@@ -23,7 +23,7 @@ const ngcWebpack = require('ngc-webpack');
 const HMR = helpers.hasProcessFlag('hot');
 const AOT = helpers.hasNpmFlag('aot');
 const METADATA = {
-  title: 'R3sourcer',
+  title: 'CORE',
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer()
 };
