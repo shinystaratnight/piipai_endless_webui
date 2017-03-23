@@ -18,3 +18,9 @@ prod:
 	npm run build:prod
 	mv dist/ www/
 	rm -rf dist/
+
+build-for-docker:
+	npm install
+	npm run build:prod
+	rm -rf /www/*
+	mv dist/* /www/
