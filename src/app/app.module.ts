@@ -22,8 +22,8 @@ import { ROUTES } from './app.routes';
 // App is our top level component
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
-import { HomeComponent } from './pages/home';
 import { NoContentComponent } from './pages/no-content';
+import { components } from './components';
 
 import '../styles/styles.scss';
 
@@ -37,8 +37,8 @@ const APP_PROVIDERS = [
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
-    HomeComponent,
     NoContentComponent,
+    ...components
   ],
   imports: [ // import Angular's modules
     BrowserModule,
