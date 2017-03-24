@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { LoginService } from './../../services/login.service';
+
 @Component({
   selector: 'login-form',
   templateUrl: 'login-form.component.html'
@@ -8,8 +10,13 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 export class LoginFormComponent {
 
   public loginForm: FormGroup;
+  public error: any;
+  public response: any;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private loginService: LoginService
+  ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.compose([
         Validators.required,
@@ -39,6 +46,14 @@ export class LoginFormComponent {
         valid: false
       }
     };
+  }
+
+  public login() {
+    this.loginService.login(this.loginForm.value)
+      .subscribe(
+        (res: any) => this.response = res,
+        (err) => this.error = err
+      );
   }
 
 }

@@ -24,6 +24,7 @@ import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { NoContentComponent } from './pages/no-content';
 import { components } from './components';
+import { services } from './services/index';
 
 import '../styles/styles.scss';
 
@@ -49,7 +50,8 @@ const APP_PROVIDERS = [
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    ...services
   ]
 })
 export class AppModule {}

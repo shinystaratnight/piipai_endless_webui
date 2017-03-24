@@ -1,8 +1,14 @@
+import { LoginService } from './../../services/login.service';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement, Injector, NO_ERRORS_SCHEMA, Component } from '@angular/core';
 import { ComponentFixtureAutoDetect, async, fakeAsync } from '@angular/core/testing';
+
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 
 import { LoginFormComponent } from './login-form.component';
 
@@ -13,12 +19,21 @@ describe('LoginFormComponent', () => {
   let de: DebugElement;
   let el: HTMLElement;
   let content: string;
+  let response: any;
 
   beforeEach(async(() => {
+
+    const mockLoginService = {
+      login() {
+        return Observable.of(response);
+      }
+    };
+
     TestBed.configureTestingModule({
       declarations: [LoginFormComponent],
       providers: [
-        FormBuilder
+        FormBuilder,
+        { provide: LoginService, useValue: mockLoginService }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
@@ -88,6 +103,22 @@ describe('LoginFormComponent', () => {
       input.setValue(invalidPhone);
       expect(comp.validatePhone(input)).toEqual(result);
     });
+  });
+
+  describe('login method', () => {
+
+    it('should be defined', () => {
+      expect(comp.login).toBeDefined();
+    });
+
+    it('should update response property', () => {
+      response = {
+        status: 'ok'
+      };
+      comp.login();
+      expect(comp.response).toEqual(response);
+    });
+
   });
 
 });
