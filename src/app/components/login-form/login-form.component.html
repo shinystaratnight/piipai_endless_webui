@@ -24,11 +24,15 @@
           </div>
 
           <div class="form-group text-center">
+<<<<<<< HEAD
             <button type="submit" class="btn btn-primary pl-4 pr-4"
               [disabled]="loginForm.controls['username'].hasError('required') ||
                 (loginForm.controls['username'].hasError('validateEmail') &&
                 loginForm.controls['username'].hasError('validatePhone'))"
               >ENTER</button>
+=======
+            <button type="submit" class="btn btn-primary pl-4 pr-4" [disabled]="!loginForm.valid">ENTER</button>
+>>>>>>> 7f6ffdfcda72beab17b022ac9c013cd84719b040
           </div>
 
         </form>
