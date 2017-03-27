@@ -1,3 +1,4 @@
+import { LoginFormComponent } from './components/login-form/login-form.component';
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home';
 import { NoContentComponent } from './pages/no-content';
@@ -5,8 +6,7 @@ import { NoContentComponent } from './pages/no-content';
 import { DataResolver } from './app.resolver';
 
 export const ROUTES: Routes = [
-  { path: '',      component: HomeComponent },
-  { path: 'crm',   loadChildren: './+crm#CrmModule'},
-  { path: 'extranet',   loadChildren: './+extranet#ExtranetModule'},
-  { path: '**',    component: NoContentComponent },
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
+  { path: 'login', component: LoginFormComponent },
+  { path: '**', component: NoContentComponent },
 ];
