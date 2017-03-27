@@ -1,0 +1,215 @@
+<div class="container">
+  <div class="card mt-3 mb-3">
+    <h5 class="card-header p-3 bg-primary text-white">Registration</h5>
+
+    <form class="card-content p-3">
+
+      <div class="row">
+        <div class="form-group col-12 col-md-2">
+          <label for="title">Title</label>
+          <select class="form-control" id="title">
+            <option value="Mr.">Mr.</option>
+            <option value="Ms.">Ms.</option>
+            <option value="Mrs.">Mrs.</option>
+            <option value="Dr.">Dr.</option>
+          </select>
+        </div>
+
+        <div class="form-group col-12 col-md-5">
+          <label for="first_name">First Name</label>
+          <input type="text" class="form-control" id="first_name">
+        </div>
+
+        <div class="form-group col-12 col-md-5">
+          <label for="last_name">Last Name</label>
+          <input type="text" class="form-control" id="last_name">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-12 col-md-6">
+          <label for="email">E-Mail Address</label>
+          <input type="text" class="form-control" id="email">
+        </div>
+
+        <div class="form-group col-12 col-md-6">
+          <label for="phone_mobile">Phone Number</label>
+          <input type="text" class="form-control" id="phone_mobile">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <button class="btn btn-secondary w-100" [ngClass]="{'bg-primary text-white': isCompany}" (click)="onCompany()">Company</button>
+          <p class="text-muted">
+            <small>* Looking for workers <br></small>
+            <small>* Supplier or contractor</small>
+          </p>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-secondary w-100" [ngClass]="{'bg-primary text-white': isRecruitee}" (click)="onRecruitee()">Recruitee</button>
+          <p class="text-muted"><small>* Looking for work</small></p>
+        </div>
+      </div>
+
+      <div class="div" *ngIf="isCompany">
+        <h5 class="mt-3 mb-3">Company</h5>
+
+        <div class="row">
+          <div class="form-group col-12 col-md-4">
+            <label for="country">Country</label>
+            <select class="form-control" id="title">
+              <option value="Country">Country</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12 col-md-4">
+            <label for="state">State</label>
+            <select class="form-control" id="title">
+              <option value="State">State</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12 col-md-4">
+            <label for="city">City</label>
+            <select class="form-control" id="title">
+              <option value="City">City</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-12 col-md-6">
+            <label for="company">Name</label>
+            <input type="text" class="form-control" id="company">
+          </div>
+
+          <div class="form-group col-12 col-md-6">
+            <label for="bussiness_id">Business ID</label>
+            <input type="text" class="form-control" id="bussiness_id">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-12 col-md-6">
+            <label for="postal_address">Postal Address</label>
+            <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment">
+          </div>
+
+          <div class="form-group col-12 col-md-6">
+            <label for="postal_code">Postal Code</label>
+            <input type="text" class="form-control" id="postal_code">
+          </div>
+        </div>
+      </div>
+
+
+      <div class="div" *ngIf="isRecruitee">
+
+        <h5 class="mt-3 mb-3">Private Person / Recruitee</h5>
+
+        <div class="row">
+          <div class="form-group col-12 col-md-4">
+            <label for="phone_mobile">Date of Birth</label>
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #datepicker="ngbDatepicker">
+              <div class="input-group-addon" (click)="datepicker.toggle()">
+                <img src="assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-12 col-md-8">
+            <label for="tax_number">Tax File Number</label>
+            <input type="text" class="form-control" id="tax_number">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-12 col-md-4">
+            <label for="country">Country</label>
+            <select class="form-control" id="title">
+              <option value="Country">Country</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12 col-md-4">
+            <label for="state">State</label>
+            <select class="form-control" id="title">
+              <option value="State">State</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12 col-md-4">
+            <label for="city">City</label>
+            <select class="form-control" id="title">
+              <option value="City">City</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-12 col-md-6">
+            <label for="postal_address">Postal Address</label>
+            <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment">
+          </div>
+
+          <div class="form-group col-12 col-md-6">
+            <label for="postal_code">Postal Code</label>
+            <input type="text" class="form-control" id="postal_code">
+          </div>
+        </div>
+
+        <div class="d-inline-flex">
+          <div class="form-group mr-2">
+            <label class="btn btn-info" for="upload">Upload</label>
+            <input type="file" id="upload" [hidden]="true">
+          </div>
+
+          <div class="form-group mr-2 pt-1">or</div>
+
+          <div class="form-group">
+            <label class="btn btn-info" for="upload">Take a Photo</label>
+            <input type="file" id="upload" [hidden]="true">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-12">
+            <label for="city">Please select Tickets and Licences you currently hold</label>
+            <select class="form-control" id="title">
+              <option selected>Choose a tag</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12">
+            <label for="city">Please select your tole(s) or trade(s)</label>
+            <select class="form-control" id="title">
+              <option class="text-muted" selected>Choose a skill</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label class="d-inline-flex align-items-center justify-content-start">
+              <input type="checkbox" class="mr-3" style="min-width: 1rem">
+              <span>
+                I agree that the information provided above is correct and I take personal responsibility in case it is not.<br>
+                I also aknowledge that registering for a second/duplicate account for myself, when detected, is subject to a fine.
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col">
+          <button type="submit" class="btn btn-primary pl-4 pr-4 mt-3">Register</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

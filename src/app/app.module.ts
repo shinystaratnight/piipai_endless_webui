@@ -25,6 +25,8 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { NoContentComponent } from './pages/no-content';
 import { components } from './components';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import '../styles/styles.scss';
 
 // Application wide providers
@@ -44,7 +46,8 @@ const APP_PROVIDERS = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+    NgbModule.forRoot()
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
