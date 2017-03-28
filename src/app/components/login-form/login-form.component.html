@@ -23,6 +23,15 @@
             <input type="password" class="form-control" id="password" placeholder="" formControlName="password">
           </div>
 
+          <div *ngIf="response" class="text-center text-info pb-3">
+            {{ response }}
+          </div>
+
+          <div *ngIf="error" class="text-center text-danger pb-3">
+            <div *ngIf="error.errors.email">{{ error.errors.email }}</div>
+            <div *ngIf="error.errors.phone_mobile">{{ error.errors.phone_mobile }}</div>
+          </div>
+
           <div class="form-group text-center">
             <button type="submit" class="btn btn-primary pl-4 pr-4"
               [disabled]="loginForm.controls['username'].hasError('required') ||

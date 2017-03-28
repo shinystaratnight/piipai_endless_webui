@@ -1,9 +1,11 @@
 import { LoginService } from './../../services/login.service';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement, Injector, NO_ERRORS_SCHEMA, Component } from '@angular/core';
 import { ComponentFixtureAutoDetect, async, fakeAsync } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { LocalStorageService } from 'ng2-webstorage';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -29,10 +31,18 @@ describe('LoginFormComponent', () => {
       }
     };
 
+    const mockRouter = {
+      navigate() {
+        return true;
+      }
+    };
+
     TestBed.configureTestingModule({
       declarations: [LoginFormComponent],
       providers: [
         FormBuilder,
+        LocalStorageService,
+        { provide: Router, useValue: mockRouter },
         { provide: LoginService, useValue: mockLoginService }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -113,11 +123,31 @@ describe('LoginFormComponent', () => {
 
     it('should update response property', () => {
       response = {
-        status: 'ok'
+        message: 'sent message'
       };
       comp.login();
-      expect(comp.response).toEqual(response);
+      expect(comp.response).toEqual(response.message);
     });
+
+    it('should save user data', inject([LocalStorageService], (storage: LocalStorageService) => {
+      spyOn(storage, 'store');
+      response = {
+        status: 'success',
+        data: 'user data'
+      };
+      comp.login();
+      expect(storage.store).toHaveBeenCalled();
+    }));
+
+    it('should redirect to register form', inject([Router], (router: Router) => {
+      spyOn(router, 'navigate');
+      response = {
+        status: 'success',
+        data: 'user data'
+      };
+      comp.login();
+      expect(router.navigate).toHaveBeenCalled();
+    }));
 
   });
 

@@ -18,7 +18,7 @@ export class LoginService {
   public login(data) {
     return this.http.post(this.url, data)
       .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }
 
 }

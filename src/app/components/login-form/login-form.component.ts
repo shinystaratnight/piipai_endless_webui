@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { LocalStorageService } from 'ng2-webstorage';
 
 import { LoginService } from './../../services/login.service';
 
@@ -15,7 +17,9 @@ export class LoginFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private storage: LocalStorageService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.compose([
@@ -51,8 +55,21 @@ export class LoginFormComponent {
   public login() {
     this.loginService.login(this.loginForm.value)
       .subscribe(
-        (res: any) => this.response = res,
-        (err) => this.error = err
+        (res: any) => {
+          if (res.data) {
+            this.storage.store('contact', res.data.contact);
+            this.router.navigate(['/']);
+          } else if (res.message) {
+            this.response = res.message;
+          }
+        },
+        (err) => {
+          if (err.register) {
+            this.router.navigate(['/register', { [err.register]: this.loginForm.value.username }]);
+          } else {
+            this.error = err;
+          }
+        }
       );
   }
 
