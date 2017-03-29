@@ -53,6 +53,8 @@ export class LoginFormComponent {
   }
 
   public login() {
+    this.response = null;
+    this.error = null;
     this.loginService.login(this.loginForm.value)
       .subscribe(
         (res: any) => {
@@ -64,8 +66,8 @@ export class LoginFormComponent {
           }
         },
         (err) => {
-          if (err.register) {
-            this.router.navigate(['/register', { [err.register]: this.loginForm.value.username }]);
+          if (err.errors.register) {
+            this.router.navigate(['/register']);
           } else {
             this.error = err;
           }

@@ -71,5 +71,28 @@ describe('LoginService', () => {
       });
     })));
 
+    it('should parse error', async(inject(
+      [LoginService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        register: 'email'
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.login();
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toBeDefined();
+        expect(service.username).toBeDefined();
+      });
+    })));
+
   });
 });

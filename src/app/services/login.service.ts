@@ -10,15 +10,26 @@ import 'rxjs/add/observable/throw';
 export class LoginService {
 
   public url: string;
+  public username: any;
 
   constructor(private http: Http) {
     this.url = `/ecore/api/v2/login/`;
   }
 
   public login(data) {
+    this.username = null;
     return this.http.post(this.url, data)
       .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
+      .catch((error: any) => {
+        const register = error.json().errors.register;
+        if (register) {
+          this.username = {
+            field: register,
+            value: data.username
+          };
+        }
+        return Observable.throw(error.json() || 'Server error');
+      });
   }
 
 }
