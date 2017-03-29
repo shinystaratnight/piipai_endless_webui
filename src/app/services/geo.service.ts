@@ -26,14 +26,14 @@ export class GeoService {
       .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }
 
-  public getRegions() {
-    return this.http.get(this.regionsUrl)
+  public getRegions(id) {
+    return this.http.get(`${this.countriesUrl}/${id}/regions`)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }
 
-  public getCities() {
-    return this.http.get(this.citiesUrl)
+  public getCities(id) {
+    return this.http.get(`${this.regionsUrl}/${id}/cities`)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }

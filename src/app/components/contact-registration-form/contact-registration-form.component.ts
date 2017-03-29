@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { GeoService } from './../../services/geo.service';
 
@@ -25,25 +25,34 @@ export class ContactRegistrationFormComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.recruiteeContactForm = this.fb.group({
+      birthday: [''],
+      tax_number: [''],
       country: [''],
       state: [''],
       city: [''],
-      postal_code: ['']
+      address: ['', Validators.compose([Validators.required])],
+      postal_code: ['', Validators.compose([Validators.required])],
+      picture: [''],
+      tags: [''],
+      skills: ['']
     });
 
     this.companyContactForm = this.fb.group({
       country: [''],
       state: [''],
       city: [''],
-      postal_code: ['']
+      name: [''],
+      bussiness_id: [''],
+      address: ['', Validators.compose([Validators.required])],
+      postal_code: ['', Validators.compose([Validators.required])],
     });
 
     this.contactForm = this.fb.group({
       title: [''],
-      first_name: [''],
-      last_name: [''],
-      email: [''],
-      phone_mobile: [''],
+      first_name: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
+      last_name: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
+      email: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
+      phone_mobile: ['', Validators.compose([Validators.required])],
       recruiteeContact: this.recruiteeContactForm,
       companyContact: this.companyContactForm
     });
@@ -57,12 +66,37 @@ export class ContactRegistrationFormComponent implements OnInit {
         });
   }
 
+  public selectCountry(country) {
+    this.regions = null;
+    this.cities = null;
+    this.geo.getRegions(country.value.id)
+      .subscribe(
+        (regions) => {
+          this.regions = regions.results;
+        }
+      );
+  }
+
+  public selectRegion(region) {
+    this.cities = null;
+    this.geo.getCities(region.value.id)
+      .subscribe(
+        (cities) => {
+          this.cities = cities.results;
+        }
+      );
+  }
+
   public onCompany() {
+    this.regions = null;
+    this.cities = null;
     this.isCompany = true;
     this.isRecruitee = false;
   }
 
   public onRecruitee() {
+    this.regions = null;
+    this.cities = null;
     this.isRecruitee = true;
     this.isCompany = false;
   }

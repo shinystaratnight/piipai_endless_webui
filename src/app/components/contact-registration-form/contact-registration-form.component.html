@@ -40,14 +40,14 @@
 
       <div class="row">
         <div class="col-6">
-          <button class="btn btn-secondary w-100" [ngClass]="{'bg-primary text-white': isCompany}" (click)="onCompany()">Company</button>
+          <button type="button" class="btn btn-secondary w-100" [ngClass]="{'bg-primary text-white': isCompany}" (click)="onCompany()">Company</button>
           <p class="text-muted">
             <small>* Looking for workers <br></small>
             <small>* Supplier or contractor</small>
           </p>
         </div>
         <div class="col-6">
-          <button class="btn btn-secondary w-100" [ngClass]="{'bg-primary text-white': isRecruitee}" (click)="onRecruitee()">Recruitee</button>
+          <button type="button" class="btn btn-secondary w-100" [ngClass]="{'bg-primary text-white': isRecruitee}" (click)="onRecruitee()">Recruitee</button>
           <p class="text-muted"><small>* Looking for work</small></p>
         </div>
       </div>
@@ -58,22 +58,22 @@
         <div class="row">
           <div class="form-group col-12 col-md-4">
             <label for="country">Country</label>
-            <select class="form-control" id="title" formControlName="country">
-              <option *ngFor="let country of countries" value="country.name">{{ country.name }}</option>
-            </select>
-          </div>
-
-          <div class="form-group col-12 col-md-4" *ngIf="countries">
-            <label for="state">State</label>
-            <select class="form-control" id="title" formControlName="state">
-              <option value="State">State</option>
+            <select class="form-control" id="title" formControlName="country" (change)="selectCountry(this.companyContactForm.controls['country'])">
+              <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
             </select>
           </div>
 
           <div class="form-group col-12 col-md-4" *ngIf="regions">
+            <label for="state">State</label>
+            <select class="form-control" id="title" formControlName="state" (change)="selectRegion(this.companyContactForm.controls['state'])">
+              <option *ngFor="let region of regions" [ngValue]="region">{{ region.name }}</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12 col-md-4" *ngIf="cities">
             <label for="city">City</label>
             <select class="form-control" id="title" formControlName="city">
-              <option value="City">City</option>
+              <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
             </select>
           </div>
         </div>
@@ -81,19 +81,19 @@
         <div class="row">
           <div class="form-group col-12 col-md-6">
             <label for="company">Name</label>
-            <input type="text" class="form-control" id="company">
+            <input type="text" class="form-control" id="company" formControlName="name">
           </div>
 
           <div class="form-group col-12 col-md-6">
             <label for="bussiness_id">Business ID</label>
-            <input type="text" class="form-control" id="bussiness_id">
+            <input type="text" class="form-control" id="bussiness_id" formControlName="bussiness_id">
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-12 col-md-6">
             <label for="postal_address">Postal Address</label>
-            <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment">
+            <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment" formControlName="address">
           </div>
 
           <div class="form-group col-12 col-md-6">
@@ -111,7 +111,7 @@
           <div class="form-group col-12 col-md-4">
             <label for="phone_mobile">Date of Birth</label>
             <div class="input-group">
-              <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #datepicker="ngbDatepicker">
+              <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #datepicker="ngbDatepicker" formControlName="birthday">
               <div class="input-group-addon" (click)="datepicker.toggle()">
                 <img src="assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
               </div>
@@ -120,29 +120,29 @@
 
           <div class="form-group col-12 col-md-8">
             <label for="tax_number">Tax File Number</label>
-            <input type="text" class="form-control" id="tax_number">
+            <input type="text" class="form-control" id="tax_number" formControlName="tax_number">
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-12 col-md-4">
             <label for="country">Country</label>
-            <select class="form-control" id="title">
-              <option value="Country">Country</option>
+            <select class="form-control" id="title" formControlName="country" (change)="selectCountry(this.recruiteeContactForm.controls['country'])">
+              <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
             </select>
           </div>
 
-          <div class="form-group col-12 col-md-4">
+          <div class="form-group col-12 col-md-4" *ngIf="regions">
             <label for="state">State</label>
-            <select class="form-control" id="title">
-              <option value="State">State</option>
+            <select class="form-control" id="title" formControlName="state" (change)="selectRegion(this.recruiteeContactForm.controls['state'])">
+              <option *ngFor="let region of regions" [ngValue]="region">{{ region.name }}</option>
             </select>
           </div>
 
-          <div class="form-group col-12 col-md-4">
+          <div class="form-group col-12 col-md-4" *ngIf="cities">
             <label for="city">City</label>
-            <select class="form-control" id="title">
-              <option value="City">City</option>
+            <select class="form-control" id="title" formControlName="city">
+              <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
             </select>
           </div>
         </div>
@@ -150,7 +150,7 @@
         <div class="row">
           <div class="form-group col-12 col-md-6">
             <label for="postal_address">Postal Address</label>
-            <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment">
+            <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment" formControlName="address">
           </div>
 
           <div class="form-group col-12 col-md-6">
@@ -162,7 +162,7 @@
         <div class="d-inline-flex">
           <div class="form-group mr-2">
             <label class="btn btn-info" for="upload">Upload</label>
-            <input type="file" id="upload" [hidden]="true">
+            <input type="file" id="upload" [hidden]="true" formControlName="picture">
           </div>
 
           <div class="form-group mr-2 pt-1">or</div>
