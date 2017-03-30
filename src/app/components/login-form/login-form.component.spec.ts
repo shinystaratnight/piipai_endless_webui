@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement, Injector, NO_ERRORS_SCHEMA, Component } from '@angular/core';
 import { ComponentFixtureAutoDetect, async, fakeAsync } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from 'ng2-webstorage';
 
 import { Observable } from 'rxjs/Observable';
@@ -22,12 +22,28 @@ describe('LoginFormComponent', () => {
   let el: HTMLElement;
   let content: string;
   let response: any;
+  let metadata: any;
 
   beforeEach(async(() => {
 
     const mockLoginService = {
       login() {
+        if (response.status === 'error') {
+          return Observable.throw(response);
+        }
         return Observable.of(response);
+      },
+      loginWithToken(token) {
+        if (response.status === 'error') {
+          return Observable.throw(response);
+        }
+        return Observable.of(response);
+      },
+      getMetaData() {
+        if (metadata.status === 'error') {
+          return Observable.throw(metadata);
+        }
+        return Observable.of(metadata);
       }
     };
 
@@ -43,6 +59,10 @@ describe('LoginFormComponent', () => {
         FormBuilder,
         LocalStorageService,
         { provide: Router, useValue: mockRouter },
+        { provide: ActivatedRoute, useValue: {
+            params: Observable.of({ token: 123 })
+          }
+        },
         { provide: LoginService, useValue: mockLoginService }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -60,6 +80,22 @@ describe('LoginFormComponent', () => {
 
   it('should have loginForm property', () => {
     expect(comp.loginForm).toBeDefined();
+  });
+
+  describe('ngOnInit method', () => {
+
+    it('should be defined', () => {
+      expect(comp.ngOnInit).toBeDefined();
+    });
+
+    it('should be call tokenAuth method', () => {
+      spyOn(comp, 'tokenAuth');
+      spyOn(comp, 'getMetaData');
+      comp.ngOnInit();
+      expect(comp.getMetaData).toHaveBeenCalled();
+      expect(comp.tokenAuth).toHaveBeenCalled();
+    });
+
   });
 
   describe('validateEmail method', () => {
@@ -139,7 +175,7 @@ describe('LoginFormComponent', () => {
       expect(storage.store).toHaveBeenCalled();
     }));
 
-    it('should redirect to register form', inject([Router], (router: Router) => {
+    it('should redirect to "/"', inject([Router], (router: Router) => {
       spyOn(router, 'navigate');
       response = {
         status: 'success',
@@ -148,6 +184,102 @@ describe('LoginFormComponent', () => {
       comp.login();
       expect(router.navigate).toHaveBeenCalled();
     }));
+
+    it('should parse errors', inject([Router], (router: Router) => {
+      spyOn(router, 'navigate');
+      response = {
+        status: 'error',
+        errors: {
+          register: 'email'
+        }
+      };
+      comp.login();
+      expect(router.navigate).toHaveBeenCalled();
+    }));
+
+    it('should redirect to "/"', inject([Router], (router: Router) => {
+      response = {
+        status: 'error',
+        errors: {
+          error: 'error message'
+        }
+      };
+      comp.login();
+      expect(comp.error).toEqual(response);
+    }));
+
+  });
+
+  describe('tokenAuth method', () => {
+
+    it('should be defined', () => {
+      expect(comp.tokenAuth).toBeDefined();
+    });
+
+    it('should save user data', inject([LocalStorageService], (storage: LocalStorageService) => {
+      spyOn(storage, 'store');
+      response = {
+        status: 'success',
+        data: 'user data',
+        redirect_to: '/'
+      };
+      comp.tokenAuth(5);
+      expect(storage.store).toHaveBeenCalled();
+    }));
+
+    it('should redirect to register form', inject([Router], (router: Router) => {
+      spyOn(router, 'navigate');
+      response = {
+        status: 'success',
+        data: 'user data',
+        redirect_to: '/'
+      };
+      comp.tokenAuth(5);
+      expect(router.navigate).toHaveBeenCalled();
+    }));
+
+    it('should redirect to login form', inject([Router], (router: Router) => {
+      spyOn(router, 'navigate');
+      response = {
+        status: 'error',
+        errors: 'error message',
+      };
+      comp.tokenAuth(5);
+      expect(router.navigate).toHaveBeenCalled();
+    }));
+
+  });
+
+  describe('getMetaData method', () => {
+
+    it('should be defined', () => {
+      expect(comp.getMetaData).toBeDefined();
+    });
+
+    it('should save fields data', () => {
+      metadata = {
+        fields: {
+          username: {
+            label: 'username'
+          },
+          password: {
+            label: 'password'
+          }
+        }
+      };
+      comp.getMetaData();
+      expect(comp.usernameField.label).toEqual('username');
+      expect(comp.passwordField.label).toEqual('password');
+    });
+
+    it('should parse error', () => {
+      metadata = {
+        status: 'error',
+        message: 'error message'
+      };
+      comp.getMetaData();
+      expect(comp.error).toEqual(metadata);
+    });
 
   });
 

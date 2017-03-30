@@ -32,4 +32,17 @@ export class LoginService {
       });
   }
 
+  public loginWithToken(token) {
+    this.username = null;
+    return this.http.get(`${this.url}${token}`)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
+  }
+
+  public getMetaData() {
+    return this.http.options(this.url)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
+  }
+
 }

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from 'ng2-webstorage';
 
 import { LoginService } from './../../services/login.service';
@@ -9,17 +9,21 @@ import { LoginService } from './../../services/login.service';
   selector: 'login-form',
   templateUrl: 'login-form.component.html'
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnInit {
 
   public loginForm: FormGroup;
   public error: any;
   public response: any;
+  public token: boolean = false;
+  public usernameField: any;
+  public passwordField: any;
 
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
     private storage: LocalStorageService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.compose([
@@ -29,6 +33,16 @@ export class LoginFormComponent {
       ])],
       password: ''
     });
+  }
+
+  public ngOnInit() {
+    this.route.params.subscribe((params) => {
+      this.token = params['token'];
+      if (this.token) {
+        this.tokenAuth(this.token);
+      }
+    });
+    this.getMetaData();
   }
 
   public validateEmail(c: FormControl) {
@@ -73,6 +87,25 @@ export class LoginFormComponent {
           }
         }
       );
+  }
+
+  public tokenAuth(token) {
+    this.loginService.loginWithToken(token).subscribe(
+      (res: any) => {
+          this.storage.store('contact', res.data.contact);
+          this.router.navigate([res.data.redirect_to]);
+      },
+      (err) => this.router.navigate(['login']));
+  }
+
+  public getMetaData() {
+    this.loginService.getMetaData().subscribe(
+      (res: any) => {
+        this.usernameField = res.fields.username;
+        this.passwordField = res.fields.password;
+      },
+      (err) => this.error = err
+    );
   }
 
 }

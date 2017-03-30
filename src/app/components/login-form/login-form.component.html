@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="!token">
   <div class="row justify-content-center align-items-center">
     <div class="col-12 col-sm-9 col-md-7 col-lg-4 mt-5">
       <div class="card">
@@ -7,11 +7,14 @@
         <form class="card-content  p-3" [formGroup]="loginForm" novalidate (ngSubmit)="login()">
 
           <div class="form-group">
-            <label for="username">Phone or E-mail address</label>
+            <label for="username" *ngIf="usernameField">{{ usernameField.label }}</label>
             <input type="text" class="form-control" id="username" placeholder="" formControlName="username">
+            <div *ngIf="error" class="text-left text-danger">
+              <div *ngIf="error.errors.username">{{ error.errors.username }}</div>
+            </div>
           </div>
           <div class="form-group">
-            <label for="password">Password (optional)</label>
+            <label for="password" *ngIf="passwordField">{{ passwordField.label }}</label>
             <input type="password" class="form-control" id="password" placeholder="" formControlName="password">
           </div>
 
