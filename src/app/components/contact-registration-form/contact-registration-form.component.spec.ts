@@ -6,6 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { GeoService } from './../../services/geo.service';
+import { ContactRegistrationService } from './../../services/contact-registration.service';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -37,13 +38,56 @@ describe('ContactRegistrationFormComponent', () => {
     }
   };
 
+  const metadata = {
+    fields: {
+      contact: {
+        children: {
+          address: {
+            children: {
+              country: {},
+              state: {},
+              city: {},
+              street_address: {},
+              postal_code: {}
+            }
+          },
+          title: {},
+          first_name: {},
+          last_name: {},
+          email: {},
+          phone_mobile: {},
+          birthday: {},
+          picture: {}
+        }
+      },
+      company: {
+        children: {
+          name: {},
+          business_id: {}
+        }
+      }
+    }
+  };
+
+  const mockContactRegistrationService = {
+    getMetaData() {
+      return Observable.of(metadata);
+    },
+    getTags() {
+      return Observable.of({
+        results: []
+      });
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         ContactRegistrationFormComponent
       ],
       providers: [
-        { provide: GeoService, useValue: mockGeoService }
+        { provide: GeoService, useValue: mockGeoService },
+        { provide: ContactRegistrationService, useValue: mockContactRegistrationService }
       ],
       schemas: [ NO_ERRORS_SCHEMA ],
       imports: [
@@ -107,6 +151,11 @@ describe('ContactRegistrationFormComponent', () => {
     it('should update countries property', () => {
       comp.ngOnInit();
       expect(comp.countries).toEqual([1, 2, 3]);
+    });
+
+    it('should update metaDataContact property', () => {
+      comp.ngOnInit();
+      expect(comp.metadata).toEqual(metadata);
     });
 
   });

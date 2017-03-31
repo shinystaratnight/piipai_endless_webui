@@ -15,9 +15,9 @@ import { GeoService } from './geo.service';
 
 describe('GeoService', () => {
 
-  const countriesUrl: string = `/ecore/api/v2/endless_core/countries`;
-  const regionsUrl: string = `/ecore/api/v2/endless_core/regions`;
-  const citiesUrl: string = `/ecore/api/v2/endless_core/cities`;
+  const countriesUrl: string = `/ecore/api/v2/endless_core/countries/`;
+  const regionsUrl: string = `/ecore/api/v2/endless_core/regions/`;
+  const citiesUrl: string = `/ecore/api/v2/endless_core/cities/`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

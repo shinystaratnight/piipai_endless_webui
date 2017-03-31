@@ -2,38 +2,35 @@
   <div class="card mt-3 mb-3">
     <h5 class="card-header p-3 bg-primary text-white">Registration</h5>
 
-    <form class="card-content p-3" [formGroup]="contactForm" novalidate>
+    <form class="card-content p-3" [formGroup]="contactForm" novalidate *ngIf="metadata">
 
       <div class="row">
         <div class="form-group col-12 col-md-2">
-          <label for="title">Title</label>
+          <label for="title" *ngIf="titleField">{{ titleField.label }}</label>
           <select class="form-control" id="title" formControlName="title">
-            <option value="Mr.">Mr.</option>
-            <option value="Ms.">Ms.</option>
-            <option value="Mrs.">Mrs.</option>
-            <option value="Dr.">Dr.</option>
+            <option *ngFor="let item of titleField.choices" [value]="item.value">{{ item.display_name }}</option>
           </select>
         </div>
 
         <div class="form-group col-12 col-md-5">
-          <label for="first_name">First Name</label>
+          <label for="first_name" *ngIf="firstNameField">{{ firstNameField.label }}</label>
           <input type="text" class="form-control" id="first_name" formControlName="first_name">
         </div>
 
         <div class="form-group col-12 col-md-5">
-          <label for="last_name">Last Name</label>
+          <label for="last_name" *ngIf="lastNameField">{{ lastNameField.label }}</label>
           <input type="text" class="form-control" id="last_name" formControlName="last_name">
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-12 col-md-6">
-          <label for="email">E-Mail Address</label>
+          <label for="email" *ngIf="emailField">{{ emailField.label }}</label>
           <input type="text" class="form-control" id="email" formControlName="email">
         </div>
 
         <div class="form-group col-12 col-md-6">
-          <label for="phone_mobile">Phone Number</label>
+          <label for="phone_mobile" *ngIf="phoneMobileField">{{ phoneMobileField.label }}</label>
           <input type="text" class="form-control" id="phone_mobile" formControlName="phone_mobile">
         </div>
       </div>
@@ -57,21 +54,21 @@
 
         <div class="row">
           <div class="form-group col-12 col-md-4">
-            <label for="country">Country</label>
+            <label for="country" *ngIf="countryField">{{ countryField.label }}</label>
             <select class="form-control" id="title" formControlName="country" (change)="selectCountry(this.companyContactForm.controls['country'])">
               <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
             </select>
           </div>
 
           <div class="form-group col-12 col-md-4" *ngIf="regions">
-            <label for="state">State</label>
+            <label for="state" *ngIf="stateField">{{ stateField.label }}</label>
             <select class="form-control" id="title" formControlName="state" (change)="selectRegion(this.companyContactForm.controls['state'])">
               <option *ngFor="let region of regions" [ngValue]="region">{{ region.name }}</option>
             </select>
           </div>
 
           <div class="form-group col-12 col-md-4" *ngIf="cities">
-            <label for="city">City</label>
+            <label for="city" *ngIf="cityField">{{ cityField.label }}</label>
             <select class="form-control" id="title" formControlName="city">
               <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
             </select>
@@ -80,24 +77,24 @@
 
         <div class="row">
           <div class="form-group col-12 col-md-6">
-            <label for="company">Name</label>
+            <label for="company" *ngIf="companyNameField">{{ companyNameField.label }}</label>
             <input type="text" class="form-control" id="company" formControlName="name">
           </div>
 
           <div class="form-group col-12 col-md-6">
-            <label for="bussiness_id">Business ID</label>
+            <label for="bussiness_id" *ngIf="businessIdField">{{ businessIdField.label }}</label>
             <input type="text" class="form-control" id="bussiness_id" formControlName="bussiness_id">
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-12 col-md-6">
-            <label for="postal_address">Postal Address</label>
+            <label for="postal_address" *ngIf="streetAddressField">{{ streetAddressField.label }}</label>
             <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment" formControlName="address">
           </div>
 
           <div class="form-group col-12 col-md-6">
-            <label for="postal_code">Postal Code</label>
+            <label for="postal_code" *ngIf="postalCodeField">{{ postalCodeField.label }}</label>
             <input type="text" class="form-control" id="postal_code" formControlName="postal_code">
           </div>
         </div>
@@ -109,7 +106,7 @@
 
         <div class="row">
           <div class="form-group col-12 col-md-4">
-            <label for="phone_mobile">Date of Birth</label>
+            <label for="phone_mobile" *ngIf="birthdayField">{{ birthdayField.label }}</label>
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #datepicker="ngbDatepicker" formControlName="birthday">
               <div class="input-group-addon" (click)="datepicker.toggle()">
@@ -119,28 +116,28 @@
           </div>
 
           <div class="form-group col-12 col-md-8">
-            <label for="tax_number">Tax File Number</label>
+            <label for="tax_number" *ngIf="taxFileNumberField">{{ taxFileNumberField.label }}</label>
             <input type="text" class="form-control" id="tax_number" formControlName="tax_number">
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-12 col-md-4">
-            <label for="country">Country</label>
+            <label for="country" *ngIf="countryField">{{ countryField.label }}</label>
             <select class="form-control" id="title" formControlName="country" (change)="selectCountry(this.recruiteeContactForm.controls['country'])">
               <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
             </select>
           </div>
 
           <div class="form-group col-12 col-md-4" *ngIf="regions">
-            <label for="state">State</label>
+            <label for="state" *ngIf="stateField">{{ stateField.label }}</label>
             <select class="form-control" id="title" formControlName="state" (change)="selectRegion(this.recruiteeContactForm.controls['state'])">
               <option *ngFor="let region of regions" [ngValue]="region">{{ region.name }}</option>
             </select>
           </div>
 
           <div class="form-group col-12 col-md-4" *ngIf="cities">
-            <label for="city">City</label>
+            <label for="city" *ngIf="cityField">{{ cityField.label }}</label>
             <select class="form-control" id="title" formControlName="city">
               <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
             </select>
@@ -149,40 +146,39 @@
 
         <div class="row">
           <div class="form-group col-12 col-md-6">
-            <label for="postal_address">Postal Address</label>
+            <label for="postal_address" *ngIf="streetAddressField">{{ streetAddressField.label }}</label>
             <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment" formControlName="address">
           </div>
 
           <div class="form-group col-12 col-md-6">
-            <label for="postal_code">Postal Code</label>
+            <label for="postal_code" *ngIf="postalCodeField">{{ postalCodeField.label }}</label>
             <input type="text" class="form-control" id="postal_code" formControlName="postal_code">
           </div>
         </div>
 
-        <div class="d-inline-flex">
-          <div class="form-group mr-2">
-            <label class="btn btn-info" for="upload">Upload</label>
-            <input type="file" id="upload" [hidden]="true" formControlName="picture">
-          </div>
-
-          <div class="form-group mr-2 pt-1">or</div>
-
-          <div class="form-group">
-            <label class="btn btn-info" for="upload">Take a Photo</label>
-            <input type="file" id="upload" [hidden]="true">
+        <div class="row">
+          <div class="form-group col">
+            <div class="pb-1">{{ pictureField.label }}</div>
+              <div class="d-inline-flex">
+                <label class="btn btn-info" for="upload" *ngIf="pictureField">{{ uploadField }}</label>
+                <input type="file" id="upload" [hidden]="true" formControlName="picture">
+                <div class="form-group mr-2 ml-2 pt-1">or</div>
+                <label class="btn btn-info" for="upload">{{ takeAFotoField }}</label>
+                <input type="file" id="upload" [hidden]="true">
+              </div>
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-12">
-            <label for="city">Please select Tickets and Licences you currently hold</label>
+            <label for="city" *ngIf="tagsField">{{ tagsField.label }}</label>
             <select class="form-control" id="title">
-              <option selected>Choose a tag</option>
+              <option *ngFor="let item of tags" [value]="item.value">{{ item.name }}</option>
             </select>
           </div>
 
           <div class="form-group col-12">
-            <label for="city">Please select your tole(s) or trade(s)</label>
+            <label for="city" *ngIf="skillsField">{{ skillsField.label }}</label>
             <select class="form-control" id="title">
               <option class="text-muted" selected>Choose a skill</option>
             </select>

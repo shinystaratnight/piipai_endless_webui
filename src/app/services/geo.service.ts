@@ -15,9 +15,9 @@ export class GeoService {
   constructor(
     private http: Http
   ) {
-    this.countriesUrl = '/ecore/api/v2/endless_core/countries';
-    this.regionsUrl = '/ecore/api/v2/endless_core/regions';
-    this.citiesUrl = '/ecore/api/v2/endless_core/cities';
+    this.countriesUrl = '/ecore/api/v2/endless_core/countries/';
+    this.regionsUrl = '/ecore/api/v2/endless_core/regions/';
+    this.citiesUrl = '/ecore/api/v2/endless_core/cities/';
    }
 
   public getCountries() {
@@ -27,13 +27,13 @@ export class GeoService {
   }
 
   public getRegions(id) {
-    return this.http.get(`${this.countriesUrl}/${id}/regions`)
+    return this.http.get(`${this.countriesUrl}${id}/regions`)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }
 
   public getCities(id) {
-    return this.http.get(`${this.regionsUrl}/${id}/cities`)
+    return this.http.get(`${this.regionsUrl}${id}/cities`)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }
