@@ -8,5 +8,6 @@ import { DataResolver } from './app.resolver';
 export const ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: 'login', component: LoginFormComponent },
+  { path: 'login/:token', component: LoginFormComponent },
   { path: '**', component: NoContentComponent },
 ];
