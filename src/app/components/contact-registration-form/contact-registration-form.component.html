@@ -2,7 +2,7 @@
   <div class="card mt-3 mb-3">
     <h5 class="card-header p-3 bg-primary text-white">Registration</h5>
 
-    <form class="card-content p-3" [formGroup]="contactForm" novalidate *ngIf="metadata">
+    <form class="card-content p-3" [formGroup]="contactForm" *ngIf="metadata" (ngSubmit)="newContact()">
 
       <div class="row">
         <div class="form-group col-12 col-md-2">
@@ -26,12 +26,22 @@
       <div class="row">
         <div class="form-group col-12 col-md-6">
           <label for="email" *ngIf="emailField">{{ emailField.label }}</label>
-          <input type="text" class="form-control" id="email" formControlName="email">
+          <input type="email" class="form-control" id="email" *ngIf="!username.email" formControlName="email" (blur)="emailValidate(contactForm.controls['email'].value)">
+          <div class="form-control text-muted" *ngIf="username.email">{{ username.email ? username.value : '' }}</div>
+          <div *ngIf="emailValidateResult">
+            <div class="text-success mt-1" *ngIf="emailValidateResult.status === 'success'">{{ emailValidateResult.data.message }}</div>
+            <div class="text-danger mt-1" *ngIf="emailValidateResult.status === 'error'">{{ emailValidateResult.errors.message }}</div>
+          </div>
         </div>
 
         <div class="form-group col-12 col-md-6">
           <label for="phone_mobile" *ngIf="phoneMobileField">{{ phoneMobileField.label }}</label>
-          <input type="text" class="form-control" id="phone_mobile" formControlName="phone_mobile">
+          <input type="tel" class="form-control" id="phone_mobile" *ngIf="!username.phone_mobile" formControlName="phone_mobile" (blur)="phoneValidate(contactForm.controls['phone_mobile'].value)">
+          <div class="form-control text-muted" *ngIf="username.phone_mobile">{{ username.phone_mobile ? username.value : '' }}</div>
+          <div *ngIf="phoneValidateResult">
+            <div class="text-success mt-1" *ngIf="phoneValidateResult.status === 'success'">{{ phoneValidateResult.data.message }}</div>
+            <div class="text-danger mt-1" *ngIf="phoneValidateResult.status === 'error'">{{ phoneValidateResult.errors.message }}</div>
+          </div>
         </div>
       </div>
 
@@ -90,7 +100,7 @@
         <div class="row">
           <div class="form-group col-12 col-md-6">
             <label for="postal_address" *ngIf="streetAddressField">{{ streetAddressField.label }}</label>
-            <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment" formControlName="address">
+            <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment" formControlName="street_address">
           </div>
 
           <div class="form-group col-12 col-md-6">
@@ -147,7 +157,7 @@
         <div class="row">
           <div class="form-group col-12 col-md-6">
             <label for="postal_address" *ngIf="streetAddressField">{{ streetAddressField.label }}</label>
-            <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment" formControlName="address">
+            <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment" formControlName="street_address">
           </div>
 
           <div class="form-group col-12 col-md-6">

@@ -144,4 +144,161 @@ describe('ContactRegistrationService', () => {
 
   });
 
+  describe('registerContact method', () => {
+
+    it('should parse response', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        results: []
+      };
+      const contact = {
+        type: 'company',
+        data: {}
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.registerContact(contact);
+
+      result.subscribe((res) => {
+        expect(res).toEqual({
+          results: []
+        });
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        register: 'email'
+      };
+      const contact = {
+        type: 'company',
+        data: {}
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.registerContact(contact);
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toBeDefined();
+      });
+    })));
+
+  });
+
+  describe('emailValidate method', () => {
+
+    it('should parse response', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'success',
+        data: {
+          message: 'email is valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.emailValidate('test@test.com');
+
+      result.subscribe((res) => {
+        expect(res).toEqual(mockResponse);
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        status: 'error',
+        errors: {
+          message: 'email is not valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.emailValidate('adasdasdas');
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toEqual(mockError);
+      });
+    })));
+
+  });
+
+  describe('phoneValidate method', () => {
+
+    it('should parse response', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'success',
+        data: {
+          message: 'phone is valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.phoneValidate('+380978223695');
+
+      result.subscribe((res) => {
+        expect(res).toEqual(mockResponse);
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        status: 'error',
+        errors: {
+          message: 'phone is not valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.phoneValidate('123123123');
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toEqual(mockError);
+      });
+    })));
+
+  });
+
 });

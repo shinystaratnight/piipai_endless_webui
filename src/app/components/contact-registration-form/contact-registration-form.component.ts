@@ -2,6 +2,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { Component, OnInit } from '@angular/core';
 import { GeoService } from './../../services/geo.service';
 import { ContactRegistrationService } from './../../services/contact-registration.service';
+import { LoginService } from './../../services/login.service';
 
 @Component({
   selector: 'contact-registration-form',
@@ -43,12 +44,24 @@ export class ContactRegistrationFormComponent implements OnInit {
   public companyNameField: any;
   public businessIdField: any;
 
+  public username = {
+    phone_mobile: null,
+    email: null,
+    value: null
+  };
+
+  public contact: any;
+
   public error: any;
+  public response: any;
+  public emailValidateResult: any;
+  public phoneValidateResult: any;
 
   constructor(
     private geo: GeoService,
     private fb: FormBuilder,
-    private crs: ContactRegistrationService
+    private crs: ContactRegistrationService,
+    private loginService: LoginService
   ) {
     this.recruiteeContactForm = this.fb.group({
       birthday: [''],
@@ -56,7 +69,7 @@ export class ContactRegistrationFormComponent implements OnInit {
       country: [''],
       state: [''],
       city: [''],
-      address: ['', Validators.compose([Validators.required])],
+      street_address: ['', Validators.compose([Validators.required])],
       postal_code: ['', Validators.compose([Validators.required])],
       picture: [''],
       tags: [''],
@@ -69,7 +82,7 @@ export class ContactRegistrationFormComponent implements OnInit {
       city: [''],
       name: [''],
       bussiness_id: [''],
-      address: ['', Validators.compose([Validators.required])],
+      street_address: ['', Validators.compose([Validators.required])],
       postal_code: ['', Validators.compose([Validators.required])],
     });
 
@@ -92,6 +105,28 @@ export class ContactRegistrationFormComponent implements OnInit {
         });
     this.getMetaData();
     this.getTags();
+    if (this.loginService.username) {
+      const username = this.loginService.username;
+      this.username[username.field] = true;
+      this.username.value = username.value;
+      this.contactForm.patchValue({[username.field]: username.value});
+      this.loginService.username = null;
+    }
+  }
+
+  public emailValidate(email) {
+    this.crs.emailValidate(email).subscribe(
+      (res: any) => this.emailValidateResult = res,
+      (err: any) => this.emailValidateResult = err
+    );
+  }
+
+  public phoneValidate(phone) {
+    console.log(phone);
+    this.crs.phoneValidate(phone).subscribe(
+      (res: any) => this.phoneValidateResult = res,
+      (err: any) => this.phoneValidateResult = err
+    );
   }
 
   public selectCountry(country) {
@@ -120,6 +155,7 @@ export class ContactRegistrationFormComponent implements OnInit {
     this.cities = null;
     this.isCompany = true;
     this.isRecruitee = false;
+    this.recruiteeContactForm.reset();
   }
 
   public onRecruitee() {
@@ -127,6 +163,7 @@ export class ContactRegistrationFormComponent implements OnInit {
     this.cities = null;
     this.isRecruitee = true;
     this.isCompany = false;
+    this.companyContactForm.reset();
   }
 
   public getMetaData() {
@@ -159,6 +196,41 @@ export class ContactRegistrationFormComponent implements OnInit {
     this.crs.getTags().subscribe(
       (res: any) => this.tags = res.results
     );
+  }
+
+  public newContact() {
+    this.dataGenerate();
+    this.crs.registerContact(this.contact).subscribe(
+      (res: any) => this.response = res,
+      (err: any) => this.error = err
+    );
+  }
+
+  public dataGenerate() {
+    const type = this.isCompany ? 'company' : this.isRecruitee ? 'recruitee' : undefined;
+    this.contact = {
+      type,
+      data: {
+        title: this.contactForm.controls['title'].value,
+        first_name: this.contactForm.controls['first_name'].value,
+        last_name: this.contactForm.controls['last_name'].value,
+        email: this.contactForm.controls['email'].value,
+        phone_mobile: this.contactForm.controls['phone_mobile'].value,
+        address: {},
+      }
+    };
+    if (type === 'company') {
+      this.contact.data.name = this.companyContactForm.controls['name'].value;
+      this.contact.data.business_id =
+        this.companyContactForm.controls['bussiness_id'].value;
+      this.contact.data.address.country = this.companyContactForm.controls['country'].value.id;
+      this.contact.data.address.state = this.companyContactForm.controls['state'].value.id;
+      this.contact.data.address.city = this.companyContactForm.controls['city'].value.id;
+      this.contact.data.address.street_address =
+        this.companyContactForm.controls['street_address'].value;
+      this.contact.data.address.postal_code =
+        this.companyContactForm.controls['postal_code'].value;
+    }
   }
 
 }
