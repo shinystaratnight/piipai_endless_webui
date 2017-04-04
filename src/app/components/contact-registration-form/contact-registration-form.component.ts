@@ -22,6 +22,7 @@ export class ContactRegistrationFormComponent implements OnInit {
   public regions: any;
   public cities: any;
   public tags: any;
+  public companiesList: any = [];
 
   public metadata: any;
   public titleField: any;
@@ -43,6 +44,7 @@ export class ContactRegistrationFormComponent implements OnInit {
   public postalCodeField: any;
   public companyNameField: any;
   public businessIdField: any;
+  public passwordField: any;
 
   public username = {
     phone_mobile: null,
@@ -93,7 +95,8 @@ export class ContactRegistrationFormComponent implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
       phone_mobile: ['', Validators.compose([Validators.required])],
       recruiteeContact: this.recruiteeContactForm,
-      companyContact: this.companyContactForm
+      companyContact: this.companyContactForm,
+      password: ['']
     });
   }
 
@@ -138,6 +141,7 @@ export class ContactRegistrationFormComponent implements OnInit {
           this.regions = regions.results;
         }
       );
+    this.getCompaniesOfCountry(country.value.code2);
   }
 
   public selectRegion(region) {
@@ -172,6 +176,7 @@ export class ContactRegistrationFormComponent implements OnInit {
         const contact = res.fields.contact.children;
         const company = res.fields.company.children;
         const address = res.fields.contact.children.address.children;
+        const user = res.fields.user.children;
 
         this.metadata = res;
         this.titleField = contact.title;
@@ -188,6 +193,7 @@ export class ContactRegistrationFormComponent implements OnInit {
         this.postalCodeField = address.postal_code;
         this.companyNameField = company.name;
         this.businessIdField = company.business_id;
+        this.passwordField = user.password;
       },
     );
   }
@@ -199,6 +205,10 @@ export class ContactRegistrationFormComponent implements OnInit {
   }
 
   public newContact() {
+    this.response = null;
+    this.error = null;
+    this.emailValidateResult = null;
+    this.phoneValidateResult = null;
     this.dataGenerate();
     this.crs.registerContact(this.contact).subscribe(
       (res: any) => this.response = res,
@@ -217,6 +227,7 @@ export class ContactRegistrationFormComponent implements OnInit {
         email: this.contactForm.controls['email'].value,
         phone_mobile: this.contactForm.controls['phone_mobile'].value,
         address: {},
+        password: this.contactForm.controls['password'].value
       }
     };
     if (type === 'company') {
@@ -232,5 +243,14 @@ export class ContactRegistrationFormComponent implements OnInit {
         this.companyContactForm.controls['postal_code'].value;
     }
   }
+
+  public getCompaniesOfCountry(code2) {
+    this.crs.getCompaniesOfCountry(code2).subscribe(
+      (res: any) => this.companiesList = res.results.data.results,
+      (error: any) => this.error = error
+    );
+  }
+
+  public autocompleListFormatter = (data: any) => `${data.name}`;
 
 }

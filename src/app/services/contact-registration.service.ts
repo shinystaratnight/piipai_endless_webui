@@ -12,11 +12,13 @@ export class ContactRegistrationService {
   public companyContactUrl: string;
   public tagsUrl: string;
   public contactUrl: string;
+  public companyUrl: string;
 
   constructor(private http: Http) {
     this.companyContactUrl = `/ecore/api/v2/endless_core/company_contacts/`;
     this.tagsUrl = `/ecore/api/v2/endless_core/tags/`;
     this.contactUrl = `/ecore/api/v2/endless_core/contacts/`;
+    this.companyUrl = `/ecore/api/v2/endless_core/companies/`;
   }
 
   public getMetaData() {
@@ -49,6 +51,18 @@ export class ContactRegistrationService {
     return this.http.get(`${this.tagsUrl}`)
       .map((res: any) => res.json())
       .catch((error) => Observable.throw(error.json() || 'Server error'));
+  }
+
+  public getCompaniesOfCountry(code2) {
+    return this.http.get(`${this.companyUrl}?country=${code2}`)
+      .map((res: any) => res.json())
+      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
+  }
+
+  public getCompany(businessId) {
+    return this.http.get(`${this.companyUrl}?business_id=${businessId}`)
+      .map((res: any) => res.json())
+      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }
 
 }

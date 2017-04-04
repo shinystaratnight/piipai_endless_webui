@@ -67,6 +67,11 @@ describe('ContactRegistrationFormComponent', () => {
           name: {},
           business_id: {}
         }
+      },
+      user: {
+        children: {
+          password: {}
+        }
       }
     }
   };
@@ -81,6 +86,12 @@ describe('ContactRegistrationFormComponent', () => {
       });
     },
     registerContact(contact) {
+      if (response.status === 'error') {
+        return Observable.throw(response);
+      }
+      return Observable.of(response);
+    },
+    getCompaniesOfCountry(code2) {
       if (response.status === 'error') {
         return Observable.throw(response);
       }
@@ -194,8 +205,10 @@ describe('ContactRegistrationFormComponent', () => {
           id: 2
         }
       };
+      spyOn(comp, 'getCompaniesOfCountry').and.returnValue(true);
       comp.selectCountry(data);
       expect(comp.regions).toEqual([1, 2, 3]);
+      expect(comp.getCompaniesOfCountry).toHaveBeenCalled();
     });
 
   });
@@ -306,6 +319,35 @@ describe('ContactRegistrationFormComponent', () => {
       expect(comp.contact.data.address.city).toEqual(result.data.address.city);
       expect(comp.contact.data.address.street_address).toEqual(result.data.address.street_address);
       expect(comp.contact.data.address.postal_code).toEqual(result.data.address.postal_code);
+    });
+
+  });
+
+  describe('getCompaniesOfCountry method', () => {
+
+    it('should be defined', () => {
+      expect(comp.getCompaniesOfCountry).toBeDefined();
+    });
+
+    it('should update companiesList property', () => {
+      response = {
+        results: {
+          data: {
+            results: 'result'
+          }
+        }
+      };
+      comp.getCompaniesOfCountry('AU');
+      expect(comp.companiesList).toEqual('result');
+    });
+
+    it('should update error property', () => {
+      response = {
+        status: 'error',
+        errors: {}
+      };
+      comp.getCompaniesOfCountry('AU');
+      expect(comp.error).toEqual(response);
     });
 
   });

@@ -7,7 +7,7 @@
       <div class="row">
         <div class="form-group col-12 col-md-2">
           <label for="title" *ngIf="titleField">{{ titleField.label }}</label>
-          <select class="form-control" id="title" formControlName="title">
+          <select class="form-control custom-select" id="title" formControlName="title">
             <option *ngFor="let item of titleField.choices" [value]="item.value">{{ item.display_name }}</option>
           </select>
         </div>
@@ -15,16 +15,22 @@
         <div class="form-group col-12 col-md-5">
           <label for="first_name" *ngIf="firstNameField">{{ firstNameField.label }}</label>
           <input type="text" class="form-control" id="first_name" formControlName="first_name">
+          <div *ngIf="error">
+            <div class="text-danger mt-1" *ngIf="error.errors.first_name">{{ error.errors.first_name[0] }}</div>
+          </div>
         </div>
 
         <div class="form-group col-12 col-md-5">
           <label for="last_name" *ngIf="lastNameField">{{ lastNameField.label }}</label>
           <input type="text" class="form-control" id="last_name" formControlName="last_name">
+          <div *ngIf="error">
+            <div class="text-danger mt-1" *ngIf="error.errors.last_name">{{ error.errors.last_name[0] }}</div>
+          </div>
         </div>
       </div>
 
       <div class="row">
-        <div class="form-group col-12 col-md-6">
+        <div class="form-group col-12 col-md-4">
           <label for="email" *ngIf="emailField">{{ emailField.label }}</label>
           <input type="email" class="form-control" id="email" *ngIf="!username.email" formControlName="email" (blur)="emailValidate(contactForm.controls['email'].value)">
           <div class="form-control text-muted" *ngIf="username.email">{{ username.email ? username.value : '' }}</div>
@@ -32,15 +38,29 @@
             <div class="text-success mt-1" *ngIf="emailValidateResult.status === 'success'">{{ emailValidateResult.data.message }}</div>
             <div class="text-danger mt-1" *ngIf="emailValidateResult.status === 'error'">{{ emailValidateResult.errors.message }}</div>
           </div>
+          <div *ngIf="error">
+            <div class="text-danger mt-1" *ngIf="error.errors.email">{{ error.errors.email[0] }}</div>
+          </div>
         </div>
 
-        <div class="form-group col-12 col-md-6">
+        <div class="form-group col-12 col-md-4">
           <label for="phone_mobile" *ngIf="phoneMobileField">{{ phoneMobileField.label }}</label>
           <input type="tel" class="form-control" id="phone_mobile" *ngIf="!username.phone_mobile" formControlName="phone_mobile" (blur)="phoneValidate(contactForm.controls['phone_mobile'].value)">
           <div class="form-control text-muted" *ngIf="username.phone_mobile">{{ username.phone_mobile ? username.value : '' }}</div>
           <div *ngIf="phoneValidateResult">
             <div class="text-success mt-1" *ngIf="phoneValidateResult.status === 'success'">{{ phoneValidateResult.data.message }}</div>
             <div class="text-danger mt-1" *ngIf="phoneValidateResult.status === 'error'">{{ phoneValidateResult.errors.message }}</div>
+          </div>
+          <div *ngIf="error">
+            <div class="text-danger mt-1" *ngIf="error.errors.phone_mobile">{{ error.errors.phone_mobile[0] }}</div>
+          </div>
+        </div>
+
+        <div class="form-group col-12 col-md-4">
+          <label for="password" *ngIf="passwordField">{{ passwordField.label }}</label>
+          <input type="password" class="form-control" id="password" formControlName="password">
+          <div *ngIf="error">
+            <div class="text-danger mt-1" *ngIf="error.errors.password">{{ error.errors.password[0] }}</div>
           </div>
         </div>
       </div>
@@ -65,21 +85,21 @@
         <div class="row">
           <div class="form-group col-12 col-md-4">
             <label for="country" *ngIf="countryField">{{ countryField.label }}</label>
-            <select class="form-control" id="title" formControlName="country" (change)="selectCountry(this.companyContactForm.controls['country'])">
+            <select class="form-control custom-select" id="title" formControlName="country" (change)="selectCountry(this.companyContactForm.controls['country'])">
               <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
             </select>
           </div>
 
           <div class="form-group col-12 col-md-4" *ngIf="regions">
             <label for="state" *ngIf="stateField">{{ stateField.label }}</label>
-            <select class="form-control" id="title" formControlName="state" (change)="selectRegion(this.companyContactForm.controls['state'])">
+            <select class="form-control custom-select" id="title" formControlName="state" (change)="selectRegion(this.companyContactForm.controls['state'])">
               <option *ngFor="let region of regions" [ngValue]="region">{{ region.name }}</option>
             </select>
           </div>
 
           <div class="form-group col-12 col-md-4" *ngIf="cities">
             <label for="city" *ngIf="cityField">{{ cityField.label }}</label>
-            <select class="form-control" id="title" formControlName="city">
+            <select class="form-control custom-select" id="title" formControlName="city">
               <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
             </select>
           </div>
@@ -88,7 +108,14 @@
         <div class="row">
           <div class="form-group col-12 col-md-6">
             <label for="company" *ngIf="companyNameField">{{ companyNameField.label }}</label>
-            <input type="text" class="form-control" id="company" formControlName="name">
+            <input type="text" class="form-control" id="company" ngui-auto-complete formControlName="name"
+              [source]="companiesList"
+              display-property-name="name"
+              value-property-name="id"
+              [list-formatter]="autocompleListFormatter">
+            <div *ngIf="error">
+              <div class="text-danger mt-1" *ngIf="error.errors.name">{{ error.errors.name[0] }}</div>
+            </div>
           </div>
 
           <div class="form-group col-12 col-md-6">
@@ -101,11 +128,17 @@
           <div class="form-group col-12 col-md-6">
             <label for="postal_address" *ngIf="streetAddressField">{{ streetAddressField.label }}</label>
             <input type="text" class="form-control" id="postal_address" placeholder="Street House-Apartment" formControlName="street_address">
+            <div *ngIf="error">
+              <div class="text-danger mt-1" *ngIf="error.errors.street_address">{{ error.errors.last_name[0] }}</div>
+            </div>
           </div>
 
           <div class="form-group col-12 col-md-6">
             <label for="postal_code" *ngIf="postalCodeField">{{ postalCodeField.label }}</label>
             <input type="text" class="form-control" id="postal_code" formControlName="postal_code">
+            <div *ngIf="error">
+              <div class="text-danger mt-1" *ngIf="error.errors.postal_code">{{ error.errors.last_name[0] }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -134,21 +167,21 @@
         <div class="row">
           <div class="form-group col-12 col-md-4">
             <label for="country" *ngIf="countryField">{{ countryField.label }}</label>
-            <select class="form-control" id="title" formControlName="country" (change)="selectCountry(this.recruiteeContactForm.controls['country'])">
+            <select class="form-control custom-select" id="title" formControlName="country" (change)="selectCountry(this.recruiteeContactForm.controls['country'])">
               <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
             </select>
           </div>
 
           <div class="form-group col-12 col-md-4" *ngIf="regions">
             <label for="state" *ngIf="stateField">{{ stateField.label }}</label>
-            <select class="form-control" id="title" formControlName="state" (change)="selectRegion(this.recruiteeContactForm.controls['state'])">
+            <select class="form-control custom-select" id="title" formControlName="state" (change)="selectRegion(this.recruiteeContactForm.controls['state'])">
               <option *ngFor="let region of regions" [ngValue]="region">{{ region.name }}</option>
             </select>
           </div>
 
           <div class="form-group col-12 col-md-4" *ngIf="cities">
             <label for="city" *ngIf="cityField">{{ cityField.label }}</label>
-            <select class="form-control" id="title" formControlName="city">
+            <select class="form-control custom-select" id="title" formControlName="city">
               <option *ngFor="let city of cities" [ngValue]="city">{{ city.name }}</option>
             </select>
           </div>

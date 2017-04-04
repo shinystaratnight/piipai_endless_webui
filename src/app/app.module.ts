@@ -28,6 +28,7 @@ import { services } from './services/index';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
 import '../styles/styles.scss';
 
@@ -52,6 +53,7 @@ const APP_PROVIDERS = [
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     NgbModule.forRoot(),
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
+    NguiAutoCompleteModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

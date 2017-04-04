@@ -16,6 +16,8 @@ describe('ContactRegistrationService', () => {
 
   const companyContactUrl: string = `/ecore/api/v2/endless_core/company_contacts/`;
   const tagsUrl: string = `/ecore/api/v2/endless_core/tags/`;
+  const contactUrl = `/ecore/api/v2/endless_core/contacts/`;
+  const companyUrl = `/ecore/api/v2/endless_core/companies/`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,6 +50,8 @@ describe('ContactRegistrationService', () => {
 
     expect(service.companyContactUrl).toEqual(companyContactUrl);
     expect(service.tagsUrl).toEqual(tagsUrl);
+    expect(service.contactUrl).toEqual(contactUrl);
+    expect(service.companyUrl).toEqual(companyUrl);
   })));
 
   describe('getMataData method', () => {
@@ -290,6 +294,108 @@ describe('ContactRegistrationService', () => {
       });
 
       const result = service.phoneValidate('123123123');
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toEqual(mockError);
+      });
+    })));
+
+  });
+
+  describe('getCompaniesOfCountry method', () => {
+
+    it('should parse response', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'success',
+        data: {
+          message: 'phone is valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.getCompaniesOfCountry('AU');
+
+      result.subscribe((res) => {
+        expect(res).toEqual(mockResponse);
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        status: 'error',
+        errors: {
+          message: 'phone is not valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.getCompaniesOfCountry('AU');
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toEqual(mockError);
+      });
+    })));
+
+  });
+
+  describe('getCompany method', () => {
+
+    it('should parse response', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'success',
+        data: {
+          message: 'phone is valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.getCompany({business_id: 5});
+
+      result.subscribe((res) => {
+        expect(res).toEqual(mockResponse);
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        status: 'error',
+        errors: {
+          message: 'phone is not valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.getCompany({business_id: 5});
 
       result.subscribe((res) => {
         expect(res).toBeUndefined();
