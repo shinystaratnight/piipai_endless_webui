@@ -109,9 +109,10 @@
           <div class="form-group col-12 col-md-6">
             <label for="company" *ngIf="companyNameField">{{ companyNameField.label }}</label>
             <input type="text" class="form-control" id="company" ngui-auto-complete formControlName="name"
+              (blur)="checkCompany()"
               [source]="companiesList"
               display-property-name="name"
-              value-property-name="id"
+              value-property-name="name"
               [list-formatter]="autocompleListFormatter">
             <div *ngIf="error">
               <div class="text-danger mt-1" *ngIf="error.errors.name">{{ error.errors.name[0] }}</div>
@@ -119,8 +120,9 @@
           </div>
 
           <div class="form-group col-12 col-md-6">
-            <label for="bussiness_id" *ngIf="businessIdField">{{ businessIdField.label }}</label>
-            <input type="text" class="form-control" id="bussiness_id" formControlName="bussiness_id">
+            <label for="bussiness_id" *ngIf="businessIdField">{{ companyLocalization.verbose_value || businessIdField.label }}</label>
+            <input type="text" class="form-control" id="bussiness_id" formControlName="bussiness_id" aria-describedby="businessIdHelp" (blur)="checkCompany()">
+            <small id="businessIdHelp" class="form-text text-muted" *ngIf="companyLocalization">{{ companyLocalization.help_text }}</small>
           </div>
         </div>
 
@@ -240,6 +242,17 @@
             </label>
           </div>
         </div>
+      </div>
+
+      <div class="row" *ngIf="error">
+        <div class="col">
+          <div *ngIf="error.errors.non_field_errors">
+            <div *ngFor="let error of error.errors.non_field_errors" class="text-danger">{{ error }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="companyExistMessage">
+        <div class="col text-success">{{ companyExistMessage }}</div>
       </div>
 
       <div class="row">

@@ -96,6 +96,27 @@ describe('ContactRegistrationFormComponent', () => {
         return Observable.throw(response);
       }
       return Observable.of(response);
+    },
+    getCompanyLocalization(code2) {
+      if (response.status === 'error') {
+        return Observable.throw(response);
+      }
+      return Observable.of(response);
+    },
+    getCompany(name, businessId) {
+      if (response.status === 'error') {
+        return Observable.throw(response);
+      }
+      return Observable.of(response);
+    },
+    checkCompany() {
+      return true;
+    },
+    getAddressOfCompany(id) {
+      if (response.status === 'error') {
+        return Observable.throw(response);
+      }
+      return Observable.of(response);
     }
   };
 
@@ -206,9 +227,11 @@ describe('ContactRegistrationFormComponent', () => {
         }
       };
       spyOn(comp, 'getCompaniesOfCountry').and.returnValue(true);
+      spyOn(comp, 'getCompanyLocalization').and.returnValue(true);
       comp.selectCountry(data);
       expect(comp.regions).toEqual([1, 2, 3]);
       expect(comp.getCompaniesOfCountry).toHaveBeenCalled();
+      expect(comp.getCompanyLocalization).toHaveBeenCalled();
     });
 
   });
@@ -338,7 +361,7 @@ describe('ContactRegistrationFormComponent', () => {
         }
       };
       comp.getCompaniesOfCountry('AU');
-      expect(comp.companiesList).toEqual('result');
+      expect(comp.companiesList).toEqual(response.results);
     });
 
     it('should update error property', () => {
@@ -348,6 +371,89 @@ describe('ContactRegistrationFormComponent', () => {
       };
       comp.getCompaniesOfCountry('AU');
       expect(comp.error).toEqual(response);
+    });
+
+  });
+
+  describe('getCompanyLocalization method', () => {
+
+    it('should be defined', () => {
+      expect(comp.companyLocalization).toBeDefined();
+    });
+
+    it('should update companiesList property', () => {
+      response = {
+        count: 1,
+        results: [{company: 'name'}]
+      };
+      comp.getCompanyLocalization('AU');
+      expect(comp.companyLocalization).toEqual(response.results[0]);
+    });
+
+    it('should update error property', () => {
+      response = {
+        status: 'error',
+        errors: {}
+      };
+      comp.getCompanyLocalization('AU');
+      expect(comp.error).toEqual(response);
+    });
+
+  });
+
+  describe('getCompany method', () => {
+
+    it('should be defined', () => {
+      expect(comp.getCompany).toBeDefined();
+    });
+
+    it('should update getCompany property', () => {
+      response = {
+        count: 1,
+        message: 'Already exsist',
+        results: [{
+          company: 'name',
+          address: {
+            street_address: 'Backer street',
+            postal_code: 2060
+          }
+        }]
+      };
+      comp.getCompany('Test', 5);
+      expect(comp.company).toEqual(response.results[0]);
+    });
+
+    it('should update error property', () => {
+      response = {
+        status: 'error',
+        errors: {}
+      };
+      comp.getCompany('Test', 5);
+      expect(comp.error).toEqual(response);
+    });
+
+  });
+
+  describe('checkCompany method', () => {
+
+    it('should be defined', () => {
+      expect(comp.getCompany).toBeDefined();
+    });
+
+    it('should called with new company', () => {
+      spyOn(comp, 'checkCompany');
+      comp.companyContactForm.patchValue({bussiness_id: 5});
+      comp.companyContactForm.patchValue({name: 'Home LTD'});
+      comp.checkCompany();
+      expect(comp.checkCompany).toHaveBeenCalled();
+    });
+
+    it('should called with exist company', () => {
+      spyOn(comp, 'checkCompany');
+      comp.companyContactForm.patchValue({bussiness_id: 5});
+      comp.companyContactForm.patchValue({name: {name: 'Home LTD'}});
+      comp.checkCompany();
+      expect(comp.checkCompany).toHaveBeenCalled();
     });
 
   });

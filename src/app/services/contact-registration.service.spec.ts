@@ -18,6 +18,7 @@ describe('ContactRegistrationService', () => {
   const tagsUrl: string = `/ecore/api/v2/endless_core/tags/`;
   const contactUrl = `/ecore/api/v2/endless_core/contacts/`;
   const companyUrl = `/ecore/api/v2/endless_core/companies/`;
+  const companyLocUrl = `/ecore/api/v2/endless_core/company_localizations/`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -52,6 +53,7 @@ describe('ContactRegistrationService', () => {
     expect(service.tagsUrl).toEqual(tagsUrl);
     expect(service.contactUrl).toEqual(contactUrl);
     expect(service.companyUrl).toEqual(companyUrl);
+    expect(service.companyLocUrl).toEqual(companyLocUrl);
   })));
 
   describe('getMataData method', () => {
@@ -313,7 +315,7 @@ describe('ContactRegistrationService', () => {
       const mockResponse = {
         status: 'success',
         data: {
-          message: 'phone is valid'
+          results: []
         }
       };
 
@@ -335,7 +337,7 @@ describe('ContactRegistrationService', () => {
       const mockError = {
         status: 'error',
         errors: {
-          message: 'phone is not valid'
+          results: []
         }
       };
 
@@ -364,7 +366,7 @@ describe('ContactRegistrationService', () => {
       const mockResponse = {
         status: 'success',
         data: {
-          message: 'phone is valid'
+          results: []
         }
       };
 
@@ -386,7 +388,7 @@ describe('ContactRegistrationService', () => {
       const mockError = {
         status: 'error',
         errors: {
-          message: 'phone is not valid'
+          results: []
         }
       };
 
@@ -396,6 +398,108 @@ describe('ContactRegistrationService', () => {
       });
 
       const result = service.getCompany({business_id: 5});
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toEqual(mockError);
+      });
+    })));
+
+  });
+
+  describe('getCompanyLocalization method', () => {
+
+    it('should parse response', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'success',
+        data: {
+          results: []
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.getCompanyLocalization('AU');
+
+      result.subscribe((res) => {
+        expect(res).toEqual(mockResponse);
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        status: 'error',
+        errors: {
+          results: []
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.getCompanyLocalization('AU');
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toEqual(mockError);
+      });
+    })));
+
+  });
+
+  describe('getArrdessOfCompany method', () => {
+
+    it('should parse response', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'success',
+        data: {
+          results: []
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.getAddressOfCompany(1);
+
+      result.subscribe((res) => {
+        expect(res).toEqual(mockResponse);
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        status: 'error',
+        errors: {
+          results: []
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.getAddressOfCompany(1);
 
       result.subscribe((res) => {
         expect(res).toBeUndefined();

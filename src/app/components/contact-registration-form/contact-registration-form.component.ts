@@ -23,6 +23,8 @@ export class ContactRegistrationFormComponent implements OnInit {
   public cities: any;
   public tags: any;
   public companiesList: any = [];
+  public companyLocalization: any = {};
+  public company: any = {};
 
   public metadata: any;
   public titleField: any;
@@ -45,6 +47,7 @@ export class ContactRegistrationFormComponent implements OnInit {
   public companyNameField: any;
   public businessIdField: any;
   public passwordField: any;
+  public companyExistMessage: any;
 
   public username = {
     phone_mobile: null,
@@ -142,6 +145,7 @@ export class ContactRegistrationFormComponent implements OnInit {
         }
       );
     this.getCompaniesOfCountry(country.value.code2);
+    this.getCompanyLocalization(country.value.code2);
   }
 
   public selectRegion(region) {
@@ -160,6 +164,8 @@ export class ContactRegistrationFormComponent implements OnInit {
     this.isCompany = true;
     this.isRecruitee = false;
     this.recruiteeContactForm.reset();
+    this.companyLocalization = {};
+    this.companyExistMessage = null;
   }
 
   public onRecruitee() {
@@ -209,6 +215,7 @@ export class ContactRegistrationFormComponent implements OnInit {
     this.error = null;
     this.emailValidateResult = null;
     this.phoneValidateResult = null;
+    this.companyExistMessage = null;
     this.dataGenerate();
     this.crs.registerContact(this.contact).subscribe(
       (res: any) => this.response = res,
@@ -231,7 +238,10 @@ export class ContactRegistrationFormComponent implements OnInit {
       }
     };
     if (type === 'company') {
-      this.contact.data.name = this.companyContactForm.controls['name'].value;
+      this.contact.data.name =
+        (typeof this.companyContactForm.controls['name'].value === 'string') ?
+        this.companyContactForm.controls['name'].value :
+        this.companyContactForm.controls['name'].value.name;
       this.contact.data.business_id =
         this.companyContactForm.controls['bussiness_id'].value;
       this.contact.data.address.country = this.companyContactForm.controls['country'].value.id;
@@ -246,11 +256,55 @@ export class ContactRegistrationFormComponent implements OnInit {
 
   public getCompaniesOfCountry(code2) {
     this.crs.getCompaniesOfCountry(code2).subscribe(
-      (res: any) => this.companiesList = res.results.data.results,
+      (res: any) => this.companiesList = res.results,
       (error: any) => this.error = error
     );
   }
 
   public autocompleListFormatter = (data: any) => `${data.name}`;
+
+  public getCompanyLocalization(code2) {
+    this.crs.getCompanyLocalization(code2).subscribe(
+      (res: any) => {
+        if (res.count === 1) {
+          this.companyLocalization = res.results[0];
+        }
+      },
+      (err: any) => this.error = err
+    );
+  }
+
+  public getCompany(name, businessId) {
+    this.crs.getCompany(name, businessId).subscribe(
+      (res: any) => {
+        if (res.message) {
+          this.companyExistMessage = res.message;
+          this.company = res.results[0];
+          this.crs.getAddressOfCompany(this.company.id).subscribe(
+            (response: any) => {
+              const address = response.results[0].address;
+              this.companyContactForm.patchValue({street_address: address.street_address});
+              this.companyContactForm.patchValue({postal_code: address.postal_code});
+            },
+            (err: any) => this.error = err
+          );
+          this.companyContactForm.patchValue({name: this.company.name});
+        }
+      },
+      (err: any) => this.error = err
+    );
+  }
+
+  public checkCompany() {
+    const businessId = this.companyContactForm.controls['bussiness_id'].value;
+    const companyName = this.companyContactForm.controls['name'].value;
+    if (businessId && companyName) {
+      if ((typeof this.companyContactForm.controls['name'].value) === 'object') {
+        this.getCompany(this.companyContactForm.controls['name'].value.name, businessId);
+      } else if ((typeof this.companyContactForm.controls['name'].value) === 'string') {
+        this.getCompany(this.companyContactForm.controls['name'].value, businessId);
+      }
+    }
+  }
 
 }
