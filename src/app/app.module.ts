@@ -26,6 +26,7 @@ import { NoContentComponent } from './pages/no-content';
 import { components } from './components';
 import { services } from './services/index';
 import { Ng2Webstorage } from 'ng2-webstorage';
+import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 
 import '../styles/styles.scss';
 
@@ -48,7 +49,8 @@ const APP_PROVIDERS = [
     ReactiveFormsModule,
     HttpModule,
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+    DynamicFormModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
