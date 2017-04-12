@@ -1,1 +1,17 @@
-
+<div class="form-group" [formGroup]="group">
+  <label [attr.for]="config.key" *ngIf="config.templateOptions.label">
+    {{config.templateOptions.label}}
+  </label>
+  <input
+    class="form-control"
+    #input
+    [formControlName]="config.key"
+    [attr.type]="config.templateOptions.type ? config.templateOptions.type : 'text'"
+    [attr.id]="config.key"
+    [attr.name]="config.key"
+    [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''">
+  <small class="text-muted" *ngIf="config.templateOptions.description">
+    {{config.templateOptions.description}}
+  </small>
+  <div class="text-danger pb-3" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
+</div>

@@ -1,6 +1,10 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="handleSubmit($event)">
   <ng-container
     *ngFor="let field of config;"
-    formElement>
+    formElement
+    [config]="field"
+    [group]="form"
+    [errors]="errors">
   </ng-container>
+  <div class="text-center text-danger pb-3" *ngIf="errors.non_field_errors">{{errors.non_field_errors}}</div>
 </form>

@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col">
+    <ng-container
+      *ngFor="let field of config.children;"
+      formElement
+      [config]="field"
+      [group]="group"
+      [errors]="errors">
+    </ng-container>
+  </div>
+</div>
