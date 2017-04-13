@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -10,6 +10,9 @@ export class FormRowComponent implements OnInit {
   public config: any;
   public group: FormGroup;
   public errors: any;
+
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   public ngOnInit() {
     this.checkMetadata();
@@ -23,5 +26,9 @@ export class FormRowComponent implements OnInit {
       }
     });
     this.config.children = children;
+  }
+
+  public eventHandler(e) {
+    this.event.emit(e);
   }
 }

@@ -4,7 +4,8 @@
     formElement
     [config]="field"
     [group]="form"
-    [errors]="errors">
+    [errors]="errors"
+    (event)="eventHandler($event)">
   </ng-container>
   <div class="text-center text-danger pb-3" *ngIf="errors.non_field_errors">{{errors.non_field_errors}}</div>
 </form>

@@ -1,0 +1,16 @@
+<div class="form-group" [formGroup]="group">
+  <label [attr.for]="config.key">{{config.templateOptions.label}}</label>
+  <select
+    class="form-control"
+    #select
+    (change)="eventHandler($event)"
+    [formControlName]="config.key"
+    [attr.id]="config.key"
+    [attr.name]="config.key">
+      <option class="text-muted" *ngIf="config.templateOptions.placeholder" value="">{{config.templateOptions.placeholder}}</option>
+      <option *ngFor="let option of config.templateOptions.options" [attr.value]="option.key">{{option.value}}</option>
+  </select>
+  <small class="text-muted" *ngIf="config.templateOptions.description">
+    {{config.templateOptions.description}}
+  </small>
+</div>

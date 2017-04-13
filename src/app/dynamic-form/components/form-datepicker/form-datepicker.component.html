@@ -1,0 +1,17 @@
+<div class="form-group" [formGroup]="group">
+  <label [attr.for]="config.key">{{config.templateOptions.label}}</label>
+  <div class="input-group">
+    <input
+      class="form-control"
+      #d
+      #datepicker="ngbDatepicker"
+      ngbDatepicker
+      [formControlName]="config.key"
+      [attr.type]="config.templateOptions.type"
+      [attr.id]="config.key"
+      [attr.name]="config.key">
+    <div class="input-group-addon" (click)="datepicker.toggle()" >
+      <img src="assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+    </div>
+  </div>
+</div>

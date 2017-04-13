@@ -5,17 +5,23 @@ import {
   ViewContainerRef,
   OnInit,
   ComponentRef,
-  OnChanges
+  OnChanges,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormInputComponent } from '../form-input/form-input.component';
 import { FormRowComponent } from './../../containers/form-row/form-row.component';
 import { FormButtonComponent } from './../form-button/form-button.component';
+import { FormSelectComponent } from './../form-select/form-select.component';
+import { FormDatepickerComponent } from './../form-datepicker/form-datepicker.component';
 
 const components = {
   input: FormInputComponent,
   row: FormRowComponent,
-  button: FormButtonComponent
+  button: FormButtonComponent,
+  select: FormSelectComponent,
+  datepicker: FormDatepickerComponent
 };
 
 @Directive({
@@ -31,6 +37,9 @@ export class FormElementDirective implements OnInit, OnChanges {
   @Input()
   public errors: any;
 
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
+
   public component: ComponentRef<any>;
 
   constructor(
@@ -43,6 +52,7 @@ export class FormElementDirective implements OnInit, OnChanges {
       this.component.instance.config = this.config;
       this.component.instance.group = this.group;
       this.component.instance.errors = this.errors;
+      this.component.instance.event = this.event;
     }
   }
 
@@ -53,5 +63,6 @@ export class FormElementDirective implements OnInit, OnChanges {
     this.component.instance.config = this.config;
     this.component.instance.group = this.group;
     this.component.instance.errors = this.errors;
+    this.component.instance.event = this.event;
   }
 }
