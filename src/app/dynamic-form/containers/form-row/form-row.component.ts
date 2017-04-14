@@ -10,6 +10,7 @@ export class FormRowComponent implements OnInit {
   public config: any;
   public group: FormGroup;
   public errors: any;
+  public message: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();

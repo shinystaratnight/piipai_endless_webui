@@ -15,13 +15,15 @@ import { FormRowComponent } from './../../containers/form-row/form-row.component
 import { FormButtonComponent } from './../form-button/form-button.component';
 import { FormSelectComponent } from './../form-select/form-select.component';
 import { FormDatepickerComponent } from './../form-datepicker/form-datepicker.component';
+import { FormTextareaComponent } from './../form-textarea/form-textarea.component';
 
 const components = {
   input: FormInputComponent,
   row: FormRowComponent,
   button: FormButtonComponent,
   select: FormSelectComponent,
-  datepicker: FormDatepickerComponent
+  datepicker: FormDatepickerComponent,
+  textarea: FormTextareaComponent
 };
 
 @Directive({
@@ -36,6 +38,9 @@ export class FormElementDirective implements OnInit, OnChanges {
 
   @Input()
   public errors: any;
+
+  @Input()
+  public message: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -53,6 +58,7 @@ export class FormElementDirective implements OnInit, OnChanges {
       this.component.instance.group = this.group;
       this.component.instance.errors = this.errors;
       this.component.instance.event = this.event;
+      this.component.instance.message = this.message;
     }
   }
 
@@ -64,5 +70,6 @@ export class FormElementDirective implements OnInit, OnChanges {
     this.component.instance.group = this.group;
     this.component.instance.errors = this.errors;
     this.component.instance.event = this.event;
+    this.component.instance.message = this.message;
   }
 }

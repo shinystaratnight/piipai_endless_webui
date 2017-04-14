@@ -3,23 +3,19 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
-  selector: 'form-datepicker',
-  templateUrl: 'form-datepicker.component.html'
+  selector: 'form-textarea',
+  templateUrl: 'form-textarea.component.html'
 })
 
-export class FormDatepickerComponent
-  extends BasicElementComponent
-  implements OnInit, AfterViewInit {
-
-  @ViewChild('d')
-  public d;
+export class FormTextareaComponent extends BasicElementComponent implements OnInit, AfterViewInit {
+  @ViewChild('textarea')
+  public textarea;
 
   public config;
   public group: FormGroup;
   public errors: any;
   public message: any;
   public key: any;
-  public time: any;
 
   constructor(
     private fb: FormBuilder
@@ -30,10 +26,6 @@ export class FormDatepickerComponent
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.d, this.config);
-  }
-
-  public datepicker() {
-    return true;
+    this.addFlags(this.textarea, this.config);
   }
 }

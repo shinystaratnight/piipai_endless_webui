@@ -5,7 +5,14 @@
     [config]="field"
     [group]="form"
     [errors]="errors"
-    (event)="eventHandler($event)">
+    (event)="eventHandler($event)"
+    [message]="message">
   </ng-container>
-  <div class="text-center text-danger pb-3" *ngIf="errors.non_field_errors">{{errors.non_field_errors}}</div>
+  <div *ngIf="errors">
+    <div class="text-danger mt-1" *ngIf="errors.non_field_errors">{{errors.non_field_errors}}</div>
+  </div>
+  <div *ngIf="message">
+    <div *ngIf="message.form" class="text-success mt-1">{{message.form}}</div>
+  </div>
+  <ng-content></ng-content>
 </form>

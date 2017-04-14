@@ -1,17 +1,26 @@
 <div class="form-group" [formGroup]="group">
-  <label [attr.for]="config.key">{{config.templateOptions.label}}</label>
+  <label [attr.for]="key">{{config.templateOptions.label}}</label>
   <div class="input-group">
     <input
       class="form-control"
       #d
       #datepicker="ngbDatepicker"
       ngbDatepicker
-      [formControlName]="config.key"
-      [attr.type]="config.templateOptions.type"
-      [attr.id]="config.key"
-      [attr.name]="config.key">
-    <div class="input-group-addon" (click)="datepicker.toggle()" >
-      <img src="assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+      [formControlName]="key"
+      [attr.type]="'text'"
+      [attr.id]="key"
+      [attr.name]="key">
+    <div class="input-group-addon" (click)="datepicker.toggle()" style="cursor: pointer">
+      <i fa [name]="'calendar'" [border]=true></i>
     </div>
+  </div>
+  <small class="text-muted" *ngIf="config.templateOptions.description">
+    {{config.templateOptions.description}}
+  </small>
+  <div *ngIf="errors">
+    <div class="text-danger mt-1" *ngIf="errors[key]">{{errors[key]}}</div>
+  </div>
+  <div *ngIf="message">
+    <div *ngIf="message[key]" class="text-success mt-1">{{message[key]}}</div>
   </div>
 </div>

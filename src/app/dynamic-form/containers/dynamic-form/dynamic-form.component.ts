@@ -13,6 +13,9 @@ export class DynamicFormComponent implements OnInit {
   @Input()
   public errors: any = {};
 
+  @Input()
+  public message: any = {};
+
   @Output()
   public submit: EventEmitter<any> = new EventEmitter<any>();
 

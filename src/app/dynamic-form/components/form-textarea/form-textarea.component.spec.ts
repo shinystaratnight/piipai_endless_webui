@@ -2,24 +2,26 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
-import { NgbModule, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
-import { FormDatepickerComponent } from './form-datepicker.component';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { FormTextareaComponent } from './form-textarea.component';
 
-describe('FormDatepickerComponent', () => {
-  let fixture: ComponentFixture<FormDatepickerComponent>;
-  let comp: FormDatepickerComponent;
+describe('FormSelectComponent', () => {
+  let fixture: ComponentFixture<FormTextareaComponent>;
+  let comp: FormTextareaComponent;
   let el;
   let config = {
-    type: 'datepicker',
-    key: 'birthday',
+    type: 'textarea',
+    key: 'note',
     read_only: false,
     templateOptions: {
-      placeholder: '--/--/----',
-      label: 'Birthday',
-      type: 'text',
+      placeholder: 'Placeholder',
+      max: 200,
+      min: 2,
+      cols: 3,
+      rows: 5,
+      label: 'Note',
       required: true,
-      description: 'birthday text',
+      description: 'Note text',
     }
   };
   let errors = {};
@@ -27,17 +29,17 @@ describe('FormDatepickerComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        FormDatepickerComponent
+        FormTextareaComponent
       ],
       providers: [FormBuilder],
-      imports: [ReactiveFormsModule, NgbModule.forRoot(), FormsModule],
+      imports: [ReactiveFormsModule],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
   });
 
   beforeEach(async(() => {
     TestBed.compileComponents().then(() => {
-      fixture = TestBed.createComponent(FormDatepickerComponent);
+      fixture = TestBed.createComponent(FormTextareaComponent);
       comp = fixture.componentInstance;
     });
   }));

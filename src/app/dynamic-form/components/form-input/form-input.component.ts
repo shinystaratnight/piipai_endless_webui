@@ -8,46 +8,43 @@ import {
   EventEmitter
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
   selector: 'form-input',
   templateUrl: 'form-input.component.html'
 })
 
-export class FormInputComponent implements OnInit, AfterViewInit {
+export class FormInputComponent extends BasicElementComponent implements OnInit, AfterViewInit {
   @ViewChild('input')
   public input;
 
   public config;
   public group: FormGroup;
   public errors: any;
+  public message: any;
+  public key: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private fb: FormBuilder
-  ) {}
+  ) { super(); }
 
   public ngOnInit() {
-    this.group.addControl(this.config.key, this.fb.control(''));
+    this.addControl(this.config, this.fb);
   }
 
   public ngAfterViewInit() {
-    this.input.nativeElement.required = this.config.templateOptions.required;
-    if (this.config.templateOptions.max) {
-      this.input.nativeElement.maxLength = this.config.templateOptions.max;
-    }
-    if (this.config.templateOptions.min) {
-      this.input.nativeElement.minLength = this.config.templateOptions.min;
-    }
+    this.addFlags(this.input, this.config);
   }
 
   public eventHandler(e) {
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.get(this.config.key).value
+      value: this.group.get(this.key).value
     });
   }
 }
