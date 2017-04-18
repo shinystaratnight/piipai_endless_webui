@@ -20,6 +20,7 @@ export class FormDatepickerComponent
   public message: any;
   public key: any;
   public time: any;
+  public date: any;
 
   constructor(
     private fb: FormBuilder
@@ -35,5 +36,20 @@ export class FormDatepickerComponent
 
   public datepicker() {
     return true;
+  }
+
+  public updateDate() {
+    if (this.config.templateOptions.type === 'date') {
+      if (this.date) {
+        let {year = 0, month = 0, day = 0} = {...this.date};
+        this.group.get(this.key).patchValue(new Date(year, month, day));
+      }
+    } else if (this.config.templateOptions.type === 'datetime') {
+      if (this.date && this.time) {
+        let {year = 0, month = 0, day = 0} = {...this.date};
+        let {hour = 0, minute = 0} = {...this.time};
+        this.group.get(this.key).patchValue(new Date(year, month, day, hour, minute));
+      }
+    }
   }
 }

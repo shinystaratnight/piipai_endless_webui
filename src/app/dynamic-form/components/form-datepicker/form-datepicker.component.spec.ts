@@ -17,7 +17,7 @@ describe('FormDatepickerComponent', () => {
     templateOptions: {
       placeholder: '--/--/----',
       label: 'Birthday',
-      type: 'text',
+      type: 'date',
       required: true,
       description: 'birthday text',
     }
@@ -50,4 +50,62 @@ describe('FormDatepickerComponent', () => {
     expect(comp.errors).toBeDefined();
     expect(comp.config).toBeDefined();
   })));
+
+  describe('updateDate method', () => {
+
+    it('should be defined', () => {
+      expect(comp.updateDate).toBeDefined();
+    });
+
+    it('should update datepicker value (date type)',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.group = fb.group({});
+      comp.errors = errors;
+      comp.date = {
+        year: 2017,
+        month: 3,
+        day: 23
+      };
+      comp.time = {
+        hour: 7,
+        minute: 2
+      };
+      fixture.detectChanges();
+      comp.updateDate();
+      fixture.detectChanges();
+      expect(comp.group.get(comp.config.key).value)
+        .toEqual(new Date(comp.date.year, comp.date.month, comp.date.day));
+    })));
+
+    it('should update datepicker value (datetime type)',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+      fixture = TestBed.createComponent(FormDatepickerComponent);
+      comp = fixture.componentInstance;
+      config.templateOptions.type = 'datetime';
+      comp.config = config;
+      comp.group = fb.group({});
+      comp.errors = errors;
+      comp.date = {
+        year: 2017,
+        month: 3,
+        day: 23
+      };
+      comp.time = {
+        hour: 7,
+        minute: 2
+      };
+      fixture.detectChanges();
+      comp.updateDate();
+      fixture.detectChanges();
+      expect(comp.group.get(comp.config.key).value)
+        .toEqual(new Date(
+          comp.date.year,
+          comp.date.month,
+          comp.date.day,
+          comp.time.hour,
+          comp.time.minute
+        ));
+    })));
+  });
 });

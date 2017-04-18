@@ -16,6 +16,7 @@ import { FormButtonComponent } from './../form-button/form-button.component';
 import { FormSelectComponent } from './../form-select/form-select.component';
 import { FormDatepickerComponent } from './../form-datepicker/form-datepicker.component';
 import { FormTextareaComponent } from './../form-textarea/form-textarea.component';
+import { FormCollapseComponent } from './../../containers/form-collapse/form-collapse.component';
 
 const components = {
   input: FormInputComponent,
@@ -23,7 +24,8 @@ const components = {
   button: FormButtonComponent,
   select: FormSelectComponent,
   datepicker: FormDatepickerComponent,
-  textarea: FormTextareaComponent
+  textarea: FormTextareaComponent,
+  collapse: FormCollapseComponent
 };
 
 @Directive({

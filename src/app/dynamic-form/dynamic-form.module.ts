@@ -12,6 +12,7 @@ import { FormButtonComponent } from './components/form-button/form-button.compon
 import { FormSelectComponent } from './components/form-select/form-select.component';
 import { FormDatepickerComponent } from './components/form-datepicker/form-datepicker.component';
 import { FormTextareaComponent } from './components/form-textarea/form-textarea.component';
+import { FormCollapseComponent } from './containers/form-collapse/form-collapse.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { FormTextareaComponent } from './components/form-textarea/form-textarea.
     FormButtonComponent,
     FormSelectComponent,
     FormDatepickerComponent,
-    FormTextareaComponent
+    FormTextareaComponent,
+    FormCollapseComponent
   ],
   providers: [],
   entryComponents: [
@@ -39,7 +41,8 @@ import { FormTextareaComponent } from './components/form-textarea/form-textarea.
     FormButtonComponent,
     FormSelectComponent,
     FormDatepickerComponent,
-    FormTextareaComponent
+    FormTextareaComponent,
+    FormCollapseComponent
   ]
 })
 export class DynamicFormModule { }
