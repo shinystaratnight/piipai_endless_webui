@@ -17,6 +17,7 @@ import { FormSelectComponent } from './../form-select/form-select.component';
 import { FormDatepickerComponent } from './../form-datepicker/form-datepicker.component';
 import { FormTextareaComponent } from './../form-textarea/form-textarea.component';
 import { FormCollapseComponent } from './../../containers/form-collapse/form-collapse.component';
+import { FormCheckboxComponent } from './../form-checkbox/form-checkbox.component';
 
 const components = {
   input: FormInputComponent,
@@ -25,7 +26,8 @@ const components = {
   select: FormSelectComponent,
   datepicker: FormDatepickerComponent,
   textarea: FormTextareaComponent,
-  collapse: FormCollapseComponent
+  collapse: FormCollapseComponent,
+  checkbox: FormCheckboxComponent
 };
 
 @Directive({
@@ -47,6 +49,9 @@ export class FormElementDirective implements OnInit, OnChanges {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public buttonAction: EventEmitter<any> = new EventEmitter();
+
   public component: ComponentRef<any>;
 
   constructor(
@@ -61,6 +66,7 @@ export class FormElementDirective implements OnInit, OnChanges {
       this.component.instance.errors = this.errors;
       this.component.instance.event = this.event;
       this.component.instance.message = this.message;
+      this.component.instance.buttonAction = this.buttonAction;
     }
   }
 
@@ -73,5 +79,6 @@ export class FormElementDirective implements OnInit, OnChanges {
     this.component.instance.errors = this.errors;
     this.component.instance.event = this.event;
     this.component.instance.message = this.message;
+    this.component.instance.buttonAction = this.buttonAction;
   }
 }

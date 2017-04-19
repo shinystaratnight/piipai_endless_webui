@@ -15,6 +15,9 @@ export class FormRowComponent implements OnInit {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public buttonAction: EventEmitter<any> = new EventEmitter();
+
   public ngOnInit() {
     this.checkMetadata();
   }
@@ -31,5 +34,9 @@ export class FormRowComponent implements OnInit {
 
   public eventHandler(e) {
     this.event.emit(e);
+  }
+
+  public buttonActionHandler(e) {
+    this.buttonAction.emit(e);
   }
 }

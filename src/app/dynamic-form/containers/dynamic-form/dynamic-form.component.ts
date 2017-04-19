@@ -22,6 +22,9 @@ export class DynamicFormComponent implements OnInit {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public buttonAction: EventEmitter<any> = new EventEmitter();
+
   public form: FormGroup;
 
   constructor(private fb: FormBuilder) {}
@@ -49,5 +52,9 @@ export class DynamicFormComponent implements OnInit {
 
   public eventHandler(e) {
     this.event.emit(e);
+  }
+
+  public buttonActionHandler(e) {
+    this.buttonAction.emit(e);
   }
 }

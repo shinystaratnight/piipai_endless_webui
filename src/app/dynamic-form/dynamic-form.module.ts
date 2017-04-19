@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
+import { GenericFormComponent } from './components/generic-form/generic-form.component';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
 import { FormElementDirective } from './components/form-element/form-element.directive';
 import { FormInputComponent } from './components/form-input/form-input.component';
@@ -13,6 +14,9 @@ import { FormSelectComponent } from './components/form-select/form-select.compon
 import { FormDatepickerComponent } from './components/form-datepicker/form-datepicker.component';
 import { FormTextareaComponent } from './components/form-textarea/form-textarea.component';
 import { FormCollapseComponent } from './containers/form-collapse/form-collapse.component';
+import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.component';
+
+import { GenericFormService } from './services/generic-form.service';
 
 @NgModule({
   imports: [
@@ -22,7 +26,7 @@ import { FormCollapseComponent } from './containers/form-collapse/form-collapse.
     Angular2FontawesomeModule,
     FormsModule
   ],
-  exports: [DynamicFormComponent],
+  exports: [GenericFormComponent],
   declarations: [
     DynamicFormComponent,
     FormInputComponent,
@@ -32,9 +36,11 @@ import { FormCollapseComponent } from './containers/form-collapse/form-collapse.
     FormSelectComponent,
     FormDatepickerComponent,
     FormTextareaComponent,
-    FormCollapseComponent
+    FormCollapseComponent,
+    GenericFormComponent,
+    FormCheckboxComponent
   ],
-  providers: [],
+  providers: [GenericFormService],
   entryComponents: [
     FormInputComponent,
     FormRowComponent,
@@ -42,7 +48,8 @@ import { FormCollapseComponent } from './containers/form-collapse/form-collapse.
     FormSelectComponent,
     FormDatepickerComponent,
     FormTextareaComponent,
-    FormCollapseComponent
+    FormCollapseComponent,
+    FormCheckboxComponent
   ]
 })
 export class DynamicFormModule { }
