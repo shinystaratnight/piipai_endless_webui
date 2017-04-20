@@ -26,6 +26,8 @@ import { NoContentComponent } from './pages/no-content';
 import { components } from './components';
 import { services } from './services/index';
 import { Ng2Webstorage } from 'ng2-webstorage';
+import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
@@ -53,7 +55,10 @@ const APP_PROVIDERS = [
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     NgbModule.forRoot(),
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
-    NguiAutoCompleteModule
+    NguiAutoCompleteModule,
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+    DynamicFormModule,
+    Angular2FontawesomeModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
