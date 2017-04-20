@@ -21,6 +21,12 @@ export class GenericFormComponent implements OnInit, OnChanges {
   @Output()
   public redirect: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public responseForm: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  public errorForm: EventEmitter<any> = new EventEmitter();
+
   public metadata = [];
   public metadataError = [];
   public response = null;
@@ -61,16 +67,18 @@ export class GenericFormComponent implements OnInit, OnChanges {
   public parseError(errors) {
     if (errors.register) {
       this.redirect.emit({
-        key: errors.register,
+        field: errors.register,
         value: this.sendData.username
       });
       return;
     }
     this.errors = errors;
+    this.errorForm.emit(errors);
   }
 
   public parseResponse(response) {
     this.response = response;
+    this.responseForm.emit(response);
   }
 
   public eventHandler(event) {

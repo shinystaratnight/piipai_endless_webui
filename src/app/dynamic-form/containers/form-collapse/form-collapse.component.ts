@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -6,7 +6,7 @@ import { FormGroup } from '@angular/forms';
   templateUrl: 'form-collapse.component.html'
 })
 
-export class FormCollapseComponent implements OnInit {
+export class FormCollapseComponent implements OnInit, OnChanges {
   public config: any;
   public group: FormGroup;
   public errors: any;
@@ -21,6 +21,10 @@ export class FormCollapseComponent implements OnInit {
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
   public ngOnInit() {
+    this.checkMetadata();
+  }
+
+  public ngOnChanges() {
     this.checkMetadata();
   }
 

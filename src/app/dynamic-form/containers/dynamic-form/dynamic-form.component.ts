@@ -1,12 +1,12 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'dynamic-form',
   templateUrl: 'dynamic-form.component.html'
 })
 
-export class DynamicFormComponent implements OnInit {
+export class DynamicFormComponent implements OnInit, OnChanges {
   @Input()
   public config: any[] = [];
 
@@ -31,6 +31,9 @@ export class DynamicFormComponent implements OnInit {
 
   public ngOnInit() {
     this.form = this.fb.group({});
+  }
+
+  public ngOnChanges() {
     this.checkMetadata();
   }
 

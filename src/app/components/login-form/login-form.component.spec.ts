@@ -27,23 +27,11 @@ describe('LoginFormComponent', () => {
   beforeEach(async(() => {
 
     const mockLoginService = {
-      login() {
-        if (response.status === 'error') {
-          return Observable.throw(response);
-        }
-        return Observable.of(response);
-      },
       loginWithToken(token) {
         if (response.status === 'error') {
           return Observable.throw(response);
         }
         return Observable.of(response);
-      },
-      getMetaData() {
-        if (metadata.status === 'error') {
-          return Observable.throw(metadata);
-        }
-        return Observable.of(metadata);
       }
     };
 
@@ -78,10 +66,6 @@ describe('LoginFormComponent', () => {
     expect(comp).toBeDefined();
   });
 
-  it('should have loginForm property', () => {
-    expect(comp.loginForm).toBeDefined();
-  });
-
   describe('ngOnInit method', () => {
 
     it('should be defined', () => {
@@ -90,123 +74,9 @@ describe('LoginFormComponent', () => {
 
     it('should be call tokenAuth method', () => {
       spyOn(comp, 'tokenAuth');
-      spyOn(comp, 'getMetaData');
       comp.ngOnInit();
-      expect(comp.getMetaData).toHaveBeenCalled();
       expect(comp.tokenAuth).toHaveBeenCalled();
     });
-
-  });
-
-  describe('validateEmail method', () => {
-
-    it('should be defined', () => {
-      expect(comp.validateEmail).toBeDefined();
-    });
-
-    it('validate email with positive result', () => {
-      let validEmail = 'example@test.com';
-      let input = new FormControl();
-      input.setValue(validEmail);
-      expect(comp.validateEmail(input)).toBeNull();
-    });
-
-    it('validate email with negative result', () => {
-      let invalidEmail = 'exampltest.com';
-      let input = new FormControl();
-      let result = {
-        validateEmail: {
-          valid: false
-        }
-      };
-      input.setValue(invalidEmail);
-      expect(comp.validateEmail(input)).toEqual(result);
-    });
-
-  });
-
-  describe('validatePhone method', () => {
-
-    it('should be defined', () => {
-      expect(comp.validatePhone).toBeDefined();
-    });
-
-    it('validate phone with positive result', () => {
-      let validPhone = '+380978118569';
-      let input = new FormControl();
-      input.setValue(validPhone);
-      expect(comp.validatePhone(input)).toBeNull();
-    });
-
-    it('validate phone with negative result', () => {
-      let invalidPhone = '36987425';
-      let input = new FormControl();
-      let result = {
-        validatePhone: {
-          valid: false
-        }
-      };
-      input.setValue(invalidPhone);
-      expect(comp.validatePhone(input)).toEqual(result);
-    });
-  });
-
-  describe('login method', () => {
-
-    it('should be defined', () => {
-      expect(comp.login).toBeDefined();
-    });
-
-    it('should update response property', () => {
-      response = {
-        message: 'sent message'
-      };
-      comp.login();
-      expect(comp.response).toEqual(response.message);
-    });
-
-    it('should save user data', inject([LocalStorageService], (storage: LocalStorageService) => {
-      spyOn(storage, 'store');
-      response = {
-        status: 'success',
-        data: 'user data'
-      };
-      comp.login();
-      expect(storage.store).toHaveBeenCalled();
-    }));
-
-    it('should redirect to "/"', inject([Router], (router: Router) => {
-      spyOn(router, 'navigate');
-      response = {
-        status: 'success',
-        data: 'user data'
-      };
-      comp.login();
-      expect(router.navigate).toHaveBeenCalled();
-    }));
-
-    it('should parse errors', inject([Router], (router: Router) => {
-      spyOn(router, 'navigate');
-      response = {
-        status: 'error',
-        errors: {
-          register: 'email'
-        }
-      };
-      comp.login();
-      expect(router.navigate).toHaveBeenCalled();
-    }));
-
-    it('should redirect to "/"', inject([Router], (router: Router) => {
-      response = {
-        status: 'error',
-        errors: {
-          error: 'error message'
-        }
-      };
-      comp.login();
-      expect(comp.error).toEqual(response);
-    }));
 
   });
 
@@ -250,36 +120,59 @@ describe('LoginFormComponent', () => {
 
   });
 
-  describe('getMetaData method', () => {
+  describe('responseHandler method', () => {
 
     it('should be defined', () => {
-      expect(comp.getMetaData).toBeDefined();
+      expect(comp.responseHandler).toBeDefined();
     });
 
-    it('should save fields data', () => {
-      metadata = {
-        fields: {
-          username: {
-            label: 'username'
-          },
-          password: {
-            label: 'password'
-          }
-        }
+    it('should save user data', inject([LocalStorageService], (storage: LocalStorageService) => {
+      spyOn(storage, 'store');
+      response = {
+        status: 'success',
+        data: 'user data'
       };
-      comp.getMetaData();
-      expect(comp.usernameField.label).toEqual('username');
-      expect(comp.passwordField.label).toEqual('password');
+      comp.responseHandler(response);
+      expect(storage.store).toHaveBeenCalled();
+    }));
+
+    it('should redirect to "/"', inject([Router], (router: Router) => {
+      spyOn(router, 'navigate');
+      response = {
+        status: 'success',
+        data: 'user data'
+      };
+      comp.responseHandler(response);
+      expect(router.navigate).toHaveBeenCalled();
+    }));
+
+  });
+
+  describe('redirectHandler method', () => {
+
+    it('should be defined', () => {
+      expect(comp.redirectHandler).toBeDefined();
     });
 
-    it('should parse error', () => {
-      metadata = {
-        status: 'error',
-        message: 'error message'
+    it('should save data for register form',
+      inject([LoginService], (loginService: LoginService) => {
+      let data = {
+        field: 'email',
+        data: 'test@test.com'
       };
-      comp.getMetaData();
-      expect(comp.error).toEqual(metadata);
-    });
+      comp.redirectHandler(data);
+      expect(loginService.username).toEqual(data);
+    }));
+
+    it('should redirect to "/register"', inject([Router], (router: Router) => {
+      spyOn(router, 'navigate');
+      let data = {
+        field: 'email',
+        data: 'test@test.com'
+      };
+      comp.responseHandler(data);
+      expect(router.navigate).toHaveBeenCalled();
+    }));
 
   });
 
