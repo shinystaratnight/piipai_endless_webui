@@ -1,0 +1,9 @@
+<dynamic-form
+  [config]="metadata"
+  [errors]="errors"
+  [message]="response"
+  (submit)="submitForm($event)"
+  (event)="eventHandler($event)"
+  (buttonAction)="buttonActionHandler($event)">
+  <ng-content></ng-content>
+</dynamic-form>

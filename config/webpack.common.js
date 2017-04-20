@@ -55,6 +55,7 @@ module.exports = function (options) {
     entry: {
 
       'polyfills': './src/polyfills.browser.ts',
+      'fa':        'font-awesome-sass-loader!./config/font-awesome.config.js',
       'main':      AOT ? './src/main.browser.aot.ts' :
                   './src/main.browser.ts'
 

@@ -1,0 +1,8 @@
+<div class="form-group">
+  <button class="btn btn-primary pl-4 pr-4" [attr.type]="config.templateOptions.type" (click)="action($event)">
+    {{config.templateOptions.label}}
+  </button>
+  <small class="text-muted" *ngIf="config.templateOptions.description">
+    {{config.templateOptions.description}}
+  </small>
+</div>

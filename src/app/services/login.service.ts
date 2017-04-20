@@ -10,37 +10,21 @@ import 'rxjs/add/observable/throw';
 export class LoginService {
 
   public url: string;
-  public username: any;
+  public _username: any;
 
-  constructor(private http: Http) {
-    this.url = `/ecore/api/v2/login/`;
+  constructor(private http: Http) {}
+
+  set username(value) {
+    this._username = value;
   }
 
-  public login(data) {
+  get username() {
+    return this._username;
+  }
+
+  public loginWithToken(url, token) {
     this.username = null;
-    return this.http.post(this.url, data)
-      .map((res: Response) => res.json())
-      .catch((error: any) => {
-        const register = error.json().errors.register;
-        if (register) {
-          this.username = {
-            field: register,
-            value: data.username
-          };
-        }
-        return Observable.throw(error.json() || 'Server error');
-      });
-  }
-
-  public loginWithToken(token) {
-    this.username = null;
-    return this.http.get(`${this.url}${token}`)
-      .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
-  }
-
-  public getMetaData() {
-    return this.http.options(this.url)
+    return this.http.get(`${url}${token}`)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }
