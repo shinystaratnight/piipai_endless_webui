@@ -34,6 +34,9 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
+    if (this.config.value) {
+      this.group.get(this.key).patchValue(this.config.value);
+    }
   }
 
   public ngAfterViewInit() {
@@ -41,10 +44,12 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public eventHandler(e) {
-    this.event.emit({
-      type: e.type,
-      el: this.config,
-      value: this.group.get(this.key).value
-    });
+    if (!this.config.templateOptions.readonly && this.group.get(this.key).value) {
+      this.event.emit({
+        type: e.type,
+        el: this.config,
+        value: this.group.get(this.key).value
+      });
+    }
   }
 }

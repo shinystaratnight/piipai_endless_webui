@@ -16,7 +16,7 @@ describe('ContactRegistrationService', () => {
 
   const companyContactUrl: string = `/ecore/api/v2/endless_core/company_contacts/`;
   const tagsUrl: string = `/ecore/api/v2/endless_core/tags/`;
-  const contactUrl = `/ecore/api/v2/endless_core/contacts/`;
+  const contactUrl = `/ecore/api/v2/endless-core/contacts/`;
   const companyUrl = `/ecore/api/v2/endless_core/companies/`;
   const companyLocUrl = `/ecore/api/v2/endless_core/company_localizations/`;
 
@@ -55,53 +55,6 @@ describe('ContactRegistrationService', () => {
     expect(service.companyUrl).toEqual(companyUrl);
     expect(service.companyLocUrl).toEqual(companyLocUrl);
   })));
-
-  describe('getMataData method', () => {
-
-    it('should parse response', async(inject(
-      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
-
-      const mockResponse = {
-        status: 'ok'
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockRespond(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
-      });
-
-      const result = service.getMetaData();
-
-      result.subscribe((res) => {
-        expect(res).toEqual({
-          status: 'ok'
-        });
-      });
-    })));
-
-    it('should parse error', async(inject(
-      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
-
-      const mockError = {
-        register: 'email'
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockError(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
-      });
-
-      const result = service.getMetaData();
-
-      result.subscribe((res) => {
-        expect(res).toBeUndefined();
-      },
-      (err) => {
-        expect(err).toBeDefined();
-      });
-    })));
-
-  });
 
   describe('getTags method', () => {
 
@@ -145,163 +98,6 @@ describe('ContactRegistrationService', () => {
       },
       (err) => {
         expect(err).toBeDefined();
-      });
-    })));
-
-  });
-
-  describe('registerContact method', () => {
-
-    it('should parse response', async(inject(
-      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
-
-      const mockResponse = {
-        results: []
-      };
-      const contact = {
-        type: 'company',
-        data: {}
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockRespond(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
-      });
-
-      const result = service.registerContact(contact);
-
-      result.subscribe((res) => {
-        expect(res).toEqual({
-          results: []
-        });
-      });
-    })));
-
-    it('should parse error', async(inject(
-      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
-
-      const mockError = {
-        register: 'email'
-      };
-      const contact = {
-        type: 'company',
-        data: {}
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockError(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
-      });
-
-      const result = service.registerContact(contact);
-
-      result.subscribe((res) => {
-        expect(res).toBeUndefined();
-      },
-      (err) => {
-        expect(err).toBeDefined();
-      });
-    })));
-
-  });
-
-  describe('emailValidate method', () => {
-
-    it('should parse response', async(inject(
-      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
-
-      const mockResponse = {
-        status: 'success',
-        data: {
-          message: 'email is valid'
-        }
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockRespond(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
-      });
-
-      const result = service.emailValidate('test@test.com');
-
-      result.subscribe((res) => {
-        expect(res).toEqual(mockResponse);
-      });
-    })));
-
-    it('should parse error', async(inject(
-      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
-
-      const mockError = {
-        status: 'error',
-        errors: {
-          message: 'email is not valid'
-        }
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockError(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
-      });
-
-      const result = service.emailValidate('adasdasdas');
-
-      result.subscribe((res) => {
-        expect(res).toBeUndefined();
-      },
-      (err) => {
-        expect(err).toEqual(mockError);
-      });
-    })));
-
-  });
-
-  describe('phoneValidate method', () => {
-
-    it('should parse response', async(inject(
-      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
-
-      const mockResponse = {
-        status: 'success',
-        data: {
-          message: 'phone is valid'
-        }
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockRespond(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
-      });
-
-      const result = service.phoneValidate('+380978223695');
-
-      result.subscribe((res) => {
-        expect(res).toEqual(mockResponse);
-      });
-    })));
-
-    it('should parse error', async(inject(
-      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
-
-      const mockError = {
-        status: 'error',
-        errors: {
-          message: 'phone is not valid'
-        }
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockError(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
-      });
-
-      const result = service.phoneValidate('123123123');
-
-      result.subscribe((res) => {
-        expect(res).toBeUndefined();
-      },
-      (err) => {
-        expect(err).toEqual(mockError);
       });
     })));
 
@@ -500,6 +296,79 @@ describe('ContactRegistrationService', () => {
       });
 
       const result = service.getAddressOfCompany(1);
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toEqual(mockError);
+      });
+    })));
+
+  });
+
+  describe('fieldValidation method', () => {
+
+    it('should parse response', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'success',
+        data: {
+          message: 'email is valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.fieldValidation('email', 'test@test.com');
+
+      result.subscribe((res) => {
+        expect(res).toEqual(mockResponse);
+      });
+    })));
+
+    it('should parse phone_mobile', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'success',
+        data: {
+          message: 'phone_mobile is valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.fieldValidation('phone_mobile', 'test@test.com');
+
+      result.subscribe((res) => {
+        expect(res).toEqual(mockResponse);
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        status: 'error',
+        errors: {
+          message: 'email is not valid'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.fieldValidation('email', 'adasdasdas');
 
       result.subscribe((res) => {
         expect(res).toBeUndefined();

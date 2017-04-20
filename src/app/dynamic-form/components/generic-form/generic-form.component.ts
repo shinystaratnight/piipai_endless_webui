@@ -12,6 +12,15 @@ export class GenericFormComponent implements OnInit, OnChanges {
   @Input()
   public endpoint: string = '';
 
+  @Input()
+  public data = null;
+
+  @Input()
+  public response = null;
+
+  @Input()
+  public errors = null;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -29,8 +38,8 @@ export class GenericFormComponent implements OnInit, OnChanges {
 
   public metadata = [];
   public metadataError = [];
-  public response = null;
-  public errors = null;
+  // public response = null;
+  // public errors = null;
   public sendData = null;
 
   constructor(

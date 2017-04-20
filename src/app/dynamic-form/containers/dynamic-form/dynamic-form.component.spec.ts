@@ -88,4 +88,37 @@ describe('DynamicFormComponent', () => {
 
   });
 
+  describe('addData method', () => {
+
+    it('should update metadata', async(() => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      comp.config = [{
+        key: 'email',
+        value: '',
+        templateOptions: {
+          readonly: false
+        }
+      }, {
+        children: [{
+          key: 'phone_mobile',
+          value: '',
+          templateOptions: {
+            readonly: false
+          }
+        }]
+      }];
+      comp.data = [{
+        key: 'email',
+        value: 'test@test.com',
+        readonly: true
+      }];
+      fixture.detectChanges();
+      comp.addData(comp.data, comp.config);
+      expect(comp.config[0].value).toEqual(comp.data[0].value);
+      expect(comp.config[0].templateOptions.readonly).toEqual(comp.data[0].readonly);
+    }));
+
+  });
+
 });

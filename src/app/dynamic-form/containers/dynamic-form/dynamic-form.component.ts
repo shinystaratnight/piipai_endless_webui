@@ -16,6 +16,9 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Input()
   public message: any = {};
 
+  @Input()
+  public data = null;
+
   @Output()
   public submit: EventEmitter<any> = new EventEmitter<any>();
 
@@ -35,6 +38,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public ngOnChanges() {
     this.checkMetadata();
+    this.addData(this.data, this.config);
   }
 
   public handleSubmit(event: Event) {
@@ -59,5 +63,23 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public buttonActionHandler(e) {
     this.buttonAction.emit(e);
+  }
+
+  public addData(data, config) {
+    if (data && config) {
+      config.forEach((el) => {
+        if (el.key) {
+          data.forEach((elem) => {
+            if (elem.key === el.key) {
+              el.value = elem.value;
+              el.templateOptions.readonly = elem.readonly;
+            }
+          });
+        }
+        if (el.children) {
+          this.addData(data, el.children);
+        }
+      });
+    }
   }
 }

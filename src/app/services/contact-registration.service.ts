@@ -18,35 +18,9 @@ export class ContactRegistrationService {
   constructor(private http: Http) {
     this.companyContactUrl = `/ecore/api/v2/endless_core/company_contacts/`;
     this.tagsUrl = `/ecore/api/v2/endless_core/tags/`;
-    this.contactUrl = `/ecore/api/v2/endless_core/contacts/`;
+    this.contactUrl = `/ecore/api/v2/endless-core/contacts/`;
     this.companyUrl = `/ecore/api/v2/endless_core/companies/`;
     this.companyLocUrl = `/ecore/api/v2/endless_core/company_localizations/`;
-  }
-
-  public getMetaData() {
-    return this.http.get(`${this.companyContactUrl}metadata/?type=change`)
-      .map((res: any) => res.json())
-      .catch((error) => Observable.throw(error.json() || 'Server error'));
-  }
-
-  public registerContact(contact) {
-    if (contact.type === 'company') {
-      return this.http.post(`${this.companyContactUrl}`, contact.data)
-        .map((res: any) => res.json())
-        .catch((error) => Observable.throw(error.json() || 'Server error'));
-    }
-  }
-
-  public emailValidate(email) {
-    return this.http.get(`${this.contactUrl}validate/?email=${email}`)
-      .map((res: any) => res.json())
-      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
-  }
-
-  public phoneValidate(phone) {
-    return this.http.get(`${this.contactUrl}validate/?phone=${phone}`)
-      .map((res: any) => res.json())
-      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }
 
   public getTags() {
@@ -75,6 +49,15 @@ export class ContactRegistrationService {
 
   public getAddressOfCompany(id) {
     return this.http.get(`${this.companyUrl}${id}/addresses/?hq=True`)
+      .map((res: any) => res.json())
+      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
+  }
+
+  public fieldValidation(field, value) {
+    if (field === 'phone_mobile') {
+      field = 'phone';
+    }
+    return this.http.get(`${this.contactUrl}validate/?${field}=${value}`)
       .map((res: any) => res.json())
       .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }
