@@ -44,7 +44,9 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public eventHandler(e) {
-    if (!this.config.templateOptions.readonly && this.group.get(this.key).value) {
+    if (!this.config.templateOptions.readonly
+      && this.group.get(this.key).value
+      && !this.config.read_only) {
       this.event.emit({
         type: e.type,
         el: this.config,

@@ -28,16 +28,19 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public resourseData: EventEmitter<any> = new EventEmitter();
+
   public form: FormGroup;
 
   constructor(private fb: FormBuilder) {}
 
   public ngOnInit() {
     this.form = this.fb.group({});
+    this.addData(this.data, this.config);
   }
 
   public ngOnChanges() {
-    this.checkMetadata();
     this.addData(this.data, this.config);
   }
 
@@ -45,16 +48,6 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     event.preventDefault();
     event.stopPropagation();
     this.submit.emit(this.form.value);
-  }
-
-  public checkMetadata() {
-    const config = [];
-    this.config.forEach((el) => {
-      if (!el.read_only) {
-        config.push(el);
-      }
-    });
-    this.config = config;
   }
 
   public eventHandler(e) {
@@ -65,14 +58,19 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     this.buttonAction.emit(e);
   }
 
+  public resourseDataHandler(e) {
+    this.resourseData.emit(e);
+  }
+
   public addData(data, config) {
     if (data && config) {
       config.forEach((el) => {
         if (el.key) {
           data.forEach((elem) => {
             if (elem.key === el.key) {
-              el.value = elem.value;
-              el.templateOptions.readonly = elem.readonly;
+              Object.keys(elem.data).forEach((prop) => {
+                el[prop] = elem.data[prop];
+              });
             }
           });
         }

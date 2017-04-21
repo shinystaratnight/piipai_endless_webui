@@ -23,11 +23,6 @@ describe('ContactRegistrationFormComponent', () => {
   let response: any;
 
   const mockGeoService = {
-    getCountries() {
-      return Observable.of({
-        results: [1, 2, 3]
-      });
-    },
     getRegions() {
       return Observable.of({
         results: [1, 2, 3]
@@ -121,8 +116,6 @@ describe('ContactRegistrationFormComponent', () => {
       expect(comp.isRecruitee).toEqual(false);
       comp.onRecruitee();
       fixture.detectChanges();
-      expect(comp.regions).toBeNull();
-      expect(comp.cities).toBeNull();
       expect(comp.isCompany).toEqual(false);
       expect(comp.isRecruitee).toEqual(true);
     });
@@ -138,8 +131,6 @@ describe('ContactRegistrationFormComponent', () => {
       fixture.detectChanges();
       comp.onCompany();
       fixture.detectChanges();
-      expect(comp.regions).toBeNull();
-      expect(comp.cities).toBeNull();
       expect(comp.isCompany).toEqual(true);
       expect(comp.isRecruitee).toEqual(false);
     });
@@ -151,11 +142,6 @@ describe('ContactRegistrationFormComponent', () => {
       expect(comp.ngOnInit).toBeDefined();
     });
 
-    it('should update countries property', () => {
-      comp.ngOnInit();
-      expect(comp.countries).toEqual([1, 2, 3]);
-    });
-
   });
 
   describe('selectCountry method', () => {
@@ -165,15 +151,10 @@ describe('ContactRegistrationFormComponent', () => {
     });
 
     it('should update regions property', () => {
-      const data = {
-        value: {
-          id: 2
-        }
-      };
+      const data = { id: 2 };
       spyOn(comp, 'getCompaniesOfCountry').and.returnValue(true);
       spyOn(comp, 'getCompanyLocalization').and.returnValue(true);
-      comp.selectCountry(data);
-      expect(comp.regions).toEqual([1, 2, 3]);
+      comp.selectCountry('endpoint', data);
       expect(comp.getCompaniesOfCountry).toHaveBeenCalled();
       expect(comp.getCompanyLocalization).toHaveBeenCalled();
     });
@@ -187,12 +168,8 @@ describe('ContactRegistrationFormComponent', () => {
     });
 
     it('should update sities property', () => {
-      const data = {
-        value: {
-          id: 2
-        }
-      };
-      comp.selectRegion(data);
+      const data = { id: 2 };
+      comp.selectRegion('endpoint', data);
       expect(comp.cities).toEqual([1, 2, 3]);
     });
 

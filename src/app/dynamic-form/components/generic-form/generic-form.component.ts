@@ -1,3 +1,4 @@
+import { RequestOptions } from '@angular/http';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { GenericFormService } from './../../services/generic-form.service';
@@ -13,13 +14,16 @@ export class GenericFormComponent implements OnInit, OnChanges {
   public endpoint: string = '';
 
   @Input()
-  public data = null;
+  public data = [];
 
   @Input()
   public response = null;
 
   @Input()
   public errors = null;
+
+  @Input()
+  public relatedField = null;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -38,8 +42,6 @@ export class GenericFormComponent implements OnInit, OnChanges {
 
   public metadata = [];
   public metadataError = [];
-  // public response = null;
-  // public errors = null;
   public sendData = null;
 
   constructor(
@@ -60,7 +62,7 @@ export class GenericFormComponent implements OnInit, OnChanges {
 
   public getMetadata(endpoint) {
     this.service.getMetadata(endpoint).subscribe(
-        ((data: any) => this.metadata = data),
+        ((data: any) => this.metadata = this.updateMatadata(data)),
         ((error: any) => this.metadataError = error));
   }
 
@@ -96,5 +98,43 @@ export class GenericFormComponent implements OnInit, OnChanges {
 
   public buttonActionHandler(e) {
     this.buttonAction.emit(e);
+  }
+
+  public resourseDataHandler(e) {
+    if (!this.relatedField) {
+      this.getRalatedData(e.key, e.endpoint);
+    } else {
+      let fields = Object.keys(this.relatedField);
+      fields.forEach((el) => {
+        if (el !== e.key) {
+          this.getRalatedData(e.key, e.endpoint);
+        }
+      });
+    }
+    this.getRalatedData(e.key, e.endpoint);
+  }
+
+  public getRalatedData(key, endpoint) {
+     this.service.getAll(endpoint).subscribe(
+      (response: any) => {
+        this.data = [{
+          key,
+          data: { options: response.results }
+        }];
+      }
+    );
+  }
+
+  public updateMatadata(metadata) {
+    if (this.relatedField) {
+      metadata.forEach((el) => {
+        if (el.key && this.relatedField[el.key]) {
+          el.related = this.relatedField[el.key];
+        } else if (el.children) {
+          this.updateMatadata(el.children);
+        }
+      });
+    }
+    return metadata;
   }
 }

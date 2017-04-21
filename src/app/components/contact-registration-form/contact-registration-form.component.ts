@@ -14,15 +14,7 @@ export class ContactRegistrationFormComponent implements OnInit {
 
   public isCompany: boolean = true;
   public isRecruitee: boolean = false;
-  public datepicker: any;
 
-  public contactForm: FormGroup;
-  public recruiteeContactForm: FormGroup;
-  public companyContactForm: FormGroup;
-
-  public countries: any;
-  public regions: any;
-  public cities: any;
   public tags: any;
   public companiesList: any = [];
   public companyLocalization: any = {};
@@ -38,64 +30,67 @@ export class ContactRegistrationFormComponent implements OnInit {
 
   public data = [];
 
-  public contact: any;
+  public relatedField: any;
 
   public error = {};
   public response = {};
-  public emailValidateResult: any;
-  public phoneValidateResult: any;
 
   constructor(
     private geo: GeoService,
     private fb: FormBuilder,
     private crs: ContactRegistrationService,
     private loginService: LoginService
-  ) {}
+  ) {
+    this.relatedField = {
+      'address.state' : true,
+      'address.city': true
+    };
+  }
 
   public ngOnInit() {
-    this.geo.getCountries()
-      .subscribe(
-        (countries) => {
-          this.countries = countries.results;
-        });
-    this.getTags();
     if (this.loginService.username) {
       const username = this.loginService.username;
       this.loginService.username = null;
       this.data.push({
         key: username.field,
-        value: username.value,
-        readonly: true
+        data: {
+          value: username.value,
+          read_only: true
+        }
       });
     }
   }
 
-  public selectCountry(country) {
-    this.regions = null;
-    this.cities = null;
-    this.geo.getRegions(country.value.id)
+  public selectCountry(endpoint, country) {
+    this.geo.getRegions(endpoint, country.id)
       .subscribe(
         (regions) => {
-          this.regions = regions.results;
+          let newData = {
+            key: 'address.state',
+            data: { options: regions.results }
+          };
+          this.data = this.checkData(this.data, newData);
+          // console.log(this.data);
         }
       );
-    this.getCompaniesOfCountry(country.value.code2);
-    this.getCompanyLocalization(country.value.code2);
+    // this.getCompaniesOfCountry(country.value.code2);
+    // this.getCompanyLocalization(country.value.code2);
   }
 
-  public selectRegion(region) {
-    this.cities = null;
-    this.geo.getCities(region.value.id)
+  public selectRegion(endpoint, region) {
+    this.geo.getCities(endpoint, region.id)
       .subscribe(
         (cities) => {
-          this.cities = cities.results;
+          let newData = {
+            key: 'address.city',
+            data: { options: cities.results }
+          };
+          this.data = this.checkData(this.data, newData);
         }
       );
   }
 
   public onCompany() {
-    this.regions = null;
-    this.cities = null;
     this.isCompany = true;
     this.isRecruitee = false;
     this.companyLocalization = {};
@@ -103,16 +98,8 @@ export class ContactRegistrationFormComponent implements OnInit {
   }
 
   public onRecruitee() {
-    this.regions = null;
-    this.cities = null;
     this.isRecruitee = true;
     this.isCompany = false;
-  }
-
-  public getTags() {
-    this.crs.getTags().subscribe(
-      (res: any) => this.tags = res.results
-    );
   }
 
   public getCompaniesOfCountry(code2) {
@@ -185,12 +172,26 @@ export class ContactRegistrationFormComponent implements OnInit {
     if (event.type === 'blur' && (event.el.key === 'email' || event.el.key === 'phone_mobile')) {
       this.fieldValidation(event.el.key, event.value);
     }
+    if (event.type === 'change' && event.el.key === 'address.country') {
+      this.selectCountry(event.el.endpoint, event.value[0]);
+    }
+    if (event.type === 'change' && event.el.key === 'address.state') {
+      this.selectRegion(event.el.endpoint, event.value[0]);
+    }
   }
 
   public clearResult(result, field) {
     if (result[field]) {
       delete result[field];
     }
+  }
+
+  public checkData(data, newData) {
+    let exist = this.data.filter((el) => el.key === newData.key);
+    if (!exist.length) {
+      data.push(newData);
+    }
+    return data;
   }
 
 }

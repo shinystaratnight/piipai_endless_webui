@@ -34,19 +34,4 @@ describe('FormRowComponent', () => {
     expect(comp.config).toBeDefined();
   });
 
-  describe('checkMetadata method', () => {
-
-    it('should parse config', async(() => {
-      comp.config = {
-        children: [{
-          read_only: true
-        }]
-      };
-      fixture.detectChanges();
-      comp.checkMetadata();
-      fixture.detectChanges();
-      expect(comp.config).toEqual({children: []});
-    }));
-
-  });
 });

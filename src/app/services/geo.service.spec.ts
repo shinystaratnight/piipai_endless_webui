@@ -45,67 +45,6 @@ describe('GeoService', () => {
     expect(service).toBeDefined();
   })));
 
-  it('should have urls', async(inject(
-    [GeoService, MockBackend], (service, mockBackend) => {
-
-    expect(service.countriesUrl).toEqual(countriesUrl);
-    expect(service.regionsUrl).toEqual(regionsUrl);
-    expect(service.citiesUrl).toEqual(citiesUrl);
-  })));
-
-  describe('getCountries method', () => {
-
-    it('should parse response', async(inject(
-      [GeoService, MockBackend], (service, mockBackend) => {
-
-      const mockResponse = {
-        status: 'ok'
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockRespond(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
-      });
-
-      const result = service.getCountries();
-
-      result.subscribe((res) => {
-        expect(res).toEqual({
-          status: 'ok'
-        });
-      });
-    })));
-
-    it('should parse error', async(inject(
-      [GeoService, MockBackend], (service, mockBackend) => {
-
-      const mockError = {
-        error: 'error'
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockError(
-            new Response(new ResponseOptions({
-              type: ResponseType.Error,
-              status: 400,
-              body: JSON.stringify(mockError)
-            })));
-      });
-
-      const result = service.getCountries();
-
-      expect(result).toBeDefined();
-
-      result.subscribe((res) => {
-        expect(res).toBeUndefined();
-      },
-      (err) => {
-        expect(err).toEqual(mockError);
-      });
-    })));
-
-  });
-
   describe('getRegions method', () => {
 
     it('should parse response', async(inject(
