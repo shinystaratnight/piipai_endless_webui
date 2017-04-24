@@ -18,18 +18,11 @@ export class FormRowComponent {
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
-  @Output()
-  public resourseData: EventEmitter<any> = new EventEmitter();
-
   public eventHandler(e) {
     this.event.emit(e);
   }
 
   public buttonActionHandler(e) {
     this.buttonAction.emit(e);
-  }
-
-  public resourseDataHandler(e) {
-    this.resourseData.emit(e);
   }
 }

@@ -9,7 +9,8 @@
         [response]="response"
         [errors]="error"
         [relatedField]="relatedField"
-        (event)="eventHandler($event)">
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonActionHandler($event)">
         <div class="form-group">
           <button type="submit" class="btn btn-primary pl-4 pr-4 mt-3">Register</button>
         </div>

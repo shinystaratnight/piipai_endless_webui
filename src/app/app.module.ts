@@ -30,7 +30,6 @@ import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
 import '../styles/styles.scss';
 
@@ -55,7 +54,6 @@ const APP_PROVIDERS = [
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     NgbModule.forRoot(),
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
-    NguiAutoCompleteModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     DynamicFormModule,
     Angular2FontawesomeModule

@@ -22,19 +22,6 @@ describe('ContactRegistrationFormComponent', () => {
   let el;
   let response: any;
 
-  const mockGeoService = {
-    getRegions() {
-      return Observable.of({
-        results: [1, 2, 3]
-      });
-    },
-    getCities() {
-      return Observable.of({
-        results: [1, 2, 3]
-      });
-    }
-  };
-
   const mockContactRegistrationService = {
     getTags() {
       return Observable.of({
@@ -83,7 +70,6 @@ describe('ContactRegistrationFormComponent', () => {
         ContactRegistrationFormComponent
       ],
       providers: [
-        { provide: GeoService, useValue: mockGeoService },
         { provide: ContactRegistrationService, useValue: mockContactRegistrationService },
         { provide: LoginService, useValue: mockLoginService }
       ],
@@ -102,75 +88,10 @@ describe('ContactRegistrationFormComponent', () => {
     });
   }));
 
-  it('should have properties', () => {
-    fixture.detectChanges();
-    expect(comp.isCompany).toEqual(true);
-    expect(comp.isRecruitee).toEqual(false);
-  });
-
-  describe('onRecruitee method', () => {
-
-    it('should show recruitee form fields', () => {
-      fixture.detectChanges();
-      expect(comp.isCompany).toEqual(true);
-      expect(comp.isRecruitee).toEqual(false);
-      comp.onRecruitee();
-      fixture.detectChanges();
-      expect(comp.isCompany).toEqual(false);
-      expect(comp.isRecruitee).toEqual(true);
-    });
-  });
-
-  describe('onCompany method', () => {
-
-    it('should show company form fields', () => {
-      fixture.detectChanges();
-      expect(comp.isCompany).toEqual(true);
-      expect(comp.isRecruitee).toEqual(false);
-      comp.onRecruitee();
-      fixture.detectChanges();
-      comp.onCompany();
-      fixture.detectChanges();
-      expect(comp.isCompany).toEqual(true);
-      expect(comp.isRecruitee).toEqual(false);
-    });
-  });
-
   describe('ngOnInit method', () => {
 
     it('should be defined', () => {
       expect(comp.ngOnInit).toBeDefined();
-    });
-
-  });
-
-  describe('selectCountry method', () => {
-
-    it('should be defined', () => {
-      expect(comp.selectCountry).toBeDefined();
-    });
-
-    it('should update regions property', () => {
-      const data = { id: 2 };
-      spyOn(comp, 'getCompaniesOfCountry').and.returnValue(true);
-      spyOn(comp, 'getCompanyLocalization').and.returnValue(true);
-      comp.selectCountry('endpoint', data);
-      expect(comp.getCompaniesOfCountry).toHaveBeenCalled();
-      expect(comp.getCompanyLocalization).toHaveBeenCalled();
-    });
-
-  });
-
-  describe('selectRegion method', () => {
-
-    it('should be defined', () => {
-      expect(comp.selectRegion).toBeDefined();
-    });
-
-    it('should update sities property', () => {
-      const data = { id: 2 };
-      comp.selectRegion('endpoint', data);
-      expect(comp.cities).toEqual([1, 2, 3]);
     });
 
   });

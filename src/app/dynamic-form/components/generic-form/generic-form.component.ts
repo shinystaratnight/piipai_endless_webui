@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Observable';
 import { RequestOptions } from '@angular/http';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
@@ -8,13 +9,13 @@ import { GenericFormService } from './../../services/generic-form.service';
   templateUrl: 'generic-form.component.html'
 })
 
-export class GenericFormComponent implements OnInit, OnChanges {
+export class GenericFormComponent implements OnChanges {
 
   @Input()
   public endpoint: string = '';
 
   @Input()
-  public data = [];
+  public data = {};
 
   @Input()
   public response = null;
@@ -23,7 +24,7 @@ export class GenericFormComponent implements OnInit, OnChanges {
   public errors = null;
 
   @Input()
-  public relatedField = null;
+  public relatedField = {};
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -43,26 +44,28 @@ export class GenericFormComponent implements OnInit, OnChanges {
   public metadata = [];
   public metadataError = [];
   public sendData = null;
+  public currentEndpoint: string;
 
   constructor(
     private service: GenericFormService
   ) {}
 
-  public ngOnInit() {
-    if (this.endpoint) {
-      this.getMetadata(this.endpoint);
-    }
-  }
-
   public ngOnChanges() {
-    if (this.endpoint) {
+    if (this.endpoint !== this.currentEndpoint) {
+      this.currentEndpoint = this.endpoint;
       this.getMetadata(this.endpoint);
+    } else if (this.data && this.metadata) {
+      this.parseMetadata(this.metadata, this.data);
     }
   }
 
   public getMetadata(endpoint) {
     this.service.getMetadata(endpoint).subscribe(
-        ((data: any) => this.metadata = this.updateMatadata(data)),
+        ((data: any) => {
+          this.metadata = this.parseMetadata(data, this.relatedField);
+          this.metadata = this.parseMetadata(data, this.data);
+          this.getData(this.metadata);
+        }),
         ((error: any) => this.metadataError = error));
   }
 
@@ -93,6 +96,11 @@ export class GenericFormComponent implements OnInit, OnChanges {
   }
 
   public eventHandler(event) {
+    if (event.type === 'change' && event.el.type === 'related' && event.el.related) {
+      let key = event.el.related.field;
+      let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
+      this.getData(this.metadata, key, query);
+    }
     this.event.emit(event);
   }
 
@@ -100,41 +108,56 @@ export class GenericFormComponent implements OnInit, OnChanges {
     this.buttonAction.emit(e);
   }
 
-  public resourseDataHandler(e) {
-    if (!this.relatedField) {
-      this.getRalatedData(e.key, e.endpoint);
-    } else {
-      let fields = Object.keys(this.relatedField);
-      fields.forEach((el) => {
-        if (el !== e.key) {
-          this.getRalatedData(e.key, e.endpoint);
-        }
-      });
-    }
-    this.getRalatedData(e.key, e.endpoint);
-  }
-
-  public getRalatedData(key, endpoint) {
-     this.service.getAll(endpoint).subscribe(
+  public getRalatedData(key, endpoint, query = null) {
+    if (query) {
+      this.service.getByQuery(endpoint, query).subscribe(
       (response: any) => {
-        this.data = [{
-          key,
-          data: { options: response.results }
-        }];
-      }
-    );
+        this.parseMetadata(this.metadata, {
+          [key]: {
+            action: 'add',
+            data: { options: response.results }
+          }
+        });
+      });
+    } else {
+      this.service.getAll(endpoint).subscribe(
+        (response: any) => {
+          this.parseMetadata(this.metadata, {
+            [key]: {
+              action: 'add',
+              data: { options: response.results }
+            }
+          });
+        }
+      );
+    }
   }
 
-  public updateMatadata(metadata) {
-    if (this.relatedField) {
-      metadata.forEach((el) => {
-        if (el.key && this.relatedField[el.key]) {
-          el.related = this.relatedField[el.key];
-        } else if (el.children) {
-          this.updateMatadata(el.children);
+  public getData(metadata, key = null, query = null) {
+    metadata.forEach((el) => {
+      if (el.type === 'related') {
+        if (el.key === key) {
+          this.getRalatedData(key, el.endpoint, query);
         }
-      });
-    }
+        if (!el.relate && !key) {
+          this.getRalatedData(el.key, el.endpoint);
+        }
+      } else if (el.children) {
+        this.getData(el.children, key, query);
+      }
+    });
+  }
+
+  public parseMetadata(metadata, params) {
+    metadata.forEach((el) => {
+      if (el.key && !!params[el.key]) {
+        if (params[el.key].action === 'add') {
+          el = Object.assign(el, params[el.key].data);
+        }
+      } else if (el.children) {
+        this.parseMetadata(el.children, params);
+      }
+    });
     return metadata;
   }
 }

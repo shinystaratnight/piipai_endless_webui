@@ -16,9 +16,6 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Input()
   public message: any = {};
 
-  @Input()
-  public data = null;
-
   @Output()
   public submit: EventEmitter<any> = new EventEmitter<any>();
 

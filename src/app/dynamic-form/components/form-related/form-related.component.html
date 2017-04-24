@@ -7,6 +7,7 @@
     [formControlName]="key"
     [attr.id]="key"
     [attr.name]="key">
+    <option value="" [selected]="config.options" disabled>{{config.templateOptions.label}}</option>
     <option *ngFor="let option of config.options" [attr.value]="option.id" value="">{{option.name}}</option>
   </select>
   <small class="text-muted" *ngIf="config.templateOptions.description">

@@ -19,8 +19,8 @@ export class ContactRegistrationService {
     this.companyContactUrl = `/ecore/api/v2/endless_core/company_contacts/`;
     this.tagsUrl = `/ecore/api/v2/endless_core/tags/`;
     this.contactUrl = `/ecore/api/v2/endless-core/contacts/`;
-    this.companyUrl = `/ecore/api/v2/endless_core/companies/`;
-    this.companyLocUrl = `/ecore/api/v2/endless_core/company_localizations/`;
+    this.companyUrl = `/ecore/api/v2/endless-core/companies/`;
+    this.companyLocUrl = `/ecore/api/v2/endless-core/companylocalizations/`;
   }
 
   public getTags() {

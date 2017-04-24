@@ -29,21 +29,12 @@ export class FormRelatedComponent
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
-  @Output()
-  public resourseData: EventEmitter<any> = new EventEmitter();
-
   constructor(
     private fb: FormBuilder
   ) { super(); }
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
-    if (!this.config.related) {
-      this.resourseData.emit({
-        key: this.config.key,
-        endpoint: this.config.endpoint
-      });
-    }
   }
 
   public ngAfterViewInit() {
