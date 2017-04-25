@@ -18,10 +18,10 @@ export class GenericFormComponent implements OnChanges {
   public data = {};
 
   @Input()
-  public response = null;
+  public response: any;
 
   @Input()
-  public errors = null;
+  public errors: any;
 
   @Input()
   public relatedField = {};
@@ -71,8 +71,6 @@ export class GenericFormComponent implements OnChanges {
 
   public submitForm(data) {
     this.sendData = data;
-    this.response = null;
-    this.errors = null;
     this.service.submitForm(this.endpoint, data).subscribe(
       ((response: any) => this.parseResponse(response)),
       ((errors: any) => this.parseError(errors.errors)));
@@ -86,8 +84,8 @@ export class GenericFormComponent implements OnChanges {
       });
       return;
     }
-    this.errors = errors;
-    this.errorForm.emit(errors);
+    this.errors = this.updateErrors(this.errors, errors, this.response);
+    this.errorForm.emit(this.errors);
   }
 
   public parseResponse(response) {
@@ -100,6 +98,7 @@ export class GenericFormComponent implements OnChanges {
       let key = event.el.related.field;
       let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
       this.getData(this.metadata, key, query);
+      this.resetRalatedData(this.metadata, event.el.related.reset);
     }
     this.event.emit(event);
   }
@@ -153,11 +152,43 @@ export class GenericFormComponent implements OnChanges {
       if (el.key && !!params[el.key]) {
         if (params[el.key].action === 'add') {
           el = Object.assign(el, params[el.key].data);
+        } else if (params[el.key].update) {
+          this.getRalatedData(el.key, el.endpoint,
+            `${params[el.key].query}${params[el.key].id}`);
         }
       } else if (el.children) {
         this.parseMetadata(el.children, params);
       }
     });
     return metadata;
+  }
+
+  public resetRalatedData(metadata, key) {
+    metadata.forEach((el) => {
+      if (el.key === key) {
+        delete el.options;
+      } else if (el.children) {
+        this.resetRalatedData(el.children, key);
+      }
+    });
+  }
+
+  public updateErrors(err, errors, response, field = '') {
+    let error = err ? err : {};
+    let keyss = Object.keys(errors);
+    keyss.forEach((el) => {
+      if (errors[el].length) {
+        if (field) {
+          error[`${field}.${el}`] = errors[el];
+          delete response[`${field}.${el}`];
+        } else {
+          error[el] = errors[el];
+          delete response[el];
+        }
+      } else {
+        this.updateErrors(error, errors[el], response, el);
+      }
+    });
+    return error;
   }
 }

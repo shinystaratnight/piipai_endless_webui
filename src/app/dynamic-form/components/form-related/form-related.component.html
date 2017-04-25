@@ -7,17 +7,17 @@
     [formControlName]="key"
     [attr.id]="key"
     [attr.name]="key">
-    <option value="" [selected]="config.options" disabled>{{config.templateOptions.label}}</option>
-    <option *ngFor="let option of config.options" [attr.value]="option.id" value="">{{option.name}}</option>
+    <option value="" disabled>{{config.templateOptions.label}}</option>
+    <option *ngFor="let option of config.options" [attr.value]="option.id" value="" [selected]="group.get(key).value === option.id">{{option.name}}</option>
   </select>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
   </small>
   <div *ngIf="errors">
-    <div class="text-danger mt-1" *ngIf="errors[key]">{{errors[key]}}</div>
+    <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
   </div>
   <div *ngIf="message">
-    <div *ngIf="message[key]" class="text-success mt-1">{{message[key]}}</div>
+    <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
   </div>
 </div>
 

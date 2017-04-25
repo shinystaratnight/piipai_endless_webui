@@ -71,23 +71,6 @@ describe('DynamicFormComponent', () => {
 
   });
 
-  describe('checkMetadata method', () => {
-
-    it('should parse config', async(() => {
-      let fixture = TestBed.createComponent(DynamicFormComponent);
-      let comp = fixture.componentInstance;
-      comp.errors = errors;
-      fixture.detectChanges();
-      comp.config = [{
-        read_only: true
-      }];
-      comp.checkMetadata();
-      fixture.detectChanges();
-      expect(comp.config).toEqual([]);
-    }));
-
-  });
-
   describe('addData method', () => {
 
     it('should update metadata', async(() => {

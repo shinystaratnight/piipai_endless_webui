@@ -14,13 +14,13 @@ export class ContactRegistrationService {
   public contactUrl: string;
   public companyUrl: string;
   public companyLocUrl: string;
+  public companyAddress: string;
 
   constructor(private http: Http) {
-    this.companyContactUrl = `/ecore/api/v2/endless_core/company_contacts/`;
-    this.tagsUrl = `/ecore/api/v2/endless_core/tags/`;
     this.contactUrl = `/ecore/api/v2/endless-core/contacts/`;
     this.companyUrl = `/ecore/api/v2/endless-core/companies/`;
     this.companyLocUrl = `/ecore/api/v2/endless-core/companylocalizations/`;
+    this.companyAddress = `/ecore/api/v2/endless-core/companyaddresses/`;
   }
 
   public getTags() {
@@ -48,7 +48,7 @@ export class ContactRegistrationService {
   }
 
   public getAddressOfCompany(id) {
-    return this.http.get(`${this.companyUrl}${id}/addresses/?hq=True`)
+    return this.http.get(`${this.companyAddress}?company=${id}`)
       .map((res: any) => res.json())
       .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }

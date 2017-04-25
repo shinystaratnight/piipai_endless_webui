@@ -10,7 +10,8 @@ import { LoginService } from './../../services/login.service';
 export class ContactRegistrationFormComponent implements OnInit {
 
   public endpoint: string;
-  public companyContactEndpoint = `/ecore/api/v2/endless-core/companycontacts/register/`;
+  public companyContactEndpoint =
+    `http://172.17.0.5:8081/ecore/api/v2/endless-core/companycontacts/register/`;
 
   public tags: any;
   public company: any = {};
@@ -23,7 +24,9 @@ export class ContactRegistrationFormComponent implements OnInit {
     state: 'address.state',
     city: 'address.city',
     name: 'company.name',
-    businessId: 'company.business_id'
+    businessId: 'company.business_id',
+    postalCode: 'address.postal_code',
+    streetAddress: 'address.street_address'
   };
 
   public username = {
@@ -52,7 +55,8 @@ export class ContactRegistrationFormComponent implements OnInit {
           related: {
             field: this.fields.state,
             param: 'id',
-            query: '?country='
+            query: '?country=',
+            reset: this.fields.city
           }
         }
       },
@@ -129,19 +133,41 @@ export class ContactRegistrationFormComponent implements OnInit {
     this.crs.getCompany(data[this.fields.name], data[this.fields.businessId]).subscribe(
       (res: any) => {
         if (res.message) {
-          console.log(res);
-          // this.companyExistMessage = res.message;
-          // this.company = res.results[0];
-          this.crs.getAddressOfCompany(res.results[0].id).subscribe(
+          this.crs.getAddressOfCompany(res.results.id).subscribe(
             (response: any) => {
+              this.response[this.fields.name] = res.message;
               console.log(response);
-              // const address = response.results[0].address;
-              // this.companyContactForm.patchValue({street_address: address.street_address});
-              // this.companyContactForm.patchValue({postal_code: address.postal_code});
+              this.data = {
+                [this.fields.postalCode]: {
+                  action: 'update',
+                  value: response.results.address.postal_code
+                },
+                [this.fields.streetAddress]: {
+                  action: 'update',
+                  value: response.results.address.street_address
+                },
+                [this.fields.country]: {
+                  action: 'update',
+                  value: response.results.address.country.id
+                },
+                [this.fields.state]: {
+                  action: 'update',
+                  value: response.results.address.state.id,
+                  update: true,
+                  query: '?country=',
+                  id: response.results.address.country.id
+                },
+                [this.fields.city]: {
+                  action: 'update',
+                  value: response.results.address.city.id,
+                  update: true,
+                  query: '?region=',
+                  id: response.results.address.state.id
+                },
+              };
             },
             (err: any) => this.error = err
           );
-          // this.companyContactForm.patchValue({name: this.company.name});
         }
       },
       (err: any) => this.error = err

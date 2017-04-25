@@ -16,6 +16,9 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Input()
   public message: any = {};
 
+  @Input()
+  public data: any;
+
   @Output()
   public submit: EventEmitter<any> = new EventEmitter<any>();
 
@@ -34,11 +37,10 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public ngOnInit() {
     this.form = this.fb.group({});
-    this.addData(this.data, this.config);
   }
 
   public ngOnChanges() {
-    this.addData(this.data, this.config);
+    this.addData(this.data, this.form);
   }
 
   public handleSubmit(event: Event) {
@@ -59,22 +61,23 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     this.resourseData.emit(e);
   }
 
-  public addData(data, config) {
-    if (data && config) {
-      config.forEach((el) => {
-        if (el.key) {
-          data.forEach((elem) => {
-            if (elem.key === el.key) {
-              Object.keys(elem.data).forEach((prop) => {
-                el[prop] = elem.data[prop];
-              });
-            }
-          });
-        }
-        if (el.children) {
-          this.addData(data, el.children);
-        }
+  public addData(data, form) {
+    if (data && form) {
+      let keys = Object.keys(data);
+      keys.forEach((el) => {
+        this.updateForm(el.split('.'), data, form, el);
       });
+    }
+  }
+
+  public updateForm(keys, data, form, field) {
+    let key = keys.shift();
+    if (keys.length === 0) {
+      if (this.data[field].action === 'update') {
+        form.get(key).patchValue(this.data[field].value);
+      }
+    } else {
+      this.updateForm(keys, data, form.get(key), field);
     }
   }
 }

@@ -53,25 +53,6 @@ describe('EnterTheComponentName', () => {
         expect(2).toEqual(2);
     });
 
-    describe('ngOnInit method', () => {
-
-      it('should be defined', async(() => {
-        expect(comp.ngOnInit).toBeDefined();
-      }));
-
-      it('should called getMetadata method', async(() => {
-        response = {
-          status: 'success',
-          type: 'input'
-        };
-        comp.endpoint = 'endoint';
-        spyOn(comp, 'getMetadata');
-        comp.ngOnInit();
-        expect(comp.getMetadata).toHaveBeenCalled();
-      }));
-
-    });
-
     describe('ngOnChanges method', () => {
 
       it('should be defined', async(() => {
