@@ -44,6 +44,19 @@ describe('DynamicFormComponent', () => {
       expect(comp.config).toBeDefined();
   })));
 
+  describe('ngOnChanges method', () => {
+
+    it('should called addData method', async(() => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      spyOn(comp, 'addData');
+
+      comp.ngOnChanges();
+      expect(comp.addData).toHaveBeenCalled();
+    }));
+
+  });
+
   describe('handleSubmit method', () => {
 
     it('should enter the output assertion', async(() => {
@@ -71,36 +84,85 @@ describe('DynamicFormComponent', () => {
 
   });
 
+  describe('eventHandler method', () => {
+
+    it('should be emit event', () => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      spyOn(comp.event, 'emit');
+      comp.eventHandler('event');
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
+
+  });
+
+  describe('buttonActionHandler method', () => {
+
+    it('should be emit event', () => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      spyOn(comp.buttonAction, 'emit');
+      comp.buttonActionHandler('event');
+      expect(comp.buttonAction.emit).toHaveBeenCalled();
+    });
+
+  });
+
+  describe('resourseDataHandler method', () => {
+
+    it('should be emit event', () => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      spyOn(comp.resourseData, 'emit');
+      comp.resourseDataHandler('event');
+      expect(comp.resourseData.emit).toHaveBeenCalled();
+    });
+
+  });
+
   describe('addData method', () => {
 
     it('should update metadata', async(() => {
       let fixture = TestBed.createComponent(DynamicFormComponent);
       let comp = fixture.componentInstance;
+      spyOn(comp, 'updateForm');
       comp.config = [{
-        key: 'email',
+        key: 'address.country',
         value: '',
         templateOptions: {
           readonly: false
         }
-      }, {
-        children: [{
-          key: 'phone_mobile',
-          value: '',
-          templateOptions: {
-            readonly: false
-          }
-        }]
       }];
       comp.data = [{
-        key: 'email',
-        value: 'test@test.com',
-        readonly: true
+        key: 'country',
+        value: 'Australia',
+        read_only: true
       }];
       fixture.detectChanges();
       comp.addData(comp.data, comp.config);
-      expect(comp.config[0].value).toEqual(comp.data[0].value);
-      expect(comp.config[0].templateOptions.readonly).toEqual(comp.data[0].readonly);
+      expect(comp.updateForm).toHaveBeenCalled();
     }));
+
+  });
+
+  describe('updateForm method', () => {
+
+    it('should update metadata', async(inject(
+      [FormBuilder], (fb) => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      let form = fb.group({});
+      form.addControl('address', fb.group({}));
+      form.get('address').addControl('country', fb.control(''));
+      let data = {
+        country: {
+          action: 'update',
+          value: 'Australia'
+        }
+      };
+      comp.updateForm('address.country'.split('.'), data, form, 'country');
+      expect(form.get('address').get('country').value).toEqual('Australia');
+    })));
 
   });
 

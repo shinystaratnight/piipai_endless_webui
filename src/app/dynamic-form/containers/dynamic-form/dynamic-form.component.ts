@@ -73,8 +73,8 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   public updateForm(keys, data, form, field) {
     let key = keys.shift();
     if (keys.length === 0) {
-      if (this.data[field].action === 'update') {
-        form.get(key).patchValue(this.data[field].value);
+      if (data[field].action === 'update') {
+        form.get(key).patchValue(data[field].value);
       }
     } else {
       this.updateForm(keys, data, form.get(key), field);

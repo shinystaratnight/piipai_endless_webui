@@ -14,11 +14,10 @@ import { ContactRegistrationService } from './contact-registration.service';
 
 describe('ContactRegistrationService', () => {
 
-  const companyContactUrl: string = `/ecore/api/v2/endless_core/company_contacts/`;
-  const tagsUrl: string = `/ecore/api/v2/endless_core/tags/`;
   const contactUrl = `/ecore/api/v2/endless-core/contacts/`;
-  const companyUrl = `/ecore/api/v2/endless_core/companies/`;
-  const companyLocUrl = `/ecore/api/v2/endless_core/company_localizations/`;
+  const companyUrl = `/ecore/api/v2/endless-core/companies/`;
+  const companyLocUrl = `/ecore/api/v2/endless-core/companylocalizations/`;
+  const companyAddress = `/ecore/api/v2/endless-core/companyaddresses/`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -49,59 +48,11 @@ describe('ContactRegistrationService', () => {
   it('should have url', async(inject(
     [ContactRegistrationService, MockBackend], (service, mockBackend) => {
 
-    expect(service.companyContactUrl).toEqual(companyContactUrl);
-    expect(service.tagsUrl).toEqual(tagsUrl);
     expect(service.contactUrl).toEqual(contactUrl);
     expect(service.companyUrl).toEqual(companyUrl);
     expect(service.companyLocUrl).toEqual(companyLocUrl);
+    expect(service.companyAddress).toEqual(companyAddress);
   })));
-
-  describe('getTags method', () => {
-
-    it('should parse response', async(inject(
-      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
-
-      const mockResponse = {
-        results: []
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockRespond(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
-      });
-
-      const result = service.getTags();
-
-      result.subscribe((res) => {
-        expect(res).toEqual({
-          results: []
-        });
-      });
-    })));
-
-    it('should parse error', async(inject(
-      [ContactRegistrationService, MockBackend], (service, mockBackend) => {
-
-      const mockError = {
-        register: 'email'
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockError(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
-      });
-
-      const result = service.getTags();
-
-      result.subscribe((res) => {
-        expect(res).toBeUndefined();
-      },
-      (err) => {
-        expect(err).toBeDefined();
-      });
-    })));
-
-  });
 
   describe('getCompaniesOfCountry method', () => {
 

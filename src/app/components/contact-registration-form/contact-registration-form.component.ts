@@ -10,8 +10,7 @@ import { LoginService } from './../../services/login.service';
 export class ContactRegistrationFormComponent implements OnInit {
 
   public endpoint: string;
-  public companyContactEndpoint =
-    `http://172.17.0.5:8081/ecore/api/v2/endless-core/companycontacts/register/`;
+  public companyContactEndpoint = `/ecore/api/v2/endless-core/companycontacts/register/`;
 
   public tags: any;
   public company: any = {};
@@ -41,6 +40,7 @@ export class ContactRegistrationFormComponent implements OnInit {
 
   public error = {};
   public response = {};
+  public form = {};
 
   constructor(
     private fb: FormBuilder,
@@ -102,7 +102,7 @@ export class ContactRegistrationFormComponent implements OnInit {
         this.data = {
           [this.fields.name]: {
             action: 'add',
-            data: { companylist: res.results }
+            data: { autocomplete: res.results }
           }
         };
       },
@@ -113,17 +113,19 @@ export class ContactRegistrationFormComponent implements OnInit {
   public getCompanyLocalization(code2) {
     this.crs.getCompanyLocalization(code2).subscribe(
       (res: any) => {
-        this.data = {
-          [this.fields.businessId]: {
-            action: 'add',
-            data: {
-              templateOptions: {
-                label: res.results[0].verbose_value,
-                description: res.results[0].help_text
+        if (res.results.length) {
+          this.data = {
+            [this.fields.businessId]: {
+              action: 'add',
+              data: {
+                templateOptions: {
+                  label: res.results[0].verbose_value,
+                  description: res.results[0].help_text
+                }
               }
             }
-          }
-        };
+          };
+        }
       },
       (err: any) => this.error = err
     );
@@ -133,36 +135,39 @@ export class ContactRegistrationFormComponent implements OnInit {
     this.crs.getCompany(data[this.fields.name], data[this.fields.businessId]).subscribe(
       (res: any) => {
         if (res.message) {
-          this.crs.getAddressOfCompany(res.results.id).subscribe(
+          this.form = {
+            company: res.results[0].id
+          };
+          this.crs.getAddressOfCompany(res.results[0].id).subscribe(
             (response: any) => {
               this.response[this.fields.name] = res.message;
-              console.log(response);
+              this.clearResult(this.error, this.fields.name);
               this.data = {
                 [this.fields.postalCode]: {
                   action: 'update',
-                  value: response.results.address.postal_code
+                  value: response.results[0].address.postal_code
                 },
                 [this.fields.streetAddress]: {
                   action: 'update',
-                  value: response.results.address.street_address
+                  value: response.results[0].address.street_address
                 },
                 [this.fields.country]: {
                   action: 'update',
-                  value: response.results.address.country.id
+                  value: response.results[0].address.country.id
                 },
                 [this.fields.state]: {
                   action: 'update',
-                  value: response.results.address.state.id,
+                  value: response.results[0].address.state.id,
                   update: true,
                   query: '?country=',
-                  id: response.results.address.country.id
+                  id: response.results[0].address.country.id
                 },
                 [this.fields.city]: {
                   action: 'update',
-                  value: response.results.address.city.id,
+                  value: response.results[0].address.city.id,
                   update: true,
                   query: '?region=',
-                  id: response.results.address.state.id
+                  id: response.results[0].address.state.id
                 },
               };
             },

@@ -9,8 +9,6 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class ContactRegistrationService {
 
-  public companyContactUrl: string;
-  public tagsUrl: string;
   public contactUrl: string;
   public companyUrl: string;
   public companyLocUrl: string;
@@ -21,12 +19,6 @@ export class ContactRegistrationService {
     this.companyUrl = `/ecore/api/v2/endless-core/companies/`;
     this.companyLocUrl = `/ecore/api/v2/endless-core/companylocalizations/`;
     this.companyAddress = `/ecore/api/v2/endless-core/companyaddresses/`;
-  }
-
-  public getTags() {
-    return this.http.get(`${this.tagsUrl}`)
-      .map((res: any) => res.json())
-      .catch((error) => Observable.throw(error.json() || 'Server error'));
   }
 
   public getCompaniesOfCountry(code2) {

@@ -55,4 +55,46 @@ describe('FormSelectComponent', () => {
     expect(comp.errors).toBeDefined();
     expect(comp.config).toBeDefined();
   })));
+
+  describe('ngOnInit method', () => {
+
+    it('should called addControl method', async(() => {
+      spyOn(comp, 'addControl');
+      comp.ngOnInit();
+      expect(comp.addControl).toHaveBeenCalled();
+    }));
+
+  });
+
+  describe('ngAfterViewInit method', () => {
+
+    it('should called addControl method', async(() => {
+      spyOn(comp, 'addFlags');
+      comp.ngAfterViewInit();
+      expect(comp.addFlags).toHaveBeenCalled();
+    }));
+
+  });
+
+  describe('eventHandler method', () => {
+
+    it('should be emit event', async(inject([FormBuilder], (fb) => {
+      let form = fb.group({});
+      let key = 'email';
+      let metadata = {
+        key: 'email',
+        value: 'test@test.com'
+      };
+      let event = { type: 'change' };
+      form.addControl(key, fb.control(''));
+      comp.group = form;
+      comp.config = metadata;
+      comp.key = key;
+      spyOn(comp.event, 'emit');
+      comp.eventHandler(event);
+      expect(comp.event.emit).toHaveBeenCalled();
+    })));
+
+  });
+
 });

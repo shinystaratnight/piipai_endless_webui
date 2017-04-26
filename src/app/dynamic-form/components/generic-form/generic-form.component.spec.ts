@@ -28,6 +28,12 @@ describe('EnterTheComponentName', () => {
           return Observable.throw(response);
         }
         return Observable.of(response);
+      },
+      getByQuery() {
+        return Observable.of(response);
+      },
+      getAll() {
+        return Observable.of(response);
       }
     };
 
@@ -60,14 +66,31 @@ describe('EnterTheComponentName', () => {
       }));
 
       it('should called getMetadata method', async(() => {
+        let endpoint = '/ecore/api/v2/contacts';
+        let currentEndpoint = '/ecore/api/v2/countries';
         response = {
           status: 'success',
           type: 'input'
         };
-        comp.endpoint = 'endoint';
+        comp.currentEndpoint = currentEndpoint;
+        comp.endpoint = endpoint;
         spyOn(comp, 'getMetadata');
         comp.ngOnChanges();
         expect(comp.getMetadata).toHaveBeenCalled();
+        expect(comp.currentEndpoint).toEqual(endpoint);
+      }));
+
+      it('should called parseMetadata method', async(() => {
+        let endpoint = '/ecore/api/v2/contacts';
+        let data = { row: { data: { value: 'value' } } };
+        let config = [{key: 'row'}, {key: 'row'}];
+        comp.currentEndpoint = endpoint;
+        comp.endpoint = endpoint;
+        comp.data = data;
+        comp.metadata = config;
+        spyOn(comp, 'parseMetadata');
+        comp.ngOnChanges();
+        expect(comp.parseMetadata).toHaveBeenCalled();
       }));
 
     });
@@ -90,8 +113,11 @@ describe('EnterTheComponentName', () => {
           }
         }];
         let endpoint = 'endpoint';
+        spyOn(comp, 'parseMetadata');
+        spyOn(comp, 'getData');
         comp.getMetadata(endpoint);
-        expect(comp.metadata).toEqual(metadata);
+        expect(comp.parseMetadata).toHaveBeenCalled();
+        expect(comp.getData).toHaveBeenCalled();
       }));
 
       it('should update metadataError property', async(() => {
@@ -111,19 +137,38 @@ describe('EnterTheComponentName', () => {
         expect(comp.submitForm).toBeDefined();
       }));
 
-      it('should update response property', async(() => {
+      it('should update send data', async(() => {
+        let field = 'email';
+        response = {
+          status: 'success',
+          message: 'All be fine'
+        };
+        comp.endpoint = 'endpoint';
+        let form = {
+          [field]: 'test@test.com'
+        };
+        let data = {username: 'test'};
+        let result = Object.assign(data, form);
+        comp.form = form;
+        spyOn(comp, 'parseResponse');
+        comp.submitForm(data);
+        expect(comp.parseResponse).toHaveBeenCalled();
+        expect(comp.sendData).toEqual(result);
+      }));
+
+      it('should called parseResponse method', async(() => {
         response = {
           status: 'success',
           message: 'All be fine'
         };
         comp.endpoint = 'endpoint';
         let data = {username: 'test'};
-        fixture.detectChanges();
+        spyOn(comp, 'parseResponse');
         comp.submitForm(data);
-        expect(comp.response).toEqual(response);
+        expect(comp.parseResponse).toHaveBeenCalled();
       }));
 
-      it('should update error property', async(() => {
+      it('should called parseError method', async(() => {
         response = {
           status: 'error',
           errors: {
@@ -132,9 +177,314 @@ describe('EnterTheComponentName', () => {
         };
         comp.endpoint = 'endpoint';
         let data = {username: 'test'};
-        fixture.detectChanges();
+        spyOn(comp, 'parseError');
         comp.submitForm(data);
-        expect(comp.errors).toEqual(response.errors);
+        expect(comp.parseError).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('parseError method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.parseError).toBeDefined();
+      }));
+
+      it('should emit redirect', async(() => {
+        let field = 'email';
+        let data = {
+          register: field
+        };
+        comp.sendData = { username: field };
+        spyOn(comp.redirect, 'emit');
+        comp.parseError(data);
+        expect(comp.redirect.emit).toHaveBeenCalled();
+      }));
+
+      it('should called resetData, updateErrors methods and emit errorForm', async(() => {
+        let field = 'email';
+        let message = 'Email is invalid';
+        let data = {
+          [field]: message
+        };
+        comp.errors = {};
+        comp.response = {};
+        spyOn(comp, 'resetData');
+        spyOn(comp, 'updateErrors');
+        spyOn(comp.errorForm, 'emit');
+        comp.parseError(data);
+        expect(comp.resetData).toHaveBeenCalled();
+        expect(comp.updateErrors).toHaveBeenCalled();
+        expect(comp.errorForm.emit).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('parseResponse method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.parseResponse).toBeDefined();
+      }));
+
+      it('should parse response', async(() => {
+        let field = 'email';
+        let message = 'Email is valid';
+        let data = {
+          [field]: message
+        };
+        spyOn(comp, 'resetData');
+        spyOn(comp.responseForm, 'emit');
+        comp.parseResponse(data);
+        expect(comp.response).toEqual(data);
+        expect(comp.resetData).toHaveBeenCalled();
+        expect(comp.responseForm.emit).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('eventHandler method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.eventHandler).toBeDefined();
+      }));
+
+      it('should handle event', async(() => {
+        let field = 'country';
+        let query = '?country';
+        let param = 'id';
+        let reset = 'city';
+        let event = {
+          type: 'change',
+          el: {
+            type: 'related',
+            related: {
+              field,
+              query,
+              reset
+            }
+          },
+          value: [{
+            [param]: 2
+          }]
+        };
+        comp.metadata = [];
+        spyOn(comp, 'getData');
+        spyOn(comp, 'resetRalatedData');
+        spyOn(comp.event, 'emit');
+        comp.eventHandler(event);
+        expect(comp.getData).toHaveBeenCalled();
+        expect(comp.resetRalatedData).toHaveBeenCalled();
+        expect(comp.event.emit).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('buttonActionHandler method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.buttonActionHandler).toBeDefined();
+      }));
+
+      it('should emit button action', async(() => {
+        let event = 'event';
+        spyOn(comp.buttonAction, 'emit');
+        comp.buttonActionHandler(event);
+        expect(comp.buttonAction.emit).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('getRalatedData method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.getRalatedData).toBeDefined();
+      }));
+
+      it('should get all elements', async(() => {
+        let key = 'address.country';
+        let endpoint = '/ecore/api/v2/countries';
+        response = {
+          results: [{ id: 2, name: 'Australia' }]
+        };
+        comp.metadata = [];
+        spyOn(comp, 'parseMetadata');
+        comp.getRalatedData(key, endpoint);
+        expect(comp.parseMetadata).toHaveBeenCalled();
+      }));
+
+      it('should get elements by query', async(() => {
+        let key = 'address.country';
+        let endpoint = '/ecore/api/v2/countries';
+        let query = '?region=5';
+        response = {
+          results: [{ id: 2, name: 'Australia' }]
+        };
+        comp.metadata = [];
+        spyOn(comp, 'parseMetadata');
+        comp.getRalatedData(key, endpoint);
+        expect(comp.parseMetadata).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('getData method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.getData).toBeDefined();
+      }));
+
+      it('should get all related data', async(() => {
+        let config = [{
+          type: 'related',
+          key: 'address.country',
+          endpoint: '/ecore/api/v2/countries'
+        }, {
+          type: 'row',
+          children: [{
+            type: 'related',
+            key: 'address.city',
+            endpoint: '/ecore/api/v2/cities'
+          }]
+        }];
+        spyOn(comp, 'getRalatedData');
+        comp.getData(config, 'address.city');
+        expect(comp.getRalatedData).toHaveBeenCalled();
+      }));
+
+      it('should get all related data', async(() => {
+        let config = [{
+          type: 'related',
+          key: 'address.country',
+          endpoint: '/ecore/api/v2/countries'
+        }, {
+          type: 'row',
+          children: [{
+            type: 'related',
+            key: 'address.city',
+            endpoint: '/ecore/api/v2/cities'
+          }]
+        }];
+        spyOn(comp, 'getRalatedData');
+        comp.getData(config, 'address.city', '?region=2');
+        expect(comp.getRalatedData).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('parseMetadata method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.parseMetadata).toBeDefined();
+      }));
+
+      it('should update metadata', async(() => {
+        let fieldCity = 'address.city';
+        let fieldCountry = 'address.country';
+        let config = [{
+          type: 'related',
+          key: fieldCountry,
+          endpoint: '/ecore/api/v2/countries'
+        }, {
+          type: 'row',
+          children: [{
+            type: 'related',
+            key: fieldCity,
+            endpoint: '/ecore/api/v2/cities'
+          }]
+        }];
+        let params = {
+          [fieldCity]: {
+            action: 'add',
+            data: {
+              options: [{ key: 1, name: 'Tampa'}]
+            }
+          },
+          [fieldCountry]: {
+            query: '?region=',
+            id: 3,
+            update: true
+          }
+        };
+        spyOn(comp, 'getRalatedData');
+        comp.parseMetadata(config, params);
+        expect(comp.getRalatedData).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('resetRalatedData method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.resetRalatedData).toBeDefined();
+      }));
+
+      it('should reset related data', async(() => {
+        let fieldCity = 'address.city';
+        let fieldCountry = 'address.country';
+        let config = [{
+          type: 'related',
+          key: fieldCountry,
+          endpoint: '/ecore/api/v2/countries',
+          options: [{
+              key: 1,
+              name: 'Tampa'
+            }]
+        }, {
+          type: 'row',
+          children: [{
+            type: 'related',
+            key: fieldCity,
+            endpoint: '/ecore/api/v2/cities',
+            options: [{
+              key: 1,
+              name: 'Tampa'
+            }]
+          }]
+        }];
+        comp.resetRalatedData(config, fieldCity);
+        expect(config[1]['children'][0].options).toBeUndefined();
+      }));
+
+    });
+
+    describe('updateErrors method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.updateErrors).toBeDefined();
+      }));
+
+      it('should update errors', async(() => {
+        let fieldCity = 'address.city';
+        let fieldCountry = 'address.country';
+        let err = {};
+        let error = {
+          [fieldCity]: 'City is invalid',
+          [fieldCountry]: 'City is invalid',
+        };
+        let res = {
+          [fieldCity]: 'City is valid',
+          [fieldCountry]: 'City is valid',
+        };
+        comp.updateErrors(err, error, res);
+        expect(err).toEqual(error);
+        expect(res).toEqual({});
+      }));
+
+    });
+
+    describe('resetData method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.resetData).toBeDefined();
+      }));
+
+      it('should reset data', async(() => {
+        let fieldCity = 'address.city';
+        let fieldCountry = 'address.country';
+        let data = { fieldCity, fieldCountry };
+        comp.resetData(data);
+        expect(data[fieldCity]).toBeUndefined();
+        expect(data[fieldCountry]).toBeUndefined();
       }));
 
     });

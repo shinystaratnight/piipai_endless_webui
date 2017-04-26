@@ -34,4 +34,24 @@ describe('FormRowComponent', () => {
     expect(comp.config).toBeDefined();
   });
 
+  describe('eventHandler method', () => {
+
+    it('should be emit event', () => {
+      spyOn(comp.event, 'emit');
+      comp.eventHandler('event');
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
+
+  });
+
+  describe('buttonActionHandler method', () => {
+
+    it('should be emit event', () => {
+      spyOn(comp.buttonAction, 'emit');
+      comp.buttonActionHandler('event');
+      expect(comp.buttonAction.emit).toHaveBeenCalled();
+    });
+
+  });
+
 });

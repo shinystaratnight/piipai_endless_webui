@@ -18,13 +18,16 @@ export class GenericFormComponent implements OnChanges {
   public data = {};
 
   @Input()
-  public response: any;
+  public response = {};
 
   @Input()
-  public errors: any;
+  public errors = {};
 
   @Input()
   public relatedField = {};
+
+  @Input()
+  public form: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -70,6 +73,14 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public submitForm(data) {
+    if (this.form) {
+      let keys = Object.keys(this.form);
+      if (keys.length) {
+        keys.forEach((el) => {
+          data[el] = this.form[el];
+        });
+      }
+    }
     this.sendData = data;
     this.service.submitForm(this.endpoint, data).subscribe(
       ((response: any) => this.parseResponse(response)),
@@ -84,11 +95,13 @@ export class GenericFormComponent implements OnChanges {
       });
       return;
     }
+    this.resetData(this.errors);
     this.errors = this.updateErrors(this.errors, errors, this.response);
     this.errorForm.emit(this.errors);
   }
 
   public parseResponse(response) {
+    this.resetData(this.response);
     this.response = response;
     this.responseForm.emit(response);
   }
@@ -190,5 +203,12 @@ export class GenericFormComponent implements OnChanges {
       }
     });
     return error;
+  }
+
+  public resetData(data) {
+    let keys = Object.keys(data);
+    keys.forEach((el) => {
+      delete data[el];
+    });
   }
 }
