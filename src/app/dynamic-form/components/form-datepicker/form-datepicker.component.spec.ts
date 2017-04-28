@@ -51,6 +51,26 @@ describe('FormDatepickerComponent', () => {
     expect(comp.config).toBeDefined();
   })));
 
+  describe('ngOnInit method', () => {
+
+    it('should called addControl method', async(() => {
+      spyOn(comp, 'addControl');
+      comp.ngOnInit();
+      expect(comp.addControl).toHaveBeenCalled();
+    }));
+
+  });
+
+  describe('ngAfterViewInit method', () => {
+
+    it('should called addControl method', async(() => {
+      spyOn(comp, 'addFlags');
+      comp.ngAfterViewInit();
+      expect(comp.addFlags).toHaveBeenCalled();
+    }));
+
+  });
+
   describe('updateDate method', () => {
 
     it('should be defined', () => {

@@ -11,6 +11,18 @@ export class GenericFormService {
     private http: Http
   ) { }
 
+  public getByQuery(endpoint, query) {
+    return this.http.get(`${endpoint}${query}`)
+      .map((response: Response) => response.json())
+      .catch((error: any) => this.errorHandler(error));
+  }
+
+  public getAll(endpoint) {
+    return this.http.get(endpoint)
+      .map((response: Response) => response.json())
+      .catch((error: any) => this.errorHandler(error));
+  }
+
   public getMetadata(endpoint) {
     return this.http.options(endpoint)
       .map((response: Response) => response.json())

@@ -34,19 +34,24 @@ describe('FormRowComponent', () => {
     expect(comp.config).toBeDefined();
   });
 
-  describe('checkMetadata method', () => {
+  describe('eventHandler method', () => {
 
-    it('should parse config', async(() => {
-      comp.config = {
-        children: [{
-          read_only: true
-        }]
-      };
-      fixture.detectChanges();
-      comp.checkMetadata();
-      fixture.detectChanges();
-      expect(comp.config).toEqual({children: []});
-    }));
+    it('should be emit event', () => {
+      spyOn(comp.event, 'emit');
+      comp.eventHandler('event');
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
 
   });
+
+  describe('buttonActionHandler method', () => {
+
+    it('should be emit event', () => {
+      spyOn(comp.buttonAction, 'emit');
+      comp.buttonActionHandler('event');
+      expect(comp.buttonAction.emit).toHaveBeenCalled();
+    });
+
+  });
+
 });

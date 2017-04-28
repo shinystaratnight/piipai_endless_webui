@@ -15,6 +15,7 @@ import { FormDatepickerComponent } from './components/form-datepicker/form-datep
 import { FormTextareaComponent } from './components/form-textarea/form-textarea.component';
 import { FormCollapseComponent } from './containers/form-collapse/form-collapse.component';
 import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.component';
+import { FormRelatedComponent } from './components/form-related/form-related.component';
 
 import { GenericFormService } from './services/generic-form.service';
 
@@ -38,7 +39,8 @@ import { GenericFormService } from './services/generic-form.service';
     FormTextareaComponent,
     FormCollapseComponent,
     GenericFormComponent,
-    FormCheckboxComponent
+    FormCheckboxComponent,
+    FormRelatedComponent
   ],
   providers: [GenericFormService],
   entryComponents: [
@@ -49,7 +51,8 @@ import { GenericFormService } from './services/generic-form.service';
     FormDatepickerComponent,
     FormTextareaComponent,
     FormCollapseComponent,
-    FormCheckboxComponent
+    FormCheckboxComponent,
+    FormRelatedComponent
   ]
 })
 export class DynamicFormModule { }

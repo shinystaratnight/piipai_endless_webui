@@ -41,4 +41,27 @@ describe('FormInputComponent', () => {
     fixture.detectChanges();
     expect(comp.config).toBeDefined();
   });
+
+  describe('action method', () => {
+
+    it('should be emit event', async(inject([FormBuilder], (fb) => {
+      let form = fb.group({});
+      let key = 'email';
+      let metadata = {
+        key: 'button',
+        templateOptions: {
+          action: 'add_company'
+        }
+      };
+      let event = { type: 'click' };
+      form.addControl(key, fb.control(''));
+      form.get(key).patchValue('test@test.com');
+      comp.group = form;
+      comp.config = metadata;
+      spyOn(comp.buttonAction, 'emit');
+      comp.action(event);
+      expect(comp.buttonAction.emit).toHaveBeenCalled();
+    })));
+
+  });
 });
