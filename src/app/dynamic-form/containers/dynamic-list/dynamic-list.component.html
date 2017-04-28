@@ -1,0 +1,23 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th *ngFor="let field of config;">
+        <ng-container
+          listElement
+          [head]="true"
+          [config]="field">
+        </ng-container>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of body">
+      <td *ngFor="let cell of row;" class="align-middle">
+        <ng-container
+          listElement
+          [config]="cell">
+        </ng-container>
+      </td>
+    </tr>
+  </tbody>
+</table>

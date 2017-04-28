@@ -1,0 +1,3 @@
+<a [attr.href]="href" *ngIf="config.value && !link">{{config.value}}</a>
+<a routerLink="{{href}}" *ngIf="link">{{config.value}}</a>
+<br *ngIf="config.value">

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
+import { RouterModule } from '@angular/router';
 
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
@@ -17,6 +18,12 @@ import { FormCollapseComponent } from './containers/form-collapse/form-collapse.
 import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.component';
 import { FormRelatedComponent } from './components/form-related/form-related.component';
 
+import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
+import { ListElementDirective } from './components/list-element/list-element.directive';
+import { ListTextComponent } from './components/list-text/list-text.component';
+import { ListLinkComponent } from './components/list-link/list-link.component';
+import { ListColumnComponent } from './containers/list-column/list-column.component';
+
 import { GenericFormService } from './services/generic-form.service';
 
 @NgModule({
@@ -25,7 +32,8 @@ import { GenericFormService } from './services/generic-form.service';
     ReactiveFormsModule,
     NgbModule.forRoot(),
     Angular2FontawesomeModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   exports: [GenericFormComponent],
   declarations: [
@@ -40,7 +48,12 @@ import { GenericFormService } from './services/generic-form.service';
     FormCollapseComponent,
     GenericFormComponent,
     FormCheckboxComponent,
-    FormRelatedComponent
+    FormRelatedComponent,
+    DynamicListComponent,
+    ListElementDirective,
+    ListTextComponent,
+    ListLinkComponent,
+    ListColumnComponent
   ],
   providers: [GenericFormService],
   entryComponents: [
@@ -52,7 +65,10 @@ import { GenericFormService } from './services/generic-form.service';
     FormTextareaComponent,
     FormCollapseComponent,
     FormCheckboxComponent,
-    FormRelatedComponent
+    FormRelatedComponent,
+    ListTextComponent,
+    ListLinkComponent,
+    ListColumnComponent
   ]
 })
 export class DynamicFormModule { }
