@@ -29,6 +29,8 @@ import { Ng2Webstorage } from 'ng2-webstorage';
 import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import '../styles/styles.scss';
 
 // Application wide providers
@@ -49,6 +51,8 @@ const APP_PROVIDERS = [
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+    NgbModule.forRoot(),
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     DynamicFormModule,

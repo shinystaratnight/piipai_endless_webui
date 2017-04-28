@@ -3,25 +3,28 @@ import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing'
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { FormTextareaComponent } from './form-textarea.component';
+import { FormRelatedComponent } from './form-related.component';
 
-describe('FormSelectComponent', () => {
-  let fixture: ComponentFixture<FormTextareaComponent>;
-  let comp: FormTextareaComponent;
+describe('FormRelatedComponent', () => {
+  let fixture: ComponentFixture<FormRelatedComponent>;
+  let comp: FormRelatedComponent;
   let el;
   let config = {
-    type: 'textarea',
-    key: 'note',
+    type: 'select',
+    key: 'country',
     read_only: false,
     templateOptions: {
-      placeholder: 'Placeholder',
-      max: 200,
-      min: 2,
-      cols: 3,
-      rows: 5,
-      label: 'Note',
+      label: 'Country',
       required: true,
-      description: 'Note text',
+      description: 'country text',
+      placeholder: 'Country',
+      options: [{
+          key: 'mr',
+          value: 'Mr.',
+        }, {
+          key: 'mrs',
+          value: 'Mrs',
+        }]
     }
   };
   let errors = {};
@@ -29,7 +32,7 @@ describe('FormSelectComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        FormTextareaComponent
+        FormRelatedComponent
       ],
       providers: [FormBuilder],
       imports: [ReactiveFormsModule],
@@ -39,7 +42,7 @@ describe('FormSelectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.compileComponents().then(() => {
-      fixture = TestBed.createComponent(FormTextareaComponent);
+      fixture = TestBed.createComponent(FormRelatedComponent);
       comp = fixture.componentInstance;
     });
   }));
@@ -72,4 +75,33 @@ describe('FormSelectComponent', () => {
     }));
 
   });
+
+  describe('eventHandler method', () => {
+
+    it('should be emit event', async(inject([FormBuilder], (fb) => {
+      let form = fb.group({});
+      let key = 'title';
+      let metadata = {
+        key: 'title',
+        options: [{
+          id: 123,
+          name: 'Australia'
+        }, {
+          id: 132,
+          name: 'United State of America'
+        }]
+      };
+      let event = { type: 'change' };
+      form.addControl(key, fb.control(''));
+      form.get(key).patchValue(123);
+      comp.group = form;
+      comp.config = metadata;
+      comp.key = key;
+      spyOn(comp.event, 'emit');
+      comp.eventHandler(event);
+      expect(comp.event.emit).toHaveBeenCalled();
+    })));
+
+  });
+
 });

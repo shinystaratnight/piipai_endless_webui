@@ -19,10 +19,10 @@
         {{config.templateOptions.description}}
       </small>
       <div *ngIf="errors">
-        <div class="text-danger mt-1" *ngIf="errors[key]">{{errors[key]}}</div>
+        <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
       </div>
       <div *ngIf="message">
-        <div *ngIf="message[key]" class="text-success mt-1">{{message[key]}}</div>
+        <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
       </div>
     </div>
     <div style="min-width: 8rem;" *ngIf="config.templateOptions.type === 'datetime'">

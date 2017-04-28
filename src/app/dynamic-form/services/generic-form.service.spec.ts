@@ -42,6 +42,102 @@ describe('GenericFormService', () => {
     expect(service).toBeDefined();
   })));
 
+  describe('getByQuery method', () => {
+
+    it('should parse response', async(inject(
+      [GenericFormService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'ok',
+        results: []
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.getByQuery(url, `?country=123`);
+
+      result.subscribe((res) => {
+        expect(res).toEqual(mockResponse);
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [GenericFormService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        errors: {
+          message: 'some error'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.getMetadata({status: 500});
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toBeDefined();
+      });
+    })));
+
+  });
+
+  describe('getAll method', () => {
+
+    it('should parse response', async(inject(
+      [GenericFormService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'ok',
+        results: []
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.getAll(url);
+
+      result.subscribe((res) => {
+        expect(res).toEqual(mockResponse);
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [GenericFormService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        errors: {
+          message: 'some error'
+        }
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.getMetadata({status: 500});
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toBeDefined();
+      });
+    })));
+
+  });
+
   describe('getMetadata method', () => {
 
     it('should parse response', async(inject(
@@ -133,6 +229,34 @@ describe('GenericFormService', () => {
       },
       (err) => {
         expect(err).toBeDefined();
+      });
+    })));
+
+  });
+
+  describe('errorHandler method', () => {
+
+    it('should return Observable', async(inject(
+      [GenericFormService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        errors: {
+          message: 'some error'
+        }
+      };
+
+      const mock = {
+        json() {
+          return mockError;
+        }
+      };
+
+      const result = service.errorHandler(mock);
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      }, (err) => {
+        expect(err).toEqual(mockError);
       });
     })));
 
