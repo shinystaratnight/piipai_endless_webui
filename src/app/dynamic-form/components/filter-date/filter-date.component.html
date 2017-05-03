@@ -1,0 +1,13 @@
+<label>{{config.label}}</label>
+<div class="input-group mb-1">
+  <input class="form-control" placeholder="From date" name="dp" [(ngModel)]="data.from" ngbDatepicker #from="ngbDatepicker" [maxDate]="data.to">
+  <div class="input-group-addon" (click)="from.toggle()" style="cursor: pointer">
+    <i fa [name]="'calendar'" [border]=true></i>
+  </div>
+</div>
+<div class="input-group">
+  <input class="form-control" placeholder="To date" name="dp" [(ngModel)]="data.to" ngbDatepicker #to="ngbDatepicker" [minDate]="data.from">
+  <div class="input-group-addon" (click)="to.toggle()" style="cursor: pointer">
+    <i fa [name]="'calendar'" [border]=true></i>
+  </div>
+</div>

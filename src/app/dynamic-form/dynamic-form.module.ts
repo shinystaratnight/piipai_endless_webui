@@ -23,6 +23,13 @@ import { ListElementDirective } from './components/list-element/list-element.dir
 import { ListTextComponent } from './components/list-text/list-text.component';
 import { ListLinkComponent } from './components/list-link/list-link.component';
 import { ListColumnComponent } from './containers/list-column/list-column.component';
+import { FilterBlockComponent } from './containers/filter-block/filter-block.component';
+import { FilterDateComponent } from './components/filter-date/filter-date.component';
+import { FilterChoiceComponent } from './components/filter-choice/filter-choice.component';
+import { FilterRelatedComponent } from './components/filter-related/filter-related.component';
+import { FilterElementDirective } from './components/filter-element/filter-element.directive';
+
+import { ActionElementComponent } from './components/action-element/action-element.component';
 
 import { GenericFormService } from './services/generic-form.service';
 
@@ -53,7 +60,13 @@ import { GenericFormService } from './services/generic-form.service';
     ListElementDirective,
     ListTextComponent,
     ListLinkComponent,
-    ListColumnComponent
+    ListColumnComponent,
+    FilterBlockComponent,
+    FilterDateComponent,
+    FilterChoiceComponent,
+    FilterRelatedComponent,
+    FilterElementDirective,
+    ActionElementComponent
   ],
   providers: [GenericFormService],
   entryComponents: [
@@ -68,7 +81,10 @@ import { GenericFormService } from './services/generic-form.service';
     FormRelatedComponent,
     ListTextComponent,
     ListLinkComponent,
-    ListColumnComponent
+    ListColumnComponent,
+    FilterDateComponent,
+    FilterChoiceComponent,
+    FilterRelatedComponent
   ]
 })
 export class DynamicFormModule { }

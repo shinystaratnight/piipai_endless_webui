@@ -1,0 +1,63 @@
+import { ReactiveFormsModule , FormBuilder, FormGroup } from '@angular/forms';
+import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+
+import { FilterElementDirective } from './filter-element.directive';
+import { FilterChoiceComponent } from './../filter-choice/filter-choice.component';
+
+@Component({
+  selector: 'container',
+  template: `<div filterElement [config]="config"></div>`,
+  entryComponents: [FilterChoiceComponent]
+})
+export class ContainerComponent {
+  public config = {
+    type: 'choice',
+    key: 'key of filter',
+    label: 'Choice of list',
+    query: 'company',
+    list: [
+      {
+        label: 'Text of choice',
+        value: 'Home'
+      },
+      {
+        label: 'Text of another choice',
+        value: 'Homes'
+      }
+    ]
+  };
+}
+
+describe('FilterElementDirective', () => {
+  let fixture: ComponentFixture<ContainerComponent>;
+  let comp: ContainerComponent;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        FilterElementDirective,
+        ContainerComponent,
+        FilterChoiceComponent
+      ],
+      providers: [],
+      imports: [],
+      schemas: [ NO_ERRORS_SCHEMA ]
+    });
+  });
+
+  beforeEach(async(() => {
+    TestBed.compileComponents().then(() => {
+      fixture = TestBed.createComponent(ContainerComponent);
+      comp = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+  }));
+
+  it('should enter the assertion', () => {
+    const el = fixture.debugElement.query(By.directive(FilterChoiceComponent));
+    expect(el.nativeElement.textContent).toContain('Text of choice');
+  });
+
+});
