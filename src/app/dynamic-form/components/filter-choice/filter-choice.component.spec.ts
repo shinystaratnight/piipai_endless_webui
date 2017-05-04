@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { FilterService } from './../../services/filter.service';
 
 import { FilterChoiceComponent } from './filter-choice.component';
 
@@ -25,13 +26,18 @@ describe('FilterChoiceComponent', () => {
       }
     ]
   };
+  let mockFilterService = {
+    generateQuery() {
+      return true;
+    }
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         FilterChoiceComponent
       ],
-      providers: [],
+      providers: [{provide: FilterService, useValue: mockFilterService}],
       imports: [],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
@@ -64,6 +70,15 @@ describe('FilterChoiceComponent', () => {
       comp.select(value);
       expect(comp.query).toBeNull();
     }));
+
+    it('should be called generateQuery method',
+      async(inject([FilterService], (fs: FilterService) => {
+      spyOn(fs, 'generateQuery');
+      let value = 'company=Home';
+      comp.query = value;
+      comp.select(value);
+      expect(fs.generateQuery).toHaveBeenCalled();
+    })));
 
   });
 

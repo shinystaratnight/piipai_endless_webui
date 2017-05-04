@@ -28,6 +28,7 @@ import { FilterDateComponent } from './components/filter-date/filter-date.compon
 import { FilterChoiceComponent } from './components/filter-choice/filter-choice.component';
 import { FilterRelatedComponent } from './components/filter-related/filter-related.component';
 import { FilterElementDirective } from './components/filter-element/filter-element.directive';
+import { FilterService } from './services/filter.service';
 
 import { ActionElementComponent } from './components/action-element/action-element.component';
 
@@ -68,7 +69,7 @@ import { GenericFormService } from './services/generic-form.service';
     FilterElementDirective,
     ActionElementComponent
   ],
-  providers: [GenericFormService],
+  providers: [GenericFormService, FilterService],
   entryComponents: [
     FormInputComponent,
     FormRowComponent,

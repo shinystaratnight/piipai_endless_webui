@@ -1,13 +1,27 @@
 <label>{{config.label}}</label>
-<div class="input-group mb-1">
-  <input class="form-control" placeholder="From date" name="dp" [(ngModel)]="data.from" ngbDatepicker #from="ngbDatepicker" [maxDate]="data.to">
+<ul class="list-inline d-flex justify-content-between">
+  <li
+    *ngFor="let item of config.list"
+    [class.text-primary]="query === item.query"
+    class="text-muted"
+    style="cursor: pointer"
+    (click)="selectQuery(item.query)">
+      {{item.label}}
+  </li>
+</ul>
+
+<div class="input-group" [class.mb-1]="!l" *ngFor="let input of config.input; let l = last">
+  <input
+    class="form-control"
+    [attr.placeholder]="input.label"
+    name="dp"
+    [(ngModel)]="data[input.query]"
+    ngbDatepicker
+    #from="ngbDatepicker"
+    [maxDate]="input.query === 'from' ? data.to : ''"
+    [minDate]="input.query === 'to' ? data.from : ''"
+    (ngModelChange)="onChange()">
   <div class="input-group-addon" (click)="from.toggle()" style="cursor: pointer">
-    <i fa [name]="'calendar'" [border]=true></i>
-  </div>
-</div>
-<div class="input-group">
-  <input class="form-control" placeholder="To date" name="dp" [(ngModel)]="data.to" ngbDatepicker #to="ngbDatepicker" [minDate]="data.from">
-  <div class="input-group-addon" (click)="to.toggle()" style="cursor: pointer">
     <i fa [name]="'calendar'" [border]=true></i>
   </div>
 </div>

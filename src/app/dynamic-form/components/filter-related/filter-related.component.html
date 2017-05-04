@@ -1,6 +1,6 @@
 <label>{{config.label}}</label>
 <div class="d-flex justify-content-center align-items-center mb-1 w-100" *ngFor="let item of elements">
-  <select class="form-control custom-select" [(ngModel)]="item.data">
+  <select class="form-control custom-select" [(ngModel)]="item.data" (change)="onChange()">
     <option value=""></option>
     <option *ngFor="let option of config.options" [attr.value]="option.key">{{option.value}}</option>
   </select>

@@ -1,15 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FilterService } from './../../services/filter.service';
 
 @Component({
   selector: 'filter-date',
   templateUrl: 'filter-date.component.html'
 })
-export class FilterDateComponent {
+export class FilterDateComponent implements OnInit {
   public from: any;
   public to: any;
   public config: any;
   public data = {
-    from: '',
-    to: ''
+    from: null,
+    to: null
   };
+  public query: string;
+
+  constructor(
+    private fs: FilterService
+  ) { }
+
+  public ngOnInit() {
+    this.updateConfig();
+  }
+
+  public selectQuery(query) {
+    this.query = query;
+    this.fs.generateQuery(query, this.config.key, this.config.listName);
+  }
+
+  public onChange() {
+    let query = '';
+    let keys = Object.keys(this.data);
+    keys.forEach((el) => {
+      if (this.data[el]) {
+        let {year = 0, month = 0, day = 0} = {...this.data[el]};
+        query += `${el}=${new Date(year, month, day)}&`;
+      }
+    });
+    this.fs.generateQuery(
+      query.substring(0, query.length - 1), this.config.key, this.config.listName);
+  }
+
+  public updateConfig() {
+    this.config.input.forEach((el) => {
+      if (el.query === 'from') {
+        el.maxDate = this.data.to;
+      } else if (el.query === 'to') {
+        el.minDate = this.data.from;
+      }
+    });
+  }
+
 }

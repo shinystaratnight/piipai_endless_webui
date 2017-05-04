@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { FilterService } from './../../services/filter.service';
 
 import { FilterRelatedComponent } from './filter-related.component';
 
@@ -20,13 +21,18 @@ describe('FilterRelatedComponent', () => {
     param: 'id',
     many: true,
   };
+  let mockFilterValue = {
+    generateQuery() {
+      return true;
+    }
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         FilterRelatedComponent
       ],
-      providers: [],
+      providers: [{provide: FilterService, useValue: mockFilterValue}],
       imports: [],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
