@@ -1,5 +1,5 @@
 import { FilterService } from './../../services/filter.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'filter-related',
@@ -12,6 +12,10 @@ export class FilterRelatedComponent implements OnInit {
   public count: number;
   public item: any;
   public query: string;
+  public copyConfig = [];
+
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private fs: FilterService
@@ -26,6 +30,7 @@ export class FilterRelatedComponent implements OnInit {
     item.data = null;
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query), this.config.key, this.config.listName);
+    this.changeQuery();
   }
 
   public addElement() {
@@ -39,6 +44,7 @@ export class FilterRelatedComponent implements OnInit {
     }
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query), this.config.key, this.config.listName);
+    this.changeQuery();
   }
 
   public createElement(id) {
@@ -52,6 +58,7 @@ export class FilterRelatedComponent implements OnInit {
   public onChange() {
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query), this.config.key, this.config.listName);
+    this.changeQuery();
   }
 
   public genericQuery(elements, query) {
@@ -63,4 +70,11 @@ export class FilterRelatedComponent implements OnInit {
     });
     return result.substring(0, result.length - 1);
   }
+
+  public changeQuery() {
+    this.event.emit({
+      list: this.config.listName
+    });
+  }
+
 }

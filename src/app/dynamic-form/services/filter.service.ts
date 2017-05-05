@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
+import { GenericFormService } from './generic-form.service';
 
 @Injectable()
 export class FilterService {
 
   public _filters: any;
   public queries: any[] = [];
+  public query: any;
 
-  constructor() {
+  constructor(
+    private gfs: GenericFormService
+  ) {
     this._filters = [];
   }
 
@@ -14,6 +18,7 @@ export class FilterService {
     filters.filters.forEach((el) => {
       el.listName = filters.list;
     });
+    this.parseFilters(filters.filters);
     this._filters.push(...filters.filters);
   }
 
@@ -31,25 +36,24 @@ export class FilterService {
   public deleteFilters(filters, name) {
     filters.forEach((el) => {
       if (el.listName === name) {
-        this.filters.splice(this.filters.indexOf(el), 1);
-        this.deleteFilters(this.filters, name);
+        filters.splice(filters.indexOf(el), 1);
+        this.deleteFilters(filters, name);
       }
     });
   }
 
-  public getQuery() {
-    return 'hello';
+  public getQuery(list) {
+    return this.parseQueries(this.queries, list);
   }
 
   public generateQuery(query, key, list) {
     if (this.queries.length > 0) {
-      this.queries.forEach((el) => {
-        if (el.list === list) {
-          el.keys[key] = query;
-        } else {
-          this.queries.push({ list, keys: { [key]: query } });
-        }
-      });
+      let el = this.queries.filter((elem) => elem.list === list);
+      if (el[0]) {
+        el[0].keys[key] = query;
+      } else {
+        this.queries.push({ list, keys: { [key]: query } });
+      }
     } else {
       this.queries.push({
         list,
@@ -71,6 +75,17 @@ export class FilterService {
       }
     });
     query = query.substring(0, query.length - 1);
+    return query;
+  }
+
+  public parseFilters(filters) {
+    filters.forEach((el) => {
+      if (el.type === 'related') {
+        this.gfs.getAll(el.data.endpoint).subscribe(
+          (res) => el.options = res.results
+        );
+      }
+    });
   }
 
 }

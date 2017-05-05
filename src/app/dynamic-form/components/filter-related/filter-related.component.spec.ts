@@ -15,7 +15,9 @@ describe('FilterRelatedComponent', () => {
     key: 'key of filter',
     label: 'Company',
     data: {
-      endpoint: ''
+      endpoint: '',
+      key: 'id',
+      value: 'name'
     },
     query: 'company',
     param: 'id',
@@ -67,7 +69,10 @@ describe('FilterRelatedComponent', () => {
 
   describe('deleteValue method', () => {
 
-    it('should delete value', async(() => {
+    it('should delete value', async(inject([FilterService], (fs: FilterService) => {
+      comp.config = config;
+      spyOn(fs, 'generateQuery');
+      spyOn(comp, 'genericQuery');
       let value = 'Home LTD';
       let element = {
         id: 1,
@@ -75,13 +80,15 @@ describe('FilterRelatedComponent', () => {
       };
       comp.deleteValue(element);
       expect(element.data).toBeNull();
-    }));
+      expect(comp.genericQuery).toHaveBeenCalled();
+      expect(fs.generateQuery).toHaveBeenCalled();
+    })));
 
   });
 
   describe('addElement method', () => {
 
-    it('should parse phone number', async(() => {
+    it('should add new element', async(() => {
       let id = 2;
       let data = {
         id,
@@ -96,7 +103,10 @@ describe('FilterRelatedComponent', () => {
 
   describe('delete method', () => {
 
-    it('should element', async(() => {
+    it('should delete element', async(inject([FilterService], (fs: FilterService) => {
+      comp.config = config;
+      spyOn(fs, 'generateQuery');
+      spyOn(comp, 'genericQuery');
       let id = 2;
       let data = {
         id,
@@ -107,7 +117,9 @@ describe('FilterRelatedComponent', () => {
       expect(comp.elements.pop()).toEqual(data);
       comp.deleteElement(data);
       expect(comp.elements.filter((elem) => elem.id === id)).toEqual([]);
-    }));
+      expect(comp.genericQuery).toHaveBeenCalled();
+      expect(fs.generateQuery).toHaveBeenCalled();
+    })));
 
   });
 
@@ -122,6 +134,45 @@ describe('FilterRelatedComponent', () => {
       let result = comp.createElement(id);
       expect(result).toEqual(data);
     }));
+
+  });
+
+  describe('onChange method', () => {
+
+    it('should update query', async(inject([FilterService], (fs: FilterService) => {
+      comp.config = config;
+      spyOn(fs, 'generateQuery');
+      spyOn(comp, 'genericQuery');
+      comp.addElement();
+      comp.onChange();
+      expect(comp.genericQuery).toHaveBeenCalled();
+      expect(fs.generateQuery).toHaveBeenCalled();
+    })));
+
+  });
+
+  describe('genericQuery method', () => {
+
+    it('should generate query', async(inject([FilterService], (fs: FilterService) => {
+      let data = [{
+        id: 1,
+        data: 4567931
+      }];
+      let query = 'company';
+      let result = comp.genericQuery(data, query);
+      expect(result).toEqual(`${query}=4567931`);
+    })));
+
+  });
+
+  describe('changeQuery method', () => {
+
+    it('should emit event', () => {
+      comp.config = config;
+      spyOn(comp.event, 'emit');
+      comp.changeQuery();
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
 
   });
 

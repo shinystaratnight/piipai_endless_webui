@@ -2,6 +2,7 @@
   <div class="p-2" *ngFor="let field of config;">
     <ng-container
       filterElement
+      (event)="changeQuery($event)"
       [config]="field">
     </ng-container>
   </div>

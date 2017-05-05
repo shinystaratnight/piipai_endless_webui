@@ -27,6 +27,9 @@ export class FilterElementDirective implements OnInit, OnChanges {
   @Input()
   public config;
 
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
+
   public component: ComponentRef<any>;
 
   constructor(
@@ -37,6 +40,7 @@ export class FilterElementDirective implements OnInit, OnChanges {
   public ngOnChanges() {
     if (this.component) {
       this.component.instance.config = this.config;
+      this.component.instance.event = this.event;
     }
   }
 
@@ -45,5 +49,6 @@ export class FilterElementDirective implements OnInit, OnChanges {
     const factory = this.resolver.resolveComponentFactory<any>(component);
     this.component = this.container.createComponent(factory);
     this.component.instance.config = this.config;
+    this.component.instance.event = this.event;
   }
 }

@@ -6,7 +6,7 @@
       <option value=""></option>
       <option *ngFor="let option of config.options" [ngValue]="option">{{option.label}}</option>
   </select>
-  <button class="btn" type="button" (click)="toDoAction()">Go</button>
+  <button class="btn" type="button" (click)="toDoAction()">{{config.button_label}}</button>
 </div>
 
 <template #content let-c="close" let-d="dismiss">
@@ -17,7 +17,7 @@
     </button>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="c(true)">Yes</button>
-    <button type="button" class="btn btn-secondary" (click)="c(false)">No</button>
+    <button type="button" class="btn btn-secondary" (click)="c(true)">{{config.agree_label}}</button>
+    <button type="button" class="btn btn-secondary" (click)="c(false)">{{config.decline_label}}</button>
   </div>
 </template>

@@ -17,6 +17,12 @@ describe('DynamicListComponent', () => {
             field: 'first_name',
             type: 'text',
           }
+        ],
+        context_menu: [
+          {
+            label: 'edit profile',
+            endpoint: 'endpoint'
+          }
         ]
       },
       {
@@ -37,6 +43,12 @@ describe('DynamicListComponent', () => {
             field: 'last_name',
             type: 'link',
             href: 'login'
+          }
+        ],
+        context_menu: [
+          {
+            label: 'send SMS',
+            endpoint: 'endpoint'
           }
         ]
       }
@@ -90,6 +102,8 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'prepareData');
       comp.ngOnInit();
       expect(comp.prepareData).toHaveBeenCalled();
+      expect(comp.select).toEqual({});
+      expect(comp.filter).toEqual({});
     }));
 
   });
@@ -110,7 +124,12 @@ describe('DynamicListComponent', () => {
                 value: 'Test'
               }
             ],
-            contextMenu: undefined
+            contextMenu: [
+              {
+                label: 'edit profile',
+                endpoint: 'endpoint'
+              }
+            ]
           },
           {
             name: 'phone_mobile',
@@ -134,7 +153,12 @@ describe('DynamicListComponent', () => {
                 value: 'Testovich'
               }
             ],
-            contextMenu: undefined
+            contextMenu: [
+              {
+                label: 'send SMS',
+                endpoint: 'endpoint'
+              }
+            ]
           }
         ]
       }];

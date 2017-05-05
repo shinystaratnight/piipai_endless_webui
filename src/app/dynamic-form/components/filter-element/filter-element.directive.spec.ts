@@ -2,6 +2,7 @@ import { ReactiveFormsModule , FormBuilder, FormGroup } from '@angular/forms';
 import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { FilterService } from './../../services/filter.service';
 
 import { FilterElementDirective } from './filter-element.directive';
 import { FilterChoiceComponent } from './../filter-choice/filter-choice.component';
@@ -33,6 +34,11 @@ export class ContainerComponent {
 describe('FilterElementDirective', () => {
   let fixture: ComponentFixture<ContainerComponent>;
   let comp: ContainerComponent;
+  let mockFilterService = {
+    generateQuery() {
+      return true;
+    }
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -41,7 +47,7 @@ describe('FilterElementDirective', () => {
         ContainerComponent,
         FilterChoiceComponent
       ],
-      providers: [],
+      providers: [{provide: FilterService, useValue: mockFilterService}],
       imports: [],
       schemas: [ NO_ERRORS_SCHEMA ]
     });

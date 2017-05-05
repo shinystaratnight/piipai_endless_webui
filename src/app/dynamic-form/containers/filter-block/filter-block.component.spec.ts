@@ -32,4 +32,14 @@ describe('FilterBlockComponent', () => {
     expect(comp).toBeDefined();
   });
 
+  describe('changeQuery method', () => {
+
+    it('should emit event', () => {
+      spyOn(comp.event, 'emit');
+      comp.changeQuery({list: 'company'});
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
+
+  });
+
 });

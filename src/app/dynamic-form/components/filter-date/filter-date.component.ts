@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 
 @Component({
@@ -15,6 +15,9 @@ export class FilterDateComponent implements OnInit {
   };
   public query: string;
 
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
+
   constructor(
     private fs: FilterService
   ) { }
@@ -24,11 +27,17 @@ export class FilterDateComponent implements OnInit {
   }
 
   public selectQuery(query) {
+    this.data = {
+      from: null,
+      to: null
+    };
     this.query = query;
     this.fs.generateQuery(query, this.config.key, this.config.listName);
+    this.changeQuery();
   }
 
   public onChange() {
+    this.query = '';
     let query = '';
     let keys = Object.keys(this.data);
     keys.forEach((el) => {
@@ -39,6 +48,7 @@ export class FilterDateComponent implements OnInit {
     });
     this.fs.generateQuery(
       query.substring(0, query.length - 1), this.config.key, this.config.listName);
+    this.changeQuery();
   }
 
   public updateConfig() {
@@ -48,6 +58,12 @@ export class FilterDateComponent implements OnInit {
       } else if (el.query === 'to') {
         el.minDate = this.data.from;
       }
+    });
+  }
+
+  public changeQuery() {
+    this.event.emit({
+      list: this.config.listName
     });
   }
 

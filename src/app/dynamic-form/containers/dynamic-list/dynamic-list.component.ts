@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'dynamic-list',
@@ -11,6 +11,9 @@ export class DynamicListComponent implements OnInit {
 
   @Input()
   public data: any[] = [];
+
+  @Output()
+  public checked: EventEmitter<any> = new EventEmitter();
 
   public body: any[] = [];
   public select: any;
@@ -86,6 +89,12 @@ export class DynamicListComponent implements OnInit {
       }
     });
     return result;
+  }
+
+  public selectElement() {
+    this.checked.emit({
+      select: this.select
+    });
   }
 
 }

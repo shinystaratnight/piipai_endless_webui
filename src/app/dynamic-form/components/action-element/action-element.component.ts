@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, EventEmitter, Output } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -8,6 +8,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class ActionElementComponent {
   @Input()
   public config: any;
+
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('content')
   public content: any;
@@ -20,13 +23,17 @@ export class ActionElementComponent {
   ) {}
 
   public toDoAction() {
-    this.open(this.content);
+    if (this.action) {
+      this.open(this.content);
+    }
   }
 
   public open(content) {
     this.modalService.open(content).result.then((result) => {
       if (result) {
-        console.log(result);
+        this.event.emit({
+          action: this.action
+        });
       }
     }, (reason) => {
       return false;

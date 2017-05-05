@@ -18,6 +18,7 @@ import { FormCollapseComponent } from './containers/form-collapse/form-collapse.
 import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.component';
 import { FormRelatedComponent } from './components/form-related/form-related.component';
 
+import { GenericListComponent } from './components/generic-list/generic-list.component';
 import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
 import { ListElementDirective } from './components/list-element/list-element.directive';
 import { ListTextComponent } from './components/list-text/list-text.component';
@@ -43,7 +44,7 @@ import { GenericFormService } from './services/generic-form.service';
     FormsModule,
     RouterModule
   ],
-  exports: [GenericFormComponent],
+  exports: [GenericFormComponent, GenericListComponent],
   declarations: [
     DynamicFormComponent,
     FormInputComponent,
@@ -67,7 +68,8 @@ import { GenericFormService } from './services/generic-form.service';
     FilterChoiceComponent,
     FilterRelatedComponent,
     FilterElementDirective,
-    ActionElementComponent
+    ActionElementComponent,
+    GenericListComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [

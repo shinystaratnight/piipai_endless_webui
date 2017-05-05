@@ -12,11 +12,15 @@ describe('ActionElementComponent', () => {
   let comp: ActionElementComponent;
   let el;
   let config = {
-    label: 'Actions:',
+    label: 'Actions',
+    button_label: 'Go',
+    agree_label: 'Agree',
+    decline_label: 'Decline',
     options: [
       {
         key: 'key of action',
         label: 'label of action',
+        query: 'delete',
         confirm: true,
         message: 'confirm message'
       }
@@ -50,6 +54,7 @@ describe('ActionElementComponent', () => {
   describe('toDoAction method', () => {
 
     it('should be called open', async(() => {
+      comp.action = config.options[0];
       spyOn(comp, 'open');
       comp.toDoAction();
       expect(comp.open).toHaveBeenCalled();

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 
 @Component({
@@ -9,16 +9,27 @@ export class FilterChoiceComponent {
   public config: any;
   public query: any;
 
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
+
   constructor(
     private fs: FilterService
   ) {}
 
   public select(value) {
+    let query = `${this.config.query}=${value}`;
     if (value === this.query) {
       this.query = null;
     } else {
-    this.query = value;
+      this.query = value;
     }
-    this.fs.generateQuery(value, this.config.key, this.config.listName);
+    this.fs.generateQuery(query, this.config.key, this.config.listName);
+    this.changeQuery();
+  }
+
+  public changeQuery() {
+    this.event.emit({
+      list: this.config.listName
+    });
   }
 }

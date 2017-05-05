@@ -59,12 +59,14 @@ describe('FilterChoiceComponent', () => {
   describe('select method', () => {
 
     it('should set new query', async(() => {
+      comp.config = config;
       let value = 'company=Home';
       comp.select(value);
       expect(comp.query).toEqual(value);
     }));
 
     it('should unset query', async(() => {
+      comp.config = config;
       let value = 'company=Home';
       comp.query = value;
       comp.select(value);
@@ -73,12 +75,24 @@ describe('FilterChoiceComponent', () => {
 
     it('should be called generateQuery method',
       async(inject([FilterService], (fs: FilterService) => {
+      comp.config = config;
       spyOn(fs, 'generateQuery');
       let value = 'company=Home';
       comp.query = value;
       comp.select(value);
       expect(fs.generateQuery).toHaveBeenCalled();
     })));
+
+  });
+
+  describe('changeQuery method', () => {
+
+    it('should emit event', () => {
+      comp.config = config;
+      spyOn(comp.event, 'emit');
+      comp.changeQuery();
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
 
   });
 

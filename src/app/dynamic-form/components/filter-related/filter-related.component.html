@@ -2,7 +2,7 @@
 <div class="d-flex justify-content-center align-items-center mb-1 w-100" *ngFor="let item of elements">
   <select class="form-control custom-select" [(ngModel)]="item.data" (change)="onChange()">
     <option value=""></option>
-    <option *ngFor="let option of config.options" [attr.value]="option.key">{{option.value}}</option>
+    <option *ngFor="let option of config.options" [attr.value]="option[config.data.key]">{{option[config.data.value]}}</option>
   </select>
   <div class="d-flex justify-content-center align-items-center p-1">
     <i fa *ngIf="item.data" [name]="'times'" [border]=true (click)="deleteValue(item)" class="text-info p-1" style="cursor: pointer"></i>

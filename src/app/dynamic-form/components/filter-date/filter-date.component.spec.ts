@@ -16,6 +16,7 @@ describe('FilterDateComponent', () => {
     type: 'date',
     key: 'key of filter',
     label: 'Date',
+    listName: 'company',
     list: [
       {
         label: 'Today',
@@ -75,6 +76,7 @@ describe('FilterDateComponent', () => {
 
     it('should be called updateConfig method', () => {
       spyOn(comp, 'updateConfig');
+      comp.ngOnInit();
       expect(comp.updateConfig).toHaveBeenCalled();
     });
 
@@ -84,9 +86,10 @@ describe('FilterDateComponent', () => {
 
     it('should be called updateConfig method',
       async(inject([FilterService], (fs: FilterService) => {
+        comp.config = config;
         let query = '?from=10-03-17';
-        comp.selectQuery(query);
         spyOn(fs, 'generateQuery');
+        comp.selectQuery(query);
         expect(fs.generateQuery).toHaveBeenCalled();
         expect(comp.query).toEqual(query);
     })));
@@ -97,14 +100,15 @@ describe('FilterDateComponent', () => {
 
     it('should be called updateConfig method',
       async(inject([FilterService], (fs: FilterService) => {
+        comp.config = config;
         let data = {
           from: '20-03-17',
           to: '30-03-17'
         };
         comp.data = data;
         let query = '?from=10-03-17';
-        comp.selectQuery(query);
         spyOn(fs, 'generateQuery');
+        comp.selectQuery(query);
         expect(fs.generateQuery).toHaveBeenCalled();
         expect(comp.query).toEqual(query);
     })));
@@ -114,8 +118,35 @@ describe('FilterDateComponent', () => {
   describe('updateConfig method', () => {
 
     it('should update config', () => {
+      let to = '30-03-17';
+      let from = '10-03-17';
+      let result = [
+        {
+          query: 'from',
+          label: 'From date',
+          maxDate: to
+        },
+        {
+          query: 'to',
+          label: 'To date',
+          minDate: from
+        }
+      ];
+      comp.config = config;
+      comp.data = { to, from };
       comp.updateConfig();
-      expect(comp.config.inupt).toEqual(2);
+      expect(comp.config.input).toEqual(result);
+    });
+
+  });
+
+  describe('changeQuery method', () => {
+
+    it('should emit event', () => {
+      comp.config = config;
+      spyOn(comp.event, 'emit');
+      comp.changeQuery();
+      expect(comp.event.emit).toHaveBeenCalled();
     });
 
   });
