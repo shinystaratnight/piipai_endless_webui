@@ -28,13 +28,16 @@ export class FilterRelatedComponent implements OnInit {
 
   public deleteValue(item) {
     item.data = null;
+    this.updateOptions(this.config.options);
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query), this.config.key, this.config.listName);
     this.changeQuery();
   }
 
   public addElement() {
-    this.elements.push(this.createElement(this.count));
+    if (this.elements.length < this.config.options.length) {
+      this.elements.push(this.createElement(this.count));
+    }
   }
 
   public deleteElement(item) {
@@ -42,6 +45,7 @@ export class FilterRelatedComponent implements OnInit {
       let result = this.elements.filter((el) => el.id !== item.id);
       this.elements = result;
     }
+    this.updateOptions(this.config.options);
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query), this.config.key, this.config.listName);
     this.changeQuery();
@@ -56,6 +60,7 @@ export class FilterRelatedComponent implements OnInit {
   }
 
   public onChange() {
+    this.updateOptions(this.config.options);
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query), this.config.key, this.config.listName);
     this.changeQuery();
@@ -74,6 +79,25 @@ export class FilterRelatedComponent implements OnInit {
   public changeQuery() {
     this.event.emit({
       list: this.config.listName
+    });
+  }
+
+  public updateOptions(options) {
+    this.refreshOptions(options);
+    options.forEach((el) => {
+      this.elements.forEach((prop) => {
+        if (prop.data === el.id) {
+          el.disabled = true;
+        }
+      });
+    });
+  }
+
+  public refreshOptions(options) {
+    options.forEach((el) => {
+      if (el.disabled) {
+        el.disabled = false;
+      }
     });
   }
 

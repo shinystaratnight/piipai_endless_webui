@@ -13,7 +13,6 @@ export class GenericListComponent {
   public endpoint: string = '';
 
   public metadata: any[] = [];
-  public checkedElements: string[] = [];
 
   constructor(
     private gfs: GenericFormService,
@@ -24,11 +23,6 @@ export class GenericListComponent {
     this.gfs.getMetadata(endpoint).subscribe(
       (data) => this.metadata = data
     );
-  }
-
-  public checkedElement(e) {
-    let keys = Object.keys(e.select);
-    this.checkedElements = keys.filter((el) => e.select[el]);
   }
 
 }

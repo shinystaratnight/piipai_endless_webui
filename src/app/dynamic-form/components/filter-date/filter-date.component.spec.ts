@@ -20,15 +20,15 @@ describe('FilterDateComponent', () => {
     list: [
       {
         label: 'Today',
-        query: 'created_at=20-03-17'
+        query: 'created_at=03/03/2017'
       },
       {
         label: 'Last week',
-        query: 'from=20-03-17&to=27-03-17'
+        query: 'from=01/03/2017&to=08/03/2017'
       },
       {
         label: 'Last month',
-        query: 'from=20-03-17&to=20-04-17'
+        query: 'from=01/03/2017&to=01/04/2017'
       }
     ],
     input: [
@@ -47,6 +47,7 @@ describe('FilterDateComponent', () => {
       return true;
     }
   };
+  let moment = require('moment');
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -84,13 +85,15 @@ describe('FilterDateComponent', () => {
 
   describe('selectQuery method', () => {
 
-    it('should be called updateConfig method',
+    it('should be called generateQuery method',
       async(inject([FilterService], (fs: FilterService) => {
         comp.config = config;
         let query = '?from=10-03-17';
         spyOn(fs, 'generateQuery');
+        spyOn(comp, 'parseDate');
         comp.selectQuery(query);
         expect(fs.generateQuery).toHaveBeenCalled();
+        expect(comp.parseDate).toHaveBeenCalled();
         expect(comp.query).toEqual(query);
     })));
 
@@ -98,7 +101,7 @@ describe('FilterDateComponent', () => {
 
   describe('onChange method', () => {
 
-    it('should be called updateConfig method',
+    it('should be called generateQuery method',
       async(inject([FilterService], (fs: FilterService) => {
         comp.config = config;
         let data = {
@@ -106,11 +109,11 @@ describe('FilterDateComponent', () => {
           to: '30-03-17'
         };
         comp.data = data;
-        let query = '?from=10-03-17';
         spyOn(fs, 'generateQuery');
-        comp.selectQuery(query);
+        spyOn(comp, 'changeQuery');
+        comp.onChange();
         expect(fs.generateQuery).toHaveBeenCalled();
-        expect(comp.query).toEqual(query);
+        expect(comp.changeQuery).toHaveBeenCalled();
     })));
 
   });
@@ -147,6 +150,29 @@ describe('FilterDateComponent', () => {
       spyOn(comp.event, 'emit');
       comp.changeQuery();
       expect(comp.event.emit).toHaveBeenCalled();
+    });
+
+  });
+
+  describe('parseDate method', () => {
+
+    it('should parse date form query', () => {
+      let query = 'from=01/03/2017&to=01/15/2017';
+      let result: any = {
+        from: {
+          year: 2017,
+          month: 1,
+          day: 3
+        },
+        to: {
+          year: 2017,
+          month: 1,
+          day: 15
+        }
+      };
+      comp.config = config;
+      comp.parseDate(query, moment);
+      expect(comp.data).toEqual(result);
     });
 
   });

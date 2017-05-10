@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
+import moment from 'moment';
 
 @Component({
   selector: 'filter-date',
@@ -31,6 +32,7 @@ export class FilterDateComponent implements OnInit {
       from: null,
       to: null
     };
+    this.parseDate(query, moment);
     this.query = query;
     this.fs.generateQuery(query, this.config.key, this.config.listName);
     this.changeQuery();
@@ -64,6 +66,24 @@ export class FilterDateComponent implements OnInit {
   public changeQuery() {
     this.event.emit({
       list: this.config.listName
+    });
+  }
+
+  public parseDate(date, moment) {
+    let result = {};
+    let queries = [];
+    let dates = date.split('&');
+    dates.forEach((el) => {
+      let query = el.split('=');
+      queries.push(query[0]);
+      result[query[0]] = moment.utc(query[1], 'MM-DD-YYYY');
+    });
+    queries.forEach((el) => {
+      this.data[el] = {
+        year: result[el].year(),
+        month: result[el].month() + 1,
+        day: result[el].date()
+      };
     });
   }
 

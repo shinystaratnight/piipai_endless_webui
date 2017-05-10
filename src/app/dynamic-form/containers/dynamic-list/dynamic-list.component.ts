@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FilterService } from './../../services/filter.service';
 
 @Component({
   selector: 'dynamic-list',
@@ -7,22 +8,30 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 export class DynamicListComponent implements OnInit {
   @Input()
-  public config: any[] = [];
+  public config: any;
 
   @Input()
   public data: any[] = [];
 
   @Output()
-  public checked: EventEmitter<any> = new EventEmitter();
+  public event: EventEmitter<any> = new EventEmitter();
 
   public body: any[] = [];
   public select: any;
   public filter: any;
+  public filtersOfList: any[] = [];
+  public selectedAll: boolean = false;
+
+  constructor(
+    private filterService: FilterService
+  ) {}
 
   public ngOnInit() {
-    this.select = {};
+    this.filterService.filters = this.config.list;
+    this.filtersOfList = this.filterService.filters;
+    this.select = this.resetSelectedElements(this.data);
     this.filter = {};
-    this.body = this.prepareData(this.config, this.data);
+    this.body = this.prepareData(this.config.list.columns, this.data);
   }
 
   public prepareData(config, data) {
@@ -91,9 +100,33 @@ export class DynamicListComponent implements OnInit {
     return result;
   }
 
-  public selectElement() {
-    this.checked.emit({
-      select: this.select
+  public selectAll() {
+    let keys = Object.keys(this.select);
+    keys.forEach((el) => {
+      this.select[el] = this.selectedAll;
+    });
+  }
+
+  public resetSelectedElements(data) {
+    let select = {};
+    data.forEach((el) => {
+      select[el.id] = false;
+    });
+    return select;
+  }
+
+  public actionHandler(e) {
+    this.event.emit({
+      type: 'action',
+      action: e.action,
+      data: this.select
+    });
+  }
+
+  public filterHandler(e) {
+    this.event.emit({
+      type: 'filter',
+      list: e.list
     });
   }
 

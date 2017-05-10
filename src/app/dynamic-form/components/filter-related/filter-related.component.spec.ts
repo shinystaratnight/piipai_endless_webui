@@ -22,6 +22,7 @@ describe('FilterRelatedComponent', () => {
     query: 'company',
     param: 'id',
     many: true,
+    options: []
   };
   let mockFilterValue = {
     generateQuery() {
@@ -94,7 +95,16 @@ describe('FilterRelatedComponent', () => {
         id,
         data: ''
       };
+      let options = [
+        {
+          [config.data.key]: 213,
+          value: 'some value'
+        }
+      ];
+      comp.config = config;
+      comp.config.options = options;
       comp.count = id;
+      comp.elements = [];
       comp.addElement();
       expect(comp.elements.pop()).toEqual(data);
     }));
@@ -172,6 +182,95 @@ describe('FilterRelatedComponent', () => {
       spyOn(comp.event, 'emit');
       comp.changeQuery();
       expect(comp.event.emit).toHaveBeenCalled();
+    });
+
+  });
+
+  describe('updateOptions method', () => {
+
+    it('should update config.options property', () => {
+      let options = [
+        {
+          [config.data.key]: 213,
+          value: 'some value'
+        },
+        {
+          [config.data.key]: 125,
+          value: 'another value'
+        },
+        {
+          [config.data.key]: 1225,
+          value: 'super value'
+        }
+      ];
+      let elements = [
+        {
+          id: 1,
+          data: 125,
+        },
+        {
+          id: 2,
+          data: 213
+        }
+      ];
+      let result = [
+        {
+          [config.data.key]: 213,
+          value: 'some value',
+          disabled: true
+        },
+        {
+          [config.data.key]: 125,
+          value: 'another value',
+          disabled: true
+        },
+        {
+          [config.data.key]: 1225,
+          value: 'super value'
+        }
+      ];
+      config.options = options;
+      comp.config = config;
+      comp.elements = elements;
+      spyOn(comp, 'refreshOptions');
+      comp.updateOptions(comp.config.options);
+      expect(comp.refreshOptions).toHaveBeenCalled();
+      expect(comp.config.options).toEqual(result);
+    });
+
+  });
+
+  describe('refreshOptions method', () => {
+
+    it('should refresh config.options property', () => {
+      let options = [
+        {
+          [config.data.key]: 213,
+          value: 'some value',
+          disabled: true
+        },
+        {
+          [config.data.key]: 125,
+          value: 'another value',
+          disabled: true
+        }
+      ];
+      let result = [
+        {
+          [config.data.key]: 213,
+          value: 'some value',
+          disabled: false
+        },
+        {
+          [config.data.key]: 125,
+          value: 'another value',
+          disabled: false
+        }
+      ];
+      config.options = options;
+      comp.config = config;
+      comp.refreshOptions(comp.config.options);
+      expect(comp.config.options).toEqual(result);
     });
 
   });
