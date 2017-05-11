@@ -114,12 +114,22 @@ describe('DynamicListComponent', () => {
 
     it('should called prepareData method', async(() => {
       comp.config = config;
+      comp.ngOnInit();
+      expect(comp.filter).toEqual({});
+    }));
+
+  });
+
+  describe('ngOnChanges method', () => {
+
+    it('should called prepareData method', async(() => {
+      comp.config = config;
+      comp.data = data;
       spyOn(comp, 'prepareData');
       spyOn(comp, 'resetSelectedElements');
-      comp.ngOnInit();
+      comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.resetSelectedElements).toHaveBeenCalled();
-      expect(comp.filter).toEqual({});
     }));
 
   });
@@ -180,6 +190,28 @@ describe('DynamicListComponent', () => {
       }];
       let result = comp.prepareData(config.list.columns, data);
       expect(result).toEqual(body);
+    }));
+
+  });
+
+  describe('setValue method', () => {
+
+    it('should set value from data', async(() => {
+      let props = 'primary_contact.contact.__str__'.split('.');
+      let values = {
+        primary_contact: {
+          contact: {
+            __str__: 'Mr. Test Testovich'
+          }
+        },
+        name: 'Home LTD'
+      };
+      let resultOne = {};
+      let resultTwo = {};
+      comp.setValue(values, props, resultOne);
+      comp.setValue(values, ['name'], resultTwo);
+      expect(resultOne['value']).toEqual('Mr. Test Testovich');
+      expect(resultTwo['value']).toEqual('Home LTD');
     }));
 
   });

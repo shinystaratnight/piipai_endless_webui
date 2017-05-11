@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 
 @Component({
@@ -6,12 +6,12 @@ import { FilterService } from './../../services/filter.service';
   templateUrl: 'dynamic-list.component.html'
 })
 
-export class DynamicListComponent implements OnInit {
+export class DynamicListComponent implements OnInit, OnChanges {
   @Input()
   public config: any;
 
   @Input()
-  public data: any[] = [];
+  public data: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -27,11 +27,18 @@ export class DynamicListComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.filterService.filters = this.config.list;
-    this.filtersOfList = this.filterService.filters;
-    this.select = this.resetSelectedElements(this.data);
+    // this.filterService.filters = this.config.list;
+    // this.filtersOfList = this.filterService.filters;
     this.filter = {};
-    this.body = this.prepareData(this.config.list.columns, this.data);
+  }
+
+  public ngOnChanges() {
+    if (this.config && this.data) {
+      this.select = this.resetSelectedElements(this.data);
+      if (this.config.list) {
+        this.body = this.prepareData(this.config.list.columns, this.data);
+      }
+    }
   }
 
   public prepareData(config, data) {
@@ -49,12 +56,11 @@ export class DynamicListComponent implements OnInit {
         };
         col.content.forEach((element) => {
           let obj = {};
+          let props = element.field.split('.');
           obj['name'] = element.field;
           obj['type'] = element.type;
           obj['href'] = element.href ? element.href : null;
-          if (el[element.field]) {
-            obj['value'] = el[element.field];
-          }
+          this.setValue(el, props, obj);
           cell.content.push(obj);
         });
         row.content.push(cell);
@@ -98,6 +104,15 @@ export class DynamicListComponent implements OnInit {
       }
     });
     return result;
+  }
+
+  public setValue(data, props, object) {
+    let prop = props.shift();
+    if (props.length === 0) {
+      object['value'] = data[prop];
+    } else if (data[prop]) {
+      this.setValue(data[prop], props, object);
+    }
   }
 
   public selectAll() {

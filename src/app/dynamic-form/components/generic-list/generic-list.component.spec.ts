@@ -13,9 +13,13 @@ describe('GenericListComponent', () => {
     let comp: GenericListComponent;
     let el;
     let metadata = [];
+    let data;
     let mockGenericFormService = {
       getMetadata() {
         return Observable.of(metadata);
+      },
+      getAll() {
+        return Observable.of(data);
       }
     };
     let mockFilterService = {};
@@ -59,6 +63,28 @@ describe('GenericListComponent', () => {
         let endpoint = 'endpoint';
         comp.getMetadata(endpoint);
         expect(comp.metadata).toEqual(metadata);
+      }));
+
+    });
+
+    describe('getData method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.getData).toBeDefined();
+      }));
+
+      it('should update data property', async(() => {
+        data = {
+          results: [
+            {
+              name: 'Home LTD',
+              id: 123
+            }
+          ]
+        };
+        let endpoint = 'endpoint';
+        comp.getData(endpoint);
+        expect(comp.data).toEqual(data.results);
       }));
 
     });

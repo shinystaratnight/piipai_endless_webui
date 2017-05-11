@@ -96,4 +96,18 @@ describe('FilterChoiceComponent', () => {
 
   });
 
+  describe('resetFilter method', () => {
+
+    it('should reset query', async(inject([FilterService], (fs: FilterService) => {
+      comp.config = config;
+      spyOn(fs, 'generateQuery');
+      spyOn(comp, 'changeQuery');
+      comp.resetFilter();
+      expect(comp.changeQuery).toHaveBeenCalled();
+      expect(fs.generateQuery).toHaveBeenCalled();
+      expect(comp.query).toBeNull();
+    })));
+
+  });
+
 });

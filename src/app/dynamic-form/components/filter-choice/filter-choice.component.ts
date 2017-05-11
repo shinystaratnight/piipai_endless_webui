@@ -32,4 +32,10 @@ export class FilterChoiceComponent {
       list: this.config.listName
     });
   }
+
+  public resetFilter() {
+    this.query = null;
+    this.fs.generateQuery(this.query, this.config.key, this.config.listName);
+    this.changeQuery();
+  }
 }

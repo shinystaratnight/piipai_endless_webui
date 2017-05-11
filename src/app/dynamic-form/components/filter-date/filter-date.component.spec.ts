@@ -177,4 +177,25 @@ describe('FilterDateComponent', () => {
 
   });
 
+  describe('resetFilter method', () => {
+
+    it('should reset query', async(inject([FilterService], (fs: FilterService) => {
+      let data = {
+        from: '01/01/2017',
+        to: '01/01/2017'
+      };
+      comp.config = config;
+      comp.data = data;
+      spyOn(fs, 'generateQuery');
+      spyOn(comp, 'changeQuery');
+      comp.resetFilter();
+      expect(comp.changeQuery).toHaveBeenCalled();
+      expect(fs.generateQuery).toHaveBeenCalled();
+      expect(comp.query).toBeNull();
+      expect(comp.data.from).toBeNull();
+      expect(comp.data.to).toBeNull();
+    })));
+
+  });
+
 });

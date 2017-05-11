@@ -1,3 +1,3 @@
 <div class="container-fluid">
-  <dynamic-list [config]="config" [data]="data" (event)="eventHandler($event)"></dynamic-list>
+  <dynamic-list *ngIf="metadata && data" [config]="metadata" [data]="data" (event)="eventHandler($event)"></dynamic-list>
 </div>

@@ -13,11 +13,15 @@ import {
 import { ListTextComponent } from './../list-text/list-text.component';
 import { ListColumnComponent } from './../../containers/list-column/list-column.component';
 import { ListLinkComponent } from './../list-link/list-link.component';
+import { ListCheckboxComponent } from './../list-checkbox/list-checkbox.component';
 
 const components = {
   text: ListTextComponent,
   column: ListColumnComponent,
-  link: ListLinkComponent
+  link: ListLinkComponent,
+  input: ListTextComponent,
+  static: ListTextComponent,
+  checkbox: ListCheckboxComponent
 };
 
 @Directive({

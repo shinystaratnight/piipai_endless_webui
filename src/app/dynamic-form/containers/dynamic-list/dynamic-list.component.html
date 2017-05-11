@@ -1,10 +1,12 @@
-<filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
-<action-element [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
-<table class="table table-bordered table-sm">
+<!--<filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+<action-element [config]="config.list.actions" (event)="actionHandler($event)"></action-element>-->
+<h5 *ngIf="config.list">{{config.list.label}}</h5>
+<table class="table table-bordered table-sm" *ngIf="config.list">
   <thead>
     <tr>
       <th class="text-center" style="width: 2rem">
-        *<input type="checkbox" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
+        *
+        <input type="checkbox" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
       </th>
       <th *ngFor="let field of config.list.columns;" class="align-middle">
         <i fa
@@ -21,7 +23,7 @@
       </th>
     </tr>
   </thead>
-  <tbody>
+  <tbody *ngIf="body">
     <tr *ngFor="let row of body">
       <td class="align-middle text-center">
         <input type="checkbox" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
@@ -32,7 +34,7 @@
             listElement
             [config]="cell.content">
           </ng-container>
-          <div ngbDropdown class="d-inline-block">
+          <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
             <i fa
               id="dropdownBasic1"
               class="text-muted p-2"

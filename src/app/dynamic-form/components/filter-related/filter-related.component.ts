@@ -101,4 +101,12 @@ export class FilterRelatedComponent implements OnInit {
     });
   }
 
+  public resetFilter() {
+    this.elements = null;
+    this.count = 1;
+    this.addElement();
+    this.fs.generateQuery('', this.config.key, this.config.listName);
+    this.changeQuery();
+  }
+
 }

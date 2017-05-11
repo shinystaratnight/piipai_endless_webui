@@ -87,4 +87,12 @@ export class FilterDateComponent implements OnInit {
     });
   }
 
+  public resetFilter() {
+    this.query = null;
+    this.data.from = null;
+    this.data.to = null;
+    this.fs.generateQuery(this.query, this.config.key, this.config.listName);
+    this.changeQuery();
+  }
+
 }

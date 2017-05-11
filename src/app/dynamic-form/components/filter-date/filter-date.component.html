@@ -1,4 +1,14 @@
-<label>{{config.label}}</label>
+<label>
+  {{config.label}}
+  <i
+    *ngIf="query || data.from || data.to"
+    fa
+    class="text-danger ml-1"
+    [name]="'times-circle'"
+    [border]="true"
+    style="cursor: pointer"
+    (click)="resetFilter()"></i>
+</label>
 <ul class="list-inline d-flex justify-content-between">
   <li
     *ngFor="let item of config.list"
