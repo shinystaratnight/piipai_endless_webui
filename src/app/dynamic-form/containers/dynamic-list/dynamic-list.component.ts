@@ -18,7 +18,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
 
   public body: any[] = [];
   public select: any;
-  public filter: any;
+  public sortedColumns: any;
   public filtersOfList: any[] = [];
   public selectedAll: boolean = false;
 
@@ -29,19 +29,21 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public ngOnInit() {
     // this.filterService.filters = this.config.list;
     // this.filtersOfList = this.filterService.filters;
-    this.filter = {};
+    this.sortedColumns = {};
   }
 
   public ngOnChanges() {
     if (this.config && this.data) {
       this.select = this.resetSelectedElements(this.data);
       if (this.config.list) {
+        this.sortedColumns = this.getSortedColumns(this.config.list.columns);
         this.body = this.prepareData(this.config.list.columns, this.data);
       }
     }
   }
 
   public prepareData(config, data) {
+    let format = require('formatstring');
     let prepareData = [];
     data.forEach((el) => {
       let row = {
@@ -59,7 +61,11 @@ export class DynamicListComponent implements OnInit, OnChanges {
           let props = element.field.split('.');
           obj['name'] = element.field;
           obj['type'] = element.type;
-          obj['href'] = element.href ? element.href : null;
+          if (element.link) {
+            obj['link'] = format(element.link, el);
+          } else if (element.endpoint) {
+            obj['endpoint'] = format(element.endpoint, el);
+          }
           this.setValue(el, props, obj);
           cell.content.push(obj);
         });
@@ -70,21 +76,39 @@ export class DynamicListComponent implements OnInit, OnChanges {
     return prepareData;
   }
 
-  public filterListByColumn(field) {
-    if (this.filter[field.name]) {
-      this.filter[field.name] = this.filter[field.name] === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.filter = {};
-      this.filter[field.name] = 'asc';
-    }
-    this.body.sort((prev, next) => {
-      let prevValue = this.getValue(prev.content, field.name);
-      let nextValue = this.getValue(next.content, field.name);
-      if (this.filter[field.name] === 'asc') {
-        return prevValue > nextValue ? 1 : -1;
-      } else if (this.filter[field.name] === 'desc') {
-        return prevValue > nextValue ? -1 : 1;
+  public getSortedColumns(config) {
+    let result = {};
+    config.forEach((el) => {
+      if (el.sorted) {
+        result[el.name] = el.sorted;
       }
+    });
+    return result;
+  }
+
+  public sorting(field) {
+    if (this.sortedColumns[field.name]) {
+      this.sortedColumns[field.name] = this.sortedColumns[field.name] === 'asc' ? 'desc' : 'asc';
+      field.sorted = field.sorted === 'asc' ? 'desc' : 'asc';
+    } else {
+      let key = 'desc';
+      this.sortedColumns[field.name] = key;
+      field.sorted = key;
+    }
+    this.event.emit({
+      type: 'sort',
+      list: this.config.list.list,
+      sort: this.sortedColumns
+    });
+  }
+
+  public resetSort(field) {
+    delete field.sorted;
+    delete this.sortedColumns[field.name];
+    this.event.emit({
+      type: 'sort',
+      list: this.config.list.list,
+      sort: this.sortedColumns
     });
   }
 
@@ -133,6 +157,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public actionHandler(e) {
     this.event.emit({
       type: 'action',
+      list: this.config.list.list,
       action: e.action,
       data: this.select
     });

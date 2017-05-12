@@ -73,6 +73,7 @@ export class FilterRelatedComponent implements OnInit {
         result += `${query}=${el.data}&`;
       }
     });
+    this.query = result;
     return result.substring(0, result.length - 1);
   }
 
@@ -102,9 +103,8 @@ export class FilterRelatedComponent implements OnInit {
   }
 
   public resetFilter() {
-    this.elements = null;
-    this.count = 1;
-    this.addElement();
+    this.elements.length = 1;
+    this.deleteValue(this.elements[0]);
     this.fs.generateQuery('', this.config.key, this.config.listName);
     this.changeQuery();
   }

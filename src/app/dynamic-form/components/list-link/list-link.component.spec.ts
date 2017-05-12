@@ -73,23 +73,21 @@ describe('FormSelectComponent', () => {
 
   describe('createHref method', () => {
 
-    it('should update href with "tel:"', async(() => {
+    it('should return link', () => {
       let value = '+380978107785';
-      let result = comp.createHref(value, comp.link);
-      expect(result).toEqual('tel:+380978107785');
-    }));
+      let phone = 'tel:+380978107785';
+      let email = 'mailto:test@test.com';
+      let resultPhone = comp.createHref(value, phone);
+      let resultEmail = comp.createHref(value, email);
+      expect(resultPhone).toEqual(phone);
+      expect(resultEmail).toEqual(email);
+    });
 
-    it('should update href with "mailto:"', async(() => {
-      let value = 'test@test.com';
-      let result = comp.createHref(value, comp.link);
-      expect(result).toEqual('mailto:test@test.com');
-    }));
-
-    it('should update href with "/"', async(() => {
-      let value = 'adasdasd';
-      let result = comp.createHref(value, comp.href);
-      expect(result).toEqual(`/${comp.href}`);
-    }));
+    it('should update link property', () => {
+      let link = '/login';
+      let result = comp.createHref('', link);
+      expect(result).toEqual(link);
+    });
 
   });
 

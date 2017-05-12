@@ -11,10 +11,13 @@ describe('DynamicListComponent', () => {
   let el;
   let config = {
     list: {
+      list: 'company',
       columns: [
         {
           name: 'first_name',
           label: 'First Name',
+          sort: true,
+          sorted: 'asc',
           content: [
             {
               field: 'first_name',
@@ -31,21 +34,23 @@ describe('DynamicListComponent', () => {
         {
           name: 'phone_mobile',
           label: 'Mobile Phone',
+          sort: true,
+          sorted: 'desc',
           content: [
             {
               field: 'phone_mobile',
               type: 'link',
-              href: 'phone'
+              link: 'tel:{phone_mobile}'
             },
             {
               field: 'email',
               type: 'link',
-              href: 'email'
+              link: 'mailto:{email}'
             },
             {
               field: 'last_name',
               type: 'link',
-              href: 'login'
+              endpoint: '/ecore/api/v2/contacts/{id}',
             }
           ],
           context_menu: [
@@ -115,7 +120,7 @@ describe('DynamicListComponent', () => {
     it('should called prepareData method', async(() => {
       comp.config = config;
       comp.ngOnInit();
-      expect(comp.filter).toEqual({});
+      expect(comp.sortedColumns).toEqual({});
     }));
 
   });
@@ -127,9 +132,11 @@ describe('DynamicListComponent', () => {
       comp.data = data;
       spyOn(comp, 'prepareData');
       spyOn(comp, 'resetSelectedElements');
+      spyOn(comp, 'getSortedColumns');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.resetSelectedElements).toHaveBeenCalled();
+      expect(comp.getSortedColumns).toHaveBeenCalled();
     }));
 
   });
@@ -146,7 +153,6 @@ describe('DynamicListComponent', () => {
               {
                 name: 'first_name',
                 type: 'text',
-                href: null,
                 value: 'Test'
               }
             ],
@@ -163,19 +169,19 @@ describe('DynamicListComponent', () => {
               {
                 name: 'phone_mobile',
                 type: 'link',
-                href: 'phone',
+                link: 'tel:+380978107725',
                 value: '+380978107725'
               },
               {
                 name: 'email',
                 type: 'link',
-                href: 'email',
+                link: 'mailto:test.testovich@gmail.com',
                 value: 'test.testovich@gmail.com'
               },
               {
                 name: 'last_name',
                 type: 'link',
-                href: 'login',
+                endpoint: '/ecore/api/v2/contacts/8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
                 value: 'Testovich'
               }
             ],
@@ -190,6 +196,62 @@ describe('DynamicListComponent', () => {
       }];
       let result = comp.prepareData(config.list.columns, data);
       expect(result).toEqual(body);
+    }));
+
+  });
+
+  describe('getSortedColumns method', () => {
+
+    it('should return object with sorted columns', async(() => {
+      let result = {
+        first_name: 'asc',
+        phone_mobile: 'desc'
+      };
+      expect(comp.getSortedColumns(config.list.columns)).toEqual(result);
+    }));
+
+  });
+
+  describe('sorting method', () => {
+
+    it('should change sorted columns', async(() => {
+      let sortedCol = {};
+      let field;
+      comp.config = config;
+      comp.sortedColumns = sortedCol;
+      spyOn(comp.event, 'emit');
+      field = {
+        name: 'first_name',
+        sorted: 'asc'
+      };
+      comp.sorting(field);
+      expect(comp.sortedColumns).toEqual({first_name: 'desc'});
+      expect(field.sorted).toEqual('desc');
+      comp.sorting(field);
+      expect(comp.sortedColumns).toEqual({first_name: 'asc'});
+      expect(field.sorted).toEqual('asc');
+      expect(comp.event.emit).toHaveBeenCalled();
+    }));
+
+  });
+
+  describe('resetSort method', () => {
+
+    it('should reset sort query', async(() => {
+      let sortedCol = {};
+      let field;
+      comp.config = config;
+      comp.sortedColumns = sortedCol;
+      spyOn(comp.event, 'emit');
+      field = {
+        name: 'first_name',
+        sorted: 'asc'
+      };
+      comp.sorting(field);
+      comp.resetSort(field);
+      expect(comp.sortedColumns).toEqual({});
+      expect(field.sorted).toBeUndefined();
+      expect(comp.event.emit).toHaveBeenCalled();
     }));
 
   });

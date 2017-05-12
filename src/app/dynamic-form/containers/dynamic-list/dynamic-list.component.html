@@ -10,15 +10,24 @@
       </th>
       <th *ngFor="let field of config.list.columns;" class="align-middle">
         <i fa
-          [name]="filter[field.name] === 'desc' ? 'caret-up' : 'caret-down'"
+          *ngIf="field.sorted"
+          [name]="field.sorted === 'desc' ? 'sort-desc' : 'sort-asc'"
           [border]=true
           class="pr-2"
-          (click)="filterListByColumn(field)"
+          (click)="sorting(field)"
+          style="cursor: pointer"></i>
+        <i fa
+          *ngIf="field.sorted"
+          [name]="'sort'"
+          [border]=true
+          class="pr-2 text-muted"
+          (click)="resetSort(field)"
           style="cursor: pointer"></i>
         <ng-container
           listElement
           [head]="true"
-          [config]="field">
+          [config]="field"
+          (event)="sorting(field)">
         </ng-container>
       </th>
     </tr>

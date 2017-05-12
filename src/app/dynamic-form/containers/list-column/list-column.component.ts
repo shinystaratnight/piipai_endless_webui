@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'list-column',
@@ -6,8 +6,17 @@ import { Component } from '@angular/core';
 })
 
 export class ListColumnComponent {
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
-  public config: any[] = [];
+  public config: any;
   public head: boolean;
+
+  public sort() {
+    this.event.emit({
+      type: 'sort',
+      name: this.config.name
+    });
+  }
 
 }

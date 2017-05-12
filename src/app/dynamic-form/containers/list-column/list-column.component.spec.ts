@@ -36,4 +36,13 @@ describe('FormSelectComponent', () => {
     expect(comp).toBeDefined();
   });
 
+  describe('sort methos', () => {
+    it('should emit event', () => {
+      comp.config = config;
+      spyOn(comp.event, 'emit');
+      comp.sort();
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
+  });
+
 });

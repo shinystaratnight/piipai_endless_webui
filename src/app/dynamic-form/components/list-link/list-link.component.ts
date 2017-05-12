@@ -12,7 +12,7 @@ export class ListLinkComponent implements OnInit {
   public link: boolean;
 
   public ngOnInit() {
-    this.href = this.createHref(this.config.value, this.config.href);
+    this.href = this.createHref(this.config.value, this.config.link);
   }
 
   public isEmail(value) {
@@ -28,13 +28,12 @@ export class ListLinkComponent implements OnInit {
     return reg.test(value) ? true : false;
   }
 
-  public createHref(value, href) {
-    let prefix = this.isEmail(value) ? 'mailto:' : this.isPhone(value) ? 'tel:' : null;
-    if (prefix) {
-      return `${prefix}${value}`;
+  public createHref(value, link) {
+    if (this.isEmail(value) || this.isPhone(value)) {
+      return `${link}`;
     }
     this.link = true;
-    return `/${href}`;
+    return `${link}`;
   }
 
 }

@@ -280,10 +280,10 @@ describe('FilterRelatedComponent', () => {
     it('should reset query', async(inject([FilterService], (fs: FilterService) => {
       comp.config = config;
       spyOn(fs, 'generateQuery');
-      spyOn(comp, 'addElement');
+      spyOn(comp, 'deleteValue');
       spyOn(comp, 'changeQuery');
       comp.resetFilter();
-      expect(comp.addElement).toHaveBeenCalled();
+      expect(comp.deleteValue).toHaveBeenCalled();
       expect(comp.changeQuery).toHaveBeenCalled();
       expect(fs.generateQuery).toHaveBeenCalled();
     })));

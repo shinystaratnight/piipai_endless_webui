@@ -12,8 +12,9 @@ export class GenericListComponent implements OnInit {
   @Input()
   public endpoint: string = '';
 
-  public metadata: any[] = [];
+  public metadata: any;
   public data: any;
+  public queries: any;
 
   constructor(
     private gfs: GenericFormService,
@@ -21,6 +22,7 @@ export class GenericListComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    this.queries = {};
     this.getMetadata(this.endpoint);
     this.getData(this.endpoint);
   }
@@ -35,6 +37,27 @@ export class GenericListComponent implements OnInit {
     this.gfs.getAll(endpoint).subscribe(
       (data) => this.data = data.results
     );
+  }
+
+  public eventHandler(e) {
+    if (e.type === 'sort') {
+      this.queries[e.list] = this.sortTable(e);
+    }
+  }
+
+  public sortTable(e) {
+    let query = 'o=';
+    let queries = '';
+    let columns = Object.keys(e.sort);
+    columns.forEach((el) => {
+      if (e.sort[el] === 'desc') {
+        queries += `-${el},`;
+      } else if (e.sort[el] === 'asc') {
+        queries += `${el},`;
+      }
+    });
+    query += queries.slice(0, queries.length - 1);
+    return query;
   }
 
 }

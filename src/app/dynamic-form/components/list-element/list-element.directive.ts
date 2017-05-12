@@ -34,6 +34,9 @@ export class ListElementDirective implements OnInit, OnChanges {
   @Input()
   public head;
 
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
+
   public component: ComponentRef<any>;
 
   constructor(
@@ -53,12 +56,14 @@ export class ListElementDirective implements OnInit, OnChanges {
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;
+      this.component.instance.event = this.event;
     } else if (this.config.length || this.config.name) {
       const component = components['column'];
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;
       this.component.instance.head = this.head;
+      this.component.instance.event = this.event;
     }
   }
 }

@@ -89,4 +89,46 @@ describe('GenericListComponent', () => {
 
     });
 
+    describe('eventHandler method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.eventHandler).toBeDefined();
+      }));
+
+      it('should call sortTable method', async(() => {
+        comp.queries = {};
+        let event = {
+          type: 'sort',
+          list: 'company',
+          sort: {
+            primary_contact: 'asc'
+          }
+        };
+        spyOn(comp, 'sortTable');
+        comp.eventHandler(event);
+        expect(comp.sortTable).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('sortTable method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.sortTable).toBeDefined();
+      }));
+
+      it('should create query', async(() => {
+        let event = {
+          type: 'sort',
+          list: 'company',
+          sort: {
+            primary_contact: 'desc'
+          }
+        };
+        let result = comp.sortTable(event);
+        expect(result).toEqual('o=-primary_contact');
+      }));
+
+    });
+
 });
