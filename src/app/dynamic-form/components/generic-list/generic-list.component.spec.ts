@@ -20,6 +20,9 @@ describe('GenericListComponent', () => {
       },
       getAll() {
         return Observable.of(data);
+      },
+      getByQuery() {
+        return Observable.of(data);
       }
     };
     let mockFilterService = {};
@@ -84,7 +87,7 @@ describe('GenericListComponent', () => {
         };
         let endpoint = 'endpoint';
         comp.getData(endpoint);
-        expect(comp.data).toEqual(data.results);
+        expect(comp.data).toEqual(data);
       }));
 
     });
@@ -95,38 +98,51 @@ describe('GenericListComponent', () => {
         expect(comp.eventHandler).toBeDefined();
       }));
 
-      it('should call sortTable method', async(() => {
+      it('should update queries of list', async(() => {
         comp.queries = {};
         let event = {
           type: 'sort',
           list: 'company',
-          sort: {
-            primary_contact: 'asc'
-          }
+          query: 'company.name=Home'
         };
-        spyOn(comp, 'sortTable');
+        spyOn(comp, 'getData');
         comp.eventHandler(event);
-        expect(comp.sortTable).toHaveBeenCalled();
+        expect(comp.queries.company.sort).toEqual(event.query);
+        expect(comp.getData).toHaveBeenCalled();
       }));
 
     });
 
-    describe('sortTable method', () => {
+    describe('generateQuery method', () => {
 
       it('should be defined', async(() => {
-        expect(comp.sortTable).toBeDefined();
+        expect(comp.generateQuery).toBeDefined();
       }));
 
-      it('should create query', async(() => {
-        let event = {
-          type: 'sort',
-          list: 'company',
-          sort: {
-            primary_contact: 'desc'
-          }
+      it('should generate query', async(() => {
+        comp.queries = {};
+        let queries = {
+          sort: 'company.name=Home',
         };
-        let result = comp.sortTable(event);
-        expect(result).toEqual('o=-primary_contact');
+        let result = comp.generateQuery(queries);
+        expect(result).toEqual(`?${queries.sort}`);
+      }));
+
+    });
+
+    describe('generateQuery method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.generateQuery).toBeDefined();
+      }));
+
+      it('should generate query', async(() => {
+        comp.queries = {};
+        let queries = {
+          sort: 'company.name=Home',
+        };
+        let result = comp.generateQuery(queries);
+        expect(result).toEqual(`?${queries.sort}`);
       }));
 
     });

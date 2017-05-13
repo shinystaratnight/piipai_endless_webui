@@ -4,14 +4,15 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ListColumnComponent } from './list-column.component';
 
-describe('FormSelectComponent', () => {
+describe('ListColumnComponent', () => {
   let fixture: ComponentFixture<ListColumnComponent>;
   let comp: ListColumnComponent;
   let el;
   let config = {
     href: 'phone',
     name: 'phone_mobile',
-    type: 'link'
+    type: 'link',
+    sort: true
   };
 
   beforeEach(() => {
@@ -36,7 +37,7 @@ describe('FormSelectComponent', () => {
     expect(comp).toBeDefined();
   });
 
-  describe('sort methos', () => {
+  describe('sort method', () => {
     it('should emit event', () => {
       comp.config = config;
       spyOn(comp.event, 'emit');

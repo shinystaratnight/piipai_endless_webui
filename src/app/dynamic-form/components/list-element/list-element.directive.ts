@@ -21,7 +21,8 @@ const components = {
   link: ListLinkComponent,
   input: ListTextComponent,
   static: ListTextComponent,
-  checkbox: ListCheckboxComponent
+  checkbox: ListCheckboxComponent,
+  select: ListCheckboxComponent
 };
 
 @Directive({

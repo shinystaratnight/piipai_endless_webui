@@ -4,6 +4,7 @@ import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing'
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { DynamicListComponent } from './dynamic-list.component';
+import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 describe('DynamicListComponent', () => {
   let fixture: ComponentFixture<DynamicListComponent>;
@@ -64,7 +65,10 @@ describe('DynamicListComponent', () => {
     }
   };
 
-  let data = [{
+  let data = {
+    count: 4,
+    next: '/ecore/api/v2/endless-core/companyaddresses/?limit=1&offset=1',
+    results: [{
         title: null,
         first_name: 'Test',
         last_name: 'Testovich',
@@ -79,7 +83,8 @@ describe('DynamicListComponent', () => {
         picture: null,
         address: null,
         id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9'
-    }];
+    }]
+  };
 
   let mockFilterService = {
     _filters: [],
@@ -97,7 +102,7 @@ describe('DynamicListComponent', () => {
         DynamicListComponent
       ],
       providers: [{provide: FilterService, useValue: mockFilterService}],
-      imports: [],
+      imports: [NgbModule.forRoot()],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
   });
@@ -133,10 +138,12 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'prepareData');
       spyOn(comp, 'resetSelectedElements');
       spyOn(comp, 'getSortedColumns');
+      spyOn(comp, 'initPagination');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.resetSelectedElements).toHaveBeenCalled();
       expect(comp.getSortedColumns).toHaveBeenCalled();
+      expect(comp.initPagination).toHaveBeenCalled();
     }));
 
   });
@@ -194,7 +201,7 @@ describe('DynamicListComponent', () => {
           }
         ]
       }];
-      let result = comp.prepareData(config.list.columns, data);
+      let result = comp.prepareData(config.list.columns, data.results);
       expect(result).toEqual(body);
     }));
 
@@ -220,6 +227,7 @@ describe('DynamicListComponent', () => {
       comp.config = config;
       comp.sortedColumns = sortedCol;
       spyOn(comp.event, 'emit');
+      spyOn(comp, 'sortTable');
       field = {
         name: 'first_name',
         sorted: 'asc'
@@ -231,6 +239,7 @@ describe('DynamicListComponent', () => {
       expect(comp.sortedColumns).toEqual({first_name: 'asc'});
       expect(field.sorted).toEqual('asc');
       expect(comp.event.emit).toHaveBeenCalled();
+      expect(comp.sortTable).toHaveBeenCalled();
     }));
 
   });
@@ -342,6 +351,78 @@ describe('DynamicListComponent', () => {
       comp.config = config;
       spyOn(comp.event, 'emit');
       comp.filterHandler(event);
+      expect(comp.event.emit).toHaveBeenCalled();
+    }));
+
+  });
+
+  describe('openModal method', () => {
+
+    it('should be defined', async(() => {
+      expect(comp.openModal).toBeDefined();
+    }));
+
+    it('should open modal', async(() => {
+      let field = {
+        label: 'Company',
+        endpoint: '/ecore/api/v2/endless-core/companyaddresses'
+      };
+      spyOn(comp, 'open');
+      comp.openModal('modal', field);
+      expect(comp.open).toHaveBeenCalled();
+      expect(comp.modalInfo).toEqual(field);
+    }));
+
+  });
+
+  describe('initPagination method', () => {
+
+    it('should be defined', async(() => {
+      expect(comp.initPagination).toBeDefined();
+    }));
+
+    it('should init pagination properties', async(() => {
+      comp.initPagination(data);
+      expect(comp.limit).toEqual(1);
+      expect(comp.pageSize).toEqual(40);
+      data.count = 1;
+      data.results.length = 3;
+      comp.initPagination(data);
+      expect(comp.limit).toEqual(3);
+      expect(comp.pageSize).toEqual(10);
+    }));
+
+  });
+
+  describe('sortTable method', () => {
+
+    it('should be defined', async(() => {
+      expect(comp.sortTable).toBeDefined();
+    }));
+
+    it('should create query', async(() => {
+      let sort = {
+        primary_contact: 'desc'
+      };
+      let result = comp.sortTable(sort);
+      expect(result).toEqual('ordering=-primary_contact');
+    }));
+
+  });
+
+  describe('pageChange method', () => {
+
+    it('should be defined', async(() => {
+      expect(comp.pageChange).toBeDefined();
+    }));
+
+    it('should emit event', async(() => {
+      comp.config = config;
+      comp.limit = 2;
+      comp.page = 2;
+      spyOn(comp.event, 'emit');
+      comp.pageChange();
+      comp.page = 3;
       expect(comp.event.emit).toHaveBeenCalled();
     }));
 

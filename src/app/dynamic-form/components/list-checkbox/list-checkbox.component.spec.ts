@@ -11,7 +11,11 @@ describe('FormSelectComponent', () => {
   let config = {
     href: 'phone',
     name: 'phone_mobile',
-    type: 'link'
+    type: 'link',
+    value: true,
+    values: {
+      true: 'HQ:'
+    }
   };
 
   beforeEach(() => {
@@ -34,6 +38,14 @@ describe('FormSelectComponent', () => {
 
   it('should enter the assertion', async() => {
     expect(comp).toBeDefined();
+  });
+
+  describe('ngOnInit method', () => {
+    it('should init value', async() => {
+      comp.config = config;
+      comp.ngOnInit();
+      expect(comp.value).toEqual('HQ:');
+    });
   });
 
 });

@@ -13,10 +13,12 @@ export class ListColumnComponent {
   public head: boolean;
 
   public sort() {
-    this.event.emit({
-      type: 'sort',
-      name: this.config.name
-    });
+    if (this.config.sort) {
+      this.event.emit({
+        type: 'sort',
+        name: this.config.name
+      });
+    }
   }
 
 }

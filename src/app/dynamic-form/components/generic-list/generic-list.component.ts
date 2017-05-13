@@ -33,31 +33,39 @@ export class GenericListComponent implements OnInit {
     );
   }
 
-  public getData(endpoint) {
-    this.gfs.getAll(endpoint).subscribe(
-      (data) => this.data = data.results
-    );
-  }
-
-  public eventHandler(e) {
-    if (e.type === 'sort') {
-      this.queries[e.list] = this.sortTable(e);
+  public getData(endpoint, query = null) {
+    if (query) {
+      this.gfs.getByQuery(endpoint, query).subscribe(
+        (data) => this.data = data
+      );
+    } else {
+      this.gfs.getAll(endpoint).subscribe(
+        (data) => this.data = data
+      );
     }
   }
 
-  public sortTable(e) {
-    let query = 'o=';
-    let queries = '';
-    let columns = Object.keys(e.sort);
-    columns.forEach((el) => {
-      if (e.sort[el] === 'desc') {
-        queries += `-${el},`;
-      } else if (e.sort[el] === 'asc') {
-        queries += `${el},`;
+  public eventHandler(e) {
+    if (!this.queries[e.list]) {
+      this.queries[e.list] = {};
+    }
+    if (e.type === 'sort') {
+      this.queries[e.list].sort = e.query;
+    } else if (e.type === 'pagination') {
+      this.queries[e.list].pagination = e.query;
+    }
+    this.getData(this.endpoint, this.generateQuery(this.queries[e.list]));
+  }
+
+  public generateQuery(queries) {
+    let result = '?';
+    let queryList = Object.keys(queries);
+    queryList.forEach((el) => {
+      if (queries[el]) {
+        result += `${queries[el]}&`;
       }
     });
-    query += queries.slice(0, queries.length - 1);
-    return query;
+    return result.slice(0, result.length - 1);
   }
 
 }
