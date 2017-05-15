@@ -14,7 +14,8 @@ export class GenericListComponent implements OnInit {
 
   public metadata: any;
   public data: any;
-  public queries: any;
+  public tables = [];
+  public first: boolean = false;
 
   constructor(
     private gfs: GenericFormService,
@@ -22,39 +23,41 @@ export class GenericListComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.queries = {};
-    this.getMetadata(this.endpoint);
-    this.getData(this.endpoint);
+    this.tables.push(this.createTableData(this.endpoint));
   }
 
-  public getMetadata(endpoint) {
+  public getMetadata(endpoint, table) {
     this.gfs.getMetadata(endpoint).subscribe(
-      (metadata) => this.metadata = metadata
+      (metadata) => {
+        table.metadata = metadata;
+        table.list = metadata.list.list;
+      }
     );
   }
 
-  public getData(endpoint, query = null) {
+  public getData(endpoint, query = null, table) {
     if (query) {
       this.gfs.getByQuery(endpoint, query).subscribe(
-        (data) => this.data = data
+        (data) => table.data = data
       );
     } else {
       this.gfs.getAll(endpoint).subscribe(
-        (data) => this.data = data
+        (data) => table.data = data
       );
     }
   }
 
   public eventHandler(e) {
-    if (!this.queries[e.list]) {
-      this.queries[e.list] = {};
+    let table = this.getTable(e.list);
+    if (!table.query) {
+      table.query = {};
     }
-    if (e.type === 'sort') {
-      this.queries[e.list].sort = e.query;
-    } else if (e.type === 'pagination') {
-      this.queries[e.list].pagination = e.query;
+    if (e.type === 'sort' || e.type === 'pagination' || e.type === 'filter') {
+      table.query[e.type] = e.query;
+      this.getData(table.endpoint, this.generateQuery(table.query), table);
+    } else if (e.type === 'close') {
+      this.tables.splice(this.tables.indexOf(table), 1);
     }
-    this.getData(this.endpoint, this.generateQuery(this.queries[e.list]));
   }
 
   public generateQuery(queries) {
@@ -66,6 +69,23 @@ export class GenericListComponent implements OnInit {
       }
     });
     return result.slice(0, result.length - 1);
+  }
+
+  public createTableData(endpoint) {
+    let table = {
+      endpoint
+    };
+    if (!this.first) {
+      table['first'] = true;
+      this.first = true;
+    }
+    this.getMetadata(endpoint, table);
+    this.getData(endpoint, null, table);
+    return table;
+  }
+
+  public getTable(name) {
+    return this.tables.filter((el) => el.list === name)[0];
   }
 
 }

@@ -1,77 +1,122 @@
-<!--<filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
-<action-element [config]="config.list.actions" (event)="actionHandler($event)"></action-element>-->
-<h5 *ngIf="config.list">{{config.list.label}}</h5>
-<table class="table table-bordered table-striped table-hover table-sm" *ngIf="config.list">
-  <thead class="thead-default">
-    <tr>
-      <th class="text-center" style="width: 2rem">
-        *
-        <input type="checkbox" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
-      </th>
-      <th *ngFor="let field of config.list.columns;" class="align-middle">
-        <i fa
-          *ngIf="field.sorted"
-          [name]="field.sorted === 'desc' ? 'sort-desc' : 'sort-asc'"
-          [border]=true
-          class="pr-2"
-          (click)="sorting(field)"
+<div #datatable [class.card]="poped">
+  <div move [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white">
+    <h5 class="d-flex justify-content-between align-items-center mb-0" *ngIf="config.list">
+      <span>{{config.list.label}}</span>
+      <div class="d-flex fustify-content-center align-items-center">
+        <i
+          fa
+          class="ml-2"
+          [name]="'window-minimize'"
+          [border]="true"
+          (click)="minimizeTable()"
+          aria-hidden="true"
           style="cursor: pointer"></i>
-        <i fa
-          *ngIf="field.sorted"
-          [name]="'sort'"
-          [border]=true
-          class="pr-2 text-muted"
-          (click)="resetSort(field)"
+        <i
+          fa
+          class="ml-2"
+          [name]="'window-maximize'"
+          [border]="true"
+          (click)="unpopedTable()"
+          aria-hidden="true"
           style="cursor: pointer"></i>
-        <ng-container
-          listElement
-          [head]="true"
-          [config]="field"
-          (event)="sorting(field)">
-        </ng-container>
-      </th>
-    </tr>
-  </thead>
-  <tbody *ngIf="body">
-    <tr *ngFor="let row of body">
-      <td class="align-middle text-center">
-        <input type="checkbox" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
-      </td>
-      <td *ngFor="let cell of row.content;" class="align-middle">
-        <div class="d-flex justify-content-between align-items-center">
-          <ng-container
-            listElement
-            [config]="cell.content">
-          </ng-container>
-          <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
+        <i
+          fa
+          class="ml-2"
+          [name]="'times'"
+          [border]="true"
+          (click)="closeTable()"
+          aria-hidden="true"
+          style="cursor: pointer"></i>
+      </div>
+    </h5>
+  </div>
+  <!--<filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+  <action-element [config]="config.list.actions" (event)="actionHandler($event)"></action-element>-->
+  <div [class.card-block]="poped" [hidden]="minimized">
+    <h5 class="d-flex justify-content-between align-items-center"  *ngIf="config.list && !poped">
+      <span>{{config.list.label}}</span>
+      <i
+        fa
+        *ngIf="!first"
+        [name]="'window-restore'"
+        [border]="true" class="text-muted"
+        (click)="popedTable()"
+        aria-hidden="true"
+        style="cursor: pointer"></i>
+    </h5>
+    <table class="table table-bordered table-striped table-hover table-sm" *ngIf="config.list">
+      <thead class="thead-default">
+        <tr>
+          <th class="text-center" style="width: 2rem">
+            *
+            <input type="checkbox" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
+          </th>
+          <th *ngFor="let field of config.list.columns;" class="align-middle">
             <i fa
-              id="dropdownBasic1"
-              class="text-muted p-2"
-              [class.dropdown-toggle]="false"
-              [name]="'ellipsis-v'"
+              *ngIf="field.sorted"
+              [name]="field.sorted === 'desc' ? 'sort-desc' : 'sort-asc'"
               [border]=true
-              style="cursor: pointer"
-              ngbDropdownToggle></i>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBasic1">
-              <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
+              class="pr-2"
+              (click)="sorting(field)"
+              style="cursor: pointer"></i>
+            <i fa
+              *ngIf="field.sorted"
+              [name]="'sort'"
+              [border]=true
+              class="pr-2 text-muted"
+              (click)="resetSort(field)"
+              style="cursor: pointer"></i>
+            <ng-container
+              listElement
+              [head]="true"
+              [config]="field"
+              (event)="sorting(field)">
+            </ng-container>
+          </th>
+        </tr>
+      </thead>
+      <tbody *ngIf="body">
+        <tr *ngFor="let row of body">
+          <td class="text-center">
+            <input type="checkbox" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
+          </td>
+          <td *ngFor="let cell of row.content;">
+            <div class="d-flex justify-content-between">
+              <ng-container
+                listElement
+                [config]="cell.content">
+              </ng-container>
+              <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
+                <i fa
+                  id="dropdownBasic1"
+                  class="text-muted p-2"
+                  [class.dropdown-toggle]="false"
+                  [name]="'ellipsis-v'"
+                  [border]=true
+                  style="cursor: pointer"
+                  ngbDropdownToggle></i>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBasic1">
+                  <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<ngb-pagination
-  *ngIf="pagination"
-  [collectionSize]="pageSize"
-  [(page)]="page"
-  [maxSize]="4"
-  [rotate]="true"
-  [ellipses]="true"
-  [boundaryLinks]="true"
-  size="sm"
-  (pageChange)="pageChange()">
-</ngb-pagination>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      *ngIf="pagination"
+      [collectionSize]="pageSize"
+      [(page)]="page"
+      [maxSize]="4"
+      [rotate]="true"
+      [ellipses]="true"
+      [boundaryLinks]="true"
+      size="sm"
+      (pageChange)="pageChange()">
+    </ngb-pagination>
+  </div>
+</div>
 
 
 <template #modal let-c="close" let-d="dismiss">
@@ -82,9 +127,8 @@
     </button>
   </div>
   <div class="modal-body">
-    <generic-form [endpoint]="modalInfo.endpoint"></generic-form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary bg-primary text-white" (click)="c('Close click')">Save</button>
+    <generic-form [endpoint]="modalInfo.endpoint">
+      <button type="button" class="btn btn-secondary bg-primary text-white" (click)="c('Close click')">Save</button>
+    </generic-form>
   </div>
 </template>

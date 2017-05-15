@@ -22,11 +22,17 @@ export class DynamicListComponent implements OnInit, OnChanges {
   @Input()
   public data: any;
 
+  @Input()
+  public first: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('modal')
   public modal;
+
+  @ViewChild('datatable')
+  public datatable;
 
   public body: any[] = [];
   public select: any;
@@ -40,6 +46,10 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public pageSize: number = 0;
   public limit: number;
   public offset: number;
+  public poped: boolean = false;
+  public minimized: boolean = false;
+  public position: { top, left };
+  public move: boolean = false;
 
   constructor(
     private filterService: FilterService,
@@ -49,6 +59,9 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public ngOnInit() {
     // this.filterService.filters = this.config.list;
     // this.filtersOfList = this.filterService.filters;
+    if (this.data) {
+      this.initPagination(this.data);
+    }
     this.sortedColumns = {};
   }
 
@@ -58,7 +71,6 @@ export class DynamicListComponent implements OnInit, OnChanges {
       if (this.config.list) {
         this.sortedColumns = this.getSortedColumns(this.config.list.columns);
         this.body = this.prepareData(this.config.list.columns, this.data.results);
-        this.initPagination(this.data);
       }
     }
   }
@@ -78,7 +90,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
           contextMenu: col.context_menu
         };
         col.content.forEach((element) => {
-          let obj = {};
+          let obj: any = {};
           let props = element.field.split('.');
           obj['name'] = element.field;
           obj['type'] = element.type;
@@ -90,6 +102,9 @@ export class DynamicListComponent implements OnInit, OnChanges {
             obj['values'] = element.values;
           }
           this.setValue(el, props, obj);
+          if (!obj.value) {
+            delete cell.contextMenu;
+          }
           cell.content.push(obj);
         });
         row.content.push(cell);
@@ -243,17 +258,49 @@ export class DynamicListComponent implements OnInit, OnChanges {
 
   public pageChange() {
     let query;
+    this.selectedAll = false;
+    this.select = {};
     if (this.page === 2) {
       query = `limit=${this.limit}&offset=${this.limit}`;
     } else if (this.page === 1) {
       query = `limit=${this.limit}`;
     } else {
-      query = `limit=${this.limit}&offset=${this.limit * this.page - 1}`;
+      query = `limit=${this.limit}&offset=${this.limit * (this.page - 1)}`;
     }
     this.event.emit({
       type: 'pagination',
       list: this.config.list.list,
       query
+    });
+  }
+
+  public popedTable() {
+    this.poped = true;
+    this.position = {
+      top: this.datatable.nativeElement.offsetTop,
+      left: this.datatable.nativeElement.offsetLeft
+    };
+    this.datatable.nativeElement.style.position = 'absolute';
+  }
+
+  public unpopedTable() {
+    this.poped = false;
+    this.minimized = false;
+    this.datatable.nativeElement.style.position = 'relative';
+    this.datatable.nativeElement.style.top = 0;
+    this.datatable.nativeElement.style.left = 0;
+    this.datatable.offsetTop = this.position.top;
+    this.datatable.offsetLeft = this.position.left;
+  }
+
+  public minimizeTable() {
+    this.minimized = !this.minimized;
+  }
+
+  public closeTable() {
+    this.event.emit({
+      type: 'close',
+      list: this.config.list.list
     });
   }
 

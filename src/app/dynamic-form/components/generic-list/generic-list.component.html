@@ -1,3 +1,11 @@
 <div class="container-fluid">
-  <dynamic-list *ngIf="metadata && data" [config]="metadata" [data]="data" (event)="eventHandler($event)"></dynamic-list>
+  <div *ngFor="let table of tables">
+    <dynamic-list
+      *ngIf="table.metadata && table.data"
+      [config]="table.metadata"
+      [data]="table.data"
+      [first]="table.first"
+      (event)="eventHandler($event)">
+    </dynamic-list>
+  </div>
 </div>

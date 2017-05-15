@@ -33,6 +33,23 @@ describe('DynamicListComponent', () => {
           ]
         },
         {
+          name: 'gender',
+          label: 'Gender',
+          sort: false,
+          content: [
+            {
+              field: 'gender',
+              type: 'text',
+            }
+          ],
+          context_menu: [
+            {
+              label: 'edit profile',
+              endpoint: 'endpoint'
+            }
+          ]
+        },
+        {
           name: 'phone_mobile',
           label: 'Mobile Phone',
           sort: true,
@@ -122,10 +139,13 @@ describe('DynamicListComponent', () => {
 
   describe('ngOnInit method', () => {
 
-    it('should called prepareData method', async(() => {
+    it('should called initPagination method', async(() => {
+      spyOn(comp, 'initPagination');
       comp.config = config;
+      comp.data = {};
       comp.ngOnInit();
       expect(comp.sortedColumns).toEqual({});
+      expect(comp.initPagination).toHaveBeenCalled();
     }));
 
   });
@@ -138,12 +158,10 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'prepareData');
       spyOn(comp, 'resetSelectedElements');
       spyOn(comp, 'getSortedColumns');
-      spyOn(comp, 'initPagination');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.resetSelectedElements).toHaveBeenCalled();
       expect(comp.getSortedColumns).toHaveBeenCalled();
-      expect(comp.initPagination).toHaveBeenCalled();
     }));
 
   });
@@ -167,6 +185,16 @@ describe('DynamicListComponent', () => {
               {
                 label: 'edit profile',
                 endpoint: 'endpoint'
+              }
+            ]
+          },
+          {
+            name: 'gender',
+            content: [
+              {
+                name: 'gender',
+                type: 'text',
+                value: null
               }
             ]
           },
@@ -424,6 +452,54 @@ describe('DynamicListComponent', () => {
       comp.pageChange();
       comp.page = 3;
       expect(comp.event.emit).toHaveBeenCalled();
+    }));
+
+  });
+
+  describe('popedTable method', () => {
+
+    it('should change poped property', async(() => {
+      comp.config = config;
+      comp.poped = false;
+      comp.popedTable();
+      expect(comp.poped).toEqual(true);
+      expect(comp.position).toBeDefined();
+      expect(comp.datatable.nativeElement.style.position).toEqual('absolute');
+    }));
+
+  });
+
+  describe('unpopedTable method', () => {
+
+    it('should unpoped table', async(() => {
+      comp.config = config;
+      comp.poped = true;
+      comp.minimized = true;
+      comp.position = {
+        top: 10,
+        left: 15
+      };
+      comp.unpopedTable();
+      expect(comp.poped).toEqual(false);
+      expect(comp.minimized).toEqual(false);
+      expect(comp.datatable.nativeElement.style.position).toEqual('relative');
+      expect(comp.datatable.nativeElement.style.top).toEqual('0px');
+      expect(comp.datatable.nativeElement.style.left).toEqual('0px');
+      expect(comp.datatable.offsetTop).toEqual(comp.position.top);
+      expect(comp.datatable.offsetLeft).toEqual(comp.position.left);
+    }));
+
+  });
+
+  describe('minimizeTable method', () => {
+
+    it('should change change minimized property', async(() => {
+      comp.config = config;
+      comp.minimized = false;
+      comp.minimizeTable();
+      expect(comp.minimized).toEqual(true);
+      comp.minimizeTable();
+      expect(comp.minimized).toEqual(false);
     }));
 
   });

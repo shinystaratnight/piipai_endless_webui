@@ -36,6 +36,8 @@ import { ActionElementComponent } from './components/action-element/action-eleme
 
 import { GenericFormService } from './services/generic-form.service';
 
+import { MoveDirective } from './directives/move.directive';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -71,7 +73,8 @@ import { GenericFormService } from './services/generic-form.service';
     FilterElementDirective,
     ActionElementComponent,
     GenericListComponent,
-    ListCheckboxComponent
+    ListCheckboxComponent,
+    MoveDirective
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [

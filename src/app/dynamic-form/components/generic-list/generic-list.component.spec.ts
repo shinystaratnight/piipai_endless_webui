@@ -12,7 +12,7 @@ describe('GenericListComponent', () => {
     let fixture: ComponentFixture<GenericListComponent>;
     let comp: GenericListComponent;
     let el;
-    let metadata = [];
+    let metadata = {};
     let data;
     let mockGenericFormService = {
       getMetadata() {
@@ -47,6 +47,27 @@ describe('GenericListComponent', () => {
         });
     }));
 
+    describe('ngOnInit method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.ngOnInit).toBeDefined();
+      }));
+
+      it('should create first table', async(() => {
+        let endpoint = 'endpoint';
+        metadata = {
+          list: {
+            list: 'company'
+          }
+        };
+        comp.endpoint = endpoint;
+        comp.tables = [];
+        comp.ngOnInit();
+        expect(comp.tables[0].endpoint).toEqual(endpoint);
+      }));
+
+    });
+
     describe('getMetadata method', () => {
 
       it('should be defined', async(() => {
@@ -54,18 +75,27 @@ describe('GenericListComponent', () => {
       }));
 
       it('should update metadata property', async(() => {
-        metadata = [{
-          type: 'checkbox',
-          key: 'is_available',
-          templateOptions: {
-            label: 'test',
-            type: 'checkbox',
-            required: true
-          }
-        }];
+        let table: any = {};
+        metadata = {
+          list: {
+            list: 'companies'
+          },
+          fields: [
+            {
+              type: 'checkbox',
+              key: 'is_available',
+              templateOptions: {
+                label: 'test',
+                type: 'checkbox',
+                required: true
+              }
+            }
+          ]
+        };
         let endpoint = 'endpoint';
-        comp.getMetadata(endpoint);
-        expect(comp.metadata).toEqual(metadata);
+        comp.getMetadata(endpoint, table);
+        expect(table.metadata).toEqual(metadata);
+        expect(table.list).toEqual('companies');
       }));
 
     });
@@ -77,6 +107,7 @@ describe('GenericListComponent', () => {
       }));
 
       it('should update data property', async(() => {
+        let table: any = {};
         data = {
           results: [
             {
@@ -86,8 +117,8 @@ describe('GenericListComponent', () => {
           ]
         };
         let endpoint = 'endpoint';
-        comp.getData(endpoint);
-        expect(comp.data).toEqual(data);
+        comp.getData(endpoint, null, table);
+        expect(table.data).toEqual(data);
       }));
 
     });
@@ -99,16 +130,33 @@ describe('GenericListComponent', () => {
       }));
 
       it('should update queries of list', async(() => {
-        comp.queries = {};
+        spyOn(comp, 'getData');
         let event = {
           type: 'sort',
           list: 'company',
           query: 'company.name=Home'
         };
-        spyOn(comp, 'getData');
+        comp.tables = [];
+        comp.tables.push({ list: event.list });
         comp.eventHandler(event);
-        expect(comp.queries.company.sort).toEqual(event.query);
         expect(comp.getData).toHaveBeenCalled();
+        expect(comp.getTable(event.list).query).toEqual({ [event.type]: event.query});
+      }));
+
+      it('should remove table', async(() => {
+        let event = {
+          type: 'close',
+          list: 'company'
+        };
+        let table = {
+          list: 'company',
+          endpoint: 'endpoint',
+          first: true
+        };
+        comp.tables = [];
+        comp.tables.push(table);
+        comp.eventHandler(event);
+        expect(comp.tables).toEqual([]);
       }));
 
     });
@@ -120,29 +168,34 @@ describe('GenericListComponent', () => {
       }));
 
       it('should generate query', async(() => {
-        comp.queries = {};
-        let queries = {
-          sort: 'company.name=Home',
+        let table = {
+          list: 'company',
+          query: {
+            sort: 'company.name=Home',
+            pagination: 'limit=2&offset=2'
+          }
         };
-        let result = comp.generateQuery(queries);
-        expect(result).toEqual(`?${queries.sort}`);
+        let result = comp.generateQuery(table.query);
+        expect(result).toEqual(`?${table.query.sort}&${table.query.pagination}`);
       }));
 
     });
 
-    describe('generateQuery method', () => {
+    describe('createTableData method', () => {
 
       it('should be defined', async(() => {
-        expect(comp.generateQuery).toBeDefined();
+        expect(comp.createTableData).toBeDefined();
       }));
 
-      it('should generate query', async(() => {
-        comp.queries = {};
-        let queries = {
-          sort: 'company.name=Home',
-        };
-        let result = comp.generateQuery(queries);
-        expect(result).toEqual(`?${queries.sort}`);
+      it('should create table', async(() => {
+        let endpoint = 'endpoint';
+        spyOn(comp, 'getMetadata');
+        spyOn(comp, 'getData');
+        let result = comp.createTableData(endpoint);
+        expect(comp.getMetadata).toHaveBeenCalled();
+        expect(comp.getData).toHaveBeenCalled();
+        expect(result.endpoint).toEqual('endpoint');
+        expect(result['first']).toBeTruthy();
       }));
 
     });
