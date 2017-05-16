@@ -91,4 +91,41 @@ describe('FormSelectComponent', () => {
 
   });
 
+  describe('action method', () => {
+    it('should emit event', () => {
+      comp.config = config;
+      let event = {
+        preventDefault() {
+          return true;
+        },
+        stopPropagation() {
+          return true;
+        }
+      };
+      spyOn(comp.event, 'emit');
+      comp.action(event);
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
+  });
+
+  describe('eventHandler method', () => {
+    it('should emit event', () => {
+      comp.config = config;
+      let event = {};
+      spyOn(comp.event, 'emit');
+      comp.eventHandler(event);
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
+  });
+
+  describe('buttonHandler method', () => {
+    it('should emit buttonAction', () => {
+      comp.config = config;
+      let event = {};
+      spyOn(comp.buttonAction, 'emit');
+      comp.buttonHandler(event);
+      expect(comp.buttonAction.emit).toHaveBeenCalled();
+    });
+  });
+
 });

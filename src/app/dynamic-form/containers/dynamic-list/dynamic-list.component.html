@@ -1,6 +1,6 @@
 <div #datatable [class.card]="poped">
   <div move [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white">
-    <h5 class="d-flex justify-content-between align-items-center mb-0" *ngIf="config.list">
+    <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span>{{config.list.label}}</span>
       <div class="d-flex fustify-content-center align-items-center">
         <i
@@ -33,7 +33,7 @@
   <!--<filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
   <action-element [config]="config.list.actions" (event)="actionHandler($event)"></action-element>-->
   <div [class.card-block]="poped" [hidden]="minimized">
-    <h5 class="d-flex justify-content-between align-items-center"  *ngIf="config.list && !poped">
+    <h5 class="d-flex justify-content-between align-items-center lead"  *ngIf="config.list && !poped">
       <span>{{config.list.label}}</span>
       <i
         fa
@@ -84,7 +84,8 @@
             <div class="d-flex justify-content-between">
               <ng-container
                 listElement
-                [config]="cell.content">
+                [config]="cell.content"
+                (buttonAction)="buttonHandler($event)">
               </ng-container>
               <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
                 <i fa
@@ -126,9 +127,12 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <generic-form [endpoint]="modalInfo.endpoint">
+  <div class="modal-body" [ngSwitch]="modalInfo.type">
+    <generic-form [endpoint]="modalInfo.endpoint" *ngSwitchCase="'form'">
       <button type="button" class="btn btn-secondary bg-primary text-white" (click)="c('Close click')">Save</button>
     </generic-form>
+    <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">
+      <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
+    </sebm-google-map>
   </div>
 </template>

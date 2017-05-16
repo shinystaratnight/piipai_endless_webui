@@ -9,6 +9,9 @@ export class ListColumnComponent {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public buttonAction: EventEmitter<any> = new EventEmitter();
+
   public config: any;
   public head: boolean;
 
@@ -19,6 +22,14 @@ export class ListColumnComponent {
         name: this.config.name
       });
     }
+  }
+
+  public eventHandler(e) {
+    this.event.emit(e);
+  }
+
+  public buttonHandler(e) {
+    this.buttonAction.emit(e);
   }
 
 }

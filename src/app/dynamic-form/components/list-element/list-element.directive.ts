@@ -14,6 +14,7 @@ import { ListTextComponent } from './../list-text/list-text.component';
 import { ListColumnComponent } from './../../containers/list-column/list-column.component';
 import { ListLinkComponent } from './../list-link/list-link.component';
 import { ListCheckboxComponent } from './../list-checkbox/list-checkbox.component';
+import { FormButtonComponent } from './../form-button/form-button.component';
 
 const components = {
   text: ListTextComponent,
@@ -22,7 +23,8 @@ const components = {
   input: ListTextComponent,
   static: ListTextComponent,
   checkbox: ListCheckboxComponent,
-  select: ListCheckboxComponent
+  select: ListCheckboxComponent,
+  button: FormButtonComponent
 };
 
 @Directive({
@@ -37,6 +39,9 @@ export class ListElementDirective implements OnInit, OnChanges {
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  public buttonAction: EventEmitter<any> = new EventEmitter();
 
   public component: ComponentRef<any>;
 
@@ -58,6 +63,7 @@ export class ListElementDirective implements OnInit, OnChanges {
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;
       this.component.instance.event = this.event;
+      this.component.instance.buttonAction = this.buttonAction;
     } else if (this.config.length || this.config.name) {
       const component = components['column'];
       const factory = this.resolver.resolveComponentFactory<any>(component);
@@ -65,6 +71,7 @@ export class ListElementDirective implements OnInit, OnChanges {
       this.component.instance.config = this.config;
       this.component.instance.head = this.head;
       this.component.instance.event = this.event;
+      this.component.instance.buttonAction = this.buttonAction;
     }
   }
 }

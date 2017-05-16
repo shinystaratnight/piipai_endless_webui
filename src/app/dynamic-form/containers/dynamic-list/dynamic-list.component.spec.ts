@@ -33,6 +33,29 @@ describe('DynamicListComponent', () => {
           ]
         },
         {
+          name: 'branch',
+          label: 'Branch',
+          sort: true,
+          sorted: 'asc',
+          content: [
+            {
+              fields: [
+                {
+                  field: 'address.latitude',
+                  type: 'input'
+                },
+                {
+                  field: 'address.longitude',
+                  type: 'input'
+                }
+              ],
+              type: 'button',
+              action: 'openMap',
+              icon: 'fa-glob'
+            }
+          ]
+        },
+        {
           name: 'gender',
           label: 'Gender',
           sort: false,
@@ -98,8 +121,11 @@ describe('DynamicListComponent', () => {
         spouse_name: '',
         children: null,
         picture: null,
-        address: null,
-        id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9'
+        address: {
+          latitude: 12,
+          longitude: 13
+        },
+        id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
     }]
   };
 
@@ -189,6 +215,34 @@ describe('DynamicListComponent', () => {
             ]
           },
           {
+            name: 'branch',
+            content: [
+              {
+                name: undefined,
+                type: 'button',
+                templateOptions: {
+                  label: undefined,
+                  icon: 'glob',
+                  small: true,
+                  mb: false,
+                  action: 'openMap'
+                },
+                fields: [
+                  {
+                    field: 'address.latitude',
+                    type: 'input',
+                    value: 12
+                  },
+                  {
+                    field: 'address.longitude',
+                    type: 'input',
+                    value: 13
+                  }
+                ]
+              }
+            ]
+          },
+          {
             name: 'gender',
             content: [
               {
@@ -240,7 +294,8 @@ describe('DynamicListComponent', () => {
     it('should return object with sorted columns', async(() => {
       let result = {
         first_name: 'asc',
-        phone_mobile: 'desc'
+        phone_mobile: 'desc',
+        branch: 'asc'
       };
       expect(comp.getSortedColumns(config.list.columns)).toEqual(result);
     }));
@@ -393,7 +448,8 @@ describe('DynamicListComponent', () => {
     it('should open modal', async(() => {
       let field = {
         label: 'Company',
-        endpoint: '/ecore/api/v2/endless-core/companyaddresses'
+        endpoint: '/ecore/api/v2/endless-core/companyaddresses',
+        type: 'form'
       };
       spyOn(comp, 'open');
       comp.openModal('modal', field);
@@ -502,6 +558,46 @@ describe('DynamicListComponent', () => {
       expect(comp.minimized).toEqual(false);
     }));
 
+  });
+
+  describe('buttonHandler method', () => {
+    it('should call the function', () => {
+      comp.config = config;
+      let event = {
+        value: 'openMap',
+        el: {
+          fields: []
+        }
+      };
+      spyOn(comp, 'openMap');
+      comp.buttonHandler(event);
+      expect(comp[event.value]).toHaveBeenCalled();
+    });
+  });
+
+  describe('openMap method', () => {
+    it('should show map on modal', async(() => {
+      spyOn(comp, 'open');
+      let value = [
+        {
+          field: 'address.latitude',
+          value: 12
+        },
+        {
+          field: 'address.longitude',
+          value: 13
+        }
+      ];
+      let result = {
+        type: 'map',
+        latitude: 12,
+        longitude: 13
+      };
+      comp.modal = {};
+      comp.openMap(value);
+      expect(comp.modalInfo).toEqual(result);
+      expect(comp.open).toHaveBeenCalled();
+    }));
   });
 
 });

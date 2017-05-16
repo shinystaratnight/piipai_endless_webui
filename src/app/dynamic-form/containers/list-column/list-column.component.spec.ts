@@ -46,4 +46,24 @@ describe('ListColumnComponent', () => {
     });
   });
 
+  describe('eventHandler method', () => {
+    it('should emit event', () => {
+      comp.config = config;
+      let event = {};
+      spyOn(comp.event, 'emit');
+      comp.eventHandler(event);
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
+  });
+
+  describe('buttonHandler method', () => {
+    it('should emit buttonAction', () => {
+      comp.config = config;
+      let event = {};
+      spyOn(comp.buttonAction, 'emit');
+      comp.buttonHandler(event);
+      expect(comp.buttonAction.emit).toHaveBeenCalled();
+    });
+  });
+
 });

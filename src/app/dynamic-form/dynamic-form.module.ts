@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { RouterModule } from '@angular/router';
+import { AgmCoreModule } from 'angular2-google-maps/core';
 
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
@@ -45,7 +46,8 @@ import { MoveDirective } from './directives/move.directive';
     NgbModule.forRoot(),
     Angular2FontawesomeModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    AgmCoreModule.forRoot()
   ],
   exports: [GenericFormComponent, GenericListComponent],
   declarations: [

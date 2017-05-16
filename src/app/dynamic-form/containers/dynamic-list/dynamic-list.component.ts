@@ -91,17 +91,34 @@ export class DynamicListComponent implements OnInit, OnChanges {
         };
         col.content.forEach((element) => {
           let obj: any = {};
-          let props = element.field.split('.');
+          let props;
           obj['name'] = element.field;
           obj['type'] = element.type;
           if (element.link) {
             obj['link'] = format(element.link, el);
           } else if (element.endpoint) {
             obj['endpoint'] = format(element.endpoint, el);
-          } else if (element.values) {
-            obj['values'] = element.values;
+          } else if (element.type === 'button') {
+            obj.templateOptions = {
+              label: element.label,
+              icon: element.icon.slice(element.icon.indexOf('-') + 1),
+              small: true,
+              mb: false,
+              action: element.action
+            };
           }
-          this.setValue(el, props, obj);
+          if (element.fields) {
+            obj.fields = [];
+            element.fields.forEach((field, index) => {
+              let item = Object.assign({}, field);
+              obj.fields[index] = item;
+              props = field.field.split('.');
+              this.setValue(el, props, item);
+            });
+          } else if (element.field) {
+            props = element.field.split('.');
+            this.setValue(el, props, obj);
+          }
           if (!obj.value) {
             delete cell.contextMenu;
           }
@@ -211,11 +228,12 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public openModal(modal, field) {
     this.modalInfo.endpoint = field.endpoint;
     this.modalInfo.label = field.label;
-    this.open(modal);
+    this.modalInfo.type = 'form';
+    this.open(modal, {size: 'lg'});
   }
 
-  public open(modal) {
-    this.modalService.open(modal).result.then((reason) => {
+  public open(modal, options = {}) {
+    this.modalService.open(modal, options).result.then((reason) => {
       this.reason = reason;
     }, (reason) => {
       this.reason = reason;
@@ -302,6 +320,21 @@ export class DynamicListComponent implements OnInit, OnChanges {
       type: 'close',
       list: this.config.list.list
     });
+  }
+
+  public buttonHandler(e) {
+    if (e.value) {
+      this[e.value](e.el.fields);
+    }
+  }
+
+  public openMap(value) {
+    value.forEach((el) => {
+      let keys = el.field.split('.');
+      this.modalInfo[keys[keys.length - 1]] = +el.value;
+    });
+    this.modalInfo.type = 'map';
+    this.open(this.modal, {size: 'lg'});
   }
 
 }

@@ -16,11 +16,12 @@ export class ContainerComponent {
     href: 'phone',
     name: 'phone_mobile',
     type: 'link',
-    value: 'hello'
+    value: 'hello',
+    link: true
   };
 }
 
-describe('FormElementDirective', () => {
+describe('ListElementDirective', () => {
   let fixture: ComponentFixture<ContainerComponent>;
   let comp: ContainerComponent;
 
