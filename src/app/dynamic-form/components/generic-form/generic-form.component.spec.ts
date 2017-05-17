@@ -129,6 +129,117 @@ describe('EnterTheComponentName', () => {
         expect(comp.metadataError).toEqual(response);
       }));
 
+      it('should call getDataForForm method', async(() => {
+        response.status = 'success';
+        metadata = [{
+          type: 'checkbox',
+          key: 'is_available',
+          templateOptions: {
+            label: 'test',
+            type: 'checkbox',
+            required: true
+          }
+        }];
+        comp.id = 'Some id';
+        let endpoint = 'endpoint';
+        spyOn(comp, 'getDataForForm');
+        comp.getMetadata(endpoint);
+        expect(comp.getDataForForm).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('getDataForForm method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.getDataForForm).toBeDefined();
+      }));
+
+      it('should called fillingForm method', async(() => {
+        response = {
+          status: 'success',
+          message: 'All be fine'
+        };
+        let endpoint = 'endpoint';
+        let id = 'Some id';
+        spyOn(comp, 'fillingForm');
+        comp.getDataForForm(endpoint, id);
+        expect(comp.fillingForm).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('fillingForm method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.fillingForm).toBeDefined();
+      }));
+
+      it('should udpate metadata with value', async(() => {
+        let config = [
+          {
+            type: 'checkbox',
+            key: 'company.is_available',
+            templateOptions: {
+              label: 'Checked',
+              type: 'checkbox',
+              required: true
+            }
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                type: 'checkbox',
+                key: 'company.checked',
+                templateOptions: {
+                  label: 'Checked',
+                  type: 'checkbox',
+                  required: true
+                }
+              }
+            ]
+          }
+        ];
+        let data = {
+          company: {
+            is_available: true,
+            checked: false
+          }
+        };
+        comp.fillingForm(config, data);
+        expect(config[0]['value']).toBeTruthy();
+        expect(config[1]['children'][0]['value']).toBeFalsy();
+      }));
+
+    });
+
+    describe('getValueOfData method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.getValueOfData).toBeDefined();
+      }));
+
+      it('should udpate metadata with value', async(() => {
+        let object = {
+          type: 'checkbox',
+          key: 'is_available',
+          templateOptions: {
+            label: 'test',
+            type: 'checkbox',
+            required: true
+          }
+        };
+        let key = 'company.is_available';
+        let data = {
+          company: {
+            is_available: true
+          }
+        };
+        comp.getValueOfData(data, key, object);
+        expect(object['value']).toBeTruthy();
+      }));
+
     });
 
     describe('submitForm method', () => {

@@ -600,4 +600,26 @@ describe('DynamicListComponent', () => {
     }));
   });
 
+  describe('eventHandler method', () => {
+    it('should open modal', async(() => {
+      comp.config = config;
+      let event = {
+        target: 'form',
+        endpoint: '/',
+        label: 'Modal label',
+        id: 'element id'
+      };
+      let result = {
+        type: 'form',
+        endpoint: '/',
+        label: 'Modal label',
+        id: 'element id'
+      };
+      spyOn(comp, 'open');
+      comp.eventHandler(event);
+      expect(comp.modalInfo).toEqual(result);
+      expect(comp.open).toHaveBeenCalled();
+    }));
+  });
+
 });

@@ -8,7 +8,7 @@
       [config]="field"></ng-container>
   </span>
 </a>
-<a *ngIf="config.endpoint" href="" (click)="action($event)">
+<a #link *ngIf="config.endpoint" href="" (click)="action($event)">
   {{config.value}}
   <span *ngIf="config.fields">
     <ng-container

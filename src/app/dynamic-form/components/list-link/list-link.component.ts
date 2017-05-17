@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'list-link',
@@ -16,6 +16,9 @@ export class ListLinkComponent implements OnInit {
 
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
+
+  @ViewChild('link')
+  public element: any;
 
   public ngOnInit() {
     this.href = this.createHref(this.config.value, this.config.link);
@@ -47,7 +50,9 @@ export class ListLinkComponent implements OnInit {
     e.stopPropagation();
     this.event.emit({
       target: 'form',
-      endpoint: this.config.endpoint
+      endpoint: this.config.endpoint,
+      label: this.element.nativeElement.innerText,
+      id: this.config.id
     });
   }
 

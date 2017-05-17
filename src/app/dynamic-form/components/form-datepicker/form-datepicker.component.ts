@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
+import moment from 'moment';
 
 @Component({
   selector: 'form-datepicker',
@@ -28,6 +29,9 @@ export class FormDatepickerComponent
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
+    if (this.config.value) {
+      this.setDate(this.config.value, moment);
+    }
   }
 
   public ngAfterViewInit() {
@@ -42,14 +46,29 @@ export class FormDatepickerComponent
     if (this.config.templateOptions.type === 'date') {
       if (this.date) {
         let {year = 0, month = 0, day = 0} = {...this.date};
-        this.group.get(this.key).patchValue(new Date(year, month, day));
+        this.group.get(this.key).patchValue(new Date(Date.UTC(year, month - 1, day)));
       }
     } else if (this.config.templateOptions.type === 'datetime') {
       if (this.date && this.time) {
         let {year = 0, month = 0, day = 0} = {...this.date};
         let {hour = 0, minute = 0} = {...this.time};
-        this.group.get(this.key).patchValue(new Date(year, month, day, hour, minute));
+        this.group.get(this.key).patchValue(new Date(Date.UTC(year, month - 1, day, hour, minute)));
       }
     }
+  }
+
+  public setDate(value, moment) {
+    let date = moment.utc(value, 'YYYY-MM-DD hh:mm:ss');
+    this.date = {
+      year: date.year(),
+      month: date.month() + 1,
+      day: date.date()
+    };
+    this.time = {
+      hour: date.hour(),
+      minute: date.minute(),
+      second: date.second()
+    };
+    this.updateDate();
   }
 }

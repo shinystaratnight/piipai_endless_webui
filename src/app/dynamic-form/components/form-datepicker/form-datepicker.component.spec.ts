@@ -23,6 +23,7 @@ describe('FormDatepickerComponent', () => {
     }
   };
   let errors = {};
+  let moment = require('moment');
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -46,7 +47,6 @@ describe('FormDatepickerComponent', () => {
     comp.config = config;
     comp.group = fb.group({});
     comp.errors = errors;
-    fixture.detectChanges();
     expect(comp.errors).toBeDefined();
     expect(comp.config).toBeDefined();
   })));
@@ -54,6 +54,7 @@ describe('FormDatepickerComponent', () => {
   describe('ngOnInit method', () => {
 
     it('should called addControl method', async(() => {
+      comp.config = config;
       spyOn(comp, 'addControl');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
@@ -95,7 +96,7 @@ describe('FormDatepickerComponent', () => {
       comp.updateDate();
       fixture.detectChanges();
       expect(comp.group.get(comp.config.key).value)
-        .toEqual(new Date(comp.date.year, comp.date.month, comp.date.day));
+        .toEqual(new Date(Date.UTC(comp.date.year, comp.date.month - 1, comp.date.day)));
     })));
 
     it('should update datepicker value (datetime type)',
@@ -119,13 +120,35 @@ describe('FormDatepickerComponent', () => {
       comp.updateDate();
       fixture.detectChanges();
       expect(comp.group.get(comp.config.key).value)
-        .toEqual(new Date(
+        .toEqual(new Date(Date.UTC(
           comp.date.year,
-          comp.date.month,
+          comp.date.month - 1,
           comp.date.day,
           comp.time.hour,
           comp.time.minute
-        ));
+        )));
     })));
+  });
+
+  describe('setDate method', () => {
+    it('should set date', async(() => {
+      let value = '2017-05-17T21:28:43';
+      comp.config = config;
+      let result = {
+        year: 2017,
+        month: 5,
+        day: 17
+      };
+      let time = {
+        hour: 21,
+        minute: 28,
+        second: 43
+      };
+      spyOn(comp, 'updateDate');
+      comp.setDate(value, moment);
+      expect(comp.date).toEqual(result);
+      expect(comp.time).toEqual(time);
+      expect(comp.updateDate).toHaveBeenCalled();
+    }));
   });
 });

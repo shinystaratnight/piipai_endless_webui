@@ -85,6 +85,7 @@
               <ng-container
                 listElement
                 [config]="cell.content"
+                (event)="eventHandler($event)"
                 (buttonAction)="buttonHandler($event)">
               </ng-container>
               <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
@@ -128,8 +129,8 @@
     </button>
   </div>
   <div class="modal-body" [ngSwitch]="modalInfo.type">
-    <generic-form [endpoint]="modalInfo.endpoint" *ngSwitchCase="'form'">
-      <button type="button" class="btn btn-secondary bg-primary text-white" (click)="c('Close click')">Save</button>
+    <generic-form [endpoint]="modalInfo.endpoint" [id]="modalInfo.id" *ngSwitchCase="'form'">
+      <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
     </generic-form>
     <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">
       <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>

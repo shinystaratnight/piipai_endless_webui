@@ -29,6 +29,9 @@ export class GenericFormComponent implements OnChanges {
   @Input()
   public form: any;
 
+  @Input()
+  public id: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -48,6 +51,7 @@ export class GenericFormComponent implements OnChanges {
   public metadataError = [];
   public sendData = null;
   public currentEndpoint: string;
+  public show: boolean = false;
 
   constructor(
     private service: GenericFormService
@@ -63,13 +67,46 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public getMetadata(endpoint) {
-    this.service.getMetadata(endpoint).subscribe(
+    this.service.getMetadata(endpoint, '?type=form').subscribe(
         ((data: any) => {
           this.metadata = this.parseMetadata(data, this.relatedField);
           this.metadata = this.parseMetadata(data, this.data);
           this.getData(this.metadata);
+          if (this.id && this.metadata) {
+            this.show = false;
+            this.getDataForForm(this.endpoint, this.id);
+          }
         }),
         ((error: any) => this.metadataError = error));
+  }
+
+  public getDataForForm(endpoint, id) {
+    this.service.getAll(`${endpoint}${id}`).subscribe(
+      ((data: any) => {
+        this.fillingForm(this.metadata, data);
+      }
+    ));
+  }
+
+  public fillingForm(metadata, data) {
+    metadata.forEach((el) => {
+      if (el.key) {
+        this.getValueOfData(data, el.key, el);
+      } else if (el.children) {
+        this.fillingForm(el.children, data);
+      }
+    });
+    this.show = true;
+  }
+
+  public getValueOfData(data, key, obj) {
+    let keys = key.split('.');
+    let prop = keys.shift();
+    if (keys.length === 0) {
+      obj['value'] = data[key];
+    } else {
+      this.getValueOfData(data[prop], keys.join('.'), obj);
+    }
   }
 
   public submitForm(data) {

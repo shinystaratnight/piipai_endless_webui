@@ -4,14 +4,16 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ListLinkComponent } from './list-link.component';
 
-describe('FormSelectComponent', () => {
+describe('ListLinkComponent', () => {
   let fixture: ComponentFixture<ListLinkComponent>;
   let comp: ListLinkComponent;
   let el;
   let config = {
     href: 'phone',
     name: 'phone_mobile',
-    type: 'link'
+    type: 'link',
+    endpoint: '/',
+    id: 'some id'
   };
 
   beforeEach(() => {
@@ -93,6 +95,11 @@ describe('FormSelectComponent', () => {
 
   describe('action method', () => {
     it('should emit event', () => {
+      comp.element = {
+        nativeElement: {
+          innerText: 'Some text'
+        }
+      };
       comp.config = config;
       let event = {
         preventDefault() {

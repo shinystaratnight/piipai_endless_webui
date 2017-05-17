@@ -33,6 +33,9 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
+    if (this.config.value) {
+      this.group.get(this.key).patchValue(this.config.value);
+    }
   }
 
   public ngAfterViewInit() {

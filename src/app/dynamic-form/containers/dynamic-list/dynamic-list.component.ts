@@ -323,6 +323,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
   }
 
   public buttonHandler(e) {
+    this.modalInfo = {};
     if (e.value) {
       this[e.value](e.el.fields);
     }
@@ -334,6 +335,15 @@ export class DynamicListComponent implements OnInit, OnChanges {
       this.modalInfo[keys[keys.length - 1]] = +el.value;
     });
     this.modalInfo.type = 'map';
+    this.open(this.modal, {size: 'lg'});
+  }
+
+  public eventHandler(e) {
+    this.modalInfo = {};
+    this.modalInfo.type = e.target;
+    this.modalInfo.endpoint = e.endpoint;
+    this.modalInfo.label = e.label;
+    this.modalInfo.id = e.id;
     this.open(this.modal, {size: 'lg'});
   }
 

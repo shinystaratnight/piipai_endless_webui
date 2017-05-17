@@ -59,10 +59,20 @@ describe('FormSelectComponent', () => {
   describe('ngOnInit method', () => {
 
     it('should called addControl method', async(() => {
+      comp.config = config;
       spyOn(comp, 'addControl');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
     }));
+
+    it('should update value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let form = fb.group({});
+      comp.group = form;
+      comp.config = config;
+      comp.config.value = true;
+      comp.ngOnInit();
+      expect(comp.group.get(comp.config.key)).toBeTruthy();
+    })));
 
   });
 

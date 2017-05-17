@@ -5,7 +5,7 @@ import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { FormTextareaComponent } from './form-textarea.component';
 
-describe('FormSelectComponent', () => {
+describe('FormTextareaComponent', () => {
   let fixture: ComponentFixture<FormTextareaComponent>;
   let comp: FormTextareaComponent;
   let el;
@@ -56,10 +56,20 @@ describe('FormSelectComponent', () => {
   describe('ngOnInit method', () => {
 
     it('should called addControl method', async(() => {
+      comp.config = config;
       spyOn(comp, 'addControl');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
     }));
+
+    it('should update value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let form = fb.group({});
+      comp.group = form;
+      comp.config = config;
+      comp.config.value = 'Some value';
+      comp.ngOnInit();
+      expect(comp.group.get(comp.config.key).value).toEqual('Some value');
+    })));
 
   });
 

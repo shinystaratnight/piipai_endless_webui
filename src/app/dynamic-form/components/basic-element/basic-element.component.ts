@@ -17,6 +17,9 @@ export class BasicElementComponent {
   }
 
   public addFlags(element, config) {
+    if (config.templateOptions.type === 'number') {
+      element.nativeElement.step = 'any';
+    }
     element.nativeElement.required = config.templateOptions.required;
     if (config.templateOptions.max) {
       element.nativeElement.maxLength = config.templateOptions.max;

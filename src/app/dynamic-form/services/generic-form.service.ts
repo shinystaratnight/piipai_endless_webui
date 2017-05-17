@@ -23,8 +23,8 @@ export class GenericFormService {
       .catch((error: any) => this.errorHandler(error));
   }
 
-  public getMetadata(endpoint) {
-    return this.http.options(endpoint)
+  public getMetadata(endpoint, query = '') {
+    return this.http.options(`${endpoint}${query}`)
       .map((response: Response) => response.json())
       .catch((error: any) => this.errorHandler(error));
   }
