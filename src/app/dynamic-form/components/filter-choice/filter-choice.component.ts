@@ -1,11 +1,11 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 
 @Component({
   selector: 'filter-choice',
   templateUrl: 'filter-choice.component.html'
 })
-export class FilterChoiceComponent {
+export class FilterChoiceComponent implements OnInit {
   public config: any;
   public query: any;
 
@@ -16,14 +16,19 @@ export class FilterChoiceComponent {
     private fs: FilterService
   ) {}
 
+  public ngOnInit() {
+    this.query = this.fs.getQueries(this.config.listName, this.config.key);
+  }
+
   public select(value) {
     let query = `${this.config.query}=${value}`;
     if (value === this.query) {
       this.query = null;
+      query = '';
     } else {
       this.query = value;
     }
-    this.fs.generateQuery(query, this.config.key, this.config.listName);
+    this.fs.generateQuery(query, this.config.key, this.config.listName, value);
     this.changeQuery();
   }
 

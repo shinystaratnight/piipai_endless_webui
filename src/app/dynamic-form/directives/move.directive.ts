@@ -17,6 +17,10 @@ export class MoveDirective {
 
   @Input()
   private parent: any;
+
+  @Output()
+  private active: EventEmitter<any> = new EventEmitter();
+
   private isMovable: boolean = false;
 
   private pos: any = { x: 0, y: 0 };
@@ -71,6 +75,7 @@ export class MoveDirective {
     this.updatePosition();
     this.isMovable = true;
     this.elem.style.cursor = 'move';
+    this.active.emit(true);
   }
 
   private move($event) {

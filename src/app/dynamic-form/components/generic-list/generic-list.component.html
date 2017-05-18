@@ -5,6 +5,9 @@
       [config]="table.metadata"
       [data]="table.data"
       [first]="table.first"
+      [id]="table.id"
+      [active]="table.active"
+      (list)="listHandler($event)"
       (event)="eventHandler($event)">
     </dynamic-list>
   </div>

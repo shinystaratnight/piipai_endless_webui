@@ -25,8 +25,17 @@ export class DynamicListComponent implements OnInit, OnChanges {
   @Input()
   public first: boolean;
 
+  @Input()
+  public id: number;
+
+  @Input()
+  public active: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  public list: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('modal')
   public modal;
@@ -57,8 +66,8 @@ export class DynamicListComponent implements OnInit, OnChanges {
   ) {}
 
   public ngOnInit() {
-    // this.filterService.filters = this.config.list;
-    // this.filtersOfList = this.filterService.filters;
+    this.filterService.filters = this.config.list;
+    this.filtersOfList = this.filterService.filters;
     if (this.data) {
       this.initPagination(this.data);
     }
@@ -66,6 +75,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges() {
+    this.datatable.nativeElement.style.zIndex = this.active ? 100 : this.id * 5;
     if (this.config && this.data.results) {
       this.select = this.resetSelectedElements(this.data.results);
       if (this.config.list) {
@@ -221,7 +231,8 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public filterHandler(e) {
     this.event.emit({
       type: 'filter',
-      list: e.list
+      list: e.list,
+      query: this.filterService.getQuery(e.list)
     });
   }
 
@@ -293,15 +304,17 @@ export class DynamicListComponent implements OnInit, OnChanges {
   }
 
   public popedTable() {
+    this.filtersOfList = this.filterService.getFiltersOfList(this.config.list.list);
     this.poped = true;
     this.position = {
       top: this.datatable.nativeElement.offsetTop,
       left: this.datatable.nativeElement.offsetLeft
     };
-    this.datatable.nativeElement.style.position = 'absolute';
+    this.datatable.nativeElement.style.position = 'fixed';
   }
 
   public unpopedTable() {
+    this.filterService.filters = this.config.list;
     this.poped = false;
     this.minimized = false;
     this.datatable.nativeElement.style.position = 'relative';
@@ -320,6 +333,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
       type: 'close',
       list: this.config.list.list
     });
+    this.filterService.resetQueries(this.config.list.list);
   }
 
   public buttonHandler(e) {
@@ -345,6 +359,13 @@ export class DynamicListComponent implements OnInit, OnChanges {
     this.modalInfo.label = e.label;
     this.modalInfo.id = e.id;
     this.open(this.modal, {size: 'lg'});
+  }
+
+  public activeTable(e) {
+    this.event.emit({
+      type: 'active',
+      list: this.config.list.list
+    });
   }
 
 }

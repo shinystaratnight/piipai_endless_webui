@@ -22,15 +22,24 @@ export class FilterRelatedComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.count = 1;
-    this.elements.push(this.createElement(this.count));
+    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    if (data) {
+      let counts = data.map((el) => el.id);
+      this.elements.push(...data);
+      this.count = Math.max(counts);
+      this.genericQuery(this.elements, this.config.query);
+    } else {
+      this.count = 1;
+      this.elements.push(this.createElement(this.count));
+    }
   }
 
   public deleteValue(item) {
     item.data = null;
     this.updateOptions(this.config.options);
     this.fs.generateQuery(
-      this.genericQuery(this.elements, this.config.query), this.config.key, this.config.listName);
+      this.genericQuery(this.elements, this.config.query),
+      this.config.key, this.config.listName, this.elements);
     this.changeQuery();
   }
 
@@ -47,7 +56,8 @@ export class FilterRelatedComponent implements OnInit {
     }
     this.updateOptions(this.config.options);
     this.fs.generateQuery(
-      this.genericQuery(this.elements, this.config.query), this.config.key, this.config.listName);
+      this.genericQuery(this.elements, this.config.query),
+      this.config.key, this.config.listName, this.elements);
     this.changeQuery();
   }
 
@@ -62,7 +72,8 @@ export class FilterRelatedComponent implements OnInit {
   public onChange() {
     this.updateOptions(this.config.options);
     this.fs.generateQuery(
-      this.genericQuery(this.elements, this.config.query), this.config.key, this.config.listName);
+      this.genericQuery(this.elements, this.config.query),
+      this.config.key, this.config.listName, this.elements);
     this.changeQuery();
   }
 

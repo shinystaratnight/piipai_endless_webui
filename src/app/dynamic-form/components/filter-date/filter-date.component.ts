@@ -24,6 +24,11 @@ export class FilterDateComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    if (data) {
+      this.data = data.data;
+      this.query = data.query;
+    }
     this.updateConfig();
   }
 
@@ -34,7 +39,7 @@ export class FilterDateComponent implements OnInit {
     };
     this.parseDate(query, moment);
     this.query = query;
-    this.fs.generateQuery(query, this.config.key, this.config.listName);
+    this.fs.generateQuery(query, this.config.key, this.config.listName, { data: this.data, query });
     this.changeQuery();
   }
 
@@ -49,7 +54,8 @@ export class FilterDateComponent implements OnInit {
       }
     });
     this.fs.generateQuery(
-      query.substring(0, query.length - 1), this.config.key, this.config.listName);
+      query.substring(0, query.length - 1),
+        this.config.key, this.config.listName, { data: this.data });
     this.changeQuery();
   }
 

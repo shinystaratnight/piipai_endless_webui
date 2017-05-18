@@ -46,31 +46,36 @@ export class FilterService {
     return this.parseQueries(this.queries, list);
   }
 
-  public generateQuery(query, key, list) {
+  public generateQuery(query, key, list, value = undefined) {
     if (this.queries.length > 0) {
       let el = this.queries.filter((elem) => elem.list === list);
       if (el[0]) {
-        el[0].keys[key] = query;
+        el[0].keys[key] = { query, value };
       } else {
-        this.queries.push({ list, keys: { [key]: query } });
+        this.queries.push({ list, keys: { [key]: { query, value } }});
       }
     } else {
       this.queries.push({
         list,
         keys: {
-          [key]: query
+          [key]: {
+            query,
+            value
+          }
         }
       });
     }
   }
 
   public parseQueries(queries, list) {
-    let query = '?';
+    let query = '';
     queries.forEach((el) => {
       if (el.list === list) {
         let keys = Object.keys(el.keys);
         keys.forEach((elem) => {
-          query += `${el.keys[elem]}&`;
+          if (el.keys[elem].query) {
+            query += `${el.keys[elem].query}&`;
+          }
         });
       }
     });
@@ -86,6 +91,26 @@ export class FilterService {
         );
       }
     });
+  }
+
+  public getQueries(list, filterName) {
+    let result;
+    this.queries.forEach((el) => {
+      if (el.list === list && el.keys[filterName]) {
+        result = el.keys[filterName].value;
+      }
+    });
+    return result;
+  }
+
+  public resetQueries(list) {
+    let result;
+    this.queries.forEach((el) => {
+      if (el.list === list) {
+       result = el;
+      }
+    });
+    this.queries.splice(this.queries.indexOf(result), 1);
   }
 
 }

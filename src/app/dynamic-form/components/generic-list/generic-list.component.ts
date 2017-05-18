@@ -16,6 +16,8 @@ export class GenericListComponent implements OnInit {
   public data: any;
   public tables = [];
   public first: boolean = false;
+  public tableId: number = 1;
+  public existingIds: number[] = [];
 
   constructor(
     private gfs: GenericFormService,
@@ -31,6 +33,8 @@ export class GenericListComponent implements OnInit {
       (metadata) => {
         table.metadata = metadata;
         table.list = metadata.list.list;
+        this.existingIds.push(this.tableId);
+        table.id = this.tableId++;
       }
     );
   }
@@ -57,6 +61,9 @@ export class GenericListComponent implements OnInit {
       this.getData(table.endpoint, this.generateQuery(table.query), table);
     } else if (e.type === 'close') {
       this.tables.splice(this.tables.indexOf(table), 1);
+    } else if (e.type === 'active') {
+      this.resetActiveTable(this.tables);
+      table.active = true;
     }
   }
 
@@ -86,6 +93,23 @@ export class GenericListComponent implements OnInit {
 
   public getTable(name) {
     return this.tables.filter((el) => el.list === name)[0];
+  }
+
+  public resetActiveTable(tables) {
+    tables.forEach((el) => {
+      el.active = false;
+    });
+  }
+
+  public listHandler(e) {
+    if (this.checkList(e.endpoint)) {
+      this.tables.push(this.createTableData(e.endpoint));
+    }
+  }
+
+  public checkList(endpoint) {
+    let result = this.tables.filter((el) => el.endpoint === endpoint);
+    return !result.length;
   }
 
 }

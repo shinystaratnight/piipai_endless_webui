@@ -75,6 +75,8 @@ export class GenericFormComponent implements OnChanges {
           if (this.id && this.metadata) {
             this.show = false;
             this.getDataForForm(this.endpoint, this.id);
+          } else {
+            this.show = true;
           }
         }),
         ((error: any) => this.metadataError = error));
