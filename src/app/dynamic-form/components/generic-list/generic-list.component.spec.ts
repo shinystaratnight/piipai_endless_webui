@@ -96,6 +96,9 @@ describe('GenericListComponent', () => {
         comp.getMetadata(endpoint, table);
         expect(table.metadata).toEqual(metadata);
         expect(table.list).toEqual('companies');
+        expect(table.id).toEqual(1);
+        expect(comp.existingIds).toEqual([1]);
+        expect(comp.tableId).toEqual(2);
       }));
 
     });
@@ -159,6 +162,25 @@ describe('GenericListComponent', () => {
         expect(comp.tables).toEqual([]);
       }));
 
+      it('should set active table', async(() => {
+        let event = {
+          type: 'active',
+          list: 'company'
+        };
+        let table = {
+          list: 'company',
+          endpoint: 'endpoint',
+          first: true,
+          active: false
+        };
+        comp.tables = [];
+        comp.tables.push(table);
+        spyOn(comp, 'resetActiveTable');
+        comp.eventHandler(event);
+        expect(table.active).toBeTruthy();
+        expect(comp.resetActiveTable).toHaveBeenCalled();
+      }));
+
     });
 
     describe('generateQuery method', () => {
@@ -196,6 +218,73 @@ describe('GenericListComponent', () => {
         expect(comp.getData).toHaveBeenCalled();
         expect(result.endpoint).toEqual('endpoint');
         expect(result['first']).toBeTruthy();
+      }));
+
+    });
+
+    describe('getTable method', () => {
+
+      it('should return table from tables', async(() => {
+        let table = {
+          list: 'company',
+          endpoint: 'endpoint',
+          first: true
+        };
+        comp.tables.push(table);
+        let result = comp.getTable('company');
+        expect(result).toEqual(table);
+      }));
+
+    });
+
+    describe('resetActiveTable method', () => {
+
+      it('should reset active property of all tables', async(() => {
+        let table = {
+          list: 'company',
+          endpoint: 'endpoint',
+          first: true,
+          active: true
+        };
+        comp.tables.push(table);
+        comp.resetActiveTable(comp.tables);
+        expect(comp.tables[0].active).toBeFalsy();
+      }));
+
+    });
+
+    describe('listHandler method', () => {
+
+      it('should reset active property of all tables', async(() => {
+        let event = {
+          endpoint: 'another endpoint'
+        };
+        let table = {
+          list: 'company',
+          endpoint: 'endpoint',
+          first: true,
+          active: true
+        };
+        comp.tables.push(table);
+        comp.listHandler(event);
+        expect(comp.tables.length).toEqual(2);
+      }));
+
+    });
+
+    describe('checkList method', () => {
+
+      it('should check if table allready exist', async(() => {
+        let endpoint = 'endpoint';
+        let table = {
+          list: 'company',
+          endpoint: 'endpoint',
+          first: true,
+          active: true
+        };
+        comp.tables.push(table);
+        let result = comp.checkList(endpoint);
+        expect(result).toBeFalsy();
       }));
 
     });

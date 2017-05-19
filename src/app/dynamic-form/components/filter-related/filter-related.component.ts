@@ -26,7 +26,7 @@ export class FilterRelatedComponent implements OnInit {
     if (data) {
       let counts = data.map((el) => el.id);
       this.elements.push(...data);
-      this.count = Math.max(counts);
+      this.count = Math.max(...counts);
       this.genericQuery(this.elements, this.config.query);
     } else {
       this.count = 1;

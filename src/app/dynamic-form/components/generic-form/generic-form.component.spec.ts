@@ -118,6 +118,7 @@ describe('EnterTheComponentName', () => {
         comp.getMetadata(endpoint);
         expect(comp.parseMetadata).toHaveBeenCalled();
         expect(comp.getData).toHaveBeenCalled();
+        expect(comp.show).toBeTruthy();
       }));
 
       it('should update metadataError property', async(() => {

@@ -42,9 +42,13 @@ describe('FilterDateComponent', () => {
       }
     ]
   };
+  let queries = {};
   let mockFilterService = {
     generateQuery() {
       return true;
+    },
+    getQueries() {
+      return queries;
     }
   };
   let moment = require('moment');
@@ -76,8 +80,26 @@ describe('FilterDateComponent', () => {
   describe('ngOnInit method', () => {
 
     it('should be called updateConfig method', () => {
+      queries = {
+        data: {
+          from: {
+            year: 2017,
+            month: 4,
+            day: 12
+          },
+          to: {
+            year: 2017,
+            month: 4,
+            day: 19
+          }
+        },
+        query: 'from=01/03/2017&to=08/03/2017'
+      };
+      comp.config = config;
       spyOn(comp, 'updateConfig');
       comp.ngOnInit();
+      expect(comp.data).toEqual(queries['data']);
+      expect(comp.query).toEqual(queries['query']);
       expect(comp.updateConfig).toHaveBeenCalled();
     });
 

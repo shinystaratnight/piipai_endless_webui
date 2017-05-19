@@ -37,6 +37,9 @@ describe('FilterElementDirective', () => {
   let mockFilterService = {
     generateQuery() {
       return true;
+    },
+    getQueries() {
+      return true;
     }
   };
 

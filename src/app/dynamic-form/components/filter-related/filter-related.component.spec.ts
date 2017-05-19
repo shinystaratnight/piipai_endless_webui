@@ -24,9 +24,13 @@ describe('FilterRelatedComponent', () => {
     many: true,
     options: []
   };
+  let queries;
   let mockFilterValue = {
     generateQuery() {
       return true;
+    },
+    getQueries() {
+      return queries;
     }
   };
 
@@ -64,7 +68,26 @@ describe('FilterRelatedComponent', () => {
       };
       comp.ngOnInit();
       expect(comp.elements[0]).toEqual(element);
+      expect(comp.count).toEqual(2);
     }));
+
+    it ('should fill in filter', () => {
+      comp.config = config;
+      queries = [
+        {
+          data: 'some id',
+          id: 1
+        },
+        {
+          data: 'another id',
+          id: 5
+        }
+      ];
+      comp.ngOnInit();
+      expect(comp.elements).toEqual(queries);
+      expect(comp.count).toEqual(5);
+      expect(comp.query).toEqual('company=some id&company=another id&');
+    });
 
   });
 
@@ -111,7 +134,7 @@ describe('FilterRelatedComponent', () => {
 
   });
 
-  describe('delete method', () => {
+  describe('deleteElement method', () => {
 
     it('should delete element', async(inject([FilterService], (fs: FilterService) => {
       comp.config = config;

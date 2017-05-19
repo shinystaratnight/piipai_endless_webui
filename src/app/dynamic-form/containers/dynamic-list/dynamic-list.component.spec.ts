@@ -128,7 +128,8 @@ describe('DynamicListComponent', () => {
         id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
     }]
   };
-
+  let query;
+  let filters;
   let mockFilterService = {
     _filters: [],
     set filters(value) {
@@ -136,6 +137,15 @@ describe('DynamicListComponent', () => {
     },
     get filters() {
       return this._filters;
+    },
+    getQuery(list) {
+      return query;
+    },
+    getFiltersOfList() {
+      return filters;
+    },
+    resetQueries() {
+      return true;
     }
   };
 
@@ -188,6 +198,18 @@ describe('DynamicListComponent', () => {
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.resetSelectedElements).toHaveBeenCalled();
       expect(comp.getSortedColumns).toHaveBeenCalled();
+    }));
+
+    it('should update datatable', async(() => {
+      comp.config = config;
+      comp.data = {};
+      comp.active = false;
+      comp.id = 5;
+      comp.ngOnChanges();
+      expect(+comp.datatable.nativeElement.style.zIndex).toEqual(25);
+      comp.active = true;
+      comp.ngOnChanges();
+      expect(+comp.datatable.nativeElement.style.zIndex).toEqual(100);
     }));
 
   });
@@ -514,14 +536,16 @@ describe('DynamicListComponent', () => {
 
   describe('popedTable method', () => {
 
-    it('should change poped property', async(() => {
+    it('should change poped property', async(inject([FilterService], (fs: FilterService) => {
       comp.config = config;
       comp.poped = false;
+      spyOn(fs, 'getFiltersOfList');
       comp.popedTable();
       expect(comp.poped).toEqual(true);
       expect(comp.position).toBeDefined();
-      expect(comp.datatable.nativeElement.style.position).toEqual('absolute');
-    }));
+      expect(comp.datatable.nativeElement.style.position).toEqual('fixed');
+      expect(fs.getFiltersOfList).toHaveBeenCalled();
+    })));
 
   });
 
@@ -557,6 +581,19 @@ describe('DynamicListComponent', () => {
       comp.minimizeTable();
       expect(comp.minimized).toEqual(false);
     }));
+
+  });
+
+  describe('closeTable method', () => {
+
+    it('should emit event ofclose table', async(inject([FilterService], (fs: FilterService) => {
+      comp.config = config;
+      spyOn(comp.event, 'emit');
+      spyOn(fs, 'resetQueries');
+      comp.closeTable();
+      expect(comp.event.emit).toHaveBeenCalled();
+      expect(fs.resetQueries).toHaveBeenCalled();
+    })));
 
   });
 
@@ -619,6 +656,15 @@ describe('DynamicListComponent', () => {
       comp.eventHandler(event);
       expect(comp.modalInfo).toEqual(result);
       expect(comp.open).toHaveBeenCalled();
+    }));
+  });
+
+  describe('activeTable method', () => {
+    it('should emit event', async(() => {
+      comp.config = config;
+      spyOn(comp.event, 'emit');
+      comp.activeTable({});
+      expect(comp.event.emit).toHaveBeenCalled();
     }));
   });
 

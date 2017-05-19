@@ -26,9 +26,13 @@ describe('FilterChoiceComponent', () => {
       }
     ]
   };
+  let queries;
   let mockFilterService = {
     generateQuery() {
       return true;
+    },
+    getQueries() {
+      return queries;
     }
   };
 
@@ -54,6 +58,17 @@ describe('FilterChoiceComponent', () => {
     comp.config = config;
     fixture.detectChanges();
     expect(comp.config).toBeDefined();
+  });
+
+  describe('ngOnInit method', () => {
+
+    it('should update query', async(() => {
+      comp.config = config;
+      queries = 'Home';
+      comp.ngOnInit();
+      expect(comp.query).toEqual(queries);
+    }));
+
   });
 
   describe('select method', () => {

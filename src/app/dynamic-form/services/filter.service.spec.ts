@@ -77,9 +77,17 @@ describe('FilterService', () => {
         }
       ]
     };
+    let response = {
+      results: [
+        {
+          key: '123',
+          value: 'Home'
+        }
+      ]
+    };
     let mockGenericFormService = {
       getAll() {
-        return Observable.of([1, 3, 4]);
+        return Observable.of(response);
       }
     };
 
@@ -136,7 +144,10 @@ describe('FilterService', () => {
               {
                 list: 'company',
                 keys: {
-                  company_date: 'from=20-03-17&to=27-03-17'
+                  company_date: {
+                    query: 'from=20-03-17&to=27-03-17',
+                    value: undefined
+                  }
                 }
               }
             ];
@@ -146,8 +157,14 @@ describe('FilterService', () => {
               {
                 list: 'company',
                 keys: {
-                  company_date: 'from=20-03-17&to=27-03-17',
-                  company_name: 'company=12324&company=12312'
+                  company_date: {
+                    query: 'from=20-03-17&to=27-03-17',
+                    value: undefined
+                  },
+                  company_name: {
+                    query: 'company=12324&company=12312',
+                    value: undefined
+                  }
                 }
               }
             ];
@@ -166,15 +183,67 @@ describe('FilterService', () => {
               {
                 list: 'company',
                 keys: {
-                  company_date: 'from=20-03-17&to=27-03-17',
-                  company_name: 'company=12324&company=12312',
-                  company_status: 'active=true'
+                  company_date: {
+                    query: 'from=20-03-17&to=27-03-17'
+                  },
+                  company_name: {
+                    query: 'company=12324&company=12312',
+                  },
+                  company_status: {
+                    query: 'active=true'
+                  }
                 }
               }
             ];
-            let result = `?from=20-03-17&to=27-03-17&company=12324&company=12312&active=true`;
+            let result = `from=20-03-17&to=27-03-17&company=12324&company=12312&active=true`;
             s.queries = queries;
             expect(s.parseQueries(s.queries, 'company')).toEqual(result);
+          })
+      );
+    });
+
+    describe('parseFilters method', () => {
+      it('should update related filters',
+          inject([FilterService], (s: FilterService) => {
+            s.filters = list;
+            s.parseFilters(s.filters);
+            expect(s.filters[0].options).toEqual(response.results);
+          })
+      );
+    });
+
+    describe('getQueries method', () => {
+      it('should return queries data of filter',
+          inject([FilterService], (s: FilterService) => {
+            s.filters = list;
+            s.queries.push({
+              list: 'company',
+              keys: {
+                company_status: {
+                  value: 'active=true'
+                }
+              }
+            });
+            let result = s.getQueries('company', 'company_status');
+            expect(result).toEqual('active=true');
+          })
+      );
+    });
+
+    describe('resetQueries method', () => {
+      it('should reset quries of list',
+          inject([FilterService], (s: FilterService) => {
+            s.filters = list;
+            s.queries.push({
+              list: 'company',
+              keys: {
+                company_status: {
+                  value: 'active=true'
+                }
+              }
+            });
+            s.resetQueries('company');
+            expect(s.queries).toEqual([]);
           })
       );
     });
