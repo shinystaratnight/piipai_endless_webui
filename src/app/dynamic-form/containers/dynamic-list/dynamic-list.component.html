@@ -76,7 +76,7 @@
         </tr>
       </thead>
       <tbody *ngIf="body">
-        <tr *ngFor="let row of body">
+        <tr *ngFor="let row of body" [class.table-warning]="row.highlight">
           <td class="text-center">
             <input type="checkbox" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
           </td>

@@ -13,6 +13,12 @@ describe('DynamicListComponent', () => {
   let config = {
     list: {
       list: 'company',
+      highlight: {
+        values: {
+          master: true
+        },
+        field: 'company.type'
+      },
       columns: [
         {
           name: 'first_name',
@@ -125,6 +131,9 @@ describe('DynamicListComponent', () => {
           latitude: 12,
           longitude: 13
         },
+        company: {
+          type: 'master'
+        },
         id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
     }]
   };
@@ -219,6 +228,7 @@ describe('DynamicListComponent', () => {
     it('should prepare data for body', async(() => {
       let body = [{
         id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+        highlight: true,
         content: [
           {
             name: 'first_name',
@@ -305,7 +315,7 @@ describe('DynamicListComponent', () => {
           }
         ]
       }];
-      let result = comp.prepareData(config.list.columns, data.results);
+      let result = comp.prepareData(config.list.columns, data.results, config.list.highlight);
       expect(result).toEqual(body);
     }));
 
@@ -665,6 +675,19 @@ describe('DynamicListComponent', () => {
       spyOn(comp.event, 'emit');
       comp.activeTable({});
       expect(comp.event.emit).toHaveBeenCalled();
+    }));
+  });
+
+  describe('addHighlight method', () => {
+    it('should added property highlight into row', async(() => {
+      let field = config.list.highlight.field;
+      let elem = data.results[0];
+      let row = {
+        highlight: undefined
+      };
+      let values = config.list.highlight.values;
+      comp.addHighlight(field, elem, row, values);
+      expect(row.highlight).toBeTruthy();
     }));
   });
 

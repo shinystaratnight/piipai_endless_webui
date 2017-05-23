@@ -75,17 +75,19 @@ export class DynamicListComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges() {
+    let config = this.config;
+    let data = this.data;
     this.datatable.nativeElement.style.zIndex = this.active ? 100 : this.id * 5;
-    if (this.config && this.data.results) {
-      this.select = this.resetSelectedElements(this.data.results);
-      if (this.config.list) {
-        this.sortedColumns = this.getSortedColumns(this.config.list.columns);
-        this.body = this.prepareData(this.config.list.columns, this.data.results);
+    if (config && data.results) {
+      this.select = this.resetSelectedElements(data.results);
+      if (config.list) {
+        this.sortedColumns = this.getSortedColumns(config.list.columns);
+        this.body = this.prepareData(config.list.columns, data.results, config.list.highlight);
       }
     }
   }
 
-  public prepareData(config, data) {
+  public prepareData(config, data, highlight) {
     let format = require('formatstring');
     let prepareData = [];
     data.forEach((el) => {
@@ -93,6 +95,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
         id: el.id,
         content: []
       };
+      this.addHighlight(highlight.field, el, row, highlight.values);
       config.forEach((col) => {
         let cell = {
           name: col.name,
@@ -366,6 +369,16 @@ export class DynamicListComponent implements OnInit, OnChanges {
       type: 'active',
       list: this.config.list.list
     });
+  }
+
+  public addHighlight(prop, data, row, values) {
+    let props = prop.split('.');
+    let key = props.shift();
+    if (props.length === 0) {
+      row.highlight = values[data[prop]];
+    } else {
+      this.addHighlight(props.join('.'), data[key], row, values);
+    }
   }
 
 }
