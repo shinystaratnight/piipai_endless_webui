@@ -20,24 +20,24 @@ describe('FilterDateComponent', () => {
     list: [
       {
         label: 'Today',
-        query: 'created_at=03/03/2017'
+        query: 'updated_at_from=03/03/2017'
       },
       {
         label: 'Last week',
-        query: 'from=01/03/2017&to=08/03/2017'
+        query: 'updated_at__from=01/03/2017&updated_at__to=08/03/2017'
       },
       {
         label: 'Last month',
-        query: 'from=01/03/2017&to=01/04/2017'
+        query: 'updated_at__from=01/03/2017&updated_ad__to=01/04/2017'
       }
     ],
     input: [
       {
-        query: 'from',
+        query: 'updated_at__from',
         label: 'From date'
       },
       {
-        query: 'to',
+        query: 'updated_at__to',
         label: 'To date'
       }
     ]
@@ -97,10 +97,12 @@ describe('FilterDateComponent', () => {
       };
       comp.config = config;
       spyOn(comp, 'updateConfig');
+      spyOn(comp, 'createInputs');
       comp.ngOnInit();
       expect(comp.data).toEqual(queries['data']);
       expect(comp.query).toEqual(queries['query']);
       expect(comp.updateConfig).toHaveBeenCalled();
+      expect(comp.createInputs).toHaveBeenCalled();
     });
 
   });
@@ -113,9 +115,11 @@ describe('FilterDateComponent', () => {
         let query = '?from=10-03-17';
         spyOn(fs, 'generateQuery');
         spyOn(comp, 'parseDate');
+        spyOn(comp, 'createInputs');
         comp.selectQuery(query);
         expect(fs.generateQuery).toHaveBeenCalled();
         expect(comp.parseDate).toHaveBeenCalled();
+        expect(comp.createInputs).toHaveBeenCalled();
         expect(comp.query).toEqual(query);
     })));
 
@@ -131,6 +135,7 @@ describe('FilterDateComponent', () => {
           to: '30-03-17'
         };
         comp.data = data;
+        comp.moment = moment;
         spyOn(fs, 'generateQuery');
         spyOn(comp, 'changeQuery');
         comp.onChange();
@@ -147,18 +152,21 @@ describe('FilterDateComponent', () => {
       let from = '10-03-17';
       let result = [
         {
-          query: 'from',
+          query: 'updated_at__from',
           label: 'From date',
           maxDate: to
         },
         {
-          query: 'to',
+          query: 'updated_at__to',
           label: 'To date',
           minDate: from
         }
       ];
       comp.config = config;
-      comp.data = { to, from };
+      comp.data = {
+        updated_at__to: to,
+        updated_at__from: from
+      };
       comp.updateConfig();
       expect(comp.config.input).toEqual(result);
     });
@@ -179,7 +187,7 @@ describe('FilterDateComponent', () => {
   describe('parseDate method', () => {
 
     it('should parse date form query', () => {
-      let query = 'from=01/03/2017&to=01/15/2017';
+      let query = 'from=2017-01-03&to=2017-01-15';
       let result: any = {
         from: {
           year: 2017,
@@ -193,8 +201,36 @@ describe('FilterDateComponent', () => {
         }
       };
       comp.config = config;
+      comp.dateFormat = 'YYYY-MM-DD';
       comp.parseDate(query, moment);
       expect(comp.data).toEqual(result);
+    });
+
+  });
+
+  describe('createInputs method', () => {
+
+    it('should create inputs data', async() => {
+      let data = {};
+      comp.config = config;
+      comp.createInputs(config.input, data);
+      expect(data[config.input[0].query]).toEqual('');
+      expect(data[config.input[1].query]).toEqual('');
+    });
+
+  });
+
+  describe('resetData method', () => {
+
+    it('should reset data of inputs', async() => {
+      let data = {
+        from: '01/01/2017',
+        to: '01/01/2017'
+      };
+      comp.config = config;
+      comp.resetData(data);
+      expect(data.from).toEqual('');
+      expect(data.to).toEqual('');
     });
 
   });
@@ -214,8 +250,8 @@ describe('FilterDateComponent', () => {
       expect(comp.changeQuery).toHaveBeenCalled();
       expect(fs.generateQuery).toHaveBeenCalled();
       expect(comp.query).toBeNull();
-      expect(comp.data.from).toBeNull();
-      expect(comp.data.to).toBeNull();
+      expect(comp.data['from']).toEqual('');
+      expect(comp.data['to']).toEqual('');
     })));
 
   });

@@ -272,7 +272,8 @@ describe('DynamicListComponent', () => {
                   }
                 ]
               }
-            ]
+            ],
+            contextMenu: undefined
           },
           {
             name: 'gender',
@@ -398,6 +399,29 @@ describe('DynamicListComponent', () => {
       comp.setValue(values, ['name'], resultTwo);
       expect(resultOne['value']).toEqual('Mr. Test Testovich');
       expect(resultTwo['value']).toEqual('Home LTD');
+    }));
+
+  });
+
+  describe('checkValue method', () => {
+
+    it('should return true if some value exist', async(() => {
+      let obj = {
+        value: 'Some value',
+        fields: []
+      };
+      let result = comp.checkValue(obj);
+      expect(result).toBeTruthy();
+      obj = {
+        value: '',
+        fields: [
+          {
+            value: 'Some Value'
+          }
+        ]
+      };
+      let resultTwo = comp.checkValue(obj);
+      expect(resultTwo).toBeTruthy();
     }));
 
   });

@@ -32,6 +32,7 @@ import { FilterRelatedComponent } from './components/filter-related/filter-relat
 import { FilterElementDirective } from './components/filter-element/filter-element.directive';
 import { FilterService } from './services/filter.service';
 import { ListCheckboxComponent } from './components/list-checkbox/list-checkbox.component';
+import { FilterSelectComponent } from './components/filter-select/filter-select.component';
 
 import { ActionElementComponent } from './components/action-element/action-element.component';
 
@@ -76,7 +77,8 @@ import { MoveDirective } from './directives/move.directive';
     ActionElementComponent,
     GenericListComponent,
     ListCheckboxComponent,
-    MoveDirective
+    MoveDirective,
+    FilterSelectComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -95,7 +97,8 @@ import { MoveDirective } from './directives/move.directive';
     FilterDateComponent,
     FilterChoiceComponent,
     FilterRelatedComponent,
-    ListCheckboxComponent
+    ListCheckboxComponent,
+    FilterSelectComponent
   ]
 })
 export class DynamicFormModule { }

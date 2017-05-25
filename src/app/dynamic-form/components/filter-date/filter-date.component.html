@@ -1,7 +1,7 @@
 <label>
   {{config.label}}
   <i
-    *ngIf="query || data.from || data.to"
+    *ngIf="query || picker"
     fa
     class="text-danger ml-1"
     [name]="'times-circle'"
@@ -28,8 +28,8 @@
     [(ngModel)]="data[input.query]"
     ngbDatepicker
     #from="ngbDatepicker"
-    [maxDate]="input.query === 'from' ? data.to : ''"
-    [minDate]="input.query === 'to' ? data.from : ''"
+    [maxDate]="input.maxDate"
+    [minDate]="input.minDate"
     (ngModelChange)="onChange()">
   <div class="input-group-addon" (click)="from.toggle()" style="cursor: pointer">
     <i fa [name]="'calendar'" [border]=true></i>

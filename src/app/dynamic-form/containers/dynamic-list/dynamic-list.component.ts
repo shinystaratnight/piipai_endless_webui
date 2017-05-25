@@ -95,7 +95,9 @@ export class DynamicListComponent implements OnInit, OnChanges {
         id: el.id,
         content: []
       };
-      this.addHighlight(highlight.field, el, row, highlight.values);
+      if (highlight) {
+        this.addHighlight(highlight.field, el, row, highlight.values);
+      }
       config.forEach((col) => {
         let cell = {
           name: col.name,
@@ -132,7 +134,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
             props = element.field.split('.');
             this.setValue(el, props, obj);
           }
-          if (!obj.value) {
+          if (!this.checkValue(obj)) {
             delete cell.contextMenu;
           }
           cell.content.push(obj);
@@ -204,6 +206,20 @@ export class DynamicListComponent implements OnInit, OnChanges {
       object['value'] = data[prop];
     } else if (data[prop]) {
       this.setValue(data[prop], props, object);
+    }
+  }
+
+  public checkValue(obj) {
+    if (obj.value) {
+      return !!obj.value;
+    } else if (obj.fields) {
+      let value = '';
+      obj.fields.forEach((el) => {
+        if (el.value) {
+          value = el.value;
+        }
+      });
+      return !!value;
     }
   }
 

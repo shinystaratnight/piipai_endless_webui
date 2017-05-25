@@ -1,0 +1,14 @@
+<label>
+  {{config.label}}
+  <i
+    *ngIf="query"
+    fa
+    class="text-danger ml-1"
+    [name]="'times-circle'"
+    [border]="true"
+    style="cursor: pointer"
+    (click)="resetFilter()"></i>
+</label>
+<select class="form-control custom-select" [(ngModel)]="data" (change)="onChange()">
+  <option *ngFor="let option of config.options" [attr.value]="option.value" [selected]="data === option.value">{{option.label}}</option>
+</select>

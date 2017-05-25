@@ -103,7 +103,7 @@ describe('FilterRelatedComponent', () => {
         data: value
       };
       comp.deleteValue(element);
-      expect(element.data).toBeNull();
+      expect(element.data).toEqual('');
       expect(comp.genericQuery).toHaveBeenCalled();
       expect(fs.generateQuery).toHaveBeenCalled();
     })));

@@ -9,12 +9,13 @@ import moment from 'moment';
 export class FilterDateComponent implements OnInit {
   public from: any;
   public to: any;
+  public picker: boolean = false;
   public config: any;
-  public data = {
-    from: null,
-    to: null
-  };
+  public data = {};
   public query: string;
+  public dateFormat: string = 'YYYY-MM-DD';
+  public datetimeFormat: string = 'YYYY-MM-DD hh:mm:ss';
+  public moment: any = moment;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -24,6 +25,8 @@ export class FilterDateComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    // this.moment = moment;
+    this.createInputs(this.config.input, this.data);
     let data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
       this.data = data.data;
@@ -33,38 +36,39 @@ export class FilterDateComponent implements OnInit {
   }
 
   public selectQuery(query) {
-    this.data = {
-      from: null,
-      to: null
-    };
+    this.createInputs(this.config.input, this.data);
+    this.picker = false;
     this.parseDate(query, moment);
     this.query = query;
     this.fs.generateQuery(query, this.config.key, this.config.listName, { data: this.data, query });
     this.changeQuery();
+    this.updateConfig();
   }
 
   public onChange() {
+    this.picker = true;
     this.query = '';
     let query = '';
     let keys = Object.keys(this.data);
     keys.forEach((el) => {
       if (this.data[el]) {
         let {year = 0, month = 0, day = 0} = {...this.data[el]};
-        query += `${el}=${new Date(year, month, day)}&`;
+        query += `${el}=${this.moment.utc([year, month - 1, day]).format(this.dateFormat)}&`;
       }
     });
     this.fs.generateQuery(
       query.substring(0, query.length - 1),
         this.config.key, this.config.listName, { data: this.data });
     this.changeQuery();
+    this.updateConfig();
   }
 
   public updateConfig() {
-    this.config.input.forEach((el) => {
-      if (el.query === 'from') {
-        el.maxDate = this.data.to;
-      } else if (el.query === 'to') {
-        el.minDate = this.data.from;
+    this.config.input.forEach((el, i, arr) => {
+      if (el.query.indexOf('__from') > 0) {
+        el.maxDate = this.data[arr[1].query];
+      } else if (el.query.indexOf('__to') > 0) {
+        el.minDate = this.data[arr[0].query];
       }
     });
   }
@@ -82,7 +86,7 @@ export class FilterDateComponent implements OnInit {
     dates.forEach((el) => {
       let query = el.split('=');
       queries.push(query[0]);
-      result[query[0]] = moment.utc(query[1], 'MM-DD-YYYY');
+      result[query[0]] = moment.utc(query[1], this.dateFormat);
     });
     queries.forEach((el) => {
       this.data[el] = {
@@ -93,10 +97,23 @@ export class FilterDateComponent implements OnInit {
     });
   }
 
+  public createInputs(inputs, data) {
+    inputs.forEach((el) => {
+      data[el.query] = '';
+    });
+  }
+
+  public resetData(data) {
+    let keys = Object.keys(data);
+    keys.forEach((el) => {
+      data[el] = '';
+    });
+  }
+
   public resetFilter() {
     this.query = null;
-    this.data.from = null;
-    this.data.to = null;
+    this.resetData(this.data);
+    this.picker = false;
     this.fs.generateQuery(this.query, this.config.key, this.config.listName);
     this.changeQuery();
   }

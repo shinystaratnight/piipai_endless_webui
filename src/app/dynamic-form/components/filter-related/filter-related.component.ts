@@ -35,7 +35,7 @@ export class FilterRelatedComponent implements OnInit {
   }
 
   public deleteValue(item) {
-    item.data = null;
+    item.data = '';
     this.updateOptions(this.config.options);
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query),
