@@ -20,7 +20,11 @@ export class FilterSelectComponent implements OnInit {
   public ngOnInit() {
     let data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
-      this.data = data;
+      if (data.byQuery) {
+        this.parseQuery(data.query);
+      } else {
+        this.data = data;
+      }
     }
   }
 
@@ -44,6 +48,15 @@ export class FilterSelectComponent implements OnInit {
     this.event.emit({
       list: this.config.listName
     });
+  }
+
+  public parseQuery(query) {
+    let value = query.split('=')[1];
+    let existValue = this.config.options.filter((el) => el.value === value);
+    if (existValue.length > 0) {
+        this.query = query;
+        this.data = value;
+    }
   }
 
   public resetFilter() {

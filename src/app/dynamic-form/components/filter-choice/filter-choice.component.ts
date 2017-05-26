@@ -17,7 +17,12 @@ export class FilterChoiceComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.query = this.fs.getQueries(this.config.listName, this.config.key);
+    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    if (data.byQuery) {
+      this.query = data.query.split('=')[1];
+    } else {
+      this.query = data;
+    }
   }
 
   public select(value) {

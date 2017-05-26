@@ -31,6 +31,12 @@ export class DynamicListComponent implements OnInit, OnChanges {
   @Input()
   public active: boolean;
 
+  @Input()
+  public initPage: number = 1;
+
+  @Input()
+  public sorted: any;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -71,12 +77,20 @@ export class DynamicListComponent implements OnInit, OnChanges {
     if (this.data) {
       this.initPagination(this.data);
     }
-    this.sortedColumns = {};
   }
 
   public ngOnChanges() {
     let config = this.config;
     let data = this.data;
+    if (this.initPage) {
+      this.page = this.initPage;
+    }
+    if (this.sorted) {
+      this.sortedColumns = this.sorted;
+      Object.keys(this.sorted).forEach((el) => {
+        this.updateSort(config.list.columns, el, this.sorted[el]);
+      });
+    }
     this.datatable.nativeElement.style.zIndex = this.active ? 100 : this.id * 5;
     if (config && data.results) {
       this.select = this.resetSelectedElements(data.results);
@@ -179,6 +193,14 @@ export class DynamicListComponent implements OnInit, OnChanges {
       type: 'sort',
       list: this.config.list.list,
       sort: this.sortedColumns
+    });
+  }
+
+  public updateSort(columns, name, value) {
+    columns.forEach((el) => {
+      if (name === el.name) {
+        el.sorted = value;
+      }
     });
   }
 

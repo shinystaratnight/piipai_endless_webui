@@ -24,10 +24,14 @@ export class FilterRelatedComponent implements OnInit {
   public ngOnInit() {
     let data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
-      let counts = data.map((el) => el.id);
-      this.elements.push(...data);
-      this.count = Math.max(...counts);
-      this.genericQuery(this.elements, this.config.query);
+      if (data.byQuery) {
+        this.parseQuery(data.query);
+      } else {
+        let counts = data.map((el) => el.id);
+        this.elements.push(...data);
+        this.count = Math.max(...counts);
+        this.genericQuery(this.elements, this.config.query);
+      }
     } else {
       this.count = 1;
       this.elements.push(this.createElement(this.count));
@@ -61,12 +65,9 @@ export class FilterRelatedComponent implements OnInit {
     this.changeQuery();
   }
 
-  public createElement(id) {
+  public createElement(id, data = '') {
     this.count++;
-    return {
-      id,
-      data: ''
-    };
+    return { id, data };
   }
 
   public onChange() {
@@ -112,6 +113,14 @@ export class FilterRelatedComponent implements OnInit {
       }
     });
   }
+
+  public parseQuery(query) {
+    this.query = query;
+    query.split('&').forEach((el) => {
+      let value = el.split('=')[1];
+      this.elements.push(this.createElement(this.count, value));
+    });
+  };
 
   public resetFilter() {
     this.elements.length = 1;

@@ -25,12 +25,17 @@ export class FilterDateComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    // this.moment = moment;
     this.createInputs(this.config.input, this.data);
     let data = this.fs.getQueries(this.config.listName, this.config.key);
-    if (data) {
-      this.data = data.data;
-      this.query = data.query;
+    if (data && data.byQuery) {
+      if (data.byQuery) {
+        this.query = data.query;
+        this.parseDate(data.query, moment);
+        this.picker = true;
+      } else {
+        this.data = data.data;
+        this.query = data.query;
+      }
     }
     this.updateConfig();
   }
