@@ -66,7 +66,6 @@ export class GenericListComponent implements OnInit {
     if (e.type === 'sort' || e.type === 'pagination' || e.type === 'filter') {
       table.query[e.type] = e.query;
       this.updateUrl(table.query, e.list);
-      this.getData(table.endpoint, this.generateQuery(table.query), table);
     } else if (e.type === 'close') {
       this.tables.splice(this.tables.indexOf(table), 1);
     } else if (e.type === 'active') {
@@ -184,7 +183,8 @@ export class GenericListComponent implements OnInit {
         }
       }
     });
-    table.page = (pagination['offset'] / pagination['limit']) + 1;
+    table.limit = pagination['limit'] || '';
+    table.offset = pagination['offset'] || '';
     table.sorted = sorted;
     Object.keys(queryList).forEach((el) => {
       if (el === 'pagination' || el === 'filter') {

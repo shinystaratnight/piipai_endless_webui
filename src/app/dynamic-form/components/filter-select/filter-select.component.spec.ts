@@ -73,6 +73,17 @@ describe('FilterSelectComponent', () => {
       expect(comp.data).toEqual(queries);
     });
 
+    it('should call parseQuery method', () => {
+      comp.config = config;
+      queries = {
+        byQuery: true,
+        query: 'company__type=Master'
+      };
+      spyOn(comp, 'parseQuery');
+      comp.ngOnInit();
+      expect(comp.parseQuery).toHaveBeenCalled();
+    });
+
   });
 
   describe('onChange method', () => {
@@ -109,6 +120,18 @@ describe('FilterSelectComponent', () => {
       comp.changeQuery();
       expect(comp.event.emit).toHaveBeenCalled();
     });
+
+  });
+
+  describe('parseQuery method', () => {
+
+    it('should fill in filter by Query', async(inject([FilterService], (fs: FilterService) => {
+      comp.config = config;
+      let query = 'company__type=master';
+      comp.parseQuery(query);
+      expect(comp.query).toEqual(query);
+      expect(comp.data).toEqual('master');
+    })));
 
   });
 

@@ -32,7 +32,10 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public active: boolean;
 
   @Input()
-  public initPage: number = 1;
+  public limit: number;
+
+  @Input()
+  public offset: number;
 
   @Input()
   public sorted: any;
@@ -57,10 +60,8 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public modalInfo: any = {};
   public reason: any;
   public page: number = 1;
-  public pagination: boolean = false;
+  public pagination: any = {};
   public pageSize: number = 0;
-  public limit: number;
-  public offset: number;
   public poped: boolean = false;
   public minimized: boolean = false;
   public position: { top, left };
@@ -74,22 +75,26 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public ngOnInit() {
     this.filterService.filters = this.config.list;
     this.filtersOfList = this.filterService.filters;
-    if (this.data) {
-      this.initPagination(this.data);
-    }
   }
 
   public ngOnChanges() {
     let config = this.config;
     let data = this.data;
-    if (this.initPage) {
-      this.page = this.initPage;
+    if (data) {
+      this.initPagination(data);
     }
     if (this.sorted) {
       this.sortedColumns = this.sorted;
-      Object.keys(this.sorted).forEach((el) => {
-        this.updateSort(config.list.columns, el, this.sorted[el]);
-      });
+      let names = Object.keys(this.sorted);
+      if (names.length) {
+        Object.keys(this.sorted).forEach((el) => {
+          this.updateSort(config.list.columns, el, this.sorted[el]);
+        });
+      } else {
+        this.config.list.columns.forEach((el) => {
+          this.resetSort(el, false);
+        });
+      }
     }
     this.datatable.nativeElement.style.zIndex = this.active ? 100 : this.id * 5;
     if (config && data.results) {
@@ -186,14 +191,16 @@ export class DynamicListComponent implements OnInit, OnChanges {
     });
   }
 
-  public resetSort(field) {
+  public resetSort(field, emit) {
     delete field.sorted;
     delete this.sortedColumns[field.name];
-    this.event.emit({
-      type: 'sort',
-      list: this.config.list.list,
-      sort: this.sortedColumns
-    });
+    if (emit) {
+      this.event.emit({
+        type: 'sort',
+        list: this.config.list.list,
+        sort: this.sortedColumns
+      });
+    }
   }
 
   public updateSort(columns, name, value) {
@@ -293,21 +300,23 @@ export class DynamicListComponent implements OnInit, OnChanges {
   }
 
   public initPagination(data) {
-    let count = data.count;
-    let length = data.results.length;
-    if (!data.next && !data.previous) {
-      this.pagination = false;
-    } else {
-      let offset;
-      let limit = offset = length;
-      this.pagination = true;
+    if (this.pagination.offset !== this.offset) {
+      let count = data.count;
+      let length = this.limit ? this.limit : data.results.length;
+      if (!this.limit && !this.offset) {
+        this.limit = length;
+        this.offset = length;
+        this.page = 1;
+      } else {
+        this.page = (this.offset / this.limit) + 1;
+      }
       if (count % length === 0) {
         this.pageSize = (count / length) * 10;
       } else if (count % length > 0) {
         this.pageSize = (Math.ceil(count / length) * 10);
       }
-      this.limit = limit;
-      this.offset = offset;
+      this.pagination['limit'] = this.limit;
+      this.pagination['offset'] = this.offset;
     }
   }
 
@@ -333,7 +342,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
     if (this.page === 2) {
       query = `limit=${this.limit}&offset=${this.limit}`;
     } else if (this.page === 1) {
-      query = `limit=${this.limit}`;
+      query = `limit=${this.limit}&offset=0`;
     } else {
       query = `limit=${this.limit}&offset=${this.limit * (this.page - 1)}`;
     }

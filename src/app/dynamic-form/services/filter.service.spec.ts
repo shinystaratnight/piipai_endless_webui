@@ -206,10 +206,27 @@ describe('FilterService', () => {
       it('should update related filters',
           inject([FilterService], (s: FilterService) => {
             s.filters = list;
-            s.parseFilters(s.filters);
+            s.parseFilters(s.filters, {}, list.list);
             expect(s.filters[0].options).toEqual(response.results);
           })
       );
+
+      it('should parse params from URL', inject([FilterService], (s: FilterService) => {
+        let params = {
+          param: 'company',
+          value: 'true'
+        };
+        s.paramsOfFilters = params;
+        params = {
+          param: 'from',
+          value: '2017-03-08'
+        };
+        s.paramsOfFilters = params;
+        s.filters = list;
+        spyOn(s, 'generateQuery');
+        s.parseFilters(s.filters, s.paramsOfFilters, list.list);
+        expect(s.generateQuery).toHaveBeenCalled();
+      }));
     });
 
     describe('getQueries method', () => {
@@ -226,6 +243,25 @@ describe('FilterService', () => {
             });
             let result = s.getQueries('company', 'company_status');
             expect(result).toEqual('active=true');
+          })
+      );
+
+      it('should return query by URL',
+          inject([FilterService], (s: FilterService) => {
+            s.filters = list;
+            s.queries.push({
+              list: 'company',
+              keys: {
+                company_status: {
+                  query: 'active=true'
+                }
+              }
+            });
+            let result = s.getQueries('company', 'company_status');
+            expect(result).toEqual({
+              byQuery: true,
+              query: 'active=true'
+            });
           })
       );
     });

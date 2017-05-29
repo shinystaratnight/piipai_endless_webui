@@ -69,6 +69,16 @@ describe('FilterChoiceComponent', () => {
       expect(comp.query).toEqual(queries);
     }));
 
+    it('should update query from URL', async(() => {
+      comp.config = config;
+      queries = {
+        byQuery: true,
+        query: 'companty=Home'
+      };
+      comp.ngOnInit();
+      expect(comp.query).toEqual('Home');
+    }));
+
   });
 
   describe('select method', () => {

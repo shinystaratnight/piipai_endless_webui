@@ -105,6 +105,18 @@ describe('FilterDateComponent', () => {
       expect(comp.createInputs).toHaveBeenCalled();
     });
 
+    it('should update datapicker by date from URL query', async(() => {
+      queries = {
+        byQuery: true,
+        query: 'from=2017-01-03&to=2017-03-08'
+      };
+      comp.config = config;
+      spyOn(comp, 'parseDate');
+      comp.ngOnInit();
+      expect(comp.query).toEqual(queries['query']);
+      expect(comp.picker).toBeTruthy();
+    }));
+
   });
 
   describe('selectQuery method', () => {
@@ -121,6 +133,7 @@ describe('FilterDateComponent', () => {
         expect(comp.parseDate).toHaveBeenCalled();
         expect(comp.createInputs).toHaveBeenCalled();
         expect(comp.query).toEqual(query);
+        expect(comp.picker).toBeFalsy();
     })));
 
   });
@@ -139,6 +152,8 @@ describe('FilterDateComponent', () => {
         spyOn(fs, 'generateQuery');
         spyOn(comp, 'changeQuery');
         comp.onChange();
+        expect(comp.picker).toBeTruthy();
+        expect(comp.query).toEqual('');
         expect(fs.generateQuery).toHaveBeenCalled();
         expect(comp.changeQuery).toHaveBeenCalled();
     })));
@@ -252,6 +267,7 @@ describe('FilterDateComponent', () => {
       expect(comp.query).toBeNull();
       expect(comp.data['from']).toEqual('');
       expect(comp.data['to']).toEqual('');
+      expect(comp.picker).toBeFalsy();
     })));
 
   });

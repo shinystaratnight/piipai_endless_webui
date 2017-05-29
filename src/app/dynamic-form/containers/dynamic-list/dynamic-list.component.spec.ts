@@ -182,19 +182,6 @@ describe('DynamicListComponent', () => {
     expect(comp.config).toBeDefined();
   });
 
-  describe('ngOnInit method', () => {
-
-    it('should called initPagination method', async(() => {
-      spyOn(comp, 'initPagination');
-      comp.config = config;
-      comp.data = {};
-      comp.ngOnInit();
-      expect(comp.sortedColumns).toEqual({});
-      expect(comp.initPagination).toHaveBeenCalled();
-    }));
-
-  });
-
   describe('ngOnChanges method', () => {
 
     it('should called prepareData method', async(() => {
@@ -219,6 +206,24 @@ describe('DynamicListComponent', () => {
       comp.active = true;
       comp.ngOnChanges();
       expect(+comp.datatable.nativeElement.style.zIndex).toEqual(100);
+    }));
+
+    it('should call updateSort method', async(() => {
+      comp.config = config;
+      comp.data = {};
+      comp.active = false;
+      comp.id = 5;
+      comp.sorted = {
+        'company.name': 'asc'
+      };
+      spyOn(comp, 'updateSort');
+      spyOn(comp, 'resetSort');
+      comp.ngOnChanges();
+      expect(comp.sortedColumns).toEqual(comp.sorted);
+      expect(comp.updateSort).toHaveBeenCalled();
+      comp.sorted = {};
+      comp.ngOnChanges();
+      expect(comp.resetSort).toHaveBeenCalled();
     }));
 
   });
@@ -373,10 +378,20 @@ describe('DynamicListComponent', () => {
         sorted: 'asc'
       };
       comp.sorting(field);
-      comp.resetSort(field);
+      comp.resetSort(field, true);
       expect(comp.sortedColumns).toEqual({});
       expect(field.sorted).toBeUndefined();
       expect(comp.event.emit).toHaveBeenCalled();
+    }));
+
+  });
+
+  describe('updateSort method', () => {
+
+    it('should update sort property', async(() => {
+      comp.config = config;
+      comp.updateSort(comp.config.list.columns, 'first_name', 'asc');
+      expect(comp.config.list.columns[0].sorted).toEqual('asc');
     }));
 
   });
@@ -522,13 +537,16 @@ describe('DynamicListComponent', () => {
     }));
 
     it('should init pagination properties', async(() => {
+      comp.limit = 0;
+      comp.offset = 0;
       comp.initPagination(data);
       expect(comp.limit).toEqual(1);
       expect(comp.pageSize).toEqual(40);
       data.count = 1;
-      data.results.length = 3;
+      comp.limit = 1;
+      comp.offset = 0;
       comp.initPagination(data);
-      expect(comp.limit).toEqual(3);
+      expect(comp.limit).toEqual(1);
       expect(comp.pageSize).toEqual(10);
     }));
 

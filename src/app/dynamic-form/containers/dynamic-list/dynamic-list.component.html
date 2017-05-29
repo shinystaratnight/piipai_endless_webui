@@ -64,7 +64,7 @@
               [name]="'sort'"
               [border]=true
               class="pr-2 text-muted"
-              (click)="resetSort(field)"
+              (click)="resetSort(field, true)"
               style="cursor: pointer"></i>
             <ng-container
               listElement
@@ -107,7 +107,6 @@
       </tbody>
     </table>
     <ngb-pagination
-      *ngIf="pagination"
       [collectionSize]="pageSize"
       [(page)]="page"
       [maxSize]="4"

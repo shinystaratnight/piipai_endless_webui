@@ -3,6 +3,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { GenericListComponent } from './generic-list.component';
 import { GenericFormService } from './../../services/generic-form.service';
@@ -23,6 +25,9 @@ describe('GenericListComponent', () => {
       },
       getByQuery() {
         return Observable.of(data);
+      },
+      callAction() {
+        return Observable.of(data);
       }
     };
     let mockFilterService = {};
@@ -36,7 +41,8 @@ describe('GenericListComponent', () => {
               {provide: GenericFormService, useValue: mockGenericFormService},
               {provide: FilterService, useValue: mockFilterService}
             ],
-            schemas: [ NO_ERRORS_SCHEMA ]
+            schemas: [ NO_ERRORS_SCHEMA ],
+            imports: [ RouterTestingModule.withRoutes([]) ]
         });
     });
 
@@ -62,8 +68,9 @@ describe('GenericListComponent', () => {
         };
         comp.endpoint = endpoint;
         comp.tables = [];
+        spyOn(comp, 'createTableData');
         comp.ngOnInit();
-        expect(comp.tables[0].endpoint).toEqual(endpoint);
+        expect(comp.createTableData).toHaveBeenCalledWith(endpoint);
       }));
 
     });
@@ -93,12 +100,14 @@ describe('GenericListComponent', () => {
           ]
         };
         let endpoint = 'endpoint';
+        spyOn(comp, 'parseUrl');
         comp.getMetadata(endpoint, table);
         expect(table.metadata).toEqual(metadata);
         expect(table.list).toEqual('companies');
         expect(table.id).toEqual(1);
         expect(comp.existingIds).toEqual([1]);
         expect(comp.tableId).toEqual(2);
+        expect(comp.parseUrl).toHaveBeenCalledWith({}, table.list);
       }));
 
     });
@@ -124,6 +133,22 @@ describe('GenericListComponent', () => {
         expect(table.data).toEqual(data);
       }));
 
+      it('should update data by query', async(() => {
+        let table: any = {};
+        let query: '?active=true';
+        data = {
+          results: [
+            {
+              name: 'Home',
+              id: 125
+            }
+          ]
+        };
+        let endpoint = 'endpoint';
+        comp.getData(endpoint, query, table);
+        expect(table.data).toEqual(data);
+      }));
+
     });
 
     describe('eventHandler method', () => {
@@ -133,7 +158,7 @@ describe('GenericListComponent', () => {
       }));
 
       it('should update queries of list', async(() => {
-        spyOn(comp, 'getData');
+        spyOn(comp, 'updateUrl');
         let event = {
           type: 'sort',
           list: 'company',
@@ -142,7 +167,7 @@ describe('GenericListComponent', () => {
         comp.tables = [];
         comp.tables.push({ list: event.list });
         comp.eventHandler(event);
-        expect(comp.getData).toHaveBeenCalled();
+        expect(comp.updateUrl).toHaveBeenCalled();
         expect(comp.getTable(event.list).query).toEqual({ [event.type]: event.query});
       }));
 
@@ -181,6 +206,28 @@ describe('GenericListComponent', () => {
         expect(comp.resetActiveTable).toHaveBeenCalled();
       }));
 
+      it('should call action', async(() => {
+        let event = {
+          type: 'action',
+          list: 'company',
+          data: [123, 124],
+          action: {
+            endpoint: 'some endpoint'
+          }
+        };
+        let table = {
+          list: 'company',
+          endpoint: 'endpoint',
+          first: true,
+          active: false
+        };
+        comp.tables = [];
+        comp.tables.push(table);
+        spyOn(comp, 'callAction');
+        comp.eventHandler(event);
+        expect(comp.callAction).toHaveBeenCalledWith(event.data, event.action.endpoint);
+      }));
+
     });
 
     describe('generateQuery method', () => {
@@ -212,10 +259,8 @@ describe('GenericListComponent', () => {
       it('should create table', async(() => {
         let endpoint = 'endpoint';
         spyOn(comp, 'getMetadata');
-        spyOn(comp, 'getData');
         let result = comp.createTableData(endpoint);
         expect(comp.getMetadata).toHaveBeenCalled();
-        expect(comp.getData).toHaveBeenCalled();
         expect(result.endpoint).toEqual('endpoint');
         expect(result['first']).toBeTruthy();
       }));
@@ -266,8 +311,9 @@ describe('GenericListComponent', () => {
           active: true
         };
         comp.tables.push(table);
+        spyOn(comp, 'createTableData');
         comp.listHandler(event);
-        expect(comp.tables.length).toEqual(2);
+        expect(comp.createTableData).toHaveBeenCalledWith(event.endpoint);
       }));
 
     });
@@ -286,6 +332,90 @@ describe('GenericListComponent', () => {
         let result = comp.checkList(endpoint);
         expect(result).toBeFalsy();
       }));
+
+    });
+
+    describe('callAction method', () => {
+
+      it('should call action for list', async(() => {
+        data = {
+          status: 'ok'
+        };
+        let endpoint = 'endpoint';
+        let selectedElements = {
+          123: true,
+          124: true,
+          125: false
+        };
+        comp.callAction(selectedElements, endpoint);
+        expect(comp.res).toEqual(data);
+      }));
+
+    });
+
+    describe('updateUrl method', () => {
+
+      it('should update query on URL',
+        async(inject([ActivatedRoute, Router],
+          (route: ActivatedRoute, router: Router) => {
+        let query = {
+          filter: 'company=1c80c973-1c9e-4392-b044-da9c450c631b&company__type=master',
+          pagination: 'limit=2&offset=2',
+          sort: 'ordering=-company.name'
+        };
+        let list = 'companyaddress';
+        let queryParams = {
+          'companyaddress.f.company': '1c80c973-1c9e-4392-b044-da9c450c631b',
+          'companyaddress.f.company__type': 'master',
+          'companyaddress.p.limit': '2',
+          'companyaddress.p.offset': '2',
+          'companyaddress.s.ordering': '-company.name'
+        };
+        spyOn(router, 'navigate');
+        comp.updateUrl(query, list);
+        expect(router.navigate).toHaveBeenCalledWith([], { queryParams });
+      })));
+
+    });
+
+    describe('parseUrl method', () => {
+
+      it('should parse query params on URL', async() => {
+        let table = {
+          list: 'companyaddress',
+          endpoint: 'endpoint',
+          first: true,
+          active: false
+        };
+        comp.tables = [];
+        comp.tables.push(table);
+        let query = {
+          filter: 'company=1c80c973-1c9e-4392-b044-da9c450c631b&company__type=master',
+          sort: 'ordering=-company.name',
+          pagination: 'limit=2&offset=2'
+        };
+        let list = 'companyaddress';
+        let queryParams = {
+          'companyaddress.f.company': '1c80c973-1c9e-4392-b044-da9c450c631b',
+          'companyaddress.f.company__type': 'master',
+          'companyaddress.p.limit': 2,
+          'companyaddress.p.offset': 2,
+          'companyaddress.s.ordering': '-company.name'
+        };
+        spyOn(comp, 'getData');
+        spyOn(comp, 'generateQuery');
+        comp.parseUrl(queryParams, list);
+        let target = comp.getTable(list);
+        expect(target.query).toEqual(query);
+        expect(target.limit).toEqual(2);
+        expect(target.offset).toEqual(2);
+        expect(target.sorted).toEqual({
+          'company.name': 'desc'
+        });
+        expect(comp.getData)
+          .toHaveBeenCalledWith(table.endpoint, comp.generateQuery(target.query), target);
+        expect(comp.generateQuery).toHaveBeenCalledWith(target.query);
+      });
 
     });
 

@@ -89,6 +89,17 @@ describe('FilterRelatedComponent', () => {
       expect(comp.query).toEqual('company=some id&company=another id&');
     });
 
+    it('should update filter by query from URL', async(() => {
+      comp.config = config;
+      queries = {
+        byQuery: true,
+        query: 'company=Home'
+      };
+      spyOn(comp, 'parseQuery');
+      comp.ngOnInit();
+      expect(comp.parseQuery).toHaveBeenCalled();
+    }));
+
   });
 
   describe('deleteValue method', () => {
@@ -294,6 +305,29 @@ describe('FilterRelatedComponent', () => {
       comp.config = config;
       comp.refreshOptions(comp.config.options);
       expect(comp.config.options).toEqual(result);
+    });
+
+  });
+
+  describe('parseQuery method', () => {
+
+    it('should parse query', async() => {
+      let query = 'company=123&company=124';
+      comp.config = config;
+      comp.count = 1;
+      let result = [
+        {
+          id: 1,
+          data: '123'
+        },
+        {
+          id: 2,
+          data: '124'
+        }
+      ];
+      comp.parseQuery(query);
+      expect(comp.elements.length).toEqual(2);
+      expect(comp.elements).toEqual(result);
     });
 
   });

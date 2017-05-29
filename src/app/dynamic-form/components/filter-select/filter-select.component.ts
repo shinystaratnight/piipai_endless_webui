@@ -51,10 +51,10 @@ export class FilterSelectComponent implements OnInit {
   }
 
   public parseQuery(query) {
+    this.query = query;
     let value = query.split('=')[1];
     let existValue = this.config.options.filter((el) => el.value === value);
     if (existValue.length > 0) {
-        this.query = query;
         this.data = value;
     }
   }
