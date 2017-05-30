@@ -1,7 +1,12 @@
 <div class="form-group" [class.mb-0]="!config.templateOptions.mb">
-  <button [class.btn-sm]="config.templateOptions.small" class="btn btn-primary pl-4 pr-4 mt-1 mb-1" [attr.type]="config.templateOptions.type" (click)="action($event)">
-    {{config.templateOptions.label}}
-    <i fa [name]="config.templateOptions.icon"></i>
+  <label class="mr-1" *ngIf="config.templateOptions.label">{{config.templateOptions.label}}</label>
+  <button
+    [ngClass]="{'btn-sm': config.templateOptions.small, 'px-2': config.templateOptions.p, 'pl-4 pr-4': !config.templateOptions.p}"
+    class="btn btn-primary mt-1 mb-1"
+    [attr.type]="config.templateOptions.type"
+    (click)="action($event)">
+      {{config.templateOptions.text}}
+      <i fa [name]="config.templateOptions.icon"></i>
   </button>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}

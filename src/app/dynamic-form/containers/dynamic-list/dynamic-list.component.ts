@@ -59,13 +59,15 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public selectedAll: boolean = false;
   public modalInfo: any = {};
   public reason: any;
-  public page: number = 1;
+  public page: any;
   public pagination: any = {};
   public pageSize: number = 0;
   public poped: boolean = false;
   public minimized: boolean = false;
   public position: { top, left };
   public move: boolean = false;
+  public currentData: any;
+  public count: number;
 
   constructor(
     private filterService: FilterService,
@@ -75,6 +77,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public ngOnInit() {
     this.filterService.filters = this.config.list;
     this.filtersOfList = this.filterService.filters;
+    // this.initPagination(this.data);
   }
 
   public ngOnChanges() {
@@ -132,13 +135,16 @@ export class DynamicListComponent implements OnInit, OnChanges {
             obj['link'] = format(element.link, el);
           } else if (element.endpoint) {
             obj['endpoint'] = format(element.endpoint, el);
-          } else if (element.type === 'button') {
+          }
+          if (element.type === 'button') {
             obj.templateOptions = {
               label: element.label,
-              icon: element.icon.slice(element.icon.indexOf('-') + 1),
+              icon: element.icon ? element.icon.slice(element.icon.indexOf('-') + 1) : null,
               small: true,
               mb: false,
-              action: element.action
+              p: true,
+              action: element.action,
+              text: format(element.text, el)
             };
           }
           if (element.fields) {
@@ -300,23 +306,22 @@ export class DynamicListComponent implements OnInit, OnChanges {
   }
 
   public initPagination(data) {
-    if (this.pagination.offset !== this.offset) {
+    if (data !== this.currentData || data.count !== this.count) {
+      this.selectedAll = false;
       let count = data.count;
-      let length = this.limit ? this.limit : data.results.length;
-      if (!this.limit && !this.offset) {
-        this.limit = length;
-        this.offset = length;
+      let length = data.results.length;
+      this.count = length;
+      if (length === 0) {
+        this.pageSize = 10;
         this.page = 1;
-      } else {
+        return;
+      }
+      if (!this.offset) {
+        this.page = 1;
+      } else if (this.offset) {
         this.page = (this.offset / this.limit) + 1;
       }
-      if (count % length === 0) {
-        this.pageSize = (count / length) * 10;
-      } else if (count % length > 0) {
-        this.pageSize = (Math.ceil(count / length) * 10);
-      }
-      this.pagination['limit'] = this.limit;
-      this.pagination['offset'] = this.offset;
+      this.pageSize = (count / this.limit) * 10;
     }
   }
 

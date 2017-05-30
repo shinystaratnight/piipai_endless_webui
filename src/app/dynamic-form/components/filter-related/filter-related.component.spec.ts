@@ -3,6 +3,7 @@ import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing'
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { FilterRelatedComponent } from './filter-related.component';
 
@@ -40,7 +41,7 @@ describe('FilterRelatedComponent', () => {
         FilterRelatedComponent
       ],
       providers: [{provide: FilterService, useValue: mockFilterValue}],
-      imports: [],
+      imports: [ RouterTestingModule ],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
   });
@@ -83,10 +84,12 @@ describe('FilterRelatedComponent', () => {
           id: 5
         }
       ];
+      spyOn(comp, 'updateFilter');
       comp.ngOnInit();
       expect(comp.elements).toEqual(queries);
       expect(comp.count).toEqual(5);
       expect(comp.query).toEqual('company=some id&company=another id&');
+      expect(comp.updateFilter).toHaveBeenCalled();
     });
 
     it('should update filter by query from URL', async(() => {

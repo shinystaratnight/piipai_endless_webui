@@ -3,6 +3,7 @@ import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing'
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { FilterChoiceComponent } from './filter-choice.component';
 
@@ -42,7 +43,7 @@ describe('FilterChoiceComponent', () => {
         FilterChoiceComponent
       ],
       providers: [{provide: FilterService, useValue: mockFilterService}],
-      imports: [],
+      imports: [ RouterTestingModule ],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
   });

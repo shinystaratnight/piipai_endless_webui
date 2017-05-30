@@ -8,6 +8,7 @@ export class FilterService {
   public queries: any[] = [];
   public query: any;
   public _paramsOfFilters: any;
+  public filterList: any = [];
 
   constructor(
     private gfs: GenericFormService
@@ -17,15 +18,19 @@ export class FilterService {
   }
 
   set filters(filters) {
-    filters.filters.forEach((el) => {
-      el.listName = filters.list;
-    });
-    this.parseFilters(filters.filters, this.paramsOfFilters, filters.list);
-    this._filters.push(...filters.filters);
+    if (this.filterList.indexOf(filters.list) < 0) {
+      this.filterList.push(filters.list);
+      filters.filters.forEach((el) => {
+        el.listName = filters.list;
+      });
+      this.parseFilters(filters.filters, this.paramsOfFilters, filters.list);
+      this._filters.push(...filters.filters);
+    }
   }
 
   set paramsOfFilters(params) {
     this._paramsOfFilters[params.param] = params.value;
+    this.parseFilters(this.filters, this.paramsOfFilters, params.list);
   }
 
   get filters() {
@@ -50,6 +55,7 @@ export class FilterService {
         this.deleteFilters(filters, name);
       }
     });
+    this.filterList.splice(this.filterList.indexOf(name), 1);
   }
 
   public getQuery(list) {
@@ -96,7 +102,7 @@ export class FilterService {
   public parseFilters(filters, params, list) {
     filters.forEach((el) => {
       if (el.type === 'related') {
-        this.gfs.getAll(el.data.endpoint).subscribe(
+        this.gfs.getByQuery(el.data.endpoint, '?limit=-1').subscribe(
           (res) => el.options = res.results
         );
       }
@@ -146,6 +152,7 @@ export class FilterService {
       }
     });
     this.queries.splice(this.queries.indexOf(result), 1);
+    this._paramsOfFilters = {};
   }
 
 }

@@ -367,8 +367,7 @@ describe('GenericListComponent', () => {
         let queryParams = {
           'companyaddress.f.company': '1c80c973-1c9e-4392-b044-da9c450c631b',
           'companyaddress.f.company__type': 'master',
-          'companyaddress.p.limit': '2',
-          'companyaddress.p.offset': '2',
+          'companyaddress.p.page': 2,
           'companyaddress.s.ordering': '-company.name'
         };
         spyOn(router, 'navigate');
@@ -392,29 +391,48 @@ describe('GenericListComponent', () => {
         let query = {
           filter: 'company=1c80c973-1c9e-4392-b044-da9c450c631b&company__type=master',
           sort: 'ordering=-company.name',
-          pagination: 'limit=2&offset=2'
+          pagination: 'limit=1&offset=0'
         };
         let list = 'companyaddress';
         let queryParams = {
           'companyaddress.f.company': '1c80c973-1c9e-4392-b044-da9c450c631b',
           'companyaddress.f.company__type': 'master',
-          'companyaddress.p.limit': 2,
-          'companyaddress.p.offset': 2,
+          'companyaddress.p.page': 1,
           'companyaddress.s.ordering': '-company.name'
         };
         spyOn(comp, 'getData');
         spyOn(comp, 'generateQuery');
+        comp.count = 1;
+        comp.limit = 1;
         comp.parseUrl(queryParams, list);
         let target = comp.getTable(list);
         expect(target.query).toEqual(query);
-        expect(target.limit).toEqual(2);
-        expect(target.offset).toEqual(2);
+        expect(target.limit).toEqual(1);
+        expect(target.offset).toEqual(0);
         expect(target.sorted).toEqual({
           'company.name': 'desc'
         });
         expect(comp.getData)
           .toHaveBeenCalledWith(table.endpoint, comp.generateQuery(target.query), target);
         expect(comp.generateQuery).toHaveBeenCalledWith(target.query);
+      });
+
+    });
+
+    describe('setPage method', () => {
+
+      it('should calculate page by query', async() => {
+        let params = {
+          limit: 2,
+          offset: 2
+        };
+        comp.pagination = {};
+        let result;
+        Object.keys(params).forEach((elem, i , arr) => {
+          result = comp.setPage(elem, params[elem]);
+        });
+        expect(comp.pagination).toEqual(params);
+        expect(result).toEqual(2);
       });
 
     });

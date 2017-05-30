@@ -57,7 +57,8 @@ describe('DynamicListComponent', () => {
               ],
               type: 'button',
               action: 'openMap',
-              icon: 'fa-glob'
+              icon: 'fa-glob',
+              text: '{company.type}'
             }
           ]
         },
@@ -201,6 +202,7 @@ describe('DynamicListComponent', () => {
       comp.data = {};
       comp.active = false;
       comp.id = 5;
+      spyOn(comp, 'initPagination');
       comp.ngOnChanges();
       expect(+comp.datatable.nativeElement.style.zIndex).toEqual(25);
       comp.active = true;
@@ -218,6 +220,7 @@ describe('DynamicListComponent', () => {
       };
       spyOn(comp, 'updateSort');
       spyOn(comp, 'resetSort');
+      spyOn(comp, 'initPagination');
       comp.ngOnChanges();
       expect(comp.sortedColumns).toEqual(comp.sorted);
       expect(comp.updateSort).toHaveBeenCalled();
@@ -262,7 +265,9 @@ describe('DynamicListComponent', () => {
                   icon: 'glob',
                   small: true,
                   mb: false,
-                  action: 'openMap'
+                  action: 'openMap',
+                  text: 'master',
+                  p: true
                 },
                 fields: [
                   {
@@ -537,11 +542,6 @@ describe('DynamicListComponent', () => {
     }));
 
     it('should init pagination properties', async(() => {
-      comp.limit = 0;
-      comp.offset = 0;
-      comp.initPagination(data);
-      expect(comp.limit).toEqual(1);
-      expect(comp.pageSize).toEqual(40);
       data.count = 1;
       comp.limit = 1;
       comp.offset = 0;

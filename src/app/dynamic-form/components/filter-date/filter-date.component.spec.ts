@@ -5,6 +5,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { FilterDateComponent } from './filter-date.component';
 
@@ -59,7 +60,7 @@ describe('FilterDateComponent', () => {
         FilterDateComponent
       ],
       providers: [{provide: FilterService, useValue: mockFilterService}],
-      imports: [ NgbModule.forRoot(), FormsModule ],
+      imports: [ NgbModule.forRoot(), FormsModule, RouterTestingModule ],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
   });
@@ -127,11 +128,9 @@ describe('FilterDateComponent', () => {
         let query = '?from=10-03-17';
         spyOn(fs, 'generateQuery');
         spyOn(comp, 'parseDate');
-        spyOn(comp, 'createInputs');
         comp.selectQuery(query);
         expect(fs.generateQuery).toHaveBeenCalled();
         expect(comp.parseDate).toHaveBeenCalled();
-        expect(comp.createInputs).toHaveBeenCalled();
         expect(comp.query).toEqual(query);
         expect(comp.picker).toBeFalsy();
     })));
@@ -167,20 +166,20 @@ describe('FilterDateComponent', () => {
       let from = '10-03-17';
       let result = [
         {
-          query: 'updated_at__from',
+          query: 'updated_at_0',
           label: 'From date',
           maxDate: to
         },
         {
-          query: 'updated_at__to',
+          query: 'updated_at_1',
           label: 'To date',
           minDate: from
         }
       ];
       comp.config = config;
       comp.data = {
-        updated_at__to: to,
-        updated_at__from: from
+        updated_at_1: to,
+        updated_at_0: from
       };
       comp.updateConfig();
       expect(comp.config.input).toEqual(result);

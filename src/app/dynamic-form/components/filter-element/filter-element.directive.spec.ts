@@ -3,6 +3,7 @@ import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FilterService } from './../../services/filter.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { FilterElementDirective } from './filter-element.directive';
 import { FilterChoiceComponent } from './../filter-choice/filter-choice.component';
@@ -51,7 +52,7 @@ describe('FilterElementDirective', () => {
         FilterChoiceComponent
       ],
       providers: [{provide: FilterService, useValue: mockFilterService}],
-      imports: [],
+      imports: [ RouterTestingModule ],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
   });

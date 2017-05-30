@@ -1,5 +1,6 @@
 import { FilterService } from './../../services/filter.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'filter-related',
@@ -18,7 +19,8 @@ export class FilterRelatedComponent implements OnInit {
   public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private fs: FilterService
+    private fs: FilterService,
+    private route: ActivatedRoute
   ) {}
 
   public ngOnInit() {
@@ -36,6 +38,9 @@ export class FilterRelatedComponent implements OnInit {
       this.count = 1;
       this.elements.push(this.createElement(this.count));
     }
+    this.route.queryParams.subscribe(
+      (params) => this.updateFilter()
+    );
   }
 
   public deleteValue(item) {
@@ -120,6 +125,29 @@ export class FilterRelatedComponent implements OnInit {
       let value = el.split('=')[1];
       this.elements.push(this.createElement(this.count, value));
     });
+  };
+
+  public updateFilter() {
+    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    if (data) {
+      if (data.byQuery) {
+        this.elements = [];
+        this.parseQuery(data.query);
+      } else {
+        this.elements = [];
+        let counts = data.map((el) => el.id);
+        this.elements.push(...data);
+        this.count = Math.max(...counts);
+        this.genericQuery(this.elements, this.config.query);
+      }
+    } else {
+      this.query = '';
+      this.elements.length = 1;
+      this.elements[0].data = '';
+      if (this.config.options) {
+        this.updateOptions(this.config.options);
+      }
+    }
   };
 
   public resetFilter() {

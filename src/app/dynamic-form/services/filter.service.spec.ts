@@ -86,7 +86,7 @@ describe('FilterService', () => {
       ]
     };
     let mockGenericFormService = {
-      getAll() {
+      getByQuery() {
         return Observable.of(response);
       }
     };

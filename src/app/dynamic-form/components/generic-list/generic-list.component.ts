@@ -20,6 +20,9 @@ export class GenericListComponent implements OnInit {
   public tableId: number = 1;
   public existingIds: number[] = [];
   public res: any;
+  public limit: any;
+  public pagination: any = {};
+  public count: number;
 
   constructor(
     private gfs: GenericFormService,
@@ -46,8 +49,16 @@ export class GenericListComponent implements OnInit {
     );
   }
 
-  public getData(endpoint, query = null, table) {
-    if (query) {
+  public getData(endpoint, query = null, table, first = false) {
+    if (first) {
+      this.gfs.getAll(endpoint).subscribe(
+        (data) => {
+          this.limit = data.count > data.results.length ? data.results.length : data.count;
+          this.count = data.results.length;
+          this.getMetadata(endpoint, table);
+        }
+      );
+    } else if (query) {
       this.gfs.getByQuery(endpoint, query).subscribe(
         (data) => table.data = data
       );
@@ -95,7 +106,7 @@ export class GenericListComponent implements OnInit {
       table['first'] = true;
       this.first = true;
     }
-    this.getMetadata(endpoint, table);
+    this.getData(endpoint, null, table, true);
     return table;
   }
 
@@ -144,6 +155,10 @@ export class GenericListComponent implements OnInit {
           let key = (el === 'filter') ? 'f.' :
             (el === 'sort') ? 's.' :
             (el === 'pagination') ? 'p.' : '';
+          if (el === 'pagination') {
+            queryParams[`${list}.${key}page`] = this.setPage(keyValue[0], keyValue[1]);
+            return;
+          }
           queryParams[`${list}.${key}${keyValue[0]}`] = keyValue[1];
         });
       }
@@ -152,6 +167,7 @@ export class GenericListComponent implements OnInit {
   }
 
   public parseUrl(queryParams, list) {
+    this.fs.resetQueries(list);
     let pagination = {};
     let sorted = {};
     let queryList = {
@@ -167,12 +183,19 @@ export class GenericListComponent implements OnInit {
         if (params[1] === 'f') {
           this.fs.paramsOfFilters = {
             param: params.slice(2).toString(),
-            value: queryParams[el]
+            value: queryParams[el],
+            list
           };
           queryList['filter'] += `${params.slice(2).toString()}=${queryParams[el]}&`;
         } else if (params[1] === 'p') {
-          pagination[params[2]] = queryParams[el];
-          queryList['pagination'] += `${params[2]}=${queryParams[el]}&`;
+          let offset;
+          if (params[2] === 'page') {
+            pagination['page']
+              = ((queryParams[el] - 1) * this.limit > this.count && this.limit !== 1)
+                ? 1 : queryParams[el];
+            queryList['pagination']
+              = `limit=${this.limit}&offset=${this.limit * (pagination['page'] - 1)}`;
+          }
         } else if (params[1] === 's') {
           let fields = queryParams[el].split(',');
           fields.forEach((elem) => {
@@ -183,16 +206,27 @@ export class GenericListComponent implements OnInit {
         }
       }
     });
-    table.limit = pagination['limit'] || '';
-    table.offset = pagination['offset'] || '';
+    table.limit = this.limit;
+    table.offset = 0;
+    let page = pagination['page'];
+    if (page) {
+      table.offset = (page === 1) ? 0 : (page - 1) * this.limit;
+    }
     table.sorted = sorted;
     Object.keys(queryList).forEach((el) => {
-      if (el === 'pagination' || el === 'filter') {
+      if (el === 'filter') {
         queryList[el] = queryList[el].substring(0, queryList[el].length - 1);
       }
     });
     table.query = queryList;
     this.getData(table.endpoint, this.generateQuery(table.query), table);
+  }
+
+  public setPage(param, value) {
+    this.pagination[param] = value;
+    if (this.pagination['limit'] && this.pagination['offset']) {
+      return (this.pagination['offset'] / this.pagination['limit']) + 1;
+    }
   }
 
 }

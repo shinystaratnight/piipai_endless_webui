@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'filter-choice',
@@ -13,16 +14,14 @@ export class FilterChoiceComponent implements OnInit {
   public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private fs: FilterService
+    private fs: FilterService,
+    private route: ActivatedRoute
   ) {}
 
   public ngOnInit() {
-    let data = this.fs.getQueries(this.config.listName, this.config.key);
-    if (data.byQuery) {
-      this.query = data.query.split('=')[1];
-    } else {
-      this.query = data;
-    }
+    this.route.queryParams.subscribe(
+      (params) => this.updateFilter()
+    );
   }
 
   public select(value) {
@@ -41,6 +40,15 @@ export class FilterChoiceComponent implements OnInit {
     this.event.emit({
       list: this.config.listName
     });
+  }
+
+  public updateFilter() {
+    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    if (data.byQuery) {
+      this.query = data.query.split('=')[1];
+    } else {
+      this.query = data;
+    }
   }
 
   public resetFilter() {

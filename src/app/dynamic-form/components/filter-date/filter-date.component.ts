@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
+import { ActivatedRoute } from '@angular/router';
 import moment from 'moment';
 
 @Component({
@@ -21,28 +22,20 @@ export class FilterDateComponent implements OnInit {
   public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private fs: FilterService
+    private fs: FilterService,
+    private route: ActivatedRoute
   ) { }
 
   public ngOnInit() {
     this.createInputs(this.config.input, this.data);
-    let data = this.fs.getQueries(this.config.listName, this.config.key);
-    if (data) {
-      if (data.byQuery) {
-        this.query = data.query;
-        this.parseDate(data.query, moment);
-        this.picker = true;
-      } else {
-        this.data = data.data;
-        this.query = data.query;
-      }
-    }
-    this.updateConfig();
+    this.route.queryParams.subscribe(
+      (params) => this.updateFilter()
+    );
   }
 
   public selectQuery(query) {
-    this.createInputs(this.config.input, this.data);
     this.picker = false;
+    this.resetData(this.data);
     this.parseDate(query, moment);
     this.query = query;
     this.fs.generateQuery(query, this.config.key, this.config.listName, { data: this.data, query });
@@ -70,9 +63,9 @@ export class FilterDateComponent implements OnInit {
 
   public updateConfig() {
     this.config.input.forEach((el, i, arr) => {
-      if (el.query.indexOf('__from') > 0) {
+      if (el.query.indexOf('_0') > 0) {
         el.maxDate = this.data[arr[1].query];
-      } else if (el.query.indexOf('__to') > 0) {
+      } else if (el.query.indexOf('_1') > 0) {
         el.minDate = this.data[arr[0].query];
       }
     });
@@ -113,6 +106,25 @@ export class FilterDateComponent implements OnInit {
     keys.forEach((el) => {
       data[el] = '';
     });
+  }
+
+  public updateFilter() {
+    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    if (data) {
+      if (data.byQuery) {
+        this.query = data.query;
+        this.parseDate(data.query, moment);
+        this.picker = true;
+      } else {
+        this.data = data.data;
+        this.query = data.query;
+      }
+    } else {
+      this.query = '';
+      this.resetData(this.data);
+      this.picker = false;
+    }
+    this.updateConfig();
   }
 
   public resetFilter() {
