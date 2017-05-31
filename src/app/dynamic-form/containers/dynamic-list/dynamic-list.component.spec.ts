@@ -22,6 +22,7 @@ describe('DynamicListComponent', () => {
       columns: [
         {
           name: 'first_name',
+          sort_field: 'first_name',
           label: 'First Name',
           sort: true,
           sorted: 'asc',
@@ -40,6 +41,7 @@ describe('DynamicListComponent', () => {
         },
         {
           name: 'branch',
+          sort_field: 'branch',
           label: 'Branch',
           sort: true,
           sorted: 'asc',
@@ -81,6 +83,7 @@ describe('DynamicListComponent', () => {
         },
         {
           name: 'phone_mobile',
+          sort_field: 'phone_mobile',
           label: 'Mobile Phone',
           sort: true,
           sorted: 'desc',
@@ -239,6 +242,7 @@ describe('DynamicListComponent', () => {
         highlight: true,
         content: [
           {
+            label: 'First Name',
             name: 'first_name',
             content: [
               {
@@ -255,6 +259,7 @@ describe('DynamicListComponent', () => {
             ]
           },
           {
+            label: 'Branch',
             name: 'branch',
             content: [
               {
@@ -286,6 +291,7 @@ describe('DynamicListComponent', () => {
             contextMenu: undefined
           },
           {
+            label: 'Gender',
             name: 'gender',
             content: [
               {
@@ -296,6 +302,7 @@ describe('DynamicListComponent', () => {
             ]
           },
           {
+            label: 'Mobile Phone',
             name: 'phone_mobile',
             content: [
               {
@@ -356,14 +363,15 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'sortTable');
       field = {
         name: 'first_name',
+        sort_field: 'first_name',
         sorted: 'asc'
       };
       comp.sorting(field);
-      expect(comp.sortedColumns).toEqual({first_name: 'desc'});
-      expect(field.sorted).toEqual('desc');
-      comp.sorting(field);
       expect(comp.sortedColumns).toEqual({first_name: 'asc'});
       expect(field.sorted).toEqual('asc');
+      comp.sorting(field);
+      expect(comp.sortedColumns).toEqual({first_name: 'desc'});
+      expect(field.sorted).toEqual('desc');
       expect(comp.event.emit).toHaveBeenCalled();
       expect(comp.sortTable).toHaveBeenCalled();
     }));
@@ -594,8 +602,6 @@ describe('DynamicListComponent', () => {
       spyOn(fs, 'getFiltersOfList');
       comp.popedTable();
       expect(comp.poped).toEqual(true);
-      expect(comp.position).toBeDefined();
-      expect(comp.datatable.nativeElement.style.position).toEqual('fixed');
       expect(fs.getFiltersOfList).toHaveBeenCalled();
     })));
 
@@ -607,18 +613,9 @@ describe('DynamicListComponent', () => {
       comp.config = config;
       comp.poped = true;
       comp.minimized = true;
-      comp.position = {
-        top: 10,
-        left: 15
-      };
       comp.unpopedTable();
       expect(comp.poped).toEqual(false);
       expect(comp.minimized).toEqual(false);
-      expect(comp.datatable.nativeElement.style.position).toEqual('relative');
-      expect(comp.datatable.nativeElement.style.top).toEqual('0px');
-      expect(comp.datatable.nativeElement.style.left).toEqual('0px');
-      expect(comp.datatable.offsetTop).toEqual(comp.position.top);
-      expect(comp.datatable.offsetLeft).toEqual(comp.position.left);
     }));
 
   });
@@ -731,6 +728,21 @@ describe('DynamicListComponent', () => {
       comp.addHighlight(field, elem, row, values);
       expect(row.highlight).toBeTruthy();
     }));
+  });
+
+  describe('openList method', () => {
+
+    it('should be defined', async(() => {
+      expect(comp.openList).toBeDefined();
+    }));
+
+    it('should open new list', async(() => {
+      let endpoint = 'some endpoint';
+      spyOn(comp.list, 'emit');
+      comp.openList(endpoint);
+      expect(comp.list.emit).toHaveBeenCalledWith({endpoint});
+    }));
+
   });
 
 });

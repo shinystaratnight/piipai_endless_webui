@@ -73,14 +73,23 @@ export class FormElementDirective implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    const component = components[this.config.type];
-    const factory = this.resolver.resolveComponentFactory<any>(component);
-    this.component = this.container.createComponent(factory);
-    this.component.instance.config = this.config;
-    this.component.instance.group = this.group;
-    this.component.instance.errors = this.errors;
-    this.component.instance.event = this.event;
-    this.component.instance.message = this.message;
-    this.component.instance.buttonAction = this.buttonAction;
+    if (this.checkElement(this.config.type)) {
+      const component = components[this.config.type];
+      const factory = this.resolver.resolveComponentFactory<any>(component);
+      this.component = this.container.createComponent(factory);
+      this.component.instance.config = this.config;
+      this.component.instance.group = this.group;
+      this.component.instance.errors = this.errors;
+      this.component.instance.event = this.event;
+      this.component.instance.message = this.message;
+      this.component.instance.buttonAction = this.buttonAction;
+    }
+  }
+
+  public checkElement(type) {
+    if (components[type]) {
+      return true;
+    }
+    return false;
   }
 }

@@ -1,0 +1,51 @@
+@import '../../../node_modules/bootstrap/scss/bootstrap.scss';
+
+$datatable-background-color: white;
+$datatable-top: 250px;
+$datatable-left: $datatable-top;
+$row-datatable-margin-bottom: $spacer;
+$row-datatable-border-width: 2px;
+$row-datatable-border-color: rgba($gray-light, .5);
+$cell-datatable-width: 40%;
+
+.datatable {
+  background-color: $datatable-background-color;
+
+  &-title-hover {
+    cursor: pointer;
+  }
+
+  &.poped {
+    position: fixed;
+    top: $datatable-top;
+    left: $datatable-left;
+  }
+
+  @include media-breakpoint-down('sm') {
+    table tr {
+      margin-bottom: $row-datatable-margin-bottom;
+      display: block;
+      border-bottom: $row-datatable-border-width solid $row-datatable-border-color;
+    }
+    table td {
+      display: block;
+    }
+    table td:last-child {
+      border-bottom: 0;
+    }
+    table td::before {
+      display: block;
+      text-align: left;
+      width: $cell-datatable-width;
+      content: attr(data-label);
+      float: left;
+    }
+    table td::after {
+      display: table;
+      clear: both;
+      content: '';
+      width: 0;
+      height: 0;
+    }
+  }
+}

@@ -75,9 +75,10 @@ export class DynamicListComponent implements OnInit, OnChanges {
   ) {}
 
   public ngOnInit() {
-    this.filterService.filters = this.config.list;
-    this.filtersOfList = this.filterService.filters;
-    // this.initPagination(this.data);
+    if (this.config.list.filters) {
+      this.filterService.filters = this.config.list;
+      this.filtersOfList = this.filterService.filters;
+    }
   }
 
   public ngOnChanges() {
@@ -90,7 +91,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
       this.sortedColumns = this.sorted;
       let names = Object.keys(this.sorted);
       if (names.length) {
-        Object.keys(this.sorted).forEach((el) => {
+        names.forEach((el) => {
           this.updateSort(config.list.columns, el, this.sorted[el]);
         });
       } else {
@@ -122,6 +123,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
       }
       config.forEach((col) => {
         let cell = {
+          label: col.label,
           name: col.name,
           content: [],
           contextMenu: col.context_menu
@@ -175,19 +177,20 @@ export class DynamicListComponent implements OnInit, OnChanges {
     let result = {};
     config.forEach((el) => {
       if (el.sorted) {
-        result[el.name] = el.sorted;
+        result[el.sort_field] = el.sorted;
       }
     });
     return result;
   }
 
   public sorting(field) {
-    if (this.sortedColumns[field.name]) {
-      this.sortedColumns[field.name] = this.sortedColumns[field.name] === 'asc' ? 'desc' : 'asc';
+    if (this.sortedColumns[field.sort_field]) {
+      this.sortedColumns[field.sort_field]
+        = this.sortedColumns[field.sort_field] === 'asc' ? 'desc' : 'asc';
       field.sorted = field.sorted === 'asc' ? 'desc' : 'asc';
     } else {
-      let key = 'desc';
-      this.sortedColumns[field.name] = key;
+      let key = 'asc';
+      this.sortedColumns[field.sort_field] = key;
       field.sorted = key;
     }
     this.event.emit({
@@ -199,7 +202,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
 
   public resetSort(field, emit) {
     delete field.sorted;
-    delete this.sortedColumns[field.name];
+    delete this.sortedColumns[field.sort_field];
     if (emit) {
       this.event.emit({
         type: 'sort',
@@ -211,7 +214,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
 
   public updateSort(columns, name, value) {
     columns.forEach((el) => {
-      if (name === el.name) {
+      if (name === el.sort_field) {
         el.sorted = value;
       }
     });
@@ -361,22 +364,14 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public popedTable() {
     this.filtersOfList = this.filterService.getFiltersOfList(this.config.list.list);
     this.poped = true;
-    this.position = {
-      top: this.datatable.nativeElement.offsetTop,
-      left: this.datatable.nativeElement.offsetLeft
-    };
-    this.datatable.nativeElement.style.position = 'fixed';
   }
 
   public unpopedTable() {
-    this.filterService.filters = this.config.list;
+    if (this.config.list.filters) {
+      this.filterService.filters = this.config.list;
+    }
     this.poped = false;
     this.minimized = false;
-    this.datatable.nativeElement.style.position = 'relative';
-    this.datatable.nativeElement.style.top = 0;
-    this.datatable.nativeElement.style.left = 0;
-    this.datatable.offsetTop = this.position.top;
-    this.datatable.offsetLeft = this.position.left;
   }
 
   public minimizeTable() {
@@ -394,7 +389,11 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public buttonHandler(e) {
     this.modalInfo = {};
     if (e.value) {
-      this[e.value](e.el.fields);
+      if (e.value === 'openMap') {
+        this[e.value](e.el.fields);
+      } else if (e.value === 'openList') {
+        this[e.value](e.el.endpoint);
+      }
     }
   }
 
@@ -431,6 +430,12 @@ export class DynamicListComponent implements OnInit, OnChanges {
     } else {
       this.addHighlight(props.join('.'), data[key], row, values);
     }
+  }
+
+  public openList(value) {
+    this.list.emit({
+      endpoint: value
+    });
   }
 
 }

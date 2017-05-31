@@ -21,24 +21,24 @@ describe('FilterDateComponent', () => {
     list: [
       {
         label: 'Today',
-        query: 'updated_at_from=03/03/2017'
+        query: 'updated_at_0=03/03/2017'
       },
       {
         label: 'Last week',
-        query: 'updated_at__from=01/03/2017&updated_at__to=08/03/2017'
+        query: 'updated_at_0=01/03/2017&updated_at_1=08/03/2017'
       },
       {
         label: 'Last month',
-        query: 'updated_at__from=01/03/2017&updated_ad__to=01/04/2017'
+        query: 'updated_at_0=01/03/2017&updated_ad_1=01/04/2017'
       }
     ],
     input: [
       {
-        query: 'updated_at__from',
+        query: 'updated_at_0',
         label: 'From date'
       },
       {
-        query: 'updated_at__to',
+        query: 'updated_at_1',
         label: 'To date'
       }
     ]

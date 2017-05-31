@@ -43,7 +43,11 @@ export class GenericListComponent implements OnInit {
         this.existingIds.push(this.tableId);
         table.id = this.tableId++;
         this.route.queryParams.subscribe(
-          (params) => this.parseUrl(params, table.list)
+          (params) => {
+            if (this.getTable(table.list)) {
+              this.parseUrl(params, table.list);
+            }
+          }
         );
       }
     );
@@ -76,7 +80,9 @@ export class GenericListComponent implements OnInit {
     }
     if (e.type === 'sort' || e.type === 'pagination' || e.type === 'filter') {
       table.query[e.type] = e.query;
-      this.updateUrl(table.query, e.list);
+      if (table.first) {
+        this.updateUrl(table.query, e.list);
+      }
     } else if (e.type === 'close') {
       this.tables.splice(this.tables.indexOf(table), 1);
     } else if (e.type === 'active') {
@@ -105,8 +111,11 @@ export class GenericListComponent implements OnInit {
     if (!this.first) {
       table['first'] = true;
       this.first = true;
+      this.getData(endpoint, null, table, true);
+    } else {
+      this.getMetadata(endpoint, table);
+      this.getData(endpoint, null, table);
     }
-    this.getData(endpoint, null, table, true);
     return table;
   }
 
@@ -121,7 +130,7 @@ export class GenericListComponent implements OnInit {
   }
 
   public listHandler(e) {
-    if (this.checkList(e.endpoint)) {
+    if (this.checkList(e.endpoint) && this.tables.length < 10) {
       this.tables.push(this.createTableData(e.endpoint));
     }
   }
@@ -200,7 +209,7 @@ export class GenericListComponent implements OnInit {
           let fields = queryParams[el].split(',');
           fields.forEach((elem) => {
             let order = elem[0] === '-' ? 'desc' : 'asc';
-            sorted[elem.substring(1)] = order;
+            sorted[elem.substring(elem[0] === '-' ? 1 : 0)] = order;
           });
           queryList['sort'] += `${params[2]}=${queryParams[el]}`;
         }

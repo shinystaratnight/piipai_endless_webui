@@ -1,4 +1,4 @@
-<div #datatable [ngClass]="{'pt-2 pl-2 pr-2 mb-5': !poped}" class="card">
+<div #datatable [ngClass]="{'pt-2 pl-2 pr-2 mb-5': !poped, 'poped': poped}" class="mw-100 datatable">
   <div move [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span>{{config.list.label}}</span>
@@ -31,8 +31,8 @@
     </h5>
   </div>
   <div [class.card-block]="poped" [hidden]="minimized">
-    <filter-block *ngIf="first || poped" [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
-    <action-element [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
+    <filter-block *ngIf="(first || poped) && filtersOfList.length" [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+    <action-element *ngIf="config.list.actions" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
     <h5 class="d-flex justify-content-between align-items-center lead" *ngIf="config.list && !poped">
       <span>{{config.list.label}}</span>
       <i
@@ -45,13 +45,13 @@
         style="cursor: pointer"></i>
     </h5>
     <table class="table table-bordered table-striped table-hover table-sm" *ngIf="config.list">
-      <thead class="thead-default">
+      <thead class="thead-default hidden-sm-down">
         <tr>
           <th class="text-center" style="width: 2rem">
             *
             <input type="checkbox" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
           </th>
-          <th *ngFor="let field of config.list.columns;" class="align-middle">
+          <th *ngFor="let field of config.list.columns;" class="align-middle" [class.datatable-title-hover]="field.sort">
             <i fa
               *ngIf="field.sorted"
               [name]="field.sorted === 'desc' ? 'sort-desc' : 'sort-asc'"
@@ -80,7 +80,7 @@
           <td class="text-center">
             <input type="checkbox" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
           </td>
-          <td *ngFor="let cell of row.content;">
+          <td *ngFor="let cell of row.content;" [attr.data-label]="cell.label">
             <div class="d-flex justify-content-between">
               <ng-container
                 listElement
@@ -106,6 +106,7 @@
         </tr>
       </tbody>
     </table>
+    <div class="mb-2">{{data.count}} {{config.list.label}}</div>
     <ngb-pagination
       [collectionSize]="pageSize"
       [(page)]="page"

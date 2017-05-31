@@ -82,7 +82,7 @@ describe('GenericListComponent', () => {
       }));
 
       it('should update metadata property', async(() => {
-        let table: any = {};
+        let table: any = {first: true};
         metadata = {
           list: {
             list: 'companies'
@@ -101,6 +101,7 @@ describe('GenericListComponent', () => {
         };
         let endpoint = 'endpoint';
         spyOn(comp, 'parseUrl');
+        comp.tables.push(table);
         comp.getMetadata(endpoint, table);
         expect(table.metadata).toEqual(metadata);
         expect(table.list).toEqual('companies');
@@ -165,7 +166,7 @@ describe('GenericListComponent', () => {
           query: 'company.name=Home'
         };
         comp.tables = [];
-        comp.tables.push({ list: event.list });
+        comp.tables.push({ list: event.list, first: true });
         comp.eventHandler(event);
         expect(comp.updateUrl).toHaveBeenCalled();
         expect(comp.getTable(event.list).query).toEqual({ [event.type]: event.query});
