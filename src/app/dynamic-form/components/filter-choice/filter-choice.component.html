@@ -1,5 +1,13 @@
 <div class="ml-2">
   <label>
+    <i
+      fa
+      class="p-2"
+      [name]="isCollapsed ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      style="cursor: pointer"></i>
     {{config.label}}
     <i
       *ngIf="query"
@@ -10,7 +18,7 @@
       style="cursor: pointer"
       (click)="resetFilter()"></i>
   </label>
-  <ul class="list-unstyled">
+  <ul class="list-unstyled filter-element" [ngbCollapse]="isCollapsed">
     <li
       *ngFor="let item of config.list"
       [class.text-primary]="query === item.value"

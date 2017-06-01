@@ -72,6 +72,7 @@ describe('FilterSelectComponent', () => {
       queries = 'Master';
       comp.ngOnInit();
       expect(comp.data).toEqual(queries);
+      expect(comp.isCollapsed).toBeTruthy();
     });
 
     it('should call parseQuery method', () => {

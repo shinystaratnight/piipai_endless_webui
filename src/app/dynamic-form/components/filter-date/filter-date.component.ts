@@ -17,6 +17,7 @@ export class FilterDateComponent implements OnInit {
   public dateFormat: string = 'YYYY-MM-DD';
   public datetimeFormat: string = 'YYYY-MM-DD hh:mm:ss';
   public moment: any = moment;
+  public isCollapsed: boolean = true;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -31,6 +32,7 @@ export class FilterDateComponent implements OnInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
+    this.isCollapsed = (this.query || this.picker) ? false : true;
   }
 
   public selectQuery(query) {

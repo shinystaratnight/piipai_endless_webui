@@ -90,6 +90,7 @@ describe('FilterRelatedComponent', () => {
       expect(comp.count).toEqual(5);
       expect(comp.query).toEqual('company=some id&company=another id&');
       expect(comp.updateFilter).toHaveBeenCalled();
+      expect(comp.isCollapsed).toBeFalsy();
     });
 
     it('should update filter by query from URL', async(() => {

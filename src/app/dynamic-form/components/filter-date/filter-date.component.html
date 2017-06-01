@@ -1,4 +1,12 @@
 <label>
+  <i
+    fa
+    class="p-2"
+    [name]="isCollapsed ? 'eye' : 'eye-slash'"
+    [border]=false
+    (click)="isCollapsed = !isCollapsed"
+    [attr.aria-expanded]="!isCollapsed"
+    style="cursor: pointer"></i>
   {{config.label}}
   <i
     *ngIf="query || picker"
@@ -9,29 +17,31 @@
     style="cursor: pointer"
     (click)="resetFilter()"></i>
 </label>
-<ul class="list-inline d-flex justify-content-between">
-  <li
-    *ngFor="let item of config.list"
-    [class.text-primary]="query === item.query"
-    class="text-muted"
-    style="cursor: pointer"
-    (click)="selectQuery(item.query)">
-      {{item.label}}
-  </li>
-</ul>
+<div [ngbCollapse]="isCollapsed" class="filter-element">
+  <ul class="list-inline d-flex justify-content-between">
+    <li
+      *ngFor="let item of config.list"
+      [class.text-primary]="query === item.query"
+      class="text-muted"
+      style="cursor: pointer"
+      (click)="selectQuery(item.query)">
+        {{item.label}}
+    </li>
+  </ul>
 
-<div class="input-group" [class.mb-1]="!l" *ngFor="let input of config.input; let l = last">
-  <input
-    class="form-control"
-    [attr.placeholder]="input.label"
-    name="dp"
-    [(ngModel)]="data[input.query]"
-    ngbDatepicker
-    #from="ngbDatepicker"
-    [maxDate]="input.maxDate"
-    [minDate]="input.minDate"
-    (ngModelChange)="onChange()">
-  <div class="input-group-addon" (click)="from.toggle()" style="cursor: pointer">
-    <i fa [name]="'calendar'" [border]=true></i>
+  <div class="input-group" [class.mb-1]="!l" *ngFor="let input of config.input; let l = last">
+    <input
+      class="form-control"
+      [attr.placeholder]="input.label"
+      name="dp"
+      [(ngModel)]="data[input.query]"
+      ngbDatepicker
+      #from="ngbDatepicker"
+      [maxDate]="input.maxDate"
+      [minDate]="input.minDate"
+      (ngModelChange)="onChange()">
+    <div class="input-group-addon" (click)="from.toggle()" style="cursor: pointer">
+      <i fa [name]="'calendar'" [border]=true></i>
+    </div>
   </div>
 </div>

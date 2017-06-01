@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 export class FilterChoiceComponent implements OnInit {
   public config: any;
   public query: any;
+  public isCollapsed: boolean = true;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -22,6 +23,7 @@ export class FilterChoiceComponent implements OnInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
+    this.isCollapsed = this.query ? false : true;
   }
 
   public select(value) {

@@ -116,6 +116,7 @@ describe('FilterDateComponent', () => {
       comp.ngOnInit();
       expect(comp.query).toEqual(queries['query']);
       expect(comp.picker).toBeTruthy();
+      expect(comp.isCollapsed).toBeFalsy();
     }));
 
   });

@@ -44,7 +44,8 @@ export class GenericListComponent implements OnInit {
         table.id = this.tableId++;
         this.route.queryParams.subscribe(
           (params) => {
-            if (this.getTable(table.list)) {
+            let target = this.getTable(table.list);
+            if (target) {
               this.parseUrl(params, table.list);
             }
           }
@@ -186,9 +187,11 @@ export class GenericListComponent implements OnInit {
     };
     let table = this.getTable(list);
     let keys = Object.keys(queryParams);
+    let exist = keys.length ? false : true;
     keys.forEach((el) => {
       let params = el.split('.');
       if (params[0] === list) {
+        exist = true;
         if (params[1] === 'f') {
           this.fs.paramsOfFilters = {
             param: params.slice(2).toString(),
@@ -227,8 +230,10 @@ export class GenericListComponent implements OnInit {
         queryList[el] = queryList[el].substring(0, queryList[el].length - 1);
       }
     });
-    table.query = queryList;
-    this.getData(table.endpoint, this.generateQuery(table.query), table);
+    if (exist) {
+      table.query = queryList;
+      this.getData(table.endpoint, this.generateQuery(table.query), table);
+    }
   }
 
   public setPage(param, value) {

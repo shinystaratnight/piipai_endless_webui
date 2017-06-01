@@ -10,6 +10,7 @@ export class FilterSelectComponent implements OnInit {
   public config: any;
   public data: string = '';
   public query: string;
+  public isCollapsed: boolean = true;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -23,6 +24,7 @@ export class FilterSelectComponent implements OnInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
+    this.isCollapsed = this.query ? false : true;
   }
 
   public onChange() {
@@ -50,7 +52,7 @@ export class FilterSelectComponent implements OnInit {
   public parseQuery(query) {
     this.query = query;
     let value = query.split('=')[1];
-    let existValue = this.config.options.filter((el) => el.value === value);
+    let existValue = this.config.options.filter((el) => el.value + '' === value + '');
     if (existValue.length > 0) {
         this.data = value;
     }
@@ -66,6 +68,8 @@ export class FilterSelectComponent implements OnInit {
       } else {
         this.data = data;
       }
+    } else {
+      this.data = '';
     }
   }
 

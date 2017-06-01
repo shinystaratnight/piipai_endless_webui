@@ -1,0 +1,18 @@
+$filter-element-width: 250px;
+$filter-block-height: 400px;
+
+.filter {
+  &-block {
+    max-height: $filter-block-height;
+    overflow-x: auto;
+    width: 100%;
+
+    &-collapsed {
+      white-space: nowrap;
+    }
+  }
+
+  &-element {
+    width: $filter-element-width;
+  }
+}

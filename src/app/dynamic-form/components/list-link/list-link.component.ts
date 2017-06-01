@@ -46,13 +46,17 @@ export class ListLinkComponent implements OnInit {
   }
 
   public action(e) {
+    let arr = this.config.endpoint.split('/');
+    let id = arr[arr.length - 2];
+    arr.splice(arr.length - 2, 1);
+    let endpoint = arr.join('/');
     e.preventDefault();
     e.stopPropagation();
     this.event.emit({
       target: 'form',
-      endpoint: this.config.endpoint,
+      endpoint: endpoint || this.config.endpoint,
       label: this.element.nativeElement.innerText,
-      id: this.config.id
+      id: id || this.config.id
     });
   }
 

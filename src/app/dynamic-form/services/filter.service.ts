@@ -23,7 +23,7 @@ export class FilterService {
       filters.filters.forEach((el) => {
         el.listName = filters.list;
       });
-      this.parseFilters(filters.filters, this.paramsOfFilters, filters.list);
+      this.parseFilters(filters.filters, this.paramsOfFilters, filters.list, true);
       this._filters.push(...filters.filters);
     }
   }
@@ -99,14 +99,16 @@ export class FilterService {
     return query;
   }
 
-  public parseFilters(filters, params, list) {
-    filters.forEach((el) => {
-      if (el.type === 'related') {
-        this.gfs.getByQuery(el.data.endpoint, '?limit=-1').subscribe(
-          (res) => el.options = res.results
-        );
-      }
-    });
+  public parseFilters(filters, params, list, first = false) {
+    if (first) {
+      filters.forEach((el) => {
+        if (el.type === 'related') {
+          this.gfs.getByQuery(el.data.endpoint, '?limit=-1').subscribe(
+            (res) => el.options = res.results
+          );
+        }
+      });
+    }
     if (Object.keys(params).length > 0) {
       filters.forEach((el) => {
         if (params[el.query]) {
@@ -151,7 +153,9 @@ export class FilterService {
        result = el;
       }
     });
-    this.queries.splice(this.queries.indexOf(result), 1);
+    if (this.queries.indexOf(result) >= 0) {
+      this.queries.splice(this.queries.indexOf(result), 1);
+    }
     this._paramsOfFilters = {};
   }
 

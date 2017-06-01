@@ -14,6 +14,7 @@ export class FilterRelatedComponent implements OnInit {
   public item: any;
   public query: string;
   public copyConfig = [];
+  public isCollapsed: boolean = true;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -41,6 +42,7 @@ export class FilterRelatedComponent implements OnInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
+    this.isCollapsed = this.query ? false : true;
   }
 
   public deleteValue(item) {

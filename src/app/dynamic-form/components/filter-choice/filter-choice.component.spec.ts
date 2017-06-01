@@ -78,6 +78,7 @@ describe('FilterChoiceComponent', () => {
       };
       comp.ngOnInit();
       expect(comp.query).toEqual('Home');
+      expect(comp.isCollapsed).toBeFalsy();
     }));
 
   });

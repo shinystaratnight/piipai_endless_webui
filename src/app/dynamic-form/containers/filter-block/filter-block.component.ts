@@ -11,6 +11,8 @@ export class FilterBlockComponent {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  public direction: string = 'down';
+
   public changeQuery(e) {
     this.event.emit(e);
   }
