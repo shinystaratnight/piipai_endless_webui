@@ -40,6 +40,12 @@ export class DynamicListComponent implements OnInit, OnChanges {
   @Input()
   public sorted: any;
 
+  @Input()
+  public innerTables: any;
+
+  @Input()
+  public update: any;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -68,6 +74,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public move: boolean = false;
   public currentData: any;
   public count: number;
+  public innerTableCall: any;
 
   constructor(
     private filterService: FilterService,
@@ -79,11 +86,16 @@ export class DynamicListComponent implements OnInit, OnChanges {
       this.filterService.filters = this.config.list;
       this.filtersOfList = this.filterService.filters;
     }
+    this.innerTableCall = {
+      row: '',
+      cell: ''
+    };
   }
 
   public ngOnChanges() {
     let config = this.config;
     let data = this.data;
+    let innerTables = this.innerTables;
     if (data) {
       this.initPagination(data);
     }
@@ -108,9 +120,21 @@ export class DynamicListComponent implements OnInit, OnChanges {
         this.body = this.prepareData(config.list.columns, data.results, config.list.highlight);
       }
     }
+    if (innerTables && this.innerTableCall) {
+      let currentRow = innerTables[this.innerTableCall.row];
+      if (currentRow) {
+        let currentCell = innerTables[this.innerTableCall.row][this.innerTableCall.cell];
+        if (currentCell) {
+          let cell = innerTables[this.innerTableCall.row][this.innerTableCall.cell];
+          if (cell.metadata && cell.data) {
+            cell.body = this.prepareData(cell.metadata.list.columns, cell.data.results);
+          }
+        }
+      }
+    }
   }
 
-  public prepareData(config, data, highlight) {
+  public prepareData(config, data, highlight = null) {
     let format = require('formatstring');
     let prepareData = [];
     data.forEach((el) => {
@@ -123,6 +147,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
       }
       config.forEach((col) => {
         let cell = {
+          id: el.id,
           label: col.label,
           name: col.name,
           content: [],
@@ -131,6 +156,8 @@ export class DynamicListComponent implements OnInit, OnChanges {
         col.content.forEach((element) => {
           let obj: any = {};
           let props;
+          obj['rowId'] = el.id;
+          obj['key'] = col.name;
           obj['name'] = element.field;
           obj['type'] = element.type;
           if (element.link) {
@@ -391,8 +418,8 @@ export class DynamicListComponent implements OnInit, OnChanges {
     if (e.value) {
       if (e.value === 'openMap') {
         this[e.value](e.el.fields);
-      } else if (e.value === 'openList') {
-        this[e.value](e.el.endpoint);
+      } else if (e.value === 'openList' || e.value === 'openDiff') {
+        this[e.value](e.el.endpoint, e.el);
       }
     }
   }
@@ -435,6 +462,18 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public openList(value) {
     this.list.emit({
       endpoint: value
+    });
+  }
+
+  public openDiff(endpoint, el) {
+    this.innerTableCall.row = el.rowId;
+    this.innerTableCall.cell = el.key;
+    this.list.emit({
+      endpoint,
+      innerTable: true,
+      list: this.config.list.list,
+      key: el.key,
+      row: el.rowId
     });
   }
 

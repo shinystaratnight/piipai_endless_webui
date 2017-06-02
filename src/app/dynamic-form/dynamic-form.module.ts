@@ -33,6 +33,7 @@ import { FilterElementDirective } from './components/filter-element/filter-eleme
 import { FilterService } from './services/filter.service';
 import { ListCheckboxComponent } from './components/list-checkbox/list-checkbox.component';
 import { FilterSelectComponent } from './components/filter-select/filter-select.component';
+import { ListTableComponent } from './components/list-table/list-table.component';
 
 import { ActionElementComponent } from './components/action-element/action-element.component';
 
@@ -78,7 +79,8 @@ import { MoveDirective } from './directives/move.directive';
     GenericListComponent,
     ListCheckboxComponent,
     MoveDirective,
-    FilterSelectComponent
+    FilterSelectComponent,
+    ListTableComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [

@@ -19,6 +19,13 @@ $cell-datatable-width: 40%;
     left: $datatable-left;
   }
 
+  a {
+    color: inherit;
+    &:hover {
+      color: $brand-primary;
+    }
+  }
+
   @include media-breakpoint-down('sm') {
     table tr {
       margin-bottom: $row-datatable-margin-bottom;
@@ -37,6 +44,7 @@ $cell-datatable-width: 40%;
       width: $cell-datatable-width;
       content: attr(data-label);
       float: left;
+      font-weight: bold;
     }
     table td::after {
       display: table;

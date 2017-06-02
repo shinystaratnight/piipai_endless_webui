@@ -186,6 +186,19 @@ describe('DynamicListComponent', () => {
     expect(comp.config).toBeDefined();
   });
 
+  describe('ngOnInit method', () => {
+
+    it('should init innerTableCall property', async(() => {
+      comp.config = config;
+      comp.ngOnInit();
+      expect(comp.innerTableCall).toEqual({
+        row: '',
+        cell: ''
+      });
+    }));
+
+  });
+
   describe('ngOnChanges method', () => {
 
     it('should called prepareData method', async(() => {
@@ -232,6 +245,35 @@ describe('DynamicListComponent', () => {
       expect(comp.resetSort).toHaveBeenCalled();
     }));
 
+    it('should create body for inner tables', async(() => {
+      comp.innerTableCall = {
+        row: 125,
+        cell: 'diff'
+      };
+      comp.config = config;
+      let tables = {
+        125: {
+          diff: {
+            metadata: {
+              list: {
+                columns: []
+              }
+            },
+            data: {
+              results: []
+            },
+            body: {}
+          }
+        }
+      };
+      comp.innerTables = tables;
+      comp.data = {};
+      spyOn(comp, 'prepareData');
+      spyOn(comp, 'initPagination');
+      comp.ngOnChanges();
+      expect(comp.prepareData).toHaveBeenCalled();
+    }));
+
   });
 
   describe('prepareData method', () => {
@@ -242,10 +284,13 @@ describe('DynamicListComponent', () => {
         highlight: true,
         content: [
           {
+            id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'First Name',
             name: 'first_name',
             content: [
               {
+                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                key: 'first_name',
                 name: 'first_name',
                 type: 'text',
                 value: 'Test'
@@ -259,10 +304,13 @@ describe('DynamicListComponent', () => {
             ]
           },
           {
+            id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'Branch',
             name: 'branch',
             content: [
               {
+                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                key: 'branch',
                 name: undefined,
                 type: 'button',
                 templateOptions: {
@@ -291,10 +339,13 @@ describe('DynamicListComponent', () => {
             contextMenu: undefined
           },
           {
+            id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'Gender',
             name: 'gender',
             content: [
               {
+                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                key: 'gender',
                 name: 'gender',
                 type: 'text',
                 value: null
@@ -302,22 +353,29 @@ describe('DynamicListComponent', () => {
             ]
           },
           {
+            id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'Mobile Phone',
             name: 'phone_mobile',
             content: [
               {
+                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                key: 'phone_mobile',
                 name: 'phone_mobile',
                 type: 'link',
                 link: 'tel:+380978107725',
                 value: '+380978107725'
               },
               {
+                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                key: 'phone_mobile',
                 name: 'email',
                 type: 'link',
                 link: 'mailto:test.testovich@gmail.com',
                 value: 'test.testovich@gmail.com'
               },
               {
+                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                key: 'phone_mobile',
                 name: 'last_name',
                 type: 'link',
                 endpoint: '/ecore/api/v2/contacts/8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -656,6 +714,14 @@ describe('DynamicListComponent', () => {
         }
       };
       spyOn(comp, 'openMap');
+      spyOn(comp, 'openList');
+      spyOn(comp, 'openDiff');
+      comp.buttonHandler(event);
+      expect(comp[event.value]).toHaveBeenCalled();
+      event.value = 'openList';
+      comp.buttonHandler(event);
+      expect(comp[event.value]).toHaveBeenCalled();
+      event.value = 'openDiff';
       comp.buttonHandler(event);
       expect(comp[event.value]).toHaveBeenCalled();
     });
@@ -741,6 +807,33 @@ describe('DynamicListComponent', () => {
       spyOn(comp.list, 'emit');
       comp.openList(endpoint);
       expect(comp.list.emit).toHaveBeenCalledWith({endpoint});
+    }));
+
+  });
+
+  describe('openDiff method', () => {
+
+    it('should be defined', async(() => {
+      expect(comp.openList).toBeDefined();
+    }));
+
+    it('should open new list', async(() => {
+      comp.innerTableCall = {};
+      let elem = {
+        rowId: '124',
+        key: 'diff'
+      };
+      let endpoint = 'some endpoint';
+      comp.config = config;
+      spyOn(comp.list, 'emit');
+      comp.openDiff(endpoint, elem);
+      expect(comp.list.emit).toHaveBeenCalledWith({
+        endpoint,
+        innerTable: true,
+        list: config.list.list,
+        key: elem.key,
+        row: elem.rowId
+      });
     }));
 
   });

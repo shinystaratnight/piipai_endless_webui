@@ -35,26 +35,35 @@ export class GenericListComponent implements OnInit {
     this.tables.push(this.createTableData(this.endpoint));
   }
 
-  public getMetadata(endpoint, table) {
+  public getMetadata(endpoint, table, inner = false, outer = null) {
     this.gfs.getMetadata(endpoint).subscribe(
       (metadata) => {
         table.metadata = metadata;
-        table.list = metadata.list.list;
-        this.existingIds.push(this.tableId);
-        table.id = this.tableId++;
-        this.route.queryParams.subscribe(
-          (params) => {
-            let target = this.getTable(table.list);
-            if (target) {
-              this.parseUrl(params, table.list);
-            }
+        if (outer) {
+          outer.update = Math.random();
+        }
+        if (!inner) {
+          table.list = metadata.list.list;
+          this.existingIds.push(this.tableId);
+          table.id = this.tableId++;
+          if (!table.first) {
+            table.metadata.list.list += table.id;
+            table.list += table.id;
           }
-        );
+          this.route.queryParams.subscribe(
+            (params) => {
+              let target = this.getTable(table.list);
+              if (target) {
+                this.parseUrl(params, table.list);
+              }
+            }
+          );
+        }
       }
     );
   }
 
-  public getData(endpoint, query = null, table, first = false) {
+  public getData(endpoint, query = null, table, first = false, target = null) {
     if (first) {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
@@ -65,11 +74,21 @@ export class GenericListComponent implements OnInit {
       );
     } else if (query) {
       this.gfs.getByQuery(endpoint, query).subscribe(
-        (data) => table.data = data
+        (data) => {
+          table.data = data;
+          if (target) {
+            target.update = Math.random();
+          }
+        }
       );
     } else {
       this.gfs.getAll(endpoint).subscribe(
-        (data) => table.data = data
+        (data) => {
+          table.data = data;
+          if (target) {
+            target.update = Math.random();
+          }
+        }
       );
     }
   }
@@ -107,7 +126,8 @@ export class GenericListComponent implements OnInit {
 
   public createTableData(endpoint) {
     let table = {
-      endpoint
+      endpoint,
+      innerTables: {}
     };
     if (!this.first) {
       table['first'] = true;
@@ -131,8 +151,15 @@ export class GenericListComponent implements OnInit {
   }
 
   public listHandler(e) {
-    if (this.checkList(e.endpoint) && this.tables.length < 10) {
+    if (this.checkList(e.endpoint) && !e.innerTable && this.tables.length < 10) {
       this.tables.push(this.createTableData(e.endpoint));
+    } else if (e.innerTable) {
+      let table = this.getTable(e.list);
+      table.innerTables = Object.assign({}, table.innerTables);
+      table.innerTables[e.row] = table.innerTables[e.row] || {};
+      table.innerTables[e.row][e.key] = {};
+      this.getMetadata(e.endpoint, table.innerTables[e.row][e.key], table);
+      this.getData(e.endpoint, null, table.innerTables[e.row][e.key], false, table);
     }
   }
 

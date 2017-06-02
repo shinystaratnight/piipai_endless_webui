@@ -317,6 +317,25 @@ describe('GenericListComponent', () => {
         expect(comp.createTableData).toHaveBeenCalledWith(event.endpoint);
       }));
 
+      it('should create inner table', async(() => {
+        let event = {
+          endpoint: 'some endpoint',
+          innerTable: true,
+          list: 'company',
+          row: '12345-345',
+          key: 'diff'
+        };
+        let table = {
+          list: 'company',
+        };
+        comp.tables.push(table);
+        spyOn(comp, 'getMetadata');
+        spyOn(comp, 'getData');
+        comp.listHandler(event);
+        expect(comp.getMetadata).toHaveBeenCalled();
+        expect(comp.getData).toHaveBeenCalled();
+      }));
+
     });
 
     describe('checkList method', () => {

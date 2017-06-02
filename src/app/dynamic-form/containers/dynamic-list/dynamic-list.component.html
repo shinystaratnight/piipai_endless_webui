@@ -1,4 +1,4 @@
-<div #datatable [ngClass]="{'pt-2 pl-2 pr-2 mb-5': !poped, 'poped': poped}" class="mw-100 datatable">
+<div #datatable [ngClass]="{'pt-2 pl-2 pr-2 mb-5': !poped, 'poped card': poped}" class="mw-100 datatable">
   <div move [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span>{{config.list.label}}</span>
@@ -80,7 +80,7 @@
           <td class="text-center">
             <input type="checkbox" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
           </td>
-          <td *ngFor="let cell of row.content;" [attr.data-label]="cell.label">
+          <td *ngFor="let cell of row.content" [attr.data-label]="cell.label">
             <div class="d-flex justify-content-between">
               <ng-container
                 listElement
@@ -101,6 +101,9 @@
                   <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
                 </div>
               </div>
+            </div>
+            <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
+              <list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></list-table>
             </div>
           </td>
         </tr>
