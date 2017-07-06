@@ -111,12 +111,61 @@ describe('GenericListComponent', () => {
         expect(comp.parseUrl).toHaveBeenCalledWith({}, table.list);
       }));
 
+      it('should update metadata for subtables', async(() => {
+        let table: any = {first: false};
+        metadata = {
+          list: {
+            list: 'companies'
+          },
+          fields: [
+            {
+              type: 'checkbox',
+              key: 'is_available',
+              templateOptions: {
+                label: 'test',
+                type: 'checkbox',
+                required: true
+              }
+            }
+          ]
+        };
+        let endpoint = 'endpoint';
+        comp.limit = 1;
+        comp.tables.push(table);
+        comp.getMetadata(endpoint, table);
+        expect(table.metadata).toEqual(metadata);
+        expect(table.list).toEqual('companies1');
+        expect(table.id).toEqual(1);
+        expect(table.limit).toEqual(comp.limit);
+        expect(table.offset).toEqual(0);
+        expect(comp.existingIds).toEqual([1]);
+        expect(comp.tableId).toEqual(2);
+      }));
+
     });
 
     describe('getData method', () => {
 
       it('should be defined', async(() => {
         expect(comp.getData).toBeDefined();
+      }));
+
+      it('should update data property of first table', async(() => {
+        let table: any = {first: true};
+        data = {
+          results: [
+            {
+              name: 'Home LTD',
+              id: 123
+            }
+          ]
+        };
+        let endpoint = 'endpoint';
+        spyOn(comp, 'calcPagination');
+        spyOn(comp, 'getMetadata');
+        comp.getData(endpoint, null, table, true);
+        expect(comp.calcPagination).toHaveBeenCalledWith(data);
+        expect(comp.getMetadata).toHaveBeenCalledWith(endpoint, table);
       }));
 
       it('should update data property', async(() => {
@@ -130,8 +179,10 @@ describe('GenericListComponent', () => {
           ]
         };
         let endpoint = 'endpoint';
+        spyOn(comp, 'calcPagination');
         comp.getData(endpoint, null, table);
         expect(table.data).toEqual(data);
+        expect(comp.calcPagination).toHaveBeenCalledWith(data);
       }));
 
       it('should update data by query', async(() => {
@@ -146,8 +197,102 @@ describe('GenericListComponent', () => {
           ]
         };
         let endpoint = 'endpoint';
+        spyOn(comp, 'calcPagination');
         comp.getData(endpoint, query, table);
         expect(table.data).toEqual(data);
+        expect(comp.calcPagination).toHaveBeenCalledWith(data);
+      }));
+
+    });
+
+    describe('calcPagination method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.calcPagination).toBeDefined();
+      }));
+
+      it('should call calcLimit method', async(() => {
+        comp.limit = null;
+        data = {
+          count: 1,
+          results: [
+            {
+              name: 'Home LTD',
+              id: 123
+            }
+          ]
+        };
+        spyOn(comp, 'calcLimit');
+        comp.calcPagination(data);
+        expect(comp.count).toEqual(data.count);
+        expect(comp.calcLimit).toHaveBeenCalledWith(data.count, data.results.length);
+      }));
+
+      it('should call updateTables method', async(() => {
+        comp.limit = null;
+        data = {
+          count: 2,
+          results: [
+            {
+              name: 'Home LTD',
+              id: 123
+            }
+          ]
+        };
+        spyOn(comp, 'updateTables');
+        comp.calcPagination(data);
+        expect(comp.count).toEqual(data.count);
+        expect(comp.limit).toEqual(1);
+        expect(comp.updateTables).toHaveBeenCalledWith('limit');
+      }));
+
+    });
+
+    describe('calcLimit method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.calcLimit).toBeDefined();
+      }));
+
+      it('should return integer', async(() => {
+        let count = 2;
+        let length = 1;
+        let result = comp.calcLimit(count, length);
+        expect(result).toEqual(1);
+      }));
+
+      it('should return null', async(() => {
+        let count = 2;
+        let length = 2;
+        let result = comp.calcLimit(count, length);
+        expect(result).toBeNull();
+      }));
+
+    });
+
+    describe('updateTables method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.updateTables).toBeDefined();
+      }));
+
+      it('should update all tables on page', async(() => {
+        let tables = [
+          {
+            first: true,
+            id: 0,
+            list: 'companyaddress'
+          },
+          {
+            id: 1,
+            list: 'companyaddresslog'
+          }
+        ];
+        comp.tables = tables;
+        comp.limit = 2;
+        comp.updateTables('limit');
+        expect(comp.tables[0].limit).toEqual(2);
+        expect(comp.tables[1].limit).toEqual(2);
       }));
 
     });
@@ -227,6 +372,32 @@ describe('GenericListComponent', () => {
         spyOn(comp, 'callAction');
         comp.eventHandler(event);
         expect(comp.callAction).toHaveBeenCalledWith(event.data, event.action.endpoint);
+      }));
+
+      it('should update data of table', async(() => {
+        let event = {
+          type: 'pagination',
+          list: 'company',
+          query: 'limit=6&offset=4'
+        };
+        let table = {
+          list: 'company',
+          endpoint: 'endpoint',
+          first: false,
+          offset: undefined,
+          innerTables: <any> {1: {1: {}}}
+        };
+        comp.tables = [];
+        comp.tables.push(table);
+        spyOn(comp, 'getData');
+        spyOn(comp, 'getTable').and.returnValue(table);
+        spyOn(comp, 'generateQuery');
+        comp.eventHandler(event);
+        expect(comp.getData).toHaveBeenCalled();
+        expect(comp.getTable).toHaveBeenCalledWith(table.list);
+        expect(comp.generateQuery).toHaveBeenCalledWith({pagination: event.query});
+        expect(table.offset).toEqual('4');
+        expect(table.innerTables).toEqual({});
       }));
 
     });

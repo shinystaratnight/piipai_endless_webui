@@ -612,8 +612,17 @@ describe('DynamicListComponent', () => {
       comp.limit = 1;
       comp.offset = 0;
       comp.initPagination(data);
-      expect(comp.limit).toEqual(1);
+      expect(comp.page).toEqual(1);
       expect(comp.pageSize).toEqual(10);
+    }));
+
+    it('should open on page 2', async(() => {
+      data.count = 10;
+      comp.limit = 2;
+      comp.offset = 2;
+      comp.initPagination(data);
+      expect(comp.page).toEqual(2);
+      expect(comp.pageSize).toEqual(50);
     }));
 
   });

@@ -351,7 +351,11 @@ export class DynamicListComponent implements OnInit, OnChanges {
       } else if (this.offset) {
         this.page = (this.offset / this.limit) + 1;
       }
-      this.pageSize = (count / this.limit) * 10;
+      if (!this.limit) {
+        this.pageSize = 10;
+      } else {
+        this.pageSize = (count / this.limit) * 10;
+      }
     }
   }
 
