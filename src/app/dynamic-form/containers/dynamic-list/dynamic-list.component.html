@@ -1,36 +1,33 @@
-<div #datatable [ngClass]="{'pt-2 pl-2 pr-2 mb-5': !poped, 'poped card': poped}" class="mw-100 datatable">
+<div #datatable [ngClass]="{'pt-2 pl-2 pr-2 mb-5': !poped, 'poped card': poped}" class="mw-100 datatable" (click)="activeTable()" [hidden]="minimized">
   <div move [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
-      <span>{{config.list.label}}</span>
+      <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
       <div class="d-flex fustify-content-center align-items-center">
         <i
           fa
-          class="ml-2"
+          class="ml-2 icon"
           [name]="'window-minimize'"
           [border]="true"
           (click)="minimizeTable()"
-          aria-hidden="true"
-          style="cursor: pointer"></i>
+          aria-hidden="true"></i>
         <i
           fa
-          class="ml-2"
+          class="ml-2 icon"
           [name]="'window-maximize'"
           [border]="true"
           (click)="unpopedTable()"
-          aria-hidden="true"
-          style="cursor: pointer"></i>
+          aria-hidden="true"></i>
         <i
           fa
-          class="ml-2"
+          class="ml-2 icon"
           [name]="'times'"
           [border]="true"
           (click)="closeTable()"
-          aria-hidden="true"
-          style="cursor: pointer"></i>
+          aria-hidden="true"></i>
       </div>
     </h5>
   </div>
-  <div [class.card-block]="poped" [hidden]="minimized">
+  <div [class.card-block]="poped">
     <filter-block *ngIf="(first || poped) && filtersOfList.length" [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     <action-element *ngIf="config.list.actions" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
     <h5 class="d-flex justify-content-between align-items-center lead" *ngIf="config.list && !poped">
@@ -39,10 +36,9 @@
         fa
         *ngIf="!first"
         [name]="'window-restore'"
-        [border]="true" class="text-muted hidden-sm-down"
+        [border]="true" class="text-muted hidden-sm-down icon"
         (click)="popedTable()"
-        aria-hidden="true"
-        style="cursor: pointer"></i>
+        aria-hidden="true"></i>
     </h5>
     <table class="table table-bordered table-striped table-sm" *ngIf="config.list">
       <thead class="thead-default hidden-sm-down">
@@ -56,16 +52,14 @@
               *ngIf="field.sorted"
               [name]="field.sorted === 'desc' ? 'sort-desc' : 'sort-asc'"
               [border]=true
-              class="pr-2"
-              (click)="sorting(field)"
-              style="cursor: pointer"></i>
+              class="pr-2 icon"
+              (click)="sorting(field)"></i>
             <i fa
               *ngIf="field.sorted"
               [name]="'sort'"
               [border]=true
-              class="pr-2 text-muted"
-              (click)="resetSort(field, true)"
-              style="cursor: pointer"></i>
+              class="pr-2 text-muted icon"
+              (click)="resetSort(field, true)"></i>
             <ng-container
               listElement
               [head]="true"
@@ -91,11 +85,10 @@
               <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
                 <i fa
                   id="dropdownBasic1"
-                  class="text-muted p-2"
+                  class="text-muted p-2 icon"
                   [class.dropdown-toggle]="false"
                   [name]="'ellipsis-v'"
                   [border]=true
-                  style="cursor: pointer"
                   ngbDropdownToggle></i>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBasic1">
                   <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
@@ -128,7 +121,7 @@
   <div class="modal-header bg-primary text-white">
     <h5 class="modal-title">{{modalInfo.label}}</h5>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
+      <span class="text-white" aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body" [ngSwitch]="modalInfo.type">

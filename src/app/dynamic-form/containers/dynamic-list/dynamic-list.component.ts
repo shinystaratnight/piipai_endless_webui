@@ -46,6 +46,12 @@ export class DynamicListComponent implements OnInit, OnChanges {
   @Input()
   public update: any;
 
+  @Input()
+  public minimized: boolean;
+
+  @Input()
+  public maximize: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -69,7 +75,6 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public pagination: any = {};
   public pageSize: number = 0;
   public poped: boolean = false;
-  public minimized: boolean = false;
   public position: { top, left };
   public move: boolean = false;
   public currentData: any;
@@ -98,6 +103,9 @@ export class DynamicListComponent implements OnInit, OnChanges {
     let innerTables = this.innerTables;
     if (data) {
       this.initPagination(data);
+    }
+    if (this.maximize) {
+      this.unpopedTable();
     }
     if (this.sorted) {
       this.sortedColumns = this.sorted;
@@ -135,7 +143,6 @@ export class DynamicListComponent implements OnInit, OnChanges {
   }
 
   public prepareData(config, data, highlight = null) {
-    let format = require('formatstring');
     let prepareData = [];
     data.forEach((el) => {
       let row = {
@@ -161,9 +168,9 @@ export class DynamicListComponent implements OnInit, OnChanges {
           obj['name'] = element.field;
           obj['type'] = element.type;
           if (element.link) {
-            obj['link'] = format(element.link, el);
+            obj['link'] = this.format(element.link, el);
           } else if (element.endpoint) {
-            obj['endpoint'] = format(element.endpoint, el);
+            obj['endpoint'] = this.format(element.endpoint, el);
           }
           if (element.type === 'button') {
             obj.templateOptions = {
@@ -173,7 +180,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
               mb: false,
               p: true,
               action: element.action,
-              text: format(element.text, el)
+              text: this.format(element.text, el)
             };
           }
           if (element.fields) {
@@ -403,10 +410,15 @@ export class DynamicListComponent implements OnInit, OnChanges {
     }
     this.poped = false;
     this.minimized = false;
+    this.maximize = false;
   }
 
   public minimizeTable() {
-    this.minimized = !this.minimized;
+    this.minimized = true;
+    this.event.emit({
+      type: 'minimize',
+      list: this.config.list.list
+    });
   }
 
   public closeTable() {
@@ -447,10 +459,12 @@ export class DynamicListComponent implements OnInit, OnChanges {
   }
 
   public activeTable(e) {
-    this.event.emit({
-      type: 'active',
-      list: this.config.list.list
-    });
+    if (this.poped) {
+      this.event.emit({
+        type: 'active',
+        list: this.config.list.list
+      });
+    }
   }
 
   public addHighlight(prop, data, row, values) {
@@ -479,6 +493,44 @@ export class DynamicListComponent implements OnInit, OnChanges {
       key: el.key,
       row: el.rowId
     });
+  }
+
+  public format(str, data) {
+    let open = '{';
+    let close = '}';
+    let pieces = [];
+    let before;
+    let propValue;
+    let pos = 0;
+    let trail;
+    while (true) {
+      let start = str.indexOf(open, pos);
+      let end = str.indexOf(close, pos);
+      let key = str.substring(start + 1, end);
+      if (start === -1 || end === -1) {
+        trail = str.substr(pos);
+        if (trail !== '') {
+          pieces.push(trail);
+        }
+        break;
+      }
+      propValue = this.getPropValue(data, key);
+      before = str.substring(pos, start);
+      pieces.push(before);
+      pieces.push(propValue);
+      pos = end + 1;
+    }
+    return pieces.join('');
+  }
+
+  public getPropValue(data, key: string) {
+    let props = key.split('.');
+    let prop = props.shift();
+    if (!props.length) {
+      return data[prop];
+    } else {
+      return this.getPropValue(data[prop], props.join('.'));
+    }
   }
 
 }

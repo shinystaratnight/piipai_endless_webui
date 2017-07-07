@@ -371,7 +371,7 @@ describe('GenericListComponent', () => {
         comp.tables.push(table);
         spyOn(comp, 'callAction');
         comp.eventHandler(event);
-        expect(comp.callAction).toHaveBeenCalledWith(event.data, event.action.endpoint);
+        expect(comp.callAction).toHaveBeenCalledWith(event.data, event.action.endpoint, table);
       }));
 
       it('should update data of table', async(() => {
@@ -398,6 +398,63 @@ describe('GenericListComponent', () => {
         expect(comp.generateQuery).toHaveBeenCalledWith({pagination: event.query});
         expect(table.offset).toEqual('4');
         expect(table.innerTables).toEqual({});
+      }));
+
+      it('should update minimizedTables property', async(() => {
+        let event = {
+          type: 'minimize',
+          list: 'company'
+        };
+        let table = {
+          list: 'company',
+          minimized: false,
+          maximize: true
+        };
+        comp.tables = [];
+        comp.tables.push(table);
+        comp.minimizedTable = [];
+        comp.eventHandler(event);
+        expect(table.minimized).toBeTruthy();
+        expect(table.maximize).toBeFalsy();
+        expect(comp.minimizedTable.length).toEqual(1);
+      }));
+
+    });
+
+    describe('action method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.action).toBeDefined();
+      }));
+
+      it('should set minimized prop to false', async(() => {
+        let table = {
+          list: 'company',
+          minimized: true
+        };
+        comp.action('minimize', table);
+        expect(table.minimized).toBeFalsy();
+      }));
+
+      it('should set maximize prop to true', async(() => {
+        let table = {
+          list: 'company',
+          maximize: false
+        };
+        comp.action('maximize', table);
+        expect(table.maximize).toBeTruthy();
+      }));
+
+      it('should remove table from page', async(() => {
+        let table = {
+          list: 'company',
+          minimize: false
+        };
+        comp.tables.push(table);
+        comp.minimizedTable.push(table);
+        comp.action('close', table);
+        expect(comp.tables.length).toEqual(0);
+        expect(comp.minimizedTable.length).toEqual(0);
       }));
 
     });
@@ -528,9 +585,13 @@ describe('GenericListComponent', () => {
 
     describe('callAction method', () => {
 
-      it('should call action for list', async(() => {
+      it('should update table after action', async(() => {
         data = {
-          status: 'ok'
+          status: 'success'
+        };
+        let table = {
+          endpoint: 'some endpoint',
+          query: {}
         };
         let endpoint = 'endpoint';
         let selectedElements = {
@@ -538,8 +599,11 @@ describe('GenericListComponent', () => {
           124: true,
           125: false
         };
-        comp.callAction(selectedElements, endpoint);
-        expect(comp.res).toEqual(data);
+        spyOn(comp, 'getData');
+        spyOn(comp, 'generateQuery').and.returnValue('');
+        comp.callAction(selectedElements, endpoint, table);
+        expect(comp.generateQuery).toHaveBeenCalledWith(table.query);
+        expect(comp.getData).toHaveBeenCalledWith(table.endpoint, '', table);
       }));
 
     });

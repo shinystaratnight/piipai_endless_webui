@@ -204,13 +204,16 @@ describe('DynamicListComponent', () => {
     it('should called prepareData method', async(() => {
       comp.config = config;
       comp.data = data;
+      comp.maximize = true;
       spyOn(comp, 'prepareData');
       spyOn(comp, 'resetSelectedElements');
       spyOn(comp, 'getSortedColumns');
+      spyOn(comp, 'unpopedTable');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.resetSelectedElements).toHaveBeenCalled();
       expect(comp.getSortedColumns).toHaveBeenCalled();
+      expect(comp.unpopedTable).toHaveBeenCalled();
     }));
 
     it('should update datatable', async(() => {
@@ -680,9 +683,11 @@ describe('DynamicListComponent', () => {
       comp.config = config;
       comp.poped = true;
       comp.minimized = true;
+      comp.maximize = true;
       comp.unpopedTable();
       expect(comp.poped).toEqual(false);
       expect(comp.minimized).toEqual(false);
+      expect(comp.maximize).toEqual(false);
     }));
 
   });
@@ -694,9 +699,17 @@ describe('DynamicListComponent', () => {
       comp.minimized = false;
       comp.minimizeTable();
       expect(comp.minimized).toEqual(true);
-      comp.minimizeTable();
-      expect(comp.minimized).toEqual(false);
     }));
+
+    it('should emit event', async(() => {
+      comp.config = config;
+      spyOn(comp.event, 'emit');
+      comp.minimizeTable();
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'minimize',
+        list: config.list.list
+      });
+  }));
 
   });
 
@@ -785,6 +798,7 @@ describe('DynamicListComponent', () => {
 
   describe('activeTable method', () => {
     it('should emit event', async(() => {
+      comp.poped = true;
       comp.config = config;
       spyOn(comp.event, 'emit');
       comp.activeTable({});
@@ -843,6 +857,58 @@ describe('DynamicListComponent', () => {
         key: elem.key,
         row: elem.rowId
       });
+    }));
+
+  });
+
+  describe('format method', () => {
+
+    it('should be defined', async(() => {
+      expect(comp.format).toBeDefined();
+    }));
+
+    it('should return full string', async(() => {
+      let dataFromApi = {
+        company: {
+          name: 'Home LTD'
+        }
+      };
+      let value = 'some string';
+      let result = comp.format(value, dataFromApi);
+      expect(result).toEqual(value);
+    }));
+
+    it('should call getPropValue method', async(() => {
+      let dataFromApi = {
+        company: {
+          name: 'Home LTD'
+        }
+      };
+      let key = 'company.name';
+      let value = `full company name {${key}}`;
+      spyOn(comp, 'getPropValue').and.returnValue('Home LTD');
+      let result = comp.format(value, dataFromApi);
+      expect(comp.getPropValue).toHaveBeenCalledWith(dataFromApi, key);
+      expect(result).toEqual('full company name Home LTD');
+    }));
+
+  });
+
+  describe('getPropValue method', () => {
+
+    it('should be defined', async(() => {
+      expect(comp.getPropValue).toBeDefined();
+    }));
+
+    it('should parse data by key', async(() => {
+      let dataFromApi = {
+        company: {
+          name: 'Home LTD'
+        }
+      };
+      let key = 'company.name';
+      let result = comp.getPropValue(dataFromApi, key);
+      expect(result).toEqual(dataFromApi.company.name);
     }));
 
   });

@@ -34,6 +34,7 @@ export class ActionElementComponent {
         this.event.emit({
           action: this.action
         });
+        this.action = '';
       }
     }, (reason) => {
       return false;

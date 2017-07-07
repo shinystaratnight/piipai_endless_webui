@@ -9,6 +9,13 @@ $cell-datatable-width: 40%;
 .datatable {
   background-color: $datatable-background-color;
 
+  &-list {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 110;
+  }
+
   &-title-hover {
     cursor: pointer;
   }
@@ -17,6 +24,8 @@ $cell-datatable-width: 40%;
     position: fixed;
     top: $datatable-top;
     left: $datatable-left;
+    border-color: rgba(0, 0, 0, .2);
+    box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
   }
 
   a {

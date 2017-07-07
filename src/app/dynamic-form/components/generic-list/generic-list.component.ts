@@ -20,9 +20,11 @@ export class GenericListComponent implements OnInit {
   public tableId: number = 1;
   public existingIds: number[] = [];
   public res: any;
+  public err: any;
   public limit: any;
   public pagination: any = {};
   public count: number;
+  public minimizedTable = [];
 
   constructor(
     private gfs: GenericFormService,
@@ -150,7 +152,34 @@ export class GenericListComponent implements OnInit {
       this.resetActiveTable(this.tables);
       table.active = true;
     } else if (e.type === 'action') {
-      this.callAction(e.data, e.action.endpoint);
+      this.callAction(e.data, e.action.endpoint, table);
+    } else if (e.type === 'minimize') {
+      table.minimized = true;
+      table.maximize = false;
+      this.minimizedTable.push(table);
+    }
+  }
+
+  public action(type, table) {
+    let minIndex = this.minimizedTable.indexOf(table);
+    let tabIndex = this.tables.indexOf(table);
+    switch (type) {
+      case 'minimize':
+        table.minimized = false;
+        break;
+      case 'maximize':
+        table.maximize = true;
+        break;
+      case 'close':
+        if (minIndex !== -1 && tabIndex !== -1) {
+          this.tables.splice(tabIndex, 1);
+        }
+        break;
+      default:
+        break;
+    }
+    if (minIndex !== -1 && tabIndex !== -1) {
+      this.minimizedTable.splice(minIndex, 1);
     }
   }
 
@@ -209,7 +238,7 @@ export class GenericListComponent implements OnInit {
     return !result.length;
   }
 
-  public callAction(data, endpoint) {
+  public callAction(data, endpoint, target) {
     let ids = [];
     let keys = Object.keys(data);
     keys.forEach((el) => {
@@ -218,7 +247,14 @@ export class GenericListComponent implements OnInit {
       }
     });
     this.gfs.callAction(endpoint, ids).subscribe(
-      (res) => this.res = res
+      (res) => {
+        if (res.status === 'success') {
+          this.getData(target.endpoint, this.generateQuery(target.query), target);
+        }
+      },
+      (err) => {
+        this.err = err;
+      }
     );
   }
 

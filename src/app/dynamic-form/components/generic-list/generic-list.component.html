@@ -12,8 +12,42 @@
       [sorted]="table.sorted"
       [innerTables]="table.innerTables"
       [update]="table.update"
+      [minimized]="table.minimized"
+      [maximize]="table.maximize"
       (list)="listHandler($event)"
       (event)="eventHandler($event)">
     </dynamic-list>
+  </div>
+</div>
+
+<div class="d-flex datatable-list flex-wrap" *ngIf="minimizedTable.length">
+  <div *ngFor="let table of minimizedTable">
+    <div class="card mx-1 mt-1">
+      <div class="card-header bg-primary text-white">
+        <h5 class="d-flex justify-content-between align-items-center mb-0 lead">
+        <span class="mr-5">{{table.metadata.list.label}}</span>
+        <div class="d-flex fustify-content-center align-items-center">
+          <i fa
+            class="ml-2 icon"
+            [name]="'window-minimize'"
+            [border]="true"
+            (click)="action('minimize', table)"
+            aria-hidden="true"></i>
+          <i fa
+            class="ml-2 icon"
+            [name]="'window-maximize'"
+            [border]="true"
+            (click)="action('maximize', table)"
+            aria-hidden="true"></i>
+          <i fa
+            class="ml-2 icon"
+            [name]="'times'"
+            [border]="true"
+            (click)="action('close', table)"
+            aria-hidden="true"></i>
+        </div>
+      </h5>
+      </div>
+    </div>
   </div>
 </div>
