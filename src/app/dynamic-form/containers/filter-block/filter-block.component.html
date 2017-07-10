@@ -1,22 +1,12 @@
 <div class="card d-block mb-3">
-  <div class="card-header d-flex">
+  <div class="card-header d-flex p-3">
+    <i fa
+      class="pr-2"
+      [name]="direction === 'down' ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="direction = direction === 'down' ? 'right' : 'down'"
+      style="cursor: pointer"></i>
     <h6 class="mb-0">Filters:</h6>
-    <i
-      fa
-      [class.text-info]="direction === 'right'"
-      class="text-muted ml-auto mr-2 hidden-xs-down"
-      [name]="'long-arrow-right'"
-      [border]=false
-      (click)="direction = 'right'"
-      style="cursor: pointer"></i>
-    <i
-      fa
-      [class.text-info]="direction === 'down'"
-      class="text-muted hidden-xs-down"
-      [name]="'long-arrow-down'"
-      [border]=false
-      (click)="direction = 'down'"
-      style="cursor: pointer"></i>
   </div>
   <div class="card-body filter-block" [class.filter-block-collapsed]="direction === 'right'">
     <div class="d-sm-inline-block align-top p-2" *ngFor="let field of config;">

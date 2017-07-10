@@ -66,10 +66,17 @@ describe('GenericListComponent', () => {
             list: 'company'
           }
         };
+        let newTable = {
+          endpoint,
+          innerTables: {},
+          fisrt: true
+        };
         comp.endpoint = endpoint;
         comp.tables = [];
-        spyOn(comp, 'createTableData');
+        spyOn(comp, 'createTableData').and.returnValue(newTable);
+        spyOn(comp.tables, 'push');
         comp.ngOnInit();
+        expect(comp.tables.push).toHaveBeenCalledWith(newTable);
         expect(comp.createTableData).toHaveBeenCalledWith(endpoint);
       }));
 
@@ -101,6 +108,7 @@ describe('GenericListComponent', () => {
         };
         let endpoint = 'endpoint';
         spyOn(comp, 'parseUrl');
+        spyOn(comp, 'getTable').and.returnValue(table);
         comp.tables.push(table);
         comp.getMetadata(endpoint, table);
         expect(table.metadata).toEqual(metadata);
@@ -108,6 +116,7 @@ describe('GenericListComponent', () => {
         expect(table.id).toEqual(1);
         expect(comp.existingIds).toEqual([1]);
         expect(comp.tableId).toEqual(2);
+        expect(comp.getTable).toHaveBeenCalledWith(table.list);
         expect(comp.parseUrl).toHaveBeenCalledWith({}, table.list);
       }));
 
@@ -132,14 +141,18 @@ describe('GenericListComponent', () => {
         let endpoint = 'endpoint';
         comp.limit = 1;
         comp.tables.push(table);
-        comp.getMetadata(endpoint, table);
+        comp.getMetadata(endpoint, table, false, table);
         expect(table.metadata).toEqual(metadata);
+        expect(table.metadata.list.list).toEqual('companies1');
         expect(table.list).toEqual('companies1');
         expect(table.id).toEqual(1);
         expect(table.limit).toEqual(comp.limit);
         expect(table.offset).toEqual(0);
         expect(comp.existingIds).toEqual([1]);
         expect(comp.tableId).toEqual(2);
+        setTimeout(() => {
+          expect(table.update).toEqual(metadata);
+        }, 310);
       }));
 
     });
@@ -180,9 +193,12 @@ describe('GenericListComponent', () => {
         };
         let endpoint = 'endpoint';
         spyOn(comp, 'calcPagination');
-        comp.getData(endpoint, null, table);
+        comp.getData(endpoint, null, table, false, table);
         expect(table.data).toEqual(data);
         expect(comp.calcPagination).toHaveBeenCalledWith(data);
+        setTimeout(() => {
+          expect(table.update).toEqual(data);
+        }, 160);
       }));
 
       it('should update data by query', async(() => {
@@ -198,9 +214,12 @@ describe('GenericListComponent', () => {
         };
         let endpoint = 'endpoint';
         spyOn(comp, 'calcPagination');
-        comp.getData(endpoint, query, table);
+        comp.getData(endpoint, query, table, false, table);
         expect(table.data).toEqual(data);
         expect(comp.calcPagination).toHaveBeenCalledWith(data);
+        setTimeout(() => {
+          expect(table.update).toEqual(data);
+        }, 160);
       }));
 
     });
@@ -222,9 +241,10 @@ describe('GenericListComponent', () => {
             }
           ]
         };
-        spyOn(comp, 'calcLimit');
+        spyOn(comp, 'calcLimit').and.returnValue(false);
         comp.calcPagination(data);
         expect(comp.count).toEqual(data.count);
+        expect(comp.limit).toBeNull();
         expect(comp.calcLimit).toHaveBeenCalledWith(data.count, data.results.length);
       }));
 
@@ -419,6 +439,23 @@ describe('GenericListComponent', () => {
         expect(comp.minimizedTable.length).toEqual(1);
       }));
 
+      it('should call updateUrl method with true', async(() => {
+        let event = {
+          type: 'filter',
+          list: 'company'
+        };
+        let table = {
+          list: 'company',
+          first: true,
+          query: {}
+        };
+        comp.tables = [];
+        comp.tables.push(table);
+        spyOn(comp, 'updateUrl');
+        comp.eventHandler(event);
+        expect(comp.updateUrl).toHaveBeenCalledWith(table.query, event.list, true);
+      }));
+
     });
 
     describe('action method', () => {
@@ -487,11 +524,34 @@ describe('GenericListComponent', () => {
 
       it('should create table', async(() => {
         let endpoint = 'endpoint';
-        spyOn(comp, 'getMetadata');
+        spyOn(comp, 'getData').and.returnValue({results: []});
         let result = comp.createTableData(endpoint);
-        expect(comp.getMetadata).toHaveBeenCalled();
-        expect(result.endpoint).toEqual('endpoint');
-        expect(result['first']).toBeTruthy();
+        expect(comp.getData).toHaveBeenCalledWith(endpoint, null, {
+          endpoint,
+          innerTables: {},
+          first: true
+        }, true);
+        expect(result).toEqual(<any> {
+          endpoint,
+          innerTables: {},
+          first: true
+        });
+        expect(comp.first).toBeTruthy();
+      }));
+
+      it('should create table', async(() => {
+        let endpoint = 'endpoint';
+        let table = {
+          endpoint,
+          innerTables: {}
+        };
+        spyOn(comp, 'getMetadata');
+        spyOn(comp, 'getData');
+        comp.first = true;
+        let result = comp.createTableData(endpoint);
+        expect(comp.getMetadata).toHaveBeenCalledWith(endpoint, table);
+        expect(comp.getData).toHaveBeenCalledWith(endpoint, null, table);
+        expect(result).toEqual(table);
       }));
 
     });
@@ -540,9 +600,13 @@ describe('GenericListComponent', () => {
           active: true
         };
         comp.tables.push(table);
-        spyOn(comp, 'createTableData');
+        spyOn(comp, 'createTableData').and.returnValue({});
+        spyOn(comp, 'checkList').and.returnValue(true);
+        spyOn(comp.tables, 'push');
         comp.listHandler(event);
         expect(comp.createTableData).toHaveBeenCalledWith(event.endpoint);
+        expect(comp.checkList).toHaveBeenCalledWith(event.endpoint);
+        expect(comp.tables.push).toHaveBeenCalledWith({});
       }));
 
       it('should create inner table', async(() => {
@@ -555,13 +619,21 @@ describe('GenericListComponent', () => {
         };
         let table = {
           list: 'company',
+          innerTables: {}
         };
         comp.tables.push(table);
         spyOn(comp, 'getMetadata');
         spyOn(comp, 'getData');
+        spyOn(comp, 'getTable').and.returnValue(table);
         comp.listHandler(event);
-        expect(comp.getMetadata).toHaveBeenCalled();
-        expect(comp.getData).toHaveBeenCalled();
+        expect(table.innerTables).toEqual({
+          '12345-345': {
+            diff: {}
+          }
+        });
+        expect(comp.getMetadata).toHaveBeenCalledWith(event.endpoint, {}, table);
+        expect(comp.getData).toHaveBeenCalledWith(event.endpoint, null, {}, false, table);
+        expect(comp.getTable).toHaveBeenCalledWith(event.list);
       }));
 
     });
@@ -622,11 +694,12 @@ describe('GenericListComponent', () => {
         let queryParams = {
           'companyaddress.f.company': '1c80c973-1c9e-4392-b044-da9c450c631b',
           'companyaddress.f.company__type': 'master',
-          'companyaddress.p.page': 2,
+          'companyaddress.p.page': 1,
           'companyaddress.s.ordering': '-company.name'
         };
         spyOn(router, 'navigate');
-        comp.updateUrl(query, list);
+        comp.updateUrl(query, list, true);
+        expect(queryParams['companyaddress.p.page']).toEqual(1);
         expect(router.navigate).toHaveBeenCalledWith([], { queryParams });
       })));
 
@@ -655,6 +728,7 @@ describe('GenericListComponent', () => {
           'companyaddress.p.page': 1,
           'companyaddress.s.ordering': '-company.name'
         };
+        spyOn(comp, 'getTable').and.returnValue(table);
         spyOn(comp, 'getData');
         spyOn(comp, 'generateQuery');
         comp.count = 1;

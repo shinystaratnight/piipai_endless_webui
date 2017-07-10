@@ -27,7 +27,7 @@
       </div>
     </h5>
   </div>
-  <div [class.card-block]="poped">
+  <div [class.card-block]="poped" class="datatable-body">
     <filter-block *ngIf="(first || poped) && filtersOfList.length" [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     <action-element *ngIf="config.list.actions" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
     <h5 class="d-flex justify-content-between align-items-center lead" *ngIf="config.list && !poped">

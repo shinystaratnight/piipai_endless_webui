@@ -4,11 +4,21 @@ $filter-block-height: 400px;
 .filter {
   &-block {
     max-height: $filter-block-height;
-    overflow-x: auto;
     width: 100%;
 
     &-collapsed {
+      overflow-x: auto;
       white-space: nowrap;
+
+      &>div {
+        display: inline-block;
+      }
+    }
+  }
+
+  @include media-breakpoint-down('sm') {
+    &-block {
+      overflow-y: auto;
     }
   }
 

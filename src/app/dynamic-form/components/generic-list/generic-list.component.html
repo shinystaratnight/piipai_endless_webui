@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div *ngFor="let table of tables">
+  <div *ngFor="let table of tables; let last = last" [ngClass]="{'pb-3': last && minimizedTable.length}">
     <dynamic-list
       *ngIf="table.metadata && table.data"
       [config]="table.metadata"
@@ -20,34 +20,36 @@
   </div>
 </div>
 
-<div class="d-flex datatable-list flex-wrap" *ngIf="minimizedTable.length">
-  <div *ngFor="let table of minimizedTable">
-    <div class="card mx-1 mt-1">
-      <div class="card-header bg-primary text-white">
-        <h5 class="d-flex justify-content-between align-items-center mb-0 lead">
-        <span class="mr-5">{{table.metadata.list.label}}</span>
-        <div class="d-flex fustify-content-center align-items-center">
-          <i fa
-            class="ml-2 icon"
-            [name]="'window-minimize'"
-            [border]="true"
-            (click)="action('minimize', table)"
-            aria-hidden="true"></i>
-          <i fa
-            class="ml-2 icon"
-            [name]="'window-maximize'"
-            [border]="true"
-            (click)="action('maximize', table)"
-            aria-hidden="true"></i>
-          <i fa
-            class="ml-2 icon"
-            [name]="'times'"
-            [border]="true"
-            (click)="action('close', table)"
-            aria-hidden="true"></i>
+<div #list class="d-flex justify-content-start datatable-list pt-5 flex-wrap" *ngIf="minimizedTable.length">
+  <ng-container *ngFor="let table of minimizedTable">
+    <div class="datatable-item px-1 pt-1">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h6 class="d-flex justify-content-between align-items-center mb-0">
+            <span class="mr-3 title" placement="top" ngbTooltip="{{table.metadata.list.label}}">{{table.metadata.list.label}}</span>
+            <div class="d-flex fustify-content-center align-items-center">
+              <i fa
+                class="ml-2 icon"
+                [name]="'window-minimize'"
+                [border]="true"
+                (click)="action('minimize', table)"
+                aria-hidden="true"></i>
+              <i fa
+                class="ml-2 icon"
+                [name]="'window-maximize'"
+                [border]="true"
+                (click)="action('maximize', table)"
+                aria-hidden="true"></i>
+              <i fa
+                class="ml-2 icon"
+                [name]="'times'"
+                [border]="true"
+                (click)="action('close', table)"
+                aria-hidden="true"></i>
+            </div>
+          </h6>
         </div>
-      </h5>
       </div>
     </div>
-  </div>
+  </ng-container>
 </div>

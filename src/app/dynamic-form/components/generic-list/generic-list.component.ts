@@ -136,7 +136,11 @@ export class GenericListComponent implements OnInit {
         table.innerTables = {};
       }
       if (table.first) {
-        this.updateUrl(table.query, e.list);
+        if (e.type === 'filter') {
+          this.updateUrl(table.query, e.list, true);
+        } else {
+          this.updateUrl(table.query, e.list, false);
+        }
       } else {
         this.getData(this.getTable(e.list).endpoint, this.generateQuery(table.query), table);
         e.query.split('&').forEach((el) => {
@@ -258,7 +262,7 @@ export class GenericListComponent implements OnInit {
     );
   }
 
-  public updateUrl(query, list) {
+  public updateUrl(query, list, filter) {
     let queryParams = {};
     let keys = Object.keys(query);
     keys.forEach((el) => {
@@ -277,6 +281,9 @@ export class GenericListComponent implements OnInit {
         });
       }
     });
+    if (filter) {
+      queryParams[`${list}.p.page`] = 1;
+    }
     this.router.navigate([], { queryParams });
   }
 
@@ -310,7 +317,8 @@ export class GenericListComponent implements OnInit {
               = ((queryParams[el] - 1) * this.limit > this.count && this.limit !== 1)
                 ? 1 : queryParams[el];
             queryList['pagination']
-              = `limit=${this.limit}&offset=${this.limit * (pagination['page'] - 1)}`;
+              = `limit=${this.limit}&offset=${isNaN(this.limit * (pagination['page'] - 1)) ? 0 :
+                this.limit * (pagination['page'] - 1)}`;
           }
         } else if (params[1] === 's') {
           let fields = queryParams[el].split(',');
