@@ -527,9 +527,13 @@ export class DynamicListComponent implements OnInit, OnChanges {
     let props = key.split('.');
     let prop = props.shift();
     if (!props.length) {
-      return data[prop];
+      if (data) {
+        return data[prop];
+      }
     } else {
-      return this.getPropValue(data[prop], props.join('.'));
+      if (data) {
+        return this.getPropValue(data[prop], props.join('.'));
+      }
     }
   }
 

@@ -1,0 +1,51 @@
+<div class="form-group">
+  <label>{{config.templateOptions.label}}</label>
+
+  <div class="card p-2">
+    <div class="d-flex align-items-center pb-2" *ngFor="let item of view; let last = last">
+      <div ngbRadioGroup name="operator" class="btn-group-sm mr-3"
+        [(ngModel)]="item.operator">
+        <label class="btn btn-primary mb-0">
+          <input type="radio" [value]="'or'">or
+        </label>
+        <label class="btn btn-primary mb-0">
+          <input type="radio" [value]="'and'">and
+        </label>
+      </div>
+
+      <span class="pr-1">#{{item.id}}</span>
+
+      <span *ngFor="let value of item.values; let last = last">
+        <span class="badge badge-default p-2 mx-1">
+          {{value}}
+          <i fa class="icon pl-2"
+            [name]="'pencil'"></i>
+        </span>
+
+        <span class="px-2"
+          *ngIf="!last">{{item.operator}}</span>
+      </span>
+
+      <i fa [name]="'plus'" class="icon pl-2 text-success"></i>
+    </div>
+
+    <div>
+      <button class="btn btn-primary btn-sm"
+        (click)="addNewElement()"
+        [disabled]="view.length && view[view.length - 1].values.length < 2">Add rule</button>
+    </div>
+  </div>
+
+  <small class="text-muted"
+    *ngIf="config.templateOptions.description">
+    {{config.templateOptions.description}}
+  </small>
+  <div *ngIf="errors">
+    <div class="text-danger mt-1"
+      *ngIf="errors[key]">{{errors[key]}}</div>
+  </div>
+  <div *ngIf="message">
+    <div class="text-success mt-1"
+      *ngIf="message[key]">{{message[key]}}</div>
+  </div>
+</div>

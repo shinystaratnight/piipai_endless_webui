@@ -19,6 +19,7 @@ import { FormTextareaComponent } from './../form-textarea/form-textarea.componen
 import { FormCollapseComponent } from './../../containers/form-collapse/form-collapse.component';
 import { FormCheckboxComponent } from './../form-checkbox/form-checkbox.component';
 import { FormRelatedComponent } from './../form-related/form-related.component';
+import { FormRuleComponent } from './../form-rule/form-rule.component';
 
 const components = {
   input: FormInputComponent,
@@ -29,7 +30,8 @@ const components = {
   textarea: FormTextareaComponent,
   collapse: FormCollapseComponent,
   checkbox: FormCheckboxComponent,
-  related: FormRelatedComponent
+  related: FormRelatedComponent,
+  rule: FormRuleComponent
 };
 
 @Directive({

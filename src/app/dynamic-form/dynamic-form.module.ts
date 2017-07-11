@@ -18,6 +18,7 @@ import { FormTextareaComponent } from './components/form-textarea/form-textarea.
 import { FormCollapseComponent } from './containers/form-collapse/form-collapse.component';
 import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.component';
 import { FormRelatedComponent } from './components/form-related/form-related.component';
+import { FormRuleComponent } from './components/form-rule/form-rule.component';
 
 import { GenericListComponent } from './components/generic-list/generic-list.component';
 import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
@@ -80,7 +81,8 @@ import { MoveDirective } from './directives/move.directive';
     ListCheckboxComponent,
     MoveDirective,
     FilterSelectComponent,
-    ListTableComponent
+    ListTableComponent,
+    FormRuleComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -100,7 +102,8 @@ import { MoveDirective } from './directives/move.directive';
     FilterChoiceComponent,
     FilterRelatedComponent,
     ListCheckboxComponent,
-    FilterSelectComponent
+    FilterSelectComponent,
+    FormRuleComponent
   ]
 })
 export class DynamicFormModule { }
