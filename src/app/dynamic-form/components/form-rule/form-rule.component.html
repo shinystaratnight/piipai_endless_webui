@@ -1,7 +1,7 @@
 <div class="form-group">
   <label>{{config.templateOptions.label}}</label>
 
-  <div class="card p-2">
+  <div class="card p-2 mb-3">
     <div class="d-flex align-items-center pb-2" *ngFor="let item of view; let last = last">
       <div ngbRadioGroup name="operator" class="btn-group-sm mr-3"
         [(ngModel)]="item.operator">
@@ -15,10 +15,11 @@
 
       <span class="pr-1">#{{item.id}}</span>
 
-      <span *ngFor="let value of item.values; let last = last">
+      <span *ngFor="let value of item.values; let last = last; let i = index">
         <span class="badge badge-default p-2 mx-1">
           {{value}}
           <i fa class="icon pl-2"
+            (click)="open(element, item.type, item, i)"
             [name]="'pencil'"></i>
         </span>
 
@@ -26,13 +27,22 @@
           *ngIf="!last">{{item.operator}}</span>
       </span>
 
-      <i fa [name]="'plus'" class="icon pl-2 text-success"></i>
+      <i fa class="icon pl-2 text-success"
+        [name]="'plus'"
+        (click)="open(element, item.type, item)"></i>
     </div>
 
     <div>
-      <button class="btn btn-primary btn-sm"
-        (click)="addNewElement()"
+      <button type="button" class="btn btn-primary btn-sm"
+        (click)="addNewRule()"
         [disabled]="view.length && view[view.length - 1].values.length < 2">Add rule</button>
+      <button type="button" class="btn btn-primary btn-sm"
+        (click)="showPreview()"
+        [disabled]="view.length < 1">Preview</button>
+    </div>
+
+    <div class="mt-2" *ngFor="let item of previewRule">
+      <b>{{item.label}}s:</b>{{item.value}}
     </div>
   </div>
 
@@ -49,3 +59,80 @@
       *ngIf="message[key]">{{message[key]}}</div>
   </div>
 </div>
+
+<template #element let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div ngbRadioGroup name="type" class="btn-group-sm"
+      [(ngModel)]="choice"
+      *ngIf="!(addType !== 'new' && ruleArray.length === 0)">
+      <label class="btn btn-primary mb-0"
+        (click)="elementValue = ''"
+        *ngIf="addType === 'state' || addType === 'new'">
+        <input type="radio" [value]="'state'">State
+      </label>
+      <label class="btn btn-primary mb-0"
+        (click)="elementValue = ''"
+        *ngIf="addType === 'function' || addType === 'new'">
+        <input type="radio" [value]="'function'">Function
+      </label>
+      <label class="btn btn-primary mb-0"
+        (click)="elementValue = ''"
+        *ngIf="ruleArray.length">
+        <input type="radio" [value]="'rule'">Rule
+      </label>
+    </div>
+
+    <div [ngSwitch]="choice">
+      <div *ngSwitchCase="'state'">
+        <div class="form-group mt-2">
+          <label for="state">State</label>
+          <select class="form-control custom-select" [(ngModel)]="elementValue">
+            <option *ngFor="let el of statesArray">{{el.name_before_activation}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'function'">
+        <div class="form-group mt-2">
+          <label for="app">App</label>
+          <select class="form-control custom-select" id="app" [(ngModel)]="app">
+            <option *ngFor="let el of appsArray">{{el.name}}</option>
+          </select>
+
+          <label for="model" class="mt-2">Model</label>
+          <select class="form-control custom-select" id="model" [(ngModel)]="model">
+            <option *ngFor="let el of modelsArray">{{el.name}}</option>
+          </select>
+
+          <label for="function" class="mt-2">Function</label>
+          <select class="form-control custom-select" [(ngModel)]="elementValue">
+            <option *ngFor="let el of functionsArray">{{el.name}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'rule'">
+        <div class="form-group mt-2">
+          <label for="rule">Rule</label>
+          <select class="form-control custom-select" [(ngModel)]="elementValue">
+            <option *ngFor="let el of ruleArray">{{el.name}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success"
+      (click)="done(c, choice)"
+      [disabled]="!elementValue">Done</button>
+    <button type="button" class="btn btn-danger" (click)="c()">Cancel</button>
+  </div>
+</template>

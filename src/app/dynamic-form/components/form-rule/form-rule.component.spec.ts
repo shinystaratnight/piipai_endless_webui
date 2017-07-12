@@ -59,14 +59,31 @@ describe('FormRuleComponent', () => {
 
   });
 
-  describe('addNewElement method', () => {
+  describe('addNewRule method', () => {
 
-    it('should add control', async() => {
+    it('should add control if first element', async() => {
       comp.config = config;
       comp.id = 0;
       comp.view = [];
-      comp.addNewElement();
+      comp.addNewRule();
+      expect(comp.id).toEqual(1);
       expect(comp.view.length).toEqual(1);
+    });
+
+    it('should add control if rule complete', async() => {
+      comp.config = config;
+      comp.id = 1;
+      comp.view = [
+        {
+          id: 1,
+          operator: 'or',
+          type: 'state',
+          values: ['10', '20', '30']
+        }
+      ];
+      comp.addNewRule();
+      expect(comp.id).toEqual(2);
+      expect(comp.view.length).toEqual(2);
     });
 
   });
