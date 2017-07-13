@@ -49,6 +49,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
   public choice: string;
   public editIndex: number;
   public previewRule: any[];
+  public activeStatesConfig: any[];
 
   constructor(
     private fb: FormBuilder,
@@ -107,6 +108,10 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
       }
     }
     this.reset();
+  }
+
+  public delete(closeModal) {
+    closeModal();
   }
 
   public reset() {

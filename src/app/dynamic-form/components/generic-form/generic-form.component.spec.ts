@@ -115,9 +115,11 @@ describe('EnterTheComponentName', () => {
         let endpoint = 'endpoint';
         spyOn(comp, 'parseMetadata');
         spyOn(comp, 'getData');
+        spyOn(comp, 'checkRuleElement');
         comp.getMetadata(endpoint);
         expect(comp.parseMetadata).toHaveBeenCalled();
         expect(comp.getData).toHaveBeenCalled();
+        expect(comp.checkRuleElement).toHaveBeenCalled();
         expect(comp.show).toBeTruthy();
       }));
 
@@ -420,7 +422,7 @@ describe('EnterTheComponentName', () => {
         };
         comp.metadata = [];
         spyOn(comp, 'parseMetadata');
-        comp.getRalatedData(key, endpoint);
+        comp.getRalatedData(comp.metadata, key, endpoint);
         expect(comp.parseMetadata).toHaveBeenCalled();
       }));
 
@@ -433,7 +435,7 @@ describe('EnterTheComponentName', () => {
         };
         comp.metadata = [];
         spyOn(comp, 'parseMetadata');
-        comp.getRalatedData(key, endpoint);
+        comp.getRalatedData(comp.metadata, key, endpoint);
         expect(comp.parseMetadata).toHaveBeenCalled();
       }));
 

@@ -1,15 +1,45 @@
 <div class="form-group" [formGroup]="group">
-  <label [attr.for]="key">{{config.templateOptions.label}}</label>
-  <select
-    class="form-control custom-select"
-    #related
-    (change)="eventHandler($event)"
-    [formControlName]="key"
-    [attr.id]="key"
-    [attr.name]="key">
-    <option value="" disabled>{{config.templateOptions.label}}</option>
-    <option *ngFor="let option of config.options" [attr.value]="option.id" value="" [selected]="group.get(key).value === option.id">{{option.__str__}}</option>
-  </select>
+  <div *ngIf="!config.many">
+    <label [attr.for]="key">{{config.templateOptions.label}}</label>
+    <select
+      class="form-control custom-select"
+      #related
+      (change)="eventHandler($event)"
+      [formControlName]="key"
+      [attr.id]="key"
+      [attr.name]="key">
+      <option value="" disabled>{{config.templateOptions.label}}</option>
+      <option *ngFor="let option of config.options" [attr.value]="option[param]" value="" [selected]="group.get(key).value === option[param]">
+        {{option[display]}}
+      </option>
+    </select>
+  </div>
+
+  <div *ngIf="config.many" style="position: relative"
+      (blur)="resetList()">
+    <label [attr.for]="key">{{config.templateOptions.label}}</label>
+    <input type="text" class="form-control custom-select"
+      [(ngModel)]="value"
+      [ngModelOptions]="{standalone: true}"
+      (focus)="generateList()"
+      (keyup)="filter(value)">
+    <div class="autocomplete-list" *ngIf="list && list.length">
+      <ul class="list-group w-100">
+        <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+          *ngFor="let option of list"
+          (click)="setValue(option)">{{option[display]}}</li>
+      </ul>
+    </div>
+    <div class="d-flex flex-wrap align-items-center mt-2">
+      <span class="badge badge-default mb-1 mr-2 p-2" *ngFor="let item of results; let i = index">
+        {{item[display]}}
+        <i fa class="text-white icon ml-2"
+          (click)="deleteItem(i)"
+          [name]="'times'"></i>
+      </span>
+    </div>
+  </div>
+
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
   </small>

@@ -1,0 +1,14 @@
+.autocomplete {
+  &-list {
+    width: 100%;
+    position: absolute;
+    overflow-y: auto;
+    max-height: 200px;
+    z-index: 100;
+  }
+
+  &-item:hover {
+    width: 100%;
+    background-color: $brand-primary;
+  }
+}

@@ -53,6 +53,11 @@ export class GenericFormComponent implements OnChanges {
   public currentEndpoint: string;
   public show: boolean = false;
 
+  public workflowEndpoints = {
+    state: `/ecore/api/v2/endless-core/workflownodes/`,
+    app: `/ecore/api/v2/apps/`
+  };
+
   constructor(
     private service: GenericFormService
   ) {}
@@ -71,6 +76,7 @@ export class GenericFormComponent implements OnChanges {
         ((data: any) => {
           this.metadata = this.parseMetadata(data, this.relatedField);
           this.metadata = this.parseMetadata(data, this.data);
+          this.checkRuleElement(this.metadata);
           this.getData(this.metadata);
           if (this.id && this.metadata) {
             this.show = false;
@@ -159,24 +165,24 @@ export class GenericFormComponent implements OnChanges {
     this.buttonAction.emit(e);
   }
 
-  public getRalatedData(key, endpoint, query = null) {
+  public getRalatedData(metadata, key, endpoint, query = null, param = 'options', inner = false) {
     if (query) {
       this.service.getByQuery(endpoint, query).subscribe(
       (response: any) => {
-        this.parseMetadata(this.metadata, {
+        this.parseMetadata(metadata, {
           [key]: {
             action: 'add',
-            data: { options: response.results }
+            data: { [param]: inner ? response : response.results }
           }
         });
       });
     } else {
       this.service.getAll(endpoint).subscribe(
         (response: any) => {
-          this.parseMetadata(this.metadata, {
+          this.parseMetadata(metadata, {
             [key]: {
               action: 'add',
-              data: { options: response.results }
+              data: { [param]: inner ? response : response.results }
             }
           });
         }
@@ -188,10 +194,10 @@ export class GenericFormComponent implements OnChanges {
     metadata.forEach((el) => {
       if (el.type === 'related') {
         if (el.key === key) {
-          this.getRalatedData(key, el.endpoint, query);
+          this.getRalatedData(metadata, key, el.endpoint, query + '&limit=-1');
         }
         if (!el.relate && !key) {
-          this.getRalatedData(el.key, el.endpoint);
+          this.getRalatedData(metadata, el.key, el.endpoint, '?limit=-1');
         }
       } else if (el.children) {
         this.getData(el.children, key, query);
@@ -205,7 +211,7 @@ export class GenericFormComponent implements OnChanges {
         if (params[el.key].action === 'add') {
           el = Object.assign(el, params[el.key].data);
         } else if (params[el.key].update) {
-          this.getRalatedData(el.key, el.endpoint,
+          this.getRalatedData(this.metadata, el.key, el.endpoint,
             `${params[el.key].query}${params[el.key].id}`);
         }
       } else if (el.children) {
@@ -249,5 +255,44 @@ export class GenericFormComponent implements OnChanges {
     keys.forEach((el) => {
       delete data[el];
     });
+  }
+
+  public checkRuleElement(metadata) {
+    let activeMetadata = {
+      type: 'related',
+      key: 'rules',
+      read_only: false,
+      many: true,
+      templateOptions: {
+        label: 'Active',
+        display: 'name_before_activation'
+      }
+    };
+    let ruleElement = this.getElementFromMetadata(metadata, 'rules');
+    if (ruleElement) {
+      ruleElement.activeMetadata = [activeMetadata];
+      Object.keys(this.workflowEndpoints).forEach((el) => {
+        let newMetadata = [ruleElement, activeMetadata];
+        let endpoint = this.workflowEndpoints[el];
+        let param = el === 'state' ? 'options' : el;
+        this.getRalatedData(newMetadata, 'rules', endpoint, null, param, el === 'app');
+      });
+    }
+  }
+
+  public getElementFromMetadata(metadata, key): any {
+    let element = null;
+    metadata.forEach((el) => {
+      if (el.key === key) {
+        if (!element) {
+          element = el;
+        }
+      } else if (el.children) {
+        if (!element) {
+          element = this.getElementFromMetadata(el.children, key);
+        }
+      }
+    });
+    return element;
   }
 }

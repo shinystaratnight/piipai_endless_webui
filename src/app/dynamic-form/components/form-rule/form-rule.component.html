@@ -2,6 +2,8 @@
   <label>{{config.templateOptions.label}}</label>
 
   <div class="card p-2 mb-3">
+    <dynamic-form [config]="config.activeMetadata"></dynamic-form>
+
     <div class="d-flex align-items-center pb-2" *ngFor="let item of view; let last = last">
       <div ngbRadioGroup name="operator" class="btn-group-sm mr-3"
         [(ngModel)]="item.operator">
@@ -133,6 +135,9 @@
     <button type="button" class="btn btn-success"
       (click)="done(c, choice)"
       [disabled]="!elementValue">Done</button>
+    <button type="button" class="btn btn-danger"
+      (click)="delete(c)"
+      *ngIf="editIndex">Delete</button>
     <button type="button" class="btn btn-danger" (click)="c()">Cancel</button>
   </div>
 </template>

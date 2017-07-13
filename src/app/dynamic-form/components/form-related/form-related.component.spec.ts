@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 import { FormRelatedComponent } from './form-related.component';
 
 describe('FormRelatedComponent', () => {
@@ -13,11 +13,15 @@ describe('FormRelatedComponent', () => {
     type: 'select',
     key: 'country',
     read_only: false,
+    many: undefined,
+    value: undefined,
     templateOptions: {
       label: 'Country',
       required: true,
       description: 'country text',
       placeholder: 'Country',
+      display: undefined,
+      param: undefined,
       options: [{
           key: 'mr',
           value: 'Mr.',
@@ -35,7 +39,7 @@ describe('FormRelatedComponent', () => {
         FormRelatedComponent
       ],
       providers: [FormBuilder],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, FormsModule],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
   });
@@ -58,20 +62,74 @@ describe('FormRelatedComponent', () => {
 
   describe('ngOnInit method', () => {
 
-    it('should called addControl method', async(() => {
+    it('should called addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
       spyOn(comp, 'addControl');
       comp.ngOnInit();
-      expect(comp.addControl).toHaveBeenCalled();
-    }));
+      expect(comp.display).toEqual('__str__');
+      expect(comp.param).toEqual('id');
+      expect(comp.results).toEqual([]);
+      expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
+    })));
+
+    it('should update value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      let value = [
+        {
+          name: 'First',
+          number: 1
+        },
+        {
+          name: 'Second',
+          number: 2
+        },
+      ];
+      spyOn(comp, 'addControl');
+      comp.group = fb.group({});
+      comp.group.addControl(config.key, fb.control(''));
+      comp.config.value = value;
+      comp.key = config.key;
+      comp.ngOnInit();
+      expect(comp.group.get(comp.key).value).toEqual(value);
+    })));
+
+    it('should update value if many property equal true',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+      let value = [
+        {
+          name: 'First',
+          number: 1
+        },
+        {
+          name: 'Second',
+          number: 2
+        },
+      ];
+      let display = 'name';
+      let param = 'number';
+      config.templateOptions.display = display;
+      config.templateOptions.param = param;
+      config.many = true;
+      config.value = value;
+      comp.config = config;
+      spyOn(comp, 'addControl');
+      comp.ngOnInit();
+      expect(comp.display).toEqual(display);
+      expect(comp.param).toEqual(param);
+      expect(comp.results).toEqual(value);
+      expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
+    })));
 
   });
 
   describe('ngAfterViewInit method', () => {
 
     it('should called addControl method', async(() => {
+      comp.config = config;
+      comp.related = {};
       spyOn(comp, 'addFlags');
       comp.ngAfterViewInit();
-      expect(comp.addFlags).toHaveBeenCalled();
+      expect(comp.addFlags).toHaveBeenCalledWith(comp.related, comp.config);
     }));
 
   });
