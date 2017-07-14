@@ -2,7 +2,7 @@
   <label>{{config.templateOptions.label}}</label>
 
   <div class="card p-2 mb-3">
-    <dynamic-form [config]="config.activeMetadata"></dynamic-form>
+    <dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></dynamic-form>
 
     <div class="d-flex align-items-center pb-2" *ngFor="let item of view; let last = last">
       <div ngbRadioGroup name="operator" class="btn-group-sm mr-3"
@@ -37,7 +37,7 @@
     <div>
       <button type="button" class="btn btn-primary btn-sm"
         (click)="addNewRule()"
-        [disabled]="view.length && view[view.length - 1].values.length < 2">Add rule</button>
+        [disabled]="view.length && view[view.length - 1].values.length < 1">Add rule</button>
       <button type="button" class="btn btn-primary btn-sm"
         (click)="showPreview()"
         [disabled]="view.length < 1">Preview</button>
@@ -95,8 +95,10 @@
       <div *ngSwitchCase="'state'">
         <div class="form-group mt-2">
           <label for="state">State</label>
-          <select class="form-control custom-select" [(ngModel)]="elementValue">
-            <option *ngFor="let el of statesArray">{{el.name_before_activation}}</option>
+          <select class="form-control custom-select"
+            (focus)="generateArray('options')"
+            [(ngModel)]="elementValue">
+            <option *ngFor="let el of statesArray" [value]="el.name_before_activation">{{el.name_before_activation}}</option>
           </select>
         </div>
       </div>
@@ -104,19 +106,31 @@
       <div *ngSwitchCase="'function'">
         <div class="form-group mt-2">
           <label for="app">App</label>
-          <select class="form-control custom-select" id="app" [(ngModel)]="app">
-            <option *ngFor="let el of appsArray">{{el.name}}</option>
+          <select class="form-control custom-select" id="app"
+            (focus)="generateArray('app')"
+            (change)="getRelatedData('model')"
+            [(ngModel)]="app">
+            <option *ngFor="let el of appsArray" [value]="el">{{el}}</option>
           </select>
 
-          <label for="model" class="mt-2">Model</label>
-          <select class="form-control custom-select" id="model" [(ngModel)]="model">
-            <option *ngFor="let el of modelsArray">{{el.name}}</option>
-          </select>
+          <div *ngIf="this.config.model">
+            <label for="model" class="mt-2">Model</label>
+            <select class="form-control custom-select" id="model"
+              (focus)="generateArray('model')"
+              (change)="getRelatedData('function')"
+              [(ngModel)]="model">
+              <option *ngFor="let el of modelsArray" [value]="el">{{el}}</option>
+            </select>
+          </div>
 
-          <label for="function" class="mt-2">Function</label>
-          <select class="form-control custom-select" [(ngModel)]="elementValue">
-            <option *ngFor="let el of functionsArray">{{el.name}}</option>
-          </select>
+          <div *ngIf="this.config.function">
+            <label for="function" class="mt-2">Function</label>
+            <select class="form-control custom-select"
+              (focus)="generateArray('function')"
+              [(ngModel)]="elementValue">
+              <option *ngFor="let el of functionsArray" [value]="el">{{el}}</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -137,7 +151,7 @@
       [disabled]="!elementValue">Done</button>
     <button type="button" class="btn btn-danger"
       (click)="delete(c)"
-      *ngIf="editIndex">Delete</button>
+      *ngIf="editIndex === 0 || editIndex">Delete</button>
     <button type="button" class="btn btn-danger" (click)="c()">Cancel</button>
   </div>
 </template>

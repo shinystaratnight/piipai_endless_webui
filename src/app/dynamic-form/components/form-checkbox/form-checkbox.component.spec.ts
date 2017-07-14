@@ -49,12 +49,17 @@ describe('FormCheckboxComponent', () => {
 
   describe('ngOnInit method', () => {
 
-    it('should called addControl method', async(() => {
+    it('should called addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let form = fb.group({});
+      comp.key = 'active';
+      form.addControl(comp.key, fb.control(''));
+      comp.group = form;
       comp.config = config;
       spyOn(comp, 'addControl');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
-    }));
+      expect(comp.group.get(comp.key).patchValue(false));
+    })));
 
     it('should update value', async(inject([FormBuilder], (fb: FormBuilder) => {
       let form = fb.group({});

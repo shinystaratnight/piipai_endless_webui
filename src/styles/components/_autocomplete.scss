@@ -4,11 +4,17 @@
     position: absolute;
     overflow-y: auto;
     max-height: 200px;
+    border: 1px solid rgba($brand-inverse, .5);
+    border-radius: 0 0 .2rem .2rem;
     z-index: 100;
   }
 
-  &-item:hover {
-    width: 100%;
-    background-color: $brand-primary;
+  &-item {
+    border: none;
+    border-radius: 0 !important;
+    &:hover {
+      width: 100%;
+      background-color: $brand-primary;
+    }
   }
 }

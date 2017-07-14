@@ -47,9 +47,16 @@ export class FormRelatedComponent
     this.results = [];
     if (this.config.value) {
       if (!this.config.many) {
-        this.group.get(this.key).patchValue(this.config.value);
+        let value;
+        if (this.config.value instanceof Object) {
+          value = this.config.value[this.param];
+        } else {
+          value = this.config.value;
+        }
+        this.group.get(this.key).patchValue(value);
       } else {
         this.results = this.config.value;
+        this.updateData();
       }
     }
   }
@@ -69,7 +76,9 @@ export class FormRelatedComponent
   }
 
   public resetList() {
-    this.list = null;
+    setTimeout(() => {
+      this.list = null;
+    }, 150);
   }
 
   public filter(value) {
@@ -99,6 +108,8 @@ export class FormRelatedComponent
       let exist = this.results.indexOf(element) > -1;
       if (!exist) {
         this.results.push(element);
+        this.changeList();
+        this.updateData();
       }
     }
     this.value = null;
@@ -108,6 +119,8 @@ export class FormRelatedComponent
   public deleteItem(index) {
     if (this.results[index]) {
       this.results.splice(index, 1);
+      this.changeList();
+      this.updateData();
     }
   }
 
@@ -117,5 +130,18 @@ export class FormRelatedComponent
       el: this.config,
       value: this.config.options.filter((el) => el.id === this.group.get(this.key).value)
     });
+  }
+
+  public changeList() {
+    this.event.emit({
+      list: this.results
+    });
+  }
+
+  public updateData() {
+    let results = this.results.map((el) => {
+      return el[this.param];
+    });
+    this.group.get(this.key).patchValue(results);
   }
 }

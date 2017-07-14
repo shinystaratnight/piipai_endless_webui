@@ -15,13 +15,13 @@
     </select>
   </div>
 
-  <div *ngIf="config.many" style="position: relative"
-      (blur)="resetList()">
+  <div *ngIf="config.many" style="position: relative">
     <label [attr.for]="key">{{config.templateOptions.label}}</label>
     <input type="text" class="form-control custom-select"
       [(ngModel)]="value"
       [ngModelOptions]="{standalone: true}"
       (focus)="generateList()"
+      (blur)="resetList()"
       (keyup)="filter(value)">
     <div class="autocomplete-list" *ngIf="list && list.length">
       <ul class="list-group w-100">

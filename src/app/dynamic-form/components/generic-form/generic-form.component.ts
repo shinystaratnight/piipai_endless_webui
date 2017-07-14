@@ -133,12 +133,14 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public parseError(errors) {
-    if (errors.register) {
-      this.redirect.emit({
-        field: errors.register,
-        value: this.sendData.username
-      });
-      return;
+    if (errors) {
+      if (errors.register) {
+        this.redirect.emit({
+          field: errors.register,
+          value: this.sendData.username
+        });
+        return;
+      }
     }
     this.resetData(this.errors);
     this.errors = this.updateErrors(this.errors, errors, this.response);
@@ -157,6 +159,11 @@ export class GenericFormComponent implements OnChanges {
       let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
       this.getData(this.metadata, key, query);
       this.resetRalatedData(this.metadata, event.el.related.reset);
+    } else if (event.type === 'change' && event.el.type === 'rule') {
+      let key = event.el.related.field;
+      let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
+      this.getRalatedData(this.metadata,
+        key, event.el.endpoint, query, event.el.related.prop, true);
     }
     this.event.emit(event);
   }
@@ -221,10 +228,10 @@ export class GenericFormComponent implements OnChanges {
     return metadata;
   }
 
-  public resetRalatedData(metadata, key) {
+  public resetRalatedData(metadata, key, param = 'options') {
     metadata.forEach((el) => {
       if (el.key === key) {
-        delete el.options;
+        delete el[param];
       } else if (el.children) {
         this.resetRalatedData(el.children, key);
       }

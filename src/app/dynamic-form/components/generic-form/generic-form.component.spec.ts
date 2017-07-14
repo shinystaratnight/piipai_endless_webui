@@ -7,7 +7,7 @@ import { DebugElement } from '@angular/core';
 import { GenericFormComponent } from './generic-form.component';
 import { GenericFormService } from './../../services/generic-form.service';
 
-describe('EnterTheComponentName', () => {
+describe('GenericFormComponent', () => {
     let fixture: ComponentFixture<GenericFormComponent>;
     let comp: GenericFormComponent;
     let el;
@@ -56,7 +56,7 @@ describe('EnterTheComponentName', () => {
 
     it('should enter the assertion', () => {
         fixture.detectChanges();
-        expect(2).toEqual(2);
+        expect(comp).toBeDefined();
     });
 
     describe('ngOnChanges method', () => {
@@ -76,7 +76,7 @@ describe('EnterTheComponentName', () => {
         comp.endpoint = endpoint;
         spyOn(comp, 'getMetadata');
         comp.ngOnChanges();
-        expect(comp.getMetadata).toHaveBeenCalled();
+        expect(comp.getMetadata).toHaveBeenCalledWith(comp.endpoint);
         expect(comp.currentEndpoint).toEqual(endpoint);
       }));
 
@@ -90,7 +90,7 @@ describe('EnterTheComponentName', () => {
         comp.metadata = config;
         spyOn(comp, 'parseMetadata');
         comp.ngOnChanges();
-        expect(comp.parseMetadata).toHaveBeenCalled();
+        expect(comp.parseMetadata).toHaveBeenCalledWith(comp.metadata, comp.data);
       }));
 
     });
@@ -117,7 +117,7 @@ describe('EnterTheComponentName', () => {
         spyOn(comp, 'getData');
         spyOn(comp, 'checkRuleElement');
         comp.getMetadata(endpoint);
-        expect(comp.parseMetadata).toHaveBeenCalled();
+        expect(comp.parseMetadata).toHaveBeenCalledTimes(2);
         expect(comp.getData).toHaveBeenCalled();
         expect(comp.checkRuleElement).toHaveBeenCalled();
         expect(comp.show).toBeTruthy();
@@ -144,9 +144,11 @@ describe('EnterTheComponentName', () => {
           }
         }];
         comp.id = 'Some id';
+        comp.show = true;
         let endpoint = 'endpoint';
         spyOn(comp, 'getDataForForm');
         comp.getMetadata(endpoint);
+        expect(comp.show).toBeFalsy();
         expect(comp.getDataForForm).toHaveBeenCalled();
       }));
 
@@ -391,6 +393,28 @@ describe('EnterTheComponentName', () => {
         expect(comp.event.emit).toHaveBeenCalled();
       }));
 
+      it('should handle event if type equal "rule"', async(() => {
+        let e = {
+          type: 'change',
+          el: {
+            type: 'rule',
+            endpoint: 'some endpoint',
+            related: {
+              field: 'rules',
+              query: '?company=',
+              param: 'id',
+              prop: 'app'
+            }
+          },
+          value: [{id: 2}]
+        };
+        comp.metadata = [];
+        spyOn(comp, 'getRalatedData');
+        comp.eventHandler(e);
+        expect(comp.getRalatedData).toHaveBeenCalledWith( comp.metadata,
+          'rules', 'some endpoint', '?company=2', 'app', true);
+      }));
+
     });
 
     describe('buttonActionHandler method', () => {
@@ -403,7 +427,7 @@ describe('EnterTheComponentName', () => {
         let event = 'event';
         spyOn(comp.buttonAction, 'emit');
         comp.buttonActionHandler(event);
-        expect(comp.buttonAction.emit).toHaveBeenCalled();
+        expect(comp.buttonAction.emit).toHaveBeenCalledWith(event);
       }));
 
     });
@@ -417,12 +441,13 @@ describe('EnterTheComponentName', () => {
       it('should get all elements', async(() => {
         let key = 'address.country';
         let endpoint = '/ecore/api/v2/countries';
+        let inner = true;
         response = {
           results: [{ id: 2, name: 'Australia' }]
         };
         comp.metadata = [];
         spyOn(comp, 'parseMetadata');
-        comp.getRalatedData(comp.metadata, key, endpoint);
+        comp.getRalatedData(comp.metadata, key, endpoint, null, null, inner);
         expect(comp.parseMetadata).toHaveBeenCalled();
       }));
 
@@ -430,12 +455,13 @@ describe('EnterTheComponentName', () => {
         let key = 'address.country';
         let endpoint = '/ecore/api/v2/countries';
         let query = '?region=5';
+        let param = 'app';
         response = {
           results: [{ id: 2, name: 'Australia' }]
         };
         comp.metadata = [];
         spyOn(comp, 'parseMetadata');
-        comp.getRalatedData(comp.metadata, key, endpoint);
+        comp.getRalatedData(comp.metadata, key, endpoint, query, param);
         expect(comp.parseMetadata).toHaveBeenCalled();
       }));
 
@@ -461,8 +487,9 @@ describe('EnterTheComponentName', () => {
           }]
         }];
         spyOn(comp, 'getRalatedData');
-        comp.getData(config, 'address.city');
-        expect(comp.getRalatedData).toHaveBeenCalled();
+        comp.getData(config, 'address.city', '?region=2');
+        expect(comp.getRalatedData).toHaveBeenCalledWith(
+          config[1]['children'], 'address.city', '/ecore/api/v2/cities', '?region=2&limit=-1');
       }));
 
       it('should get all related data', async(() => {
@@ -479,8 +506,8 @@ describe('EnterTheComponentName', () => {
           }]
         }];
         spyOn(comp, 'getRalatedData');
-        comp.getData(config, 'address.city', '?region=2');
-        expect(comp.getRalatedData).toHaveBeenCalled();
+        comp.getData(config);
+        expect(comp.getRalatedData).toHaveBeenCalledTimes(2);
       }));
 
     });
@@ -555,7 +582,7 @@ describe('EnterTheComponentName', () => {
             }]
           }]
         }];
-        comp.resetRalatedData(config, fieldCity);
+        comp.resetRalatedData(config, fieldCity, 'options');
         expect(config[1]['children'][0].options).toBeUndefined();
       }));
 
@@ -599,6 +626,64 @@ describe('EnterTheComponentName', () => {
         comp.resetData(data);
         expect(data[fieldCity]).toBeUndefined();
         expect(data[fieldCountry]).toBeUndefined();
+      }));
+
+    });
+
+    describe('checkRuleElement method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.checkRuleElement).toBeDefined();
+      }));
+
+      it('should check rule element', async(() => {
+        let active = {
+          type: 'related',
+          key: 'rules',
+          read_only: false,
+          many: true,
+          templateOptions: {
+            label: 'Active',
+            display: 'name_before_activation'
+          }
+        };
+        let config = [{
+          type: 'rule',
+          key: 'rules',
+          activeMetadata: null
+        }];
+        spyOn(comp, 'getElementFromMetadata').and.returnValue(config[0]);
+        spyOn(comp, 'getRalatedData');
+        comp.checkRuleElement(config);
+        expect(comp.getElementFromMetadata).toHaveBeenCalledWith(config, 'rules');
+        expect(comp.getRalatedData).toHaveBeenCalledTimes(2);
+        expect(config[0].activeMetadata).toEqual([active]);
+
+      }));
+
+    });
+
+    describe('getElementFromMetadata method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.getElementFromMetadata).toBeDefined();
+      }));
+
+      it('should return element from metadata', async(() => {
+        let config = [
+          {
+            type: 'row',
+            key: 'country',
+            children: [
+              {
+                type: 'rule',
+                key: 'rules',
+              }
+            ]
+          }
+        ];
+        let result = comp.getElementFromMetadata(config, 'rules');
+        expect(result).toEqual(config[0]['children'][0]);
       }));
 
     });

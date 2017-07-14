@@ -50,6 +50,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
   public editIndex: number;
   public previewRule: any[];
   public activeStatesConfig: any[];
+  public data: OutputData;
 
   constructor(
     private fb: FormBuilder,
@@ -64,11 +65,12 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
     this.id = 0;
     this.ruleArray = [];
     this.previewRule = [];
+    this.data = <any> {};
   }
 
   public addNewRule(): void {
     if (this.view) {
-      if (this.view.length === 0 || this.view[this.view.length - 1].values.length > 1) {
+      if (this.view.length === 0 || this.view[this.view.length - 1].values.length > 0) {
         this.id += 1;
         this.view.push({
           id: this.id,
@@ -83,8 +85,18 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
     this.addType = type || 'new';
     this.editRule = rule;
     this.choice = '';
+
+    this.app = '';
+    this.model = '';
+    this.elementValue = '';
+    this.config.model = null;
+    this.config.function = null;
+    this.modelsArray = null;
+    this.functionsArray = null;
+
     if (rule && rule.values[index]) {
       this.editIndex = index;
+      this.elementValue = rule.values[index];
     }
     if (type === 'state' || type === 'function') {
       this.choice = type;
@@ -96,22 +108,29 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
   public done(closeModal, type) {
     closeModal();
     let choiceType;
-    if (type) {
-      choiceType = type === 'rule' ? this.addType : type;
-      this.editRule.type = choiceType;
-    }
-    if (this.elementValue) {
-      if (this.editRule && this.editRule.values[this.editIndex]) {
+    if (this.elementValue && this.editRule) {
+      if (type) {
+        choiceType = type === 'rule' ? this.addType : type;
+        this.editRule.type = choiceType;
+      }
+      if (this.editRule.values[this.editIndex]) {
         this.editRule.values[this.editIndex] = this.elementValue;
       } else {
         this.editRule.values.push(this.elementValue);
       }
     }
     this.reset();
+    this.generateData(this.view);
   }
 
   public delete(closeModal) {
     closeModal();
+    let edit = this.editRule;
+    edit.values.splice(this.editIndex, 1);
+    if (!edit.values.length) {
+      edit.type = null;
+    }
+    this.reset();
   }
 
   public reset() {
@@ -119,7 +138,6 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
     this.editIndex = null;
     this.ruleArray = [];
     this.choice = '';
-    this.elementValue = '';
   }
 
   public prepareRuleArray(type, currentId): any[] {
@@ -159,7 +177,9 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
         }
         return el;
       });
-      parseRule.unshift(item.operator);
+      if (parseRule.length > 1) {
+        parseRule.unshift(item.operator);
+      }
     }
     return parseRule;
   }
@@ -168,7 +188,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
     let value = '';
     let operator;
     if (array) {
-      operator = array.shift();
+      operator = (array.length > 1) ? array.shift() : null;
       let newArray = array.map((el) => {
         if (Array.isArray(el)) {
           el = this.generateStringOfValues(el);
@@ -176,9 +196,89 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
         }
         return `"${el}"`;
       });
-      value += newArray.join(` ${operator} `);
+      value += (operator) ? newArray.join(` ${operator} `) : newArray.toString();
     }
     return `( ${value} )`;
+  }
+
+  public generateArray(type) {
+    let props = {
+      app: 'appsArray',
+      model: 'modelsArray',
+      function: 'functionsArray',
+      options: 'statesArray'
+    };
+    if (type === 'function' || type === 'options') {
+      let existValues = this.editRule.values;
+      this[props[type]] = this.config[type].filter((el) => {
+        return (type === 'options') ? existValues.indexOf(el.name_before_activation) === -1 :
+          existValues.indexOf(el) === -1;
+      });
+    } else {
+      this[props[type]] = [].concat(this.config[type]);
+    }
+  }
+
+  public getRelatedData(type) {
+    let params = {
+      model: {
+        param: 'app',
+        query: `?app_name=`,
+        endpoint: '/ecore/api/v2/models/'
+      },
+      function: {
+        param: 'model',
+        query: `?app_name=${this.app}&model_name=`,
+        endpoint: '/ecore/api/v2/functions/'
+      }
+    };
+    if (type === 'model') {
+      this.model = null;
+      this.elementValue = null;
+      delete this.config.model;
+      delete this.config.function;
+    } else if (type === 'function') {
+      this.elementValue = null;
+      delete this.config.function;
+    }
+    this.event.emit({
+      type: 'change',
+      el: {
+        endpoint: params[type].endpoint,
+        type: 'rule',
+        related: {
+          field: 'rules',
+          param: params[type].param,
+          query: params[type].query,
+          prop: type
+        }
+      },
+      value: [{ [params[type].param]: this[params[type].param] }]
+    });
+  }
+
+  public generateData(view) {
+    let types = ['state', 'function'];
+    types.forEach((el) => {
+      let ruleArray = this.view.filter((elem) => elem.type === el);
+      let lastElement = ruleArray.pop();
+      let parsedRuleValue = this.parseValue(lastElement);
+      if (parsedRuleValue) {
+        if (el === 'state') {
+          this.data.required_states = parsedRuleValue;
+        } else if (el === 'function') {
+          this.data.required_functions = parsedRuleValue;
+        }
+      }
+    });
+  }
+
+  public changeActiveStates(e) {
+    if (e && e.list) {
+      this.data.active = e.list.map((el) => {
+        return el.number;
+      });
+    }
   }
 
 }
