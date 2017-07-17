@@ -58,6 +58,8 @@ export class GenericFormComponent implements OnChanges {
     app: `/ecore/api/v2/apps/`
   };
 
+  public workflowData = <any> {};
+
   constructor(
     private service: GenericFormService
   ) {}
@@ -154,6 +156,7 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public eventHandler(event) {
+    this.updateWorkflowData(event);
     if (event.type === 'change' && event.el.type === 'related' && event.el.related) {
       let key = event.el.related.field;
       let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
@@ -214,14 +217,14 @@ export class GenericFormComponent implements OnChanges {
 
   public parseMetadata(metadata, params) {
     metadata.forEach((el) => {
-      if (el.key && !!params[el.key]) {
+      if (el && el.key && !!params[el.key]) {
         if (params[el.key].action === 'add') {
           el = Object.assign(el, params[el.key].data);
         } else if (params[el.key].update) {
           this.getRalatedData(this.metadata, el.key, el.endpoint,
             `${params[el.key].query}${params[el.key].id}`);
         }
-      } else if (el.children) {
+      } else if (el && el.children) {
         this.parseMetadata(el.children, params);
       }
     });
@@ -282,7 +285,7 @@ export class GenericFormComponent implements OnChanges {
         let newMetadata = [ruleElement, activeMetadata];
         let endpoint = this.workflowEndpoints[el];
         let param = el === 'state' ? 'options' : el;
-        this.getRalatedData(newMetadata, 'rules', endpoint, null, param, el === 'app');
+        this.getRalatedData(newMetadata, 'rules', endpoint, '?default=2', param, el === 'app');
       });
     }
   }
@@ -301,5 +304,32 @@ export class GenericFormComponent implements OnChanges {
       }
     });
     return element;
+  }
+
+  public updateWorkflowData(event) {
+    if (event && event.el) {
+      if (event.el.key === 'workflow' || event.el.key === 'number' || event.el.key === 'company') {
+        this.workflowData[event.el.key] = Array.isArray(event.value)
+          ? event.value[0].id : event.value;
+        this.getDataOfWorkflownode();
+      }
+    }
+  }
+
+  public getDataOfWorkflownode() {
+    let keys = Object.keys(this.workflowData);
+    if (keys.length === 3) {
+      let query = [];
+      keys.forEach((el) => {
+        if (this.workflowData[el]) {
+          console.log(el);
+          if (el !== 'number' && el !== 'el') {
+            query.push(`${el}=${this.workflowData[el]}`);
+          }
+        }
+      });
+      this.getRalatedData([this.workflowData.el],
+        'rule', this.workflowEndpoints.state, `?${query.join('&')}`, 'state');
+    }
   }
 }

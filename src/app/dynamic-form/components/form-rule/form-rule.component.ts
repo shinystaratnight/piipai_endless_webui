@@ -66,6 +66,9 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
     this.ruleArray = [];
     this.previewRule = [];
     this.data = <any> {};
+    if (this.config.value) {
+      this.generateView(this.config.value);
+    }
   }
 
   public addNewRule(): void {
@@ -279,6 +282,30 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
         return el.number;
       });
     }
+  }
+
+  public generateView(data) {
+    let attr = Object.keys(data);
+    attr.forEach((el) => {
+      if (el === 'active') {
+        let results = [];
+        data[el].forEach((state) => {
+          this.config.state.filter((item) => {
+            if (+item.number === +state) {
+              results.push(item);
+            }
+          });
+        });
+        this.config.activeMetaresults.value = results;
+      } else {
+        let type;
+        if (el === 'required_states') {
+          type = 'state';
+        } else if (el === 'required_functions') {
+          type = 'function';
+        }
+      }
+    });
   }
 
 }

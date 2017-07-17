@@ -211,6 +211,59 @@ describe('FormRelatedComponent', () => {
 
   });
 
+  describe('setValue method', () => {
+
+    it('should add value', async(() => {
+      let options = [
+        { name: 'Bob' },
+        { name: 'Sam' },
+        { name: 'John' },
+        { name: 'Bill' },
+        { name: 'Tom' }
+      ];
+      let item = { name: 'Bob' };
+      comp.config = config;
+      comp.config.options = options;
+      comp.display = 'name';
+      comp.results = [];
+      comp.value = 'some value';
+      this.list = options;
+      spyOn(comp, 'changeList');
+      spyOn(comp, 'updateData');
+      comp.setValue(item);
+      expect(comp.results).toEqual([item]);
+      expect(comp.changeList).toHaveBeenCalled();
+      expect(comp.updateData).toHaveBeenCalled();
+      expect(comp.value).toBeNull();
+      expect(comp.list).toBeNull();
+    }));
+
+  });
+
+  describe('deleteItem method', () => {
+
+    it('should delete item from results', async(() => {
+      let options = [
+        { name: 'Bob' },
+        { name: 'Sam' },
+        { name: 'John' },
+        { name: 'Bill' },
+        { name: 'Tom' }
+      ];
+      let item = 2;
+      comp.config = config;
+      comp.results = options;
+      spyOn(comp, 'changeList');
+      spyOn(comp, 'updateData');
+      comp.setValue(item);
+      options.splice(item, 1);
+      expect(comp.results).toEqual(options);
+      expect(comp.changeList).toHaveBeenCalled();
+      expect(comp.updateData).toHaveBeenCalled();
+    }));
+
+  });
+
   describe('eventHandler method', () => {
 
     it('should be emit event', async(inject([FormBuilder], (fb) => {
@@ -235,6 +288,43 @@ describe('FormRelatedComponent', () => {
       spyOn(comp.event, 'emit');
       comp.eventHandler(event);
       expect(comp.event.emit).toHaveBeenCalled();
+    })));
+
+  });
+
+  describe('changeList method', () => {
+
+    it('should emit event of change', async() => {
+      let list = [
+        { name: 'Bob' },
+        { name: 'Sam' }
+      ];
+      comp.config = config;
+      comp.results = list;
+      spyOn(comp.event, 'emit');
+      comp.changeList();
+      expect(comp.event.emit).toHaveBeenCalledWith({list});
+    });
+
+  });
+
+  describe('updateData method', () => {
+
+    it('should update value of form', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let list = [
+        { name: 'Bob', id: 1 },
+        { name: 'Sam', id: 2 }
+      ];
+      let key = 'name';
+      let form = fb.group({});
+      form.addControl(key, fb.control(''));
+      comp.group = form;
+      comp.config = config;
+      comp.key = key;
+      comp.results = list;
+      comp.param = 'id';
+      comp.updateData();
+      expect(comp.group.get(key).value).toEqual([1, 2]);
     })));
 
   });
