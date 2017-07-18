@@ -4,8 +4,8 @@
   <div class="card p-2 mb-3">
     <dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></dynamic-form>
 
-    <div class="d-flex align-items-center pb-2" *ngFor="let item of view; let last = last">
-      <div ngbRadioGroup name="operator" class="btn-group-sm mr-3"
+    <div class="d-flex flex-wrap align-items-center pb-2" *ngFor="let item of view; let last = last">
+      <div ngbRadioGroup name="operator" class="btn-group-sm mr-3 mb-1"
         [(ngModel)]="item.operator">
         <label class="btn btn-primary mb-0">
           <input type="radio" [value]="'or'">or
@@ -18,7 +18,7 @@
       <span class="pr-1">#{{item.id}}</span>
 
       <span *ngFor="let value of item.values; let last = last; let i = index">
-        <span class="badge badge-default p-2 mx-1">
+        <span class="badge badge-default p-2 mb-1">
           {{value}}
           <i fa class="icon pl-2"
             (click)="open(element, item.type, item, i)"
@@ -44,7 +44,7 @@
     </div>
 
     <div class="mt-2" *ngFor="let item of previewRule">
-      <b>{{item.label}}s:</b>{{item.value}}
+      <b>{{item.label}}s:</b>&nbsp;{{item.value}}
     </div>
   </div>
 

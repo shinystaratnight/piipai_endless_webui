@@ -55,7 +55,9 @@ export class FormRelatedComponent
         }
         this.group.get(this.key).patchValue(value);
       } else {
-        this.results = this.config.value;
+        this.results = this.config.options.filter((el) => {
+          return this.config.value.indexOf(el.number) > -1;
+        });
         this.updateData();
       }
     }

@@ -52,6 +52,7 @@ export class GenericFormComponent implements OnChanges {
   public sendData = null;
   public currentEndpoint: string;
   public show: boolean = false;
+  public editForm: boolean = false;
 
   public workflowEndpoints = {
     state: `/ecore/api/v2/endless-core/workflownodes/`,
@@ -81,6 +82,7 @@ export class GenericFormComponent implements OnChanges {
           this.checkRuleElement(this.metadata);
           this.getData(this.metadata);
           if (this.id && this.metadata) {
+            this.editForm = true;
             this.show = false;
             this.getDataForForm(this.endpoint, this.id);
           } else {
@@ -94,6 +96,7 @@ export class GenericFormComponent implements OnChanges {
     this.service.getAll(`${endpoint}${id}`).subscribe(
       ((data: any) => {
         this.fillingForm(this.metadata, data);
+        this.show = true;
       }
     ));
   }
@@ -106,7 +109,7 @@ export class GenericFormComponent implements OnChanges {
         this.fillingForm(el.children, data);
       }
     });
-    this.show = true;
+    this.getDataForRules(data);
   }
 
   public getValueOfData(data, key, obj) {
@@ -129,9 +132,15 @@ export class GenericFormComponent implements OnChanges {
       }
     }
     this.sendData = data;
-    this.service.submitForm(this.endpoint, data).subscribe(
-      ((response: any) => this.parseResponse(response)),
-      ((errors: any) => this.parseError(errors.errors)));
+    if (this.editForm) {
+      this.service.editForm(`${this.endpoint}${this.id}/`, data).subscribe(
+        ((response: any) => this.parseResponse(response)),
+        ((errors: any) => this.parseError(errors.errors)));
+    } else {
+      this.service.submitForm(this.endpoint, data).subscribe(
+        ((response: any) => this.parseResponse(response)),
+        ((errors: any) => this.parseError(errors.errors)));
+    }
   }
 
   public parseError(errors) {
@@ -178,14 +187,23 @@ export class GenericFormComponent implements OnChanges {
   public getRalatedData(metadata, key, endpoint, query = null, param = 'options', inner = false) {
     if (query) {
       this.service.getByQuery(endpoint, query).subscribe(
-      (response: any) => {
-        this.parseMetadata(metadata, {
-          [key]: {
-            action: 'add',
-            data: { [param]: inner ? response : response.results }
+        (response: any) => {
+          this.parseMetadata(metadata, {
+            [key]: {
+              action: 'add',
+              data: { [param]: inner ? response : response.results }
+            }
+          });
+          if (key === 'rules') {
+            if (response.results) {
+              this.updateValueOfRules(response.results);
+            }
+            if (this.workflowData.company &&
+              this.workflowData.number && this.workflowData.workflow) {
+              this.updateMetadata(this.metadata, key);
+            }
           }
         });
-      });
     } else {
       this.service.getAll(endpoint).subscribe(
         (response: any) => {
@@ -322,14 +340,66 @@ export class GenericFormComponent implements OnChanges {
       let query = [];
       keys.forEach((el) => {
         if (this.workflowData[el]) {
-          console.log(el);
           if (el !== 'number' && el !== 'el') {
             query.push(`${el}=${this.workflowData[el]}`);
           }
         }
       });
-      this.getRalatedData([this.workflowData.el],
-        'rule', this.workflowEndpoints.state, `?${query.join('&')}`, 'state');
+      let element = this.getElementFromMetadata(this.metadata, 'rules');
+      this.getRalatedData([element, element.activeMetadata[0]],
+        'rules', this.workflowEndpoints.state, `?${query.join('&')}`);
+    }
+  }
+
+  public updateMetadata(data, key) {
+    let element = this.getElementFromMetadata(data, key);
+    data.forEach((el, i) => {
+      if (el.key === key) {
+        data.splice(i, 1, Object.assign({}, element));
+      } else if (el.children) {
+        this.updateMetadata(el.children, key);
+      }
+    });
+  }
+
+  public updateValueOfRules(res) {
+    let key = 'rules';
+    if (res && res.length > 0) {
+      res.forEach((el) => {
+        if (el.number === +this.workflowData.number) {
+          let element = this.getElementFromMetadata(this.metadata, key);
+          element.value = el.rules;
+        }
+      });
+    }
+  }
+
+  public getDataForRules(data) {
+    let element = this.getElementFromMetadata(this.metadata, 'rules');
+    if (element) {
+      ['company', 'number', 'workflow'].forEach((el) => {
+        if (data[el]) {
+          this.workflowData[el] = data[el];
+        }
+      });
+      if (this.workflowData.workflow && this.workflowData.company) {
+        let keys = Object.keys(this.workflowData);
+        let newMetadata = [element, element.activeMetadata[0]];
+        let endpoint = this.workflowEndpoints['state'];
+        let query = [];
+        keys.forEach((el) => {
+          if (this.workflowData[el]) {
+            if (el !== 'number' && el !== 'el') {
+              if (this.workflowData[el].id) {
+                query.push(`${el}=${this.workflowData[el].id}`);
+              } else {
+                query.push(`${el}=${this.workflowData[el]}`);
+              }
+            }
+          }
+        });
+        this.getRalatedData(newMetadata, 'rules', endpoint, `?${query.join('&')}`);
+      }
     }
   }
 }

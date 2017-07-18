@@ -67,7 +67,9 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
     this.previewRule = [];
     this.data = <any> {};
     if (this.config.value) {
-      this.generateView(this.config.value);
+      this.data = this.config.value;
+      this.generateView(this.data);
+      this.group.get(this.key).patchValue(this.data);
     }
   }
 
@@ -165,7 +167,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
       let parsedRuleValue = this.parseValue(lastElement);
       this.previewRule.push({
         label: el[0].toUpperCase() + el.slice(1),
-        value: this.generateStringOfValues(parsedRuleValue)
+        value: this.generateStringOfValues(parsedRuleValue, el)
       });
     });
   }
@@ -178,6 +180,12 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
           let rule = this.view.filter((elem) => +elem.id === +el.slice(1))[0];
           el = this.parseValue(rule);
         }
+        if (item.type === 'state') {
+          let state = this.config.options.filter((elem) => elem.name_before_activation === el)[0];
+          if (state) {
+            el = state.number;
+          }
+        }
         return el;
       });
       if (parseRule.length > 1) {
@@ -187,15 +195,21 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
     return parseRule;
   }
 
-  public generateStringOfValues(array): string {
+  public generateStringOfValues(array, type = ''): string {
     let value = '';
     let operator;
     if (array) {
       operator = (array.length > 1) ? array.shift() : null;
       let newArray = array.map((el) => {
         if (Array.isArray(el)) {
-          el = this.generateStringOfValues(el);
+          el = this.generateStringOfValues(el, type);
           return el;
+        }
+        if (type === 'state') {
+          let stateObj = this.config.options.filter((elem) => +elem.number === +el)[0];
+          if (stateObj) {
+            el = stateObj.name_before_activation;
+          }
         }
         return `"${el}"`;
       });
@@ -274,6 +288,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
         }
       }
     });
+    this.group.get(this.key).patchValue(this.data);
   }
 
   public changeActiveStates(e) {
@@ -282,21 +297,14 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
         return el.number;
       });
     }
+    this.generateData(this.view);
   }
 
   public generateView(data) {
     let attr = Object.keys(data);
     attr.forEach((el) => {
       if (el === 'active') {
-        let results = [];
-        data[el].forEach((state) => {
-          this.config.state.filter((item) => {
-            if (+item.number === +state) {
-              results.push(item);
-            }
-          });
-        });
-        this.config.activeMetaresults.value = results;
+        this.config.activeMetadata[0].value = data[el];
       } else {
         let type;
         if (el === 'required_states') {
@@ -304,8 +312,37 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
         } else if (el === 'required_functions') {
           type = 'function';
         }
+        this.generateDataForView([].concat(data[el]), type);
       }
     });
+  }
+
+  public generateDataForView(data, type) {
+    if (data.length === 0) {
+      this.createElement(undefined, 'or', this.id += 1, data);
+      return;
+    }
+    let operator = (data.length === 1) ? 'or' : data.shift();
+    let newData = data.map((el, i) => {
+      if (Array.isArray(el)) {
+        let id = this.generateDataForView(el, type);
+        let nemElement = `#${id}`;
+        return nemElement;
+      }
+      if (type === 'state') {
+        let obj = this.config.options.filter((prop) => prop.number === el)[0];
+        if (obj) {
+          el = obj.name_before_activation;
+        }
+      }
+      return el;
+    });
+    this.createElement(type, operator, this.id += 1, newData);
+    return this.id;
+  }
+
+  public createElement(type, operator, id, values) {
+    this.view.push({ id, type, operator, values });
   }
 
 }
