@@ -1,0 +1,28 @@
+$filter-element-width: 250px;
+$filter-block-height: 400px;
+
+.filter {
+  &-block {
+    max-height: $filter-block-height;
+    width: 100%;
+
+    &-collapsed {
+      overflow-x: auto;
+      white-space: nowrap;
+
+      &>div {
+        display: inline-block;
+      }
+    }
+  }
+
+  @include media-breakpoint-down('sm') {
+    &-block {
+      overflow-y: auto;
+    }
+  }
+
+  &-element {
+    width: $filter-element-width;
+  }
+}

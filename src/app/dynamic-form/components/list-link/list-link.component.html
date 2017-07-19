@@ -1,0 +1,23 @@
+<a [attr.href]="href" *ngIf="config.value && !link">{{config.value}}</a>
+<a routerLink="{{href}}" *ngIf="link && config.link">
+  {{config.value}}
+  <span *ngIf="config.fields">
+    <ng-container
+      *ngFor="let field of config.fields"
+      listElement
+      [config]="field"></ng-container>
+  </span>
+</a>
+<a #link *ngIf="config.endpoint" href="" (click)="action($event)">
+  {{config.value}}
+  <span *ngIf="config.fields">
+    <ng-container
+      *ngFor="let field of config.fields"
+      listElement
+      [config]="field"
+      (event)="eventHandler($event)"
+      (buttonAction)="buttonHandler($event)"></ng-container>
+  </span>
+</a>
+
+<br *ngIf="config.value">

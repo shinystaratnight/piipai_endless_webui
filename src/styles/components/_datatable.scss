@@ -1,0 +1,82 @@
+$datatable-background-color: white;
+$datatable-top: 250px;
+$datatable-left: $datatable-top;
+$row-datatable-margin-bottom: $spacer;
+$row-datatable-border-width: 2px;
+$row-datatable-border-color: rgba($gray-light, .5);
+$cell-datatable-width: 40%;
+
+.datatable {
+  background-color: $datatable-background-color;
+
+  &-list {
+    max-width: 100vw;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 110;
+
+    .title {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+
+  &-item {
+    max-width: 190px;
+  }
+
+  &-title-hover {
+    cursor: pointer;
+  }
+
+  &.poped {
+    max-width: 1200px !important;
+    position: fixed;
+    top: $datatable-top;
+    left: $datatable-left;
+    border-color: rgba(0, 0, 0, .2);
+    box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
+
+    .datatable-body {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+  }
+
+  a {
+    color: inherit;
+    &:hover {
+      color: $brand-primary;
+    }
+  }
+
+  @include media-breakpoint-down('sm') {
+    table tr {
+      margin-bottom: $row-datatable-margin-bottom;
+      display: block;
+      border-bottom: $row-datatable-border-width solid $row-datatable-border-color;
+    }
+    table td {
+      display: block;
+    }
+    table td:last-child {
+      border-bottom: 0;
+    }
+    table td::before {
+      display: block;
+      text-align: left;
+      width: $cell-datatable-width;
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+    }
+    table td::after {
+      display: table;
+      clear: both;
+      content: '';
+      width: 0;
+      height: 0;
+    }
+  }
+}

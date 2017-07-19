@@ -1,0 +1,11 @@
+<span *ngIf="head" (click)="sort()">{{config.label}}</span>
+
+<div *ngIf="!head">
+  <ng-container
+    *ngFor="let field of config"
+    listElement
+    [config]="field"
+    (event)="eventHandler($event)"
+    (buttonAction)="buttonHandler($event)">
+  </ng-container>
+</div>

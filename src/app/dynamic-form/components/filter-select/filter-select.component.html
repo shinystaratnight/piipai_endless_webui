@@ -1,0 +1,24 @@
+<label class="mb-0">
+  <i
+    fa
+    class="p-2"
+    [name]="isCollapsed ? 'eye' : 'eye-slash'"
+    [border]=false
+    (click)="isCollapsed = !isCollapsed"
+    [attr.aria-expanded]="!isCollapsed"
+    style="cursor: pointer"></i>
+  {{config.label}}
+  <i
+    *ngIf="query"
+    fa
+    class="text-danger ml-1"
+    [name]="'times-circle'"
+    [border]="true"
+    style="cursor: pointer"
+    (click)="resetFilter()"></i>
+</label>
+<div [ngbCollapse]="isCollapsed" class="filter-element">
+  <select class="form-control custom-select" [(ngModel)]="data" (change)="onChange()">
+    <option *ngFor="let option of config.options" [attr.value]="option.value" [selected]="data === option.value">{{option.label}}</option>
+  </select>
+</div>

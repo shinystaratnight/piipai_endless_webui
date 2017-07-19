@@ -1,0 +1,31 @@
+<div class="ml-2">
+  <label class="mb-0">
+    <i
+      fa
+      class="p-2"
+      [name]="isCollapsed ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      style="cursor: pointer"></i>
+    {{config.label}}
+    <i
+      *ngIf="query"
+      fa
+      class="text-danger ml-1"
+      [name]="'times-circle'"
+      [border]="true"
+      style="cursor: pointer"
+      (click)="resetFilter()"></i>
+  </label>
+  <ul class="list-unstyled filter-element" [ngbCollapse]="isCollapsed">
+    <li
+      *ngFor="let item of config.list"
+      [class.text-primary]="query === item.value"
+      class="text-muted"
+      style="cursor: pointer"
+      (click)="select(item.value)">
+        {{item.label}}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,31 @@
+  <label class="mb-0">
+    <i
+      fa
+      class="p-2"
+      [name]="isCollapsed ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      style="cursor: pointer"></i>
+    {{config.label}}
+    <i
+      *ngIf="query"
+      fa
+      class="text-danger ml-1"
+      [name]="'times-circle'"
+      [border]="true"
+      style="cursor: pointer"
+      (click)="resetFilter()"></i>
+  </label>
+  <div [ngbCollapse]="isCollapsed" class="filter-element">
+    <div class="d-flex justify-content-center align-items-center mb-1 w-100" *ngFor="let item of elements">
+      <select class="form-control custom-select" [(ngModel)]="item.data" (change)="onChange()">
+        <option value="">All</option>
+        <option *ngFor="let option of config.options" [attr.value]="option[config.data.key]" [disabled]="option.disabled" [selected]="item.data === option[config.data.key]">{{option[config.data.value]}}</option>
+      </select>
+      <div *ngIf="config.many" class="d-flex justify-content-center align-items-center p-1">
+        <i fa *ngIf="config.many" [name]="'plus'" [border]=true (click)="addElement()" class="text-success p-1" style="cursor: pointer"></i>
+        <i fa *ngIf="elements.length > 1" [name]="'ban'" [border]=true (click)="deleteElement(item)" class="text-danger p-1" style="cursor: pointer"></i>
+      </div>
+    </div>
+  </div>

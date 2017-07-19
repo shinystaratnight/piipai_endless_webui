@@ -1,0 +1,19 @@
+<form [formGroup]="form" (ngSubmit)="handleSubmit($event)">
+  <ng-container
+    *ngFor="let field of config;"
+    formElement
+    [config]="field"
+    [group]="form"
+    [errors]="errors"
+    (event)="eventHandler($event)"
+    (buttonAction)="buttonActionHandler($event)"
+    [message]="message">
+  </ng-container>
+  <div *ngIf="errors">
+    <div class="text-danger mt-1 mb-3" *ngIf="errors.non_field_errors">{{errors.non_field_errors}}</div>
+  </div>
+  <div *ngIf="message">
+    <div *ngIf="message.message" class="text-success mt-1 mb-3">{{message.message}}</div>
+  </div>
+  <ng-content></ng-content>
+</form>
