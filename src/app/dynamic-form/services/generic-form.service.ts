@@ -35,6 +35,12 @@ export class GenericFormService {
       .catch((error: any) => this.errorHandler(error));
   }
 
+  public editForm(endpoint, data) {
+    return this.http.patch(endpoint, data)
+      .map((response: Response) => response.json())
+      .catch((error: any) => this.errorHandler(error));
+  }
+
   public callAction(endpoint, data) {
     return this.http.post(endpoint, data)
       .map((response: Response) => response.json())

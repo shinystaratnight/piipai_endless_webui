@@ -160,7 +160,9 @@ export class GenericFormComponent implements OnChanges {
 
   public parseResponse(response) {
     this.resetData(this.response);
-    this.response = response;
+    if (!this.editForm) {
+      this.response = response;
+    }
     this.responseForm.emit(response);
   }
 

@@ -29,6 +29,12 @@ describe('GenericFormComponent', () => {
         }
         return Observable.of(response);
       },
+      editForm() {
+        if (response.status === 'error') {
+          return Observable.throw(response);
+        }
+        return Observable.of(response);
+      },
       getByQuery() {
         return Observable.of(response);
       },
@@ -212,9 +218,11 @@ describe('GenericFormComponent', () => {
             checked: false
           }
         };
+        spyOn(comp, 'getDataForRules');
         comp.fillingForm(config, data);
         expect(config[0]['value']).toBeTruthy();
         expect(config[1]['children'][0]['value']).toBeFalsy();
+        expect(comp.getDataForRules).toHaveBeenCalledWith(data);
       }));
 
     });
@@ -298,6 +306,34 @@ describe('GenericFormComponent', () => {
         expect(comp.parseError).toHaveBeenCalled();
       }));
 
+      it('should call parseResponse for edit form', async(() => {
+        response = {
+          status: 'success',
+          message: 'All be fine'
+        };
+        comp.endpoint = 'endpoint';
+        comp.editForm = true;
+        let data = {username: 'test'};
+        spyOn(comp, 'parseResponse');
+        comp.submitForm(data);
+        expect(comp.parseResponse).toHaveBeenCalledWith(response);
+      }));
+
+      it('should call parseError for edit form', async(() => {
+        response = {
+          status: 'error',
+          errors: {
+            username: 'It is not valid property'
+          }
+        };
+        comp.endpoint = 'endpoint';
+        comp.editForm = true;
+        let data = {username: 'test'};
+        spyOn(comp, 'parseError');
+        comp.submitForm(data);
+        expect(comp.parseError).toHaveBeenCalledWith(response.errors);
+      }));
+
     });
 
     describe('parseError method', () => {
@@ -348,6 +384,7 @@ describe('GenericFormComponent', () => {
         let data = {
           [field]: message
         };
+        comp.editForm = false;
         spyOn(comp, 'resetData');
         spyOn(comp.responseForm, 'emit');
         comp.parseResponse(data);
@@ -463,6 +500,35 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'parseMetadata');
         comp.getRalatedData(comp.metadata, key, endpoint, query, param);
         expect(comp.parseMetadata).toHaveBeenCalled();
+      }));
+
+      it('should update metadata for rules type', async(() => {
+        let key = 'rules';
+        let endpoint = '/ecore/api/v2/workflownodes';
+        let query = '?company=123&workflow=124';
+        response = {
+          results: [
+            { number: 10, name_before_activation: 'New' }
+          ]
+        };
+        comp.metadata = [];
+        comp.workflowData = {
+          company: '123',
+          number: '10',
+          workflow: '124'
+        };
+        spyOn(comp, 'updateValueOfRules');
+        spyOn(comp, 'updateMetadata');
+        spyOn(comp, 'parseMetadata');
+        comp.getRalatedData(comp.metadata, key, endpoint, query);
+        expect(comp.updateValueOfRules).toHaveBeenCalledWith(response.results);
+        expect(comp.updateMetadata).toHaveBeenCalledWith(comp.metadata, key);
+        expect(comp.parseMetadata).toHaveBeenCalledWith(comp.metadata, {
+          [key]: {
+            action: 'add',
+            data: { options: response.results }
+          }
+        });
       }));
 
     });
@@ -684,6 +750,188 @@ describe('GenericFormComponent', () => {
         ];
         let result = comp.getElementFromMetadata(config, 'rules');
         expect(result).toEqual(config[0]['children'][0]);
+      }));
+
+    });
+
+    describe('updateWorkflowData method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.updateWorkflowData).toBeDefined();
+      }));
+
+      it('should update workflow data property', async(() => {
+        let event = {
+          el: {
+            key: 'company'
+          },
+          value: '123'
+        };
+        comp.workflowData = {};
+        comp.updateWorkflowData(event);
+        expect(comp.workflowData.company).toEqual('123');
+      }));
+
+      it('should call getDataOfWorkflownode method', async(() => {
+        let event = {
+          el: {
+            key: 'company'
+          },
+          value: [{
+            name: 'Home LTD',
+            id: '123'
+          }]
+        };
+        comp.workflowData = {
+          workflow: '124',
+          number: 10
+        };
+        spyOn(comp, 'getDataOfWorkflownode');
+        comp.updateWorkflowData(event);
+        expect(comp.workflowData.company).toEqual('123');
+        expect(comp.getDataOfWorkflownode).toHaveBeenCalled();
+      }));
+
+    });
+
+    describe('getDataOfWorkflownode method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.getDataOfWorkflownode).toBeDefined();
+      }));
+
+      it('should update workflow data property', async(() => {
+        comp.workflowData = {
+          company: '123',
+          number: 10,
+          workflow: '124'
+        };
+        let config = [{
+          key: 'rules',
+          activeMetadata: [
+            {
+              key: 'rules'
+            }
+          ]
+        }];
+        comp.metadata = config;
+        comp.workflowEndpoints = {
+          state: '/ecore/api/v2/workflownodes',
+          app: ''
+        };
+        spyOn(comp, 'getElementFromMetadata').and.returnValue(config[0]);
+        spyOn(comp, 'getRalatedData');
+        comp.getDataOfWorkflownode();
+        expect(comp.getElementFromMetadata).toHaveBeenCalledWith(config, 'rules');
+        expect(comp.getRalatedData).toHaveBeenCalledWith(
+          [config[0], config[0].activeMetadata[0]],
+          'rules',
+          comp.workflowEndpoints.state,
+          `?company=123&workflow=124`
+        );
+      }));
+
+    });
+
+    describe('updateMetadata method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.updateMetadata).toBeDefined();
+      }));
+
+      it('should update metadata', async(() => {
+        let key = 'rules';
+        let config = [
+          {
+            type: 'row',
+            children: [
+              {
+                key: 'rules'
+              }
+            ]
+          }
+        ];
+        comp.updateMetadata(config, key);
+        expect(config).toEqual(config);
+      }));
+
+    });
+
+    describe('updateValueOfRules method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.updateValueOfRules).toBeDefined();
+      }));
+
+      it('should update value of element', async(() => {
+        let res = [{
+          number: 20,
+          rules: {
+            active: [20],
+            required_states: [10],
+            required_functions: ['some function']
+          }
+        }];
+        let key = 'rules';
+        comp.metadata = [
+          {
+            key: 'rules'
+          }
+        ];
+        comp.workflowData = {
+          number: 20
+        };
+        spyOn(comp, 'getElementFromMetadata').and.returnValue(comp.metadata[0]);
+        comp.updateValueOfRules(res);
+        expect(comp.metadata[0].value).toEqual(res[0].rules);
+      }));
+
+    });
+
+    describe('getDataForRules method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.getDataForRules).toBeDefined();
+      }));
+
+      it('should get rule by company and workflow', async(() => {
+        let key = 'rules';
+        let data = {
+          workflow: {
+            name: 'Company',
+            id: '123'
+          },
+          number: 10,
+          company: '124'
+        };
+        comp.metadata = [
+          {
+            key: 'rules',
+            activeMetadata: [
+              {
+                key: 'rules'
+              }
+            ]
+          }
+        ];
+        comp.workflowData = {
+          number: 20
+        };
+        comp.workflowEndpoints = {
+          state: '/ecore/api/v2/workflownodes',
+          app: ''
+        };
+        spyOn(comp, 'getElementFromMetadata').and.returnValue(comp.metadata[0]);
+        spyOn(comp, 'getRalatedData');
+        comp.getDataForRules(data);
+        expect(comp.workflowData).toEqual(data);
+        expect(comp.getElementFromMetadata).toHaveBeenCalledWith(comp.metadata, key);
+        expect(comp.getRalatedData).toHaveBeenCalledWith(
+          [comp.metadata[0], comp.metadata[0].activeMetadata[0]],
+          key,
+          comp.workflowEndpoints.state,
+          '?company=124&workflow=123'
+        );
       }));
 
     });

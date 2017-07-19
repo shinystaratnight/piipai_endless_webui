@@ -63,14 +63,9 @@
 </div>
 
 <template #element let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title">Add</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-
   <div class="modal-body">
+    <span *ngIf="editValue">{{editValue}}</span>
+    <hr *ngIf="editValue">
     <div ngbRadioGroup name="type" class="btn-group-sm"
       [(ngModel)]="choice"
       *ngIf="!(addType !== 'new' && ruleArray.length === 0)">

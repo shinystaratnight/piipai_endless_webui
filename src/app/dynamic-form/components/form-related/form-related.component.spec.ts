@@ -103,15 +103,20 @@ describe('FormRelatedComponent', () => {
 
     it('should update value if many property equal true',
       async(inject([FormBuilder], (fb: FormBuilder) => {
-      let value = [
+      let value = [1, 2];
+      let options = [
         {
-          name: 'First',
-          number: 1
+          number: 1,
+          name: 'First'
         },
         {
-          name: 'Second',
-          number: 2
+          number: 2,
+          name: 'Second'
         },
+        {
+          number: 3,
+          name: 'Third'
+        }
       ];
       let display = 'name';
       let param = 'number';
@@ -120,12 +125,16 @@ describe('FormRelatedComponent', () => {
       config.many = true;
       config.value = value;
       comp.config = config;
+      comp.config.options = options;
       spyOn(comp, 'addControl');
       spyOn(comp, 'updateData');
       comp.ngOnInit();
       expect(comp.display).toEqual(display);
       expect(comp.param).toEqual(param);
-      expect(comp.results).toEqual(value);
+      expect(comp.results).toEqual([
+        {number: 1, name: 'First'},
+        {number: 2, name: 'Second'},
+      ]);
       expect(comp.updateData).toHaveBeenCalledWith();
       expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
     })));

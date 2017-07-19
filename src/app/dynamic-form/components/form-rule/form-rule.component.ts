@@ -51,6 +51,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
   public previewRule: any[];
   public activeStatesConfig: any[];
   public data: OutputData;
+  public editValue: string;
 
   constructor(
     private fb: FormBuilder,
@@ -90,6 +91,8 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
     this.addType = type || 'new';
     this.editRule = rule;
     this.choice = '';
+    this.editValue = '';
+    this.editIndex = null;
 
     this.app = '';
     this.model = '';
@@ -101,7 +104,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
 
     if (rule && rule.values[index]) {
       this.editIndex = index;
-      this.elementValue = rule.values[index];
+      this.editValue = rule.values[index];
     }
     if (type === 'state' || type === 'function') {
       this.choice = type;

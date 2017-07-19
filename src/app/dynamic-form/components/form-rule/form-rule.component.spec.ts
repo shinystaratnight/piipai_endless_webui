@@ -60,6 +60,23 @@ describe('FormRuleComponent', () => {
       expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
     })));
 
+    it('should set value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.config.value = {
+        active: [20],
+        required_states: [10]
+      };
+      comp.group = fb.group({});
+      comp.group.addControl(config.key, fb.control(''));
+      comp.key = config.key;
+      spyOn(comp, 'addControl');
+      spyOn(comp, 'generateView');
+      comp.ngOnInit();
+      expect(comp.data).toEqual(comp.config.value);
+      expect(comp.group.get(config.key).value).toEqual(comp.config.value);
+      expect(comp.generateView).toHaveBeenCalledWith(comp.data);
+    })));
+
   });
 
   describe('addNewRule method', () => {
@@ -107,12 +124,14 @@ describe('FormRuleComponent', () => {
       expect(comp.addType).toEqual('new');
       expect(comp.editRule).toEqual(rule);
       expect(comp.choice).toEqual('');
+      expect(comp.editValue).toEqual('');
       expect(comp.app).toEqual('');
       expect(comp.model).toEqual('');
       expect(comp.config.model).toBeNull();
       expect(comp.config.function).toBeNull();
       expect(comp.modelsArray).toBeNull();
       expect(comp.functionsArray).toBeNull();
+      expect(comp.editIndex).toBeNull();
     });
 
     it('should open modal with "state" type', async() => {
@@ -158,7 +177,7 @@ describe('FormRuleComponent', () => {
       expect(comp.editRule).toEqual(rule);
       expect(comp.choice).toEqual(type);
       expect(comp.editIndex).toEqual(0);
-      expect(comp.elementValue).toEqual('some function');
+      expect(comp.editValue).toEqual('some function');
       expect(comp.app).toEqual('');
       expect(comp.model).toEqual('');
       expect(comp.config.model).toBeNull();
@@ -346,28 +365,42 @@ describe('FormRuleComponent', () => {
 
   describe('parseValue method', () => {
 
-    it('should parse view and return data of a rules', async() => {
+    it('should parse view and return data of a rules for state', async() => {
       let view = [
         {
           id: 1,
           type: 'state',
           operator: 'or',
-          values: ['10', '20']
+          values: ['New', 'Active']
         },
         {
           id: 2,
           type: 'state',
           operator: 'and',
-          values: ['30', '#1']
+          values: ['Approved', '#1']
         }
       ];
       comp.config = config;
+      comp.config.options = [
+        {
+          name_before_activation: 'New',
+          number: 10
+        },
+        {
+          name_before_activation: 'Active',
+          number: 20
+        },
+        {
+          name_before_activation: 'Approved',
+          number: 30
+        }
+      ];
       comp.view = view;
       let result = comp.parseValue(view[1]);
-      expect(result).toEqual(['and', '30', ['or', '10', '20']]);
+      expect(result).toEqual(['and', 30, ['or', 10, 20]]);
     });
 
-    it('should parse view and return data of a rules', async() => {
+    it('should parse view and return data of a rules for function', async() => {
       let view = [
         {
           id: 1,
@@ -387,17 +420,91 @@ describe('FormRuleComponent', () => {
   describe('generateStringOfValues method', () => {
 
     it('should generate stirng for preview', async() => {
-      let rule = ['and', '10', ['or', '20', '30']];
+      let rule = ['and', 10, ['or', 20, 30]];
       comp.config = config;
-      let result = comp.generateStringOfValues(rule);
-      expect(result).toEqual('( "10" and ( "20" or "30" ) )');
+      comp.config.options = [
+        {
+          name_before_activation: 'New',
+          number: 10
+        },
+        {
+          name_before_activation: 'Active',
+          number: 20
+        },
+        {
+          name_before_activation: 'Approved',
+          number: 30
+        }
+      ];
+      let result = comp.generateStringOfValues(rule, 'state');
+      expect(result).toEqual('( "New" and ( "Active" or "Approved" ) )');
     });
 
     it('should generate stirng for preview without operator', async() => {
       let rule = ['10'];
       comp.config = config;
-      let result = comp.generateStringOfValues(rule);
-      expect(result).toEqual('( "10" )');
+      comp.config.options = [
+        {
+          name_before_activation: 'New',
+          number: 10
+        }
+      ];
+      let result = comp.generateStringOfValues(rule, 'state');
+      expect(result).toEqual('( "New" )');
+    });
+
+  });
+
+  describe('generateArray method', () => {
+
+    it('should generate array of options', async() => {
+      let type = 'options';
+      comp.config = config;
+      comp.config.options = [
+        {
+          name_before_activation: 'New',
+          number: 10
+        },
+        {
+          name_before_activation: 'Active',
+          number: 20
+        }
+      ];
+      comp.editRule = {
+        values: ['and', 'New']
+      };
+      comp.generateArray('options');
+      expect(comp.statesArray).toEqual([
+        {
+          name_before_activation: 'Active',
+          number: 20
+        }
+      ]);
+    });
+
+    it('should generate array of functions', async() => {
+      let type = 'function';
+      comp.config = config;
+      comp.config.function = [
+        'some function',
+        'function'
+      ];
+      comp.editRule = {
+        values: ['and', 'some function']
+      };
+      comp.generateArray('function');
+      expect(comp.functionsArray).toEqual(['function']);
+    });
+
+    it('should generate array of app', async() => {
+      let type = 'model';
+      comp.config = config;
+      comp.config.model = [
+        'companyrel',
+        'company'
+      ];
+      comp.generateArray('model');
+      expect(comp.modelsArray).toEqual(comp.config.model);
     });
 
   });
@@ -512,8 +619,101 @@ describe('FormRuleComponent', () => {
         required_states: undefined,
         required_functions: undefined
       };
+      comp.view = [];
+      spyOn(comp, 'generateData');
       comp.changeActiveStates(event);
       expect(comp.data.active).toEqual([10, 20]);
+      expect(comp.generateData).toHaveBeenCalledWith(comp.view);
+    });
+
+  });
+
+  describe('generateView method', () => {
+
+    it('should call generateDataForView method', async() => {
+      let data = {
+        active: [40],
+        required_states: ['or', 30, ['and', 10, 20]],
+        required_functions: ['or', 'function1', ['and', 'function1', 'functiob2']]
+      };
+      comp.config.activeMetadata = [{}];
+      spyOn(comp, 'generateDataForView');
+      comp.generateView(data);
+      expect(comp.config.activeMetadata[0].value).toEqual([40]);
+      expect(comp.generateDataForView).toHaveBeenCalledTimes(2);
+      expect(comp.generateDataForView)
+        .toHaveBeenCalledWith([].concat(data.required_states), 'state');
+      expect(comp.generateDataForView)
+        .toHaveBeenCalledWith([].concat(data.required_functions), 'function');
+    });
+
+  });
+
+  describe('generateDataForView method', () => {
+
+    it('should create new element if data equal null', async() => {
+      let data = null;
+      spyOn(comp, 'createElement');
+      comp.id = 0;
+      comp.generateDataForView(data, 'state');
+      expect(comp.createElement).toHaveBeenCalledWith(undefined, 'or', 1, data);
+    });
+
+    it('should generate view for states', async() => {
+      let data = ['or', 30, ['and', 10, [20]]];
+      let options = [
+        {
+          name_before_activation: 'New',
+          number: 10
+        },
+        {
+          name_before_activation: 'Active',
+          number: 20
+        },
+        {
+          name_before_activation: 'Appreved',
+          number: 30
+        }
+      ];
+      comp.id = 0;
+      comp.generateDataForView(data, 'state');
+      expect(comp.view).toEqual([
+        {
+          id: 1,
+          type: 'state',
+          operator: 'or',
+          values: ['Active']
+        },
+        {
+          id: 1,
+          type: 'state',
+          operator: 'and',
+          values: ['New', '#1']
+        },
+        {
+          id: 2,
+          type: 'state',
+          operator: 'or',
+          values: ['Approved', '#2']
+        }
+      ]);
+    });
+
+  });
+
+  describe('createElement method', () => {
+
+    it('should add new element into view property', async() => {
+      comp.view = [];
+      comp.createElement('state', 'or', 1, []);
+      expect(comp.view).toEqual([
+        {
+          id: 1,
+          type: 'state',
+          operator: 'or',
+          values: []
+        }
+      ]);
     });
 
   });
