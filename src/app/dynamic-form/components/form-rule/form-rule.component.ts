@@ -325,23 +325,25 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
       this.createElement(undefined, 'or', this.id += 1, data);
       return;
     }
-    let operator = (data.length === 1) ? 'or' : data.shift();
-    let newData = data.map((el, i) => {
-      if (Array.isArray(el)) {
-        let id = this.generateDataForView(el, type);
-        let nemElement = `#${id}`;
-        return nemElement;
-      }
-      if (type === 'state') {
-        let obj = this.config.options.filter((prop) => prop.number === el)[0];
-        if (obj) {
-          el = obj.name_before_activation;
+    if (this.config.options) {
+      let operator = (data.length === 1) ? 'or' : data.shift();
+      let newData = data.map((el, i) => {
+        if (Array.isArray(el)) {
+          let id = this.generateDataForView(el, type);
+          let nemElement = `#${id}`;
+          return nemElement;
         }
-      }
-      return el;
-    });
-    this.createElement(type, operator, this.id += 1, newData);
-    return this.id;
+        if (type === 'state') {
+          let obj = this.config.options.filter((prop) => prop.number === el)[0];
+          if (obj) {
+            el = obj.name_before_activation;
+          }
+        }
+        return el;
+      });
+      this.createElement(type, operator, this.id += 1, newData);
+      return this.id;
+    }
   }
 
   public createElement(type, operator, id, values) {

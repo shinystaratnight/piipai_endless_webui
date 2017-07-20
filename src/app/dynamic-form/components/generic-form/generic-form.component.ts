@@ -177,7 +177,7 @@ export class GenericFormComponent implements OnChanges {
       let key = event.el.related.field;
       let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
       this.getRalatedData(this.metadata,
-        key, event.el.endpoint, query, event.el.related.prop, true);
+        key, event.el.endpoint, null, query, event.el.related.prop, true);
     }
     this.event.emit(event);
   }
@@ -186,8 +186,16 @@ export class GenericFormComponent implements OnChanges {
     this.buttonAction.emit(e);
   }
 
-  public getRalatedData(metadata, key, endpoint, query = null, param = 'options', inner = false) {
+  public getRalatedData
+    (metadata, key, endpoint, fields, query = null, param = 'options', inner = false) {
+    let fieldsQuery;
+    if (fields) {
+      fieldsQuery = this.generateQueryForRelatedFields(fields);
+    }
     if (query) {
+      if (fieldsQuery) {
+        query += `&${fieldsQuery}`;
+      }
       this.service.getByQuery(endpoint, query).subscribe(
         (response: any) => {
           this.parseMetadata(metadata, {
@@ -205,6 +213,7 @@ export class GenericFormComponent implements OnChanges {
               this.updateMetadata(this.metadata, key);
             }
           }
+          this.updateMetadata(this.metadata, key);
         });
     } else {
       this.service.getAll(endpoint).subscribe(
@@ -220,14 +229,28 @@ export class GenericFormComponent implements OnChanges {
     }
   }
 
+  public generateQueryForRelatedFields(fields) {
+    let query = '';
+    let display = (fields.display) ? fields.display : '__str__';
+    let param = (fields.param) ? fields.param : 'id';
+    query += `fields=${display}&fileds=${param}`;
+    return query;
+  }
+
   public getData(metadata, key = null, query = null) {
     metadata.forEach((el) => {
       if (el.type === 'related') {
         if (el.key === key) {
-          this.getRalatedData(metadata, key, el.endpoint, query + '&limit=-1');
+          this.getRalatedData(metadata, key, el.endpoint, {}, query + '&limit=-1');
         }
         if (!el.relate && !key) {
-          this.getRalatedData(metadata, el.key, el.endpoint, '?limit=-1');
+          let fields = <any> {};
+          if (el.templateOptions.display) {
+            fields.display = el.templateOptions.display;
+          } else if (el.templateOptions.param) {
+            fields.param = el.templateOptions.param;
+          }
+          this.getRalatedData(metadata, el.key, el.endpoint, fields, '?limit=-1');
         }
       } else if (el.children) {
         this.getData(el.children, key, query);
@@ -295,7 +318,8 @@ export class GenericFormComponent implements OnChanges {
       many: true,
       templateOptions: {
         label: 'Active',
-        display: 'name_before_activation'
+        display: 'name_before_activation',
+        param: 'number'
       }
     };
     let ruleElement = this.getElementFromMetadata(metadata, 'rules');
@@ -305,7 +329,8 @@ export class GenericFormComponent implements OnChanges {
         let newMetadata = [ruleElement, activeMetadata];
         let endpoint = this.workflowEndpoints[el];
         let param = el === 'state' ? 'options' : el;
-        this.getRalatedData(newMetadata, 'rules', endpoint, '?default=2', param, el === 'app');
+        this.getRalatedData(newMetadata, 'rules', endpoint,
+          null, '?default=2', param, el === 'app');
       });
     }
   }
@@ -349,7 +374,7 @@ export class GenericFormComponent implements OnChanges {
       });
       let element = this.getElementFromMetadata(this.metadata, 'rules');
       this.getRalatedData([element, element.activeMetadata[0]],
-        'rules', this.workflowEndpoints.state, `?${query.join('&')}`);
+        'rules', this.workflowEndpoints.state, null, `?${query.join('&')}`);
     }
   }
 
@@ -400,7 +425,7 @@ export class GenericFormComponent implements OnChanges {
             }
           }
         });
-        this.getRalatedData(newMetadata, 'rules', endpoint, `?${query.join('&')}`);
+        this.getRalatedData(newMetadata, 'rules', endpoint, null, `?${query.join('&')}`);
       }
     }
   }

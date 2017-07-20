@@ -74,6 +74,10 @@ describe('FormRelatedComponent', () => {
 
     it('should update value if it a object', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
+      comp.config.options = [{
+        name: 'First',
+        number: 1
+      }];
       let value = {
         name: 'First',
         number: 1
@@ -87,6 +91,7 @@ describe('FormRelatedComponent', () => {
       comp.config.templateOptions.param = 'number';
       comp.ngOnInit();
       expect(comp.group.get(comp.key).value).toEqual(1);
+      expect(comp.displayValue).toEqual('First');
     })));
 
     it('should update value if it a string', async(inject([FormBuilder], (fb: FormBuilder) => {
@@ -141,14 +146,39 @@ describe('FormRelatedComponent', () => {
 
   });
 
-  describe('ngAfterViewInit method', () => {
+  describe('onModalScrollDown method', () => {
 
-    it('should called addFlags method', async(() => {
+    it('should called generatePreviewList method', async(() => {
       comp.config = config;
-      comp.related = {};
-      spyOn(comp, 'addFlags');
-      comp.ngAfterViewInit();
-      expect(comp.addFlags).toHaveBeenCalledWith(comp.related, comp.config);
+      comp.list = [];
+      spyOn(comp, 'generatePreviewList');
+      comp.onModalScrollDown();
+      expect(comp.generatePreviewList).toHaveBeenCalledWith(comp.list);
+    }));
+
+  });
+
+  describe('openAutocomplete method', () => {
+
+    it('should open actocomplete element', async(() => {
+      comp.config = config;
+      comp.config.options = [];
+      comp.search = {
+        nativeElement: {
+          focus() {
+            return true;
+          }
+        }
+      };
+      spyOn(comp, 'generateList');
+      spyOn(comp.search.nativeElement, 'focus');
+      comp.openAutocomplete();
+      expect(comp.searchValue).toBeNull();
+      expect(comp.hideAutocomplete).toBeFalsy();
+      expect(comp.generateList).toHaveBeenCalled();
+      setTimeout(() => {
+        expect(comp.search.nativeElement.focus).toHaveBeenCalled();
+      }, 100);
     }));
 
   });
@@ -159,7 +189,8 @@ describe('FormRelatedComponent', () => {
       comp.config = config;
       comp.results = [];
       comp.display = 'name';
-      comp.related = {};
+      comp.list = [];
+      comp.hideAutocomplete = true;
       comp.config.options = [
         { name: 'Lilu'},
         { name: 'Bob' }
@@ -169,11 +200,41 @@ describe('FormRelatedComponent', () => {
         { name: 'Bob' },
         { name: 'Lilu'}
       ]);
+      spyOn(comp, 'generatePreviewList');
       comp.generateList();
       expect(comp.list).toEqual([
         { name: 'Bob' },
         { name: 'Lilu'}
       ]);
+      expect(comp.generatePreviewList).toHaveBeenCalledWith(comp.list);
+      expect(comp.hideAutocomplete).toBeFalsy();
+    }));
+
+    it('should call filter method', async(() => {
+      comp.config = config;
+      comp.results = [];
+      comp.searchValue = 'as';
+      comp.config.options = [
+        { name: 'Lilu'},
+        { name: 'Bob' }
+      ];
+      spyOn(comp, 'filter');
+      comp.generateList();
+      expect(comp.filter).toHaveBeenCalledWith(comp.searchValue);
+    }));
+
+  });
+
+  describe('generatePreviewList method', () => {
+
+    it('should generate priview list', async(() => {
+      comp.lastElement = 0;
+      comp.limit = 10;
+      comp.list = [];
+      spyOn(comp.list, 'slice').and.returnValue([]);
+      comp.generatePreviewList(comp.list);
+      expect(comp.list.slice).toHaveBeenCalledWith(0, 10);
+      expect(comp.previewList).toEqual([]);
     }));
 
   });
@@ -182,8 +243,18 @@ describe('FormRelatedComponent', () => {
 
     it('should reset list property', async(() => {
       comp.list = [{name: 'Bob'}];
+      comp.previewList = [];
+      comp.lastElement = 10;
+      comp.hideAutocomplete = false;
+      comp.searchValue = 'as';
+      comp.config = config;
+      comp.config.many = false;
       comp.resetList();
       setTimeout(() => {
+        expect(comp.previewList).toBeNull();
+        expect(comp.hideAutocomplete).toBeTruthy();
+        expect(comp.searchValue).toBeNull();
+        expect(comp.lastElement).toEqual(0);
         expect(comp.list).toBeNull();
       }, 200);
     }));
@@ -204,11 +275,13 @@ describe('FormRelatedComponent', () => {
       ];
       comp.display = 'name';
       comp.results = [];
+      spyOn(comp, 'generatePreviewList');
       comp.filter(value);
       expect(comp.list).toEqual([
         { name: 'Sam' },
         { name: 'Tom' }
       ]);
+      expect(comp.generatePreviewList).toHaveBeenCalledWith(comp.list);
     }));
 
     it('should call generateList method', async(() => {
@@ -222,7 +295,7 @@ describe('FormRelatedComponent', () => {
 
   describe('setValue method', () => {
 
-    it('should add value', async(() => {
+    it('should add value if many values', async(() => {
       let options = [
         { name: 'Bob' },
         { name: 'Sam' },
@@ -233,19 +306,55 @@ describe('FormRelatedComponent', () => {
       let item = { name: 'Bob' };
       comp.config = config;
       comp.config.options = options;
+      comp.config.many = true;
       comp.display = 'name';
       comp.results = [];
-      comp.value = 'some value';
+      comp.searchValue = 'some value';
       this.list = options;
       spyOn(comp, 'changeList');
       spyOn(comp, 'updateData');
+      spyOn(comp, 'eventHandler');
       comp.setValue(item);
       expect(comp.results).toEqual([item]);
       expect(comp.changeList).toHaveBeenCalled();
       expect(comp.updateData).toHaveBeenCalled();
-      expect(comp.value).toBeNull();
+      expect(comp.eventHandler).toHaveBeenCalledWith({type: 'change'});
+      expect(comp.searchValue).toBeNull();
       expect(comp.list).toBeNull();
+      expect(comp.previewList).toBeNull();
     }));
+
+    it('should add value if single value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let options = [
+        { name: 'Bob', id: 123 },
+        { name: 'Sam' },
+        { name: 'John' },
+        { name: 'Bill' },
+        { name: 'Tom' }
+      ];
+      let item = { name: 'Bob', id: 123 };
+      comp.config = config;
+      comp.config.many = false;
+      comp.key = 'manager';
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(''));
+      comp.config.options = options;
+      comp.display = 'name';
+      comp.param = 'id';
+      comp.results = [];
+      comp.searchValue = 'some value';
+      this.list = options;
+      spyOn(comp, 'changeList');
+      spyOn(comp, 'eventHandler');
+      comp.setValue(item);
+      expect(comp.group.get(comp.key).value).toEqual(123);
+      expect(comp.displayValue).toEqual('Bob');
+      expect(comp.changeList).toHaveBeenCalled();
+      expect(comp.eventHandler).toHaveBeenCalledWith({type: 'change'});
+      expect(comp.searchValue).toBeNull();
+      expect(comp.list).toBeNull();
+      expect(comp.previewList).toBeNull();
+    })));
 
   });
 
@@ -264,7 +373,7 @@ describe('FormRelatedComponent', () => {
       comp.results = options;
       spyOn(comp, 'changeList');
       spyOn(comp, 'updateData');
-      comp.setValue(item);
+      comp.deleteItem(item);
       options.splice(item, 1);
       expect(comp.results).toEqual(options);
       expect(comp.changeList).toHaveBeenCalled();

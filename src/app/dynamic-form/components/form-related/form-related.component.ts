@@ -16,9 +16,10 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 
 export class FormRelatedComponent
   extends BasicElementComponent
-    implements OnInit, AfterViewInit {
-  @ViewChild('related')
-  public related;
+    implements OnInit {
+
+  @ViewChild('search')
+  public search;
 
   public config;
   public group: FormGroup;
@@ -29,8 +30,15 @@ export class FormRelatedComponent
   public param: string;
   public list: any[];
   public results: any;
-  public options: any[];
-  public value: any;
+  public displayValue: any;
+  public limit: number = 10;
+  public previewList: any[];
+  public lastElement: number = 0;
+  public searchValue: any;
+  public hideAutocomplete: boolean = true;
+
+  public modalScrollDistance = 2;
+  public modalScrollThrottle = 50;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -49,41 +57,77 @@ export class FormRelatedComponent
       if (!this.config.many) {
         let value;
         if (this.config.value instanceof Object) {
+          if (this.config.options) {
+            this.displayValue = this.config.options.filter((el) => {
+              return el[this.param] === this.config.value[this.param];
+            })[0][this.display];
+          }
           value = this.config.value[this.param];
         } else {
           value = this.config.value;
         }
         this.group.get(this.key).patchValue(value);
       } else {
-        this.results = this.config.options.filter((el) => {
-          return this.config.value.indexOf(el.number) > -1;
-        });
+        if (this.config.options) {
+          this.results = this.config.options.filter((el) => {
+            return this.config.value.indexOf(el[this.param]) > -1;
+          });
+        } else {
+          this.results = this.config.value;
+        }
         this.updateData();
       }
     }
   }
 
-  public ngAfterViewInit() {
-    if (this.related) {
-      this.addFlags(this.related, this.config);
+  public onModalScrollDown() {
+    this.generatePreviewList(this.list);
+  }
+
+  public openAutocomplete() {
+    if (this.config.options) {
+      this.searchValue = null;
+      this.hideAutocomplete = false;
+      this.generateList();
+      setTimeout(() => {
+        this.search.nativeElement.focus();
+      }, 50);
     }
   }
 
   public generateList(): void {
     if (this.config.options) {
-      this.list = this.config.options
-        .filter((el) => !(this.results.indexOf(el) > -1))
-        .sort((p, n) => p[this.display] > n[this.display] ? 1 : -1);
+      this.hideAutocomplete = false;
+      if (this.searchValue) {
+        this.filter(this.searchValue);
+      } else {
+        this.list = this.config.options
+          .filter((el) => !(this.results.indexOf(el) > -1))
+          .sort((p, n) => p[this.display] > n[this.display] ? 1 : -1);
+        this.generatePreviewList(this.list);
+      }
     }
+  }
+
+  public generatePreviewList(list) {
+    this.lastElement += this.limit;
+    this.previewList = list.slice(0, this.lastElement);
   }
 
   public resetList() {
     setTimeout(() => {
       this.list = null;
+      this.previewList = null;
+      this.lastElement = 0;
+      this.hideAutocomplete = true;
+      if (!this.config.many) {
+        this.searchValue = null;
+      }
     }, 150);
   }
 
   public filter(value) {
+    this.lastElement = 0;
     let filteredList;
     if (value) {
       if (this.config.options) {
@@ -97,6 +141,7 @@ export class FormRelatedComponent
           }
         });
         this.list = filteredList;
+        this.generatePreviewList(this.list);
       }
     } else {
       this.generateList();
@@ -109,13 +154,20 @@ export class FormRelatedComponent
     if (element) {
       let exist = this.results.indexOf(element) > -1;
       if (!exist) {
-        this.results.push(element);
+        if (this.config.many) {
+          this.results.push(element);
+          this.updateData();
+        } else {
+          this.displayValue = item[this.display];
+          this.group.get(this.key).patchValue(item[this.param]);
+        }
         this.changeList();
-        this.updateData();
       }
+      this.eventHandler({type: 'change'});
     }
-    this.value = null;
+    this.searchValue = null;
     this.list = null;
+    this.previewList = null;
   }
 
   public deleteItem(index) {

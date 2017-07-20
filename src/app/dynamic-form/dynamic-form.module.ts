@@ -5,6 +5,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { RouterModule } from '@angular/router';
 import { AgmCoreModule } from 'angular2-google-maps/core';
+import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
@@ -50,7 +51,8 @@ import { MoveDirective } from './directives/move.directive';
     Angular2FontawesomeModule,
     FormsModule,
     RouterModule,
-    AgmCoreModule.forRoot()
+    AgmCoreModule.forRoot(),
+    InfiniteScrollModule
   ],
   exports: [GenericFormComponent, GenericListComponent],
   declarations: [

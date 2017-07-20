@@ -449,7 +449,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getRalatedData');
         comp.eventHandler(e);
         expect(comp.getRalatedData).toHaveBeenCalledWith( comp.metadata,
-          'rules', 'some endpoint', '?company=2', 'app', true);
+          'rules', 'some endpoint', null, '?company=2', 'app', true);
       }));
 
     });
@@ -484,7 +484,7 @@ describe('GenericFormComponent', () => {
         };
         comp.metadata = [];
         spyOn(comp, 'parseMetadata');
-        comp.getRalatedData(comp.metadata, key, endpoint, null, null, inner);
+        comp.getRalatedData(comp.metadata, key, endpoint, null, null, null, inner);
         expect(comp.parseMetadata).toHaveBeenCalled();
       }));
 
@@ -520,7 +520,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'updateValueOfRules');
         spyOn(comp, 'updateMetadata');
         spyOn(comp, 'parseMetadata');
-        comp.getRalatedData(comp.metadata, key, endpoint, query);
+        comp.getRalatedData(comp.metadata, key, endpoint, null, query);
         expect(comp.updateValueOfRules).toHaveBeenCalledWith(response.results);
         expect(comp.updateMetadata).toHaveBeenCalledWith(comp.metadata, key);
         expect(comp.parseMetadata).toHaveBeenCalledWith(comp.metadata, {
@@ -555,20 +555,26 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getRalatedData');
         comp.getData(config, 'address.city', '?region=2');
         expect(comp.getRalatedData).toHaveBeenCalledWith(
-          config[1]['children'], 'address.city', '/ecore/api/v2/cities', '?region=2&limit=-1');
+          config[1]['children'], 'address.city', '/ecore/api/v2/cities', {}, '?region=2&limit=-1');
       }));
 
       it('should get all related data', async(() => {
         let config = [{
           type: 'related',
           key: 'address.country',
-          endpoint: '/ecore/api/v2/countries'
+          endpoint: '/ecore/api/v2/countries',
+          templateOptions: {
+            display: undefined
+          }
         }, {
           type: 'row',
           children: [{
             type: 'related',
             key: 'address.city',
-            endpoint: '/ecore/api/v2/cities'
+            endpoint: '/ecore/api/v2/cities',
+            templateOptions: {
+              display: undefined
+            }
           }]
         }];
         spyOn(comp, 'getRalatedData');
@@ -710,7 +716,8 @@ describe('GenericFormComponent', () => {
           many: true,
           templateOptions: {
             label: 'Active',
-            display: 'name_before_activation'
+            display: 'name_before_activation',
+            param: 'number'
           }
         };
         let config = [{
@@ -827,6 +834,7 @@ describe('GenericFormComponent', () => {
           [config[0], config[0].activeMetadata[0]],
           'rules',
           comp.workflowEndpoints.state,
+          null,
           `?company=123&workflow=124`
         );
       }));
@@ -930,6 +938,7 @@ describe('GenericFormComponent', () => {
           [comp.metadata[0], comp.metadata[0].activeMetadata[0]],
           key,
           comp.workflowEndpoints.state,
+          null,
           '?company=124&workflow=123'
         );
       }));

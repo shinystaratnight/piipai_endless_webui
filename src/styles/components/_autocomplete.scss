@@ -1,12 +1,15 @@
 .autocomplete {
+  width: 100%;
+  position: absolute;
+  border: 1px solid rgba($brand-inverse, .5);
+  border-radius: 0 0 .2rem .2rem;
+  z-index: 100;
+
   &-list {
     width: 100%;
-    position: absolute;
     overflow-y: auto;
     max-height: 200px;
-    border: 1px solid rgba($brand-inverse, .5);
-    border-radius: 0 0 .2rem .2rem;
-    z-index: 100;
+    z-index: 150;
   }
 
   &-item {
