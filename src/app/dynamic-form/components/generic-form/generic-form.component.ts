@@ -134,11 +134,23 @@ export class GenericFormComponent implements OnChanges {
     this.sendData = data;
     if (this.editForm) {
       this.service.editForm(`${this.endpoint}${this.id}/`, data).subscribe(
-        ((response: any) => this.parseResponse(response)),
+        ((response: any) => {
+          this.parseResponse(response);
+          this.event.emit({
+            type: 'sendForm',
+            data: response
+          });
+        }),
         ((errors: any) => this.parseError(errors.errors)));
     } else {
       this.service.submitForm(this.endpoint, data).subscribe(
-        ((response: any) => this.parseResponse(response)),
+        ((response: any) => {
+          this.parseResponse(response);
+          this.event.emit({
+            type: 'sendForm',
+            data: response
+          });
+        }),
         ((errors: any) => this.parseError(errors.errors)));
     }
   }
@@ -178,6 +190,11 @@ export class GenericFormComponent implements OnChanges {
       let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
       this.getRalatedData(this.metadata,
         key, event.el.endpoint, null, query, event.el.related.prop, true);
+    } else if (event.type === 'delete') {
+      this.service.delete(event.endpoint, event.id).subscribe(
+        (response: any) => this.parseResponse(response),
+        (err: any) => this.parseError(err)
+      );
     }
     this.event.emit(event);
   }
@@ -212,8 +229,9 @@ export class GenericFormComponent implements OnChanges {
               this.workflowData.number && this.workflowData.workflow) {
               this.updateMetadata(this.metadata, key);
             }
+          } else {
+            this.updateMetadata(this.metadata, key);
           }
-          this.updateMetadata(this.metadata, key);
         });
     } else {
       this.service.getAll(endpoint).subscribe(
@@ -233,7 +251,7 @@ export class GenericFormComponent implements OnChanges {
     let query = '';
     let display = (fields.display) ? fields.display : '__str__';
     let param = (fields.param) ? fields.param : 'id';
-    query += `fields=${display}&fileds=${param}`;
+    query += `fields=${display}&fields=${param}`;
     return query;
   }
 

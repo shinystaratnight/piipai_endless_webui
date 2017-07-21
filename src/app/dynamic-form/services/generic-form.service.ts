@@ -47,6 +47,12 @@ export class GenericFormService {
       .catch((error: any) => this.errorHandler(error));
   }
 
+  public delete(endpoint, id) {
+    return this.http.delete(`${endpoint}${id}/`)
+      .map((response: Response) => response.json())
+      .catch((error: any) => this.errorHandler(error));
+  }
+
   public errorHandler(error) {
     return Observable.throw(error.json());
   }

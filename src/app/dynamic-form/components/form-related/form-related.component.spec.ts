@@ -3,6 +3,7 @@ import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing'
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormRelatedComponent } from './form-related.component';
 
 describe('FormRelatedComponent', () => {
@@ -39,7 +40,7 @@ describe('FormRelatedComponent', () => {
         FormRelatedComponent
       ],
       providers: [FormBuilder],
-      imports: [ReactiveFormsModule, FormsModule],
+      imports: [ReactiveFormsModule, FormsModule, NgbModule.forRoot()],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
   });
@@ -108,7 +109,7 @@ describe('FormRelatedComponent', () => {
 
     it('should update value if many property equal true',
       async(inject([FormBuilder], (fb: FormBuilder) => {
-      let value = [1, 2];
+      let value = [1, 2, {number: 3}];
       let options = [
         {
           number: 1,
@@ -139,9 +140,13 @@ describe('FormRelatedComponent', () => {
       expect(comp.results).toEqual([
         {number: 1, name: 'First'},
         {number: 2, name: 'Second'},
+        {number: 3, name: 'Third'}
       ]);
       expect(comp.updateData).toHaveBeenCalledWith();
       expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
+      comp.config.options = null;
+      comp.ngOnInit();
+      expect(comp.results).toEqual(config.value);
     })));
 
   });
@@ -155,6 +160,53 @@ describe('FormRelatedComponent', () => {
       comp.onModalScrollDown();
       expect(comp.generatePreviewList).toHaveBeenCalledWith(comp.list);
     }));
+
+  });
+
+  describe('deleteElement method', () => {
+
+    it('should emit event for delete related object', async(() => {
+      comp.config = config;
+      comp.modalData = {
+        endpoint: 'some endpont',
+        id: 123
+      };
+      let test = {
+        closeModal() {
+          return true;
+        }
+      };
+      let event = {
+        type: 'delete',
+        endpoint: comp.modalData.endpoint,
+        id: comp.modalData.id
+      };
+      spyOn(test, 'closeModal');
+      spyOn(comp.event, 'emit');
+      comp.deleteElement(test.closeModal);
+      expect(comp.event.emit).toHaveBeenCalledWith(event);
+      expect(test.closeModal).toHaveBeenCalledWith();
+    }));
+
+  });
+
+  describe('open method', () => {
+
+    it('should set data for modal window', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.group = fb.group({});
+      comp.key = 'key';
+      comp.modalData = {};
+      comp.group.addControl(comp.key, fb.control(''));
+      let type = 'add';
+      comp.open(type);
+      expect(comp.modalData).toEqual({
+        type,
+        title: comp.config.templateOptions.label,
+        endpoint: comp.config.templateOptions.endpoint,
+        id: ''
+      });
+    })));
 
   });
 
@@ -444,6 +496,25 @@ describe('FormRelatedComponent', () => {
       comp.updateData();
       expect(comp.group.get(key).value).toEqual([1, 2]);
     })));
+
+  });
+
+  describe('formEvent method', () => {
+
+    it('should close modal window', async() => {
+      let test = {
+        closeModal() {
+          return true;
+        }
+      };
+      let event = {
+        type: 'sendForm'
+      };
+      let type = 'add';
+      spyOn(test, 'closeModal');
+      comp.formEvent(event, test.closeModal, type);
+      expect(test.closeModal).toHaveBeenCalled();
+    });
 
   });
 

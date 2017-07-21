@@ -7,6 +7,7 @@ import {
   EventEmitter,
   OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
@@ -20,6 +21,9 @@ export class FormRelatedComponent
 
   @ViewChild('search')
   public search;
+
+  @ViewChild('modal')
+  public modal;
 
   public config;
   public group: FormGroup;
@@ -36,6 +40,7 @@ export class FormRelatedComponent
   public lastElement: number = 0;
   public searchValue: any;
   public hideAutocomplete: boolean = true;
+  public modalData: any = {};
 
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
@@ -44,10 +49,12 @@ export class FormRelatedComponent
   public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private modalService: NgbModal
   ) { super(); }
 
   public ngOnInit() {
+    console.log(this.config.key);
     this.addControl(this.config, this.fb);
     this.display =
       this.config.templateOptions.display ? this.config.templateOptions.display : '__str__';
@@ -69,8 +76,20 @@ export class FormRelatedComponent
         this.group.get(this.key).patchValue(value);
       } else {
         if (this.config.options) {
-          this.results = this.config.options.filter((el) => {
-            return this.config.value.indexOf(el[this.param]) > -1;
+          let results = [];
+          this.config.options.forEach((el) => {
+            this.config.value.forEach((elem) => {
+              if (elem instanceof Object) {
+                if (elem[this.param] === el[this.param]) {
+                  results.push(el);
+                }
+              } else {
+                if (elem === el[this.param]) {
+                  results.push(el);
+                }
+              }
+            });
+            this.results = results;
           });
         } else {
           this.results = this.config.value;
@@ -82,6 +101,23 @@ export class FormRelatedComponent
 
   public onModalScrollDown() {
     this.generatePreviewList(this.list);
+  }
+
+  public deleteElement(closeModal) {
+    closeModal();
+    this.event.emit({
+      type: 'delete',
+      endpoint: this.modalData.endpoint,
+      id: this.modalData.id
+    });
+  }
+
+  public open(type) {
+    this.modalData.type = type;
+    this.modalData.title = this.config.templateOptions.label;
+    this.modalData.endpoint = this.config.endpoint;
+    this.modalData.id = this.group.get(this.key).value;
+    this.modalService.open(this.modal);
   }
 
   public openAutocomplete() {
@@ -197,5 +233,11 @@ export class FormRelatedComponent
       return el[this.param];
     });
     this.group.get(this.key).patchValue(results);
+  }
+
+  public formEvent(e, closeModal, type) {
+    if (e.type === 'sendForm') {
+      closeModal();
+    }
   }
 }

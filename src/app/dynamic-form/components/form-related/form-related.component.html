@@ -1,10 +1,34 @@
 <div class="form-group" [formGroup]="group">
   <div *ngIf="!config.many" style="position: relative">
     <label [attr.for]="key">{{config.templateOptions.label}}</label>
-    <div class="form-control custom-select" style="cursor: pointer;"
-      (click)="openAutocomplete()">
-      <div class="mw-100" style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
+    <div class="d-flex align-items-center">
+      <div class="form-control custom-select" style="cursor: pointer; overflow: hidden"
+        (click)="openAutocomplete()">
+        <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
+      </div>
+      <div class="btn-group" role="group"
+        *ngIf="config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete" >
+        <button type="button" class="btn btn-secondary"
+          *ngIf="config.templateOptions.edit"
+          (click)="open('edit')">
+          <i fa class="text-primary icon"
+            [name]="'pencil'"></i>
+        </button>
+        <button type="button" class="btn btn-secondary"
+          *ngIf="config.templateOptions.add"
+          (click)="open('add')">
+          <i fa class="text-success icon"
+            [name]="'plus'" ></i>
+        </button>
+        <button type="button" class="btn btn-secondary"
+          *ngIf="config.templateOptions.delete"
+          (click)="open('delete')">
+          <i fa class="text-danger icon"
+            [name]="'times'"></i>
+        </button>
+      </div>
     </div>
+
     <div class="card autocomplete p-1" [hidden]="hideAutocomplete">
       <input type="text" class="form-control mb-1"
         #search
@@ -70,4 +94,29 @@
     <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
   </div>
 </div>
+
+<template #modal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">{{modalData.title}}</h5>
+    <button type="button" class="close" (click)="c()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div *ngIf="modalData.type !== 'delete'">
+      <generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c, type)">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </generic-form>
+    </div>
+    <div *ngIf="modalData.type === 'delete'">
+      Are you sure?
+    </div>
+  </div>
+
+  <div *ngIf="modalData.type === 'delete'" class="modal-footer">
+    <button type="button" class="btn btn-danger"
+      (click)="deleteElement(c)">Delete</button>
+  </div>
+</template>
 

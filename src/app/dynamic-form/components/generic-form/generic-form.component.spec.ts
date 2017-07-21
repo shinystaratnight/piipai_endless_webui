@@ -35,6 +35,12 @@ describe('GenericFormComponent', () => {
         }
         return Observable.of(response);
       },
+      delete() {
+        if (response.status === 'error') {
+          return Observable.throw(response);
+        }
+        return Observable.of(response);
+      },
       getByQuery() {
         return Observable.of(response);
       },
@@ -288,8 +294,13 @@ describe('GenericFormComponent', () => {
         comp.endpoint = 'endpoint';
         let data = {username: 'test'};
         spyOn(comp, 'parseResponse');
+        spyOn(comp.event, 'emit');
         comp.submitForm(data);
         expect(comp.parseResponse).toHaveBeenCalled();
+        expect(comp.event.emit).toHaveBeenCalledWith({
+          type: 'sendForm',
+          data: response
+        });
       }));
 
       it('should called parseError method', async(() => {
@@ -315,8 +326,13 @@ describe('GenericFormComponent', () => {
         comp.editForm = true;
         let data = {username: 'test'};
         spyOn(comp, 'parseResponse');
+        spyOn(comp.event, 'emit');
         comp.submitForm(data);
         expect(comp.parseResponse).toHaveBeenCalledWith(response);
+        expect(comp.event.emit).toHaveBeenCalledWith({
+          type: 'sendForm',
+          data: response
+        });
       }));
 
       it('should call parseError for edit form', async(() => {
@@ -452,6 +468,38 @@ describe('GenericFormComponent', () => {
           'rules', 'some endpoint', null, '?company=2', 'app', true);
       }));
 
+      it('should parse response for delete object', async(() => {
+        let e = {
+          type: 'delete',
+          endpoint: 'some endpoint',
+          id: 123
+        };
+        response = {
+          status: 'success',
+          message: 'Deleted'
+        };
+        comp.metadata = [];
+        spyOn(comp, 'parseResponse');
+        comp.eventHandler(e);
+        expect(comp.parseResponse).toHaveBeenCalledWith(response);
+      }));
+
+      it('should parse error for delete object', async(() => {
+        let e = {
+          type: 'delete',
+          endpoint: 'some endpoint',
+          id: 123
+        };
+        response = {
+          status: 'error',
+          errors: ['canceled']
+        };
+        comp.metadata = [];
+        spyOn(comp, 'parseError');
+        comp.eventHandler(e);
+        expect(comp.parseError).toHaveBeenCalledWith(response);
+      }));
+
     });
 
     describe('buttonActionHandler method', () => {
@@ -493,13 +541,18 @@ describe('GenericFormComponent', () => {
         let endpoint = '/ecore/api/v2/countries';
         let query = '?region=5';
         let param = 'app';
+        let fields = {};
         response = {
           results: [{ id: 2, name: 'Australia' }]
         };
         comp.metadata = [];
         spyOn(comp, 'parseMetadata');
-        comp.getRalatedData(comp.metadata, key, endpoint, query, param);
+        spyOn(comp, 'updateMetadata');
+        spyOn(comp, 'generateQueryForRelatedFields').and.returnValue(`fields=__str__&fields=id`);
+        comp.getRalatedData(comp.metadata, key, endpoint, fields, query, param);
+        expect(comp.generateQueryForRelatedFields).toHaveBeenCalledWith({});
         expect(comp.parseMetadata).toHaveBeenCalled();
+        expect(comp.updateMetadata).toHaveBeenCalledWith([], key);
       }));
 
       it('should update metadata for rules type', async(() => {
@@ -533,6 +586,28 @@ describe('GenericFormComponent', () => {
 
     });
 
+    describe('generateQueryForRelatedFields method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.generateQueryForRelatedFields).toBeDefined();
+      }));
+
+      it('should generate query by default', async(() => {
+        let fields = {};
+        let query = comp.generateQueryForRelatedFields(fields);
+        expect(query).toEqual(`fields=__str__&fields=id`);
+      }));
+
+      it('should generate query', async(() => {
+        let fields = {
+          display: 'name',
+          param: 'id'
+        };
+        let query = comp.generateQueryForRelatedFields(fields);
+        expect(query).toEqual(`fields=name&fields=id`);
+      }));
+    });
+
     describe('getData method', () => {
 
       it('should be defined', async(() => {
@@ -564,7 +639,8 @@ describe('GenericFormComponent', () => {
           key: 'address.country',
           endpoint: '/ecore/api/v2/countries',
           templateOptions: {
-            display: undefined
+            display: 'name',
+            param: 'id'
           }
         }, {
           type: 'row',
@@ -573,7 +649,8 @@ describe('GenericFormComponent', () => {
             key: 'address.city',
             endpoint: '/ecore/api/v2/cities',
             templateOptions: {
-              display: undefined
+              display: 'name',
+              param: 'id'
             }
           }]
         }];

@@ -25,7 +25,8 @@ export class BasicElementComponent {
       element.nativeElement.maxLength = config.templateOptions.max;
     }
     if (config.templateOptions.min) {
-      element.nativeElement.minLength = config.templateOptions.min;
+      let min = (config.templateOptions.min < 0) ? 0 : config.templateOptions.min;
+      element.nativeElement.minLength = min;
     }
     if (config.templateOptions.max && config.templateOptions.type === 'number') {
       element.nativeElement.max = config.templateOptions.max;
