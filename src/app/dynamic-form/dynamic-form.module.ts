@@ -20,6 +20,7 @@ import { FormCollapseComponent } from './containers/form-collapse/form-collapse.
 import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.component';
 import { FormRelatedComponent } from './components/form-related/form-related.component';
 import { FormRuleComponent } from './components/form-rule/form-rule.component';
+import { FormTimelineComponent } from './components/form-timeline/form-timeline.component';
 
 import { GenericListComponent } from './components/generic-list/generic-list.component';
 import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
@@ -84,7 +85,8 @@ import { MoveDirective } from './directives/move.directive';
     MoveDirective,
     FilterSelectComponent,
     ListTableComponent,
-    FormRuleComponent
+    FormRuleComponent,
+    FormTimelineComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -105,7 +107,8 @@ import { MoveDirective } from './directives/move.directive';
     FilterRelatedComponent,
     ListCheckboxComponent,
     FilterSelectComponent,
-    FormRuleComponent
+    FormRuleComponent,
+    FormTimelineComponent
   ]
 })
 export class DynamicFormModule { }

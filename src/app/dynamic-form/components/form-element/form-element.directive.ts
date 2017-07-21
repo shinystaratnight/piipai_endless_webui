@@ -20,6 +20,7 @@ import { FormCollapseComponent } from './../../containers/form-collapse/form-col
 import { FormCheckboxComponent } from './../form-checkbox/form-checkbox.component';
 import { FormRelatedComponent } from './../form-related/form-related.component';
 import { FormRuleComponent } from './../form-rule/form-rule.component';
+import { FormTimelineComponent } from './../form-timeline/form-timeline.component';
 
 const components = {
   input: FormInputComponent,
@@ -31,7 +32,8 @@ const components = {
   collapse: FormCollapseComponent,
   checkbox: FormCheckboxComponent,
   related: FormRelatedComponent,
-  rule: FormRuleComponent
+  rule: FormRuleComponent,
+  timeline: FormTimelineComponent
 };
 
 @Directive({

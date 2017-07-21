@@ -1,0 +1,44 @@
+<div class="timeline">
+  <div *ngFor="let state of statesConfig" class="d-inline-block mb-3">
+    <div class="d-flex flex-column">
+      <div>
+        <div class="timeline-element card"
+          [ngClass]="{
+            'need-requirements': state.state === 0,
+            'allowed': state.state === 1,
+            'active': state.state === 2,
+            'visited': state.state === 3,
+            'not-allowed': state.state === 4
+          }"
+          (click)="open(state)">
+          <span *ngIf="state.state === 2">
+            {{(state.name_after_activation) ? state.name_after_activation : state.name_before_activation}}
+          </span>
+          <span *ngIf="state.state !== 2">
+            {{state.name_before_activation}}
+          </span>
+        </div>
+        <i fa class="mx-3"
+          [name]="'chevron-right'"></i>
+      </div>
+      <ul *ngIf="state.requirements && state.requirements.length > 0">
+        <li *ngFor="let item of state.requirements">{{item}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<template #stateModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">{{modalData.title}}</h5>
+    <button type="button" class="close" (click)="c()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <generic-form [endpoint]="objectEndpoint">
+      <button type="submit" class="btn btn-primary">Save</button>
+    </generic-form>
+  </div>
+</template>
