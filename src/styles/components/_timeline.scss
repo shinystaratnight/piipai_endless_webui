@@ -2,18 +2,54 @@
   &-element {
     display: inline-block;
     padding: 1.25rem;
-    cursor: pointer;
     transition: .3s;
 
-    &:hover,
-    &:focus {
-      box-shadow: 1px 1px 2px 2px rgba($brand-inverse, .3);
+    &-wrapper:hover .timeline-requirements {
+      display: block;
+    }
+
+    &.active:hover,
+    &.active:focus,
+    &.allowed:hover,
+    &.allowed:focus {
+      cursor: pointer;
+      box-shadow: 2px 2px 4px rgba($brand-inverse, .3);
+    }
+
+  }
+
+  &-requirements {
+    position: relative;
+    display: none;
+
+    &-item {
+      position: absolute;
+      top: 9px;
+      max-width: 300px;
+      background-color: white;
+      border: 1px solid $gray-light;
+      border-radius: .3rem;
+      z-index: 10;
+
+      &::before, &::after {
+        content: '';
+        position: absolute;
+        left: 20px;
+        top: -20px;
+        border: 10px solid transparent;
+        border-bottom: 10px solid $gray-light;
+      }
+      &::after {
+        border-bottom: 10px solid white;
+        top: -18px;
+      }
     }
   }
 
   .active {
     border-color: $brand-success;
     background-color: $brand-success;
+    color: darken($brand-success, 25%);
   }
 
   .allowed {
@@ -32,5 +68,6 @@
 
   .visited {
     background-color: rgba($brand-inverse, .5);
+    color: rgba($brand-inverse, .7);
   }
 }

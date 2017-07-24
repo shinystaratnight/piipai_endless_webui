@@ -5,6 +5,16 @@
   border-radius: 0 0 .2rem .2rem;
   z-index: 100;
 
+  &-value {
+    overflow: hidden;
+    background-color: $gray-lighter;
+
+    &.active {
+      cursor: pointer;
+      background-color: white;
+    }
+  }
+
   &-list {
     width: 100%;
     overflow-y: auto;

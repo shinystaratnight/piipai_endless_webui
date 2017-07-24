@@ -54,7 +54,6 @@ export class FormRelatedComponent
   ) { super(); }
 
   public ngOnInit() {
-    console.log(this.config.key);
     this.addControl(this.config, this.fb);
     this.display =
       this.config.templateOptions.display ? this.config.templateOptions.display : '__str__';
@@ -72,6 +71,11 @@ export class FormRelatedComponent
           value = this.config.value[this.param];
         } else {
           value = this.config.value;
+          if (this.config.options) {
+            this.displayValue = this.config.options.filter((el) => {
+              return el[this.param] === this.config.value;
+            })[0][this.display];
+          }
         }
         this.group.get(this.key).patchValue(value);
       } else {
@@ -110,6 +114,9 @@ export class FormRelatedComponent
       endpoint: this.modalData.endpoint,
       id: this.modalData.id
     });
+    this.group.get(this.key).patchValue('');
+    delete this.config.value;
+    this.displayValue = null;
   }
 
   public open(type) {
@@ -121,7 +128,7 @@ export class FormRelatedComponent
   }
 
   public openAutocomplete() {
-    if (this.config.options) {
+    if (this.config.options && !this.config.readonly) {
       this.searchValue = null;
       this.hideAutocomplete = false;
       this.generateList();
@@ -214,11 +221,12 @@ export class FormRelatedComponent
     }
   }
 
-  public eventHandler(e) {
+  public eventHandler(e, value = null) {
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.config.options.filter((el) => el.id === this.group.get(this.key).value)
+      value: value ? value
+        : this.config.options.filter((el) => el.id === this.group.get(this.key).value)
     });
   }
 
@@ -236,8 +244,16 @@ export class FormRelatedComponent
   }
 
   public formEvent(e, closeModal, type) {
-    if (e.type === 'sendForm') {
+    if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
+      this.group.get(this.key).patchValue(e.data[this.param]);
+      this.config.value = e.data[this.param];
+      this.event.emit({
+        type: 'update',
+        el: this.config,
+        currentQuery: this.config.currentQuery
+      });
+      this.eventHandler({type: 'change'}, e.data[this.param]);
     }
   }
 }

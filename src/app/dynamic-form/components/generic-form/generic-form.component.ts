@@ -138,7 +138,8 @@ export class GenericFormComponent implements OnChanges {
           this.parseResponse(response);
           this.event.emit({
             type: 'sendForm',
-            data: response
+            data: response,
+            status: 'success'
           });
         }),
         ((errors: any) => this.parseError(errors.errors)));
@@ -148,7 +149,8 @@ export class GenericFormComponent implements OnChanges {
           this.parseResponse(response);
           this.event.emit({
             type: 'sendForm',
-            data: response
+            data: response,
+            status: 'success'
           });
         }),
         ((errors: any) => this.parseError(errors.errors)));
@@ -180,7 +182,9 @@ export class GenericFormComponent implements OnChanges {
 
   public eventHandler(event) {
     this.updateWorkflowData(event);
-    if (event.type === 'change' && event.el.type === 'related' && event.el.related) {
+    if (event.type === 'update' && event.el.type === 'related') {
+      this.getData(this.metadata, event.el.key, event.currentQuery);
+    } else if (event.type === 'change' && event.el.type === 'related' && event.el.related) {
       let key = event.el.related.field;
       let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
       this.getData(this.metadata, key, query);
@@ -195,6 +199,9 @@ export class GenericFormComponent implements OnChanges {
         (response: any) => this.parseResponse(response),
         (err: any) => this.parseError(err)
       );
+    } else if (event.type === 'update' && event.el.key === 'timeline') {
+      this.getRalatedData(this.metadata, event.el.key,
+        event.el.endpoint, null, event.query, null, true);
     }
     this.event.emit(event);
   }
@@ -205,6 +212,7 @@ export class GenericFormComponent implements OnChanges {
 
   public getRalatedData
     (metadata, key, endpoint, fields, query = null, param = 'options', inner = false) {
+    let currentQuery = query;
     let fieldsQuery;
     if (fields) {
       fieldsQuery = this.generateQueryForRelatedFields(fields);
@@ -218,7 +226,10 @@ export class GenericFormComponent implements OnChanges {
           this.parseMetadata(metadata, {
             [key]: {
               action: 'add',
-              data: { [param]: inner ? response : response.results }
+              data: {
+                [param]: inner ? response : response.results,
+                currentQuery: query
+              }
             }
           });
           if (key === 'rules') {
@@ -410,12 +421,13 @@ export class GenericFormComponent implements OnChanges {
   public updateValueOfRules(res) {
     let key = 'rules';
     if (res && res.length > 0) {
-      res.forEach((el) => {
-        if (el.number === +this.workflowData.number) {
-          let element = this.getElementFromMetadata(this.metadata, key);
-          element.value = el.rules;
-        }
-      });
+      let result = res.filter((el) => el.number === +this.workflowData.number)[0];
+      let element = this.getElementFromMetadata(this.metadata, key);
+      if (result) {
+        element.value = result.rules;
+      } else {
+        element.value = null;
+      }
     }
   }
 

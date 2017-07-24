@@ -19,7 +19,10 @@ describe('FormRuleComponent', () => {
       label: 'Rules',
       required: true,
       description: 'help text'
-    }
+    },
+    activeMetadata: [{
+      value: 'some value'
+    }]
   };
   let errors = {};
 
@@ -50,14 +53,15 @@ describe('FormRuleComponent', () => {
     it('should add control', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
       comp.group = fb.group({});
-      spyOn(comp, 'addControl');
+      comp.group.addControl(comp.config.key, fb.control(''));
       comp.ngOnInit();
       expect(comp.view).toEqual([]);
       expect(comp.id).toEqual(0);
       expect(comp.ruleArray).toEqual([]);
       expect(comp.previewRule).toEqual([]);
       expect(comp.data).toEqual(<any> {});
-      expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
+      expect(comp.group.get(comp.config.key).value).toBeNull();
+      expect(comp.config.activeMetadata[0].value).toBeNull();
     })));
 
     it('should set value', async(inject([FormBuilder], (fb: FormBuilder) => {

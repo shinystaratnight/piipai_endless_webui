@@ -65,7 +65,11 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     if (data && form) {
       let keys = Object.keys(data);
       keys.forEach((el) => {
-        this.updateForm(el.split('.'), data, form, el);
+        if (el.indexOf('.') > -1) {
+          this.updateForm(el.split('.'), data, form, el);
+        } else {
+          this.updateForm([el], data, form, el);
+        }
       });
     }
   }

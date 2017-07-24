@@ -1,8 +1,8 @@
 <div class="timeline">
-  <div *ngFor="let state of statesConfig" class="d-inline-block mb-3">
+  <div *ngFor="let state of config.options; let l = last" class="d-inline-block mb-3">
     <div class="d-flex flex-column">
-      <div>
-        <div class="timeline-element card"
+      <div class="timeline-element-wrapper" style="position: relative">
+        <div class="timeline-element card p-3"
           [ngClass]="{
             'need-requirements': state.state === 0,
             'allowed': state.state === 1,
@@ -19,11 +19,18 @@
           </span>
         </div>
         <i fa class="mx-3"
+          *ngIf="!l"
           [name]="'chevron-right'"></i>
+        <div class="timeline-requirements"
+          *ngIf="state.state === 0 && state.requirements && state.requirements.length > 0">
+          <div class="timeline-requirements-item p-2">
+            <h6>Requirements:</h6>
+            <ul class="list-unstyled m-0">
+              <li *ngFor="let item of state.requirements; let i = index">{{i + 1}}.&nbsp;{{item}}</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <ul *ngIf="state.requirements && state.requirements.length > 0">
-        <li *ngFor="let item of state.requirements">{{item}}</li>
-      </ul>
     </div>
   </div>
 </div>
@@ -37,7 +44,7 @@
   </div>
 
   <div class="modal-body">
-    <generic-form [endpoint]="objectEndpoint">
+    <generic-form [endpoint]="objectEndpoint" [data]="stateData" (event)="sendEventHandler($event, c)">
       <button type="submit" class="btn btn-primary">Save</button>
     </generic-form>
   </div>

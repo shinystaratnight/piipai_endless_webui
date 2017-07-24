@@ -299,7 +299,8 @@ describe('GenericFormComponent', () => {
         expect(comp.parseResponse).toHaveBeenCalled();
         expect(comp.event.emit).toHaveBeenCalledWith({
           type: 'sendForm',
-          data: response
+          data: response,
+          status: 'success'
         });
       }));
 
@@ -331,7 +332,8 @@ describe('GenericFormComponent', () => {
         expect(comp.parseResponse).toHaveBeenCalledWith(response);
         expect(comp.event.emit).toHaveBeenCalledWith({
           type: 'sendForm',
-          data: response
+          data: response,
+          status: 'success'
         });
       }));
 
@@ -417,6 +419,25 @@ describe('GenericFormComponent', () => {
         expect(comp.eventHandler).toBeDefined();
       }));
 
+      it('should update options for related data', async(() => {
+        let field = 'country';
+        let query = '?country';
+        let param = 'id';
+        let reset = 'city';
+        let event = {
+          type: 'update',
+          el: {
+            type: 'related',
+            key: 'country'
+          },
+          currentQuery: 'some query'
+        };
+        comp.metadata = [];
+        spyOn(comp, 'getData');
+        comp.eventHandler(event);
+        expect(comp.getData).toHaveBeenCalledWith(comp.metadata, event.el.key, event.currentQuery);
+      }));
+
       it('should handle event', async(() => {
         let field = 'country';
         let query = '?country';
@@ -500,6 +521,22 @@ describe('GenericFormComponent', () => {
         expect(comp.parseError).toHaveBeenCalledWith(response);
       }));
 
+      it('should update timeline after change', async(() => {
+        let e = {
+          type: 'update',
+          el: {
+            key: 'timeline',
+            endpoint: 'some endpoint',
+          },
+          query: 'some query'
+        };
+        comp.metadata = [];
+        spyOn(comp, 'getRalatedData');
+        comp.eventHandler(e);
+        expect(comp.getRalatedData).toHaveBeenCalledWith(comp.metadata, e.el.key,
+          e.el.endpoint, null, e.query, null, true);
+      }));
+
     });
 
     describe('buttonActionHandler method', () => {
@@ -579,7 +616,7 @@ describe('GenericFormComponent', () => {
         expect(comp.parseMetadata).toHaveBeenCalledWith(comp.metadata, {
           [key]: {
             action: 'add',
-            data: { options: response.results }
+            data: { options: response.results, currentQuery: query }
           }
         });
       }));
@@ -969,6 +1006,25 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getElementFromMetadata').and.returnValue(comp.metadata[0]);
         comp.updateValueOfRules(res);
         expect(comp.metadata[0].value).toEqual(res[0].rules);
+      }));
+
+      it('should update value of element with null', async(() => {
+        let res = [{
+          number: 20,
+          rules: null
+        }];
+        let key = 'rules';
+        comp.metadata = [
+          {
+            key: 'rules'
+          }
+        ];
+        comp.workflowData = {
+          number: 10
+        };
+        spyOn(comp, 'getElementFromMetadata').and.returnValue(comp.metadata[0]);
+        comp.updateValueOfRules(res);
+        expect(comp.metadata[0].value).toBeNull();
       }));
 
     });

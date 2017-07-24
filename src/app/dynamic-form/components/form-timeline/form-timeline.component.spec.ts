@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-describe('FormCheckboxComponent', () => {
+describe('FormTimelineComponent', () => {
   let fixture: ComponentFixture<FormTimelineComponent>;
   let comp: FormTimelineComponent;
   let el;

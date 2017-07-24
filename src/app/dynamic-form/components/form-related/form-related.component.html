@@ -2,7 +2,8 @@
   <div *ngIf="!config.many" style="position: relative">
     <label [attr.for]="key">{{config.templateOptions.label}}</label>
     <div class="d-flex align-items-center">
-      <div class="form-control custom-select" style="cursor: pointer; overflow: hidden"
+      <div class="form-control custom-select autocomplete-value"
+        [ngClass]="{'active': !config.readonly}"
         (click)="openAutocomplete()">
         <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
       </div>

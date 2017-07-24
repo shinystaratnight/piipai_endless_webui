@@ -71,6 +71,10 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
       this.data = this.config.value;
       this.generateView(this.data);
       this.group.get(this.key).patchValue(this.data);
+    } else {
+      this.config.activeMetadata[0].value = null;
+      this.view = [];
+      this.group.get(this.key).patchValue(null);
     }
   }
 

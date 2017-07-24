@@ -97,7 +97,15 @@ describe('FormRelatedComponent', () => {
 
     it('should update value if it a string', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
-      let value = '2';
+      comp.config.options = [{
+        number: 2,
+        name: 'First'
+      }];
+      let display = 'name';
+      let param = 'number';
+      config.templateOptions.display = display;
+      config.templateOptions.param = param;
+      let value = 2;
       spyOn(comp, 'addControl');
       comp.group = fb.group({});
       comp.group.addControl(config.key, fb.control(''));
@@ -105,6 +113,7 @@ describe('FormRelatedComponent', () => {
       comp.key = config.key;
       comp.ngOnInit();
       expect(comp.group.get(comp.key).value).toEqual(value);
+      expect(comp.displayValue).toEqual('First');
     })));
 
     it('should update value if many property equal true',
@@ -165,7 +174,8 @@ describe('FormRelatedComponent', () => {
 
   describe('deleteElement method', () => {
 
-    it('should emit event for delete related object', async(() => {
+    it('should emit event for delete related object',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
       comp.modalData = {
         endpoint: 'some endpont',
@@ -181,12 +191,20 @@ describe('FormRelatedComponent', () => {
         endpoint: comp.modalData.endpoint,
         id: comp.modalData.id
       };
+      comp.group = fb.group({});
+      comp.key = 'key';
+      comp.config.value = 'some';
+      comp.displayValue = 'some';
+      comp.group.addControl(comp.key, fb.control('some value'));
       spyOn(test, 'closeModal');
       spyOn(comp.event, 'emit');
       comp.deleteElement(test.closeModal);
       expect(comp.event.emit).toHaveBeenCalledWith(event);
       expect(test.closeModal).toHaveBeenCalledWith();
-    }));
+      expect(comp.group.get(comp.key).value).toEqual('');
+      expect(comp.config.value).toBeUndefined();
+      expect(comp.displayValue).toBeNull();
+    })));
 
   });
 
@@ -215,6 +233,7 @@ describe('FormRelatedComponent', () => {
     it('should open actocomplete element', async(() => {
       comp.config = config;
       comp.config.options = [];
+      comp.config.readonly = false;
       comp.search = {
         nativeElement: {
           focus() {
@@ -460,6 +479,22 @@ describe('FormRelatedComponent', () => {
       expect(comp.event.emit).toHaveBeenCalled();
     })));
 
+    it('should be emit event with value', async(inject([FormBuilder], (fb) => {
+      let metadata = {
+        key: 'title'
+      };
+      let event = { type: 'change' };
+      let value = {};
+      comp.config = metadata;
+      spyOn(comp.event, 'emit');
+      comp.eventHandler(event, value);
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'change',
+        el: metadata,
+        value
+      });
+    })));
+
   });
 
   describe('changeList method', () => {
@@ -501,20 +536,45 @@ describe('FormRelatedComponent', () => {
 
   describe('formEvent method', () => {
 
-    it('should close modal window', async() => {
+    it('should close modal window and update value',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
       let test = {
         closeModal() {
           return true;
         }
       };
       let event = {
-        type: 'sendForm'
+        type: 'sendForm',
+        status: 'success',
+        data: {
+          id: 123,
+          name: 'First'
+        }
       };
       let type = 'add';
+      let key = 'name';
+      let form = fb.group({});
+      form.addControl(key, fb.control(''));
+      comp.group = form;
+      comp.config = config;
+      comp.config.currentQuery = 'some query';
+      comp.param = 'id';
+      comp.display = 'name';
+      comp.key = key;
       spyOn(test, 'closeModal');
+      spyOn(comp.event, 'emit');
+      spyOn(comp, 'eventHandler');
       comp.formEvent(event, test.closeModal, type);
       expect(test.closeModal).toHaveBeenCalled();
-    });
+      expect(comp.group.get(comp.key).value).toEqual(123);
+      expect(comp.config.value).toEqual(123);
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'update',
+        el: comp.config,
+        currentQuery: comp.config.currentQuery
+      });
+      expect(comp.eventHandler).toHaveBeenCalledWith({type: 'change'}, 123);
+    })));
 
   });
 
