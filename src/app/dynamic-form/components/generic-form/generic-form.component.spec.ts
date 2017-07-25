@@ -486,7 +486,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getRalatedData');
         comp.eventHandler(e);
         expect(comp.getRalatedData).toHaveBeenCalledWith( comp.metadata,
-          'rules', 'some endpoint', null, '?company=2', 'app', true);
+          'rules', 'some endpoint', null, '?company=2', 'app', false);
       }));
 
       it('should parse response for delete object', async(() => {

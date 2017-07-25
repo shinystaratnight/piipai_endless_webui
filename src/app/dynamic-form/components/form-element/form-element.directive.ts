@@ -21,6 +21,7 @@ import { FormCheckboxComponent } from './../form-checkbox/form-checkbox.componen
 import { FormRelatedComponent } from './../form-related/form-related.component';
 import { FormRuleComponent } from './../form-rule/form-rule.component';
 import { FormTimelineComponent } from './../form-timeline/form-timeline.component';
+import { FormPictureComponent } from './../form-picture/form-picture.component';
 
 const components = {
   input: FormInputComponent,
@@ -33,7 +34,8 @@ const components = {
   checkbox: FormCheckboxComponent,
   related: FormRelatedComponent,
   rule: FormRuleComponent,
-  timeline: FormTimelineComponent
+  timeline: FormTimelineComponent,
+  picture: FormPictureComponent
 };
 
 @Directive({
