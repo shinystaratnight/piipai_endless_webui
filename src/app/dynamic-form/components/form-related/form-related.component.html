@@ -55,9 +55,10 @@
 
   <div *ngIf="config.many" style="position: relative">
     <label [attr.for]="key">{{config.templateOptions.label}}</label>
-    <input type="text" class="form-control custom-select"
+    <input type="text" class="form-control custom-select autocomplete-value"
       [(ngModel)]="searchValue"
       [ngModelOptions]="{standalone: true}"
+      [ngClass]="{'active': !config.readonly}"
       (focus)="generateList()"
       (blur)="resetList()"
       (keyup)="filter(searchValue)">

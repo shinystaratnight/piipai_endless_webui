@@ -193,7 +193,7 @@ export class GenericFormComponent implements OnChanges {
       let key = event.el.related.field;
       let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
       this.getRalatedData(this.metadata,
-        key, event.el.endpoint, null, query, event.el.related.prop, true);
+        key, event.el.endpoint, null, query, event.el.related.prop, false);
     } else if (event.type === 'delete') {
       this.service.delete(event.endpoint, event.id).subscribe(
         (response: any) => this.parseResponse(response),
@@ -211,7 +211,7 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public getRalatedData
-    (metadata, key, endpoint, fields, query = null, param = 'options', inner = false) {
+    (metadata, key, endpoint, fields, query = null, param = 'options', update = true) {
     let currentQuery = query;
     let fieldsQuery;
     if (fields) {
@@ -227,7 +227,7 @@ export class GenericFormComponent implements OnChanges {
             [key]: {
               action: 'add',
               data: {
-                [param]: inner ? response : response.results,
+                [param]: response.results ? response.results : response,
                 currentQuery: query
               }
             }
@@ -237,10 +237,11 @@ export class GenericFormComponent implements OnChanges {
               this.updateValueOfRules(response.results);
             }
             if (this.workflowData.company &&
-              this.workflowData.number && this.workflowData.workflow) {
+              this.workflowData.number &&
+              this.workflowData.workflow && update) {
               this.updateMetadata(this.metadata, key);
             }
-          } else {
+          } else if (update) {
             this.updateMetadata(this.metadata, key);
           }
         });
@@ -250,7 +251,7 @@ export class GenericFormComponent implements OnChanges {
           this.parseMetadata(metadata, {
             [key]: {
               action: 'add',
-              data: { [param]: inner ? response : response.results }
+              data: { [param]: response.results ? response.results : response }
             }
           });
         }

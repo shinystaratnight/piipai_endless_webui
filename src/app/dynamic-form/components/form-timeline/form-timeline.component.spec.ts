@@ -12,7 +12,11 @@ describe('FormTimelineComponent', () => {
   let comp: FormTimelineComponent;
   let el;
   let config = {
-    type: 'timeline'
+    type: 'timeline',
+    endpoint: '/ecore/api/v2/endless-core/workflownodes/timeline',
+    query: ['model', 'object_id'],
+    model: 'endless_core.companyrel',
+    object_id: 'e3cfaf55'
   };
 
   beforeEach(() => {
@@ -41,9 +45,11 @@ describe('FormTimelineComponent', () => {
 
   describe('ngOnInit method', () => {
     it('should initialize properties', () => {
+      comp.config = config;
+      spyOn(comp, 'getTimeline');
       comp.ngOnInit();
-      expect(comp.modalData).toEqual({});
       expect(comp.objectEndpoint).toEqual('/ecore/api/v2/endless-core/workflowobjects/');
+      expect(comp.getTimeline).toHaveBeenCalled();
     });
   });
 
@@ -54,14 +60,17 @@ describe('FormTimelineComponent', () => {
         name_before_activation: 'Cancel/Fail',
         name_after_activation: 'Sales Failed',
         state: 1,
-        requirements: []
+        requirements: [],
+        wf_object_id: 124
       };
       comp.modalData = {};
       comp.stateModal = {};
       spyOn(comp.modalService, 'open');
+      spyOn(comp, 'setDataForState');
       comp.open(state);
       expect(comp.modalData.title).toEqual(state.name_before_activation);
-      expect(comp.modalService.open).toHaveBeenCalledWith(comp.stateModal);
+      expect(comp.modalService.open).toHaveBeenCalledWith(comp.stateModal, {size: 'lg'});
+      expect(comp.setDataForState).toHaveBeenCalledWith(state);
     });
 
     it('should open modal window for active states if name_after_activation is defined', () => {
@@ -70,14 +79,18 @@ describe('FormTimelineComponent', () => {
         name_before_activation: 'Cancel/Fail',
         name_after_activation: 'Sales Failed',
         state: 2,
-        requirements: []
+        requirements: [],
+        wf_object_id: 124
       };
       comp.modalData = {};
       comp.stateModal = {};
       spyOn(comp.modalService, 'open');
+      spyOn(comp, 'setDataForState');
       comp.open(state);
+      expect(comp.modalData.id).toEqual(124);
       expect(comp.modalData.title).toEqual(state.name_after_activation);
-      expect(comp.modalService.open).toHaveBeenCalledWith(comp.stateModal);
+      expect(comp.modalService.open).toHaveBeenCalledWith(comp.stateModal, {size: 'lg'});
+      expect(comp.setDataForState).toHaveBeenCalledWith(state);
     });
 
     it('should open modal window for active states', () => {
@@ -86,15 +99,95 @@ describe('FormTimelineComponent', () => {
         name_before_activation: 'Cancel/Fail',
         name_after_activation: '',
         state: 2,
-        requirements: []
+        requirements: [],
+        wf_object_id: 124
       };
       comp.modalData = {};
       comp.stateModal = {};
       spyOn(comp.modalService, 'open');
+      spyOn(comp, 'setDataForState');
       comp.open(state);
+      expect(comp.modalData.id).toEqual(124);
       expect(comp.modalData.title).toEqual(state.name_before_activation);
-      expect(comp.modalService.open).toHaveBeenCalledWith(comp.stateModal);
+      expect(comp.modalService.open).toHaveBeenCalledWith(comp.stateModal, {size: 'lg'});
+      expect(comp.setDataForState).toHaveBeenCalledWith(state);
     });
   });
 
+  describe('getTimeline method', () => {
+    it('should emit event for get a timeline data', () => {
+      comp.config = config;
+      let query = `?model=${comp.config.model}&object_id=${comp.config.object_id}`;
+      spyOn(comp.event, 'emit');
+      comp.getTimeline();
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'update',
+        el: comp.config,
+        query
+      });
+    });
+  });
+
+  describe('setDataForState method', () => {
+    it('should set data for chosen state', () => {
+      comp.config = config;
+      let state = {
+        id: 123,
+        name_before_activation: 'Cancel/Fail',
+        name_after_activation: '',
+        state: 2,
+        requirements: [],
+        wf_object_id: 124
+      };
+      let value = <any> {
+        object_id: {
+          action: 'add',
+          data: {
+            read_only: true,
+            value: comp.config.object_id,
+            readonly: true
+          }
+        },
+        state: {
+          action: 'add',
+          data: {
+            read_only: true,
+            value: state.id,
+            readonly: true
+          }
+        },
+        active: {
+          action: 'add',
+          data: {
+            read_only: true,
+            value: true,
+            readonly: true
+          }
+        }
+      };
+      let result = comp.setDataForState(state);
+      expect(result).toEqual(value);
+    });
+  });
+
+  describe('sendEventHandler method', () => {
+    it('should update timeline', () => {
+      comp.config = config;
+      comp.modalData = {};
+      let test = {
+        closeModal() {
+          return true;
+        }
+      };
+      let event = {
+        status: 'success'
+      };
+      spyOn(test, 'closeModal');
+      spyOn(comp, 'getTimeline');
+      comp.sendEventHandler(event, test.closeModal);
+      expect(test.closeModal).toHaveBeenCalled();
+      expect(comp.getTimeline).toHaveBeenCalled();
+      expect(comp.modalData).toBeNull();
+    });
+  });
 });

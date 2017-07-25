@@ -23,12 +23,12 @@ export class FormTimelineComponent implements OnInit {
   constructor(public modalService: NgbModal) {}
 
   public ngOnInit() {
-    this.modalData = {};
     this.objectEndpoint = '/ecore/api/v2/endless-core/workflowobjects/';
     this.getTimeline();
   }
 
-  public open(state) {
+  public open(state): void {
+    this.modalData = {};
     if (state.state === 1 || state.state === 2) {
       let title = '';
       if (state.state === 1) {
@@ -36,9 +36,7 @@ export class FormTimelineComponent implements OnInit {
       } else if (state.state === 2) {
         title = (state.name_after_activation) ? state.name_after_activation
           : state.name_before_activation;
-      } else if (state.state === 4) {
-        this.requirements = state.requirements;
-        return;
+        this.modalData.id = state.wf_object_id;
       }
       this.modalData.title = title;
       this.stateData = this.setDataForState(state);
@@ -46,7 +44,7 @@ export class FormTimelineComponent implements OnInit {
     }
   }
 
-  public getTimeline() {
+  public getTimeline(): void {
     let query = this.config.query.map((el) => {
       return `${el}=${this.config[el]}`;
     });
@@ -57,12 +55,12 @@ export class FormTimelineComponent implements OnInit {
     });
   }
 
-  public setDataForState(state) {
+  public setDataForState(state): {} {
     let fields = ['object_id', 'state', 'active'];
     let result = {};
     fields.forEach((el) => {
       let value = (el === 'state') ? state.id : (el === 'object_id') ? this.config[el] : true;
-      fields[el] = {
+      result[el] = {
         action: 'add',
         data: {
           read_only: true,
@@ -71,13 +69,14 @@ export class FormTimelineComponent implements OnInit {
         }
       };
     });
-    return fields;
+    return result;
   }
 
-  public sendEventHandler(e, closeModal) {
+  public sendEventHandler(e, closeModal): void {
     if (e.status === 'success') {
       closeModal();
       this.getTimeline();
+      this.modalData = null;
     }
   }
 

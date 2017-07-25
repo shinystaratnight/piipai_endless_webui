@@ -9,7 +9,7 @@
     overflow: hidden;
     background-color: $gray-lighter;
 
-    &.active {
+    &.active:not(:focus) {
       cursor: pointer;
       background-color: white;
     }

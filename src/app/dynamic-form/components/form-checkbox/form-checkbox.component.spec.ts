@@ -75,6 +75,7 @@ describe('FormCheckboxComponent', () => {
   describe('ngAfterViewInit method', () => {
 
     it('should called addControl method', async(() => {
+      comp.checkbox = {};
       spyOn(comp, 'addFlags');
       comp.ngAfterViewInit();
       expect(comp.addFlags).toHaveBeenCalled();

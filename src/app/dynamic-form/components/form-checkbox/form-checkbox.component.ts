@@ -35,7 +35,9 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.checkbox, this.config);
+    if (this.checkbox) {
+      this.addFlags(this.checkbox, this.config);
+    }
   }
 
   public eventHandler(e) {
