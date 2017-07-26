@@ -6,6 +6,7 @@
     [attr.type]="config.templateOptions.type ? config.templateOptions.type : 'text'"
     [hidden]="true"
     [attr.id]="key"
+    (change)="fileChangeEvent($event)"
     [attr.name]="key">
   <div class="d-flex align-items-center flex-wrap">
     <button class="btn btn-primary btn-sm text-white d-flex align-items-center"
@@ -41,12 +42,20 @@
     </button>
   </div>
 
-  <div class="modal-body">
-
+  <div *ngIf="modalOpen" class="modal-body picture d-flex justify-content-between align-items-center flex-wrap">
+    <ack-webcam class="d-flex align-items-center"
+      [(ref)]="webcam"
+      [options]="options"
+      (onError)="onCamError($event)"></ack-webcam>
+    <div class="photo d-flex justify-content-center align-items-center">
+      <span class="text-white"
+        *ngIf="!photoExist">Photo</span>
+      <canvas [hidden]="!photoExist"></canvas>
+    </div>
   </div>
 
   <div class="modal-footer justify-content-start">
-    <button class="btn btn-primary">{{config.templateOptions.label_photo}}</button>
-    <button class="btn btn-danger" (click)="c()">Cancel</button>
+    <button class="btn btn-primary" (click)="getPhoto()">{{config.templateOptions.label_photo}}</button>
+    <button class="btn btn-danger" (click)="close(c)">Cancel</button>
   </div>
 </template>
