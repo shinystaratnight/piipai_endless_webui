@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { FallbackDispatcher } from 'ng2-webcam';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
@@ -17,40 +18,46 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   @ViewChild('picture')
   public picture;
 
-  @ViewChild('video')
-  public video;
-
   public config;
   public group: FormGroup;
   public errors: any;
   public message: any;
   public key: any;
   public photoExist: boolean = false;
-  public modalOpen: boolean = false;
   public mime: string;
-  public file: any;
-
+  public fileName: string = '';
+  public onSuccess;
+  public onError;
+  public flashPlayer: any;
   public err: any;
 
   public options = {
-    audio: true,
+    audio: false,
     video: true,
     width: 320,
     height: 240,
     fallbackMode: 'callback',
-    fallbackSrc: '/node_modules/ack-angular-webcam/jscam_canvas_only.swf',
+    fallbackSrc: 'assets/jscam_canvas_only.swf',
     fallbackQuality: 85,
     cameraType: 'front'
   };
-
-  public webcam;
-  public base64;
 
   constructor(
     private fb: FormBuilder,
     public modalService: NgbModal,
     private element: ElementRef
-  ) { super(); }
+  ) {
+    super();
+    this.onSuccess = (stream: any) => {
+      if (stream instanceof FallbackDispatcher) {
+        this.flashPlayer = <FallbackDispatcher> stream;
+        this.onFallback();
+      }
+    };
+    this.onError = (err) => {
+      this.err = err;
+    };
+  }
 
   public ngOnInit(): void {
     this.addControl(this.config, this.fb);
@@ -66,19 +73,17 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   }
 
   public open(): void {
-    this.modalOpen = true;
     this.photoExist = false;
     this.modalService.open(this.modal, {size: 'lg'});
   }
 
-  public close(closeModal) {
-    closeModal();
-    this.modalOpen = false;
-  }
-
   public getPhoto() {
+    this.fileName = '';
     let canvas = this.createPhoto();
-    this.base64 = canvas.toDataURL(this.mime);
+    let base64 = canvas.toDataURL(this.mime);
+    if (base64) {
+      this.updateValue('image.jpeg', base64);
+    }
   }
 
   public createPhoto() {
@@ -86,21 +91,93 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     const video = <any> document.getElementsByTagName('video')[0];
     const canvas = <any> document.getElementsByTagName('canvas')[0];
     if (video) {
-      canvas.style.maxWidth = `${this.options.width}px`;
+      canvas.style.maxWidth = `100%`;
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       canvas.getContext('2d').drawImage(video, 0, 0);
+    } else {
+      this.flashPlayer.capture();
     }
     return canvas;
   }
 
   public fileChangeEvent(e) {
-    this.file = e.target.files;
-    this.base64 = null;
+    this.updateValue('', '');
+    let file = e.target.files[0];
+    if (file) {
+      let reader = new FileReader();
+      reader.onload = () => {
+        let imageType = /^image\//;
+
+        if (!imageType.test(file.type)) {
+          return;
+        }
+        if (reader.result) {
+          let name = file.name;
+          this.updateValue(name, reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
-  public onCamError(err) {
-    this.err = err;
+  public onFallback(): void {
+    const self = this;
+    const canvas = <any> document.getElementsByTagName('canvas')[0];
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      const size = self.flashPlayer.getCameraSize();
+      const w = size.width;
+      const h = size.height;
+      const externData = {
+        imgData: ctx.getImageData(0, 0, w, h),
+        pos: 0
+      };
+
+      canvas.width = w;
+      canvas.height = h;
+      ctx.clearRect(0, 0, w, h);
+
+      FallbackDispatcher.implementExternal({
+        onSave: (data) => {
+          try {
+            let col = data.split(';');
+            let tmp = null;
+
+            for (let i = 0; i < w; i++) {
+              tmp = parseInt(col[i], 10);
+              externData.imgData.data[externData.pos + 0] = (tmp >> 16) & 0xff;
+              externData.imgData.data[externData.pos + 1] = (tmp >> 8) & 0xff;
+              externData.imgData.data[externData.pos + 2] = tmp & 0xff;
+              externData.imgData.data[externData.pos + 3] = 0xff;
+              externData.pos += 4;
+            }
+
+            if (externData.pos >= 4 * w * h) {
+              ctx.putImageData(externData.imgData, 0, 0);
+              externData.pos = 0;
+            }
+          } catch (e) {
+            console.error(e);
+          }
+
+        },
+        debug: (tag, message): void => {
+          // do nothing
+        },
+        onCapture: () => {
+          self.flashPlayer.save();
+        },
+        onTick: (time) => {
+          // do nothing
+        }
+      });
+    }
+  }
+
+  public updateValue(name, value) {
+    this.fileName = name;
+    this.group.get(this.key).patchValue(value);
   }
 
 }

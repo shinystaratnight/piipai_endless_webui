@@ -89,11 +89,6 @@ module.exports = function (options) {
 
       rules: [
 
-        {
-          test: /\.swf$/,
-          loader: "file-loader?name=[path][name].[ext]"
-        },
-
         /*
          * Typescript loader support for .ts
          *
@@ -194,7 +189,12 @@ module.exports = function (options) {
         {
           test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
           use: 'file-loader'
-        }
+        },
+
+        {
+          test: /\.swf$/,
+          loader: "file-loader"
+        },
 
       ],
 

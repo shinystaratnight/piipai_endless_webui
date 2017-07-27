@@ -1,28 +1,29 @@
-<div class="form-group" [formGroup]="group">
+<div class="form-group">
   <label>{{config.templateOptions.label}}</label>
   <input
     #picture
-    [formControlName]="key"
+    accept="image/*"
     [attr.type]="config.templateOptions.type ? config.templateOptions.type : 'text'"
     [hidden]="true"
     [attr.id]="key"
     (change)="fileChangeEvent($event)"
     [attr.name]="key">
   <div class="d-flex align-items-center flex-wrap">
-    <button class="btn btn-primary btn-sm text-white d-flex align-items-center"
+    <button type="button" class="btn btn-primary btn-sm text-white d-flex align-items-center"
       (click)="upload()">
       <i fa class="mr-1"
         [name]="'upload'"></i>
       {{config.templateOptions.label_upload}}
     </button>
     <span class="p-1">or</span>
-    <button class="btn btn-success btn-sm text-white d-flex"
+    <button type="button" class="btn btn-success btn-sm text-white d-flex"
       (click)="open()">
       <i fa class="mr-1"
         [name]="'camera'"></i>
       {{config.templateOptions.label_photo}}
     </button>
   </div>
+  <div class="mt-1" *ngIf="fileName"><i class="text-muted">file:</i> {{fileName}}</div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
   </small>
@@ -42,20 +43,16 @@
     </button>
   </div>
 
-  <div *ngIf="modalOpen" class="modal-body picture d-flex justify-content-between align-items-center flex-wrap">
-    <ack-webcam class="d-flex align-items-center"
-      [(ref)]="webcam"
-      [options]="options"
-      (onError)="onCamError($event)"></ack-webcam>
+  <div class="modal-body picture d-inline-block d-flex justify-content-between flex-wrap">
+    <ng2-webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError"></ng2-webcam>
     <div class="photo d-flex justify-content-center align-items-center">
-      <span class="text-white"
-        *ngIf="!photoExist">Photo</span>
+      <span *ngIf="!photoExist" class="text-white">Photo</span>
       <canvas [hidden]="!photoExist"></canvas>
     </div>
   </div>
 
   <div class="modal-footer justify-content-start">
-    <button class="btn btn-primary" (click)="getPhoto()">{{config.templateOptions.label_photo}}</button>
-    <button class="btn btn-danger" (click)="close(c)">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="getPhoto()">{{config.templateOptions.label_photo}}</button>
+    <button type="button" class="btn btn-danger" (click)="c()">Cancel</button>
   </div>
 </template>
