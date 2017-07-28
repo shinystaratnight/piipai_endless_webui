@@ -123,17 +123,13 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public submitForm(data) {
+    let newData = {};
     if (this.form) {
-      let keys = Object.keys(this.form);
-      if (keys.length) {
-        keys.forEach((el) => {
-          data[el] = this.form[el];
-        });
-      }
+      newData = Object.assign({}, data, this.form);
     }
-    this.sendData = data;
+    this.sendData = newData;
     if (this.editForm) {
-      this.service.editForm(`${this.endpoint}${this.id}/`, data).subscribe(
+      this.service.editForm(`${this.endpoint}${this.id}/`, newData).subscribe(
         ((response: any) => {
           this.parseResponse(response);
           this.event.emit({
@@ -144,7 +140,7 @@ export class GenericFormComponent implements OnChanges {
         }),
         ((errors: any) => this.parseError(errors.errors)));
     } else {
-      this.service.submitForm(this.endpoint, data).subscribe(
+      this.service.submitForm(this.endpoint, newData).subscribe(
         ((response: any) => {
           this.parseResponse(response);
           this.event.emit({
@@ -187,8 +183,8 @@ export class GenericFormComponent implements OnChanges {
     } else if (event.type === 'change' && event.el.type === 'related' && event.el.related) {
       let key = event.el.related.field;
       let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
-      this.getData(this.metadata, key, query);
       this.resetRalatedData(this.metadata, event.el.related.reset);
+      this.getData(this.metadata, key, query);
     } else if (event.type === 'change' && event.el.type === 'rule') {
       let key = event.el.related.field;
       let query = `${event.el.related.query}${event.value[0][event.el.related.param]}`;
@@ -263,6 +259,9 @@ export class GenericFormComponent implements OnChanges {
     let query = '';
     let display = (fields.display) ? fields.display : '__str__';
     let param = (fields.param) ? fields.param : 'id';
+    if (fields.code2) {
+      query += `fields=${fields.code2}&`;
+    }
     query += `fields=${display}&fields=${param}`;
     return query;
   }
@@ -280,6 +279,10 @@ export class GenericFormComponent implements OnChanges {
           } else if (el.templateOptions.param) {
             fields.param = el.templateOptions.param;
           }
+          let keys = el.key.split('.');
+          if (keys.indexOf('country') > -1) {
+            fields.code2 = 'code2';
+          }
           this.getRalatedData(metadata, el.key, el.endpoint, fields, '?limit=-1');
         }
       } else if (el.children) {
@@ -293,9 +296,27 @@ export class GenericFormComponent implements OnChanges {
       if (el && el.key && !!params[el.key]) {
         if (params[el.key].action === 'add') {
           el = Object.assign(el, params[el.key].data);
+          let elem = this.getElementFromMetadata(metadata, el.key);
+          if (elem.related) {
+            this.resetRalatedData(metadata, elem.related.reset);
+          }
+          this.updateMetadata(metadata, el.key);
         } else if (params[el.key].update) {
-          this.getRalatedData(this.metadata, el.key, el.endpoint,
-            `${params[el.key].query}${params[el.key].id}`);
+          let elem = this.getElementFromMetadata(metadata, el.key);
+          if (elem.related) {
+            this.resetRalatedData(metadata, elem.related.reset);
+          }
+          elem.value = params[el.key].value;
+          if (params[el.key].block) {
+            elem.readonly = true;
+          }
+          this.getRalatedData(metadata, el.key, el.endpoint, {},
+            `${params[el.key].query}${params[el.key].id}&limit=-1`);
+        } else if (params[el.key].action === 'update') {
+          if (params[el.key].block) {
+            let elem = this.getElementFromMetadata(metadata, el.key);
+            elem.read_only = true;
+          }
         }
       } else if (el && el.children) {
         this.parseMetadata(el.children, params);
@@ -308,6 +329,7 @@ export class GenericFormComponent implements OnChanges {
     metadata.forEach((el) => {
       if (el.key === key) {
         delete el[param];
+        delete el.value;
       } else if (el.children) {
         this.resetRalatedData(el.children, key);
       }

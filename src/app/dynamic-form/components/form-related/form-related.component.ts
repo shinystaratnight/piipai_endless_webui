@@ -101,6 +101,9 @@ export class FormRelatedComponent
         this.updateData();
       }
     }
+    if (this.config.query) {
+      this.config.currentQuery = `${this.config.query}${this.config.id}`;
+    }
   }
 
   public onModalScrollDown() {

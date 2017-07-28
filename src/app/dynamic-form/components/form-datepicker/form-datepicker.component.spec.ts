@@ -81,7 +81,9 @@ describe('FormDatepickerComponent', () => {
     it('should update datepicker value (date type)',
       async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
+      comp.key = config.key;
       comp.group = fb.group({});
+      comp.group.addControl(comp.config.key, fb.control(''));
       comp.errors = errors;
       comp.date = {
         year: 2017,
@@ -92,11 +94,10 @@ describe('FormDatepickerComponent', () => {
         hour: 7,
         minute: 2
       };
-      fixture.detectChanges();
-      comp.updateDate();
-      fixture.detectChanges();
+      comp.updateDate(moment);
       expect(comp.group.get(comp.config.key).value)
-        .toEqual(new Date(Date.UTC(comp.date.year, comp.date.month - 1, comp.date.day)));
+        .toEqual(moment.utc([comp.date.year, comp.date.month - 1, comp.date.day])
+          .format('YYYY-MM-DD'));
     })));
 
     it('should update datepicker value (datetime type)',
@@ -105,7 +106,9 @@ describe('FormDatepickerComponent', () => {
       comp = fixture.componentInstance;
       config.templateOptions.type = 'datetime';
       comp.config = config;
+      comp.key = config.key;
       comp.group = fb.group({});
+      comp.group.addControl(comp.config.key, fb.control(''));
       comp.errors = errors;
       comp.date = {
         year: 2017,
@@ -116,17 +119,12 @@ describe('FormDatepickerComponent', () => {
         hour: 7,
         minute: 2
       };
-      fixture.detectChanges();
-      comp.updateDate();
-      fixture.detectChanges();
+      comp.updateDate(moment);
       expect(comp.group.get(comp.config.key).value)
-        .toEqual(new Date(Date.UTC(
-          comp.date.year,
-          comp.date.month - 1,
-          comp.date.day,
-          comp.time.hour,
-          comp.time.minute
-        )));
+        .toEqual(moment
+          .utc([comp.date.year,
+            comp.date.month - 1, comp.date.day, comp.time.hour, comp.time.minute])
+              .format('YYYY-MM-DD hh:mm'));
     })));
   });
 

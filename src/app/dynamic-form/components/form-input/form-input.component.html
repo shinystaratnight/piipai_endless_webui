@@ -4,8 +4,10 @@
   </label>
   <input
     class="form-control"
+    autocomplete="off"
     #input
     (blur)="eventHandler($event)"
+    (focus)="generateList()"
     (keyup)=filter(key)
     [formControlName]="key"
     [attr.type]="config.templateOptions.type ? config.templateOptions.type : 'text'"
@@ -14,8 +16,19 @@
     [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''"
     [readonly]="config.read_only"
     [value]="config.value ? config.value : ''">
-  <div class="list-group w-100" *ngIf="filteredList.length > 0" style="position: absolute; z-index: 1">
-    <a (click)="select(item.name)" class="list-group-item list-group-item-action" *ngFor="let item of filteredList" style="cursor: pointer">{{item.name}}</a>
+  <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutomoplete">
+    <div class="autocomplete-list"
+      infinite-scroll
+      [infiniteScrollDistance]="modalScrollDistance"
+      [infiniteScrollThrottle]="modalScrollThrottle"
+      [scrollWindow]="false"
+      (scrolled)="onModalScrollDown()">
+      <ul class="list-group w-100">
+        <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+          *ngFor="let item of list"
+          (click)="select(item.name)">{{item.name}}</li>
+      </ul>
+    </div>
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}

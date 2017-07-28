@@ -28,8 +28,15 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public key: any;
 
   public query = '';
-  public filteredList = [];
+  public filteredList: any[];
+  public list = [];
+  public limit = 10;
+  public lastElement = 0;
   public elementRef;
+  public hideAutocomplete = true;
+
+  public modalScrollDistance = 2;
+  public modalScrollThrottle = 50;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -65,6 +72,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public filter(key) {
+    this.lastElement = 0;
     let query = this.group.get(key).value;
     if (query !== '') {
       if (this.config.autocomplete) {
@@ -72,14 +80,35 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
           return el.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
         });
       }
+      this.list = this.filteredList;
+      this.generatePreviewList(this.list);
     } else {
-      this.filteredList = [];
+      this.generateList();
     }
   }
 
   public select(item) {
     this.group.get(this.key).patchValue(item);
-    this.filteredList = [];
+    this.filteredList = null;
+    this.generateList();
+  }
+
+  public generateList(): void {
+    if (this.config.autocomplete) {
+      this.hideAutocomplete = false;
+      this.list = this.config.autocomplete
+        .sort((p, n) => p.name > n.name ? 1 : -1);
+      this.generatePreviewList(this.list);
+    }
+  }
+
+  public onModalScrollDown() {
+    this.generatePreviewList(this.filteredList);
+  }
+
+  public generatePreviewList(list) {
+    this.lastElement += this.limit;
+    this.list = list.slice(0, this.lastElement);
   }
 
   @HostListener('document:click', ['$event'])

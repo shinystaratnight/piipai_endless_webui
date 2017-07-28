@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, RequestOptions } from '@angular/http';
 import {
   NgModule
 } from '@angular/core';
@@ -28,6 +28,9 @@ import { services } from './services/index';
 import { Ng2Webstorage } from 'ng2-webstorage';
 import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
+
+import { DefaultRequestOptions } from './services/default-request-options.service';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -61,7 +64,9 @@ const APP_PROVIDERS = [
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS,
-    ...services
+    ...services,
+    { provide: RequestOptions, useClass: DefaultRequestOptions },
+    CookieService
   ]
 })
 export class AppModule {}

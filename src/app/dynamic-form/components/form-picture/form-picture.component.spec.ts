@@ -220,7 +220,9 @@ describe('FormPictureComponent', () => {
       FileReader.prototype.readAsDataURL = () => {
         this.result = 'some result';
       };
+      spyOn(comp, 'updateValue');
       comp.fileChangeEvent(event);
+      expect(comp.updateValue).toHaveBeenCalled();
     });
 
   });

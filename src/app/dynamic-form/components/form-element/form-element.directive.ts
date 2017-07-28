@@ -80,7 +80,16 @@ export class FormElementDirective implements OnInit, OnChanges {
 
   public ngOnInit() {
     if (this.checkElement(this.config.type)) {
-      const component = components[this.config.type];
+      let component;
+      if (this.config.type === 'input') {
+        if (this.config.templateOptions.type === 'picture') {
+          component = components['picture'];
+        } else {
+          component = components[this.config.type];
+        }
+      } else {
+        component = components[this.config.type];
+      }
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;

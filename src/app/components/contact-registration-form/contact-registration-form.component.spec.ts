@@ -226,29 +226,36 @@ describe('ContactRegistrationFormComponent', () => {
       let data = {
         [fields.postalCode]: {
           action: 'update',
-          value: response.results[0].address.postal_code
+          value: response.results[0].address.postal_code,
+          block: true
         },
         [fields.streetAddress]: {
           action: 'update',
-          value: response.results[0].address.street_address
+          value: response.results[0].address.street_address,
+          block: true
         },
         [fields.country]: {
-          action: 'update',
-          value: response.results[0].address.country.id
+          action: 'add',
+          data: {
+            value: response.results[0].address.country.id,
+            readonly: true
+          }
         },
         [fields.state]: {
           action: 'update',
           value: response.results[0].address.state.id,
           update: true,
           query: '?country=',
-          id: response.results[0].address.country.id
+          id: response.results[0].address.country.id,
+          block: true
         },
         [fields.city]: {
           action: 'update',
           value: response.results[0].address.city.id,
           update: true,
           query: '?region=',
-          id: response.results[0].address.state.id
+          id: response.results[0].address.state.id,
+          block: true
         },
       };
       comp.getCompany(formData);
