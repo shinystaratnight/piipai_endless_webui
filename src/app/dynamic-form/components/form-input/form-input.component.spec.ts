@@ -67,7 +67,7 @@ describe('FormInputComponent', () => {
       comp.key = key;
       spyOn(comp, 'addControl');
       comp.ngOnInit();
-      expect(comp.addControl).toHaveBeenCalled();
+      expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
       expect(comp.group.get(key).value).toEqual('test@test.com');
     })));
 
@@ -115,12 +115,25 @@ describe('FormInputComponent', () => {
       form.addControl('email', fb.control(''));
       comp.group = form;
       comp.config = metadata;
+      spyOn(comp, 'generateList');
       comp.filter(key);
-      expect(comp.filteredList).toEqual([]);
-      form.get(key).patchValue('an');
+      expect(comp.generateList).toHaveBeenCalled();
+    })));
 
+    it('should update filteredList by query', async(inject([FormBuilder], (fb) => {
+      let form = fb.group({});
+      let metadata = {
+        autocomplete: [{ name: 'anna' }, { name: 'banana' }]
+      };
+      let key = 'email';
+      form.addControl('email', fb.control(''));
+      comp.group = form;
+      comp.config = metadata;
+      spyOn(comp, 'generatePreviewList');
+      form.get(key).patchValue('an');
       comp.filter(key);
-      expect(comp.filteredList.length).toEqual(2);
+      comp.list = metadata.autocomplete;
+      expect(comp.generatePreviewList).toHaveBeenCalledWith(metadata.autocomplete);
     })));
 
   });
@@ -133,20 +146,68 @@ describe('FormInputComponent', () => {
       form.addControl('email', fb.control(''));
       comp.group = form;
       comp.key = key;
+      spyOn(comp, 'generateList');
       comp.select('anna');
+      expect(comp.generateList).toHaveBeenCalled();
       expect(comp.group.get(key).value).toEqual('anna');
-      expect(comp.filteredList).toEqual([]);
+      expect(comp.filteredList).toBeNull();
     })));
+
+  });
+
+  describe('generateList method', () => {
+
+    it('should generate first list for autocomplete', async(() => {
+      let key = 'email';
+      comp.key = key;
+      comp.hideAutocomplete = true;
+      let metadata = {
+        autocomplete: [{ name: 'banana' }, { name: 'anna' }]
+      };
+      comp.config = metadata;
+      spyOn(comp, 'generatePreviewList');
+      let result = metadata.autocomplete.sort((p, n) => p.name > n.name ? 1 : -1);
+      comp.generateList();
+      expect(comp.hideAutocomplete).toBeFalsy();
+      expect(comp.list).toEqual(result);
+      expect(comp.generatePreviewList).toHaveBeenCalledWith(result);
+    }));
+
+  });
+
+  describe('onModalScrollDown method', () => {
+
+    it('should call generatePreviewList method', async(() => {
+      comp.config = config;
+      let filteredList = [{name: 'anna'}, {name: 'top'}];
+      comp.filteredList = filteredList;
+      spyOn(comp, 'generatePreviewList');
+      comp.onModalScrollDown();
+      expect(comp.generatePreviewList).toHaveBeenCalledWith(filteredList);
+    }));
+
+  });
+
+  describe('generatePreviewList method', () => {
+
+    it('should generate list for autocomplete', async(() => {
+      comp.config = config;
+      comp.limit = 1;
+      comp.lastElement = 0;
+      let list = [{name: 'anna'}, {name: 'top'}];
+      comp.generatePreviewList(list);
+      expect(comp.list).toEqual(list.slice(0, 1));
+    }));
 
   });
 
   describe('handleClick method', () => {
 
-    it('should reset filteredList', async(inject([FormBuilder], (fb) => {
+    it('should reset filteredList', async() => {
       comp.filteredList = [{ name: 'anna' }, { name: 'banana' }];
       comp.handleClick({target: {}});
       expect(comp.filteredList).toEqual([]);
-    })));
+    });
 
   });
 });

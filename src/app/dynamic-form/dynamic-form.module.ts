@@ -23,6 +23,7 @@ import { FormRelatedComponent } from './components/form-related/form-related.com
 import { FormRuleComponent } from './components/form-rule/form-rule.component';
 import { FormTimelineComponent } from './components/form-timeline/form-timeline.component';
 import { FormPictureComponent } from './components/form-picture/form-picture.component';
+import { FormHiddenComponent } from './containers/form-hidden/form-hidden.component';
 
 import { GenericListComponent } from './components/generic-list/generic-list.component';
 import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
@@ -90,7 +91,8 @@ import { MoveDirective } from './directives/move.directive';
     FormRuleComponent,
     FormTimelineComponent,
     FormPictureComponent,
-    WebCamComponent
+    WebCamComponent,
+    FormHiddenComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -113,7 +115,8 @@ import { MoveDirective } from './directives/move.directive';
     FilterSelectComponent,
     FormRuleComponent,
     FormTimelineComponent,
-    FormPictureComponent
+    FormPictureComponent,
+    FormHiddenComponent
   ]
 })
 export class DynamicFormModule { }

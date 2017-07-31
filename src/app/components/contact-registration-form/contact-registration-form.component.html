@@ -4,6 +4,8 @@
 
     <div class="card-content p-3">
       <generic-form
+        [commonFields]="commonFields"
+        [hide]="hide"
         [endpoint]="endpoint"
         [data]="data"
         [response]="response"
@@ -13,7 +15,7 @@
         (event)="eventHandler($event)"
         (buttonAction)="buttonActionHandler($event)">
         <div class="form-group">
-          <button type="submit" class="btn btn-primary pl-4 pr-4 mt-3">Register</button>
+          <button type="submit" class="btn btn-primary pl-4 pr-4 mt-3" [disabled]="hide">Register</button>
         </div>
       </generic-form>
     </div>

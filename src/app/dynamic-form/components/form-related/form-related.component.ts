@@ -214,6 +214,8 @@ export class FormRelatedComponent
     this.searchValue = null;
     this.list = null;
     this.previewList = null;
+    this.errors = null;
+    this.message = null;
   }
 
   public deleteItem(index) {

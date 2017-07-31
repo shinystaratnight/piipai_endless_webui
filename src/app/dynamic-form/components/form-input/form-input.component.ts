@@ -108,7 +108,9 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
 
   public generatePreviewList(list) {
     this.lastElement += this.limit;
-    this.list = list.slice(0, this.lastElement);
+    if (list) {
+      this.list = list.slice(0, this.lastElement);
+    }
   }
 
   @HostListener('document:click', ['$event'])

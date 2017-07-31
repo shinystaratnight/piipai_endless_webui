@@ -107,6 +107,36 @@ describe('GenericFormComponent', () => {
 
     });
 
+    describe('formChange method', () => {
+
+      it('should be defined', async(() => {
+        expect(comp.formChange).toBeDefined();
+      }));
+
+      it('should updateMetadata', async(() => {
+        let data = {
+          fisrt_name: 'Tom'
+        };
+        let config = [{
+          key: 'first_name'
+        }];
+        comp.metadata = config;
+        spyOn(comp, 'parseMetadata');
+        spyOn(comp, 'parseError');
+        comp.formChange(data);
+        expect(comp.parseMetadata).toHaveBeenCalledWith(config, {
+          fisrt_name: {
+            action: 'add',
+            data: {
+              value: 'Tom'
+            }
+          }
+        });
+        expect(comp.parseError).toHaveBeenCalled();
+      }));
+
+    });
+
     describe('getMetadata method', () => {
 
       it('should be defined', async(() => {
@@ -278,7 +308,7 @@ describe('GenericFormComponent', () => {
           [field]: 'test@test.com'
         };
         let data = {username: 'test'};
-        let result = Object.assign(data, form);
+        let result = Object.assign({}, data, form);
         comp.form = form;
         spyOn(comp, 'parseResponse');
         comp.submitForm(data);
@@ -296,6 +326,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'parseResponse');
         spyOn(comp.event, 'emit');
         comp.submitForm(data);
+        expect(comp.sendData).toEqual(data);
         expect(comp.parseResponse).toHaveBeenCalled();
         expect(comp.event.emit).toHaveBeenCalledWith({
           type: 'sendForm',
@@ -638,10 +669,11 @@ describe('GenericFormComponent', () => {
       it('should generate query', async(() => {
         let fields = {
           display: 'name',
-          param: 'id'
+          param: 'id',
+          code2: 'code2'
         };
         let query = comp.generateQueryForRelatedFields(fields);
-        expect(query).toEqual(`fields=name&fields=id`);
+        expect(query).toEqual(`fields=code2&fields=name&fields=id`);
       }));
     });
 
@@ -707,17 +739,27 @@ describe('GenericFormComponent', () => {
       it('should update metadata', async(() => {
         let fieldCity = 'address.city';
         let fieldCountry = 'address.country';
+        let fieldBusinnesId = 'company.business_id';
         let config = [{
           type: 'related',
           key: fieldCountry,
-          endpoint: '/ecore/api/v2/countries'
+          endpoint: '/ecore/api/v2/countries',
+          readonly: false,
+          related: {
+            reset: 'region'
+          }
         }, {
           type: 'row',
           children: [{
             type: 'related',
             key: fieldCity,
             endpoint: '/ecore/api/v2/cities'
+          }, {
+            type: 'business_id',
+            key: 'input'
           }]
+        }, {
+          type: 'hidden'
         }];
         let params = {
           [fieldCity]: {
@@ -729,12 +771,27 @@ describe('GenericFormComponent', () => {
           [fieldCountry]: {
             query: '?region=',
             id: 3,
-            update: true
+            update: true,
+            value: 'Australia',
+            block: true
+          },
+          [fieldBusinnesId]: {
+            action: 'update',
+            block: true,
+            value: '7777'
           }
         };
+        comp.hide = true;
         spyOn(comp, 'getRalatedData');
+        spyOn(comp, 'getElementFromMetadata').and.returnValue(config[0]);
+        spyOn(comp, 'resetRalatedData');
         comp.parseMetadata(config, params);
         expect(comp.getRalatedData).toHaveBeenCalled();
+        expect(comp.resetRalatedData).toHaveBeenCalled();
+        expect(comp.getElementFromMetadata).toHaveBeenCalled();
+        expect(config[0]['readonly']).toBeTruthy();
+        expect(config[0]['value']).toEqual('Australia');
+        expect(config[2]['hide']).toEqual(comp.hide);
       }));
 
     });
@@ -765,11 +822,13 @@ describe('GenericFormComponent', () => {
             options: [{
               key: 1,
               name: 'Tampa'
-            }]
+            }],
+            value: 'Tampa'
           }]
         }];
         comp.resetRalatedData(config, fieldCity, 'options');
         expect(config[1]['children'][0].options).toBeUndefined();
+        expect(config[1]['children'][0].value).toBeUndefined();
       }));
 
     });

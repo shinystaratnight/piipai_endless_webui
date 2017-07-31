@@ -32,6 +32,12 @@ export class GenericFormComponent implements OnChanges {
   @Input()
   public id: string;
 
+  @Input()
+  public commonFields: string;
+
+  @Input()
+  public hide: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -53,6 +59,7 @@ export class GenericFormComponent implements OnChanges {
   public currentEndpoint: string;
   public show: boolean = false;
   public editForm: boolean = false;
+  public formObject: any;
 
   public workflowEndpoints = {
     state: `/ecore/api/v2/endless-core/workflownodes/`,
@@ -72,6 +79,20 @@ export class GenericFormComponent implements OnChanges {
     } else if (this.data && this.metadata) {
       this.parseMetadata(this.metadata, this.data);
     }
+  }
+
+  public formChange(data) {
+    let newData = {};
+    Object.keys(data).forEach((el) => {
+      newData[el] = {
+        action: 'add',
+        data: {
+          value: data[el]
+        }
+      };
+    });
+    this.metadata = this.parseMetadata(this.metadata, newData);
+    this.parseError(Object.assign({}, this.errors));
   }
 
   public getMetadata(endpoint) {
@@ -126,6 +147,8 @@ export class GenericFormComponent implements OnChanges {
     let newData = {};
     if (this.form) {
       newData = Object.assign({}, data, this.form);
+    } else {
+      newData = data;
     }
     this.sendData = newData;
     if (this.editForm) {
@@ -293,6 +316,9 @@ export class GenericFormComponent implements OnChanges {
 
   public parseMetadata(metadata, params) {
     metadata.forEach((el) => {
+      if (el.type === 'hidden') {
+        el.hide = this.hide;
+      }
       if (el && el.key && !!params[el.key]) {
         if (params[el.key].action === 'add') {
           el = Object.assign(el, params[el.key].data);

@@ -44,6 +44,20 @@ describe('DynamicFormComponent', () => {
       expect(comp.config).toBeDefined();
   })));
 
+  describe('ngOnInit method', () => {
+
+    it('should called addData method', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      let form = fb.group({});
+      comp.config = [];
+      comp.ngOnInit();
+      // expect(comp.form).toEqual(form);
+      expect(comp.currentForm).toEqual([]);
+    })));
+
+  });
+
   describe('ngOnChanges method', () => {
 
     it('should called addData method', async(() => {
@@ -53,6 +67,52 @@ describe('DynamicFormComponent', () => {
 
       comp.ngOnChanges();
       expect(comp.addData).toHaveBeenCalled();
+    }));
+
+    it('should update values', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      comp.config = ['some'];
+      comp.commonFields = [];
+      let form = fb.group({});
+      comp.form = form;
+      let currentForm = [];
+      spyOn(comp, 'getValues').and.returnValue({});
+      spyOn(comp.formChange, 'emit');
+      comp.ngOnChanges();
+      expect(comp.currentForm).toEqual(comp.config);
+      expect(comp.getValues).toHaveBeenCalled();
+      expect(comp.formChange.emit).toHaveBeenCalledWith({});
+    })));
+
+  });
+
+  describe('getValues method', () => {
+
+    it('should return values of form', () => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      let data = {first_name: 'Tom'};
+      let list = ['first_name'];
+      spyOn(comp, 'getValue').and.returnValue('Tom');
+      let result = comp.getValues(data, list);
+      expect(result).toEqual(data);
+    });
+
+  });
+
+  describe('getValue method', () => {
+
+    it('should return value of form element', inject([FormBuilder], (fb: FormBuilder) => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      let list = ['address.country'];
+      comp.form = fb.group({});
+      comp.form.addControl('address', fb.group({country: 'Australia'}));
+      let result = comp.getValues(comp.form, list);
+      expect(result).toEqual({
+        'address.country': 'Australia'
+      });
     }));
 
   });

@@ -65,12 +65,15 @@ describe('FormRelatedComponent', () => {
 
     it('should called addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
+      comp.config.query = '?country=';
+      comp.config.id = 2;
       spyOn(comp, 'addControl');
       comp.ngOnInit();
       expect(comp.display).toEqual('__str__');
       expect(comp.param).toEqual('id');
       expect(comp.results).toEqual([]);
       expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
+      expect(comp.config.currentQuery).toEqual('?country=2');
     })));
 
     it('should update value if it a object', async(inject([FormBuilder], (fb: FormBuilder) => {
@@ -381,6 +384,8 @@ describe('FormRelatedComponent', () => {
       comp.display = 'name';
       comp.results = [];
       comp.searchValue = 'some value';
+      comp.message = {};
+      comp.errors = {};
       this.list = options;
       spyOn(comp, 'changeList');
       spyOn(comp, 'updateData');
@@ -393,6 +398,8 @@ describe('FormRelatedComponent', () => {
       expect(comp.searchValue).toBeNull();
       expect(comp.list).toBeNull();
       expect(comp.previewList).toBeNull();
+      expect(comp.message).toBeNull();
+      expect(comp.errors).toBeNull();
     }));
 
     it('should add value if single value', async(inject([FormBuilder], (fb: FormBuilder) => {
@@ -414,6 +421,8 @@ describe('FormRelatedComponent', () => {
       comp.param = 'id';
       comp.results = [];
       comp.searchValue = 'some value';
+      comp.message = {};
+      comp.errors = {};
       this.list = options;
       spyOn(comp, 'changeList');
       spyOn(comp, 'eventHandler');
@@ -425,6 +434,8 @@ describe('FormRelatedComponent', () => {
       expect(comp.searchValue).toBeNull();
       expect(comp.list).toBeNull();
       expect(comp.previewList).toBeNull();
+      expect(comp.message).toBeNull();
+      expect(comp.errors).toBeNull();
     })));
 
   });

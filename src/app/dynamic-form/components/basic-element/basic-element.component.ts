@@ -11,7 +11,7 @@ export class BasicElementComponent {
     if (keys.length > 1) {
       this.addControls(this.group, keys, fb);
     } else {
-      this.group.addControl(config.key, fb.control(''));
+      this.group.addControl(config.key, fb.control(undefined));
       this.key = config.key;
     }
   }

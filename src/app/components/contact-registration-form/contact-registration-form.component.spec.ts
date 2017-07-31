@@ -207,6 +207,8 @@ describe('ContactRegistrationFormComponent', () => {
         count: 1,
         message: 'Already exsist',
         results: [{
+          name: 'Home LTD',
+          business_id: '7777',
           company: 'name',
           address: {
             street_address: 'Backer street',
@@ -256,7 +258,7 @@ describe('ContactRegistrationFormComponent', () => {
           query: '?region=',
           id: response.results[0].address.state.id,
           block: true
-        },
+        }
       };
       comp.getCompany(formData);
       expect(comp.data).toEqual(data);
@@ -429,8 +431,52 @@ describe('ContactRegistrationFormComponent', () => {
     it('should update endpoint', () => {
       let endpoint = `/ecore/api/v2/contacts`;
       comp.companyContactEndpoint = endpoint;
+      comp.error = {};
+      spyOn(comp, 'reset');
       comp.register_company_contact();
+      expect(comp.reset).toHaveBeenCalledWith({});
       expect(comp.endpoint).toEqual(endpoint);
+      expect(comp.data).toEqual({});
+      expect(comp.hide).toBeFalsy();
+    });
+
+  });
+
+  describe('register_candidate_contact method', () => {
+
+    it('should be defined', () => {
+      expect(comp.register_candidate_contact).toBeDefined();
+    });
+
+    it('should update endpoint', () => {
+      let endpoint = `/ecore/api/v2/endless-core/companycontacts/register/`;
+      comp.candidateContactEndpoint = endpoint;
+      comp.error = {};
+      spyOn(comp, 'reset');
+      comp.register_company_contact();
+      expect(comp.reset).toHaveBeenCalledWith({});
+      expect(comp.endpoint).toEqual(endpoint);
+      expect(comp.data).toEqual({});
+      expect(comp.hide).toBeFalsy();
+    });
+
+  });
+
+  describe('reset method', () => {
+
+    it('should be defined', () => {
+      expect(comp.reset).toBeDefined();
+    });
+
+    it('should update endpoint', () => {
+      let data = <any> {
+        title: ['Some error'],
+        first_name: ['some error']
+      };
+      let commonFileds = ['title'];
+      comp.commonFields = commonFileds;
+      comp.reset(data);
+      expect(data).toEqual({title: ['Some error']});
     });
 
   });

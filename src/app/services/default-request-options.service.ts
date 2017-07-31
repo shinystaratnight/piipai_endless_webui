@@ -11,7 +11,7 @@ export class DefaultRequestOptions extends BaseRequestOptions {
 
     if (this.cookie.get('csrftoken')) {
       this.headers = new Headers({
-        'X-CSRFToken': '1234'
+        'X-CSRFToken': this.cookie.get('csrftoken')
       });
     }
   }

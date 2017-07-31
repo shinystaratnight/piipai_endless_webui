@@ -22,6 +22,7 @@ import { FormRelatedComponent } from './../form-related/form-related.component';
 import { FormRuleComponent } from './../form-rule/form-rule.component';
 import { FormTimelineComponent } from './../form-timeline/form-timeline.component';
 import { FormPictureComponent } from './../form-picture/form-picture.component';
+import { FormHiddenComponent } from './../../containers/form-hidden/form-hidden.component';
 
 const components = {
   input: FormInputComponent,
@@ -35,7 +36,8 @@ const components = {
   related: FormRelatedComponent,
   rule: FormRuleComponent,
   timeline: FormTimelineComponent,
-  picture: FormPictureComponent
+  picture: FormPictureComponent,
+  hidden: FormHiddenComponent
 };
 
 @Directive({

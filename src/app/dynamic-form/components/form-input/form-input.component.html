@@ -16,7 +16,7 @@
     [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''"
     [readonly]="config.read_only"
     [value]="config.value ? config.value : ''">
-  <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutomoplete">
+  <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutocomplete">
     <div class="autocomplete-list"
       infinite-scroll
       [infiniteScrollDistance]="modalScrollDistance"

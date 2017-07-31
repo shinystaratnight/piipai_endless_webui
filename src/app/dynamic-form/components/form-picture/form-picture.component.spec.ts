@@ -163,10 +163,27 @@ describe('FormPictureComponent', () => {
           return 'some base64';
         }
       });
-      spyOn(comp, 'updateValue');
       comp.getPhoto();
-      expect(comp.createPhoto);
-      expect(comp.updateValue).toHaveBeenCalledWith('image.jpeg', 'some base64');
+      expect(comp.base64).toEqual('some base64');
+    });
+
+  });
+
+  describe('save method', () => {
+
+    it('should save image from webcam', () => {
+      comp.config = config;
+      comp.base64 = 'base64';
+      let test = {
+        closeModal() {
+          return true;
+        }
+      };
+      spyOn(test, 'closeModal');
+      spyOn(comp, 'updateValue');
+      comp.save(test.closeModal);
+      expect(comp.updateValue).toHaveBeenCalledWith('image.jpeg', 'base64');
+      expect(test.closeModal).toHaveBeenCalled();
     });
 
   });

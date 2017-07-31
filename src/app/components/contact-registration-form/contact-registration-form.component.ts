@@ -43,6 +43,9 @@ export class ContactRegistrationFormComponent implements OnInit {
   public error = {};
   public response = {};
   public form = {};
+  public hide = true;
+
+  public commonFields = ['title', 'first_name', 'last_name', 'phone_mobile', 'email'];
 
   constructor(
     private fb: FormBuilder,
@@ -255,9 +258,23 @@ export class ContactRegistrationFormComponent implements OnInit {
 
   public register_company_contact() {
     this.endpoint = this.companyContactEndpoint;
+    this.reset(this.error);
+    this.data = {};
+    this.hide = false;
   }
 
   public register_candidate_contact() {
     this.endpoint = this.candidateContactEndpoint;
+    this.reset(this.error);
+    this.data = {};
+    this.hide = false;
+  }
+
+  public reset(data) {
+    Object.keys(data).forEach((el) => {
+      if (this.commonFields.indexOf(el) === -1) {
+        delete data[el];
+      }
+    });
   }
 }

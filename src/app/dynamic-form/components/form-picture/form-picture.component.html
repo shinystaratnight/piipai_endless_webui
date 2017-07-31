@@ -3,7 +3,7 @@
   <input
     #picture
     accept="image/*"
-    [attr.type]="config.templateOptions.type ? config.templateOptions.type : 'text'"
+    [attr.type]="'file'"
     [hidden]="true"
     [attr.id]="key"
     (change)="fileChangeEvent($event)"
@@ -43,7 +43,7 @@
     </button>
   </div>
 
-  <div class="modal-body picture d-inline-block d-flex justify-content-between flex-wrap">
+  <div class="modal-body picture d-inline-block d-flex justify-content-around flex-wrap">
     <ng2-webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError"></ng2-webcam>
     <div class="photo d-flex justify-content-center align-items-center">
       <span *ngIf="!photoExist" class="text-white">Photo</span>
@@ -52,7 +52,8 @@
   </div>
 
   <div class="modal-footer justify-content-start">
-    <button type="button" class="btn btn-primary" (click)="getPhoto()">{{config.templateOptions.label_photo}}</button>
-    <button type="button" class="btn btn-danger" (click)="c()">Cancel</button>
+    <button *ngIf="photoExist" type="button" class="btn btn-success" (click)="save(c)">Save</button>
+    <button type="button" class="btn btn-primary" (click)="getPhoto()">{{photoExist ? 'Try again' : config.templateOptions.label_photo}}</button>
+    <button type="button" class="btn btn-secondary" (click)="c()">Cancel</button>
   </div>
 </template>

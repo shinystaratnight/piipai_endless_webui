@@ -30,6 +30,7 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   public onError;
   public flashPlayer: any;
   public err: any;
+  public base64: string;
 
   public options = {
     audio: false,
@@ -80,9 +81,13 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   public getPhoto() {
     this.fileName = '';
     let canvas = this.createPhoto();
-    let base64 = canvas.toDataURL(this.mime);
-    if (base64) {
-      this.updateValue('image.jpeg', base64);
+    this.base64 = canvas.toDataURL(this.mime);
+  }
+
+  public save(closeModal) {
+    if (this.base64) {
+      this.updateValue('image.jpeg', this.base64);
+      closeModal();
     }
   }
 
