@@ -1,1 +1,117 @@
+<div *ngIf="data" class="container profile pt-5 d-flex flex-column justify-content-start">
 
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-start w-100 mb-3">
+    <div class="d-flex flex-column block">
+
+      <div class="element d-flex align-items-center p-2 px-4 mb-3">
+        <img class="avatar mr-3" [src]="data.contact.picture" alt="Profile">
+        <span class="name">{{data.contact.__str__}}</span>
+      </div>
+
+      <div class="element mb-3 mb-md-0">
+        <div class="text-white element-header p-2"
+          (click)="residency.isCollapsed = !residency.isCollapsed"
+          [attr.aria-expanded]="!residency.isCollapsed" aria-controls="collapseExample">
+            <i fa class="element-icon m-0 mr-2" [name]="residency.isCollapsed ? 'plus' : 'close'"></i>
+            Residency
+          </div>
+        <div id="collapseExample" [ngbCollapse]="residency.isCollapsed">
+          <div *ngFor="let item of residency.viewData; let odd = odd" class="element-item p-2" [ngClass]="{'odd': odd}">
+            <span class="pr-2"><b>{{item[0]}}</b></span>
+            <span class="pl-md-2">{{item[1]}}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="block element">
+      <div class="text-white element-header p-2"
+        (click)="personalTraits.isCollapsed = !personalTraits.isCollapsed"
+        [attr.aria-expanded]="!personalTraits.isCollapsed" aria-controls="collapseExample">
+          <i fa class="element-icon m-0 mr-2" [name]="personalTraits.isCollapsed ? 'plus' : 'close'"></i>
+          Personal Traits
+        </div>
+      <div id="collapseExample" [ngbCollapse]="personalTraits.isCollapsed">
+        <div *ngFor="let item of personalTraits.viewData; let odd = odd" class="element-item p-2" [ngClass]="{'odd': odd}">
+          <span class="pr-2"><b>{{item[0]}}</b></span>
+          <span class="pl-md-2">{{item[1]}}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="element mb-3">
+    <div class="text-white element-header p-2"
+      (click)="skills.isCollapsed = !skills.isCollapsed"
+      [attr.aria-expanded]="!skills.isCollapsed" aria-controls="collapseExample">
+        <i fa class="element-icon m-0 mr-2" [name]="skills.isCollapsed ? 'plus' : 'close'"></i>
+        Skills
+    </div>
+    <div id="collapseExample" [ngbCollapse]="skills.isCollapsed">
+      <div style="overflow-x: auto">
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th *ngFor="let item of skills.viewData.label">{{item}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of skills.viewData.row">
+              <td *ngFor="let cell of row">
+                {{cell}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="element mb-3">
+    <div class="text-white element-header p-2"
+      (click)="tags.isCollapsed = !tags.isCollapsed"
+      [attr.aria-expanded]="!tags.isCollapsed" aria-controls="collapseExample">
+        <i fa class="element-icon m-0 mr-2" [name]="tags.isCollapsed ? 'plus' : 'close'"></i>
+        Tags
+    </div>
+    <div id="collapseExample" [ngbCollapse]="tags.isCollapsed">
+      <div style="overflow-x: auto">
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th *ngFor="let item of tags.viewData.label">{{item}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of tags.viewData.row">
+              <td *ngFor="let cell of row">
+                <a *ngIf="cell.map" [href]="cell[0]">Link</a>
+                <span *ngIf="!cell.map">{{cell}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="element">
+    <div class="text-white element-header p-2"
+      (click)="contactDetails.isCollapsed = !contactDetails.isCollapsed"
+      [attr.aria-expanded]="!contactDetails.isCollapsed" aria-controls="collapseExample">
+        <i fa class="element-icon m-0 mr-2" [name]="contactDetails.isCollapsed ? 'plus' : 'close'"></i>
+        Contact Details
+      </div>
+    <div id="collapseExample" [ngbCollapse]="contactDetails.isCollapsed">
+      <div *ngFor="let item of contactDetails.viewData; let odd = odd" class="element-item p-2" [ngClass]="{'odd': odd}">
+        <span class="pr-2"><b>{{item[0]}}</b></span>
+        <a *ngIf="item[2]" [href]="item[2] + item[1]">{{item[1]}}</a>
+        <span *ngIf="!item[2]" class="pl-md-2">{{item[1]}}</span>
+      </div>
+    </div>
+  </div>
+
+
+</div>

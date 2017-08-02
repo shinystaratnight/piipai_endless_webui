@@ -4,6 +4,7 @@ import { GenericFormService } from '../../dynamic-form/services/generic-form.ser
 
 interface ViewElement {
   type: string;
+  isCollapsed: boolean;
   elementList?: string[];
   viewData?: ListElement[] | TableElement;
 }
@@ -28,28 +29,43 @@ export class ProfileComponent implements OnInit {
   public id: string;
 
   public endpoint: string = '/ecore/api/v2/endless-candidate/candidatecontacts/';
+  public contactEndpoint: string = '/ecore/api/v2/endless-core/contacts/';
+  public skillsEndpoint: string = '/ecore/api/v2/endless-candidate/skillrels/';
+  public tagsEndpoint: string = '/ecore/api/v2/endless-candidate/tagrels/';
+
   public metadata: any;
   public data: any;
   public error: any;
 
+  public contactMetadata: any;
+  public skillsMetadata: any;
+  public tagsMetadata: any;
+  public contactData: any;
+  public contactId: any;
+
   public personalTraits: ViewElement = {
     type: 'list',
+    isCollapsed: false,
     viewData: []
   };
   public residency: ViewElement = {
     type: 'list',
+    isCollapsed: false,
     viewData: []
   };
   public skills: ViewElement = {
     type: 'table',
+    isCollapsed: false,
     viewData: []
   };
   public tags: ViewElement = {
     type: 'table',
+    isCollapsed: false,
     viewData: []
   };
   public contactDetails: ViewElement = {
     type: 'list',
+    isCollapsed: false,
     viewData: []
   };
 
@@ -71,18 +87,36 @@ export class ProfileComponent implements OnInit {
       'residency',
       'visa_type.__str__',
       'visa_expiry_date',
-      'nationality.__str__'
+      'nationality'
     ];
 
     this.contactDetails.elementList = [
-      'contact.email',
-      'contact.phone_mobile'
+      'email',
+      'phone_mobile',
+      'address.phone_landline',
+      'address.phone_fax',
+      'address.city',
+      'address.postal_code',
+      'address.state',
+      'address.country'
+    ];
+
+    this.skills.elementList = [
+      'skill',
+      'score',
+      'prior_experience'
+    ];
+
+    this.tags.elementList = [
+      '__str__',
+      'verification_evidence',
+      'verified_by'
     ];
     this.id = '7a25f402-c421-4412-a9e1-163baea438e8';
-    this.getMetadata();
+    this.getMetadata(this.endpoint);
   }
 
-  public getMetadata() {
+  public getMetadata(endpoint) {
     this.service.getMetadata(this.endpoint + '?type=form').subscribe(
       (res: any) => {
         this.metadata = res;
@@ -95,13 +129,53 @@ export class ProfileComponent implements OnInit {
     this.service.getAll(this.endpoint + this.id + '/').subscribe(
       (res: any) => {
         this.data = res;
+        this.contactId = res.contact.id;
+        this.generate('personalTraits');
+        this.generate('residency');
+        this.getContactMetadata();
+      },
+      (error: any) => this.error = error);
+  }
+
+  public getContactMetadata() {
+    this.service.getMetadata(this.contactEndpoint + '?type=form').subscribe(
+      (res: any) => {
+        this.contactMetadata = res;
+        this.getContactData();
+      },
+      (error: any) => this.error = error);
+  }
+
+  public getContactData() {
+    this.service.getAll(this.contactEndpoint + this.contactId + '/').subscribe(
+      (res: any) => {
+        this.contactData = res;
+        this.generate('contactDetails');
+        this.getSkillMetadata();
+      },
+      (error: any) => this.error = error);
+  }
+
+  public getSkillMetadata() {
+    this.service.getMetadata(this.skillsEndpoint + '?type=form').subscribe(
+      (res: any) => {
+        this.skillsMetadata = res;
+        this.getTagMetadata();
+      },
+      (error: any) => this.error = error);
+  }
+
+  public getTagMetadata() {
+    this.service.getMetadata(this.tagsEndpoint + '?type=form').subscribe(
+      (res: any) => {
+        this.tagsMetadata = res;
         this.generateView();
       },
       (error: any) => this.error = error);
   }
 
   public generateView() {
-    let components = ['personalTraits', 'residency', 'contactDetails'];
+    let components = ['skills', 'tags'];
     components.forEach((el) => {
       this.generate(el);
     });
@@ -110,39 +184,73 @@ export class ProfileComponent implements OnInit {
   public generate(element) {
     switch (this[element].type) {
       case 'list':
-        this.generateList(this[element].elementList, this[element].viewData);
+        this.generateList(this[element].elementList, this[element].viewData, element);
         break;
       case 'table':
-        this.generateTable(this[element].elementList, this[element].viewData);
+        this.generateTable(this[element].elementList, this[element].viewData, element);
         break;
       default: return false;
     }
   }
 
-  public generateList(elements, data) {
-    let metadata = this.metadata;
-    let apiData = this.data;
+  public generateList(elements, data, element) {
+    let metadata;
+    let apiData;
+    if (element === 'contactDetails') {
+      apiData = this.contactData;
+      metadata = this.contactMetadata;
+    } else {
+      apiData = this.data;
+      metadata = this.metadata;
+    }
     elements.forEach((el) => {
       let item = [];
       let options;
       let formElement = this.getItemFromMetadata(metadata, el);
-      item.push(formElement ? formElement.templateOptions.label : '');
+      item.push((formElement && formElement.templateOptions.label)
+        ? formElement.templateOptions.label : '');
       if (formElement && formElement.type === 'select') {
         options = formElement.templateOptions.options;
       }
       let valueElement = this.getValueOfData(apiData, el, options);
-      item.push(valueElement ? valueElement : '');
+      item.push(valueElement ? valueElement : (el === 'nationality') ? 'Other' : '');
+      if (this.isEmail(valueElement)) {
+        item.push('mailto:');
+      } else if (this.isPhone(valueElement)) {
+        item.push('tel:');
+      }
       data.push(item);
     });
   }
 
-  public generateTable(elements, data: TableElement) {
-    let metadata = this.metadata;
+  public generateTable(elements, data: TableElement, element) {
+    let metadata = this[element + 'Metadata'];
     let apiData = this.data;
     data.label = elements.map((el) => {
       let formElement = this.getItemFromMetadata(metadata, el);
       return formElement ? formElement.templateOptions.label : '';
     });
+    let prop = (element === 'skills') ? 'candidate_skills' : (elements) ? 'tag_rels' : null;
+    data.row = [];
+    if (prop) {
+      apiData[prop].forEach((el) => {
+        let item = [];
+        elements.forEach((elem) => {
+          let options;
+          let formElement = this.getItemFromMetadata(metadata, elem);
+          if (formElement && formElement.type === 'select') {
+            options = formElement.templateOptions.options;
+          }
+          let valueElement = this.getValueOfData(el, elem, options);
+          if (this.isLink(valueElement)) {
+            item.push([valueElement]);
+          } else {
+            item.push(valueElement ? valueElement : '');
+          }
+        });
+        data.row.push(item);
+      });
+    }
   }
 
   public getItemFromMetadata(metadata, key) {
@@ -157,7 +265,7 @@ export class ProfileComponent implements OnInit {
     return element;
   }
 
-  public getValueOfData(data: any[], key: string, options: any[] = null) {
+  public getValueOfData(data, key: string, options: any[] = null) {
     let keys = key.split('.');
     let prop = keys.shift();
     if (keys.length === 0) {
@@ -169,11 +277,34 @@ export class ProfileComponent implements OnInit {
           }
         });
       } else {
-        value = data[prop];
+        if (data[prop] instanceof Object) {
+          value = data[prop].name;
+        } else {
+          value = data[prop];
+        }
       }
       return value;
     } else {
       return this.getValueOfData(data[prop], keys.join('.'), options);
     }
+  }
+
+  public isEmail(value) {
+    let reg =
+       /^[a-z][a-zA-Z0-9_.]*(\.[a-zA-Z][a-zA-Z0-9_.]*)?@[a-z][a-zA-Z-0-9]*\.[a-z]+(\.[a-z]+)?$/;
+
+    return reg.test(value) ? true : false;
+  }
+
+  public isPhone(value) {
+    let reg = /^\+(?:[0-9] ?){6,14}[0-9]$/;
+
+    return reg.test(value) ? true : false;
+  }
+
+  public isLink(value) {
+    let reg = /^(https?:\/\/)/;
+
+    return reg.test(value) ? true : false;
   }
 }
