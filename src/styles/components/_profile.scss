@@ -9,6 +9,18 @@
 
   }
 
+  .table {
+    .edit {
+      visibility: hidden;
+    }
+
+    .item:hover {
+      .edit {
+        visibility: visible;
+      }
+    }
+  }
+
   .element {
     border-radius: .2rem;
     box-shadow: 0 0 1px rgba(17,17,17,0.6), 0 5px 10px -3px rgba(17,17,17,0.4);

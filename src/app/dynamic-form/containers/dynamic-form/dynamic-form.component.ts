@@ -49,7 +49,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public ngOnChanges() {
     this.addData(this.data, this.form);
-    if (this.config !== this.currentForm) {
+    if (this.config !== this.currentForm && this.currentForm !== undefined) {
       this.currentForm = this.config;
       let oldValues = this.getValues(this.form, this.commonFields);
       this.formChange.emit(oldValues);

@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 
 interface ViewElement {
@@ -16,7 +17,7 @@ interface ListElement {
 
 interface TableElement {
   label: string[];
-  row: string[][];
+  row: any[];
 }
 
 @Component({
@@ -27,6 +28,9 @@ export class ProfileComponent implements OnInit {
 
   @Input()
   public id: string;
+
+  @ViewChild('modal')
+  public modal;
 
   public endpoint: string = '/ecore/api/v2/endless-candidate/candidatecontacts/';
   public contactEndpoint: string = '/ecore/api/v2/endless-core/contacts/';
@@ -42,6 +46,8 @@ export class ProfileComponent implements OnInit {
   public tagsMetadata: any;
   public contactData: any;
   public contactId: any;
+
+  public modalData: any;
 
   public personalTraits: ViewElement = {
     type: 'list',
@@ -69,7 +75,10 @@ export class ProfileComponent implements OnInit {
     viewData: []
   };
 
-  constructor(private service: GenericFormService) {}
+  constructor(
+    private service: GenericFormService,
+    private modalService: NgbModal
+  ) {}
 
   public ngOnInit() {
     this.personalTraits.elementList = [
@@ -114,6 +123,24 @@ export class ProfileComponent implements OnInit {
     ];
     this.id = '7a25f402-c421-4412-a9e1-163baea438e8';
     this.getMetadata(this.endpoint);
+  }
+
+  public openModal(title, element, id) {
+    this.modalData = null;
+    this.modalData = this.prepareData(title, element, id);
+    this.modalService.open(this.modal, {size: 'lg'});
+  }
+
+  public prepareData(title, element, id) {
+    let data = {
+      title: '',
+      endpoint: '',
+      id: ''
+    };
+    data.title = (title) ? title : this.data.contact.__str__;
+    data.endpoint = (element) ? this[element + 'Endpoint'] : this.endpoint;
+    data.id = (id) ? id : this.id;
+    return data;
   }
 
   public getMetadata(endpoint) {
@@ -228,13 +255,18 @@ export class ProfileComponent implements OnInit {
     let apiData = this.data;
     data.label = elements.map((el) => {
       let formElement = this.getItemFromMetadata(metadata, el);
-      return formElement ? formElement.templateOptions.label : '';
+      return (formElement && formElement.templateOptions.label) ?
+        formElement.templateOptions.label : '';
     });
-    let prop = (element === 'skills') ? 'candidate_skills' : (elements) ? 'tag_rels' : null;
+    let prop = (element === 'skills') ? 'candidate_skills' :
+      (element === 'tags') ? 'tag_rels' : null;
     data.row = [];
     if (prop) {
       apiData[prop].forEach((el) => {
-        let item = [];
+        let item = {
+          id: '',
+          values: []
+        };
         elements.forEach((elem) => {
           let options;
           let formElement = this.getItemFromMetadata(metadata, elem);
@@ -242,10 +274,11 @@ export class ProfileComponent implements OnInit {
             options = formElement.templateOptions.options;
           }
           let valueElement = this.getValueOfData(el, elem, options);
+          item.id = this.getValueOfData(el, 'id');
           if (this.isLink(valueElement)) {
-            item.push([valueElement]);
+            item.values.push([valueElement]);
           } else {
-            item.push(valueElement ? valueElement : '');
+            item.values.push(valueElement ? valueElement : '');
           }
         });
         data.row.push(item);
@@ -306,5 +339,20 @@ export class ProfileComponent implements OnInit {
     let reg = /^(https?:\/\/)/;
 
     return reg.test(value) ? true : false;
+  }
+
+  public refreshProfile() {
+    let components = ['personalTraits', 'residency', 'contactDetails', 'skills', 'tags'];
+    components.forEach((el) => {
+      this[el].viewData = [];
+      this.generate(el);
+    });
+  }
+
+  public formEvent(e, closeModal) {
+    if (e.type === 'sendForm' && e.status === 'success') {
+      closeModal();
+      this.refreshProfile();
+    }
   }
 }

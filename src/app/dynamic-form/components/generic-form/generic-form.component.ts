@@ -114,7 +114,7 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public getDataForForm(endpoint, id) {
-    this.service.getAll(`${endpoint}${id}`).subscribe(
+    this.service.getAll(`${endpoint}${id}/`).subscribe(
       ((data: any) => {
         this.fillingForm(this.metadata, data);
         this.show = true;
@@ -137,7 +137,9 @@ export class GenericFormComponent implements OnChanges {
     let keys = key.split('.');
     let prop = keys.shift();
     if (keys.length === 0) {
-      obj['value'] = data[key];
+      if (data) {
+        obj['value'] = data[key];
+      }
     } else {
       this.getValueOfData(data[prop], keys.join('.'), obj);
     }
