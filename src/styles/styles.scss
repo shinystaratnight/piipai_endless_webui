@@ -1,5 +1,6 @@
 @import 'variables.scss';
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
+@import '../../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss';
 
 @import 'basic.scss';
 @import 'components/map.scss';
@@ -10,3 +11,4 @@
 @import 'components/timeline.scss';
 @import 'components/picture.scss';
 @import 'components/profile.scss';
+@import 'components/navigation.scss';

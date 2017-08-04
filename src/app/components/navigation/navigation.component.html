@@ -1,0 +1,47 @@
+<header #header class="bg-primary text-white navigation">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between justify-content-lg-start">
+      <div class="d-flex align-items-center mr-lg-5">
+        <span class="title lead">R3sourcer</span>
+      </div>
+      <nav #nav class="d-flex align-items-stretch flex-first flex-lg-unordered">
+        <button class=" d-flex align-items-center hamburger hamburger--spring hidden-lg-up" type="button"
+          [ngClass]="{'is-active': isCollapsed}"
+          (click)="isCollapsed = !isCollapsed">
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </button>
+        <ul class="navigation-list mh-100" [ngClass]="{'show': isCollapsed}">
+          <template *ngFor="let page of pages" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page, first: true, height: headerHeight}"></template>
+        </ul>
+      </nav>
+      <div class="d-flex align-items-center ml-lg-auto">
+        <span class="user mr-2">Welcome, AnonymousUser</span>
+        <img class="photo m-1" width="40" height="40" src="http://172.18.0.6:8081/ecore/media/contact_pictures/avatar.png" alt="Image">
+      </div>
+    </div>
+  </div>
+</header>
+
+<template #list let-p="pages" let-h="height">
+  <ul *ngIf="!isCollapsed" class="navigation-list-nested" [ngStyle]="{'top.px': h}">
+    <template *ngFor="let page of p" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page}"></template>
+  </ul>
+  <ul *ngIf="isCollapsed" class="navigation-list-nested">
+    <template *ngFor="let page of p" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page}"></template>
+  </ul>
+</template>
+
+<template #item let-p="page" let-f="first" let-h="height">
+  <li class="navigation-item">
+    <div class="d-flex align-items-center justify-content-between w-100">
+      <a routerLink="{{p.url}}" class="p-2">{{p.name}}</a>
+      <i fa class="icon mr-2"
+        *ngIf="(!f || isCollapsed) && p.childrens.length"
+        [name]="'chevron-right'"></i>
+    </div>
+    <template *ngIf="p.childrens && f" [ngTemplateOutlet]="list" [ngOutletContext]="{pages: p.childrens, height: h}"></template>
+    <template *ngIf="p.childrens && !f" [ngTemplateOutlet]="list" [ngOutletContext]="{pages: p.childrens}"></template>
+  </li>
+</template>
