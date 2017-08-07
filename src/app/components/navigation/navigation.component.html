@@ -2,23 +2,38 @@
   <div class="container-fluid">
     <div class="d-flex justify-content-between justify-content-lg-start">
       <div class="d-flex align-items-center mr-lg-5">
-        <span class="title lead">R3sourcer</span>
+        <span class="title lead py-2"><a routerLink="/">R3sourcer</a></span>
       </div>
-      <nav #nav class="d-flex align-items-stretch flex-first flex-lg-unordered">
-        <button class=" d-flex align-items-center hamburger hamburger--spring hidden-lg-up" type="button"
-          [ngClass]="{'is-active': isCollapsed}"
-          (click)="isCollapsed = !isCollapsed">
-          <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-          </span>
-        </button>
-        <ul class="navigation-list mh-100" [ngClass]="{'show': isCollapsed}">
-          <template *ngFor="let page of pages" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page, first: true, height: headerHeight}"></template>
-        </ul>
-      </nav>
-      <div class="d-flex align-items-center ml-lg-auto">
-        <span class="user mr-2">Welcome, AnonymousUser</span>
-        <img class="photo m-1" width="40" height="40" src="http://172.18.0.6:8081/ecore/media/contact_pictures/avatar.png" alt="Image">
+      <div class="d-flex align-items-center flex-lg-unordered align-items-stretch"
+        [ngClass]="{'flex-first': pages}"
+        *ngIf="pages.length">
+        <nav #nav class="d-flex">
+          <button class=" d-flex align-items-center hamburger hamburger--spring hidden-lg-up" type="button"
+            [ngClass]="{'is-active': isCollapsed}"
+            (click)="showNavigation($event)">
+            <span class="hamburger-box">
+              <span class="hamburger-inner"></span>
+            </span>
+          </button>
+          <ul class="navigation-list mh-100" [ngClass]="{'show': isCollapsed}" [ngStyle]="{'top.px': (isCollapsed) ? headerHeight : 0}">
+            <template *ngFor="let page of pages" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page, first: true, height: headerHeight}"></template>
+          </ul>
+        </nav>
+      </div>
+      <div class="user d-flex align-items-center ml-lg-auto">
+        <span *ngIf="greeting" class="user-title" [ngClass]="{'hide': user}">{{greeting}}</span>
+        <img class="photo m-1 ml-2" width="40" height="40" [src]="userPicture" alt="Image"
+          *ngIf="user"
+          (click)="hideUserBlock($event)">
+        <div class="user-block"
+          #userBlock
+          *ngIf="user"
+          [hidden]="hideUserMenu"
+          [ngStyle]="{'top.px': headerHeight}">
+          <ul class="list-unstyled m-0 p-0">
+            <li><a class="p-2" href="#">Log Out</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -36,7 +51,8 @@
 <template #item let-p="page" let-f="first" let-h="height">
   <li class="navigation-item">
     <div class="d-flex align-items-center justify-content-between w-100">
-      <a routerLink="{{p.url}}" class="p-2">{{p.name}}</a>
+      <a routerLink="{{p.url}}" class="p-2"
+        (click)="isCollapsed = false">{{p.name}}</a>
       <i fa class="icon mr-2"
         *ngIf="(!f || isCollapsed) && p.childrens.length"
         [name]="'chevron-right'"></i>
