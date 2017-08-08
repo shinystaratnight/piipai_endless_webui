@@ -14,7 +14,7 @@ export interface Page {
 @Injectable()
 export class NavigationService {
 
-  public navigationList: any[];
+  public navigationList: Page[];
   public endpoint = '/ecore/api/v2/endless-core/extranetnavigations/';
   public error;
 
@@ -26,10 +26,11 @@ export class NavigationService {
     if (!this.navigationList) {
       return this.gfs.getAll(this.endpoint).map(
         (res: any) => {
-          this.navigationList = res.results;
-          return this.navigationList;
-        },
-        (err: any) => this.error = err
+          if (res.results) {
+            this.navigationList = res.results;
+            return this.navigationList;
+          }
+        }
       );
     } else {
       return Observable.of(this.navigationList);

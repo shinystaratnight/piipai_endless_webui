@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { NavigationService, Page } from '../../services/navigation.service';
 
-interface Breadcrumb {
+export interface Breadcrumb {
   path: string;
   label: string;
   active?: boolean;
@@ -20,8 +20,7 @@ export class BreadcrumbComponent implements OnInit {
 
   constructor(
     private navigationService: NavigationService,
-    private route: ActivatedRoute,
-    private router: Router
+    private route: ActivatedRoute
   ) {}
 
   public ngOnInit() {

@@ -37,7 +37,7 @@ export class NavigationComponent implements OnInit, AfterContentChecked {
   public error: any;
   public isCollapsed: boolean = false;
   public hideUserMenu: boolean = true;
-  public contactEndpoint: string;
+  public contactEndpoint: string = '/ecore/api/v2/endless-core/contacts/';
   public greeting: string;
   public userPicture: string;
   public user: any;
@@ -49,7 +49,6 @@ export class NavigationComponent implements OnInit, AfterContentChecked {
   ) { }
 
   public ngOnInit() {
-    this.contactEndpoint = '/ecore/api/v2/endless-core/contacts/';
     this.getUserInformation();
   }
 
