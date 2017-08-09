@@ -18,7 +18,7 @@ export class GenericFormComponent implements OnChanges {
   public data = {};
 
   @Input()
-  public response = {};
+  public response: any = {};
 
   @Input()
   public errors = {};
@@ -153,6 +153,9 @@ export class GenericFormComponent implements OnChanges {
       newData = data;
     }
     this.sendData = newData;
+    if (this.response.message) {
+      this.response.message = '';
+    }
     if (this.editForm) {
       this.service.editForm(`${this.endpoint}${this.id}/`, newData).subscribe(
         ((response: any) => {

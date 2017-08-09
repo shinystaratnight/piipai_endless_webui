@@ -10,7 +10,7 @@ import { LoginService } from './../../services/login.service';
 })
 export class LoginFormComponent implements OnInit {
 
-  public error: any;
+  public error: any = {};
   public response: any;
   public token: boolean = false;
   public endpoint = `/ecore/api/v2/login/`;
@@ -44,12 +44,14 @@ export class LoginFormComponent implements OnInit {
     if (response.data) {
       this.storage.store('contact', response.data.contact);
       this.router.navigate(['/']);
+    } else if (response.status === 'success') {
+      this.error = {};
     }
   }
 
   public redirectHandler(data) {
     this.loginService.username = data;
-    this.router.navigate(['/register']);
+    this.router.navigate(['/registration']);
   }
 
 }

@@ -146,6 +146,14 @@ describe('LoginFormComponent', () => {
       expect(router.navigate).toHaveBeenCalled();
     }));
 
+    it('should update error property', () => {
+      response = {
+        status: 'success',
+      };
+      comp.responseHandler(response);
+      expect(comp.error).toEqual({});
+    });
+
   });
 
   describe('redirectHandler method', () => {

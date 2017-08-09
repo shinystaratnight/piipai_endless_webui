@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 
 import { LocalStorageService } from 'ng2-webstorage';
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { NavigationService } from '../../services/navigation.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'navigation',
@@ -37,15 +37,14 @@ export class NavigationComponent implements OnInit, AfterContentChecked {
   public error: any;
   public isCollapsed: boolean = false;
   public hideUserMenu: boolean = true;
-  public contactEndpoint: string = '/ecore/api/v2/endless-core/contacts/';
   public greeting: string;
   public userPicture: string;
   public user: any;
 
   constructor(
-    private service: GenericFormService,
     private storage: LocalStorageService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private userService: UserService
   ) { }
 
   public ngOnInit() {
@@ -66,7 +65,7 @@ export class NavigationComponent implements OnInit, AfterContentChecked {
     let contact = this.storage.retrieve('contact');
     if (contact) {
       this.getPagesList();
-      this.service.getAll(`${this.contactEndpoint}${contact.id}/`).subscribe(
+      this.userService.getUserData(contact.id).subscribe(
         (res: any) => {
           this.user = res;
           this.greeting = `Welcome, ${this.user.__str__}`;
@@ -90,6 +89,10 @@ export class NavigationComponent implements OnInit, AfterContentChecked {
     e.stopPropagation();
     this.hideUserMenu = true;
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  public logOut() {
+    this.userService.logout();
   }
 
   @HostListener('document:click', ['$event'])
