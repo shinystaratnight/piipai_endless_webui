@@ -1,0 +1,33 @@
+.autocomplete {
+  width: 100%;
+  position: absolute;
+  border: 1px solid rgba($brand-inverse, .5);
+  border-radius: 0 0 .2rem .2rem;
+  z-index: 100;
+
+  &-value {
+    overflow: hidden;
+    background-color: $gray-lighter;
+
+    &.active:not(:focus) {
+      cursor: pointer;
+      background-color: white;
+    }
+  }
+
+  &-list {
+    width: 100%;
+    overflow-y: auto;
+    max-height: 200px;
+    z-index: 150;
+  }
+
+  &-item {
+    border: none;
+    border-radius: 0 !important;
+    &:hover {
+      width: 100%;
+      background-color: $brand-primary;
+    }
+  }
+}

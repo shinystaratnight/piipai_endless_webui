@@ -1,0 +1,141 @@
+.navigation {
+  .title {
+    font-size: 1rem;
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+  }
+  .user {
+
+    &-title {
+      font-weight: lighter;
+    }
+
+    @include media-breakpoint-down('md') {
+      &-title.hide {
+        display: none;
+      }
+    }
+
+    &-block {
+      position: absolute;
+      right: 0;
+      width: 200px;
+      color: white;
+      background-color: $brand-primary;
+      box-shadow: inset 0 0 4px rgba(0, 0, 0, .2);
+
+      a {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+
+        &:hover {
+          color: black;
+        }
+      }
+    }
+
+  }
+
+  img {
+    width: 40px;
+    height: 40px;
+
+    &.photo {
+      border-radius: 50%;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &-list {
+    display: flex;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style-position: inside;
+    list-style-type: none;
+
+    @include media-breakpoint-down('md') {
+      display: none;
+    }
+
+    &.show {
+      display: block;
+      position: fixed;
+      left: 0;
+      max-width: 70vw;
+      flex-direction: column;
+      align-items: flex-start;
+      background-color: rgba($brand-primary, 1);
+      box-shadow: inset 0 0 4px rgba(0, 0, 0, .2);
+      z-index: 200;
+
+      & .navigation-list-nested {
+        position: relative;
+        left: 0;
+        background-color: transparent;
+      }
+    }
+
+    a {
+      display: block;
+      color: white;
+      text-decoration: none;
+    }
+
+    &-nested {
+      display: flex;
+      visibility: hidden;
+      width: 200px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 0;
+      margin-bottom: 0;
+      padding-left: 0;
+      flex-direction: column;
+      list-style-position: inside;
+      list-style-type: none;
+      background-color: $brand-primary;
+      box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, .2);
+      z-index: 1000;
+
+      & .navigation-list-nested {
+        top: 0;
+        left: 200px;
+      }
+    }
+
+  }
+
+  &-item {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    &:hover {
+      cursor: pointer;
+
+      &>div {
+        a:hover {
+          color: black;
+        }
+        .icon {
+          transform: rotate(90deg);
+        }
+      }
+
+      &>.navigation-list-nested {
+        height: auto;
+        visibility: visible;
+      }
+    }
+  }
+}

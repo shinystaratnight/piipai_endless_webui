@@ -1,15 +1,91 @@
 <div class="form-group" [formGroup]="group">
-  <label [attr.for]="key">{{config.templateOptions.label}}</label>
-  <select
-    class="form-control custom-select"
-    #related
-    (change)="eventHandler($event)"
-    [formControlName]="key"
-    [attr.id]="key"
-    [attr.name]="key">
-    <option value="" disabled>{{config.templateOptions.label}}</option>
-    <option *ngFor="let option of config.options" [attr.value]="option.id" value="" [selected]="group.get(key).value === option.id">{{option.__str__}}</option>
-  </select>
+  <div *ngIf="!config.many" style="position: relative">
+    <label [attr.for]="key">{{config.templateOptions.label}}</label>
+    <div class="d-flex align-items-center">
+      <div class="form-control custom-select autocomplete-value"
+        [ngClass]="{'active': !config.readonly}"
+        (click)="openAutocomplete()">
+        <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
+      </div>
+      <div class="btn-group" role="group"
+        *ngIf="config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete" >
+        <button type="button" class="btn btn-secondary"
+          *ngIf="config.templateOptions.edit"
+          (click)="open('edit')">
+          <i fa class="text-primary icon"
+            [name]="'pencil'"></i>
+        </button>
+        <button type="button" class="btn btn-secondary"
+          *ngIf="config.templateOptions.add"
+          (click)="open('add')">
+          <i fa class="text-success icon"
+            [name]="'plus'" ></i>
+        </button>
+        <button type="button" class="btn btn-secondary"
+          *ngIf="config.templateOptions.delete"
+          (click)="open('delete')">
+          <i fa class="text-danger icon"
+            [name]="'times'"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="card autocomplete p-1" [hidden]="hideAutocomplete">
+      <input type="text" class="form-control mb-1"
+        #search
+        [(ngModel)]="searchValue"
+        [ngModelOptions]="{standalone: true}"
+        (blur)="resetList()"
+        (keyup)="filter(searchValue)">
+      <div #autocomplete class="autocomplete-list"
+        infinite-scroll
+        [infiniteScrollDistance]="modalScrollDistance"
+        [infiniteScrollThrottle]="modalScrollThrottle"
+        [scrollWindow]="false"
+        (scrolled)="onModalScrollDown()"
+        [hidden]="!(previewList && previewList.length)">
+        <ul class="list-group w-100">
+          <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+            *ngFor="let option of previewList"
+            (click)="setValue(option)">{{option[display]}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="config.many" style="position: relative">
+    <label [attr.for]="key">{{config.templateOptions.label}}</label>
+    <input type="text" class="form-control custom-select autocomplete-value"
+      [(ngModel)]="searchValue"
+      [ngModelOptions]="{standalone: true}"
+      [ngClass]="{'active': !config.readonly}"
+      (focus)="generateList()"
+      (blur)="resetList()"
+      (keyup)="filter(searchValue)">
+      <div class="autocomplete" [hidden]="!(previewList && previewList.length)">
+        <div class="autocomplete-list"
+          infinite-scroll
+          [infiniteScrollDistance]="modalScrollDistance"
+          [infiniteScrollThrottle]="modalScrollThrottle"
+          [scrollWindow]="false"
+          (scrolled)="onModalScrollDown()">
+          <ul class="list-group w-100">
+            <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+              *ngFor="let option of previewList"
+              (click)="setValue(option)">{{option[display]}}</li>
+          </ul>
+        </div>
+      </div>
+    <div class="d-flex flex-wrap align-items-center mt-2">
+      <span class="badge badge-default mb-1 mr-2 p-2" *ngFor="let item of results; let i = index">
+        {{item[display]}}
+        <i fa class="text-white icon ml-2"
+          (click)="deleteItem(i)"
+          [name]="'times'"></i>
+      </span>
+    </div>
+  </div>
+
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
   </small>
@@ -20,4 +96,29 @@
     <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
   </div>
 </div>
+
+<template #modal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">{{modalData.title}}</h5>
+    <button type="button" class="close" (click)="c()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div *ngIf="modalData.type !== 'delete'">
+      <generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c, type)">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </generic-form>
+    </div>
+    <div *ngIf="modalData.type === 'delete'">
+      Are you sure?
+    </div>
+  </div>
+
+  <div *ngIf="modalData.type === 'delete'" class="modal-footer">
+    <button type="button" class="btn btn-danger"
+      (click)="deleteElement(c)">Delete</button>
+  </div>
+</template>
 

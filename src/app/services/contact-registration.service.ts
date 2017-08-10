@@ -22,7 +22,7 @@ export class ContactRegistrationService {
   }
 
   public getCompaniesOfCountry(code2) {
-    return this.http.get(`${this.companyUrl}?country=${code2}`)
+    return this.http.get(`${this.companyUrl}?country=${code2}&limit=-1&fields=name`)
       .map((res: any) => res.json())
       .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }

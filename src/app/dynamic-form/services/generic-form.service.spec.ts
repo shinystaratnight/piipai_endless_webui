@@ -234,6 +234,53 @@ describe('GenericFormService', () => {
 
   });
 
+  describe('editForm method', () => {
+
+    it('should parse response', async(inject(
+      [GenericFormService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'ok'
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.editForm(url, {username: 'Petya'});
+
+      result.subscribe((res) => {
+        expect(res).toEqual({
+          status: 'ok'
+        });
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [GenericFormService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        register: 'email'
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.editForm(url, {username: 'Petya'});
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toBeDefined();
+      });
+    })));
+
+  });
+
   describe('callAction method', () => {
 
     it('should parse response', async(inject(
@@ -270,6 +317,53 @@ describe('GenericFormService', () => {
       });
 
       const result = service.callAction(url, ['123', '124']);
+
+      result.subscribe((res) => {
+        expect(res).toBeUndefined();
+      },
+      (err) => {
+        expect(err).toBeDefined();
+      });
+    })));
+
+  });
+
+  describe('delete method', () => {
+
+    it('should parse response', async(inject(
+      [GenericFormService, MockBackend], (service, mockBackend) => {
+
+      const mockResponse = {
+        status: 'ok'
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockRespond(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+      });
+
+      const result = service.callAction(url, 123);
+
+      result.subscribe((res) => {
+        expect(res).toEqual({
+          status: 'ok'
+        });
+      });
+    })));
+
+    it('should parse error', async(inject(
+      [GenericFormService, MockBackend], (service, mockBackend) => {
+
+      const mockError = {
+        errors: ['Invalid id']
+      };
+
+      mockBackend.connections.subscribe((conn) => {
+        conn.mockError(
+            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
+      });
+
+      const result = service.callAction(url, 123);
 
       result.subscribe((res) => {
         expect(res).toBeUndefined();

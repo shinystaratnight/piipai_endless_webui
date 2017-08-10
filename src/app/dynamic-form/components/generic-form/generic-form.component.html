@@ -4,11 +4,13 @@
 </div>
 <dynamic-form
   *ngIf="show"
+  [commonFields]="commonFields"
   [config]="metadata"
   [errors]="errors"
   [message]="response"
   [data]="data"
   (submit)="submitForm($event)"
+  (formChange)="formChange($event)"
   (event)="eventHandler($event)"
   (buttonAction)="buttonActionHandler($event)">
   <ng-content></ng-content>

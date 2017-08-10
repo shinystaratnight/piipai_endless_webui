@@ -42,17 +42,23 @@ export class FormDatepickerComponent
     return true;
   }
 
-  public updateDate() {
+  public updateDate(time = moment) {
     if (this.config.templateOptions.type === 'date') {
       if (this.date) {
         let {year = 0, month = 0, day = 0} = {...this.date};
-        this.group.get(this.key).patchValue(new Date(Date.UTC(year, month - 1, day)));
+        if (time) {
+          let value = time.utc([year, month - 1, day]).format('YYYY-MM-DD');
+          this.group.get(this.key).patchValue(value);
+        }
       }
     } else if (this.config.templateOptions.type === 'datetime') {
       if (this.date && this.time) {
         let {year = 0, month = 0, day = 0} = {...this.date};
         let {hour = 0, minute = 0} = {...this.time};
-        this.group.get(this.key).patchValue(new Date(Date.UTC(year, month - 1, day, hour, minute)));
+        if (time) {
+          let value = time.utc([year, month - 1, day, hour, minute]).format('YYYY-MM-DD hh:mm');
+          this.group.get(this.key).patchValue(value);
+        }
       }
     }
   }

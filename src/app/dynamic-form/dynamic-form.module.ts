@@ -5,6 +5,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { RouterModule } from '@angular/router';
 import { AgmCoreModule } from 'angular2-google-maps/core';
+import { InfiniteScrollModule } from 'angular2-infinite-scroll';
+import { WebCamComponent } from 'ng2-webcam';
 
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
@@ -18,6 +20,10 @@ import { FormTextareaComponent } from './components/form-textarea/form-textarea.
 import { FormCollapseComponent } from './containers/form-collapse/form-collapse.component';
 import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.component';
 import { FormRelatedComponent } from './components/form-related/form-related.component';
+import { FormRuleComponent } from './components/form-rule/form-rule.component';
+import { FormTimelineComponent } from './components/form-timeline/form-timeline.component';
+import { FormPictureComponent } from './components/form-picture/form-picture.component';
+import { FormHiddenComponent } from './containers/form-hidden/form-hidden.component';
 
 import { GenericListComponent } from './components/generic-list/generic-list.component';
 import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
@@ -49,7 +55,8 @@ import { MoveDirective } from './directives/move.directive';
     Angular2FontawesomeModule,
     FormsModule,
     RouterModule,
-    AgmCoreModule.forRoot()
+    AgmCoreModule.forRoot(),
+    InfiniteScrollModule
   ],
   exports: [GenericFormComponent, GenericListComponent],
   declarations: [
@@ -80,7 +87,12 @@ import { MoveDirective } from './directives/move.directive';
     ListCheckboxComponent,
     MoveDirective,
     FilterSelectComponent,
-    ListTableComponent
+    ListTableComponent,
+    FormRuleComponent,
+    FormTimelineComponent,
+    FormPictureComponent,
+    WebCamComponent,
+    FormHiddenComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -100,7 +112,11 @@ import { MoveDirective } from './directives/move.directive';
     FilterChoiceComponent,
     FilterRelatedComponent,
     ListCheckboxComponent,
-    FilterSelectComponent
+    FilterSelectComponent,
+    FormRuleComponent,
+    FormTimelineComponent,
+    FormPictureComponent,
+    FormHiddenComponent
   ]
 })
 export class DynamicFormModule { }

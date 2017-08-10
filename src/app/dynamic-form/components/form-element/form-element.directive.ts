@@ -19,6 +19,10 @@ import { FormTextareaComponent } from './../form-textarea/form-textarea.componen
 import { FormCollapseComponent } from './../../containers/form-collapse/form-collapse.component';
 import { FormCheckboxComponent } from './../form-checkbox/form-checkbox.component';
 import { FormRelatedComponent } from './../form-related/form-related.component';
+import { FormRuleComponent } from './../form-rule/form-rule.component';
+import { FormTimelineComponent } from './../form-timeline/form-timeline.component';
+import { FormPictureComponent } from './../form-picture/form-picture.component';
+import { FormHiddenComponent } from './../../containers/form-hidden/form-hidden.component';
 
 const components = {
   input: FormInputComponent,
@@ -29,7 +33,11 @@ const components = {
   textarea: FormTextareaComponent,
   collapse: FormCollapseComponent,
   checkbox: FormCheckboxComponent,
-  related: FormRelatedComponent
+  related: FormRelatedComponent,
+  rule: FormRuleComponent,
+  timeline: FormTimelineComponent,
+  picture: FormPictureComponent,
+  hidden: FormHiddenComponent
 };
 
 @Directive({
@@ -74,7 +82,16 @@ export class FormElementDirective implements OnInit, OnChanges {
 
   public ngOnInit() {
     if (this.checkElement(this.config.type)) {
-      const component = components[this.config.type];
+      let component;
+      if (this.config.type === 'input') {
+        if (this.config.templateOptions.type === 'picture') {
+          component = components['picture'];
+        } else {
+          component = components[this.config.type];
+        }
+      } else {
+        component = components[this.config.type];
+      }
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;

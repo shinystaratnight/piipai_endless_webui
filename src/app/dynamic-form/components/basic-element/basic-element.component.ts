@@ -11,7 +11,7 @@ export class BasicElementComponent {
     if (keys.length > 1) {
       this.addControls(this.group, keys, fb);
     } else {
-      this.group.addControl(config.key, fb.control(''));
+      this.group.addControl(config.key, fb.control(undefined));
       this.key = config.key;
     }
   }
@@ -25,7 +25,8 @@ export class BasicElementComponent {
       element.nativeElement.maxLength = config.templateOptions.max;
     }
     if (config.templateOptions.min) {
-      element.nativeElement.minLength = config.templateOptions.min;
+      let min = (config.templateOptions.min < 0) ? 0 : config.templateOptions.min;
+      element.nativeElement.minLength = min;
     }
     if (config.templateOptions.max && config.templateOptions.type === 'number') {
       element.nativeElement.max = config.templateOptions.max;

@@ -11,10 +11,12 @@ export class ContactRegistrationFormComponent implements OnInit {
 
   public endpoint: string;
   public companyContactEndpoint = `/ecore/api/v2/endless-core/companycontacts/register/`;
+  public candidateContactEndpoint = `/ecore/api/v2/endless-candidate/candidatecontacts/register/`;
 
   public tags: any;
   public company: any = {};
   public companyData = {};
+  public updateData = {};
 
   public fields = {
     email: 'email',
@@ -41,6 +43,9 @@ export class ContactRegistrationFormComponent implements OnInit {
   public error = {};
   public response = {};
   public form = {};
+  public hide = true;
+
+  public commonFields = ['title', 'first_name', 'last_name', 'phone_mobile', 'email'];
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +61,7 @@ export class ContactRegistrationFormComponent implements OnInit {
             field: this.fields.state,
             param: 'id',
             query: '?country=',
-            reset: this.fields.city
+            reset: this.fields.state
           }
         }
       },
@@ -66,7 +71,8 @@ export class ContactRegistrationFormComponent implements OnInit {
           related: {
             field: this.fields.city,
             param: 'id',
-            query: '?region='
+            query: '?region=',
+            reset: this.fields.city
           },
           relate: true
         }
@@ -138,6 +144,18 @@ export class ContactRegistrationFormComponent implements OnInit {
           this.form = {
             company: res.results[0].id
           };
+          this.data = {
+            [this.fields.name]: {
+              action: 'update',
+              value: res.results[0].name,
+              block: true
+            },
+            [this.fields.businessId]: {
+              action: 'update',
+              value: res.results[0].business_id,
+              block: true
+            },
+          };
           this.crs.getAddressOfCompany(res.results[0].id).subscribe(
             (response: any) => {
               this.response[this.fields.name] = res.message;
@@ -145,29 +163,43 @@ export class ContactRegistrationFormComponent implements OnInit {
               this.data = {
                 [this.fields.postalCode]: {
                   action: 'update',
-                  value: response.results[0].address.postal_code
+                  value: response.results[0].address &&
+                    response.results[0].address.postal_code,
+                  block: true
                 },
                 [this.fields.streetAddress]: {
                   action: 'update',
-                  value: response.results[0].address.street_address
+                  value: response.results[0].address &&
+                    response.results[0].address.street_address,
+                  block: true
                 },
                 [this.fields.country]: {
-                  action: 'update',
-                  value: response.results[0].address.country.id
+                  action: 'add',
+                  data: {
+                    value: response.results[0].address.country &&
+                      response.results[0].address.country.id,
+                    readonly: true
+                  }
                 },
                 [this.fields.state]: {
                   action: 'update',
-                  value: response.results[0].address.state.id,
+                  value: response.results[0].address.state &&
+                    response.results[0].address.state.id,
                   update: true,
                   query: '?country=',
-                  id: response.results[0].address.country.id
+                  id: response.results[0].address.country &&
+                    response.results[0].address.country.id,
+                  block: true
                 },
                 [this.fields.city]: {
                   action: 'update',
-                  value: response.results[0].address.city.id,
+                  value: response.results[0].address.city &&
+                    response.results[0].address.city.id,
                   update: true,
                   query: '?region=',
-                  id: response.results[0].address.state.id
+                  id: response.results[0].address.state &&
+                    response.results[0].address.state.id,
+                  block: true
                 },
               };
             },
@@ -226,5 +258,23 @@ export class ContactRegistrationFormComponent implements OnInit {
 
   public register_company_contact() {
     this.endpoint = this.companyContactEndpoint;
+    this.reset(this.error);
+    this.data = {};
+    this.hide = false;
+  }
+
+  public register_candidate_contact() {
+    this.endpoint = this.candidateContactEndpoint;
+    this.reset(this.error);
+    this.data = {};
+    this.hide = false;
+  }
+
+  public reset(data) {
+    Object.keys(data).forEach((el) => {
+      if (this.commonFields.indexOf(el) === -1) {
+        delete data[el];
+      }
+    });
   }
 }
