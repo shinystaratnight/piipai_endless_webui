@@ -268,7 +268,7 @@ export class GenericListComponent implements OnInit {
     keys.forEach((el) => {
       if (query[el]) {
         let elements = query[el].split('&');
-        elements.forEach((item) => {
+        elements.forEach((item, i) => {
           let keyValue = item.split('=');
           let key = (el === 'filter') ? 'f.' :
             (el === 'sort') ? 's.' :
@@ -277,7 +277,11 @@ export class GenericListComponent implements OnInit {
             queryParams[`${list}.${key}page`] = this.setPage(keyValue[0], keyValue[1]);
             return;
           }
-          queryParams[`${list}.${key}${keyValue[0]}`] = keyValue[1];
+          if (key === 'f.') {
+            queryParams[`${list}.${key}${keyValue[0]}-${i}`] = keyValue[1];
+          } else {
+            queryParams[`${list}.${key}${keyValue[0]}`] = keyValue[1];
+          }
         });
       }
     });
@@ -304,12 +308,13 @@ export class GenericListComponent implements OnInit {
       if (params[0] === list) {
         exist = true;
         if (params[1] === 'f') {
+          let name = params.slice(2).toString();
           this.fs.paramsOfFilters = {
-            param: params.slice(2).toString(),
+            param: name.slice(0, name.indexOf('-')),
             value: queryParams[el],
             list
           };
-          queryList['filter'] += `${params.slice(2).toString()}=${queryParams[el]}&`;
+          queryList['filter'] += `${name.slice(0, name.indexOf('-'))}=${queryParams[el]}&`;
         } else if (params[1] === 'p') {
           let offset;
           if (params[2] === 'page') {

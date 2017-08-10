@@ -5,7 +5,8 @@ import {
   Output,
   EventEmitter,
   OnChanges,
-  ViewChild
+  ViewChild,
+  OnDestroy
 } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,7 +16,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: 'dynamic-list.component.html'
 })
 
-export class DynamicListComponent implements OnInit, OnChanges {
+export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public config: any;
 
@@ -139,6 +140,12 @@ export class DynamicListComponent implements OnInit, OnChanges {
           }
         }
       }
+    }
+  }
+
+  public ngOnDestroy() {
+    if (this.first) {
+      this.filterService.filters = null;
     }
   }
 

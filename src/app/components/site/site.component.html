@@ -1,2 +1,13 @@
 <navigation></navigation>
 <breadcrumb></breadcrumb>
+
+<div class="container-fluid" *ngIf="pageData">
+  <div [ngSwitch]="pageData.pathData.type">
+    <div *ngSwitchCase="'form'">
+      <generic-form [endpoint]="pageData.endpoint" [id]="pageData.pathData.id"></generic-form>
+    </div>
+    <div *ngSwitchCase="'list'">
+      <generic-list [endpoint]="pageData.endpoint"></generic-list>
+    </div>
+  </div>
+</div>

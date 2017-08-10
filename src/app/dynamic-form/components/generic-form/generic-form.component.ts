@@ -141,7 +141,9 @@ export class GenericFormComponent implements OnChanges {
         obj['value'] = data[key];
       }
     } else {
-      this.getValueOfData(data[prop], keys.join('.'), obj);
+      if (data[prop]) {
+        this.getValueOfData(data[prop], keys.join('.'), obj);
+      }
     }
   }
 

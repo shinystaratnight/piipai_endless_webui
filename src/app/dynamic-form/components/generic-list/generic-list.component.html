@@ -1,23 +1,21 @@
-<div class="container-fluid">
-  <div *ngFor="let table of tables; let last = last" [ngClass]="{'pb-3': last && minimizedTable.length}">
-    <dynamic-list
-      *ngIf="table.metadata && table.data"
-      [config]="table.metadata"
-      [data]="table.data"
-      [first]="table.first"
-      [id]="table.id"
-      [active]="table.active"
-      [limit]="table.limit"
-      [offset]="table.offset"
-      [sorted]="table.sorted"
-      [innerTables]="table.innerTables"
-      [update]="table.update"
-      [minimized]="table.minimized"
-      [maximize]="table.maximize"
-      (list)="listHandler($event)"
-      (event)="eventHandler($event)">
-    </dynamic-list>
-  </div>
+<div *ngFor="let table of tables; let last = last" [ngClass]="{'pb-3': last && minimizedTable.length}">
+  <dynamic-list
+    *ngIf="table.metadata && table.data"
+    [config]="table.metadata"
+    [data]="table.data"
+    [first]="table.first"
+    [id]="table.id"
+    [active]="table.active"
+    [limit]="table.limit"
+    [offset]="table.offset"
+    [sorted]="table.sorted"
+    [innerTables]="table.innerTables"
+    [update]="table.update"
+    [minimized]="table.minimized"
+    [maximize]="table.maximize"
+    (list)="listHandler($event)"
+    (event)="eventHandler($event)">
+  </dynamic-list>
 </div>
 
 <div #list class="d-flex justify-content-start datatable-list pt-5 flex-wrap" *ngIf="minimizedTable.length">

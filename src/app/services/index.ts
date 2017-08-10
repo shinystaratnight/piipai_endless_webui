@@ -4,6 +4,7 @@ import { NavigationService } from './navigation.service';
 import { UserService } from './user.service';
 import { AuthGuard } from './auth-guard';
 import { NotAuthorizedGuard } from './not-authorized-guard';
+import { SiteService } from './site.service';
 
 export const services = [
   LoginService,
@@ -11,5 +12,6 @@ export const services = [
   NavigationService,
   UserService,
   AuthGuard,
-  NotAuthorizedGuard
+  NotAuthorizedGuard,
+  SiteService
 ];
