@@ -9,6 +9,22 @@ $cell-datatable-width: 40%;
 .datatable {
   background-color: $datatable-background-color;
 
+  .table-wrapper {
+    position: relative;
+
+    .refreshing-bg {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .2);
+    }
+  }
+
   &-list {
     max-width: 100vw;
     position: fixed;

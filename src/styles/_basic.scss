@@ -2,3 +2,22 @@
   font-size: 14px !important;
   cursor: pointer;
 }
+
+.modal-content {
+  max-height: 90vh;
+  margin-top: 5vh;
+  padding-top: 3.8rem;
+  overflow: auto;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
+
+  .modal-header-wrapper {
+    position: absolute;
+    width: 100%;
+    top: 0;
+  }
+
+  .modal-title {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}

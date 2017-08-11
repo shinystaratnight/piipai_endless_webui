@@ -224,8 +224,7 @@ describe('FormRelatedComponent', () => {
       expect(comp.modalData).toEqual({
         type,
         title: comp.config.templateOptions.label,
-        endpoint: comp.config.templateOptions.endpoint,
-        id: ''
+        endpoint: comp.config.templateOptions.endpoint
       });
     })));
 

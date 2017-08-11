@@ -20,7 +20,7 @@ export class NotAuthorizedGuard implements CanActivate {
   public isLoggedOut() {
     let storageData = this.storage.retrieve('contact');
     let sessionID = this.cookie.get('sessionid');
-    if (!storageData && !sessionID) {
+    if (!storageData) {
       return true;
     } else {
       this.router.navigate(['/']);

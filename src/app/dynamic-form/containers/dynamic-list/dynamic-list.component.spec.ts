@@ -279,6 +279,23 @@ describe('DynamicListComponent', () => {
 
   });
 
+  describe('ngOnDestroy', () => {
+    it('should clean filters and close modal',
+      async(inject([FilterService], (fs: FilterService) => {
+        comp.first = true;
+        comp.config = config;
+        comp.modalRef = {
+          close() {
+            return true;
+          }
+        };
+        spyOn(comp.modalRef, 'close');
+        comp.ngOnDestroy();
+        expect(fs.filters).toEqual(null);
+        expect(comp.modalRef.close).toHaveBeenCalled();
+    })));
+  });
+
   describe('prepareData method', () => {
 
     it('should prepare data for body', async(() => {

@@ -81,6 +81,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   public currentData: any;
   public count: number;
   public innerTableCall: any;
+  public modalRef: any;
+  public refreshing: boolean = false;
 
   constructor(
     private filterService: FilterService,
@@ -146,6 +148,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnDestroy() {
     if (this.first) {
       this.filterService.filters = null;
+      if (this.modalRef) {
+        this.modalRef.close();
+      }
     }
   }
 
@@ -342,11 +347,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public open(modal, options = {}) {
-    this.modalService.open(modal, options).result.then((reason) => {
-      this.reason = reason;
-    }, (reason) => {
-      this.reason = reason;
-    });
+    this.modalRef = this.modalService.open(modal, options);
   }
 
   public initPagination(data) {

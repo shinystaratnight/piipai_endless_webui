@@ -39,6 +39,7 @@ export class UserService {
     this.service.submitForm(this.logoutEndpoint, {1: ''}).subscribe(
       (res: any) => {
         if (res.status === 'success') {
+          this.user = null;
           this.storage.clear('contact');
           this.cookie.remove('sessionid');
           this.router.navigate(['/login']);

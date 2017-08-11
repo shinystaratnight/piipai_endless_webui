@@ -12,6 +12,12 @@ import { UserService } from './user.service';
 describe('UserService', () => {
 
   let response;
+  let user = {
+      title: 'Mr.',
+      first_name: 'Tom',
+      last_name: 'Smith',
+      __str__: 'Mr. Tom Smith'
+    };
   let mockRouter = {
     navigate() {
       return true;
@@ -19,7 +25,10 @@ describe('UserService', () => {
   };
   let mockGenericFormService = {
     getAll() {
-      return true;
+      return Observable.of(response);
+    },
+    submitForm() {
+      return Observable.of(response);
     }
   };
 
@@ -39,5 +48,51 @@ describe('UserService', () => {
   it('should be defined', async(inject([UserService], (service) => {
     expect(service).toBeDefined();
   })));
+
+  describe('getUserData method', () => {
+    it('should return user data if first request',
+      async(inject([UserService], (userService: UserService) => {
+        response = user;
+        let id = '123';
+        userService.getUserData(id).subscribe(
+          (userData: any) => {
+            expect(userData).toEqual(response);
+            expect(userService.user).toEqual(response);
+          }
+        );
+    })));
+
+    it('should return user data if is not fisrt request',
+      async(inject([UserService], (userService: UserService) => {
+        userService.user = user;
+        let id = '123';
+        userService.getUserData(id).subscribe(
+          (userData: any) => {
+            expect(userData).toEqual(user);
+          }
+        );
+    })));
+  });
+
+  describe('logout method', () => {
+    it('should delete information about user',
+      async(inject([UserService, LocalStorageService, CookieService, Router],
+        (userService: UserService, storage: LocalStorageService,
+          cookie: CookieService, router: Router) => {
+            response = {
+              status: 'success',
+              message: 'You are logged out'
+            };
+            userService.user = user;
+            storage.store('contact', {});
+            cookie.put('sessionid', '123');
+            spyOn(router, 'navigate');
+            userService.logout();
+            expect(userService.user).toBeNull();
+            expect(storage.retrieve('contact')).toBeNull();
+            expect(cookie.get('sessionid')).toBeUndefined();
+            expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    })));
+  });
 
 });

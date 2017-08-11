@@ -59,7 +59,7 @@ export class FilterRelatedComponent implements OnInit {
 
   public generateList(item): void {
     this.list = this.config.options
-      .sort((p, n) => p[this.config.data.key] > n[this.config.data.key] ? 1 : -1);
+      .sort((p, n) => p[this.config.data.value] > n[this.config.data.value] ? 1 : -1);
     this.generatePreviewList(this.list, item);
   }
 
@@ -134,7 +134,7 @@ export class FilterRelatedComponent implements OnInit {
     this.changeQuery();
   }
 
-  public getValueByKey(key, item) {
+  public getValueByKey(key) {
     if (this.config.options) {
       let value = this.config.options.filter((el) => el[this.config.data.key] === key)[0];
       if (value) {

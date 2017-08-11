@@ -5,7 +5,7 @@ import {
   ViewChild,
   Output,
   EventEmitter,
-  OnChanges } from '@angular/core';
+  OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
@@ -17,7 +17,7 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 
 export class FormRelatedComponent
   extends BasicElementComponent
-    implements OnInit {
+    implements OnInit, OnDestroy {
 
   @ViewChild('search')
   public search;
@@ -41,6 +41,7 @@ export class FormRelatedComponent
   public searchValue: any;
   public hideAutocomplete: boolean = true;
   public modalData: any = {};
+  public modalRef: any;
 
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
@@ -106,6 +107,12 @@ export class FormRelatedComponent
     }
   }
 
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
+  }
+
   public onModalScrollDown() {
     this.generatePreviewList(this.list);
   }
@@ -126,8 +133,10 @@ export class FormRelatedComponent
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
     this.modalData.endpoint = this.config.endpoint;
-    this.modalData.id = this.group.get(this.key).value;
-    this.modalService.open(this.modal);
+    if (type === 'edit' || type === 'delete') {
+      this.modalData.id = this.group.get(this.key).value;
+    }
+    this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
   }
 
   public openAutocomplete() {

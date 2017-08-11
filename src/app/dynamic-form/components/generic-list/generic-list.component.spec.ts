@@ -692,8 +692,8 @@ describe('GenericListComponent', () => {
         };
         let list = 'companyaddress';
         let queryParams = {
-          'companyaddress.f.company': '1c80c973-1c9e-4392-b044-da9c450c631b',
-          'companyaddress.f.company__type': 'master',
+          'companyaddress.f.company-0': '1c80c973-1c9e-4392-b044-da9c450c631b',
+          'companyaddress.f.company__type-1': 'master',
           'companyaddress.p.page': 1,
           'companyaddress.s.ordering': '-company.name'
         };
@@ -723,8 +723,8 @@ describe('GenericListComponent', () => {
         };
         let list = 'companyaddress';
         let queryParams = {
-          'companyaddress.f.company': '1c80c973-1c9e-4392-b044-da9c450c631b',
-          'companyaddress.f.company__type': 'master',
+          'companyaddress.f.company-0': '1c80c973-1c9e-4392-b044-da9c450c631b',
+          'companyaddress.f.company__type-1': 'master',
           'companyaddress.p.page': 1,
           'companyaddress.s.ordering': '-company.name'
         };

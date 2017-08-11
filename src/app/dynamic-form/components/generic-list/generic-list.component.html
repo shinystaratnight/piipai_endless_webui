@@ -16,9 +16,13 @@
     (list)="listHandler($event)"
     (event)="eventHandler($event)">
   </dynamic-list>
+  <div *ngIf="!(table.metadata && table.data)" class="spinner">
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
+  </div>
 </div>
 
-<div #list class="d-flex justify-content-start datatable-list pt-5 flex-wrap" *ngIf="minimizedTable.length">
+<div #list class="d-flex justify-content-start datatable-list pt-2 flex-wrap" *ngIf="minimizedTable.length">
   <ng-container *ngFor="let table of minimizedTable">
     <div class="datatable-item px-1 pt-1">
       <div class="card">
