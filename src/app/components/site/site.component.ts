@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
+import { LocalStorageService } from 'ng2-webstorage';
 import { SiteService, PageData } from '../../services/site.service';
 
 @Component({
@@ -11,25 +12,37 @@ import { SiteService, PageData } from '../../services/site.service';
 export class SiteComponent implements OnInit {
 
   public pageData: PageData;
+  public user: any;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
-    private siteService: SiteService
+    private siteService: SiteService,
+    private storage: LocalStorageService
   ) {}
 
   public ngOnInit() {
+    this.user = this.storage.retrieve('contact');
     this.route.url.subscribe(
       (url: any) => {
         this.pageData = null;
         if (url.length) {
           this.siteService.getDataOfPage(url).subscribe(
             (pageData: PageData) => {
-              this.pageData = pageData;
+              setTimeout(() => {
+                this.pageData = pageData;
+              }, 50);
             }
           );
         }
       }
     );
+  }
+
+  public formEvent(e) {
+    if (e.type === 'sendForm' && e.status === 'success') {
+      this.router.navigate([this.pageData.pathData.path]);
+    }
   }
 
 }

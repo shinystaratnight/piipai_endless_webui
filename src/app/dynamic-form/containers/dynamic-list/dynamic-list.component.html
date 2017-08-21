@@ -121,20 +121,22 @@
 
 
 <template #modal let-c="close" let-d="dismiss">
-  <div class="modal-header-wrapper">
-    <div class="modal-header bg-primary text-white">
-      <h5 class="modal-title">{{modalInfo.label}}</h5>
-      <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
-        <span class="text-white" aria-hidden="true">&times;</span>
-      </button>
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{modalInfo.label}}</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="modal-body" [ngSwitch]="modalInfo.type">
-    <generic-form [endpoint]="modalInfo.endpoint" [id]="modalInfo.id" *ngSwitchCase="'form'">
-      <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
-    </generic-form>
-    <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">
-      <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
-    </sebm-google-map>
+    <div class="modal-body" [ngSwitch]="modalInfo.type">
+      <generic-form [endpoint]="modalInfo.endpoint" [id]="modalInfo.id" *ngSwitchCase="'form'">
+        <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
+      </generic-form>
+      <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">
+        <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
+      </sebm-google-map>
+    </div>
   </div>
 </template>

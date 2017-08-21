@@ -139,6 +139,8 @@ export class FilterRelatedComponent implements OnInit {
       let value = this.config.options.filter((el) => el[this.config.data.key] === key)[0];
       if (value) {
         return value[this.config.data.value];
+      } else {
+        return 'All';
       }
     }
   }

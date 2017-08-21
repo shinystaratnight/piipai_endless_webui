@@ -1,7 +1,9 @@
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ContactRegistrationService } from './../../services/contact-registration.service';
 import { LoginService } from './../../services/login.service';
+import { LocalStorageService } from 'ng2-webstorage';
 
 @Component({
   selector: 'contact-registration-form',
@@ -12,11 +14,14 @@ export class ContactRegistrationFormComponent implements OnInit {
   public endpoint: string;
   public companyContactEndpoint = `/ecore/api/v2/endless-core/companycontacts/register/`;
   public candidateContactEndpoint = `/ecore/api/v2/endless-candidate/candidatecontacts/register/`;
+  public contactEndpoint = `/ecore/api/v2/endless-core/contacts/`;
 
   public tags: any;
   public company: any = {};
   public companyData = {};
   public updateData = {};
+
+  public password: boolean = false;
 
   public fields = {
     email: 'email',
@@ -50,7 +55,10 @@ export class ContactRegistrationFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private crs: ContactRegistrationService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private route: ActivatedRoute,
+    private storage: LocalStorageService,
+    private router: Router
   ) {
     this.endpoint = this.companyContactEndpoint;
     this.relatedField = {
@@ -100,6 +108,19 @@ export class ContactRegistrationFormComponent implements OnInit {
         }
       };
     }
+    this.route.url.subscribe((url) => {
+      let urlCopy = [].concat(url);
+      let user = this.storage.retrieve('contact');
+      if (user && user.password) {
+        this.router.navigate(['/']);
+        return;
+      }
+      let lastElement = urlCopy.pop().path;
+      if (lastElement === 'password') {
+        this.endpoint = `${this.contactEndpoint}${user.id}/password/`;
+        this.password = true;
+      }
+    });
   }
 
   public getCompaniesOfCountry(code2) {
@@ -243,6 +264,12 @@ export class ContactRegistrationFormComponent implements OnInit {
       (event.el.key === this.fields.name || event.el.key === this.fields.businessId)) {
       this.companyData[event.el.key] = event.value;
       this.checkCompany();
+    }
+    if (event.type === 'sendForm' && event.status === 'success') {
+      let user = this.storage.retrieve('contact');
+      user.password = true;
+      this.storage.store('contact', user);
+      this.router.navigate(['/']);
     }
   }
 

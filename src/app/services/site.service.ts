@@ -71,6 +71,12 @@ export class SiteService {
         path: this.generatePath(urlCopy),
         id
       };
+    } else if (lastElement === 'profile') {
+      urlCopy.push(lastElement);
+      data = {
+        type: 'profile',
+        path: this.generatePath(urlCopy)
+      };
     } else {
       urlCopy.push(lastElement);
       data = {

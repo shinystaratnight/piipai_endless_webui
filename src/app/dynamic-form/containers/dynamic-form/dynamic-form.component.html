@@ -10,7 +10,9 @@
     [message]="message">
   </ng-container>
   <div *ngIf="errors">
-    <div class="text-danger mt-1 mb-3" *ngIf="errors.non_field_errors">{{errors.non_field_errors}}</div>
+    <div class="text-danger mt-1 mb-3" *ngIf="errors.non_field_errors">
+      <div *ngFor="let error of errors.non_field_errors">{{error}}</div>
+    </div>
   </div>
   <div *ngIf="message">
     <div *ngIf="message.message" class="text-success mt-1 mb-3">{{message.message}}</div>

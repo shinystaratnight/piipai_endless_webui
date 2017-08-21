@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
@@ -20,7 +20,7 @@ interface Rule {
   selector: 'form-rule',
   templateUrl: 'form-rule.component.html'
 })
-export class FormRuleComponent extends BasicElementComponent implements OnInit {
+export class FormRuleComponent extends BasicElementComponent implements OnInit, OnDestroy {
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -52,6 +52,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
   public activeStatesConfig: any[];
   public data: OutputData;
   public editValue: string;
+  public modalRef: any;
 
   constructor(
     private fb: FormBuilder,
@@ -75,6 +76,12 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
       this.config.activeMetadata[0].value = null;
       this.view = [];
       this.group.get(this.key).patchValue(null);
+    }
+  }
+
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
     }
   }
 
@@ -114,7 +121,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit {
       this.choice = type;
       this.ruleArray = this.prepareRuleArray(type, rule.id);
     }
-    this.modalService.open(content);
+    this.modalRef = this.modalService.open(content);
   }
 
   public done(closeModal, type) {

@@ -38,6 +38,9 @@ export class GenericFormComponent implements OnChanges {
   @Input()
   public hide: boolean;
 
+  @Input()
+  public edit: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -158,8 +161,9 @@ export class GenericFormComponent implements OnChanges {
     if (this.response.message) {
       this.response.message = '';
     }
-    if (this.editForm) {
-      this.service.editForm(`${this.endpoint}${this.id}/`, newData).subscribe(
+    if (this.editForm || this.edit) {
+      let endpoint = this.editForm ? `${this.endpoint}${this.id}/` : this.endpoint;
+      this.service.editForm(endpoint, newData).subscribe(
         ((response: any) => {
           this.parseResponse(response);
           this.event.emit({
@@ -260,7 +264,17 @@ export class GenericFormComponent implements OnChanges {
           });
           if (key === 'rules') {
             if (response.results) {
+              let rules = this.getElementFromMetadata(metadata, 'rules');
               this.updateValueOfRules(response.results);
+              this.parseMetadata(rules.activeMetadata, {
+                [key]: {
+                  action: 'add',
+                  data: {
+                    [param]: response.results ? response.results : response,
+                    currentQuery: query
+                  }
+                }
+              });
             }
             if (this.workflowData.company &&
               this.workflowData.number &&

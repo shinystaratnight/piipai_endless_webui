@@ -1,13 +1,15 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GeoService } from './../../services/geo.service';
 import { ContactRegistrationService } from './../../services/contact-registration.service';
 import { LoginService } from './../../services/login.service';
+import { LocalStorageService } from 'ng2-webstorage';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -55,6 +57,23 @@ describe('ContactRegistrationFormComponent', () => {
     }
   };
 
+  const mockActivatedRoute = {
+    url: Observable.of([
+      {
+        path: 'registration'
+      },
+      {
+        path: 'password'
+      }
+    ])
+  };
+
+  const mockRouter = {
+    navigate() {
+      return true;
+    }
+  };
+
   const fields = {
     email: 'email',
     phoneMobile: 'phone_mobile',
@@ -80,6 +99,9 @@ describe('ContactRegistrationFormComponent', () => {
         ContactRegistrationFormComponent
       ],
       providers: [
+        LocalStorageService,
+        { provide: Router, useValue: mockRouter },
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: ContactRegistrationService, useValue: mockContactRegistrationService },
         { provide: LoginService, useValue: mockLoginService }
       ],
@@ -104,7 +126,7 @@ describe('ContactRegistrationFormComponent', () => {
       expect(comp.ngOnInit).toBeDefined();
     });
 
-    it('should udate data', () => {
+    it('should update data', async(inject([LocalStorageService], (storage: LocalStorageService) => {
       let result = {
         [mockLoginService.username.field]: {
           action: 'add',
@@ -114,9 +136,32 @@ describe('ContactRegistrationFormComponent', () => {
           }
         }
       };
+      storage.store('contact', {id: 2});
       comp.ngOnInit();
       expect(comp.data).toEqual(result);
-    });
+      storage.clear('contact');
+    })));
+
+    it('should set endpoint',
+      async(inject([LocalStorageService, ActivatedRoute],
+        (storage: LocalStorageService, route: ActivatedRoute) => {
+          comp.contactEndpoint = '/ecore/api/v2/endless-core/contacts/';
+          storage.store('contact', {id: 2});
+          comp.ngOnInit();
+          expect(comp.endpoint).toEqual(`${comp.contactEndpoint}2/password/`);
+          expect(comp.password).toBeTruthy();
+          storage.clear('contact');
+    })));
+
+    it('should navigate to "/"',
+      async(inject([LocalStorageService, Router],
+        (storage: LocalStorageService, router: Router) => {
+          storage.store('contact', {id: 2, password: true});
+          spyOn(router, 'navigate');
+          comp.ngOnInit();
+          expect(router.navigate).toHaveBeenCalledWith(['/']);
+          storage.clear('contact');
+    })));
 
   });
 
@@ -385,6 +430,22 @@ describe('ContactRegistrationFormComponent', () => {
       expect(comp.checkCompany).toHaveBeenCalled();
       expect(comp.companyData[event.el.key]).toEqual(event.value);
     });
+
+    it('should regirect to "/" after change password',
+      async(inject([LocalStorageService, Router],
+        (storage: LocalStorageService, router: Router) => {
+          let event = {
+            type: 'sendForm',
+            status: 'success'
+          };
+          let user = {id: 2};
+          storage.store('contact', user);
+          spyOn(router, 'navigate');
+          comp.eventHandler(event);
+          expect(storage.retrieve('contact').password).toBeTruthy();
+          expect(router.navigate).toHaveBeenCalledWith(['/']);
+          storage.clear('contact');
+    })));
 
   });
 

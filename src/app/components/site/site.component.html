@@ -4,10 +4,15 @@
 <div class="container-fluid" *ngIf="pageData">
   <div [ngSwitch]="pageData.pathData.type">
     <div *ngSwitchCase="'form'">
-      <generic-form [endpoint]="pageData.endpoint" [id]="pageData.pathData.id"></generic-form>
+      <generic-form [endpoint]="pageData.endpoint" [id]="pageData.pathData.id" (event)="formEvent($event)">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </generic-form>
     </div>
     <div *ngSwitchCase="'list'">
       <generic-list [endpoint]="pageData.endpoint"></generic-list>
+    </div>
+    <div *ngSwitchCase="'profile'">
+      <profile [id]="user.id"></profile>
     </div>
   </div>
 </div>

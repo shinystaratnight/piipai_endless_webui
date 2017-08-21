@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, ViewChild, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -6,7 +6,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: 'form-timeline.component.html'
 })
 
-export class FormTimelineComponent implements OnInit {
+export class FormTimelineComponent implements OnInit, OnDestroy {
 
   @ViewChild('stateModal')
   public stateModal;
@@ -19,12 +19,19 @@ export class FormTimelineComponent implements OnInit {
   public objectEndpoint: string;
   public stateData: any = {};
   public requirements: any[];
+  public modalRef: any;
 
   constructor(public modalService: NgbModal) {}
 
   public ngOnInit() {
     this.objectEndpoint = '/ecore/api/v2/endless-core/workflowobjects/';
     this.getTimeline();
+  }
+
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
   }
 
   public open(state): void {
@@ -40,7 +47,7 @@ export class FormTimelineComponent implements OnInit {
       }
       this.modalData.title = title;
       this.stateData = this.setDataForState(state);
-      this.modalService.open(this.stateModal, {size: 'lg'});
+      this.modalRef = this.modalService.open(this.stateModal, {size: 'lg'});
     }
   }
 

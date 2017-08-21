@@ -23,6 +23,7 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
   public errors: any;
   public message: any;
   public key: any;
+  public options: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -33,6 +34,7 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
+    this.options = this.config.templateOptions.options.sort((p, n) => p.label > n.label ? 1 : -1 );
     if (this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
     }
