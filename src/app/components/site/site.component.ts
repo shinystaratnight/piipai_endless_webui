@@ -13,6 +13,7 @@ export class SiteComponent implements OnInit {
 
   public pageData: PageData;
   public user: any;
+  public dashboard: boolean = true;
 
   constructor(
     private router: Router,
@@ -27,6 +28,7 @@ export class SiteComponent implements OnInit {
       (url: any) => {
         this.pageData = null;
         if (url.length) {
+          this.dashboard = false;
           this.siteService.getDataOfPage(url).subscribe(
             (pageData: PageData) => {
               setTimeout(() => {
@@ -34,6 +36,8 @@ export class SiteComponent implements OnInit {
               }, 50);
             }
           );
+        } else {
+          this.dashboard = true;
         }
       }
     );

@@ -1,0 +1,32 @@
+.dashboard {
+  .welcome {
+    height: 90vh;
+    text-align: center;
+  }
+
+  & .add-widget {
+      box-shadow: 0 0 0 1px rgba($brand-inverse, .2);
+
+    &:hover {
+      box-shadow: 0 0 2px 1px rgba($brand-inverse, .5);
+    }
+  }
+
+  .widget-preview {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+    margin: .5rem;
+    border-radius: .5rem;
+    text-align: center;
+    background-color: rgba($brand-inverse, .1);
+    box-shadow: 0 0 0 1px rgba($brand-inverse, .2);
+
+    &:hover {
+      cursor: pointer;
+      box-shadow: 0 0 5px 2px rgba($brand-inverse, .5);
+    }
+  }
+}

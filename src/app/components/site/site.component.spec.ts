@@ -77,6 +77,7 @@ describe('SiteComponent', () => {
           tick(100);
           expect(comp.pageData).toEqual(pageData);
           expect(comp.user).toEqual(user);
+          expect(comp.dashboard).toBeFalsy();
           storage.clear('contact');
         })));
   });

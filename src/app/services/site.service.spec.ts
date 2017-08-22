@@ -150,6 +150,21 @@ describe('UserService', () => {
         });
     })));
 
+    it('should return profile type of page',
+      async(inject([SiteService], (siteService: SiteService) => {
+        let url = [
+          {
+            path: 'profile'
+          }
+        ];
+        spyOn(siteService, 'generatePath').and.returnValue('/profile/');
+        let result = siteService.getTypeOfPage(url);
+        expect(result).toEqual({
+          type: 'profile',
+          path: '/profile/'
+        });
+    })));
+
     it('should return list type of page',
       async(inject([SiteService], (siteService: SiteService) => {
         let url = [

@@ -1,0 +1,35 @@
+<div class="dashboard">
+  <div class="welcome d-flex align-items-center justify-content-center flex-column">
+    <span class="text-muted"><b>Modify your dashboard by adding widgets!</b></span>
+    <button class="add-widget icon btn mt-2 px-4 d-flex align-items-center justify-content-center" (click)="openModal()">
+      <i class="text-muted" fa [name]="'plus'"></i>
+    </button>
+  </div>
+</div>
+
+<template #modal let-c="close">
+  <div class="dashboard">
+    <div class="modal-content-wrapper">
+      <div class="modal-header-wrapper">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Widgets</h5>
+          <button type="button" class="close ml-2" (click)="c()">
+            <span class="text-white" aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="d-flex justify-content-around align-items-start flex-wrap">
+          <div class="widget-preview d-flex justify-content-center align-items-center"
+            *ngFor="let widget of modulesList"
+            (click)="addModule(widget, c)">
+              <span class="text-muted"><b>{{widget.content_type.name}}</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
