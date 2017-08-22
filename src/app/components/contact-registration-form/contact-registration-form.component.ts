@@ -267,9 +267,11 @@ export class ContactRegistrationFormComponent implements OnInit {
     }
     if (event.type === 'sendForm' && event.status === 'success') {
       let user = this.storage.retrieve('contact');
-      user.password = true;
-      this.storage.store('contact', user);
-      this.router.navigate(['/']);
+      if (user) {
+        user.password = true;
+        this.storage.store('contact', user);
+        this.router.navigate(['/']);
+      }
     }
   }
 
