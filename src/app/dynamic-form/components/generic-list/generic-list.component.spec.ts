@@ -179,6 +179,7 @@ describe('GenericListComponent', () => {
         comp.getData(endpoint, null, table, true);
         expect(comp.calcPagination).toHaveBeenCalledWith(data);
         expect(comp.getMetadata).toHaveBeenCalledWith(endpoint, table);
+        expect(table.refresh).toBeFalsy();
       }));
 
       it('should update data property', async(() => {
@@ -196,6 +197,7 @@ describe('GenericListComponent', () => {
         comp.getData(endpoint, null, table, false, table);
         expect(table.data).toEqual(data);
         expect(comp.calcPagination).toHaveBeenCalledWith(data);
+        expect(table.refresh).toBeFalsy();
         setTimeout(() => {
           expect(table.update).toEqual(data);
         }, 160);
@@ -217,6 +219,7 @@ describe('GenericListComponent', () => {
         comp.getData(endpoint, query, table, false, table);
         expect(table.data).toEqual(data);
         expect(comp.calcPagination).toHaveBeenCalledWith(data);
+        expect(table.refresh).toBeFalsy();
         setTimeout(() => {
           expect(table.update).toEqual(data);
         }, 160);

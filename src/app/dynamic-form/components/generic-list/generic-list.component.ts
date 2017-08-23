@@ -73,6 +73,7 @@ export class GenericListComponent implements OnInit {
     if (first) {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
+          table.refresh = false;
           this.calcPagination(data);
           this.getMetadata(endpoint, table);
         }
@@ -82,6 +83,7 @@ export class GenericListComponent implements OnInit {
         (data) => {
           table.data = data;
           this.calcPagination(data);
+          table.refresh = false;
           if (target) {
             setTimeout(() => {
               target.update = data;
@@ -94,6 +96,7 @@ export class GenericListComponent implements OnInit {
         (data) => {
           table.data = data;
           this.calcPagination(data);
+          table.refresh = false;
           if (target) {
             setTimeout(() => {
               target.update = data;
@@ -131,6 +134,7 @@ export class GenericListComponent implements OnInit {
       table.query = {};
     }
     if (e.type === 'sort' || e.type === 'pagination' || e.type === 'filter') {
+      table.refresh = true;
       table.query[e.type] = e.query;
       if (e.type === 'pagination') {
         table.innerTables = {};

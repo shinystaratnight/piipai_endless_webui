@@ -31,6 +31,10 @@ export class SiteComponent implements OnInit {
           this.dashboard = false;
           this.siteService.getDataOfPage(url).subscribe(
             (pageData: PageData) => {
+              if (!pageData.endpoint) {
+                this.router.navigate(['/']);
+                return;
+              }
               setTimeout(() => {
                 this.pageData = pageData;
               }, 50);

@@ -1,4 +1,9 @@
 .dashboard {
+
+  a:hover {
+    text-decoration: underline;
+  }
+
   .welcome {
     height: 90vh;
     text-align: center;
@@ -16,8 +21,6 @@
     position: relative;
     top: 0;
     left: 0;
-    width: 200px;
-    height: 200px;
     margin: .5rem;
     border-radius: .5rem;
     text-align: center;

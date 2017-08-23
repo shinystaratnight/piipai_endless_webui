@@ -30,8 +30,12 @@
   <div [class.card-block]="poped" class="datatable-body">
     <filter-block *ngIf="(first || poped) && filtersOfList.length" [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     <action-element *ngIf="config.list.actions" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
-    <h5 class="d-flex justify-content-between align-items-center lead" *ngIf="config.list && !poped">
+    <h5 class="d-flex justify-content-between align-items-center lead mb-2" *ngIf="config.list && !poped">
       <span>{{config.list.label}}</span>
+      <a class="btn btn-primary text-white" routerLink="add"
+        *ngIf="first">
+        Add {{config.list.label}}
+      </a>
       <i
         fa
         *ngIf="!first"
@@ -70,7 +74,7 @@
             </th>
           </tr>
         </thead>
-        <tbody *ngIf="body">
+        <tbody *ngIf="body && !refresh">
           <tr *ngFor="let row of body" [class.table-warning]="row.highlight">
             <td class="text-center">
               <input type="checkbox" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
@@ -103,7 +107,10 @@
           </tr>
         </tbody>
       </table>
-      <div class="refreshing-bg" *ngIf="refreshing"></div>
+      <div *ngIf="refresh" class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+      </div>
     </div>
     <div class="mb-2">{{data.count}} {{config.list.label}}</div>
     <ngb-pagination

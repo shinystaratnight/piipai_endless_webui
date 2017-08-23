@@ -43,7 +43,7 @@ export class SiteService {
     let pathData: PathData = this.getTypeOfPage(url);
     let element: Page = this.getElementFromList(list, pathData.path);
     let data: PageData = {
-      endpoint: element.endpoint,
+      endpoint: element ? element.endpoint : '',
       pathData
     };
     return data;

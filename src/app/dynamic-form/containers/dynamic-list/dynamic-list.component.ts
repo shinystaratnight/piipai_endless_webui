@@ -53,6 +53,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public maximize: boolean;
 
+  @Input()
+  public refresh: boolean = false;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
