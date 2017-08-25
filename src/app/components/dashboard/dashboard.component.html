@@ -12,9 +12,11 @@
       *ngFor="let group of widgetList">
       <h6 class="p-2 mb-0 bg-inverse text-white">{{group.label}}</h6>
       <div class="list-group">
-        <div class="p-2 list-group-item d-flex align-items-center justify-content-between"
+        <div class="widget p-2 list-group-item d-flex align-items-center justify-content-between"
           *ngFor="let widget of group.list">
             <a [routerLink]="[widget.link]">{{widget.label}}</a>
+            <i fa [name]="'times'" class="icon text-danger"
+              (click)="removeModule(widget)"></i>
         </div>
       </div>
     </div>

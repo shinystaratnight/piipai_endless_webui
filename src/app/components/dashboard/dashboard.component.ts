@@ -18,6 +18,7 @@ export interface WidgetItem {
   position: number;
   ui_config: any;
   labelOfWidgetGroup: string;
+  id: string;
 }
 
 export interface WidgetGroup {
@@ -109,9 +110,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  public removeModule(widget) {
+    this.genericFormService.delete(this.userModelsEndpoint, widget.id).subscribe(
+      (res: any) => {
+        this.getUserModules();
+    });
+  }
+
   public getUserModules() {
     this.genericFormService.getAll(this.userModelsEndpoint).subscribe(
       (res: any) => {
+        this.widgets = [];
+        this.widgetList = [];
         this.userModules = res.results;
         if (this.modulesList && this.modulesList.length) {
           this.generateWidgetList();
@@ -141,7 +151,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           .map((elem) => elem.toUpperCase())
           .join(' ');
         let appName = widgetInfo.module_data.app.replace(/_/, '-');
-        let modelName = widgetInfo.module_data.model.plural_name;
+        let modelName = widgetInfo.module_data.plural_name.split(' ').join('').toLowerCase();
         let endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
         let link = this.getLinkByEndpoint(this.pages, endpoint);
         let widget = <WidgetItem> {
@@ -150,7 +160,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           endpoint,
           position: el.position,
           ui_config: el.ui_config,
-          labelOfWidgetGroup
+          labelOfWidgetGroup,
+          id: el.id
         };
         this.widgets.push(widget);
       }
