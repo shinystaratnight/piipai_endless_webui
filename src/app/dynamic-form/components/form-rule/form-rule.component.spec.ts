@@ -83,6 +83,19 @@ describe('FormRuleComponent', () => {
 
   });
 
+  describe('ngOnDestroy method', () => {
+    it('should close modal window', () => {
+      comp.modalRef = {
+        close() {
+          return true;
+        }
+      };
+      spyOn(comp.modalRef, 'close');
+      comp.ngOnDestroy();
+      expect(comp.modalRef.close).toHaveBeenCalled();
+    });
+  });
+
   describe('addNewRule method', () => {
 
     it('should add control if first element', async() => {

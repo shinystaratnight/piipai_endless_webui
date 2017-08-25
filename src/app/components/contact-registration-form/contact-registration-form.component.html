@@ -4,6 +4,7 @@
 
     <div class="card-content p-3">
       <generic-form
+        *ngIf="!password"
         [commonFields]="commonFields"
         [hide]="hide"
         [endpoint]="endpoint"
@@ -17,6 +18,18 @@
         <div class="form-group">
           <button type="submit" class="btn btn-primary pl-4 pr-4 mt-3" [disabled]="hide">Register</button>
         </div>
+      </generic-form>
+
+      <generic-form
+        *ngIf="password"
+        [edit]="true"
+        [endpoint]="endpoint"
+        [response]="response"
+        [errors]="error"
+        (event)="eventHandler($event)">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary pl-4 pr-4 mt-3">Save</button>
+          </div>
       </generic-form>
     </div>
 

@@ -143,6 +143,19 @@ describe('ProfileComponent', () => {
 
   });
 
+  describe('ngOnDestroy method', () => {
+    it('should close modal window', () => {
+      comp.modalRef = {
+        close() {
+          return true;
+        }
+      };
+      spyOn(comp.modalRef, 'close');
+      comp.ngOnDestroy();
+      expect(comp.modalRef.close).toHaveBeenCalled();
+    });
+  });
+
   describe('openModal method', () => {
 
     it('should be defined', () => {

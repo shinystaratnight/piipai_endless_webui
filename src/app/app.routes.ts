@@ -3,14 +3,41 @@ import { ContactRegistrationFormComponent }
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home';
-import { NoContentComponent } from './pages/no-content';
+import { SiteComponent } from './components/site/site.component';
+import { AuthGuard } from './services/auth-guard';
+import { NotAuthorizedGuard } from './services/not-authorized-guard';
 
 import { DataResolver } from './app.resolver';
 
 export const ROUTES: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'login' },
-  { path: 'login', component: LoginFormComponent },
-  { path: 'login/:token', component: LoginFormComponent },
-  { path: 'register', component: ContactRegistrationFormComponent },
-  { path: '**', component: NoContentComponent },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: '/'
+  },
+  {
+    path: 'login',
+    component: LoginFormComponent,
+    canActivate: [NotAuthorizedGuard]
+  },
+  {
+    path: 'login/:token',
+    component: LoginFormComponent,
+    canActivate: [NotAuthorizedGuard]
+  },
+  {
+    path: 'registration',
+    component: ContactRegistrationFormComponent,
+    canActivate: [NotAuthorizedGuard]
+  },
+  {
+    path: 'registration/password',
+    component: ContactRegistrationFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '**',
+    component: SiteComponent,
+    canActivate: [AuthGuard]
+  }
 ];

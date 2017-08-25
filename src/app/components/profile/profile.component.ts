@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
 
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
@@ -24,7 +24,7 @@ interface TableElement {
   selector: 'profile',
   templateUrl: 'profile.component.html'
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
 
   @Input()
   public id: string;
@@ -48,6 +48,7 @@ export class ProfileComponent implements OnInit {
   public contactId: any;
 
   public modalData: any;
+  public modalRef: any;
 
   public personalTraits: ViewElement = {
     type: 'list',
@@ -125,10 +126,16 @@ export class ProfileComponent implements OnInit {
     this.getMetadata(this.endpoint);
   }
 
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
+  }
+
   public openModal(title, element, id) {
     this.modalData = null;
     this.modalData = this.prepareData(title, element, id);
-    this.modalService.open(this.modal, {size: 'lg'});
+    this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
   }
 
   public prepareData(title, element, id) {

@@ -214,7 +214,7 @@ describe('FilterService', () => {
       it('should parse params from URL', inject([FilterService], (s: FilterService) => {
         let params = {
           param: 'company',
-          value: 'true'
+          value: 'true&false'
         };
         s.paramsOfFilters = params;
         params = {

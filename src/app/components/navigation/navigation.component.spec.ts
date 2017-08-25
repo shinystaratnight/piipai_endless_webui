@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { LocalStorageService } from 'ng2-webstorage';
 import { NavigationService, Page } from './../../services/navigation.service';
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
+import { UserService } from '../../services/user.service';
 
 import { NavigationComponent } from './navigation.component';
 
@@ -24,9 +24,12 @@ describe('NavigationComponent', () => {
       return Observable.of(pages);
     }
   };
-  let mockGenericFormService = {
-    getAll() {
+  let mockUserService = {
+    getUserData() {
       return Observable.of(response);
+    },
+    logout() {
+      return true;
     }
   };
 
@@ -35,7 +38,7 @@ describe('NavigationComponent', () => {
       declarations: [NavigationComponent],
       providers: [
         LocalStorageService,
-        { provide: GenericFormService, useValue: mockGenericFormService },
+        { provide: UserService, useValue: mockUserService },
         { provide: NavigationService, useValue: mockNavigationService }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -103,8 +106,8 @@ describe('NavigationComponent', () => {
     })));
 
     it('should udate user information',
-      async(inject([LocalStorageService, GenericFormService],
-        (storage: LocalStorageService, service: GenericFormService) => {
+      async(inject([LocalStorageService, UserService],
+        (storage: LocalStorageService, service: UserService) => {
           let userInfo = {
             id: 123
           };
@@ -114,7 +117,6 @@ describe('NavigationComponent', () => {
               thumb: 'avatar.jpeg'
             }
           };
-          comp.contactEndpoint = '/ecore/api/v2/contacts/';
           storage.store('contact', userInfo);
           spyOn(comp, 'getPagesList');
           comp.getUserInformation();
@@ -165,6 +167,15 @@ describe('NavigationComponent', () => {
       expect(event.preventDefault).toHaveBeenCalled();
       expect(event.stopPropagation).toHaveBeenCalled();
     });
+  });
+
+  describe('logout method', () => {
+    it('should call logout method of UserService',
+      async(inject([UserService], (userService: UserService) => {
+        spyOn(userService, 'logout');
+        comp.logOut();
+        expect(userService.logout).toHaveBeenCalled();
+    })));
   });
 
   describe('handleClick method', () => {

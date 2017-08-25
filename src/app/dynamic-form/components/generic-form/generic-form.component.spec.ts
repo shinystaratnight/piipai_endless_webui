@@ -641,8 +641,10 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'updateValueOfRules');
         spyOn(comp, 'updateMetadata');
         spyOn(comp, 'parseMetadata');
+        spyOn(comp, 'getElementFromMetadata').and.returnValue({activeMetadata: []});
         comp.getRalatedData(comp.metadata, key, endpoint, null, query);
         expect(comp.updateValueOfRules).toHaveBeenCalledWith(response.results);
+        expect(comp.getElementFromMetadata).toHaveBeenCalled();
         expect(comp.updateMetadata).toHaveBeenCalledWith(comp.metadata, key);
         expect(comp.parseMetadata).toHaveBeenCalledWith(comp.metadata, {
           [key]: {

@@ -11,6 +11,7 @@ export class FilterSelectComponent implements OnInit {
   public data: string = '';
   public query: string;
   public isCollapsed: boolean = true;
+  public options: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -21,6 +22,7 @@ export class FilterSelectComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
+    this.options = this.config.options.sort((p, n) => p.label > n.label ? 1 : -1 );
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );

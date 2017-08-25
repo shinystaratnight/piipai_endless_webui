@@ -1,5 +1,5 @@
 import { FilterService } from './../../services/filter.service';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -16,6 +16,17 @@ export class FilterRelatedComponent implements OnInit {
   public copyConfig = [];
   public isCollapsed: boolean = true;
 
+  public searchValue: string;
+  public modalScrollDistance = 2;
+  public modalScrollThrottle = 50;
+  public list: any[];
+  public limit: number = 10;
+  public previewList: any[];
+  public topHeight: number;
+
+  @ViewChild('search')
+  public search;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -28,6 +39,7 @@ export class FilterRelatedComponent implements OnInit {
     let data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
       if (data.byQuery) {
+        this.count = 1;
         this.parseQuery(data.query);
       } else {
         let counts = data.map((el) => el.id);
@@ -45,13 +57,92 @@ export class FilterRelatedComponent implements OnInit {
     this.isCollapsed = this.query ? false : true;
   }
 
+  public generateList(item): void {
+    this.list = this.config.options
+      .sort((p, n) => p[this.config.data.value] > n[this.config.data.value] ? 1 : -1);
+    this.generatePreviewList(this.list, item);
+  }
+
+  public generatePreviewList(list, item) {
+    item.lastElement += this.limit;
+    this.previewList = list.slice(0, item.lastElement);
+  }
+
+  public openAutocomplete($event, item) {
+    if (this.config.options) {
+      let autocomplete;
+      let target = $event.target;
+      this.searchValue = null;
+      item.hideAutocomplete = false;
+      this.generateList(item);
+      if (target.classList.contains('autocomplete-value')) {
+        this.topHeight = target.offsetHeight;
+        autocomplete = target.nextElementSibling;
+      } else {
+        this.topHeight = target.parentElement.offsetHeight;
+        autocomplete = target.parentElement.nextElementSibling;
+      }
+      setTimeout(() => {
+        autocomplete.children[0].focus();
+      }, 50);
+    }
+  }
+
+  public resetList(item) {
+    setTimeout(() => {
+      this.list = null;
+      this.previewList = null;
+      item.lastElement = 0;
+      item.hideAutocomplete = true;
+    }, 150);
+  }
+
+  public filter(value, item) {
+    item.lastElement = 0;
+    let filteredList;
+    if (value) {
+      filteredList = this.config.options.filter((el) => {
+        let val = el[this.config.data.value];
+        if (val) {
+          return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
+        }
+      });
+      this.list = filteredList;
+      this.generatePreviewList(this.list, item);
+    } else {
+      this.generateList(item);
+    }
+  }
+
+  public onModalScrollDown(item) {
+    this.generatePreviewList(this.list, item);
+  }
+
+  public setValue(value, item) {
+    item.data = value[this.config.data.key];
+    this.searchValue = null;
+    this.list = null;
+    this.previewList = null;
+    this.onChange();
+  }
+
   public deleteValue(item) {
     item.data = '';
-    this.updateOptions(this.config.options);
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query),
       this.config.key, this.config.listName, this.elements);
     this.changeQuery();
+  }
+
+  public getValueByKey(key) {
+    if (this.config.options) {
+      let value = this.config.options.filter((el) => el[this.config.data.key] === key)[0];
+      if (value) {
+        return value[this.config.data.value];
+      } else {
+        return 'All';
+      }
+    }
   }
 
   public addElement() {
@@ -65,7 +156,6 @@ export class FilterRelatedComponent implements OnInit {
       let result = this.elements.filter((el) => el.id !== item.id);
       this.elements = result;
     }
-    this.updateOptions(this.config.options);
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query),
       this.config.key, this.config.listName, this.elements);
@@ -74,11 +164,15 @@ export class FilterRelatedComponent implements OnInit {
 
   public createElement(id, data = '') {
     this.count++;
-    return { id, data };
+    return {
+      id,
+      data,
+      lastElement: 0,
+      hideAutocomplete: true
+    };
   }
 
   public onChange() {
-    this.updateOptions(this.config.options);
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query),
       this.config.key, this.config.listName, this.elements);
@@ -99,25 +193,6 @@ export class FilterRelatedComponent implements OnInit {
   public changeQuery() {
     this.event.emit({
       list: this.config.listName
-    });
-  }
-
-  public updateOptions(options) {
-    this.refreshOptions(options);
-    options.forEach((el) => {
-      this.elements.forEach((prop) => {
-        if (prop.data === el.id) {
-          el.disabled = true;
-        }
-      });
-    });
-  }
-
-  public refreshOptions(options) {
-    options.forEach((el) => {
-      if (el.disabled) {
-        el.disabled = false;
-      }
     });
   }
 
@@ -146,9 +221,6 @@ export class FilterRelatedComponent implements OnInit {
       this.query = '';
       this.elements.length = 1;
       this.elements[0].data = '';
-      if (this.config.options) {
-        this.updateOptions(this.config.options);
-      }
     }
   };
 

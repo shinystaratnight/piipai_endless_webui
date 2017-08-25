@@ -53,6 +53,19 @@ describe('FormTimelineComponent', () => {
     });
   });
 
+  describe('ngOnDestroy method', () => {
+    it('should close modal window', () => {
+      comp.modalRef = {
+        close() {
+          return true;
+        }
+      };
+      spyOn(comp.modalRef, 'close');
+      comp.ngOnDestroy();
+      expect(comp.modalRef.close).toHaveBeenCalled();
+    });
+  });
+
   describe('open method', () => {
     it('should open modal window for allowed states', () => {
       let state = {

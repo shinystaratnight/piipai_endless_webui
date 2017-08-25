@@ -5,7 +5,8 @@ import {
   Output,
   EventEmitter,
   OnChanges,
-  ViewChild
+  ViewChild,
+  OnDestroy
 } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,7 +16,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: 'dynamic-list.component.html'
 })
 
-export class DynamicListComponent implements OnInit, OnChanges {
+export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public config: any;
 
@@ -52,6 +53,9 @@ export class DynamicListComponent implements OnInit, OnChanges {
   @Input()
   public maximize: boolean;
 
+  @Input()
+  public refresh: boolean = false;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -80,6 +84,8 @@ export class DynamicListComponent implements OnInit, OnChanges {
   public currentData: any;
   public count: number;
   public innerTableCall: any;
+  public modalRef: any;
+  public refreshing: boolean = false;
 
   constructor(
     private filterService: FilterService,
@@ -138,6 +144,15 @@ export class DynamicListComponent implements OnInit, OnChanges {
             cell.body = this.prepareData(cell.metadata.list.columns, cell.data.results);
           }
         }
+      }
+    }
+  }
+
+  public ngOnDestroy() {
+    if (this.first) {
+      this.filterService.filters = null;
+      if (this.modalRef) {
+        this.modalRef.close();
       }
     }
   }
@@ -335,11 +350,7 @@ export class DynamicListComponent implements OnInit, OnChanges {
   }
 
   public open(modal, options = {}) {
-    this.modalService.open(modal, options).result.then((reason) => {
-      this.reason = reason;
-    }, (reason) => {
-      this.reason = reason;
-    });
+    this.modalRef = this.modalService.open(modal, options);
   }
 
   public initPagination(data) {

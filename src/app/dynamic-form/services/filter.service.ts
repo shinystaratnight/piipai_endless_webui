@@ -18,18 +18,25 @@ export class FilterService {
   }
 
   set filters(filters) {
-    if (this.filterList.indexOf(filters.list) < 0) {
+    if (filters && this.filterList.indexOf(filters.list) < 0) {
       this.filterList.push(filters.list);
       filters.filters.forEach((el) => {
         el.listName = filters.list;
       });
       this.parseFilters(filters.filters, this.paramsOfFilters, filters.list, true);
       this._filters.push(...filters.filters);
+    } else {
+      this._filters = [];
+      this.filterList = [];
     }
   }
 
   set paramsOfFilters(params) {
-    this._paramsOfFilters[params.param] = params.value;
+    if (this._paramsOfFilters[params.param]) {
+      this._paramsOfFilters[params.param] += `&${params.value}`;
+    } else {
+      this._paramsOfFilters[params.param] = params.value;
+    }
     this.parseFilters(this.filters, this.paramsOfFilters, params.list);
   }
 
@@ -103,7 +110,7 @@ export class FilterService {
     if (first) {
       filters.forEach((el) => {
         if (el.type === 'related') {
-          this.gfs.getByQuery(el.data.endpoint, '?limit=-1').subscribe(
+          this.gfs.getByQuery(el.data.endpoint, '?limit=-1&fields=__str__&fields=id').subscribe(
             (res) => el.options = res.results
           );
         }
@@ -112,7 +119,16 @@ export class FilterService {
     if (Object.keys(params).length > 0) {
       filters.forEach((el) => {
         if (params[el.query]) {
-          let query = `${el.query}=${params[el.query]}`;
+          let query = '';
+          if (params[el.query].indexOf('&') > -1) {
+            let array = params[el.query].split('&');
+            array.forEach((elem) => {
+              query += `${el.query}=${elem}&`;
+            });
+            query = query.slice(0, -1);
+          } else {
+            query = `${el.query}=${params[el.query]}`;
+          }
           this.generateQuery(query, el.key, list);
         } else if (el.input) {
           let query = '';
