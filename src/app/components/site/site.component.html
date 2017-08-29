@@ -1,11 +1,16 @@
 <navigation></navigation>
 <breadcrumb></breadcrumb>
 
-<div class="container-fluid">
+<div class="container-fluid pb-5">
   <div *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
     <div *ngSwitchCase="'form'">
       <generic-form [endpoint]="pageData.endpoint" [id]="pageData.pathData.id" (event)="formEvent($event)">
-        <button type="submit" class="btn btn-primary">Save</button>
+        <div class="d-flex">
+          <button type="button" class="btn btn-danger"
+            *ngIf="pageData.pathData.id"
+            (click)="deleteElement(pageData)">Delete</button>
+          <button type="submit" class="btn btn-primary ml-auto">Save</button>
+        </div>
       </generic-form>
     </div>
     <div *ngSwitchCase="'list'">

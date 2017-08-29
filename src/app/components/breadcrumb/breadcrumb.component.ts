@@ -83,7 +83,7 @@ export class BreadcrumbComponent implements OnInit {
         if (!result) {
           result = el;
         }
-      } else if (el.childrens.length) {
+      } else if (el.children && el.childrens.length) {
         if (!result) {
           result = this.getElement(path, el.childrens);
         }

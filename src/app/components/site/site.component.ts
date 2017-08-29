@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { LocalStorageService } from 'ng2-webstorage';
 import { SiteService, PageData } from '../../services/site.service';
+import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 
 @Component({
   selector: 'site',
@@ -19,7 +20,8 @@ export class SiteComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private siteService: SiteService,
-    private storage: LocalStorageService
+    private storage: LocalStorageService,
+    private genericFormService: GenericFormService
   ) {}
 
   public ngOnInit() {
@@ -51,6 +53,12 @@ export class SiteComponent implements OnInit {
     if (e.type === 'sendForm' && e.status === 'success') {
       this.router.navigate([this.pageData.pathData.path]);
     }
+  }
+
+  public deleteElement(element) {
+    this.genericFormService.delete(element.endpoint, element.pathData.id).subscribe(
+      (res: any) => this.router.navigate([element.pathData.path])
+    );
   }
 
 }

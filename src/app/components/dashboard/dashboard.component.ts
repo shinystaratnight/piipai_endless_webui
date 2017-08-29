@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -46,6 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public widgetList: WidgetGroup[];
   public pages: Page[];
   public widgets: WidgetItem[];
+  public selectedWidget: any;
 
   constructor(
     public modalService: NgbModal,
@@ -96,13 +98,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  public selectModule(widget) {
+    this.userModelData = <any> {};
+    this.userModelData.dashboard_module = widget.id;
+    this.userModelData.position = this.getLastPosition() + 1;
+    this.selectedWidget = widget;
+  }
+
   public addModule(widget, closeModal) {
     closeModal();
-    this.userModelData = {
-      dashboard_module: widget.id,
-      position: this.getLastPosition() + 1,
-      ui_config: {}
-    };
     this.genericFormService.submitForm(this.userModelsEndpoint, this.userModelData).subscribe(
       (res: any) => {
         this.getUserModules();

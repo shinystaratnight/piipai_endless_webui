@@ -26,7 +26,7 @@ export class SiteService {
 
   public getDataOfPage(url: any): Observable<PageData> {
     if (!this.list) {
-      return this.navigationService.getPages().map(
+      return this.navigationService.getPages().subscribe(
         (list: Page[]) => {
           this.list = list;
           let data = this.generateData(list, url);
