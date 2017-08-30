@@ -15,7 +15,11 @@ export interface Page {
 export class NavigationService {
 
   public navigationList: Page[];
-  public endpoint = '/ecore/api/v2/endless-core/extranetnavigations/';
+  public userModels: any;
+  public models: any;
+  public endpoint = '/ecore/api/v2/endless-core/extranetnavigations/?limit=-1';
+  public userModelsEndpoint = '/ecore/api/v2/endless-core/userdashboardmodules/?limit=-1';
+  public modelsListEndpoint = '/ecore/api/v2/endless-core/dashboardmodules/?limit=-1';
   public error;
 
   constructor(
@@ -23,18 +27,36 @@ export class NavigationService {
   ) { }
 
   public getPages() {
-    if (!this.navigationList) {
-      return this.gfs.getAll(this.endpoint).map(
-        (res: any) => {
-          if (res.results) {
-            this.navigationList = res.results;
-            return this.navigationList;
-          }
+    return this.gfs.getAll(this.endpoint).map(
+      (res: any) => {
+        if (res.results) {
+          this.navigationList = res.results;
+          return this.navigationList;
         }
-      );
-    } else {
-      return Observable.of(this.navigationList);
-    }
+      }
+    );
+  }
+
+  public getUserModules() {
+    return this.gfs.getAll(this.userModelsEndpoint).map(
+      (res: any) => {
+        if (res.results) {
+          this.userModels = res.results;
+          return this.userModels;
+        }
+      }
+    );
+  }
+
+  public getModules() {
+    return this.gfs.getAll(this.modelsListEndpoint).map(
+      (res: any) => {
+        if (res.results) {
+          this.models = res.results;
+          return this.models;
+        }
+      }
+    );
   }
 
 }

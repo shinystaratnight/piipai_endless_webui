@@ -1,4 +1,14 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+  Input,
+  OnChanges,
+  EventEmitter,
+  Output
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -31,7 +41,7 @@ export interface WidgetGroup {
   templateUrl: 'dashboard.component.html'
 })
 
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnChanges, OnDestroy, OnInit {
 
   @ViewChild('modal')
   public modal: any;
@@ -40,12 +50,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public modelsListEndpoint = '/ecore/api/v2/endless-core/dashboardmodules/';
   public modalRef: any;
   public userModelData: UserModelData;
+
+  @Input()
   public modulesList: any;
+
+  @Input()
   public userModules: any;
+
+  @Output()
+  public changeWidgetList: EventEmitter<any> = new EventEmitter();
+
   public availableModules: any;
   public widgetList: WidgetGroup[];
+
+  @Input()
   public pages: Page[];
+
   public widgets: WidgetItem[];
+  public selectedWidget: any;
 
   constructor(
     public modalService: NgbModal,
@@ -56,7 +78,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.widgetList = [];
     this.widgets = [];
-    this.getPagesList();
+  }
+
+  public ngOnChanges() {
+    if (this.pages && this.userModules && this.modulesList) {
+      this.widgetList = [];
+      this.widgets = [];
+      this.generateWidgetList();
+    }
   }
 
   public ngOnDestroy() {
@@ -66,6 +95,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   public openModal() {
+    this.selectedWidget = null;
     this.availableModules = this.getAvaliableModules();
     this.modalRef = this.modalService.open(this.modal);
   }
@@ -85,27 +115,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  public getModelsList() {
-    this.genericFormService.getAll(this.modelsListEndpoint).subscribe(
-      (res: any) => {
-        this.modulesList = res.results;
-        if (this.userModules && this.userModules.length) {
-          this.generateWidgetList();
-        }
-      }
-    );
+  public selectModule(widget) {
+    this.userModelData = <any> {};
+    this.userModelData.dashboard_module = widget.id;
+    this.userModelData.position = this.getLastPosition() + 1;
+    this.userModelData.ui_config = {};
+    this.selectedWidget = widget;
   }
 
-  public addModule(widget, closeModal) {
+  public addModule(closeModal) {
     closeModal();
-    this.userModelData = {
-      dashboard_module: widget.id,
-      position: this.getLastPosition() + 1,
-      ui_config: {}
-    };
     this.genericFormService.submitForm(this.userModelsEndpoint, this.userModelData).subscribe(
       (res: any) => {
-        this.getUserModules();
+        this.changeWidgetList.emit({
+          changed: true
+        });
       }
     );
   }
@@ -113,22 +137,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public removeModule(widget) {
     this.genericFormService.delete(this.userModelsEndpoint, widget.id).subscribe(
       (res: any) => {
-        this.getUserModules();
+        this.changeWidgetList.emit({
+          changed: true
+        });
     });
   }
 
-  public getUserModules() {
-    this.genericFormService.getAll(this.userModelsEndpoint).subscribe(
-      (res: any) => {
-        this.widgets = [];
-        this.widgetList = [];
-        this.userModules = res.results;
-        if (this.modulesList && this.modulesList.length) {
-          this.generateWidgetList();
-        }
-      }
-    );
-  }
 
   public getLastPosition() {
     let position = 0;
@@ -156,7 +170,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         let link = this.getLinkByEndpoint(this.pages, endpoint);
         let widget = <WidgetItem> {
           label: el.dashboard_module.name,
-          link: link || '/',
+          link: (el.ui_config && el.ui_config.display_on_navbar) ? link || '/' : '/',
           endpoint,
           position: el.position,
           ui_config: el.ui_config,
@@ -214,14 +228,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     });
     return link;
-  }
-
-  public getPagesList() {
-    this.navigationService.getPages().subscribe((pages: Page[]) => {
-      this.pages = pages;
-      this.getModelsList();
-      this.getUserModules();
-    });
   }
 
   public getListOfGroupsName(widgets, param): string[] {

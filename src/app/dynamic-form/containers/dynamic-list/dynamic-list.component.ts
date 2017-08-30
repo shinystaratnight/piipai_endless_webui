@@ -182,6 +182,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
           obj['key'] = col.name;
           obj['name'] = element.field;
           obj['type'] = element.type;
+          obj['values'] = element.values;
           if (element.link) {
             obj['link'] = this.format(element.link, el);
           } else if (element.endpoint) {
@@ -290,6 +291,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   public setValue(data, props, object) {
     let prop = props.shift();
     if (props.length === 0) {
+      if (object.type === 'related') {
+        object['value'] = data[prop].__str__;
+      }
       object['value'] = data[prop];
     } else if (data[prop]) {
       this.setValue(data[prop], props, object);

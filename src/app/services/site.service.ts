@@ -24,19 +24,9 @@ export class SiteService {
     private navigationService: NavigationService
   ) {}
 
-  public getDataOfPage(url: any): Observable<PageData> {
-    if (!this.list) {
-      return this.navigationService.getPages().map(
-        (list: Page[]) => {
-          this.list = list;
-          let data = this.generateData(list, url);
-          return data;
-        }
-      );
-    } else if (this.list) {
-      let data = this.generateData(this.list, url);
-      return Observable.of(data);
-    }
+  public getDataOfPage(url: any, list) {
+    let data = this.generateData(list, url);
+    return Observable.of(data);
   }
 
   public generateData(list: Page[], url: any[]): PageData {

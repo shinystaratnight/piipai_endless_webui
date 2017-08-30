@@ -1,9 +1,10 @@
 import {
   Component,
-  OnInit,
   ViewChild,
   AfterContentChecked,
-  HostListener
+  HostListener,
+  Input,
+  OnInit
 } from '@angular/core';
 
 import { LocalStorageService } from 'ng2-webstorage';
@@ -32,8 +33,10 @@ export class NavigationComponent implements OnInit, AfterContentChecked {
   @ViewChild('userBlock')
   public userBlock: any;
 
-  public headerHeight: number;
+  @Input()
   public pages: any[] = [];
+
+  public headerHeight: number;
   public error: any;
   public isCollapsed: boolean = false;
   public hideUserMenu: boolean = true;
@@ -51,12 +54,6 @@ export class NavigationComponent implements OnInit, AfterContentChecked {
     this.getUserInformation();
   }
 
-  public getPagesList() {
-    this.navigationService.getPages().subscribe(
-      (list: any) => this.pages = list,
-    );
-  }
-
   public ngAfterContentChecked() {
     this.headerHeight = this.header.nativeElement.clientHeight;
   }
@@ -64,7 +61,6 @@ export class NavigationComponent implements OnInit, AfterContentChecked {
   public getUserInformation() {
     let contact = this.storage.retrieve('contact');
     if (contact) {
-      this.getPagesList();
       this.userService.getUserData(contact.id).subscribe(
         (res: any) => {
           this.user = res;
