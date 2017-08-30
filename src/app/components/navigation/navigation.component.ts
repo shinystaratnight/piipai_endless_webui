@@ -65,7 +65,8 @@ export class NavigationComponent implements OnInit, AfterContentChecked {
         (res: any) => {
           this.user = res;
           this.greeting = `Welcome, ${this.user.__str__}`;
-          this.userPicture = (res.picture) ? res.picture.thumb : '/assets/img/avatar.png';
+          this.userPicture =
+            (res.picture && res.picture.thumb) ? res.picture.thumb : '/assets/img/avatar.png';
         }
       );
     } else {
