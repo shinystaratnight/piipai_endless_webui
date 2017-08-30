@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NavigationService, Page } from '../../services/navigation.service';
@@ -15,8 +15,11 @@ export interface Breadcrumb {
 })
 
 export class BreadcrumbComponent implements OnInit {
-  public list: Breadcrumb[] = [];
+
+  @Input()
   public navigationList: Page[];
+
+  public list: Breadcrumb[] = [];
 
   constructor(
     private navigationService: NavigationService,
@@ -28,17 +31,12 @@ export class BreadcrumbComponent implements OnInit {
   }
 
   public getList() {
-    this.navigationService.getPages().subscribe(
-      (list: any) => {
-        this.navigationList = list;
-        this.route.url.subscribe(
-          (url) => {
-            if (this.navigationList) {
-              this.list = [];
-              this.generateData(url);
-            }
-          }
-        );
+    this.route.url.subscribe(
+      (url) => {
+        if (this.navigationList) {
+          this.list = [];
+          this.generateData(url);
+        }
       }
     );
   }
@@ -83,7 +81,7 @@ export class BreadcrumbComponent implements OnInit {
         if (!result) {
           result = el;
         }
-      } else if (el.children && el.childrens.length) {
+      } else if (el.childrens && el.childrens.length) {
         if (!result) {
           result = this.getElement(path, el.childrens);
         }

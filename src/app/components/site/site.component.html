@@ -1,5 +1,5 @@
-<navigation></navigation>
-<breadcrumb></breadcrumb>
+<navigation [pages]="pagesList"></navigation>
+<breadcrumb [navigationList]="pagesList"></breadcrumb>
 
 <div class="container-fluid pb-5">
   <div *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
@@ -21,5 +21,9 @@
     </div>
   </div>
 
-  <dashboard *ngIf="dashboard"></dashboard>
+  <dashboard *ngIf="dashboard"
+    [pages]="pagesList"
+    [userModules]="userModules"
+    [modulesList]="modulesList"
+    (changeWidgetList)="updateNavigation($event)"></dashboard>
 </div>

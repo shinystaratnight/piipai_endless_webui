@@ -10,7 +10,9 @@ export class ListCheckboxComponent implements OnInit {
   public value: any;
 
   public ngOnInit() {
-    this.value = this.config.values[this.config.value];
+    if (this.config.values) {
+      this.value = this.config.values[this.config.value];
+    }
   }
 
 };
