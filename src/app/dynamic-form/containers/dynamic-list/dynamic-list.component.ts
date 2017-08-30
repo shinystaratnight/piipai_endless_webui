@@ -292,9 +292,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     let prop = props.shift();
     if (props.length === 0) {
       if (object.type === 'related') {
-        object['value'] = data[prop].__str__;
+        object['value'] = data[prop] ? data[prop].__str__ : '';
+      } else {
+        object['value'] = data[prop];
       }
-      object['value'] = data[prop];
     } else if (data[prop]) {
       this.setValue(data[prop], props, object);
     }

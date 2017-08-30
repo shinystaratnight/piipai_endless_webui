@@ -25,7 +25,8 @@ const components = {
   checkbox: ListCheckboxComponent,
   select: ListCheckboxComponent,
   button: FormButtonComponent,
-  datetime: ListTextComponent
+  datetime: ListTextComponent,
+  related: ListTextComponent
 };
 
 @Directive({
