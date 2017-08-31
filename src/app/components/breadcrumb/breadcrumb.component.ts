@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnChanges, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { NavigationService, Page } from '../../services/navigation.service';
+import { Page } from '../../services/navigation.service';
 
 export interface Breadcrumb {
   path: string;
@@ -14,7 +14,7 @@ export interface Breadcrumb {
   templateUrl: 'breadcrumb.component.html'
 })
 
-export class BreadcrumbComponent implements OnInit {
+export class BreadcrumbComponent implements OnChanges {
 
   @Input()
   public navigationList: Page[];
@@ -22,11 +22,10 @@ export class BreadcrumbComponent implements OnInit {
   public list: Breadcrumb[] = [];
 
   constructor(
-    private navigationService: NavigationService,
     private route: ActivatedRoute
   ) {}
 
-  public ngOnInit() {
+  public ngOnChanges() {
     this.getList();
   }
 

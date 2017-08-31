@@ -8,19 +8,10 @@ import { SiteService, PageData } from './site.service';
 
 describe('UserService', () => {
 
-  let response;
-
-  let mockNavigationService = {
-    getPages() {
-      return Observable.of(response);
-    }
-  };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        SiteService,
-        { provide: NavigationService, useValue: mockNavigationService }
+        SiteService
       ],
       imports: []
     });
@@ -32,9 +23,8 @@ describe('UserService', () => {
 
   describe('getDataOfPage method', () => {
     it('should create new request',
-      async(inject([SiteService, NavigationService],
-        (siteService: SiteService, navigationService: NavigationService) => {
-          response = [
+      async(inject([SiteService], (siteService: SiteService) => {
+          let list = [
             {
               name: 'Contact',
               url: '/contact/',
@@ -43,34 +33,20 @@ describe('UserService', () => {
               childrens: []
             }
           ];
-          siteService.list = null;
+          let response = {
+            endpoint: list[0].endpoint,
+            pathData: {
+              type: 'list',
+              path: list[0].url
+            }
+          };
           spyOn(siteService, 'generateData').and.returnValue(response);
-          let result = siteService.getDataOfPage('some url');
-          result.subscribe((list) => {
-            expect(siteService.list).toEqual(response);
-            expect(list).toEqual(response);
+          let result = siteService.getDataOfPage(list[0].endpoint, list);
+          result.subscribe((dataList) => {
+            expect(dataList).toEqual(response);
           });
     })));
 
-    it('should return exist data',
-      async(inject([SiteService, NavigationService],
-        (siteService: SiteService, navigationService: NavigationService) => {
-          response = [
-            {
-              name: 'Contact',
-              url: '/contact/',
-              endpoint: '/ecore/api/v2/contacts',
-              __str__: 'Contact',
-              childrens: []
-            }
-          ];
-          siteService.list = response;
-          spyOn(siteService, 'generateData').and.returnValue(response);
-          let result = siteService.getDataOfPage('some url');
-          result.subscribe((list) => {
-            expect(list).toEqual(response);
-          });
-    })));
   });
 
   describe('generateData method', () => {

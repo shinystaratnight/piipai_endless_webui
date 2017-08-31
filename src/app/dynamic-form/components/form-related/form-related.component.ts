@@ -130,6 +130,7 @@ export class FormRelatedComponent
   }
 
   public open(type) {
+    this.modalData = {};
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
     this.modalData.endpoint = this.config.endpoint;

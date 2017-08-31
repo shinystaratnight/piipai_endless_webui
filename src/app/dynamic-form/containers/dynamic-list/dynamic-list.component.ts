@@ -56,6 +56,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public refresh: boolean = false;
 
+  @Input()
+  public endpoint: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -162,6 +165,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     data.forEach((el) => {
       let row = {
         id: el.id,
+        __str__: el.__str__,
         content: []
       };
       if (highlight) {
@@ -471,6 +475,15 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     this.modalInfo.endpoint = e.endpoint;
     this.modalInfo.label = e.label;
     this.modalInfo.id = e.id;
+    this.open(this.modal, {size: 'lg'});
+  }
+
+  public editObject(id, label) {
+    this.modalInfo = {};
+    this.modalInfo.type = 'form';
+    this.modalInfo.endpoint = this.endpoint;
+    this.modalInfo.label = label ? label : 'Edit';
+    this.modalInfo.id = id;
     this.open(this.modal, {size: 'lg'});
   }
 

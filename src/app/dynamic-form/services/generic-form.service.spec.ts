@@ -9,6 +9,7 @@ import {
   ConnectionBackend
 } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
+import { CookieService } from 'angular2-cookie/core';
 
 import { GenericFormService } from './generic-form.service';
 
@@ -22,6 +23,7 @@ describe('GenericFormService', () => {
         GenericFormService,
         MockBackend,
         BaseRequestOptions,
+        CookieService,
         {
           provide: Http,
           useFactory: (backend, options) => new Http(backend, options),

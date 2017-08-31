@@ -45,6 +45,7 @@ describe('DynamicListComponent', () => {
           label: 'Branch',
           sort: true,
           sorted: 'asc',
+          values: {},
           content: [
             {
               fields: [
@@ -139,6 +140,7 @@ describe('DynamicListComponent', () => {
           type: 'master'
         },
         id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+        __str__: 'Test Testovich'
     }]
   };
   let query;
@@ -301,6 +303,7 @@ describe('DynamicListComponent', () => {
     it('should prepare data for body', async(() => {
       let body = [{
         id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+        __str__: 'Test Testovich',
         highlight: true,
         content: [
           {
@@ -313,7 +316,8 @@ describe('DynamicListComponent', () => {
                 key: 'first_name',
                 name: 'first_name',
                 type: 'text',
-                value: 'Test'
+                value: 'Test',
+                values: undefined
               }
             ],
             contextMenu: [
@@ -333,6 +337,7 @@ describe('DynamicListComponent', () => {
                 key: 'branch',
                 name: undefined,
                 type: 'button',
+                values: undefined,
                 templateOptions: {
                   label: undefined,
                   icon: 'glob',
@@ -368,7 +373,8 @@ describe('DynamicListComponent', () => {
                 key: 'gender',
                 name: 'gender',
                 type: 'text',
-                value: null
+                value: null,
+                values: undefined,
               }
             ]
           },
@@ -383,7 +389,8 @@ describe('DynamicListComponent', () => {
                 name: 'phone_mobile',
                 type: 'link',
                 link: 'tel:+380978107725',
-                value: '+380978107725'
+                value: '+380978107725',
+                values: undefined,
               },
               {
                 rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -391,7 +398,8 @@ describe('DynamicListComponent', () => {
                 name: 'email',
                 type: 'link',
                 link: 'mailto:test.testovich@gmail.com',
-                value: 'test.testovich@gmail.com'
+                value: 'test.testovich@gmail.com',
+                values: undefined,
               },
               {
                 rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -399,7 +407,8 @@ describe('DynamicListComponent', () => {
                 name: 'last_name',
                 type: 'link',
                 endpoint: '/ecore/api/v2/contacts/8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-                value: 'Testovich'
+                value: 'Testovich',
+                values: undefined,
               }
             ],
             contextMenu: [
@@ -505,6 +514,22 @@ describe('DynamicListComponent', () => {
       comp.setValue(values, ['name'], resultTwo);
       expect(resultOne['value']).toEqual('Mr. Test Testovich');
       expect(resultTwo['value']).toEqual('Home LTD');
+    }));
+
+    it('should set value from data', async(() => {
+      let props = 'primary_contact.contact'.split('.');
+      let values = {
+        primary_contact: {
+          contact: {
+            __str__: 'Mr. Test Testovich'
+          }
+        }
+      };
+      let resultOne = {
+        type: 'related'
+      };
+      comp.setValue(values, props, resultOne);
+      expect(resultOne['value']).toEqual('Mr. Test Testovich');
     }));
 
   });
@@ -811,6 +836,23 @@ describe('DynamicListComponent', () => {
       expect(comp.modalInfo).toEqual(result);
       expect(comp.open).toHaveBeenCalled();
     }));
+  });
+
+  describe('editObject method', () => {
+    it('should open modal for edit object', () => {
+      let id = '123';
+      let label = 'Edit';
+      comp.endpoint = 'some edpoint';
+      spyOn(comp, 'open');
+      comp.editObject(id, label);
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: comp.endpoint,
+        label,
+        id
+      });
+      expect(comp.open).toHaveBeenCalled();
+    });
   });
 
   describe('activeTable method', () => {

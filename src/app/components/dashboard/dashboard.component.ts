@@ -143,7 +143,6 @@ export class DashboardComponent implements OnChanges, OnDestroy, OnInit {
     });
   }
 
-
   public getLastPosition() {
     let position = 0;
     this.widgets.forEach((el) => {
