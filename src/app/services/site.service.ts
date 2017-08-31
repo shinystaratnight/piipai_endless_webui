@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { NavigationService, Page } from './navigation.service';
+import { Page } from './navigation.service';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -19,10 +19,6 @@ export interface PageData {
 export class SiteService {
 
   public list: Page[];
-
-  constructor(
-    private navigationService: NavigationService
-  ) {}
 
   public getDataOfPage(url: any, list) {
     let data = this.generateData(list, url);

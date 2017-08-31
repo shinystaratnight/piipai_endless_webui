@@ -65,7 +65,6 @@ const APP_PROVIDERS = [
     ENV_PROVIDERS,
     APP_PROVIDERS,
     ...services,
-    { provide: RequestOptions, useClass: DefaultRequestOptions },
     CookieService
   ]
 })

@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 
-import { NavigationService, Page } from './../../services/navigation.service';
+import { Page } from './../../services/navigation.service';
 import { BreadcrumbComponent, Breadcrumb } from './breadcrumb.component';
 
 describe('BreadcrumbComponent', () => {
@@ -35,8 +35,7 @@ describe('BreadcrumbComponent', () => {
     TestBed.configureTestingModule({
       declarations: [BreadcrumbComponent],
       providers: [
-        { provide: ActivatedRoute, useValue: mockActivatedRoute},
-        { provide: NavigationService, useValue: mockNavigationService }
+        { provide: ActivatedRoute, useValue: mockActivatedRoute}
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
@@ -51,19 +50,18 @@ describe('BreadcrumbComponent', () => {
     expect(comp).toBeDefined();
   });
 
-  describe('ngOnInit', () => {
+  describe('ngOnChanges', () => {
     it('should call getList method', () => {
       spyOn(comp, 'getList');
-      comp.ngOnInit();
+      comp.ngOnChanges();
       expect(comp.getList).toHaveBeenCalled();
     });
   });
 
   describe('getList method', () => {
     it('should get list and call generateData method',
-      async(inject([NavigationService, ActivatedRoute],
-        (navigationService: NavigationService, route: ActivatedRoute) => {
-          response = [
+      async(inject([ActivatedRoute], (route: ActivatedRoute) => {
+          comp.navigationList = [
             {
               name: 'Contact',
               url: '/contact/',
@@ -81,7 +79,6 @@ describe('BreadcrumbComponent', () => {
           ];
           spyOn(comp, 'generateData');
           comp.getList();
-          expect(comp.navigationList).toEqual(response);
           expect(comp.list).toEqual([]);
           expect(comp.generateData).toHaveBeenCalledWith(url);
     })));

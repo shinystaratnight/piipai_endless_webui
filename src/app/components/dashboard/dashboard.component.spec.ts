@@ -6,6 +6,7 @@ import {
   async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { NavigationService, Page } from '../../services/navigation.service';
@@ -44,7 +45,7 @@ describe('DashboardComponent', () => {
         { provide: GenericFormService, useValue: mockGenericFormService },
         { provide: NavigationService, useValue: mockNavigationservice }
       ],
-      imports: [NgbModule.forRoot()],
+      imports: [NgbModule.forRoot(), FormsModule],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents()
@@ -59,12 +60,23 @@ describe('DashboardComponent', () => {
   });
 
   describe('ngOnInit method', () => {
-    it('should call methods', () => {
-      spyOn(comp, 'getPagesList');
+    it('should initial properties', () => {
       comp.ngOnInit();
-      expect(comp.getPagesList).toHaveBeenCalled();
       expect(comp.widgetList).toEqual([]);
       expect(comp.widgets).toEqual([]);
+    });
+  });
+
+  describe('ngOnChanges method', () => {
+    it('should call generateWidgetList method', () => {
+      comp.pages = [];
+      comp.userModules = [];
+      comp.modulesList = [];
+      spyOn(comp, 'generateWidgetList');
+      comp.ngOnChanges();
+      expect(comp.widgetList).toEqual([]);
+      expect(comp.widgets).toEqual([]);
+      expect(comp.generateWidgetList).toHaveBeenCalled();
     });
   });
 
@@ -85,6 +97,7 @@ describe('DashboardComponent', () => {
     it('should open modal with widgets', () => {
       spyOn(comp, 'getAvaliableModules').and.returnValue([]);
       comp.openModal();
+      expect(comp.selectedWidget).toBeNull();
       expect(comp.getAvaliableModules).toHaveBeenCalled();
       expect(comp.availableModules).toEqual([]);
     });
@@ -120,17 +133,19 @@ describe('DashboardComponent', () => {
     });
   });
 
-  describe('getModelsList method', () => {
-    it('should update modulesList property', () => {
-        response = {
-          results: []
-        };
-        comp.modelsListEndpoint = '/ecore/api/v2/endless-core/dashboardmodules/';
-        comp.userModules = [{}];
-        spyOn(comp, 'generateWidgetList');
-        comp.getModelsList();
-        expect(comp.modulesList).toEqual([]);
-        expect(comp.generateWidgetList).toHaveBeenCalled();
+  describe('selectModule method', () => {
+    it('should call getLastPosition', () => {
+      let widget = {
+        id: '123',
+      };
+      spyOn(comp, 'getLastPosition').and.returnValue(1);
+      comp.selectModule(widget);
+      expect(comp.userModelData).toEqual({
+        dashboard_module: '123',
+        position: 2,
+        ui_config: {}
+      });
+      expect(comp.selectedWidget).toEqual(widget);
     });
   });
 
@@ -150,11 +165,12 @@ describe('DashboardComponent', () => {
           ui_config: {}
         };
         spyOn(modal, 'closeModal');
-        spyOn(comp, 'getUserModules');
-        spyOn(comp, 'getLastPosition').and.returnValue(0);
-        comp.addModule(widget, modal.closeModal);
+        spyOn(comp.changeWidgetList, 'emit');
+        comp.addModule(modal.closeModal);
         expect(modal.closeModal).toHaveBeenCalled();
-        expect(comp.getUserModules).toHaveBeenCalled();
+        expect(comp.changeWidgetList.emit).toHaveBeenCalledWith({
+          changed: true
+        });
     });
   });
 
@@ -164,25 +180,11 @@ describe('DashboardComponent', () => {
         id: '123'
       };
       comp.userModelsEndpoint = '/ecore/api/v2/endless-core/userdashboardmodules/';
-      spyOn(comp, 'getUserModules');
+      spyOn(comp.changeWidgetList, 'emit');
       comp.removeModule(widget);
-      expect(comp.getUserModules).toHaveBeenCalled();
-    });
-  });
-
-  describe('getUserModules method', () => {
-    it('should update userModules property', () => {
-        response = {
-          results: []
-        };
-        comp.userModelsEndpoint = '/ecore/api/v2/endless-core/dashboardmodules/';
-        comp.modulesList = [{}];
-        spyOn(comp, 'generateWidgetList');
-        comp.getUserModules();
-        expect(comp.widgets).toEqual([]);
-        expect(comp.widgetList).toEqual([]);
-        expect(comp.userModules).toEqual([]);
-        expect(comp.generateWidgetList).toHaveBeenCalled();
+      expect(comp.changeWidgetList.emit).toHaveBeenCalledWith({
+          changed: true
+        });
     });
   });
 
@@ -218,7 +220,9 @@ describe('DashboardComponent', () => {
             name: 'Company Contact'
           },
           position: 2,
-          ui_config: {},
+          ui_config: {
+            display_on_navbar: true
+          },
           __str__: 'Director Mr. Tom Smith: Company Contact'
         }
       ];
@@ -354,16 +358,6 @@ describe('DashboardComponent', () => {
       ];
       let result = comp.getLinkByEndpoint(pagesList, endpoint);
       expect(result).toEqual(pagesList[0].url);
-    });
-  });
-
-  describe('getPagesList method', () => {
-    it('should call methods for get widgets', () => {
-      spyOn(comp, 'getModelsList');
-      spyOn(comp, 'getUserModules');
-      comp.getPagesList();
-      expect(comp.getModelsList).toHaveBeenCalled();
-      expect(comp.getUserModules).toHaveBeenCalled();
     });
   });
 

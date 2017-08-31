@@ -62,30 +62,6 @@ describe('NavigationComponent', () => {
     });
   });
 
-  describe('getPagesList method', () => {
-    it('should get list of pages',
-      async(inject([NavigationService], (navidationService: NavigationService) => {
-        pages = [
-          {
-            name: 'Contact',
-            url: '/contact/',
-            endpoint: '/ecore/api/v2/contacts',
-            __str__: 'Contact',
-            childrens: []
-          },
-          {
-            name: 'Login',
-            url: '/login/',
-            endpoint: '/ecore/api/v2/login',
-            __str__: 'Login',
-            childrens: []
-          }
-        ];
-        comp.getPagesList();
-        expect(comp.pages).toEqual(pages);
-    })));
-  });
-
   describe('ngAfterContentChecked', () => {
     it('should get height of page header', () => {
       comp.header = {
@@ -118,12 +94,11 @@ describe('NavigationComponent', () => {
             }
           };
           storage.store('contact', userInfo);
-          spyOn(comp, 'getPagesList');
           comp.getUserInformation();
           expect(comp.greeting).toEqual(`Welcome, ${response.__str__}`);
           expect(comp.userPicture).toEqual(response.picture.thumb);
           expect(comp.user).toEqual(response);
-          expect(comp.getPagesList).toHaveBeenCalled();
+          storage.clear('contact');
     })));
   });
 

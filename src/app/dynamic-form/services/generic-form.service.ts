@@ -1,56 +1,77 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+
+import { CookieService } from 'angular2-cookie/core';
 
 @Injectable()
 export class GenericFormService {
 
   constructor(
-    private http: Http
+    private http: Http,
+    private cookie: CookieService
   ) { }
 
   public getByQuery(endpoint, query) {
-    return this.http.get(`${endpoint}${query}`)
+    let headers = new Headers();
+    this.updateHeaders(headers);
+    return this.http.get(`${endpoint}${query}`, { headers })
       .map((response: Response) => response.json())
       .catch((error: any) => this.errorHandler(error));
   }
 
   public getAll(endpoint) {
-    return this.http.get(endpoint)
+    let headers = new Headers();
+    this.updateHeaders(headers);
+    return this.http.get(endpoint, { headers })
       .map((response: Response) => response.json())
       .catch((error: any) => this.errorHandler(error));
   }
 
   public getMetadata(endpoint, query = '') {
-    return this.http.options(`${endpoint}${query}`)
+    let headers = new Headers();
+    this.updateHeaders(headers);
+    return this.http.options(`${endpoint}${query}`, { headers })
       .map((response: Response) => response.json())
       .catch((error: any) => this.errorHandler(error));
   }
 
   public submitForm(endpoint, data) {
-    return this.http.post(endpoint, data)
+    let headers = new Headers();
+    this.updateHeaders(headers);
+    return this.http.post(endpoint, data, { headers })
       .map((response: Response) => response.json())
       .catch((error: any) => this.errorHandler(error));
   }
 
   public editForm(endpoint, data) {
-    return this.http.put(endpoint, data)
+    let headers = new Headers();
+    this.updateHeaders(headers);
+    return this.http.put(endpoint, data, { headers })
       .map((response: Response) => response.json())
       .catch((error: any) => this.errorHandler(error));
   }
 
   public callAction(endpoint, data) {
-    return this.http.post(endpoint, data)
+    let headers = new Headers();
+    this.updateHeaders(headers);
+    return this.http.post(endpoint, data, { headers })
       .map((response: Response) => response.json())
       .catch((error: any) => this.errorHandler(error));
   }
 
   public delete(endpoint, id) {
-    return this.http.delete(`${endpoint}${id}/`)
+    let headers = new Headers();
+    this.updateHeaders(headers);
+    return this.http.delete(`${endpoint}${id}/`, { headers })
       .map((response: Response) => response.json())
       .catch((error: any) => this.errorHandler(error));
+  }
+
+  public updateHeaders(headers) {
+    headers.append('X-CSRFToken', this.cookie.get('csrftoken'));
   }
 
   public errorHandler(error) {

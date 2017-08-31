@@ -110,7 +110,10 @@ export class FilterService {
     if (first) {
       filters.forEach((el) => {
         if (el.type === 'related') {
-          this.gfs.getByQuery(el.data.endpoint, '?limit=-1&fields=__str__&fields=id').subscribe(
+          let value = (el.data && el.data.value) ? el.data.value : '__str__';
+          let key = (el.data && el.data.key) ? el.data.key : 'id';
+          this.gfs.getByQuery(el.data.endpoint,
+            `?limit=-1&fields=${value}&fields=${key}`).subscribe(
             (res) => el.options = res.results
           );
         }
