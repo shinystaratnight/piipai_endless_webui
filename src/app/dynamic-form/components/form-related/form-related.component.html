@@ -1,6 +1,6 @@
-<div class="form-group" [formGroup]="group">
+<div *ngIf="!config.list" class="form-group" [formGroup]="group">
   <div *ngIf="!config.many" style="position: relative">
-    <label [attr.for]="key">{{config.templateOptions.label}}</label>
+    <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
     <div class="d-flex align-items-center">
       <div class="form-control custom-select autocomplete-value"
         [ngClass]="{'active': !config.readonly}"
@@ -54,7 +54,7 @@
   </div>
 
   <div *ngIf="config.many" style="position: relative">
-    <label [attr.for]="key">{{config.templateOptions.label}}</label>
+    <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
     <input type="text" class="form-control custom-select autocomplete-value" autocomplete="off"
       [(ngModel)]="searchValue"
       [ngModelOptions]="{standalone: true}"
@@ -95,6 +95,57 @@
   </div>
   <div *ngIf="message">
     <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
+  </div>
+</div>
+
+<div class="mb-2" *ngIf="config.list">
+  <h5 class="bg-primary text-white mb-0">
+    <i
+      fa
+      class="p-2"
+      [name]="isCollapsed ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      aria-controls="collapseExample"
+      style="cursor: pointer"></i>
+        {{config.templateOptions.label}}
+  </h5>
+  <div id="collapseExample" [ngbCollapse]="isCollapsed">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th *ngFor="let col of config.metadata">
+            {{col.templateOptions.label}}
+          </th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let object of dataOfList">
+          <td *ngFor="let field of object.metadata;">
+            <ng-container
+              formElement
+              [label]="false"
+              [config]="field"
+              [group]="object.data"
+              (event)="updateValues($event)">
+            </ng-container>
+          </td>
+          <td>
+            <span class="d-flex align-items-center">
+              <i fa class="icon text-danger" title="Delete"
+                [name]="'trash'"
+                (click)="deleteObject(object)"></i>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <a href="#" (click)="addObject($event)">
+        <i fa [name]="'plus'" class="icon text-success"></i>
+        Add {{config.templateOptions.label}}
+    </a>
   </div>
 </div>
 

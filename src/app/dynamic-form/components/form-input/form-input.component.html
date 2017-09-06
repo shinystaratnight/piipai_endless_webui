@@ -1,5 +1,5 @@
 <div class="form-group" [formGroup]="group" style="position: relative">
-  <label [attr.for]="key" *ngIf="config.templateOptions.label">
+  <label [attr.for]="key" *ngIf="label && config.templateOptions.label">
     {{config.templateOptions.label}}
   </label>
   <input

@@ -10,6 +10,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
+import { GenericFormService } from './../../services/generic-form.service';
+
 @Component({
   selector: 'form-related',
   templateUrl: 'form-related.component.html'
@@ -46,16 +48,20 @@ export class FormRelatedComponent
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
 
+  public dataOfList: any;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private genericFormService: GenericFormService
   ) { super(); }
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
+    this.generateDataForList(this.config);
     this.display =
       this.config.templateOptions.display ? this.config.templateOptions.display : '__str__';
     this.param = this.config.templateOptions.param ? this.config.templateOptions.param : 'id';
@@ -110,6 +116,83 @@ export class FormRelatedComponent
   public ngOnDestroy() {
     if (this.modalRef) {
       this.modalRef.close();
+    }
+  }
+
+  public generateDataForList(config) {
+    this.dataOfList = [];
+    if (config.list && config.metadata) {
+      if (this.config.value) {
+        this.config.value.forEach((el) => {
+          let object = this.createObject();
+          this.fillingForm(object.metadata, el);
+          this.dataOfList.push(object);
+        });
+      } else {
+        let object = this.createObject();
+        this.dataOfList.push(object);
+      }
+    }
+  }
+
+  public createObject() {
+    let object = {
+      data: this.fb.group({}),
+      metadata: []
+    };
+    object.metadata = this.config.metadata.map((el) => {
+      return Object.assign({}, el);
+    });
+    return object;
+  }
+
+  public addObject(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (this.dataOfList) {
+      let object = this.createObject();
+      this.dataOfList.push(object);
+    }
+  }
+
+  public deleteObject(object) {
+    this.genericFormService
+      .delete(this.config.endpoint, object.id)
+      .subscribe(
+        (response: any) => {
+          this.dataOfList.splice(this.dataOfList.indexOf(object), 1);
+        }
+      );
+  }
+
+  public updateValue(e) {
+    let value = this.dataOfList.map((el) => {
+      return el.data.value;
+    });
+    this.group.get(this.config.key).patchValue(value);
+  }
+
+  public fillingForm(metadata, data) {
+    metadata.forEach((el) => {
+      if (el.key) {
+        this.getValueOfData(data, el.key, el);
+      } else if (el.children) {
+        this.fillingForm(el.children, data);
+      }
+    });
+  }
+
+  public getValueOfData(data, key, obj) {
+    let keys = key.split('.');
+    let prop = keys.shift();
+    if (keys.length === 0) {
+      if (data) {
+        obj['value'] = data[key];
+      }
+    } else {
+      if (data[prop]) {
+        this.getValueOfData(data[prop], keys.join('.'), obj);
+      }
     }
   }
 

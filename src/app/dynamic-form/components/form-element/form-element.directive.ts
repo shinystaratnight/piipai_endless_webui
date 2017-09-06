@@ -50,6 +50,9 @@ export class FormElementDirective implements OnInit, OnChanges {
   public config;
 
   @Input()
+  public label = true;
+
+  @Input()
   public group: FormGroup;
 
   @Input()
@@ -74,6 +77,7 @@ export class FormElementDirective implements OnInit, OnChanges {
   public ngOnChanges() {
     if (this.component) {
       this.component.instance.config = this.config;
+      this.component.instance.label = this.label;
       this.component.instance.group = this.group;
       this.component.instance.errors = this.errors;
       this.component.instance.event = this.event;
@@ -97,6 +101,7 @@ export class FormElementDirective implements OnInit, OnChanges {
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;
+      this.component.instance.label = this.label;
       this.component.instance.group = this.group;
       this.component.instance.errors = this.errors;
       this.component.instance.event = this.event;

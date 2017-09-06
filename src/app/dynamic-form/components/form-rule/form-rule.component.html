@@ -1,5 +1,5 @@
 <div class="form-group">
-  <label>{{config.templateOptions.label}}</label>
+  <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
 
   <div class="card p-2 mb-3">
     <dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></dynamic-form>

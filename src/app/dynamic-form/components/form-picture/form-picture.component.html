@@ -1,5 +1,5 @@
 <div class="form-group">
-  <label>{{config.templateOptions.label}}</label>
+  <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
   <input
     #picture
     accept="image/*"

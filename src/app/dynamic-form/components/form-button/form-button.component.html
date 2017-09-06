@@ -1,5 +1,5 @@
 <div class="form-group" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap">
-  <label class="mr-1" *ngIf="config.templateOptions.label">{{config.templateOptions.label}}</label>
+  <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
   <button
     [ngClass]="{'btn-sm': config.templateOptions.small, 'px-2': config.templateOptions.p, 'pl-4 pr-4': !config.templateOptions.p}"
     class="btn btn-primary mt-1 mb-1"

@@ -240,6 +240,22 @@ export class GenericFormComponent implements OnChanges {
     this.buttonAction.emit(e);
   }
 
+  public getRelatedMetadata(metadata, key, endpoint) {
+    this.service.getMetadata(endpoint, '?type=form').subscribe(
+      (response: any) => {
+        this.parseMetadata(metadata, {
+          [key]: {
+            action: 'add',
+            data: {
+              metadata: response
+            }
+          }
+        });
+        this.getData(response);
+      }
+    );
+  }
+
   public getRalatedData
     (metadata, key, endpoint, fields, query = null, param = 'options', update = true) {
     let currentQuery = query;
@@ -328,6 +344,9 @@ export class GenericFormComponent implements OnChanges {
             fields.code2 = 'code2';
           }
           this.getRalatedData(metadata, el.key, el.endpoint, fields, '?limit=-1');
+          if (el.list) {
+            this.getRelatedMetadata(metadata, el.key, el.endpoint);
+          }
         }
       } else if (el.children) {
         this.getData(el.children, key, query);

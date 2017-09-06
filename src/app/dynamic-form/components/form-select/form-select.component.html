@@ -1,5 +1,5 @@
 <div class="form-group" [formGroup]="group">
-  <label [attr.for]="key">{{config.templateOptions.label}}</label>
+  <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
   <select
     class="form-control custom-select"
     #select

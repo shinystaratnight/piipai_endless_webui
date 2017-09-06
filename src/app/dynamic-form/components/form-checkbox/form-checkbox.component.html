@@ -10,7 +10,7 @@
         [attr.id]="key"
         [attr.name]="key">
       <i fa class="text-success mr-1"
-        *ngIf="config.read_only"
+        *ngIf="label && config.read_only"
         [name]="'check-square-o'"></i>
         {{config.templateOptions.label}}
     </label>
