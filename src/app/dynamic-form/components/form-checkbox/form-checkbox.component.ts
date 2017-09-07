@@ -18,6 +18,7 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
   public message: any;
   public key: any;
   public value = true;
+  public label: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -28,7 +29,9 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
-    this.group.get(this.key).patchValue(false);
+    if (!this.group.get(this.key).value) {
+      this.group.get(this.key).patchValue(false);
+    }
     if (this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
     }

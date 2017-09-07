@@ -23,6 +23,7 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   public errors: any;
   public message: any;
   public key: any;
+  public label: boolean;
   public photoExist: boolean = false;
   public mime: string;
   public fileName: string = '';

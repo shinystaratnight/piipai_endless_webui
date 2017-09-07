@@ -5,6 +5,9 @@ import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormRelatedComponent } from './form-related.component';
+import { GenericFormService } from './../../services/generic-form.service';
+
+import { Observable } from 'rxjs/Observable';
 
 describe('FormRelatedComponent', () => {
   let fixture: ComponentFixture<FormRelatedComponent>;
@@ -34,12 +37,21 @@ describe('FormRelatedComponent', () => {
   };
   let errors = {};
 
+  const mockGenericFormService = {
+    delete() {
+      return Observable.of(true);
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         FormRelatedComponent
       ],
-      providers: [FormBuilder],
+      providers: [
+        FormBuilder,
+        { provide: GenericFormService, useValue: mockGenericFormService }
+      ],
       imports: [ReactiveFormsModule, FormsModule, NgbModule.forRoot()],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
@@ -67,12 +79,17 @@ describe('FormRelatedComponent', () => {
       comp.config = config;
       comp.config.query = '?country=';
       comp.config.id = 2;
+      comp.key = comp.config.key;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(''));
       spyOn(comp, 'addControl');
+      spyOn(comp, 'generateDataForList');
       comp.ngOnInit();
       expect(comp.display).toEqual('__str__');
       expect(comp.param).toEqual('id');
       expect(comp.results).toEqual([]);
       expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
+      expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config);
       expect(comp.config.currentQuery).toEqual('?country=2');
     })));
 
@@ -161,6 +178,157 @@ describe('FormRelatedComponent', () => {
       expect(comp.results).toEqual(config.value);
     })));
 
+  });
+
+  describe('generateDataForList method', () => {
+    it('should create empty list', () => {
+      comp.config = config;
+      comp.config.metadata = [];
+      comp.config.list = true;
+      comp.config.value = undefined;
+      spyOn(comp, 'createObject').and.returnValue({});
+      comp.generateDataForList(comp.config);
+      expect(comp.createObject).toHaveBeenCalled();
+      expect(comp.dataOfList).toEqual([{}]);
+    });
+
+    it('should create list by value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.config.metadata = [];
+      comp.config.list = true;
+      comp.config.value = [
+        {
+          id: 1
+        },
+        {
+          id: 2
+        }
+      ];
+      comp.key = comp.config.key;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.config.key, fb.control(''));
+      spyOn(comp, 'createObject').and.returnValue({});
+      spyOn(comp, 'fillingForm');
+      comp.generateDataForList(comp.config);
+      expect(comp.createObject).toHaveBeenCalled();
+      expect(comp.fillingForm).toHaveBeenCalled();
+      expect(comp.dataOfList).toEqual([
+        {id: 2},
+        {id: 2}
+      ]);
+      expect(comp.group.get(comp.config.key).value).toEqual(comp.config.value);
+    })));
+  });
+
+  describe('createObject method', () => {
+    it('create new object of list', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.config.metadata = [{}];
+      let result = comp.createObject();
+      expect(result).toBeDefined();
+      expect(result.data).toBeDefined();
+      expect(result.metadata).toEqual([{}]);
+    })));
+  });
+
+  describe('addObject method', () => {
+    it('should add new empty object into list', () => {
+      let event = {
+        preventDefault() {
+          return true;
+        },
+        stopPropagation() {
+          return true;
+        }
+      };
+      comp.config = config;
+      comp.dataOfList = [];
+      spyOn(comp, 'createObject').and.returnValue({});
+      spyOn(event, 'preventDefault');
+      spyOn(event, 'stopPropagation');
+      comp.addObject(event);
+      expect(comp.createObject).toHaveBeenCalled();
+      expect(comp.dataOfList.length).toEqual(1);
+    });
+  });
+
+  describe('deleteObject method', () => {
+    it('should delete objectfrom list', () => {
+      let object = {
+        id: 2
+      };
+      comp.config = config;
+      comp.dataOfList = [];
+      comp.dataOfList.push(object);
+      comp.deleteObject(object);
+      expect(comp.dataOfList.length).toEqual(0);
+    });
+  });
+
+  describe('updateValue method', () => {
+    it('should update value of element', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let event = {};
+      comp.config = config;
+      comp.key = comp.config.key;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.config.key, fb.control(''));
+      comp.dataOfList = [
+        {
+          id: 1,
+          data: {
+            value: {
+              first_name: 'Tom',
+              last_name: 'Smith'
+            }
+          }
+        }
+      ];
+      comp.updateValue(event);
+      expect(comp.group.get(comp.config.key).value).toEqual([
+        {
+          first_name: 'Tom',
+          last_name: 'Smith',
+          id: 1
+        }
+      ]);
+    })));
+  });
+
+  describe('fillingForm method', () => {
+    it('should filling form by data', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let metadata = [
+        {
+          children: [
+            {
+              key: 'address.city'
+            }
+          ]
+        }
+      ];
+      let data = {
+        address: {
+          city: 'Sydney'
+        }
+      };
+      let group = fb.group({});
+      comp.fillingForm(metadata, data, group);
+      expect(group.get('address').get('city').value).toEqual('Sydney');
+    })));
+  });
+
+  describe('getValueOfData method', () => {
+    it('should set value by key', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let data = {
+        address: {
+          city: 'Sydney'
+        }
+      };
+      let object = <any> {};
+      let key = 'address.city';
+      let group = fb.group({});
+      comp.getValueOfData(data, key, group);
+      expect(group.get('address').get('city').value).toEqual('Sydney');
+    })));
   });
 
   describe('onModalScrollDown method', () => {

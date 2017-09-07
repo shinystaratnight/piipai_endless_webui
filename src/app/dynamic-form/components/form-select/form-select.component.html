@@ -8,7 +8,7 @@
     [attr.id]="key"
     [attr.name]="key">
       <option class="text-muted" value="" [disabled]="true">{{config.templateOptions.label ? config.templateOptions.label : ''}}</option>
-      <option *ngFor="let option of config.templateOptions.options" [attr.value]="option.value" [selected]="group.get(key).value === option.value">{{option.label}}</option>
+      <option *ngFor="let option of config.templateOptions.options" [attr.value]="option.value" [selected]="group.get(key).value == option.value">{{option.label}}</option>
   </select>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}

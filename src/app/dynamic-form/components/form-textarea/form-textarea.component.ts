@@ -16,6 +16,7 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
   public errors: any;
   public message: any;
   public key: any;
+  public label: boolean;
 
   constructor(
     private fb: FormBuilder

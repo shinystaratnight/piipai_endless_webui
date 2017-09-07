@@ -53,12 +53,15 @@ describe('FormDatepickerComponent', () => {
 
   describe('ngOnInit method', () => {
 
-    it('should called addControl method', async(() => {
+    it('should called addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
+      comp.key = comp.config.key;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.config.key, fb.control(undefined));
       spyOn(comp, 'addControl');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
-    }));
+    })));
 
   });
 

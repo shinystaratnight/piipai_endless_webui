@@ -585,6 +585,24 @@ describe('GenericFormComponent', () => {
 
     });
 
+    describe('getRelatedMetadata method', () => {
+      it('should get metadata of related elements', () => {
+        metadata = [];
+        response.status = 'success';
+        let testMetadata = [
+          {
+            key: 'skill'
+          }
+        ];
+        let key = 'skill';
+        let endpoint = 'some endpoint';
+        spyOn(comp, 'getData');
+        comp.getRelatedMetadata(testMetadata, key, endpoint);
+        expect(comp.getData).toHaveBeenCalled();
+        expect(testMetadata[0]['metadata']).toEqual(metadata);
+      });
+    });
+
     describe('getRalatedData method', () => {
 
       it('should be defined', async(() => {

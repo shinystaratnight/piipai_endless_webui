@@ -53,7 +53,9 @@ export class BasicElementComponent {
   private addControls(group, keys: string[], fb) {
     const el = keys.shift();
     if (keys.length === 0) {
-      this.addElement(group, el, fb);
+      if (!group.get(el)) {
+        this.addElement(group, el, fb);
+      }
       this.key = el;
       this.group = group;
     } else if (!group.get(el)) {

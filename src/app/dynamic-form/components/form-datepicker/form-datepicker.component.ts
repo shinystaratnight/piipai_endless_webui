@@ -22,6 +22,7 @@ export class FormDatepickerComponent
   public key: any;
   public time: any;
   public date: any;
+  public label: boolean;
 
   constructor(
     private fb: FormBuilder
@@ -29,8 +30,10 @@ export class FormDatepickerComponent
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
-    if (this.config.value) {
-      this.setDate(this.config.value, moment);
+    if (this.config.value || this.group.get(this.key).value) {
+      let data = this.config.value ? this.config.value :
+        this.group.get(this.key).value;
+      this.setDate(data, moment);
     }
   }
 

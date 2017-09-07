@@ -9,6 +9,7 @@ import { FormGroup } from '@angular/forms';
 export class FormButtonComponent {
   public config;
   public group: FormGroup;
+  public label: boolean;
 
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();

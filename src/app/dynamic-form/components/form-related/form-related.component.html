@@ -112,13 +112,13 @@
         {{config.templateOptions.label}}
   </h5>
   <div id="collapseExample" [ngbCollapse]="isCollapsed">
-    <table class="table table-bordered">
+    <table *ngIf="dataOfList" class="table table-bordered">
       <thead>
         <tr>
           <th *ngFor="let col of config.metadata">
             {{col.templateOptions.label}}
           </th>
-          <th>&nbsp;</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -129,11 +129,11 @@
               [label]="false"
               [config]="field"
               [group]="object.data"
-              (event)="updateValues($event)">
+              (event)="updateValue($event)">
             </ng-container>
           </td>
           <td>
-            <span class="d-flex align-items-center">
+            <span class="d-flex align-items-center justify-content-center">
               <i fa class="icon text-danger" title="Delete"
                 [name]="'trash'"
                 (click)="deleteObject(object)"></i>
@@ -142,7 +142,7 @@
         </tr>
       </tbody>
     </table>
-    <a href="#" (click)="addObject($event)">
+    <a *ngIf="dataOfList" href="#" (click)="addObject($event)">
         <i fa [name]="'plus'" class="icon text-success"></i>
         Add {{config.templateOptions.label}}
     </a>
