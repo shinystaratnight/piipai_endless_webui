@@ -304,7 +304,9 @@ describe('DynamicListComponent', () => {
       let body = [{
         id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
         __str__: 'Test Testovich',
-        highlight: true,
+        highlight: {
+          highlight: true
+        },
         content: [
           {
             id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -875,6 +877,19 @@ describe('DynamicListComponent', () => {
       let values = config.list.highlight.values;
       comp.addHighlight(field, elem, row, values);
       expect(row.highlight).toBeTruthy();
+    }));
+
+    it('should add object with color for highlight', async(() => {
+      let field = 'is_available';
+      let elem = data.results[0];
+      let row = {
+        highlight: undefined
+      };
+      let values = {
+        true: 'green'
+      };
+      comp.addHighlight(field, elem, row, values);
+      expect(row.highlight.color).toEqual('green');
     }));
   });
 

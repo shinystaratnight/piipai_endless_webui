@@ -500,7 +500,17 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     let props = prop.split('.');
     let key = props.shift();
     if (props.length === 0) {
-      row.highlight = values[data[prop]];
+      let property = data[prop];
+      row.highlight = false;
+      if (typeof values[property] === 'boolean') {
+        row.highlight = {
+          highlight: true
+        };
+      } else if (property) {
+        row.highlight = {
+          color: values[property]
+        };
+      }
     } else {
       this.addHighlight(props.join('.'), data[key], row, values);
     }
