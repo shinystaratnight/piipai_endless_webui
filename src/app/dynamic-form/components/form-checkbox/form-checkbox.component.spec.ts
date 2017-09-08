@@ -10,14 +10,21 @@ describe('FormCheckboxComponent', () => {
   let comp: FormCheckboxComponent;
   let el;
   let config = {
-    type: 'checkbox',
-    key: 'is_available',
-    templateOptions: {
-      label: 'test',
       type: 'checkbox',
-      required: true
-    }
-  };
+      key: 'is_available',
+      read_only: true,
+      value: false,
+      templateOptions: {
+        label: 'Test',
+        required: true,
+        type: 'icon',
+        values: {
+          true: 'check-circle',
+          false: 'times-circle',
+          null: 'minus-circle'
+        }
+      }
+    };
   let errors = {};
 
   beforeEach(() => {
@@ -56,9 +63,11 @@ describe('FormCheckboxComponent', () => {
       comp.group = form;
       comp.config = config;
       spyOn(comp, 'addControl');
+      spyOn(comp, 'setValue');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
-      expect(comp.group.get(comp.key).patchValue(false));
+      expect(comp.setValue).toHaveBeenCalled();
+      expect(comp.group.get(comp.key).value).toBeFalsy();
     })));
 
     it('should update value', async(inject([FormBuilder], (fb: FormBuilder) => {
@@ -70,6 +79,32 @@ describe('FormCheckboxComponent', () => {
       expect(comp.group.get(comp.config.key).value).toBeTruthy();
     })));
 
+  });
+
+  describe('setValue method', () => {
+    it('should set value and "text-success" class for checkbox', () => {
+      let value = true;
+      comp.config = config;
+      comp.setValue(value);
+      expect(comp.checkboxValue).toEqual('check-circle');
+      expect(comp.checkboxClass).toEqual('text-success');
+    });
+
+    it('should set value and "text-danger" class for checkbox', () => {
+      let value = false;
+      comp.config = config;
+      comp.setValue(value);
+      expect(comp.checkboxValue).toEqual('times-circle');
+      expect(comp.checkboxClass).toEqual('text-danger');
+   });
+
+    it('should set value and "text-muted" class for checkbox', () => {
+      let value = null;
+      comp.config = config;
+      comp.setValue(value);
+      expect(comp.checkboxValue).toEqual('minus-circle');
+      expect(comp.checkboxClass).toEqual('text-muted');
+    });
   });
 
   describe('ngAfterViewInit method', () => {
