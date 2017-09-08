@@ -19,6 +19,18 @@ describe('DynamicListComponent', () => {
         },
         field: 'company.type'
       },
+      tabs: [
+        {
+          label: 'Contact',
+          fields: ['gender', 'phone_modile'],
+          is_collapsed: false
+        },
+        {
+          label: 'Branch',
+          fields: ['branch'],
+          is_collapsed: true
+        }
+      ],
       columns: [
         {
           name: 'first_name',
@@ -211,11 +223,13 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'resetSelectedElements');
       spyOn(comp, 'getSortedColumns');
       spyOn(comp, 'unpopedTable');
+      spyOn(comp, 'updateMetadataByTabs');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.resetSelectedElements).toHaveBeenCalled();
       expect(comp.getSortedColumns).toHaveBeenCalled();
       expect(comp.unpopedTable).toHaveBeenCalled();
+      expect(comp.updateMetadataByTabs).toHaveBeenCalled();
     }));
 
     it('should update datatable', async(() => {
@@ -224,11 +238,13 @@ describe('DynamicListComponent', () => {
       comp.active = false;
       comp.id = 5;
       spyOn(comp, 'initPagination');
+      spyOn(comp, 'updateMetadataByTabs');
       comp.ngOnChanges();
       expect(+comp.datatable.nativeElement.style.zIndex).toEqual(25);
       comp.active = true;
       comp.ngOnChanges();
       expect(+comp.datatable.nativeElement.style.zIndex).toEqual(100);
+      expect(comp.updateMetadataByTabs).toHaveBeenCalled();
     }));
 
     it('should call updateSort method', async(() => {
@@ -242,12 +258,14 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'updateSort');
       spyOn(comp, 'resetSort');
       spyOn(comp, 'initPagination');
+      spyOn(comp, 'updateMetadataByTabs');
       comp.ngOnChanges();
       expect(comp.sortedColumns).toEqual(comp.sorted);
       expect(comp.updateSort).toHaveBeenCalled();
       comp.sorted = {};
       comp.ngOnChanges();
       expect(comp.resetSort).toHaveBeenCalled();
+      expect(comp.updateMetadataByTabs).toHaveBeenCalled();
     }));
 
     it('should create body for inner tables', async(() => {
@@ -275,8 +293,10 @@ describe('DynamicListComponent', () => {
       comp.data = {};
       spyOn(comp, 'prepareData');
       spyOn(comp, 'initPagination');
+      spyOn(comp, 'updateMetadataByTabs');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
+      expect(comp.updateMetadataByTabs).toHaveBeenCalled();
     }));
 
   });
@@ -298,9 +318,45 @@ describe('DynamicListComponent', () => {
     })));
   });
 
+  describe('changeTab method', () => {
+    it('should not change status of tab', () => {
+      comp.tabs = config.list.tabs;
+      let tab = comp.tabs[0];
+      comp.changeTab(tab);
+      expect(tab.is_collapsed).toBeFalsy();
+    });
+
+    it('should change status of tab', () => {
+      comp.tabs = config.list.tabs;
+      let tab = comp.tabs[1];
+      comp.changeTab(tab);
+      expect(tab.is_collapsed).toBeFalsy();
+    });
+  });
+
+  describe('getTabOfColumn method', () => {
+    it('should return tab of tabs by name of column', () => {
+      comp.tabs = config.list.tabs;
+      let name = 'gender';
+      let tab = comp.getTabOfColumn(name);
+      expect(tab).toEqual(comp.tabs[0]);
+    });
+  });
+
+  describe('updateMetadataByTabs method', () => {
+    it('should add tab proporty for all column', () => {
+      comp.config = config;
+      spyOn(comp, 'getTabOfColumn');
+      comp.updateMetadataByTabs(comp.config.list.columns);
+      expect(comp.getTabOfColumn).toHaveBeenCalledTimes(4);
+    });
+  });
+
   describe('prepareData method', () => {
 
     it('should prepare data for body', async(() => {
+      comp.config = config;
+      comp.tabs = config.list.tabs;
       let body = [{
         id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
         __str__: 'Test Testovich',
@@ -312,6 +368,7 @@ describe('DynamicListComponent', () => {
             id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'First Name',
             name: 'first_name',
+            tab: undefined,
             content: [
               {
                 rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -333,6 +390,7 @@ describe('DynamicListComponent', () => {
             id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'Branch',
             name: 'branch',
+            tab: undefined,
             content: [
               {
                 rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -369,6 +427,7 @@ describe('DynamicListComponent', () => {
             id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'Gender',
             name: 'gender',
+            tab: undefined,
             content: [
               {
                 rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -384,6 +443,7 @@ describe('DynamicListComponent', () => {
             id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'Mobile Phone',
             name: 'phone_mobile',
+            tab: undefined,
             content: [
               {
                 rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -422,6 +482,7 @@ describe('DynamicListComponent', () => {
           }
         ]
       }];
+      spyOn(comp, 'getTabOfColumn').and.returnValue(undefined);
       let result = comp.prepareData(config.list.columns, data.results, config.list.highlight);
       expect(result).toEqual(body);
     }));

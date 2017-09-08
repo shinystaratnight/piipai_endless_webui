@@ -241,17 +241,17 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public getRelatedMetadata(metadata, key, endpoint) {
-    this.service.getMetadata(endpoint, '?type=form').subscribe(
+    this.service.getMetadata(endpoint, '?type=formset').subscribe(
       (response: any) => {
         this.parseMetadata(metadata, {
           [key]: {
             action: 'add',
             data: {
-              metadata: response
+              metadata: response.fields
             }
           }
         });
-        this.getData(response);
+        this.getData(response.fields);
       }
     );
   }
@@ -295,10 +295,10 @@ export class GenericFormComponent implements OnChanges {
             if (this.workflowData.company &&
               this.workflowData.number &&
               this.workflowData.workflow && update) {
-              this.updateMetadata(this.metadata, key);
+              this.updateMetadata(metadata, key);
             }
           } else if (update) {
-            this.updateMetadata(this.metadata, key);
+            this.updateMetadata(metadata, key);
           }
         });
     } else {

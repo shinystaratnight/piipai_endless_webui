@@ -9,6 +9,15 @@ $cell-datatable-width: 40%;
 .datatable {
   background-color: $datatable-background-color;
 
+  .tabs .tab {
+    cursor: pointer;
+    color: $gray-light;
+
+    &:hover {
+      color: $gray-dark;
+    }
+  }
+
   .table-wrapper {
     position: relative;
 

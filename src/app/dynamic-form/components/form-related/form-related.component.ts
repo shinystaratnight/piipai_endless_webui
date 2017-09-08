@@ -166,6 +166,7 @@ export class FormRelatedComponent
         .subscribe(
           (response: any) => {
             this.dataOfList.splice(this.dataOfList.indexOf(object), 1);
+            this.updateValue(undefined);
           }
         );
     }

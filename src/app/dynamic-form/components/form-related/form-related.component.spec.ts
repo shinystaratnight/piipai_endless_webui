@@ -260,8 +260,10 @@ describe('FormRelatedComponent', () => {
       comp.config = config;
       comp.dataOfList = [];
       comp.dataOfList.push(object);
+      spyOn(comp, 'updateValue');
       comp.deleteObject(object);
       expect(comp.dataOfList.length).toEqual(0);
+      expect(comp.updateValue).toHaveBeenCalled();
     });
   });
 

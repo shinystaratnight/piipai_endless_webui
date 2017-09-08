@@ -89,6 +89,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   public innerTableCall: any;
   public modalRef: any;
   public refreshing: boolean = false;
+  public tabs: any;
 
   constructor(
     private filterService: FilterService,
@@ -110,6 +111,12 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     let config = this.config;
     let data = this.data;
     let innerTables = this.innerTables;
+    if (!this.tabs) {
+      this.tabs = this.config.list.tabs;
+    }
+    if (config.list.columns) {
+      this.updateMetadataByTabs(config.list.columns);
+    }
     if (data) {
       this.initPagination(data);
     }
@@ -160,6 +167,49 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public changeTab(tab) {
+    if (this.tabs) {
+      this.tabs.forEach((el) => {
+        if (el === tab) {
+          el.is_collapsed = !el.is_collapsed;
+        }
+      });
+      let collapsedTabs = this.tabs.filter((el) => el.is_collapsed);
+      if (collapsedTabs.length === this.tabs.length) {
+        this.tabs.forEach((el) => {
+          if (el === tab) {
+            el.is_collapsed = !el.is_collapsed;
+          }
+        });
+      }
+    }
+  }
+
+  public getTabOfColumn(name) {
+    let tab;
+    if (this.tabs) {
+      let filteredTabs = this.tabs.filter((el) => {
+        let result = false;
+        el.fields.forEach((field) => {
+          if (field === name) {
+            result = true;
+          }
+        });
+        return result;
+      });
+      if (filteredTabs.length) {
+        tab = filteredTabs[0];
+      }
+    }
+    return tab;
+  }
+
+  public updateMetadataByTabs(metadata) {
+    metadata.forEach((el) => {
+      el.tab = this.getTabOfColumn(el.name);
+    });
+  }
+
   public prepareData(config, data, highlight = null) {
     let prepareData = [];
     data.forEach((el) => {
@@ -177,7 +227,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
           label: col.label,
           name: col.name,
           content: [],
-          contextMenu: col.context_menu
+          contextMenu: col.context_menu,
+          tab: this.getTabOfColumn(col.name)
         };
         col.content.forEach((element) => {
           let obj: any = {};

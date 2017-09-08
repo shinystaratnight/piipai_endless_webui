@@ -15,7 +15,7 @@
     [attr.name]="key"
     [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''"
     [readonly]="config.read_only"
-    [value]="config.value ? config.value : group.get(key).value ? group.get(key).value : ''">
+    [value]="config.value === 0 || config.value ? config.value : group.get(key).value === 0 || group.get(key).value ? group.get(key).value : ''">
   <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutocomplete">
     <div class="autocomplete-list"
       infinite-scroll

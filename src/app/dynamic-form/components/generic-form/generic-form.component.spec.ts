@@ -587,7 +587,7 @@ describe('GenericFormComponent', () => {
 
     describe('getRelatedMetadata method', () => {
       it('should get metadata of related elements', () => {
-        metadata = [];
+        metadata = <any> {fields: []};
         response.status = 'success';
         let testMetadata = [
           {
@@ -599,7 +599,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getData');
         comp.getRelatedMetadata(testMetadata, key, endpoint);
         expect(comp.getData).toHaveBeenCalled();
-        expect(testMetadata[0]['metadata']).toEqual(metadata);
+        expect(testMetadata[0]['metadata']).toEqual(metadata['fields']);
       });
     });
 
