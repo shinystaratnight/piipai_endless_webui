@@ -24,6 +24,7 @@ import { FormTimelineComponent } from './../form-timeline/form-timeline.componen
 import { FormPictureComponent } from './../form-picture/form-picture.component';
 import { FormHiddenComponent } from './../../containers/form-hidden/form-hidden.component';
 import { FormVacancyDatesComponent } from './../form-vacancy-dates/form-vacancy-dates.component';
+import { FormListComponent } from './../form-list/form-list.component';
 
 const components = {
   input: FormInputComponent,
@@ -39,7 +40,8 @@ const components = {
   timeline: FormTimelineComponent,
   picture: FormPictureComponent,
   hidden: FormHiddenComponent,
-  vacancydates: FormVacancyDatesComponent
+  vacancydates: FormVacancyDatesComponent,
+  list: FormListComponent
 };
 
 @Directive({

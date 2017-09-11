@@ -44,6 +44,7 @@ import { ListCheckboxComponent } from './components/list-checkbox/list-checkbox.
 import { FilterSelectComponent } from './components/filter-select/filter-select.component';
 import { ListTableComponent } from './components/list-table/list-table.component';
 import { ListImageComponent } from './components/list-image/list-image.copmonent';
+import { FormListComponent } from './components/form-list/form-list.component';
 
 import { ActionElementComponent } from './components/action-element/action-element.component';
 
@@ -98,7 +99,8 @@ import { MoveDirective } from './directives/move.directive';
     WebCamComponent,
     FormHiddenComponent,
     FormVacancyDatesComponent,
-    ListImageComponent
+    ListImageComponent,
+    FormListComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -124,7 +126,8 @@ import { MoveDirective } from './directives/move.directive';
     FormPictureComponent,
     FormHiddenComponent,
     FormVacancyDatesComponent,
-    ListImageComponent
+    ListImageComponent,
+    FormListComponent
   ]
 })
 export class DynamicFormModule { }

@@ -33,9 +33,13 @@
     <h5 class="d-flex justify-content-between align-items-center lead mb-2" *ngIf="config.list && !poped">
       <span>{{config.list.label}}</span>
       <a class="btn btn-primary text-white" routerLink="add"
-        *ngIf="first">
+        *ngIf="first && !inForm">
         Add {{config.list.label}}
       </a>
+      <button class="btn btn-primary"
+        (click)="addObject()">
+        Add {{config.list.label}}
+      </button>
       <i
         fa
         *ngIf="!first"
@@ -90,10 +94,10 @@
             [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
             <td class="text-center">
               <input type="checkbox" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
-              <a *ngIf="first" [routerLink]="[row.id + '/change']">
+              <a *ngIf="first && !inForm" [routerLink]="[row.id + '/change']">
                 <i fa [name]="'pencil'" class="icon text-primary"></i>
               </a>
-              <i fa *ngIf="!first"
+              <i fa *ngIf="!first || inForm"
                 [name]="'pencil'" class="icon text-primary"
                 (click)="editObject(row.id, row.__str__)"></i>
             </td>

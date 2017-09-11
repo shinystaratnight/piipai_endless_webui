@@ -199,22 +199,29 @@ describe('FormRelatedComponent', () => {
       comp.config.value = [
         {
           id: 1
-        },
-        {
-          id: 2
         }
       ];
       comp.key = comp.config.key;
       comp.group = fb.group({});
       comp.group.addControl(comp.config.key, fb.control(''));
-      spyOn(comp, 'createObject').and.returnValue({});
+      spyOn(comp, 'createObject').and.returnValue({
+        data: {
+          id: 1
+        }
+      });
       spyOn(comp, 'fillingForm');
       comp.generateDataForList(comp.config);
       expect(comp.createObject).toHaveBeenCalled();
       expect(comp.fillingForm).toHaveBeenCalled();
       expect(comp.dataOfList).toEqual([
-        {id: 2},
-        {id: 2}
+        {
+          id: 1,
+          data: {
+            value: {
+              id: 1
+            }
+          }
+        }
       ]);
       expect(comp.group.get(comp.config.key).value).toEqual(comp.config.value);
     })));
@@ -330,6 +337,22 @@ describe('FormRelatedComponent', () => {
       let group = fb.group({});
       comp.getValueOfData(data, key, group);
       expect(group.get('address').get('city').value).toEqual('Sydney');
+    })));
+
+    it('should set value by key from Object', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let data = {
+        address: {
+          city: {
+            name: 'Sydney',
+            id: 123
+          }
+        }
+      };
+      let object = <any> {};
+      let key = 'address.city';
+      let group = fb.group({});
+      comp.getValueOfData(data, key, group);
+      expect(group.get('address').get('city').value).toEqual(123);
     })));
   });
 

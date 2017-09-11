@@ -13,6 +13,9 @@ export class GenericListComponent implements OnInit {
   @Input()
   public endpoint: string = '';
 
+  @Input()
+  public inForm: boolean = false;
+
   public metadata: any;
   public data: any;
   public tables = [];
@@ -56,14 +59,18 @@ export class GenericListComponent implements OnInit {
             table.limit = this.limit;
             table.offset = 0;
           }
-          this.route.queryParams.subscribe(
-            (params) => {
-              let target = this.getTable(table.list);
-              if (target.first) {
-                this.parseUrl(params, table.list);
+          if (!this.inForm) {
+            this.route.queryParams.subscribe(
+              (params) => {
+                let target = this.getTable(table.list);
+                if (target.first) {
+                  this.parseUrl(params, table.list);
+                }
               }
-            }
-          );
+            );
+          } else {
+            this.getData(endpoint, table.query, table);
+          }
         }
       }
     );
@@ -139,7 +146,7 @@ export class GenericListComponent implements OnInit {
       if (e.type === 'pagination') {
         table.innerTables = {};
       }
-      if (table.first) {
+      if (table.first && !this.inForm) {
         if (e.type === 'filter') {
           this.updateUrl(table.query, e.list, true);
         } else {
@@ -147,12 +154,14 @@ export class GenericListComponent implements OnInit {
         }
       } else {
         this.getData(this.getTable(e.list).endpoint, this.generateQuery(table.query), table);
-        e.query.split('&').forEach((el) => {
-          let propsArray = el.split('=');
-          if (propsArray[0] === 'offset') {
-            table['offset'] = propsArray[1];
-          }
-        });
+        if (e.query) {
+          e.query.split('&').forEach((el) => {
+            let propsArray = el.split('=');
+            if (propsArray[0] === 'offset') {
+              table['offset'] = propsArray[1];
+            }
+          });
+        }
       }
     } else if (e.type === 'close') {
       this.tables.splice(this.tables.indexOf(table), 1);
@@ -192,7 +201,13 @@ export class GenericListComponent implements OnInit {
   }
 
   public generateQuery(queries) {
-    let result = '?';
+    let patt = /\?/;
+    let result = '';
+    if (patt.test(this.endpoint)) {
+      result = '&';
+    } else {
+      result = '?';
+    }
     let queryList = Object.keys(queries);
     queryList.forEach((el) => {
       if (queries[el]) {
@@ -316,7 +331,8 @@ export class GenericListComponent implements OnInit {
           this.fs.paramsOfFilters = {
             param: name.slice(0, name.indexOf('-')),
             value: queryParams[el],
-            list
+            list,
+            endpoint: this.endpoint
           };
           queryList['filter'] += `${name.slice(0, name.indexOf('-'))}=${queryParams[el]}&`;
         } else if (params[1] === 'p') {

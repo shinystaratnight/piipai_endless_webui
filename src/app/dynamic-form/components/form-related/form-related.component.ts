@@ -126,14 +126,16 @@ export class FormRelatedComponent
   public generateDataForList(config) {
     if (config.list && config.metadata) {
       this.dataOfList = [];
+      let value = [];
       if (this.config.value) {
         this.config.value.forEach((el) => {
           let object = this.createObject();
           object['id'] = el.id;
           this.fillingForm(object.metadata, el, object.data);
+          value.push(object.data.value);
           this.dataOfList.push(object);
         });
-        this.group.get(this.key).patchValue(this.config.value);
+        this.group.get(this.key).patchValue(value);
       } else {
         let object = this.createObject();
         this.dataOfList.push(object);
@@ -198,7 +200,15 @@ export class FormRelatedComponent
     let prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
-        obj.addControl(key, this.fb.control(data[key]));
+        if (data[key] instanceof Object) {
+          if (data[key].id) {
+            obj.addControl(key, this.fb.control(data[key].id));
+          } else {
+            obj.addControl(key, this.fb.control(data[key]));
+          }
+        } else {
+          obj.addControl(key, this.fb.control(data[key]));
+        }
       }
     } else {
       if (data[prop]) {

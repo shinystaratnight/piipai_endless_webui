@@ -59,6 +59,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public endpoint: string;
 
+  @Input()
+  public inForm: boolean = false;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -98,8 +101,11 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit() {
     if (this.config.list.filters) {
-      this.filterService.filters = this.config.list;
-      this.filtersOfList = this.filterService.filters;
+      this.filterService.filters = {
+        endpoint: this.endpoint,
+        list: this.config.list
+      };
+      this.filtersOfList = this.filterService.getFiltersByEndpoint(this.endpoint);
     }
     this.innerTableCall = {
       row: '',
@@ -160,7 +166,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnDestroy() {
     if (this.first) {
-      this.filterService.filters = null;
+      this.filterService.filters = {
+        endpoint: this.endpoint,
+        list: null
+      };
       if (this.modalRef) {
         this.modalRef.close();
       }
@@ -471,7 +480,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public popedTable() {
-    this.filtersOfList = this.filterService.getFiltersOfList(this.config.list.list);
+    this.filtersOfList = this.filterService.getFiltersOfList(this.endpoint, this.config.list.list);
     this.poped = true;
   }
 
@@ -526,6 +535,14 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     this.modalInfo.endpoint = e.endpoint;
     this.modalInfo.label = e.label;
     this.modalInfo.id = e.id;
+    this.open(this.modal, {size: 'lg'});
+  }
+
+  public addObject() {
+    this.modalInfo = {};
+    this.modalInfo.type = 'form';
+    this.modalInfo.endpoint = this.endpoint;
+    this.modalInfo.label = `Add ${this.config.list.label}`;
     this.open(this.modal, {size: 'lg'});
   }
 

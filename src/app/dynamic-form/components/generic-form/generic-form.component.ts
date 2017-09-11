@@ -77,6 +77,10 @@ export class GenericFormComponent implements OnChanges {
 
   public ngOnChanges() {
     if (this.endpoint !== this.currentEndpoint) {
+      let patt = /\?/;
+      if (patt.test(this.endpoint)) {
+        this.endpoint = this.endpoint.slice(0, this.endpoint.indexOf('?'));
+      }
       this.currentEndpoint = this.endpoint;
       this.getMetadata(this.endpoint);
     } else if (this.data && this.metadata) {
@@ -109,6 +113,7 @@ export class GenericFormComponent implements OnChanges {
             this.editForm = true;
             this.show = false;
             this.getDataForForm(this.endpoint, this.id);
+            this.updateElements(this.metadata, 'id', 'list', this.id);
           } else {
             this.show = true;
           }
@@ -547,5 +552,15 @@ export class GenericFormComponent implements OnChanges {
         this.getRalatedData(newMetadata, 'rules', endpoint, null, `?${query.join('&')}`);
       }
     }
+  }
+
+  public updateElements(metadata, param, type, value) {
+    this.metadata.forEach((el) => {
+      if (el.type === type) {
+        el[param] = value;
+      } else if (el.children) {
+        this.updateElements(metadata, param, type, value);
+      }
+    });
   }
 }
