@@ -20,7 +20,7 @@ export class FilterService {
   set filters(filters) {
     if (!this._filters[filters.endpoint]) {
       this._filters[filters.endpoint] = [];
-      if (filters && this.filterList.indexOf(filters.list.list) < 0) {
+      if (filters && filters.list && this.filterList.indexOf(filters.list.list) < 0) {
         this.filterList.push(filters.list.list);
         filters.list.filters.forEach((el) => {
           el.listName = filters.list.list;

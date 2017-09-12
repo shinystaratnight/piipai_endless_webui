@@ -459,6 +459,23 @@ describe('GenericListComponent', () => {
         expect(comp.updateUrl).toHaveBeenCalledWith(table.query, event.list, true);
       }));
 
+      it('should update list', async(() => {
+        let event = {
+          type: 'update',
+          list: 'company'
+        };
+        let table = {
+          list: 'company',
+          first: true,
+          query: {}
+        };
+        comp.tables = [];
+        comp.tables.push(table);
+        spyOn(comp, 'getData');
+        comp.eventHandler(event);
+        expect(comp.getData).toHaveBeenCalled();
+      }));
+
     });
 
     describe('action method', () => {

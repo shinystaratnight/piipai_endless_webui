@@ -416,12 +416,24 @@ describe('FormRelatedComponent', () => {
       comp.modalData = {};
       comp.group.addControl(comp.key, fb.control(''));
       let type = 'add';
-      comp.open(type);
+      let event = {
+        preventDefault() {
+          return true;
+        },
+        stopPropagation() {
+          return true;
+        }
+      };
+      spyOn(event, 'preventDefault');
+      spyOn(event, 'stopPropagation');
+      comp.open(type, event);
       expect(comp.modalData).toEqual({
         type,
         title: comp.config.templateOptions.label,
         endpoint: comp.config.templateOptions.endpoint
       });
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(event.stopPropagation).toHaveBeenCalled();
     })));
 
   });

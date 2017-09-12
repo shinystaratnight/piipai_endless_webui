@@ -1182,5 +1182,21 @@ describe('GenericFormComponent', () => {
         comp.updateElements(config, 'id', 'list', 123);
         expect(config[0].children[0]['id']).toEqual(123);
       });
+
+      it('should update elements for edit form', () => {
+        let prop = 'editForm';
+        let config = [
+          {
+            children: [
+              {
+                type: 'list'
+              }
+            ]
+          }
+        ];
+        comp.updateElements(config, prop, undefined, true);
+        expect(config[0][prop]).toBeTruthy();
+        expect(config[0].children[0][prop]).toBeTruthy();
+      });
     });
 });

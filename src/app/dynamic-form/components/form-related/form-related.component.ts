@@ -234,7 +234,11 @@ export class FormRelatedComponent
     this.displayValue = null;
   }
 
-  public open(type) {
+  public open(type, e = undefined) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     this.modalData = {};
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;

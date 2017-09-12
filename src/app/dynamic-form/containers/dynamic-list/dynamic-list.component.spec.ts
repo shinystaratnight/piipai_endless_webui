@@ -1066,4 +1066,27 @@ describe('DynamicListComponent', () => {
 
   });
 
+  describe('formEvent method', () => {
+    it('should update listafter edit element', () => {
+      let event = {
+        type: 'sendForm',
+        status: 'success'
+      };
+      let test = {
+        closeModal() {
+          return true;
+        }
+      };
+      comp.config = config;
+      spyOn(comp.event, 'emit');
+      spyOn(test, 'closeModal');
+      comp.formEvent(event, test.closeModal);
+      expect(test.closeModal).toHaveBeenCalled();
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'update',
+        list: config.list.list
+      });
+    });
+  });
+
 });

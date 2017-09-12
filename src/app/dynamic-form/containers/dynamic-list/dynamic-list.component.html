@@ -36,7 +36,7 @@
         *ngIf="first && !inForm">
         Add {{config.list.label}}
       </a>
-      <button class="btn btn-primary"
+      <button *ngIf="inForm" class="btn btn-primary"
         (click)="addObject()">
         Add {{config.list.label}}
       </button>
@@ -160,7 +160,7 @@
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
-      <generic-form [endpoint]="modalInfo.endpoint" [id]="modalInfo.id" *ngSwitchCase="'form'">
+      <generic-form [endpoint]="modalInfo.endpoint" [id]="modalInfo.id" *ngSwitchCase="'form'" (event)="formEvent($event, c)">
         <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
       </generic-form>
       <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">

@@ -16,8 +16,10 @@ export class GenericListComponent implements OnInit {
   @Input()
   public inForm: boolean = false;
 
-  public metadata: any;
+  @Input()
   public data: any;
+
+  public metadata: any;
   public tables = [];
   public first: boolean = false;
   public tableId: number = 1;
@@ -140,8 +142,13 @@ export class GenericListComponent implements OnInit {
     if (!table.query) {
       table.query = {};
     }
-    if (e.type === 'sort' || e.type === 'pagination' || e.type === 'filter') {
+    if (e.type === 'sort' || e.type === 'pagination' ||
+      e.type === 'filter' || e.type === 'update') {
       table.refresh = true;
+      if (e.type === 'update') {
+        this.getData(this.getTable(e.list).endpoint, this.generateQuery(table.query), table);
+        return;
+      }
       table.query[e.type] = e.query;
       if (e.type === 'pagination') {
         table.innerTables = {};

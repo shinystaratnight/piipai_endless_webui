@@ -114,6 +114,7 @@ export class GenericFormComponent implements OnChanges {
             this.show = false;
             this.getDataForForm(this.endpoint, this.id);
             this.updateElements(this.metadata, 'id', 'list', this.id);
+            this.updateElements(this.metadata, 'editForm', undefined, true);
           } else {
             this.show = true;
           }
@@ -554,10 +555,15 @@ export class GenericFormComponent implements OnChanges {
     }
   }
 
-  public updateElements(metadata, param, type, value) {
+  public updateElements(metadata, param, type = undefined, value) {
     metadata.forEach((el) => {
-      if (el.type === type) {
+      if (type && el.type === type) {
         el[param] = value;
+      } else if (!type) {
+        el[param] = value;
+        if (el.children) {
+          this.updateElements(el.children, param, type, value);
+        }
       } else if (el.children) {
         this.updateElements(el.children, param, type, value);
       }

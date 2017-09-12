@@ -647,4 +647,14 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public formEvent(e, closeModal) {
+    if (e.type === 'sendForm' && e.status === 'success') {
+      closeModal();
+      this.event.emit({
+        type: 'update',
+        list: this.config.list.list
+      });
+    }
+  }
+
 }
