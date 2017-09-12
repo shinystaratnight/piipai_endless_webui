@@ -302,7 +302,7 @@ describe('DynamicListComponent', () => {
 
   });
 
-  describe('ngOnDestroy', () => {
+  describe('ngOnDestroy method', () => {
     it('should clean filters and close modal',
       async(inject([FilterService], (fs: FilterService) => {
         comp.first = true;
@@ -323,14 +323,45 @@ describe('DynamicListComponent', () => {
     })));
   });
 
-  describe('changeTab method', () => {
-    it('should not change status of tab', () => {
-      comp.tabs = config.list.tabs;
-      let tab = comp.tabs[0];
-      comp.changeTab(tab);
-      expect(tab.is_collapsed).toBeFalsy();
+  describe('ngAfterContentChecked method', () => {
+    it('should call checkOverflow method', () => {
+      spyOn(comp, 'checkOverfow');
+      comp.ngAfterContentChecked();
+      expect(comp.checkOverfow).toHaveBeenCalled();
+    });
+  });
+
+  describe('checkOverflow method', () => {
+    it('should set overflow auto', () => {
+      comp.tableWrapper = {
+        nativeElement: {
+          style: {
+            overflowX: 'visible'
+          },
+          offsetWidth: 500
+        }
+      };
+      comp.config = config;
+      comp.checkOverfow();
+      expect(comp.tableWrapper.nativeElement.style.overflowX).toEqual('auto');
     });
 
+    it('should set overflow visible', () => {
+      comp.tableWrapper = {
+        nativeElement: {
+          style: {
+            overflowX: 'auto'
+          },
+          offsetWidth: 800
+        }
+      };
+      comp.config = config;
+      comp.checkOverfow();
+      expect(comp.tableWrapper.nativeElement.style.overflowX).toEqual('visible');
+    });
+  });
+
+  describe('changeTab method', () => {
     it('should change status of tab', () => {
       comp.tabs = config.list.tabs;
       let tab = comp.tabs[1];

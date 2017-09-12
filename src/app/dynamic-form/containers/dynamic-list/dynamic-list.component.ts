@@ -6,7 +6,8 @@ import {
   EventEmitter,
   OnChanges,
   ViewChild,
-  OnDestroy
+  OnDestroy,
+  AfterContentChecked
 } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +17,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: 'dynamic-list.component.html'
 })
 
-export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
+export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
   @Input()
   public config: any;
 
@@ -73,6 +74,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('datatable')
   public datatable;
+
+  @ViewChild('tableWrapper')
+  public tableWrapper;
 
   public body: any[] = [];
   public select: any;
@@ -176,6 +180,27 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public ngAfterContentChecked() {
+    this.checkOverfow();
+  }
+
+  public checkOverfow() {
+    let width = this.tableWrapper.nativeElement.offsetWidth;
+    let count = 0;
+    this.config.list.columns.forEach((el) => {
+      if (!el.tab) {
+        count += 1;
+      } else if (el.tab && !el.tab.is_collapsed) {
+        count += 1;
+      }
+    });
+    if ((width / count) < 150) {
+      this.tableWrapper.nativeElement.style.overflowX = 'auto';
+    } else {
+      this.tableWrapper.nativeElement.style.overflowX = 'visible';
+    }
+  };
+
   public changeTab(tab) {
     if (this.tabs) {
       this.tabs.forEach((el) => {
@@ -184,13 +209,6 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
       let collapsedTabs = this.tabs.filter((el) => el.is_collapsed);
-      if (collapsedTabs.length === this.tabs.length) {
-        this.tabs.forEach((el) => {
-          if (el === tab) {
-            el.is_collapsed = !el.is_collapsed;
-          }
-        });
-      }
     }
   }
 
@@ -321,7 +339,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
       this.event.emit({
         type: 'sort',
         list: this.config.list.list,
-        sort: this.sortedColumns
+        query: this.sortTable(this.sortedColumns)
       });
     }
   }
