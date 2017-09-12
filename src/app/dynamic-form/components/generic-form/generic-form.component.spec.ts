@@ -105,6 +105,15 @@ describe('GenericFormComponent', () => {
         expect(comp.parseMetadata).toHaveBeenCalledWith(comp.metadata, comp.data);
       }));
 
+      it('should parse endpoint', async(() => {
+        let endpoint = '/ecore/api/v2/contacts/?company=123';
+        comp.endpoint = endpoint;
+        spyOn(comp, 'getMetadata');
+        comp.ngOnChanges();
+        expect(comp.currentEndpoint).toEqual('/ecore/api/v2/contacts/');
+        expect(comp.getMetadata).toHaveBeenCalledWith(comp.endpoint);
+      }));
+
     });
 
     describe('formChange method', () => {
@@ -189,8 +198,10 @@ describe('GenericFormComponent', () => {
         comp.show = true;
         let endpoint = 'endpoint';
         spyOn(comp, 'getDataForForm');
+        spyOn(comp, 'updateElements');
         comp.getMetadata(endpoint);
         expect(comp.show).toBeFalsy();
+        expect(comp.updateElements).toHaveBeenCalled();
         expect(comp.getDataForForm).toHaveBeenCalled();
       }));
 
@@ -1155,5 +1166,21 @@ describe('GenericFormComponent', () => {
         );
       }));
 
+    });
+
+    describe('updateElements method', () => {
+      it('should update elements', () => {
+        let config = [
+          {
+            children: [
+              {
+                type: 'list'
+              }
+            ]
+          }
+        ];
+        comp.updateElements(config, 'id', 'list', 123);
+        expect(config[0].children[0]['id']).toEqual(123);
+      });
     });
 });

@@ -12,6 +12,7 @@ describe('DynamicListComponent', () => {
   let el;
   let config = {
     list: {
+      label: 'Company',
       list: 'company',
       highlight: {
         values: {
@@ -306,6 +307,7 @@ describe('DynamicListComponent', () => {
       async(inject([FilterService], (fs: FilterService) => {
         comp.first = true;
         comp.config = config;
+        comp.endpoint = '/ecore/api/v2/contacts/';
         comp.modalRef = {
           close() {
             return true;
@@ -313,7 +315,10 @@ describe('DynamicListComponent', () => {
         };
         spyOn(comp.modalRef, 'close');
         comp.ngOnDestroy();
-        expect(fs.filters).toEqual(null);
+        expect(fs.filters).toEqual({
+          endpoint: comp.endpoint,
+          list: null
+        });
         expect(comp.modalRef.close).toHaveBeenCalled();
     })));
   });
@@ -899,6 +904,19 @@ describe('DynamicListComponent', () => {
       expect(comp.modalInfo).toEqual(result);
       expect(comp.open).toHaveBeenCalled();
     }));
+  });
+
+  describe('addObject method', () => {
+    it('should open modal for create new object', () => {
+      comp.config = config;
+      comp.endpoint = '/ecore/api/v2/companies/';
+      comp.addObject();
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: comp.endpoint,
+        label: `Add ${config.list.label}`
+      });
+    });
   });
 
   describe('editObject method', () => {

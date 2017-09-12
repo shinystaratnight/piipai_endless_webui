@@ -555,11 +555,11 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public updateElements(metadata, param, type, value) {
-    this.metadata.forEach((el) => {
+    metadata.forEach((el) => {
       if (el.type === type) {
         el[param] = value;
       } else if (el.children) {
-        this.updateElements(metadata, param, type, value);
+        this.updateElements(el.children, param, type, value);
       }
     });
   }

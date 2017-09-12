@@ -205,8 +205,11 @@ describe('FormRelatedComponent', () => {
       comp.group = fb.group({});
       comp.group.addControl(comp.config.key, fb.control(''));
       spyOn(comp, 'createObject').and.returnValue({
+        id: 1,
         data: {
-          id: 1
+          value: {
+            id: 1
+          }
         }
       });
       spyOn(comp, 'fillingForm');

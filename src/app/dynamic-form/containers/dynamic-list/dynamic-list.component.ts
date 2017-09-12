@@ -486,7 +486,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
 
   public unpopedTable() {
     if (this.config.list.filters) {
-      this.filterService.filters = this.config.list;
+      this.filterService.filters = {
+        endpoint: this.endpoint,
+        list: this.config.list,
+      };
     }
     this.poped = false;
     this.minimized = false;
