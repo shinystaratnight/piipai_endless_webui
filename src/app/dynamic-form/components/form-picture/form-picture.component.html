@@ -43,7 +43,7 @@
     </button>
   </div>
 
-  <div class="modal-body picture d-inline-block d-flex justify-content-around flex-wrap">
+  <div class="modal-body picture d-inline-block d-flex justify-content-around flex-wrap" style="overflow: auto">
     <ng2-webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError"></ng2-webcam>
     <div class="photo d-flex justify-content-center align-items-center">
       <span *ngIf="!photoExist" class="text-white">Photo</span>

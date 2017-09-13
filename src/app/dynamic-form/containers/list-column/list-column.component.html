@@ -1,7 +1,7 @@
 <span *ngIf="head && !config.iconLabel" (click)="sort()">{{config.label}}</span>
 <span *ngIf="head && config.iconLabel" (clock)="sort()">
   <i fa class="text-muted"
-    [name]="{{config.iconLabel}}"></i>
+    [name]="config.iconLabel"></i>
 </span>
 
 <div *ngIf="!head">

@@ -61,6 +61,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   public endpoint: string;
 
   @Input()
+  public parentEndpoint: string;
+
+  @Input()
   public inForm: boolean = false;
 
   @Output()
@@ -106,7 +109,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   public ngOnInit() {
     if (this.config.list.filters) {
       this.filterService.filters = {
-        endpoint: this.endpoint,
+        endpoint: this.parentEndpoint || this.endpoint,
         list: this.config.list
       };
       this.filtersOfList = this.filterService.getFiltersByEndpoint(this.endpoint);
@@ -498,14 +501,15 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   }
 
   public popedTable() {
-    this.filtersOfList = this.filterService.getFiltersOfList(this.endpoint, this.config.list.list);
+    this.filtersOfList =
+      this.filterService.getFiltersOfList(this.parentEndpoint, this.config.list.list);
     this.poped = true;
   }
 
   public unpopedTable() {
     if (this.config.list.filters) {
       this.filterService.filters = {
-        endpoint: this.endpoint,
+        endpoint: this.parentEndpoint,
         list: this.config.list,
       };
     }
@@ -672,6 +676,21 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         type: 'update',
         list: this.config.list.list
       });
+    }
+  }
+
+  public buttonAction(e) {
+    if (e && e.type) {
+      switch (e.type) {
+        case 'add_object':
+          this.addObject();
+          break;
+        case 'poped_table':
+          this.popedTable();
+          break;
+        default:
+          return;
+      }
     }
   }
 

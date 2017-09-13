@@ -1120,4 +1120,24 @@ describe('DynamicListComponent', () => {
     });
   });
 
+  describe('buttonAction method', () => {
+    it('should call add_object action', () => {
+      let event = {
+        type: 'add_object'
+      };
+      spyOn(comp, 'addObject');
+      comp.buttonAction(event);
+      expect(comp.addObject).toHaveBeenCalled();
+    });
+
+    it('should call poped_table action', () => {
+      let event = {
+        type: 'poped_table'
+      };
+      spyOn(comp, 'popedTable');
+      comp.buttonAction(event);
+      expect(comp.popedTable).toHaveBeenCalled();
+    });
+  });
+
 });

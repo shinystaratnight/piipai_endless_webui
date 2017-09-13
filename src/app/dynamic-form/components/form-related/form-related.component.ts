@@ -2,6 +2,7 @@ import {
   Component,
   OnInit,
   AfterViewInit,
+  AfterContentChecked,
   ViewChild,
   Output,
   EventEmitter,
@@ -19,13 +20,16 @@ import { GenericFormService } from './../../services/generic-form.service';
 
 export class FormRelatedComponent
   extends BasicElementComponent
-    implements OnInit, OnDestroy {
+    implements OnInit, OnDestroy, AfterContentChecked {
 
   @ViewChild('search')
   public search;
 
   @ViewChild('modal')
   public modal;
+
+  @ViewChild('tableWrapper')
+  public tableWrapper: any;
 
   public config;
   public group: FormGroup;
@@ -122,6 +126,24 @@ export class FormRelatedComponent
       this.modalRef.close();
     }
   }
+
+  public ngAfterContentChecked() {
+    if (this.tableWrapper) {
+      this.checkOverfow();
+    }
+  }
+
+  public checkOverfow() {
+    if (this.config.metadata) {
+      let width = this.tableWrapper.nativeElement.offsetWidth;
+      let count = this.config.metadata.length;
+      if ((width / count) < 150) {
+        this.tableWrapper.nativeElement.style.overflowX = 'auto';
+      } else {
+        this.tableWrapper.nativeElement.style.overflowX = 'visible';
+      }
+    }
+  };
 
   public generateDataForList(config) {
     if (config.list && config.metadata) {

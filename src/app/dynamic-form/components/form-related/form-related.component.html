@@ -112,7 +112,7 @@
         style="cursor: pointer"></i>
           {{config.templateOptions.label}}
     </h5>
-    <div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
+    <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list px-2">
       <table *ngIf="dataOfList" class="table table-bordered">
         <thead>
           <tr>

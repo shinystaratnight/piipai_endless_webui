@@ -55,8 +55,10 @@ export class FilterService {
 
   public getFiltersOfList(endpoint, name) {
     let result = [];
-    result = this._filters[endpoint].filter((el) => el.listName === name);
-    this.deleteFilters(this._filters[endpoint], name);
+    if (endpoint && this._filters[endpoint]) {
+      result = this._filters[endpoint].filter((el) => el.listName === name);
+      this.deleteFilters(this._filters[endpoint], name);
+    }
     return result;
   }
 

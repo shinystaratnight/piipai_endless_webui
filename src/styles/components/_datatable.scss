@@ -4,7 +4,7 @@ $datatable-left: $datatable-top;
 $row-datatable-margin-bottom: $spacer;
 $row-datatable-border-width: 2px;
 $row-datatable-border-color: rgba($gray-light, .5);
-$cell-datatable-width: 40%;
+$cell-datatable-width: 45%;
 
 .datatable {
   background-color: $datatable-background-color;
@@ -95,6 +95,8 @@ $cell-datatable-width: 40%;
       content: attr(data-label);
       float: left;
       font-weight: bold;
+      word-break: break-word;
+      margin-right: .3rem;
     }
     table td::after {
       display: table;
@@ -103,5 +105,12 @@ $cell-datatable-width: 40%;
       width: 0;
       height: 0;
     }
+  }
+}
+
+
+.list {
+  td {
+    min-width: 150px;
   }
 }

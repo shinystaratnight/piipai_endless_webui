@@ -55,7 +55,7 @@ export class GenericListComponent implements OnInit {
           table.list = metadata.list.list;
           this.existingIds.push(this.tableId);
           table.id = this.tableId++;
-          if (!table.first) {
+          if (table && !table.first) {
             table.metadata.list.list += table.id;
             table.list += table.id;
             table.limit = this.limit;
@@ -65,7 +65,7 @@ export class GenericListComponent implements OnInit {
             this.route.queryParams.subscribe(
               (params) => {
                 let target = this.getTable(table.list);
-                if (target.first) {
+                if (target && target.first) {
                   this.parseUrl(params, table.list);
                 }
               }
@@ -153,7 +153,7 @@ export class GenericListComponent implements OnInit {
       if (e.type === 'pagination') {
         table.innerTables = {};
       }
-      if (table.first && !this.inForm) {
+      if (table && table.first && !this.inForm) {
         if (e.type === 'filter') {
           this.updateUrl(table.query, e.list, true);
         } else {
@@ -234,6 +234,8 @@ export class GenericListComponent implements OnInit {
       this.first = true;
       this.getData(endpoint, null, table, true);
     } else {
+      let firstTable = this.getFirstTable();
+      table['parentEndpoint'] = firstTable.endpoint;
       this.getMetadata(endpoint, table);
       this.getData(endpoint, null, table);
     }
@@ -242,6 +244,10 @@ export class GenericListComponent implements OnInit {
 
   public getTable(name) {
     return this.tables.filter((el) => el.list === name)[0];
+  }
+
+  public getFirstTable() {
+    return this.tables.filter((el) => el && el.first)[0];
   }
 
   public resetActiveTable(tables) {

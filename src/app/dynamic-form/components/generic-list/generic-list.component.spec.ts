@@ -555,7 +555,7 @@ describe('GenericListComponent', () => {
         expect(comp.createTableData).toBeDefined();
       }));
 
-      it('should create table', async(() => {
+      it('should create first table', async(() => {
         let endpoint = 'endpoint';
         spyOn(comp, 'getData').and.returnValue({results: []});
         let result = comp.createTableData(endpoint);
@@ -576,10 +576,12 @@ describe('GenericListComponent', () => {
         let endpoint = 'endpoint';
         let table = {
           endpoint,
-          innerTables: {}
+          innerTables: {},
+          parentEndpoint: '/ecore/'
         };
         spyOn(comp, 'getMetadata');
         spyOn(comp, 'getData');
+        spyOn(comp, 'getFirstTable').and.returnValue({endpoint: '/ecore/'});
         comp.first = true;
         let result = comp.createTableData(endpoint);
         expect(comp.getMetadata).toHaveBeenCalledWith(endpoint, table);
@@ -602,6 +604,17 @@ describe('GenericListComponent', () => {
         expect(result).toEqual(table);
       }));
 
+    });
+
+    describe('getFirstTable method', () => {
+      it('should return first table', () => {
+        let table = {
+          first: true
+        };
+        comp.tables.push(table);
+        let result = comp.getFirstTable();
+        expect(result).toEqual(table);
+      });
     });
 
     describe('resetActiveTable method', () => {

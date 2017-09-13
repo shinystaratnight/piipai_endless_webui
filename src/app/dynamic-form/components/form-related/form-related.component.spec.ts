@@ -19,6 +19,7 @@ describe('FormRelatedComponent', () => {
     read_only: false,
     many: undefined,
     value: undefined,
+    metadata: [],
     templateOptions: {
       label: 'Country',
       required: true,
@@ -178,6 +179,48 @@ describe('FormRelatedComponent', () => {
       expect(comp.results).toEqual(config.value);
     })));
 
+  });
+
+  describe('ngAfterContentChecked method', () => {
+    it('should call checkOverflow method', () => {
+      comp.config = config;
+      comp.tableWrapper = {};
+      spyOn(comp, 'checkOverfow');
+      comp.ngAfterContentChecked();
+      expect(comp.checkOverfow).toHaveBeenCalled();
+    });
+  });
+
+  describe('checkOverflow method', () => {
+    it('should set overflow auto', () => {
+      comp.tableWrapper = {
+        nativeElement: {
+          style: {
+            overflowX: 'visible'
+          },
+          offsetWidth: 100
+        }
+      };
+      comp.config = config;
+      comp.config.metadata = [{}];
+      comp.checkOverfow();
+      expect(comp.tableWrapper.nativeElement.style.overflowX).toEqual('auto');
+    });
+
+    it('should set overflow visible', () => {
+      comp.tableWrapper = {
+        nativeElement: {
+          style: {
+            overflowX: 'auto'
+          },
+          offsetWidth: 200
+        }
+      };
+      comp.config = config;
+      comp.config.metadata = [{}];
+      comp.checkOverfow();
+      expect(comp.tableWrapper.nativeElement.style.overflowX).toEqual('visible');
+    });
   });
 
   describe('generateDataForList method', () => {

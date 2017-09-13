@@ -45,6 +45,7 @@ import { FilterSelectComponent } from './components/filter-select/filter-select.
 import { ListTableComponent } from './components/list-table/list-table.component';
 import { ListImageComponent } from './components/list-image/list-image.copmonent';
 import { FormListComponent } from './components/form-list/form-list.component';
+import { ListButtonsComponent } from './containers/list-buttons/list-buttons.component';
 
 import { ActionElementComponent } from './components/action-element/action-element.component';
 
@@ -100,7 +101,8 @@ import { MoveDirective } from './directives/move.directive';
     FormHiddenComponent,
     FormVacancyDatesComponent,
     ListImageComponent,
-    FormListComponent
+    FormListComponent,
+    ListButtonsComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
