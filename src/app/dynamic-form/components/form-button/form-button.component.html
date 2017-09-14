@@ -2,11 +2,14 @@
   <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
   <button
     [ngClass]="{'btn-sm': config.templateOptions.small, 'px-2': config.templateOptions.p, 'pl-4 pr-4': !config.templateOptions.p}"
-    class="btn btn-primary mt-1 mb-1"
+    class="btn mt-1 mb-1"
+    [class.button]="config.list"
+    [ngClass]="{'btn-primary': !config.list}"
     [attr.type]="config.templateOptions.type"
     (click)="action($event)">
-      {{config.templateOptions.text}}
-      <i fa [name]="config.templateOptions.icon"></i>
+      <i fa class="mr-1"
+        *ngIf="config.templateOptions.icon"
+        [name]="config.templateOptions.icon"></i>{{config.templateOptions.text}}
   </button>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}

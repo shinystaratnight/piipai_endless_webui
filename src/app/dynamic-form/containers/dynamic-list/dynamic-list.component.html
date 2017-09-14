@@ -176,3 +176,16 @@
     </div>
   </div>
 </template>
+
+<template #confirmModal let-c="close">
+  <div class="modal-header">
+    <p>{{modalInfo.message}}</p>
+    <button type="button" class="close" aria-label="Close" (click)="d(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="callAction(modalInfo, c)">{{modalInfo.agree_label}}</button>
+    <button type="button" class="btn btn-secondary" (click)="c(false)">{{modalInfo.decline_label}}</button>
+  </div>
+</template>

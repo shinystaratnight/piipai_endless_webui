@@ -6,6 +6,9 @@ import { DebugElement } from '@angular/core';
 import { DynamicListComponent } from './dynamic-list.component';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { GenericFormService } from './../../services/generic-form.service';
+import { Observable } from 'rxjs/Observable';
+
 describe('DynamicListComponent', () => {
   let fixture: ComponentFixture<DynamicListComponent>;
   let comp: DynamicListComponent;
@@ -74,7 +77,14 @@ describe('DynamicListComponent', () => {
               type: 'button',
               action: 'openMap',
               icon: 'fa-glob',
-              text: '{company.type}'
+              text: '{company.type}',
+              confirm: true,
+              options: {
+                label: 'Delete selected',
+                message: 'Are you sure?',
+                agree_label: 'Agree',
+                decline_label: 'Decline'
+              }
             }
           ]
         },
@@ -177,12 +187,21 @@ describe('DynamicListComponent', () => {
     }
   };
 
+  const mockGenericFormService = {
+    submitForm() {
+      return Observable.of({});
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         DynamicListComponent
       ],
-      providers: [{provide: FilterService, useValue: mockFilterService}],
+      providers: [
+        {provide: FilterService, useValue: mockFilterService},
+        {provide: GenericFormService, useValue: mockGenericFormService }
+      ],
       imports: [NgbModule.forRoot()],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
@@ -434,6 +453,14 @@ describe('DynamicListComponent', () => {
                 name: undefined,
                 type: 'button',
                 values: undefined,
+                confirm: true,
+                list: true,
+                options: {
+                  label: 'Delete selected',
+                  message: 'Are you sure?',
+                  agree_label: 'Agree',
+                  decline_label: 'Decline'
+                },
                 templateOptions: {
                   label: undefined,
                   icon: 'glob',
@@ -868,8 +895,7 @@ describe('DynamicListComponent', () => {
   });
 
   describe('buttonHandler method', () => {
-    it('should call the function', () => {
-      comp.config = config;
+    it('should call openMap method', () => {
       let event = {
         value: 'openMap',
         el: {
@@ -877,16 +903,139 @@ describe('DynamicListComponent', () => {
         }
       };
       spyOn(comp, 'openMap');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.openMap).toHaveBeenCalledWith(event.el.fields);
+    });
+
+    it('should call openList method', () => {
+      let event = {
+        value: 'openList',
+        el: {
+          endpoint: 'some endpoint',
+        }
+      };
       spyOn(comp, 'openList');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.openList).toHaveBeenCalledWith(event.el.endpoint, event.el);
+    });
+
+    it('should call openDiff method', () => {
+      let event = {
+        value: 'openDiff',
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
       spyOn(comp, 'openDiff');
       comp.buttonHandler(event);
-      expect(comp[event.value]).toHaveBeenCalled();
-      event.value = 'openList';
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.openDiff).toHaveBeenCalledWith(event.el.endpoint, event.el);
+    });
+
+    it('should call openForm method', () => {
+      let event = {
+        value: 'openForm',
+      };
+      spyOn(comp, 'openForm');
       comp.buttonHandler(event);
-      expect(comp[event.value]).toHaveBeenCalled();
-      event.value = 'openDiff';
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.openForm).toHaveBeenCalledWith(event);
+    });
+
+    it('should call setAction method', () => {
+      let event = {
+        value: 'callAction',
+      };
+      spyOn(comp, 'setAction');
       comp.buttonHandler(event);
-      expect(comp[event.value]).toHaveBeenCalled();
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.setAction).toHaveBeenCalledWith(event);
+    });
+  });
+
+  describe('openForm method', () => {
+    it('should prepareData for form', () => {
+      let event = {
+        el: {
+          endpoint: 'some endpoint',
+          value: 'Invoice'
+        }
+      };
+      spyOn(comp, 'open');
+      comp.modal = {};
+      comp.openForm(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: event.el.endpoint,
+        label: event.el.value
+      });
+      expect(comp.open).toHaveBeenCalledWith(comp.modal, {size: 'lg'});
+    });
+  });
+
+  describe('setAction method', () => {
+    it('should call callAction method', () => {
+      let event = {
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
+      spyOn(comp, 'callAction');
+      comp.setAction(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'action',
+        endpoint: event.el.endpoint
+      });
+      expect(comp.callAction).toHaveBeenCalledWith(comp.modalInfo);
+    });
+
+    it('should call open method', () => {
+      let event = {
+        el: {
+          endpoint: 'some endpoint',
+          confirm: true,
+          options: {
+            message: 'Are you sure?',
+            agree_label: 'Agree',
+            decline_label: 'Decline'
+          }
+        }
+      };
+      comp.confirmModal = {};
+      spyOn(comp, 'open');
+      comp.setAction(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'action',
+        endpoint: event.el.endpoint,
+        message: event.el.options.message,
+        agree_label: event.el.options.agree_label,
+        decline_label: event.el.options.decline_label
+      });
+      expect(comp.open).toHaveBeenCalledWith(comp.confirmModal);
+    });
+  });
+
+  describe('callAction method', () => {
+    it('should call action', () => {
+      let modal = {
+        closeModal() {
+          return true;
+        }
+      };
+      let modalInfo = {
+        endpoint: 'some endpoint'
+      };
+      comp.config = config;
+      spyOn(modal, 'closeModal');
+      spyOn(comp.event, 'emit');
+      comp.callAction(modalInfo, modal.closeModal);
+      expect(modal.closeModal).toHaveBeenCalled();
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'update',
+        list: comp.config.list.list
+      });
     });
   });
 

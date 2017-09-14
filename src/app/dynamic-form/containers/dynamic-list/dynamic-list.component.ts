@@ -12,6 +12,8 @@ import {
 import { FilterService } from './../../services/filter.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { GenericFormService } from './../../services/generic-form.service';
+
 @Component({
   selector: 'dynamic-list',
   templateUrl: 'dynamic-list.component.html'
@@ -75,6 +77,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   @ViewChild('modal')
   public modal;
 
+  @ViewChild('confirmModal')
+  public confirmModal;
+
   @ViewChild('datatable')
   public datatable;
 
@@ -103,7 +108,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   constructor(
     private filterService: FilterService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private genericFormService: GenericFormService
   ) {}
 
   public ngOnInit() {
@@ -274,6 +280,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
             obj['endpoint'] = this.format(element.endpoint, el);
           }
           if (element.type === 'button') {
+            obj.confirm = element.confirm;
+            obj.options = element.options;
+            obj.list = true;
             obj.templateOptions = {
               label: element.label,
               icon: element.icon ? element.icon.slice(element.icon.indexOf('-') + 1) : null,
@@ -536,13 +545,63 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   public buttonHandler(e) {
     this.modalInfo = {};
-    if (e.value) {
-      if (e.value === 'openMap') {
-        this[e.value](e.el.fields);
-      } else if (e.value === 'openList' || e.value === 'openDiff') {
-        this[e.value](e.el.endpoint, e.el);
+    if (e && e.value) {
+      switch (e.value) {
+        case 'openMap':
+          this.openMap(e.el.fields);
+        break;
+        case 'openList':
+        case 'openDiff':
+          this[e.value](e.el.endpoint, e.el);
+          break;
+        case 'openForm':
+          this.openForm(e);
+          break;
+        case 'callAction':
+          this.setAction(e);
+          break;
+        default:
+          return;
       }
     }
+    return;
+  }
+
+  public openForm(e) {
+    this.modalInfo = {};
+    this.modalInfo.type = 'form';
+    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo.label = e.el.value;
+    this.open(this.modal, {size: 'lg'});
+  }
+
+  public setAction(e) {
+    this.modalInfo = {};
+    this.modalInfo.type = 'action';
+    this.modalInfo.endpoint = e.el.endpoint;
+    if (e.el.confirm && e.el.options) {
+      this.modalInfo.message = e.el.options.message;
+      this.modalInfo.agree_label = e.el.options.agree_label;
+      this.modalInfo.decline_label = e.el.options.decline_label;
+      this.open(this.confirmModal);
+    } else {
+      this.callAction(this.modalInfo);
+    }
+  }
+
+  public callAction(modalInfo, closeModal = undefined) {
+    if (closeModal) {
+      closeModal();
+    }
+    let endpoint = modalInfo.endpoint;
+    this.genericFormService.submitForm(endpoint, {}).subscribe(
+      (res: any) => {
+        this.event.emit({
+          type: 'update',
+          list: this.config.list.list
+        });
+      }
+    );
   }
 
   public openMap(value) {
@@ -635,7 +694,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     let propValue;
     let pos = 0;
     let trail;
-    while (true) {
+    while (true && str) {
       let start = str.indexOf(open, pos);
       let end = str.indexOf(close, pos);
       let key = str.substring(start + 1, end);

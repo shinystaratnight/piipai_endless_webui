@@ -9,6 +9,17 @@ $cell-datatable-width: 45%;
 .datatable {
   background-color: $datatable-background-color;
 
+  .button {
+    border: 1px solid $brand-primary;
+    background-color: white;
+    color: rgba(black, .6);
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba($brand-primary, .3);
+    }
+  }
+
   .tabs .tab {
     cursor: pointer;
     color: $gray-light;
