@@ -67,7 +67,7 @@
           <tr>
             <th class="text-center" style="width: 2rem">
               *
-              <input type="checkbox" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
+              <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
             </th>
             <th *ngFor="let field of config.list.columns;" class="align-middle"
               [class.datatable-title-hover]="field.sort"
@@ -99,12 +99,12 @@
             [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
             <td>
               <div class="d-flex flex-md-column justify-content-between align-items-center">
-                <input type="checkbox" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
-                <a class="d-flex mt-md-2" *ngIf="first && !inForm" [routerLink]="[row.id + '/change']">
+                <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
+                <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm" [routerLink]="[row.id + '/change']">
                   <i fa [name]="'pencil'" class="icon text-primary"></i>
                 </a>
                 <i fa *ngIf="!first || inForm"
-                  [name]="'pencil'" class="icon text-primary"
+                  [name]="'pencil'" class="icon text-primary ml-auto ml-md-0"
                   (click)="editObject(row.id, row.__str__)"></i>
               </div>
             </td>

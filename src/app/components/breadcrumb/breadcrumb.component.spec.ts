@@ -85,37 +85,6 @@ describe('BreadcrumbComponent', () => {
   });
 
   describe('generateData method', () => {
-    it('should call generateBreadcrumb method if last element of url is "add"', () => {
-      let urlArray = [
-        {
-          path: 'contact'
-        },
-        {
-          path: 'add'
-        }
-      ];
-      spyOn(comp, 'generateBreadcrumb');
-      comp.generateData(urlArray);
-      expect(comp.generateBreadcrumb).toHaveBeenCalledWith(['contact']);
-    });
-
-    it('should call generateBreadcrumb method if last element of url is "change"', () => {
-      let urlArray = [
-        {
-          path: 'contact'
-        },
-        {
-          path: '123'
-        },
-        {
-          path: 'change'
-        }
-      ];
-      spyOn(comp, 'generateBreadcrumb');
-      comp.generateData(urlArray);
-      expect(comp.generateBreadcrumb).toHaveBeenCalledWith(['contact']);
-    });
-
     it('should call generateBreadcrumb method', () => {
       let urlArray = [
         {
@@ -147,6 +116,36 @@ describe('BreadcrumbComponent', () => {
         {
           path: '/contact/',
           label: 'Contact',
+          active: true
+        }
+      ]);
+    });
+
+    it('should add last element when create new object', () => {
+      let urlArray = ['add'];
+      comp.list = [];
+      comp.formLabel = 'Add';
+      spyOn(comp, 'getElement').and.returnValue(false);
+      comp.generateBreadcrumb(urlArray);
+      expect(comp.list).toEqual([
+        {
+          path: null,
+          label: comp.formLabel,
+          active: true
+        }
+      ]);
+    });
+
+    it('should add last element when edit object', () => {
+      let urlArray = ['change'];
+      comp.list = [];
+      comp.formLabel = 'Mr. Tom Smith';
+      spyOn(comp, 'getElement').and.returnValue(false);
+      comp.generateBreadcrumb(urlArray);
+      expect(comp.list).toEqual([
+        {
+          path: null,
+          label: comp.formLabel,
           active: true
         }
       ]);

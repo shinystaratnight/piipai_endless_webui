@@ -7,9 +7,10 @@
           [ngClass]="{'active': !config.readonly}"
           (click)="openAutocomplete()">
           <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
+          <template *ngIf="!config.options" [ngTemplateOutlet]="spinner"></template>
         </div>
         <div class="btn-group" role="group"
-          *ngIf="config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete" >
+          *ngIf="config.options && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete)" >
           <button type="button" class="btn btn-secondary"
             *ngIf="config.templateOptions.edit && displayValue"
             (click)="open('edit')">
@@ -63,6 +64,7 @@
         (focus)="generateList()"
         (blur)="resetList()"
         (keyup)="filter(searchValue)">
+      <template *ngIf="!config.options" [ngTemplateOutlet]="spinner"></template>
         <div class="autocomplete" [hidden]="!(previewList && previewList.length)">
           <div class="autocomplete-list"
             infinite-scroll
@@ -99,8 +101,8 @@
     </div>
   </div>
 
-  <div class="mb-2" *ngIf="config.list">
-    <h5 class="bg-primary text-white mb-0">
+  <div class="mb-3" *ngIf="config.list">
+    <h6 class="card flex-row align-items-center mb-0" [ngClass]="{'bg-primary text-white': !isCollapsed}">
       <i
         fa
         class="p-2"
@@ -111,9 +113,9 @@
         aria-controls="collapseExample"
         style="cursor: pointer"></i>
           {{config.templateOptions.label}}
-    </h5>
+    </h6>
     <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list px-2">
-      <table *ngIf="dataOfList" class="table table-bordered">
+      <table *ngIf="dataOfList" class="table table-bordered mb-1">
         <thead>
           <tr>
             <th *ngFor="let col of config.metadata">
@@ -182,6 +184,23 @@
       <button type="button" class="btn btn-danger"
         (click)="deleteElement(c)">Delete</button>
     </div>
+  </div>
+</template>
+
+<template #spinner>
+  <div class="sk-fading-circle">
+    <div class="sk-circle1 sk-circle"></div>
+    <div class="sk-circle2 sk-circle"></div>
+    <div class="sk-circle3 sk-circle"></div>
+    <div class="sk-circle4 sk-circle"></div>
+    <div class="sk-circle5 sk-circle"></div>
+    <div class="sk-circle6 sk-circle"></div>
+    <div class="sk-circle7 sk-circle"></div>
+    <div class="sk-circle8 sk-circle"></div>
+    <div class="sk-circle9 sk-circle"></div>
+    <div class="sk-circle10 sk-circle"></div>
+    <div class="sk-circle11 sk-circle"></div>
+    <div class="sk-circle12 sk-circle"></div>
   </div>
 </template>
 

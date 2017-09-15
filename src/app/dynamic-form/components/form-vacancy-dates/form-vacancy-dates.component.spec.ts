@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { FormVacancyDatesComponent } from './form-vacancy-dates.component';
+import { FormVacancyDatesComponent, VacancyDate } from './form-vacancy-dates.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 
@@ -11,14 +11,14 @@ describe('FormVacancyDatesComponent', () => {
   let comp: FormVacancyDatesComponent;
   let el;
   let config = {
-    type: 'vacancydates',
-    key: 'vacancydates',
-    templateOptions: {
-      label: 'Vacancy Dates',
-      required: true,
-      description: 'test'
-    }
-  };
+      type: 'vacancydates',
+      key: 'vacancydates',
+      templateOptions: {
+        label: 'Vacancy Dates',
+        required: true,
+        description: 'test'
+      }
+    };
   let errors = {};
 
   let moment = require('moment');
@@ -55,6 +55,33 @@ describe('FormVacancyDatesComponent', () => {
       expect(comp.calcMinDate).toHaveBeenCalled();
       expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
     })));
+
+    it('should fill in vacancy dates', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let vacancyDates: VacancyDate[] = [
+        {
+          shift_date: '2017-01-05',
+          workers: 2
+        },
+        {
+          shift_date: '2017-02-06',
+          workers: 2
+        }
+      ];
+      comp.config = config;
+      comp.config.value = vacancyDates;
+      comp.key = config.key;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(''));
+      spyOn(comp, 'calcMinDate');
+      spyOn(comp, 'addControl');
+      spyOn(comp, 'generateVacancyDates').and.returnValues(comp.config);
+      comp.ngOnInit();
+      expect(comp.vacancyDates).toEqual(comp.config);
+      expect(comp.group.get(comp.key).value).toEqual(comp.config.value);
+      expect(comp.calcMinDate).toHaveBeenCalled();
+      expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
+      expect(comp.generateVacancyDates).toHaveBeenCalled();
+    })));
   });
 
   describe('calcMinDate method', () => {
@@ -65,6 +92,24 @@ describe('FormVacancyDatesComponent', () => {
         month: moment().month() + 1,
         day: moment().date()
       });
+    });
+  });
+
+  describe('generateVacancyDates method', () => {
+    it('should generate view data from api data', () => {
+      let vacancyDates: VacancyDate[] = [
+        {
+          shift_date: '2017-01-05',
+          workers: 2
+        },
+        {
+          shift_date: '2017-02-06',
+          workers: 2
+        }
+      ];
+      comp.config = config;
+      comp.vacancyDates = comp.generateVacancyDates(comp.config.value, moment);
+      expect(comp.vacancyDates).toEqual(comp.config.value);
     });
   });
 

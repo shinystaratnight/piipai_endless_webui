@@ -4,6 +4,11 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 
 import moment from 'moment';
 
+export interface VacancyDate {
+  shift_date: string;
+  workers: number;
+}
+
 @Component({
   selector: 'form-vacancy-dates',
   templateUrl: 'form-vacancy-dates.component.html'
@@ -22,8 +27,8 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
   public dateFormat = 'YYYY-MM-DD';
   public minDate: any;
 
-  public vacancyDate: any;
-  public vacancyDates: any[];
+  public vacancyDate: VacancyDate;
+  public vacancyDates: VacancyDate[];
 
   constructor(
     private fb: FormBuilder
@@ -35,6 +40,10 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
     this.vacancyDates = [];
     this.calcMinDate(moment);
     this.addControl(this.config, this.fb);
+    if (this.config && this.config.value) {
+      this.vacancyDates = this.generateVacancyDates(this.config.value, moment);
+      this.group.get(this.key).patchValue(this.config.value);
+    }
   }
 
   public calcMinDate(time) {
@@ -43,6 +52,22 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
       month: time().month() + 1,
       day: time().date()
     };
+  }
+
+  public generateVacancyDates(value: VacancyDate[], moment): VacancyDate[] {
+    return value.map((el) => {
+      let val: VacancyDate = {
+        shift_date: '',
+        workers: 0
+      };
+      if (el.shift_date) {
+        val.shift_date = moment(el.shift_date).format(this.dateFormat);
+      }
+      if (el.workers) {
+        val.workers = el.workers;
+      }
+      return val;
+    });
   }
 
   public selectVacancyDate(e, time = moment) {

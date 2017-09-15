@@ -1,4 +1,4 @@
-<h5 class="bg-primary text-white">
+<h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !isCollapsed}">
   <i
     fa
     class="p-2"
@@ -9,7 +9,7 @@
     aria-controls="collapseExample"
     style="cursor: pointer"></i>
   {{config.name}}
-</h5>
+</h6>
 <div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
   <ng-container *ngFor="let field of config.children;"
     formElement

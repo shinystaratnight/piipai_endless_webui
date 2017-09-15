@@ -98,6 +98,16 @@ describe('SiteComponent', () => {
         })));
   });
 
+  describe('changeFormLabel method', () => {
+    it('should change formLabel proeprty', () => {
+      let event = {
+        str: 'Add'
+      };
+      comp.changeFormLabel(event);
+      expect(comp.formLabel).toEqual('Add');
+    });
+  });
+
   describe('getPageData method', () => {
     it('should update pageData property',
       fakeAsync(inject([SiteService], (siteService: SiteService) => {

@@ -167,9 +167,13 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'parseMetadata');
         spyOn(comp, 'getData');
         spyOn(comp, 'checkRuleElement');
+        spyOn(comp.str, 'emit');
         comp.getMetadata(endpoint);
         expect(comp.parseMetadata).toHaveBeenCalledTimes(2);
         expect(comp.getData).toHaveBeenCalled();
+        expect(comp.str.emit).toHaveBeenCalledWith({
+          str: 'Add'
+        });
         expect(comp.checkRuleElement).toHaveBeenCalled();
         expect(comp.show).toBeTruthy();
       }));
@@ -216,12 +220,17 @@ describe('GenericFormComponent', () => {
       it('should called fillingForm method', async(() => {
         response = {
           status: 'success',
-          message: 'All be fine'
+          message: 'All be fine',
+          __str__: 'Str'
         };
         let endpoint = 'endpoint';
         let id = 'Some id';
         spyOn(comp, 'fillingForm');
+        spyOn(comp.str, 'emit');
         comp.getDataForForm(endpoint, id);
+        expect(comp.str.emit).toHaveBeenCalledWith({
+          str: 'Str'
+        });
         expect(comp.fillingForm).toHaveBeenCalled();
       }));
 
@@ -668,19 +677,17 @@ describe('GenericFormComponent', () => {
           workflow: '124'
         };
         spyOn(comp, 'updateValueOfRules');
-        spyOn(comp, 'updateMetadata');
         spyOn(comp, 'parseMetadata');
         spyOn(comp, 'getElementFromMetadata').and.returnValue({activeMetadata: []});
-        comp.getRalatedData(comp.metadata, key, endpoint, null, query);
+        comp.getRalatedData(comp.metadata, key, endpoint, null, query, 'options', false);
         expect(comp.updateValueOfRules).toHaveBeenCalledWith(response.results);
         expect(comp.getElementFromMetadata).toHaveBeenCalled();
-        expect(comp.updateMetadata).toHaveBeenCalledWith(comp.metadata, key);
         expect(comp.parseMetadata).toHaveBeenCalledWith(comp.metadata, {
           [key]: {
             action: 'add',
             data: { options: response.results, currentQuery: query }
           }
-        });
+        }, false);
       }));
 
     });

@@ -56,6 +56,9 @@ export class GenericFormComponent implements OnChanges {
   @Output()
   public errorForm: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public str: EventEmitter<any> = new EventEmitter();
+
   public metadata = [];
   public metadataError = [];
   public sendData = null;
@@ -116,6 +119,9 @@ export class GenericFormComponent implements OnChanges {
             this.updateElements(this.metadata, 'id', 'list', this.id);
             this.updateElements(this.metadata, 'editForm', undefined, true);
           } else {
+            this.str.emit({
+              str: 'Add'
+            });
             this.show = true;
           }
         }),
@@ -127,6 +133,9 @@ export class GenericFormComponent implements OnChanges {
       ((data: any) => {
         this.fillingForm(this.metadata, data);
         this.show = true;
+        this.str.emit({
+          str: data && data.__str__ ? data.__str__ : ''
+        });
       }
     ));
   }
@@ -283,7 +292,7 @@ export class GenericFormComponent implements OnChanges {
                 currentQuery: query
               }
             }
-          });
+          }, update);
           if (key === 'rules') {
             if (response.results) {
               let rules = this.getElementFromMetadata(metadata, 'rules');
@@ -296,7 +305,7 @@ export class GenericFormComponent implements OnChanges {
                     currentQuery: query
                   }
                 }
-              });
+              }, update);
             }
             if (this.workflowData.company &&
               this.workflowData.number &&
@@ -360,7 +369,7 @@ export class GenericFormComponent implements OnChanges {
     });
   }
 
-  public parseMetadata(metadata, params) {
+  public parseMetadata(metadata, params, update = true) {
     metadata.forEach((el) => {
       if (el.type === 'hidden') {
         el.hide = this.hide;
@@ -372,7 +381,9 @@ export class GenericFormComponent implements OnChanges {
           if (elem.related) {
             this.resetRalatedData(metadata, elem.related.reset);
           }
-          this.updateMetadata(metadata, el.key);
+          if (update) {
+            this.updateMetadata(metadata, el.key);
+          }
         } else if (params[el.key].update) {
           let elem = this.getElementFromMetadata(metadata, el.key);
           if (elem.related) {
