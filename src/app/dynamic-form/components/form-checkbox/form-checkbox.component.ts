@@ -22,6 +22,7 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
 
   public checkboxValue: string;
   public checkboxClass: string = '';
+  public checkboxColor: string = '';
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -33,12 +34,15 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
   public ngOnInit() {
     this.addControl(this.config, this.fb);
     if (!this.group.get(this.key).value && !this.config.read_only) {
-      this.group.get(this.key).patchValue(false);
+      let value = this.config.defaultValue || false;
+      this.group.get(this.key).patchValue(value);
     }
     if (this.config.read_only) {
       this.setValue(this.config.value);
+    } else if (this.config.templateOptions.type === 'icon') {
+      this.customizeCheckbox();
     }
-    if (this.config.value) {
+    if (this.config.value || this.config.value === false || this.config.value === null) {
       this.group.get(this.key).patchValue(this.config.value);
     }
   }
@@ -50,6 +54,15 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
       this.checkboxClass = value === true ?
         'text-success' : value === false ?
         'text-danger' : 'text-muted';
+    }
+  }
+
+  public customizeCheckbox() {
+    let color = this.config.templateOptions.color;
+    let classes = ['primary', 'danger', 'info', 'success', 'warning'];
+    this.checkboxClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
+    if (!this.checkboxClass) {
+      this.checkboxColor = color || '';
     }
   }
 

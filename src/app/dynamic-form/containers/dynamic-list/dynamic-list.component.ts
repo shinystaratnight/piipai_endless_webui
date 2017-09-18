@@ -80,6 +80,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   @ViewChild('confirmModal')
   public confirmModal;
 
+  @ViewChild('evaluateModal')
+  public evaluateModal;
+
   @ViewChild('datatable')
   public datatable;
 
@@ -560,6 +563,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         case 'callAction':
           this.setAction(e);
           break;
+        case 'evaluate':
+          this.evaluate(e);
         default:
           return;
       }
@@ -611,6 +616,19 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     });
     this.modalInfo.type = 'map';
     this.open(this.modal, {size: 'lg'});
+  }
+
+  public evaluate(e) {
+    let object = this.data.results.filter((el) => el.id === e.el.rowId)[0];
+    this.modalInfo = {};
+    this.modalInfo.type = 'evaluate';
+    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo.label = {
+      picture: object.picture && object.picture.thumb ?
+         object.picture.thumb : '/assets/img/avatar.png',
+      name: object.__str__
+    };
+    this.open(this.evaluateModal);
   }
 
   public eventHandler(e) {

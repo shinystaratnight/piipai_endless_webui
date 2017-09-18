@@ -1,7 +1,12 @@
 <div class="form-group" [formGroup]="group" *ngIf="!config.read_only">
   <div class="form-check">
     <label [attr.for]="key" class="form-check-label" [ngClass]="{'pl-0': config.read_only}">
+      <i class="mr-1" *ngIf="config.templateOptions.type === 'icon'"
+        [ngClass]="[checkboxClass]"
+        [ngStyle]="{'color': checkboxColor}"
+        fa [name]="config.templateOptions.values[group.get(key).value]"></i>
       <input
+        [hidden]="config.templateOptions.type === 'icon'"
         #checkbox
         class="form-check-input"
         [formControl]="group.get(key)"

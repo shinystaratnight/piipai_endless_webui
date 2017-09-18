@@ -189,3 +189,20 @@
     <button type="button" class="btn btn-secondary" (click)="c(false)">{{modalInfo.decline_label}}</button>
   </div>
 </template>
+
+<template #evaluateModal let-c="close">
+  <div class="modal-header">
+    <div class="d-flex align-items-center">
+      <img class="mr-2" [src]="modalInfo.label.picture" alt="Photo" width="40" height="40">
+      <h5 class="mb-0">{{modalInfo.label.name}}</h5>
+    </div>
+    <button type="button" class="close" aria-label="Close" (click)="c(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <generic-form [endpoint]="modalInfo.endpoint">
+      <button class="btn btn-primary mr-auto text-white">Submit</button>
+    </generic-form>
+  </div>
+</template>
