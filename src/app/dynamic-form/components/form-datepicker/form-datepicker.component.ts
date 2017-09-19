@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 @Component({
   selector: 'form-datepicker',
@@ -15,6 +15,9 @@ export class FormDatepickerComponent
   @ViewChild('d')
   public d;
 
+  @ViewChild('t')
+  public t;
+
   public config;
   public group: FormGroup;
   public errors: any;
@@ -23,10 +26,16 @@ export class FormDatepickerComponent
   public time: any;
   public date: any;
   public label: boolean;
+  public init: boolean;
+  public $: any;
+  public mobileDevice: boolean;
 
   constructor(
     private fb: FormBuilder
-  ) { super(); }
+  ) {
+    super();
+    this.$ = require('jquery');
+  }
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
@@ -35,49 +44,70 @@ export class FormDatepickerComponent
         this.group.get(this.key).value;
       this.setDate(data, moment);
     }
+    this.mobileDevice = this.identifyDevice();
+  }
+
+  public identifyDevice() {
+    let deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+    return deviceNamesReg.test(navigator.userAgent.toLowerCase());
   }
 
   public ngAfterViewInit() {
     this.addFlags(this.d, this.config);
-  }
-
-  public datepicker() {
-    return true;
-  }
-
-  public updateDate(time = moment) {
-    if (this.config.templateOptions.type === 'date') {
-      if (this.date) {
-        let {year = 0, month = 0, day = 0} = {...this.date};
-        if (time) {
-          let value = time.utc([year, month - 1, day]).format('YYYY-MM-DD');
-          this.group.get(this.key).patchValue(value);
+    if (!this.init) {
+      let dateType = this.mobileDevice ? 'flipbox' : 'datebox';
+      let timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';
+      this.init = true;
+      this.$(this.d.nativeElement).datebox({
+        mode: dateType,
+        closeCallback: () => {
+          let date = `${this.d.nativeElement.value} ${this.t.nativeElement.value}`;
+          this.setDate(date, moment, true);
         }
-      }
-    } else if (this.config.templateOptions.type === 'datetime') {
-      if (this.date && this.time) {
-        let {year = 0, month = 0, day = 0} = {...this.date};
-        let {hour = 0, minute = 0} = {...this.time};
-        if (time) {
-          let value = time.utc([year, month - 1, day, hour, minute]).format('YYYY-MM-DD hh:mm');
-          this.group.get(this.key).patchValue(value);
-        }
+      });
+      if (this.config.templateOptions.type === 'datetime') {
+        this.$(this.t.nativeElement).datebox({
+          mode: timeType,
+          overrideTimeFormat: 12,
+          overrideTimeOutput: '%I:%M %p',
+          closeCallback: () => {
+            let date = `${this.d.nativeElement.value} ${this.t.nativeElement.value}`;
+            this.setDate(date, moment, true);
+          }
+        });
       }
     }
   }
 
-  public setDate(value, moment) {
-    let date = moment.utc(value, 'YYYY-MM-DD hh:mm:ss');
-    this.date = {
-      year: date.year(),
-      month: date.month() + 1,
-      day: date.date()
-    };
-    this.time = {
-      hour: date.hour(),
-      minute: date.minute(),
-      second: date.second()
-    };
-    this.updateDate();
+  public updateDate(date, time = moment) {
+    if (this.config.templateOptions.type === 'date') {
+      if (date) {
+        if (!this.date) {
+          this.date = date.format('YYYY-MM-DD');
+        }
+        this.group.get(this.key).patchValue(date.format('YYYY-MM-DD'));
+      }
+    } else if (this.config.templateOptions.type === 'datetime') {
+      if (date) {
+        if (!this.date) {
+          this.date = date.format('YYYY-MM-DD');
+        }
+        if (!this.time) {
+          this.time = date.format('hh:mm A');
+        }
+        this.group.get(this.key).patchValue(date.format());
+      }
+    }
+  }
+
+  public setDate(value, moment, picker = false) {
+    let date;
+    if (picker) {
+      let newValue = moment(value, 'YYYY-MM-DD hh:mm A').format().split('+')[0];
+      date = moment.tz(newValue + '+10:00', 'Australia/Sydney');
+    } else {
+      date = moment.tz(value, 'Australia/Sydney');
+    }
+    this.updateDate(date);
   }
 }

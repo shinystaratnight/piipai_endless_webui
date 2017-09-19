@@ -2,18 +2,17 @@
   <div class="d-flex" (click)="updateDate()">
     <div class="w-100">
       <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
-      <div *ngIf="!config.read_only" class="input-group">
-        <input
-        class="form-control"
-        #d
-        #datepicker="ngbDatepicker"
-        ngbDatepicker
-        [(ngModel)]="date"
-        [attr.id]="key"
-        [attr.name]="key">
-        <div class="input-group-addon" (click)="datepicker.toggle()" style="cursor: pointer">
-          <i fa [name]="'calendar'" [border]=true></i>
-        </div>
+      <div *ngIf="!config.read_only" class="input-group datepicker">
+        <input class="form-control"
+          #d
+          data-role="datebox"
+          [(ngModel)]="date"
+          [attr.id]="key"
+          [attr.name]="key">
+        <input [hidden]="config.templateOptions.type !== 'datetime'" class="form-control"
+          #t
+          date-role="datebox"
+          [(ngModel)]="time">
       </div>
       <div *ngIf="config.read_only" class="form-control">{{group && group.get(key).value}}</div>
       <small class="text-muted" *ngIf="config.templateOptions.description">
@@ -25,9 +24,6 @@
       <div *ngIf="message">
         <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
       </div>
-    </div>
-    <div style="min-width: 8rem;" *ngIf="config.templateOptions.type === 'datetime'">
-      <ngb-timepicker [(ngModel)]="time"></ngb-timepicker>
     </div>
   </div>
 </div>
