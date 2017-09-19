@@ -266,6 +266,7 @@ export class FormRelatedComponent
     this.modalData.title = this.config.templateOptions.label;
     this.modalData.endpoint = this.config.endpoint;
     if (type === 'edit' || type === 'delete') {
+      this.modalData.title = this.displayValue;
       this.modalData.id = this.group.get(this.key).value;
     }
     this.modalRef = this.modalService.open(this.modal, {size: 'lg'});

@@ -565,6 +565,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
           break;
         case 'evaluate':
           this.evaluate(e);
+          break;
         default:
           return;
       }
@@ -648,7 +649,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     this.open(this.modal, {size: 'lg'});
   }
 
-  public editObject(id, label) {
+  public editObject(id, label = undefined) {
     this.modalInfo = {};
     this.modalInfo.type = 'form';
     this.modalInfo.endpoint = this.endpoint;

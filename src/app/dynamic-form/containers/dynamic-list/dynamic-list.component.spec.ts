@@ -953,6 +953,16 @@ describe('DynamicListComponent', () => {
       expect(comp.modalInfo).toEqual({});
       expect(comp.setAction).toHaveBeenCalledWith(event);
     });
+
+    it('should call evaluate method', () => {
+      let event = {
+        value: 'evaluate',
+      };
+      spyOn(comp, 'evaluate');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.evaluate).toHaveBeenCalledWith(event);
+    });
   });
 
   describe('openForm method', () => {
@@ -1064,6 +1074,72 @@ describe('DynamicListComponent', () => {
     }));
   });
 
+  describe('evaluate method', () => {
+    it('should set data for evaluation booking', () => {
+      let event = {
+        el: {
+          rowId: 123,
+          endpoint: '/ecore/api/v2/contacts/'
+        }
+      };
+      let mockData = {
+        results: [
+          {
+            id: 123,
+            picture: {
+              thumb: 'imageSrc'
+            },
+            __str__: 'Mr. Tom Smith'
+          }
+        ]
+      };
+      comp.evaluateModal = {};
+      comp.data = mockData;
+      spyOn(comp, 'open');
+      comp.evaluate(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'evaluate',
+        endpoint: event.el.endpoint,
+        label: {
+          picture: mockData.results[0].picture.thumb,
+          name: mockData.results[0].__str__
+        }
+      });
+      expect(comp.open).toHaveBeenCalledWith(comp.evaluateModal);
+    });
+
+    it('should set default picture for modal window', () => {
+      let event = {
+        el: {
+          rowId: 123,
+          endpoint: '/ecore/api/v2/contacts/'
+        }
+      };
+      let mockData = {
+        results: [
+          {
+            id: 123,
+            picture: null,
+            __str__: 'Mr. Tom Smith'
+          }
+        ]
+      };
+      comp.evaluateModal = {};
+      comp.data = mockData;
+      spyOn(comp, 'open');
+      comp.evaluate(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'evaluate',
+        endpoint: event.el.endpoint,
+        label: {
+          picture: '/assets/img/avatar.png',
+          name: mockData.results[0].__str__
+        }
+      });
+      expect(comp.open).toHaveBeenCalledWith(comp.evaluateModal);
+    });
+  });
+
   describe('eventHandler method', () => {
     it('should open modal', async(() => {
       comp.config = config;
@@ -1110,6 +1186,20 @@ describe('DynamicListComponent', () => {
         type: 'form',
         endpoint: comp.endpoint,
         label,
+        id
+      });
+      expect(comp.open).toHaveBeenCalled();
+    });
+
+    it('should open modal for edit object with "Edit" label', () => {
+      let id = '123';
+      comp.endpoint = 'some edpoint';
+      spyOn(comp, 'open');
+      comp.editObject(id);
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: comp.endpoint,
+        label: 'Edit',
         id
       });
       expect(comp.open).toHaveBeenCalled();
