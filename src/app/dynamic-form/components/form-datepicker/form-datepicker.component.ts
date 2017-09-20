@@ -79,7 +79,7 @@ export class FormDatepickerComponent
     }
   }
 
-  public updateDate(date, time = moment) {
+  public updateDate(date) {
     if (this.config.templateOptions.type === 'date') {
       if (date) {
         if (!this.date) {
