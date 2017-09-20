@@ -1,19 +1,15 @@
-<div class="form-group" [formGroup]="group">
+<div class="form-group" [formGroup]="group" *ngIf="!config.read_only">
   <div class="form-check">
     <label [attr.for]="key" class="form-check-label" [ngClass]="{'pl-0': config.read_only}">
       <input
-        *ngIf="!config.read_only"
         #checkbox
         class="form-check-input"
         [formControl]="group.get(key)"
         type="checkbox"
         [attr.id]="key"
         [attr.name]="key">
-      <i fa class="text-success mr-1"
-        *ngIf="config.read_only"
-        [name]="'check-square-o'"></i>
-        {{config.templateOptions.label}}
-    </label>
+      {{config.templateOptions.label}}
+    </label><br>
     <small class="text-muted" *ngIf="config.templateOptions.description">
       {{config.templateOptions.description}}
     </small>
@@ -24,4 +20,16 @@
       <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
     </div>
   </div>
+</div>
+
+<div class="form-group d-flex fustify-content-start align-items-center" *ngIf="config.read_only">
+  <label class="mr-5 mb-0">{{config.templateOptions.label}}</label>
+  <span
+    *ngIf="config.templateOptions && config.templateOptions.type === 'text'">
+      {{this.checkboxValue}}
+  </span>
+  <i fa [name]="checkboxValue"
+    [ngClass]="[checkboxClass]"
+    *ngIf="config.templateOptions && config.templateOptions.type === 'icon'">
+  </i>
 </div>

@@ -19,6 +19,9 @@ export class BreadcrumbComponent implements OnChanges {
   @Input()
   public navigationList: Page[];
 
+  @Input()
+  public formLabel: string;
+
   public list: Breadcrumb[] = [];
 
   constructor(
@@ -44,17 +47,7 @@ export class BreadcrumbComponent implements OnChanges {
     let urlCopy = url.map((el) => {
       return el.path;
     });
-    let lastElement = urlCopy.pop();
-    let fullPath;
-    if (lastElement === 'add') {
-      this.generateBreadcrumb(urlCopy);
-    } else if (lastElement === 'change') {
-      let id = urlCopy.pop();
-      this.generateBreadcrumb(urlCopy);
-    } else {
-      urlCopy.push(lastElement);
-      this.generateBreadcrumb(urlCopy);
-    }
+    this.generateBreadcrumb(urlCopy);
   }
 
   public generateBreadcrumb(url) {
@@ -68,6 +61,12 @@ export class BreadcrumbComponent implements OnChanges {
           path,
           label: exist.name,
           active: path === fullPath
+        });
+      } else if ((el === 'add' || el === 'change') && this.formLabel) {
+        this.list.push({
+          path: null,
+          label: this.formLabel,
+          active: true
         });
       }
     });

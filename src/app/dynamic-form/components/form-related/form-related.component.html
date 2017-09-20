@@ -1,74 +1,51 @@
-<div class="form-group" [formGroup]="group">
-  <div *ngIf="!config.many" style="position: relative">
-    <label [attr.for]="key">{{config.templateOptions.label}}</label>
-    <div class="d-flex align-items-center">
-      <div class="form-control custom-select autocomplete-value"
-        [ngClass]="{'active': !config.readonly}"
-        (click)="openAutocomplete()">
-        <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
+<div *ngIf="!(config.editForm && config.read_only)">
+  <div *ngIf="!config.list" class="form-group" [formGroup]="group">
+    <div *ngIf="!config.many" style="position: relative">
+      <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
+      <div class="d-flex align-items-center">
+        <div class="form-control custom-select autocomplete-value"
+          [ngClass]="{'active': !config.readonly}"
+          (click)="openAutocomplete()">
+          <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
+          <template *ngIf="!config.options" [ngTemplateOutlet]="spinner"></template>
+        </div>
+        <div class="btn-group" role="group"
+          *ngIf="config.options && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete)" >
+          <button type="button" class="btn btn-secondary"
+            *ngIf="config.templateOptions.edit && displayValue"
+            (click)="open('edit')">
+            <i fa class="text-primary icon"
+              [name]="'pencil'"></i>
+          </button>
+          <button type="button" class="btn btn-secondary"
+            *ngIf="config.templateOptions.add"
+            (click)="open('add')">
+            <i fa class="text-success icon"
+              [name]="'plus'" ></i>
+          </button>
+          <button type="button" class="btn btn-secondary"
+            *ngIf="config.templateOptions.delete && displayValue"
+            (click)="open('delete')">
+            <i fa class="text-danger icon"
+              [name]="'times'"></i>
+          </button>
+        </div>
       </div>
-      <div class="btn-group" role="group"
-        *ngIf="config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete" >
-        <button type="button" class="btn btn-secondary"
-          *ngIf="config.templateOptions.edit && displayValue"
-          (click)="open('edit')">
-          <i fa class="text-primary icon"
-            [name]="'pencil'"></i>
-        </button>
-        <button type="button" class="btn btn-secondary"
-          *ngIf="config.templateOptions.add"
-          (click)="open('add')">
-          <i fa class="text-success icon"
-            [name]="'plus'" ></i>
-        </button>
-        <button type="button" class="btn btn-secondary"
-          *ngIf="config.templateOptions.delete && displayValue"
-          (click)="open('delete')">
-          <i fa class="text-danger icon"
-            [name]="'times'"></i>
-        </button>
-      </div>
-    </div>
 
-    <div class="card autocomplete p-1" [hidden]="hideAutocomplete">
-      <input type="text" class="form-control mb-1" autocomplete="off"
-        #search
-        [(ngModel)]="searchValue"
-        [ngModelOptions]="{standalone: true}"
-        (blur)="resetList()"
-        (keyup)="filter(searchValue)">
-      <div #autocomplete class="autocomplete-list"
-        infinite-scroll
-        [infiniteScrollDistance]="modalScrollDistance"
-        [infiniteScrollThrottle]="modalScrollThrottle"
-        [scrollWindow]="false"
-        (scrolled)="onModalScrollDown()"
-        [hidden]="!(previewList && previewList.length)">
-        <ul class="list-group w-100">
-          <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
-            *ngFor="let option of previewList"
-            (click)="setValue(option)">{{option[display]}}</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="config.many" style="position: relative">
-    <label [attr.for]="key">{{config.templateOptions.label}}</label>
-    <input type="text" class="form-control custom-select autocomplete-value" autocomplete="off"
-      [(ngModel)]="searchValue"
-      [ngModelOptions]="{standalone: true}"
-      [ngClass]="{'active': !config.readonly}"
-      (focus)="generateList()"
-      (blur)="resetList()"
-      (keyup)="filter(searchValue)">
-      <div class="autocomplete" [hidden]="!(previewList && previewList.length)">
-        <div class="autocomplete-list"
+      <div class="card autocomplete p-1" [hidden]="hideAutocomplete">
+        <input type="text" class="form-control mb-1" autocomplete="off"
+          #search
+          [(ngModel)]="searchValue"
+          [ngModelOptions]="{standalone: true}"
+          (blur)="resetList()"
+          (keyup)="filter(searchValue)">
+        <div #autocomplete class="autocomplete-list"
           infinite-scroll
           [infiniteScrollDistance]="modalScrollDistance"
           [infiniteScrollThrottle]="modalScrollThrottle"
           [scrollWindow]="false"
-          (scrolled)="onModalScrollDown()">
+          (scrolled)="onModalScrollDown()"
+          [hidden]="!(previewList && previewList.length)">
           <ul class="list-group w-100">
             <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
               *ngFor="let option of previewList"
@@ -76,26 +53,109 @@
           </ul>
         </div>
       </div>
-    <div class="d-flex flex-wrap align-items-center mt-2">
-      <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal"
-        *ngFor="let item of results; let i = index">
-        {{item[display]}}
-        <i fa class="text-white icon ml-2"
-          (click)="deleteItem(i)"
-          [name]="'times'"></i>
-      </span>
+    </div>
+
+    <div *ngIf="config.many" style="position: relative">
+      <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
+      <input type="text" class="form-control custom-select autocomplete-value" autocomplete="off"
+        [(ngModel)]="searchValue"
+        [ngModelOptions]="{standalone: true}"
+        [ngClass]="{'active': !config.readonly}"
+        (focus)="generateList()"
+        (blur)="resetList()"
+        (keyup)="filter(searchValue)">
+      <template *ngIf="!config.options" [ngTemplateOutlet]="spinner"></template>
+        <div class="autocomplete" [hidden]="!(previewList && previewList.length)">
+          <div class="autocomplete-list"
+            infinite-scroll
+            [infiniteScrollDistance]="modalScrollDistance"
+            [infiniteScrollThrottle]="modalScrollThrottle"
+            [scrollWindow]="false"
+            (scrolled)="onModalScrollDown()">
+            <ul class="list-group w-100">
+              <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+                *ngFor="let option of previewList"
+                (click)="setValue(option)">{{option[display]}}</li>
+            </ul>
+          </div>
+        </div>
+      <div class="d-flex flex-wrap align-items-center mt-2">
+        <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal"
+          *ngFor="let item of results; let i = index">
+          {{item[display]}}
+          <i fa class="text-white icon ml-2"
+            (click)="deleteItem(i)"
+            [name]="'times'"></i>
+        </span>
+      </div>
+    </div>
+
+    <small class="text-muted" *ngIf="config.templateOptions.description">
+      {{config.templateOptions.description}}
+    </small>
+    <div *ngIf="errors">
+      <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
+    </div>
+    <div *ngIf="message">
+      <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
     </div>
   </div>
 
-  <small class="text-muted" *ngIf="config.templateOptions.description">
-    {{config.templateOptions.description}}
-  </small>
-  <div *ngIf="errors">
-    <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
+  <div class="mb-3" *ngIf="config.list">
+    <h6 class="card flex-row align-items-center mb-0" [ngClass]="{'bg-primary text-white': !isCollapsed}">
+      <i
+        fa
+        class="p-2"
+        [name]="isCollapsed ? 'eye' : 'eye-slash'"
+        [border]=false
+        (click)="isCollapsed = !isCollapsed"
+        [attr.aria-expanded]="!isCollapsed"
+        aria-controls="collapseExample"
+        style="cursor: pointer"></i>
+          {{config.templateOptions.label}}
+    </h6>
+    <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list px-2">
+      <table *ngIf="dataOfList" class="table table-bordered mb-1">
+        <thead>
+          <tr>
+            <th *ngFor="let col of config.metadata">
+              {{col.templateOptions.label}}
+            </th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let object of dataOfList">
+            <td *ngFor="let field of object.metadata;">
+              <ng-container
+                formElement
+                [label]="false"
+                [config]="field"
+                [group]="object.data"
+                (event)="updateValue($event)">
+              </ng-container>
+            </td>
+            <td>
+              <span *ngIf="object.id" class="d-flex align-items-center justify-content-center">
+                <i fa class="icon text-danger" title="Delete"
+                  [name]="'trash'"
+                  (click)="deleteObject(object)"></i>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <a *ngIf="dataOfList" href="#" (click)="addObject($event)">
+          <i fa [name]="'plus'" class="icon text-success"></i>
+          Add {{config.templateOptions.label}}
+      </a>
+    </div>
   </div>
-  <div *ngIf="message">
-    <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
-  </div>
+</div>
+
+<div class="form-group" *ngIf="config.editForm && config.read_only">
+  <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label><br>
+  <a href="#" (click)="open('edit', $event)">{{displayValue}}</a>
 </div>
 
 <template #modal let-c="close" let-d="dismiss">
@@ -124,6 +184,23 @@
       <button type="button" class="btn btn-danger"
         (click)="deleteElement(c)">Delete</button>
     </div>
+  </div>
+</template>
+
+<template #spinner>
+  <div class="sk-fading-circle">
+    <div class="sk-circle1 sk-circle"></div>
+    <div class="sk-circle2 sk-circle"></div>
+    <div class="sk-circle3 sk-circle"></div>
+    <div class="sk-circle4 sk-circle"></div>
+    <div class="sk-circle5 sk-circle"></div>
+    <div class="sk-circle6 sk-circle"></div>
+    <div class="sk-circle7 sk-circle"></div>
+    <div class="sk-circle8 sk-circle"></div>
+    <div class="sk-circle9 sk-circle"></div>
+    <div class="sk-circle10 sk-circle"></div>
+    <div class="sk-circle11 sk-circle"></div>
+    <div class="sk-circle12 sk-circle"></div>
   </div>
 </template>
 

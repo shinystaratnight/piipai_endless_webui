@@ -28,64 +28,87 @@
     </h5>
   </div>
   <div [class.card-block]="poped" class="datatable-body">
-    <filter-block *ngIf="(first || poped) && filtersOfList.length" [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+    <filter-block *ngIf="(first || poped) && filtersOfList && filtersOfList.length" [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     <action-element *ngIf="config.list.actions" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
-    <h5 class="d-flex justify-content-between align-items-center lead mb-2" *ngIf="config.list && !poped">
+    <h5 class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center lead mb-2" *ngIf="config.list && !poped">
       <span>{{config.list.label}}</span>
-      <a class="btn btn-primary text-white" routerLink="add"
-        *ngIf="first">
-        Add {{config.list.label}}
-      </a>
-      <i
-        fa
-        *ngIf="!first"
-        [name]="'window-restore'"
-        [border]="true" class="text-muted hidden-sm-down icon"
-        (click)="popedTable()"
-        aria-hidden="true"></i>
+      <div class="mt-2">
+        <list-buttons
+          [buttons]="config.list.buttons"
+          [first]="first"
+          [inForm]="inForm"
+          [label]="config.list.label"
+          [poped]="poped"
+          (event)="buttonAction($event)">
+        </list-buttons>
+      </div>
     </h5>
-    <div class="table-wrapper">
+    <div class="mt-2" *ngIf="poped">
+      <list-buttons
+        [buttons]="config.list.buttons"
+        [first]="first"
+        [inForm]="inForm"
+        [label]="config.list.label"
+        [poped]="poped"
+        (event)="buttonAction($event)">
+      </list-buttons>
+    </div>
+    <div class="tabs d-flex flex-wrap justify-content-around align-items-center">
+      <div class="tab py-2 mx-2"
+        *ngFor="let tab of tabs"
+        (click)="changeTab(tab)">
+        <i fa [name]="tab.is_collapsed ? 'eye' : 'eye-slash'"></i>
+        {{tab.label}}
+      </div>
+    </div>
+    <div #tableWrapper class="table-wrapper">
       <table class="table table-bordered table-striped table-sm" *ngIf="config.list">
         <thead class="thead-default hidden-sm-down">
           <tr>
             <th class="text-center" style="width: 2rem">
               *
-              <input type="checkbox" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
+              <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
             </th>
-            <th *ngFor="let field of config.list.columns;" class="align-middle" [class.datatable-title-hover]="field.sort">
-              <i fa
-                *ngIf="field.sorted"
-                [name]="field.sorted === 'desc' ? 'sort-desc' : 'sort-asc'"
-                [border]=true
-                class="pr-2 icon"
-                (click)="sorting(field)"></i>
-              <i fa
-                *ngIf="field.sorted"
-                [name]="'sort'"
-                [border]=true
-                class="pr-2 text-muted icon"
-                (click)="resetSort(field, true)"></i>
-              <ng-container
-                listElement
-                [head]="true"
-                [config]="field"
-                (event)="sorting(field)">
-              </ng-container>
+            <th *ngFor="let field of config.list.columns;" class="align-middle"
+              [class.datatable-title-hover]="field.sort"
+              [hidden]="field.tab && field.tab.is_collapsed">
+                <i fa
+                  *ngIf="field.sorted"
+                  [name]="field.sorted === 'desc' ? 'sort-desc' : 'sort-asc'"
+                  [border]=true
+                  class="pr-2 icon"
+                  (click)="sorting(field)"></i>
+                <i fa
+                  *ngIf="field.sorted"
+                  [name]="'sort'"
+                  [border]=true
+                  class="pr-2 text-muted icon"
+                  (click)="resetSort(field, true)"></i>
+                <ng-container
+                  listElement
+                  [head]="true"
+                  [config]="field"
+                  (event)="sorting(field)">
+                </ng-container>
             </th>
           </tr>
         </thead>
         <tbody *ngIf="body && !refresh">
-          <tr *ngFor="let row of body" [class.table-warning]="row.highlight">
-            <td class="text-center">
-              <input type="checkbox" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
-              <a *ngIf="first" [routerLink]="[row.id + '/change']">
-                <i fa [name]="'pencil'" class="icon text-primary"></i>
-              </a>
-              <i fa *ngIf="!first"
-                [name]="'pencil'" class="icon text-primary"
-                (click)="editObject(row.id, row.__str__)"></i>
+          <tr *ngFor="let row of body"
+            [class.table-warning]="row.highlight && row.highlight.highlight"
+            [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
+            <td>
+              <div class="d-flex flex-md-column justify-content-between align-items-center">
+                <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
+                <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm" [routerLink]="[row.id + '/change']">
+                  <i fa [name]="'pencil'" class="icon text-primary"></i>
+                </a>
+                <i fa *ngIf="!first || inForm"
+                  [name]="'pencil'" class="icon text-primary ml-auto ml-md-0"
+                  (click)="editObject(row.id, row.__str__)"></i>
+              </div>
             </td>
-            <td *ngFor="let cell of row.content" [attr.data-label]="cell.label">
+            <td *ngFor="let cell of row.content" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
               <div class="d-flex justify-content-between">
                 <ng-container
                   listElement
@@ -144,12 +167,25 @@
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
-      <generic-form [endpoint]="modalInfo.endpoint" [id]="modalInfo.id" *ngSwitchCase="'form'">
+      <generic-form [endpoint]="modalInfo.endpoint" [id]="modalInfo.id" *ngSwitchCase="'form'" (event)="formEvent($event, c)">
         <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
       </generic-form>
       <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">
         <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
       </sebm-google-map>
     </div>
+  </div>
+</template>
+
+<template #confirmModal let-c="close">
+  <div class="modal-header">
+    <p>{{modalInfo.message}}</p>
+    <button type="button" class="close" aria-label="Close" (click)="d(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="callAction(modalInfo, c)">{{modalInfo.agree_label}}</button>
+    <button type="button" class="btn btn-secondary" (click)="c(false)">{{modalInfo.decline_label}}</button>
   </div>
 </template>

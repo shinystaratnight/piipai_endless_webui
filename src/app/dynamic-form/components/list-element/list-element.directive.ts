@@ -15,6 +15,7 @@ import { ListColumnComponent } from './../../containers/list-column/list-column.
 import { ListLinkComponent } from './../list-link/list-link.component';
 import { ListCheckboxComponent } from './../list-checkbox/list-checkbox.component';
 import { FormButtonComponent } from './../form-button/form-button.component';
+import { ListImageComponent } from './../list-image/list-image.copmonent';
 
 const components = {
   text: ListTextComponent,
@@ -26,7 +27,10 @@ const components = {
   select: ListCheckboxComponent,
   button: FormButtonComponent,
   datetime: ListTextComponent,
-  related: ListTextComponent
+  related: ListTextComponent,
+  picture: ListImageComponent,
+  icon: ListImageComponent,
+  date: ListTextComponent
 };
 
 @Directive({

@@ -1,0 +1,13 @@
+.vacancy-dates {
+  width: 13rem;
+  border-radius: .2rem;
+  box-shadow: 0 0 2px 2px rgba($gray, .5);
+
+  &-wrapper {
+    overflow: auto;
+  }
+
+  .workers {
+    width: 5rem;
+  }
+}

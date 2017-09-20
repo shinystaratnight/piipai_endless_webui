@@ -1,10 +1,10 @@
 <navigation [pages]="pagesList"></navigation>
-<breadcrumb [navigationList]="pagesList"></breadcrumb>
+<breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
 
 <div class="container-fluid pb-5">
   <div *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
     <div *ngSwitchCase="'form'">
-      <generic-form [endpoint]="pageData.endpoint" [id]="pageData.pathData.id" (event)="formEvent($event)">
+      <generic-form [endpoint]="pageData.endpoint" [id]="pageData.pathData.id" (event)="formEvent($event)" (str)="changeFormLabel($event)">
         <div class="d-flex">
           <button type="button" class="btn btn-danger"
             *ngIf="pageData.pathData.id"

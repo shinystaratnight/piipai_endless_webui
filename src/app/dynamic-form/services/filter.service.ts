@@ -13,21 +13,25 @@ export class FilterService {
   constructor(
     private gfs: GenericFormService
   ) {
-    this._filters = [];
+    this._filters = {};
     this._paramsOfFilters = {};
   }
 
   set filters(filters) {
-    if (filters && this.filterList.indexOf(filters.list) < 0) {
-      this.filterList.push(filters.list);
-      filters.filters.forEach((el) => {
-        el.listName = filters.list;
-      });
-      this.parseFilters(filters.filters, this.paramsOfFilters, filters.list, true);
-      this._filters.push(...filters.filters);
-    } else {
-      this._filters = [];
-      this.filterList = [];
+    if (!this._filters[filters.endpoint]) {
+      this._filters[filters.endpoint] = [];
+      if (filters && filters.list && this.filterList.indexOf(filters.list.list) < 0) {
+        this.filterList.push(filters.list.list);
+        filters.list.filters.forEach((el) => {
+          el.listName = filters.list.list;
+          el.endpoint = filters.endpoint;
+        });
+        this.parseFilters(filters.list.filters, this.paramsOfFilters, filters.list.list, true);
+        this._filters[filters.endpoint].push(...filters.list.filters);
+      } else {
+        this._filters = {};
+        this.filterList = [];
+      }
     }
   }
 
@@ -37,21 +41,24 @@ export class FilterService {
     } else {
       this._paramsOfFilters[params.param] = params.value;
     }
-    this.parseFilters(this.filters, this.paramsOfFilters, params.list);
+    let filters = this.getFiltersByEndpoint(params.endpoint);
+    this.parseFilters(filters, this.paramsOfFilters, params.list);
   }
 
-  get filters() {
-    return this._filters;
+  public getFiltersByEndpoint(endpoint) {
+    return this._filters[endpoint];
   }
 
   get paramsOfFilters() {
     return this._paramsOfFilters;
   }
 
-  public getFiltersOfList(name) {
+  public getFiltersOfList(endpoint, name) {
     let result = [];
-    result = this._filters.filter((el) => el.listName === name);
-    this.deleteFilters(this._filters, name);
+    if (endpoint && this._filters[endpoint]) {
+      result = this._filters[endpoint].filter((el) => el.listName === name);
+      this.deleteFilters(this._filters[endpoint], name);
+    }
     return result;
   }
 

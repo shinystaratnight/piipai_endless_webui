@@ -56,6 +56,9 @@ export class GenericFormComponent implements OnChanges {
   @Output()
   public errorForm: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public str: EventEmitter<any> = new EventEmitter();
+
   public metadata = [];
   public metadataError = [];
   public sendData = null;
@@ -77,6 +80,10 @@ export class GenericFormComponent implements OnChanges {
 
   public ngOnChanges() {
     if (this.endpoint !== this.currentEndpoint) {
+      let patt = /\?/;
+      if (patt.test(this.endpoint)) {
+        this.endpoint = this.endpoint.slice(0, this.endpoint.indexOf('?'));
+      }
       this.currentEndpoint = this.endpoint;
       this.getMetadata(this.endpoint);
     } else if (this.data && this.metadata) {
@@ -109,7 +116,12 @@ export class GenericFormComponent implements OnChanges {
             this.editForm = true;
             this.show = false;
             this.getDataForForm(this.endpoint, this.id);
+            this.updateElements(this.metadata, 'id', 'list', this.id);
+            this.updateElements(this.metadata, 'editForm', undefined, true);
           } else {
+            this.str.emit({
+              str: 'Add'
+            });
             this.show = true;
           }
         }),
@@ -121,6 +133,9 @@ export class GenericFormComponent implements OnChanges {
       ((data: any) => {
         this.fillingForm(this.metadata, data);
         this.show = true;
+        this.str.emit({
+          str: data && data.__str__ ? data.__str__ : ''
+        });
       }
     ));
   }
@@ -240,6 +255,22 @@ export class GenericFormComponent implements OnChanges {
     this.buttonAction.emit(e);
   }
 
+  public getRelatedMetadata(metadata, key, endpoint) {
+    this.service.getMetadata(endpoint, '?type=formset').subscribe(
+      (response: any) => {
+        this.parseMetadata(metadata, {
+          [key]: {
+            action: 'add',
+            data: {
+              metadata: response.fields
+            }
+          }
+        });
+        this.getData(response.fields);
+      }
+    );
+  }
+
   public getRalatedData
     (metadata, key, endpoint, fields, query = null, param = 'options', update = true) {
     let currentQuery = query;
@@ -261,7 +292,7 @@ export class GenericFormComponent implements OnChanges {
                 currentQuery: query
               }
             }
-          });
+          }, update);
           if (key === 'rules') {
             if (response.results) {
               let rules = this.getElementFromMetadata(metadata, 'rules');
@@ -274,15 +305,15 @@ export class GenericFormComponent implements OnChanges {
                     currentQuery: query
                   }
                 }
-              });
+              }, update);
             }
             if (this.workflowData.company &&
               this.workflowData.number &&
               this.workflowData.workflow && update) {
-              this.updateMetadata(this.metadata, key);
+              this.updateMetadata(metadata, key);
             }
           } else if (update) {
-            this.updateMetadata(this.metadata, key);
+            this.updateMetadata(metadata, key);
           }
         });
     } else {
@@ -328,6 +359,9 @@ export class GenericFormComponent implements OnChanges {
             fields.code2 = 'code2';
           }
           this.getRalatedData(metadata, el.key, el.endpoint, fields, '?limit=-1');
+          if (el.list) {
+            this.getRelatedMetadata(metadata, el.key, el.endpoint);
+          }
         }
       } else if (el.children) {
         this.getData(el.children, key, query);
@@ -335,7 +369,7 @@ export class GenericFormComponent implements OnChanges {
     });
   }
 
-  public parseMetadata(metadata, params) {
+  public parseMetadata(metadata, params, update = true) {
     metadata.forEach((el) => {
       if (el.type === 'hidden') {
         el.hide = this.hide;
@@ -347,7 +381,9 @@ export class GenericFormComponent implements OnChanges {
           if (elem.related) {
             this.resetRalatedData(metadata, elem.related.reset);
           }
-          this.updateMetadata(metadata, el.key);
+          if (update) {
+            this.updateMetadata(metadata, el.key);
+          }
         } else if (params[el.key].update) {
           let elem = this.getElementFromMetadata(metadata, el.key);
           if (elem.related) {
@@ -528,5 +564,20 @@ export class GenericFormComponent implements OnChanges {
         this.getRalatedData(newMetadata, 'rules', endpoint, null, `?${query.join('&')}`);
       }
     }
+  }
+
+  public updateElements(metadata, param, type = undefined, value) {
+    metadata.forEach((el) => {
+      if (type && el.type === type) {
+        el[param] = value;
+      } else if (!type) {
+        el[param] = value;
+        if (el.children) {
+          this.updateElements(el.children, param, type, value);
+        }
+      } else if (el.children) {
+        this.updateElements(el.children, param, type, value);
+      }
+    });
   }
 }

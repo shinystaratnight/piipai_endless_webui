@@ -6,12 +6,16 @@ import { DebugElement } from '@angular/core';
 import { DynamicListComponent } from './dynamic-list.component';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { GenericFormService } from './../../services/generic-form.service';
+import { Observable } from 'rxjs/Observable';
+
 describe('DynamicListComponent', () => {
   let fixture: ComponentFixture<DynamicListComponent>;
   let comp: DynamicListComponent;
   let el;
   let config = {
     list: {
+      label: 'Company',
       list: 'company',
       highlight: {
         values: {
@@ -19,6 +23,18 @@ describe('DynamicListComponent', () => {
         },
         field: 'company.type'
       },
+      tabs: [
+        {
+          label: 'Contact',
+          fields: ['gender', 'phone_modile'],
+          is_collapsed: false
+        },
+        {
+          label: 'Branch',
+          fields: ['branch'],
+          is_collapsed: true
+        }
+      ],
       columns: [
         {
           name: 'first_name',
@@ -61,7 +77,14 @@ describe('DynamicListComponent', () => {
               type: 'button',
               action: 'openMap',
               icon: 'fa-glob',
-              text: '{company.type}'
+              text: '{company.type}',
+              confirm: true,
+              options: {
+                label: 'Delete selected',
+                message: 'Are you sure?',
+                agree_label: 'Agree',
+                decline_label: 'Decline'
+              }
             }
           ]
         },
@@ -164,12 +187,21 @@ describe('DynamicListComponent', () => {
     }
   };
 
+  const mockGenericFormService = {
+    submitForm() {
+      return Observable.of({});
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         DynamicListComponent
       ],
-      providers: [{provide: FilterService, useValue: mockFilterService}],
+      providers: [
+        {provide: FilterService, useValue: mockFilterService},
+        {provide: GenericFormService, useValue: mockGenericFormService }
+      ],
       imports: [NgbModule.forRoot()],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
@@ -211,11 +243,13 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'resetSelectedElements');
       spyOn(comp, 'getSortedColumns');
       spyOn(comp, 'unpopedTable');
+      spyOn(comp, 'updateMetadataByTabs');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.resetSelectedElements).toHaveBeenCalled();
       expect(comp.getSortedColumns).toHaveBeenCalled();
       expect(comp.unpopedTable).toHaveBeenCalled();
+      expect(comp.updateMetadataByTabs).toHaveBeenCalled();
     }));
 
     it('should update datatable', async(() => {
@@ -224,11 +258,13 @@ describe('DynamicListComponent', () => {
       comp.active = false;
       comp.id = 5;
       spyOn(comp, 'initPagination');
+      spyOn(comp, 'updateMetadataByTabs');
       comp.ngOnChanges();
       expect(+comp.datatable.nativeElement.style.zIndex).toEqual(25);
       comp.active = true;
       comp.ngOnChanges();
       expect(+comp.datatable.nativeElement.style.zIndex).toEqual(100);
+      expect(comp.updateMetadataByTabs).toHaveBeenCalled();
     }));
 
     it('should call updateSort method', async(() => {
@@ -242,12 +278,14 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'updateSort');
       spyOn(comp, 'resetSort');
       spyOn(comp, 'initPagination');
+      spyOn(comp, 'updateMetadataByTabs');
       comp.ngOnChanges();
       expect(comp.sortedColumns).toEqual(comp.sorted);
       expect(comp.updateSort).toHaveBeenCalled();
       comp.sorted = {};
       comp.ngOnChanges();
       expect(comp.resetSort).toHaveBeenCalled();
+      expect(comp.updateMetadataByTabs).toHaveBeenCalled();
     }));
 
     it('should create body for inner tables', async(() => {
@@ -275,17 +313,20 @@ describe('DynamicListComponent', () => {
       comp.data = {};
       spyOn(comp, 'prepareData');
       spyOn(comp, 'initPagination');
+      spyOn(comp, 'updateMetadataByTabs');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
+      expect(comp.updateMetadataByTabs).toHaveBeenCalled();
     }));
 
   });
 
-  describe('ngOnDestroy', () => {
+  describe('ngOnDestroy method', () => {
     it('should clean filters and close modal',
       async(inject([FilterService], (fs: FilterService) => {
         comp.first = true;
         comp.config = config;
+        comp.endpoint = '/ecore/api/v2/contacts/';
         comp.modalRef = {
           close() {
             return true;
@@ -293,23 +334,96 @@ describe('DynamicListComponent', () => {
         };
         spyOn(comp.modalRef, 'close');
         comp.ngOnDestroy();
-        expect(fs.filters).toEqual(null);
+        expect(fs.filters).toEqual({
+          endpoint: comp.endpoint,
+          list: null
+        });
         expect(comp.modalRef.close).toHaveBeenCalled();
     })));
+  });
+
+  describe('ngAfterContentChecked method', () => {
+    it('should call checkOverflow method', () => {
+      spyOn(comp, 'checkOverfow');
+      comp.ngAfterContentChecked();
+      expect(comp.checkOverfow).toHaveBeenCalled();
+    });
+  });
+
+  describe('checkOverflow method', () => {
+    it('should set overflow auto', () => {
+      comp.tableWrapper = {
+        nativeElement: {
+          style: {
+            overflowX: 'visible'
+          },
+          offsetWidth: 500
+        }
+      };
+      comp.config = config;
+      comp.checkOverfow();
+      expect(comp.tableWrapper.nativeElement.style.overflowX).toEqual('auto');
+    });
+
+    it('should set overflow visible', () => {
+      comp.tableWrapper = {
+        nativeElement: {
+          style: {
+            overflowX: 'auto'
+          },
+          offsetWidth: 800
+        }
+      };
+      comp.config = config;
+      comp.checkOverfow();
+      expect(comp.tableWrapper.nativeElement.style.overflowX).toEqual('visible');
+    });
+  });
+
+  describe('changeTab method', () => {
+    it('should change status of tab', () => {
+      comp.tabs = config.list.tabs;
+      let tab = comp.tabs[1];
+      comp.changeTab(tab);
+      expect(tab.is_collapsed).toBeFalsy();
+    });
+  });
+
+  describe('getTabOfColumn method', () => {
+    it('should return tab of tabs by name of column', () => {
+      comp.tabs = config.list.tabs;
+      let name = 'gender';
+      let tab = comp.getTabOfColumn(name);
+      expect(tab).toEqual(comp.tabs[0]);
+    });
+  });
+
+  describe('updateMetadataByTabs method', () => {
+    it('should add tab proporty for all column', () => {
+      comp.config = config;
+      spyOn(comp, 'getTabOfColumn');
+      comp.updateMetadataByTabs(comp.config.list.columns);
+      expect(comp.getTabOfColumn).toHaveBeenCalledTimes(4);
+    });
   });
 
   describe('prepareData method', () => {
 
     it('should prepare data for body', async(() => {
+      comp.config = config;
+      comp.tabs = config.list.tabs;
       let body = [{
         id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
         __str__: 'Test Testovich',
-        highlight: true,
+        highlight: {
+          highlight: true
+        },
         content: [
           {
             id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'First Name',
             name: 'first_name',
+            tab: undefined,
             content: [
               {
                 rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -331,6 +445,7 @@ describe('DynamicListComponent', () => {
             id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'Branch',
             name: 'branch',
+            tab: undefined,
             content: [
               {
                 rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -338,6 +453,14 @@ describe('DynamicListComponent', () => {
                 name: undefined,
                 type: 'button',
                 values: undefined,
+                confirm: true,
+                list: true,
+                options: {
+                  label: 'Delete selected',
+                  message: 'Are you sure?',
+                  agree_label: 'Agree',
+                  decline_label: 'Decline'
+                },
                 templateOptions: {
                   label: undefined,
                   icon: 'glob',
@@ -367,6 +490,7 @@ describe('DynamicListComponent', () => {
             id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'Gender',
             name: 'gender',
+            tab: undefined,
             content: [
               {
                 rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -382,6 +506,7 @@ describe('DynamicListComponent', () => {
             id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
             label: 'Mobile Phone',
             name: 'phone_mobile',
+            tab: undefined,
             content: [
               {
                 rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -420,6 +545,7 @@ describe('DynamicListComponent', () => {
           }
         ]
       }];
+      spyOn(comp, 'getTabOfColumn').and.returnValue(undefined);
       let result = comp.prepareData(config.list.columns, data.results, config.list.highlight);
       expect(result).toEqual(body);
     }));
@@ -769,8 +895,7 @@ describe('DynamicListComponent', () => {
   });
 
   describe('buttonHandler method', () => {
-    it('should call the function', () => {
-      comp.config = config;
+    it('should call openMap method', () => {
       let event = {
         value: 'openMap',
         el: {
@@ -778,16 +903,139 @@ describe('DynamicListComponent', () => {
         }
       };
       spyOn(comp, 'openMap');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.openMap).toHaveBeenCalledWith(event.el.fields);
+    });
+
+    it('should call openList method', () => {
+      let event = {
+        value: 'openList',
+        el: {
+          endpoint: 'some endpoint',
+        }
+      };
       spyOn(comp, 'openList');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.openList).toHaveBeenCalledWith(event.el.endpoint, event.el);
+    });
+
+    it('should call openDiff method', () => {
+      let event = {
+        value: 'openDiff',
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
       spyOn(comp, 'openDiff');
       comp.buttonHandler(event);
-      expect(comp[event.value]).toHaveBeenCalled();
-      event.value = 'openList';
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.openDiff).toHaveBeenCalledWith(event.el.endpoint, event.el);
+    });
+
+    it('should call openForm method', () => {
+      let event = {
+        value: 'openForm',
+      };
+      spyOn(comp, 'openForm');
       comp.buttonHandler(event);
-      expect(comp[event.value]).toHaveBeenCalled();
-      event.value = 'openDiff';
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.openForm).toHaveBeenCalledWith(event);
+    });
+
+    it('should call setAction method', () => {
+      let event = {
+        value: 'callAction',
+      };
+      spyOn(comp, 'setAction');
       comp.buttonHandler(event);
-      expect(comp[event.value]).toHaveBeenCalled();
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.setAction).toHaveBeenCalledWith(event);
+    });
+  });
+
+  describe('openForm method', () => {
+    it('should prepareData for form', () => {
+      let event = {
+        el: {
+          endpoint: 'some endpoint',
+          value: 'Invoice'
+        }
+      };
+      spyOn(comp, 'open');
+      comp.modal = {};
+      comp.openForm(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: event.el.endpoint,
+        label: event.el.value
+      });
+      expect(comp.open).toHaveBeenCalledWith(comp.modal, {size: 'lg'});
+    });
+  });
+
+  describe('setAction method', () => {
+    it('should call callAction method', () => {
+      let event = {
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
+      spyOn(comp, 'callAction');
+      comp.setAction(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'action',
+        endpoint: event.el.endpoint
+      });
+      expect(comp.callAction).toHaveBeenCalledWith(comp.modalInfo);
+    });
+
+    it('should call open method', () => {
+      let event = {
+        el: {
+          endpoint: 'some endpoint',
+          confirm: true,
+          options: {
+            message: 'Are you sure?',
+            agree_label: 'Agree',
+            decline_label: 'Decline'
+          }
+        }
+      };
+      comp.confirmModal = {};
+      spyOn(comp, 'open');
+      comp.setAction(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'action',
+        endpoint: event.el.endpoint,
+        message: event.el.options.message,
+        agree_label: event.el.options.agree_label,
+        decline_label: event.el.options.decline_label
+      });
+      expect(comp.open).toHaveBeenCalledWith(comp.confirmModal);
+    });
+  });
+
+  describe('callAction method', () => {
+    it('should call action', () => {
+      let modal = {
+        closeModal() {
+          return true;
+        }
+      };
+      let modalInfo = {
+        endpoint: 'some endpoint'
+      };
+      comp.config = config;
+      spyOn(modal, 'closeModal');
+      spyOn(comp.event, 'emit');
+      comp.callAction(modalInfo, modal.closeModal);
+      expect(modal.closeModal).toHaveBeenCalled();
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'update',
+        list: comp.config.list.list
+      });
     });
   });
 
@@ -838,6 +1086,19 @@ describe('DynamicListComponent', () => {
     }));
   });
 
+  describe('addObject method', () => {
+    it('should open modal for create new object', () => {
+      comp.config = config;
+      comp.endpoint = '/ecore/api/v2/companies/';
+      comp.addObject();
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: comp.endpoint,
+        label: `Add ${config.list.label}`
+      });
+    });
+  });
+
   describe('editObject method', () => {
     it('should open modal for edit object', () => {
       let id = '123';
@@ -875,6 +1136,19 @@ describe('DynamicListComponent', () => {
       let values = config.list.highlight.values;
       comp.addHighlight(field, elem, row, values);
       expect(row.highlight).toBeTruthy();
+    }));
+
+    it('should add object with color for highlight', async(() => {
+      let field = 'is_available';
+      let elem = data.results[0];
+      let row = {
+        highlight: undefined
+      };
+      let values = {
+        true: 'green'
+      };
+      comp.addHighlight(field, elem, row, values);
+      expect(row.highlight.color).toEqual('green');
     }));
   });
 
@@ -970,6 +1244,49 @@ describe('DynamicListComponent', () => {
       expect(result).toEqual(dataFromApi.company.name);
     }));
 
+  });
+
+  describe('formEvent method', () => {
+    it('should update listafter edit element', () => {
+      let event = {
+        type: 'sendForm',
+        status: 'success'
+      };
+      let test = {
+        closeModal() {
+          return true;
+        }
+      };
+      comp.config = config;
+      spyOn(comp.event, 'emit');
+      spyOn(test, 'closeModal');
+      comp.formEvent(event, test.closeModal);
+      expect(test.closeModal).toHaveBeenCalled();
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'update',
+        list: config.list.list
+      });
+    });
+  });
+
+  describe('buttonAction method', () => {
+    it('should call add_object action', () => {
+      let event = {
+        type: 'add_object'
+      };
+      spyOn(comp, 'addObject');
+      comp.buttonAction(event);
+      expect(comp.addObject).toHaveBeenCalled();
+    });
+
+    it('should call poped_table action', () => {
+      let event = {
+        type: 'poped_table'
+      };
+      spyOn(comp, 'popedTable');
+      comp.buttonAction(event);
+      expect(comp.popedTable).toHaveBeenCalled();
+    });
   });
 
 });

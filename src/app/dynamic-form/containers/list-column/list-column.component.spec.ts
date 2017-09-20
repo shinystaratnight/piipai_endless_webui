@@ -12,7 +12,9 @@ describe('ListColumnComponent', () => {
     href: 'phone',
     name: 'phone_mobile',
     type: 'link',
-    sort: true
+    sort: true,
+    label: 'Email',
+    iconLabel: 'envelope'
   };
 
   beforeEach(() => {

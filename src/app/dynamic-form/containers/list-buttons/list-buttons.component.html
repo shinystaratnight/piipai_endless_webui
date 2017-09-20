@@ -1,0 +1,37 @@
+<div class="d-flex align-items-center">
+  <div class="d-flex align-items-center flex-wrap ml-sm-auto"
+    *ngIf="buttons && buttons.length">
+      <div class="my-1" *ngFor="let button of buttons; let f = first; let l = last">
+        <a class="btn btn-primary text-white btn-sm" routerLink="add"
+          [ngClass]="{'mx-2': !(f || l)}"
+          *ngIf="first && !inForm && button.action === 'add_object'">
+            {{button.label}}
+        </a>
+        <button *ngIf="!first || inForm || button.action !== 'add_object'" class="btn btn-primary btn-sm"
+          [ngClass]="{'mx-2': !(f || l)}"
+          (click)="buttonAction(button.action)">
+            {{button.label}}
+        </button>
+      </div>
+  </div>
+  <div class="d-flex align-items-center ml-sm-auto"
+    *ngIf="!buttons">
+      <a class="btn btn-primary btn-sm text-white" routerLink="add"
+        *ngIf="first && !inForm">
+        Add {{label}}
+      </a>
+      <button *ngIf="!first || inForm" class="btn btn-primary btn-sm ml-auto"
+        (click)="buttonAction('add_object')">
+        Add {{label}}
+      </button>
+  </div>
+  <button class="btn btn-primary hidden-sm-down btn-sm ml-2"
+    *ngIf="!first && !poped"
+    (click)="buttonAction('poped_table')">
+    <i
+      fa
+      [name]="'window-restore'"
+      [border]="true" class="text-white icon"
+      aria-hidden="true"></i>
+  </button>
+</div>

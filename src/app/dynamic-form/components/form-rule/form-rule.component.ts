@@ -33,6 +33,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   public errors: any;
   public message: any;
   public key: any;
+  public label: boolean;
 
   public view: Rule[];
   public id: number;

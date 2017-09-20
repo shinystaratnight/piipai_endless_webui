@@ -1,8 +1,8 @@
 <ol *ngIf="list.length" class="breadcrumb">
   <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
-  <li class="breadcrumb-item" [ngClass]="{'active': item.active}"
-    *ngFor="let item of list">
-    <a *ngIf="!item.active" routerLink="{{item.path}}">{{item.label}}</a>
-    <span *ngIf="item.active">{{item.label}}</span>
+  <li class="breadcrumb-item" [ngClass]="{'active': item.active || last}"
+    *ngFor="let item of list; let last = last">
+    <a *ngIf="!item.active && !last" routerLink="{{item.path}}">{{item.label}}</a>
+    <span *ngIf="item.active || last">{{item.label}}</span>
   </li>
 </ol>

@@ -13,8 +13,13 @@ export class GenericListComponent implements OnInit {
   @Input()
   public endpoint: string = '';
 
-  public metadata: any;
+  @Input()
+  public inForm: boolean = false;
+
+  @Input()
   public data: any;
+
+  public metadata: any;
   public tables = [];
   public first: boolean = false;
   public tableId: number = 1;
@@ -50,20 +55,24 @@ export class GenericListComponent implements OnInit {
           table.list = metadata.list.list;
           this.existingIds.push(this.tableId);
           table.id = this.tableId++;
-          if (!table.first) {
+          if (table && !table.first) {
             table.metadata.list.list += table.id;
             table.list += table.id;
             table.limit = this.limit;
             table.offset = 0;
           }
-          this.route.queryParams.subscribe(
-            (params) => {
-              let target = this.getTable(table.list);
-              if (target.first) {
-                this.parseUrl(params, table.list);
+          if (!this.inForm) {
+            this.route.queryParams.subscribe(
+              (params) => {
+                let target = this.getTable(table.list);
+                if (target && target.first) {
+                  this.parseUrl(params, table.list);
+                }
               }
-            }
-          );
+            );
+          } else {
+            this.getData(endpoint, table.query, table);
+          }
         }
       }
     );
@@ -133,13 +142,18 @@ export class GenericListComponent implements OnInit {
     if (!table.query) {
       table.query = {};
     }
-    if (e.type === 'sort' || e.type === 'pagination' || e.type === 'filter') {
+    if (e.type === 'sort' || e.type === 'pagination' ||
+      e.type === 'filter' || e.type === 'update') {
       table.refresh = true;
+      if (e.type === 'update') {
+        this.getData(this.getTable(e.list).endpoint, this.generateQuery(table.query), table);
+        return;
+      }
       table.query[e.type] = e.query;
       if (e.type === 'pagination') {
         table.innerTables = {};
       }
-      if (table.first) {
+      if (table && table.first && !this.inForm) {
         if (e.type === 'filter') {
           this.updateUrl(table.query, e.list, true);
         } else {
@@ -147,12 +161,14 @@ export class GenericListComponent implements OnInit {
         }
       } else {
         this.getData(this.getTable(e.list).endpoint, this.generateQuery(table.query), table);
-        e.query.split('&').forEach((el) => {
-          let propsArray = el.split('=');
-          if (propsArray[0] === 'offset') {
-            table['offset'] = propsArray[1];
-          }
-        });
+        if (e.query) {
+          e.query.split('&').forEach((el) => {
+            let propsArray = el.split('=');
+            if (propsArray[0] === 'offset') {
+              table['offset'] = propsArray[1];
+            }
+          });
+        }
       }
     } else if (e.type === 'close') {
       this.tables.splice(this.tables.indexOf(table), 1);
@@ -192,7 +208,13 @@ export class GenericListComponent implements OnInit {
   }
 
   public generateQuery(queries) {
-    let result = '?';
+    let patt = /\?/;
+    let result = '';
+    if (patt.test(this.endpoint)) {
+      result = '&';
+    } else {
+      result = '?';
+    }
     let queryList = Object.keys(queries);
     queryList.forEach((el) => {
       if (queries[el]) {
@@ -212,6 +234,8 @@ export class GenericListComponent implements OnInit {
       this.first = true;
       this.getData(endpoint, null, table, true);
     } else {
+      let firstTable = this.getFirstTable();
+      table['parentEndpoint'] = firstTable.endpoint;
       this.getMetadata(endpoint, table);
       this.getData(endpoint, null, table);
     }
@@ -220,6 +244,10 @@ export class GenericListComponent implements OnInit {
 
   public getTable(name) {
     return this.tables.filter((el) => el.list === name)[0];
+  }
+
+  public getFirstTable() {
+    return this.tables.filter((el) => el && el.first)[0];
   }
 
   public resetActiveTable(tables) {
@@ -316,7 +344,8 @@ export class GenericListComponent implements OnInit {
           this.fs.paramsOfFilters = {
             param: name.slice(0, name.indexOf('-')),
             value: queryParams[el],
-            list
+            list,
+            endpoint: this.endpoint
           };
           queryList['filter'] += `${name.slice(0, name.indexOf('-'))}=${queryParams[el]}&`;
         } else if (params[1] === 'p') {

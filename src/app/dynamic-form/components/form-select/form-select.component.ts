@@ -24,6 +24,7 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
   public message: any;
   public key: any;
   public options: any;
+  public label: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();

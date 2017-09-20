@@ -23,6 +23,8 @@ import { FormRuleComponent } from './../form-rule/form-rule.component';
 import { FormTimelineComponent } from './../form-timeline/form-timeline.component';
 import { FormPictureComponent } from './../form-picture/form-picture.component';
 import { FormHiddenComponent } from './../../containers/form-hidden/form-hidden.component';
+import { FormVacancyDatesComponent } from './../form-vacancy-dates/form-vacancy-dates.component';
+import { FormListComponent } from './../form-list/form-list.component';
 
 const components = {
   input: FormInputComponent,
@@ -37,7 +39,9 @@ const components = {
   rule: FormRuleComponent,
   timeline: FormTimelineComponent,
   picture: FormPictureComponent,
-  hidden: FormHiddenComponent
+  hidden: FormHiddenComponent,
+  vacancydates: FormVacancyDatesComponent,
+  list: FormListComponent
 };
 
 @Directive({
@@ -46,6 +50,9 @@ const components = {
 export class FormElementDirective implements OnInit, OnChanges {
   @Input()
   public config;
+
+  @Input()
+  public label = true;
 
   @Input()
   public group: FormGroup;
@@ -72,6 +79,7 @@ export class FormElementDirective implements OnInit, OnChanges {
   public ngOnChanges() {
     if (this.component) {
       this.component.instance.config = this.config;
+      this.component.instance.label = this.label;
       this.component.instance.group = this.group;
       this.component.instance.errors = this.errors;
       this.component.instance.event = this.event;
@@ -95,6 +103,7 @@ export class FormElementDirective implements OnInit, OnChanges {
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;
+      this.component.instance.label = this.label;
       this.component.instance.group = this.group;
       this.component.instance.errors = this.errors;
       this.component.instance.event = this.event;

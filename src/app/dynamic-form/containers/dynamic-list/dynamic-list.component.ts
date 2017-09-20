@@ -6,17 +6,20 @@ import {
   EventEmitter,
   OnChanges,
   ViewChild,
-  OnDestroy
+  OnDestroy,
+  AfterContentChecked
 } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+import { GenericFormService } from './../../services/generic-form.service';
 
 @Component({
   selector: 'dynamic-list',
   templateUrl: 'dynamic-list.component.html'
 })
 
-export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
+export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
   @Input()
   public config: any;
 
@@ -59,6 +62,12 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public endpoint: string;
 
+  @Input()
+  public parentEndpoint: string;
+
+  @Input()
+  public inForm: boolean = false;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -68,8 +77,14 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('modal')
   public modal;
 
+  @ViewChild('confirmModal')
+  public confirmModal;
+
   @ViewChild('datatable')
   public datatable;
+
+  @ViewChild('tableWrapper')
+  public tableWrapper;
 
   public body: any[] = [];
   public select: any;
@@ -89,16 +104,21 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   public innerTableCall: any;
   public modalRef: any;
   public refreshing: boolean = false;
+  public tabs: any;
 
   constructor(
     private filterService: FilterService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private genericFormService: GenericFormService
   ) {}
 
   public ngOnInit() {
     if (this.config.list.filters) {
-      this.filterService.filters = this.config.list;
-      this.filtersOfList = this.filterService.filters;
+      this.filterService.filters = {
+        endpoint: this.parentEndpoint || this.endpoint,
+        list: this.config.list
+      };
+      this.filtersOfList = this.filterService.getFiltersByEndpoint(this.endpoint);
     }
     this.innerTableCall = {
       row: '',
@@ -110,6 +130,12 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     let config = this.config;
     let data = this.data;
     let innerTables = this.innerTables;
+    if (!this.tabs) {
+      this.tabs = this.config.list.tabs;
+    }
+    if (config.list.columns) {
+      this.updateMetadataByTabs(config.list.columns);
+    }
     if (data) {
       this.initPagination(data);
     }
@@ -153,11 +179,71 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnDestroy() {
     if (this.first) {
-      this.filterService.filters = null;
+      this.filterService.filters = {
+        endpoint: this.endpoint,
+        list: null
+      };
       if (this.modalRef) {
         this.modalRef.close();
       }
     }
+  }
+
+  public ngAfterContentChecked() {
+    this.checkOverfow();
+  }
+
+  public checkOverfow() {
+    let width = this.tableWrapper.nativeElement.offsetWidth;
+    let count = 0;
+    this.config.list.columns.forEach((el) => {
+      if (!el.tab) {
+        count += 1;
+      } else if (el.tab && !el.tab.is_collapsed) {
+        count += 1;
+      }
+    });
+    if ((width / count) < 150) {
+      this.tableWrapper.nativeElement.style.overflowX = 'auto';
+    } else {
+      this.tableWrapper.nativeElement.style.overflowX = 'visible';
+    }
+  };
+
+  public changeTab(tab) {
+    if (this.tabs) {
+      this.tabs.forEach((el) => {
+        if (el === tab) {
+          el.is_collapsed = !el.is_collapsed;
+        }
+      });
+      let collapsedTabs = this.tabs.filter((el) => el.is_collapsed);
+    }
+  }
+
+  public getTabOfColumn(name) {
+    let tab;
+    if (this.tabs) {
+      let filteredTabs = this.tabs.filter((el) => {
+        let result = false;
+        el.fields.forEach((field) => {
+          if (field === name) {
+            result = true;
+          }
+        });
+        return result;
+      });
+      if (filteredTabs.length) {
+        tab = filteredTabs[0];
+      }
+    }
+    return tab;
+  }
+
+  public updateMetadataByTabs(metadata) {
+    metadata.forEach((el) => {
+      el.tab = this.getTabOfColumn(el.name);
+    });
   }
 
   public prepareData(config, data, highlight = null) {
@@ -177,7 +263,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
           label: col.label,
           name: col.name,
           content: [],
-          contextMenu: col.context_menu
+          contextMenu: col.context_menu,
+          tab: this.getTabOfColumn(col.name)
         };
         col.content.forEach((element) => {
           let obj: any = {};
@@ -193,6 +280,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
             obj['endpoint'] = this.format(element.endpoint, el);
           }
           if (element.type === 'button') {
+            obj.confirm = element.confirm;
+            obj.options = element.options;
+            obj.list = true;
             obj.templateOptions = {
               label: element.label,
               icon: element.icon ? element.icon.slice(element.icon.indexOf('-') + 1) : null,
@@ -261,7 +351,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
       this.event.emit({
         type: 'sort',
         list: this.config.list.list,
-        sort: this.sortedColumns
+        query: this.sortTable(this.sortedColumns)
       });
     }
   }
@@ -420,13 +510,17 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public popedTable() {
-    this.filtersOfList = this.filterService.getFiltersOfList(this.config.list.list);
+    this.filtersOfList =
+      this.filterService.getFiltersOfList(this.parentEndpoint, this.config.list.list);
     this.poped = true;
   }
 
   public unpopedTable() {
     if (this.config.list.filters) {
-      this.filterService.filters = this.config.list;
+      this.filterService.filters = {
+        endpoint: this.parentEndpoint,
+        list: this.config.list,
+      };
     }
     this.poped = false;
     this.minimized = false;
@@ -451,13 +545,63 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
 
   public buttonHandler(e) {
     this.modalInfo = {};
-    if (e.value) {
-      if (e.value === 'openMap') {
-        this[e.value](e.el.fields);
-      } else if (e.value === 'openList' || e.value === 'openDiff') {
-        this[e.value](e.el.endpoint, e.el);
+    if (e && e.value) {
+      switch (e.value) {
+        case 'openMap':
+          this.openMap(e.el.fields);
+        break;
+        case 'openList':
+        case 'openDiff':
+          this[e.value](e.el.endpoint, e.el);
+          break;
+        case 'openForm':
+          this.openForm(e);
+          break;
+        case 'callAction':
+          this.setAction(e);
+          break;
+        default:
+          return;
       }
     }
+    return;
+  }
+
+  public openForm(e) {
+    this.modalInfo = {};
+    this.modalInfo.type = 'form';
+    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo.label = e.el.value;
+    this.open(this.modal, {size: 'lg'});
+  }
+
+  public setAction(e) {
+    this.modalInfo = {};
+    this.modalInfo.type = 'action';
+    this.modalInfo.endpoint = e.el.endpoint;
+    if (e.el.confirm && e.el.options) {
+      this.modalInfo.message = e.el.options.message;
+      this.modalInfo.agree_label = e.el.options.agree_label;
+      this.modalInfo.decline_label = e.el.options.decline_label;
+      this.open(this.confirmModal);
+    } else {
+      this.callAction(this.modalInfo);
+    }
+  }
+
+  public callAction(modalInfo, closeModal = undefined) {
+    if (closeModal) {
+      closeModal();
+    }
+    let endpoint = modalInfo.endpoint;
+    this.genericFormService.submitForm(endpoint, {}).subscribe(
+      (res: any) => {
+        this.event.emit({
+          type: 'update',
+          list: this.config.list.list
+        });
+      }
+    );
   }
 
   public openMap(value) {
@@ -475,6 +619,14 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     this.modalInfo.endpoint = e.endpoint;
     this.modalInfo.label = e.label;
     this.modalInfo.id = e.id;
+    this.open(this.modal, {size: 'lg'});
+  }
+
+  public addObject() {
+    this.modalInfo = {};
+    this.modalInfo.type = 'form';
+    this.modalInfo.endpoint = this.endpoint;
+    this.modalInfo.label = `Add ${this.config.list.label}`;
     this.open(this.modal, {size: 'lg'});
   }
 
@@ -500,7 +652,17 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     let props = prop.split('.');
     let key = props.shift();
     if (props.length === 0) {
-      row.highlight = values[data[prop]];
+      let property = data[prop];
+      row.highlight = false;
+      if (typeof values[property] === 'boolean') {
+        row.highlight = {
+          highlight: true
+        };
+      } else if (property) {
+        row.highlight = {
+          color: values[property]
+        };
+      }
     } else {
       this.addHighlight(props.join('.'), data[key], row, values);
     }
@@ -532,7 +694,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     let propValue;
     let pos = 0;
     let trail;
-    while (true) {
+    while (true && str) {
       let start = str.indexOf(open, pos);
       let end = str.indexOf(close, pos);
       let key = str.substring(start + 1, end);
@@ -562,6 +724,31 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       if (data) {
         return this.getPropValue(data[prop], props.join('.'));
+      }
+    }
+  }
+
+  public formEvent(e, closeModal) {
+    if (e.type === 'sendForm' && e.status === 'success') {
+      closeModal();
+      this.event.emit({
+        type: 'update',
+        list: this.config.list.list
+      });
+    }
+  }
+
+  public buttonAction(e) {
+    if (e && e.type) {
+      switch (e.type) {
+        case 'add_object':
+          this.addObject();
+          break;
+        case 'poped_table':
+          this.popedTable();
+          break;
+        default:
+          return;
       }
     }
   }

@@ -24,6 +24,9 @@ import { FormRuleComponent } from './components/form-rule/form-rule.component';
 import { FormTimelineComponent } from './components/form-timeline/form-timeline.component';
 import { FormPictureComponent } from './components/form-picture/form-picture.component';
 import { FormHiddenComponent } from './containers/form-hidden/form-hidden.component';
+import {
+  FormVacancyDatesComponent
+} from './components/form-vacancy-dates/form-vacancy-dates.component';
 
 import { GenericListComponent } from './components/generic-list/generic-list.component';
 import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
@@ -40,6 +43,9 @@ import { FilterService } from './services/filter.service';
 import { ListCheckboxComponent } from './components/list-checkbox/list-checkbox.component';
 import { FilterSelectComponent } from './components/filter-select/filter-select.component';
 import { ListTableComponent } from './components/list-table/list-table.component';
+import { ListImageComponent } from './components/list-image/list-image.copmonent';
+import { FormListComponent } from './components/form-list/form-list.component';
+import { ListButtonsComponent } from './containers/list-buttons/list-buttons.component';
 
 import { ActionElementComponent } from './components/action-element/action-element.component';
 
@@ -92,7 +98,11 @@ import { MoveDirective } from './directives/move.directive';
     FormTimelineComponent,
     FormPictureComponent,
     WebCamComponent,
-    FormHiddenComponent
+    FormHiddenComponent,
+    FormVacancyDatesComponent,
+    ListImageComponent,
+    FormListComponent,
+    ListButtonsComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -116,7 +126,10 @@ import { MoveDirective } from './directives/move.directive';
     FormRuleComponent,
     FormTimelineComponent,
     FormPictureComponent,
-    FormHiddenComponent
+    FormHiddenComponent,
+    FormVacancyDatesComponent,
+    ListImageComponent,
+    FormListComponent
   ]
 })
 export class DynamicFormModule { }

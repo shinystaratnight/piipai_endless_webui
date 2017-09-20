@@ -459,6 +459,23 @@ describe('GenericListComponent', () => {
         expect(comp.updateUrl).toHaveBeenCalledWith(table.query, event.list, true);
       }));
 
+      it('should update list', async(() => {
+        let event = {
+          type: 'update',
+          list: 'company'
+        };
+        let table = {
+          list: 'company',
+          first: true,
+          query: {}
+        };
+        comp.tables = [];
+        comp.tables.push(table);
+        spyOn(comp, 'getData');
+        comp.eventHandler(event);
+        expect(comp.getData).toHaveBeenCalled();
+      }));
+
     });
 
     describe('action method', () => {
@@ -517,6 +534,19 @@ describe('GenericListComponent', () => {
         expect(result).toEqual(`?${table.query.sort}&${table.query.pagination}`);
       }));
 
+      it('should add new queries', async(() => {
+        let table = {
+          list: 'company',
+          query: {
+            sort: 'company.name=Home',
+            pagination: 'limit=2&offset=2'
+          }
+        };
+        comp.endpoint = '/ecore/api/v2/contacts/?company=123';
+        let result = comp.generateQuery(table.query);
+        expect(result).toEqual(`&${table.query.sort}&${table.query.pagination}`);
+      }));
+
     });
 
     describe('createTableData method', () => {
@@ -525,7 +555,7 @@ describe('GenericListComponent', () => {
         expect(comp.createTableData).toBeDefined();
       }));
 
-      it('should create table', async(() => {
+      it('should create first table', async(() => {
         let endpoint = 'endpoint';
         spyOn(comp, 'getData').and.returnValue({results: []});
         let result = comp.createTableData(endpoint);
@@ -546,10 +576,12 @@ describe('GenericListComponent', () => {
         let endpoint = 'endpoint';
         let table = {
           endpoint,
-          innerTables: {}
+          innerTables: {},
+          parentEndpoint: '/ecore/'
         };
         spyOn(comp, 'getMetadata');
         spyOn(comp, 'getData');
+        spyOn(comp, 'getFirstTable').and.returnValue({endpoint: '/ecore/'});
         comp.first = true;
         let result = comp.createTableData(endpoint);
         expect(comp.getMetadata).toHaveBeenCalledWith(endpoint, table);
@@ -572,6 +604,17 @@ describe('GenericListComponent', () => {
         expect(result).toEqual(table);
       }));
 
+    });
+
+    describe('getFirstTable method', () => {
+      it('should return first table', () => {
+        let table = {
+          first: true
+        };
+        comp.tables.push(table);
+        let result = comp.getFirstTable();
+        expect(result).toEqual(table);
+      });
     });
 
     describe('resetActiveTable method', () => {

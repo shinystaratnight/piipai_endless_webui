@@ -26,6 +26,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public errors: any;
   public message: any;
   public key: any;
+  public label: boolean;
 
   public query = '';
   public filteredList: any[];
@@ -51,7 +52,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
-    if (this.config.value) {
+    if (this.config.value === 0 || this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
     }
   }

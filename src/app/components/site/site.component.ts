@@ -21,6 +21,7 @@ export class SiteComponent implements OnInit {
   public modulesList: any;
   public userModules: any;
   public pagesList: any;
+  public formLabel: string;
 
   constructor(
     private router: Router,
@@ -35,6 +36,7 @@ export class SiteComponent implements OnInit {
     this.user = this.storage.retrieve('contact');
     this.route.url.subscribe(
       (url: any) => {
+        this.formLabel = '';
         this.pageData = null;
         this.getPageNavigation(url);
         if (url.length) {
@@ -44,6 +46,12 @@ export class SiteComponent implements OnInit {
         }
       }
     );
+  }
+
+  public changeFormLabel(e) {
+    if (e && e.str) {
+      this.formLabel = e.str;
+    }
   }
 
   public getPageData(url) {
