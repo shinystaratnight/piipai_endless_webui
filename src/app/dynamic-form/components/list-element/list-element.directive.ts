@@ -41,6 +41,9 @@ export class ListElementDirective implements OnInit, OnChanges {
   public config;
 
   @Input()
+  public length;
+
+  @Input()
   public head;
 
   @Output()
@@ -68,6 +71,7 @@ export class ListElementDirective implements OnInit, OnChanges {
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;
+      this.component.instance.length = this.length;
       this.component.instance.event = this.event;
       this.component.instance.buttonAction = this.buttonAction;
     } else if (this.config.length || this.config.name) {
@@ -75,6 +79,7 @@ export class ListElementDirective implements OnInit, OnChanges {
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;
+      this.component.instance.length = this.length;
       this.component.instance.head = this.head;
       this.component.instance.event = this.event;
       this.component.instance.buttonAction = this.buttonAction;

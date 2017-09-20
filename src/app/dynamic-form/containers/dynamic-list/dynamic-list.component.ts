@@ -14,6 +14,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from './../../services/generic-form.service';
 
+import moment from 'moment';
+
 @Component({
   selector: 'dynamic-list',
   templateUrl: 'dynamic-list.component.html'
@@ -282,9 +284,21 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
           } else if (element.endpoint) {
             obj['endpoint'] = this.format(element.endpoint, el);
           }
+          if (element.type === 'static') {
+            obj.value = this.format(element.text, el);
+            obj.label = element.label;
+          }
           if (element.type === 'button') {
             obj.confirm = element.confirm;
             obj.options = element.options;
+            obj.color = element.color;
+            obj.repeat = element.repeat;
+            if (element.hidden) {
+              this.setValue(el, element.hidden.split('.'), obj, 'hidden');
+            }
+            if (element.replace_by) {
+              this.setValue(el, element.replace_by.split('.'), obj, 'replace_by');
+            }
             obj.list = true;
             obj.templateOptions = {
               label: element.label,
@@ -385,13 +399,13 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     return result;
   }
 
-  public setValue(data, props, object) {
+  public setValue(data, props, object , param = 'value') {
     let prop = props.shift();
     if (props.length === 0) {
-      if (object.type === 'related') {
-        object['value'] = data[prop] ? data[prop].__str__ : '';
-      } else {
-        object['value'] = data[prop];
+      if (object.type === 'related' && !object[param]) {
+        object[param] = data[prop] ? data[prop].__str__ : '';
+      } else if (!object[param]) {
+        object[param] = data[prop];
       }
     } else if (data[prop]) {
       this.setValue(data[prop], props, object);
@@ -738,6 +752,14 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     let prop = props.shift();
     if (!props.length) {
       if (data) {
+        if (prop.indexOf('__') > -1) {
+          let propArray = prop.split('__');
+          let datetime = ['date', 'time'];
+          if (datetime.indexOf(propArray[1]) > -1) {
+            return moment(data[propArray[0]])
+              .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
+          }
+        }
         return data[prop];
       }
     } else {

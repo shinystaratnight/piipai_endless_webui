@@ -61,8 +61,12 @@ export class FormDatepickerComponent
       this.$(this.d.nativeElement).datebox({
         mode: dateType,
         closeCallback: () => {
-          let date = `${this.d.nativeElement.value} ${this.t.nativeElement.value}`;
-          this.setDate(date, moment, true);
+          let date = this.d.nativeElement.value;
+          let time = this.t.nativeElement.value;
+          if (date) {
+            let fullDate = date + (time ? time : '');
+            this.setDate(fullDate, moment, true);
+          }
         }
       });
       if (this.config.templateOptions.type === 'datetime') {
@@ -71,8 +75,12 @@ export class FormDatepickerComponent
           overrideTimeFormat: 12,
           overrideTimeOutput: '%I:%M %p',
           closeCallback: () => {
-            let date = `${this.d.nativeElement.value} ${this.t.nativeElement.value}`;
-            this.setDate(date, moment, true);
+            let date = this.d.nativeElement.value;
+            let time = this.t.nativeElement.value;
+            if (date && time) {
+              let fullDate = `${date} ${time}`;
+              this.setDate(fullDate, moment, true);
+            }
           }
         });
       }
@@ -102,12 +110,14 @@ export class FormDatepickerComponent
 
   public setDate(value, moment, picker = false) {
     let date;
-    if (picker) {
-      let newValue = moment(value, 'YYYY-MM-DD hh:mm A').format().split('+')[0];
-      date = moment.tz(newValue + '+10:00', 'Australia/Sydney');
-    } else {
-      date = moment.tz(value, 'Australia/Sydney');
+    if (value) {
+      if (picker) {
+        let newValue = moment(value, 'YYYY-MM-DD hh:mm A').format().split('+')[0];
+        date = moment.tz(newValue + '+10:00', 'Australia/Sydney');
+      } else {
+        date = moment.tz(value, 'Australia/Sydney');
+      }
+      this.updateDate(date);
     }
-    this.updateDate(date);
   }
 }
