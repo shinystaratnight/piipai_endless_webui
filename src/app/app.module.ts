@@ -37,6 +37,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import '../styles/styles.scss';
 
 import 'jquery-ui';
+import '../../node_modules/bootstrap/dist/js/bootstrap.js';
 import '../../node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.js';
 
 // Application wide providers

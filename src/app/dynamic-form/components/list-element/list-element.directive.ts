@@ -30,7 +30,8 @@ const components = {
   related: ListTextComponent,
   picture: ListImageComponent,
   icon: ListImageComponent,
-  date: ListTextComponent
+  date: ListTextComponent,
+  datepicker: ListTextComponent
 };
 
 @Directive({

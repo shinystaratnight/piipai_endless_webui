@@ -34,7 +34,7 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
   public ngOnInit() {
     this.addControl(this.config, this.fb);
     if (!this.group.get(this.key).value && !this.config.read_only) {
-      let value = this.config.defaultValue || false;
+      let value = this.config.default || false;
       this.group.get(this.key).patchValue(value);
     }
     if (this.config.read_only) {

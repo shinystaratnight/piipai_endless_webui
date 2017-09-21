@@ -14,7 +14,7 @@ describe('FormCheckboxComponent', () => {
       key: 'is_available',
       read_only: true,
       value: false,
-      defaultValue: true,
+      default: true,
       templateOptions: {
         label: 'Test',
         required: true,
@@ -73,7 +73,7 @@ describe('FormCheckboxComponent', () => {
       expect(comp.group.get(comp.key).value).toBeFalsy();
     })));
 
-    it('should set defaultValue', async(inject([FormBuilder], (fb: FormBuilder) => {
+    it('should set default value', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
       comp.key = config.key;
       comp.group = fb.group({});

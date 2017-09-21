@@ -374,7 +374,7 @@ export class GenericFormComponent implements OnChanges {
       if (el.type === 'hidden') {
         el.hide = this.hide;
       }
-      if (el && el.key && !!params[el.key]) {
+      if (el && el.key && params && !!params[el.key]) {
         if (params[el.key].action === 'add') {
           el = Object.assign(el, params[el.key].data);
           let elem = this.getElementFromMetadata(metadata, el.key);

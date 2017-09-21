@@ -14,7 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from './../../services/generic-form.service';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 @Component({
   selector: 'dynamic-list',
@@ -110,6 +110,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   public modalRef: any;
   public refreshing: boolean = false;
   public tabs: any;
+  public evaluateEndpoint: string;
+  public approveEndpoint: string;
 
   constructor(
     private filterService: FilterService,
@@ -283,6 +285,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
             obj['link'] = this.format(element.link, el);
           } else if (element.endpoint) {
             obj['endpoint'] = this.format(element.endpoint, el);
+            if (col.name === 'evaluate') {
+              this.evaluateEndpoint = element.endpoint;
+            }
           }
           if (element.type === 'static') {
             obj.value = this.format(element.text, el);
@@ -571,13 +576,19 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         case 'openDiff':
           this[e.value](e.el.endpoint, e.el);
           break;
+        case 'approveTimesheet':
+          this.approveTimesheet(e);
+          break;
         case 'openForm':
           this.openForm(e);
+          break;
+        case 'changeTimesheet':
+          this.changeTimesheet(e);
           break;
         case 'callAction':
           this.setAction(e);
           break;
-        case 'evaluate':
+        case 'evaluateCandidate':
           this.evaluate(e);
           break;
         default:
@@ -638,12 +649,60 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     this.modalInfo = {};
     this.modalInfo.type = 'evaluate';
     this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo.edit = true;
     this.modalInfo.label = {
       picture: object.picture && object.picture.thumb ?
          object.picture.thumb : '/assets/img/avatar.png',
-      name: object.__str__
+      name: object.vacancy_offer.candidate_contact.contact.__str__
     };
     this.open(this.evaluateModal);
+  }
+
+  public changeTimesheet(e) {
+    let object = this.data.results.filter((el) => el.id === e.el.rowId)[0];
+    this.modalInfo = {};
+    this.modalInfo.type = 'evaluate';
+    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo.edit = true;
+    this.modalInfo.data = {
+      shift_started_at: {
+        action: 'add',
+        data: {
+          value: object.shift_started_at
+        }
+      },
+      break_started_at: {
+        action: 'add',
+        data: {
+          value: object.break_started_at
+        }
+      },
+      break_ended_at: {
+        action: 'add',
+        data: {
+          value: object.break_ended_at
+        }
+      },
+      shift_ended_at: {
+        action: 'add',
+        data: {
+          value: object.shift_ended_at
+        }
+      }
+    };
+    this.modalInfo.label = {
+      picture: object.picture && object.picture.thumb ?
+         object.picture.thumb : '/assets/img/avatar.png',
+      name: object.vacancy_offer.candidate_contact.contact.__str__
+    };
+    this.open(this.evaluateModal, {size: 'lg'});
+  }
+
+  public approveTimesheet(e) {
+    let object = this.data.results.filter((el) => el.id === e.el.rowId)[0];
+    this.approveEndpoint = e.el.endpoint;
+    e.el.endpoint = this.format(this.evaluateEndpoint, object);
+    this.evaluate(e);
   }
 
   public eventHandler(e) {
@@ -756,7 +815,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
           let propArray = prop.split('__');
           let datetime = ['date', 'time'];
           if (datetime.indexOf(propArray[1]) > -1) {
-            return moment(data[propArray[0]])
+            return moment.tz(data[propArray[0]], 'Australia/Sydney')
               .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
           }
         }
@@ -776,6 +835,25 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         type: 'update',
         list: this.config.list.list
       });
+    }
+  }
+
+  public evaluateEvent(e, closeModal) {
+    if (e.type === 'sendForm' && e.status === 'success') {
+      closeModal();
+      if (this.approveEndpoint) {
+        this.genericFormService.editForm(this.approveEndpoint, {}).subscribe(
+          (res: any) => {
+            this.event.emit({
+              type: 'update',
+              list: this.config.list.list
+            });
+            this.approveEndpoint = null;
+          }
+        );
+      } else {
+        this.formEvent(e, closeModal);
+      }
     }
   }
 
