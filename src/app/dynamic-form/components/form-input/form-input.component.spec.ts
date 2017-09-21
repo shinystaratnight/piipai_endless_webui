@@ -76,6 +76,8 @@ describe('FormInputComponent', () => {
   describe('ngAfterViewInit method', () => {
 
     it('should called addControl method', async(() => {
+      comp.config = config;
+      comp.config.readOnly = false;
       spyOn(comp, 'addFlags');
       comp.ngAfterViewInit();
       expect(comp.addFlags).toHaveBeenCalled();

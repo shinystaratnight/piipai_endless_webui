@@ -84,6 +84,8 @@ export class FormDatepickerComponent
           }
         });
       }
+      this.d.nativeElement.readOnly = false;
+      this.t.nativeElement.readOnly = false;
     }
   }
 

@@ -58,7 +58,9 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.input, this.config);
+    if (!this.config.read_only) {
+      this.addFlags(this.input, this.config);
+    }
   }
 
   public eventHandler(e) {
