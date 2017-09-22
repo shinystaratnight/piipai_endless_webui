@@ -8,6 +8,9 @@ interface PathData {
   type: string;
   path: string;
   id?: string;
+  postfix?: string;
+  modal?: boolean;
+  title?: string;
 }
 
 export interface PageData {
@@ -32,6 +35,10 @@ export class SiteService {
       endpoint: element ? element.endpoint : '',
       pathData
     };
+    if (pathData.postfix) {
+      data.endpoint = data.endpoint + pathData.id + '/submit/';
+      pathData.id = null;
+    }
     return data;
   }
 
@@ -50,13 +57,18 @@ export class SiteService {
         type: 'form',
         path: this.generatePath(urlCopy)
       };
-    } else if (lastElement === 'change') {
+    } else if (lastElement === 'change' || lastElement === 'submit') {
       let id = urlCopy.pop();
       data = {
         type: 'form',
         path: this.generatePath(urlCopy),
         id
       };
+      if (lastElement === 'submit') {
+        data.postfix = 'submit';
+        data.modal = true;
+        data.title = 'TimeSheet filling';
+      }
     } else if (lastElement === 'profile') {
       urlCopy.push(lastElement);
       data = {

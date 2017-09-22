@@ -44,8 +44,10 @@ describe('ListImageComponent', () => {
   describe('ngOnInit method', () => {
     it('should update property icon', () => {
       comp.config = config;
+      spyOn(comp, 'setClass');
       comp.ngOnInit();
       expect(comp.icon).toEqual(comp.config.values[config.value]);
+      expect(comp.setClass).toHaveBeenCalledWith(comp.config.value);
     });
 
     it('should update src property', () => {
@@ -67,6 +69,26 @@ describe('ListImageComponent', () => {
       comp.config = config;
       comp.ngOnInit();
       expect(comp.src).toEqual(defaultSrc);
+    });
+  });
+
+  describe('setClass method', () => {
+    it('should set class "text-success"', () => {
+      let value = true;
+      comp.setClass(value);
+      expect(comp.iconClass).toEqual('text-success');
+    });
+
+    it('should set class "text-danger"', () => {
+      let value = false;
+      comp.setClass(value);
+      expect(comp.iconClass).toEqual('text-danger');
+    });
+
+    it('should set class "text-muted"', () => {
+      let value = null;
+      comp.setClass(value);
+      expect(comp.iconClass).toEqual('text-muted');
     });
   });
 

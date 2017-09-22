@@ -281,6 +281,12 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
           obj['name'] = element.field;
           obj['type'] = element.type;
           obj['values'] = element.values;
+          if (element.type === 'icon') {
+            let field = this.config.fields.filter((elem) => elem.key === element.field);
+            if (field && field.length > 0) {
+              obj['values'] = field[0].templateOptions.values;
+            }
+          }
           if (element.link) {
             obj['link'] = this.format(element.link, el);
           } else if (element.endpoint) {
@@ -410,7 +416,11 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       if (object.type === 'related' && !object[param]) {
         object[param] = data[prop] ? data[prop].__str__ : '';
       } else if (!object[param]) {
-        object[param] = data[prop];
+        if (object.type === 'datepicker' || object.type === 'datetime') {
+          object[param] = moment.tz(data[prop], 'Australia/Sydney').format('YYYY-MM-DD hh:mm A');
+        } else {
+          object[param] = data[prop];
+        }
       }
     } else if (data[prop]) {
       this.setValue(data[prop], props, object);
@@ -650,6 +660,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     this.modalInfo.type = 'evaluate';
     this.modalInfo.endpoint = e.el.endpoint;
     this.modalInfo.edit = true;
+    this.modalInfo.needData = false;
     this.modalInfo.label = {
       picture: object.picture && object.picture.thumb ?
          object.picture.thumb : '/assets/img/avatar.png',
@@ -664,6 +675,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     this.modalInfo.type = 'evaluate';
     this.modalInfo.endpoint = e.el.endpoint;
     this.modalInfo.edit = true;
+    this.modalInfo.needData = false;
     this.modalInfo.data = {
       shift_started_at: {
         action: 'add',
@@ -696,6 +708,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       name: object.vacancy_offer.candidate_contact.contact.__str__
     };
     this.open(this.evaluateModal, {size: 'lg'});
+    let modalContent: any = document.getElementsByClassName('modal-content')[0];
+    if (modalContent) {
+      modalContent.style.overflow = 'visible';
+    }
   }
 
   public approveTimesheet(e) {

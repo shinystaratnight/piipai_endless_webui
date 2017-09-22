@@ -1,6 +1,6 @@
 <div class="form-group" [formGroup]="group" *ngIf="!config.read_only">
   <div class="form-check">
-    <label [attr.for]="key" class="form-check-label" [ngClass]="{'pl-0': config.read_only}">
+    <label [attr.for]="key" class="form-check-label" [ngClass]="{'pl-0': config.read_only || this.config.templateOptions.type === 'icon'}">
       <i class="mr-1" *ngIf="config.templateOptions.type === 'icon'"
         [ngClass]="[checkboxClass]"
         [ngStyle]="{'color': checkboxColor}"

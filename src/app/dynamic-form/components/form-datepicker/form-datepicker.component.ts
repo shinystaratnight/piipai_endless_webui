@@ -53,7 +53,9 @@ export class FormDatepickerComponent
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.d, this.config);
+    if (this.d) {
+      this.addFlags(this.d, this.config);
+    }
     if (!this.init) {
       let dateType = this.mobileDevice ? 'flipbox' : 'datebox';
       let timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';

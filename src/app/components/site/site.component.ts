@@ -133,7 +133,7 @@ export class SiteComponent implements OnInit {
     userModels.forEach((el) => {
       if (el && el.dashboard_module) {
         let model = models.filter((elem) => {
-          if (elem.id === el.dashboard_module.id && el.ui_config.display_on_navbar) {
+          if (elem.id === el.dashboard_module.id && !el.ui_config.display_on_navbar) {
             return true;
           } else {
             return false;
@@ -154,7 +154,7 @@ export class SiteComponent implements OnInit {
   public removePages(pages, endpoints) {
     pages.forEach((el, i) => {
       if (el.childrens && el.childrens.length) {
-        if (endpoints.indexOf(el.endpoint) === -1) {
+        if (endpoints.indexOf(el.endpoint) > -1) {
           el.disabled = true;
         }
         let childrens = this.removePages(el.childrens, endpoints);
@@ -162,7 +162,7 @@ export class SiteComponent implements OnInit {
           pages.splice(i, 1);
           this.removePages(pages, endpoints);
         }
-      } else if (endpoints.indexOf(el.endpoint) === -1) {
+      } else if (endpoints.indexOf(el.endpoint) > -1) {
         pages.splice(i, 1);
         this.removePages(pages, endpoints);
       }

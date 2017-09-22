@@ -39,6 +39,8 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
 
+  public displayValue: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -51,15 +53,25 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public ngOnInit() {
-    this.addControl(this.config, this.fb);
-    if (this.config.value === 0 || this.config.value) {
-      this.group.get(this.key).patchValue(this.config.value);
+    if (this.config.type !== 'static') {
+      this.addControl(this.config, this.fb);
+      if (this.config.value === 0 || this.config.value) {
+        this.group.get(this.key).patchValue(this.config.value);
+      }
+    } else {
+      if (this.config.value instanceof Object) {
+        this.displayValue = this.config.value.__str__;
+      } else {
+        this.displayValue = this.config.value;
+      }
     }
   }
 
   public ngAfterViewInit() {
     if (!this.config.read_only) {
-      this.addFlags(this.input, this.config);
+      if (this.input) {
+        this.addFlags(this.input, this.config);
+      }
     }
   }
 
