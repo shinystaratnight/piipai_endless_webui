@@ -41,7 +41,8 @@ const components = {
   picture: FormPictureComponent,
   hidden: FormHiddenComponent,
   vacancydates: FormVacancyDatesComponent,
-  list: FormListComponent
+  list: FormListComponent,
+  static: FormInputComponent
 };
 
 @Directive({

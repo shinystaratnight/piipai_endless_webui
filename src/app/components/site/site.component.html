@@ -4,13 +4,20 @@
 <div class="container-fluid pb-5">
   <div *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
     <div *ngSwitchCase="'form'">
-      <generic-form [endpoint]="pageData.endpoint" [id]="pageData.pathData.id" (event)="formEvent($event)" (str)="changeFormLabel($event)">
-        <div class="d-flex">
-          <button type="button" class="btn btn-danger"
-            *ngIf="pageData.pathData.id"
-            (click)="deleteElement(pageData)">Delete</button>
-          <button type="submit" class="btn btn-primary ml-auto">Save</button>
-        </div>
+      <generic-form
+        [title]="pageData.pathData.title"
+        [modal]="pageData.pathData.modal"
+        [endpoint]="pageData.endpoint"
+        [id]="pageData.pathData.id"
+        [edit]="pageData.pathData.postfix"
+        (event)="formEvent($event)"
+        (str)="changeFormLabel($event)">
+          <div class="d-flex">
+            <button type="button" class="btn btn-danger"
+              *ngIf="pageData.pathData.id"
+              (click)="deleteElement(pageData)">Delete</button>
+            <button type="submit" class="btn btn-primary ml-auto">Save</button>
+          </div>
       </generic-form>
     </div>
     <div *ngSwitchCase="'list'">

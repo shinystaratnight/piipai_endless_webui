@@ -10,6 +10,7 @@ export class ListLinkComponent implements OnInit {
   public config;
   public href: string;
   public link: boolean;
+  public value: string;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -22,7 +23,12 @@ export class ListLinkComponent implements OnInit {
 
   public ngOnInit() {
     this.href = this.createHref(this.config.value, this.config.link);
-  }
+    if (this.config.value && this.config.value instanceof Object) {
+      this.value = this.config.value.__str__;
+    } else {
+      this.value = this.config.value;
+    }
+   }
 
   public isEmail(value) {
     let reg =

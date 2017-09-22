@@ -8,6 +8,10 @@
   </div>
 
   <div class="col-12 col-md-6 mt-5" *ngIf="userModules && userModules.length">
+    <button class="icon btn btn-primary mb-3 px-4 d-flex align-items-center justify-content-center" (click)="openModal()">
+      <span class="text-white"><b>Add Widget</b></span>
+    </button>
+
     <div class="mb-3 d-flex flex-column align-items-stretch justify-content-center"
       *ngFor="let group of widgetList">
       <h6 class="p-2 mb-0 bg-inverse text-white">{{group.label}}</h6>
@@ -20,10 +24,6 @@
         </div>
       </div>
     </div>
-
-    <button class="icon btn btn-primary mt-2 px-4 d-flex align-items-center justify-content-center" (click)="openModal()">
-      <span class="text-white"><b>Add Widget</b></span>
-    </button>
   </div>
 </div>
 

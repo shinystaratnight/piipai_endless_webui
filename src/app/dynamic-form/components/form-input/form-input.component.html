@@ -17,7 +17,8 @@
     [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''"
     [readonly]="config.read_only"
     [value]="config.value === 0 || config.value ? config.value : group.get(key).value === 0 || group.get(key).value ? group.get(key).value : ''">
-  <div *ngIf="config.read_only" class="form-control">{{(group && group.get(key).value) || ''}}</div>
+  <div *ngIf="config.read_only && config.type !== 'static'" >{{(group && group.get(key).value) || ''}}</div>
+  <div *ngIf="config.type === 'static'" >{{displayValue}}</div>
   <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutocomplete">
     <div class="autocomplete-list"
       infinite-scroll

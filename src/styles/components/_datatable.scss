@@ -9,6 +9,15 @@ $cell-datatable-width: 45%;
 .datatable {
   background-color: $datatable-background-color;
 
+  list-column,
+  list-text {
+    width: 100%;
+
+    .label {
+      min-width: 40%;
+    }
+  }
+
   .button {
     border: 1px solid $brand-primary;
     background-color: white;

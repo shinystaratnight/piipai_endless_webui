@@ -14,10 +14,12 @@ describe('FormCheckboxComponent', () => {
       key: 'is_available',
       read_only: true,
       value: false,
+      default: true,
       templateOptions: {
         label: 'Test',
         required: true,
         type: 'icon',
+        color: 'primary',
         values: {
           true: 'check-circle',
           false: 'times-circle',
@@ -62,11 +64,27 @@ describe('FormCheckboxComponent', () => {
       form.addControl(comp.key, fb.control(''));
       comp.group = form;
       comp.config = config;
+      comp.config.read_only = true;
       spyOn(comp, 'addControl');
       spyOn(comp, 'setValue');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
       expect(comp.setValue).toHaveBeenCalled();
+      expect(comp.group.get(comp.key).value).toBeFalsy();
+    })));
+
+    it('should set default value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.key = config.key;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(false));
+      comp.config.value = false;
+      comp.config.read_only = false;
+      spyOn(comp, 'addControl');
+      spyOn(comp, 'customizeCheckbox');
+      comp.ngOnInit();
+      expect(comp.addControl).toHaveBeenCalled();
+      expect(comp.customizeCheckbox).toHaveBeenCalled();
       expect(comp.group.get(comp.key).value).toBeFalsy();
     })));
 
@@ -104,6 +122,23 @@ describe('FormCheckboxComponent', () => {
       comp.setValue(value);
       expect(comp.checkboxValue).toEqual('minus-circle');
       expect(comp.checkboxClass).toEqual('text-muted');
+    });
+  });
+
+  describe('customCheckbox method', () => {
+    it('should set checkboxClass', () => {
+      comp.config = config;
+      comp.customizeCheckbox();
+      expect(comp.checkboxClass).toEqual(`text-${config.templateOptions.color}`);
+      expect(comp.checkboxColor).toEqual('');
+    });
+
+    it('should set color', () => {
+      comp.config = config;
+      comp.config.templateOptions.color = 'purple';
+      comp.customizeCheckbox();
+      expect(comp.checkboxColor).toEqual(comp.config.templateOptions.color);
+      expect(comp.checkboxClass).toEqual('');
     });
   });
 

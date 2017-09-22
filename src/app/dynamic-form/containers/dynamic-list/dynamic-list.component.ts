@@ -14,6 +14,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from './../../services/generic-form.service';
 
+import moment from 'moment-timezone';
+
 @Component({
   selector: 'dynamic-list',
   templateUrl: 'dynamic-list.component.html'
@@ -80,6 +82,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   @ViewChild('confirmModal')
   public confirmModal;
 
+  @ViewChild('evaluateModal')
+  public evaluateModal;
+
   @ViewChild('datatable')
   public datatable;
 
@@ -105,6 +110,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   public modalRef: any;
   public refreshing: boolean = false;
   public tabs: any;
+  public evaluateEndpoint: string;
+  public approveEndpoint: string;
 
   constructor(
     private filterService: FilterService,
@@ -274,14 +281,35 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
           obj['name'] = element.field;
           obj['type'] = element.type;
           obj['values'] = element.values;
+          if (element.type === 'icon') {
+            let field = this.config.fields.filter((elem) => elem.key === element.field);
+            if (field && field.length > 0) {
+              obj['values'] = field[0].templateOptions.values;
+            }
+          }
           if (element.link) {
             obj['link'] = this.format(element.link, el);
           } else if (element.endpoint) {
             obj['endpoint'] = this.format(element.endpoint, el);
+            if (col.name === 'evaluate') {
+              this.evaluateEndpoint = element.endpoint;
+            }
+          }
+          if (element.type === 'static') {
+            obj.value = this.format(element.text, el);
+            obj.label = element.label;
           }
           if (element.type === 'button') {
             obj.confirm = element.confirm;
             obj.options = element.options;
+            obj.color = element.color;
+            obj.repeat = element.repeat;
+            if (element.hidden) {
+              this.setValue(el, element.hidden.split('.'), obj, 'hidden');
+            }
+            if (element.replace_by) {
+              this.setValue(el, element.replace_by.split('.'), obj, 'replace_by');
+            }
             obj.list = true;
             obj.templateOptions = {
               label: element.label,
@@ -382,13 +410,17 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     return result;
   }
 
-  public setValue(data, props, object) {
+  public setValue(data, props, object , param = 'value') {
     let prop = props.shift();
     if (props.length === 0) {
-      if (object.type === 'related') {
-        object['value'] = data[prop] ? data[prop].__str__ : '';
-      } else {
-        object['value'] = data[prop];
+      if (object.type === 'related' && !object[param]) {
+        object[param] = data[prop] ? data[prop].__str__ : '';
+      } else if (!object[param]) {
+        if (object.type === 'datepicker' || object.type === 'datetime') {
+          object[param] = moment.tz(data[prop], 'Australia/Sydney').format('YYYY-MM-DD hh:mm A');
+        } else {
+          object[param] = data[prop];
+        }
       }
     } else if (data[prop]) {
       this.setValue(data[prop], props, object);
@@ -554,11 +586,20 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         case 'openDiff':
           this[e.value](e.el.endpoint, e.el);
           break;
+        case 'approveTimesheet':
+          this.approveTimesheet(e);
+          break;
         case 'openForm':
           this.openForm(e);
           break;
+        case 'changeTimesheet':
+          this.changeTimesheet(e);
+          break;
         case 'callAction':
           this.setAction(e);
+          break;
+        case 'evaluateCandidate':
+          this.evaluate(e);
           break;
         default:
           return;
@@ -613,6 +654,73 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     this.open(this.modal, {size: 'lg'});
   }
 
+  public evaluate(e) {
+    let object = this.data.results.filter((el) => el.id === e.el.rowId)[0];
+    this.modalInfo = {};
+    this.modalInfo.type = 'evaluate';
+    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo.edit = true;
+    this.modalInfo.needData = false;
+    this.modalInfo.label = {
+      picture: object.picture && object.picture.thumb ?
+         object.picture.thumb : '/assets/img/avatar.png',
+      name: object.vacancy_offer.candidate_contact.contact.__str__
+    };
+    this.open(this.evaluateModal);
+  }
+
+  public changeTimesheet(e) {
+    let object = this.data.results.filter((el) => el.id === e.el.rowId)[0];
+    this.modalInfo = {};
+    this.modalInfo.type = 'evaluate';
+    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo.edit = true;
+    this.modalInfo.needData = false;
+    this.modalInfo.data = {
+      shift_started_at: {
+        action: 'add',
+        data: {
+          value: object.shift_started_at
+        }
+      },
+      break_started_at: {
+        action: 'add',
+        data: {
+          value: object.break_started_at
+        }
+      },
+      break_ended_at: {
+        action: 'add',
+        data: {
+          value: object.break_ended_at
+        }
+      },
+      shift_ended_at: {
+        action: 'add',
+        data: {
+          value: object.shift_ended_at
+        }
+      }
+    };
+    this.modalInfo.label = {
+      picture: object.picture && object.picture.thumb ?
+         object.picture.thumb : '/assets/img/avatar.png',
+      name: object.vacancy_offer.candidate_contact.contact.__str__
+    };
+    this.open(this.evaluateModal, {size: 'lg'});
+    let modalContent: any = document.getElementsByClassName('modal-content')[0];
+    if (modalContent) {
+      modalContent.style.overflow = 'visible';
+    }
+  }
+
+  public approveTimesheet(e) {
+    let object = this.data.results.filter((el) => el.id === e.el.rowId)[0];
+    this.approveEndpoint = e.el.endpoint;
+    e.el.endpoint = this.format(this.evaluateEndpoint, object);
+    this.evaluate(e);
+  }
+
   public eventHandler(e) {
     this.modalInfo = {};
     this.modalInfo.type = e.target;
@@ -630,7 +738,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     this.open(this.modal, {size: 'lg'});
   }
 
-  public editObject(id, label) {
+  public editObject(id, label = undefined) {
     this.modalInfo = {};
     this.modalInfo.type = 'form';
     this.modalInfo.endpoint = this.endpoint;
@@ -719,6 +827,14 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     let prop = props.shift();
     if (!props.length) {
       if (data) {
+        if (prop.indexOf('__') > -1) {
+          let propArray = prop.split('__');
+          let datetime = ['date', 'time'];
+          if (datetime.indexOf(propArray[1]) > -1) {
+            return moment.tz(data[propArray[0]], 'Australia/Sydney')
+              .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
+          }
+        }
         return data[prop];
       }
     } else {
@@ -735,6 +851,25 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         type: 'update',
         list: this.config.list.list
       });
+    }
+  }
+
+  public evaluateEvent(e, closeModal) {
+    if (e.type === 'sendForm' && e.status === 'success') {
+      closeModal();
+      if (this.approveEndpoint) {
+        this.genericFormService.editForm(this.approveEndpoint, {}).subscribe(
+          (res: any) => {
+            this.event.emit({
+              type: 'update',
+              list: this.config.list.list
+            });
+            this.approveEndpoint = null;
+          }
+        );
+      } else {
+        this.formEvent(e, closeModal);
+      }
     }
   }
 

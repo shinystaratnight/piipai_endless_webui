@@ -65,7 +65,7 @@
       <table class="table table-bordered table-striped table-sm" *ngIf="config.list">
         <thead class="thead-default hidden-sm-down">
           <tr>
-            <th class="text-center" style="width: 2rem">
+            <th *ngIf="!config.list.buttons || config.list.buttons.length > 0" class="text-center" style="width: 2rem">
               *
               <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
             </th>
@@ -97,7 +97,7 @@
           <tr *ngFor="let row of body"
             [class.table-warning]="row.highlight && row.highlight.highlight"
             [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
-            <td>
+            <td *ngIf="!config.list.buttons || config.list.buttons.length > 0">
               <div class="d-flex flex-md-column justify-content-between align-items-center">
                 <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
                 <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm" [routerLink]="[row.id + '/change']">
@@ -167,7 +167,7 @@
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
-      <generic-form [endpoint]="modalInfo.endpoint" [id]="modalInfo.id" *ngSwitchCase="'form'" (event)="formEvent($event, c)">
+      <generic-form [endpoint]="modalInfo.endpoint" [data]="modalInfo.data" [id]="modalInfo.id" *ngSwitchCase="'form'" (event)="formEvent($event, c)">
         <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
       </generic-form>
       <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">
@@ -187,5 +187,27 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="callAction(modalInfo, c)">{{modalInfo.agree_label}}</button>
     <button type="button" class="btn btn-secondary" (click)="c(false)">{{modalInfo.decline_label}}</button>
+  </div>
+</template>
+
+<template #evaluateModal let-c="close">
+  <div class="modal-header">
+    <div class="d-flex align-items-center">
+      <img class="mr-2" [src]="modalInfo.label.picture" alt="Photo" width="40" height="40">
+      <h5 class="mb-0">{{modalInfo.label.name}}</h5>
+    </div>
+    <button type="button" class="close" aria-label="Close" (click)="c(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <generic-form
+      [needData]="modalInfo.needData"
+      [endpoint]="modalInfo.endpoint"
+      [data]="modalInfo.data"
+      [edit]="modalInfo.edit"
+      (event)="evaluateEvent($event, c)">
+        <button class="btn btn-primary mr-auto text-white">Submit</button>
+    </generic-form>
   </div>
 </template>

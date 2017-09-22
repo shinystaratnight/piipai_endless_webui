@@ -18,6 +18,15 @@ export class GenericFormComponent implements OnChanges {
   public data = {};
 
   @Input()
+  public modal: boolean;
+
+  @Input()
+  public title: boolean;
+
+  @Input()
+  public needData: boolean = true;
+
+  @Input()
   public response: any = {};
 
   @Input()
@@ -112,12 +121,18 @@ export class GenericFormComponent implements OnChanges {
           this.metadata = this.parseMetadata(data, this.data);
           this.checkRuleElement(this.metadata);
           this.getData(this.metadata);
-          if (this.id && this.metadata) {
-            this.editForm = true;
+          if ((this.id || this.edit) && this.metadata) {
+            if (this.id) {
+              this.editForm = true;
+            }
             this.show = false;
-            this.getDataForForm(this.endpoint, this.id);
-            this.updateElements(this.metadata, 'id', 'list', this.id);
-            this.updateElements(this.metadata, 'editForm', undefined, true);
+            if (this.needData) {
+              this.getDataForForm(this.endpoint, this.id);
+              this.updateElements(this.metadata, 'id', 'list', this.id);
+              this.updateElements(this.metadata, 'editForm', undefined, true);
+            } else {
+              this.show = true;
+            }
           } else {
             this.str.emit({
               str: 'Add'
@@ -129,7 +144,8 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public getDataForForm(endpoint, id) {
-    this.service.getAll(`${endpoint}${id}/`).subscribe(
+    let endp = id ? `${endpoint}${id}/` : endpoint;
+    this.service.getAll(endp).subscribe(
       ((data: any) => {
         this.fillingForm(this.metadata, data);
         this.show = true;
@@ -374,7 +390,7 @@ export class GenericFormComponent implements OnChanges {
       if (el.type === 'hidden') {
         el.hide = this.hide;
       }
-      if (el && el.key && !!params[el.key]) {
+      if (el && el.key && params && !!params[el.key]) {
         if (params[el.key].action === 'add') {
           el = Object.assign(el, params[el.key].data);
           let elem = this.getElementFromMetadata(metadata, el.key);

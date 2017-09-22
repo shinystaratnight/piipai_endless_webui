@@ -45,7 +45,9 @@ describe('DynamicListComponent', () => {
           content: [
             {
               field: 'first_name',
-              type: 'text',
+              type: 'static',
+              text: '{first_name}',
+              label: 'Test'
             }
           ],
           context_menu: [
@@ -85,6 +87,24 @@ describe('DynamicListComponent', () => {
                 agree_label: 'Agree',
                 decline_label: 'Decline'
               }
+            }
+          ]
+        },
+        {
+          name: 'evaluate',
+          label: 'Evaluate',
+          content: [
+            {
+              action: 'evaluateCandidate',
+              color: 'warning',
+              endpoint: '/timesheets/{id}/evaluate/',
+              field: 'id',
+              icon: 'fa-star',
+              label: 'Evaluate',
+              replace_by: 'supervisor',
+              hidden: 'supervisor_approved_at',
+              repeat: 5,
+              type: 'button'
             }
           ]
         },
@@ -403,7 +423,7 @@ describe('DynamicListComponent', () => {
       comp.config = config;
       spyOn(comp, 'getTabOfColumn');
       comp.updateMetadataByTabs(comp.config.list.columns);
-      expect(comp.getTabOfColumn).toHaveBeenCalledTimes(4);
+      expect(comp.getTabOfColumn).toHaveBeenCalledTimes(5);
     });
   });
 
@@ -412,142 +432,182 @@ describe('DynamicListComponent', () => {
     it('should prepare data for body', async(() => {
       comp.config = config;
       comp.tabs = config.list.tabs;
-      let body = [{
-        id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-        __str__: 'Test Testovich',
-        highlight: {
-          highlight: true
-        },
-        content: [
-          {
-            id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-            label: 'First Name',
-            name: 'first_name',
-            tab: undefined,
-            content: [
-              {
-                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-                key: 'first_name',
-                name: 'first_name',
-                type: 'text',
-                value: 'Test',
-                values: undefined
-              }
-            ],
-            contextMenu: [
-              {
-                label: 'edit profile',
-                endpoint: 'endpoint'
-              }
-            ]
-          },
-          {
-            id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-            label: 'Branch',
-            name: 'branch',
-            tab: undefined,
-            content: [
-              {
-                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-                key: 'branch',
-                name: undefined,
-                type: 'button',
-                values: undefined,
-                confirm: true,
-                list: true,
-                options: {
-                  label: 'Delete selected',
-                  message: 'Are you sure?',
-                  agree_label: 'Agree',
-                  decline_label: 'Decline'
-                },
-                templateOptions: {
-                  label: undefined,
-                  icon: 'glob',
-                  small: true,
-                  mb: false,
-                  action: 'openMap',
-                  text: 'master',
-                  p: true
-                },
-                fields: [
-                  {
-                    field: 'address.latitude',
-                    type: 'input',
-                    value: 12
+      let body = [
+        {
+          id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+          __str__: 'Test Testovich',
+          content: [
+            {
+              id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+              label: 'First Name',
+              name: 'first_name',
+              content: [
+                {
+                  rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  key: 'first_name',
+                  name: 'first_name',
+                  type: 'static',
+                  values: undefined,
+                  value: 'Test',
+                  label: 'Test'
+                }
+              ],
+              contextMenu: [
+                {
+                  label: 'edit profile',
+                  endpoint: 'endpoint'
+                }
+              ],
+              tab: undefined
+            },
+            {
+              id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+              label: 'Branch',
+              name: 'branch',
+              content: [
+                {
+                  rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  key: 'branch',
+                  name: undefined,
+                  type: 'button',
+                  values: undefined,
+                  confirm: true,
+                  options: {
+                    label: 'Delete selected',
+                    message: 'Are you sure?',
+                    agree_label: 'Agree',
+                    decline_label: 'Decline'
                   },
-                  {
-                    field: 'address.longitude',
-                    type: 'input',
-                    value: 13
-                  }
-                ]
-              }
-            ],
-            contextMenu: undefined
-          },
-          {
-            id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-            label: 'Gender',
-            name: 'gender',
-            tab: undefined,
-            content: [
-              {
-                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-                key: 'gender',
-                name: 'gender',
-                type: 'text',
-                value: null,
-                values: undefined,
-              }
-            ]
-          },
-          {
-            id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-            label: 'Mobile Phone',
-            name: 'phone_mobile',
-            tab: undefined,
-            content: [
-              {
-                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-                key: 'phone_mobile',
-                name: 'phone_mobile',
-                type: 'link',
-                link: 'tel:+380978107725',
-                value: '+380978107725',
-                values: undefined,
-              },
-              {
-                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-                key: 'phone_mobile',
-                name: 'email',
-                type: 'link',
-                link: 'mailto:test.testovich@gmail.com',
-                value: 'test.testovich@gmail.com',
-                values: undefined,
-              },
-              {
-                rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-                key: 'phone_mobile',
-                name: 'last_name',
-                type: 'link',
-                endpoint: '/ecore/api/v2/contacts/8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-                value: 'Testovich',
-                values: undefined,
-              }
-            ],
-            contextMenu: [
-              {
-                label: 'send SMS',
-                endpoint: 'endpoint'
-              }
-            ]
+                  color: undefined,
+                  repeat: undefined,
+                  list: true,
+                  templateOptions: {
+                    label: undefined,
+                    icon: 'glob',
+                    small: true,
+                    mb: false,
+                    p: true,
+                    action: 'openMap',
+                    text: 'master'
+                  },
+                  fields: [
+                    {
+                      field: 'address.latitude',
+                      type: 'input',
+                      value: 12
+                    },
+                    {
+                      field: 'address.longitude',
+                      type: 'input',
+                      value: 13
+                    }
+                  ]
+                }
+              ],
+              contextMenu: undefined,
+              tab: undefined
+            },
+            {
+              id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+              label: 'Evaluate',
+              name: 'evaluate',
+              content: [
+                {
+                  rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  key: 'evaluate',
+                  name: 'id',
+                  type: 'button',
+                  values: undefined,
+                  endpoint: '/timesheets/8ffddc8b-058b-4d71-94fb-f95eed60cbf9/evaluate/',
+                  confirm: undefined,
+                  options: undefined,
+                  color: 'warning',
+                  repeat: 5,
+                  hidden: undefined,
+                  replace_by: undefined,
+                  list: true,
+                  templateOptions: {
+                    label: 'Evaluate',
+                    icon: 'star',
+                    small: true,
+                    mb: false,
+                    p: true,
+                    action: 'evaluateCandidate',
+                    text: ''
+                  },
+                  value: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9'
+                }
+              ],
+              contextMenu: undefined,
+              tab: undefined
+            },
+            {
+              id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+              label: 'Gender',
+              name: 'gender',
+              content: [
+                {
+                  rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  key: 'gender',
+                  name: 'gender',
+                  type: 'text',
+                  values: undefined,
+                  value: null
+                }
+              ],
+              tab: undefined
+            },
+            {
+              id: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+              label: 'Mobile Phone',
+              name: 'phone_mobile',
+              content: [
+                {
+                  rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  key: 'phone_mobile',
+                  name: 'phone_mobile',
+                  type: 'link',
+                  values: undefined,
+                  link: 'tel:+380978107725',
+                  value: '+380978107725'
+                },
+                {
+                  rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  key: 'phone_mobile',
+                  name: 'email',
+                  type: 'link',
+                  values: undefined,
+                  link: 'mailto:test.testovich@gmail.com',
+                  value: 'test.testovich@gmail.com'
+                },
+                {
+                  rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  key: 'phone_mobile',
+                  name: 'last_name',
+                  type: 'link',
+                  values: undefined,
+                  endpoint: '/ecore/api/v2/contacts/8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  value: 'Testovich'
+                }
+              ],
+              contextMenu: [
+                {
+                  label: 'send SMS',
+                  endpoint: 'endpoint'
+                }
+              ],
+              tab: undefined
+            }
+          ],
+          highlight: {
+            highlight: true
           }
-        ]
-      }];
+        }
+      ];
       spyOn(comp, 'getTabOfColumn').and.returnValue(undefined);
       let result = comp.prepareData(config.list.columns, data.results, config.list.highlight);
       expect(result).toEqual(body);
+      expect(comp.evaluateEndpoint).toEqual('/timesheets/{id}/evaluate/');
     }));
 
   });
@@ -934,6 +994,19 @@ describe('DynamicListComponent', () => {
       expect(comp.openDiff).toHaveBeenCalledWith(event.el.endpoint, event.el);
     });
 
+    it('should call approveTimesheet method', () => {
+      let event = {
+        value: 'approveTimesheet',
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
+      spyOn(comp, 'approveTimesheet');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.approveTimesheet).toHaveBeenCalledWith(event);
+    });
+
     it('should call openForm method', () => {
       let event = {
         value: 'openForm',
@@ -944,6 +1017,16 @@ describe('DynamicListComponent', () => {
       expect(comp.openForm).toHaveBeenCalledWith(event);
     });
 
+    it('should call changeTimesheet method', () => {
+      let event = {
+        value: 'changeTimesheet',
+      };
+      spyOn(comp, 'changeTimesheet');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.changeTimesheet).toHaveBeenCalledWith(event);
+    });
+
     it('should call setAction method', () => {
       let event = {
         value: 'callAction',
@@ -952,6 +1035,16 @@ describe('DynamicListComponent', () => {
       comp.buttonHandler(event);
       expect(comp.modalInfo).toEqual({});
       expect(comp.setAction).toHaveBeenCalledWith(event);
+    });
+
+    it('should call evaluateCandidate method', () => {
+      let event = {
+        value: 'evaluateCandidate',
+      };
+      spyOn(comp, 'evaluate');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.evaluate).toHaveBeenCalledWith(event);
     });
   });
 
@@ -1064,6 +1157,190 @@ describe('DynamicListComponent', () => {
     }));
   });
 
+  describe('evaluate method', () => {
+    it('should set data for evaluation booking', () => {
+      let event = {
+        el: {
+          rowId: 123,
+          endpoint: '/ecore/api/v2/contacts/'
+        }
+      };
+      let mockData = {
+        results: [
+          {
+            id: 123,
+            picture: {
+              thumb: 'imageSrc'
+            },
+            vacancy_offer: {
+              candidate_contact: {
+                contact: {
+                  __str__: 'Mr. Tom Smith'
+                }
+              }
+            }
+          }
+        ]
+      };
+      comp.evaluateModal = {};
+      comp.data = mockData;
+      spyOn(comp, 'open');
+      comp.evaluate(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'evaluate',
+        edit: true,
+        endpoint: event.el.endpoint,
+        label: {
+          picture: mockData.results[0].picture.thumb,
+          name: mockData.results[0].vacancy_offer.candidate_contact.contact.__str__
+        }
+      });
+      expect(comp.open).toHaveBeenCalledWith(comp.evaluateModal);
+    });
+
+    it('should set default picture for modal window', () => {
+      let event = {
+        el: {
+          rowId: 123,
+          endpoint: '/ecore/api/v2/contacts/'
+        }
+      };
+      let mockData = {
+        results: [
+          {
+            id: 123,
+            picture: null,
+            vacancy_offer: {
+              candidate_contact: {
+                contact: {
+                  __str__: 'Mr. Tom Smith'
+                }
+              }
+            }
+          }
+        ]
+      };
+      comp.evaluateModal = {};
+      comp.data = mockData;
+      spyOn(comp, 'open');
+      comp.evaluate(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'evaluate',
+        edit: true,
+        endpoint: event.el.endpoint,
+        label: {
+          picture: '/assets/img/avatar.png',
+          name: mockData.results[0].vacancy_offer.candidate_contact.contact.__str__
+        }
+      });
+      expect(comp.open).toHaveBeenCalledWith(comp.evaluateModal);
+    });
+  });
+
+  describe('changeTimesheet method', () => {
+    it('should open modal for change timesheet', () => {
+      let event = {
+        el: {
+          rowId: 123,
+          endpoint: '/ecore/api/v2/contacts/'
+        }
+      };
+      let mockData = {
+        results: [
+          {
+            id: 123,
+            picture: null,
+            shift_started_at: '2017-09-21T07:00:00+10:00',
+            break_started_at: '2017-09-21T12:00:00+10:00',
+            break_ended_at: '2017-09-21T12:30:00+10:00',
+            shift_ended_at: '2017-09-21T15:30:00+10:00',
+            vacancy_offer: {
+              candidate_contact: {
+                contact: {
+                  __str__: 'Mr. Tom Smith'
+                }
+              }
+            }
+          }
+        ]
+      };
+      comp.evaluateModal = {};
+      comp.data = mockData;
+      spyOn(comp, 'open');
+      comp.changeTimesheet(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'evaluate',
+        edit: true,
+        endpoint: event.el.endpoint,
+        data: {
+          shift_started_at: {
+            action: 'add',
+            data: {
+              value: mockData.results[0].shift_started_at
+            }
+          },
+          break_started_at: {
+            action: 'add',
+            data: {
+              value: mockData.results[0].break_started_at
+            }
+          },
+          break_ended_at: {
+            action: 'add',
+            data: {
+              value: mockData.results[0].break_ended_at
+            }
+          },
+          shift_ended_at: {
+            action: 'add',
+            data: {
+              value: mockData.results[0].shift_ended_at
+            }
+          }
+        },
+        label: {
+          picture: '/assets/img/avatar.png',
+          name: mockData.results[0].vacancy_offer.candidate_contact.contact.__str__
+        }
+      });
+      expect(comp.open).toHaveBeenCalledWith(comp.evaluateModal, {size: 'lg'});
+    });
+  });
+
+  describe('approveTimesheet method', () => {
+    it('should open modal for approve timesheet', () => {
+      let event = {
+        el: {
+          rowId: 123,
+          endpoint: '/ecore/api/v2/contacts/'
+        }
+      };
+      let mockData = {
+        results: [
+          {
+            id: 123,
+            picture: null,
+            vacancy_offer: {
+              candidate_contact: {
+                contact: {
+                  __str__: 'Mr. Tom Smith'
+                }
+              }
+            }
+          }
+        ]
+      };
+      comp.evaluateModal = {};
+      comp.data = mockData;
+      spyOn(comp, 'evaluate');
+      spyOn(comp, 'format');
+      comp.approveTimesheet(event);
+      expect(comp.evaluate).toHaveBeenCalled();
+      expect(comp.format).toHaveBeenCalled();
+      expect(comp.approveEndpoint).toEqual('/ecore/api/v2/contacts/');
+    });
+  });
+
   describe('eventHandler method', () => {
     it('should open modal', async(() => {
       comp.config = config;
@@ -1110,6 +1387,20 @@ describe('DynamicListComponent', () => {
         type: 'form',
         endpoint: comp.endpoint,
         label,
+        id
+      });
+      expect(comp.open).toHaveBeenCalled();
+    });
+
+    it('should open modal for edit object with "Edit" label', () => {
+      let id = '123';
+      comp.endpoint = 'some edpoint';
+      spyOn(comp, 'open');
+      comp.editObject(id);
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: comp.endpoint,
+        label: 'Edit',
         id
       });
       expect(comp.open).toHaveBeenCalled();

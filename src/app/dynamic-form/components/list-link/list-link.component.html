@@ -1,6 +1,6 @@
 <a [attr.href]="href" *ngIf="config.value && !link">{{config.value}}</a>
 <a routerLink="{{href}}" *ngIf="link && config.link">
-  {{config.value}}
+  {{value}}
   <span *ngIf="config.fields">
     <ng-container
       *ngFor="let field of config.fields"
@@ -9,7 +9,7 @@
   </span>
 </a>
 <a #link *ngIf="config.endpoint" href="" (click)="action($event)">
-  {{config.value}}
+  {{value}}
   <span *ngIf="config.fields">
     <ng-container
       *ngFor="let field of config.fields"

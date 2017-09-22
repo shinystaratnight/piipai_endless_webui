@@ -23,7 +23,7 @@ describe('FormDatepickerComponent', () => {
     }
   };
   let errors = {};
-  let moment = require('moment');
+  let moment = require('moment-timezone');
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -59,15 +59,26 @@ describe('FormDatepickerComponent', () => {
       comp.group = fb.group({});
       comp.group.addControl(comp.config.key, fb.control(undefined));
       spyOn(comp, 'addControl');
+      spyOn(comp, 'identifyDevice').and.returnValue(true);
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
+      expect(comp.identifyDevice).toHaveBeenCalled();
+      expect(comp.mobileDevice).toEqual(true);
     })));
 
+  });
+
+  describe('identifyDevice method', () => {
+    it('should identify device', () => {
+      let isMobileDevice = comp.identifyDevice();
+      expect(isMobileDevice).toBeFalsy();
+    });
   });
 
   describe('ngAfterViewInit method', () => {
 
     it('should called addControl method', async(() => {
+      comp.init = true;
       spyOn(comp, 'addFlags');
       comp.ngAfterViewInit();
       expect(comp.addFlags).toHaveBeenCalled();
@@ -83,72 +94,37 @@ describe('FormDatepickerComponent', () => {
 
     it('should update datepicker value (date type)',
       async(inject([FormBuilder], (fb: FormBuilder) => {
+      let date = {
+        format() {
+          return true;
+        }
+      };
       comp.config = config;
+      comp.config.templateOptions.type = 'datetime';
       comp.key = config.key;
       comp.group = fb.group({});
       comp.group.addControl(comp.config.key, fb.control(''));
-      comp.errors = errors;
-      comp.date = {
-        year: 2017,
-        month: 3,
-        day: 23
-      };
-      comp.time = {
-        hour: 7,
-        minute: 2
-      };
-      comp.updateDate(moment);
-      expect(comp.group.get(comp.config.key).value)
-        .toEqual(moment.utc([comp.date.year, comp.date.month - 1, comp.date.day])
-          .format('YYYY-MM-DD'));
+      spyOn(date, 'format').and.returnValue('2017-06-06');
+      comp.updateDate(date);
+      expect(comp.date).toEqual('2017-06-06');
+      expect(comp.time).toEqual('2017-06-06');
+      expect(comp.group.get(comp.key).value).toEqual('2017-06-06');
     })));
 
-    it('should update datepicker value (datetime type)',
-      async(inject([FormBuilder], (fb: FormBuilder) => {
-      fixture = TestBed.createComponent(FormDatepickerComponent);
-      comp = fixture.componentInstance;
-      config.templateOptions.type = 'datetime';
-      comp.config = config;
-      comp.key = config.key;
-      comp.group = fb.group({});
-      comp.group.addControl(comp.config.key, fb.control(''));
-      comp.errors = errors;
-      comp.date = {
-        year: 2017,
-        month: 3,
-        day: 23
-      };
-      comp.time = {
-        hour: 7,
-        minute: 2
-      };
-      comp.updateDate(moment);
-      expect(comp.group.get(comp.config.key).value)
-        .toEqual(moment
-          .utc([comp.date.year,
-            comp.date.month - 1, comp.date.day, comp.time.hour, comp.time.minute])
-              .format('YYYY-MM-DD hh:mm'));
-    })));
   });
 
   describe('setDate method', () => {
-    it('should set date', async(() => {
-      let value = '2017-05-17T21:28:43';
-      comp.config = config;
-      let result = {
-        year: 2017,
-        month: 5,
-        day: 17
-      };
-      let time = {
-        hour: 21,
-        minute: 28,
-        second: 43
-      };
+    it('should set date from api', async(() => {
+      let value = '2017-06-06T00:00:00+10:00';
       spyOn(comp, 'updateDate');
       comp.setDate(value, moment);
-      expect(comp.date).toEqual(result);
-      expect(comp.time).toEqual(time);
+      expect(comp.updateDate).toHaveBeenCalled();
+    }));
+
+    it('should set date from picker', async(() => {
+      let value = '2017-06-06 02:02 AM';
+      spyOn(comp, 'updateDate');
+      comp.setDate(value, moment, true);
       expect(comp.updateDate).toHaveBeenCalled();
     }));
   });

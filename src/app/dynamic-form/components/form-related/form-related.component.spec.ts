@@ -479,6 +479,24 @@ describe('FormRelatedComponent', () => {
       expect(event.stopPropagation).toHaveBeenCalled();
     })));
 
+    it('should set data for edit object', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.group = fb.group({});
+      comp.key = 'key';
+      comp.modalData = {};
+      comp.group.addControl(comp.key, fb.control(''));
+      comp.group.get(comp.key).patchValue(123);
+      comp.displayValue = 'Mr. Tom Smith';
+      let type = 'edit';
+      comp.open(type);
+      expect(comp.modalData).toEqual({
+        id: 123,
+        type,
+        title: comp.displayValue,
+        endpoint: comp.config.templateOptions.endpoint
+      });
+    })));
+
   });
 
   describe('openAutocomplete method', () => {
