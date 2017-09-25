@@ -1,4 +1,4 @@
-<div *ngIf="!(config.editForm && config.read_only)">
+<div *ngIf="!(config.editForm && config.read_only) && !config.hide">
   <div *ngIf="!config.list" class="form-group" [formGroup]="group">
     <div *ngIf="!config.many" style="position: relative">
       <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
@@ -153,7 +153,7 @@
   </div>
 </div>
 
-<div class="form-group" *ngIf="config.editForm && config.read_only">
+<div class="form-group" *ngIf="config.editForm && config.read_only && !config.hide">
   <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label><br>
   <a href="#" (click)="open('edit', $event)">{{displayValue}}</a>
 </div>

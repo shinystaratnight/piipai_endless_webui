@@ -55,8 +55,11 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public ngOnInit() {
     if (this.config.type !== 'static') {
       this.addControl(this.config, this.fb);
-      if (this.config.value === 0 || this.config.value) {
-        this.group.get(this.key).patchValue(this.config.value);
+      if (this.config.value === 0 || this.config.value ||
+        this.config.default || this.config.default === 0) {
+        let value = (this.config.value === 0 || this.config.value) ?
+           this.config.value : this.config.default;
+        this.group.get(this.key).patchValue(value);
       }
     } else {
       if (this.config.value instanceof Object) {

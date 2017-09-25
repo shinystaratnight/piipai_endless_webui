@@ -50,6 +50,9 @@ export class GenericFormComponent implements OnChanges {
   @Input()
   public edit: boolean;
 
+  @Input()
+  public showResponse: boolean = true;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -72,6 +75,8 @@ export class GenericFormComponent implements OnChanges {
   public metadataError = [];
   public sendData = null;
   public currentEndpoint: string;
+  public currentId: string;
+  public splitElements: any[] = [];
   public show: boolean = false;
   public editForm: boolean = false;
   public formObject: any;
@@ -88,6 +93,14 @@ export class GenericFormComponent implements OnChanges {
   ) {}
 
   public ngOnChanges() {
+    if (this.currentId !== this.id) {
+      this.editForm = true;
+      this.splitElements.forEach((el) => {
+        el.id = this.id;
+      });
+      this.getData(this.splitElements);
+      this.metadata.push(...this.splitElements);
+    }
     if (this.endpoint !== this.currentEndpoint) {
       let patt = /\?/;
       if (patt.test(this.endpoint)) {
@@ -120,6 +133,7 @@ export class GenericFormComponent implements OnChanges {
           this.metadata = this.parseMetadata(data, this.relatedField);
           this.metadata = this.parseMetadata(data, this.data);
           this.checkRuleElement(this.metadata);
+          this.checkFormBuilder(this.metadata, this.endpoint);
           this.getData(this.metadata);
           if ((this.id || this.edit) && this.metadata) {
             if (this.id) {
@@ -235,7 +249,7 @@ export class GenericFormComponent implements OnChanges {
 
   public parseResponse(response) {
     this.resetData(this.response);
-    if (!this.editForm) {
+    if (!this.editForm && this.showResponse) {
       this.response = response;
     }
     this.responseForm.emit(response);
@@ -595,5 +609,24 @@ export class GenericFormComponent implements OnChanges {
         this.updateElements(el.children, param, type, value);
       }
     });
+  }
+
+  public checkFormBuilder(metadata: any[], endpoint: string) {
+    if (endpoint === '/ecore/api/v2/endless-core/forms/') {
+      let groupElement: any;
+      let groupKey: string = 'groups';
+      metadata.forEach((el, i) => {
+        if (el.key === groupKey) {
+          groupElement = metadata.splice(i, 1);
+        }
+      });
+      if (!this.editForm) {
+        groupElement[0].read_only = false;
+        groupElement[0].createOnly = true;
+        groupElement[0].type = 'fieldsGroup';
+        groupElement[0].parent = {};
+        this.splitElements.push(groupElement[0]);
+      }
+    }
   }
 }

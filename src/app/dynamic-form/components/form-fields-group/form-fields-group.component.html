@@ -1,0 +1,45 @@
+<div class="form-group">
+  <label *ngIf="config.templateOptions.label">{{config.templateOptions.label}}</label><br>
+  <div class="card p-1 mb-2" *ngFor="let group of groups">
+    <div class="card-header p-1 mb-1 d-flex justify-content-between align-items-center">
+      <b>{{group.name}}</b>
+      <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(group, groups, 'group')"></i>
+      <i fa [name]="'times'" class="icon text-danger mr-2" (click)="delete(group, groups, 'group')"></i>
+      <b>#{{group.position + 1}}</b>
+    </div>
+
+    <div class="card flex-row p-2 align-items-center m-2" *ngFor="let field of group.fields">
+      <span>{{field.label}}</span>
+      <small class="ml-auto mr-2">{{field.polymorphic_ctype.__str__}}</small>
+      <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(field, group.fields, 'field')"></i>
+      <i fa [name]="'times'" class="icon text-danger mr-2" (click)="delete(field, group.fields, 'field')"></i>
+    </div>
+
+    <button class="btn btn-sm btn-primary my-2 align-self-end" (click)="addField(group, group.id)">Add field</button>
+  </div>
+
+  <button type="button" class="btn btn-sm btn-primary mt-2" (click)="addGroup()">Add group</button>
+</div>
+
+<template #modal let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{modalData.title}}</h5>
+        <button type="button" class="close ml-2" (click)="c()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <generic-form
+        [data]="modalData.data"
+        [endpoint]="modalData.endpoint"
+        [id]="modalData.id"
+        (event)="formEvent($event, c, modalData.type, modalData.container, modalData.edit)">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </generic-form>
+    </div>
+  </div>
+</template>
