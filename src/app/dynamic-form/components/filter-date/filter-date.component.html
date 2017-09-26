@@ -33,15 +33,10 @@
     <input
       class="form-control"
       [attr.placeholder]="input.label"
-      name="dp"
+      #d
+      data-role="datebox"
+      [attr.name]="input.query"
       [(ngModel)]="data[input.query]"
-      ngbDatepicker
-      #from="ngbDatepicker"
-      [maxDate]="input.maxDate"
-      [minDate]="input.minDate"
       (ngModelChange)="onChange()">
-    <div class="input-group-addon" (click)="from.toggle()" style="cursor: pointer">
-      <i fa [name]="'calendar'" [border]=true></i>
-    </div>
   </div>
 </div>

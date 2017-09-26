@@ -8,11 +8,10 @@
       <b>#{{group.position + 1}}</b>
     </div>
 
-    <div class="card flex-row p-2 align-items-center m-2" *ngFor="let field of group.fields">
+    <div class="card flex-row p-2 align-items-center m-2" *ngFor="let field of group.field_list">
       <span>{{field.label}}</span>
-      <small class="ml-auto mr-2">{{field.polymorphic_ctype.__str__}}</small>
-      <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(field, group.fields, 'field')"></i>
-      <i fa [name]="'times'" class="icon text-danger mr-2" (click)="delete(field, group.fields, 'field')"></i>
+      <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(field, group.field_list, 'field')"></i>
+      <i fa [name]="'times'" class="icon text-danger mr-2" (click)="delete(field, group.field_list, 'field')"></i>
     </div>
 
     <button class="btn btn-sm btn-primary my-2 align-self-end" (click)="addField(group, group.id)">Add field</button>
@@ -25,7 +24,7 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">{{modalData.title}}</h5>
+        <h5 class="modal-title">{{(choosenType && fields[choosenType].label) || modalData.title}}</h5>
         <button type="button" class="close ml-2" (click)="c()">
           <span class="text-white" aria-hidden="true">&times;</span>
         </button>
@@ -33,11 +32,21 @@
     </div>
 
     <div class="modal-body">
+      <div class="d-flex flex-column" *ngIf="modalData.type === 'field' && !modalData.id && !choosenType">
+        <span
+          class="badge badge-default my-1 py-2"
+          style="cursor: pointer"
+          *ngFor="let type of types"
+          (click)="setType(type)">
+            {{fields[type].label}}
+        </span>
+      </div>
       <generic-form
+        *ngIf="(modalData.type === 'field' && choosenType) || modalData.type === 'group'"
         [data]="modalData.data"
         [endpoint]="modalData.endpoint"
         [id]="modalData.id"
-        (event)="formEvent($event, c, modalData.type, modalData.container, modalData.edit)">
+        (event)="formEvent($event, c, modalData.container, modalData.edit, modalData.type)">
         <button type="submit" class="btn btn-primary">Save</button>
       </generic-form>
     </div>

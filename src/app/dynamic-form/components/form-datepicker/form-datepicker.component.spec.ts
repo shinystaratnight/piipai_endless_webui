@@ -79,6 +79,7 @@ describe('FormDatepickerComponent', () => {
 
     it('should called addControl method', async(() => {
       comp.init = true;
+      comp.d = {};
       spyOn(comp, 'addFlags');
       comp.ngAfterViewInit();
       expect(comp.addFlags).toHaveBeenCalled();

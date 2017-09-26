@@ -5,6 +5,7 @@
   <div *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
     <div *ngSwitchCase="'form'">
       <generic-form
+        *ngIf="pageData.endpoint !== '/ecore/api/v2/endless-core/forms/'"
         [title]="pageData.pathData.title"
         [modal]="pageData.pathData.modal"
         [endpoint]="pageData.endpoint"
@@ -19,6 +20,11 @@
             <button type="submit" class="btn btn-primary ml-auto">Save</button>
           </div>
       </generic-form>
+      <form-builder
+        *ngIf="pageData.endpoint === '/ecore/api/v2/endless-core/forms/'"
+        [endpoint]="pageData.endpoint"
+        [id]="pageData.pathData.id">
+      </form-builder>
     </div>
     <div *ngSwitchCase="'list'">
       <generic-list [endpoint]="pageData.endpoint"></generic-list>

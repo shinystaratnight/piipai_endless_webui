@@ -1188,6 +1188,7 @@ describe('DynamicListComponent', () => {
       comp.evaluate(event);
       expect(comp.modalInfo).toEqual({
         type: 'evaluate',
+        needData: false,
         edit: true,
         endpoint: event.el.endpoint,
         label: {
@@ -1226,6 +1227,7 @@ describe('DynamicListComponent', () => {
       comp.evaluate(event);
       expect(comp.modalInfo).toEqual({
         type: 'evaluate',
+        needData: false,
         edit: true,
         endpoint: event.el.endpoint,
         label: {
@@ -1270,6 +1272,7 @@ describe('DynamicListComponent', () => {
       comp.changeTimesheet(event);
       expect(comp.modalInfo).toEqual({
         type: 'evaluate',
+        needData: false,
         edit: true,
         endpoint: event.el.endpoint,
         data: {

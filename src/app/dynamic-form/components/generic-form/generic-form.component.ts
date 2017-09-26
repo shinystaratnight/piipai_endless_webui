@@ -100,6 +100,7 @@ export class GenericFormComponent implements OnChanges {
       });
       this.getData(this.splitElements);
       this.metadata.push(...this.splitElements);
+      this.parseMetadata(this.metadata, this.data);
     }
     if (this.endpoint !== this.currentEndpoint) {
       let patt = /\?/;
@@ -617,15 +618,26 @@ export class GenericFormComponent implements OnChanges {
       let groupKey: string = 'groups';
       metadata.forEach((el, i) => {
         if (el.key === groupKey) {
-          groupElement = metadata.splice(i, 1);
+          groupElement = metadata.splice(i, 1)[0];
         }
       });
-      if (!this.editForm) {
-        groupElement[0].read_only = false;
-        groupElement[0].createOnly = true;
-        groupElement[0].type = 'fieldsGroup';
-        groupElement[0].parent = {};
-        this.splitElements.push(groupElement[0]);
+      if (!this.editForm && groupElement) {
+        groupElement.read_only = false;
+        groupElement.createOnly = true;
+        groupElement.type = 'fieldsGroup';
+        groupElement.parent = {};
+        this.splitElements.push(groupElement);
+      } else if (this.endpoint === '/ecore/api/v2/endless-core/forms/') {
+        let groups = {
+          read_only: false,
+          createOnly: true,
+          type: 'fieldsGroup',
+          key: 'groups',
+          templateOptions: {
+            label: 'Groups'
+          }
+        };
+        this.splitElements.push(groups);
       }
     }
   }

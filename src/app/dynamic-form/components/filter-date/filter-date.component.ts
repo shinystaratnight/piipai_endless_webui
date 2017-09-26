@@ -1,13 +1,20 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  AfterViewInit,
+  ViewChildren
+} from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 import { ActivatedRoute } from '@angular/router';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 @Component({
   selector: 'filter-date',
   templateUrl: 'filter-date.component.html'
 })
-export class FilterDateComponent implements OnInit {
+export class FilterDateComponent implements OnInit, AfterViewInit {
   public from: any;
   public to: any;
   public picker: boolean = false;
@@ -19,13 +26,22 @@ export class FilterDateComponent implements OnInit {
   public moment: any = moment;
   public isCollapsed: boolean = true;
 
+  public init: boolean = false;
+  public mobileDevice: boolean;
+  public $: any;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
+
+  @ViewChildren('d')
+  public d: any;
 
   constructor(
     private fs: FilterService,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.$ = require('jquery');
+  }
 
   public ngOnInit() {
     this.createInputs(this.config.input, this.data);
@@ -33,6 +49,32 @@ export class FilterDateComponent implements OnInit {
       (params) => this.updateFilter()
     );
     this.isCollapsed = (this.query || this.picker) ? false : true;
+    this.mobileDevice = this.identifyDevice();
+  }
+
+  public identifyDevice() {
+    let deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+    return deviceNamesReg.test(navigator.userAgent.toLowerCase());
+  }
+
+  public ngAfterViewInit() {
+    if (!this.init && this.d) {
+      let dateType = this.mobileDevice ? 'flipbox' : 'datebox';
+      this.init = true;
+      this.d.forEach((el) => {
+        this.$(el.nativeElement).datebox({
+          mode: dateType,
+          closeCallback: () => {
+            let date = el.nativeElement.value;
+            if (date) {
+              let fullDate = date;
+              this.onChange(date, el.nativeElement.name);
+            }
+          }
+        });
+        el.nativeElement.readOnly = false;
+      });
+    }
   }
 
   public selectQuery(query) {
@@ -45,15 +87,15 @@ export class FilterDateComponent implements OnInit {
     this.updateConfig();
   }
 
-  public onChange() {
+  public onChange(date, name) {
     this.picker = true;
     this.query = '';
     let query = '';
+    this.data[name] = date;
     let keys = Object.keys(this.data);
     keys.forEach((el) => {
       if (this.data[el]) {
-        let {year = 0, month = 0, day = 0} = {...this.data[el]};
-        query += `${el}=${this.moment.utc([year, month - 1, day]).format(this.dateFormat)}&`;
+        query += `${el}=${this.data[el]}&`;
       }
     });
     this.fs.generateQuery(
@@ -86,14 +128,10 @@ export class FilterDateComponent implements OnInit {
     dates.forEach((el) => {
       let query = el.split('=');
       queries.push(query[0]);
-      result[query[0]] = moment.utc(query[1], this.dateFormat);
+      result[query[0]] = moment.tz(query[1], 'Australia/Sydney').format(this.dateFormat);
     });
     queries.forEach((el) => {
-      this.data[el] = {
-        year: result[el].year(),
-        month: result[el].month() + 1,
-        day: result[el].date()
-      };
+      this.data[el] = result[el];
     });
   }
 
