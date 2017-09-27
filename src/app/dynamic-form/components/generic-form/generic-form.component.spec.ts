@@ -229,7 +229,8 @@ describe('GenericFormComponent', () => {
         spyOn(comp.str, 'emit');
         comp.getDataForForm(endpoint, id);
         expect(comp.str.emit).toHaveBeenCalledWith({
-          str: 'Str'
+          str: 'Str',
+          data: response
         });
         expect(comp.fillingForm).toHaveBeenCalled();
       }));

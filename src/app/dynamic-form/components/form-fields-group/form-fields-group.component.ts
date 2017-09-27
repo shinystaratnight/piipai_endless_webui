@@ -37,45 +37,49 @@ export class FormFieldsGroupComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.groups = [];
+    if (this.config.value) {
+      this.groups = this.config.value;
+    } else {
+      this.groups = [];
+    }
     this.fields = {
-      172: {
+      textareafield: {
         endpoint: '/ecore/api/v2/endless-core/textareaformfields/',
         label: 'TextArea field'
       },
-      173: {
+      numberfield: {
         endpoint: '/ecore/api/v2/endless-core/numberformfields/',
         label: 'Number field'
       },
-      174: {
+      modelfield: {
         endpoint: '/ecore/api/v2/endless-core/modelformfields/',
         label: 'Model field'
       },
-      176: {
+      selectfield: {
         endpoint: '/ecore/api/v2/endless-core/selectformfields/',
         label: 'Select field'
       },
-      177: {
+      filefield: {
         endpoint: '/ecore/api/v2/endless-core/fileformfields/',
         label: 'File field'
       },
-      178: {
+      imagefield: {
         endpoint: '/ecore/api/v2/endless-core/imageformfields/',
         label: 'Image field'
       },
-      179: {
+      checkboxfield: {
         endpoint: '/ecore/api/v2/endless-core/checkboxformfields/',
         label: 'Checkbox field'
       },
-      180: {
+      datefield: {
         endpoint: '/ecore/api/v2/endless-core/dateformfields/',
         label: 'Date field'
       },
-      181: {
+      radiobuttonsfield: {
         endpoint: '/ecore/api/v2/endless-core/radiobuttonsformfields/',
         label: 'Radio button field'
       },
-      182: {
+      textfield: {
         endpoint: '/ecore/api/v2/endless-core/textformfields/',
         label: 'Text field'
       }
@@ -130,13 +134,13 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public edit(object, container, type) {
     this.modalData = {};
-    this.choosenType = object.polymorphic_ctype ? object.polymorphic_ctype.id : null;
+    this.choosenType = object.field_type ? object.field_type : null;
     this.modalData.type = type;
     this.modalData.edit = true;
     this.modalData.title = object.__str__;
     this.modalData.container = container;
     this.modalData.endpoint = type === 'group' ?
-      this.formFieldGroupsEndpoint : this.fields[object.polymorphic_ctype.id].endpoint;
+      this.formFieldGroupsEndpoint : this.fields[object.field_type].endpoint;
     this.modalData.id = object.id;
     if (type === 'group') {
       this.modalData.data = {
@@ -168,7 +172,7 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public delete(object, container: any[], type) {
     let endpoint = type === 'group' ?
-      this.formFieldGroupsEndpoint : this.fields[object.polymorphic_ctype.id].endpoint;
+      this.formFieldGroupsEndpoint : this.fields[object.field_type].endpoint;
     let id = object.id;
     this.genericFormService.delete(endpoint, id).subscribe(
       (res: any) => {
@@ -200,6 +204,19 @@ export class FormFieldsGroupComponent implements OnInit {
       container.sort((p, n) => {
         return p.position > n.position ? 1 : -1;
       });
+    } else if (e.type === 'blur' && this.choosenType === 'modelfield' && e.el.key === 'name') {
+      let element = this.config.fields.filter((el) => el.name === e.value);
+      this.modalData.data = Object.assign({}, this.modalData.data);
+      if (element && element[0]) {
+        ['required', 'help_text', 'label', 'name'].forEach((el) => {
+          this.modalData.data[el] = {
+            action: 'add',
+            data: {
+              value: element[0][el]
+            }
+          };
+        });
+      }
     }
   }
 
@@ -209,10 +226,21 @@ export class FormFieldsGroupComponent implements OnInit {
         el = Object.assign(el, object);
       }
     });
+    container.sort((p, n) => {
+      return p.position > n.position ? 1 : -1;
+    });
   }
 
   public setType(type) {
     this.choosenType = type;
     this.modalData.endpoint = this.fields[type].endpoint;
+    if (this.modalData.data && type === 'modelfield') {
+      this.modalData.data['name'] = {
+        action: 'add',
+        data: {
+          autocomplete: this.config.fields
+        }
+      };
+    }
   }
 }

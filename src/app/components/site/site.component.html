@@ -22,6 +22,7 @@
       </generic-form>
       <form-builder
         *ngIf="pageData.endpoint === '/ecore/api/v2/endless-core/forms/'"
+        [path]="pageData.pathData.path"
         [endpoint]="pageData.endpoint"
         [id]="pageData.pathData.id">
       </form-builder>

@@ -26,6 +26,7 @@ import { FormHiddenComponent } from './../../containers/form-hidden/form-hidden.
 import { FormVacancyDatesComponent } from './../form-vacancy-dates/form-vacancy-dates.component';
 import { FormListComponent } from './../form-list/form-list.component';
 import { FormFieldsGroupComponent } from './../form-fields-group/form-fields-group.component';
+import { FormOptionsComponent } from './../form-options/form-options.component';
 
 const components = {
   input: FormInputComponent,
@@ -44,7 +45,8 @@ const components = {
   vacancydates: FormVacancyDatesComponent,
   list: FormListComponent,
   static: FormInputComponent,
-  fieldsGroup: FormFieldsGroupComponent
+  fieldsGroup: FormFieldsGroupComponent,
+  formOptions: FormOptionsComponent
 };
 
 @Directive({

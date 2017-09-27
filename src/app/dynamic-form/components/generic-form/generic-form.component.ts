@@ -94,6 +94,7 @@ export class GenericFormComponent implements OnChanges {
 
   public ngOnChanges() {
     if (this.currentId !== this.id) {
+      this.currentId = this.id;
       this.editForm = true;
       this.splitElements.forEach((el) => {
         el.id = this.id;
@@ -165,7 +166,8 @@ export class GenericFormComponent implements OnChanges {
         this.fillingForm(this.metadata, data);
         this.show = true;
         this.str.emit({
-          str: data && data.__str__ ? data.__str__ : ''
+          str: data && data.__str__ ? data.__str__ : '',
+          data
         });
       }
     ));
@@ -621,24 +623,24 @@ export class GenericFormComponent implements OnChanges {
           groupElement = metadata.splice(i, 1)[0];
         }
       });
-      if (!this.editForm && groupElement) {
+      if (groupElement) {
         groupElement.read_only = false;
         groupElement.createOnly = true;
         groupElement.type = 'fieldsGroup';
-        groupElement.parent = {};
-        this.splitElements.push(groupElement);
-      } else if (this.endpoint === '/ecore/api/v2/endless-core/forms/') {
-        let groups = {
-          read_only: false,
-          createOnly: true,
-          type: 'fieldsGroup',
-          key: 'groups',
-          templateOptions: {
-            label: 'Groups'
-          }
-        };
-        this.splitElements.push(groups);
+        if (this.editForm) {
+          metadata.push(groupElement);
+        } else {
+          this.splitElements.push(groupElement);
+        }
       }
     }
+    if (endpoint === '/ecore/api/v2/endless-core/selectformfields/' ||
+        endpoint === '/ecore/api/v2/endless-core/radiobuttonsformfields/') {
+          metadata.forEach((el) => {
+            if (el.key === 'choices') {
+              el.type = 'formOptions';
+            }
+          });
+        }
   }
 }

@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, inject, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { FormInputComponent } from './form-input.component';
@@ -88,7 +88,7 @@ describe('FormInputComponent', () => {
 
   describe('eventHandler method', () => {
 
-    it('should be emit event', async(inject([FormBuilder], (fb) => {
+    it('should be emit event', fakeAsync(inject([FormBuilder], (fb) => {
       let form = fb.group({});
       let key = 'active';
       let metadata = {
@@ -102,6 +102,7 @@ describe('FormInputComponent', () => {
       comp.key = key;
       spyOn(comp.event, 'emit');
       comp.eventHandler(event);
+      tick(300);
       expect(comp.event.emit).toHaveBeenCalled();
     })));
 

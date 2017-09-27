@@ -16,6 +16,9 @@ export class FormBuilderComponent {
   @Input()
   public id: string;
 
+  @Input()
+  public path: string;
+
   public label: string;
   public previewLink: string;
   public data: any;
@@ -41,11 +44,27 @@ export class FormBuilderComponent {
     }
   }
 
+  public eventForm(e) {
+    if (e && e.data) {
+      this.label = e.data.__str__;
+      this.previewLink = `/ecore/form-builds/${e.data.id}/`;
+      this.data = {
+        groups: {
+          action: 'add',
+          data: {
+            fields: e.data.model_fields,
+            id: e.data.id
+          }
+        }
+      };
+    }
+  }
+
   public delete() {
     if (this.id) {
       this.genericFormService.delete(this.endpoint, this.id).subscribe(
         (res: any) => {
-          this.router.navigate(['/']);
+          this.router.navigate([this.path]);
         }
       );
     }

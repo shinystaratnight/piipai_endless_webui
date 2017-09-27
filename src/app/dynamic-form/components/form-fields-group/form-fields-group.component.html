@@ -1,20 +1,28 @@
 <div class="form-group">
   <label *ngIf="config.templateOptions.label">{{config.templateOptions.label}}</label><br>
-  <div class="card p-1 mb-2" *ngFor="let group of groups">
-    <div class="card-header p-1 mb-1 d-flex justify-content-between align-items-center">
+  <div class="card mb-2" *ngFor="let group of groups">
+    <div class="card-header p-2 mb-1 d-flex justify-content-between align-items-center element group">
       <b>{{group.name}}</b>
       <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(group, groups, 'group')"></i>
       <i fa [name]="'times'" class="icon text-danger mr-2" (click)="delete(group, groups, 'group')"></i>
-      <b>#{{group.position + 1}}</b>
+      <b><small>(position: {{group.position}})</small></b>
     </div>
 
-    <div class="card flex-row p-2 align-items-center m-2" *ngFor="let field of group.field_list">
-      <span>{{field.label}}</span>
-      <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(field, group.field_list, 'field')"></i>
-      <i fa [name]="'times'" class="icon text-danger mr-2" (click)="delete(field, group.field_list, 'field')"></i>
+    <div class="card flex-row p-2 align-items-stretch justify-content-between m-2 element field" *ngFor="let field of group.field_list">
+      <div class="d-flex flex-column justify-content-between">
+        <b>{{field.label}}</b>
+        <small>({{fields[field.field_type].label}})</small>
+      </div>
+      <div class="d-flex flex-column justify-content-between">
+        <div class="d-flex justify-content-end align-items-center">
+          <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(field, group.field_list, 'field')"></i>
+          <i fa [name]="'times'" class="icon text-danger" (click)="delete(field, group.field_list, 'field')"></i>
+        </div>
+        <b><small>(position: {{field.position}})</small></b>
+      </div>
     </div>
 
-    <button class="btn btn-sm btn-primary my-2 align-self-end" (click)="addField(group, group.id)">Add field</button>
+    <button type="button" class="btn btn-sm btn-primary my-2 align-self-start m-2" (click)="addField(group, group.id)">Add field</button>
   </div>
 
   <button type="button" class="btn btn-sm btn-primary mt-2" (click)="addGroup()">Add group</button>

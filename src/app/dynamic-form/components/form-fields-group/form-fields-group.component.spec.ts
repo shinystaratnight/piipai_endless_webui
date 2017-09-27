@@ -44,7 +44,16 @@ describe('FormFieldsGroupComponent', () => {
   });
 
   describe('ngOnInit method', () => {
+    it('should set value', () => {
+      comp.config = {
+        value: []
+      };
+      comp.ngOnInit();
+      expect(comp.groups).toEqual([]);
+    });
+
     it('should init properties', () => {
+      comp.config = {};
       comp.ngOnInit();
       expect(comp.groups).toEqual([]);
     });
@@ -64,7 +73,7 @@ describe('FormFieldsGroupComponent', () => {
         container: comp.groups,
         endpoint: comp.formFieldGroupsEndpoint,
         data: {
-          fields: {
+          field_list: {
             action: 'add',
             data: {
               value: [],
@@ -87,16 +96,14 @@ describe('FormFieldsGroupComponent', () => {
   describe('addField method', () => {
     it('should add modal window for add field', () => {
       let group = {
-        fields: []
+        field_list: []
       };
       let id = 'some id';
-      comp.formFieldsEndpoint = 'some endpoint';
       comp.addField(group, id);
       expect(comp.modalData).toEqual({
         type: 'field',
         title: 'Field',
-        container: group.fields,
-        endpoint: comp.formFieldsEndpoint,
+        container: group.field_list,
         data: {
           group: {
             action: 'add',
@@ -126,26 +133,54 @@ describe('FormFieldsGroupComponent', () => {
         title: object.__str__,
         container,
         endpoint: comp.formFieldGroupsEndpoint,
-        id: object.id
+        id: object.id,
+        data: {
+          field_list: {
+            action: 'add',
+            data: {
+              hide: true
+            }
+          },
+          form: {
+            action: 'add',
+            data: {
+              hide : true
+            }
+          }
+        }
       });
     });
 
     it('should edit field', () => {
       let object = {
         id: 'some id',
-        __str__: 'some str'
+        __str__: 'some str',
+        field_type: 'textfield'
       };
       let container = [];
       let type = 'field';
-      comp.formFieldsEndpoint = 'endpoint';
+      comp.fields = {
+        textfield: {
+          endpoint: '/ecore/api/v2/endless-core/textformfields/',
+          label: 'Text field'
+        }
+      };
       comp.edit(object, container, type);
       expect(comp.modalData).toEqual({
         type,
         edit: true,
         title: object.__str__,
         container,
-        endpoint: comp.formFieldsEndpoint,
-        id: object.id
+        endpoint: comp.fields[object.field_type].endpoint,
+        id: object.id,
+        data: {
+          group: {
+            action: 'add',
+            data: {
+              hide: true
+            }
+          },
+        }
       });
     });
   });
@@ -153,7 +188,7 @@ describe('FormFieldsGroupComponent', () => {
   describe('delete method', () => {
     it('should delete group', () => {
       let object = {
-        id: '123',
+        id: '123'
       };
       let container = [
         {
@@ -169,6 +204,9 @@ describe('FormFieldsGroupComponent', () => {
     it('should delete field', () => {
       let object = {
         id: '123',
+        polymorphic_ctype: {
+          id: '182'
+        }
       };
       let container = [
         {
@@ -176,7 +214,12 @@ describe('FormFieldsGroupComponent', () => {
         }
       ];
       let type = 'field';
-      comp.formFieldsEndpoint = 'endpoint';
+      comp.fields = {
+        182: {
+          endpoint: '/ecore/api/v2/endless-core/textformfields/',
+          label: 'Text field'
+        }
+      };
       comp.delete(object, container, type);
       expect(container).toEqual([]);
     });
@@ -198,7 +241,7 @@ describe('FormFieldsGroupComponent', () => {
       };
       let container = [];
       spyOn(test, 'closeModal');
-      comp.formEvent(event, test.closeModal, container, false);
+      comp.formEvent(event, test.closeModal, container, false, 'group');
       expect(test.closeModal).toHaveBeenCalled();
       expect(container).toEqual([event.data]);
     });
@@ -225,9 +268,65 @@ describe('FormFieldsGroupComponent', () => {
       ];
       spyOn(comp, 'updateObject');
       spyOn(test, 'closeModal');
-      comp.formEvent(event, test.closeModal, container, true);
+      comp.formEvent(event, test.closeModal, container, true, 'group');
       expect(test.closeModal).toHaveBeenCalled();
       expect(comp.updateObject).toHaveBeenCalled();
+    });
+
+    it('should update model field values', () => {
+      let event = {
+        type: 'blur',
+        el: {
+          key: 'name'
+        },
+        value: 'id'
+      };
+      let test = {
+        closeModal() {
+          return true;
+        }
+      };
+      comp.choosenType = 'modelfield';
+      comp.config = {
+        fields: [
+          {
+            name: 'id',
+            help_text: '',
+            required: false,
+            label: 'Id'
+          }
+        ]
+      };
+      comp.modalData = {
+        data: {}
+      };
+      comp.formEvent(event, test.closeModal, [], false, 'field');
+      expect(comp.modalData.data).toEqual({
+        name: {
+          action: 'add',
+          data: {
+            value: 'id'
+          }
+        },
+        help_text: {
+          action: 'add',
+          data: {
+            value: ''
+          }
+        },
+        required: {
+          action: 'add',
+          data: {
+            value: false
+          }
+        },
+        label: {
+          action: 'add',
+          data: {
+            value: 'Id'
+          }
+        }
+      });
     });
   });
 
@@ -262,6 +361,37 @@ describe('FormFieldsGroupComponent', () => {
           position: 3
         }
       ]);
+    });
+  });
+
+  describe('setType method', () => {
+    it('should set type of filed', () => {
+      let type = '182';
+      comp.config = {
+        fileds: []
+      };
+      comp.fields = {
+        182: {
+          endpoint: '/ecore/api/v2/endless-core/textformfields/',
+          label: 'Text field'
+        }
+      };
+      comp.modalData = {
+        data: {}
+      };
+      comp.setType(type);
+      expect(comp.choosenType).toEqual(type);
+      expect(comp.modalData).toEqual({
+        endpoint: comp.fields[type].endpoint,
+        data: {
+          name: {
+            action: 'add',
+            data: {
+              autocomplete: comp.config.fields
+            }
+          }
+        }
+      });
     });
   });
 
