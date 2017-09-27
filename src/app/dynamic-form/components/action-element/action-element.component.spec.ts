@@ -23,6 +23,12 @@ describe('ActionElementComponent', () => {
         query: 'delete',
         confirm: true,
         message: 'confirm message'
+      },
+      {
+        confirm: false,
+        endpoint: '/ecore/api/v2/endless-core/companyaddresses/sendsms/',
+        label: 'Send sms',
+        message: 'Are you sure?'
       }
     ]
   };
@@ -58,6 +64,15 @@ describe('ActionElementComponent', () => {
       spyOn(comp, 'open');
       comp.toDoAction();
       expect(comp.open).toHaveBeenCalled();
+    }));
+
+    it('should emit action', async(() => {
+      comp.action = config.options[1];
+      spyOn(comp.event, 'emit');
+      comp.toDoAction();
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        action: comp.action
+      });
     }));
 
   });

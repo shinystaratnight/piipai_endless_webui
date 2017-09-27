@@ -173,6 +173,9 @@
       <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">
         <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
       </sebm-google-map>
+      <div *ngSwitchCase="'frame'">
+        {{modalInfo.url}}
+      </div>
     </div>
   </div>
 </template>

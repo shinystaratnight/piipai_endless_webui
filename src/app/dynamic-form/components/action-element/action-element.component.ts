@@ -23,8 +23,13 @@ export class ActionElementComponent {
   ) {}
 
   public toDoAction() {
-    if (this.action) {
+    if (this.action && this.action.confirm) {
       this.open(this.content);
+    } else if (this.action && !this.action.confirm) {
+      this.event.emit({
+        action: this.action
+      });
+      this.action = '';
     }
   }
 

@@ -601,6 +601,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         case 'evaluateCandidate':
           this.evaluate(e);
           break;
+        case 'sendSMS':
+          this.openFrame(e.el.fields);
+          break;
         default:
           return;
       }
@@ -719,6 +722,31 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     this.approveEndpoint = e.el.endpoint;
     e.el.endpoint = this.format(this.evaluateEndpoint, object);
     this.evaluate(e);
+  }
+
+  public openFrame(e, param = 'recipient') {
+    let query = '?';
+    let contacts = [];
+    if (e && e.length) {
+      e.forEach((el) => {
+        if (el instanceof Object && el.value) {
+          contacts.push(el.value);
+        } else if (el) {
+          contacts.push(el);
+        }
+      });
+    }
+    if (contacts && contacts.length) {
+      contacts.forEach((el) => {
+        query += `${param}[]=${el}&`;
+      });
+      query = query.slice(0, query.length - 1);
+      this.modalInfo = {};
+      this.modalInfo.type = 'frame';
+      this.modalInfo.url = param === 'recipient' ? '/ecore/twilio/' : '';
+      this.modalInfo.url += query;
+      this.open(this.modal, {size: 'lg'});
+    }
   }
 
   public eventHandler(e) {
