@@ -371,20 +371,19 @@ describe('SiteComponent', () => {
       expect(result).toEqual([
         {
           endpoint: 'four',
-          disabled: true,
-          childrens: [
-            {
-              endpoint: 'first',
-              childrens: []
-            }
-          ]
+          childrens: []
         },
         {
-          endpoint: 'second',
+          endpoint: 'five',
           childrens: [
             {
-              endpoint: 'third',
-              childrens: []
+              endpoint: 'six',
+              childrens: [
+                {
+                  endpoint: 'seven',
+                  childrens: []
+                }
+              ]
             }
           ]
         }

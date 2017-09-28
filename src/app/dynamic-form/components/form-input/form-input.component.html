@@ -1,4 +1,4 @@
-<div class="form-group" [formGroup]="group" style="position: relative">
+<div *ngIf="!config.hide" class="form-group" [formGroup]="group" style="position: relative">
   <label [attr.for]="key" *ngIf="label && config.templateOptions.label">
     {{config.templateOptions.label}}
   </label>

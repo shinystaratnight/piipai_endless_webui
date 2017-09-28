@@ -394,7 +394,8 @@ describe('GenericListComponent', () => {
         comp.tables.push(table);
         spyOn(comp, 'callAction');
         comp.eventHandler(event);
-        expect(comp.callAction).toHaveBeenCalledWith(event.data, event.action.endpoint, table);
+        expect(comp.callAction)
+          .toHaveBeenCalledWith(event.data, event.action.endpoint, table, event);
       }));
 
       it('should update data of table', async(() => {
@@ -717,11 +718,40 @@ describe('GenericListComponent', () => {
           124: true,
           125: false
         };
+        let event = {
+          action: {
+            reload: true
+          }
+        };
         spyOn(comp, 'getData');
         spyOn(comp, 'generateQuery').and.returnValue('');
-        comp.callAction(selectedElements, endpoint, table);
+        comp.callAction(selectedElements, endpoint, table, event);
         expect(comp.generateQuery).toHaveBeenCalledWith(table.query);
         expect(comp.getData).toHaveBeenCalledWith(table.endpoint, '', table);
+      }));
+
+      it('should change actionData of table', async(() => {
+        data = {
+          status: 'success'
+        };
+        let table = {
+          endpoint: 'some endpoint',
+          query: {},
+          actionData: undefined
+        };
+        let endpoint = 'endpoint';
+        let selectedElements = {
+          123: true,
+          124: true,
+          125: false
+        };
+        let event = {
+          action: {
+            reload: false
+          }
+        };
+        comp.callAction(selectedElements, endpoint, table, event);
+        expect(table.actionData).toEqual(data);
       }));
 
     });

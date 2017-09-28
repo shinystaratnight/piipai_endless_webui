@@ -211,3 +211,10 @@
     </generic-form>
   </div>
 </template>
+
+<template #sendMessageModal let-c="close">
+  <div class="modal-body">
+    <iframe class="send-sms" [src]="modalInfo.url" frameborder="0"></iframe>
+    <br>
+  </div>
+</template>

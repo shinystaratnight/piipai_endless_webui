@@ -27,6 +27,10 @@ import { FormHiddenComponent } from './containers/form-hidden/form-hidden.compon
 import {
   FormVacancyDatesComponent
 } from './components/form-vacancy-dates/form-vacancy-dates.component';
+import {
+  FormFieldsGroupComponent
+} from './components/form-fields-group/form-fields-group.component';
+import { FormOptionsComponent } from './components/form-options/form-options.component';
 
 import { GenericListComponent } from './components/generic-list/generic-list.component';
 import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
@@ -102,7 +106,9 @@ import { MoveDirective } from './directives/move.directive';
     FormVacancyDatesComponent,
     ListImageComponent,
     FormListComponent,
-    ListButtonsComponent
+    ListButtonsComponent,
+    FormFieldsGroupComponent,
+    FormOptionsComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -129,7 +135,9 @@ import { MoveDirective } from './directives/move.directive';
     FormHiddenComponent,
     FormVacancyDatesComponent,
     ListImageComponent,
-    FormListComponent
+    FormListComponent,
+    FormFieldsGroupComponent,
+    FormOptionsComponent
   ]
 })
 export class DynamicFormModule { }

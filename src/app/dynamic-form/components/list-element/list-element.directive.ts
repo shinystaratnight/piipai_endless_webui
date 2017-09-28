@@ -31,7 +31,8 @@ const components = {
   picture: ListImageComponent,
   icon: ListImageComponent,
   date: ListTextComponent,
-  datepicker: ListTextComponent
+  datepicker: ListTextComponent,
+  textarea: ListTextComponent
 };
 
 @Directive({

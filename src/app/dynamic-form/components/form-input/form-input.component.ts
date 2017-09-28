@@ -55,8 +55,11 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public ngOnInit() {
     if (this.config.type !== 'static') {
       this.addControl(this.config, this.fb);
-      if (this.config.value === 0 || this.config.value) {
-        this.group.get(this.key).patchValue(this.config.value);
+      if (this.config.value === 0 || this.config.value ||
+        this.config.default || this.config.default === 0) {
+        let value = (this.config.value === 0 || this.config.value) ?
+           this.config.value : this.config.default;
+        this.group.get(this.key).patchValue(value);
       }
     } else {
       if (this.config.value instanceof Object) {
@@ -76,14 +79,16 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public eventHandler(e) {
-    if (this.group.get(this.key).value
+    setTimeout(() => {
+      if (this.group.get(this.key).value
       && !this.config.read_only) {
-      this.event.emit({
-        type: e.type,
-        el: this.config,
-        value: this.group.get(this.key).value
-      });
-    }
+        this.event.emit({
+          type: e.type,
+          el: this.config,
+          value: this.group.get(this.key).value
+        });
+      }
+    }, 250);
   }
 
   public filter(key) {

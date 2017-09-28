@@ -151,7 +151,7 @@ describe('FilterDateComponent', () => {
         comp.moment = moment;
         spyOn(fs, 'generateQuery');
         spyOn(comp, 'changeQuery');
-        comp.onChange();
+        comp.onChange('20-03-17', 'from');
         expect(comp.picker).toBeTruthy();
         expect(comp.query).toEqual('');
         expect(fs.generateQuery).toHaveBeenCalled();
@@ -204,16 +204,8 @@ describe('FilterDateComponent', () => {
     it('should parse date form query', () => {
       let query = 'from=2017-01-03&to=2017-01-15';
       let result: any = {
-        from: {
-          year: 2017,
-          month: 1,
-          day: 3
-        },
-        to: {
-          year: 2017,
-          month: 1,
-          day: 15
-        }
+        from: '2017-01-03',
+        to: '2017-01-15'
       };
       comp.config = config;
       comp.dateFormat = 'YYYY-MM-DD';

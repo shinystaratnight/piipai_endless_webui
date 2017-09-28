@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { GenericFormService } from './../../services/generic-form.service';
 
@@ -70,6 +71,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   @Input()
   public inForm: boolean = false;
 
+  @Input()
+  public actionData: any;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -84,6 +88,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   @ViewChild('evaluateModal')
   public evaluateModal;
+
+  @ViewChild('sendMessageModal')
+  public sendMessageModal;
 
   @ViewChild('datatable')
   public datatable;
@@ -112,11 +119,14 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   public tabs: any;
   public evaluateEndpoint: string;
   public approveEndpoint: string;
+  public currentActionData: any;
+  public actionEndpoint: any;
 
   constructor(
     private filterService: FilterService,
     private modalService: NgbModal,
-    private genericFormService: GenericFormService
+    private genericFormService: GenericFormService,
+    private sanitizer: DomSanitizer
   ) {}
 
   public ngOnInit() {
@@ -137,6 +147,15 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     let config = this.config;
     let data = this.data;
     let innerTables = this.innerTables;
+    if (this.actionData !== this.currentActionData) {
+      this.currentActionData = this.actionData;
+      if (this.actionEndpoint === '/ecore/api/v2/endless-core/companyaddresses/sendsms/') {
+        setTimeout(() => {
+          this.openFrame(this.currentActionData.phone_number);
+        }, 250);
+      }
+      return;
+    }
     if (!this.tabs) {
       this.tabs = this.config.list.tabs;
     }
@@ -457,6 +476,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   }
 
   public actionHandler(e) {
+    this.actionEndpoint = e.action.endpoint;
     this.event.emit({
       type: 'action',
       list: this.config.list.list,
@@ -601,6 +621,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         case 'evaluateCandidate':
           this.evaluate(e);
           break;
+        case 'sendSMS':
+          this.openFrame(e.el.fields);
+          break;
         default:
           return;
       }
@@ -719,6 +742,36 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     this.approveEndpoint = e.el.endpoint;
     e.el.endpoint = this.format(this.evaluateEndpoint, object);
     this.evaluate(e);
+  }
+
+  public openFrame(e, param = 'recipient') {
+    let query = '?';
+    let contacts = [];
+    if (e && e.length) {
+      e.forEach((el) => {
+        if (el) {
+          if (el instanceof Object) {
+            if (el.value) {
+              contacts.push(el.value);
+            }
+          } else {
+            contacts.push(el);
+          }
+        }
+      });
+    }
+    if (contacts && contacts.length) {
+      contacts.forEach((el) => {
+        query += `${param}[]=${encodeURIComponent(el)}&`;
+      });
+      query = query.slice(0, query.length - 1);
+      let url;
+      this.modalInfo = {};
+      url = param === 'recipient' ? '/ecore/twilio/' : '';
+      url += query;
+      this.modalInfo.url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.open(this.sendMessageModal);
+    }
   }
 
   public eventHandler(e) {

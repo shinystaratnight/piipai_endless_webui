@@ -1,6 +1,7 @@
 import { FilterService } from './../../services/filter.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
+import { DomSanitizer } from '@angular/platform-browser';
+import { TestBed, async, ComponentFixture, inject, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { DynamicListComponent } from './dynamic-list.component';
@@ -219,6 +220,7 @@ describe('DynamicListComponent', () => {
         DynamicListComponent
       ],
       providers: [
+        DomSanitizer,
         {provide: FilterService, useValue: mockFilterService},
         {provide: GenericFormService, useValue: mockGenericFormService }
       ],
@@ -270,6 +272,22 @@ describe('DynamicListComponent', () => {
       expect(comp.getSortedColumns).toHaveBeenCalled();
       expect(comp.unpopedTable).toHaveBeenCalled();
       expect(comp.updateMetadataByTabs).toHaveBeenCalled();
+    }));
+
+    it('should call openFrame method', fakeAsync(() => {
+      comp.config = config;
+      comp.data = data;
+      comp.actionData = {};
+      comp.actionEndpoint = '/ecore/api/v2/endless-core/companyaddresses/sendsms/';
+      comp.currentActionData = {
+        phone_mobile: ['+380983456723']
+      };
+      spyOn(comp, 'openFrame');
+      comp.ngOnChanges();
+      tick(300);
+      expect(comp.openFrame).toHaveBeenCalledWith(comp.currentActionData.phone_mobile);
+      comp.actionData = undefined;
+      comp.currentActionData = undefined;
     }));
 
     it('should update datatable', async(() => {
@@ -788,11 +806,15 @@ describe('DynamicListComponent', () => {
         key: 'key of action',
         label: 'label of action',
         message: 'confirm message',
-        query: 'delete'
+        query: 'delete',
+        action: {
+          endpoint: 'some endpoint'
+        }
       };
       comp.config = config;
       spyOn(comp.event, 'emit');
       comp.actionHandler(event);
+      expect(comp.actionEndpoint).toEqual(event.action.endpoint);
       expect(comp.event.emit).toHaveBeenCalled();
     }));
 
@@ -1046,6 +1068,19 @@ describe('DynamicListComponent', () => {
       expect(comp.modalInfo).toEqual({});
       expect(comp.evaluate).toHaveBeenCalledWith(event);
     });
+
+    it('should call openFrame method', () => {
+      let event = {
+        value: 'sendSMS',
+        el: {
+          fields: []
+        }
+      };
+      spyOn(comp, 'openFrame');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.openFrame).toHaveBeenCalledWith(event.el.fields);
+    });
   });
 
   describe('openForm method', () => {
@@ -1188,6 +1223,7 @@ describe('DynamicListComponent', () => {
       comp.evaluate(event);
       expect(comp.modalInfo).toEqual({
         type: 'evaluate',
+        needData: false,
         edit: true,
         endpoint: event.el.endpoint,
         label: {
@@ -1226,6 +1262,7 @@ describe('DynamicListComponent', () => {
       comp.evaluate(event);
       expect(comp.modalInfo).toEqual({
         type: 'evaluate',
+        needData: false,
         edit: true,
         endpoint: event.el.endpoint,
         label: {
@@ -1270,6 +1307,7 @@ describe('DynamicListComponent', () => {
       comp.changeTimesheet(event);
       expect(comp.modalInfo).toEqual({
         type: 'evaluate',
+        needData: false,
         edit: true,
         endpoint: event.el.endpoint,
         data: {
@@ -1338,6 +1376,22 @@ describe('DynamicListComponent', () => {
       expect(comp.evaluate).toHaveBeenCalled();
       expect(comp.format).toHaveBeenCalled();
       expect(comp.approveEndpoint).toEqual('/ecore/api/v2/contacts/');
+    });
+  });
+
+  describe('openFrame method', () => {
+    it('should prepare query and call open method', () => {
+      let event = ['+380984532345', {
+        value: '+380984532345'
+      }];
+      comp.sendMessageModal = {};
+      comp.modalInfo = {};
+      spyOn(comp, 'open');
+      comp.openFrame(event);
+      expect(comp.modalInfo).toEqual({
+        url: undefined
+      });
+      expect(comp.open).toHaveBeenCalledWith(comp.sendMessageModal);
     });
   });
 
