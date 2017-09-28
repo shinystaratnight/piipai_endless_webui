@@ -149,7 +149,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     let innerTables = this.innerTables;
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;
-      if (this.actionEndpoint === '/ecore/api/v2/endless-core/companyaddresses/sendsms/') {
+      if (this.actionEndpoint.indexOf('/sendsms/') > -1) {
         setTimeout(() => {
           this.openFrame(this.currentActionData.phone_number);
         }, 250);
