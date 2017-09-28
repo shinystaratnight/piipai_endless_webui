@@ -204,9 +204,7 @@ describe('FormFieldsGroupComponent', () => {
     it('should delete field', () => {
       let object = {
         id: '123',
-        polymorphic_ctype: {
-          id: '182'
-        }
+        field_type: 'textfield'
       };
       let container = [
         {
@@ -215,7 +213,7 @@ describe('FormFieldsGroupComponent', () => {
       ];
       let type = 'field';
       comp.fields = {
-        182: {
+        textfield: {
           endpoint: '/ecore/api/v2/endless-core/textformfields/',
           label: 'Text field'
         }
@@ -366,14 +364,14 @@ describe('FormFieldsGroupComponent', () => {
 
   describe('setType method', () => {
     it('should set type of filed', () => {
-      let type = '182';
+      let type = 'modelfield';
       comp.config = {
-        fileds: []
+        fields: []
       };
       comp.fields = {
-        182: {
-          endpoint: '/ecore/api/v2/endless-core/textformfields/',
-          label: 'Text field'
+        modelfield: {
+          endpoint: '/ecore/api/v2/endless-core/modelformfield/',
+          label: 'Model field'
         }
       };
       comp.modalData = {

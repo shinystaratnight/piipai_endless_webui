@@ -151,7 +151,7 @@ describe('FilterDateComponent', () => {
         comp.moment = moment;
         spyOn(fs, 'generateQuery');
         spyOn(comp, 'changeQuery');
-        comp.onChange();
+        comp.onChange('20-03-17', 'from');
         expect(comp.picker).toBeTruthy();
         expect(comp.query).toEqual('');
         expect(fs.generateQuery).toHaveBeenCalled();

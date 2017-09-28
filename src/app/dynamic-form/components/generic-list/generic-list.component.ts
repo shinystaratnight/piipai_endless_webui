@@ -176,7 +176,7 @@ export class GenericListComponent implements OnInit {
       this.resetActiveTable(this.tables);
       table.active = true;
     } else if (e.type === 'action') {
-      this.callAction(e.data, e.action.endpoint, table);
+      this.callAction(e.data, e.action.endpoint, table, e);
     } else if (e.type === 'minimize') {
       table.minimized = true;
       table.maximize = false;
@@ -274,7 +274,7 @@ export class GenericListComponent implements OnInit {
     return !result.length;
   }
 
-  public callAction(data, endpoint, target) {
+  public callAction(data, endpoint, target, e) {
     let ids = [];
     let keys = Object.keys(data);
     keys.forEach((el) => {
@@ -285,7 +285,11 @@ export class GenericListComponent implements OnInit {
     this.gfs.callAction(endpoint, ids).subscribe(
       (res) => {
         if (res.status === 'success') {
-          this.getData(target.endpoint, this.generateQuery(target.query), target);
+          if (e.action.reload) {
+            this.getData(target.endpoint, this.generateQuery(target.query), target);
+          } else {
+            target.actionData = res;
+          }
         }
       },
       (err) => {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { GenericFormService } from './../../dynamic-form/services/generic-form.service';
@@ -18,6 +18,9 @@ export class FormBuilderComponent {
 
   @Input()
   public path: string;
+
+  @Output()
+  public str: EventEmitter<any> = new EventEmitter();
 
   public label: string;
   public previewLink: string;
@@ -41,6 +44,9 @@ export class FormBuilderComponent {
           }
         }
       };
+      this.str.emit({
+        str: event.data.__str__
+      });
     }
   }
 
@@ -57,6 +63,13 @@ export class FormBuilderComponent {
           }
         }
       };
+      this.str.emit({
+        str: e.data.__str__
+      });
+    } else if (e.str) {
+      this.str.emit({
+        str: e.str
+      });
     }
   }
 

@@ -42,7 +42,9 @@ export class FilterService {
       this._paramsOfFilters[params.param] = params.value;
     }
     let filters = this.getFiltersByEndpoint(params.endpoint);
-    this.parseFilters(filters, this.paramsOfFilters, params.list);
+    if (filters) {
+      this.parseFilters(filters, this.paramsOfFilters, params.list);
+    }
   }
 
   public getFiltersByEndpoint(endpoint) {

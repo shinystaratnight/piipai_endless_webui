@@ -173,9 +173,6 @@
       <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">
         <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
       </sebm-google-map>
-      <div *ngSwitchCase="'frame'">
-        {{modalInfo.url}}
-      </div>
     </div>
   </div>
 </template>
@@ -212,5 +209,12 @@
       (event)="evaluateEvent($event, c)">
         <button class="btn btn-primary mr-auto text-white">Submit</button>
     </generic-form>
+  </div>
+</template>
+
+<template #sendMessageModal let-c="close">
+  <div class="modal-body">
+    <iframe class="send-sms" [src]="modalInfo.url" frameborder="0"></iframe>
+    <br>
   </div>
 </template>

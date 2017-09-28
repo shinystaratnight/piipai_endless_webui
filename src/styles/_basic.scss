@@ -33,3 +33,16 @@
 label, b {
   font-weight: 500;
 }
+
+iframe.send-sms {
+  width: 100%;
+  height: 80vh;
+}
+
+.send-message.close {
+  position: fixed;
+  right: -1rem;
+  top: .5rem;
+  color: $brand-primary;
+  z-index: 1000;
+}
