@@ -1,15 +1,5 @@
-<div class="card d-block mb-3">
-  <div class="card-header d-flex p-3">
-    <i fa
-      class="pr-2"
-      [name]="direction === 'down' ? 'eye' : 'eye-slash'"
-      [border]=false
-      (click)="direction = direction === 'down' ? 'right' : 'down'"
-      style="cursor: pointer"></i>
-    <h6 class="mb-0">Filters:</h6>
-  </div>
-  <div class="card-body filter-block" [class.filter-block-collapsed]="direction === 'right'">
-    <div class="d-sm-inline-block align-top p-2" *ngFor="let field of config;">
+  <div class="filter-block" [class.filter-block-collapsed]="direction === 'right'">
+    <div *ngFor="let field of config;">
       <ng-container
         filterElement
         (event)="changeQuery($event)"
@@ -17,4 +7,3 @@
       </ng-container>
     </div>
   </div>
-</div>

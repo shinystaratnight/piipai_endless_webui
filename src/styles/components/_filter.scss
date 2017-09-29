@@ -5,6 +5,8 @@ $filter-block-height: 400px;
   &-block {
     max-height: $filter-block-height;
     width: 100%;
+    background-color: transparent;
+    color: white;
 
     &-collapsed {
       overflow-x: auto;
@@ -16,13 +18,33 @@ $filter-block-height: 400px;
     }
   }
 
-  @include media-breakpoint-down('sm') {
-    &-block {
-      overflow-y: auto;
+  &-label {
+    widows: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+    font-weight: normal;
+
+    &.active {
+      font-weight: 500;
     }
   }
 
   &-element {
-    width: $filter-element-width;
+    border-bottom: 1px solid #58595e;
+    box-shadow: 0 1px 1px 0 #292a2f;
+
+    &.active {
+      background-color: #2d2c31;
+      box-shadow: inset 0 0 3px 3px #242328;
+      border-bottom: none;
+    }
+  }
+
+  @include media-breakpoint-down('sm') {
+    &-block {
+      overflow-y: auto;
+    }
   }
 }

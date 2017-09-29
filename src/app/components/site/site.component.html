@@ -1,44 +1,46 @@
 <navigation [pages]="pagesList"></navigation>
-<breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
 
-<div class="container-fluid pb-5">
-  <div *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
-    <div *ngSwitchCase="'form'">
-      <generic-form
-        *ngIf="pageData.endpoint !== '/ecore/api/v2/endless-core/forms/'"
-        [title]="pageData.pathData.title"
-        [modal]="pageData.pathData.modal"
-        [endpoint]="pageData.endpoint"
-        [id]="pageData.pathData.id"
-        [edit]="pageData.pathData.postfix"
-        (event)="formEvent($event)"
-        (str)="changeFormLabel($event)">
-          <div class="d-flex">
-            <button type="button" class="btn btn-danger"
-              *ngIf="pageData.pathData.id"
-              (click)="deleteElement(pageData)">Delete</button>
-            <button type="submit" class="btn btn-primary ml-auto">Save</button>
-          </div>
-      </generic-form>
-      <form-builder
-        *ngIf="pageData.endpoint === '/ecore/api/v2/endless-core/forms/'"
-        [path]="pageData.pathData.path"
-        [endpoint]="pageData.endpoint"
-        [id]="pageData.pathData.id"
-        (str)="changeFormLabel($event)">
-      </form-builder>
-    </div>
-    <div *ngSwitchCase="'list'">
+<div class="h-100" *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
+  <div *ngSwitchCase="'form'">
+    <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
+    <generic-form
+      *ngIf="pageData.endpoint !== '/ecore/api/v2/endless-core/forms/'"
+      [title]="pageData.pathData.title"
+      [modal]="pageData.pathData.modal"
+      [endpoint]="pageData.endpoint"
+      [id]="pageData.pathData.id"
+      [edit]="pageData.pathData.postfix"
+      (event)="formEvent($event)"
+      (str)="changeFormLabel($event)">
+        <div class="d-flex">
+          <button type="button" class="btn btn-danger"
+            *ngIf="pageData.pathData.id"
+            (click)="deleteElement(pageData)">Delete</button>
+          <button type="submit" class="btn btn-primary ml-auto">Save</button>
+        </div>
+    </generic-form>
+    <form-builder
+      *ngIf="pageData.endpoint === '/ecore/api/v2/endless-core/forms/'"
+      [path]="pageData.pathData.path"
+      [endpoint]="pageData.endpoint"
+      [id]="pageData.pathData.id"
+      (str)="changeFormLabel($event)">
+    </form-builder>
+  </div>
+  <div class="list-page" *ngSwitchCase="'list'">
+    <div class="filter-place"></div>
+    <div class="content">
+      <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
       <generic-list [endpoint]="pageData.endpoint"></generic-list>
     </div>
-    <div *ngSwitchCase="'profile'">
-      <profile [id]="user.id"></profile>
-    </div>
+  </div>
+  <div *ngSwitchCase="'profile'">
+    <profile [id]="user.id"></profile>
   </div>
 
+</div>
   <dashboard *ngIf="dashboard"
     [pages]="pagesList"
     [userModules]="userModules"
     [modulesList]="modulesList"
     (changeWidgetList)="updateNavigation($event)"></dashboard>
-</div>

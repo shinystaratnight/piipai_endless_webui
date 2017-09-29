@@ -1,16 +1,58 @@
+$nested-width: 300px;
+
 .navigation {
+  background-color: #fea456;
+
+  .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 320px;
+    min-width: 320px;
+    margin-right: 2rem;
+    background-color: #f3872f;
+
+    &-image {
+      width: auto;
+      height: 60px;
+    }
+  }
+
   .title {
+    position: relative;
+    height: 115px;
     font-size: 1rem;
 
-    a {
-      color: white;
-      text-decoration: none;
+    &-name {
+      font-size: 2rem;
+      text-transform: uppercase;
+      color:white;
     }
   }
   .user {
 
     &-title {
-      font-weight: lighter;
+      color: #925014;
+      font-size: .8rem;
+      margin-right: 1.3rem;
+    }
+
+    &-icons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.1rem;
+      height: 2.1rem;
+      min-width: 2.1rem;
+      min-height: 2.1rem;
+      margin-right: .5rem;
+      border-radius: 50%;
+      background-color: #f9852e;
+    }
+
+    &-icon {
+      width: 1.2rem;
+      height: 1.2rem;
     }
 
     @include media-breakpoint-down('md') {
@@ -56,6 +98,7 @@
 
   &-list {
     display: flex;
+    flex-wrap: wrap;
     margin-bottom: 0;
     padding-left: 0;
     list-style-position: inside;
@@ -72,7 +115,7 @@
       max-width: 70vw;
       flex-direction: column;
       align-items: flex-start;
-      background-color: rgba($brand-primary, 1);
+      background-color: #fea456;
       box-shadow: inset 0 0 4px rgba(0, 0, 0, .2);
       z-index: 200;
 
@@ -84,7 +127,6 @@
     }
 
     a {
-      display: block;
       color: white;
       text-decoration: none;
     }
@@ -92,7 +134,7 @@
     &-nested {
       display: flex;
       visibility: hidden;
-      width: 200px;
+      width: $nested-width;
       position: absolute;
       top: 0;
       left: 0;
@@ -102,13 +144,13 @@
       flex-direction: column;
       list-style-position: inside;
       list-style-type: none;
-      background-color: $brand-primary;
+      background-color: #fea456;
       box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, .2);
       z-index: 1000;
 
       & .navigation-list-nested {
         top: 0;
-        left: 200px;
+        left: $nested-width;
       }
     }
 
@@ -120,14 +162,20 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    text-transform: uppercase;
 
     &:hover {
+      color: black;
       cursor: pointer;
 
+      .icon {
+        color: white;
+      }
+
       &>div {
-        a:hover {
+        a {
           cursor: pointer;
-          color: black;
+          color: inherit;
         }
         .icon {
           transform: rotate(90deg);
@@ -139,5 +187,12 @@
         visibility: visible;
       }
     }
+  }
+
+  &-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
   }
 }

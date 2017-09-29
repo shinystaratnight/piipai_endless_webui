@@ -1,4 +1,6 @@
-  <label class="mb-0">
+<div class="filter-element p-2" [class.active]="!isCollapsed">
+  <label class="filter-label" [class.active]="!isCollapsed">
+    {{config.label}}
     <i
       fa
       class="p-2"
@@ -7,9 +9,8 @@
       (click)="isCollapsed = !isCollapsed"
       [attr.aria-expanded]="!isCollapsed"
       style="cursor: pointer"></i>
-    {{config.label}}
     <i
-      *ngIf="query"
+      *ngIf="false"
       fa
       class="text-danger ml-1"
       [name]="'times-circle'"
@@ -17,7 +18,7 @@
       style="cursor: pointer"
       (click)="resetFilter()"></i>
   </label>
-  <div [ngbCollapse]="isCollapsed" class="filter-element">
+  <div [ngbCollapse]="isCollapsed">
     <div class="d-flex justify-content-center align-items-center mb-1 w-100" *ngFor="let item of elements" style="position: relative">
       <div class="form-control custom-select autocomplete-value active"
         (click)="openAutocomplete($event, item)">
@@ -52,3 +53,4 @@
       </div>
     </div>
   </div>
+</div>
