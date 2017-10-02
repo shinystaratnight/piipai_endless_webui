@@ -44,7 +44,6 @@ $filter-block-height: 400px;
     &.active {
       background-color: #2d2c31;
       box-shadow: inset 0 0 3px 3px #242328;
-      border-bottom: none;
     }
 
     @include media-breakpoint-down('md') {

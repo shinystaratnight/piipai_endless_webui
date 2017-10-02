@@ -50,6 +50,7 @@ import { ListTableComponent } from './components/list-table/list-table.component
 import { ListImageComponent } from './components/list-image/list-image.copmonent';
 import { FormListComponent } from './components/form-list/form-list.component';
 import { ListButtonsComponent } from './containers/list-buttons/list-buttons.component';
+import { ListSerachBarComponent } from './components/list-search-bar/list-search-bar.component';
 
 import { ActionElementComponent } from './components/action-element/action-element.component';
 
@@ -108,7 +109,8 @@ import { MoveDirective } from './directives/move.directive';
     FormListComponent,
     ListButtonsComponent,
     FormFieldsGroupComponent,
-    FormOptionsComponent
+    FormOptionsComponent,
+    ListSerachBarComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [

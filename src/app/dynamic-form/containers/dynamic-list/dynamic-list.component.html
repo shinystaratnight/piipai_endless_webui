@@ -34,6 +34,7 @@
     <action-element *ngIf="config.list.actions" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
     <h5 class="datatable-label" *ngIf="config.list && !poped">
       <span class="mr-auto">select {{config.list.label}} to change</span>
+      <list-search-bar></list-search-bar>
       <div>
         <list-buttons
           [buttons]="config.list.buttons"

@@ -1,0 +1,8 @@
+<form action="" class="search-bar form-group" (ngSubmit)="search($event)">
+  <input
+    [(ngModel)]="searchValue"
+    [ngModelOptions]="{standalone: true}"
+    type="form-control"
+    placeholder="Search...">
+  <i fa [name]="'search'" class="search-icon icon"></i>
+</form>
