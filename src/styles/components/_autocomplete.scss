@@ -5,13 +5,65 @@
   border-radius: 0 0 .2rem .2rem;
   z-index: 100;
 
+
+  @include media-breakpoint-up('lg') {
+    &-filter .autocomplete {
+      background-color: #2d2c31;
+    }
+
+    &-filter input {
+      border: none;
+      border-bottom: 2px solid white;
+      border-radius: 0;
+      background-color: #2d2c31;
+      color: white;
+
+      &:hover, &:focus {
+        border-color: $brand-primary;
+        background-color: #2d2c31;
+        color: white;
+      }
+    }
+
+    &-filter &-value {
+      border: 0;
+      border-radius: 0;
+      background-color: #2d2c31;
+      overflow: hidden;
+
+      &.active:not(:focus) {
+        cursor: pointer;
+        background-color: #2d2c31;
+      }
+    }
+
+    &-filter &-item {
+      color: white;
+      background-color: #2d2c31;
+
+      &:hover {
+        color: #838288;
+        background-color: #fff;
+      }
+    }
+
+    &-filter &-value {
+      border: 0;
+      border-radius: 0;
+      border-bottom: 1px solid white;
+      background-color: #2d2c31;
+      color: white;
+    }
+  }
+
   &-value {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     overflow: hidden;
-    background-color: $gray-lighter;
 
     &.active:not(:focus) {
       cursor: pointer;
-      background-color: white;
     }
   }
 

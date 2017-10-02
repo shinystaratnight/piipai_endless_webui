@@ -7,20 +7,28 @@ $nested-width: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 320px;
-    min-width: 320px;
+    width: 17vw;
+    min-width: 17vw;
+    height: 11vh;
+    min-height: 100%;
     margin-right: 2rem;
     background-color: #f3872f;
 
     &-image {
       width: auto;
-      height: 60px;
+      height: auto;
+      max-height: 7vh;
+      max-width: 90%;
+    }
+
+    @include media-breakpoint-down('md') {
+      display: none;
     }
   }
 
   .title {
     position: relative;
-    height: 115px;
+    max-height: 100%;
     font-size: 1rem;
 
     &-name {
@@ -29,7 +37,9 @@ $nested-width: 300px;
       color:white;
     }
   }
+
   .user {
+    min-height: 100%;
 
     &-title {
       color: #925014;
@@ -98,7 +108,6 @@ $nested-width: 300px;
 
   &-list {
     display: flex;
-    flex-wrap: wrap;
     margin-bottom: 0;
     padding-left: 0;
     list-style-position: inside;
@@ -135,8 +144,8 @@ $nested-width: 300px;
       display: flex;
       visibility: hidden;
       width: $nested-width;
+      max-width: 70vw;
       position: absolute;
-      top: 0;
       left: 0;
       height: 0;
       margin-bottom: 0;

@@ -13,9 +13,13 @@ $cell-datatable-width: 45%;
 }
 
 .filter-place {
-  width: 320px;
-  min-width: 320px;
+  width: 17vw;
+  min-width: 17vw;
   background-color: #36373c;
+
+  @include media-breakpoint-down('md') {
+    display: none;
+  }
 }
 
 .content {
@@ -27,7 +31,7 @@ $cell-datatable-width: 45%;
 
 .datatable {
   max-height: 100%;
-  padding: 1rem;
+  padding: 0 1rem;
 
   list-column,
   list-text {
@@ -38,8 +42,25 @@ $cell-datatable-width: 45%;
     }
   }
 
+  td {
+    border-top: none;
+    border-right: 1px solid #d3d3d3;
+
+    &:last-child {
+      border-right: none;
+
+      @include media-breakpoint-down('sm') {
+        border-right: 1px solid #d3d3d3;
+      }
+    }
+  }
+
   &-wrapper {
-    max-width: calc(100vw - 320px);
+    max-width: 83vw;
+
+    @include media-breakpoint-down('md') {
+      max-width: 100%;
+    }
   }
 
   &-label {
@@ -49,9 +70,16 @@ $cell-datatable-width: 45%;
     text-transform: uppercase;
     font-weight: 300;
     padding: 1rem;
+    margin-bottom: 1rem;
     border: 2px solid #dbdce1;
     background-color: white;
     color: #555;
+
+    @include media-breakpoint-down('sm') {
+      align-items: stretch;
+      justify-content: center;
+      flex-direction: column;
+    }
   }
 
   &-button {
@@ -69,6 +97,16 @@ $cell-datatable-width: 45%;
     &:focus {
       text-decoration: none;
       background-color: darken(#54545c, 5%);
+    }
+
+    @include media-breakpoint-down('sm') {
+      width: 100%;
+      & {
+        margin-top: .5rem;
+      }
+      &:first-child {
+        margin-top: 0;
+      }
     }
   }
 
@@ -96,12 +134,38 @@ $cell-datatable-width: 45%;
     position: absolute;
     top: 0;
     left: 0;
-    width: 320px;
+    width: 17vw;
+
+    @include media-breakpoint-down('md') {
+      position: relative;
+      width: auto;
+    }
   }
 
   .table-wrapper {
     position: relative;
-    max-width: calc(100vw - 320px);
+    max-width: 83vw;
+    border: 1px solid #d3d3d3;
+
+    @include media-breakpoint-down('md') {
+      max-width: 100%;
+    }
+
+    @include media-breakpoint-down('sm') {
+      border: none;
+    }
+
+    table {
+      margin-bottom: 0;
+    }
+
+    thead th {
+      vertical-align: top;
+      font-weight: normal;
+      text-transform: uppercase;
+      background-color: #54545e;
+      color: white;
+    }
 
     .refreshing-bg {
       display: flex;
@@ -166,6 +230,7 @@ $cell-datatable-width: 45%;
     }
     table td {
       display: block;
+      border: 1px solid #d3d3d3;
     }
     table td:last-child {
       border-bottom: 0;

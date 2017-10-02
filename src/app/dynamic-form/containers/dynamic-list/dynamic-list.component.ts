@@ -7,7 +7,8 @@ import {
   OnChanges,
   ViewChild,
   OnDestroy,
-  AfterContentChecked
+  AfterContentChecked,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -19,7 +20,8 @@ import moment from 'moment-timezone';
 
 @Component({
   selector: 'dynamic-list',
-  templateUrl: 'dynamic-list.component.html'
+  templateUrl: 'dynamic-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, AfterContentChecked {

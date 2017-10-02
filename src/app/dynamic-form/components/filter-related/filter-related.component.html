@@ -19,10 +19,11 @@
       (click)="resetFilter()"></i>
   </label>
   <div [ngbCollapse]="isCollapsed">
-    <div class="d-flex justify-content-center align-items-center mb-1 w-100" *ngFor="let item of elements" style="position: relative">
-      <div class="form-control custom-select autocomplete-value active"
+    <div class="d-flex justify-content-center align-items-center mb-1 w-100 autocomplete-filter" *ngFor="let item of elements" style="position: relative">
+      <div class="form-control autocomplete-value active"
         (click)="openAutocomplete($event, item)">
           <div style="overflow: hidden; white-space: nowrap">{{getValueByKey(item.data, item)}}</div>
+          <i fa [name]="item.hideAutocomplete ? 'angle-right' : 'angle-down'" class="text-md-white ml-2"></i>
       </div>
 
       <div class="card autocomplete p-1" [hidden]="item.hideAutocomplete" [ngStyle]="{'top.px': topHeight}">

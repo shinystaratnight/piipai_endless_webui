@@ -66,7 +66,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
           mode: dateType,
           closeCallback: () => {
             let date = el.nativeElement.value;
-            if (date) {
+            if (date && this.data[el.nativeElement.name] !== date) {
               let fullDate = date;
               this.onChange(date, el.nativeElement.name);
             }

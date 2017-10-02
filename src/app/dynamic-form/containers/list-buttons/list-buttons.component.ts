@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 interface Button {
   label: string;
@@ -8,7 +8,8 @@ interface Button {
 
 @Component({
   selector: 'list-buttons',
-  templateUrl: 'list-buttons.component.html'
+  templateUrl: 'list-buttons.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListButtonsComponent {
 
