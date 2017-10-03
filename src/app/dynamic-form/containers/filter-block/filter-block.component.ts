@@ -1,9 +1,8 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'filter-block',
-  templateUrl: 'filter-block.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: 'filter-block.component.html'
 })
 export class FilterBlockComponent {
   @Input()

@@ -21,7 +21,7 @@
   <ul class="list-unstyled" [ngbCollapse]="isCollapsed">
     <li
       *ngFor="let item of config.list"
-      [class.text-primary]="query === item.value"
+      [class.selected]="query === item.value"
       class="text-muted"
       style="cursor: pointer"
       (click)="select(item.value)">

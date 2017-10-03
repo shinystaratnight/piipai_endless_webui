@@ -46,7 +46,7 @@ export class FilterChoiceComponent implements OnInit {
 
   public updateFilter() {
     let data = this.fs.getQueries(this.config.listName, this.config.key);
-    if (data.byQuery) {
+    if (data && data.byQuery) {
       this.query = data.query.split('=')[1];
     } else {
       this.query = data;

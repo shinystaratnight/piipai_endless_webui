@@ -1,10 +1,10 @@
 import {
   Component,
   ViewChild,
-  AfterContentChecked,
   HostListener,
   Input,
-  OnInit
+  OnInit,
+  AfterViewInit
 } from '@angular/core';
 
 import { LocalStorageService } from 'ng2-webstorage';
@@ -16,7 +16,7 @@ import { UserService } from '../../services/user.service';
   templateUrl: 'navigation.component.html'
 })
 
-export class NavigationComponent implements OnInit, AfterContentChecked {
+export class NavigationComponent implements OnInit, AfterViewInit {
 
   @ViewChild('header')
   public header: any;
@@ -54,8 +54,8 @@ export class NavigationComponent implements OnInit, AfterContentChecked {
     this.getUserInformation();
   }
 
-  public ngAfterContentChecked() {
-    this.headerHeight = this.header.nativeElement.clientHeight;
+  public ngAfterViewInit() {
+    this.headerHeight = this.header.nativeElement.offsetHeight - 1;
   }
 
   public getUserInformation() {

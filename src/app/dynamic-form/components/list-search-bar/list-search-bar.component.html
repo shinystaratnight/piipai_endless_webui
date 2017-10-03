@@ -4,5 +4,5 @@
     [ngModelOptions]="{standalone: true}"
     type="form-control"
     placeholder="Search...">
-  <i fa [name]="'search'" class="search-icon icon"></i>
+  <i fa [name]="'search'" class="search-icon icon" (click)="search($event)"></i>
 </form>

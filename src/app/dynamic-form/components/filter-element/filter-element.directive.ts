@@ -47,10 +47,12 @@ export class FilterElementDirective implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    const component = components[this.config.type];
-    const factory = this.resolver.resolveComponentFactory<any>(component);
-    this.component = this.container.createComponent(factory);
-    this.component.instance.config = this.config;
-    this.component.instance.event = this.event;
+    if (this.config.type !== 'search') {
+      const component = components[this.config.type];
+      const factory = this.resolver.resolveComponentFactory<any>(component);
+      this.component = this.container.createComponent(factory);
+      this.component.instance.config = this.config;
+      this.component.instance.event = this.event;
+    }
   }
 }

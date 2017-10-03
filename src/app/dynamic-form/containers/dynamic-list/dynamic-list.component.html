@@ -1,4 +1,4 @@
-<div #datatable [ngClass]="{'mb-5': !poped, 'poped card': poped}" class="mw-100 datatable" (click)="activeTable()" [hidden]="minimized">
+<div #datatable [ngClass]="{'poped card': poped}" class="mw-100 datatable h-100" (click)="activeTable()" [hidden]="minimized">
   <div move [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
@@ -28,13 +28,13 @@
     </h5>
   </div>
   <div [class.card-block]="poped" class="datatable-body">
-    <div class="filter-wrapper">
-      <filter-block *ngIf="(first || poped) && filtersOfList && filtersOfList.length" [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+    <div class="filter-wrapper" *ngIf="(first || poped) && filtersOfList && filtersOfList.length">
+      <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     </div>
     <action-element *ngIf="config.list.actions" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
     <h5 class="datatable-label" *ngIf="config.list && !poped">
       <span class="mr-auto">select {{config.list.label}} to change</span>
-      <list-search-bar></list-search-bar>
+      <list-search-bar *ngIf="config.list.search_enabled" [list]="config.list.list" (event)="filterHandler($event)"></list-search-bar>
       <div>
         <list-buttons
           [buttons]="config.list.buttons"

@@ -62,15 +62,15 @@ describe('NavigationComponent', () => {
     });
   });
 
-  describe('ngAfterContentChecked', () => {
+  describe('ngAfterViewInit method', () => {
     it('should get height of page header', () => {
       comp.header = {
         nativeElement: {
-          clientHeight: 40
+          offsetHeight: 40
         }
       };
-      comp.ngAfterContentChecked();
-      expect(comp.headerHeight).toEqual(40);
+      comp.ngAfterViewInit();
+      expect(comp.headerHeight).toEqual(39);
     });
   });
 

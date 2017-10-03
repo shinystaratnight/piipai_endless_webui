@@ -10,11 +10,16 @@ $cell-datatable-width: 45%;
   display: flex;
   align-items: stretch;
   height: 100%;
+  background-color: #eef1f6;
+
+  @include media-breakpoint-down('md') {
+    height: auto;
+  }
 }
 
 .filter-place {
-  width: 17vw;
-  min-width: 17vw;
+  width: 320px;
+  min-width: 320px;
   background-color: #36373c;
 
   @include media-breakpoint-down('md') {
@@ -56,7 +61,8 @@ $cell-datatable-width: 45%;
   }
 
   &-wrapper {
-    max-width: 83vw;
+    height: calc(100% - 3rem);
+    max-width: calc(100vw - 320px);
 
     @include media-breakpoint-down('md') {
       max-width: 100%;
@@ -131,7 +137,7 @@ $cell-datatable-width: 45%;
     position: absolute;
     top: 0;
     left: 0;
-    width: 17vw;
+    width: 320px;
 
     @include media-breakpoint-down('md') {
       position: relative;
@@ -141,7 +147,9 @@ $cell-datatable-width: 45%;
 
   .table-wrapper {
     position: relative;
-    max-width: 83vw;
+    max-height: 500px;
+    overflow-y: auto;
+    max-width: calc(100vw - 320px);
     border: 1px solid #d3d3d3;
 
     @include media-breakpoint-down('md') {
@@ -217,6 +225,13 @@ $cell-datatable-width: 45%;
     &:hover {
       color: $brand-primary;
     }
+  }
+
+  table th {
+    position: sticky;
+    top: 0;
+    border-top: none;
+    z-index: 2;
   }
 
   @include media-breakpoint-down('sm') {
