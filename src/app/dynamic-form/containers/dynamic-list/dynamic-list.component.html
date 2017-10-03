@@ -1,4 +1,4 @@
-<div #datatable [ngClass]="{'pt-2 pl-2 pr-2 mb-5': !poped, 'poped card': poped}" class="mw-100 datatable" (click)="activeTable()" [hidden]="minimized">
+<div #datatable [ngClass]="{'poped card': poped}" class="mw-100 datatable h-100" (click)="activeTable()" [hidden]="minimized">
   <div move [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
@@ -28,11 +28,14 @@
     </h5>
   </div>
   <div [class.card-block]="poped" class="datatable-body">
-    <filter-block *ngIf="(first || poped) && filtersOfList && filtersOfList.length" [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+    <div class="filter-wrapper" *ngIf="(first || poped) && filtersOfList && filtersOfList.length">
+      <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+    </div>
     <action-element *ngIf="config.list.actions" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
-    <h5 class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center lead mb-2" *ngIf="config.list && !poped">
-      <span>{{config.list.label}}</span>
-      <div class="mt-2">
+    <h5 class="datatable-label" *ngIf="config.list && !poped">
+      <span class="mr-auto">select {{config.list.label}} to change</span>
+      <list-search-bar *ngIf="config.list.search_enabled" [list]="config.list.list" (event)="filterHandler($event)"></list-search-bar>
+      <div>
         <list-buttons
           [buttons]="config.list.buttons"
           [first]="first"
@@ -43,7 +46,7 @@
         </list-buttons>
       </div>
     </h5>
-    <div class="mt-2" *ngIf="poped">
+    <div *ngIf="poped">
       <list-buttons
         [buttons]="config.list.buttons"
         [first]="first"
@@ -62,14 +65,14 @@
       </div>
     </div>
     <div #tableWrapper class="table-wrapper">
-      <table class="table table-bordered table-striped table-sm" *ngIf="config.list">
+      <table class="table table-sm" *ngIf="config.list">
         <thead class="thead-default hidden-sm-down">
           <tr>
             <th *ngIf="!config.list.buttons || config.list.buttons.length > 0" class="text-center" style="width: 2rem">
               *
               <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
             </th>
-            <th *ngFor="let field of config.list.columns;" class="align-middle"
+            <th *ngFor="let field of config.list.columns;"
               [class.datatable-title-hover]="field.sort"
               [hidden]="field.tab && field.tab.is_collapsed">
                 <i fa

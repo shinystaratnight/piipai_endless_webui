@@ -7,7 +7,8 @@ import {
   OnChanges,
   ViewChild,
   OnDestroy,
-  AfterContentChecked
+  AfterContentChecked,
+  AfterViewInit
 } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -22,7 +23,8 @@ import moment from 'moment-timezone';
   templateUrl: 'dynamic-list.component.html'
 })
 
-export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
+export class DynamicListComponent implements
+  OnInit, OnChanges, OnDestroy, AfterContentChecked, AfterViewInit {
   @Input()
   public config: any;
 
@@ -130,6 +132,21 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   ) {}
 
   public ngOnInit() {
+    if (this.config.list.filters && this.config.list.search_enabled) {
+      this.config.list.filters.push({
+        type: 'search',
+        query: 'search',
+        key: 'search'
+      });
+    } else if (this.config.list.search_enabled) {
+      this.config.list.filters = [
+        {
+          type: 'search',
+          query: 'search',
+          key: 'search'
+        }
+      ];
+    }
     if (this.config.list.filters) {
       this.filterService.filters = {
         endpoint: this.parentEndpoint || this.endpoint,
@@ -217,6 +234,15 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   public ngAfterContentChecked() {
     this.checkOverfow();
+  }
+
+  public ngAfterViewInit() {
+    if (this.tableWrapper) {
+      let offsetTop = this.tableWrapper.nativeElement.offsetTop;
+      let parent = this.tableWrapper.nativeElement.offsetParent;
+      let parentHeight = parent.offsetHeight;
+      this.tableWrapper.nativeElement.style.maxHeight = (parentHeight - offsetTop - 80) + 'px';
+    }
   }
 
   public checkOverfow() {

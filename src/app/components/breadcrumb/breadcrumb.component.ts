@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input } from '@angular/core';
+import { Component, OnChanges, Input, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Page } from '../../services/navigation.service';
@@ -11,7 +11,8 @@ export interface Breadcrumb {
 
 @Component({
   selector: 'breadcrumb',
-  templateUrl: 'breadcrumb.component.html'
+  templateUrl: 'breadcrumb.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class BreadcrumbComponent implements OnChanges {

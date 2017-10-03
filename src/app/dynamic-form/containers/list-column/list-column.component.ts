@@ -1,8 +1,9 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'list-column',
-  templateUrl: 'list-column.component.html'
+  templateUrl: 'list-column.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ListColumnComponent {

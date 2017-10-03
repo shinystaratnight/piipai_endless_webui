@@ -1,4 +1,4 @@
-<div *ngFor="let table of tables; let last = last" [ngClass]="{'pb-3': last && minimizedTable.length}">
+<div class="datatable-wrapper" *ngFor="let table of tables; let last = last" [ngClass]="{'pb-3': last && minimizedTable.length}">
   <dynamic-list
     *ngIf="table.metadata && table.data"
     [config]="table.metadata"

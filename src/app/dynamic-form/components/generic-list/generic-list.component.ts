@@ -149,6 +149,10 @@ export class GenericListComponent implements OnInit {
         this.getData(this.getTable(e.list).endpoint, this.generateQuery(table.query), table);
         return;
       }
+      if (table.query[e.type] === e.query) {
+        table.refresh = false;
+        return;
+      }
       table.query[e.type] = e.query;
       if (e.type === 'pagination') {
         table.innerTables = {};

@@ -1,4 +1,4 @@
-<ol *ngIf="list.length" class="breadcrumb">
+<ol *ngIf="list.length" class="breadcrumb mb-0">
   <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
   <li class="breadcrumb-item" [ngClass]="{'active': item.active || last}"
     *ngFor="let item of list; let last = last">

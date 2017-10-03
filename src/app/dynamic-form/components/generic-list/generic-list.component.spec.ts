@@ -446,12 +446,13 @@ describe('GenericListComponent', () => {
       it('should call updateUrl method with true', async(() => {
         let event = {
           type: 'filter',
-          list: 'company'
+          list: 'company',
+          query: 'some query'
         };
         let table = {
           list: 'company',
           first: true,
-          query: {}
+          query: {filter: 'some value'}
         };
         comp.tables = [];
         comp.tables.push(table);
