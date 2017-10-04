@@ -52,6 +52,7 @@ export class FormRelatedComponent
 
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
+  public count: number;
 
   public dataOfList: any;
   public isCollapsed: boolean = false;
@@ -77,15 +78,17 @@ export class FormRelatedComponent
       if (!this.config.many) {
         let value;
         if (data instanceof Object) {
-          if (this.config.options) {
+          if (this.config.options && this.config.options.length) {
             this.displayValue = this.config.options.filter((el) => {
               return el[this.param] === data[this.param];
             })[0][this.display];
+          } else if (data[this.display]) {
+            this.displayValue = data[this.display];
           }
           value = data[this.param];
         } else {
           value = data;
-          if (this.config.options) {
+          if (this.config.options && this.config.options.length) {
             this.displayValue = this.config.options.filter((el) => {
               return el[this.param] === data;
             })[0][this.display];
@@ -93,7 +96,7 @@ export class FormRelatedComponent
         }
         this.group.get(this.key).patchValue(value);
       } else {
-        if (this.config.options) {
+        if (this.config.options && this.config.options.length) {
           let results = [];
           this.config.options.forEach((el) => {
             data.forEach((elem) => {
@@ -222,15 +225,7 @@ export class FormRelatedComponent
     let prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
-        if (data[key] instanceof Object) {
-          if (data[key].id) {
-            obj.addControl(key, this.fb.control(data[key].id));
-          } else {
-            obj.addControl(key, this.fb.control(data[key]));
-          }
-        } else {
           obj.addControl(key, this.fb.control(data[key]));
-        }
       }
     } else {
       if (data[prop]) {
@@ -241,7 +236,7 @@ export class FormRelatedComponent
   }
 
   public onModalScrollDown() {
-    this.generatePreviewList(this.list);
+    this.generateList(this.searchValue, true);
   }
 
   public deleteElement(closeModal) {
@@ -278,18 +273,16 @@ export class FormRelatedComponent
   }
 
   public openAutocomplete() {
-    if (this.config.options && !this.config.readonly) {
       this.searchValue = null;
       this.hideAutocomplete = false;
-      this.generateList();
+      this.generateList(this.searchValue);
       setTimeout(() => {
         this.search.nativeElement.focus();
       }, 50);
-    }
   }
 
-  public generateList(): void {
-    if (this.config.options) {
+  public generateList(value, concat = false): void {
+    if (this.config.useOptions) {
       this.hideAutocomplete = false;
       if (this.searchValue) {
         this.filter(this.searchValue);
@@ -299,6 +292,9 @@ export class FormRelatedComponent
           .sort((p, n) => p[this.display] > n[this.display] ? 1 : -1);
         this.generatePreviewList(this.list);
       }
+    } else {
+      this.hideAutocomplete = false;
+      this.getOptions(value, this.lastElement, concat);
     }
   }
 
@@ -313,6 +309,7 @@ export class FormRelatedComponent
       this.previewList = null;
       this.lastElement = 0;
       this.hideAutocomplete = true;
+      this.count = null;
       if (!this.config.many) {
         this.searchValue = null;
       }
@@ -321,9 +318,11 @@ export class FormRelatedComponent
 
   public filter(value) {
     this.lastElement = 0;
-    let filteredList;
-    if (value) {
-      if (this.config.options) {
+    this.count = null;
+    this.previewList = null;
+    if (this.config.useOptions) {
+      let filteredList;
+      if (value && this.config.options) {
         filteredList = this.config.options.filter((el) => {
           let val = el[this.display];
           if (val) {
@@ -337,29 +336,23 @@ export class FormRelatedComponent
         this.generatePreviewList(this.list);
       }
     } else {
-      this.generateList();
+      this.generateList(value);
     }
   }
 
   public setValue(item) {
-    let element = [].concat(
-      this.config.options.filter((el) => el[this.display] === item[this.display]))[0];
-    if (element) {
-      let exist = this.results.indexOf(element) > -1;
-      if (!exist) {
-        if (this.config.many) {
-          this.results.push(element);
-          this.updateData();
-        } else {
-          this.displayValue = item[this.display];
-          this.group.get(this.key).patchValue(item[this.param]);
-        }
-        this.changeList();
-      }
-      this.eventHandler({type: 'change'});
+    if (this.config.many) {
+      this.results.push(item);
+      this.updateData();
+    } else {
+      this.displayValue = item[this.display];
+      this.group.get(this.key).patchValue(item[this.param]);
     }
+    this.changeList();
+    this.eventHandler({type: 'change'}, item[this.param]);
     this.searchValue = null;
     this.list = null;
+    this.count = null;
     this.previewList = null;
     this.errors = null;
     this.message = null;
@@ -406,6 +399,31 @@ export class FormRelatedComponent
         currentQuery: this.config.currentQuery
       });
       this.eventHandler({type: 'change'}, e.data[this.param]);
+    }
+  }
+
+  public getOptions(value, offset, concat = false) {
+    let endpoint = this.config.endpoint;
+    let query = '';
+    if (value) {
+      query += `?search=${value}&`;
+    }
+    query += !query ? '?' : '';
+    query += `limit=${this.limit}&offset=${offset}&fields=${this.display}&fields=${this.param}`;
+    if (!this.count || (this.count && offset < this.count && concat)) {
+      this.lastElement += this.limit;
+      this.genericFormService.getByQuery(endpoint, query).subscribe(
+        (res: any) => {
+          this.count = res.count;
+          if (res.results && res.results.length) {
+            if (concat) {
+              this.previewList.push(...res.results);
+            } else {
+              this.previewList = res.results;
+            }
+          }
+        }
+      );
     }
   }
 }

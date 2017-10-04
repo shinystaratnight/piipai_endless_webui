@@ -2,6 +2,8 @@ import { FilterService } from './../../services/filter.service';
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { GenericFormService } from './../../services/generic-form.service';
+
 @Component({
   selector: 'filter-related',
   templateUrl: 'filter-related.component.html'
@@ -32,35 +34,19 @@ export class FilterRelatedComponent implements OnInit {
 
   constructor(
     private fs: FilterService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private genericFormService: GenericFormService
   ) {}
 
   public ngOnInit() {
-    let data = this.fs.getQueries(this.config.listName, this.config.key);
-    if (data) {
-      if (data.byQuery) {
-        this.count = 1;
-        this.parseQuery(data.query);
-      } else {
-        let counts = data.map((el) => el.id);
-        this.elements.push(...data);
-        this.count = Math.max(...counts);
-        this.genericQuery(this.elements, this.config.query);
-      }
-    } else {
-      this.count = 1;
-      this.elements.push(this.createElement(this.count));
-    }
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
     this.isCollapsed = this.query ? false : true;
   }
 
-  public generateList(item): void {
-    this.list = this.config.options
-      .sort((p, n) => p[this.config.data.value] > n[this.config.data.value] ? 1 : -1);
-    this.generatePreviewList(this.list, item);
+  public generateList(item, concat = false): void {
+      this.getOptions(this.searchValue, item, concat);
   }
 
   public generatePreviewList(list, item) {
@@ -69,7 +55,6 @@ export class FilterRelatedComponent implements OnInit {
   }
 
   public openAutocomplete($event, item) {
-    if (this.config.options) {
       let autocomplete;
       let target = $event.target;
       this.searchValue = null;
@@ -85,7 +70,6 @@ export class FilterRelatedComponent implements OnInit {
       setTimeout(() => {
         autocomplete.children[0].focus();
       }, 50);
-    }
   }
 
   public resetList(item) {
@@ -93,33 +77,26 @@ export class FilterRelatedComponent implements OnInit {
       this.list = null;
       this.previewList = null;
       item.lastElement = 0;
+      item.count = null;
       item.hideAutocomplete = true;
     }, 150);
   }
 
   public filter(value, item) {
     item.lastElement = 0;
-    let filteredList;
-    if (value) {
-      filteredList = this.config.options.filter((el) => {
-        let val = el[this.config.data.value];
-        if (val) {
-          return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
-        }
-      });
-      this.list = filteredList;
-      this.generatePreviewList(this.list, item);
-    } else {
-      this.generateList(item);
-    }
+    item.count = null;
+    this.previewList = null;
+    this.generateList(item);
   }
 
   public onModalScrollDown(item) {
-    this.generatePreviewList(this.list, item);
+    this.generateList(item, true);
   }
 
   public setValue(value, item) {
     item.data = value[this.config.data.key];
+    item.displayValue = value[this.config.data.value];
+    item.count = null;
     this.searchValue = null;
     this.list = null;
     this.previewList = null;
@@ -132,17 +109,6 @@ export class FilterRelatedComponent implements OnInit {
       this.genericQuery(this.elements, this.config.query),
       this.config.key, this.config.listName, this.elements);
     this.changeQuery();
-  }
-
-  public getValueByKey(key) {
-    if (this.config.options) {
-      let value = this.config.options.filter((el) => el[this.config.data.key] === key)[0];
-      if (value) {
-        return value[this.config.data.value];
-      } else {
-        return 'All';
-      }
-    }
   }
 
   public addElement() {
@@ -164,12 +130,14 @@ export class FilterRelatedComponent implements OnInit {
 
   public createElement(id, data = '') {
     this.count++;
-    return {
+    let element = {
       id,
       data,
       lastElement: 0,
       hideAutocomplete: true
     };
+    element['displayValue'] = data ? this.getOption(data, element) : '';
+    return element;
   }
 
   public onChange() {
@@ -219,8 +187,8 @@ export class FilterRelatedComponent implements OnInit {
       }
     } else {
       this.query = '';
-      this.elements.length = 1;
-      this.elements[0].data = '';
+      this.count = 1;
+      this.elements.push(this.createElement(this.count));
     }
   };
 
@@ -229,6 +197,45 @@ export class FilterRelatedComponent implements OnInit {
     this.deleteValue(this.elements[0]);
     this.fs.generateQuery('', this.config.key, this.config.listName);
     this.changeQuery();
+  }
+
+  public getOption(value, item) {
+    let endpoint = `${this.config.data.endpoint}${value}/`;
+    let display = this.config.data.value;
+    let key = this.config.data.key;
+    this.genericFormService.getAll(endpoint).subscribe(
+      (res: any) => {
+        item.displayValue = res[this.config.data.value];
+      }
+    );
+  }
+
+  public getOptions(value, item, concat = false) {
+    let endpoint = this.config.data.endpoint;
+    let offset = item.lastElement;
+    let display = this.config.data.value;
+    let key = this.config.data.key;
+    let query = '';
+    if (value) {
+      query += `?search=${value}&`;
+    }
+    query += !query ? '?' : '';
+    query += `limit=${this.limit}&offset=${offset}&fields=${display}&fields=${key}`;
+    if (!item.count || (item.count && offset < item.count && concat)) {
+      item.lastElement += this.limit;
+      this.genericFormService.getByQuery(endpoint, query).subscribe(
+        (res: any) => {
+          item.count = res.count;
+          if (res.results && res.results.length) {
+            if (concat) {
+              this.previewList.push(...res.results);
+            } else {
+              this.previewList = res.results;
+            }
+          }
+        }
+      );
+    }
   }
 
 }
