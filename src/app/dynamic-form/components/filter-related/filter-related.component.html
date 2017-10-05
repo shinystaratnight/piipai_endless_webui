@@ -1,0 +1,57 @@
+<div class="filter-element p-2" [class.active]="!isCollapsed">
+  <label class="filter-label" [class.active]="!isCollapsed">
+    {{config.label}}
+    <i
+      fa
+      class="p-2"
+      [name]="isCollapsed ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      style="cursor: pointer"></i>
+    <i
+      *ngIf="false"
+      fa
+      class="text-danger ml-1"
+      [name]="'times-circle'"
+      [border]="true"
+      style="cursor: pointer"
+      (click)="resetFilter()"></i>
+  </label>
+  <div [ngbCollapse]="isCollapsed">
+    <div class="d-flex justify-content-center align-items-center mb-1 w-100 autocomplete-filter" *ngFor="let item of elements" style="position: relative">
+      <div class="form-control autocomplete-value active"
+        (click)="openAutocomplete($event, item)">
+          <div style="overflow: hidden; white-space: nowrap">{{item.displayValue}}</div>
+          <i fa [name]="item.hideAutocomplete ? 'angle-right' : 'angle-down'" class="text-md-white ml-2"></i>
+      </div>
+
+      <div class="card autocomplete p-1" [hidden]="item.hideAutocomplete" [ngStyle]="{'top.px': topHeight}">
+        <input type="text" class="form-control mb-1"
+          [(ngModel)]="searchValue"
+          [ngModelOptions]="{standalone: true}"
+          (blur)="resetList(item)"
+          (keyup)="filter(item)">
+        <div class="autocomplete-list"
+          infinite-scroll
+          [infiniteScrollDistance]="modalScrollDistance"
+          [infiniteScrollThrottle]="modalScrollThrottle"
+          [scrollWindow]="false"
+          (scrolled)="onModalScrollDown(item)"
+          [hidden]="!(previewList && previewList.length)">
+          <ul class="list-group w-100">
+            <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer" (click)="setValue({id: '', __str__: 'All'}, item)">All</li>
+            <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+              *ngFor="let option of previewList"
+              (click)="setValue(option, item)">{{option[config.data.value]}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div *ngIf="config.many" class="d-flex justify-content-center align-items-center p-1">
+        <i fa *ngIf="config.many" [name]="'plus'" [border]=true (click)="addElement()" class="text-success p-1" style="cursor: pointer"></i>
+        <i fa *ngIf="elements.length > 1" [name]="'ban'" [border]=true (click)="deleteElement(item)" class="text-danger p-1" style="cursor: pointer"></i>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<h5 class="bg-primary text-white">
+  <i
+    fa
+    class="p-2"
+    [name]="isCollapsed ? 'eye' : 'eye-slash'"
+    [border]=false
+    (click)="isCollapsed = !isCollapsed"
+    [attr.aria-expanded]="!isCollapsed"
+    aria-controls="collapseExample"
+    style="cursor: pointer"></i>
+  {{config.templateOptions.label}}
+</h5>
+<div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
+  <generic-list [endpoint]="config.endpoint" [inForm]="true" [data]="data"></generic-list>
+</div>
+

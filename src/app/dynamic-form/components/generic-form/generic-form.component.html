@@ -1,0 +1,26 @@
+<div [ngClass]="{'d-flex justify-content-center align-items-center': modal}">
+  <div [ngClass]="{'col-12 col-sm-9 col-md-9 col-lg-9 mt-3': modal}">
+    <div [ngClass]="{'card': modal}">
+      <h5 *ngIf="modal" class="card-header p-3 bg-primary text-white">{{title}}</h5>
+      <div [ngClass]="{'card-content p-3': modal}">
+        <div *ngIf="!show" class="spinner">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+        <dynamic-form
+          *ngIf="show"
+          [commonFields]="commonFields"
+          [config]="metadata"
+          [errors]="errors"
+          [message]="response"
+          [data]="data"
+          (submit)="submitForm($event)"
+          (formChange)="formChange($event)"
+          (event)="eventHandler($event)"
+          (buttonAction)="buttonActionHandler($event)">
+          <ng-content></ng-content>
+        </dynamic-form>
+      </div>
+    </div>
+  </div>
+</div>

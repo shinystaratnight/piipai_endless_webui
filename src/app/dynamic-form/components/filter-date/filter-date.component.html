@@ -1,0 +1,43 @@
+<div class="filter-element p-2" [class.active]="!isCollapsed">
+  <label class="filter-label" [class.active]="!isCollapsed">
+    {{config.label}}
+    <i
+      fa
+      class="p-2"
+      [name]="isCollapsed ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      style="cursor: pointer"></i>
+    <i
+      *ngIf="false"
+      fa
+      class="text-danger ml-1"
+      [name]="'times-circle'"
+      [border]="true"
+      style="cursor: pointer"
+      (click)="resetFilter()"></i>
+  </label>
+  <div [ngbCollapse]="isCollapsed">
+    <ul class="list-inline d-flex justify-content-between">
+      <li
+        *ngFor="let item of config.list"
+        [class.text-primary]="query === item.query"
+        style="cursor: pointer"
+        (click)="selectQuery(item.query)">
+          {{item.label}}
+      </li>
+    </ul>
+
+    <div class="input-group datepicker" [class.mb-1]="!l" *ngFor="let input of config.input; let l = last">
+      <input
+        class="form-control"
+        [attr.placeholder]="input.label"
+        #d
+        data-role="datebox"
+        [attr.name]="input.query"
+        [(ngModel)]="data[input.query]"
+        (ngModelChange)="onChange()">
+    </div>
+  </div>
+</div>

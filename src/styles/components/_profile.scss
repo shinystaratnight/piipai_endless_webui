@@ -1,0 +1,85 @@
+.profile {
+
+  .block {
+    width: 48%;
+
+    @include media-breakpoint-down('sm') {
+      width: 100%;
+    }
+
+  }
+
+  .table {
+    .edit {
+      visibility: hidden;
+    }
+
+    .item:hover {
+      .edit {
+        visibility: visible;
+      }
+    }
+  }
+
+  .element {
+    border-radius: .2rem;
+    box-shadow: 0 0 1px rgba(17,17,17,0.6), 0 5px 10px -3px rgba(17,17,17,0.4);
+
+    &-header {
+      display: flex;
+      align-items: center;
+      transition: all .5s;
+      background-color: $gray-dark;
+
+      &:hover {
+        cursor: pointer;
+        background-color: rgba($gray-dark, .8);
+      }
+    }
+
+    &-icon {
+      font-size: .8rem;
+      font-weight: 300;
+    }
+
+    &-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      & span,
+      & a {
+        width: 60%;
+
+        &:first-child {
+          width: 40%;
+          text-align: right;
+        }
+      }
+
+      @include media-breakpoint-down('sm') {
+        align-items: flex-start;
+        flex-direction: column;
+
+        & span:first-child {
+          text-align: left;
+        }
+      }
+
+      &.odd {
+        background-color: rgba($gray-dark, .1);
+      }
+    }
+  }
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+
+  .name {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+}

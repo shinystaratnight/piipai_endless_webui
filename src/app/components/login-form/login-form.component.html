@@ -1,0 +1,21 @@
+<div class="container" *ngIf="!token">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-12 col-sm-9 col-md-7 col-lg-4 mt-5">
+      <div class="card">
+
+        <h5 class="card-header p-3 bg-primary text-white">CORE</h5>
+        <div class="card-content p-3">
+          <generic-form
+            [endpoint]="endpoint"
+            [errors]="error"
+            (redirect)="redirectHandler($event)"
+            (responseForm)="responseHandler($event)">
+            <div class="form-group text-center">
+              <button type="submit" class="btn btn-primary pl-4 pr-4">ENTER</button>
+            </div>
+          </generic-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

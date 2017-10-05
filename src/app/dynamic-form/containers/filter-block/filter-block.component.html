@@ -1,0 +1,9 @@
+  <div class="filter-block" [class.filter-block-collapsed]="direction === 'right'">
+    <div *ngFor="let field of config;">
+      <ng-container
+        filterElement
+        (event)="changeQuery($event)"
+        [config]="field">
+      </ng-container>
+    </div>
+  </div>

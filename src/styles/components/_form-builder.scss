@@ -1,0 +1,20 @@
+.form-builder {
+
+  .group {
+    background-color: rgba($brand-primary, .2);
+  }
+
+  .field {
+    background-color: rgba($brand-inverse, .1);
+  }
+
+  .element {
+    i {
+      visibility: hidden;
+    }
+
+    &:hover i {
+      visibility: visible;
+    }
+  }
+}

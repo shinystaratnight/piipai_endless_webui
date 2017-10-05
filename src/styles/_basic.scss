@@ -1,0 +1,48 @@
+body {
+  height: 89vh;
+}
+
+.icon {
+  font-size: 14px !important;
+  cursor: pointer;
+}
+
+.modal-content {
+  max-height: 90vh;
+  margin-top: 5vh;
+  overflow: auto;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
+
+  .modal-header-wrapper {
+    position: sticky;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+  }
+
+  .modal-title {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+.datepicker h4 {
+  font-size: 1rem;
+}
+
+label, b {
+  font-weight: 500;
+}
+
+iframe.send-sms {
+  width: 100%;
+  height: 80vh;
+}
+
+.send-message.close {
+  position: fixed;
+  right: -1rem;
+  top: .5rem;
+  color: $brand-primary;
+  z-index: 1000;
+}

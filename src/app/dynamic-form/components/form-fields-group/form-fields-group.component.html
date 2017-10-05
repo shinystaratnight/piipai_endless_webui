@@ -1,0 +1,62 @@
+<div class="form-group">
+  <label *ngIf="config.templateOptions.label">{{config.templateOptions.label}}</label><br>
+  <div class="card mb-2" *ngFor="let group of groups">
+    <div class="card-header p-2 mb-1 d-flex justify-content-between align-items-center element group">
+      <b>{{group.name}}</b>
+      <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(group, groups, 'group')"></i>
+      <i fa [name]="'times'" class="icon text-danger mr-2" (click)="delete(group, groups, 'group')"></i>
+      <b><small>(position: {{group.position}})</small></b>
+    </div>
+
+    <div class="card flex-row p-2 align-items-stretch justify-content-between m-2 element field" *ngFor="let field of group.field_list">
+      <div class="d-flex flex-column justify-content-between">
+        <b>{{field.label}}</b>
+        <small>({{fields[field.field_type].label}})</small>
+      </div>
+      <div class="d-flex flex-column justify-content-between">
+        <div class="d-flex justify-content-end align-items-center">
+          <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(field, group.field_list, 'field')"></i>
+          <i fa [name]="'times'" class="icon text-danger" (click)="delete(field, group.field_list, 'field')"></i>
+        </div>
+        <b><small>(position: {{field.position}})</small></b>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-sm btn-primary my-2 align-self-start m-2" (click)="addField(group, group.id)">Add field</button>
+  </div>
+
+  <button type="button" class="btn btn-sm btn-primary mt-2" (click)="addGroup()">Add group</button>
+</div>
+
+<template #modal let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{(choosenType && fields[choosenType].label) || modalData.title}}</h5>
+        <button type="button" class="close ml-2" (click)="c()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <div class="d-flex flex-column" *ngIf="modalData.type === 'field' && !modalData.id && !choosenType">
+        <span
+          class="badge badge-default my-1 py-2"
+          style="cursor: pointer"
+          *ngFor="let type of types"
+          (click)="setType(type)">
+            {{fields[type].label}}
+        </span>
+      </div>
+      <generic-form
+        *ngIf="(modalData.type === 'field' && choosenType) || modalData.type === 'group'"
+        [data]="modalData.data"
+        [endpoint]="modalData.endpoint"
+        [id]="modalData.id"
+        (event)="formEvent($event, c, modalData.container, modalData.edit, modalData.type)">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </generic-form>
+    </div>
+  </div>
+</template>

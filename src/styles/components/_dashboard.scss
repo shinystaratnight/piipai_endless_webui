@@ -1,0 +1,45 @@
+.dashboard {
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .welcome {
+    height: 85vh;
+    text-align: center;
+  }
+
+  & .add-widget {
+      box-shadow: 0 0 0 1px rgba($brand-inverse, .2);
+
+    &:hover {
+      box-shadow: 0 0 2px 1px rgba($brand-inverse, .5);
+    }
+  }
+
+  .icon {
+    display: none;
+  }
+
+  .widget-preview {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: .5rem;
+    border-radius: .5rem;
+    text-align: center;
+    background-color: rgba($brand-inverse, .1);
+    box-shadow: 0 0 0 1px rgba($brand-inverse, .2);
+
+    &:hover {
+      cursor: pointer;
+      box-shadow: 0 0 5px 2px rgba($brand-inverse, .5);
+    }
+  }
+
+  .widget:hover {
+    .icon {
+      display: block;
+    }
+  }
+}

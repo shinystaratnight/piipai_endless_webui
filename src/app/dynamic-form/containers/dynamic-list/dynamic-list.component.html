@@ -1,0 +1,223 @@
+<div #datatable [ngClass]="{'poped card': poped}" class="mw-100 datatable h-100" (click)="activeTable()" [hidden]="minimized">
+  <div move [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
+    <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
+      <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
+      <div class="d-flex fustify-content-center align-items-center">
+        <i
+          fa
+          class="ml-2 icon"
+          [name]="'window-minimize'"
+          [border]="true"
+          (click)="minimizeTable()"
+          aria-hidden="true"></i>
+        <i
+          fa
+          class="ml-2 icon"
+          [name]="'window-maximize'"
+          [border]="true"
+          (click)="unpopedTable()"
+          aria-hidden="true"></i>
+        <i
+          fa
+          class="ml-2 icon"
+          [name]="'times'"
+          [border]="true"
+          (click)="closeTable()"
+          aria-hidden="true"></i>
+      </div>
+    </h5>
+  </div>
+  <div [class.card-block]="poped" class="datatable-body">
+    <div class="filter-wrapper" *ngIf="(first || poped) && filtersOfList && filtersOfList.length">
+      <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+    </div>
+    <action-element *ngIf="config.list.actions" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
+    <h5 class="datatable-label" *ngIf="config.list && !poped">
+      <span class="mr-auto">select {{config.list.label}} to change</span>
+      <list-search-bar *ngIf="config.list.search_enabled" [list]="config.list.list" (event)="filterHandler($event)"></list-search-bar>
+      <div>
+        <list-buttons
+          [buttons]="config.list.buttons"
+          [first]="first"
+          [inForm]="inForm"
+          [label]="config.list.label"
+          [poped]="poped"
+          (event)="buttonAction($event)">
+        </list-buttons>
+      </div>
+    </h5>
+    <div *ngIf="poped">
+      <list-buttons
+        [buttons]="config.list.buttons"
+        [first]="first"
+        [inForm]="inForm"
+        [label]="config.list.label"
+        [poped]="poped"
+        (event)="buttonAction($event)">
+      </list-buttons>
+    </div>
+    <div class="tabs d-flex flex-wrap justify-content-around align-items-center">
+      <div class="tab py-2 mx-2"
+        *ngFor="let tab of tabs"
+        (click)="changeTab(tab)">
+        <i fa [name]="tab.is_collapsed ? 'eye' : 'eye-slash'"></i>
+        {{tab.label}}
+      </div>
+    </div>
+    <div #tableWrapper class="table-wrapper">
+      <table class="table table-sm" *ngIf="config.list">
+        <thead class="thead-default hidden-sm-down">
+          <tr>
+            <th *ngIf="!config.list.buttons || config.list.buttons.length > 0" class="text-center" style="width: 2rem">
+              *
+              <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
+            </th>
+            <th *ngFor="let field of config.list.columns;"
+              [class.datatable-title-hover]="field.sort"
+              [hidden]="field.tab && field.tab.is_collapsed">
+                <i fa
+                  *ngIf="field.sorted"
+                  [name]="field.sorted === 'desc' ? 'sort-desc' : 'sort-asc'"
+                  [border]=true
+                  class="pr-2 icon"
+                  (click)="sorting(field)"></i>
+                <i fa
+                  *ngIf="field.sorted"
+                  [name]="'sort'"
+                  [border]=true
+                  class="pr-2 text-muted icon"
+                  (click)="resetSort(field, true)"></i>
+                <ng-container
+                  listElement
+                  [head]="true"
+                  [config]="field"
+                  (event)="sorting(field)">
+                </ng-container>
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngIf="body && !refresh">
+          <tr *ngFor="let row of body"
+            [class.table-warning]="row.highlight && row.highlight.highlight"
+            [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
+            <td *ngIf="!config.list.buttons || config.list.buttons.length > 0">
+              <div class="d-flex flex-md-column justify-content-between align-items-center">
+                <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
+                <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm" [routerLink]="[row.id + '/change']">
+                  <i fa [name]="'pencil'" class="icon text-primary"></i>
+                </a>
+                <i fa *ngIf="!first || inForm"
+                  [name]="'pencil'" class="icon text-primary ml-auto ml-md-0"
+                  (click)="editObject(row.id, row.__str__)"></i>
+              </div>
+            </td>
+            <td *ngFor="let cell of row.content" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
+              <div class="d-flex justify-content-between">
+                <ng-container
+                  listElement
+                  [config]="cell.content"
+                  (event)="eventHandler($event)"
+                  (buttonAction)="buttonHandler($event)">
+                </ng-container>
+                <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
+                  <i fa
+                    id="dropdownBasic1"
+                    class="text-muted p-2 icon"
+                    [class.dropdown-toggle]="false"
+                    [name]="'ellipsis-v'"
+                    [border]=true
+                    ngbDropdownToggle></i>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
+                <list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></list-table>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="refresh" class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+      </div>
+    </div>
+    <div class="mb-2">{{data.count}} {{config.list.label}}</div>
+    <ngb-pagination
+      [collectionSize]="pageSize"
+      [(page)]="page"
+      [maxSize]="4"
+      [rotate]="true"
+      [ellipses]="true"
+      [boundaryLinks]="true"
+      size="sm"
+      (pageChange)="pageChange()">
+    </ngb-pagination>
+  </div>
+</div>
+
+
+<template #modal let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{modalInfo.label}}</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body" [ngSwitch]="modalInfo.type">
+      <generic-form [endpoint]="modalInfo.endpoint" [data]="modalInfo.data" [id]="modalInfo.id" *ngSwitchCase="'form'" (event)="formEvent($event, c)">
+        <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
+      </generic-form>
+      <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">
+        <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
+      </sebm-google-map>
+    </div>
+  </div>
+</template>
+
+<template #confirmModal let-c="close">
+  <div class="modal-header">
+    <p>{{modalInfo.message}}</p>
+    <button type="button" class="close" aria-label="Close" (click)="d(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="callAction(modalInfo, c)">{{modalInfo.agree_label}}</button>
+    <button type="button" class="btn btn-secondary" (click)="c(false)">{{modalInfo.decline_label}}</button>
+  </div>
+</template>
+
+<template #evaluateModal let-c="close">
+  <div class="modal-header">
+    <div class="d-flex align-items-center">
+      <img class="mr-2" [src]="modalInfo.label.picture" alt="Photo" width="40" height="40">
+      <h5 class="mb-0">{{modalInfo.label.name}}</h5>
+    </div>
+    <button type="button" class="close" aria-label="Close" (click)="c(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <generic-form
+      [needData]="modalInfo.needData"
+      [endpoint]="modalInfo.endpoint"
+      [data]="modalInfo.data"
+      [edit]="modalInfo.edit"
+      (event)="evaluateEvent($event, c)">
+        <button class="btn btn-primary mr-auto text-white">Submit</button>
+    </generic-form>
+  </div>
+</template>
+
+<template #sendMessageModal let-c="close">
+  <div class="modal-body">
+    <iframe class="send-sms" [src]="modalInfo.url" frameborder="0"></iframe>
+    <br>
+  </div>
+</template>

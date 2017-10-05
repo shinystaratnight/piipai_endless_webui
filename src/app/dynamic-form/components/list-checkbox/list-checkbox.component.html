@@ -1,0 +1,10 @@
+<i
+  *ngIf="!config.values"
+  fa
+  [class.text-danger]="config.value === false"
+  [class.text-success]="config.value === true"
+  [class.text-muted]="config.value == null"
+  [name]="config.value ? 'check-circle' : config.value === false ? 'times-circle' : 'minus-circle'"
+  [border]="true">
+</i>
+<span *ngIf="config.values">{{value}}</span>

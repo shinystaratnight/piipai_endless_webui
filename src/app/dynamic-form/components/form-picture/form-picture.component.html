@@ -1,0 +1,59 @@
+<div class="form-group">
+  <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
+  <input
+    #picture
+    accept="image/*"
+    [attr.type]="'file'"
+    [hidden]="true"
+    [attr.id]="key"
+    (change)="fileChangeEvent($event)"
+    [attr.name]="key">
+  <div class="d-flex align-items-center flex-wrap">
+    <button type="button" class="btn btn-primary btn-sm text-white d-flex align-items-center"
+      (click)="upload()">
+      <i fa class="mr-1"
+        [name]="'upload'"></i>
+      {{config.templateOptions.label_upload}}
+    </button>
+    <span class="p-1">or</span>
+    <button type="button" class="btn btn-success btn-sm text-white d-flex"
+      (click)="open()">
+      <i fa class="mr-1"
+        [name]="'camera'"></i>
+      {{config.templateOptions.label_photo}}
+    </button>
+  </div>
+  <div class="mt-1" *ngIf="fileName"><i class="text-muted">file:</i> {{fileName}}</div>
+  <small class="text-muted" *ngIf="config.templateOptions.description">
+    {{config.templateOptions.description}}
+  </small>
+  <div *ngIf="errors">
+    <div class="text-danger mt-1" *ngIf="errors[key]">{{errors[key]}}</div>
+  </div>
+  <div *ngIf="message">
+    <div *ngIf="message[key]" class="text-success mt-1">{{message[key]}}</div>
+  </div>
+</div>
+
+<template #modal let-c="close">
+  <div class="modal-header">
+    <h5 class="modal-title">{{config.templateOptions.label_photo}}</h5>
+    <button type="button" class="close" (click)="c()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body picture d-inline-block d-flex justify-content-around flex-wrap" style="overflow: auto">
+    <ng2-webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError"></ng2-webcam>
+    <div class="photo d-flex justify-content-center align-items-center">
+      <span *ngIf="!photoExist" class="text-white">Photo</span>
+      <canvas [hidden]="!photoExist"></canvas>
+    </div>
+  </div>
+
+  <div class="modal-footer justify-content-start">
+    <button *ngIf="photoExist" type="button" class="btn btn-success" (click)="save(c)">Save</button>
+    <button type="button" class="btn btn-primary" (click)="getPhoto()">{{photoExist ? 'Try again' : config.templateOptions.label_photo}}</button>
+    <button type="button" class="btn btn-secondary" (click)="c()">Cancel</button>
+  </div>
+</template>

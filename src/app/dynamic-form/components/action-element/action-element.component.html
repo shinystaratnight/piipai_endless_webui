@@ -1,0 +1,23 @@
+<div class="d-flex mb-3 form-group">
+  <label class="col-form-label pr-1">{{config.label}}</label>
+  <select
+    [(ngModel)]="action"
+    class="custom-select mr-2">
+      <option value=""></option>
+      <option *ngFor="let option of config.options" [ngValue]="option">{{option.label}}</option>
+  </select>
+  <button class="btn" type="button" (click)="toDoAction()">{{config.button_label}}</button>
+</div>
+
+<template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <p>{{action.message}}</p>
+    <button type="button" class="close" aria-label="Close" (click)="d(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c(true)">{{config.agree_label}}</button>
+    <button type="button" class="btn btn-secondary" (click)="c(false)">{{config.decline_label}}</button>
+  </div>
+</template>
