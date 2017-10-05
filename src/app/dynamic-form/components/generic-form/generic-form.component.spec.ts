@@ -292,22 +292,35 @@ describe('GenericFormComponent', () => {
 
       it('should udpate metadata with value', async(() => {
         let object = {
-          type: 'checkbox',
-          key: 'is_available',
+          type: 'related',
+          key: 'contact',
+          value: undefined,
+          options: undefined,
           templateOptions: {
-            label: 'test',
-            type: 'checkbox',
+            label: 'Contact',
+            type: 'related',
             required: true
           }
         };
-        let key = 'company.is_available';
+        let key = 'company.contact';
         let data = {
           company: {
-            is_available: true
+            contact: {
+              __str__: 'Mr. Tom Smith',
+              id: '123'
+            }
           }
         };
-        comp.getValueOfData(data, key, object);
-        expect(object['value']).toBeTruthy();
+        let testMetadata = [object];
+        comp.getValueOfData(data, key, object, testMetadata);
+        expect(object['value']).toEqual({
+          __str__: 'Mr. Tom Smith',
+          id: '123'
+        });
+        expect(object.options).toEqual([{
+          __str__: 'Mr. Tom Smith',
+          id: '123'
+        }]);
       }));
 
     });
@@ -764,7 +777,7 @@ describe('GenericFormComponent', () => {
         }];
         spyOn(comp, 'getRalatedData');
         comp.getData(config);
-        expect(comp.getRalatedData).toHaveBeenCalledTimes(2);
+        expect(comp.getRalatedData).toHaveBeenCalledTimes(1);
       }));
 
     });
@@ -926,6 +939,7 @@ describe('GenericFormComponent', () => {
           key: 'rules',
           read_only: false,
           many: true,
+          useOptions: true,
           templateOptions: {
             label: 'Active',
             display: 'name_before_activation',
@@ -1043,7 +1057,7 @@ describe('GenericFormComponent', () => {
         comp.getDataOfWorkflownode();
         expect(comp.getElementFromMetadata).toHaveBeenCalledWith(config, 'rules');
         expect(comp.getRalatedData).toHaveBeenCalledWith(
-          [config[0], config[0].activeMetadata[0]],
+          comp.metadata,
           'rules',
           comp.workflowEndpoints.state,
           null,
@@ -1166,7 +1180,7 @@ describe('GenericFormComponent', () => {
         expect(comp.workflowData).toEqual(data);
         expect(comp.getElementFromMetadata).toHaveBeenCalledWith(comp.metadata, key);
         expect(comp.getRalatedData).toHaveBeenCalledWith(
-          [comp.metadata[0], comp.metadata[0].activeMetadata[0]],
+          comp.metadata,
           key,
           comp.workflowEndpoints.state,
           null,

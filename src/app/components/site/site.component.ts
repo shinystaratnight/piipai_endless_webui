@@ -69,9 +69,18 @@ export class SiteComponent implements OnInit {
   }
 
   public getPageNavigation(url) {
-    this.getModelsList(url);
-    this.getPages(url);
-    this.getUserModules(url);
+    if (!this.modulesList) {
+      this.getModelsList(url);
+    }
+    if (!this.pagesList) {
+      this.getPages(url);
+    }
+    if (!this.userModules) {
+      this.getUserModules(url);
+    }
+    if (this.modulesList && this.userModules && this.pagesList) {
+      this.getPageData(url);
+    }
   }
 
   public getModelsList(url) {

@@ -176,7 +176,7 @@ export class GenericFormComponent implements OnChanges {
   public fillingForm(metadata, data) {
     metadata.forEach((el) => {
       if (el.key) {
-        this.getValueOfData(data, el.key, el);
+        this.getValueOfData(data, el.key, el, metadata);
       } else if (el.children) {
         this.fillingForm(el.children, data);
       }
@@ -184,16 +184,37 @@ export class GenericFormComponent implements OnChanges {
     this.getDataForRules(data);
   }
 
-  public getValueOfData(data, key, obj) {
+  public getValueOfData(data, key, obj, metadata) {
     let keys = key.split('.');
     let prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
         obj['value'] = data[key];
+        if (obj.type === 'related') {
+          let endpoint;
+          if (obj.value) {
+            if (obj.value instanceof Object) {
+              if (obj.value.id && obj.value.__str__) {
+                obj.options = [obj.value];
+              }
+            } else if (Array.isArray(obj.value) && obj.value.length) {
+              if (!(obj.value[0] instanceof Object) && !obj.list) {
+                endpoint = obj.endpoint;
+              }
+            } else {
+              endpoint = `${obj.endpoint}${obj.value}`;
+            }
+          } else {
+            obj.options = [];
+          }
+          if (endpoint) {
+            this.getRalatedData(metadata, obj.key, endpoint, {}, null, null, true);
+          }
+        }
       }
     } else {
       if (data[prop]) {
-        this.getValueOfData(data[prop], keys.join('.'), obj);
+        this.getValueOfData(data[prop], keys.join('.'), obj, metadata);
       }
     }
   }
@@ -390,8 +411,9 @@ export class GenericFormComponent implements OnChanges {
           let keys = el.key.split('.');
           if (keys.indexOf('country') > -1) {
             fields.code2 = 'code2';
+            this.getRalatedData(metadata, el.key, el.endpoint, fields, '?limit=-1');
           }
-          this.getRalatedData(metadata, el.key, el.endpoint, fields, '?limit=-1');
+          el.options = [];
           if (el.list) {
             this.getRelatedMetadata(metadata, el.key, el.endpoint);
           }
@@ -484,6 +506,7 @@ export class GenericFormComponent implements OnChanges {
       key: 'rules',
       read_only: false,
       many: true,
+      useOptions: true,
       templateOptions: {
         label: 'Active',
         display: 'name_before_activation',
@@ -541,7 +564,7 @@ export class GenericFormComponent implements OnChanges {
         }
       });
       let element = this.getElementFromMetadata(this.metadata, 'rules');
-      this.getRalatedData([element, element.activeMetadata[0]],
+      this.getRalatedData(this.metadata,
         'rules', this.workflowEndpoints.state, null, `?${query.join('&')}`);
     }
   }
@@ -580,7 +603,6 @@ export class GenericFormComponent implements OnChanges {
       });
       if (this.workflowData.workflow && this.workflowData.company) {
         let keys = Object.keys(this.workflowData);
-        let newMetadata = [element, element.activeMetadata[0]];
         let endpoint = this.workflowEndpoints['state'];
         let query = [];
         keys.forEach((el) => {
@@ -594,7 +616,7 @@ export class GenericFormComponent implements OnChanges {
             }
           }
         });
-        this.getRalatedData(newMetadata, 'rules', endpoint, null, `?${query.join('&')}`);
+        this.getRalatedData(this.metadata, 'rules', endpoint, null, `?${query.join('&')}`);
       }
     }
   }

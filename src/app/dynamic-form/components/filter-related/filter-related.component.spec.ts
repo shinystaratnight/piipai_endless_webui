@@ -5,7 +5,10 @@ import { DebugElement } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { GenericFormService } from './../../services/generic-form.service';
 import { FilterRelatedComponent } from './filter-related.component';
+
+import { Observable } from 'rxjs/Observable';
 
 describe('FilterRelatedComponent', () => {
   let fixture: ComponentFixture<FilterRelatedComponent>;
@@ -27,6 +30,7 @@ describe('FilterRelatedComponent', () => {
     options: []
   };
   let queries;
+  let response;
   let mockFilterValue = {
     generateQuery() {
       return true;
@@ -36,12 +40,24 @@ describe('FilterRelatedComponent', () => {
     }
   };
 
+  const mockGenericFormService = {
+    getByQuery() {
+      return Observable.of(response);
+    },
+    getAll() {
+      return Observable.of(response);
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         FilterRelatedComponent
       ],
-      providers: [{provide: FilterService, useValue: mockFilterValue}],
+      providers: [
+        {provide: FilterService, useValue: mockFilterValue},
+        {provide: GenericFormService, useValue: mockGenericFormService}
+      ],
       imports: [ RouterTestingModule ],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
@@ -54,82 +70,28 @@ describe('FilterRelatedComponent', () => {
     });
   }));
 
-  it('should enter the assertion', async() => {
-    comp.config = config;
-    fixture.detectChanges();
-    expect(comp.config).toBeDefined();
-  });
-
   describe('ngOnInit method', () => {
 
-    it('should initial elements', async(() => {
+    it('should set isCollapsed by true', async(() => {
       comp.config = config;
-      let element = {
-        id: 1,
-        data: '',
-        lastElement: 0,
-        hideAutocomplete: true
-      };
+      comp.query = '';
       comp.ngOnInit();
-      expect(comp.elements[0]).toEqual(element);
-      expect(comp.count).toEqual(2);
+      expect(comp.isCollapsed).toBeTruthy();
     }));
 
-    it ('should fill in filter', () => {
-      comp.config = config;
-      queries = [
-        {
-          data: 'some id',
-          id: 1
-        },
-        {
-          data: 'another id',
-          id: 5
-        }
-      ];
-      spyOn(comp, 'updateFilter');
-      comp.ngOnInit();
-      expect(comp.elements).toEqual(queries);
-      expect(comp.count).toEqual(5);
-      expect(comp.query).toEqual('company=some id&company=another id&');
-      expect(comp.updateFilter).toHaveBeenCalled();
-      expect(comp.isCollapsed).toBeFalsy();
-    });
-
-    it('should update filter by query from URL', async(() => {
-      comp.config = config;
-      queries = {
-        byQuery: true,
-        query: 'company=Home'
-      };
-      spyOn(comp, 'parseQuery');
-      comp.ngOnInit();
-      expect(comp.parseQuery).toHaveBeenCalled();
-    }));
-
-  });
+});
 
   describe('genericList method', () => {
-    it('generate list from options', () => {
+    it('generate call getOptions method', () => {
       let item = {
         id: 1,
         data: ''
       };
-      config.options = [
-        {
-          [config.data.key]: '124',
-          [config.data.value]: 'Second Value'
-        },
-        {
-          [config.data.key]: '123',
-          [config.data.value]: 'First Value'
-        }
-      ];
       comp.config = config;
-      spyOn(comp, 'generatePreviewList');
+      comp.searchValue = '';
+      spyOn(comp, 'getOptions');
       comp.generateList(item);
-      expect(comp.list).toEqual(config.options);
-      expect(comp.generatePreviewList).toHaveBeenCalledWith(comp.list, item);
+      expect(comp.getOptions).toHaveBeenCalledWith(comp.searchValue, item, false);
     });
   });
 
@@ -203,16 +165,16 @@ describe('FilterRelatedComponent', () => {
       let item = {
         id: 1,
         hideAutocomplete: false,
-        lastElement: 20
+        lastElement: 20,
+        count: 125
       };
-      comp.list = [];
       comp.previewList = [];
       comp.resetList(item);
       tick(200);
-      expect(comp.list).toBeNull();
       expect(comp.previewList).toBeNull();
       expect(item.hideAutocomplete).toBeTruthy();
       expect(item.lastElement).toEqual(0);
+      expect(item.count).toBeNull();
     }));
   });
 
@@ -220,46 +182,27 @@ describe('FilterRelatedComponent', () => {
     it('should call generateList method', () => {
       let item = {
         id: 1,
-        lastElement: 10
+        lastElement: 10,
+        count: 123
       };
       spyOn(comp, 'generateList');
-      comp.filter(false, item);
+      comp.filter(item);
       expect(item.lastElement).toEqual(0);
+      expect(item.count).toBeNull();
+      expect(comp.previewList).toBeNull();
       expect(comp.generateList).toHaveBeenCalled();
     });
 
-    it('should filter options by some value', () => {
-      let value = 'an';
-      let item = {
-        id: 1
-      };
-      config.options = [
-        {
-          [config.data.key]: '123',
-          [config.data.value]: 'Anna'
-        },
-        {
-          [config.data.key]: '124',
-          [config.data.value]: 'Tom'
-        }
-      ];
-      comp.config = config;
-      spyOn(comp, 'generatePreviewList');
-      comp.filter(value, item);
-      expect(comp.list).toEqual([config.options[0]]);
-      expect(comp.generatePreviewList).toHaveBeenCalled();
-    });
   });
 
   describe('onModalScrollDown method', () => {
-    it('should call generatePreviewList', () => {
+    it('should call generateList method', () => {
       let item = {
         id: 1
       };
-      comp.list = [];
-      spyOn(comp, 'generatePreviewList');
+      spyOn(comp, 'generateList');
       comp.onModalScrollDown(item);
-      expect(comp.generatePreviewList).toHaveBeenCalledWith(comp.list, item);
+      expect(comp.generateList).toHaveBeenCalledWith(item, true);
     });
   });
 
@@ -267,22 +210,24 @@ describe('FilterRelatedComponent', () => {
     it('should set value from autocomplete element', () => {
       let item = {
         id: 1,
-        data: ''
+        data: '',
+        displayValue: '',
+        count: 123
       };
       let value = {
         [config.data.key]: '124',
         [config.data.value]: 'Tom'
       };
       comp.config = config;
-      comp.list = [];
       comp.previewList = [];
       comp.searchValue = 'om';
       spyOn(comp, 'onChange');
       comp.setValue(value, item);
-      expect(comp.list).toBeNull();
       expect(comp.previewList).toBeNull();
       expect(comp.searchValue).toBeNull();
+      expect(item.count).toBeNull();
       expect(item.data).toEqual('124');
+      expect(item.displayValue).toEqual('Tom');
       expect(comp.onChange).toHaveBeenCalled();
     });
   });
@@ -306,21 +251,6 @@ describe('FilterRelatedComponent', () => {
       expect(fs.generateQuery).toHaveBeenCalled();
     })));
 
-  });
-
-  describe('getValueByKey method', () => {
-    it('should return value by some property', () => {
-      let key = '124';
-      config.options = [
-        {
-          [config.data.key]: '124',
-          [config.data.value]: 'Tom'
-        }
-      ];
-      comp.config = config;
-      let result = comp.getValueByKey(key);
-      expect(result).toEqual('Tom');
-    });
   });
 
   describe('addElement method', () => {
@@ -387,11 +317,14 @@ describe('FilterRelatedComponent', () => {
       let id = 2;
       let data = {
         id,
-        data: '',
+        data: '123',
         lastElement: 0,
-        hideAutocomplete: true
+        hideAutocomplete: true,
+        displayValue: undefined
       };
-      let result = comp.createElement(id);
+      spyOn(comp, 'getOption');
+      let result = comp.createElement(id, '123');
+      expect(comp.getOption).toHaveBeenCalled();
       expect(result).toEqual(data);
     });
 
@@ -483,8 +416,8 @@ describe('FilterRelatedComponent', () => {
         spyOn(fs, 'getQueries').and.returnValue(false);
         comp.updateFilter();
         expect(comp.query).toEqual('');
-        expect(comp.elements.length).toEqual(1);
-        expect(comp.elements[0].data).toEqual('');
+        expect(comp.count).toEqual(2);
+        expect(comp.elements.length).toEqual(3);
     })));
 
     it('should update filter by query', async(inject([FilterService], (fs: FilterService) => {
@@ -550,6 +483,68 @@ describe('FilterRelatedComponent', () => {
       expect(fs.generateQuery).toHaveBeenCalled();
     })));
 
+  });
+
+  describe('getOption method', () => {
+    it('should udpate displayValue of filter',
+      async(inject([GenericFormService], (genericFormService: GenericFormService) => {
+        let value = '123';
+        let item = {
+          id: 1,
+          data: '',
+          displayValue: ''
+        };
+        comp.config = config;
+        response = {
+          id: '123',
+          name: 'Tom'
+        };
+        comp.getOption(value, item);
+        expect(item.displayValue).toEqual('Tom');
+    })));
+  });
+
+  describe('getOptions method', () => {
+    it('should create new previewList', () => {
+      let value: '123';
+      let item = {
+        id: 1,
+        data: '',
+        count: null,
+        lastElement: 0
+      };
+      comp.config = config;
+      comp.limit = 10;
+      response = {
+        count: 25,
+        results: [1, 2, 3]
+      };
+      comp.getOptions(value, item, false);
+      expect(item.lastElement).toEqual(10);
+      expect(item.count).toEqual(25);
+      expect(comp.previewList).toEqual([1, 2, 3]);
+    });
+
+    it('should add new elements into previewList', () => {
+      let value: '123';
+      let item = {
+        id: 1,
+        data: '',
+        count: null,
+        lastElement: 10
+      };
+      comp.config = config;
+      comp.limit = 10;
+      comp.previewList = [1, 2, 3];
+      response = {
+        count: 25,
+        results: [4, 5, 6]
+      };
+      comp.getOptions(value, item, true);
+      expect(item.lastElement).toEqual(20);
+      expect(item.count).toEqual(25);
+      expect(comp.previewList).toEqual([1, 2, 3, 4, 5, 6]);
+    });
   });
 
 });

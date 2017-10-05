@@ -7,7 +7,7 @@
           [ngClass]="{'active': !config.readonly}"
           (click)="openAutocomplete()">
           <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
-          <template *ngIf="!config.options" [ngTemplateOutlet]="spinner"></template>
+          <template *ngIf="!config.options && !displayValue" [ngTemplateOutlet]="spinner"></template>
         </div>
         <div class="btn-group" role="group"
           *ngIf="config.options && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete)" >

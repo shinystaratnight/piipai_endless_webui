@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, inject, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
@@ -37,10 +37,14 @@ describe('FormRelatedComponent', () => {
     }
   };
   let errors = {};
+  let response;
 
   const mockGenericFormService = {
     delete() {
       return Observable.of(true);
+    },
+    getByQuery() {
+      return Observable.of(response);
     }
   };
 
@@ -372,18 +376,6 @@ describe('FormRelatedComponent', () => {
   });
 
   describe('getValueOfData method', () => {
-    it('should set value by key', async(inject([FormBuilder], (fb: FormBuilder) => {
-      let data = {
-        address: {
-          city: 'Sydney'
-        }
-      };
-      let object = <any> {};
-      let key = 'address.city';
-      let group = fb.group({});
-      comp.getValueOfData(data, key, group);
-      expect(group.get('address').get('city').value).toEqual('Sydney');
-    })));
 
     it('should set value by key from Object', async(inject([FormBuilder], (fb: FormBuilder) => {
       let data = {
@@ -398,18 +390,21 @@ describe('FormRelatedComponent', () => {
       let key = 'address.city';
       let group = fb.group({});
       comp.getValueOfData(data, key, group);
-      expect(group.get('address').get('city').value).toEqual(123);
+      expect(group.get('address').get('city').value).toEqual({
+        name: 'Sydney',
+        id: 123
+      });
     })));
   });
 
   describe('onModalScrollDown method', () => {
 
-    it('should called generatePreviewList method', async(() => {
+    it('should called generateList method', async(() => {
       comp.config = config;
-      comp.list = [];
-      spyOn(comp, 'generatePreviewList');
+      comp.searchValue = 'query';
+      spyOn(comp, 'generateList');
       comp.onModalScrollDown();
-      expect(comp.generatePreviewList).toHaveBeenCalledWith(comp.list);
+      expect(comp.generateList).toHaveBeenCalledWith(comp.searchValue, true);
     }));
 
   });
@@ -501,10 +496,8 @@ describe('FormRelatedComponent', () => {
 
   describe('openAutocomplete method', () => {
 
-    it('should open actocomplete element', async(() => {
+    it('should open actocomplete element', fakeAsync(() => {
       comp.config = config;
-      comp.config.options = [];
-      comp.config.readonly = false;
       comp.search = {
         nativeElement: {
           focus() {
@@ -512,15 +505,15 @@ describe('FormRelatedComponent', () => {
           }
         }
       };
+      comp.searchValue = 'query';
       spyOn(comp, 'generateList');
       spyOn(comp.search.nativeElement, 'focus');
       comp.openAutocomplete();
       expect(comp.searchValue).toBeNull();
       expect(comp.hideAutocomplete).toBeFalsy();
-      expect(comp.generateList).toHaveBeenCalled();
-      setTimeout(() => {
-        expect(comp.search.nativeElement.focus).toHaveBeenCalled();
-      }, 100);
+      expect(comp.generateList).toHaveBeenCalledWith(comp.searchValue);
+      tick(100);
+      expect(comp.search.nativeElement.focus).toHaveBeenCalled();
     }));
 
   });
@@ -528,7 +521,9 @@ describe('FormRelatedComponent', () => {
   describe('generateList method', () => {
 
     it('should generate list property from data', async(() => {
+      let value = 'query';
       comp.config = config;
+      config['useOptions'] = true;
       comp.results = [];
       comp.display = 'name';
       comp.list = [];
@@ -543,7 +538,7 @@ describe('FormRelatedComponent', () => {
         { name: 'Lilu'}
       ]);
       spyOn(comp, 'generatePreviewList');
-      comp.generateList();
+      comp.generateList(value);
       expect(comp.list).toEqual([
         { name: 'Bob' },
         { name: 'Lilu'}
@@ -553,6 +548,7 @@ describe('FormRelatedComponent', () => {
     }));
 
     it('should call filter method', async(() => {
+      let value = 'as';
       comp.config = config;
       comp.results = [];
       comp.searchValue = 'as';
@@ -561,8 +557,18 @@ describe('FormRelatedComponent', () => {
         { name: 'Bob' }
       ];
       spyOn(comp, 'filter');
-      comp.generateList();
+      comp.generateList(value);
       expect(comp.filter).toHaveBeenCalledWith(comp.searchValue);
+      config['useOptions'] = undefined;
+    }));
+
+    it('should call getOptions method', async(() => {
+      let value = 'query';
+      comp.lastElement = 0;
+      comp.config = config;
+      spyOn(comp, 'getOptions');
+      comp.generateList(value);
+      expect(comp.getOptions).toHaveBeenCalledWith(value, 0, false);
     }));
 
   });
@@ -583,7 +589,7 @@ describe('FormRelatedComponent', () => {
 
   describe('resetList method', () => {
 
-    it('should reset list property', async(() => {
+    it('should reset list property', fakeAsync(() => {
       comp.list = [{name: 'Bob'}];
       comp.previewList = [];
       comp.lastElement = 10;
@@ -592,13 +598,13 @@ describe('FormRelatedComponent', () => {
       comp.config = config;
       comp.config.many = false;
       comp.resetList();
-      setTimeout(() => {
-        expect(comp.previewList).toBeNull();
-        expect(comp.hideAutocomplete).toBeTruthy();
-        expect(comp.searchValue).toBeNull();
-        expect(comp.lastElement).toEqual(0);
-        expect(comp.list).toBeNull();
-      }, 200);
+      tick(200);
+      expect(comp.previewList).toBeNull();
+      expect(comp.hideAutocomplete).toBeTruthy();
+      expect(comp.searchValue).toBeNull();
+      expect(comp.lastElement).toEqual(0);
+      expect(comp.count).toBeNull();
+      expect(comp.list).toBeNull();
     }));
 
   });
@@ -615,6 +621,7 @@ describe('FormRelatedComponent', () => {
         { name: 'Bill' },
         { name: 'Tom' }
       ];
+      comp.config.useOptions = true;
       comp.display = 'name';
       comp.results = [];
       spyOn(comp, 'generatePreviewList');
@@ -623,14 +630,18 @@ describe('FormRelatedComponent', () => {
         { name: 'Sam' },
         { name: 'Tom' }
       ]);
+      expect(comp.count).toBeNull();
+      expect(comp.previewList).toBeNull();
       expect(comp.generatePreviewList).toHaveBeenCalledWith(comp.list);
+      comp.config.useOptions = undefined;
     }));
 
     it('should call generateList method', async(() => {
-      let value = '';
+      let value = 'Tom';
+      comp.config = config;
       spyOn(comp, 'generateList');
       comp.filter(value);
-      expect(comp.generateList).toHaveBeenCalled();
+      expect(comp.generateList).toHaveBeenCalledWith(value);
     }));
 
   });
@@ -639,17 +650,18 @@ describe('FormRelatedComponent', () => {
 
     it('should add value if many values', async(() => {
       let options = [
-        { name: 'Bob' },
-        { name: 'Sam' },
-        { name: 'John' },
-        { name: 'Bill' },
-        { name: 'Tom' }
+        { name: 'Bob', id: '123' },
+        { name: 'Sam', id: '124' },
+        { name: 'John', id: '125' },
+        { name: 'Bill', id: '126' },
+        { name: 'Tom', id: '127' }
       ];
-      let item = { name: 'Bob' };
+      let item = options[0];
       comp.config = config;
       comp.config.options = options;
       comp.config.many = true;
       comp.display = 'name';
+      comp.param = 'id';
       comp.results = [];
       comp.searchValue = 'some value';
       comp.message = {};
@@ -662,9 +674,10 @@ describe('FormRelatedComponent', () => {
       expect(comp.results).toEqual([item]);
       expect(comp.changeList).toHaveBeenCalled();
       expect(comp.updateData).toHaveBeenCalled();
-      expect(comp.eventHandler).toHaveBeenCalledWith({type: 'change'});
+      expect(comp.eventHandler).toHaveBeenCalledWith({type: 'change'}, item[comp.param]);
       expect(comp.searchValue).toBeNull();
       expect(comp.list).toBeNull();
+      expect(comp.count).toBeNull();
       expect(comp.previewList).toBeNull();
       expect(comp.message).toBeNull();
       expect(comp.errors).toBeNull();
@@ -673,12 +686,12 @@ describe('FormRelatedComponent', () => {
     it('should add value if single value', async(inject([FormBuilder], (fb: FormBuilder) => {
       let options = [
         { name: 'Bob', id: 123 },
-        { name: 'Sam' },
-        { name: 'John' },
-        { name: 'Bill' },
-        { name: 'Tom' }
+        { name: 'Sam', id: 124 },
+        { name: 'John', id: 125 },
+        { name: 'Bill', id: 126 },
+        { name: 'Tom', id: 127 }
       ];
-      let item = { name: 'Bob', id: 123 };
+      let item = options[0];
       comp.config = config;
       comp.config.many = false;
       comp.key = 'manager';
@@ -698,7 +711,7 @@ describe('FormRelatedComponent', () => {
       expect(comp.group.get(comp.key).value).toEqual(123);
       expect(comp.displayValue).toEqual('Bob');
       expect(comp.changeList).toHaveBeenCalled();
-      expect(comp.eventHandler).toHaveBeenCalledWith({type: 'change'});
+      expect(comp.eventHandler).toHaveBeenCalledWith({type: 'change'}, item[comp.param]);
       expect(comp.searchValue).toBeNull();
       expect(comp.list).toBeNull();
       expect(comp.previewList).toBeNull();
@@ -734,36 +747,12 @@ describe('FormRelatedComponent', () => {
 
   describe('eventHandler method', () => {
 
-    it('should be emit event', async(inject([FormBuilder], (fb) => {
-      let form = fb.group({});
-      let key = 'title';
-      let metadata = {
-        key: 'title',
-        options: [{
-          id: 123,
-          name: 'Australia'
-        }, {
-          id: 132,
-          name: 'United State of America'
-        }]
-      };
-      let event = { type: 'change' };
-      form.addControl(key, fb.control(''));
-      form.get(key).patchValue(123);
-      comp.group = form;
-      comp.config = metadata;
-      comp.key = key;
-      spyOn(comp.event, 'emit');
-      comp.eventHandler(event);
-      expect(comp.event.emit).toHaveBeenCalled();
-    })));
-
     it('should be emit event with value', async(inject([FormBuilder], (fb) => {
       let metadata = {
         key: 'title'
       };
       let event = { type: 'change' };
-      let value = {};
+      let value = '123';
       comp.config = metadata;
       spyOn(comp.event, 'emit');
       comp.eventHandler(event, value);
@@ -855,6 +844,38 @@ describe('FormRelatedComponent', () => {
       expect(comp.eventHandler).toHaveBeenCalledWith({type: 'change'}, 123);
     })));
 
+  });
+
+  describe('getOptions method', () => {
+    it('should create new previewList', () => {
+      let value: '123';
+      comp.config = config;
+      comp.limit = 10;
+      response = {
+        count: 25,
+        results: [1, 2, 3]
+      };
+      comp.getOptions(value, 0, false);
+      expect(comp.lastElement).toEqual(10);
+      expect(comp.count).toEqual(25);
+      expect(comp.previewList).toEqual([1, 2, 3]);
+    });
+
+    it('should add new elements into previewList', () => {
+      let value: '123';
+      comp.config = config;
+      comp.limit = 10;
+      comp.lastElement = 10;
+      comp.previewList = [1, 2, 3];
+      response = {
+        count: 25,
+        results: [4, 5, 6]
+      };
+      comp.getOptions(value, 10, true);
+      expect(comp.lastElement).toEqual(20);
+      expect(comp.count).toEqual(25);
+      expect(comp.previewList).toEqual([1, 2, 3, 4, 5, 6]);
+    });
   });
 
 });

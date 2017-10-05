@@ -116,18 +116,6 @@ export class FilterService {
   }
 
   public parseFilters(filters, params, list, first = false) {
-    if (first) {
-      filters.forEach((el) => {
-        if (el.type === 'related') {
-          let value = (el.data && el.data.value) ? el.data.value : '__str__';
-          let key = (el.data && el.data.key) ? el.data.key : 'id';
-          this.gfs.getByQuery(el.data.endpoint,
-            `?limit=-1&fields=${value}&fields=${key}`).subscribe(
-            (res) => el.options = res.results
-          );
-        }
-      });
-    }
     if (Object.keys(params).length > 0) {
       filters.forEach((el) => {
         if (params[el.query]) {
