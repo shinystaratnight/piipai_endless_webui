@@ -74,7 +74,6 @@ export class FilterRelatedComponent implements OnInit {
 
   public resetList(item) {
     setTimeout(() => {
-      this.list = null;
       this.previewList = null;
       item.lastElement = 0;
       item.count = null;
@@ -82,7 +81,7 @@ export class FilterRelatedComponent implements OnInit {
     }, 150);
   }
 
-  public filter(value, item) {
+  public filter(item) {
     item.lastElement = 0;
     item.count = null;
     this.previewList = null;
@@ -98,7 +97,6 @@ export class FilterRelatedComponent implements OnInit {
     item.displayValue = value[this.config.data.value];
     item.count = null;
     this.searchValue = null;
-    this.list = null;
     this.previewList = null;
     this.onChange();
   }
@@ -202,10 +200,9 @@ export class FilterRelatedComponent implements OnInit {
   public getOption(value, item) {
     let endpoint = `${this.config.data.endpoint}${value}/`;
     let display = this.config.data.value;
-    let key = this.config.data.key;
     this.genericFormService.getAll(endpoint).subscribe(
       (res: any) => {
-        item.displayValue = res[this.config.data.value];
+        item.displayValue = res[display];
       }
     );
   }

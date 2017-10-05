@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { WebCamComponent } from 'ng2-webcam';
+import { ButtonRadioDirective } from 'ngx-bootstrap';
 
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
@@ -110,7 +111,8 @@ import { MoveDirective } from './directives/move.directive';
     ListButtonsComponent,
     FormFieldsGroupComponent,
     FormOptionsComponent,
-    ListSerachBarComponent
+    ListSerachBarComponent,
+    ButtonRadioDirective
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [

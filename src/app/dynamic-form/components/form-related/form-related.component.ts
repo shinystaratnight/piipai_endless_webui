@@ -225,7 +225,7 @@ export class FormRelatedComponent
     let prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
-          obj.addControl(key, this.fb.control(data[key]));
+        obj.addControl(key, this.fb.control(data[key]));
       }
     } else {
       if (data[prop]) {
@@ -366,12 +366,11 @@ export class FormRelatedComponent
     }
   }
 
-  public eventHandler(e, value = null) {
+  public eventHandler(e, value) {
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: value ? value
-        : this.config.options.filter((el) => el.id === this.group.get(this.key).value)
+      value
     });
   }
 

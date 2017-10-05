@@ -5,14 +5,9 @@
     <dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></dynamic-form>
 
     <div class="d-flex flex-wrap align-items-center pb-2" *ngFor="let item of view; let last = last">
-      <div ngbRadioGroup name="operator" class="btn-group-sm mr-3 mb-1"
-        [(ngModel)]="item.operator">
-        <label class="btn btn-primary mb-0">
-          <input type="radio" [value]="'or'">or
-        </label>
-        <label class="btn btn-primary mb-0">
-          <input type="radio" [value]="'and'">and
-        </label>
+      <div class="btn-group-sm mr-3 mb-1">
+        <label class="btn btn-primary mb-0" [(ngModel)]="item.operator" btnRadio="or">or</label>
+        <label class="btn btn-primary mb-0" [(ngModel)]="item.operator" btnRadio="and">and</label>
       </div>
 
       <span class="pr-1">#{{item.id}}</span>
@@ -66,24 +61,10 @@
   <div class="modal-body">
     <span *ngIf="editValue">{{editValue}}</span>
     <hr *ngIf="editValue">
-    <div ngbRadioGroup name="type" class="btn-group-sm"
-      [(ngModel)]="choice"
-      *ngIf="!(addType !== 'new' && ruleArray.length === 0)">
-      <label class="btn btn-primary mb-0"
-        (click)="elementValue = ''"
-        *ngIf="addType === 'state' || addType === 'new'">
-        <input type="radio" [value]="'state'">State
-      </label>
-      <label class="btn btn-primary mb-0"
-        (click)="elementValue = ''"
-        *ngIf="addType === 'function' || addType === 'new'">
-        <input type="radio" [value]="'function'">Function
-      </label>
-      <label class="btn btn-primary mb-0"
-        (click)="elementValue = ''"
-        *ngIf="ruleArray.length">
-        <input type="radio" [value]="'rule'">Rule
-      </label>
+    <div class="btn-group-sm mr-3 mb-1">
+      <label *ngIf="!(addType !== 'new' && ruleArray.length === 0)" class="btn btn-primary mb-0" [(ngModel)]="choice" btnRadio="state" (click)="elementValue = ''">State</label>
+      <label *ngIf="addType === 'function' || addType === 'new'" class="btn btn-primary mb-0" [(ngModel)]="choice" btnRadio="function" (click)="elementValue = ''">Function</label>
+      <label *ngIf="ruleArray.length" class="btn btn-primary mb-0" [(ngModel)]="choice" btnRadio="rule" (click)="elementValue = ''">Rule</label>
     </div>
 
     <div [ngSwitch]="choice">

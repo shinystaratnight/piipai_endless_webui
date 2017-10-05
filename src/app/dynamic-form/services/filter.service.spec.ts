@@ -235,17 +235,6 @@ describe('FilterService', () => {
     });
 
     describe('parseFilters method', () => {
-      it('should update related filters',
-          inject([FilterService], (s: FilterService) => {
-            let endpoint = '/ecore/api/v2/contacts/';
-            s.filters = {
-              endpoint,
-              list
-            };
-            s.parseFilters(s.getFiltersByEndpoint(endpoint), {}, list.list);
-            expect(s.getFiltersByEndpoint(endpoint)[0].options).toEqual(response.results);
-          })
-      );
 
       it('should parse params from URL', inject([FilterService], (s: FilterService) => {
         let endpoint = '/ecore/api/v2/contacts/';
