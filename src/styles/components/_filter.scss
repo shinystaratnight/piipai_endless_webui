@@ -1,7 +1,18 @@
-$filter-element-width: 250px;
 $filter-block-height: 400px;
 
 .filter {
+  font-family: 'Roboto Condensed', sans-serif;
+
+  &-place {
+    width: 320px;
+    min-width: 320px;
+    background-color: #262b2d;
+
+    @include media-breakpoint-down('md') {
+      display: none;
+    }
+  }
+
   &-block {
     max-height: $filter-block-height;
     width: 100%;
@@ -9,6 +20,11 @@ $filter-block-height: 400px;
     background-color: transparent;
     color: white;
     overflow-y: auto;
+    box-sizing: border-box;
+    
+    &-label {
+      display: none;
+    }
 
     @include media-breakpoint-down('md') {
       color: black;
@@ -32,6 +48,7 @@ $filter-block-height: 400px;
 
   &-label {
     widows: 100%;
+    padding: .5rem .75rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -74,4 +91,51 @@ $filter-block-height: 400px;
       }
     }
   }
+}
+
+.r3sourcer {
+  .filter {
+    &-place {
+      width: 300px;
+      min-width: 300px;
+      background-color: #2b2f31;
+    }
+
+    &-block-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #212527;
+      color: white;
+    }
+
+    &-label {
+      padding: .4rem 1.4rem;
+      background-color: #212527;
+
+      &.active {
+        font-weight: normal;
+      }
+
+      &.related {
+        display: none;
+      }
+    }
+
+    &-element {
+      border-bottom: none;
+      box-shadow: none;
+
+      &.active {
+        background-color: transparent;
+        box-shadow: none;
+      }
+    }
+
+    &-related {
+      padding: .4rem 1.4rem;
+    }
+  }
+
 }

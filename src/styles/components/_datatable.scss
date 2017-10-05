@@ -17,16 +17,6 @@ $cell-datatable-width: 45%;
   }
 }
 
-.filter-place {
-  width: 320px;
-  min-width: 320px;
-  background-color: #36373c;
-
-  @include media-breakpoint-down('md') {
-    display: none;
-  }
-}
-
 .content {
   height: 100%;
   width: 100%;
@@ -271,5 +261,14 @@ $cell-datatable-width: 45%;
 .list {
   td {
     min-width: 150px;
+  }
+}
+
+.r3sourcer {
+  .datatable {
+
+    .filter-wrapper {
+      width: 300px;
+    }
   }
 }

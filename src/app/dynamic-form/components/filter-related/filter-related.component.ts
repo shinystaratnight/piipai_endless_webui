@@ -16,7 +16,7 @@ export class FilterRelatedComponent implements OnInit {
   public item: any;
   public query: string;
   public copyConfig = [];
-  public isCollapsed: boolean = true;
+  public isCollapsed: boolean = false;
 
   public searchValue: string;
   public modalScrollDistance = 2;
@@ -134,7 +134,7 @@ export class FilterRelatedComponent implements OnInit {
       lastElement: 0,
       hideAutocomplete: true
     };
-    element['displayValue'] = data ? this.getOption(data, element) : '';
+    element['displayValue'] = data ? this.getOption(data, element) : this.config.label;
     return element;
   }
 

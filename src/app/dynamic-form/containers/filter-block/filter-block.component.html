@@ -1,4 +1,8 @@
   <div class="filter-block" [class.filter-block-collapsed]="direction === 'right'">
+    <div class="filter-block-label">
+      <span>Filter</span>
+      <i fa [name]="'filter'"></i>
+    </div>
     <div *ngFor="let field of config;">
       <ng-container
         filterElement
