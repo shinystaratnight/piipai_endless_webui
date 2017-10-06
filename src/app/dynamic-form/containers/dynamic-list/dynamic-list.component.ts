@@ -237,11 +237,22 @@ export class DynamicListComponent implements
   }
 
   public ngAfterViewInit() {
-    if (this.tableWrapper) {
-      let offsetTop = this.tableWrapper.nativeElement.offsetTop;
-      let parent = this.tableWrapper.nativeElement.offsetParent;
-      let parentHeight = parent.offsetHeight;
-      this.tableWrapper.nativeElement.style.maxHeight = (parentHeight - offsetTop - 80) + 'px';
+    if (this.datatable) {
+      let listButtons: any = document.getElementsByClassName('list-buttons');
+      let filterWrapper: any = document.getElementsByClassName('filter-wrapper');
+      let width: any = window.innerWidth;
+      let height: any = window.innerHeight;
+      let offsetTop;
+      if (listButtons && listButtons.length && width > 992) {
+        offsetTop = listButtons[0].offsetHeight;
+        if (filterWrapper && filterWrapper.length) {
+          if (document.body.classList.contains('r3sourcer')) {
+            filterWrapper[0].style.top = offsetTop + 'px';
+          }
+          filterWrapper[0].style.height = height - 100 - offsetTop + 'px';
+        }
+      }
+      console.log(filterWrapper);
     }
   }
 

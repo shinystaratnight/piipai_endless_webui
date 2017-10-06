@@ -144,17 +144,19 @@
         <div class="double-bounce2"></div>
       </div>
     </div>
-    <div class="mb-2">{{data.count}} {{config.list.label}}</div>
-    <ngb-pagination
-      [collectionSize]="pageSize"
-      [(page)]="page"
-      [maxSize]="4"
-      [rotate]="true"
-      [ellipses]="true"
-      [boundaryLinks]="true"
-      size="sm"
-      (pageChange)="pageChange()">
-    </ngb-pagination>
+    <div class="pagination d-flex align-items-center mt-2">
+      <ngb-pagination
+        [collectionSize]="pageSize"
+        [(page)]="page"
+        [maxSize]="4"
+        [rotate]="true"
+        [ellipses]="true"
+        [boundaryLinks]="true"
+        size="sm"
+        (pageChange)="pageChange()">
+      </ngb-pagination>
+      <div class="ml-2">{{data.count}} {{config.list.label}}</div>
+    </div>
   </div>
 </div>
 

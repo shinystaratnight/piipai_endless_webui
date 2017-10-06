@@ -23,7 +23,7 @@ $nested-width: 300px;
       max-width: 90%;
     }
 
-    @include media-breakpoint-down('md') {
+    @include media-breakpoint-down('lg') {
       display: none;
     }
   }
@@ -52,7 +52,7 @@ $nested-width: 300px;
       opacity: .5;
       z-index: 0;
 
-      @include media-breakpoint-down('md') {
+      @include media-breakpoint-down('lg') {
         display: none;
       }
     }
@@ -63,7 +63,6 @@ $nested-width: 300px;
   }
 
   .user {
-    min-height: 100%;
 
     &-title {
       font-family: 'Roboto Condensed', sans-serif;
@@ -90,7 +89,7 @@ $nested-width: 300px;
       height: 1.2rem;
     }
 
-    @include media-breakpoint-down('md') {
+    @include media-breakpoint-down('lg') {
       &-title.hide {
         display: none;
       }
@@ -138,10 +137,6 @@ $nested-width: 300px;
     list-style-position: inside;
     list-style-type: none;
 
-    @include media-breakpoint-down('md') {
-      display: none;
-    }
-
     &.show {
       display: block;
       position: fixed;
@@ -166,8 +161,7 @@ $nested-width: 300px;
     }
 
     &-nested {
-      display: flex;
-      visibility: hidden;
+      display: none;
       width: $nested-width;
       max-width: 70vw;
       position: absolute;
@@ -183,9 +177,16 @@ $nested-width: 300px;
       z-index: 1000;
 
       & .navigation-list-nested {
+        display: none;
         top: 0;
         left: $nested-width;
       }
+    }
+
+    @include media-breakpoint-down('lg') {
+      display: none;
+      width: $nested-width;
+      max-width: 70vw;
     }
 
   }
@@ -218,7 +219,7 @@ $nested-width: 300px;
 
       &>.navigation-list-nested {
         height: auto;
-        visibility: visible;
+        display: flex;
       }
     }
   }
@@ -240,7 +241,7 @@ $nested-width: 300px;
       min-width: 300px;
       height: 8vh;
       max-height: 80px;
-      min-height: 47px;
+      min-height: 3rem;
 
       background-image: url(/assets/img/logo-res-1x.png);
       background-repeat: no-repeat;

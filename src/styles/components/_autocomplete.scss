@@ -77,6 +77,11 @@
 
 .r3sourcer .autocomplete {
   @include media-breakpoint-up('lg') {
+    &-filter .autocomplete-value {
+      border: 1px solid #363c3e;
+      border-radius: .2rem;
+    }
+
     &-filter &-value {
       border-radius: 0;
       background-color: transparent;
@@ -84,7 +89,6 @@
 
       &.active:not(:focus) {
         cursor: pointer;
-        border: 1px solid #363c3e;
       }
     }
 

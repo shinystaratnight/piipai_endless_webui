@@ -186,7 +186,9 @@ export class FilterRelatedComponent implements OnInit {
     } else {
       this.query = '';
       this.count = 1;
-      this.elements.push(this.createElement(this.count));
+      if (this.elements && !this.elements.length) {
+        this.elements.push(this.createElement(this.count));
+      }
     }
   };
 
@@ -225,7 +227,9 @@ export class FilterRelatedComponent implements OnInit {
           item.count = res.count;
           if (res.results && res.results.length) {
             if (concat) {
-              this.previewList.push(...res.results);
+              if (this.previewList) {
+                this.previewList.push(...res.results);
+              }
             } else {
               this.previewList = res.results;
             }

@@ -7,6 +7,7 @@
       [name]="isCollapsed ? 'angle-right' : 'angle-down'"
       [border]=false
       (click)="isCollapsed = !isCollapsed"
+      [class.text-primary]="!isCollapsed"
       [attr.aria-expanded]="!isCollapsed"
       style="cursor: pointer"></i>
     <i

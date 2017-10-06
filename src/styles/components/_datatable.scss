@@ -51,7 +51,6 @@ $cell-datatable-width: 45%;
   }
 
   &-wrapper {
-    height: calc(100% - 3rem);
     max-width: calc(100vw - 320px);
 
     @include media-breakpoint-down('md') {
@@ -101,6 +100,10 @@ $cell-datatable-width: 45%;
         margin-top: .5rem;
       }
     }
+  }
+
+  .pagination ul {
+    margin-bottom: 0;
   }
 
   .button {
@@ -265,10 +268,103 @@ $cell-datatable-width: 45%;
 }
 
 .r3sourcer {
-  .datatable {
+  @include media-breakpoint-up('lg') {
 
-    .filter-wrapper {
+    .datatable {
+
+      .filter-wrapper {
+        width: 300px;
+
+        @include media-breakpoint-down('md') {
+          position: relative;
+          width: auto;
+        }
+      }
+
+      .table-wrapper {
+        box-shadow: 0 -3px 0 0 $brand-primary;      
+        border: 0;
+        border-radius: .3rem;
+
+        table {
+          background-color: #f1f1f1;
+        }
+
+        thead th {
+          text-transform: none;
+          font-weight: 500;
+          height: 3.5rem;
+          vertical-align: middle;
+          background-color: #2b2f31;
+        }
+
+        tbody {
+
+          tr {
+            border-top: 1rem solid #f1f1f1;
+            border-bottom: 1rem solid white;
+            
+            td:first-child {
+              border-left: 4px solid $brand-primary;
+              border-top-left-radius: .3rem;
+              border-bottom-left-radius: .3rem;
+            }
+
+            td:last-child {
+              border-bottom-right-radius: .5rem;
+            }
+          }
+
+          tr:nth-child(even) td:first-child {
+            border-left-color: #2c3032;
+          }
+
+          td {
+            position: relative;
+            padding: .5rem;
+            font-weight: 300;
+            color: #525252;
+            background-color: white;
+            border-bottom: 1rem solid white;
+            border-top: 1rem solid white;
+            box-shadow: 3px 0px 0px -1px white, 1px 1px 2px 0px rgba(0, 0, 0, 0.1), 2px 1px 0px 0px rgba(0, 0, 0, .1);
+          }
+        }
+      }
+
+      &-button.first {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background-color: $brand-primary;
+        color: white;
+
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          background-color: darken($brand-primary, 5%);
+        }
+      }
+
+      &-label {
+        padding: 0;
+        margin-bottom: 1.5rem;
+        color: #262b2d;
+        background-color: transparent;
+        border: none;      
+      }
+    }
+
+    .list-page {
+      background-color: #f1f1f1;
+    }
+
+    .list-buttons {
+      position: absolute;
+      left: 0;
+      top: 0;
       width: 300px;
+      padding: 2rem;
     }
   }
 }

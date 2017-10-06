@@ -39,6 +39,20 @@
   &-icon {
     position: absolute;
     right: 1rem;
+    top: .8rem;
   }
 
+}
+
+.r3sourcer {
+  .search {
+      &-bar {
+        input {
+          padding: .8rem 1rem;
+          border: none;
+          background-color: transparent;
+          box-shadow: 1px 1px 1px rgba(black, .04);
+        }
+    }
+  }
 }
