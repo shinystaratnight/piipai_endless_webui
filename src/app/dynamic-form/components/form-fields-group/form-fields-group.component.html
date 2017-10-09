@@ -42,9 +42,10 @@
     <div class="modal-body">
       <div class="d-flex flex-column" *ngIf="modalData.type === 'field' && !modalData.id && !choosenType">
         <span
-          class="badge badge-default my-1 py-2"
+          [ngClass]="{'badge badge-default my-1 py-2': i !== 1}"
+          [class.mb-4]="f"
           style="cursor: pointer"
-          *ngFor="let type of types"
+          *ngFor="let type of types; let f = first; let i = index"
           (click)="setType(type)">
             {{fields[type].label}}
         </span>

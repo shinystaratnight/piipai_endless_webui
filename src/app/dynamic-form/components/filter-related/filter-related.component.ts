@@ -42,7 +42,7 @@ export class FilterRelatedComponent implements OnInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
-    this.isCollapsed = this.query ? false : true;
+    this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
   }
 
   public generateList(item, concat = false): void {

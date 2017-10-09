@@ -4,10 +4,10 @@
     <i
       fa
       class="p-2"
-      [name]="isCollapsed ? 'angle-right' : 'angle-down'"
+      [name]="icons[theme][isCollapsed]"
       [border]=false
       (click)="isCollapsed = !isCollapsed"
-      [class.text-primary]="!isCollapsed"
+      [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
       [attr.aria-expanded]="!isCollapsed"
       style="cursor: pointer"></i>
     <i
@@ -19,7 +19,7 @@
       style="cursor: pointer"
       (click)="resetFilter()"></i>
   </label>
-  <div [ngbCollapse]="isCollapsed">
+  <div [ngbCollapse]="isCollapsed" class="filter-date-wrapper">
     <ul class="list-inline d-flex justify-content-between my-1">
       <li
         *ngFor="let item of config.list"

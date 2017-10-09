@@ -29,6 +29,17 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
   public init: boolean = false;
   public mobileDevice: boolean;
   public $: any;
+  public icons = {
+    r3sourcer: {
+      true: 'angle-right',
+      false: 'angle-down'
+    },
+    default: {
+      true: 'eye',
+      false: 'eye-slash'
+    }
+  };
+  public theme: string;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -48,8 +59,10 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
-    this.isCollapsed = (this.query || this.picker) ? false : true;
+    this.isCollapsed = (this.query || this.picker) ||
+      document.body.classList.contains('r3sourcer') ? false : true;
     this.mobileDevice = this.identifyDevice();
+    this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
   }
 
   public identifyDevice() {

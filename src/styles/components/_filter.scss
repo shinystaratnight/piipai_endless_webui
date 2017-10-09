@@ -19,7 +19,6 @@ $filter-block-height: 400px;
     margin-bottom: 1rem;
     background-color: transparent;
     color: white;
-    overflow-y: auto;
     box-sizing: border-box;
     
     &-label {
@@ -43,7 +42,6 @@ $filter-block-height: 400px;
 
   &-label {
     widows: 100%;
-    padding: .5rem .75rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -55,29 +53,11 @@ $filter-block-height: 400px;
     }
   }
 
-  &-select,
-  &-select:hover,
-  &-select:active,
-  &-select:focus {
-    margin-top: 1rem;
-    border: 1px solid #363c3e;
-    background-color: transparent;
-    color: white;
-
-    option {
-      color: black;
-    }
+  &-choice {
+    padding: .4rem 1rem;
+    color: #8c8c8b;
   }
-
-  &-date,
-  &-date:hover,
-  &-date:active,
-  &-date:focus {
-    border: 1px solid #363c3e;
-    background-color: transparent;
-    color: white;
-  }
-
+  
   &-element {
     border-bottom: 1px solid #58595e;
     box-shadow: 0 1px 1px 0 #292a2f;
@@ -124,6 +104,7 @@ $filter-block-height: 400px;
         height: 100%;
         margin-bottom: 0;
         max-height: 100%;
+        overflow-y: auto;
       }
 
       &-block-label {
@@ -162,8 +143,58 @@ $filter-block-height: 400px;
         }
       }
 
+      &-select-wrapper {
+        padding: 0 1.4rem;
+      }
+
+      &-select,
+      &-select:hover,
+      &-select:active,
+      &-select:focus {
+        margin-top: 1rem;
+        border: 1px solid #363c3e;
+        background-color: transparent;
+        color: white;
+
+        option {
+          color: black;
+        }
+      }
+
+      &-date-wrapper {
+        padding: .4rem 1.4rem;
+      }
+
+      &-date,
+      &-date:hover,
+      &-date:active,
+      &-date:focus {
+        border: 1px solid #363c3e;
+        background-color: transparent;
+        color: white;
+      }
+
       &-related {
         padding: 0 1.4rem;
+      }
+
+      &-choice {
+        padding: .4rem 1.4rem;
+        color: #8c8c8b;
+
+        li::before {
+          font-family: FontAwesome;
+          content: "\f10c";
+          font-size: .8rem;
+          position: static;
+          border: none;
+          display: inline-block;
+          height: 1.5rem;
+        }
+
+        & .selected {
+          color: white;
+        }
       }
     }
   }

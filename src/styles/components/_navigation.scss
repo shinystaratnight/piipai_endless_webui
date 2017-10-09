@@ -11,10 +11,12 @@ $nested-width: 300px;
     min-width: 320px;
     height: 11vh;
     min-height: 100%;
-    background-color: #f3872f;
+    max-height: 109px;
+    background-color: darken($brand-primary, 10%);
     background-image: url(/assets/img/LBK_regular_logo.png);
     background-repeat: no-repeat;
-    background-size: auto 7vh;
+    background-size: auto 4vh;
+    background-position: 2rem center;
 
     &-image {
       width: auto;
@@ -41,13 +43,19 @@ $nested-width: 300px;
       color:white;
 
       z-index: 4;
+
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
     }
 
     &-name-bg {
       position: absolute;
+      top: -41px;
       left: 0;
-      margin-top: -2px;
-      font-size: calc(15vh + 0px);
+      margin-top: -7px;
+      font-size: 8.7rem;
       color: $brand-primary;
       opacity: .5;
       z-index: 0;
@@ -246,7 +254,7 @@ $nested-width: 300px;
       background-image: url(/assets/img/logo-res-1x.png);
       background-repeat: no-repeat;
       background-size: auto 3vh;
-      background-position: center;
+      background-position: 2rem center;
 
       &-image {
         max-height: 5vh;
@@ -255,7 +263,7 @@ $nested-width: 300px;
 
     .title-name-bg {
       margin-top: 1px;
-      font-size: calc(11vh + 0px);
+      font-size: 6.7rem;
     }
 
     .user-title {

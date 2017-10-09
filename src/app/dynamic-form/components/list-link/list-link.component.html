@@ -1,5 +1,5 @@
-<a [attr.href]="href" *ngIf="config.value && !link">{{config.value}}</a>
-<a routerLink="{{href}}" *ngIf="link && config.link">
+<a class="link" [attr.href]="href" *ngIf="config.value && !link">{{config.value}}</a>
+<a class="link" routerLink="{{href}}" *ngIf="link && config.link">
   {{value}}
   <span *ngIf="config.fields">
     <ng-container
@@ -8,7 +8,7 @@
       [config]="field"></ng-container>
   </span>
 </a>
-<a #link *ngIf="config.endpoint" href="" (click)="action($event)">
+<a class="link" #link *ngIf="config.endpoint" href="" (click)="action($event)">
   {{value}}
   <span *ngIf="config.fields">
     <ng-container

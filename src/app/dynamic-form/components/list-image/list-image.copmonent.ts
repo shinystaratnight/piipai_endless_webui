@@ -13,9 +13,15 @@ export class ListImageComponent implements OnInit {
   public iconClass: string;
 
   public ngOnInit() {
+    let defaultAvatar: string;
+    if (document.body.classList.contains('r3sourcer')) {
+      defaultAvatar = 'r3-avatar.png';
+    } else {
+      defaultAvatar = 'avatar.png';
+    }
     if (this.config.type === 'picture') {
       this.src = (this.config.value && this.config.value.thumb)
-        ? this.config.value.thumb : '/assets/img/avatar.png';
+        ? this.config.value.thumb : `/assets/img/${defaultAvatar}`;
     } else if (this.config.type === 'icon') {
       if (this.config.values) {
         this.icon = this.config.values[this.config.value];

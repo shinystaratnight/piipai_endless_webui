@@ -10,6 +10,7 @@ $cell-datatable-width: 45%;
   display: flex;
   align-items: stretch;
   height: 100%;
+  min-height: calc(100vh - 109px);
   background-color: #eef1f6;
 
   @include media-breakpoint-down('md') {
@@ -25,7 +26,6 @@ $cell-datatable-width: 45%;
 
 
 .datatable {
-  max-height: 100%;
   padding: 0 1rem;
 
   list-column,
@@ -52,6 +52,10 @@ $cell-datatable-width: 45%;
 
   &-wrapper {
     max-width: calc(100vw - 320px);
+
+    &:first-child {
+      max-height: calc(100% - 80px);
+    }
 
     @include media-breakpoint-down('md') {
       max-width: 100%;
@@ -140,7 +144,6 @@ $cell-datatable-width: 45%;
 
   .table-wrapper {
     position: relative;
-    max-height: 500px;
     overflow-y: auto;
     max-width: calc(100vw - 320px);
     border: 1px solid #d3d3d3;
@@ -208,7 +211,7 @@ $cell-datatable-width: 45%;
     box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
 
     .datatable-body {
-      max-height: 500px;
+      max-height: 70vh;
       overflow-y: auto;
     }
   }
@@ -270,7 +273,25 @@ $cell-datatable-width: 45%;
 .r3sourcer {
   @include media-breakpoint-up('lg') {
 
+    .list-page {
+      min-height: calc(100vh - 80px);
+    }
+
     .datatable {
+
+      &-wrapper:first-child {
+        max-height: calc(100% - 80px);
+      }
+
+      a.link {
+        border-bottom: 1px dotted $brand-primary;
+
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          border-bottom-style: solid;
+        }
+      }
 
       .filter-wrapper {
         width: 300px;
@@ -281,38 +302,50 @@ $cell-datatable-width: 45%;
         }
       }
 
-      .table-wrapper {
-        box-shadow: 0 -3px 0 0 $brand-primary;      
+      .table-wrapper {    
         border: 0;
         border-radius: .3rem;
 
         table {
+          border-collapse: separate;
+          border-spacing: 0 1rem;
           background-color: #f1f1f1;
         }
 
         thead th {
+          padding: .5rem;
+          border-top: 3px solid $brand-primary;
           text-transform: none;
           font-weight: 500;
           height: 3.5rem;
           vertical-align: middle;
           background-color: #2b2f31;
+
+          &:first-child {
+            border-bottom-left-radius: .3rem;
+            border-top-left-radius: .3rem;
+          }
+
+          &:last-child {
+            border-bottom-right-radius: .3rem;
+            border-top-right-radius: .3rem;
+          }
         }
 
         tbody {
 
-          tr {
-            border-top: 1rem solid #f1f1f1;
-            border-bottom: 1rem solid white;
-            
-            td:first-child {
-              border-left: 4px solid $brand-primary;
-              border-top-left-radius: .3rem;
-              border-bottom-left-radius: .3rem;
-            }
+          border-collapse: separate;
+          border-spacing: 0 1rem;
 
-            td:last-child {
-              border-bottom-right-radius: .5rem;
-            }
+          tr td:first-child {
+            border-left: 4px solid $brand-primary;
+            border-top-left-radius: .3rem;
+            border-bottom-left-radius: .3rem;
+          }
+
+          tr td:last-child {
+            border-top-right-radius: .3rem;
+            border-bottom-right-radius: .3rem;
           }
 
           tr:nth-child(even) td:first-child {
@@ -320,14 +353,12 @@ $cell-datatable-width: 45%;
           }
 
           td {
-            position: relative;
+            border-bottom: 1px solid silver;
+            border-right: none;
             padding: .5rem;
             font-weight: 300;
             color: #525252;
             background-color: white;
-            border-bottom: 1rem solid white;
-            border-top: 1rem solid white;
-            box-shadow: 3px 0px 0px -1px white, 1px 1px 2px 0px rgba(0, 0, 0, 0.1), 2px 1px 0px 0px rgba(0, 0, 0, .1);
           }
         }
       }
@@ -348,7 +379,7 @@ $cell-datatable-width: 45%;
 
       &-label {
         padding: 0;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         color: #262b2d;
         background-color: transparent;
         border: none;      

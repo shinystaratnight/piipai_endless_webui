@@ -238,8 +238,9 @@ export class DynamicListComponent implements
 
   public ngAfterViewInit() {
     if (this.datatable) {
-      let listButtons: any = document.getElementsByClassName('list-buttons');
-      let filterWrapper: any = document.getElementsByClassName('filter-wrapper');
+      let listButtons: any = this.datatable.nativeElement.getElementsByClassName('list-buttons');
+      let filterWrapper: any =
+        this.datatable.nativeElement.getElementsByClassName('filter-wrapper');
       let width: any = window.innerWidth;
       let height: any = window.innerHeight;
       let offsetTop;
@@ -252,7 +253,22 @@ export class DynamicListComponent implements
           filterWrapper[0].style.height = height - 100 - offsetTop + 'px';
         }
       }
-      console.log(filterWrapper);
+      if (this.first) {
+        let table = this.datatable.nativeElement.getElementsByClassName('table');
+        let offsetParent = this.datatable.nativeElement.offsetParent;
+        let datatableWrapper = offsetParent.getElementsByClassName('datatable-wrapper')[0];
+        if (this.tableWrapper) {
+          if ((offsetParent.offsetHeight - this.tableWrapper.nativeElement.offsetTop)
+             < table[0].offsetHeight) {
+            datatableWrapper.style.maxHeight = offsetParent.offsetHeight - 70 + 'px';
+            this.datatable.nativeElement.style.maxHeight = offsetParent.offsetHeight - 70 + 'px';
+          }
+          let tableWrapperElement = this.tableWrapper.nativeElement;
+          let parentHeigth = tableWrapperElement.parentElement.parentElement.offsetHeight;
+          tableWrapperElement.style.maxHeight = 
+            parentHeigth - tableWrapperElement.offsetTop + `px`;
+        }
+      }
     }
   }
 
