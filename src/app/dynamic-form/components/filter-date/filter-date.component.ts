@@ -59,7 +59,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit() {
     if (!this.init && this.d) {
-      let dateType = this.mobileDevice ? 'flipbox' : 'datebox';
+      let dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       this.init = true;
       this.d.forEach((el) => {
         this.$(el.nativeElement).datebox({

@@ -57,7 +57,7 @@ export class FormDatepickerComponent
       this.addFlags(this.d, this.config);
     }
     if (!this.init) {
-      let dateType = this.mobileDevice ? 'flipbox' : 'datebox';
+      let dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       let timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';
       this.init = true;
       this.$(this.d.nativeElement).datebox({
@@ -66,7 +66,7 @@ export class FormDatepickerComponent
           let date = this.d.nativeElement.value;
           let time = this.t.nativeElement.value;
           if (date) {
-            let fullDate = date + (time ? time : '');
+            let fullDate = date + (time ? ` ${time}` : '');
             this.setDate(fullDate, moment, true);
           }
         }
@@ -91,7 +91,7 @@ export class FormDatepickerComponent
     }
   }
 
-  public updateDate(date) {
+  public updateDate(date, picker) {
     if (this.config.templateOptions.type === 'date') {
       if (date) {
         if (!this.date) {
@@ -104,7 +104,7 @@ export class FormDatepickerComponent
         if (!this.date) {
           this.date = date.format('YYYY-MM-DD');
         }
-        if (!this.time) {
+        if (!this.time && !picker) {
           this.time = date.format('hh:mm A');
         }
         this.group.get(this.key).patchValue(date.format());
@@ -116,12 +116,12 @@ export class FormDatepickerComponent
     let date;
     if (value) {
       if (picker) {
-        let newValue = moment(value, 'YYYY-MM-DD hh:mm A').format().split('+')[0];
+        let newValue = moment.tz(value, 'Australia/Sydney').format().split('+')[0];
         date = moment.tz(newValue + '+10:00', 'Australia/Sydney');
       } else {
         date = moment.tz(value, 'Australia/Sydney');
       }
-      this.updateDate(date);
+      this.updateDate(date, picker);
     }
   }
 }
