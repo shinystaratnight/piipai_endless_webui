@@ -9,6 +9,20 @@
   @include media-breakpoint-up('lg') {
     &-filter .autocomplete {
       background-color: #2d2c31;
+      color: white;
+    }
+
+    &-filter &-value {
+      border: 0;
+      border-radius: 0;
+      background-color: transparent;
+      overflow: hidden;
+
+      &.active:not(:focus) {
+        cursor: pointer;
+        background-color: #2d2c31;
+        color: inherit;
+      }
     }
 
     &-filter input {
@@ -16,43 +30,21 @@
       border-bottom: 2px solid white;
       border-radius: 0;
       background-color: #2d2c31;
-      color: white;
 
       &:hover, &:focus {
-        border-color: $brand-primary;
-        background-color: #2d2c31;
         color: white;
-      }
-    }
-
-    &-filter &-value {
-      border: 0;
-      border-radius: 0;
-      background-color: #2d2c31;
-      overflow: hidden;
-
-      &.active:not(:focus) {
-        cursor: pointer;
+        border-color: $brand-primary;
         background-color: #2d2c31;
       }
     }
 
     &-filter &-item {
-      color: white;
       background-color: #2d2c31;
 
       &:hover {
         color: #838288;
-        background-color: #fff;
+        background-color: white;
       }
-    }
-
-    &-filter &-value {
-      border: 0;
-      border-radius: 0;
-      border-bottom: 1px solid white;
-      background-color: #2d2c31;
-      color: white;
     }
   }
 
@@ -80,6 +72,43 @@
     &:hover {
       width: 100%;
       background-color: $brand-primary;
+    }
+  }
+}
+
+.r3sourcer .autocomplete {
+  @include media-breakpoint-up('lg') {
+    &-filter .autocomplete-value {
+      border: 1px solid #363c3e;
+      border-radius: .2rem;
+    }
+
+    &-filter &-value {
+      border-radius: 0;
+      background-color: transparent;
+      overflow: hidden;
+
+      &.active:not(:focus) {
+        cursor: pointer;
+      }
+    }
+
+    &-filter input {
+      border: none;
+      border-bottom: 2px solid white;
+      border-radius: 0;
+
+      &:hover, &:focus {
+        border-color: $brand-primary;
+      }
+    }
+
+    &-filter &-item {
+
+      &:hover {
+        color: #838288;
+        background-color: white;
+      }
     }
   }
 }

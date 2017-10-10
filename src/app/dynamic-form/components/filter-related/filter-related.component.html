@@ -1,5 +1,5 @@
 <div class="filter-element p-2" [class.active]="!isCollapsed">
-  <label class="filter-label" [class.active]="!isCollapsed">
+  <label class="filter-label related" [class.active]="!isCollapsed">
     {{config.label}}
     <i
       fa
@@ -18,8 +18,8 @@
       style="cursor: pointer"
       (click)="resetFilter()"></i>
   </label>
-  <div [ngbCollapse]="isCollapsed">
-    <div class="d-flex justify-content-center align-items-center mb-1 w-100 autocomplete-filter" *ngFor="let item of elements" style="position: relative">
+  <div [ngbCollapse]="isCollapsed" class="filter-related">
+    <div class="d-flex justify-content-center align-items-center mb-1 autocomplete-filter" *ngFor="let item of elements" style="position: relative">
       <div class="form-control autocomplete-value active"
         (click)="openAutocomplete($event, item)">
           <div style="overflow: hidden; white-space: nowrap">{{item.displayValue}}</div>

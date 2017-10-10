@@ -1,7 +1,7 @@
 $nested-width: 300px;
 
 .navigation {
-  background-color: #fea456;
+  background-color: lighten($brand-primary, 10%);
 
   .logo {
     display: flex;
@@ -11,7 +11,12 @@ $nested-width: 300px;
     min-width: 320px;
     height: 11vh;
     min-height: 100%;
-    background-color: #f3872f;
+    max-height: 109px;
+    background-color: darken($brand-primary, 10%);
+    background-image: url(/assets/img/LBK_regular_logo.png);
+    background-repeat: no-repeat;
+    background-size: auto 4vh;
+    background-position: 2rem center;
 
     &-image {
       width: auto;
@@ -20,7 +25,7 @@ $nested-width: 300px;
       max-width: 90%;
     }
 
-    @include media-breakpoint-down('md') {
+    @include media-breakpoint-down('lg') {
       display: none;
     }
   }
@@ -38,27 +43,37 @@ $nested-width: 300px;
       color:white;
 
       z-index: 4;
+
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
     }
 
     &-name-bg {
       position: absolute;
+      top: -41px;
       left: 0;
-      margin-top: -2px;
-      font-size: calc(15vh + 0px);
+      margin-top: -7px;
+      font-size: 8.7rem;
       color: $brand-primary;
       opacity: .5;
       z-index: 0;
 
-      @include media-breakpoint-down('md') {
+      @include media-breakpoint-down('lg') {
         display: none;
       }
     }
   }
 
+  nav {
+    font-size: 1.1rem;
+  }
+
   .user {
-    min-height: 100%;
 
     &-title {
+      font-family: 'Roboto Condensed', sans-serif;
       color: #925014;
       font-size: .8rem;
       margin-right: 1.3rem;
@@ -74,7 +89,7 @@ $nested-width: 300px;
       min-height: 2.1rem;
       margin-right: .5rem;
       border-radius: 50%;
-      background-color: #f9852e;
+      background-color: darken($brand-primary, 10%);
     }
 
     &-icon {
@@ -82,7 +97,7 @@ $nested-width: 300px;
       height: 1.2rem;
     }
 
-    @include media-breakpoint-down('md') {
+    @include media-breakpoint-down('lg') {
       &-title.hide {
         display: none;
       }
@@ -130,10 +145,6 @@ $nested-width: 300px;
     list-style-position: inside;
     list-style-type: none;
 
-    @include media-breakpoint-down('md') {
-      display: none;
-    }
-
     &.show {
       display: block;
       position: fixed;
@@ -141,7 +152,7 @@ $nested-width: 300px;
       max-width: 70vw;
       flex-direction: column;
       align-items: flex-start;
-      background-color: #fea456;
+      background-color: lighten($brand-primary, 10%);
       box-shadow: inset 0 0 4px rgba(0, 0, 0, .2);
       z-index: 200;
 
@@ -158,8 +169,7 @@ $nested-width: 300px;
     }
 
     &-nested {
-      display: flex;
-      visibility: hidden;
+      display: none;
       width: $nested-width;
       max-width: 70vw;
       position: absolute;
@@ -170,14 +180,21 @@ $nested-width: 300px;
       flex-direction: column;
       list-style-position: inside;
       list-style-type: none;
-      background-color: #fea456;
+      background-color: lighten($brand-primary, 10%);
       box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, .2);
       z-index: 1000;
 
       & .navigation-list-nested {
+        display: none;
         top: 0;
         left: $nested-width;
       }
+    }
+
+    @include media-breakpoint-down('lg') {
+      display: none;
+      width: $nested-width;
+      max-width: 70vw;
     }
 
   }
@@ -210,7 +227,7 @@ $nested-width: 300px;
 
       &>.navigation-list-nested {
         height: auto;
-        visibility: visible;
+        display: flex;
       }
     }
   }
@@ -220,5 +237,37 @@ $nested-width: 300px;
     justify-content: center;
     align-items: center;
     align-self: stretch;
+  }
+}
+
+.r3sourcer {
+  .navigation {
+
+    .logo {
+      background-color: #1f2325;
+      width: 300px;
+      min-width: 300px;
+      height: 8vh;
+      max-height: 80px;
+      min-height: 3rem;
+
+      background-image: url(/assets/img/logo-res-1x.png);
+      background-repeat: no-repeat;
+      background-size: auto 3vh;
+      background-position: 2rem center;
+
+      &-image {
+        max-height: 5vh;
+      }
+    }
+
+    .title-name-bg {
+      margin-top: 1px;
+      font-size: 6.7rem;
+    }
+
+    .user-title {
+      color: white;
+    }
   }
 }
