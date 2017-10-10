@@ -34,6 +34,10 @@ import { DefaultRequestOptions } from './services/default-request-options.servic
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import moment from 'moment-timezone';
+
+moment.tz.setDefault('Australia/Sydney');
+
 import '../styles/styles.scss';
 
 import 'jquery-ui';

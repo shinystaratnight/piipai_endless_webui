@@ -64,12 +64,10 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
       this.d.forEach((el) => {
         this.$(el.nativeElement).datebox({
           mode: dateType,
+          useClearButton: true,
           closeCallback: () => {
             let date = el.nativeElement.value;
-            if (date && this.data[el.nativeElement.name] !== date) {
-              let fullDate = date;
-              this.onChange(date, el.nativeElement.name);
-            }
+            this.onChange(date, el.nativeElement.name);
           }
         });
         el.nativeElement.readOnly = false;

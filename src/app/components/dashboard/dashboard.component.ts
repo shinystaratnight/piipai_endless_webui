@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   ViewChild,
   OnDestroy,
   Input,
@@ -41,7 +40,7 @@ export interface WidgetGroup {
   templateUrl: 'dashboard.component.html'
 })
 
-export class DashboardComponent implements OnChanges, OnDestroy, OnInit {
+export class DashboardComponent implements OnChanges, OnDestroy {
 
   @ViewChild('modal')
   public modal: any;
@@ -74,11 +73,6 @@ export class DashboardComponent implements OnChanges, OnDestroy, OnInit {
     private genericFormService: GenericFormService,
     private navigationService: NavigationService
   ) { }
-
-  public ngOnInit() {
-    this.widgetList = [];
-    this.widgets = [];
-  }
 
   public ngOnChanges() {
     if (this.pages && this.userModules && this.modulesList) {

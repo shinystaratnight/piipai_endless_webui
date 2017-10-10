@@ -62,12 +62,15 @@ export class FormDatepickerComponent
       this.init = true;
       this.$(this.d.nativeElement).datebox({
         mode: dateType,
+        useClearButton: true,
         closeCallback: () => {
           let date = this.d.nativeElement.value;
           let time = this.t.nativeElement.value;
           if (date) {
             let fullDate = date + (time ? ` ${time}` : '');
             this.setDate(fullDate, moment, true);
+          } else {
+            this.group.get(this.key).patchValue(null);
           }
         }
       });
@@ -76,12 +79,15 @@ export class FormDatepickerComponent
           mode: timeType,
           overrideTimeFormat: 12,
           overrideTimeOutput: '%I:%M %p',
+          useClearButton: true,
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
-            if (date && time) {
-              let fullDate = `${date} ${time}`;
+            if (date) {
+              let fullDate = date + (time ? ` ${time}` : '');
               this.setDate(fullDate, moment, true);
+            } else {
+              this.group.get(this.key).patchValue(null);
             }
           }
         });
@@ -91,7 +97,7 @@ export class FormDatepickerComponent
     }
   }
 
-  public updateDate(date, picker) {
+  public updateDate(date) {
     if (this.config.templateOptions.type === 'date') {
       if (date) {
         if (!this.date) {
@@ -104,7 +110,7 @@ export class FormDatepickerComponent
         if (!this.date) {
           this.date = date.format('YYYY-MM-DD');
         }
-        if (!this.time && !picker) {
+        if (!this.time) {
           this.time = date.format('hh:mm A');
         }
         this.group.get(this.key).patchValue(date.format());
@@ -116,12 +122,11 @@ export class FormDatepickerComponent
     let date;
     if (value) {
       if (picker) {
-        let newValue = moment.tz(value, 'Australia/Sydney').format().split('+')[0];
-        date = moment.tz(newValue + '+10:00', 'Australia/Sydney');
+        date = moment(value, 'YYYY-MM-DD hh:mm A');
       } else {
-        date = moment.tz(value, 'Australia/Sydney');
+        date = moment(value);
       }
-      this.updateDate(date, picker);
+      this.updateDate(date);
     }
   }
 }
