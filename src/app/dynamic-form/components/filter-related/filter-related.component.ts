@@ -16,7 +16,7 @@ export class FilterRelatedComponent implements OnInit {
   public item: any;
   public query: string;
   public copyConfig = [];
-  public isCollapsed: boolean = true;
+  public isCollapsed: boolean = false;
 
   public searchValue: string;
   public modalScrollDistance = 2;
@@ -42,7 +42,7 @@ export class FilterRelatedComponent implements OnInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
-    this.isCollapsed = this.query ? false : true;
+    this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
   }
 
   public generateList(item, concat = false): void {
@@ -134,7 +134,7 @@ export class FilterRelatedComponent implements OnInit {
       lastElement: 0,
       hideAutocomplete: true
     };
-    element['displayValue'] = data ? this.getOption(data, element) : '';
+    element['displayValue'] = data ? this.getOption(data, element) : this.config.label;
     return element;
   }
 
@@ -186,7 +186,9 @@ export class FilterRelatedComponent implements OnInit {
     } else {
       this.query = '';
       this.count = 1;
-      this.elements.push(this.createElement(this.count));
+      if (this.elements && !this.elements.length) {
+        this.elements.push(this.createElement(this.count));
+      }
     }
   };
 
@@ -225,7 +227,9 @@ export class FilterRelatedComponent implements OnInit {
           item.count = res.count;
           if (res.results && res.results.length) {
             if (concat) {
-              this.previewList.push(...res.results);
+              if (this.previewList) {
+                this.previewList.push(...res.results);
+              }
             } else {
               this.previewList = res.results;
             }

@@ -10,20 +10,11 @@ $cell-datatable-width: 45%;
   display: flex;
   align-items: stretch;
   height: 100%;
+  min-height: calc(100vh - 109px);
   background-color: #eef1f6;
 
   @include media-breakpoint-down('md') {
     height: auto;
-  }
-}
-
-.filter-place {
-  width: 320px;
-  min-width: 320px;
-  background-color: #36373c;
-
-  @include media-breakpoint-down('md') {
-    display: none;
   }
 }
 
@@ -35,7 +26,6 @@ $cell-datatable-width: 45%;
 
 
 .datatable {
-  max-height: 100%;
   padding: 0 1rem;
 
   list-column,
@@ -61,8 +51,11 @@ $cell-datatable-width: 45%;
   }
 
   &-wrapper {
-    height: calc(100% - 3rem);
     max-width: calc(100vw - 320px);
+
+    &:first-child {
+      max-height: calc(100% - 80px);
+    }
 
     @include media-breakpoint-down('md') {
       max-width: 100%;
@@ -113,6 +106,10 @@ $cell-datatable-width: 45%;
     }
   }
 
+  .pagination ul {
+    margin-bottom: 0;
+  }
+
   .button {
     border: 1px solid $brand-primary;
     background-color: white;
@@ -147,7 +144,6 @@ $cell-datatable-width: 45%;
 
   .table-wrapper {
     position: relative;
-    max-height: 500px;
     overflow-y: auto;
     max-width: calc(100vw - 320px);
     border: 1px solid #d3d3d3;
@@ -215,7 +211,7 @@ $cell-datatable-width: 45%;
     box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
 
     .datatable-body {
-      max-height: 500px;
+      max-height: 70vh;
       overflow-y: auto;
     }
   }
@@ -271,5 +267,135 @@ $cell-datatable-width: 45%;
 .list {
   td {
     min-width: 150px;
+  }
+}
+
+.r3sourcer {
+  @include media-breakpoint-up('lg') {
+
+    .list-page {
+      min-height: calc(100vh - 80px);
+    }
+
+    .datatable {
+
+      &-wrapper:first-child {
+        max-height: calc(100% - 80px);
+      }
+
+      a.link {
+        border-bottom: 1px dotted $brand-primary;
+
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          border-bottom-style: solid;
+        }
+      }
+
+      .filter-wrapper {
+        width: 300px;
+
+        @include media-breakpoint-down('md') {
+          position: relative;
+          width: auto;
+        }
+      }
+
+      .table-wrapper {    
+        border: 0;
+        border-radius: .3rem;
+
+        table {
+          border-collapse: separate;
+          border-spacing: 0 1rem;
+          background-color: #f1f1f1;
+        }
+
+        thead th {
+          padding: .5rem;
+          border-top: 3px solid $brand-primary;
+          text-transform: none;
+          font-weight: 500;
+          height: 3.5rem;
+          vertical-align: middle;
+          background-color: #2b2f31;
+
+          &:first-child {
+            border-bottom-left-radius: .3rem;
+            border-top-left-radius: .3rem;
+          }
+
+          &:last-child {
+            border-bottom-right-radius: .3rem;
+            border-top-right-radius: .3rem;
+          }
+        }
+
+        tbody {
+
+          border-collapse: separate;
+          border-spacing: 0 1rem;
+
+          tr td:first-child {
+            border-left: 4px solid $brand-primary;
+            border-top-left-radius: .3rem;
+            border-bottom-left-radius: .3rem;
+          }
+
+          tr td:last-child {
+            border-top-right-radius: .3rem;
+            border-bottom-right-radius: .3rem;
+          }
+
+          tr:nth-child(even) td:first-child {
+            border-left-color: #2c3032;
+          }
+
+          td {
+            border-bottom: 1px solid silver;
+            border-right: none;
+            padding: .5rem;
+            font-weight: 300;
+            color: #525252;
+            background-color: white;
+          }
+        }
+      }
+
+      &-button.first {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background-color: $brand-primary;
+        color: white;
+
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          background-color: darken($brand-primary, 5%);
+        }
+      }
+
+      &-label {
+        padding: 0;
+        margin-bottom: 1rem;
+        color: #262b2d;
+        background-color: transparent;
+        border: none;      
+      }
+    }
+
+    .list-page {
+      background-color: #f1f1f1;
+    }
+
+    .list-buttons {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 300px;
+      padding: 2rem;
+    }
   }
 }

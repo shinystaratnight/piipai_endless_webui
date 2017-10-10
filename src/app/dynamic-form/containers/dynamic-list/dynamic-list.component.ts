@@ -237,11 +237,38 @@ export class DynamicListComponent implements
   }
 
   public ngAfterViewInit() {
-    if (this.tableWrapper) {
-      let offsetTop = this.tableWrapper.nativeElement.offsetTop;
-      let parent = this.tableWrapper.nativeElement.offsetParent;
-      let parentHeight = parent.offsetHeight;
-      this.tableWrapper.nativeElement.style.maxHeight = (parentHeight - offsetTop - 80) + 'px';
+    if (this.datatable) {
+      let listButtons: any = this.datatable.nativeElement.getElementsByClassName('list-buttons');
+      let filterWrapper: any =
+        this.datatable.nativeElement.getElementsByClassName('filter-wrapper');
+      let width: any = window.innerWidth;
+      let height: any = window.innerHeight;
+      let offsetTop;
+      if (listButtons && listButtons.length && width > 992) {
+        offsetTop = listButtons[0].offsetHeight;
+        if (filterWrapper && filterWrapper.length) {
+          if (document.body.classList.contains('r3sourcer')) {
+            filterWrapper[0].style.top = offsetTop + 'px';
+          }
+          filterWrapper[0].style.height = height - 100 - offsetTop + 'px';
+        }
+      }
+      if (this.first) {
+        let table = this.datatable.nativeElement.getElementsByClassName('table');
+        let offsetParent = this.datatable.nativeElement.offsetParent;
+        let datatableWrapper = offsetParent.getElementsByClassName('datatable-wrapper')[0];
+        if (this.tableWrapper) {
+          if ((offsetParent.offsetHeight - this.tableWrapper.nativeElement.offsetTop)
+             < table[0].offsetHeight) {
+            datatableWrapper.style.maxHeight = offsetParent.offsetHeight - 70 + 'px';
+            this.datatable.nativeElement.style.maxHeight = offsetParent.offsetHeight - 70 + 'px';
+          }
+          let tableWrapperElement = this.tableWrapper.nativeElement;
+          let parentHeigth = tableWrapperElement.parentElement.parentElement.offsetHeight;
+          tableWrapperElement.style.maxHeight = 
+            parentHeigth - tableWrapperElement.offsetTop + `px`;
+        }
+      }
     }
   }
 
