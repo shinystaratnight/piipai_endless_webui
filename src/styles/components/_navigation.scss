@@ -247,13 +247,13 @@ $nested-width: 300px;
       background-color: #1f2325;
       width: 300px;
       min-width: 300px;
-      height: 8vh;
+      height: 80px;
       max-height: 80px;
       min-height: 3rem;
 
       background-image: url(/assets/img/logo-res-1x.png);
       background-repeat: no-repeat;
-      background-size: auto 3vh;
+      background-size: auto 45%;
       background-position: 2rem center;
 
       &-image {
@@ -262,7 +262,7 @@ $nested-width: 300px;
     }
 
     .title-name-bg {
-      margin-top: 1px;
+      margin-top: 3px;
       font-size: 6.7rem;
     }
 
