@@ -1,4 +1,4 @@
-<div #datatable [ngClass]="{'poped card': poped}" class="mw-100 datatable h-100" (click)="activeTable()" [hidden]="minimized">
+<div #datatable [ngClass]="{'poped card p-0': poped}" class="mw-100 datatable" (click)="activeTable()" [hidden]="minimized">
   <div move [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
@@ -104,10 +104,10 @@
               <div class="d-flex flex-md-column justify-content-between align-items-center">
                 <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
                 <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm" [routerLink]="[row.id + '/change']">
-                  <i fa [name]="'pencil'" class="icon text-primary"></i>
+                  <i fa [name]="'pencil'" class="icon text-warning"></i>
                 </a>
                 <i fa *ngIf="!first || inForm"
-                  [name]="'pencil'" class="icon text-primary ml-auto ml-md-0"
+                  [name]="'pencil'" class="icon text-warning ml-auto ml-md-0"
                   (click)="editObject(row.id, row.__str__)"></i>
               </div>
             </td>
@@ -144,17 +144,19 @@
         <div class="double-bounce2"></div>
       </div>
     </div>
-    <div class="mb-2">{{data.count}} {{config.list.label}}</div>
-    <ngb-pagination
-      [collectionSize]="pageSize"
-      [(page)]="page"
-      [maxSize]="4"
-      [rotate]="true"
-      [ellipses]="true"
-      [boundaryLinks]="true"
-      size="sm"
-      (pageChange)="pageChange()">
-    </ngb-pagination>
+    <div class="pagination d-flex flex-wrap align-items-center py-3">
+      <ngb-pagination
+        [collectionSize]="pageSize"
+        [(page)]="page"
+        [maxSize]="2"
+        [rotate]="true"
+        [ellipses]="true"
+        [boundaryLinks]="true"
+        size="sm"
+        (pageChange)="pageChange()">
+      </ngb-pagination>
+      <div class="ml-2">{{data.count}} {{config.list.label}}</div>
+    </div>
   </div>
 </div>
 

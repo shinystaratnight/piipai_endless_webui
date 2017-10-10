@@ -4,8 +4,9 @@
     <i
       fa
       class="p-2"
-      [name]="isCollapsed ? 'eye' : 'eye-slash'"
+      [name]="icons[theme][isCollapsed]"
       [border]=false
+      [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
       (click)="isCollapsed = !isCollapsed"
       [attr.aria-expanded]="!isCollapsed"
       style="cursor: pointer"></i>
@@ -18,8 +19,8 @@
       style="cursor: pointer"
       (click)="resetFilter()"></i>
   </label>
-  <div [ngbCollapse]="isCollapsed">
-    <select class="form-control custom-select" [(ngModel)]="data" (change)="onChange()">
+  <div [ngbCollapse]="isCollapsed" class="filter-select-wrapper">
+    <select class="form-control custom-select filter-select" [(ngModel)]="data" (change)="onChange()">
       <option *ngFor="let option of config.options" [attr.value]="option.value" [selected]="data === option.value">{{option.label}}</option>
     </select>
   </div>

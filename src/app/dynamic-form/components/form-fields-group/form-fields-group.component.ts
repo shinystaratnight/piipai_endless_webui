@@ -43,6 +43,13 @@ export class FormFieldsGroupComponent implements OnInit {
       this.groups = [];
     }
     this.fields = {
+      modelfield: {
+        endpoint: '/ecore/api/v2/endless-core/modelformfields/',
+        label: 'Model field'
+      },
+      group: {
+        label: 'Custom fields:'
+      },
       textareafield: {
         endpoint: '/ecore/api/v2/endless-core/textareaformfields/',
         label: 'TextArea field'
@@ -50,10 +57,6 @@ export class FormFieldsGroupComponent implements OnInit {
       numberfield: {
         endpoint: '/ecore/api/v2/endless-core/numberformfields/',
         label: 'Number field'
-      },
-      modelfield: {
-        endpoint: '/ecore/api/v2/endless-core/modelformfields/',
-        label: 'Model field'
       },
       selectfield: {
         endpoint: '/ecore/api/v2/endless-core/selectformfields/',

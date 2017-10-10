@@ -1,19 +1,16 @@
 <header #header class="text-white navigation">
-  <div class="d-flex justify-content-between justify-content-lg-start h-100">
+  <div class="d-flex justify-content-between h-100">
     <div class="logo">
-      <a href="#">
-        <img class="logo-image" src="/assets/img/LBK_regular_logo.png" alt="LBK">
-      </a>
     </div>
     <div class="d-flex align-items-center title">
-      <span class="title-name">CRM</span>
+      <a class="title-name" href="#">CRM</a>
       <span class="title-name-bg">CRM</span>
     </div>
-    <div class="d-flex align-items-center flex-lg-unordered align-items-stretch"
+    <div class="d-flex align-items-center flex-xl-unordered align-items-stretch"
       [ngClass]="{'flex-first': pages}"
       *ngIf="pages && pages.length">
       <nav #nav class="d-flex">
-        <button class=" d-flex align-items-center hamburger hamburger--spring hidden-lg-up" type="button"
+        <button class=" d-flex align-items-center hamburger hamburger--spring hidden-xl-up" type="button"
           [ngClass]="{'is-active': isCollapsed}"
           (click)="showNavigation($event)">
           <span class="hamburger-box">
@@ -25,7 +22,7 @@
         </ul>
       </nav>
     </div>
-    <div class="user d-flex justify-content-end align-items-center ml-lg-auto flex-wrap">
+    <div class="user d-flex justify-content-end align-items-center ml-xl-auto flex-wrap">
       <span *ngIf="greeting" class="user-title" [ngClass]="{'hide': user}">{{greeting}}</span>
       <div class="d-flex align-items-center flex-wrap">
         <a href="#" class="user-icons">
