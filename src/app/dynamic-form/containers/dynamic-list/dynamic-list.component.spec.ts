@@ -207,10 +207,14 @@ describe('DynamicListComponent', () => {
       return true;
     }
   };
+  let response;
 
   const mockGenericFormService = {
     submitForm() {
       return Observable.of({});
+    },
+    getAll() {
+      return Observable.of(response);
     }
   };
 
@@ -1081,6 +1085,26 @@ describe('DynamicListComponent', () => {
       expect(comp.modalInfo).toEqual({});
       expect(comp.openFrame).toHaveBeenCalledWith(event.el.fields);
     });
+
+    it('should call showPreview method', () => {
+      let event = {
+        value: 'previewInvoice'
+      };
+      spyOn(comp, 'showPreview');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.showPreview).toHaveBeenCalledWith(event);
+    });
+
+    it('should call printPDF method', () => {
+      let event = {
+        value: 'printInvoice'
+      };
+      spyOn(comp, 'printPDF');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.printPDF).toHaveBeenCalledWith(event);
+    });
   });
 
   describe('openForm method', () => {
@@ -1631,6 +1655,36 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'popedTable');
       comp.buttonAction(event);
       expect(comp.popedTable).toHaveBeenCalled();
+    });
+  });
+
+  describe('showPreview method', () => {
+    it('should open modal preview', () => {
+      let e = {
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
+      response = 'prf url';
+      spyOn(comp, 'open');
+      comp.showPreviewInvoice = {};
+      comp.showPreview(e);
+      expect(comp.open).toHaveBeenCalledWith(comp.showPreviewInvoice, {size: 'lg'});
+    });
+  });
+
+  describe('printPDF method', () => {
+    it('should open modal for print pdf file', () => {
+      let e = {
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
+      response = 'prf url';
+      spyOn(comp, 'open');
+      comp.sendMessageModal = {};
+      comp.printPDF(e);
+      expect(comp.open).toHaveBeenCalledWith(comp.sendMessageModal, {size: 'lg'});
     });
   });
 
