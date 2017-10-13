@@ -3,7 +3,7 @@
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
       <div class="d-flex fustify-content-center align-items-center">
-        <i
+        <i 
           fa
           class="ml-2 icon"
           [name]="'window-minimize'"
@@ -220,6 +220,13 @@
 <template #sendMessageModal let-c="close">
   <div class="modal-body">
     <iframe class="send-sms" [src]="modalInfo.url" frameborder="0"></iframe>
+    <br>
+  </div>
+</template>
+
+<template #showPreviewInvoice>
+  <div class="modal-body">
+    <pdf-viewer [src]="modalInfo.url" [render-text]="true" style="display: block;"></pdf-viewer>
     <br>
   </div>
 </template>

@@ -13,11 +13,11 @@ describe('UserService', () => {
 
   let response;
   let user = {
-      title: 'Mr.',
-      first_name: 'Tom',
-      last_name: 'Smith',
-      __str__: 'Mr. Tom Smith'
-    };
+    title: 'Mr.',
+    first_name: 'Tom',
+    last_name: 'Smith',
+    __str__: 'Mr. Tom Smith'
+  };
   let mockRouter = {
     navigate() {
       return true;
@@ -53,8 +53,7 @@ describe('UserService', () => {
     it('should return user data if first request',
       async(inject([UserService], (userService: UserService) => {
         response = user;
-        let id = '123';
-        userService.getUserData(id).subscribe(
+        userService.getUserData().subscribe(
           (userData: any) => {
             expect(userData).toEqual(response);
             expect(userService.user).toEqual(response);
@@ -65,8 +64,7 @@ describe('UserService', () => {
     it('should return user data if is not fisrt request',
       async(inject([UserService], (userService: UserService) => {
         userService.user = user;
-        let id = '123';
-        userService.getUserData(id).subscribe(
+        userService.getUserData().subscribe(
           (userData: any) => {
             expect(userData).toEqual(user);
           }
@@ -76,22 +74,18 @@ describe('UserService', () => {
 
   describe('logout method', () => {
     it('should delete information about user',
-      async(inject([UserService, LocalStorageService, CookieService, Router],
-        (userService: UserService, storage: LocalStorageService,
-          cookie: CookieService, router: Router) => {
+      async(inject([UserService, CookieService, Router],
+        (userService: UserService, cookie: CookieService, router: Router) => {
             response = {
               status: 'success',
               message: 'You are logged out'
             };
             userService.user = user;
-            storage.store('contact', {});
-            cookie.put('sessionid', '123');
             spyOn(router, 'navigate');
             userService.logout();
             expect(userService.user).toBeNull();
-            expect(storage.retrieve('contact')).toBeNull();
             expect(cookie.get('sessionid')).toBeUndefined();
-            expect(router.navigate).toHaveBeenCalledWith(['/login']);
+            expect(router.navigate).toHaveBeenCalledWith(['/home']);
     })));
   });
 

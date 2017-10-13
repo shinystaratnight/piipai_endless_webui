@@ -72,17 +72,15 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit() {
     if (!this.init && this.d) {
-      let dateType = this.mobileDevice ? 'flipbox' : 'datebox';
+      let dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       this.init = true;
       this.d.forEach((el) => {
         this.$(el.nativeElement).datebox({
           mode: dateType,
+          useClearButton: true,
           closeCallback: () => {
             let date = el.nativeElement.value;
-            if (date && this.data[el.nativeElement.name] !== date) {
-              let fullDate = date;
-              this.onChange(date, el.nativeElement.name);
-            }
+            this.onChange(date, el.nativeElement.name);
           }
         });
         el.nativeElement.readOnly = false;

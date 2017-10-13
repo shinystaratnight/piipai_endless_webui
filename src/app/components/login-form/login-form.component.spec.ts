@@ -5,7 +5,6 @@ import { By } from '@angular/platform-browser';
 import { DebugElement, Injector, NO_ERRORS_SCHEMA, Component } from '@angular/core';
 import { ComponentFixtureAutoDetect, async, fakeAsync } from '@angular/core/testing';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LocalStorageService } from 'ng2-webstorage';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -45,10 +44,10 @@ describe('LoginFormComponent', () => {
       declarations: [LoginFormComponent],
       providers: [
         FormBuilder,
-        LocalStorageService,
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: {
-            params: Observable.of({ token: 123 })
+            params: Observable.of({ token: 123 }),
+            queryParams: Observable.of({type: 'extranet'})
           }
         },
         { provide: LoginService, useValue: mockLoginService }
@@ -78,6 +77,13 @@ describe('LoginFormComponent', () => {
       expect(comp.tokenAuth).toHaveBeenCalled();
     });
 
+    it('should set label property', () => {
+      spyOn(comp, 'tokenAuth');
+      comp.ngOnInit();
+      expect(comp.tokenAuth).toHaveBeenCalled();
+      expect(comp.label).toEqual('Extranet Login');
+    });
+
   });
 
   describe('tokenAuth method', () => {
@@ -86,16 +92,17 @@ describe('LoginFormComponent', () => {
       expect(comp.tokenAuth).toBeDefined();
     });
 
-    it('should save user data', inject([LocalStorageService], (storage: LocalStorageService) => {
-      spyOn(storage, 'store');
+    it('should save user data', async(inject([Router], (router: Router) => {
+      spyOn(router, 'navigate');
       response = {
         status: 'success',
-        data: 'user data',
-        redirect_to: '/'
+        data: {
+          redirect_to: '/'
+        }
       };
       comp.tokenAuth(5);
-      expect(storage.store).toHaveBeenCalled();
-    }));
+      expect(router.navigate).toHaveBeenCalledWith([response.data.redirect_to]);
+    })));
 
     it('should redirect to register form', inject([Router], (router: Router) => {
       spyOn(router, 'navigate');
@@ -108,14 +115,14 @@ describe('LoginFormComponent', () => {
       expect(router.navigate).toHaveBeenCalled();
     }));
 
-    it('should redirect to login form', inject([Router], (router: Router) => {
+    it('should redirect to home page', inject([Router], (router: Router) => {
       spyOn(router, 'navigate');
       response = {
         status: 'error',
         errors: 'error message',
       };
       comp.tokenAuth(5);
-      expect(router.navigate).toHaveBeenCalled();
+      expect(router.navigate).toHaveBeenCalledWith(['home']);
     }));
 
   });
@@ -126,25 +133,15 @@ describe('LoginFormComponent', () => {
       expect(comp.responseHandler).toBeDefined();
     });
 
-    it('should save user data', inject([LocalStorageService], (storage: LocalStorageService) => {
-      spyOn(storage, 'store');
-      response = {
-        status: 'success',
-        data: 'user data'
-      };
-      comp.responseHandler(response);
-      expect(storage.store).toHaveBeenCalled();
-    }));
-
-    it('should redirect to "/"', inject([Router], (router: Router) => {
+    it('should redirect to "/"', async(inject([Router], (router: Router) => {
       spyOn(router, 'navigate');
       response = {
         status: 'success',
         data: 'user data'
       };
       comp.responseHandler(response);
-      expect(router.navigate).toHaveBeenCalled();
-    }));
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
+    })));
 
     it('should update error property', () => {
       response = {
@@ -172,7 +169,7 @@ describe('LoginFormComponent', () => {
       expect(loginService.username).toEqual(data);
     }));
 
-    it('should redirect to "/register"', inject([Router], (router: Router) => {
+    it('should redirect to "/registration"', inject([Router], (router: Router) => {
       spyOn(router, 'navigate');
       let data = {
         field: 'email',

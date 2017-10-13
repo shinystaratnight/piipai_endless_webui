@@ -24,7 +24,7 @@
     </div>
     <div class="user d-flex justify-content-end align-items-center ml-xl-auto flex-wrap">
       <span *ngIf="greeting" class="user-title" [ngClass]="{'hide': user}">{{greeting}}</span>
-      <div class="d-flex align-items-center flex-wrap">
+      <div *ngIf="user" class="d-flex align-items-center flex-wrap">
         <a href="#" class="user-icons">
           <img class="user-icon" src="/assets/img/eye.svg" alt="View site">
         </a>

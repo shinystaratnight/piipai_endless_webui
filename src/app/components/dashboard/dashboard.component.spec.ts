@@ -59,14 +59,6 @@ describe('DashboardComponent', () => {
     expect(comp).toBeDefined();
   });
 
-  describe('ngOnInit method', () => {
-    it('should initial properties', () => {
-      comp.ngOnInit();
-      expect(comp.widgetList).toEqual([]);
-      expect(comp.widgets).toEqual([]);
-    });
-  });
-
   describe('ngOnChanges method', () => {
     it('should call generateWidgetList method', () => {
       comp.pages = [];

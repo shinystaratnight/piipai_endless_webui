@@ -1,30 +1,25 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 
-import { LocalStorageService } from 'ng2-webstorage';
-import { CookieService } from 'angular2-cookie/core';
+import { UserService } from './user.service';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class NotAuthorizedGuard implements CanActivate {
 
   constructor(
-    private storage: LocalStorageService,
-    private cookie: CookieService,
-    private router: Router
+    private router: Router,
+    private UserService: UserService
   ) {}
 
-  public canActivate(): boolean {
-    return this.isLoggedOut();
-  }
-
-  public isLoggedOut() {
-    let storageData = this.storage.retrieve('contact');
-    let sessionID = this.cookie.get('sessionid');
-    if (!storageData || !sessionID) {
-      return true;
-    } else {
-      this.router.navigate(['/']);
-      return false;
-    }
+  public canActivate(): Observable<boolean> {
+    return this.UserService.getUserData()
+      .map((user: any) => {
+        this.router.navigate(['/']);
+        return false;
+      })
+      .catch((err: any) => {
+        return Observable.of(true);
+      });
   }
 }

@@ -6,7 +6,6 @@ import {
   async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
 
-import { LocalStorageService } from 'ng2-webstorage';
 import { NavigationService, Page } from './../../services/navigation.service';
 import { UserService } from '../../services/user.service';
 
@@ -37,7 +36,6 @@ describe('NavigationComponent', () => {
     TestBed.configureTestingModule({
       declarations: [NavigationComponent],
       providers: [
-        LocalStorageService,
         { provide: UserService, useValue: mockUserService },
         { provide: NavigationService, useValue: mockNavigationService }
       ],
@@ -75,31 +73,20 @@ describe('NavigationComponent', () => {
   });
 
   describe('getUserInformation method', () => {
-    it('should update greeting property',
-      async(inject([LocalStorageService], (storage: LocalStorageService) => {
+    it('should update greeting property', () => {
         comp.getUserInformation();
         expect(comp.greeting).toEqual('Welcome, Anonymous User');
-    })));
+    });
 
-    it('should udate user information',
-      async(inject([LocalStorageService, UserService],
-        (storage: LocalStorageService, service: UserService) => {
-          let userInfo = {
-            id: 123
-          };
-          response = {
-            __str__: 'Mr. Tom Smith',
-            picture: {
-              thumb: 'avatar.jpeg'
+    it('should udate user information', () => {
+          comp.user = {
+            contact: {
+              __str__: 'Mr. Tom Smith'
             }
           };
-          storage.store('contact', userInfo);
           comp.getUserInformation();
-          expect(comp.greeting).toEqual(`Welcome, ${response.__str__}`);
-          expect(comp.userPicture).toEqual(response.picture.thumb);
-          expect(comp.user).toEqual(response);
-          storage.clear('contact');
-    })));
+          expect(comp.greeting).toEqual(`Welcome, ${comp.user.contact.__str__}`);
+    });
   });
 
   describe('hideUserBlock', () => {

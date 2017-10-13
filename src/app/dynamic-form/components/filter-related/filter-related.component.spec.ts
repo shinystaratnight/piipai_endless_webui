@@ -416,8 +416,8 @@ describe('FilterRelatedComponent', () => {
         spyOn(fs, 'getQueries').and.returnValue(false);
         comp.updateFilter();
         expect(comp.query).toEqual('');
-        expect(comp.count).toEqual(2);
-        expect(comp.elements.length).toEqual(3);
+        expect(comp.count).toEqual(1);
+        expect(comp.elements.length).toEqual(2);
     })));
 
     it('should update filter by query', async(inject([FilterService], (fs: FilterService) => {

@@ -100,6 +100,9 @@ export class DynamicListComponent implements
   @ViewChild('tableWrapper')
   public tableWrapper;
 
+  @ViewChild('showPreviewInvoice')
+  public showPreviewInvoice;
+
   public body: any[] = [];
   public select: any;
   public sortedColumns: any;
@@ -265,7 +268,7 @@ export class DynamicListComponent implements
           }
           let tableWrapperElement = this.tableWrapper.nativeElement;
           let parentHeigth = tableWrapperElement.parentElement.parentElement.offsetHeight;
-          tableWrapperElement.style.maxHeight = 
+          tableWrapperElement.style.maxHeight =
             parentHeigth - tableWrapperElement.offsetTop + `px`;
         }
       }
@@ -677,6 +680,12 @@ export class DynamicListComponent implements
         case 'sendSMS':
           this.openFrame(e.el.fields);
           break;
+        case 'previewInvoice':
+          this.showPreview(e);
+          break;
+        case 'printInvoice':
+          this.printPDF(e);
+          break;
         default:
           return;
       }
@@ -992,6 +1001,30 @@ export class DynamicListComponent implements
           return;
       }
     }
+  }
+
+  public showPreview(e) {
+    this.genericFormService.getAll(e.el.endpoint).subscribe(
+      (res: any) => {
+        this.modalInfo = {
+          url: {
+            url: res.pdf
+          }
+        };
+        this.open(this.showPreviewInvoice, {size: 'lg'});
+      }
+    );
+  }
+
+  public printPDF(e) {
+    this.genericFormService.getAll(e.el.endpoint).subscribe(
+      (res: any) => {
+        this.modalInfo = {
+          url: this.sanitizer.bypassSecurityTrustResourceUrl(res.pdf)
+        };
+        this.open(this.sendMessageModal, {size: 'lg'});
+      }
+    );
   }
 
 }
