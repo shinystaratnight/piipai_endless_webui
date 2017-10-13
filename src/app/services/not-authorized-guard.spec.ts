@@ -1,8 +1,8 @@
 import { async, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { LocalStorageService } from 'ng2-webstorage';
-import { CookieService } from 'angular2-cookie/core';
+import { UserService } from './user.service';
+import { Observable } from 'rxjs/Observable';
 
 import { NotAuthorizedGuard } from './not-authorized-guard';
 
@@ -15,13 +15,22 @@ describe('NotAuthorizedGuard', () => {
     }
   };
 
+  let mockUserService = {
+    getUserData() {
+      if (response.status === 'success') {
+        return Observable.of(response);
+      } else {
+        return Observable.throw(response);
+      }
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         NotAuthorizedGuard,
-        LocalStorageService,
-        CookieService,
-        { provide: Router, useValue: mockRouter }
+        { provide: Router, useValue: mockRouter },
+        { provide: UserService, useValue: mockUserService }
       ],
       imports: []
     });
@@ -32,35 +41,27 @@ describe('NotAuthorizedGuard', () => {
   })));
 
   describe('canActivate method', () => {
-    it('should call isLoggedIn method', async(inject([NotAuthorizedGuard],
-      (notAuthorizedGuard: NotAuthorizedGuard) => {
-        spyOn(notAuthorizedGuard, 'isLoggedOut');
-        notAuthorizedGuard.canActivate();
-        expect(notAuthorizedGuard.isLoggedOut).toHaveBeenCalled();
-    })));
-  });
-
-  describe('isLoggedIn method', () => {
-    it('should return true',
-      async(inject([NotAuthorizedGuard, LocalStorageService, CookieService, Router],
-        (notAuthorizedGuard: NotAuthorizedGuard,
-          storage: LocalStorageService, cookie: CookieService) => {
-            storage.clear('contact');
-            cookie.remove('sessionid');
-            let result = notAuthorizedGuard.isLoggedOut();
-            expect(result).toBeTruthy();
-      })));
-
-    it('should return false',
-      async(inject([NotAuthorizedGuard, LocalStorageService, CookieService, Router],
-        (notAuthorizedGuard: NotAuthorizedGuard, storage: LocalStorageService,
-          cookie: CookieService, router: Router) => {
-            storage.store('contact', {});
-            cookie.put('sessionid', '123456');
-            spyOn(router, 'navigate');
-            let result = notAuthorizedGuard.isLoggedOut();
+    it('should return observable of true',
+      async(inject([NotAuthorizedGuard, Router],
+        (notAuthorizedGuard: NotAuthorizedGuard, router: Router) => {
+          response = {
+            status: 'success'
+          };
+          spyOn(router, 'navigate');
+          notAuthorizedGuard.canActivate().subscribe((res: boolean) => {
+            expect(res).toBeFalsy();
             expect(router.navigate).toHaveBeenCalledWith(['/']);
-            expect(result).toBeFalsy();
+          });
+    })));
+
+    it('should return observable of false',
+      async(inject([NotAuthorizedGuard, Router], (notAuthorizedGuard: NotAuthorizedGuard) => {
+        response = {
+          status: 'error'
+        };
+        notAuthorizedGuard.canActivate().subscribe((res: boolean) => {
+          expect(res).toBeTruthy();
+        });
     })));
   });
 

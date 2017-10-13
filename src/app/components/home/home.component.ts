@@ -26,7 +26,7 @@ export class HomeComponent implements OnDestroy {
   public mobileLogin() {
     this.modalInfo = {
       label: 'Please, enter a mobile phone',
-      endpoint: '/ecore/api/v2/login/',
+      endpoint: '/ecore/api/v2/auth/login/',
       data: {
         password: {
           action: 'add',

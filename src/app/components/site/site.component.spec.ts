@@ -7,6 +7,7 @@ import { LocalStorageService } from 'ng2-webstorage';
 import { SiteService, PageData } from '../../services/site.service';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { NavigationService } from '../../services/navigation.service';
+import { UserService } from '../../services/user.service';
 
 import { SiteComponent } from './site.component';
 
@@ -60,6 +61,12 @@ describe('SiteComponent', () => {
       }
     };
 
+    const mockUserService = {
+      getUserData() {
+        return Observable.of({ data: {} });
+      }
+    };
+
     TestBed.configureTestingModule({
       declarations: [SiteComponent],
       providers: [
@@ -68,7 +75,8 @@ describe('SiteComponent', () => {
         { provide: Router, useValue: mockRouter },
         { provide: SiteService, useValue: mockSiteService },
         { provide: GenericFormService, useValue: mockGenericFormService },
-        { provide: NavigationService, useValue: mockNavigationService }
+        { provide: NavigationService, useValue: mockNavigationService },
+        { provide: UserService, useValue: mockUserService }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
@@ -84,18 +92,13 @@ describe('SiteComponent', () => {
   });
 
   describe('ngOnInit method', () => {
-    it('should call getPageNavigation method',
-      async(inject([LocalStorageService, SiteService],
-        (storage: LocalStorageService, siteService: SiteService) => {
-          let user = {id: 2};
-          storage.store('contact', user);
-          spyOn(comp, 'getPageNavigation');
-          comp.ngOnInit();
-          expect(comp.user).toEqual(user);
-          expect(comp.dashboard).toBeFalsy();
-          expect(comp.getPageNavigation).toHaveBeenCalledWith(mockUrl);
-          storage.clear('contact');
-        })));
+    it('should call getPageNavigation method and set user property', () => {
+      spyOn(comp, 'getPageNavigation');
+      comp.ngOnInit();
+      expect(comp.user).toEqual({});
+      expect(comp.dashboard).toBeFalsy();
+      expect(comp.getPageNavigation).toHaveBeenCalledWith(mockUrl);
+    });
   });
 
   describe('changeFormLabel method', () => {

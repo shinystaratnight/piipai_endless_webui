@@ -5,6 +5,7 @@ import { LocalStorageService } from 'ng2-webstorage';
 import { SiteService, PageData } from '../../services/site.service';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { NavigationService } from '../../services/navigation.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'site',
@@ -29,11 +30,16 @@ export class SiteComponent implements OnInit {
     private siteService: SiteService,
     private storage: LocalStorageService,
     private genericFormService: GenericFormService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private userService: UserService
   ) {}
 
   public ngOnInit() {
-    this.user = this.storage.retrieve('contact');
+    this.userService.getUserData().subscribe(
+      (user: any) => {
+        this.user = user.data;
+      }
+    );
     this.route.url.subscribe(
       (url: any) => {
         this.formLabel = '';

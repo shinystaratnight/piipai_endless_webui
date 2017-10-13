@@ -7,7 +7,6 @@ import {
   AfterViewInit
 } from '@angular/core';
 
-import { LocalStorageService } from 'ng2-webstorage';
 import { NavigationService } from '../../services/navigation.service';
 import { UserService } from '../../services/user.service';
 
@@ -36,16 +35,17 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   @Input()
   public pages: any[] = [];
 
+  @Input()
+  public user: any;
+
   public headerHeight: number;
   public error: any;
   public isCollapsed: boolean = false;
   public hideUserMenu: boolean = true;
   public greeting: string;
   public userPicture: string;
-  public user: any;
 
   constructor(
-    private storage: LocalStorageService,
     private navigationService: NavigationService,
     private userService: UserService
   ) { }
@@ -59,16 +59,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   public getUserInformation() {
-    let contact = this.storage.retrieve('contact');
-    if (contact) {
-      this.userService.getUserData(contact.id).subscribe(
-        (res: any) => {
-          this.user = res;
-          this.greeting = `Welcome, ${this.user.__str__}`;
-          this.userPicture =
-            (res.picture && res.picture.thumb) ? res.picture.thumb : '/assets/img/avatar.png';
-        }
-      );
+    if (this.user && this.user.contact) {
+      this.greeting = `Welcome, ${this.user.contact.__str__}`;
     } else {
       this.greeting = `Welcome, Anonymous User`;
     }

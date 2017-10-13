@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LocalStorageService } from 'ng2-webstorage';
 
 import { LoginService } from './../../services/login.service';
 
@@ -13,12 +12,11 @@ export class LoginFormComponent implements OnInit {
   public error: any = {};
   public response: any;
   public token: boolean = false;
-  public endpoint = `/ecore/api/v2/login/`;
+  public endpoint = `/ecore/api/v2/auth/login/`;
   public label: any;
 
   constructor(
     private loginService: LoginService,
-    private storage: LocalStorageService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -35,24 +33,20 @@ export class LoginFormComponent implements OnInit {
       if (type === 'crm' || type === 'extranet') {
         this.label = type === 'crm' ? 'CRM' :
           type === 'extranet' ? 'Extranet Login' : '';
-      } else {
-        this.router.navigate(['/']);
       }
     });
   }
 
   public tokenAuth(token) {
-    this.loginService.loginWithToken(this.endpoint, token).subscribe(
+    this.loginService.loginWithToken(token).subscribe(
       (res: any) => {
-          this.storage.store('contact', res.data.contact);
           this.router.navigate([res.data.redirect_to]);
       },
-      (err) => this.router.navigate(['login']));
+      (err) => this.router.navigate(['home']));
   }
 
   public responseHandler(response) {
     if (response.data) {
-      this.storage.store('contact', response.data.contact);
       this.router.navigate(['/']);
     } else if (response.status === 'success') {
       this.error = {};
