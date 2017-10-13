@@ -48,7 +48,8 @@ describe('LoginFormComponent', () => {
         LocalStorageService,
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: {
-            params: Observable.of({ token: 123 })
+            params: Observable.of({ token: 123 }),
+            queryParams: Observable.of({type: 'extranet'})
           }
         },
         { provide: LoginService, useValue: mockLoginService }
@@ -76,6 +77,13 @@ describe('LoginFormComponent', () => {
       spyOn(comp, 'tokenAuth');
       comp.ngOnInit();
       expect(comp.tokenAuth).toHaveBeenCalled();
+    });
+
+    it('should set label property', () => {
+      spyOn(comp, 'tokenAuth');
+      comp.ngOnInit();
+      expect(comp.tokenAuth).toHaveBeenCalled();
+      expect(comp.label).toEqual('Extranet Login');
     });
 
   });

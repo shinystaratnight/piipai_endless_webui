@@ -49,7 +49,7 @@ describe('AuthGuard', () => {
             spyOn(router, 'navigate');
             let result = authGuard.isLoggedIn();
             expect(result).toBeFalsy();
-            expect(router.navigate).toHaveBeenCalledWith(['/login']);
+            expect(router.navigate).toHaveBeenCalledWith(['/home']);
       })));
 
     it('should return true',

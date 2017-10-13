@@ -1,0 +1,38 @@
+<navigation></navigation>
+
+<div class="container">
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a [routerLink]="['/login']" [queryParams]="{type: 'extranet'}">Client/Candidate Access</a>
+        </li>
+        <li class="list-group-item">
+            <a href="#" (click)="mobileLogin()">Mobile Login</a>
+        </li>
+        <li class="list-group-item">
+            <a [routerLink]="['/login']" [queryParams]="{type: 'crm'}">CRM Access</a>
+        </li>
+        <li class="list-group-item">
+            <a [routerLink]="['/registration']">Register as candidate</a>
+        </li>
+    </ul>
+</div>
+
+<template #mobileLoginTemplate let-c="close">
+  <div class="modal-header">
+    <div class="d-flex align-items-center">
+      <h5 class="mb-0">{{modalInfo.label}}</h5>
+    </div>
+    <button type="button" class="close" aria-label="Close" (click)="c(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <generic-form
+      [endpoint]="modalInfo.endpoint"
+      [data]="modalInfo.data"
+      (event)="formEvent($event, c)">
+        <button type="submit" class="btn btn-primary text-white">Sign In</button>
+        <button type="button" class="btn bg-inverse text-white" (click)="c()">Close</button>
+    </generic-form>
+  </div>
+</template>
