@@ -4,7 +4,7 @@ body {
 }
 
 body.r3sourcer {
-  height: 92vh;
+  height: 91vh;
 }
 
 .icon {
@@ -50,4 +50,12 @@ iframe.send-sms {
   top: .5rem;
   color: $brand-primary;
   z-index: 1000;
+}
+
+.pull-right {
+  float: right;
+}
+
+.pull-left {
+  float: left;
 }

@@ -22,9 +22,10 @@ export class LoginService {
     return this._username;
   }
 
-  public loginWithToken(url, token) {
+  public loginWithToken(token) {
     this.username = null;
-    return this.http.get(`${url}${token}`)
+    let url = `/ecore/api/v2/auth/${token}/login_by_token/`;
+    return this.http.get(url)
       .map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json() || 'Server error'));
   }

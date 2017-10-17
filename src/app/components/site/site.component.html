@@ -1,4 +1,4 @@
-<navigation [pages]="pagesList"></navigation>
+<navigation [user]="user" [pages]="pagesList"></navigation>
 
 <div class="h-100" *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
   <div *ngSwitchCase="'form'">

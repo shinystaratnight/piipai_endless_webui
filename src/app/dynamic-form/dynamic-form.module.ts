@@ -8,6 +8,7 @@ import { AgmCoreModule } from 'angular2-google-maps/core';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { WebCamComponent } from 'ng2-webcam';
 import { ButtonRadioDirective } from 'ngx-bootstrap';
+import { PdfViewerComponent } from 'ng2-pdf-viewer';
 
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
@@ -112,7 +113,8 @@ import { MoveDirective } from './directives/move.directive';
     FormFieldsGroupComponent,
     FormOptionsComponent,
     ListSerachBarComponent,
-    ButtonRadioDirective
+    ButtonRadioDirective,
+    PdfViewerComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
