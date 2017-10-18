@@ -14,6 +14,7 @@ export class LoginFormComponent implements OnInit {
   public token: boolean = false;
   public endpoint = `/ecore/api/v2/auth/login/`;
   public label: any;
+  public type: string;
 
   constructor(
     private loginService: LoginService,
@@ -30,6 +31,7 @@ export class LoginFormComponent implements OnInit {
     });
     this.route.queryParams.subscribe((params) => {
       let type = params['type'];
+      this.type = type;
       if (type === 'crm' || type === 'extranet') {
         this.label = type === 'crm' ? 'CRM' :
           type === 'extranet' ? 'Extranet Login' : '';

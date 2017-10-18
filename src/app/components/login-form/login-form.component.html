@@ -1,20 +1,19 @@
+<navigation></navigation>
 <div class="container" *ngIf="!token">
   <div class="row justify-content-center align-items-center">
     <div class="col-12 col-sm-9 col-md-7 col-lg-4 mt-5">
-      <div class="card">
-
-        <h5 class="card-header p-3 bg-primary text-white">{{label}}</h5>
-        <div class="card-content p-3">
-          <generic-form
-            [endpoint]="endpoint"
-            [errors]="error"
-            (redirect)="redirectHandler($event)"
-            (responseForm)="responseHandler($event)">
-            <div class="form-group text-center">
-              <button type="submit" class="btn btn-primary pl-4 pr-4">Log In</button>
-            </div>
-          </generic-form>
-        </div>
+      <h5 class="login-title">{{label}}</h5>
+      <div class="login-content">
+        <generic-form
+          [endpoint]="endpoint"
+          [errors]="error"
+          (redirect)="redirectHandler($event)"
+          (responseForm)="responseHandler($event)">
+          <div class="form-group text-right">
+            <button type="submit" class="login-button">LOGIN</button>
+            <a *ngIf="type === 'extranet'" class="login-link" href="#">Forgot Password?</a>
+          </div>
+        </generic-form>
       </div>
     </div>
   </div>
