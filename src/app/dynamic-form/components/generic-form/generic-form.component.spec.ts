@@ -599,7 +599,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getRalatedData');
         comp.eventHandler(e);
         expect(comp.getRalatedData).toHaveBeenCalledWith(comp.metadata, e.el.key,
-          e.el.endpoint, null, e.query, null, true);
+          e.el.endpoint, null, e.query, undefined, false);
       }));
 
     });
