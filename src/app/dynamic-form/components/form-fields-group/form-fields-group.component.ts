@@ -22,6 +22,7 @@ export class FormFieldsGroupComponent implements OnInit {
   public modal: any;
 
   public formFieldGroupsEndpoint: string = '/ecore/api/v2/endless-core/formfieldgroups/';
+  public formModelFieldEndpoint: string = '/ecore/api/v2/endless-core/modelformfields/';
   public groups: FormFieldsGroup[];
   public fields: any;
   public choosenType: string;
@@ -30,6 +31,8 @@ export class FormFieldsGroupComponent implements OnInit {
   public config: any;
   public modalData: any;
   public modalRef: any;
+
+  public groupId: string;
 
   constructor(
     private modalService: NgbModal,
@@ -40,7 +43,9 @@ export class FormFieldsGroupComponent implements OnInit {
     if (this.config.value) {
       this.groups = this.config.value;
     } else {
-      this.groups = [];
+      this.groups = this.config.fields;
+      this.addCollapseProperty(this.groups);
+      this.createGroup();
     }
     this.fields = {
       modelfield: {
@@ -117,6 +122,29 @@ export class FormFieldsGroupComponent implements OnInit {
     this.modalRef = this.modalService.open(this.modal);
   }
 
+  public createGroup(): void {
+    let body = {
+      field_list: [],
+      form: this.config.id,
+      name: this.config.id,
+      position: 0
+    };
+    this.genericFormService.submitForm(this.formFieldGroupsEndpoint, body).subscribe(
+      (res: any) => {
+        this.groupId = res.id;
+      }
+    );
+  }
+
+  public addCollapseProperty(list): void {
+    list.forEach((el) => {
+      if (el.model_fields) {
+        el.isCollapsed = true;
+        this.addCollapseProperty(el.model_fields);
+      }
+    });
+  }
+
   public addField(group, id) {
     this.modalData = {};
     this.choosenType = null;
@@ -133,6 +161,39 @@ export class FormFieldsGroupComponent implements OnInit {
       },
     };
     this.modalRef = this.modalService.open(this.modal);
+  }
+
+  public toggleActiveState(field): void {
+    if (field.id) {
+      this.genericFormService.delete(this.formModelFieldEndpoint, field.id).subscribe(
+        (res: any) => {
+          delete field.id;
+        }
+      );
+    } else {
+      let body = Object.assign({group: this.groupId}, field);
+      this.genericFormService.submitForm(this.formModelFieldEndpoint, body).subscribe(
+        (res: any) => {
+          field.id = res.id;
+        }
+      );
+    }
+  }
+
+  public toggleRequireProperty(field): void {
+    if (field.id) {
+      let body = Object.assign({group: this.groupId}, field);
+      body.required = !field.required;
+      this.genericFormService
+        .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
+        .subscribe(
+          (res: any) => {
+            field.required = res.required;
+          }
+        );
+    } else {
+      field.required = !field.required;
+    }
   }
 
   public edit(object, container, type) {

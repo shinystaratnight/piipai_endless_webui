@@ -25,6 +25,7 @@ export class FormBuilderComponent {
   public label: string;
   public previewLink: string;
   public data: any;
+  public errors: {};
 
   constructor(
     private router: Router,
@@ -81,5 +82,9 @@ export class FormBuilderComponent {
         }
       );
     }
+  }
+
+  public resetError(response) {
+    this.errors = {};
   }
 }
