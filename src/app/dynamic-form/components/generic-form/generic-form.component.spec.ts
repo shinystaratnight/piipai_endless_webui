@@ -77,6 +77,22 @@ describe('GenericFormComponent', () => {
         expect(comp.ngOnChanges).toBeDefined();
       }));
 
+      it('should add new element after save part of form', () => {
+        comp.id = '123';
+        comp.splitElements = [
+          { key: 'group' },
+        ];
+        comp.metadata = [];
+        comp.data = {};
+        spyOn(comp, 'getData');
+        spyOn(comp, 'parseMetadata');
+        spyOn(comp, 'getMetadata');
+        comp.ngOnChanges();
+        expect(comp.getData).toHaveBeenCalledWith(comp.splitElements);
+        expect(comp.metadata).toEqual(comp.splitElements);
+        expect(comp.parseMetadata).toHaveBeenCalledWith(comp.metadata, comp.data);
+      });
+
       it('should called getMetadata method', async(() => {
         let endpoint = '/ecore/api/v2/contacts';
         let currentEndpoint = '/ecore/api/v2/countries';
@@ -448,7 +464,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'updateErrors');
         spyOn(comp.errorForm, 'emit');
         comp.parseError(data);
-        expect(comp.resetData).toHaveBeenCalled();
+        expect(comp.resetData).toHaveBeenCalledTimes(2);
         expect(comp.updateErrors).toHaveBeenCalled();
         expect(comp.errorForm.emit).toHaveBeenCalled();
       }));
@@ -468,12 +484,14 @@ describe('GenericFormComponent', () => {
           [field]: message
         };
         comp.editForm = false;
+        comp.response = {};
+        comp.errors = {};
         spyOn(comp, 'resetData');
         spyOn(comp.responseForm, 'emit');
         comp.parseResponse(data);
         expect(comp.response).toEqual(data);
-        expect(comp.resetData).toHaveBeenCalled();
-        expect(comp.responseForm.emit).toHaveBeenCalled();
+        expect(comp.resetData).toHaveBeenCalledTimes(2);
+        expect(comp.responseForm.emit).toHaveBeenCalledWith(data);
       }));
 
     });
@@ -1219,6 +1237,48 @@ describe('GenericFormComponent', () => {
         comp.updateElements(config, prop, undefined, true);
         expect(config[0][prop]).toBeTruthy();
         expect(config[0].children[0][prop]).toBeTruthy();
+      });
+    });
+
+    describe('checkFormBuilder method', () => {
+      it('should remove groups element of from builder', () => {
+        let endpoint = '/ecore/api/v2/endless-core/forms/';
+        let config = [
+          { key: 'groups' }
+        ];
+        comp.editForm = false;
+        comp.checkFormBuilder(config, endpoint);
+        expect(comp.splitElements.length).toEqual(1);
+        expect(comp.splitElements[0]).toEqual({
+          key: 'groups',
+          read_only: false,
+          createOnly: true,
+          type: 'fieldsGroup'
+        });
+      });
+
+      it('should update groups element of form builder', () => {
+        let endpoint = '/ecore/api/v2/endless-core/forms/';
+        let config = <any> [
+          { key: 'groups' }
+        ];
+        comp.editForm = true;
+        comp.checkFormBuilder(config, endpoint);
+        expect(config[0]).toEqual({
+          key: 'groups',
+          read_only: false,
+          createOnly: true,
+          type: 'fieldsGroup'
+        });
+      });
+
+      it('should change choice element on formOptions type', () => {
+        let endpoint = '/ecore/api/v2/endless-core/radiobuttonsformfields/';
+        let config = <any> [
+          { key: 'choices' }
+        ];
+        comp.checkFormBuilder(config, endpoint);
+        expect(config[0].type).toEqual('formOptions');
       });
     });
 });

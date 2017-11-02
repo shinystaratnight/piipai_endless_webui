@@ -5,10 +5,8 @@
     [id]="id"
     [modal]="true"
     [showResponse]="false"
-    [errors]="errors"
     (str)="eventForm($event)"
-    (event)="eventHandler($event)"
-    (responseForm)="resetError($event)">
+    (event)="eventHandler($event)">
     <button *ngIf="!id" type="submit" class="btn btn-primary">Save</button>
     <span *ngIf="label">
       Preview: <a [href]="previewLink" target="blank">{{label}}</a>

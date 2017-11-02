@@ -15,11 +15,15 @@ describe('FormBuilderComponent', () => {
 
   let comp: FormBuilderComponent;
   let fixture: ComponentFixture<FormBuilderComponent>;
-  let response: any;
+  let response: any = {};
 
   let mockGenericFormService = {
     delete() {
-      return Observable.of(response);
+      if (response.status === 'success') {
+        return Observable.of(response);
+      } else {
+        return Observable.throw(response);
+      }
     }
   };
   let mockRouter = {
@@ -55,13 +59,87 @@ describe('FormBuilderComponent', () => {
         status: 'success',
         data: {
           id: 'some id',
-          __str__: 'some str'
+          __str__: 'some str',
+          groups: [],
+          model_fields: []
         }
       };
+      spyOn(comp.str, 'emit');
       comp.eventHandler(event);
       expect(comp.id).toEqual('some id');
       expect(comp.label).toEqual('some str');
       expect(comp.previewLink).toEqual(`/ecore/form-builds/${event.data.id}/`);
+      expect(comp.data).toEqual({
+        groups: {
+          action: 'add',
+          data: {
+            fields: event.data.model_fields
+          }
+        }
+      });
+      expect(comp.str.emit).toHaveBeenCalledWith({
+        str: event.data.__str__
+      });
+    });
+  });
+
+  describe('eventForm method', () => {
+    it('should set data of form', () => {
+      let event = {
+        data: {
+          id: 'some id',
+          __str__: 'some str',
+          groups: [],
+          model_fields: []
+        }
+      };
+      spyOn(comp.str, 'emit');
+      comp.eventForm(event);
+      expect(comp.label).toEqual('some str');
+      expect(comp.previewLink).toEqual(`/ecore/form-builds/${event.data.id}/`);
+      expect(comp.data).toEqual({
+        groups: {
+          action: 'add',
+          data: {
+            fields: event.data.model_fields,
+            id: event.data.id
+          }
+        }
+      });
+      expect(comp.str.emit).toHaveBeenCalledWith({
+        str: event.data.__str__
+      });
+    });
+
+    it('should set str property', () => {
+      let event = {
+        str: 'Title'
+      };
+      spyOn(comp.str, 'emit');
+      comp.eventForm(event);
+      expect(comp.str.emit).toHaveBeenCalledWith({
+        str: event.str
+      });
+    });
+  });
+
+  describe('delete method', () => {
+    it('should delete form', async(inject([Router], (router: Router) => {
+      comp.path = '/';
+      comp.endpoint = 'some endpoint';
+      comp.id = '123';
+      response.status = 'success';
+      spyOn(router, 'navigate');
+      comp.delete();
+      expect(router.navigate).toHaveBeenCalledWith([comp.path]);
+    })));
+
+    it('should update error property', () => {
+      comp.endpoint = 'some endpoint';
+      comp.id = '123';
+      response.status = 'error';
+      comp.delete();
+      expect(comp.error).toEqual(response);
     });
   });
 
