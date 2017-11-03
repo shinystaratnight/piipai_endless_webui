@@ -43,6 +43,12 @@ export const ROUTES: Routes = [
   {
     path: '**',
     component: SiteComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'settings',
+        loadChildren: './settings/settings.module#SettingsModule'
+      }
+    ]
   }
 ];
