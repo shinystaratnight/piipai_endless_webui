@@ -32,6 +32,9 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { DefaultRequestOptions } from './services/default-request-options.service';
 
+// import { NavigationComponent } from './components/navigation/navigation.component';
+import { SharedModule } from './shared/shared.module';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import moment from 'moment-timezone';
@@ -62,12 +65,12 @@ const APP_PROVIDERS = [
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     NgbModule.forRoot(),
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     DynamicFormModule,
-    Angular2FontawesomeModule
+    Angular2FontawesomeModule,
+    SharedModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

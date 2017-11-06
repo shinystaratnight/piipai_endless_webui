@@ -7,6 +7,9 @@ import { SiteComponent } from './components/site/site.component';
 import { AuthGuard } from './services/auth-guard';
 import { NotAuthorizedGuard } from './services/not-authorized-guard';
 
+import { UserService } from './services/user.service';
+import { NavigationService } from './services/navigation.service';
+
 import { DataResolver } from './app.resolver';
 
 export const ROUTES: Routes = [
@@ -41,14 +44,17 @@ export const ROUTES: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'settings',
+    loadChildren: './settings/settings.module#SettingsModule',
+    resolve: {
+      user: UserService,
+      pagesList: NavigationService
+    },
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     component: SiteComponent,
     canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'settings',
-        loadChildren: './settings/settings.module#SettingsModule'
-      }
-    ]
   }
 ];

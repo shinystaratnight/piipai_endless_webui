@@ -46,4 +46,8 @@ export class UserService {
       (err: any) => this.error = err
     );
   }
+
+  public resolve() {
+    return this.getUserData();
+  }
 }

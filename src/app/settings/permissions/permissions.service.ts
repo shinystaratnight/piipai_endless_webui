@@ -28,8 +28,11 @@ export class PermissionsService {
     private cookie: CookieService
   ) { }
 
-  public getAllPermissions() {
+  public getAllPermissions(query = undefined) {
     let endpoint = `${this.endpoints.base}${this.endpoints.all}`;
+    if (query) {
+      endpoint += `${query}/`;
+    }
     let headers = this.updateHeaders();
     return this.http.get(endpoint, { headers })
                     .map((res: Response) => res.json())
@@ -38,6 +41,14 @@ export class PermissionsService {
 
   public getAllUsers() {
     let endpoint = `${this.endpoints.users}`;
+    this.updateHeaders();
+    return this.http.get(endpoint)
+                    .map((res: Response) => res.json())
+                    .catch((err: Response) => this.errorHandler(err));
+  }
+
+  public getPermissionsOfUser(id) {
+    let endpoint = `${this.endpoints.user}${id}/`;
     this.updateHeaders();
     return this.http.get(endpoint)
                     .map((res: Response) => res.json())

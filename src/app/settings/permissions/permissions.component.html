@@ -1,0 +1,40 @@
+<div class="container-fluid">
+  <ngb-tabset (tabChange)="beforeChange($event)">
+    <ngb-tab id="group" title="Groups">
+      <template ngbTabContent>
+        <div class="permission-wrapper">
+          <template [ngTemplateOutlet]="list" [ngOutletContext]="settings.group.list"></template>
+          <template [ngTemplateOutlet]="list" [ngOutletContext]="settings.group.permissions"></template>
+          <template [ngTemplateOutlet]="list" [ngOutletContext]="settings.group.users"></template>
+        </div>
+      </template>
+    </ngb-tab>
+    <ngb-tab id="user" title="Users">
+      <template ngbTabContent>
+        <div class="permission-wrapper">
+          <template [ngTemplateOutlet]="list" [ngOutletContext]="settings.user.list"></template>
+          <template [ngTemplateOutlet]="list" [ngOutletContext]="settings.user.permissions"></template>
+        </div>
+      </template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
+
+<template #list let-t="title" let-l="list" let-p="param" let-a="actions" let-type="type" let-e="element">
+  <div class="permission-block">
+    <b class="mb-2">{{t}}:</b>
+    <div *ngIf="type === 'group'">
+      <div class="form-inline">
+        <input type="text" class="form-control" [(ngModel)]="name">
+        <button type="button" (click)="addGroup(name)"></button>
+      </div>
+    </div>
+    <div class="permission-item"
+      [class.active]="true"
+      *ngFor="let item of l"
+      (click)="toggle(type, e, item)">
+        {{item[p]}}
+        <i fa class="permission-icon text-danger" *ngIf="element === 'group' && !type" [name]="'trash'" (click)="removeGroup(item)"></i>
+      </div>
+  </div>
+</template>

@@ -59,4 +59,8 @@ export class NavigationService {
     );
   }
 
+  public resolve() {
+    return this.getPages();
+  }
+
 }
