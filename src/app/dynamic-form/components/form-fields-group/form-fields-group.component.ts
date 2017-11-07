@@ -22,6 +22,7 @@ export class FormFieldsGroupComponent implements OnInit {
   public modal: any;
 
   public formFieldGroupsEndpoint: string = '/ecore/api/v2/endless-core/formfieldgroups/';
+  public formModelFieldEndpoint: string = '/ecore/api/v2/endless-core/modelformfields/';
   public groups: FormFieldsGroup[];
   public fields: any;
   public choosenType: string;
@@ -31,6 +32,9 @@ export class FormFieldsGroupComponent implements OnInit {
   public modalData: any;
   public modalRef: any;
 
+  public groupId: string;
+  public error: any;
+
   constructor(
     private modalService: NgbModal,
     private genericFormService: GenericFormService
@@ -38,9 +42,15 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public ngOnInit() {
     if (this.config.value) {
-      this.groups = this.config.value;
+      let value = this.config.value;
+      this.groupId = value[0].id;
+      this.parseValueFromApi(value[0], this.config.fields);
+      this.groups = this.config.fields;
+      this.addCollapseProperty(this.groups);
     } else {
-      this.groups = [];
+      this.groups = this.config.fields;
+      this.addCollapseProperty(this.groups);
+      this.createGroup();
     }
     this.fields = {
       modelfield: {
@@ -117,6 +127,56 @@ export class FormFieldsGroupComponent implements OnInit {
     this.modalRef = this.modalService.open(this.modal);
   }
 
+  public createGroup(): void {
+    let body = {
+      field_list: [],
+      form: this.config.id,
+      name: this.config.id,
+      position: 0
+    };
+    this.genericFormService.submitForm(this.formFieldGroupsEndpoint, body).subscribe(
+      (res: any) => {
+        this.groupId = res.id;
+      },
+      (err: any) => this.error = err
+    );
+  }
+
+  public addCollapseProperty(list): void {
+    list.forEach((el) => {
+      if (el.model_fields) {
+        el.isCollapsed = true;
+        el.model_fields.forEach((field) => {
+          if (field.id) {
+            el.isCollapsed = false;
+          }
+          if (field.model_fields) {
+            field.model_fields.forEach((nestedField) => {
+              if (nestedField.id) {
+                el.isCollapsed = false;
+              }
+            });
+          }
+        });
+        this.addCollapseProperty(el.model_fields);
+      }
+    });
+  }
+
+  public parseValueFromApi(groups, fields): void {
+    fields.forEach((el) => {
+      groups.field_list.forEach((field) => {
+        if (el.name === field.name) {
+          el.id = field.id;
+          el.required = field.required;
+        }
+      });
+      if (el.model_fields) {
+        this.parseValueFromApi(groups, el.model_fields);
+      }
+    });
+  }
+
   public addField(group, id) {
     this.modalData = {};
     this.choosenType = null;
@@ -133,6 +193,42 @@ export class FormFieldsGroupComponent implements OnInit {
       },
     };
     this.modalRef = this.modalService.open(this.modal);
+  }
+
+  public toggleActiveState(field): void {
+    if (field.id) {
+      this.genericFormService.delete(this.formModelFieldEndpoint, field.id).subscribe(
+        (res: any) => {
+          delete field.id;
+        },
+        (err: any) => this.error = err
+      );
+    } else {
+      let body = Object.assign({group: this.groupId}, field);
+      this.genericFormService.submitForm(this.formModelFieldEndpoint, body).subscribe(
+        (res: any) => {
+          field.id = res.id;
+        },
+        (err: any) => this.error = err
+      );
+    }
+  }
+
+  public toggleRequireProperty(field): void {
+    if (field.id) {
+      let body = Object.assign({group: this.groupId}, field);
+      body.required = !field.required;
+      this.genericFormService
+        .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
+        .subscribe(
+          (res: any) => {
+            field.required = res.required;
+          },
+          (err: any) => this.error = err
+        );
+    } else {
+      field.required = !field.required;
+    }
   }
 
   public edit(object, container, type) {
@@ -184,7 +280,8 @@ export class FormFieldsGroupComponent implements OnInit {
             container.splice(i, 1);
           }
         });
-      }
+      },
+      (err: any) => this.error = err
     );
   }
 

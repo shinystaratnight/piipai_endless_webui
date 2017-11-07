@@ -1,32 +1,52 @@
 <div class="form-group">
-  <label *ngIf="config.templateOptions.label">{{config.templateOptions.label}}</label><br>
-  <div class="card mb-2" *ngFor="let group of groups">
-    <div class="card-header p-2 mb-1 d-flex justify-content-between align-items-center element group">
-      <b>{{group.name}}</b>
-      <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(group, groups, 'group')"></i>
-      <i fa [name]="'times'" class="icon text-danger mr-2" (click)="delete(group, groups, 'group')"></i>
-      <b><small>(position: {{group.position}})</small></b>
-    </div>
-
-    <div class="card flex-row p-2 align-items-stretch justify-content-between m-2 element field" *ngFor="let field of group.field_list">
-      <div class="d-flex flex-column justify-content-between">
-        <b>{{field.label}}</b>
-        <small>({{fields[field.field_type].label}})</small>
-      </div>
-      <div class="d-flex flex-column justify-content-between">
-        <div class="d-flex justify-content-end align-items-center">
-          <i fa [name]="'pencil'" class="icon text-primary ml-auto mr-2" (click)="edit(field, group.field_list, 'field')"></i>
-          <i fa [name]="'times'" class="icon text-danger" (click)="delete(field, group.field_list, 'field')"></i>
-        </div>
-        <b><small>(position: {{field.position}})</small></b>
-      </div>
-    </div>
-
-    <button type="button" class="btn btn-sm btn-primary my-2 align-self-start m-2" (click)="addField(group, group.id)">Add field</button>
-  </div>
-
-  <button type="button" class="btn btn-sm btn-primary mt-2" (click)="addGroup()">Add group</button>
+  <template [ngTemplateOutlet]="list" [ngOutletContext]="{list: groups}"></template>
 </div>
+
+<template #list let-l="list">
+  <div *ngFor="let item of l">
+    <div *ngIf="item.model_fields" class="d-flex justify-content-center flex-column">
+      <div class="d-flex align-items-center p-2 group">
+        <b class="text-muted">{{item.lookup_label}}</b>
+        <i *ngIf="item.isCollapsed"
+           fa
+           [name]="'plus-square'"
+           class="icon text-primary ml-auto"
+           (click)="item.isCollapsed = !item.isCollapsed">
+        </i>
+        <i *ngIf="!item.isCollapsed"
+           fa
+           [name]="'minus-square'"
+           class="icon text-muted ml-auto"
+           (click)="item.isCollapsed = !item.isCollapsed">
+        </i>
+      </div>
+      <div class="pl-4" [ngbCollapse]="item.isCollapsed">
+        <template [ngTemplateOutlet]="list" [ngOutletContext]="{list: item.model_fields}"></template>
+      </div>
+    </div>
+    <div *ngIf="item.name">
+      <template [ngTemplateOutlet]="field" [ngOutletContext]="{field: item}"></template>
+    </div>
+  </div>
+</template>
+
+<template #field let-i="field">
+  <div class="d-flex align-items-center p-2 field">
+    <span>{{i.label}}</span>
+    <button type="button" class="btn btn-sm ml-auto"
+            [class.btn-default]="!i.id"
+            [class.btn-success]="i.id"
+            (click)="toggleActiveState(i)">
+      Active
+    </button>
+    <button type="button" class="btn btn-sm ml-2"
+            [class.btn-default]="i.required"
+            [class.btn-success]="i.required"
+            (click)="toggleRequireProperty(i)">
+      Required
+    </button>
+  </div>
+</template>
 
 <template #modal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">

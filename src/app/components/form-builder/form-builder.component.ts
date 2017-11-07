@@ -25,6 +25,7 @@ export class FormBuilderComponent {
   public label: string;
   public previewLink: string;
   public data: any;
+  public error: any;
 
   constructor(
     private router: Router,
@@ -36,14 +37,16 @@ export class FormBuilderComponent {
       this.id = event.data.id;
       this.label = event.data.__str__;
       this.previewLink = `/ecore/form-builds/${this.id}/`;
-      this.data = {
-        groups: {
-          action: 'add',
-          data: {
-            fields: event.data.model_fields
+      if (event.data.groups && !event.data.groups.length) {
+        this.data = {
+          groups: {
+            action: 'add',
+            data: {
+              fields: event.data.model_fields
+            }
           }
-        }
-      };
+        };
+      }
       this.str.emit({
         str: event.data.__str__
       });
@@ -78,7 +81,8 @@ export class FormBuilderComponent {
       this.genericFormService.delete(this.endpoint, this.id).subscribe(
         (res: any) => {
           this.router.navigate([this.path]);
-        }
+        },
+        (err: any) => this.error = err
       );
     }
   }

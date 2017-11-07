@@ -15,12 +15,50 @@ describe('FormFieldsGroupComponent', () => {
 
   let comp: FormFieldsGroupComponent;
   let fixture: ComponentFixture<FormFieldsGroupComponent>;
-  let response: any = 123;
+  let response: any = {};
 
   let mockGenericFormService = {
     delete() {
-      return Observable.of(response);
+      if (response.status === 'success') {
+        return Observable.of(response);
+      } else {
+        return Observable.throw(response);
+      }
+    },
+    submitForm() {
+      if (response.status === 'success') {
+        return Observable.of(response);
+      } else {
+        return Observable.throw(response);
+      }
+    },
+    editForm() {
+      if (response.status === 'success') {
+        return Observable.of(response);
+      } else {
+        return Observable.throw(response);
+      }
     }
+  };
+
+  let config = {
+    createOnly: true,
+    editForm: true,
+    endpoint: '/ecore/api/v2/endless-core/formfieldgroups/',
+    fields: [],
+    id: '1aa7e89f-a695-4c2f-98f6-b44e6287e144',
+    key: 'groups',
+    list: false,
+    many: true,
+    read_only: false,
+    templateOptions: {
+      label: 'Groups',
+      add: true,
+      delete: false,
+      edit: true,
+      type: 'related'
+    },
+    type: 'fieldsGroup'
   };
 
   beforeEach(async(() => {
@@ -45,17 +83,34 @@ describe('FormFieldsGroupComponent', () => {
 
   describe('ngOnInit method', () => {
     it('should set value', () => {
-      comp.config = {
-        value: []
-      };
+      comp.config = config;
+      comp.config.value = [
+        {
+          id: '123'
+        }
+      ];
+      spyOn(comp, 'parseValueFromApi');
+      spyOn(comp, 'addCollapseProperty');
       comp.ngOnInit();
+      expect(comp.fields).toBeDefined();
+      expect(comp.types).toBeDefined();
+      expect(comp.groupId).toEqual('123');
+      expect(comp.parseValueFromApi).toHaveBeenCalledWith(comp.config.value[0], comp.config.fields);
       expect(comp.groups).toEqual([]);
+      expect(comp.addCollapseProperty).toHaveBeenCalledWith(comp.groups);
     });
 
-    it('should init properties', () => {
-      comp.config = {};
+    it('should init porperties', () => {
+      comp.config = config;
+      comp.config.value = undefined;
+      spyOn(comp, 'addCollapseProperty');
+      spyOn(comp, 'createGroup');
       comp.ngOnInit();
-      expect(comp.groups).toEqual([]);
+      expect(comp.fields).toBeDefined();
+      expect(comp.types).toBeDefined();
+      expect(comp.groups).toEqual(config.fields);
+      expect(comp.addCollapseProperty).toHaveBeenCalledWith(comp.groups);
+      expect(comp.createGroup).toHaveBeenCalled();
     });
   });
 
@@ -93,6 +148,68 @@ describe('FormFieldsGroupComponent', () => {
     });
   });
 
+  describe('createGroup method', () => {
+    it('should create default group for fields', () => {
+      comp.config = config;
+      comp.formFieldGroupsEndpoint = 'some endpoint';
+      response.status = 'success';
+      response.id = '123';
+      comp.createGroup();
+      expect(comp.groupId).toEqual('123');
+    });
+
+    it('should update error property', () => {
+      comp.config = config;
+      comp.formFieldGroupsEndpoint = 'some endpoint';
+      response.status = 'error';
+      response.errors = {};
+      comp.createGroup();
+      expect(comp.error).toEqual(response);
+    });
+  });
+
+  describe('addCollapseProperty method', () => {
+    it('should add collpase property into groups', () => {
+      let list = <any> [
+        {
+          model_fields: [
+            {
+              model_fields: [
+                {
+                  id: 123
+                }
+              ]
+            }
+          ]
+        }
+      ];
+      comp.addCollapseProperty(list);
+      expect(list[0].isCollapsed).toBeFalsy();
+      expect(list[0].model_fields[0].isCollapsed).toBeFalsy();
+    });
+  });
+
+  describe('parseValueFromApi method', () => {
+    it('should set id and required properties', () => {
+      let groups = {
+        field_list: [
+          { name: 'contact__title', id: '123', required: true }
+        ]
+      };
+      let fields = <any> [
+        {
+          lookup_label: 'Contact',
+          model_fields: [
+            { name: 'contact__title', required: false }
+          ]
+        }
+      ];
+      comp.parseValueFromApi(groups, fields);
+      expect(fields[0].model_fields[0].id).toEqual('123');
+      expect(fields[0].model_fields[0].required).toBeTruthy();
+    });
+  });
+
   describe('addField method', () => {
     it('should add modal window for add field', () => {
       let group = {
@@ -114,6 +231,77 @@ describe('FormFieldsGroupComponent', () => {
           }
         }
       });
+    });
+  });
+
+  describe('toggleActiveState method', () => {
+    it('should delete field from form', () => {
+      let field = <any> {
+        id: '123'
+      };
+      response.status = 'success';
+      comp.toggleActiveState(field);
+      expect(field).toEqual({});
+    });
+
+    it('should update error property if delete is not done', () => {
+      let field = {
+        id: '123'
+      };
+      response.status = 'error';
+      comp.toggleActiveState(field);
+      expect(comp.error).toEqual(response);
+    });
+
+    it('should add new filed in the form', () => {
+      comp.groupId = '1234';
+      let field = <any> {};
+      response.status = 'success';
+      response.id = '123';
+      comp.toggleActiveState(field);
+      expect(field.id).toEqual('123');
+    });
+
+    it('should update error propert if add new field is not done', () => {
+      let field = {};
+      response.status = 'error';
+      response.errors = {};
+      comp.toggleActiveState(field);
+      expect(comp.error).toEqual(response);
+
+    });
+  });
+
+  describe('toggleRequireProperty method', () => {
+    it('should send request for change field property', () => {
+      let field = {
+        id: '123',
+        required: false
+      };
+      comp.groupId = '124';
+      response.status = 'success';
+      response.required = true;
+      comp.toggleRequireProperty(field);
+      expect(field.required).toBeTruthy();
+    });
+
+    it('should update error property', () => {
+      let field = {
+        id: '123',
+        required: false
+      };
+      response.status = 'error';
+      response.errors = {};
+      comp.toggleRequireProperty(field);
+      expect(comp.error).toEqual(response);
+    });
+
+    it('should toggle required property of field', () => {
+      let field = {
+        required: false
+      };
+      comp.toggleRequireProperty(field);
+      expect(field.required).toBeTruthy();
     });
   });
 
@@ -196,6 +384,7 @@ describe('FormFieldsGroupComponent', () => {
         }
       ];
       let type = 'group';
+      response.status = 'success';
       comp.formFieldGroupsEndpoint = 'endpoint';
       comp.delete(object, container, type);
       expect(container).toEqual([]);
@@ -218,8 +407,20 @@ describe('FormFieldsGroupComponent', () => {
           label: 'Text field'
         }
       };
+      response.status = 'success';
       comp.delete(object, container, type);
       expect(container).toEqual([]);
+    });
+
+    it('should update error property', () => {
+      let object = {
+        id: '123'
+      };
+      let container = [{ id: '123' }];
+      let type = 'group';
+      response.status = 'error';
+      comp.delete(object, container, type);
+      expect(comp.error).toEqual(response);
     });
   });
 
