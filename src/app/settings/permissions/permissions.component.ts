@@ -1,25 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { PermissionsService } from './permissions.service';
 
-interface Permission {
+export interface Permission {
   id: string;
   name: string;
   codename: string;
   active?: boolean;
 }
 
-interface User {
+export interface User {
   id: string;
   name: string;
-  boolean?: false;
 }
 
-interface Group {
+export interface Group {
   id: string;
   name: string;
-  codename: string;
+  active?: boolean;
 }
 
 @Component({
@@ -31,204 +29,173 @@ export class PermissionsComponent implements OnInit {
 
   public permissionsList: Permission[];
   public targetPermissions: Permission[];
+  public cashPermissions: Permission[];
+
   public users: User[];
+  public cashUsers: User[];
+
   public groups: Group[];
+  public targetGroups: Group[];
+  public cashGroups: Group[];
 
-  public userId: any;
-  public groupId: any;
+  public targetId: string;
 
-  public modalScrollDistance = 2;
-  public modalScrollThrottle = 50;
-  public limit: 10;
-  public lastElement: any;
-  public count: number;
-
-  public settings = {
-    user: {
-      list: {
-        title: 'Users',
-        list: this.users,
-        param: 'name',
-        actions: false,
-        element: 'user'
-      },
-      permissions: {
-        title: 'Permissions',
-        list: this.permissionsList,
-        param: 'name',
-        actions: true,
-        element: 'user',
-        type: 'permission',
-      }
-    },
-    group: {
-      list: {
-        title: 'Grpous',
-        list: this.users,
-        param: 'name',
-        actions: true,
-        element: 'group'
-      },
-      permissions: {
-        title: 'Permissions',
-        list: this.permissionsList,
-        param: 'name',
-        actions: true,
-        element: 'group',
-        type: 'permission'
-      },
-      users: {
-        title: 'Users',
-        list: this.users,
-        param: 'name',
-        actions: true,
-        element: 'group',
-        type: 'user'
-      }
-    }
+  public search = {
+    list: '',
+    permission: '',
+    group: ''
   };
 
-  public mockUsers = [
-    {
-      id: '1',
-      name: 'Tom Smith'
-    },
-    {
-      id: '2',
-      name: 'Test Testovich'
-    }
-  ];
-
-  public mockPermissions = [
-    {
-      id: '1',
-      name: 'Can Activate',
-      codename: 'can_activate'
-    },
-    {
-      id: '2',
-      name: 'Not can activate',
-      codename: 'not_can_activate'
-    }
-  ];
-
-  public mockGroups = [
-    {
-      id: '1',
-      name: 'Mega',
-      codename: 'mega'
-    },
-    {
-      id: '2',
-      name: 'Super',
-      codename: 'super'
-    }
-  ];
+  public settings: any;
+  public name: string;
 
   constructor(
-    private service: PermissionsService,
-    private route: ActivatedRoute
+    private service: PermissionsService
   ) {}
 
   public ngOnInit() {
-    // this.getPermissions();
-    // this.getGroups();
-    // this.getUsers();
-    this.users = this.mockUsers;
-    this.permissionsList = this.mockPermissions;
-    this.groups = this.mockGroups;
-    // this.route.url.subscribe((url) => {
-    //   let id = url[1].path;
-    //   this.userId = id;
-    // });
+    this.getPermissions();
+    this.getGroups();
+    this.getUsers();
+    this.settings = {
+      user: {
+        list: {
+          title: 'Users',
+          list: this.users,
+          param: 'name',
+          actions: false,
+          element: 'user',
+          type: 'list'
+        },
+        permissions: {
+          title: 'Permissions',
+          list: this.permissionsList,
+          param: 'name',
+          actions: true,
+          element: 'user',
+          type: 'permission',
+        },
+        groups: {
+          title: 'Groups',
+          list: this.groups,
+          param: 'name',
+          actions: true,
+          element: 'user',
+          type: 'group'
+        }
+      },
+      group: {
+        list: {
+          title: 'Groups',
+          list: this.groups,
+          param: 'name',
+          actions: true,
+          element: 'group',
+          type: 'list'
+        },
+        permissions: {
+          title: 'Permissions',
+          list: this.permissionsList,
+          param: 'name',
+          actions: true,
+          element: 'group',
+          type: 'permission'
+        }
+      }
+    };
   }
 
-  public getGroups() {
+  public getGroups(): void {
     this.service.getAllGroups().subscribe(
-      (res: Group[]) => {
-        this.groups = res;
+      (res: any) => {
+        this.cashGroups = res.results;
+        this.groups = res.results;
       }
     );
   }
 
-  public getUsers() {
+  public getUsers(): void {
     this.service.getAllUsers().subscribe(
-      (res: User[]) => {
-        this.users = res;
+      (res: any) => {
+        this.users = res.results;
       }
     );
   }
 
-  public getPermissions() {
+  public getPermissions(): void {
     this.service.getAllPermissions().subscribe(
       (res: any) => {
+        this.cashPermissions = res.results.slice();
         this.permissionsList = res.results;
-        this.count = res.count;
       }
     );
   }
 
-  public toggle(type, element, item) {
-    if (!type) {
+  public toggle(type: string, element: string, item: Group|Permission): void {
+    if (type === 'list') {
       this.getPermissionsOf(item.id, element);
+      if (element === 'user') {
+        this.getGroupsOfUser(item.id);
+      }
+      this.targetId = item.id;
       return;
     }
     if (type === 'permission') {
-      this.togglePermissions(item, element);
-    } else if (type === 'user') {
-      this.toggleUsers(item);
+      this.togglePermissions(<Permission> item, element);
+    } else if (type === 'group') {
+      this.toggleGroup(item);
     }
   }
 
-  public togglePermissions(permission, type) {
+  public togglePermissions(permission: Permission, type: string): void {
     if (permission.active) {
       if (type === 'user') {
-        this.service.revokePermissionsOfTheUser(this.userId, [permission.id])
+        this.service.revokePermissionsOfTheUser(this.targetId, [permission.id])
                     .subscribe((res: any) => permission.active = false);
       }
       if (type === 'group') {
-        this.service.revokePermissionsOfTheGroup(this.groupId, [permission.id])
-                    .subscribe((res: any) => permission.activate = false);
+        this.service.revokePermissionsOfTheGroup(this.targetId, [permission.id])
+                    .subscribe((res: any) => permission.active = false);
       }
     } else {
       if (type === 'user') {
-        this.service.addPermissionsOnTheUser(this.userId, [permission.id])
+        this.service.addPermissionsOnTheUser(this.targetId, [permission.id])
                     .subscribe((res: any) => permission.active = true);
       }
       if (type === 'group') {
-        this.service.addPermissionsOnTheGroup(this.groupId, [permission.id])
+        this.service.addPermissionsOnTheGroup(this.targetId, [permission.id])
                     .subscribe((res: any) => permission.active = true);
       }
     }
   }
 
-  public toggleUsers(user) {
-    if (this.groupId) {
-      if (!user.active) {
-        this.service.addUserOnTheGroup(this.groupId, user.id).subscribe(
-          (res: any) => {
-            user.active = true;
-          }
-        );
-      }
+  public toggleGroup(group: Group): void {
+    if (!group.active) {
+      this.service.addUserOnTheGroup(group.id, this.targetId).subscribe(
+        (res: any) => {
+          group.active = true;
+        }
+      );
     }
   }
 
-  public addGroup(name) {
+  public addGroup(name: string): void {
     this.service.createGroup(name)
                 .subscribe((res: any) => this.getGroups());
   }
 
-  public removeGroup(group) {
+  public removeGroup(group: Group, e: any): void {
+    e.preventDefault();
+    e.stopPropagation();
     this.service.deleteGroup(group.id)
                 .subscribe((res: any) => this.groups.splice(this.groups.indexOf(group), 1));
   }
 
-  public getPermissionsOf(id, type) {
+  public getPermissionsOf(id: string, type: string): void {
     if (type === 'user') {
       this.service.getPermissionsOfUser(id).subscribe(
         (res: any) => {
-          this.targetPermissions = res.results;
+          this.targetPermissions = <Permission[]> res.results;
           this.combineElement(this.targetPermissions, this.permissionsList);
         }
       );
@@ -236,54 +203,58 @@ export class PermissionsComponent implements OnInit {
     if (type === 'group') {
       this.service.getAllPermissionsOfTheGroup(id).subscribe(
         (res: any) => {
-          this.targetPermissions = res.results;
+          this.targetPermissions = <Permission[]> res.results;
           this.combineElement(this.targetPermissions, this.permissionsList);
         }
       );
     }
   }
 
-  public combineElement(array: any[], target: any[]) {
+  public getGroupsOfUser(id) {
+    this.service.getGroupsOnTheUser(id).subscribe(
+      (res: any) => {
+        this.targetGroups = <Group[]> res.results;
+        this.combineElement(this.targetGroups, this.groups);
+      }
+    );
+  }
+
+  public combineElement(responseData: any[], target: any[]): void {
     target.forEach((el) => {
-      array.forEach((element) => {
+      responseData.forEach((element) => {
         if (el.id === element.id) {
           el.active = true;
         }
       });
     });
-    target.sort((p, n) => {
-      return p.name > n.name || p.active ? 1 : -1;
-    });
   }
 
-  public onModalScrollDown() {
-    this.getMore(this.lastElement);
-  }
-
-  public getMore(offset) {
-    let query = '';
-    query += !query ? '?' : '';
-    query += `limit=${this.limit}&offset=${offset}`;
-    if (!this.count || (this.count && offset < this.count)) {
-      this.lastElement += this.limit;
-      this.service.getAllPermissions(query).subscribe(
-        (res: any) => {
-          if (res.results && res.results.length) {
-            this.permissionsList.push(...res.results);
-            this.combineElement(this.targetPermissions, this.permissionsList);
-          }
+  public filter(value, type, target, element) {
+    type = type === 'list' ? element : type;
+    let source = type === 'user' ? this.cashUsers :
+      type === 'group' ? this.cashGroups :
+      type === 'permission' ? this.cashPermissions : null;
+    if (value && source) {
+      target = source.filter((el) => {
+        let val = el.name;
+        if (val) {
+          return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
         }
-      );
+      });
+    } else {
+      target = source.slice();
     }
   }
 
-  public beforeChange(event) {
-    if (event.nextId === 'user') {
-      this.userId = undefined;
-    } else if (event.nexId === 'group') {
-      this.groupId = undefined;
-    }
-    this.permissionsList = []
+  public beforeChange(): void {
+    this.targetId = undefined;
+    this.search.list = '';
+    this.search.group = '';
+    this.search.permission = '';
+    this.targetPermissions = [];
+    this.targetGroups = [];
+    this.groups = this.cashGroups.slice();
+    this.permissionsList = this.cashPermissions.slice();
   };
 
 }

@@ -17,9 +17,9 @@ export class NavigationService {
   public navigationList: Page[];
   public userModels: any;
   public models: any;
-  public endpoint = '/ecore/api/v2/endless-core/extranetnavigations/?limit=-1';
-  public userModelsEndpoint = '/ecore/api/v2/endless-core/userdashboardmodules/?limit=-1';
-  public modelsListEndpoint = '/ecore/api/v2/endless-core/dashboardmodules/?limit=-1';
+  public endpoint = '/ecore/api/v2/core/extranetnavigations/?limit=-1';
+  public userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/?limit=-1';
+  public modelsListEndpoint = '/ecore/api/v2/core/dashboardmodules/?limit=-1';
   public error;
 
   constructor(

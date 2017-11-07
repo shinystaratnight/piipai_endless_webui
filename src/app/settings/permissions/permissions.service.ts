@@ -13,14 +13,14 @@ export class PermissionsService {
     base: 'ecore/api/v2/permissions/',
     user: 'ecore/api/v2/permissions/user/',
     group: 'ecore/api/v2/permissions/group/',
-    groups: 'ecore/api/v2/permissions/groups/',
     users: 'ecore/api/v2/company_settings/users/',
     all: 'all/',
     add: 'set/',
     create: 'create/',
     addUser: 'add_user/',
     revoke: 'revoke/',
-    delete: 'delete/'
+    delete: 'delete/',
+    groups: 'groups/'
   };
 
   constructor(
@@ -29,10 +29,7 @@ export class PermissionsService {
   ) { }
 
   public getAllPermissions(query = undefined) {
-    let endpoint = `${this.endpoints.base}${this.endpoints.all}`;
-    if (query) {
-      endpoint += `${query}/`;
-    }
+    let endpoint = `${this.endpoints.base}${this.endpoints.all}?limit=-1`;
     let headers = this.updateHeaders();
     return this.http.get(endpoint, { headers })
                     .map((res: Response) => res.json())
@@ -66,6 +63,14 @@ export class PermissionsService {
                     .catch((err: Response) => this.errorHandler(err));
   }
 
+  public getGroupsOnTheUser(id: string) {
+    let endpoint = `${this.endpoints.user}${id}/${this.endpoints.groups}`;
+    this.updateHeaders();
+    return this.http.get(endpoint)
+                    .map((res: Response) => res.json())
+                    .catch((err: Response) => this.errorHandler(err));
+  }
+
   public revokePermissionsOfTheUser(id: string, permissions: string[]) {
     let endpoint = `${this.endpoints.user}${id}/${this.endpoints.revoke}`;
     this.updateHeaders();
@@ -75,7 +80,7 @@ export class PermissionsService {
   }
 
   public getAllGroups() {
-    let endpoint = `${this.endpoints.groups}`;
+    let endpoint = `${this.endpoints.base}${this.endpoints.groups}`;
     this.updateHeaders();
     return this.http.get(endpoint)
                     .map((res: Response) => res.json())

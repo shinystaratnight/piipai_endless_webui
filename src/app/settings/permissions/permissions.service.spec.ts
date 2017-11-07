@@ -150,6 +150,63 @@ describe('PermissionsService', () => {
 
   });
 
+  describe('getPermissionsOfUser method', () => {
+
+        beforeEach(() => {
+          delete response.status;
+          delete response.data;
+          delete response.errors;
+        });
+
+        it('should parse response',
+          async(inject([PermissionsService, MockBackend], (service, mockBackend) => {
+            response.status = 'success';
+            response.data = {
+              count: 0,
+              results: []
+            };
+            mockBackend.connections.subscribe((conn) => {
+              let responseObject = new ResponseOptions({
+                body: JSON.stringify(response)
+              });
+              let mockResponse = new Response(responseObject);
+              conn.mockRespond(mockResponse);
+            });
+            let result;
+            let id = '123';
+            spyOn(service, 'updateHeaders').and.returnValue({});
+            service.getPermissionsOfUser(id).subscribe(
+              (res: any) => result = res
+            );
+            expect(result).toEqual(response);
+            expect(service.updateHeaders).toHaveBeenCalled();
+        })));
+
+        it('should parse errors',
+          async(inject([PermissionsService, MockBackend], (service, mockBackend) => {
+            response.status = 'error';
+            response.errors = {
+              detail: 'some detail'
+            };
+            mockBackend.connections.subscribe((conn) => {
+              let responseObject = new ResponseOptions({
+                body: JSON.stringify(response)
+              });
+              let mockError = new Response(responseObject);
+              conn.mockError(mockError);
+            });
+            let result;
+            let id = '123';
+            spyOn(service, 'updateHeaders').and.returnValue({});
+            service.getPermissionsOfUser(id).subscribe(null,
+              (err: any) => result = err
+            );
+            expect(result).toEqual(response);
+            expect(service.updateHeaders).toHaveBeenCalled();
+        })));
+
+      });
+
   describe('addPermissionsOnTheUser method', () => {
 
     beforeEach(() => {
@@ -208,6 +265,63 @@ describe('PermissionsService', () => {
     })));
 
   });
+
+  describe('getGroupsOnTheUser method', () => {
+
+        beforeEach(() => {
+          delete response.status;
+          delete response.data;
+          delete response.errors;
+        });
+
+        it('should parse response',
+          async(inject([PermissionsService, MockBackend], (service, mockBackend) => {
+            response.status = 'success';
+            response.data = {
+              count: 0,
+              results: []
+            };
+            mockBackend.connections.subscribe((conn) => {
+              let responseObject = new ResponseOptions({
+                body: JSON.stringify(response)
+              });
+              let mockResponse = new Response(responseObject);
+              conn.mockRespond(mockResponse);
+            });
+            let result;
+            let id = '123';
+            spyOn(service, 'updateHeaders').and.returnValue({});
+            service.getGroupsOnTheUser(id).subscribe(
+              (res: any) => result = res
+            );
+            expect(result).toEqual(response);
+            expect(service.updateHeaders).toHaveBeenCalled();
+        })));
+
+        it('should parse errors',
+          async(inject([PermissionsService, MockBackend], (service, mockBackend) => {
+            response.status = 'error';
+            response.errors = {
+              detail: 'some detail'
+            };
+            mockBackend.connections.subscribe((conn) => {
+              let responseObject = new ResponseOptions({
+                body: JSON.stringify(response)
+              });
+              let mockError = new Response(responseObject);
+              conn.mockError(mockError);
+            });
+            let result;
+            let id = '123';
+            spyOn(service, 'updateHeaders').and.returnValue({});
+            service.getGroupsOnTheUser(id).subscribe(null,
+              (err: any) => result = err
+            );
+            expect(result).toEqual(response);
+            expect(service.updateHeaders).toHaveBeenCalled();
+        })));
+
+      });
 
   describe('revokePermissionsOfTheUser method', () => {
 
