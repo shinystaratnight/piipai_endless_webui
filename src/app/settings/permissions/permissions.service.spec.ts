@@ -236,7 +236,7 @@ describe('PermissionsService', () => {
         service.addPermissionsOnTheUser(id, permissions).subscribe(
           (res: any) => result = res
         );
-        expect(result).toEqual(response);
+        expect(result).toBeDefined();
         expect(service.updateHeaders).toHaveBeenCalled();
     })));
 
@@ -350,7 +350,7 @@ describe('PermissionsService', () => {
         service.revokePermissionsOfTheUser().subscribe(
           (res: any) => result = res
         );
-        expect(result).toEqual(response);
+        expect(result).toBeDefined();
         expect(service.updateHeaders).toHaveBeenCalled();
     })));
 
@@ -516,7 +516,7 @@ describe('PermissionsService', () => {
         service.createGroup(name).subscribe(
           (res: any) => result = res
         );
-        expect(result).toEqual(response);
+        expect(result).toBeDefined();
         expect(service.updateHeaders).toHaveBeenCalled();
     })));
 
@@ -629,7 +629,7 @@ describe('PermissionsService', () => {
         service.addPermissionsOnTheGroup(id, permissions).subscribe(
           (res: any) => result = res
         );
-        expect(result).toEqual(response);
+        expect(result).toBeDefined();
         expect(service.updateHeaders).toHaveBeenCalled();
     })));
 
@@ -688,7 +688,7 @@ describe('PermissionsService', () => {
         service.addUserOnTheGroup(groupId, userId).subscribe(
           (res: any) => result = res
         );
-        expect(result).toEqual(response);
+        expect(result).toBeDefined();
         expect(service.updateHeaders).toHaveBeenCalled();
     })));
 
@@ -710,6 +710,65 @@ describe('PermissionsService', () => {
         let userId = '124';
         spyOn(service, 'updateHeaders').and.returnValue({});
         service.addUserOnTheGroup(groupId, userId).subscribe(null,
+          (err: any) => result = err
+        );
+        expect(result).toEqual(response);
+        expect(service.updateHeaders).toHaveBeenCalled();
+    })));
+
+  });
+
+  describe('removeUserOnTheGroup method', () => {
+
+    beforeEach(() => {
+      delete response.status;
+      delete response.data;
+      delete response.errors;
+    });
+
+    it('should parse response',
+      async(inject([PermissionsService, MockBackend], (service, mockBackend) => {
+        response.status = 'success';
+        response.data = {
+          count: 0,
+          results: []
+        };
+        mockBackend.connections.subscribe((conn) => {
+          let responseObject = new ResponseOptions({
+            body: JSON.stringify(response)
+          });
+          let mockResponse = new Response(responseObject);
+          conn.mockRespond(mockResponse);
+        });
+        let result;
+        let groupId = '123';
+        let userId = '124';
+        spyOn(service, 'updateHeaders').and.returnValue({});
+        service.removeUserOnTheGroup(groupId, userId).subscribe(
+          (res: any) => result = res
+        );
+        expect(result).toBeDefined();
+        expect(service.updateHeaders).toHaveBeenCalled();
+    })));
+
+    it('should parse errors',
+      async(inject([PermissionsService, MockBackend], (service, mockBackend) => {
+        response.status = 'error';
+        response.errors = {
+          detail: 'some detail'
+        };
+        mockBackend.connections.subscribe((conn) => {
+          let responseObject = new ResponseOptions({
+            body: JSON.stringify(response)
+          });
+          let mockError = new Response(responseObject);
+          conn.mockError(mockError);
+        });
+        let result;
+        let groupId = '123';
+        let userId = '124';
+        spyOn(service, 'updateHeaders').and.returnValue({});
+        service.removeUserOnTheGroup(groupId, userId).subscribe(null,
           (err: any) => result = err
         );
         expect(result).toEqual(response);
@@ -747,7 +806,7 @@ describe('PermissionsService', () => {
         service.revokePermissionsOfTheGroup(id, permissions).subscribe(
           (res: any) => result = res
         );
-        expect(result).toEqual(response);
+        expect(result).toBeDefined();
         expect(service.updateHeaders).toHaveBeenCalled();
     })));
 

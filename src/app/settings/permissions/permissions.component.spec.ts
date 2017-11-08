@@ -29,25 +29,28 @@ describe('PermissionsComponent', () => {
       return Observable.of(response.data);
     },
     revokePermissionsOfTheUser() {
-      return Observable.of(true);
+      return Observable.of(response.data);
     },
     revokePermissionsOfTheGroup() {
-      return Observable.of(true);
+      return Observable.of(response.data);
     },
     addPermissionsOnTheUser() {
-      return Observable.of(true);
+      return Observable.of(response.data);
     },
     addPermissionsOnTheGroup() {
-      return Observable.of(true);
+      return Observable.of(response.data);
     },
     addUserOnTheGroup() {
-      return Observable.of(true);
+      return Observable.of(response.data);
+    },
+    removeUserOnTheGroup() {
+      return Observable.of(response.data);
     },
     createGroup() {
-      return Observable.of(true);
+      return Observable.of(response.data);
     },
     deleteGroup() {
-      return Observable.of(true);
+      return Observable.of(response.data);
     },
     getPermissionsOfUser() {
       return Observable.of(response.data);
@@ -56,6 +59,9 @@ describe('PermissionsComponent', () => {
       return Observable.of(response.data);
     },
     getAllPermissions() {
+      return Observable.of(response.data);
+    },
+    getGroupsOnTheUser() {
       return Observable.of(response.data);
     }
   };
@@ -91,36 +97,43 @@ describe('PermissionsComponent', () => {
     it('should get groups of company', () => {
       response.data.results = [];
       comp.getGroups();
+      expect(comp.cashGroups).toEqual(response.data.results);
       expect(comp.groups).toEqual(response.data.results);
     });
   });
 
   describe('getUsers method', () => {
     it('should get users of company', () => {
-      response.data.results = [];
+      response.data.user_list = [];
       comp.getUsers();
-      expect(comp.users).toEqual(response.data.results);
+      expect(comp.cashUsers).toEqual(response.data.user_list);
+      expect(comp.users).toEqual(response.data.user_list);
     });
   });
 
   describe('getPermissions method', () => {
     it('should get permissions list', () => {
-      response.data.results = [];
+      response.data.permission_list = [];
       comp.getPermissions();
-      expect(comp.permissionsList).toEqual(response.data.results);
+      expect(comp.cashPermissions).toEqual(response.data.permission_list);
+      expect(comp.permissionsList).toEqual(response.data.permission_list);
     });
   });
 
   describe('toggle method', () => {
     it('should call getPermissionOf method', () => {
       const type = 'list';
-      const element = 'group';
-      const item: Group = {
+      const element = 'user';
+      const item: User = {
         id: '1',
         name: 'Managers'
       };
       spyOn(comp, 'getPermissionsOf');
+      spyOn(comp, 'resetData');
+      spyOn(comp, 'getGroupsOfUser');
       comp.toggle(type, element, item);
+      expect(comp.resetData).toHaveBeenCalledTimes(2);
+      expect(comp.getGroupsOfUser).toHaveBeenCalled();
       expect(comp.getPermissionsOf).toHaveBeenCalled();
       expect(comp.targetId).toEqual(item.id);
     });
@@ -194,10 +207,21 @@ describe('PermissionsComponent', () => {
     it('should add a user to group', () => {
       const group: Group = {
         id: '1',
-        name: 'Mahagers'
+        name: 'Managers',
+        active: false
       };
       comp.toggleGroup(group);
       expect(group.active).toBeTruthy();
+    });
+
+    it('should remove a user from group', () => {
+      const group: Group = {
+        id: '1',
+        name: 'Managers',
+        active: true
+      };
+      comp.toggleGroup(group);
+      expect(group.active).toBeFalsy();
     });
   });
 
@@ -206,6 +230,7 @@ describe('PermissionsComponent', () => {
       const name = 'Managers';
       spyOn(comp, 'getGroups');
       comp.addGroup(name);
+      expect(comp.name).toEqual('');
       expect(comp.getGroups).toHaveBeenCalled();
     });
   });
@@ -227,10 +252,13 @@ describe('PermissionsComponent', () => {
       spyOn(event, 'preventDefault');
       spyOn(event, 'stopPropagation');
       comp.groups = [];
+      comp.cashGroups = [];
       comp.groups.push(group);
+      comp.cashGroups.push(group);
       comp.removeGroup(group, event);
       expect(event.preventDefault).toHaveBeenCalled();
       expect(event.stopPropagation).toHaveBeenCalled();
+      expect(comp.cashGroups.length).toEqual(0);
       expect(comp.groups.length).toEqual(0);
     });
   });
@@ -253,6 +281,18 @@ describe('PermissionsComponent', () => {
       comp.permissionsList = [];
       spyOn(comp, 'combineElement');
       comp.getPermissionsOf(id, type);
+      expect(comp.combineElement).toHaveBeenCalledWith(response.data.results, []);
+    });
+  });
+
+  describe('getGroupsOfUser', () => {
+    it('should update groups of user', () => {
+      const id = '1';
+      response.data.results = [];
+      comp.groups = [];
+      spyOn(comp, 'combineElement');
+      comp.getGroupsOfUser(id);
+      expect(comp.targetGroups).toEqual(response.data.results);
       expect(comp.combineElement).toHaveBeenCalledWith(response.data.results, []);
     });
   });
@@ -293,17 +333,37 @@ describe('PermissionsComponent', () => {
           codename: 'can_activate'
         }
       ];
-      comp.targetPermissions = [
+      comp.groups = [
         {
           id: '1',
-          name: 'Can activate',
-          codename: 'can_activate'
+          name: 'Managers'
         }
       ];
+      comp.cashGroups = [].concat(comp.groups);
+      comp.cashPermissions = [].concat(comp.permissionsList);
+      spyOn(comp, 'resetData');
       comp.beforeChange();
       expect(comp.targetId).toBeUndefined();
-      expect(comp.permissionsList).toEqual([]);
+      expect(comp.search).toEqual({
+        list: '',
+        group: '',
+        permission: ''
+      });
+      expect(comp.permissionsList).toEqual(comp.cashPermissions);
+      expect(comp.groups).toEqual(comp.cashGroups);
       expect(comp.targetPermissions).toEqual([]);
+      expect(comp.targetGroups).toEqual([]);
+      expect(comp.resetData).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('resetData method', () => {
+    it('should delete active property from objects', () => {
+      let array = [{
+        active: true
+      }];
+      comp.resetData(array);
+      expect(array[0].active).toBeUndefined();
     });
   });
 

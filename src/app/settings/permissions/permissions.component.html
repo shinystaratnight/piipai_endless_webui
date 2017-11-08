@@ -1,19 +1,38 @@
 <div class="my-3">
-  <ngb-tabset type="pills" (tabChange)="beforeChange($event)">
+  <ngb-tabset type="pills" (tabChange)="beforeChange()">
     <ngb-tab id="group" title="Groups">
       <template ngbTabContent>
+        <div class="permission-block-add form-inline">
+          <input type="text" class="permission-input form-control mr-2" [(ngModel)]="name">
+          <button type="button" class="btn bg-default" (click)="addGroup(name)">Add</button>
+        </div>
         <div class="permission-wrapper">
-          <template [ngTemplateOutlet]="list" [ngOutletContext]="settings.group.list"></template>
-          <template *ngIf="targetId" [ngTemplateOutlet]="list" [ngOutletContext]="settings.group.permissions"></template>
+          <template
+            [ngTemplateOutlet]="list"
+            [ngOutletContext]="{title: 'Groups', list: groups, param: 'name', element: 'group', type: 'list'}">
+          </template>
+          <template *ngIf="targetId"
+            [ngTemplateOutlet]="list"
+            [ngOutletContext]="{title: 'Permissions', list: permissionsList, param: 'name', element: 'group', type: 'permission'}">
+          </template>
         </div>
       </template>
     </ngb-tab>
     <ngb-tab id="user" title="Users">
       <template ngbTabContent>
         <div class="permission-wrapper">
-          <template [ngTemplateOutlet]="list" [ngOutletContext]="settings.user.list"></template>
-          <template *ngIf="targetId" [ngTemplateOutlet]="list" [ngOutletContext]="settings.user.permissions"></template>
-          <template *ngIf="targetId" [ngTemplateOutlet]="list" [ngOutletContext]="settings.user.groups"></template>
+          <template
+            [ngTemplateOutlet]="list"
+            [ngOutletContext]="{title: 'Users', list: users, param: 'name', element: 'user', type: 'list'}">
+          </template>
+          <template *ngIf="targetId"
+            [ngTemplateOutlet]="list"
+            [ngOutletContext]="{title: 'Permissions', list: permissionsList, param: 'name', element: 'user', type: 'permission'}">
+          </template>
+          <template *ngIf="targetId"
+            [ngTemplateOutlet]="list"
+            [ngOutletContext]="{title: 'Groups', list: groups, param: 'name', element: 'user', type: 'group'}">
+          </template>
         </div>
       </template>
     </ngb-tab>
@@ -23,18 +42,14 @@
 <template #list let-t="title" let-l="list" let-p="param" let-a="actions" let-type="type" let-e="element">
   <div class="permission-block-wrapper">
     <b class="permission-block-title">{{t}}:</b>
+    <div class="permission-search">
+      <input type="text"
+        [(ngModel)]="search[type]"
+        class="form-control w-100 mb-2"
+        (keyup)="filter(search[type], type, l, e)">
+      <i fa [name]="'search'" class="permission-search-icon text-muted"></i>
+    </div>
     <div class="permission-block">
-      <div *ngIf="e === 'group' && type === 'list'" class="form-inline mb-2">
-        <input type="text" class="permission-input form-control mr-2" [(ngModel)]="name">
-        <button type="button" class="btn bg-default" (click)="addGroup(name)">Add</button>
-      </div>
-      <div class="permission-search">
-        <input type="text"
-          [(ngModel)]="search[type]"
-          class="form-control w-100 mb-2"
-          (keyup)="filter(search[type], type, l, e)">
-        <i fa [name]="'search'" class="permission-search-icon text-muted"></i>
-      </div>
       <div class="permission-item"
         [class.active]="item.active"
         [class.selected]="item.id === targetId && type === 'list'"

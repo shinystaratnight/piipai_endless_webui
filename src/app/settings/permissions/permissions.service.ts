@@ -18,6 +18,7 @@ export class PermissionsService {
     add: 'set/',
     create: 'create/',
     addUser: 'add_user/',
+    removeUser: 'remove_user/',
     revoke: 'revoke/',
     delete: 'delete/',
     groups: 'groups/'
@@ -38,16 +39,16 @@ export class PermissionsService {
 
   public getAllUsers() {
     let endpoint = `${this.endpoints.users}`;
-    this.updateHeaders();
-    return this.http.get(endpoint)
+    let headers = this.updateHeaders();
+    return this.http.get(endpoint, { headers })
                     .map((res: Response) => res.json())
                     .catch((err: Response) => this.errorHandler(err));
   }
 
   public getPermissionsOfUser(id) {
     let endpoint = `${this.endpoints.user}${id}/`;
-    this.updateHeaders();
-    return this.http.get(endpoint)
+    let headers = this.updateHeaders();
+    return this.http.get(endpoint, { headers })
                     .map((res: Response) => res.json())
                     .catch((err: Response) => this.errorHandler(err));
   }
@@ -57,57 +58,60 @@ export class PermissionsService {
     let body = {
       permission_list: permissions
     };
-    this.updateHeaders();
-    return this.http.post(endpoint, body)
-                    .map((res: Response) => res.json())
+    let headers = this.updateHeaders();
+    return this.http.post(endpoint, body, { headers })
+                    .map((res: Response) => Observable.of(res))
                     .catch((err: Response) => this.errorHandler(err));
   }
 
   public getGroupsOnTheUser(id: string) {
     let endpoint = `${this.endpoints.user}${id}/${this.endpoints.groups}`;
-    this.updateHeaders();
-    return this.http.get(endpoint)
+    let headers = this.updateHeaders();
+    return this.http.get(endpoint, { headers })
                     .map((res: Response) => res.json())
                     .catch((err: Response) => this.errorHandler(err));
   }
 
   public revokePermissionsOfTheUser(id: string, permissions: string[]) {
     let endpoint = `${this.endpoints.user}${id}/${this.endpoints.revoke}`;
-    this.updateHeaders();
-    return this.http.get(endpoint)
-                    .map((res: Response) => res.json())
+    let body = {
+      permission_list: permissions
+    };
+    let headers = this.updateHeaders();
+    return this.http.post(endpoint, body, { headers })
+                    .map((res: Response) => Observable.of(res))
                     .catch((err: Response) => this.errorHandler(err));
   }
 
   public getAllGroups() {
     let endpoint = `${this.endpoints.base}${this.endpoints.groups}`;
-    this.updateHeaders();
-    return this.http.get(endpoint)
+    let headers = this.updateHeaders();
+    return this.http.get(endpoint, { headers })
                     .map((res: Response) => res.json())
                     .catch((err: Response) => this.errorHandler(err));
   }
 
   public getAllPermissionsOfTheGroup(id) {
     let endpoint = `${this.endpoints.group}${id}/`;
-    this.updateHeaders();
-    return this.http.get(endpoint)
+    let headers = this.updateHeaders();
+    return this.http.get(endpoint, { headers })
                     .map((res: Response) => res.json())
                     .catch((err: Response) => this.errorHandler(err));
   }
 
   public createGroup(name: string) {
-    let endpoint = `${this.endpoints.groups}${this.endpoints.create}`;
+    let endpoint = `${this.endpoints.base}${this.endpoints.groups}${this.endpoints.create}`;
     let body = {name};
-    this.updateHeaders();
-    return this.http.post(endpoint, body)
-                    .map((res: Response) => res.json())
+    let headers = this.updateHeaders();
+    return this.http.post(endpoint, body, { headers })
+                    .map((res: Response) => Observable.of(res))
                     .catch((err: Response) => this.errorHandler(err));
   }
 
   public deleteGroup(id: string) {
     let endpoint = `${this.endpoints.group}${id}/${this.endpoints.delete}`;
-    this.updateHeaders();
-    return this.http.get(endpoint)
+    let headers = this.updateHeaders();
+    return this.http.get(endpoint, { headers })
                     .map((res: Response) => res.json())
                     .catch((err: Response) => this.errorHandler(err));
   }
@@ -117,9 +121,9 @@ export class PermissionsService {
     let body = {
       permission_list: permissions
     };
-    this.updateHeaders();
-    return this.http.post(endpoint, body)
-                    .map((res: Response) => res.json())
+    let headers = this.updateHeaders();
+    return this.http.post(endpoint, body, { headers })
+                    .map((res: Response) => Observable.of(res))
                     .catch((err: Response) => this.errorHandler(err));
   }
 
@@ -128,9 +132,20 @@ export class PermissionsService {
     let body = {
       user_id: userId
     };
-    this.updateHeaders();
-    return this.http.post(endpoint, body)
-                    .map((res: Response) => res.json())
+    let headers = this.updateHeaders();
+    return this.http.post(endpoint, body, { headers })
+                    .map((res: Response) => Observable.of(res))
+                    .catch((err: Response) => this.errorHandler(err));
+  }
+
+  public removeUserOnTheGroup(groupId: string, userId: string) {
+    let endpoint = `${this.endpoints.group}${groupId}/${this.endpoints.removeUser}`;
+    let body = {
+      user_id: userId
+    };
+    let headers = this.updateHeaders();
+    return this.http.post(endpoint, body, { headers })
+                    .map((res: Response) => Observable.of(res))
                     .catch((err: Response) => this.errorHandler(err));
   }
 
@@ -139,9 +154,9 @@ export class PermissionsService {
     let body = {
       permission_list: permissions
     };
-    this.updateHeaders();
-    return this.http.post(endpoint, body)
-                    .map((res: Response) => res.json())
+    let headers = this.updateHeaders();
+    return this.http.post(endpoint, body, { headers })
+                    .map((res: Response) => Observable.of(res))
                     .catch((err: Response) => this.errorHandler(err));
   }
 

@@ -46,6 +46,9 @@ describe('SiteComponent', () => {
     const mockGenericFormService = {
       delete() {
         return Observable.of(true);
+      },
+      getAll() {
+        return Observable.of(true);
       }
     };
 
@@ -98,6 +101,20 @@ describe('SiteComponent', () => {
       expect(comp.user).toEqual({});
       expect(comp.dashboard).toBeFalsy();
       expect(comp.getPageNavigation).toHaveBeenCalledWith(mockUrl);
+    });
+  });
+
+  describe('checkPermissions method', () => {
+    it('should update pageData property', () => {
+      let data = {
+        endpoint: 'some endpoint',
+        pathData: {
+          type: 'list',
+          path: 'path'
+        }
+      };
+      comp.checkPermissions(data);
+      expect(comp.pageData).toEqual(data);
     });
   });
 

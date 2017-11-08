@@ -54,6 +54,13 @@ export class SiteComponent implements OnInit {
     );
   }
 
+  public checkPermissions(pageData) {
+    this.genericFormService.getAll(pageData.endpoint).subscribe(
+      (res: any) => this.pageData = pageData,
+      (err: any) => window.history.back()
+    );
+  }
+
   public changeFormLabel(e) {
     if (e && e.str) {
       this.formLabel = e.str;
@@ -66,10 +73,9 @@ export class SiteComponent implements OnInit {
         if (!pageData.endpoint) {
           this.router.navigate(['/']);
           return;
+        } else {
+          this.checkPermissions(pageData);
         }
-        setTimeout(() => {
-          this.pageData = pageData;
-        }, 50);
       }
     );
   }
