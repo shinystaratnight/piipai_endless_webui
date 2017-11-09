@@ -71,7 +71,7 @@ import { MoveDirective } from './directives/move.directive';
     AgmCoreModule.forRoot(),
     InfiniteScrollModule
   ],
-  exports: [GenericFormComponent, GenericListComponent],
+  exports: [GenericFormComponent, GenericListComponent, DynamicFormComponent],
   declarations: [
     DynamicFormComponent,
     FormInputComponent,

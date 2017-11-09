@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { PermissionsComponent } from './permissions/permissions.component';
+import { CompanyComponent } from './company/company.component';
 import { SettingsComponent } from './settings.component';
 
 export const routes: Routes = [
@@ -9,12 +10,12 @@ export const routes: Routes = [
     component: SettingsComponent,
     children: [
       {
-        path: 'permissions',
-        component: PermissionsComponent,
+        path: 'company',
+        component: CompanyComponent
       },
       {
-        path: 'permissions/:id',
-        component: PermissionsComponent
+        path: 'permissions',
+        component: PermissionsComponent,
       }
     ]
   }
