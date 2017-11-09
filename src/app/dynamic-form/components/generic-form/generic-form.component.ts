@@ -267,11 +267,13 @@ export class GenericFormComponent implements OnChanges {
       }
     }
     this.resetData(this.errors);
+    this.resetData(this.response);
     this.errors = this.updateErrors(this.errors, errors, this.response);
     this.errorForm.emit(this.errors);
   }
 
   public parseResponse(response) {
+    this.resetData(this.errors);
     this.resetData(this.response);
     if (!this.editForm && this.showResponse) {
       this.response = response;
@@ -476,28 +478,32 @@ export class GenericFormComponent implements OnChanges {
 
   public updateErrors(err, errors, response, field = '') {
     let error = err ? err : {};
-    let keyss = Object.keys(errors);
-    keyss.forEach((el) => {
-      if (errors[el].length) {
-        if (field) {
-          error[`${field}.${el}`] = errors[el];
-          delete response[`${field}.${el}`];
+    if (errors) {
+      let keyss = Object.keys(errors);
+      keyss.forEach((el) => {
+        if (errors[el].length) {
+          if (field) {
+            error[`${field}.${el}`] = errors[el];
+            delete response[`${field}.${el}`];
+          } else {
+            error[el] = errors[el];
+            delete response[el];
+          }
         } else {
-          error[el] = errors[el];
-          delete response[el];
+          this.updateErrors(error, errors[el], response, el);
         }
-      } else {
-        this.updateErrors(error, errors[el], response, el);
-      }
-    });
+      });
+    }
     return error;
   }
 
   public resetData(data) {
-    let keys = Object.keys(data);
-    keys.forEach((el) => {
-      delete data[el];
-    });
+    if (data) {
+      let keys = Object.keys(data);
+      keys.forEach((el) => {
+        delete data[el];
+      });
+    }
   }
 
   public checkRuleElement(metadata) {
