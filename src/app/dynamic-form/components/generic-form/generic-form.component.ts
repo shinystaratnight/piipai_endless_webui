@@ -175,8 +175,10 @@ export class GenericFormComponent implements OnChanges {
 
   public fillingForm(metadata, data) {
     metadata.forEach((el) => {
-      if (el.key) {
+      if (el.key && el.key !== 'timeline') {
         this.getValueOfData(data, el.key, el, metadata);
+      } else if (el.key && el.key === 'timeline') {
+        el.value = data;
       } else if (el.children) {
         this.fillingForm(el.children, data);
       }
@@ -189,7 +191,9 @@ export class GenericFormComponent implements OnChanges {
     let prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
-        obj['value'] = data[key];
+        if (!obj['value']) {
+          obj['value'] = data[key];
+        }
         if (obj.type === 'related') {
           let endpoint;
           if (obj.value) {
@@ -202,13 +206,13 @@ export class GenericFormComponent implements OnChanges {
                 endpoint = obj.endpoint;
               }
             } else {
-              endpoint = `${obj.endpoint}${obj.value}`;
+              endpoint = `${obj.endpoint}${obj.value}/`;
             }
           } else {
             obj.options = [];
           }
           if (endpoint) {
-            this.getRalatedData(metadata, obj.key, endpoint, {}, null, null, true);
+            this.getRalatedData(metadata, obj.key, endpoint, {}, null, 'value', true);
           }
         }
       }
@@ -302,7 +306,7 @@ export class GenericFormComponent implements OnChanges {
       );
     } else if (event.type === 'update' && event.el.key === 'timeline') {
       this.getRalatedData(this.metadata, event.el.key,
-        event.el.endpoint, null, event.query, null, true);
+        event.el.endpoint, null, event.query, undefined, false);
     }
     this.event.emit(event);
   }
@@ -440,6 +444,9 @@ export class GenericFormComponent implements OnChanges {
           }
           if (update) {
             this.updateMetadata(metadata, el.key);
+          }
+          if (params[el.key].data && params[el.key].data.value) {
+            this.getValueOfData(params[el.key].data.value, el.key, elem, metadata);
           }
         } else if (params[el.key].update) {
           let elem = this.getElementFromMetadata(metadata, el.key);

@@ -392,11 +392,7 @@ export class FormRelatedComponent
       closeModal();
       this.group.get(this.key).patchValue(e.data[this.param]);
       this.config.value = e.data[this.param];
-      this.event.emit({
-        type: 'update',
-        el: this.config,
-        currentQuery: this.config.currentQuery
-      });
+      this.displayValue = e.data[this.display];
       this.eventHandler({type: 'change'}, e.data[this.param]);
     }
   }
