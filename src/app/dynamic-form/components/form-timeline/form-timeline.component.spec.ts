@@ -7,16 +7,18 @@ import { FormsModule } from '@angular/forms';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { FormatString } from '../../../helpers/format';
+
 describe('FormTimelineComponent', () => {
   let fixture: ComponentFixture<FormTimelineComponent>;
   let comp: FormTimelineComponent;
   let el;
   let config = {
     type: 'timeline',
-    endpoint: '/ecore/api/v2/endless-core/workflownodes/timeline',
+    endpoint: '/ecore/api/v2/core/workflownodes/timeline',
     query: ['model', 'object_id'],
     model: 'endless_core.companyrel',
-    object_id: 'e3cfaf55'
+    object_id: '{id}'
   };
 
   beforeEach(() => {
@@ -48,7 +50,7 @@ describe('FormTimelineComponent', () => {
       comp.config = config;
       spyOn(comp, 'getTimeline');
       comp.ngOnInit();
-      expect(comp.objectEndpoint).toEqual('/ecore/api/v2/endless-core/workflowobjects/');
+      expect(comp.objectEndpoint).toEqual('/ecore/api/v2/core/workflowobjects/');
       expect(comp.getTimeline).toHaveBeenCalled();
     });
   });
@@ -130,7 +132,12 @@ describe('FormTimelineComponent', () => {
   describe('getTimeline method', () => {
     it('should emit event for get a timeline data', () => {
       comp.config = config;
-      let query = `?model=${comp.config.model}&object_id=${comp.config.object_id}`;
+      comp.config.value = {
+        id: '123'
+      };
+      let formatString = new FormatString();
+      let value = formatString.format(comp.config['object_id'], comp.config.value);
+      let query = `?model=${comp.config.model}&object_id=${value}`;
       spyOn(comp.event, 'emit');
       comp.getTimeline();
       expect(comp.event.emit).toHaveBeenCalledWith({
@@ -144,6 +151,7 @@ describe('FormTimelineComponent', () => {
   describe('setDataForState method', () => {
     it('should set data for chosen state', () => {
       comp.config = config;
+      comp.objectId = '123';
       let state = {
         id: 123,
         name_before_activation: 'Cancel/Fail',
@@ -157,8 +165,9 @@ describe('FormTimelineComponent', () => {
           action: 'add',
           data: {
             read_only: true,
-            value: comp.config.object_id,
-            readonly: true
+            value: '123',
+            readonly: true,
+            editForm: true
           }
         },
         state: {
@@ -166,15 +175,17 @@ describe('FormTimelineComponent', () => {
           data: {
             read_only: true,
             value: state.id,
-            readonly: true
+            readonly: true,
+            editForm: true
           }
         },
         active: {
           action: 'add',
           data: {
-            read_only: true,
+            read_only: false,
             value: true,
-            readonly: true
+            readonly: true,
+            editForm: true
           }
         }
       };

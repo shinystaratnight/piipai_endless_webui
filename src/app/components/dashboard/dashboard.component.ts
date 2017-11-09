@@ -45,8 +45,8 @@ export class DashboardComponent implements OnChanges, OnDestroy {
   @ViewChild('modal')
   public modal: any;
 
-  public userModelsEndpoint = '/ecore/api/v2/endless-core/userdashboardmodules/';
-  public modelsListEndpoint = '/ecore/api/v2/endless-core/dashboardmodules/';
+  public userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/';
+  public modelsListEndpoint = '/ecore/api/v2/core/dashboardmodules/';
   public modalRef: any;
   public userModelData: UserModelData;
 

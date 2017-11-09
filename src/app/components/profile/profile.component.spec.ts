@@ -17,8 +17,8 @@ describe('ProfileComponent', () => {
   let comp: ProfileComponent;
   let fixture;
 
-  let endpoint = '/ecore/api/v2/endless-candidate/candidatecontacts/';
-  let contactEndpoint = '/ecore/api/v2/endless-core/contacts/';
+  let endpoint = '/ecore/api/v2/candidate/candidatecontacts/';
+  let contactEndpoint = '/ecore/api/v2/core/contacts/';
 
   let response: any;
   let mockService = {

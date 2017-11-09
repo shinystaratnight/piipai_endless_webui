@@ -77,10 +77,17 @@ export class SiteService {
       };
     } else {
       urlCopy.push(lastElement);
-      data = {
-        type: 'list',
-        path: this.generatePath(urlCopy)
-      };
+      if (urlCopy.indexOf('settings') > -1) {
+        data = <any> {
+          type: undefined,
+          path: this.generatePath(urlCopy)
+        };
+      } else {
+        data = {
+          type: 'list',
+          path: this.generatePath(urlCopy)
+        };
+      }
     }
     return data;
   }

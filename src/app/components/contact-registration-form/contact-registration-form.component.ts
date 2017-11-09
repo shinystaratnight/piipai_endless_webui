@@ -12,9 +12,9 @@ import { LocalStorageService } from 'ng2-webstorage';
 export class ContactRegistrationFormComponent implements OnInit {
 
   public endpoint: string;
-  public companyContactEndpoint = `/ecore/api/v2/endless-core/companycontacts/register/`;
-  public candidateContactEndpoint = `/ecore/api/v2/endless-candidate/candidatecontacts/register/`;
-  public contactEndpoint = `/ecore/api/v2/endless-core/contacts/`;
+  public companyContactEndpoint = `/ecore/api/v2/core/companycontacts/register/`;
+  public candidateContactEndpoint = `/ecore/api/v2/candidate/candidatecontacts/register/`;
+  public contactEndpoint = `/ecore/api/v2/core/contacts/`;
 
   public tags: any;
   public company: any = {};

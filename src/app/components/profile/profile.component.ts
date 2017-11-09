@@ -32,10 +32,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   @ViewChild('modal')
   public modal;
 
-  public endpoint: string = '/ecore/api/v2/endless-candidate/candidatecontacts/';
-  public contactEndpoint: string = '/ecore/api/v2/endless-core/contacts/';
-  public skillsEndpoint: string = '/ecore/api/v2/endless-candidate/skillrels/';
-  public tagsEndpoint: string = '/ecore/api/v2/endless-candidate/tagrels/';
+  public endpoint: string = '/ecore/api/v2/candidate/candidatecontacts/';
+  public contactEndpoint: string = '/ecore/api/v2/core/contacts/';
+  public skillsEndpoint: string = '/ecore/api/v2/candidate/skillrels/';
+  public tagsEndpoint: string = '/ecore/api/v2/candidate/tagrels/';
 
   public metadata: any;
   public data: any;

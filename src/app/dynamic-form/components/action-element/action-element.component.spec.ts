@@ -26,7 +26,7 @@ describe('ActionElementComponent', () => {
       },
       {
         confirm: false,
-        endpoint: '/ecore/api/v2/endless-core/companyaddresses/sendsms/',
+        endpoint: '/ecore/api/v2/core/companyaddresses/sendsms/',
         label: 'Send sms',
         message: 'Are you sure?'
       }

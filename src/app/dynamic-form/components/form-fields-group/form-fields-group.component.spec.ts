@@ -44,7 +44,7 @@ describe('FormFieldsGroupComponent', () => {
   let config = {
     createOnly: true,
     editForm: true,
-    endpoint: '/ecore/api/v2/endless-core/formfieldgroups/',
+    endpoint: '/ecore/api/v2/core/formfieldgroups/',
     fields: [],
     id: '1aa7e89f-a695-4c2f-98f6-b44e6287e144',
     key: 'groups',
@@ -349,7 +349,7 @@ describe('FormFieldsGroupComponent', () => {
       let type = 'field';
       comp.fields = {
         textfield: {
-          endpoint: '/ecore/api/v2/endless-core/textformfields/',
+          endpoint: '/ecore/api/v2/core/textformfields/',
           label: 'Text field'
         }
       };
@@ -403,7 +403,7 @@ describe('FormFieldsGroupComponent', () => {
       let type = 'field';
       comp.fields = {
         textfield: {
-          endpoint: '/ecore/api/v2/endless-core/textformfields/',
+          endpoint: '/ecore/api/v2/core/textformfields/',
           label: 'Text field'
         }
       };
@@ -571,7 +571,7 @@ describe('FormFieldsGroupComponent', () => {
       };
       comp.fields = {
         modelfield: {
-          endpoint: '/ecore/api/v2/endless-core/modelformfield/',
+          endpoint: '/ecore/api/v2/core/modelformfield/',
           label: 'Model field'
         }
       };

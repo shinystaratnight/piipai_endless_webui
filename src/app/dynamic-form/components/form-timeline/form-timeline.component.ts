@@ -1,6 +1,8 @@
 import { Component, ViewChild, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
+import { FormatString } from '../../../helpers/format';
+
 @Component({
   selector: 'form-timeline',
   templateUrl: 'form-timeline.component.html'
@@ -20,12 +22,15 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public stateData: any = {};
   public requirements: any[];
   public modalRef: any;
+  public objectId: string;
 
   constructor(public modalService: NgbModal) {}
 
   public ngOnInit() {
-    this.objectEndpoint = '/ecore/api/v2/endless-core/workflowobjects/';
-    this.getTimeline();
+    this.objectEndpoint = '/ecore/api/v2/core/workflowobjects/';
+    if (!this.config.options) {
+      this.getTimeline();
+    }
   }
 
   public ngOnDestroy() {
@@ -52,7 +57,14 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public getTimeline(): void {
+    let formatString = new FormatString();
     let query = this.config.query.map((el) => {
+      if (el === 'object_id') {
+        if (!this.objectId) {
+          this.objectId = formatString.format(this.config[el], this.config.value);
+        }
+        return `${el}=${this.objectId}`;
+      }
       return `${el}=${this.config[el]}`;
     });
     this.event.emit({
@@ -66,13 +78,14 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     let fields = ['object_id', 'state', 'active'];
     let result = {};
     fields.forEach((el) => {
-      let value = (el === 'state') ? state.id : (el === 'object_id') ? this.config[el] : true;
+      let value = (el === 'state') ? state.id : (el === 'object_id') ? this.objectId : true;
       result[el] = {
         action: 'add',
         data: {
-          read_only: true,
+          read_only: el === 'active' ? false : true,
           value,
-          readonly: true
+          readonly: true,
+          editForm: true
         }
       };
     });
