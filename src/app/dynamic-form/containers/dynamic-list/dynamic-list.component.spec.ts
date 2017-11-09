@@ -162,7 +162,7 @@ describe('DynamicListComponent', () => {
 
   let data = {
     count: 4,
-    next: '/ecore/api/v2/endless-core/companyaddresses/?limit=1&offset=1',
+    next: '/ecore/api/v2/core/companyaddresses/?limit=1&offset=1',
     results: [{
         title: null,
         first_name: 'Test',
@@ -282,7 +282,7 @@ describe('DynamicListComponent', () => {
       comp.config = config;
       comp.data = data;
       comp.actionData = {};
-      comp.actionEndpoint = '/ecore/api/v2/endless-core/companyaddresses/sendsms/';
+      comp.actionEndpoint = '/ecore/api/v2/core/companyaddresses/sendsms/';
       comp.currentActionData = {
         phone_mobile: ['+380983456723']
       };
@@ -847,7 +847,7 @@ describe('DynamicListComponent', () => {
     it('should open modal', async(() => {
       let field = {
         label: 'Company',
-        endpoint: '/ecore/api/v2/endless-core/companyaddresses',
+        endpoint: '/ecore/api/v2/core/companyaddresses',
         type: 'form'
       };
       spyOn(comp, 'open');

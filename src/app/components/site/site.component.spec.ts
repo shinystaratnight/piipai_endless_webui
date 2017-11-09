@@ -134,7 +134,7 @@ describe('SiteComponent', () => {
         comp.pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/endless-core/contacts/',
+            endpoint: '/ecore/api/v2/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -190,7 +190,7 @@ describe('SiteComponent', () => {
         let pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/endless-core/contacts/',
+            endpoint: '/ecore/api/v2/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -217,7 +217,7 @@ describe('SiteComponent', () => {
         let pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/endless-core/contacts/',
+            endpoint: '/ecore/api/v2/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -244,7 +244,7 @@ describe('SiteComponent', () => {
         let pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/endless-core/contacts/',
+            endpoint: '/ecore/api/v2/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -338,7 +338,7 @@ describe('SiteComponent', () => {
       comp.pages = [
         {
           childrens: [],
-          endpoint: '/ecore/api/v2/endless-candidate/candidatecontacts/',
+          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
           name: 'Candidate Contact',
           url: '/candidatecontacts/',
           __str__: 'Candidate Contact'

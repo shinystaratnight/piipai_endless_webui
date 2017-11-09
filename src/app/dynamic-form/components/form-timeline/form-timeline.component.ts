@@ -27,7 +27,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   constructor(public modalService: NgbModal) {}
 
   public ngOnInit() {
-    this.objectEndpoint = '/ecore/api/v2/endless-core/workflowobjects/';
+    this.objectEndpoint = '/ecore/api/v2/core/workflowobjects/';
     if (!this.config.options) {
       this.getTimeline();
     }

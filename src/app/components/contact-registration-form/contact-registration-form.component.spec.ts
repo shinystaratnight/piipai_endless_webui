@@ -145,7 +145,7 @@ describe('ContactRegistrationFormComponent', () => {
     it('should set endpoint',
       async(inject([LocalStorageService, ActivatedRoute],
         (storage: LocalStorageService, route: ActivatedRoute) => {
-          comp.contactEndpoint = '/ecore/api/v2/endless-core/contacts/';
+          comp.contactEndpoint = '/ecore/api/v2/core/contacts/';
           storage.store('contact', {id: 2});
           comp.ngOnInit();
           expect(comp.endpoint).toEqual(`${comp.contactEndpoint}2/password/`);
@@ -510,7 +510,7 @@ describe('ContactRegistrationFormComponent', () => {
     });
 
     it('should update endpoint', () => {
-      let endpoint = `/ecore/api/v2/endless-core/companycontacts/register/`;
+      let endpoint = `/ecore/api/v2/core/companycontacts/register/`;
       comp.candidateContactEndpoint = endpoint;
       comp.error = {};
       spyOn(comp, 'reset');

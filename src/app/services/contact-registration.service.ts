@@ -15,10 +15,10 @@ export class ContactRegistrationService {
   public companyAddress: string;
 
   constructor(private http: Http) {
-    this.contactUrl = `/ecore/api/v2/endless-core/contacts/`;
-    this.companyUrl = `/ecore/api/v2/endless-core/companies/`;
-    this.companyLocUrl = `/ecore/api/v2/endless-core/companylocalizations/`;
-    this.companyAddress = `/ecore/api/v2/endless-core/companyaddresses/`;
+    this.contactUrl = `/ecore/api/v2/core/contacts/`;
+    this.companyUrl = `/ecore/api/v2/core/companies/`;
+    this.companyLocUrl = `/ecore/api/v2/core/companylocalizations/`;
+    this.companyAddress = `/ecore/api/v2/core/companyaddresses/`;
   }
 
   public getCompaniesOfCountry(code2) {

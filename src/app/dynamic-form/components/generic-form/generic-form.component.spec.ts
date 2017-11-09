@@ -1242,7 +1242,7 @@ describe('GenericFormComponent', () => {
 
     describe('checkFormBuilder method', () => {
       it('should remove groups element of from builder', () => {
-        let endpoint = '/ecore/api/v2/endless-core/forms/';
+        let endpoint = '/ecore/api/v2/core/forms/';
         let config = [
           { key: 'groups' }
         ];
@@ -1258,7 +1258,7 @@ describe('GenericFormComponent', () => {
       });
 
       it('should update groups element of form builder', () => {
-        let endpoint = '/ecore/api/v2/endless-core/forms/';
+        let endpoint = '/ecore/api/v2/core/forms/';
         let config = <any> [
           { key: 'groups' }
         ];
@@ -1273,7 +1273,7 @@ describe('GenericFormComponent', () => {
       });
 
       it('should change choice element on formOptions type', () => {
-        let endpoint = '/ecore/api/v2/endless-core/radiobuttonsformfields/';
+        let endpoint = '/ecore/api/v2/core/radiobuttonsformfields/';
         let config = <any> [
           { key: 'choices' }
         ];

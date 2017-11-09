@@ -82,7 +82,7 @@ export class GenericFormComponent implements OnChanges {
   public formObject: any;
 
   public workflowEndpoints = {
-    state: `/ecore/api/v2/endless-core/workflownodes/`,
+    state: `/ecore/api/v2/core/workflownodes/`,
     app: `/ecore/api/v2/apps/`
   };
 
@@ -650,7 +650,7 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public checkFormBuilder(metadata: any[], endpoint: string) {
-    if (endpoint === '/ecore/api/v2/endless-core/forms/') {
+    if (endpoint === '/ecore/api/v2/core/forms/') {
       let groupElement: any;
       let groupKey: string = 'groups';
       metadata.forEach((el, i) => {
@@ -669,8 +669,8 @@ export class GenericFormComponent implements OnChanges {
         }
       }
     }
-    if (endpoint === '/ecore/api/v2/endless-core/selectformfields/' ||
-        endpoint === '/ecore/api/v2/endless-core/radiobuttonsformfields/') {
+    if (endpoint === '/ecore/api/v2/core/selectformfields/' ||
+        endpoint === '/ecore/api/v2/core/radiobuttonsformfields/') {
           metadata.forEach((el) => {
             if (el.key === 'choices') {
               el.type = 'formOptions';

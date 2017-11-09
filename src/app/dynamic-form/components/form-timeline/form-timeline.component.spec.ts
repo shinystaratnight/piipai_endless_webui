@@ -15,7 +15,7 @@ describe('FormTimelineComponent', () => {
   let el;
   let config = {
     type: 'timeline',
-    endpoint: '/ecore/api/v2/endless-core/workflownodes/timeline',
+    endpoint: '/ecore/api/v2/core/workflownodes/timeline',
     query: ['model', 'object_id'],
     model: 'endless_core.companyrel',
     object_id: '{id}'
@@ -50,7 +50,7 @@ describe('FormTimelineComponent', () => {
       comp.config = config;
       spyOn(comp, 'getTimeline');
       comp.ngOnInit();
-      expect(comp.objectEndpoint).toEqual('/ecore/api/v2/endless-core/workflowobjects/');
+      expect(comp.objectEndpoint).toEqual('/ecore/api/v2/core/workflowobjects/');
       expect(comp.getTimeline).toHaveBeenCalled();
     });
   });
