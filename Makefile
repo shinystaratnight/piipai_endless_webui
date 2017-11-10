@@ -1,4 +1,4 @@
-make:
+all:
 	npm install
 	npm run build:prod
 	rm -rf /www/*
