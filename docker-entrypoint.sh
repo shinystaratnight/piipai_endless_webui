@@ -1,4 +1,4 @@
 #!/bin/bash
 echo "Start building..."
-exec make build-for-docker
+exec make
 echo "Building finished"
