@@ -4,6 +4,16 @@ $breadcrumb-bg:               transparent;
 $breadcrumb-divider:          ">";
 $breadcrumb-item-padding:     .2rem;
 
+// Theme color
+$themes: ('default', 'labour', 'indigo', 'teal', 'brown');
+$theme-colors: (
+  'default': #3cb1db,
+  'labour': #f58926,
+  'indigo': #3f51b5,
+  'teal': #009688,
+  'brown': #795548
+);
+
 //Hamburger
 $hamburger-padding-x: .4rem;
 $hamburger-padding-y: .8rem;

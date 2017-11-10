@@ -33,6 +33,8 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   public err: any;
   public base64: string;
 
+  public value: any;
+
   public options = {
     audio: false,
     video: true,
@@ -64,6 +66,12 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   public ngOnInit(): void {
     this.addControl(this.config, this.fb);
     this.mime = 'image/jpeg';
+    if (this.config.default) {
+      this.value = this.config.default;
+      if (this.config.value && this.config.value.thumb) {
+        this.value = this.config.value.origin;
+      }
+    }
   }
 
   public ngAfterViewInit() {
@@ -183,6 +191,7 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
 
   public updateValue(name, value) {
     this.fileName = name;
+    this.value = value;
     this.group.get(this.key).patchValue(value);
   }
 

@@ -18,6 +18,12 @@ $spinner-background-color: $brand-primary;
   top: 0;
   left: 0;
 
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: map-get($theme-colors, $item);
+    }
+  }
+
   -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
   animation: sk-bounce 2.0s infinite ease-in-out;
 }

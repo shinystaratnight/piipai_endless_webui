@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
+import { meta } from './company.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 
 @Component({
@@ -15,58 +16,10 @@ export class CompanyComponent implements OnInit {
   public errors: any;
   public response: any;
 
-  public config = [
-    {
-      type: 'picture',
-      key: 'logo',
-      read_only: false,
-      templateOptions: {
-        label: 'Logo',
-        label_upload: 'Choose a file',
-        type: 'file',
-        required: false,
-      }
-    },
-    {
-      type: 'related',
-      key: 'company',
-      read_only: false,
-      endpoint: '/ecore/api/v2/core/companies/',
-      templateOptions: {
-        label: 'Company',
-        required: true,
-        display: '__str__',
-        param: 'id'
-      }
-    },
-    {
-      type: 'input',
-      key: 'font',
-      templateOptions: {
-        max: 32,
-        label: 'Font',
-        type: 'text',
-      }
-    },
-    {
-      type: 'input',
-      key: 'color_scheme',
-      templateOptions: {
-        max: 32,
-        label: 'Color scheme',
-        type: 'text',
-      }
-    },
-    {
-      type: 'input',
-      key: 'forwarding_number',
-      templateOptions: {
-        max: 32,
-        label: 'Forwarding number',
-        type: 'text',
-      }
-    }
-  ];
+  public currentTheme: string;
+  public currentFornt: string;
+
+  public config = meta;
 
   public companySettingsData: any;
 
@@ -105,14 +58,29 @@ export class CompanyComponent implements OnInit {
       if (data) {
         if (!obj['value']) {
           obj['value'] = data[key];
-        }
-        if (obj.type === 'related') {
-          obj.options = [];
+          if (key === 'color_scheme') {
+            this.currentTheme = data[key];
+          }
         }
       }
     } else {
       if (data[prop]) {
         this.getValueOfData(data[prop], keys.join('.'), obj, metadata);
+      }
+    }
+  }
+
+  public eventHandler(e) {
+    if (e.type === 'change' && e.el.type === 'radio') {
+      let body = document.body;
+      if (e.el.templateOptions.type === 'color') {
+        body.classList.remove(this.currentTheme);
+        body.classList.add(`${e.value}-theme`);
+        this.currentTheme = `${e.value}-theme`;
+      } else if (e.el.templateOptions.type === 'text') {
+        let font = `${e.value}, sans-serif`;
+        body.style.fontFamily = font;
+        this.currentFornt = e.value;
       }
     }
   }

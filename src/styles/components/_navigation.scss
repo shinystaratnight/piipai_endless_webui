@@ -3,6 +3,12 @@ $nested-width: 300px;
 .navigation {
   background-color: lighten($brand-primary, 10%);
 
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: lighten(map-get($theme-colors, $item), 10%);
+    }
+  }
+
   .logo {
     display: flex;
     justify-content: center;
@@ -17,6 +23,12 @@ $nested-width: 300px;
     background-repeat: no-repeat;
     background-size: auto 4vh;
     background-position: 2rem center;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        background-color: darken(map-get($theme-colors, $item), 10%);
+      }
+    }
 
     &-image {
       width: auto;
@@ -55,10 +67,17 @@ $nested-width: 300px;
       top: -41px;
       left: 0;
       margin-top: -7px;
+      font-family: Roboto, sans-serif;
       font-size: 8.7rem;
       color: $brand-primary;
       opacity: .5;
       z-index: 0;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          color: map-get($theme-colors, $item);
+        }
+      }
 
       @include media-breakpoint-down('lg') {
         display: none;
@@ -90,6 +109,12 @@ $nested-width: 300px;
       margin-right: .5rem;
       border-radius: 50%;
       background-color: darken($brand-primary, 10%);
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          background-color: darken(map-get($theme-colors, $item), 10%);
+        }
+      }
     }
 
     &-icon {
@@ -111,6 +136,12 @@ $nested-width: 300px;
       background-color: $brand-primary;
       box-shadow: inset 0 0 4px rgba(0, 0, 0, .2);
       z-index: 1000;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          background-color: map-get($theme-colors, $item);
+        }
+      }
 
       a {
         display: block;
@@ -156,6 +187,12 @@ $nested-width: 300px;
       box-shadow: inset 0 0 4px rgba(0, 0, 0, .2);
       z-index: 200;
 
+      @each $item in $themes {
+        .#{$item}-theme & {
+          background-color: lighten(map-get($theme-colors, $item), 10%);
+        }
+      }
+
       & .navigation-list-nested {
         position: relative;
         left: 0;
@@ -183,6 +220,12 @@ $nested-width: 300px;
       background-color: lighten($brand-primary, 10%);
       box-shadow: inset 0 0 2px 1px rgba(0, 0, 0, .2);
       z-index: 1000;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          background-color: lighten(map-get($theme-colors, $item), 10%);
+        }
+      }
 
       & .navigation-list-nested {
         display: none;
