@@ -830,17 +830,11 @@ describe('FormRelatedComponent', () => {
       comp.display = 'name';
       comp.key = key;
       spyOn(test, 'closeModal');
-      spyOn(comp.event, 'emit');
       spyOn(comp, 'eventHandler');
       comp.formEvent(event, test.closeModal, type);
       expect(test.closeModal).toHaveBeenCalled();
       expect(comp.group.get(comp.key).value).toEqual(123);
       expect(comp.config.value).toEqual(123);
-      expect(comp.event.emit).toHaveBeenCalledWith({
-        type: 'update',
-        el: comp.config,
-        currentQuery: comp.config.currentQuery
-      });
       expect(comp.eventHandler).toHaveBeenCalledWith({type: 'change'}, 123);
     })));
 

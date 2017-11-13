@@ -171,7 +171,7 @@ describe('DashboardComponent', () => {
       let widget = {
         id: '123'
       };
-      comp.userModelsEndpoint = '/ecore/api/v2/endless-core/userdashboardmodules/';
+      comp.userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/';
       spyOn(comp.changeWidgetList, 'emit');
       comp.removeModule(widget);
       expect(comp.changeWidgetList.emit).toHaveBeenCalledWith({
@@ -228,7 +228,7 @@ describe('DashboardComponent', () => {
           module_data: {
             model: 'companycontact',
             name: 'Company Contact',
-            app: 'endless_core',
+            app: 'core',
             plural_name: 'Company Contacts'
           },
           is_active: true,
@@ -239,7 +239,7 @@ describe('DashboardComponent', () => {
         {
           name: 'Company Contacts',
           url: '/companycontacts/',
-          endpoint: '/ecore/api/v2/endless-core/companycontacts/',
+          endpoint: '/ecore/api/v2/core/companycontacts/',
           __str__: 'Company Contacts',
           childrens: []
         }
@@ -287,7 +287,7 @@ describe('DashboardComponent', () => {
         {
           label: 'Company Contact',
           link: '/companycontact/',
-          endpoint: '/ecore/api/v2/endless-core/companycontacts/',
+          endpoint: '/ecore/api/v2/core/companycontacts/',
           position: 2,
           ui_config: {},
           labelOfWidgetGroup: 'ENDLESS CORE',
@@ -338,12 +338,12 @@ describe('DashboardComponent', () => {
 
   describe('getLinkByEndpoint method', () => {
     it('should return link by endpoint', () => {
-      let endpoint = '/ecore/api/v2/endless-core/companycontacts/';
+      let endpoint = '/ecore/api/v2/core/companycontacts/';
       let pagesList: Page[] = [
         {
           name: 'Company Contacts',
           url: '/companycontacts/',
-          endpoint: '/ecore/api/v2/endless-core/companycontacts/',
+          endpoint: '/ecore/api/v2/core/companycontacts/',
           __str__: 'Company Contacts',
           childrens: []
         }

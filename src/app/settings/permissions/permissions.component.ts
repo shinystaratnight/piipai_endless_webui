@@ -1,0 +1,242 @@
+import { Component, OnInit } from '@angular/core';
+
+import { PermissionsService } from './permissions.service';
+
+export interface Permission {
+  id: string;
+  name: string;
+  codename: string;
+  active?: boolean;
+}
+
+export interface User {
+  id: string;
+  name: string;
+}
+
+export interface Group {
+  id: string;
+  name: string;
+  active?: boolean;
+}
+
+@Component({
+  selector: 'permissions',
+  templateUrl: 'permissions.component.html'
+})
+
+export class PermissionsComponent implements OnInit {
+
+  public permissionsList: Permission[];
+  public targetPermissions: Permission[];
+  public cashPermissions: Permission[];
+
+  public users: User[];
+  public cashUsers: User[];
+
+  public groups: Group[];
+  public targetGroups: Group[];
+  public cashGroups: Group[];
+
+  public targetId: string;
+
+  public search = {
+    list: '',
+    permission: '',
+    group: ''
+  };
+
+  public name: string;
+
+  constructor(
+    private service: PermissionsService
+  ) {}
+
+  public ngOnInit() {
+    this.getPermissions();
+    this.getGroups();
+    this.getUsers();
+  }
+
+  public getGroups(): void {
+    this.service.getAllGroups().subscribe(
+      (res: any) => {
+        this.cashGroups = res.results;
+        this.groups = [].concat(res.results);
+      }
+    );
+  }
+
+  public getUsers(): void {
+    this.service.getAllUsers().subscribe(
+      (res: any) => {
+        this.cashUsers = res.user_list;
+        this.users = [].concat(res.user_list);
+      }
+    );
+  }
+
+  public getPermissions(): void {
+    this.service.getAllPermissions().subscribe(
+      (res: any) => {
+        this.cashPermissions = res.permission_list;
+        this.permissionsList = [].concat(this.cashPermissions);
+      }
+    );
+  }
+
+  public toggle(type: string, element: string, item: Group|Permission): void {
+    if (type === 'list') {
+      this.getPermissionsOf(item.id, element);
+      if (element === 'user') {
+        this.getGroupsOfUser(item.id);
+      }
+      this.targetId = item.id;
+      this.resetData(this.groups);
+      this.resetData(this.permissionsList);
+      return;
+    }
+    if (type === 'permission') {
+      this.togglePermissions(<Permission> item, element);
+    } else if (type === 'group') {
+      this.toggleGroup(item);
+    }
+  }
+
+  public togglePermissions(permission: Permission, type: string): void {
+    if (permission.active) {
+      if (type === 'user') {
+        this.service.revokePermissionsOfTheUser(this.targetId, [permission.id])
+                    .subscribe((res: any) => permission.active = false);
+      }
+      if (type === 'group') {
+        this.service.revokePermissionsOfTheGroup(this.targetId, [permission.id])
+                    .subscribe((res: any) => permission.active = false);
+      }
+    } else {
+      if (type === 'user') {
+        this.service.addPermissionsOnTheUser(this.targetId, [permission.id])
+                    .subscribe((res: any) => permission.active = true);
+      }
+      if (type === 'group') {
+        this.service.addPermissionsOnTheGroup(this.targetId, [permission.id])
+                    .subscribe((res: any) => permission.active = true);
+      }
+    }
+  }
+
+  public toggleGroup(group: Group): void {
+    if (!group.active) {
+      this.service.addUserOnTheGroup(group.id, this.targetId).subscribe(
+        (res: any) => {
+          group.active = true;
+        }
+      );
+    } else if (group.active) {
+      this.service.removeUserOnTheGroup(group.id, this.targetId).subscribe(
+        (res: any) => {
+          group.active = false;
+        }
+      );
+    }
+  }
+
+  public addGroup(name: string): void {
+    this.service.createGroup(name).subscribe(
+      (res: any) => {
+        this.name = '';
+        this.getGroups();
+      });
+  }
+
+  public removeGroup(group: Group, e: any): void {
+    e.preventDefault();
+    e.stopPropagation();
+    this.service.deleteGroup(group.id).subscribe(
+      (res: any) => {
+        this.cashGroups.splice(this.groups.indexOf(group), 1);
+        this.groups.splice(this.groups.indexOf(group), 1);
+      }
+    );
+  }
+
+  public getPermissionsOf(id: string, type: string): void {
+    if (type === 'user') {
+      this.service.getPermissionsOfUser(id).subscribe(
+        (res: any) => {
+          this.targetPermissions = <Permission[]> res.results;
+          this.combineElement(this.targetPermissions, this.permissionsList);
+        }
+      );
+    }
+    if (type === 'group') {
+      this.service.getAllPermissionsOfTheGroup(id).subscribe(
+        (res: any) => {
+          this.targetPermissions = <Permission[]> res.results;
+          this.combineElement(this.targetPermissions, this.permissionsList);
+        }
+      );
+    }
+  }
+
+  public getGroupsOfUser(id) {
+    this.service.getGroupsOnTheUser(id).subscribe(
+      (res: any) => {
+        this.targetGroups = <Group[]> res.results;
+        this.combineElement(this.targetGroups, this.groups);
+      }
+    );
+  }
+
+  public combineElement(responseData: any[], target: any[]): void {
+    target.forEach((el) => {
+      responseData.forEach((element) => {
+        if (el.id === element.id) {
+          el.active = true;
+        }
+      });
+    });
+  }
+
+  public filter(value, type, target, element) {
+    type = type === 'list' ? element : type;
+    let source = type === 'user' ? this.cashUsers :
+      type === 'group' ? this.cashGroups :
+      type === 'permission' ? this.cashPermissions : null;
+    if (value && source) {
+      target.length = 0;
+      let newArray = source.filter((el) => {
+        let val = el.name;
+        if (val) {
+          return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
+        }
+      });
+      target.push(...newArray);
+    } else {
+      target.length = 0;
+      target = source ? target.push(...source) : [];
+    }
+  }
+
+  public beforeChange(): void {
+    this.targetId = undefined;
+    this.search.list = '';
+    this.search.group = '';
+    this.search.permission = '';
+    this.targetPermissions = [];
+    this.targetGroups = [];
+    this.groups.length = 0;
+    this.permissionsList.length = 0;
+    this.groups = [].concat(this.cashGroups);
+    this.permissionsList = [].concat(this.cashPermissions);
+    this.resetData(this.groups);
+    this.resetData(this.permissionsList);
+  };
+
+  public resetData(array: any[]) {
+    array.forEach((el) => {
+      delete el.active;
+    });
+  }
+
+}

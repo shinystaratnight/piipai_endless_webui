@@ -21,8 +21,8 @@ export class FormFieldsGroupComponent implements OnInit {
   @ViewChild('modal')
   public modal: any;
 
-  public formFieldGroupsEndpoint: string = '/ecore/api/v2/endless-core/formfieldgroups/';
-  public formModelFieldEndpoint: string = '/ecore/api/v2/endless-core/modelformfields/';
+  public formFieldGroupsEndpoint: string = '/ecore/api/v2/core/formfieldgroups/';
+  public formModelFieldEndpoint: string = '/ecore/api/v2/core/modelformfields/';
   public groups: FormFieldsGroup[];
   public fields: any;
   public choosenType: string;
@@ -54,46 +54,46 @@ export class FormFieldsGroupComponent implements OnInit {
     }
     this.fields = {
       modelfield: {
-        endpoint: '/ecore/api/v2/endless-core/modelformfields/',
+        endpoint: '/ecore/api/v2/core/modelformfields/',
         label: 'Model field'
       },
       group: {
         label: 'Custom fields:'
       },
       textareafield: {
-        endpoint: '/ecore/api/v2/endless-core/textareaformfields/',
+        endpoint: '/ecore/api/v2/core/textareaformfields/',
         label: 'TextArea field'
       },
       numberfield: {
-        endpoint: '/ecore/api/v2/endless-core/numberformfields/',
+        endpoint: '/ecore/api/v2/core/numberformfields/',
         label: 'Number field'
       },
       selectfield: {
-        endpoint: '/ecore/api/v2/endless-core/selectformfields/',
+        endpoint: '/ecore/api/v2/core/selectformfields/',
         label: 'Select field'
       },
       filefield: {
-        endpoint: '/ecore/api/v2/endless-core/fileformfields/',
+        endpoint: '/ecore/api/v2/core/fileformfields/',
         label: 'File field'
       },
       imagefield: {
-        endpoint: '/ecore/api/v2/endless-core/imageformfields/',
+        endpoint: '/ecore/api/v2/core/imageformfields/',
         label: 'Image field'
       },
       checkboxfield: {
-        endpoint: '/ecore/api/v2/endless-core/checkboxformfields/',
+        endpoint: '/ecore/api/v2/core/checkboxformfields/',
         label: 'Checkbox field'
       },
       datefield: {
-        endpoint: '/ecore/api/v2/endless-core/dateformfields/',
+        endpoint: '/ecore/api/v2/core/dateformfields/',
         label: 'Date field'
       },
       radiobuttonsfield: {
-        endpoint: '/ecore/api/v2/endless-core/radiobuttonsformfields/',
+        endpoint: '/ecore/api/v2/core/radiobuttonsformfields/',
         label: 'Radio button field'
       },
       textfield: {
-        endpoint: '/ecore/api/v2/endless-core/textformfields/',
+        endpoint: '/ecore/api/v2/core/textformfields/',
         label: 'Text field'
       }
     };

@@ -5,7 +5,7 @@
     <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
     <div class="container-fluid pb-5">
       <generic-form
-        *ngIf="pageData.endpoint !== '/ecore/api/v2/endless-core/forms/'"
+        *ngIf="pageData.endpoint !== '/ecore/api/v2/core/forms/'"
         [title]="pageData.pathData.title"
         [modal]="pageData.pathData.modal"
         [endpoint]="pageData.endpoint"
@@ -22,7 +22,7 @@
       </generic-form>
     </div>
     <form-builder
-      *ngIf="pageData.endpoint === '/ecore/api/v2/endless-core/forms/'"
+      *ngIf="pageData.endpoint === '/ecore/api/v2/core/forms/'"
       [path]="pageData.pathData.path"
       [endpoint]="pageData.endpoint"
       [id]="pageData.pathData.id"
@@ -46,3 +46,5 @@
     [userModules]="userModules"
     [modulesList]="modulesList"
     (changeWidgetList)="updateNavigation($event)"></dashboard>
+
+<router-outlet></router-outlet>

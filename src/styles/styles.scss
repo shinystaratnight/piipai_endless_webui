@@ -2,6 +2,7 @@
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 @import '../../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss';
 @import '../../node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.css';
+@import '../../node_modules/ng2-toastr/ng2-toastr.css';
 
 @import 'basic.scss';
 @import 'components/map.scss';
@@ -19,3 +20,4 @@
 @import 'components/search-bar.scss';
 @import 'components/sign-in.scss';
 @import 'components/login-form.scss';
+@import 'components/permissions.scss';

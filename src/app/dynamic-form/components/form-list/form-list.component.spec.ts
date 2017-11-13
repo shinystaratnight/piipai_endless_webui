@@ -12,7 +12,7 @@ describe('FormListComponent', () => {
   let config = {
     type: 'list',
     key: 'company',
-    endpoint: '/ecore/api/v2/endless-core/contacts/',
+    endpoint: '/ecore/api/v2/core/contacts/',
     collapsed: true,
     parent_field: 'comapny',
     id: '124',

@@ -46,6 +46,9 @@ describe('SiteComponent', () => {
     const mockGenericFormService = {
       delete() {
         return Observable.of(true);
+      },
+      getAll() {
+        return Observable.of(true);
       }
     };
 
@@ -101,6 +104,20 @@ describe('SiteComponent', () => {
     });
   });
 
+  describe('checkPermissions method', () => {
+    it('should update pageData property', () => {
+      let data = {
+        endpoint: 'some endpoint',
+        pathData: {
+          type: 'list',
+          path: 'path'
+        }
+      };
+      comp.checkPermissions(data);
+      expect(comp.pageData).toEqual(data);
+    });
+  });
+
   describe('changeFormLabel method', () => {
     it('should change formLabel proeprty', () => {
       let event = {
@@ -117,7 +134,7 @@ describe('SiteComponent', () => {
         comp.pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/endless-core/contacts/',
+            endpoint: '/ecore/api/v2/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -173,7 +190,7 @@ describe('SiteComponent', () => {
         let pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/endless-core/contacts/',
+            endpoint: '/ecore/api/v2/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -200,7 +217,7 @@ describe('SiteComponent', () => {
         let pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/endless-core/contacts/',
+            endpoint: '/ecore/api/v2/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -227,7 +244,7 @@ describe('SiteComponent', () => {
         let pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/endless-core/contacts/',
+            endpoint: '/ecore/api/v2/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -321,7 +338,7 @@ describe('SiteComponent', () => {
       comp.pages = [
         {
           childrens: [],
-          endpoint: '/ecore/api/v2/endless-candidate/candidatecontacts/',
+          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
           name: 'Candidate Contact',
           url: '/candidatecontacts/',
           __str__: 'Candidate Contact'

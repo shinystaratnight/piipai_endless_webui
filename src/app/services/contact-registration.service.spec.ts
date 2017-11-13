@@ -14,10 +14,10 @@ import { ContactRegistrationService } from './contact-registration.service';
 
 describe('ContactRegistrationService', () => {
 
-  const contactUrl = `/ecore/api/v2/endless-core/contacts/`;
-  const companyUrl = `/ecore/api/v2/endless-core/companies/`;
-  const companyLocUrl = `/ecore/api/v2/endless-core/companylocalizations/`;
-  const companyAddress = `/ecore/api/v2/endless-core/companyaddresses/`;
+  const contactUrl = `/ecore/api/v2/core/contacts/`;
+  const companyUrl = `/ecore/api/v2/core/companies/`;
+  const companyLocUrl = `/ecore/api/v2/core/companylocalizations/`;
+  const companyAddress = `/ecore/api/v2/core/companyaddresses/`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
