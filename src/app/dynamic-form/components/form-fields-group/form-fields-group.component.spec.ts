@@ -594,4 +594,86 @@ describe('FormFieldsGroupComponent', () => {
     });
   });
 
+  describe('filter method', () => {
+    it('should filter fileds by value', () => {
+      let val = 'job';
+      comp.groups = [];
+      spyOn(comp, 'toggleElement');
+      spyOn(comp, 'checkElement');
+      comp.filter(val);
+      expect(comp.toggleElement).toHaveBeenCalledWith(comp.groups, true);
+      expect(comp.checkElement).toHaveBeenCalledWith(val, comp.groups, true);
+    });
+
+    it('should return all fields', () => {
+      let val = '';
+      comp.groups = [];
+      spyOn(comp, 'toggleElement');
+      spyOn(comp, 'addCollapseProperty');
+      comp.filter(val);
+      expect(comp.toggleElement).toHaveBeenCalledWith(comp.groups, false);
+      expect(comp.addCollapseProperty).toHaveBeenCalledWith(comp.groups);
+    });
+  });
+
+  describe('checkElement method', () => {
+    it('should update fields property and return true', () => {
+      let value = 't';
+      let array = <any> [
+        {
+          label: 'Contact',
+          model_fields: [
+            {
+              label: 'Title'
+            }
+          ]
+        }
+      ];
+      let result = comp.checkElement(value, array);
+      expect(array).toEqual([
+        {
+          label: 'Contact',
+          hidden: false,
+          isCollapsed: false,
+          model_fields: [
+            {
+              label: 'Title',
+              hidden: false
+            }
+          ]
+        }
+      ]);
+      expect(result).toBeTruthy();
+    });
+  });
+
+  describe('toggleElement method', () => {
+    it('should toggle hidden property', () => {
+      let array = <any> [
+        {
+          label: 'Country',
+          model_fields: [
+            {
+              label: 'Title'
+            }
+          ]
+        }
+      ];
+      let hidden = true;
+      comp.toggleElement(array, hidden);
+      expect(array).toEqual([
+        {
+          label: 'Country',
+          hidden: true,
+          model_fields: [
+            {
+              label: 'Title',
+              hidden: true
+            }
+          ]
+        }
+      ]);
+    });
+  });
+
 });

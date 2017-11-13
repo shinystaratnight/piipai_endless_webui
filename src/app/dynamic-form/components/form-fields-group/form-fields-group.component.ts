@@ -23,7 +23,7 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public formFieldGroupsEndpoint: string = '/ecore/api/v2/core/formfieldgroups/';
   public formModelFieldEndpoint: string = '/ecore/api/v2/core/modelformfields/';
-  public groups: FormFieldsGroup[];
+  public groups: any[];
   public fields: any;
   public choosenType: string;
   public types: string[];
@@ -34,6 +34,8 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public groupId: string;
   public error: any;
+
+  public search: string;
 
   constructor(
     private modalService: NgbModal,
@@ -205,6 +207,9 @@ export class FormFieldsGroupComponent implements OnInit {
       );
     } else {
       let body = Object.assign({group: this.groupId}, field);
+      delete body.hidden;
+      delete body.isCollapsed;
+      delete body.model_fields;
       this.genericFormService.submitForm(this.formModelFieldEndpoint, body).subscribe(
         (res: any) => {
           field.id = res.id;
@@ -217,6 +222,9 @@ export class FormFieldsGroupComponent implements OnInit {
   public toggleRequireProperty(field): void {
     if (field.id) {
       let body = Object.assign({group: this.groupId}, field);
+      delete body.hidden;
+      delete body.isCollapsed;
+      delete body.model_fields;
       body.required = !field.required;
       this.genericFormService
         .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
@@ -343,4 +351,49 @@ export class FormFieldsGroupComponent implements OnInit {
       };
     }
   }
+
+  public filter(value) {
+    if (value && this.groups) {
+      this.toggleElement(this.groups, true);
+      this.checkElement(value, this.groups, true);
+    } else {
+      if (this.groups) {
+        this.toggleElement(this.groups, false);
+        this.addCollapseProperty(this.groups);
+      }
+    }
+  }
+
+  public checkElement(value, array, first = false) {
+    let result = false;
+    array.forEach((el) => {
+      let self = false;
+      let children = false;
+      let val = el.label;
+      if (val && val.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+        self = true;
+      }
+      if (el.model_fields) {
+        children = this.checkElement(value, el.model_fields);
+        el.isCollapsed = !children;
+      }
+      el.hidden = !(self || children);
+      if (!result) {
+        result = !el.hidden;
+      }
+    });
+    if (!first) {
+      return result;
+    }
+  }
+
+  public toggleElement(array, hidden) {
+    array.forEach((el) => {
+      el.hidden = hidden;
+      if (el.model_fields) {
+        this.toggleElement(el.model_fields, hidden);
+      }
+    });
+  }
+
 }

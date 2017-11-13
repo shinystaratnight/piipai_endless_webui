@@ -1,30 +1,48 @@
 <div class="form-group">
+  <div class="form-group search">
+    <input type="text" class="form-control w-100" [(ngModel)]="search" (keyup)="filter(search)" placeholder="Search">
+    <i fa [name]="'search'" class="text-muted search-icon" ></i>
+  </div>
   <template [ngTemplateOutlet]="list" [ngOutletContext]="{list: groups}"></template>
 </div>
 
 <template #list let-l="list">
   <div *ngFor="let item of l">
-    <div *ngIf="item.model_fields" class="d-flex justify-content-center flex-column">
+    <div *ngIf="item.model_fields && !item.hidden" class="d-flex justify-content-center flex-column">
       <div class="d-flex align-items-center p-2 group">
-        <b class="text-muted">{{item.lookup_label}}</b>
-        <i *ngIf="item.isCollapsed"
-           fa
-           [name]="'plus-square'"
-           class="icon text-primary ml-auto"
-           (click)="item.isCollapsed = !item.isCollapsed">
-        </i>
-        <i *ngIf="!item.isCollapsed"
-           fa
-           [name]="'minus-square'"
-           class="icon text-muted ml-auto"
-           (click)="item.isCollapsed = !item.isCollapsed">
-        </i>
+        <b class="text-muted">{{item.label}}</b>
+        <div class="ml-auto d-flex align-items-center flex-wrap">
+          <button type="button" class="btn btn-sm m-1"
+                  [class.btn-default]="!item.id"
+                  [class.btn-success]="item.id"
+                  (click)="toggleActiveState(item)">
+            Active
+          </button>
+          <button type="button" class="btn btn-sm m-1 ml-2"
+                  [class.btn-default]="item.required"
+                  [class.btn-success]="item.required"
+                  (click)="toggleRequireProperty(item)">
+            Required
+          </button>
+          <i *ngIf="item.isCollapsed"
+             fa
+             [name]="'plus-square'"
+             class="icon text-primary m-1 ml-2"
+             (click)="item.isCollapsed = !item.isCollapsed">
+          </i>
+          <i *ngIf="!item.isCollapsed"
+             fa
+             [name]="'minus-square'"
+             class="icon text-muted m-1 ml-2"
+             (click)="item.isCollapsed = !item.isCollapsed">
+          </i>
+        </div>
       </div>
       <div class="pl-4" [ngbCollapse]="item.isCollapsed">
         <template [ngTemplateOutlet]="list" [ngOutletContext]="{list: item.model_fields}"></template>
       </div>
     </div>
-    <div *ngIf="item.name">
+    <div *ngIf="item.name && !item.model_fields && !item.hidden">
       <template [ngTemplateOutlet]="field" [ngOutletContext]="{field: item}"></template>
     </div>
   </div>
