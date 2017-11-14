@@ -17,19 +17,6 @@ export const meta = [
         }
       },
       {
-        type: 'related',
-        key: 'company_settings.company',
-        read_only: false,
-        hide: true,
-        endpoint: '/ecore/api/v2/core/companies/',
-        templateOptions: {
-          label: 'Company',
-          required: true,
-          display: '__str__',
-          param: 'id'
-        }
-      },
-      {
         type: 'radio',
         key: 'company_settings.font',
         label: true,

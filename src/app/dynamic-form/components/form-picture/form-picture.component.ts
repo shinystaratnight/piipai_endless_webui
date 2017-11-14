@@ -68,9 +68,9 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     this.mime = 'image/jpeg';
     if (this.config.default) {
       this.value = this.config.default;
-      if (this.config.value && this.config.value.thumb) {
-        this.value = this.config.value.origin;
-      }
+    }
+    if (this.config.value && this.config.value.thumb) {
+      this.value = this.config.value.origin;
     }
   }
 

@@ -7,7 +7,7 @@
           <input class="form-check-input"
             (change)="eventHandler($event)"
             type="radio"
-            [formControl]="group.get(key)"
+            [formControlName]="key"
             [id]="radio.key"
             [value]="radio.key"
             [name]="key"

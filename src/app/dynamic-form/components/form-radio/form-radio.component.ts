@@ -33,7 +33,8 @@ export class FormRadioComponent extends BasicElementComponent implements OnInit 
       this.group.get(this.key).patchValue(this.value);
     }
     if (this.config.value || this.config.value === false || this.config.value === null) {
-      this.group.get(this.key).patchValue(this.config.value);
+      this.value = this.config.value;
+      this.group.get(this.key).patchValue(this.value);
     }
   }
 
@@ -41,7 +42,7 @@ export class FormRadioComponent extends BasicElementComponent implements OnInit 
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.controls[this.key].value
+      value: this.group.get(this.key).value
     });
   }
 }

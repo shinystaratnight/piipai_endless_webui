@@ -83,7 +83,83 @@ describe('CompanyComponent', () => {
       comp.submitForm(data);
       expect(comp.errors).toEqual({});
     });
+  });
 
+  describe('fillingForm method', () => {
+    it('should filling form by data', () => {
+      let metadata = [
+        {
+          type: 'collapse',
+          children: [
+            {
+              type: 'radio',
+              key: 'font'
+            }
+          ]
+        }
+      ];
+      let data = {
+        fobt: 'Roboto'
+      };
+      spyOn(comp, 'getValueOfData');
+      comp.fillingForm(metadata, data);
+      expect(comp.getValueOfData).toHaveBeenCalled();
+    });
+  });
+
+  describe('getValueOfData method', () => {
+    it('should set value of element', () => {
+      let data = {
+        company_setting: {
+          color_scheme: 'indigo-theme'
+        }
+      };
+      let key = 'company_setting.color_scheme';
+      let object = {
+        value: undefined
+      };
+      comp.getValueOfData(data, key, object);
+      expect(object.value).toEqual('indigo-theme');
+      expect(comp.currentTheme).toEqual('indigo-theme');
+    });
+  });
+
+  describe('eventHandler method', () => {
+    it('should change color scheme of site', () => {
+      let event = {
+        type: 'change',
+        el: {
+          type: 'radio',
+          templateOptions: {
+            type: 'color'
+          }
+        },
+        value: 'indigo'
+      };
+      let body = document.body;
+      let theme = `${event.value}-theme`;
+      comp.eventHandler(event);
+      expect(body.classList.contains(theme)).toBeTruthy();
+      expect(comp.currentTheme).toEqual(theme);
+    });
+
+    it('should change font of site', () => {
+      let event = {
+        type: 'change',
+        el: {
+          type: 'radio',
+          templateOptions: {
+            type: 'text'
+          }
+        },
+        value: 'Lato'
+      };
+      let body = document.body;
+      let font = `${event.value}, sans-serif`;
+      comp.eventHandler(event);
+      expect(body.style.fontFamily).toEqual(font);
+      expect(comp.currentFont).toEqual(event.value);
+    });
   });
 
 });
