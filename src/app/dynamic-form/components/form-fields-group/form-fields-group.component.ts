@@ -223,6 +223,9 @@ export class FormFieldsGroupComponent implements OnInit {
           delete field.id;
           delete field.position;
           this.activeFields = this.getActiveFields(this.groups);
+          this.activeFields.sort((p, n) => {
+            return p.position > n.position ? 1 : -1;
+          });
         },
         (err: any) => this.error = err
       );
@@ -238,6 +241,9 @@ export class FormFieldsGroupComponent implements OnInit {
           field.position = res.position;
           this.lastPosition = res.position;
           this.activeFields = this.getActiveFields(this.groups);
+          this.activeFields.sort((p, n) => {
+            return p.position > n.position ? 1 : -1;
+          });
         },
         (err: any) => this.error = err
       );
@@ -252,7 +258,7 @@ export class FormFieldsGroupComponent implements OnInit {
       }
       if (el.model_fields) {
         let activeChildrens = this.getActiveFields(el.model_fields);
-        results.concat(activeChildrens);
+        results.push(...activeChildrens);
       }
     });
     return results;
@@ -440,7 +446,6 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   public changePosition(item, type) {
-    console.log(this);
     let currentPosition = item.position;
     let nextPosition = type === 'up' ? item.position - 1 : item.position + 1;
     let element = this.getItemByPosition(this.activeFields, nextPosition);
