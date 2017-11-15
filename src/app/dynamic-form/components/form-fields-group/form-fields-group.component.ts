@@ -21,9 +21,12 @@ export class FormFieldsGroupComponent implements OnInit {
   @ViewChild('modal')
   public modal: any;
 
+  @ViewChild('modalActiveFields')
+  public modalActiveFields: any;
+
   public formFieldGroupsEndpoint: string = '/ecore/api/v2/core/formfieldgroups/';
   public formModelFieldEndpoint: string = '/ecore/api/v2/core/modelformfields/';
-  public groups: FormFieldsGroup[];
+  public groups: any[];
   public fields: any;
   public choosenType: string;
   public types: string[];
@@ -34,6 +37,11 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public groupId: string;
   public error: any;
+
+  public search: string;
+  public activeFields: any[];
+
+  public lastPosition: number = 0;
 
   constructor(
     private modalService: NgbModal,
@@ -47,11 +55,23 @@ export class FormFieldsGroupComponent implements OnInit {
       this.parseValueFromApi(value[0], this.config.fields);
       this.groups = this.config.fields;
       this.addCollapseProperty(this.groups);
+      this.activeFields = value[0].field_list.sort((p, n) => {
+        return p.position > n.position ? 1 : -1;
+      });
+      this.activeFields.forEach((el) => {
+        if (el.position > this.lastPosition) {
+          this.lastPosition = el.position;
+        }
+      });
     } else {
       this.groups = this.config.fields;
       this.addCollapseProperty(this.groups);
       this.createGroup();
     }
+    this.activeFields = this.getActiveFields(this.groups);
+    this.activeFields.sort((p, n) => {
+      return p.position > n.position ? 1 : -1;
+    });
     this.fields = {
       modelfield: {
         endpoint: '/ecore/api/v2/core/modelformfields/',
@@ -169,6 +189,7 @@ export class FormFieldsGroupComponent implements OnInit {
         if (el.name === field.name) {
           el.id = field.id;
           el.required = field.required;
+          el.position = field.position;
         }
       });
       if (el.model_fields) {
@@ -200,23 +221,55 @@ export class FormFieldsGroupComponent implements OnInit {
       this.genericFormService.delete(this.formModelFieldEndpoint, field.id).subscribe(
         (res: any) => {
           delete field.id;
+          delete field.position;
+          this.activeFields = this.getActiveFields(this.groups);
+          this.activeFields.sort((p, n) => {
+            return p.position > n.position ? 1 : -1;
+          });
         },
         (err: any) => this.error = err
       );
     } else {
       let body = Object.assign({group: this.groupId}, field);
+      body.position = this.lastPosition + 1;
+      delete body.hidden;
+      delete body.isCollapsed;
+      delete body.model_fields;
       this.genericFormService.submitForm(this.formModelFieldEndpoint, body).subscribe(
         (res: any) => {
           field.id = res.id;
+          field.position = res.position;
+          this.lastPosition = res.position;
+          this.activeFields = this.getActiveFields(this.groups);
+          this.activeFields.sort((p, n) => {
+            return p.position > n.position ? 1 : -1;
+          });
         },
         (err: any) => this.error = err
       );
     }
   }
 
+  public getActiveFields(array) {
+    let results = [];
+    array.forEach((el) => {
+      if (el.id) {
+        results.push(el);
+      }
+      if (el.model_fields) {
+        let activeChildrens = this.getActiveFields(el.model_fields);
+        results.push(...activeChildrens);
+      }
+    });
+    return results;
+  }
+
   public toggleRequireProperty(field): void {
     if (field.id) {
       let body = Object.assign({group: this.groupId}, field);
+      delete body.hidden;
+      delete body.isCollapsed;
+      delete body.model_fields;
       body.required = !field.required;
       this.genericFormService
         .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
@@ -343,4 +396,90 @@ export class FormFieldsGroupComponent implements OnInit {
       };
     }
   }
+
+  public filter(value) {
+    if (value && this.groups) {
+      this.toggleElement(this.groups, true);
+      this.checkElement(value, this.groups, true);
+    } else {
+      if (this.groups) {
+        this.toggleElement(this.groups, false);
+        this.addCollapseProperty(this.groups);
+      }
+    }
+  }
+
+  public checkElement(value, array, first = false) {
+    let result = false;
+    array.forEach((el) => {
+      let self = false;
+      let children = false;
+      let val = el.label;
+      if (val && val.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+        self = true;
+      }
+      if (el.model_fields) {
+        children = this.checkElement(value, el.model_fields);
+        el.isCollapsed = !children;
+      }
+      el.hidden = !(self || children);
+      if (!result) {
+        result = !el.hidden;
+      }
+    });
+    if (!first) {
+      return result;
+    }
+  }
+
+  public toggleElement(array, hidden) {
+    array.forEach((el) => {
+      el.hidden = hidden;
+      if (el.model_fields) {
+        this.toggleElement(el.model_fields, hidden);
+      }
+    });
+  }
+
+  public openActiveFields() {
+    this.modalRef = this.modalService.open(this.modalActiveFields);
+  }
+
+  public changePosition(item, type) {
+    let currentPosition = item.position;
+    let nextPosition = type === 'up' ? item.position - 1 : item.position + 1;
+    let element = this.getItemByPosition(this.activeFields, nextPosition);
+    item.position = nextPosition;
+    let body = Object.assign({group: this.groupId}, item);
+    delete body.hidden;
+    delete body.isCollapsed;
+    delete body.model_fields;
+    this.genericFormService
+      .editForm(`${this.formModelFieldEndpoint}${item.id}/`, body)
+      .subscribe((res: any) => {
+        let newBody = Object.assign({group: this.groupId}, element);
+        newBody.position = currentPosition;
+        delete newBody.hidden;
+        delete newBody.isCollapsed;
+        delete newBody.model_fields;
+        this.genericFormService.editForm(`${this.formModelFieldEndpoint}${element.id}/`, newBody)
+          .subscribe((response: any) => {
+            element.position = response.position;
+            this.activeFields.sort((p, n) => {
+              return p.position > n.position ? 1 : -1;
+            });
+          });
+      });
+  }
+
+  public getItemByPosition(array, position) {
+    let element;
+    array.forEach((el) => {
+      if (el.position === position) {
+        element = el;
+      }
+    });
+    return element;
+  }
+
 }

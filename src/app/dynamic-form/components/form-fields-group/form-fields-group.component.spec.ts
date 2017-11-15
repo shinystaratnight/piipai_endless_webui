@@ -86,11 +86,13 @@ describe('FormFieldsGroupComponent', () => {
       comp.config = config;
       comp.config.value = [
         {
-          id: '123'
+          id: '123',
+          field_list: []
         }
       ];
       spyOn(comp, 'parseValueFromApi');
       spyOn(comp, 'addCollapseProperty');
+      spyOn(comp, 'getActiveFields').and.returnValue([]);
       comp.ngOnInit();
       expect(comp.fields).toBeDefined();
       expect(comp.types).toBeDefined();
@@ -98,6 +100,9 @@ describe('FormFieldsGroupComponent', () => {
       expect(comp.parseValueFromApi).toHaveBeenCalledWith(comp.config.value[0], comp.config.fields);
       expect(comp.groups).toEqual([]);
       expect(comp.addCollapseProperty).toHaveBeenCalledWith(comp.groups);
+      expect(comp.activeFields).toEqual([]);
+      expect(comp.lastPosition).toEqual(0);
+      expect(comp.getActiveFields).toHaveBeenCalled();
     });
 
     it('should init porperties', () => {
@@ -240,8 +245,12 @@ describe('FormFieldsGroupComponent', () => {
         id: '123'
       };
       response.status = 'success';
+      comp.groups = [];
+      spyOn(comp, 'getActiveFields').and.returnValue([]);
       comp.toggleActiveState(field);
       expect(field).toEqual({});
+      expect(comp.getActiveFields).toHaveBeenCalledWith(comp.groups);
+      expect(comp.activeFields).toEqual([]);
     });
 
     it('should update error property if delete is not done', () => {
@@ -258,8 +267,14 @@ describe('FormFieldsGroupComponent', () => {
       let field = <any> {};
       response.status = 'success';
       response.id = '123';
+      response.position = 123;
+      comp.groups = [];
+      spyOn(comp, 'getActiveFields').and.returnValue([]);
       comp.toggleActiveState(field);
       expect(field.id).toEqual('123');
+      expect(comp.getActiveFields).toHaveBeenCalledWith(comp.groups);
+      expect(comp.activeFields).toEqual([]);
+      expect(comp.lastPosition).toEqual(123);
     });
 
     it('should update error propert if add new field is not done', () => {
@@ -269,6 +284,26 @@ describe('FormFieldsGroupComponent', () => {
       comp.toggleActiveState(field);
       expect(comp.error).toEqual(response);
 
+    });
+  });
+
+  describe('getActiveFields method', () => {
+    it('should return array with active fields', () => {
+      let testArray = [
+        {
+          id: '123',
+          model_fields: [
+            {
+              id: '124'
+            }
+          ]
+        }
+      ];
+      let result = comp.getActiveFields(testArray);
+      expect(result).toEqual([
+        {id: '123', model_fields: [{ id: '124' }]},
+        {id: '124'}
+      ]);
     });
   });
 
@@ -591,6 +626,119 @@ describe('FormFieldsGroupComponent', () => {
           }
         }
       });
+    });
+  });
+
+  describe('filter method', () => {
+    it('should filter fileds by value', () => {
+      let val = 'job';
+      comp.groups = [];
+      spyOn(comp, 'toggleElement');
+      spyOn(comp, 'checkElement');
+      comp.filter(val);
+      expect(comp.toggleElement).toHaveBeenCalledWith(comp.groups, true);
+      expect(comp.checkElement).toHaveBeenCalledWith(val, comp.groups, true);
+    });
+
+    it('should return all fields', () => {
+      let val = '';
+      comp.groups = [];
+      spyOn(comp, 'toggleElement');
+      spyOn(comp, 'addCollapseProperty');
+      comp.filter(val);
+      expect(comp.toggleElement).toHaveBeenCalledWith(comp.groups, false);
+      expect(comp.addCollapseProperty).toHaveBeenCalledWith(comp.groups);
+    });
+  });
+
+  describe('checkElement method', () => {
+    it('should update fields property and return true', () => {
+      let value = 't';
+      let array = <any> [
+        {
+          label: 'Contact',
+          model_fields: [
+            {
+              label: 'Title'
+            }
+          ]
+        }
+      ];
+      let result = comp.checkElement(value, array);
+      expect(array).toEqual([
+        {
+          label: 'Contact',
+          hidden: false,
+          isCollapsed: false,
+          model_fields: [
+            {
+              label: 'Title',
+              hidden: false
+            }
+          ]
+        }
+      ]);
+      expect(result).toBeTruthy();
+    });
+  });
+
+  describe('toggleElement method', () => {
+    it('should toggle hidden property', () => {
+      let array = <any> [
+        {
+          label: 'Country',
+          model_fields: [
+            {
+              label: 'Title'
+            }
+          ]
+        }
+      ];
+      let hidden = true;
+      comp.toggleElement(array, hidden);
+      expect(array).toEqual([
+        {
+          label: 'Country',
+          hidden: true,
+          model_fields: [
+            {
+              label: 'Title',
+              hidden: true
+            }
+          ]
+        }
+      ]);
+    });
+  });
+
+  describe('changePosition method', () => {
+    it('should change position of two fields', () => {
+      response.status = 'success';
+      response.position = 0;
+      comp.activeFields = [
+        { id: '123', position: 0 },
+        { id: '124', position: 1 }
+      ];
+      comp.formFieldGroupsEndpoint = 'some endpoint';
+      comp.groupId = '123456';
+      let type = 'down';
+      spyOn(comp, 'getItemByPosition').and.returnValue(comp.activeFields[1]);
+      comp.changePosition(comp.activeFields[0], type);
+      expect(comp.activeFields).toEqual([
+        { id: '124', position: 0 },
+        { id: '123', position: 1 }
+      ]);
+    });
+  });
+
+  describe('getItemByPosition method', () => {
+    it('should return element by position property', () => {
+      let array = [{
+        id: '123',
+        position: 123
+      }];
+      let result = comp.getItemByPosition(array, 123);
+      expect(result).toEqual(array[0]);
     });
   });
 
