@@ -80,14 +80,11 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
 
   public eventHandler(e) {
     setTimeout(() => {
-      if (this.group.get(this.key).value
-      && !this.config.read_only) {
-        this.event.emit({
-          type: e.type,
-          el: this.config,
-          value: this.group.get(this.key).value
-        });
-      }
+      this.event.emit({
+        type: e.type,
+        el: this.config,
+        value: this.group.get(this.key).value
+      });
     }, 250);
   }
 

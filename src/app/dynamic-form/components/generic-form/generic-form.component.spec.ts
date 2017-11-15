@@ -227,6 +227,33 @@ describe('GenericFormComponent', () => {
 
     });
 
+    describe('saveHiddenFields method', () => {
+      it('should save fields with show rules', () => {
+        let config = [
+          {
+            type: 'collapse',
+            children: [
+              {
+                key: 'manager',
+                hide: false,
+                showIf: ['contact']
+              }
+            ]
+          }
+        ];
+        comp.hiddenFields = {
+          elements: [],
+          keys: []
+        };
+        comp.saveHiddenFields(config);
+        expect(comp.hiddenFields).toEqual(<any> {
+          elements: [config[0].children[0]],
+          keys: 'manager'
+        });
+        expect(config[0].children[0].hide).toBeTruthy();
+      });
+    });
+
     describe('getDataForForm method', () => {
 
       it('should be defined', async(() => {
@@ -855,10 +882,12 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getRalatedData');
         spyOn(comp, 'getElementFromMetadata').and.returnValue(config[0]);
         spyOn(comp, 'resetRalatedData');
+        spyOn(comp, 'saveHiddenFields');
         comp.parseMetadata(config, params);
         expect(comp.getRalatedData).toHaveBeenCalled();
         expect(comp.resetRalatedData).toHaveBeenCalled();
         expect(comp.getElementFromMetadata).toHaveBeenCalled();
+        expect(comp.saveHiddenFields).toHaveBeenCalled();
         expect(config[0]['readonly']).toBeTruthy();
         expect(config[0]['value']).toEqual('Australia');
         expect(config[2]['hide']).toEqual(comp.hide);

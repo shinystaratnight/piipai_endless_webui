@@ -4,6 +4,13 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { GenericFormService } from './../../services/generic-form.service';
 
+import { Field } from '../../models/field.model';
+
+interface HiddenFields {
+  elements: Field[];
+  keys: string[];
+}
+
 @Component({
   selector: 'generic-form',
   templateUrl: 'generic-form.component.html'
@@ -71,7 +78,7 @@ export class GenericFormComponent implements OnChanges {
   @Output()
   public str: EventEmitter<any> = new EventEmitter();
 
-  public metadata = [];
+  public metadata: Field[] = [];
   public metadataError = [];
   public sendData = null;
   public currentEndpoint: string;
@@ -80,6 +87,10 @@ export class GenericFormComponent implements OnChanges {
   public show: boolean = false;
   public editForm: boolean = false;
   public formObject: any;
+  public hiddenFields: HiddenFields = {
+    elements: [],
+    keys: []
+  };
 
   public workflowEndpoints = {
     state: `/ecore/api/v2/core/workflownodes/`,
@@ -132,8 +143,8 @@ export class GenericFormComponent implements OnChanges {
   public getMetadata(endpoint) {
     this.service.getMetadata(endpoint, '?type=form').subscribe(
         ((data: any) => {
-          this.metadata = this.parseMetadata(data, this.relatedField);
           this.metadata = this.parseMetadata(data, this.data);
+          this.metadata = this.parseMetadata(data, this.relatedField);
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.getData(this.metadata);
@@ -157,6 +168,20 @@ export class GenericFormComponent implements OnChanges {
           }
         }),
         ((error: any) => this.metadataError = error));
+  }
+
+  public saveHiddenFields(metadata: Field[]) {
+    metadata.forEach((el) => {
+      if (el.showIf && el.showIf.length) {
+        if (this.hiddenFields.keys.indexOf(el.key) === -1) {
+          this.hiddenFields.keys.push(el.key);
+          this.hiddenFields.elements.push(el);
+          el.hide = true;
+        }
+      } else if (el.children) {
+        this.saveHiddenFields(el.children);
+      }
+    });
   }
 
   public getDataForForm(endpoint, id) {
@@ -431,6 +456,7 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public parseMetadata(metadata, params, update = true) {
+    this.saveHiddenFields(metadata);
     metadata.forEach((el) => {
       if (el.type === 'hidden') {
         el.hide = this.hide;

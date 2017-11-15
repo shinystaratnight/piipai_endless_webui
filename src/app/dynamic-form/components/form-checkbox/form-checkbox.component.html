@@ -8,6 +8,7 @@
       <input
         [hidden]="config.templateOptions.type === 'icon'"
         #checkbox
+        (change)="eventHandler($event)"
         class="form-check-input"
         [formControl]="group.get(key)"
         type="checkbox"

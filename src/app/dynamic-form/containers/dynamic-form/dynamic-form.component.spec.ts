@@ -52,7 +52,6 @@ describe('DynamicFormComponent', () => {
       let form = fb.group({});
       comp.config = [];
       comp.ngOnInit();
-      // expect(comp.form).toEqual(form);
       expect(comp.currentForm).toEqual([]);
     })));
 
@@ -72,7 +71,7 @@ describe('DynamicFormComponent', () => {
     it('should update values', async(inject([FormBuilder], (fb: FormBuilder) => {
       let fixture = TestBed.createComponent(DynamicFormComponent);
       let comp = fixture.componentInstance;
-      comp.config = ['some'];
+      comp.config = <any> ['some'];
       comp.commonFields = [];
       let form = fb.group({});
       comp.form = form;
@@ -150,10 +149,33 @@ describe('DynamicFormComponent', () => {
       let fixture = TestBed.createComponent(DynamicFormComponent);
       let comp = fixture.componentInstance;
       spyOn(comp.event, 'emit');
-      comp.eventHandler('event');
+      spyOn(comp, 'parseConfig');
+      comp.eventHandler(<any> 'event');
       expect(comp.event.emit).toHaveBeenCalled();
+      expect(comp.parseConfig).toHaveBeenCalled();
     });
 
+  });
+
+  describe('parseConfig method', () => {
+    it('should parseConfig for check hidden fields', () => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      let metadata = [
+        {
+          type: 'collapse',
+          children: [
+            {
+              key: 'contact',
+              showIf: ['user'],
+            }
+          ]
+        }
+      ];
+      spyOn(comp, 'checkHiddenFields');
+      comp.parseConfig(metadata);
+      expect(comp.checkHiddenFields).toHaveBeenCalled();
+    });
   });
 
   describe('buttonActionHandler method', () => {
@@ -224,6 +246,21 @@ describe('DynamicFormComponent', () => {
       expect(form.get('address').get('country').value).toEqual('Australia');
     })));
 
+  });
+
+  describe('checkHiddenFields method', () => {
+    it('should check hidden field', () => {
+      let fixture = TestBed.createComponent(DynamicFormComponent);
+      let comp = fixture.componentInstance;
+      let field = {
+        hide: true,
+        showIf: ['contact']
+      };
+      spyOn(comp, 'checkShowRules').and.returnValue(true);
+      comp.checkHiddenFields(field);
+      expect(comp.checkShowRules).toHaveBeenCalledWith(['contact']);
+      expect(field.hide).toBeFalsy();
+    });
   });
 
 });
