@@ -21,4 +21,14 @@
       visibility: visible;
     }
   }
+
+  .search {
+    position: relative;
+
+    .search-icon {
+      position: absolute;
+      top: .7rem;
+      right: .7rem;
+    }
+  }
 }
