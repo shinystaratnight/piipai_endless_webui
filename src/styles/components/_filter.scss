@@ -19,7 +19,7 @@ $filter-block-height: 400px;
     background-color: transparent;
     color: white;
     box-sizing: border-box;
-    
+
     &-label {
       display: none;
     }
@@ -56,7 +56,7 @@ $filter-block-height: 400px;
     padding: .4rem 1rem;
     color: #8c8c8b;
   }
-  
+
   &-element {
     border-bottom: 1px solid #58595e;
     box-shadow: 0 1px 1px 0 #292a2f;
@@ -74,9 +74,15 @@ $filter-block-height: 400px;
         display: inline-block;
         height: 1.5rem;
         border-left: 3px solid $brand-primary;
+
+        @each $item in $themes {
+          .#{$item}-theme & {
+            border-left-color: map-get($theme-colors, $item);
+          }
+        }
       }
     }
- 
+
     @include media-breakpoint-down('md') {
       border-bottom: none;
       box-shadow: none;

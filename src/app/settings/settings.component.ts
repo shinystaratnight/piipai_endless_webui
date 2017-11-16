@@ -11,6 +11,8 @@ export class SettingsComponent implements OnInit {
   public user: any;
   public pagesList: any;
 
+  public url: any;
+
   constructor(
     private route: ActivatedRoute
   ) {}
@@ -18,6 +20,9 @@ export class SettingsComponent implements OnInit {
   public ngOnInit() {
     this.user = this.route.snapshot.data['user'].data;
     this.pagesList = this.route.snapshot.data['pagesList'];
+    this.url = [
+      { path: 'settings' }
+    ];
   }
 
 }

@@ -2,6 +2,12 @@
   &-title {
     text-transform: uppercase;
     color: $brand-primary;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        color: map-get($theme-colors, $item);
+      }
+    }
   }
   &-group {
     padding: 0;
@@ -40,6 +46,12 @@
       margin-right: 2rem;
       path {
         fill: $brand-primary;
+
+        @each $item in $themes {
+          .#{$item}-theme & {
+            fill: map-get($theme-colors, $item);
+          }
+        }
       }
     }
     &:hover {
@@ -47,6 +59,12 @@
     }
     &:nth-child(odd) {
       border-left-color: $brand-primary;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          border-left-color: map-get($theme-colors, $item);
+        }
+      }
     }
   }
 }

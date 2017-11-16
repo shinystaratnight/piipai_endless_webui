@@ -23,7 +23,9 @@ describe('FormPictureComponent', () => {
       label_photo: 'Take a photo',
       type: 'file',
       required: false,
-      description: 'help text'
+      description: 'help text',
+      file: true,
+      photo: false
     }
   };
   let errors = {};

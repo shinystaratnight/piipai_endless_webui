@@ -36,6 +36,14 @@
         border-color: $brand-primary;
         background-color: #2d2c31;
       }
+
+      @each $item in $themes {
+        .#{$item}-theme &:hover,
+        .#{$item}-theme &:focus {
+          border-color: map-get($theme-colors, $item);
+        }
+      }
+
     }
 
     &-filter &-item {
@@ -73,6 +81,12 @@
       width: 100%;
       background-color: $brand-primary;
     }
+
+    @each $item in $themes {
+      .#{$item}-theme &:hover {
+        background-color: map-get($theme-colors, $item);
+      }
+    }
   }
 }
 
@@ -100,6 +114,12 @@
 
       &:hover, &:focus {
         border-color: $brand-primary;
+      }
+
+      @each $item in $themes {
+        .#{$item}-theme &:hover {
+          border-color: map-get($theme-colors, $item);
+        }
       }
     }
 

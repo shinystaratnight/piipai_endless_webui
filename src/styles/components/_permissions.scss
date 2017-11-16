@@ -46,6 +46,12 @@
     &.selected {
       box-shadow: none;
       background-color: rgba($brand-primary, .5);
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          background-color: rgba(map-get($theme-colors, $item), .5);
+        }
+      }
     }
 
     &.active {
