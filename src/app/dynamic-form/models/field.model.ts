@@ -9,6 +9,7 @@ export interface Field {
   showIf?: any[];
   value?: any;
   activeMetadata?: Field[];
+  hidden?: any;
   templateOptions?: {
     label?: string;
     type?: string;

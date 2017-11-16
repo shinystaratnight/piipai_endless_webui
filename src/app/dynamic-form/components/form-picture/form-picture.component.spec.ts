@@ -9,6 +9,8 @@ import { FormPictureComponent } from './form-picture.component';
 import { WebCamComponent } from 'ng2-webcam';
 import { FallbackDispatcher } from 'ng2-webcam';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 describe('FormPictureComponent', () => {
   let fixture: ComponentFixture<FormPictureComponent>;
   let comp: FormPictureComponent;
@@ -50,25 +52,43 @@ describe('FormPictureComponent', () => {
     });
   }));
 
-  it('should enter the assertion', async(inject([FormBuilder], (fb: FormBuilder) => {
-    comp.config = config;
-    comp.group = fb.group({});
-    comp.errors = errors;
-    fixture.detectChanges();
-    expect(comp.errors).toBeDefined();
-    expect(comp.config).toBeDefined();
-  })));
-
   describe('ngOnInit method', () => {
 
     it('should call addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
+      comp.key = config.key;
+      comp.config.hidden = new BehaviorSubject(true);
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(''));
       spyOn(comp, 'addControl');
+      spyOn(comp, 'setInitValue');
       comp.ngOnInit();
+      expect(comp.config.hide).toBeTruthy();
+      expect(comp.group.get(comp.key).value).toBeUndefined();
       expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
+      expect(comp.setInitValue).toHaveBeenCalled();
       expect(comp.mime).toEqual('image/jpeg');
+      comp.config.hidden = null;
     })));
 
+  });
+
+  describe('setInitValue method', () => {
+    it('should set default value', () => {
+      comp.config = config;
+      comp.config.default = 'logo.png';
+      comp.setInitValue();
+      expect(comp.value).toEqual('logo.png');
+    });
+
+    it('should set value from api', () => {
+      comp.config = config;
+      comp.config.value = {
+        origin: 'logo.png'
+      };
+      comp.setInitValue();
+      expect(comp.value).toEqual('logo.png');
+    });
   });
 
   describe('ngAfterViewInit method', () => {

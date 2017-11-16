@@ -66,10 +66,26 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   public ngOnInit(): void {
     this.addControl(this.config, this.fb);
     this.mime = 'image/jpeg';
+    this.setInitValue();
+    if (this.config && this.config.hidden) {
+      this.config.hidden.subscribe((hide) => {
+        if (hide) {
+          this.config.hide = hide;
+          this.group.get(this.key).patchValue(undefined);
+          this.setInitValue();
+        } else {
+          this.config.hide = hide;
+        }
+      });
+    }
+    this.createEvent();
+  }
+
+  public setInitValue() {
     if (this.config.default) {
       this.value = this.config.default;
     }
-    if (this.config.value && this.config.value.thumb) {
+    if (this.config.value && this.config.value.origin) {
       this.value = this.config.value.origin;
     }
   }

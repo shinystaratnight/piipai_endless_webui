@@ -248,7 +248,7 @@ describe('GenericFormComponent', () => {
         comp.saveHiddenFields(config);
         expect(comp.hiddenFields).toEqual(<any> {
           elements: [config[0].children[0]],
-          keys: 'manager'
+          keys: ['manager']
         });
         expect(config[0].children[0].hide).toBeTruthy();
       });

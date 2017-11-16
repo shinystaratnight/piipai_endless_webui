@@ -1,10 +1,12 @@
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { EventEmitter } from '@angular/forms/src/facade/async';
 
 export class BasicElementComponent {
 
   public group: FormGroup;
   public key: any;
   public config: any;
+  public event: EventEmitter<any> = new EventEmitter();
 
   public addControl(config, fb: FormBuilder) {
     const keys = config.key.split('.');
@@ -40,6 +42,14 @@ export class BasicElementComponent {
     if (config.templateOptions.rows) {
       element.nativeElement.rows = config.templateOptions.rows;
     }
+  }
+
+  public createEvent() {
+    this.event.emit({
+      type: 'create',
+      el: this.config,
+      value: this.group.get(this.key).value
+    });
   }
 
   private addElement(group, el, fb) {

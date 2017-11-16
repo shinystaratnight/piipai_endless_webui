@@ -5,6 +5,8 @@ import { DebugElement } from '@angular/core';
 import { FormCheckboxComponent } from './form-checkbox.component';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 describe('FormCheckboxComponent', () => {
   let fixture: ComponentFixture<FormCheckboxComponent>;
   let comp: FormCheckboxComponent;
@@ -58,6 +60,28 @@ describe('FormCheckboxComponent', () => {
 
   describe('ngOnInit method', () => {
 
+    it('should init properties', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let form = fb.group({});
+      comp.key = 'active';
+      form.addControl(comp.key, fb.control(''));
+      comp.group = form;
+      comp.config = config;
+      comp.config.read_only = true;
+      comp.config.hidden = new BehaviorSubject(true);
+      spyOn(comp, 'addControl');
+      spyOn(comp, 'setInitValue');
+      comp.ngOnInit();
+      expect(comp.config.hide).toBeTruthy();
+      expect(comp.addControl).toHaveBeenCalled();
+      expect(comp.setInitValue).toHaveBeenCalled();
+      expect(comp.group.get(comp.key).value).toBeUndefined();
+      comp.config.hidden = null;
+    })));
+
+  });
+
+  describe('setInitValue method', () => {
+
     it('should called addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
       let form = fb.group({});
       comp.key = 'active';
@@ -65,10 +89,8 @@ describe('FormCheckboxComponent', () => {
       comp.group = form;
       comp.config = config;
       comp.config.read_only = true;
-      spyOn(comp, 'addControl');
       spyOn(comp, 'setValue');
-      comp.ngOnInit();
-      expect(comp.addControl).toHaveBeenCalled();
+      comp.setInitValue();
       expect(comp.setValue).toHaveBeenCalled();
       expect(comp.group.get(comp.key).value).toBeFalsy();
     })));
@@ -80,21 +102,22 @@ describe('FormCheckboxComponent', () => {
       comp.group.addControl(comp.key, fb.control(false));
       comp.config.value = false;
       comp.config.read_only = false;
-      spyOn(comp, 'addControl');
       spyOn(comp, 'customizeCheckbox');
-      comp.ngOnInit();
-      expect(comp.addControl).toHaveBeenCalled();
+      comp.setInitValue();
       expect(comp.customizeCheckbox).toHaveBeenCalled();
       expect(comp.group.get(comp.key).value).toBeFalsy();
     })));
 
-    it('should update value', async(inject([FormBuilder], (fb: FormBuilder) => {
-      let form = fb.group({});
-      comp.group = form;
-      comp.config = config;
-      comp.config.value = true;
-      comp.ngOnInit();
-      expect(comp.group.get(comp.config.key).value).toBeTruthy();
+    it('should update value',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        let form = fb.group({});
+        comp.group = form;
+        comp.config = config;
+        comp.key = config.key;
+        comp.group.addControl(comp.key, fb.control(false));
+        comp.config.value = null;
+        comp.setInitValue();
+        expect(comp.group.get(comp.config.key).value).toBeNull();
     })));
 
   });

@@ -71,6 +71,22 @@ export class FormRelatedComponent
     this.display =
       this.config.templateOptions.display ? this.config.templateOptions.display : '__str__';
     this.param = this.config.templateOptions.param ? this.config.templateOptions.param : 'id';
+    this.setInitValue();
+    if (this.config && this.config.hidden) {
+      this.config.hidden.subscribe((hide) => {
+        if (hide) {
+          this.config.hide = hide;
+          this.group.get(this.key).patchValue(undefined);
+          this.setInitValue();
+        } else {
+          this.config.hide = hide;
+        }
+      });
+    }
+    this.createEvent();
+  }
+
+  public setInitValue() {
     this.results = [];
     if (this.config.value || this.group.get(this.key).value) {
       let data = this.config.value ? this.config.value :

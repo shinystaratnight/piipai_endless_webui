@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { GenericFormService } from './../../services/generic-form.service';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import { Field } from '../../models/field.model';
 
 interface HiddenFields {
@@ -176,7 +178,7 @@ export class GenericFormComponent implements OnChanges {
         if (this.hiddenFields.keys.indexOf(el.key) === -1) {
           this.hiddenFields.keys.push(el.key);
           this.hiddenFields.elements.push(el);
-          el.hide = true;
+          el.hidden = new BehaviorSubject(true);
         }
       } else if (el.children) {
         this.saveHiddenFields(el.children);
@@ -456,7 +458,6 @@ export class GenericFormComponent implements OnChanges {
   }
 
   public parseMetadata(metadata, params, update = true) {
-    this.saveHiddenFields(metadata);
     metadata.forEach((el) => {
       if (el.type === 'hidden') {
         el.hide = this.hide;
@@ -495,6 +496,7 @@ export class GenericFormComponent implements OnChanges {
         this.parseMetadata(el.children, params);
       }
     });
+    this.saveHiddenFields(metadata);
     return metadata;
   }
 

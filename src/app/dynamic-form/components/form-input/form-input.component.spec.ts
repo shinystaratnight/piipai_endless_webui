@@ -5,11 +5,13 @@ import { DebugElement } from '@angular/core';
 import { FormInputComponent } from './form-input.component';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 describe('FormInputComponent', () => {
   let fixture: ComponentFixture<FormInputComponent>;
   let comp: FormInputComponent;
   let el;
-  let config = {
+  let config = <any> {
     type: 'input',
     key: 'test',
     templateOptions: {
@@ -42,15 +44,6 @@ describe('FormInputComponent', () => {
     });
   }));
 
-  it('should enter the assertion', async(inject([FormBuilder], (fb: FormBuilder) => {
-    comp.config = config;
-    comp.group = fb.group({});
-    comp.errors = errors;
-    fixture.detectChanges();
-    expect(comp.errors).toBeDefined();
-    expect(comp.config).toBeDefined();
-  })));
-
   describe('ngOnInit method', () => {
 
     it('should called addControl method', async(inject([FormBuilder], (fb) => {
@@ -65,12 +58,49 @@ describe('FormInputComponent', () => {
       comp.group = form;
       comp.config = metadata;
       comp.key = key;
+      comp.config.hidden = new BehaviorSubject(true);
       spyOn(comp, 'addControl');
+      spyOn(comp, 'setInitValue');
+      spyOn(comp, 'createEvent');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
-      expect(comp.group.get(key).value).toEqual('test@test.com');
+      expect(comp.setInitValue).toHaveBeenCalled();
+      expect(comp.createEvent).toHaveBeenCalled();
+      expect(comp.config.hide).toBeTruthy();
+      expect(comp.group.get(key).value).toBeUndefined();
+      comp.config.hidden = null;
     })));
 
+  });
+
+  describe('setInitValue method', () => {
+    it('should set default value',
+      async(inject([FormBuilder], (fb) => {
+        let form = fb.group({});
+        let key = 'email';
+        let metadata = {
+          key: 'email',
+          read_only: false
+        };
+        form.addControl(key, fb.control(''));
+        comp.group = form;
+        comp.config = metadata;
+        comp.config.default = 0;
+        comp.key = key;
+        comp.setInitValue();
+        expect(comp.group.get(key).value).toEqual(0);
+    })));
+
+    it('should set desplay value', () => {
+      comp.config = config;
+      config.type = 'static';
+      config.value = {
+        __str__: 'Value'
+      };
+      comp.setInitValue();
+      expect(comp.displayValue).toEqual('Value');
+      config.type = 'input';
+    });
   });
 
   describe('ngAfterViewInit method', () => {

@@ -87,12 +87,16 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   public handleSubmit(event: Event) {
     event.preventDefault();
     event.stopPropagation();
-    this.submit.emit(this.form.value);
+    let data = this.form.value;
+    this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
+    this.submit.emit(data);
   }
 
   public eventHandler(e: CustomEvent): void {
     this.event.emit(e);
-    this.parseConfig(this.hiddenFields.elements);
+    if (this.hiddenFields && this.hiddenFields.elements && this.hiddenFields.elements.length) {
+      this.parseConfig(this.hiddenFields.elements);
+    }
   }
 
   public parseConfig(metadata: Field[]) {
@@ -139,7 +143,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   public checkHiddenFields(field: Field): void {
     let rule = field.showIf;
     let show = this.checkShowRules(rule);
-    field.hide = !show;
+    field.hidden.next(!show);
   }
 
   public checkShowRules(rule: any[]): boolean {
@@ -177,6 +181,25 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     let firstKey = keysArray.shift();
     if (keysArray.length === 0) {
       return data[firstKey];
+    } else if (keysArray.length > 0) {
+      let combineKeys = keysArray.join('.');
+      return this.getValueByKey(combineKeys, data[firstKey]);
+    }
+  }
+
+  public removeValuesOfHiddenFields(metadata: Field[], data): void {
+    metadata.forEach((el: Field) => {
+      if (el.hide) {
+        this.removeValue(el.key, data);
+      }
+    });
+  }
+
+  public removeValue(key: string, data: any): void {
+    let keysArray = key.split('.');
+    let firstKey = keysArray.shift();
+    if (keysArray.length === 0) {
+      delete data[firstKey];
     } else if (keysArray.length > 0) {
       let combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
