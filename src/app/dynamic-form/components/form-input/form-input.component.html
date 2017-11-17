@@ -3,7 +3,7 @@
     {{config.templateOptions.label}}
   </label>
   <input
-    *ngIf="!config.read_only"
+    *ngIf="!config.read_only && config.type !== 'static'"
     class="form-control"
     autocomplete="off"
     #input

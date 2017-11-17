@@ -76,6 +76,7 @@ export class FormRelatedComponent
       this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
+          this.displayValue = null;
           this.group.get(this.key).patchValue(undefined);
           this.setInitValue();
         } else {

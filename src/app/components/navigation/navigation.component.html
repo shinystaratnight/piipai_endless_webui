@@ -40,7 +40,7 @@
 </header>
 
 <template #list let-p="pages" let-h="height">
-  <ul *ngIf="!isCollapsed" class="navigation-list-nested" [ngStyle]="{'top.px': h}">
+  <ul *ngIf="!isCollapsed" class="navigation-list-nested">
     <template *ngFor="let page of p" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page}"></template>
   </ul>
   <ul *ngIf="isCollapsed" class="navigation-list-nested">

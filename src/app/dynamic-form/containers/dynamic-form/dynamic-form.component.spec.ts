@@ -6,6 +6,7 @@ import { ComponentFixtureAutoDetect } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { DynamicFormComponent } from './dynamic-form.component';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 describe('DynamicFormComponent', () => {
   let fixture;
@@ -112,13 +113,7 @@ describe('DynamicFormComponent', () => {
 
   describe('handleSubmit method', () => {
 
-    it('should enter the output assertion', async(() => {
-      comp.errors = errors;
-      fixture.detectChanges();
-      let formWasSubmited = false;
-      let sub = comp.submit.subscribe(() => formWasSubmited = true);
-      const selector = By.css('form');
-      let form = fixture.debugElement.query(selector);
+    it('should emit event of submit form', async(() => {
       let event = {
         preventDefault() {
           return true;
@@ -127,10 +122,17 @@ describe('DynamicFormComponent', () => {
           return true;
         }
       };
-      form.triggerEventHandler('submit', event);
-      fixture.detectChanges();
-      expect(formWasSubmited).toBeTruthy();
-      sub.unsubscribe();
+      comp.form = {
+        value: {}
+      };
+      comp.hiddenFields = {
+        elements: []
+      };
+      spyOn(comp, 'removeValuesOfHiddenFields');
+      spyOn(comp.submit, 'emit');
+      comp.handleSubmit(event);
+      expect(comp.removeValuesOfHiddenFields).toHaveBeenCalled();
+      expect(comp.submit.emit).toHaveBeenCalled();
     }));
 
   });
@@ -139,7 +141,7 @@ describe('DynamicFormComponent', () => {
 
     it('should be emit event', () => {
       comp.hiddenFields = {
-        elements: []
+        elements: [{}]
       };
       spyOn(comp.event, 'emit');
       spyOn(comp, 'parseConfig');
@@ -233,14 +235,16 @@ describe('DynamicFormComponent', () => {
 
   describe('checkHiddenFields method', () => {
     it('should check hidden field', () => {
-      let field = {
+      let field = <any> {
         hide: true,
         showIf: ['contact']
       };
+      field.hidden = new BehaviorSubject(true);
       spyOn(comp, 'checkShowRules').and.returnValue(true);
+      spyOn(field.hidden, 'next');
       comp.checkHiddenFields(field);
       expect(comp.checkShowRules).toHaveBeenCalledWith(['contact']);
-      expect(field.hide).toBeFalsy();
+      expect(field.hidden.next).toHaveBeenCalledWith(false);
     });
   });
 
@@ -312,6 +316,37 @@ describe('DynamicFormComponent', () => {
       let key = 'contact.name';
       let result = comp.getValueByKey(key, data);
       expect(result).toEqual('Tom');
+    });
+  });
+
+  describe('removeValuesOfHiddenFields method', () => {
+    it('should call removeValue method form hidden elements', () => {
+      let metadata = [
+        {
+          type: 'input',
+          key: 'first_name',
+          hide: true
+        }
+      ];
+      let data = {
+        first_name: 'Tom'
+      };
+      spyOn(comp, 'removeValue');
+      comp.removeValuesOfHiddenFields(metadata, data);
+      expect(comp.removeValue).toHaveBeenCalledWith('first_name', data);
+    });
+  });
+
+  describe('removeValue method', () => {
+    it('should remove value from data', () => {
+      let key = 'contact.email';
+      let data = {
+        contact: {
+          email: 'test@test.com'
+        }
+      };
+      comp.removeValue(key, data);
+      expect(data.contact.email).toBeUndefined();
     });
   });
 

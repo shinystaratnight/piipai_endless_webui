@@ -28,6 +28,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.objectEndpoint = '/ecore/api/v2/core/workflowobjects/';
+    let formatString = new FormatString();
+    this.objectId = formatString.format(this.config['object_id'], this.config.value);
     if (!this.config.options) {
       this.getTimeline();
     }
@@ -57,12 +59,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public getTimeline(): void {
-    let formatString = new FormatString();
     let query = this.config.query.map((el) => {
       if (el === 'object_id') {
-        if (!this.objectId) {
-          this.objectId = formatString.format(this.config[el], this.config.value);
-        }
         return `${el}=${this.objectId}`;
       }
       return `${el}=${this.config[el]}`;

@@ -202,7 +202,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
       delete data[firstKey];
     } else if (keysArray.length > 0) {
       let combineKeys = keysArray.join('.');
-      return this.getValueByKey(combineKeys, data[firstKey]);
+      this.removeValue(combineKeys, data[firstKey]);
     }
   }
 

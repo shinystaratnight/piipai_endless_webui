@@ -72,11 +72,12 @@ describe('FormOptionsComponent', () => {
       comp.key = config.key;
       comp.setInitValue();
       expect(comp.config.hide).toBeTruthy();
-      expect(comp.group.get(comp.key).value).toBeUndefined();
+      expect(comp.group.get(comp.key).value).toEqual(comp.config.value);
       expect(comp.optionsArray).toEqual(comp.config.value);
     })));
 
     it('should set optionsArray', () => {
+      comp.config = config;
       comp.config.value = null;
       comp.setInitValue();
       expect(comp.optionsArray).toEqual([

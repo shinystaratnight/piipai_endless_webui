@@ -6,6 +6,7 @@ import { DebugElement } from '@angular/core';
 
 import { GenericFormComponent } from './generic-form.component';
 import { GenericFormService } from './../../services/generic-form.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 describe('GenericFormComponent', () => {
     let fixture: ComponentFixture<GenericFormComponent>;
@@ -183,10 +184,12 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'parseMetadata');
         spyOn(comp, 'getData');
         spyOn(comp, 'checkRuleElement');
+        spyOn(comp, 'saveHiddenFields');
         spyOn(comp.str, 'emit');
         comp.getMetadata(endpoint);
         expect(comp.parseMetadata).toHaveBeenCalledTimes(2);
         expect(comp.getData).toHaveBeenCalled();
+        expect(comp.saveHiddenFields).toHaveBeenCalled();
         expect(comp.str.emit).toHaveBeenCalledWith({
           str: 'Add'
         });
@@ -229,7 +232,7 @@ describe('GenericFormComponent', () => {
 
     describe('saveHiddenFields method', () => {
       it('should save fields with show rules', () => {
-        let config = [
+        let config = <any> [
           {
             type: 'collapse',
             children: [
@@ -250,7 +253,7 @@ describe('GenericFormComponent', () => {
           elements: [config[0].children[0]],
           keys: ['manager']
         });
-        expect(config[0].children[0].hide).toBeTruthy();
+        expect(config[0].children[0].hidden instanceof BehaviorSubject).toBeTruthy();
       });
     });
 
@@ -882,12 +885,10 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getRalatedData');
         spyOn(comp, 'getElementFromMetadata').and.returnValue(config[0]);
         spyOn(comp, 'resetRalatedData');
-        spyOn(comp, 'saveHiddenFields');
         comp.parseMetadata(config, params);
         expect(comp.getRalatedData).toHaveBeenCalled();
         expect(comp.resetRalatedData).toHaveBeenCalled();
         expect(comp.getElementFromMetadata).toHaveBeenCalled();
-        expect(comp.saveHiddenFields).toHaveBeenCalled();
         expect(config[0]['readonly']).toBeTruthy();
         expect(config[0]['value']).toEqual('Australia');
         expect(config[2]['hide']).toEqual(comp.hide);

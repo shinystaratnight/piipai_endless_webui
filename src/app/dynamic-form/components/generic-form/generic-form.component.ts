@@ -146,6 +146,7 @@ export class GenericFormComponent implements OnChanges {
     this.service.getMetadata(endpoint, '?type=form').subscribe(
         ((data: any) => {
           this.metadata = this.parseMetadata(data, this.data);
+          this.saveHiddenFields(this.metadata);
           this.metadata = this.parseMetadata(data, this.relatedField);
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
@@ -496,7 +497,6 @@ export class GenericFormComponent implements OnChanges {
         this.parseMetadata(el.children, params);
       }
     });
-    this.saveHiddenFields(metadata);
     return metadata;
   }
 

@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" [hidden]="config.hide">
   <div class="d-flex" (click)="updateDate()">
     <div class="w-100">
       <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>

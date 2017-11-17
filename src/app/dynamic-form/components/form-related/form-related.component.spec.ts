@@ -8,6 +8,7 @@ import { FormRelatedComponent } from './form-related.component';
 import { GenericFormService } from './../../services/generic-form.service';
 
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 describe('FormRelatedComponent', () => {
   let fixture: ComponentFixture<FormRelatedComponent>;
@@ -69,31 +70,38 @@ describe('FormRelatedComponent', () => {
     });
   }));
 
-  it('should enter the assertion', async(inject([FormBuilder], (fb: FormBuilder) => {
-    comp.config = config;
-    comp.group = fb.group({});
-    comp.errors = errors;
-    fixture.detectChanges();
-    expect(comp.errors).toBeDefined();
-    expect(comp.config).toBeDefined();
-  })));
-
   describe('ngOnInit method', () => {
+    it('should init default properties', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.config.hidden = new BehaviorSubject(true);
+      comp.config.id = 2;
+      comp.key = comp.config.key;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(''));
+      spyOn(comp, 'addControl');
+      spyOn(comp, 'setInitValue');
+      comp.ngOnInit();
+      expect(comp.addControl).toHaveBeenCalled();
+      expect(comp.display).toEqual('__str__');
+      expect(comp.param).toEqual('id');
+      expect(comp.group.get(comp.key).value).toBeUndefined();
+      expect(comp.config.hide).toBeTruthy();
+      comp.config.hidden = null;
+    })));
+  });
 
-    it('should called addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
+  describe('setInitValue method', () => {
+
+    it('should init properties', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
       comp.config.query = '?country=';
       comp.config.id = 2;
       comp.key = comp.config.key;
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(''));
-      spyOn(comp, 'addControl');
       spyOn(comp, 'generateDataForList');
-      comp.ngOnInit();
-      expect(comp.display).toEqual('__str__');
-      expect(comp.param).toEqual('id');
+      comp.setInitValue();
       expect(comp.results).toEqual([]);
-      expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
       expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config);
       expect(comp.config.currentQuery).toEqual('?country=2');
     })));
@@ -113,9 +121,9 @@ describe('FormRelatedComponent', () => {
       comp.config.value = value;
       comp.config.many = false;
       comp.key = config.key;
-      comp.config.templateOptions.display = 'name';
-      comp.config.templateOptions.param = 'number';
-      comp.ngOnInit();
+      comp.display = 'name';
+      comp.param = 'number';
+      comp.setInitValue();
       expect(comp.group.get(comp.key).value).toEqual(1);
       expect(comp.displayValue).toEqual('First');
     })));
@@ -128,15 +136,15 @@ describe('FormRelatedComponent', () => {
       }];
       let display = 'name';
       let param = 'number';
-      config.templateOptions.display = display;
-      config.templateOptions.param = param;
+      comp.display = 'name';
+      comp.param = 'number';
       let value = 2;
       spyOn(comp, 'addControl');
       comp.group = fb.group({});
       comp.group.addControl(config.key, fb.control(''));
       comp.config.value = value;
       comp.key = config.key;
-      comp.ngOnInit();
+      comp.setInitValue();
       expect(comp.group.get(comp.key).value).toEqual(value);
       expect(comp.displayValue).toEqual('First');
     })));
@@ -160,15 +168,14 @@ describe('FormRelatedComponent', () => {
       ];
       let display = 'name';
       let param = 'number';
-      config.templateOptions.display = display;
-      config.templateOptions.param = param;
+      comp.display = 'name';
+      comp.param = 'number';
       config.many = true;
       config.value = value;
       comp.config = config;
       comp.config.options = options;
-      spyOn(comp, 'addControl');
       spyOn(comp, 'updateData');
-      comp.ngOnInit();
+      comp.setInitValue();
       expect(comp.display).toEqual(display);
       expect(comp.param).toEqual(param);
       expect(comp.results).toEqual([
@@ -177,9 +184,8 @@ describe('FormRelatedComponent', () => {
         {number: 3, name: 'Third'}
       ]);
       expect(comp.updateData).toHaveBeenCalledWith();
-      expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
       comp.config.options = null;
-      comp.ngOnInit();
+      comp.setInitValue();
       expect(comp.results).toEqual(config.value);
     })));
 

@@ -48,8 +48,14 @@ describe('FormTimelineComponent', () => {
   describe('ngOnInit method', () => {
     it('should initialize properties', () => {
       comp.config = config;
+      comp.config.value = {
+        id: '123'
+      };
+      let formatString = new FormatString();
+      let value = formatString.format(comp.config['object_id'], comp.config.value);
       spyOn(comp, 'getTimeline');
       comp.ngOnInit();
+      expect(comp.objectId).toEqual(value);
       expect(comp.objectEndpoint).toEqual('/ecore/api/v2/core/workflowobjects/');
       expect(comp.getTimeline).toHaveBeenCalled();
     });
@@ -135,9 +141,10 @@ describe('FormTimelineComponent', () => {
       comp.config.value = {
         id: '123'
       };
+      comp.objectId = 'someId';
       let formatString = new FormatString();
-      let value = formatString.format(comp.config['object_id'], comp.config.value);
-      let query = `?model=${comp.config.model}&object_id=${value}`;
+      // let value = formatString.format(comp.config['object_id'], comp.config.value);
+      let query = `?model=${comp.config.model}&object_id=${comp.objectId}`;
       spyOn(comp.event, 'emit');
       comp.getTimeline();
       expect(comp.event.emit).toHaveBeenCalledWith({
