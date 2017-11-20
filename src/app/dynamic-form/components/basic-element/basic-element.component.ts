@@ -9,16 +9,18 @@ export class BasicElementComponent {
   public event: EventEmitter<any> = new EventEmitter();
 
   public addControl(config, fb: FormBuilder) {
-    const keys = config.key.split('.');
-    if (keys.length > 1) {
-      this.addControls(this.group, keys, fb);
-    } else {
-      if (config.type === 'related' && !config.many) {
-        keys.push('id');
+    if (config.key) {
+      const keys = config.key.split('.');
+      if (keys.length > 1) {
         this.addControls(this.group, keys, fb);
-      } else if (config.type !== 'static') {
-        this.group.addControl(config.key, fb.control(undefined));
-        this.key = config.key;
+      } else {
+        if (config.type === 'related' && !config.many) {
+          keys.push('id');
+          this.addControls(this.group, keys, fb);
+        } else if (config.type !== 'static') {
+          this.group.addControl(config.key, fb.control(undefined));
+          this.key = config.key;
+        }
       }
     }
   }

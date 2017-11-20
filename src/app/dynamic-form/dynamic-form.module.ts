@@ -34,6 +34,7 @@ import {
 } from './components/form-fields-group/form-fields-group.component';
 import { FormOptionsComponent } from './components/form-options/form-options.component';
 import { FormRadioComponent } from './components/form-radio/form-radio.component';
+import { FormReplaceComponent } from './components/form-replace/form-replace.component';
 
 import { GenericListComponent } from './components/generic-list/generic-list.component';
 import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
@@ -116,7 +117,8 @@ import { MoveDirective } from './directives/move.directive';
     ListSerachBarComponent,
     ButtonRadioDirective,
     PdfViewerComponent,
-    FormRadioComponent
+    FormRadioComponent,
+    FormReplaceComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -146,7 +148,8 @@ import { MoveDirective } from './directives/move.directive';
     FormListComponent,
     FormFieldsGroupComponent,
     FormOptionsComponent,
-    FormRadioComponent
+    FormRadioComponent,
+    FormReplaceComponent
   ]
 })
 export class DynamicFormModule { }

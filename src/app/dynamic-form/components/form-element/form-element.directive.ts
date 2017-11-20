@@ -28,6 +28,8 @@ import { FormListComponent } from './../form-list/form-list.component';
 import { FormFieldsGroupComponent } from './../form-fields-group/form-fields-group.component';
 import { FormOptionsComponent } from './../form-options/form-options.component';
 import { FormRadioComponent } from './../form-radio/form-radio.component';
+import { FormReplaceComponent } from './../form-replace/form-replace.component';
+import { ListLinkComponent } from '../list-link/list-link.component';
 
 const components = {
   input: FormInputComponent,
@@ -48,7 +50,9 @@ const components = {
   static: FormInputComponent,
   fieldsGroup: FormFieldsGroupComponent,
   formOptions: FormOptionsComponent,
-  radio: FormRadioComponent
+  radio: FormRadioComponent,
+  replace: FormReplaceComponent,
+  link: ListLinkComponent
 };
 
 @Directive({
