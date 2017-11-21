@@ -10,6 +10,10 @@ export interface Field {
   value?: any;
   activeMetadata?: Field[];
   hidden?: any;
+  data?: any;
+  metadata?: Field[];
+  options?: any[];
+  dateTable?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;

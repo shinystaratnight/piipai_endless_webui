@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  EventEmitter,
+  ViewChild,
+  Output
+} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { BasicElementComponent } from '../basic-element/basic-element.component';
@@ -6,7 +13,6 @@ import { FormatString } from '../../../helpers/format';
 import { GenericFormService } from '../../services/generic-form.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
-import { ViewChild } from '@angular/core/src/metadata/di';
 
 @Component({
   selector: 'form-replace',
@@ -17,6 +23,9 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
 
   @ViewChild('modal')
   public modalTemplate: any;
+
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   public config;
   public group: FormGroup;
@@ -44,7 +53,9 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.selfGroup = this.fb.group({});
     this.modalData = {};
     this.addControl(this.config, this.fb);
-    this.generateMetadata(this.config.replace_by);
+    this.config.data.subscribe(
+      (res: any) => this.generateMetadata(this.config.replace_by)
+    );
   }
 
   public ngOnDestroy() {
@@ -81,11 +92,15 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
   public getValueByKey(key: string, data: any): any {
     let keysArray = key.split('.');
     let firstKey = keysArray.shift();
-    if (keysArray.length === 0) {
-      return data[firstKey];
-    } else if (keysArray.length > 0) {
-      let combineKeys = keysArray.join('.');
-      return this.getValueByKey(combineKeys, data[firstKey]);
+    if (data) {
+      if (keysArray.length === 0) {
+        return data[firstKey];
+      } else if (keysArray.length > 0) {
+        let combineKeys = keysArray.join('.');
+        return this.getValueByKey(combineKeys, data[firstKey]);
+      }
+    } else {
+      return false;
     }
   }
 
@@ -173,5 +188,12 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
         }
       );
     }
+  }
+
+  public updateReplace() {
+    this.event.emit({
+      type: 'updateData',
+      el: this.config
+    });
   }
 }

@@ -11,11 +11,9 @@ describe('FormListComponent', () => {
   let el;
   let config = {
     type: 'list',
-    key: 'company',
     endpoint: '/ecore/api/v2/core/contacts/',
+    query: 'contact={id}',
     collapsed: true,
-    parent_field: 'comapny',
-    id: '124',
     templateOptions: {
       label: 'Company',
     }

@@ -7,6 +7,7 @@ import { GenericFormService } from './../../services/generic-form.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Field } from '../../models/field.model';
+import { FormatString } from '../../../helpers/format';
 
 interface HiddenFields {
   elements: Field[];
@@ -101,6 +102,10 @@ export class GenericFormComponent implements OnChanges {
 
   public workflowData = <any> {};
 
+  public replaceElements: Field[] = [];
+
+  public format = new FormatString();
+
   constructor(
     private service: GenericFormService
   ) {}
@@ -145,6 +150,7 @@ export class GenericFormComponent implements OnChanges {
   public getMetadata(endpoint) {
     this.service.getMetadata(endpoint, '?type=form').subscribe(
         ((data: any) => {
+          this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);
           this.metadata = this.parseMetadata(data, this.relatedField);
@@ -187,6 +193,26 @@ export class GenericFormComponent implements OnChanges {
     });
   }
 
+  public updateDataOfReplaceElements(element) {
+    if (this.id) {
+      let endp = this.id ? `${this.endpoint}${this.id}/` : this.endpoint;
+      this.service.getAll(endp).subscribe(
+        (data: any) => {
+          this.replaceElements.forEach((el) => {
+            if (el.data) {
+              el.data.next(data);
+            }
+          });
+          if (element.type === 'related') {
+            element.data.next(this.getValueOfData(data, element.key, element, undefined));
+          }
+        }
+      );
+    } else {
+      return;
+    }
+  }
+
   public getDataForForm(endpoint, id) {
     let endp = id ? `${endpoint}${id}/` : endpoint;
     this.service.getAll(endp).subscribe(
@@ -204,9 +230,16 @@ export class GenericFormComponent implements OnChanges {
   public fillingForm(metadata, data) {
     metadata.forEach((el) => {
       if (el.key && el.key !== 'timeline') {
+        if (el.type === 'replace') {
+          el.data = new BehaviorSubject(data);
+        }
         this.getValueOfData(data, el.key, el, metadata);
       } else if (el.key && el.key === 'timeline') {
         el.value = data;
+      } else if (el.type === 'list') {
+        el.endpoint = this.format.format(el.endpoint, data);
+        el.query = this.format.format(el.endpoint, data);
+        el.field.value = this.format.format(el.field.value, data);
       } else if (el.children) {
         this.fillingForm(el.children, data);
       }
@@ -335,6 +368,8 @@ export class GenericFormComponent implements OnChanges {
     } else if (event.type === 'update' && event.el.key === 'timeline') {
       this.getRalatedData(this.metadata, event.el.key,
         event.el.endpoint, null, event.query, undefined, false);
+    } else if (event.type === 'updateData') {
+      this.updateDataOfReplaceElements(event.el);
     }
     this.event.emit(event);
   }
@@ -705,5 +740,15 @@ export class GenericFormComponent implements OnChanges {
             }
           });
         }
+  }
+
+  public getReplaceElements(metadata: Field[]) {
+    metadata.forEach((el) => {
+      if (el.type === 'replace') {
+        this.replaceElements.push(el);
+      } else if (el.children) {
+        this.getReplaceElements(el.children);
+      }
+    });
   }
 }

@@ -19,6 +19,9 @@ export class GenericListComponent implements OnInit {
   @Input()
   public data: any;
 
+  @Input()
+  public query: string;
+
   public metadata: any;
   public tables = [];
   public first: boolean = false;
@@ -79,15 +82,21 @@ export class GenericListComponent implements OnInit {
   }
 
   public getData(endpoint, query = null, table, first = false, target = null) {
-    if (first) {
+    if (first && !this.query) {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
           table.refresh = false;
           this.calcPagination(data);
-          this.getMetadata(endpoint, table);
+          if (this.inForm) {
+            endpoint += '?type=formset';
+            this.getMetadata(endpoint, table);
+          } else {
+            this.getMetadata(endpoint, table);
+          }
         }
       );
-    } else if (query) {
+    } else if (query || this.query) {
+      query += this.query;
       this.gfs.getByQuery(endpoint, query).subscribe(
         (data) => {
           table.data = data;
@@ -236,7 +245,13 @@ export class GenericListComponent implements OnInit {
     if (!this.first) {
       table['first'] = true;
       this.first = true;
-      this.getData(endpoint, null, table, true);
+      if (this.inForm) {
+        table['data'] = this.data;
+        endpoint += '?type=formset';
+        this.getMetadata(endpoint, table);
+      } else {
+        this.getData(endpoint, null, table, true);
+      }
     } else {
       let firstTable = this.getFirstTable();
       table['parentEndpoint'] = firstTable.endpoint;
