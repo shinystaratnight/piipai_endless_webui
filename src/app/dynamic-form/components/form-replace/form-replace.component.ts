@@ -54,7 +54,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.modalData = {};
     this.addControl(this.config, this.fb);
     this.config.data.subscribe(
-      (res: any) => this.generateMetadata(this.config.replace_by)
+      (data: any) => this.generateMetadata(this.config.replace_by, data)
     );
   }
 
@@ -64,25 +64,25 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     }
   }
 
-  public generateMetadata(array: any[]) {
+  public generateMetadata(array: any[], data: any): void {
     array.forEach((el) => {
       let element = Object.keys(el)[0];
       let key = el[element];
-      let value = this.getValueByKey(key, this.config.data);
+      let value = this.getValueByKey(key, data);
       if (value) {
         let format = new FormatString();
         let elConfig = Object.assign(this.config.elements[element]);
         if (elConfig.endpoint) {
-          elConfig.endpoint = format.format(elConfig.endpoint, this.config.data);
+          elConfig.endpoint = format.format(elConfig.endpoint, data);
           if (elConfig.query) {
-            elConfig.query = format.format(elConfig.query, this.config.data);
+            elConfig.query = format.format(elConfig.query, data);
           }
         }
         if (elConfig.id) {
-          elConfig.id = format.format(elConfig.query, this.config.data);
+          elConfig.id = format.format(elConfig.id, data);
         }
         if (elConfig.key) {
-          elConfig.value = this.getValueByKey(elConfig.key, this.config.data);
+          elConfig.value = this.getValueByKey(elConfig.key, data);
         }
         this.metadata.push(elConfig);
       }
@@ -126,7 +126,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.modalData = {};
     this.modalData.endpoint = endpoint;
     this.modalData.el = el;
-    this.modalRef.open(this.modalTemplate, {size: 'lg'});
+    this.modalRef = this.modal.open(this.modalTemplate, {size: 'lg'});
   }
 
   public sendAction(endpoint: string, query: string): void {
@@ -134,12 +134,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
       endpoint += `?${query}`;
       this.gfs.getByQuery(endpoint, query).subscribe(
         (res: any) => {
-          this.gfs.getAll(this.config.formEndpoint).subscribe(
-            (response: any) => {
-              this.config.data = response;
-              this.generateMetadata(this.config.replace_by);
-            }
-          );
+          this.updateReplace();
         }
       );
     } else {
@@ -152,7 +147,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.modalData.endpoint = endpoint;
     this.modalData.id = el.id;
     this.modalData.el = el;
-    this.modalRef.open(this.modalTemplate, {size: 'lg'});
+    this.modalRef = this.modal.open(this.modalTemplate, {size: 'lg'});
   }
 
   public deleteAction(endpoint: string, query: string, el) {
@@ -161,19 +156,14 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.modalData.endpoint = endpoint;
     this.modalData.id = el.id;
     this.modalData.el = el;
-    this.modalRef.open(this.modalTemplate, {size: 'lg'});
+    this.modalRef = this.modal.open(this.modalTemplate, {size: 'lg'});
   }
 
   public deleteElement(closeModal) {
     closeModal();
     this.gfs.delete(this.modalData.endpoint, this.modalData.id).subscribe(
       (res: any) => {
-        this.gfs.getAll(this.config.formEndpoint).subscribe(
-          (response: any) => {
-            this.config.data = response;
-            this.generateMetadata(this.config.replace_by);
-          }
-        );
+        this.updateReplace();
       }
     );
   }
@@ -181,12 +171,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
   public formEvent(e, closeModal, el) {
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
-      this.gfs.getAll(this.config.formEndpoint).subscribe(
-        (res: any) => {
-          this.config.data = res;
-          this.generateMetadata(this.config.replace_by);
-        }
-      );
+      this.updateReplace();
     }
   }
 

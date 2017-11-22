@@ -14,6 +14,7 @@ export interface Field {
   metadata?: Field[];
   options?: any[];
   dateTable?: boolean;
+  prefilled?: any;
   templateOptions?: {
     label?: string;
     type?: string;

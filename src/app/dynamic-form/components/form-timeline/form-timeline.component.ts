@@ -23,13 +23,23 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public requirements: any[];
   public modalRef: any;
   public objectId: string;
+  public query: any;
 
   constructor(public modalService: NgbModal) {}
 
   public ngOnInit() {
+    this.query = [];
     this.objectEndpoint = '/ecore/api/v2/core/workflowobjects/';
     let formatString = new FormatString();
-    this.objectId = formatString.format(this.config['object_id'], this.config.value);
+    let keys = Object.keys(this.config.query);
+    keys.forEach((el) => {
+      if (el === 'object_id') {
+        this.objectId = formatString.format(this.config.query[el], this.config.value);
+        this.query.push(`${el}=${this.objectId}`);
+      } else {
+        this.query.push(`${el}=${this.config.query[el]}`);
+      }
+    });
     if (!this.config.options) {
       this.getTimeline();
     }
@@ -59,16 +69,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public getTimeline(): void {
-    let query = this.config.query.map((el) => {
-      if (el === 'object_id') {
-        return `${el}=${this.objectId}`;
-      }
-      return `${el}=${this.config[el]}`;
-    });
     this.event.emit({
       type: 'update',
       el: this.config,
-      query: `?${query.join('&')}`
+      query: `?${this.query.join('&')}`
     });
   }
 

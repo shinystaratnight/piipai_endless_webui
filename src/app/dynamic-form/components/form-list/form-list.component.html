@@ -1,4 +1,4 @@
-<h6 class="bg-primary text-white d-flex align-items-center" *ngIf="config.templateOptions.label">
+<h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !isCollapsed}" *ngIf="config.templateOptions.label">
   <i
     fa
     class="p-2"
@@ -9,10 +9,10 @@
     aria-controls="collapseExample"
     style="cursor: pointer"></i>
   {{config.templateOptions.label}}
-  <button type="button" class="btn btn-sm group-button ml-auto mr-2" (click)="addObject()">{{config.templateOptions.add_label}}</button>
+  <button type="button" class="text-white btn btn-sm group-button ml-auto mr-2" (click)="addObject()">{{config.templateOptions.add_label}}</button>
 </h6>
 <div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
-  <generic-list [endpoint]="config.endpoint" [inForm]="true" [data]="config.data"></generic-list>
+  <generic-list [endpoint]="config.endpoint" [query]="query" [inForm]="true" [data]="config.data" [update]="update"></generic-list>
 </div>
 
 <template #modal let-c="close" let-d="dismiss">

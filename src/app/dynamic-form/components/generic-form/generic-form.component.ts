@@ -195,7 +195,7 @@ export class GenericFormComponent implements OnChanges {
 
   public updateDataOfReplaceElements(element) {
     if (this.id) {
-      let endp = this.id ? `${this.endpoint}${this.id}/` : this.endpoint;
+      let endp = `${this.endpoint}${this.id}/`;
       this.service.getAll(endp).subscribe(
         (data: any) => {
           this.replaceElements.forEach((el) => {
@@ -237,9 +237,21 @@ export class GenericFormComponent implements OnChanges {
       } else if (el.key && el.key === 'timeline') {
         el.value = data;
       } else if (el.type === 'list') {
-        el.endpoint = this.format.format(el.endpoint, data);
-        el.query = this.format.format(el.endpoint, data);
-        el.field.value = this.format.format(el.field.value, data);
+        if (el.endpoint) {
+          el.endpoint = this.format.format(el.endpoint, data);
+        }
+        if (el.query) {
+          const queryKeys = Object.keys(el.query);
+          queryKeys.forEach((elem) => {
+            el.query[elem] = this.format.format(el.query[elem], data);
+          });
+        }
+        if (el.prefilled) {
+          const keys = Object.keys(el.prefilled);
+          keys.forEach((elem) => {
+            el.prefilled[elem] = this.format.format(el.prefilled[elem], data);
+          });
+        }
       } else if (el.children) {
         this.fillingForm(el.children, data);
       }

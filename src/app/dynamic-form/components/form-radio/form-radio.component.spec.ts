@@ -49,7 +49,7 @@ describe('FormRadioComponent', () => {
   describe('ngOnInit method', () => {
     it('should set default value',
       async(inject([FormBuilder], (fb: FormBuilder) => {
-        comp.config = config;
+        comp.config = Object.assign(config);
         comp.key = config.key;
         comp.group = fb.group({});
         comp.group.addControl(comp.key, fb.control(undefined));
@@ -61,21 +61,22 @@ describe('FormRadioComponent', () => {
 
     it('should initialize properties',
       async(inject([FormBuilder], (fb: FormBuilder) => {
-        comp.config = config;
+        comp.config = Object.assign(config);
+        comp.config.value = null;
         comp.key = config.key;
         comp.group = fb.group({});
         comp.group.addControl(comp.key, fb.control(undefined));
         spyOn(comp, 'addControl');
         comp.ngOnInit();
         expect(comp.addControl).toHaveBeenCalled();
-        expect(comp.group.get(comp.key).value).toEqual('Roboto');
+        expect(comp.group.get(comp.key).value).toBeNull();
     })));
   });
 
   describe('eventHandler method', () => {
     it('should emit event of change value',
       async(inject([FormBuilder], (fb: FormBuilder) => {
-        comp.config = config;
+        comp.config = Object.assign(config);
         let event = {
           type: 'change'
         };

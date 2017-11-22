@@ -6,12 +6,28 @@ import { FormReplaceComponent } from './form-replace.component';
 import { Observable } from 'rxjs/Observable';
 import { GenericFormService } from '../../services/generic-form.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { lang } from 'moment';
 
 describe('FormReplaceComponent', () => {
   let fixture: ComponentFixture<FormReplaceComponent>;
   let comp: FormReplaceComponent;
   let el;
-  let config = {
+  const data = {
+    company: {
+      skill: {
+        hourly_rate: 25,
+        actions: {
+          create: true,
+          text: true,
+          edit: true,
+        }
+      },
+      id: '123',
+      __str__: 'General Construction Labourer $24.46/h'
+    }
+  };
+  const config = {
     type: 'replace',
     key: 'test',
     templateOptions: {
@@ -27,6 +43,7 @@ describe('FormReplaceComponent', () => {
         type: 'button',
         endpoint: '/ecore/api/v2/{company.id}/hourly_rate/',
         query: 'rate={company.skill.hourly_rate}',
+        id: '{company.id}',
         templateOptions: {
           text: 'Set hourly rate',
           p: true,
@@ -47,20 +64,7 @@ describe('FormReplaceComponent', () => {
         endpoint: '/'
       }
     },
-    data: {
-      company: {
-        skill: {
-          hourly_rate: 25,
-          actions: {
-            create: true,
-            text: true,
-            edit: true,
-          }
-        },
-        id: '123',
-        __str__: 'General Construction Labourer $24.46/h'
-      }
-    }
+    data: new BehaviorSubject(data)
   };
   let errors = {};
   const response = <any> {};
@@ -124,7 +128,7 @@ describe('FormReplaceComponent', () => {
         expect(comp.selfGroup).toBeDefined();
         expect(comp.modalData).toEqual({});
         expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
-        expect(comp.generateMetadata).toHaveBeenCalledWith(comp.config.replace_by);
+        expect(comp.generateMetadata).toHaveBeenCalledWith(comp.config.replace_by, data);
     })));
   });
 
@@ -146,12 +150,13 @@ describe('FormReplaceComponent', () => {
       comp.config = Object.assign(config);
       comp.metadata = [];
       spyOn(comp, 'getValueByKey').and.returnValue('mockValue');
-      comp.generateMetadata(comp.config.replace_by);
+      comp.generateMetadata(comp.config.replace_by, data);
       expect(comp.metadata).toEqual([
         {
           type: 'button',
           endpoint: '/ecore/api/v2/123/hourly_rate/',
           query: 'rate=25',
+          id: '123',
           templateOptions: {
             text: 'Set hourly rate',
             p: true,
@@ -173,6 +178,160 @@ describe('FormReplaceComponent', () => {
           endpoint: '/'
         }
       ]);
+    });
+  });
+
+  describe('getValueByKey method', () => {
+    it('should return value by key', () => {
+      const apiData = {
+        address: {
+          city: 'Sydney'
+        }
+      };
+      const key = 'address.city';
+      const value = comp.getValueByKey(key, apiData);
+      expect(value).toEqual(apiData.address.city);
+    });
+  });
+
+  describe('eventHandler method', () => {
+    it('should call add action', () => {
+      const event = {
+        endpoint: 'some endpoint',
+        query: 'some query',
+        target: 'form',
+        action: 'add',
+        el: {}
+      };
+      spyOn(comp, 'addAction');
+      comp.eventHandler(event);
+      expect(comp.addAction).toHaveBeenCalledWith(event.endpoint, event.query, event.el);
+    });
+
+    it('should call edit method', () => {
+      const event = {
+        type: 'click',
+        action: 'edit',
+        el: {
+          endpoint: 'some endpoint',
+          query: 'some query',
+        }
+      };
+      spyOn(comp, 'editAction');
+      comp.eventHandler(event);
+      expect(comp.editAction).toHaveBeenCalledWith(event.el.endpoint, event.el.query, event.el);
+    });
+  });
+
+  describe('addAction method', () => {
+    it('should open modal window', () => {
+      const endpoint = 'some endpoint';
+      const query = 'some query';
+      const element = {};
+      comp.addAction(endpoint, query, element);
+      expect(comp.modalData).toEqual({
+        endpoint: endpoint + '?' +  query,
+        el: element
+      });
+      expect(comp.modalRef).toBeDefined();
+    });
+  });
+
+  describe('sendAction method', () => {
+    it('should send some request', () => {
+      const endpoint = 'some endpoint';
+      const query = 'some query';
+      response.status = 'success';
+      spyOn(comp, 'updateReplace');
+      comp.sendAction(endpoint, query);
+      expect(comp.updateReplace).toHaveBeenCalled();
+    });
+  });
+
+  describe('editAction method', () => {
+    it('should open modal window for edit some object', () => {
+      const endpoint = 'some endpoint';
+      const query = 'some query';
+      const element = {
+        id: '123'
+      };
+      comp.editAction(endpoint, query, element);
+      expect(comp.modalData).toEqual({
+        endpoint,
+        id: element.id,
+        el: element
+      });
+      expect(comp.modalRef).toBeDefined();
+    });
+  });
+
+  describe('deleteAction method', () => {
+    it('should open modal window for delete some object', () => {
+      const endpoint = 'some endpoint';
+      const query = 'some query';
+      const element = {
+        id: '123'
+      };
+      comp.deleteAction(endpoint, query, element);
+      expect(comp.modalData).toEqual({
+        type: 'delete',
+        endpoint,
+        id: element.id,
+        el: element
+      });
+      expect(comp.modalRef).toBeDefined();
+    });
+  });
+
+  describe('deleteElement method', () => {
+    it('should close modal and delete some object', () => {
+      const testObject = {
+        closeModal() {
+          return true;
+        }
+      };
+      comp.modalData = {
+        endpoint: 'some endpoint',
+        id: '123'
+      };
+      response.status = 'success';
+      spyOn(testObject, 'closeModal');
+      spyOn(comp, 'updateReplace');
+      comp.deleteElement(testObject.closeModal);
+      expect(testObject.closeModal).toHaveBeenCalled();
+      expect(comp.updateReplace).toHaveBeenCalled();
+    });
+  });
+
+  describe('formEvent method', () => {
+    it('should update replace elenent after close modal', () => {
+      const event = {
+        type: 'sendForm',
+        status: 'success'
+      };
+      const testObject = {
+        closeModal() {
+          return true;
+        }
+      };
+      const element = {};
+      spyOn(comp, 'updateReplace');
+      spyOn(testObject, 'closeModal');
+      comp.formEvent(event, testObject.closeModal, element);
+      expect(comp.updateReplace).toHaveBeenCalled();
+      expect(testObject.closeModal).toHaveBeenCalled();
+    });
+  });
+
+  describe('updateReplace method', () => {
+    it('should emit event for update replace element', () => {
+      comp.config = Object.assign(config);
+      spyOn(comp.event, 'emit');
+      comp.updateReplace();
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'updateData',
+        el: comp.config
+      });
     });
   });
 

@@ -16,9 +16,10 @@ describe('FormTimelineComponent', () => {
   let config = {
     type: 'timeline',
     endpoint: '/ecore/api/v2/core/workflownodes/timeline',
-    query: ['model', 'object_id'],
-    model: 'endless_core.companyrel',
-    object_id: '{id}'
+    query: {
+      model: 'endless_core.companyrel',
+      object_id: '{id}'
+    },
   };
 
   beforeEach(() => {
@@ -39,12 +40,6 @@ describe('FormTimelineComponent', () => {
     });
   }));
 
-  it('should enter the assertion', () => {
-    comp.config = config;
-    fixture.detectChanges();
-    expect(comp.config).toBeDefined();
-  });
-
   describe('ngOnInit method', () => {
     it('should initialize properties', () => {
       comp.config = config;
@@ -52,9 +47,10 @@ describe('FormTimelineComponent', () => {
         id: '123'
       };
       let formatString = new FormatString();
-      let value = formatString.format(comp.config['object_id'], comp.config.value);
+      let value = formatString.format(comp.config.query['object_id'], comp.config.value);
       spyOn(comp, 'getTimeline');
       comp.ngOnInit();
+      expect(comp.query).toEqual(['model=endless_core.companyrel', 'object_id=123']);
       expect(comp.objectId).toEqual(value);
       expect(comp.objectEndpoint).toEqual('/ecore/api/v2/core/workflowobjects/');
       expect(comp.getTimeline).toHaveBeenCalled();
@@ -138,19 +134,14 @@ describe('FormTimelineComponent', () => {
   describe('getTimeline method', () => {
     it('should emit event for get a timeline data', () => {
       comp.config = config;
-      comp.config.value = {
-        id: '123'
-      };
-      comp.objectId = 'someId';
       let formatString = new FormatString();
-      // let value = formatString.format(comp.config['object_id'], comp.config.value);
-      let query = `?model=${comp.config.model}&object_id=${comp.objectId}`;
+      comp.query = ['model=endless_core.companyrel', 'object_id=123'];
       spyOn(comp.event, 'emit');
       comp.getTimeline();
       expect(comp.event.emit).toHaveBeenCalledWith({
         type: 'update',
         el: comp.config,
-        query
+        query: `?model=endless_core.companyrel&object_id=123`
       });
     });
   });

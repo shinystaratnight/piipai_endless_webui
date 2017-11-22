@@ -3,6 +3,8 @@ import { GenericFormService } from './../../services/generic-form.service';
 import { FilterService } from './../../services/filter.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 @Component({
   selector: 'generic-list',
   templateUrl: 'generic-list.component.html'
@@ -21,6 +23,9 @@ export class GenericListComponent implements OnInit {
 
   @Input()
   public query: string;
+
+  @Input()
+  public update: BehaviorSubject<boolean>;
 
   public metadata: any;
   public tables = [];
@@ -43,10 +48,18 @@ export class GenericListComponent implements OnInit {
 
   public ngOnInit() {
     this.tables.push(this.createTableData(this.endpoint));
+    if (this.update) {
+      this.update.subscribe((update) => {
+        if (update) {
+          let table = this.getFirstTable();
+          this.getData(table.endpoint, this.generateQuery(table.query), table);
+        }
+      });
+    }
   }
 
-  public getMetadata(endpoint, table, inner = false, outer = null) {
-    this.gfs.getMetadata(endpoint).subscribe(
+  public getMetadata(endpoint, table, inner = false, outer = null, formset = undefined) {
+    this.gfs.getMetadata(formset ? `${endpoint}${formset}` : endpoint).subscribe(
       (metadata) => {
         table.metadata = metadata;
         if (outer) {
@@ -96,8 +109,8 @@ export class GenericListComponent implements OnInit {
         }
       );
     } else if (query || this.query) {
-      query += this.query;
-      this.gfs.getByQuery(endpoint, query).subscribe(
+      let newQuery = query ? `${query}&${this.query}` : `?${this.query}`;
+      this.gfs.getByQuery(endpoint, newQuery).subscribe(
         (data) => {
           table.data = data;
           this.calcPagination(data);
@@ -247,8 +260,7 @@ export class GenericListComponent implements OnInit {
       this.first = true;
       if (this.inForm) {
         table['data'] = this.data;
-        endpoint += '?type=formset';
-        this.getMetadata(endpoint, table);
+        this.getMetadata(endpoint, table, null, null, '?type=formset');
       } else {
         this.getData(endpoint, null, table, true);
       }

@@ -95,7 +95,7 @@ export class FormRelatedComponent
         }
       });
     }
-    if (this.config && this.config.list && this.config.data && !this.config.dateTable) {
+    if (this.config && this.config.list && this.config.data) {
       this.config.data.subscribe((data) => {
         this.generateDataForList(this.config, data);
       });
@@ -104,7 +104,7 @@ export class FormRelatedComponent
     if (this.config && this.config.metadata) {
       this.getReplaceElements(this.config.metadata);
     }
-    this.isCollapsed = this.config.isCollapsed;
+    this.isCollapsed = this.config.collapsed;
   }
 
   public setInitValue() {
@@ -158,7 +158,7 @@ export class FormRelatedComponent
     if (this.config.query) {
       this.config.currentQuery = `${this.config.query}${this.config.id}`;
     }
-    this.generateDataForList(this.config);
+    this.generateDataForList(this.config, this.config.value);
   }
 
   public ngOnDestroy() {
@@ -199,9 +199,8 @@ export class FormRelatedComponent
     if (config.list && config.metadata) {
       this.dataOfList = [];
       let value = [];
-      let values = data ? data : this.config.value;
-      if (values) {
-        values.forEach((el) => {
+      if (data) {
+        data.forEach((el) => {
           let object = this.createObject();
           object['id'] = el.id;
           this.fillingForm(object.metadata, el);
@@ -209,7 +208,7 @@ export class FormRelatedComponent
           value.push(object.data.value);
           this.dataOfList.push(object);
         });
-        this.group.get(this.key).patchValue(values);
+        this.group.get(this.key).patchValue(data);
       } else {
         let object = this.createObject();
         this.dataOfList.push(object);

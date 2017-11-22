@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 
-import { GenericFormService } from '../../services/generic-form.service';
 import { FormatString } from '../../../helpers/format';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'form-list',
@@ -28,13 +28,24 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public modalRef: NgbModalRef;
 
+  public update: BehaviorSubject<boolean>;
+  public query: string;
+
   constructor(
-    private gfs: GenericFormService,
     private modal: NgbModal
   ) { }
 
   public ngOnInit() {
+    this.update = new BehaviorSubject(false);
     this.isCollapsed = this.config.collapsed ? this.config.collapsed : false;
+    if (this.config.query) {
+      let queryKeys = Object.keys(this.config.query);
+      let queryArray = [];
+      queryKeys.forEach((el) => {
+        queryArray.push(`${el}=${this.config.query[el]}`);
+      });
+      this.query = queryArray.join('&');
+    }
   }
 
   public ngOnDestroy() {
@@ -45,24 +56,31 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public addObject() {
     this.modalData = {};
+    this.modalData.title = this.config.templateOptions.add_label;
     this.modalData.endpoint = this.config.endpoint;
-    this.modalData.query = this.config.query;
-    this.modalData.data = {
-      [this.config.field.name]: {
+    this.modalData.data = {};
+    const keys = Object.keys(this.config.prefilled);
+    keys.forEach((el) => {
+      this.modalData.data[el] = {
         action: 'add',
         data: {
-          value: this.config.field.value,
+          value: this.config.prefilled[el],
           read_only: true,
           editForm: true
         }
-      }
-    };
+      };
+    });
     this.modalRef = this.modal.open(this.modalTemplate, {size: 'lg'});
   }
 
   public formEvent(e, closeModal) {
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
+      this.updateList();
     }
+  }
+
+  public updateList() {
+    this.update.next(true);
   }
 }
