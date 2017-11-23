@@ -24,6 +24,12 @@ export class SiteComponent implements OnInit {
   public pagesList: any;
   public formLabel: string;
 
+  public formStorage: boolean;
+  public formStorageEndpoint: string;
+  public approvedStorage: boolean;
+
+  public error: any;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -35,6 +41,7 @@ export class SiteComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
+    this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
     this.userService.getUserData().subscribe(
       (user: any) => {
         this.user = user.data;
@@ -56,7 +63,14 @@ export class SiteComponent implements OnInit {
 
   public checkPermissions(pageData) {
     this.genericFormService.getAll(pageData.endpoint).subscribe(
-      (res: any) => this.pageData = pageData,
+      (res: any) => {
+        this.pageData = pageData;
+        if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
+          this.formStorage = true;
+        } else {
+          this.formStorage = false;
+        }
+      },
       (err: any) => window.history.back()
     );
   }
@@ -64,6 +78,9 @@ export class SiteComponent implements OnInit {
   public changeFormLabel(e) {
     if (e && e.str) {
       this.formLabel = e.str;
+      if (e.data && this.formStorage) {
+        this.approvedStorage = e.data.status;
+      }
     }
   }
 
@@ -198,5 +215,16 @@ export class SiteComponent implements OnInit {
       this.modulesList = null;
       this.getPageNavigation([]);
     }
+  }
+
+  public approveFormStorage(element) {
+    let endpoint = `${this.formStorageEndpoint}${element.pathData.id}/approve/`;
+    let body = {
+      status: 'True'
+    };
+    this.genericFormService.submitForm(endpoint, body).subscribe(
+      (res: any) => this.router.navigate([element.pathData.path]),
+      (err: any) => this.error = err
+    );
   }
 }
