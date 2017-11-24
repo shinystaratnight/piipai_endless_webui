@@ -136,6 +136,7 @@ export class GenericFormComponent implements OnChanges {
           this.metadata = this.parseMetadata(data, this.data);
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
+          this.checkFormStorage(this.metadata, this.endpoint);
           this.getData(this.metadata);
           if ((this.id || this.edit) && this.metadata) {
             if (this.id) {
@@ -647,6 +648,21 @@ export class GenericFormComponent implements OnChanges {
         this.updateElements(el.children, param, type, value);
       }
     });
+  }
+
+  public checkFormStorage(metadata: any[], endpoint: string) {
+    if (endpoint === '/ecore/api/v2/core/formstorages/') {
+      metadata.forEach((el, i) => {
+        if (el.key === 'data') {
+          el.type = 'json';
+          el.read_only = true;
+        } else if (el.key === 'status') {
+          el.hide = true;
+        } else if (el.children) {
+          this.checkFormStorage(el.children, endpoint);
+        }
+      });
+    }
   }
 
   public checkFormBuilder(metadata: any[], endpoint: string) {

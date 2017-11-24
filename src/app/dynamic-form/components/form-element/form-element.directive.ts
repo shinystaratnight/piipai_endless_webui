@@ -27,6 +27,7 @@ import { FormVacancyDatesComponent } from './../form-vacancy-dates/form-vacancy-
 import { FormListComponent } from './../form-list/form-list.component';
 import { FormFieldsGroupComponent } from './../form-fields-group/form-fields-group.component';
 import { FormOptionsComponent } from './../form-options/form-options.component';
+import { FormJsonComponent } from './../form-json/form-json.component';
 
 const components = {
   input: FormInputComponent,
@@ -46,7 +47,8 @@ const components = {
   list: FormListComponent,
   static: FormInputComponent,
   fieldsGroup: FormFieldsGroupComponent,
-  formOptions: FormOptionsComponent
+  formOptions: FormOptionsComponent,
+  json: FormJsonComponent
 };
 
 @Directive({

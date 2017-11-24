@@ -27,16 +27,18 @@ export class FormBuilderComponent {
   public data: any;
   public error: any;
 
+  public links: any[];
+
   constructor(
     private router: Router,
     private genericFormService: GenericFormService
   ) {}
 
   public eventHandler(event: any) {
-    if (event.type === 'sendForm' && event.status === 'success') {
+    if (event.type === 'sendForm' && event.status === 'success' && !this.id) {
       this.id = event.data.id;
+      this.links = event.data.company_links;
       this.label = event.data.__str__;
-      this.previewLink = `/ecore/form-builds/${this.id}/`;
       if (event.data.groups && !event.data.groups.length) {
         this.data = {
           groups: {
@@ -50,13 +52,15 @@ export class FormBuilderComponent {
       this.str.emit({
         str: event.data.__str__
       });
+    } else if (event.type === 'sendForm' && event.status === 'success' && this.id) {
+      this.router.navigate([this.path]);
     }
   }
 
   public eventForm(e) {
     if (e && e.data) {
       this.label = e.data.__str__;
-      this.previewLink = `/ecore/form-builds/${e.data.id}/`;
+      this.links = e.data.company_links;
       this.data = {
         groups: {
           action: 'add',
