@@ -61,14 +61,20 @@ describe('FormBuilderComponent', () => {
           id: 'some id',
           __str__: 'some str',
           groups: [],
-          model_fields: []
+          model_fields: [],
+          company_links: [
+            {
+              company: 'LabourKing',
+              url: '/ecore/form-builders/'
+            }
+          ]
         }
       };
       spyOn(comp.str, 'emit');
       comp.eventHandler(event);
       expect(comp.id).toEqual('some id');
       expect(comp.label).toEqual('some str');
-      expect(comp.previewLink).toEqual(`/ecore/form-builds/${event.data.id}/`);
+      expect(comp.links).toEqual(event.data.company_links);
       expect(comp.data).toEqual({
         groups: {
           action: 'add',
@@ -81,6 +87,19 @@ describe('FormBuilderComponent', () => {
         str: event.data.__str__
       });
     });
+
+    it('should redirect after save form',
+      async(inject([Router], (router: Router) => {
+        const event = {
+          type: 'sendForm',
+          status: 'success',
+          data: {}
+        };
+        comp.id = '123';
+        spyOn(router, 'navigate');
+        comp.eventHandler(event);
+        expect(router.navigate).toHaveBeenCalled();
+    })));
   });
 
   describe('eventForm method', () => {
@@ -90,13 +109,19 @@ describe('FormBuilderComponent', () => {
           id: 'some id',
           __str__: 'some str',
           groups: [],
-          model_fields: []
+          model_fields: [],
+          company_links: [
+            {
+              company: 'LabourKing',
+              url: '/ecore/form-builders/'
+            }
+          ]
         }
       };
       spyOn(comp.str, 'emit');
       comp.eventForm(event);
       expect(comp.label).toEqual('some str');
-      expect(comp.previewLink).toEqual(`/ecore/form-builds/${event.data.id}/`);
+      expect(comp.links).toEqual(event.data.company_links);
       expect(comp.data).toEqual({
         groups: {
           action: 'add',

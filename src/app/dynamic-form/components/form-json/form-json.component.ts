@@ -1,0 +1,53 @@
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+
+interface JSONPreview {
+  title: string;
+  value: string | number;
+}
+
+@Component({
+  selector: 'form-json',
+  templateUrl: 'form-json.component.html'
+})
+
+export class FormJsonComponent implements OnInit {
+
+  public config;
+  public group: FormGroup;
+  public errors: any;
+  public message: any;
+  public key: any;
+
+  public previewData: JSONPreview[];
+
+  public ngOnInit() {
+    if (this.config && this.config.value) {
+      this.previewData = [];
+      this.generateViewByJSON(this.config.value);
+    }
+  }
+
+  public generateViewByJSON(json: any): void {
+    let keys: string[] = Object.keys(json);
+    keys.forEach((el: string) => {
+      if (json[el] instanceof Object) {
+        this.generateViewByJSON(json[el]);
+      } else {
+        let fields: string[] = el.split('__');
+        if (fields.length > 1) {
+          this.previewData.push({
+            title: fields.pop().split('_').join(' '),
+            value: json[el]
+          });
+        } else {
+          this.previewData.push({
+            title: el.split('_').join(' '),
+            value: json[el]
+          });
+        }
+      }
+    });
+  }
+
+}

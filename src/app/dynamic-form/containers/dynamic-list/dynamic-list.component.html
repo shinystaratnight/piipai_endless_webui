@@ -3,7 +3,7 @@
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
       <div class="d-flex fustify-content-center align-items-center">
-        <i 
+        <i
           fa
           class="ml-2 icon"
           [name]="'window-minimize'"
@@ -68,7 +68,7 @@
       <table class="table table-sm" *ngIf="config.list">
         <thead class="thead-default hidden-sm-down">
           <tr>
-            <th *ngIf="!config.list.buttons || config.list.buttons.length > 0" class="text-center" style="width: 2rem">
+            <th class="text-center" style="width: 2rem">
               *
               <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
             </th>
@@ -100,7 +100,7 @@
           <tr *ngFor="let row of body"
             [class.table-warning]="row.highlight && row.highlight.highlight"
             [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
-            <td *ngIf="!config.list.buttons || config.list.buttons.length > 0">
+            <td>
               <div class="d-flex flex-md-column justify-content-between align-items-center">
                 <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
                 <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm" [routerLink]="[row.id + '/change']">
