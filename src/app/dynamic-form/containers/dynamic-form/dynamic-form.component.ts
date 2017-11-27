@@ -88,7 +88,9 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     event.preventDefault();
     event.stopPropagation();
     let data = this.form.value;
-    this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
+    if (this.hiddenFields) {
+      this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
+    }
     this.filterSendData(this.config, data);
     this.submit.emit(data);
   }
