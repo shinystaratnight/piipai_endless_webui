@@ -234,20 +234,22 @@ export class GenericListComponent implements OnInit {
   }
 
   public generateQuery(queries) {
-    let patt = /\?/;
-    let result = '';
-    if (patt.test(this.endpoint)) {
-      result = '&';
-    } else {
-      result = '?';
-    }
-    let queryList = Object.keys(queries);
-    queryList.forEach((el) => {
-      if (queries[el]) {
-        result += `${queries[el]}&`;
+    if (queries) {
+      let patt = /\?/;
+      let result = '';
+      if (patt.test(this.endpoint)) {
+        result = '&';
+      } else {
+        result = '?';
       }
-    });
-    return result.slice(0, result.length - 1);
+      let queryList = Object.keys(queries);
+      queryList.forEach((el) => {
+        if (queries[el]) {
+          result += `${queries[el]}&`;
+        }
+      });
+      return result.slice(0, result.length - 1);
+    }
   }
 
   public createTableData(endpoint) {

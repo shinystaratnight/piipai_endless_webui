@@ -42,17 +42,35 @@ describe('FormTimelineComponent', () => {
 
   describe('ngOnInit method', () => {
     it('should initialize properties', () => {
+      comp.config = Object.assign(config);
+      // comp.config.value = {
+      //   id: '123'
+      // };
+      // let formatString = new FormatString();
+      // let value = formatString.format(comp.config.query['object_id'], comp.config.value);
+      spyOn(comp, 'initialize');
+      comp.ngOnInit();
+      expect(comp.query).toEqual([]);
+      // expect(comp.objectId).toEqual(value);
+      expect(comp.objectEndpoint).toEqual('/ecore/api/v2/core/workflowobjects/');
+      expect(comp.initialize).toHaveBeenCalled();
+    });
+  });
+
+  describe('initialize method', () => {
+    it('should initialize properties', () => {
       comp.config = config;
       comp.config.value = {
         id: '123'
       };
+      comp.query = [];
       let formatString = new FormatString();
       let value = formatString.format(comp.config.query['object_id'], comp.config.value);
       spyOn(comp, 'getTimeline');
       comp.ngOnInit();
       expect(comp.query).toEqual(['model=endless_core.companyrel', 'object_id=123']);
       expect(comp.objectId).toEqual(value);
-      expect(comp.objectEndpoint).toEqual('/ecore/api/v2/core/workflowobjects/');
+      // expect(comp.objectEndpoint).toEqual('/ecore/api/v2/core/workflowobjects/');
       expect(comp.getTimeline).toHaveBeenCalled();
     });
   });

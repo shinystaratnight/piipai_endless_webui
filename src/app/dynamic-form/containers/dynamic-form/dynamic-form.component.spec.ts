@@ -130,8 +130,10 @@ describe('DynamicFormComponent', () => {
       };
       spyOn(comp, 'removeValuesOfHiddenFields');
       spyOn(comp.submit, 'emit');
+      spyOn(comp, 'filterSendData');
       comp.handleSubmit(event);
       expect(comp.removeValuesOfHiddenFields).toHaveBeenCalled();
+      expect(comp.filterSendData).toHaveBeenCalled();
       expect(comp.submit.emit).toHaveBeenCalled();
     }));
 
@@ -347,6 +349,31 @@ describe('DynamicFormComponent', () => {
       };
       comp.removeValue(key, data);
       expect(data.contact.email).toBeUndefined();
+    });
+  });
+
+  describe('filterSendData method', () => {
+    it('should check metadata for send property', () => {
+      const metadata = [
+        {
+          type: 'collapse',
+          children: [
+            {
+              type: 'related',
+              key: 'contact.picture',
+              send: false
+            }
+          ]
+        }
+      ];
+      const data = {
+        contact: {
+          picture: 'picture.jpg'
+        }
+      };
+      spyOn(comp, 'removeValue');
+      comp.filterSendData(metadata, data);
+      expect(comp.removeValue).toHaveBeenCalled();
     });
   });
 

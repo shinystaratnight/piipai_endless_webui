@@ -89,6 +89,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     event.stopPropagation();
     let data = this.form.value;
     this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
+    this.filterSendData(this.config, data);
     this.submit.emit(data);
   }
 
@@ -180,7 +181,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     let keysArray = key.split('.');
     let firstKey = keysArray.shift();
     if (keysArray.length === 0) {
-      return data[firstKey];
+      return data && data[firstKey];
     } else if (keysArray.length > 0) {
       let combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
@@ -199,11 +200,23 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     let keysArray = key.split('.');
     let firstKey = keysArray.shift();
     if (keysArray.length === 0) {
-      delete data[firstKey];
+      if (data) {
+        delete data[firstKey];
+      }
     } else if (keysArray.length > 0) {
       let combineKeys = keysArray.join('.');
       this.removeValue(combineKeys, data[firstKey]);
     }
+  }
+
+  public filterSendData(metadata: Field[], data) {
+    metadata.forEach((el) => {
+      if (el.send === false) {
+        this.removeValue(el.key, data);
+      } else if (el.children) {
+        this.filterSendData(el.children, data);
+      }
+    });
   }
 
  }

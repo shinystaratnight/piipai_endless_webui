@@ -36,6 +36,12 @@ export class FormListComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
+    if (!this.config.hide) {
+      this.initialize();
+    }
+  }
+
+  public initialize(): void {
     this.update = new BehaviorSubject(false);
     this.isCollapsed = this.config.collapsed ? this.config.collapsed : false;
     if (this.config.query) {

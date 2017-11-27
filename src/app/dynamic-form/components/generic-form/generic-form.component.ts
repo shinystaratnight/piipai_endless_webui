@@ -511,6 +511,13 @@ export class GenericFormComponent implements OnChanges {
       if (el.type === 'hidden') {
         el.hide = this.hide;
       }
+      if (el.type === 'timeline' || el.type === 'list') {
+        if (this.edit || this.editForm) {
+          el.hide = false;
+        } else {
+          el.hide = true;
+        }
+      }
       if (el && el.key && params && !!params[el.key]) {
         if (params[el.key].action === 'add') {
           el = Object.assign(el, params[el.key].data);

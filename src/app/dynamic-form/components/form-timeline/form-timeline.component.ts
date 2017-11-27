@@ -30,6 +30,12 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.query = [];
     this.objectEndpoint = '/ecore/api/v2/core/workflowobjects/';
+    if (!this.config.hide) {
+      this.initialize();
+    }
+  }
+
+  public initialize() {
     let formatString = new FormatString();
     let keys = Object.keys(this.config.query);
     keys.forEach((el) => {

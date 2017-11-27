@@ -53,6 +53,15 @@ describe('FormListComponent', () => {
   });
 
   describe('ngOnInit method', () => {
+    it('should call initialize method', () => {
+      comp.config = Object.assign(config);
+      spyOn(comp, 'initialize');
+      comp.ngOnInit();
+      expect(comp.initialize).toHaveBeenCalled();
+    });
+  });
+
+  describe('initialize method', () => {
     it('should init properties', () => {
       comp.config = Object.assign(config);
       comp.ngOnInit();
