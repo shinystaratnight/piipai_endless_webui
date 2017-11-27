@@ -16,6 +16,7 @@ export interface Field {
   dateTable?: boolean;
   prefilled?: any;
   send?: boolean;
+  view?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;

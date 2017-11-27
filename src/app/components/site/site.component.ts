@@ -30,6 +30,8 @@ export class SiteComponent implements OnInit {
 
   public error: any;
 
+  public formMode: string;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -53,6 +55,7 @@ export class SiteComponent implements OnInit {
         this.pageData = null;
         this.getPageNavigation(url);
         if (url.length) {
+          this.formMode = '';
           this.dashboard = false;
         } else {
           this.dashboard = true;
@@ -154,10 +157,18 @@ export class SiteComponent implements OnInit {
     );
   }
 
+  public changeMode(mode) {
+    this.formMode = mode;
+  }
+
   public formEvent(e) {
     if (e.type === 'sendForm' && e.status === 'success') {
       this.router.navigate([this.pageData.pathData.path]);
     }
+  }
+
+  public modeEvent(mode) {
+    this.formMode = mode;
   }
 
   public deleteElement(element) {

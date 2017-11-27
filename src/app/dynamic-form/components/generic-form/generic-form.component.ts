@@ -19,7 +19,7 @@ interface HiddenFields {
   templateUrl: 'generic-form.component.html'
 })
 
-export class GenericFormComponent implements OnChanges {
+export class GenericFormComponent implements OnChanges, OnInit {
 
   @Input()
   public endpoint: string = '';
@@ -63,6 +63,9 @@ export class GenericFormComponent implements OnChanges {
   @Input()
   public showResponse: boolean = true;
 
+  @Input()
+  public mode: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -80,6 +83,9 @@ export class GenericFormComponent implements OnChanges {
 
   @Output()
   public str: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  public modeEvent: EventEmitter<any> = new EventEmitter();
 
   public metadata: Field[] = [];
   public metadataError = [];
@@ -110,6 +116,13 @@ export class GenericFormComponent implements OnChanges {
     private service: GenericFormService
   ) {}
 
+  public ngOnInit() {
+    if (this.id) {
+      this.mode = 'view';
+      this.modeEvent.emit(this.mode);
+    }
+  }
+
   public ngOnChanges() {
     if (this.currentId !== this.id) {
       this.currentId = this.id;
@@ -131,6 +144,24 @@ export class GenericFormComponent implements OnChanges {
     } else if (this.data && this.metadata) {
       this.parseMetadata(this.metadata, this.data);
     }
+    if (this.id && this.mode && this.metadata) {
+      if (this.mode === 'edit') {
+        this.toggleModeMetadata(this.metadata, this.mode);
+      }
+    }
+  }
+
+  public toggleModeMetadata(metadata: Field[], mode: string) {
+    metadata.forEach((el) => {
+      if (mode === 'view') {
+        el.view = true;
+      } else {
+        delete el.view;
+      }
+      if (el.children) {
+        this.toggleModeMetadata(el.children, mode);
+      }
+    });
   }
 
   public formChange(data) {
@@ -150,6 +181,7 @@ export class GenericFormComponent implements OnChanges {
   public getMetadata(endpoint) {
     this.service.getMetadata(endpoint, '?type=form').subscribe(
         ((data: any) => {
+          this.toggleModeMetadata(this.metadata, this.mode);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);
