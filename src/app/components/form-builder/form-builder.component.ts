@@ -28,6 +28,7 @@ export class FormBuilderComponent {
   public error: any;
 
   public links: any[];
+  public domain = location.origin;
 
   constructor(
     private router: Router,
@@ -45,6 +46,12 @@ export class FormBuilderComponent {
             action: 'add',
             data: {
               fields: event.data.model_fields
+            }
+          },
+          id: {
+            action: 'add',
+            data: {
+              value: event.data.id
             }
           }
         };
