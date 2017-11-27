@@ -49,6 +49,9 @@ describe('SiteComponent', () => {
       },
       getAll() {
         return Observable.of(true);
+      },
+      submitForm() {
+        return Observable.of(true);
       }
     };
 
@@ -101,6 +104,7 @@ describe('SiteComponent', () => {
       expect(comp.user).toEqual({});
       expect(comp.dashboard).toBeFalsy();
       expect(comp.getPageNavigation).toHaveBeenCalledWith(mockUrl);
+      expect(comp.formStorageEndpoint).toBeDefined();
     });
   });
 
@@ -115,16 +119,35 @@ describe('SiteComponent', () => {
       };
       comp.checkPermissions(data);
       expect(comp.pageData).toEqual(data);
+      expect(comp.formStorage).toBeFalsy();
+    });
+
+    it('should set formStorage true', () => {
+      let data = {
+        endpoint: '/ecore/api/v2/core/formstorages/',
+        pathData: {
+          type: 'list',
+          path: 'path'
+        }
+      };
+      comp.checkPermissions(data);
+      expect(comp.pageData).toEqual(data);
+      expect(comp.formStorage).toBeTruthy();
     });
   });
 
   describe('changeFormLabel method', () => {
     it('should change formLabel proeprty', () => {
       let event = {
-        str: 'Add'
+        str: 'Add',
+        data: {
+          status: true
+        }
       };
+      comp.formStorage = true;
       comp.changeFormLabel(event);
       expect(comp.formLabel).toEqual('Add');
+      expect(comp.approvedStorage).toBeTruthy();
     });
   });
 
@@ -423,6 +446,22 @@ describe('SiteComponent', () => {
       expect(comp.modulesList).toBeNull();
       expect(comp.getPageNavigation).toHaveBeenCalledWith([]);
     });
+  });
+
+  describe('approveFormStorage method', () => {
+    it('should approve form storage',
+      async(inject([Router], (router: Router) => {
+        comp.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
+        const element = {
+          pathData: {
+            id: '123',
+            path: '/'
+          }
+        };
+        spyOn(router, 'navigate');
+        comp.approveFormStorage(element);
+        expect(router.navigate).toHaveBeenCalledWith([element.pathData.path]);
+    })));
   });
 
 });

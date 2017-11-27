@@ -30,6 +30,7 @@ import { FormOptionsComponent } from './../form-options/form-options.component';
 import { FormRadioComponent } from './../form-radio/form-radio.component';
 import { FormReplaceComponent } from './../form-replace/form-replace.component';
 import { ListLinkComponent } from '../list-link/list-link.component';
+import { FormJsonComponent } from './../form-json/form-json.component';
 
 const components = {
   input: FormInputComponent,
@@ -52,7 +53,8 @@ const components = {
   formOptions: FormOptionsComponent,
   radio: FormRadioComponent,
   replace: FormReplaceComponent,
-  link: ListLinkComponent
+  link: ListLinkComponent,
+  json: FormJsonComponent
 };
 
 @Directive({

@@ -186,6 +186,8 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'checkRuleElement');
         spyOn(comp, 'saveHiddenFields');
         spyOn(comp, 'getReplaceElements');
+        spyOn(comp, 'checkFormStorage');
+        spyOn(comp, 'checkFormBuilder');
         spyOn(comp.str, 'emit');
         comp.getMetadata(endpoint);
         expect(comp.parseMetadata).toHaveBeenCalledTimes(2);
@@ -196,6 +198,8 @@ describe('GenericFormComponent', () => {
         });
         expect(comp.checkRuleElement).toHaveBeenCalled();
         expect(comp.getReplaceElements).toHaveBeenCalled();
+        expect(comp.checkFormStorage).toHaveBeenCalled();
+        expect(comp.checkFormBuilder).toHaveBeenCalled();
         expect(comp.show).toBeTruthy();
       }));
 
@@ -225,11 +229,15 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getDataForForm');
         spyOn(comp, 'updateElements');
         spyOn(comp, 'getReplaceElements');
+        spyOn(comp, 'checkFormStorage');
+        spyOn(comp, 'checkFormBuilder');
         comp.getMetadata(endpoint);
         expect(comp.show).toBeFalsy();
         expect(comp.updateElements).toHaveBeenCalled();
         expect(comp.getDataForForm).toHaveBeenCalled();
         expect(comp.getReplaceElements).toHaveBeenCalled();
+        expect(comp.checkFormStorage).toHaveBeenCalled();
+        expect(comp.checkFormBuilder).toHaveBeenCalled();
       }));
 
     });
@@ -1342,6 +1350,32 @@ describe('GenericFormComponent', () => {
         comp.updateElements(config, prop, undefined, true);
         expect(config[0][prop]).toBeTruthy();
         expect(config[0].children[0][prop]).toBeTruthy();
+      });
+    });
+
+    describe('checkFormStorage method', () => {
+      it('should update metadata for formStorage page', () => {
+        const endpoint = '/ecore/api/v2/core/formstorages/';
+        const config = <any> [
+          {
+            type: 'collapse',
+            children: [
+              {
+                key: 'data',
+                type: 'input',
+                read_only: false,
+              },
+              {
+                key: 'status',
+                hide: false
+              }
+            ]
+          }
+        ];
+        comp.checkFormStorage(config, endpoint);
+        expect(config[0].children[0].type).toEqual('json');
+        expect(config[0].children[0].read_only).toBeTruthy();
+        expect(config[0].children[1].hide).toBeTruthy();
       });
     });
 
