@@ -240,7 +240,7 @@ export class DynamicListComponent implements
   }
 
   public ngAfterViewInit() {
-    if (this.datatable) {
+    if (this.datatable && !this.inForm) {
       let listButtons: any = this.datatable.nativeElement.getElementsByClassName('list-buttons');
       let filterWrapper: any =
         this.datatable.nativeElement.getElementsByClassName('filter-wrapper');

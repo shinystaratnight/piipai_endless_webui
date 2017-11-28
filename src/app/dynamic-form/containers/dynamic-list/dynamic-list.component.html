@@ -31,8 +31,8 @@
     <div class="filter-wrapper" *ngIf="(first || poped) && filtersOfList && filtersOfList.length">
       <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     </div>
-    <action-element *ngIf="config.list.actions" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
-    <h5 class="datatable-label" *ngIf="config.list && !poped">
+    <action-element *ngIf="config.list.actions && !inForm" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
+    <h5 class="datatable-label" *ngIf="config.list && !poped && !inForm">
       <span class="mr-auto">select {{config.list.label}} to change</span>
       <list-search-bar *ngIf="config.list.search_enabled" [list]="config.list.list" (event)="filterHandler($event)"></list-search-bar>
       <div>

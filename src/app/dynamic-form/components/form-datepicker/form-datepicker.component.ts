@@ -39,12 +39,28 @@ export class FormDatepickerComponent
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
+    this.setInitValue();
+    if (this.config && this.config.hidden) {
+      this.config.hidden.subscribe((hide) => {
+        if (hide) {
+          this.config.hide = hide;
+          this.group.get(this.key).patchValue(undefined);
+          this.setInitValue();
+        } else {
+          this.config.hide = hide;
+        }
+      });
+    }
+    this.mobileDevice = this.identifyDevice();
+    this.createEvent();
+  }
+
+  public setInitValue() {
     if (this.config.value || this.group.get(this.key).value) {
       let data = this.config.value ? this.config.value :
         this.group.get(this.key).value;
       this.setDate(data, moment);
     }
-    this.mobileDevice = this.identifyDevice();
   }
 
   public identifyDevice() {

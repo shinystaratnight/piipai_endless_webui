@@ -5,6 +5,8 @@ import { DebugElement } from '@angular/core';
 import { FormOptionsComponent } from './form-options.component';
 import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 describe('FormOptionsComponent', () => {
   let fixture: ComponentFixture<FormOptionsComponent>;
   let comp: FormOptionsComponent;
@@ -42,6 +44,25 @@ describe('FormOptionsComponent', () => {
       comp.config = config;
       comp.group = fb.group({});
       comp.group.addControl(config.key, fb.control(''));
+      comp.config.hidden = new BehaviorSubject(true);
+      comp.key = config.key;
+      spyOn(comp, 'addControl');
+      spyOn(comp, 'setInitValue');
+      comp.ngOnInit();
+      expect(comp.addControl).toHaveBeenCalled();
+      expect(comp.setInitValue).toHaveBeenCalled();
+      expect(comp.config.hide).toBeTruthy();
+      expect(comp.group.get(comp.key).value).toBeUndefined();
+      comp.config.hidden = null;
+    })));
+
+  });
+
+  describe('setInitValue method', () => {
+    it('should set value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.group = fb.group({});
+      comp.group.addControl(config.key, fb.control(''));
       comp.config.value = [
         {
           label: 'Label',
@@ -49,27 +70,23 @@ describe('FormOptionsComponent', () => {
         }
       ];
       comp.key = config.key;
-      spyOn(comp, 'addControl');
-      comp.ngOnInit();
+      comp.setInitValue();
+      expect(comp.config.hide).toBeTruthy();
       expect(comp.group.get(comp.key).value).toEqual(comp.config.value);
-      expect(comp.addControl).toHaveBeenCalled();
       expect(comp.optionsArray).toEqual(comp.config.value);
     })));
 
-    it('should set optionsArray', async(inject([FormBuilder], (fb: FormBuilder) => {
+    it('should set optionsArray', () => {
       comp.config = config;
-      comp.group = fb.group({});
       comp.config.value = null;
-      spyOn(comp, 'addControl');
-      comp.ngOnInit();
-      expect(comp.addControl).toHaveBeenCalled();
+      comp.setInitValue();
       expect(comp.optionsArray).toEqual([
         {
           label: '',
           value: ''
         }
       ]);
-    })));
+    });
   });
 
   describe('updateValue method', () => {

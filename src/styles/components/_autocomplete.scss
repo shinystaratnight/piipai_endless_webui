@@ -7,12 +7,12 @@
 
 
   @include media-breakpoint-up('lg') {
-    &-filter .autocomplete {
+    .list-page &-filter .autocomplete {
       background-color: #2d2c31;
       color: white;
     }
 
-    &-filter &-value {
+    .list-page &-filter &-value {
       border: 0;
       border-radius: 0;
       background-color: transparent;
@@ -25,7 +25,7 @@
       }
     }
 
-    &-filter input {
+    .list-page &-filter input {
       border: none;
       border-bottom: 2px solid white;
       border-radius: 0;
@@ -36,9 +36,17 @@
         border-color: $brand-primary;
         background-color: #2d2c31;
       }
+
+      @each $item in $themes {
+        .#{$item}-theme &:hover,
+        .#{$item}-theme &:focus {
+          border-color: map-get($theme-colors, $item);
+        }
+      }
+
     }
 
-    &-filter &-item {
+    .list-page &-filter &-item {
       background-color: #2d2c31;
 
       &:hover {
@@ -73,12 +81,18 @@
       width: 100%;
       background-color: $brand-primary;
     }
+
+    @each $item in $themes {
+      .#{$item}-theme &:hover {
+        background-color: map-get($theme-colors, $item);
+      }
+    }
   }
 }
 
 .r3sourcer .autocomplete {
   @include media-breakpoint-up('lg') {
-    &-filter .autocomplete-value {
+    .list-page &-filter .autocomplete-value {
       border: 1px solid #363c3e;
       border-radius: .2rem;
     }
@@ -100,6 +114,12 @@
 
       &:hover, &:focus {
         border-color: $brand-primary;
+      }
+
+      @each $item in $themes {
+        .#{$item}-theme &:hover {
+          border-color: map-get($theme-colors, $item);
+        }
       }
     }
 

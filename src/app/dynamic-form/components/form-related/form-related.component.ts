@@ -12,6 +12,13 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 import { GenericFormService } from './../../services/generic-form.service';
+import { Field } from '../../models/field.model';
+
+interface RelatedObject {
+  id: string;
+  data: FormGroup;
+  metadata: Field[];
+}
 
 @Component({
   selector: 'form-related',
@@ -57,6 +64,10 @@ export class FormRelatedComponent
   public dataOfList: any;
   public isCollapsed: boolean = false;
 
+  public replaceElements: any = [];
+
+  public listElement: Field;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -71,6 +82,32 @@ export class FormRelatedComponent
     this.display =
       this.config.templateOptions.display ? this.config.templateOptions.display : '__str__';
     this.param = this.config.templateOptions.param ? this.config.templateOptions.param : 'id';
+    this.setInitValue();
+    if (this.config && this.config.hidden) {
+      this.config.hidden.subscribe((hide) => {
+        if (hide) {
+          this.config.hide = hide;
+          this.displayValue = null;
+          this.group.get(this.key).patchValue(undefined);
+          this.setInitValue();
+        } else {
+          this.config.hide = hide;
+        }
+      });
+    }
+    if (this.config && this.config.list && this.config.data) {
+      this.config.data.subscribe((data) => {
+        this.generateDataForList(this.config, data);
+      });
+    }
+    this.createEvent();
+    if (this.config && this.config.metadata) {
+      this.getReplaceElements(this.config.metadata);
+    }
+    this.isCollapsed = this.config.collapsed;
+  }
+
+  public setInitValue() {
     this.results = [];
     if (this.config.value || this.group.get(this.key).value) {
       let data = this.config.value ? this.config.value :
@@ -121,7 +158,7 @@ export class FormRelatedComponent
     if (this.config.query) {
       this.config.currentQuery = `${this.config.query}${this.config.id}`;
     }
-    this.generateDataForList(this.config);
+    this.generateDataForList(this.config, this.config.value);
   }
 
   public ngOnDestroy() {
@@ -136,7 +173,7 @@ export class FormRelatedComponent
     }
   }
 
-  public checkOverfow() {
+  public checkOverfow(): void {
     if (this.config.metadata) {
       let width = this.tableWrapper.nativeElement.offsetWidth;
       let count = this.config.metadata.length;
@@ -148,19 +185,30 @@ export class FormRelatedComponent
     }
   };
 
-  public generateDataForList(config) {
+  public getReplaceElements(metadata: Field[]): void {
+    metadata.forEach((el) => {
+      if (el.type === 'replace') {
+        this.replaceElements.push(el);
+      } else if (el.children) {
+        this.getReplaceElements(el.children);
+      }
+    });
+  }
+
+  public generateDataForList(config: Field, data = undefined): void {
     if (config.list && config.metadata) {
       this.dataOfList = [];
       let value = [];
-      if (this.config.value) {
-        this.config.value.forEach((el) => {
+      if (data) {
+        data.forEach((el) => {
           let object = this.createObject();
           object['id'] = el.id;
-          this.fillingForm(object.metadata, el, object.data);
+          this.fillingForm(object.metadata, el);
+          object.data = this.fb.group({});
           value.push(object.data.value);
           this.dataOfList.push(object);
         });
-        this.group.get(this.key).patchValue(value);
+        this.group.get(this.key).patchValue(data);
       } else {
         let object = this.createObject();
         this.dataOfList.push(object);
@@ -168,16 +216,19 @@ export class FormRelatedComponent
     }
   }
 
-  public createObject() {
+  public createObject(): RelatedObject {
     let object = {
+      id: undefined,
       data: this.fb.group({}),
       metadata: []
     };
-    object.metadata = [].concat(this.config.metadata);
+    object.metadata = this.config.metadata.map((el) => {
+      return Object.assign({}, el);
+    });
     return object;
   }
 
-  public addObject(e) {
+  public addObject(e): void {
     e.preventDefault();
     e.stopPropagation();
     if (this.dataOfList) {
@@ -186,7 +237,7 @@ export class FormRelatedComponent
     }
   }
 
-  public deleteObject(object) {
+  public deleteObject(object: RelatedObject): void {
     if (object.id) {
       this.genericFormService
         .delete(this.config.endpoint, object.id)
@@ -199,47 +250,57 @@ export class FormRelatedComponent
     }
   }
 
-  public updateValue(e) {
-    let value = this.dataOfList.map((el) => {
-      let object = el.data.value;
-      if (el.id) {
-        object.id = el.id;
-      }
-      return object;
-    });
-    this.group.get(this.key).patchValue(value);
+  public updateValue(e): void {
+    if (e.type !== 'create' && e.type !== 'updateValue') {
+      let value = this.dataOfList.map((el) => {
+        let object = el.data.value;
+        if (el.id) {
+          object.id = el.id;
+        }
+        return object;
+      });
+      this.group.get(this.key).patchValue(value);
+    }
   }
 
-  public fillingForm(metadata, data, object) {
+  public fillingForm(metadata: Field[], data): void {
     metadata.forEach((el) => {
       if (el.key) {
-        this.getValueOfData(data, el.key, object);
+        this.getValueOfData(data, el.key, el);
       } else if (el.children) {
-        this.fillingForm(el.children, data, object);
+        this.fillingForm(el.children, data);
       }
     });
   }
 
-    public getValueOfData(data, key, obj) {
+  public getValueOfData(data, key: string, obj: Field): void {
     let keys = key.split('.');
     let prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
-        obj.addControl(key, this.fb.control(data[key]));
+        if (!obj['value']) {
+          obj['value'] = data[key];
+        }
+        if (obj.type === 'related') {
+          if (obj.value && obj.value instanceof Object) {
+            if (obj.value.id && obj.value.__str__) {
+              obj.options = [obj.value];
+            }
+          }
+        }
       }
     } else {
       if (data[prop]) {
-        obj.addControl(prop, this.fb.group({}));
-        this.getValueOfData(data[prop], keys.join('.'), obj.get(prop));
+        this.getValueOfData(data[prop], keys.join('.'), obj);
       }
     }
   }
 
-  public onModalScrollDown() {
+  public onModalScrollDown(): void {
     this.generateList(this.searchValue, true);
   }
 
-  public deleteElement(closeModal) {
+  public deleteElement(closeModal): void {
     closeModal();
     this.event.emit({
       type: 'delete',
@@ -251,7 +312,7 @@ export class FormRelatedComponent
     this.displayValue = null;
   }
 
-  public open(type, e = undefined, object = undefined) {
+  public open(type, e = undefined, object = undefined): void {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -272,7 +333,7 @@ export class FormRelatedComponent
     this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
   }
 
-  public openAutocomplete() {
+  public openAutocomplete(): void {
       this.searchValue = null;
       this.hideAutocomplete = false;
       this.generateList(this.searchValue);

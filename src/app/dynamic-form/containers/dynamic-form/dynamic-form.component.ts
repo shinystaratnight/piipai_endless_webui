@@ -1,6 +1,9 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 
+import { Field } from '../../models/field.model';
+import { CustomEvent } from '../../models/custom-event.model';
+
 @Component({
   selector: 'dynamic-form',
   templateUrl: 'dynamic-form.component.html'
@@ -8,7 +11,7 @@ import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angu
 
 export class DynamicFormComponent implements OnInit, OnChanges {
   @Input()
-  public config: any[] = [];
+  public config: Field[] = [];
 
   @Input()
   public errors: any = {};
@@ -21,6 +24,9 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   @Input()
   public commonFields: any;
+
+  @Input()
+  public hiddenFields: any;
 
   @Output()
   public submit: EventEmitter<any> = new EventEmitter<any>();
@@ -81,11 +87,28 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   public handleSubmit(event: Event) {
     event.preventDefault();
     event.stopPropagation();
-    this.submit.emit(this.form.value);
+    let data = this.form.value;
+    if (this.hiddenFields) {
+      this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
+    }
+    this.filterSendData(this.config, data);
+    this.submit.emit(data);
   }
 
-  public eventHandler(e) {
+  public eventHandler(e: CustomEvent): void {
     this.event.emit(e);
+    if (this.hiddenFields && this.hiddenFields.elements && this.hiddenFields.elements.length) {
+      this.parseConfig(this.hiddenFields.elements);
+    }
+  }
+
+  public parseConfig(metadata: Field[]) {
+    metadata.forEach((el: Field) => {
+      this.checkHiddenFields(el);
+      if (el.children) {
+        this.parseConfig(el.children);
+      }
+    });
   }
 
   public buttonActionHandler(e) {
@@ -119,4 +142,83 @@ export class DynamicFormComponent implements OnInit, OnChanges {
       this.updateForm(keys, data, form.get(key), field);
     }
   }
-}
+
+  public checkHiddenFields(field: Field): void {
+    let rule = field.showIf;
+    let show = this.checkShowRules(rule);
+    field.hidden.next(!show);
+  }
+
+  public checkShowRules(rule: any[]): boolean {
+    let approvedRules = 0;
+    let rulesNumber = rule.length;
+    let data = this.form.value;
+
+    rule.forEach((el: any) => {
+      if (typeof el === 'string') {
+        let value = this.getValueByKey(el, data);
+
+        if (value && value !== '0') {
+          approvedRules += 1;
+        } else {
+          return;
+        }
+      } else if (el instanceof Object) {
+        let key = Object.keys(el)[0];
+        let targetValue = el[key];
+        let value = this.getValueByKey(key, data);
+
+        if (value === targetValue) {
+          approvedRules += 1;
+        } else {
+          return;
+        }
+      }
+    });
+
+    return approvedRules === rulesNumber;
+  }
+
+  public getValueByKey(key: string, data: any): any {
+    let keysArray = key.split('.');
+    let firstKey = keysArray.shift();
+    if (keysArray.length === 0) {
+      return data && data[firstKey];
+    } else if (keysArray.length > 0) {
+      let combineKeys = keysArray.join('.');
+      return this.getValueByKey(combineKeys, data[firstKey]);
+    }
+  }
+
+  public removeValuesOfHiddenFields(metadata: Field[], data): void {
+    metadata.forEach((el: Field) => {
+      if (el.hide) {
+        this.removeValue(el.key, data);
+      }
+    });
+  }
+
+  public removeValue(key: string, data: any): void {
+    let keysArray = key.split('.');
+    let firstKey = keysArray.shift();
+    if (keysArray.length === 0) {
+      if (data) {
+        delete data[firstKey];
+      }
+    } else if (keysArray.length > 0) {
+      let combineKeys = keysArray.join('.');
+      this.removeValue(combineKeys, data[firstKey]);
+    }
+  }
+
+  public filterSendData(metadata: Field[], data) {
+    metadata.forEach((el) => {
+      if (el.send === false) {
+        this.removeValue(el.key, data);
+      } else if (el.children) {
+        this.filterSendData(el.children, data);
+      }
+    });
+  }
+
+ }

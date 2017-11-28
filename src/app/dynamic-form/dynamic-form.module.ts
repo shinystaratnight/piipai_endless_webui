@@ -33,6 +33,8 @@ import {
   FormFieldsGroupComponent
 } from './components/form-fields-group/form-fields-group.component';
 import { FormOptionsComponent } from './components/form-options/form-options.component';
+import { FormRadioComponent } from './components/form-radio/form-radio.component';
+import { FormReplaceComponent } from './components/form-replace/form-replace.component';
 import { FormJsonComponent } from './components/form-json/form-json.component';
 
 import { GenericListComponent } from './components/generic-list/generic-list.component';
@@ -72,7 +74,7 @@ import { MoveDirective } from './directives/move.directive';
     AgmCoreModule.forRoot(),
     InfiniteScrollModule
   ],
-  exports: [GenericFormComponent, GenericListComponent],
+  exports: [GenericFormComponent, GenericListComponent, DynamicFormComponent],
   declarations: [
     DynamicFormComponent,
     FormInputComponent,
@@ -116,6 +118,8 @@ import { MoveDirective } from './directives/move.directive';
     ListSerachBarComponent,
     ButtonRadioDirective,
     PdfViewerComponent,
+    FormRadioComponent,
+    FormReplaceComponent,
     FormJsonComponent
   ],
   providers: [GenericFormService, FilterService],
@@ -146,6 +150,8 @@ import { MoveDirective } from './directives/move.directive';
     FormListComponent,
     FormFieldsGroupComponent,
     FormOptionsComponent,
+    FormRadioComponent,
+    FormReplaceComponent,
     FormJsonComponent
   ]
 })

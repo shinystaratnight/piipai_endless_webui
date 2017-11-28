@@ -6,6 +6,7 @@ import { DebugElement } from '@angular/core';
 
 import { GenericFormComponent } from './generic-form.component';
 import { GenericFormService } from './../../services/generic-form.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 describe('GenericFormComponent', () => {
     let fixture: ComponentFixture<GenericFormComponent>;
@@ -183,16 +184,20 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'parseMetadata');
         spyOn(comp, 'getData');
         spyOn(comp, 'checkRuleElement');
+        spyOn(comp, 'saveHiddenFields');
+        spyOn(comp, 'getReplaceElements');
         spyOn(comp, 'checkFormStorage');
         spyOn(comp, 'checkFormBuilder');
         spyOn(comp.str, 'emit');
         comp.getMetadata(endpoint);
         expect(comp.parseMetadata).toHaveBeenCalledTimes(2);
         expect(comp.getData).toHaveBeenCalled();
+        expect(comp.saveHiddenFields).toHaveBeenCalled();
         expect(comp.str.emit).toHaveBeenCalledWith({
           str: 'Add'
         });
         expect(comp.checkRuleElement).toHaveBeenCalled();
+        expect(comp.getReplaceElements).toHaveBeenCalled();
         expect(comp.checkFormStorage).toHaveBeenCalled();
         expect(comp.checkFormBuilder).toHaveBeenCalled();
         expect(comp.show).toBeTruthy();
@@ -223,16 +228,77 @@ describe('GenericFormComponent', () => {
         let endpoint = 'endpoint';
         spyOn(comp, 'getDataForForm');
         spyOn(comp, 'updateElements');
+        spyOn(comp, 'getReplaceElements');
         spyOn(comp, 'checkFormStorage');
         spyOn(comp, 'checkFormBuilder');
         comp.getMetadata(endpoint);
         expect(comp.show).toBeFalsy();
         expect(comp.updateElements).toHaveBeenCalled();
         expect(comp.getDataForForm).toHaveBeenCalled();
+        expect(comp.getReplaceElements).toHaveBeenCalled();
         expect(comp.checkFormStorage).toHaveBeenCalled();
         expect(comp.checkFormBuilder).toHaveBeenCalled();
       }));
 
+    });
+
+    describe('saveHiddenFields method', () => {
+      it('should save fields with show rules', () => {
+        let config = <any> [
+          {
+            type: 'collapse',
+            children: [
+              {
+                key: 'manager',
+                hide: false,
+                showIf: ['contact']
+              }
+            ]
+          }
+        ];
+        comp.hiddenFields = {
+          elements: [],
+          keys: []
+        };
+        comp.saveHiddenFields(config);
+        expect(comp.hiddenFields).toEqual(<any> {
+          elements: [config[0].children[0]],
+          keys: ['manager']
+        });
+        expect(config[0].children[0].hidden instanceof BehaviorSubject).toBeTruthy();
+      });
+    });
+
+    describe('updateDataOfReplaceElements method', () => {
+      it('should update data of all replace elements', () => {
+        comp.id = '123';
+        comp.endpoint = 'some endpoint';
+        const replaceElement = {
+          data: new BehaviorSubject({})
+        };
+        comp.replaceElements = [replaceElement];
+        spyOn(replaceElement.data, 'next');
+        comp.updateDataOfReplaceElements({});
+        expect(replaceElement.data.next).toHaveBeenCalled();
+      });
+
+      it('should update related data', () => {
+        comp.id = '123';
+        comp.endpoint = 'some endpoint';
+        const replaceElement = {
+          data: new BehaviorSubject({})
+        };
+        const element = {
+          type: 'related',
+          data: new BehaviorSubject({})
+        };
+        comp.replaceElements = [replaceElement];
+        spyOn(comp, 'getValueOfData').and.returnValue({});
+        spyOn(element.data, 'next');
+        comp.updateDataOfReplaceElements(element);
+        expect(comp.getValueOfData).toHaveBeenCalled();
+        expect(element.data.next).toHaveBeenCalled();
+      });
     });
 
     describe('getDataForForm method', () => {
@@ -268,9 +334,9 @@ describe('GenericFormComponent', () => {
       }));
 
       it('should udpate metadata with value', async(() => {
-        let config = [
+        let config: any[] = [
           {
-            type: 'checkbox',
+            type: 'replace',
             key: 'company.is_available',
             templateOptions: {
               label: 'Checked',
@@ -291,19 +357,45 @@ describe('GenericFormComponent', () => {
                 }
               }
             ]
+          },
+          {
+            type: 'list',
+            endpoint: '/ecore/api/v2/candidatecontact/',
+            query: {
+              contact: '{id}'
+            },
+            prefilled: {
+              contact: '{id}'
+            }
+          },
+          {
+            key: 'timeline',
           }
         ];
         let data = {
           company: {
             is_available: true,
             checked: false
-          }
+          },
+          id: '123'
         };
         spyOn(comp, 'getDataForRules');
+        spyOn(comp, 'getValueOfData');
         comp.fillingForm(config, data);
-        expect(config[0]['value']).toBeTruthy();
-        expect(config[1]['children'][0]['value']).toBeFalsy();
+        expect(config[0].data instanceof BehaviorSubject).toBeTruthy();
+        expect(config[2]).toEqual({
+          type: 'list',
+          endpoint: '/ecore/api/v2/candidatecontact/',
+          query: {
+            contact: '123'
+          },
+          prefilled: {
+            contact: '123'
+          }
+        });
+        expect(config[3].value).toEqual(data);
         expect(comp.getDataForRules).toHaveBeenCalledWith(data);
+        expect(comp.getValueOfData).toHaveBeenCalled();
       }));
 
     });
@@ -626,6 +718,19 @@ describe('GenericFormComponent', () => {
         comp.eventHandler(e);
         expect(comp.getRalatedData).toHaveBeenCalledWith(comp.metadata, e.el.key,
           e.el.endpoint, null, e.query, undefined, false);
+      }));
+
+      it('should update value for replace elements', async(() => {
+        let e = {
+          type: 'updateData',
+          el: {
+            key: 'related',
+            endpoint: 'some endpoint',
+          }
+        };
+        spyOn(comp, 'updateDataOfReplaceElements');
+        comp.eventHandler(e);
+        expect(comp.updateDataOfReplaceElements).toHaveBeenCalledWith(e.el);
       }));
 
     });
@@ -1313,6 +1418,22 @@ describe('GenericFormComponent', () => {
         ];
         comp.checkFormBuilder(config, endpoint);
         expect(config[0].type).toEqual('formOptions');
+      });
+    });
+
+    describe('getReplaceElements method', () => {
+      it('should update replaceElements property', () => {
+        const config = [{
+          type: 'collapse',
+          children: [
+            {
+              type: 'replace'
+            }
+          ]
+        }];
+        comp.replaceElements = [];
+        comp.getReplaceElements(config);
+        expect(comp.replaceElements.length).toEqual(1);
       });
     });
 });

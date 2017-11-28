@@ -3,6 +3,8 @@ import { GenericFormService } from './../../services/generic-form.service';
 import { FilterService } from './../../services/filter.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 @Component({
   selector: 'generic-list',
   templateUrl: 'generic-list.component.html'
@@ -18,6 +20,12 @@ export class GenericListComponent implements OnInit {
 
   @Input()
   public data: any;
+
+  @Input()
+  public query: string;
+
+  @Input()
+  public update: BehaviorSubject<boolean>;
 
   public metadata: any;
   public tables = [];
@@ -40,10 +48,18 @@ export class GenericListComponent implements OnInit {
 
   public ngOnInit() {
     this.tables.push(this.createTableData(this.endpoint));
+    if (this.update) {
+      this.update.subscribe((update) => {
+        if (update) {
+          let table = this.getFirstTable();
+          this.getData(table.endpoint, this.generateQuery(table.query), table);
+        }
+      });
+    }
   }
 
-  public getMetadata(endpoint, table, inner = false, outer = null) {
-    this.gfs.getMetadata(endpoint).subscribe(
+  public getMetadata(endpoint, table, inner = false, outer = null, formset = undefined) {
+    this.gfs.getMetadata(formset ? `${endpoint}${formset}` : endpoint).subscribe(
       (metadata) => {
         table.metadata = metadata;
         if (outer) {
@@ -79,16 +95,22 @@ export class GenericListComponent implements OnInit {
   }
 
   public getData(endpoint, query = null, table, first = false, target = null) {
-    if (first) {
+    if (first && !this.query) {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
           table.refresh = false;
           this.calcPagination(data);
-          this.getMetadata(endpoint, table);
+          if (this.inForm) {
+            endpoint += '?type=formset';
+            this.getMetadata(endpoint, table);
+          } else {
+            this.getMetadata(endpoint, table);
+          }
         }
       );
-    } else if (query) {
-      this.gfs.getByQuery(endpoint, query).subscribe(
+    } else if (query || this.query) {
+      let newQuery = query ? `${query}&${this.query}` : `?${this.query}`;
+      this.gfs.getByQuery(endpoint, newQuery).subscribe(
         (data) => {
           table.data = data;
           this.calcPagination(data);
@@ -212,20 +234,22 @@ export class GenericListComponent implements OnInit {
   }
 
   public generateQuery(queries) {
-    let patt = /\?/;
-    let result = '';
-    if (patt.test(this.endpoint)) {
-      result = '&';
-    } else {
-      result = '?';
-    }
-    let queryList = Object.keys(queries);
-    queryList.forEach((el) => {
-      if (queries[el]) {
-        result += `${queries[el]}&`;
+    if (queries) {
+      let patt = /\?/;
+      let result = '';
+      if (patt.test(this.endpoint)) {
+        result = '&';
+      } else {
+        result = '?';
       }
-    });
-    return result.slice(0, result.length - 1);
+      let queryList = Object.keys(queries);
+      queryList.forEach((el) => {
+        if (queries[el]) {
+          result += `${queries[el]}&`;
+        }
+      });
+      return result.slice(0, result.length - 1);
+    }
   }
 
   public createTableData(endpoint) {
@@ -236,7 +260,12 @@ export class GenericListComponent implements OnInit {
     if (!this.first) {
       table['first'] = true;
       this.first = true;
-      this.getData(endpoint, null, table, true);
+      if (this.inForm) {
+        table['data'] = this.data;
+        this.getMetadata(endpoint, table, null, null, '?type=formset');
+      } else {
+        this.getData(endpoint, null, table, true);
+      }
     } else {
       let firstTable = this.getFirstTable();
       table['parentEndpoint'] = firstTable.endpoint;

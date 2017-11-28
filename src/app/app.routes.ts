@@ -9,6 +9,7 @@ import { NotAuthorizedGuard } from './services/not-authorized-guard';
 
 import { UserService } from './services/user.service';
 import { NavigationService } from './services/navigation.service';
+import { SettingsService } from './services/settings.service';
 
 import { DataResolver } from './app.resolver';
 
@@ -41,14 +42,18 @@ export const ROUTES: Routes = [
   {
     path: 'registration/password',
     component: ContactRegistrationFormComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: {
+      settings: SettingsService
+    }
   },
   {
     path: 'settings',
     loadChildren: './settings/settings.module#SettingsModule',
     resolve: {
       user: UserService,
-      pagesList: NavigationService
+      pagesList: NavigationService,
+      settings: SettingsService
     },
     canActivate: [AuthGuard]
   },
@@ -56,5 +61,8 @@ export const ROUTES: Routes = [
     path: '**',
     component: SiteComponent,
     canActivate: [AuthGuard],
+    resolve: {
+      settings: SettingsService
+    }
   }
 ];

@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { FormTextareaComponent } from './form-textarea.component';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 describe('FormTextareaComponent', () => {
   let fixture: ComponentFixture<FormTextareaComponent>;
@@ -44,33 +45,37 @@ describe('FormTextareaComponent', () => {
     });
   }));
 
-  it('should enter the assertion', async(inject([FormBuilder], (fb: FormBuilder) => {
-    comp.config = config;
-    comp.group = fb.group({});
-    comp.errors = errors;
-    fixture.detectChanges();
-    expect(comp.errors).toBeDefined();
-    expect(comp.config).toBeDefined();
-  })));
-
   describe('ngOnInit method', () => {
 
-    it('should called addControl method', async(() => {
-      comp.config = config;
-      spyOn(comp, 'addControl');
-      comp.ngOnInit();
-      expect(comp.addControl).toHaveBeenCalled();
-    }));
-
-    it('should update value', async(inject([FormBuilder], (fb: FormBuilder) => {
-      let form = fb.group({});
-      comp.group = form;
-      comp.config = config;
-      comp.config.value = 'Some value';
-      comp.ngOnInit();
-      expect(comp.group.get(comp.config.key).value).toEqual('Some value');
+    it('should init defaults properties',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.config = config;
+        comp.key = config.key;
+        comp.group = fb.group({});
+        comp.group.addControl(comp.key, fb.control(''));
+        comp.config.hidden = new BehaviorSubject(true);
+        spyOn(comp, 'addControl');
+        spyOn(comp, 'setInitValue');
+        comp.ngOnInit();
+        expect(comp.addControl).toHaveBeenCalled();
+        expect(comp.setInitValue).toHaveBeenCalled();
+        expect(comp.config.hide).toBeTruthy();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        comp.config.hidden = null;
     })));
 
+  });
+
+  describe('setInitValue method', () => {
+    it('should set value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.key = config.key;
+      comp.config.value = 'mr';
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(''));
+      comp.setInitValue();
+      expect(comp.group.get(comp.key).value).toEqual('mr');
+    })));
   });
 
   describe('ngAfterViewInit method', () => {
