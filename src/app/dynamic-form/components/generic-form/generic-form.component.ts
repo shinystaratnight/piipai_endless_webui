@@ -119,7 +119,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public ngOnInit() {
     if (this.id) {
       this.mode = 'view';
-      this.modeEvent.emit(this.mode);
+      setTimeout(() => {
+        this.modeEvent.emit(this.mode);
+      }, 100);
     }
   }
 
@@ -153,7 +155,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public toggleModeMetadata(metadata: Field[], mode: string) {
     metadata.forEach((el) => {
-      if (mode === 'view') {
+      if (mode === 'view' && el.key) {
         el.view = true;
       } else {
         delete el.view;
@@ -181,7 +183,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public getMetadata(endpoint) {
     this.service.getMetadata(endpoint, '?type=form').subscribe(
         ((data: any) => {
-          this.toggleModeMetadata(this.metadata, this.mode);
+          this.toggleModeMetadata(data, this.mode);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);

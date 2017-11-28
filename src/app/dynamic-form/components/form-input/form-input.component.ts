@@ -83,9 +83,9 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       }
     } else {
       if (this.config.value instanceof Object) {
-        this.displayValue = this.config.value.__str__;
+        this.displayValue = this.config.value.__str__ || '-';
       } else {
-        this.displayValue = this.config.value;
+        this.displayValue = this.config.value || '-';
       }
     }
   }

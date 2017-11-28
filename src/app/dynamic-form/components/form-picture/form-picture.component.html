@@ -1,30 +1,37 @@
 <div class="form-group" *ngIf="!config.hide">
-  <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label><br>
-  <input
-    #picture
-    accept="image/*"
-    [attr.type]="'file'"
-    [hidden]="true"
-    [attr.id]="key"
-    (change)="fileChangeEvent($event)"
-    [attr.name]="key">
-  <img class="image-preview" *ngIf="value" [src]="value" alt="image">
-  <div class="d-flex align-items-center flex-wrap">
-    <button *ngIf="config.templateOptions.file" type="button" class="btn btn-primary btn-sm text-white d-flex align-items-center"
-      (click)="upload()">
-      <i fa class="mr-1"
-        [name]="'upload'"></i>
-      {{config.templateOptions.label_upload}}
-    </button>
-    <span *ngIf="config.templateOptions.photo" class="p-1">or</span>
-    <button *ngIf="config.templateOptions.photo" type="button" class="btn btn-success btn-sm text-white d-flex"
-      (click)="open()">
-      <i fa class="mr-1"
-        [name]="'camera'"></i>
-      {{config.templateOptions.label_photo}}
-    </button>
+  <div class="form-element">
+    <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label">
+      {{config.templateOptions.label}}:
+    </label>
+    <input
+      #picture
+      accept="image/*"
+      [attr.type]="'file'"
+      [hidden]="true"
+      [attr.id]="key"
+      (change)="fileChangeEvent($event)"
+      [attr.name]="key">
+    <div class="form-element-content">
+      <img class="image-preview" *ngIf="value" [src]="value" alt="image">
+      <span *ngIf="!value">-</span>
+      <div *ngIf="!config.read_only && !config.view" class="d-flex align-items-center flex-wrap">
+        <button *ngIf="config.templateOptions.file" type="button" class="btn btn-primary btn-sm text-white d-flex align-items-center"
+          (click)="upload()">
+          <i fa class="mr-1"
+            [name]="'upload'"></i>
+          {{config.templateOptions.label_upload}}
+        </button>
+        <span *ngIf="config.templateOptions.photo" class="p-1">or</span>
+        <button *ngIf="config.templateOptions.photo" type="button" class="btn btn-success btn-sm text-white d-flex"
+          (click)="open()">
+          <i fa class="mr-1"
+            [name]="'camera'"></i>
+          {{config.templateOptions.label_photo}}
+        </button>
+      </div>
+      <div class="mt-1" *ngIf="fileName && !config.read_only && !config.view"><i class="text-muted">file:</i> {{fileName}}</div>
+    </div>
   </div>
-  <div class="mt-1" *ngIf="fileName"><i class="text-muted">file:</i> {{fileName}}</div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
   </small>

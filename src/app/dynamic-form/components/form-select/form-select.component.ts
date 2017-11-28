@@ -26,6 +26,8 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
   public options: any;
   public label: boolean;
 
+  public displayValue: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -51,14 +53,28 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
     this.createEvent();
   }
 
+  public getValue(options: any[], value: string): string {
+    let element = options.find((el) => el.value === value);
+    if (element) {
+      return element.label;
+    } else {
+      return '-';
+    }
+  }
+
   public setInitValue() {
     if (this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
     }
+    if ((this.config.read_only || this.config.view) && !this.config.hide) {
+      this.displayValue = this.getValue(this.options, this.config.value);
+    }
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.select, this.config);
+    if (this.select) {
+      this.addFlags(this.select, this.config);
+    }
   }
 
   public eventHandler(e) {

@@ -69,32 +69,16 @@ export class FormDatepickerComponent
   }
 
   public ngAfterViewInit() {
-    if (this.d) {
-      this.addFlags(this.d, this.config);
-    }
-    if (!this.init) {
-      let dateType = this.mobileDevice ? 'flipbox' : 'calbox';
-      let timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';
-      this.init = true;
-      this.$(this.d.nativeElement).datebox({
-        mode: dateType,
-        useClearButton: true,
-        closeCallback: () => {
-          let date = this.d.nativeElement.value;
-          let time = this.t.nativeElement.value;
-          if (date) {
-            let fullDate = date + (time ? ` ${time}` : '');
-            this.setDate(fullDate, moment, true);
-          } else {
-            this.group.get(this.key).patchValue(null);
-          }
-        }
-      });
-      if (this.config.templateOptions.type === 'datetime') {
-        this.$(this.t.nativeElement).datebox({
-          mode: timeType,
-          overrideTimeFormat: 12,
-          overrideTimeOutput: '%I:%M %p',
+    if (!this.config.read_only || !this.config.view) {
+      if (this.d) {
+        this.addFlags(this.d, this.config);
+      }
+      if (!this.init) {
+        let dateType = this.mobileDevice ? 'flipbox' : 'calbox';
+        let timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';
+        this.init = true;
+        this.$(this.d.nativeElement).datebox({
+          mode: dateType,
           useClearButton: true,
           closeCallback: () => {
             let date = this.d.nativeElement.value;
@@ -107,9 +91,27 @@ export class FormDatepickerComponent
             }
           }
         });
+        if (this.config.templateOptions.type === 'datetime') {
+          this.$(this.t.nativeElement).datebox({
+            mode: timeType,
+            overrideTimeFormat: 12,
+            overrideTimeOutput: '%I:%M %p',
+            useClearButton: true,
+            closeCallback: () => {
+              let date = this.d.nativeElement.value;
+              let time = this.t.nativeElement.value;
+              if (date) {
+                let fullDate = date + (time ? ` ${time}` : '');
+                this.setDate(fullDate, moment, true);
+              } else {
+                this.group.get(this.key).patchValue(null);
+              }
+            }
+          });
+        }
+        this.d.nativeElement.readOnly = false;
+        this.t.nativeElement.readOnly = false;
       }
-      this.d.nativeElement.readOnly = false;
-      this.t.nativeElement.readOnly = false;
     }
   }
 

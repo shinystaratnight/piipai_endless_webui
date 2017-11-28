@@ -1,13 +1,14 @@
-<div *ngIf="!(config.editForm && config.read_only) && !config.hide">
+<div *ngIf="(!(config.editForm || config.view) || config.list) && !config.read_only && !config.hide">
   <div *ngIf="!config.list" class="form-group" [formGroup]="group">
-    <div *ngIf="!config.many" style="position: relative">
-      <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
-      <div class="d-flex align-items-center">
+    <div class="form-element" *ngIf="!config.many">
+      <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
+        {{config.templateOptions.label}}:
+      </label>
+      <div class="form-element-content flex-row" style="position: relative">
         <div class="form-control custom-select autocomplete-value"
           [ngClass]="{'active': !config.readonly}"
           (click)="openAutocomplete()">
           <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
-          <template *ngIf="!config.options && !displayValue" [ngTemplateOutlet]="spinner"></template>
         </div>
         <div class="btn-group" role="group"
           *ngIf="config.options && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete)" >
@@ -30,42 +31,43 @@
               [name]="'times'"></i>
           </button>
         </div>
-      </div>
-
-      <div class="card autocomplete p-1" [hidden]="hideAutocomplete">
-        <input type="text" class="form-control mb-1" autocomplete="off"
-          #search
-          [(ngModel)]="searchValue"
-          [ngModelOptions]="{standalone: true}"
-          (blur)="resetList()"
-          (keyup)="filter(searchValue)">
-        <div #autocomplete class="autocomplete-list"
-          infinite-scroll
-          [infiniteScrollDistance]="modalScrollDistance"
-          [infiniteScrollThrottle]="modalScrollThrottle"
-          [scrollWindow]="false"
-          (scrolled)="onModalScrollDown()"
-          [hidden]="!(previewList && previewList.length)">
-          <ul class="list-group w-100">
-            <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
-              *ngFor="let option of previewList"
-              (click)="setValue(option)">{{option[display]}}</li>
-          </ul>
+        <div class="card autocomplete p-1" [hidden]="hideAutocomplete" style="top: 2.4rem">
+          <input type="text" class="form-control mb-1" autocomplete="off"
+            #search
+            [(ngModel)]="searchValue"
+            [ngModelOptions]="{standalone: true}"
+            (blur)="resetList()"
+            (keyup)="filter(searchValue)">
+          <div #autocomplete class="autocomplete-list"
+            infinite-scroll
+            [infiniteScrollDistance]="modalScrollDistance"
+            [infiniteScrollThrottle]="modalScrollThrottle"
+            [scrollWindow]="false"
+            (scrolled)="onModalScrollDown()"
+            [hidden]="!(previewList && previewList.length)">
+            <ul class="list-group w-100">
+              <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+                *ngFor="let option of previewList"
+                (click)="setValue(option)">{{option[display]}}</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
 
-    <div *ngIf="config.many" style="position: relative">
-      <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
-      <input type="text" class="form-control custom-select autocomplete-value" autocomplete="off"
-        [(ngModel)]="searchValue"
-        [ngModelOptions]="{standalone: true}"
-        [ngClass]="{'active': !config.readonly}"
-        (focus)="generateList()"
-        (blur)="resetList()"
-        (keyup)="filter(searchValue)">
-      <template *ngIf="!config.options" [ngTemplateOutlet]="spinner"></template>
-        <div class="autocomplete" [hidden]="!(previewList && previewList.length)">
+    <div class="form-element" *ngIf="config.many">
+      <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
+        {{config.templateOptions.label}}:
+      </label>
+      <div class="form-element-content" style="position: relative">
+        <input type="text" class="form-control custom-select autocomplete-value" autocomplete="off"
+          [(ngModel)]="searchValue"
+          [ngModelOptions]="{standalone: true}"
+          [ngClass]="{'active': !config.readonly}"
+          (focus)="generateList()"
+          (blur)="resetList()"
+          (keyup)="filter(searchValue)">
+        <div class="autocomplete" [hidden]="!(previewList && previewList.length)" style="top: 2.4rem">
           <div class="autocomplete-list"
             infinite-scroll
             [infiniteScrollDistance]="modalScrollDistance"
@@ -79,14 +81,15 @@
             </ul>
           </div>
         </div>
-      <div class="d-flex flex-wrap align-items-center mt-2">
-        <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal"
-          *ngFor="let item of results; let i = index">
-          {{item[display]}}
-          <i fa class="text-white icon ml-2"
-            (click)="deleteItem(i)"
-            [name]="'times'"></i>
-        </span>
+        <div class="d-flex flex-wrap align-items-center mt-2">
+          <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal"
+            *ngFor="let item of results; let i = index">
+            {{item[display]}}
+            <i fa class="text-white icon ml-2"
+              (click)="deleteItem(i)"
+              [name]="'times'"></i>
+          </span>
+        </div>
       </div>
     </div>
 
@@ -153,11 +156,16 @@
   </div>
 </div>
 
-<div class="form-group" *ngIf="config.editForm && config.read_only && !config.hide">
-  <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label><br>
-  <a *ngIf="!config.many" href="#" (click)="open('edit', $event)">{{displayValue}}</a>
-  <div *ngIf="config.many && results">
-    <a *ngFor="let item of results" href="#" (click)="open('edit', $event, item)">{{item[display]}}</a>
+<div class="form-group form-element" *ngIf="config.editForm && (config.read_only || (config.view && !config.list)) && !config.hide">
+  <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label">
+    {{config.templateOptions.label}}
+  </label>
+  <div class="form-element-content">
+    <span *ngIf="!displayValue">-</span>
+    <a *ngIf="!config.many" href="#" (click)="open('edit', $event)">{{displayValue}}</a>
+    <div *ngIf="config.many && results">
+      <a *ngFor="let item of results" href="#" (click)="open('edit', $event, item)">{{item[display]}}</a>
+    </div>
   </div>
 </div>
 

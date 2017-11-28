@@ -1,36 +1,40 @@
 <div *ngIf="!config.hide" class="form-group" [formGroup]="group" style="position: relative">
-  <label [attr.for]="key" *ngIf="label && config.templateOptions.label">
-    {{config.templateOptions.label}}
-  </label>
-  <input
-    *ngIf="!config.read_only && config.type !== 'static'"
-    class="form-control"
-    autocomplete="off"
-    #input
-    (blur)="eventHandler($event)"
-    (focus)="generateList()"
-    (keyup)=filter(key)
-    [formControlName]="key"
-    [attr.type]="config.templateOptions.type ? config.templateOptions.type : 'text'"
-    [attr.id]="key"
-    [attr.name]="key"
-    [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''"
-    [readonly]="config.read_only"
-    [value]="config.value === 0 || config.value ? config.value : group.get(key).value === 0 || group.get(key).value ? group.get(key).value : ''">
-  <div *ngIf="config.read_only && config.type !== 'static'" >{{(group && group.get(key).value) || ''}}</div>
-  <div *ngIf="config.type === 'static'" >{{displayValue}}</div>
-  <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutocomplete">
-    <div class="autocomplete-list"
-      infinite-scroll
-      [infiniteScrollDistance]="modalScrollDistance"
-      [infiniteScrollThrottle]="modalScrollThrottle"
-      [scrollWindow]="false"
-      (scrolled)="onModalScrollDown()">
-      <ul class="list-group w-100">
-        <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
-          *ngFor="let item of list"
-          (click)="select(item.name)">{{item.name}}</li>
-      </ul>
+  <div class="form-element">
+    <label class="col-form-label form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions.label">
+      {{config.templateOptions.label}}:
+    </label>
+    <div class="form-element-content">
+      <input
+        *ngIf="!config.read_only && config.type !== 'static' && !config.view"
+        class="form-control"
+        autocomplete="off"
+        #input
+        (blur)="eventHandler($event)"
+        (focus)="generateList()"
+        (keyup)=filter(key)
+        [formControlName]="key"
+        [attr.type]="config.templateOptions.type ? config.templateOptions.type : 'text'"
+        [attr.id]="key"
+        [attr.name]="key"
+        [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''"
+        [readonly]="config.read_only"
+        [value]="config.value === 0 || config.value ? config.value : group.get(key).value === 0 || group.get(key).value ? group.get(key).value : ''">
+      <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutocomplete">
+        <div class="autocomplete-list"
+          infinite-scroll
+          [infiniteScrollDistance]="modalScrollDistance"
+          [infiniteScrollThrottle]="modalScrollThrottle"
+          [scrollWindow]="false"
+          (scrolled)="onModalScrollDown()">
+          <ul class="list-group w-100">
+            <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+              *ngFor="let item of list"
+              (click)="select(item.name)">{{item.name}}</li>
+          </ul>
+        </div>
+      </div>
+      <div *ngIf="(config.read_only || config.view) && config.type !== 'static'" >{{(group && group.get(key).value) || '-'}}</div>
+      <div *ngIf="config.type === 'static'">{{displayValue}}</div>
     </div>
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
