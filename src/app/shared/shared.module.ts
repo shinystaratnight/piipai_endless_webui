@@ -10,6 +10,7 @@ import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.compone
 import { ToastComponent } from './components/toast.component';
 
 import { ErrorsService } from './services/errors.service';
+import { CheckPermissionService } from './services/check-permission';
 
 @NgModule({
   imports: [
@@ -28,6 +29,6 @@ import { ErrorsService } from './services/errors.service';
     BreadcrumbComponent,
     ToastComponent
   ],
-  providers: [ErrorsService],
+  providers: [ErrorsService, CheckPermissionService],
 })
 export class SharedModule { }

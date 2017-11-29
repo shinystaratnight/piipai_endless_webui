@@ -30,6 +30,8 @@ export class FormDatepickerComponent
   public $: any;
   public mobileDevice: boolean;
 
+  public viewMode: boolean;
+
   constructor(
     private fb: FormBuilder
   ) {
@@ -40,6 +42,13 @@ export class FormDatepickerComponent
   public ngOnInit() {
     this.addControl(this.config, this.fb);
     this.setInitValue();
+    this.checkModeProperty();
+    this.checkHiddenProperty();
+    this.mobileDevice = this.identifyDevice();
+    this.createEvent();
+  }
+
+  public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
       this.config.hidden.subscribe((hide) => {
         if (hide) {
@@ -51,8 +60,19 @@ export class FormDatepickerComponent
         }
       });
     }
-    this.mobileDevice = this.identifyDevice();
-    this.createEvent();
+  }
+
+  public checkModeProperty() {
+    if (this.config && this.config.mode) {
+      this.config.mode.subscribe((mode) => {
+        if (mode === 'view') {
+          this.viewMode = true;
+        } else {
+          this.viewMode = this.config.read_only || false;
+        }
+        this.setInitValue();
+      });
+    }
   }
 
   public setInitValue() {
@@ -60,6 +80,8 @@ export class FormDatepickerComponent
       let data = this.config.value ? this.config.value :
         this.group.get(this.key).value;
       this.setDate(data, moment);
+    } else if (this.config.default) {
+      this.setDate(this.config.default, moment);
     }
   }
 
@@ -69,7 +91,7 @@ export class FormDatepickerComponent
   }
 
   public ngAfterViewInit() {
-    if (!this.config.read_only || !this.config.view) {
+    if (!this.viewMode && !this.config.hide) {
       if (this.d) {
         this.addFlags(this.d, this.config);
       }

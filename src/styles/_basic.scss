@@ -109,7 +109,7 @@ input:checked ~ .color-preview {
   }
 }
 
-.form-element {
+.site-page .form-element {
   display: flex;
   flex-wrap: wrap;
 
@@ -135,6 +135,12 @@ input:checked ~ .color-preview {
     }
   }
 
+  &-picture:not(:empty) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   @include media-breakpoint-down('xs') {
     &-label,
     &-content {
@@ -152,7 +158,10 @@ input:checked ~ .color-preview {
   }
 }
 
-
+.form-list .form-group,
+.form-list .form-control {
+  margin-bottom: 0;
+}
 
 @each $item in $themes {
   .#{$item}-theme .bg-primary {

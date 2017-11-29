@@ -35,6 +35,8 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
 
   public value: any;
 
+  public viewMode: boolean;
+
   public options = {
     audio: false,
     video: true,
@@ -67,6 +69,12 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     this.addControl(this.config, this.fb);
     this.mime = 'image/jpeg';
     this.setInitValue();
+    this.checkModeProperty();
+    this.checkHiddenProperty();
+    this.createEvent();
+  }
+
+  public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
       this.config.hidden.subscribe((hide) => {
         if (hide) {
@@ -78,7 +86,19 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
         }
       });
     }
-    this.createEvent();
+  }
+
+  public checkModeProperty() {
+    if (this.config && this.config.mode) {
+      this.config.mode.subscribe((mode) => {
+        if (mode === 'view') {
+          this.viewMode = true;
+        } else {
+          this.viewMode = this.config.read_only || false;
+        }
+        this.setInitValue();
+      });
+    }
   }
 
   public setInitValue() {

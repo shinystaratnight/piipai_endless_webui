@@ -11,18 +11,18 @@
       [attr.id]="key"
       (change)="fileChangeEvent($event)"
       [attr.name]="key">
-    <div class="form-element-content">
+    <div class="form-element-picture">
       <img class="image-preview" *ngIf="value" [src]="value" alt="image">
-      <span *ngIf="!value">-</span>
-      <div *ngIf="!config.read_only && !config.view" class="d-flex align-items-center flex-wrap">
-        <button *ngIf="config.templateOptions.file" type="button" class="btn btn-primary btn-sm text-white d-flex align-items-center"
+      <span *ngIf="!value && viewMode ">-</span>
+      <div *ngIf="!viewMode" class="d-flex align-items-center flex-wrap">
+        <button type="button" class="btn btn-primary btn-sm text-white d-flex align-items-center"
           (click)="upload()">
           <i fa class="mr-1"
             [name]="'upload'"></i>
           {{config.templateOptions.label_upload}}
         </button>
-        <span *ngIf="config.templateOptions.photo" class="p-1">or</span>
-        <button *ngIf="config.templateOptions.photo" type="button" class="btn btn-success btn-sm text-white d-flex"
+        <span class="p-1">or</span>
+        <button type="button" class="btn btn-success btn-sm text-white d-flex"
           (click)="open()">
           <i fa class="mr-1"
             [name]="'camera'"></i>

@@ -1,4 +1,4 @@
-<div class="form-group" [hidden]="config.hide || config.view || config.read_only">
+<div class="form-group" [hidden]="config.hide || viewMode">
   <div class="form-element" (click)="updateDate()">
     <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
       {{config.templateOptions.label}}:
@@ -27,7 +27,7 @@
   </div>
 </div>
 
-<div class="form-group" *ngIf="(config.view || config.read_only) && !config.hide">
+<div class="form-group" *ngIf="config.viewMode && !config.hide">
   <div class="form-element" (click)="updateDate()">
     <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
       {{config.templateOptions.label}}:
