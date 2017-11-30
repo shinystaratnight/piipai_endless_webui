@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'settings-page',
@@ -14,15 +14,15 @@ export class SettingsComponent implements OnInit {
   public url: any;
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   public ngOnInit() {
+    console.log(this);
     this.user = this.route.snapshot.data['user'].data;
     this.pagesList = this.route.snapshot.data['pagesList'];
-    this.url = [
-      { path: 'settings' }
-    ];
+    this.url = this.router.url.slice(1).split('/').map((el) => { return {path: el}; });
   }
 
 }
