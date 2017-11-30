@@ -8,6 +8,7 @@ import { SettingsComponent } from './settings.component';
 import { PermissionsComponent } from './permissions/permissions.component';
 import { CompanyComponent } from './company/company.component';
 import { PermissionsService } from './permissions/permissions.service';
+import { MyobComponent } from './myob/myob.component';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -27,7 +28,7 @@ import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
     InfiniteScrollModule,
     DynamicFormModule
   ],
-  declarations: [PermissionsComponent, SettingsComponent, CompanyComponent],
+  declarations: [PermissionsComponent, SettingsComponent, CompanyComponent, MyobComponent],
   providers: [PermissionsService]
 })
 export class SettingsModule { }

@@ -19,7 +19,6 @@ export class SettingsComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    console.log(this);
     this.user = this.route.snapshot.data['user'].data;
     this.pagesList = this.route.snapshot.data['pagesList'];
     this.url = this.router.url.slice(1).split('/').map((el) => { return {path: el}; });
