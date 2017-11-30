@@ -1,18 +1,27 @@
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { EventEmitter } from '@angular/forms/src/facade/async';
 
 export class BasicElementComponent {
 
   public group: FormGroup;
   public key: any;
   public config: any;
+  public event: EventEmitter<any> = new EventEmitter();
 
   public addControl(config, fb: FormBuilder) {
-    const keys = config.key.split('.');
-    if (keys.length > 1) {
-      this.addControls(this.group, keys, fb);
-    } else {
-      this.group.addControl(config.key, fb.control(undefined));
-      this.key = config.key;
+    if (config.key) {
+      const keys = config.key.split('.');
+      if (keys.length > 1) {
+        this.addControls(this.group, keys, fb);
+      } else {
+        if (config.type === 'related' && !config.many) {
+          keys.push('id');
+          this.addControls(this.group, keys, fb);
+        } else if (config.type !== 'static') {
+          this.group.addControl(config.key, fb.control(undefined));
+          this.key = config.key;
+        }
+      }
     }
   }
 
@@ -40,6 +49,14 @@ export class BasicElementComponent {
     if (config.templateOptions.rows) {
       element.nativeElement.rows = config.templateOptions.rows;
     }
+  }
+
+  public createEvent() {
+    this.event.emit({
+      type: 'create',
+      el: this.config,
+      value: this.group.get(this.key).value
+    });
   }
 
   private addElement(group, el, fb) {

@@ -36,6 +36,22 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
   public ngOnInit() {
     this.addControl(this.config, this.fb);
     this.options = this.config.templateOptions.options.sort((p, n) => p.label > n.label ? 1 : -1 );
+    this.setInitValue();
+    if (this.config && this.config.hidden) {
+      this.config.hidden.subscribe((hide) => {
+        if (hide) {
+          this.config.hide = hide;
+          this.group.get(this.key).patchValue(undefined);
+          this.setInitValue();
+        } else {
+          this.config.hide = hide;
+        }
+      });
+    }
+    this.createEvent();
+  }
+
+  public setInitValue() {
     if (this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
     }

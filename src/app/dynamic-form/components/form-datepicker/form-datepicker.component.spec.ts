@@ -6,6 +6,8 @@ import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 import { NgbModule, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { FormDatepickerComponent } from './form-datepicker.component';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 describe('FormDatepickerComponent', () => {
   let fixture: ComponentFixture<FormDatepickerComponent>;
   let comp: FormDatepickerComponent;
@@ -58,14 +60,33 @@ describe('FormDatepickerComponent', () => {
       comp.key = comp.config.key;
       comp.group = fb.group({});
       comp.group.addControl(comp.config.key, fb.control(undefined));
+      comp.config.hidden = new BehaviorSubject(true);
       spyOn(comp, 'addControl');
       spyOn(comp, 'identifyDevice').and.returnValue(true);
+      spyOn(comp, 'setInitValue');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
       expect(comp.identifyDevice).toHaveBeenCalled();
+      expect(comp.setInitValue).toHaveBeenCalled();
       expect(comp.mobileDevice).toEqual(true);
+      expect(comp.group.get(comp.key).value).toBeUndefined();
+      expect(comp.config.hide).toBeTruthy();
+      comp.config.hidden = null;
     })));
 
+  });
+
+  describe('setInitValue method', () => {
+    it('should init value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.key = config.key;
+      comp.config.value = 'value';
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(undefined));
+      spyOn(comp, 'setDate');
+      comp.setInitValue();
+      expect(comp.setDate).toHaveBeenCalled();
+    })));
   });
 
   describe('identifyDevice method', () => {

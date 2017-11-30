@@ -3,7 +3,7 @@ $filter-block-height: 400px;
 .filter {
   font-family: 'Roboto Condensed', sans-serif;
 
-  &-place {
+  .list-page &-place {
     width: 320px;
     min-width: 320px;
     background-color: #262b2d;
@@ -17,16 +17,22 @@ $filter-block-height: 400px;
     width: 100%;
     margin-bottom: 1rem;
     background-color: transparent;
-    color: white;
     box-sizing: border-box;
-    
+    border: 2px solid #dbdce1;
+
+    .list-page & {
+      color: white;
+      border: none;
+    }
+
     &-label {
       display: none;
     }
 
     @include media-breakpoint-down('md') {
-      color: black;
-      border: 2px solid #dbdce1;
+      .list-page & {
+        color: black;
+      }
     }
 
     &-collapsed {
@@ -56,8 +62,8 @@ $filter-block-height: 400px;
     padding: .4rem 1rem;
     color: #8c8c8b;
   }
-  
-  &-element {
+
+  .list-page &-element {
     border-bottom: 1px solid #58595e;
     box-shadow: 0 1px 1px 0 #292a2f;
 
@@ -74,9 +80,15 @@ $filter-block-height: 400px;
         display: inline-block;
         height: 1.5rem;
         border-left: 3px solid $brand-primary;
+
+        @each $item in $themes {
+          .#{$item}-theme & {
+            border-left-color: map-get($theme-colors, $item);
+          }
+        }
       }
     }
- 
+
     @include media-breakpoint-down('md') {
       border-bottom: none;
       box-shadow: none;
@@ -90,7 +102,7 @@ $filter-block-height: 400px;
   }
 }
 
-.r3sourcer {
+.r3sourcer .list-page {
   @include media-breakpoint-up('lg') {
     .filter {
       &-place {

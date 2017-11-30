@@ -27,6 +27,9 @@ import { FormVacancyDatesComponent } from './../form-vacancy-dates/form-vacancy-
 import { FormListComponent } from './../form-list/form-list.component';
 import { FormFieldsGroupComponent } from './../form-fields-group/form-fields-group.component';
 import { FormOptionsComponent } from './../form-options/form-options.component';
+import { FormRadioComponent } from './../form-radio/form-radio.component';
+import { FormReplaceComponent } from './../form-replace/form-replace.component';
+import { ListLinkComponent } from '../list-link/list-link.component';
 import { FormJsonComponent } from './../form-json/form-json.component';
 
 const components = {
@@ -48,6 +51,9 @@ const components = {
   static: FormInputComponent,
   fieldsGroup: FormFieldsGroupComponent,
   formOptions: FormOptionsComponent,
+  radio: FormRadioComponent,
+  replace: FormReplaceComponent,
+  link: ListLinkComponent,
   json: FormJsonComponent
 };
 

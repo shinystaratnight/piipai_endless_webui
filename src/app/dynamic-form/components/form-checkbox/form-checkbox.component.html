@@ -1,4 +1,4 @@
-<div class="form-group" [formGroup]="group" *ngIf="!config.read_only">
+<div class="form-group" [formGroup]="group" *ngIf="!config.read_only && !config.hide">
   <div class="form-check">
     <label [attr.for]="key" class="form-check-label" [ngClass]="{'pl-0': config.read_only || this.config.templateOptions.type === 'icon'}">
       <i class="mr-1" *ngIf="config.templateOptions.type === 'icon'"
@@ -8,6 +8,7 @@
       <input
         [hidden]="config.templateOptions.type === 'icon'"
         #checkbox
+        (change)="eventHandler($event)"
         class="form-check-input"
         [formControl]="group.get(key)"
         type="checkbox"
@@ -27,7 +28,7 @@
   </div>
 </div>
 
-<div class="form-group d-flex fustify-content-start align-items-center" *ngIf="config.read_only">
+<div class="form-group d-flex fustify-content-start align-items-center" *ngIf="config.read_only && !config.hide">
   <label class="mr-5 mb-0">{{config.templateOptions.label}}</label>
   <span
     *ngIf="config.templateOptions && config.templateOptions.type === 'text'">

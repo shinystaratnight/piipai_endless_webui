@@ -23,6 +23,12 @@ export class BreadcrumbComponent implements OnChanges {
   @Input()
   public formLabel: string;
 
+  @Input()
+  public url: any;
+
+  @Input()
+  public byRoute: boolean = true;
+
   public list: Breadcrumb[] = [];
 
   constructor(
@@ -34,14 +40,20 @@ export class BreadcrumbComponent implements OnChanges {
   }
 
   public getList() {
-    this.route.url.subscribe(
-      (url) => {
-        if (this.navigationList) {
-          this.list = [];
-          this.generateData(url);
+    this.list = [];
+    if (this.url) {
+      this.generateData(this.url);
+    }
+    if (this.byRoute) {
+      this.route.url.subscribe(
+        (url) => {
+          if (this.navigationList) {
+            this.list = [];
+            this.generateData(url);
+          }
         }
-      }
-    );
+      );
+    }
   }
 
   public generateData(url) {

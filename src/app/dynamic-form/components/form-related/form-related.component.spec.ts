@@ -8,6 +8,7 @@ import { FormRelatedComponent } from './form-related.component';
 import { GenericFormService } from './../../services/generic-form.service';
 
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 describe('FormRelatedComponent', () => {
   let fixture: ComponentFixture<FormRelatedComponent>;
@@ -20,6 +21,7 @@ describe('FormRelatedComponent', () => {
     many: undefined,
     value: undefined,
     metadata: [],
+    collapsed: true,
     templateOptions: {
       label: 'Country',
       required: true,
@@ -36,6 +38,7 @@ describe('FormRelatedComponent', () => {
         }]
     }
   };
+  const mockData = {};
   let errors = {};
   let response;
 
@@ -69,37 +72,54 @@ describe('FormRelatedComponent', () => {
     });
   }));
 
-  it('should enter the assertion', async(inject([FormBuilder], (fb: FormBuilder) => {
-    comp.config = config;
-    comp.group = fb.group({});
-    comp.errors = errors;
-    fixture.detectChanges();
-    expect(comp.errors).toBeDefined();
-    expect(comp.config).toBeDefined();
-  })));
-
   describe('ngOnInit method', () => {
+    it('should init default properties', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = Object.assign(config);
+      comp.config.list = true;
+      comp.config.hidden = new BehaviorSubject(true);
+      comp.config.data = new BehaviorSubject(mockData);
+      comp.config.id = 2;
+      comp.key = comp.config.key;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(''));
+      spyOn(comp, 'addControl');
+      spyOn(comp, 'setInitValue');
+      spyOn(comp, 'generateDataForList');
+      spyOn(comp, 'getReplaceElements');
+      spyOn(comp, 'createEvent');
+      comp.ngOnInit();
+      expect(comp.addControl).toHaveBeenCalled();
+      expect(comp.display).toEqual('__str__');
+      expect(comp.param).toEqual('id');
+      expect(comp.group.get(comp.key).value).toBeUndefined();
+      expect(comp.config.hide).toBeTruthy();
+      expect(comp.generateDataForList).toHaveBeenCalled();
+      expect(comp.getReplaceElements).toHaveBeenCalled();
+      expect(comp.createEvent).toHaveBeenCalled();
+      expect(comp.isCollapsed).toEqual(comp.config.collapsed);
+      comp.config.hidden = null;
+      comp.config.data = null;
+    })));
+  });
 
-    it('should called addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
+  describe('setInitValue method', () => {
+
+    it('should init properties', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
       comp.config.query = '?country=';
       comp.config.id = 2;
       comp.key = comp.config.key;
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(''));
-      spyOn(comp, 'addControl');
       spyOn(comp, 'generateDataForList');
-      comp.ngOnInit();
-      expect(comp.display).toEqual('__str__');
-      expect(comp.param).toEqual('id');
+      comp.setInitValue();
       expect(comp.results).toEqual([]);
-      expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
-      expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config);
+      expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config, comp.config.value);
       expect(comp.config.currentQuery).toEqual('?country=2');
     })));
 
     it('should update value if it a object', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = config;
+      comp.config = Object.assign(config);
       comp.config.options = [{
         name: 'First',
         number: 1
@@ -113,9 +133,11 @@ describe('FormRelatedComponent', () => {
       comp.config.value = value;
       comp.config.many = false;
       comp.key = config.key;
-      comp.config.templateOptions.display = 'name';
-      comp.config.templateOptions.param = 'number';
-      comp.ngOnInit();
+      comp.display = 'name';
+      comp.param = 'number';
+      spyOn(comp, 'generateDataForList');
+      comp.setInitValue();
+      expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config, comp.config.value);
       expect(comp.group.get(comp.key).value).toEqual(1);
       expect(comp.displayValue).toEqual('First');
     })));
@@ -128,15 +150,17 @@ describe('FormRelatedComponent', () => {
       }];
       let display = 'name';
       let param = 'number';
-      config.templateOptions.display = display;
-      config.templateOptions.param = param;
+      comp.display = 'name';
+      comp.param = 'number';
       let value = 2;
       spyOn(comp, 'addControl');
+      spyOn(comp, 'generateDataForList');
       comp.group = fb.group({});
       comp.group.addControl(config.key, fb.control(''));
       comp.config.value = value;
       comp.key = config.key;
-      comp.ngOnInit();
+      comp.setInitValue();
+      expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config, comp.config.value);
       expect(comp.group.get(comp.key).value).toEqual(value);
       expect(comp.displayValue).toEqual('First');
     })));
@@ -160,15 +184,15 @@ describe('FormRelatedComponent', () => {
       ];
       let display = 'name';
       let param = 'number';
-      config.templateOptions.display = display;
-      config.templateOptions.param = param;
-      config.many = true;
-      config.value = value;
+      comp.display = 'name';
+      comp.param = 'number';
       comp.config = config;
+      comp.config.many = true;
+      comp.config.value = value;
       comp.config.options = options;
-      spyOn(comp, 'addControl');
       spyOn(comp, 'updateData');
-      comp.ngOnInit();
+      spyOn(comp, 'generateDataForList');
+      comp.setInitValue();
       expect(comp.display).toEqual(display);
       expect(comp.param).toEqual(param);
       expect(comp.results).toEqual([
@@ -176,10 +200,10 @@ describe('FormRelatedComponent', () => {
         {number: 2, name: 'Second'},
         {number: 3, name: 'Third'}
       ]);
+      expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config, comp.config.value);
       expect(comp.updateData).toHaveBeenCalledWith();
-      expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
       comp.config.options = null;
-      comp.ngOnInit();
+      comp.setInitValue();
       expect(comp.results).toEqual(config.value);
     })));
 
@@ -227,6 +251,24 @@ describe('FormRelatedComponent', () => {
     });
   });
 
+  describe('getReplaceElements method', () => {
+    it('should update replaceElements array', () => {
+      const metadata = [
+        {
+          type: 'collapse',
+          children: [
+            {
+              type: 'replace'
+            }
+          ]
+        }
+      ];
+      comp.replaceElements = [];
+      comp.getReplaceElements(metadata);
+      expect(comp.replaceElements.length).toEqual(1);
+    });
+  });
+
   describe('generateDataForList method', () => {
     it('should create empty list', () => {
       comp.config = config;
@@ -260,19 +302,10 @@ describe('FormRelatedComponent', () => {
         }
       });
       spyOn(comp, 'fillingForm');
-      comp.generateDataForList(comp.config);
+      comp.generateDataForList(comp.config, comp.config.value);
       expect(comp.createObject).toHaveBeenCalled();
       expect(comp.fillingForm).toHaveBeenCalled();
-      expect(comp.dataOfList).toEqual([
-        {
-          id: 1,
-          data: {
-            value: {
-              id: 1
-            }
-          }
-        }
-      ]);
+      expect(comp.dataOfList.length).toEqual(1);
       expect(comp.group.get(comp.config.key).value).toEqual(comp.config.value);
     })));
   });
@@ -310,9 +343,11 @@ describe('FormRelatedComponent', () => {
   });
 
   describe('deleteObject method', () => {
-    it('should delete objectfrom list', () => {
+    it('should delete objectfrom list', async(inject([FormBuilder], (fb: FormBuilder) => {
       let object = {
-        id: 2
+        id: '2',
+        metadata: [],
+        data: fb.group({})
       };
       comp.config = config;
       comp.dataOfList = [];
@@ -321,7 +356,7 @@ describe('FormRelatedComponent', () => {
       comp.deleteObject(object);
       expect(comp.dataOfList.length).toEqual(0);
       expect(comp.updateValue).toHaveBeenCalled();
-    });
+    })));
   });
 
   describe('updateValue method', () => {
@@ -354,7 +389,7 @@ describe('FormRelatedComponent', () => {
   });
 
   describe('fillingForm method', () => {
-    it('should filling form by data', async(inject([FormBuilder], (fb: FormBuilder) => {
+    it('should filling form by data', () => {
       let metadata = [
         {
           children: [
@@ -369,32 +404,40 @@ describe('FormRelatedComponent', () => {
           city: 'Sydney'
         }
       };
-      let group = fb.group({});
-      comp.fillingForm(metadata, data, group);
-      expect(group.get('address').get('city').value).toEqual('Sydney');
-    })));
+      spyOn(comp, 'getValueOfData');
+      comp.fillingForm(metadata, data);
+      expect(comp.getValueOfData).toHaveBeenCalled();
+    });
   });
 
   describe('getValueOfData method', () => {
 
-    it('should set value by key from Object', async(inject([FormBuilder], (fb: FormBuilder) => {
+    it('should set value by key from Object', () => {
       let data = {
         address: {
           city: {
-            name: 'Sydney',
+            __str__: 'Sydney',
             id: 123
           }
         }
       };
       let object = <any> {};
       let key = 'address.city';
-      let group = fb.group({});
-      comp.getValueOfData(data, key, group);
-      expect(group.get('address').get('city').value).toEqual({
-        name: 'Sydney',
+      let obj = {
+        type: 'related',
+        value: undefined,
+        options: undefined
+      };
+      comp.getValueOfData(data, key, obj);
+      expect(obj.value).toEqual({
+        __str__: 'Sydney',
         id: 123
       });
-    })));
+      expect(obj.options).toEqual([{
+        __str__: 'Sydney',
+        id: 123
+      }]);
+    });
   });
 
   describe('onModalScrollDown method', () => {

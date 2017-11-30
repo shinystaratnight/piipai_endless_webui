@@ -1,4 +1,4 @@
-<div class="timeline">
+<div *ngIf="!this.config.hide" class="timeline">
   <div *ngFor="let state of config.options; let l = last" class="d-inline-block mb-3">
     <div class="d-flex flex-column">
       <div class="timeline-element-wrapper" style="position: relative">

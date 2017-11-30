@@ -1,16 +1,42 @@
-<h5 class="bg-primary text-white">
-  <i
-    fa
-    class="p-2"
-    [name]="isCollapsed ? 'eye' : 'eye-slash'"
-    [border]=false
-    (click)="isCollapsed = !isCollapsed"
-    [attr.aria-expanded]="!isCollapsed"
-    aria-controls="collapseExample"
-    style="cursor: pointer"></i>
-  {{config.templateOptions.label}}
-</h5>
-<div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
-  <generic-list [endpoint]="config.endpoint" [inForm]="true" [data]="data"></generic-list>
+<div *ngIf="!this.config.hide">
+  <h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !isCollapsed}" *ngIf="config.templateOptions.label">
+    <i
+      fa
+      class="p-2"
+      [name]="isCollapsed ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      aria-controls="collapseExample"
+      style="cursor: pointer"></i>
+    {{config.templateOptions.label}}
+    <button *ngIf="config.templateOptions.add_label"
+      type="button"
+      class="text-white btn btn-sm group-button ml-auto mr-2"
+      (click)="addObject()">
+        {{config.templateOptions.add_label}}
+    </button>
+  </h6>
+  <div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
+    <generic-list [endpoint]="config.endpoint" [query]="query" [inForm]="true" [data]="config.data" [update]="update"></generic-list>
+  </div>
 </div>
 
+<template #modal let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{modalData.title}}</h5>
+        <button type="button" class="close ml-2" (click)="c()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <generic-form [endpoint]="modalData.endpoint" [data]="modalData.data" (event)="formEvent($event, c)">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </generic-form>
+    </div>
+  </div>
+</template>

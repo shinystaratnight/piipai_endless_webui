@@ -1,5 +1,9 @@
 <navigation [user]="user" [pages]="pagesList"></navigation>
-<breadcrumb [navigationList]="pagesList"></breadcrumb>
+<breadcrumb [byRoute]="false" [url]="url" [navigationList]="pagesList"></breadcrumb>
+
 <div class="container">
-    <router-outlet></router-outlet>
+  <label>Permissions</label>
+  <permissions></permissions>
+
+  <company></company>
 </div>

@@ -51,6 +51,12 @@ iframe.send-sms {
   top: .5rem;
   color: $brand-primary;
   z-index: 1000;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      color: map-get($theme-colors, $item);
+    }
+  }
 }
 
 .pull-right {
@@ -59,4 +65,79 @@ iframe.send-sms {
 
 .pull-left {
   float: left;
+}
+
+.color-preview {
+  display: inline-block;
+  width: 3rem;
+  height: 2rem;
+  border-radius: .2rem;
+  transition: all .4s;
+}
+
+input:checked ~ .color-preview {
+  transform: scale(1.2);
+}
+
+.image-preview {
+  width: 150px;
+  margin-bottom: 1rem;
+  border-radius: .3rem;
+  border: 5px solid white;
+  box-shadow: 0 0 0 2px black;
+}
+
+.group-button {
+  font-size: .7rem;
+  background-color: lighten($brand-primary, 15%);
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: lighten(map-get($theme-colors, $item), 15%) !important;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    background-color: darken($brand-primary, 10%);
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        background-color: darken(map-get($theme-colors, $item), 10%) !important;
+      }
+    }
+  }
+}
+
+
+
+@each $item in $themes {
+  .#{$item}-theme .bg-primary {
+    background-color: map-get($theme-colors, $item) !important;
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .btn-primary {
+    border-color: map-get($theme-colors, $item);
+    background-color: map-get($theme-colors, $item) !important;
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .text-primary {
+    color: map-get($theme-colors, $item) !important;
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme a {
+    color: map-get($theme-colors, $item);
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .nav-link.active {
+    background-color: map-get($theme-colors, $item) !important;
+  }
 }

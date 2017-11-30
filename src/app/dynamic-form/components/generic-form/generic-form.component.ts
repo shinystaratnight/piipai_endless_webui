@@ -4,6 +4,16 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { GenericFormService } from './../../services/generic-form.service';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+import { Field } from '../../models/field.model';
+import { FormatString } from '../../../helpers/format';
+
+interface HiddenFields {
+  elements: Field[];
+  keys: string[];
+}
+
 @Component({
   selector: 'generic-form',
   templateUrl: 'generic-form.component.html'
@@ -71,7 +81,7 @@ export class GenericFormComponent implements OnChanges {
   @Output()
   public str: EventEmitter<any> = new EventEmitter();
 
-  public metadata = [];
+  public metadata: Field[] = [];
   public metadataError = [];
   public sendData = null;
   public currentEndpoint: string;
@@ -80,6 +90,10 @@ export class GenericFormComponent implements OnChanges {
   public show: boolean = false;
   public editForm: boolean = false;
   public formObject: any;
+  public hiddenFields: HiddenFields = {
+    elements: [],
+    keys: []
+  };
 
   public workflowEndpoints = {
     state: `/ecore/api/v2/core/workflownodes/`,
@@ -87,6 +101,10 @@ export class GenericFormComponent implements OnChanges {
   };
 
   public workflowData = <any> {};
+
+  public replaceElements: Field[] = [];
+
+  public format = new FormatString();
 
   constructor(
     private service: GenericFormService
@@ -132,8 +150,10 @@ export class GenericFormComponent implements OnChanges {
   public getMetadata(endpoint) {
     this.service.getMetadata(endpoint, '?type=form').subscribe(
         ((data: any) => {
-          this.metadata = this.parseMetadata(data, this.relatedField);
+          this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
+          this.saveHiddenFields(this.metadata);
+          this.metadata = this.parseMetadata(data, this.relatedField);
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
@@ -160,6 +180,40 @@ export class GenericFormComponent implements OnChanges {
         ((error: any) => this.metadataError = error));
   }
 
+  public saveHiddenFields(metadata: Field[]) {
+    metadata.forEach((el) => {
+      if (el.showIf && el.showIf.length) {
+        if (this.hiddenFields.keys.indexOf(el.key) === -1) {
+          this.hiddenFields.keys.push(el.key);
+          this.hiddenFields.elements.push(el);
+          el.hidden = new BehaviorSubject(true);
+        }
+      } else if (el.children) {
+        this.saveHiddenFields(el.children);
+      }
+    });
+  }
+
+  public updateDataOfReplaceElements(element) {
+    if (this.id) {
+      let endp = `${this.endpoint}${this.id}/`;
+      this.service.getAll(endp).subscribe(
+        (data: any) => {
+          this.replaceElements.forEach((el) => {
+            if (el.data) {
+              el.data.next(data);
+            }
+          });
+          if (element.type === 'related') {
+            element.data.next(this.getValueOfData(data, element.key, element, undefined));
+          }
+        }
+      );
+    } else {
+      return;
+    }
+  }
+
   public getDataForForm(endpoint, id) {
     let endp = id ? `${endpoint}${id}/` : endpoint;
     this.service.getAll(endp).subscribe(
@@ -177,9 +231,28 @@ export class GenericFormComponent implements OnChanges {
   public fillingForm(metadata, data) {
     metadata.forEach((el) => {
       if (el.key && el.key !== 'timeline') {
+        if (el.type === 'replace') {
+          el.data = new BehaviorSubject(data);
+        }
         this.getValueOfData(data, el.key, el, metadata);
       } else if (el.key && el.key === 'timeline') {
         el.value = data;
+      } else if (el.type === 'list') {
+        if (el.endpoint) {
+          el.endpoint = this.format.format(el.endpoint, data);
+        }
+        if (el.query) {
+          const queryKeys = Object.keys(el.query);
+          queryKeys.forEach((elem) => {
+            el.query[elem] = this.format.format(el.query[elem], data);
+          });
+        }
+        if (el.prefilled) {
+          const keys = Object.keys(el.prefilled);
+          keys.forEach((elem) => {
+            el.prefilled[elem] = this.format.format(el.prefilled[elem], data);
+          });
+        }
       } else if (el.children) {
         this.fillingForm(el.children, data);
       }
@@ -308,6 +381,8 @@ export class GenericFormComponent implements OnChanges {
     } else if (event.type === 'update' && event.el.key === 'timeline') {
       this.getRalatedData(this.metadata, event.el.key,
         event.el.endpoint, null, event.query, undefined, false);
+    } else if (event.type === 'updateData') {
+      this.updateDataOfReplaceElements(event.el);
     }
     this.event.emit(event);
   }
@@ -435,6 +510,13 @@ export class GenericFormComponent implements OnChanges {
     metadata.forEach((el) => {
       if (el.type === 'hidden') {
         el.hide = this.hide;
+      }
+      if (el.type === 'timeline' || el.type === 'list') {
+        if (this.edit || this.editForm) {
+          el.hide = false;
+        } else {
+          el.hide = true;
+        }
       }
       if (el && el.key && params && !!params[el.key]) {
         if (params[el.key].action === 'add') {
@@ -693,5 +775,15 @@ export class GenericFormComponent implements OnChanges {
             }
           });
         }
+  }
+
+  public getReplaceElements(metadata: Field[]) {
+    metadata.forEach((el) => {
+      if (el.type === 'replace') {
+        this.replaceElements.push(el);
+      } else if (el.children) {
+        this.getReplaceElements(el.children);
+      }
+    });
   }
 }
