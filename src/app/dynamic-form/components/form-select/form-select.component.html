@@ -30,7 +30,7 @@
     {{config.templateOptions.label}}:
   </label>
   <div class="form-element-content">
-    {{displayValue}}
+    {{displayValue || '-'}}
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}

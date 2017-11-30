@@ -375,12 +375,12 @@ export class FormRelatedComponent
       if (object) {
         this.modalData.title = object.allData[this.display];
         this.modalData.id = object[this.param];
-        if (type === 'edit') {
-          this.modalData.mode = 'edit';
-        }
       } else {
         this.modalData.title = this.displayValue;
         this.modalData.id = this.group.get(this.key).value;
+      }
+      if (type === 'edit') {
+        this.modalData.mode = 'edit';
       }
     }
     if (this.modalData.id && type !== 'delete') {

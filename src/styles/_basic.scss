@@ -109,6 +109,15 @@ input:checked ~ .color-preview {
   }
 }
 
+.form-element-content {
+  display: flex;
+}
+
+.form-element-checkbox {
+  display: inline-flex;
+  margin-left: .5rem;
+}
+
 .site-page .form-element {
   display: flex;
   flex-wrap: wrap;
@@ -128,6 +137,7 @@ input:checked ~ .color-preview {
   &-checkbox:not(:empty) {
     display: flex;
     align-items: center;
+    margin-left: 0;
 
     @include media-breakpoint-down('xs') {
       order: -1;

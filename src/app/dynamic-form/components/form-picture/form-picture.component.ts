@@ -105,9 +105,14 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     if (this.config.default) {
       this.value = this.config.default;
     }
-    if (this.config.value && this.config.value.origin) {
-      this.value = this.config.value.origin;
+    if (this.config.value) {
+      if (this.config.value instanceof Object && this.config.value.origin) {
+        this.value = this.config.value.origin;
+      } else if (typeof this.config.value === 'string') {
+        this.value = this.config.value;
+      }
     }
+    this.group.get(this.key).patchValue(undefined);
   }
 
   public ngAfterViewInit() {
