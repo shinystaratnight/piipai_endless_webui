@@ -9,6 +9,10 @@ import { Observable } from 'rxjs/Observable';
 
 import { PermissionsComponent, Group, User, Permission } from './permissions.component';
 import { PermissionsService } from './permissions.service';
+import { SettingsService } from './../settings.service';
+import { ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router/src/router_module';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 describe('PermissionsComponent', () => {
 
@@ -66,10 +70,24 @@ describe('PermissionsComponent', () => {
     }
   };
 
+  let mockUrl: any = [{
+    path: 'permissions'
+  }];
+
+  const mockActivatedRoute = {
+    url: Observable.of(mockUrl)
+  };
+
+  const mockSettingsService = {
+    url: new BehaviorSubject(mockUrl)
+  };
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PermissionsComponent],
       providers: [
+        { provide: SettingsService, useValue: mockSettingsService },
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: PermissionsService, useValue: mockPermissionsService }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]

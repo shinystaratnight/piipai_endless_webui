@@ -67,7 +67,7 @@ const APP_PROVIDERS = [
     HttpModule,
     NgbModule.forRoot(),
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules }),
     DynamicFormModule,
     Angular2FontawesomeModule,
     SharedModule

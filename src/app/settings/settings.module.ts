@@ -16,6 +16,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
+import { SettingsService } from './settings.service';
 
 @NgModule({
   imports: [
@@ -29,6 +30,6 @@ import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
     DynamicFormModule
   ],
   declarations: [PermissionsComponent, SettingsComponent, CompanyComponent, MyobComponent],
-  providers: [PermissionsService]
+  providers: [PermissionsService, SettingsService]
 })
 export class SettingsModule { }

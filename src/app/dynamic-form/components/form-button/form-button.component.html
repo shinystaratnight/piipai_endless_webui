@@ -3,14 +3,14 @@
   <button
     *ngIf="!config.hidden"
     [ngClass]="[buttonClass]"
-    [ngStyle]="{'backgroundColor': buttonColor}"
+    [ngStyle]="{'backgroundColor': config.color}"
     class="btn mt-1 mb-1"
     [class.button]="config.list && !buttonClass"
     [class.btn-sm]="config.templateOptions.small"
     [class.px-2]="config.templateOptions.p"
     [class.pl-4.pr-4]="!config.templateOptions.p"
     [class.btn-primary]="!config.list"
-    [class.text-white]="buttonClass"
+    [class.text-white]="buttonClass || config.color"
     [attr.type]="config.templateOptions.type"
     (click)="action($event)">
       <span class="d-flex align-items-center justify-content-between">

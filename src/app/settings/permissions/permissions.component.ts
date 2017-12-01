@@ -1,7 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { PermissionsService } from './permissions.service';
+import { SettingsService } from '../settings.service';
 
 export interface Permission {
   id: string;
@@ -28,9 +29,6 @@ export interface Group {
 
 export class PermissionsComponent implements OnInit {
 
-  @Output()
-  public routeEvent: EventEmitter<any> = new EventEmitter();
-
   public permissionsList: Permission[];
   public targetPermissions: Permission[];
   public cashPermissions: Permission[];
@@ -54,11 +52,14 @@ export class PermissionsComponent implements OnInit {
 
   constructor(
     private service: PermissionsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private settingsService: SettingsService
   ) {}
 
   public ngOnInit() {
-    this.routeEvent.emit(this.route.snapshot.url);
+    this.route.url.subscribe((url) => {
+      this.settingsService.url = <any> url;
+    });
     this.getPermissions();
     this.getGroups();
     this.getUsers();

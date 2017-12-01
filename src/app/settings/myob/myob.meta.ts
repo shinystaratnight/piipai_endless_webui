@@ -21,6 +21,8 @@ export const meta = [
       },
       {
         type: 'button',
+        key: 'connect',
+        list: true,
         templateOptions: {
           text: 'Connect',
           p: true,
