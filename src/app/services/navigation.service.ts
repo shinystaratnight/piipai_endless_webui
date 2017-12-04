@@ -27,14 +27,18 @@ export class NavigationService {
   ) { }
 
   public getPages() {
-    return this.gfs.getAll(this.endpoint).map(
-      (res: any) => {
-        if (res.results) {
-          this.navigationList = res.results;
-          return this.navigationList;
+    if (!this.navigationList) {
+      return this.gfs.getAll(this.endpoint).map(
+        (res: any) => {
+          if (res.results) {
+            this.navigationList = res.results;
+            return this.navigationList;
+          }
         }
-      }
-    );
+      );
+    } else {
+      return Observable.of(this.navigationList);
+    }
   }
 
   public getUserModules() {

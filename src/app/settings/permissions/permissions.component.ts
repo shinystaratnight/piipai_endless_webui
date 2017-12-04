@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { PermissionsService } from './permissions.service';
+import { SettingsService } from '../settings.service';
 
 export interface Permission {
   id: string;
@@ -49,10 +51,15 @@ export class PermissionsComponent implements OnInit {
   public name: string;
 
   constructor(
-    private service: PermissionsService
+    private service: PermissionsService,
+    private route: ActivatedRoute,
+    private settingsService: SettingsService
   ) {}
 
   public ngOnInit() {
+    this.route.url.subscribe((url) => {
+      this.settingsService.url = <any> url;
+    });
     this.getPermissions();
     this.getGroups();
     this.getUsers();

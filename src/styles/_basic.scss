@@ -109,7 +109,12 @@ input:checked ~ .color-preview {
   }
 }
 
-
+@each $item in $themes {
+  .#{$item}-theme .page-item.active .page-link {
+    background-color: map-get($theme-colors, $item) !important;
+    border-color: map-get($theme-colors, $item) !important;
+  }
+}
 
 @each $item in $themes {
   .#{$item}-theme .bg-primary {

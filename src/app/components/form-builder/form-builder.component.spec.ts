@@ -81,6 +81,12 @@ describe('FormBuilderComponent', () => {
           data: {
             fields: event.data.model_fields
           }
+        },
+        id: {
+          action: 'add',
+          data: {
+            value: event.data.id
+          }
         }
       });
       expect(comp.str.emit).toHaveBeenCalledWith({
