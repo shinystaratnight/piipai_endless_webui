@@ -1,42 +1,44 @@
-<div class="my-3">
-  <ngb-tabset type="pills" (tabChange)="beforeChange()">
-    <ngb-tab id="group" title="Groups">
-      <template ngbTabContent>
-        <div class="permission-block-add form-inline">
-          <input type="text" class="permission-input form-control mr-2" [(ngModel)]="name">
-          <button type="button" class="btn bg-default" (click)="addGroup(name)">Add</button>
-        </div>
-        <div class="permission-wrapper">
-          <template
-            [ngTemplateOutlet]="list"
-            [ngOutletContext]="{title: 'Groups', list: groups, param: 'name', element: 'group', type: 'list'}">
-          </template>
-          <template *ngIf="targetId"
-            [ngTemplateOutlet]="list"
-            [ngOutletContext]="{title: 'Permissions', list: permissionsList, param: 'name', element: 'group', type: 'permission'}">
-          </template>
-        </div>
-      </template>
-    </ngb-tab>
-    <ngb-tab id="user" title="Users">
-      <template ngbTabContent>
-        <div class="permission-wrapper">
-          <template
-            [ngTemplateOutlet]="list"
-            [ngOutletContext]="{title: 'Users', list: users, param: 'name', element: 'user', type: 'list'}">
-          </template>
-          <template *ngIf="targetId"
-            [ngTemplateOutlet]="list"
-            [ngOutletContext]="{title: 'Permissions', list: permissionsList, param: 'name', element: 'user', type: 'permission'}">
-          </template>
-          <template *ngIf="targetId"
-            [ngTemplateOutlet]="list"
-            [ngOutletContext]="{title: 'Groups', list: groups, param: 'name', element: 'user', type: 'group'}">
-          </template>
-        </div>
-      </template>
-    </ngb-tab>
-  </ngb-tabset>
+<div class="container">
+  <div class="my-3">
+    <ngb-tabset type="pills" (tabChange)="beforeChange()">
+      <ngb-tab id="group" title="Groups">
+        <template ngbTabContent>
+          <div class="permission-block-add form-inline">
+            <input type="text" class="permission-input form-control mr-2" [(ngModel)]="name">
+            <button type="button" class="btn bg-default" (click)="addGroup(name)">Add</button>
+          </div>
+          <div class="permission-wrapper">
+            <template
+              [ngTemplateOutlet]="list"
+              [ngOutletContext]="{title: 'Groups', list: groups, param: 'name', element: 'group', type: 'list'}">
+            </template>
+            <template *ngIf="targetId"
+              [ngTemplateOutlet]="list"
+              [ngOutletContext]="{title: 'Permissions', list: permissionsList, param: 'name', element: 'group', type: 'permission'}">
+            </template>
+          </div>
+        </template>
+      </ngb-tab>
+      <ngb-tab id="user" title="Users">
+        <template ngbTabContent>
+          <div class="permission-wrapper">
+            <template
+              [ngTemplateOutlet]="list"
+              [ngOutletContext]="{title: 'Users', list: users, param: 'name', element: 'user', type: 'list'}">
+            </template>
+            <template *ngIf="targetId"
+              [ngTemplateOutlet]="list"
+              [ngOutletContext]="{title: 'Permissions', list: permissionsList, param: 'name', element: 'user', type: 'permission'}">
+            </template>
+            <template *ngIf="targetId"
+              [ngTemplateOutlet]="list"
+              [ngOutletContext]="{title: 'Groups', list: groups, param: 'name', element: 'user', type: 'group'}">
+            </template>
+          </div>
+        </template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
 </div>
 
 <template #list let-t="title" let-l="list" let-p="param" let-a="actions" let-type="type" let-e="element">

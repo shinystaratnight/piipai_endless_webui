@@ -1,0 +1,34 @@
+export const meta = [
+  {
+    name: 'API Connection',
+    type: 'collapse',
+    children: [
+      {
+        type: 'input',
+        key: 'key',
+        templateOptions: {
+          label: 'Developer Key',
+          type: 'text'
+        }
+      },
+      {
+        type: 'input',
+        key: 'secret',
+        templateOptions: {
+          label: 'Developer Secret',
+          type: 'text'
+        }
+      },
+      {
+        type: 'button',
+        key: 'connect',
+        list: true,
+        templateOptions: {
+          text: 'Connect',
+          p: true,
+          action: 'connect'
+        }
+      }
+    ]
+  }
+];

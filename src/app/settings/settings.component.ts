@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SettingsService } from './settings.service';
 
 @Component({
   selector: 'settings-page',
@@ -14,15 +15,18 @@ export class SettingsComponent implements OnInit {
   public url: any;
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private settingsService: SettingsService
   ) {}
 
   public ngOnInit() {
+    let currentURL = { path: 'settings' };
     this.user = this.route.snapshot.data['user'].data;
     this.pagesList = this.route.snapshot.data['pagesList'];
-    this.url = [
-      { path: 'settings' }
-    ];
+    this.settingsService.url.subscribe((child) => {
+      this.url = [].concat(currentURL, child);
+    });
   }
 
 }

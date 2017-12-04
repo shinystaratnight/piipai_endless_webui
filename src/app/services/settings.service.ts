@@ -8,17 +8,22 @@ import 'rxjs/add/operator/catch';
 export class SettingsService {
 
   public endpoint: string = '/ecore/api/v2/company_settings';
+  public settings: any;
 
   constructor(private http: Http) { }
 
   public resolve() {
-    this.http.get(this.endpoint).subscribe(
-      (res: Response) => {
-        let settings = res.json();
-        document.body.classList.add(`${settings.company_settings.color_scheme}-theme`);
-        document.body.style.fontFamily = `${settings.company_settings.font}, sans-serif`;
-      }
-    );
+    if (!this.settings) {
+      this.http.get(this.endpoint).subscribe(
+        (res: Response) => {
+          let settings = res.json();
+          this.settings = settings;
+          let body = document.body;
+          body.parentElement.classList.add(`${settings.company_settings.color_scheme}-theme`);
+          body.style.fontFamily = `${settings.company_settings.font}, sans-serif`;
+        }
+      );
+    }
   }
 
 }
