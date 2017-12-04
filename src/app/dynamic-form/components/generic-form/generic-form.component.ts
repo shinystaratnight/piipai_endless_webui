@@ -19,7 +19,7 @@ interface HiddenFields {
   templateUrl: 'generic-form.component.html'
 })
 
-export class GenericFormComponent implements OnChanges {
+export class GenericFormComponent implements OnChanges, OnInit {
 
   @Input()
   public endpoint: string = '';
@@ -63,6 +63,9 @@ export class GenericFormComponent implements OnChanges {
   @Input()
   public showResponse: boolean = true;
 
+  @Input()
+  public mode: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -80,6 +83,9 @@ export class GenericFormComponent implements OnChanges {
 
   @Output()
   public str: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  public modeEvent: EventEmitter<any> = new EventEmitter();
 
   public metadata: Field[] = [];
   public metadataError = [];
@@ -110,6 +116,15 @@ export class GenericFormComponent implements OnChanges {
     private service: GenericFormService
   ) {}
 
+  public ngOnInit() {
+    if (this.id && !this.mode) {
+      this.mode = 'view';
+      setTimeout(() => {
+        this.modeEvent.emit(this.mode);
+      }, 100);
+    }
+  }
+
   public ngOnChanges() {
     if (this.currentId !== this.id) {
       this.currentId = this.id;
@@ -131,6 +146,36 @@ export class GenericFormComponent implements OnChanges {
     } else if (this.data && this.metadata) {
       this.parseMetadata(this.metadata, this.data);
     }
+    if (this.id && this.mode && this.metadata) {
+      if (this.mode === 'edit') {
+        this.toggleModeMetadata(this.metadata, this.mode);
+      }
+    }
+  }
+
+  public setModeForElement(metadata: Field[], mode) {
+    if (mode === 'view') {
+      metadata.forEach((el) => {
+        if (el.key) {
+          el.mode = new BehaviorSubject(mode);
+        } else if (el.children) {
+          this.setModeForElement(el.children, mode);
+        }
+      });
+    }
+  }
+
+  public toggleModeMetadata(metadata: Field[], mode: string) {
+    metadata.forEach((el) => {
+      if (el.key) {
+        el.mode.next(mode);
+        if (el.type === 'related' && el.list) {
+          this.toggleModeMetadata(el.metadata, mode);
+        }
+      } else if (el.children) {
+        this.toggleModeMetadata(el.children, mode);
+      }
+    });
   }
 
   public formChange(data) {
@@ -150,6 +195,7 @@ export class GenericFormComponent implements OnChanges {
   public getMetadata(endpoint) {
     this.service.getMetadata(endpoint, '?type=form').subscribe(
         ((data: any) => {
+          this.setModeForElement(data, this.mode);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);
@@ -205,7 +251,7 @@ export class GenericFormComponent implements OnChanges {
             }
           });
           if (element.type === 'related') {
-            element.data.next(this.getValueOfData(data, element.key, element, undefined));
+            element.data.next(this.getValueOfData(data, element.key, element, undefined, true));
           }
         }
       );
@@ -234,6 +280,9 @@ export class GenericFormComponent implements OnChanges {
         if (el.type === 'replace') {
           el.data = new BehaviorSubject(data);
         }
+        if (el.type === 'related' && el.list) {
+          el.data = new BehaviorSubject(this.getValueOfData(data, el.key, el, metadata));
+        }
         this.getValueOfData(data, el.key, el, metadata);
       } else if (el.key && el.key === 'timeline') {
         el.value = data;
@@ -260,12 +309,12 @@ export class GenericFormComponent implements OnChanges {
     this.getDataForRules(data);
   }
 
-  public getValueOfData(data, key, obj, metadata) {
+  public getValueOfData(data, key, obj, metadata, update = false) {
     let keys = key.split('.');
     let prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
-        if (!obj['value']) {
+        if (!obj['value'] || update) {
           obj['value'] = data[key];
         }
         if (obj.type === 'related') {
@@ -295,6 +344,7 @@ export class GenericFormComponent implements OnChanges {
         this.getValueOfData(data[prop], keys.join('.'), obj, metadata);
       }
     }
+    return obj['value'];
   }
 
   public submitForm(data) {
@@ -394,6 +444,7 @@ export class GenericFormComponent implements OnChanges {
   public getRelatedMetadata(metadata, key, endpoint) {
     this.service.getMetadata(endpoint, '?type=formset').subscribe(
       (response: any) => {
+        this.setModeForElement(response.fields, this.mode);
         this.parseMetadata(metadata, {
           [key]: {
             action: 'add',

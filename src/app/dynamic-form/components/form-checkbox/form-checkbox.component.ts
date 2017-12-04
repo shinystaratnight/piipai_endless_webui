@@ -24,6 +24,8 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
   public checkboxClass: string = '';
   public checkboxColor: string = '';
 
+  public viewMode: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -34,6 +36,12 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
   public ngOnInit() {
     this.addControl(this.config, this.fb);
     this.setInitValue();
+    this.checkModeProperty();
+    this.checkHiddenProperty();
+    this.createEvent();
+  }
+
+  public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
       this.config.hidden.subscribe((hide) => {
         if (hide) {
@@ -45,35 +53,49 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
         }
       });
     }
-    this.createEvent();
+  }
+
+  public checkModeProperty() {
+    if (this.config && this.config.mode) {
+      this.config.mode.subscribe((mode) => {
+        if (mode === 'view') {
+          this.viewMode = true;
+        } else {
+          this.viewMode = this.config.read_only || false;
+        }
+        this.setInitValue();
+      });
+    }
   }
 
   public setInitValue() {
-    if (!this.group.get(this.key).value && !this.config.read_only) {
-      let value = this.config.default || false;
-      this.group.get(this.key).patchValue(value);
+    let value = this.config.value || this.group.get(this.key).value || this.config.default;
+    if (this.viewMode) {
+      if (this.config.templateOptions.type === 'checkbox') {
+        this.defaultValues(value);
+      }
     }
-    if (this.config.read_only) {
-      this.setValue(this.config.value);
-    } else if (this.config.templateOptions.type === 'icon') {
-      this.customizeCheckbox();
+    if (this.config.templateOptions.type === 'icon') {
+      this.customizeCheckbox(value);
     }
-    if (this.config.value || this.config.value === false || this.config.value === null) {
-      this.group.get(this.key).patchValue(this.config.value);
+    this.group.get(this.key).patchValue(this.config.value);
+  }
+
+  public defaultValues(value) {
+    if (value) {
+      this.checkboxClass = 'text-success';
+      this.checkboxValue = 'check-circle';
+    } else if (value === null) {
+      this.checkboxClass = 'text-muted';
+      this.checkboxValue = 'minus-circle';
+    } else {
+      this.checkboxClass = 'text-danger';
+      this.checkboxValue = 'times-circle';
     }
   }
 
-  public setValue(value) {
-    let values = this.config && this.config.templateOptions.values;
-    if (values) {
-      this.checkboxValue = values[value];
-      this.checkboxClass = value === true ?
-        'text-success' : value === false ?
-        'text-danger' : 'text-muted';
-    }
-  }
-
-  public customizeCheckbox() {
+  public customizeCheckbox(value): void {
+    this.checkboxValue = this.config.templateOptions.values[value];
     let color = this.config.templateOptions.color;
     let classes = ['primary', 'danger', 'info', 'success', 'warning'];
     this.checkboxClass = classes.indexOf(color) > -1 ? `text-${color}` : '';

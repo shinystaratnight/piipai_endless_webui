@@ -6,12 +6,15 @@ import 'rxjs/add/operator/catch';
 
 import { CookieService } from 'angular2-cookie/core';
 
+import { ErrorsService } from '../../shared/services/errors.service';
+
 @Injectable()
 export class GenericFormService {
 
   constructor(
     private http: Http,
-    private cookie: CookieService
+    private cookie: CookieService,
+    private errors: ErrorsService
   ) { }
 
   public getByQuery(endpoint, query) {
@@ -67,7 +70,7 @@ export class GenericFormService {
     this.updateHeaders(headers);
     return this.http.delete(`${endpoint}${id}/`, { headers })
       .map((response: Response) => response.json())
-      .catch((error: any) => this.errorHandler(error));
+      .catch((error: any) => this.errors.parseErrors(error));
   }
 
   public updateHeaders(headers) {
