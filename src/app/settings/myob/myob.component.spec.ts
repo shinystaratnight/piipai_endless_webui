@@ -35,6 +35,13 @@ describe('MyobComponent', () => {
       } else {
         return Observable.throw(response.errors);
       }
+    },
+    getAll() {
+      if (response.status === 'success') {
+        return Observable.of(response.data);
+      } else {
+        return Observable.throw(response.errors);
+      }
     }
   };
 
@@ -83,6 +90,7 @@ describe('MyobComponent', () => {
         expect(comp.config).toBeDefined();
         expect(comp.pageUrl).toBeDefined();
         expect(comp.endpoint).toBeDefined();
+        expect(comp.companyFile).toBeDefined();
         expect(comp.fillingForm).toHaveBeenCalledWith(meta, { key, secret });
         expect(comp.saveInfo).toHaveBeenCalledWith(code, key, secret);
     })));
@@ -137,9 +145,84 @@ describe('MyobComponent', () => {
       const secret = '123';
       comp.pageUrl = 'http://localhost/settings/myob';
       spyOn(comp, 'updateButton');
+      spyOn(comp, 'getCompanyFiles');
       comp.saveInfo(code, key, secret);
       expect(comp.connected).toBeTruthy();
       expect(comp.updateButton).toHaveBeenCalled();
+    });
+  });
+
+  describe('testCompanyFile method', () => {
+    it('should test company file with credentials', () => {
+      response.status = 'success';
+      response.data = {
+        is_valid: true
+      };
+      const file = {
+        id: '123',
+        username: 'Tom',
+        password: 'Smith',
+        status: undefined
+      };
+      comp.testCompanyFile(file);
+      expect(file.status).toEqual(response.data.is_valid);
+    });
+
+    it('should update errors', () => {
+      response.status = 'error';
+      response.errors = {};
+      const file = {
+        id: '123',
+        username: 'Tom',
+        password: 'Smith',
+        status: undefined
+      };
+      comp.testCompanyFile(file);
+      expect(comp.error).toEqual(response.errors);
+    });
+  });
+
+  describe('getCompanyFiles method', () => {
+    it('should update list of company files', () => {
+      response.status = 'success';
+      response.data = {
+        list: []
+      };
+      comp.companyFile = {};
+      comp.getCompanyFiles();
+      expect(comp.companyFile).toEqual({
+        list: response.data,
+        isCollapsed: false
+      });
+    });
+
+    it('should update errors', () => {
+      response.status = 'error';
+      response.errors = {};
+      comp.getCompanyFiles();
+      expect(comp.error).toEqual(response.errors);
+    });
+  });
+
+  describe('refreshCompanyFiles method', () => {
+    it('should refresh list of company files', () => {
+      response.status = 'success';
+      response.data = {
+        list: []
+      };
+      comp.companyFile = {};
+      comp.getCompanyFiles();
+      expect(comp.companyFile).toEqual({
+        list: response.data,
+        isCollapsed: false
+      });
+    });
+
+    it('should update errors', () => {
+      response.status = 'error';
+      response.errors = {};
+      comp.getCompanyFiles();
+      expect(comp.error).toEqual(response.errors);
     });
   });
 

@@ -5,3 +5,39 @@
     (buttonAction)="buttonHandler($event)">
   </dynamic-form>
 </div>
+
+<div *ngIf="connected" class="container-fluid" >
+  <h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !companyFile.isCollapsed}">
+    <i fa
+      class="p-2"
+      [name]="companyFile.isCollapsed ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="companyFile.isCollapsed = !companyFile.isCollapsed"
+      [attr.aria-expanded]="!companyFile.isCollapsed"
+      aria-controls="collapseExample"
+      style="cursor: pointer"></i>
+    <span>Company File</span>
+    <button type="button" class="btn btn-default btn-sm mx-3" (click)="refreshCompanyFiles()">Refresh</button>
+    <span>Last refreshed - {{companyFile.refreshedDate}}</span>
+  </h6>
+  <div id="collapseExample" [ngbCollapse]="companyFile.isCollapsed" class="px-2">
+    <div class="row" *ngFor="let file of companyFile.list">
+      <div class="col-12 col-md-3 col-lg-2 mb-2">
+        <label>{{file.name}}</label>
+      </div>
+      <div class="col-12 col-md-3 col-lg-2 mb-2">
+        <input type="text" class="form-control" [(ngModel)]="file.username" placeholder="Username">
+      </div>
+      <div class="col-12 col-md-3 col-lg-2 mb-2">
+        <input type="password" class="form-control" [(ngModel)]="file.password" placeholder="Password">
+      </div>
+      <div class="col-12 col-md-3 col-lg-2 mb-2">
+        <button type="button" class="btn btn-default mr-2" (click)="testCompanyFile(file)">Test</button>
+        <i fa [name]="file.status ? 'check' : 'times'"
+          [class.text-success]="file.status"
+          [class.text-danger]="!file.status"></i>
+      </div>
+    </div>
+  </div>
+
+</div>
