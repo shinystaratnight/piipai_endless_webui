@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { meta } from './company.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
+import { SettingsService } from '../settings.service';
 
 @Component({
   selector: 'company',
@@ -25,9 +27,14 @@ export class CompanyComponent implements OnInit {
 
   constructor(
     private gfs: GenericFormService,
+    private route: ActivatedRoute,
+    private settingsService: SettingsService
   ) { }
 
   public ngOnInit() {
+    this.route.url.subscribe((url) => {
+      this.settingsService.url = <any> url;
+    });
     this.gfs.getAll(this.endpoint).subscribe(
       (res: any) => {
         this.config = meta;
@@ -62,7 +69,7 @@ export class CompanyComponent implements OnInit {
         if (!obj['value']) {
           obj['value'] = data[key];
           if (key === 'color_scheme') {
-            this.currentTheme = data[key];
+            this.currentTheme = `${data[key]}-theme`;
           }
         }
       }
@@ -77,8 +84,8 @@ export class CompanyComponent implements OnInit {
     if (e.type === 'change' && e.el.type === 'radio' && e.value) {
       let body = document.body;
       if (e.el.templateOptions.type === 'color') {
-        body.classList.remove(this.currentTheme);
-        body.classList.add(`${e.value}-theme`);
+        body.parentElement.classList.remove(this.currentTheme);
+        body.parentElement.classList.add(`${e.value}-theme`);
         this.currentTheme = `${e.value}-theme`;
       } else if (e.el.templateOptions.type === 'text') {
         let font = `${e.value}, sans-serif`;

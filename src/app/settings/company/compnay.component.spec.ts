@@ -4,11 +4,14 @@ import {
   TestBed,
   inject,
   async } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { CompanyComponent } from './company.component';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
+import { SettingsService } from '../settings.service';
 
 describe('CompanyComponent', () => {
 
@@ -37,10 +40,24 @@ describe('CompanyComponent', () => {
     }
   };
 
+  let mockUrl: any = [{
+    path: 'permissions'
+  }];
+
+  const mockActivatedRoute = {
+    url: Observable.of(mockUrl)
+  };
+
+  const mockSettingsService = {
+    url: new BehaviorSubject(mockUrl)
+  };
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CompanyComponent],
       providers: [
+        { provide: SettingsService, useValue: mockSettingsService },
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: GenericFormService, useValue: mockGenericFormService }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -111,7 +128,7 @@ describe('CompanyComponent', () => {
     it('should set value of element', () => {
       let data = {
         company_setting: {
-          color_scheme: 'indigo-theme'
+          color_scheme: 'indigo'
         }
       };
       let key = 'company_setting.color_scheme';
@@ -119,7 +136,7 @@ describe('CompanyComponent', () => {
         value: undefined
       };
       comp.getValueOfData(data, key, object);
-      expect(object.value).toEqual('indigo-theme');
+      expect(object.value).toEqual('indigo');
       expect(comp.currentTheme).toEqual('indigo-theme');
     });
   });
@@ -139,7 +156,7 @@ describe('CompanyComponent', () => {
       let body = document.body;
       let theme = `${event.value}-theme`;
       comp.eventHandler(event);
-      expect(body.classList.contains(theme)).toBeTruthy();
+      expect(body.parentElement.classList.contains(theme)).toBeTruthy();
       expect(comp.currentTheme).toEqual(theme);
     });
 

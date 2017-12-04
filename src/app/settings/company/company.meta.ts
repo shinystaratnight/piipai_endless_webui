@@ -10,6 +10,7 @@ export const meta = [
         templateOptions: {
           label: 'Logo',
           label_upload: 'Choose a file',
+          label_photo: 'Take a photo',
           type: 'file',
           required: false,
           file: true,
