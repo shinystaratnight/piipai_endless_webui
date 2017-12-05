@@ -7,6 +7,8 @@ import { GenericFormService } from '../../dynamic-form/services/generic-form.ser
 import { NavigationService } from '../../services/navigation.service';
 import { UserService } from '../../services/user.service';
 
+import { CheckPermissionService } from '../../shared/services/check-permission';
+
 @Component({
   selector: 'site',
   templateUrl: 'site.component.html'
@@ -30,6 +32,8 @@ export class SiteComponent implements OnInit {
 
   public error: any;
 
+  public formMode: string;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -37,7 +41,8 @@ export class SiteComponent implements OnInit {
     private storage: LocalStorageService,
     private genericFormService: GenericFormService,
     private navigationService: NavigationService,
-    private userService: UserService
+    private userService: UserService,
+    private permission: CheckPermissionService
   ) {}
 
   public ngOnInit() {
@@ -53,6 +58,7 @@ export class SiteComponent implements OnInit {
         this.pageData = null;
         this.getPageNavigation(url);
         if (url.length) {
+          this.formMode = '';
           this.dashboard = false;
         } else {
           this.dashboard = true;
@@ -62,17 +68,31 @@ export class SiteComponent implements OnInit {
   }
 
   public checkPermissions(pageData) {
-    this.genericFormService.getAll(pageData.endpoint).subscribe(
-      (res: any) => {
-        this.pageData = pageData;
-        if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
-          this.formStorage = true;
-        } else {
-          this.formStorage = false;
-        }
-      },
-      (err: any) => window.history.back()
-    );
+    if (pageData.pathData.id) {
+      this.permission.viewCheck(pageData.endpoint, pageData.pathData.id).subscribe(
+        (res: any) => {
+          this.pageData = pageData;
+          if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
+            this.formStorage = true;
+          } else {
+            this.formStorage = false;
+          }
+        },
+        (err: any) => window.history.back()
+      );
+    } else {
+      this.permission.createCheck(pageData.endpoint).subscribe(
+        (res: any) => {
+          this.pageData = pageData;
+          if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
+            this.formStorage = true;
+          } else {
+            this.formStorage = false;
+          }
+        },
+        (err: any) => window.history.back()
+      );
+    }
   }
 
   public changeFormLabel(e) {
@@ -154,10 +174,21 @@ export class SiteComponent implements OnInit {
     );
   }
 
+  public changeMode(pageData) {
+    this.permission.updateCheck(pageData.endpoint, pageData.pathData.id).subscribe(
+      (res: any) => this.formMode = 'edit',
+      (err: any) => this.error = err
+    );
+  }
+
   public formEvent(e) {
     if (e.type === 'sendForm' && e.status === 'success') {
       this.router.navigate([this.pageData.pathData.path]);
     }
+  }
+
+  public modeEvent(mode) {
+    this.formMode = mode;
   }
 
   public deleteElement(element) {

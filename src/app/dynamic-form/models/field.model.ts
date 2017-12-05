@@ -1,3 +1,5 @@
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 export interface Field {
   type?: string;
   key?: string;
@@ -9,13 +11,15 @@ export interface Field {
   showIf?: any[];
   value?: any;
   activeMetadata?: Field[];
-  hidden?: any;
+  hidden?: BehaviorSubject<boolean>;
   data?: any;
   metadata?: Field[];
   options?: any[];
   dateTable?: boolean;
   prefilled?: any;
   send?: boolean;
+  view?: boolean;
+  mode?: BehaviorSubject<string>;
   templateOptions?: {
     label?: string;
     type?: string;
