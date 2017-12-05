@@ -109,6 +109,70 @@ input:checked ~ .color-preview {
   }
 }
 
+.form-element-content {
+  display: flex;
+}
+
+.form-element-checkbox {
+  display: inline-flex;
+  margin-left: .5rem;
+}
+
+.site-page .form-element {
+  display: flex;
+  flex-wrap: wrap;
+
+  &-label {
+    flex-basis: 200px;
+  }
+
+  &-content{
+    display: flex;
+    align-items: center;
+    flex-basis: calc(100% - 200px);
+    min-width: 200px;
+    max-width: 300px;
+  }
+
+  &-checkbox:not(:empty) {
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+
+    @include media-breakpoint-down('xs') {
+      order: -1;
+      margin-right: .5rem;
+    }
+  }
+
+  &-picture:not(:empty) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  @include media-breakpoint-down('xs') {
+    &-label,
+    &-content {
+      flex-basis: auto;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    &-content {
+      width: 100%;
+      max-width: none;
+      min-width: auto;
+    }
+  }
+}
+
+.form-list .form-group,
+.form-list .form-control {
+  margin-bottom: 0;
+}
+
 @each $item in $themes {
   .#{$item}-theme .page-item.active .page-link {
     background-color: map-get($theme-colors, $item) !important;

@@ -26,6 +26,10 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
   public options: any;
   public label: boolean;
 
+  public displayValue: string;
+
+  public viewMode: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -37,6 +41,12 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
     this.addControl(this.config, this.fb);
     this.options = this.config.templateOptions.options.sort((p, n) => p.label > n.label ? 1 : -1 );
     this.setInitValue();
+    this.checkModeProperty();
+    this.checkHiddenProperty();
+    this.createEvent();
+  }
+
+  public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
       this.config.hidden.subscribe((hide) => {
         if (hide) {
@@ -48,17 +58,43 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
         }
       });
     }
-    this.createEvent();
+  }
+
+  public checkModeProperty() {
+    if (this.config && this.config.mode) {
+      this.config.mode.subscribe((mode) => {
+        if (mode === 'view') {
+          this.viewMode = true;
+        } else {
+          this.viewMode = this.config.read_only || false;
+        }
+        this.setInitValue();
+      });
+    }
+  }
+
+  public getValue(options: any[], value: string): string {
+    let element = options.find((el) => el.value === value);
+    if (element) {
+      return element.label;
+    } else {
+      return '-';
+    }
   }
 
   public setInitValue() {
     if (this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
     }
+    if ((this.config.read_only || this.config.view) && !this.config.hide) {
+      this.displayValue = this.getValue(this.options, this.config.value);
+    }
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.select, this.config);
+    if (this.select) {
+      this.addFlags(this.select, this.config);
+    }
   }
 
   public eventHandler(e) {

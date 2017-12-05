@@ -41,6 +41,8 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
 
   public displayValue: string;
 
+  public viewMode: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -57,6 +59,14 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       this.addControl(this.config, this.fb);
     }
     this.setInitValue();
+    this.checkModeProperty();
+    this.checkHiddenProperty();
+    if (this.config.type !== 'static') {
+      this.createEvent();
+    }
+  }
+
+  public checkHiddenProperty() {
     if (this.config && this.config.hidden && this.config.type !== 'static') {
       this.config.hidden.subscribe((hide) => {
         if (hide) {
@@ -68,8 +78,18 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
         }
       });
     }
-    if (this.config.type !== 'static') {
-      this.createEvent();
+  }
+
+  public checkModeProperty() {
+    if (this.config && this.config.mode) {
+      this.config.mode.subscribe((mode) => {
+        if (mode === 'view') {
+          this.viewMode = true;
+        } else {
+          this.viewMode = this.config.read_only || false;
+        }
+        this.setInitValue();
+      });
     }
   }
 
@@ -83,9 +103,9 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       }
     } else {
       if (this.config.value instanceof Object) {
-        this.displayValue = this.config.value.__str__;
+        this.displayValue = this.config.value.__str__ || '-';
       } else {
-        this.displayValue = this.config.value;
+        this.displayValue = this.config.value || '-';
       }
     }
   }

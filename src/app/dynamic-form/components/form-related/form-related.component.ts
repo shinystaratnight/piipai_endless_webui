@@ -12,10 +12,12 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 import { GenericFormService } from './../../services/generic-form.service';
+import { CheckPermissionService } from '../../../shared/services/check-permission';
 import { Field } from '../../models/field.model';
 
 interface RelatedObject {
   id: string;
+  allData: any;
   data: FormGroup;
   metadata: Field[];
 }
@@ -68,21 +70,43 @@ export class FormRelatedComponent
 
   public listElement: Field;
 
+  public viewMode: boolean;
+
+  public skillEndpoint: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
-    private genericFormService: GenericFormService
+    private genericFormService: GenericFormService,
+    private permission: CheckPermissionService
   ) { super(); }
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
+    this.skillEndpoint = this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
+      this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
     this.display =
       this.config.templateOptions.display ? this.config.templateOptions.display : '__str__';
     this.param = this.config.templateOptions.param ? this.config.templateOptions.param : 'id';
     this.setInitValue();
+    this.checkModeProperty();
+    this.checkHiddenProperty();
+    if (this.config && this.config.list && this.config.data) {
+      this.config.data.subscribe((data) => {
+        this.generateDataForList(this.config, data);
+      });
+    }
+    this.createEvent();
+    if (this.config && this.config.metadata) {
+      this.getReplaceElements(this.config.metadata);
+    }
+    this.isCollapsed = this.config.collapsed;
+  }
+
+  public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
       this.config.hidden.subscribe((hide) => {
         if (hide) {
@@ -95,16 +119,19 @@ export class FormRelatedComponent
         }
       });
     }
-    if (this.config && this.config.list && this.config.data) {
-      this.config.data.subscribe((data) => {
-        this.generateDataForList(this.config, data);
+  }
+
+  public checkModeProperty() {
+    if (this.config && this.config.mode) {
+      this.config.mode.subscribe((mode) => {
+        if (mode === 'view') {
+          this.viewMode = true;
+        } else {
+          this.viewMode = this.config.read_only || false;
+        }
+        this.setInitValue();
       });
     }
-    this.createEvent();
-    if (this.config && this.config.metadata) {
-      this.getReplaceElements(this.config.metadata);
-    }
-    this.isCollapsed = this.config.collapsed;
   }
 
   public setInitValue() {
@@ -203,6 +230,7 @@ export class FormRelatedComponent
         data.forEach((el) => {
           let object = this.createObject();
           object['id'] = el.id;
+          object['allData'] = el;
           this.fillingForm(object.metadata, el);
           object.data = this.fb.group({});
           value.push(object.data.value);
@@ -219,11 +247,14 @@ export class FormRelatedComponent
   public createObject(): RelatedObject {
     let object = {
       id: undefined,
+      allData: undefined,
       data: this.fb.group({}),
       metadata: []
     };
     object.metadata = this.config.metadata.map((el) => {
-      return Object.assign({}, el);
+      let element = Object.assign({}, el);
+      element.mode = el.mode;
+      return element;
     });
     return object;
   }
@@ -247,6 +278,25 @@ export class FormRelatedComponent
             this.updateValue(undefined);
           }
         );
+    }
+  }
+
+  public editObject(object: RelatedObject): void {
+    if (object.id) {
+      this.open('edit', undefined, object);
+    }
+  }
+
+  public setAsDefault(object: RelatedObject): void {
+    if (object.id) {
+      let endpoint = `${this.config.endpoint}${object.id}/`;
+      let body = {
+        default_rate: true,
+        skill: object.allData.skill.id
+      };
+      this.genericFormService
+        .editForm(endpoint, body)
+        .subscribe((res: any) => this.updateList());
     }
   }
 
@@ -323,14 +373,29 @@ export class FormRelatedComponent
     this.modalData.endpoint = this.config.endpoint;
     if (type === 'edit' || type === 'delete') {
       if (object) {
-        this.modalData.title = object[this.display];
+        this.modalData.title = object.allData[this.display];
         this.modalData.id = object[this.param];
       } else {
         this.modalData.title = this.displayValue;
         this.modalData.id = this.group.get(this.key).value;
       }
+      if (type === 'edit') {
+        this.modalData.mode = 'edit';
+      }
     }
-    this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
+    if (this.modalData.id && type !== 'delete') {
+      this.permission.updateCheck(this.modalData.endpoint, this.modalData.id)
+        .subscribe(
+          (res: any) => this.modalRef = this.modalService.open(this.modal, {size: 'lg'})
+        );
+    } else if (type !== 'delete') {
+      this.permission.createCheck(this.modalData.endpoint)
+        .subscribe(
+          (res: any) => this.modalRef = this.modalService.open(this.modal, {size: 'lg'})
+        );
+    } else {
+      this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
+    }
   }
 
   public openAutocomplete(): void {
@@ -449,13 +514,23 @@ export class FormRelatedComponent
   }
 
   public formEvent(e, closeModal, type) {
-    if (e.type === 'sendForm' && e.status === 'success') {
+    if (e.type === 'sendForm' && e.status === 'success' && !this.config.list) {
       closeModal();
       this.group.get(this.key).patchValue(e.data[this.param]);
       this.config.value = e.data[this.param];
       this.displayValue = e.data[this.display];
       this.eventHandler({type: 'change'}, e.data[this.param]);
+    } else if (e.type === 'sendForm' && e.status === 'success' && this.config.list) {
+      closeModal();
+      this.updateList();
     }
+  }
+
+  public updateList() {
+    this.event.emit({
+      type: 'updateData',
+      el: this.config
+    });
   }
 
   public getOptions(value, offset, concat = false) {
