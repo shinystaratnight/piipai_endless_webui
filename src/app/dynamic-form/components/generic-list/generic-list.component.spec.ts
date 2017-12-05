@@ -109,6 +109,8 @@ describe('GenericListComponent', () => {
         let endpoint = 'endpoint';
         spyOn(comp, 'parseUrl');
         spyOn(comp, 'getTable').and.returnValue(table);
+        spyOn(comp, 'prepareSortQuery');
+        spyOn(comp, 'getSortedFields');
         comp.tables.push(table);
         comp.getMetadata(endpoint, table);
         expect(table.metadata).toEqual(metadata);
@@ -118,6 +120,8 @@ describe('GenericListComponent', () => {
         expect(comp.tableId).toEqual(2);
         expect(comp.getTable).toHaveBeenCalledWith(table.list);
         expect(comp.parseUrl).toHaveBeenCalledWith({}, table.list);
+        expect(comp.prepareSortQuery).toHaveBeenCalled();
+        expect(comp.getSortedFields).toHaveBeenCalled();
       }));
 
       it('should update metadata for subtables', async(() => {
@@ -141,6 +145,8 @@ describe('GenericListComponent', () => {
         let endpoint = 'endpoint';
         comp.limit = 1;
         comp.tables.push(table);
+        spyOn(comp, 'prepareSortQuery');
+        spyOn(comp, 'getSortedFields');
         comp.getMetadata(endpoint, table, false, table);
         expect(table.metadata).toEqual(metadata);
         expect(table.metadata.list.list).toEqual('companies1');
@@ -150,6 +156,8 @@ describe('GenericListComponent', () => {
         expect(table.offset).toEqual(0);
         expect(comp.existingIds).toEqual([1]);
         expect(comp.tableId).toEqual(2);
+        expect(comp.prepareSortQuery).toHaveBeenCalled();
+        expect(comp.getSortedFields).toHaveBeenCalled();
         setTimeout(() => {
           expect(table.update).toEqual(metadata);
         }, 310);

@@ -471,7 +471,9 @@ describe('DynamicListComponent', () => {
                   type: 'static',
                   values: undefined,
                   value: 'Test',
-                  label: 'Test'
+                  label: 'Test',
+                  delim: undefined,
+                  title: undefined,
                 }
               ],
               contextMenu: [
@@ -512,6 +514,8 @@ describe('DynamicListComponent', () => {
                     action: 'openMap',
                     text: 'master'
                   },
+                  delim: undefined,
+                  title: undefined,
                   fields: [
                     {
                       field: 'address.latitude',
@@ -557,7 +561,9 @@ describe('DynamicListComponent', () => {
                     action: 'evaluateCandidate',
                     text: ''
                   },
-                  value: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9'
+                  value: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  delim: undefined,
+                  title: undefined,
                 }
               ],
               contextMenu: undefined,
@@ -574,7 +580,9 @@ describe('DynamicListComponent', () => {
                   name: 'gender',
                   type: 'text',
                   values: undefined,
-                  value: null
+                  value: null,
+                  delim: undefined,
+                  title: undefined,
                 }
               ],
               tab: undefined
@@ -591,7 +599,9 @@ describe('DynamicListComponent', () => {
                   type: 'link',
                   values: undefined,
                   link: 'tel:+380978107725',
-                  value: '+380978107725'
+                  value: '+380978107725',
+                  delim: undefined,
+                  title: undefined,
                 },
                 {
                   rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -600,7 +610,9 @@ describe('DynamicListComponent', () => {
                   type: 'link',
                   values: undefined,
                   link: 'mailto:test.testovich@gmail.com',
-                  value: 'test.testovich@gmail.com'
+                  value: 'test.testovich@gmail.com',
+                  delim: undefined,
+                  title: undefined,
                 },
                 {
                   rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -609,7 +621,9 @@ describe('DynamicListComponent', () => {
                   type: 'link',
                   values: undefined,
                   endpoint: '/ecore/api/v2/contacts/8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-                  value: 'Testovich'
+                  value: 'Testovich',
+                  delim: undefined,
+                  title: undefined,
                 }
               ],
               contextMenu: [

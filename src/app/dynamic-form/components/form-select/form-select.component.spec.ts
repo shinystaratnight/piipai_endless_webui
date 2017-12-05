@@ -84,6 +84,8 @@ describe('FormSelectComponent', () => {
   describe('ngAfterViewInit method', () => {
 
     it('should called addControl method', async(() => {
+      comp.select = {};
+      comp.config = Object.assign(config);
       spyOn(comp, 'addFlags');
       comp.ngAfterViewInit();
       expect(comp.addFlags).toHaveBeenCalled();

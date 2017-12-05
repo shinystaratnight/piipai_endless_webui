@@ -9,6 +9,9 @@ import { GenericFormService } from './../../services/generic-form.service';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { SharedModule } from '../../../shared/shared.module';
+import { ErrorsService } from '../../../shared/services/errors.service';
+import { CheckPermissionService } from '../../../shared/services/check-permission';
 
 describe('FormRelatedComponent', () => {
   let fixture: ComponentFixture<FormRelatedComponent>;
@@ -51,6 +54,27 @@ describe('FormRelatedComponent', () => {
     }
   };
 
+  const mockErrorsService = {
+    parseErrors() {
+      return Observable.of(true);
+    }
+  };
+
+  const mockCheckPermissionService = {
+    viewCheck() {
+      return Observable.of(true);
+    },
+    createCheck() {
+      return Observable.of(true);
+    },
+    deleteCheck() {
+      return Observable.of(true);
+    },
+    updateCheck() {
+      return Observable.of(true);
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -58,9 +82,11 @@ describe('FormRelatedComponent', () => {
       ],
       providers: [
         FormBuilder,
+        { provide: CheckPermissionService, useValue: mockCheckPermissionService },
+        { provide: ErrorsService, userValue: mockErrorsService },
         { provide: GenericFormService, useValue: mockGenericFormService }
       ],
-      imports: [ReactiveFormsModule, FormsModule, NgbModule.forRoot()],
+      imports: [ReactiveFormsModule, FormsModule, NgbModule.forRoot(), SharedModule],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
   });
@@ -317,7 +343,7 @@ describe('FormRelatedComponent', () => {
       let result = comp.createObject();
       expect(result).toBeDefined();
       expect(result.data).toBeDefined();
-      expect(result.metadata).toEqual([{}]);
+      expect(result.metadata).toEqual([{ mode: undefined }]);
     })));
   });
 
@@ -344,7 +370,7 @@ describe('FormRelatedComponent', () => {
 
   describe('deleteObject method', () => {
     it('should delete objectfrom list', async(inject([FormBuilder], (fb: FormBuilder) => {
-      let object = {
+      let object = <any> {
         id: '2',
         metadata: [],
         data: fb.group({})
@@ -531,7 +557,8 @@ describe('FormRelatedComponent', () => {
         id: 123,
         type,
         title: comp.displayValue,
-        endpoint: comp.config.templateOptions.endpoint
+        endpoint: comp.config.endpoint,
+        mode: 'edit'
       });
     })));
 
@@ -867,7 +894,8 @@ describe('FormRelatedComponent', () => {
       let form = fb.group({});
       form.addControl(key, fb.control(''));
       comp.group = form;
-      comp.config = config;
+      comp.config = Object.assign({}, config);
+      comp.config.list = false;
       comp.config.currentQuery = 'some query';
       comp.param = 'id';
       comp.display = 'name';

@@ -28,14 +28,14 @@
     </h5>
   </div>
   <div [class.card-block]="poped" class="datatable-body">
-    <div class="filter-wrapper" *ngIf="(first || poped) && filtersOfList && filtersOfList.length">
+    <div class="filter-wrapper" *ngIf="(first || poped) && showFilters">
       <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     </div>
     <action-element *ngIf="config.list.actions && !inForm" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
-    <h5 class="datatable-label" *ngIf="config.list && !poped && !inForm">
-      <span class="mr-auto">select {{config.list.label}} to change</span>
+    <h5 class="datatable-label" *ngIf="(config.list && (inForm && config.list.search_enabled) || (!inForm && !poped))">
+      <span *ngIf="!inForm" class="mr-auto">select {{config.list.label}} to change</span>
       <list-search-bar *ngIf="config.list.search_enabled" [list]="config.list.list" (event)="filterHandler($event)"></list-search-bar>
-      <div>
+      <div *ngIf="!inForm">
         <list-buttons
           [buttons]="config.list.buttons"
           [first]="first"

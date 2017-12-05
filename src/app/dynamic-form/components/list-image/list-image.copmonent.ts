@@ -11,6 +11,7 @@ export class ListImageComponent implements OnInit {
   public src: string;
   public icon: string;
   public iconClass: string;
+  public last: boolean;
 
   public ngOnInit() {
     let defaultAvatar: string;
@@ -25,9 +26,17 @@ export class ListImageComponent implements OnInit {
     } else if (this.config.type === 'icon') {
       if (this.config.values) {
         this.icon = this.config.values[this.config.value];
+        if (this.config.color) {
+          this.getColor(this.config.value);
+          return;
+        }
         this.setClass(this.config.value);
       }
     }
+  }
+
+  public getColor(value) {
+    this.iconClass = this.config.color[value] ? `text-${this.config.color[value]}` : 'text-muted';
   }
 
   public setClass(value) {

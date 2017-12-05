@@ -63,7 +63,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   public addObject() {
     this.modalData = {};
     this.modalData.title = this.config.templateOptions.add_label;
-    this.modalData.endpoint = this.config.endpoint;
+    this.modalData.endpoint = this.config.add_endpoint || this.config.endpoint;
     this.modalData.data = {};
     const keys = Object.keys(this.config.prefilled);
     keys.forEach((el) => {

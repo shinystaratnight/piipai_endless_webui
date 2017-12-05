@@ -11,6 +11,7 @@ export class ListLinkComponent implements OnInit {
   public href: string;
   public link: boolean;
   public value: string;
+  public last: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();

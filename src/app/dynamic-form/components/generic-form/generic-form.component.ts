@@ -290,6 +290,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
         if (el.endpoint) {
           el.endpoint = this.format.format(el.endpoint, data);
         }
+        if (el.add_endpoint) {
+          el.add_endpoint = this.format.format(el.add_endpoint, data);
+        }
         if (el.query) {
           const queryKeys = Object.keys(el.query);
           queryKeys.forEach((elem) => {

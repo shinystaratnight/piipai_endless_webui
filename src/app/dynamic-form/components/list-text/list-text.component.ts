@@ -9,5 +9,6 @@ export class ListTextComponent {
 
   public config: any[] = [];
   public length: any;
+  public last: boolean;
 
 }

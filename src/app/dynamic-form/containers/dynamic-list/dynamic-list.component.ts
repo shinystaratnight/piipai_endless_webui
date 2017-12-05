@@ -127,6 +127,8 @@ export class DynamicListComponent implements
   public currentActionData: any;
   public actionEndpoint: any;
 
+  public showFilters: boolean;
+
   constructor(
     private filterService: FilterService,
     private modalService: NgbModal,
@@ -161,6 +163,15 @@ export class DynamicListComponent implements
       row: '',
       cell: ''
     };
+    if (this.config.list.search_enabled) {
+      if (this.filtersOfList.length > 1) {
+        this.showFilters = true;
+      } else {
+        this.showFilters = false;
+      }
+    } else {
+      this.showFilters = !!(this.filtersOfList && this.filtersOfList.length);
+    }
   }
 
   public ngOnChanges() {
@@ -356,10 +367,13 @@ export class DynamicListComponent implements
           obj['name'] = element.field;
           obj['type'] = element.type;
           obj['values'] = element.values;
+          obj['delim'] = col.delim;
+          obj['title'] = col.title;
           if (element.type === 'icon') {
             let field = this.config.fields.filter((elem) => elem.key === element.field);
             if (field && field.length > 0) {
               obj['values'] = field[0].templateOptions.values;
+              obj['color'] = field[0].templateOptions.color;
             }
           }
           if (element.link) {
@@ -492,7 +506,8 @@ export class DynamicListComponent implements
         object[param] = data[prop] ? data[prop].__str__ : '';
       } else if (!object[param]) {
         if (object.type === 'datepicker' || object.type === 'datetime') {
-          object[param] = moment.tz(data[prop], 'Australia/Sydney').format('YYYY-MM-DD hh:mm A');
+          object[param] = data[prop] &&
+            moment.tz(data[prop], 'Australia/Sydney').format('YYYY-MM-DD hh:mm A');
         } else {
           object[param] = data[prop];
         }

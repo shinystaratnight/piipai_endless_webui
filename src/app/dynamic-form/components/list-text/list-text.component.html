@@ -1,3 +1,6 @@
 <div class="d-flex align-items-center flex-wrap mb-1" *ngIf="config.value || config.value === 0" style="width: 100%">
-  <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>{{config.value}}
+  <span [title]="config.title || ''">
+    <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>{{config.value}}
+    <span *ngIf="config.delim && !last">{{config.delim}}</span>
+  </span>
 </div>
