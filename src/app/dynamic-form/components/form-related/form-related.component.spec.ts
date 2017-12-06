@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormRelatedComponent } from './form-related.component';
+import { FormRelatedComponent, RelatedObject } from './form-related.component';
 import { GenericFormService } from './../../services/generic-form.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -50,6 +50,9 @@ describe('FormRelatedComponent', () => {
       return Observable.of(true);
     },
     getByQuery() {
+      return Observable.of(response);
+    },
+    editForm() {
       return Observable.of(response);
     }
   };
@@ -100,16 +103,15 @@ describe('FormRelatedComponent', () => {
 
   describe('ngOnInit method', () => {
     it('should init default properties', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = Object.assign(config);
+      comp.config = Object.assign({}, config);
       comp.config.list = true;
-      comp.config.hidden = new BehaviorSubject(true);
+      comp.config.endpoint = '/ecore/api/v2/pricing/pricelistrates/';
       comp.config.data = new BehaviorSubject(mockData);
-      comp.config.id = 2;
       comp.key = comp.config.key;
-      comp.group = fb.group({});
-      comp.group.addControl(comp.key, fb.control(''));
       spyOn(comp, 'addControl');
       spyOn(comp, 'setInitValue');
+      spyOn(comp, 'checkModeProperty');
+      spyOn(comp, 'checkHiddenProperty');
       spyOn(comp, 'generateDataForList');
       spyOn(comp, 'getReplaceElements');
       spyOn(comp, 'createEvent');
@@ -117,15 +119,58 @@ describe('FormRelatedComponent', () => {
       expect(comp.addControl).toHaveBeenCalled();
       expect(comp.display).toEqual('__str__');
       expect(comp.param).toEqual('id');
-      expect(comp.group.get(comp.key).value).toBeUndefined();
-      expect(comp.config.hide).toBeTruthy();
+      expect(comp.setInitValue).toHaveBeenCalled();
+      expect(comp.checkModeProperty).toHaveBeenCalled();
+      expect(comp.checkHiddenProperty).toHaveBeenCalled();
       expect(comp.generateDataForList).toHaveBeenCalled();
       expect(comp.getReplaceElements).toHaveBeenCalled();
       expect(comp.createEvent).toHaveBeenCalled();
       expect(comp.isCollapsed).toEqual(comp.config.collapsed);
-      comp.config.hidden = null;
-      comp.config.data = null;
+      expect(comp.skillEndpoint).toBeTruthy();
     })));
+  });
+
+  describe('checkHiddenProperty method', () => {
+    it('should call setInitValue method',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.config = Object.assign({}, config);
+        comp.key = comp.config.key;
+        comp.group = fb.group({});
+        comp.group.addControl(comp.key, fb.control(''));
+        spyOn(comp, 'setInitValue');
+        comp.config.hidden = new BehaviorSubject(true);
+        comp.checkHiddenProperty();
+        expect(comp.config.hide).toBeTruthy();
+        expect(comp.displayValue).toBeNull();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        expect(comp.setInitValue).toHaveBeenCalled();
+    })));
+
+    it('should set hide false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.hidden = new BehaviorSubject(false);
+      comp.checkHiddenProperty();
+      expect(comp.config.hide).toBeFalsy();
+    });
+  });
+
+  describe('checkModeProperty method', () => {
+    it('should set viewMode true value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('view');
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeTruthy();
+    });
+
+    it('should set viewMode false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('edit');
+      comp.config.read_only = false;
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeFalsy();
+    });
   });
 
   describe('setInitValue method', () => {
@@ -383,6 +428,39 @@ describe('FormRelatedComponent', () => {
       expect(comp.dataOfList.length).toEqual(0);
       expect(comp.updateValue).toHaveBeenCalled();
     })));
+  });
+
+  describe('editObject method', () => {
+    it('should call open method for edit object', () => {
+      const obj: RelatedObject = {
+        id: '133',
+        allData: {},
+        data: undefined,
+        metadata: []
+      };
+      spyOn(comp, 'open');
+      comp.editObject(obj);
+      expect(comp.open).toHaveBeenCalledWith('edit', undefined, obj);
+    });
+  });
+
+  describe('setAsDefault method', () => {
+    it('should call updateList method', () => {
+      comp.config = Object.assign({}, config);
+      const obj: RelatedObject = {
+        id: '133',
+        allData: {
+          skill: {
+            id: '1243'
+          }
+        },
+        data: undefined,
+        metadata: []
+      };
+      spyOn(comp, 'updateList');
+      comp.setAsDefault(obj);
+      expect(comp.updateList).toHaveBeenCalled();
+    });
   });
 
   describe('updateValue method', () => {
@@ -889,26 +967,50 @@ describe('FormRelatedComponent', () => {
           name: 'First'
         }
       };
-      let type = 'add';
-      let key = 'name';
-      let form = fb.group({});
-      form.addControl(key, fb.control(''));
-      comp.group = form;
       comp.config = Object.assign({}, config);
+      comp.key = comp.config.key;
       comp.config.list = false;
-      comp.config.currentQuery = 'some query';
       comp.param = 'id';
       comp.display = 'name';
-      comp.key = key;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(''));
       spyOn(test, 'closeModal');
       spyOn(comp, 'eventHandler');
-      comp.formEvent(event, test.closeModal, type);
+      comp.formEvent(event, test.closeModal);
       expect(test.closeModal).toHaveBeenCalled();
       expect(comp.group.get(comp.key).value).toEqual(123);
       expect(comp.config.value).toEqual(123);
+      expect(comp.displayValue).toEqual('First');
       expect(comp.eventHandler).toHaveBeenCalledWith({type: 'change'}, 123);
     })));
 
+    it('should call updateList method', () => {
+      let test = {
+        closeModal() {
+          return true;
+        }
+      };
+      let event = {
+        type: 'sendForm',
+        status: 'success'
+      };
+      comp.config = Object.assign({}, config);
+      spyOn(test, 'closeModal');
+      spyOn(comp, 'updateList');
+      comp.formEvent(event, test.closeModal);
+      expect(test.closeModal).toHaveBeenCalled();
+      expect(comp.updateList).toHaveBeenCalled();
+    });
+
+  });
+
+  describe('updateList method', () => {
+    it('should emit event', () => {
+      comp.config = Object.assign({}, config);
+      spyOn(comp.event, 'emit');
+      comp.updateList();
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
   });
 
   describe('getOptions method', () => {

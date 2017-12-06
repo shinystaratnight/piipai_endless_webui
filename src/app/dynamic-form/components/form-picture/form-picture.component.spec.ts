@@ -55,40 +55,104 @@ describe('FormPictureComponent', () => {
   describe('ngOnInit method', () => {
 
     it('should call addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = config;
-      comp.key = config.key;
-      comp.config.hidden = new BehaviorSubject(true);
-      comp.group = fb.group({});
-      comp.group.addControl(comp.key, fb.control(''));
+      comp.config = Object.assign({}, config);
+      comp.key = comp.config.key;
       spyOn(comp, 'addControl');
       spyOn(comp, 'setInitValue');
+      spyOn(comp, 'checkModeProperty');
+      spyOn(comp, 'checkHiddenProperty');
+      spyOn(comp, 'createEvent');
       comp.ngOnInit();
-      expect(comp.config.hide).toBeTruthy();
-      expect(comp.group.get(comp.key).value).toBeUndefined();
       expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
-      expect(comp.setInitValue).toHaveBeenCalled();
       expect(comp.mime).toEqual('image/jpeg');
-      comp.config.hidden = null;
+      expect(comp.setInitValue).toHaveBeenCalled();
+      expect(comp.checkModeProperty).toHaveBeenCalled();
+      expect(comp.checkHiddenProperty).toHaveBeenCalled();
+      expect(comp.createEvent).toHaveBeenCalled();
     })));
 
   });
 
-  describe('setInitValue method', () => {
-    it('should set default value', () => {
-      comp.config = config;
-      comp.config.default = 'logo.png';
-      comp.setInitValue();
-      expect(comp.value).toEqual('logo.png');
+  describe('checkHiddenProperty method', () => {
+    it('should call setInitValue method',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.config = Object.assign({}, config);
+        comp.key = comp.config.key;
+        comp.group = fb.group({});
+        comp.group.addControl(comp.key, fb.control(''));
+        spyOn(comp, 'setInitValue');
+        comp.config.hidden = new BehaviorSubject(true);
+        comp.checkHiddenProperty();
+        expect(comp.config.hide).toBeTruthy();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        expect(comp.setInitValue).toHaveBeenCalled();
+    })));
+
+    it('should set hide false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.hidden = new BehaviorSubject(false);
+      comp.checkHiddenProperty();
+      expect(comp.config.hide).toBeFalsy();
+    });
+  });
+
+  describe('checkModeProperty method', () => {
+    it('should set viewMode true value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('view');
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeTruthy();
     });
 
-    it('should set value from api', () => {
-      comp.config = config;
-      comp.config.value = {
-        origin: 'logo.png'
-      };
-      comp.setInitValue();
-      expect(comp.value).toEqual('logo.png');
+    it('should set viewMode false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('edit');
+      comp.config.read_only = false;
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeFalsy();
     });
+  });
+
+  describe('setInitValue method', () => {
+    it('should set default value',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.group = fb.group({});
+        comp.config = Object.assign({}, config);
+        comp.key = config.key;
+        comp.group.addControl(comp.key, fb.control(''));
+        comp.config.default = 'logo.png';
+        comp.setInitValue();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        expect(comp.value).toEqual('logo.png');
+    })));
+
+    it('should set value from api by Object value',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.group = fb.group({});
+        comp.config = Object.assign({}, config);
+        comp.key = config.key;
+        comp.group.addControl(comp.key, fb.control(''));
+        comp.config.value = {
+          origin: 'logo.png'
+        };
+        comp.setInitValue();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        expect(comp.value).toEqual('logo.png');
+    })));
+
+    it('should set value from api by string value',
+    async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.group = fb.group({});
+      comp.config = Object.assign({}, config);
+      comp.key = config.key;
+      comp.group.addControl(comp.key, fb.control(''));
+      comp.config.value = 'logo.png';
+      comp.setInitValue();
+      expect(comp.group.get(comp.key).value).toBeUndefined();
+      expect(comp.value).toEqual('logo.png');
+  })));
   });
 
   describe('ngAfterViewInit method', () => {

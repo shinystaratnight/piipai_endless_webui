@@ -12,6 +12,8 @@ import { UserService } from '../../services/user.service';
 import { SiteComponent } from './site.component';
 
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { CheckPermissionService } from '../../shared/services/check-permission';
 
 describe('SiteComponent', () => {
 
@@ -19,11 +21,12 @@ describe('SiteComponent', () => {
   let fixture: ComponentFixture<SiteComponent>;
   let de: DebugElement;
   let el: HTMLElement;
-  let mockUrl: any = ['contact', 'add'];
+  let mockUrl: any = [];
   let pageData: PageData;
   let modulesList: any;
   let userModules: any;
   let pages: any;
+  const permissions: any = {};
 
   beforeEach(async(() => {
 
@@ -73,6 +76,18 @@ describe('SiteComponent', () => {
       }
     };
 
+    const mockCheckPermissionService = {
+      viewCheck() {
+        return Observable.of(true);
+      },
+      createCheck() {
+        return Observable.of(true);
+      },
+      updateCheck() {
+        return Observable.of(true);
+      }
+    };
+
     TestBed.configureTestingModule({
       declarations: [SiteComponent],
       providers: [
@@ -82,7 +97,8 @@ describe('SiteComponent', () => {
         { provide: SiteService, useValue: mockSiteService },
         { provide: GenericFormService, useValue: mockGenericFormService },
         { provide: NavigationService, useValue: mockNavigationService },
-        { provide: UserService, useValue: mockUserService }
+        { provide: UserService, useValue: mockUserService },
+        { provide: CheckPermissionService, useValue: mockCheckPermissionService }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
@@ -93,23 +109,49 @@ describe('SiteComponent', () => {
       });
   }));
 
-  it('should be defined', () => {
-    expect(comp).toBeDefined();
-  });
-
   describe('ngOnInit method', () => {
-    it('should call getPageNavigation method and set user property', () => {
-      spyOn(comp, 'getPageNavigation');
-      comp.ngOnInit();
-      expect(comp.user).toEqual({});
-      expect(comp.dashboard).toBeFalsy();
-      expect(comp.getPageNavigation).toHaveBeenCalledWith(mockUrl);
-      expect(comp.formStorageEndpoint).toBeDefined();
-    });
+
+    it('should open dashboard page',
+      async(inject([ActivatedRoute], (route: ActivatedRoute) => {
+        comp.pageData = undefined;
+        comp.formLabel = 'Add';
+        spyOn(comp, 'getPageNavigation');
+        comp.ngOnInit();
+        expect(comp.formLabel).toEqual('');
+        expect(comp.pageData).toBeNull();
+        expect(comp.getPageNavigation).toHaveBeenCalledWith([]);
+        expect(comp.dashboard).toBeTruthy();
+      })));
+
+    it('should open contact page',
+      async(inject([ActivatedRoute], (route: ActivatedRoute) => {
+        comp.pageData = undefined;
+        comp.formLabel = 'Add';
+        spyOn(comp, 'getPageNavigation');
+        mockUrl.push('contact');
+        comp.ngOnInit();
+        expect(comp.formLabel).toEqual('');
+        expect(comp.pageData).toBeNull();
+        expect(comp.getPageNavigation).toHaveBeenCalledWith(['contact']);
+        expect(comp.dashboard).toBeFalsy();
+    })));
   });
 
   describe('checkPermissions method', () => {
-    it('should update pageData property', () => {
+    it('should update pageData property for view mode', () => {
+      let data = {
+        endpoint: '/ecore/api/v2/core/formstorages/',
+        pathData: {
+          type: 'list',
+          path: 'path',
+        }
+      };
+      comp.checkPermissions(data);
+      expect(comp.pageData).toEqual(data);
+      expect(comp.formStorage).toBeTruthy();
+    });
+
+    it('should set formStorage false for view mode', () => {
       let data = {
         endpoint: 'some endpoint',
         pathData: {
@@ -122,17 +164,32 @@ describe('SiteComponent', () => {
       expect(comp.formStorage).toBeFalsy();
     });
 
-    it('should set formStorage true', () => {
+    it('should update pageData property for view mode', () => {
       let data = {
         endpoint: '/ecore/api/v2/core/formstorages/',
         pathData: {
           type: 'list',
-          path: 'path'
+          path: 'path',
+          id: '123'
         }
       };
       comp.checkPermissions(data);
       expect(comp.pageData).toEqual(data);
       expect(comp.formStorage).toBeTruthy();
+    });
+
+    it('should set formStorage false for view mode', () => {
+      let data = {
+        endpoint: 'some endpoint',
+        pathData: {
+          type: 'list',
+          path: 'path',
+          id: '123'
+        }
+      };
+      comp.checkPermissions(data);
+      expect(comp.pageData).toEqual(data);
+      expect(comp.formStorage).toBeFalsy();
     });
   });
 
@@ -287,6 +344,20 @@ describe('SiteComponent', () => {
     })));
   });
 
+  describe('changeMode method', () => {
+    it('should change formMoe property', () => {
+      const mockPageData = {
+        endpoint: 'some endpoint',
+        pathData: {
+          id: '123'
+        }
+      };
+      comp.formMode = 'view';
+      comp.changeMode(mockPageData);
+      expect(comp.formMode).toEqual('edit');
+    });
+  });
+
   describe('formEvent method', () => {
     it('should redirect to list page', async(inject([Router], (router: Router) => {
       let event = {
@@ -305,6 +376,15 @@ describe('SiteComponent', () => {
       comp.formEvent(event);
       expect(router.navigate).toHaveBeenCalledWith([comp.pageData.pathData.path]);
     })));
+  });
+
+  describe('formEvent method', () => {
+    it('should change formMode', () => {
+      const mode = 'view';
+      comp.formMode = '';
+      comp.modeEvent(mode);
+      expect(comp.formMode).toEqual(mode);
+    });
   });
 
   describe('deleteElement method', () => {

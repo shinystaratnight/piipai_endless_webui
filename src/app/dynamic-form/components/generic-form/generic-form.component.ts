@@ -306,6 +306,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
           });
         }
       } else if (el.children) {
+        if (el.type === 'row') {
+          el.label = this.format.format(el.label, data);
+        }
         this.fillingForm(el.children, data);
       }
     });

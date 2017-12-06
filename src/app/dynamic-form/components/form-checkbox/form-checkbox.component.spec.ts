@@ -12,23 +12,23 @@ describe('FormCheckboxComponent', () => {
   let comp: FormCheckboxComponent;
   let el;
   let config = {
-      type: 'checkbox',
-      key: 'is_available',
-      read_only: true,
-      value: false,
-      default: true,
-      templateOptions: {
-        label: 'Test',
-        required: true,
-        type: 'icon',
-        color: 'primary',
-        values: {
-          true: 'check-circle',
-          false: 'times-circle',
-          null: 'minus-circle'
-        }
+    type: 'checkbox',
+    key: 'is_available',
+    read_only: true,
+    value: false,
+    default: true,
+    templateOptions: {
+      label: 'Test',
+      required: true,
+      type: 'icon',
+      color: 'primary',
+      values: {
+        true: 'check-circle',
+        false: 'times-circle',
+        null: 'minus-circle'
       }
-    };
+    }
+  };
   let errors = {};
 
   beforeEach(() => {
@@ -49,63 +49,95 @@ describe('FormCheckboxComponent', () => {
     });
   }));
 
-  it('should enter the assertion', async(inject([FormBuilder], (fb: FormBuilder) => {
-    comp.config = config;
-    comp.group = fb.group({});
-    comp.errors = errors;
-    fixture.detectChanges();
-    expect(comp.errors).toBeDefined();
-    expect(comp.config).toBeDefined();
-  })));
-
   describe('ngOnInit method', () => {
 
-    it('should init properties', async(inject([FormBuilder], (fb: FormBuilder) => {
-      let form = fb.group({});
-      comp.key = 'active';
-      form.addControl(comp.key, fb.control(''));
-      comp.group = form;
-      comp.config = config;
-      comp.config.read_only = true;
-      comp.config.hidden = new BehaviorSubject(true);
-      spyOn(comp, 'addControl');
-      spyOn(comp, 'setInitValue');
-      comp.ngOnInit();
-      expect(comp.config.hide).toBeTruthy();
-      expect(comp.addControl).toHaveBeenCalled();
-      expect(comp.setInitValue).toHaveBeenCalled();
-      expect(comp.group.get(comp.key).value).toBeUndefined();
-      comp.config.hidden = null;
+    it('should init properties',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.config = Object.assign({}, config);
+        spyOn(comp, 'addControl');
+        spyOn(comp, 'setInitValue');
+        spyOn(comp, 'checkModeProperty');
+        spyOn(comp, 'checkHiddenProperty');
+        spyOn(comp, 'createEvent');
+        comp.ngOnInit();
+        expect(comp.addControl).toHaveBeenCalled();
+        expect(comp.setInitValue).toHaveBeenCalled();
+        expect(comp.checkModeProperty).toHaveBeenCalled();
+        expect(comp.checkHiddenProperty).toHaveBeenCalled();
+        expect(comp.createEvent).toHaveBeenCalled();
     })));
 
   });
 
-  describe('setInitValue method', () => {
-
-    it('should called addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
-      let form = fb.group({});
-      comp.key = 'active';
-      form.addControl(comp.key, fb.control(''));
-      comp.group = form;
-      comp.config = config;
-      comp.config.read_only = true;
-      spyOn(comp, 'setValue');
-      comp.setInitValue();
-      expect(comp.setValue).toHaveBeenCalled();
-      expect(comp.group.get(comp.key).value).toBeFalsy();
+  describe('checkHiddenProperty method', () => {
+    it('should call setInitValue method',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.config = Object.assign({}, config);
+        comp.key = comp.config.key;
+        comp.group = fb.group({});
+        comp.group.addControl(comp.key, fb.control(''));
+        spyOn(comp, 'setInitValue');
+        comp.config.hidden = new BehaviorSubject(true);
+        comp.checkHiddenProperty();
+        expect(comp.config.hide).toBeTruthy();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        expect(comp.setInitValue).toHaveBeenCalled();
     })));
 
-    it('should set default value', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = config;
-      comp.key = config.key;
-      comp.group = fb.group({});
-      comp.group.addControl(comp.key, fb.control(false));
-      comp.config.value = false;
+    it('should set hide false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.hidden = new BehaviorSubject(false);
+      comp.checkHiddenProperty();
+      expect(comp.config.hide).toBeFalsy();
+    });
+  });
+
+  describe('checkModeProperty method', () => {
+    it('should set viewMode true value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('view');
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeTruthy();
+    });
+
+    it('should set viewMode false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('edit');
       comp.config.read_only = false;
-      spyOn(comp, 'customizeCheckbox');
-      comp.setInitValue();
-      expect(comp.customizeCheckbox).toHaveBeenCalled();
-      expect(comp.group.get(comp.key).value).toBeFalsy();
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeFalsy();
+    });
+  });
+
+  describe('setInitValue method', () => {
+
+    it('should init checkbox value',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.config = Object.assign({}, config);
+        comp.key = config.key;
+        comp.group = fb.group({});
+        comp.group.addControl(comp.key, fb.control(''));
+        comp.viewMode = true;
+        comp.config.templateOptions.type = 'checkbox';
+        spyOn(comp, 'defaultValues');
+        comp.setInitValue();
+        expect(comp.defaultValues).toHaveBeenCalled();
+        expect(comp.group.get(comp.key).value).toBeFalsy();
+    })));
+
+    it('should init icon value',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.config = Object.assign({}, config);
+        comp.key = config.key;
+        comp.group = fb.group({});
+        comp.group.addControl(comp.key, fb.control(false));
+        comp.config.templateOptions.type = 'icon';
+        spyOn(comp, 'customizeCheckbox');
+        comp.setInitValue();
+        expect(comp.customizeCheckbox).toHaveBeenCalled();
+        expect(comp.group.get(comp.key).value).toBeFalsy();
     })));
 
     it('should update value',
@@ -122,46 +154,38 @@ describe('FormCheckboxComponent', () => {
 
   });
 
-  describe('setValue method', () => {
-    it('should set value and "text-success" class for checkbox', () => {
-      let value = true;
-      comp.config = config;
-      comp.setValue(value);
-      expect(comp.checkboxValue).toEqual('check-circle');
+  describe('defaultValues method', () => {
+    it('should update checkboxClass and checkboxValue if value is true', () => {
+      const value = true;
+      comp.defaultValues(value);
       expect(comp.checkboxClass).toEqual('text-success');
+      expect(comp.checkboxValue).toEqual('check-circle');
     });
 
-    it('should set value and "text-danger" class for checkbox', () => {
-      let value = false;
-      comp.config = config;
-      comp.setValue(value);
-      expect(comp.checkboxValue).toEqual('times-circle');
-      expect(comp.checkboxClass).toEqual('text-danger');
-   });
-
-    it('should set value and "text-muted" class for checkbox', () => {
-      let value = null;
-      comp.config = config;
-      comp.setValue(value);
-      expect(comp.checkboxValue).toEqual('minus-circle');
+    it('should update checkboxClass and checkboxValue if value is null', () => {
+      const value = null;
+      comp.defaultValues(value);
       expect(comp.checkboxClass).toEqual('text-muted');
+      expect(comp.checkboxValue).toEqual('minus-circle');
+    });
+
+    it('should update checkboxClass and checkboxValue if value is false', () => {
+      const value = false;
+      comp.defaultValues(value);
+      expect(comp.checkboxClass).toEqual('text-danger');
+      expect(comp.checkboxValue).toEqual('times-circle');
     });
   });
 
   describe('customCheckbox method', () => {
-    it('should set checkboxClass', () => {
-      comp.config = config;
-      comp.customizeCheckbox();
-      expect(comp.checkboxClass).toEqual(`text-${config.templateOptions.color}`);
+    it('should update buttonClass', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.templateOptions.color = undefined;
+      comp.checkboxClass = undefined;
+      const value = null;
+      comp.customizeCheckbox(value);
+      expect(comp.checkboxValue).toEqual(config.templateOptions.values[value]);
       expect(comp.checkboxColor).toEqual('');
-    });
-
-    it('should set color', () => {
-      comp.config = config;
-      comp.config.templateOptions.color = 'purple';
-      comp.customizeCheckbox();
-      expect(comp.checkboxColor).toEqual(comp.config.templateOptions.color);
-      expect(comp.checkboxClass).toEqual('');
     });
   });
 

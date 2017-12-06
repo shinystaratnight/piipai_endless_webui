@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { GenericListComponent } from './generic-list.component';
 import { GenericFormService } from './../../services/generic-form.service';
 import { FilterService } from './../../services/filter.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 describe('GenericListComponent', () => {
     let fixture: ComponentFixture<GenericListComponent>;
@@ -69,15 +70,21 @@ describe('GenericListComponent', () => {
         let newTable = {
           endpoint,
           innerTables: {},
-          fisrt: true
+          fisrt: true,
+          query: {}
         };
         comp.endpoint = endpoint;
         comp.tables = [];
+        comp.update = new BehaviorSubject(true);
         spyOn(comp, 'createTableData').and.returnValue(newTable);
         spyOn(comp.tables, 'push');
+        spyOn(comp, 'getFirstTable').and.returnValue(newTable);
+        spyOn(comp, 'getData');
         comp.ngOnInit();
         expect(comp.tables.push).toHaveBeenCalledWith(newTable);
         expect(comp.createTableData).toHaveBeenCalledWith(endpoint);
+        expect(comp.getFirstTable).toHaveBeenCalled();
+        expect(comp.getData).toHaveBeenCalled();
       }));
 
     });
@@ -163,6 +170,29 @@ describe('GenericListComponent', () => {
         }, 310);
       }));
 
+    });
+
+    describe('getSortedFields method', () => {
+      it('should return object with sorted fields', () => {
+        const columns = [
+          { sort: true, sorted: 'desc', sort_field: 'contact' }
+        ];
+        let result = comp.getSortedFields(columns);
+        expect(result).toEqual({
+          contact: 'desc'
+        });
+      });
+    });
+
+    describe('prepareSortQuery method', () => {
+      it('should return ordering query', () => {
+        const sorted = {
+          contact: 'desc',
+          date: 'asc'
+        };
+        let result = comp.prepareSortQuery(sorted);
+        expect(result).toEqual('ordering=-contact,date');
+      });
     });
 
     describe('getData method', () => {

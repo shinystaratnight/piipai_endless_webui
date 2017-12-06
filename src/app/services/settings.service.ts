@@ -14,7 +14,7 @@ export class SettingsService {
 
   public resolve() {
     if (!this.settings) {
-      this.http.get(this.endpoint)
+      return this.http.get(this.endpoint)
         .map((res: Response) => {
           let settings = res.json();
           this.settings = settings;
