@@ -14,13 +14,14 @@ export class SettingsService {
 
   public resolve() {
     if (!this.settings) {
-      this.http.get(this.endpoint).subscribe(
+      return this.http.get(this.endpoint).map(
         (res: Response) => {
           let settings = res.json();
           this.settings = settings;
           let body = document.body;
           body.parentElement.classList.add(`${settings.company_settings.color_scheme}-theme`);
           body.style.fontFamily = `${settings.company_settings.font}, sans-serif`;
+          return res;
         }
       );
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -11,7 +11,7 @@ import { SettingsService } from '../settings.service';
   templateUrl: 'company.component.html'
 })
 
-export class CompanyComponent implements OnInit {
+export class CompanyComponent implements OnInit, OnDestroy {
 
   public endpoint: string = '/ecore/api/v2/company_settings/';
 
@@ -20,6 +20,9 @@ export class CompanyComponent implements OnInit {
 
   public currentTheme: string;
   public currentFont: string;
+
+  public savedTheme: string;
+  public savedFont: string;
 
   public config;
 
@@ -44,9 +47,31 @@ export class CompanyComponent implements OnInit {
     );
   }
 
+  public ngOnDestroy() {
+    this.resetSettings();
+  }
+
+  public resetSettings() {
+    let body = document.body;
+    body.parentElement.classList.remove(this.currentTheme);
+    if (this.savedTheme) {
+      body.parentElement.classList.add(`${this.savedTheme}-theme`);
+    }
+    if (this.savedFont) {
+      let font = `${this.savedFont}, sans-serif`;
+      body.style.fontFamily = font;
+    } else {
+      body.style.fontFamily = null;
+    }
+  }
+
   public submitForm(data) {
     this.gfs.submitForm(this.endpoint, data).subscribe(
-      (res: any) => this.response = res,
+      (res: any) => {
+        this.response = res;
+        this.savedTheme = res.company_settings.color_scheme;
+        this.savedFont = res.company_settings.font;
+      },
       (err: any) => this.errors = err
     );
   }
@@ -66,11 +91,13 @@ export class CompanyComponent implements OnInit {
     let prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
-        if (!obj['value']) {
-          obj['value'] = data[key];
-          if (key === 'color_scheme') {
-            this.currentTheme = `${data[key]}-theme`;
-          }
+        obj['value'] = data[key];
+        if (key === 'color_scheme') {
+          this.currentTheme = `${data[key]}-theme`;
+          this.savedTheme = data[key];
+        }
+        if (key === 'font') {
+          this.savedFont = data[key];
         }
       }
     } else {
