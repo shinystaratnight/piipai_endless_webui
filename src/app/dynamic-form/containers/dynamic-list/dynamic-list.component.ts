@@ -17,6 +17,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { GenericFormService } from './../../services/generic-form.service';
 
 import moment from 'moment-timezone';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'dynamic-list',
@@ -126,6 +127,7 @@ export class DynamicListComponent implements
   public approveEndpoint: string;
   public currentActionData: any;
   public actionEndpoint: any;
+  public error: any;
 
   public showFilters: boolean;
 
@@ -259,30 +261,26 @@ export class DynamicListComponent implements
       let height: any = window.innerHeight;
       let offsetTop;
       if (listButtons && listButtons.length && width > 992) {
-        offsetTop = listButtons[0].offsetHeight;
-        if (filterWrapper && filterWrapper.length) {
-          if (document.body.classList.contains('r3sourcer')) {
-            filterWrapper[0].style.top = offsetTop + 'px';
-          }
-          filterWrapper[0].style.height = height - 100 - offsetTop + 'px';
-        }
+        this.calcButton(offsetTop, listButtons, filterWrapper);
+        this.calcTable();
       }
-      if (this.first) {
-        let table = this.datatable.nativeElement.getElementsByClassName('table');
-        let offsetParent = this.datatable.nativeElement.offsetParent;
-        let datatableWrapper = offsetParent.getElementsByClassName('datatable-wrapper')[0];
-        if (this.tableWrapper) {
-          if ((offsetParent.offsetHeight - this.tableWrapper.nativeElement.offsetTop)
-             < table[0].offsetHeight) {
-            datatableWrapper.style.maxHeight = offsetParent.offsetHeight - 70 + 'px';
-            this.datatable.nativeElement.style.maxHeight = offsetParent.offsetHeight - 70 + 'px';
-          }
-          let tableWrapperElement = this.tableWrapper.nativeElement;
-          let parentHeigth = tableWrapperElement.parentElement.parentElement.offsetHeight;
-          tableWrapperElement.style.maxHeight =
-            parentHeigth - tableWrapperElement.offsetTop + `px`;
-        }
+    }
+  }
+
+  public calcButton(offsetTop, listButtons, filterWrapper) {
+    offsetTop = listButtons[0].offsetHeight;
+    if (filterWrapper && filterWrapper.length) {
+      if (document.body.classList.contains('r3sourcer')) {
+        filterWrapper[0].style.top = offsetTop + 'px';
+        filterWrapper[0].style.height = `calc(100vh - ${offsetTop}px - 80px)`;
       }
+    }
+  }
+
+  public calcTable() {
+    if (this.tableWrapper) {
+      let tableWrapperEl = this.tableWrapper.nativeElement;
+      tableWrapperEl.style.maxHeight = `calc(100vh - ${tableWrapperEl.offsetTop}px - 150px)`;
     }
   }
 
@@ -369,6 +367,12 @@ export class DynamicListComponent implements
           obj['values'] = element.values;
           obj['delim'] = col.delim;
           obj['title'] = col.title;
+          if (element.type === 'datepicker') {
+            let field = this.config.fields.find((elem) => elem.key === element.field);
+            if (field) {
+              obj.templateOptions = field.templateOptions;
+            }
+          }
           if (element.type === 'icon') {
             let field = this.config.fields.filter((elem) => elem.key === element.field);
             if (field && field.length > 0) {
@@ -481,24 +485,6 @@ export class DynamicListComponent implements
     });
   }
 
-  public getValue(data, name) {
-    let result = '';
-    data.forEach((el) => {
-      if (el.name === name) {
-        let value = '';
-        el.content.forEach((elem) => {
-          if (elem.value) {
-            value += `${elem.value} `;
-          }
-        });
-        result = value;
-      } else if (el.content) {
-        this.getValue(el.content, name);
-      }
-    });
-    return result;
-  }
-
   public setValue(data, props, object , param = 'value') {
     let prop = props.shift();
     if (props.length === 0) {
@@ -507,7 +493,7 @@ export class DynamicListComponent implements
       } else if (!object[param]) {
         if (object.type === 'datepicker' || object.type === 'datetime') {
           object[param] = data[prop] &&
-            moment.tz(data[prop], 'Australia/Sydney').format('YYYY-MM-DD hh:mm A');
+            moment.tz(data[prop], 'Australia/Sydney').format('DD/MM/YYYY hh:mm A');
         } else {
           object[param] = data[prop];
         }
@@ -701,6 +687,8 @@ export class DynamicListComponent implements
         case 'printInvoice':
           this.printPDF(e);
           break;
+        case 'delete':
+          this.delete(e);
         default:
           return;
       }
@@ -957,14 +945,6 @@ export class DynamicListComponent implements
     let prop = props.shift();
     if (!props.length) {
       if (data) {
-        if (prop.indexOf('__') > -1) {
-          let propArray = prop.split('__');
-          let datetime = ['date', 'time'];
-          if (datetime.indexOf(propArray[1]) > -1) {
-            return moment.tz(data[propArray[0]], 'Australia/Sydney')
-              .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
-          }
-        }
         return data[prop];
       }
     } else {
@@ -1039,6 +1019,19 @@ export class DynamicListComponent implements
         };
         this.open(this.sendMessageModal, {size: 'lg'});
       }
+    );
+  }
+
+  public delete(e) {
+    console.log(e);
+    this.genericFormService.delete(this.endpoint, e.el.rowId).subscribe(
+      (res: any) => {
+        this.event.emit({
+          type: 'update',
+          list: this.config.list.list
+        });
+      },
+      (err: any) => this.error = err
     );
   }
 

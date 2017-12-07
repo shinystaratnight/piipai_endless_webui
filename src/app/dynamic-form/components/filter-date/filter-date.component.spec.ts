@@ -204,11 +204,11 @@ describe('FilterDateComponent', () => {
     it('should parse date form query', () => {
       let query = 'from=2017-01-03&to=2017-01-15';
       let result: any = {
-        from: '2017-01-03',
-        to: '2017-01-15'
+        from: '03/01/2017',
+        to: '15/01/2017'
       };
       comp.config = config;
-      comp.dateFormat = 'YYYY-MM-DD';
+      comp.dateFormat = 'DD/MM/YYYY';
       comp.parseDate(query, moment);
       expect(comp.data).toEqual(result);
     });

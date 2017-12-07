@@ -215,6 +215,12 @@ describe('DynamicListComponent', () => {
     },
     getAll() {
       return Observable.of(response);
+    },
+    editForm() {
+      return Observable.of({});
+    },
+    delete() {
+      return Observable.of({});
     }
   };
 
@@ -1119,6 +1125,16 @@ describe('DynamicListComponent', () => {
       expect(comp.modalInfo).toEqual({});
       expect(comp.printPDF).toHaveBeenCalledWith(event);
     });
+
+    it('should call delete method', () => {
+      let event = {
+        value: 'delete'
+      };
+      spyOn(comp, 'delete');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.delete).toHaveBeenCalledWith(event);
+    });
   });
 
   describe('openForm method', () => {
@@ -1652,6 +1668,49 @@ describe('DynamicListComponent', () => {
     });
   });
 
+  describe('evaluateEvent method', () => {
+    it('should emit event for update list', () => {
+      const event = {
+        type: 'sendForm',
+        status: 'success'
+      };
+      const modal = {
+        closeModal() {
+          return true;
+        }
+      };
+      comp.config = Object.assign({}, config);
+      comp.approveEndpoint = 'some endpoint';
+      spyOn(comp.event, 'emit');
+      spyOn(modal, 'closeModal');
+      comp.evaluateEvent(event, modal.closeModal);
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'update',
+        list: comp.config.list.list
+      });
+      expect(modal.closeModal).toHaveBeenCalled();
+      expect(comp.approveEndpoint).toBeNull();
+    });
+
+    it('should call formEvent method', () => {
+      const event = {
+        type: 'sendForm',
+        status: 'success'
+      };
+      const modal = {
+        closeModal() {
+          return true;
+        }
+      };
+      comp.approveEndpoint = undefined;
+      spyOn(comp, 'formEvent');
+      spyOn(modal, 'closeModal');
+      comp.evaluateEvent(event, modal.closeModal);
+      expect(modal.closeModal).toHaveBeenCalled();
+      expect(comp.formEvent).toHaveBeenCalledWith(event, modal.closeModal);
+    });
+  });
+
   describe('buttonAction method', () => {
     it('should call add_object action', () => {
       let event = {
@@ -1699,6 +1758,24 @@ describe('DynamicListComponent', () => {
       comp.sendMessageModal = {};
       comp.printPDF(e);
       expect(comp.open).toHaveBeenCalledWith(comp.sendMessageModal, {size: 'lg'});
+    });
+  });
+
+  describe('delete method', () => {
+    it('should delete element from list', () => {
+      const event = {
+        el: {
+          rowId: '123'
+        }
+      };
+      comp.config = Object.assign({}, config);
+      comp.endpoint = 'some endpoint';
+      spyOn(comp.event, 'emit');
+      comp.delete(event);
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'update',
+        list: comp.config.list.list
+      });
     });
   });
 

@@ -21,8 +21,8 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
   public config: any;
   public data = {};
   public query: string;
-  public dateFormat: string = 'YYYY-MM-DD';
-  public datetimeFormat: string = 'YYYY-MM-DD hh:mm:ss';
+  public dateFormat: string = 'DD/MM/YYYY';
+  public datetimeFormat: string = 'DD/MM/YYYY hh:mm:ss';
   public moment: any = moment;
   public isCollapsed: boolean = true;
 
@@ -77,6 +77,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
       this.d.forEach((el) => {
         this.$(el.nativeElement).datebox({
           mode: dateType,
+          dateFormat: '%d/%m/%Y',
           useClearButton: true,
           closeCallback: () => {
             let date = el.nativeElement.value;
