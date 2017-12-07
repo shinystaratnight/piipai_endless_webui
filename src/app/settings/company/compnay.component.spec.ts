@@ -84,13 +84,42 @@ describe('CompanyComponent', () => {
     });
   });
 
+  describe('ngOnDestroy method', () => {
+    it('should call ressetSettings method', () => {
+      spyOn(comp, 'resetSettings');
+      comp.ngOnDestroy();
+      expect(comp.resetSettings).toHaveBeenCalled();
+    });
+  });
+
+  describe('resetSettings method', () => {
+    it('should reset settings', () => {
+      comp.savedFont = 'Barlow';
+      comp.savedTheme = 'indigo';
+      comp.currentTheme = 'default';
+      const body = document.body;
+      body.parentElement.classList.add(`${comp.currentTheme}-theme`);
+      comp.resetSettings();
+      expect(body.parentElement.classList.contains(`${comp.currentTheme}-theme`));
+      expect(body.style.fontFamily).toEqual(`${comp.savedFont}, sans-serif`);
+    });
+  });
+
   describe('submitForm method', () => {
     it('should update object', () => {
       let data = {};
       comp.endpoint = 'some endpoint';
       response.status = 'success';
+      response.data = {
+        company_settings: {
+          color_scheme: 'indigo',
+          font: 'Barlow'
+        }
+      };
       comp.submitForm(data);
-      expect(comp.response).toEqual({});
+      expect(comp.response).toEqual(response.data);
+      expect(comp.savedTheme).toEqual(response.data.company_settings.color_scheme);
+      expect(comp.savedFont).toEqual(response.data.company_settings.font);
     });
 
     it('should update errors property', () => {
@@ -128,7 +157,8 @@ describe('CompanyComponent', () => {
     it('should set value of element', () => {
       let data = {
         company_setting: {
-          color_scheme: 'indigo'
+          color_scheme: 'indigo',
+          font: 'Barlow'
         }
       };
       let key = 'company_setting.color_scheme';
@@ -136,8 +166,11 @@ describe('CompanyComponent', () => {
         value: undefined
       };
       comp.getValueOfData(data, key, object);
-      expect(object.value).toEqual('indigo');
+      expect(comp.savedTheme).toEqual('indigo');
       expect(comp.currentTheme).toEqual('indigo-theme');
+      comp.getValueOfData(data, 'company_setting.font', object);
+      expect(object.value).toEqual('Barlow');
+      expect(comp.savedFont).toEqual('Barlow');
     });
   });
 

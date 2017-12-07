@@ -21,6 +21,9 @@ export class MyobComponent implements OnInit {
   public config;
   public connected: boolean;
 
+  public companyFile: any;
+  public error: any;
+
   constructor(
     private gfs: GenericFormService,
     private route: ActivatedRoute,
@@ -52,6 +55,10 @@ export class MyobComponent implements OnInit {
         this.config = meta;
       }
     });
+
+    this.companyFile = {
+      isCollapsed: true
+    };
   }
 
   public eventHandler(e) {
@@ -94,9 +101,38 @@ export class MyobComponent implements OnInit {
       (res: any) => {
         this.updateButton('success');
         this.connected = true;
+        this.getCompanyFiles();
       },
       (err: any) => this.updateButton('error')
     );
+  }
+
+  public testCompanyFile(file) {
+    const url = '/api/v2/company_settings/company_files/check/';
+    const body = {
+      id: file.id,
+      username: file.username,
+      password: file.password
+    };
+    this.gfs.submitForm(url, body).subscribe((res: any) => {
+      file.status = res.is_valid;
+    }, (err: any) => this.error = err);
+  }
+
+  public getCompanyFiles() {
+    const url = '/api/v2/company_settings/company_files/';
+    this.gfs.getAll(url).subscribe((res: any) => {
+      this.companyFile.list = res;
+      this.companyFile.isCollapsed = false;
+    }, (err: any) => this.error = err);
+  }
+
+  public refreshCompanyFiles() {
+    const url = '/api/v2/company_settings/company_files/refresh/';
+    this.gfs.getAll(url).subscribe((res: any) => {
+      this.companyFile.list = res;
+      this.companyFile.isCollapsed = false;
+    }, (err: any) => this.error = err);
   }
 
   public updateButton(type) {
