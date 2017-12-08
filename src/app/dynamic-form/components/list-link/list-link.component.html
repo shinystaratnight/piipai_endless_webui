@@ -1,6 +1,6 @@
 <a class="link" [attr.href]="href" *ngIf="config.value && !link" [title]="config.title || ''">{{config.value}}</a>
-<a class="link" routerLink="{{href}}" *ngIf="link && config.link" [title]="config.title || ''">
-  {{value || '-'}}
+<a class="link" routerLink="{{href}}" *ngIf="config.value && link && config.link" [title]="config.title || ''">
+  {{value}}
   <span *ngIf="config.fields">
     <ng-container
       *ngFor="let field of config.fields"
@@ -9,7 +9,7 @@
   </span>
 </a>
 <a class="link" #link *ngIf="config.endpoint" href="" (click)="action($event)" [title]="config.title || ''">
-  {{value || '-'}}
+  {{value}}
   <span *ngIf="config.fields">
     <ng-container
       *ngFor="let field of config.fields"
@@ -19,5 +19,6 @@
       (buttonAction)="buttonHandler($event)"></ng-container>
   </span>
 </a>
+<span *ngIf="!config.value">-</span>
 <span *ngIf="config.delim && !last">{{config.delim}}</span>
 <br *ngIf="config.value && !config.delim">

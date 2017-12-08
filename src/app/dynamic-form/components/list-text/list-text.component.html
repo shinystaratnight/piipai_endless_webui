@@ -1,6 +1,8 @@
-<div class="d-flex align-items-center flex-wrap mb-1" *ngIf="config.value || config.value === 0" style="width: 100%">
+<span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="value || value === 0">
   <span [title]="config.title || ''">
-    <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>{{config.value}}
-    <span *ngIf="config.delim && !last">{{config.delim}}</span>
+    <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>{{value}}
   </span>
-</div>
+</span>
+<span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="!value && value !== 0">-</span>
+<span *ngIf="config.delim && !last">{{config.delim}}</span>
+<br *ngIf="(value || value === 0) && !config.delim">

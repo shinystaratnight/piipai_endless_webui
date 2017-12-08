@@ -46,7 +46,7 @@ export class FormDatepickerComponent
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
-    this.setInitValue();
+    this.setInitValue(moment);
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.mobileDevice = this.identifyDevice();
@@ -59,7 +59,7 @@ export class FormDatepickerComponent
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
-          this.setInitValue();
+          this.setInitValue(moment);
         } else {
           this.config.hide = hide;
         }
@@ -75,12 +75,12 @@ export class FormDatepickerComponent
         } else {
           this.viewMode = this.config.read_only || false;
         }
-        this.setInitValue();
+        this.setInitValue(moment);
       });
     }
   }
 
-  public setInitValue() {
+  public setInitValue(moment) {
     let type = this.config.templateOptions.type;
     if (this.config.value || this.group.get(this.key).value) {
       let data = this.config.value ? this.config.value : this.group.get(this.key).value;
@@ -127,6 +127,7 @@ export class FormDatepickerComponent
         this.$(this.d.nativeElement).datebox({
           mode: dateType,
           dateFormat: '%d/%m/%Y',
+          overrideDateFormat: '%d/%m/%Y',
           useClearButton: true,
           closeCallback: () => {
             let date = this.d.nativeElement.value;

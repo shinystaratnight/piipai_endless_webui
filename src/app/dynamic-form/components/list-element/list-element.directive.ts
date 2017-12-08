@@ -31,6 +31,7 @@ const components = {
   picture: ListImageComponent,
   icon: ListImageComponent,
   date: ListTextComponent,
+  time: ListTextComponent,
   datepicker: ListTextComponent,
   textarea: ListTextComponent
 };

@@ -125,19 +125,19 @@ describe('FormDatepickerComponent', () => {
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(undefined));
       spyOn(comp, 'setDate');
-      comp.setInitValue();
+      comp.setInitValue(moment);
       expect(comp.setDate).toHaveBeenCalled();
     })));
 
     it('should init value', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = config;
+      comp.config = Object.assign({}, config);
       comp.key = config.key;
       comp.config.value = undefined;
       comp.config.default = 'value';
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(undefined));
       spyOn(comp, 'setDate');
-      comp.setInitValue();
+      comp.setInitValue(moment);
       expect(comp.setDate).toHaveBeenCalled();
     })));
   });

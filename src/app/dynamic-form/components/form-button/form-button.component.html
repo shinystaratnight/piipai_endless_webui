@@ -1,6 +1,7 @@
-<div class="form-group" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap">
+<div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap">
   <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
   <button
+    type="button"
     *ngIf="!config.hidden && (config.templateOptions.text || repeatArray.length > 1)"
     [ngClass]="[buttonClass]"
     [ngStyle]="{'backgroundColor': config.color}"
@@ -24,7 +25,7 @@
      class="icon"
      fa
      [name]="config.templateOptions.icon"
-     [ngStyle]="{'color': config.templateOptions.text_color}"
+     [ngStyle]="{'color': config.text_color}"
      (click)="action($event)">
   </i>
   <span *ngIf="config.hidden">{{replacyValue}}</span>

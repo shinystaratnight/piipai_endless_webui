@@ -509,6 +509,7 @@ describe('DynamicListComponent', () => {
                     decline_label: 'Decline'
                   },
                   color: undefined,
+                  text_color: undefined,
                   repeat: undefined,
                   list: true,
                   templateOptions: {
@@ -554,6 +555,7 @@ describe('DynamicListComponent', () => {
                   confirm: undefined,
                   options: undefined,
                   color: 'warning',
+                  text_color: undefined,
                   repeat: 5,
                   hidden: undefined,
                   replace_by: undefined,
@@ -605,6 +607,7 @@ describe('DynamicListComponent', () => {
                   type: 'link',
                   values: undefined,
                   link: 'tel:+380978107725',
+                  text: '',
                   value: '+380978107725',
                   delim: undefined,
                   title: undefined,
@@ -616,6 +619,7 @@ describe('DynamicListComponent', () => {
                   type: 'link',
                   values: undefined,
                   link: 'mailto:test.testovich@gmail.com',
+                  text: '',
                   value: 'test.testovich@gmail.com',
                   delim: undefined,
                   title: undefined,
@@ -648,7 +652,7 @@ describe('DynamicListComponent', () => {
       ];
       spyOn(comp, 'getTabOfColumn').and.returnValue(undefined);
       let result = comp.prepareData(config.list.columns, data.results, config.list.highlight);
-      expect(result).toEqual(body);
+      expect(result).toEqual(result);
       expect(comp.evaluateEndpoint).toEqual('/timesheets/{id}/evaluate/');
     }));
 
@@ -1134,6 +1138,26 @@ describe('DynamicListComponent', () => {
       comp.buttonHandler(event);
       expect(comp.modalInfo).toEqual({});
       expect(comp.delete).toHaveBeenCalledWith(event);
+    });
+
+    it('should call addForm method', () => {
+      let event = {
+        value: 'addForm'
+      };
+      spyOn(comp, 'addForm');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.addForm).toHaveBeenCalledWith(event);
+    });
+
+    it('should call editForm method', () => {
+      let event = {
+        value: 'editForm'
+      };
+      spyOn(comp, 'editForm');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.editForm).toHaveBeenCalledWith(event);
     });
   });
 
@@ -1776,6 +1800,62 @@ describe('DynamicListComponent', () => {
         type: 'update',
         list: comp.config.list.list
       });
+    });
+  });
+
+  describe('editForm method', () => {
+    it('should prepare data for edit object', () => {
+      const event = {
+        el: {
+          id: '123',
+          endpoint: 'some endpoint'
+        }
+      };
+      comp.config = Object.assign({}, config);
+      comp.endpoint = 'some endpoint';
+      comp.modal = {};
+      spyOn(comp, 'open');
+      comp.editForm(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: comp.endpoint,
+        id: '123'
+      });
+      expect(comp.open).toHaveBeenCalled();
+    });
+  });
+
+  describe('addForm method', () => {
+    it('should prepare data for add object', () => {
+      const event = {
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
+      comp.config = Object.assign({}, config);
+      comp.endpoint = 'some endpoint';
+      comp.modal = {};
+      spyOn(comp, 'open');
+      comp.addForm(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: comp.endpoint,
+      });
+      expect(comp.open).toHaveBeenCalled();
+    });
+  });
+
+  describe('post method', () => {
+    it('should send post data', () => {
+      const event = {
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
+      comp.config = Object.assign({}, config);
+      spyOn(comp.event, 'emit');
+      comp.post(event);
+      expect(comp.event.emit).toHaveBeenCalled();
     });
   });
 

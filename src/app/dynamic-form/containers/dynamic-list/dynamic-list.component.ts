@@ -382,6 +382,7 @@ export class DynamicListComponent implements
           }
           if (element.link) {
             obj['link'] = this.format(element.link, el);
+            obj.text = this.format(element.text, el);
           } else if (element.endpoint) {
             obj['endpoint'] = this.format(element.endpoint, el);
             if (col.name === 'evaluate') {
@@ -396,9 +397,13 @@ export class DynamicListComponent implements
             obj.confirm = element.confirm;
             obj.options = element.options;
             obj.color = element.color;
+            obj.text_color = element.text_color;
             obj.repeat = element.repeat;
             if (element.hidden) {
               this.setValue(el, element.hidden.split('.'), obj, 'hidden');
+            } else if (element.field) {
+              this.setValue(el, element.field.split('.'), obj, 'hidden');
+              obj.hidden = !obj.hidden;
             }
             if (element.replace_by) {
               this.setValue(el, element.replace_by.split('.'), obj, 'replace_by');
@@ -491,12 +496,7 @@ export class DynamicListComponent implements
       if (object.type === 'related' && !object[param]) {
         object[param] = data[prop] ? data[prop].__str__ : '';
       } else if (!object[param]) {
-        if (object.type === 'datepicker' || object.type === 'datetime') {
-          object[param] = data[prop] &&
-            moment.tz(data[prop], 'Australia/Sydney').format('DD/MM/YYYY hh:mm A');
-        } else {
-          object[param] = data[prop];
-        }
+        object[param] = data[prop];
       }
     } else if (data[prop]) {
       this.setValue(data[prop], props, object);
@@ -689,6 +689,13 @@ export class DynamicListComponent implements
           break;
         case 'delete':
           this.delete(e);
+          break;
+        case 'addForm':
+          this.addForm(e);
+          break;
+        case 'editForm':
+          this.editForm(e);
+          break;
         default:
           return;
       }
@@ -1023,8 +1030,34 @@ export class DynamicListComponent implements
   }
 
   public delete(e) {
-    console.log(e);
     this.genericFormService.delete(this.endpoint, e.el.rowId).subscribe(
+      (res: any) => {
+        this.event.emit({
+          type: 'update',
+          list: this.config.list.list
+        });
+      },
+      (err: any) => this.error = err
+    );
+  }
+
+  public editForm(e) {
+    this.modalInfo = {};
+    this.modalInfo.type = 'form';
+    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo.id = e.el.id;
+    this.open(this.modal, {size: 'lg'});
+  }
+
+  public addForm(e) {
+    this.modalInfo = {};
+    this.modalInfo.type = 'form';
+    this.modalInfo.endpoint = e.el.endpoint;
+    this.open(this.modal, {size: 'lg'});
+  }
+
+  public post(e) {
+    this.genericFormService.submitForm(e.el.endpoint, {}).subscribe(
       (res: any) => {
         this.event.emit({
           type: 'update',

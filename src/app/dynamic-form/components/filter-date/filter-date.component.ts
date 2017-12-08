@@ -78,6 +78,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
         this.$(el.nativeElement).datebox({
           mode: dateType,
           dateFormat: '%d/%m/%Y',
+          overrideDateFormat: '%d/%m/%Y',
           useClearButton: true,
           closeCallback: () => {
             let date = el.nativeElement.value;
