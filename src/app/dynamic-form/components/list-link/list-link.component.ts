@@ -60,12 +60,19 @@ export class ListLinkComponent implements OnInit {
       let id = arr[arr.length - 2];
       arr.splice(arr.length - 2, 1);
       let endpoint = arr.join('/');
-      this.event.emit({
-        target: 'form',
-        endpoint: endpoint || this.config.endpoint,
-        label: this.element.nativeElement.innerText,
-        id: id || this.config.id
-      });
+      if (this.config.action) {
+        this.buttonAction.emit({
+          el: this.config,
+          value: this.config.action
+        });
+      } else {
+        this.event.emit({
+          target: 'form',
+          endpoint: endpoint || this.config.endpoint,
+          label: this.element.nativeElement.innerText,
+          id: id || this.config.id
+        });
+      }
     }
   }
 

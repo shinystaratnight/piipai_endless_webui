@@ -10,6 +10,8 @@ import { WebCamComponent } from 'ng2-webcam';
 import { ButtonRadioDirective } from 'ngx-bootstrap';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
 
+import { ProfileComponent } from '../components/profile/profile.component';
+
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
 import { FormElementDirective } from './components/form-element/form-element.directive';
@@ -75,7 +77,7 @@ import { MoveDirective } from './directives/move.directive';
     AgmCoreModule.forRoot(),
     InfiniteScrollModule
   ],
-  exports: [GenericFormComponent, GenericListComponent, DynamicFormComponent],
+  exports: [GenericFormComponent, GenericListComponent, DynamicFormComponent, ProfileComponent],
   declarations: [
     DynamicFormComponent,
     FormInputComponent,
@@ -122,7 +124,8 @@ import { MoveDirective } from './directives/move.directive';
     FormRadioComponent,
     FormReplaceComponent,
     FormJsonComponent,
-    FormColumnComponent
+    FormColumnComponent,
+    ProfileComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [

@@ -365,6 +365,7 @@ export class DynamicListComponent implements
           obj['name'] = element.field;
           obj['type'] = element.type;
           obj['values'] = element.values;
+          obj.action = element.action;
           obj['delim'] = col.delim;
           obj['title'] = col.title;
           if (element.type === 'datepicker') {
@@ -714,11 +715,26 @@ export class DynamicListComponent implements
         case 'emptyPost':
           this.post(e);
           break;
+        case 'showCandidateProfile':
+          this.showCandidateProfile(e);
+          break;
         default:
           return;
       }
     }
     return;
+  }
+
+  public showCandidateProfile(e) {
+    console.log(e);
+    let arr = e.el.endpoint.split('/');
+    let id = arr[arr.length - 2];
+    arr.splice(arr.length - 2, 1);
+    let endpoint = arr.join('/');
+    this.modalInfo = {};
+    this.modalInfo.type = 'profile';
+    this.modalInfo.id = id;
+    this.open(this.modal, {size: 'lg'});
   }
 
   public openForm(e) {
@@ -970,7 +986,16 @@ export class DynamicListComponent implements
     let prop = props.shift();
     if (!props.length) {
       if (data) {
-        return data[prop];
+        if (prop.indexOf('__') > -1) {
+          let propArray = prop.split('__');
+          let datetime = ['date', 'time'];
+          if (datetime.indexOf(propArray[1]) > -1) {
+            return moment.tz(data[propArray[0]], 'Australia/Sydney')
+              .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
+          }
+        } else {
+          return data[prop];
+        }
       }
     } else {
       if (data) {
