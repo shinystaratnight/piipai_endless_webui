@@ -5,4 +5,4 @@
 </span>
 <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="!value && value !== 0">-</span>
 <span *ngIf="config.delim && !last">{{config.delim}}</span>
-<br *ngIf="(value || value === 0) && !config.delim">
+<br *ngIf="!config.delim">

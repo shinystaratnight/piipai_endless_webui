@@ -1,7 +1,6 @@
-<div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap">
+<div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden">
   <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
-  <button
-    type="button"
+  <button type="button"
     *ngIf="!config.hidden && (config.templateOptions.text || repeatArray.length > 1)"
     [ngClass]="[buttonClass]"
     [ngStyle]="{'backgroundColor': config.color}"
@@ -12,7 +11,6 @@
     [class.pl-4.pr-4]="!config.templateOptions.p"
     [class.btn-primary]="!config.list"
     [class.text-white]="buttonClass || config.color"
-    [attr.type]="config.templateOptions.type"
     (click)="action($event)">
       <span class="d-flex align-items-center justify-content-between">
         <i fa
@@ -26,10 +24,13 @@
      fa
      [name]="config.templateOptions.icon"
      [ngStyle]="{'color': config.text_color}"
-     (click)="action($event)">
+     (click)="action($event)"
+     [title]="config.title">
   </i>
-  <span *ngIf="config.hidden">{{replacyValue}}</span>
+  <span *ngIf="config.hidden && replacyValue">{{replacyValue}}</span>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
   </small>
+  <span *ngIf="config.delim">{{config.delim}}</span>
 </div>
+<br *ngIf="config.list && !config.delim">

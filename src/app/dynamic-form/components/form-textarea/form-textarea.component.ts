@@ -70,6 +70,10 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.textarea, this.config);
+    if (!this.config.read_only) {
+      if (this.textarea) {
+        this.addFlags(this.textarea, this.config);
+      }
+    }
   }
 }

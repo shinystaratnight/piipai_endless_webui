@@ -381,9 +381,23 @@ export class DynamicListComponent implements
             }
           }
           if (element.link) {
+            let indexOf = element.link.indexOf('{field}');
+            if (indexOf) {
+              element.link = element.link.replace(/{field}/gi, `{${element.field}}`);
+            }
+            if (element.link[element.link.length - 1] !== '/') {
+              element.link += '/change';
+            }
             obj['link'] = this.format(element.link, el);
             obj.text = this.format(element.text, el);
           } else if (element.endpoint) {
+            let indexOf = element.endpoint.indexOf('{field}');
+            if (indexOf) {
+              element.endpoint = element.endpoint.replace(/{field}/gi, `{${element.field}}`);
+            }
+            if (element.endpoint[element.endpoint.length - 1] !== '/') {
+              element.endpoint += '/';
+            }
             obj['endpoint'] = this.format(element.endpoint, el);
             if (col.name === 'evaluate') {
               this.evaluateEndpoint = element.endpoint;
@@ -398,6 +412,7 @@ export class DynamicListComponent implements
             obj.options = element.options;
             obj.color = element.color;
             obj.text_color = element.text_color;
+            obj.title = element.title;
             obj.repeat = element.repeat;
             if (element.hidden) {
               this.setValue(el, element.hidden.split('.'), obj, 'hidden');
@@ -490,7 +505,7 @@ export class DynamicListComponent implements
     });
   }
 
-  public setValue(data, props, object , param = 'value') {
+  public setValue(data, props, object, param = 'value') {
     let prop = props.shift();
     if (props.length === 0) {
       if (object.type === 'related' && !object[param]) {
@@ -499,7 +514,7 @@ export class DynamicListComponent implements
         object[param] = data[prop];
       }
     } else if (data[prop]) {
-      this.setValue(data[prop], props, object);
+      this.setValue(data[prop], props, object, param);
     }
   }
 
@@ -695,6 +710,9 @@ export class DynamicListComponent implements
           break;
         case 'editForm':
           this.editForm(e);
+          break;
+        case 'emptyPost':
+          this.post(e);
           break;
         default:
           return;
@@ -1042,10 +1060,14 @@ export class DynamicListComponent implements
   }
 
   public editForm(e) {
+    let arr = e.el.endpoint.split('/');
+    let id = arr[arr.length - 2];
+    arr.splice(arr.length - 2, 1);
+    let endpoint = arr.join('/');
     this.modalInfo = {};
     this.modalInfo.type = 'form';
-    this.modalInfo.endpoint = e.el.endpoint;
-    this.modalInfo.id = e.el.id;
+    this.modalInfo.endpoint = endpoint;
+    this.modalInfo.id = id;
     this.open(this.modal, {size: 'lg'});
   }
 
