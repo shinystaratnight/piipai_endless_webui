@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, inject, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
@@ -72,6 +72,17 @@ describe('GenericFormComponent', () => {
         expect(comp).toBeDefined();
     });
 
+    describe('ngOnInit method', () => {
+      it('init view mode', fakeAsync(() => {
+        comp.id = '123';
+        spyOn(comp.modeEvent, 'emit');
+        comp.ngOnInit();
+        tick(100);
+        expect(comp.mode).toEqual('view');
+        expect(comp.modeEvent.emit).toHaveBeenCalledWith(comp.mode);
+      }));
+    });
+
     describe('ngOnChanges method', () => {
 
       it('should be defined', async(() => {
@@ -131,6 +142,59 @@ describe('GenericFormComponent', () => {
         expect(comp.getMetadata).toHaveBeenCalledWith(comp.endpoint);
       }));
 
+      it('should parse endpoint', async(() => {
+        comp.id = '123';
+        comp.mode = 'edit';
+        comp.metadata = [];
+        spyOn(comp, 'toggleModeMetadata');
+        comp.ngOnChanges();
+        expect(comp.toggleModeMetadata).toHaveBeenCalledWith(comp.metadata, comp.mode);
+      }));
+
+    });
+
+    describe('setModeForElement method', () => {
+      it('should set view mode for elements', () => {
+        const mode = 'view';
+        const config = [
+          {
+            type: 'collapse',
+            children: [
+              {
+                type: 'input',
+                key: 'contact',
+                mode: undefined
+              }
+            ]
+          }
+        ];
+        comp.setModeForElement(config, mode);
+        expect(config[0].children[0].mode).toBeDefined();
+      });
+    });
+
+    describe('toggleModeMetadata method', () => {
+      it('should change mode value', () => {
+        const mode = 'edit';
+        const modeObject = new BehaviorSubject('mode');
+        const config = [
+          {
+            type: 'collapse',
+            children: [
+              {
+                type: 'related',
+                key: 'contact',
+                mode: modeObject,
+                metadata: []
+              }
+            ]
+          }
+        ];
+        comp.toggleModeMetadata(config, mode);
+        modeObject.subscribe((value) => {
+          expect(mode).toEqual(value);
+        });
+      });
     });
 
     describe('formChange method', () => {

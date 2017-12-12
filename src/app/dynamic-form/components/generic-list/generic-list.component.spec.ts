@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { GenericListComponent } from './generic-list.component';
 import { GenericFormService } from './../../services/generic-form.service';
 import { FilterService } from './../../services/filter.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 describe('GenericListComponent', () => {
     let fixture: ComponentFixture<GenericListComponent>;
@@ -69,15 +70,21 @@ describe('GenericListComponent', () => {
         let newTable = {
           endpoint,
           innerTables: {},
-          fisrt: true
+          fisrt: true,
+          query: {}
         };
         comp.endpoint = endpoint;
         comp.tables = [];
+        comp.update = new BehaviorSubject(true);
         spyOn(comp, 'createTableData').and.returnValue(newTable);
         spyOn(comp.tables, 'push');
+        spyOn(comp, 'getFirstTable').and.returnValue(newTable);
+        spyOn(comp, 'getData');
         comp.ngOnInit();
         expect(comp.tables.push).toHaveBeenCalledWith(newTable);
         expect(comp.createTableData).toHaveBeenCalledWith(endpoint);
+        expect(comp.getFirstTable).toHaveBeenCalled();
+        expect(comp.getData).toHaveBeenCalled();
       }));
 
     });
@@ -109,6 +116,8 @@ describe('GenericListComponent', () => {
         let endpoint = 'endpoint';
         spyOn(comp, 'parseUrl');
         spyOn(comp, 'getTable').and.returnValue(table);
+        spyOn(comp, 'prepareSortQuery');
+        spyOn(comp, 'getSortedFields');
         comp.tables.push(table);
         comp.getMetadata(endpoint, table);
         expect(table.metadata).toEqual(metadata);
@@ -118,6 +127,8 @@ describe('GenericListComponent', () => {
         expect(comp.tableId).toEqual(2);
         expect(comp.getTable).toHaveBeenCalledWith(table.list);
         expect(comp.parseUrl).toHaveBeenCalledWith({}, table.list);
+        expect(comp.prepareSortQuery).toHaveBeenCalled();
+        expect(comp.getSortedFields).toHaveBeenCalled();
       }));
 
       it('should update metadata for subtables', async(() => {
@@ -141,6 +152,8 @@ describe('GenericListComponent', () => {
         let endpoint = 'endpoint';
         comp.limit = 1;
         comp.tables.push(table);
+        spyOn(comp, 'prepareSortQuery');
+        spyOn(comp, 'getSortedFields');
         comp.getMetadata(endpoint, table, false, table);
         expect(table.metadata).toEqual(metadata);
         expect(table.metadata.list.list).toEqual('companies1');
@@ -150,11 +163,36 @@ describe('GenericListComponent', () => {
         expect(table.offset).toEqual(0);
         expect(comp.existingIds).toEqual([1]);
         expect(comp.tableId).toEqual(2);
+        expect(comp.prepareSortQuery).toHaveBeenCalled();
+        expect(comp.getSortedFields).toHaveBeenCalled();
         setTimeout(() => {
           expect(table.update).toEqual(metadata);
         }, 310);
       }));
 
+    });
+
+    describe('getSortedFields method', () => {
+      it('should return object with sorted fields', () => {
+        const columns = [
+          { sort: true, sorted: 'desc', sort_field: 'contact' }
+        ];
+        let result = comp.getSortedFields(columns);
+        expect(result).toEqual({
+          contact: 'desc'
+        });
+      });
+    });
+
+    describe('prepareSortQuery method', () => {
+      it('should return ordering query', () => {
+        const sorted = {
+          contact: 'desc',
+          date: 'asc'
+        };
+        let result = comp.prepareSortQuery(sorted);
+        expect(result).toEqual('ordering=-contact,date');
+      });
     });
 
     describe('getData method', () => {

@@ -29,6 +29,11 @@ export class FormDatepickerComponent
   public init: boolean;
   public $: any;
   public mobileDevice: boolean;
+  public displayValue: string;
+
+  public dateFormat: string = 'DD/MM/YYYY';
+  public datetimeFormat: string = 'DD/MM/YYYY hh:mm A';
+  public timeFormat: string = 'hh:mm A';
 
   public viewMode: boolean;
 
@@ -41,7 +46,7 @@ export class FormDatepickerComponent
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
-    this.setInitValue();
+    this.setInitValue(moment);
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.mobileDevice = this.identifyDevice();
@@ -54,7 +59,7 @@ export class FormDatepickerComponent
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
-          this.setInitValue();
+          this.setInitValue(moment);
         } else {
           this.config.hide = hide;
         }
@@ -70,18 +75,37 @@ export class FormDatepickerComponent
         } else {
           this.viewMode = this.config.read_only || false;
         }
-        this.setInitValue();
+        this.setInitValue(moment);
       });
     }
   }
 
-  public setInitValue() {
+  public setInitValue(moment) {
+    let type = this.config.templateOptions.type;
     if (this.config.value || this.group.get(this.key).value) {
-      let data = this.config.value ? this.config.value :
-        this.group.get(this.key).value;
-      this.setDate(data, moment);
+      let data = this.config.value ? this.config.value : this.group.get(this.key).value;
+      if (type === 'date' || type === 'datetime') {
+        this.setDate(data, moment);
+        this.displayValue = data ?
+                            moment.tz(data, 'Australia/Sydney')
+                                  .format(type === 'date' ? this.dateFormat : this.datetimeFormat) :
+                            '-';
+      } else if (type === 'time') {
+        this.setTime(data, moment);
+        this.displayValue = data ? moment(data, 'hh:mm:ss').format('hh:mm A') : '-';
+      }
     } else if (this.config.default) {
-      this.setDate(this.config.default, moment);
+      let data = this.config.default;
+      if (type === 'date' || type === 'datetime') {
+        this.setDate(data, moment);
+        this.displayValue = data ?
+                            moment.tz(data, 'Australia/Sydney')
+                                  .format(type === 'date' ? this.dateFormat : this.datetimeFormat) :
+                            '-';
+      } else if (type === 'time') {
+        this.setTime(data, moment);
+        this.displayValue = data ? moment(data, 'hh:mm:ss').format(this.timeFormat) : '-';
+      }
     }
   }
 
@@ -98,21 +122,26 @@ export class FormDatepickerComponent
       let dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       let timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';
       this.init = true;
-      this.$(this.d.nativeElement).datebox({
-        mode: dateType,
-        useClearButton: true,
-        closeCallback: () => {
-          let date = this.d.nativeElement.value;
-          let time = this.t.nativeElement.value;
-          if (date) {
-            let fullDate = date + (time ? ` ${time}` : '');
-            this.setDate(fullDate, moment, true);
-          } else {
-            this.group.get(this.key).patchValue(null);
+      let type = this.config.templateOptions.type;
+      if (type === 'date' || type === 'datetime') {
+        this.$(this.d.nativeElement).datebox({
+          mode: dateType,
+          dateFormat: '%d/%m/%Y',
+          overrideDateFormat: '%d/%m/%Y',
+          useClearButton: true,
+          closeCallback: () => {
+            let date = this.d.nativeElement.value;
+            let time = this.t.nativeElement.value;
+            if (date) {
+              let fullDate = date + (time ? ` ${time}` : '');
+              this.setDate(fullDate, moment, true);
+            } else {
+              this.group.get(this.key).patchValue(null);
+            }
           }
-        }
-      });
-      if (this.config.templateOptions.type === 'datetime') {
+        });
+      }
+      if (type === 'datetime') {
         this.$(this.t.nativeElement).datebox({
           mode: timeType,
           overrideTimeFormat: 12,
@@ -130,6 +159,22 @@ export class FormDatepickerComponent
           }
         });
       }
+      if (type === 'time') {
+        this.$(this.t.nativeElement).datebox({
+          mode: timeType,
+          overrideTimeFormat: 12,
+          overrideTimeOutput: '%I:%M %p',
+          useClearButton: true,
+          closeCallback: () => {
+            let time = this.t.nativeElement.value;
+            if (time) {
+              this.setTime(time, moment, true);
+            } else {
+              this.group.get(this.key).patchValue(null);
+            }
+          }
+        });
+      }
       this.d.nativeElement.readOnly = false;
       this.t.nativeElement.readOnly = false;
     }
@@ -139,20 +184,29 @@ export class FormDatepickerComponent
     if (this.config.templateOptions.type === 'date') {
       if (date) {
         if (!this.date) {
-          this.date = date.format('YYYY-MM-DD');
+          this.date = date.format(this.dateFormat);
         }
         this.group.get(this.key).patchValue(date.format('YYYY-MM-DD'));
       }
     } else if (this.config.templateOptions.type === 'datetime') {
       if (date) {
         if (!this.date) {
-          this.date = date.format('YYYY-MM-DD');
+          this.date = date.format(this.dateFormat);
         }
         if (!this.time) {
-          this.time = date.format('hh:mm A');
+          this.time = date.format(this.timeFormat);
         }
         this.group.get(this.key).patchValue(date.format());
       }
+    }
+  }
+
+  public updateTime(time) {
+    if (time) {
+      if (!this.time) {
+        this.time = time.format(this.timeFormat);
+      }
+      this.group.get(this.key).patchValue(time.format('hh:mm:ss'));
     }
   }
 
@@ -160,11 +214,23 @@ export class FormDatepickerComponent
     let date;
     if (value) {
       if (picker) {
-        date = moment(value, 'YYYY-MM-DD hh:mm A');
+        date = moment(value, this.datetimeFormat);
       } else {
         date = moment(value);
       }
       this.updateDate(date);
+    }
+  }
+
+  public setTime(value, moment, picker = false) {
+    let time;
+    if (value) {
+      if (picker) {
+        time = moment(value, this.timeFormat);
+      } else {
+        time = moment(value, 'hh:mm:ss');
+      }
+      this.updateTime(time);
     }
   }
 }

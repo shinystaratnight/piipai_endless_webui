@@ -17,6 +17,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { GenericFormService } from './../../services/generic-form.service';
 
 import moment from 'moment-timezone';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'dynamic-list',
@@ -126,6 +127,9 @@ export class DynamicListComponent implements
   public approveEndpoint: string;
   public currentActionData: any;
   public actionEndpoint: any;
+  public error: any;
+
+  public showFilters: boolean;
 
   constructor(
     private filterService: FilterService,
@@ -161,6 +165,15 @@ export class DynamicListComponent implements
       row: '',
       cell: ''
     };
+    if (this.config.list.search_enabled) {
+      if (this.filtersOfList.length > 1) {
+        this.showFilters = true;
+      } else {
+        this.showFilters = false;
+      }
+    } else {
+      this.showFilters = !!(this.filtersOfList && this.filtersOfList.length);
+    }
   }
 
   public ngOnChanges() {
@@ -248,30 +261,26 @@ export class DynamicListComponent implements
       let height: any = window.innerHeight;
       let offsetTop;
       if (listButtons && listButtons.length && width > 992) {
-        offsetTop = listButtons[0].offsetHeight;
-        if (filterWrapper && filterWrapper.length) {
-          if (document.body.classList.contains('r3sourcer')) {
-            filterWrapper[0].style.top = offsetTop + 'px';
-          }
-          filterWrapper[0].style.height = height - 100 - offsetTop + 'px';
-        }
+        this.calcButton(offsetTop, listButtons, filterWrapper);
+        this.calcTable();
       }
-      if (this.first) {
-        let table = this.datatable.nativeElement.getElementsByClassName('table');
-        let offsetParent = this.datatable.nativeElement.offsetParent;
-        let datatableWrapper = offsetParent.getElementsByClassName('datatable-wrapper')[0];
-        if (this.tableWrapper) {
-          if ((offsetParent.offsetHeight - this.tableWrapper.nativeElement.offsetTop)
-             < table[0].offsetHeight) {
-            datatableWrapper.style.maxHeight = offsetParent.offsetHeight - 70 + 'px';
-            this.datatable.nativeElement.style.maxHeight = offsetParent.offsetHeight - 70 + 'px';
-          }
-          let tableWrapperElement = this.tableWrapper.nativeElement;
-          let parentHeigth = tableWrapperElement.parentElement.parentElement.offsetHeight;
-          tableWrapperElement.style.maxHeight =
-            parentHeigth - tableWrapperElement.offsetTop + `px`;
-        }
+    }
+  }
+
+  public calcButton(offsetTop, listButtons, filterWrapper) {
+    offsetTop = listButtons[0].offsetHeight;
+    if (filterWrapper && filterWrapper.length) {
+      if (document.body.classList.contains('r3sourcer')) {
+        filterWrapper[0].style.top = offsetTop + 'px';
+        filterWrapper[0].style.height = `calc(100vh - ${offsetTop}px - 80px)`;
       }
+    }
+  }
+
+  public calcTable() {
+    if (this.tableWrapper) {
+      let tableWrapperEl = this.tableWrapper.nativeElement;
+      tableWrapperEl.style.maxHeight = `calc(100vh - ${tableWrapperEl.offsetTop}px - 150px)`;
     }
   }
 
@@ -356,15 +365,39 @@ export class DynamicListComponent implements
           obj['name'] = element.field;
           obj['type'] = element.type;
           obj['values'] = element.values;
+          obj['delim'] = col.delim;
+          obj['title'] = col.title;
+          if (element.type === 'datepicker') {
+            let field = this.config.fields.find((elem) => elem.key === element.field);
+            if (field) {
+              obj.templateOptions = field.templateOptions;
+            }
+          }
           if (element.type === 'icon') {
             let field = this.config.fields.filter((elem) => elem.key === element.field);
             if (field && field.length > 0) {
               obj['values'] = field[0].templateOptions.values;
+              obj['color'] = field[0].templateOptions.color;
             }
           }
           if (element.link) {
+            let indexOf = element.link.indexOf('{field}');
+            if (indexOf) {
+              element.link = element.link.replace(/{field}/gi, `{${element.field}}`);
+            }
+            if (element.link[element.link.length - 1] !== '/') {
+              element.link += '/change';
+            }
             obj['link'] = this.format(element.link, el);
+            obj.text = this.format(element.text, el);
           } else if (element.endpoint) {
+            let indexOf = element.endpoint.indexOf('{field}');
+            if (indexOf) {
+              element.endpoint = element.endpoint.replace(/{field}/gi, `{${element.field}}`);
+            }
+            if (element.endpoint[element.endpoint.length - 1] !== '/') {
+              element.endpoint += '/';
+            }
             obj['endpoint'] = this.format(element.endpoint, el);
             if (col.name === 'evaluate') {
               this.evaluateEndpoint = element.endpoint;
@@ -378,9 +411,14 @@ export class DynamicListComponent implements
             obj.confirm = element.confirm;
             obj.options = element.options;
             obj.color = element.color;
+            obj.text_color = element.text_color;
+            obj.title = element.title;
             obj.repeat = element.repeat;
             if (element.hidden) {
               this.setValue(el, element.hidden.split('.'), obj, 'hidden');
+            } else if (element.field) {
+              this.setValue(el, element.field.split('.'), obj, 'hidden');
+              obj.hidden = !obj.hidden;
             }
             if (element.replace_by) {
               this.setValue(el, element.replace_by.split('.'), obj, 'replace_by');
@@ -467,38 +505,16 @@ export class DynamicListComponent implements
     });
   }
 
-  public getValue(data, name) {
-    let result = '';
-    data.forEach((el) => {
-      if (el.name === name) {
-        let value = '';
-        el.content.forEach((elem) => {
-          if (elem.value) {
-            value += `${elem.value} `;
-          }
-        });
-        result = value;
-      } else if (el.content) {
-        this.getValue(el.content, name);
-      }
-    });
-    return result;
-  }
-
-  public setValue(data, props, object , param = 'value') {
+  public setValue(data, props, object, param = 'value') {
     let prop = props.shift();
     if (props.length === 0) {
       if (object.type === 'related' && !object[param]) {
         object[param] = data[prop] ? data[prop].__str__ : '';
       } else if (!object[param]) {
-        if (object.type === 'datepicker' || object.type === 'datetime') {
-          object[param] = moment.tz(data[prop], 'Australia/Sydney').format('YYYY-MM-DD hh:mm A');
-        } else {
-          object[param] = data[prop];
-        }
+        object[param] = data[prop];
       }
     } else if (data[prop]) {
-      this.setValue(data[prop], props, object);
+      this.setValue(data[prop], props, object, param);
     }
   }
 
@@ -685,6 +701,18 @@ export class DynamicListComponent implements
           break;
         case 'printInvoice':
           this.printPDF(e);
+          break;
+        case 'delete':
+          this.delete(e);
+          break;
+        case 'addForm':
+          this.addForm(e);
+          break;
+        case 'editForm':
+          this.editForm(e);
+          break;
+        case 'emptyPost':
+          this.post(e);
           break;
         default:
           return;
@@ -942,14 +970,6 @@ export class DynamicListComponent implements
     let prop = props.shift();
     if (!props.length) {
       if (data) {
-        if (prop.indexOf('__') > -1) {
-          let propArray = prop.split('__');
-          let datetime = ['date', 'time'];
-          if (datetime.indexOf(propArray[1]) > -1) {
-            return moment.tz(data[propArray[0]], 'Australia/Sydney')
-              .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
-          }
-        }
         return data[prop];
       }
     } else {
@@ -1024,6 +1044,49 @@ export class DynamicListComponent implements
         };
         this.open(this.sendMessageModal, {size: 'lg'});
       }
+    );
+  }
+
+  public delete(e) {
+    this.genericFormService.delete(this.endpoint, e.el.rowId).subscribe(
+      (res: any) => {
+        this.event.emit({
+          type: 'update',
+          list: this.config.list.list
+        });
+      },
+      (err: any) => this.error = err
+    );
+  }
+
+  public editForm(e) {
+    let arr = e.el.endpoint.split('/');
+    let id = arr[arr.length - 2];
+    arr.splice(arr.length - 2, 1);
+    let endpoint = arr.join('/');
+    this.modalInfo = {};
+    this.modalInfo.type = 'form';
+    this.modalInfo.endpoint = endpoint;
+    this.modalInfo.id = id;
+    this.open(this.modal, {size: 'lg'});
+  }
+
+  public addForm(e) {
+    this.modalInfo = {};
+    this.modalInfo.type = 'form';
+    this.modalInfo.endpoint = e.el.endpoint;
+    this.open(this.modal, {size: 'lg'});
+  }
+
+  public post(e) {
+    this.genericFormService.submitForm(e.el.endpoint, {}).subscribe(
+      (res: any) => {
+        this.event.emit({
+          type: 'update',
+          list: this.config.list.list
+        });
+      },
+      (err: any) => this.error = err
     );
   }
 

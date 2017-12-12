@@ -36,6 +36,7 @@ import { FormOptionsComponent } from './components/form-options/form-options.com
 import { FormRadioComponent } from './components/form-radio/form-radio.component';
 import { FormReplaceComponent } from './components/form-replace/form-replace.component';
 import { FormJsonComponent } from './components/form-json/form-json.component';
+import { FormColumnComponent } from './containers/form-column/form-column.component';
 
 import { GenericListComponent } from './components/generic-list/generic-list.component';
 import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
@@ -120,7 +121,8 @@ import { MoveDirective } from './directives/move.directive';
     PdfViewerComponent,
     FormRadioComponent,
     FormReplaceComponent,
-    FormJsonComponent
+    FormJsonComponent,
+    FormColumnComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -152,7 +154,8 @@ import { MoveDirective } from './directives/move.directive';
     FormOptionsComponent,
     FormRadioComponent,
     FormReplaceComponent,
-    FormJsonComponent
+    FormJsonComponent,
+    FormColumnComponent
   ]
 })
 export class DynamicFormModule { }

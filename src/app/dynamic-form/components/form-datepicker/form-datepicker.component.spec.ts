@@ -57,34 +57,87 @@ describe('FormDatepickerComponent', () => {
 
     it('should called addControl method', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
-      comp.key = comp.config.key;
-      comp.group = fb.group({});
-      comp.group.addControl(comp.config.key, fb.control(undefined));
-      comp.config.hidden = new BehaviorSubject(true);
       spyOn(comp, 'addControl');
       spyOn(comp, 'identifyDevice').and.returnValue(true);
       spyOn(comp, 'setInitValue');
+      spyOn(comp, 'checkModeProperty');
+      spyOn(comp, 'checkHiddenProperty');
+      spyOn(comp, 'createEvent');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
       expect(comp.identifyDevice).toHaveBeenCalled();
       expect(comp.setInitValue).toHaveBeenCalled();
+      expect(comp.checkModeProperty).toHaveBeenCalled();
+      expect(comp.checkHiddenProperty).toHaveBeenCalled();
       expect(comp.mobileDevice).toEqual(true);
-      expect(comp.group.get(comp.key).value).toBeUndefined();
-      expect(comp.config.hide).toBeTruthy();
-      comp.config.hidden = null;
+      expect(comp.createEvent).toHaveBeenCalled();
     })));
 
   });
 
+  describe('checkHiddenProperty method', () => {
+    it('should call setInitValue method',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.config = Object.assign({}, config);
+        comp.key = comp.config.key;
+        comp.group = fb.group({});
+        comp.group.addControl(comp.key, fb.control(''));
+        spyOn(comp, 'setInitValue');
+        comp.config.hidden = new BehaviorSubject(true);
+        comp.checkHiddenProperty();
+        expect(comp.config.hide).toBeTruthy();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        expect(comp.setInitValue).toHaveBeenCalled();
+    })));
+
+    it('should set hide false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.hidden = new BehaviorSubject(false);
+      comp.checkHiddenProperty();
+      expect(comp.config.hide).toBeFalsy();
+    });
+  });
+
+  describe('checkModeProperty method', () => {
+    it('should set viewMode true value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('view');
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeTruthy();
+    });
+
+    it('should set viewMode false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('edit');
+      comp.config.read_only = false;
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeFalsy();
+    });
+  });
+
   describe('setInitValue method', () => {
     it('should init value', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = config;
+      comp.config = Object.assign({}, config);
       comp.key = config.key;
       comp.config.value = 'value';
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(undefined));
       spyOn(comp, 'setDate');
-      comp.setInitValue();
+      comp.setInitValue(moment);
+      expect(comp.setDate).toHaveBeenCalled();
+    })));
+
+    it('should init value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = Object.assign({}, config);
+      comp.key = config.key;
+      comp.config.value = undefined;
+      comp.config.default = 'value';
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(undefined));
+      spyOn(comp, 'setDate');
+      comp.setInitValue(moment);
       expect(comp.setDate).toHaveBeenCalled();
     })));
   });
@@ -121,7 +174,26 @@ describe('FormDatepickerComponent', () => {
           return true;
         }
       };
-      comp.config = config;
+      comp.config = Object.assign({}, config);
+      comp.config.templateOptions.type = 'date';
+      comp.key = config.key;
+      comp.date = undefined;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.config.key, fb.control(''));
+      spyOn(date, 'format').and.returnValue('2017-06-06');
+      comp.updateDate(date);
+      expect(comp.date).toEqual('2017-06-06');
+      expect(comp.group.get(comp.key).value).toEqual('2017-06-06');
+    })));
+
+    it('should update datepicker value (date type)',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+      let date = {
+        format() {
+          return true;
+        }
+      };
+      comp.config = Object.assign({}, config);
       comp.config.templateOptions.type = 'datetime';
       comp.key = config.key;
       comp.group = fb.group({});

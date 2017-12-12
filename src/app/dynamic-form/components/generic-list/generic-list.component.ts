@@ -62,6 +62,9 @@ export class GenericListComponent implements OnInit {
     this.gfs.getMetadata(formset ? `${endpoint}${formset}` : endpoint).subscribe(
       (metadata) => {
         table.metadata = metadata;
+        table.query = {
+          sort: this.prepareSortQuery(this.getSortedFields(metadata.list.columns))
+        };
         if (outer) {
           setTimeout(() => {
             outer.update = metadata;
@@ -87,11 +90,36 @@ export class GenericListComponent implements OnInit {
               }
             );
           } else {
-            this.getData(endpoint, table.query, table);
+            this.getData(endpoint, this.generateQuery(table.query), table);
           }
         }
       }
     );
+  }
+
+  public getSortedFields(columns) {
+    const result = {};
+    columns.forEach((el) => {
+      if (el.sort && el.sorted) {
+        result[el.sort_field] = el.sorted;
+      }
+    });
+    return result;
+  }
+
+  public prepareSortQuery(sorted) {
+    let query = 'ordering=';
+    let queries = '';
+    let columns = Object.keys(sorted);
+    columns.forEach((el) => {
+      if (sorted[el] === 'desc') {
+        queries += `-${el},`;
+      } else if (sorted[el] === 'asc') {
+        queries += `${el},`;
+      }
+    });
+    query += queries.slice(0, queries.length - 1);
+    return query;
   }
 
   public getData(endpoint, query = null, table, first = false, target = null) {

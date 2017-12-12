@@ -6,7 +6,7 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 import { FormButtonComponent } from './form-button.component';
 
-describe('FormInputComponent', () => {
+describe('FormButtonComponent', () => {
   let fixture: ComponentFixture<FormButtonComponent>;
   let comp: FormButtonComponent;
   let el;
@@ -36,10 +36,41 @@ describe('FormInputComponent', () => {
     });
   }));
 
-  it('should enter the assertion', () => {
-    comp.config = config;
-    fixture.detectChanges();
-    expect(comp.config).toBeDefined();
+  describe('ngOnInit method', () => {
+    it('should update replacyValue by object', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.replace_by = {
+        __str__: 'String'
+      };
+      comp.config.repeat = 2;
+      comp.config.templateOptions.icon = true;
+      spyOn(comp, 'customizeButton');
+      comp.ngOnInit();
+      expect(comp.replacyValue).toEqual('String');
+      expect(comp.repeatArray.length).toEqual(comp.config.repeat);
+      expect(comp.customizeButton).toHaveBeenCalled();
+    });
+
+    it('should update replacyValue by some value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.replace_by = 'String';
+      comp.config.repeat = undefined;
+      comp.config.templateOptions.icon = true;
+      spyOn(comp, 'customizeButton');
+      comp.ngOnInit();
+      expect(comp.replacyValue).toEqual('String');
+      expect(comp.repeatArray.length).toEqual(1);
+      expect(comp.customizeButton).toHaveBeenCalled();
+    });
+  });
+
+  describe('customizeButton method', () => {
+    it('should update buttonClass', () => {
+      comp.config = Object.assign({}, config);
+      comp.buttonClass = undefined;
+      comp.customizeButton();
+      expect(comp.buttonClass).toEqual('');
+    });
   });
 
   describe('action method', () => {

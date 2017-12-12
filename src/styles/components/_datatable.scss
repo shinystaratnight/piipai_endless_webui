@@ -10,18 +10,20 @@ $cell-datatable-width: 45%;
   display: flex;
   align-items: stretch;
   height: 100%;
-  min-height: calc(100vh - 109px);
+  min-height: calc(100vh - 48px);
   background-color: #eef1f6;
 
   @include media-breakpoint-down('md') {
     height: auto;
   }
+
+  @include media-breakpoint-up('xl') {
+    min-height: calc(100vh - 80px);;
+  }
 }
 
 .content {
-  height: 100%;
   width: 100%;
-  overflow: auto;
 }
 
 
@@ -156,14 +158,6 @@ $cell-datatable-width: 45%;
     overflow-y: auto;
     border: 1px solid #d3d3d3;
 
-    .list-page & {
-      max-width: calc(100vw - 320px);
-    }
-
-    @include media-breakpoint-down('md') {
-      max-width: 100%;
-    }
-
     @include media-breakpoint-down('sm') {
       border: none;
     }
@@ -294,147 +288,139 @@ $cell-datatable-width: 45%;
 .r3sourcer {
   @include media-breakpoint-up('lg') {
 
-    .list-page {
-      min-height: calc(100vh - 80px);
+    .list-page .datatable {
 
-      .datatable {
+      a.link {
+        border-bottom: 1px dotted $brand-primary;
 
-        &-wrapper:first-child {
-          max-height: calc(100% - 80px);
+        @each $item in $themes {
+          .#{$item}-theme & {
+            border-bottom-color: map-get($theme-colors, $item);
+          }
         }
 
-        a.link {
-          border-bottom: 1px dotted $brand-primary;
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          border-bottom-style: solid;
+        }
+      }
+
+      .filter-wrapper {
+        width: 300px;
+
+        @include media-breakpoint-down('md') {
+          position: relative;
+          width: auto;
+        }
+      }
+
+      .table-wrapper {
+        border: 0;
+        border-radius: .3rem;
+
+        table {
+          border-collapse: separate;
+          border-spacing: 0 1rem;
+          background-color: #f1f1f1;
+        }
+
+        thead th {
+          padding: .5rem;
+          border-top: 3px solid $brand-primary;
+          text-transform: none;
+          font-weight: 500;
+          height: 3.5rem;
+          vertical-align: middle;
+          background-color: #2b2f31;
 
           @each $item in $themes {
             .#{$item}-theme & {
-              border-bottom-color: map-get($theme-colors, $item);
+              border-top-color: map-get($theme-colors, $item);
             }
           }
 
-          &:hover,
-          &:focus {
-            text-decoration: none;
-            border-bottom-style: solid;
+          &:first-child {
+            border-bottom-left-radius: .3rem;
+            border-top-left-radius: .3rem;
+          }
+
+          &:last-child {
+            border-bottom-right-radius: .3rem;
+            border-top-right-radius: .3rem;
           }
         }
 
-        .filter-wrapper {
-          width: 300px;
+        tbody {
 
-          @include media-breakpoint-down('md') {
-            position: relative;
-            width: auto;
-          }
-        }
+          border-collapse: separate;
+          border-spacing: 0 1rem;
 
-        .table-wrapper {
-          border: 0;
-          border-radius: .3rem;
-
-          table {
-            border-collapse: separate;
-            border-spacing: 0 1rem;
-            background-color: #f1f1f1;
-          }
-
-          thead th {
-            padding: .5rem;
-            border-top: 3px solid $brand-primary;
-            text-transform: none;
-            font-weight: 500;
-            height: 3.5rem;
-            vertical-align: middle;
-            background-color: #2b2f31;
+          tr td:first-child {
+            border-left: 4px solid $brand-primary;
+            border-top-left-radius: .3rem;
+            border-bottom-left-radius: .3rem;
 
             @each $item in $themes {
               .#{$item}-theme & {
-                border-top-color: map-get($theme-colors, $item);
+                border-left-color: map-get($theme-colors, $item);
               }
             }
-
-            &:first-child {
-              border-bottom-left-radius: .3rem;
-              border-top-left-radius: .3rem;
-            }
-
-            &:last-child {
-              border-bottom-right-radius: .3rem;
-              border-top-right-radius: .3rem;
-            }
           }
 
-          tbody {
+          tr td:last-child {
+            border-top-right-radius: .3rem;
+            border-bottom-right-radius: .3rem;
+          }
 
-            border-collapse: separate;
-            border-spacing: 0 1rem;
+          tr:nth-child(even) td:first-child {
+            border-left-color: #2c3032;
+          }
 
-            tr td:first-child {
-              border-left: 4px solid $brand-primary;
-              border-top-left-radius: .3rem;
-              border-bottom-left-radius: .3rem;
+          td {
+            border-bottom: 1px solid silver;
+            border-right: none;
+            padding: .5rem;
+            font-weight: 300;
+            color: #525252;
+            background-color: white;
+          }
+        }
+      }
 
-              @each $item in $themes {
-                .#{$item}-theme & {
-                  border-left-color: map-get($theme-colors, $item);
-                }
-              }
-            }
+      &-button.first {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background-color: $brand-primary;
+        color: white;
 
-            tr td:last-child {
-              border-top-right-radius: .3rem;
-              border-bottom-right-radius: .3rem;
-            }
-
-            tr:nth-child(even) td:first-child {
-              border-left-color: #2c3032;
-            }
-
-            td {
-              border-bottom: 1px solid silver;
-              border-right: none;
-              padding: .5rem;
-              font-weight: 300;
-              color: #525252;
-              background-color: white;
-            }
+        @each $item in $themes {
+          .#{$item}-theme & {
+            background-color: map-get($theme-colors, $item);
           }
         }
 
-        &-button.first {
-          display: block;
-          width: 100%;
-          text-align: center;
-          background-color: $brand-primary;
-          color: white;
-
-          @each $item in $themes {
-            .#{$item}-theme & {
-              background-color: map-get($theme-colors, $item);
-            }
-          }
-
-          &:hover,
-          &:focus {
-            text-decoration: none;
-            background-color: darken($brand-primary, 5%);
-          }
-
-          @each $item in $themes {
-            .#{$item}-theme &:hover,
-            .#{$item}-theme &:focus {
-              background-color: darken(map-get($theme-colors, $item), 5%);
-            }
-          }
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          background-color: darken($brand-primary, 5%);
         }
 
-        &-label {
-          padding: 0;
-          margin-bottom: 1rem;
-          color: #262b2d;
-          background-color: transparent;
-          border: none;
+        @each $item in $themes {
+          .#{$item}-theme &:hover,
+          .#{$item}-theme &:focus {
+            background-color: darken(map-get($theme-colors, $item), 5%);
+          }
         }
+      }
+
+      &-label {
+        padding: 0;
+        margin-bottom: 1rem;
+        color: #262b2d;
+        background-color: transparent;
+        border: none;
       }
     }
 

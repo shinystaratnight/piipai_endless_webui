@@ -12,6 +12,7 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 import { CookieService } from 'angular2-cookie/core';
 
 import { GenericFormService } from './generic-form.service';
+import { SharedModule } from '../../shared/shared.module';
 
 describe('GenericFormService', () => {
 
@@ -33,7 +34,8 @@ describe('GenericFormService', () => {
         { provide: RequestOptions, useClass: BaseRequestOptions },
       ],
       imports: [
-        HttpModule
+        HttpModule,
+        SharedModule
       ]
     });
   });

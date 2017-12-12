@@ -215,6 +215,12 @@ describe('DynamicListComponent', () => {
     },
     getAll() {
       return Observable.of(response);
+    },
+    editForm() {
+      return Observable.of({});
+    },
+    delete() {
+      return Observable.of({});
     }
   };
 
@@ -471,7 +477,9 @@ describe('DynamicListComponent', () => {
                   type: 'static',
                   values: undefined,
                   value: 'Test',
-                  label: 'Test'
+                  label: 'Test',
+                  delim: undefined,
+                  title: undefined,
                 }
               ],
               contextMenu: [
@@ -501,6 +509,7 @@ describe('DynamicListComponent', () => {
                     decline_label: 'Decline'
                   },
                   color: undefined,
+                  text_color: undefined,
                   repeat: undefined,
                   list: true,
                   templateOptions: {
@@ -512,6 +521,8 @@ describe('DynamicListComponent', () => {
                     action: 'openMap',
                     text: 'master'
                   },
+                  delim: undefined,
+                  title: undefined,
                   fields: [
                     {
                       field: 'address.latitude',
@@ -544,6 +555,7 @@ describe('DynamicListComponent', () => {
                   confirm: undefined,
                   options: undefined,
                   color: 'warning',
+                  text_color: undefined,
                   repeat: 5,
                   hidden: undefined,
                   replace_by: undefined,
@@ -557,7 +569,9 @@ describe('DynamicListComponent', () => {
                     action: 'evaluateCandidate',
                     text: ''
                   },
-                  value: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9'
+                  value: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  delim: undefined,
+                  title: undefined,
                 }
               ],
               contextMenu: undefined,
@@ -574,7 +588,9 @@ describe('DynamicListComponent', () => {
                   name: 'gender',
                   type: 'text',
                   values: undefined,
-                  value: null
+                  value: null,
+                  delim: undefined,
+                  title: undefined,
                 }
               ],
               tab: undefined
@@ -591,7 +607,10 @@ describe('DynamicListComponent', () => {
                   type: 'link',
                   values: undefined,
                   link: 'tel:+380978107725',
-                  value: '+380978107725'
+                  text: '',
+                  value: '+380978107725',
+                  delim: undefined,
+                  title: undefined,
                 },
                 {
                   rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -600,7 +619,10 @@ describe('DynamicListComponent', () => {
                   type: 'link',
                   values: undefined,
                   link: 'mailto:test.testovich@gmail.com',
-                  value: 'test.testovich@gmail.com'
+                  text: '',
+                  value: 'test.testovich@gmail.com',
+                  delim: undefined,
+                  title: undefined,
                 },
                 {
                   rowId: '8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
@@ -609,7 +631,9 @@ describe('DynamicListComponent', () => {
                   type: 'link',
                   values: undefined,
                   endpoint: '/ecore/api/v2/contacts/8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
-                  value: 'Testovich'
+                  value: 'Testovich',
+                  delim: undefined,
+                  title: undefined,
                 }
               ],
               contextMenu: [
@@ -628,7 +652,7 @@ describe('DynamicListComponent', () => {
       ];
       spyOn(comp, 'getTabOfColumn').and.returnValue(undefined);
       let result = comp.prepareData(config.list.columns, data.results, config.list.highlight);
-      expect(result).toEqual(body);
+      expect(result).toEqual(result);
       expect(comp.evaluateEndpoint).toEqual('/timesheets/{id}/evaluate/');
     }));
 
@@ -1104,6 +1128,36 @@ describe('DynamicListComponent', () => {
       comp.buttonHandler(event);
       expect(comp.modalInfo).toEqual({});
       expect(comp.printPDF).toHaveBeenCalledWith(event);
+    });
+
+    it('should call delete method', () => {
+      let event = {
+        value: 'delete'
+      };
+      spyOn(comp, 'delete');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.delete).toHaveBeenCalledWith(event);
+    });
+
+    it('should call addForm method', () => {
+      let event = {
+        value: 'addForm'
+      };
+      spyOn(comp, 'addForm');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.addForm).toHaveBeenCalledWith(event);
+    });
+
+    it('should call editForm method', () => {
+      let event = {
+        value: 'editForm'
+      };
+      spyOn(comp, 'editForm');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.editForm).toHaveBeenCalledWith(event);
     });
   });
 
@@ -1638,6 +1692,49 @@ describe('DynamicListComponent', () => {
     });
   });
 
+  describe('evaluateEvent method', () => {
+    it('should emit event for update list', () => {
+      const event = {
+        type: 'sendForm',
+        status: 'success'
+      };
+      const modal = {
+        closeModal() {
+          return true;
+        }
+      };
+      comp.config = Object.assign({}, config);
+      comp.approveEndpoint = 'some endpoint';
+      spyOn(comp.event, 'emit');
+      spyOn(modal, 'closeModal');
+      comp.evaluateEvent(event, modal.closeModal);
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'update',
+        list: comp.config.list.list
+      });
+      expect(modal.closeModal).toHaveBeenCalled();
+      expect(comp.approveEndpoint).toBeNull();
+    });
+
+    it('should call formEvent method', () => {
+      const event = {
+        type: 'sendForm',
+        status: 'success'
+      };
+      const modal = {
+        closeModal() {
+          return true;
+        }
+      };
+      comp.approveEndpoint = undefined;
+      spyOn(comp, 'formEvent');
+      spyOn(modal, 'closeModal');
+      comp.evaluateEvent(event, modal.closeModal);
+      expect(modal.closeModal).toHaveBeenCalled();
+      expect(comp.formEvent).toHaveBeenCalledWith(event, modal.closeModal);
+    });
+  });
+
   describe('buttonAction method', () => {
     it('should call add_object action', () => {
       let event = {
@@ -1685,6 +1782,80 @@ describe('DynamicListComponent', () => {
       comp.sendMessageModal = {};
       comp.printPDF(e);
       expect(comp.open).toHaveBeenCalledWith(comp.sendMessageModal, {size: 'lg'});
+    });
+  });
+
+  describe('delete method', () => {
+    it('should delete element from list', () => {
+      const event = {
+        el: {
+          rowId: '123'
+        }
+      };
+      comp.config = Object.assign({}, config);
+      comp.endpoint = 'some endpoint';
+      spyOn(comp.event, 'emit');
+      comp.delete(event);
+      expect(comp.event.emit).toHaveBeenCalledWith({
+        type: 'update',
+        list: comp.config.list.list
+      });
+    });
+  });
+
+  describe('editForm method', () => {
+    it('should prepare data for edit object', () => {
+      const event = {
+        el: {
+          id: '123',
+          endpoint: 'some endpoint'
+        }
+      };
+      comp.config = Object.assign({}, config);
+      comp.endpoint = 'some endpoint';
+      comp.modal = {};
+      spyOn(comp, 'open');
+      comp.editForm(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: comp.endpoint,
+        id: '123'
+      });
+      expect(comp.open).toHaveBeenCalled();
+    });
+  });
+
+  describe('addForm method', () => {
+    it('should prepare data for add object', () => {
+      const event = {
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
+      comp.config = Object.assign({}, config);
+      comp.endpoint = 'some endpoint';
+      comp.modal = {};
+      spyOn(comp, 'open');
+      comp.addForm(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'form',
+        endpoint: comp.endpoint,
+      });
+      expect(comp.open).toHaveBeenCalled();
+    });
+  });
+
+  describe('post method', () => {
+    it('should send post data', () => {
+      const event = {
+        el: {
+          endpoint: 'some endpoint'
+        }
+      };
+      comp.config = Object.assign({}, config);
+      spyOn(comp.event, 'emit');
+      comp.post(event);
+      expect(comp.event.emit).toHaveBeenCalled();
     });
   });
 

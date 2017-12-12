@@ -34,14 +34,6 @@ export class FormatString {
     let prop = props.shift();
     if (!props.length) {
       if (data) {
-        if (prop.indexOf('__') > -1) {
-          let propArray = prop.split('__');
-          let datetime = ['date', 'time'];
-          if (datetime.indexOf(propArray[1]) > -1) {
-            return moment.tz(data[propArray[0]], 'Australia/Sydney')
-              .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
-          }
-        }
         return data[prop];
       }
     } else {

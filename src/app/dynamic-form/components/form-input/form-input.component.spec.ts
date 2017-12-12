@@ -47,59 +47,92 @@ describe('FormInputComponent', () => {
   describe('ngOnInit method', () => {
 
     it('should called addControl method', async(inject([FormBuilder], (fb) => {
-      let form = fb.group({});
-      let key = 'email';
-      let metadata = {
-        key: 'email',
-        value: 'test@test.com',
-        read_only: false
-      };
-      form.addControl(key, fb.control(''));
-      comp.group = form;
-      comp.config = metadata;
-      comp.key = key;
-      comp.config.hidden = new BehaviorSubject(true);
+      comp.config = Object.assign({}, config);
       spyOn(comp, 'addControl');
       spyOn(comp, 'setInitValue');
+      spyOn(comp, 'checkModeProperty');
+      spyOn(comp, 'checkHiddenProperty');
       spyOn(comp, 'createEvent');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalledWith(comp.config, fb);
       expect(comp.setInitValue).toHaveBeenCalled();
+      expect(comp.checkModeProperty).toHaveBeenCalled();
+      expect(comp.checkHiddenProperty).toHaveBeenCalled();
       expect(comp.createEvent).toHaveBeenCalled();
-      expect(comp.config.hide).toBeTruthy();
-      expect(comp.group.get(key).value).toBeUndefined();
-      comp.config.hidden = null;
     })));
 
+  });
+
+  describe('checkHiddenProperty method', () => {
+    it('should call setInitValue method',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.config = Object.assign({}, config);
+        comp.key = comp.config.key;
+        comp.group = fb.group({});
+        comp.group.addControl(comp.key, fb.control(''));
+        spyOn(comp, 'setInitValue');
+        comp.config.hidden = new BehaviorSubject(true);
+        comp.checkHiddenProperty();
+        expect(comp.config.hide).toBeTruthy();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        expect(comp.setInitValue).toHaveBeenCalled();
+    })));
+
+    it('should set hide false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.hidden = new BehaviorSubject(false);
+      comp.checkHiddenProperty();
+      expect(comp.config.hide).toBeFalsy();
+    });
+  });
+
+  describe('checkModeProperty method', () => {
+    it('should set viewMode true value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('view');
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeTruthy();
+    });
+
+    it('should set viewMode false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('edit');
+      comp.config.read_only = false;
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeFalsy();
+    });
   });
 
   describe('setInitValue method', () => {
     it('should set default value',
       async(inject([FormBuilder], (fb) => {
-        let form = fb.group({});
-        let key = 'email';
-        let metadata = {
-          key: 'email',
-          read_only: false
-        };
-        form.addControl(key, fb.control(''));
-        comp.group = form;
-        comp.config = metadata;
+        comp.config = Object.assign({}, config);
+        comp.key = comp.config.key;
+        comp.group = fb.group({});
+        comp.group.addControl(comp.key, fb.control(''));
         comp.config.default = 0;
-        comp.key = key;
         comp.setInitValue();
-        expect(comp.group.get(key).value).toEqual(0);
+        expect(comp.group.get(comp.key).value).toEqual(0);
     })));
 
-    it('should set desplay value', () => {
-      comp.config = config;
-      config.type = 'static';
-      config.value = {
+    it('should set display value from object', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.type = 'static';
+      comp.config.value = {
         __str__: 'Value'
       };
       comp.setInitValue();
       expect(comp.displayValue).toEqual('Value');
-      config.type = 'input';
+    });
+
+    it('should set display value from string', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.type = 'static';
+      comp.config.value = 'Value';
+      comp.setInitValue();
+      expect(comp.displayValue).toEqual('Value');
     });
   });
 
