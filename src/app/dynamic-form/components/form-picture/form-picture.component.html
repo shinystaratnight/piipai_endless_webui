@@ -1,6 +1,6 @@
 <div class="form-group" *ngIf="!config.hide">
-  <div class="form-element">
-    <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label">
+  <div class="form-element" [class.custom]="config.custom">
+    <label class="col-form-label form-element-label" [hidden]="config.custom" *ngIf="label && config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
     <input

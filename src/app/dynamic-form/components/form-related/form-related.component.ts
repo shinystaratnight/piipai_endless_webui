@@ -22,6 +22,14 @@ export interface RelatedObject {
   metadata: Field[];
 }
 
+export interface CustomField {
+  key: string;
+  value: any;
+  icon?: string;
+  link?: boolean;
+  prefix?: string;
+}
+
 @Component({
   selector: 'form-related',
   templateUrl: 'form-related.component.html'
@@ -73,6 +81,7 @@ export class FormRelatedComponent
   public viewMode: boolean;
 
   public skillEndpoint: boolean;
+  public customTemplate: CustomField[];
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -94,6 +103,9 @@ export class FormRelatedComponent
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
+    if (this.config.custom && this.config.custom.length) {
+      this.generateCustomTemplate(this.config.custom);
+    }
     if (this.config && this.config.list && this.config.data) {
       this.config.data.subscribe((data) => {
         this.generateDataForList(this.config, data);
@@ -104,6 +116,28 @@ export class FormRelatedComponent
       this.getReplaceElements(this.config.metadata);
     }
     this.isCollapsed = this.config.collapsed;
+  }
+
+  public generateCustomTemplate(fieldsList) {
+    if (this.config.value) {
+      this.customTemplate = fieldsList.map((el) => {
+        let object = <CustomField> {};
+        let value = this.getValueOfData(this.config.value, el, object);
+        object.key = el;
+        if (el === 'email') {
+          object.icon = 'envelope';
+          object.prefix = 'mailto:';
+        } else if (el === 'phone_mobile') {
+          object.icon = 'commenting';
+          object.prefix = 'tel:';
+        } else if (el === 'address.__str__') {
+          object.icon = 'map-marker';
+        } else if (el === '__str__' || el === 'contact.__str__') {
+          object.link = true;
+        }
+        return object;
+      });
+    }
   }
 
   public checkHiddenProperty() {

@@ -33,4 +33,4 @@
   </small>
   <span *ngIf="config.delim">{{config.delim}}</span>
 </div>
-<br *ngIf="config.list && !config.delim">
+<br *ngIf="config.list && !config.hidden && !config.delim">

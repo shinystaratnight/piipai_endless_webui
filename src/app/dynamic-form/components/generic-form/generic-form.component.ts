@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { GenericFormService } from './../../services/generic-form.service';
 
+import { customTemplates } from '../../models/custom-templates';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Field } from '../../models/field.model';
@@ -200,6 +202,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);
           this.metadata = this.parseMetadata(data, this.relatedField);
+          this.addCustomTemplates(customTemplates[endpoint], this.metadata);
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
@@ -842,5 +845,17 @@ export class GenericFormComponent implements OnChanges, OnInit {
         this.getReplaceElements(el.children);
       }
     });
+  }
+
+  public addCustomTemplates(customFields, metadata) {
+    if (customFields) {
+      metadata.forEach((el) => {
+        if (el.key) {
+          el.custom = customFields[el.key];
+        } else if (el.children) {
+          this.addCustomTemplates(customFields, el.children);
+        }
+      });
+    }
   }
 }
