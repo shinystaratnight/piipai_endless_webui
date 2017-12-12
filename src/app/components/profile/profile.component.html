@@ -4,7 +4,7 @@
     <div class="d-flex flex-column block">
 
       <div class="element d-flex align-items-center p-2 px-4 mb-3">
-        <img class="avatar mr-3" [src]="data.contact.picture" alt="Profile">
+        <img class="avatar mr-3" [src]="data.contact.picture && data.contact.picture.origin" alt="Profile">
         <span class="name mr-auto">{{data.contact.__str__}}</span>
         <button type="button" class="btn btn-default"
           (click)="openModal()">Edit</button>
@@ -121,7 +121,7 @@
     <div id="collapseExample" [ngbCollapse]="contactDetails.isCollapsed">
       <div *ngFor="let item of contactDetails.viewData; let odd = odd" class="element-item p-2" [ngClass]="{'odd': odd}">
         <span class="pr-2"><b>{{item[0]}}</b></span>
-        <a *ngIf="item[2]" [href]="item[2] + item[1]">{{item[1]}}</a>
+        <a class="pl-md-2" *ngIf="item[2]" [href]="item[2] + item[1]">{{item[1]}}</a>
         <span *ngIf="!item[2]" class="pl-md-2">{{item[1]}}</span>
       </div>
     </div>
