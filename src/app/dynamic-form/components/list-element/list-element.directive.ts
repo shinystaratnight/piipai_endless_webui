@@ -31,6 +31,7 @@ const components = {
   picture: ListImageComponent,
   icon: ListImageComponent,
   date: ListTextComponent,
+  time: ListTextComponent,
   datepicker: ListTextComponent,
   textarea: ListTextComponent
 };
@@ -41,6 +42,9 @@ const components = {
 export class ListElementDirective implements OnInit, OnChanges {
   @Input()
   public config;
+
+  @Input()
+  public last;
 
   @Input()
   public length;
@@ -73,6 +77,7 @@ export class ListElementDirective implements OnInit, OnChanges {
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;
+      this.component.instance.last = this.last;
       this.component.instance.length = this.length;
       this.component.instance.event = this.event;
       this.component.instance.buttonAction = this.buttonAction;
@@ -81,6 +86,7 @@ export class ListElementDirective implements OnInit, OnChanges {
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
       this.component.instance.config = this.config;
+      this.component.instance.last = this.last;
       this.component.instance.length = this.length;
       this.component.instance.head = this.head;
       this.component.instance.event = this.event;

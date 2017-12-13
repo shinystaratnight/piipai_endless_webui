@@ -15,7 +15,7 @@ import { GenericFormService } from './../../services/generic-form.service';
 import { CheckPermissionService } from '../../../shared/services/check-permission';
 import { Field } from '../../models/field.model';
 
-interface RelatedObject {
+export interface RelatedObject {
   id: string;
   allData: any;
   data: FormGroup;
@@ -513,7 +513,7 @@ export class FormRelatedComponent
     this.group.get(this.key).patchValue(results);
   }
 
-  public formEvent(e, closeModal, type) {
+  public formEvent(e, closeModal, type = undefined) {
     if (e.type === 'sendForm' && e.status === 'success' && !this.config.list) {
       closeModal();
       this.group.get(this.key).patchValue(e.data[this.param]);

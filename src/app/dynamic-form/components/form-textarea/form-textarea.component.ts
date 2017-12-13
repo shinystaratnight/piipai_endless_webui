@@ -18,6 +18,9 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
   public key: any;
   public label: boolean;
 
+  public viewMode: boolean;
+  public displayValue: string;
+
   constructor(
     private fb: FormBuilder
   ) { super(); }
@@ -25,7 +28,13 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
   public ngOnInit() {
     this.addControl(this.config, this.fb);
     this.setInitValue();
-    if (this.config && this.config.hidden) {
+    this.checkModeProperty();
+    this.checkHiddenProperty();
+    this.createEvent();
+  }
+
+  public checkHiddenProperty() {
+    if (this.config && this.config.hidden && this.config.type !== 'static') {
       this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
@@ -36,16 +45,35 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
         }
       });
     }
-    this.createEvent();
+  }
+
+  public checkModeProperty() {
+    if (this.config && this.config.mode) {
+      this.config.mode.subscribe((mode) => {
+        if (mode === 'view') {
+          this.viewMode = true;
+        } else {
+          this.viewMode = this.config.read_only || false;
+        }
+        this.setInitValue();
+      });
+    }
   }
 
   public setInitValue() {
     if (this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
+      this.displayValue = this.config.value;
+    } else {
+      this.displayValue = '-';
     }
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.textarea, this.config);
+    if (!this.config.read_only) {
+      if (this.textarea) {
+        this.addFlags(this.textarea, this.config);
+      }
+    }
   }
 }

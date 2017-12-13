@@ -1,6 +1,6 @@
 <navigation [user]="user" [pages]="pagesList"></navigation>
 
-<div class="h-100 site-page" *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
+<div class="site-page" *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
   <div *ngSwitchCase="'form'">
     <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
     <div class="container-fluid pb-5">
@@ -41,7 +41,7 @@
     </div>
   </div>
   <div *ngSwitchCase="'profile'">
-    <profile [id]="user.id"></profile>
+    <profile [id]="user.contact.contact_id"></profile>
   </div>
 
 </div>

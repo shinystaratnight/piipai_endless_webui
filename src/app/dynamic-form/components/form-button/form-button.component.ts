@@ -44,10 +44,15 @@ export class FormButtonComponent implements OnInit {
   }
 
   public action(e) {
+    let id;
+    if (this.config.field === 'id') {
+      id = this.config.rowId;
+    }
     this.buttonAction.emit({
       type: e.type,
       el: this.config,
-      value: this.config.templateOptions.action
+      value: this.config.templateOptions.action,
+      id
     });
   }
 }

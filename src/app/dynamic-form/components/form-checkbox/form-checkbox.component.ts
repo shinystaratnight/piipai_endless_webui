@@ -78,7 +78,7 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
     if (this.config.templateOptions.type === 'icon') {
       this.customizeCheckbox(value);
     }
-    this.group.get(this.key).patchValue(this.config.value);
+    this.group.get(this.key).patchValue(value || false);
   }
 
   public defaultValues(value) {

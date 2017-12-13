@@ -29,7 +29,8 @@ export class BasicElementComponent {
     if (config.templateOptions.type === 'number') {
       element.nativeElement.step = 'any';
     }
-    element.nativeElement.required = config.templateOptions.required;
+    element.nativeElement.required =
+      config.type !== 'datepicker' && config.templateOptions.required;
     if (config.templateOptions.max) {
       element.nativeElement.maxLength = config.templateOptions.max;
     }

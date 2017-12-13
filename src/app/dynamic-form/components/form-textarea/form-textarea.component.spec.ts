@@ -49,32 +49,80 @@ describe('FormTextareaComponent', () => {
 
     it('should init defaults properties',
       async(inject([FormBuilder], (fb: FormBuilder) => {
-        comp.config = config;
-        comp.key = config.key;
-        comp.group = fb.group({});
-        comp.group.addControl(comp.key, fb.control(''));
-        comp.config.hidden = new BehaviorSubject(true);
+        comp.config = Object.assign({}, config);
         spyOn(comp, 'addControl');
         spyOn(comp, 'setInitValue');
+        spyOn(comp, 'checkModeProperty');
+        spyOn(comp, 'checkHiddenProperty');
+        spyOn(comp, 'createEvent');
         comp.ngOnInit();
         expect(comp.addControl).toHaveBeenCalled();
         expect(comp.setInitValue).toHaveBeenCalled();
-        expect(comp.config.hide).toBeTruthy();
-        expect(comp.group.get(comp.key).value).toBeUndefined();
-        comp.config.hidden = null;
+        expect(comp.checkModeProperty).toHaveBeenCalled();
+        expect(comp.checkHiddenProperty).toHaveBeenCalled();
+        expect(comp.createEvent).toHaveBeenCalled();
     })));
 
   });
 
+  describe('checkHiddenProperty method', () => {
+    it('should call setInitValue method',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.config = Object.assign({}, config);
+        comp.key = comp.config.key;
+        comp.group = fb.group({});
+        comp.group.addControl(comp.key, fb.control(''));
+        spyOn(comp, 'setInitValue');
+        comp.config.hidden = new BehaviorSubject(true);
+        comp.checkHiddenProperty();
+        expect(comp.config.hide).toBeTruthy();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        expect(comp.setInitValue).toHaveBeenCalled();
+    })));
+
+    it('should set hide false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.hidden = new BehaviorSubject(false);
+      comp.checkHiddenProperty();
+      expect(comp.config.hide).toBeFalsy();
+    });
+  });
+
+  describe('checkModeProperty method', () => {
+    it('should set viewMode true value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('view');
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeTruthy();
+    });
+
+    it('should set viewMode false value', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.mode = new BehaviorSubject('edit');
+      comp.config.read_only = false;
+      spyOn(comp, 'setInitValue');
+      comp.checkModeProperty();
+      expect(comp.viewMode).toBeFalsy();
+    });
+  });
+
   describe('setInitValue method', () => {
     it('should set value', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = config;
-      comp.key = config.key;
+      comp.config = Object.assign({}, config);
+      comp.key = comp.config.key;
       comp.config.value = 'mr';
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(''));
       comp.setInitValue();
       expect(comp.group.get(comp.key).value).toEqual('mr');
+      expect(comp.displayValue).toEqual('mr');
+    })));
+
+    it('should set value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = Object.assign({}, config);
+      comp.setInitValue();
+      expect(comp.displayValue).toEqual('-');
     })));
   });
 

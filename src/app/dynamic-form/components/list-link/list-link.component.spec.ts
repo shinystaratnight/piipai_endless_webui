@@ -100,7 +100,8 @@ describe('ListLinkComponent', () => {
           innerText: 'Some text'
         }
       };
-      comp.config = config;
+      comp.config = Object.assign({}, config);
+      comp.value = 'some value';
       let event = {
         preventDefault() {
           return true;
