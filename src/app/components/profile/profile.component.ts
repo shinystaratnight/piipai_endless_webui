@@ -88,27 +88,28 @@ export class ProfileComponent implements OnInit, OnDestroy {
       'transportation_to_work',
       'strength',
       'language',
-      'reliability_score',
-      'loyalty_score',
-      'total_score'
+      'candidate_scores.reliability',
+      'candidate_scores.loyalty',
+      'candidate_scores.recruitment_score',
+      'candidate_scores.client_feedback'
     ];
 
     this.residency.elementList = [
       'residency',
-      'visa_type.__str__',
+      'visa_type',
       'visa_expiry_date',
       'nationality'
     ];
 
     this.contactDetails.elementList = [
-      'email',
-      'phone_mobile',
-      'address.phone_landline',
-      'address.phone_fax',
-      'address.city',
-      'address.postal_code',
-      'address.state',
-      'address.country'
+        'email',
+        'phone_mobile',
+        'address.phone_landline',
+        'address.phone_fax',
+        'address.city',
+        'address.postal_code',
+        'address.state',
+        'address.country'
     ];
 
     this.skills.elementList = [
@@ -118,11 +119,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     ];
 
     this.tags.elementList = [
-      '__str__',
+      'tag',
       'verification_evidence',
       'verified_by'
     ];
-    this.id = '7a25f402-c421-4412-a9e1-163baea438e8';
     this.getMetadata(this.endpoint);
   }
 
@@ -297,9 +297,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     let element;
     metadata.forEach((el) => {
       if (el.key === key) {
-        element = el;
+        if (!element) {
+          element = el;
+        }
       } else if (el.children) {
-        element = this.getItemFromMetadata(el.children, key);
+        if (!element) {
+          element = this.getItemFromMetadata(el.children, key);
+        }
       }
     });
     return element;
@@ -308,24 +312,26 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public getValueOfData(data, key: string, options: any[] = null) {
     let keys = key.split('.');
     let prop = keys.shift();
-    if (keys.length === 0) {
-      let value;
-      if (options) {
-        options.forEach((el) => {
-          if (el.value === data[prop]) {
-            value = el.label;
-          }
-        });
-      } else {
-        if (data[prop] instanceof Object) {
-          value = data[prop].name;
+    if (data) {
+      if (keys.length === 0) {
+        let value;
+        if (options) {
+          options.forEach((el) => {
+            if (el.value + '' === data[prop] + '') {
+              value = el.label;
+            }
+          });
         } else {
-          value = data[prop];
+          if (data[prop] instanceof Object) {
+            value = data[prop].__str__;
+          } else {
+            value = data[prop];
+          }
         }
+        return value;
+      } else {
+        return this.getValueOfData(data[prop], keys.join('.'), options);
       }
-      return value;
-    } else {
-      return this.getValueOfData(data[prop], keys.join('.'), options);
     }
   }
 
