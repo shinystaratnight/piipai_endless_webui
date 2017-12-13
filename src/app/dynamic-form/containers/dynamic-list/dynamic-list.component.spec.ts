@@ -1159,6 +1159,16 @@ describe('DynamicListComponent', () => {
       expect(comp.modalInfo).toEqual({});
       expect(comp.editForm).toHaveBeenCalledWith(event);
     });
+
+    it('should call emptyPost method', () => {
+      let event = {
+        value: 'emptyPost'
+      };
+      spyOn(comp, 'post');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.post).toHaveBeenCalledWith(event);
+    });
   });
 
   describe('openForm method', () => {
@@ -1808,17 +1818,16 @@ describe('DynamicListComponent', () => {
       const event = {
         el: {
           id: '123',
-          endpoint: 'some endpoint'
+          endpoint: '/ecore/api/v2/contacts/123/'
         }
       };
       comp.config = Object.assign({}, config);
-      comp.endpoint = 'some endpoint';
       comp.modal = {};
       spyOn(comp, 'open');
       comp.editForm(event);
       expect(comp.modalInfo).toEqual({
         type: 'form',
-        endpoint: comp.endpoint,
+        endpoint: '/ecore/api/v2/contacts/',
         id: '123'
       });
       expect(comp.open).toHaveBeenCalled();

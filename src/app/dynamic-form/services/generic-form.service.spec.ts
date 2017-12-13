@@ -82,7 +82,7 @@ describe('GenericFormService', () => {
             new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
       });
 
-      const result = service.getMetadata({status: 500});
+      const result = service.getByQuery({status: 500});
 
       result.subscribe((res) => {
         expect(res).toBeUndefined();
@@ -130,7 +130,7 @@ describe('GenericFormService', () => {
             new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
       });
 
-      const result = service.getMetadata({status: 500});
+      const result = service.getAll({status: 500});
 
       result.subscribe((res) => {
         expect(res).toBeUndefined();
@@ -346,7 +346,7 @@ describe('GenericFormService', () => {
             new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
       });
 
-      const result = service.callAction(url, 123);
+      const result = service.delete(url, 123);
 
       result.subscribe((res) => {
         expect(res).toEqual({
@@ -367,7 +367,7 @@ describe('GenericFormService', () => {
             new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
       });
 
-      const result = service.callAction(url, 123);
+      const result = service.delete(url, 123);
 
       result.subscribe((res) => {
         expect(res).toBeUndefined();

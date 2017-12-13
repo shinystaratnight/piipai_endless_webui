@@ -103,7 +103,7 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
 
   public setInitValue() {
     if (this.config.default) {
-      this.value = this.config.default;
+      this.value = `ecore/media/${this.config.default}`;
     }
     if (this.config.value) {
       if (this.config.value instanceof Object && this.config.value.origin) {

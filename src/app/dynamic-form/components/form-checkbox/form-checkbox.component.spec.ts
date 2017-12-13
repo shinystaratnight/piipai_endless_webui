@@ -124,7 +124,7 @@ describe('FormCheckboxComponent', () => {
         spyOn(comp, 'defaultValues');
         comp.setInitValue();
         expect(comp.defaultValues).toHaveBeenCalled();
-        expect(comp.group.get(comp.key).value).toBeFalsy();
+        expect(comp.group.get(comp.key).value).toBeTruthy();
     })));
 
     it('should init icon value',
@@ -137,7 +137,7 @@ describe('FormCheckboxComponent', () => {
         spyOn(comp, 'customizeCheckbox');
         comp.setInitValue();
         expect(comp.customizeCheckbox).toHaveBeenCalled();
-        expect(comp.group.get(comp.key).value).toBeFalsy();
+        expect(comp.group.get(comp.key).value).toBeTruthy();
     })));
 
     it('should update value',
@@ -149,7 +149,7 @@ describe('FormCheckboxComponent', () => {
         comp.group.addControl(comp.key, fb.control(false));
         comp.config.value = null;
         comp.setInitValue();
-        expect(comp.group.get(comp.config.key).value).toBeNull();
+        expect(comp.group.get(comp.config.key).value).toBeTruthy();
     })));
 
   });

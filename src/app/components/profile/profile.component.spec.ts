@@ -79,9 +79,10 @@ describe('ProfileComponent', () => {
           'transportation_to_work',
           'strength',
           'language',
-          'reliability_score',
-          'loyalty_score',
-          'total_score'
+          'candidate_scores.reliability',
+          'candidate_scores.loyalty',
+          'candidate_scores.recruitment_score',
+          'candidate_scores.client_feedback'
         ]
       };
       let residency = {
@@ -90,7 +91,7 @@ describe('ProfileComponent', () => {
         isCollapsed: false,
         elementList: [
           'residency',
-          'visa_type.__str__',
+          'visa_type',
           'visa_expiry_date',
           'nationality'
         ]
@@ -125,7 +126,7 @@ describe('ProfileComponent', () => {
         viewData: [],
         isCollapsed: false,
         elementList: [
-          '__str__',
+          'tag',
           'verification_evidence',
           'verified_by'
         ]
@@ -634,7 +635,7 @@ describe('ProfileComponent', () => {
       let data = {
         address: {
           state: {
-            name: 'NSW'
+            __str__: 'NSW'
           }
         },
         title: 'Mr.'

@@ -7,6 +7,7 @@ import { DebugElement } from '@angular/core';
 import { GenericFormComponent } from './generic-form.component';
 import { GenericFormService } from './../../services/generic-form.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { customTemplates } from '../../models/custom-templates';
 
 describe('GenericFormComponent', () => {
     let fixture: ComponentFixture<GenericFormComponent>;
@@ -252,6 +253,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getReplaceElements');
         spyOn(comp, 'checkFormStorage');
         spyOn(comp, 'checkFormBuilder');
+        spyOn(comp, 'addCustomTemplates');
         spyOn(comp.str, 'emit');
         comp.getMetadata(endpoint);
         expect(comp.parseMetadata).toHaveBeenCalledTimes(2);
@@ -264,6 +266,7 @@ describe('GenericFormComponent', () => {
         expect(comp.getReplaceElements).toHaveBeenCalled();
         expect(comp.checkFormStorage).toHaveBeenCalled();
         expect(comp.checkFormBuilder).toHaveBeenCalled();
+        expect(comp.addCustomTemplates).toHaveBeenCalled();
         expect(comp.show).toBeTruthy();
       }));
 
@@ -295,6 +298,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getReplaceElements');
         spyOn(comp, 'checkFormStorage');
         spyOn(comp, 'checkFormBuilder');
+        spyOn(comp, 'addCustomTemplates');
         comp.getMetadata(endpoint);
         expect(comp.show).toBeFalsy();
         expect(comp.updateElements).toHaveBeenCalled();
@@ -302,6 +306,7 @@ describe('GenericFormComponent', () => {
         expect(comp.getReplaceElements).toHaveBeenCalled();
         expect(comp.checkFormStorage).toHaveBeenCalled();
         expect(comp.checkFormBuilder).toHaveBeenCalled();
+        expect(comp.addCustomTemplates).toHaveBeenCalled();
       }));
 
     });
@@ -1498,6 +1503,27 @@ describe('GenericFormComponent', () => {
         comp.replaceElements = [];
         comp.getReplaceElements(config);
         expect(comp.replaceElements.length).toEqual(1);
+      });
+    });
+
+    describe('addCustomTemplates method', () => {
+      it('should add custom templates for related objects', () => {
+        const customFields = {
+          contact: ['__str__']
+        };
+        const config = <any> [
+          {
+            type: 'collapse',
+            children: [
+              {
+                type: 'related',
+                key: 'contact'
+              }
+            ]
+          }
+        ];
+        comp.addCustomTemplates(customFields, config);
+        expect(config[0].children[0].custom).toEqual(['__str__']);
       });
     });
 });

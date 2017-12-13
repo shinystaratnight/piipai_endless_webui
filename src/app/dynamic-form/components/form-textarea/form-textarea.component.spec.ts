@@ -129,6 +129,8 @@ describe('FormTextareaComponent', () => {
   describe('ngAfterViewInit method', () => {
 
     it('should called addControl method', async(() => {
+      comp.config = Object.assign({}, config);
+      comp.textarea = {};
       spyOn(comp, 'addFlags');
       comp.ngAfterViewInit();
       expect(comp.addFlags).toHaveBeenCalled();

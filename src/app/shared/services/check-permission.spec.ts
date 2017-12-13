@@ -116,7 +116,7 @@ describe('CheckPermissionService', () => {
             new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
       });
 
-      const result = service.viewCheck(url);
+      const result = service.createCheck(url);
       expect(service.updateHeaders).toHaveBeenCalled();
       result.subscribe((res) => {
         expect(res).toEqual(mockResponse);
@@ -137,7 +137,7 @@ describe('CheckPermissionService', () => {
             new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
       });
 
-      const result = service.viewCheck(url);
+      const result = service.createCheck(url);
 
       result.subscribe((res) => {
         expect(res).toBeUndefined();
@@ -164,7 +164,7 @@ describe('CheckPermissionService', () => {
             new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
       });
 
-      const result = service.viewCheck(url, `123`);
+      const result = service.updateCheck(url, `123`);
       expect(service.updateHeaders).toHaveBeenCalled();
       result.subscribe((res) => {
         expect(res).toEqual(mockResponse);
@@ -185,7 +185,7 @@ describe('CheckPermissionService', () => {
             new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
       });
 
-      const result = service.viewCheck(url, `123`);
+      const result = service.updateCheck(url, `123`);
 
       result.subscribe((res) => {
         expect(res).toBeUndefined();
@@ -212,7 +212,7 @@ describe('CheckPermissionService', () => {
             new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
       });
 
-      const result = service.viewCheck(url, `123`);
+      const result = service.deleteCheck(url, `123`);
       expect(service.updateHeaders).toHaveBeenCalled();
       result.subscribe((res) => {
         expect(res).toEqual(mockResponse);
@@ -233,7 +233,7 @@ describe('CheckPermissionService', () => {
             new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
       });
 
-      const result = service.viewCheck(url, `123`);
+      const result = service.deleteCheck(url, `123`);
 
       result.subscribe((res) => {
         expect(res).toBeUndefined();

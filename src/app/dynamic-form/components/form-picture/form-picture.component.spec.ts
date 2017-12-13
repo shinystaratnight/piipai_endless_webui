@@ -125,7 +125,7 @@ describe('FormPictureComponent', () => {
         comp.config.default = 'logo.png';
         comp.setInitValue();
         expect(comp.group.get(comp.key).value).toBeUndefined();
-        expect(comp.value).toEqual('logo.png');
+        expect(comp.value).toEqual('ecore/media/logo.png');
     })));
 
     it('should set value from api by Object value',

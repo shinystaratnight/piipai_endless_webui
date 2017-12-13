@@ -15,6 +15,8 @@ import { GenericFormService } from './../../services/generic-form.service';
 import { CheckPermissionService } from '../../../shared/services/check-permission';
 import { Field } from '../../models/field.model';
 
+import { FormatString } from '../../../helpers/format';
+
 export interface RelatedObject {
   id: string;
   allData: any;
@@ -83,6 +85,8 @@ export class FormRelatedComponent
   public skillEndpoint: boolean;
   public customTemplate: CustomField[];
 
+  public fields: string[];
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -98,8 +102,12 @@ export class FormRelatedComponent
     this.skillEndpoint = this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
       this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
     this.display =
-      this.config.templateOptions.display ? this.config.templateOptions.display : '__str__';
+      this.config.templateOptions.display ? this.config.templateOptions.display : '{__str__}';
     this.param = this.config.templateOptions.param ? this.config.templateOptions.param : 'id';
+    this.fields = this.config.templateOptions.values;
+    if (this.fields) {
+      this.fields.push(this.param);
+    }
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
@@ -169,6 +177,7 @@ export class FormRelatedComponent
   }
 
   public setInitValue() {
+    let formatString = new FormatString();
     this.results = [];
     if (this.config.value || this.group.get(this.key).value) {
       let data = this.config.value ? this.config.value :
@@ -177,19 +186,21 @@ export class FormRelatedComponent
         let value;
         if (data instanceof Object) {
           if (this.config.options && this.config.options.length) {
-            this.displayValue = this.config.options.filter((el) => {
-              return el[this.param] === data[this.param];
-            })[0][this.display];
-          } else if (data[this.display]) {
-            this.displayValue = data[this.display];
+            const obj = this.config.options.find((el) => el[this.param] === data[this.param]);
+            if (obj) {
+              this.displayValue = formatString.format(this.display, obj);
+            }
+          } else {
+            this.displayValue = formatString.format(this.display, data);
           }
           value = data[this.param];
         } else {
           value = data;
           if (this.config.options && this.config.options.length) {
-            this.displayValue = this.config.options.filter((el) => {
-              return el[this.param] === data;
-            })[0][this.display];
+            const obj = this.config.options.find((el) => el[this.param] === data);
+            if (obj) {
+              this.displayValue = formatString.format(this.display, obj);
+            }
           }
         }
         this.group.get(this.key).patchValue(value);
@@ -407,7 +418,7 @@ export class FormRelatedComponent
     this.modalData.endpoint = this.config.endpoint;
     if (type === 'edit' || type === 'delete') {
       if (object) {
-        this.modalData.title = object.allData[this.display];
+        this.modalData.title = object.allData.__str__;
         this.modalData.id = object[this.param];
       } else {
         this.modalData.title = this.displayValue;
@@ -447,9 +458,13 @@ export class FormRelatedComponent
       if (this.searchValue) {
         this.filter(this.searchValue);
       } else {
+        const formatString = new FormatString();
+        this.config.options.forEach((el) => {
+          el.__str__ = formatString.format(this.display, el);
+        });
         this.list = this.config.options
           .filter((el) => !(this.results.indexOf(el) > -1))
-          .sort((p, n) => p[this.display] > n[this.display] ? 1 : -1);
+          .sort((p, n) => p.__str__ > n.__str__ ? 1 : -1);
         this.generatePreviewList(this.list);
       }
     } else {
@@ -484,7 +499,7 @@ export class FormRelatedComponent
       let filteredList;
       if (value && this.config.options) {
         filteredList = this.config.options.filter((el) => {
-          let val = el[this.display];
+          let val = el.__str__;
           if (val) {
             let existInConfig = val.toLowerCase().indexOf(value.toLowerCase()) > -1;
             if (existInConfig) {
@@ -501,11 +516,12 @@ export class FormRelatedComponent
   }
 
   public setValue(item) {
+    const formatString = new FormatString();
     if (this.config.many) {
       this.results.push(item);
       this.updateData();
     } else {
-      this.displayValue = item[this.display];
+      this.displayValue = formatString.format(this.display, item);
       this.group.get(this.key).patchValue(item[this.param]);
     }
     this.changeList();
@@ -550,9 +566,10 @@ export class FormRelatedComponent
   public formEvent(e, closeModal, type = undefined) {
     if (e.type === 'sendForm' && e.status === 'success' && !this.config.list) {
       closeModal();
+      const formatString = new FormatString();
       this.group.get(this.key).patchValue(e.data[this.param]);
       this.config.value = e.data[this.param];
-      this.displayValue = e.data[this.display];
+      this.displayValue = formatString.format(this.display, e.data);
       this.eventHandler({type: 'change'}, e.data[this.param]);
     } else if (e.type === 'sendForm' && e.status === 'success' && this.config.list) {
       closeModal();
@@ -567,6 +584,19 @@ export class FormRelatedComponent
     });
   }
 
+  public generateFields(fields: string[]) {
+    let query = '&';
+    if (fields) {
+      fields.forEach((el) => {
+        query += `fields=${el}&`;
+      });
+      query = query.slice(0, query.length - 1);
+    } else {
+      query = `fields=__str__&fields=${this.param}`;
+    }
+    return query;
+  }
+
   public getOptions(value, offset, concat = false) {
     let endpoint = this.config.endpoint;
     let query = '';
@@ -574,13 +604,18 @@ export class FormRelatedComponent
       query += `?search=${value}&`;
     }
     query += !query ? '?' : '';
-    query += `limit=${this.limit}&offset=${offset}&fields=${this.display}&fields=${this.param}`;
+    query += `limit=${this.limit}&offset=${offset}`;
+    query += this.generateFields(this.fields);
     if (!this.count || (this.count && offset < this.count && concat)) {
       this.lastElement += this.limit;
       this.genericFormService.getByQuery(endpoint, query).subscribe(
         (res: any) => {
           this.count = res.count;
           if (res.results && res.results.length) {
+            const formatString = new FormatString();
+            res.results.forEach((el) => {
+              el.__str__ = formatString.format(this.display, el);
+            });
             if (concat) {
               this.previewList.push(...res.results);
             } else {
