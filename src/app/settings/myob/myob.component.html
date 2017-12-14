@@ -6,7 +6,7 @@
   </dynamic-form>
 </div>
 
-<div *ngIf="connected" class="container-fluid" >
+<div class="container-fluid" >
   <h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !companyFile.isCollapsed}">
     <i fa
       class="p-2"
@@ -40,4 +40,42 @@
     </div>
   </div>
 
+  <h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !payrollAccounts.isCollapsed}">
+    <i fa
+      class="p-2"
+      [name]="payrollAccounts.isCollapsed ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="payrollAccounts.isCollapsed = !payrollAccounts.isCollapsed"
+      [attr.aria-expanded]="!payrollAccounts.isCollapsed"
+      aria-controls="collapseExample"
+      style="cursor: pointer"></i>
+    <span>Payroll accounts</span>
+    <button type="button" class="btn btn-default btn-sm mx-3" (click)="refreshCompanyFiles()">Refresh</button>
+    <span>Last refreshed - {{payrollAccounts.refreshedDate}}</span>
+  </h6>
+  <div id="collapseExample" [ngbCollapse]="payrollAccounts.isCollapsed" class="px-2">
+    <h4>Expenses account</h4>
+      <template [ngTemplateOutlet]="account" [ngOutletContext]="{account: payrollAccounts.subcontractor}"></template>
+    <hr>
+    <h4>Income account</h4>
+  </div>
+
 </div>
+
+<template #account let-a="account">
+  <div class="row">
+    <label class="col-12 col-md-3 col-lg-2" for="">{{a.title}}</label>
+    <select [(ngModel)]="a.file">
+      <option *ngFor="let file of companyFile.list" [value]="file.id">{{file.name}}</option>
+    </select>
+    <button type="button" class="btn btn-default btn-sm mx-3" (click)="refresh()">Refresh</button>
+    <span>Last refreshed - {{a.refreshed}}</span>
+  </div>
+
+  <div class="row">
+    <label class="col-12 col-md-3 col-lg-2" for="">{{a.title}}</label>
+    <select [(ngModel)]="a.file">
+      <option *ngFor="let file of companyFile.list" [value]="file.id">{{file.name}}</option>
+    </select>
+  </div>
+</template>
