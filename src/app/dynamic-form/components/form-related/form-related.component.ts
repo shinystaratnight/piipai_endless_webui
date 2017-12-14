@@ -428,6 +428,19 @@ export class FormRelatedComponent
         this.modalData.mode = 'edit';
       }
     }
+    if (this.config.prefilled) {
+      this.modalData.data = {};
+      const keys = Object.keys(this.config.prefilled);
+      keys.forEach((el) => {
+        this.modalData.data[el] = {
+          action: 'add',
+          data: {
+            value: this.config.prefilled[el],
+            read_only: true
+          }
+        };
+      });
+    }
     if (this.modalData.id && type !== 'delete') {
       this.permission.updateCheck(this.modalData.endpoint, this.modalData.id)
         .subscribe(

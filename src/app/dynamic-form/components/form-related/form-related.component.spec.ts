@@ -594,7 +594,7 @@ describe('FormRelatedComponent', () => {
   describe('open method', () => {
 
     it('should set data for modal window', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = config;
+      comp.config = Object.assign({}, config);
       comp.group = fb.group({});
       comp.key = 'key';
       comp.modalData = {};
@@ -621,7 +621,10 @@ describe('FormRelatedComponent', () => {
     })));
 
     it('should set data for edit object', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = config;
+      comp.config = Object.assign({}, config);
+      comp.config.prefilled = {
+        candidate_contact: '123'
+      };
       comp.group = fb.group({});
       comp.key = 'key';
       comp.modalData = {};
@@ -635,7 +638,16 @@ describe('FormRelatedComponent', () => {
         type,
         title: comp.displayValue,
         endpoint: comp.config.endpoint,
-        mode: 'edit'
+        mode: 'edit',
+        data: {
+          candidate_contact: {
+            action: 'add',
+            data: {
+              value: '123',
+              read_only: true
+            }
+          }
+        }
       });
     })));
 

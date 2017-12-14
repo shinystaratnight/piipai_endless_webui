@@ -18,7 +18,7 @@ export class ListTextComponent implements OnInit {
       if (this.config.value && this.config.display) {
         this.value = this.config.display;
       } else {
-        this.value = this.config.value !== '-' ? this.config.value : '';
+        this.value = this.config.value;
       }
     }
     this.checkDate(moment);

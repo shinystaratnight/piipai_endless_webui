@@ -285,6 +285,12 @@ export class GenericFormComponent implements OnChanges, OnInit {
         }
         if (el.type === 'related' && el.list) {
           el.data = new BehaviorSubject(this.getValueOfData(data, el.key, el, metadata));
+          if (el.prefilled) {
+            const keys = Object.keys(el.prefilled);
+            keys.forEach((elem) => {
+              el.prefilled[elem] = this.format.format(el.prefilled[elem], data);
+            });
+          }
         }
         this.getValueOfData(data, el.key, el, metadata);
       } else if (el.key && el.key === 'timeline') {

@@ -404,6 +404,7 @@ export class DynamicListComponent implements
             if (col.name === 'evaluate') {
               this.evaluateEndpoint = element.endpoint;
             }
+            obj.text = this.format(element.text, el);
           }
           if (element.type === 'static') {
             obj.value = this.format(element.text, el);
