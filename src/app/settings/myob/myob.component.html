@@ -55,27 +55,41 @@
   </h6>
   <div id="collapseExample" [ngbCollapse]="payrollAccounts.isCollapsed" class="px-2">
     <h4>Expenses account</h4>
-      <template [ngTemplateOutlet]="account" [ngOutletContext]="{account: payrollAccounts.subcontractor}"></template>
+    <template
+      *ngFor="let account of payrollAccounts.subcontractor; let first = first"
+      [ngTemplateOutlet]="accountTemplate"
+      [ngOutletContext]="{account: account, first: first, type: 'expenses'}">
+    </template>
+    <br>
+    <template
+      *ngFor="let account of payrollAccounts.candidate; let first = first"
+      [ngTemplateOutlet]="accountTemplate"
+      [ngOutletContext]="{account: account, first: first, type: 'expenses'}">
+    </template>
     <hr>
     <h4>Income account</h4>
+    <template
+        *ngFor="let account of payrollAccounts.company_client; let first = first"
+        [ngTemplateOutlet]="accountTemplate"
+        [ngOutletContext]="{account: account, first: first, type: 'income'}">
+      </template>
   </div>
 
 </div>
 
-<template #account let-a="account">
+<template #accountTemplate let-a="account" let-first="first" let-t="type">
   <div class="row">
-    <label class="col-12 col-md-3 col-lg-2" for="">{{a.title}}</label>
-    <select [(ngModel)]="a.file">
-      <option *ngFor="let file of companyFile.list" [value]="file.id">{{file.name}}</option>
-    </select>
-    <button type="button" class="btn btn-default btn-sm mx-3" (click)="refresh()">Refresh</button>
-    <span>Last refreshed - {{a.refreshed}}</span>
-  </div>
-
-  <div class="row">
-    <label class="col-12 col-md-3 col-lg-2" for="">{{a.title}}</label>
-    <select [(ngModel)]="a.file">
-      <option *ngFor="let file of companyFile.list" [value]="file.id">{{file.name}}</option>
-    </select>
+    <label class="col-12 col-md-3 col-lg-3 d-flex align-items-center" [class.pl-5]="!first" [attr.for]="a.key">{{a.label}}</label>
+    <div class="col-12 col-md-3 col-lg-2 mb-2">
+      <select class="custom-select w-100" [(ngModel)]="a.value">
+        <option *ngIf="first" value="" selected>Select company file</option>
+        <option *ngIf="!first" value="" selected>Select {{t}} account</option>
+        <option *ngFor="let file of a.options" [attr.id]="a.key" [value]="file.id">{{file.name}}</option>
+      </select>
+    </div>
+    <div class="col-12 col-md col-lg mb-2 d-flex align-items-center">
+      <button *ngIf="first" type="button" class="btn btn-default btn-sm mx-3" (click)="getAccounts(true)">Refresh</button>
+      <span *ngIf="first">Last refreshed - {{a.refreshed}}</span>
+    </div>
   </div>
 </template>

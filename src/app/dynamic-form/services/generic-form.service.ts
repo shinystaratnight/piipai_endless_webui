@@ -45,7 +45,7 @@ export class GenericFormService {
     let headers = new Headers();
     this.updateHeaders(headers);
     return this.http.post(endpoint, data, { headers })
-      .map((response: Response) => response.json())
+      .map((response: any) => response.body || response.json())
       .catch((error: any) => this.errorHandler(error));
   }
 

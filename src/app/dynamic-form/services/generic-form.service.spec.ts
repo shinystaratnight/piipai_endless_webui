@@ -197,7 +197,8 @@ describe('GenericFormService', () => {
       [GenericFormService, MockBackend], (service, mockBackend) => {
 
       const mockResponse = {
-        status: 'ok'
+        status: 'ok',
+        body: ''
       };
 
       mockBackend.connections.subscribe((conn) => {
@@ -209,7 +210,8 @@ describe('GenericFormService', () => {
 
       result.subscribe((res) => {
         expect(res).toEqual({
-          status: 'ok'
+          status: 'ok',
+          body: ''
         });
       });
     })));

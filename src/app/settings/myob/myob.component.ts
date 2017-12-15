@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { meta } from './myob.meta';
+import { meta, payrollAccounts } from './myob.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { LocalStorageService } from 'ng2-webstorage';
 import { Field } from '../../dynamic-form/models/field.model';
@@ -23,6 +23,8 @@ export class MyobComponent implements OnInit {
 
   public companyFile: any;
   public payrollAccounts: any;
+  public accounts: any[];
+  public MYOBSettings: any;
   public error: any;
 
   constructor(
@@ -61,60 +63,7 @@ export class MyobComponent implements OnInit {
       isCollapsed: true
     };
 
-    this.payrollAccounts = {
-      isCollapsed: true,
-      subcontractor: [
-        {
-          label: 'Subcontractor',
-          value: '',
-          key: 'subcontractor'
-        },
-        {
-          label: 'Contract work',
-          value: '',
-          key: 'subcontractor_contract_work'
-        }, {
-          label: 'GST',
-          value: '',
-          key: 'subcontractor_gst'
-        }
-      ],
-      candidate: [
-        {
-          label: 'Cadidate',
-          value: '',
-          key: 'candidate',
-          options: []
-        },
-        {
-          label: 'Wages and Salries',
-          value: '',
-          key: 'candidate_wages'
-        },
-        {
-          label: 'Superannuation',
-          value: '',
-          key: 'candidate_superannuation'
-        }
-      ],
-      company_client: [
-        {
-          label: 'Company Client',
-          value: '',
-          key: 'company_client'
-        },
-        {
-          label: 'Labour hire services',
-          value: '',
-          key: 'company_client_labour_hire'
-        },
-        {
-          label: 'GST',
-          value: '',
-          key: 'company_client_gst'
-        },
-      ]
-    };
+    this.payrollAccounts = payrollAccounts;
   }
 
   public eventHandler(e) {
@@ -164,7 +113,7 @@ export class MyobComponent implements OnInit {
   }
 
   public testCompanyFile(file) {
-    const url = '/api/v2/company_settings/company_files/check/';
+    const url = '/ecore/api/v2/company_settings/company_files/check/';
     const body = {
       id: file.id,
       username: file.username,
@@ -176,19 +125,49 @@ export class MyobComponent implements OnInit {
   }
 
   public getCompanyFiles() {
-    const url = '/api/v2/company_settings/company_files/';
+    const url = '/ecore/api/v2/company_settings/company_files/';
     this.gfs.getAll(url).subscribe((res: any) => {
-      this.companyFile.list = res;
+      this.companyFile.list = res.company_files;
       this.companyFile.isCollapsed = false;
+      this.filledCompanyFiles(this.companyFile.list);
     }, (err: any) => this.error = err);
   }
 
   public refreshCompanyFiles() {
-    const url = '/api/v2/company_settings/company_files/refresh/';
+    const url = '/ecore/api/v2/company_settings/company_files/refresh/';
     this.gfs.getAll(url).subscribe((res: any) => {
-      this.companyFile.list = res;
+      this.companyFile.list = res.company_files;
       this.companyFile.isCollapsed = false;
+      this.filledCompanyFiles(this.companyFile.list);
     }, (err: any) => this.error = err);
+  }
+
+  public getAccounts(refresh = false) {
+    let url = '/ecore/api/v2/company_settings/myob_accounts/';
+    if (refresh) {
+      url += 'refresh/';
+    }
+    this.gfs.getAll(url).subscribe((res: any) => {
+      this.accounts = res.myob_accounts;
+    }, (err: any) => this.error = err);
+  }
+
+  public getMYOBSettings() {
+    let url = '/api/v2/company_settings/myob_settings/';
+    this.gfs.getAll(url).subscribe((res: any) => {
+      this.MYOBSettings = res.myob_settings;
+    }, (err: any) => this.error = err);
+  }
+
+  public filledCompanyFiles(list: any[]) {
+    const keys = ['subcontractor', 'candidate', 'company_client'];
+    keys.forEach((el) => {
+      this.payrollAccounts[el].forEach((field) => {
+        if (field.key === el) {
+          field.options = list;
+        }
+      });
+    });
   }
 
   public updateButton(type) {

@@ -186,14 +186,16 @@ describe('MyobComponent', () => {
     it('should update list of company files', () => {
       response.status = 'success';
       response.data = {
-        list: []
+        company_files: []
       };
       comp.companyFile = {};
+      spyOn(comp, 'filledCompanyFiles');
       comp.getCompanyFiles();
       expect(comp.companyFile).toEqual({
-        list: response.data,
+        list: response.data.company_files,
         isCollapsed: false
       });
+      expect(comp.filledCompanyFiles).toHaveBeenCalledWith([]);
     });
 
     it('should update errors', () => {
@@ -208,14 +210,16 @@ describe('MyobComponent', () => {
     it('should refresh list of company files', () => {
       response.status = 'success';
       response.data = {
-        list: []
+        company_files: []
       };
       comp.companyFile = {};
+      spyOn(comp, 'filledCompanyFiles');
       comp.getCompanyFiles();
       expect(comp.companyFile).toEqual({
-        list: response.data,
+        list: response.data.company_files,
         isCollapsed: false
       });
+      expect(comp.filledCompanyFiles).toHaveBeenCalledWith([]);
     });
 
     it('should update errors', () => {
@@ -223,6 +227,78 @@ describe('MyobComponent', () => {
       response.errors = {};
       comp.getCompanyFiles();
       expect(comp.error).toEqual(response.errors);
+    });
+  });
+
+  describe('getAccounts method', () => {
+    it('should update list of accounts', () => {
+      response.status = 'success';
+      response.data = {
+        myob_accounts: []
+      };
+      comp.getAccounts();
+      expect(comp.accounts).toEqual([]);
+    });
+
+    it('should update list of accounts', () => {
+      response.status = 'success';
+      response.data = {
+        myob_accounts: []
+      };
+      comp.getAccounts(true);
+      expect(comp.accounts).toEqual([]);
+    });
+
+    it('should update errors', () => {
+      response.status = 'error';
+      response.errors = {};
+      comp.getAccounts();
+      expect(comp.error).toEqual(response.errors);
+    });
+  });
+
+  describe('getMYOBSettings method', () => {
+    it('should update myob settings', () => {
+      response.status = 'success';
+      response.data = {
+        myob_settings: {}
+      };
+      comp.getMYOBSettings();
+      expect(comp.MYOBSettings).toEqual({});
+    });
+
+    it('should update errors', () => {
+      response.status = 'error';
+      response.errors = {};
+      comp.getMYOBSettings();
+      expect(comp.error).toEqual(response.errors);
+    });
+  });
+
+  describe('filledCompanyFiles method', () => {
+    it('should add company lists into account type', () => {
+      comp.payrollAccounts = {
+        subcontractor: [
+          {
+            key: 'subcontractor'
+          }
+        ],
+        candidate: [
+          {
+            key: 'candidate'
+          }
+        ],
+        company_client: [
+          {
+            key: 'company_client'
+          }
+        ]
+      };
+      const accounts = [];
+      comp.filledCompanyFiles(accounts);
+      expect(comp.payrollAccounts.subcontractor[0].options).toEqual([]);
+      expect(comp.payrollAccounts.candidate[0].options).toEqual([]);
+      expect(comp.payrollAccounts.company_client[0].options).toEqual([]);
     });
   });
 
