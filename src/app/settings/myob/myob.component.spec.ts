@@ -125,7 +125,7 @@ describe('MyobComponent', () => {
     })));
   });
 
-  describe('buttonHanler method', () => {
+  describe('buttonHandler method', () => {
     it('should call action of button', () => {
       const event = {
         type: 'click',
@@ -162,10 +162,10 @@ describe('MyobComponent', () => {
         id: '123',
         username: 'Tom',
         password: 'Smith',
-        status: undefined
+        authenticated: undefined
       };
       comp.testCompanyFile(file);
-      expect(file.status).toEqual(response.data.is_valid);
+      expect(file.authenticated).toEqual(response.data.is_valid);
     });
 
     it('should update errors', () => {
@@ -214,7 +214,7 @@ describe('MyobComponent', () => {
       };
       comp.companyFile = {};
       spyOn(comp, 'filledCompanyFiles');
-      comp.getCompanyFiles();
+      comp.refreshCompanyFiles();
       expect(comp.companyFile).toEqual({
         list: response.data.company_files,
         isCollapsed: false
@@ -225,7 +225,7 @@ describe('MyobComponent', () => {
     it('should update errors', () => {
       response.status = 'error';
       response.errors = {};
-      comp.getCompanyFiles();
+      comp.refreshCompanyFiles();
       expect(comp.error).toEqual(response.errors);
     });
   });
@@ -253,6 +253,48 @@ describe('MyobComponent', () => {
       response.status = 'error';
       response.errors = {};
       comp.getAccounts();
+      expect(comp.error).toEqual(response.errors);
+    });
+  });
+
+  describe('getAccountsOfCompanyFile method', () => {
+    it('shouldupdate list of file accounts', () => {
+      response.status = 'success';
+      response.data = {
+        myob_accounts: []
+      };
+      const id = '123';
+      const key = 'subcontractor';
+      comp.payrollAccounts = {
+        subcontractor: [
+          {
+            label: 'Subcontractor',
+            value: '',
+            key: 'subcontractor',
+          },
+          {
+            label: 'Contract work',
+            value: '',
+            key: 'subcontractor_contract_work',
+          },
+          {
+            label: 'GST',
+            value: '',
+            key: 'subcontractor_gst',
+          }
+        ]
+      };
+      comp.getAccountsOfCompanyFile(id, key);
+      expect(comp.payrollAccounts[key][1].options).toBeDefined([]);
+      expect(comp.payrollAccounts[key][2].options).toBeDefined([]);
+    });
+
+    it('should update errors', () => {
+      response.status = 'error';
+      response.errors = {};
+      const id = '123';
+      const key = 'subcontractor';
+      comp.getAccountsOfCompanyFile(id, key);
       expect(comp.error).toEqual(response.errors);
     });
   });

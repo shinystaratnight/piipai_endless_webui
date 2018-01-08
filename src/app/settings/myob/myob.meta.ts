@@ -34,54 +34,45 @@ export const meta = [
 ];
 
 export const payrollAccounts = {
-  isCollapsed: true,
+  isCollapsed: false,
   subcontractor: [
     {
       label: 'Subcontractor',
-      value: '',
       key: 'subcontractor',
     },
     {
       label: 'Contract work',
-      value: '',
       key: 'subcontractor_contract_work',
     }, {
       label: 'GST',
-      value: '',
       key: 'subcontractor_gst',
     }
   ],
   candidate: [
     {
       label: 'Cadidate',
-      value: '',
       key: 'candidate',
     },
     {
       label: 'Wages and Salries',
-      value: '',
       key: 'candidate_wages',
     },
     {
       label: 'Superannuation',
-      value: '',
       key: 'candidate_superannuation',
     }
   ],
   company_client: [
     {
       label: 'Company Client',
-      value: '',
       key: 'company_client',
     },
     {
       label: 'Labour hire services',
-      value: '',
       key: 'company_client_labour_hire',
     },
     {
       label: 'GST',
-      value: '',
       key: 'company_client_gst',
     },
   ]

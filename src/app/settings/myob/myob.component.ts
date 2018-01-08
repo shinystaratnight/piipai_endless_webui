@@ -35,6 +35,8 @@ export class MyobComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    const routeData: any = this.route.snapshot.data;
+    this.MYOBSettings = routeData.myobSettings.myob_settings;
     this.pageUrl = location.origin + location.pathname;
     this.route.url.subscribe((url) => {
       this.settingsService.url = <any> url;
@@ -60,7 +62,7 @@ export class MyobComponent implements OnInit {
     });
 
     this.companyFile = {
-      isCollapsed: true
+      isCollapsed: false
     };
 
     this.payrollAccounts = payrollAccounts;
@@ -120,7 +122,7 @@ export class MyobComponent implements OnInit {
       password: file.password
     };
     this.gfs.submitForm(url, body).subscribe((res: any) => {
-      file.status = res.is_valid;
+      file.authenticated = res.is_valid;
     }, (err: any) => this.error = err);
   }
 
@@ -152,8 +154,22 @@ export class MyobComponent implements OnInit {
     }, (err: any) => this.error = err);
   }
 
+  public getAccountsOfCompanyFile(id: string, key: string): void {
+    const keys = ['subcontractor', 'candidate', 'company_client'];
+    if (keys.indexOf(key) > -1) {
+      let url = '/ecore/api/v2/company_settings/company_files/';
+      this.gfs.getAll(`${url}${id}/accounts`).subscribe((res: any) => {
+        this.payrollAccounts[key].forEach((el, i) => {
+          if (i !== 0) {
+            el.options = res.myob_accounts;
+          }
+        });
+      }, (err: any) => this.error = err);
+    }
+  }
+
   public getMYOBSettings() {
-    let url = '/api/v2/company_settings/myob_settings/';
+    let url = '/ecore/api/v2/company_settings/myob_settings/';
     this.gfs.getAll(url).subscribe((res: any) => {
       this.MYOBSettings = res.myob_settings;
     }, (err: any) => this.error = err);
@@ -194,6 +210,19 @@ export class MyobComponent implements OnInit {
       } else if (el.children) {
         this.fillingForm(el.children, data);
       }
+    });
+  }
+
+  public sendForm() {
+    const data = {};
+    const keys = ['subcontractor', 'candidate', 'company_client'];
+    keys.forEach((el) => {
+      data[el] = {};
+      this.payrollAccounts[el].forEach((item) => {
+        if (item.key !== el) {
+          data[el][item.key] = item.value;
+        }
+      });
     });
   }
 
