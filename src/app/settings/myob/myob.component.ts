@@ -7,6 +7,8 @@ import { LocalStorageService } from 'ng2-webstorage';
 import { Field } from '../../dynamic-form/models/field.model';
 import { SettingsService } from '../settings.service';
 
+import moment from 'moment-timezone';
+
 @Component({
   selector: 'myob',
   templateUrl: 'myob.component.html'
@@ -35,8 +37,11 @@ export class MyobComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    this.payrollAccounts = payrollAccounts;
     const routeData: any = this.route.snapshot.data;
     this.MYOBSettings = routeData.myobSettings.myob_settings;
+    this.parseMYOBSettings(this.MYOBSettings, moment);
+
     this.pageUrl = location.origin + location.pathname;
     this.route.url.subscribe((url) => {
       this.settingsService.url = <any> url;
@@ -65,7 +70,46 @@ export class MyobComponent implements OnInit {
       isCollapsed: false
     };
 
-    this.payrollAccounts = payrollAccounts;
+    this.getCompanyFiles();
+  }
+
+  public parseMYOBSettings(settings, moment, reset = undefined) {
+    if (!reset) {
+      settings.payroll_accounts_last_refreshed = settings.payroll_accounts_last_refreshed ?
+        moment.tz(settings.payroll_accounts_last_refreshed, 'Australia/Sydney')
+              .format('DD/MM/YYYY hh:mm A') : '';
+      settings.company_files_last_refreshed = settings.company_files_last_refreshed ?
+        moment.tz(settings.company_files_last_refreshed, 'Australia/Sydney')
+          .format('DD/MM/YYYY hh:mm A') : '';
+    }
+
+    const keys = ['subcontractor', 'candidate', 'company_client'];
+    keys.forEach((el) => {
+      this.payrollAccounts[el].forEach((item) => {
+        if (settings[item.key]) {
+          item.value = settings[item.key].id;
+        }
+      });
+    });
+  }
+
+  public parseAccounts(data: any[], key: string = undefined): void {
+    if (key) {
+      this.payrollAccounts[key].forEach((el, i) => {
+        if (i !== 0) {
+          el.options = data;
+        }
+      });
+    } else {
+      const keys = ['subcontractor', 'candidate', 'company_client'];
+      keys.forEach((el: string) => {
+        this.payrollAccounts[el].forEach((item, i) => {
+          if (i !== 0) {
+            item.options = data;
+          }
+        });
+      });
+    }
   }
 
   public eventHandler(e) {
@@ -130,8 +174,14 @@ export class MyobComponent implements OnInit {
     const url = '/ecore/api/v2/company_settings/company_files/';
     this.gfs.getAll(url).subscribe((res: any) => {
       this.companyFile.list = res.company_files;
+      this.companyFile.list.forEach((el) => {
+        el.username = '';
+        el.password = '';
+      });
       this.companyFile.isCollapsed = false;
       this.filledCompanyFiles(this.companyFile.list);
+
+      this.getAccounts();
     }, (err: any) => this.error = err);
   }
 
@@ -139,8 +189,13 @@ export class MyobComponent implements OnInit {
     const url = '/ecore/api/v2/company_settings/company_files/refresh/';
     this.gfs.getAll(url).subscribe((res: any) => {
       this.companyFile.list = res.company_files;
+      this.companyFile.list.forEach((el) => {
+        el.username = '';
+        el.password = '';
+      });
       this.companyFile.isCollapsed = false;
       this.filledCompanyFiles(this.companyFile.list);
+      this.getMYOBSettings();
     }, (err: any) => this.error = err);
   }
 
@@ -150,7 +205,13 @@ export class MyobComponent implements OnInit {
       url += 'refresh/';
     }
     this.gfs.getAll(url).subscribe((res: any) => {
-      this.accounts = res.myob_accounts;
+      if (res && res.myob_accounts) {
+        this.accounts = res.myob_accounts;
+      }
+      this.parseAccounts(this.accounts);
+      if (refresh) {
+        this.getMYOBSettings();
+      }
     }, (err: any) => this.error = err);
   }
 
@@ -159,11 +220,7 @@ export class MyobComponent implements OnInit {
     if (keys.indexOf(key) > -1) {
       let url = '/ecore/api/v2/company_settings/company_files/';
       this.gfs.getAll(`${url}${id}/accounts`).subscribe((res: any) => {
-        this.payrollAccounts[key].forEach((el, i) => {
-          if (i !== 0) {
-            el.options = res.myob_accounts;
-          }
-        });
+        this.parseAccounts(res, key);
       }, (err: any) => this.error = err);
     }
   }
@@ -172,6 +229,7 @@ export class MyobComponent implements OnInit {
     let url = '/ecore/api/v2/company_settings/myob_settings/';
     this.gfs.getAll(url).subscribe((res: any) => {
       this.MYOBSettings = res.myob_settings;
+      this.parseMYOBSettings(this.MYOBSettings, moment);
     }, (err: any) => this.error = err);
   }
 
@@ -214,16 +272,22 @@ export class MyobComponent implements OnInit {
   }
 
   public sendForm() {
+    let url = '/ecore/api/v2/company_settings/myob_settings/';
     const data = {};
     const keys = ['subcontractor', 'candidate', 'company_client'];
     keys.forEach((el) => {
-      data[el] = {};
       this.payrollAccounts[el].forEach((item) => {
         if (item.key !== el) {
-          data[el][item.key] = item.value;
+          data[item.key] = {
+            id: item.value
+          };
         }
       });
     });
+    this.resetErrors();
+    this.gfs.submitForm(url, data).subscribe(undefined,
+      (err: any) => this.parseError(err)
+    );
   }
 
   public getValueOfData(data, key: string, obj: Field): void {
@@ -252,6 +316,32 @@ export class MyobComponent implements OnInit {
       }
     });
     return result;
+  }
+
+  public parseError(err) {
+    if (err && err.errors) {
+      const keys = ['subcontractor', 'candidate', 'company_client'];
+      keys.forEach((el) => {
+        this.payrollAccounts[el].forEach((item) => {
+          if (err.errors[item.key]) {
+            item.error = err.errors[item.key].id;
+          }
+        });
+      });
+    }
+  }
+
+  public resetErrors() {
+    const keys = ['subcontractor', 'candidate', 'company_client'];
+    keys.forEach((el) => {
+      this.payrollAccounts[el].forEach((item) => {
+        item.error = null;
+      });
+    });
+  }
+
+  public reset() {
+    this.parseMYOBSettings(this.MYOBSettings, moment, true);
   }
 
 }
