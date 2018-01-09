@@ -219,6 +219,9 @@ export class FormRelatedComponent
                 }
               }
             });
+            results.forEach((elem) => {
+              elem.__str__ = formatString.format(this.display, elem);
+            });
             this.results = results;
           });
         } else {

@@ -59,7 +59,7 @@
       <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
         {{config.templateOptions.label}}:
       </label>
-      <div class="form-element-content" style="position: relative">
+      <div class="form-element-content flex-column align-items-start" style="position: relative">
         <input type="text" class="form-control custom-select autocomplete-value" autocomplete="off"
           [(ngModel)]="searchValue"
           [ngModelOptions]="{standalone: true}"

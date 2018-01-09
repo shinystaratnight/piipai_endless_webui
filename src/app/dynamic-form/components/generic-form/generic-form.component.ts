@@ -321,7 +321,6 @@ export class GenericFormComponent implements OnChanges, OnInit {
         this.fillingForm(el.children, data);
       }
     });
-    this.getDataForRules(data);
   }
 
   public getValueOfData(data, key, obj, metadata, update = false) {
@@ -671,7 +670,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
       useOptions: true,
       templateOptions: {
         label: 'Active',
-        display: 'name_before_activation',
+        display: '{name_before_activation}',
         param: 'number'
       }
     };
@@ -716,7 +715,15 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public getDataOfWorkflownode() {
     let keys = Object.keys(this.workflowData);
-    if (keys.length === 3) {
+    let active = true;
+    keys.forEach((el) => {
+      if (active) {
+        active = this.workflowData[el];
+      } else {
+        return;
+      }
+    });
+    if (active) {
       let query = [];
       keys.forEach((el) => {
         if (this.workflowData[el]) {
@@ -758,11 +765,6 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public getDataForRules(data) {
     let element = this.getElementFromMetadata(this.metadata, 'rules');
     if (element) {
-      ['company', 'number', 'workflow'].forEach((el) => {
-        if (data[el]) {
-          this.workflowData[el] = data[el];
-        }
-      });
       if (this.workflowData.workflow && this.workflowData.company) {
         let keys = Object.keys(this.workflowData);
         let endpoint = this.workflowEndpoints['state'];
