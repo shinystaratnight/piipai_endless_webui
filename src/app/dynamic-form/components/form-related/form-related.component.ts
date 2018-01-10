@@ -87,6 +87,8 @@ export class FormRelatedComponent
 
   public fields: string[];
 
+  public saveProcess: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -580,8 +582,12 @@ export class FormRelatedComponent
   }
 
   public formEvent(e, closeModal, type = undefined) {
+    if (e.type === 'saveStart') {
+      this.saveProcess = true;
+    }
     if (e.type === 'sendForm' && e.status === 'success' && !this.config.list) {
       closeModal();
+      this.saveProcess = false;
       const formatString = new FormatString();
       this.group.get(this.key).patchValue(e.data[this.param]);
       this.config.value = e.data[this.param];
@@ -589,6 +595,7 @@ export class FormRelatedComponent
       this.eventHandler({type: 'change'}, e.data[this.param]);
     } else if (e.type === 'sendForm' && e.status === 'success' && this.config.list) {
       closeModal();
+      this.saveProcess = false;
       this.updateList();
     }
   }

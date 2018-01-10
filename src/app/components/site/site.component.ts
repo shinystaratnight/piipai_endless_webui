@@ -34,6 +34,8 @@ export class SiteComponent implements OnInit {
 
   public formMode: string;
 
+  public saveProcess: boolean;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -182,7 +184,11 @@ export class SiteComponent implements OnInit {
   }
 
   public formEvent(e) {
+    if (e.type === 'saveStart') {
+      this.saveProcess = true;
+    }
     if (e.type === 'sendForm' && e.status === 'success') {
+      this.saveProcess = false;
       this.router.navigate([this.pageData.pathData.path]);
     }
   }

@@ -20,7 +20,7 @@
               *ngIf="pageData.pathData.id && formMode === 'edit'"
               (click)="deleteElement(pageData)">Delete</button>
             <button *ngIf="formMode === 'view'" type="button" class="btn btn-primary mr-2 ml-auto" (click)="changeMode(pageData)">Edit</button>
-            <button *ngIf="!formStorage && formMode !== 'view'" type="submit" class="btn btn-primary" [class.ml-auto]="!formMode">Save</button>
+            <button *ngIf="!formStorage && formMode !== 'view'" type="submit" class="btn btn-primary" [class.ml-auto]="!formMode" [disabled]="saveProcess">Save</button>
             <button *ngIf="formStorage && !approvedStorage && formMode === 'edit'" type="button" class="btn btn-success ml-auto" (click)="approveFormStorage(pageData)">Approve</button>
           </div>
       </generic-form>

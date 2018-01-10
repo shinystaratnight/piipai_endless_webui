@@ -170,7 +170,7 @@
     <span *ngIf="!customTemplate">:</span>
   </label>
   <div class="form-element-content">
-    <span *ngIf="!displayValue">-</span>
+    <span *ngIf="!displayValue && !results">-</span>
     <a *ngIf="!config.many" href="#" (click)="open('edit', $event)">{{displayValue}}</a>
     <div *ngIf="config.many && results">
       <a *ngFor="let item of results" href="#" (click)="open('edit', $event, item)">{{item.__str__}}</a>
@@ -195,7 +195,7 @@
     <div class="modal-body">
       <div *ngIf="modalData.type !== 'delete'">
         <generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c, type)" [mode]="modalData.mode" [data]="modalData.data">
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-primary" [disabled]="saveProcess">Save</button>
         </generic-form>
       </div>
       <div *ngIf="modalData.type === 'delete'">
