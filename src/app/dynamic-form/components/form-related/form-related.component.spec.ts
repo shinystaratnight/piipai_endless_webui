@@ -252,9 +252,9 @@ describe('FormRelatedComponent', () => {
           name: 'Third'
         }
       ];
-      let display = 'name';
+      let display = '{name}';
       let param = 'number';
-      comp.display = 'name';
+      comp.display = '{name}';
       comp.param = 'number';
       comp.config = config;
       comp.config.many = true;
@@ -266,9 +266,9 @@ describe('FormRelatedComponent', () => {
       expect(comp.display).toEqual(display);
       expect(comp.param).toEqual(param);
       expect(comp.results).toEqual([
-        {number: 1, name: 'First'},
-        {number: 2, name: 'Second'},
-        {number: 3, name: 'Third'}
+        { number: 1, name: 'First', __str__: 'First' },
+        { number: 2, name: 'Second', __str__: 'Second' },
+        { number: 3, name: 'Third', __str__: 'Third' }
       ]);
       expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config, comp.config.value);
       expect(comp.updateData).toHaveBeenCalledWith();

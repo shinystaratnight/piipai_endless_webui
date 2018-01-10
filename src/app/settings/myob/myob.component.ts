@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { meta, payrollAccounts } from './myob.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
@@ -33,7 +33,8 @@ export class MyobComponent implements OnInit {
     private gfs: GenericFormService,
     private route: ActivatedRoute,
     private storage: LocalStorageService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private router: Router
   ) { }
 
   public ngOnInit() {
@@ -67,7 +68,8 @@ export class MyobComponent implements OnInit {
     });
 
     this.companyFile = {
-      isCollapsed: false
+      isCollapsed: false,
+      list: []
     };
 
     this.getCompanyFiles();
@@ -188,7 +190,7 @@ export class MyobComponent implements OnInit {
   public refreshCompanyFiles() {
     const url = '/ecore/api/v2/company_settings/company_files/refresh/';
     this.gfs.getAll(url).subscribe((res: any) => {
-      this.companyFile.list = res.company_files;
+      this.companyFile.list.push(...res.company_files);
       this.companyFile.list.forEach((el) => {
         el.username = '';
         el.password = '';
@@ -285,7 +287,8 @@ export class MyobComponent implements OnInit {
       });
     });
     this.resetErrors();
-    this.gfs.submitForm(url, data).subscribe(undefined,
+    this.gfs.submitForm(url, data).subscribe(
+      (rse: any) => this.router.navigate(['/']),
       (err: any) => this.parseError(err)
     );
   }

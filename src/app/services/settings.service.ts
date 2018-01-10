@@ -24,9 +24,11 @@ export class SettingsService {
           return this.http.get(this.endpoint)
             .map((res: Response) => {
               let settings = res.json();
-              let body = document.body;
-              body.parentElement.classList.add(`${settings.company_settings.color_scheme}-theme`);
-              body.style.fontFamily = `${settings.company_settings.font}, sans-serif`;
+              setTimeout(() => {
+                let body = document.body;
+                body.parentElement.classList.add(`${settings.company_settings.color_scheme}-theme`);
+                body.style.fontFamily = `${settings.company_settings.font}, sans-serif`;
+              }, 700);
               return res;
             })
             .catch((err: any) => Observable.of(true));

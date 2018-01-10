@@ -762,29 +762,6 @@ export class GenericFormComponent implements OnChanges, OnInit {
     }
   }
 
-  public getDataForRules(data) {
-    let element = this.getElementFromMetadata(this.metadata, 'rules');
-    if (element) {
-      if (this.workflowData.workflow && this.workflowData.company) {
-        let keys = Object.keys(this.workflowData);
-        let endpoint = this.workflowEndpoints['state'];
-        let query = [];
-        keys.forEach((el) => {
-          if (this.workflowData[el]) {
-            if (el !== 'number' && el !== 'el') {
-              if (this.workflowData[el].id) {
-                query.push(`${el}=${this.workflowData[el].id}`);
-              } else {
-                query.push(`${el}=${this.workflowData[el]}`);
-              }
-            }
-          }
-        });
-        this.getRalatedData(this.metadata, 'rules', endpoint, null, `?${query.join('&')}`);
-      }
-    }
-  }
-
   public updateElements(metadata, param, type = undefined, value) {
     metadata.forEach((el) => {
       if (type && el.type === type) {
