@@ -90,6 +90,8 @@ export class MyobComponent implements OnInit {
       this.payrollAccounts[el].forEach((item) => {
         if (settings[item.key]) {
           item.value = settings[item.key].id;
+        } else {
+          item.value = '';
         }
       });
     });
@@ -100,6 +102,7 @@ export class MyobComponent implements OnInit {
       this.payrollAccounts[key].forEach((el, i) => {
         if (i !== 0) {
           el.options = data;
+          el.value = '';
         }
       });
     } else {
@@ -222,7 +225,7 @@ export class MyobComponent implements OnInit {
     if (keys.indexOf(key) > -1) {
       let url = '/ecore/api/v2/company_settings/company_files/';
       this.gfs.getAll(`${url}${id}/accounts`).subscribe((res: any) => {
-        this.parseAccounts(res, key);
+        this.parseAccounts(res.myob_accounts, key);
       }, (err: any) => this.error = err);
     }
   }
@@ -344,6 +347,7 @@ export class MyobComponent implements OnInit {
   }
 
   public reset() {
+    this.getAccounts();
     this.parseMYOBSettings(this.MYOBSettings, moment, true);
   }
 

@@ -443,7 +443,7 @@ describe('MyobComponent', () => {
       const key = 'subcontractor';
       spyOn(comp, 'parseAccounts');
       comp.getAccountsOfCompanyFile(id, key);
-      expect(comp.parseAccounts).toHaveBeenCalledWith(response.data, key);
+      expect(comp.parseAccounts).toHaveBeenCalledWith(response.data.myob_accounts, key);
     });
 
     it('should update errors', () => {
