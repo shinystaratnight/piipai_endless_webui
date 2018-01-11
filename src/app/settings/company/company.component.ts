@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { meta } from './company.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
@@ -31,7 +31,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
   constructor(
     private gfs: GenericFormService,
     private route: ActivatedRoute,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private router: Router
   ) { }
 
   public ngOnInit() {
@@ -68,9 +69,9 @@ export class CompanyComponent implements OnInit, OnDestroy {
   public submitForm(data) {
     this.gfs.submitForm(this.endpoint, data).subscribe(
       (res: any) => {
-        this.response = res;
-        this.savedTheme = res.company_settings.color_scheme;
-        this.savedFont = res.company_settings.font;
+        this.savedTheme = null;
+        this.savedFont = null;
+        this.router.navigate(['/']);
       },
       (err: any) => this.errors = err
     );

@@ -5,6 +5,8 @@ import { PermissionsComponent } from './permissions/permissions.component';
 import { CompanyComponent } from './company/company.component';
 import { MyobComponent } from './myob/myob.component';
 
+import { MyobResolver } from './myob/myob.resolver';
+
 export const routes: Routes = [
   {
     path: '',
@@ -25,7 +27,10 @@ export const routes: Routes = [
       },
       {
         path: 'myob',
-        component: MyobComponent
+        component: MyobComponent,
+        resolve: {
+          myobSettings: MyobResolver
+        }
       }
     ]
   },

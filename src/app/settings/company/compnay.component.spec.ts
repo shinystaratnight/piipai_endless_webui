@@ -4,7 +4,7 @@ import {
   TestBed,
   inject,
   async } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -52,13 +52,20 @@ describe('CompanyComponent', () => {
     url: new BehaviorSubject(mockUrl)
   };
 
+  const mockRouter = {
+    navigate() {
+      return true;
+    }
+  };
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CompanyComponent],
       providers: [
         { provide: SettingsService, useValue: mockSettingsService },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
-        { provide: GenericFormService, useValue: mockGenericFormService }
+        { provide: GenericFormService, useValue: mockGenericFormService },
+        { provide: Router, useValue: mockRouter }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })

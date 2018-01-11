@@ -21,7 +21,7 @@ export class GenericFormService {
     let headers = new Headers();
     this.updateHeaders(headers);
     return this.http.get(`${endpoint}${query}`, { headers })
-      .map((response: Response) => response.json())
+      .map((response: any) => response._body ? response.json() : {})
       .catch((error: any) => this.errorHandler(error));
   }
 
@@ -29,7 +29,7 @@ export class GenericFormService {
     let headers = new Headers();
     this.updateHeaders(headers);
     return this.http.get(endpoint, { headers })
-      .map((response: Response) => response.json())
+      .map((response: any) => response._body ? response.json() : {})
       .catch((error: any) => this.errorHandler(error));
   }
 
@@ -37,7 +37,7 @@ export class GenericFormService {
     let headers = new Headers();
     this.updateHeaders(headers);
     return this.http.options(`${endpoint}${query}`, { headers })
-      .map((response: Response) => response.json())
+      .map((response: any) => response.json())
       .catch((error: any) => this.errorHandler(error));
   }
 
@@ -45,7 +45,7 @@ export class GenericFormService {
     let headers = new Headers();
     this.updateHeaders(headers);
     return this.http.post(endpoint, data, { headers })
-      .map((response: Response) => response.json())
+      .map((response: any) => response._body ? response.json() : {})
       .catch((error: any) => this.errorHandler(error));
   }
 
@@ -53,7 +53,7 @@ export class GenericFormService {
     let headers = new Headers();
     this.updateHeaders(headers);
     return this.http.put(endpoint, data, { headers })
-      .map((response: Response) => response.json())
+      .map((response: any) => response._body ? response.json() : {})
       .catch((error: any) => this.errorHandler(error));
   }
 
@@ -61,7 +61,7 @@ export class GenericFormService {
     let headers = new Headers();
     this.updateHeaders(headers);
     return this.http.post(endpoint, data, { headers })
-      .map((response: Response) => response.json())
+      .map((response: any) => response._body ? response.json() : {})
       .catch((error: any) => this.errorHandler(error));
   }
 
@@ -69,7 +69,7 @@ export class GenericFormService {
     let headers = new Headers();
     this.updateHeaders(headers);
     return this.http.delete(`${endpoint}${id}/`, { headers })
-      .map((response: Response) => response.json())
+      .map((response: any) => response._body ? response.json() : {})
       .catch((error: any) => this.errors.parseErrors(error));
   }
 

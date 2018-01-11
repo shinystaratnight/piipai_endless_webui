@@ -1,4 +1,12 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  ViewChild,
+  AfterViewInit,
+  ElementRef,
+  EventEmitter
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FallbackDispatcher } from 'ng2-webcam';
 
@@ -18,6 +26,9 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   @ViewChild('picture')
   public picture;
 
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
+
   public config;
   public group: FormGroup;
   public errors: any;
@@ -32,6 +43,7 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   public flashPlayer: any;
   public err: any;
   public base64: string;
+  public link: string;
 
   public value: any;
 
@@ -103,13 +115,19 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
 
   public setInitValue() {
     if (this.config.default) {
-      this.value = this.config.default;
+      this.value = `ecore/media/${this.config.default}`;
     }
     if (this.config.value) {
       if (this.config.value instanceof Object && this.config.value.origin) {
         this.value = this.config.value.origin;
       } else if (typeof this.config.value === 'string') {
-        this.value = this.config.value;
+        let imageType = /^image\//;
+        let pdfType = /pdf$/;
+        if (pdfType.test(this.config.value)) {
+          this.link = this.config.value;
+        } else {
+          this.value = this.config.value;
+        }
       }
     }
     this.group.get(this.key).patchValue(undefined);
@@ -136,7 +154,7 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
 
   public save(closeModal) {
     if (this.base64) {
-      this.updateValue('image.jpeg', this.base64);
+      this.updateValue('image.jpeg', this.base64, true);
       closeModal();
     }
   }
@@ -157,19 +175,20 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   }
 
   public fileChangeEvent(e) {
-    this.updateValue('', '');
+    this.updateValue('', '', true);
     let file = e.target.files[0];
     if (file) {
       let reader = new FileReader();
       reader.onload = () => {
         let imageType = /^image\//;
+        let pdfType = /pdf$/;
 
-        if (!imageType.test(file.type)) {
+        if (!imageType.test(file.type) && !pdfType.test(file.type)) {
           return;
         }
         if (reader.result) {
           let name = file.name;
-          this.updateValue(name, reader.result);
+          this.updateValue(name, reader.result, imageType.test(file.type));
         }
       };
       reader.readAsDataURL(file);
@@ -230,10 +249,15 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     }
   }
 
-  public updateValue(name, value) {
+  public updateValue(name, value, image = false) {
     this.fileName = name;
-    this.value = value;
+    if (image) {
+      this.value = value;
+    }
     this.group.get(this.key).patchValue(value);
+    this.event.emit({
+      type: 'changeImage'
+    });
   }
 
 }

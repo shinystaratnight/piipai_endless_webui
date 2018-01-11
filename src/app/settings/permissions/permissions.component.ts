@@ -163,6 +163,9 @@ export class PermissionsComponent implements OnInit {
       (res: any) => {
         this.cashGroups.splice(this.groups.indexOf(group), 1);
         this.groups.splice(this.groups.indexOf(group), 1);
+        if (this.targetId === group.id) {
+          this.targetId = undefined;
+        }
       }
     );
   }
@@ -171,7 +174,7 @@ export class PermissionsComponent implements OnInit {
     if (type === 'user') {
       this.service.getPermissionsOfUser(id).subscribe(
         (res: any) => {
-          this.targetPermissions = <Permission[]> res.results;
+          this.targetPermissions = <Permission[]> res.permission_list;
           this.combineElement(this.targetPermissions, this.permissionsList);
         }
       );
@@ -179,7 +182,7 @@ export class PermissionsComponent implements OnInit {
     if (type === 'group') {
       this.service.getAllPermissionsOfTheGroup(id).subscribe(
         (res: any) => {
-          this.targetPermissions = <Permission[]> res.results;
+          this.targetPermissions = <Permission[]> res.permission_list;
           this.combineElement(this.targetPermissions, this.permissionsList);
         }
       );

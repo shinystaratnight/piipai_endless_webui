@@ -48,7 +48,7 @@
             <ul class="list-group w-100">
               <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
                 *ngFor="let option of previewList"
-                (click)="setValue(option)">{{option[display]}}</li>
+                (click)="setValue(option)">{{option.__str__}}</li>
             </ul>
           </div>
         </div>
@@ -59,7 +59,7 @@
       <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
         {{config.templateOptions.label}}:
       </label>
-      <div class="form-element-content" style="position: relative">
+      <div class="form-element-content flex-column align-items-start" style="position: relative">
         <input type="text" class="form-control custom-select autocomplete-value" autocomplete="off"
           [(ngModel)]="searchValue"
           [ngModelOptions]="{standalone: true}"
@@ -77,14 +77,14 @@
             <ul class="list-group w-100">
               <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
                 *ngFor="let option of previewList"
-                (click)="setValue(option)">{{option[display]}}</li>
+                (click)="setValue(option)">{{option.__str__}}</li>
             </ul>
           </div>
         </div>
         <div class="d-flex flex-wrap align-items-center mt-2">
           <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal"
             *ngFor="let item of results; let i = index">
-            {{item[display]}}
+            {{item.__str__}}
             <i fa class="text-white icon ml-2"
               (click)="deleteItem(i)"
               [name]="'times'"></i>
@@ -164,17 +164,21 @@
   </div>
 </div>
 
-<div class="form-group form-element" *ngIf="viewMode && !config.list && !config.hide">
+<div class="form-group form-element" [class.custom]="customTemplate" *ngIf="viewMode && !config.list && !config.hide">
   <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label">
-    {{config.templateOptions.label}}:
+    {{config.templateOptions.label}}
+    <span *ngIf="!customTemplate">:</span>
   </label>
   <div class="form-element-content">
     <span *ngIf="!displayValue">-</span>
     <a *ngIf="!config.many" href="#" (click)="open('edit', $event)">{{displayValue}}</a>
     <div *ngIf="config.many && results">
-      <a *ngFor="let item of results" href="#" (click)="open('edit', $event, item)">{{item[display]}}</a>
+      <a *ngFor="let item of results" href="#" (click)="open('edit', $event, item)">{{item.__str__}}</a>
     </div>
   </div>
+
+  <template [ngTemplateOutlet]="custom"></template>
+
 </div>
 
 <template #modal let-c="close" let-d="dismiss">
@@ -190,7 +194,7 @@
 
     <div class="modal-body">
       <div *ngIf="modalData.type !== 'delete'">
-        <generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c, type)" [mode]="modalData.mode">
+        <generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c, type)" [mode]="modalData.mode" [data]="modalData.data">
           <button type="submit" class="btn btn-primary">Save</button>
         </generic-form>
       </div>
@@ -223,3 +227,13 @@
   </div>
 </template>
 
+<template #custom>
+  <div class="d-flex flex-column justify-content-center">
+    <span *ngFor="let field of customTemplate">
+      <i fa *ngIf="field.value && field.icon" [name]="field.icon" class="text-primary"></i>
+      <span *ngIf="field.value && !field.link && !field.prefix">{{field.value}}</span>
+      <a *ngIf="field.value && field.link" href="#" (click)="open('edit', $event)">{{field.value}}</a>
+      <a *ngIf="field.value && field.prefix" href="{{field.prefix + field.value}}">{{field.value}}</a>
+    </span>
+  </div>
+</template>

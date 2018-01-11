@@ -18,6 +18,8 @@ import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
 import { SettingsService } from './settings.service';
 
+import { MyobResolver } from './myob/myob.resolver';
+
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
@@ -29,7 +31,16 @@ import { SettingsService } from './settings.service';
     InfiniteScrollModule,
     DynamicFormModule
   ],
-  declarations: [PermissionsComponent, SettingsComponent, CompanyComponent, MyobComponent],
-  providers: [PermissionsService, SettingsService]
+  declarations: [
+    PermissionsComponent,
+    SettingsComponent,
+    CompanyComponent,
+    MyobComponent
+  ],
+  providers: [
+    PermissionsService,
+    SettingsService,
+    MyobResolver
+  ]
 })
 export class SettingsModule { }

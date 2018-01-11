@@ -6,7 +6,7 @@ import {
   async,
   fakeAsync,
   tick } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -16,7 +16,7 @@ import { LocalStorageService } from 'ng2-webstorage';
 import { MyobComponent } from './myob.component';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { SettingsService } from '../settings.service';
-import { meta } from './myob.meta';
+import { meta, payrollAccounts } from './myob.meta';
 
 describe('MyobComponent', () => {
 
@@ -52,11 +52,24 @@ describe('MyobComponent', () => {
   const code = '123';
   const mockActivatedRoute = {
     url: Observable.of(mockUrl),
-    queryParams: Observable.of({code})
+    queryParams: Observable.of({code}),
+    snapshot: {
+      data: {
+        myobSettings: {
+          myob_settings: {}
+        }
+      }
+    }
   };
 
   const mockSettingsService = {
     url: new BehaviorSubject(mockUrl)
+  };
+
+  const mockRouter = {
+    navigate() {
+      return true;
+    }
   };
 
   beforeEach(async(() => {
@@ -66,7 +79,8 @@ describe('MyobComponent', () => {
         LocalStorageService,
         { provide: SettingsService, useValue: mockSettingsService },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
-        { provide: GenericFormService, useValue: mockGenericFormService }
+        { provide: GenericFormService, useValue: mockGenericFormService },
+        { provide: Router, useValue: mockRouter }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
@@ -86,15 +100,158 @@ describe('MyobComponent', () => {
         storage.store('secret', '234');
         spyOn(comp, 'fillingForm');
         spyOn(comp, 'saveInfo');
+        spyOn(comp, 'getCompanyFiles');
+        spyOn(comp, 'parseMYOBSettings');
         comp.ngOnInit();
+        expect(comp.payrollAccounts).toBeDefined();
+        expect(comp.MYOBSettings).toBeDefined();
         expect(comp.config).toBeDefined();
         expect(comp.pageUrl).toBeDefined();
         expect(comp.endpoint).toBeDefined();
         expect(comp.companyFile).toBeDefined();
         expect(comp.fillingForm).toHaveBeenCalledWith(meta, { key, secret });
         expect(comp.saveInfo).toHaveBeenCalledWith(code, key, secret);
+        expect(comp.getCompanyFiles).toHaveBeenCalled();
+        expect(comp.parseMYOBSettings).toHaveBeenCalled();
     })));
 
+  });
+
+  describe('parseMYOBSettings method', () => {
+    const settings = {
+      subcontractor_contract_work: {
+        id: 'c413e87a',
+        number: '11',
+        name: 'Business',
+        type: 'Bank'
+      },
+      subcontractor_gst: {
+        id: 'c413e87a',
+        number: '11',
+        name: 'Business',
+        type: 'Bank'
+      },
+      candidate_wages: {
+        id: '1e1f2cb0',
+        number: '12',
+        name: 'Undeposited',
+        type: 'Bank'
+      },
+      candidate_superannuation: {
+        id: '9eb5efe3',
+        number: '12',
+        name: 'Payroll',
+        type: 'Bank'
+      },
+      company_client_labour_hire: {
+        id: '99029d69',
+        number: '11',
+        name: 'Business',
+        type: 'Bank'
+      },
+      company_client_gst: {
+        id: '1e1f2cb0',
+        number: '12',
+        name: 'Undeposited',
+        type: 'Bank'
+      },
+      payroll_accounts_last_refreshed: '2018-01-10T02:25:05.708024+11:00',
+      company_files_last_refreshed: '2018-01-10T02:25:05.708024+11:00'
+    };
+
+    it('should update payrollAccounts', () => {
+      const result = {
+        isCollapsed: false,
+        subcontractor: [
+          {
+            label: 'Subcontractor',
+            key: 'subcontractor',
+            value: ''
+          },
+          {
+            label: 'Contract work',
+            key: 'subcontractor_contract_work',
+            value: 'c413e87a'
+          },
+          {
+            label: 'GST',
+            key: 'subcontractor_gst',
+            value: 'c413e87a'
+          }
+        ],
+        candidate: [
+          {
+            label: 'Cadidate',
+            key: 'candidate',
+            value: ''
+          },
+          {
+            label: 'Wages and Salries',
+            key: 'candidate_wages',
+            value: '1e1f2cb0'
+          },
+          {
+            label: 'Superannuation',
+            key: 'candidate_superannuation',
+            value: '9eb5efe3'
+          }
+        ],
+        company_client: [
+          {
+            label: 'Company Client',
+            key: 'company_client',
+            value: ''
+          },
+          {
+            label: 'Labour hire services',
+            key: 'company_client_labour_hire',
+            value: '99029d69'
+          },
+          {
+            label: 'GST',
+            key: 'company_client_gst',
+            value: '1e1f2cb0'
+          }
+        ]
+      };
+      comp.payrollAccounts = payrollAccounts;
+      const moment = require('moment-timezone');
+      comp.parseMYOBSettings(settings, moment, true);
+      expect(comp.payrollAccounts).toEqual(result);
+    });
+
+    it('should update time of settings', () => {
+      const moment = require('moment-timezone');
+      comp.payrollAccounts = payrollAccounts;
+      comp.parseMYOBSettings(settings, moment);
+      expect(settings.company_files_last_refreshed).toEqual('10/01/2018 02:25 AM');
+      expect(settings.payroll_accounts_last_refreshed).toEqual('10/01/2018 02:25 AM');
+    });
+  });
+
+  describe('paseAccounts method', () => {
+    it('should update options of accounts of subcontractor', () => {
+      const key = 'subcontractor';
+      const data = [];
+      comp.payrollAccounts = payrollAccounts;
+      comp.parseAccounts(data, key);
+      expect(comp.payrollAccounts.subcontractor[1].options).toEqual([]);
+      expect(comp.payrollAccounts.subcontractor[2].options).toEqual([]);
+    });
+
+    it('should update options of accouts of all type contact', () => {
+      const data = [];
+      comp.payrollAccounts = payrollAccounts;
+      comp.parseAccounts(data);
+      expect(comp.payrollAccounts.subcontractor[1].options).toEqual([]);
+      expect(comp.payrollAccounts.subcontractor[2].options).toEqual([]);
+
+      expect(comp.payrollAccounts.candidate[1].options).toEqual([]);
+      expect(comp.payrollAccounts.candidate[2].options).toEqual([]);
+
+      expect(comp.payrollAccounts.company_client[1].options).toEqual([]);
+      expect(comp.payrollAccounts.company_client[2].options).toEqual([]);
+    });
   });
 
   describe('eventHandler method', () => {
@@ -125,7 +282,7 @@ describe('MyobComponent', () => {
     })));
   });
 
-  describe('buttonHanler method', () => {
+  describe('buttonHandler method', () => {
     it('should call action of button', () => {
       const event = {
         type: 'click',
@@ -162,10 +319,10 @@ describe('MyobComponent', () => {
         id: '123',
         username: 'Tom',
         password: 'Smith',
-        status: undefined
+        authenticated: undefined
       };
       comp.testCompanyFile(file);
-      expect(file.status).toEqual(response.data.is_valid);
+      expect(file.authenticated).toEqual(response.data.is_valid);
     });
 
     it('should update errors', () => {
@@ -186,14 +343,23 @@ describe('MyobComponent', () => {
     it('should update list of company files', () => {
       response.status = 'success';
       response.data = {
-        list: []
+        company_files: [
+          {
+            id: '123',
+            name: 'Sandbox'
+          }
+        ]
       };
       comp.companyFile = {};
+      spyOn(comp, 'filledCompanyFiles');
+      spyOn(comp, 'getAccounts');
       comp.getCompanyFiles();
       expect(comp.companyFile).toEqual({
-        list: response.data,
+        list: response.data.company_files,
         isCollapsed: false
       });
+      expect(comp.filledCompanyFiles).toHaveBeenCalled();
+      expect(comp.getAccounts).toHaveBeenCalledWith();
     });
 
     it('should update errors', () => {
@@ -208,21 +374,132 @@ describe('MyobComponent', () => {
     it('should refresh list of company files', () => {
       response.status = 'success';
       response.data = {
+        company_files: [
+          {
+            id: '124',
+            name: 'Sandbox File'
+          }
+        ]
+      };
+      comp.companyFile = {
         list: []
       };
-      comp.companyFile = {};
-      comp.getCompanyFiles();
+      spyOn(comp, 'filledCompanyFiles');
+      spyOn(comp, 'getMYOBSettings');
+      comp.refreshCompanyFiles();
       expect(comp.companyFile).toEqual({
-        list: response.data,
+        list: response.data.company_files,
         isCollapsed: false
       });
+      expect(comp.filledCompanyFiles).toHaveBeenCalled();
+      expect(comp.getMYOBSettings).toHaveBeenCalled();
     });
 
     it('should update errors', () => {
       response.status = 'error';
       response.errors = {};
-      comp.getCompanyFiles();
+      comp.refreshCompanyFiles();
       expect(comp.error).toEqual(response.errors);
+    });
+  });
+
+  describe('getAccounts method', () => {
+    it('should update list of accounts', () => {
+      response.status = 'success';
+      response.data = {
+        myob_accounts: []
+      };
+      spyOn(comp, 'parseAccounts');
+      comp.getAccounts();
+      expect(comp.accounts).toEqual([]);
+      expect(comp.parseAccounts).toHaveBeenCalled();
+    });
+
+    it('should call getMYOBSettings for update date of refresh', () => {
+      response.status = 'success';
+      response.data = {};
+      spyOn(comp, 'parseAccounts');
+      spyOn(comp, 'getMYOBSettings');
+      comp.getAccounts(true);
+      expect(comp.parseAccounts).toHaveBeenCalled();
+      expect(comp.getMYOBSettings).toHaveBeenCalled();
+    });
+
+    it('should update errors', () => {
+      response.status = 'error';
+      response.errors = {};
+      comp.getAccounts();
+      expect(comp.error).toEqual(response.errors);
+    });
+  });
+
+  describe('getAccountsOfCompanyFile method', () => {
+    it('should update list of file accounts', () => {
+      response.status = 'success';
+      response.data = {
+        myob_accounts: []
+      };
+      const id = '123';
+      const key = 'subcontractor';
+      spyOn(comp, 'parseAccounts');
+      comp.getAccountsOfCompanyFile(id, key);
+      expect(comp.parseAccounts).toHaveBeenCalledWith(response.data.myob_accounts, key);
+    });
+
+    it('should update errors', () => {
+      response.status = 'error';
+      response.errors = {};
+      const id = '123';
+      const key = 'subcontractor';
+      comp.getAccountsOfCompanyFile(id, key);
+      expect(comp.error).toEqual(response.errors);
+    });
+  });
+
+  describe('getMYOBSettings method', () => {
+    it('should update myob settings', () => {
+      response.status = 'success';
+      response.data = {
+        myob_settings: {}
+      };
+      spyOn(comp, 'parseMYOBSettings');
+      comp.getMYOBSettings();
+      expect(comp.MYOBSettings).toEqual({});
+      expect(comp.parseMYOBSettings).toHaveBeenCalled();
+    });
+
+    it('should update errors', () => {
+      response.status = 'error';
+      response.errors = {};
+      comp.getMYOBSettings();
+      expect(comp.error).toEqual(response.errors);
+    });
+  });
+
+  describe('filledCompanyFiles method', () => {
+    it('should add company lists into account type', () => {
+      comp.payrollAccounts = {
+        subcontractor: [
+          {
+            key: 'subcontractor'
+          }
+        ],
+        candidate: [
+          {
+            key: 'candidate'
+          }
+        ],
+        company_client: [
+          {
+            key: 'company_client'
+          }
+        ]
+      };
+      const accounts = [];
+      comp.filledCompanyFiles(accounts);
+      expect(comp.payrollAccounts.subcontractor[0].options).toEqual([]);
+      expect(comp.payrollAccounts.candidate[0].options).toEqual([]);
+      expect(comp.payrollAccounts.company_client[0].options).toEqual([]);
     });
   });
 
@@ -281,6 +558,30 @@ describe('MyobComponent', () => {
     });
   });
 
+  describe('sendForm method', () => {
+    it('should save data', async(inject([Router], (router: Router) => {
+      response.status = 'success';
+      response.data = {};
+      comp.payrollAccounts = payrollAccounts;
+      spyOn(comp, 'resetErrors');
+      spyOn(router, 'navigate');
+      comp.sendForm();
+      expect(comp.resetErrors).toHaveBeenCalled();
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
+    })));
+
+    it('should update errors', () => {
+      response.status = 'errors';
+      response.errors = {};
+      comp.payrollAccounts = payrollAccounts;
+      spyOn(comp, 'resetErrors');
+      spyOn(comp, 'parseError');
+      comp.sendForm();
+      expect(comp.resetErrors).toHaveBeenCalled();
+      expect(comp.parseError).toHaveBeenCalled();
+    });
+  });
+
   describe('getValueOfData method', () => {
     it('should set value of element', () => {
       let data = {
@@ -301,6 +602,65 @@ describe('MyobComponent', () => {
     it('should return element from metadata', () => {
       const element = comp.getElementByKey(meta, 'connect');
       expect(element).toBeDefined();
+    });
+  });
+
+  describe('parseError method', () => {
+    it('should update errors of payroll accounts', () => {
+      comp.payrollAccounts = payrollAccounts;
+      const err = {
+        errors: {
+          subcontractor_contract_work: {
+            id: []
+          },
+          subcontractor_gst: {
+            id: []
+          },
+          candidate_wages: {
+            id: []
+          },
+          candidate_superannuation: {
+            id: []
+          },
+          company_client_labour_hire: {
+            id: []
+          },
+          company_client_gst: {
+            id: []
+          }
+        }
+      };
+      comp.parseError(err);
+      expect(comp.payrollAccounts.subcontractor[1].error).toEqual([]);
+      expect(comp.payrollAccounts.subcontractor[2].error).toEqual([]);
+
+      expect(comp.payrollAccounts.candidate[1].error).toEqual([]);
+      expect(comp.payrollAccounts.candidate[2].error).toEqual([]);
+
+      expect(comp.payrollAccounts.company_client[1].error).toEqual([]);
+      expect(comp.payrollAccounts.company_client[2].error).toEqual([]);
+    });
+  });
+
+  describe('resetErrors method', () => {
+    it('should reset errors', () => {
+      comp.payrollAccounts = payrollAccounts;
+      const keys = ['subcontractor', 'candidate', 'company_client'];
+      comp.resetErrors();
+      keys.forEach((el) => {
+        comp.payrollAccounts[el].forEach((item) => {
+          expect(item.error).toBeNull();
+        });
+      });
+    });
+  });
+
+  describe('reset method', () => {
+    it('should reset changes', () => {
+      comp.MYOBSettings = {};
+      spyOn(comp, 'parseMYOBSettings');
+      comp.reset();
+      expect(comp.parseMYOBSettings).toHaveBeenCalled();
     });
   });
 

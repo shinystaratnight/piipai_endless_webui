@@ -117,7 +117,7 @@ describe('FormRelatedComponent', () => {
       spyOn(comp, 'createEvent');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
-      expect(comp.display).toEqual('__str__');
+      expect(comp.display).toEqual('{__str__}');
       expect(comp.param).toEqual('id');
       expect(comp.setInitValue).toHaveBeenCalled();
       expect(comp.checkModeProperty).toHaveBeenCalled();
@@ -204,7 +204,7 @@ describe('FormRelatedComponent', () => {
       comp.config.value = value;
       comp.config.many = false;
       comp.key = config.key;
-      comp.display = 'name';
+      comp.display = '{name}';
       comp.param = 'number';
       spyOn(comp, 'generateDataForList');
       comp.setInitValue();
@@ -219,9 +219,8 @@ describe('FormRelatedComponent', () => {
         number: 2,
         name: 'First'
       }];
-      let display = 'name';
       let param = 'number';
-      comp.display = 'name';
+      comp.display = '{name}';
       comp.param = 'number';
       let value = 2;
       spyOn(comp, 'addControl');
@@ -253,9 +252,9 @@ describe('FormRelatedComponent', () => {
           name: 'Third'
         }
       ];
-      let display = 'name';
+      let display = '{name}';
       let param = 'number';
-      comp.display = 'name';
+      comp.display = '{name}';
       comp.param = 'number';
       comp.config = config;
       comp.config.many = true;
@@ -267,9 +266,9 @@ describe('FormRelatedComponent', () => {
       expect(comp.display).toEqual(display);
       expect(comp.param).toEqual(param);
       expect(comp.results).toEqual([
-        {number: 1, name: 'First'},
-        {number: 2, name: 'Second'},
-        {number: 3, name: 'Third'}
+        { number: 1, name: 'First', __str__: 'First' },
+        { number: 2, name: 'Second', __str__: 'Second' },
+        { number: 3, name: 'Third', __str__: 'Third' }
       ]);
       expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config, comp.config.value);
       expect(comp.updateData).toHaveBeenCalledWith();
@@ -595,7 +594,7 @@ describe('FormRelatedComponent', () => {
   describe('open method', () => {
 
     it('should set data for modal window', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = config;
+      comp.config = Object.assign({}, config);
       comp.group = fb.group({});
       comp.key = 'key';
       comp.modalData = {};
@@ -622,7 +621,10 @@ describe('FormRelatedComponent', () => {
     })));
 
     it('should set data for edit object', async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.config = config;
+      comp.config = Object.assign({}, config);
+      comp.config.prefilled = {
+        candidate_contact: '123'
+      };
       comp.group = fb.group({});
       comp.key = 'key';
       comp.modalData = {};
@@ -636,7 +638,16 @@ describe('FormRelatedComponent', () => {
         type,
         title: comp.displayValue,
         endpoint: comp.config.endpoint,
-        mode: 'edit'
+        mode: 'edit',
+        data: {
+          candidate_contact: {
+            action: 'add',
+            data: {
+              value: '123',
+              read_only: true
+            }
+          }
+        }
       });
     })));
 
@@ -763,20 +774,19 @@ describe('FormRelatedComponent', () => {
       let value = 'M';
       comp.config = config;
       comp.config.options = [
-        { name: 'Bob' },
-        { name: 'Sam' },
-        { name: 'John' },
-        { name: 'Bill' },
-        { name: 'Tom' }
+        { __str__: 'Bob' },
+        { __str__: 'Sam' },
+        { __str__: 'John' },
+        { __str__: 'Bill' },
+        { __str__: 'Tom' }
       ];
       comp.config.useOptions = true;
-      comp.display = 'name';
       comp.results = [];
       spyOn(comp, 'generatePreviewList');
       comp.filter(value);
       expect(comp.list).toEqual([
-        { name: 'Sam' },
-        { name: 'Tom' }
+        { __str__: 'Sam' },
+        { __str__: 'Tom' }
       ]);
       expect(comp.count).toBeNull();
       expect(comp.previewList).toBeNull();
@@ -798,17 +808,16 @@ describe('FormRelatedComponent', () => {
 
     it('should add value if many values', async(() => {
       let options = [
-        { name: 'Bob', id: '123' },
-        { name: 'Sam', id: '124' },
-        { name: 'John', id: '125' },
-        { name: 'Bill', id: '126' },
-        { name: 'Tom', id: '127' }
+        { __str__: 'Bob', id: '123' },
+        { __str__: 'Sam', id: '124' },
+        { __str__: 'John', id: '125' },
+        { __str__: 'Bill', id: '126' },
+        { __str__: 'Tom', id: '127' }
       ];
       let item = options[0];
       comp.config = config;
       comp.config.options = options;
       comp.config.many = true;
-      comp.display = 'name';
       comp.param = 'id';
       comp.results = [];
       comp.searchValue = 'some value';
@@ -833,11 +842,11 @@ describe('FormRelatedComponent', () => {
 
     it('should add value if single value', async(inject([FormBuilder], (fb: FormBuilder) => {
       let options = [
-        { name: 'Bob', id: 123 },
-        { name: 'Sam', id: 124 },
-        { name: 'John', id: 125 },
-        { name: 'Bill', id: 126 },
-        { name: 'Tom', id: 127 }
+        { __str__: 'Bob', id: 123 },
+        { __str__: 'Sam', id: 124 },
+        { __str__: 'John', id: 125 },
+        { __str__: 'Bill', id: 126 },
+        { __str__: 'Tom', id: 127 }
       ];
       let item = options[0];
       comp.config = config;
@@ -846,7 +855,7 @@ describe('FormRelatedComponent', () => {
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(''));
       comp.config.options = options;
-      comp.display = 'name';
+      comp.display = '{__str__}';
       comp.param = 'id';
       comp.results = [];
       comp.searchValue = 'some value';
@@ -964,14 +973,14 @@ describe('FormRelatedComponent', () => {
         status: 'success',
         data: {
           id: 123,
-          name: 'First'
+          __str__: 'First'
         }
       };
       comp.config = Object.assign({}, config);
       comp.key = comp.config.key;
       comp.config.list = false;
       comp.param = 'id';
-      comp.display = 'name';
+      comp.display = '{__str__}';
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(''));
       spyOn(test, 'closeModal');
@@ -1016,32 +1025,57 @@ describe('FormRelatedComponent', () => {
   describe('getOptions method', () => {
     it('should create new previewList', () => {
       let value: '123';
-      comp.config = config;
+      comp.config = Object.assign({}, config);
+      comp.display = '{id}';
       comp.limit = 10;
       response = {
         count: 25,
-        results: [1, 2, 3]
+        results: [
+          { id: 1 },
+          { id: 2 },
+          { id: 3 }
+        ]
       };
       comp.getOptions(value, 0, false);
       expect(comp.lastElement).toEqual(10);
       expect(comp.count).toEqual(25);
-      expect(comp.previewList).toEqual([1, 2, 3]);
+      expect(comp.previewList).toEqual([
+        {id: 1, __str__: '1'},
+        {id: 2, __str__: '2'},
+        {id: 3, __str__: '3'}
+      ]);
     });
 
     it('should add new elements into previewList', () => {
       let value: '123';
-      comp.config = config;
+      comp.config = Object.assign({}, config);
+      comp.display = '{id}';
       comp.limit = 10;
       comp.lastElement = 10;
-      comp.previewList = [1, 2, 3];
+      comp.previewList = [
+        { id: 1, __str__: '1' },
+        { id: 2, __str__: '2' },
+        { id: 3, __str__: '3' }
+      ];
       response = {
         count: 25,
-        results: [4, 5, 6]
+        results: [
+          { id: 4, __str__: 4 },
+          { id: 5, __str__: 5 },
+          { id: 6, __str__: 6 }
+        ]
       };
       comp.getOptions(value, 10, true);
       expect(comp.lastElement).toEqual(20);
       expect(comp.count).toEqual(25);
-      expect(comp.previewList).toEqual([1, 2, 3, 4, 5, 6]);
+      expect(comp.previewList).toEqual([
+        { id: 1, __str__: '1' },
+        { id: 2, __str__: '2' },
+        { id: 3, __str__: '3' },
+        { id: 4, __str__: '4' },
+        { id: 5, __str__: '5' },
+        { id: 6, __str__: '6' }
+      ]);
     });
   });
 

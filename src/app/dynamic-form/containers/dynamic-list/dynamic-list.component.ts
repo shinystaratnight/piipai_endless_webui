@@ -368,6 +368,7 @@ export class DynamicListComponent implements
           obj.action = element.action;
           obj['delim'] = col.delim;
           obj['title'] = col.title;
+          obj['display'] = this.format(element.display, el);
           if (element.type === 'datepicker') {
             let field = this.config.fields.find((elem) => elem.key === element.field);
             if (field) {
@@ -403,10 +404,17 @@ export class DynamicListComponent implements
             if (col.name === 'evaluate') {
               this.evaluateEndpoint = element.endpoint;
             }
+            obj.text = this.format(element.text, el);
           }
           if (element.type === 'static') {
             obj.value = this.format(element.text, el);
             obj.label = element.label;
+          }
+          if (element.type === 'picture') {
+            const field = this.config.fields.find((elem) => elem.key === element.field);
+            if (field) {
+              obj.default = field.default;
+            }
           }
           if (element.type === 'button') {
             obj.confirm = element.confirm;
@@ -726,7 +734,6 @@ export class DynamicListComponent implements
   }
 
   public showCandidateProfile(e) {
-    console.log(e);
     let arr = e.el.endpoint.split('/');
     let id = arr[arr.length - 2];
     arr.splice(arr.length - 2, 1);

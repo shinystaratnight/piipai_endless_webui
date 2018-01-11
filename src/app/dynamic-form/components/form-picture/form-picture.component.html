@@ -1,11 +1,11 @@
 <div class="form-group" *ngIf="!config.hide">
-  <div class="form-element">
-    <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label">
+  <div class="form-element" [class.custom]="config.custom">
+    <label class="col-form-label form-element-label" [hidden]="config.custom" *ngIf="label && config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
     <input
       #picture
-      accept="image/*"
+      accept="image/*,application/pdf"
       [attr.type]="'file'"
       [hidden]="true"
       [attr.id]="key"
@@ -13,7 +13,8 @@
       [attr.name]="key">
     <div class="form-element-picture">
       <img class="image-preview" *ngIf="value" [src]="value" alt="image">
-      <span *ngIf="!value && viewMode ">-</span>
+      <a *ngIf="link" [href]="link">Link</a>
+      <span *ngIf="!value && !link && viewMode ">-</span>
       <div *ngIf="!viewMode" class="d-flex align-items-center flex-wrap">
         <button type="button" class="btn btn-primary btn-sm text-white d-flex align-items-center"
           (click)="upload()">
