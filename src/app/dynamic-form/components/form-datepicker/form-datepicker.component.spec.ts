@@ -118,27 +118,58 @@ describe('FormDatepickerComponent', () => {
   });
 
   describe('setInitValue method', () => {
-    it('should init value', async(inject([FormBuilder], (fb: FormBuilder) => {
+    it('should init datetime value', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = Object.assign({}, config);
+      comp.config.templateOptions.type = 'datetime';
       comp.key = config.key;
-      comp.config.value = 'value';
+      comp.config.value = '2017-02-17T08:00:00+11:00';
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(undefined));
       spyOn(comp, 'setDate');
       comp.setInitValue(moment);
       expect(comp.setDate).toHaveBeenCalled();
+      expect(comp.displayValue).toEqual('17/02/2017 08:00 AM');
     })));
 
-    it('should init value', async(inject([FormBuilder], (fb: FormBuilder) => {
+    it('should init time value', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = Object.assign({}, config);
+      comp.config.templateOptions.type = 'time';
+      comp.key = config.key;
+      comp.config.value = '08:00:00';
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(undefined));
+      spyOn(comp, 'setTime');
+      comp.setInitValue(moment);
+      expect(comp.setTime).toHaveBeenCalled();
+      expect(comp.displayValue).toEqual('08:00 AM');
+    })));
+
+    it('should init default datetime value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = Object.assign({}, config);
+      comp.config.templateOptions.type = 'date';
       comp.key = config.key;
       comp.config.value = undefined;
-      comp.config.default = 'value';
+      comp.config.default = '2017-02-17T08:00:00+11:00';
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(undefined));
       spyOn(comp, 'setDate');
       comp.setInitValue(moment);
       expect(comp.setDate).toHaveBeenCalled();
+      expect(comp.displayValue).toEqual('17/02/2017');
+    })));
+
+    it('should init default time value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = Object.assign({}, config);
+      comp.config.templateOptions.type = 'time';
+      comp.key = config.key;
+      comp.config.value = undefined;
+      comp.config.default = '08:00:00';
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(undefined));
+      spyOn(comp, 'setTime');
+      comp.setInitValue(moment);
+      expect(comp.setTime).toHaveBeenCalled();
+      expect(comp.displayValue).toEqual('08:00 AM');
     })));
   });
 
@@ -207,6 +238,24 @@ describe('FormDatepickerComponent', () => {
 
   });
 
+  describe('updateTime method', () => {
+    it('should update time value', async(inject([FormBuilder], (fb: FormBuilder) => {
+      let time = {
+        format() {
+          return true;
+        }
+      };
+      comp.config = Object.assign({}, config);
+      comp.key = config.key;
+      comp.group = fb.group({});
+      comp.group.addControl(comp.config.key, fb.control(''));
+      spyOn(time, 'format').and.returnValue('08:00 AM');
+      comp.updateTime(time);
+      expect(comp.time).toEqual('08:00 AM');
+      expect(comp.group.get(comp.key).value).toBeDefined();
+    })));
+  });
+
   describe('setDate method', () => {
     it('should set date from api', async(() => {
       let value = '2017-06-06T00:00:00+10:00';
@@ -221,5 +270,21 @@ describe('FormDatepickerComponent', () => {
       comp.setDate(value, moment, true);
       expect(comp.updateDate).toHaveBeenCalled();
     }));
+  });
+
+  describe('setTime method', () => {
+    it('should set time from value', () => {
+      const value = '08:00:00';
+      spyOn(comp, 'updateTime');
+      comp.setTime(value, moment);
+      expect(comp.updateTime).toHaveBeenCalled();
+    });
+
+    it('should set time from picker', () => {
+      const value = '08:00 AM';
+      spyOn(comp, 'updateTime');
+      comp.setTime(value, moment, true);
+      expect(comp.updateTime).toHaveBeenCalled();
+    });
   });
 });

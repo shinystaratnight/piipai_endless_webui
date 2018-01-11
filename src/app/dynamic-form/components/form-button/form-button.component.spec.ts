@@ -12,6 +12,8 @@ describe('FormButtonComponent', () => {
   let el;
   let config = {
     type: 'button',
+    field: 'id',
+    rowId: '123',
     templateOptions: {
       label: 'ENTER',
       type: 'submit'
@@ -88,7 +90,7 @@ describe('FormButtonComponent', () => {
       form.addControl(key, fb.control(''));
       form.get(key).patchValue('test@test.com');
       comp.group = form;
-      comp.config = metadata;
+      comp.config = Object.assign({}, metadata);
       spyOn(comp.buttonAction, 'emit');
       comp.action(event);
       expect(comp.buttonAction.emit).toHaveBeenCalled();

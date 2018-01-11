@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { GenericFormService } from './../../services/generic-form.service';
 
+import { customTemplates } from '../../models/custom-templates';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Field } from '../../models/field.model';
@@ -200,6 +202,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);
           this.metadata = this.parseMetadata(data, this.relatedField);
+          this.addCustomTemplates(customTemplates[endpoint], this.metadata);
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
@@ -282,6 +285,12 @@ export class GenericFormComponent implements OnChanges, OnInit {
         }
         if (el.type === 'related' && el.list) {
           el.data = new BehaviorSubject(this.getValueOfData(data, el.key, el, metadata));
+          if (el.prefilled) {
+            const keys = Object.keys(el.prefilled);
+            keys.forEach((elem) => {
+              el.prefilled[elem] = this.format.format(el.prefilled[elem], data);
+            });
+          }
         }
         this.getValueOfData(data, el.key, el, metadata);
       } else if (el.key && el.key === 'timeline') {
@@ -312,7 +321,6 @@ export class GenericFormComponent implements OnChanges, OnInit {
         this.fillingForm(el.children, data);
       }
     });
-    this.getDataForRules(data);
   }
 
   public getValueOfData(data, key, obj, metadata, update = false) {
@@ -662,7 +670,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
       useOptions: true,
       templateOptions: {
         label: 'Active',
-        display: 'name_before_activation',
+        display: '{name_before_activation}',
         param: 'number'
       }
     };
@@ -707,7 +715,15 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public getDataOfWorkflownode() {
     let keys = Object.keys(this.workflowData);
-    if (keys.length === 3) {
+    let active = true;
+    keys.forEach((el) => {
+      if (active) {
+        active = this.workflowData[el];
+      } else {
+        return;
+      }
+    });
+    if (active) {
       let query = [];
       keys.forEach((el) => {
         if (this.workflowData[el]) {
@@ -742,34 +758,6 @@ export class GenericFormComponent implements OnChanges, OnInit {
         element.value = result.rules;
       } else {
         element.value = null;
-      }
-    }
-  }
-
-  public getDataForRules(data) {
-    let element = this.getElementFromMetadata(this.metadata, 'rules');
-    if (element) {
-      ['company', 'number', 'workflow'].forEach((el) => {
-        if (data[el]) {
-          this.workflowData[el] = data[el];
-        }
-      });
-      if (this.workflowData.workflow && this.workflowData.company) {
-        let keys = Object.keys(this.workflowData);
-        let endpoint = this.workflowEndpoints['state'];
-        let query = [];
-        keys.forEach((el) => {
-          if (this.workflowData[el]) {
-            if (el !== 'number' && el !== 'el') {
-              if (this.workflowData[el].id) {
-                query.push(`${el}=${this.workflowData[el].id}`);
-              } else {
-                query.push(`${el}=${this.workflowData[el]}`);
-              }
-            }
-          }
-        });
-        this.getRalatedData(this.metadata, 'rules', endpoint, null, `?${query.join('&')}`);
       }
     }
   }
@@ -842,5 +830,17 @@ export class GenericFormComponent implements OnChanges, OnInit {
         this.getReplaceElements(el.children);
       }
     });
+  }
+
+  public addCustomTemplates(customFields, metadata) {
+    if (customFields) {
+      metadata.forEach((el) => {
+        if (el.key) {
+          el.custom = customFields[el.key];
+        } else if (el.children) {
+          this.addCustomTemplates(customFields, el.children);
+        }
+      });
+    }
   }
 }

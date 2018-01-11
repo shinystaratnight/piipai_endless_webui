@@ -125,7 +125,7 @@ describe('FormPictureComponent', () => {
         comp.config.default = 'logo.png';
         comp.setInitValue();
         expect(comp.group.get(comp.key).value).toBeUndefined();
-        expect(comp.value).toEqual('logo.png');
+        expect(comp.value).toEqual('ecore/media/logo.png');
     })));
 
     it('should set value from api by Object value',
@@ -143,16 +143,28 @@ describe('FormPictureComponent', () => {
     })));
 
     it('should set value from api by string value',
-    async(inject([FormBuilder], (fb: FormBuilder) => {
-      comp.group = fb.group({});
-      comp.config = Object.assign({}, config);
-      comp.key = config.key;
-      comp.group.addControl(comp.key, fb.control(''));
-      comp.config.value = 'logo.png';
-      comp.setInitValue();
-      expect(comp.group.get(comp.key).value).toBeUndefined();
-      expect(comp.value).toEqual('logo.png');
-  })));
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.group = fb.group({});
+        comp.config = Object.assign({}, config);
+        comp.key = config.key;
+        comp.group.addControl(comp.key, fb.control(''));
+        comp.config.value = 'logo.png';
+        comp.setInitValue();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        expect(comp.value).toEqual('logo.png');
+    })));
+
+    it('should set pdf value from api by string value',
+      async(inject([FormBuilder], (fb: FormBuilder) => {
+        comp.group = fb.group({});
+        comp.config = Object.assign({}, config);
+        comp.key = config.key;
+        comp.group.addControl(comp.key, fb.control(''));
+        comp.config.value = '1202.pdf';
+        comp.setInitValue();
+        expect(comp.group.get(comp.key).value).toBeUndefined();
+        expect(comp.link).toEqual('1202.pdf');
+    })));
   });
 
   describe('ngAfterViewInit method', () => {
@@ -268,7 +280,7 @@ describe('FormPictureComponent', () => {
       spyOn(test, 'closeModal');
       spyOn(comp, 'updateValue');
       comp.save(test.closeModal);
-      expect(comp.updateValue).toHaveBeenCalledWith('image.jpeg', 'base64');
+      expect(comp.updateValue).toHaveBeenCalledWith('image.jpeg', 'base64', true);
       expect(test.closeModal).toHaveBeenCalled();
     });
 
@@ -331,7 +343,6 @@ describe('FormPictureComponent', () => {
   });
 
   describe('updateValue method', () => {
-
     it('should update value', inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
       comp.key = 'picture';
@@ -344,6 +355,19 @@ describe('FormPictureComponent', () => {
       expect(comp.group.get(comp.key).value).toEqual(value);
     }));
 
+    it('should update value', inject([FormBuilder], (fb: FormBuilder) => {
+      comp.config = config;
+      comp.key = 'picture';
+      comp.group = fb.group({});
+      comp.group.addControl(comp.key, fb.control(''));
+      let name = 'logo.jpeg';
+      let value = 'some string';
+      spyOn(comp.event, 'emit');
+      comp.updateValue(name, value, true);
+      expect(comp.fileName).toEqual(name);
+      expect(comp.group.get(comp.key).value).toEqual(value);
+      expect(comp.event.emit).toHaveBeenCalled();
+    }));
   });
 
 });

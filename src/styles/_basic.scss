@@ -111,6 +111,8 @@ input:checked ~ .color-preview {
 
 .form-element-content {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .form-element-checkbox {
@@ -128,6 +130,7 @@ input:checked ~ .color-preview {
 
   &-content{
     display: flex;
+    flex-direction: row;
     align-items: center;
     flex-basis: calc(100% - 200px);
     min-width: 200px;
@@ -164,6 +167,22 @@ input:checked ~ .color-preview {
       width: 100%;
       max-width: none;
       min-width: auto;
+    }
+  }
+}
+
+.site-page .form-element {
+  &.custom {
+    flex-direction: column;
+    justify-content: center;
+
+    .form-element-label {
+      text-transform: uppercase;
+      flex-basis: auto;
+    }
+
+    .form-element-content{
+      display: none;
     }
   }
 }

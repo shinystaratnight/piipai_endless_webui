@@ -6,7 +6,7 @@
   </dynamic-form>
 </div>
 
-<div *ngIf="connected" class="container-fluid" >
+<div class="container-fluid mb-5">
   <h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !companyFile.isCollapsed}">
     <i fa
       class="p-2"
@@ -18,7 +18,7 @@
       style="cursor: pointer"></i>
     <span>Company File</span>
     <button type="button" class="btn btn-default btn-sm mx-3" (click)="refreshCompanyFiles()">Refresh</button>
-    <span>Last refreshed - {{companyFile.refreshedDate}}</span>
+    <span>Last refreshed - {{MYOBSettings.company_files_last_refreshed}}</span>
   </h6>
   <div id="collapseExample" [ngbCollapse]="companyFile.isCollapsed" class="px-2">
     <div class="row" *ngFor="let file of companyFile.list">
@@ -33,11 +33,65 @@
       </div>
       <div class="col-12 col-md-3 col-lg-2 mb-2">
         <button type="button" class="btn btn-default mr-2" (click)="testCompanyFile(file)">Test</button>
-        <i fa [name]="file.status ? 'check' : 'times'"
-          [class.text-success]="file.status"
-          [class.text-danger]="!file.status"></i>
+        <i fa [name]="file.authenticated ? 'check' : 'times'"
+          [class.text-success]="file.authenticated"
+          [class.text-danger]="!file.authenticated"></i>
       </div>
     </div>
   </div>
 
+  <h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !payrollAccounts.isCollapsed}">
+    <i fa
+      class="p-2"
+      [name]="payrollAccounts.isCollapsed ? 'eye' : 'eye-slash'"
+      [border]=false
+      (click)="payrollAccounts.isCollapsed = !payrollAccounts.isCollapsed"
+      [attr.aria-expanded]="!payrollAccounts.isCollapsed"
+      aria-controls="collapseExample"
+      style="cursor: pointer"></i>
+    <span>Payroll accounts</span>
+    <button type="button" class="btn btn-default btn-sm mx-3" (click)="getAccounts(true)">Refresh</button>
+    <span>Last refreshed - {{MYOBSettings.payroll_accounts_last_refreshed}}</span>
+  </h6>
+  <div id="collapseExample" [ngbCollapse]="payrollAccounts.isCollapsed" class="px-2">
+    <h4>Expenses account</h4>
+    <template
+      *ngFor="let account of payrollAccounts.subcontractor; let first = first"
+      [ngTemplateOutlet]="accountTemplate"
+      [ngOutletContext]="{account: account, first: first, type: 'expenses', list: payrollAccounts.subcontractor}">
+    </template>
+    <br>
+    <template
+      *ngFor="let account of payrollAccounts.candidate; let first = first"
+      [ngTemplateOutlet]="accountTemplate"
+      [ngOutletContext]="{account: account, first: first, type: 'expenses'}">
+    </template>
+    <hr>
+    <h4>Income account</h4>
+    <template
+      *ngFor="let account of payrollAccounts.company_client; let first = first"
+      [ngTemplateOutlet]="accountTemplate"
+      [ngOutletContext]="{account: account, first: first, type: 'income'}">
+    </template>
+  </div>
+
+  <div class="d-flex justify-content-end align-items-center">
+    <button class="btn btn-default" type="button" (click)="reset()">Discard changes</button>
+    <button class="btn btn-primary ml-2" type="button" (click)="sendForm()">Save</button>
+  </div>
 </div>
+
+
+<template #accountTemplate let-a="account" let-first="first" let-t="type">
+  <div class="row">
+    <label class="col-12 col-md-2 col-lg-2 d-flex align-items-center" [class.account-field]="!first" [attr.for]="a.key">{{a.label}}</label>
+    <div class="col-12 col-md-5 col-lg-4 mb-2">
+      <select class="custom-select w-100" [(ngModel)]="a.value" (ngModelChange)="getAccountsOfCompanyFile($event, a.key)">
+        <option *ngIf="first" value="" [selected]="a.value === ''" disabled>Select company file</option>
+        <option *ngIf="!first" value="" [selected]="a.value === ''" disabled>Select {{t}} account</option>
+        <option *ngFor="let item of a.options" [value]="item.id" [selected]="item.id === a.value">{{item.name}}</option>
+      </select>
+      <div class="text-danger p-2" *ngFor="let err of a.error">{{err}}</div>
+    </div>
+  </div>
+</template>

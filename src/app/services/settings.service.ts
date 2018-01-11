@@ -18,25 +18,25 @@ export class SettingsService {
   ) { }
 
   public resolve() {
-    if (!this.settings) {
-      return this.userService.getUserData().mergeMap(
-        (user: any) => {
-          if (user.data.contact.contact_type === 'manager') {
-            return this.http.get(this.endpoint)
-              .map((res: Response) => {
-                let settings = res.json();
+    return this.userService.getUserData().mergeMap(
+      (user: any) => {
+        if (user.data.contact.contact_type === 'manager') {
+          return this.http.get(this.endpoint)
+            .map((res: Response) => {
+              let settings = res.json();
+              setTimeout(() => {
                 let body = document.body;
                 body.parentElement.classList.add(`${settings.company_settings.color_scheme}-theme`);
                 body.style.fontFamily = `${settings.company_settings.font}, sans-serif`;
-                return res;
-              })
-              .catch((err: any) => Observable.of(true));
-          } else {
-            return Observable.of(<any> []);
-          }
+              }, 700);
+              return res;
+            })
+            .catch((err: any) => Observable.of(true));
+        } else {
+          return Observable.of(<any> []);
         }
-      );
-    }
+      }
+    );
   }
 
 }

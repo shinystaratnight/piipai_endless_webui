@@ -5,6 +5,8 @@ import { LocalStorageService } from 'ng2-webstorage';
 import { CookieService } from 'angular2-cookie/core';
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 
+import { NavigationService } from './navigation.service';
+
 import { Observable } from 'rxjs/Observable';
 
 import { UserService } from './user.service';
@@ -32,12 +34,17 @@ describe('UserService', () => {
     }
   };
 
+  const mockNavigationService = {
+    navigationList: []
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         UserService,
         LocalStorageService,
         CookieService,
+        { provide: NavigationService, useValue: mockNavigationService },
         { provide: GenericFormService, useValue: mockGenericFormService },
         { provide: Router, useValue: mockRouter }
       ],
@@ -74,18 +81,20 @@ describe('UserService', () => {
 
   describe('logout method', () => {
     it('should delete information about user',
-      async(inject([UserService, CookieService, Router],
-        (userService: UserService, cookie: CookieService, router: Router) => {
-            response = {
-              status: 'success',
-              message: 'You are logged out'
-            };
-            userService.user = user;
-            spyOn(router, 'navigate');
-            userService.logout();
-            expect(userService.user).toBeNull();
-            expect(cookie.get('sessionid')).toBeUndefined();
-            expect(router.navigate).toHaveBeenCalledWith(['/home']);
+      async(inject([UserService, CookieService, Router, NavigationService],
+      (userService: UserService, cookie: CookieService, router: Router, nav: NavigationService) => {
+        response = {
+          status: 'success',
+          message: 'You are logged out'
+        };
+        userService.user = user;
+        nav.navigationList = [];
+        spyOn(router, 'navigate');
+        userService.logout();
+        expect(userService.user).toBeNull();
+        expect(cookie.get('sessionid')).toBeUndefined();
+        expect(router.navigate).toHaveBeenCalledWith(['/home']);
+        expect(nav.navigationList).toBeNull();
     })));
   });
 

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-// import { LocalStorageService } from 'ng2-webstorage';
 import { CookieService } from 'angular2-cookie/core';
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 
 import { Observable } from 'rxjs/Observable';
+import { NavigationService } from './navigation.service';
 
 @Injectable()
 export class UserService {
@@ -18,7 +18,8 @@ export class UserService {
   constructor(
     private service: GenericFormService,
     private router: Router,
-    private cookie: CookieService
+    private cookie: CookieService,
+    private navigation: NavigationService
   ) {}
 
   public getUserData() {
@@ -39,6 +40,7 @@ export class UserService {
       (res: any) => {
         if (res.status === 'success') {
           this.user = null;
+          this.navigation.navigationList = null;
           this.cookie.remove('sessionid');
           this.router.navigate(['/home']);
         }

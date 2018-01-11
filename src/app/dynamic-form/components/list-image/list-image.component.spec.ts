@@ -43,32 +43,56 @@ describe('ListImageComponent', () => {
 
   describe('ngOnInit method', () => {
     it('should update property icon', () => {
-      comp.config = config;
+      comp.config = Object.assign({}, config);
       spyOn(comp, 'setClass');
       comp.ngOnInit();
       expect(comp.icon).toEqual(comp.config.values[config.value]);
       expect(comp.setClass).toHaveBeenCalledWith(comp.config.value);
     });
 
+    it('should update property icon with color', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.color = {
+        male: 'success'
+      };
+      spyOn(comp, 'getColor');
+      comp.ngOnInit();
+      expect(comp.icon).toEqual(comp.config.values[config.value]);
+      expect(comp.getColor).toHaveBeenCalledWith(comp.config.value);
+    });
+
     it('should update src property', () => {
-      config.type = 'picture';
-      config.value = <any> {
+      comp.config = Object.assign({}, config);
+      comp.config.type = 'picture';
+      comp.config.value = <any> {
         thumb: 'image.jpg'
       };
-      comp.config = config;
       comp.ngOnInit();
       expect(comp.src).toEqual(comp.config.value.thumb);
     });
 
     it('should set default image', ()  => {
-      let defaultSrc = '/assets/img/avatar.png';
-      config.type = 'picture';
-      config.value = <any> {
+      comp.config = Object.assign({}, config);
+      comp.config.type = 'picture';
+      comp.config.default = 'logo.png';
+      comp.config.value = <any> {
         thumb: null
       };
-      comp.config = config;
+      let defaultSrc = 'ecore/media/logo.png';
       comp.ngOnInit();
       expect(comp.src).toEqual(defaultSrc);
+    });
+  });
+
+  describe('getColor method', () => {
+    it('should update iconClass property', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.color = {
+        true: 'danger'
+      };
+      const value = true;
+      comp.getColor(value);
+      expect(comp.iconClass).toEqual('text-danger');
     });
   });
 
