@@ -193,6 +193,10 @@ export class SiteComponent implements OnInit {
     }
   }
 
+  public formError() {
+    this.saveProcess = false;
+  }
+
   public modeEvent(mode) {
     this.formMode = mode;
   }

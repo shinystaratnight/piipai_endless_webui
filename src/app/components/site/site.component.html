@@ -14,6 +14,7 @@
         [mode]="formMode"
         (event)="formEvent($event)"
         (modeEvent)="modeEvent($event)"
+        (errorForm)="formError($event)"
         (str)="changeFormLabel($event)">
           <div class="d-flex">
             <button type="button" class="btn btn-danger mr-auto"

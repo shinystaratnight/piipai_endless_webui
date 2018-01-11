@@ -120,7 +120,7 @@
         type="button"
         class="text-white btn btn-sm group-button ml-auto mr-2"
         (click)="open('add')">
-          Add {{config.templateOptions.label}}
+          Add
       </button>
     </h6>
     <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list px-2">
@@ -194,8 +194,14 @@
 
     <div class="modal-body">
       <div *ngIf="modalData.type !== 'delete'">
-        <generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c, type)" [mode]="modalData.mode" [data]="modalData.data">
-          <button type="submit" class="btn btn-primary" [disabled]="saveProcess">Save</button>
+        <generic-form
+          [endpoint]="modalData.endpoint"
+          [mode]="modalData.mode"
+          [data]="modalData.data"
+          [id]="modalData.id"
+          (event)="formEvent($event, c, type)"
+          (errorForm)="formError($event)">
+            <button type="submit" class="btn btn-primary" [disabled]="saveProcess">Save</button>
         </generic-form>
       </div>
       <div *ngIf="modalData.type === 'delete'">

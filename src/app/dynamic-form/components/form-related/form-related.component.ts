@@ -548,8 +548,6 @@ export class FormRelatedComponent
     this.list = null;
     this.count = null;
     this.previewList = null;
-    this.errors = null;
-    this.message = null;
   }
 
   public deleteItem(index) {
@@ -598,6 +596,10 @@ export class FormRelatedComponent
       this.saveProcess = false;
       this.updateList();
     }
+  }
+
+  public formError() {
+    this.saveProcess = false;
   }
 
   public updateList() {

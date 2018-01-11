@@ -359,6 +359,15 @@ describe('SiteComponent', () => {
   });
 
   describe('formEvent method', () => {
+    it('should update save process', () => {
+      let event = {
+        type: 'saveStart'
+      };
+      comp.saveProcess = false;
+      comp.formEvent(event);
+      expect(comp.saveProcess).toBeTruthy();
+    });
+
     it('should redirect to list page', async(inject([Router], (router: Router) => {
       let event = {
         type: 'sendForm',
@@ -374,11 +383,20 @@ describe('SiteComponent', () => {
       };
       spyOn(router, 'navigate');
       comp.formEvent(event);
+      expect(comp.saveProcess).toBeFalsy();
       expect(router.navigate).toHaveBeenCalledWith([comp.pageData.pathData.path]);
     })));
   });
 
-  describe('formEvent method', () => {
+  describe('formError method', () => {
+    it('should update save process', () => {
+      comp.saveProcess = true;
+      comp.formError();
+      expect(comp.saveProcess).toBeFalsy();
+    });
+  });
+
+  describe('modeEvent method', () => {
     it('should change formMode', () => {
       const mode = 'view';
       comp.formMode = '';

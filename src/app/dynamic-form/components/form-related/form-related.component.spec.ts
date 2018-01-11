@@ -836,8 +836,6 @@ describe('FormRelatedComponent', () => {
       expect(comp.list).toBeNull();
       expect(comp.count).toBeNull();
       expect(comp.previewList).toBeNull();
-      expect(comp.message).toBeNull();
-      expect(comp.errors).toBeNull();
     }));
 
     it('should add value if single value', async(inject([FormBuilder], (fb: FormBuilder) => {
@@ -872,8 +870,6 @@ describe('FormRelatedComponent', () => {
       expect(comp.searchValue).toBeNull();
       expect(comp.list).toBeNull();
       expect(comp.previewList).toBeNull();
-      expect(comp.message).toBeNull();
-      expect(comp.errors).toBeNull();
     })));
 
   });
@@ -961,6 +957,15 @@ describe('FormRelatedComponent', () => {
 
   describe('formEvent method', () => {
 
+    it('should update save process', () => {
+      const event = {
+        type: 'saveStart'
+      };
+      comp.saveProcess = false;
+      comp.formEvent(event, undefined);
+      expect(comp.saveProcess).toBeTruthy();
+    });
+
     it('should close modal window and update value',
       async(inject([FormBuilder], (fb: FormBuilder) => {
       let test = {
@@ -986,6 +991,7 @@ describe('FormRelatedComponent', () => {
       spyOn(test, 'closeModal');
       spyOn(comp, 'eventHandler');
       comp.formEvent(event, test.closeModal);
+      expect(comp.saveProcess).toBeFalsy();
       expect(test.closeModal).toHaveBeenCalled();
       expect(comp.group.get(comp.key).value).toEqual(123);
       expect(comp.config.value).toEqual(123);
@@ -1007,10 +1013,19 @@ describe('FormRelatedComponent', () => {
       spyOn(test, 'closeModal');
       spyOn(comp, 'updateList');
       comp.formEvent(event, test.closeModal);
+      expect(comp.saveProcess).toBeFalsy();
       expect(test.closeModal).toHaveBeenCalled();
       expect(comp.updateList).toHaveBeenCalled();
     });
 
+  });
+
+  describe('formError method', () => {
+    it('should update save process', () => {
+      comp.saveProcess = true;
+      comp.formError();
+      expect(comp.saveProcess).toBeFalsy();
+    });
   });
 
   describe('updateList method', () => {
