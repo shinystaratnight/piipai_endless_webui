@@ -25,7 +25,10 @@
     <div class="user d-flex justify-content-end align-items-center ml-xl-auto flex-wrap">
       <span *ngIf="greeting" class="user-title" [ngClass]="{'hide': user}">{{greeting}}</span>
       <div *ngIf="user" class="d-flex align-items-center flex-wrap">
-        <a href="/" class="user-icons">
+        <a *ngIf="candidate" [routerLink]="'/profile'" class="user-icons">
+          <img class="user-icon" src="/assets/img/eye.svg" alt="View site">
+        </a>
+        <a *ngIf="!candidate" href="/" class="user-icons">
           <img class="user-icon" src="/assets/img/eye.svg" alt="View site">
         </a>
         <a href="/" class="user-icons">

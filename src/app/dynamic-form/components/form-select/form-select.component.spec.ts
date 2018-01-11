@@ -144,7 +144,7 @@ describe('FormSelectComponent', () => {
     it('should update display value', () => {
       comp.config = Object.assign({}, config);
       comp.config.value = undefined;
-      comp.config.view = true;
+      comp.viewMode = true;
       comp.config.hide = false;
       spyOn(comp, 'getValue').and.returnValue('-');
       comp.setInitValue();

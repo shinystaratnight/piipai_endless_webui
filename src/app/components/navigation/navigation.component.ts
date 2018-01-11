@@ -44,6 +44,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   public hideUserMenu: boolean = true;
   public greeting: string;
   public userPicture: string;
+  public candidate: boolean;
 
   constructor(
     private navigationService: NavigationService,
@@ -61,6 +62,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   public getUserInformation() {
     if (this.user && this.user.contact) {
       this.greeting = `Welcome, ${this.user.contact.__str__}`;
+      this.candidate = this.user.contact.contact_type === 'candidate';
     } else {
       this.greeting = `Welcome, Anonymous User`;
     }

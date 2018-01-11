@@ -109,7 +109,9 @@ export class SiteComponent implements OnInit {
   public getPageData(url) {
     this.siteService.getDataOfPage(url, this.pagesList).subscribe(
       (pageData: PageData) => {
-        if (!pageData.endpoint) {
+        if (pageData.pathData.path === '/profile/') {
+          this.pageData = pageData;
+        } else if (!pageData.endpoint) {
           this.router.navigate(['/']);
           return;
         } else {

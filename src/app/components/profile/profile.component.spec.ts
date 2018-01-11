@@ -486,7 +486,7 @@ describe('ProfileComponent', () => {
       let data = [];
       comp.generateList(elements, data, 'personalTraits');
       expect(data).toEqual([
-        ['Name', ''],
+        ['Name', '-'],
         ['', 'Mr.']
       ]);
     });
