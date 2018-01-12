@@ -12,6 +12,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SharedModule } from '../../../shared/shared.module';
 import { ErrorsService } from '../../../shared/services/errors.service';
 import { CheckPermissionService } from '../../../shared/services/check-permission';
+import { NavigationService } from '../../../services/navigation.service';
 
 describe('FormRelatedComponent', () => {
   let fixture: ComponentFixture<FormRelatedComponent>;
@@ -78,6 +79,8 @@ describe('FormRelatedComponent', () => {
     }
   };
 
+  const mockNavigationService = {};
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -87,7 +90,8 @@ describe('FormRelatedComponent', () => {
         FormBuilder,
         { provide: CheckPermissionService, useValue: mockCheckPermissionService },
         { provide: ErrorsService, userValue: mockErrorsService },
-        { provide: GenericFormService, useValue: mockGenericFormService }
+        { provide: GenericFormService, useValue: mockGenericFormService },
+        { provide: NavigationService, useValue: mockNavigationService }
       ],
       imports: [ReactiveFormsModule, FormsModule, NgbModule.forRoot(), SharedModule],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -207,7 +211,9 @@ describe('FormRelatedComponent', () => {
       comp.display = '{name}';
       comp.param = 'number';
       spyOn(comp, 'generateDataForList');
+      spyOn(comp, 'getLinkPath');
       comp.setInitValue();
+      expect(comp.getLinkPath).toHaveBeenCalled();
       expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config, comp.config.value);
       expect(comp.group.get(comp.key).value).toEqual(1);
       expect(comp.displayValue).toEqual('First');
@@ -225,11 +231,13 @@ describe('FormRelatedComponent', () => {
       let value = 2;
       spyOn(comp, 'addControl');
       spyOn(comp, 'generateDataForList');
+      spyOn(comp, 'getLinkPath');
       comp.group = fb.group({});
       comp.group.addControl(config.key, fb.control(''));
       comp.config.value = value;
       comp.key = config.key;
       comp.setInitValue();
+      expect(comp.getLinkPath).toHaveBeenCalled();
       expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config, comp.config.value);
       expect(comp.group.get(comp.key).value).toEqual(value);
       expect(comp.displayValue).toEqual('First');
@@ -277,48 +285,6 @@ describe('FormRelatedComponent', () => {
       expect(comp.results).toEqual(config.value);
     })));
 
-  });
-
-  describe('ngAfterContentChecked method', () => {
-    it('should call checkOverflow method', () => {
-      comp.config = config;
-      comp.tableWrapper = {};
-      spyOn(comp, 'checkOverfow');
-      comp.ngAfterContentChecked();
-      expect(comp.checkOverfow).toHaveBeenCalled();
-    });
-  });
-
-  describe('checkOverflow method', () => {
-    it('should set overflow auto', () => {
-      comp.tableWrapper = {
-        nativeElement: {
-          style: {
-            overflowX: 'visible'
-          },
-          offsetWidth: 100
-        }
-      };
-      comp.config = config;
-      comp.config.metadata = [{}];
-      comp.checkOverfow();
-      expect(comp.tableWrapper.nativeElement.style.overflowX).toEqual('auto');
-    });
-
-    it('should set overflow visible', () => {
-      comp.tableWrapper = {
-        nativeElement: {
-          style: {
-            overflowX: 'auto'
-          },
-          offsetWidth: 200
-        }
-      };
-      comp.config = config;
-      comp.config.metadata = [{}];
-      comp.checkOverfow();
-      expect(comp.tableWrapper.nativeElement.style.overflowX).toEqual('visible');
-    });
   });
 
   describe('getReplaceElements method', () => {

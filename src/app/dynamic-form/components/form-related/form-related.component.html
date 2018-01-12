@@ -170,10 +170,10 @@
     <span *ngIf="!customTemplate">:</span>
   </label>
   <div class="form-element-content">
-    <span *ngIf="!displayValue && !results">-</span>
-    <a *ngIf="!config.many" href="#" (click)="open('edit', $event)">{{displayValue}}</a>
+    <span *ngIf="!displayValue && (!results || results.length === 0)">-</span>
+    <a *ngIf="!config.many" href="{{this.linkPath}}" (click)="open('edit', $event)">{{displayValue}}</a>
     <div *ngIf="config.many && results">
-      <a *ngFor="let item of results" href="#" (click)="open('edit', $event, item)">{{item.__str__}}</a>
+      <a *ngFor="let item of results" href="/" (click)="open('edit', $event, item)">{{item.__str__}}</a>
     </div>
   </div>
 
@@ -238,7 +238,7 @@
     <span *ngFor="let field of customTemplate">
       <i fa *ngIf="field.value && field.icon" [name]="field.icon" class="text-primary"></i>
       <span *ngIf="field.value && !field.link && !field.prefix">{{field.value}}</span>
-      <a *ngIf="field.value && field.link" href="#" (click)="open('edit', $event)">{{field.value}}</a>
+      <a *ngIf="field.value && field.link" href="{{linkPath}}" (click)="open('edit', $event)">{{field.value}}</a>
       <a *ngIf="field.value && field.prefix" href="{{field.prefix + field.value}}">{{field.value}}</a>
     </span>
   </div>

@@ -39,6 +39,8 @@ export class GenericListComponent implements OnInit {
   public count: number;
   public minimizedTable = [];
 
+  public cashData: any[];
+
   constructor(
     private gfs: GenericFormService,
     private fs: FilterService,
@@ -127,6 +129,7 @@ export class GenericListComponent implements OnInit {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
           table.refresh = false;
+          this.cashData = data;
           this.calcPagination(data);
           if (this.inForm) {
             endpoint += '?type=formset';
@@ -137,7 +140,15 @@ export class GenericListComponent implements OnInit {
         }
       );
     } else if (query || this.query) {
-      let newQuery = query ? `${query}&${this.query}` : `?${this.query}`;
+      let newQuery;
+      if (query) {
+        newQuery = query;
+        if (this.query) {
+          newQuery += `&${this.query}`;
+        }
+      } else {
+        newQuery = this.query;
+      }
       this.gfs.getByQuery(endpoint, newQuery).subscribe(
         (data) => {
           table.data = data;
@@ -420,7 +431,7 @@ export class GenericListComponent implements OnInit {
               = ((queryParams[el] - 1) * this.limit > this.count && this.limit !== 1)
                 ? 1 : queryParams[el];
             queryList['pagination']
-              = `limit=${this.limit}&offset=${isNaN(this.limit * (pagination['page'] - 1)) ? 0 :
+              = `limit=${(this.limit ? this.limit : 10)}&offset=${isNaN(this.limit * (pagination['page'] - 1)) ? 0 : //tslint:disable-line
                 this.limit * (pagination['page'] - 1)}`;
           }
         } else if (params[1] === 's') {
@@ -447,7 +458,16 @@ export class GenericListComponent implements OnInit {
     });
     if (exist) {
       table.query = queryList;
-      this.getData(table.endpoint, this.generateQuery(table.query), table);
+      if (this.cashData) {
+        if (!table.query.filter && !table.query.sort && !table.query.pagination) {
+          table.data = this.cashData;
+          this.cashData = undefined;
+        } else {
+          this.getData(table.endpoint, this.generateQuery(table.query), table);
+        }
+      } else {
+        this.getData(table.endpoint, this.generateQuery(table.query), table);
+      }
     }
   }
 

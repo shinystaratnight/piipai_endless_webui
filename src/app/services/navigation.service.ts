@@ -22,6 +22,8 @@ export class NavigationService {
   public modelsListEndpoint = '/ecore/api/v2/core/dashboardmodules/?limit=-1';
   public error;
 
+  public linksList: Page[] = [];
+
   constructor(
     private gfs: GenericFormService
   ) { }
@@ -32,6 +34,7 @@ export class NavigationService {
         (res: any) => {
           if (res.results) {
             this.navigationList = res.results;
+            this.generateLinks(this.navigationList, this.linksList);
             return this.navigationList;
           }
         }
@@ -65,6 +68,15 @@ export class NavigationService {
 
   public resolve() {
     return this.getPages();
+  }
+
+  public generateLinks(links, target) {
+    links.forEach((el) => {
+      target.push(el);
+      if (el.childrens) {
+        this.generateLinks(el.childrens, target);
+      }
+    });
   }
 
 }

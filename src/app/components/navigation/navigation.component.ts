@@ -56,7 +56,16 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    this.headerHeight = this.header.nativeElement.offsetHeight - 1;
+    const header = this.header.nativeElement;
+    this.headerHeight = header.offsetHeight - 1;
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 1200) {
+        this.isCollapsed = false;
+      } else {
+        this.headerHeight = header.offsetHeight - 1;
+      }
+    });
   }
 
   public getUserInformation() {
