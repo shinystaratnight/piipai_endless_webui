@@ -131,6 +131,8 @@ export class DynamicListComponent implements
 
   public showFilters: boolean;
 
+  public asyncData: any;
+
   constructor(
     private filterService: FilterService,
     private modalService: NgbModal,
@@ -220,6 +222,7 @@ export class DynamicListComponent implements
       if (config.list) {
         this.sortedColumns = this.getSortedColumns(config.list.columns);
         this.body = this.prepareData(config.list.columns, data.results, config.list.highlight);
+        this.getAsyncData();
       }
     }
     if (innerTables && this.innerTableCall) {
@@ -284,6 +287,80 @@ export class DynamicListComponent implements
           }, 66);
         }
       }, false);
+    }
+  }
+
+  public getAsyncData() {
+    if (this.asyncData) {
+      const endpoints = Object.keys(this.asyncData);
+      if (endpoints.length) {
+        endpoints.forEach((endpoint) => {
+          if (this.asyncData[endpoint][0].method === 'get') {
+            let query = this.generateParams(this.asyncData[endpoint]);
+            if (endpoint.indexOf('?') > -1) {
+              query = `&${query}`;
+            } else {
+              query = `${query}`;
+            }
+            this.genericFormService.getByQuery(endpoint, query).subscribe(
+              (res: any) => this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
+              (err: any) => this.error = err
+            );
+          } else {
+            const body = this.generateParams(this.asyncData[endpoint]);
+            this.genericFormService.submitForm(endpoint, body).subscribe(
+              (res: any) => this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
+              (err: any) => this.error = err
+            );
+          }
+        });
+      }
+    }
+  }
+
+  public generateParams(elements: any[]) {
+    if (elements && elements.length) {
+      let params = {};
+      elements.forEach((element) => {
+        const keys = Object.keys(element.query);
+        keys.forEach((key) => {
+          if (params[key]) {
+            if (params[key] !== element.query[key]) {
+              if (Array.isArray(params[key])) {
+                params[key].push(element.query[key]);
+              } else {
+                params[key] = [params[key], element.query[key]];
+              }
+            }
+          } else {
+            params[key] = element.query[key];
+          }
+        });
+      });
+      if (elements[0].method === 'get') {
+        const keys = Object.keys(params);
+        let query = '';
+        keys.forEach((key) => {
+          if (Array.isArray(params[key])) {
+            params[key].forEach((item) => {
+              query += `${key}=${item}&`;
+            });
+          } else {
+            query += `${key}=${params[key]}&`;
+          }
+        });
+        return query.slice(0, query.length - 1);
+      } else if (elements[0].method === 'post') {
+        return params;
+      }
+    }
+  }
+
+  public updateValuesOfAsyncData(data, target) {
+    const element = data.find((item) => item.id === target.id);
+    if (element) {
+      target.obj.value = element[target.request_field];
+      target.content.splice(target.content.indexOf(target.obj), 1, Object.assign({}, target.obj));
     }
   }
 
@@ -358,6 +435,7 @@ export class DynamicListComponent implements
   }
 
   public prepareData(config, data, highlight = null) {
+    this.asyncData = {};
     let prepareData = [];
     data.forEach((el) => {
       let row = {
@@ -477,6 +555,31 @@ export class DynamicListComponent implements
           }
           if (!this.checkValue(obj)) {
             delete cell.contextMenu;
+          }
+          if (element.async && obj.value === null) {
+            element.endpoint = this.format(element.endpoint, el);
+            if (element.query) {
+              const keys = Object.keys(element.query);
+              keys.forEach((key) => {
+                element.query[key] = this.format(element.query[key], el);
+              });
+            }
+            if (this.asyncData[element.endpoint]) {
+              this.asyncData[element.endpoint].push({
+                method: element.method,
+                content: cell.content,
+                field: obj,
+                id: el.id,
+                request_field: element.request_field
+              });
+            } else {
+              this.asyncData[element.endpoint] = [{
+                method: element.method,
+                field: obj,
+                id: el.id,
+                request_field: element.request_field
+              }];
+            }
           }
           cell.content.push(obj);
         });
