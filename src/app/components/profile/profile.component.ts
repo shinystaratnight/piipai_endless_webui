@@ -46,6 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public tagsMetadata: any;
   public contactData: any;
   public contactId: any;
+  public defaultPicture: any;
 
   public modalData: any;
   public modalRef: any;
@@ -154,6 +155,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.service.getMetadata(this.endpoint + '?type=form').subscribe(
       (res: any) => {
         this.metadata = res;
+        const picture = this.getItemFromMetadata(res, 'contact.picture');
+        if (picture && picture.default) {
+          this.defaultPicture = picture.default.indexOf('http') ? picture.default : `/ecore/media/${picture.default}`; //tslint:disable-line
+        } else {
+          this.defaultPicture = `/assets/img/Labourking_logo.jpg`;
+        }
         this.getData();
       },
       (error: any) => this.error = error);
@@ -281,6 +288,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
             options = formElement.templateOptions.options;
           }
           let valueElement = this.getValueOfData(el, elem, options);
+          if (formElement.key === 'score') {
+            valueElement = [valueElement];
+          }
           item.id = this.getValueOfData(el, 'id');
           if (this.isLink(valueElement)) {
             item.values.push([valueElement]);

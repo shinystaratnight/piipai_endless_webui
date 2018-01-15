@@ -563,7 +563,7 @@ describe('ProfileComponent', () => {
         row: [
           {
             id: undefined,
-            values: [3, 'Inexperienced']
+            values: [[3], 'Inexperienced']
           }
         ]
       });
