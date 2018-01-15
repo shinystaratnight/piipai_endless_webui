@@ -9,7 +9,10 @@ describe('FormRowComponent', () => {
   let fixture: ComponentFixture<FormRowComponent>;
   let comp: FormRowComponent;
   let el;
-  let config = { children: [] };
+  let config = {
+    label: 'Title',
+    children: []
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({

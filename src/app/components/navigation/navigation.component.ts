@@ -44,6 +44,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   public hideUserMenu: boolean = true;
   public greeting: string;
   public userPicture: string;
+  public candidate: boolean;
 
   constructor(
     private navigationService: NavigationService,
@@ -55,12 +56,22 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    this.headerHeight = this.header.nativeElement.offsetHeight - 1;
+    const header = this.header.nativeElement;
+    this.headerHeight = header.offsetHeight - 1;
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 1200) {
+        this.isCollapsed = false;
+      } else {
+        this.headerHeight = header.offsetHeight - 1;
+      }
+    });
   }
 
   public getUserInformation() {
     if (this.user && this.user.contact) {
       this.greeting = `Welcome, ${this.user.contact.__str__}`;
+      this.candidate = this.user.contact.contact_type === 'candidate';
     } else {
       this.greeting = `Welcome, Anonymous User`;
     }

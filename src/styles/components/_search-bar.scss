@@ -49,12 +49,12 @@
     &-bar {
       input {
         padding: .8rem 1rem;
-        border: none;
+        border: 1px solid grey;
         background-color: transparent;
         box-shadow: 1px 1px 1px rgba(black, .04);
       }
     }
-    
+
     &-icon {
       position: absolute;
       right: 1rem;

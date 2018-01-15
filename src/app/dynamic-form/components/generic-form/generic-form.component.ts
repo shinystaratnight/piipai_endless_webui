@@ -372,6 +372,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
     if (this.response.message) {
       this.response.message = '';
     }
+    this.event.emit({
+      type: 'saveStart'
+    });
     if (this.editForm || this.edit) {
       let endpoint = this.editForm ? `${this.endpoint}${this.id}/` : this.endpoint;
       this.service.editForm(endpoint, newData).subscribe(
@@ -455,8 +458,12 @@ export class GenericFormComponent implements OnChanges, OnInit {
     this.buttonAction.emit(e);
   }
 
-  public getRelatedMetadata(metadata, key, endpoint) {
-    this.service.getMetadata(endpoint, '?type=formset').subscribe(
+  public getRelatedMetadata(metadata, key, endpoint, metadataQuery) {
+    let query = '?type=formset';
+    if (metadataQuery) {
+      query += `&${metadataQuery}`;
+    }
+    this.service.getMetadata(endpoint, query).subscribe(
       (response: any) => {
         this.setModeForElement(response.fields, this.mode);
         this.parseMetadata(metadata, {
@@ -494,7 +501,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
               }
             }
           }, update);
-          if (key === 'rules') {
+          if (key === 'rules' && this.endpoint === '/ecore/api/v2/core/workflownodes/') {
             if (response.results) {
               let rules = this.getElementFromMetadata(metadata, 'rules');
               this.updateValueOfRules(response.results);
@@ -562,13 +569,25 @@ export class GenericFormComponent implements OnChanges, OnInit {
           }
           el.options = [];
           if (el.list) {
-            this.getRelatedMetadata(metadata, el.key, el.endpoint);
+            let metadataQuery;
+            if (el.metadata_query) {
+              metadataQuery = this.parseMetadataQuery(el);
+            }
+            this.getRelatedMetadata(metadata, el.key, el.endpoint, metadataQuery);
           }
         }
       } else if (el.children) {
         this.getData(el.children, key, query);
       }
     });
+  }
+
+  public parseMetadataQuery(data) {
+    const keys = Object.keys(data);
+    const result = keys.map((query) => {
+      return `${query}=${data[query]}`;
+    });
+    return result.join('&');
   }
 
   public parseMetadata(metadata, params, update = true) {
@@ -732,6 +751,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
           }
         }
       });
+      query.push('limit=-1');
       let element = this.getElementFromMetadata(this.metadata, 'rules');
       this.getRalatedData(this.metadata,
         'rules', this.workflowEndpoints.state, null, `?${query.join('&')}`);

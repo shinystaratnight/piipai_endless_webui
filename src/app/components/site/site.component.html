@@ -4,26 +4,35 @@
   <div *ngSwitchCase="'form'">
     <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
     <div class="container-fluid pb-5">
-      <generic-form
-        *ngIf="pageData.endpoint !== '/ecore/api/v2/core/forms/'"
-        [title]="pageData.pathData.title"
-        [modal]="pageData.pathData.modal"
-        [endpoint]="pageData.endpoint"
-        [id]="pageData.pathData.id"
-        [edit]="pageData.pathData.postfix"
-        [mode]="formMode"
-        (event)="formEvent($event)"
-        (modeEvent)="modeEvent($event)"
-        (str)="changeFormLabel($event)">
-          <div class="d-flex">
-            <button type="button" class="btn btn-danger mr-auto"
-              *ngIf="pageData.pathData.id && formMode === 'edit'"
-              (click)="deleteElement(pageData)">Delete</button>
-            <button *ngIf="formMode === 'view'" type="button" class="btn btn-primary mr-2 ml-auto" (click)="changeMode(pageData)">Edit</button>
-            <button *ngIf="!formStorage && formMode !== 'view'" type="submit" class="btn btn-primary" [class.ml-auto]="!formMode">Save</button>
-            <button *ngIf="formStorage && !approvedStorage && formMode === 'edit'" type="button" class="btn btn-success ml-auto" (click)="approveFormStorage(pageData)">Approve</button>
+      <div class="d-flex justify-content-center align-items-center">
+        <div class="col-12 col-sm-9 col-md-9 col-lg-9 mt-3">
+          <div class="card">
+            <div class="card-content p-2">
+              <generic-form
+                *ngIf="pageData.endpoint !== '/ecore/api/v2/core/forms/'"
+                [title]="pageData.pathData.title"
+                [modal]="pageData.pathData.modal"
+                [endpoint]="pageData.endpoint"
+                [id]="pageData.pathData.id"
+                [edit]="pageData.pathData.postfix"
+                [mode]="formMode"
+                (event)="formEvent($event)"
+                (modeEvent)="modeEvent($event)"
+                (errorForm)="formError($event)"
+                (str)="changeFormLabel($event)">
+                  <div class="d-flex">
+                    <button type="button" class="btn btn-danger mr-auto"
+                      *ngIf="pageData.pathData.id && formMode === 'edit'"
+                      (click)="deleteElement(pageData)">Delete</button>
+                    <button *ngIf="formMode === 'view'" type="button" class="btn btn-primary mr-2 ml-auto" (click)="changeMode(pageData)">Edit</button>
+                    <button *ngIf="!formStorage && formMode !== 'view'" type="submit" class="btn btn-primary" [class.ml-auto]="!formMode" [disabled]="saveProcess">Save</button>
+                    <button *ngIf="formStorage && !approvedStorage && formMode === 'edit'" type="button" class="btn btn-success ml-auto" (click)="approveFormStorage(pageData)">Approve</button>
+                  </div>
+              </generic-form>
+            </div>
           </div>
-      </generic-form>
+        </div>
+      </div>
     </div>
     <form-builder
       *ngIf="pageData.endpoint === '/ecore/api/v2/core/forms/'"

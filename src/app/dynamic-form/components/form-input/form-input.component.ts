@@ -100,6 +100,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
         let value = (this.config.value === 0 || this.config.value) ?
            this.config.value : this.config.default;
         this.group.get(this.key).patchValue(value);
+        this.displayValue = value || value === 0 ? value : '-';
       }
     } else {
       if (this.config.value instanceof Object) {

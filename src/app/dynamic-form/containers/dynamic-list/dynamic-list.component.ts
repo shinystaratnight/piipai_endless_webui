@@ -258,12 +258,32 @@ export class DynamicListComponent implements
       let filterWrapper: any =
         this.datatable.nativeElement.getElementsByClassName('filter-wrapper');
       let width: any = window.innerWidth;
-      let height: any = window.innerHeight;
       let offsetTop;
       if (listButtons && listButtons.length && width > 992) {
         this.calcButton(offsetTop, listButtons, filterWrapper);
         this.calcTable();
       }
+
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        if (!resizeTimeout) {
+          resizeTimeout = setTimeout(() => {
+            resizeTimeout = null;
+            if (listButtons && listButtons.length && window.innerWidth > 992) {
+              this.calcButton(offsetTop, listButtons, filterWrapper);
+              this.calcTable();
+            } else {
+              filterWrapper[0].style.top = 0;
+              filterWrapper[0].style.height = 'auto';
+
+              if (this.tableWrapper) {
+                let tableWrapperEl = this.tableWrapper.nativeElement;
+                tableWrapperEl.style.maxHeight = 'auto';
+              }
+            }
+          }, 66);
+        }
+      }, false);
     }
   }
 

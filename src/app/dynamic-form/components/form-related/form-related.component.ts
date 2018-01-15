@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   AfterViewInit,
-  AfterContentChecked,
   ViewChild,
   Output,
   EventEmitter,
@@ -13,6 +12,7 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 
 import { GenericFormService } from './../../services/generic-form.service';
 import { CheckPermissionService } from '../../../shared/services/check-permission';
+import { NavigationService } from '../../../services/navigation.service';
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
@@ -39,7 +39,7 @@ export interface CustomField {
 
 export class FormRelatedComponent
   extends BasicElementComponent
-    implements OnInit, OnDestroy, AfterContentChecked {
+    implements OnInit, OnDestroy {
 
   @ViewChild('search')
   public search;
@@ -87,6 +87,10 @@ export class FormRelatedComponent
 
   public fields: string[];
 
+  public saveProcess: boolean;
+
+  public linkPath: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -94,7 +98,8 @@ export class FormRelatedComponent
     private fb: FormBuilder,
     private modalService: NgbModal,
     private genericFormService: GenericFormService,
-    private permission: CheckPermissionService
+    private permission: CheckPermissionService,
+    private navigation: NavigationService
   ) { super(); }
 
   public ngOnInit() {
@@ -176,6 +181,17 @@ export class FormRelatedComponent
     }
   }
 
+  public getLinkPath(endpoint): string {
+    const list = this.navigation.linksList;
+    let result;
+    list.forEach((el) => {
+      if (el.endpoint === endpoint) {
+        result = el.url;
+      }
+    });
+    return result;
+  }
+
   public setInitValue() {
     let formatString = new FormatString();
     this.results = [];
@@ -188,9 +204,21 @@ export class FormRelatedComponent
           if (this.config.options && this.config.options.length) {
             const obj = this.config.options.find((el) => el[this.param] === data[this.param]);
             if (obj) {
+              const path = this.getLinkPath(this.config.endpoint);
+              if (path) {
+                this.linkPath = location.origin + path + this.group.get(this.key).value + '/change';
+              } else {
+                this.linkPath = '/';
+              }
               this.displayValue = formatString.format(this.display, obj);
             }
           } else {
+            const path = this.getLinkPath(this.config.endpoint);
+            if (path) {
+              this.linkPath = location.origin + path + this.group.get(this.key).value + '/change';
+            } else {
+              this.linkPath = '/';
+            }
             this.displayValue = formatString.format(this.display, data);
           }
           value = data[this.param];
@@ -199,6 +227,12 @@ export class FormRelatedComponent
           if (this.config.options && this.config.options.length) {
             const obj = this.config.options.find((el) => el[this.param] === data);
             if (obj) {
+              const path = this.getLinkPath(this.config.endpoint);
+              if (path) {
+                this.linkPath = location.origin + path + this.group.get(this.key).value + '/change';
+              } else {
+                this.linkPath = '/';
+              }
               this.displayValue = formatString.format(this.display, obj);
             }
           }
@@ -241,24 +275,6 @@ export class FormRelatedComponent
       this.modalRef.close();
     }
   }
-
-  public ngAfterContentChecked() {
-    if (this.tableWrapper) {
-      this.checkOverfow();
-    }
-  }
-
-  public checkOverfow(): void {
-    if (this.config.metadata) {
-      let width = this.tableWrapper.nativeElement.offsetWidth;
-      let count = this.config.metadata.length;
-      if ((width / count) < 150) {
-        this.tableWrapper.nativeElement.style.overflowX = 'auto';
-      } else {
-        this.tableWrapper.nativeElement.style.overflowX = 'visible';
-      }
-    }
-  };
 
   public getReplaceElements(metadata: Field[]): void {
     metadata.forEach((el) => {
@@ -546,8 +562,6 @@ export class FormRelatedComponent
     this.list = null;
     this.count = null;
     this.previewList = null;
-    this.errors = null;
-    this.message = null;
   }
 
   public deleteItem(index) {
@@ -580,8 +594,12 @@ export class FormRelatedComponent
   }
 
   public formEvent(e, closeModal, type = undefined) {
+    if (e.type === 'saveStart') {
+      this.saveProcess = true;
+    }
     if (e.type === 'sendForm' && e.status === 'success' && !this.config.list) {
       closeModal();
+      this.saveProcess = false;
       const formatString = new FormatString();
       this.group.get(this.key).patchValue(e.data[this.param]);
       this.config.value = e.data[this.param];
@@ -589,8 +607,13 @@ export class FormRelatedComponent
       this.eventHandler({type: 'change'}, e.data[this.param]);
     } else if (e.type === 'sendForm' && e.status === 'success' && this.config.list) {
       closeModal();
+      this.saveProcess = false;
       this.updateList();
     }
+  }
+
+  public formError() {
+    this.saveProcess = false;
   }
 
   public updateList() {
