@@ -528,8 +528,10 @@ describe('GenericFormComponent', () => {
         let result = Object.assign({}, data, form);
         comp.form = form;
         spyOn(comp, 'parseResponse');
+        spyOn(comp.event, 'emit');
         comp.submitForm(data);
         expect(comp.parseResponse).toHaveBeenCalled();
+        expect(comp.event.emit).toHaveBeenCalledWith({ type: 'saveStart' });
         expect(comp.sendData).toEqual(result);
       }));
 
@@ -828,8 +830,9 @@ describe('GenericFormComponent', () => {
         ];
         let key = 'skill';
         let endpoint = 'some endpoint';
+        const metadataQuery = 'vacancie=true';
         spyOn(comp, 'getData');
-        comp.getRelatedMetadata(testMetadata, key, endpoint);
+        comp.getRelatedMetadata(testMetadata, key, endpoint, metadataQuery);
         expect(comp.getData).toHaveBeenCalled();
         expect(testMetadata[0]['metadata']).toEqual(metadata['fields']);
       });
@@ -875,13 +878,14 @@ describe('GenericFormComponent', () => {
 
       it('should update metadata for rules type', async(() => {
         let key = 'rules';
-        let endpoint = '/ecore/api/v2/workflownodes';
+        let endpoint = '/ecore/api/v2/core/workflownodes/';
         let query = '?company=123&workflow=124';
         response = {
           results: [
             { number: 10, name_before_activation: 'New' }
           ]
         };
+        comp.endpoint = endpoint;
         comp.metadata = [];
         comp.workflowData = {
           company: '123',
@@ -957,6 +961,10 @@ describe('GenericFormComponent', () => {
           type: 'related',
           key: 'address.country',
           endpoint: '/ecore/api/v2/countries',
+          list: true,
+          metadata_query: {
+            vacancie: true
+          },
           templateOptions: {
             display: 'name',
             param: 'id'
@@ -974,10 +982,25 @@ describe('GenericFormComponent', () => {
           }]
         }];
         spyOn(comp, 'getRalatedData');
+        spyOn(comp, 'parseMetadataQuery');
+        spyOn(comp, 'getRelatedMetadata');
         comp.getData(config);
         expect(comp.getRalatedData).toHaveBeenCalledTimes(1);
+        expect(comp.parseMetadataQuery).toHaveBeenCalled();
+        expect(comp.getRelatedMetadata).toHaveBeenCalled();
       }));
 
+    });
+
+    describe('pasreMetadataQuery method', () => {
+      it('should generate metadata query', () => {
+        const data = {
+          vacancie: true,
+          query: false
+        };
+        const result = comp.parseMetadataQuery(data);
+        expect(result).toEqual('vacancie=true&query=false');
+      });
     });
 
     describe('parseMetadata method', () => {
@@ -1261,7 +1284,7 @@ describe('GenericFormComponent', () => {
           'rules',
           comp.workflowEndpoints.state,
           null,
-          `?company=123&workflow=124`
+          `?company=123&workflow=124&limit=-1`
         );
       }));
 

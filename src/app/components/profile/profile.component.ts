@@ -247,7 +247,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         options = formElement.templateOptions.options;
       }
       let valueElement = this.getValueOfData(apiData, el, options);
-      item.push(valueElement ? valueElement : (el === 'nationality') ? 'Other' : '');
+      item.push(valueElement ? valueElement : (el === 'nationality') ? 'Other' : '-');
       if (this.isEmail(valueElement)) {
         item.push('mailto:');
       } else if (this.isPhone(valueElement)) {
@@ -285,7 +285,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           if (this.isLink(valueElement)) {
             item.values.push([valueElement]);
           } else {
-            item.values.push(valueElement ? valueElement : '');
+            item.values.push(valueElement || valueElement === 0 ? valueElement : '-');
           }
         });
         data.row.push(item);
@@ -317,7 +317,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         let value;
         if (options) {
           options.forEach((el) => {
-            if (el.value + '' === data[prop] + '') {
+            if (el.value == data[prop]) { // tslint:disable-line
               value = el.label;
             }
           });

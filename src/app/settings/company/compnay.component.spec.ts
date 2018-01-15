@@ -113,21 +113,17 @@ describe('CompanyComponent', () => {
   });
 
   describe('submitForm method', () => {
-    it('should update object', () => {
+    it('should update object', async(inject([Router], (router: Router) => {
       let data = {};
       comp.endpoint = 'some endpoint';
       response.status = 'success';
-      response.data = {
-        company_settings: {
-          color_scheme: 'indigo',
-          font: 'Barlow'
-        }
-      };
+      response.data = {};
+      spyOn(router, 'navigate');
       comp.submitForm(data);
-      expect(comp.response).toEqual(response.data);
-      expect(comp.savedTheme).toEqual(response.data.company_settings.color_scheme);
-      expect(comp.savedFont).toEqual(response.data.company_settings.font);
-    });
+      expect(comp.savedTheme).toBeNull();
+      expect(comp.savedFont).toBeNull();
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
+    })));
 
     it('should update errors property', () => {
       let data = {};

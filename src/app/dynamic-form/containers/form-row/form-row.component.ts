@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -6,7 +6,7 @@ import { FormGroup } from '@angular/forms';
   templateUrl: 'form-row.component.html'
 })
 
-export class FormRowComponent {
+export class FormRowComponent implements OnInit {
   public config: any;
   public group: FormGroup;
   public errors: any;
@@ -17,6 +17,12 @@ export class FormRowComponent {
 
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
+
+  public ngOnInit() {
+    if (!this.config.editForm) {
+      this.config.label = this.config.label.indexOf('{') === -1 ? this.config.label : '';
+    }
+  }
 
   public eventHandler(e) {
     this.event.emit(e);

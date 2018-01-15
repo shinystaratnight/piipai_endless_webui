@@ -74,7 +74,7 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
   }
 
   public getValue(options: any[], value: string): string {
-    let element = options.find((el) => el.value === value);
+    let element = options.find((el) => el.value == value); // tslint:disable-line
     if (element) {
       return element.label;
     } else {
@@ -86,7 +86,7 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
     if (this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
     }
-    if ((this.config.read_only || this.config.view) && !this.config.hide) {
+    if (this.viewMode && !this.config.hide) {
       this.displayValue = this.getValue(this.options, this.config.value);
     }
   }
