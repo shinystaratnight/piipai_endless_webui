@@ -4,10 +4,8 @@
     <div class="d-flex flex-column block">
 
       <div class="element d-flex align-items-center p-2 px-4 mb-3">
-        <img class="avatar mr-3" [src]="data.contact.picture && data.contact.picture.origin" alt="Profile">
+        <img class="avatar mr-3" [src]="(data.contact.picture && data.contact.picture.origin) || defaultPicture" alt="Profile">
         <span class="name mr-auto">{{data.contact.__str__}}</span>
-        <button type="button" class="btn btn-default"
-          (click)="openModal()">Edit</button>
       </div>
 
       <div class="element mb-3 mb-md-0">
@@ -62,8 +60,17 @@
           <tbody>
             <tr *ngFor="let row of skills.viewData.row" class="item">
               <td *ngFor="let cell of row.values; let f = first" >
-                <div class="d-flex align-items-center justify-content-between">
-                  {{cell}}
+                <div class="d-flex align-items-center">
+                  <span class="pr-1">{{cell}}</span>
+                  <ngb-rating *ngIf="cell.length === 1" [rate]="cell[0]" max="5" [readonly]="true">
+                    <template let-fill="fill" let-index="index">
+                      <span *ngIf="fill === 100" class="star full">&#9733;</span>
+                      <span *ngIf="fill === 0" class="star">&#9733;</span>
+                      <span *ngIf="fill < 100 && fill > 0" class="star">
+                        <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                      </span>
+                    </template>
+                  </ngb-rating>
                   <i fa class="edit icon text-muted ml-1 mr-2"
                     *ngIf="false"
                     [name]="'pencil'"
