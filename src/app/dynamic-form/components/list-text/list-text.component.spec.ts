@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ListTextComponent } from './list-text.component';
 
-describe('FormSelectComponent', () => {
+describe('ListTextComponent', () => {
   let fixture: ComponentFixture<ListTextComponent>;
   let comp: ListTextComponent;
   let el;

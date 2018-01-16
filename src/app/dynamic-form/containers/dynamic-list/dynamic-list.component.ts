@@ -77,11 +77,17 @@ export class DynamicListComponent implements
   @Input()
   public actionData: any;
 
+  @Input()
+  public supportData: any;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
   @Output()
   public list: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  public checkedObjects: EventEmitter<string[]> = new EventEmitter();
 
   @ViewChild('modal')
   public modal;
@@ -103,6 +109,9 @@ export class DynamicListComponent implements
 
   @ViewChild('showPreviewInvoice')
   public showPreviewInvoice;
+
+  @ViewChild('fillInMap')
+  public fillInMap;
 
   public body: any[] = [];
   public select: any;
@@ -669,6 +678,14 @@ export class DynamicListComponent implements
     keys.forEach((el) => {
       this.select[el] = this.selectedAll;
     });
+    this.emitSelect();
+  }
+
+  public emitSelect() {
+    if (this.select) {
+      const keys = Object.keys(this.select);
+      this.checkedObjects.emit(keys.filter((key) => this.select[key]));
+    }
   }
 
   public resetSelectedElements(data) {
@@ -1172,10 +1189,38 @@ export class DynamicListComponent implements
         case 'poped_table':
           this.popedTable();
           break;
+        case 'openMap':
+          this.showMap();
+          break;
         default:
           return;
       }
     }
+  }
+
+  public showMap() {
+    this.modalInfo = this.generateDataFormFillInMap({});
+    this.generateDataFormFillInMap(this.modalInfo);
+    this.open(this.fillInMap, {size: 'lg'});
+  }
+
+  public generateDataFormFillInMap(data) {
+    data.markers = [];
+    this.data.forEach((el) => {
+      data.markers.push({
+        latitude: this.getPropValue(el, 'address.latitude'),
+        longitude: this.getPropValue(el, 'address.longitude'),
+        name: this.getPropValue(el, 'contact.__str__'),
+        description: this.getPropValue(el, 'address.__str__')
+      });
+    });
+    if (this.supportData && this.supportData.marker) {
+      data.latitude = this.supportData.marker.latitude;
+      data.longitude = this.supportData.marker.longitude;
+      data.name = this.supportData.marker.name;
+      data.description = this.supportData.marker.description;
+    }
+    return data;
   }
 
   public showPreview(e) {

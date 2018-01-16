@@ -1,8 +1,24 @@
-<span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="value || value === 0">
-  <span [title]="config.title || ''">
-    <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>{{value}}
+<span *ngIf="!arrayValue">
+  <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="value || value === 0">
+    <span [title]="config.title || ''">
+      <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>{{value}}
+    </span>
   </span>
+  <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="!value && value !== 0">-</span>
 </span>
-<span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="!value && value !== 0">-</span>
+
+<span *ngIf="arrayValue">
+  <span *ngFor="let item of value; let l = last">
+    <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="value || value === 0">
+      <span [title]="config.title || ''">
+        <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>{{value}}
+      </span>
+    </span>
+    <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="!value && value !== 0">-</span>
+  </span>
+  <span *ngIf="config.delim && !l">{{config.delim}}</span>
+  <br *ngIf="!config.delim && !l">
+</span>
+
 <span *ngIf="config.delim && !last">{{config.delim}}</span>
 <br *ngIf="!config.delim">

@@ -12,6 +12,7 @@ export class ListTextComponent implements OnInit {
   public length: any;
   public last: boolean;
   public value: any;
+  public arrayValue: boolean;
 
   public ngOnInit() {
     if (this.config.value || this.config.value === 0) {
@@ -19,6 +20,9 @@ export class ListTextComponent implements OnInit {
         this.value = this.config.display;
       } else {
         this.value = this.config.value;
+        if (Array.isArray(this.value)) {
+          this.arrayValue = true;
+        }
       }
     }
     this.checkDate(moment);
@@ -28,17 +32,34 @@ export class ListTextComponent implements OnInit {
     let type = this.config.templateOptions && this.config.templateOptions.type;
     if (type === 'time' || type === 'date' || type === 'datetime') {
       if (type === 'time') {
-        this.value = this.config.value ?
-          moment(this.config.value, 'hh:mm:ss').format('hh:mm A') : '-';
+        if (this.arrayValue) {
+          const result = this.value.map((el) => {
+            return el ? moment(el, 'hh:mm:ss').format('hh:mm A') : '-';
+          });
+          this.value = result;
+        } else {
+          this.value = this.value ? moment(this.value, 'hh:mm:ss').format('hh:mm A') : '-';
+        }
       }
       if (type === 'date') {
-        this.value = this.config.value ?
-          moment(this.config.value, 'YYYY-MM-DD').format('DD/MM/YYYY') : '-';
+        if (this.arrayValue) {
+          const result = this.value.map((el) => {
+            return el ? moment(el, 'YYYY-MM-DD').format('DD/MM/YYYY') : '-';
+          });
+          this.value = result;
+        } else {
+          this.value = this.value ? moment(this.value, 'YYYY-MM-DD').format('DD/MM/YYYY') : '-';
+        }
       }
       if (type === 'datetime') {
-        this.value = this.config.value ?
-          moment.tz(this.config.value, 'Australia/Sydney')
-                .format('DD/MM/YYYY hh:mm A') : '-';
+        if (this.arrayValue) {
+          const result = this.value.map((el) => {
+            return el ? moment.tz(el, 'Australia/Sydney').format('DD/MM/YYYY hh:mm A') : '-';
+          });
+          this.value = result;
+        } else {
+          this.value = this.value ? moment.tz(this.value, 'Australia/Sydney').format('DD/MM/YYYY hh:mm A') : '-'; //tslint:disable-line
+        }
       }
     }
   }

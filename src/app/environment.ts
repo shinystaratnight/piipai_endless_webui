@@ -56,3 +56,7 @@ export const decorateModuleRef = _decorateModuleRef;
 export const ENV_PROVIDERS = [
   ...PROVIDERS
 ];
+
+export const environment = {
+  GOOGLE_GEO_CODING_API_KEY: ''
+};

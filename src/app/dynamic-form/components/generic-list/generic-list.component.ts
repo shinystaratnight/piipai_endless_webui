@@ -4,6 +4,8 @@ import { FilterService } from './../../services/filter.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Output } from '@angular/core/src/metadata/directives';
+import { EventEmitter } from '@angular/common/src/facade/async';
 
 @Component({
   selector: 'generic-list',
@@ -26,6 +28,12 @@ export class GenericListComponent implements OnInit {
 
   @Input()
   public update: BehaviorSubject<boolean>;
+
+  @Input()
+  public supportData: any;
+
+  @Output()
+  public checkedObjects: EventEmitter<string[]> = new EventEmitter();
 
   public metadata: any;
   public tables = [];
@@ -476,6 +484,10 @@ export class GenericListComponent implements OnInit {
     if (this.pagination['limit'] && this.pagination['offset']) {
       return (this.pagination['offset'] / this.pagination['limit']) + 1;
     }
+  }
+
+  public checkedHandler(e) {
+    this.checkedObjects.emit(e);
   }
 
 }

@@ -126,14 +126,20 @@ describe('FilterDateComponent', () => {
     it('should be called generateQuery method',
       async(inject([FilterService], (fs: FilterService) => {
         comp.config = config;
-        let query = '?from=10-03-17';
+        let query = 'from=2018-01-16';
         spyOn(fs, 'generateQuery');
-        spyOn(comp, 'parseDate');
+        spyOn(comp, 'parseDate').and.returnValue('from=16/01/2018');
+        spyOn(comp, 'resetData');
+        spyOn(comp, 'changeQuery');
+        spyOn(comp, 'updateConfig');
         comp.selectQuery(query);
-        expect(fs.generateQuery).toHaveBeenCalled();
-        expect(comp.parseDate).toHaveBeenCalled();
-        expect(comp.query).toEqual(query);
         expect(comp.picker).toBeFalsy();
+        expect(comp.resetData).toHaveBeenCalled();
+        expect(comp.parseDate).toHaveBeenCalled();
+        expect(comp.query).toEqual('from=16/01/2018');
+        expect(fs.generateQuery).toHaveBeenCalled();
+        expect(comp.changeQuery).toHaveBeenCalled();
+        expect(comp.updateConfig).toHaveBeenCalled();
     })));
 
   });
@@ -202,7 +208,7 @@ describe('FilterDateComponent', () => {
   describe('parseDate method', () => {
 
     it('should parse date form query', () => {
-      let query = 'from=2017-01-03&to=2017-01-15';
+      let query = 'from=03/01/2017&to=15/01/2017';
       let result: any = {
         from: '03/01/2017',
         to: '15/01/2017'
@@ -211,6 +217,14 @@ describe('FilterDateComponent', () => {
       comp.dateFormat = 'DD/MM/YYYY';
       comp.parseDate(query, moment);
       expect(comp.data).toEqual(result);
+    });
+
+    it('should parse date form query and return new query', () => {
+      let query = 'from=2017-01-03&to=2017-01-15';
+      let result = 'from=03/01/2017&to=15/01/2017';
+      comp.config = config;
+      const newQuery = comp.parseDate(query, moment, 'YYYY-MM-DD');
+      expect(newQuery).toEqual(result);
     });
 
   });

@@ -26,6 +26,21 @@ export class FilterRelatedComponent implements OnInit {
   public previewList: any[];
   public topHeight: number;
 
+  public settingValue: boolean = true;
+
+  public defaultValue: any;
+  public theme: string;
+  public icons = {
+    r3sourcer: {
+      true: 'angle-right',
+      false: 'angle-down'
+    },
+    default: {
+      true: 'eye',
+      false: 'eye-slash'
+    }
+  };
+
   @ViewChild('search')
   public search;
 
@@ -43,6 +58,11 @@ export class FilterRelatedComponent implements OnInit {
       (params) => this.updateFilter()
     );
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
+    this.defaultValue = {
+      [this.config.data.key]: '',
+      [this.config.data.value]: 'All'
+    };
+    this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
   }
 
   public generateList(item, concat = false): void {
@@ -103,6 +123,7 @@ export class FilterRelatedComponent implements OnInit {
 
   public deleteValue(item) {
     item.data = '';
+    item.displayValue = 'All';
     this.fs.generateQuery(
       this.genericQuery(this.elements, this.config.query),
       this.config.key, this.config.listName, this.elements);
@@ -134,7 +155,7 @@ export class FilterRelatedComponent implements OnInit {
       lastElement: 0,
       hideAutocomplete: true
     };
-    element['displayValue'] = data ? this.getOption(data, element) : this.config.label;
+    element['displayValue'] = data ? this.getOption(data, element) : 'All';
     return element;
   }
 
@@ -174,14 +195,20 @@ export class FilterRelatedComponent implements OnInit {
     let data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
       if (data.byQuery) {
-        this.elements = [];
-        this.parseQuery(data.query);
+        if (this.settingValue) {
+          this.settingValue = false;
+          this.elements = [];
+          this.parseQuery(data.query);
+        }
       } else {
-        this.elements = [];
-        let counts = data.map((el) => el.id);
-        this.elements.push(...data);
-        this.count = Math.max(...counts);
-        this.genericQuery(this.elements, this.config.query);
+        if (this.settingValue) {
+          this.settingValue = false;
+          this.elements = [];
+          let counts = data.map((el) => el.id);
+          this.elements.push(...data);
+          this.count = Math.max(...counts);
+          this.genericQuery(this.elements, this.config.query);
+        }
       }
     } else {
       this.query = '';

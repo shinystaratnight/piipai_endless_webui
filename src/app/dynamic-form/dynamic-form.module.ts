@@ -10,6 +10,8 @@ import { WebCamComponent } from 'ng2-webcam';
 import { ButtonRadioDirective } from 'ngx-bootstrap';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
 
+import { environment } from '../environment';
+
 import { ProfileComponent } from '../components/profile/profile.component';
 
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
@@ -74,7 +76,7 @@ import { MoveDirective } from './directives/move.directive';
     Angular2FontawesomeModule,
     FormsModule,
     RouterModule,
-    AgmCoreModule.forRoot(),
+    AgmCoreModule.forRoot({ apiKey: environment.GOOGLE_GEO_CODING_API_KEY}),
     InfiniteScrollModule
   ],
   exports: [GenericFormComponent, GenericListComponent, DynamicFormComponent, ProfileComponent],

@@ -102,7 +102,7 @@
             [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
             <td *ngIf="!inForm">
               <div class="d-flex flex-md-column justify-content-between align-items-center">
-                <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]">
+                <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]" (ngModelChange)="emitSelect()">
                 <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm" [routerLink]="[row.id + '/change']">
                   <i fa [name]="'pencil'" class="icon text-warning"></i>
                 </a>
@@ -175,8 +175,13 @@
       <generic-form [endpoint]="modalInfo.endpoint" [data]="modalInfo.data" [id]="modalInfo.id" *ngSwitchCase="'form'" (event)="formEvent($event, c)">
         <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
       </generic-form>
-      <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" *ngSwitchCase="'map'">
-        <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
+      <sebm-google-map
+        *ngSwitchCase="'map'"
+        [latitude]="modalInfo.latitude"
+        [longitude]="modalInfo.longitude"
+        [zoom]="13"
+        [mapTypeControl]="true">
+          <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
       </sebm-google-map>
       <profile [id]="modalInfo.id" *ngSwitchCase="'profile'"></profile>
     </div>
@@ -230,4 +235,19 @@
     <pdf-viewer [src]="modalInfo.url" [render-text]="true" style="display: block;"></pdf-viewer>
     <br>
   </div>
+</template>
+
+<template #fillInMap>
+  <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13">
+    <sebm-google-map-info-window [disableAutoPan]="true">
+      <strong>{{modalInfo.name}}</strong>
+      <p>{{modalInfo.description}}</p>
+    </sebm-google-map-info-window>
+    <sebm-google-map-marker *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
+      <sebm-google-map-info-window [disableAutoPan]="true">
+        <strong>{{marker.name}}</strong>
+        <p>{{marker.description}}</p>
+      </sebm-google-map-info-window>
+    </sebm-google-map-marker>
+  </sebm-google-map>
 </template>

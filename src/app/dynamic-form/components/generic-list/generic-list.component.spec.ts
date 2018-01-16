@@ -881,4 +881,12 @@ describe('GenericListComponent', () => {
 
     });
 
+    describe('checkedHandler method', () => {
+      it('should emit event with chekced objects', () => {
+        spyOn(comp.checkedObjects, 'emit');
+        comp.checkedHandler([]);
+        expect(comp.checkedObjects.emit).toHaveBeenCalledWith([]);
+      });
+    });
+
 });
