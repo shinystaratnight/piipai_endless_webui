@@ -32,6 +32,9 @@ export class FilterService {
         this._filters = {};
         this.filterList = [];
       }
+    } else {
+      this._filters = {};
+      this.filterList = [];
     }
   }
 

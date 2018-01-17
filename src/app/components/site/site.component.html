@@ -4,12 +4,12 @@
   <div *ngSwitchCase="'form'">
     <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
     <div class="container-fluid pb-5">
-      <div class="d-flex justify-content-center align-items-center">
-        <div class="col-12 col-sm-9 col-md-9 col-lg-9 mt-3">
-          <div class="card">
-            <div class="card-content p-2">
+      <div [ngClass]="{'d-flex justify-content-center align-items-center': !pageData.pathData.modal}">
+        <div [ngClass]="{'col-12 col-sm-9 col-md-9 col-lg-9 mt-3': !pageData.pathData.modal}">
+          <div [class.card]="!pageData.pathData.modal">
+            <div [ngClass]="{'card-content p-2': !pageData.pathData.modal}" [class.modal-form]="pageData.pathData.modal">
               <generic-form
-                *ngIf="pageData.endpoint !== '/ecore/api/v2/core/forms/'"
+                *ngIf="pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit'"
                 [title]="pageData.pathData.title"
                 [modal]="pageData.pathData.modal"
                 [endpoint]="pageData.endpoint"
@@ -29,6 +29,12 @@
                     <button *ngIf="formStorage && !approvedStorage && formMode === 'edit'" type="button" class="btn btn-success ml-auto" (click)="approveFormStorage(pageData)">Approve</button>
                   </div>
               </generic-form>
+
+              <fill-in
+                *ngIf="pageData.pathData.postfix && pageData.pathData.postfix === 'fillin'"
+                [endpoint]="pageData.endpoint"
+                [pageData]="pageData">
+              </fill-in>
             </div>
           </div>
         </div>

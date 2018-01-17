@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
 
 import { FormatString } from '../../../helpers/format';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
@@ -14,6 +14,9 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   @ViewChild('modal')
   public modalTemplate: any;
+
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   public isCollapsed: boolean;
 
@@ -90,5 +93,15 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public updateList() {
     this.update.next(true);
+  }
+
+  public checkedHandler(e) {
+    this.event.emit(e);
+  }
+
+  public eventHandler(e) {
+    if (e) {
+      this.config.templateOptions.label = e.__str__;
+    }
   }
 }

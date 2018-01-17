@@ -56,6 +56,7 @@ describe('ListLinkComponent', () => {
       comp.config.value = {
         __str__: 'Value'
       };
+      comp.config.text = 'Value';
       comp.ngOnInit();
       expect(comp.value).toBeDefined();
       expect(comp.href).toBeDefined();

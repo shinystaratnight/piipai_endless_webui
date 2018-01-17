@@ -32,10 +32,10 @@
       <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     </div>
     <action-element *ngIf="config.list.actions && !inForm" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
-    <h5 class="datatable-label" *ngIf="(config.list && (inForm && config.list.search_enabled) || (!inForm && !poped))">
+    <h5 class="datatable-label" *ngIf="(config.list && (inForm && (config.list.search_enabled || config.list.buttons)) || (!inForm && !poped))">
       <span *ngIf="!inForm" class="mr-auto">select {{config.list.label}} to change</span>
       <list-search-bar *ngIf="config.list.search_enabled" [list]="config.list.list" (event)="filterHandler($event)"></list-search-bar>
-      <div *ngIf="!inForm">
+      <div class="align-self-end">
         <list-buttons
           [buttons]="config.list.buttons"
           [first]="first"
@@ -68,9 +68,9 @@
       <table class="table table-sm" *ngIf="config.list">
         <thead class="thead-default hidden-sm-down">
           <tr>
-            <th *ngIf="!inForm" class="text-center" style="width: 2rem">
+            <th *ngIf="!inForm || actions" class="text-center" style="width: 2rem">
               *
-              <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
+              <input type="checkbox" *ngIf="config.list.actions || actions" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
             </th>
             <th *ngFor="let field of config.list.columns;"
               [class.datatable-title-hover]="field.sort"
@@ -100,13 +100,13 @@
           <tr *ngFor="let row of body"
             [class.table-warning]="row.highlight && row.highlight.highlight"
             [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
-            <td *ngIf="!inForm">
+            <td *ngIf="!inForm || actions">
               <div class="d-flex flex-md-column justify-content-between align-items-center">
-                <input type="checkbox" *ngIf="config.list.actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]" (ngModelChange)="emitSelect()">
+                <input type="checkbox" *ngIf="config.list.actions || actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]" (ngModelChange)="emitSelect()">
                 <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm" [routerLink]="[row.id + '/change']">
                   <i fa [name]="'pencil'" class="icon text-warning"></i>
                 </a>
-                <i fa *ngIf="!first || inForm"
+                <i fa *ngIf="!first"
                   [name]="'pencil'" class="icon text-warning ml-auto ml-md-0"
                   (click)="editObject(row.id, row.__str__)"></i>
               </div>
@@ -144,7 +144,7 @@
         <div class="double-bounce2"></div>
       </div>
     </div>
-    <div class="pagination d-flex flex-wrap align-items-center py-3">
+    <div *ngIf="pageSize" class="pagination d-flex flex-wrap align-items-center py-3">
       <ngb-pagination
         [collectionSize]="pageSize"
         [(page)]="page"
@@ -238,14 +238,11 @@
 </template>
 
 <template #fillInMap>
-  <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13">
-    <sebm-google-map-info-window [disableAutoPan]="true">
-      <strong>{{modalInfo.name}}</strong>
-      <p>{{modalInfo.description}}</p>
-    </sebm-google-map-info-window>
+  <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13" [mapTypeControl]="true">
     <sebm-google-map-marker *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
-      <sebm-google-map-info-window [disableAutoPan]="true">
+      <sebm-google-map-info-window>
         <strong>{{marker.name}}</strong>
+        <br>
         <p>{{marker.description}}</p>
       </sebm-google-map-info-window>
     </sebm-google-map-marker>

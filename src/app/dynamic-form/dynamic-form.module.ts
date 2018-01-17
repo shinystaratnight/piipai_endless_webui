@@ -61,6 +61,7 @@ import { ListImageComponent } from './components/list-image/list-image.copmonent
 import { FormListComponent } from './components/form-list/form-list.component';
 import { ListButtonsComponent } from './containers/list-buttons/list-buttons.component';
 import { ListSerachBarComponent } from './components/list-search-bar/list-search-bar.component';
+import { FilterRangeComponent } from './components/filter-range/filter-range.component';
 
 import { ActionElementComponent } from './components/action-element/action-element.component';
 
@@ -127,7 +128,8 @@ import { MoveDirective } from './directives/move.directive';
     FormReplaceComponent,
     FormJsonComponent,
     FormColumnComponent,
-    ProfileComponent
+    ProfileComponent,
+    FilterRangeComponent
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -160,7 +162,8 @@ import { MoveDirective } from './directives/move.directive';
     FormRadioComponent,
     FormReplaceComponent,
     FormJsonComponent,
-    FormColumnComponent
+    FormColumnComponent,
+    FilterRangeComponent
   ]
 })
 export class DynamicFormModule { }

@@ -32,8 +32,23 @@ export class GenericListComponent implements OnInit {
   @Input()
   public supportData: any;
 
+  @Input()
+  public paginated: string = 'on';
+
+  @Input()
+  public responseField: string = 'results';
+
+  @Input()
+  public metaType: string;
+
+  @Input()
+  public actions: boolean = false;
+
   @Output()
   public checkedObjects: EventEmitter<string[]> = new EventEmitter();
+
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   public metadata: any;
   public tables = [];
@@ -136,9 +151,12 @@ export class GenericListComponent implements OnInit {
     if (first && !this.query) {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
+          this.event.emit(data[this.supportData]);
           table.refresh = false;
           this.cashData = data;
-          this.calcPagination(data);
+          if (this.paginated === 'on') {
+            this.calcPagination(data);
+          }
           if (this.inForm) {
             endpoint += '?type=formset';
             this.getMetadata(endpoint, table);
@@ -159,8 +177,11 @@ export class GenericListComponent implements OnInit {
       }
       this.gfs.getByQuery(endpoint, newQuery).subscribe(
         (data) => {
+          this.event.emit(data[this.supportData]);
           table.data = data;
-          this.calcPagination(data);
+          if (this.paginated === 'on') {
+            this.calcPagination(data);
+          }
           table.refresh = false;
           if (target) {
             setTimeout(() => {
@@ -172,8 +193,11 @@ export class GenericListComponent implements OnInit {
     } else {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
+          this.event.emit(data[this.supportData]);
           table.data = data;
-          this.calcPagination(data);
+          if (this.paginated === 'on') {
+            this.calcPagination(data);
+          }
           table.refresh = false;
           if (target) {
             setTimeout(() => {
@@ -309,7 +333,7 @@ export class GenericListComponent implements OnInit {
       this.first = true;
       if (this.inForm) {
         table['data'] = this.data;
-        this.getMetadata(endpoint, table, null, null, '?type=formset');
+        this.getMetadata(endpoint, table, null, null, !this.metaType && '?type=formset');
       } else {
         this.getData(endpoint, null, table, true);
       }

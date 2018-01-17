@@ -18,7 +18,20 @@
     </button>
   </h6>
   <div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
-    <generic-list [endpoint]="config.endpoint" [query]="query" [inForm]="true" [data]="config.data" [update]="update"></generic-list>
+    <generic-list
+      [endpoint]="config.endpoint"
+      [query]="query"
+      [inForm]="true"
+      [data]="config.data"
+      [update]="update"
+      [responseField]="config.responseField || 'results'"
+      [paginated]="config.paginated || 'on'"
+      [supportData]="config.supportData"
+      [metaType]="config.metaType"
+      [actions]="config.actions"
+      (checkedObjects)="checkedHandler($event)"
+      (event)="eventHandler($event)">
+    </generic-list>
   </div>
 </div>
 
