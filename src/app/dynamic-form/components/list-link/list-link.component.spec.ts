@@ -42,11 +42,32 @@ describe('ListLinkComponent', () => {
 
   describe('ngOnInit method', () => {
 
-    it('should called createHref method', async(() => {
-      comp.config = config;
-      spyOn(comp, 'createHref');
+    it('should update value by string', async(() => {
+      comp.config = Object.assign({}, config);
+      comp.config.value = 'test@test.com';
+      comp.config.link = 'mailto:test@test.com';
       comp.ngOnInit();
-      expect(comp.createHref).toHaveBeenCalled();
+      expect(comp.value).toEqual(comp.config.value);
+      expect(comp.href).toEqual(comp.config.link);
+    }));
+
+    it('should update value by object', async(() => {
+      comp.config = Object.assign({}, config);
+      comp.config.value = {
+        __str__: 'Value'
+      };
+      comp.config.text = 'Value';
+      comp.ngOnInit();
+      expect(comp.value).toBeDefined();
+      expect(comp.href).toBeDefined();
+    }));
+
+    it('should update link property if value is array ', async(() => {
+      comp.config = Object.assign({}, config);
+      comp.config.value = ['test@test.com'];
+      comp.config.link = ['mailto:test@test.com'];
+      comp.ngOnInit();
+      expect(comp.link).toBeFalsy();
     }));
 
   });
@@ -70,26 +91,6 @@ describe('ListLinkComponent', () => {
       phone = 'asdasdasdas';
       expect(comp.isPhone(phone)).toBeFalsy();
     }));
-
-  });
-
-  describe('createHref method', () => {
-
-    it('should return link', () => {
-      let value = '+380978107785';
-      let phone = 'tel:+380978107785';
-      let email = 'mailto:test@test.com';
-      let resultPhone = comp.createHref(value, phone);
-      let resultEmail = comp.createHref(value, email);
-      expect(resultPhone).toEqual(phone);
-      expect(resultEmail).toEqual(email);
-    });
-
-    it('should update link property', () => {
-      let link = '/login';
-      let result = comp.createHref('', link);
-      expect(result).toEqual(link);
-    });
 
   });
 

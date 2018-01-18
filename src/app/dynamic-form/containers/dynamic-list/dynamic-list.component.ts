@@ -13,6 +13,7 @@ import {
 import { FilterService } from './../../services/filter.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 import { GenericFormService } from './../../services/generic-form.service';
 
@@ -77,11 +78,26 @@ export class DynamicListComponent implements
   @Input()
   public actionData: any;
 
+  @Input()
+  public supportData: any;
+
+  @Input()
+  public responseField: string;
+
+  @Input()
+  public paginated: string;
+
+  @Input()
+  public actions: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
   @Output()
   public list: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  public checkedObjects: EventEmitter<string[]> = new EventEmitter();
 
   @ViewChild('modal')
   public modal;
@@ -103,6 +119,9 @@ export class DynamicListComponent implements
 
   @ViewChild('showPreviewInvoice')
   public showPreviewInvoice;
+
+  @ViewChild('fillInMap')
+  public fillInMap;
 
   public body: any[] = [];
   public select: any;
@@ -131,11 +150,14 @@ export class DynamicListComponent implements
 
   public showFilters: boolean;
 
+  public asyncData: any;
+
   constructor(
     private filterService: FilterService,
     private modalService: NgbModal,
     private genericFormService: GenericFormService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private router: Router
   ) {}
 
   public ngOnInit() {
@@ -166,7 +188,7 @@ export class DynamicListComponent implements
       cell: ''
     };
     if (this.config.list.search_enabled) {
-      if (this.filtersOfList.length > 1) {
+      if (this.filtersOfList && this.filtersOfList.length > 1) {
         this.showFilters = true;
       } else {
         this.showFilters = false;
@@ -195,7 +217,7 @@ export class DynamicListComponent implements
     if (config.list.columns) {
       this.updateMetadataByTabs(config.list.columns);
     }
-    if (data) {
+    if (data && this.paginated === 'on') {
       this.initPagination(data);
     }
     if (this.maximize) {
@@ -215,11 +237,14 @@ export class DynamicListComponent implements
       }
     }
     this.datatable.nativeElement.style.zIndex = this.active ? 100 : this.id * 5;
-    if (config && data.results) {
-      this.select = this.resetSelectedElements(data.results);
+    if (config && data[this.responseField]) {
+      this.select = this.resetSelectedElements(data[this.responseField]);
       if (config.list) {
         this.sortedColumns = this.getSortedColumns(config.list.columns);
-        this.body = this.prepareData(config.list.columns, data.results, config.list.highlight);
+        this.body = this.prepareData(config.list.columns, data[this.responseField], config.list.highlight); //tslint:disable-line
+        if (this.asyncData) {
+          this.getAsyncData();
+        }
       }
     }
     if (innerTables && this.innerTableCall) {
@@ -284,6 +309,91 @@ export class DynamicListComponent implements
           }, 66);
         }
       }, false);
+    }
+  }
+
+  public getAsyncData() {
+    if (this.asyncData) {
+      const endpoints = Object.keys(this.asyncData);
+      if (endpoints.length) {
+        endpoints.forEach((endpoint) => {
+          if (this.asyncData[endpoint][0].method === 'get') {
+            let query = this.generateParams(this.asyncData[endpoint]);
+            if (endpoint.indexOf('?') > -1) {
+              query = `&${query}`;
+            } else {
+              query = `${query}`;
+            }
+            this.genericFormService.getByQuery(endpoint, query).subscribe(
+              (res: any) => this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
+              (err: any) => this.error = err
+            );
+          } else {
+            const body: any = this.generateParams(this.asyncData[endpoint]);
+            if (this.endpoint.indexOf('/ecore/api/v2/hr/vacancies/') > -1) {
+              body.vacancy = this.data[this.supportData].id;
+            }
+            this.genericFormService.submitForm(endpoint, body).subscribe(
+              (res: any) => this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
+              (err: any) => this.error = err
+            );
+          }
+        });
+      }
+    }
+  }
+
+  public generateParams(elements: any[]) {
+    if (elements && elements.length) {
+      let params = {};
+      elements.forEach((element) => {
+        if (element.query) {
+          const keys = Object.keys(element.query);
+          keys.forEach((key) => {
+            if (params[key]) {
+              if (params[key] === element.query[key]) {
+                return;
+              } else {
+                if (Array.isArray(params[key])) {
+                  if (params[key].indexOf(element.query[key]) === -1) {
+                    params[key].push(element.query[key]);
+                  } else {
+                    return;
+                  }
+                } else {
+                  params[key] = [].concat(params[key], element.query[key]);
+                }
+              }
+            } else {
+              params[key] = element.query[key];
+            }
+          });
+        }
+      });
+      if (elements[0].method === 'get') {
+        const keys = Object.keys(params);
+        let query = '';
+        keys.forEach((key) => {
+          if (Array.isArray(params[key])) {
+            params[key].forEach((item) => {
+              query += `${key}=${item}&`;
+            });
+          } else {
+            query += `${key}=${params[key]}&`;
+          }
+        });
+        return query.slice(0, query.length - 1);
+      } else if (elements[0].method === 'post') {
+        return params;
+      }
+    }
+  }
+
+  public updateValuesOfAsyncData(data, target) {
+    const element = data.find((item) => item.id === target.id);
+    if (element) {
+      target.obj.value = element[target.request_field];
+      target.content.splice(target.content.indexOf(target.obj), 1, Object.assign({}, target.obj));
     }
   }
 
@@ -358,6 +468,7 @@ export class DynamicListComponent implements
   }
 
   public prepareData(config, data, highlight = null) {
+    this.asyncData = {};
     let prepareData = [];
     data.forEach((el) => {
       let row = {
@@ -406,9 +517,6 @@ export class DynamicListComponent implements
             let indexOf = element.link.indexOf('{field}');
             if (indexOf) {
               element.link = element.link.replace(/{field}/gi, `{${element.field}}`);
-            }
-            if (element.link[element.link.length - 1] !== '/') {
-              element.link += '/change';
             }
             obj['link'] = this.format(element.link, el);
             obj.text = this.format(element.text, el);
@@ -478,6 +586,36 @@ export class DynamicListComponent implements
           if (!this.checkValue(obj)) {
             delete cell.contextMenu;
           }
+          if (element.async && obj.value === -1) {
+            element.endpoint = this.format(element.endpoint, el);
+            const query = {};
+            if (element.query) {
+              const keys = Object.keys(element.query);
+              obj.query = {};
+              keys.forEach((key) => {
+                query[key] = this.format(element.query[key], el);
+              });
+            }
+            if (this.asyncData[element.endpoint]) {
+              this.asyncData[element.endpoint].push({
+                method: element.method,
+                content: cell.content,
+                query,
+                field: obj,
+                id: el.id,
+                request_field: element.request_field
+              });
+            } else {
+              this.asyncData[element.endpoint] = [{
+                method: element.method,
+                content: cell.content,
+                query,
+                field: obj,
+                id: el.id,
+                request_field: element.request_field
+              }];
+            }
+          }
           cell.content.push(obj);
         });
         row.content.push(cell);
@@ -538,7 +676,11 @@ export class DynamicListComponent implements
     let prop = props.shift();
     if (props.length === 0) {
       if (object.type === 'related' && !object[param]) {
-        object[param] = data[prop] ? data[prop].__str__ : '';
+        if (Array.isArray(data[prop])) {
+          object[param] = data[prop];
+        } else {
+          object[param] = data[prop] ? data[prop].__str__ : '';
+        }
       } else if (!object[param]) {
         object[param] = data[prop];
       }
@@ -566,6 +708,14 @@ export class DynamicListComponent implements
     keys.forEach((el) => {
       this.select[el] = this.selectedAll;
     });
+    this.emitSelect();
+  }
+
+  public emitSelect() {
+    if (this.select) {
+      const keys = Object.keys(this.select);
+      this.checkedObjects.emit(keys.filter((key) => this.select[key]));
+    }
   }
 
   public resetSelectedElements(data) {
@@ -746,11 +896,19 @@ export class DynamicListComponent implements
         case 'showCandidateProfile':
           this.showCandidateProfile(e);
           break;
+        case 'fillin':
+          this.fillIn(e);
+          break;
         default:
           return;
       }
     }
     return;
+  }
+
+  public fillIn(e) {
+    const fillInPath = `/hr/vacancies/${e.el.rowId}/fillin/`;
+    this.router.navigate([fillInPath]);
   }
 
   public showCandidateProfile(e) {
@@ -811,7 +969,7 @@ export class DynamicListComponent implements
   }
 
   public evaluate(e) {
-    let object = this.data.results.filter((el) => el.id === e.el.rowId)[0];
+    let object = this.data[this.responseField].filter((el) => el.id === e.el.rowId)[0];
     this.modalInfo = {};
     this.modalInfo.type = 'evaluate';
     this.modalInfo.endpoint = e.el.endpoint;
@@ -826,7 +984,7 @@ export class DynamicListComponent implements
   }
 
   public changeTimesheet(e) {
-    let object = this.data.results.filter((el) => el.id === e.el.rowId)[0];
+    let object = this.data[this.responseField].filter((el) => el.id === e.el.rowId)[0];
     this.modalInfo = {};
     this.modalInfo.type = 'evaluate';
     this.modalInfo.endpoint = e.el.endpoint;
@@ -871,7 +1029,7 @@ export class DynamicListComponent implements
   }
 
   public approveTimesheet(e) {
-    let object = this.data.results.filter((el) => el.id === e.el.rowId)[0];
+    let object = this.data[this.responseField].filter((el) => el.id === e.el.rowId)[0];
     this.approveEndpoint = e.el.endpoint;
     e.el.endpoint = this.format(this.evaluateEndpoint, object);
     this.evaluate(e);
@@ -1019,6 +1177,8 @@ export class DynamicListComponent implements
           if (datetime.indexOf(propArray[1]) > -1) {
             return moment.tz(data[propArray[0]], 'Australia/Sydney')
               .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
+          } else {
+            return data[prop];
           }
         } else {
           return data[prop];
@@ -1069,10 +1229,42 @@ export class DynamicListComponent implements
         case 'poped_table':
           this.popedTable();
           break;
+        case 'openMap':
+          this.showMap();
+          break;
         default:
           return;
       }
     }
+  }
+
+  public showMap() {
+    this.modalInfo = this.generateDataFormFillInMap({});
+    this.generateDataFormFillInMap(this.modalInfo);
+    this.open(this.fillInMap, {size: 'lg'});
+  }
+
+  public generateDataFormFillInMap(data) {
+    data.markers = [];
+    this.data[this.responseField].forEach((el) => {
+      data.markers.push({
+        latitude: +this.getPropValue(el, 'contact.address.latitude'),
+        longitude: +this.getPropValue(el, 'contact.address.longitude'),
+        name: this.getPropValue(el, 'contact.__str__'),
+        description: this.getPropValue(el, 'contact.address.__str__')
+      });
+    });
+    if (this.supportData) {
+      data.markers.push({
+        latitude: this.data[this.supportData].latitude,
+        longitude: this.data[this.supportData].longitude,
+        name: this.data[this.supportData].__str__,
+        description: this.data[this.supportData].address
+      });
+      data.latitude = this.data[this.supportData].latitude;
+      data.longitude = this.data[this.supportData].longitude;
+    }
+    return data;
   }
 
   public showPreview(e) {

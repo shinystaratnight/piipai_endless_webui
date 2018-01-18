@@ -19,6 +19,11 @@
     [parentEndpoint]="table.parentEndpoint"
     [inForm]="inForm"
     [actionData]="table.actionData"
+    [supportData]="supportData"
+    [responseField]="responseField"
+    [paginated]="paginated"
+    [actions]="actions"
+    (checkedObjects)="checkedHandler($event)"
     (list)="listHandler($event)"
     (event)="eventHandler($event)">
   </dynamic-list>

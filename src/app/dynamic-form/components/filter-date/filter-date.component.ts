@@ -93,9 +93,9 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
   public selectQuery(query) {
     this.picker = false;
     this.resetData(this.data);
-    this.parseDate(query, moment);
-    this.query = query;
-    this.fs.generateQuery(query, this.config.key, this.config.listName, { data: this.data, query });
+    const newQuery = this.parseDate(query, moment, 'YYYY-MM-DD');
+    this.query = newQuery;
+    this.fs.generateQuery(newQuery, this.config.key, this.config.listName, { data: this.data, query }); //tslint:disable-line
     this.changeQuery();
     this.updateConfig();
   }
@@ -134,18 +134,23 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public parseDate(date, moment) {
+  public parseDate(date, moment, format = undefined) {
     let result = {};
     let queries = [];
     let dates = date.split('&');
+    const newDate = [];
     dates.forEach((el) => {
       let query = el.split('=');
+      const date = moment.tz(query[1], format || this.dateFormat, 'Australia/Sydney').format(this.dateFormat); //tslint:disable-line
+      query[1] = date;
+      newDate.push(query.join('='));
       queries.push(query[0]);
-      result[query[0]] = moment.tz(query[1], 'Australia/Sydney').format(this.dateFormat);
+      result[query[0]] = date;
     });
     queries.forEach((el) => {
       this.data[el] = result[el];
     });
+    return newDate.join('&');
   }
 
   public createInputs(inputs, data) {

@@ -36,7 +36,7 @@ export class SiteService {
       pathData
     };
     if (pathData.postfix) {
-      data.endpoint = data.endpoint + pathData.id + '/submit/';
+      data.endpoint = data.endpoint + pathData.id + `/${pathData.postfix}/`;
       pathData.id = null;
     }
     return data;
@@ -57,7 +57,7 @@ export class SiteService {
         type: 'form',
         path: this.generatePath(urlCopy)
       };
-    } else if (lastElement === 'change' || lastElement === 'submit') {
+    } else if (lastElement === 'change' || lastElement === 'submit' || lastElement === 'fillin') {
       let id = urlCopy.pop();
       data = {
         type: 'form',
@@ -68,6 +68,9 @@ export class SiteService {
         data.postfix = 'submit';
         data.modal = true;
         data.title = 'TimeSheet filling';
+      }
+      if (lastElement === 'fillin') {
+        data.postfix = 'fillin';
       }
     } else if (lastElement === 'profile') {
       urlCopy.push(lastElement);

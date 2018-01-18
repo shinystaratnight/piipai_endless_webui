@@ -8,10 +8,11 @@ import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/cor
 export class ListLinkComponent implements OnInit {
 
   public config;
-  public href: string;
+  public href: string | string[];
   public link: boolean;
   public value: string;
   public last: boolean;
+  public arrayValue: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -19,15 +20,19 @@ export class ListLinkComponent implements OnInit {
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild('link')
-  public element: any;
-
   public ngOnInit() {
-    this.href = this.createHref(this.config.value, this.config.link);
+
     if (this.config.value && this.config.value instanceof Object) {
       this.value = this.config.value && (this.config.text || this.config.value.__str__);
     } else {
       this.value = this.config.value && (this.config.text || this.config.value);
+    }
+    this.href = this.config.link;
+
+    if (Array.isArray(this.value) && Array.isArray(this.link)) {
+      this.link = !(this.isEmail(this.value[0]) || this.isPhone(this.value[0]));
+    } else {
+      this.link = !(this.isEmail(this.value) || this.isPhone(this.value));
     }
    }
 
@@ -42,14 +47,6 @@ export class ListLinkComponent implements OnInit {
     let reg = /^\+(?:[0-9] ?){6,14}[0-9]$/;
 
     return reg.test(value) ? true : false;
-  }
-
-  public createHref(value, link) {
-    if (this.isEmail(value) || this.isPhone(value)) {
-      return `${link}`;
-    }
-    this.link = true;
-    return `${link}`;
   }
 
   public action(e) {
@@ -69,7 +66,7 @@ export class ListLinkComponent implements OnInit {
         this.event.emit({
           target: 'form',
           endpoint: endpoint || this.config.endpoint,
-          label: this.element.nativeElement.innerText,
+          label: e.target.innerText,
           id: id || this.config.id
         });
       }

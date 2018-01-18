@@ -3,14 +3,15 @@
     {{config.label}}
     <i
       fa
-      class="p-2"
-      [name]="isCollapsed ? 'eye' : 'eye-slash'"
+      class="p-2 ml-auto"
+      [name]="icons[theme][isCollapsed]"
       [border]=false
+      [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
       (click)="isCollapsed = !isCollapsed"
       [attr.aria-expanded]="!isCollapsed"
       style="cursor: pointer"></i>
     <i
-      *ngIf="false"
+      *ngIf="query"
       fa
       class="text-danger ml-1"
       [name]="'times-circle'"
@@ -19,7 +20,7 @@
       (click)="resetFilter()"></i>
   </label>
   <div [ngbCollapse]="isCollapsed" class="filter-related">
-    <div class="d-flex justify-content-center align-items-center mb-1 autocomplete-filter" *ngFor="let item of elements" style="position: relative">
+    <div class="d-flex justify-content-center align-items-center mt-3 autocomplete-filter" *ngFor="let item of elements" style="position: relative">
       <div class="form-control autocomplete-value active"
         (click)="openAutocomplete($event, item)">
           <div style="overflow: hidden; white-space: nowrap">{{item.displayValue}}</div>
@@ -40,7 +41,7 @@
           (scrolled)="onModalScrollDown(item)"
           [hidden]="!(previewList && previewList.length)">
           <ul class="list-group w-100">
-            <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer" (click)="setValue({id: '', __str__: 'All'}, item)">All</li>
+            <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer" (click)="setValue(defaultValue, item)">All</li>
             <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
               *ngFor="let option of previewList"
               (click)="setValue(option, item)">{{option[config.data.value]}}</li>

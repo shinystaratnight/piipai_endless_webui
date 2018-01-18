@@ -10,6 +10,17 @@ export class FilterChoiceComponent implements OnInit {
   public config: any;
   public query: any;
   public isCollapsed: boolean = true;
+  public theme: string;
+  public icons = {
+    r3sourcer: {
+      true: 'angle-right',
+      false: 'angle-down'
+    },
+    default: {
+      true: 'eye',
+      false: 'eye-slash'
+    }
+  };
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -24,6 +35,7 @@ export class FilterChoiceComponent implements OnInit {
       (params) => this.updateFilter()
     );
     this.isCollapsed = this.query ? false : true;
+    this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
   }
 
   public select(value) {
