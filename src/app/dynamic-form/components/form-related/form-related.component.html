@@ -173,7 +173,10 @@
     <span *ngIf="!displayValue && (!results || results.length === 0)">-</span>
     <a *ngIf="!config.many" href="{{this.linkPath}}" (click)="open('edit', $event)">{{displayValue}}</a>
     <div *ngIf="config.many && results">
-      <a *ngFor="let item of results" href="/" (click)="open('edit', $event, item)">{{item.__str__}}</a>
+      <span *ngFor="let item of results; let l = last">
+        <a href="/" (click)="open('edit', $event, item)">{{item.__str__}}</a>
+        <br *ngIf="!l">
+      </span>
     </div>
   </div>
 

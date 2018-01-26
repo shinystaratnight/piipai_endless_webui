@@ -68,6 +68,7 @@ export class FormRelatedComponent
   public hideAutocomplete: boolean = true;
   public modalData: any = {};
   public modalRef: any;
+  public formData: any = {};
 
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
@@ -116,6 +117,7 @@ export class FormRelatedComponent
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
+    this.checkFormData();
     if (this.config.custom && this.config.custom.length) {
       this.generateCustomTemplate(this.config.custom);
     }
@@ -178,6 +180,12 @@ export class FormRelatedComponent
         }
         this.setInitValue();
       });
+    }
+  }
+
+  public checkFormData() {
+    if (this.config.formData) {
+      this.config.formData.subscribe((formData) => this.formData = formData);
     }
   }
 
@@ -273,6 +281,15 @@ export class FormRelatedComponent
   public ngOnDestroy() {
     if (this.modalRef) {
       this.modalRef.close();
+    }
+    if (this.config.hidden) {
+      this.config.hidden.complete();
+    }
+    if (this.config.mode) {
+      this.config.mode.complete();
+    }
+    if (this.config.formData) {
+      this.config.formData.complete();
     }
   }
 
@@ -437,7 +454,7 @@ export class FormRelatedComponent
     this.modalData.endpoint = this.config.endpoint;
     if (type === 'edit' || type === 'delete') {
       if (object) {
-        this.modalData.title = object.allData.__str__;
+        this.modalData.title = object.allData ? object.allData.__str__ : object.__str__;
         this.modalData.id = object[this.param];
       } else {
         this.modalData.title = this.displayValue;
@@ -636,6 +653,19 @@ export class FormRelatedComponent
     return query;
   }
 
+  public generateQuery(queries) {
+    const format = new FormatString();
+    let query = '&';
+    if (queries) {
+      const keys = Object.keys(queries);
+      keys.forEach((el) => {
+        query += `${el}=${format.format(queries[el], this.formData)}&`;
+      });
+      query = query.slice(0, query.length - 1);
+    }
+    return query.length > 1 || '';
+  }
+
   public getOptions(value, offset, concat = false) {
     let endpoint = this.config.endpoint;
     let query = '';
@@ -645,6 +675,7 @@ export class FormRelatedComponent
     query += !query ? '?' : '';
     query += `limit=${this.limit}&offset=${offset}`;
     query += this.generateFields(this.fields);
+    query += this.generateQuery(this.config.query);
     if (!this.count || (this.count && offset < this.count && concat)) {
       this.lastElement += this.limit;
       this.genericFormService.getByQuery(endpoint, query).subscribe(

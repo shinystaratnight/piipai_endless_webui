@@ -10,6 +10,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Field } from '../../models/field.model';
 import { FormatString } from '../../../helpers/format';
+import { Subject } from 'rxjs/Subject';
 
 interface HiddenFields {
   elements: Field[];
@@ -197,7 +198,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public getMetadata(endpoint) {
     this.service.getMetadata(endpoint, '?type=form').subscribe(
         ((data: any) => {
+          const formData = new Subject();
           this.setModeForElement(data, this.mode);
+          this.updateFormData(data, formData);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);
@@ -239,6 +242,16 @@ export class GenericFormComponent implements OnChanges, OnInit {
         }
       } else if (el.children) {
         this.saveHiddenFields(el.children);
+      }
+    });
+  }
+
+  public updateFormData(metadata, formData) {
+    metadata.forEach((el) => {
+      if (el.key) {
+        el.formData = formData;
+      } else if (el.children) {
+        this.updateFormData(el.children, formData);
       }
     });
   }
