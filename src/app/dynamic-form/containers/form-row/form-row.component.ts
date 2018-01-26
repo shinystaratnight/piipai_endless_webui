@@ -19,7 +19,7 @@ export class FormRowComponent implements OnInit {
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
   public ngOnInit() {
-    if (!this.config.editForm) {
+    if (!this.config.editForm && this.config.label) {
       this.config.label = this.config.label.indexOf('{') === -1 ? this.config.label : '';
     }
   }

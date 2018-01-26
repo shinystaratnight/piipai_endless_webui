@@ -3,7 +3,7 @@
     {{config.label}}
     <i
       fa
-      class="p-2"
+      class="p-2 ml-auto"
       [name]="icons[theme][isCollapsed]"
       [border]=false
       (click)="isCollapsed = !isCollapsed"
@@ -11,7 +11,7 @@
       [attr.aria-expanded]="!isCollapsed"
       style="cursor: pointer"></i>
     <i
-      *ngIf="false"
+      *ngIf="query"
       fa
       class="text-danger ml-1"
       [name]="'times-circle'"

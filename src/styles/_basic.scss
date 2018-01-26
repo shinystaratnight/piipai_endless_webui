@@ -171,6 +171,10 @@ input:checked ~ .color-preview {
   }
 }
 
+.modal-form .form-element-content {
+  flex-wrap: wrap;
+}
+
 .site-page .form-element {
   &.custom {
     flex-direction: column;

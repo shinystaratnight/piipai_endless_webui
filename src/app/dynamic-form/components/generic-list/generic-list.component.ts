@@ -4,6 +4,8 @@ import { FilterService } from './../../services/filter.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Output } from '@angular/core/src/metadata/directives';
+import { EventEmitter } from '@angular/common/src/facade/async';
 
 @Component({
   selector: 'generic-list',
@@ -26,6 +28,27 @@ export class GenericListComponent implements OnInit {
 
   @Input()
   public update: BehaviorSubject<boolean>;
+
+  @Input()
+  public supportData: any;
+
+  @Input()
+  public paginated: string = 'on';
+
+  @Input()
+  public responseField: string = 'results';
+
+  @Input()
+  public metaType: string;
+
+  @Input()
+  public actions: boolean = false;
+
+  @Output()
+  public checkedObjects: EventEmitter<string[]> = new EventEmitter();
+
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   public metadata: any;
   public tables = [];
@@ -128,9 +151,12 @@ export class GenericListComponent implements OnInit {
     if (first && !this.query) {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
+          this.event.emit(data[this.supportData]);
           table.refresh = false;
           this.cashData = data;
-          this.calcPagination(data);
+          if (this.paginated === 'on') {
+            this.calcPagination(data);
+          }
           if (this.inForm) {
             endpoint += '?type=formset';
             this.getMetadata(endpoint, table);
@@ -151,8 +177,11 @@ export class GenericListComponent implements OnInit {
       }
       this.gfs.getByQuery(endpoint, newQuery).subscribe(
         (data) => {
+          this.event.emit(data[this.supportData]);
           table.data = data;
-          this.calcPagination(data);
+          if (this.paginated === 'on') {
+            this.calcPagination(data);
+          }
           table.refresh = false;
           if (target) {
             setTimeout(() => {
@@ -164,8 +193,11 @@ export class GenericListComponent implements OnInit {
     } else {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
+          this.event.emit(data[this.supportData]);
           table.data = data;
-          this.calcPagination(data);
+          if (this.paginated === 'on') {
+            this.calcPagination(data);
+          }
           table.refresh = false;
           if (target) {
             setTimeout(() => {
@@ -301,7 +333,7 @@ export class GenericListComponent implements OnInit {
       this.first = true;
       if (this.inForm) {
         table['data'] = this.data;
-        this.getMetadata(endpoint, table, null, null, '?type=formset');
+        this.getMetadata(endpoint, table, null, null, !this.metaType && '?type=formset');
       } else {
         this.getData(endpoint, null, table, true);
       }
@@ -476,6 +508,10 @@ export class GenericListComponent implements OnInit {
     if (this.pagination['limit'] && this.pagination['offset']) {
       return (this.pagination['offset'] / this.pagination['limit']) + 1;
     }
+  }
+
+  public checkedHandler(e) {
+    this.checkedObjects.emit(e);
   }
 
 }

@@ -48,7 +48,15 @@ describe('DynamicListComponent', () => {
               field: 'first_name',
               type: 'static',
               text: '{first_name}',
-              label: 'Test'
+              label: 'Test',
+              async: true,
+              endpoint: '/ecore/api/v2/localization/{id}',
+              method: 'post',
+              query: {
+                type: '{company.type}',
+                contacts: '{id}'
+              },
+              request_field: 'first_name'
             }
           ],
           context_menu: [
@@ -117,6 +125,14 @@ describe('DynamicListComponent', () => {
             {
               field: 'gender',
               type: 'text',
+              async: true,
+              endpoint: '/ecore/api/v2/localization/{id}',
+              method: 'post',
+              query: {
+                type: '{company.type}',
+                contacts: '{id}'
+              },
+              request_field: 'gender'
             }
           ],
           context_menu: [
@@ -165,7 +181,7 @@ describe('DynamicListComponent', () => {
     next: '/ecore/api/v2/core/companyaddresses/?limit=1&offset=1',
     results: [{
         title: null,
-        first_name: 'Test',
+        first_name: null,
         last_name: 'Testovich',
         email: 'test.testovich@gmail.com',
         phone_mobile: '+380978107725',
@@ -214,6 +230,9 @@ describe('DynamicListComponent', () => {
       return Observable.of({});
     },
     getAll() {
+      return Observable.of(response);
+    },
+    getByQuery() {
       return Observable.of(response);
     },
     editForm() {
@@ -276,12 +295,14 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'getSortedColumns');
       spyOn(comp, 'unpopedTable');
       spyOn(comp, 'updateMetadataByTabs');
+      spyOn(comp, 'getAsyncData');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.resetSelectedElements).toHaveBeenCalled();
       expect(comp.getSortedColumns).toHaveBeenCalled();
       expect(comp.unpopedTable).toHaveBeenCalled();
       expect(comp.updateMetadataByTabs).toHaveBeenCalled();
+      expect(comp.getAsyncData).toHaveBeenCalled();
     }));
 
     it('should call openFrame method', fakeAsync(() => {
@@ -398,6 +419,128 @@ describe('DynamicListComponent', () => {
     });
   });
 
+  describe('getAsyncData method', () => {
+    it('should get async data by get request', () => {
+      comp.asyncData = {
+        '/ecore/api/v2/locatozation/?code=AU': [
+          {
+            method: 'get',
+            content: [{}],
+            field: {},
+            id: '123',
+            request_field: 'contact'
+          }
+        ]
+      };
+      spyOn(comp, 'generateParams').and.returnValue('country=Australia');
+      spyOn(comp, 'updateValuesOfAsyncData');
+      comp.getAsyncData();
+      expect(comp.generateParams).toHaveBeenCalled();
+      expect(comp.updateValuesOfAsyncData).toHaveBeenCalled();
+    });
+
+    it('should get async data by get request', () => {
+      comp.asyncData = {
+        '/ecore/api/v2/locatozation/?code=AU': [
+          {
+            method: 'post',
+            content: [{}],
+            field: {},
+            id: '123',
+            request_field: 'contact'
+          }
+        ]
+      };
+      spyOn(comp, 'generateParams').and.returnValue('country=Australia');
+      spyOn(comp, 'updateValuesOfAsyncData');
+      comp.getAsyncData();
+      expect(comp.generateParams).toHaveBeenCalled();
+      expect(comp.updateValuesOfAsyncData).toHaveBeenCalled();
+    });
+  });
+
+  describe('generateParams method', () => {
+    it('should generate data for get request', () => {
+      const elements = [
+        {
+          method: 'get',
+          query: {
+            vacancy: '1',
+            contacts: '1'
+          }
+        },
+        {
+          method: 'get',
+          query: {
+            vacancy: '1',
+            contacts: '2'
+          }
+        },
+        {
+          method: 'get',
+          query: {
+            vacancy: '1',
+            contacts: '3'
+          }
+        }
+      ];
+      const result = comp.generateParams(elements);
+      expect(result).toEqual('vacancy=1&contacts=1&contacts=2&contacts=3');
+    });
+
+    it('should generate data for post request', () => {
+      const elements = [
+        {
+          method: 'post',
+          query: {
+            vacancy: '1',
+            contacts: '1'
+          }
+        },
+        {
+          method: 'post',
+          query: {
+            vacancy: '1',
+            contacts: '2'
+          }
+        },
+        {
+          method: 'post',
+          query: {
+            vacancy: '1',
+            contacts: '3'
+          }
+        }
+      ];
+      const result = comp.generateParams(elements);
+      expect(result).toEqual({
+        vacancy: '1',
+        contacts: ['1', '2', '3']
+      });
+    });
+  });
+
+  describe('updateValuesOfAsyncData method', () => {
+    it('should udate field in the table', () => {
+      const field = {
+        value: null
+      };
+      const responseData = [{
+        id: '123',
+        contact: '12'
+      }];
+      const target = {
+        id: '123',
+        request_field: 'contact',
+        obj: field,
+        content: [field]
+      };
+      comp.updateValuesOfAsyncData(responseData, target);
+      expect(target.content.length).toEqual(1);
+      expect(target.content[0].value).toEqual('12');
+    });
+  });
+
   describe('checkOverflow method', () => {
     it('should set overflow auto', () => {
       comp.tableWrapper = {
@@ -476,7 +619,7 @@ describe('DynamicListComponent', () => {
                   name: 'first_name',
                   type: 'static',
                   values: undefined,
-                  value: 'Test',
+                  value: null,
                   label: 'Test',
                   delim: undefined,
                   title: undefined,

@@ -76,6 +76,8 @@ describe('FilterRelatedComponent', () => {
       comp.config = config;
       comp.query = '';
       comp.ngOnInit();
+      expect(comp.defaultValue).toBeDefined();
+      expect(comp.theme).toBeDefined();
       expect(comp.isCollapsed).toBeTruthy();
     }));
 
@@ -242,10 +244,12 @@ describe('FilterRelatedComponent', () => {
       let value = 'Home LTD';
       let element = {
         id: 1,
-        data: value
+        data: value,
+        displayValue: '1'
       };
       comp.deleteValue(element);
       expect(element.data).toEqual('');
+      expect(element.displayValue).toEqual('All');
       expect(comp.genericQuery).toHaveBeenCalled();
       expect(comp.changeQuery).toHaveBeenCalled();
       expect(fs.generateQuery).toHaveBeenCalled();
@@ -320,9 +324,9 @@ describe('FilterRelatedComponent', () => {
         data: '123',
         lastElement: 0,
         hideAutocomplete: true,
-        displayValue: undefined
+        displayValue: 'Value'
       };
-      spyOn(comp, 'getOption');
+      spyOn(comp, 'getOption').and.returnValue('Value');
       let result = comp.createElement(id, '123');
       expect(comp.getOption).toHaveBeenCalled();
       expect(result).toEqual(data);
@@ -432,10 +436,12 @@ describe('FilterRelatedComponent', () => {
         query: 'company=123'
       });
       comp.config = config;
+      comp.settingValue = true;
       spyOn(comp, 'parseQuery');
       comp.updateFilter();
       expect(comp.elements).toEqual([]);
       expect(comp.parseQuery).toHaveBeenCalledWith('company=123');
+      expect(comp.settingValue).toBeFalsy();
     })));
 
     it('should update filter by data', async(inject([FilterService], (fs: FilterService) => {
@@ -452,10 +458,12 @@ describe('FilterRelatedComponent', () => {
       comp.config = config;
       spyOn(fs, 'getQueries').and.returnValue(data);
       spyOn(comp, 'genericQuery');
+      comp.settingValue = true;
       comp.updateFilter();
       expect(comp.count).toEqual(2);
       expect(comp.elements).toEqual(data);
       expect(comp.genericQuery).toHaveBeenCalledWith(comp.elements, config.query);
+      expect(comp.settingValue).toBeFalsy();
     })));
   });
 
