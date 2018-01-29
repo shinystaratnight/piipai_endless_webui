@@ -25,6 +25,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   public message: any;
   public key: any;
   public label: boolean;
+  public count: number;
 
   public modalData: any;
   public format = new FormatString();
@@ -103,5 +104,9 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (e) {
       this.config.templateOptions.label = e.__str__;
     }
+  }
+
+  public checkCount(e: number): void {
+    this.count = e;
   }
 }

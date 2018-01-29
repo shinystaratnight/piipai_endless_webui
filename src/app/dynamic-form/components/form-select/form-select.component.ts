@@ -83,7 +83,7 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
   }
 
   public setInitValue() {
-    if (this.config.value) {
+    if (this.config.value != undefined) { //tslint:disable-line
       this.group.get(this.key).patchValue(this.config.value);
     }
     if (this.viewMode && !this.config.hide) {

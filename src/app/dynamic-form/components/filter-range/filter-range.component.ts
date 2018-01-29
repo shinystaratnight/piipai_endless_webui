@@ -41,6 +41,7 @@ export class FilterRangeComponent implements OnInit {
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
     this.data = this.config.default || 0;
+    this.fs.generateQuery(this.genericQuery(this.config.key, this.data), this.config.key, this.config.listName, this.data); //tslint:disable-line
   }
 
   public onChange(e) {

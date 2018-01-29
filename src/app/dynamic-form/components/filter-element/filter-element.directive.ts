@@ -15,13 +15,15 @@ import { FilterChoiceComponent } from './../filter-choice/filter-choice.componen
 import { FilterRelatedComponent } from './../filter-related/filter-related.component';
 import { FilterSelectComponent } from './../filter-select/filter-select.component';
 import { FilterRangeComponent } from '../filter-range/filter-range.component';
+import { FilterMultipleComponent } from '../filter-multiple/filter-multiple.component';
 
 const components = {
   date: FilterDateComponent,
   choice: FilterChoiceComponent,
   related: FilterRelatedComponent,
   select: FilterSelectComponent,
-  text: FilterRangeComponent
+  text: FilterRangeComponent,
+  multiple: FilterMultipleComponent
 };
 
 @Directive({

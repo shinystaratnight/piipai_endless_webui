@@ -201,6 +201,7 @@ export class DynamicListComponent implements
   public ngOnChanges() {
     let config = this.config;
     let data = this.data;
+    this.parseMultipleFilter(this.config.list.filters);
     let innerTables = this.innerTables;
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;
@@ -309,6 +310,30 @@ export class DynamicListComponent implements
           }, 66);
         }
       }, false);
+    }
+  }
+
+  public parseMultipleFilter(filters: any[]): void {
+    if (filters) {
+      const multipleFilters = filters.filter((filter) => filter.type === 'multiple');
+      multipleFilters.forEach((filter) => {
+        if (!filter.parsed) {
+          if (filter.data.data) {
+            filter.data = this.getPropValue(this.data, filter.data.data);
+            filter.parsed = true;
+          }
+
+          if (filter.data.endpoint && !filter.data.data) {
+            filter.endpoint = this.format(filter.endpoint, this.data);
+            this.genericFormService.getAll(filter.endpoint).subscribe(
+              (res: any) => {
+                filter.data = res;
+                filter.parsed = true;
+              }
+            );
+          }
+        }
+      });
     }
   }
 
@@ -1312,6 +1337,7 @@ export class DynamicListComponent implements
     this.modalInfo.type = 'form';
     this.modalInfo.endpoint = endpoint;
     this.modalInfo.id = id;
+    this.modalInfo.mode = 'edit';
     this.open(this.modal, {size: 'lg'});
   }
 

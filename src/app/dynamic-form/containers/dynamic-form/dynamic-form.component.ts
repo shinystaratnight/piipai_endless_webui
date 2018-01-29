@@ -97,6 +97,9 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public eventHandler(e: CustomEvent): void {
     this.event.emit(e);
+    if (e.el && e.el.formData) {
+      e.el.formData.next(this.form.value);
+    }
     if (this.hiddenFields && this.hiddenFields.elements && this.hiddenFields.elements.length) {
       this.parseConfig(this.hiddenFields.elements);
     }

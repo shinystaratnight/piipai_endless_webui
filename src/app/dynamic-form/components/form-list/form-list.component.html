@@ -10,7 +10,7 @@
       aria-controls="collapseExample"
       style="cursor: pointer"></i>
     {{config.templateOptions.label}}
-    <button *ngIf="config.templateOptions.add_label"
+    <button *ngIf="config.templateOptions.add_label && config.max > count"
       type="button"
       class="text-white btn btn-sm group-button ml-auto mr-2"
       (click)="addObject()">
@@ -29,6 +29,7 @@
       [supportData]="config.supportData"
       [metaType]="config.metaType"
       [actions]="config.actions"
+      (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)">
     </generic-list>
