@@ -81,7 +81,7 @@ export class FormRelatedComponent
 
   public listElement: Field;
 
-  public viewMode: boolean;
+  public viewMode: boolean = true;
 
   public skillEndpoint: boolean;
   public customTemplate: CustomField[];
@@ -137,7 +137,7 @@ export class FormRelatedComponent
     if (this.config.value) {
       this.customTemplate = fieldsList.map((el) => {
         let object = <CustomField> {};
-        let value = this.getValueOfData(this.config.value, el, object);
+        this.getValueOfData(this.config.value, el, object);
         object.key = el;
         if (el === 'email') {
           object.icon = 'envelope';
@@ -282,13 +282,13 @@ export class FormRelatedComponent
     if (this.modalRef) {
       this.modalRef.close();
     }
-    if (this.config.hidden) {
+    if (this.config && this.config.hidden) {
       this.config.hidden.complete();
     }
-    if (this.config.mode) {
+    if (this.config && this.config.mode) {
       this.config.mode.complete();
     }
-    if (this.config.formData) {
+    if (this.config && this.config.formData) {
       this.config.formData.complete();
     }
   }
@@ -640,7 +640,7 @@ export class FormRelatedComponent
     });
   }
 
-  public generateFields(fields: string[]) {
+  public generateFields(fields?: string[]) {
     let query = '&';
     if (fields) {
       fields.forEach((el) => {
@@ -648,9 +648,14 @@ export class FormRelatedComponent
       });
       query = query.slice(0, query.length - 1);
     } else {
-      query = `fields=__str__&fields=${this.param}`;
+      query = `&fields=__str__&fields=${this.param}`;
     }
     return query;
+  }
+
+  public removeItem(index) {
+    this.dataOfList.splice(index, 1);
+    this.updateValue({});
   }
 
   public generateQuery(queries) {
@@ -663,7 +668,7 @@ export class FormRelatedComponent
       });
       query = query.slice(0, query.length - 1);
     }
-    return query.length > 1 || '';
+    return query.length > 1 ? query : '';
   }
 
   public getOptions(value, offset, concat = false) {

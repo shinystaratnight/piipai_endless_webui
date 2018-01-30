@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'list-link',
@@ -10,7 +10,7 @@ export class ListLinkComponent implements OnInit {
   public config;
   public href: string | string[];
   public link: boolean;
-  public value: string;
+  public value: string | string[];
   public last: boolean;
   public arrayValue: boolean;
 
@@ -22,19 +22,19 @@ export class ListLinkComponent implements OnInit {
 
   public ngOnInit() {
 
-    if (this.config.value && this.config.value instanceof Object) {
+    if (this.config.value && this.config.value instanceof Object && !Array.isArray(this.config.value)) { //tslint:disable-line
       this.value = this.config.value && (this.config.text || this.config.value.__str__);
     } else {
       this.value = this.config.value && (this.config.text || this.config.value);
     }
     this.href = this.config.link;
 
-    if (Array.isArray(this.value) && Array.isArray(this.link)) {
+    if (Array.isArray(this.value) && Array.isArray(this.href)) {
       this.link = !(this.isEmail(this.value[0]) || this.isPhone(this.value[0]));
     } else {
       this.link = !(this.isEmail(this.value) || this.isPhone(this.value));
     }
-   }
+  }
 
   public isEmail(value) {
     let reg =

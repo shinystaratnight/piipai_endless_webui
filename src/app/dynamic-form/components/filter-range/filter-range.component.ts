@@ -44,7 +44,7 @@ export class FilterRangeComponent implements OnInit {
     this.fs.generateQuery(this.genericQuery(this.config.key, this.data), this.config.key, this.config.listName, this.data); //tslint:disable-line
   }
 
-  public onChange(e) {
+  public onChange() {
     this.fs.generateQuery(
       this.genericQuery(this.config.key, this.data),
       this.config.key, this.config.listName, this.data);
@@ -87,7 +87,7 @@ export class FilterRangeComponent implements OnInit {
   }
 
   public resetFilter() {
-    this.data = '';
+    this.data = this.config.defaut || '';
     this.query = '';
     this.fs.generateQuery('', this.config.key, this.config.listName);
     this.changeQuery();

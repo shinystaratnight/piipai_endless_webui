@@ -67,13 +67,17 @@ describe('FilterSelectComponent', () => {
 
   describe('ngOnInit method', () => {
 
-    it ('should fill in filter', () => {
+    it ('should fill in filter', async(inject([FilterService], (fs: FilterService) => {
       comp.config = config;
       queries = 'Master';
+      spyOn(comp, 'genericQuery').and.returnValue('');
+      spyOn(fs, 'generateQuery');
       comp.ngOnInit();
-      expect(comp.data).toEqual(queries);
+      expect(comp.data).toEqual('');
       expect(comp.isCollapsed).toBeTruthy();
-    });
+      expect(fs.generateQuery).toHaveBeenCalled();
+      expect(comp.genericQuery).toHaveBeenCalled();
+    })));
 
     it('should call parseQuery method', () => {
       comp.config = config;
