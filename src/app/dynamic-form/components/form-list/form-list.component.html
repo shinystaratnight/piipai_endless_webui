@@ -10,7 +10,7 @@
       aria-controls="collapseExample"
       style="cursor: pointer"></i>
     {{config.templateOptions.label}}
-    <button *ngIf="config.templateOptions.add_label && config.max > count"
+    <button *ngIf="showButton"
       type="button"
       class="text-white btn btn-sm group-button ml-auto mr-2"
       (click)="addObject()">

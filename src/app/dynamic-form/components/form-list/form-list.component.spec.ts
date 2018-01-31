@@ -147,4 +147,14 @@ describe('FormListComponent', () => {
     });
   });
 
+  describe('checkCount method', () => {
+    it('update showButton property', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.max = 2;
+      let event = 4;
+      comp.checkCount(event);
+      expect(comp.showButton).toBeFalsy();
+    });
+  });
+
 });

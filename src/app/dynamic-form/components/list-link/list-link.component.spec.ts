@@ -12,7 +12,7 @@ describe('ListLinkComponent', () => {
     href: 'phone',
     name: 'phone_mobile',
     type: 'link',
-    endpoint: '/',
+    endpoint: '/ecore/api/v2/skills/skills/123/change',
     id: 'some id'
   };
 
@@ -34,41 +34,45 @@ describe('ListLinkComponent', () => {
     });
   }));
 
-  it('should enter the assertion', async() => {
-    comp.config = config;
-    fixture.detectChanges();
-    expect(comp.config).toBeDefined();
-  });
-
   describe('ngOnInit method', () => {
 
-    it('should update value by string', async(() => {
+    it('should update value by string', () => {
       comp.config = Object.assign({}, config);
       comp.config.value = 'test@test.com';
       comp.config.link = 'mailto:test@test.com';
+      spyOn(comp, 'isEmail').and.returnValue(false);
+      spyOn(comp, 'isPhone').and.returnValue(false);
       comp.ngOnInit();
       expect(comp.value).toEqual(comp.config.value);
       expect(comp.href).toEqual(comp.config.link);
-    }));
+      expect(comp.link).toBeTruthy();
+    });
 
-    it('should update value by object', async(() => {
+    it('should update value by object', () => {
       comp.config = Object.assign({}, config);
       comp.config.value = {
         __str__: 'Value'
       };
-      comp.config.text = 'Value';
+      comp.config.text = 'Text';
+      comp.config.link = 'link';
+      spyOn(comp, 'isEmail').and.returnValue(true);
+      spyOn(comp, 'isPhone').and.returnValue(false);
       comp.ngOnInit();
-      expect(comp.value).toBeDefined();
-      expect(comp.href).toBeDefined();
-    }));
+      expect(comp.value).toEqual('Text');
+      expect(comp.href).toEqual('link');
+    });
 
-    it('should update link property if value is array ', async(() => {
+    it('should update link property if value is array ', () => {
       comp.config = Object.assign({}, config);
       comp.config.value = ['test@test.com'];
       comp.config.link = ['mailto:test@test.com'];
+      spyOn(comp, 'isEmail').and.returnValue(true);
+      spyOn(comp, 'isPhone').and.returnValue(false);
       comp.ngOnInit();
+      expect(comp.value).toEqual(comp.config.value);
+      expect(comp.href).toEqual(comp.config.link);
       expect(comp.link).toBeFalsy();
-    }));
+    });
 
   });
 
@@ -96,12 +100,28 @@ describe('ListLinkComponent', () => {
 
   describe('action method', () => {
     it('should emit event', () => {
-      comp.element = {
-        nativeElement: {
-          innerText: 'Some text'
+      comp.config = Object.assign({}, config);
+      comp.value = 'some value';
+      let event = {
+        preventDefault() {
+          return true;
+        },
+        stopPropagation() {
+          return true;
+        },
+        target: {
+          innerText: 'Link'
         }
       };
-      comp.config = Object.assign({}, config);
+      spyOn(comp.event, 'emit');
+      comp.action(event);
+      expect(comp.event.emit).toHaveBeenCalled();
+    });
+
+    it('should emit buttonAction', () => {
+      comp.config = Object.assign({
+        action: 'editForm'
+      }, config);
       comp.value = 'some value';
       let event = {
         preventDefault() {
@@ -111,9 +131,9 @@ describe('ListLinkComponent', () => {
           return true;
         }
       };
-      spyOn(comp.event, 'emit');
+      spyOn(comp.buttonAction, 'emit');
       comp.action(event);
-      expect(comp.event.emit).toHaveBeenCalled();
+      expect(comp.buttonAction.emit).toHaveBeenCalled();
     });
   });
 

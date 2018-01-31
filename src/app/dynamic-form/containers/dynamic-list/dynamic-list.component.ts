@@ -1264,12 +1264,11 @@ export class DynamicListComponent implements
   }
 
   public showMap() {
-    this.modalInfo = this.generateDataFormFillInMap({});
-    this.generateDataFormFillInMap(this.modalInfo);
+    this.modalInfo = this.generateDataForFillInMap({});
     this.open(this.fillInMap, {size: 'lg'});
   }
 
-  public generateDataFormFillInMap(data) {
+  public generateDataForFillInMap(data) {
     data.markers = [];
     this.data[this.responseField].forEach((el) => {
       data.markers.push({

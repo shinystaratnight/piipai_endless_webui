@@ -55,9 +55,22 @@ describe('ListTextComponent', () => {
       comp.config.templateOptions = {
         type: 'time'
       };
-      comp.config.value = '08:00:00';
+      comp.value = '08:00:00';
+      spyOn(comp, 'ngOnInit');
       comp.checkDate(moment);
       expect(comp.value).toEqual('08:00 AM');
+    });
+
+    it('should parse time if value is array', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.templateOptions = {
+        type: 'time'
+      };
+      comp.arrayValue = true;
+      comp.value = ['08:00:00'];
+      spyOn(comp, 'ngOnInit');
+      comp.checkDate(moment);
+      expect(comp.value).toEqual(['08:00 AM']);
     });
 
     it('should parse date value', () => {
@@ -65,9 +78,22 @@ describe('ListTextComponent', () => {
       comp.config.templateOptions = {
         type: 'date'
       };
-      comp.config.value = '2017-12-08';
+      comp.value = '2017-12-08';
+      spyOn(comp, 'ngOnInit');
       comp.checkDate(moment);
       expect(comp.value).toEqual('08/12/2017');
+    });
+
+    it('should parse date if value is array', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.templateOptions = {
+        type: 'date'
+      };
+      comp.arrayValue = true;
+      comp.value = ['2017-12-08'];
+      spyOn(comp, 'ngOnInit');
+      comp.checkDate(moment);
+      expect(comp.value).toEqual(['08/12/2017']);
     });
 
     it('should parse datetime value', () => {
@@ -75,9 +101,22 @@ describe('ListTextComponent', () => {
       comp.config.templateOptions = {
         type: 'datetime'
       };
-      comp.config.value = '2017-12-08T08:00:00+11:00';
+      comp.value = '2017-12-08T08:00:00+11:00';
+      spyOn(comp, 'ngOnInit');
       comp.checkDate(moment);
       expect(comp.value).toEqual('08/12/2017 08:00 AM');
+    });
+
+    it('should parse datetime if value is array', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.templateOptions = {
+        type: 'datetime'
+      };
+      comp.arrayValue = true;
+      comp.value = ['2017-12-08T08:00:00+11:00'];
+      spyOn(comp, 'ngOnInit');
+      comp.checkDate(moment);
+      expect(comp.value).toEqual(['08/12/2017 08:00 AM']);
     });
   });
 

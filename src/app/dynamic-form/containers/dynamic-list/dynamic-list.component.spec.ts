@@ -6,6 +6,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { DynamicListComponent } from './dynamic-list.component';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 import { GenericFormService } from './../../services/generic-form.service';
 import { Observable } from 'rxjs/Observable';
@@ -243,6 +244,12 @@ describe('DynamicListComponent', () => {
     }
   };
 
+  const mockRouter = {
+    navigate() {
+      return true;
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -251,7 +258,8 @@ describe('DynamicListComponent', () => {
       providers: [
         DomSanitizer,
         {provide: FilterService, useValue: mockFilterService},
-        {provide: GenericFormService, useValue: mockGenericFormService }
+        {provide: GenericFormService, useValue: mockGenericFormService },
+        {provide: Router, useValue: mockRouter}
       ],
       imports: [NgbModule.forRoot()],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -287,15 +295,18 @@ describe('DynamicListComponent', () => {
   describe('ngOnChanges method', () => {
 
     it('should called prepareData method', async(() => {
-      comp.config = config;
+      comp.config = Object.assign({}, config);
+      comp.responseField = 'results';
       comp.data = data;
       comp.maximize = true;
+      comp.asyncData = true;
       spyOn(comp, 'prepareData');
       spyOn(comp, 'resetSelectedElements');
       spyOn(comp, 'getSortedColumns');
       spyOn(comp, 'unpopedTable');
       spyOn(comp, 'updateMetadataByTabs');
       spyOn(comp, 'getAsyncData');
+      spyOn(comp, 'parseMultipleFilter');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.resetSelectedElements).toHaveBeenCalled();
@@ -303,6 +314,7 @@ describe('DynamicListComponent', () => {
       expect(comp.unpopedTable).toHaveBeenCalled();
       expect(comp.updateMetadataByTabs).toHaveBeenCalled();
       expect(comp.getAsyncData).toHaveBeenCalled();
+      expect(comp.parseMultipleFilter).toHaveBeenCalled();
     }));
 
     it('should call openFrame method', fakeAsync(() => {
@@ -314,11 +326,13 @@ describe('DynamicListComponent', () => {
         phone_mobile: ['+380983456723']
       };
       spyOn(comp, 'openFrame');
+      spyOn(comp, 'parseMultipleFilter');
       comp.ngOnChanges();
       tick(300);
       expect(comp.openFrame).toHaveBeenCalledWith(comp.currentActionData.phone_mobile);
       comp.actionData = undefined;
       comp.currentActionData = undefined;
+      expect(comp.parseMultipleFilter).toHaveBeenCalled();
     }));
 
     it('should update datatable', async(() => {
@@ -328,12 +342,14 @@ describe('DynamicListComponent', () => {
       comp.id = 5;
       spyOn(comp, 'initPagination');
       spyOn(comp, 'updateMetadataByTabs');
+      spyOn(comp, 'parseMultipleFilter');
       comp.ngOnChanges();
       expect(+comp.datatable.nativeElement.style.zIndex).toEqual(25);
       comp.active = true;
       comp.ngOnChanges();
       expect(+comp.datatable.nativeElement.style.zIndex).toEqual(100);
       expect(comp.updateMetadataByTabs).toHaveBeenCalled();
+      expect(comp.parseMultipleFilter).toHaveBeenCalled();
     }));
 
     it('should call updateSort method', async(() => {
@@ -348,6 +364,7 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'resetSort');
       spyOn(comp, 'initPagination');
       spyOn(comp, 'updateMetadataByTabs');
+      spyOn(comp, 'parseMultipleFilter');
       comp.ngOnChanges();
       expect(comp.sortedColumns).toEqual(comp.sorted);
       expect(comp.updateSort).toHaveBeenCalled();
@@ -355,6 +372,7 @@ describe('DynamicListComponent', () => {
       comp.ngOnChanges();
       expect(comp.resetSort).toHaveBeenCalled();
       expect(comp.updateMetadataByTabs).toHaveBeenCalled();
+      expect(comp.parseMultipleFilter).toHaveBeenCalled();
     }));
 
     it('should create body for inner tables', async(() => {
@@ -383,9 +401,11 @@ describe('DynamicListComponent', () => {
       spyOn(comp, 'prepareData');
       spyOn(comp, 'initPagination');
       spyOn(comp, 'updateMetadataByTabs');
+      spyOn(comp, 'parseMultipleFilter');
       comp.ngOnChanges();
       expect(comp.prepareData).toHaveBeenCalled();
       expect(comp.updateMetadataByTabs).toHaveBeenCalled();
+      expect(comp.parseMultipleFilter).toHaveBeenCalled();
     }));
 
   });
@@ -419,6 +439,43 @@ describe('DynamicListComponent', () => {
     });
   });
 
+  describe('parseMultipleFilter method', () => {
+    it('should update data from metadata', () => {
+      comp.data = {
+        shifts: []
+      };
+      const tableFilters = <any> [
+        {
+          type: 'multiple',
+          data: {
+            data: 'shifts'
+          }
+        }
+      ];
+      comp.parseMultipleFilter(tableFilters);
+      expect(tableFilters[0].data).toEqual([]);
+      expect(tableFilters[0].parsed).toBeTruthy();
+    });
+
+    it('sholud update data from separate endpoint', () => {
+      comp.data = {
+        id: '123'
+      };
+      const tableFilters = <any> [
+        {
+          type: 'multiple',
+          data: {
+            endpoint: '/ecore/api/v2/hr/vacancy/{id}/shifts/'
+          }
+        }
+      ];
+      response = [];
+      comp.parseMultipleFilter(tableFilters);
+      expect(tableFilters[0].data).toBeDefined();
+      expect(tableFilters[0].parsed).toBeTruthy();
+    });
+  });
+
   describe('getAsyncData method', () => {
     it('should get async data by get request', () => {
       comp.asyncData = {
@@ -439,7 +496,7 @@ describe('DynamicListComponent', () => {
       expect(comp.updateValuesOfAsyncData).toHaveBeenCalled();
     });
 
-    it('should get async data by get request', () => {
+    it('should get async data by post request', () => {
       comp.asyncData = {
         '/ecore/api/v2/locatozation/?code=AU': [
           {
@@ -451,7 +508,14 @@ describe('DynamicListComponent', () => {
           }
         ]
       };
-      spyOn(comp, 'generateParams').and.returnValue('country=Australia');
+      comp.endpoint = '/ecore/api/v2/hr/vacancies/';
+      comp.data = {
+        vacancy: {
+          id: '123'
+        }
+      };
+      comp.supportData = 'vacancy';
+      spyOn(comp, 'generateParams').and.returnValue({});
       spyOn(comp, 'updateValuesOfAsyncData');
       comp.getAsyncData();
       expect(comp.generateParams).toHaveBeenCalled();
@@ -1312,6 +1376,57 @@ describe('DynamicListComponent', () => {
       expect(comp.modalInfo).toEqual({});
       expect(comp.post).toHaveBeenCalledWith(event);
     });
+
+    it('should call showCandidateProfile method', () => {
+      let event = {
+        value: 'showCandidateProfile'
+      };
+      spyOn(comp, 'showCandidateProfile');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.showCandidateProfile).toHaveBeenCalledWith(event);
+    });
+
+    it('should call fillIn method', () => {
+      let event = {
+        value: 'fillin'
+      };
+      spyOn(comp, 'fillIn');
+      comp.buttonHandler(event);
+      expect(comp.modalInfo).toEqual({});
+      expect(comp.fillIn).toHaveBeenCalledWith(event);
+    });
+  });
+
+  describe('fillIn method', () => {
+    it('should redirect on fillin form', async(inject([Router], (router: Router) => {
+      spyOn(router, 'navigate');
+      const event = {
+        el: {
+          rowId: '123'
+        }
+      };
+      const url = `/hr/vacancies/${event.el.rowId}/fillin/`;
+      comp.fillIn(event);
+      expect(router.navigate).toHaveBeenCalledWith([url]);
+    })));
+  });
+
+  describe('showCandidateProfile method', () => {
+    it('should open candidate profile', () => {
+      const event = {
+        el: {
+          endpoint: '/ecore/api/v2/candidate/candidate/123/'
+        }
+      };
+      spyOn(comp, 'open');
+      comp.showCandidateProfile(event);
+      expect(comp.modalInfo).toEqual({
+        type: 'profile',
+        id: '123',
+      });
+      expect(comp.open).toHaveBeenCalled();
+    });
   });
 
   describe('openForm method', () => {
@@ -1450,6 +1565,7 @@ describe('DynamicListComponent', () => {
       };
       comp.evaluateModal = {};
       comp.data = mockData;
+      comp.responseField = 'results';
       spyOn(comp, 'open');
       comp.evaluate(event);
       expect(comp.modalInfo).toEqual({
@@ -1489,6 +1605,7 @@ describe('DynamicListComponent', () => {
       };
       comp.evaluateModal = {};
       comp.data = mockData;
+      comp.responseField = 'results';
       spyOn(comp, 'open');
       comp.evaluate(event);
       expect(comp.modalInfo).toEqual({
@@ -1533,6 +1650,7 @@ describe('DynamicListComponent', () => {
         ]
       };
       comp.evaluateModal = {};
+      comp.responseField = 'results';
       comp.data = mockData;
       spyOn(comp, 'open');
       comp.changeTimesheet(event);
@@ -1600,6 +1718,7 @@ describe('DynamicListComponent', () => {
         ]
       };
       comp.evaluateModal = {};
+      comp.responseField = 'results';
       comp.data = mockData;
       spyOn(comp, 'evaluate');
       spyOn(comp, 'format');
@@ -1906,6 +2025,72 @@ describe('DynamicListComponent', () => {
       comp.buttonAction(event);
       expect(comp.popedTable).toHaveBeenCalled();
     });
+
+    it('should call openMap action', () => {
+      let event = {
+        type: 'openMap'
+      };
+      spyOn(comp, 'showMap');
+      comp.buttonAction(event);
+      expect(comp.showMap).toHaveBeenCalled();
+    });
+  });
+
+  describe('showMap method', () => {
+    it('should open map', () => {
+      spyOn(comp, 'generateDataForFillInMap');
+      spyOn(comp, 'open');
+      comp.showMap();
+      expect(comp.generateDataForFillInMap).toHaveBeenCalled();
+      expect(comp.open).toHaveBeenCalled();
+    });
+  });
+
+  describe('generateDataForFillInMap method', () => {
+    it('should generate modal data', () => {
+      comp.data = {
+        candidates: [
+          {
+            latitude: 0,
+            longitude: 0,
+            contact: {
+              address: {
+                __str__: 'Baker Street'
+              },
+              __str__: 'Mr. Test Testovich'
+            }
+          }
+        ],
+        vacancy: {
+          latitude: 0,
+          longitude: 0,
+          __str__: 'Home Street',
+          address: 'Home Street'
+        }
+      };
+      comp.responseField = 'candidates';
+      comp.supportData = 'vacancy';
+      const formData = {};
+      comp.generateDataForFillInMap(formData);
+      expect(formData).toEqual({
+          markers: [
+            {
+              latitude: NaN,
+              longitude: NaN,
+              name: 'Mr. Test Testovich',
+              description: 'Baker Street'
+            },
+            {
+              latitude: 0,
+              longitude: 0,
+              name: 'Home Street',
+              description: 'Home Street'
+            }
+          ],
+          latitude: 0,
+          longitude: 0
+        });
+    });
   });
 
   describe('showPreview method', () => {
@@ -1971,7 +2156,8 @@ describe('DynamicListComponent', () => {
       expect(comp.modalInfo).toEqual({
         type: 'form',
         endpoint: '/ecore/api/v2/contacts/',
-        id: '123'
+        id: '123',
+        mode: 'edit'
       });
       expect(comp.open).toHaveBeenCalled();
     });

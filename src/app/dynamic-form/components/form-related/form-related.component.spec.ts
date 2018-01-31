@@ -79,7 +79,14 @@ describe('FormRelatedComponent', () => {
     }
   };
 
-  const mockNavigationService = {};
+  const mockNavigationService = {
+    linksList: [
+      {
+        url: '/skills/skills/',
+        endpoint: '/ecore/api/v2/skills/skills/'
+      }
+    ]
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -119,6 +126,7 @@ describe('FormRelatedComponent', () => {
       spyOn(comp, 'generateDataForList');
       spyOn(comp, 'getReplaceElements');
       spyOn(comp, 'createEvent');
+      spyOn(comp, 'checkFormData');
       comp.ngOnInit();
       expect(comp.addControl).toHaveBeenCalled();
       expect(comp.display).toEqual('{__str__}');
@@ -128,10 +136,48 @@ describe('FormRelatedComponent', () => {
       expect(comp.checkHiddenProperty).toHaveBeenCalled();
       expect(comp.generateDataForList).toHaveBeenCalled();
       expect(comp.getReplaceElements).toHaveBeenCalled();
+      expect(comp.checkFormData).toHaveBeenCalled();
       expect(comp.createEvent).toHaveBeenCalled();
       expect(comp.isCollapsed).toEqual(comp.config.collapsed);
       expect(comp.skillEndpoint).toBeTruthy();
     })));
+  });
+
+  describe('generateCustomTemplate method', () => {
+    it('should generate custom template', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.value = {
+        email: 'test@test.com',
+        phone_mobile: '+380777777777',
+        addres: {
+          __str__: 'Home street'
+        },
+        __str__: 'Mr. Test Testovich'
+      };
+      const fieldsList = ['__str__', 'address.__str__', 'phone_mobile', 'email'];
+      spyOn(comp, 'getValueOfData');
+      comp.generateCustomTemplate(fieldsList);
+      expect(comp.customTemplate).toEqual(<any> [
+        {
+          key: '__str__',
+          link: true
+        },
+        {
+          key: 'address.__str__',
+          icon: 'map-marker'
+        },
+        {
+          key: 'phone_mobile',
+          icon: 'commenting',
+          prefix: 'tel:'
+        },
+        {
+          key: 'email',
+          icon: 'envelope',
+          prefix: 'mailto:'
+        }
+      ]);
+    });
   });
 
   describe('checkHiddenProperty method', () => {
@@ -175,6 +221,24 @@ describe('FormRelatedComponent', () => {
       comp.checkModeProperty();
       expect(comp.viewMode).toBeFalsy();
     });
+  });
+
+  describe('checkFormData method', () => {
+    it('should subscibe on change data of form', () => {
+      comp.config = Object.assign({}, config);
+      comp.config.formData = new BehaviorSubject({});
+      comp.checkFormData();
+      expect(comp.formData).toEqual({});
+    });
+  });
+
+  describe('getLinkPath method', () => {
+    it('should return url by endpoint',
+      async(inject([NavigationService], (navigation: NavigationService) => {
+        const endpoint = '/ecore/api/v2/skills/skills/';
+        let result = comp.getLinkPath(endpoint);
+        expect(result).toEqual('/skills/skills/');
+    })));
   });
 
   describe('setInitValue method', () => {
@@ -1003,6 +1067,34 @@ describe('FormRelatedComponent', () => {
     });
   });
 
+  describe('generateFields method', () => {
+    it('should generate query by fields', () => {
+      const fields = ['__str__', 'id'];
+      const query = comp.generateFields(fields);
+      expect(query).toEqual('&fields=__str__&fields=id');
+    });
+
+    it('should generate query by param', () => {
+      comp.config = Object.assign({}, config);
+      comp.param = 'id';
+      const query = comp.generateFields();
+      expect(query).toEqual('&fields=__str__&fields=id');
+    });
+  });
+
+  describe('generateQuery method', () => {
+    it('should generate query', () => {
+      comp.formData = {
+        type: 'master'
+      };
+      const queries = {
+        company: '{type}'
+      };
+      const result = comp.generateQuery(queries);
+      expect(result).toEqual('&company=master');
+    });
+  });
+
   describe('getOptions method', () => {
     it('should create new previewList', () => {
       let value: '123';
@@ -1017,7 +1109,11 @@ describe('FormRelatedComponent', () => {
           { id: 3 }
         ]
       };
+      spyOn(comp, 'generateFields');
+      spyOn(comp, 'generateQuery');
       comp.getOptions(value, 0, false);
+      expect(comp.generateFields).toHaveBeenCalled();
+      expect(comp.generateQuery).toHaveBeenCalled();
       expect(comp.lastElement).toEqual(10);
       expect(comp.count).toEqual(25);
       expect(comp.previewList).toEqual([
@@ -1046,7 +1142,11 @@ describe('FormRelatedComponent', () => {
           { id: 6, __str__: 6 }
         ]
       };
+      spyOn(comp, 'generateFields');
+      spyOn(comp, 'generateQuery');
       comp.getOptions(value, 10, true);
+      expect(comp.generateFields).toHaveBeenCalled();
+      expect(comp.generateQuery).toHaveBeenCalled();
       expect(comp.lastElement).toEqual(20);
       expect(comp.count).toEqual(25);
       expect(comp.previewList).toEqual([

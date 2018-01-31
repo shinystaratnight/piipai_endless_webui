@@ -52,7 +52,7 @@ export class FilterMultipleComponent implements OnInit {
     }
   }
 
-  public onChange(e) {
+  public onChange() {
     this.fs.generateQuery(
       this.genericQuery(this.config.query, this.data),
       this.config.key,
@@ -103,7 +103,6 @@ export class FilterMultipleComponent implements OnInit {
   }
 
   public updateFilter() {
-    this.data = '';
     this.query = '';
     let data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
@@ -112,8 +111,6 @@ export class FilterMultipleComponent implements OnInit {
       } else {
         this.data = data;
       }
-    } else {
-      this.data = '';
     }
   }
 }

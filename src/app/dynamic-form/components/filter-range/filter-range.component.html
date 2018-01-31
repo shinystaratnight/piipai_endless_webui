@@ -25,7 +25,7 @@
       type="number"
       class="form-control"
       [(ngModel)]="data"
-      (blur)="onChange($event)"
+      (blur)="onChange()"
       [attr.min]="config.min"
       [attr.max]="config.max"
       [attr.value]="config.default">
