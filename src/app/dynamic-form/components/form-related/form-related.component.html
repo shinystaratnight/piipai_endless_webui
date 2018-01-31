@@ -145,7 +145,7 @@
               </ng-container>
             </td>
             <td>
-              <span *ngIf="object.id && !viewMode" class="d-flex align-items-center">
+              <span *ngIf="object.id" class="d-flex align-items-center">
                 <i fa class="icon text-danger mx-2" title="Delete"
                   [name]="'times-circle'"
                   (click)="deleteObject(object)"></i>
@@ -156,14 +156,14 @@
                   [name]="'check'"
                   (click)="setAsDefault(object)"></i>
               </span>
-              <span *ngIf="!object.id && !viewMode" class="d-flex align-items-center">
+              <span *ngIf="!object.id" class="d-flex align-items-center">
                 <i fa class="icon text-danger mx-2" title="Delete" [name]="'times-circle'" (click)="removeItem(index)"></i>
               </span>
             </td>
           </tr>
         </tbody>
       </table>
-      <a *ngIf="!viewMode" href="#" (click)="addObject($event)"><small><i fa name="plus" class="text-success"></i></small> Add</a>
+      <a href="#" (click)="addObject($event)"><small><i fa name="plus" class="text-success"></i></small> Add</a>
     </div>
   </div>
 </div>

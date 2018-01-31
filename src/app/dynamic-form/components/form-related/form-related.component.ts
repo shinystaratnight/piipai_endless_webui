@@ -81,7 +81,7 @@ export class FormRelatedComponent
 
   public listElement: Field;
 
-  public viewMode: boolean = true;
+  public viewMode: boolean;
 
   public skillEndpoint: boolean;
   public customTemplate: CustomField[];
