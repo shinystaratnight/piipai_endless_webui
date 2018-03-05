@@ -706,6 +706,8 @@ export class DynamicListComponent implements
         } else {
           object[param] = data[prop] ? data[prop].__str__ : '';
         }
+      } else if (object.type === 'static' && !object[param]) {
+        object[param] = data[prop] && data[prop].__str__ ? data[prop].__str__ : data[prop];
       } else if (!object[param]) {
         object[param] = data[prop];
       }
