@@ -25,6 +25,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   public message: any;
   public key: any;
   public label: boolean;
+  public count: number;
 
   public modalData: any;
   public format = new FormatString();
@@ -33,6 +34,7 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public update: BehaviorSubject<boolean>;
   public query: string;
+  public showButton: boolean;
 
   constructor(
     private modal: NgbModal
@@ -102,6 +104,15 @@ export class FormListComponent implements OnInit, OnDestroy {
   public eventHandler(e) {
     if (e) {
       this.config.templateOptions.label = e.__str__;
+    }
+  }
+
+  public checkCount(e: number): void {
+    this.count = e;
+    if (this.config.max) {
+      this.showButton = this.config.templateOptions.add_label && this.config.max > this.count;
+    } else {
+      this.showButton = this.config.templateOptions.add_label;
     }
   }
 }

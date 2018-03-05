@@ -50,6 +50,9 @@ export class GenericListComponent implements OnInit {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public dataLength: EventEmitter<number> = new EventEmitter();
+
   public metadata: any;
   public tables = [];
   public first: boolean = false;
@@ -151,6 +154,7 @@ export class GenericListComponent implements OnInit {
     if (first && !this.query) {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
+          this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           table.refresh = false;
           this.cashData = data;
@@ -177,6 +181,7 @@ export class GenericListComponent implements OnInit {
       }
       this.gfs.getByQuery(endpoint, newQuery).subscribe(
         (data) => {
+          this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           table.data = data;
           if (this.paginated === 'on') {
@@ -193,6 +198,7 @@ export class GenericListComponent implements OnInit {
     } else {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
+          this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           table.data = data;
           if (this.paginated === 'on') {

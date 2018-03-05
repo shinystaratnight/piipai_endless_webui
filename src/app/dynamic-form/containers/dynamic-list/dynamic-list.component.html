@@ -172,8 +172,14 @@
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
-      <generic-form [endpoint]="modalInfo.endpoint" [data]="modalInfo.data" [id]="modalInfo.id" *ngSwitchCase="'form'" (event)="formEvent($event, c)">
-        <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
+      <generic-form
+        *ngSwitchCase="'form'"
+        [endpoint]="modalInfo.endpoint"
+        [data]="modalInfo.data"
+        [id]="modalInfo.id"
+        [mode]="modalInfo.mode"
+        (event)="formEvent($event, c)">
+          <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
       </generic-form>
       <sebm-google-map
         *ngSwitchCase="'map'"

@@ -116,12 +116,12 @@
         aria-controls="collapseExample"
         style="cursor: pointer"></i>
           {{config.templateOptions.label}}
-      <button *ngIf="config.templateOptions.label"
+      <!-- <button *ngIf="config.templateOptions.label"
         type="button"
         class="text-white btn btn-sm group-button ml-auto mr-2"
         (click)="open('add')">
           Add
-      </button>
+      </button> -->
     </h6>
     <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list px-2">
       <table *ngIf="dataOfList" class="table table-bordered mb-1">
@@ -134,7 +134,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let object of dataOfList">
+          <tr *ngFor="let object of dataOfList; let index = index">
             <td *ngFor="let field of object.metadata;">
               <ng-container
                 formElement
@@ -156,10 +156,14 @@
                   [name]="'check'"
                   (click)="setAsDefault(object)"></i>
               </span>
+              <span *ngIf="!object.id" class="d-flex align-items-center">
+                <i fa class="icon text-danger mx-2" title="Delete" [name]="'times-circle'" (click)="removeItem(index)"></i>
+              </span>
             </td>
           </tr>
         </tbody>
       </table>
+      <a href="#" (click)="addObject($event)"><small><i fa name="plus" class="text-success"></i></small> Add</a>
     </div>
   </div>
 </div>
@@ -173,7 +177,10 @@
     <span *ngIf="!displayValue && (!results || results.length === 0)">-</span>
     <a *ngIf="!config.many" href="{{this.linkPath}}" (click)="open('edit', $event)">{{displayValue}}</a>
     <div *ngIf="config.many && results">
-      <a *ngFor="let item of results" href="/" (click)="open('edit', $event, item)">{{item.__str__}}</a>
+      <span *ngFor="let item of results; let l = last">
+        <a href="/" (click)="open('edit', $event, item)">{{item.__str__}}</a>
+        <br *ngIf="!l">
+      </span>
     </div>
   </div>
 

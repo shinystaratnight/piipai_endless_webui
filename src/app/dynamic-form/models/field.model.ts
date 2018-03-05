@@ -1,4 +1,5 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 
 export interface Field {
   type?: string;
@@ -12,6 +13,7 @@ export interface Field {
   value?: any;
   activeMetadata?: Field[];
   hidden?: BehaviorSubject<boolean>;
+  formData?: Subject<any>;
   data?: any;
   metadata?: Field[];
   options?: any[];

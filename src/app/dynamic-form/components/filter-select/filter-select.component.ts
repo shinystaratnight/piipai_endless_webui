@@ -8,7 +8,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class FilterSelectComponent implements OnInit {
   public config: any;
-  public data: string = '';
+  public data: string;
   public query: string;
   public isCollapsed: boolean = true;
   public options: any;
@@ -39,6 +39,8 @@ export class FilterSelectComponent implements OnInit {
     );
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
+    this.data = this.config.default || '';
+    this.fs.generateQuery(this.genericQuery(this.config.query, this.data), this.config.key, this.config.listName, this.data); //tslint:disable-line
   }
 
   public onChange() {

@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, inject, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -201,7 +201,7 @@ describe('GenericListComponent', () => {
         expect(comp.getData).toBeDefined();
       }));
 
-      it('should update data property of first table', async(() => {
+      it('should update data property of first table', () => {
         let table: any = {first: true};
         data = {
           results: [
@@ -214,13 +214,15 @@ describe('GenericListComponent', () => {
         let endpoint = 'endpoint';
         spyOn(comp, 'calcPagination');
         spyOn(comp, 'getMetadata');
+        spyOn(comp.dataLength, 'emit');
         comp.getData(endpoint, null, table, true);
         expect(comp.calcPagination).toHaveBeenCalledWith(data);
         expect(comp.getMetadata).toHaveBeenCalledWith(endpoint, table);
+        expect(comp.dataLength.emit).toHaveBeenCalled();
         expect(table.refresh).toBeFalsy();
-      }));
+      });
 
-      it('should update data property', async(() => {
+      it('should update data property', fakeAsync(() => {
         let table: any = {};
         data = {
           results: [
@@ -232,18 +234,20 @@ describe('GenericListComponent', () => {
         };
         let endpoint = 'endpoint';
         spyOn(comp, 'calcPagination');
+        spyOn(comp.dataLength, 'emit');
         comp.getData(endpoint, null, table, false, table);
         expect(table.data).toEqual(data);
         expect(comp.calcPagination).toHaveBeenCalledWith(data);
+        expect(comp.dataLength.emit).toHaveBeenCalled();
         expect(table.refresh).toBeFalsy();
-        setTimeout(() => {
-          expect(table.update).toEqual(data);
-        }, 160);
+        tick(200);
+        expect(table.update).toEqual(data);
       }));
 
-      it('should update data by query', async(() => {
+      it('should update data by query', fakeAsync(() => {
         let table: any = {};
-        let query: '?active=true';
+        let query = '?active=true';
+        comp.query = 'type=master';
         data = {
           results: [
             {
@@ -254,13 +258,14 @@ describe('GenericListComponent', () => {
         };
         let endpoint = 'endpoint';
         spyOn(comp, 'calcPagination');
+        spyOn(comp.dataLength, 'emit');
         comp.getData(endpoint, query, table, false, table);
         expect(table.data).toEqual(data);
         expect(comp.calcPagination).toHaveBeenCalledWith(data);
+        expect(comp.dataLength.emit).toHaveBeenCalled();
         expect(table.refresh).toBeFalsy();
-        setTimeout(() => {
-          expect(table.update).toEqual(data);
-        }, 160);
+        tick(200);
+        expect(table.update).toEqual(data);
       }));
 
     });

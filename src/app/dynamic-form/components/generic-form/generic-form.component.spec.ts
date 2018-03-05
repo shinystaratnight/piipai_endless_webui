@@ -8,6 +8,7 @@ import { GenericFormComponent } from './generic-form.component';
 import { GenericFormService } from './../../services/generic-form.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { customTemplates } from '../../models/custom-templates';
+import { Subject } from 'rxjs/Subject';
 
 describe('GenericFormComponent', () => {
     let fixture: ComponentFixture<GenericFormComponent>;
@@ -254,6 +255,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'checkFormStorage');
         spyOn(comp, 'checkFormBuilder');
         spyOn(comp, 'addCustomTemplates');
+        spyOn(comp, 'updateFormData');
         spyOn(comp.str, 'emit');
         comp.getMetadata(endpoint);
         expect(comp.parseMetadata).toHaveBeenCalledTimes(2);
@@ -267,6 +269,7 @@ describe('GenericFormComponent', () => {
         expect(comp.checkFormStorage).toHaveBeenCalled();
         expect(comp.checkFormBuilder).toHaveBeenCalled();
         expect(comp.addCustomTemplates).toHaveBeenCalled();
+        expect(comp.updateFormData).toHaveBeenCalled();
         expect(comp.show).toBeTruthy();
       }));
 
@@ -299,6 +302,7 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'checkFormStorage');
         spyOn(comp, 'checkFormBuilder');
         spyOn(comp, 'addCustomTemplates');
+        spyOn(comp, 'updateFormData');
         comp.getMetadata(endpoint);
         expect(comp.show).toBeFalsy();
         expect(comp.updateElements).toHaveBeenCalled();
@@ -307,6 +311,7 @@ describe('GenericFormComponent', () => {
         expect(comp.checkFormStorage).toHaveBeenCalled();
         expect(comp.checkFormBuilder).toHaveBeenCalled();
         expect(comp.addCustomTemplates).toHaveBeenCalled();
+        expect(comp.updateFormData);
       }));
 
     });
@@ -335,6 +340,28 @@ describe('GenericFormComponent', () => {
           keys: ['manager']
         });
         expect(config[0].children[0].hidden instanceof BehaviorSubject).toBeTruthy();
+      });
+    });
+
+    describe('updateFormData method', () => {
+      it('should add formData property for elements', () => {
+        const config = <any> [
+          {
+            key: 'address'
+          },
+          {
+            type: 'collapse',
+            children: [
+              {
+                key: 'company'
+              }
+            ]
+          }
+        ];
+        const formData = new Subject();
+        comp.updateFormData(config, formData);
+        expect(config[0].formData).toEqual(formData);
+        expect(config[1].children[0].formData).toEqual(formData);
       });
     });
 
