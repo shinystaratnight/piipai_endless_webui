@@ -531,11 +531,11 @@ export class DynamicListComponent implements
               obj.templateOptions = field.templateOptions;
             }
           }
-          if (element.type === 'icon') {
-            let field = this.config.fields.filter((elem) => elem.key === element.field);
-            if (field && field.length > 0) {
-              obj['values'] = field[0].templateOptions.values;
-              obj['color'] = field[0].templateOptions.color;
+          if (element.type === 'icon' || element.type === 'static') {
+            let field = this.config.fields.find((elem) => elem.key === element.field);
+            if (field) {
+              obj['values'] = field.templateOptions.values;
+              obj['color'] = field.templateOptions.color;
             }
           }
           if (element.link) {
