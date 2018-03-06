@@ -90,6 +90,9 @@ export class DynamicListComponent implements
   @Input()
   public actions: boolean;
 
+  @Input()
+  public delay: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -664,31 +667,35 @@ export class DynamicListComponent implements
   }
 
   public sorting(field) {
-    if (this.sortedColumns[field.sort_field]) {
-      this.sortedColumns[field.sort_field]
-        = this.sortedColumns[field.sort_field] === 'asc' ? 'desc' : 'asc';
-      field.sorted = field.sorted === 'asc' ? 'desc' : 'asc';
-    } else {
-      let key = 'asc';
-      this.sortedColumns[field.sort_field] = key;
-      field.sorted = key;
-    }
-    this.event.emit({
-      type: 'sort',
-      list: this.config.list.list,
-      query: this.sortTable(this.sortedColumns)
-    });
-  }
-
-  public resetSort(field, emit) {
-    delete field.sorted;
-    delete this.sortedColumns[field.sort_field];
-    if (emit) {
+    if (!this.delay) {
+      if (this.sortedColumns[field.sort_field]) {
+        this.sortedColumns[field.sort_field]
+          = this.sortedColumns[field.sort_field] === 'asc' ? 'desc' : 'asc';
+        field.sorted = field.sorted === 'asc' ? 'desc' : 'asc';
+      } else {
+        let key = 'asc';
+        this.sortedColumns[field.sort_field] = key;
+        field.sorted = key;
+      }
       this.event.emit({
         type: 'sort',
         list: this.config.list.list,
         query: this.sortTable(this.sortedColumns)
       });
+    }
+  }
+
+  public resetSort(field, emit) {
+    if (!this.delay) {
+      delete field.sorted;
+      delete this.sortedColumns[field.sort_field];
+      if (emit) {
+        this.event.emit({
+          type: 'sort',
+          list: this.config.list.list,
+          query: this.sortTable(this.sortedColumns)
+        });
+      }
     }
   }
 

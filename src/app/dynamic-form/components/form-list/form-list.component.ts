@@ -57,6 +57,13 @@ export class FormListComponent implements OnInit, OnDestroy {
       });
       this.query = queryArray.join('&');
     }
+    if (this.config.delay) {
+      this.config.data = {
+        length: 0,
+        results: []
+      };
+      this.config.delayData[this.config.endpoint] = this.config;
+    }
   }
 
   public ngOnDestroy() {
@@ -76,9 +83,10 @@ export class FormListComponent implements OnInit, OnDestroy {
         this.modalData.data[el] = {
           action: 'add',
           data: {
-            value: this.config.prefilled[el],
+            value: this.config.delay ? undefined : this.config.prefilled[el],
             read_only: true,
-            editForm: true
+            editForm: true,
+            hide: this.config.delay
           }
         };
       });
@@ -89,11 +97,15 @@ export class FormListComponent implements OnInit, OnDestroy {
   public formEvent(e, closeModal) {
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
-      this.updateList();
+      this.updateList(e.data);
     }
   }
 
-  public updateList() {
+  public updateList(data) {
+    if (this.config.delay) {
+      this.config.data.results.push(data);
+      this.config.data.length = this.config.data.length;
+    }
     this.update.next(true);
   }
 

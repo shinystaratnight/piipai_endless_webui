@@ -69,6 +69,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
   @Input()
   public mode: string;
 
+  @Input()
+  public delay: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -114,6 +117,8 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public replaceElements: Field[] = [];
 
   public format = new FormatString();
+
+  public delayData = {};
 
   constructor(
     private service: GenericFormService
@@ -392,6 +397,14 @@ export class GenericFormComponent implements OnChanges, OnInit {
     this.event.emit({
       type: 'saveStart'
     });
+    if (this.delay) {
+      this.event.emit({
+        type: 'sendForm',
+        data: newData,
+        status: 'success'
+      });
+      return;
+    }
     if (this.editForm || this.edit) {
       let endpoint = this.editForm ? `${this.endpoint}${this.id}/` : this.endpoint;
       this.service.editForm(endpoint, newData).subscribe(
@@ -408,11 +421,6 @@ export class GenericFormComponent implements OnChanges, OnInit {
       this.service.submitForm(this.endpoint, newData).subscribe(
         ((response: any) => {
           this.parseResponse(response);
-          this.event.emit({
-            type: 'sendForm',
-            data: response,
-            status: 'success'
-          });
         }),
         ((errors: any) => this.parseError(errors.errors)));
     }
@@ -437,10 +445,42 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public parseResponse(response) {
     this.resetData(this.errors);
     this.resetData(this.response);
+
     if (!this.editForm && this.showResponse) {
       this.response = response;
     }
+
     this.responseForm.emit(response);
+    const delayEndppoints = Object.keys(this.delayData);
+
+    if (delayEndppoints.length) {
+      delayEndppoints.forEach((endpoint: string) => {
+        const prefilledDataKeys = Object.keys(this.delayData[endpoint].prefilled);
+        prefilledDataKeys.forEach((el) => {
+          this.delayData[endpoint].prefilled[el] = this.format.format(this.delayData[endpoint].prefilled[el], response); //tslint:disable-line
+        });
+
+        this.delayData[endpoint].data.results.forEach((element, index, arr) => {
+          const body = Object.assign(element, this.delayData[endpoint].prefilled);
+
+          this.service.submitForm(endpoint, body).subscribe(() => {
+            if (arr.length - 1 === index) {
+              this.event.emit({
+                type: 'sendForm',
+                data: response,
+                status: 'success'
+              });
+            }
+          });
+        });
+      });
+    } else {
+      this.event.emit({
+        type: 'sendForm',
+        data: response,
+        status: 'success'
+      });
+    }
   }
 
   public eventHandler(event) {
@@ -612,11 +652,16 @@ export class GenericFormComponent implements OnChanges, OnInit {
       if (el.type === 'hidden') {
         el.hide = this.hide;
       }
-      if (el.type === 'timeline' || el.type === 'list') {
+      if (el.type === 'timeline' || (el.type === 'list' && !el.delay)) {
         if (this.edit || this.editForm) {
           el.hide = false;
         } else {
           el.hide = true;
+        }
+      }
+      if (el.type === 'list') {
+        if (el.delay) {
+          el.delayData = this.delayData;
         }
       }
       if (el && el.key && params && !!params[el.key]) {

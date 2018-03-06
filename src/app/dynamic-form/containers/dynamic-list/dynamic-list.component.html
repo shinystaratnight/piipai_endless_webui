@@ -32,7 +32,7 @@
       <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     </div>
     <action-element *ngIf="config.list.actions && !inForm" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
-    <h5 class="datatable-label" *ngIf="(config.list && (inForm && (config.list.search_enabled || config.list.buttons)) || (!inForm && !poped))">
+    <h5 class="datatable-label" *ngIf="(config.list && (inForm && (config.list.search_enabled || config.list.buttons) && !delay) || (!inForm && !poped))">
       <span *ngIf="!inForm" class="mr-auto">select {{config.list.label}} to change</span>
       <list-search-bar *ngIf="config.list.search_enabled" [list]="config.list.list" (event)="filterHandler($event)"></list-search-bar>
       <div class="align-self-end">
@@ -73,16 +73,16 @@
               <input type="checkbox" *ngIf="config.list.actions || actions" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
             </th>
             <th *ngFor="let field of config.list.columns;"
-              [class.datatable-title-hover]="field.sort"
+              [class.datatable-title-hover]="field.sort && !delay"
               [hidden]="field.tab && field.tab.is_collapsed">
                 <i fa
-                  *ngIf="field.sorted"
+                  *ngIf="field.sorted && !delay"
                   [name]="field.sorted === 'desc' ? 'sort-desc' : 'sort-asc'"
                   [border]=true
                   class="pr-2 icon"
                   (click)="sorting(field)"></i>
                 <i fa
-                  *ngIf="field.sorted"
+                  *ngIf="field.sorted && !delay"
                   [name]="'sort'"
                   [border]=true
                   class="pr-2 text-muted icon"

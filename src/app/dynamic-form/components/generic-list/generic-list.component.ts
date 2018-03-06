@@ -44,6 +44,9 @@ export class GenericListComponent implements OnInit {
   @Input()
   public actions: boolean = false;
 
+  @Input()
+  public delay: boolean = false;
+
   @Output()
   public checkedObjects: EventEmitter<string[]> = new EventEmitter();
 
@@ -78,9 +81,13 @@ export class GenericListComponent implements OnInit {
     this.tables.push(this.createTableData(this.endpoint));
     if (this.update) {
       this.update.subscribe((update) => {
-        if (update) {
+        if (update && !this.delay) {
           let table = this.getFirstTable();
           this.getData(table.endpoint, this.generateQuery(table.query), table);
+        } else if (update) {
+          let table = this.getFirstTable();
+          table['data'] = this.data;
+          table.update = Object.assign({}, this.data);
         }
       });
     }
@@ -90,9 +97,11 @@ export class GenericListComponent implements OnInit {
     this.gfs.getMetadata(formset ? `${endpoint}${formset}` : endpoint).subscribe(
       (metadata) => {
         table.metadata = metadata;
-        table.query = {
-          sort: this.prepareSortQuery(this.getSortedFields(metadata.list.columns))
-        };
+        if (!this.delay) {
+          table.query = {
+            sort: this.prepareSortQuery(this.getSortedFields(metadata.list.columns))
+          };
+        }
         if (outer) {
           setTimeout(() => {
             outer.update = metadata;
@@ -117,7 +126,7 @@ export class GenericListComponent implements OnInit {
                 }
               }
             );
-          } else {
+          } else if (!this.delay) {
             this.getData(endpoint, this.generateQuery(table.query), table);
           }
         }
@@ -347,7 +356,9 @@ export class GenericListComponent implements OnInit {
       let firstTable = this.getFirstTable();
       table['parentEndpoint'] = firstTable.endpoint;
       this.getMetadata(endpoint, table);
-      this.getData(endpoint, null, table);
+      if (!this.delay) {
+        this.getData(endpoint, null, table);
+      }
     }
     return table;
   }
