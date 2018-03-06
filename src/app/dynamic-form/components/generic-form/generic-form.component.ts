@@ -292,6 +292,10 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public fillingForm(metadata, data) {
     metadata.forEach((el) => {
+      if (el.templateOptions) {
+        el.templateOptions.label = this.format.format(el.templateOptions.label, data);
+        el.templateOptions.text = this.format.format(el.templateOptions.text, data);
+      }
       if (el.key && el.key !== 'timeline') {
         if (el.type === 'replace') {
           el.data = new BehaviorSubject(data);

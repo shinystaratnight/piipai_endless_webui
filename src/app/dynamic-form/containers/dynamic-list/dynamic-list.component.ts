@@ -514,6 +514,9 @@ export class DynamicListComponent implements
           tab: this.getTabOfColumn(col.name)
         };
         col.content.forEach((element) => {
+          if (element.showIf && !this.checkShowRules(element.showIf, el)) {
+            return;
+          }
           let obj: any = {};
           let props;
           obj['rowId'] = el.id;
@@ -1041,6 +1044,30 @@ export class DynamicListComponent implements
         data: {
           value: object.shift_ended_at
         }
+      },
+      supervisor: {
+        action: 'add',
+        data: {
+          value: object.supervisor
+        }
+      },
+      position: {
+        action: 'add',
+        data: {
+          value: object.position
+        }
+      },
+      company: {
+        action: 'add',
+        data: {
+          value: object.company
+        }
+      },
+      jobsite: {
+        action: 'add',
+        data: {
+          value: object.jobsite
+        }
       }
     };
     this.modalInfo.label = {
@@ -1330,15 +1357,11 @@ export class DynamicListComponent implements
   }
 
   public editForm(e) {
-    let arr = e.el.endpoint.split('/');
-    let id = arr[arr.length - 2];
-    arr.splice(arr.length - 2, 1);
-    let endpoint = arr.join('/');
     this.modalInfo = {};
     this.modalInfo.type = 'form';
-    this.modalInfo.endpoint = endpoint;
-    this.modalInfo.id = id;
+    this.modalInfo.endpoint = e.el.endpoint;
     this.modalInfo.mode = 'edit';
+    this.modalInfo.edit = true;
     this.open(this.modal, {size: 'lg'});
   }
 
@@ -1359,6 +1382,46 @@ export class DynamicListComponent implements
       },
       (err: any) => this.error = err
     );
+  }
+
+  public checkShowRules(rule: any[], data): boolean {
+    let approvedRules = 0;
+    let rulesNumber = rule.length;
+
+    rule.forEach((el: any) => {
+      if (typeof el === 'string') {
+        let value = this.getValueByKey(el, data);
+
+        if (value && value !== '0') {
+          approvedRules += 1;
+        } else {
+          return;
+        }
+      } else if (el instanceof Object) {
+        let key = Object.keys(el)[0];
+        let targetValue = el[key];
+        let value = this.getValueByKey(key, data);
+
+        if (value === targetValue) {
+          approvedRules += 1;
+        } else {
+          return;
+        }
+      }
+    });
+
+    return approvedRules === rulesNumber;
+  }
+
+  public getValueByKey(key: string, data: any): any {
+    let keysArray = key.split('.');
+    let firstKey = keysArray.shift();
+    if (keysArray.length === 0) {
+      return data && data[firstKey];
+    } else if (keysArray.length > 0) {
+      let combineKeys = keysArray.join('.');
+      return this.getValueByKey(combineKeys, data[firstKey]);
+    }
   }
 
 }
