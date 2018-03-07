@@ -142,7 +142,7 @@ describe('FormListComponent', () => {
     it('should emit update event for list', () => {
       comp.update = new BehaviorSubject(false);
       spyOn(comp.update, 'next');
-      comp.updateList();
+      comp.updateList(null);
       expect(comp.update.next).toHaveBeenCalledWith(true);
     });
   });
