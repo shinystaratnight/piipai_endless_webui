@@ -241,7 +241,7 @@
 </template>
 
 <template #custom>
-  <div class="d-flex flex-column justify-content-center">
+  <div *ngIf="customTemplate && customTemplate.length" class="d-flex flex-column justify-content-center">
     <span *ngFor="let field of customTemplate">
       <i fa *ngIf="field.value && field.icon" [name]="field.icon" class="text-primary"></i>
       <span *ngIf="field.value && !field.link && !field.prefix">{{field.value}}</span>
@@ -249,4 +249,5 @@
       <a *ngIf="field.value && field.prefix" href="{{field.prefix + field.value}}">{{field.value}}</a>
     </span>
   </div>
+  <div *ngIf="customTemplate && !customTemplate.length" class="d-flex flex-column justify-content-center">-</div>
 </template>

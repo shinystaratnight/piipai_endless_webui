@@ -60,7 +60,8 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (this.config.delay) {
       this.config.data = {
         length: 0,
-        results: []
+        results: [],
+        sendData: []
       };
       this.config.delayData[this.config.endpoint] = this.config;
     }
@@ -97,13 +98,14 @@ export class FormListComponent implements OnInit, OnDestroy {
   public formEvent(e, closeModal) {
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
-      this.updateList(e.data);
+      this.updateList(e);
     }
   }
 
-  public updateList(data) {
+  public updateList(event) {
     if (this.config.delay) {
-      this.config.data.results.push(data);
+      this.config.data.sendData.push(event.sendData);
+      this.config.data.results.push(event.viewData);
       this.config.data.length = this.config.data.length;
     }
     this.update.next(true);

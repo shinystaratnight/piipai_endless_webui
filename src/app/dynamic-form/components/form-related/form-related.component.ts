@@ -152,6 +152,8 @@ export class FormRelatedComponent
         }
         return object;
       });
+    } else {
+      this.customTemplate = [];
     }
   }
 

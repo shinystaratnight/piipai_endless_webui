@@ -1,16 +1,17 @@
-import { Observable } from 'rxjs/Observable';
-import { RequestOptions } from '@angular/http';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
+
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/concat';
+import 'rxjs/add/operator/finally';
+
 import { GenericFormService } from './../../services/generic-form.service';
 
 import { customTemplates } from '../../models/custom-templates';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
 import { Field } from '../../models/field.model';
+
 import { FormatString } from '../../../helpers/format';
-import { Subject } from 'rxjs/Subject';
 
 interface HiddenFields {
   elements: Field[];
@@ -383,6 +384,39 @@ export class GenericFormComponent implements OnChanges, OnInit {
     return obj['value'];
   }
 
+  public checkRelatedData(data: any) {
+    const result = JSON.parse(JSON.stringify(data));
+    const keys = Object.keys(data);
+
+    keys.forEach((key, index, arr) => {
+      if (data[key] instanceof Object) {
+        if (data[key].id) {
+          const el = this.getElementFromMetadata(this.metadata, key);
+
+          const requests = [];
+          requests.push(this.createRequest(el.endpoint, data[key].id));
+
+          Observable.concat(...requests)
+            .finally(() => {
+              this.event.emit({
+                type: 'sendForm',
+                viewData: result,
+                sendData: data,
+                status: 'success'
+              });
+            })
+            .subscribe((res) => {
+              result[key] = res;
+            });
+        }
+      }
+    });
+  }
+
+  public createRequest(endpoint, id) {
+    return this.service.getAll(endpoint + id + '/');
+  }
+
   public submitForm(data) {
     let newData = {};
     if (this.form) {
@@ -398,11 +432,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
       type: 'saveStart'
     });
     if (this.delay) {
-      this.event.emit({
-        type: 'sendForm',
-        data: newData,
-        status: 'success'
-      });
+      this.checkRelatedData(newData);
       return;
     }
     if (this.editForm || this.edit) {
@@ -460,7 +490,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
           this.delayData[endpoint].prefilled[el] = this.format.format(this.delayData[endpoint].prefilled[el], response); //tslint:disable-line
         });
 
-        this.delayData[endpoint].data.results.forEach((element, index, arr) => {
+        this.delayData[endpoint].data.sendData.forEach((element, index, arr) => {
           const body = Object.assign(element, this.delayData[endpoint].prefilled);
 
           this.service.submitForm(endpoint, body).subscribe(() => {
@@ -660,8 +690,10 @@ export class GenericFormComponent implements OnChanges, OnInit {
         }
       }
       if (el.type === 'list') {
-        if (el.delay) {
+        if (el.delay && !this.editForm) {
           el.delayData = this.delayData;
+        } else {
+          el.delay = undefined;
         }
       }
       if (el && el.key && params && !!params[el.key]) {
