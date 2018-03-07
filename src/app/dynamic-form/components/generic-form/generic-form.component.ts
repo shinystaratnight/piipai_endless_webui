@@ -8,7 +8,6 @@ import 'rxjs/add/operator/finally';
 
 import { GenericFormService } from './../../services/generic-form.service';
 
-import { customTemplates } from '../../models/custom-templates';
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
@@ -211,7 +210,6 @@ export class GenericFormComponent implements OnChanges, OnInit {
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);
           this.metadata = this.parseMetadata(data, this.relatedField);
-          this.addCustomTemplates(customTemplates[endpoint], this.metadata);
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
@@ -287,6 +285,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
     this.service.getAll(endp).subscribe(
       ((data: any) => {
         this.fillingForm(this.metadata, data);
+        this.addCustomTemplates(this.metadata, data);
         this.show = true;
         this.str.emit({
           str: data && data.__str__ ? data.__str__ : '',
@@ -946,15 +945,17 @@ export class GenericFormComponent implements OnChanges, OnInit {
     });
   }
 
-  public addCustomTemplates(customFields, metadata) {
-    if (customFields) {
-      metadata.forEach((el) => {
-        if (el.key) {
-          el.custom = customFields[el.key];
-        } else if (el.children) {
-          this.addCustomTemplates(customFields, el.children);
-        }
-      });
-    }
+  public addCustomTemplates(metadata, data) {
+    metadata.forEach((el) => {
+      if (el.custom) {
+        el.customValue = [];
+
+        el.custom.forEach((field) => {
+          el.customValue.push(this.getValueOfData(data, field, {}, this.metadata));
+        });
+      } else if (el.children) {
+        this.addCustomTemplates(el.children, data);
+      }
+    });
   }
 }
