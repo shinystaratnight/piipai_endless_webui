@@ -1,7 +1,9 @@
 <span *ngIf="!arrayValue">
   <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="value || value === 0">
     <span [title]="config.title || ''">
-      <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>{{value}}
+      <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
+      <span *ngIf="!iconView">{{value}}</span>
+      <i fa *ngIf="iconView" [name]="value" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></i>
     </span>
   </span>
   <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="!value && value !== 0">-</span>

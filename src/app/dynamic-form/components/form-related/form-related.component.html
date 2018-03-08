@@ -123,7 +123,7 @@
           Add
       </button> -->
     </h6>
-    <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list px-2">
+    <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list-related px-2">
       <table *ngIf="dataOfList" class="table table-bordered mb-1">
         <thead>
           <tr>
@@ -241,12 +241,14 @@
 </template>
 
 <template #custom>
-  <div class="d-flex flex-column justify-content-center">
+  <div *ngIf="customTemplate && customTemplate.length" class="d-flex flex-column justify-content-center">
     <span *ngFor="let field of customTemplate">
       <i fa *ngIf="field.value && field.icon" [name]="field.icon" class="text-primary"></i>
-      <span *ngIf="field.value && !field.link && !field.prefix">{{field.value}}</span>
+      <span *ngIf="field.value && !field.link && !field.prefix && !field.outside">{{field.value}}</span>
       <a *ngIf="field.value && field.link" href="{{linkPath}}" (click)="open('edit', $event)">{{field.value}}</a>
       <a *ngIf="field.value && field.prefix" href="{{field.prefix + field.value}}">{{field.value}}</a>
+      <a *ngIf="field.value && field.outside" href="{{field.value}}">{{field.value}}</a>
     </span>
   </div>
+  <div *ngIf="customTemplate && !customTemplate.length" class="d-flex flex-column justify-content-center">-</div>
 </template>

@@ -1,16 +1,16 @@
-import { Observable } from 'rxjs/Observable';
-import { RequestOptions } from '@angular/http';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
-import { GenericFormService } from './../../services/generic-form.service';
-
-import { customTemplates } from '../../models/custom-templates';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/concat';
+import 'rxjs/add/operator/finally';
+
+import { GenericFormService } from './../../services/generic-form.service';
 
 import { Field } from '../../models/field.model';
+
 import { FormatString } from '../../../helpers/format';
-import { Subject } from 'rxjs/Subject';
 
 interface HiddenFields {
   elements: Field[];
@@ -69,6 +69,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
   @Input()
   public mode: string;
 
+  @Input()
+  public delay: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -114,6 +117,8 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public replaceElements: Field[] = [];
 
   public format = new FormatString();
+
+  public delayData = {};
 
   constructor(
     private service: GenericFormService
@@ -205,7 +210,6 @@ export class GenericFormComponent implements OnChanges, OnInit {
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);
           this.metadata = this.parseMetadata(data, this.relatedField);
-          this.addCustomTemplates(customTemplates[endpoint], this.metadata);
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
@@ -281,6 +285,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
     this.service.getAll(endp).subscribe(
       ((data: any) => {
         this.fillingForm(this.metadata, data);
+        this.addCustomTemplates(this.metadata, data);
         this.show = true;
         this.str.emit({
           str: data && data.__str__ ? data.__str__ : '',
@@ -292,6 +297,10 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public fillingForm(metadata, data) {
     metadata.forEach((el) => {
+      if (el.templateOptions) {
+        el.templateOptions.label = this.format.format(el.templateOptions.label, data);
+        el.templateOptions.text = this.format.format(el.templateOptions.text, data);
+      }
       if (el.key && el.key !== 'timeline') {
         if (el.type === 'replace') {
           el.data = new BehaviorSubject(data);
@@ -374,6 +383,39 @@ export class GenericFormComponent implements OnChanges, OnInit {
     return obj['value'];
   }
 
+  public checkRelatedData(data: any) {
+    const result = JSON.parse(JSON.stringify(data));
+    const keys = Object.keys(data);
+
+    keys.forEach((key, index, arr) => {
+      if (data[key] instanceof Object) {
+        if (data[key].id) {
+          const el = this.getElementFromMetadata(this.metadata, key);
+
+          const requests = [];
+          requests.push(this.createRequest(el.endpoint, data[key].id));
+
+          Observable.concat(...requests)
+            .finally(() => {
+              this.event.emit({
+                type: 'sendForm',
+                viewData: result,
+                sendData: data,
+                status: 'success'
+              });
+            })
+            .subscribe((res) => {
+              result[key] = res;
+            });
+        }
+      }
+    });
+  }
+
+  public createRequest(endpoint, id) {
+    return this.service.getAll(endpoint + id + '/');
+  }
+
   public submitForm(data) {
     let newData = {};
     if (this.form) {
@@ -388,6 +430,10 @@ export class GenericFormComponent implements OnChanges, OnInit {
     this.event.emit({
       type: 'saveStart'
     });
+    if (this.delay) {
+      this.checkRelatedData(newData);
+      return;
+    }
     if (this.editForm || this.edit) {
       let endpoint = this.editForm ? `${this.endpoint}${this.id}/` : this.endpoint;
       this.service.editForm(endpoint, newData).subscribe(
@@ -404,11 +450,6 @@ export class GenericFormComponent implements OnChanges, OnInit {
       this.service.submitForm(this.endpoint, newData).subscribe(
         ((response: any) => {
           this.parseResponse(response);
-          this.event.emit({
-            type: 'sendForm',
-            data: response,
-            status: 'success'
-          });
         }),
         ((errors: any) => this.parseError(errors.errors)));
     }
@@ -433,10 +474,42 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public parseResponse(response) {
     this.resetData(this.errors);
     this.resetData(this.response);
+
     if (!this.editForm && this.showResponse) {
       this.response = response;
     }
+
     this.responseForm.emit(response);
+    const delayEndppoints = Object.keys(this.delayData);
+
+    if (delayEndppoints.length) {
+      delayEndppoints.forEach((endpoint: string) => {
+        const prefilledDataKeys = Object.keys(this.delayData[endpoint].prefilled);
+        prefilledDataKeys.forEach((el) => {
+          this.delayData[endpoint].prefilled[el] = this.format.format(this.delayData[endpoint].prefilled[el], response); //tslint:disable-line
+        });
+
+        this.delayData[endpoint].data.sendData.forEach((element, index, arr) => {
+          const body = Object.assign(element, this.delayData[endpoint].prefilled);
+
+          this.service.submitForm(endpoint, body).subscribe(() => {
+            if (arr.length - 1 === index) {
+              this.event.emit({
+                type: 'sendForm',
+                data: response,
+                status: 'success'
+              });
+            }
+          });
+        });
+      });
+    } else {
+      this.event.emit({
+        type: 'sendForm',
+        data: response,
+        status: 'success'
+      });
+    }
   }
 
   public eventHandler(event) {
@@ -608,11 +681,18 @@ export class GenericFormComponent implements OnChanges, OnInit {
       if (el.type === 'hidden') {
         el.hide = this.hide;
       }
-      if (el.type === 'timeline' || el.type === 'list') {
+      if (el.type === 'timeline' || (el.type === 'list' && !el.delay)) {
         if (this.edit || this.editForm) {
           el.hide = false;
         } else {
           el.hide = true;
+        }
+      }
+      if (el.type === 'list') {
+        if (el.delay && !this.editForm) {
+          el.delayData = this.delayData;
+        } else {
+          el.delay = undefined;
         }
       }
       if (el && el.key && params && !!params[el.key]) {
@@ -865,15 +945,17 @@ export class GenericFormComponent implements OnChanges, OnInit {
     });
   }
 
-  public addCustomTemplates(customFields, metadata) {
-    if (customFields) {
-      metadata.forEach((el) => {
-        if (el.key) {
-          el.custom = customFields[el.key];
-        } else if (el.children) {
-          this.addCustomTemplates(customFields, el.children);
-        }
-      });
-    }
+  public addCustomTemplates(metadata, data) {
+    metadata.forEach((el) => {
+      if (el.custom) {
+        el.customValue = [];
+
+        el.custom.forEach((field) => {
+          el.customValue.push(this.getValueOfData(data, field, {}, this.metadata));
+        });
+      } else if (el.children) {
+        this.addCustomTemplates(el.children, data);
+      }
+    });
   }
 }

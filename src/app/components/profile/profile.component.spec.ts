@@ -258,15 +258,12 @@ describe('ProfileComponent', () => {
           }
         }
       };
-      spyOn(comp, 'getContactMetadata');
       spyOn(comp, 'generate');
       comp.getData();
       expect(comp.data).toEqual(response.body);
-      expect(comp.contactId).toEqual('123');
       expect(comp.generate).toHaveBeenCalledTimes(2);
       expect(comp.generate).toHaveBeenCalledWith('personalTraits');
       expect(comp.generate).toHaveBeenCalledWith('residency');
-      expect(comp.getContactMetadata).toHaveBeenCalled();
     });
 
     it('should update error property', () => {
@@ -275,64 +272,6 @@ describe('ProfileComponent', () => {
         error: []
       };
       comp.getData();
-      expect(comp.error).toEqual([]);
-    });
-
-  });
-
-  describe('getContactMetadata method', () => {
-
-    it('should be defined', () => {
-      expect(comp.getContactMetadata).toBeDefined();
-    });
-
-    it('should call getContactData method', () => {
-      response = {
-        status: 'success',
-        body: []
-      };
-      spyOn(comp, 'getContactData');
-      comp.getContactMetadata();
-      expect(comp.contactMetadata).toEqual([]);
-      expect(comp.getContactData).toHaveBeenCalled();
-    });
-
-    it('should update error property', () => {
-      response = {
-        status: 'error',
-        error: []
-      };
-      comp.getContactMetadata();
-      expect(comp.error).toEqual([]);
-    });
-
-  });
-
-  describe('getContactData method', () => {
-
-    it('should be defined', () => {
-      expect(comp.getContactData).toBeDefined();
-    });
-
-    it('should call getSkillMetadata method', () => {
-      response = {
-        status: 'success',
-        body: {}
-      };
-      spyOn(comp, 'getSkillMetadata');
-      spyOn(comp, 'generate');
-      comp.getContactData();
-      expect(comp.contactData).toEqual({});
-      expect(comp.generate).toHaveBeenCalledWith('contactDetails');
-      expect(comp.getSkillMetadata).toHaveBeenCalled();
-    });
-
-    it('should update error property', () => {
-      response = {
-        status: 'error',
-        error: []
-      };
-      comp.getContactData();
       expect(comp.error).toEqual([]);
     });
 
@@ -488,34 +427,6 @@ describe('ProfileComponent', () => {
       expect(data).toEqual([
         ['Name', '-'],
         ['', 'Mr.']
-      ]);
-    });
-
-    it('should generate data for contactDetails lists', () => {
-      comp.contactMetadata = [
-        {
-          key: 'email',
-          templateOptions: {
-            label: 'Email'
-          }
-        },
-        {
-          key: 'phone_mobile',
-          templateOptions: {
-            label: 'Mobile Phone'
-          }
-        }
-      ];
-      comp.contactData = {
-        email: 'tom@hotmail.com',
-        phone_mobile: '+380998889977'
-      };
-      let elements = ['email', 'phone_mobile'];
-      let data = [];
-      comp.generateList(elements, data, 'contactDetails');
-      expect(data).toEqual([
-        ['Email', 'tom@hotmail.com', 'mailto:'],
-        ['Mobile Phone', '+380998889977', 'tel:']
       ]);
     });
 

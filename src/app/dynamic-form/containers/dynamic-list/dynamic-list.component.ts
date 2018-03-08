@@ -90,6 +90,9 @@ export class DynamicListComponent implements
   @Input()
   public actions: boolean;
 
+  @Input()
+  public delay: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -514,6 +517,9 @@ export class DynamicListComponent implements
           tab: this.getTabOfColumn(col.name)
         };
         col.content.forEach((element) => {
+          if (element.showIf && !this.checkShowRules(element.showIf, el)) {
+            return;
+          }
           let obj: any = {};
           let props;
           obj['rowId'] = el.id;
@@ -531,11 +537,11 @@ export class DynamicListComponent implements
               obj.templateOptions = field.templateOptions;
             }
           }
-          if (element.type === 'icon') {
-            let field = this.config.fields.filter((elem) => elem.key === element.field);
-            if (field && field.length > 0) {
-              obj['values'] = field[0].templateOptions.values;
-              obj['color'] = field[0].templateOptions.color;
+          if (element.type === 'icon' || element.type === 'static') {
+            let field = this.config.fields.find((elem) => elem.key === element.field);
+            if (field) {
+              obj['values'] = field.templateOptions.values;
+              obj['color'] = field.templateOptions.color;
             }
           }
           if (element.link) {
@@ -661,31 +667,35 @@ export class DynamicListComponent implements
   }
 
   public sorting(field) {
-    if (this.sortedColumns[field.sort_field]) {
-      this.sortedColumns[field.sort_field]
-        = this.sortedColumns[field.sort_field] === 'asc' ? 'desc' : 'asc';
-      field.sorted = field.sorted === 'asc' ? 'desc' : 'asc';
-    } else {
-      let key = 'asc';
-      this.sortedColumns[field.sort_field] = key;
-      field.sorted = key;
-    }
-    this.event.emit({
-      type: 'sort',
-      list: this.config.list.list,
-      query: this.sortTable(this.sortedColumns)
-    });
-  }
-
-  public resetSort(field, emit) {
-    delete field.sorted;
-    delete this.sortedColumns[field.sort_field];
-    if (emit) {
+    if (!this.delay) {
+      if (this.sortedColumns[field.sort_field]) {
+        this.sortedColumns[field.sort_field]
+          = this.sortedColumns[field.sort_field] === 'asc' ? 'desc' : 'asc';
+        field.sorted = field.sorted === 'asc' ? 'desc' : 'asc';
+      } else {
+        let key = 'asc';
+        this.sortedColumns[field.sort_field] = key;
+        field.sorted = key;
+      }
       this.event.emit({
         type: 'sort',
         list: this.config.list.list,
         query: this.sortTable(this.sortedColumns)
       });
+    }
+  }
+
+  public resetSort(field, emit) {
+    if (!this.delay) {
+      delete field.sorted;
+      delete this.sortedColumns[field.sort_field];
+      if (emit) {
+        this.event.emit({
+          type: 'sort',
+          list: this.config.list.list,
+          query: this.sortTable(this.sortedColumns)
+        });
+      }
     }
   }
 
@@ -706,6 +716,8 @@ export class DynamicListComponent implements
         } else {
           object[param] = data[prop] ? data[prop].__str__ : '';
         }
+      } else if (object.type === 'static' && !object[param]) {
+        object[param] = data[prop] && data[prop].__str__ ? data[prop].__str__ : data[prop];
       } else if (!object[param]) {
         object[param] = data[prop];
       }
@@ -1039,6 +1051,30 @@ export class DynamicListComponent implements
         data: {
           value: object.shift_ended_at
         }
+      },
+      supervisor: {
+        action: 'add',
+        data: {
+          value: object.supervisor
+        }
+      },
+      position: {
+        action: 'add',
+        data: {
+          value: object.position
+        }
+      },
+      company: {
+        action: 'add',
+        data: {
+          value: object.company
+        }
+      },
+      jobsite: {
+        action: 'add',
+        data: {
+          value: object.jobsite
+        }
       }
     };
     this.modalInfo.label = {
@@ -1328,15 +1364,11 @@ export class DynamicListComponent implements
   }
 
   public editForm(e) {
-    let arr = e.el.endpoint.split('/');
-    let id = arr[arr.length - 2];
-    arr.splice(arr.length - 2, 1);
-    let endpoint = arr.join('/');
     this.modalInfo = {};
     this.modalInfo.type = 'form';
-    this.modalInfo.endpoint = endpoint;
-    this.modalInfo.id = id;
+    this.modalInfo.endpoint = e.el.endpoint;
     this.modalInfo.mode = 'edit';
+    this.modalInfo.edit = true;
     this.open(this.modal, {size: 'lg'});
   }
 
@@ -1357,6 +1389,46 @@ export class DynamicListComponent implements
       },
       (err: any) => this.error = err
     );
+  }
+
+  public checkShowRules(rule: any[], data): boolean {
+    let approvedRules = 0;
+    let rulesNumber = rule.length;
+
+    rule.forEach((el: any) => {
+      if (typeof el === 'string') {
+        let value = this.getValueByKey(el, data);
+
+        if (value && value !== '0') {
+          approvedRules += 1;
+        } else {
+          return;
+        }
+      } else if (el instanceof Object) {
+        let key = Object.keys(el)[0];
+        let targetValue = el[key];
+        let value = this.getValueByKey(key, data);
+
+        if (value === targetValue) {
+          approvedRules += 1;
+        } else {
+          return;
+        }
+      }
+    });
+
+    return approvedRules === rulesNumber;
+  }
+
+  public getValueByKey(key: string, data: any): any {
+    let keysArray = key.split('.');
+    let firstKey = keysArray.shift();
+    if (keysArray.length === 0) {
+      return data && data[firstKey];
+    } else if (keysArray.length > 0) {
+      let combineKeys = keysArray.join('.');
+      return this.getValueByKey(combineKeys, data[firstKey]);
+    }
   }
 
 }
