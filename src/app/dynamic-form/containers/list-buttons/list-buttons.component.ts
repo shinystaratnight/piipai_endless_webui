@@ -28,6 +28,8 @@ export class ListButtonsComponent {
   @Input()
   public poped: boolean;
 
+  @Input() public allowPermissions: string[];
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -35,5 +37,9 @@ export class ListButtonsComponent {
     this.event.emit({
       type
     });
+  }
+
+  public checkPermission(type: string): boolean {
+    return this.allowPermissions.indexOf(type) > -1;
   }
 }

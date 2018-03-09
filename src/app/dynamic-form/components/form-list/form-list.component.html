@@ -10,7 +10,7 @@
       aria-controls="collapseExample"
       style="cursor: pointer"></i>
     {{config.templateOptions.label}}
-    <button *ngIf="showButton || config.delay"
+    <button *ngIf="(showButton || config.delay) && checkPermissions('post')"
       type="button"
       class="text-white btn btn-sm group-button ml-auto mr-2"
       (click)="addObject()">
@@ -30,6 +30,7 @@
       [supportData]="config.supportData"
       [metaType]="config.metaType"
       [actions]="config.actions"
+      [allowPermissions]="allowMethods"
       (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)">

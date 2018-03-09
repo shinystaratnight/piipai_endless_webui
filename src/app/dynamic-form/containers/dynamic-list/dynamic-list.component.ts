@@ -93,6 +93,9 @@ export class DynamicListComponent implements
   @Input()
   public delay: boolean;
 
+  @Input()
+  public allowPermissions: string[];
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -1428,6 +1431,14 @@ export class DynamicListComponent implements
     } else if (keysArray.length > 0) {
       let combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
+    }
+  }
+
+  public checkPermission(type: string): boolean {
+    if (this.allowPermissions) {
+      return this.allowPermissions.indexOf(type) > -1;
+    } else {
+      return false;
     }
   }
 

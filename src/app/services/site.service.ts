@@ -24,8 +24,7 @@ export class SiteService {
   public list: Page[];
 
   public getDataOfPage(url: any, list) {
-    let data = this.generateData(list, url);
-    return Observable.of(data);
+    return Observable.of(this.generateData(list, url));
   }
 
   public generateData(list: Page[], url: any[]): PageData {

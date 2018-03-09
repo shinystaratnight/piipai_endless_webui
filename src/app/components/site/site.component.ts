@@ -35,6 +35,7 @@ export class SiteComponent implements OnInit {
   public formMode: string;
 
   public saveProcess: boolean;
+  public permissionMethods: string[];
 
   constructor(
     private router: Router,
@@ -69,32 +70,8 @@ export class SiteComponent implements OnInit {
     );
   }
 
-  public checkPermissions(pageData) {
-    if (pageData.pathData.id) {
-      this.permission.viewCheck(pageData.endpoint, pageData.pathData.id).subscribe(
-        (res: any) => {
-          this.pageData = pageData;
-          if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
-            this.formStorage = true;
-          } else {
-            this.formStorage = false;
-          }
-        },
-        (err: any) => window.history.back()
-      );
-    } else {
-      this.permission.createCheck(pageData.endpoint).subscribe(
-        (res: any) => {
-          this.pageData = pageData;
-          if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
-            this.formStorage = true;
-          } else {
-            this.formStorage = false;
-          }
-        },
-        (err: any) => window.history.back()
-      );
-    }
+  public checkPermission(type: string): boolean {
+    return this.permissionMethods.indexOf(type) > -1;
   }
 
   public changeFormLabel(e) {
@@ -111,11 +88,20 @@ export class SiteComponent implements OnInit {
       (pageData: PageData) => {
         if (pageData.pathData.path === '/profile/') {
           this.pageData = pageData;
+          this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
         } else if (!pageData.endpoint) {
           this.router.navigate(['/']);
           return;
         } else {
-          this.checkPermissions(pageData);
+          setTimeout(() => {
+            this.pageData = pageData;
+            this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+            if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
+              this.formStorage = true;
+            } else {
+              this.formStorage = false;
+            }
+          }, 0);
         }
       }
     );
@@ -179,10 +165,7 @@ export class SiteComponent implements OnInit {
   }
 
   public changeMode(pageData) {
-    this.permission.updateCheck(pageData.endpoint, pageData.pathData.id).subscribe(
-      (res: any) => this.formMode = 'edit',
-      (err: any) => this.error = err
-    );
+    this.formMode = 'edit';
   }
 
   public formEvent(e) {
