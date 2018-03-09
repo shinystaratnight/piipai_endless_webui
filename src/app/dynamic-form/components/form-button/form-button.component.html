@@ -1,7 +1,7 @@
 <div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden">
   <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
   <button type="button"
-    *ngIf="!config.hidden && (config.templateOptions.text || repeatArray.length > 1)"
+    *ngIf="!config.hidden && (config.templateOptions.text || repeatArray && repeatArray.length > 1)"
     [ngClass]="[buttonClass]"
     [ngStyle]="{'backgroundColor': config.color}"
     class="btn mt-1 mb-1"
@@ -19,7 +19,7 @@
           [name]="config.templateOptions.icon"></i>{{config.templateOptions.text}}
       </span>
   </button>
-  <i *ngIf="!config.hidden && !config.templateOptions.text && repeatArray.length === 1"
+  <i *ngIf="!config.hidden && !config.templateOptions.text && repeatArray && repeatArray.length === 1"
      class="icon"
      fa
      [name]="config.templateOptions.icon"

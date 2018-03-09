@@ -21,21 +21,17 @@
             Active
           </button>
           <button type="button" class="btn btn-sm m-1 ml-2"
-                  [class.btn-default]="item.required"
-                  [class.btn-success]="item.required"
+                  [class.btn-default]="item.setRequired"
+                  [class.btn-success]="item.required || item.setRequired"
                   (click)="toggleRequireProperty(item)">
             Required
           </button>
-          <i *ngIf="item.isCollapsed"
+          <i
              fa
-             [name]="'plus-square'"
+             [name]="item.isCollapsed ? 'plus-square' : 'minus-square'"
              class="icon text-primary m-1 ml-2"
-             (click)="item.isCollapsed = !item.isCollapsed">
-          </i>
-          <i *ngIf="!item.isCollapsed"
-             fa
-             [name]="'minus-square'"
-             class="icon text-muted m-1 ml-2"
+             [class.text-primary]="item.isCollapsed"
+             [class.text-muted]="!item.isCollapsed"
              (click)="item.isCollapsed = !item.isCollapsed">
           </i>
         </div>
@@ -60,8 +56,8 @@
       Active
     </button>
     <button type="button" class="btn btn-sm ml-2"
-            [class.btn-default]="i.required"
-            [class.btn-success]="i.required"
+            [class.btn-default]="i.setRequired"
+            [class.btn-success]="i.required || i.setRequired"
             (click)="toggleRequireProperty(i)">
       Required
     </button>

@@ -106,7 +106,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       if (this.config.value instanceof Object) {
         this.displayValue = this.config.value.__str__ || '-';
       } else {
-        this.displayValue = this.config.value || '-';
+        this.displayValue = this.config.templateOptions.text || this.config.value || '-';
       }
     }
   }

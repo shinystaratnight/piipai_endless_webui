@@ -30,6 +30,7 @@ export interface CustomField {
   icon?: string;
   link?: boolean;
   prefix?: string;
+  outside?: boolean;
 }
 
 @Component({
@@ -135,23 +136,28 @@ export class FormRelatedComponent
 
   public generateCustomTemplate(fieldsList) {
     if (this.config.value) {
-      this.customTemplate = fieldsList.map((el) => {
+      this.customTemplate = fieldsList.map((el, index) => {
         let object = <CustomField> {};
-        this.getValueOfData(this.config.value, el, object);
+        object.value = this.config.customValue[index];
         object.key = el;
-        if (el === 'email') {
+        if (el.indexOf('email') > -1) {
           object.icon = 'envelope';
           object.prefix = 'mailto:';
-        } else if (el === 'phone_mobile') {
+        } else if (el.indexOf('phone_mobile') > -1) {
           object.icon = 'commenting';
           object.prefix = 'tel:';
-        } else if (el === 'address.__str__') {
+        } else if (el.indexOf('website') > -1) {
+          object.icon = 'globe';
+          object.outside = true;
+        } else if (el.indexOf('address') > -1) {
           object.icon = 'map-marker';
-        } else if (el === '__str__' || el === 'contact.__str__') {
+        } else if (el === '__str__' || el.indexOf('contact.__str__') > -1) {
           object.link = true;
         }
         return object;
       });
+    } else {
+      this.customTemplate = [];
     }
   }
 

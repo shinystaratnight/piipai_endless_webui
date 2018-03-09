@@ -14,6 +14,10 @@ export class ListTextComponent implements OnInit {
   public value: any;
   public arrayValue: boolean;
 
+  public iconView: boolean;
+  public iconClass: string;
+  public iconColor: string;
+
   public ngOnInit() {
     if (this.config.value || this.config.value === 0) {
       if (this.config.value && this.config.display) {
@@ -26,6 +30,7 @@ export class ListTextComponent implements OnInit {
       }
     }
     this.checkDate(moment);
+    this.customizeStatic(this.config.value);
   }
 
   public checkDate(moment) {
@@ -59,6 +64,25 @@ export class ListTextComponent implements OnInit {
           this.value = result;
         } else {
           this.value = this.value ? moment.tz(this.value, 'Australia/Sydney').format('DD/MM/YYYY hh:mm A') : '-'; //tslint:disable-line
+        }
+      }
+    }
+  }
+
+  public customizeStatic(value): void {
+    if (this.config && this.config.values) {
+      this.iconView = true;
+      this.value = this.config.values[value];
+      let color = this.config.color;
+      let classes = ['primary', 'danger', 'info', 'success', 'warning'];
+      this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
+      if (!this.iconClass) {
+        if (color) {
+          this.iconColor = color;
+        } else {
+          this.iconClass = value === true ?
+            'text-success' : value === false ?
+              'text-danger' : 'text-muted';
         }
       }
     }

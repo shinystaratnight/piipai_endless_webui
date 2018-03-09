@@ -9,7 +9,7 @@ import { UserService } from './user.service';
 @Injectable()
 export class SettingsService {
 
-  public endpoint: string = '/ecore/api/v2/company_settings';
+  public endpoint: string = '/ecore/api/v2/company_settings/';
   public settings: any;
 
   constructor(

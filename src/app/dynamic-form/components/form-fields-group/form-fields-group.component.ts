@@ -265,22 +265,25 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   public toggleRequireProperty(field): void {
-    if (field.id) {
-      let body = Object.assign({group: this.groupId}, field);
-      delete body.hidden;
-      delete body.isCollapsed;
-      delete body.model_fields;
-      body.required = !field.required;
-      this.genericFormService
-        .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
-        .subscribe(
-          (res: any) => {
-            field.required = res.required;
-          },
-          (err: any) => this.error = err
-        );
-    } else {
-      field.required = !field.required;
+    if (!field.required) {
+      if (field.id) {
+        let body = Object.assign({group: this.groupId}, field);
+        delete body.hidden;
+        delete body.isCollapsed;
+        delete body.model_fields;
+        delete body.setRequired;
+        body.required = !field.setRequired;
+        this.genericFormService
+          .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
+          .subscribe(
+            (res: any) => {
+              field.setRequired = res.required;
+            },
+            (err: any) => this.error = err
+          );
+      } else {
+        field.setRequired = !field.setRequired;
+      }
     }
   }
 

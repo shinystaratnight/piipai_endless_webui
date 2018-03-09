@@ -30,10 +30,27 @@ body.r3sourcer {
     overflow: hidden;
     white-space: nowrap;
   }
+
+  @include media-breakpoint-down('md') {
+    max-height: 100%;
+  }
+
 }
 
-.datepicker h4 {
-  font-size: 1rem;
+.datepicker {
+  flex-wrap: wrap;
+
+  .input-group-addon {
+    width: 38px;
+  }
+
+  .input-group:first-child {
+    margin-bottom: .2rem;
+  }
+
+  h4 {
+    font-size: 1rem;
+  }
 }
 
 label, b {
@@ -194,6 +211,12 @@ input:checked ~ .color-preview {
 .form-list .form-group,
 .form-list .form-control {
   margin-bottom: 0;
+}
+
+@include media-breakpoint-down('md') {
+  .list-related {
+    overflow-x: auto;
+  }
 }
 
 @each $item in $themes {

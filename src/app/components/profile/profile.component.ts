@@ -33,19 +33,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public modal;
 
   public endpoint: string = '/ecore/api/v2/candidate/candidatecontacts/';
-  public contactEndpoint: string = '/ecore/api/v2/core/contacts/';
   public skillsEndpoint: string = '/ecore/api/v2/candidate/skillrels/';
   public tagsEndpoint: string = '/ecore/api/v2/candidate/tagrels/';
 
-  public metadata: any;
+  public metadata: any[];
   public data: any;
   public error: any;
 
-  public contactMetadata: any;
-  public skillsMetadata: any;
-  public tagsMetadata: any;
-  public contactData: any;
-  public contactId: any;
+  public skillsMetadata: any[];
+  public tagsMetadata: any[];
   public defaultPicture: any;
 
   public modalData: any;
@@ -103,14 +99,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     ];
 
     this.contactDetails.elementList = [
-        'email',
-        'phone_mobile',
-        'address.phone_landline',
-        'address.phone_fax',
-        'address.city',
-        'address.postal_code',
-        'address.state',
-        'address.country'
+        'contact.email',
+        'contact.phone_mobile',
+        'contact.address.phone_landline',
+        'contact.address.phone_fax',
+        'contact.address.city',
+        'contact.address.postal_code',
+        'contact.address.state',
+        'contact.address.country'
     ];
 
     this.skills.elementList = [
@@ -124,7 +120,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       'verification_evidence',
       'verified_by'
     ];
-    this.getMetadata(this.endpoint);
+    this.getMetadata(this.endpoint + this.id + '/profile');
   }
 
   public ngOnDestroy() {
@@ -152,7 +148,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public getMetadata(endpoint) {
-    this.service.getMetadata(this.endpoint + '?type=form').subscribe(
+    this.service.getMetadata(endpoint + '?type=form').subscribe(
       (res: any) => {
         this.metadata = res;
         const picture = this.getItemFromMetadata(res, 'contact.picture');
@@ -170,27 +166,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.service.getAll(this.endpoint + this.id + '/').subscribe(
       (res: any) => {
         this.data = res;
-        this.contactId = res.contact.id;
         this.generate('personalTraits');
         this.generate('residency');
-        this.getContactMetadata();
-      },
-      (error: any) => this.error = error);
-  }
-
-  public getContactMetadata() {
-    this.service.getMetadata(this.contactEndpoint + '?type=form').subscribe(
-      (res: any) => {
-        this.contactMetadata = res;
-        this.getContactData();
-      },
-      (error: any) => this.error = error);
-  }
-
-  public getContactData() {
-    this.service.getAll(this.contactEndpoint + this.contactId + '/').subscribe(
-      (res: any) => {
-        this.contactData = res;
         this.generate('contactDetails');
         this.getSkillMetadata();
       },
@@ -235,25 +212,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public generateList(elements, data, element) {
-    let metadata;
-    let apiData;
-    if (element === 'contactDetails') {
-      apiData = this.contactData;
-      metadata = this.contactMetadata;
-    } else {
-      apiData = this.data;
-      metadata = this.metadata;
-    }
     elements.forEach((el) => {
       let item = [];
       let options;
-      let formElement = this.getItemFromMetadata(metadata, el);
+      let formElement = this.getItemFromMetadata(this.metadata, el);
       item.push((formElement && formElement.templateOptions.label)
         ? formElement.templateOptions.label : '');
       if (formElement && formElement.type === 'select') {
         options = formElement.templateOptions.options;
       }
-      let valueElement = this.getValueOfData(apiData, el, options);
+      let valueElement = this.getValueOfData(this.data, el, options);
       item.push(valueElement ? valueElement : (el === 'nationality') ? 'Other' : '-');
       if (this.isEmail(valueElement)) {
         item.push('mailto:');
