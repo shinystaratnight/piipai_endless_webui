@@ -7,8 +7,9 @@ import {
   AfterViewInit
 } from '@angular/core';
 
-import { NavigationService } from '../../services/navigation.service';
-import { UserService } from '../../services/user.service';
+import { NavigationService, Page } from '../../services/navigation.service';
+import { UserService, User } from '../../services/user.service';
+import { CheckPermissionService } from '../../shared/services/check-permission';
 
 @Component({
   selector: 'navigation',
@@ -33,10 +34,10 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   public userBlock: any;
 
   @Input()
-  public pages: any[] = [];
+  public pages: Page[];
 
   @Input()
-  public user: any;
+  public user: User;
 
   public headerHeight: number;
   public error: any;
@@ -69,9 +70,9 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   public getUserInformation() {
-    if (this.user && this.user.contact) {
-      this.greeting = `Welcome, ${this.user.contact.__str__}`;
-      this.candidate = this.user.contact.contact_type === 'candidate';
+    if (this.user && this.user.data.contact) {
+      this.greeting = `Welcome, ${this.user.data.contact.__str__}`;
+      this.candidate = this.user.data.contact.contact_type === 'candidate';
     } else {
       this.greeting = `Welcome, Anonymous User`;
     }

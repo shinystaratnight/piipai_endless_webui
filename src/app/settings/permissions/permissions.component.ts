@@ -249,4 +249,30 @@ export class PermissionsComponent implements OnInit {
     });
   }
 
+  public selectAll(type) {
+    if (type === 'user') {
+      this.service
+        .addPermissionsOnTheUser(this.targetId, this.permissionsList.map((el) => el.id))
+        .subscribe((res: any) => this.permissionsList.forEach((el) => el.active = true));
+    }
+    if (type === 'group') {
+      this.service
+        .addPermissionsOnTheGroup(this.targetId, this.permissionsList.map((el) => el.id))
+        .subscribe((res: any) => this.permissionsList.forEach((el) => el.active = true));
+    }
+  }
+
+  public removeAll(type) {
+    if (type === 'user') {
+      this.service
+        .revokePermissionsOfTheUser(this.targetId, this.permissionsList.map((el) => el.id))
+        .subscribe((res: any) => this.permissionsList.forEach((el) => el.active = false));
+    }
+    if (type === 'group') {
+      this.service
+        .revokePermissionsOfTheGroup(this.targetId, this.permissionsList.map((el) => el.id))
+        .subscribe((res: any) => this.permissionsList.forEach((el) => el.active = false));
+    }
+  }
+
 }

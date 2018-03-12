@@ -46,6 +46,13 @@ export class SiteService {
   }
 
   public getTypeOfPage(url): PathData {
+    if (!url.length) {
+      return {
+        type: 'list',
+        path: '/'
+      };
+    }
+
     let data: PathData;
     let urlCopy = url.map((el) => {
       return el.path;

@@ -3,6 +3,7 @@ import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/operator/do';
 
 import { UserService, User } from './user.service';
 import { CheckPermissionService } from '../shared/services/check-permission';
@@ -18,17 +19,20 @@ export class AuthGuard implements CanActivate {
     private navigationService: NavigationService,
   ) {}
 
-  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> { //tslint:disable-line
+  public canActivate(route: any, state: RouterStateSnapshot): Observable<boolean> { //tslint:disable-line
       return Observable.combineLatest(this.userServise.getUserData(), this.navigationService.getPages())
         .mergeMap((response: [User, Page[]]) => {
-          if (state.url === '/') {
-            return Observable.of(true);
-          } else {
+          const contactType = response[0].data.contact.contact_type;
+
+          if (contactType === 'manager' || contactType === 'client') {
             return this.checkPermissionServise.checkPermission(
                 response[0].data.user,
-                route.url,
+                route._urlSegment.segments,
                 response[1]
-              );
+              )
+              .do((res: boolean) => !res && this.router.navigate(['/home']));
+          } else {
+            return Observable.of(true);
           }
         })
         .catch((err: any) => {

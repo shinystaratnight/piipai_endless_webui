@@ -5,7 +5,7 @@ import { LocalStorageService } from 'ng2-webstorage';
 import { SiteService, PageData } from '../../services/site.service';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { NavigationService } from '../../services/navigation.service';
-import { UserService } from '../../services/user.service';
+import { UserService, User } from '../../services/user.service';
 
 import { CheckPermissionService } from '../../shared/services/check-permission';
 
@@ -51,8 +51,8 @@ export class SiteComponent implements OnInit {
   public ngOnInit() {
     this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
     this.userService.getUserData().subscribe(
-      (user: any) => {
-        this.user = user.data;
+      (user: User) => {
+        this.user = user;
       }
     );
     this.route.url.subscribe(

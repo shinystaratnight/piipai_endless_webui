@@ -8,7 +8,7 @@ import 'rxjs/add/operator/catch';
 import { SiteService, PageData } from '../../services/site.service';
 import { ErrorsService } from './errors.service';
 import { CookieService } from 'angular2-cookie/core';
-import { Page } from '../../services/navigation.service';
+import { Page, NavigationService } from '../../services/navigation.service';
 
 interface Permission {
   id: number;
@@ -33,6 +33,7 @@ export class CheckPermissionService {
     private error: ErrorsService,
     private cookie: CookieService,
     private siteService: SiteService,
+    private navigationService: NavigationService,
   ) { }
 
   get permissions() {
@@ -44,10 +45,10 @@ export class CheckPermissionService {
   }
 
   public getPermissions(id: string): Observable<Permission[]> {
-    if (!this._permissions) {
+    if (!this.permissions) {
       return this.getUserPermissions(id);
     } else {
-      return Observable.of(this._permissions);
+      return Observable.of(this.permissions);
     }
   }
 
@@ -57,25 +58,54 @@ export class CheckPermissionService {
 
     return Observable.combineLatest(permissions, page)
       .mergeMap((data: [Permission[], PageData]) => {
+        if (!this.navigationService.parsedByPermissions) {
+          this.parseNavigation(data[0], list);
+        }
+
         const method = this.parseMethod(data[1].pathData.type, data[1].pathData.id);
 
-        return Observable.of(this.getAllowMethods(data[0], data[1].endpoint).indexOf(method) > -1);
+        return Observable.of(this.getAllowMethods(data[0], data[1].endpoint)
+          .indexOf(method) > -1);
       });
 
   }
 
   public getAllowMethods (permissions: Permission[] = this.permissions, endpoint: string): string[] { //tslint:disable-line
-    const allowMethods: Permission[] = permissions.filter((permission) => {
-      return endpoint.indexOf(permission.model) > -1;
+    if (endpoint === '/') {
+      return ['get'];
+    }
+
+    if (permissions) {
+      const allowMethods: Permission[] = permissions.filter((permission) => {
+        const model = permission.codename.split('_')[0];
+        return endpoint && endpoint.indexOf(model) > -1;
+      });
+
+      // TODO: uncomment when permissions were completed
+      // return allowMethods.length ? allowMethods.map((permission: Permission) => {
+      //   return permission.codename.split('_').pop();
+      // }) : [];
+
+      // TODO: remove when permissions were completed
+      return ['delete', 'get', 'post', 'update'];
+    } else {
+      return ['delete', 'get', 'post', 'update'];
+    }
+
+  }
+
+  public parseNavigation(permissions: Permission[], list: Page[]): void {
+    list.forEach((page: Page) => {
+      if (page.endpoint !== '/') {
+        const allowMethods = this.getAllowMethods(permissions, page.endpoint);
+
+        page.disabled = allowMethods.indexOf('get') === -1;
+      }
+
+      if (page.childrens && page.childrens.length) {
+        this.parseNavigation(permissions, page.childrens);
+      }
     });
-
-    // TODO: uncomment when permissions were completed
-    // return allowMethods.map((permission: Permission) => {
-    //   return permission.codename.split('_').pop();
-    // });
-
-    // TODO: remove when permissions were completed
-    return ['delete', 'get', 'post', 'update'];
   }
 
   private parseMethod(type: string, id?: string): string {

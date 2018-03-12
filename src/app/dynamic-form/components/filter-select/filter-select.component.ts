@@ -34,13 +34,12 @@ export class FilterSelectComponent implements OnInit {
 
   public ngOnInit() {
     this.options = this.config.options.sort((p, n) => p.label > n.label ? 1 : -1 );
-    this.route.queryParams.subscribe(
-      (params) => this.updateFilter()
-    );
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
     this.data = this.config.default || '';
-    this.fs.generateQuery(this.genericQuery(this.config.query, this.data), this.config.key, this.config.listName, this.data); //tslint:disable-line
+    this.route.queryParams.subscribe(
+      (params) => this.updateFilter()
+    );
   }
 
   public onChange() {
@@ -68,9 +67,9 @@ export class FilterSelectComponent implements OnInit {
   public parseQuery(query) {
     this.query = query;
     let value = query.split('=')[1];
-    let existValue = this.config.options.filter((el) => el.value + '' === value + '');
-    if (existValue.length > 0) {
-        this.data = value;
+    let existValue = this.config.options.find((el) => el.value + '' === value + '');
+    if (existValue) {
+      this.data = existValue.value;
     }
   }
 
