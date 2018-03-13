@@ -7,6 +7,7 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { CheckPermissionService } from '../../../shared/services/check-permission';
 
 describe('FormListComponent', () => {
   let fixture: ComponentFixture<FormListComponent>;
@@ -30,12 +31,21 @@ describe('FormListComponent', () => {
   };
   let errors = {};
 
+  const mockCheckPermissionService = {
+    getAllowMethods() {
+      return true;
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         FormListComponent
       ],
-      providers: [FormBuilder],
+      providers: [
+        FormBuilder,
+        { provide: CheckPermissionService, useValue: mockCheckPermissionService }
+      ],
       imports: [ReactiveFormsModule, NgbModule.forRoot()],
       schemas: [ NO_ERRORS_SCHEMA ]
     });
@@ -102,7 +112,8 @@ describe('FormListComponent', () => {
             data: {
               value: '25',
               read_only: true,
-              editForm: true
+              editForm: true,
+              hide: undefined
             }
           },
           name: {
@@ -110,7 +121,8 @@ describe('FormListComponent', () => {
             data: {
               value: 'Tom',
               read_only: true,
-              editForm: true
+              editForm: true,
+              hide: undefined
             }
           }
         }
@@ -141,6 +153,7 @@ describe('FormListComponent', () => {
   describe('updateList method', () => {
     it('should emit update event for list', () => {
       comp.update = new BehaviorSubject(false);
+      comp.config = Object.assign({}, config);
       spyOn(comp.update, 'next');
       comp.updateList(null);
       expect(comp.update.next).toHaveBeenCalledWith(true);

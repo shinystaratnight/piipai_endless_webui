@@ -101,14 +101,14 @@ describe('ProfileComponent', () => {
         viewData: [],
         isCollapsed: false,
         elementList: [
-          'email',
-          'phone_mobile',
-          'address.phone_landline',
-          'address.phone_fax',
-          'address.city',
-          'address.postal_code',
-          'address.state',
-          'address.country'
+          'contact.email',
+          'contact.phone_mobile',
+          'contact.address.phone_landline',
+          'contact.address.phone_fax',
+          'contact.address.city',
+          'contact.address.postal_code',
+          'contact.address.state',
+          'contact.address.country'
         ]
       };
       let skills = {
@@ -133,13 +133,14 @@ describe('ProfileComponent', () => {
       };
       spyOn(comp, 'getMetadata');
       comp.endpoint = endpoint;
+      comp.id = '123';
       comp.ngOnInit();
       expect(comp.personalTraits).toEqual(personalTraits);
       expect(comp.residency).toEqual(residency);
       expect(comp.contactDetails).toEqual(contactDetails);
       expect(comp.skills).toEqual(skills);
       expect(comp.tags).toEqual(tags);
-      expect(comp.getMetadata).toHaveBeenCalledWith(endpoint);
+      expect(comp.getMetadata).toHaveBeenCalledWith(endpoint + comp.id + '/profile');
     });
 
   });
@@ -259,11 +260,14 @@ describe('ProfileComponent', () => {
         }
       };
       spyOn(comp, 'generate');
+      spyOn(comp, 'getSkillMetadata');
       comp.getData();
       expect(comp.data).toEqual(response.body);
-      expect(comp.generate).toHaveBeenCalledTimes(2);
+      expect(comp.generate).toHaveBeenCalledTimes(3);
       expect(comp.generate).toHaveBeenCalledWith('personalTraits');
       expect(comp.generate).toHaveBeenCalledWith('residency');
+      expect(comp.generate).toHaveBeenCalledWith('contactDetails');
+      expect(comp.getSkillMetadata).toHaveBeenCalled();
     });
 
     it('should update error property', () => {

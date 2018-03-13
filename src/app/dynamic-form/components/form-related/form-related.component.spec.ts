@@ -65,17 +65,8 @@ describe('FormRelatedComponent', () => {
   };
 
   const mockCheckPermissionService = {
-    viewCheck() {
-      return Observable.of(true);
-    },
-    createCheck() {
-      return Observable.of(true);
-    },
-    deleteCheck() {
-      return Observable.of(true);
-    },
-    updateCheck() {
-      return Observable.of(true);
+    getAllowMethods() {
+      return ['get', 'post', 'delete', 'update'];
     }
   };
 
@@ -154,27 +145,37 @@ describe('FormRelatedComponent', () => {
         },
         __str__: 'Mr. Test Testovich'
       };
-      const fieldsList = ['__str__', 'address.__str__', 'phone_mobile', 'email'];
-      spyOn(comp, 'getValueOfData');
+      comp.config.customValue = ['Mr. Tom Smith', 'Home street', '+380998886633', 'test@hotmail.com', 'home.com']; // tslint:disable-line
+      const fieldsList = ['__str__', 'address.__str__', 'phone_mobile', 'email', 'website'];
       comp.generateCustomTemplate(fieldsList);
       expect(comp.customTemplate).toEqual(<any> [
         {
           key: '__str__',
-          link: true
+          link: true,
+          value: 'Mr. Tom Smith'
         },
         {
           key: 'address.__str__',
-          icon: 'map-marker'
+          icon: 'map-marker',
+          value: 'Home street'
         },
         {
           key: 'phone_mobile',
           icon: 'commenting',
-          prefix: 'tel:'
+          prefix: 'tel:',
+          value: '+380998886633'
         },
         {
           key: 'email',
           icon: 'envelope',
-          prefix: 'mailto:'
+          prefix: 'mailto:',
+          value: 'test@hotmail.com'
+        },
+        {
+          key: 'website',
+          icon: 'globe',
+          value: 'home.com',
+          outside: true,
         }
       ]);
     });
@@ -469,7 +470,7 @@ describe('FormRelatedComponent', () => {
       };
       spyOn(comp, 'open');
       comp.editObject(obj);
-      expect(comp.open).toHaveBeenCalledWith('edit', undefined, obj);
+      expect(comp.open).toHaveBeenCalledWith('update', undefined, obj);
     });
   });
 
@@ -629,7 +630,7 @@ describe('FormRelatedComponent', () => {
       comp.key = 'key';
       comp.modalData = {};
       comp.group.addControl(comp.key, fb.control(''));
-      let type = 'add';
+      let type = 'post';
       let event = {
         preventDefault() {
           return true;
@@ -640,6 +641,7 @@ describe('FormRelatedComponent', () => {
       };
       spyOn(event, 'preventDefault');
       spyOn(event, 'stopPropagation');
+      spyOn(comp, 'checkPermission').and.returnValue(true);
       comp.open(type, event);
       expect(comp.modalData).toEqual({
         type,
@@ -661,14 +663,15 @@ describe('FormRelatedComponent', () => {
       comp.group.addControl(comp.key, fb.control(''));
       comp.group.get(comp.key).patchValue(123);
       comp.displayValue = 'Mr. Tom Smith';
-      let type = 'edit';
+      let type = 'update';
+      spyOn(comp, 'checkPermission').and.returnValue(true);
       comp.open(type);
       expect(comp.modalData).toEqual({
         id: 123,
         type,
         title: comp.displayValue,
         endpoint: comp.config.endpoint,
-        mode: 'edit',
+        mode: 'update',
         data: {
           candidate_contact: {
             action: 'add',

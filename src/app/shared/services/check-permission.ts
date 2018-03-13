@@ -17,7 +17,7 @@ interface Permission {
   model?: string;
 }
 
-interface PermissionResponse {
+export interface PermissionResponse {
   permission_list: Permission[];
   group_permission_list: Permission[];
 }
