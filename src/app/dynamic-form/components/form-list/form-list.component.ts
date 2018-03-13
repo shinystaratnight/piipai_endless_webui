@@ -71,6 +71,22 @@ export class FormListComponent implements OnInit, OnDestroy {
       };
       this.config.delayData[this.config.endpoint] = this.config;
     }
+
+    if (this.config.metadata_query) {
+      this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
+    }
+
+    if (this.config.add_metadata_query) {
+      this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
+    }
+  }
+
+  public parseMetadataQuery(data, field) {
+    const keys = Object.keys(data[field]);
+    const result = keys.map((query) => {
+      return `${query}=${data[field][query]}`;
+    });
+    return result.join('&');
   }
 
   public ngOnDestroy() {

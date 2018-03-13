@@ -72,6 +72,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
   @Input()
   public delay: boolean;
 
+  @Input()
+  public metadataQuery: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -201,7 +204,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
   }
 
   public getMetadata(endpoint) {
-    this.service.getMetadata(endpoint, '?type=form').subscribe(
+    this.service
+      .getMetadata(endpoint, '?type=form' + (this.metadataQuery ? `&${this.metadataQuery}` : ''))
+      .subscribe(
         ((data: any) => {
           const formData = new Subject();
           this.setModeForElement(data, this.mode);
@@ -657,7 +662,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
           if (el.list) {
             let metadataQuery;
             if (el.metadata_query) {
-              metadataQuery = this.parseMetadataQuery(el);
+              metadataQuery = this.parseMetadataQuery(el, 'metadata_query');
             }
             this.getRelatedMetadata(metadata, el.key, el.endpoint, metadataQuery);
           }
@@ -668,10 +673,10 @@ export class GenericFormComponent implements OnChanges, OnInit {
     });
   }
 
-  public parseMetadataQuery(data) {
-    const keys = Object.keys(data);
+  public parseMetadataQuery(data, field) {
+    const keys = Object.keys(data[field]);
     const result = keys.map((query) => {
-      return `${query}=${data[query]}`;
+      return `${query}=${data[field][query]}`;
     });
     return result.join('&');
   }

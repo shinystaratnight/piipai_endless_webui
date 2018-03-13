@@ -31,6 +31,7 @@
       [metaType]="config.metaType"
       [actions]="config.actions"
       [allowPermissions]="allowMethods"
+      [metadataQuery]="config.metadata_query"
       (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)">
@@ -50,8 +51,13 @@
     </div>
 
     <div class="modal-body">
-      <generic-form [delay]="config.delay" [endpoint]="modalData.endpoint" [data]="modalData.data" (event)="formEvent($event, c)">
-        <button type="submit" class="btn btn-primary">Save</button>
+      <generic-form
+        [delay]="config.delay"
+        [endpoint]="modalData.endpoint"
+        [data]="modalData.data"
+        [metadataQuery]="config.add_metadata_query"
+        (event)="formEvent($event, c)">
+          <button type="submit" class="btn btn-primary">Save</button>
       </generic-form>
     </div>
   </div>
