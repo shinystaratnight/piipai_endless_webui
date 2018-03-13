@@ -3,7 +3,7 @@ import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angu
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/observable/concat';
+import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/finally';
 
 import { GenericFormService } from './../../services/generic-form.service';
@@ -392,29 +392,43 @@ export class GenericFormComponent implements OnChanges, OnInit {
     const result = JSON.parse(JSON.stringify(data));
     const keys = Object.keys(data);
 
+    const requests = [];
+    const fields = [];
+
     keys.forEach((key, index, arr) => {
       if (data[key] instanceof Object) {
         if (data[key].id) {
           const el = this.getElementFromMetadata(this.metadata, key);
 
-          const requests = [];
           requests.push(this.createRequest(el.endpoint, data[key].id));
-
-          Observable.concat(...requests)
-            .finally(() => {
-              this.event.emit({
-                type: 'sendForm',
-                viewData: result,
-                sendData: data,
-                status: 'success'
-              });
-            })
-            .subscribe((res) => {
-              result[key] = res;
-            });
+          fields.push(key);
         }
       }
     });
+
+    if (!requests.length) {
+      this.event.emit({
+        type: 'sendForm',
+        viewData: result,
+        sendData: data,
+        status: 'success'
+      });
+    } else {
+      Observable.forkJoin(...requests)
+        .finally(() => {
+          this.event.emit({
+            type: 'sendForm',
+            viewData: result,
+            sendData: data,
+            status: 'success'
+          });
+        })
+        .subscribe((res: any[]) => {
+          res.forEach((el, i) => {
+            result[fields[i]] = el;
+          });
+        });
+    }
   }
 
   public createRequest(endpoint, id) {
@@ -422,6 +436,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
   }
 
   public submitForm(data) {
+    if (!this.checkDelayData()) {
+      return;
+    }
     let newData = {};
     if (this.form) {
       newData = Object.assign({}, data, this.form);
@@ -474,6 +491,26 @@ export class GenericFormComponent implements OnChanges, OnInit {
     this.resetData(this.response);
     this.errors = this.updateErrors(this.errors, errors, this.response);
     this.errorForm.emit(this.errors);
+  }
+
+  public checkDelayData() {
+    const delayEndppoints = Object.keys(this.delayData);
+
+    let count = 0;
+    if (delayEndppoints.length) {
+      delayEndppoints.forEach((el) => {
+        if (this.delayData[el].data.sendData && this.delayData[el].data.sendData.length) {
+          count += 1;
+          this.delayData[el].message = '';
+        } else {
+          this.delayData[el].message = 'This field is required.';
+        }
+      });
+
+      return delayEndppoints.length === count;
+    }
+
+    return true;
   }
 
   public parseResponse(response) {

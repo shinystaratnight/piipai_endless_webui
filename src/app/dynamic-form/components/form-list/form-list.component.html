@@ -36,6 +36,8 @@
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)">
     </generic-list>
+
+    <div class="text-danger my-2" *ngIf="config.message">{{config.message}}</div>
   </div>
 </div>
 
