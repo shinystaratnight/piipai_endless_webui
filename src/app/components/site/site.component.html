@@ -1,6 +1,6 @@
 <navigation [user]="user" [pages]="pagesList"></navigation>
 
-<div class="site-page" *ngIf="pageData" [ngSwitch]="pageData.pathData.type">
+<div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
   <div *ngSwitchCase="'form'">
     <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
     <div class="container-fluid pb-5">
@@ -21,12 +21,12 @@
                 (errorForm)="formError($event)"
                 (str)="changeFormLabel($event)">
                   <div class="d-flex">
-                    <button type="button" class="btn btn-danger mr-auto"
-                      *ngIf="pageData.pathData.id && formMode === 'edit'"
+                    <button type="button" class="btn btn-danger"
+                      *ngIf="pageData.pathData.id && formMode === 'edit' && checkPermission('delete')"
                       (click)="deleteElement(pageData)">Delete</button>
-                    <button *ngIf="formMode === 'view'" type="button" class="btn btn-primary mr-2 ml-auto" (click)="changeMode(pageData)">Edit</button>
-                    <button *ngIf="!formStorage && formMode !== 'view'" type="submit" class="btn btn-primary" [class.ml-auto]="!formMode" [disabled]="saveProcess">Save</button>
-                    <button *ngIf="formStorage && !approvedStorage && formMode === 'edit'" type="button" class="btn btn-success ml-auto" (click)="approveFormStorage(pageData)">Approve</button>
+                    <button *ngIf="formMode === 'view' && checkPermission('post')" type="button" class="btn btn-primary mr-2 ml-auto" (click)="changeMode(pageData)">Edit</button>
+                    <button *ngIf="!formStorage && formMode !== 'view' && checkPermission('post')" type="submit" class="btn btn-primary mr-2 ml-auto" [disabled]="saveProcess">Save</button>
+                    <button *ngIf="formStorage && !approvedStorage && formMode === 'edit' && checkPermission('post')" type="button" class="btn btn-success mr-2 ml-auto" (click)="approveFormStorage(pageData)">Approve</button>
                   </div>
               </generic-form>
 
@@ -52,11 +52,11 @@
     <div class="filter-place"></div>
     <div class="content">
       <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
-      <generic-list [endpoint]="pageData.endpoint"></generic-list>
+      <generic-list [allowPermissions]="permissionMethods" [endpoint]="pageData.endpoint"></generic-list>
     </div>
   </div>
   <div *ngSwitchCase="'profile'">
-    <profile [id]="user.contact.contact_id"></profile>
+    <profile [id]="user.data.contact.contact_id"></profile>
   </div>
 
 </div>

@@ -92,6 +92,7 @@ export class FormRelatedComponent
   public saveProcess: boolean;
 
   public linkPath: string;
+  public allowPermissions: string[];
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -101,7 +102,7 @@ export class FormRelatedComponent
     private modalService: NgbModal,
     private genericFormService: GenericFormService,
     private permission: CheckPermissionService,
-    private navigation: NavigationService
+    private navigation: NavigationService,
   ) { super(); }
 
   public ngOnInit() {
@@ -112,6 +113,7 @@ export class FormRelatedComponent
       this.config.templateOptions.display ? this.config.templateOptions.display : '{__str__}';
     this.param = this.config.templateOptions.param ? this.config.templateOptions.param : 'id';
     this.fields = this.config.templateOptions.values;
+    this.allowPermissions = this.permission.getAllowMethods(undefined, this.config.endpoint);
     if (this.fields) {
       this.fields.push(this.param);
     }
@@ -370,7 +372,7 @@ export class FormRelatedComponent
 
   public editObject(object: RelatedObject): void {
     if (object.id) {
-      this.open('edit', undefined, object);
+      this.open('update', undefined, object);
     }
   }
 
@@ -454,11 +456,14 @@ export class FormRelatedComponent
       e.preventDefault();
       e.stopPropagation();
     }
+    if (!this.checkPermission(type)) {
+      return;
+    }
     this.modalData = {};
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
     this.modalData.endpoint = this.config.endpoint;
-    if (type === 'edit' || type === 'delete') {
+    if (type === 'update' || type === 'delete') {
       if (object) {
         this.modalData.title = object.allData ? object.allData.__str__ : object.__str__;
         this.modalData.id = object[this.param];
@@ -466,8 +471,8 @@ export class FormRelatedComponent
         this.modalData.title = this.displayValue;
         this.modalData.id = this.group.get(this.key).value;
       }
-      if (type === 'edit') {
-        this.modalData.mode = 'edit';
+      if (type === 'update') {
+        this.modalData.mode = 'update';
       }
     }
     if (this.config.prefilled) {
@@ -483,19 +488,7 @@ export class FormRelatedComponent
         };
       });
     }
-    if (this.modalData.id && type !== 'delete') {
-      this.permission.updateCheck(this.modalData.endpoint, this.modalData.id)
-        .subscribe(
-          (res: any) => this.modalRef = this.modalService.open(this.modal, {size: 'lg'})
-        );
-    } else if (type !== 'delete') {
-      this.permission.createCheck(this.modalData.endpoint)
-        .subscribe(
-          (res: any) => this.modalRef = this.modalService.open(this.modal, {size: 'lg'})
-        );
-    } else {
-      this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
-    }
+    this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
   }
 
   public openAutocomplete(): void {
@@ -705,6 +698,14 @@ export class FormRelatedComponent
           }
         }
       );
+    }
+  }
+
+  public checkPermission(type: string): boolean {
+    if (this.allowPermissions) {
+      return this.allowPermissions.indexOf(type) > -1;
+    } else {
+      return false;
     }
   }
 }

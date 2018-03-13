@@ -47,6 +47,9 @@ export class GenericListComponent implements OnInit {
   @Input()
   public delay: boolean = false;
 
+  @Input()
+  public allowPermissions: string[];
+
   @Output()
   public checkedObjects: EventEmitter<string[]> = new EventEmitter();
 

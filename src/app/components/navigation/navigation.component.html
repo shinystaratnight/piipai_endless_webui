@@ -52,11 +52,11 @@
 </template>
 
 <template #item let-p="page" let-f="first" let-h="height">
-  <li class="navigation-item">
+  <li class="navigation-item" [class.disabled]="p.disabled">
     <div class="d-flex align-items-center justify-content-between w-100 h-100">
       <a *ngIf="!p.disabled" routerLink="{{p.url}}" class="p-2 navigation-link"
         (click)="isCollapsed = false">{{p.name}}</a>
-      <span class="p-2 navigation-link" *ngIf="p.disabled" (click)="isCollapsed = false">{{p.name}}</span>
+      <span class="p-2 navigation-link disabled" *ngIf="p.disabled" (click)="isCollapsed = false">{{p.name}}</span>
       <i fa class="icon mr-2"
         *ngIf="(!f || isCollapsed) && p.childrens && p.childrens.length"
         [name]="'chevron-right'"></i>

@@ -5,6 +5,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { CheckPermissionService } from '../../../shared/services/check-permission';
+
 @Component({
   selector: 'form-list',
   templateUrl: 'form-list.component.html'
@@ -36,14 +38,18 @@ export class FormListComponent implements OnInit, OnDestroy {
   public query: string;
   public showButton: boolean;
 
+  public allowMethods: string[];
+
   constructor(
-    private modal: NgbModal
+    private modal: NgbModal,
+    private permission: CheckPermissionService,
   ) { }
 
   public ngOnInit() {
     if (!this.config.hide) {
       this.initialize();
     }
+    this.allowMethods = this.permission.getAllowMethods(undefined, this.config.endpoint);
   }
 
   public initialize(): void {
@@ -127,6 +133,14 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.showButton = this.config.templateOptions.add_label && this.config.max > this.count;
     } else {
       this.showButton = this.config.templateOptions.add_label;
+    }
+  }
+
+  public checkPermissions(type: string): boolean {
+    if (this.allowMethods) {
+      return this.allowMethods.indexOf(type) > -1;
+    } else {
+      return false;
     }
   }
 }

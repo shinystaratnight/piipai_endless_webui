@@ -269,6 +269,10 @@ $nested-width: 300px;
         display: flex;
       }
     }
+
+    &.disabled:hover {
+      cursor: default;
+    }
   }
 
   &-link {
@@ -276,6 +280,10 @@ $nested-width: 300px;
     justify-content: center;
     align-items: center;
     align-self: stretch;
+
+    &.disabled {
+      color: #aaa;
+    }
   }
 }
 

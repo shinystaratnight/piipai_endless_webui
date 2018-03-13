@@ -7,12 +7,26 @@ import { GenericFormService } from '../dynamic-form/services/generic-form.servic
 import { Observable } from 'rxjs/Observable';
 import { NavigationService } from './navigation.service';
 
+export interface User {
+  status: string;
+  data: {
+    contact: {
+      contact_id: string;
+      contact_type: string;
+      id: string;
+      name: string;
+      __str__: string;
+    },
+    user: string;
+  };
+}
+
 @Injectable()
 export class UserService {
 
   public authEndpoint: string = '/ecore/api/v2/auth/restore_session/';
   public logoutEndpoint: string = '/ecore/api/v2/auth/logout/';
-  public user: any;
+  public user: User;
   public error: any;
 
   constructor(
@@ -22,11 +36,11 @@ export class UserService {
     private navigation: NavigationService
   ) {}
 
-  public getUserData() {
+  public getUserData(): Observable<User> {
     if (!this.user) {
       return this.service.getAll(`${this.authEndpoint}`).map(
-        (res: any) => {
-          this.user = res;
+        (user: User) => {
+          this.user = user;
           return this.user;
         }
       ).catch((err: any) => Observable.throw(err));
