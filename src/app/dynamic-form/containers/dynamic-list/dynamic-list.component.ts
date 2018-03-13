@@ -541,10 +541,13 @@ export class DynamicListComponent implements
             }
           }
           if (element.type === 'icon' || element.type === 'static') {
+            if (element.type === 'icon') {
+              obj.label = element.label;
+            }
             let field = this.config.fields.find((elem) => elem.key === element.field);
             if (field) {
-              obj['values'] = field.templateOptions.values;
-              obj['color'] = field.templateOptions.color;
+              obj['values'] = field.templateOptions.values || element.values;
+              obj['color'] = field.templateOptions.color || element.color;
             }
           }
           if (element.link) {
