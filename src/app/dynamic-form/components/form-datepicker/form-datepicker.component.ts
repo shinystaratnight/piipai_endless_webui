@@ -45,7 +45,7 @@ export class FormDatepickerComponent
   }
 
   public ngOnInit() {
-    this.addControl(this.config, this.fb);
+    this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.setInitValue(moment);
     this.checkModeProperty();
     this.checkHiddenProperty();
@@ -115,9 +115,6 @@ export class FormDatepickerComponent
   }
 
   public ngAfterViewInit() {
-    if (this.d) {
-      this.addFlags(this.d, this.config);
-    }
     if (!this.init) {
       let dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       let timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';

@@ -311,13 +311,14 @@ describe('FormFieldsGroupComponent', () => {
     it('should send request for change field property', () => {
       let field = {
         id: '123',
-        required: false
+        required: false,
+        setRequired: false,
       };
       comp.groupId = '124';
       response.status = 'success';
       response.required = true;
       comp.toggleRequireProperty(field);
-      expect(field.required).toBeTruthy();
+      expect(field.setRequired).toBeTruthy();
     });
 
     it('should update error property', () => {
@@ -333,10 +334,11 @@ describe('FormFieldsGroupComponent', () => {
 
     it('should toggle required property of field', () => {
       let field = {
-        required: false
+        required: false,
+        setRequired: false
       };
       comp.toggleRequireProperty(field);
-      expect(field.required).toBeTruthy();
+      expect(field.setRequired).toBeTruthy();
     });
   });
 

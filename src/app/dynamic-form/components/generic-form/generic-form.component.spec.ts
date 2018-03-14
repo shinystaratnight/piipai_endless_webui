@@ -254,7 +254,6 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getReplaceElements');
         spyOn(comp, 'checkFormStorage');
         spyOn(comp, 'checkFormBuilder');
-        spyOn(comp, 'addCustomTemplates');
         spyOn(comp, 'updateFormData');
         spyOn(comp.str, 'emit');
         comp.getMetadata(endpoint);
@@ -268,7 +267,6 @@ describe('GenericFormComponent', () => {
         expect(comp.getReplaceElements).toHaveBeenCalled();
         expect(comp.checkFormStorage).toHaveBeenCalled();
         expect(comp.checkFormBuilder).toHaveBeenCalled();
-        expect(comp.addCustomTemplates).toHaveBeenCalled();
         expect(comp.updateFormData).toHaveBeenCalled();
         expect(comp.show).toBeTruthy();
       }));
@@ -301,7 +299,6 @@ describe('GenericFormComponent', () => {
         spyOn(comp, 'getReplaceElements');
         spyOn(comp, 'checkFormStorage');
         spyOn(comp, 'checkFormBuilder');
-        spyOn(comp, 'addCustomTemplates');
         spyOn(comp, 'updateFormData');
         comp.getMetadata(endpoint);
         expect(comp.show).toBeFalsy();
@@ -310,7 +307,6 @@ describe('GenericFormComponent', () => {
         expect(comp.getReplaceElements).toHaveBeenCalled();
         expect(comp.checkFormStorage).toHaveBeenCalled();
         expect(comp.checkFormBuilder).toHaveBeenCalled();
-        expect(comp.addCustomTemplates).toHaveBeenCalled();
         expect(comp.updateFormData);
       }));
 
@@ -568,12 +564,16 @@ describe('GenericFormComponent', () => {
           message: 'All be fine'
         };
         comp.endpoint = 'endpoint';
+        comp.editForm = true;
         let data = {username: 'test'};
         spyOn(comp, 'parseResponse');
         spyOn(comp.event, 'emit');
         comp.submitForm(data);
         expect(comp.sendData).toEqual(data);
         expect(comp.parseResponse).toHaveBeenCalled();
+        expect(comp.event.emit).toHaveBeenCalledWith({
+          type: 'saveStart'
+        });
         expect(comp.event.emit).toHaveBeenCalledWith({
           type: 'sendForm',
           data: response,
@@ -1021,11 +1021,13 @@ describe('GenericFormComponent', () => {
 
     describe('pasreMetadataQuery method', () => {
       it('should generate metadata query', () => {
-        const data = {
-          vacancie: true,
-          query: false
+        const config = {
+          data: {
+            vacancie: true,
+            query: false
+          }
         };
-        const result = comp.parseMetadataQuery(data);
+        const result = comp.parseMetadataQuery(config, 'data');
         expect(result).toEqual('vacancie=true&query=false');
       });
     });
@@ -1509,22 +1511,17 @@ describe('GenericFormComponent', () => {
 
     describe('addCustomTemplates method', () => {
       it('should add custom templates for related objects', () => {
-        const customFields = {
-          contact: ['__str__']
+        const config = [{
+          type: 'related',
+          custom: ['__str__'],
+          customValue: []
+        }];
+        const data  = {
+          __str__: 'Mr. Tom Smith'
         };
-        const config = <any> [
-          {
-            type: 'collapse',
-            children: [
-              {
-                type: 'related',
-                key: 'contact'
-              }
-            ]
-          }
-        ];
-        comp.addCustomTemplates(customFields, config);
-        expect(config[0].children[0].custom).toEqual(['__str__']);
+        spyOn(comp, 'getValueOfData').and.returnValue('Mr. Tom Smith');
+        comp.addCustomTemplates(config, data);
+        expect(config[0].customValue).toEqual(['Mr. Tom Smith']);
       });
     });
 });

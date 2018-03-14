@@ -5,6 +5,8 @@ import { UserService } from './user.service';
 import { Observable } from 'rxjs/Observable';
 
 import { AuthGuard } from './auth-guard';
+import { CheckPermissionService } from '../shared/services/check-permission';
+import { NavigationService } from './navigation.service';
 
 describe('AuthGuard', () => {
 
@@ -25,12 +27,26 @@ describe('AuthGuard', () => {
     }
   };
 
+  const mockCheckPermissionService = {
+    CheckPermissionService() {
+      return Observable.of(true);
+    }
+  };
+
+  const mockNavigationService = {
+    getPages() {
+      return [];
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         AuthGuard,
         { provide: Router, useValue: mockRouter },
-        { provide: UserService, useValue: mockUserService }
+        { provide: UserService, useValue: mockUserService },
+        { provide: CheckPermissionService, useValue: mockCheckPermissionService },
+        { provide: NavigationService, useValue: mockNavigationService }
       ],
       imports: []
     });

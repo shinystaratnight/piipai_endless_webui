@@ -167,13 +167,11 @@ export class FormRelatedComponent
     if (this.config && this.config.hidden) {
       this.config.hidden.subscribe((hide) => {
         if (hide) {
-          this.config.hide = hide;
           this.displayValue = null;
           this.group.get(this.key).patchValue(undefined);
           this.setInitValue();
-        } else {
-          this.config.hide = hide;
         }
+        this.config.hide = this.config.hide || hide;
       });
     }
   }
