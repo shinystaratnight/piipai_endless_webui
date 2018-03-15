@@ -171,7 +171,7 @@ export class FormRelatedComponent
           this.group.get(this.key).patchValue(undefined);
           this.setInitValue();
         }
-        this.config.hide = this.config.hide || hide;
+        this.config.hide = hide;
       });
     }
   }

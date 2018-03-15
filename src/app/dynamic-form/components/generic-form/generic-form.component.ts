@@ -257,7 +257,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public updateFormData(metadata, formData) {
     metadata.forEach((el) => {
-      if (el.key) {
+      if (el.key || el.type === 'list') {
         el.formData = formData;
       } else if (el.children) {
         this.updateFormData(el.children, formData);
