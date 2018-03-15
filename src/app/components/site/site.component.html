@@ -22,10 +22,10 @@
                 (str)="changeFormLabel($event)">
                   <div class="d-flex">
                     <button type="button" class="btn btn-danger"
-                      *ngIf="pageData.pathData.id && formMode === 'edit' && checkPermission('delete')"
+                      *ngIf="pageData.pathData.id && checkPermission('delete')"
                       (click)="deleteElement(pageData)">Delete</button>
-                    <button *ngIf="formMode === 'view' && checkPermission('post')" type="button" class="btn btn-primary mr-2 ml-auto" (click)="changeMode(pageData)">Edit</button>
-                    <button *ngIf="!formStorage && formMode !== 'view' && checkPermission('post')" type="submit" class="btn btn-primary mr-2 ml-auto" [disabled]="saveProcess">Save</button>
+                    <button *ngIf="formMode === 'view' && checkPermission('update')" type="button" class="btn btn-primary mr-2 ml-auto" (click)="changeMode(pageData)">Edit</button>
+                    <button *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))" type="submit" class="btn btn-primary mr-2 ml-auto" [disabled]="saveProcess">Save</button>
                     <button *ngIf="formStorage && !approvedStorage && formMode === 'edit' && checkPermission('post')" type="button" class="btn btn-success mr-2 ml-auto" (click)="approveFormStorage(pageData)">Approve</button>
                   </div>
               </generic-form>

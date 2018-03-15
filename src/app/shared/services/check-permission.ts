@@ -81,13 +81,9 @@ export class CheckPermissionService {
         return endpoint && endpoint.indexOf(model) > -1;
       });
 
-      // TODO: uncomment when permissions were completed
-      // return allowMethods.length ? allowMethods.map((permission: Permission) => {
-      //   return permission.codename.split('_').pop();
-      // }) : [];
-
-      // TODO: remove when permissions were completed
-      return ['delete', 'get', 'post', 'update'];
+      return allowMethods.length ? allowMethods.map((permission: Permission) => {
+        return permission.codename.split('_').pop();
+      }) : [];
     } else {
       return ['delete', 'get', 'post', 'update'];
     }
