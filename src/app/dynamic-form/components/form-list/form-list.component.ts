@@ -39,6 +39,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   public showButton: boolean;
 
   public allowMethods: string[];
+  public formData: any[];
 
   constructor(
     private modal: NgbModal,
@@ -49,6 +50,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (!this.config.hide) {
       this.initialize();
     }
+    this.checkFormData();
     this.allowMethods = this.permission.getAllowMethods(undefined, this.config.endpoint);
   }
 
@@ -108,10 +110,12 @@ export class FormListComponent implements OnInit, OnDestroy {
           data: {
             value: this.config.delay ? undefined : this.config.prefilled[el],
             read_only: true,
-            editForm: true,
-            hide: this.config.delay
+            editForm: true
           }
         };
+        if (this.config.delay) {
+          this.modalData.data[el].data.hide = true;
+        }
       });
     }
     this.modalRef = this.modal.open(this.modalTemplate, {size: 'lg'});
@@ -125,7 +129,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public updateList(event) {
-    if (this.config.delay) {
+    if (this.config.delay && this.checkOnUnique(event.sendData, this.config.unique)) {
       this.config.data.sendData.push(event.sendData);
       this.config.data.results.push(event.viewData);
       this.config.data.length = this.config.data.length;
@@ -146,9 +150,9 @@ export class FormListComponent implements OnInit, OnDestroy {
   public checkCount(e: number): void {
     this.count = e;
     if (this.config.max) {
-      this.showButton = this.config.templateOptions.add_label && this.config.max > this.count;
+      this.showButton = (this.config.templateOptions.add_label || this.config.add_endpoint) && this.config.max > this.count; //tslint:disable-line
     } else {
-      this.showButton = this.config.templateOptions.add_label;
+      this.showButton = this.config.templateOptions.add_label || this.config.add_endpoint;
     }
   }
 
@@ -157,6 +161,43 @@ export class FormListComponent implements OnInit, OnDestroy {
       return this.allowMethods.indexOf(type) > -1;
     } else {
       return false;
+    }
+  }
+
+  public checkOnUnique(data, fields: string[]) {
+    if (!fields) {
+      return true;
+    }
+    let check: boolean = true;
+    fields.forEach((el: string) => {
+      const inputValue = this.getValueByKey(el, data);
+      this.config.data.sendData.find((field) => {
+        const value = this.getValueByKey(el, field);
+        if (inputValue === value) {
+          check = false;
+        }
+      });
+    });
+    return check;
+  }
+
+  public getValueByKey(key: string, data: any): any {
+    let keysArray = key.split('.');
+    let firstKey = keysArray.shift();
+    if (keysArray.length === 0) {
+      return data && data[firstKey];
+    } else if (keysArray.length > 0) {
+      let combineKeys = keysArray.join('.');
+      return this.getValueByKey(combineKeys, data[firstKey]);
+    }
+  }
+
+  public checkFormData() {
+    if (this.config.formData) {
+      this.config.formData
+        .subscribe((formData) => {
+          this.formData = formData;
+        });
     }
   }
 }

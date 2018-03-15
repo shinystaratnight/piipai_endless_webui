@@ -184,6 +184,9 @@ export class FormDatepickerComponent
           this.date = date.format(this.dateFormat);
         }
         this.group.get(this.key).patchValue(date.format('YYYY-MM-DD'));
+        this.event.emit({
+          el: this.config
+        });
       }
     } else if (this.config.templateOptions.type === 'datetime') {
       if (date) {
@@ -194,6 +197,9 @@ export class FormDatepickerComponent
           this.time = date.format(this.timeFormat);
         }
         this.group.get(this.key).patchValue(date.format());
+        this.event.emit({
+          el: this.config
+        });
       }
     }
   }
@@ -204,6 +210,9 @@ export class FormDatepickerComponent
         this.time = time.format(this.timeFormat);
       }
       this.group.get(this.key).patchValue(time.format('hh:mm:ss'));
+      this.event.emit({
+        el: this.config
+      });
     }
   }
 
