@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { FormatString } from '../../../helpers/format';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
@@ -6,6 +7,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { CheckPermissionService } from '../../../shared/services/check-permission';
+import { GenericFormService } from '../../services/generic-form.service';
 
 @Component({
   selector: 'form-list',
@@ -41,16 +43,22 @@ export class FormListComponent implements OnInit, OnDestroy {
   public allowMethods: string[];
   public formData: any[];
 
+  public defaultValues: any[] = [];
+  public defaultQueries: any;
+  public addedData: any[] = [];
+
   constructor(
     private modal: NgbModal,
     private permission: CheckPermissionService,
+    private gfs: GenericFormService,
+    private router: Router,
   ) { }
 
   public ngOnInit() {
     if (!this.config.hide) {
       this.initialize();
+      this.checkFormData();
     }
-    this.checkFormData();
     this.allowMethods = this.permission.getAllowMethods(undefined, this.config.endpoint);
   }
 
@@ -98,6 +106,12 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public addObject() {
+    if (this.config.add_endpoint && this.config.add_endpoint.indexOf('fillin') > -1) {
+      const urlPath = this.router.url.split('/');
+      urlPath.splice(urlPath.length - 1, 1, 'fillin').join('/');
+      this.router.navigateByUrl(urlPath.join('/'));
+      return;
+    }
     this.modalData = {};
     this.modalData.title = this.config.templateOptions.add_label;
     this.modalData.endpoint = this.config.add_endpoint || this.config.endpoint;
@@ -130,9 +144,10 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public updateList(event) {
     if (this.config.delay && this.checkOnUnique(event.sendData, this.config.unique)) {
+      this.addedData.push(event.viewData);
       this.config.data.sendData.push(event.sendData);
-      this.config.data.results.push(event.viewData);
-      this.config.data.length = this.config.data.length;
+
+      this.updateDataInTheList(this.defaultValues, this.addedData);
     }
     this.update.next(true);
   }
@@ -177,6 +192,13 @@ export class FormListComponent implements OnInit, OnDestroy {
           check = false;
         }
       });
+
+      this.config.data.results.find((field) => {
+        const value = this.getValueByKey(el, field);
+        if (inputValue === value) {
+          check = false;
+        }
+      });
     });
     return check;
   }
@@ -197,7 +219,55 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.config.formData
         .subscribe((formData) => {
           this.formData = formData;
+          this.checkDefaultValues(formData);
         });
     }
+  }
+
+  public checkDefaultValues(data) {
+    const format = new FormatString();
+    if (this.config.default) {
+      if (!this.defaultQueries) {
+        this.defaultQueries = {};
+      }
+      const keys = Object.keys(this.config.default);
+      let fullfilled = true;
+      keys.forEach((key) => {
+        const value = format.format('{shift_date}', data);
+        this.defaultQueries[key] = value;
+        if (!value) {
+          fullfilled = false;
+        }
+      });
+
+      if (fullfilled) {
+        this.gfs.getByQuery(this.config.endpoint, this.generateQuery(this.defaultQueries))
+          .subscribe((res: any) => {
+            this.defaultValues = res.results;
+            this.updateDataInTheList(this.defaultValues, this.addedData);
+            this.update.next(true);
+          });
+      } else {
+        this.defaultValues = [];
+        this.updateDataInTheList(this.defaultValues, this.addedData);
+        this.update.next(true);
+      }
+      return;
+    }
+  }
+
+  public generateQuery(data: any): string {
+    const keys = Object.keys(data);
+    const values = keys.map((key) => {
+      return `${data[key]}`;
+    });
+
+    return `?${values.join('&')}`;
+  }
+
+  public updateDataInTheList(defaultData, addedData) {
+    const length = this.config.data.results.length;
+
+    this.config.data.results = [...defaultData, ...addedData];
   }
 }

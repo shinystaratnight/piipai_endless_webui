@@ -180,8 +180,12 @@
         [id]="modalInfo.id"
         [mode]="modalInfo.mode"
         [edit]="modalInfo.edit"
-        (event)="formEvent($event, c)">
-          <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
+        (event)="formEvent($event, c)"
+        (errorForm)="formError($event)">
+          <button type="submit" class="btn btn-secondary bg-primary text-white" [disabled]="saveProcess">
+            Save
+            <spinner *ngIf="saveProcess"></spinner>
+          </button>
       </generic-form>
       <sebm-google-map
         *ngSwitchCase="'map'"
@@ -247,7 +251,7 @@
 
 <template #fillInMap>
   <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13" [mapTypeControl]="true">
-    <sebm-google-map-marker *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
+    <sebm-google-map-marker [iconUrl]="marker.iconUrl" *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
       <sebm-google-map-info-window>
         <strong>{{marker.name}}</strong>
         <br>

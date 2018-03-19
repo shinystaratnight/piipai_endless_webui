@@ -9,7 +9,7 @@
           <div [class.card]="!pageData.pathData.modal">
             <div [ngClass]="{'card-content p-2': !pageData.pathData.modal}" [class.modal-form]="pageData.pathData.modal">
               <generic-form
-                *ngIf="pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit'"
+                *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit'"
                 [title]="pageData.pathData.title"
                 [modal]="pageData.pathData.modal"
                 [endpoint]="pageData.endpoint"
@@ -25,7 +25,10 @@
                       *ngIf="pageData.pathData.id && checkPermission('delete')"
                       (click)="deleteElement(pageData)">Delete</button>
                     <button *ngIf="formMode === 'view' && checkPermission('update')" type="button" class="btn btn-primary mr-2 ml-auto" (click)="changeMode(pageData)">Edit</button>
-                    <button *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))" type="submit" class="btn btn-primary mr-2 ml-auto" [disabled]="saveProcess">Save</button>
+                    <button *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))" type="submit" class="btn btn-primary mr-2 ml-auto" [disabled]="saveProcess">
+                      Save
+                      <spinner *ngIf="saveProcess"></spinner>
+                    </button>
                     <button *ngIf="formStorage && !approvedStorage && formMode === 'edit' && checkPermission('post')" type="button" class="btn btn-success mr-2 ml-auto" (click)="approveFormStorage(pageData)">Approve</button>
                   </div>
               </generic-form>

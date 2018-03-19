@@ -69,6 +69,7 @@ import { ActionElementComponent } from './components/action-element/action-eleme
 import { GenericFormService } from './services/generic-form.service';
 
 import { MoveDirective } from './directives/move.directive';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import { MoveDirective } from './directives/move.directive';
     FormsModule,
     RouterModule,
     AgmCoreModule.forRoot({ apiKey: environment.GOOGLE_GEO_CODING_API_KEY}),
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    SharedModule,
   ],
   exports: [GenericFormComponent, GenericListComponent, DynamicFormComponent, ProfileComponent],
   declarations: [

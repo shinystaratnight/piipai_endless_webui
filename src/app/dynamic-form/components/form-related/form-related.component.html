@@ -208,7 +208,10 @@
           [id]="modalData.id"
           (event)="formEvent($event, c, type)"
           (errorForm)="formError($event)">
-            <button *ngIf="checkPermission('update')" type="submit" class="btn btn-primary" [disabled]="saveProcess">Save</button>
+            <button *ngIf="checkPermission('update')" type="submit" class="btn btn-primary" [disabled]="saveProcess">
+              Save
+              <spinner *ngIf="saveProcess"></spinner>
+            </button>
         </generic-form>
       </div>
       <div *ngIf="modalData.type === 'delete'">

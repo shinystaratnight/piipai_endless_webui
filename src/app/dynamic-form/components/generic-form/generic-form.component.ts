@@ -718,7 +718,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
     return result.join('&');
   }
 
-  public parseMetadata(metadata, params, update = true) {
+  public parseMetadata(metadata, params, update = false) {
     metadata.forEach((el) => {
       if (el.type === 'hidden') {
         el.hide = this.hide;
@@ -739,8 +739,8 @@ export class GenericFormComponent implements OnChanges, OnInit {
       }
       if (el && el.key && params && !!params[el.key]) {
         if (params[el.key].action === 'add') {
-          el = Object.assign(el, params[el.key].data);
           let elem = this.getElementFromMetadata(metadata, el.key);
+          this.updateData(params[elem.key].data, elem);
           if (elem.related) {
             this.resetRalatedData(metadata, elem.related.reset);
           }
@@ -772,6 +772,11 @@ export class GenericFormComponent implements OnChanges, OnInit {
       }
     });
     return metadata;
+  }
+
+  public updateData(data, elem) {
+    elem.hide = false;
+    elem.value = data.value || elem.value;
   }
 
   public resetRalatedData(metadata, key, param = 'options') {
@@ -897,7 +902,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
     let element = this.getElementFromMetadata(data, key);
     data.forEach((el, i) => {
       if (el.key === key) {
-        data.splice(i, 1, Object.assign({}, element));
+        data.splice(i, 1, {...element});
       } else if (el.children) {
         this.updateMetadata(el.children, key);
       }

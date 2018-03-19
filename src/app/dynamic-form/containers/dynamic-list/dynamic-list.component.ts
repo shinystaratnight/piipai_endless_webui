@@ -153,6 +153,7 @@ export class DynamicListComponent implements
   public currentActionData: any;
   public actionEndpoint: any;
   public error: any;
+  public saveProcess: boolean;
 
   public showFilters: boolean;
 
@@ -1259,13 +1260,21 @@ export class DynamicListComponent implements
   }
 
   public formEvent(e, closeModal) {
+    if (e.type === 'saveStart') {
+      this.saveProcess = true;
+    }
     if (e.type === 'sendForm' && e.status === 'success') {
+      this.saveProcess = false;
       closeModal();
       this.event.emit({
         type: 'update',
         list: this.config.list.list
       });
     }
+  }
+
+  public formError() {
+    this.saveProcess = false;
   }
 
   public evaluateEvent(e, closeModal) {
@@ -1317,7 +1326,8 @@ export class DynamicListComponent implements
         latitude: +this.getPropValue(el, 'contact.address.latitude'),
         longitude: +this.getPropValue(el, 'contact.address.longitude'),
         name: this.getPropValue(el, 'contact.__str__'),
-        description: this.getPropValue(el, 'contact.address.__str__')
+        description: this.getPropValue(el, 'contact.address.__str__'),
+        iconUrl: '/assets/img/location-blue.svg'
       });
     });
     if (this.supportData) {
@@ -1325,7 +1335,9 @@ export class DynamicListComponent implements
         latitude: this.data[this.supportData].latitude,
         longitude: this.data[this.supportData].longitude,
         name: this.data[this.supportData].__str__,
-        description: this.data[this.supportData].address
+        description: this.data[this.supportData].address,
+        label: this.sanitizer.bypassSecurityTrustStyle("{ color: 'green'}"),
+        iconUrl: '/assets/img/location-red.svg'
       });
       data.latitude = this.data[this.supportData].latitude;
       data.longitude = this.data[this.supportData].longitude;

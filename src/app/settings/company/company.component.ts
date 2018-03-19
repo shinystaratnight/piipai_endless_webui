@@ -23,6 +23,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
   public savedTheme: string;
   public savedFont: string;
+  public saveProcess: boolean;
 
   public config;
 
@@ -67,13 +68,17 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   public submitForm(data) {
+    this.saveProcess = true;
     this.gfs.submitForm(this.endpoint, data).subscribe(
       (res: any) => {
+        this.saveProcess = false;
         this.savedTheme = null;
         this.savedFont = null;
-        this.router.navigate(['/']);
       },
-      (err: any) => this.errors = err
+      (err: any) => {
+        this.saveProcess = false;
+        this.errors = err;
+      }
     );
   }
 

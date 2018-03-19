@@ -3,6 +3,9 @@
   (submit)="submitForm($event)"
   (event)="eventHandler($event)">
   <div class="d-flex">
-    <button type="submit" class="btn btn-primary ml-auto">Save</button>
+    <button type="submit" class="btn btn-primary ml-auto" [disabled]="saveProcess">
+      Save
+      <spinner *ngIf="saveProcess"></spinner>
+    </button>
   </div>
 </dynamic-form>

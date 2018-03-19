@@ -175,6 +175,15 @@ export class FormDatepickerComponent
       this.d.nativeElement.readOnly = false;
       this.t.nativeElement.readOnly = false;
     }
+    this.group.get(this.key).valueChanges.subscribe((val) => {
+      if (!val) {
+        setTimeout(() => {
+          this.event.emit({
+            el: this.config
+          });
+        }, 150);
+      }
+    });
   }
 
   public updateDate(date) {

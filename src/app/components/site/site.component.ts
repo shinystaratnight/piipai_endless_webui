@@ -36,6 +36,7 @@ export class SiteComponent implements OnInit {
 
   public saveProcess: boolean;
   public permissionMethods: string[];
+  public reload: boolean;
 
   constructor(
     private router: Router,
@@ -174,7 +175,11 @@ export class SiteComponent implements OnInit {
     }
     if (e.type === 'sendForm' && e.status === 'success') {
       this.saveProcess = false;
-      this.router.navigate([this.pageData.pathData.path]);
+      this.formMode = 'view';
+      this.reload = true;
+      setTimeout(() => {
+        this.reload = false;
+      }, 150);
     }
   }
 
