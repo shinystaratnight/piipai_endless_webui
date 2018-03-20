@@ -51,6 +51,16 @@ export class FormDatepickerComponent
     this.checkHiddenProperty();
     this.mobileDevice = this.identifyDevice();
     this.createEvent();
+    this.group.get(this.key).valueChanges.subscribe((val) => {
+      if (!val) {
+        setTimeout(() => {
+          this.event.emit({
+            el: this.config,
+            type: 'change'
+          });
+        }, 150);
+      }
+    });
   }
 
   public checkHiddenProperty() {
@@ -58,7 +68,9 @@ export class FormDatepickerComponent
       this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
-          this.group.get(this.key).patchValue(undefined);
+          if (this.group.get(this.key).value) {
+            this.group.get(this.key).patchValue(undefined);
+          }
           this.setInitValue(moment);
         } else {
           this.config.hide = hide;
@@ -175,15 +187,6 @@ export class FormDatepickerComponent
       this.d.nativeElement.readOnly = false;
       this.t.nativeElement.readOnly = false;
     }
-    this.group.get(this.key).valueChanges.subscribe((val) => {
-      if (!val) {
-        setTimeout(() => {
-          this.event.emit({
-            el: this.config
-          });
-        }, 150);
-      }
-    });
   }
 
   public updateDate(date) {
@@ -194,7 +197,8 @@ export class FormDatepickerComponent
         }
         this.group.get(this.key).patchValue(date.format('YYYY-MM-DD'));
         this.event.emit({
-          el: this.config
+          el: this.config,
+          type: 'change'
         });
       }
     } else if (this.config.templateOptions.type === 'datetime') {
@@ -207,7 +211,8 @@ export class FormDatepickerComponent
         }
         this.group.get(this.key).patchValue(date.format());
         this.event.emit({
-          el: this.config
+          el: this.config,
+          type: 'change'
         });
       }
     }
@@ -220,7 +225,8 @@ export class FormDatepickerComponent
       }
       this.group.get(this.key).patchValue(time.format('HH:mm:ss'));
       this.event.emit({
-        el: this.config
+        el: this.config,
+        type: 'change'
       });
     }
   }
