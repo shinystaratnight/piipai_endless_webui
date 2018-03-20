@@ -951,7 +951,7 @@ export class DynamicListComponent implements
   }
 
   public fillIn(e) {
-    const fillInPath = `/hr/vacancies/${e.el.rowId}/fillin/`;
+    const fillInPath = `/hr/jobs/${e.el.rowId}/fillin/`;
     this.router.navigate([fillInPath]);
   }
 

@@ -370,7 +370,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
                 endpoint = obj.endpoint;
               }
             } else {
-              endpoint = `${obj.endpoint}${obj.value}/`;
+              endpoint = obj.endpoint && `${obj.endpoint}${obj.value}/`;
             }
           } else {
             obj.options = [];
@@ -609,6 +609,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public getRalatedData
     (metadata, key, endpoint, fields, query = null, param = 'options', update = true) {
+    if (!endpoint) {
+      return;
+    }
     let currentQuery = query;
     let fieldsQuery;
     if (fields) {
@@ -680,7 +683,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public getData(metadata, key = null, query = null) {
     metadata.forEach((el) => {
       if (el.type === 'related') {
-        if (el.key === key) {
+        if (el.key === key && el.endpoint) {
           this.getRalatedData(metadata, key, el.endpoint, {}, query + '&limit=-1');
         }
         if (!el.relate && !key) {
@@ -718,7 +721,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
     return result.join('&');
   }
 
-  public parseMetadata(metadata, params, update = false) {
+  public parseMetadata(metadata, params, update = true) {
     metadata.forEach((el) => {
       if (el.type === 'hidden') {
         el.hide = this.hide;
@@ -775,7 +778,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
   }
 
   public updateData(data, elem) {
-    elem.hide = false;
+    elem.read_only = data.read_only || elem.read_only;
+    elem.editForm = data.editForm || elem.editForm;
+    elem.hide = data.hide || elem.hide;
     elem.value = data.value || elem.value;
   }
 
@@ -902,7 +907,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
     let element = this.getElementFromMetadata(data, key);
     data.forEach((el, i) => {
       if (el.key === key) {
-        data.splice(i, 1, {...element});
+        data.splice(i, 1, Object.assign({}, element));
       } else if (el.children) {
         this.updateMetadata(el.children, key);
       }

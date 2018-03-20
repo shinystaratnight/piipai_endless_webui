@@ -92,7 +92,7 @@ export class FormDatepickerComponent
                             '-';
       } else if (type === 'time') {
         this.setTime(data, moment);
-        this.displayValue = data ? moment(data, 'hh:mm:ss').format('hh:mm A') : '-';
+        this.displayValue = data ? moment(data, 'HH:mm:ss').format('hh:mm A') : '-';
       }
     } else if (this.config.default) {
       let data = this.config.default;
@@ -104,7 +104,7 @@ export class FormDatepickerComponent
                             '-';
       } else if (type === 'time') {
         this.setTime(data, moment);
-        this.displayValue = data ? moment(data, 'hh:mm:ss').format(this.timeFormat) : '-';
+        this.displayValue = data ? moment(data, 'HH:mm:ss').format(this.timeFormat) : '-';
       }
     }
   }
@@ -218,7 +218,7 @@ export class FormDatepickerComponent
       if (!this.time) {
         this.time = time.format(this.timeFormat);
       }
-      this.group.get(this.key).patchValue(time.format('hh:mm:ss'));
+      this.group.get(this.key).patchValue(time.format('HH:mm:ss'));
       this.event.emit({
         el: this.config
       });
@@ -243,7 +243,7 @@ export class FormDatepickerComponent
       if (picker) {
         time = moment(value, this.timeFormat);
       } else {
-        time = moment(value, 'hh:mm:ss');
+        time = moment(value, 'HH:mm:ss');
       }
       this.updateTime(time);
     }

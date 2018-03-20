@@ -288,15 +288,6 @@ export class FormRelatedComponent
     if (this.modalRef) {
       this.modalRef.close();
     }
-    if (this.config && this.config.hidden) {
-      this.config.hidden.complete();
-    }
-    if (this.config && this.config.mode) {
-      this.config.mode.complete();
-    }
-    if (this.config && this.config.formData) {
-      this.config.formData.complete();
-    }
   }
 
   public getReplaceElements(metadata: Field[]): void {

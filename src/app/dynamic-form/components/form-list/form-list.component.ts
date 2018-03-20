@@ -233,7 +233,7 @@ export class FormListComponent implements OnInit, OnDestroy {
       const keys = Object.keys(this.config.default);
       let fullfilled = true;
       keys.forEach((key) => {
-        const value = format.format('{shift_date}', data);
+        const value = format.format(this.config.default[key], data);
         this.defaultQueries[key] = value;
         if (!value) {
           fullfilled = false;
@@ -259,7 +259,7 @@ export class FormListComponent implements OnInit, OnDestroy {
   public generateQuery(data: any): string {
     const keys = Object.keys(data);
     const values = keys.map((key) => {
-      return `${data[key]}`;
+      return `${key}=${data[key]}`;
     });
 
     return `?${values.join('&')}`;
@@ -268,6 +268,30 @@ export class FormListComponent implements OnInit, OnDestroy {
   public updateDataInTheList(defaultData, addedData) {
     const length = this.config.data.results.length;
 
+    this.pasredAddedData(addedData, defaultData, this.config.unique);
+    this.pasredAddedData(this.config.data.sendData, defaultData, this.config.unique);
     this.config.data.results = [...defaultData, ...addedData];
+  }
+
+  public pasredAddedData(addedData: any[], defaultData: any[], fields: string[]) {
+    if (!fields) {
+      return;
+    }
+    if (defaultData && defaultData.length) {
+      fields.forEach((el: string) => {
+        const inputValues = [];
+        defaultData.forEach((field) => {
+          inputValues.push(this.getValueByKey(el, field));
+        });
+
+        for (let i = 0; i < addedData.length; i++) {
+          const value = this.getValueByKey(el, addedData[i]);
+          if (inputValues.indexOf(value) > -1) {
+            addedData.splice(i, 1);
+            i--;
+          }
+        }
+      });
+    }
   }
 }

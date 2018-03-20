@@ -35,7 +35,7 @@ export class FillInComponent implements OnInit {
         endpoint: this.endpoint,
         responseField: 'list',
         paginated: 'off',
-        supportData: 'vacancy',
+        supportData: 'job',
         metaType: true,
         actions: true,
         templateOptions: {
