@@ -58,7 +58,8 @@
         [endpoint]="modalData.endpoint"
         [data]="modalData.data"
         [metadataQuery]="config.add_metadata_query"
-        (event)="formEvent($event, c)">
+        (event)="formEvent($event, c)"
+        (errorForm)="formError($event)">
           <button type="submit" class="btn btn-primary" [disabled]="saveProcess">
             Save
             <spinner *ngIf="saveProcess"></spinner>

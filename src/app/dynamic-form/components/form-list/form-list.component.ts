@@ -148,6 +148,10 @@ export class FormListComponent implements OnInit, OnDestroy {
     }
   }
 
+  public formError() {
+    this.saveProcess = false;
+  }
+
   public updateList(event) {
     if (this.config.delay && this.checkOnUnique(event.sendData, this.config.unique)) {
       this.addedData.push(event.viewData);
