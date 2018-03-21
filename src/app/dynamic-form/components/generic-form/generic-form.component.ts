@@ -64,7 +64,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public edit: boolean;
 
   @Input()
-  public showResponse: boolean = true;
+  public showResponse: boolean = false;
 
   @Input()
   public mode: string;
@@ -743,7 +743,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
       if (el && el.key && params && !!params[el.key]) {
         if (params[el.key].action === 'add') {
           let elem = this.getElementFromMetadata(metadata, el.key);
-          this.updateData(params[elem.key].data, elem);
+          elem = Object.assign(elem, params[elem.key].data);
           if (elem.related) {
             this.resetRalatedData(metadata, elem.related.reset);
           }
@@ -775,13 +775,6 @@ export class GenericFormComponent implements OnChanges, OnInit {
       }
     });
     return metadata;
-  }
-
-  public updateData(data, elem) {
-    elem.read_only = data.read_only || elem.read_only;
-    elem.editForm = data.editForm || elem.editForm;
-    elem.hide = data.hide || elem.hide;
-    elem.value = data.value || elem.value;
   }
 
   public resetRalatedData(metadata, key, param = 'options') {

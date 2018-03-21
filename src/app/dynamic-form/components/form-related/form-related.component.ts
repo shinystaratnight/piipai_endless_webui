@@ -191,7 +191,17 @@ export class FormRelatedComponent
 
   public checkFormData() {
     if (this.config.formData) {
-      this.config.formData.subscribe((formData) => this.formData = formData);
+      this.config.formData.subscribe((formData) => {
+        this.formData = formData.data;
+        if (formData.key !== this.config.key) {
+          if (this.config.default && !this.config.hide && !this.config.value) {
+            this.getOptions.call(this, '', 0, false, this.setValue);
+            if (this.config.read_only) {
+              this.viewMode = true;
+            }
+          }
+        }
+      });
     }
   }
 
@@ -433,7 +443,8 @@ export class FormRelatedComponent
     this.event.emit({
       type: 'delete',
       endpoint: this.modalData.endpoint,
-      id: this.modalData.id
+      id: this.modalData.id,
+      el: this.config
     });
     this.group.get(this.key).patchValue('');
     delete this.config.value;
@@ -554,15 +565,20 @@ export class FormRelatedComponent
 
   public setValue(item) {
     const formatString = new FormatString();
-    if (this.config.many) {
-      this.results.push(item);
-      this.updateData();
+    if (item) {
+      if (this.config.many) {
+        this.results.push(item);
+        this.updateData();
+      } else {
+        this.displayValue = formatString.format(this.display, item);
+        this.group.get(this.key).patchValue(item[this.param]);
+      }
     } else {
-      this.displayValue = formatString.format(this.display, item);
-      this.group.get(this.key).patchValue(item[this.param]);
+      this.displayValue = '';
+      this.group.get(this.key).patchValue(undefined);
     }
     this.changeList();
-    this.eventHandler({type: 'change'}, item[this.param]);
+    this.eventHandler({type: 'change'}, item && item[this.param]);
     this.searchValue = null;
     this.list = null;
     this.count = null;
@@ -587,7 +603,9 @@ export class FormRelatedComponent
 
   public changeList() {
     this.event.emit({
-      list: this.results
+      list: this.results,
+      el: this.config,
+      type: 'chenge'
     });
   }
 
@@ -659,7 +677,7 @@ export class FormRelatedComponent
     return query.length > 1 ? query : '';
   }
 
-  public getOptions(value, offset, concat = false) {
+  public getOptions(value, offset, concat = false, callback?) {
     let endpoint = this.config.endpoint;
     let query = '';
     if (value) {
@@ -684,6 +702,10 @@ export class FormRelatedComponent
             } else {
               this.previewList = res.results;
             }
+
+          }
+          if (callback) {
+            callback.call(this, res.results[0]);
           }
         }
       );

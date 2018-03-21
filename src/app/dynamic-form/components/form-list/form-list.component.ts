@@ -47,6 +47,8 @@ export class FormListComponent implements OnInit, OnDestroy {
   public defaultQueries: any;
   public addedData: any[] = [];
 
+  public saveProcess: boolean;
+
   constructor(
     private modal: NgbModal,
     private permission: CheckPermissionService,
@@ -136,10 +138,18 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public formEvent(e, closeModal) {
+    if (e.type === 'saveStart') {
+      this.saveProcess = true;
+    }
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
       this.updateList(e);
+      this.saveProcess = false;
     }
+  }
+
+  public formError() {
+    this.saveProcess = false;
   }
 
   public updateList(event) {
@@ -218,8 +228,8 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (this.config.formData) {
       this.config.formData
         .subscribe((formData) => {
-          this.formData = formData;
-          this.checkDefaultValues(formData);
+          this.formData = formData.data;
+          this.checkDefaultValues(formData.data);
         });
     }
   }
