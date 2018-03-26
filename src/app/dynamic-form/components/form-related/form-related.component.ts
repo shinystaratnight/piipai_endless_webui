@@ -585,11 +585,21 @@ export class FormRelatedComponent
     this.previewList = null;
   }
 
-  public deleteItem(index) {
-    if (this.results[index]) {
-      this.results.splice(index, 1);
-      this.changeList();
-      this.updateData();
+  public deleteItem(index: number, item: any, api: boolean) {
+    if (api) {
+      this.genericFormService.delete(this.config.endpoint, item[this.param], 'delete')
+        .subscribe(() => {
+          if (this.results[index]) {
+            this.results.splice(index, 1);
+            this.changeList();
+          }
+        });
+    } else {
+      if (this.results[index]) {
+        this.results.splice(index, 1);
+        this.changeList();
+        this.updateData();
+      }
     }
   }
 
