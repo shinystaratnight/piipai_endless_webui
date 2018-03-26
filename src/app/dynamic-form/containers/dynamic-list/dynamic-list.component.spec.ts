@@ -16,6 +16,7 @@ describe('DynamicListComponent', () => {
   let comp: DynamicListComponent;
   let el;
   let config = {
+    fields: [],
     list: {
       label: 'Company',
       list: 'company',
@@ -1639,6 +1640,10 @@ describe('DynamicListComponent', () => {
             break_started_at: '2017-09-21T12:00:00+10:00',
             break_ended_at: '2017-09-21T12:30:00+10:00',
             shift_ended_at: '2017-09-21T15:30:00+10:00',
+            supervisor: '',
+            position: '',
+            company: '',
+            jobsite: '',
             vacancy_offer: {
               candidate_contact: {
                 contact: {
@@ -1682,6 +1687,30 @@ describe('DynamicListComponent', () => {
             action: 'add',
             data: {
               value: mockData.results[0].shift_ended_at
+            }
+          },
+          supervisor: {
+            action: 'add',
+            data: {
+              value: mockData.results[0].supervisor
+            }
+          },
+          position: {
+            action: 'add',
+            data: {
+              value: mockData.results[0].position
+            }
+          },
+          company: {
+            action: 'add',
+            data: {
+              value: mockData.results[0].company
+            }
+          },
+          jobsite: {
+            action: 'add',
+            data: {
+              value: mockData.results[0].jobsite
             }
           }
         },
@@ -2155,9 +2184,9 @@ describe('DynamicListComponent', () => {
       comp.editForm(event);
       expect(comp.modalInfo).toEqual({
         type: 'form',
-        endpoint: '/ecore/api/v2/contacts/',
-        id: '123',
-        mode: 'edit'
+        endpoint: '/ecore/api/v2/contacts/123/',
+        mode: 'edit',
+        edit: true,
       });
       expect(comp.open).toHaveBeenCalled();
     });

@@ -22,7 +22,7 @@ export class SettingsComponent implements OnInit {
 
   public ngOnInit() {
     let currentURL = { path: 'settings' };
-    this.user = this.route.snapshot.data['user'].data;
+    this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
     this.settingsService.url.subscribe((child) => {
       this.url = [].concat(currentURL, child);

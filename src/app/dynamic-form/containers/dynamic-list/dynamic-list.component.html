@@ -42,6 +42,7 @@
           [inForm]="inForm"
           [label]="config.list.label"
           [poped]="poped"
+          [allowPermissions]="allowPermissions"
           (event)="buttonAction($event)">
         </list-buttons>
       </div>
@@ -103,10 +104,10 @@
             <td *ngIf="!inForm || actions">
               <div class="d-flex flex-md-column justify-content-between align-items-center">
                 <input type="checkbox" *ngIf="config.list.actions || actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]" (ngModelChange)="emitSelect()">
-                <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm && !config.list.editDisable" [routerLink]="[row.id + '/change']">
+                <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm && !config.list.editDisable && checkPermission('get')" [routerLink]="[row.id + '/change']">
                   <i fa [name]="'pencil'" class="icon text-warning"></i>
                 </a>
-                <i fa *ngIf="!first && !config.list.editDisable"
+                <i fa *ngIf="!first && !config.list.editDisable && checkPermission('get')"
                   [name]="'pencil'" class="icon text-warning ml-auto ml-md-0"
                   (click)="editObject(row.id, row.__str__)"></i>
               </div>
@@ -179,8 +180,12 @@
         [id]="modalInfo.id"
         [mode]="modalInfo.mode"
         [edit]="modalInfo.edit"
-        (event)="formEvent($event, c)">
-          <button type="submit" class="btn btn-secondary bg-primary text-white">Save</button>
+        (event)="formEvent($event, c)"
+        (errorForm)="formError($event)">
+          <button type="submit" class="btn btn-secondary bg-primary text-white" [disabled]="saveProcess">
+            Save
+            <spinner *ngIf="saveProcess"></spinner>
+          </button>
       </generic-form>
       <sebm-google-map
         *ngSwitchCase="'map'"
@@ -246,7 +251,7 @@
 
 <template #fillInMap>
   <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13" [mapTypeControl]="true">
-    <sebm-google-map-marker *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
+    <sebm-google-map-marker [iconUrl]="marker.iconUrl" *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
       <sebm-google-map-info-window>
         <strong>{{marker.name}}</strong>
         <br>

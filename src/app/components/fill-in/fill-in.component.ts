@@ -35,7 +35,7 @@ export class FillInComponent implements OnInit {
         endpoint: this.endpoint,
         responseField: 'list',
         paginated: 'off',
-        supportData: 'vacancy',
+        supportData: 'job',
         metaType: true,
         actions: true,
         templateOptions: {
@@ -51,15 +51,21 @@ export class FillInComponent implements OnInit {
   }
 
   public back() {
-    this.router.navigate([this.pageData.pathData.path]);
+    this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']); //tslint:disable-line
   }
 
   public sendData() {
     if (this.data && this.data.length) {
       this.gfs.submitForm(this.endpoint, this.data).subscribe(
-        (res: any) => this.router.navigate([this.pageData.pathData.path]),
+        (res: any) => this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
         (err: any) => this.err = err
       );
     }
+  }
+
+  public getId(path: string): string {
+    const keys = path.split('/');
+
+    return keys[keys.length - 3];
   }
 }

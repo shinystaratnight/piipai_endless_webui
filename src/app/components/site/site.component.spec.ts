@@ -77,14 +77,8 @@ describe('SiteComponent', () => {
     };
 
     const mockCheckPermissionService = {
-      viewCheck() {
-        return Observable.of(true);
-      },
-      createCheck() {
-        return Observable.of(true);
-      },
-      updateCheck() {
-        return Observable.of(true);
+      getAllowMethods() {
+        return ['get', 'post', 'update', 'delete'];
       }
     };
 
@@ -137,59 +131,11 @@ describe('SiteComponent', () => {
     })));
   });
 
-  describe('checkPermissions method', () => {
-    it('should update pageData property for view mode', () => {
-      let data = {
-        endpoint: '/ecore/api/v2/core/formstorages/',
-        pathData: {
-          type: 'list',
-          path: 'path',
-        }
-      };
-      comp.checkPermissions(data);
-      expect(comp.pageData).toEqual(data);
-      expect(comp.formStorage).toBeTruthy();
-    });
-
-    it('should set formStorage false for view mode', () => {
-      let data = {
-        endpoint: 'some endpoint',
-        pathData: {
-          type: 'list',
-          path: 'path'
-        }
-      };
-      comp.checkPermissions(data);
-      expect(comp.pageData).toEqual(data);
-      expect(comp.formStorage).toBeFalsy();
-    });
-
-    it('should update pageData property for view mode', () => {
-      let data = {
-        endpoint: '/ecore/api/v2/core/formstorages/',
-        pathData: {
-          type: 'list',
-          path: 'path',
-          id: '123'
-        }
-      };
-      comp.checkPermissions(data);
-      expect(comp.pageData).toEqual(data);
-      expect(comp.formStorage).toBeTruthy();
-    });
-
-    it('should set formStorage false for view mode', () => {
-      let data = {
-        endpoint: 'some endpoint',
-        pathData: {
-          type: 'list',
-          path: 'path',
-          id: '123'
-        }
-      };
-      comp.checkPermissions(data);
-      expect(comp.pageData).toEqual(data);
-      expect(comp.formStorage).toBeFalsy();
+  describe('checkPermission method', () => {
+    it('should checkpermission for action', () => {
+      comp.permissionMethods = ['get', 'post'];
+      const result = comp.checkPermission('get');
+      expect(result).toBeTruthy();
     });
   });
 

@@ -11,9 +11,12 @@ import {
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { CookieService } from 'angular2-cookie/core';
 
-import { CheckPermissionService } from './check-permission';
+import { CheckPermissionService, PermissionResponse } from './check-permission';
 import { ErrorsService } from './errors.service';
 import { Observable } from 'rxjs/Observable';
+import { SiteService } from '../../services/site.service';
+import { NavigationService } from '../../services/navigation.service';
+import { Permission } from '../../settings/permissions/permissions.component';
 
 describe('CheckPermissionService', () => {
 
@@ -23,6 +26,16 @@ describe('CheckPermissionService', () => {
     parseErrors() {
       return Observable.throw('err');
     }
+  };
+
+  const mockSiteService = {
+    getDataOfPage() {
+      return {};
+    }
+  };
+
+  const mockNavigationService = {
+    parsedByPermissions: false,
   };
 
   beforeEach(() => {
@@ -40,6 +53,8 @@ describe('CheckPermissionService', () => {
         },
         { provide: ConnectionBackend, useClass: MockBackend },
         { provide: RequestOptions, useClass: BaseRequestOptions },
+        { provide: SiteService, useValue: mockSiteService },
+        { provide: NavigationService, useValue: mockNavigationService }
       ],
       imports: [
         HttpModule
@@ -53,196 +68,38 @@ describe('CheckPermissionService', () => {
     expect(service).toBeDefined();
   })));
 
-  describe('viewCheck method', () => {
+  describe('getPermissions method', () => {
 
-    it('should parse response', async(inject(
-      [CheckPermissionService, MockBackend], (service, mockBackend) => {
+    it('should return permissions from api',
+      async(inject([CheckPermissionService, MockBackend],
+        (service: CheckPermissionService, mockBackend: MockBackend) => {
+          const mockResponse: PermissionResponse = {
+            permission_list: [],
+            group_permission_list: []
+          };
 
-      const mockResponse = {
-        status: 'ok',
-        results: []
-      };
-      spyOn(service, 'updateHeaders');
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockRespond(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
-      });
+          const body = JSON.stringify(mockResponse);
 
-      const result = service.viewCheck(url, `123`);
-      expect(service.updateHeaders).toHaveBeenCalled();
-      result.subscribe((res) => {
-        expect(res).toEqual(mockResponse);
-      });
+          mockBackend.connections.subscribe((conn) => {
+            conn.mockRespond(new Response(new ResponseOptions({ body })));
+          });
+          const result = service.getPermissions('123');
+
+          result.subscribe((res) => {
+            expect(res).toEqual([]);
+          });
     })));
 
-    it('should parse error', async(inject(
-      [CheckPermissionService, MockBackend], (service, mockBackend) => {
+    it('should return permissions from cash',
+      async(inject([CheckPermissionService], (service: CheckPermissionService) => {
+        service.permissions = [{
+          name: 'Name',
+          id: 1,
+          codename: 'Codename'
+        }];
 
-      const mockError = {
-        errors: {
-          message: 'some error'
-        }
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockError(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
-      });
-
-      const result = service.viewCheck(url, `123`);
-
-      result.subscribe((res) => {
-        expect(res).toBeUndefined();
-      },
-      (err) => {
-        expect(err).toBeDefined();
-      });
+        const permissions = service.getPermissions('123');
     })));
-
-  });
-
-  describe('createCheck method', () => {
-
-    it('should parse response', async(inject(
-      [CheckPermissionService, MockBackend], (service, mockBackend) => {
-
-      const mockResponse = {
-        status: 'ok',
-        results: []
-      };
-      spyOn(service, 'updateHeaders');
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockRespond(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
-      });
-
-      const result = service.createCheck(url);
-      expect(service.updateHeaders).toHaveBeenCalled();
-      result.subscribe((res) => {
-        expect(res).toEqual(mockResponse);
-      });
-    })));
-
-    it('should parse error', async(inject(
-      [CheckPermissionService, MockBackend], (service, mockBackend) => {
-
-      const mockError = {
-        errors: {
-          message: 'some error'
-        }
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockError(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
-      });
-
-      const result = service.createCheck(url);
-
-      result.subscribe((res) => {
-        expect(res).toBeUndefined();
-      },
-      (err) => {
-        expect(err).toBeDefined();
-      });
-    })));
-
-  });
-
-  describe('updateCheck method', () => {
-
-    it('should parse response', async(inject(
-      [CheckPermissionService, MockBackend], (service, mockBackend) => {
-
-      const mockResponse = {
-        status: 'ok',
-        results: []
-      };
-      spyOn(service, 'updateHeaders');
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockRespond(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
-      });
-
-      const result = service.updateCheck(url, `123`);
-      expect(service.updateHeaders).toHaveBeenCalled();
-      result.subscribe((res) => {
-        expect(res).toEqual(mockResponse);
-      });
-    })));
-
-    it('should parse error', async(inject(
-      [CheckPermissionService, MockBackend], (service, mockBackend) => {
-
-      const mockError = {
-        errors: {
-          message: 'some error'
-        }
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockError(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
-      });
-
-      const result = service.updateCheck(url, `123`);
-
-      result.subscribe((res) => {
-        expect(res).toBeUndefined();
-      },
-      (err) => {
-        expect(err).toBeDefined();
-      });
-    })));
-
-  });
-
-  describe('deleteCheck method', () => {
-
-    it('should parse response', async(inject(
-      [CheckPermissionService, MockBackend], (service, mockBackend) => {
-
-      const mockResponse = {
-        status: 'ok',
-        results: []
-      };
-      spyOn(service, 'updateHeaders');
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockRespond(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
-      });
-
-      const result = service.deleteCheck(url, `123`);
-      expect(service.updateHeaders).toHaveBeenCalled();
-      result.subscribe((res) => {
-        expect(res).toEqual(mockResponse);
-      });
-    })));
-
-    it('should parse error', async(inject(
-      [CheckPermissionService, MockBackend], (service, mockBackend) => {
-
-      const mockError = {
-        errors: {
-          message: 'some error'
-        }
-      };
-
-      mockBackend.connections.subscribe((conn) => {
-        conn.mockError(
-            new Response(new ResponseOptions({ body: JSON.stringify(mockError) })));
-      });
-
-      const result = service.deleteCheck(url, `123`);
-
-      result.subscribe((res) => {
-        expect(res).toBeUndefined();
-      },
-      (err) => {
-        expect(err).toBeDefined();
-      });
-    })));
-
   });
 
 });

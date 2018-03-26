@@ -8,6 +8,7 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { NavigationComponent } from '../components/navigation/navigation.component';
 import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.component';
 import { ToastComponent } from './components/toast.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 import { ErrorsService } from './services/errors.service';
 import { CheckPermissionService } from './services/check-permission';
@@ -22,12 +23,14 @@ import { CheckPermissionService } from './services/check-permission';
   exports: [
     NavigationComponent,
     BreadcrumbComponent,
-    ToastComponent
+    ToastComponent,
+    SpinnerComponent,
   ],
   declarations: [
     NavigationComponent,
     BreadcrumbComponent,
-    ToastComponent
+    ToastComponent,
+    SpinnerComponent,
   ],
   providers: [ErrorsService, CheckPermissionService],
 })

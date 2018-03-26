@@ -1,4 +1,4 @@
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EventEmitter } from '@angular/forms/src/facade/async';
 
 export class BasicElementComponent {
@@ -8,7 +8,7 @@ export class BasicElementComponent {
   public config: any;
   public event: EventEmitter<any> = new EventEmitter();
 
-  public addControl(config, fb: FormBuilder) {
+  public addControl(config, fb: FormBuilder, required?) {
     if (config.key) {
       const keys = config.key.split('.');
       if (keys.length > 1) {
@@ -18,7 +18,7 @@ export class BasicElementComponent {
           keys.push('id');
           this.addControls(this.group, keys, fb);
         } else if (config.type !== 'static') {
-          this.group.addControl(config.key, fb.control(undefined));
+          this.group.addControl(config.key, fb.control(undefined, required ? Validators.required : undefined)); //tslint:disable-line
           this.key = config.key;
         }
       }

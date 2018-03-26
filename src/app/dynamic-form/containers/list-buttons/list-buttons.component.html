@@ -4,7 +4,7 @@
       <div class="my-1" *ngFor="let button of buttons; let f = first; let l = last">
         <a class="datatable-button first" routerLink="add"
         [ngClass]="{'mx-2': !(f || l)}"
-        *ngIf="first && !inForm && button.action === 'add_object'">
+        *ngIf="first && !inForm && button.action === 'add_object' && checkPermission('post')">
           <i *ngIf="button.action === 'add_object'" fa [name]="'plus-circle'" class="text-white"></i>
             {{button.label}}
         </a>
@@ -18,11 +18,11 @@
   <div class="d-flex align-items-center ml-sm-auto w-100"
     *ngIf="!buttons">
     <a class="datatable-button first text-white" routerLink="add"
-      *ngIf="first && !inForm">
+      *ngIf="first && !inForm && checkPermission('post')">
         <i fa [name]="'plus-circle'" class="text-white mr-2"></i>
         Add {{label}}
       </a>
-      <button *ngIf="!first || inForm" class="datatable-button ml-auto"
+      <button *ngIf="(!first || inForm) && checkPermission('post')" class="datatable-button ml-auto"
         (click)="buttonAction('add_object')">
         <i fa [name]="'plus-circle'" class="text-white mr-2"></i>
         Add {{label}}

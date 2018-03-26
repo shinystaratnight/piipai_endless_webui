@@ -47,6 +47,12 @@ export class GenericListComponent implements OnInit {
   @Input()
   public delay: boolean = false;
 
+  @Input()
+  public allowPermissions: string[];
+
+  @Input()
+  public metadataQuery: string;
+
   @Output()
   public checkedObjects: EventEmitter<string[]> = new EventEmitter();
 
@@ -94,44 +100,46 @@ export class GenericListComponent implements OnInit {
   }
 
   public getMetadata(endpoint, table, inner = false, outer = null, formset = undefined) {
-    this.gfs.getMetadata(formset ? `${endpoint}${formset}` : endpoint).subscribe(
-      (metadata) => {
-        table.metadata = metadata;
-        if (!this.delay) {
-          table.query = {
-            sort: this.prepareSortQuery(this.getSortedFields(metadata.list.columns))
-          };
-        }
-        if (outer) {
-          setTimeout(() => {
-            outer.update = metadata;
-          }, 300);
-        }
-        if (!inner) {
-          table.list = metadata.list.list;
-          this.existingIds.push(this.tableId);
-          table.id = this.tableId++;
-          if (table && !table.first) {
-            table.metadata.list.list += table.id;
-            table.list += table.id;
-            table.limit = this.limit;
-            table.offset = 0;
+    this.gfs
+      .getMetadata(formset ? `${endpoint}${formset}` + (this.metadataQuery ? `&${this.metadataQuery}` : '') : endpoint + (this.metadataQuery ? `&${this.metadataQuery}` : '')) //tslint:disable-line
+      .subscribe(
+        (metadata) => {
+          table.metadata = metadata;
+          if (!this.delay) {
+            table.query = {
+              sort: this.prepareSortQuery(this.getSortedFields(metadata.list.columns))
+            };
           }
-          if (!this.inForm) {
-            this.route.queryParams.subscribe(
-              (params) => {
-                let target = this.getTable(table.list);
-                if (target && target.first) {
-                  this.parseUrl(params, table.list);
+          if (outer) {
+            setTimeout(() => {
+              outer.update = metadata;
+            }, 300);
+          }
+          if (!inner) {
+            table.list = metadata.list.list;
+            this.existingIds.push(this.tableId);
+            table.id = this.tableId++;
+            if (table && !table.first) {
+              table.metadata.list.list += table.id;
+              table.list += table.id;
+              table.limit = this.limit;
+              table.offset = 0;
+            }
+            if (!this.inForm) {
+              this.route.queryParams.subscribe(
+                (params) => {
+                  let target = this.getTable(table.list);
+                  if (target && target.first) {
+                    this.parseUrl(params, table.list);
+                  }
                 }
-              }
-            );
-          } else if (!this.delay) {
-            this.getData(endpoint, this.generateQuery(table.query), table);
+              );
+            } else if (!this.delay) {
+              this.getData(endpoint, this.generateQuery(table.query), table);
+            }
           }
         }
-      }
-    );
+      );
   }
 
   public getSortedFields(columns) {

@@ -10,11 +10,11 @@
       aria-controls="collapseExample"
       style="cursor: pointer"></i>
     {{config.templateOptions.label}}
-    <button *ngIf="showButton || config.delay"
+    <button *ngIf="(showButton || config.delay) && checkPermissions('post')"
       type="button"
       class="text-white btn btn-sm group-button ml-auto mr-2"
       (click)="addObject()">
-        Add
+        {{config?.templateOptions?.add_label || 'Add'}}
     </button>
   </h6>
   <div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
@@ -30,10 +30,14 @@
       [supportData]="config.supportData"
       [metaType]="config.metaType"
       [actions]="config.actions"
+      [allowPermissions]="allowMethods"
+      [metadataQuery]="config.metadata_query"
       (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)">
     </generic-list>
+
+    <div class="text-danger my-2" *ngIf="config.message">{{config.message}}</div>
   </div>
 </div>
 
@@ -49,8 +53,17 @@
     </div>
 
     <div class="modal-body">
-      <generic-form [delay]="config.delay" [endpoint]="modalData.endpoint" [data]="modalData.data" (event)="formEvent($event, c)">
-        <button type="submit" class="btn btn-primary">Save</button>
+      <generic-form
+        [delay]="config.delay"
+        [endpoint]="modalData.endpoint"
+        [data]="modalData.data"
+        [metadataQuery]="config.add_metadata_query"
+        (event)="formEvent($event, c)"
+        (errorForm)="formError($event)">
+          <button type="submit" class="btn btn-primary" [disabled]="saveProcess">
+            Save
+            <spinner *ngIf="saveProcess"></spinner>
+          </button>
       </generic-form>
     </div>
   </div>

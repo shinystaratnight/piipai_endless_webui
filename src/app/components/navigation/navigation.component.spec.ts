@@ -79,13 +79,15 @@ describe('NavigationComponent', () => {
     });
 
     it('should udate user information', () => {
-          comp.user = {
-            contact: {
-              __str__: 'Mr. Tom Smith'
+          comp.user = <any> {
+            data: {
+              contact: {
+                __str__: 'Mr. Tom Smith'
+              }
             }
           };
           comp.getUserInformation();
-          expect(comp.greeting).toEqual(`Welcome, ${comp.user.contact.__str__}`);
+          expect(comp.greeting).toEqual(`Welcome, ${comp.user.data.contact.__str__}`);
     });
   });
 

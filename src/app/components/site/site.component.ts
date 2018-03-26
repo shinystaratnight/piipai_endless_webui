@@ -5,7 +5,7 @@ import { LocalStorageService } from 'ng2-webstorage';
 import { SiteService, PageData } from '../../services/site.service';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { NavigationService } from '../../services/navigation.service';
-import { UserService } from '../../services/user.service';
+import { UserService, User } from '../../services/user.service';
 
 import { CheckPermissionService } from '../../shared/services/check-permission';
 
@@ -35,6 +35,8 @@ export class SiteComponent implements OnInit {
   public formMode: string;
 
   public saveProcess: boolean;
+  public permissionMethods: string[];
+  public reload: boolean;
 
   constructor(
     private router: Router,
@@ -50,8 +52,8 @@ export class SiteComponent implements OnInit {
   public ngOnInit() {
     this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
     this.userService.getUserData().subscribe(
-      (user: any) => {
-        this.user = user.data;
+      (user: User) => {
+        this.user = user;
       }
     );
     this.route.url.subscribe(
@@ -69,32 +71,8 @@ export class SiteComponent implements OnInit {
     );
   }
 
-  public checkPermissions(pageData) {
-    if (pageData.pathData.id) {
-      this.permission.viewCheck(pageData.endpoint, pageData.pathData.id).subscribe(
-        (res: any) => {
-          this.pageData = pageData;
-          if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
-            this.formStorage = true;
-          } else {
-            this.formStorage = false;
-          }
-        },
-        (err: any) => window.history.back()
-      );
-    } else {
-      this.permission.createCheck(pageData.endpoint).subscribe(
-        (res: any) => {
-          this.pageData = pageData;
-          if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
-            this.formStorage = true;
-          } else {
-            this.formStorage = false;
-          }
-        },
-        (err: any) => window.history.back()
-      );
-    }
+  public checkPermission(type: string): boolean {
+    return this.permissionMethods.indexOf(type) > -1;
   }
 
   public changeFormLabel(e) {
@@ -111,11 +89,20 @@ export class SiteComponent implements OnInit {
       (pageData: PageData) => {
         if (pageData.pathData.path === '/profile/') {
           this.pageData = pageData;
+          this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
         } else if (!pageData.endpoint) {
           this.router.navigate(['/']);
           return;
         } else {
-          this.checkPermissions(pageData);
+          setTimeout(() => {
+            this.pageData = pageData;
+            this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+            if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
+              this.formStorage = true;
+            } else {
+              this.formStorage = false;
+            }
+          }, 0);
         }
       }
     );
@@ -179,10 +166,7 @@ export class SiteComponent implements OnInit {
   }
 
   public changeMode(pageData) {
-    this.permission.updateCheck(pageData.endpoint, pageData.pathData.id).subscribe(
-      (res: any) => this.formMode = 'edit',
-      (err: any) => this.error = err
-    );
+    this.formMode = 'edit';
   }
 
   public formEvent(e) {
@@ -190,8 +174,16 @@ export class SiteComponent implements OnInit {
       this.saveProcess = true;
     }
     if (e.type === 'sendForm' && e.status === 'success') {
+      if (!this.pageData.pathData.id) {
+        this.router.navigate([this.pageData.pathData.path + e.data.id + '/change']);
+        return;
+      }
       this.saveProcess = false;
-      this.router.navigate([this.pageData.pathData.path]);
+      this.formMode = 'view';
+      this.reload = true;
+      setTimeout(() => {
+        this.reload = false;
+      }, 150);
     }
   }
 

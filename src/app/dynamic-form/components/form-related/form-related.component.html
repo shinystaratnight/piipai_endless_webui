@@ -13,19 +13,19 @@
         <div class="btn-group" role="group"
           *ngIf="config.options && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete)" >
           <button type="button" class="btn btn-secondary"
-            *ngIf="config.templateOptions.edit && displayValue"
-            (click)="open('edit')">
+            *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
+            (click)="open('update')">
             <i fa class="text-primary icon"
               [name]="'pencil'"></i>
           </button>
           <button type="button" class="btn btn-secondary"
-            *ngIf="config.templateOptions.add"
-            (click)="open('add')">
+            *ngIf="config.templateOptions.add && checkPermission('post')"
+            (click)="open('post')">
             <i fa class="text-success icon"
               [name]="'plus'" ></i>
           </button>
           <button type="button" class="btn btn-secondary"
-            *ngIf="config.templateOptions.delete && displayValue"
+            *ngIf="config.templateOptions.delete && displayValue && checkPermission('delete')"
             (click)="open('delete')">
             <i fa class="text-danger icon"
               [name]="'times'"></i>
@@ -175,10 +175,10 @@
   </label>
   <div class="form-element-content">
     <span *ngIf="!displayValue && (!results || results.length === 0)">-</span>
-    <a *ngIf="!config.many" href="{{this.linkPath}}" (click)="open('edit', $event)">{{displayValue}}</a>
+    <a *ngIf="!config.many" href="{{this.linkPath}}" (click)="open('update', $event)">{{displayValue}}</a>
     <div *ngIf="config.many && results">
       <span *ngFor="let item of results; let l = last">
-        <a href="/" (click)="open('edit', $event, item)">{{item.__str__}}</a>
+        <a href="/" (click)="open('update', $event, item)">{{item.__str__}}</a>
         <br *ngIf="!l">
       </span>
     </div>
@@ -208,7 +208,10 @@
           [id]="modalData.id"
           (event)="formEvent($event, c, type)"
           (errorForm)="formError($event)">
-            <button type="submit" class="btn btn-primary" [disabled]="saveProcess">Save</button>
+            <button *ngIf="checkPermission('update')" type="submit" class="btn btn-primary" [disabled]="saveProcess">
+              Save
+              <spinner *ngIf="saveProcess"></spinner>
+            </button>
         </generic-form>
       </div>
       <div *ngIf="modalData.type === 'delete'">
@@ -245,7 +248,7 @@
     <span *ngFor="let field of customTemplate">
       <i fa *ngIf="field.value && field.icon" [name]="field.icon" class="text-primary"></i>
       <span *ngIf="field.value && !field.link && !field.prefix && !field.outside">{{field.value}}</span>
-      <a *ngIf="field.value && field.link" href="{{linkPath}}" (click)="open('edit', $event)">{{field.value}}</a>
+      <a *ngIf="field.value && field.link" href="{{linkPath}}" (click)="open('update', $event)">{{field.value}}</a>
       <a *ngIf="field.value && field.prefix" href="{{field.prefix + field.value}}">{{field.value}}</a>
       <a *ngIf="field.value && field.outside" href="{{field.value}}">{{field.value}}</a>
     </span>

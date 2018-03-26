@@ -22,6 +22,7 @@ export class MyobComponent implements OnInit {
   public response: any;
   public config;
   public connected: boolean;
+  public saveProcess: boolean;
 
   public companyFile: any;
   public payrollAccounts: any;
@@ -290,9 +291,15 @@ export class MyobComponent implements OnInit {
       });
     });
     this.resetErrors();
+    this.saveProcess = true;
     this.gfs.submitForm(url, data).subscribe(
-      (rse: any) => this.router.navigate(['/']),
-      (err: any) => this.parseError(err)
+      (rse: any) => {
+        this.saveProcess = false;
+      },
+      (err: any) => {
+        this.saveProcess = false;
+        this.parseError(err);
+      }
     );
   }
 

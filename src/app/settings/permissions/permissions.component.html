@@ -64,5 +64,9 @@
           </i>
         </div>
     </div>
+    <div *ngIf="type === 'permission'" class="d-flex m-2 align-items-center">
+      <button class="btn btn-success mr-2" (click)="selectAll(e)">Select All</button>
+      <button class="btn btn-danger" (click)="removeAll(e)">Remove All</button>
+    </div>
   </div>
 </template>

@@ -9,6 +9,7 @@ export interface Page {
   endpoint: string;
   __str__: string;
   childrens: Page[];
+  disabled?: boolean;
 }
 
 @Injectable()
@@ -21,6 +22,7 @@ export class NavigationService {
   public userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/?limit=-1';
   public modelsListEndpoint = '/ecore/api/v2/core/dashboardmodules/?limit=-1';
   public error;
+  public parsedByPermissions: boolean;
 
   public linksList: Page[] = [];
 

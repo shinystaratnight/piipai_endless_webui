@@ -45,12 +45,22 @@ export class FormDatepickerComponent
   }
 
   public ngOnInit() {
-    this.addControl(this.config, this.fb);
+    this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.setInitValue(moment);
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.mobileDevice = this.identifyDevice();
     this.createEvent();
+    this.group.get(this.key).valueChanges.subscribe((val) => {
+      if (!val) {
+        setTimeout(() => {
+          this.event.emit({
+            el: this.config,
+            type: 'change'
+          });
+        }, 150);
+      }
+    });
   }
 
   public checkHiddenProperty() {
@@ -58,7 +68,9 @@ export class FormDatepickerComponent
       this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
-          this.group.get(this.key).patchValue(undefined);
+          if (this.group.get(this.key).value) {
+            this.group.get(this.key).patchValue(undefined);
+          }
           this.setInitValue(moment);
         } else {
           this.config.hide = hide;
@@ -92,7 +104,7 @@ export class FormDatepickerComponent
                             '-';
       } else if (type === 'time') {
         this.setTime(data, moment);
-        this.displayValue = data ? moment(data, 'hh:mm:ss').format('hh:mm A') : '-';
+        this.displayValue = data ? moment(data, 'HH:mm:ss').format('hh:mm A') : '-';
       }
     } else if (this.config.default) {
       let data = this.config.default;
@@ -104,7 +116,7 @@ export class FormDatepickerComponent
                             '-';
       } else if (type === 'time') {
         this.setTime(data, moment);
-        this.displayValue = data ? moment(data, 'hh:mm:ss').format(this.timeFormat) : '-';
+        this.displayValue = data ? moment(data, 'HH:mm:ss').format(this.timeFormat) : '-';
       }
     }
   }
@@ -115,9 +127,6 @@ export class FormDatepickerComponent
   }
 
   public ngAfterViewInit() {
-    if (this.d) {
-      this.addFlags(this.d, this.config);
-    }
     if (!this.init) {
       let dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       let timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';
@@ -187,6 +196,10 @@ export class FormDatepickerComponent
           this.date = date.format(this.dateFormat);
         }
         this.group.get(this.key).patchValue(date.format('YYYY-MM-DD'));
+        this.event.emit({
+          el: this.config,
+          type: 'change'
+        });
       }
     } else if (this.config.templateOptions.type === 'datetime') {
       if (date) {
@@ -197,6 +210,10 @@ export class FormDatepickerComponent
           this.time = date.format(this.timeFormat);
         }
         this.group.get(this.key).patchValue(date.format());
+        this.event.emit({
+          el: this.config,
+          type: 'change'
+        });
       }
     }
   }
@@ -206,7 +223,11 @@ export class FormDatepickerComponent
       if (!this.time) {
         this.time = time.format(this.timeFormat);
       }
-      this.group.get(this.key).patchValue(time.format('hh:mm:ss'));
+      this.group.get(this.key).patchValue(time.format('HH:mm:ss'));
+      this.event.emit({
+        el: this.config,
+        type: 'change'
+      });
     }
   }
 
@@ -228,7 +249,7 @@ export class FormDatepickerComponent
       if (picker) {
         time = moment(value, this.timeFormat);
       } else {
-        time = moment(value, 'hh:mm:ss');
+        time = moment(value, 'HH:mm:ss');
       }
       this.updateTime(time);
     }

@@ -3,7 +3,7 @@ import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angu
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/observable/concat';
+import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/finally';
 
 import { GenericFormService } from './../../services/generic-form.service';
@@ -64,13 +64,16 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public edit: boolean;
 
   @Input()
-  public showResponse: boolean = true;
+  public showResponse: boolean = false;
 
   @Input()
   public mode: string;
 
   @Input()
   public delay: boolean;
+
+  @Input()
+  public metadataQuery: string;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -201,7 +204,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
   }
 
   public getMetadata(endpoint) {
-    this.service.getMetadata(endpoint, '?type=form').subscribe(
+    this.service
+      .getMetadata(endpoint, '?type=form' + (this.metadataQuery ? `&${this.metadataQuery}` : ''))
+      .subscribe(
         ((data: any) => {
           const formData = new Subject();
           this.setModeForElement(data, this.mode);
@@ -252,7 +257,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public updateFormData(metadata, formData) {
     metadata.forEach((el) => {
-      if (el.key) {
+      if (el.key || el.type === 'list') {
         el.formData = formData;
       } else if (el.children) {
         this.updateFormData(el.children, formData);
@@ -365,7 +370,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
                 endpoint = obj.endpoint;
               }
             } else {
-              endpoint = `${obj.endpoint}${obj.value}/`;
+              endpoint = obj.endpoint && `${obj.endpoint}${obj.value}/`;
             }
           } else {
             obj.options = [];
@@ -387,29 +392,43 @@ export class GenericFormComponent implements OnChanges, OnInit {
     const result = JSON.parse(JSON.stringify(data));
     const keys = Object.keys(data);
 
+    const requests = [];
+    const fields = [];
+
     keys.forEach((key, index, arr) => {
       if (data[key] instanceof Object) {
         if (data[key].id) {
           const el = this.getElementFromMetadata(this.metadata, key);
 
-          const requests = [];
           requests.push(this.createRequest(el.endpoint, data[key].id));
-
-          Observable.concat(...requests)
-            .finally(() => {
-              this.event.emit({
-                type: 'sendForm',
-                viewData: result,
-                sendData: data,
-                status: 'success'
-              });
-            })
-            .subscribe((res) => {
-              result[key] = res;
-            });
+          fields.push(key);
         }
       }
     });
+
+    if (!requests.length) {
+      this.event.emit({
+        type: 'sendForm',
+        viewData: result,
+        sendData: data,
+        status: 'success'
+      });
+    } else {
+      Observable.forkJoin(...requests)
+        .finally(() => {
+          this.event.emit({
+            type: 'sendForm',
+            viewData: result,
+            sendData: data,
+            status: 'success'
+          });
+        })
+        .subscribe((res: any[]) => {
+          res.forEach((el, i) => {
+            result[fields[i]] = el;
+          });
+        });
+    }
   }
 
   public createRequest(endpoint, id) {
@@ -417,6 +436,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
   }
 
   public submitForm(data) {
+    if (!this.checkDelayData()) {
+      return;
+    }
     let newData = {};
     if (this.form) {
       newData = Object.assign({}, data, this.form);
@@ -469,6 +491,26 @@ export class GenericFormComponent implements OnChanges, OnInit {
     this.resetData(this.response);
     this.errors = this.updateErrors(this.errors, errors, this.response);
     this.errorForm.emit(this.errors);
+  }
+
+  public checkDelayData() {
+    const delayEndppoints = Object.keys(this.delayData);
+
+    let count = 0;
+    if (delayEndppoints.length) {
+      delayEndppoints.forEach((el) => {
+        if (this.delayData[el].data.sendData && this.delayData[el].data.sendData.length) {
+          count += 1;
+          this.delayData[el].message = '';
+        } else {
+          this.delayData[el].message = 'This field is required.';
+        }
+      });
+
+      return delayEndppoints.length === count;
+    }
+
+    return true;
   }
 
   public parseResponse(response) {
@@ -567,6 +609,9 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public getRalatedData
     (metadata, key, endpoint, fields, query = null, param = 'options', update = true) {
+    if (!endpoint) {
+      return;
+    }
     let currentQuery = query;
     let fieldsQuery;
     if (fields) {
@@ -638,7 +683,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public getData(metadata, key = null, query = null) {
     metadata.forEach((el) => {
       if (el.type === 'related') {
-        if (el.key === key) {
+        if (el.key === key && el.endpoint) {
           this.getRalatedData(metadata, key, el.endpoint, {}, query + '&limit=-1');
         }
         if (!el.relate && !key) {
@@ -657,7 +702,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
           if (el.list) {
             let metadataQuery;
             if (el.metadata_query) {
-              metadataQuery = this.parseMetadataQuery(el);
+              metadataQuery = this.parseMetadataQuery(el, 'metadata_query');
             }
             this.getRelatedMetadata(metadata, el.key, el.endpoint, metadataQuery);
           }
@@ -668,10 +713,10 @@ export class GenericFormComponent implements OnChanges, OnInit {
     });
   }
 
-  public parseMetadataQuery(data) {
-    const keys = Object.keys(data);
+  public parseMetadataQuery(data, field) {
+    const keys = Object.keys(data[field]);
     const result = keys.map((query) => {
-      return `${query}=${data[query]}`;
+      return `${query}=${data[field][query]}`;
     });
     return result.join('&');
   }
@@ -697,8 +742,8 @@ export class GenericFormComponent implements OnChanges, OnInit {
       }
       if (el && el.key && params && !!params[el.key]) {
         if (params[el.key].action === 'add') {
-          el = Object.assign(el, params[el.key].data);
           let elem = this.getElementFromMetadata(metadata, el.key);
+          elem = Object.assign(elem, params[elem.key].data);
           if (elem.related) {
             this.resetRalatedData(metadata, elem.related.reset);
           }
