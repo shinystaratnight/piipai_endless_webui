@@ -44,7 +44,6 @@ export class MyobComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.keysOfPayroll = ['invoice', 'timesheet'];
     this.payrollAccounts = payrollAccounts;
 
     this.MYOBSettings = (<any> this.route.snapshot.data).myobSettings.myob_settings;
@@ -111,41 +110,37 @@ export class MyobComponent implements OnInit {
           .format('DD/MM/YYYY hh:mm A') : '';
     }
 
-    this.keysOfPayroll.forEach((el) => {
-      this.payrollAccounts[el].forEach((item) => {
-        if (settings[item.key]) {
-          if (item.options && item.options.length) {
-            const field = item.options.find((option) => item.value === option.id);
+    Object.keys(this.payrollAccounts).forEach((el) => {
+        if (settings[el]) {
+          if (this.payrollAccounts[el].options && this.payrollAccounts[el].options.length) {
+            let field = this.payrollAccounts[el].options
+              .find((option) => this.payrollAccounts[el].value === option.id);
+
             if (!field) {
-              item.value = undefined;
+              this.payrollAccounts[el].value = undefined;
             } else {
-              item.value = settings[item.key].id;
+              this.payrollAccounts[el].value = settings[el].id;
             }
           } else {
-            item.value = settings[item.key].id;
+            this.payrollAccounts[el].value = settings[el].id;
           }
         } else {
-          item.value = undefined;
+          if (this.payrollAccounts[el] instanceof Object) {
+            this.payrollAccounts[el].value = undefined;
+          }
         }
-      });
     });
   }
 
   public parseAccounts(data: any[], key: string = undefined): void {
     if (key) {
-      this.payrollAccounts[key].forEach((el, i) => {
-        if (i !== 0) {
-          el.options = data;
-          el.value = undefined;
-        }
-      });
+      this.payrollAccounts[key].options = data;
+      this.payrollAccounts[key].value = undefined;
     } else {
-      this.keysOfPayroll.forEach((el: string) => {
-        this.payrollAccounts[el].forEach((item, i) => {
-          if (i !== 0) {
-            item.options = data;
-          }
-        });
+      Object.keys(this.payrollAccounts).forEach((el: string) => {
+        if (el.indexOf('_account') > -1) {
+          this.payrollAccounts[el].options = data;
+        }
       });
     }
   }
@@ -238,6 +233,7 @@ export class MyobComponent implements OnInit {
       this.parseAccounts(this.accounts);
       if (refresh) {
         this.getMYOBSettings();
+        this.getAccounts();
       }
     }, (err: any) => this.error = err);
   }
@@ -266,15 +262,10 @@ export class MyobComponent implements OnInit {
   }
 
   public getAccountsOfCompanyFile(id: string, key: string, files: boolean): void {
-    if (files) {
-      const field = key.split('_')[0];
-      if (this.keysOfPayroll.indexOf(field) > -1) {
-        let url = '/ecore/api/v2/company_settings/company_files/';
-        this.gfs.getAll(`${url}${id}/accounts`).subscribe((res: any) => {
-          this.parseAccounts(res.myob_accounts, field);
-        }, );
-      }
-    }
+    let url = '/ecore/api/v2/company_settings/company_files/';
+    this.gfs.getAll(`${url}${id}/accounts`).subscribe((res: any) => {
+      this.parseAccounts(res.myob_accounts, key);
+    }, );
   }
 
   public getMYOBSettings() {
@@ -286,12 +277,10 @@ export class MyobComponent implements OnInit {
   }
 
   public filledCompanyFiles(list: any[]) {
-    this.keysOfPayroll.forEach((el) => {
-      this.payrollAccounts[el].forEach((field) => {
-        if (field.key === `${el}_company_file`) {
-          field.options = list;
-        }
-      });
+    Object.keys(this.payrollAccounts).forEach((el) => {
+      if (el.indexOf('_company_file') > -1) {
+        this.payrollAccounts[el].options = list;
+      }
     });
     this.parseMYOBSettings(this.MYOBSettings, moment, true);
   }
@@ -311,18 +300,15 @@ export class MyobComponent implements OnInit {
     }, 3500);
   }
 
-  public sendForm() {
+  public sendForm(form) {
     let url = '/ecore/api/v2/company_settings/myob_settings/';
     const data = {};
-    this.keysOfPayroll.forEach((el) => {
-      this.payrollAccounts[el].forEach((item) => {
-        if (item.key !== el) {
-          data[item.key] = {
-            id: item.value
-          };
-        }
-      });
+    Object.keys(form).forEach((key) => {
+      data[key] = {
+        id: form[key]
+      };
     });
+
     this.resetErrors();
     this.saveProcess = true;
     this.gfs.submitForm(url, data).subscribe(
@@ -366,21 +352,20 @@ export class MyobComponent implements OnInit {
 
   public parseError(err) {
     if (err && err.errors) {
-      this.keysOfPayroll.forEach((el) => {
-        this.payrollAccounts[el].forEach((item) => {
-          if (err.errors[item.key]) {
-            item.error = err.errors[item.key].id;
-          }
-        });
+      Object.keys(this.payrollAccounts).forEach((el) => {
+        if (err.errors[el]) {
+          this.payrollAccounts[el].error = Object.keys(err.errors[el])
+            .map((key) => err.errors[el][key]);
+        }
       });
     }
   }
 
   public resetErrors() {
-    this.keysOfPayroll.forEach((el) => {
-      this.payrollAccounts[el].forEach((item) => {
-        item.error = null;
-      });
+    Object.keys(this.payrollAccounts).forEach((el) => {
+      if (this.payrollAccounts[el] instanceof Object) {
+        this.payrollAccounts[el].error = null;
+      }
     });
   }
 

@@ -1,4 +1,4 @@
-<navigation [user]="user" [pages]="pagesList"></navigation>
+<navigation [user]="user" [pages]="pagesList" (update)="updateNavigationList($event)"></navigation>
 
 <div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
   <div *ngSwitchCase="'form'">

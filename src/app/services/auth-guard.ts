@@ -19,10 +19,16 @@ export class AuthGuard implements CanActivate {
     private navigationService: NavigationService,
   ) {}
 
-  public canActivate(route: any, state: RouterStateSnapshot): Observable<boolean> { //tslint:disable-line
-      return Observable.combineLatest(this.userServise.getUserData(), this.navigationService.getPages())
-        .mergeMap((response: [User, Page[]]) => {
-          const contactType = response[0].data.contact.contact_type;
+  public canActivate(route: any, state: RouterStateSnapshot): Observable<boolean> {
+      return this.userServise.getUserData()
+        .mergeMap((user: User) => {
+          return Observable.combineLatest(
+            Observable.of(user),
+            this.navigationService.getPages(user.currentRole)
+          );
+        })
+        .mergeMap((response: any) => {
+          const contactType = response[0].currentRole || response[0].data.contact.contact_type;
 
           if (contactType === 'manager' || contactType === 'client') {
             return this.checkPermissionServise.checkPermission(
