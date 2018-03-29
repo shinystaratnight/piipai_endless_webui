@@ -25,7 +25,7 @@
     <div class="user d-flex justify-content-end align-items-center ml-xl-auto flex-wrap">
       <div class="d-flex flex-column">
         <span *ngIf="greeting" class="user-title" [ngClass]="{'hide': user}">{{greeting}}</span>
-        <div *ngIf="user.roles && user.roles.length" class="mt-1 form-inline">
+        <div *ngIf="user && user.roles && user.roles.length" class="mt-1 form-inline">
           <small class="mr-1">Role:</small>
           <select class="form-control form-control-sm" id="role" [ngModel]="currentRole" (ngModelChange)="changeRole($event)">
             <option *ngFor="let role of user.roles" [value]="role"><small>{{role}}</small></option>
