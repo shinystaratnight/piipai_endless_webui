@@ -5,6 +5,8 @@ import { CookieService } from 'angular2-cookie/core';
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
+
 import { NavigationService } from './navigation.service';
 
 export interface User {
@@ -19,6 +21,8 @@ export interface User {
     },
     user: string;
   };
+  roles: string[];
+  currentRole: string;
 }
 
 @Injectable()
@@ -26,6 +30,7 @@ export class UserService {
 
   public authEndpoint: string = '/ecore/api/v2/auth/restore_session/';
   public logoutEndpoint: string = '/ecore/api/v2/auth/logout/';
+  public rolesEndpoint = '/ecore/api/v2/core/users/roles/';
   public user: User;
   public error: any;
 
@@ -38,15 +43,27 @@ export class UserService {
 
   public getUserData(): Observable<User> {
     if (!this.user) {
-      return this.service.getAll(`${this.authEndpoint}`).map(
-        (user: User) => {
-          this.user = user;
-          return this.user;
-        }
-      ).catch((err: any) => Observable.throw(err));
-    } else if (this.user) {
+      return Observable.combineLatest(this.service.getAll(this.authEndpoint), this.getUserRoles())
+        .map(
+          (res: [User, { roles: string[] }]) => {
+            this.user = res[0];
+            this.user.roles = res[1].roles;
+            this.user.currentRole = this.user.data.contact.contact_type || res[1].roles[0];
+            return this.user;
+          })
+        .catch((err: any) => Observable.throw(err));
+    } else {
       return Observable.of(this.user);
     }
+  }
+
+  public getUserRoles() {
+    return this.service.getAll(this.rolesEndpoint);
+  }
+
+  public currentRole(role) {
+    this.user.currentRole = role;
+    this.navigation.setCurrentRole(role);
   }
 
   public logout() {

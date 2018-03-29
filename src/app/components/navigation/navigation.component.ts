@@ -4,8 +4,12 @@ import {
   HostListener,
   Input,
   OnInit,
-  AfterViewInit
+  AfterViewInit,
+  EventEmitter,
+  Output,
 } from '@angular/core';
+
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { NavigationService, Page } from '../../services/navigation.service';
 import { UserService, User } from '../../services/user.service';
@@ -39,6 +43,9 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   @Input()
   public user: User;
 
+  @Output()
+  public update: EventEmitter<string> = new EventEmitter();
+
   public headerHeight: number;
   public error: any;
   public isCollapsed: boolean = false;
@@ -46,10 +53,14 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   public greeting: string;
   public userPicture: string;
   public candidate: boolean;
+  public currentRole: string;
 
   constructor(
     private navigationService: NavigationService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private checkPermissionServise: CheckPermissionService,
   ) { }
 
   public ngOnInit() {
@@ -71,6 +82,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   public getUserInformation() {
     if (this.user && this.user.data.contact) {
+      this.currentRole = this.user.currentRole;
       this.greeting = `Welcome, ${this.user.data.contact.__str__}`;
       this.candidate = this.user.data.contact.contact_type === 'candidate';
     } else {
@@ -94,6 +106,10 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   public logOut() {
     this.userService.logout();
+  }
+
+  public changeRole(role) {
+    this.update.emit(role);
   }
 
   @HostListener('document:click', ['$event'])

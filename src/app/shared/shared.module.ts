@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
@@ -18,7 +19,8 @@ import { CheckPermissionService } from './services/check-permission';
     CommonModule,
     RouterModule,
     Angular2FontawesomeModule,
-    ToastModule.forRoot()
+    ToastModule.forRoot(),
+    FormsModule,
   ],
   exports: [
     NavigationComponent,

@@ -3,6 +3,8 @@ import { GenericFormService } from '../dynamic-form/services/generic-form.servic
 
 import { Observable } from 'rxjs/Observable';
 
+import { UserService } from './user.service';
+
 export interface Page {
   name: string;
   url: string;
@@ -15,7 +17,8 @@ export interface Page {
 @Injectable()
 export class NavigationService {
 
-  public navigationList: Page[];
+  public currentRole: string;
+  public navigationList: any = {};
   public userModels: any;
   public models: any;
   public endpoint = '/ecore/api/v2/core/extranetnavigations/?limit=-1';
@@ -27,22 +30,27 @@ export class NavigationService {
   public linksList: Page[] = [];
 
   constructor(
-    private gfs: GenericFormService
+    private gfs: GenericFormService,
   ) { }
 
-  public getPages() {
-    if (!this.navigationList) {
-      return this.gfs.getAll(this.endpoint).map(
+  public getPages(role) {
+    if (!this.navigationList[role]) {
+      let query = `&role=${role}`;
+      return this.gfs.getAll(`${this.endpoint}${query}`)
+        .map(
         (res: any) => {
           if (res.results) {
-            this.navigationList = res.results;
-            this.generateLinks(this.navigationList, this.linksList);
-            return this.navigationList;
+            this.currentRole = role;
+            this.navigationList[role] = res.results;
+            this.linksList.length = 0;
+            this.generateLinks(this.navigationList[role], this.linksList);
+
+            return this.navigationList[role];
           }
         }
       );
     } else {
-      return Observable.of(this.navigationList);
+      return Observable.of(this.navigationList[role]);
     }
   }
 
@@ -69,7 +77,15 @@ export class NavigationService {
   }
 
   public resolve() {
-    return this.getPages();
+    return this.getPages(this.currentRole);
+  }
+
+  public setCurrentRole(role) {
+    this.currentRole = role;
+    if (this.navigationList[role]) {
+      this.linksList.length = 0;
+      this.generateLinks(this.navigationList[role], this.linksList);
+    }
   }
 
   public generateLinks(links, target) {

@@ -17,7 +17,7 @@ import { CheckPermissionService } from '../../shared/services/check-permission';
 export class SiteComponent implements OnInit {
 
   public pageData: PageData;
-  public user: any;
+  public user: User;
   public dashboard: boolean = true;
   public pages: any;
 
@@ -51,11 +51,7 @@ export class SiteComponent implements OnInit {
 
   public ngOnInit() {
     this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
-    this.userService.getUserData().subscribe(
-      (user: User) => {
-        this.user = user;
-      }
-    );
+    this.user = this.userService.user;
     this.route.url.subscribe(
       (url: any) => {
         this.formLabel = '';
@@ -108,6 +104,19 @@ export class SiteComponent implements OnInit {
     );
   }
 
+  public updateNavigationList(role: string) {
+    this.userService.currentRole(role);
+    this.navigationService.getPages(role)
+      .subscribe((pages: any) => {
+        this.permission.parseNavigation(this.permission.permissions, pages);
+        this.pagesList = this.filterNavigation(pages, this.userModules, this.modulesList);
+
+        if (this.router.url !== '/') {
+          this.router.navigate(['']);
+        }
+      });
+  }
+
   public getPageNavigation(url) {
     if (!this.modulesList) {
       this.getModelsList(url);
@@ -152,7 +161,9 @@ export class SiteComponent implements OnInit {
   }
 
   public getPages(url) {
-    this.navigationService.getPages().subscribe(
+    const role = this.user.currentRole;
+
+    this.navigationService.getPages(role).subscribe(
       (res: any) => {
         this.pages = res;
         if (this.pages && this.userModules && this.modulesList) {

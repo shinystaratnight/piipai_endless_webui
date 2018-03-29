@@ -24,23 +24,19 @@ export const meta = [
 
 export const payrollAccounts = {
   isCollapsed: false,
-  invoice: [
-    {
-      label: 'Company file',
-      key: 'invoice_company_file',
-      value: ''
-    },
-    {
-      label: 'Activity account',
-      key: 'invoice_activity_account',
-      value: ''
-    }
-  ],
-  timesheet: [
-    {
-      label: 'Company file',
-      key: 'timesheet_company_file',
-      value: ''
-    }
-  ]
+  invoice_company_file: {
+    label: 'Company file',
+    key: 'invoice_company_file',
+    value: ''
+  },
+  invoice_activity_account: {
+    label: 'Activity account',
+    key: 'invoice_activity_account',
+    value: ''
+  },
+  timesheet_company_file: {
+    label: 'Company file',
+    key: 'timesheet_company_file',
+    value: ''
+  }
 };
