@@ -48,7 +48,7 @@
             <ul class="list-group w-100">
               <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
                 *ngFor="let option of previewList"
-                (click)="setValue(option)">{{option[display]}}</li>
+                (click)="setValue(option)">{{option.__str__}}</li>
             </ul>
           </div>
         </div>
@@ -77,14 +77,14 @@
             <ul class="list-group w-100">
               <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
                 *ngFor="let option of previewList"
-                (click)="setValue(option)">{{option[display]}}</li>
+                (click)="setValue(option)">{{option.__str__}}</li>
             </ul>
           </div>
         </div>
         <div class="d-flex flex-wrap align-items-center mt-2">
           <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal"
             *ngFor="let item of results; let i = index">
-            {{item[display]}}
+            {{item.__str__}}
             <i fa class="text-white icon ml-2"
               (click)="deleteItem(i)"
               [name]="'times'"></i>
@@ -177,13 +177,13 @@
     <a *ngIf="!config.many" href="{{this.linkPath}}" (click)="open('update', $event)">{{displayValue}}</a>
     <div *ngIf="config.many && results && !config.templateOptions.deleteList">
       <span *ngFor="let item of results; let l = last">
-        <a href="/" (click)="open('update', $event, item)">{{item[display]}}</a>
+        <a href="/" (click)="open('update', $event, item)">{{item.__str__}}</a>
         <br *ngIf="!l">
       </span>
     </div>
     <div *ngIf="config.many && results && config.templateOptions.deleteList"  class="d-flex flex-wrap align-items-center mt-2">
       <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal" *ngFor="let item of results; let i = index">
-        {{item[display]}}
+        {{item.__str__}}
         <i fa class="text-white icon ml-2" (click)="deleteItem(i, item, config.templateOptions.deleteList)" [name]="'times'"></i>
       </span>
     </div>
