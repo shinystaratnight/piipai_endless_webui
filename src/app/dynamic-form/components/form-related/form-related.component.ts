@@ -193,7 +193,7 @@ export class FormRelatedComponent
     if (this.config.formData) {
       this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
-        if (formData.key !== this.config.key) {
+        if (this.checkRelatedField(formData.key)) {
           if (this.config.default && !this.config.hide && !this.config.value) {
             this.getOptions.call(this, '', 0, false, this.setValue);
             if (this.config.read_only) {
@@ -728,5 +728,15 @@ export class FormRelatedComponent
     } else {
       return false;
     }
+  }
+
+  public checkRelatedField(key: string): boolean {
+    let result;
+    if (this.config.showIf) {
+      this.config.showIf.forEach((field) => {
+        result = field.indexOf(key) > -1;
+      });
+    }
+    return result || false;
   }
 }
