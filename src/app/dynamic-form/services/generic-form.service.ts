@@ -65,10 +65,10 @@ export class GenericFormService {
       .catch((error: any) => this.errorHandler(error));
   }
 
-  public delete(endpoint, id) {
+  public delete(endpoint, id, postfix?) {
     let headers = new Headers();
     this.updateHeaders(headers);
-    return this.http.delete(`${endpoint}${id}/`, { headers })
+    return this.http.delete(`${endpoint}${id}/` + (postfix ? `${postfix}/` : ''), { headers })
       .map((response: any) => response._body ? response.json() : {})
       .catch((error: any) => this.errors.parseErrors(error));
   }

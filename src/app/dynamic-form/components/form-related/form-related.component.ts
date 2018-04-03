@@ -193,7 +193,7 @@ export class FormRelatedComponent
     if (this.config.formData) {
       this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
-        if (formData.key !== this.config.key) {
+        if (this.checkRelatedField(formData.key)) {
           if (this.config.default && !this.config.hide && !this.config.value) {
             this.getOptions.call(this, '', 0, false, this.setValue);
             if (this.config.read_only) {
@@ -585,11 +585,21 @@ export class FormRelatedComponent
     this.previewList = null;
   }
 
-  public deleteItem(index) {
-    if (this.results[index]) {
-      this.results.splice(index, 1);
-      this.changeList();
-      this.updateData();
+  public deleteItem(index: number, item: any, api: boolean) {
+    if (api) {
+      this.genericFormService.delete(this.config.endpoint, item[this.param], 'delete')
+        .subscribe(() => {
+          if (this.results[index]) {
+            this.results.splice(index, 1);
+            this.changeList();
+          }
+        });
+    } else {
+      if (this.results[index]) {
+        this.results.splice(index, 1);
+        this.changeList();
+        this.updateData();
+      }
     }
   }
 
@@ -718,5 +728,15 @@ export class FormRelatedComponent
     } else {
       return false;
     }
+  }
+
+  public checkRelatedField(key: string): boolean {
+    let result;
+    if (this.config.showIf) {
+      this.config.showIf.forEach((field) => {
+        result = field.indexOf(key) > -1;
+      });
+    }
+    return result || false;
   }
 }

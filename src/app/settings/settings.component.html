@@ -1,4 +1,4 @@
-<navigation [user]="user" [pages]="pagesList"></navigation>
+<navigation [user]="user" [pages]="pagesList" (update)="updateNavigation($event)"></navigation>
 <breadcrumb [byRoute]="false" [url]="url" [navigationList]="pagesList"></breadcrumb>
 
 <div class="site-page mb-5">
