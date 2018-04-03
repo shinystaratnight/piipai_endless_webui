@@ -18,7 +18,7 @@ export class FillInComponent implements OnInit {
   public pageData: any;
 
   public meta: any[];
-  public data: string[];
+  public data: any;
   public err: any;
 
   constructor(
@@ -47,7 +47,11 @@ export class FillInComponent implements OnInit {
   }
 
   public checkedObjects(e) {
-    this.data = e;
+    const shifts = e.filters.keys.date.value.filter((el) => el.checked);
+    this.data = {
+      candidates: e.checkedData,
+      shifts: shifts.map((el) => el.data.id)
+    };
   }
 
   public back() {
@@ -55,7 +59,7 @@ export class FillInComponent implements OnInit {
   }
 
   public sendData() {
-    if (this.data && this.data.length) {
+    if (this.data) {
       this.gfs.submitForm(this.endpoint, this.data).subscribe(
         (res: any) => this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
         (err: any) => this.err = err
