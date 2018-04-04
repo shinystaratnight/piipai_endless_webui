@@ -189,7 +189,7 @@ export class MyobComponent implements OnInit {
   public testCompanyFile(file) {
     const url = '/ecore/api/v2/company_settings/company_files/check/';
     const body = {
-      id: file.id,
+      id: file.cf_id,
       username: file.username,
       password: file.password
     };
@@ -256,6 +256,7 @@ export class MyobComponent implements OnInit {
         this.updateMetadata(this.config, 'auth_data_list');
       })
       .subscribe((res) => {
+        this.getValueOfData(res, 'auth_data_list', obj, 'options');
         this.getValueOfData(res, 'auth_data_list', obj);
         this.authData = res.auth_data_list;
        }, (err: any) => this.error = err);
@@ -304,9 +305,15 @@ export class MyobComponent implements OnInit {
     let url = '/ecore/api/v2/company_settings/myob_settings/';
     const data = {};
     Object.keys(form).forEach((key) => {
-      data[key] = {
-        id: form[key]
-      };
+      if (key.indexOf('company_file') > -1) {
+        data[key] = {
+          id: this.companyFile.list.find((file) => file.id === form[key]).cf_id
+        }
+      } else {
+        data[key] = {
+          id: form[key]
+        };
+      }
     });
 
     this.resetErrors();
@@ -322,18 +329,24 @@ export class MyobComponent implements OnInit {
     );
   }
 
-  public getValueOfData(data, key: string, obj: Field): void {
+  public getValueOfData(data, key: string, obj: Field, param?: string): void {
     let keys = key.split('.');
     let prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
-        if (!obj['value']) {
-          obj['value'] = data[key];
+        if (param) {
+          if (!obj[param]) {
+            obj[param] = data[key];
+          }
+        } else {
+          if (!obj['value']) {
+            obj['value'] = data[key];
+          }
         }
       }
     } else {
       if (data[prop]) {
-        this.getValueOfData(data[prop], keys.join('.'), obj);
+        this.getValueOfData(data[prop], keys.join('.'), obj, param);
       }
     }
   }

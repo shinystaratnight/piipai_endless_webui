@@ -422,11 +422,14 @@ export class DynamicListComponent implements
   }
 
   public updateValuesOfAsyncData(data, target) {
-    const element = data.find((item) => item.id === target.id);
-    if (element) {
-      target.obj.value = element[target.request_field];
-      target.content.splice(target.content.indexOf(target.obj), 1, Object.assign({}, target.obj));
-    }
+    data.forEach((el) => {
+      target.forEach((targetItem) => {
+        if (el.id === targetItem.id || el.contact === targetItem.id) {
+          targetItem.field.value = el[targetItem.request_field];
+        }
+      });
+    });
+    this.body = JSON.parse(JSON.stringify(this.body));
   }
 
   public calcButton(offsetTop, listButtons, filterWrapper) {
@@ -632,6 +635,10 @@ export class DynamicListComponent implements
               obj.query = {};
               keys.forEach((key) => {
                 query[key] = this.format(element.query[key], el);
+
+                if (!query[key]) {
+                  query[key] = this.format(element.query[key], this.data);
+                }
               });
             }
             if (this.asyncData[element.endpoint]) {

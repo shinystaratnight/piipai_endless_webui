@@ -50,9 +50,15 @@ export class FilterMultipleComponent implements OnInit {
         };
       });
     }
+    if (this.config.unique) {
+      setTimeout(() => {
+        this.onChange(null, true);
+      }, 50);
+    }
   }
 
-  public onChange() {
+  public onChange(index: number, first?) {
+    this.checkUniqueValues(this.config.unique, this.data, first, index);
     this.fs.generateQuery(
       this.genericQuery(this.config.query, this.data),
       this.config.key,
@@ -111,6 +117,39 @@ export class FilterMultipleComponent implements OnInit {
       } else {
         this.data = data;
       }
+    }
+  }
+
+  public checkUniqueValues(unique, data, first?, index?) {
+    if (unique) {
+      const uniqueField = {};
+      unique.forEach((field) => {
+        if (index !== undefined && index !== null) {
+          data.forEach((el, i) => {
+            if (el.checked && i === index) {
+              uniqueField[field] = [].concat(el.data[field]);
+            }
+          });
+        }
+
+        data.forEach((el, i) => {
+          if (!uniqueField[field]) {
+            uniqueField[field] = [];
+          }
+          if (uniqueField[field].indexOf(el.data[field]) > -1) {
+            if (i !== index) {
+              el.checked = false;
+            }
+          } else {
+            if (first) {
+              el.checked = true;
+            }
+            if (el.checked) {
+              uniqueField[field].push(el.data[field]);
+            }
+          }
+        });
+      });
     }
   }
 }

@@ -9,11 +9,10 @@
     </i>
   </label>
   <div [ngbCollapse]="isCollapsed" class="filter-select-wrapper">
-    <div *ngFor="let item of data" class="form-check">
+    <div *ngFor="let item of data; let index = index" class="form-check">
       <label class="form-check-label">
-        <input type="checkbox" class="form-check-input" [(ngModel)]="item.checked" name="checked"> {{item.label}}
+        <input type="checkbox" class="form-check-input" [(ngModel)]="item.checked" name="checked" (ngModelChange)="onChange(index)"> {{item.label}}
       </label>
     </div>
-    <button type="button" class="btn btn-sm btn-primary" (click)="onChange()">Filter</button>
   </div>
 </div>
