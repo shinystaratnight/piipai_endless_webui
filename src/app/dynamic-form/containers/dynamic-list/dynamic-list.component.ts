@@ -96,6 +96,15 @@ export class DynamicListComponent implements
   @Input()
   public allowPermissions: string[];
 
+  @Input()
+  public metadataQuery: string;
+
+  @Input()
+  public addMetadataQuery: string;
+
+  @Input()
+  public editEndpoint: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -1389,9 +1398,18 @@ export class DynamicListComponent implements
   }
 
   public editForm(e) {
+    let endpoint;
+    if (this.editEndpoint) {
+      endpoint = this.format(
+        this.editEndpoint,
+        this.data.results.find((el) => el.id === e.el.rowId)
+      );
+    } else {
+      endpoint = e.el.endpoint;
+    }
     this.modalInfo = {};
     this.modalInfo.type = 'form';
-    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo.endpoint = endpoint;
     this.modalInfo.mode = 'edit';
     this.modalInfo.edit = true;
     this.open(this.modal, {size: 'lg'});
