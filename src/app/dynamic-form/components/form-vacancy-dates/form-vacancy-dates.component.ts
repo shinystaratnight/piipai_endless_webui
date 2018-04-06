@@ -1,13 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
-import moment from 'moment';
-
-export interface VacancyDate {
-  shift_date: string;
-  workers: number;
-}
+import moment from 'moment-timezone';
 
 @Component({
   selector: 'form-vacancy-dates',
@@ -22,13 +17,14 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
   public message: any;
   public key: any;
 
+  public event: EventEmitter<any> = new EventEmitter();
+
   public displayMonths = 2;
-  public navigation = 'select';
+  public navigation = 'arrows';
   public dateFormat = 'YYYY-MM-DD';
   public minDate: any;
-
-  public vacancyDate: VacancyDate;
-  public vacancyDates: VacancyDate[];
+  public markDisabled: Function;
+  public vacancyDate: any;
 
   constructor(
     private fb: FormBuilder
@@ -37,13 +33,26 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
   }
 
   public ngOnInit() {
-    this.vacancyDates = [];
     this.calcMinDate(moment);
     this.addControl(this.config, this.fb);
     if (this.config && this.config.value) {
-      this.vacancyDates = this.generateVacancyDates(this.config.value, moment);
       this.group.get(this.key).patchValue(this.config.value);
     }
+  }
+
+  public markDisabledDates(dates: any[] = []) {
+    this.markDisabled = (date, current) => {
+      const exist = dates.find((item) => {
+        const parsedDate = moment(item);
+
+        const year = parsedDate.year();
+        const month = parsedDate.month() + 1;
+        const day = parsedDate.date();
+
+        return year === date.year && month === date.month && day === date.day;
+      });
+      return exist;
+    };
   }
 
   public calcMinDate(time) {
@@ -54,48 +63,12 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
     };
   }
 
-  public generateVacancyDates(value: VacancyDate[], moment): VacancyDate[] {
-    return value.map((el) => {
-      let val: VacancyDate = {
-        shift_date: '',
-        workers: 0
-      };
-      if (el.shift_date) {
-        val.shift_date = moment(el.shift_date).format(this.dateFormat);
-      }
-      if (el.workers) {
-        val.workers = el.workers;
-      }
-      return val;
-    });
-  }
-
   public selectVacancyDate(e, time = moment) {
-    let vacancyDate = {
-      shift_date: time().date(e.day).month(e.month - 1).year(e.year).format(this.dateFormat),
-      workers: 1
-    };
-    if (this.checkIfExistVacancyDate(this.vacancyDates, vacancyDate)) {
-      return;
-    }
-    this.vacancyDates.push(vacancyDate);
-    this.vacancyDates.sort((p, n) => p.shift_date > n.shift_date ? 1 : -1);
-    this.updateResults(this.vacancyDates);
-  }
-
-  public checkIfExistVacancyDate(vacancyDates, vacancyDate) {
-    let element = vacancyDates.filter((el) => el.shift_date === vacancyDate.shift_date);
-    return !!element.length;
-  }
-
-  public removeVacancyDate(vacancyDate) {
-    let index = this.vacancyDates.indexOf(vacancyDate);
-    this.vacancyDates.splice(index, 1);
-    this.updateResults(this.vacancyDates);
-  }
-
-  public updateResults(value) {
-    this.group.get(this.key).patchValue(value);
+    this.group.get(this.key).patchValue(time([e.year, e.month - 1, e.day]).format(this.dateFormat));
+    this.event.emit({
+      el: this.config,
+      type: 'change'
+    });
   }
 
 }
