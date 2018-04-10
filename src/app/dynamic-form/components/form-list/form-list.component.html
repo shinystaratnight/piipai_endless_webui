@@ -20,6 +20,7 @@
   <div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
     <generic-list
       [endpoint]="config.endpoint"
+      [editEndpoint]="config.edit_endpoint"
       [query]="query"
       [inForm]="true"
       [data]="config.data"
@@ -32,6 +33,7 @@
       [actions]="config.actions"
       [allowPermissions]="allowMethods"
       [metadataQuery]="config.metadata_query"
+      [addMetadataQuery]="config.add_metadata_query"
       (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)">

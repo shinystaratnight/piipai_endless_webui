@@ -18,6 +18,9 @@ export class GenericListComponent implements OnInit {
   public endpoint: string = '';
 
   @Input()
+  public editEndpoint: string = '';
+
+  @Input()
   public inForm: boolean = false;
 
   @Input()
@@ -52,6 +55,9 @@ export class GenericListComponent implements OnInit {
 
   @Input()
   public metadataQuery: string;
+
+  @Input()
+  public addMetadataQuery: string;
 
   @Output()
   public checkedObjects: EventEmitter<any> = new EventEmitter();
