@@ -457,7 +457,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
       return;
     }
     if (this.editForm || this.edit) {
-      let endpoint = this.editForm ? `${this.endpoint}${this.id}/` : this.endpoint + '/';
+      let endpoint = this.editForm ? `${this.endpoint}${this.id}/` : this.endpoint;
       this.service.editForm(endpoint, newData).subscribe(
         ((response: any) => {
           this.parseResponse(response);
