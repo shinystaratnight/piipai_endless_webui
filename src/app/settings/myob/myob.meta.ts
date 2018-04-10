@@ -14,7 +14,7 @@ export const meta = [
         mode: new BehaviorSubject('edit'),
         templateOptions: {
           label: 'Authorized accounts',
-          display: 'myob_user_username',
+          display: '{myob_user_username}',
           deleteList: true,
         }
       },

@@ -38,6 +38,9 @@ export class SiteComponent implements OnInit {
   public permissionMethods: string[];
   public reload: boolean;
 
+  public Jira: any;
+  public jiraLoaded: boolean;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -50,8 +53,12 @@ export class SiteComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
+    this.loadScript();
     this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
     this.user = this.userService.user;
+    if (this.user.currentRole === 'candidate' || this.user.currentRole === 'client') {
+      document.getElementsByTagName('head')[0].appendChild(this.Jira);
+    }
     this.route.url.subscribe(
       (url: any) => {
         this.formLabel = '';
@@ -65,6 +72,15 @@ export class SiteComponent implements OnInit {
         }
       }
     );
+  }
+
+  public loadScript() {
+    this.Jira = document.createElement('script');
+    this.Jira.src = 'https://taavisaavo.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/klpxh0/b/20/a44af77267a987a660377e5c46e0fb64/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=5a8ec06b'; //tslint:disable-line
+    this.Jira.type = 'text/javascript';
+    this.Jira.async = true;
+    this.Jira.id = 'jira';
+    this.Jira.charset = 'utf-8';
   }
 
   public checkPermission(type: string): boolean {
@@ -105,6 +121,23 @@ export class SiteComponent implements OnInit {
   }
 
   public updateNavigationList(role: string) {
+    if (role === 'client' || role === 'candidate') {
+      if (!this.jiraLoaded) {
+        document.getElementsByTagName('head')[0].appendChild(this.Jira);
+        this.jiraLoaded = true;
+
+      } else {
+        setTimeout(() => {
+          let link = document.getElementById('atlwdg-trigger');
+          if (link) {
+            document.getElementById('atlwdg-trigger').style.display = 'block';
+          }
+        }, 1000);
+      }
+    } else {
+      document.getElementById('atlwdg-trigger').style.display = 'none';
+    }
+
     this.userService.currentRole(role);
     this.navigationService.getPages(role)
       .subscribe((pages: any) => {

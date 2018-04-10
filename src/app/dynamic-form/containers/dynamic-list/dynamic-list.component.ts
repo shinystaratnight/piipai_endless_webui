@@ -96,6 +96,15 @@ export class DynamicListComponent implements
   @Input()
   public allowPermissions: string[];
 
+  @Input()
+  public metadataQuery: string;
+
+  @Input()
+  public addMetadataQuery: string;
+
+  @Input()
+  public editEndpoint: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -422,11 +431,14 @@ export class DynamicListComponent implements
   }
 
   public updateValuesOfAsyncData(data, target) {
-    const element = data.find((item) => item.id === target.id);
-    if (element) {
-      target.obj.value = element[target.request_field];
-      target.content.splice(target.content.indexOf(target.obj), 1, Object.assign({}, target.obj));
-    }
+    data.forEach((el) => {
+      target.forEach((targetItem) => {
+        if (el.id === targetItem.id || el.contact === targetItem.id) {
+          targetItem.field.value = el[targetItem.request_field];
+        }
+      });
+    });
+    this.body = JSON.parse(JSON.stringify(this.body));
   }
 
   public calcButton(offsetTop, listButtons, filterWrapper) {
@@ -632,6 +644,10 @@ export class DynamicListComponent implements
               obj.query = {};
               keys.forEach((key) => {
                 query[key] = this.format(element.query[key], el);
+
+                if (!query[key]) {
+                  query[key] = this.format(element.query[key], this.data);
+                }
               });
             }
             if (this.asyncData[element.endpoint]) {
@@ -1382,9 +1398,18 @@ export class DynamicListComponent implements
   }
 
   public editForm(e) {
+    let endpoint;
+    if (this.editEndpoint) {
+      endpoint = this.format(
+        this.editEndpoint,
+        this.data.results.find((el) => el.id === e.el.rowId)
+      );
+    } else {
+      endpoint = e.el.endpoint;
+    }
     this.modalInfo = {};
     this.modalInfo.type = 'form';
-    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo.endpoint = endpoint;
     this.modalInfo.mode = 'edit';
     this.modalInfo.edit = true;
     this.open(this.modal, {size: 'lg'});

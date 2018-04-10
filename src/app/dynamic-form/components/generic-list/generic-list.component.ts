@@ -18,6 +18,9 @@ export class GenericListComponent implements OnInit {
   public endpoint: string = '';
 
   @Input()
+  public editEndpoint: string = '';
+
+  @Input()
   public inForm: boolean = false;
 
   @Input()
@@ -53,8 +56,11 @@ export class GenericListComponent implements OnInit {
   @Input()
   public metadataQuery: string;
 
+  @Input()
+  public addMetadataQuery: string;
+
   @Output()
-  public checkedObjects: EventEmitter<string[]> = new EventEmitter();
+  public checkedObjects: EventEmitter<any> = new EventEmitter();
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -536,7 +542,10 @@ export class GenericListComponent implements OnInit {
   }
 
   public checkedHandler(e) {
-    this.checkedObjects.emit(e);
+    this.checkedObjects.emit({
+      checkedData: e,
+      filters: this.fs.queries.find((el) => el.list === this.tables[0].list)
+    });
   }
 
 }
