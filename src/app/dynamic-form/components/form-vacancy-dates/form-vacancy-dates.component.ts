@@ -38,9 +38,17 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
     if (this.config && this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
     }
+
+    if (this.config.formData) {
+      this.config.formData.subscribe((data) => {
+        this.markDisabledDates([]);
+      });
+    }
   }
 
   public markDisabledDates(dates: any[] = []) {
+    const today = moment().tz('Australia/Sydney');
+
     this.markDisabled = (date, current) => {
       const exist = dates.find((item) => {
         const parsedDate = moment(item);
@@ -48,6 +56,12 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
         const year = parsedDate.year();
         const month = parsedDate.month() + 1;
         const day = parsedDate.date();
+        const hour = parsedDate.hour();
+        const minute = parsedDate.minute();
+
+        if (today.year() === date.year && today.month() + 1 === date.month && today.date() === date.day) { //tslint:disable-line
+          return exist || today.isAfter(moment.tz([year, month - 1, day, hour, minute], 'Australia/Sydney'));
+        }
 
         return year === date.year && month === date.month && day === date.day;
       });

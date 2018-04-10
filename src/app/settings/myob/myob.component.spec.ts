@@ -7,6 +7,7 @@ import {
   fakeAsync,
   tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -74,6 +75,7 @@ describe('MyobComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [FormsModule],
       declarations: [MyobComponent],
       providers: [
         LocalStorageService,
@@ -101,6 +103,7 @@ describe('MyobComponent', () => {
         spyOn(comp, 'fillingForm');
         spyOn(comp, 'saveInfo');
         spyOn(comp, 'getCompanyFiles');
+        spyOn(comp, 'getAuthData');
         spyOn(comp, 'parseMYOBSettings');
         comp.ngOnInit();
         expect(comp.payrollAccounts).toBeDefined();
