@@ -123,6 +123,8 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public delayData = {};
 
+  public candidateFill: boolean;
+
   constructor(
     private service: GenericFormService
   ) {}
@@ -133,6 +135,10 @@ export class GenericFormComponent implements OnChanges, OnInit {
       setTimeout(() => {
         this.modeEvent.emit(this.mode);
       }, 100);
+    }
+
+    if (this.endpoint.indexOf('candidate_fill')) {
+      this.candidateFill = true;
     }
   }
 
@@ -457,7 +463,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
       return;
     }
     if (this.editForm || this.edit) {
-      let endpoint = this.editForm ? `${this.endpoint}${this.id}/` : this.endpoint;
+      let endpoint = this.editForm ? `${this.endpoint}${(this.id ? this.id + '/' : '')}` : this.endpoint; //tslint:disable-line
       this.service.editForm(endpoint, newData).subscribe(
         ((response: any) => {
           this.parseResponse(response);

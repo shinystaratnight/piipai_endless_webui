@@ -371,9 +371,6 @@ export class DynamicListComponent implements
             );
           } else {
             const body: any = this.generateParams(this.asyncData[endpoint]);
-            if (this.endpoint.indexOf('/ecore/api/v2/hr/vacancies/') > -1) {
-              body.vacancy = this.data[this.supportData].id;
-            }
             this.genericFormService.submitForm(endpoint, body).subscribe(
               (res: any) => this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
               (err: any) => this.error = err
@@ -1038,7 +1035,7 @@ export class DynamicListComponent implements
     this.modalInfo.label = {
       picture: object.picture && object.picture.thumb ?
          object.picture.thumb : '/assets/img/avatar.png',
-      name: object.vacancy_offer.candidate_contact.contact.__str__
+      name: object.job_offer.candidate_contact.contact.__str__
     };
     this.open(this.evaluateModal);
   }
@@ -1103,7 +1100,7 @@ export class DynamicListComponent implements
     this.modalInfo.label = {
       picture: object.picture && object.picture.thumb ?
          object.picture.thumb : '/assets/img/avatar.png',
-      name: object.vacancy_offer.candidate_contact.contact.__str__
+      name: object.job_offer.candidate_contact.contact.__str__
     };
     this.open(this.evaluateModal, {size: 'lg'});
     let modalContent: any = document.getElementsByClassName('modal-content')[0];

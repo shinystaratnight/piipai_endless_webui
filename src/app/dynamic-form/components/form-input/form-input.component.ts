@@ -12,6 +12,10 @@ import {
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
+import { FormatString } from '../../../helpers/format';
+
+import * as moment from 'moment-timezone';
+
 @Component({
   selector: 'form-input',
   templateUrl: 'form-input.component.html'
@@ -63,6 +67,31 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     this.checkHiddenProperty();
     if (this.config.type !== 'static') {
       this.createEvent();
+    }
+    if (this.config.formData) {
+      this.config.formData.subscribe((data) => {
+        if (this.config.type === 'static' && this.config.key === 'total_worked') {
+          const shiftStart = moment(data.data.shift_started_at);
+          const shiftEnded = moment(data.data.shift_ended_at);
+          const breakStart = moment(data.data.break_started_at);
+          const breakEnded = moment(data.data.break_ended_at);
+
+          if (shiftStart.isBefore(shiftEnded) && breakStart.isBefore(breakEnded)) {
+            const shiftTime = moment.utc(shiftEnded.diff(shiftStart));
+            const breakTime = moment.utc(breakEnded.diff(breakStart));
+
+            const shiftDiff = shiftTime.format('HH:mm');
+            if (breakStart && breakEnded) {
+              const breakDiff = breakTime.format('HH:mm');
+              const totalTime = moment.utc(shiftTime.diff(breakTime)).format('HH:mm');
+
+              this.displayValue = `${shiftDiff} - ${breakDiff} = ${totalTime} hours`;
+            } else {
+              this.displayValue = `${shiftDiff} - 00:00 = ${shiftDiff} hours`;
+            }
+          }
+        }
+      });
     }
   }
 
