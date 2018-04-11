@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 
 import { meta, payrollAccounts } from './myob.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
@@ -40,7 +39,6 @@ export class MyobComponent implements OnInit {
     private route: ActivatedRoute,
     private settingsService: SettingsService,
     private router: Router,
-    private location: Location,
   ) { }
 
   public ngOnInit() {
@@ -308,7 +306,7 @@ export class MyobComponent implements OnInit {
       if (key.indexOf('company_file') > -1) {
         data[key] = {
           id: this.companyFile.list.find((file) => file.id === form[key]).cf_id
-        }
+        };
       } else {
         data[key] = {
           id: form[key]

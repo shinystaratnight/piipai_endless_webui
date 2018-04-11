@@ -9,11 +9,8 @@ import {
   Output,
 } from '@angular/core';
 
-import { Router, ActivatedRoute } from '@angular/router';
-
 import { NavigationService, Page } from '../../services/navigation.service';
 import { UserService, User } from '../../services/user.service';
-import { CheckPermissionService } from '../../shared/services/check-permission';
 
 @Component({
   selector: 'navigation',
@@ -58,9 +55,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   constructor(
     private navigationService: NavigationService,
     private userService: UserService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private checkPermissionServise: CheckPermissionService,
   ) { }
 
   public ngOnInit() {

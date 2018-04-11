@@ -1,4 +1,4 @@
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
@@ -141,16 +141,17 @@ describe('DynamicFormComponent', () => {
 
   describe('eventHandler method', () => {
 
-    it('should be emit event', () => {
+    it('should be emit event', fakeAsync(() => {
       comp.hiddenFields = {
         elements: [{}]
       };
       spyOn(comp.event, 'emit');
       spyOn(comp, 'parseConfig');
       comp.eventHandler(<any> 'event');
+      tick(50);
       expect(comp.event.emit).toHaveBeenCalled();
       expect(comp.parseConfig).toHaveBeenCalled();
-    });
+    }));
 
   });
 
