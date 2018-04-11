@@ -81,7 +81,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
             const breakTime = moment.utc(breakEnded.diff(breakStart));
 
             const shiftDiff = shiftTime.format('HH:mm');
-            if (breakStart && breakEnded) {
+            if (breakStart && breakEnded && !data.data.no_break) {
               const breakDiff = breakTime.format('HH:mm');
               const totalTime = moment.utc(shiftTime.diff(breakTime)).format('HH:mm');
 

@@ -15,6 +15,7 @@ import { FormatString } from '../../../helpers/format';
 interface HiddenFields {
   elements: Field[];
   keys: string[];
+  observers: string[];
 }
 
 @Component({
@@ -107,7 +108,8 @@ export class GenericFormComponent implements OnChanges, OnInit {
   public formObject: any;
   public hiddenFields: HiddenFields = {
     elements: [],
-    keys: []
+    keys: [],
+    observers: []
   };
 
   public workflowEndpoints = {
@@ -253,12 +255,31 @@ export class GenericFormComponent implements OnChanges, OnInit {
         if (this.hiddenFields.keys.indexOf(el.key) === -1) {
           this.hiddenFields.keys.push(el.key);
           this.hiddenFields.elements.push(el);
+          this.hiddenFields.observers = this.observeFields(el.showIf, this.hiddenFields.observers);
           el.hidden = new BehaviorSubject(true);
         }
       } else if (el.children) {
         this.saveHiddenFields(el.children);
       }
     });
+  }
+
+  public observeFields(fields: any[], observers) {
+    fields.forEach((field: any) => {
+      if (field instanceof Object) {
+        const keys = Object.keys(field);
+        keys.forEach((key) => {
+          if (observers.indexOf(key) === -1) {
+            observers.push(key);
+          }
+        });
+      } else {
+        if (observers.indexOf(field) === -1) {
+          observers.push(field);
+        }
+      }
+    });
+    return observers;
   }
 
   public updateFormData(metadata, formData) {

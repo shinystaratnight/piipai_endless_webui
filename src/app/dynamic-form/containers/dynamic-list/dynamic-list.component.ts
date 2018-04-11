@@ -1256,8 +1256,12 @@ export class DynamicListComponent implements
           let propArray = prop.split('__');
           let datetime = ['date', 'time'];
           if (datetime.indexOf(propArray[1]) > -1) {
-            return moment.tz(data[propArray[0]], 'Australia/Sydney')
-              .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
+            if (data[propArray[0]]) {
+              return moment.tz(data[propArray[0]], 'Australia/Sydney')
+                .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
+            } else {
+              return '';
+            }
           } else {
             return data[prop];
           }

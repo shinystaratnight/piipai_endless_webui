@@ -35,7 +35,7 @@
     <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
       {{config.templateOptions.label}}:
     </label>
-    <div class="form-element-content">{{displayValue}}</div>
+    <div class="form-element-content">{{displayValue || '-'}}</div>
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
