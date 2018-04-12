@@ -4,10 +4,12 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { FormListComponent } from './form-list.component';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CheckPermissionService } from '../../../shared/services/check-permission';
+import { GenericFormService } from '../../services/generic-form.service';
 
 describe('FormListComponent', () => {
   let fixture: ComponentFixture<FormListComponent>;
@@ -37,6 +39,19 @@ describe('FormListComponent', () => {
     }
   };
 
+  const mockGenericFormService = {
+    getByQuery() {
+      return true;
+    }
+  };
+
+  const mockRouter = {
+    url: '/',
+    navigateByUrl() {
+      return true;
+    }
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -44,6 +59,8 @@ describe('FormListComponent', () => {
       ],
       providers: [
         FormBuilder,
+        { provide: Router, useValue: mockRouter },
+        { provide: GenericFormService, useValue: mockGenericFormService },
         { provide: CheckPermissionService, useValue: mockCheckPermissionService }
       ],
       imports: [ReactiveFormsModule, NgbModule.forRoot()],
