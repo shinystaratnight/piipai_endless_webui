@@ -9,6 +9,9 @@ import { FilterService } from './../../services/filter.service';
 })
 export class ListSerachBarComponent implements OnInit {
 
+  @Input() public count: string;
+  @Input() public label: string;
+
   @Input()
   public list: string;
 

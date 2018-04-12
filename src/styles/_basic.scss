@@ -1,11 +1,32 @@
 body {
-  height: 89vh;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, Verdana, Geneva, sans-serif;
+
+  color: $gray;
 }
 
-body.r3sourcer {
-  height: 91vh;
-  background-color: #f1f1f1;
+button {
+  cursor: pointer;
+}
+
+.site-page {
+  padding: 25px 50px;
+}
+
+.datatable-wrapper .btn {
+  border-radius: 50px;
+}
+
+.btn-shadow {
+  box-shadow: 0px 3px 7px 3px rgba($gray, 0.2);
+}
+
+.datatable-wrapper .custom-select {
+  position: relative;
+
+  border-radius: 50px;
+  background: white url(/assets/img/down-arrow.svg) no-repeat;
+  background-position: right .75rem center;
+  background-size: 8px 10px;
 }
 
 .description {
@@ -105,7 +126,7 @@ input:checked ~ .color-preview {
   margin-bottom: 1rem;
   border-radius: .3rem;
   border: 5px solid white;
-  box-shadow: 0 0 0 2px black;
+  box-shadow: 0 0 0 2px $gray;
 }
 
 .group-button {

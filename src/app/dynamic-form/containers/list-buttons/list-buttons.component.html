@@ -5,8 +5,7 @@
         <a class="datatable-button first" routerLink="add"
         [ngClass]="{'mx-2': !(f || l)}"
         *ngIf="first && !inForm && button.action === 'add_object' && checkPermission('post')">
-          <i *ngIf="button.action === 'add_object'" fa [name]="'plus-circle'" class="text-white"></i>
-            {{button.label}}
+            + {{button.label}}
         </a>
         <button *ngIf="!first || inForm || button.action !== 'add_object'" class="datatable-button"
           [ngClass]="{'mx-2': !(f || l)}"
@@ -17,15 +16,13 @@
   </div>
   <div class="d-flex align-items-center ml-sm-auto w-100"
     *ngIf="!buttons">
-    <a class="datatable-button first text-white" routerLink="add"
+    <a class="btn btn-primary btn-shadow datatable-button first text-white" routerLink="add"
       *ngIf="first && !inForm && checkPermission('post')">
-        <i fa [name]="'plus-circle'" class="text-white mr-2"></i>
-        Add {{label}}
+        + Add new {{label}}
       </a>
       <button *ngIf="(!first || inForm) && checkPermission('post')" class="datatable-button ml-auto"
         (click)="buttonAction('add_object')">
-        <i fa [name]="'plus-circle'" class="text-white mr-2"></i>
-        Add {{label}}
+        + Add new {{label}}
       </button>
   </div>
   <button class="datatable-button hidden-sm-down ml-2"

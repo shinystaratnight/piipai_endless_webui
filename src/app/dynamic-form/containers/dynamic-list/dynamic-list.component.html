@@ -28,72 +28,80 @@
     </h5>
   </div>
   <div [class.card-block]="poped" class="datatable-body">
-    <div class="filter-wrapper" *ngIf="(first || poped) && showFilters">
+    <!-- <div class="filter-wrapper" *ngIf="(first || poped) && showFilters">
       <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
-    </div>
-    <action-element *ngIf="config.list.actions && !inForm" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
-    <h5 class="datatable-label" *ngIf="(config.list && (inForm && (config.list.search_enabled || config.list.buttons) && !delay) || (!inForm && !poped))">
-      <span *ngIf="!inForm" class="mr-auto">select {{config.list.label}} to change</span>
-      <list-search-bar *ngIf="config.list.search_enabled" [list]="config.list.list" (event)="filterHandler($event)"></list-search-bar>
-      <div class="align-self-end">
-        <list-buttons
-          [buttons]="config.list.buttons"
-          [first]="first"
-          [inForm]="inForm"
-          [label]="config.list.label"
-          [poped]="poped"
-          [allowPermissions]="allowPermissions"
-          (event)="buttonAction($event)">
-        </list-buttons>
-      </div>
-    </h5>
-    <div *ngIf="poped">
+    </div> -->
+    <h2 class="datatable-label" *ngIf="(config.list && (inForm && (config.list.search_enabled || config.list.buttons) && !delay) || (!inForm && !poped))">
+      <span *ngIf="!inForm" class="mr-auto">{{config.list.label}}</span>
       <list-buttons
         [buttons]="config.list.buttons"
         [first]="first"
         [inForm]="inForm"
         [label]="config.list.label"
         [poped]="poped"
+        [allowPermissions]="allowPermissions"
         (event)="buttonAction($event)">
       </list-buttons>
+    </h2>
+    <div class="datatable-header">
+      <button class="btn btn-outline-secondary filter-button mr-3">
+        <i fa name="filter" class="text-secondary"></i>
+        Filters
+      </button>
+      <list-search-bar
+        class="datatable-search"
+        *ngIf="config.list.search_enabled"
+        [count]="count"
+        [label]="config.list.label"
+        [list]="config.list.list"
+        (event)="filterHandler($event)">
+      </list-search-bar>
     </div>
-    <div class="tabs d-flex flex-wrap justify-content-around align-items-center">
-      <div class="tab py-1 mx-2"
-        *ngFor="let tab of tabs"
-        (click)="changeTab(tab)">
+    <action-element *ngIf="config.list.actions && !inForm" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
+    <div class="datatable-tabs">
+      <span class="tab" *ngFor="let tab of tabs" (click)="changeTab(tab)">
         <i fa [name]="tab.is_collapsed ? 'eye' : 'eye-slash'"></i>
         {{tab.label}}
-      </div>
+      </span>
     </div>
+
     <div #tableWrapper class="table-wrapper">
       <table class="table table-sm" *ngIf="config.list">
         <thead class="thead-default hidden-sm-down">
           <tr>
-            <th *ngIf="!inForm || actions" class="text-center" style="width: 2rem">
-              *
-              <input type="checkbox" *ngIf="config.list.actions || actions" [(ngModel)]="selectedAll" (ngModelChange)="selectAll()">
+            <th *ngIf="!inForm || actions" class="active" style="width: 2rem">
+              <div class="cell-content">
+                <label for="all-checkbox">All</label>
+                <input
+                  id="all-checkbox"
+                  type="checkbox"
+                  hidden
+                  *ngIf="config.list.actions || actions"
+                  [(ngModel)]="selectedAll"
+                  (ngModelChange)="selectAll()">
+              </div>
             </th>
             <th *ngFor="let field of config.list.columns;"
-              [class.datatable-title-hover]="field.sort && !delay"
               [hidden]="field.tab && field.tab.is_collapsed">
-                <i fa
-                  *ngIf="field.sorted && !delay"
-                  [name]="field.sorted === 'desc' ? 'sort-desc' : 'sort-asc'"
-                  [border]=true
-                  class="pr-2 icon"
-                  (click)="sorting(field)"></i>
-                <i fa
-                  *ngIf="field.sorted && !delay"
-                  [name]="'sort'"
-                  [border]=true
-                  class="pr-2 text-muted icon"
-                  (click)="resetSort(field, true)"></i>
-                <ng-container
-                  listElement
-                  [head]="true"
-                  [config]="field"
-                  (event)="sorting(field)">
-                </ng-container>
+                <div class="cell-content">
+                  <ng-container
+                    listElement
+                    [head]="true"
+                    [config]="field"
+                    (event)="sorting(field)">
+                  </ng-container>
+                  <i fa
+                    class="sort-icon"
+                    *ngIf="field.sort && !delay"
+                    [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'"
+                    [class.active]="field.sorted && !delay"
+                    [border]=true
+                    (click)="field.openSort = !field.openSort"></i>
+                </div>
+                <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">
+                  <li [class.active]="field.sorted === 'asc'" (click)="sorting(field, 'asc'); field.openSort = false">Alphabetically A-Z</li>
+                  <li [class.active]="field.sorted === 'desc'" (click)="sorting(field, 'desc'); field.openSort = false">Alphabetically Z-A</li>
+                </ul>
             </th>
           </tr>
         </thead>
@@ -102,39 +110,43 @@
             [class.table-warning]="row.highlight && row.highlight.highlight"
             [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
             <td *ngIf="!inForm || actions">
-              <div class="d-flex flex-md-column justify-content-between align-items-center">
-                <input type="checkbox" *ngIf="config.list.actions || actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]" (ngModelChange)="emitSelect()">
-                <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm && !config.list.editDisable && checkPermission('get')" [routerLink]="[row.id + '/change']">
-                  <i fa [name]="'pencil'" class="icon text-warning"></i>
-                </a>
-                <i fa *ngIf="!first && !config.list.editDisable && checkPermission('get')"
-                  [name]="'pencil'" class="icon text-warning ml-auto ml-md-0"
-                  (click)="editObject(row.id, row.__str__)"></i>
+              <div class="cell-content">
+                <div class="d-flex flex-md-column justify-content-between align-items-center">
+                  <input type="checkbox" *ngIf="config.list.actions || actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]" (ngModelChange)="emitSelect()">
+                  <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm && !config.list.editDisable && checkPermission('get')" [routerLink]="[row.id + '/change']">
+                    <i fa [name]="'pencil'" class="icon text-warning"></i>
+                  </a>
+                  <i fa *ngIf="!first && !config.list.editDisable && checkPermission('get')"
+                    [name]="'pencil'" class="icon text-warning ml-auto ml-md-0"
+                    (click)="editObject(row.id, row.__str__)"></i>
+                </div>
               </div>
             </td>
             <td *ngFor="let cell of row.content" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
-              <div class="d-flex justify-content-between">
-                <ng-container
-                  listElement
-                  [config]="cell.content"
-                  (event)="eventHandler($event)"
-                  (buttonAction)="buttonHandler($event)">
-                </ng-container>
-                <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
-                  <i fa
-                    id="dropdownBasic1"
-                    class="text-muted p-2 icon"
-                    [class.dropdown-toggle]="false"
-                    [name]="'ellipsis-v'"
-                    [border]=true
-                    ngbDropdownToggle></i>
-                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBasic1">
-                    <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
+              <div class="cell-content">
+                <div class="d-flex justify-content-between">
+                  <ng-container
+                    listElement
+                    [config]="cell.content"
+                    (event)="eventHandler($event)"
+                    (buttonAction)="buttonHandler($event)">
+                  </ng-container>
+                  <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
+                    <i fa
+                      id="dropdownBasic1"
+                      class="text-muted p-2 icon"
+                      [class.dropdown-toggle]="false"
+                      [name]="'ellipsis-v'"
+                      [border]=true
+                      ngbDropdownToggle></i>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBasic1">
+                      <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
-                <list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></list-table>
+                <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
+                  <list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></list-table>
+                </div>
               </div>
             </td>
           </tr>

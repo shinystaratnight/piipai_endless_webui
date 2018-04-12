@@ -51,12 +51,8 @@
       (str)="changeFormLabel($event)">
     </form-builder>
   </div>
-  <div class="list-page" *ngSwitchCase="'list'">
-    <div class="filter-place"></div>
-    <div class="content">
-      <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
-      <generic-list [allowPermissions]="permissionMethods" [endpoint]="pageData.endpoint"></generic-list>
-    </div>
+  <div *ngSwitchCase="'list'">
+    <generic-list [allowPermissions]="permissionMethods" [endpoint]="pageData.endpoint"></generic-list>
   </div>
   <div *ngSwitchCase="'profile'">
     <profile [id]="user.data.contact.contact_id"></profile>

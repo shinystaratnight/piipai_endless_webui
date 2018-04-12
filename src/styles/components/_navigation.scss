@@ -1,7 +1,7 @@
 $nested-width: 200px;
 $side-width: 320px;
-$header-shadow: 0 0 5px 5px rgba(200, 200, 200, 0.3);
-$nested-shadow: 0 0 10px 1px rgba(200, 200, 200, 0.3);
+$header-shadow: 0 0 15px 8px rgba($gray, .2);
+$nested-shadow: 0px 5px 10px 5px rgba($gray, .2);
 $header-bg: white;
 
 .page-header {
@@ -32,7 +32,7 @@ $header-bg: white;
 
     padding: 5px 24px;
 
-    color: black;
+    color: inherit;
     text-decoration: none;
 
     &:hover,
@@ -80,13 +80,13 @@ $header-bg: white;
         & > .navigation-link {
           padding: 27px 24px;
 
-          &.active {
-            border-bottom: 2px solid $brand-primary;
+        }
+        &:not(:hover) > .navigation-link.active {
+          box-shadow: inset 0 -3px 0px 0px $brand-primary;
 
-            @each $item in $themes {
-              .#{$item}-theme & {
-                border-bottom: 2px solid map-get($theme-colors, $item);
-              }
+          @each $item in $themes {
+            .#{$item}-theme & {
+              box-shadow: inset 0 -3px 0px 0px map-get($theme-colors, $item);
             }
           }
         }

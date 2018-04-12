@@ -295,38 +295,38 @@ export class DynamicListComponent implements
   }
 
   public ngAfterViewInit() {
-    if (this.datatable && !this.inForm) {
-      let listButtons: any = this.datatable.nativeElement.getElementsByClassName('list-buttons');
-      let filterWrapper: any =
-        this.datatable.nativeElement.getElementsByClassName('filter-wrapper');
-      let width: any = window.innerWidth;
-      let offsetTop;
-      if (listButtons && listButtons.length && width > 992) {
-        this.calcButton(offsetTop, listButtons, filterWrapper);
-        this.calcTable();
-      }
+    // if (this.datatable && !this.inForm) {
+    //   let listButtons: any = this.datatable.nativeElement.getElementsByClassName('list-buttons');
+    //   let filterWrapper: any =
+    //     this.datatable.nativeElement.getElementsByClassName('filter-wrapper');
+    //   let width: any = window.innerWidth;
+    //   let offsetTop;
+    //   if (listButtons && listButtons.length && width > 992) {
+    //     this.calcButton(offsetTop, listButtons, filterWrapper);
+    //     this.calcTable();
+    //   }
 
-      let resizeTimeout;
-      window.addEventListener('resize', () => {
-        if (!resizeTimeout) {
-          resizeTimeout = setTimeout(() => {
-            resizeTimeout = null;
-            if (listButtons && listButtons.length && window.innerWidth > 992) {
-              this.calcButton(offsetTop, listButtons, filterWrapper);
-              this.calcTable();
-            } else {
-              filterWrapper[0].style.top = 0;
-              filterWrapper[0].style.height = 'auto';
+    //   let resizeTimeout;
+    //   window.addEventListener('resize', () => {
+    //     if (!resizeTimeout) {
+    //       resizeTimeout = setTimeout(() => {
+    //         resizeTimeout = null;
+    //         if (listButtons && listButtons.length && window.innerWidth > 992) {
+    //           this.calcButton(offsetTop, listButtons, filterWrapper);
+    //           this.calcTable();
+    //         } else {
+    //           filterWrapper[0].style.top = 0;
+    //           filterWrapper[0].style.height = 'auto';
 
-              if (this.tableWrapper) {
-                let tableWrapperEl = this.tableWrapper.nativeElement;
-                tableWrapperEl.style.maxHeight = 'auto';
-              }
-            }
-          }, 66);
-        }
-      }, false);
-    }
+    //           if (this.tableWrapper) {
+    //             let tableWrapperEl = this.tableWrapper.nativeElement;
+    //             tableWrapperEl.style.maxHeight = 'auto';
+    //           }
+    //         }
+    //       }, 66);
+    //     }
+    //   }, false);
+    // }
   }
 
   public parseMultipleFilter(filters: any[]): void {
@@ -686,17 +686,11 @@ export class DynamicListComponent implements
     return result;
   }
 
-  public sorting(field) {
+  public sorting(field, type: string) {
     if (!this.delay) {
-      if (this.sortedColumns[field.sort_field]) {
-        this.sortedColumns[field.sort_field]
-          = this.sortedColumns[field.sort_field] === 'asc' ? 'desc' : 'asc';
-        field.sorted = field.sorted === 'asc' ? 'desc' : 'asc';
-      } else {
-        let key = 'asc';
-        this.sortedColumns[field.sort_field] = key;
-        field.sorted = key;
-      }
+      this.sortedColumns[field.sort_field] = type;
+      field.sorted = type;
+
       this.event.emit({
         type: 'sort',
         list: this.config.list.list,
