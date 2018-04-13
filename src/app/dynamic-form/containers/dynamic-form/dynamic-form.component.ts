@@ -203,7 +203,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public removeValuesOfHiddenFields(metadata: Field[], data): void {
     metadata.forEach((el: Field) => {
-      if (el.hide) {
+      if (el.hide && el.key) {
         this.removeValue(el.key, data);
       }
     });

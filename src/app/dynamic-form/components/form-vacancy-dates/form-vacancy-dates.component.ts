@@ -25,6 +25,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
   public minDate: any;
   public markDisabled: Function;
   public vacancyDate: any;
+  public vacancyDates: string[];
 
   constructor(
     private fb: FormBuilder
@@ -39,10 +40,8 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
       this.group.get(this.key).patchValue(this.config.value);
     }
 
-    if (this.config.formData) {
-      this.config.formData.subscribe((data) => {
-        this.markDisabledDates([]);
-      });
+    if (this.config.value) {
+      this.markDisabledDates(this.config.value);
     }
   }
 
@@ -78,11 +77,21 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
   }
 
   public selectVacancyDate(e, time = moment) {
-    this.group.get(this.key).patchValue(time([e.year, e.month - 1, e.day]).format(this.dateFormat));
+    const date = time([e.year, e.month - 1, e.day]).format(this.dateFormat);
+    this.vacancyDates = this.vacancyDates || [];
+    if (this.vacancyDates.indexOf(date) === -1) {
+      this.vacancyDates.push(date);
+    }
+
+    this.group.get(this.key).patchValue(this.vacancyDates);
     this.event.emit({
       el: this.config,
       type: 'change'
     });
+  }
+
+  public removeDate(date) {
+    this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
   }
 
 }
