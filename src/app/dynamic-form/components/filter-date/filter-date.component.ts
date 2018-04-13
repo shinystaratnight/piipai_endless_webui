@@ -79,7 +79,9 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
           mode: dateType,
           dateFormat: '%d/%m/%Y',
           overrideDateFormat: '%d/%m/%Y',
-          useClearButton: true,
+          useClearButton: false,
+          useHeader: false,
+          calHighToday: false,
           closeCallback: () => {
             let date = el.nativeElement.value;
             this.onChange(date, el.nativeElement.name);

@@ -51,7 +51,7 @@
       (str)="changeFormLabel($event)">
     </form-builder>
   </div>
-  <div *ngSwitchCase="'list'">
+  <div class="datatable-list" *ngSwitchCase="'list'">
     <generic-list [allowPermissions]="permissionMethods" [endpoint]="pageData.endpoint"></generic-list>
   </div>
   <div *ngSwitchCase="'profile'">

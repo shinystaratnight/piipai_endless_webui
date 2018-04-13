@@ -165,6 +165,7 @@ export class DynamicListComponent implements
   public saveProcess: boolean;
 
   public showFilters: boolean;
+  public filtersHidden: boolean;
 
   public asyncData: any;
 

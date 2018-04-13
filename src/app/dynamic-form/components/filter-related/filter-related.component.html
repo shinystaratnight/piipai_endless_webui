@@ -1,7 +1,7 @@
-<div class="filter-element p-2" [class.active]="!isCollapsed">
+<div class="filter-element" [class.active]="!isCollapsed">
   <label class="filter-label related" [class.active]="!isCollapsed">
     {{config.label}}
-    <i
+    <!-- <i
       fa
       class="p-2 ml-auto"
       [name]="icons[theme][isCollapsed]"
@@ -9,7 +9,7 @@
       [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
       (click)="isCollapsed = !isCollapsed"
       [attr.aria-expanded]="!isCollapsed"
-      style="cursor: pointer"></i>
+      style="cursor: pointer"></i> -->
     <i
       *ngIf="query"
       fa
@@ -20,19 +20,21 @@
       (click)="resetFilter()"></i>
   </label>
   <div [ngbCollapse]="isCollapsed" class="filter-related">
-    <div class="d-flex justify-content-center align-items-center mt-3 autocomplete-filter" *ngFor="let item of elements" style="position: relative">
+    <div class="d-flex justify-content-center align-items-center autocomplete-filter" style="position: relative">
       <div class="form-control autocomplete-value active"
         (click)="openAutocomplete($event, item)">
           <div style="overflow: hidden; white-space: nowrap">{{item.displayValue}}</div>
-          <i fa [name]="item.hideAutocomplete ? 'angle-right' : 'angle-down'" class="text-md-white ml-2"></i>
+          <i fa [name]="item.hideAutocomplete ? 'angle-down' : 'angle-up'" class="text-md-white ml-2"></i>
       </div>
 
-      <div class="card autocomplete p-1" [hidden]="item.hideAutocomplete" [ngStyle]="{'top.px': topHeight}">
-        <input type="text" class="form-control mb-1"
+      <div class="autocomplete p-1" [hidden]="item.hideAutocomplete" [ngStyle]="{'top.px': topHeight}">
+        <input #search="ngModel"
+          name="search"
+          type="text"
+          class="form-control mb-1"
           [(ngModel)]="searchValue"
           [ngModelOptions]="{standalone: true}"
-          (blur)="resetList(item)"
-          (keyup)="filter(item)">
+          (blur)="resetList(item)">
         <div class="autocomplete-list"
           infinite-scroll
           [infiniteScrollDistance]="modalScrollDistance"

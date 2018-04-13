@@ -1,28 +1,45 @@
-import { FilterService } from './../../services/filter.service';
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NgModel } from '@angular/forms';
 
 import { GenericFormService } from './../../services/generic-form.service';
+import { FilterService } from './../../services/filter.service';
+
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/observable/fromEvent';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 
 @Component({
   selector: 'filter-related',
   templateUrl: 'filter-related.component.html'
 })
-export class FilterRelatedComponent implements OnInit {
+export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy {
   public config: any;
   public data: any;
-  public elements = [];
-  public count: number;
+  // public elements = [];
+  // public count: number;
   public item: any;
   public query: string;
-  public copyConfig = [];
+  // public copyConfig = [];
   public isCollapsed: boolean = false;
 
   public searchValue: string;
+
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
+
   public list: any[];
-  public limit: number = 10;
+  public limit: number = 100;
   public previewList: any[];
   public topHeight: number;
 
@@ -40,6 +57,9 @@ export class FilterRelatedComponent implements OnInit {
       false: 'eye-slash'
     }
   };
+
+  public cashResults: any[];
+  public subscription: Subscription;
 
   @ViewChild('search')
   public search;
@@ -63,23 +83,40 @@ export class FilterRelatedComponent implements OnInit {
       [this.config.data.value]: 'All'
     };
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
+
+    this.item = this.createElement();
   }
 
-  public generateList(item, concat = false): void {
-      this.getOptions(this.searchValue, item, concat);
+  public ngAfterViewInit() {
+    if (this.search) {
+      this.subscription = this.search.valueChanges
+        .debounceTime(400)
+        .distinctUntilChanged()
+        .subscribe((res) => {
+          this.filter();
+        });
+    }
   }
 
-  public generatePreviewList(list, item) {
-    item.lastElement += this.limit;
-    this.previewList = list.slice(0, item.lastElement);
+  public ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
-  public openAutocomplete($event, item) {
+  public generateList(concat = false): void {
+      this.getOptions(this.searchValue, concat);
+  }
+
+  public generatePreviewList(list) {
+    this.item.lastElement += this.limit;
+    this.previewList = list.slice(0, this.item.lastElement);
+  }
+
+  public openAutocomplete($event) {
       let autocomplete;
       let target = $event.target;
       this.searchValue = null;
-      item.hideAutocomplete = false;
-      this.generateList(item);
+      this.item.hideAutocomplete = false;
+      this.generateList(this.item);
       if (target.classList.contains('autocomplete-value')) {
         this.topHeight = target.offsetHeight;
         autocomplete = target.nextElementSibling;
@@ -92,87 +129,87 @@ export class FilterRelatedComponent implements OnInit {
       }, 50);
   }
 
-  public resetList(item) {
+  public resetList() {
     setTimeout(() => {
       this.previewList = null;
-      item.lastElement = 0;
-      item.count = null;
-      item.hideAutocomplete = true;
+      this.item.lastElement = 0;
+      this.item.count = null;
+      this.item.hideAutocomplete = true;
     }, 150);
   }
 
-  public filter(item) {
-    item.lastElement = 0;
-    item.count = null;
+  public filter() {
+    this.item.lastElement = 0;
+    this.item.count = null;
     this.previewList = null;
-    this.generateList(item);
+    this.generateList();
   }
 
-  public onModalScrollDown(item) {
-    this.generateList(item, true);
+  public onModalScrollDown() {
+    this.generateList(true);
   }
 
-  public setValue(value, item) {
-    item.data = value[this.config.data.key];
-    item.displayValue = value[this.config.data.value];
-    item.count = null;
+  public setValue(value) {
+    this.item.data = value[this.config.data.key];
+    this.item.displayValue = value[this.config.data.value];
+    this.item.count = null;
     this.searchValue = null;
     this.previewList = null;
     this.onChange();
   }
 
-  public deleteValue(item) {
-    item.data = '';
-    item.displayValue = 'All';
+  public deleteValue() {
+    this.item.data = '';
+    this.item.displayValue = 'All';
     this.fs.generateQuery(
-      this.genericQuery(this.elements, this.config.query),
-      this.config.key, this.config.listName, this.elements);
+      this.genericQuery(this.config.query),
+      this.config.key, this.config.listName, this.item);
     this.changeQuery();
   }
 
-  public addElement() {
-    if (this.elements.length < this.config.options.length) {
-      this.elements.push(this.createElement(this.count));
-    }
-  }
+  // public addElement() {
+  //   if (this.elements.length < this.config.options.length) {
+  //     this.elements.push(this.createElement(this.count));
+  //   }
+  // }
 
-  public deleteElement(item) {
-    if (this.elements.length > 1) {
-      let result = this.elements.filter((el) => el.id !== item.id);
-      this.elements = result;
-    }
-    this.fs.generateQuery(
-      this.genericQuery(this.elements, this.config.query),
-      this.config.key, this.config.listName, this.elements);
-    this.changeQuery();
-  }
+  // public deleteElement(item = this.elements[0]) {
+  //   if (this.elements.length > 1) {
+  //     let result = this.elements.filter((el) => el.id !== item.id);
+  //     this.elements = result;
+  //   }
+  //   this.fs.generateQuery(
+  //     this.genericQuery(this.elements, this.config.query),
+  //     this.config.key, this.config.listName, this.elements);
+  //   this.changeQuery();
+  // }
 
-  public createElement(id, data = '') {
-    this.count++;
+  public createElement(data = '') {
+    // this.count++;
     let element = {
-      id,
       data,
       lastElement: 0,
       hideAutocomplete: true
     };
-    element['displayValue'] = data ? this.getOption(data, element) : 'All';
+    element['displayValue'] = data ? this.getOption(data) : 'All';
     return element;
   }
 
   public onChange() {
     this.fs.generateQuery(
-      this.genericQuery(this.elements, this.config.query),
-      this.config.key, this.config.listName, this.elements);
+      this.genericQuery(this.config.query),
+      this.config.key, this.config.listName, this.item);
     this.changeQuery();
   }
 
-  public genericQuery(elements, query) {
-    let result = '';
-    elements.forEach((el) => {
-      if (el.data) {
-        result += `${query}=${el.data}&`;
-      }
-    });
+  public genericQuery(query) {
+    let result = `${query}=${this.item.data}&`;
+    // elements.forEach((el) => {
+    //   if (el.data) {
+    //     result += `${query}=${el.data}&`;
+    //   }
+    // });
+    // this.item
     this.query = result;
     return result.substring(0, result.length - 1);
   }
@@ -187,7 +224,7 @@ export class FilterRelatedComponent implements OnInit {
     this.query = query;
     query.split('&').forEach((el) => {
       let value = el.split('=')[1];
-      this.elements.push(this.createElement(this.count, value));
+      this.item = this.createElement(value);
     });
   };
 
@@ -197,48 +234,50 @@ export class FilterRelatedComponent implements OnInit {
       if (data.byQuery) {
         if (this.settingValue) {
           this.settingValue = false;
-          this.elements = [];
+          // this.elements = [];
           this.parseQuery(data.query);
         }
       } else {
         if (this.settingValue) {
           this.settingValue = false;
-          this.elements = [];
-          let counts = data.map((el) => el.id);
-          this.elements.push(...data);
-          this.count = Math.max(...counts);
-          this.genericQuery(this.elements, this.config.query);
+          // this.elements = [];
+          // let counts = data.map((el) => el.id);
+          // this.elements.push(...data);
+          // this.count = Math.max(...counts);
+          this.item = data;
+          this.genericQuery(this.config.query);
         }
       }
     } else {
       this.query = '';
-      this.count = 1;
-      if (this.elements && !this.elements.length) {
-        this.elements.push(this.createElement(this.count));
-      }
+      this.item = this.createElement();
+      // this.count = 1;
+      // if (this.elements && !this.elements.length) {
+      //   this.elements.push(this.createElement(this.count));
+      // }
     }
   };
 
   public resetFilter() {
-    this.elements.length = 1;
-    this.deleteValue(this.elements[0]);
+    // this.elements.length = 1;
+    this.deleteValue();
     this.fs.generateQuery('', this.config.key, this.config.listName);
     this.changeQuery();
   }
 
-  public getOption(value, item) {
+  public getOption(value) {
     let endpoint = `${this.config.data.endpoint}${value}/`;
     let display = this.config.data.value;
     this.genericFormService.getAll(endpoint).subscribe(
       (res: any) => {
-        item.displayValue = res[display];
+        this.item.displayValue = res[display];
       }
     );
   }
 
-  public getOptions(value, item, concat = false) {
+  public getOptions(value, concat = false) {
     let endpoint = this.config.data.endpoint;
-    let offset = item.lastElement;
+    let offset = this.item.lastElement;
     let display = this.config.data.value;
     let key = this.config.data.key;
     let query = '';
@@ -247,11 +286,11 @@ export class FilterRelatedComponent implements OnInit {
     }
     query += !query ? '?' : '';
     query += `limit=${this.limit}&offset=${offset}&fields=${display}&fields=${key}`;
-    if (!item.count || (item.count && offset < item.count && concat)) {
-      item.lastElement += this.limit;
+    if (!this.item.count || (this.item.count && offset < this.item.count && concat)) {
+      this.item.lastElement += this.limit;
       this.genericFormService.getByQuery(endpoint, query).subscribe(
         (res: any) => {
-          item.count = res.count;
+          this.item.count = res.count;
           if (res.results && res.results.length) {
             if (concat) {
               if (this.previewList) {

@@ -137,7 +137,9 @@ export class FormDatepickerComponent
           mode: dateType,
           dateFormat: '%d/%m/%Y',
           overrideDateFormat: '%d/%m/%Y',
-          useClearButton: true,
+          useClearButton: false,
+          useHeader: false,
+          calHighToday: false,
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
@@ -155,7 +157,9 @@ export class FormDatepickerComponent
           mode: timeType,
           overrideTimeFormat: 12,
           overrideTimeOutput: '%I:%M %p',
-          useClearButton: true,
+          useClearButton: false,
+          useHeader: false,
+          calHighToday: false,
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
@@ -173,7 +177,9 @@ export class FormDatepickerComponent
           mode: timeType,
           overrideTimeFormat: 12,
           overrideTimeOutput: '%I:%M %p',
-          useClearButton: true,
+          useClearButton: false,
+          useHeader: false,
+          calHighToday: false,
           closeCallback: () => {
             let time = this.t.nativeElement.value;
             if (time) {

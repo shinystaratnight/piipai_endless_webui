@@ -8,8 +8,137 @@ button {
   cursor: pointer;
 }
 
-.site-page {
-  padding: 25px 50px;
+.r3sourcer a {
+  color: inherit;
+
+  &:hover,
+  &:focus,
+  &.active {
+    color: $brand-primary;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        color: map-get($theme-colors, $item);
+      }
+    }
+  }
+}
+
+.ui-datebox-container.dropdown-menu {
+  width: auto;
+  border: none;
+
+  .ui-datebox-gridheader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ui-datebox-gridplus {
+    order: 2;
+
+    span::before {
+      content: '\f105';
+
+      font-size: 18px;
+    }
+  }
+
+  .ui-datebox-gridminus {
+    color: $gray;
+
+    span::before {
+      font-size: 18px;
+
+      content: '\f104';
+    }
+  }
+
+  .ui-datebox-datebox-group {
+    text-align: center;
+
+    input {
+      border-radius: 50px;
+    }
+
+    .fa-plus::before {
+      font-size: 18px;
+
+      content: '\f106';
+    }
+
+    .fa-minus::before {
+      font-size: 18px;
+
+      content: '\f107';
+    }
+  }
+
+  .ui-datebox-controls {
+    a {
+      border-radius: 50px;
+
+      &:hover {
+        background-color: $brand-primary;
+
+        color: white;
+      }
+    }
+  }
+
+  .btn-sm,
+  .ui-datebox-griddate {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 2rem;
+    height: 2rem;
+
+    font-size: .7rem;
+    line-height: .7rem;
+
+
+    padding: 0;
+
+    &.ui-datebox-griddate-label,
+    &.ui-datebox-griddate-empty {
+      font-weight: normal;
+      color: rgba($gray, 0.4);
+    }
+  }
+
+  .btn-sm {
+    border: none;
+    border-radius: 50%;
+
+    &:hover {
+      border: none;
+
+      background-color: $brand-primary;
+      color: white;
+    }
+  }
+}
+
+.ui-datebox-container .ui-datebox-controls {
+  a {
+    margin-bottom: 5px;
+
+    border-radius: 50px;
+
+    &:hover {
+      background-color: $brand-primary;
+
+      color: white;
+    }
+  }
+}
+
+.modal-lg {
+  @include media-breakpoint-up('xl') {
+    max-width: 1170px;
+  }
 }
 
 .datatable-wrapper .btn {
@@ -267,12 +396,6 @@ input:checked ~ .color-preview {
 @each $item in $themes {
   .#{$item}-theme .text-primary {
     color: map-get($theme-colors, $item) !important;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme a {
-    color: map-get($theme-colors, $item);
   }
 }
 

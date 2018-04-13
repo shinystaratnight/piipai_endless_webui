@@ -1,13 +1,13 @@
-  <div class="filter-block" [class.filter-block-collapsed]="direction === 'right'">
-    <div class="filter-block-label">
-      <span>Filter</span>
-      <i fa [name]="'filter'"></i>
-    </div>
-    <div *ngFor="let field of config;">
-      <ng-container
-        filterElement
-        (event)="changeQuery($event)"
-        [config]="field">
-      </ng-container>
-    </div>
+<div class="filters-block">
+  <div class="filters-label">
+    <h5>Filters</h5>
+    <span class="reset">Reset all</span>
   </div>
+  <div *ngFor="let field of config;">
+    <ng-container
+      filterElement
+      (event)="changeQuery($event)"
+      [config]="field">
+    </ng-container>
+  </div>
+</div>
