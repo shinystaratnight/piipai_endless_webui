@@ -100,13 +100,14 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public eventHandler(e: CustomEvent): void {
     this.event.emit(e);
+    let key = e.el.type === 'related' ? e.el.key + '.id' : e.el.key;
     setTimeout(() => {
       if (e.el && e.el.formData) {
         if (e.type === 'change' && e.el && e.el.key) {
           e.el.formData.next({key: e.el.key, data: this.form.value});
         }
       }
-      if (this.hiddenFields && this.hiddenFields.elements && this.hiddenFields.elements.length) {
+      if (this.hiddenFields && this.hiddenFields.observers.indexOf(key) > -1) {
         this.parseConfig(this.hiddenFields.elements);
       }
     }, 50);

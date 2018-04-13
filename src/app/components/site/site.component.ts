@@ -218,6 +218,10 @@ export class SiteComponent implements OnInit {
       this.saveProcess = true;
     }
     if (e.type === 'sendForm' && e.status === 'success') {
+      if (this.pageData.pathData.postfix === 'submit') {
+        this.router.navigate([this.pageData.pathData.path]);
+        return;
+      }
       if (!this.pageData.pathData.id) {
         this.router.navigate([this.pageData.pathData.path + e.data.id + '/change']);
         return;

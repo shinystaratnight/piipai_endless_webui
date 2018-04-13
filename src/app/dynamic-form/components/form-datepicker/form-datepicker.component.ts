@@ -106,7 +106,7 @@ export class FormDatepickerComponent
         this.setTime(data, moment);
         this.displayValue = data ? moment(data, 'HH:mm:ss').format('hh:mm A') : '-';
       }
-    } else if (this.config.default) {
+    } else if (this.config.default && this.config.default !== '-') {
       let data = this.config.default;
       if (type === 'date' || type === 'datetime') {
         this.setDate(data, moment);
