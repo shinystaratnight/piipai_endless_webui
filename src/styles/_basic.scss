@@ -24,6 +24,35 @@ button {
   }
 }
 
+.r3sourcer {
+  input[type="checkbox"]:checked ~ .custom-checkbox {
+    font-size: .6rem;
+
+    border-color: $brand-primary;
+
+    background-color: $brand-primary;
+    color: white;
+  }
+
+  .custom-checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-width: 1rem;
+    height: 1rem;
+
+    margin-right: .5rem;
+
+    font-size: 0;
+
+    border: 1px solid rgba($gray, .2);
+    border-radius: .2rem;
+
+    cursor: pointer;
+  }
+}
+
 .ui-datebox-container.dropdown-menu {
   width: auto;
   border: none;
@@ -156,6 +185,16 @@ button {
   background: white url(/assets/img/down-arrow.svg) no-repeat;
   background-position: right .75rem center;
   background-size: 8px 10px;
+
+  &:focus {
+    background: url(/assets/img/down-arrow.svg) no-repeat;
+    background-position: right .75rem center;
+    background-size: 8px 10px;
+  }
+
+  &.active {
+    border-color: $gray;
+  }
 }
 
 .description {

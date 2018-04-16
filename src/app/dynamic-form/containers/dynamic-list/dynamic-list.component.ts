@@ -169,6 +169,13 @@ export class DynamicListComponent implements
 
   public asyncData: any;
 
+  public pictures = {
+    '/ecore/api/v2/core/contacts/': '{picture.origin}',
+    '/ecore/api/v2/candidate/candidatecontacts/': '{contact.picture.origin}',
+    '/ecore/api/v2/core/companycontacts/': '{contact.picture.origin}',
+    '/ecore/api/v2/core/companies/': '{logo.origin}'
+  };
+
   constructor(
     private filterService: FilterService,
     private modalService: NgbModal,
@@ -516,6 +523,10 @@ export class DynamicListComponent implements
       let row = {
         id: el.id,
         __str__: el.__str__,
+        picture: this.pictures[this.endpoint]
+          ? this.format(this.pictures[this.endpoint], el)
+          : undefined,
+        collapsed: true,
         content: []
       };
       if (highlight) {
@@ -789,11 +800,19 @@ export class DynamicListComponent implements
   }
 
   public filterHandler(e) {
-    this.event.emit({
-      type: 'filter',
-      list: e.list,
-      query: this.filterService.getQuery(e.list)
-    });
+    if (e === 'resetAll') {
+      this.event.emit({
+        type: 'filter',
+        list: this.config.list.list,
+        query: ''
+      });
+    } else {
+      this.event.emit({
+        type: 'filter',
+        list: e.list,
+        query: this.filterService.getQuery(e.list)
+      });
+    }
   }
 
   public openModal(modal, field) {

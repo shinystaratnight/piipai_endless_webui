@@ -137,6 +137,78 @@
 
       font-size: .8rem;
     }
+
+    .default-value {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      color: rgba($gray, .4);
+
+      a:hover {
+        color: $gray;
+        cursor: pointer;
+      }
+    }
+
+    input[type="checkbox"]:checked ~ .custom-checkbox {
+      font-size: .6rem;
+
+      border-color: $brand-primary;
+
+      background-color: $brand-primary;
+      color: white;
+    }
+
+    .custom-checkbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      min-width: 1rem;
+      height: 1rem;
+
+      margin-right: .5rem;
+
+      font-size: 0;
+
+      border: 1px solid rgba($gray, .2);
+      border-radius: .2rem;
+
+      cursor: pointer;
+    }
+
+    .datepicker {
+      display: relative;
+
+      input {
+        padding-left: 5rem;
+      }
+
+      .placeholder {
+        position: absolute;
+        top: 9px;
+        left: 16px;
+
+        font-size: .8rem;
+
+        color: rgba($gray, .4);
+
+        z-index: 20;
+      }
+    }
+  }
+
+  &-date {
+    padding-left: 5rem;
+
+    &.active {
+      border-color: $gray;
+
+      & ~ .input-group-addon {
+        border-color: $gray !important;
+      }
+    }
   }
 }
 

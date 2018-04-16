@@ -20,7 +20,7 @@
       (click)="resetFilter()"></i>
   </label>
   <div [ngbCollapse]="isCollapsed" class="filter-select-wrapper">
-    <select class="form-control custom-select filter-select" [(ngModel)]="data" (change)="onChange()">
+    <select class="form-control custom-select filter-select" [(ngModel)]="data" (change)="onChange()" [class.active]="query">
       <option *ngFor="let option of config.options" [attr.value]="option.value" [selected]="data === option.value">{{option.label}}</option>
     </select>
   </div>

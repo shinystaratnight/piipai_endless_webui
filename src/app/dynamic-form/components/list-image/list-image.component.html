@@ -1,5 +1,5 @@
-<img *ngIf="src" [src]="src" alt="avatar" width="40" height="40">
-<i *ngIf="icon" fa [name]="icon" [ngClass]="[iconClass]" [title]="config.title || ''"></i>
 <span>{{config.label}}</span>
+<img *ngIf="src" [src]="src" width="60" height="60">
+<i *ngIf="icon" fa [name]="icon" [ngClass]="[iconClass]" [title]="config.title || ''"></i>
 <span *ngIf="config.delim && !last">{{config.delim}}</span>
 <br *ngIf="!config.hidden && !config.delim">

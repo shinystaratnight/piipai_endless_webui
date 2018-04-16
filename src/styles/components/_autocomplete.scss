@@ -2,7 +2,9 @@
   width: 100%;
   position: absolute;
   // border: 1px solid rgba($brand-inverse, .5);
-  // border-radius: 0 0 .2rem .2rem;
+
+  background-color: white;
+
   z-index: 30;
 
 
@@ -12,21 +14,38 @@
     //   color: white;
     // }
 
+  .form-element & input {
+    @each $item in $themes {
+      .#{$item}-theme &:hover,
+      .#{$item}-theme &:focus {
+        border-color: map-get($theme-colors, $item);
+      }
+    }
+  }
+
   &-value {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     border: 1px solid rgba($gray, .2);
-    border-radius: 50px;
 
     background-color: transparent;
 
     overflow: hidden;
+    cursor: default;
 
-    &.active:not(:focus) {
-      cursor: pointer;
+    .filter-wrapper & {
+      border-radius: 50px;
     }
+
+    &.active {
+      border-color: $gray;
+    }
+
+    // &.active:not(:focus) {
+    //   cursor: pointer;
+    // }
 
     // &.active:not(:focus) {
     //   background-color: #2d2c31;
@@ -84,25 +103,32 @@
 
     overflow-y: auto;
 
-    z-index: 150;
+    z-index: 20;
   }
 
   &-item {
+    padding: .5rem;
+
     border: none;
     border-radius: 0;
 
-    // &:hover {
-      // color: $gray;
-      // width: 100%;
-      // background-color: $brand-primary;
-    // }
+    // cursor: pointer;
 
-    // @each $item in $themes {
-    //   .#{$item}-theme &:hover {
-    //     background-color: map-get($theme-colors, $item);
-    //   }
-    // }
-  // }
+    label {
+      margin-bottom: 0;
+    }
+
+    .form-element &:hover {
+      color: $gray;
+      width: 100%;
+      background-color: $brand-primary;
+    }
+
+    @each $item in $themes {
+      .#{$item}-theme .form-element &:hover {
+        background-color: map-get($theme-colors, $item);
+      }
+    }
   }
 
 // .r3sourcer .autocomplete {
@@ -122,23 +148,23 @@
     //   }
     // }
 
-    &-filter input {
-      // border: none;
-      // width: 60%;
+    // &-filter input {
+    //   // border: none;
+    //   // width: 60%;
 
-      border-bottom: 1px solid rgba($gray, .2);
-      border-radius: 50px;
+    //   border-bottom: 1px solid rgba($gray, .2);
+    //   border-radius: 50px;
 
-      &:hover, &:focus {
-        border-color: $gray;
-      }
+    //   &:hover, &:focus {
+    //     border-color: $gray;
+    //   }
 
-      // @each $item in $themes {
-      //   .#{$item}-theme &:hover {
-      //     border-color: map-get($theme-colors, $item);
-      //   }
-      // }
-    }
+    //   // @each $item in $themes {
+    //   //   .#{$item}-theme &:hover {
+    //   //     border-color: map-get($theme-colors, $item);
+    //   //   }
+    //   // }
+    // }
 
     // &-filter &-item {
 

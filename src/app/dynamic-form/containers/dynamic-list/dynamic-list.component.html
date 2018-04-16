@@ -28,7 +28,7 @@
     </h5>
   </div>
   <div class="datatable-content">
-    <div class="filter-wrapper" *ngIf="(first || poped) && showFilters" [class.open]="!filtersHidden">
+    <div class="filter-wrapper" *ngIf="(first || poped) && showFilters" [class.open]="!filtersHidden" [class.in-form]="inForm">
       <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     </div>
     <div class="background" (click)="filtersHidden = !filtersHidden"></div>
@@ -60,12 +60,12 @@
         </list-search-bar>
       </div>
       <action-element *ngIf="config.list.actions && !inForm" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
-      <div class="datatable-tabs">
+      <!-- <div class="datatable-tabs">
         <span class="tab" *ngFor="let tab of tabs" (click)="changeTab(tab)">
           <i fa [name]="tab.is_collapsed ? 'eye' : 'eye-slash'"></i>
           {{tab.label}}
         </span>
-      </div>
+      </div> -->
 
       <div #tableWrapper class="table-wrapper">
         <table class="table table-sm" *ngIf="config.list">
@@ -105,6 +105,11 @@
                     <li [class.active]="field.sorted === 'desc'" (click)="sorting(field, 'desc'); field.openSort = false">Alphabetically Z-A</li>
                   </ul>
               </th>
+              <th *ngIf="config.list.tabs" class="last-cell">
+                <div class="cell-content">
+                  More
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody *ngIf="body && !refresh">
@@ -113,14 +118,27 @@
               [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
               <td *ngIf="!inForm || actions">
                 <div class="cell-content">
-                  <div class="d-flex flex-md-column justify-content-between align-items-center">
-                    <input type="checkbox" *ngIf="config.list.actions || actions" [(ngModel)]="select[row.id]" [checked]="select[row.id]" (ngModelChange)="emitSelect()">
-                    <a class="d-flex mt-md-2 ml-auto ml-md-0" *ngIf="first && !inForm && !config.list.editDisable && checkPermission('get')" [routerLink]="[row.id + '/change']">
-                      <i fa [name]="'pencil'" class="icon text-warning"></i>
-                    </a>
-                    <i fa *ngIf="!first && !config.list.editDisable && checkPermission('get')"
-                      [name]="'pencil'" class="icon text-warning ml-auto ml-md-0"
-                      (click)="editObject(row.id, row.__str__)"></i>
+                  <div class="first-cell">
+                    <label>
+                      <input type="checkbox"
+                        class="form-check-input"
+                        *ngIf="config.list.actions || actions"
+                        [(ngModel)]="select[row.id]"
+                        [checked]="select[row.id]"
+                        (ngModelChange)="emitSelect()" hidden>
+                      <div class="custom-checkbox">
+                        <i fa name="check"></i>
+                      </div>
+                    </label>
+                    <div class="first-cell-content">
+                      <img *ngIf="row.picture" class="first-cell-image" [src]="row.picture">
+                      <a class="first-cell-link" *ngIf="first && !inForm && !config.list.editDisable && checkPermission('get')" [routerLink]="[row.id + '/change']">
+                        <i fa [name]="'pencil'" class="icon text-warning"></i>&nbsp;Edit
+                      </a>
+                      <i fa *ngIf="!first && !config.list.editDisable && checkPermission('get')"
+                        [name]="'pencil'" class="icon text-warning ml-auto ml-md-0"
+                        (click)="editObject(row.id, row.__str__)"></i>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -150,6 +168,12 @@
                     <list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></list-table>
                   </div>
                 </div>
+              </td>
+              <td *ngIf="config.list.tabs" class="last-cell">
+                <i fa
+                  class="more-icon"
+                  [name]="row.collapsed ? 'angle-down' : 'angle-up'">
+                </i>
               </td>
             </tr>
           </tbody>

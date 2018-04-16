@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/skip';
 
 @Component({
   selector: 'filter-related',
@@ -39,7 +40,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public modalScrollThrottle = 50;
 
   public list: any[];
-  public limit: number = 100;
+  public limit: number = 10;
   public previewList: any[];
   public topHeight: number;
 
@@ -47,6 +48,11 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public defaultValue: any;
   public theme: string;
+  public multiple: boolean;
+  public selected: any[];
+
+  public chashValues: any[];
+
   public icons = {
     r3sourcer: {
       true: 'angle-right',
@@ -83,15 +89,17 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       [this.config.data.value]: 'All'
     };
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
+    this.multiple = this.config.multiple;
 
-    this.item = this.createElement();
+    // this.item = this.createElement();
   }
 
   public ngAfterViewInit() {
     if (this.search) {
       this.subscription = this.search.valueChanges
+        .skip(1)
         .debounceTime(400)
-        .distinctUntilChanged()
+        // .distinctUntilChanged()
         .subscribe((res) => {
           this.filter();
         });
@@ -99,11 +107,19 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   public generateList(concat = false): void {
+    if (this.multiple) {
+      if (!this.chashValues) {
+        this.getOptions(this.searchValue, concat);
+      }
+    } else {
       this.getOptions(this.searchValue, concat);
+    }
   }
 
   public generatePreviewList(list) {
@@ -112,26 +128,33 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public openAutocomplete($event) {
+      if (this.multiple && !this.item.hideAutocomplete) {
+        this.item.hideAutocomplete = true;
+        return;
+      }
       let autocomplete;
       let target = $event.target;
+
       this.searchValue = null;
       this.item.hideAutocomplete = false;
-      this.generateList(this.item);
+      this.generateList();
       if (target.classList.contains('autocomplete-value')) {
-        this.topHeight = target.offsetHeight;
+        this.topHeight = target.offsetHeight + 1;
         autocomplete = target.nextElementSibling;
       } else {
-        this.topHeight = target.parentElement.offsetHeight;
+        this.topHeight = target.parentElement.offsetHeight + 1;
         autocomplete = target.parentElement.nextElementSibling;
       }
       setTimeout(() => {
-        autocomplete.children[0].focus();
+        if (!this.multiple) {
+          autocomplete.children[0].focus();
+        }
       }, 50);
   }
 
   public resetList() {
     setTimeout(() => {
-      this.previewList = null;
+      this.previewList.length = 0;
       this.item.lastElement = 0;
       this.item.count = null;
       this.item.hideAutocomplete = true;
@@ -141,30 +164,52 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public filter() {
     this.item.lastElement = 0;
     this.item.count = null;
-    this.previewList = null;
+    // this.previewList = null;
     this.generateList();
   }
 
   public onModalScrollDown() {
-    this.generateList(true);
+    if (!this.multiple) {
+      this.generateList(true);
+    }
   }
 
-  public setValue(value) {
-    this.item.data = value[this.config.data.key];
-    this.item.displayValue = value[this.config.data.value];
-    this.item.count = null;
-    this.searchValue = null;
-    this.previewList = null;
-    this.onChange();
+  public setValue(value, list?) {
+    if (this.multiple) {
+      this.selected = list.filter((item) => item.checked);
+      // if (this.item.data) {
+      //   this.item.data.push(value[this.config.data.key]);
+      // } else {
+      //   this.item.data = [value[this.config.data.key]];
+      // }
+      this.item.data = this.selected.map((el) => el[this.config.data.key]);
+      this.item.displayValue = this.selected.length
+        ? `Selected ${this.selected.length} ${this.config.label}`
+        : `Select ${this.config.label}`;
+      this.onChange();
+    } else {
+      this.item.data = value[this.config.data.key];
+      this.item.displayValue = value[this.config.data.value];
+      this.item.count = null;
+      this.item.hideAutocomplete = true;
+      this.searchValue = null;
+      this.previewList.length = 0;
+      this.onChange();
+    }
   }
 
   public deleteValue() {
-    this.item.data = '';
-    this.item.displayValue = 'All';
-    this.fs.generateQuery(
-      this.genericQuery(this.config.query),
-      this.config.key, this.config.listName, this.item);
-    this.changeQuery();
+    if (this.multiple) {
+      this.resetAll(this.previewList || []);
+      return;
+    } else {
+      this.item.data = '';
+      this.item.displayValue = 'All';
+    }
+    // this.fs.generateQuery(
+    //   this.genericQuery(this.config.query),
+    //   this.config.key, this.config.listName, this.item);
+    // this.changeQuery();
   }
 
   // public addElement() {
@@ -184,7 +229,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   //   this.changeQuery();
   // }
 
-  public createElement(data = '') {
+  public createElement(data?: any) {
     // this.count++;
     let element = {
       data,
@@ -203,7 +248,14 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public genericQuery(query) {
-    let result = `${query}=${this.item.data}&`;
+    let result = '';
+    if (Array.isArray(this.item.data)) {
+      this.item.data.forEach((el) => {
+        result += `${query}=${el}&`;
+      });
+    } else {
+      result = `${query}=${this.item.data}&`;
+    }
     // elements.forEach((el) => {
     //   if (el.data) {
     //     result += `${query}=${el.data}&`;
@@ -222,10 +274,19 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public parseQuery(query) {
     this.query = query;
-    query.split('&').forEach((el) => {
-      let value = el.split('=')[1];
-      this.item = this.createElement(value);
+    const queries = query.split('&');
+    const selected = queries.length;
+    let data = queries.length && [];
+    queries.forEach((el, i) => {
+      if (queries.length) {
+        data.push(el.split('=')[1]);
+      } else {
+        data = el.split('=')[1];
+      }
     });
+    if (!this.item) {
+      this.item = this.createElement(data);
+    }
   };
 
   public updateFilter() {
@@ -250,7 +311,10 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     } else {
       this.query = '';
-      this.item = this.createElement();
+      if (!this.item) {
+        this.item = this.createElement();
+      }
+      this.deleteValue();
       // this.count = 1;
       // if (this.elements && !this.elements.length) {
       //   this.elements.push(this.createElement(this.count));
@@ -261,11 +325,15 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public resetFilter() {
     // this.elements.length = 1;
     this.deleteValue();
-    this.fs.generateQuery('', this.config.key, this.config.listName);
+    this.fs.generateQuery('', this.config.key, this.config.listName, this.item);
     this.changeQuery();
   }
 
   public getOption(value) {
+    if (this.multiple) {
+      this.selected = value;
+      return `Selected ${value.length} ${this.config.label}`;
+    }
     let endpoint = `${this.config.data.endpoint}${value}/`;
     let display = this.config.data.value;
     this.genericFormService.getAll(endpoint).subscribe(
@@ -281,6 +349,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     let display = this.config.data.value;
     let key = this.config.data.key;
     let query = '';
+
     if (value) {
       query += `?search=${value}&`;
     }
@@ -291,18 +360,44 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.genericFormService.getByQuery(endpoint, query).subscribe(
         (res: any) => {
           this.item.count = res.count;
-          if (res.results && res.results.length) {
+          if (res.results) {
             if (concat) {
               if (this.previewList) {
                 this.previewList.push(...res.results);
               }
             } else {
+              if (!this.chashValues && this.multiple) {
+                if (this.selected) {
+                  res.results.forEach((el) => {
+                    if (this.selected.indexOf(el[this.config.data.key]) > -1) {
+                      el.checked = true;
+                    }
+                  });
+                }
+                this.chashValues = res.results;
+                this.previewList = this.chashValues;
+                return;
+              }
               this.previewList = res.results;
             }
           }
         }
       );
     }
+  }
+
+  public selectAll(list) {
+    list.forEach((el) => {
+      el.checked = true;
+    });
+    this.setValue(null, list);
+  }
+
+  public resetAll(list) {
+    list.forEach((el) => {
+      el.checked = false;
+    });
+    this.setValue(null, list);
   }
 
 }

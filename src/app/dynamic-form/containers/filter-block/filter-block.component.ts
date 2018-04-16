@@ -16,4 +16,8 @@ export class FilterBlockComponent {
   public changeQuery(e) {
     this.event.emit(e);
   }
+
+  public resetAll() {
+    this.event.emit('resetAll');
+  }
 }
