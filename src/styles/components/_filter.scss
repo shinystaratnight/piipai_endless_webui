@@ -210,6 +210,32 @@
       }
     }
   }
+
+  &-values {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    margin-top: .5rem;
+
+    .badge {
+      padding: .3rem .5rem;
+      margin-top: .3rem;
+
+      font-size: .8rem;
+      font-weight: normal;
+
+      border: 1px solid $brand-primary;
+      border-radius: 50px;
+
+      background-color: white;
+      color: inherit;
+    }
+
+    i {
+      color: $brand-primary;
+    }
+  }
 }
 
 // .r3sourcer .list-page {

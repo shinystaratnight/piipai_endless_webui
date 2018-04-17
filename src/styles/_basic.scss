@@ -46,10 +46,43 @@ button {
 
     font-size: 0;
 
-    border: 1px solid rgba($gray, .2);
+    border: 1px solid #bdbdbd;
     border-radius: .2rem;
 
     cursor: pointer;
+  }
+
+  .badge {
+    font-size: .8rem;
+    font-weight: normal;
+
+    border-radius: 50px;
+
+    background-color: rgba($brand-primary, .5);
+    color: inherit;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        background-color: rgba(map-get($theme-colors, $item), .5);
+      }
+    }
+  }
+
+  .btn-outline-primary {
+    font-size: .7rem;
+    padding: .1rem;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        border-color: map-get($theme-colors, $item);
+        color: map-get($theme-colors, $item);
+
+        &:hover {
+          background-color: map-get($theme-colors, $item);
+          color: white;
+        }
+      }
+    }
   }
 }
 
@@ -198,7 +231,7 @@ button {
 }
 
 .description {
-  color: silver;
+  color: rgba($gray, .5);
 }
 
 .icon {

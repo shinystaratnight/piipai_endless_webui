@@ -1,0 +1,27 @@
+<div class="list-info-wrapper">
+  <div>
+    <div class="list-info-image">
+      <img [src]="src">
+
+      <i *ngIf="available" fa name="check-circle" class="available"></i>
+      <i *ngIf="!available" fa name="times-circle" class="unavailable"></i>
+    </div>
+
+    <div class="list-info-edit-link">
+      <i fa name="pencil" class="edit"></i>
+      Edit
+    </div>
+  </div>
+
+  <div>
+    <h5 class="list-info-title">{{title}}</h5>
+    <p class="description">{{description}}</p>
+
+    <div class="list-info-status">
+      <span class="title">Status:</span>
+      <span class="badge" *ngFor="let stat of status">{{stat}}</span>
+    </div>
+  </div>
+
+  <i *ngIf="description" fa name="info-circle" placement="right" ngbTooltip="description"></i>
+</div>

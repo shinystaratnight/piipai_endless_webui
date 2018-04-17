@@ -116,6 +116,12 @@
 
     label {
       margin-bottom: 0;
+
+      cursor: pointer;
+    }
+
+    &:hover {
+      cursor: pointer;
     }
 
     .form-element &:hover {

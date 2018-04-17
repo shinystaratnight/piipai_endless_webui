@@ -76,5 +76,12 @@
         </div>
       </div>
     </div>
+
+    <div *ngIf="selected" class="filter-values">
+      <span class="badge" *ngFor="let value of selected">
+        {{value[config.data.value]}}
+        <i class="icon" fa name="times" (click)="removeItem(value)"></i>
+      </span>
+    </div>
   </div>
 </div>

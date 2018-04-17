@@ -71,8 +71,8 @@
         <table class="table table-sm" *ngIf="config.list">
           <thead class="thead-default hidden-sm-down">
             <tr>
-              <th *ngIf="!inForm || actions" class="active" style="width: 2rem">
-                <div class="cell-content">
+              <th *ngIf="(!inForm && config.list.actions) || actions || edit" class="active first-cell" style="width: 2rem">
+                <div *ngIf="(!inForm && config.list.actions) || actions">
                   <label for="all-checkbox">All</label>
                   <input
                     id="all-checkbox"
@@ -83,99 +83,118 @@
                     (ngModelChange)="selectAll()">
                 </div>
               </th>
-              <th *ngFor="let field of config.list.columns;"
-                [hidden]="field.tab && field.tab.is_collapsed">
-                  <div class="cell-content">
-                    <ng-container
-                      listElement
-                      [head]="true"
-                      [config]="field"
-                      (event)="sorting(field)">
-                    </ng-container>
-                    <i fa
-                      class="sort-icon"
-                      *ngIf="field.sort && !delay"
-                      [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'"
-                      [class.active]="field.sorted && !delay"
-                      [border]=true
-                      (click)="field.openSort = !field.openSort"></i>
-                  </div>
-                  <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">
-                    <li [class.active]="field.sorted === 'asc'" (click)="sorting(field, 'asc'); field.openSort = false">Alphabetically A-Z</li>
-                    <li [class.active]="field.sorted === 'desc'" (click)="sorting(field, 'desc'); field.openSort = false">Alphabetically Z-A</li>
-                  </ul>
+              <th *ngFor="let field of config.list.columns;" [hidden]="field.tab && field.tab.is_collapsed">
+                <ng-container
+                  listElement
+                  [head]="true"
+                  [config]="field"
+                  (event)="sorting(field)">
+                </ng-container>
+                <i fa
+                  class="sort-icon"
+                  *ngIf="field.sort && !delay"
+                  [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'"
+                  [class.active]="field.sorted && !delay"
+                  [border]=true
+                  (click)="field.openSort = !field.openSort"></i>
+                <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">
+                  <li [class.active]="field.sorted === 'asc'" (click)="sorting(field, 'asc'); field.openSort = false">Alphabetically A-Z</li>
+                  <li [class.active]="field.sorted === 'desc'" (click)="sorting(field, 'desc'); field.openSort = false">Alphabetically Z-A</li>
+                </ul>
               </th>
-              <th *ngIf="config.list.tabs" class="last-cell">
-                <div class="cell-content">
-                  More
-                </div>
-              </th>
+              <th *ngIf="config.list.tabs" class="last-cell">More</th>
             </tr>
           </thead>
           <tbody *ngIf="body && !refresh">
-            <tr *ngFor="let row of body"
-              [class.table-warning]="row.highlight && row.highlight.highlight"
-              [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
-              <td *ngIf="!inForm || actions">
-                <div class="cell-content">
-                  <div class="first-cell">
-                    <label>
-                      <input type="checkbox"
-                        class="form-check-input"
-                        *ngIf="config.list.actions || actions"
-                        [(ngModel)]="select[row.id]"
-                        [checked]="select[row.id]"
-                        (ngModelChange)="emitSelect()" hidden>
-                      <div class="custom-checkbox">
-                        <i fa name="check"></i>
-                      </div>
-                    </label>
-                    <div class="first-cell-content">
-                      <img *ngIf="row.picture" class="first-cell-image" [src]="row.picture">
-                      <a class="first-cell-link" *ngIf="first && !inForm && !config.list.editDisable && checkPermission('get')" [routerLink]="[row.id + '/change']">
-                        <i fa [name]="'pencil'" class="icon text-warning"></i>&nbsp;Edit
-                      </a>
-                      <i fa *ngIf="!first && !config.list.editDisable && checkPermission('get')"
-                        [name]="'pencil'" class="icon text-warning ml-auto ml-md-0"
-                        (click)="editObject(row.id, row.__str__)"></i>
+            <ng-container *ngFor="let row of body">
+              <tr [class.main]="row.additionalBody && !row.collapsed" [class.table-warning]="row.highlight && row.highlight.highlight"
+                [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
+                <td *ngIf="(!inForm && config.list.actions) || actions || edit" class="first-cell">
+                  <label *ngIf="config.list.actions || actions">
+                    <input type="checkbox"
+                      class="form-check-input"
+                      [(ngModel)]="select[row.id]"
+                      [checked]="select[row.id]"
+                      (ngModelChange)="emitSelect()" hidden>
+                    <div class="custom-checkbox">
+                      <i fa name="check"></i>
                     </div>
-                  </div>
-                </div>
-              </td>
-              <td *ngFor="let cell of row.content" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
-                <div class="cell-content">
-                  <div class="d-flex justify-content-between">
-                    <ng-container
-                      listElement
-                      [config]="cell.content"
-                      (event)="eventHandler($event)"
-                      (buttonAction)="buttonHandler($event)">
-                    </ng-container>
-                    <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
-                      <i fa
-                        id="dropdownBasic1"
-                        class="text-muted p-2 icon"
-                        [class.dropdown-toggle]="false"
-                        [name]="'ellipsis-v'"
-                        [border]=true
-                        ngbDropdownToggle></i>
-                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
-                      </div>
+                  </label>
+                  <a class="first-cell-link" *ngIf="first && !inForm && !config.list.editDisable && checkPermission('get')" [routerLink]="[row.id + '/change']">
+                    <i fa
+                      name="pencil"
+                      class="icon">
+                    </i>&nbsp;Edit
+                  </a>
+                  <i fa
+                    *ngIf="!first && !config.list.editDisable && checkPermission('get')"
+                    name="pencil"
+                    class="icon"
+                    (click)="editObject(row.id, row.__str__)"></i>
+                </td>
+
+                <td *ngFor="let cell of row.content" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
+                  <ng-container
+                    listElement
+                    [config]="cell.content"
+                    (event)="eventHandler($event)"
+                    (buttonAction)="buttonHandler($event)">
+                  </ng-container>
+                  <!-- <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
+                    <i fa
+                      id="dropdownBasic1"
+                      class="text-muted p-2 icon"
+                      [class.dropdown-toggle]="false"
+                      [name]="'ellipsis-v'"
+                      [border]=true
+                      ngbDropdownToggle></i>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBasic1">
+                      <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
                     </div>
-                  </div>
+                  </div> -->
                   <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
                     <list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></list-table>
                   </div>
-                </div>
-              </td>
-              <td *ngIf="config.list.tabs" class="last-cell">
-                <i fa
-                  class="more-icon"
-                  [name]="row.collapsed ? 'angle-down' : 'angle-up'">
-                </i>
-              </td>
-            </tr>
+                </td>
+
+                <td *ngIf="config.list.tabs" class="last-cell">
+                  <i fa
+                    class="more-icon"
+                    [name]="row.collapsed ? 'angle-down' : 'angle-up'"
+                    (click)="row.collapsed = !row.collapsed">
+                  </i>
+                </td>
+
+              </tr>
+              <tr *ngIf="row.additionalBody && !row.collapsed">
+                <td *ngIf="(!inForm && config.list.actions) || actions || edit">&nbsp;</td>
+                <td [attr.colspan]="row.content.length">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th *ngFor="let acell of row.additionalBody.content">{{acell.label}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td *ngFor="let acell of row.additionalBody.content">
+                          <div class="additional-data" *ngFor="let field of acell.content">
+                            <span class="description">{{field.label}}</span>
+                            <ng-container *ngFor="let innerField of field.content"
+                              listElement
+                              [config]="innerField"
+                              (event)="eventHandler($event)"
+                              (buttonAction)="buttonHandler($event)">
+                            </ng-container>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td *ngIf="config.list.tabs">&nbsp;</td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
         <div *ngIf="refresh" class="spinner">

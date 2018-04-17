@@ -63,6 +63,7 @@ import { ListButtonsComponent } from './containers/list-buttons/list-buttons.com
 import { ListSerachBarComponent } from './components/list-search-bar/list-search-bar.component';
 import { FilterRangeComponent } from './components/filter-range/filter-range.component';
 import { FilterMultipleComponent } from './components/filter-multiple/filter-multiple.component';
+import { ListInfoComponent } from './components/list-info/list-info.component';
 
 import { ActionElementComponent } from './components/action-element/action-element.component';
 
@@ -133,7 +134,8 @@ import { SharedModule } from '../shared/shared.module';
     FormColumnComponent,
     ProfileComponent,
     FilterRangeComponent,
-    FilterMultipleComponent
+    FilterMultipleComponent,
+    ListInfoComponent,
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -168,7 +170,8 @@ import { SharedModule } from '../shared/shared.module';
     FormJsonComponent,
     FormColumnComponent,
     FilterRangeComponent,
-    FilterMultipleComponent
+    FilterMultipleComponent,
+    ListInfoComponent,
   ]
 })
 export class DynamicFormModule { }

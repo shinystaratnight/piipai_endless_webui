@@ -5,7 +5,9 @@ import {
   EventEmitter,
   ViewChild,
   AfterViewInit,
-  OnDestroy
+  OnDestroy,
+  HostListener,
+  ElementRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgModel } from '@angular/forms';
@@ -50,6 +52,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public theme: string;
   public multiple: boolean;
   public selected: any[];
+  public selectedValues: any[];
 
   public chashValues: any[];
 
@@ -76,7 +79,8 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   constructor(
     private fs: FilterService,
     private route: ActivatedRoute,
-    private genericFormService: GenericFormService
+    private genericFormService: GenericFormService,
+    private elementRef: ElementRef
   ) {}
 
   public ngOnInit() {
@@ -86,7 +90,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
     this.defaultValue = {
       [this.config.data.key]: '',
-      [this.config.data.value]: 'All'
+      [this.config.data.value]: this.multiple ? `Select ${this.config.label}` : 'All'
     };
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
     this.multiple = this.config.multiple;
@@ -236,7 +240,6 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       lastElement: 0,
       hideAutocomplete: true
     };
-    element['displayValue'] = data ? this.getOption(data) : 'All';
     return element;
   }
 
@@ -286,6 +289,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     });
     if (!this.item) {
       this.item = this.createElement(data);
+      this.item['displayValue'] = data ? this.getOption(data) : 'All';
     }
   };
 
@@ -313,6 +317,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.query = '';
       if (!this.item) {
         this.item = this.createElement();
+        this.item['displayValue'] = data ? this.getOption(data) : 'All';
       }
       this.deleteValue();
       // this.count = 1;
@@ -332,9 +337,18 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public getOption(value) {
     if (this.multiple) {
       this.selected = value;
+      this.getOptions(this.searchValue);
       return `Selected ${value.length} ${this.config.label}`;
     }
-    let endpoint = `${this.config.data.endpoint}${value}/`;
+    let endpoint;
+    const index = this.config.data.endpoint.indexOf('?');
+    if (index !== -1) {
+      endpoint = this.config.data.endpoint.slice(0, index)
+        + `${value}/`
+        + this.config.data.endpoint.slice(index);
+    } else {
+      endpoint = `${this.config.data.endpoint}${value}/`;
+    }
     let display = this.config.data.value;
     this.genericFormService.getAll(endpoint).subscribe(
       (res: any) => {
@@ -351,9 +365,9 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     let query = '';
 
     if (value) {
-      query += `?search=${value}&`;
+      query += endpoint.indexOf('?') === -1 ? `?search=${value}` : `&search=${value}`;
     }
-    query += !query ? '?' : '';
+    query += !query && endpoint.indexOf('?') === -1 ? '?' : '&';
     query += `limit=${this.limit}&offset=${offset}&fields=${display}&fields=${key}`;
     if (!this.item.count || (this.item.count && offset < this.item.count && concat)) {
       this.item.lastElement += this.limit;
@@ -376,6 +390,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
                 }
                 this.chashValues = res.results;
                 this.previewList = this.chashValues;
+                this.selected = this.filterSelectedValues(this.previewList);
                 return;
               }
               this.previewList = res.results;
@@ -398,6 +413,33 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       el.checked = false;
     });
     this.setValue(null, list);
+  }
+
+  public filterSelectedValues(list) {
+    return list.filter((el) => this.selected && this.selected.indexOf(el.id) > -1);
+  }
+
+  public removeItem(item) {
+    item.checked = false;
+    this.setValue(item, this.previewList);
+  }
+
+  @HostListener('document:click', ['$event'])
+  public handleClick(event) {
+    let clickedComponent = event.target;
+    let inside = false;
+    do {
+      if (clickedComponent === this.elementRef.nativeElement) {
+        inside = true;
+      }
+      clickedComponent = clickedComponent.parentNode;
+    } while (clickedComponent);
+    if (!inside) {
+      if (this.multiple && !this.item.hideAutocomplete) {
+        this.item.hideAutocomplete = true;
+        return;
+      }
+    }
   }
 
 }

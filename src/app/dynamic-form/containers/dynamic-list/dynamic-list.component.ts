@@ -172,9 +172,10 @@ export class DynamicListComponent implements
   public pictures = {
     '/ecore/api/v2/core/contacts/': '{picture.origin}',
     '/ecore/api/v2/candidate/candidatecontacts/': '{contact.picture.origin}',
-    '/ecore/api/v2/core/companycontacts/': '{contact.picture.origin}',
     '/ecore/api/v2/core/companies/': '{logo.origin}'
   };
+
+  public edit: boolean;
 
   constructor(
     private filterService: FilterService,
@@ -220,6 +221,8 @@ export class DynamicListComponent implements
     } else {
       this.showFilters = !!(this.filtersOfList && this.filtersOfList.length);
     }
+
+    this.edit = !this.pictures[this.endpoint];
   }
 
   public ngOnChanges() {
@@ -266,7 +269,22 @@ export class DynamicListComponent implements
       this.select = this.resetSelectedElements(data[this.responseField]);
       if (config.list) {
         this.sortedColumns = this.getSortedColumns(config.list.columns);
-        this.body = this.prepareData(config.list.columns, data[this.responseField], config.list.highlight); //tslint:disable-line
+        if (this.tabs) {
+          const mainMetadata = config.list.columns.filter((el) => !el.tab || !el.tab.is_collapsed);
+          const additionalMetadata = config.list.columns.filter((el) => el.tab && el.tab.is_collapsed); //tslint:disable-line
+          const additionalBody = this.prepareData(additionalMetadata, data[this.responseField], config.list.highlight);
+
+          this.body = this.prepareData(mainMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
+          this.body.forEach((main) => {
+            additionalBody.forEach((additional) => {
+              if (main.id === additional.id) {
+                main.additionalBody = this.parseAdditionalBody(additional);
+              }
+            });
+          });
+        } else {
+          this.body = this.prepareData(config.list.columns, data[this.responseField], config.list.highlight); //tslint:disable-line
+        }
         if (this.asyncData) {
           this.getAsyncData();
         }
@@ -284,6 +302,22 @@ export class DynamicListComponent implements
         }
       }
     }
+  }
+
+  public parseAdditionalBody(body) {
+    const content = [];
+
+    body.content.forEach((col) => {
+      const tab = col.tab;
+      const newContent = content.find((c) => c.label === tab.label);
+      if (newContent) {
+        newContent.content.push(col);
+      } else {
+        content.push(Object.assign({}, tab, {content: [col]}));
+      }
+    });
+    body.content = content;
+    return body;
   }
 
   public ngOnDestroy() {
