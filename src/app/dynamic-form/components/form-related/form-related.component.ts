@@ -197,7 +197,7 @@ export class FormRelatedComponent
     if (this.config.formData) {
       this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
-        if (this.checkRelatedField(formData.key)) {
+        if (this.checkRelatedField(formData.key, formData.data)) {
           if (this.config.default && !this.config.hide && !this.config.value) {
             this.getOptions.call(this, '', 0, false, this.setValue);
             if (this.config.read_only) {
@@ -460,13 +460,16 @@ export class FormRelatedComponent
       e.preventDefault();
       e.stopPropagation();
     }
-    if (!this.checkPermission(type)) {
+    if (!this.checkPermission(type) && this.config.endpoint) {
       return;
     }
     this.modalData = {};
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
     this.modalData.endpoint = object && object.endpoint || this.config.endpoint;
+    if (object.endpoint) {
+      this.modalData.edit = true;
+    }
     if (type === 'update' || type === 'delete') {
       if (object) {
         this.modalData.title = object.allData ? object.allData.__str__ : object.__str__;
@@ -734,13 +737,51 @@ export class FormRelatedComponent
     }
   }
 
-  public checkRelatedField(key: string): boolean {
+  public checkRelatedField(key: string, data): boolean {
     let result;
     if (this.config.showIf) {
-      this.config.showIf.forEach((field) => {
-        result = field.indexOf(key) > -1;
-      });
+      result = this.checkShowRules(this.config.showIf, data);
     }
     return result || false;
+  }
+
+  public checkShowRules(rule: any[], data): boolean {
+    let approvedRules = 0;
+    let rulesNumber = rule.length;
+
+    rule.forEach((el: any) => {
+      if (typeof el === 'string') {
+        let value = this.getValueByKey(el, data);
+
+        if (value && value !== '0') {
+          approvedRules += 1;
+        } else {
+          return;
+        }
+      } else if (el instanceof Object) {
+        let key = Object.keys(el)[0];
+        let targetValue = el[key];
+        let value = this.getValueByKey(key, data);
+
+        if (value === targetValue) {
+          approvedRules += 1;
+        } else {
+          return;
+        }
+      }
+    });
+
+    return approvedRules === rulesNumber;
+  }
+
+  public getValueByKey(key: string, data: any): any {
+    let keysArray = key.split('.');
+    let firstKey = keysArray.shift();
+    if (keysArray.length === 0) {
+      return data && data[firstKey];
+    } else if (keysArray.length > 0) {
+      let combineKeys = keysArray.join('.');
+      return this.getValueByKey(combineKeys, data[firstKey]);
+    }
   }
 }
