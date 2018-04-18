@@ -8,6 +8,29 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
 
 .datatable-wrapper {
 
+  .btn {
+    border-radius: 50px;
+  }
+
+  .custom-select {
+    position: relative;
+
+    border-radius: 50px;
+    background: white url(/assets/img/down-arrow.svg) no-repeat;
+    background-position: right .75rem center;
+    background-size: 8px 10px;
+
+    &:focus {
+      background: url(/assets/img/down-arrow.svg) no-repeat;
+      background-position: right .75rem center;
+      background-size: 8px 10px;
+    }
+
+    &.active {
+      border-color: $gray;
+    }
+  }
+
   .datatable-list & {
     padding: 25px 0;
   }
@@ -20,8 +43,6 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     outline: none;
 
     &:focus {
-      border-color: transparent;
-      // box-shadow: 0 0 0 1px $gray;
       border: 1px solid $gray;
     }
   }
@@ -38,8 +59,6 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
           border-right: 1px solid $gray !important;
           border-top: 1px solid $gray;
           border-bottom: 1px solid $gray;
-          // box-shadow: 0 0 0 1px $gray;
-          // border-color: transparent;
         }
       }
     }
@@ -73,7 +92,7 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     border-collapse: separate;
     border-spacing: 0 6px;
 
-    font-size: .8rem;
+    font-size: .9rem;
 
     color: $gray;
 
@@ -81,14 +100,6 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
       border-top: none;
 
       padding: .3rem;
-
-      // &:first-child {
-      //   border-left: 1px solid rgba($gray, .4);
-      // }
-
-      // &:last-child {
-      //   border-right: 1px solid rgba($gray, .4);
-      // }
     }
 
     tbody tr {
@@ -137,22 +148,18 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     }
   }
 
-  // .table-row {
-  //   display: table-row-group;
-  // }
-
   thead th {
     position: relative;
 
     padding: .3rem;
 
     vertical-align: top;
-    font-size: .8rem;
+    font-size: .9rem;
 
     border-top: none;
     border-bottom: none;
 
-    color: rgba($gray, .4);
+    color: rgba(black, .15);
     text-transform: uppercase;
 
     background-color: white;
@@ -199,9 +206,9 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
   @include media-breakpoint-up('xl') {
     &-list &-body,
     &-body.open-filters {
-      // width: 80%;
       width: calc(100% - 285px);
       max-width: 80%;
+
       margin: 0 auto;
     }
   }
@@ -210,12 +217,6 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     display: flex;
     align-items: flex-start;
     justify-content: space-around;
-
-    // @include media-breakpoint-down('sm') {
-    //   flex-direction: column;
-    //   align-items: center;
-    //   justify-content: flex-start;
-    // }
   }
 
   &-search {
@@ -244,12 +245,6 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
   .filter-wrapper {
     display: none;
     width: 265px;
-
-    // min-height: 100vh;
-
-    // &.in-form {
-    //   min-height: auto;
-    // }
 
     &.open {
       display: block;
@@ -298,18 +293,45 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     margin-bottom: .5rem;
 
     &:hover {
-      background-color: $brand-primary;
       border-color: $brand-primary;
+
+      background-color: $brand-primary;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          border-color: map-get($theme-colors, $item);
+
+          background-color: map-get($theme-colors, $item);
+        }
+      }
     }
 
     &.active {
-      background-color: $brand-primary;
       border-color: $brand-primary;
+
+      background-color: $brand-primary;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          border-color: map-get($theme-colors, $item);
+
+          background-color: map-get($theme-colors, $item);
+        }
+      }
 
       &:hover,
       &:focus {
-        background-color: $brand-primary;
         border-color: $brand-primary;
+
+        background-color: $brand-primary;
+
+        @each $item in $themes {
+          .#{$item}-theme & {
+            border-color: map-get($theme-colors, $item);
+
+            background-color: map-get($theme-colors, $item);
+          }
+        }
       }
     }
   }
@@ -338,12 +360,11 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
 
       &:hover {
         font-weight: bold;
-        // color: $brand-primary;
+
         cursor: pointer;
       }
 
       &.active {
-        // color: $brand-primary;
         font-weight: bold;
       }
     }
@@ -370,16 +391,7 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
   }
 
   .first-cell {
-    // display: flex;
-    // flex-direction: column;
-    // align-items: center;
-    // justify-content: space-between;
-
     text-align: center;
-
-    // &:not(th) .custom-checkbox{
-    //   margin-top: 2rem;
-    // }
 
     &-link {
       display: flex;
@@ -420,436 +432,3 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     }
   }
 }
-
-// .list-page {
-//   position: relative;
-//   display: flex;
-//   align-items: stretch;
-//   // height: 100%;
-//   // min-height: calc(100vh - 48px);
-//   // background-color: #eef1f6;
-
-//   @include media-breakpoint-down('md') {
-//     height: auto;
-//   }
-
-//   @include media-breakpoint-up('xl') {
-//     min-height: calc(100vh - 80px);;
-//   }
-// }
-
-// .content {
-//   width: 100%;
-// }
-
-
-// .datatable {
-//   padding: 0 1rem;
-
-//   list-column,
-//   list-text {
-//     width: 100%;
-
-//     .label {
-//       min-width: 40%;
-//     }
-//   }
-
-//   td {
-//     border-top: none;
-//     border-right: 1px solid #d3d3d3;
-
-//     &:last-child {
-//       border-right: none;
-
-//       @include media-breakpoint-down('sm') {
-//         border-right: 1px solid #d3d3d3;
-//       }
-//     }
-//   }
-
-//   // .list-page &-wrapper {
-//   //   max-width: calc(100vw - 320px);
-
-//   //   &:first-child {
-//   //     max-height: calc(100% - 80px);
-//   //   }
-
-//   //   @include media-breakpoint-down('md') {
-//   //     max-width: 100%;
-//   //   }
-//   // }
-
-//   &-label {
-//     display: flex;
-//     align-items: center;
-//     justify-content: flex-start;
-//     text-transform: uppercase;
-//     font-weight: 300;
-//     padding: 1rem;
-//     margin-bottom: 1rem;
-//     border: 2px solid #dbdce1;
-//     background-color: white;
-//     color: #555;
-
-//     @include media-breakpoint-down('sm') {
-//       align-items: stretch;
-//       justify-content: center;
-//       flex-direction: column;
-//     }
-//   }
-
-//   &-button {
-//     color: white;
-//     padding: .5rem .8rem;
-//     font-size: 1rem;
-//     text-transform: uppercase;
-//     text-decoration: none;
-//     border-radius: 2px;
-//     border: none;
-//     background-color: #54545c;
-//     cursor: pointer;
-
-//     &:hover,
-//     &:focus {
-//       text-decoration: none;
-//       background-color: darken(#54545c, 5%);
-//     }
-
-//     @include media-breakpoint-down('sm') {
-//       width: 100%;
-//       & {
-//         margin-top: .5rem;
-//       }
-//     }
-//   }
-
-//   .pagination ul {
-//     margin-bottom: 0;
-//   }
-
-//   .button {
-//     border: 1px solid $brand-primary;
-//     background-color: white;
-//     color: rgba(black, .6);
-//     cursor: pointer;
-
-//     &:hover {
-//       background-color: rgba($brand-primary, .3);
-//     }
-
-//     @each $item in $themes {
-//       .#{$item}-theme & {
-//         border-color: map-get($theme-colors, $item);
-//       }
-//       .#{$item}-theme &:hover {
-//         background-color: rgba(map-get($theme-colors, $item), .3);
-//       }
-//     }
-//   }
-
-//   .tabs .tab {
-//     cursor: pointer;
-//     color: $gray-light;
-
-//     &:hover {
-//       color: $gray-dark;
-//     }
-//   }
-
-//   .list-page & .filter-wrapper {
-//     position: absolute;
-//     top: 0;
-//     left: 0;
-//     width: 320px;
-
-//     @include media-breakpoint-down('md') {
-//       position: relative;
-//       width: auto;
-//     }
-//   }
-
-//   .table-wrapper {
-//     position: relative;
-//     overflow-y: auto;
-//     border: 1px solid #d3d3d3;
-
-//     @include media-breakpoint-down('sm') {
-//       border: none;
-//     }
-
-//     table {
-//       margin-bottom: 0;
-//     }
-
-//     thead th {
-//       vertical-align: top;
-//       text-transform: uppercase;
-//     }
-
-//     .list-page & thead th {
-//       font-weight: normal;
-//       background-color: #54545e;
-//       color: white;
-//     }
-
-//     .refreshing-bg {
-//       display: flex;
-//       justify-content: center;
-//       align-items: center;
-//       position: absolute;
-//       top: 0;
-//       left: 0;
-//       width: 100%;
-//       height: 100%;
-//       background: rgba(0, 0, 0, .2);
-//     }
-//   }
-
-//   &-list {
-//     max-width: 100vw;
-//     position: fixed;
-//     left: 0;
-//     bottom: 0;
-//     z-index: 110;
-
-//     .title {
-//       overflow: hidden;
-//       white-space: nowrap;
-//     }
-//   }
-
-//   &-item {
-//     max-width: 190px;
-//   }
-
-//   &-title-hover {
-//     cursor: pointer;
-//   }
-
-//   &.poped {
-//     max-width: 1200px !important;
-//     position: fixed;
-//     top: $datatable-top;
-//     left: $datatable-left;
-//     border-color: rgba(0, 0, 0, .2);
-//     box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
-
-//     .datatable-body {
-//       max-height: 70vh;
-//       overflow-y: auto;
-//     }
-//   }
-
-//   a {
-//     color: inherit;
-//     &:hover {
-//       color: $brand-primary;
-//     }
-
-//     @each $item in $themes {
-//       .#{$item}-theme &:hover {
-//         color: map-get($theme-colors, $item);
-//       }
-//     }
-//   }
-
-//   table th {
-//     position: sticky;
-//     top: 0;
-//     border-top: none;
-//     z-index: 2;
-//   }
-
-//   @include media-breakpoint-down('sm') {
-//     table tr {
-//       margin-bottom: $row-datatable-margin-bottom;
-//       display: block;
-//       border-bottom: $row-datatable-border-width solid $row-datatable-border-color;
-//     }
-//     table td {
-//       display: block;
-//       border: 1px solid #d3d3d3;
-//     }
-//     table td:last-child {
-//       border-bottom: 0;
-//     }
-//     table td::before {
-//       display: block;
-//       text-align: left;
-//       width: $cell-datatable-width;
-//       content: attr(data-label);
-//       float: left;
-//       font-weight: bold;
-//       word-break: break-word;
-//       margin-right: .3rem;
-//     }
-//     table td::after {
-//       display: table;
-//       clear: both;
-//       content: '';
-//       width: 0;
-//       height: 0;
-//     }
-//   }
-// }
-
-
-// .list {
-//   td {
-//     min-width: 150px;
-//   }
-// }
-
-// .r3sourcer {
-//   @include media-breakpoint-up('lg') {
-
-//     .list-page .datatable {
-
-//       a.link {
-//         border-bottom: 1px dotted $brand-primary;
-
-//         @each $item in $themes {
-//           .#{$item}-theme & {
-//             border-bottom-color: map-get($theme-colors, $item);
-//           }
-//         }
-
-//         &:hover,
-//         &:focus {
-//           text-decoration: none;
-//           border-bottom-style: solid;
-//         }
-//       }
-
-//       .filter-wrapper {
-//         width: 300px;
-
-//         @include media-breakpoint-down('md') {
-//           position: relative;
-//           width: auto;
-//         }
-//       }
-
-//       .table-wrapper {
-//         border: 0;
-//         border-radius: .3rem;
-
-//         table {
-//           border-collapse: separate;
-//           border-spacing: 0 1rem;
-//           background-color: #f1f1f1;
-//         }
-
-//         thead th {
-//           padding: .5rem;
-//           border-top: 3px solid $brand-primary;
-//           text-transform: none;
-//           font-weight: 500;
-//           height: 3.5rem;
-//           vertical-align: middle;
-//           background-color: #2b2f31;
-
-//           @each $item in $themes {
-//             .#{$item}-theme & {
-//               border-top-color: map-get($theme-colors, $item);
-//             }
-//           }
-
-//           &:first-child {
-//             border-bottom-left-radius: .3rem;
-//             border-top-left-radius: .3rem;
-//           }
-
-//           &:last-child {
-//             border-bottom-right-radius: .3rem;
-//             border-top-right-radius: .3rem;
-//           }
-//         }
-
-//         tbody {
-
-//           border-collapse: separate;
-//           border-spacing: 0 1rem;
-
-//           tr td:first-child {
-//             border-left: 4px solid $brand-primary;
-//             border-top-left-radius: .3rem;
-//             border-bottom-left-radius: .3rem;
-
-//             @each $item in $themes {
-//               .#{$item}-theme & {
-//                 border-left-color: map-get($theme-colors, $item);
-//               }
-//             }
-//           }
-
-//           tr td:last-child {
-//             border-top-right-radius: .3rem;
-//             border-bottom-right-radius: .3rem;
-//           }
-
-//           tr:nth-child(even) td:first-child {
-//             border-left-color: #2c3032;
-//           }
-
-//           td {
-//             border-bottom: 1px solid silver;
-//             border-right: none;
-//             padding: .5rem;
-//             font-weight: 300;
-//             color: #525252;
-//             background-color: white;
-//           }
-//         }
-//       }
-
-//       &-button.first {
-//         display: block;
-//         width: 100%;
-//         text-align: center;
-//         background-color: $brand-primary;
-//         color: white;
-
-//         @each $item in $themes {
-//           .#{$item}-theme & {
-//             background-color: map-get($theme-colors, $item);
-//           }
-//         }
-
-//         &:hover,
-//         &:focus {
-//           text-decoration: none;
-//           background-color: darken($brand-primary, 5%);
-//         }
-
-//         @each $item in $themes {
-//           .#{$item}-theme &:hover,
-//           .#{$item}-theme &:focus {
-//             background-color: darken(map-get($theme-colors, $item), 5%);
-//           }
-//         }
-//       }
-
-//       &-label {
-//         padding: 0;
-//         margin-bottom: 1rem;
-//         color: #262b2d;
-//         background-color: transparent;
-//         border: none;
-//       }
-//     }
-
-//     // .list-page {
-//     //   background-color: #f1f1f1;
-//     // }
-
-//     .list-page .list-buttons {
-//       position: absolute;
-//       left: 0;
-//       top: 0;
-//       width: 300px;
-//       padding: 2rem;
-//     }
-//   }
-// }

@@ -4,11 +4,16 @@ body {
   color: $gray;
 }
 
+
+label, b {
+  font-weight: 500;
+}
+
 button {
   cursor: pointer;
 }
 
-.r3sourcer a {
+a {
   color: inherit;
 
   &:hover,
@@ -16,6 +21,10 @@ button {
   &.active {
     color: $brand-primary;
 
+    &.not-underline {
+      text-decoration: none;
+    }
+
     @each $item in $themes {
       .#{$item}-theme & {
         color: map-get($theme-colors, $item);
@@ -24,67 +33,153 @@ button {
   }
 }
 
-.r3sourcer {
-  input[type="checkbox"]:checked ~ .custom-checkbox {
-    font-size: .6rem;
+input[type="checkbox"]:checked ~ .custom-checkbox {
+  font-size: .6rem;
 
-    border-color: $brand-primary;
+  border-color: $brand-primary;
 
-    background-color: $brand-primary;
-    color: white;
-  }
+  background-color: $brand-primary;
+  color: white;
+}
 
-  .custom-checkbox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.custom-checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    min-width: 1rem;
-    height: 1rem;
+  min-width: 1rem;
+  height: 1rem;
 
-    margin-right: .5rem;
+  margin-right: .5rem;
 
-    font-size: 0;
+  font-size: 0;
 
-    border: 1px solid #bdbdbd;
-    border-radius: .2rem;
+  border: 1px solid #bdbdbd;
+  border-radius: .2rem;
 
-    cursor: pointer;
-  }
+  cursor: pointer;
+}
 
-  .badge {
-    font-size: .8rem;
-    font-weight: normal;
+/*---------- Bootstrap ---------- */
 
-    border-radius: 50px;
+.badge {
+  font-size: .75rem;
+  font-weight: normal;
 
-    background-color: rgba($brand-primary, .5);
-    color: inherit;
+  padding: .56rem;
 
-    @each $item in $themes {
-      .#{$item}-theme & {
-        background-color: rgba(map-get($theme-colors, $item), .5);
-      }
+  border-radius: 50px;
+
+  background-color: rgba($brand-primary, .5);
+  color: inherit;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: rgba(map-get($theme-colors, $item), .5);
     }
   }
+}
 
-  .btn-outline-primary {
-    font-size: .7rem;
-    padding: .1rem;
+.btn-outline-primary {
+  font-size: .625rem;
+  padding: .25rem;
 
-    @each $item in $themes {
-      .#{$item}-theme & {
-        border-color: map-get($theme-colors, $item);
-        color: map-get($theme-colors, $item);
+  @each $item in $themes {
+    .#{$item}-theme & {
+      border-color: map-get($theme-colors, $item);
+      color: map-get($theme-colors, $item);
 
-        &:hover {
-          background-color: map-get($theme-colors, $item);
-          color: white;
-        }
+      &:hover {
+        background-color: map-get($theme-colors, $item);
+        color: white;
       }
     }
   }
 }
+
+.modal-lg {
+  @include media-breakpoint-up('xl') {
+    max-width: 1170px;
+  }
+}
+
+.modal-content {
+  max-height: 90vh;
+  margin-top: 5vh;
+  overflow: auto;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
+
+  .modal-header-wrapper {
+    position: sticky;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+  }
+
+  .modal-title {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  @include media-breakpoint-down('md') {
+    max-height: 100%;
+  }
+}
+
+.group-button {
+  font-size: .7rem;
+  background-color: lighten($brand-primary, 15%);
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: lighten(map-get($theme-colors, $item), 15%) !important;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    background-color: darken($brand-primary, 10%);
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        background-color: darken(map-get($theme-colors, $item), 10%) !important;
+      }
+    }
+  }
+}
+
+.form-list .form-group,
+.form-list .form-control {
+  margin-bottom: 0;
+}
+
+@each $item in $themes {
+  .#{$item}-theme .bg-primary {
+    background-color: map-get($theme-colors, $item) !important;
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .btn-primary {
+    border-color: map-get($theme-colors, $item);
+    background-color: map-get($theme-colors, $item) !important;
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .text-primary {
+    color: map-get($theme-colors, $item) !important;
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .page-item.active .page-link {
+    background-color: map-get($theme-colors, $item) !important;
+    border-color: map-get($theme-colors, $item) !important;
+  }
+}
+
+/*---------- jtsage-datebox-bootstrap4 ---------- */
 
 .ui-datebox-container.dropdown-menu {
   width: auto;
@@ -197,72 +292,6 @@ button {
   }
 }
 
-.modal-lg {
-  @include media-breakpoint-up('xl') {
-    max-width: 1170px;
-  }
-}
-
-.datatable-wrapper .btn {
-  border-radius: 50px;
-}
-
-.btn-shadow {
-  box-shadow: 0px 3px 7px 3px rgba($gray, 0.2);
-}
-
-.datatable-wrapper .custom-select {
-  position: relative;
-
-  border-radius: 50px;
-  background: white url(/assets/img/down-arrow.svg) no-repeat;
-  background-position: right .75rem center;
-  background-size: 8px 10px;
-
-  &:focus {
-    background: url(/assets/img/down-arrow.svg) no-repeat;
-    background-position: right .75rem center;
-    background-size: 8px 10px;
-  }
-
-  &.active {
-    border-color: $gray;
-  }
-}
-
-.description {
-  color: rgba($gray, .5);
-}
-
-.icon {
-  font-size: 14px !important;
-  cursor: pointer;
-}
-
-.modal-content {
-  max-height: 90vh;
-  margin-top: 5vh;
-  overflow: auto;
-  box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
-
-  .modal-header-wrapper {
-    position: sticky;
-    width: 100%;
-    top: 0;
-    z-index: 100;
-  }
-
-  .modal-title {
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  @include media-breakpoint-down('md') {
-    max-height: 100%;
-  }
-
-}
-
 .datepicker {
   flex-wrap: wrap;
 
@@ -279,8 +308,19 @@ button {
   }
 }
 
-label, b {
-  font-weight: 500;
+/*---------- Custom styles ---------- */
+
+.btn-shadow {
+  box-shadow: 0px 3px 7px 3px rgba($gray, 0.2);
+}
+
+.description {
+  color: rgba($gray, .5);
+}
+
+.icon {
+  font-size: 14px !important;
+  cursor: pointer;
 }
 
 iframe.send-sms {
@@ -310,169 +350,27 @@ iframe.send-sms {
   float: left;
 }
 
-.color-preview {
-  display: inline-block;
-  width: 3rem;
-  height: 2rem;
-  border-radius: .2rem;
-  transition: all .4s;
-}
+.badge.badge-outline {
+  padding: .25rem .4rem;
 
-input:checked ~ .color-preview {
-  transform: scale(1.2);
-}
+  font-size: .8rem;
 
-.image-preview {
-  width: 150px;
-  margin-bottom: 1rem;
-  border-radius: .3rem;
-  border: 5px solid white;
-  box-shadow: 0 0 0 2px $gray;
-}
+  border: 1px solid $brand-primary;
 
-.group-button {
-  font-size: .7rem;
-  background-color: lighten($brand-primary, 15%);
+  background-color: white;
+  color: $brand-primary;
 
   @each $item in $themes {
     .#{$item}-theme & {
-      background-color: lighten(map-get($theme-colors, $item), 15%) !important;
-    }
-  }
-
-  &:hover,
-  &:focus {
-    background-color: darken($brand-primary, 10%);
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        background-color: darken(map-get($theme-colors, $item), 10%) !important;
-      }
+      border-color: map-get($theme-colors, $item);
+      color: map-get($theme-colors, $item);
     }
   }
 }
 
-.form-element-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.form-element-checkbox {
-  display: inline-flex;
-  margin-left: .5rem;
-}
-
-.site-page .form-element {
-  display: flex;
-  flex-wrap: wrap;
-
-  &-label {
-    flex-basis: 200px;
-  }
-
-  &-content{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-basis: calc(100% - 200px);
-    min-width: 200px;
-    max-width: 300px;
-  }
-
-  &-checkbox:not(:empty) {
-    display: flex;
-    align-items: center;
-    margin-left: 0;
-
-    @include media-breakpoint-down('xs') {
-      order: -1;
-      margin-right: .5rem;
-    }
-  }
-
-  &-picture:not(:empty) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  @include media-breakpoint-down('xs') {
-    &-label,
-    &-content {
-      flex-basis: auto;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    &-content {
-      width: 100%;
-      max-width: none;
-      min-width: auto;
-    }
-  }
-}
-
-.modal-form .form-element-content {
-  flex-wrap: wrap;
-}
-
-.site-page .form-element {
-  &.custom {
-    flex-direction: column;
-    justify-content: center;
-
-    .form-element-label {
-      text-transform: uppercase;
-      flex-basis: auto;
-    }
-
-    .form-element-content{
-      display: none;
-    }
-  }
-}
-
-.form-list .form-group,
-.form-list .form-control {
-  margin-bottom: 0;
-}
-
-@include media-breakpoint-down('md') {
-  .list-related {
-    overflow-x: auto;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .page-item.active .page-link {
-    background-color: map-get($theme-colors, $item) !important;
-    border-color: map-get($theme-colors, $item) !important;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .bg-primary {
-    background-color: map-get($theme-colors, $item) !important;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .btn-primary {
-    border-color: map-get($theme-colors, $item);
-    background-color: map-get($theme-colors, $item) !important;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .text-primary {
-    color: map-get($theme-colors, $item) !important;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .nav-link.active {
-    background-color: map-get($theme-colors, $item) !important;
-  }
-}
+// @each $item in $themes {
+//   .#{$item}-theme .page-item.active .page-link {
+//     background-color: map-get($theme-colors, $item) !important;
+//     border-color: map-get($theme-colors, $item) !important;
+//   }
+// }

@@ -120,7 +120,7 @@
                       <i fa name="check"></i>
                     </div>
                   </label>
-                  <a class="first-cell-link" *ngIf="first && !inForm && !config.list.editDisable && checkPermission('get')" [routerLink]="[row.id + '/change']">
+                  <a class="first-cell-link not-underline" *ngIf="first && !inForm && !config.list.editDisable && checkPermission('get')" [routerLink]="[row.id + '/change']">
                     <i fa
                       name="pencil"
                       class="icon">

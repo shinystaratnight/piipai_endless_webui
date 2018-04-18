@@ -1,0 +1,63 @@
+@import '../../../../styles/variables.scss';
+
+.list-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &.inline {
+    flex-direction: row;
+    align-items: flex-start;
+
+    a:not(.default) {
+      font-size: .9rem;
+      font-weight: normal;
+
+      color: $gray;
+
+      &:hover,
+      &:focus {
+        color: $brand-primary;
+
+        @each $item in $themes {
+          .#{$item}-theme & {
+            color: map-get($theme-colors, $item);
+          }
+        }
+      }
+    }
+
+    .display {
+      order: 0;
+      margin-right: .2rem;
+
+      &:after {
+        content: ':';
+      }
+    }
+  }
+
+  .display {
+    order: 2;
+
+    color: rgba($gray, .3);
+  }
+
+  a:not(.default) {
+    font-size: 1rem;
+    font-weight: bold;
+
+    color: rgba($gray, .8);
+
+    &:hover,
+    &:focus {
+      color: $brand-primary;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          color: map-get($theme-colors, $item);
+        }
+      }
+    }
+  }
+}

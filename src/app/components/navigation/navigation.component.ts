@@ -7,6 +7,7 @@ import {
   AfterViewInit,
   EventEmitter,
   Output,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { NavigationService, Page } from '../../services/navigation.service';
@@ -14,7 +15,9 @@ import { UserService, User } from '../../services/user.service';
 
 @Component({
   selector: 'navigation',
-  templateUrl: 'navigation.component.html'
+  templateUrl: 'navigation.component.html',
+  styleUrls: ['./navigation.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class NavigationComponent implements OnInit, AfterViewInit {

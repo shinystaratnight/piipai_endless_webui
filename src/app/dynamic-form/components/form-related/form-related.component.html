@@ -62,7 +62,6 @@
         <input type="text" class="form-control custom-select autocomplete-value" autocomplete="off"
           [(ngModel)]="searchValue"
           [ngModelOptions]="{standalone: true}"
-          [ngClass]="{'active': !config.readonly}"
           (focus)="generateList()"
           (blur)="resetList()"
           (keyup)="filter(searchValue)">

@@ -1,27 +1,29 @@
 <div class="list-info-wrapper">
-  <div>
+  <div class=list-info-left>
     <div class="list-info-image">
       <img [src]="src">
 
-      <i *ngIf="available" fa name="check-circle" class="available"></i>
-      <i *ngIf="!available" fa name="times-circle" class="unavailable"></i>
+      <i *ngIf="available" fa name="check" class="available"></i>
+      <i *ngIf="!available" fa name="times" class="unavailable"></i>
     </div>
 
-    <div class="list-info-edit-link">
+    <a class="list-info-edit-link not-underline" [routerLink]="[config.rowId + '/change']">
       <i fa name="pencil" class="edit"></i>
       Edit
-    </div>
+    </a>
   </div>
 
-  <div>
+  <div class="list-info-block">
     <h5 class="list-info-title">{{title}}</h5>
     <p class="description">{{description}}</p>
 
-    <div class="list-info-status">
+    <div *ngIf="status && status.length" class="list-info-status">
       <span class="title">Status:</span>
-      <span class="badge" *ngFor="let stat of status">{{stat}}</span>
+      <div class="list-info-status-wrapper">
+        <span class="badge badge-outline" *ngFor="let stat of status">{{stat.__str__}}</span>
+      </div>
     </div>
   </div>
 
-  <i *ngIf="description" fa name="info-circle" placement="right" ngbTooltip="description"></i>
+  <i class="info" *ngIf="description" fa name="info-circle" placement="right" ngbTooltip="description"></i>
 </div>

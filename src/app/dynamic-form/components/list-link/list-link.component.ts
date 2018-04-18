@@ -1,8 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'list-link',
-  templateUrl: 'list-link.component.html'
+  templateUrl: 'list-link.component.html',
+  styleUrls: ['./list-link.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class ListLinkComponent implements OnInit {

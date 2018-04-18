@@ -17,6 +17,7 @@ import { ListCheckboxComponent } from './../list-checkbox/list-checkbox.componen
 import { FormButtonComponent } from './../form-button/form-button.component';
 import { ListImageComponent } from './../list-image/list-image.copmonent';
 import { ListInfoComponent } from './../list-info/list-info.component';
+import { ListTagsComponent } from '../list-tags/list-tags.component';
 
 const components = {
   text: ListTextComponent,
@@ -36,6 +37,7 @@ const components = {
   datepicker: ListTextComponent,
   textarea: ListTextComponent,
   info: ListInfoComponent,
+  tags: ListTagsComponent,
 };
 
 @Directive({

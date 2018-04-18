@@ -1,18 +1,10 @@
 .autocomplete {
-  width: 100%;
   position: absolute;
-  // border: 1px solid rgba($brand-inverse, .5);
+
+  width: 100%;
 
   background-color: white;
-
   z-index: 30;
-
-
-  // @include media-breakpoint-up('lg') {
-    // .list-page &-filter .autocomplete {
-    //   background-color: #2d2c31;
-    //   color: white;
-    // }
 
   .form-element & input {
     @each $item in $themes {
@@ -42,60 +34,7 @@
     &.active {
       border-color: $gray;
     }
-
-    // &.active:not(:focus) {
-    //   cursor: pointer;
-    // }
-
-    // &.active:not(:focus) {
-    //   background-color: #2d2c31;
-
-    //   color: inherit;
-    //   cursor: pointer;
-    // }
   }
-
-  // .list-page &-filter input {
-  //   border: none;
-  //   border-bottom: 2px solid white;
-  //   border-radius: 0;
-  //   background-color: #2d2c31;
-
-  //   &:hover, &:focus {
-  //     color: white;
-  //     border-color: $brand-primary;
-  //     background-color: #2d2c31;
-  //   }
-
-  //   @each $item in $themes {
-  //     .#{$item}-theme &:hover,
-  //     .#{$item}-theme &:focus {
-  //       border-color: map-get($theme-colors, $item);
-  //     }
-  //   }
-
-  // }
-
-    // .list-page &-filter &-item {
-    //   background-color: #2d2c31;
-
-    //   &:hover {
-    //     color: #838288;
-    //     background-color: white;
-    //   }
-    // }
-  // }
-
-  // &-value {
-  //   display: flex;
-  //   justify-content: space-between;
-  //   align-items: center;
-  //   overflow: hidden;
-
-  //   &.active:not(:focus) {
-  //     cursor: pointer;
-  //   }
-  // }
 
   &-list {
     width: 100%;
@@ -111,8 +50,6 @@
 
     border: none;
     border-radius: 0;
-
-    // cursor: pointer;
 
     label {
       margin-bottom: 0;
@@ -136,48 +73,4 @@
       }
     }
   }
-
-// .r3sourcer .autocomplete {
-  // @include media-breakpoint-up('lg') {
-    // .list-page &-filter .autocomplete-value {
-    //   border: 1px solid rgba($gray, .2);
-    //   border-radius: 50px;
-    // }
-
-    // &-filter &-value {
-    //   border-radius: 0;
-    //   background-color: transparent;
-    //   overflow: hidden;
-
-    //   &.active:not(:focus) {
-    //     cursor: pointer;
-    //   }
-    // }
-
-    // &-filter input {
-    //   // border: none;
-    //   // width: 60%;
-
-    //   border-bottom: 1px solid rgba($gray, .2);
-    //   border-radius: 50px;
-
-    //   &:hover, &:focus {
-    //     border-color: $gray;
-    //   }
-
-    //   // @each $item in $themes {
-    //   //   .#{$item}-theme &:hover {
-    //   //     border-color: map-get($theme-colors, $item);
-    //   //   }
-    //   // }
-    // }
-
-    // &-filter &-item {
-
-    //   &:hover {
-    //     color: $gray;
-    //     // background-color: white;
-    //   }
-    // }
-  // }
 }

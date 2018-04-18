@@ -590,6 +590,7 @@ export class DynamicListComponent implements
           obj['delim'] = col.delim;
           obj['title'] = col.title;
           obj['display'] = this.format(element.display, el);
+          obj['inline'] = element.inline;
           if (element.type === 'datepicker') {
             let field = this.config.fields.find((elem) => elem.key === element.field);
             if (field) {
@@ -675,6 +676,21 @@ export class DynamicListComponent implements
           } else if (element.field) {
             props = element.field.split('.');
             this.setValue(el, props, obj);
+
+            if (obj.type === 'picture') {
+              obj.value = el;
+              obj.values = {
+                picture: 'picture.origin',
+                available: 'availability',
+                title: '__str__',
+                address: 'address.__str__',
+                description: 'last_name',
+                status: 'company_contact',
+              };
+
+              obj.type = 'info';
+            }
+
           }
           if (!this.checkValue(obj)) {
             delete cell.contextMenu;

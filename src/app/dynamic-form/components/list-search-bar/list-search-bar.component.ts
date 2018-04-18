@@ -5,7 +5,8 @@ import { FilterService } from './../../services/filter.service';
 
 @Component({
   selector: 'list-search-bar',
-  templateUrl: 'list-search-bar.component.html'
+  templateUrl: 'list-search-bar.component.html',
+  styleUrls: ['./list-search-bar.component.scss']
 })
 export class ListSerachBarComponent implements OnInit {
 

@@ -7,7 +7,8 @@ import {
   Output,
   EventEmitter,
   ElementRef,
-  HostListener
+  HostListener,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
@@ -18,7 +19,9 @@ import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'form-input',
-  templateUrl: 'form-input.component.html'
+  templateUrl: 'form-input.component.html',
+  styleUrls: ['./form-input.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class FormInputComponent extends BasicElementComponent implements OnInit, AfterViewInit {

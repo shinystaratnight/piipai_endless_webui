@@ -13,7 +13,8 @@ interface FormFieldsGroup {
 
 @Component({
   selector: 'form-fields-group',
-  templateUrl: 'form-fields-group.component.html'
+  templateUrl: 'form-fields-group.component.html',
+  styleUrls: ['./form-fields-group.component.scss']
 })
 
 export class FormFieldsGroupComponent implements OnInit {

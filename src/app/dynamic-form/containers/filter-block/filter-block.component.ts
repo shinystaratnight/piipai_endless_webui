@@ -2,7 +2,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'filter-block',
-  templateUrl: 'filter-block.component.html'
+  templateUrl: 'filter-block.component.html',
+  styleUrls: ['./filter-block.component.scss']
 })
 export class FilterBlockComponent {
   @Input()

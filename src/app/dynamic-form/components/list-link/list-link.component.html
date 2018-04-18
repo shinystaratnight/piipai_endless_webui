@@ -1,31 +1,35 @@
-<span *ngIf="!arrayValue">
-  <a class="link" [attr.href]="href" *ngIf="config.value && !link" [title]="config.title || ''">{{config.value}}</a>
+<div class="list-link" [class.inline]="config.inline">
+  <span *ngIf="config.display" class="display">{{config.display}}</span>
+  <span *ngIf="!arrayValue">
+    <a class="link default" [attr.href]="href" *ngIf="config.value && !link" [title]="config.title || ''">{{config.value}}</a>
 
-  <a class="link" routerLink="{{href}}" *ngIf="config.value && link && config.link" [title]="config.title || ''">
-    {{value}}
-    <span *ngIf="config.fields">
-      <ng-container
-        *ngFor="let field of config.fields"
-        listElement
-        [config]="field">
-      </ng-container>
-    </span>
-  </a>
+    <a class="link" routerLink="{{href}}" *ngIf="config.value && link && config.link" [title]="config.title || ''">
+      {{value}}
+      <span *ngIf="config.fields">
+        <ng-container
+          *ngFor="let field of config.fields"
+          listElement
+          [config]="field">
+        </ng-container>
+      </span>
+    </a>
 
-  <a class="link" *ngIf="config.endpoint" href="" (click)="action($event)" [title]="config.title || ''">
-    {{value}}
-    <span *ngIf="config.fields">
-      <ng-container
-        *ngFor="let field of config.fields"
-        listElement
-        [config]="field"
-        (event)="eventHandler($event)"
-        (buttonAction)="buttonHandler($event)"></ng-container>
-    </span>
-  </a>
+    <a class="link" *ngIf="config.endpoint" href="" (click)="action($event)" [title]="config.title || ''">
+      {{value}}
+      <span *ngIf="config.fields">
+        <ng-container
+          *ngFor="let field of config.fields"
+          listElement
+          [config]="field"
+          (event)="eventHandler($event)"
+          (buttonAction)="buttonHandler($event)"></ng-container>
+      </span>
+    </a>
 
-  <span *ngIf="!config.value && !config.fields">-</span>
-</span>
+    <span *ngIf="!config.value && !config.fields">-</span>
+  </span>
+</div>
+
 
 <span *ngIf="arrayValue">
   <span *ngFor="let item of value; let l = last; let i = index">

@@ -1,3 +1,6 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+
 $nested-width: 200px;
 $side-width: 320px;
 $header-shadow: 0 0 15px 8px rgba($gray, .2);

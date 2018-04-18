@@ -5,7 +5,8 @@ import { LoginService } from './../../services/login.service';
 
 @Component({
   selector: 'login-form',
-  templateUrl: 'login-form.component.html'
+  templateUrl: 'login-form.component.html',
+  styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
 

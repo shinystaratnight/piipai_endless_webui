@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'list-info',
-  templateUrl: 'list-info.component.html'
+  templateUrl: 'list-info.component.html',
+  styleUrls: ['./list-info.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class ListInfoComponent implements OnInit {
@@ -14,8 +16,7 @@ export class ListInfoComponent implements OnInit {
   public title: string;
   public address: string;
   public description: string;
-  public status: string[];
-  public link: string;
+  public status: any[];
 
   public ngOnInit() {
     this.src = this.getValue(this.config.values.picture, this.config.value);
@@ -24,7 +25,6 @@ export class ListInfoComponent implements OnInit {
     this.address = this.getValue(this.config.values.address, this.config.value);
     this.description = this.getValue(this.config.values.description, this.config.value);
     this.status = this.getValue(this.config.values.status, this.config.value);
-    this.link = this.config.link;
   }
 
   public getValue(key: string, data: any): any {
