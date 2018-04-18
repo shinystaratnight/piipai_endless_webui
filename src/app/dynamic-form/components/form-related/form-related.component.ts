@@ -134,6 +134,10 @@ export class FormRelatedComponent
       this.getReplaceElements(this.config.metadata);
     }
     this.isCollapsed = this.config.collapsed;
+
+    if (this.config.editForm && this.config.read_only) {
+      this.viewMode = true;
+    }
   }
 
   public generateCustomTemplate(fieldsList) {
@@ -283,7 +287,7 @@ export class FormRelatedComponent
             this.results = results;
           });
         } else {
-          this.results = data;
+          this.results = data && data !== '-' ? data : [];
         }
         this.updateData();
       }
@@ -462,7 +466,7 @@ export class FormRelatedComponent
     this.modalData = {};
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
-    this.modalData.endpoint = this.config.endpoint;
+    this.modalData.endpoint = object && object.endpoint || this.config.endpoint;
     if (type === 'update' || type === 'delete') {
       if (object) {
         this.modalData.title = object.allData ? object.allData.__str__ : object.__str__;

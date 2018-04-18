@@ -944,6 +944,7 @@ export class DynamicListComponent implements
         case 'addForm':
           this.addForm(e);
           break;
+        case 'editModal':
         case 'editForm':
           this.editForm(e);
           break;
@@ -1414,6 +1415,7 @@ export class DynamicListComponent implements
     this.modalInfo.endpoint = endpoint;
     this.modalInfo.mode = 'edit';
     this.modalInfo.edit = true;
+    this.modalInfo.dontUseMetadataQuery = e.value === 'editModal';
     this.open(this.modal, {size: 'lg'});
   }
 
