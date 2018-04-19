@@ -467,7 +467,7 @@ export class FormRelatedComponent
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
     this.modalData.endpoint = object && object.endpoint || this.config.endpoint;
-    if (object.endpoint) {
+    if (object && object.endpoint) {
       this.modalData.edit = true;
     }
     if (type === 'update' || type === 'delete') {
