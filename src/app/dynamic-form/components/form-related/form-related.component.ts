@@ -739,10 +739,23 @@ export class FormRelatedComponent
 
   public checkRelatedField(key: string, data): boolean {
     let result;
-    if (this.config.showIf) {
+    if (this.config.showIf && this.checkExistKey(this.config.showIf, key)) {
       result = this.checkShowRules(this.config.showIf, data);
     }
     return result || false;
+  }
+
+  public checkExistKey(rules, key) {
+    let result = false;
+    rules.forEach((rule) => {
+      if (rule instanceof Object) {
+        const keys = Object.keys(rule);
+        result = result || keys.indexOf(key) > -1;
+      } else {
+        result = result || rule.indexOf(key) > -1;
+      }
+    });
+    return result;
   }
 
   public checkShowRules(rule: any[], data): boolean {
