@@ -1,0 +1,8 @@
+<div *ngFor="let skill of config.value">
+  {{skill.skill.name}} &nbsp;
+  <span
+    [style.color]="colors[skill.score]">
+      | &nbsp;{{skill.score}}&nbsp;
+      <i fa name="star"></i>
+  </span>
+</div>

@@ -77,10 +77,10 @@
       </div>
     </div>
 
-    <div *ngIf="selected" class="filter-values">
-      <span class="badge" *ngFor="let value of selected">
+    <div *ngIf="selected && selected.length" class="filter-values">
+      <span class="badge badge-outline" *ngFor="let value of selected">
         {{value[config.data.value]}}
-        <i class="icon" fa name="times" (click)="removeItem(value)"></i>
+        <i fa name="times" (click)="removeItem(value)"></i>
       </span>
     </div>
   </div>

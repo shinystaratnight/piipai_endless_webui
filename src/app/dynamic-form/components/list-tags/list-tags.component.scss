@@ -1,6 +1,24 @@
-span {
-  display: inline-flex;
+@import '../../../../styles/variables.scss';
 
+span {
   margin-right: .5rem;
   margin-bottom: .3rem;
+}
+
+.tags-wrapper {
+  display: flex;
+
+  &.column {
+    flex-direction: column;
+  }
+
+  .success {
+    border-color: $brand-success;
+    color: $brand-success;
+  }
+
+  .danger {
+    border-color: $brand-danger;
+    color: $brand-danger;
+  }
 }

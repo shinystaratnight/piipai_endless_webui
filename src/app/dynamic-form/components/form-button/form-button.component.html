@@ -4,7 +4,7 @@
     *ngIf="!config.hidden && (config.templateOptions.text || repeatArray && repeatArray.length > 1)"
     [ngClass]="[buttonClass]"
     [ngStyle]="{'backgroundColor': config.color}"
-    class="btn mb-1"
+    class="btn"
     [class.btn-outline-primary]="config.list && !buttonClass"
     [class.btn-sm]="config.templateOptions.small"
     [class.px-2]="config.templateOptions.p"

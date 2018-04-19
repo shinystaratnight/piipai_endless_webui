@@ -26,7 +26,7 @@ export const meta = [
           label: 'Font',
           type: 'text',
           options: [
-            { key: 'Roboto', value: 'Roboto' },
+            { key: 'Source Sans Pro', value: 'Source Sans Pro' },
             { key: 'Lato', value: 'Lato' },
             { key: 'Barlow', value: 'Barlow' },
             { key: 'Open Sans', value: 'Open Sans' }
@@ -43,7 +43,7 @@ export const meta = [
           type: 'color',
           inline: true,
           options: [
-            { key: 'default', value: '#3cb1db' },
+            { key: 'default', value: '#28A3FC' },
             { key: 'labour', value: '#f58926' },
             { key: 'indigo', value: '#3f51b5' },
             { key: 'teal', value: '#009688' },

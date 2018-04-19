@@ -29,11 +29,8 @@ import 'rxjs/add/operator/skip';
 export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy {
   public config: any;
   public data: any;
-  // public elements = [];
-  // public count: number;
   public item: any;
   public query: string;
-  // public copyConfig = [];
   public isCollapsed: boolean = false;
 
   public searchValue: string;
@@ -93,9 +90,6 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       [this.config.data.value]: this.multiple ? `Select ${this.config.label}` : 'All'
     };
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
-    this.multiple = this.config.multiple;
-
-    // this.item = this.createElement();
   }
 
   public ngAfterViewInit() {
@@ -103,7 +97,6 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.subscription = this.search.valueChanges
         .skip(1)
         .debounceTime(400)
-        // .distinctUntilChanged()
         .subscribe((res) => {
           this.filter();
         });
@@ -168,7 +161,6 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public filter() {
     this.item.lastElement = 0;
     this.item.count = null;
-    // this.previewList = null;
     this.generateList();
   }
 
@@ -181,11 +173,6 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public setValue(value, list?) {
     if (this.multiple) {
       this.selected = list.filter((item) => item.checked);
-      // if (this.item.data) {
-      //   this.item.data.push(value[this.config.data.key]);
-      // } else {
-      //   this.item.data = [value[this.config.data.key]];
-      // }
       this.item.data = this.selected.map((el) => el[this.config.data.key]);
       this.item.displayValue = this.selected.length
         ? `Selected ${this.selected.length} ${this.config.label}`
@@ -210,31 +197,9 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.item.data = '';
       this.item.displayValue = 'All';
     }
-    // this.fs.generateQuery(
-    //   this.genericQuery(this.config.query),
-    //   this.config.key, this.config.listName, this.item);
-    // this.changeQuery();
   }
 
-  // public addElement() {
-  //   if (this.elements.length < this.config.options.length) {
-  //     this.elements.push(this.createElement(this.count));
-  //   }
-  // }
-
-  // public deleteElement(item = this.elements[0]) {
-  //   if (this.elements.length > 1) {
-  //     let result = this.elements.filter((el) => el.id !== item.id);
-  //     this.elements = result;
-  //   }
-  //   this.fs.generateQuery(
-  //     this.genericQuery(this.elements, this.config.query),
-  //     this.config.key, this.config.listName, this.elements);
-  //   this.changeQuery();
-  // }
-
   public createElement(data?: any) {
-    // this.count++;
     let element = {
       data,
       lastElement: 0,
@@ -259,12 +224,6 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     } else {
       result = `${query}=${this.item.data}&`;
     }
-    // elements.forEach((el) => {
-    //   if (el.data) {
-    //     result += `${query}=${el.data}&`;
-    //   }
-    // });
-    // this.item
     this.query = result;
     return result.substring(0, result.length - 1);
   }
@@ -299,16 +258,11 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       if (data.byQuery) {
         if (this.settingValue) {
           this.settingValue = false;
-          // this.elements = [];
           this.parseQuery(data.query);
         }
       } else {
         if (this.settingValue) {
           this.settingValue = false;
-          // this.elements = [];
-          // let counts = data.map((el) => el.id);
-          // this.elements.push(...data);
-          // this.count = Math.max(...counts);
           this.item = data;
           this.genericQuery(this.config.query);
         }
@@ -320,15 +274,10 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
         this.item['displayValue'] = data ? this.getOption(data) : 'All';
       }
       this.deleteValue();
-      // this.count = 1;
-      // if (this.elements && !this.elements.length) {
-      //   this.elements.push(this.createElement(this.count));
-      // }
     }
   };
 
   public resetFilter() {
-    // this.elements.length = 1;
     this.deleteValue();
     this.fs.generateQuery('', this.config.key, this.config.listName, this.item);
     this.changeQuery();

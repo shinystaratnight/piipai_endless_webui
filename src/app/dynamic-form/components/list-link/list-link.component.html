@@ -1,7 +1,11 @@
 <div class="list-link" [class.inline]="config.inline">
   <span *ngIf="config.display" class="display">{{config.display}}</span>
-  <span *ngIf="!arrayValue">
-    <a class="link default" [attr.href]="href" *ngIf="config.value && !link" [title]="config.title || ''">{{config.value}}</a>
+  <span class="d-flex align-items-center" *ngIf="!arrayValue">
+    <a #view class="link default" [class.phone]="phone" [attr.href]="href" *ngIf="config.value && !link" [title]="config.title || ''">
+      {{config.value}}
+    </a>
+    <button class="btn btn-outline-primary" (click)="sendSms()">SMS</button>
+    <button class="btn btn-outline-primary" (click)="lickView.nativeElement.click()">Call</button>
 
     <a class="link" routerLink="{{href}}" *ngIf="config.value && link && config.link" [title]="config.title || ''">
       {{value}}

@@ -3,7 +3,10 @@
 
   width: 100%;
 
+  margin-top: 5px;
+
   background-color: white;
+  box-shadow: 0 0 12px rgba($gray, .15);
   z-index: 30;
 
   .form-element & input {
@@ -26,6 +29,10 @@
 
     overflow: hidden;
     cursor: default;
+
+    i {
+      font-size: 14px;
+    }
 
     .filter-wrapper & {
       border-radius: 50px;
@@ -50,6 +57,7 @@
 
     border: none;
     border-radius: 0;
+    border-bottom: 1px solid rgba($gray, .05);
 
     label {
       margin-bottom: 0;

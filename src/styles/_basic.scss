@@ -1,5 +1,8 @@
 body {
-  font-family: Roboto, Verdana, Geneva, sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
+
+  font-size: 16px;
+  line-height: 20px;
 
   color: $gray;
 }
@@ -183,6 +186,7 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 
 .ui-datebox-container.dropdown-menu {
   width: auto;
+  max-width: 250px;
   border: none;
 
   .ui-datebox-gridheader {
@@ -239,6 +243,12 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
         background-color: $brand-primary;
 
         color: white;
+
+        @each $item in $themes {
+          .#{$item}-theme & {
+            background-color: map-get($theme-colors, $item);
+          }
+        }
       }
     }
   }
@@ -274,6 +284,22 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 
       background-color: $brand-primary;
       color: white;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          background-color: map-get($theme-colors, $item);
+        }
+      }
+    }
+  }
+
+  .btn-info {
+    background-color: $brand-primary;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        background-color: map-get($theme-colors, $item);
+      }
     }
   }
 }
@@ -288,6 +314,12 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
       background-color: $brand-primary;
 
       color: white;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          background-color: map-get($theme-colors, $item);
+        }
+      }
     }
   }
 }
@@ -311,11 +343,11 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 /*---------- Custom styles ---------- */
 
 .btn-shadow {
-  box-shadow: 0px 3px 7px 3px rgba($gray, 0.2);
+  box-shadow: 0px 4px 6px 0 rgba(black, 0.1);
 }
 
 .description {
-  color: rgba($gray, .5);
+  color: rgba($gray, .7);
 }
 
 .icon {
@@ -353,7 +385,7 @@ iframe.send-sms {
 .badge.badge-outline {
   padding: .25rem .4rem;
 
-  font-size: .8rem;
+  font-size: .75rem;
 
   border: 1px solid $brand-primary;
 

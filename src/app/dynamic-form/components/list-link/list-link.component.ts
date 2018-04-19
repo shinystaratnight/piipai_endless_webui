@@ -1,4 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  ViewEncapsulation,
+  ViewChild
+} from '@angular/core';
 
 @Component({
   selector: 'list-link',
@@ -16,11 +23,16 @@ export class ListLinkComponent implements OnInit {
   public last: boolean;
   public arrayValue: boolean;
 
+  public phone: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
+
+  @ViewChild('view')
+  public lickView;
 
   public ngOnInit() {
 
@@ -35,6 +47,10 @@ export class ListLinkComponent implements OnInit {
       this.link = !(this.isEmail(this.value[0]) || this.isPhone(this.value[0]));
     } else {
       this.link = !(this.isEmail(this.value) || this.isPhone(this.value));
+    }
+
+    if (!this.link && this.config.link.indexOf('tel:') > -1) {
+      this.phone = true;
     }
   }
 
@@ -81,6 +97,20 @@ export class ListLinkComponent implements OnInit {
 
   public buttonHandler(e) {
     this.buttonAction.emit(e);
+  }
+
+  public sendSms() {
+    this.buttonAction.emit({
+      type: 'click',
+      value: 'sendSMS',
+      el: Object.assign({}, this.config, {
+        fields: [{
+          type: 'link',
+          field: this.config.key,
+          value: this.config.value
+        }]
+      })
+    });
   }
 
 }

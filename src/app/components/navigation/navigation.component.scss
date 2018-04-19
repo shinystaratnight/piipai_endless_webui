@@ -2,16 +2,16 @@
 @import '../../../styles/mixins.scss';
 
 $nested-width: 200px;
-$side-width: 320px;
-$header-shadow: 0 0 15px 8px rgba($gray, .2);
-$nested-shadow: 0px 5px 10px 5px rgba($gray, .2);
+$side-width: 252px;
+$header-shadow: 0 8px 12px rgba($gray, .2);
+$nested-shadow: 0px 6px 10px 5px rgba($gray, .2);
 $header-bg: white;
 
 .page-header {
   display: flex;
   align-items: center;
 
-  height: 80px;
+  height: 72px;
 
   padding: 0 50px;
 
@@ -59,19 +59,17 @@ $header-bg: white;
     align-items: center;
 
     width: $side-width;
-    height: 80px;
+    height: 72px;
 
     background-image: url(/assets/img/LBK_regular_logo.png);
     background-repeat: no-repeat;
-    background-size: auto 4vh;
+    background-size: auto 40px;
     background-position: 2rem center;
   }
 
  .navigation {
     display: flex;
     align-items: center;
-
-    // font-size: 1.1rem;
 
     &-list {
       display: flex;
@@ -83,7 +81,7 @@ $header-bg: white;
         }
 
         & > .navigation-link {
-          padding: 28px 24px;
+          padding: 26px 25px;
 
         }
         &:not(:hover) > .navigation-link.active {
@@ -134,7 +132,7 @@ $header-bg: white;
         z-index: 1000;
 
         & .navigation-list-nested {
-          border-radius: 0 3px 3px 3px;
+          border-radius: 0 3px 3px 0;
 
           top: 0;
           left: $nested-width;
@@ -233,8 +231,8 @@ $header-bg: white;
       padding: 15px 0;
 
       img {
-        width: 50px;
-        height: 50px;
+        width: 48px;
+        height: 48px;
 
         margin-left: 24px;
 
@@ -259,6 +257,7 @@ $header-bg: white;
 
     &-menu {
       position: absolute;
+      top: 72px;
       right: 0;
 
       margin: 0;
@@ -280,7 +279,7 @@ $header-bg: white;
 .r3sourcer .page-header .logo {
   background-image: url(/assets/img/new-software.svg);
   background-repeat: no-repeat;
-  background-size: auto 48px;
+  background-size: auto 40px;
   background-position: left center;
 
   @include media-breakpoint-down('lg') {

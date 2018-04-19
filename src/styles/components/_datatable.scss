@@ -1,9 +1,3 @@
-// $datatable-top: 250px;
-// $datatable-left: $datatable-top;
-// $row-datatable-margin-bottom: $spacer;
-// $row-datatable-border-width: 2px;
-// $row-datatable-border-color: rgba($gray-light, .5);
-// $cell-datatable-width: 45%;
 $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
 
 .datatable-wrapper {
@@ -32,56 +26,9 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
   }
 
   .datatable-list & {
-    padding: 25px 0;
+    padding: 31px 0;
   }
 
-   input {
-    padding: .5rem 1rem;
-
-    border-radius: 50px;
-    border: 1px solid rgba($gray, .2);
-    outline: none;
-
-    &:focus {
-      border: 1px solid $gray;
-    }
-  }
-
-  .input-group {
-    input {
-      border-right: none;
-
-      &:focus {
-        border-right: none;
-
-        & ~ .input-group-addon {
-
-          border-right: 1px solid $gray !important;
-          border-top: 1px solid $gray;
-          border-bottom: 1px solid $gray;
-        }
-      }
-    }
-  }
-
-  .input-group-addon {
-    width: 50px;
-
-    border-right: 1px solid rgba($gray, .2);
-    border-top: 1px solid rgba($gray, .2);
-    border-bottom: 1px solid rgba($gray, .2);
-    border-radius: 0 50px 50px 0 !important;
-
-    background-color: transparent;
-
-    span {
-      cursor: pointer;
-    }
-  }
-
-  .form-control {
-    transition: none;
-  }
 }
 
 .datatable {
@@ -92,7 +39,7 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     border-collapse: separate;
     border-spacing: 0 6px;
 
-    font-size: .9rem;
+    font-size: .875rem;
 
     color: $gray;
 
@@ -118,11 +65,11 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
       }
 
       &:hover {
-        box-shadow: 0 0 10px 4px rgba($gray, 0.3);
+        box-shadow: 0 0 10px 4px rgba($gray, 0.2);
       }
 
       &:hover.main + tr {
-        box-shadow: 0 -5px white, 0 0 10px 4px rgba($gray, 0.3);
+        box-shadow: 0 -5px white, 0 0 10px 4px rgba($gray, 0.2);
       }
     }
 
@@ -142,8 +89,8 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
       }
 
       th {
-        font-size: .7rem;
-        font-weight: normal;
+        font-size: .75rem;
+        font-weight: 600;
       }
     }
   }
@@ -154,12 +101,14 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     padding: .3rem;
 
     vertical-align: top;
-    font-size: .9rem;
+    font-size: .875rem;
+    line-height: 24px;
+    font-weight: 600;
 
     border-top: none;
     border-bottom: none;
 
-    color: rgba(black, .15);
+    color: rgba(black, .2);
     text-transform: uppercase;
 
     background-color: white;
@@ -183,9 +132,14 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     align-items: center;
     flex-wrap: wrap;
 
-    padding-bottom: 16px;
+    padding-bottom: 11px;
 
-    border-bottom: 1px solid rgba($gray, .2);
+    font-size: 36px;
+    line-height: 36px;
+
+    border-bottom: 1px solid rgba($gray, .1);
+
+    color: #4F4F4F;
   }
 
   &-header {
@@ -290,47 +244,42 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
   }
 
   .filter-button {
+    display: flex;
+    align-items: center;
+
     margin-bottom: .5rem;
+    padding: 10px 27px;
 
-    &:hover {
-      border-color: $brand-primary;
+    border-color: rgba($gray, .1);
 
-      background-color: $brand-primary;
+    color: rgba(black, .5);
+    box-shadow: 0 0 6px rgba(black, .1);
 
-      @each $item in $themes {
-        .#{$item}-theme & {
-          border-color: map-get($theme-colors, $item);
-
-          background-color: map-get($theme-colors, $item);
-        }
-      }
+    path {
+      fill: rgba(black, .5);
     }
 
+    svg {
+      margin-right: 10px;
+    }
+
+    &:hover,
     &.active {
       border-color: $brand-primary;
 
       background-color: $brand-primary;
 
+      color: #FDFDFD;
+
+      path {
+        fill: #FDFDFD
+      }
+
       @each $item in $themes {
         .#{$item}-theme & {
           border-color: map-get($theme-colors, $item);
 
           background-color: map-get($theme-colors, $item);
-        }
-      }
-
-      &:hover,
-      &:focus {
-        border-color: $brand-primary;
-
-        background-color: $brand-primary;
-
-        @each $item in $themes {
-          .#{$item}-theme & {
-            border-color: map-get($theme-colors, $item);
-
-            background-color: map-get($theme-colors, $item);
-          }
         }
       }
     }
@@ -429,6 +378,14 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
       width: 85px;
 
       margin-right: .5rem;
+
+      font-size: .75rem;
+
+      color: rgba($gray, .55);
     }
+  }
+
+  .pagination {
+    margin: 0;
   }
 }

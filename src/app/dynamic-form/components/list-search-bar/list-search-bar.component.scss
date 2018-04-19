@@ -18,9 +18,19 @@
     input {
       width: 100%;
 
-      padding-left: 4rem;
-      padding-right: 8rem;
+      padding: 10px 8rem 10px 4rem;
+
+      border: 1px solid rgba($gray, .1);
+
+      border-radius: 50px;
+
       color: $gray;
+
+      outline: none;
+
+      &:focus {
+        border-color: $gray;
+      }
 
       &:focus ~ .search-icon {
         fill: $gray;

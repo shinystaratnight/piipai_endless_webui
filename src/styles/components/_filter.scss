@@ -1,21 +1,71 @@
 .filter {
   &-label {
-    font-size: .8rem;
+    font-size: .875rem;
+    line-height: 18px;
+    font-weight: 600;
 
     text-transform: uppercase;
-    color: rgba($gray, .6);
+    color: rgba(black, .35);
   }
 
   &-element {
-    margin-bottom: 1.5rem;
+    margin-top: 10px;
+    padding-bottom: 1rem;
 
     font-size: .8rem;
 
-    .form-control {
-      padding-top: .7rem;
-      padding-bottom: .7rem;
+    border-bottom: 1px solid rgba($gray, .1);
 
-      font-size: .8rem;
+    .input-group {
+      input {
+        border-right: none;
+
+        &:focus {
+          border-right: none;
+
+          & ~ .input-group-addon {
+
+            border-right: 1px solid $gray !important;
+            border-top: 1px solid $gray;
+            border-bottom: 1px solid $gray;
+          }
+        }
+      }
+    }
+
+    .input-group-addon {
+      width: 50px;
+
+      border-right: 1px solid rgba($gray, .2);
+      border-top: 1px solid rgba($gray, .2);
+      border-bottom: 1px solid rgba($gray, .2);
+      border-radius: 0 50px 50px 0 !important;
+
+      background-color: transparent;
+
+      span {
+        cursor: pointer;
+      }
+    }
+
+    .form-control {
+      height: auto !important;
+
+      padding-top: .625rem;
+      padding-bottom: .625rem;
+
+      font-size: .75rem;
+      line-height: 20px;
+
+      border-radius: 50px;
+
+      background-color: #fdfdfd;
+
+      transition: none;
+
+      &:focus {
+        border: 1px solid $gray;
+      }
     }
 
     .default-value {
@@ -31,31 +81,9 @@
       }
     }
 
-    input[type="checkbox"]:checked ~ .custom-checkbox {
-      font-size: .6rem;
-
-      border-color: $brand-primary;
-
-      background-color: $brand-primary;
-      color: white;
-    }
-
     .custom-checkbox {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      min-width: 1rem;
-      height: 1rem;
-
-      margin-right: .5rem;
-
-      font-size: 0;
-
-      border: 1px solid rgba($gray, .2);
-      border-radius: .2rem;
-
-      cursor: pointer;
+      min-width: .875rem;
+      height: .875rem;
     }
 
     .datepicker {
@@ -67,7 +95,7 @@
 
       .placeholder {
         position: absolute;
-        top: 9px;
+        top: 10px;
         left: 16px;
 
         font-size: .8rem;
@@ -98,22 +126,36 @@
 
     margin-top: .5rem;
 
-    .badge {
-      padding: .3rem .5rem;
+    .badge.badge-outline {
+      position: relative;
+
+      max-width: 100%;
+
+      padding-right: 1.5rem;
       margin-top: .3rem;
+      margin-right: .3rem;
 
-      font-size: .8rem;
-      font-weight: normal;
-
-      border: 1px solid $brand-primary;
-      border-radius: 50px;
-
-      background-color: white;
       color: inherit;
+
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     i {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+
+      font-size: .75rem;
+
       color: $brand-primary;
+      cursor: pointer;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          color: map-get($theme-colors, $item);
+        }
+      }
     }
   }
 }

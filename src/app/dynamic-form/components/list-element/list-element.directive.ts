@@ -18,6 +18,7 @@ import { FormButtonComponent } from './../form-button/form-button.component';
 import { ListImageComponent } from './../list-image/list-image.copmonent';
 import { ListInfoComponent } from './../list-info/list-info.component';
 import { ListTagsComponent } from '../list-tags/list-tags.component';
+import { ListSkillsComponent } from '../list-skills/list-skills.component';
 
 const components = {
   text: ListTextComponent,
@@ -38,6 +39,7 @@ const components = {
   textarea: ListTextComponent,
   info: ListInfoComponent,
   tags: ListTagsComponent,
+  skills: ListSkillsComponent,
 };
 
 @Directive({
