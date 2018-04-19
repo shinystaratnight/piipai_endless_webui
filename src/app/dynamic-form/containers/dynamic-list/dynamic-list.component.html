@@ -234,7 +234,7 @@
       <generic-form
         *ngSwitchCase="'form'"
         [endpoint]="modalInfo.endpoint"
-        [metadataQuery]="addMetadataQuery || metadataQuery"
+        [metadataQuery]="!modalInfo.dontUseMetadataQuery ? addMetadataQuery || metadataQuery : ''"
         [data]="modalInfo.data"
         [id]="modalInfo.id"
         [mode]="modalInfo.mode"

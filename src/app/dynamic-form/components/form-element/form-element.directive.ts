@@ -47,7 +47,7 @@ const components = {
   timeline: FormTimelineComponent,
   picture: FormPictureComponent,
   hidden: FormHiddenComponent,
-  vacancydates: FormVacancyDatesComponent,
+  jobdates: FormVacancyDatesComponent,
   list: FormListComponent,
   static: FormInputComponent,
   fieldsGroup: FormFieldsGroupComponent,

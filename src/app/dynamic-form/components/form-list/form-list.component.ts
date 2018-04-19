@@ -49,6 +49,8 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public saveProcess: boolean;
 
+  public initialized: boolean;
+
   constructor(
     private modal: NgbModal,
     private permission: CheckPermissionService,
@@ -61,7 +63,24 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.initialize();
       this.checkFormData();
     }
+    this.checkHiddenProperty();
     this.allowMethods = this.permission.getAllowMethods(undefined, this.config.endpoint);
+  }
+
+  public checkHiddenProperty() {
+    if (this.config && this.config.hidden) {
+      this.config.hidden.subscribe((hide) => {
+        if (hide) {
+          this.config.hide = hide;
+        } else {
+          if (!this.initialized) {
+            this.initialize();
+            this.checkFormData();
+          }
+          this.config.hide = hide;
+        }
+      });
+    }
   }
 
   public initialize(): void {
@@ -91,6 +110,8 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (this.config.add_metadata_query) {
       this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
     }
+
+    this.initialized = true;
   }
 
   public parseMetadataQuery(data, field) {

@@ -1216,6 +1216,7 @@ export class DynamicListComponent implements
     this.modalInfo.endpoint = e.endpoint;
     this.modalInfo.label = e.label;
     this.modalInfo.id = e.id;
+    this.modalInfo.dontUseMetadataQuery = true;
     this.open(this.modal, {size: 'lg'});
   }
 
