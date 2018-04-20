@@ -15,12 +15,12 @@
 
   <div class="list-info-block">
     <h5 class="list-info-title">{{title}}</h5>
-    <p class="description">{{description}}</p>
+    <p class="description">{{address}}</p>
 
     <div *ngIf="status && status.length" class="list-info-status">
       <span class="title">Status:</span>
       <div class="list-info-status-wrapper">
-        <span class="badge badge-outline" *ngFor="let stat of status">{{stat.__str__}}</span>
+        <span class="badge badge-outline" *ngFor="let stat of status">{{stat}}</span>
       </div>
     </div>
   </div>

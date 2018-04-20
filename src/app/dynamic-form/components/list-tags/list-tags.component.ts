@@ -16,11 +16,9 @@ export class ListTagsComponent implements OnInit {
   public dangerClass: boolean;
 
   public ngOnInit() {
-    console.log(this);
     this.display = this.config.display || '__str__';
     this.tags = this.config.value;
     this.outlineClass = this.config.outline;
     this.successClass = this.config.available;
-    this.dangerClass = !this.config.available;
   }
 }

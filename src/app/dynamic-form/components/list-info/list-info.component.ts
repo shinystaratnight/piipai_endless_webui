@@ -28,13 +28,15 @@ export class ListInfoComponent implements OnInit {
   }
 
   public getValue(key: string, data: any): any {
-    let keys = key.split('.');
-    let prop = keys.shift();
+    if (key) {
+      let keys = key.split('.');
+      let prop = keys.shift();
 
-    if (!keys.length) {
-      return data[prop];
-    } else if (data[prop]) {
-      return this.getValue(keys.join('.'), data[prop]);
+      if (!keys.length) {
+        return data[prop];
+      } else if (data[prop]) {
+        return this.getValue(keys.join('.'), data[prop]);
+      }
     }
   }
 }

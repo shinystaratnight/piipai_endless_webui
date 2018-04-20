@@ -675,8 +675,12 @@ export class DynamicListComponent implements
               this.setValue(el, props, item);
             });
           } else if (element.field) {
-            props = element.field.split('.');
-            this.setValue(el, props, obj);
+            if (element.type === 'info') {
+              obj.value = el;
+            } else {
+              props = element.field.split('.');
+              this.setValue(el, props, obj);
+            }
           }
           if (!this.checkValue(obj)) {
             delete cell.contextMenu;
