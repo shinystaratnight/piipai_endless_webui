@@ -100,8 +100,16 @@
       flex-direction: column;
     }
 
-    .badge {
+    .badge.badge-outline {
       margin-bottom: .2rem;
+
+      border-color: $brand-success;
+      color: $brand-success;
+
+      &.danger {
+        color: $brand-danger;
+        border-color: $brand-danger;
+      }
     }
 
     .badge:last-child {

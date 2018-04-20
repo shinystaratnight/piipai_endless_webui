@@ -24,7 +24,7 @@ export class ListInfoComponent implements OnInit {
     this.title = this.getValue(this.config.values.title, this.config.value);
     this.address = this.getValue(this.config.values.address, this.config.value);
     this.description = this.getValue(this.config.values.description, this.config.value);
-    this.status = this.getValue(this.config.values.status.field, this.config.value);
+    this.status = this.getValue(this.config.values && this.config.values.status.field, this.config.value); //tslint:disable-line
   }
 
   public getValue(key: string, data: any): any {
@@ -37,6 +37,12 @@ export class ListInfoComponent implements OnInit {
       } else if (data[prop]) {
         return this.getValue(keys.join('.'), data[prop]);
       }
+    }
+  }
+
+  public checkDanger(item) {
+    if (this.config.values && this.config.values.status) {
+      return this.config.values.status.color.red.indexOf(item[this.config.values.status.color_attr]) > -1; //tslint:disable-line
     }
   }
 }

@@ -20,7 +20,7 @@
     <div *ngIf="status && status.length" class="list-info-status">
       <span class="title">Status:</span>
       <div class="list-info-status-wrapper">
-        <span class="badge badge-outline" *ngFor="let stat of status">{{stat}}</span>
+        <span class="badge badge-outline" [class.danger]="checkDanger(stat)" *ngFor="let stat of status">{{stat.__str__}}</span>
       </div>
     </div>
   </div>

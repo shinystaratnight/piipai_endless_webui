@@ -29,6 +29,10 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     padding: 31px 0;
   }
 
+  .table-wrapper {
+    max-width: 100%;
+    overflow: auto;
+  }
 }
 
 .datatable {
@@ -91,6 +95,13 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
       th {
         font-size: .75rem;
         font-weight: 600;
+      }
+
+      td {
+        color: $gray;
+        opacity: .8;
+
+        min-width: 200px;
       }
     }
   }

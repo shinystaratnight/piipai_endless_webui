@@ -10,9 +10,14 @@ span {
 
 .tags-wrapper {
   display: flex;
+  flex-wrap: wrap;
 
   &.column {
     flex-direction: column;
+  }
+
+  .badge {
+    margin-bottom: .3rem;
   }
 
   .success {

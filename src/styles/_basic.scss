@@ -65,6 +65,11 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 
 /*---------- Bootstrap ---------- */
 
+.btn-primary {
+  border-color: $brand-primary;
+  background-color: $brand-primary;
+}
+
 .badge {
   font-size: .75rem;
   font-weight: normal;
@@ -400,9 +405,9 @@ iframe.send-sms {
   }
 }
 
-// @each $item in $themes {
-//   .#{$item}-theme .page-item.active .page-link {
-//     background-color: map-get($theme-colors, $item) !important;
-//     border-color: map-get($theme-colors, $item) !important;
-//   }
-// }
+@each $item in $themes {
+  .#{$item}-theme .page-item.active .page-link {
+    background-color: map-get($theme-colors, $item) !important;
+    border-color: map-get($theme-colors, $item) !important;
+  }
+}
