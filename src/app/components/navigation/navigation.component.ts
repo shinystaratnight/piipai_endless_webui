@@ -109,6 +109,19 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.update.emit(role);
   }
 
+  public clickActione(e, p) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    p.opened = !p.opened;
+
+    if (p.url !== '/') {
+      this.isCollapsed = false;
+    }
+
+    return false;
+  }
+
   @HostListener('document:click', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;

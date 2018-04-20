@@ -20,7 +20,8 @@
     <div *ngIf="status && status.length" class="list-info-status">
       <span class="title">Status:</span>
       <div class="list-info-status-wrapper">
-        <span class="badge badge-outline" [class.danger]="checkDanger(stat)" *ngFor="let stat of status">{{stat.__str__}}</span>
+        <span class="badge badge-outline" [ngClass]="[checkClass(stat)]" *ngFor="let stat of statusList">{{stat.__str__}}</span>
+        <a href *ngIf="more" (click)="showMore($event)">{{status.length - 4}} more</a>
       </div>
     </div>
   </div>

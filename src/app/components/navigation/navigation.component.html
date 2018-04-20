@@ -52,11 +52,17 @@
 </template>
 
 <template #item let-p="page" let-f="first" let-h="height">
-  <li class="navigation-item" [class.disabled]="p.disabled">
-    <a *ngIf="!p.disabled" routerLink="{{p.url}}" class="navigation-link" [class.active]="p.active"
-      (click)="isCollapsed = false">{{p.name}}</a>
+  <li class="navigation-item" [class.disabled]="p.disabled" [class.opened]="p.opened">
+    <a *ngIf="!p.disabled" [routerLink]="p.url !== '/' ? [p.url] : null" class="navigation-link" [class.active]="p.active"
+      (click)="clickActione($event, p)">{{p.name}}</a>
     <span class="navigation-link disabled" *ngIf="p.disabled" (click)="isCollapsed = false">{{p.name}}</span>
     <i fa class="icon" [class.active]="p.active" name="circle"></i>
+
+    <i fa
+      class="icon-link"
+      [class.extend]="p.childrens && p.childrens.length"
+      [name]="p.opened ? 'minus' : 'plus'">
+    </i>
 
     <template *ngIf="p.childrens && f" [ngTemplateOutlet]="list" [ngOutletContext]="{pages: p.childrens, height: h}"></template>
     <template *ngIf="p.childrens && !f" [ngTemplateOutlet]="list" [ngOutletContext]="{pages: p.childrens}"></template>

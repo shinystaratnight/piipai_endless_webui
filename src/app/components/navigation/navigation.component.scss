@@ -18,6 +18,10 @@ $header-bg: white;
   background-color: $header-bg;
   box-shadow: $header-shadow;
 
+  @include media-breakpoint-down('lg') {
+    justify-content: space-between;
+  }
+
   ul {
     margin-bottom: 0;
     padding-left: 0;
@@ -74,17 +78,24 @@ $header-bg: white;
     &-list {
       display: flex;
 
-      &-parent > li{
+      .icon-link {
+        display: none;
+      }
 
-        & > .icon {
+      &-parent {
+
+        max-height: calc(100vh - 72px);
+
+        & > li > .icon {
           display: none !important;
         }
 
-        & > .navigation-link {
+        & > li > .navigation-link {
           padding: 26px 25px;
 
         }
-        &:not(:hover) > .navigation-link.active {
+
+        & > li:not(:hover) > .navigation-link.active {
           box-shadow: inset 0 -3px 0px 0px $brand-primary;
 
           @each $item in $themes {
@@ -93,25 +104,82 @@ $header-bg: white;
             }
           }
         }
-      }
 
-      &.show {
-        display: block;
+        &.show {
+          display: block;
 
-        position: fixed;
-        left: 0;
-
-        max-width: 70vw;
-
-        background-color: $header-bg;
-        box-shadow: $nested-shadow;
-        z-index: 200;
-
-        & .navigation-list-nested {
-          position: relative;
+          position: fixed;
           left: 0;
+
+          max-width: 70vw;
+
+          background-color: $header-bg;
+          box-shadow: $nested-shadow;
+          z-index: 200;
+
+          .extend {
+            display: block;
+
+            position: absolute;
+            top: calc(50% - 2px);
+            right: 9px;
+
+            font-size: .6rem;
+
+            color: $brand-primary;
+
+            @each $item in $themes {
+              .#{$item}-theme & {
+                color: map-get($theme-colors, $item);
+              }
+            }
+          }
+
+          & > li {
+            & > .navigation-link {
+              padding: 10px 25px;
+            }
+
+          }
+
+          .navigation-item:hover > .navigation-list-nested {
+            display: none;
+          }
+
+          .navigation-item.opened {
+            color: $brand-primary;
+
+            @each $item in $themes {
+              .#{$item}-theme & {
+                color: map-get($theme-colors, $item);
+              }
+            }
+
+            i {
+              top: 1rem;
+            }
+
+            .navigation-list-nested i {
+              top: 11px;
+            }
+          }
+
+          .navigation-item.opened > .navigation-list-nested {
+            display: flex;
+
+            box-shadow: inset 0 0 4px 2px rgba($gray, .2);
+          }
+
+          & .navigation-list-nested {
+            position: relative;
+            left: 0;
+
+            height: auto;
+          }
         }
       }
+
+
 
       &-nested {
         display: none;
@@ -223,6 +291,10 @@ $header-bg: white;
     position: relative;
 
     margin-left: auto;
+
+    @include media-breakpoint-down('lg') {
+      margin-left: 0;
+    }
 
     &-block {
       display: flex;

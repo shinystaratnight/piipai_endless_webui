@@ -56,7 +56,7 @@ export class ListLinkComponent implements OnInit {
 
   public isEmail(value) {
     let reg =
-       /^[a-z][a-zA-Z0-9_.]*(\.[a-zA-Z][a-zA-Z0-9_.]*)?@[a-z][a-zA-Z-0-9]*\.[a-z]+(\.[a-z]+)?$/;
+       /^[a-zA-Z][a-zA-Z0-9_.]*(\.[a-zA-Z][a-zA-Z0-9_.]*)?@[a-zA-Z][a-zA-Z-0-9]*\.[a-zA-Z]+(\.[a-zA-Z]+)?$/; //tslint:disable-line
 
     return reg.test(value) ? true : false;
   }

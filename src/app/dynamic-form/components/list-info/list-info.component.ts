@@ -18,13 +18,36 @@ export class ListInfoComponent implements OnInit {
   public description: string;
   public status: any[];
 
+  public color: any;
+  public colorAttr: string;
+  public className: any;
+
+  public statusList: any[];
+  public more: boolean;
+
   public ngOnInit() {
-    this.src = this.getValue(this.config.values.picture, this.config.value);
-    this.available = this.getValue(this.config.values.available, this.config.value);
-    this.title = this.getValue(this.config.values.title, this.config.value);
-    this.address = this.getValue(this.config.values.address, this.config.value);
-    this.description = this.getValue(this.config.values.description, this.config.value);
-    this.status = this.getValue(this.config.values && this.config.values.status.field, this.config.value); //tslint:disable-line
+    if (this.config.values) {
+      const keys = Object.keys(this.config.values);
+
+      keys.forEach((key) => {
+        if (key === 'status') {
+          this[key] = this.getValue(this.config.values[key].field, this.config.value);
+
+          if (this[key].length > 4) {
+            this.statusList = this[key].slice(0, 4);
+
+            this.more = true;
+          } else {
+            this.statusList = this[key];
+          }
+
+          this.color = this.config.values[key].color;
+          this.colorAttr = this.config.values[key].color_attr;
+        } else {
+          this[key] = this.getValue(this.config.values[key], this.config.value);
+        }
+      });
+    }
   }
 
   public getValue(key: string, data: any): any {
@@ -40,9 +63,26 @@ export class ListInfoComponent implements OnInit {
     }
   }
 
-  public checkDanger(item) {
-    if (this.config.values && this.config.values.status) {
-      return this.config.values.status.color.red.indexOf(item[this.config.values.status.color_attr]) > -1; //tslint:disable-line
+  public checkClass(item) {
+    let className;
+    if (this.color && this.colorAttr) {
+      const keys = Object.keys(this.color);
+
+      keys.forEach((key) => {
+        className = this.color.red.indexOf(item[this.colorAttr]) > -1 ? key : 'success';
+      });
     }
+
+    return className || 'success';
+  }
+
+  public showMore(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.statusList = this.status;
+    this.more = false;
+
+    return false;
   }
 }

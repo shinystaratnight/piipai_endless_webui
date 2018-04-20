@@ -110,6 +110,21 @@
         color: $brand-danger;
         border-color: $brand-danger;
       }
+
+      &.success {
+        color: $brand-success;
+        border-color: $brand-success;
+      }
+
+      &.info {
+        color: $brand-info;
+        border-color: $brand-info;
+      }
+
+      &.warning {
+        color: $brand-warning;
+        border-color: $brand-warning;
+      }
     }
 
     .badge:last-child {
