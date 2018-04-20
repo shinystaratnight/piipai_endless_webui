@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'list-skills',
@@ -7,7 +7,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ListSkillsComponent {
+export class ListSkillsComponent implements OnInit {
 
   public config: any;
 
@@ -18,4 +18,11 @@ export class ListSkillsComponent {
     4: '#ffbf00',
     5: '#FFD042'
   };
+  public list: boolean;
+
+  public ngOnInit() {
+    if (Array.isArray(this.config.value)) {
+      this.list = true;
+    }
+  }
 }
