@@ -19,7 +19,7 @@ import { FilterMultipleComponent } from '../filter-multiple/filter-multiple.comp
 
 const components = {
   date: FilterDateComponent,
-  choice: FilterChoiceComponent,
+  checkbox: FilterMultipleComponent,
   related: FilterRelatedComponent,
   select: FilterSelectComponent,
   text: FilterRangeComponent,

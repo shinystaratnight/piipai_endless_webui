@@ -7,6 +7,14 @@
       [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
       (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" style="cursor: pointer">
     </i> -->
+    <i
+      *ngIf="query"
+      fa
+      class="text-danger ml-1"
+      [name]="'times-circle'"
+      [border]="true"
+      style="cursor: pointer"
+      (click)="resetFilter()"></i>
   </label>
   <div [ngbCollapse]="isCollapsed" class="filter-select-wrapper">
     <div *ngFor="let item of data; let index = index" class="form-check">

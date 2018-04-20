@@ -602,7 +602,7 @@ export class DynamicListComponent implements
           obj['display'] = this.format(element.display, el);
           obj['inline'] = element.inline;
           obj['outline'] = element.outline;
-          obj['label'] = col.label;
+          obj['skillName'] = col.label;
           if (element.type === 'datepicker') {
             let field = this.config.fields.find((elem) => elem.key === element.field);
             if (field) {
