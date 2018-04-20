@@ -6,12 +6,15 @@
   align-items: flex-start;
 
   .btn {
-    display: none;
+    display: inline-block;
+    visibility: hidden;
 
     padding-left: .5rem;
     padding-right: .5rem;
 
     margin-right: .3rem;
+
+    transition: none;
   }
 
   .phone {
@@ -19,7 +22,7 @@
   }
 
   &:hover .phone ~ .btn {
-    display: inline-block;
+    visibility: visible;
   }
 
   &.inline {

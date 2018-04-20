@@ -24,7 +24,7 @@ export class ListInfoComponent implements OnInit {
     this.title = this.getValue(this.config.values.title, this.config.value);
     this.address = this.getValue(this.config.values.address, this.config.value);
     this.description = this.getValue(this.config.values.description, this.config.value);
-    this.status = this.getValue(this.config.values.status, this.config.value);
+    this.status = this.getValue(this.config.values.status.field, this.config.value);
   }
 
   public getValue(key: string, data: any): any {

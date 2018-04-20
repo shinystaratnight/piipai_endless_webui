@@ -81,6 +81,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   ) {}
 
   public ngOnInit() {
+    this.multiple = this.config.multiple;
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );

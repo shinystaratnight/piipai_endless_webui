@@ -271,8 +271,18 @@ export class DynamicListComponent implements
         this.sortedColumns = this.getSortedColumns(config.list.columns);
         if (this.tabs) {
           const mainMetadata = config.list.columns.filter((el) => !el.tab || !el.tab.is_collapsed);
-          const additionalMetadata = config.list.columns.filter((el) => el.tab && el.tab.is_collapsed); //tslint:disable-line
-          const additionalBody = this.prepareData(additionalMetadata, data[this.responseField], config.list.highlight);
+          const metadata = config.list.columns.filter((el) => el.tab && el.tab.is_collapsed); //tslint:disable-line
+          const additionalMetadata = [];
+
+          this.tabs.forEach((tab) => {
+            if (tab.is_collapsed) {
+              tab.fields.forEach((field) => {
+                additionalMetadata.push(metadata.find((el) => el.name === field));
+              });
+            }
+          });
+
+          const additionalBody = this.prepareData(additionalMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
 
           this.body = this.prepareData(mainMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
           this.body.forEach((main) => {
@@ -592,6 +602,7 @@ export class DynamicListComponent implements
           obj['display'] = this.format(element.display, el);
           obj['inline'] = element.inline;
           obj['outline'] = element.outline;
+          obj['label'] = col.label;
           if (element.type === 'datepicker') {
             let field = this.config.fields.find((elem) => elem.key === element.field);
             if (field) {
