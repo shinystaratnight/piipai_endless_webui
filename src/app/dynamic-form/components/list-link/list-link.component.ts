@@ -40,6 +40,9 @@ export class ListLinkComponent implements OnInit {
       this.value = this.config.value && (this.config.text || this.config.value.__str__);
     } else {
       this.value = this.config.value && (this.config.text || this.config.value);
+      if (Array.isArray(this.config.value)) {
+        this.arrayValue = true;
+      }
     }
     this.href = this.config.link;
 

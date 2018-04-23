@@ -15,7 +15,7 @@ export class NotAuthorizedGuard implements CanActivate {
   public canActivate(): Observable<boolean> {
     return this.UserService.getUserData()
       .map((user: any) => {
-        this.router.navigate(['/']);
+        this.router.navigate(['']);
         return false;
       })
       .catch((err: any) => {

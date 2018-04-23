@@ -24,4 +24,4 @@
 </span>
 
 <span *ngIf="config.delim && !last">{{config.delim}}</span>
-<br *ngIf="!config.delim">
+<br *ngIf="!config.delim && config.name !== 'credit_approved'">

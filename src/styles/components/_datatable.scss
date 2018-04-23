@@ -1,9 +1,19 @@
-$nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
+$nested-shadow: 0px 0px 8px 1px rgba($gray, .2);
+$nested-shadow-hover: 0px 0px 10px 2px rgba($gray, .3);
 
 .datatable-wrapper {
 
   .btn {
     border-radius: 50px;
+
+    margin-bottom: .2rem;
+  }
+
+  .tooltip-inner {
+    width: 255px;
+    max-width: 255px;
+
+    text-align: left;
   }
 
   .custom-select {
@@ -23,6 +33,10 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
     &.active {
       border-color: $gray;
     }
+  }
+
+  .form-check {
+    font-size: 12px;
   }
 
   .datatable-list & {
@@ -51,12 +65,15 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
       border-top: none;
 
       padding: .3rem;
+
+      padding-top: 9px;
+      padding-bottom: 9px;
     }
 
     tbody tr {
       border-radius: 4px;
 
-      box-shadow: 0 0 8px 4px rgba($gray, 0.1);
+      box-shadow: $nested-shadow;
 
       &.main {
         border-radius: 4px 4px 0 0;
@@ -64,16 +81,20 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
         & + tr {
           border-radius: 0 0 4px 4px;
 
-          box-shadow: 0 -5px white, 0 0 8px 4px rgba($gray, 0.1);
+          box-shadow: 0 -5px white, $nested-shadow;
+
+          td {
+            padding-top: 0;
+          }
         }
       }
 
       &:hover {
-        box-shadow: 0 0 10px 4px rgba($gray, 0.2);
+        box-shadow: $nested-shadow-hover;
       }
 
       &:hover.main + tr {
-        box-shadow: 0 -5px white, 0 0 10px 4px rgba($gray, 0.2);
+        box-shadow: 0 -5px white, $nested-shadow-hover;
       }
     }
 
@@ -98,10 +119,14 @@ $nested-shadow: 0px 0px 3px 1px rgba($gray, .2);
       }
 
       td {
-        color: $gray;
-        opacity: .8;
-
         min-width: 250px;
+
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .additional-data {
+        color: rgba($gray, .85);
       }
     }
   }

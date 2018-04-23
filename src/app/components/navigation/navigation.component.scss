@@ -108,10 +108,12 @@ $header-bg: white;
         &.show {
           display: block;
 
-          position: fixed;
+          position: absolute;
           left: 0;
 
           max-width: 70vw;
+          max-height: calc(100vh - 72px);
+          overflow: auto;
 
           background-color: $header-bg;
           box-shadow: $nested-shadow;
@@ -306,9 +308,17 @@ $header-bg: white;
         width: 48px;
         height: 48px;
 
-        margin-left: 24px;
+        margin-left: 8px;
 
         border-radius: 50%;
+      }
+
+      .description {
+        font-size: 14px;
+
+        color: $gray;
+
+        opacity: .7;
       }
     }
 
@@ -320,7 +330,7 @@ $header-bg: white;
     }
 
     &-icon {
-      margin-left: 24px;
+      margin-left: 16px;
 
       font-size: 24px !important;
 
@@ -329,7 +339,7 @@ $header-bg: white;
 
     &-menu {
       position: absolute;
-      top: 72px;
+      top: 75px;
       right: 0;
 
       margin: 0;
@@ -343,6 +353,8 @@ $header-bg: white;
 
       .role {
         padding: 5px 24px;
+
+        flex-wrap: nowrap;
       }
     }
   }

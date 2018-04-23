@@ -17,6 +17,7 @@ export class ListInfoComponent implements OnInit {
   public address: string;
   public description: string;
   public status: any[];
+  public averageScore: any;
 
   public color: any;
   public colorAttr: string;
@@ -25,9 +26,19 @@ export class ListInfoComponent implements OnInit {
   public statusList: any[];
   public more: boolean;
 
+  public colors = {
+    1: '#FA5C46',
+    2: '#fc9183',
+    3: '#FFA236',
+    4: '#ffbf00',
+    5: '#FFD042',
+  };
+
   public ngOnInit() {
     if (this.config.values) {
       const keys = Object.keys(this.config.values);
+
+      this.averageScore = this.config.value.average_score;
 
       keys.forEach((key) => {
         if (key === 'status') {
@@ -84,5 +95,9 @@ export class ListInfoComponent implements OnInit {
     this.more = false;
 
     return false;
+  }
+
+  public getScore(score) {
+    return Math.floor(parseFloat(score));
   }
 }

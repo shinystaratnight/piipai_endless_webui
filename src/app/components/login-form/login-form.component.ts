@@ -17,6 +17,8 @@ export class LoginFormComponent implements OnInit {
   public label: any;
   public type: string;
 
+  public loginProcess: boolean;
+
   constructor(
     private loginService: LoginService,
     private router: Router,
@@ -50,7 +52,7 @@ export class LoginFormComponent implements OnInit {
 
   public responseHandler(response) {
     if (response.data) {
-      this.router.navigate(['/']);
+      this.router.navigate(['']);
     } else if (response.status === 'success') {
       this.error = {};
     }
@@ -58,7 +60,13 @@ export class LoginFormComponent implements OnInit {
 
   public redirectHandler(data) {
     this.loginService.username = data;
-    this.router.navigate(['/registration']);
+    location.href = '/ecore/register/';
+  }
+
+  public formEvent(e) {
+    if (e.type === 'saveStart') {
+      this.loginProcess = true;
+    }
   }
 
 }

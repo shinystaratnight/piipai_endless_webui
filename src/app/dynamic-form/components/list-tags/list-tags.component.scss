@@ -13,11 +13,16 @@ span {
   flex-wrap: wrap;
 
   &.column {
+    align-items: flex-start;
     flex-direction: column;
   }
 
   .badge {
     margin-bottom: .3rem;
+
+    &.badge-outline {
+      line-height: 1;
+    }
   }
 
   .success {

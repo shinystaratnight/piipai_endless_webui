@@ -140,6 +140,7 @@ export class DynamicListComponent implements
 
   public body: any[] = [];
   public select: any;
+  public selectedCount: number;
   public sortedColumns: any;
   public filtersOfList: any[] = [];
   public selectedAll: boolean = false;
@@ -165,17 +166,17 @@ export class DynamicListComponent implements
   public saveProcess: boolean;
 
   public showFilters: boolean;
-  public filtersHidden: boolean;
+  public filtersHidden: boolean = true;
 
   public asyncData: any;
 
-  public pictures = {
-    '/ecore/api/v2/core/contacts/': '{picture.origin}',
-    '/ecore/api/v2/candidate/candidatecontacts/': '{contact.picture.origin}',
-    '/ecore/api/v2/core/companies/': '{logo.origin}'
-  };
+  public pictures = [
+    '/ecore/api/v2/core/contacts/',
+    '/ecore/api/v2/candidate/candidatecontacts/',
+    '/ecore/api/v2/core/companies/'
+  ];
 
-  public edit: boolean;
+  public noneEdit: boolean;
 
   constructor(
     private filterService: FilterService,
@@ -222,7 +223,7 @@ export class DynamicListComponent implements
       this.showFilters = !!(this.filtersOfList && this.filtersOfList.length);
     }
 
-    this.edit = !this.pictures[this.endpoint];
+    this.noneEdit = this.pictures.indexOf(this.endpoint) > -1;
   }
 
   public ngOnChanges() {
@@ -567,9 +568,6 @@ export class DynamicListComponent implements
       let row = {
         id: el.id,
         __str__: el.__str__,
-        picture: this.pictures[this.endpoint]
-          ? this.format(this.pictures[this.endpoint], el)
-          : undefined,
         collapsed: true,
         content: []
       };
@@ -599,10 +597,12 @@ export class DynamicListComponent implements
           obj.action = element.action;
           obj['delim'] = col.delim;
           obj['title'] = col.title;
-          obj['display'] = this.format(element.display, el);
           obj['inline'] = element.inline;
           obj['outline'] = element.outline;
           obj['skillName'] = col.label;
+          if (element.display) {
+            obj.display = this.format(element.display.replace(/{field}/gi, `{${element.field}}`), el); //tslint:disable-line
+          }
           if (element.type === 'datepicker') {
             let field = this.config.fields.find((elem) => elem.key === element.field);
             if (field) {
@@ -627,21 +627,37 @@ export class DynamicListComponent implements
             obj['link'] = this.format(element.link, el);
             obj.text = this.format(element.text, el);
           } else if (element.endpoint) {
-            let indexOf = element.endpoint.indexOf('{field}');
-            if (indexOf) {
-              element.endpoint = element.endpoint.replace(/{field}/gi, `{${element.field}}`);
+            if (element.field) {
+              props = element.field.split('.');
+              this.setValue(el, props, obj);
             }
+
+            let indexOf = element.endpoint.indexOf('{field}');
             if (element.endpoint[element.endpoint.length - 1] !== '/') {
               element.endpoint += '/';
             }
-            obj['endpoint'] = this.format(element.endpoint, el);
+            if (indexOf) {
+              element.endpoint = element.endpoint.replace(/{field}/gi, `{${element.field}}`);
+            }
+            if (Array.isArray(obj.value)) {
+              obj.link = [];
+              obj.value.forEach((val) => {
+                obj.link.push(this.format(element.endpoint, {
+                  [obj.name]: val
+                }).replace('/ecore/api/v2', ''));
+              });
+            } else {
+              obj['endpoint'] = this.format(element.endpoint, el);
+            }
             if (col.name === 'evaluate') {
               this.evaluateEndpoint = element.endpoint;
             }
             obj.text = this.format(element.text, el);
           }
           if (element.type === 'static') {
-            obj.value = this.format(element.text, el);
+            if (element.text) {
+              obj.value = this.format(element.text.replace(/{field}/gi, `{${element.field}}`), el);
+            }
             obj.label = element.label;
           }
           if (element.type === 'picture') {
@@ -828,6 +844,8 @@ export class DynamicListComponent implements
   public emitSelect() {
     if (this.select) {
       const keys = Object.keys(this.select);
+      const result = keys.filter((key) => this.select[key]);
+      this.selectedCount = result.length;
       this.checkedObjects.emit(keys.filter((key) => this.select[key]));
     }
   }

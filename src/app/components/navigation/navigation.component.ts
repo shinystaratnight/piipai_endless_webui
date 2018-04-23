@@ -54,6 +54,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   public userPicture: string;
   public candidate: boolean;
   public currentRole: string;
+  public company: string;
+  public picture: string;
 
   constructor(
     private navigationService: NavigationService,
@@ -82,6 +84,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.currentRole = this.user.currentRole;
       this.greeting = `Welcome, ${this.user.data.contact.__str__}`;
       this.candidate = this.user.data.contact.contact_type === 'candidate';
+      this.company = this.user.data.contact.company;
+      this.picture = this.user.data.contact.picture && this.user.data.contact.picture.origin;
     } else {
       this.greeting = `Welcome, Anonymous User`;
     }

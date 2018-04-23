@@ -1,8 +1,7 @@
 <div class="tags-wrapper" [class.column]="config.outline">
   <span class="badge"
     [class.badge-outline]="config.outline"
-    [class.success]="successClass"
-    [class.danger]="dangerClass"
+    [ngClass]="[checkClass(tag)]"
     *ngFor="let tag of tags">
       {{tag[display]}}
   </span>

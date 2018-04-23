@@ -82,6 +82,9 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public ngOnInit() {
     this.multiple = this.config.multiple;
+    if (this.multiple) {
+      this.limit = -1;
+    }
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
@@ -274,7 +277,6 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
         this.item = this.createElement();
         this.item['displayValue'] = data ? this.getOption(data) : 'All';
       }
-      this.deleteValue();
     }
   };
 

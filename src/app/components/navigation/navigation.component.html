@@ -17,9 +17,9 @@
     <div class="user-block">
       <div class="user-info">
         <span>{{user.data.contact.__str__}}</span>
-        <span class="description">Labourking</span>
+        <span *ngIf="company" class="description">{{company}}</span>
       </div>
-      <img src="/assets/img/avatar.png" alt="{{user.data.contact.__str__}}" width="50px" height="50px">
+      <img [src]="picture" width="50px" height="50px">
 
       <i class="user-icon" fa name="angle-down" (click)="hideUserBlock($event)"></i>
     </div>
@@ -28,7 +28,7 @@
       <li>
         <div *ngIf="user && user.roles && user.roles.length" class="form-inline role">
           <span class="mr-1">Role:</span>
-          <select class="form-control form-control-sm" id="role" [ngModel]="currentRole" (ngModelChange)="changeRole($event)">
+          <select class="form-control form-control-sm" id="role" [(ngModel)]="currentRole" (ngModelChange)="changeRole($event)">
             <option *ngFor="let role of user.roles" [value]="role">
               <small>{{role}}</small>
             </option>

@@ -11,14 +11,32 @@ export class ListTagsComponent implements OnInit {
 
   public display: string;
   public tags: any[];
-  public outlineClass: boolean;
-  public successClass: boolean;
-  public dangerClass: boolean;
+
+  public color: any;
+  public colorAttr: string;
 
   public ngOnInit() {
     this.display = this.config.display || '__str__';
     this.tags = this.config.value;
-    this.outlineClass = this.config.outline;
-    this.successClass = this.config.available;
+
+    this.color = this.config.color;
+    this.colorAttr = this.config.color_attr;
+  }
+
+  public checkClass(item) {
+    if (this.config.outline) {
+      let className;
+      if (this.color && this.colorAttr) {
+        const keys = Object.keys(this.color);
+
+        keys.forEach((key) => {
+          className = this.color[key].indexOf(item[this.colorAttr]) > -1 ? key : 'success';
+        });
+      }
+
+      return className || 'success';
+    }
+
+    return '';
   }
 }

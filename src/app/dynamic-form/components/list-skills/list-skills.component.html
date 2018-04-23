@@ -4,7 +4,7 @@
       {{skill.skill.name}}&nbsp;<span [style.color]="colors[getScore(skill.score)]">|&nbsp;{{skill.score}}&nbsp;<i fa name="star"></i></span>
     </span>
   </div>
-  <a href *ngIf="more" (click)="showMore($event)">{{config.value.length - 4}} more</a>
+  <a class="more" href *ngIf="more" (click)="showMore($event)">{{config.value.length - 4}} more</a>
 </ng-container>
 
 <ng-container *ngIf="!list">

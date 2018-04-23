@@ -36,8 +36,12 @@ a {
   }
 }
 
+i {
+  opacity: 1;
+}
+
 input[type="checkbox"]:checked ~ .custom-checkbox {
-  font-size: .6rem;
+  font-size: 12px;
 
   border-color: $brand-primary;
 
@@ -64,6 +68,32 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 }
 
 /*---------- Bootstrap ---------- */
+
+.tooltip {
+  height: 50px;
+  max-height: 50px;
+
+  color: $gray;
+  opacity: .8;
+
+  &-inner {
+    font-size: 12px;
+
+    background-color: white;
+    color: inherit;
+    box-shadow: 0 0 8px 2px rgba($gray, .3);
+
+    .tooltip-right &::before {
+      width: 10px;
+      height: 10px;
+
+      border: none;
+
+      transform: rotate(45deg);
+      box-shadow: -4px 4px 15px 1px rgba($gray, .2);
+    }
+  }
+}
 
 .btn-primary {
   border-color: $brand-primary;
@@ -407,7 +437,11 @@ iframe.send-sms {
 
 @each $item in $themes {
   .#{$item}-theme .page-item.active .page-link {
-    background-color: map-get($theme-colors, $item) !important;
-    border-color: map-get($theme-colors, $item) !important;
+    background-color: map-get($theme-colors, $item);
+    border-color: map-get($theme-colors, $item);
+  }
+
+  .#{$item}-theme .page-link {
+    color: map-get($theme-colors, $item);
   }
 }

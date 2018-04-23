@@ -2,7 +2,6 @@
   <select
     [(ngModel)]="action"
     class="custom-select mr-2">
-      <option value=""></option>
       <option *ngFor="let option of config.options" [ngValue]="option">{{option.label}}</option>
   </select>
   <button class="btn btn-primary btn-shadow" type="button" (click)="toDoAction()">{{label}}</button>
