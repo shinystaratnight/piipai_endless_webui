@@ -1,7 +1,7 @@
-<div class="filter-element p-2" [class.active]="!isCollapsed">
+<div class="filter-element" [class.active]="!isCollapsed">
   <label class="filter-label" [class.active]="!isCollapsed">
     {{config.label}}
-    <i
+    <!-- <i
       fa
       class="p-2 ml-auto"
       [name]="icons[theme][isCollapsed]"
@@ -9,7 +9,7 @@
       (click)="isCollapsed = !isCollapsed"
       [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
       [attr.aria-expanded]="!isCollapsed"
-      style="cursor: pointer"></i>
+      style="cursor: pointer"></i> -->
     <i
       *ngIf="query"
       fa
@@ -33,12 +33,15 @@
     <div class="input-group datepicker" [class.mb-1]="!l" *ngFor="let input of config.input; let l = last">
       <input
         class="form-control filter-date"
-        [attr.placeholder]="input.label"
+        [class.active]="data[input.query]"
         #d
         data-role="datebox"
         [attr.name]="input.query"
         [(ngModel)]="data[input.query]"
         (ngModelChange)="onChange()">
+      <div class="placeholder">
+         {{input.label}}
+      </div>
     </div>
   </div>
 </div>

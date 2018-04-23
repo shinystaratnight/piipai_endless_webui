@@ -6,7 +6,6 @@
       </label>
       <div class="form-element-content flex-row" style="position: relative">
         <div class="form-control custom-select autocomplete-value"
-          [ngClass]="{'active': !config.readonly}"
           (click)="openAutocomplete()">
           <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
         </div>
@@ -63,7 +62,6 @@
         <input type="text" class="form-control custom-select autocomplete-value" autocomplete="off"
           [(ngModel)]="searchValue"
           [ngModelOptions]="{standalone: true}"
-          [ngClass]="{'active': !config.readonly}"
           (focus)="generateList()"
           (blur)="resetList()"
           (keyup)="filter(searchValue)">
@@ -85,7 +83,7 @@
           <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal"
             *ngFor="let item of results; let i = index">
             {{item.__str__}}
-            <i fa class="text-white icon ml-2"
+            <i fa class="icon ml-2"
               (click)="deleteItem(i)"
               [name]="'times'"></i>
           </span>

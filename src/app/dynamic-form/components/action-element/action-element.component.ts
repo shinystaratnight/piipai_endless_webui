@@ -1,13 +1,17 @@
-import { Component, Input, ViewChild, EventEmitter, Output } from '@angular/core';
+import { Component, Input, ViewChild, EventEmitter, Output, OnChanges } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+import { FormatString } from '../../../helpers/format';
 
 @Component({
   selector: 'action-element',
   templateUrl: 'action-element.component.html'
 })
-export class ActionElementComponent {
+export class ActionElementComponent implements OnChanges {
   @Input()
   public config: any;
+
+  @Input() public count: number;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -17,10 +21,20 @@ export class ActionElementComponent {
 
   public action: any;
   public closeResult: string;
+  public data: any;
+  public label: string;
 
   public constructor(
     private modalService: NgbModal
   ) {}
+
+  public ngOnChanges() {
+    this.data = {
+      count: this.count
+    };
+    const format = new FormatString();
+    this.label = format.format(this.config.button_label, this.data);
+  }
 
   public toDoAction() {
     if (this.action && this.action.confirm) {

@@ -15,7 +15,8 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 
 @Component({
   selector: 'form-picture',
-  templateUrl: 'form-picture.component.html'
+  templateUrl: 'form-picture.component.html',
+  styleUrls: ['./form-picture.component.scss']
 })
 
 export class FormPictureComponent extends BasicElementComponent implements OnInit, AfterViewInit {

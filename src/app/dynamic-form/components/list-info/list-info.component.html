@@ -1,0 +1,38 @@
+<div class="list-info-wrapper">
+  <div class=list-info-left>
+    <div class="list-info-image">
+      <img [src]="src">
+
+      <i *ngIf="available" fa name="check" class="available"></i>
+      <i *ngIf="!available" fa name="times" class="unavailable"></i>
+    </div>
+
+    <a class="list-info-edit-link not-underline" [routerLink]="[config.rowId + '/change']">
+      <i fa name="pencil" class="edit"></i>
+      Edit
+    </a>
+  </div>
+
+  <div class="list-info-block">
+    <h5 class="list-info-title">
+      <span *ngIf="!this.averageScore && this.averageScore !== 0">{{title}}</span>
+      <span *ngIf="this.averageScore || this.averageScore === 0">
+        {{title}}&nbsp;&nbsp;
+        <span [style.color]="colors[getScore(this.averageScore)]">
+          |&nbsp;&nbsp;{{this.averageScore}}
+          <i fa name="star"></i>
+        </span>
+      </span>
+      <i class="info" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
+    </h5>
+    <p class="description">{{address}}</p>
+
+    <div *ngIf="status && status.length" class="list-info-status">
+      <span class="title">Status:</span>
+      <div class="list-info-status-wrapper">
+        <span class="badge badge-outline" [ngClass]="[checkClass(stat)]" *ngFor="let stat of statusList">{{stat.__str__}}</span>
+        <a class="more" href *ngIf="more" (click)="showMore($event)">{{status.length - 4}} more</a>
+      </div>
+    </div>
+  </div>
+</div>

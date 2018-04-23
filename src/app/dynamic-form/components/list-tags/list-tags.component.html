@@ -1,0 +1,8 @@
+<div class="tags-wrapper" [class.column]="config.outline">
+  <span class="badge"
+    [class.badge-outline]="config.outline"
+    [ngClass]="[checkClass(tag)]"
+    *ngFor="let tag of tags">
+      {{tag[display]}}
+  </span>
+</div>

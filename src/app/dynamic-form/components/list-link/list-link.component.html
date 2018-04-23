@@ -1,47 +1,57 @@
-<span *ngIf="!arrayValue">
-  <a class="link" [attr.href]="href" *ngIf="config.value && !link" [title]="config.title || ''">{{config.value}}</a>
+<ng-container *ngIf="arrayValue ? config.value && config.value.length : config.value">
+  <div class="list-link" [class.inline]="config.inline">
+    <span *ngIf="config.display && config.value" class="display">{{config.display}}</span>
+    <span class="d-flex align-items-center" *ngIf="!arrayValue">
+      <a #view class="link default" [class.phone]="phone" [attr.href]="href" *ngIf="config.value && !link" [title]="config.title || ''">
+        {{config.value}}
+      </a>
+      <button *ngIf="phone" class="btn btn-outline-primary" (click)="sendSms()">SMS</button>
+      <button *ngIf="phone" class="btn btn-outline-primary" (click)="lickView.nativeElement.click()">Call</button>
 
-  <a class="link" routerLink="{{href}}" *ngIf="config.value && link && config.link" [title]="config.title || ''">
-    {{value}}
-    <span *ngIf="config.fields">
-      <ng-container
-        *ngFor="let field of config.fields"
-        listElement
-        [config]="field">
-      </ng-container>
+      <a class="link" routerLink="{{href}}" *ngIf="config.value && link && config.link" [title]="config.title || ''">
+        {{value}}
+        <span *ngIf="config.fields">
+          <ng-container
+            *ngFor="let field of config.fields"
+            listElement
+            [config]="field">
+          </ng-container>
+        </span>
+      </a>
+
+      <a class="link" *ngIf="config.endpoint" href="" (click)="action($event)" [title]="config.title || ''">
+        {{value}}
+        <span *ngIf="config.fields">
+          <ng-container
+            *ngFor="let field of config.fields"
+            listElement
+            [config]="field"
+            (event)="eventHandler($event)"
+            (buttonAction)="buttonHandler($event)"></ng-container>
+        </span>
+      </a>
+
+      <span *ngIf="config.delim && !last">{{config.delim}}</span>
+      <br *ngIf="!config.delim && !config.fields">
     </span>
-  </a>
 
-  <a class="link" *ngIf="config.endpoint" href="" (click)="action($event)" [title]="config.title || ''">
-    {{value}}
-    <span *ngIf="config.fields">
-      <ng-container
-        *ngFor="let field of config.fields"
-        listElement
-        [config]="field"
-        (event)="eventHandler($event)"
-        (buttonAction)="buttonHandler($event)"></ng-container>
-    </span>
-  </a>
+    <span class="d-flex flex-column" *ngIf="arrayValue">
+      <span *ngFor="let item of value; let l = last; let i = index">
+        <a class="link" [attr.href]="href[i]" *ngIf="item && !link" [title]="config.title || ''">{{item.__str__}}</a>
 
-  <span *ngIf="!config.value && !config.fields">-</span>
-</span>
+        <a class="link" routerLink="{{href[i]}}/change" *ngIf="item && link && config.link" [title]="config.title || ''">
+          {{item.__str__}}
+          <span *ngIf="config.fields">
+            <ng-container *ngFor="let field of config.fields" listElement [config]="field"></ng-container>
+          </span>
+        </a>
 
-<span *ngIf="arrayValue">
-  <span *ngFor="let item of value; let l = last; let i = index">
-    <a class="link" [attr.href]="href[i]" *ngIf="item && !link" [title]="config.title || ''">{{item}}</a>
-
-    <a class="link" routerLink="{{href[i]}}" *ngIf="item && link && config.link" [title]="config.title || ''">
-      {{item}}
-      <span *ngIf="config.fields">
-        <ng-container *ngFor="let field of config.fields" listElement [config]="field"></ng-container>
+        <span *ngIf="config.delim && !l">{{config.delim}}</span>
+        <br *ngIf="!config.delim && !config.fields && !l">
       </span>
-    </a>
+    </span>
+  </div>
 
-    <span *ngIf="config.delim && !l">{{config.delim}}</span>
-    <br *ngIf="!config.delim && !config.fields && !l">
-  </span>
-</span>
-
-<span *ngIf="config.delim && !last">{{config.delim}}</span>
-<br *ngIf="!config.delim && !config.fields">
+  <span *ngIf="config.delim && !last">{{config.delim}}</span>
+  <br *ngIf="!config.delim && !config.fields">
+</ng-container>

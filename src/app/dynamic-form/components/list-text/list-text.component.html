@@ -1,27 +1,27 @@
 <span *ngIf="!arrayValue">
-  <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="value || value === 0">
+  <span class="d-inline-flex align-items-center flex-wrap" *ngIf="value || value === 0">
     <span [title]="config.title || ''">
       <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
       <span *ngIf="!iconView">{{value}}</span>
       <i fa *ngIf="iconView" [name]="value" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></i>
     </span>
   </span>
-  <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="!value && value !== 0">-</span>
+  <span class="d-inline-flex align-items-center flex-wrap" *ngIf="!value && value !== 0">-</span>
 </span>
 
 <span *ngIf="arrayValue">
   <span *ngFor="let item of value; let l = last">
-    <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="item || item === 0">
+    <span class="d-inline-flex align-items-center flex-wrap" *ngIf="item || item === 0">
       <span [title]="config.title || ''">
         <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
         {{item && item.__str__ ? item.__str__ : item}}
       </span>
     </span>
-    <span class="d-inline-flex align-items-center flex-wrap mb-1" *ngIf="!item && item !== 0">-</span>
+    <span class="d-inline-flex align-items-center flex-wrap" *ngIf="!item && item !== 0">-</span>
     <span *ngIf="config.delim && !l">{{config.delim}}</span>
     <br *ngIf="!config.delim && !l">
   </span>
 </span>
 
 <span *ngIf="config.delim && !last">{{config.delim}}</span>
-<br *ngIf="!config.delim">
+<br *ngIf="!config.delim && config.name !== 'credit_approved'">

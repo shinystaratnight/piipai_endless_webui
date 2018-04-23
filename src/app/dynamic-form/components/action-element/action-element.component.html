@@ -1,12 +1,10 @@
 <div class="d-flex mb-3 form-group">
-  <label class="col-form-label pr-1">{{config.label}}</label>
   <select
     [(ngModel)]="action"
     class="custom-select mr-2">
-      <option value=""></option>
       <option *ngFor="let option of config.options" [ngValue]="option">{{option.label}}</option>
   </select>
-  <button class="btn" type="button" (click)="toDoAction()">{{config.button_label}}</button>
+  <button class="btn btn-primary btn-shadow" type="button" (click)="toDoAction()">{{label}}</button>
 </div>
 
 <template #content let-c="close" let-d="dismiss">

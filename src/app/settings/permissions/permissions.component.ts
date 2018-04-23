@@ -24,7 +24,8 @@ export interface Group {
 
 @Component({
   selector: 'permissions',
-  templateUrl: 'permissions.component.html'
+  templateUrl: 'permissions.component.html',
+  styleUrls: ['./permissions.component.scss']
 })
 
 export class PermissionsComponent implements OnInit {

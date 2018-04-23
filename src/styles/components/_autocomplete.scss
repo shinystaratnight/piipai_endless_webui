@@ -1,57 +1,19 @@
 .autocomplete {
-  width: 100%;
   position: absolute;
-  border: 1px solid rgba($brand-inverse, .5);
-  border-radius: 0 0 .2rem .2rem;
-  z-index: 100;
 
+  width: 100%;
 
-  @include media-breakpoint-up('lg') {
-    .list-page &-filter .autocomplete {
-      background-color: #2d2c31;
-      color: white;
-    }
+  margin-top: 5px;
 
-    .list-page &-filter &-value {
-      border: 0;
-      border-radius: 0;
-      background-color: transparent;
-      overflow: hidden;
+  background-color: white;
+  box-shadow: 0 0 12px rgba($gray, .2);
+  z-index: 30;
 
-      &.active:not(:focus) {
-        cursor: pointer;
-        background-color: #2d2c31;
-        color: inherit;
-      }
-    }
-
-    .list-page &-filter input {
-      border: none;
-      border-bottom: 2px solid white;
-      border-radius: 0;
-      background-color: #2d2c31;
-
-      &:hover, &:focus {
-        color: white;
-        border-color: $brand-primary;
-        background-color: #2d2c31;
-      }
-
-      @each $item in $themes {
-        .#{$item}-theme &:hover,
-        .#{$item}-theme &:focus {
-          border-color: map-get($theme-colors, $item);
-        }
-      }
-
-    }
-
-    .list-page &-filter &-item {
-      background-color: #2d2c31;
-
-      &:hover {
-        color: #838288;
-        background-color: white;
+  .form-element & input {
+    @each $item in $themes {
+      .#{$item}-theme &:hover,
+      .#{$item}-theme &:focus {
+        border-color: map-get($theme-colors, $item);
       }
     }
   }
@@ -60,74 +22,62 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    overflow: hidden;
 
-    &.active:not(:focus) {
-      cursor: pointer;
+    border: 1px solid rgba($gray, .2);
+
+    background-color: transparent;
+
+    overflow: hidden;
+    cursor: default;
+
+    i {
+      font-size: 14px;
+    }
+
+    .filter-wrapper & {
+      border-radius: 50px;
+    }
+
+    &.active {
+      border-color: $gray;
     }
   }
 
   &-list {
     width: 100%;
-    overflow-y: auto;
     max-height: 200px;
-    z-index: 150;
+
+    overflow-y: auto;
+
+    z-index: 20;
   }
 
   &-item {
+    padding: .5rem;
+
     border: none;
-    border-radius: 0 !important;
+    border-radius: 0;
+    border-bottom: 1px solid rgba($gray, .05);
+
+    label {
+      margin-bottom: 0;
+
+      cursor: pointer;
+    }
+
     &:hover {
+      cursor: pointer;
+    }
+
+    .form-element &:hover {
+      color: $gray;
       width: 100%;
       background-color: $brand-primary;
     }
 
     @each $item in $themes {
-      .#{$item}-theme &:hover {
+      .#{$item}-theme .form-element &:hover {
         background-color: map-get($theme-colors, $item);
-      }
-    }
-  }
-}
-
-.r3sourcer .autocomplete {
-  @include media-breakpoint-up('lg') {
-    .list-page &-filter .autocomplete-value {
-      border: 1px solid #363c3e;
-      border-radius: .2rem;
-    }
-
-    &-filter &-value {
-      border-radius: 0;
-      background-color: transparent;
-      overflow: hidden;
-
-      &.active:not(:focus) {
-        cursor: pointer;
-      }
-    }
-
-    &-filter input {
-      border: none;
-      border-bottom: 2px solid white;
-      border-radius: 0;
-
-      &:hover, &:focus {
-        border-color: $brand-primary;
-      }
-
-      @each $item in $themes {
-        .#{$item}-theme &:hover {
-          border-color: map-get($theme-colors, $item);
-        }
-      }
-    }
-
-    &-filter &-item {
-
-      &:hover {
-        color: #838288;
-        background-color: white;
       }
     }
   }

@@ -5,7 +5,8 @@ import { BasicElementComponent } from '../basic-element/basic-element.component'
 
 @Component({
   selector: 'form-radio',
-  templateUrl: 'form-radio.component.html'
+  templateUrl: 'form-radio.component.html',
+  styleUrls: ['./form-radio.component.scss']
 })
 
 export class FormRadioComponent extends BasicElementComponent implements OnInit {

@@ -6,7 +6,8 @@ import moment from 'moment-timezone';
 
 @Component({
   selector: 'form-vacancy-dates',
-  templateUrl: 'form-vacancy-dates.component.html'
+  templateUrl: 'form-vacancy-dates.component.html',
+  styleUrls: ['./form-vacancy-dates.component.scss']
 })
 
 export class FormVacancyDatesComponent extends BasicElementComponent implements OnInit {

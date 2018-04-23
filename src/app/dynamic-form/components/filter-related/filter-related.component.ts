@@ -1,26 +1,43 @@
-import { FilterService } from './../../services/filter.service';
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  HostListener,
+  ElementRef
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NgModel } from '@angular/forms';
 
 import { GenericFormService } from './../../services/generic-form.service';
+import { FilterService } from './../../services/filter.service';
+
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/observable/fromEvent';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/skip';
 
 @Component({
   selector: 'filter-related',
   templateUrl: 'filter-related.component.html'
 })
-export class FilterRelatedComponent implements OnInit {
+export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy {
   public config: any;
   public data: any;
-  public elements = [];
-  public count: number;
   public item: any;
   public query: string;
-  public copyConfig = [];
   public isCollapsed: boolean = false;
 
   public searchValue: string;
+
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
+
   public list: any[];
   public limit: number = 10;
   public previewList: any[];
@@ -30,6 +47,12 @@ export class FilterRelatedComponent implements OnInit {
 
   public defaultValue: any;
   public theme: string;
+  public multiple: boolean;
+  public selected: any[];
+  public selectedValues: any[];
+
+  public chashValues: any[];
+
   public icons = {
     r3sourcer: {
       true: 'angle-right',
@@ -41,6 +64,9 @@ export class FilterRelatedComponent implements OnInit {
     }
   };
 
+  public cashResults: any[];
+  public subscription: Subscription;
+
   @ViewChild('search')
   public search;
 
@@ -50,129 +76,158 @@ export class FilterRelatedComponent implements OnInit {
   constructor(
     private fs: FilterService,
     private route: ActivatedRoute,
-    private genericFormService: GenericFormService
+    private genericFormService: GenericFormService,
+    private elementRef: ElementRef
   ) {}
 
   public ngOnInit() {
+    this.multiple = this.config.multiple;
+    if (this.multiple) {
+      this.limit = -1;
+    }
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
     this.defaultValue = {
       [this.config.data.key]: '',
-      [this.config.data.value]: 'All'
+      [this.config.data.value]: this.multiple ? `Select ${this.config.label}` : 'All'
     };
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
   }
 
-  public generateList(item, concat = false): void {
-      this.getOptions(this.searchValue, item, concat);
+  public ngAfterViewInit() {
+    if (this.search) {
+      this.subscription = this.search.valueChanges
+        .skip(1)
+        .debounceTime(400)
+        .subscribe((res) => {
+          this.filter();
+        });
+    }
   }
 
-  public generatePreviewList(list, item) {
-    item.lastElement += this.limit;
-    this.previewList = list.slice(0, item.lastElement);
+  public ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
-  public openAutocomplete($event, item) {
+  public generateList(concat = false): void {
+    if (this.multiple) {
+      if (!this.chashValues) {
+        this.getOptions(this.searchValue, concat);
+      }
+    } else {
+      this.getOptions(this.searchValue, concat);
+    }
+  }
+
+  public generatePreviewList(list) {
+    this.item.lastElement += this.limit;
+    this.previewList = list.slice(0, this.item.lastElement);
+  }
+
+  public openAutocomplete($event) {
+      if (this.multiple && !this.item.hideAutocomplete) {
+        this.item.hideAutocomplete = true;
+        return;
+      }
       let autocomplete;
       let target = $event.target;
+
       this.searchValue = null;
-      item.hideAutocomplete = false;
-      this.generateList(item);
+      this.item.hideAutocomplete = false;
+      this.generateList();
       if (target.classList.contains('autocomplete-value')) {
-        this.topHeight = target.offsetHeight;
+        this.topHeight = target.offsetHeight + 1;
         autocomplete = target.nextElementSibling;
       } else {
-        this.topHeight = target.parentElement.offsetHeight;
+        this.topHeight = target.parentElement.offsetHeight + 1;
         autocomplete = target.parentElement.nextElementSibling;
       }
       setTimeout(() => {
-        autocomplete.children[0].focus();
+        if (!this.multiple) {
+          autocomplete.children[0].focus();
+        }
       }, 50);
   }
 
-  public resetList(item) {
+  public resetList() {
     setTimeout(() => {
-      this.previewList = null;
-      item.lastElement = 0;
-      item.count = null;
-      item.hideAutocomplete = true;
+      this.previewList.length = 0;
+      this.item.lastElement = 0;
+      this.item.count = null;
+      this.item.hideAutocomplete = true;
     }, 150);
   }
 
-  public filter(item) {
-    item.lastElement = 0;
-    item.count = null;
-    this.previewList = null;
-    this.generateList(item);
+  public filter() {
+    this.item.lastElement = 0;
+    this.item.count = null;
+    this.generateList();
   }
 
-  public onModalScrollDown(item) {
-    this.generateList(item, true);
-  }
-
-  public setValue(value, item) {
-    item.data = value[this.config.data.key];
-    item.displayValue = value[this.config.data.value];
-    item.count = null;
-    this.searchValue = null;
-    this.previewList = null;
-    this.onChange();
-  }
-
-  public deleteValue(item) {
-    item.data = '';
-    item.displayValue = 'All';
-    this.fs.generateQuery(
-      this.genericQuery(this.elements, this.config.query),
-      this.config.key, this.config.listName, this.elements);
-    this.changeQuery();
-  }
-
-  public addElement() {
-    if (this.elements.length < this.config.options.length) {
-      this.elements.push(this.createElement(this.count));
+  public onModalScrollDown() {
+    if (!this.multiple) {
+      this.generateList(true);
     }
   }
 
-  public deleteElement(item) {
-    if (this.elements.length > 1) {
-      let result = this.elements.filter((el) => el.id !== item.id);
-      this.elements = result;
+  public setValue(value, list?) {
+    if (this.multiple) {
+      this.selected = list.filter((item) => item.checked);
+      this.item.data = this.selected.map((el) => el[this.config.data.key]);
+      this.item.displayValue = this.selected.length
+        ? `Selected ${this.selected.length} ${this.config.label}`
+        : `Select ${this.config.label}`;
+      this.onChange();
+    } else {
+      this.item.data = value[this.config.data.key];
+      this.item.displayValue = value[this.config.data.value];
+      this.item.count = null;
+      this.item.hideAutocomplete = true;
+      this.searchValue = null;
+      this.previewList.length = 0;
+      this.onChange();
     }
-    this.fs.generateQuery(
-      this.genericQuery(this.elements, this.config.query),
-      this.config.key, this.config.listName, this.elements);
-    this.changeQuery();
   }
 
-  public createElement(id, data = '') {
-    this.count++;
+  public deleteValue() {
+    if (this.multiple) {
+      this.resetAll(this.previewList || []);
+      return;
+    } else {
+      this.item.data = '';
+      this.item.displayValue = 'All';
+    }
+  }
+
+  public createElement(data?: any) {
     let element = {
-      id,
       data,
       lastElement: 0,
       hideAutocomplete: true
     };
-    element['displayValue'] = data ? this.getOption(data, element) : 'All';
     return element;
   }
 
   public onChange() {
     this.fs.generateQuery(
-      this.genericQuery(this.elements, this.config.query),
-      this.config.key, this.config.listName, this.elements);
+      this.genericQuery(this.config.query),
+      this.config.key, this.config.listName, this.item);
     this.changeQuery();
   }
 
-  public genericQuery(elements, query) {
+  public genericQuery(query) {
     let result = '';
-    elements.forEach((el) => {
-      if (el.data) {
-        result += `${query}=${el.data}&`;
-      }
-    });
+    if (Array.isArray(this.item.data)) {
+      this.item.data.forEach((el) => {
+        result += `${query}=${el}&`;
+      });
+    } else {
+      result = `${query}=${this.item.data}&`;
+    }
     this.query = result;
     return result.substring(0, result.length - 1);
   }
@@ -185,10 +240,20 @@ export class FilterRelatedComponent implements OnInit {
 
   public parseQuery(query) {
     this.query = query;
-    query.split('&').forEach((el) => {
-      let value = el.split('=')[1];
-      this.elements.push(this.createElement(this.count, value));
+    const queries = query.split('&');
+    const selected = queries.length;
+    let data = queries.length && [];
+    queries.forEach((el, i) => {
+      if (queries.length) {
+        data.push(el.split('=')[1]);
+      } else {
+        data = el.split('=')[1];
+      }
     });
+    if (!this.item) {
+      this.item = this.createElement(data);
+      this.item['displayValue'] = data ? this.getOption(data) : 'All';
+    }
   };
 
   public updateFilter() {
@@ -197,72 +262,135 @@ export class FilterRelatedComponent implements OnInit {
       if (data.byQuery) {
         if (this.settingValue) {
           this.settingValue = false;
-          this.elements = [];
           this.parseQuery(data.query);
         }
       } else {
         if (this.settingValue) {
           this.settingValue = false;
-          this.elements = [];
-          let counts = data.map((el) => el.id);
-          this.elements.push(...data);
-          this.count = Math.max(...counts);
-          this.genericQuery(this.elements, this.config.query);
+          this.item = data;
+          this.genericQuery(this.config.query);
         }
       }
     } else {
       this.query = '';
-      this.count = 1;
-      if (this.elements && !this.elements.length) {
-        this.elements.push(this.createElement(this.count));
+      if (!this.item) {
+        this.item = this.createElement();
+        this.item['displayValue'] = data ? this.getOption(data) : 'All';
       }
     }
   };
 
   public resetFilter() {
-    this.elements.length = 1;
-    this.deleteValue(this.elements[0]);
-    this.fs.generateQuery('', this.config.key, this.config.listName);
+    this.deleteValue();
+    this.fs.generateQuery('', this.config.key, this.config.listName, this.item);
     this.changeQuery();
   }
 
-  public getOption(value, item) {
-    let endpoint = `${this.config.data.endpoint}${value}/`;
+  public getOption(value) {
+    if (this.multiple) {
+      this.selected = value;
+      this.getOptions(this.searchValue);
+      return `Selected ${value.length} ${this.config.label}`;
+    }
+    let endpoint;
+    const index = this.config.data.endpoint.indexOf('?');
+    if (index !== -1) {
+      endpoint = this.config.data.endpoint.slice(0, index)
+        + `${value}/`
+        + this.config.data.endpoint.slice(index);
+    } else {
+      endpoint = `${this.config.data.endpoint}${value}/`;
+    }
     let display = this.config.data.value;
     this.genericFormService.getAll(endpoint).subscribe(
       (res: any) => {
-        item.displayValue = res[display];
+        this.item.displayValue = res[display];
       }
     );
   }
 
-  public getOptions(value, item, concat = false) {
+  public getOptions(value, concat = false) {
     let endpoint = this.config.data.endpoint;
-    let offset = item.lastElement;
+    let offset = this.item.lastElement;
     let display = this.config.data.value;
     let key = this.config.data.key;
     let query = '';
+
     if (value) {
-      query += `?search=${value}&`;
+      query += endpoint.indexOf('?') === -1 ? `?search=${value}` : `&search=${value}`;
     }
-    query += !query ? '?' : '';
+    query += !query && endpoint.indexOf('?') === -1 ? '?' : '&';
     query += `limit=${this.limit}&offset=${offset}&fields=${display}&fields=${key}`;
-    if (!item.count || (item.count && offset < item.count && concat)) {
-      item.lastElement += this.limit;
+    if (!this.item.count || (this.item.count && offset < this.item.count && concat)) {
+      this.item.lastElement += this.limit;
       this.genericFormService.getByQuery(endpoint, query).subscribe(
         (res: any) => {
-          item.count = res.count;
-          if (res.results && res.results.length) {
+          this.item.count = res.count;
+          if (res.results) {
             if (concat) {
               if (this.previewList) {
                 this.previewList.push(...res.results);
               }
             } else {
+              if (!this.chashValues && this.multiple) {
+                if (this.selected) {
+                  res.results.forEach((el) => {
+                    if (this.selected.indexOf(el[this.config.data.key]) > -1) {
+                      el.checked = true;
+                    }
+                  });
+                }
+                this.chashValues = res.results;
+                this.previewList = this.chashValues;
+                this.selected = this.filterSelectedValues(this.previewList);
+                return;
+              }
               this.previewList = res.results;
             }
           }
         }
       );
+    }
+  }
+
+  public selectAll(list) {
+    list.forEach((el) => {
+      el.checked = true;
+    });
+    this.setValue(null, list);
+  }
+
+  public resetAll(list) {
+    list.forEach((el) => {
+      el.checked = false;
+    });
+    this.setValue(null, list);
+  }
+
+  public filterSelectedValues(list) {
+    return list.filter((el) => this.selected && this.selected.indexOf(el.id) > -1);
+  }
+
+  public removeItem(item) {
+    item.checked = false;
+    this.setValue(item, this.previewList);
+  }
+
+  @HostListener('document:click', ['$event'])
+  public handleClick(event) {
+    let clickedComponent = event.target;
+    let inside = false;
+    do {
+      if (clickedComponent === this.elementRef.nativeElement) {
+        inside = true;
+      }
+      clickedComponent = clickedComponent.parentNode;
+    } while (clickedComponent);
+    if (!inside) {
+      if (this.multiple && !this.item.hideAutocomplete) {
+        this.item.hideAutocomplete = true;
+        return;
+      }
     }
   }
 

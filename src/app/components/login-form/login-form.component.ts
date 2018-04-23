@@ -5,7 +5,8 @@ import { LoginService } from './../../services/login.service';
 
 @Component({
   selector: 'login-form',
-  templateUrl: 'login-form.component.html'
+  templateUrl: 'login-form.component.html',
+  styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
 
@@ -15,6 +16,8 @@ export class LoginFormComponent implements OnInit {
   public endpoint = `/ecore/api/v2/auth/login/`;
   public label: any;
   public type: string;
+
+  public loginProcess: boolean;
 
   constructor(
     private loginService: LoginService,
@@ -49,7 +52,7 @@ export class LoginFormComponent implements OnInit {
 
   public responseHandler(response) {
     if (response.data) {
-      this.router.navigate(['/']);
+      this.router.navigate(['']);
     } else if (response.status === 'success') {
       this.error = {};
     }
@@ -57,7 +60,13 @@ export class LoginFormComponent implements OnInit {
 
   public redirectHandler(data) {
     this.loginService.username = data;
-    this.router.navigate(['/registration']);
+    location.href = '/ecore/register/';
+  }
+
+  public formEvent(e) {
+    if (e.type === 'saveStart') {
+      this.loginProcess = true;
+    }
   }
 
 }

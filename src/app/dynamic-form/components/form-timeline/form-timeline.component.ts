@@ -5,7 +5,8 @@ import { FormatString } from '../../../helpers/format';
 
 @Component({
   selector: 'form-timeline',
-  templateUrl: 'form-timeline.component.html'
+  templateUrl: 'form-timeline.component.html',
+  styleUrls: ['./form-timeline.component.scss']
 })
 
 export class FormTimelineComponent implements OnInit, OnDestroy {

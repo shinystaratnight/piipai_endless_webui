@@ -9,9 +9,13 @@
           [errors]="error"
           [showResponse]="true"
           (redirect)="redirectHandler($event)"
-          (responseForm)="responseHandler($event)">
+          (responseForm)="responseHandler($event)"
+          (event)="formEvent($event)">
           <div class="form-group text-right">
-            <button type="submit" class="login-button">LOGIN</button>
+            <button type="submit" class="login-button">
+              LOGIN
+              <spinner *ngIf="loginProcess"></spinner>
+            </button>
             <a *ngIf="type === 'extranet'" class="login-link" href="#">Forgot Password?</a>
           </div>
         </generic-form>

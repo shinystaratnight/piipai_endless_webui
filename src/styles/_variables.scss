@@ -1,13 +1,17 @@
+
+@import '../../node_modules/bootstrap/scss/variables.scss';
+
 // Color variables
-$brand-primary:             #3cb1db;
+$brand-primary:             #28A3FC;
 $breadcrumb-bg:               transparent;
 $breadcrumb-divider:          ">";
 $breadcrumb-item-padding:     .2rem;
+$gray: #333;
 
 // Theme color
 $themes: ('default', 'labour', 'indigo', 'teal', 'brown');
 $theme-colors: (
-  'default': #3cb1db,
+  'default': #28A3FC,
   'labour': #f58926,
   'indigo': #3f51b5,
   'teal': #009688,
@@ -20,4 +24,4 @@ $hamburger-padding-y: .8rem;
 $hamburger-layer-width: 25px;
 $hamburger-layer-height: 3px;
 $hamburger-layer-spacing: 5px;
-$hamburger-layer-color: white;
+$hamburger-layer-color: black;

@@ -140,6 +140,7 @@ export class DynamicListComponent implements
 
   public body: any[] = [];
   public select: any;
+  public selectedCount: number;
   public sortedColumns: any;
   public filtersOfList: any[] = [];
   public selectedAll: boolean = false;
@@ -165,8 +166,17 @@ export class DynamicListComponent implements
   public saveProcess: boolean;
 
   public showFilters: boolean;
+  public filtersHidden: boolean = true;
 
   public asyncData: any;
+
+  public pictures = [
+    '/ecore/api/v2/core/contacts/',
+    '/ecore/api/v2/candidate/candidatecontacts/',
+    '/ecore/api/v2/core/companies/'
+  ];
+
+  public noneEdit: boolean;
 
   constructor(
     private filterService: FilterService,
@@ -212,6 +222,8 @@ export class DynamicListComponent implements
     } else {
       this.showFilters = !!(this.filtersOfList && this.filtersOfList.length);
     }
+
+    this.noneEdit = this.pictures.indexOf(this.endpoint) > -1;
   }
 
   public ngOnChanges() {
@@ -258,7 +270,32 @@ export class DynamicListComponent implements
       this.select = this.resetSelectedElements(data[this.responseField]);
       if (config.list) {
         this.sortedColumns = this.getSortedColumns(config.list.columns);
-        this.body = this.prepareData(config.list.columns, data[this.responseField], config.list.highlight); //tslint:disable-line
+        if (this.tabs) {
+          const mainMetadata = config.list.columns.filter((el) => !el.tab || !el.tab.is_collapsed);
+          const metadata = config.list.columns.filter((el) => el.tab && el.tab.is_collapsed); //tslint:disable-line
+          const additionalMetadata = [];
+
+          this.tabs.forEach((tab) => {
+            if (tab.is_collapsed) {
+              tab.fields.forEach((field) => {
+                additionalMetadata.push(metadata.find((el) => el.name === field));
+              });
+            }
+          });
+
+          const additionalBody = this.prepareData(additionalMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
+
+          this.body = this.prepareData(mainMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
+          this.body.forEach((main) => {
+            additionalBody.forEach((additional) => {
+              if (main.id === additional.id) {
+                main.additionalBody = this.parseAdditionalBody(additional);
+              }
+            });
+          });
+        } else {
+          this.body = this.prepareData(config.list.columns, data[this.responseField], config.list.highlight); //tslint:disable-line
+        }
         if (this.asyncData) {
           this.getAsyncData();
         }
@@ -278,6 +315,22 @@ export class DynamicListComponent implements
     }
   }
 
+  public parseAdditionalBody(body) {
+    const content = [];
+
+    body.content.forEach((col) => {
+      const tab = col.tab;
+      const newContent = content.find((c) => c.label === tab.label);
+      if (newContent) {
+        newContent.content.push(col);
+      } else {
+        content.push(Object.assign({}, tab, {content: [col]}));
+      }
+    });
+    body.content = content;
+    return body;
+  }
+
   public ngOnDestroy() {
     if (this.first) {
       this.filterService.filters = {
@@ -295,38 +348,38 @@ export class DynamicListComponent implements
   }
 
   public ngAfterViewInit() {
-    if (this.datatable && !this.inForm) {
-      let listButtons: any = this.datatable.nativeElement.getElementsByClassName('list-buttons');
-      let filterWrapper: any =
-        this.datatable.nativeElement.getElementsByClassName('filter-wrapper');
-      let width: any = window.innerWidth;
-      let offsetTop;
-      if (listButtons && listButtons.length && width > 992) {
-        this.calcButton(offsetTop, listButtons, filterWrapper);
-        this.calcTable();
-      }
+    // if (this.datatable && !this.inForm) {
+    //   let listButtons: any = this.datatable.nativeElement.getElementsByClassName('list-buttons');
+    //   let filterWrapper: any =
+    //     this.datatable.nativeElement.getElementsByClassName('filter-wrapper');
+    //   let width: any = window.innerWidth;
+    //   let offsetTop;
+    //   if (listButtons && listButtons.length && width > 992) {
+    //     this.calcButton(offsetTop, listButtons, filterWrapper);
+    //     this.calcTable();
+    //   }
 
-      let resizeTimeout;
-      window.addEventListener('resize', () => {
-        if (!resizeTimeout) {
-          resizeTimeout = setTimeout(() => {
-            resizeTimeout = null;
-            if (listButtons && listButtons.length && window.innerWidth > 992) {
-              this.calcButton(offsetTop, listButtons, filterWrapper);
-              this.calcTable();
-            } else {
-              filterWrapper[0].style.top = 0;
-              filterWrapper[0].style.height = 'auto';
+    //   let resizeTimeout;
+    //   window.addEventListener('resize', () => {
+    //     if (!resizeTimeout) {
+    //       resizeTimeout = setTimeout(() => {
+    //         resizeTimeout = null;
+    //         if (listButtons && listButtons.length && window.innerWidth > 992) {
+    //           this.calcButton(offsetTop, listButtons, filterWrapper);
+    //           this.calcTable();
+    //         } else {
+    //           filterWrapper[0].style.top = 0;
+    //           filterWrapper[0].style.height = 'auto';
 
-              if (this.tableWrapper) {
-                let tableWrapperEl = this.tableWrapper.nativeElement;
-                tableWrapperEl.style.maxHeight = 'auto';
-              }
-            }
-          }, 66);
-        }
-      }, false);
-    }
+    //           if (this.tableWrapper) {
+    //             let tableWrapperEl = this.tableWrapper.nativeElement;
+    //             tableWrapperEl.style.maxHeight = 'auto';
+    //           }
+    //         }
+    //       }, 66);
+    //     }
+    //   }, false);
+    // }
   }
 
   public parseMultipleFilter(filters: any[]): void {
@@ -515,6 +568,7 @@ export class DynamicListComponent implements
       let row = {
         id: el.id,
         __str__: el.__str__,
+        collapsed: true,
         content: []
       };
       if (highlight) {
@@ -543,7 +597,12 @@ export class DynamicListComponent implements
           obj.action = element.action;
           obj['delim'] = col.delim;
           obj['title'] = col.title;
-          obj['display'] = this.format(element.display, el);
+          obj['inline'] = element.inline;
+          obj['outline'] = element.outline;
+          obj['skillName'] = col.label;
+          if (element.display) {
+            obj.display = this.format(element.display.replace(/{field}/gi, `{${element.field}}`), el); //tslint:disable-line
+          }
           if (element.type === 'datepicker') {
             let field = this.config.fields.find((elem) => elem.key === element.field);
             if (field) {
@@ -568,21 +627,37 @@ export class DynamicListComponent implements
             obj['link'] = this.format(element.link, el);
             obj.text = this.format(element.text, el);
           } else if (element.endpoint) {
-            let indexOf = element.endpoint.indexOf('{field}');
-            if (indexOf) {
-              element.endpoint = element.endpoint.replace(/{field}/gi, `{${element.field}}`);
+            if (element.field) {
+              props = element.field.split('.');
+              this.setValue(el, props, obj);
             }
+
+            let indexOf = element.endpoint.indexOf('{field}');
             if (element.endpoint[element.endpoint.length - 1] !== '/') {
               element.endpoint += '/';
             }
-            obj['endpoint'] = this.format(element.endpoint, el);
+            if (indexOf) {
+              element.endpoint = element.endpoint.replace(/{field}/gi, `{${element.field}}`);
+            }
+            if (Array.isArray(obj.value)) {
+              obj.link = [];
+              obj.value.forEach((val) => {
+                obj.link.push(this.format(element.endpoint, {
+                  [obj.name]: val
+                }).replace('/ecore/api/v2', ''));
+              });
+            } else {
+              obj['endpoint'] = this.format(element.endpoint, el);
+            }
             if (col.name === 'evaluate') {
               this.evaluateEndpoint = element.endpoint;
             }
             obj.text = this.format(element.text, el);
           }
           if (element.type === 'static') {
-            obj.value = this.format(element.text, el);
+            if (element.text) {
+              obj.value = this.format(element.text.replace(/{field}/gi, `{${element.field}}`), el);
+            }
             obj.label = element.label;
           }
           if (element.type === 'picture') {
@@ -627,8 +702,12 @@ export class DynamicListComponent implements
               this.setValue(el, props, item);
             });
           } else if (element.field) {
-            props = element.field.split('.');
-            this.setValue(el, props, obj);
+            if (element.type === 'info') {
+              obj.value = el;
+            } else {
+              props = element.field.split('.');
+              this.setValue(el, props, obj);
+            }
           }
           if (!this.checkValue(obj)) {
             delete cell.contextMenu;
@@ -686,17 +765,11 @@ export class DynamicListComponent implements
     return result;
   }
 
-  public sorting(field) {
+  public sorting(field, type: string) {
     if (!this.delay) {
-      if (this.sortedColumns[field.sort_field]) {
-        this.sortedColumns[field.sort_field]
-          = this.sortedColumns[field.sort_field] === 'asc' ? 'desc' : 'asc';
-        field.sorted = field.sorted === 'asc' ? 'desc' : 'asc';
-      } else {
-        let key = 'asc';
-        this.sortedColumns[field.sort_field] = key;
-        field.sorted = key;
-      }
+      this.sortedColumns[field.sort_field] = type;
+      field.sorted = type;
+
       this.event.emit({
         type: 'sort',
         list: this.config.list.list,
@@ -771,6 +844,8 @@ export class DynamicListComponent implements
   public emitSelect() {
     if (this.select) {
       const keys = Object.keys(this.select);
+      const result = keys.filter((key) => this.select[key]);
+      this.selectedCount = result.length;
       this.checkedObjects.emit(keys.filter((key) => this.select[key]));
     }
   }
@@ -794,11 +869,19 @@ export class DynamicListComponent implements
   }
 
   public filterHandler(e) {
-    this.event.emit({
-      type: 'filter',
-      list: e.list,
-      query: this.filterService.getQuery(e.list)
-    });
+    if (e === 'resetAll') {
+      this.event.emit({
+        type: 'filter',
+        list: this.config.list.list,
+        query: ''
+      });
+    } else {
+      this.event.emit({
+        type: 'filter',
+        list: e.list,
+        query: this.filterService.getQuery(e.list)
+      });
+    }
   }
 
   public openModal(modal, field) {

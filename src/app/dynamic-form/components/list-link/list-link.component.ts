@@ -1,8 +1,17 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  ViewEncapsulation,
+  ViewChild
+} from '@angular/core';
 
 @Component({
   selector: 'list-link',
-  templateUrl: 'list-link.component.html'
+  templateUrl: 'list-link.component.html',
+  styleUrls: ['./list-link.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class ListLinkComponent implements OnInit {
@@ -14,11 +23,16 @@ export class ListLinkComponent implements OnInit {
   public last: boolean;
   public arrayValue: boolean;
 
+  public phone: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
+
+  @ViewChild('view')
+  public lickView;
 
   public ngOnInit() {
 
@@ -26,6 +40,9 @@ export class ListLinkComponent implements OnInit {
       this.value = this.config.value && (this.config.text || this.config.value.__str__);
     } else {
       this.value = this.config.value && (this.config.text || this.config.value);
+      if (Array.isArray(this.config.value)) {
+        this.arrayValue = true;
+      }
     }
     this.href = this.config.link;
 
@@ -34,11 +51,15 @@ export class ListLinkComponent implements OnInit {
     } else {
       this.link = !(this.isEmail(this.value) || this.isPhone(this.value));
     }
+
+    if (!this.link && this.config.link.indexOf('tel:') > -1) {
+      this.phone = true;
+    }
   }
 
   public isEmail(value) {
     let reg =
-       /^[a-z][a-zA-Z0-9_.]*(\.[a-zA-Z][a-zA-Z0-9_.]*)?@[a-z][a-zA-Z-0-9]*\.[a-z]+(\.[a-z]+)?$/;
+       /^[a-zA-Z][a-zA-Z0-9_.]*(\.[a-zA-Z][a-zA-Z0-9_.]*)?@[a-zA-Z][a-zA-Z-0-9]*\.[a-zA-Z]+(\.[a-zA-Z]+)?$/; //tslint:disable-line
 
     return reg.test(value) ? true : false;
   }
@@ -79,6 +100,20 @@ export class ListLinkComponent implements OnInit {
 
   public buttonHandler(e) {
     this.buttonAction.emit(e);
+  }
+
+  public sendSms() {
+    this.buttonAction.emit({
+      type: 'click',
+      value: 'sendSMS',
+      el: Object.assign({}, this.config, {
+        fields: [{
+          type: 'link',
+          field: this.config.key,
+          value: this.config.value
+        }]
+      })
+    });
   }
 
 }
