@@ -69,7 +69,7 @@ export class ListInfoComponent implements OnInit {
       const keys = Object.keys(this.color);
 
       keys.forEach((key) => {
-        className = this.color.red.indexOf(item[this.colorAttr]) > -1 ? key : 'success';
+        className = this.color[key].indexOf(item[this.colorAttr]) > -1 ? key : 'success';
       });
     }
 
