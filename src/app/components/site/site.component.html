@@ -4,13 +4,14 @@
   <div *ngSwitchCase="'form'">
     <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
     <div
-      *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit'"
+      *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'"
       class="container-fluid pb-5">
         <div [ngClass]="{'d-flex justify-content-center align-items-center': !pageData.pathData.modal}">
           <div [ngClass]="{'col-12 col-sm-9 col-md-9 col-lg-9 mt-3': !pageData.pathData.modal}">
             <div [class.card]="!pageData.pathData.modal">
               <div [ngClass]="{'card-content p-2': !pageData.pathData.modal}" [class.modal-form]="pageData.pathData.modal">
                 <generic-form
+                  *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit'"
                   [title]="pageData.pathData.title"
                   [modal]="pageData.pathData.modal"
                   [endpoint]="pageData.endpoint"
