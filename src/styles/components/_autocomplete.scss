@@ -4,9 +4,12 @@
   width: 100%;
 
   margin-top: 5px;
+  padding: 0 13px;
+
+  border-radius: 4px;
 
   background-color: white;
-  box-shadow: 0 0 12px rgba($gray, .2);
+  box-shadow: 0 0 12px rgba($gray, .15);
   z-index: 30;
 
   .form-element & input {
@@ -25,7 +28,7 @@
 
     border: 1px solid rgba($gray, .2);
 
-    background-color: transparent;
+    background-color: #fefefe;
 
     overflow: hidden;
     cursor: default;
@@ -53,11 +56,18 @@
   }
 
   &-item {
-    padding: .5rem;
+    padding: .5rem 0;
+    margin-bottom: 1px;
 
-    border: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
     border-radius: 0;
-    border-bottom: 1px solid rgba($gray, .05);
+    border-bottom: 1px solid rgba($gray, .08);
+
+    &:hover {
+      background-color: #f7f7f7;
+    }
 
     label {
       margin-bottom: 0;

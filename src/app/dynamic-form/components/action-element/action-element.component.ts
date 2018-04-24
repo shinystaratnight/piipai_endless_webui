@@ -5,7 +5,8 @@ import { FormatString } from '../../../helpers/format';
 
 @Component({
   selector: 'action-element',
-  templateUrl: 'action-element.component.html'
+  templateUrl: 'action-element.component.html',
+  styleUrls: ['./action-element.component.scss']
 })
 export class ActionElementComponent implements OnChanges {
   @Input()

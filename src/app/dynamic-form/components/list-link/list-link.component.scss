@@ -9,11 +9,12 @@
     display: inline-block;
     visibility: hidden;
 
-    padding-left: .5rem;
-    padding-right: .5rem;
+    padding: .2rem .3rem .1rem .3rem;
 
     margin-right: .2rem;
     margin-bottom: 0;
+
+    line-height: 1;
 
     transition: none;
   }
