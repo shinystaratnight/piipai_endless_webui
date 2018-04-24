@@ -116,6 +116,7 @@ export class SiteComponent implements OnInit {
             }
           }, 0);
         }
+        this.setActivePage(this.pagesList, pageData.pathData.path);
       }
     );
   }
@@ -309,5 +310,19 @@ export class SiteComponent implements OnInit {
       (res: any) => this.router.navigate([element.pathData.path]),
       (err: any) => this.error = err
     );
+  }
+
+  public setActivePage(pages, path) {
+    let active = false;
+    pages.forEach((page) => {
+      if (path === page.url && page.url !== '/') {
+        active = true;
+        page.active = true;
+      } else if (page.childrens) {
+        page.active = this.setActivePage(page.childrens, path);
+        active = active || page.active;
+      }
+    });
+    return active;
   }
 }

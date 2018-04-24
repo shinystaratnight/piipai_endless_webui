@@ -63,6 +63,8 @@ import { ListButtonsComponent } from './containers/list-buttons/list-buttons.com
 import { ListSerachBarComponent } from './components/list-search-bar/list-search-bar.component';
 import { FilterRangeComponent } from './components/filter-range/filter-range.component';
 import { FilterMultipleComponent } from './components/filter-multiple/filter-multiple.component';
+import { ListInfoComponent } from './components/list-info/list-info.component';
+import { ListTagsComponent } from './components/list-tags/list-tags.component';
 
 import { ActionElementComponent } from './components/action-element/action-element.component';
 
@@ -70,6 +72,7 @@ import { GenericFormService } from './services/generic-form.service';
 
 import { MoveDirective } from './directives/move.directive';
 import { SharedModule } from '../shared/shared.module';
+import { ListSkillsComponent } from './components/list-skills/list-skills.component';
 
 @NgModule({
   imports: [
@@ -133,7 +136,10 @@ import { SharedModule } from '../shared/shared.module';
     FormColumnComponent,
     ProfileComponent,
     FilterRangeComponent,
-    FilterMultipleComponent
+    FilterMultipleComponent,
+    ListInfoComponent,
+    ListTagsComponent,
+    ListSkillsComponent,
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -168,7 +174,10 @@ import { SharedModule } from '../shared/shared.module';
     FormJsonComponent,
     FormColumnComponent,
     FilterRangeComponent,
-    FilterMultipleComponent
+    FilterMultipleComponent,
+    ListInfoComponent,
+    ListTagsComponent,
+    ListSkillsComponent
   ]
 })
 export class DynamicFormModule { }

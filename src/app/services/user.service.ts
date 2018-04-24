@@ -13,6 +13,11 @@ export interface User {
   status: string;
   data: {
     contact: {
+      company: string;
+      picture: {
+        origin: string;
+        thumb: string;
+      },
       contact_id: string;
       contact_type: string;
       id: string;
@@ -71,7 +76,7 @@ export class UserService {
       (res: any) => {
         if (res.status === 'success') {
           this.user = null;
-          this.navigation.navigationList = null;
+          this.navigation.navigationList = {};
           this.cookie.remove('sessionid');
           this.router.navigate(['/home']);
         }

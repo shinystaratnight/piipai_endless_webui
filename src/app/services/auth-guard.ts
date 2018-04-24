@@ -36,13 +36,13 @@ export class AuthGuard implements CanActivate {
                 route._urlSegment.segments,
                 response[1]
               )
-              .do((res: boolean) => !res && this.router.navigate(['/home']));
+              .do((res: boolean) => !res && this.router.navigate(['home']));
           } else {
             return Observable.of(true);
           }
         })
         .catch((err: any) => {
-          this.router.navigate(['/home']);
+          this.router.navigate(['home']);
           return Observable.of(false);
         });
   }

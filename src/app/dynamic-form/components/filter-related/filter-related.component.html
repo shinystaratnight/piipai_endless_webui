@@ -1,7 +1,7 @@
-<div class="filter-element p-2" [class.active]="!isCollapsed">
+<div class="filter-element" [class.active]="!isCollapsed">
   <label class="filter-label related" [class.active]="!isCollapsed">
     {{config.label}}
-    <i
+    <!-- <i
       fa
       class="p-2 ml-auto"
       [name]="icons[theme][isCollapsed]"
@@ -9,7 +9,7 @@
       [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
       (click)="isCollapsed = !isCollapsed"
       [attr.aria-expanded]="!isCollapsed"
-      style="cursor: pointer"></i>
+      style="cursor: pointer"></i> -->
     <i
       *ngIf="query"
       fa
@@ -20,19 +20,23 @@
       (click)="resetFilter()"></i>
   </label>
   <div [ngbCollapse]="isCollapsed" class="filter-related">
-    <div class="d-flex justify-content-center align-items-center mt-3 autocomplete-filter" *ngFor="let item of elements" style="position: relative">
-      <div class="form-control autocomplete-value active"
-        (click)="openAutocomplete($event, item)">
+    <div class="d-flex justify-content-center align-items-center autocomplete-filter" style="position: relative">
+      <div class="form-control autocomplete-value"
+        [class.active]="(multiple && selected && selected.length) || (!multiple && item.data)"
+        (click)="openAutocomplete($event)">
           <div style="overflow: hidden; white-space: nowrap">{{item.displayValue}}</div>
-          <i fa [name]="item.hideAutocomplete ? 'angle-right' : 'angle-down'" class="text-md-white ml-2"></i>
+          <i fa [name]="item.hideAutocomplete ? 'angle-down' : 'angle-up'" class="text-md-white ml-2"></i>
       </div>
 
-      <div class="card autocomplete p-1" [hidden]="item.hideAutocomplete" [ngStyle]="{'top.px': topHeight}">
-        <input type="text" class="form-control mb-1"
+      <div class="autocomplete p-1" [hidden]="item.hideAutocomplete" [ngStyle]="{'top.px': topHeight}">
+        <input #search="ngModel"
+          *ngIf="!multiple"
+          name="search"
+          type="text"
+          class="form-control mb-1"
           [(ngModel)]="searchValue"
           [ngModelOptions]="{standalone: true}"
-          (blur)="resetList(item)"
-          (keyup)="filter(item)">
+          (blur)="resetList(item)">
         <div class="autocomplete-list"
           infinite-scroll
           [infiniteScrollDistance]="modalScrollDistance"
@@ -40,19 +44,44 @@
           [scrollWindow]="false"
           (scrolled)="onModalScrollDown(item)"
           [hidden]="!(previewList && previewList.length)">
-          <ul class="list-group w-100">
-            <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer" (click)="setValue(defaultValue, item)">All</li>
-            <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+          <ul *ngIf="!multiple" class="list-group w-100">
+            <li class="list-group-item autocomplete-item" (click)="setValue(defaultValue, item)">All</li>
+            <li class="list-group-item autocomplete-item"
               *ngFor="let option of previewList"
-              (click)="setValue(option, item)">{{option[config.data.value]}}</li>
+              (click)="setValue(option)">{{option[config.data.value]}}</li>
+          </ul>
+
+
+          <ul *ngIf="multiple" class="list-group w-100">
+            <li class="autocomplete-item default-value" *ngIf="previewList && previewList.length">
+              <a (click)="selectAll(previewList)">Select All</a>
+              <a (click)="resetAll(previewList)">Reset All</a>
+            </li>
+            <li class="list-group-item autocomplete-item form-check" *ngFor="let option of previewList; let index = index">
+              <label class="d-flex align-items-center">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  [(ngModel)]="option.checked"
+                  name="checked"
+                  (ngModelChange)="setValue(option, previewList)"
+                  hidden>
+                <div class="custom-checkbox">
+                  <i fa name="check"></i>
+                </div>
+                {{option[config.data.value]}}
+              </label>
+            </li>
           </ul>
         </div>
       </div>
+    </div>
 
-      <div *ngIf="config.many" class="d-flex justify-content-center align-items-center p-1">
-        <i fa *ngIf="config.many" [name]="'plus'" [border]=true (click)="addElement()" class="text-success p-1" style="cursor: pointer"></i>
-        <i fa *ngIf="elements.length > 1" [name]="'ban'" [border]=true (click)="deleteElement(item)" class="text-danger p-1" style="cursor: pointer"></i>
-      </div>
+    <div *ngIf="selected && selected.length" class="filter-values">
+      <span class="badge badge-outline" *ngFor="let value of selected">
+        {{value[config.data.value]}}
+        <i fa name="times" (click)="removeItem(value)"></i>
+      </span>
     </div>
   </div>
 </div>

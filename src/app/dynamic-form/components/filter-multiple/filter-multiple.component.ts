@@ -24,12 +24,14 @@ export class FilterMultipleComponent implements OnInit {
     }
   };
   public theme: string;
+  public type: string;
 
   @Output() public event: EventEmitter<any> = new EventEmitter();
 
   constructor(private fs: FilterService, private route: ActivatedRoute) {}
 
   public ngOnInit() {
+    this.type = this.config.type === 'multiple' ? 'data' : 'options';
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
@@ -40,21 +42,25 @@ export class FilterMultipleComponent implements OnInit {
     this.theme = document.body.classList.contains('r3sourcer')
       ? 'r3sourcer'
       : 'default';
-    if (this.config.data) {
-      this.data = this.config.data.map((data) => {
-        return {
-          label: data[this.config.display],
-          query: this.config.query,
-          checked: true,
-          data
-        };
-      });
+    if (!this.data) {
+      this.createData(this.type);
     }
     if (this.config.unique) {
       setTimeout(() => {
         this.onChange(null, true);
       }, 50);
     }
+  }
+
+  public createData(type) {
+    this.data = this.config[type].map((data) => {
+      return {
+        label: type === 'data' ? data[this.config.display] : data.label,
+        query: this.config.query,
+        checked: type === 'data' ? true : false,
+        data: type === 'data' ? data : data.value
+      };
+    });
   }
 
   public onChange(index: number, first?) {
@@ -74,10 +80,14 @@ export class FilterMultipleComponent implements OnInit {
     if (data) {
       data.forEach((el) => {
         if (el.checked) {
-          const queries = Object.keys(el.query);
-          queries.forEach((item) => {
-            result += `${item}=${format.format(el.query[item], el.data)}&`;
-          });
+          if (el.query instanceof Object) {
+            const queries = Object.keys(el.query);
+            queries.forEach((item) => {
+              result += `${item}=${format.format(el.query[item], el.data)}&`;
+            });
+          } else {
+            result += `${query}=${el.data}&`;
+          }
         }
       });
     }
@@ -96,14 +106,16 @@ export class FilterMultipleComponent implements OnInit {
     this.query = query;
     if (this.data) {
       this.data.forEach((el) => {
-        const keys = Object.keys(el.query);
-        let result;
-        keys.forEach((item) => {
-          result = `${item}=${format.format(el.query[item], el.data)}`;
-          if (query.indexOf(result)) {
-            el.checked = el.checked ? el.checked : false;
-          }
-        });
+        if (el.query instanceof Object) {
+          const keys = Object.keys(el.query);
+          let result;
+          keys.forEach((item) => {
+            result = `${item}=${format.format(el.query[item], el.data)}`;
+            el.checked = query.indexOf(result) > -1;
+          });
+        } else {
+          el.checked = query.indexOf(`${el.query}=${el.data}`) > -1;
+        }
       });
     }
   }
@@ -113,10 +125,19 @@ export class FilterMultipleComponent implements OnInit {
     let data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
       if (data.byQuery) {
+        if (!this.data) {
+          this.createData(this.type);
+        }
+
         this.parseQuery(data.query);
       } else {
         this.data = data;
       }
+    } else {
+      if (!this.data) {
+        this.createData(this.type);
+      }
+      this.resetValues();
     }
   }
 
@@ -151,5 +172,22 @@ export class FilterMultipleComponent implements OnInit {
         });
       });
     }
+  }
+
+  public resetValues() {
+    this.data.forEach((el) => {
+      el.checked = false;
+    });
+  }
+
+  public resetFilter() {
+    this.resetValues();
+    this.fs.generateQuery(
+      this.genericQuery(this.config.query, this.data),
+      this.config.key,
+      this.config.listName,
+      this.data
+    );
+    this.changeQuery();
   }
 }

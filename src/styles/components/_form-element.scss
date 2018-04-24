@@ -1,0 +1,81 @@
+.form-element {
+  &-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &-checkbox {
+    display: inline-flex;
+    margin-left: .5rem;
+  }
+
+  .site-page & {
+    display: flex;
+    flex-wrap: wrap;
+
+    &-label {
+      flex-basis: 200px;
+    }
+
+    &-content{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-basis: calc(100% - 200px);
+      min-width: 200px;
+      max-width: 300px;
+    }
+
+    &-checkbox:not(:empty) {
+      display: flex;
+      align-items: center;
+      margin-left: 0;
+
+      @include media-breakpoint-down('xs') {
+        order: -1;
+        margin-right: .5rem;
+      }
+    }
+
+    &-picture:not(:empty) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    @include media-breakpoint-down('xs') {
+      &-label,
+      &-content {
+        flex-basis: auto;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+      }
+
+      &-content {
+        width: 100%;
+        max-width: none;
+        min-width: auto;
+      }
+    }
+
+    &.custom {
+      flex-direction: column;
+      justify-content: center;
+
+      .form-element-label {
+        text-transform: uppercase;
+        flex-basis: auto;
+      }
+
+      .form-element-content{
+        display: none;
+      }
+    }
+  }
+
+  .modal-form &-content {
+    flex-wrap: wrap;
+  }
+}

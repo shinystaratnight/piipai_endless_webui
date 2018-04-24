@@ -1,16 +1,144 @@
 body {
-  height: 89vh;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
+
+  font-size: 16px;
+  line-height: 20px;
+
+  color: $gray;
 }
 
-body.r3sourcer {
-  height: 91vh;
-  background-color: #f1f1f1;
+
+label, b {
+  font-weight: 500;
 }
 
-.icon {
-  font-size: 14px !important;
+button {
   cursor: pointer;
+}
+
+a {
+  color: inherit;
+
+  &:hover,
+  &:focus,
+  &.active {
+    color: $brand-primary;
+
+    &.not-underline {
+      text-decoration: none;
+    }
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        color: map-get($theme-colors, $item);
+      }
+    }
+  }
+}
+
+i {
+  opacity: 1;
+}
+
+input[type="checkbox"]:checked ~ .custom-checkbox {
+  font-size: 12px;
+
+  border-color: $brand-primary;
+
+  background-color: $brand-primary;
+  color: white;
+}
+
+.custom-checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-width: 1rem;
+  height: 1rem;
+
+  margin-right: .5rem;
+
+  font-size: 0;
+
+  border: 1px solid #bdbdbd;
+  border-radius: .2rem;
+
+  cursor: pointer;
+}
+
+/*---------- Bootstrap ---------- */
+
+.tooltip {
+  height: 50px;
+  max-height: 50px;
+
+  color: $gray;
+  opacity: .8;
+
+  &-inner {
+    font-size: 12px;
+
+    background-color: white;
+    color: inherit;
+    box-shadow: 0 0 8px 2px rgba($gray, .3);
+
+    .tooltip-right &::before {
+      width: 10px;
+      height: 10px;
+
+      border: none;
+
+      transform: rotate(45deg);
+      box-shadow: -4px 4px 15px 1px rgba($gray, .2);
+    }
+  }
+}
+
+.btn-primary {
+  border-color: $brand-primary;
+  background-color: $brand-primary;
+}
+
+.badge {
+  font-size: .75rem;
+  font-weight: normal;
+
+  padding: .56rem;
+
+  border-radius: 50px;
+
+  background-color: rgba($brand-primary, .5);
+  color: inherit;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: rgba(map-get($theme-colors, $item), .5);
+    }
+  }
+}
+
+.btn-outline-primary {
+  font-size: .625rem;
+  padding: .25rem;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      border-color: map-get($theme-colors, $item);
+      color: map-get($theme-colors, $item);
+
+      &:hover {
+        background-color: map-get($theme-colors, $item);
+        color: white;
+      }
+    }
+  }
+}
+
+.modal-lg {
+  @include media-breakpoint-up('xl') {
+    max-width: 1170px;
+  }
 }
 
 .modal-content {
@@ -34,7 +162,201 @@ body.r3sourcer {
   @include media-breakpoint-down('md') {
     max-height: 100%;
   }
+}
 
+.group-button {
+  font-size: .7rem;
+  background-color: lighten($brand-primary, 15%);
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: lighten(map-get($theme-colors, $item), 15%) !important;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    background-color: darken($brand-primary, 10%);
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        background-color: darken(map-get($theme-colors, $item), 10%) !important;
+      }
+    }
+  }
+}
+
+.form-list .form-group,
+.form-list .form-control {
+  margin-bottom: 0;
+}
+
+@each $item in $themes {
+  .#{$item}-theme .bg-primary {
+    background-color: map-get($theme-colors, $item) !important;
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .btn-primary {
+    border-color: map-get($theme-colors, $item);
+    background-color: map-get($theme-colors, $item) !important;
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .text-primary {
+    color: map-get($theme-colors, $item) !important;
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .page-item.active .page-link {
+    background-color: map-get($theme-colors, $item) !important;
+    border-color: map-get($theme-colors, $item) !important;
+  }
+}
+
+/*---------- jtsage-datebox-bootstrap4 ---------- */
+
+.ui-datebox-container.dropdown-menu {
+  width: auto;
+  max-width: 250px;
+  border: none;
+
+  .ui-datebox-gridheader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ui-datebox-gridplus {
+    order: 2;
+
+    span::before {
+      content: '\f105';
+
+      font-size: 18px;
+    }
+  }
+
+  .ui-datebox-gridminus {
+    color: $gray;
+
+    span::before {
+      font-size: 18px;
+
+      content: '\f104';
+    }
+  }
+
+  .ui-datebox-datebox-group {
+    text-align: center;
+
+    input {
+      border-radius: 50px;
+    }
+
+    .fa-plus::before {
+      font-size: 18px;
+
+      content: '\f106';
+    }
+
+    .fa-minus::before {
+      font-size: 18px;
+
+      content: '\f107';
+    }
+  }
+
+  .ui-datebox-controls {
+    a {
+      border-radius: 50px;
+
+      &:hover {
+        background-color: $brand-primary;
+
+        color: white;
+
+        @each $item in $themes {
+          .#{$item}-theme & {
+            background-color: map-get($theme-colors, $item);
+          }
+        }
+      }
+    }
+  }
+
+  .btn-sm,
+  .ui-datebox-griddate {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 2rem;
+    height: 2rem;
+
+    font-size: .7rem;
+    line-height: .7rem;
+
+
+    padding: 0;
+
+    &.ui-datebox-griddate-label,
+    &.ui-datebox-griddate-empty {
+      font-weight: normal;
+      color: rgba($gray, 0.4);
+    }
+  }
+
+  .btn-sm {
+    border: none;
+    border-radius: 50%;
+
+    &:hover {
+      border: none;
+
+      background-color: $brand-primary;
+      color: white;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          background-color: map-get($theme-colors, $item);
+        }
+      }
+    }
+  }
+
+  .btn-info {
+    background-color: $brand-primary;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        background-color: map-get($theme-colors, $item);
+      }
+    }
+  }
+}
+
+.ui-datebox-container .ui-datebox-controls {
+  a {
+    margin-bottom: 5px;
+
+    border-radius: 50px;
+
+    &:hover {
+      background-color: $brand-primary;
+
+      color: white;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          background-color: map-get($theme-colors, $item);
+        }
+      }
+    }
+  }
 }
 
 .datepicker {
@@ -53,8 +375,19 @@ body.r3sourcer {
   }
 }
 
-label, b {
-  font-weight: 500;
+/*---------- Custom styles ---------- */
+
+.btn-shadow {
+  box-shadow: 0px 4px 6px 0 rgba(black, 0.1);
+}
+
+.description {
+  color: rgba($gray, .7);
+}
+
+.icon {
+  font-size: 14px !important;
+  cursor: pointer;
 }
 
 iframe.send-sms {
@@ -84,175 +417,31 @@ iframe.send-sms {
   float: left;
 }
 
-.color-preview {
-  display: inline-block;
-  width: 3rem;
-  height: 2rem;
-  border-radius: .2rem;
-  transition: all .4s;
-}
+.badge.badge-outline {
+  padding: .25rem .4rem;
 
-input:checked ~ .color-preview {
-  transform: scale(1.2);
-}
+  font-size: .75rem;
 
-.image-preview {
-  width: 150px;
-  margin-bottom: 1rem;
-  border-radius: .3rem;
-  border: 5px solid white;
-  box-shadow: 0 0 0 2px black;
-}
+  border: 1px solid $brand-primary;
 
-.group-button {
-  font-size: .7rem;
-  background-color: lighten($brand-primary, 15%);
+  background-color: white;
+  color: $brand-primary;
 
   @each $item in $themes {
     .#{$item}-theme & {
-      background-color: lighten(map-get($theme-colors, $item), 15%) !important;
+      border-color: map-get($theme-colors, $item);
+      color: map-get($theme-colors, $item);
     }
-  }
-
-  &:hover,
-  &:focus {
-    background-color: darken($brand-primary, 10%);
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        background-color: darken(map-get($theme-colors, $item), 10%) !important;
-      }
-    }
-  }
-}
-
-.form-element-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.form-element-checkbox {
-  display: inline-flex;
-  margin-left: .5rem;
-}
-
-.site-page .form-element {
-  display: flex;
-  flex-wrap: wrap;
-
-  &-label {
-    flex-basis: 200px;
-  }
-
-  &-content{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-basis: calc(100% - 200px);
-    min-width: 200px;
-    max-width: 300px;
-  }
-
-  &-checkbox:not(:empty) {
-    display: flex;
-    align-items: center;
-    margin-left: 0;
-
-    @include media-breakpoint-down('xs') {
-      order: -1;
-      margin-right: .5rem;
-    }
-  }
-
-  &-picture:not(:empty) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  @include media-breakpoint-down('xs') {
-    &-label,
-    &-content {
-      flex-basis: auto;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    &-content {
-      width: 100%;
-      max-width: none;
-      min-width: auto;
-    }
-  }
-}
-
-.modal-form .form-element-content {
-  flex-wrap: wrap;
-}
-
-.site-page .form-element {
-  &.custom {
-    flex-direction: column;
-    justify-content: center;
-
-    .form-element-label {
-      text-transform: uppercase;
-      flex-basis: auto;
-    }
-
-    .form-element-content{
-      display: none;
-    }
-  }
-}
-
-.form-list .form-group,
-.form-list .form-control {
-  margin-bottom: 0;
-}
-
-@include media-breakpoint-down('md') {
-  .list-related {
-    overflow-x: auto;
   }
 }
 
 @each $item in $themes {
   .#{$item}-theme .page-item.active .page-link {
-    background-color: map-get($theme-colors, $item) !important;
-    border-color: map-get($theme-colors, $item) !important;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .bg-primary {
-    background-color: map-get($theme-colors, $item) !important;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .btn-primary {
+    background-color: map-get($theme-colors, $item);
     border-color: map-get($theme-colors, $item);
-    background-color: map-get($theme-colors, $item) !important;
   }
-}
 
-@each $item in $themes {
-  .#{$item}-theme .text-primary {
-    color: map-get($theme-colors, $item) !important;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme a {
+  .#{$item}-theme .page-link {
     color: map-get($theme-colors, $item);
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .nav-link.active {
-    background-color: map-get($theme-colors, $item) !important;
   }
 }
