@@ -61,9 +61,12 @@
   &-image {
     position: relative;
 
-    img {
+    img,
+    .contact-avatar {
       width: 54px;
       height: 54px;
+
+      margin-bottom: .5rem;
 
       border-radius: 50%;
     }
@@ -103,8 +106,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    margin-top: .5rem;
 
     color: rgba($gray, .3);
 

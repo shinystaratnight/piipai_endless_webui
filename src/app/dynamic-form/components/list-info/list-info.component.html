@@ -1,13 +1,16 @@
 <div class="list-info-wrapper">
   <div class=list-info-left>
     <div class="list-info-image">
-      <img [src]="src">
+      <img *ngIf="picture" [src]="picture">
+      <div *ngIf="contactAvatar" class="contact-avatar">
+        {{contactAvatar}}
+      </div>
 
-      <i *ngIf="available" fa name="check" class="available"></i>
-      <i *ngIf="!available" fa name="times" class="unavailable"></i>
+      <i *ngIf="available && (picture || contactAvatar)" fa name="check" class="available"></i>
+      <i *ngIf="!available && (picture || contactAvatar)" fa name="times" class="unavailable"></i>
     </div>
 
-    <a class="list-info-edit-link not-underline" [routerLink]="[config.rowId + '/change']">
+    <a class="list-info-edit-link not-underline" [class.pl-2]="!(picture || contactAvatar)" [routerLink]="[config.rowId + '/change']">
       <i fa name="pencil" class="edit"></i>
       Edit
     </a>
