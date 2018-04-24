@@ -38,6 +38,8 @@ export class LoginFormComponent implements OnInit {
       if (type === 'crm' || type === 'extranet') {
         this.label = type === 'crm' ? 'CRM' :
           type === 'extranet' ? 'Extranet Login' : '';
+      } else {
+        this.label = 'Login';
       }
     });
   }
