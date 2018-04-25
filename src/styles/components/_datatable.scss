@@ -45,7 +45,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
   .table-wrapper {
     max-width: 100%;
-    overflow-x: auto;
+    overflow-x: auto !important;
   }
 }
 
