@@ -18,7 +18,9 @@
 
   <div class="list-info-block">
     <h5 class="list-info-title">
-      <span *ngIf="!this.averageScore && this.averageScore !== 0">{{title}}</span>
+      <span *ngIf="!this.averageScore && this.averageScore !== 0">
+        {{title}}&nbsp;<i class="info" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
+      </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
         {{title}}&nbsp;&nbsp;
         <span [style.color]="colors[getScore(this.averageScore)]">
@@ -26,7 +28,6 @@
           <i fa name="star"></i>
         </span>
       </span>
-      <i class="info" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
     </h5>
     <p class="description">{{address}}</p>
 

@@ -275,7 +275,25 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.query = '';
       if (!this.item) {
         this.item = this.createElement();
-        this.item['displayValue'] = data ? this.getOption(data) : 'All';
+        if (this.multiple) {
+          this.item.displayValue = `Select ${this.config.label}`;
+        } else {
+          this.item.displayValue = data ? this.getOption(data) : 'All';
+        }
+      }
+
+      if (this.item && !this.multiple) {
+        this.item.data = '';
+        this.item.displayValue = 'All';
+      } else if (this.previewList) {
+        this.previewList.forEach((el) => {
+          el.checked = false;
+        });
+        this.selected = this.previewList.filter((item) => item.checked);
+        this.item.data = this.selected.map((el) => el[this.config.data.key]);
+        this.item.displayValue = this.selected && this.selected.length
+          ? `Selected ${this.selected.length} ${this.config.label}`
+          : `Select ${this.config.label}`;
       }
     }
   };

@@ -84,6 +84,10 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
   color: $gray;
   opacity: 1;
 
+  &.show {
+    opacity: 1;
+  }
+
   &-inner {
     font-size: 12px;
 
