@@ -13,7 +13,7 @@
       <template *ngFor="let page of pages" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page, first: true, height: headerHeight}"></template>
     </ul>
   </nav>
-  <div class="user" *ngIf="user">
+  <div #userBlock class="user" *ngIf="user">
     <div class="user-block">
       <div class="user-info">
         <span>{{user.data.contact.__str__}}</span>
