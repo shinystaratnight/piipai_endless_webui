@@ -1,7 +1,7 @@
 <navigation></navigation>
 <div class="container" *ngIf="!token">
   <div class="row justify-content-center align-items-center">
-    <div class="col-12 col-sm-9 col-md-7 col-lg-4 mt-5">
+    <div class="d-flex flex-column col-12 col-sm-9 col-md-7 col-lg-4 mt-5">
       <h5 class="login-title">{{label}}</h5>
       <div class="login-content">
         <generic-form
@@ -10,9 +10,10 @@
           [showResponse]="true"
           (redirect)="redirectHandler($event)"
           (responseForm)="responseHandler($event)"
+          (errorForm)="errorHandler($event)"
           (event)="formEvent($event)">
           <div class="form-group text-right">
-            <button type="submit" class="login-button">
+            <button type="submit" class="btn login-button">
               LOGIN
               <spinner *ngIf="loginProcess"></spinner>
             </button>
@@ -20,6 +21,10 @@
           </div>
         </generic-form>
       </div>
+      <a href="/ecore/register/" class="btn register-button px-3 mt-3">
+        <i fa name="plus-circle"></i>
+        Register as candidate
+      </a>
     </div>
   </div>
 </div>

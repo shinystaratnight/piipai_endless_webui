@@ -45,7 +45,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
   .table-wrapper {
     max-width: 100%;
-    overflow: auto;
+    overflow-x: auto !important;
   }
 }
 
@@ -121,8 +121,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       }
 
       td {
-        min-width: 250px;
-
         padding-top: 0;
         padding-bottom: 0;
       }
@@ -210,7 +208,9 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     align-items: flex-start;
     justify-content: space-around;
 
-    min-height: calc(100vh - 72px - 31px);
+    &-list & {
+      min-height: calc(100vh - 72px - 31px);
+    }
   }
 
   &-search {
@@ -421,8 +421,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   .additional-data {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-
 
     .description {
       width: 85px;
@@ -432,6 +430,27 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       font-size: .75rem;
 
       color: rgba($gray, .55);
+    }
+
+    &-content {
+      min-width: 120px;
+    }
+
+    .description + &-content {
+      min-width: calc(210px - 85px - .5rem);
+    }
+
+    .badge {
+      text-overflow: ellipsis;
+      overflow: hidden;
+
+      @include media-breakpoint-down('xl') {
+        max-width: 240px;
+      }
+
+      @include media-breakpoint-down('md') {
+        max-width: 200px;
+      }
     }
   }
 
