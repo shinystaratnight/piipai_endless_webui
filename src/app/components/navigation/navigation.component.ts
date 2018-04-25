@@ -56,6 +56,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   public currentRole: string;
   public company: string;
   public picture: string;
+  public contactAvatar: string;
 
   constructor(
     private navigationService: NavigationService,
@@ -86,6 +87,19 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.candidate = this.user.data.contact.contact_type === 'candidate';
       this.company = this.user.data.contact.company;
       this.picture = this.user.data.contact.picture && this.user.data.contact.picture.origin;
+
+      if (!this.picture) {
+        const nameElements = this.user.data.contact.__str__.split(' ');
+
+        if (nameElements && nameElements.length) {
+          if (nameElements.length === 2) {
+            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
+          } else if (nameElements.length === 3) {
+            nameElements.shift();
+            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
+          }
+        }
+      }
     } else {
       this.greeting = `Welcome, Anonymous User`;
     }

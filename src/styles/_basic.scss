@@ -5,6 +5,8 @@ body {
   line-height: 20px;
 
   color: $gray;
+
+  background-color: #f5f5f5;
 }
 
 
@@ -47,6 +49,10 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 
   background-color: $brand-primary;
   color: white;
+
+  i {
+    opacity: 1;
+  }
 }
 
 .custom-checkbox {
@@ -59,22 +65,24 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 
   margin-right: .5rem;
 
-  font-size: 0;
+  font-size: 12px;
 
   border: 1px solid #bdbdbd;
   border-radius: .2rem;
 
   cursor: pointer;
+
+  i {
+    opacity: 0;
+  }
 }
 
 /*---------- Bootstrap ---------- */
 
 .tooltip {
-  height: 50px;
-  max-height: 50px;
 
   color: $gray;
-  opacity: .8;
+  opacity: 1;
 
   &-inner {
     font-size: 12px;
@@ -189,6 +197,10 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 .form-list .form-group,
 .form-list .form-control {
   margin-bottom: 0;
+}
+
+.list-group-item:last-child {
+  border-radius: 0;
 }
 
 @each $item in $themes {
@@ -376,6 +388,33 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 }
 
 /*---------- Custom styles ---------- */
+
+.contact-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+  line-height: 24px;
+
+  font-weight: 600;
+
+  border-radius: 50%;
+
+  color: white;
+
+  background: $brand-primary;
+  background: -webkit-linear-gradient(to bottom, $brand-primary, #f2fcfe);
+  background: linear-gradient(to bottom, $brand-primary, #f2fcfe);
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background: map-get($theme-colors, $item);
+      background: -webkit-linear-gradient(to bottom, map-get($theme-colors, $item), #f2fcfe);
+      background: linear-gradient(to bottom, map-get($theme-colors, $item), #f2fcfe);
+    }
+  }
+}
 
 .btn-shadow {
   box-shadow: 0px 4px 6px 0 rgba(black, 0.1);

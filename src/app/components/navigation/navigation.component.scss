@@ -1,10 +1,10 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
 
-$nested-width: 200px;
+$nested-width: 230px;
 $side-width: 252px;
-$header-shadow: 0 8px 12px rgba($gray, .2);
-$nested-shadow: 0px 6px 10px 5px rgba($gray, .2);
+$header-shadow: 0 8px 12px rgba(black, .04);
+$nested-shadow: 0px 6px 20px 0px rgba($gray, .3);
 $header-bg: white;
 
 .page-header {
@@ -207,7 +207,7 @@ $header-bg: white;
           top: 0;
           left: $nested-width;
 
-          box-shadow: 5px 0px 10px 5px rgba($gray, .2);
+          box-shadow: 5px 0px 20px 0px rgba($gray, .3);
         }
       }
 
@@ -304,7 +304,8 @@ $header-bg: white;
 
       padding: 15px 0;
 
-      img {
+      img,
+      .contact-avatar {
         width: 48px;
         height: 48px;
 
