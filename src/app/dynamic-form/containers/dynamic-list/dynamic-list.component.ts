@@ -289,7 +289,11 @@ export class DynamicListComponent implements
           this.body.forEach((main) => {
             additionalBody.forEach((additional) => {
               if (main.id === additional.id) {
-                main.additionalBody = this.parseAdditionalBody(additional);
+                if (!additional.parsed) {
+                  main.additionalBody = this.parseAdditionalBody(additional);
+                } else {
+                  main.additionalBody = additional;
+                }
               }
             });
           });
@@ -328,6 +332,7 @@ export class DynamicListComponent implements
       }
     });
     body.content = content;
+    body.parsed = true;
     return body;
   }
 
