@@ -38,6 +38,8 @@ export class LoginFormComponent implements OnInit {
       if (type === 'crm' || type === 'extranet') {
         this.label = type === 'crm' ? 'CRM' :
           type === 'extranet' ? 'Extranet Login' : '';
+      } else {
+        this.label = 'Login';
       }
     });
   }
@@ -47,7 +49,7 @@ export class LoginFormComponent implements OnInit {
       (res: any) => {
           this.router.navigate([res.data.redirect_to]);
       },
-      (err) => this.router.navigate(['home']));
+      (err) => this.router.navigate(['login']));
   }
 
   public responseHandler(response) {
@@ -55,6 +57,7 @@ export class LoginFormComponent implements OnInit {
       this.router.navigate(['']);
     } else if (response.status === 'success') {
       this.error = {};
+      this.loginProcess = false;
     }
   }
 
@@ -67,6 +70,10 @@ export class LoginFormComponent implements OnInit {
     if (e.type === 'saveStart') {
       this.loginProcess = true;
     }
+  }
+
+  public errorHandler() {
+    this.loginProcess = false;
   }
 
 }

@@ -78,7 +78,7 @@ export class UserService {
           this.user = null;
           this.navigation.navigationList = {};
           this.cookie.remove('sessionid');
-          this.router.navigate(['/home']);
+          this.router.navigate(['login']);
         }
       },
       (err: any) => this.error = err
