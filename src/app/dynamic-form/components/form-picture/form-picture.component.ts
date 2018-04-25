@@ -50,6 +50,8 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
 
   public viewMode: boolean;
 
+  public contactAvatar: string;
+
   public options = {
     audio: false,
     video: true,
@@ -115,9 +117,6 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   }
 
   public setInitValue() {
-    if (this.config.default) {
-      this.value = `ecore/media/${this.config.default}`;
-    }
     if (this.config.value) {
       if (this.config.value instanceof Object && this.config.value.origin) {
         this.value = this.config.value.origin;
@@ -131,6 +130,24 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
         }
       }
     }
+
+    if (!this.value) {
+      this.value = this.config.companyContact ? '/assets/img/logo.svg' : '';
+
+      if (!this.value && this.config.contactName) {
+        const nameElements = this.config.contactName.split(' ');
+
+        if (nameElements && nameElements.length) {
+          if (nameElements.length === 2) {
+            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
+          } else if (nameElements.length === 3) {
+            nameElements.shift();
+            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
+          }
+        }
+      }
+    }
+
     this.group.get(this.key).patchValue(undefined);
   }
 
