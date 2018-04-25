@@ -116,7 +116,7 @@ export class ContactRegistrationFormComponent implements OnInit {
         return;
       }
       let lastElement = urlCopy.pop().path;
-      if (lastElement === 'password') {
+      if (lastElement === 'password' && user) {
         this.endpoint = `${this.contactEndpoint}${user.id}/password/`;
         this.password = true;
       }

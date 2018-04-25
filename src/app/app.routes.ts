@@ -19,11 +19,11 @@ export const ROUTES: Routes = [
     pathMatch: 'full',
     redirectTo: '/'
   },
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [NotAuthorizedGuard]
-  },
+  // {
+  //   path: 'home',
+  //   component: HomeComponent,
+  //   canActivate: [NotAuthorizedGuard]
+  // },
   {
     path: 'login',
     component: LoginFormComponent,
@@ -34,11 +34,11 @@ export const ROUTES: Routes = [
     component: LoginFormComponent,
     canActivate: [NotAuthorizedGuard]
   },
-  {
-    path: 'registration',
-    component: ContactRegistrationFormComponent,
-    canActivate: [NotAuthorizedGuard]
-  },
+  // {
+  //   path: 'registration',
+  //   component: ContactRegistrationFormComponent,
+  //   canActivate: [NotAuthorizedGuard]
+  // },
   {
     path: 'registration/password',
     component: ContactRegistrationFormComponent,
