@@ -127,6 +127,11 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public candidateFill: boolean;
 
+  public pictures = {
+    '/ecore/api/v2/core/contacts/': '__str__',
+    '/ecore/api/v2/candidate/candidatecontacts/': '__str__',
+  };
+
   constructor(
     private service: GenericFormService
   ) {}
@@ -332,6 +337,14 @@ export class GenericFormComponent implements OnChanges, OnInit {
       if (el.templateOptions) {
         el.templateOptions.label = this.format.format(el.templateOptions.label, data);
         el.templateOptions.text = this.format.format(el.templateOptions.text, data);
+      }
+      if (el.type === 'input') {
+        if (el.templateOptions && el.templateOptions.type === 'picture') {
+          el.companyContact = this.endpoint === '/ecore/api/v2/core/companies/';
+          if (this.pictures[this.endpoint]) {
+            el.contactName = data['__str__'];
+          }
+        }
       }
       if (el.key && el.key !== 'timeline') {
         if (el.type === 'replace') {

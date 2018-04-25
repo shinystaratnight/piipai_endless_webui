@@ -11,13 +11,14 @@ export class ListInfoComponent implements OnInit {
 
   public config: any;
 
-  public src: string;
+  public picture: string;
   public available: boolean;
   public title: string;
   public address: string;
   public description: string;
   public status: any[];
   public averageScore: any;
+  public contactAvatar: string;
 
   public color: any;
   public colorAttr: string;
@@ -54,10 +55,26 @@ export class ListInfoComponent implements OnInit {
 
           this.color = this.config.values[key].color;
           this.colorAttr = this.config.values[key].color_attr;
+        } else if (key === 'picture') {
+          this[key] = this.getValue(this.config.values[key], this.config.value)
+            || (this.config.companyPicture ? '/assets/img/logo.svg' : null);
         } else {
           this[key] = this.getValue(this.config.values[key], this.config.value);
         }
       });
+
+      if (!this.picture) {
+        const nameElements = this.title.split(' ');
+
+        if (nameElements && nameElements.length) {
+          if (nameElements.length === 2) {
+            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
+          } else if (nameElements.length === 3) {
+            nameElements.shift();
+            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
+          }
+        }
+      }
     }
   }
 

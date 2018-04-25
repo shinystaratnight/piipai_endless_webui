@@ -709,6 +709,7 @@ export class DynamicListComponent implements
           } else if (element.field) {
             if (element.type === 'info') {
               obj.value = el;
+              obj.companyPicture = this.endpoint === '/ecore/api/v2/core/companies/';
             } else {
               props = element.field.split('.');
               this.setValue(el, props, obj);

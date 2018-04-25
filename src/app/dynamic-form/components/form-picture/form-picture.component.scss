@@ -1,7 +1,7 @@
 @import '../../../../styles/variables.scss';
 
 $width: 320px;
-$height: 240px;
+$height: 150px;
 
 .picture {
   video {
@@ -19,13 +19,21 @@ $height: 240px;
     img {
       max-height: $height;
     }
+
   }
 }
 
 .image-preview {
-  width: 150px;
-  margin-bottom: 1rem;
-  border-radius: .3rem;
-  border: 5px solid white;
-  box-shadow: 0 0 0 2px $gray;
+  width: $height;
+  height: $height;
+
+  border-radius: 50%;
+}
+
+.contact-avatar {
+  width: $height;
+  height: $height;
+
+  font-size: 46px;
+  line-height: 1.25;
 }
