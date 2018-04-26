@@ -83,7 +83,9 @@ import { FilterLimitComponent } from './components/filter-limit/filter-limit.com
     Angular2FontawesomeModule,
     FormsModule,
     RouterModule,
-    AgmCoreModule.forRoot({ apiKey: environment.GOOGLE_GEO_CODING_API_KEY}),
+    AgmCoreModule.forRoot({
+      apiKey: process.env.GOOGLE_GEO_CODING_API_KEY || environment.GOOGLE_GEO_CODING_API_KEY
+    }),
     InfiniteScrollModule,
     SharedModule,
   ],

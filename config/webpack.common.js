@@ -17,6 +17,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ngcWebpack = require('ngc-webpack');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+const Dotenv = require("dotenv-webpack");
 
 /*
  * Webpack Constants
@@ -367,6 +368,11 @@ module.exports = function (options) {
         disabled: !AOT,
         tsConfig: helpers.root('tsconfig.webpack.json'),
         resourceOverride: helpers.root('config/resource-override.js')
+      }),
+
+      new Dotenv({
+        path: './.env', // Path to .env file (this is the default)
+        safe: false // load .env.example (defaults to "false" which does not use dotenv-safe)
       })
 
     ],
