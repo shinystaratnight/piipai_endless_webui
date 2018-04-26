@@ -66,6 +66,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public cashResults: any[];
   public subscription: Subscription;
+  public filterSubscription: Subscription;
 
   @ViewChild('search')
   public search;
@@ -88,6 +89,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
+    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
     this.defaultValue = {
       [this.config.data.key]: '',
@@ -111,6 +113,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    this.filterSubscription.unsubscribe();
   }
 
   public generateList(concat = false): void {

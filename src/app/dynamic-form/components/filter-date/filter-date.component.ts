@@ -4,17 +4,20 @@ import {
   Output,
   EventEmitter,
   AfterViewInit,
-  ViewChildren
+  ViewChildren,
+  OnDestroy
 } from '@angular/core';
-import { FilterService } from './../../services/filter.service';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 import moment from 'moment-timezone';
+
+import { FilterService } from './../../services/filter.service';
 
 @Component({
   selector: 'filter-date',
   templateUrl: 'filter-date.component.html'
 })
-export class FilterDateComponent implements OnInit, AfterViewInit {
+export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public from: any;
   public to: any;
   public picker: boolean = false;
@@ -41,6 +44,8 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
   };
   public theme: string;
 
+  public filterSubscription: Subscription;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -59,10 +64,15 @@ export class FilterDateComponent implements OnInit, AfterViewInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
+    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter);
     this.isCollapsed = (this.query || this.picker) ||
       document.body.classList.contains('r3sourcer') ? false : true;
     this.mobileDevice = this.identifyDevice();
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
+  }
+
+  public ngOnDestroy() {
+    this.filterSubscription.unsubscribe();
   }
 
   public identifyDevice() {

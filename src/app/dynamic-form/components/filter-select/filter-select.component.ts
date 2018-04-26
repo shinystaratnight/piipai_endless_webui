@@ -1,12 +1,14 @@
 import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
 import { FilterService } from './../../services/filter.service';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'filter-select',
   templateUrl: 'filter-select.component.html'
 })
-export class FilterSelectComponent implements OnInit {
+export class FilterSelectComponent implements OnInit, OnDestroy {
   public config: any;
   public data: string;
   public query: string;
@@ -23,6 +25,7 @@ export class FilterSelectComponent implements OnInit {
     }
   };
   public theme: string;
+  public filterSubscription: Subscription;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -40,6 +43,11 @@ export class FilterSelectComponent implements OnInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
+    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
+  }
+
+  public ngOnDestroy() {
+    this.filterSubscription.unsubscribe();
   }
 
   public onChange() {

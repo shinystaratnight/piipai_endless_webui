@@ -38,7 +38,9 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
     let query = '';
 
     this.inputs.forEach((input) => {
-      query += `${input.query}=${input.data}&`;
+      if (input.data || input.data === 0) {
+        query += `${input.query}=${input.data}&`;
+      }
     });
 
     this.query = query.slice(0, query.length - 1);
@@ -52,13 +54,12 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
 
   public resetFilter() {
     this.query = '';
-    this.inputs = this.inputs.map((input) => Object.assign({}, input, { data: 0}));
+    this.inputs = this.inputs.map((input) => Object.assign({}, input, {data: null}));
     this.fs.generateQuery(this.query, this.config.key, this.config.listName);
     this.emitChange();
   }
 
   private emitChange() {
-    console.log(this);
     this.event.emit({
       list: this.config.listName
     });
@@ -94,7 +95,7 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
 
   private createInputs() {
     this.inputs = this.config.input.map((input) => {
-      return Object.assign({}, input, {data: 0});
+      return Object.assign({}, input, {data: null});
     });
   }
 

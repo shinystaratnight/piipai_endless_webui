@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { FilterService } from '../../services/filter.service';
 import { FormatString } from '../../../helpers/format';
@@ -8,7 +9,7 @@ import { FormatString } from '../../../helpers/format';
   selector: 'filter-multiple',
   templateUrl: './filter-multiple.component.html'
 })
-export class FilterMultipleComponent implements OnInit {
+export class FilterMultipleComponent implements OnInit, OnDestroy {
   public config: any;
   public query: string;
   public data: any;
@@ -25,6 +26,7 @@ export class FilterMultipleComponent implements OnInit {
   };
   public theme: string;
   public type: string;
+  public filterSubscription: Subscription;
 
   @Output() public event: EventEmitter<any> = new EventEmitter();
 
@@ -35,6 +37,7 @@ export class FilterMultipleComponent implements OnInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
+    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
     this.isCollapsed =
       this.query || document.body.classList.contains('r3sourcer')
         ? false
@@ -50,6 +53,10 @@ export class FilterMultipleComponent implements OnInit {
         this.onChange(null, true);
       }, 50);
     }
+  }
+
+  public ngOnDestroy() {
+    this.filterSubscription.unsubscribe();
   }
 
   public createData(type) {
