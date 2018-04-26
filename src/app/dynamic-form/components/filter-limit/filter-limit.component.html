@@ -1,0 +1,21 @@
+<div class="filter-element" [class.active]="!isCollapsed">
+  <label class="filter-label" [class.active]="!isCollapsed">
+    {{config.label}}
+    <i class="text-danger ml-1" style="cursor: pointer"
+      *ngIf="query"
+      fa
+      name="times-circle"
+      [border]="true"
+      (click)="resetFilter()">
+    </i>
+  </label>
+  <div class="filter-limit-wrapper">
+    <input type="number" class="form-control"
+      *ngFor="let el of inputs; let i = index"
+      [attr.min]="config.min"
+      [attr.max]="config.max"
+      [(ngModel)]="el.data"
+      (blur)="onChange()">
+    <span class="delimiter">&ndash;</span>
+  </div>
+</div>
