@@ -58,5 +58,5 @@ export const ENV_PROVIDERS = [
 ];
 
 export const environment = {
-  GOOGLE_GEO_CODING_API_KEY: ''
+  GOOGLE_GEO_CODING_API_KEY: 'AIzaSyCgJzYEgyFN_xxC-nlhaK5rg2jmqm_ieSU'
 };

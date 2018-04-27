@@ -16,6 +16,7 @@ import { FilterRelatedComponent } from './../filter-related/filter-related.compo
 import { FilterSelectComponent } from './../filter-select/filter-select.component';
 import { FilterRangeComponent } from '../filter-range/filter-range.component';
 import { FilterMultipleComponent } from '../filter-multiple/filter-multiple.component';
+import { FilterLimitComponent } from '../filter-limit/filter-limit.component';
 
 const components = {
   date: FilterDateComponent,
@@ -23,7 +24,8 @@ const components = {
   related: FilterRelatedComponent,
   select: FilterSelectComponent,
   text: FilterRangeComponent,
-  multiple: FilterMultipleComponent
+  multiple: FilterMultipleComponent,
+  range: FilterLimitComponent
 };
 
 @Directive({

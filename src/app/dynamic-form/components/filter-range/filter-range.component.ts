@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+
 import { FilterService } from './../../services/filter.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { FilterService } from './../../services/filter.service';
   templateUrl: 'filter-range.component.html'
 })
 
-export class FilterRangeComponent implements OnInit {
+export class FilterRangeComponent implements OnInit, OnDestroy {
 
   public config: any;
   public query: string;
@@ -26,6 +27,8 @@ export class FilterRangeComponent implements OnInit {
   };
   public theme: string;
 
+  public filterSubscription: Subscription;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -38,10 +41,15 @@ export class FilterRangeComponent implements OnInit {
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
+    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
     this.data = this.config.default || 0;
     this.fs.generateQuery(this.genericQuery(this.config.key, this.data), this.config.key, this.config.listName, this.data); //tslint:disable-line
+  }
+
+  public ngOnDestroy() {
+    this.filterSubscription.unsubscribe();
   }
 
   public onChange() {
