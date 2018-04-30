@@ -221,9 +221,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
       .getMetadata(endpoint, '?type=form' + (this.metadataQuery ? `&${this.metadataQuery}` : ''))
       .subscribe(
         ((data: any) => {
-          const formData = new Subject();
           this.setModeForElement(data, this.mode);
-          this.updateFormData(data, formData);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);
@@ -324,6 +322,8 @@ export class GenericFormComponent implements OnChanges, OnInit {
         this.fillingForm(this.metadata, data);
         this.addCustomTemplates(this.metadata, data);
         this.show = true;
+        const formData = new BehaviorSubject({ data });
+        this.updateFormData(this.metadata, formData);
         this.str.emit({
           str: data && data.__str__ ? data.__str__ : '',
           data
