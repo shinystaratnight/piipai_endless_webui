@@ -1,0 +1,12 @@
+<div class="container">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-12 col-sm-8 col-md-7 col-lg-6 mt-5">
+      <form (submit)="checkCard($event)">
+        <div class="form-row" [class.submited]="saving">
+          <div id="card-element"></div>
+          <div id="card-errors" role="alert">{{error}}</div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

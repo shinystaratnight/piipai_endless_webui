@@ -58,6 +58,11 @@ export const ROUTES: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'billing',
+    loadChildren: './billing/billing.module#BillingModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     component: SiteComponent,
     canActivate: [AuthGuard],
