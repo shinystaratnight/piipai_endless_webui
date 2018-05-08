@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GenericFormService } from './generic-form.service';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class FilterService {
@@ -9,6 +10,12 @@ export class FilterService {
   public query: any;
   public _paramsOfFilters: any;
   public filterList: any = [];
+
+  private _reset: Subject<any> = new Subject();
+
+  get reset() {
+    return this._reset.asObservable();
+  }
 
   constructor(
     private gfs: GenericFormService
@@ -178,4 +185,10 @@ export class FilterService {
     this._paramsOfFilters = {};
   }
 
+  public resetFilters(list: string) {
+    const listFilters = this.getQuery(list);
+
+    this.queries.splice(this.queries.indexOf(listFilters), 1);
+    this._reset.next(true);
+  }
 }

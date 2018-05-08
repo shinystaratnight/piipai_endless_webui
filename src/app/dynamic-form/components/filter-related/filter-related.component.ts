@@ -66,6 +66,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public cashResults: any[];
   public subscription: Subscription;
+  public filterSubscription: Subscription;
 
   @ViewChild('search')
   public search;
@@ -88,6 +89,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
+    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
     this.defaultValue = {
       [this.config.data.key]: '',
@@ -111,6 +113,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    this.filterSubscription.unsubscribe();
   }
 
   public generateList(concat = false): void {
@@ -275,7 +278,25 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.query = '';
       if (!this.item) {
         this.item = this.createElement();
-        this.item['displayValue'] = data ? this.getOption(data) : 'All';
+        if (this.multiple) {
+          this.item.displayValue = `Select ${this.config.label}`;
+        } else {
+          this.item.displayValue = data ? this.getOption(data) : 'All';
+        }
+      }
+
+      if (this.item && !this.multiple) {
+        this.item.data = '';
+        this.item.displayValue = 'All';
+      } else if (this.previewList) {
+        this.previewList.forEach((el) => {
+          el.checked = false;
+        });
+        this.selected = this.previewList.filter((item) => item.checked);
+        this.item.data = this.selected.map((el) => el[this.config.data.key]);
+        this.item.displayValue = this.selected && this.selected.length
+          ? `Selected ${this.selected.length} ${this.config.label}`
+          : `Select ${this.config.label}`;
       }
     }
   };

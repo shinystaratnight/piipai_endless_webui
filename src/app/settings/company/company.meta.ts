@@ -7,6 +7,7 @@ export const meta = [
         type: 'picture',
         key: 'company_settings.logo',
         read_only: false,
+        companyContact: true,
         templateOptions: {
           label: 'Logo',
           label_upload: 'Choose a file',

@@ -342,6 +342,7 @@ export class DynamicListComponent implements
         endpoint: this.endpoint,
         list: null
       };
+      this.filterService.resetQueries(this.config.list.list);
       if (this.modalRef) {
         this.modalRef.close();
       }
@@ -881,6 +882,10 @@ export class DynamicListComponent implements
         list: this.config.list.list,
         query: ''
       });
+
+      if (this.inForm) {
+        this.filterService.resetFilters(this.config.list.list);
+      }
     } else {
       this.event.emit({
         type: 'filter',
