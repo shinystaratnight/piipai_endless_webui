@@ -4,7 +4,6 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { SiteComponent } from './site/site.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormBuilderComponent } from './form-builder/form-builder.component';
-import { HomeComponent } from './home/home.component';
 import { FillInComponent } from './fill-in/fill-in.component';
 
 export const components = [
@@ -13,6 +12,5 @@ export const components = [
   SiteComponent,
   DashboardComponent,
   FormBuilderComponent,
-  HomeComponent,
   FillInComponent
 ];

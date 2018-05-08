@@ -2,7 +2,6 @@ import { ContactRegistrationFormComponent }
   from './components/contact-registration-form/contact-registration-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
 import { SiteComponent } from './components/site/site.component';
 import { AuthGuard } from './services/auth-guard';
 import { NotAuthorizedGuard } from './services/not-authorized-guard';
@@ -19,11 +18,6 @@ export const ROUTES: Routes = [
     pathMatch: 'full',
     redirectTo: '/'
   },
-  // {
-  //   path: 'home',
-  //   component: HomeComponent,
-  //   canActivate: [NotAuthorizedGuard]
-  // },
   {
     path: 'login',
     component: LoginFormComponent,

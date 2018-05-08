@@ -203,6 +203,18 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     }
   }
 
+  public switchType(type) {
+    switch (type) {
+      case 'text':
+        this.config.templateOptions.type = 'password';
+        break;
+      case 'password':
+        this.config.templateOptions.type = 'text';
+      default:
+        break;
+    }
+  }
+
   @HostListener('document:click', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;
