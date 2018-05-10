@@ -60,6 +60,10 @@ export const ROUTES: Routes = [
   {
     path: 'billing',
     loadChildren: './billing/billing.module#BillingModule',
+    resolve: {
+      user: UserService,
+      pagesList: NavigationService
+    },
     canActivate: [AuthGuard]
   },
   {

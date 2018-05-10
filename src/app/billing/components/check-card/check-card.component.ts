@@ -4,8 +4,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { GenericFormService } from '../../../dynamic-form/services/generic-form.service';
-
+import { BillingService } from '../../services/billing-service';
 import { environment } from '../../../environment';
 
 const style = {
@@ -33,7 +32,6 @@ const style = {
 })
 export class CheckCardComponent implements OnInit {
 
-  public endpoint: string = '/ecore/billing/stripe_customer/';
   public error: string;
   public saving: boolean;
 
@@ -41,7 +39,7 @@ export class CheckCardComponent implements OnInit {
   private card: any;
 
   constructor(
-    private genericFormService: GenericFormService
+    private billingService: BillingService
   ) {}
 
   public ngOnInit() {
@@ -75,7 +73,7 @@ export class CheckCardComponent implements OnInit {
   }
 
   public sendToken(token) {
-    this.genericFormService.submitForm(this.endpoint, {
+    this.billingService.setCardInfo({
       source: token
     }).subscribe(() => {
       this.saving = false;

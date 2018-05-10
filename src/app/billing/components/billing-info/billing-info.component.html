@@ -1,0 +1,33 @@
+<div>
+  <h4 class="mb-3">Your current subscription details</h4>
+
+  <p>Price: </p>
+  <p>Worker count: </p>
+  <p>Type: </p>
+  <p>Status: </p>
+  <p>Curent period start: </p>
+  <p>Curent period end: </p>
+</div>
+
+<div>
+  <h4 class="mb-3">Your payments</h4>
+
+  <table class="table table-default">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let payment of payments">
+        <td>{{payment.type}}</td>
+        <td>{{payment.amount | currency:'USD':true}}</td>
+        <td>{{payment.status}}</td>
+        <td>{{payment.created}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
