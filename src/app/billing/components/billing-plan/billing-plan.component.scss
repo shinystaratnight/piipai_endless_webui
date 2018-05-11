@@ -1,0 +1,138 @@
+@import '../../../../styles/variables.scss';
+
+h4  {
+  margin-bottom: 1.5rem;
+
+  text-align: center;
+}
+
+.form-group {
+  text-align: center;
+}
+
+.form-control {
+  display: inline-block;
+  width: 100px;
+}
+
+.plan {
+
+  &-info {
+    display: flex;
+
+    width: 600px;
+
+    margin: 1rem auto;
+  }
+
+  &-item {
+    flex: 1;
+
+    margin-right: 1rem;
+
+    text-align: center;
+    border-radius: .5rem;
+
+    color: white;
+
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 0 10px #333;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.active {
+      i {
+        visibility: visible;
+      }
+    }
+  }
+
+  &-name {
+    position: relative;
+
+    padding: 1rem;
+
+    border-radius: .5rem .5rem 0 0;
+
+    background-color: $brand-primary;
+
+    h5 {
+      position: relative;
+
+      text-transform: uppercase;
+    }
+
+    p {
+      margin-bottom: 0;
+
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    small {
+      position: absolute;
+      bottom: 2px;
+
+      margin-left: 5px;
+
+      font-size: 12px;
+
+      color: yellow;
+    }
+
+    i {
+      position: absolute;
+
+      background-color: $brand-success;
+
+      padding: 0 .8rem;
+
+      right: 0px;
+      top: 0px;
+
+      font-size: 12px;
+      border-radius: 0 .5rem 0 .5rem;
+
+      visibility: hidden;
+    }
+  }
+
+  &-item:nth-child(odd) &-name {
+    background-color: #464646;
+  }
+
+  &-detail {
+    padding: 1rem;
+
+    border-radius: 0 0 .5rem .5rem;
+
+    background-color: $brand-primary;
+
+    h4 {
+      margin-bottom: 1rem;
+    }
+
+    h5 {
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &-item:nth-child(even) &-detail {
+    background-color: #464646;
+  }
+}
+
+p.message {
+  text-align: center;
+  color: rgba(#333, .5);
+
+  a {
+    color: $brand-primary;
+  }
+}

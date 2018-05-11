@@ -5,12 +5,15 @@ import { CookieService } from 'angular2-cookie/core';
 
 import { Observable } from 'rxjs/Observable';
 
+import { Plan } from '../models';
+
 @Injectable()
 export class BillingService {
 
   private cardInfoEndpoint = '/ecore/billing/stripe_customer/';
   private subscriptionInfoEndpoint = '/ecore/billing/subscription/list/';
   private subscriptionStatusEndpoint = '/ecore/billing/subscription/status/';
+  private planEndpoint = '/ecore/billing/subscription/create/';
 
   constructor(
     private http: Http,
@@ -25,13 +28,19 @@ export class BillingService {
 
   public getSubscriptionInfo() {
     const headers = this.updateHeaders();
-    return this.http.get(this.subscriptionInfoEndpoint)
+    return this.http.get(this.subscriptionInfoEndpoint, {headers})
       .map((res: any) => res.json && res.json());
   }
 
   public getSubscriptionStatus() {
     const headers = this.updateHeaders();
-    return this.http.get(this.subscriptionStatusEndpoint)
+    return this.http.get(this.subscriptionStatusEndpoint, {headers})
+      .map((res: any) => res.json && res.json());
+  }
+
+  public setPlan(body: Plan) {
+    const headers = this.updateHeaders();
+    return this.http.post(this.planEndpoint, body, {headers})
       .map((res: any) => res.json && res.json());
   }
 

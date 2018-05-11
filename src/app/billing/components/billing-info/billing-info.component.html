@@ -1,15 +1,15 @@
-<div>
+<div *ngIf="currentPlan">
   <h4 class="mb-3">Your current subscription details</h4>
 
-  <p>Price: </p>
-  <p>Worker count: </p>
-  <p>Type: </p>
-  <p>Status: </p>
+  <p>Price: {{currentPlan.price}}</p>
+  <p>Worker count: {{currentPlan.worker_count}}</p>
+  <p>Type: {{currentPlan.type}}</p>
+  <p>Status: {{currentPlan.status}}</p>
   <p>Curent period start: </p>
   <p>Curent period end: </p>
 </div>
 
-<div>
+<div *ngIf="payments">
   <h4 class="mb-3">Your payments</h4>
 
   <table class="table table-default">

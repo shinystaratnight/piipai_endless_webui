@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { BillingService } from '../../services/billing-service';
+import { Plan, Payment } from '../../models';
 
 @Component({
   selector: 'billing-info',
@@ -8,15 +8,7 @@ import { BillingService } from '../../services/billing-service';
   styleUrls: ['./billing-info.component.scss']
 })
 
-export class BillingInfoComponent implements OnInit {
-
-  public payments: any[];
-
-  constructor(
-    private billingService: BillingService
-  ) { }
-
-  public ngOnInit() {
-    this.payments = [];
-  }
+export class BillingInfoComponent {
+  @Input() public payments: Payment[];
+  @Input() public currentPlan: Plan;
 }
