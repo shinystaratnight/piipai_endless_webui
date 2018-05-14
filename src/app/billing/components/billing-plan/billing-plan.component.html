@@ -19,9 +19,9 @@
       <i>Active</i>
     </div>
     <div class="plan-detail">
-      <h4>${{planPay(plan.price, plan.start)}}</h4>
+      <h4>${{planPay(plan, plan.procent)}}</h4>
       <h5>Per month</h5>
-      <p>(${{planPayYear(plan.price, plan.start)}} annually)</p>
+      <p>(${{planPayYear(plan, plan.procent)}} annually)</p>
       <p>+ ${{plan.pay}} per extra worker if over the plan, adjusted monthly.</p>
     </div>
   </div>
