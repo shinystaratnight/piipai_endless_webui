@@ -6,8 +6,7 @@ import {
   async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
 
-import { NavigationService, Page } from './../../services/navigation.service';
-import { UserService } from '../../services/user.service';
+import { NavigationService, Page, UserService } from '../../../services';
 
 import { NavigationComponent } from './navigation.component';
 

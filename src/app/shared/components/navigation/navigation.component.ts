@@ -10,8 +10,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { NavigationService, Page } from '../../services/navigation.service';
-import { UserService, User } from '../../services/user.service';
+import { UserService, User, NavigationService, Page } from '../../../services';
 
 @Component({
   selector: 'navigation',

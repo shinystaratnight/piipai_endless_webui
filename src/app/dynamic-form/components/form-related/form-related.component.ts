@@ -8,11 +8,13 @@ import {
   OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 import { GenericFormService } from './../../services/generic-form.service';
-import { CheckPermissionService } from '../../../shared/services/check-permission';
-import { NavigationService } from '../../../services/navigation.service';
+import { CheckPermissionService } from '../../../shared/services';
+import { NavigationService, UserService } from '../../../services';
+
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
@@ -104,6 +106,7 @@ export class FormRelatedComponent
     private genericFormService: GenericFormService,
     private permission: CheckPermissionService,
     private navigation: NavigationService,
+    private userService: UserService
   ) { super(); }
 
   public ngOnInit() {
@@ -292,7 +295,12 @@ export class FormRelatedComponent
         }
         this.updateData();
       }
+    } else if (this.config.default && this.config.default.includes('session')) {
+      const id = this.userService.user.data.contact.contact_id;
+
+      this.getOptions.call(this, '', 0, false, this.setValue, id);
     }
+
     if (this.config.query) {
       this.config.currentQuery = `${this.config.query}${this.config.id}`;
     }
@@ -695,7 +703,7 @@ export class FormRelatedComponent
     return query.length > 1 ? query : '';
   }
 
-  public getOptions(value, offset, concat = false, callback?) {
+  public getOptions(value, offset, concat = false, callback?, id?) {
     let endpoint = this.config.endpoint;
     let query = '';
     if (value) {
@@ -723,7 +731,9 @@ export class FormRelatedComponent
 
           }
           if (callback) {
-            callback.call(this, res.results[0]);
+            const target = res.results.find((el) => el.id === id);
+
+            callback.call(this, (target || res.results[0]));
           }
         }
       );

@@ -12,7 +12,7 @@ import { PdfViewerComponent } from 'ng2-pdf-viewer';
 
 import { environment } from '../environment';
 
-import { ProfileComponent } from '../components/profile/profile.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';

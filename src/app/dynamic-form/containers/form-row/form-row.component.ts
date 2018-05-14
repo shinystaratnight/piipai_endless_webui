@@ -20,8 +20,10 @@ export class FormRowComponent implements OnInit {
 
   public ngOnInit() {
     if (!this.config.editForm && this.config.label) {
-      this.config.label = this.config.label.indexOf('{') === -1 ? this.config.label : '';
+      this.config.label = this.config.label.includes('{') ? '' : this.config.label;
     }
+
+    this.checkChildrenOnReadOnlyProperty();
   }
 
   public eventHandler(e) {
@@ -30,5 +32,25 @@ export class FormRowComponent implements OnInit {
 
   public buttonActionHandler(e) {
     this.buttonAction.emit(e);
+  }
+
+  public checkChildrenOnReadOnlyProperty() {
+    if (!this.config.editForm) {
+      this.config.children.forEach((column) => {
+        if (column.children && column.children.length) {
+          const count = column.children.length;
+          let hiddenFields = 0;
+
+          column.children.forEach((field) => {
+            if (field.read_only && field.type === 'input' && field.templateOptions.type === 'picture') { //tslint:disable-line
+              hiddenFields += 1;
+            }
+          });
+          if (count === hiddenFields) {
+            column.hidden = true;
+          }
+        }
+      });
+    }
   }
 }
