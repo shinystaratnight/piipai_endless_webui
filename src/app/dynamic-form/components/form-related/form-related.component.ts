@@ -241,7 +241,7 @@ export class FormRelatedComponent
             if (obj) {
               const path = this.getLinkPath(this.config.endpoint);
               if (path) {
-                this.linkPath = location.origin + path + this.group.get(this.key).value + '/change';
+                this.linkPath = location.origin + path + data[this.param] + '/change';
               } else {
                 this.linkPath = '/';
               }
@@ -250,7 +250,7 @@ export class FormRelatedComponent
           } else {
             const path = this.getLinkPath(this.config.endpoint);
             if (path) {
-              this.linkPath = location.origin + path + this.group.get(this.key).value + '/change';
+              this.linkPath = location.origin + path + data[this.param] + '/change';
             } else {
               this.linkPath = '/';
             }
@@ -264,7 +264,7 @@ export class FormRelatedComponent
             if (obj) {
               const path = this.getLinkPath(this.config.endpoint);
               if (path) {
-                this.linkPath = location.origin + path + this.group.get(this.key).value + '/change';
+                this.linkPath = location.origin + path + value + '/change';
               } else {
                 this.linkPath = '/';
               }
