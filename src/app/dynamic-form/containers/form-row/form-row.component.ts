@@ -42,7 +42,7 @@ export class FormRowComponent implements OnInit {
           let hiddenFields = 0;
 
           column.children.forEach((field) => {
-            if (field.read_only && field.type === 'input' && field.templateOptions.type === 'picture') { //tslint:disable-line
+            if (field.read_only && (field.type === 'input' || field.type === 'related')) {
               hiddenFields += 1;
             }
           });
