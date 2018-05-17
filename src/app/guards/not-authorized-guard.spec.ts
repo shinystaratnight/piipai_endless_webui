@@ -1,7 +1,7 @@
 import { async, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { UserService } from './user.service';
+import { UserService } from '../services';
 import { Observable } from 'rxjs/Observable';
 
 import { NotAuthorizedGuard } from './not-authorized-guard';

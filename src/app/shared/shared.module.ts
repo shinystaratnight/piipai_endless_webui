@@ -6,13 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
-import { NavigationComponent } from '../components/navigation/navigation.component';
-import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.component';
-import { ToastComponent } from './components/toast.component';
-import { SpinnerComponent } from './components/spinner/spinner.component';
+import { components } from './components';
 
-import { ErrorsService } from './services/errors.service';
-import { CheckPermissionService } from './services/check-permission';
+import { services } from './services';
 
 @NgModule({
   imports: [
@@ -23,17 +19,13 @@ import { CheckPermissionService } from './services/check-permission';
     FormsModule,
   ],
   exports: [
-    NavigationComponent,
-    BreadcrumbComponent,
-    ToastComponent,
-    SpinnerComponent,
+    ...components
   ],
   declarations: [
-    NavigationComponent,
-    BreadcrumbComponent,
-    ToastComponent,
-    SpinnerComponent,
+    ...components,
   ],
-  providers: [ErrorsService, CheckPermissionService],
+  providers: [
+    ...services
+  ],
 })
 export class SharedModule { }

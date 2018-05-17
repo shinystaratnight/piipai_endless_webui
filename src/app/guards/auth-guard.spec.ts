@@ -1,12 +1,11 @@
 import { async, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { UserService } from './user.service';
+import { UserService, NavigationService } from '../services';
 import { Observable } from 'rxjs/Observable';
 
 import { AuthGuard } from './auth-guard';
 import { CheckPermissionService } from '../shared/services/check-permission';
-import { NavigationService } from './navigation.service';
 
 describe('AuthGuard', () => {
 

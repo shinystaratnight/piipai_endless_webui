@@ -1,7 +1,7 @@
 import { Component, OnChanges, Input, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Page } from '../../services/navigation.service';
+import { Page } from '../../../services';
 
 export interface Breadcrumb {
   path: string;
