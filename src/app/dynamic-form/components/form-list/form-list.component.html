@@ -1,5 +1,5 @@
 <div *ngIf="!this.config.hide">
-  <h6 class="card flex-row align-items-center" [ngClass]="{'bg-primary text-white': !isCollapsed}" *ngIf="config.templateOptions.label">
+  <!-- <h6 class="card flex-row align-items-center" [ngClass]="{'bg-primary text-white': !isCollapsed}" *ngIf="config.templateOptions.label">
     <i
       fa
       class="p-2"
@@ -16,8 +16,21 @@
       (click)="addObject()">
         {{config?.templateOptions?.add_label || 'Add'}}
     </button>
-  </h6>
-  <div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
+  </h6> -->
+
+  <div class="title">
+    <div>
+      <h4>{{config.templateOptions.label}}</h4>
+      <p>Here you can see the tags which belong to the candidate</p>
+    </div>
+    <button class="btn btn-primary btn-shadow"
+      *ngIf="(showButton || config.delay) && checkPermissions('post')"
+      (click)="addObject()">
+        {{config?.templateOptions?.add_label || '+ Add Item'}}
+      </button>
+  </div>
+
+  <div>
     <generic-list
       [endpoint]="config.endpoint"
       [editEndpoint]="config.edit_endpoint"

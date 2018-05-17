@@ -1,0 +1,19 @@
+<ngb-tabset>
+  <ng-container *ngFor="let field of config.children; let i = index">
+    <ngb-tab [title]="field.name || (field.templateOptions && field.templateOptions.label)">
+      <template ngbTabContent>
+        <div class="label" *ngIf="field.main">{{field.label}}</div>
+
+        <ng-container
+          formElement
+          [config]="field"
+          [group]="group"
+          [errors]="errors"
+          [message]="message"
+          (event)="eventHandler($event)"
+          (buttonAction)="buttonActionHandler($event)">
+        </ng-container>
+      </template>
+    </ngb-tab>
+  </ng-container>
+</ngb-tabset>

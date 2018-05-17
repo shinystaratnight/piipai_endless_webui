@@ -15,6 +15,8 @@ label, b {
 }
 
 button {
+  font-family: inherit;
+
   cursor: pointer;
 }
 
@@ -43,7 +45,6 @@ i {
 }
 
 input[type="checkbox"]:checked ~ .custom-checkbox {
-  font-size: 12px;
 
   border-color: $brand-primary;
 
@@ -105,6 +106,10 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
       box-shadow: -4px 4px 15px 1px rgba($gray, .2);
     }
   }
+}
+
+.btn {
+  border-radius: 100px;
 }
 
 .btn-primary {
@@ -205,6 +210,43 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 
 .list-group-item:last-child {
   border-radius: 0;
+}
+
+.nav-tabs {
+  align-items: flex-end;
+  flex-wrap: wrap;
+
+  justify-content: space-around !important;
+
+  border: none;
+  border-bottom: 2px solid rgba(#e5e5e5, .8);
+
+  .nav-link {
+    padding: 6px;
+    padding-bottom: 8px;
+
+    font-size: 14px;
+    line-height: 14px;
+
+    border: none;
+
+    color: rgba(black, .43);
+
+    &.active {
+      padding: 6px;
+
+      background-color: transparent;
+      border-color: none;
+
+      color: inherit;
+
+      border-bottom: 2px solid $brand-primary;
+    }
+  }
+}
+
+.tab-pane {
+  padding: 40px;
 }
 
 @each $item in $themes {
@@ -486,5 +528,80 @@ iframe.send-sms {
 
   .#{$item}-theme .page-link {
     color: map-get($theme-colors, $item);
+  }
+}
+
+
+.form-page {
+  padding: 48px 10px;
+}
+
+.form-content {
+  position: relative;
+
+  width: calc(100% - 285px);
+  max-width: 80%;
+  margin: 0 auto;
+
+  padding: 32px 0;
+
+  box-shadow: 0 0 8px rgba($gray, .1);
+
+  .button-delete {
+    position: absolute;
+    top: 32px;
+    right: 40px;
+  }
+
+  .datatable-body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .custom-checkbox {
+    min-width: 12px;
+    height: 12px;
+
+    font-size: 8px;
+  }
+
+  .form-group {
+    margin-bottom: .5rem;
+  }
+
+  .custom-select {
+    height: 28px !important;
+  }
+
+  .autocomplete-value {
+    border: none;
+    border-bottom: 1px solid rgba($gray, .1);
+  }
+
+  input,
+  select, {
+    padding: 4px 10px 4px 0;
+
+    font-size: 14px;
+    line-height: 16px;
+
+    border: none;
+    border-radius: 0;
+    outline: none;
+
+    border-bottom: 1px solid rgba($gray, .1);
+
+    &:focus {
+      border-bottom-color: $brand-primary;
+    }
+  }
+
+  input {
+    padding: 6px 10px 5px 0;
+  }
+
+  .btn {
+    font-size: 14px;
+    line-height: 18px;
   }
 }

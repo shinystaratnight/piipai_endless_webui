@@ -11,7 +11,8 @@ import { GenericFormService } from '../../services/generic-form.service';
 
 @Component({
   selector: 'form-list',
-  templateUrl: 'form-list.component.html'
+  templateUrl: 'form-list.component.html',
+  styleUrls: ['./form-list.component.scss']
 })
 
 export class FormListComponent implements OnInit, OnDestroy {

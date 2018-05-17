@@ -1,15 +1,14 @@
 <navigation [user]="user" [pages]="pagesList" (update)="updateNavigationList($event)"></navigation>
 
 <div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
-  <div *ngSwitchCase="'form'">
-    <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb>
-    <div
-      *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'"
-      class="container-fluid pb-5">
-        <div [ngClass]="{'d-flex justify-content-center align-items-center': !pageData.pathData.modal}">
-          <div [ngClass]="{'col-12 col-sm-9 col-md-9 col-lg-9 mt-3': !pageData.pathData.modal}">
-            <div [class.card]="!pageData.pathData.modal">
-              <div [ngClass]="{'card-content p-2': !pageData.pathData.modal}" [class.modal-form]="pageData.pathData.modal">
+  <div *ngSwitchCase="'form'" class="form-page">
+    <!-- <breadcrumb [navigationList]="pagesList" [formLabel]="formLabel"></breadcrumb> -->
+    <div class="form-content"
+      *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'">
+        <!-- <div [ngClass]="{'d-flex justify-content-center align-items-center': !pageData.pathData.modal}"> -->
+          <!-- <div [ngClass]="{'col-12 col-sm-9 col-md-9 col-lg-9': !pageData.pathData.modal}"> -->
+            <!-- <div [class.card]="!pageData.pathData.modal"> -->
+              <div [class.modal-form]="pageData.pathData.modal">
                 <generic-form
                   *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit'"
                   [title]="pageData.pathData.title"
@@ -23,10 +22,15 @@
                   (errorForm)="formError($event)"
                   (str)="changeFormLabel($event)">
                     <div class="d-flex">
-                      <button type="button" class="btn btn-danger"
+                      <button type="button" class="btn button-delete"
                         *ngIf="pageData.pathData.id && checkPermission('delete')"
                         (click)="deleteElement(pageData)">Delete</button>
-                      <button *ngIf="formMode === 'view' && checkPermission('update')" type="button" class="btn btn-primary mr-2 ml-auto" (click)="changeMode(pageData)">Edit</button>
+                      <button type="button" class="btn btn-primary btn-shadow"
+                        *ngIf="formMode === 'view' && checkPermission('update')"
+                        (click)="changeMode(pageData)">
+                          <i fa name="pencil"></i>
+                          Edit mode
+                      </button>
                       <button *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))" type="submit" class="btn btn-primary mr-2 ml-auto" [disabled]="saveProcess">
                         Save
                         <spinner *ngIf="saveProcess"></spinner>
@@ -41,9 +45,9 @@
                   [pageData]="pageData">
                 </fill-in>
               </div>
-            </div>
-          </div>
-        </div>
+            <!-- </div> -->
+          <!-- </div> -->
+        <!-- </div> -->
     </div>
     <form-builder
       *ngIf="pageData.endpoint === '/ecore/api/v2/core/forms/'"

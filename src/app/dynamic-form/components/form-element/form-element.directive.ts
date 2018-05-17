@@ -32,6 +32,9 @@ import { FormReplaceComponent } from './../form-replace/form-replace.component';
 import { ListLinkComponent } from '../list-link/list-link.component';
 import { FormJsonComponent } from './../form-json/form-json.component';
 import { FormColumnComponent } from '../../containers/form-column/form-column.component';
+import { FormTabsComponent } from '../../containers/form-tabs/form-tabs.component';
+import { FormInfoComponent } from '../../components/form-info/form-info.component';
+import { FormGroupComponent } from '../../containers/form-group/form-group.component';
 
 const components = {
   input: FormInputComponent,
@@ -56,7 +59,10 @@ const components = {
   replace: FormReplaceComponent,
   link: ListLinkComponent,
   json: FormJsonComponent,
-  column: FormColumnComponent
+  column: FormColumnComponent,
+  tabs: FormTabsComponent,
+  info: FormInfoComponent,
+  group: FormGroupComponent,
 };
 
 @Directive({

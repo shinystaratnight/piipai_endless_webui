@@ -74,6 +74,9 @@ import { MoveDirective } from './directives/move.directive';
 import { SharedModule } from '../shared/shared.module';
 import { ListSkillsComponent } from './components/list-skills/list-skills.component';
 import { FilterLimitComponent } from './components/filter-limit/filter-limit.component';
+import { FormTabsComponent } from './containers/form-tabs/form-tabs.component';
+import { FormInfoComponent } from './components/form-info/form-info.component';
+import { FormGroupComponent } from './containers/form-group/form-group.component';
 
 @NgModule({
   imports: [
@@ -143,7 +146,10 @@ import { FilterLimitComponent } from './components/filter-limit/filter-limit.com
     ListInfoComponent,
     ListTagsComponent,
     ListSkillsComponent,
-    FilterLimitComponent
+    FilterLimitComponent,
+    FormTabsComponent,
+    FormInfoComponent,
+    FormGroupComponent,
   ],
   providers: [GenericFormService, FilterService],
   entryComponents: [
@@ -182,7 +188,10 @@ import { FilterLimitComponent } from './components/filter-limit/filter-limit.com
     ListInfoComponent,
     ListTagsComponent,
     ListSkillsComponent,
-    FilterLimitComponent
+    FilterLimitComponent,
+    FormTabsComponent,
+    FormInfoComponent,
+    FormGroupComponent,
   ]
 })
 export class DynamicFormModule { }

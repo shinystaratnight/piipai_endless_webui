@@ -221,6 +221,12 @@ export class GenericFormComponent implements OnChanges, OnInit {
       .getMetadata(endpoint, '?type=form' + (this.metadataQuery ? `&${this.metadataQuery}` : ''))
       .subscribe(
         ((data: any) => {
+
+          if (endpoint) {
+            data = candidate_metadata; //tslint:disable-line
+          }
+          console.dir(data);
+
           this.setModeForElement(data, this.mode);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
@@ -396,7 +402,11 @@ export class GenericFormComponent implements OnChanges, OnInit {
     if (keys.length === 0) {
       if (data) {
         if (!obj['value'] || update) {
-          obj['value'] = data[key];
+          if (key === 'self') {
+            obj['value'] = data;
+          } else {
+            obj['value'] = data[key];
+          }
         }
         if (obj.type === 'related') {
           let endpoint;
@@ -1044,3 +1054,957 @@ export class GenericFormComponent implements OnChanges, OnInit {
     });
   }
 }
+
+//tslint:disable
+var candidate_metadata = [
+  {
+    "type": "info",
+    key: 'self',
+    values: {
+      picture: 'contact.picture.thumb',
+      status: {
+        field: 'active_states',
+        color: {
+          danger: [0, 80, 90],
+          color_attr: 'number',
+        }
+      },
+      address: 'contact.address.__str__',
+      available: 'contact.is_available',
+      title: 'contact.__str__'
+    }
+  },
+  {
+    type: 'tabs',
+    children: [
+      {
+        type: 'group',
+        label: 'Personal information',
+        name: 'Personal Info',
+        main: true,
+        children: [
+          {
+            type: 'row',
+            children: [
+              {
+                type: 'group',
+                label: 'Contacts',
+                width: .5,
+                children: [
+
+                ]
+              },
+              {
+                type: 'group',
+                label: 'Notify',
+                width: .25,
+                children: [
+                  {
+                    "key": "message_by_sms",
+                    "default": true,
+                    "read_only": false,
+                    "type": "checkbox",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "By SMS",
+                      "type": "checkbox"
+                    }
+                  },
+                  {
+                    "key": "message_by_email",
+                    "default": true,
+                    "read_only": false,
+                    "type": "checkbox",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "By E-Mail",
+                      "type": "checkbox"
+                    }
+                  }
+                ]
+              },
+              {
+                type: 'group',
+                label: 'Recruitment agent',
+                width: .25,
+                children: [
+
+                ]
+              }
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                type: 'group',
+                label: 'Additional info',
+                width: .25,
+                children: [
+                  {
+                    "key": "language",
+                    "default": 0,
+                    "read_only": false,
+                    "type": "input",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Language",
+                      "max": 32767,
+                      "type": "number",
+                      "min": 0
+                    }
+                  },
+                  {
+                    "key": "transportation_to_work",
+                    "read_only": false,
+                    "type": "select",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Transportation to Work",
+                      "options": [
+                        {
+                          "label": "Own Car",
+                          "value": 1
+                        },
+                        {
+                          "label": "Public Transportation",
+                          "value": 2
+                        }
+                      ],
+                      "type": "select"
+                    }
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                label: 'Phisical parameters',
+                width: .25,
+                children: [
+                  {
+                    "key": "height",
+                    "read_only": false,
+                    "type": "input",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Height, cm",
+                      "type": "text"
+                    }
+                  },
+                  {
+                    "key": "weight",
+                    "read_only": false,
+                    "type": "input",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Weight, kg",
+                      "type": "number"
+                    }
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                label: 'Character',
+                width: .25,
+                children: [
+                  {
+                    "type": "input",
+                    "key": "candidate_scores.id",
+                    "send": false,
+                    "read_only": false,
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Id",
+                      "type": "text"
+                    },
+                    "hide": true
+                  },
+                  {
+                    "key": "candidate_scores.loyalty",
+                    "send": false,
+                    "read_only": true,
+                    "type": "static",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Loyalty Score",
+                      "type": "score"
+                    }
+                  },
+                  {
+                    "key": "candidate_scores.reliability",
+                    "send": false,
+                    "read_only": true,
+                    "type": "static",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Reliability Score",
+                      "type": "score"
+                    }
+                  },
+                  {
+                    "key": "strength",
+                    "default": 0,
+                    "read_only": false,
+                    "type": "input",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Strength",
+                      "max": 32767,
+                      "type": "score",
+                      "min": 0
+                    }
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                label: 'Rating',
+                width: .25,
+                children: [
+                  {
+                    "key": "candidate_scores.client_feedback",
+                    "send": false,
+                    "read_only": true,
+                    "type": "static",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Client Feedback",
+                      "type": "score"
+                    }
+                  },
+                  {
+                    "key": "candidate_scores.recruitment_score",
+                    "send": false,
+                    "read_only": true,
+                    "type": "static",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Recruitment Score",
+                      "type": "score"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                type: 'group',
+                label: 'Formalities',
+                width: .25,
+                children: [
+                  {
+                    "key": "tax_file_number",
+                    "read_only": false,
+                    "type": "input",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Tax File Number",
+                      "max": 9,
+                      "type": "text"
+                    }
+                  },
+                  {
+                    "list": false,
+                    "read_only": false,
+                    "type": "related",
+                    "key": "superannuation_fund",
+                    "many": false,
+                    "endpoint": "/ecore/api/v2/candidate/superannuationfunds/",
+                    "templateOptions": {
+                      "label": "Superannuation fund",
+                      "add": true,
+                      "edit": true,
+                      "type": "related",
+                      "values": [
+                        "__str__"
+                      ],
+                      "delete": false
+                    }
+                  },
+                  {
+                    "key": "super_member_number",
+                    "read_only": false,
+                    "type": "input",
+                    "showIf": [
+                      "superannuation_fund.id"
+                    ],
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Super Member Number",
+                      "max": 63,
+                      "type": "text"
+                    }
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                width: .5,
+                children: [
+                  {
+                    "list": false,
+                    "read_only": false,
+                    "type": "related",
+                    "key": "bank_account",
+                    "many": false,
+                    "endpoint": "/ecore/api/v2/core/bankaccounts/",
+                    "templateOptions": {
+                      "label": "Bank account",
+                      "add": true,
+                      "edit": true,
+                      "type": "related",
+                      "values": [
+                        "__str__"
+                      ],
+                      "delete": false
+                    }
+                  },
+                  {
+                    "list": false,
+                    "read_only": false,
+                    "type": "related",
+                    "key": "employment_classification",
+                    "many": false,
+                    "endpoint": "/ecore/api/v2/skills/employmentclassifications/",
+                    "templateOptions": {
+                      "label": "Employment classification",
+                      "add": true,
+                      "edit": true,
+                      "type": "related",
+                      "values": [
+                        "__str__"
+                      ],
+                      "delete": false
+                    }
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                label: 'Emergency',
+                width: .25,
+                children: [
+                  {
+                    "key": "emergency_contact_name",
+                    "read_only": false,
+                    "type": "input",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Emergency Contact Name",
+                      "max": 63,
+                      "type": "text"
+                    }
+                  },
+                  {
+                    "key": "emergency_contact_phone",
+                    "read_only": false,
+                    "type": "input",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Emergency Contact Phone Number",
+                      "type": "text"
+                    }
+                  },
+                  {
+                    "key": "autoreceives_sms",
+                    "default": true,
+                    "read_only": false,
+                    "type": "checkbox",
+                    "templateOptions": {
+                      "required": false,
+                      "label": "Autoreceives SMS",
+                      "type": "checkbox"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      // {
+      //   "type": "group",
+      //   "name": "Contacts",
+      //   "children": [
+          // {
+          //   "key": "residency",
+          //   "default": 0,
+          //   "read_only": false,
+          //   "type": "select",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Residency Status",
+          //     "options": [
+          //       {
+          //         "label": "Unknown",
+          //         "value": 0
+          //       },
+          //       {
+          //         "label": "Citizen",
+          //         "value": 1
+          //       },
+          //       {
+          //         "label": "Permanent Resident",
+          //         "value": 2
+          //       },
+          //       {
+          //         "label": "Temporary Resident",
+          //         "value": 3
+          //       }
+          //     ],
+          //     "type": "select"
+          //   }
+          // },
+          // {
+          //   "list": false,
+          //   "read_only": false,
+          //   "type": "related",
+          //   "key": "visa_type",
+          //   "many": false,
+          //   "endpoint": "/ecore/api/v2/candidate/visatypes/",
+          //   "templateOptions": {
+          //     "label": "Visa type",
+          //     "add": true,
+          //     "edit": true,
+          //     "type": "related",
+          //     "values": [
+          //       "__str__"
+          //     ],
+          //     "delete": false
+          //   },
+          //   "showIf": [
+          //     {
+          //       "residency": "3"
+          //     }
+          //   ]
+          // },
+          // {
+          //   "key": "visa_expiry_date",
+          //   "read_only": false,
+          //   "type": "datepicker",
+          //   "showIf": [
+          //     "visa_type.id"
+          //   ],
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Visa Expiry Date",
+          //     "type": "date"
+          //   }
+          // },
+          // {
+          //   "key": "vevo_checked_at",
+          //   "read_only": false,
+          //   "type": "datepicker",
+          //   "showIf": [
+          //     "visa_type.id"
+          //   ],
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "VEVO checked at",
+          //     "type": "date"
+          //   }
+          // },
+          // {
+          //   "list": false,
+          //   "read_only": false,
+          //   "type": "related",
+          //   "key": "nationality",
+          //   "many": false,
+          //   "endpoint": "/ecore/api/v2/core/countries/",
+          //   "templateOptions": {
+          //     "label": "Nationality",
+          //     "add": true,
+          //     "edit": true,
+          //     "type": "related",
+          //     "values": [
+          //       "__str__"
+          //     ],
+          //     "delete": false
+          //   }
+          // }
+      //   ]
+      // },
+      // {
+      //   "type": "collapse",
+      //   "name": "Formalities",
+      //   "children": [
+          // {
+          //   "key": "tax_file_number",
+          //   "read_only": false,
+          //   "type": "input",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Tax File Number",
+          //     "max": 9,
+          //     "type": "text"
+          //   }
+          // },
+          // {
+          //   "list": false,
+          //   "read_only": false,
+          //   "type": "related",
+          //   "key": "superannuation_fund",
+          //   "many": false,
+          //   "endpoint": "/ecore/api/v2/candidate/superannuationfunds/",
+          //   "templateOptions": {
+          //     "label": "Superannuation fund",
+          //     "add": true,
+          //     "edit": true,
+          //     "type": "related",
+          //     "values": [
+          //       "__str__"
+          //     ],
+          //     "delete": false
+          //   }
+          // },
+          // {
+          //   "key": "super_member_number",
+          //   "read_only": false,
+          //   "type": "input",
+          //   "showIf": [
+          //     "superannuation_fund.id"
+          //   ],
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Super Member Number",
+          //     "max": 63,
+          //     "type": "text"
+          //   }
+          // },
+          // {
+          //   "list": false,
+          //   "read_only": false,
+          //   "type": "related",
+          //   "key": "bank_account",
+          //   "many": false,
+          //   "endpoint": "/ecore/api/v2/core/bankaccounts/",
+          //   "templateOptions": {
+          //     "label": "Bank account",
+          //     "add": true,
+          //     "edit": true,
+          //     "type": "related",
+          //     "values": [
+          //       "__str__"
+          //     ],
+          //     "delete": false
+          //   }
+          // },
+          // {
+          //   "key": "emergency_contact_name",
+          //   "read_only": false,
+          //   "type": "input",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Emergency Contact Name",
+          //     "max": 63,
+          //     "type": "text"
+          //   }
+          // },
+          // {
+          //   "key": "emergency_contact_phone",
+          //   "read_only": false,
+          //   "type": "input",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Emergency Contact Phone Number",
+          //     "type": "text"
+          //   }
+          // },
+          // {
+          //   "list": false,
+          //   "read_only": false,
+          //   "type": "related",
+          //   "key": "employment_classification",
+          //   "many": false,
+          //   "endpoint": "/ecore/api/v2/skills/employmentclassifications/",
+          //   "templateOptions": {
+          //     "label": "Employment classification",
+          //     "add": true,
+          //     "edit": true,
+          //     "type": "related",
+          //     "values": [
+          //       "__str__"
+          //     ],
+          //     "delete": false
+          //   }
+          // },
+      //     {
+      //       "key": "autoreceives_sms",
+      //       "default": true,
+      //       "read_only": false,
+      //       "type": "checkbox",
+      //       "templateOptions": {
+      //         "required": false,
+      //         "label": "Autoreceives SMS",
+      //         "type": "checkbox"
+      //       }
+      //     }
+      //   ]
+      // },
+      // {
+      //   "type": "collapse",
+      //   "name": "Personal Traits",
+      //   "children": [
+          // {
+          //   "key": "height",
+          //   "read_only": false,
+          //   "type": "input",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Height, cm",
+          //     "type": "text"
+          //   }
+          // },
+          // {
+          //   "key": "weight",
+          //   "read_only": false,
+          //   "type": "input",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Weight, kg",
+          //     "type": "number"
+          //   }
+          // },
+          // {
+          //   "key": "transportation_to_work",
+          //   "read_only": false,
+          //   "type": "select",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Transportation to Work",
+          //     "options": [
+          //       {
+          //         "label": "Own Car",
+          //         "value": 1
+          //       },
+          //       {
+          //         "label": "Public Transportation",
+          //         "value": 2
+          //       }
+          //     ],
+          //     "type": "select"
+          //   }
+          // },
+          // {
+          //   "key": "strength",
+          //   "default": 0,
+          //   "read_only": false,
+          //   "type": "input",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Strength",
+          //     "max": 32767,
+          //     "type": "number",
+          //     "min": 0
+          //   }
+          // },
+          // {
+          //   "key": "language",
+          //   "default": 0,
+          //   "read_only": false,
+          //   "type": "input",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Language",
+          //     "max": 32767,
+          //     "type": "number",
+          //     "min": 0
+          //   }
+          // }
+      //   ]
+      // },
+      // {
+      //   "type": "collapse",
+      //   "name": "Candidate rating",
+      //   "children": [
+          // {
+          //   "type": "input",
+          //   "key": "candidate_scores.id",
+          //   "send": false,
+          //   "read_only": false,
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Id",
+          //     "type": "text"
+          //   },
+          //   "hide": true
+          // },
+          // {
+          //   "key": "candidate_scores.loyalty",
+          //   "send": false,
+          //   "read_only": true,
+          //   "type": "static",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Loyalty Score",
+          //     "type": "static"
+          //   }
+          // },
+          // {
+          //   "key": "candidate_scores.reliability",
+          //   "send": false,
+          //   "read_only": true,
+          //   "type": "static",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Reliability Score",
+          //     "type": "static"
+          //   }
+          // },
+          // {
+          //   "key": "candidate_scores.client_feedback",
+          //   "send": false,
+          //   "read_only": true,
+          //   "type": "static",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Client Feedback",
+          //     "type": "static"
+          //   }
+          // },
+          // {
+          //   "key": "candidate_scores.recruitment_score",
+          //   "send": false,
+          //   "read_only": true,
+          //   "type": "static",
+          //   "templateOptions": {
+          //     "required": false,
+          //     "label": "Recruitment Score",
+          //     "type": "static"
+          //   }
+          // }
+        // ]
+      // },
+      // {
+      //   "type": "collapse",
+      //   "name": "Messages",
+      //   "children": [
+      //     {
+      //       "key": "message_by_sms",
+      //       "default": true,
+      //       "read_only": false,
+      //       "type": "checkbox",
+      //       "templateOptions": {
+      //         "required": false,
+      //         "label": "By SMS",
+      //         "type": "checkbox"
+      //       }
+      //     },
+      //     {
+      //       "key": "message_by_email",
+      //       "default": true,
+      //       "read_only": false,
+      //       "type": "checkbox",
+      //       "templateOptions": {
+      //         "required": false,
+      //         "label": "By E-Mail",
+      //         "type": "checkbox"
+      //       }
+      //     }
+      //   ]
+      // },
+
+      // {
+      //   "type": "collapse",
+      //   "name": "Other",
+      //   "children": [
+      //     {
+      //       "key": "created_at",
+      //       "send": false,
+      //       "read_only": true,
+      //       "type": "datepicker",
+      //       "templateOptions": {
+      //         "required": false,
+      //         "label": "Created at",
+      //         "type": "date"
+      //       }
+      //     },
+      //     {
+      //       "key": "updated_at",
+      //       "send": false,
+      //       "read_only": true,
+      //       "type": "datepicker",
+      //       "templateOptions": {
+      //         "required": false,
+      //         "label": "Updated at",
+      //         "type": "date"
+      //       }
+      //     }
+      //   ]
+      // },
+
+      {
+        "prefilled": {
+          "candidate_contact": "{id}"
+        },
+        "query": {
+          "candidate_contact": "{id}"
+        },
+        "type": "list",
+        "endpoint": "/ecore/api/v2/candidate/skillrels/",
+        "templateOptions": {
+          "label": "Skills",
+          "add_label": "Add",
+          "text": "Skills",
+          "type": "list"
+        }
+      },
+      {
+        "list": true,
+        "read_only": false,
+        "type": "related",
+        "key": "tag_rels",
+        "many": true,
+        "endpoint": "/ecore/api/v2/candidate/tagrels/",
+        "templateOptions": {
+          "label": "Candidate Tags",
+          "add": true,
+          "edit": true,
+          "type": "related",
+          "values": [
+            "__str__"
+          ],
+          "delete": true
+        }
+      },
+      {
+        "prefilled": {
+          "contact": "{contact.id}"
+        },
+        "query": {
+          "contact": "{contact.id}"
+        },
+        "type": "list",
+        "endpoint": "/ecore/api/v2/activity/activities/",
+        "templateOptions": {
+          "label": "Activities",
+          "add_label": "Add",
+          "text": "Activities",
+          "type": "list"
+        }
+      },
+      {
+        "key": "timeline",
+        "query": {
+          "model": "candidate.candidatecontact",
+          "object_id": "{id}"
+        },
+        "endpoint": "/ecore/api/v2/core/workflownodes/timeline/",
+        "type": "timeline",
+        "templateOptions": {
+          "label": "States Timeline",
+          "text": "States Timeline",
+          "type": "timeline"
+        }
+      },
+      {
+        "prefilled": {
+          "object_id": "{id}"
+        },
+        "query": {
+          "object_id": "{id}"
+        },
+        "type": "list",
+        "endpoint": "/ecore/api/v2/core/workflowobjects/",
+        "templateOptions": {
+          "label": "Candidate States History",
+          "add_label": "Add",
+          "text": "Candidate States History",
+          "type": "list"
+        }
+      },
+      {
+        "query": {
+          "contact": "{contact.id}"
+        },
+        "endpoint": "/ecore/api/v2/core/contactunavailabilities/",
+        "type": "list",
+        "templateOptions": {
+          "label": "Candidate Unavailabilities",
+          "text": "Candidate Unavailabilities",
+          "type": "list"
+        }
+      },
+      {
+        "query": {
+          "candidate_contact": "{id}"
+        },
+        "endpoint": "/ecore/api/v2/hr/joboffers/candidate/",
+        "type": "list",
+        "templateOptions": {
+          "label": "Job Offers",
+          "text": "Job Offers",
+          "type": "list"
+        }
+      },
+      {
+        "prefilled": {
+          "candidate_contact": "{id}"
+        },
+        "query": {
+          "candidate_contact": "{id}"
+        },
+        "type": "list",
+        "endpoint": "/ecore/api/v2/hr/carrierlists/",
+        "templateOptions": {
+          "label": "Carrier List",
+          "add_label": "Add",
+          "text": "Carrier List",
+          "type": "list"
+        }
+      },
+      {
+        "prefilled": {
+          "candidate_contact": "{id}"
+        },
+        "query": {
+          "candidate_contact": "{id}"
+        },
+        "type": "list",
+        "endpoint": "/ecore/api/v2/hr/blacklists/",
+        "templateOptions": {
+          "label": "Black List",
+          "add_label": "Add",
+          "text": "Black List",
+          "type": "list"
+        }
+      },
+      {
+        "prefilled": {
+          "candidate_contact": "{id}"
+        },
+        "query": {
+          "candidate_contact": "{id}"
+        },
+        "type": "list",
+        "endpoint": "/ecore/api/v2/hr/favouritelists/",
+        "templateOptions": {
+          "label": "Favorite List",
+          "add_label": "Add",
+          "text": "Favorite List",
+          "type": "list"
+        }
+      },
+      {
+        "prefilled": {
+          "candidate_contact": "{id}"
+        },
+        "query": {
+          "candidate_contact": "{id}"
+        },
+        "type": "list",
+        "endpoint": "/ecore/api/v2/hr/candidateevaluations/",
+        "templateOptions": {
+          "label": "Evaluations",
+          "add_label": "Add",
+          "text": "Evaluations",
+          "type": "list"
+        }
+      }
+    ]
+  }
+]

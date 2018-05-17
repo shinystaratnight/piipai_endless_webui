@@ -1,0 +1,24 @@
+@import '../../../../styles/variables.scss';
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+h4 {
+  margin-bottom: 8px;
+
+  font-size: 24px;
+  line-height: 1;
+
+  color: #4f4f4f;
+}
+
+p {
+  margin-bottom: 8px;
+
+  color: $gray;
+
+  opacity: .7;
+}

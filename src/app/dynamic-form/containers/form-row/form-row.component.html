@@ -1,6 +1,6 @@
 <h6 *ngIf="config.label" class="card bg-primary p-2 text-white">{{config.label}}</h6>
-<div class="row">
-  <div class="col-12 col-md" *ngFor="let field of config.children;">
+<div class="items">
+  <div [ngStyle]="{'flex': field.width || 1}" *ngFor="let field of config.children;">
     <ng-container
       formElement
       [config]="field"
