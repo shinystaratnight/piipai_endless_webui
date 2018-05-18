@@ -1,5 +1,5 @@
 <div class="form-group" [formGroup]="group" *ngIf="!config.hide && !viewMode">
-  <!-- <div class="form-element"> -->
+  <div class="form-element">
     <div class="form-element-checkbox">
       <i class="mr-1" *ngIf="config.templateOptions.type === 'icon'"
         [ngClass]="[checkboxClass]"
@@ -14,9 +14,9 @@
       <div *ngIf="config.templateOptions.type !== 'icon'" class="custom-checkbox">
         <i fa name="check"></i>
       </div>
-      <label *ngIf="label && config.templateOptions.label" [attr.for]="key" class="col-form-label form-element-label">{{config.templateOptions.label}}</label>
+      <label *ngIf="label && config.templateOptions.label" [attr.for]="key" class="col-form-label">{{config.templateOptions.label}}</label>
     </div>
-  <!-- </div> -->
+  </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
   </small>
@@ -39,7 +39,7 @@
         *ngIf="config.templateOptions && config.templateOptions.type === 'icon'"></i>
       <i class="pr-1" fa [name]="checkboxValue" [ngClass]="[checkboxClass]" *ngIf="config.templateOptions && config.templateOptions.type === 'checkbox'"></i>
     </div>
-    <label *ngIf="label && config.templateOptions.label" class="col-form-label form-element-label">{{config.templateOptions.label}}</label>
+    <label *ngIf="label && config.templateOptions.label" class="col-form-label">{{config.templateOptions.label}}</label>
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}

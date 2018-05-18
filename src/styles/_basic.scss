@@ -441,15 +441,15 @@ input.not-empty {
 }
 
 .datepicker {
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
 
   .input-group-addon {
     width: 38px;
   }
 
-  .input-group:first-child {
-    margin-bottom: .2rem;
-  }
+  // .input-group:first-child {
+  //   margin-bottom: .2rem;
+  // }
 
   h4 {
     font-size: 1rem;
@@ -574,53 +574,25 @@ iframe.send-sms {
     position: absolute;
     top: 32px;
     right: 40px;
+
+    font-size: 14px;
+    line-height: 18px;
+
+    color: $gray;
+    opacity: .3;
+
+    &:hover,
+    &:focus {
+      opacity: 1;
+
+      background-color: transparent;
+      border-color: transparent;
+    }
   }
 
   .datatable-body {
     padding-left: 0;
     padding-right: 0;
-  }
-
-  .custom-checkbox {
-    min-width: 12px;
-    height: 12px;
-
-    font-size: 8px;
-  }
-
-  .form-group {
-    margin-bottom: .5rem;
-  }
-
-  .custom-select {
-    height: 28px !important;
-  }
-
-  .autocomplete-value {
-    border: none;
-    border-bottom: 1px solid rgba($gray, .1);
-  }
-
-  input,
-  select, {
-    padding: 4px 10px 4px 0;
-
-    font-size: 14px;
-    line-height: 16px;
-
-    border: none;
-    border-radius: 0;
-    outline: none;
-
-    border-bottom: 1px solid rgba($gray, .1);
-
-    &:focus {
-      border-bottom-color: $brand-primary;
-    }
-  }
-
-  input {
-    padding: 6px 10px 5px 0;
   }
 
   .btn {

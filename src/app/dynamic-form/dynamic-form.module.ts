@@ -24,6 +24,8 @@ import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.com
 import { ListColumnComponent } from './containers/list-column/list-column.component';
 import { FilterBlockComponent } from './containers/filter-block/filter-block.component';
 import { ListButtonsComponent } from './containers/list-buttons/list-buttons.component';
+import { FormTabsComponent } from './containers/form-tabs/form-tabs.component';
+import { FormGroupComponent } from './containers/form-group/form-group.component';
 
 import { services } from './services';
 
@@ -68,6 +70,8 @@ import { directives } from './directives';
     FormHiddenComponent,
     ListButtonsComponent,
     FormColumnComponent,
+    FormTabsComponent,
+    FormGroupComponent,
 
     ...components,
     ...directives,
@@ -81,6 +85,8 @@ import { directives } from './directives';
     ListColumnComponent,
     FormColumnComponent,
     FormHiddenComponent,
+    FormTabsComponent,
+    FormGroupComponent,
 
     ...entryComponents,
   ]

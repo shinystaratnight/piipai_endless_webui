@@ -1,5 +1,7 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+
+import { FormService } from '../../services';
 
 @Component({
   selector: 'form-tabs',
@@ -7,16 +9,28 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./form-tabs.component.scss']
 })
 
-export class FormTabsComponent {
+export class FormTabsComponent implements OnInit {
 
   public config: any;
 
   public group: FormGroup;
   public errors: any;
   public message: any;
+  public formId: number;
+
+  public canUpdate: boolean;
+  public mode: string;
 
   @Output() public event = new EventEmitter();
   @Output() public buttonAction = new EventEmitter();
+
+  constructor(
+    private formService: FormService
+  ) {}
+
+  public ngOnInit() {
+    this.canUpdate = this.formService.getAllowedMethods(this.formId).indexOf('update') > -1;
+  }
 
   public eventHandler(e) {
     this.event.emit(e);
@@ -25,4 +39,10 @@ export class FormTabsComponent {
   public buttonActionHandler(e) {
     this.buttonAction.emit(e);
   }
+
+  public changeMode() {
+    this.mode = 'edit';
+    this.formService.changeModeOfForm(this.formId, 'edit');
+  }
+
 }

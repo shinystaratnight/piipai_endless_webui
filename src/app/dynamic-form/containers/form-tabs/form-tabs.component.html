@@ -1,8 +1,16 @@
 <ngb-tabset>
   <ng-container *ngFor="let field of config.children; let i = index">
-    <ngb-tab [title]="field.name || (field.templateOptions && field.templateOptions.label)">
+    <ngb-tab *ngIf="!field.hide" [title]="field.name || (field.templateOptions && field.templateOptions.label)">
       <template ngbTabContent>
-        <div class="label" *ngIf="field.main">{{field.label}}</div>
+        <div class="label" *ngIf="field.main">
+          {{field.label}}
+          <button type="button" class="btn" [class.active]="mode === 'edit'"
+            *ngIf="canUpdate"
+            (click)="changeMode()">
+              <i fa name="pencil"></i>
+              Edit mode
+          </button>
+        </div>
 
         <ng-container
           formElement

@@ -1,0 +1,16 @@
+@import '../../../../styles/variables.scss';
+
+.custom-button {
+  color: $gray;
+  opacity: .8;
+
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  i {
+    margin-right: 12px;
+  }
+}

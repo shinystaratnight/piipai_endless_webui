@@ -12,8 +12,7 @@ label {
 
     display: flex;
 
-    margin-left: 40px;
-    margin-bottom: 40px;
+    margin: 0 40px 40px;
 
     .info {
       position: relative;
@@ -204,6 +203,13 @@ label {
       line-height: 22px;
     }
   }
+}
+
+.date {
+  margin-left: auto;
+  margin-top: 40px;
+
+  text-align: right;
 }
 
 .more {

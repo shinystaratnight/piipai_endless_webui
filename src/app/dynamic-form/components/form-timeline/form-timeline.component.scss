@@ -1,9 +1,9 @@
 @import '../../../../styles/variables.scss';
 
 .timeline {
+  padding-bottom: 25px;
+
   &-element {
-    display: inline-block;
-    padding: 1.25rem;
     transition: .3s;
 
     &-wrapper:hover .timeline-requirements {
@@ -71,5 +71,9 @@
   .visited {
     background-color: rgba($brand-inverse, .5);
     color: rgba($brand-inverse, .7);
+  }
+
+  .arrow {
+    margin: 0 6px;
   }
 }

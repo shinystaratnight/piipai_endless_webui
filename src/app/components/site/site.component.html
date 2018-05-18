@@ -22,9 +22,12 @@
                   (errorForm)="formError($event)"
                   (str)="changeFormLabel($event)">
                     <div class="d-flex">
-                      <button type="button" class="btn button-delete"
+                      <button type="button" class="btn button-delete custom-button"
                         *ngIf="pageData.pathData.id && checkPermission('delete')"
-                        (click)="deleteElement(pageData)">Delete</button>
+                        (click)="deleteElement(pageData)">
+                          <i fa name="trash"></i>
+                          Delete
+                        </button>
                       <button type="button" class="btn btn-primary btn-shadow"
                         *ngIf="formMode === 'view' && checkPermission('update')"
                         (click)="changeMode(pageData)">

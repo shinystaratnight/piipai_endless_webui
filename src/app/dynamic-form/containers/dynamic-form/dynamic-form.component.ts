@@ -28,6 +28,8 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Input()
   public hiddenFields: any;
 
+  @Input() public formId: number;
+
   @Output()
   public submit: EventEmitter<any> = new EventEmitter<any>();
 

@@ -1,6 +1,31 @@
+@import '../../../../styles/variables.scss';
+
 .label {
+  display: flex;
+
   font-size: 28px;
   line-height: 36px;
 
   color: #4f4f4f;
+}
+
+button {
+  margin-left: auto;
+
+  border-color: rgba($gray, .1);
+
+  background-color: #fdfdfd;
+  color: rgba(black, .5);
+  box-shadow: 0 0 8px rgba(black, .15);
+
+  &:hover {
+    background-color: #fdfdfd;
+    border-color: #fdfdfd;
+  }
+
+  &.active {
+    background-color: $brand-primary;
+    color: white;
+    box-shadow: 0 0 6px rgba(black, .1);
+  }
 }

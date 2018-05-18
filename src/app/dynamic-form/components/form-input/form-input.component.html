@@ -3,7 +3,7 @@
     <label class="col-form-label form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
-    <div class="form-element-content">
+    <div class="form-element-content" [class.full]="config.templateOptions.addon || config.key === 'password'">
       <input
         *ngIf="config.type !== 'static' && !viewMode"
         class="form-control"
@@ -44,20 +44,20 @@
       <div *ngIf="config.key === 'password'" class="password" (click)="switchType(config.templateOptions.type)">
         <img src="/assets/img/eye.svg">
       </div>
-      <div *ngIf="viewMode && config.type !== 'static'" >{{displayValue}}</div>
       <div *ngIf="config.type === 'static' && config.templateOptions.type !== 'score'">{{displayValue}}</div>
-      <ngb-rating *ngIf="viewMode && config.templateOptions.type === 'score'"
-        [rate]="config.value"
-        max="5"
-        [readonly]="true">
-        <template let-fill="fill" let-index="index">
-          <span *ngIf="fill === 100" class="star full">&#9733;</span>
-          <span *ngIf="fill === 0" class="star">&#9733;</span>
-          <span *ngIf="fill < 100 && fill > 0" class="star">
-            <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
-          </span>
-        </template>
-      </ngb-rating>
+      <div class="rating" *ngIf="viewMode && config.templateOptions.type === 'score'">
+        <ngb-rating [rate]="config.value" max="5" [readonly]="true">
+          <template let-fill="fill" let-index="index">
+            <span *ngIf="fill === 100" class="star full">&#9733;</span>
+            <span *ngIf="fill === 0" class="star">&#9733;</span>
+            <span *ngIf="fill < 100 && fill > 0" class="star">
+              <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+            </span>
+          </template>
+        </ngb-rating>
+        <!-- &nbsp;
+        | {{displayValue}} -->
+      </div>
     </div>
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">

@@ -1,3 +1,5 @@
+@import '../../../../styles/variables.scss';
+
 .star {
   position: relative;
   display: inline-block;
@@ -13,6 +15,10 @@
   overflow: hidden;
   color: #1e90ff;
 }
+.addon-input {
+  padding: 0 0 0 49px;
+}
+
 .addon,
 .password {
   position: absolute;
@@ -72,4 +78,10 @@
   font-size: 14px;
 
   opacity: .54;
+}
+.rating {
+  display: flex;
+  align-items: flex-start;
+
+  color: $brand-primary;
 }

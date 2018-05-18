@@ -133,23 +133,25 @@
 
                 <td *ngFor="let cell of row.content" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
                   <ng-container
+                    *ngIf="cell.name !== 'actions'"
                     listElement
                     [config]="cell.content"
                     (event)="eventHandler($event)"
                     (buttonAction)="buttonHandler($event)">
                   </ng-container>
-                  <!-- <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
-                    <i fa
-                      id="dropdownBasic1"
-                      class="text-muted p-2 icon"
-                      [class.dropdown-toggle]="false"
-                      [name]="'ellipsis-v'"
-                      [border]=true
-                      ngbDropdownToggle></i>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBasic1">
-                      <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
-                    </div>
-                  </div> -->
+
+                  <ng-container *ngIf="cell.name === 'actions'">
+                    <template #actionsTemplate>
+                      <ng-container
+                        listElement
+                        [config]="cell.content"
+                        (event)="eventHandler($event)"
+                        (buttonAction)="buttonHandler($event, cell.pop = pop)">
+                      </ng-container>
+                    </template>
+                    <i fa class="icon px-1" name="ellipsis-v" placement="bottom" #pop="ngbPopover" [ngbPopover]="actionsTemplate" style="opacity: .3"></i>
+                  </ng-container>
+
                   <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
                     <list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></list-table>
                   </div>

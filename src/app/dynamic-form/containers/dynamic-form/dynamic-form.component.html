@@ -1,10 +1,11 @@
-<form [formGroup]="form" (ngSubmit)="handleSubmit($event)">
+<form [formGroup]="form" (ngSubmit)="handleSubmit($event)" style="margin: 40px">
   <ng-container
     *ngFor="let field of config;"
     formElement
     [config]="field"
     [group]="form"
     [errors]="errors"
+    [formId]="formId"
     (event)="eventHandler($event)"
     (buttonAction)="buttonActionHandler($event)"
     [message]="message">

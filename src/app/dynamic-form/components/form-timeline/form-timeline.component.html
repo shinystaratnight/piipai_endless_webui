@@ -2,7 +2,7 @@
   <div *ngFor="let state of config.options; let l = last" class="d-inline-block mb-3">
     <div class="d-flex flex-column">
       <div class="timeline-element-wrapper" style="position: relative">
-        <div class="timeline-element card p-3"
+        <div class="timeline-element badge badge-outline"
           [ngClass]="{
             'need-requirements': state.state === 0,
             'allowed': state.state === 1,
@@ -17,10 +17,9 @@
           <span *ngIf="state.state !== 2">
             {{state.name_before_activation}}
           </span>
-        </div>
-        <i fa class="mx-3"
-          *ngIf="!l"
-          [name]="'chevron-right'"></i>
+        </div><svg class="arrow" *ngIf="!l" width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0L3 3L6 0" transform="translate(1 7) rotate(-90)" stroke="#1BD168" />
+        </svg>
         <div class="timeline-requirements"
           *ngIf="state.state === 0 && state.requirements && state.requirements.length > 0">
           <div class="timeline-requirements-item p-2">

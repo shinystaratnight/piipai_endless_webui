@@ -726,7 +726,7 @@ export class FormRelatedComponent
             res.results.forEach((el) => {
               el.__str__ = formatString.format(this.display, el);
             });
-            if (concat) {
+            if (concat && this.previewList) {
               this.previewList.push(...res.results);
             } else {
               this.previewList = res.results;

@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+  OnChanges,
+  OnDestroy
+} from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -6,11 +14,12 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/finally';
 
-import { GenericFormService } from './../../services/generic-form.service';
+import { GenericFormService, FormService } from '../../services/';
 
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
+import { Subscription } from 'rxjs/Subscription';
 
 interface HiddenFields {
   elements: Field[];
@@ -23,7 +32,7 @@ interface HiddenFields {
   templateUrl: 'generic-form.component.html'
 })
 
-export class GenericFormComponent implements OnChanges, OnInit {
+export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   public endpoint: string = '';
@@ -132,9 +141,15 @@ export class GenericFormComponent implements OnChanges, OnInit {
     '/ecore/api/v2/candidate/candidatecontacts/': '__str__',
   };
 
+  public subscriptions: Subscription[];
+  public formId: number;
+
   constructor(
-    private service: GenericFormService
-  ) {}
+    private service: GenericFormService,
+    private formService: FormService,
+  ) {
+    this.subscriptions = [];
+  }
 
   public ngOnInit() {
     if (this.id && !this.mode) {
@@ -147,6 +162,21 @@ export class GenericFormComponent implements OnChanges, OnInit {
     if (this.endpoint.indexOf('candidate_fill')) {
       this.candidateFill = true;
     }
+
+    this.formId = this.formService.registerForm(this.endpoint, this.mode);
+
+    this.subscriptions.push(
+      this.formService.getForm(this.formId).mode
+        .subscribe((mode: string) => {
+          this.mode = mode;
+
+          this.toggleModeMetadata(this.metadata, this.mode);
+        })
+    );
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   public ngOnChanges() {
@@ -226,6 +256,7 @@ export class GenericFormComponent implements OnChanges, OnInit {
             data = candidate_metadata; //tslint:disable-line
           }
           console.dir(data);
+
 
           this.setModeForElement(data, this.mode);
           this.getReplaceElements(data);
@@ -1071,7 +1102,9 @@ var candidate_metadata = [
       },
       address: 'contact.address.__str__',
       available: 'contact.is_available',
-      title: 'contact.__str__'
+      title: 'contact.__str__',
+      created_at: 'created_at',
+      updated_at: 'updated_at'
     }
   },
   {
@@ -1128,7 +1161,24 @@ var candidate_metadata = [
                 label: 'Recruitment agent',
                 width: .25,
                 children: [
-
+                  {
+                    "collapsed": false,
+                    "type": "related",
+                    "endpoint": "/ecore/api/v2/core/companycontacts/",
+                    "templateOptions": {
+                      "edit": true,
+                      "delete": false,
+                      "add": true,
+                      "values": [
+                        "__str__"
+                      ],
+                      "type": "related",
+                    },
+                    "key": "recruitment_agent",
+                    "read_only": true,
+                    "list": false,
+                    "many": false,
+                  }
                 ]
               }
             ]
@@ -1343,6 +1393,7 @@ var candidate_metadata = [
               },
               {
                 type: 'group',
+                label: '',
                 width: .5,
                 children: [
                   {
@@ -1861,7 +1912,7 @@ var candidate_metadata = [
         "many": true,
         "endpoint": "/ecore/api/v2/candidate/tagrels/",
         "templateOptions": {
-          "label": "Candidate Tags",
+          "label": "Tags",
           "add": true,
           "edit": true,
           "type": "related",
@@ -1871,52 +1922,87 @@ var candidate_metadata = [
           "delete": true
         }
       },
+      // {
+      //   "prefilled": {
+      //     "contact": "{contact.id}"
+      //   },
+      //   "query": {
+      //     "contact": "{contact.id}"
+      //   },
+      //   "type": "list",
+      //   "endpoint": "/ecore/api/v2/activity/activities/",
+      //   "templateOptions": {
+      //     "label": "Activities",
+      //     "add_label": "Add",
+      //     "text": "Activities",
+      //     "type": "list"
+      //   }
+      // },
       {
-        "prefilled": {
-          "contact": "{contact.id}"
-        },
-        "query": {
-          "contact": "{contact.id}"
-        },
-        "type": "list",
-        "endpoint": "/ecore/api/v2/activity/activities/",
-        "templateOptions": {
-          "label": "Activities",
-          "add_label": "Add",
-          "text": "Activities",
-          "type": "list"
-        }
+        type: 'group',
+        name: 'States',
+        children: [
+          {
+            "key": "timeline",
+            "query": {
+              "model": "candidate.candidatecontact",
+              "object_id": "{id}"
+            },
+            "endpoint": "/ecore/api/v2/core/workflownodes/timeline/",
+            "type": "timeline",
+            "templateOptions": {
+              "text": "States Timeline",
+              "type": "timeline"
+            }
+          },
+          {
+            "prefilled": {
+              "object_id": "{id}"
+            },
+            "query": {
+              "object_id": "{id}"
+            },
+            "type": "list",
+            "endpoint": "/ecore/api/v2/core/workflowobjects/",
+            "templateOptions": {
+              "label": "Candidate States History",
+              "add_label": "Add",
+              "text": "Candidate States History",
+              "type": "list"
+            }
+          },
+        ]
       },
-      {
-        "key": "timeline",
-        "query": {
-          "model": "candidate.candidatecontact",
-          "object_id": "{id}"
-        },
-        "endpoint": "/ecore/api/v2/core/workflownodes/timeline/",
-        "type": "timeline",
-        "templateOptions": {
-          "label": "States Timeline",
-          "text": "States Timeline",
-          "type": "timeline"
-        }
-      },
-      {
-        "prefilled": {
-          "object_id": "{id}"
-        },
-        "query": {
-          "object_id": "{id}"
-        },
-        "type": "list",
-        "endpoint": "/ecore/api/v2/core/workflowobjects/",
-        "templateOptions": {
-          "label": "Candidate States History",
-          "add_label": "Add",
-          "text": "Candidate States History",
-          "type": "list"
-        }
-      },
+      // {
+      //   "key": "timeline",
+      //   "query": {
+      //     "model": "candidate.candidatecontact",
+      //     "object_id": "{id}"
+      //   },
+      //   "endpoint": "/ecore/api/v2/core/workflownodes/timeline/",
+      //   "type": "timeline",
+      //   "templateOptions": {
+      //     "label": "States Timeline",
+      //     "text": "States Timeline",
+      //     "type": "timeline"
+      //   }
+      // },
+      // {
+      //   "prefilled": {
+      //     "object_id": "{id}"
+      //   },
+      //   "query": {
+      //     "object_id": "{id}"
+      //   },
+      //   "type": "list",
+      //   "endpoint": "/ecore/api/v2/core/workflowobjects/",
+      //   "templateOptions": {
+      //     "label": "Candidate States History",
+      //     "add_label": "Add",
+      //     "text": "Candidate States History",
+      //     "type": "list"
+      //   }
+      // },
       {
         "query": {
           "contact": "{contact.id}"
@@ -1924,7 +2010,7 @@ var candidate_metadata = [
         "endpoint": "/ecore/api/v2/core/contactunavailabilities/",
         "type": "list",
         "templateOptions": {
-          "label": "Candidate Unavailabilities",
+          "label": "Unavailabilities",
           "text": "Candidate Unavailabilities",
           "type": "list"
         }

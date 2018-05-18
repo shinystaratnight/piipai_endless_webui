@@ -17,6 +17,8 @@ export class FormInfoComponent implements OnInit {
   public status: any[];
   public averageScore: any;
   public contactAvatar: string;
+  public created_at: string; //tslint:disable-line
+  public updated_at: string; //tslint:disable-line
 
   public color: any;
   public colorAttr: string;
@@ -34,7 +36,7 @@ export class FormInfoComponent implements OnInit {
   };
 
   public ngOnInit() {
-    if (this.config.values) {
+    if (this.config.values && this.config.value) {
       const keys = Object.keys(this.config.values);
 
       this.averageScore = this.config.value.average_score;

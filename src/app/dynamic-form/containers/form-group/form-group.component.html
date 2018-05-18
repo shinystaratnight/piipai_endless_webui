@@ -1,4 +1,4 @@
-<label *ngIf="!config.main">{{config.label}}&nbsp;</label>
+<label *ngIf="!config.main && (config.label || config.label === '')">{{config.label === '' ? '&nbsp;' : config.label}}</label>
 <div *ngFor="let field of config.children">
   <ng-container
     formElement
