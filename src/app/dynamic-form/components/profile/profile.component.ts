@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
 
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
+
+import { GenericFormService } from '../../services/generic-form.service';
 
 interface ViewElement {
   type: string;

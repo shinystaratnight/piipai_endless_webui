@@ -13,3 +13,63 @@
   overflow: hidden;
   color: #1e90ff;
 }
+.addon,
+.password {
+  position: absolute;
+  display: flex;
+
+  height: 100%;
+
+  padding: 14px;
+
+  opacity: .3;
+
+  img {
+    width: 16px;
+  }
+}
+
+.addon {
+  padding-right: 10px;
+
+  border-right: 1px solid rgba(#333, .6);
+}
+
+.password  {
+  right: 0;
+
+  img:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+}
+
+.form-control::-webkit-input-placeholder {
+  font-size: 14px;
+
+  opacity: .54;
+}
+
+.form-control::-moz-placeholder, {
+  font-size: 14px;
+
+  opacity: .54;
+}
+
+.form-control:-ms-input-placeholder {
+  font-size: 14px;
+
+  opacity: .54;
+}
+
+.form-control:-moz-placeholder {
+  font-size: 14px;
+
+  opacity: .54;
+}
+
+.form-control::placeholder {
+  font-size: 14px;
+
+  opacity: .54;
+}

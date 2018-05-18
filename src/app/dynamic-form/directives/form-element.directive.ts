@@ -10,31 +10,29 @@ import {
   EventEmitter
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FormInputComponent } from '../form-input/form-input.component';
-import { FormRowComponent } from './../../containers/form-row/form-row.component';
-import { FormButtonComponent } from './../form-button/form-button.component';
-import { FormSelectComponent } from './../form-select/form-select.component';
-import { FormDatepickerComponent } from './../form-datepicker/form-datepicker.component';
-import { FormTextareaComponent } from './../form-textarea/form-textarea.component';
-import { FormCollapseComponent } from './../../containers/form-collapse/form-collapse.component';
-import { FormCheckboxComponent } from './../form-checkbox/form-checkbox.component';
-import { FormRelatedComponent } from './../form-related/form-related.component';
-import { FormRuleComponent } from './../form-rule/form-rule.component';
-import { FormTimelineComponent } from './../form-timeline/form-timeline.component';
-import { FormPictureComponent } from './../form-picture/form-picture.component';
-import { FormHiddenComponent } from './../../containers/form-hidden/form-hidden.component';
-import { FormVacancyDatesComponent } from './../form-vacancy-dates/form-vacancy-dates.component';
-import { FormListComponent } from './../form-list/form-list.component';
-import { FormFieldsGroupComponent } from './../form-fields-group/form-fields-group.component';
-import { FormOptionsComponent } from './../form-options/form-options.component';
-import { FormRadioComponent } from './../form-radio/form-radio.component';
-import { FormReplaceComponent } from './../form-replace/form-replace.component';
-import { ListLinkComponent } from '../list-link/list-link.component';
-import { FormJsonComponent } from './../form-json/form-json.component';
-import { FormColumnComponent } from '../../containers/form-column/form-column.component';
-import { FormTabsComponent } from '../../containers/form-tabs/form-tabs.component';
-import { FormInfoComponent } from '../../components/form-info/form-info.component';
-import { FormGroupComponent } from '../../containers/form-group/form-group.component';
+
+import { FormInputComponent } from '../components/form-input/form-input.component';
+import { FormRowComponent } from '../containers/form-row/form-row.component';
+import { FormButtonComponent } from '../components/form-button/form-button.component';
+import { FormSelectComponent } from '../components/form-select/form-select.component';
+import { FormDatepickerComponent } from '../components/form-datepicker/form-datepicker.component';
+import { FormTextareaComponent } from '../components/form-textarea/form-textarea.component';
+import { FormCollapseComponent } from '../containers/form-collapse/form-collapse.component';
+import { FormCheckboxComponent } from '../components/form-checkbox/form-checkbox.component';
+import { FormRelatedComponent } from '../components/form-related/form-related.component';
+import { FormRuleComponent } from '../components/form-rule/form-rule.component';
+import { FormTimelineComponent } from '../components/form-timeline/form-timeline.component';
+import { FormPictureComponent } from '../components/form-picture/form-picture.component';
+import { FormHiddenComponent } from '../containers/form-hidden/form-hidden.component';
+import { FormVacancyDatesComponent } from '../components/form-vacancy-dates/form-vacancy-dates.component'; //tslint:disable-line
+import { FormListComponent } from '../components/form-list/form-list.component';
+import { FormFieldsGroupComponent } from '../components/form-fields-group/form-fields-group.component'; //tslint:disable-line
+import { FormOptionsComponent } from '../components/form-options/form-options.component';
+import { FormRadioComponent } from '../components/form-radio/form-radio.component';
+import { FormReplaceComponent } from '../components/form-replace/form-replace.component';
+import { ListLinkComponent } from '../components/list-link/list-link.component';
+import { FormJsonComponent } from '../components/form-json/form-json.component';
+import { FormColumnComponent } from '../containers/form-column/form-column.component';
 
 const components = {
   input: FormInputComponent,

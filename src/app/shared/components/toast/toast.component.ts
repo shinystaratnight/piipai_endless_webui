@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 
-import { ErrorsService } from '../services/errors.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+
+import { ErrorsService } from '../../services';
 
 @Component({
   selector: 'my-toast',

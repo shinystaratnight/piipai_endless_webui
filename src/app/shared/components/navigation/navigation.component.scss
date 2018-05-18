@@ -1,5 +1,5 @@
-@import '../../../styles/variables.scss';
-@import '../../../styles/mixins.scss';
+@import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins.scss';
 
 $nested-width: 230px;
 $side-width: 252px;
@@ -20,6 +20,10 @@ $header-bg: white;
 
   @include media-breakpoint-down('lg') {
     justify-content: space-between;
+  }
+
+  @include media-breakpoint-down('sm') {
+    padding: 0 10px;
   }
 
   ul {
@@ -319,6 +323,8 @@ $header-bg: white;
       .description {
         font-size: 14px;
 
+        text-align: right;
+
         color: $gray;
 
         opacity: .7;
@@ -353,6 +359,10 @@ $header-bg: white;
       background-color: $header-bg;
       box-shadow:  $nested-shadow;
       z-index: 200;
+
+      li.description {
+        padding: 5px 24px;
+      }
 
       .role {
         padding: 5px 24px;

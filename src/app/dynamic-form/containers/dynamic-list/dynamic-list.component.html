@@ -35,7 +35,7 @@
     <div [class.card-block]="poped" class="datatable-body" [class.open-filters]="!filtersHidden && showFilters">
       <h2 class="datatable-label"
         *ngIf="(config.list && (inForm && (config.list.search_enabled || (config.list.buttons && config.list.buttons.length)) && !delay) || (!inForm && !poped))">
-        <span *ngIf="!inForm" class="mr-auto">{{config.list.label}}</span>
+        <span *ngIf="!inForm" class="mr-auto my-1">{{config.list.label}}</span>
         <list-buttons
           [buttons]="config.list.buttons"
           [first]="first"

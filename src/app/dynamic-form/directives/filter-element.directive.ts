@@ -10,13 +10,13 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { FilterDateComponent } from './../filter-date/filter-date.component';
-import { FilterChoiceComponent } from './../filter-choice/filter-choice.component';
-import { FilterRelatedComponent } from './../filter-related/filter-related.component';
-import { FilterSelectComponent } from './../filter-select/filter-select.component';
-import { FilterRangeComponent } from '../filter-range/filter-range.component';
-import { FilterMultipleComponent } from '../filter-multiple/filter-multiple.component';
-import { FilterLimitComponent } from '../filter-limit/filter-limit.component';
+import { FilterDateComponent } from '../components/filter-date/filter-date.component';
+import { FilterChoiceComponent } from '../components/filter-choice/filter-choice.component';
+import { FilterRelatedComponent } from '../components/filter-related/filter-related.component';
+import { FilterSelectComponent } from '../components/filter-select/filter-select.component';
+import { FilterRangeComponent } from '../components/filter-range/filter-range.component';
+import { FilterMultipleComponent } from '../components/filter-multiple/filter-multiple.component';
+import { FilterLimitComponent } from '../components/filter-limit/filter-limit.component';
 
 const components = {
   date: FilterDateComponent,

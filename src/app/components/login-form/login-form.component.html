@@ -1,30 +1,49 @@
 <navigation></navigation>
+
 <div class="container" *ngIf="!token">
-  <div class="row justify-content-center align-items-center">
-    <div class="d-flex flex-column col-12 col-sm-9 col-md-7 col-lg-4 mt-5">
-      <h5 class="login-title">{{label}}</h5>
-      <div class="login-content">
-        <generic-form
-          [endpoint]="endpoint"
-          [errors]="error"
-          [showResponse]="true"
-          (redirect)="redirectHandler($event)"
-          (responseForm)="responseHandler($event)"
-          (errorForm)="errorHandler($event)"
-          (event)="formEvent($event)">
-          <div class="form-group text-right">
-            <button type="submit" class="btn login-button">
-              LOGIN
-              <spinner *ngIf="loginProcess"></spinner>
-            </button>
-            <a *ngIf="type === 'extranet'" class="login-link" href="#">Forgot Password?</a>
-          </div>
-        </generic-form>
-      </div>
-      <a href="/ecore/register/" class="btn register-button px-3 mt-3">
-        <i fa name="plus-circle"></i>
-        Register as candidate
-      </a>
+  <div class="login-wrapper">
+    <div class="login-title">
+      <img src="/assets/img/logo.svg" alt="R3sourcer">
+      <p>R3sourcer company</p>
     </div>
+
+    <div class="login-form">
+      <div class="login-label">
+        <h5 class="title">Login</h5>
+        <p class="description">Please enter your email and password</p>
+      </div>
+
+      <generic-form
+        [endpoint]="endpoint"
+        [data]="data"
+        [errors]="error"
+        [showResponse]="true"
+        (redirect)="redirectHandler($event)"
+        (responseForm)="responseHandler($event)"
+        (errorForm)="errorHandler($event)"
+        (event)="formEvent($event)">
+        <div class="links form-group">
+          <label class="form-element-checkbox">
+            <input type="checkbox" class="form-check-input" hidden>
+            <div class="custom-checkbox">
+              <i fa name="check"></i>
+            </div>
+            <span>Remember me</span>
+          </label>
+          <a class="forgot" href="#">Forgot Password?</a>
+        </div>
+        <button class="btn btn-primary login-button" type="submit">Lоgin <spinner *ngIf="loginProcess"></spinner></button>
+      </generic-form>
+    </div>
+
   </div>
+</div>
+
+<div class="register-link">
+  <a href="/ecore/register/">
+    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 42 42">
+      <polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22 " />
+    </svg>
+    New candidate account
+  </a>
 </div>

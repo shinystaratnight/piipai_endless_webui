@@ -132,7 +132,7 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     }
 
     if (!this.value) {
-      this.value = this.config.companyContact && this.config.key === 'logo' ? '/assets/img/logo.svg' : '';
+      this.value = this.config.companyContact && this.config.key === 'logo' ? '/assets/img/logo.svg' : ''; //tslint:disable-line
 
       if (!this.value && this.config.contactName) {
         const nameElements = this.config.contactName.split(' ');

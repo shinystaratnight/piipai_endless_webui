@@ -15,7 +15,7 @@
   </nav>
   <div #userBlock class="user" *ngIf="user">
     <div class="user-block">
-      <div class="user-info">
+      <div class="user-info hidden-sm-down">
         <span>{{user.data.contact.__str__}}</span>
         <span *ngIf="company" class="description">{{company}}</span>
       </div>
@@ -37,6 +37,10 @@
         </div>
       </li>
       <li *ngIf="candidate"><a routerLink="/profile">Profile</a></li>
+      <li class="hidden-md-up description">
+        <span>{{user.data.contact.__str__}}</span><br>
+        <span *ngIf="company">{{company}}</span>
+      </li>
       <li><a routerLink="/">Change password</a></li>
       <li><a routerLink="/" (click)="logOut()">Log out</a></li>
     </ul>

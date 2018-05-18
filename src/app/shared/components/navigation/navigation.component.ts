@@ -10,8 +10,12 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { NavigationService, Page } from '../../services/navigation.service';
-import { UserService, User } from '../../services/user.service';
+import { UserService, User, NavigationService, Page } from '../../../services';
+
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'navigation',
@@ -58,6 +62,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   public picture: string;
   public contactAvatar: string;
 
+  public resizeSubscription: Subscription;
+
   constructor(
     private navigationService: NavigationService,
     private userService: UserService,
@@ -71,13 +77,21 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     const header = this.header.nativeElement;
     this.headerHeight = header.offsetHeight - 1;
 
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 1200) {
-        this.isCollapsed = false;
-      } else {
-        this.headerHeight = header.offsetHeight - 1;
-      }
-    });
+    this.resizeSubscription = Observable.fromEvent(window, 'resize')
+      .debounceTime(200)
+      .subscribe(() => {
+        if (window.innerWidth > 1200 && this.isCollapsed === true) {
+          this.isCollapsed = false;
+        } else if (this.headerHeight !== header.offsetHeight - 1) {
+          this.headerHeight = header.offsetHeight - 1;
+        }
+      });
+  }
+
+  public ngOnDestroy() {
+    if (this.resizeSubscription) {
+      this.resizeSubscription.unsubscribe();
+    }
   }
 
   public getUserInformation() {
