@@ -55,6 +55,20 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
   }
 }
 
+input {
+  border-color: rgba(#333, .2);
+}
+
+input.not-empty {
+  border-color: rgba(#333, .3);
+
+  background-color: #fefefe;
+
+  & ~ .addon {
+    border-color: rgba(#333, .8);
+  }
+}
+
 .custom-checkbox {
   display: flex;
   justify-content: center;
@@ -110,6 +124,11 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 .btn-primary {
   border-color: $brand-primary;
   background-color: $brand-primary;
+}
+
+.btn:hover {
+  border-color: darken($brand-primary, 10%);
+  background-color: darken($brand-primary, 10%);
 }
 
 .badge {
@@ -201,6 +220,10 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 .form-list .form-group,
 .form-list .form-control {
   margin-bottom: 0;
+}
+
+.form-control:focus {
+  box-shadow: none;
 }
 
 .list-group-item:last-child {

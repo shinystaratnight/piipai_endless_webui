@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 import {
-  HomeComponent,
   SiteComponent,
   LoginFormComponent,
   ContactRegistrationFormComponent
@@ -19,11 +18,6 @@ export const ROUTES: Routes = [
     pathMatch: 'full',
     redirectTo: '/'
   },
-  // {
-  //   path: 'home',
-  //   component: HomeComponent,
-  //   canActivate: [NotAuthorizedGuard]
-  // },
   {
     path: 'login',
     component: LoginFormComponent,

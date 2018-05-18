@@ -1,8 +1,13 @@
 .form-element {
   &-content {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+
+    .form-control.addon-input {
+      padding: 0 41px 0 49px;
+    }
   }
 
   &-checkbox {
@@ -32,7 +37,7 @@
       align-items: center;
       margin-left: 0;
 
-      @include media-breakpoint-down('xs') {
+      @include media-breakpoint-down('sm') {
         order: -1;
         margin-right: .5rem;
       }
@@ -44,7 +49,7 @@
       align-items: flex-start;
     }
 
-    @include media-breakpoint-down('xs') {
+    @include media-breakpoint-down('sm') {
       &-label,
       &-content {
         flex-basis: auto;
