@@ -5,9 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/operator/do';
 
-import { UserService, User } from './user.service';
-import { CheckPermissionService } from '../shared/services/check-permission';
-import { NavigationService, Page } from './navigation.service';
+import { UserService, User, NavigationService, Page } from '../services';
+import { CheckPermissionService } from '../shared/services';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

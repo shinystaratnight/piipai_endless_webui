@@ -24,7 +24,8 @@ import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { NoContentComponent } from './pages/no-content';
 import { components } from './components';
-import { services } from './services/index';
+import { services } from './services';
+import { guards } from './guards';
 import { Ng2Webstorage } from 'ng2-webstorage';
 import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
@@ -32,7 +33,6 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { DefaultRequestOptions } from './services/default-request-options.service';
 
-// import { NavigationComponent } from './components/navigation/navigation.component';
 import { SharedModule } from './shared/shared.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -76,6 +76,7 @@ const APP_PROVIDERS = [
     ENV_PROVIDERS,
     APP_PROVIDERS,
     ...services,
+    ...guards,
     CookieService
   ]
 })

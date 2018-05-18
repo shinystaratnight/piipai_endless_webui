@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 
-import { Page } from './../../services/navigation.service';
+import { Page } from '../../../services';
 import { BreadcrumbComponent, Breadcrumb } from './breadcrumb.component';
 
 describe('BreadcrumbComponent', () => {
