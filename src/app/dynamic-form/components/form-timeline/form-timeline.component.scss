@@ -1,10 +1,56 @@
 @import '../../../../styles/variables.scss';
 
+.badge {
+  line-height: 1.2;
+}
+
 .timeline {
   padding-bottom: 25px;
 
+  &-dropdown-menu {
+
+    .timeline-element-wrapper {
+      display: block;
+    }
+
+    .timeline-element {
+      margin-bottom: 5px;
+    }
+
+    .collapse {
+      height: 0px;
+      margin-bottom: 0px;
+
+      line-height: 0;
+      font-size: 0;
+      padding: 0;
+      border: 0;
+
+      .arrow {
+        display: none;
+      }
+
+      transition: .5s all ease-out;
+    }
+
+    svg.next {
+      display: none;
+    }
+  }
+
   &-element {
+    display: inline-block;
+    margin-bottom: 16px;
+
     transition: .3s;
+
+    &-wrapper {
+      display: inline-block;
+
+      &.dropdown-wrapper {
+        display: none;
+      }
+    }
 
     &-wrapper:hover .timeline-requirements {
       display: block;
@@ -60,20 +106,24 @@
   }
 
   .not-allowed {
-    border-color: rgba($brand-danger, .7);
+    border-color: #828282;
+    color: rgba($gray, .7);
+
+    opacity: .2;
   }
 
   .need-requirements {
-    border-color: rgba($brand-danger, .7);
-    color: $brand-success;
+    border-color: #828282;
+    color: rgba($gray, .7);
   }
 
   .visited {
-    background-color: rgba($brand-inverse, .5);
-    color: rgba($brand-inverse, .7);
+    border-color: $gray;
+    background-color: rgba($gray, .5);
+    color: rgba($gray, .7);
   }
 
-  .arrow {
+  .next {
     margin: 0 6px;
   }
 }

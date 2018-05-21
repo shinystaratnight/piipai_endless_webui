@@ -28,12 +28,18 @@
 
     height: 28px;
 
+    min-height: 28px;
+
     border: 1px solid rgba($gray, .2);
 
     background-color: #fefefe;
 
     overflow: hidden;
     cursor: default;
+
+    div {
+      width: 230px;
+    }
 
     i {
       font-size: 14px;

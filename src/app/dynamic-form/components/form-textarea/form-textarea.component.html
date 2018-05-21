@@ -3,8 +3,9 @@
     <label class="form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions.label">
       {{config.templateOptions.label}}
     </label>
-    <div class="form-element-content">
+    <div class="form-element-content" style="height: auto; max-height: none">
       <textarea
+        rows="5"
         *ngIf="!viewMode"
         class="form-control"
         #textarea

@@ -1,9 +1,13 @@
 @import '../../../../styles/variables.scss';
 
 .title {
-  display: flex;
   justify-content: space-between;
   align-items: flex-start;
+}
+
+h6 .btn {
+  font-size: 12px;
+  line-height: 14px;
 }
 
 h4 {

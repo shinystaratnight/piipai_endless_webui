@@ -110,10 +110,6 @@ export class FormRelatedComponent
   ) { super(); }
 
   public ngOnInit() {
-    if (!this.config.editForm && this.config.read_only) {
-      return;
-    }
-    this.addControl(this.config, this.fb);
     this.skillEndpoint = this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
       this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
     this.display =
@@ -124,6 +120,11 @@ export class FormRelatedComponent
     if (this.fields) {
       this.fields.push(this.param);
     }
+
+    if (!this.config.editForm && this.config.read_only) {
+      return;
+    }
+    this.addControl(this.config, this.fb);
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
