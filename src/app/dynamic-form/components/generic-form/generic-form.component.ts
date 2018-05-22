@@ -426,7 +426,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     if (keys.length === 0) {
       if (data) {
         if (!obj['value'] || update) {
-          if (key === 'self') {
+          if (key === 'id' &&  obj.type === 'info') {
             obj['value'] = data;
           } else {
             obj['value'] = data[key];
