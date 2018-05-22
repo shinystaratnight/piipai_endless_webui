@@ -10,6 +10,8 @@ import { FilterRelatedComponent } from './filter-related.component';
 
 import { Observable } from 'rxjs/Observable';
 
+import { Subject } from 'rxjs/Subject';
+
 describe('FilterRelatedComponent', () => {
   let fixture: ComponentFixture<FilterRelatedComponent>;
   let comp: FilterRelatedComponent;
@@ -67,6 +69,7 @@ describe('FilterRelatedComponent', () => {
     TestBed.compileComponents().then(() => {
       fixture = TestBed.createComponent(FilterRelatedComponent);
       comp = fixture.componentInstance;
+      comp.filterSubscription = new Subject().subscribe();
     });
   }));
 

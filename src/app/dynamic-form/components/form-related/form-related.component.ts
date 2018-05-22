@@ -37,7 +37,7 @@ export interface CustomField {
 
 @Component({
   selector: 'form-related',
-  templateUrl: 'form-related.component.html',
+  templateUrl: './form-related.component.html',
   styleUrls: ['./form-related.component.scss']
 })
 

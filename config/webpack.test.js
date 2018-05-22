@@ -164,6 +164,10 @@ module.exports = function (options) {
           loader: "file-loader"
         },
 
+        {
+          test: /\.scss$/,
+          loader: 'raw-loader!sass-loader',
+        },
       ]
     },
 

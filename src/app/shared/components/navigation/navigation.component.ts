@@ -8,6 +8,7 @@ import {
   EventEmitter,
   Output,
   ViewEncapsulation,
+  OnDestroy,
 } from '@angular/core';
 
 import { UserService, User, NavigationService, Page } from '../../../services';
@@ -19,12 +20,12 @@ import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'navigation',
-  templateUrl: 'navigation.component.html',
+  templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
-export class NavigationComponent implements OnInit, AfterViewInit {
+export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('header')
   public header: any;

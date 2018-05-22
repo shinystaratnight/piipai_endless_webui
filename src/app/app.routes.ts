@@ -21,7 +21,10 @@ export const ROUTES: Routes = [
   {
     path: 'login',
     component: LoginFormComponent,
-    canActivate: [NotAuthorizedGuard]
+    canActivate: [NotAuthorizedGuard],
+    resolve: {
+      settings: SettingsService
+    }
   },
   {
     path: 'login/:token',

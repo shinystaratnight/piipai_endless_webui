@@ -12,6 +12,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { FilterMultipleComponent } from './filter-multiple.component';
 
+import { Subject } from 'rxjs/Subject';
+
 describe('FilterMultipleComponent', () => {
   let fixture: ComponentFixture<FilterMultipleComponent>;
   let comp: FilterMultipleComponent;
@@ -49,6 +51,7 @@ describe('FilterMultipleComponent', () => {
       TestBed.compileComponents().then(() => {
         fixture = TestBed.createComponent(FilterMultipleComponent);
         comp = fixture.componentInstance;
+        comp.filterSubscription = new Subject().subscribe();
       });
     })
   );

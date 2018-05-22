@@ -11,13 +11,18 @@ import { LoginService } from './../../services/login.service';
 })
 export class LoginFormComponent implements OnInit {
 
-  public error: any = {};
-  public response: any;
-  public token: boolean = false;
-  public endpoint = `/ecore/api/v2/auth/login/`;
   public label: any;
-
+  public response: any;
   public loginProcess: boolean;
+  public settings: any;
+
+  public error = {};
+  public token = false;
+  public endpoint = `/ecore/api/v2/auth/login/`;
+  public rememberMe = false;
+  public additionalData = {
+    remember_me: false
+  };
 
   public data = {
     username: {
@@ -50,7 +55,7 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   public ngOnInit() {
@@ -60,6 +65,8 @@ export class LoginFormComponent implements OnInit {
         this.tokenAuth(this.token);
       }
     });
+
+    this.settings = this.route.snapshot.data['settings'];
   }
 
   public tokenAuth(token) {
@@ -92,6 +99,11 @@ export class LoginFormComponent implements OnInit {
 
   public errorHandler() {
     this.loginProcess = false;
+  }
+
+  public updateCheckbox(value: boolean) {
+    this.rememberMe = value;
+    this.additionalData.remember_me = this.rememberMe;
   }
 
 }

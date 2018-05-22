@@ -148,6 +148,12 @@
 
   color: $brand-primary;
 
+  @each $item in $themes {
+    .#{$item}-theme & {
+      color: map-get($theme-colors, $item);
+    }
+  }
+
   a {
     display: inline-flex;
     align-items: center;
@@ -156,12 +162,20 @@
   svg {
     width: 13px;
     height: 13px;
+
     margin-right: .5rem;
   }
 
   polygon {
     fill: $brand-primary;
     stroke: $brand-primary;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        fill: map-get($theme-colors, $item);
+        stroke: map-get($theme-colors, $item);
+      }
+    }
   }
 }
 
