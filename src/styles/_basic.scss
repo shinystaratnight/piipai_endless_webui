@@ -102,6 +102,19 @@ select.not-empty {
 
 /*---------- Bootstrap ---------- */
 
+.modal-backdrop {
+  z-index: 1;
+}
+
+.modal {
+  z-index: 1;
+}
+
+.input-group .form-control,
+.input-group .form-control:hover {
+  z-index: 1;
+}
+
 .tooltip {
 
   color: $gray;
@@ -143,11 +156,6 @@ select.not-empty {
       }
     }
   }
-}
-
-.btn:hover {
-  border-color: darken($brand-primary, 10%);
-  background-color: darken($brand-primary, 10%);
 }
 
 .badge {
