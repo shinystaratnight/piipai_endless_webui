@@ -12,6 +12,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { FilterRangeComponent } from './filter-range.component';
 
+import { Subject } from 'rxjs/Subject';
+
 describe('FilterRangeComponent', () => {
   let fixture: ComponentFixture<FilterRangeComponent>;
   let comp: FilterRangeComponent;
@@ -48,6 +50,7 @@ describe('FilterRangeComponent', () => {
       TestBed.compileComponents().then(() => {
         fixture = TestBed.createComponent(FilterRangeComponent);
         comp = fixture.componentInstance;
+        comp.filterSubscription = new Subject().subscribe();
       });
     })
   );

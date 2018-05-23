@@ -4,7 +4,7 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ListElementDirective } from './list-element.directive';
-import { ListLinkComponent } from './../list-link/list-link.component';
+import { ListLinkComponent } from '../components/list-link/list-link.component';
 
 @Component({
   selector: 'container',

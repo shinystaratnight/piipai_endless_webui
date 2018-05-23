@@ -44,7 +44,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public skillsMetadata: any[];
   public tagsMetadata: any[];
-  public defaultPicture: any;
 
   public modalData: any;
   public modalRef: any;
@@ -153,12 +152,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.service.getMetadata(endpoint + '?type=form').subscribe(
       (res: any) => {
         this.metadata = res;
-        const picture = this.getItemFromMetadata(res, 'contact.picture');
-        if (picture && picture.default) {
-          this.defaultPicture = picture.default.indexOf('http') ? picture.default : `/ecore/media/${picture.default}`; //tslint:disable-line
-        } else {
-          this.defaultPicture = `/assets/img/Labourking_logo.jpg`;
-        }
         this.getData();
       },
       (error: any) => this.error = error);
@@ -168,6 +161,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.service.getAll(this.endpoint + this.id + '/').subscribe(
       (res: any) => {
         this.data = res;
+
+        const nameElements = res.contact.__str__.split(' ');
+
+        if (nameElements && nameElements.length) {
+          if (nameElements.length === 2) {
+            this.data.contactAvatar = nameElements
+              .map((el) => el[0])
+              .join('')
+              .toUpperCase();
+          } else if (nameElements.length === 3) {
+            nameElements.shift();
+            this.data.contactAvatar = nameElements
+              .map((el) => el[0])
+              .join('')
+              .toUpperCase();
+          }
+        }
+
         this.generate('personalTraits');
         this.generate('residency');
         this.generate('contactDetails');

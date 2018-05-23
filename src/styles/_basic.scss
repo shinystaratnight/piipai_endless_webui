@@ -50,6 +50,14 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
   background-color: $brand-primary;
   color: white;
 
+  @each $item in $themes {
+    .#{$item}-theme & {
+      border-color: map-get($theme-colors, $item);
+
+      background-color: map-get($theme-colors, $item);
+    }
+  }
+
   i {
     opacity: 1;
   }
@@ -59,7 +67,8 @@ input {
   border-color: rgba(#333, .2);
 }
 
-input.not-empty {
+input.not-empty,
+select.not-empty {
   border-color: rgba(#333, .3);
 
   background-color: #fefefe;
@@ -124,6 +133,16 @@ input.not-empty {
 .btn-primary {
   border-color: $brand-primary;
   background-color: $brand-primary;
+
+  &:focus {
+    box-shadow: 0 0 2px rgba($brand-primary, .5);
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        box-shadow: 0 0 2px rgba(map-get($theme-colors, $item), .5);
+      }
+    }
+  }
 }
 
 .btn:hover {
@@ -224,10 +243,22 @@ input.not-empty {
 
 .form-control:focus {
   box-shadow: none;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      border-color: map-get($theme-colors, $item);
+    }
+  }
 }
 
 .list-group-item:last-child {
   border-radius: 0;
+}
+
+.page-item.active .page-link {
+  border-color: $brand-primary;
+
+  background-color: $brand-primary;
 }
 
 @each $item in $themes {
@@ -251,8 +282,13 @@ input.not-empty {
 
 @each $item in $themes {
   .#{$item}-theme .page-item.active .page-link {
-    background-color: map-get($theme-colors, $item) !important;
-    border-color: map-get($theme-colors, $item) !important;
+    border-color: map-get($theme-colors, $item);
+
+    background-color: map-get($theme-colors, $item);
+  }
+
+  .#{$item}-theme .page-link {
+    color: map-get($theme-colors, $item);
   }
 }
 
@@ -498,16 +534,5 @@ iframe.send-sms {
       border-color: map-get($theme-colors, $item);
       color: map-get($theme-colors, $item);
     }
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .page-item.active .page-link {
-    background-color: map-get($theme-colors, $item);
-    border-color: map-get($theme-colors, $item);
-  }
-
-  .#{$item}-theme .page-link {
-    color: map-get($theme-colors, $item);
   }
 }
