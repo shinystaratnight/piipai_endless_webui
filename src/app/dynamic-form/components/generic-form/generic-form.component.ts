@@ -229,7 +229,12 @@ export class GenericFormComponent implements OnChanges, OnInit {
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
+          this.addAutocompleteProperty(this.metadata);
           this.getData(this.metadata);
+
+          const formData = new BehaviorSubject({ data: {} });
+          this.updateFormData(this.metadata, formData);
+
           if ((this.id || this.edit) && this.metadata) {
             if (this.id) {
               this.editForm = true;
@@ -250,6 +255,17 @@ export class GenericFormComponent implements OnChanges, OnInit {
           }
         }),
         ((error: any) => this.metadataError = error));
+  }
+
+  public addAutocompleteProperty(metadata: any, property?: Subject<any>) {
+    property = property || new Subject<any>();
+    metadata.forEach((element) => {
+      if (element.key) {
+        element.autocompleteData = property;
+      } else if (element.children) {
+        this.addAutocompleteProperty(element.children, property);
+      }
+    });
   }
 
   public saveHiddenFields(metadata: Field[]) {
@@ -512,6 +528,11 @@ export class GenericFormComponent implements OnChanges, OnInit {
       this.service.submitForm(this.endpoint, newData).subscribe(
         ((response: any) => {
           this.parseResponse(response);
+          this.event.emit({
+            type: 'sendForm',
+            data: response,
+            status: 'success'
+          });
         }),
         ((errors: any) => this.parseError(errors.errors)));
     }
