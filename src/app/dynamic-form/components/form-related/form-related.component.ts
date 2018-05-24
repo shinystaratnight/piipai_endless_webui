@@ -220,7 +220,7 @@ export class FormRelatedComponent
             const query = {};
             this.relatedAutocomplete.related.forEach((field) => {
               if (field === 'state') {
-                query['region'] = `{region.id}`;
+                query['region'] = `{state.id}`;
               } else {
                 query[field] = `{${field}.id}`;
               }
