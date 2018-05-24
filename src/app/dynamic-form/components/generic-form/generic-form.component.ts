@@ -218,7 +218,10 @@ export class GenericFormComponent implements OnChanges, OnInit {
 
   public getMetadata(endpoint) {
     this.service
-      .getMetadata(endpoint, '?type=form' + (this.metadataQuery ? `&${this.metadataQuery}` : ''))
+      .getMetadata(
+        endpoint,
+        (this.id || this.edit ? '?type=form' : '?type=formadd') + (this.metadataQuery ? `&${this.metadataQuery}` : '') //tslint:disable-line
+      )
       .subscribe(
         ((data: any) => {
           this.setModeForElement(data, this.mode);

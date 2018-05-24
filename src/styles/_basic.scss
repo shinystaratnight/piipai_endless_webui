@@ -267,6 +267,7 @@ select.not-empty {
   border-color: $brand-primary;
 
   background-color: $brand-primary;
+  z-index: 1;
 }
 
 @each $item in $themes {
