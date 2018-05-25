@@ -4,7 +4,7 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { FormElementDirective } from './form-element.directive';
-import { FormInputComponent } from './../form-input/form-input.component';
+import { FormInputComponent } from '../components/form-input/form-input.component';
 
 @Component({
   selector: 'container',

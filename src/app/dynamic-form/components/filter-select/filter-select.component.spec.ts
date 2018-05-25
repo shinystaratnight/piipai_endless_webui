@@ -7,6 +7,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { FilterSelectComponent } from './filter-select.component';
 
+import { Subject } from 'rxjs/Subject';
+
 describe('FilterSelectComponent', () => {
   let fixture: ComponentFixture<FilterSelectComponent>;
   let comp: FilterSelectComponent;
@@ -56,6 +58,7 @@ describe('FilterSelectComponent', () => {
     TestBed.compileComponents().then(() => {
       fixture = TestBed.createComponent(FilterSelectComponent);
       comp = fixture.componentInstance;
+      comp.filterSubscription = new Subject().subscribe();
     });
   }));
 

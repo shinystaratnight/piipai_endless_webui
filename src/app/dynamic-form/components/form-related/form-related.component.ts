@@ -5,7 +5,9 @@ import {
   ViewChild,
   Output,
   EventEmitter,
-  OnDestroy } from '@angular/core';
+  OnDestroy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
@@ -37,7 +39,7 @@ export interface CustomField {
 
 @Component({
   selector: 'form-related',
-  templateUrl: 'form-related.component.html',
+  templateUrl: './form-related.component.html',
   styleUrls: ['./form-related.component.scss']
 })
 
@@ -96,6 +98,7 @@ export class FormRelatedComponent
 
   public linkPath: string;
   public allowPermissions: string[];
+  public relatedAutocomplete: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -106,10 +109,12 @@ export class FormRelatedComponent
     private genericFormService: GenericFormService,
     private permission: CheckPermissionService,
     private navigation: NavigationService,
-    private userService: UserService
+    private userService: UserService,
+    private cd: ChangeDetectorRef
   ) { super(); }
 
   public ngOnInit() {
+    this.addControl(this.config, this.fb);
     this.skillEndpoint = this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
       this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
     this.display =
@@ -120,15 +125,14 @@ export class FormRelatedComponent
     if (this.fields) {
       this.fields.push(this.param);
     }
-
+    this.checkAutocomplete();
+    this.checkFormData();
     if (!this.config.editForm && this.config.read_only) {
       return;
     }
-    this.addControl(this.config, this.fb);
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
-    this.checkFormData();
     if (this.config.custom && this.config.custom.length) {
       this.generateCustomTemplate(this.config.custom);
     }
@@ -211,6 +215,36 @@ export class FormRelatedComponent
             if (this.config.read_only) {
               this.viewMode = true;
             }
+          }
+          if (this.relatedAutocomplete) {
+            const query = {};
+            this.relatedAutocomplete.related.forEach((field) => {
+              if (field === 'state') {
+                query['region'] = `{region.id}`;
+              } else {
+                query[field] = `{${field}.id}`;
+              }
+            });
+
+            this.getOptions.call(this, this.relatedAutocomplete.search, 0 , false, this.setValue, undefined, query); //tslint:disable-line
+          }
+        }
+      });
+    }
+  }
+
+  public checkAutocomplete() {
+    if (this.config.autocompleteData) {
+      this.config.autocompleteData.subscribe((data) => {
+        this.relatedAutocomplete = undefined;
+        if (data.hasOwnProperty(this.config.key)) {
+          if (data[this.config.key].related) {
+            this.relatedAutocomplete = {
+              search: data[this.config.key].value,
+              related: data[this.config.key].related
+            };
+          } else {
+            this.getOptions.call(this, data[this.config.key].value, 0, false, this.setValue);
           }
         }
       });
@@ -603,6 +637,7 @@ export class FormRelatedComponent
     this.list = null;
     this.count = null;
     this.previewList = null;
+    this.cd.detectChanges();
   }
 
   public deleteItem(index: number, item: any, api: boolean) {
@@ -707,7 +742,7 @@ export class FormRelatedComponent
     return query.length > 1 ? query : '';
   }
 
-  public getOptions(value, offset, concat = false, callback?, id?) {
+  public getOptions(value, offset, concat = false, callback?, id?, customQuery?) {
     let endpoint = this.config.endpoint;
     let query = '';
     if (value) {
@@ -717,6 +752,9 @@ export class FormRelatedComponent
     query += `limit=${this.limit}&offset=${offset}`;
     query += this.generateFields(this.fields);
     query += this.generateQuery(this.config.query);
+    if (customQuery) {
+      query += this.generateQuery(customQuery);
+    }
     if (!this.count || (this.count && offset < this.count && concat)) {
       this.lastElement += this.limit;
       this.genericFormService.getByQuery(endpoint, query).subscribe(
@@ -756,6 +794,8 @@ export class FormRelatedComponent
     let result;
     if (this.config.showIf && this.checkExistKey(this.config.showIf, key)) {
       result = this.checkShowRules(this.config.showIf, data);
+    } else if (this.relatedAutocomplete && this.relatedAutocomplete.related && this.checkExistKey(this.relatedAutocomplete.related, key)) { //tslint:disable-line
+      result = this.checkShowRules(this.relatedAutocomplete.related, data);
     }
     return result || false;
   }

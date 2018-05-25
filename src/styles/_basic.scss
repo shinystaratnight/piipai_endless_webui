@@ -68,8 +68,9 @@ input {
   border-color: rgba(#333, .2);
 }
 
-input.not-empty {
-  border-color: rgba(#333, .3) !important;
+input.not-empty,
+select.not-empty {
+  border-color: rgba(#333, .3);
 
   background-color: #fefefe;
 
@@ -101,6 +102,19 @@ input.not-empty {
 }
 
 /*---------- Bootstrap ---------- */
+
+.modal-backdrop {
+  z-index: 1;
+}
+
+.modal {
+  z-index: 1;
+}
+
+.input-group .form-control,
+.input-group .form-control:hover {
+  z-index: 1;
+}
 
 .tooltip {
 
@@ -137,6 +151,16 @@ input.not-empty {
 .btn-primary {
   border-color: $brand-primary;
   background-color: $brand-primary;
+
+  &:focus {
+    box-shadow: 0 0 2px rgba($brand-primary, .5);
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        box-shadow: 0 0 2px rgba(map-get($theme-colors, $item), .5);
+      }
+    }
+  }
 }
 
 .badge {
@@ -245,6 +269,12 @@ input.not-empty {
 
 .form-control:focus {
   box-shadow: none;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      border-color: map-get($theme-colors, $item);
+    }
+  }
 }
 
 .list-group-item:last-child {
@@ -288,6 +318,13 @@ input.not-empty {
   padding: 40px;
 }
 
+.page-item.active .page-link {
+  border-color: $brand-primary;
+
+  background-color: $brand-primary;
+  z-index: 1;
+}
+
 @each $item in $themes {
   .#{$item}-theme .bg-primary {
     background-color: map-get($theme-colors, $item) !important;
@@ -309,8 +346,13 @@ input.not-empty {
 
 @each $item in $themes {
   .#{$item}-theme .page-item.active .page-link {
-    background-color: map-get($theme-colors, $item) !important;
-    border-color: map-get($theme-colors, $item) !important;
+    border-color: map-get($theme-colors, $item);
+
+    background-color: map-get($theme-colors, $item);
+  }
+
+  .#{$item}-theme .page-link {
+    color: map-get($theme-colors, $item);
   }
 }
 

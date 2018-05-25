@@ -215,7 +215,7 @@
           size="sm"
           (pageChange)="pageChange()">
         </ngb-pagination>
-        <div class="ml-2">{{data.count}} {{config.list.label}}</div>
+        <div class="ml-2">{{data.count}} {{config.list.pagination_label || config.list.label}}</div>
       </div>
     </div>
   </div>

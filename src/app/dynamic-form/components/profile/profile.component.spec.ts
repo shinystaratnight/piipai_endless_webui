@@ -6,7 +6,7 @@ import { DebugElement } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ProfileComponent } from './profile.component';
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
+import { GenericFormService } from '../../services';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';

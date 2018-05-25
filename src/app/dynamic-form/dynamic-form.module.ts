@@ -10,6 +10,7 @@ import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { WebCamComponent } from 'ng2-webcam';
 import { ButtonRadioDirective } from 'ngx-bootstrap';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { GooglePlaceModule } from 'ng2-google-place-autocomplete';
 
 import { environment } from '../environment';
 
@@ -35,6 +36,7 @@ import { directives } from './directives';
       apiKey: process.env.GOOGLE_GEO_CODING_API_KEY || environment.GOOGLE_GEO_CODING_API_KEY
     }),
     InfiniteScrollModule,
+    GooglePlaceModule,
     SharedModule,
   ],
   exports: [

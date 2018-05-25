@@ -3,8 +3,8 @@
 <div class="container" *ngIf="!token">
   <div class="login-wrapper">
     <div class="login-title">
-      <img src="/assets/img/logo.svg" alt="R3sourcer">
-      <p>R3sourcer company</p>
+      <img src="{{settings.logo || '/assets/img/logo.svg'}}" alt="R3sourcer">
+      <p>{{settings.company_name || 'R3sourcer'}} company</p>
     </div>
 
     <div class="login-form">
@@ -18,19 +18,20 @@
         [data]="data"
         [errors]="error"
         [showResponse]="true"
+        [form]="additionalData"
         (redirect)="redirectHandler($event)"
         (responseForm)="responseHandler($event)"
         (errorForm)="errorHandler($event)"
         (event)="formEvent($event)">
         <div class="links form-group">
           <label class="form-element-checkbox">
-            <input type="checkbox" class="form-check-input" hidden>
+            <input type="checkbox" class="form-check-input" [ngModel]="rememberMe" (ngModelChange)="updateCheckbox($event)" hidden>
             <div class="custom-checkbox">
               <i fa name="check"></i>
             </div>
             <span>Remember me</span>
           </label>
-          <a class="forgot" href="#">Forgot Password?</a>
+          <a class="forgot" [routerLink]="['/login']">Forgot Password?</a>
         </div>
         <button class="btn btn-primary login-button" type="submit">Lоgin <spinner *ngIf="loginProcess"></spinner></button>
       </generic-form>

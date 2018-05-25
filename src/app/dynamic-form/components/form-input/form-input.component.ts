@@ -25,8 +25,6 @@ import * as moment from 'moment-timezone';
 })
 
 export class FormInputComponent extends BasicElementComponent implements OnInit, AfterViewInit {
-  @ViewChild('input')
-  public input;
 
   public config;
   public group: FormGroup;
@@ -34,24 +32,47 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public message: any;
   public key: any;
   public label: boolean;
+  public filteredList: any[];
+  public elementRef: ElementRef;
+  public displayValue: string;
+  public viewMode: boolean;
 
   public query = '';
-  public filteredList: any[];
   public list = [];
   public limit = 10;
   public lastElement = 0;
-  public elementRef;
   public hideAutocomplete = true;
-
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
+  public autocompleteFields = {
+    country: {
+      label: 'long_name',
+      field: 'country',
+      value: '',
+    },
+    administrative_area_level_1: {
+      label: 'long_name',
+      field: 'state',
+      value: '',
+      related: ['country'],
+    },
+    locality: {
+      label: 'long_name',
+      field: 'city',
+      value: '',
+      related: ['country', 'state']
+    },
+    postal_code: {
+      label: 'short_name',
+      field: 'postal_code',
+      value: '',
+    },
+    keys: ['country', 'administrative_area_level_1', 'locality', 'postal_code']
+  };
 
-  public displayValue: string;
+  @ViewChild('input') public input;
 
-  public viewMode: boolean;
-
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  @Output() public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
@@ -68,6 +89,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
+    this.checkAutocomplete();
     if (this.config.type !== 'static') {
       this.createEvent();
     }
@@ -121,6 +143,16 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
           this.viewMode = this.config.read_only || false;
         }
         this.setInitValue();
+      });
+    }
+  }
+
+  public checkAutocomplete() {
+    if (this.config.autocompleteData) {
+      this.config.autocompleteData.subscribe((data) => {
+        if (data.hasOwnProperty(this.config.key)) {
+          this.group.get(this.key).patchValue(data[this.config.key].value);
+        }
       });
     }
   }
@@ -213,6 +245,38 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       default:
         break;
     }
+  }
+
+  public getAddress(address) {
+    this.group.get(this.key).patchValue(address.formatted_address);
+
+    this.autocompleteFields.keys.forEach((field: string) => {
+      this.autocompleteFields[field].value = undefined;
+      this.autocompleteFields[field].long_name_value = '';
+    });
+
+    for (let i = address.address_components.length - 1; i; i--) {
+      let addressElement = address.address_components[i];
+      let addressType = addressElement.types[0];
+
+      if (this.autocompleteFields[addressType]) {
+        let val = addressElement[this.autocompleteFields[addressType].label];
+
+        this.autocompleteFields[addressType].value = val;
+      }
+    }
+
+    const result =  {};
+    this.autocompleteFields.keys.forEach((field: string) => {
+      const target = this.autocompleteFields[field];
+
+      result[target.field] = {
+        value: target.value,
+        related: target.related
+      };
+    });
+
+    this.config.autocompleteData.next(result);
   }
 
   @HostListener('document:click', ['$event'])
