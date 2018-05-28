@@ -21,7 +21,7 @@
   <div class="form-element-list-title title">
     <div>
       <h4>{{config.templateOptions.label}}</h4>
-      <p>Here you can see the tags which belong to the candidate</p>
+      <p>{{config.help}}</p>
     </div>
     <button type="button" class="btn btn-primary btn-shadow"
       *ngIf="(showButton || config.delay) && checkPermissions('post')"

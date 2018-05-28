@@ -7,6 +7,7 @@ let counter = 0;
 export class Form {
 
   public allowMethods: string[];
+  public hasTabs: boolean;
 
   private _mode: BehaviorSubject<string>;
   get mode() {
@@ -29,5 +30,4 @@ export class Form {
   public changeMode(mode: string) {
     this._mode.next(mode);
   }
-
 }

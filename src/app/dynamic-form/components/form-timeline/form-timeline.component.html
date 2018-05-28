@@ -26,6 +26,9 @@
   </select>
 
   <i *ngIf="getState(currentState).state === 0" class="info" placement="right" [ngbTooltip]="requirements">i</i>
+  <button type="button" (click)="open(getState(currentState))" *ngIf="getState(currentState).state === 1" class="btn btn-sm badge badge-outline">
+    <i fa name="check"></i>
+  </button>
 </div>
 
 <template #stateModal let-c="close" let-d="dismiss">
@@ -78,9 +81,11 @@
 <template #requirements>
   <div class="info-block">
     <h6>To activate this state, fill in the required fields:</h6>
-    {{getState(currentState)|json}}
     <ul>
-      <li *ngFor="let option of getState(currentState).state.requirements">{{item}}</li>
+      <li *ngFor="let option of getState(currentState).requirements">
+        <i fa class="icon" name="circle"></i>
+        {{option}}
+      </li>
     </ul>
   </div>
 </template>

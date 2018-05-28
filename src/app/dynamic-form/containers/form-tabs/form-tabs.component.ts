@@ -30,6 +30,8 @@ export class FormTabsComponent implements OnInit {
 
   public ngOnInit() {
     this.canUpdate = this.formService.getAllowedMethods(this.formId).indexOf('update') > -1;
+
+    this.formService.getForm(this.formId).hasTabs = true;
   }
 
   public eventHandler(e) {

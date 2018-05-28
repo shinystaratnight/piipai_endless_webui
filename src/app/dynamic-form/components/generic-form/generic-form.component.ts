@@ -167,8 +167,11 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.formService.getForm(this.formId).mode
+        .skip(1)
         .subscribe((mode: string) => {
           this.mode = mode;
+
+          this.modeEvent.emit(this.mode);
 
           this.toggleModeMetadata(this.metadata, this.mode);
         })
@@ -1100,5 +1103,9 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         this.addCustomTemplates(el.children, data);
       }
     });
+  }
+
+  public hasTabs() {
+    return this.formService.getForm(this.formId).hasTabs;
   }
 }

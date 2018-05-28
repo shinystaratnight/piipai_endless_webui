@@ -24,7 +24,7 @@
                   <i fa name="trash"></i>
                   Delete
                 </button>
-              <button type="button" class="btn btn-primary btn-shadow ml-auto"
+              <button type="button" class="btn btn-primary btn-shadow ml-auto button-edit"
                 *ngIf="formMode === 'view' && checkPermission('update')"
                 (click)="changeMode(pageData)">
                   <i fa name="pencil"></i>
@@ -53,16 +53,18 @@
       (str)="changeFormLabel($event)">
     </form-builder>
   </div>
+
   <div class="datatable-list" *ngSwitchCase="'list'">
     <generic-list [allowPermissions]="permissionMethods" [endpoint]="pageData.endpoint"></generic-list>
   </div>
+
   <div *ngSwitchCase="'profile'">
     <profile [id]="user.data.contact.contact_id"></profile>
   </div>
-
 </div>
-  <dashboard *ngIf="dashboard"
-    [pages]="pagesList"
-    [userModules]="userModules"
-    [modulesList]="modulesList"
-    (changeWidgetList)="updateNavigation($event)"></dashboard>
+
+<dashboard *ngIf="dashboard"
+  [pages]="pagesList"
+  [userModules]="userModules"
+  [modulesList]="modulesList"
+  (changeWidgetList)="updateNavigation($event)"></dashboard>

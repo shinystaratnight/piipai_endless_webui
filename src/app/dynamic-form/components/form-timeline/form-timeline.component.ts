@@ -1,4 +1,12 @@
-import { Component, ViewChild, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  OnInit,
+  EventEmitter,
+  Output,
+  OnDestroy,
+  ViewEncapsulation
+} from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { FormatString } from '../../../helpers/format';
@@ -28,9 +36,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
   public currentState: any;
 
-  public dropdown: boolean = true;
+  public dropdown: boolean;
   public selectArray: any[];
-  public droped: boolean;
 
   constructor(public modalService: NgbModal) {}
 
@@ -74,34 +81,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         this.selectArray = this.config.options.filter((el) => {
           return el.state < 2;
         });
+
+        this.currentState = this.selectArray[0].id;
       }
-
-      this.currentState = this.selectArray[0].id;
-
-      // if (this.dropdown) {
-      //   this.config.options.forEach((el) => el.collapse = true);
-
-      //   let state;
-      //   for (let i = 0; i < this.config.options.length; i++) {
-      //     if (this.config.options[i].state === 1) {
-      //       if (state && state.state !== 1) {
-      //         state = this.config.options[i];
-      //       } else if (!state) {
-      //         state = this.config.options[i];
-      //       }
-      //     }
-
-      //     if (this.config.options[i].state === 0) {
-      //       if (state && state.state !== 0) {
-      //         state = this.config.options[i];
-      //       }
-      //     }
-      //   }
-
-      //   if (state) {
-      //     state.collapse = false;
-      //   }
-      // }
     }
   }
 
@@ -118,15 +100,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public open(state): void {
-    // if (this.dropdown && !this.droped) {
-    //   this.droped = true;
-    //   this.config.options.forEach((el) => el.collapse = false);
-    //   return;
-    // }
-
     this.modalData = {};
     if (state.state === 1 || state.state === 2) {
-      // this.currentState = state;
       let title = '';
       if (state.state === 1) {
         title = state.name_before_activation;

@@ -26,9 +26,9 @@
     justify-content: space-between;
     align-items: center;
 
-    height: 28px;
+    height: 22px;
 
-    min-height: 28px;
+    min-height: 22px;
 
     border: 1px solid rgba($gray, .2);
 
@@ -36,10 +36,6 @@
 
     overflow: hidden;
     cursor: default;
-
-    div {
-      width: 230px;
-    }
 
     i {
       font-size: 14px;

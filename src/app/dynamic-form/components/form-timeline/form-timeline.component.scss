@@ -23,6 +23,24 @@
       display: flex;
       align-items: center;
 
+      .btn.btn-sm {
+        padding: 1px 2px 0px 2px;
+        margin-left: .5rem;
+
+        font-size: 12px;
+        line-height: 14px;
+
+        border-color: $brand-success;
+        color: $brand-success;
+
+        &:hover {
+          border-color: $brand-success;
+
+          background-color: $brand-success;
+          color: white;
+        }
+      }
+
       & .timeline-element {
         margin-bottom: 0;
       }
@@ -88,9 +106,7 @@
   .info {
     position: relative;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
 
     width: 1rem;
     height: 1rem;
@@ -125,12 +141,52 @@
   }
 
   .info-block {
+    padding: 12px 16px;
+
     text-align: left;
 
     h6 {
       font-size: 12px;
       line-height: 16px;
     }
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      position: relative;
+
+      padding-left: 16px;
+
+      font-size: 12px;
+      line-height: 14px;
+
+      list-style: none;
+
+      color: rgba($gray, .7);
+    }
+
+    .icon {
+      position: absolute;
+      top: 4px;
+      left: 5px;
+
+      font-size: 6px !important;
+
+      color: $brand-primary;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          color: map-get($theme-colors, $item);
+        }
+      }
+    }
+  }
+
+  option {
+    color: rgba($gray, .8);
   }
 
   .active {

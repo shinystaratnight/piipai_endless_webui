@@ -2,7 +2,7 @@
   <div [ngClass]="{'col-12 col-sm-9 col-md-9 col-lg-9 mt-3': modal}">
     <div [ngClass]="{'card': modal}">
       <h5 *ngIf="modal" class="card-header p-3 bg-primary text-white">{{title}}</h5>
-      <div [ngClass]="{'card-content p-3': modal}">
+      <div [ngClass]="{'card-content p-3': modal}" [class.has-tabs]="hasTabs()">
         <div *ngIf="!show" class="spinner">
           <div class="double-bounce1"></div>
           <div class="double-bounce2"></div>

@@ -18,7 +18,7 @@
   input,
   select,
   textarea {
-    padding: 4px 10px 4px 0;
+    padding: 0;
 
     font-size: 14px;
     line-height: 16px;
@@ -42,11 +42,19 @@
     }
   }
 
-  select {
+  select.form-control:not([size]):not([multiple]) {
+    height: 22px;
+    min-height: 22px;
+
     padding-right: 30px;
+
+    text-align: left;
   }
 
   input {
+    height: 22px;
+    min-height: 22px;
+
     padding: 6px 10px 5px 0;
   }
 
@@ -66,7 +74,15 @@
   }
 
   .custom-select {
-    height: 28px !important;
+    background: #fff url(/assets/img/down-arrow.svg) no-repeat;
+    background-position: right .75rem center;
+    background-size: 8px 8px;
+
+    &:focus {
+      background: url(/assets/img/down-arrow.svg) no-repeat;
+      background-position: right .75rem center;
+      background-size: 8px 8px;
+    }
   }
 
   .autocomplete-value {
@@ -77,22 +93,34 @@
   }
 
   .input-group-addon {
+    width: auto;
+
     background-color: transparent;
     border-right: none !important;
     border-top: none !important;
     border-radius: 0 !important;
     color: inherit;
 
+    padding: 0 5px;
+
+    font-size: 14px !important;
+
     border-bottom: 1px solid rgba($gray, .1);
   }
 
   &-content {
     position: relative;
+    display: flex;
 
     width: 80%;
     max-width: 300px;
-    max-height: 28px;
-    display: flex;
+
+    height: 22px;
+    max-height: 22px;
+    min-height: 22px;
+
+    font-size: 14px;
+    line-height: 20px;
 
     &.full {
       width: 100%;
@@ -112,7 +140,6 @@
       max-height: none;
 
       .input-group {
-        min-width: 224px;
         max-width: 300px;
       }
     }
@@ -122,7 +149,7 @@
     }
 
     button {
-      padding: 5px;
+      padding: 0 5px;
 
       border: none;
       outline: none;
