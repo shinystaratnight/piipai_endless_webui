@@ -52,6 +52,10 @@
     &.active {
       border-color: $gray;
     }
+
+    &.form-control {
+      padding-right: 65px;
+    }
   }
 
   &-list {
@@ -98,5 +102,13 @@
         background-color: map-get($theme-colors, $item);
       }
     }
+  }
+
+  &-preloader {
+    padding: .2rem;
+
+    text-align: center;
+
+    background-color: rgba($gray, .1);
   }
 }

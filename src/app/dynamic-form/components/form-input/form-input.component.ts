@@ -46,7 +46,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public modalScrollThrottle = 50;
   public autocompleteFields = {
     country: {
-      label: 'long_name',
+      label: 'short_name',
       field: 'country',
       value: '',
     },

@@ -11,6 +11,7 @@ label {
     position: relative;
 
     display: flex;
+    flex-wrap: wrap;
 
     margin-top: -40px;
     margin-bottom: 40px;
@@ -134,7 +135,7 @@ label {
   }
 
   &-block {
-    margin-right: .5rem;
+    margin-right: auto;
 
     .description {
       font-size: 12px;
@@ -211,7 +212,6 @@ label {
 }
 
 .date {
-  margin-left: auto;
   margin-top: 80px;
 
   text-align: right;

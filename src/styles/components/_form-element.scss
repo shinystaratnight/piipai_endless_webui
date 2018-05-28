@@ -24,7 +24,7 @@
     line-height: 16px;
 
     border: none;
-    border-radius: 0 !important;
+    border-radius: 0;
     outline: none;
 
     border-bottom: 1px solid rgba($gray, .1);
@@ -40,6 +40,10 @@
         }
       }
     }
+  }
+
+  select {
+    padding-right: 30px;
   }
 
   input {
@@ -111,6 +115,10 @@
         min-width: 224px;
         max-width: 300px;
       }
+    }
+
+    &.many {
+      max-height: none;
     }
 
     button {

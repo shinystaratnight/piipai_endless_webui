@@ -1,16 +1,32 @@
 <div *ngIf="!this.config.hide && !this.dropdown" class="timeline">
-  <template *ngFor="let state of config.options; let last = last" [ngTemplateOutlet]="stateElement" [ngOutletContext]="{state: state, last: last}"></template>
+  <template *ngFor="let state of config.options; let last = last"
+    [ngTemplateOutlet]="stateElement"
+    [ngOutletContext]="{state: state, last: last}">
+  </template>
 </div>
 
-<div *ngIf="!this.config.hide && this.dropdown" class="timeline" [class.timeline-dropdown-menu]="dropdown">
-  <div class="current-state">
-    <template [ngTemplateOutlet]="state" [ngOutletContext]="{state: currentState}"></template>
-  </div>
-  <div>
-    <template *ngFor="let state of config.options; let last = last" [ngTemplateOutlet]="stateElement" [ngOutletContext]="{state: state, last: last}"></template>
-  </div>
-</div>
+<div *ngIf="selectArray && this.dropdown" class="timeline timeline-select-wrapper">
+  <select class="timeline-element badge badge-outline timeline-select"
+    [ngClass]="{
+      'need-requirements': getState(currentState).state === 0,
+      'allowed': getState(currentState).state === 1,
+      'active': getState(currentState).state === 2,
+      'visited': getState(currentState).state === 3,
+      'not-allowed': getState(currentState).state === 4
+    }"
+    [(ngModel)]="currentState">
+      <option *ngFor="let option of selectArray" [value]="option.id">
+        <span *ngIf="option.state === 2">
+          {{(option.name_after_activation) ? option.name_after_activation : option.name_before_activation}}
+        </span>
+        <span *ngIf="option.state !== 2">
+          {{option.name_before_activation}}
+        </span>
+      </option>
+  </select>
 
+  <i *ngIf="getState(currentState).state === 0" class="info" placement="right" [ngbTooltip]="requirements">i</i>
+</div>
 
 <template #stateModal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
@@ -50,11 +66,21 @@
     </svg>
     <div class="timeline-requirements" *ngIf="state.state === 0 && state.requirements && state.requirements.length > 0">
       <div class="timeline-requirements-item p-2">
-        <h6>Requirements:</h6>
+        <h6>To activate this state, fill in the required fields:</h6>
         <ul class="list-unstyled m-0">
           <li *ngFor="let item of state.requirements; let i = index">{{i + 1}}.&nbsp;{{item}}</li>
         </ul>
       </div>
     </div>
+  </div>
+</template>
+
+<template #requirements>
+  <div class="info-block">
+    <h6>To activate this state, fill in the required fields:</h6>
+    {{getState(currentState)|json}}
+    <ul>
+      <li *ngFor="let option of getState(currentState).state.requirements">{{item}}</li>
+    </ul>
   </div>
 </template>

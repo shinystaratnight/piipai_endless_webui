@@ -26,10 +26,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public objectId: string;
   public query: any;
 
-  public previousState: any;
   public currentState: any;
 
-  public dropdown: boolean = false;
+  public dropdown: boolean = true;
+  public selectArray: any[];
   public droped: boolean;
 
   constructor(public modalService: NgbModal) {}
@@ -71,29 +71,43 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       );
 
       if (this.dropdown) {
-        this.config.options.forEach((el) => el.collapse = true);
-
-        let state;
-        for (let i = 0; i < this.config.options.length; i++) {
-          if (this.config.options[i].state === 1) {
-            if (state && state.state !== 1) {
-              state = this.config.options[i];
-            } else if (!state) {
-              state = this.config.options[i];
-            }
-          }
-
-          if (this.config.options[i].state === 0) {
-            if (state && state.state !== 0) {
-              state = this.config.options[i];
-            }
-          }
-        }
-
-        if (state) {
-          state.collapse = false;
-        }
+        this.selectArray = this.config.options.filter((el) => {
+          return el.state < 2;
+        });
       }
+
+      this.currentState = this.selectArray[0].id;
+
+      // if (this.dropdown) {
+      //   this.config.options.forEach((el) => el.collapse = true);
+
+      //   let state;
+      //   for (let i = 0; i < this.config.options.length; i++) {
+      //     if (this.config.options[i].state === 1) {
+      //       if (state && state.state !== 1) {
+      //         state = this.config.options[i];
+      //       } else if (!state) {
+      //         state = this.config.options[i];
+      //       }
+      //     }
+
+      //     if (this.config.options[i].state === 0) {
+      //       if (state && state.state !== 0) {
+      //         state = this.config.options[i];
+      //       }
+      //     }
+      //   }
+
+      //   if (state) {
+      //     state.collapse = false;
+      //   }
+      // }
+    }
+  }
+
+  public getState(state: string): any {
+    if (this.config.options) {
+      return this.config.options.find((el) => el.id === state);
     }
   }
 
@@ -104,15 +118,15 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public open(state): void {
-    if (this.dropdown && !this.droped) {
-      this.droped = true;
-      this.config.options.forEach((el) => el.collapse = false);
-      return;
-    }
+    // if (this.dropdown && !this.droped) {
+    //   this.droped = true;
+    //   this.config.options.forEach((el) => el.collapse = false);
+    //   return;
+    // }
 
     this.modalData = {};
     if (state.state === 1 || state.state === 2) {
-      this.currentState = state;
+      // this.currentState = state;
       let title = '';
       if (state.state === 1) {
         title = state.name_before_activation;

@@ -20,6 +20,10 @@ import { NavigationService, UserService } from '../../../services';
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/skip';
+import 'rxjs/add/operator/filter';
 
 export interface RelatedObject {
   id: string;
@@ -45,10 +49,13 @@ export interface CustomField {
 
 export class FormRelatedComponent
   extends BasicElementComponent
-    implements OnInit, OnDestroy {
+    implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('search')
   public search;
+
+  @ViewChild('searchElement')
+  public searchElement;
 
   @ViewChild('modal')
   public modal;
@@ -78,9 +85,11 @@ export class FormRelatedComponent
 
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
-  public count: number;
+
+  public skipScroll = false;
 
   public dataOfList: any;
+  public count: number;
   public isCollapsed: boolean = false;
 
   public replaceElements: any = [];
@@ -99,6 +108,7 @@ export class FormRelatedComponent
   public linkPath: string;
   public allowPermissions: string[];
   public relatedAutocomplete: any;
+  public subscription: Subscription;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -149,6 +159,18 @@ export class FormRelatedComponent
 
     if (this.config.editForm && this.config.read_only) {
       this.viewMode = true;
+    }
+  }
+
+  public ngAfterViewInit() {
+    if (this.search) {
+      this.subscription = this.search.valueChanges
+        .skip(2)
+        .filter((value) => value !== null)
+        .debounceTime(400)
+        .subscribe((res) => {
+          this.filter(this.searchValue);
+        });
     }
   }
 
@@ -486,7 +508,10 @@ export class FormRelatedComponent
   }
 
   public onModalScrollDown(): void {
-    this.generateList(this.searchValue, true);
+    if (!this.skipScroll && (this.previewList && this.previewList.length !== this.count)) {
+      this.skipScroll = true;
+      this.generateList(this.searchValue, true);
+    }
   }
 
   public deleteElement(closeModal): void {
@@ -546,17 +571,23 @@ export class FormRelatedComponent
   }
 
   public openAutocomplete(): void {
+    // debugger;
+    if (this.hideAutocomplete === true) {
       this.searchValue = null;
-      this.hideAutocomplete = false;
+      // this.hideAutocomplete = false;
+      // this.generateList(this.searchValue);
       this.generateList(this.searchValue);
       setTimeout(() => {
-        this.search.nativeElement.focus();
+        this.searchElement.nativeElement.focus();
       }, 50);
+    }
+    console.log('openAutocomplete');
   }
 
   public generateList(value, concat = false): void {
+    this.hideAutocomplete = false;
     if (this.config.useOptions) {
-      this.hideAutocomplete = false;
+      console.log('useOptions');
       if (this.searchValue) {
         this.filter(this.searchValue);
       } else {
@@ -570,7 +601,7 @@ export class FormRelatedComponent
         this.generatePreviewList(this.list);
       }
     } else {
-      this.hideAutocomplete = false;
+      console.log('notUseOptions');
       this.getOptions(value, this.lastElement, concat);
     }
   }
@@ -581,19 +612,19 @@ export class FormRelatedComponent
   }
 
   public resetList() {
+    console.log('resetList');
     setTimeout(() => {
+      console.log(this);
       this.list = null;
       this.previewList = null;
       this.lastElement = 0;
       this.hideAutocomplete = true;
       this.count = null;
-      if (!this.config.many) {
-        this.searchValue = null;
-      }
     }, 150);
   }
 
   public filter(value) {
+    console.log('filter');
     this.lastElement = 0;
     this.count = null;
     this.previewList = null;
@@ -743,6 +774,7 @@ export class FormRelatedComponent
   }
 
   public getOptions(value, offset, concat = false, callback?, id?, customQuery?) {
+    console.log(arguments);
     let endpoint = this.config.endpoint;
     let query = '';
     if (value) {
@@ -759,6 +791,7 @@ export class FormRelatedComponent
       this.lastElement += this.limit;
       this.genericFormService.getByQuery(endpoint, query).subscribe(
         (res: any) => {
+          this.skipScroll = false;
           this.count = res.count;
           if (res.results && res.results.length) {
             const formatString = new FormatString();
@@ -851,5 +884,9 @@ export class FormRelatedComponent
       let combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
     }
+  }
+
+  public trackByFn(value) {
+    return value[this.param];
   }
 }

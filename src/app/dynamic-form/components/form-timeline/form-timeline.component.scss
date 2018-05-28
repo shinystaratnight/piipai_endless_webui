@@ -7,34 +7,25 @@
 .timeline {
   padding-bottom: 25px;
 
-  &-dropdown-menu {
+  &-select {
+    padding-right: 30px;
 
-    .timeline-element-wrapper {
-      display: block;
-    }
+    background: #fff url(/assets/img/down-arrow.svg) no-repeat;
+    background-position: right .75rem center;
+    background-size: 8px 8px;
 
-    .timeline-element {
-      margin-bottom: 5px;
-    }
+    -ms-progress-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 
-    .collapse {
-      height: 0px;
-      margin-bottom: 0px;
+    &-wrapper {
+      display: flex;
+      align-items: center;
 
-      line-height: 0;
-      font-size: 0;
-      padding: 0;
-      border: 0;
-
-      .arrow {
-        display: none;
+      & .timeline-element {
+        margin-bottom: 0;
       }
-
-      transition: .5s all ease-out;
-    }
-
-    svg.next {
-      display: none;
     }
   }
 
@@ -56,10 +47,10 @@
       display: block;
     }
 
-    &.active:hover,
-    &.active:focus,
-    &.allowed:hover,
-    &.allowed:focus {
+    &.active:hover:not(.timeline-select),
+    &.active:focus:not(.timeline-select),
+    &.allowed:hover:not(.timeline-select),
+    &.allowed:focus:not(.timeline-select) {
       cursor: pointer;
       box-shadow: 2px 2px 4px rgba($brand-inverse, .3);
     }
@@ -91,6 +82,54 @@
         border-bottom: 10px solid white;
         top: -18px;
       }
+    }
+  }
+
+  .info {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 1rem;
+    height: 1rem;
+
+    margin-left: 8px;
+
+    padding-right: 1px;
+
+    font-size: 12px;
+    line-height: 12px;
+
+    border-radius: 50%;
+    border: 1px solid $gray;
+
+    color: $gray;
+    opacity: .5;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $brand-primary;
+      color: $brand-primary;
+
+      opacity: 1;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          border-color: map-get($theme-colors, $item);
+          color: map-get($theme-colors, $item);
+        }
+      }
+    }
+  }
+
+  .info-block {
+    text-align: left;
+
+    h6 {
+      font-size: 12px;
+      line-height: 16px;
     }
   }
 

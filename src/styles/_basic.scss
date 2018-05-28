@@ -108,7 +108,7 @@ select.not-empty {
 }
 
 .modal {
-  z-index: 1;
+  z-index: 2;
 }
 
 .input-group .form-control,
@@ -206,10 +206,17 @@ select.not-empty {
   }
 }
 
+.modal-header {
+  background-color: #fff;
+}
+
 .modal-content {
   max-height: 90vh;
+
   margin-top: 5vh;
+
   overflow: auto;
+
   box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
 
   .modal-header-wrapper {
@@ -219,13 +226,17 @@ select.not-empty {
     z-index: 100;
   }
 
+  .modal-body {
+    border-radius: .5rem .5rem 0 0;
+  }
+
   .modal-title {
     overflow: hidden;
     white-space: nowrap;
   }
 
   @include media-breakpoint-down('md') {
-    max-height: 100%;
+    max-height: 75vh;
   }
 }
 
@@ -316,6 +327,10 @@ select.not-empty {
 
 .tab-pane {
   padding: 40px;
+
+  @include media-breakpoint-down('md') {
+    padding: 20px;
+  }
 }
 
 .page-item.active .page-link {
@@ -324,6 +339,8 @@ select.not-empty {
   background-color: $brand-primary;
   z-index: 1;
 }
+
+
 
 @each $item in $themes {
   .#{$item}-theme .bg-primary {
@@ -643,6 +660,7 @@ iframe.send-sms {
 
   padding: 32px 0;
 
+  background-color: #fff;
   box-shadow: 0 0 8px rgba($gray, .1);
 
   @include media-breakpoint-down('lg') {
@@ -652,8 +670,8 @@ iframe.send-sms {
 
   .button-delete {
     position: absolute;
-    top: 32px;
-    right: 40px;
+    top: 25px;
+    right: 24px;
 
     font-size: 14px;
     line-height: 18px;
@@ -662,6 +680,10 @@ iframe.send-sms {
     opacity: .3;
 
     background-color: transparent;
+
+    @include media-breakpoint-down('md') {
+      right: 4px;
+    }
 
     &:hover,
     &:focus {
