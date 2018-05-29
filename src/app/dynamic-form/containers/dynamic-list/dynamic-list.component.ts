@@ -606,6 +606,7 @@ export class DynamicListComponent implements
           obj['inline'] = element.inline;
           obj['outline'] = element.outline;
           obj['skillName'] = col.label;
+          obj['description'] = col.description;
           if (element.display) {
             obj.display = this.format(element.display.replace(/{field}/gi, `{${element.field}}`), el); //tslint:disable-line
           }
@@ -997,7 +998,8 @@ export class DynamicListComponent implements
     this.filterService.resetQueries(this.config.list.list);
   }
 
-  public buttonHandler(e) {
+  public buttonHandler(e, action) {
+    action.close();
     this.modalInfo = {};
     if (e && e.value) {
       switch (e.value) {

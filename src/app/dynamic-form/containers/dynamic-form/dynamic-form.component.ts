@@ -6,7 +6,8 @@ import { CustomEvent } from '../../models/custom-event.model';
 
 @Component({
   selector: 'dynamic-form',
-  templateUrl: 'dynamic-form.component.html'
+  templateUrl: 'dynamic-form.component.html',
+  styleUrls: ['./dynamic-form.component.scss']
 })
 
 export class DynamicFormComponent implements OnInit, OnChanges {
@@ -28,6 +29,8 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Input()
   public hiddenFields: any;
 
+  @Input() public formId: number;
+
   @Output()
   public submit: EventEmitter<any> = new EventEmitter<any>();
 
@@ -43,13 +46,14 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Output()
   public resourseData: EventEmitter<any> = new EventEmitter();
 
+  @Input()
   public form: FormGroup;
   public currentForm: any;
 
   constructor(private fb: FormBuilder) {}
 
   public ngOnInit() {
-    this.form = this.fb.group({});
+    this.form = this.form || this.fb.group({});
     this.currentForm = this.config;
   }
 
@@ -206,7 +210,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public removeValuesOfHiddenFields(metadata: Field[], data): void {
     metadata.forEach((el: Field) => {
-      if (el.hide && el.key) {
+      if (el.hide && el.key && !el.saveField) {
         this.removeValue(el.key, data);
       }
     });
@@ -227,7 +231,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public filterSendData(metadata: Field[], data) {
     metadata.forEach((el) => {
-      if (el.send === false) {
+      if (el.send === false && !el.saveField) {
         this.removeValue(el.key, data);
       } else if (el.children) {
         this.filterSendData(el.children, data);
