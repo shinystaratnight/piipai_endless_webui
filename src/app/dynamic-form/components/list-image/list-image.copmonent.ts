@@ -12,13 +12,18 @@ export class ListImageComponent implements OnInit {
   public icon: string;
   public iconClass: string;
   public last: boolean;
+  public file: string;
 
   public ngOnInit() {
     let defaultAvatar: string;
     if (this.config.type === 'picture') {
       defaultAvatar = this.config.default;
       this.src = (this.config.value && this.config.value.thumb)
-        ? this.config.value.thumb : `ecore/media/${defaultAvatar}`;
+        ? this.config.value.thumb : false;
+
+      if (this.config.value) {
+        this.file = this.config.value;
+      }
     } else if (this.config.type === 'icon') {
       if (this.config.values) {
         this.icon = this.config.values[this.config.value];

@@ -63,6 +63,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (!this.config.hide) {
       this.initialize();
       this.checkFormData();
+      this.checkTimelineChange();
     }
     this.checkHiddenProperty();
     this.allowMethods = this.permission.getAllowMethods(undefined, this.config.endpoint);
@@ -253,6 +254,12 @@ export class FormListComponent implements OnInit, OnDestroy {
           this.formData = formData.data;
           this.checkDefaultValues(formData.data);
         });
+    }
+  }
+
+  public checkTimelineChange() {
+    if (this.config.timelineSubject) {
+      this.config.timelineSubject.subscribe(() => this.update.next(true));
     }
   }
 

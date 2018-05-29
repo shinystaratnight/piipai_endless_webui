@@ -29,7 +29,7 @@ export class FormTabsComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.canUpdate = this.formService.getAllowedMethods(this.formId).indexOf('update') > -1;
+    this.canUpdate = this.formService.getAllowedMethods(this.formId).indexOf('update') > -1 && this.config.editForm; //tslint:disable-line
 
     this.formService.getForm(this.formId).hasTabs = true;
   }

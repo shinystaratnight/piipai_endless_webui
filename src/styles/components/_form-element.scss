@@ -54,8 +54,6 @@
   input {
     height: 22px;
     min-height: 22px;
-
-    padding: 6px 10px 5px 0;
   }
 
   .custom-checkbox {
@@ -137,6 +135,7 @@
     &.datepicker {
       flex-wrap: wrap;
 
+      height: auto;
       max-height: none;
 
       .input-group {
@@ -145,6 +144,7 @@
     }
 
     &.many {
+      height: auto;
       max-height: none;
     }
 

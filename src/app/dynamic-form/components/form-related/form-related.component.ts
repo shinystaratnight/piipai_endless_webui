@@ -571,23 +571,18 @@ export class FormRelatedComponent
   }
 
   public openAutocomplete(): void {
-    // debugger;
     if (this.hideAutocomplete === true) {
       this.searchValue = null;
-      // this.hideAutocomplete = false;
-      // this.generateList(this.searchValue);
       this.generateList(this.searchValue);
       setTimeout(() => {
         this.searchElement.nativeElement.focus();
       }, 50);
     }
-    console.log('openAutocomplete');
   }
 
   public generateList(value, concat = false): void {
     this.hideAutocomplete = false;
     if (this.config.useOptions) {
-      console.log('useOptions');
       if (this.searchValue) {
         this.filter(this.searchValue);
       } else {
@@ -601,7 +596,6 @@ export class FormRelatedComponent
         this.generatePreviewList(this.list);
       }
     } else {
-      console.log('notUseOptions');
       this.getOptions(value, this.lastElement, concat);
     }
   }
@@ -612,9 +606,7 @@ export class FormRelatedComponent
   }
 
   public resetList() {
-    console.log('resetList');
     setTimeout(() => {
-      console.log(this);
       this.list = null;
       this.previewList = null;
       this.lastElement = 0;
@@ -624,7 +616,6 @@ export class FormRelatedComponent
   }
 
   public filter(value) {
-    console.log('filter');
     this.lastElement = 0;
     this.count = null;
     this.previewList = null;
@@ -774,7 +765,6 @@ export class FormRelatedComponent
   }
 
   public getOptions(value, offset, concat = false, callback?, id?, customQuery?) {
-    console.log(arguments);
     let endpoint = this.config.endpoint;
     let query = '';
     if (value) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'form-info',
@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 
 export class FormInfoComponent implements OnInit {
   public config: any;
+  public group: any;
 
   public picture: string;
   public available: boolean;
@@ -23,6 +24,7 @@ export class FormInfoComponent implements OnInit {
   public color: any;
   public colorAttr: string;
   public className: any;
+  public viewMode: boolean;
 
   public statusList: any[];
   public more: boolean;
@@ -35,7 +37,11 @@ export class FormInfoComponent implements OnInit {
     5: '#FFD042',
   };
 
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
+
   public ngOnInit() {
+    this.checkModeProperty();
     if (this.config.values && this.config.value) {
       const keys = Object.keys(this.config.values);
 
@@ -78,6 +84,17 @@ export class FormInfoComponent implements OnInit {
     }
   }
 
+  public getConfig(name: string) {
+    if (name === 'title' && !this.config.editForm) {
+      const config = this.config.metadata[name];
+
+      config.templateOptions.label = `${config.key[0].toUpperCase()}${config.key.slice(1)}`;
+      return config;
+    }
+
+    return this.config.metadata[name];
+  }
+
   public getValue(key: string, data: any): any {
     if (key) {
       let keys = key.split('.');
@@ -116,5 +133,13 @@ export class FormInfoComponent implements OnInit {
 
   public getScore(score) {
     return Math.floor(parseFloat(score));
+  }
+
+  public checkModeProperty() {
+    if (this.config && this.config.mode) {
+      this.config.mode.subscribe((mode) => {
+        this.viewMode = mode === 'view';
+      });
+    }
   }
 }

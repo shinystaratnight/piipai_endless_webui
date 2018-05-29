@@ -5,7 +5,7 @@
     </label>
     <div class="form-element-content" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon || config.key === 'password'">
       <input
-        *ngIf="config.type !== 'static' && !viewMode && config.key !== 'street_address'"
+        *ngIf="(config.type !== 'static' || config.key === 'strength') && !viewMode && config.key !== 'street_address'"
         class="form-control"
         [class.not-empty]="group.get(key).value"
         autocomplete="off"
@@ -18,7 +18,7 @@
         [attr.type]="config.templateOptions.type ? (config.templateOptions.type === 'score' && 'number') || config.templateOptions.type : 'text'"
         [attr.id]="key"
         [attr.name]="key"
-        [attr.placeholder]="config.templateOptions.placeholder || config.templateOptions.label || ''"
+        [attr.placeholder]="!config.templateOptions.label ? config.templateOptions.placeholder : ''"
         [readonly]="config.read_only"
         [value]="config.value === 0 || config.value ? config.value : group.get(key).value === 0 || group.get(key).value ? group.get(key).value : ''">
 

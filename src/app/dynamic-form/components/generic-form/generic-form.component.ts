@@ -210,6 +210,56 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
+  public checkFormInfoElement(metadata: any[]) {
+    const infoElement = this.getElementFromMetadata(metadata, 'id');
+
+    if (infoElement && infoElement.type === 'info') {
+      const keys = Object.keys(infoElement.values);
+      infoElement.metadata = {};
+      keys.forEach((el) => {
+        const value = infoElement.values[el];
+        if (typeof value === 'string') {
+          const key = value.replace('.__str__', '');
+          const element = this.getElementFromMetadata(metadata, key);
+
+          if (element) {
+            element.saveField = true;
+            infoElement.metadata[el] = Object.assign(
+              {},
+              element,
+              {
+                hide: false
+              },
+              {
+                templateOptions: {
+                  ...element.templateOptions,
+                  label: element.type !== 'checkbox' ? '' : element.templateOptions.label
+                }
+              }
+            );
+          }
+        }
+      });
+
+      const timeline = this.getElementFromMetadata(metadata, 'timeline');
+
+      if (timeline) {
+        infoElement.metadata['timeline'] = Object.assign({}, timeline);
+        infoElement.metadata['timeline'].dropdown = true;
+      }
+    }
+  }
+
+  public checkTimeLine(metadata, subject) {
+    metadata.forEach((el) => {
+      if (el.key === 'timeline' || (el.endpoint &&  el.endpoint === '/ecore/api/v2/core/workflowobjects/')) { //tslint:disable-line
+        el.timelineSubject = subject;
+      } else if (el.children) {
+        this.checkTimeLine(el.children, subject);
+      }
+    });
+  }
+
   public setModeForElement(metadata: Field[], mode) {
     if (mode === 'view') {
       metadata.forEach((el) => {
@@ -265,11 +315,15 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
+
           this.addAutocompleteProperty(this.metadata);
           this.getData(this.metadata);
 
           const formData = new BehaviorSubject({ data: {} });
           this.updateFormData(this.metadata, formData);
+
+          const timelineSubject = new Subject();
+          this.checkTimeLine(this.metadata, timelineSubject);
 
           if ((this.id || this.edit) && this.metadata) {
             if (this.id) {
@@ -288,6 +342,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
               str: 'Add'
             });
             this.show = true;
+            this.checkFormInfoElement(this.metadata);
           }
         }),
         ((error: any) => this.metadataError = error));
@@ -376,6 +431,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         this.show = true;
         const formData = new BehaviorSubject({ data });
         this.updateFormData(this.metadata, formData);
+        this.checkFormInfoElement(this.metadata);
         this.str.emit({
           str: data && data.__str__ ? data.__str__ : '',
           data

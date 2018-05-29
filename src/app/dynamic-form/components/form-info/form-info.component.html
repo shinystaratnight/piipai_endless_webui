@@ -10,15 +10,17 @@
 
   <div class="form-info-block">
     <p>
-      <label>
-        <input type="checkbox" class="form-check-input" [checked]="available" hidden>
-        <div class="custom-checkbox">
-          <i fa name="check"></i>
-        </div>
-        Available
+      <label *ngIf="config && viewMode" [class.text-success]="available" [class.text-danger]="!available">
+        <i class="mr-2" fa [name]="available ? 'check-circle' : 'times-circle'"></i>
+        {{available ? 'Available' : 'Not available'}}
       </label>
+
+      <ng-container formElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
+        [config]="config.metadata['available']"
+        [group]="group">
+      </ng-container>
     </p>
-    <h5 class="form-info-title">
+    <h5 class="form-info-title" *ngIf="config && viewMode">
       <span *ngIf="!this.averageScore && this.averageScore !== 0">
         {{title}}&nbsp;
         <i class="info" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
@@ -31,15 +33,23 @@
         </span>
       </span>
     </h5>
-    <p class="description">{{address}}</p>
+    <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode"
+      [config]="getConfig('title')"
+      [group]="group">
+    </ng-container>
 
-    <div *ngIf="status && status.length" class="form-info-status">
-      <span class="title">Status:</span>
-      <div class="form-info-status-wrapper">
-        <span class="badge badge-outline" [ngClass]="[checkClass(stat)]" *ngFor="let stat of statusList">{{stat.__str__}}</span>
-        <a class="more" href *ngIf="more" (click)="showMore($event)">{{status.length - 4}} more</a>
-      </div>
-    </div>
+    <p *ngIf="config && viewMode" class="description">{{address}}</p>
+    <p *ngIf="config && config.metadata['address'] && !viewMode && config.editForm">
+      <ng-container formElement
+        [config]="config.metadata['address']"
+        [group]="group">
+      </ng-container>
+    </p>
+
+    <ng-container formElement *ngIf="config && config.metadata['timeline'] && config.editForm"
+      [config]="config.metadata['timeline']"
+      (event)="event.emit($event)">
+    </ng-container>
   </div>
 
   <div class="date" *ngIf="created_at || updated_at">

@@ -22,6 +22,7 @@ export interface Field {
   send?: boolean;
   view?: boolean;
   mode?: BehaviorSubject<string>;
+  saveField?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;

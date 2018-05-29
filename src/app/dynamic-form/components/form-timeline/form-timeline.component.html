@@ -60,21 +60,27 @@
       <span *ngIf="state.state === 2">
         {{(state.name_after_activation) ? state.name_after_activation : state.name_before_activation}}
       </span>
-      <span *ngIf="state.state !== 2">
+      <span *ngIf="state.state !== 2 && state.state !== 0">
+        {{state.name_before_activation}}
+      </span>
+      <span *ngIf="state.state === 0" placement="bottom" [ngbTooltip]="requir">
         {{state.name_before_activation}}
       </span>
     </div>
     <svg class="arrow" *ngIf="!l" width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0L3 3L6 0" transform="translate(1 7) rotate(-90)" stroke="#1BD168" />
     </svg>
-    <div class="timeline-requirements" *ngIf="state.state === 0 && state.requirements && state.requirements.length > 0">
-      <div class="timeline-requirements-item p-2">
+    <template #requir>
+      <div class="info-block">
         <h6>To activate this state, fill in the required fields:</h6>
-        <ul class="list-unstyled m-0">
-          <li *ngFor="let item of state.requirements; let i = index">{{i + 1}}.&nbsp;{{item}}</li>
+        <ul>
+          <li *ngFor="let option of state.requirements">
+            <i fa class="icon" name="circle"></i>
+            {{option}}
+          </li>
         </ul>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 

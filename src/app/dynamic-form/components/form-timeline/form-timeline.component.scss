@@ -53,6 +53,8 @@
 
     transition: .3s;
 
+    cursor: default;
+
     &-wrapper {
       display: inline-block;
 
@@ -73,34 +75,6 @@
       box-shadow: 2px 2px 4px rgba($brand-inverse, .3);
     }
 
-  }
-
-  &-requirements {
-    position: relative;
-    display: none;
-
-    &-item {
-      position: absolute;
-      top: 9px;
-      max-width: 300px;
-      background-color: white;
-      border: 1px solid $gray-light;
-      border-radius: .3rem;
-      z-index: 10;
-
-      &::before, &::after {
-        content: '';
-        position: absolute;
-        left: 20px;
-        top: -20px;
-        border: 10px solid transparent;
-        border-bottom: 10px solid $gray-light;
-      }
-      &::after {
-        border-bottom: 10px solid white;
-        top: -18px;
-      }
-    }
   }
 
   .info {
