@@ -83,10 +83,25 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public updateDropdown() {
     if (this.dropdown) {
       this.selectArray = this.config.options.filter((el) => {
-        return el.state < 2;
+        return el.state < 3;
       });
 
-      this.currentState = this.selectArray[0].id;
+      let key = 0;
+      const setKey = false;
+      this.selectArray.forEach((el, i) => {
+        if (el.state === 2) {
+          key = i;
+        }
+      });
+
+      if (key === 0 && !setKey) {
+        this.selectArray.forEach((el, i) => {
+          if (el.state === 1 && key === 0) {
+            key = i;
+          }
+        });
+      }
+      this.currentState = this.selectArray[key].id;
     }
   }
 
