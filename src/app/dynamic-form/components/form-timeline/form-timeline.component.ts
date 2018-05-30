@@ -101,7 +101,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
           }
         });
       }
-      this.currentState = this.selectArray[key].id;
+      this.currentState = this.selectArray[key] && this.selectArray[key].id;
     }
   }
 
