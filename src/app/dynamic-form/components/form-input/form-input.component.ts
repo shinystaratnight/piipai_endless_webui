@@ -139,6 +139,10 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+
+          if (this.group.get(this.key) && !this.config.hide) {
+            this.group.get(this.key).patchValue(undefined);
+          }
         } else {
           this.viewMode = this.config.read_only || false;
         }

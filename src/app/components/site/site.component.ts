@@ -210,8 +210,8 @@ export class SiteComponent implements OnInit {
     );
   }
 
-  public changeMode(pageData) {
-    this.formMode = 'edit';
+  public changeMode(mode: string) {
+    this.formMode = mode;
   }
 
   public formEvent(e) {

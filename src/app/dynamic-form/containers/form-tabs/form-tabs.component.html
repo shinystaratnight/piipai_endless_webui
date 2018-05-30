@@ -5,9 +5,23 @@
         <template ngbTabContent>
           <div class="label" *ngIf="field.main">
             {{field.label}}
-            <button type="button" class="btn" [class.active]="mode === 'edit'" *ngIf="canUpdate" (click)="changeMode()">
-              <i fa name="pencil"></i>
-              Edit mode
+            <button type="button" class="btn edit-mode"
+              *ngIf="canUpdate && mode === 'view'"
+              (click)="changeMode('edit')">
+                <i fa name="pencil"></i>
+                Edit mode
+            </button>
+
+            <button type="button" class="btn close"
+              *ngIf="mode === 'edit'"
+              (click)="changeMode('view')">
+                Close without save
+            </button>
+
+            <button type="submit" class="btn btn-primary btn-shadow save"
+              *ngIf="mode === 'edit' || !config.editForm">
+                Save changes
+                <spinner *ngIf="saving"></spinner>
             </button>
           </div>
 

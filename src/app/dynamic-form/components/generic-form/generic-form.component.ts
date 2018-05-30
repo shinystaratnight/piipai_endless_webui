@@ -5,7 +5,8 @@ import {
   EventEmitter,
   Output,
   OnChanges,
-  OnDestroy
+  OnDestroy,
+  SimpleChanges
 } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -170,10 +171,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         .skip(1)
         .subscribe((mode: string) => {
           this.mode = mode;
-
           this.modeEvent.emit(this.mode);
-
-          this.toggleModeMetadata(this.metadata, this.mode);
         })
     );
   }
@@ -182,7 +180,16 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
-  public ngOnChanges() {
+  public ngOnChanges(changes: SimpleChanges) {
+    Object.keys(changes).forEach((input) => {
+      if (input === 'mode') {
+        this.resetData(this.errors);
+        this.resetData(this.response);
+
+        this.toggleModeMetadata(this.metadata, this.mode);
+      }
+    });
+
     if (this.currentId !== this.id) {
       this.currentId = this.id;
       this.editForm = true;
@@ -591,47 +598,54 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     if (!this.checkDelayData()) {
       return;
     }
-    let newData = {};
-    if (this.form) {
-      newData = Object.assign({}, data, this.form);
-    } else {
-      newData = data;
-    }
+
+    const newData = this.form
+      ? Object.assign({}, data, this.form)
+      : data || {};
     this.sendData = newData;
+
     if (this.response.message) {
       this.response.message = '';
     }
+
+    if (this.delay) {
+      this.checkRelatedData(newData);
+
+      return;
+    }
+
+    if (this.editForm || this.edit) {
+      const endpoint = this.editForm
+        ? `${this.endpoint}${(this.id ? this.id + '/' : '')}`
+        : this.endpoint;
+
+      this.saveForm(endpoint, newData);
+    } else {
+      this.saveForm(this.endpoint, newData);
+    }
+  }
+
+  public saveForm(endpoint: string, data) {
     this.event.emit({
       type: 'saveStart'
     });
-    if (this.delay) {
-      this.checkRelatedData(newData);
-      return;
-    }
-    if (this.editForm || this.edit) {
-      let endpoint = this.editForm ? `${this.endpoint}${(this.id ? this.id + '/' : '')}` : this.endpoint; //tslint:disable-line
-      this.service.editForm(endpoint, newData).subscribe(
-        ((response: any) => {
-          this.parseResponse(response);
-          this.event.emit({
-            type: 'sendForm',
-            data: response,
-            status: 'success'
-          });
-        }),
-        ((errors: any) => this.parseError(errors.errors)));
-    } else {
-      this.service.submitForm(this.endpoint, newData).subscribe(
-        ((response: any) => {
-          this.parseResponse(response);
-          this.event.emit({
-            type: 'sendForm',
-            data: response,
-            status: 'success'
-          });
-        }),
-        ((errors: any) => this.parseError(errors.errors)));
-    }
+    this.formService.getForm(this.formId).setSaveProcess(true);
+
+    this.service.editForm(endpoint, data)
+      .subscribe(
+        (response: any) => this.responseHandler(response),
+        (errors: any) => this.parseError(errors.errors)
+      );
+  }
+
+  public responseHandler(response: any) {
+    this.formService.getForm(this.formId).setSaveProcess(false);
+    this.parseResponse(response);
+    this.event.emit({
+      type: 'sendForm',
+      data: response,
+      status: 'success'
+    });
   }
 
   public parseError(errors) {
@@ -648,6 +662,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     this.resetData(this.response);
     this.errors = this.updateErrors(this.errors, errors, this.response);
     this.errorForm.emit(this.errors);
+    this.formService.getForm(this.formId).setSaveProcess(false);
   }
 
   public checkDelayData() {

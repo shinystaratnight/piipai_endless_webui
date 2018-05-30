@@ -19,24 +19,39 @@
 }
 
 button {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+button.edit-mode {
   align-self: center;
 
-  margin-left: 24px;
+  margin-left: auto;
 
-  border-color: rgba($gray, .1);
+  border: none;
 
   background-color: #fdfdfd;
-  color: rgba(black, .5);
+  color: rgba(black, .55);
   box-shadow: 0 0 8px rgba(black, .15);
 
   &:hover {
     background-color: #fdfdfd;
-    border-color: #fdfdfd;
   }
+}
 
-  &.active {
-    background-color: $brand-primary;
-    color: white;
-    box-shadow: 0 0 6px rgba(black, .1);
+button.close {
+  margin-left: auto;
+  margin-right: 20px;
+
+  color: #333;
+  opacity: .3;
+
+  &:hover,
+  &:focus {
+    opacity: .8;
   }
+}
+
+button.save {
+  color: white;
 }
