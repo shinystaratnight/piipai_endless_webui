@@ -619,23 +619,32 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         ? `${this.endpoint}${(this.id ? this.id + '/' : '')}`
         : this.endpoint;
 
-      this.saveForm(endpoint, newData);
+      this.saveForm(endpoint, newData, true);
     } else {
       this.saveForm(this.endpoint, newData);
     }
   }
 
-  public saveForm(endpoint: string, data) {
+  public saveForm(endpoint: string, data, edit?: boolean) {
     this.event.emit({
       type: 'saveStart'
     });
     this.formService.getForm(this.formId).setSaveProcess(true);
 
-    this.service.editForm(endpoint, data)
+    if (edit) {
+      this.service.editForm(endpoint, data)
+        .subscribe(
+          (response: any) => this.responseHandler(response),
+          (errors: any) => this.parseError(errors.errors)
+        );
+    } else {
+      this.service.submitForm(endpoint, data)
       .subscribe(
         (response: any) => this.responseHandler(response),
         (errors: any) => this.parseError(errors.errors)
       );
+
+    }
   }
 
   public responseHandler(response: any) {
