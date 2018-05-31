@@ -1,7 +1,15 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { FormService } from '../../services';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'form-tabs',
@@ -9,7 +17,7 @@ import { FormService } from '../../services';
   styleUrls: ['./form-tabs.component.scss']
 })
 
-export class FormTabsComponent implements OnInit {
+export class FormTabsComponent implements OnInit, OnDestroy {
 
   public config: any;
 
@@ -20,6 +28,10 @@ export class FormTabsComponent implements OnInit {
 
   public canUpdate: boolean;
   public mode: string;
+  public modeSubscription: Subscription;
+
+  public saving: boolean;
+  public saveSubscription: Subscription;
 
   @Output() public event = new EventEmitter();
   @Output() public buttonAction = new EventEmitter();
@@ -29,9 +41,24 @@ export class FormTabsComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
+    const form = this.formService.getForm(this.formId);
+
     this.canUpdate = this.formService.getAllowedMethods(this.formId).indexOf('update') > -1 && this.config.editForm; //tslint:disable-line
 
-    this.formService.getForm(this.formId).hasTabs = true;
+    form.hasTabs = true;
+
+    this.modeSubscription = form.mode.subscribe((mode) => {
+      this.mode = mode;
+    });
+
+    this.saveSubscription = form.saveProcess.subscribe((saving) => {
+      this.saving = saving;
+    });
+  }
+
+  public ngOnDestroy() {
+    this.modeSubscription.unsubscribe();
+    this.saveSubscription.unsubscribe();
   }
 
   public eventHandler(e) {
@@ -42,9 +69,8 @@ export class FormTabsComponent implements OnInit {
     this.buttonAction.emit(e);
   }
 
-  public changeMode() {
-    this.mode = 'edit';
-    this.formService.changeModeOfForm(this.formId, 'edit');
+  public changeMode(mode: string) {
+    this.formService.changeModeOfForm(this.formId, mode);
   }
 
 }

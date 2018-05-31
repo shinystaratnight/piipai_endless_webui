@@ -23,18 +23,33 @@
                 (click)="deleteElement(pageData)">
                   <i fa name="trash"></i>
                   Delete
-                </button>
+              </button>
+
+              <button type="button" class="btn close button-close"
+                *ngIf="formMode === 'edit'"
+                (click)="changeMode('view')">
+                  Close without save
+              </button>
+
               <button type="button" class="btn btn-primary btn-shadow ml-auto button-edit"
                 *ngIf="formMode === 'view' && checkPermission('update')"
-                (click)="changeMode(pageData)">
+                (click)="changeMode('edit')">
                   <i fa name="pencil"></i>
                   Edit mode
               </button>
-              <button *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))" type="submit" class="btn btn-primary mr-2 ml-auto" [disabled]="saveProcess">
-                Save
-                <spinner *ngIf="saveProcess"></spinner>
+
+              <button type="submit" class="btn btn-primary button-save"
+                *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))"
+                [disabled]="saveProcess">
+                  Save
+                  <spinner *ngIf="saveProcess"></spinner>
               </button>
-              <button *ngIf="formStorage && !approvedStorage && formMode === 'edit' && checkPermission('post')" type="button" class="btn btn-success mr-2 ml-auto" (click)="approveFormStorage(pageData)">Approve</button>
+
+              <button type="button" class="btn btn-success mr-2 ml-auto"
+                *ngIf="formStorage && !approvedStorage && formMode === 'edit' && checkPermission('post')"
+                (click)="approveFormStorage(pageData)">
+                  Approve
+              </button>
             </div>
         </generic-form>
 

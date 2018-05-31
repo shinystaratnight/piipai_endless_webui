@@ -14,6 +14,11 @@ export class Form {
     return this._mode.asObservable();
   }
 
+  private _saveProcess: BehaviorSubject<boolean>;
+  get saveProcess() {
+    return this._saveProcess.asObservable();
+  }
+
   private _id = counter++;
   get id() {
     return this._id;
@@ -23,11 +28,16 @@ export class Form {
 
   constructor(endpoint: string, mode: string, allowMethods: string[]) {
     this._mode = new BehaviorSubject(mode);
+    this._saveProcess = new BehaviorSubject(false);
     this.endpoint = endpoint;
     this.allowMethods = allowMethods;
   }
 
   public changeMode(mode: string) {
     this._mode.next(mode);
+  }
+
+  public setSaveProcess(saving: boolean) {
+    this._saveProcess.next(saving);
   }
 }
