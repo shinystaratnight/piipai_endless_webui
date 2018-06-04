@@ -1,0 +1,59 @@
+<div class="form-info-wrapper">
+  <div class=form-info-left>
+    <div class="form-info-image">
+      <img *ngIf="picture" [src]="picture">
+      <div *ngIf="contactAvatar" class="contact-avatar">
+        {{contactAvatar}}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-info-block">
+    <p>
+      <label *ngIf="config && viewMode" [class.text-success]="available" [class.text-danger]="!available">
+        <i class="mr-2" fa [name]="available ? 'check-circle' : 'times-circle'"></i>
+        {{available ? 'Available' : 'Not available'}}
+      </label>
+
+      <ng-container formElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
+        [config]="config.metadata['available']"
+        [group]="group">
+      </ng-container>
+    </p>
+    <h5 class="form-info-title" *ngIf="config && viewMode">
+      <span *ngIf="!this.averageScore && this.averageScore !== 0">
+        {{title}}&nbsp;
+        <i class="info" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
+      </span>
+      <span *ngIf="this.averageScore || this.averageScore === 0">
+        {{title}}&nbsp;
+        <span class="score" [style.color]="colors[getScore(this.averageScore)]">
+          |&nbsp;{{this.averageScore}}
+          <i fa name="star"></i>
+        </span>
+      </span>
+    </h5>
+    <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode"
+      [config]="getConfig('title')"
+      [group]="group">
+    </ng-container>
+
+    <p *ngIf="config && viewMode" class="description">{{address}}</p>
+    <p *ngIf="config && config.metadata['address'] && !viewMode && config.editForm">
+      <ng-container formElement
+        [config]="config.metadata['address']"
+        [group]="group">
+      </ng-container>
+    </p>
+
+    <ng-container formElement *ngIf="config && config.metadata['timeline'] && config.editForm"
+      [config]="config.metadata['timeline']"
+      (event)="event.emit($event)">
+    </ng-container>
+  </div>
+
+  <div class="date" *ngIf="created_at || updated_at">
+    <span *ngIf="created_at"><span class="description">Created:</span> {{created_at | date:'shortDate'}} <br></span>
+    <span *ngIf="updated_at"><span class="description">Updated:</span> {{updated_at | date:'shortDate'}}</span>
+  </div>
+</div>

@@ -69,7 +69,7 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
   }
 
   public setInitValue() {
-    let value = this.config.value || this.group.get(this.key).value || this.config.default;
+    let value = this.config.value || (this.viewMode === false && this.config.default); //tslint:disable-line
     if (this.viewMode) {
       if (this.config.templateOptions.type === 'checkbox') {
         this.defaultValues(value);

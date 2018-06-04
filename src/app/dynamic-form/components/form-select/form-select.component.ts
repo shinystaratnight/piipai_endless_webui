@@ -65,6 +65,7 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
       this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+          this.group.get(this.key).patchValue(undefined);
         } else {
           this.viewMode = this.config.read_only || false;
         }

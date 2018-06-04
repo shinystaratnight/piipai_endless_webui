@@ -1,7 +1,16 @@
-import { Component, ViewChild, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  OnInit,
+  Output,
+  OnDestroy,
+  ViewEncapsulation,
+  ChangeDetectorRef
+} from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { FormatString } from '../../../helpers/format';
+import { GenericFormService } from '../../services';
 
 @Component({
   selector: 'form-timeline',
@@ -14,9 +23,6 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   @ViewChild('stateModal')
   public stateModal;
 
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
-
   public config: any;
   public modalData: any;
   public objectEndpoint: string;
@@ -26,13 +32,35 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public objectId: string;
   public query: any;
 
-  constructor(public modalService: NgbModal) {}
+  public currentState: any;
+
+  public dropdown: boolean;
+  public selectArray: any[];
+  public updated: boolean;
+
+  constructor(
+    public modalService: NgbModal,
+    private genericFormService: GenericFormService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   public ngOnInit() {
+    this.dropdown = this.config.dropdown;
     this.query = [];
     this.objectEndpoint = '/ecore/api/v2/core/workflowobjects/';
     if (!this.config.hide) {
       this.initialize();
+    }
+    if (this.config.timelineSubject) {
+      this.config.timelineSubject.subscribe((value) => {
+        this.config.options = value;
+
+        if (this.dropdown) {
+          this.updateDropdown();
+        }
+
+        this.cd.detectChanges();
+      });
     }
   }
 
@@ -49,6 +77,37 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     });
     if (!this.config.options) {
       this.getTimeline();
+    }
+  }
+
+  public updateDropdown() {
+    if (this.dropdown) {
+      this.selectArray = this.config.options.filter((el) => {
+        return el.state < 3;
+      });
+
+      let key = 0;
+      const setKey = false;
+      this.selectArray.forEach((el, i) => {
+        if (el.state === 2) {
+          key = i;
+        }
+      });
+
+      if (key === 0 && !setKey) {
+        this.selectArray.forEach((el, i) => {
+          if (el.state === 1 && key === 0) {
+            key = i;
+          }
+        });
+      }
+      this.currentState = this.selectArray[key] && this.selectArray[key].id;
+    }
+  }
+
+  public getState(state: string): any {
+    if (this.config.options) {
+      return this.config.options.find((el) => el.id === state);
     }
   }
 
@@ -76,11 +135,11 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public getTimeline(): void {
-    this.event.emit({
-      type: 'update',
-      el: this.config,
-      query: `?${this.query.join('&')}`
-    });
+
+    this.genericFormService.getByQuery(this.config.endpoint, `?${this.query.join('&')}`)
+      .subscribe((res) => {
+        this.config.timelineSubject.next(res);
+      });
   }
 
   public setDataForState(state): {} {

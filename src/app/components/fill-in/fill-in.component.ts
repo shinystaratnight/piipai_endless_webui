@@ -6,7 +6,8 @@ import { GenericFormService } from '../../dynamic-form/services/generic-form.ser
 
 @Component({
   selector: 'fill-in',
-  templateUrl: 'fill-in.component.html'
+  templateUrl: './fill-in.component.html',
+  styleUrls: ['./fill-in.component.scss']
 })
 
 export class FillInComponent implements OnInit {

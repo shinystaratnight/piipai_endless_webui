@@ -1,19 +1,22 @@
 <div class="form-group" [formGroup]="group" *ngIf="!config.hide && !viewMode">
   <div class="form-element">
-    <label *ngIf="label && config.templateOptions.label" [attr.for]="key" class="col-form-label form-element-label">{{config.templateOptions.label}}</label>
-    <div class="form-element-checkbox">
-      <i class="mr-1" *ngIf="config.templateOptions.type === 'icon'"
-        [ngClass]="[checkboxClass]"
-        [ngStyle]="{'color': checkboxColor}"
-        fa [name]="config.templateOptions.values[group.get(key).value]"></i>
-      <input
-        [hidden]="config.templateOptions.type === 'icon'"
-        #checkbox
-        (change)="eventHandler($event)"
-        [formControl]="group.get(key)"
-        type="checkbox"
-        [attr.id]="key"
-        [attr.name]="key">
+    <div class="form-element-content">
+      <label class="form-element-checkbox" *ngIf="label && config.templateOptions.label" [attr.for]="key">
+        <i class="mr-1" *ngIf="config.templateOptions.type === 'icon'"
+          [ngClass]="[checkboxClass]"
+          [ngStyle]="{'color': checkboxColor}"
+          fa [name]="config.templateOptions.values[group.get(key).value]"></i>
+        <input type="checkbox" class="form-check-input" hidden
+          #checkbox
+          (change)="eventHandler($event)"
+          [formControl]="group.get(key)"
+          [attr.id]="key"
+          [attr.name]="key">
+        <div *ngIf="config.templateOptions.type !== 'icon'" class="custom-checkbox">
+          <i fa name="check"></i>
+        </div>
+        {{config.templateOptions.label}}
+      </label>
     </div>
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
@@ -29,15 +32,17 @@
 
 <div class="form-group" *ngIf="viewMode && !config.hide">
   <div class="form-element">
-    <label *ngIf="label && config.templateOptions.label" class="col-form-label form-element-label">{{config.templateOptions.label}}</label>
-    <div class="form-element-checkbox">
-      <span *ngIf="config.templateOptions && config.templateOptions.type === 'text'">
-        {{this.checkboxValue}}
-      </span>
-      <i fa [name]="checkboxValue"
-        [ngClass]="[checkboxClass]"
-        *ngIf="config.templateOptions && config.templateOptions.type === 'icon'"></i>
-      <i fa [name]="checkboxValue" [ngClass]="[checkboxClass]" *ngIf="config.templateOptions && config.templateOptions.type === 'checkbox'"></i>
+    <div class="form-element-content">
+      <div class="form-element-checkbox">
+        <span *ngIf="config.templateOptions && config.templateOptions.type === 'text'">
+          {{this.checkboxValue}}
+        </span>
+        <i fa [name]="checkboxValue"
+          [ngClass]="[checkboxClass]"
+          *ngIf="config.templateOptions && config.templateOptions.type === 'icon'"></i>
+        <i class="pr-2" fa [name]="checkboxValue" [ngClass]="[checkboxClass]" *ngIf="config.templateOptions && config.templateOptions.type === 'checkbox'"></i>
+        <label class="mb-0" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
+      </div>
     </div>
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">

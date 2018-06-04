@@ -1,0 +1,13 @@
+<label *ngIf="!config.main && (config.name ? config.label : true)">{{config.name ? config.label || '' : config.label || '&nbsp;'}}</label>
+<div *ngFor="let field of config.children">
+  <ng-container
+    formElement
+    [config]="field"
+    [group]="group"
+    [errors]="errors"
+    [message]="message"
+    (event)="eventHandler($event)"
+    (buttonAction)="buttonActionHandler($event)">
+  </ng-container>
+</div>
+

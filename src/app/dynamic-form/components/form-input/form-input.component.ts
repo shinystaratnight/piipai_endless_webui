@@ -46,7 +46,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public modalScrollThrottle = 50;
   public autocompleteFields = {
     country: {
-      label: 'long_name',
+      label: 'short_name',
       field: 'country',
       value: '',
     },
@@ -83,14 +83,14 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public ngOnInit() {
-    if (this.config.type !== 'static') {
+    if (this.config.type !== 'static' || this.config.key === 'strength') {
       this.addControl(this.config, this.fb);
     }
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.checkAutocomplete();
-    if (this.config.type !== 'static') {
+    if (this.config.type !== 'static' || this.config.key === 'strength') {
       this.createEvent();
     }
     if (this.config.formData) {
@@ -121,7 +121,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public checkHiddenProperty() {
-    if (this.config && this.config.hidden && this.config.type !== 'static') {
+    if (this.config && this.config.hidden && (this.config.type !== 'static' || this.config.key === 'strength')) { //tslint:disable-line
       this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
@@ -139,6 +139,10 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+
+          if (this.group.get(this.key) && !this.config.hide) {
+            this.group.get(this.key).patchValue(undefined);
+          }
         } else {
           this.viewMode = this.config.read_only || false;
         }
@@ -158,7 +162,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public setInitValue() {
-    if (this.config.type !== 'static') {
+    if (this.config.type !== 'static' || this.config.key === 'strength') {
       if (this.config.value === 0 || this.config.value ||
         this.config.default || this.config.default === 0) {
         let value = (this.config.value === 0 || this.config.value) ?

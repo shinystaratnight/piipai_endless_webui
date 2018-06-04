@@ -16,26 +16,11 @@ import { environment } from '../environment';
 
 import { SharedModule } from '../shared/shared.module';
 
-import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
-import { FormRowComponent } from './containers/form-row/form-row.component';
-import { FormCollapseComponent } from './containers/form-collapse/form-collapse.component';
-import { FormHiddenComponent } from './containers/form-hidden/form-hidden.component';
-import { FormColumnComponent } from './containers/form-column/form-column.component';
-import { DynamicListComponent } from './containers/dynamic-list/dynamic-list.component';
-import { ListColumnComponent } from './containers/list-column/list-column.component';
-import { FilterBlockComponent } from './containers/filter-block/filter-block.component';
-import { ListButtonsComponent } from './containers/list-buttons/list-buttons.component';
-
 import { services } from './services';
 
-import {
-  components,
-  entryComponents,
+import * as fromComponents from './components';
 
-  GenericFormComponent,
-  GenericListComponent,
-  ProfileComponent,
-} from './components';
+import * as fromContainers from './containers';
 
 import { directives } from './directives';
 
@@ -54,37 +39,26 @@ import { directives } from './directives';
     GooglePlaceModule,
     SharedModule,
   ],
-  exports: [GenericFormComponent, GenericListComponent, DynamicFormComponent, ProfileComponent],
+  exports: [
+    fromComponents.GenericFormComponent,
+    fromComponents.GenericListComponent,
+    fromContainers.DynamicFormComponent,
+    fromComponents.ProfileComponent],
   declarations: [
     WebCamComponent,
     PdfViewerComponent,
     ButtonRadioDirective,
 
-    DynamicFormComponent,
-    DynamicListComponent,
-
-    FormRowComponent,
-    FormCollapseComponent,
-    ListColumnComponent,
-    FilterBlockComponent,
-    FormHiddenComponent,
-    ListButtonsComponent,
-    FormColumnComponent,
-
-    ...components,
+    ...fromComponents.components,
     ...directives,
+    ...fromContainers.components
   ],
   providers: [
     ...services,
   ],
   entryComponents: [
-    FormRowComponent,
-    FormCollapseComponent,
-    ListColumnComponent,
-    FormColumnComponent,
-    FormHiddenComponent,
-
-    ...entryComponents,
+    ...fromComponents.entryComponents,
+    ...fromContainers.entryComponents
   ]
 })
 export class DynamicFormModule { }
