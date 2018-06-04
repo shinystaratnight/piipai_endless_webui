@@ -60,7 +60,10 @@
     min-width: 12px;
     height: 12px;
 
-    font-size: 8px;
+    svg {
+      height: 5px;
+      width: 7px;
+    }
   }
 
   .form-group {

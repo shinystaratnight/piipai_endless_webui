@@ -13,7 +13,9 @@
           [attr.id]="key"
           [attr.name]="key">
         <div *ngIf="config.templateOptions.type !== 'icon'" class="custom-checkbox">
-          <i fa name="check"></i>
+          <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.08284 4.87574C2.92663 5.03195 2.67337 5.03195 2.51716 4.87574L1.12071 3.47929C0.888359 3.24694 0.511641 3.24694 0.279289 3.47929C0.0469372 3.71164 0.0469373 4.08836 0.279289 4.32071L2.37574 6.41716C2.61005 6.65147 2.98995 6.65147 3.22426 6.41716L8.52071 1.12071C8.75306 0.888359 8.75306 0.511642 8.52071 0.279289C8.28836 0.0469374 7.91164 0.0469372 7.67929 0.279289L3.08284 4.87574Z" fill="white" stroke="#FDFDFD" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
         {{config.templateOptions.label}}
       </label>

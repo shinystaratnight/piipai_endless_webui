@@ -89,12 +89,15 @@ select.not-empty {
 
   margin-right: .5rem;
 
-  font-size: 12px;
-
   border: 1px solid #bdbdbd;
   border-radius: .2rem;
 
   cursor: pointer;
+
+  // svg {
+  //   height: 12px;
+  //   width: 12px;
+  // }
 
   i {
     opacity: 0;

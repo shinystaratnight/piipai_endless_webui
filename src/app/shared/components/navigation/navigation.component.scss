@@ -4,7 +4,7 @@
 $nested-width: 230px;
 $side-width: 252px;
 $header-shadow: 0 8px 12px rgba(black, .04);
-$nested-shadow: 0px 6px 20px 0px rgba($gray, .3);
+$nested-shadow: 0px 0px 20px rgba($gray, .3);
 $header-bg: white;
 
 .page-header {
@@ -63,16 +63,16 @@ $header-bg: white;
 
   .logo {
     display: flex;
-    justify-content: center;
     align-items: center;
 
     width: $side-width;
     height: 72px;
 
-    background-image: url(/assets/img/LBK_regular_logo.png);
-    background-repeat: no-repeat;
-    background-size: auto 40px;
-    background-position: 2rem center;
+    &-link {
+      display: inline;
+
+      padding: 0;
+    }
   }
 
  .navigation {
@@ -181,6 +181,8 @@ $header-bg: white;
             left: 0;
 
             height: auto;
+
+            z-index: -1;
           }
         }
       }
@@ -228,6 +230,8 @@ $header-bg: white;
       position: relative;
 
       width: 100%;
+
+      color: rgba(#333, .85);
 
       & > .navigation-link {
         width: 100%;
@@ -374,12 +378,17 @@ $header-bg: white;
 }
 
 .r3sourcer .page-header .logo {
-  background-image: url(/assets/img/new-software.svg);
-  background-repeat: no-repeat;
-  background-size: auto 40px;
-  background-position: left center;
+  // background-image: url(/assets/img/new-software.svg);
+  // background-repeat: no-repeat;
+  // background-size: auto 40px;
+  // background-position: left center;
+
+  img {
+    height: 40px;
+  }
 
   @include media-breakpoint-down('lg') {
-    background-position: center center;
+    justify-content: center;
+    // background-position: center center;
   }
 }
