@@ -2,7 +2,6 @@
 @import '../../../styles/mixins.scss';
 
 .login {
-
   &-wrapper {
     max-width: 400px;
 
@@ -11,7 +10,7 @@
     border-radius: 4px;
 
     background-color: #fff;
-    box-shadow: 0 0 8px rgba(#333, .1);
+    box-shadow: 0 0 8px rgba(#333, 0.1);
 
     @include media-breakpoint-down('sm') {
       margin-top: 36px;
@@ -21,7 +20,7 @@
   &-title {
     padding: 28px 0 24px;
 
-    border-bottom: 1px solid rgba(#333, .1);
+    border-bottom: 1px solid rgba(#333, 0.1);
 
     text-align: center;
 
@@ -34,7 +33,7 @@
       height: 80px;
 
       border-radius: 50%;
-      border: 1px solid rgba(#333, .15);
+      border: 1px solid rgba(#333, 0.15);
 
       @include media-breakpoint-down('sm') {
         width: 60px;
@@ -46,7 +45,7 @@
       margin-top: 4px;
       margin-bottom: 0;
 
-      opacity: .3;
+      opacity: 0.3;
     }
   }
 
@@ -61,7 +60,7 @@
     }
 
     p {
-      opacity: .5;
+      opacity: 0.5;
 
       margin-bottom: 24px;
     }
@@ -89,7 +88,7 @@
       line-height: 14px;
 
       span {
-        opacity: .3;
+        opacity: 0.3;
       }
     }
 
@@ -98,11 +97,11 @@
 
       border-radius: 100px;
 
-      opacity: .8;
+      // opacity: 0.8;
     }
 
     a {
-      opacity: .3;
+      opacity: 0.3;
 
       &:hover {
         text-decoration: none;
@@ -137,15 +136,36 @@
 
     margin-top: 28px;
 
+    font-family: inherit;
     font-weight: 600;
 
     border-radius: 100px;
 
-    box-shadow: 0 4px 6px rgba(black, .1);
+    box-shadow: 0 4px 6px rgba(black, 0.1);
   }
 }
 
-.register-link  {
+.form-element-checkbox {
+  &:hover {
+    color: #4f4f4f;
+
+    span {
+      opacity: 1;
+    }
+
+    .custom-checkbox {
+      border-color: #4f4f4f;
+    }
+  }
+}
+
+a.forgot {
+  &:hover {
+    color: #4f4f4f;
+  }
+}
+
+.register-link {
   margin-bottom: 2rem;
 
   text-align: center;
@@ -167,7 +187,7 @@
     width: 13px;
     height: 13px;
 
-    margin-right: .5rem;
+    margin-right: 0.5rem;
   }
 
   polygon {
@@ -182,4 +202,3 @@
     }
   }
 }
-
