@@ -246,6 +246,10 @@ export class FormRelatedComponent
               } else {
                 query[field] = `{${field}.id}`;
               }
+
+              if (field === 'country') {
+                query['code2'] = this.relatedAutocomplete.search;
+              }
             });
 
             this.getOptions.call(this, this.relatedAutocomplete.search, 0 , false, this.setValue, undefined, query); //tslint:disable-line
