@@ -9,21 +9,17 @@ import { FormatString } from '../../../helpers/format';
   styleUrls: ['./action-element.component.scss']
 })
 export class ActionElementComponent implements OnChanges {
-  @Input()
-  public config: any;
-
+  @Input() public config: any;
   @Input() public count: number;
+  @ViewChild('content') public content: any;
 
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
-
-  @ViewChild('content')
-  public content: any;
-
-  public action: any;
   public closeResult: string;
   public data: any;
   public label: string;
+
+  @Output() public event: EventEmitter<any> = new EventEmitter();
+
+  public action: any = {};
 
   public constructor(
     private modalService: NgbModal

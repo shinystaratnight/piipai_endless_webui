@@ -66,10 +66,18 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
       padding: .3rem;
 
-      padding-top: 9px;
-      padding-bottom: 9px;
+      padding-top: 16px;
+      padding-bottom: 16px;
 
       background-color: white;
+
+      &:first-child {
+        padding-left: 16px;
+      }
+
+      &:last-child {
+        padding-right: 16px;
+      }
     }
 
     tbody tr {

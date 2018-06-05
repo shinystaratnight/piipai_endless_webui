@@ -3,7 +3,8 @@ import moment from 'moment-timezone';
 
 @Component({
   selector: 'list-text',
-  templateUrl: 'list-text.component.html'
+  templateUrl: './list-text.component.html',
+  styleUrls: ['./list-text.component.scss']
 })
 
 export class ListTextComponent implements OnInit {

@@ -26,9 +26,9 @@
         {{title}}&nbsp;<i class="info" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
       </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
-        {{title}}&nbsp;&nbsp;
-        <span [style.color]="colors[getScore(this.averageScore)]">
-          |&nbsp;&nbsp;{{this.averageScore}}
+        {{title}}
+        <span class="score" [style.color]="colors[getScore(this.averageScore)]" [style.borderColor]="colors[getScore(this.averageScore)]">
+          {{this.averageScore}}
           <i fa name="star"></i>
         </span>
       </span>

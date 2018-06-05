@@ -1,7 +1,13 @@
 <ng-container *ngIf="list">
   <div *ngFor="let skill of dataList">
     <span class="skill-title">
-      {{skill.skill.name}}&nbsp;<span [style.color]="colors[getScore(skill.score)]">|&nbsp;{{skill.score}}&nbsp;<i fa name="star"></i></span>
+      {{skill.skill.name}}
+      <span class="score"
+        [style.color]="colors[getScore(skill.score)]"
+        [style.borderColor]="colors[getScore(skill.score)]">
+          {{skill.score}}&nbsp;
+          <i fa name="star"></i>
+      </span>
     </span>
   </div>
   <a class="more" href *ngIf="more" (click)="showMore($event)">{{config.value.length - 4}} more</a>
@@ -10,7 +16,13 @@
 <ng-container *ngIf="!list">
   <div>
     <span class="skill-title">
-      {{config.skillName}}&nbsp;<span [style.color]="colors[getScore(config.value)]">|&nbsp;{{config.value}}&nbsp;<i fa name="star"></i></span>
+      {{config.skillName}}
+      <span class="score"
+        [style.color]="colors[getScore(config.value)]"
+        [style.borderColor]="colors[getScore(config.value)]">
+          {{config.value}}&nbsp;
+          <i fa name="star"></i>
+      </span>
     </span>
   </div>
 </ng-container>

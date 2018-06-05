@@ -28,6 +28,7 @@ export class ListInfoComponent implements OnInit {
   public more: boolean;
 
   public colors = {
+    0: '#bdbdbd',
     1: '#FA5C46',
     2: '#fc9183',
     3: '#FFA236',
@@ -36,6 +37,7 @@ export class ListInfoComponent implements OnInit {
   };
 
   public ngOnInit() {
+    console.log(this);
     if (this.config.values) {
       const keys = Object.keys(this.config.values);
 
@@ -63,13 +65,14 @@ export class ListInfoComponent implements OnInit {
         }
       });
 
-      if (!this.picture) {
+      if (this.picture == null) {
+        console.log(this.title);
         const nameElements = this.title.split(' ');
 
         if (nameElements && nameElements.length) {
           if (nameElements.length === 2) {
             this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          } else if (nameElements.length === 3) {
+          } else if (nameElements.length > 2) {
             nameElements.shift();
             this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
           }

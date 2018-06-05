@@ -94,11 +94,12 @@
                   [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'"
                   [class.active]="field.sorted && !delay"
                   [border]=true
-                  (click)="field.openSort = !field.openSort"></i>
-                <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">
+                  (click)="sorting(field, field.sorted === 'desc' ? 'asc' : 'desc')"></i>
+                <!-- (click)="field.openSort = !field.openSort"></i> -->
+                <!-- <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">
                   <li [class.active]="field.sorted === 'asc'" (click)="sorting(field, 'asc'); field.openSort = false">Alphabetically A-Z</li>
                   <li [class.active]="field.sorted === 'desc'" (click)="sorting(field, 'desc'); field.openSort = false">Alphabetically Z-A</li>
-                </ul>
+                </ul> -->
               </th>
               <th *ngIf="config.list.tabs" class="last-cell">More</th>
             </tr>

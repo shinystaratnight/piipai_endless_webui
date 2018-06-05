@@ -192,12 +192,12 @@ select.not-empty {
 
   border-radius: 50px;
 
-  background-color: rgba($brand-primary, .5);
+  background-color: rgba($brand-primary, .2);
   color: inherit;
 
   @each $item in $themes {
     .#{$item}-theme & {
-      background-color: rgba(map-get($theme-colors, $item), .5);
+      background-color: rgba(map-get($theme-colors, $item), .2);
     }
   }
 }
