@@ -4,13 +4,8 @@
       {{config.templateOptions.label}}:
     </label>
     <div class="form-element-content" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon || config.key === 'password'">
-<<<<<<< HEAD
-      <input *ngIf="(config.type !== 'static' || config.key === 'strength') && !viewMode && config.key !== 'street_address'" class="form-control"
-        [class.not-empty]="group.get(key).value" autocomplete="off" #input (blur)="eventHandler($event)" (focus)="generateList()"
-        (keyup)=filter(key) [class.addon-input]="config.templateOptions.addon || config.key === 'password'" [formControlName]="key"
-=======
       <input
-        *ngIf="(config.type !== 'static' || config.key === 'strength') && !viewMode && (config.type !== 'address' && config.key !== 'street_address' && config.key !== 'street_address')"
+        *ngIf="(config.type !== 'static' || config.key === 'strength') && !viewMode && (config.type !== 'address' && config.key !== 'address' && config.key !== 'street_address')"
         class="form-control"
         [class.not-empty]="group.get(key).value"
         autocomplete="off"
@@ -20,15 +15,10 @@
         (keyup)=filter(key)
         [class.addon-input]="config.templateOptions.addon || config.key === 'password'"
         [formControlName]="key"
->>>>>>> master
         [attr.type]="config.templateOptions.type ? (config.templateOptions.type === 'score' && 'number') || config.templateOptions.type : 'text'"
         [attr.id]="key" [attr.name]="key" [attr.placeholder]="!config.templateOptions.label ? config.templateOptions.placeholder : ''"
         [readonly]="config.read_only" [value]="config.value === 0 || config.value ? config.value : group.get(key).value === 0 || group.get(key).value ? group.get(key).value : ''">
 
-<<<<<<< HEAD
-      <input type="text" class="form-control" id="autocomplete" *ngIf="config.type !== 'static' && !viewMode && config.key === 'street_address'"
-        ng2-google-place-autocomplete [formControlName]="key" [attr.id]="key" [attr.name]="key" (setAddress)="getAddress($event)">
-=======
       <input type="text" class="form-control" id="autocomplete"
         *ngIf="config.type !== 'static' && !viewMode && (config.type === 'address' || config.key === 'address' || config.key === 'street_address')"
         ng2-google-place-autocomplete
@@ -37,7 +27,6 @@
         [attr.id]="key"
         [attr.name]="key"
         (setAddress) = "getAddress($event)">
->>>>>>> master
       <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutocomplete">
         <div class="autocomplete-list" infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
           [scrollWindow]="false" (scrolled)="onModalScrollDown()">
