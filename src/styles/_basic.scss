@@ -455,7 +455,7 @@ select.not-empty {
   }
 
   .ui-datebox-controls {
-    a {
+    .btn {
       border-radius: 50px;
 
       &:hover {
@@ -545,6 +545,10 @@ select.not-empty {
       }
     }
   }
+}
+
+.jtsage-datebox-backdrop-div {
+  z-index: 20;
 }
 
 .datepicker {
