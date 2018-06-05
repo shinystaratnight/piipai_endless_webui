@@ -69,6 +69,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     },
     keys: ['country', 'administrative_area_level_1', 'locality', 'postal_code']
   };
+  public address = '';
 
   @ViewChild('input') public input;
 
@@ -168,6 +169,12 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
         let value = (this.config.value === 0 || this.config.value) ?
            this.config.value : this.config.default;
         this.group.get(this.key).patchValue(value);
+
+        if (this.config.type === 'address'
+          || this.key === 'address'
+          || this.key === 'street_address') {
+          this.address = value;
+        }
         this.displayValue = value || value === 0 ? value : '-';
       }
     } else {
@@ -252,7 +259,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public getAddress(address) {
-    this.group.get(this.key).patchValue(address.formatted_address);
+    this.group.get(this.key).patchValue(address);
 
     this.autocompleteFields.keys.forEach((field: string) => {
       this.autocompleteFields[field].value = undefined;
@@ -280,7 +287,7 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       };
     });
 
-    this.config.autocompleteData.next(result);
+    // this.config.autocompleteData.next(result);
   }
 
   @HostListener('document:click', ['$event'])
