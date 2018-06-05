@@ -555,7 +555,7 @@ export class FormRelatedComponent
         this.modalData.id = this.group.get(this.key).value;
       }
       if (type === 'update') {
-        this.modalData.mode = 'update';
+        this.modalData.mode = 'edit';
       }
     }
     if (this.config.prefilled) {
