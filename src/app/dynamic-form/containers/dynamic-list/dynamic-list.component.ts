@@ -607,6 +607,7 @@ export class DynamicListComponent implements
           obj['outline'] = element.outline;
           obj['skillName'] = col.label;
           obj['description'] = col.description;
+          obj['redirect'] = element.redirect;
           if (element.display) {
             obj.display = this.format(element.display.replace(/{field}/gi, `{${element.field}}`), el); //tslint:disable-line
           }
@@ -998,8 +999,10 @@ export class DynamicListComponent implements
     this.filterService.resetQueries(this.config.list.list);
   }
 
-  public buttonHandler(e, action) {
-    action.close();
+  public buttonHandler(e, action?) {
+    if (action) {
+      action.close();
+    }
     this.modalInfo = {};
     if (e && e.value) {
       switch (e.value) {
@@ -1525,6 +1528,11 @@ export class DynamicListComponent implements
   public post(e) {
     this.genericFormService.submitForm(e.el.endpoint, {}).subscribe(
       (res: any) => {
+        if (e.el && e.el.redirect) {
+          location.href = e.el.redirect;
+          return;
+        }
+
         this.event.emit({
           type: 'update',
           list: this.config.list.list
