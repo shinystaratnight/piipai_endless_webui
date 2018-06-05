@@ -1,5 +1,6 @@
 body {
   font-family: 'Source Sans Pro', sans-serif;
+  -webkit-font-smoothing: antialiased;
 
   font-size: 16px;
   line-height: 20px;
@@ -9,8 +10,8 @@ body {
   background-color: #f5f5f5;
 }
 
-
-label, b {
+label,
+b {
   font-weight: 500;
 }
 
@@ -44,8 +45,7 @@ i {
   opacity: 1;
 }
 
-input[type="checkbox"]:checked ~ .custom-checkbox {
-
+input[type='checkbox']:checked ~ .custom-checkbox {
   border-color: $brand-primary;
 
   background-color: $brand-primary;
@@ -65,17 +65,34 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 }
 
 input {
-  border-color: rgba(#333, .2);
+  border-color: rgba(#333, 0.2);
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus
+  &:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px rgba($brand-primary, .2) inset;
+    box-shadow: 0 0 0px 1000px rgba($brand-primary, .2) inset;
+
+    transition: background-color 5000s ease-in-out 5000s;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        -webkit-box-shadow: 0 0 0px 1000px rgba(map-get($theme-colors, $item), .2) inset;
+        box-shadow: 0 0 0px 1000px rgba(map-get($theme-colors, $item), .2) inset;
+      }
+    }
+  }
 }
 
 input.not-empty,
 select.not-empty {
-  border-color: rgba(#333, .3);
+  border-color: rgba(#333, 0.3);
 
   background-color: #fefefe;
 
   & ~ .addon {
-    border-color: rgba(#333, .8) !important;
+    border-color: rgba(#333, 0.8) !important;
   }
 }
 
@@ -87,12 +104,12 @@ select.not-empty {
   min-width: 1rem;
   height: 1rem;
 
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 
   font-size: 12px;
 
   border: 1px solid #bdbdbd;
-  border-radius: .2rem;
+  border-radius: 0.2rem;
 
   cursor: pointer;
 
@@ -117,7 +134,6 @@ select.not-empty {
 }
 
 .tooltip {
-
   color: $gray;
   opacity: 1;
 
@@ -134,7 +150,7 @@ select.not-empty {
 
     background-color: white;
     color: inherit;
-    box-shadow: 0 0 8px 2px rgba($gray, .3);
+    box-shadow: 0 0 8px 2px rgba($gray, 0.3);
 
     .tooltip-right &::before {
       width: 10px;
@@ -143,7 +159,7 @@ select.not-empty {
       border: none;
 
       transform: rotate(45deg);
-      box-shadow: -4px 4px 15px 1px rgba($gray, .2);
+      box-shadow: -4px 4px 15px 1px rgba($gray, 0.2);
     }
 
     .tooltip-bottom &::before {
@@ -155,7 +171,7 @@ select.not-empty {
       background-color: #fff;
 
       transform: rotate(45deg);
-      box-shadow: 4px -4px 15px 1px rgba($gray, .2);
+      box-shadow: 4px -4px 15px 1px rgba($gray, 0.2);
     }
   }
 }
@@ -169,39 +185,39 @@ select.not-empty {
   background-color: $brand-primary;
 
   &:focus {
-    box-shadow: 0 0 2px rgba($brand-primary, .5);
+    box-shadow: 0 0 2px rgba($brand-primary, 0.5);
 
     @each $item in $themes {
       .#{$item}-theme & {
-        box-shadow: 0 0 2px rgba(map-get($theme-colors, $item), .5);
+        box-shadow: 0 0 2px rgba(map-get($theme-colors, $item), 0.5);
       }
     }
   }
 }
 
 .badge {
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: normal;
 
   line-height: 1;
 
-  padding: .56rem;
+  padding: 0.56rem;
 
   border-radius: 50px;
 
-  background-color: rgba($brand-primary, .5);
+  background-color: rgba($brand-primary, 0.5);
   color: inherit;
 
   @each $item in $themes {
     .#{$item}-theme & {
-      background-color: rgba(map-get($theme-colors, $item), .5);
+      background-color: rgba(map-get($theme-colors, $item), 0.5);
     }
   }
 }
 
 .btn-outline-primary {
-  font-size: .625rem;
-  padding: .25rem;
+  font-size: 0.625rem;
+  padding: 0.25rem;
 
   @each $item in $themes {
     .#{$item}-theme & {
@@ -233,7 +249,7 @@ select.not-empty {
 
   overflow: auto;
 
-  box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
 
   .modal-header-wrapper {
     position: sticky;
@@ -243,7 +259,7 @@ select.not-empty {
   }
 
   .modal-body {
-    border-radius: .5rem .5rem 0 0;
+    border-radius: 0.5rem 0.5rem 0 0;
   }
 
   .modal-title {
@@ -257,7 +273,7 @@ select.not-empty {
 }
 
 .group-button {
-  font-size: .7rem;
+  font-size: 0.7rem;
   border-color: lighten($brand-primary, 15%);
   background-color: lighten($brand-primary, 15%);
 
@@ -315,7 +331,7 @@ select.not-empty {
   justify-content: space-around !important;
 
   border: none;
-  border-bottom: 2px solid rgba(#e5e5e5, .8);
+  border-bottom: 2px solid rgba(#e5e5e5, 0.8);
 
   .nav-link {
     padding: 6px;
@@ -326,7 +342,7 @@ select.not-empty {
 
     border: none;
 
-    color: rgba(black, .43);
+    color: rgba(black, 0.43);
 
     &.active {
       padding: 6px;
@@ -356,8 +372,6 @@ select.not-empty {
   background-color: $brand-primary;
   z-index: 1;
 }
-
-
 
 @each $item in $themes {
   .#{$item}-theme .bg-primary {
@@ -485,9 +499,8 @@ select.not-empty {
     width: 2rem;
     height: 2rem;
 
-    font-size: .7rem;
-    line-height: .7rem;
-
+    font-size: 0.7rem;
+    line-height: 0.7rem;
 
     padding: 0;
 
@@ -548,7 +561,6 @@ select.not-empty {
 }
 
 .datepicker {
-
   .input-group-addon {
     width: 38px;
   }
@@ -581,8 +593,16 @@ select.not-empty {
   @each $item in $themes {
     .#{$item}-theme & {
       background: map-get($theme-colors, $item);
-      background: -webkit-linear-gradient(to bottom, map-get($theme-colors, $item), #f2fcfe);
-      background: linear-gradient(to bottom, map-get($theme-colors, $item), #f2fcfe);
+      background: -webkit-linear-gradient(
+        to bottom,
+        map-get($theme-colors, $item),
+        #f2fcfe
+      );
+      background: linear-gradient(
+        to bottom,
+        map-get($theme-colors, $item),
+        #f2fcfe
+      );
     }
   }
 }
@@ -596,7 +616,7 @@ select.not-empty {
 }
 
 .description {
-  color: rgba($gray, .7);
+  color: rgba($gray, 0.7);
 }
 
 .icon {
@@ -612,7 +632,7 @@ iframe.send-sms {
 .send-message.close {
   position: fixed;
   right: -1rem;
-  top: .5rem;
+  top: 0.5rem;
   color: $brand-primary;
   z-index: 1000;
 
@@ -632,9 +652,9 @@ iframe.send-sms {
 }
 
 .badge.badge-outline {
-  padding: .25rem .4rem;
+  padding: 0.25rem 0.4rem;
 
-  font-size: .75rem;
+  font-size: 0.75rem;
 
   border: 1px solid $brand-primary;
 
@@ -668,7 +688,6 @@ iframe.send-sms {
   }
 }
 
-
 .form-page {
   padding: 48px 10px;
 }
@@ -683,7 +702,7 @@ iframe.send-sms {
   padding: 32px 0;
 
   background-color: #fff;
-  box-shadow: 0 0 8px rgba($gray, .1);
+  box-shadow: 0 0 8px rgba($gray, 0.1);
 
   @include media-breakpoint-down('lg') {
     width: 100%;
@@ -699,7 +718,7 @@ iframe.send-sms {
     line-height: 18px;
 
     color: $gray;
-    opacity: .3;
+    opacity: 0.3;
 
     background-color: transparent;
 
@@ -723,11 +742,11 @@ iframe.send-sms {
     font-weight: normal;
 
     color: #333;
-    opacity: .3;
+    opacity: 0.3;
 
     &:hover,
     &:focus {
-      opacity: .8;
+      opacity: 0.8;
     }
   }
 

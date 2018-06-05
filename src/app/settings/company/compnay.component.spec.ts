@@ -148,7 +148,7 @@ describe('CompanyComponent', () => {
         }
       ];
       let data = {
-        fobt: 'Roboto'
+        font: 'Roboto'
       };
       spyOn(comp, 'getValueOfData');
       comp.fillingForm(metadata, data);
