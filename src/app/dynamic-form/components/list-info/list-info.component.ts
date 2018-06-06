@@ -37,7 +37,6 @@ export class ListInfoComponent implements OnInit {
   };
 
   public ngOnInit() {
-    console.log(this);
     if (this.config.values) {
       const keys = Object.keys(this.config.values);
 
@@ -66,7 +65,6 @@ export class ListInfoComponent implements OnInit {
       });
 
       if (this.picture == null) {
-        console.log(this.title);
         const nameElements = this.title.split(' ');
 
         if (nameElements && nameElements.length) {
