@@ -64,6 +64,7 @@ const components = {
   tabs: FormTabsComponent,
   info: FormInfoComponent,
   group: FormGroupComponent,
+  address: FormInputComponent
 };
 
 @Directive({
@@ -120,10 +121,10 @@ export class FormElementDirective implements OnInit, OnChanges {
         if (this.config.templateOptions.type === 'picture') {
           component = components['picture'];
         } else {
-          component = components[this.config.type];
+          component = this.getComponent(this.config.type, this.config.editForm);
         }
       } else {
-        component = components[this.config.type];
+        component = this.getComponent(this.config.type, this.config.editForm);
       }
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
@@ -143,5 +144,12 @@ export class FormElementDirective implements OnInit, OnChanges {
       return true;
     }
     return false;
+  }
+
+  public getComponent(type, edit?) {
+    if (type === 'address' && edit) {
+      return FormRelatedComponent;
+    }
+    return components[type];
   }
 }
