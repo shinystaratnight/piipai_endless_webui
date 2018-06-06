@@ -1,12 +1,12 @@
 import {
   Component,
   OnInit,
-  AfterViewInit,
   ViewChild,
   Output,
   EventEmitter,
   OnDestroy,
   ChangeDetectorRef,
+  AfterViewChecked,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -49,7 +49,7 @@ export interface CustomField {
 
 export class FormRelatedComponent
   extends BasicElementComponent
-    implements OnInit, OnDestroy, AfterViewInit {
+    implements OnInit, OnDestroy, AfterViewChecked {
 
   @ViewChild('search')
   public search;
@@ -109,6 +109,7 @@ export class FormRelatedComponent
   public allowPermissions: string[];
   public relatedAutocomplete: any;
   public subscription: Subscription;
+  public autocompleteDisplay: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -162,8 +163,9 @@ export class FormRelatedComponent
     }
   }
 
-  public ngAfterViewInit() {
-    if (this.search) {
+  public ngAfterViewChecked() {
+    if (this.search && !this.autocompleteDisplay) {
+      this.autocompleteDisplay = true;
       this.subscription = this.search.valueChanges
         .skip(2)
         .filter((value) => value !== null)
@@ -219,6 +221,11 @@ export class FormRelatedComponent
       this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+
+          this.autocompleteDisplay = false;
+          if (this.subscription) {
+            this.subscription.unsubscribe();
+          }
         } else {
           this.viewMode = this.config.read_only || false;
         }
