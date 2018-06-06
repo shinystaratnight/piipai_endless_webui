@@ -110,7 +110,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     }
     setTimeout(() => {
       if (e.el && e.el.formData) {
-        if (e.type === 'change' && e.el && e.el.key) {
+        if ((e.type === 'change' || e.type === 'create') && e.el && e.el.key) {
           e.el.formData.next({key: e.el.key, data: this.form.value});
         }
       }
