@@ -138,7 +138,8 @@ export class FormDatepickerComponent
           mode: dateType,
           dateFormat: '%d/%m/%Y',
           overrideDateFormat: '%d/%m/%Y',
-          useClearButton: false,
+          useClearButton: true,
+          useFocus: true,
           useHeader: false,
           calHighToday: false,
           closeCallback: () => {
@@ -158,7 +159,8 @@ export class FormDatepickerComponent
           mode: timeType,
           overrideTimeFormat: 12,
           overrideTimeOutput: '%I:%M %p',
-          useClearButton: false,
+          useClearButton: true,
+          useFocus: true,
           useHeader: false,
           calHighToday: false,
           closeCallback: () => {
@@ -178,7 +180,8 @@ export class FormDatepickerComponent
           mode: timeType,
           overrideTimeFormat: 12,
           overrideTimeOutput: '%I:%M %p',
-          useClearButton: false,
+          useClearButton: true,
+          useFocus: true,
           useHeader: false,
           calHighToday: false,
           closeCallback: () => {

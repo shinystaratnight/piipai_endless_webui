@@ -13,10 +13,10 @@
       [attr.name]="key">
     <div class="form-element-picture">
       <img class="image-preview" *ngIf="value" [src]="value" alt="image">
-      <div *ngIf="contactAvatar" class="contact-avatar">{{contactAvatar}}</div>
+      <div *ngIf="contactAvatar && !fileName" class="contact-avatar">{{contactAvatar}}</div>
       <a *ngIf="link" [href]="link">Link</a>
       <span *ngIf="!value && !contactAvatar && !link && viewMode ">-</span>
-      <div *ngIf="!viewMode && !config.read_only" class="d-flex align-items-center flex-wrap">
+      <div *ngIf="!viewMode && !config.read_only" class="d-flex align-items-center flex-wrap mt-3">
         <button type="button" class="btn btn-primary btn-sm text-white d-flex align-items-center"
           (click)="upload()">
           <i fa class="mr-1"

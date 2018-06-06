@@ -58,7 +58,7 @@
           class="datatable-search"
           *ngIf="config.list.search_enabled"
           [count]="data.count"
-          [label]="config.list.label"
+          [label]="config.list.pagination_label || config.list.label"
           [list]="config.list.list"
           (event)="filterHandler($event)">
         </list-search-bar>
