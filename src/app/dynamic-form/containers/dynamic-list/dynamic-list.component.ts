@@ -170,6 +170,14 @@ export class DynamicListComponent implements
 
   public asyncData: any;
 
+  public pictures = [
+    '/ecore/api/v2/core/contacts/',
+    '/ecore/api/v2/candidate/candidatecontacts/',
+    '/ecore/api/v2/core/companies/'
+  ];
+
+  public noneEdit: boolean;
+
   constructor(
     private filterService: FilterService,
     private modalService: NgbModal,
@@ -214,6 +222,8 @@ export class DynamicListComponent implements
     } else {
       this.showFilters = !!(this.filtersOfList && this.filtersOfList.length);
     }
+
+    this.noneEdit = this.pictures.indexOf(this.endpoint) > -1;
   }
 
   public ngOnChanges() {
