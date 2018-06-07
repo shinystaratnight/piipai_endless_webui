@@ -138,12 +138,16 @@ export class FormRelatedComponent
     }
     this.checkAutocomplete();
     this.checkFormData();
+    this.createEvent();
+    this.checkHiddenProperty();
     if (!this.config.editForm && this.config.read_only) {
+      if (this.config.value) {
+        this.setValue(this.config.value);
+      }
       return;
     }
     this.setInitValue();
     this.checkModeProperty();
-    this.checkHiddenProperty();
     if (this.config.custom && this.config.custom.length) {
       this.generateCustomTemplate(this.config.custom);
     }
@@ -152,7 +156,6 @@ export class FormRelatedComponent
         this.generateDataForList(this.config, data);
       });
     }
-    this.createEvent();
     if (this.config && this.config.metadata) {
       this.getReplaceElements(this.config.metadata);
     }
@@ -539,6 +542,8 @@ export class FormRelatedComponent
   }
 
   public open(type, e = undefined, object = undefined): void {
+    const format = new FormatString();
+
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -572,7 +577,9 @@ export class FormRelatedComponent
         this.modalData.data[el] = {
           action: 'add',
           data: {
-            value: this.config.prefilled[el],
+            value: this.config.list
+              ? this.config.prefilled[el]
+              : format.format(this.config.prefilled[el], this.formData),
             read_only: true
           }
         };
