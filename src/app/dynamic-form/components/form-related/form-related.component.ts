@@ -139,15 +139,12 @@ export class FormRelatedComponent
     this.checkAutocomplete();
     this.checkFormData();
     this.createEvent();
-    this.checkHiddenProperty();
     if (!this.config.editForm && this.config.read_only) {
-      if (this.config.value) {
-        this.setValue(this.config.value);
-      }
       return;
     }
     this.setInitValue();
     this.checkModeProperty();
+    this.checkHiddenProperty();
     if (this.config.custom && this.config.custom.length) {
       this.generateCustomTemplate(this.config.custom);
     }
@@ -580,7 +577,8 @@ export class FormRelatedComponent
             value: this.config.list
               ? this.config.prefilled[el]
               : format.format(this.config.prefilled[el], this.formData),
-            read_only: true
+            read_only: true,
+            editForm: true
           }
         };
       });
