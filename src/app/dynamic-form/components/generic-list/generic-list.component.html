@@ -28,11 +28,12 @@
     [metadataQuery]="metadataQuery"
     [addMetadataQuery]="addMetadataQuery"
     [editEndpoint]="editEndpoint"
+    [addData]="table.addData"
     (checkedObjects)="checkedHandler($event)"
     (list)="listHandler($event)"
     (event)="eventHandler($event)">
   </dynamic-list>
-  <div *ngIf="!(table.metadata && table.data)" class="spinner">
+  <div *ngIf="!(table.metadata && table.data) || uploading" class="spinner">
     <div class="double-bounce1"></div>
     <div class="double-bounce2"></div>
   </div>

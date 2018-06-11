@@ -81,26 +81,28 @@
                     (ngModelChange)="selectAll()">
                 </div>
               </th>
-              <th *ngFor="let field of config.list.columns;" [hidden]="field.tab && field.tab.is_collapsed">
-                <ng-container
-                  listElement
-                  [head]="true"
-                  [config]="field"
-                  (event)="sorting(field)">
-                </ng-container>
-                <i fa
-                  class="sort-icon"
-                  *ngIf="field.sort && !delay"
-                  [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'"
-                  [class.active]="field.sorted && !delay"
-                  [border]=true
-                  (click)="sorting(field, field.sorted === 'desc' ? 'asc' : 'desc')"></i>
-                <!-- (click)="field.openSort = !field.openSort"></i> -->
-                <!-- <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">
-                  <li [class.active]="field.sorted === 'asc'" (click)="sorting(field, 'asc'); field.openSort = false">Alphabetically A-Z</li>
-                  <li [class.active]="field.sorted === 'desc'" (click)="sorting(field, 'desc'); field.openSort = false">Alphabetically Z-A</li>
-                </ul> -->
-              </th>
+              <ng-container *ngFor="let field of config.list.columns">
+                <th *ngIf="!(field.tab && field.tab.is_collapsed)">
+                  <ng-container
+                    listElement
+                    [head]="true"
+                    [config]="field"
+                    (event)="sorting(field)">
+                  </ng-container>
+                  <i fa
+                    class="sort-icon"
+                    *ngIf="field.sort && !delay"
+                    [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'"
+                    [class.active]="field.sorted && !delay"
+                    [border]=true
+                    (click)="sorting(field, field.sorted === 'desc' ? 'asc' : 'desc')"></i>
+                  <!-- (click)="field.openSort = !field.openSort"></i> -->
+                  <!-- <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">
+                    <li [class.active]="field.sorted === 'asc'" (click)="sorting(field, 'asc'); field.openSort = false">Alphabetically A-Z</li>
+                    <li [class.active]="field.sorted === 'desc'" (click)="sorting(field, 'desc'); field.openSort = false">Alphabetically Z-A</li>
+                  </ul> -->
+                </th>
+              </ng-container>
               <th *ngIf="config.list.tabs" class="last-cell">More</th>
             </tr>
           </thead>
@@ -207,7 +209,7 @@
           <div class="double-bounce2"></div>
         </div>
       </div>
-      <div *ngIf="pageSize" class="d-flex flex-wrap align-items-center py-3">
+      <div *ngIf="pageSize && inForm" class="d-flex flex-wrap align-items-center py-3">
         <ngb-pagination
           [collectionSize]="pageSize"
           [(page)]="page"

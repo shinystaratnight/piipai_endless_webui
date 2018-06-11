@@ -8,17 +8,18 @@ import {
   ViewChild,
   OnDestroy,
   AfterContentChecked,
-  AfterViewInit
+  AfterViewInit,
+  SimpleChanges,
 } from '@angular/core';
-import { FilterService } from './../../services/filter.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
-import { GenericFormService } from './../../services/generic-form.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import moment from 'moment-timezone';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+import { FilterService } from './../../services';
+import { GenericFormService } from './../../services';
 
 @Component({
   selector: 'dynamic-list',
@@ -27,136 +28,57 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class DynamicListComponent implements
   OnInit, OnChanges, OnDestroy, AfterContentChecked, AfterViewInit {
-  @Input()
-  public config: any;
 
-  @Input()
-  public data: any;
+  @Input() public config: any;
+  @Input() public data: any;
+  @Input() public first: boolean;
+  @Input() public id: number;
+  @Input() public active: boolean;
+  @Input() public limit: number;
+  @Input() public offset: number;
+  @Input() public sorted: any;
+  @Input() public innerTables: any;
+  @Input() public update: any;
+  @Input() public minimized: boolean;
+  @Input() public maximize: boolean;
+  @Input() public endpoint: string;
+  @Input() public parentEndpoint: string;
+  @Input() public actionData: any;
+  @Input() public supportData: any;
+  @Input() public responseField: string;
+  @Input() public paginated: string;
+  @Input() public actions: boolean;
+  @Input() public delay: boolean;
+  @Input() public allowPermissions: string[];
+  @Input() public metadataQuery: string;
+  @Input() public addMetadataQuery: string;
+  @Input() public editEndpoint: string;
+  @Input() public addData: any;
 
-  @Input()
-  public first: boolean;
+  @Input() public refresh: boolean = false;
+  @Input() public inForm: boolean = false;
 
-  @Input()
-  public id: number;
+  @Output() public event: EventEmitter<any> = new EventEmitter();
+  @Output() public list: EventEmitter<any> = new EventEmitter();
+  @Output() public checkedObjects: EventEmitter<string[]> = new EventEmitter();
 
-  @Input()
-  public active: boolean;
+  @ViewChild('modal') public modal;
+  @ViewChild('confirmModal') public confirmModal;
+  @ViewChild('evaluateModal') public evaluateModal;
+  @ViewChild('sendMessageModal') public sendMessageModal;
+  @ViewChild('datatable') public datatable;
+  @ViewChild('tableWrapper') public tableWrapper;
+  @ViewChild('showPreviewInvoice') public showPreviewInvoice;
+  @ViewChild('fillInMap') public fillInMap;
 
-  @Input()
-  public limit: number;
-
-  @Input()
-  public offset: number;
-
-  @Input()
-  public sorted: any;
-
-  @Input()
-  public innerTables: any;
-
-  @Input()
-  public update: any;
-
-  @Input()
-  public minimized: boolean;
-
-  @Input()
-  public maximize: boolean;
-
-  @Input()
-  public refresh: boolean = false;
-
-  @Input()
-  public endpoint: string;
-
-  @Input()
-  public parentEndpoint: string;
-
-  @Input()
-  public inForm: boolean = false;
-
-  @Input()
-  public actionData: any;
-
-  @Input()
-  public supportData: any;
-
-  @Input()
-  public responseField: string;
-
-  @Input()
-  public paginated: string;
-
-  @Input()
-  public actions: boolean;
-
-  @Input()
-  public delay: boolean;
-
-  @Input()
-  public allowPermissions: string[];
-
-  @Input()
-  public metadataQuery: string;
-
-  @Input()
-  public addMetadataQuery: string;
-
-  @Input()
-  public editEndpoint: string;
-
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public list: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public checkedObjects: EventEmitter<string[]> = new EventEmitter();
-
-  @ViewChild('modal')
-  public modal;
-
-  @ViewChild('confirmModal')
-  public confirmModal;
-
-  @ViewChild('evaluateModal')
-  public evaluateModal;
-
-  @ViewChild('sendMessageModal')
-  public sendMessageModal;
-
-  @ViewChild('datatable')
-  public datatable;
-
-  @ViewChild('tableWrapper')
-  public tableWrapper;
-
-  @ViewChild('showPreviewInvoice')
-  public showPreviewInvoice;
-
-  @ViewChild('fillInMap')
-  public fillInMap;
-
-  public body: any[] = [];
-  public select: any;
   public selectedCount: number;
   public sortedColumns: any;
-  public filtersOfList: any[] = [];
-  public selectedAll: boolean = false;
-  public modalInfo: any = {};
   public reason: any;
   public page: any;
-  public pagination: any = {};
-  public pageSize: number = 0;
-  public poped: boolean = false;
-  public position: { top, left };
-  public move: boolean = false;
   public currentData: any;
   public count: number;
   public innerTableCall: any;
   public modalRef: any;
-  public refreshing: boolean = false;
   public tabs: any;
   public evaluateEndpoint: string;
   public approveEndpoint: string;
@@ -164,73 +86,71 @@ export class DynamicListComponent implements
   public actionEndpoint: any;
   public error: any;
   public saveProcess: boolean;
-
   public showFilters: boolean;
-  public filtersHidden: boolean = true;
-
   public asyncData: any;
+  public searchFilter: any;
+  public position: { top, left };
+  public noneEdit: boolean;
 
+  public body: any[] = [];
+  public select: any = {};
+  public filtersOfList: any[] = [];
+  public selectedAll: boolean = false;
+  public modalInfo: any = {};
+  public pagination: any = {};
+  public pageSize: number = 0;
+  public poped: boolean = false;
+  public move: boolean = false;
+  public refreshing: boolean = false;
+  public filtersHidden: boolean = true;
+  public additionalMetadata: any[] = [];
   public pictures = [
     '/ecore/api/v2/core/contacts/',
     '/ecore/api/v2/candidate/candidatecontacts/',
     '/ecore/api/v2/core/companies/'
   ];
 
-  public noneEdit: boolean;
-
   constructor(
     private filterService: FilterService,
     private modalService: NgbModal,
     private genericFormService: GenericFormService,
     private sanitizer: DomSanitizer,
-    private router: Router
-  ) {}
+    private router: Router,
+  ) {
+    this.searchFilter = {
+      type: 'search',
+      query: 'search',
+      key: 'search'
+    };
 
-  public ngOnInit() {
-    if (this.config.list.filters && this.config.list.search_enabled) {
-      this.config.list.filters.push({
-        type: 'search',
-        query: 'search',
-        key: 'search'
-      });
-    } else if (this.config.list.search_enabled) {
-      this.config.list.filters = [
-        {
-          type: 'search',
-          query: 'search',
-          key: 'search'
-        }
-      ];
-    }
-    if (this.config.list.filters) {
-      this.filterService.filters = {
-        endpoint: this.parentEndpoint || this.endpoint,
-        list: this.config.list
-      };
-      this.filtersOfList = this.filterService.getFiltersByEndpoint(this.endpoint);
-    }
     this.innerTableCall = {
       row: '',
       cell: ''
     };
-    if (this.config.list.search_enabled) {
-      if (this.filtersOfList && this.filtersOfList.length > 1) {
-        this.showFilters = true;
-      } else {
-        this.showFilters = false;
-      }
-    } else {
-      this.showFilters = !!(this.filtersOfList && this.filtersOfList.length);
-    }
+  }
+
+  public ngOnInit() {
+    this.updateFilters();
 
     this.noneEdit = this.pictures.indexOf(this.endpoint) > -1;
   }
 
-  public ngOnChanges() {
-    let config = this.config;
-    let data = this.data;
-    this.parseMultipleFilter(this.config.list.filters);
-    let innerTables = this.innerTables;
+  public ngOnChanges(changes: SimpleChanges) {
+
+    const config = changes['config'] && changes['config'].isFirstChange()
+      ? changes['config'].currentValue
+      : this.config;
+
+    const data = changes['data'] && changes['data'].isFirstChange()
+      ? changes['data'].currentValue
+      : this.data;
+
+    const innerTables = changes['innerTables'] && changes['innerTables'].isFirstChange()
+      ? changes['innerTables'].currentValue
+      : this.innerTables;
+
+    const addData = changes['addData'].currentValue;
+
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;
       if (this.actionEndpoint.indexOf('/sendsms/') > -1) {
@@ -240,12 +160,7 @@ export class DynamicListComponent implements
       }
       return;
     }
-    if (!this.tabs) {
-      this.tabs = this.config.list.tabs;
-    }
-    if (config.list.columns) {
-      this.updateMetadataByTabs(config.list.columns);
-    }
+
     if (data && this.paginated === 'on') {
       this.initPagination(data);
     }
@@ -266,27 +181,78 @@ export class DynamicListComponent implements
       }
     }
     this.datatable.nativeElement.style.zIndex = this.active ? 100 : this.id * 5;
+
+    if (changes.hasOwnProperty('config') && changes['config'].isFirstChange()) {
+      this.parseTabs(config);
+      this.parseMultipleFilter(config.list.filters);
+    }
+
+    if (changes.hasOwnProperty('data') && changes['data'].isFirstChange()) {
+      this.body.push(...this.generateBody(config, data, innerTables));
+    }
+
+    if (changes.hasOwnProperty('addData') && !changes['addData'].isFirstChange()) {
+      this.body.push(...this.generateBody(config, addData, innerTables));
+    }
+  }
+
+  public updateFilters() {
+    if (this.config.list.filters && this.config.list.search_enabled) {
+      this.config.list.filters.push(this.searchFilter);
+    } else if (this.config.list.search_enabled) {
+      this.config.list.filters = [this.searchFilter];
+    }
+    if (this.config.list.filters) {
+      this.filterService.filters = {
+        endpoint: this.parentEndpoint || this.endpoint,
+        list: this.config.list
+      };
+      this.filtersOfList = this.filterService.getFiltersByEndpoint(this.endpoint);
+    }
+    if (this.config.list.search_enabled) {
+      if (this.filtersOfList && this.filtersOfList.length > 1) {
+        this.showFilters = true;
+      } else {
+        this.showFilters = false;
+      }
+    } else {
+      this.showFilters = !!(this.filtersOfList && this.filtersOfList.length);
+    }
+  }
+
+  public parseTabs(config) {
+    this.tabs = config.list.tabs;
+
+    this.updateMetadataByTabs(config.list.columns);
+
+    if (this.tabs) {
+      const tabsMetadata = config.list.columns.filter((el) => el.tab && el.tab.is_collapsed);
+
+      if (tabsMetadata.length) {
+        this.tabs.forEach((tab) => {
+          if (tab.is_collapsed) {
+            tab.fields.forEach((field) => {
+              this.additionalMetadata.push(tabsMetadata.find((el) => el.name === field));
+            });
+          }
+        });
+      }
+    }
+  }
+
+  public generateBody(config, data, innerTables) {
+    let body;
+
     if (config && data[this.responseField]) {
-      this.select = this.resetSelectedElements(data[this.responseField]);
+      this.select = {...this.select, ...this.resetSelectedElements(data[this.responseField])};
       if (config.list) {
         this.sortedColumns = this.getSortedColumns(config.list.columns);
         if (this.tabs) {
           const mainMetadata = config.list.columns.filter((el) => !el.tab || !el.tab.is_collapsed);
-          const metadata = config.list.columns.filter((el) => el.tab && el.tab.is_collapsed); //tslint:disable-line
-          const additionalMetadata = [];
+          const additionalBody = this.prepareData(this.additionalMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
 
-          this.tabs.forEach((tab) => {
-            if (tab.is_collapsed) {
-              tab.fields.forEach((field) => {
-                additionalMetadata.push(metadata.find((el) => el.name === field));
-              });
-            }
-          });
-
-          const additionalBody = this.prepareData(additionalMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
-
-          this.body = this.prepareData(mainMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
-          this.body.forEach((main) => {
+          body = this.prepareData(mainMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
+          body.forEach((main) => {
             additionalBody.forEach((additional) => {
               if (main.id === additional.id) {
                 if (!additional.parsed) {
@@ -298,13 +264,19 @@ export class DynamicListComponent implements
             });
           });
         } else {
-          this.body = this.prepareData(config.list.columns, data[this.responseField], config.list.highlight); //tslint:disable-line
+          body = this.prepareData(config.list.columns, data[this.responseField], config.list.highlight); //tslint:disable-line
         }
         if (this.asyncData) {
           this.getAsyncData();
         }
       }
     }
+
+    this.parseInnerTables(innerTables);
+    return body;
+  }
+
+  public parseInnerTables(innerTables) {
     if (innerTables && this.innerTableCall) {
       let currentRow = innerTables[this.innerTableCall.row];
       if (currentRow) {

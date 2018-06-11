@@ -2,10 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { LocalStorageService } from 'ng2-webstorage';
-import { SiteService, PageData } from '../../services/site.service';
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
-import { NavigationService } from '../../services/navigation.service';
-import { UserService, User } from '../../services/user.service';
+
+import { Subject } from 'rxjs/Subject';
+
+import {
+  SiteService,
+  PageData,
+  NavigationService,
+  UserService,
+  User
+} from '../../services';
+import { GenericFormService } from '../../dynamic-form/services';
 
 import { CheckPermissionService } from '../../shared/services/check-permission';
 
@@ -40,6 +47,8 @@ export class SiteComponent implements OnInit {
 
   public Jira: any;
   public jiraLoaded: boolean;
+
+  public upload: Subject<boolean> = new Subject();
 
   constructor(
     private router: Router,
@@ -94,6 +103,10 @@ export class SiteComponent implements OnInit {
         this.approvedStorage = e.data.status;
       }
     }
+  }
+
+  public onModalScrollDown() {
+    this.upload.next(true);
   }
 
   public getPageData(url) {

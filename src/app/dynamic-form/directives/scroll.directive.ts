@@ -16,8 +16,6 @@ export class ScrollDirective implements AfterViewInit {
   public offsetTop: number;
 
   constructor(private el: ElementRef, public renderer: Renderer) {
-    console.log(el);
-
     this.offsetTop = el.nativeElement.offsetTop;
   }
 

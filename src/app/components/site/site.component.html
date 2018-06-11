@@ -69,8 +69,13 @@
     </form-builder>
   </div>
 
-  <div class="datatable-list" *ngSwitchCase="'list'">
-    <generic-list [allowPermissions]="permissionMethods" [endpoint]="pageData.endpoint"></generic-list>
+  <div class="datatable-list pb-3" *ngSwitchCase="'list'"
+    infinite-scroll
+    infiniteScrollThrottle="500"
+    infiniteScrollDistance="2"
+    [scrollWindow]="true"
+    (scrolled)="onModalScrollDown()">
+    <generic-list [upload]="upload" [allowPermissions]="permissionMethods" [endpoint]="pageData.endpoint"></generic-list>
   </div>
 
   <div *ngSwitchCase="'profile'">

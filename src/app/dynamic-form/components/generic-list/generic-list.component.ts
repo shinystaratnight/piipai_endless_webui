@@ -1,18 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { GenericFormService } from './../../services/generic-form.service';
-import { FilterService } from './../../services/filter.service';
+import { Component, Input, Output, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { GenericFormService, FilterService } from './../../services';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Output } from '@angular/core/src/metadata/directives';
-import { EventEmitter } from '@angular/common/src/facade/async';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'generic-list',
   templateUrl: 'generic-list.component.html'
 })
 
-export class GenericListComponent implements OnInit {
+export class GenericListComponent implements OnInit, OnDestroy {
 
   @Input()
   public endpoint: string = '';
@@ -59,6 +60,9 @@ export class GenericListComponent implements OnInit {
   @Input()
   public addMetadataQuery: string;
 
+  @Input()
+  public upload: Subject<boolean>;
+
   @Output()
   public checkedObjects: EventEmitter<any> = new EventEmitter();
 
@@ -81,6 +85,9 @@ export class GenericListComponent implements OnInit {
   public minimizedTable = [];
 
   public cashData: any[];
+  public uploading: boolean;
+
+  public subscriptions: Subscription[] = [];
 
   constructor(
     private gfs: GenericFormService,
@@ -91,8 +98,9 @@ export class GenericListComponent implements OnInit {
 
   public ngOnInit() {
     this.tables.push(this.createTableData(this.endpoint));
+
     if (this.update) {
-      this.update.subscribe((update) => {
+      const subscription = this.update.subscribe((update) => {
         if (update && !this.delay) {
           let table = this.getFirstTable();
           this.getData(table.endpoint, this.generateQuery(table.query), table);
@@ -102,12 +110,46 @@ export class GenericListComponent implements OnInit {
           table.update = Object.assign({}, this.data);
         }
       });
+
+      this.subscriptions.push(subscription);
     }
+
+    if (this.upload) {
+      const subscription = this.upload.asObservable()
+        .debounceTime(500)
+        .subscribe((data) => {
+          if (data && !this.uploading) {
+            this.uploading = true;
+
+            setTimeout(() => {
+              this.uploadMore();
+            }, 500);
+          }
+        });
+
+      this.subscriptions.push(subscription);
+    }
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    });
+  }
+
+  public uploadMore() {
+    const table = this.getFirstTable();
+
+    table.query.pagination = `limit=${table.limit}&offset=${table.offset + table.limit}`;
+    this.getData(table.endpoint, this.generateQuery(table.query), table, false, null, true);
   }
 
   public getMetadata(endpoint, table, inner = false, outer = null, formset = undefined) {
     this.gfs
-      .getMetadata(formset ? `${endpoint}${formset}` + (this.metadataQuery ? `&${this.metadataQuery}` : '') : endpoint + (this.metadataQuery ? `&${this.metadataQuery}` : '')) //tslint:disable-line
+      .getMetadata(
+        formset ? `${endpoint}${formset}` + (this.metadataQuery ? `&${this.metadataQuery}` : '') : endpoint + (this.metadataQuery ? `&${this.metadataQuery}` : '')) //tslint:disable-line
       .subscribe(
         (metadata) => {
           table.metadata = metadata;
@@ -173,7 +215,7 @@ export class GenericListComponent implements OnInit {
     return query;
   }
 
-  public getData(endpoint, query = null, table, first = false, target = null) {
+  public getData(endpoint, query = null, table, first = false, target = null, add = false) {
     if (first && !this.query) {
       this.gfs.getAll(endpoint).subscribe(
         (data) => {
@@ -206,7 +248,13 @@ export class GenericListComponent implements OnInit {
         (data) => {
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
-          table.data = data;
+          if (add) {
+            table.offset += table.limit;
+            table.addData = data;
+            this.uploading = false;
+          } else {
+            table.data = data;
+          }
           if (this.paginated === 'on') {
             this.calcPagination(data);
           }
@@ -223,7 +271,13 @@ export class GenericListComponent implements OnInit {
         (data) => {
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
-          table.data = data;
+          if (add) {
+            table.offset += table.limit;
+            table.addData = data;
+            this.uploading = false;
+          } else {
+            table.data = data;
+          }
           if (this.paginated === 'on') {
             this.calcPagination(data);
           }
@@ -378,11 +432,11 @@ export class GenericListComponent implements OnInit {
   }
 
   public getTable(name) {
-    return this.tables.filter((el) => el.list === name)[0];
+    return this.tables.find((el) => el.list === name);
   }
 
   public getFirstTable() {
-    return this.tables.filter((el) => el && el.first)[0];
+    return this.tables.find((el) => el.first);
   }
 
   public resetActiveTable(tables) {

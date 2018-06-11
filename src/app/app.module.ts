@@ -30,6 +30,7 @@ import { Ng2Webstorage } from 'ng2-webstorage';
 import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
 import { DefaultRequestOptions } from './services/default-request-options.service';
 
@@ -70,7 +71,8 @@ const APP_PROVIDERS = [
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules }),
     DynamicFormModule,
     Angular2FontawesomeModule,
-    SharedModule
+    SharedModule,
+    InfiniteScrollModule,
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
