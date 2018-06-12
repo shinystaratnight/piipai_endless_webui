@@ -13,6 +13,7 @@
           [id]="pageData.pathData.id"
           [edit]="pageData.pathData.postfix"
           [mode]="formMode"
+          [path]="pageData.pathData.path"
           (event)="formEvent($event)"
           (modeEvent)="modeEvent($event)"
           (errorForm)="formError($event)"
@@ -83,3 +84,5 @@
   [userModules]="userModules"
   [modulesList]="modulesList"
   (changeWidgetList)="updateNavigation($event)"></dashboard>
+
+<my-toast></my-toast>

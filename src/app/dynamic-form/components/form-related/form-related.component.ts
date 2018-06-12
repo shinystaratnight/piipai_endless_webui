@@ -139,9 +139,6 @@ export class FormRelatedComponent
     this.checkAutocomplete();
     this.checkFormData();
     this.createEvent();
-    if (!this.config.editForm && this.config.read_only) {
-      return;
-    }
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
@@ -587,12 +584,14 @@ export class FormRelatedComponent
   }
 
   public openAutocomplete(): void {
-    if (this.hideAutocomplete === true) {
-      this.searchValue = null;
-      this.generateList(this.searchValue);
-      setTimeout(() => {
-        this.searchElement.nativeElement.focus();
-      }, 50);
+    if (this.config.type !== 'address') {
+      if (this.hideAutocomplete === true) {
+        this.searchValue = null;
+        this.generateList(this.searchValue);
+        setTimeout(() => {
+          this.searchElement.nativeElement.focus();
+        }, 50);
+      }
     }
   }
 
@@ -814,7 +813,18 @@ export class FormRelatedComponent
           if (callback) {
             const target = res.results.find((el) => el.id === id);
 
-            callback.call(this, (target || res.results[0]));
+            const item = target || res.results[0];
+
+            if (item) {
+              const path = this.getLinkPath(this.config.endpoint);
+              if (path) {
+                this.linkPath = location.origin + path + item[this.param] + '/change';
+              } else {
+                this.linkPath = '/';
+              }
+
+              callback.call(this, item);
+            }
           }
         }
       );

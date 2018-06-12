@@ -3,7 +3,8 @@ import { Routes } from '@angular/router';
 import {
   SiteComponent,
   LoginFormComponent,
-  ContactRegistrationFormComponent
+  ContactRegistrationFormComponent,
+  VerifyEmailComponent
 } from './components';
 
 import { UserService, NavigationService, SettingsService } from './services';
@@ -13,6 +14,10 @@ import { AuthGuard, NotAuthorizedGuard } from './guards';
 import { DataResolver } from './app.resolver';
 
 export const ROUTES: Routes = [
+  {
+    path: 'core/contacts/:id/verify_email',
+    component: VerifyEmailComponent
+  },
   {
     path: '',
     pathMatch: 'full',
@@ -31,11 +36,6 @@ export const ROUTES: Routes = [
     component: LoginFormComponent,
     canActivate: [NotAuthorizedGuard]
   },
-  // {
-  //   path: 'registration',
-  //   component: ContactRegistrationFormComponent,
-  //   canActivate: [NotAuthorizedGuard]
-  // },
   {
     path: 'registration/password',
     component: ContactRegistrationFormComponent,

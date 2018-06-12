@@ -46,6 +46,8 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Output()
   public resourseData: EventEmitter<any> = new EventEmitter();
 
+  @Output() public changeValue: EventEmitter<any> = new EventEmitter();
+
   @Input()
   public form: FormGroup;
   public currentForm: any;
@@ -104,6 +106,10 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public eventHandler(e: CustomEvent): void {
     this.event.emit(e);
+
+    if (e.type === 'change') {
+      this.changeValue.emit(this.form.value);
+    }
     let key;
     if (e.el) {
       key = e.el.type === 'related' ? e.el.key + '.id' : e.el.key;

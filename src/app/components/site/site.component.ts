@@ -56,9 +56,7 @@ export class SiteComponent implements OnInit {
     this.loadScript();
     this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
     this.user = this.userService.user;
-    if (this.user.currentRole === 'candidate' || this.user.currentRole === 'client') {
-      document.getElementsByTagName('head')[0].appendChild(this.Jira);
-    }
+    this.updateJiraTask(this.user.currentRole);
     this.route.url.subscribe(
       (url: any) => {
         this.formLabel = '';
@@ -122,22 +120,7 @@ export class SiteComponent implements OnInit {
   }
 
   public updateNavigationList(role: string) {
-    if (role === 'client' || role === 'candidate') {
-      if (!this.jiraLoaded) {
-        document.getElementsByTagName('head')[0].appendChild(this.Jira);
-        this.jiraLoaded = true;
-
-      } else {
-        setTimeout(() => {
-          let link = document.getElementById('atlwdg-trigger');
-          if (link) {
-            document.getElementById('atlwdg-trigger').style.display = 'block';
-          }
-        }, 1000);
-      }
-    } else {
-      document.getElementById('atlwdg-trigger').style.display = 'none';
-    }
+    this.updateJiraTask(role);
 
     this.userService.currentRole(role);
     this.navigationService.getPages(role)
@@ -149,6 +132,26 @@ export class SiteComponent implements OnInit {
           this.router.navigate(['']);
         }
       });
+  }
+
+  public updateJiraTask(role: string) {
+    const trigger = document.getElementById('atlwdg-trigger');
+    if (role === 'client' || role === 'candidate') {
+      if (!trigger) {
+        document.getElementsByTagName('head')[0].appendChild(this.Jira);
+      } else {
+        setTimeout(() => {
+          let link = document.getElementById('atlwdg-trigger');
+          if (link) {
+            document.getElementById('atlwdg-trigger').style.display = 'block';
+          }
+        }, 1000);
+      }
+    } else {
+      if (trigger) {
+        trigger.style.display = 'none';
+      }
+    }
   }
 
   public getPageNavigation(url) {
@@ -254,26 +257,28 @@ export class SiteComponent implements OnInit {
   }
 
   public filterNavigation(pages, userModels, models) {
-    let endpointsList = [];
-    userModels.forEach((el) => {
-      if (el && el.dashboard_module) {
-        let model = models.filter((elem) => {
-          if (elem.id === el.dashboard_module.id && !el.ui_config.display_on_navbar) {
-            return true;
-          } else {
-            return false;
+    if (pages && userModels && models) {
+      let endpointsList = [];
+      userModels.forEach((el) => {
+        if (el && el.dashboard_module) {
+          let model = models.filter((elem) => {
+            if (elem.id === el.dashboard_module.id && !el.ui_config.display_on_navbar) {
+              return true;
+            } else {
+              return false;
+            }
+          });
+          if (model.length) {
+            let appName = model[0].module_data.app.replace(/_/, '-');
+            let modelName = model[0].module_data.plural_name.split(' ').join('').toLowerCase();
+            let endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
+            endpointsList.push(endpoint);
           }
-        });
-        if (model.length) {
-          let appName = model[0].module_data.app.replace(/_/, '-');
-          let modelName = model[0].module_data.plural_name.split(' ').join('').toLowerCase();
-          let endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
-          endpointsList.push(endpoint);
         }
-      }
-    });
-    this.removePages(pages, endpointsList);
-    return pages;
+      });
+      this.removePages(pages, endpointsList);
+      return pages;
+    }
   }
 
   public removePages(pages, endpoints) {
