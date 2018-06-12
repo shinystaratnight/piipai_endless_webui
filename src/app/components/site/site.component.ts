@@ -56,7 +56,7 @@ export class SiteComponent implements OnInit {
     this.loadScript();
     this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
     this.user = this.userService.user;
-    this.updateNavigationList(this.user.currentRole);
+    this.updateJiraTask(this.user.currentRole);
     this.route.url.subscribe(
       (url: any) => {
         this.formLabel = '';
@@ -120,6 +120,21 @@ export class SiteComponent implements OnInit {
   }
 
   public updateNavigationList(role: string) {
+    this.updateJiraTask(role);
+
+    this.userService.currentRole(role);
+    this.navigationService.getPages(role)
+      .subscribe((pages: any) => {
+        this.permission.parseNavigation(this.permission.permissions, pages);
+        this.pagesList = this.filterNavigation(pages, this.userModules, this.modulesList);
+
+        if (this.router.url !== '/') {
+          this.router.navigate(['']);
+        }
+      });
+  }
+
+  public updateJiraTask(role: string) {
     const trigger = document.getElementById('atlwdg-trigger');
     if (role === 'client' || role === 'candidate') {
       if (!trigger) {
@@ -137,17 +152,6 @@ export class SiteComponent implements OnInit {
         trigger.style.display = 'none';
       }
     }
-
-    this.userService.currentRole(role);
-    this.navigationService.getPages(role)
-      .subscribe((pages: any) => {
-        this.permission.parseNavigation(this.permission.permissions, pages);
-        this.pagesList = this.filterNavigation(pages, this.userModules, this.modulesList);
-
-        if (this.router.url !== '/') {
-          this.router.navigate(['']);
-        }
-      });
   }
 
   public getPageNavigation(url) {

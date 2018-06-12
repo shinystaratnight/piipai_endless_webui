@@ -86,6 +86,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   public metadataQuery: string;
 
+  @Input() public path: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -144,6 +146,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
   public subscriptions: Subscription[];
   public formId: number;
+
+  public checkObject: any = {};
 
   constructor(
     private service: GenericFormService,
@@ -322,6 +326,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
+          this.updateCheckObject(this.metadata);
 
           this.addAutocompleteProperty(this.metadata);
           this.getData(this.metadata);
@@ -353,6 +358,63 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           }
         }),
         ((error: any) => this.metadataError = error));
+  }
+
+  public updateCheckObject(metadata) {
+    metadata.forEach((el) => {
+      if (el.key && el.checkObject) {
+        this.checkObject[el.key] = el.checkObject;
+      } else if (el.children) {
+        this.updateCheckObject(el.children);
+      }
+    });
+  }
+
+  public parseCheckObject(data) {
+    if (this.endpoint === '/ecore/api/v2/core/companycontacts/') {
+      const keys = Object.keys(this.checkObject);
+      if (keys.length) {
+        const formatString = new FormatString();
+
+        keys.forEach((key) => {
+          const query = { ...this.checkObject[key].query };
+          const queryParams = Object.keys(query);
+          queryParams.forEach((param) => {
+            query[param] = typeof query[param] === 'string'
+              ? formatString.format(query[param], data)
+              : query[param];
+          });
+
+          let send = !queryParams.some((param) => query[param] == null || query[param] === '');
+          if (send && this.checkObject[key].cache) {
+            send = queryParams.some((param) => query[param] !== this.checkObject[key].cache[param]);
+          }
+          this.checkObject[key].cache = query;
+
+          if (send) {
+            this.service.getByQuery(
+              this.checkObject[key].endpoint,
+              '?' + Object.keys(query)
+                .map((param) => `${param}=${query[param]}`)
+                .join('&')
+            ).subscribe((res) => {
+              if (res.count) {
+                const errors = {
+                  [key]: [
+                    this.checkObject[key].error,
+                    `${res.results[0].__str__}`,
+                    `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change` //tslint:disable-line
+                  ]
+                };
+                this.errors = this.updateErrors(this.errors, errors, this.response);
+              } else {
+                this.errors = this.updateErrors(this.errors, { [key]: '  ' }, this.response);
+              }
+            });
+          }
+        });
+      }
+    }
   }
 
   public addAutocompleteProperty(metadata: any, property?: Subject<any>) {
@@ -1042,11 +1104,16 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public updateWorkflowData(event) {
-    if (event && event.el) {
-      if (event.el.key === 'workflow' || event.el.key === 'number' || event.el.key === 'company') {
-        this.workflowData[event.el.key] = Array.isArray(event.value)
-          ? event.value[0].id : event.value;
-        this.getDataOfWorkflownode();
+    if (this.endpoint === '/ecore/api/v2/core/workflownodes/') {
+      if (event && event.el) {
+        if (event.el.key === 'workflow'
+          || event.el.key === 'number'
+          || event.el.key === 'company'
+        ) {
+          this.workflowData[event.el.key] = Array.isArray(event.value)
+            ? event.value[0].id : event.value;
+          this.getDataOfWorkflownode();
+        }
       }
     }
   }

@@ -19,7 +19,8 @@
           (submit)="submitForm($event)"
           (formChange)="formChange($event)"
           (event)="eventHandler($event)"
-          (buttonAction)="buttonActionHandler($event)">
+          (buttonAction)="buttonActionHandler($event)"
+          (changeValue)="parseCheckObject($event)">
           <ng-content></ng-content>
         </dynamic-form>
       </div>
