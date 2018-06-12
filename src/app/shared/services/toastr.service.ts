@@ -5,13 +5,13 @@ import { Observable } from 'rxjs/Observable';
 
 export interface Message {
   message: string;
-  type: MessageType;
+  type: string;
 }
 
-export enum MessageType {
-  Success = 'success',
-  Error = 'error'
-}
+export const MessageType = {
+  success: 'success',
+  error: 'error'
+};
 
 @Injectable()
 export class ToastrService {
@@ -26,7 +26,7 @@ export class ToastrService {
     this._messages = new BehaviorSubject(null);
   }
 
-  public sendMessage(message: string, type: MessageType) {
+  public sendMessage(message: string, type: string) {
     this._messages.next({ message, type });
   }
 

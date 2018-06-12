@@ -21,7 +21,7 @@ export class VerifyEmailComponent implements OnInit {
       .subscribe(
         (res) => {
           setTimeout(() => {
-            this.ts.sendMessage(res.message, MessageType.Success);
+            this.ts.sendMessage(res.message, MessageType.success);
           }, 2000);
 
           this.router.navigate(['/']);

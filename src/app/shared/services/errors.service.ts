@@ -17,7 +17,7 @@ export class ErrorsService {
       let body = error.json();
       this.ts.sendMessage(
         body.errors.detail,
-        MessageType.Error
+        MessageType.error
       );
       return Observable.throw(error.json());
     }
