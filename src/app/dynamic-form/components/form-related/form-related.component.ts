@@ -158,6 +158,14 @@ export class FormRelatedComponent
     if (this.config.editForm && this.config.read_only) {
       this.viewMode = true;
     }
+
+    if (this.config.metadata_query) {
+      this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
+    }
+
+    if (this.config.add_metadata_query) {
+      this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
+    }
   }
 
   public ngAfterViewChecked() {
@@ -171,6 +179,14 @@ export class FormRelatedComponent
           this.filter(this.searchValue);
         });
     }
+  }
+
+  public parseMetadataQuery(data, field) {
+    const keys = Object.keys(data[field]);
+    const result = keys.map((query) => {
+      return `${query}=${data[field][query]}`;
+    });
+    return result.join('&');
   }
 
   public generateCustomTemplate(fieldsList) {

@@ -75,7 +75,7 @@
         [metadataQuery]="config.add_metadata_query"
         (event)="formEvent($event, c)"
         (errorForm)="formError($event)">
-          <button type="submit" class="btn btn-primary" [disabled]="saveProcess">
+          <button type="submit" class="btn btn-primary button-save" [disabled]="saveProcess">
             Save
             <spinner *ngIf="saveProcess"></spinner>
           </button>

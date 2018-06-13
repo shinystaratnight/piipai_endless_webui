@@ -19,8 +19,9 @@
             </button>
 
             <button type="submit" class="btn btn-primary btn-shadow save"
+              [class.ml-auto]="mode !== 'edit'"
               *ngIf="mode === 'edit' || !config.editForm">
-                Save changes
+                {{mode !== 'edit' ? 'Save' : 'Save changes'}}
                 <spinner *ngIf="saving"></spinner>
             </button>
           </div>
