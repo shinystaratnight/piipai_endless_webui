@@ -59,6 +59,9 @@ export class GenericListComponent implements OnInit {
   @Input()
   public addMetadataQuery: string;
 
+  @Input()
+  public listNameCache: any;
+
   @Output()
   public checkedObjects: EventEmitter<any> = new EventEmitter();
 
@@ -111,6 +114,11 @@ export class GenericListComponent implements OnInit {
       .subscribe(
         (metadata) => {
           table.metadata = metadata;
+
+          if (this.listNameCache && !this.listNameCache[this.endpoint]) {
+            this.listNameCache[this.endpoint] = metadata && metadata.list && metadata.list.label;
+          }
+
           if (!this.delay) {
             table.query = {
               sort: this.prepareSortQuery(this.getSortedFields(metadata.list.columns))
