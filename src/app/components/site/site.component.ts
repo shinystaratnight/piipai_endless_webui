@@ -41,6 +41,10 @@ export class SiteComponent implements OnInit {
   public Jira: any;
   public jiraLoaded: boolean;
 
+  public listName: string;
+
+  public listNameCache = {};
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -115,8 +119,27 @@ export class SiteComponent implements OnInit {
           }, 0);
         }
         this.setActivePage(this.pagesList, pageData.pathData.path);
+
+        this.getNameOfList(pageData);
       }
     );
+  }
+
+  public getNameOfList(pageData: PageData) {
+    if (pageData.pathData.type === 'form') {
+      if (this.listNameCache[pageData.endpoint]) {
+        this.listName = this.listNameCache[pageData.endpoint];
+        return;
+      }
+
+      this.genericFormService.getMetadata(pageData.endpoint)
+        .subscribe((list) => {
+          if (list && list.list && list.list.label) {
+            this.listName = list.list.label;
+            this.listNameCache[pageData.endpoint] = list.list.label;
+          }
+        });
+    }
   }
 
   public updateNavigationList(role: string) {
