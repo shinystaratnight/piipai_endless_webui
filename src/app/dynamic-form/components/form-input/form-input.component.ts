@@ -1,6 +1,5 @@
 import {
   Component,
-  ViewContainerRef,
   OnInit,
   ViewChild,
   AfterViewInit,
@@ -8,10 +7,15 @@ import {
   EventEmitter,
   ElementRef,
   HostListener,
-  ViewEncapsulation
+  ViewEncapsulation,
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+
 import { BasicElementComponent } from './../basic-element/basic-element.component';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { FormatString } from '../../../helpers/format';
 
@@ -24,7 +28,9 @@ import * as moment from 'moment-timezone';
   encapsulation: ViewEncapsulation.None
 })
 
-export class FormInputComponent extends BasicElementComponent implements OnInit, AfterViewInit {
+export class FormInputComponent
+  extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy {
 
   public config;
   public group: FormGroup;
@@ -33,7 +39,6 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public key: any;
   public label: boolean;
   public filteredList: any[];
-  public elementRef: ElementRef;
   public displayValue: string;
   public viewMode: boolean;
 
@@ -70,17 +75,21 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     keys: ['country', 'administrative_area_level_1', 'locality', 'postal_code']
   };
   public address = '';
+  public formData: any;
 
   @ViewChild('input') public input;
 
   @Output() public event: EventEmitter<any> = new EventEmitter();
 
+  private subscriptions: Subscription[];
+
   constructor(
     private fb: FormBuilder,
-    private myElement: ElementRef
+    public elementRef: ElementRef,
+    private cd: ChangeDetectorRef
   ) {
     super();
-    this.elementRef = myElement;
+    this.subscriptions = [];
   }
 
   public ngOnInit() {
@@ -91,11 +100,20 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.checkAutocomplete();
+    this.checkFormData();
     if (this.config.type !== 'static' || this.config.key === 'strength') {
       this.createEvent();
     }
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
+  public checkFormData() {
     if (this.config.formData) {
-      this.config.formData.subscribe((data) => {
+      const subscription = this.config.formData.subscribe((data) => {
+        this.formData = data.data;
         if (this.config.type === 'static' && this.config.key === 'total_worked') {
           const shiftStart = moment(data.data.shift_started_at);
           const shiftEnded = moment(data.data.shift_ended_at);
@@ -116,14 +134,19 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
               this.displayValue = `${shiftDiff} - 00:00 = ${shiftDiff} hours`;
             }
           }
+        } else {
+          this.setInitValue();
         }
+
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkHiddenProperty() {
     if (this.config && this.config.hidden && (this.config.type !== 'static' || this.config.key === 'strength')) { //tslint:disable-line
-      this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -131,13 +154,17 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
         } else {
           this.config.hide = hide;
         }
+
+        this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
 
@@ -149,33 +176,42 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
         }
         this.setInitValue();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkAutocomplete() {
     if (this.config.autocompleteData) {
-      this.config.autocompleteData.subscribe((data) => {
+      const subscription = this.config.autocompleteData.subscribe((data) => {
         if (data.hasOwnProperty(this.config.key)) {
           this.group.get(this.key).patchValue(data[this.config.key].value);
         }
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public setInitValue() {
     if (this.config.type !== 'static' || this.config.key === 'strength') {
-      if (this.config.value === 0 || this.config.value ||
-        this.config.default || this.config.default === 0) {
-        let value = (this.config.value === 0 || this.config.value) ?
-           this.config.value : this.config.default;
-        this.group.get(this.key).patchValue(value);
+      if (this.config.value === 0
+        || this.config.value
+        || this.config.default
+        || this.config.default === 0) {
+          const format = new FormatString();
 
-        if (this.config.type === 'address'
-          || this.key === 'address'
-          || this.key === 'street_address') {
-          this.address = value;
-        }
-        this.displayValue = value || value === 0 ? value : '-';
+          let value = (this.config.value === 0 || this.config.value)
+            ? this.config.value
+            : format.format(this.config.default, this.formData);
+          this.group.get(this.key).patchValue(value);
+
+          if (this.config.type === 'address'
+            || this.key === 'address'
+            || this.key === 'street_address') {
+            this.address = value;
+          }
+          this.displayValue = value || value === 0 ? value : '-';
       }
     } else {
       if (this.config.value instanceof Object) {
@@ -287,7 +323,11 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       };
     });
 
-    this.eventHandler({type: 'blur'});
+    this.event.emit({
+      type: 'change',
+      el: this.config,
+      value: address
+    });
 
     // this.config.autocompleteData.next(result);
   }

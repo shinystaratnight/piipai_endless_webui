@@ -1,6 +1,8 @@
 import { Component, OnInit, EventEmitter, Output, ViewChild, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 interface OutputData {

@@ -1,10 +1,20 @@
-import { Component, OnInit, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+  Output,
+  EventEmitter,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Router } from '@angular/router';
 
-import { FormatString } from '../../../helpers/format';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subscription } from 'rxjs/Subscription';
+
+import { FormatString } from '../../../helpers/format';
 
 import { CheckPermissionService } from '../../../shared/services/check-permission';
 import { GenericFormService } from '../../services/generic-form.service';
@@ -52,12 +62,17 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public initialized: boolean;
 
+  private subscriptions: Subscription[];
+
   constructor(
     private modal: NgbModal,
     private permission: CheckPermissionService,
     private gfs: GenericFormService,
     private router: Router,
-  ) { }
+    private cd: ChangeDetectorRef
+  ) {
+    this.subscriptions = [];
+  }
 
   public ngOnInit() {
     if (!this.config.hide) {
@@ -71,7 +86,7 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
         } else {
@@ -81,7 +96,11 @@ export class FormListComponent implements OnInit, OnDestroy {
           }
           this.config.hide = hide;
         }
+
+        this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
@@ -128,6 +147,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (this.modalRef) {
       this.modalRef.close();
     }
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   public addObject() {
@@ -249,17 +269,21 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public checkFormData() {
     if (this.config.formData) {
-      this.config.formData
+      const subscription = this.config.formData
         .subscribe((formData) => {
           this.formData = formData.data;
           this.checkDefaultValues(formData.data);
         });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkTimelineChange() {
     if (this.config.timelineSubject) {
-      this.config.timelineSubject.subscribe(() => this.update.next(true));
+      const subscription = this.config.timelineSubject.subscribe(() => this.update.next(true));
+
+      this.subscriptions.push(subscription);
     }
   }
 

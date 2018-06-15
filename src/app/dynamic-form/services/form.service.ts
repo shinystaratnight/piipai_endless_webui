@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subscription } from 'rxjs/Subscription';
-
 import { CheckPermissionService } from '../../shared/services';
 
 import { Form } from '../models/form.model';

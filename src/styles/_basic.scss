@@ -576,6 +576,10 @@ select.not-empty {
 
 /*---------- Custom styles ---------- */
 
+.form-control.not-empty[readonly] {
+  background-color: transparent;
+}
+
 .contact-avatar {
   display: flex;
   align-items: center;

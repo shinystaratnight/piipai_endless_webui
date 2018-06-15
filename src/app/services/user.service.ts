@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 
 import { NavigationService } from './navigation.service';
+import { CheckPermissionService } from '../shared/services';
 
 export interface User {
   status: string;
@@ -43,7 +44,8 @@ export class UserService {
     private service: GenericFormService,
     private router: Router,
     private cookie: CookieService,
-    private navigation: NavigationService
+    private navigation: NavigationService,
+    private permission: CheckPermissionService
   ) {}
 
   public getUserData(): Observable<User> {
@@ -77,6 +79,7 @@ export class UserService {
         if (res.status === 'success') {
           this.user = null;
           this.navigation.navigationList = {};
+          this.permission.permissions = null;
           this.cookie.remove('sessionid');
           this.router.navigate(['login']);
         }

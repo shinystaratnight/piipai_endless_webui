@@ -131,17 +131,19 @@ export class CheckPermissionService {
   }
 
   private filterPermissions(array: Permission[]): Permission[] {
-    const keys = {};
-    const result = [];
+    if (array) {
+      const keys = {};
+      const result = [];
 
-    array.forEach((el: Permission) => {
-      if (!keys[el.id]) {
-        result.push(el);
-        keys[el.id] = true;
-      }
-    });
+      array.forEach((el: Permission) => {
+        if (!keys[el.id]) {
+          result.push(el);
+          keys[el.id] = true;
+        }
+      });
 
-    return result;
+      return result;
+    }
   }
 
   private updateHeaders(headers) {
