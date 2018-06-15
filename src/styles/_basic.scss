@@ -67,6 +67,8 @@ input[type='checkbox']:checked ~ .custom-checkbox {
 input {
   border-color: rgba(#333, 0.2);
 
+  font-family: inherit;
+
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus
