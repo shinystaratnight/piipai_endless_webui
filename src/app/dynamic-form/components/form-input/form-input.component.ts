@@ -287,6 +287,8 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       };
     });
 
+    this.eventHandler({type: 'blur'});
+
     // this.config.autocompleteData.next(result);
   }
 
