@@ -203,7 +203,9 @@ export class FormInputComponent
 
           let value = (this.config.value === 0 || this.config.value)
             ? this.config.value
-            : format.format(this.config.default, this.formData);
+            : (typeof this.config.default === 'string')
+              ? format.format(this.config.default, this.formData)
+              : this.config.default;
           this.group.get(this.key).patchValue(value);
 
           if (this.config.type === 'address'
