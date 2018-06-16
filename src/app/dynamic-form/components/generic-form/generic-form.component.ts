@@ -12,6 +12,7 @@ import {
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/finally';
 
@@ -20,7 +21,6 @@ import { GenericFormService, FormService } from '../../services/';
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
-import { Subscription } from 'rxjs/Subscription';
 
 interface HiddenFields {
   elements: Field[];
@@ -144,10 +144,11 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     '/ecore/api/v2/candidate/candidatecontacts/': '__str__',
   };
 
-  public subscriptions: Subscription[];
   public formId: number;
 
   public checkObject: any = {};
+
+  private subscriptions: Subscription[];
 
   constructor(
     private service: GenericFormService,
@@ -170,18 +171,19 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
     this.formId = this.formService.registerForm(this.endpoint, this.mode);
 
-    this.subscriptions.push(
-      this.formService.getForm(this.formId).mode
-        .skip(1)
-        .subscribe((mode: string) => {
-          this.mode = mode;
-          this.modeEvent.emit(this.mode);
-        })
-    );
+    const subscription = this.formService
+      .getForm(this.formId).mode
+      .skip(1)
+      .subscribe((mode: string) => {
+        this.mode = mode;
+        this.modeEvent.emit(this.mode);
+      });
+
+    this.subscriptions.push(subscription);
   }
 
   public ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription && subscription.unsubscribe());
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -635,7 +637,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         status: 'success'
       });
     } else {
-      Observable.forkJoin(...requests)
+      const subscription = Observable.forkJoin(...requests)
         .finally(() => {
           this.event.emit({
             type: 'sendForm',
@@ -649,6 +651,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             result[fields[i]] = el;
           });
         });
+
+      this.subscriptions.push(subscription);
     }
   }
 

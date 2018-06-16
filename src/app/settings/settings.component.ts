@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SettingsService } from './settings.service';
 
 import { UserService } from '../services/user.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'settings-page',
@@ -16,6 +17,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   public url: any;
 
+  private settingsSubscription: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -27,7 +30,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     let currentURL = { path: 'settings' };
     this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
-    this.settingsService.url.subscribe((child) => {
+    this.settingsSubscription = this.settingsService.url.subscribe((child) => {
       this.url = [].concat(currentURL, child);
 
       this.setActivePage(this.pagesList, `/${this.url.map((el) => el.path).join('/')}/`);
@@ -36,6 +39,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     this.setActivePage(this.pagesList, '');
+
+    this.settingsSubscription.unsubscribe();
   }
 
   public updateNavigation(role) {

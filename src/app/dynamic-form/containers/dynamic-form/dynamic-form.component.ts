@@ -51,6 +51,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Input()
   public form: FormGroup;
   public currentForm: any;
+  public fullData: any;
 
   constructor(private fb: FormBuilder) {}
 
@@ -117,13 +118,50 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     setTimeout(() => {
       if (e.el && e.el.formData) {
         if ((e.type === 'change' || e.type === 'create') && e.el && e.el.key) {
-          e.el.formData.next({key: e.el.key, data: this.form.value});
+          const newData = this.generateData(e.el.key, e.el.formData.getValue().data, e);
+          this.fullData = newData;
+          if (this.hiddenFields && this.hiddenFields.observers.indexOf(key) > -1) {
+            this.parseConfig(this.hiddenFields.elements);
+          }
+          e.el.formData.next({
+            key: e.el.key,
+            data: newData
+          });
         }
       }
-      if (this.hiddenFields && this.hiddenFields.observers.indexOf(key) > -1) {
-        this.parseConfig(this.hiddenFields.elements);
-      }
     }, 50);
+  }
+
+  public generateData(key: string, data = {}, event: CustomEvent): any {
+    const keys = key.split('.');
+    const firstKey = keys.shift();
+
+    if (keys.length === 0) {
+      if (event.el.type === 'related' && firstKey !== 'id') {
+        if (data[firstKey]) {
+          data[firstKey] = {
+            ...data[firstKey],
+            ...event.additionalData
+          };
+        } else {
+          data[firstKey] = {
+            id: event.value,
+            ...event.additionalData
+          };
+        }
+      } else {
+        data[firstKey] = event.value;
+      }
+    } else {
+      if (data[firstKey]) {
+        this.generateData(keys.join('.'), data[firstKey], event);
+      } else {
+        data[firstKey] = {};
+        this.generateData(keys.join('.'), data[firstKey], event);
+      }
+    }
+
+    return data;
   }
 
   public parseConfig(metadata: Field[]) {
@@ -176,7 +214,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   public checkShowRules(rule: any[]): boolean {
     let approvedRules = 0;
     let rulesNumber = rule.length;
-    let data = this.form.value;
+    let data = this.fullData;
 
     rule.forEach((el: any) => {
       if (typeof el === 'string') {

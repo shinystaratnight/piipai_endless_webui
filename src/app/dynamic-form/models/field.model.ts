@@ -13,7 +13,7 @@ export interface Field {
   value?: any;
   activeMetadata?: Field[];
   hidden?: BehaviorSubject<boolean>;
-  formData?: Subject<any>;
+  formData?: BehaviorSubject<any>;
   data?: any;
   metadata?: Field[];
   options?: any[];

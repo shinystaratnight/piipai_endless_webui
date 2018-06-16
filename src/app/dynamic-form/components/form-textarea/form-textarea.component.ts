@@ -1,5 +1,15 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+
+import { Subscription } from 'rxjs/Subscription';
+
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
@@ -7,7 +17,9 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
   templateUrl: 'form-textarea.component.html'
 })
 
-export class FormTextareaComponent extends BasicElementComponent implements OnInit, AfterViewInit {
+export class FormTextareaComponent
+  extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('textarea')
   public textarea;
 
@@ -21,9 +33,15 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
   public viewMode: boolean;
   public displayValue: string;
 
+  private subscriptions: Subscription[];
+
   constructor(
-    private fb: FormBuilder
-  ) { super(); }
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
+  ) {
+    super();
+    this.subscriptions = [];
+  }
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
@@ -33,9 +51,13 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
     this.createEvent();
   }
 
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
   public checkHiddenProperty() {
     if (this.config && this.config.hidden && this.config.type !== 'static') {
-      this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -43,13 +65,17 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
         } else {
           this.config.hide = hide;
         }
+
+        this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
           this.group.get(this.key).patchValue(undefined);
@@ -58,6 +84,8 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
         }
         this.setInitValue();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
