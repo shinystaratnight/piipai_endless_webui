@@ -12,7 +12,7 @@
     <p>
       <label *ngIf="config && viewMode" [class.text-success]="available" [class.text-danger]="!available">
         <i class="mr-2" fa [name]="available ? 'check-circle' : 'times-circle'"></i>
-        {{available ? 'Available' : 'Not available'}}
+        {{available ? config.metadata['available'].templateOptions.label : 'Not' + config.metadata['available'].templateOptions.label}}
       </label>
 
       <ng-container formElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
@@ -20,7 +20,17 @@
         [group]="group">
       </ng-container>
     </p>
+
+    <div class="job-title" *ngIf="config && viewMode && job_title">{{job_title}}</div>
+    <div *ngIf="config && config.metadata['job_title'] && !viewMode && config.editForm">
+      <ng-container formElement
+        [config]="getConfig('job_title')"
+        [group]="group">
+      </ng-container>
+    </div>
+
     <h5 class="form-info-title" *ngIf="config && viewMode">
+
       <span *ngIf="!this.averageScore && this.averageScore !== 0">
         {{title}}&nbsp;
         <i class="info" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
@@ -37,6 +47,14 @@
       [config]="getConfig('title')"
       [group]="group">
     </ng-container>
+
+    <!-- <div class="description" *ngIf="company">{{company}}</div> -->
+    <div *ngIf="config && config.metadata['company'] && config.editForm">
+      <ng-container formElement
+        [config]="config.metadata['company']"
+        [group]="group">
+      </ng-container>
+    </div>
 
     <p *ngIf="config && viewMode" class="description">{{address}}</p>
     <p *ngIf="config && config.metadata['address'] && !viewMode && config.editForm">

@@ -22,6 +22,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public contactAvatar: string;
   public created_at: string; //tslint:disable-line
   public updated_at: string; //tslint:disable-line
+  public job_title: string; //tslint:disable-line
+  public company: string;
 
   public color: any;
   public colorAttr: string;

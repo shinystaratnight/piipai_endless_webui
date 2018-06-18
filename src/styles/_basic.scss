@@ -67,6 +67,8 @@ input[type='checkbox']:checked ~ .custom-checkbox {
 input {
   border-color: rgba(#333, 0.2);
 
+  font-family: inherit;
+
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus
@@ -702,6 +704,14 @@ iframe.send-sms {
 
 .modal-content .has-tabs .button-save {
   display: none;
+}
+
+.modal-content .has-tabs .close {
+  display: none;
+}
+
+.modal-content .has-tabs .save {
+  margin-left: auto;
 }
 
 .form-navigation {

@@ -61,6 +61,8 @@ export class FormListComponent implements OnInit, OnDestroy {
   public saveProcess: boolean;
 
   public initialized: boolean;
+  public metadataQuery: string;
+  public addMetadataQuery: string;
 
   private subscriptions: Subscription[];
 
@@ -125,11 +127,11 @@ export class FormListComponent implements OnInit, OnDestroy {
     }
 
     if (this.config.metadata_query) {
-      this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
+      this.metadataQuery = this.parseMetadataQuery(this.config, 'metadata_query');
     }
 
     if (this.config.add_metadata_query) {
-      this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
+      this.addMetadataQuery = this.parseMetadataQuery(this.config, 'add_metadata_query');
     }
 
     this.initialized = true;
