@@ -372,6 +372,8 @@ export class FormRelatedComponent
               }
               this.displayValue = formatString.format(this.display, obj);
             }
+          } else {
+            this.getOptions.call(this, '', 0, false, this.setValue, data);
           }
         }
         this.group.get(this.key).patchValue(value);
