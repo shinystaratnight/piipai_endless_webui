@@ -84,7 +84,7 @@ export class FormDatepickerComponent
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
       const subscription = this.config.hidden.subscribe((hide) => {
-        if (hide) {
+        if (hide && !this.config.hide) {
           this.config.hide = hide;
           if (this.group.get(this.key).value) {
             this.group.get(this.key).patchValue(undefined);
