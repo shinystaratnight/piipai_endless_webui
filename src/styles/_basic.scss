@@ -706,6 +706,14 @@ iframe.send-sms {
   display: none;
 }
 
+.modal-content .has-tabs .close {
+  display: none;
+}
+
+.modal-content .has-tabs .save {
+  margin-left: auto;
+}
+
 .form-navigation {
   width: calc(100% - 285px);
   max-width: 80%;

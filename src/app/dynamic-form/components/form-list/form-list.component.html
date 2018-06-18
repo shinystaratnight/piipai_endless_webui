@@ -45,8 +45,8 @@
       [metaType]="config.metaType"
       [actions]="config.actions"
       [allowPermissions]="allowMethods"
-      [metadataQuery]="config.metadata_query"
-      [addMetadataQuery]="config.add_metadata_query"
+      [metadataQuery]="metadataQuery"
+      [addMetadataQuery]="addMetadataQuery"
       (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)">
