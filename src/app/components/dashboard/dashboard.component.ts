@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
-import { NavigationService, Page } from '../../services/navigation.service';
+import { Page, UserService } from '../../services/';
 
 export interface UserModelData {
   dashboard_module: string;
@@ -72,7 +72,7 @@ export class DashboardComponent implements OnChanges, OnDestroy {
   constructor(
     public modalService: NgbModal,
     private genericFormService: GenericFormService,
-    private navigationService: NavigationService
+    public userService: UserService
   ) { }
 
   public ngOnChanges() {
@@ -110,12 +110,14 @@ export class DashboardComponent implements OnChanges, OnDestroy {
     });
   }
 
-  public selectModule(widget) {
+  public selectModule(widget, c) {
     this.userModelData = <any> {};
     this.userModelData.dashboard_module = widget.id;
     this.userModelData.position = this.getLastPosition() + 1;
     this.userModelData.ui_config = {};
     this.selectedWidget = widget;
+
+    this.addModule(c);
   }
 
   public addModule(closeModal) {
@@ -164,7 +166,7 @@ export class DashboardComponent implements OnChanges, OnDestroy {
         let link = this.getLinkByEndpoint(this.pages, endpoint);
         let widget = <WidgetItem> {
           label: el.dashboard_module.name,
-          link: (el.ui_config && el.ui_config.display_on_navbar) ? link || '/' : '/',
+          link: el.ui_config ? link || '/' : '/',
           endpoint,
           position: el.position,
           ui_config: el.ui_config,
