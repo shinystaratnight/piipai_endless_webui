@@ -56,7 +56,9 @@ export class BasicElementComponent {
     this.event.emit({
       type: 'create',
       el: this.config,
-      value: this.group.get(this.key).value
+      value: this.key === 'id'
+        ? { id: this.group.get(this.key).value }
+        : this.group.get(this.key).value
     });
   }
 

@@ -46,7 +46,7 @@
             [hidden]="!(previewList && previewList.length)">
             <ul class="list-group w-100">
               <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
-                *ngFor="let option of previewList"
+                *ngFor="let option of previewList; trackBy: trackByFn"
                 (click)="setValue(option)">{{option.__str__}}</li>
             </ul>
             <div class="autocomplete-preloader" *ngIf="skipScroll">
@@ -63,11 +63,12 @@
       </label>
       <div class="form-element-content flex-column align-items-start" [class.many]="config.many && results" style="position: relative">
         <input type="text" class="form-control autocomplete-value" autocomplete="off"
+          #search="ngModel"
+          #searchElement
           [(ngModel)]="searchValue"
           [ngModelOptions]="{standalone: true}"
           (focus)="generateList()"
-          (blur)="resetList()"
-          (keyup)="filter(searchValue)">
+          (blur)="resetList()">
 
         <div class="form-element-content-actions"
           *ngIf="config.options && config.templateOptions.add" >
@@ -98,10 +99,10 @@
           </div>
         </div>
         <div class="d-flex flex-wrap align-items-center mt-2">
-          <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal"
+          <span class="badge badge-outline mt-2" style="white-space: normal"
             *ngFor="let item of results; let i = index">
             {{item.__str__}}
-            <i fa class="icon ml-2"
+            <i fa class="ml-2"
               (click)="deleteItem(i, item)"
               [name]="'times'"></i>
           </span>
@@ -198,9 +199,9 @@
       </span>
     </div>
     <div *ngIf="config.many && results && config.templateOptions.deleteList"  class="d-flex flex-wrap align-items-center mt-2">
-      <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal" *ngFor="let item of results; let i = index">
+      <span class="badge badge-outline mt-2" style="white-space: normal" *ngFor="let item of results; let i = index">
         {{item.__str__}}
-        <i fa class="text-white icon ml-2" (click)="deleteItem(i, item, config.templateOptions.deleteList)" [name]="'times'"></i>
+        <i fa class="text-white ml-2" (click)="deleteItem(i, item, config.templateOptions.deleteList)" [name]="'times'"></i>
       </span>
     </div>
   </div>
