@@ -260,7 +260,6 @@ export class SiteComponent implements OnInit {
 
   public updateNavigation(e) {
     if (e.changed) {
-      this.pages = null;
       this.userModules = null;
       this.modulesList = null;
       this.getPageNavigation([]);

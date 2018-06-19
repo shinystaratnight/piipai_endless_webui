@@ -165,7 +165,8 @@ export class DashboardComponent implements OnChanges, OnDestroy {
         let endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
         let link = this.getLinkByEndpoint(this.pages, endpoint);
         let widget = <WidgetItem> {
-          label: el.dashboard_module.name,
+          plural_name: widgetInfo.module_data.plural_name,
+          label: widgetInfo.module_data.name,
           link: el.ui_config ? link || '/' : '/',
           endpoint,
           position: el.position,

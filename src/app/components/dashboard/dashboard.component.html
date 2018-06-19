@@ -8,31 +8,14 @@
   </div>
 
   <div *ngIf="userModules && userModules.length">
-    <!-- <button class="icon btn btn-primary mb-3 px-4 d-flex align-items-center justify-content-center" (click)="openModal()">
-      <span class="text-white"><b>Add Widget</b></span>
-    </button>
-
-    <div class="mb-3 d-flex flex-column align-items-stretch justify-content-center"
-      *ngFor="let group of widgetList">
-      <h6 class="p-2 mb-0 bg-inverse text-white">{{group.label}}</h6>
-      <div class="list-group">
-        <div class="widget p-2 list-group-item d-flex align-items-center justify-content-between"
-          *ngFor="let widget of group.list">
-            <a [routerLink]="[widget.link]">{{widget.label}}</a>
-            <i fa [name]="'times'" class="icon text-danger"
-              (click)="removeModule(widget)"></i>
-        </div>
-      </div>
-    </div> -->
-
     <h3 class="title">Dashboard</h3>
     <div class="dashboard-wrapper">
       <ng-container *ngFor="let widget of widgets">
         <div class="widget-item">
           <div class="widget-header">
             <div>
-              <h3 class="widget-title">{{widget.label}}</h3>
-              <span class="widget-description">Open list with {{widget.label | lowercase}}</span>
+              <h3 class="widget-title">{{widget.plural_name}}</h3>
+              <span class="widget-description">Open list with {{widget.plural_name | lowercase}}</span>
             </div>
 
             <a [routerLink]="[widget.link]">
@@ -74,21 +57,6 @@
                 <span class="text-muted"><b>{{widget.content_type.name}}</b></span>
             </div>
           </div>
-          <!-- <div *ngIf="selectedWidget">
-            <form (submit)="addModule(c)">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox"
-                    [(ngModel)]="userModelData.ui_config.display_on_navbar"
-                    [ngModelOptions]="{standalone: true}">
-                  Display on Navbar
-                </label>
-              </div>
-              <div class="form-group mt-3">
-                <button type="submit" class="btn btn-primary">Add</button>
-              </div>
-            </form>
-          </div> -->
           <div class="d-flex justify-content-center align-content-center p-3"
             *ngIf="availableModules && !availableModules.length">
               <span class="text-muted">No Widgets</span>
