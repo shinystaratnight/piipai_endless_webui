@@ -76,6 +76,7 @@ export class FormInputComponent
   };
   public address = '';
   public formData: any;
+  public autocompleteValue: any;
 
   @ViewChild('input') public input;
 
@@ -174,6 +175,7 @@ export class FormInputComponent
         } else {
           this.viewMode = this.config.read_only || false;
         }
+        this.autocompleteValue = undefined;
         this.setInitValue();
       });
 
@@ -185,7 +187,7 @@ export class FormInputComponent
     if (this.config.autocompleteData) {
       const subscription = this.config.autocompleteData.subscribe((data) => {
         if (data.hasOwnProperty(this.config.key)) {
-          this.group.get(this.key).patchValue(data[this.config.key].value);
+          this.autocompleteValue = data[this.config.key];
         }
       });
 
@@ -195,7 +197,10 @@ export class FormInputComponent
 
   public setInitValue() {
     if (this.config.type !== 'static' || this.config.key === 'strength') {
-      if (this.config.value === 0
+      if (this.autocompleteValue) {
+        this.displayValue = this.autocompleteValue;
+        this.group.get(this.key).patchValue(this.autocompleteValue);
+      } else if (this.config.value === 0
         || this.config.value
         || this.config.default
         || this.config.default === 0) {
@@ -222,6 +227,8 @@ export class FormInputComponent
         this.displayValue = this.config.templateOptions.text || this.config.value || '-';
       }
     }
+
+    this.cd.detectChanges();
   }
 
   public ngAfterViewInit() {
@@ -299,39 +306,17 @@ export class FormInputComponent
   public getAddress(address) {
     this.group.get(this.key).patchValue(address);
 
-    this.autocompleteFields.keys.forEach((field: string) => {
-      this.autocompleteFields[field].value = undefined;
-      this.autocompleteFields[field].long_name_value = '';
-    });
-
-    for (let i = address.address_components.length - 1; i; i--) {
-      let addressElement = address.address_components[i];
-      let addressType = addressElement.types[0];
-
-      if (this.autocompleteFields[addressType]) {
-        let val = addressElement[this.autocompleteFields[addressType].label];
-
-        this.autocompleteFields[addressType].value = val;
-      }
-    }
-
-    const result =  {};
-    this.autocompleteFields.keys.forEach((field: string) => {
-      const target = this.autocompleteFields[field];
-
-      result[target.field] = {
-        value: target.value,
-        related: target.related
-      };
-    });
-
     this.event.emit({
       type: 'change',
       el: this.config,
       value: address
     });
 
-    // this.config.autocompleteData.next(result);
+    this.event.emit({
+      type: 'address',
+      el: this.config,
+      value: address
+    });
   }
 
   @HostListener('document:click', ['$event'])

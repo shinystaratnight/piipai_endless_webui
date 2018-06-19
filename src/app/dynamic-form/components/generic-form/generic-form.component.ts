@@ -825,8 +825,22 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         event.el.endpoint, null, event.query, undefined, false);
     } else if (event.type === 'updateData') {
       this.updateDataOfReplaceElements(event.el);
+    } else if (event.type === 'address') {
+      this.parseAddress(event.value, event.el);
     }
     this.event.emit(event);
+  }
+
+  public parseAddress(data, el) {
+    this.service.submitForm('/ecore/api/v2/core/addresses/parse/', data)
+      .subscribe(
+        (res) => {
+          this.parseError({});
+          el.autocompleteData.next(res);
+        },
+        (err: any) => {
+          this.parseError({ [el.key]: err.errors});
+        });
   }
 
   public buttonActionHandler(e) {

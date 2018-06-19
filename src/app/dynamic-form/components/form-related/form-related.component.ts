@@ -140,7 +140,7 @@ export class FormRelatedComponent
     this.param = this.config.templateOptions.param ? this.config.templateOptions.param : 'id';
     this.fields = this.config.templateOptions.values;
     this.allowPermissions = this.permission.getAllowMethods(undefined, this.config.endpoint);
-    if (this.fields) {
+    if (this.fields && this.fields.indexOf(this.param) === -1) {
       this.fields.push(this.param);
     }
     this.checkAutocomplete();
@@ -301,16 +301,9 @@ export class FormRelatedComponent
   public checkAutocomplete() {
     if (this.config.autocompleteData) {
       const subscription = this.config.autocompleteData.subscribe((data) => {
-        this.relatedAutocomplete = undefined;
         if (data.hasOwnProperty(this.config.key)) {
-          if (data[this.config.key].related) {
-            this.relatedAutocomplete = {
-              search: data[this.config.key].value,
-              related: data[this.config.key].related
-            };
-          } else {
-            this.getOptions.call(this, data[this.config.key].value, 0, false, this.setValue);
-          }
+          this.currentQuery = undefined;
+          this.getOptions.call(this, '', 0, false, this.setValue, data[this.config.key]);
         }
       });
 
@@ -848,40 +841,59 @@ export class FormRelatedComponent
         && (!this.count || (this.count && offset < this.count && concat))) {
       this.lastElement += this.limit;
       this.currentQuery = query;
-      this.genericFormService.getByQuery(endpoint, query).subscribe(
-        (res: any) => {
-          this.skipScroll = false;
-          this.count = res.count;
-          if (res.results && res.results.length) {
-            const formatString = new FormatString();
-            res.results.forEach((el) => {
-              el.__str__ = formatString.format(this.display, el);
-            });
-            if (concat && this.previewList) {
-              this.previewList.push(...res.results);
-            } else {
-              this.previewList = res.results;
+      if (!id) {
+        this.genericFormService.getByQuery(endpoint, query).subscribe(
+          (res: any) => {
+            this.skipScroll = false;
+            this.count = res.count;
+            if (res.results && res.results.length) {
+              const formatString = new FormatString();
+              res.results.forEach((el) => {
+                el.__str__ = formatString.format(this.display, el);
+              });
+              if (concat && this.previewList) {
+                this.previewList.push(...res.results);
+              } else {
+                this.previewList = res.results;
+              }
+
             }
+            if (callback) {
+              const target = res.results.find((el) => el.id === id);
 
+              const item = target || res.results[0];
+
+              if (item) {
+                const path = this.getLinkPath(this.config.endpoint);
+                if (path) {
+                  this.linkPath = location.origin + path + item[this.param] + '/change';
+                } else {
+                  this.linkPath = '/';
+                }
+
+                callback.call(this, item);
+              }
+            }
           }
-          if (callback) {
-            const target = res.results.find((el) => el.id === id);
-
-            const item = target || res.results[0];
-
-            if (item) {
+        );
+      } else {
+        this.genericFormService
+        .getByQuery(endpoint + id + '/', `?${this.generateFields(this.fields)}`)
+        .subscribe(
+          (res: any) => {
+            if (res) {
               const path = this.getLinkPath(this.config.endpoint);
               if (path) {
-                this.linkPath = location.origin + path + item[this.param] + '/change';
+                this.linkPath = location.origin + path + res[this.param] + '/change';
               } else {
                 this.linkPath = '/';
               }
 
-              callback.call(this, item);
+              callback.call(this, res);
             }
           }
-        }
-      );
+        );
+      }
     }
   }
 
