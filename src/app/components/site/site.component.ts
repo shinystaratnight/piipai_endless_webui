@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { LocalStorageService } from 'ng2-webstorage';
 import { SiteService, PageData } from '../../services/site.service';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { NavigationService } from '../../services/navigation.service';
@@ -19,7 +18,6 @@ export class SiteComponent implements OnInit {
   public pageData: PageData;
   public user: User;
   public dashboard: boolean = true;
-  public pages: any;
 
   public modulesList: any;
   public userModules: any;
@@ -49,7 +47,6 @@ export class SiteComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private siteService: SiteService,
-    private storage: LocalStorageService,
     private genericFormService: GenericFormService,
     private navigationService: NavigationService,
     private userService: UserService,
@@ -149,7 +146,7 @@ export class SiteComponent implements OnInit {
     this.navigationService.getPages(role)
       .subscribe((pages: any) => {
         this.permission.parseNavigation(this.permission.permissions, pages);
-        this.pagesList = this.filterNavigation(pages, this.userModules, this.modulesList);
+        this.pagesList = pages;
 
         if (this.router.url !== '/') {
           this.router.navigate(['']);
@@ -194,29 +191,13 @@ export class SiteComponent implements OnInit {
 
   public getModelsList(url) {
     this.navigationService.getModules().subscribe(
-      (res: any) => {
-        this.modulesList = res;
-        if (this.pages && this.userModules && this.modulesList) {
-          this.pagesList = this.filterNavigation(this.pages, this.userModules, this.modulesList);
-          if (url.length) {
-            this.getPageData(url);
-          }
-        }
-      }
+      (res: any) => this.modulesList = res
     );
   }
 
   public getUserModules(url) {
     this.navigationService.getUserModules().subscribe(
-      (res: any) => {
-        this.userModules = res;
-        if (this.pages && this.userModules && this.modulesList) {
-          this.pagesList = this.filterNavigation(this.pages, this.userModules, this.modulesList);
-          if (url.length) {
-            this.getPageData(url);
-          }
-        }
-      }
+      (res: any) => this.userModules = res
     );
   }
 
@@ -225,12 +206,10 @@ export class SiteComponent implements OnInit {
 
     this.navigationService.getPages(role).subscribe(
       (res: any) => {
-        this.pages = res;
-        if (this.pages && this.userModules && this.modulesList) {
-          this.pagesList = this.filterNavigation(this.pages, this.userModules, this.modulesList);
-          if (url.length) {
-            this.getPageData(url);
-          }
+        this.pagesList = res;
+
+        if (url.length) {
+          this.getPageData(url);
         }
       }
     );
@@ -277,50 +256,6 @@ export class SiteComponent implements OnInit {
     this.genericFormService.delete(element.endpoint, element.pathData.id).subscribe(
       (res: any) => this.router.navigate([element.pathData.path])
     );
-  }
-
-  public filterNavigation(pages, userModels, models) {
-    if (pages && userModels && models) {
-      let endpointsList = [];
-      userModels.forEach((el) => {
-        if (el && el.dashboard_module) {
-          let model = models.filter((elem) => {
-            if (elem.id === el.dashboard_module.id && !el.ui_config.display_on_navbar) {
-              return true;
-            } else {
-              return false;
-            }
-          });
-          if (model.length) {
-            let appName = model[0].module_data.app.replace(/_/, '-');
-            let modelName = model[0].module_data.plural_name.split(' ').join('').toLowerCase();
-            let endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
-            endpointsList.push(endpoint);
-          }
-        }
-      });
-      this.removePages(pages, endpointsList);
-      return pages;
-    }
-  }
-
-  public removePages(pages, endpoints) {
-    pages.forEach((el, i) => {
-      if (el.childrens && el.childrens.length) {
-        if (endpoints.indexOf(el.endpoint) > -1) {
-          el.disabled = true;
-        }
-        let childrens = this.removePages(el.childrens, endpoints);
-        if (!childrens.length && el.disabled) {
-          pages.splice(i, 1);
-          this.removePages(pages, endpoints);
-        }
-      } else if (endpoints.indexOf(el.endpoint) > -1) {
-        pages.splice(i, 1);
-        this.removePages(pages, endpoints);
-      }
-    });
-    return pages;
   }
 
   public updateNavigation(e) {
