@@ -825,7 +825,9 @@ export class FormRelatedComponent
     if (queries) {
       const keys = Object.keys(queries);
       keys.forEach((el) => {
-        query += `${el}=${format.format(queries[el], this.formData)}&`;
+        query += typeof queries[el] === 'string'
+          ? `${el}=${format.format(queries[el], this.formData)}&`
+          : `${el}=${queries[el]}&`;
       });
       query = query.slice(0, query.length - 1);
     }
