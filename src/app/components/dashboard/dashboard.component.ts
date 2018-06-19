@@ -22,11 +22,13 @@ export interface UserModelData {
 
 export interface WidgetItem {
   label: string;
+  name?: string;
+  addLabel?: string;
+  description?: string;
   link: string;
   endpoint: string;
   position: number;
   ui_config: any;
-  labelOfWidgetGroup: string;
   id: string;
 }
 
@@ -156,22 +158,24 @@ export class DashboardComponent implements OnChanges, OnDestroy {
     this.userModules.forEach((el) => {
       let widgetInfo = this.getInfoAboutWidget(el, ['module_data']);
       if (widgetInfo) {
-        let labelOfWidgetGroup = widgetInfo.module_data.app
-          .split('_')
-          .map((elem) => elem.toUpperCase())
-          .join(' ');
-        let appName = widgetInfo.module_data.app.replace(/_/, '-');
-        let modelName = widgetInfo.module_data.plural_name.split(' ').join('').toLowerCase();
-        let endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
+        let endpoint;
+        if (!widgetInfo.module_data.endpoint) {
+          let appName = widgetInfo.module_data.app.replace(/_/, '-');
+          let modelName = widgetInfo.module_data.plural_name.split(' ').join('').toLowerCase();
+          endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
+        } else {
+          endpoint = widgetInfo.module_data.endpoint;
+        }
         let link = this.getLinkByEndpoint(this.pages, endpoint);
         let widget = <WidgetItem> {
-          plural_name: widgetInfo.module_data.plural_name,
-          label: widgetInfo.module_data.name,
+          label: widgetInfo.module_data.label || widgetInfo.module_data.plural_name,
+          name: widgetInfo.module_data.name,
+          addLabel: widgetInfo.module_data.add_label,
+          description: widgetInfo.module_data.description,
           link: el.ui_config ? link || '/' : '/',
           endpoint,
           position: el.position,
           ui_config: el.ui_config,
-          labelOfWidgetGroup,
           id: el.id
         };
         this.widgets.push(widget);

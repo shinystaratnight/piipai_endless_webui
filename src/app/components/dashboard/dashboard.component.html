@@ -14,8 +14,9 @@
         <div class="widget-item">
           <div class="widget-header">
             <div>
-              <h3 class="widget-title">{{widget.plural_name}}</h3>
-              <span class="widget-description">Open list with {{widget.plural_name | lowercase}}</span>
+              <h3 class="widget-title">{{widget.label}}</h3>
+              <span *ngIf="widget.description" class="widget-description">{{widget.description}}</span>
+              <span *ngIf="!widget.description" class="widget-description">Open list with {{widget.plural_name | lowercase}}</span>
             </div>
 
             <a [routerLink]="[widget.link]">
@@ -28,7 +29,8 @@
             </a>
           </div>
           <div class="widget-footer">
-            <a [routerLink]="[widget.link + '/add']" href="">+ Add new {{widget.label | lowercase}}</a>
+            <a *ngIf="widget.addLabel" [routerLink]="[widget.link + '/add']" href="">{{widget.addLabel}}</a>
+            <a *ngIf="!widget.addLabel" [routerLink]="[widget.link + '/add']" href="">+ Add new {{widget.name | lowercase}}</a>
           </div>
         </div>
       </ng-container>
