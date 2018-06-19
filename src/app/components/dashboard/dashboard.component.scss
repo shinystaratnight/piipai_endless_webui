@@ -107,14 +107,18 @@
     }
   }
 
-  .widget-header {
+  a:hover {
+    text-decoration: none;
+  }
+
+  a.widget-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     padding: 24px;
 
-    a:hover svg path {
+    &:hover svg path {
       fill: $gray;
       opacity: .6;
     }
@@ -148,23 +152,20 @@
     color: white;
   }
 
-  .widget-footer {
+  a.widget-footer {
+    display: block;
+
     padding: 1rem;
 
+    font-size: 14px;
+    line-height: 16px;
     text-align: center;
 
-    a {
-      font-size: 14px;
-      line-height: 16px;
+    color: $gray;
+    opacity: .6;
 
-      text-decoration: none;
-
-      color: $gray;
-      opacity: .6;
-
-      &:hover {
-        opacity: 1;
-      }
+    &:hover {
+      opacity: 1;
     }
   }
 }
