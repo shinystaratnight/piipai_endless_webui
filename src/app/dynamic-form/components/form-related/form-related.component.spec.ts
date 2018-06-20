@@ -246,8 +246,6 @@ describe('FormRelatedComponent', () => {
 
     it('should init properties', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = config;
-      comp.config.query = '?country=';
-      comp.config.id = 2;
       comp.key = comp.config.key;
       comp.group = fb.group({});
       comp.group.addControl(comp.key, fb.control(''));
@@ -255,7 +253,6 @@ describe('FormRelatedComponent', () => {
       comp.setInitValue();
       expect(comp.results).toEqual([]);
       expect(comp.generateDataForList).toHaveBeenCalledWith(comp.config, comp.config.value);
-      expect(comp.config.currentQuery).toEqual('?country=2');
     })));
 
     it('should update value if it a object', async(inject([FormBuilder], (fb: FormBuilder) => {

@@ -11,19 +11,18 @@ import {
   OnDestroy,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-
-import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Subscription } from 'rxjs/Subscription';
-
-import { FormatString } from '../../../helpers/format';
-
 import * as moment from 'moment-timezone';
+
+import { Field } from '../../models';
+import { FormatString } from '../../../helpers/format';
+import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 @Component({
   selector: 'form-input',
-  templateUrl: 'form-input.component.html',
+  templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
@@ -32,15 +31,18 @@ export class FormInputComponent
   extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
 
-  public config;
+  public config: Field;
   public group: FormGroup;
   public errors: any;
   public message: any;
   public key: any;
+
   public label: boolean;
   public filteredList: any[];
   public displayValue: string;
   public viewMode: boolean;
+  public formData: any;
+  public autocompleteValue: any;
 
   public query = '';
   public list = [];
@@ -49,34 +51,7 @@ export class FormInputComponent
   public hideAutocomplete = true;
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
-  public autocompleteFields = {
-    country: {
-      label: 'short_name',
-      field: 'country',
-      value: '',
-    },
-    administrative_area_level_1: {
-      label: 'long_name',
-      field: 'state',
-      value: '',
-      related: ['country'],
-    },
-    locality: {
-      label: 'long_name',
-      field: 'city',
-      value: '',
-      related: ['country', 'state']
-    },
-    postal_code: {
-      label: 'short_name',
-      field: 'postal_code',
-      value: '',
-    },
-    keys: ['country', 'administrative_area_level_1', 'locality', 'postal_code']
-  };
   public address = '';
-  public formData: any;
-  public autocompleteValue: any;
 
   @ViewChild('input') public input;
 
@@ -136,7 +111,11 @@ export class FormInputComponent
             }
           }
         } else {
-          this.setInitValue();
+          if (this.config.type !== 'address'
+            && this.key !== 'address'
+            && this.key !== 'street_address') {
+            this.setInitValue();
+          }
         }
 
       });
@@ -189,6 +168,8 @@ export class FormInputComponent
         if (data.hasOwnProperty(this.config.key)) {
           this.autocompleteValue = data[this.config.key];
         }
+
+        this.cd.detectChanges();
       });
 
       this.subscriptions.push(subscription);
@@ -317,6 +298,10 @@ export class FormInputComponent
       el: this.config,
       value: address
     });
+
+    setTimeout(() => {
+      this.cd.detectChanges();
+    }, 1000);
   }
 
   @HostListener('document:click', ['$event'])

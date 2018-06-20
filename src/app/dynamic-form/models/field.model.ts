@@ -23,6 +23,19 @@ export interface Field {
   view?: boolean;
   mode?: BehaviorSubject<string>;
   saveField?: boolean;
+  endpoint?: string;
+  custom?: any;
+  collapsed?: boolean;
+  editForm?: boolean;
+  metadata_query?: string;
+  add_metadata_query?: string;
+  customValue?: any;
+  default?: any;
+  autocompleteData?: Subject<any>;
+  autocomplete?: any[];
+  query?: any;
+  currentQuery?: string;
+  useOptions?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;
@@ -30,5 +43,9 @@ export interface Field {
     max?: number;
     required?: boolean;
     readonly?: boolean;
+    display?: string;
+    param?: string;
+    values?: string[];
+    text?: string;
   };
 };

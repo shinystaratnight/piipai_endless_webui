@@ -11,20 +11,19 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/filter';
 
-import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 import { GenericFormService } from '../../services';
 import { CheckPermissionService } from '../../../shared/services';
 import { NavigationService, UserService } from '../../../services';
-
-import { Field } from '../../models/field.model';
+import { BasicElementComponent } from '../basic-element/basic-element.component';
+import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
+
 
 export interface RelatedObject {
   id: string;
@@ -64,7 +63,7 @@ export class FormRelatedComponent
   @ViewChild('tableWrapper')
   public tableWrapper: any;
 
-  public config;
+  public config: Field;
   public group: FormGroup;
   public errors: any;
   public message: any;
@@ -248,6 +247,9 @@ export class FormRelatedComponent
         if (mode === 'view') {
           this.viewMode = true;
 
+          this.group.get(this.key).patchValue(undefined);
+          this.displayValue = undefined;
+
           this.autocompleteDisplay = false;
           if (this.searchSubscription) {
             this.searchSubscription.unsubscribe();
@@ -404,9 +406,6 @@ export class FormRelatedComponent
 
     }
 
-    if (this.config.query) {
-      this.config.currentQuery = `${this.config.query}${this.config.id}`;
-    }
     this.generateDataForList(this.config, this.config.value);
   }
 
