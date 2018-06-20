@@ -27,8 +27,8 @@ export interface Field {
   custom?: any;
   collapsed?: boolean;
   editForm?: boolean;
-  metadata_query?: string;
-  add_metadata_query?: string;
+  metadata_query?: string | any;
+  add_metadata_query?: string | any;
   customValue?: any;
   default?: any;
   autocompleteData?: Subject<any>;
