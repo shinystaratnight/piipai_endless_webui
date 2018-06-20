@@ -11,19 +11,18 @@ import {
   OnDestroy,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-
-import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Subscription } from 'rxjs/Subscription';
-
-import { FormatString } from '../../../helpers/format';
-
 import * as moment from 'moment-timezone';
+
+import { Field } from '../../models';
+import { FormatString } from '../../../helpers/format';
+import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 @Component({
   selector: 'form-input',
-  templateUrl: 'form-input.component.html',
+  templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
@@ -32,15 +31,18 @@ export class FormInputComponent
   extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
 
-  public config;
+  public config: Field;
   public group: FormGroup;
   public errors: any;
   public message: any;
   public key: any;
+
   public label: boolean;
   public filteredList: any[];
   public displayValue: string;
   public viewMode: boolean;
+  public formData: any;
+  public autocompleteValue: any;
 
   public query = '';
   public list = [];
@@ -49,33 +51,7 @@ export class FormInputComponent
   public hideAutocomplete = true;
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
-  public autocompleteFields = {
-    country: {
-      label: 'short_name',
-      field: 'country',
-      value: '',
-    },
-    administrative_area_level_1: {
-      label: 'long_name',
-      field: 'state',
-      value: '',
-      related: ['country'],
-    },
-    locality: {
-      label: 'long_name',
-      field: 'city',
-      value: '',
-      related: ['country', 'state']
-    },
-    postal_code: {
-      label: 'short_name',
-      field: 'postal_code',
-      value: '',
-    },
-    keys: ['country', 'administrative_area_level_1', 'locality', 'postal_code']
-  };
   public address = '';
-  public formData: any;
 
   @ViewChild('input') public input;
 
@@ -135,7 +111,11 @@ export class FormInputComponent
             }
           }
         } else {
-          this.setInitValue();
+          if (this.config.type !== 'address'
+            && this.key !== 'address'
+            && this.key !== 'street_address') {
+            this.setInitValue();
+          }
         }
 
       });
@@ -174,6 +154,7 @@ export class FormInputComponent
         } else {
           this.viewMode = this.config.read_only || false;
         }
+        this.autocompleteValue = undefined;
         this.setInitValue();
       });
 
@@ -185,8 +166,10 @@ export class FormInputComponent
     if (this.config.autocompleteData) {
       const subscription = this.config.autocompleteData.subscribe((data) => {
         if (data.hasOwnProperty(this.config.key)) {
-          this.group.get(this.key).patchValue(data[this.config.key].value);
+          this.autocompleteValue = data[this.config.key];
         }
+
+        this.cd.detectChanges();
       });
 
       this.subscriptions.push(subscription);
@@ -195,7 +178,10 @@ export class FormInputComponent
 
   public setInitValue() {
     if (this.config.type !== 'static' || this.config.key === 'strength') {
-      if (this.config.value === 0
+      if (this.autocompleteValue) {
+        this.displayValue = this.autocompleteValue;
+        this.group.get(this.key).patchValue(this.autocompleteValue);
+      } else if (this.config.value === 0
         || this.config.value
         || this.config.default
         || this.config.default === 0) {
@@ -222,6 +208,8 @@ export class FormInputComponent
         this.displayValue = this.config.templateOptions.text || this.config.value || '-';
       }
     }
+
+    this.cd.detectChanges();
   }
 
   public ngAfterViewInit() {
@@ -299,39 +287,21 @@ export class FormInputComponent
   public getAddress(address) {
     this.group.get(this.key).patchValue(address);
 
-    this.autocompleteFields.keys.forEach((field: string) => {
-      this.autocompleteFields[field].value = undefined;
-      this.autocompleteFields[field].long_name_value = '';
-    });
-
-    for (let i = address.address_components.length - 1; i; i--) {
-      let addressElement = address.address_components[i];
-      let addressType = addressElement.types[0];
-
-      if (this.autocompleteFields[addressType]) {
-        let val = addressElement[this.autocompleteFields[addressType].label];
-
-        this.autocompleteFields[addressType].value = val;
-      }
-    }
-
-    const result =  {};
-    this.autocompleteFields.keys.forEach((field: string) => {
-      const target = this.autocompleteFields[field];
-
-      result[target.field] = {
-        value: target.value,
-        related: target.related
-      };
-    });
-
     this.event.emit({
       type: 'change',
       el: this.config,
       value: address
     });
 
-    // this.config.autocompleteData.next(result);
+    this.event.emit({
+      type: 'address',
+      el: this.config,
+      value: address
+    });
+
+    setTimeout(() => {
+      this.cd.detectChanges();
+    }, 1000);
   }
 
   @HostListener('document:click', ['$event'])
