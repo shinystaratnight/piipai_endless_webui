@@ -145,8 +145,8 @@ export class FormRelatedComponent
     }
     this.checkAutocomplete();
     this.checkFormData();
-    this.createEvent();
     this.setInitValue();
+    this.createEvent();
     this.checkModeProperty();
     this.checkHiddenProperty();
     if (this.config.custom && this.config.custom.length) {
@@ -623,7 +623,6 @@ export class FormRelatedComponent
   public openAutocomplete(): void {
     if (this.config.type !== 'address') {
       if (this.hideAutocomplete === true) {
-        this.currentQuery = null;
         this.searchValue = null;
         this.generateList(this.searchValue);
         setTimeout(() => {
@@ -634,6 +633,7 @@ export class FormRelatedComponent
   }
 
   public generateList(value, concat = false): void {
+    this.currentQuery = null;
     this.hideAutocomplete = false;
     if (this.config.useOptions) {
       if (this.searchValue) {
@@ -697,6 +697,7 @@ export class FormRelatedComponent
     if (item) {
       if (this.config.many) {
         this.results.push(item);
+        this.hideAutocomplete = true;
         this.updateData();
       } else {
         this.displayValue = formatString.format(this.display, item);
@@ -817,7 +818,9 @@ export class FormRelatedComponent
     if (queries) {
       const keys = Object.keys(queries);
       keys.forEach((el) => {
-        query += `${el}=${format.format(queries[el], this.formData)}&`;
+        query += typeof queries[el] === 'string'
+          ? `${el}=${format.format(queries[el], this.formData)}&`
+          : `${el}=${queries[el]}&`;
       });
       query = query.slice(0, query.length - 1);
     }
@@ -826,73 +829,75 @@ export class FormRelatedComponent
 
   public getOptions(value, offset, concat = false, callback?, id?, customQuery?) {
     let endpoint = this.config.endpoint;
-    let query = '';
-    if (value) {
-      query += `?search=${value}&`;
-    }
-    query += !query ? '?' : '';
-    query += `limit=${this.limit}&offset=${offset}`;
-    query += this.generateFields(this.fields);
-    query += this.generateQuery(this.config.query);
-    if (customQuery) {
-      query += this.generateQuery(customQuery);
-    }
-    if (query !== this.currentQuery
-        && (!this.count || (this.count && offset < this.count && concat))) {
-      this.lastElement += this.limit;
-      this.currentQuery = query;
-      if (!id) {
-        this.genericFormService.getByQuery(endpoint, query).subscribe(
-          (res: any) => {
-            this.skipScroll = false;
-            this.count = res.count;
-            if (res.results && res.results.length) {
-              const formatString = new FormatString();
-              res.results.forEach((el) => {
-                el.__str__ = formatString.format(this.display, el);
-              });
-              if (concat && this.previewList) {
-                this.previewList.push(...res.results);
-              } else {
-                this.previewList = res.results;
+    if (endpoint) {
+      let query = '';
+      if (value) {
+        query += `?search=${value}&`;
+      }
+      query += !query ? '?' : '';
+      query += `limit=${this.limit}&offset=${offset}`;
+      query += this.generateFields(this.fields);
+      query += this.generateQuery(this.config.query);
+      if (customQuery) {
+        query += this.generateQuery(customQuery);
+      }
+      if (query !== this.currentQuery
+          && (!this.count || (this.count && offset < this.count && concat))) {
+        this.lastElement += this.limit;
+        this.currentQuery = query;
+        if (!id) {
+          this.genericFormService.getByQuery(endpoint, query).subscribe(
+            (res: any) => {
+              this.skipScroll = false;
+              this.count = res.count;
+              if (res.results && res.results.length) {
+                const formatString = new FormatString();
+                res.results.forEach((el) => {
+                  el.__str__ = formatString.format(this.display, el);
+                });
+                if (concat && this.previewList) {
+                  this.previewList.push(...res.results);
+                } else {
+                  this.previewList = res.results;
+                }
+
               }
+              if (callback) {
+                const target = res.results.find((el) => el.id === id);
 
+                const item = target || res.results[0];
+
+                if (item) {
+                  const path = this.getLinkPath(this.config.endpoint);
+                  if (path) {
+                    this.linkPath = location.origin + path + item[this.param] + '/change';
+                  } else {
+                    this.linkPath = '/';
+                  }
+
+                  callback.call(this, item);
+                }
+              }
             }
-            if (callback) {
-              const target = res.results.find((el) => el.id === id);
-
-              const item = target || res.results[0];
-
-              if (item) {
+          );
+        } else {
+          this.genericFormService
+          .getByQuery(endpoint + id + '/', `?${this.generateFields(this.fields)}`)
+          .subscribe(
+            (res: any) => {
+              if (res) {
                 const path = this.getLinkPath(this.config.endpoint);
                 if (path) {
-                  this.linkPath = location.origin + path + item[this.param] + '/change';
+                  this.linkPath = location.origin + path + res[this.param] + '/change';
                 } else {
                   this.linkPath = '/';
                 }
 
-                callback.call(this, item);
+                callback.call(this, res);
               }
             }
-          }
-        );
-      } else {
-        this.genericFormService
-        .getByQuery(endpoint + id + '/', `?${this.generateFields(this.fields)}`)
-        .subscribe(
-          (res: any) => {
-            if (res) {
-              const path = this.getLinkPath(this.config.endpoint);
-              if (path) {
-                this.linkPath = location.origin + path + res[this.param] + '/change';
-              } else {
-                this.linkPath = '/';
-              }
-
-              callback.call(this, res);
-            }
-          }
-        );
+          );
+        }
       }
     }
   }
