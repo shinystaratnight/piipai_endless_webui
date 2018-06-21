@@ -42,7 +42,7 @@ export class BasicElementComponent {
       && (config.templateOptions.type === 'number' || config.templateOptions.type === 'score')) {
       element.nativeElement.max = config.templateOptions.max;
     }
-    if (config.templateOptions.min
+    if ((config.templateOptions.min || config.templateOptions.min === 0)
       && (config.templateOptions.type === 'number' || config.templateOptions.type === 'score')) {
       element.nativeElement.min = config.templateOptions.min;
     }
