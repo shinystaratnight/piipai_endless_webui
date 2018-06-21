@@ -8,6 +8,7 @@
   padding-bottom: 25px;
 
   &-select {
+    margin-left: 11px;
     padding-right: 30px;
 
     background: #fff url(/assets/img/down-arrow.svg) no-repeat;
@@ -157,6 +158,10 @@
         }
       }
     }
+  }
+
+  button i {
+    line-height: 14px;
   }
 
   option {

@@ -80,14 +80,19 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       });
 
       if (!this.picture) {
-        const nameElements = this.title.split(' ');
 
-        if (nameElements && nameElements.length) {
-          if (nameElements.length === 2) {
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          } else if (nameElements.length === 3) {
-            nameElements.shift();
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
+        if (this.config.metadata['link']) {
+          this.picture = '/assets/img/logo.svg';
+        } else {
+          const nameElements = this.title.split(' ');
+
+          if (nameElements && nameElements.length) {
+            if (nameElements.length === 2) {
+              this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
+            } else if (nameElements.length === 3) {
+              nameElements.shift();
+              this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
+            }
           }
         }
       }

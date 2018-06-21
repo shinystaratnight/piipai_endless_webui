@@ -10,13 +10,20 @@
 
   <div class="form-info-block">
     <p>
-      <label *ngIf="config && viewMode" [class.text-success]="available" [class.text-danger]="!available">
+      <label *ngIf="config && viewMode && (available === true || available === false)" [class.text-success]="available" [class.text-danger]="!available">
         <i class="mr-2" fa [name]="available ? 'check-circle' : 'times-circle'"></i>
         {{available ? config.metadata['available'].templateOptions.label : 'Not' + config.metadata['available'].templateOptions.label}}
       </label>
 
       <ng-container formElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
         [config]="config.metadata['available']"
+        [group]="group">
+      </ng-container>
+
+      <a class="client-link" [href]="link" *ngIf="config && viewMode && link">{{link}}</a>
+
+      <ng-container formElement *ngIf="config && config.metadata['link'] && !viewMode && config.editForm"
+        [config]="config.metadata['link']"
         [group]="group">
       </ng-container>
     </p>
@@ -56,7 +63,7 @@
       </ng-container>
     </div>
 
-    <p *ngIf="config && viewMode" class="description">{{address}}</p>
+    <p *ngIf="config && viewMode" class="description">{{address}} <span class="address-hq" *ngIf="config.metadata['link']">|&nbsp;HQ</span></p>
     <p *ngIf="config && config.metadata['address'] && !viewMode && config.editForm">
       <ng-container formElement
         [config]="config.metadata['address']"

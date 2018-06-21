@@ -229,7 +229,7 @@ export class FormRelatedComponent
       const subscription = this.config.hidden.subscribe((hide) => {
         if (hide && !this.config.hide) {
           this.displayValue = null;
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key).patchValue('');
           this.setInitValue();
         }
         this.config.hide = hide;
@@ -247,7 +247,7 @@ export class FormRelatedComponent
         if (mode === 'view') {
           this.viewMode = true;
 
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key).patchValue('');
           this.displayValue = undefined;
 
           this.autocompleteDisplay = false;
@@ -704,7 +704,7 @@ export class FormRelatedComponent
       }
     } else {
       this.displayValue = '';
-      this.group.get(this.key).patchValue(undefined);
+      this.group.get(this.key).patchValue('');
     }
     this.changeList();
     this.eventHandler({type: 'change'}, item && item[this.param], item);

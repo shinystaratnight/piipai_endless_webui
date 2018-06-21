@@ -6,6 +6,8 @@
 </div>
 
 <div *ngIf="selectArray && currentState && this.dropdown" class="timeline timeline-select-wrapper">
+  Status:
+
   <select class="timeline-element badge badge-outline timeline-select"
     [ngClass]="{
       'need-requirements': getState(currentState).state === 0,

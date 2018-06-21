@@ -5,6 +5,10 @@ label {
   align-items: center;
 }
 
+p {
+  margin-bottom: 8px;
+}
+
 .form-info {
 
   &-wrapper {
@@ -143,11 +147,30 @@ label {
     .description {
       font-size: 12px;
       line-height: 14px;
+
+      .address-hq {
+        margin-left: 8px;
+
+        color: $brand-primary;
+      }
     }
 
     .job-title {
       font-size: 14px;
       line-height: 20px;
+    }
+
+    .client-link {
+      font-size: 14px;
+      line-height: 20px;
+
+      color: $brand-primary;
+
+      opacity: .8;
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 
