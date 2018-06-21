@@ -1,6 +1,6 @@
 <div class="form-group">
   <label>{{config.templateOptions.label}}:</label>
-  <div #calendar class="vacancy-dates-wrapper mb-2" (click)="eventHandler($event)">
+  <div #calendar class="vacancy-dates-wrapper mb-2">
     <ngb-datepicker
       [ngModel]="vacancyDate"
       [minDate]="minDate"
