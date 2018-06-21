@@ -1,17 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { LocalStorageService } from 'ng2-webstorage';
-import { SiteService, PageData } from '../../services/site.service';
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
-import { NavigationService } from '../../services/navigation.service';
-import { UserService, User } from '../../services/user.service';
-
-import { CheckPermissionService } from '../../shared/services/check-permission';
+import { SiteService, PageData, UserService, User, Role, NavigationService } from '../../services/';
+import { GenericFormService } from '../../dynamic-form/services/';
+import { CheckPermissionService, ToastrService, MessageType } from '../../shared/services/';
 
 @Component({
   selector: 'site',
-  templateUrl: 'site.component.html'
+  templateUrl: './site.component.html'
 })
 
 export class SiteComponent implements OnInit {
@@ -19,7 +15,7 @@ export class SiteComponent implements OnInit {
   public pageData: PageData;
   public user: User;
   public dashboard: boolean = true;
-  public pages: any;
+  public currentRole: Role;
 
   public modulesList: any;
   public userModules: any;
@@ -41,24 +37,27 @@ export class SiteComponent implements OnInit {
   public Jira: any;
   public jiraLoaded: boolean;
 
+  public listName: string;
+
+  public listNameCache = {};
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private siteService: SiteService,
-    private storage: LocalStorageService,
     private genericFormService: GenericFormService,
     private navigationService: NavigationService,
     private userService: UserService,
-    private permission: CheckPermissionService
+    private permission: CheckPermissionService,
+    private ts: ToastrService
   ) {}
 
   public ngOnInit() {
     this.loadScript();
     this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
     this.user = this.userService.user;
-    if (this.user.currentRole === 'candidate' || this.user.currentRole === 'client') {
-      document.getElementsByTagName('head')[0].appendChild(this.Jira);
-    }
+    this.currentRole = this.user.currentRole;
+    this.updateJiraTask(this.user.currentRole);
     this.route.url.subscribe(
       (url: any) => {
         this.formLabel = '';
@@ -102,8 +101,12 @@ export class SiteComponent implements OnInit {
         if (pageData.pathData.path === '/profile/') {
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-        } else if (!pageData.endpoint) {
-          this.router.navigate(['/']);
+        } else if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
+          setTimeout(() => {
+            this.ts.sendMessage('Page not found!', MessageType.error);
+          }, 2000);
+
+          this.router.navigate(['']);
           return;
         } else {
           setTimeout(() => {
@@ -117,16 +120,50 @@ export class SiteComponent implements OnInit {
           }, 0);
         }
         this.setActivePage(this.pagesList, pageData.pathData.path);
+
+        this.getNameOfList(pageData);
       }
     );
   }
 
-  public updateNavigationList(role: string) {
-    if (role === 'client' || role === 'candidate') {
-      if (!this.jiraLoaded) {
-        document.getElementsByTagName('head')[0].appendChild(this.Jira);
-        this.jiraLoaded = true;
+  public getNameOfList(pageData: PageData) {
+    if (pageData.pathData.type === 'form') {
+      if (this.listNameCache[pageData.endpoint]) {
+        this.listName = this.listNameCache[pageData.endpoint];
+        return;
+      }
 
+      this.genericFormService.getMetadata(pageData.endpoint)
+        .subscribe((list) => {
+          if (list && list.list && list.list.label) {
+            this.listName = list.list.label;
+            this.listNameCache[pageData.endpoint] = list.list.label;
+          }
+        });
+    }
+  }
+
+  public updateNavigationList(role: Role) {
+    this.updateJiraTask(role);
+
+    this.userService.currentRole(role);
+    this.currentRole = role;
+    this.navigationService.getPages(role)
+      .subscribe((pages: any) => {
+        this.permission.parseNavigation(this.permission.permissions, pages);
+        this.pagesList = pages;
+
+        if (this.router.url !== '/') {
+          this.router.navigate(['']);
+        }
+      });
+  }
+
+  public updateJiraTask(role: Role) {
+    const trigger = document.getElementById('atlwdg-trigger');
+    if (role.__str__.includes('client') || role.__str__.includes('candidate')) {
+      if (!trigger) {
+        document.getElementsByTagName('head')[0].appendChild(this.Jira);
       } else {
         setTimeout(() => {
           let link = document.getElementById('atlwdg-trigger');
@@ -136,19 +173,10 @@ export class SiteComponent implements OnInit {
         }, 1000);
       }
     } else {
-      document.getElementById('atlwdg-trigger').style.display = 'none';
+      if (trigger) {
+        trigger.style.display = 'none';
+      }
     }
-
-    this.userService.currentRole(role);
-    this.navigationService.getPages(role)
-      .subscribe((pages: any) => {
-        this.permission.parseNavigation(this.permission.permissions, pages);
-        this.pagesList = this.filterNavigation(pages, this.userModules, this.modulesList);
-
-        if (this.router.url !== '/') {
-          this.router.navigate(['']);
-        }
-      });
   }
 
   public getPageNavigation(url) {
@@ -168,29 +196,13 @@ export class SiteComponent implements OnInit {
 
   public getModelsList(url) {
     this.navigationService.getModules().subscribe(
-      (res: any) => {
-        this.modulesList = res;
-        if (this.pages && this.userModules && this.modulesList) {
-          this.pagesList = this.filterNavigation(this.pages, this.userModules, this.modulesList);
-          if (url.length) {
-            this.getPageData(url);
-          }
-        }
-      }
+      (res: any) => this.modulesList = res
     );
   }
 
   public getUserModules(url) {
     this.navigationService.getUserModules().subscribe(
-      (res: any) => {
-        this.userModules = res;
-        if (this.pages && this.userModules && this.modulesList) {
-          this.pagesList = this.filterNavigation(this.pages, this.userModules, this.modulesList);
-          if (url.length) {
-            this.getPageData(url);
-          }
-        }
-      }
+      (res: any) => this.userModules = res
     );
   }
 
@@ -199,19 +211,17 @@ export class SiteComponent implements OnInit {
 
     this.navigationService.getPages(role).subscribe(
       (res: any) => {
-        this.pages = res;
-        if (this.pages && this.userModules && this.modulesList) {
-          this.pagesList = this.filterNavigation(this.pages, this.userModules, this.modulesList);
-          if (url.length) {
-            this.getPageData(url);
-          }
+        this.pagesList = res;
+
+        if (url.length) {
+          this.getPageData(url);
         }
       }
     );
   }
 
-  public changeMode(pageData) {
-    this.formMode = 'edit';
+  public changeMode(mode: string) {
+    this.formMode = mode;
   }
 
   public formEvent(e) {
@@ -253,51 +263,8 @@ export class SiteComponent implements OnInit {
     );
   }
 
-  public filterNavigation(pages, userModels, models) {
-    let endpointsList = [];
-    userModels.forEach((el) => {
-      if (el && el.dashboard_module) {
-        let model = models.filter((elem) => {
-          if (elem.id === el.dashboard_module.id && !el.ui_config.display_on_navbar) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        if (model.length) {
-          let appName = model[0].module_data.app.replace(/_/, '-');
-          let modelName = model[0].module_data.plural_name.split(' ').join('').toLowerCase();
-          let endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
-          endpointsList.push(endpoint);
-        }
-      }
-    });
-    this.removePages(pages, endpointsList);
-    return pages;
-  }
-
-  public removePages(pages, endpoints) {
-    pages.forEach((el, i) => {
-      if (el.childrens && el.childrens.length) {
-        if (endpoints.indexOf(el.endpoint) > -1) {
-          el.disabled = true;
-        }
-        let childrens = this.removePages(el.childrens, endpoints);
-        if (!childrens.length && el.disabled) {
-          pages.splice(i, 1);
-          this.removePages(pages, endpoints);
-        }
-      } else if (endpoints.indexOf(el.endpoint) > -1) {
-        pages.splice(i, 1);
-        this.removePages(pages, endpoints);
-      }
-    });
-    return pages;
-  }
-
   public updateNavigation(e) {
     if (e.changed) {
-      this.pages = null;
       this.userModules = null;
       this.modulesList = null;
       this.getPageNavigation([]);
@@ -327,5 +294,13 @@ export class SiteComponent implements OnInit {
       }
     });
     return active;
+  }
+
+  public getClientId(): string | undefined {
+    if (this.currentRole.__str__.includes('client')) {
+      return this.currentRole.id;
+    }
+
+    return undefined;
   }
 }

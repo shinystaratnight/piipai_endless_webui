@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { Subscription } from 'rxjs/Subscription';
+
+import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 interface Option {
   label: string|number;
@@ -13,7 +15,7 @@ interface Option {
   templateUrl: 'form-options.component.html'
 })
 
-export class FormOptionsComponent extends BasicElementComponent implements OnInit {
+export class FormOptionsComponent extends BasicElementComponent implements OnInit, OnDestroy {
 
   public config;
   public group: FormGroup;
@@ -23,17 +25,21 @@ export class FormOptionsComponent extends BasicElementComponent implements OnIni
 
   public optionsArray: Option[];
 
+  private subscriptions: Subscription[];
+
   constructor(
     private fb: FormBuilder,
+    private cd: ChangeDetectorRef
   ) {
     super();
+    this.subscriptions = [];
   }
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
     this.setInitValue();
     if (this.config && this.config.hidden) {
-      this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -41,9 +47,17 @@ export class FormOptionsComponent extends BasicElementComponent implements OnIni
         } else {
           this.config.hide = hide;
         }
+
+        this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
     this.createEvent();
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   public setInitValue() {

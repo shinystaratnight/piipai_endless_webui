@@ -31,6 +31,7 @@ import { FormSelectComponent } from './form-select/form-select.component';
 import { FormTextareaComponent } from './form-textarea/form-textarea.component';
 import { FormTimelineComponent } from './form-timeline/form-timeline.component';
 import { FormVacancyDatesComponent } from './form-vacancy-dates/form-vacancy-dates.component';
+import { FormInfoComponent } from './form-info/form-info.component';
 
 // List elements
 import { GenericListComponent } from './generic-list/generic-list.component';
@@ -77,6 +78,7 @@ export const entryComponents = [
   FormTextareaComponent,
   FormTimelineComponent,
   FormVacancyDatesComponent,
+  FormInfoComponent,
 
   ListCheckboxComponent,
   ListImageComponent,

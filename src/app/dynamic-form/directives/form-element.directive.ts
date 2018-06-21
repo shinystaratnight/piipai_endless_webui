@@ -33,6 +33,9 @@ import { FormReplaceComponent } from '../components/form-replace/form-replace.co
 import { ListLinkComponent } from '../components/list-link/list-link.component';
 import { FormJsonComponent } from '../components/form-json/form-json.component';
 import { FormColumnComponent } from '../containers/form-column/form-column.component';
+import { FormTabsComponent } from '../containers/form-tabs/form-tabs.component';
+import { FormInfoComponent } from '../components/form-info/form-info.component';
+import { FormGroupComponent } from '../containers/form-group/form-group.component';
 
 const components = {
   input: FormInputComponent,
@@ -57,7 +60,11 @@ const components = {
   replace: FormReplaceComponent,
   link: ListLinkComponent,
   json: FormJsonComponent,
-  column: FormColumnComponent
+  column: FormColumnComponent,
+  tabs: FormTabsComponent,
+  info: FormInfoComponent,
+  group: FormGroupComponent,
+  address: FormInputComponent
 };
 
 @Directive({
@@ -78,6 +85,8 @@ export class FormElementDirective implements OnInit, OnChanges {
 
   @Input()
   public message: any;
+
+  @Input() public formId: number;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -101,6 +110,7 @@ export class FormElementDirective implements OnInit, OnChanges {
       this.component.instance.event = this.event;
       this.component.instance.message = this.message;
       this.component.instance.buttonAction = this.buttonAction;
+      this.component.instance.formId = this.formId;
     }
   }
 
@@ -111,10 +121,10 @@ export class FormElementDirective implements OnInit, OnChanges {
         if (this.config.templateOptions.type === 'picture') {
           component = components['picture'];
         } else {
-          component = components[this.config.type];
+          component = this.getComponent(this.config.type, this.config.editForm);
         }
       } else {
-        component = components[this.config.type];
+        component = this.getComponent(this.config.type, this.config.editForm);
       }
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
@@ -125,6 +135,7 @@ export class FormElementDirective implements OnInit, OnChanges {
       this.component.instance.event = this.event;
       this.component.instance.message = this.message;
       this.component.instance.buttonAction = this.buttonAction;
+      this.component.instance.formId = this.formId;
     }
   }
 
@@ -133,5 +144,12 @@ export class FormElementDirective implements OnInit, OnChanges {
       return true;
     }
     return false;
+  }
+
+  public getComponent(type, edit?) {
+    if (type === 'address' && edit) {
+      return FormRelatedComponent;
+    }
+    return components[type];
   }
 }

@@ -2,4 +2,9 @@
 <img *ngIf="src" [src]="src" width="60" height="60">
 <i *ngIf="icon" fa [name]="icon" [ngClass]="[iconClass]" [title]="config.title || ''"></i>
 <span *ngIf="config.delim && !last">{{config.delim}}</span>
+<a *ngIf="file" [href]="file" target="_blank">
+  <i fa name="file" class="mr-2"></i>
+  Сertificate of education
+</a>
+<div *ngIf="contactAvatar" class="contact-avatar">{{contactAvatar}}</div>
 <br *ngIf="!config.hidden && !config.delim">

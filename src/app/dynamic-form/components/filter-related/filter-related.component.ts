@@ -17,10 +17,9 @@ import { FilterService } from './../../services/filter.service';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/skip';
+import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'filter-related',
@@ -37,6 +36,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
+  public skipScroll = false;
 
   public list: any[];
   public limit: number = 10;
@@ -101,7 +101,8 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public ngAfterViewInit() {
     if (this.search) {
       this.subscription = this.search.valueChanges
-        .skip(1)
+        .skip(2)
+        .filter((value) => value !== null)
         .debounceTime(400)
         .subscribe((res) => {
           this.filter();
@@ -173,7 +174,10 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public onModalScrollDown() {
     if (!this.multiple) {
-      this.generateList(true);
+      if (!this.skipScroll) {
+        this.skipScroll = true;
+        this.generateList(true);
+      }
     }
   }
 
@@ -346,6 +350,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.item.lastElement += this.limit;
       this.genericFormService.getByQuery(endpoint, query).subscribe(
         (res: any) => {
+          this.skipScroll = false;
           this.item.count = res.count;
           if (res.results) {
             if (concat) {

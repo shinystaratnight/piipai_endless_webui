@@ -17,7 +17,7 @@ export class BasicElementComponent {
         if (config.type === 'related' && !config.many) {
           keys.push('id');
           this.addControls(this.group, keys, fb);
-        } else if (config.type !== 'static') {
+        } else if (config.type !== 'static' || config.key === 'strength') {
           this.group.addControl(config.key, fb.control(undefined, required ? Validators.required : undefined)); //tslint:disable-line
           this.key = config.key;
         }
@@ -56,7 +56,9 @@ export class BasicElementComponent {
     this.event.emit({
       type: 'create',
       el: this.config,
-      value: this.group.get(this.key).value
+      value: this.config.key === 'id'
+        ? { id: this.group.get(this.key).value }
+        : this.group.get(this.key).value
     });
   }
 

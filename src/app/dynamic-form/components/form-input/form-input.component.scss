@@ -1,18 +1,37 @@
+@import '../../../../styles/variables.scss';
+
+.showAll {
+  max-height: none;
+}
+
 .star {
   position: relative;
   display: inline-block;
   font-size: 1.5rem;
-  color: #b0c4de;
+  color: #bdbdbd;
 }
 .full {
-  color: #1e90ff;
+  color: #ffd042;
 }
 .half {
   position: absolute;
   display: inline-block;
   overflow: hidden;
-  color: #1e90ff;
+  color: #ffd042;
 }
+.addon-input {
+  padding: 0 0 0 49px !important;
+
+  border: 1px solid rgba($gray, 0.2) !important;
+
+  background-color: #fdfdfd;
+
+  &:focus,
+  &:hover {
+    border-color: #4f4f4f;
+  }
+}
+
 .addon,
 .password {
   position: absolute;
@@ -22,7 +41,7 @@
 
   padding: 14px;
 
-  opacity: .3;
+  opacity: 0.2;
 
   img {
     width: 16px;
@@ -32,44 +51,65 @@
 .addon {
   padding-right: 10px;
 
-  border-right: 1px solid rgba(#333, .6);
+  border-right: 1px solid rgba(#333, 0.6);
 }
 
-.password  {
+.password {
   right: 0;
+  height: auto;
 
-  img:hover {
+  padding: 0;
+  margin: 14px;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  svg {
+    fill: $gray;
+  }
+
+  svg:hover {
     opacity: 1;
     cursor: pointer;
+
+    fill: #4f4f4f;
   }
 }
 
 .form-control::-webkit-input-placeholder {
   font-size: 14px;
 
-  opacity: .54;
+  opacity: 0.54;
 }
 
-.form-control::-moz-placeholder, {
+.form-control::-moz-placeholder {
   font-size: 14px;
 
-  opacity: .54;
+  opacity: 0.54;
 }
 
 .form-control:-ms-input-placeholder {
   font-size: 14px;
 
-  opacity: .54;
+  opacity: 0.54;
 }
 
 .form-control:-moz-placeholder {
   font-size: 14px;
 
-  opacity: .54;
+  opacity: 0.54;
 }
 
 .form-control::placeholder {
   font-size: 14px;
 
-  opacity: .54;
+  opacity: 0.54;
+}
+
+.rating {
+  display: flex;
+  align-items: flex-start;
+
+  color: $brand-primary;
 }

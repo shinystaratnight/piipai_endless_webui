@@ -6,7 +6,8 @@ import { CustomEvent } from '../../models/custom-event.model';
 
 @Component({
   selector: 'dynamic-form',
-  templateUrl: 'dynamic-form.component.html'
+  templateUrl: 'dynamic-form.component.html',
+  styleUrls: ['./dynamic-form.component.scss']
 })
 
 export class DynamicFormComponent implements OnInit, OnChanges {
@@ -28,6 +29,8 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Input()
   public hiddenFields: any;
 
+  @Input() public formId: number;
+
   @Output()
   public submit: EventEmitter<any> = new EventEmitter<any>();
 
@@ -43,13 +46,17 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   @Output()
   public resourseData: EventEmitter<any> = new EventEmitter();
 
+  @Output() public changeValue: EventEmitter<any> = new EventEmitter();
+
+  @Input()
   public form: FormGroup;
   public currentForm: any;
+  public fullData: any;
 
   constructor(private fb: FormBuilder) {}
 
   public ngOnInit() {
-    this.form = this.fb.group({});
+    this.form = this.form || this.fb.group({});
     this.currentForm = this.config;
   }
 
@@ -100,6 +107,10 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public eventHandler(e: CustomEvent): void {
     this.event.emit(e);
+
+    if (e.type === 'change') {
+      this.changeValue.emit(this.form.value);
+    }
     let key;
     if (e.el) {
       key = e.el.type === 'related' ? e.el.key + '.id' : e.el.key;
@@ -107,13 +118,50 @@ export class DynamicFormComponent implements OnInit, OnChanges {
     setTimeout(() => {
       if (e.el && e.el.formData) {
         if ((e.type === 'change' || e.type === 'create') && e.el && e.el.key) {
-          e.el.formData.next({key: e.el.key, data: this.form.value});
+          const newData = this.generateData(e.el.key, e.el.formData.getValue().data, e);
+          this.fullData = newData;
+          if (this.hiddenFields && this.hiddenFields.observers.indexOf(key) > -1) {
+            this.parseConfig(this.hiddenFields.elements);
+          }
+          e.el.formData.next({
+            key: e.el.key,
+            data: newData
+          });
         }
       }
-      if (this.hiddenFields && this.hiddenFields.observers.indexOf(key) > -1) {
-        this.parseConfig(this.hiddenFields.elements);
-      }
     }, 50);
+  }
+
+  public generateData(key: string, data = {}, event: CustomEvent): any {
+    const keys = key.split('.');
+    const firstKey = keys.shift();
+
+    if (keys.length === 0) {
+      if (event.el.type === 'related' && firstKey !== 'id') {
+        if (data[firstKey]) {
+          data[firstKey] = {
+            ...data[firstKey],
+            ...event.additionalData
+          };
+        } else {
+          data[firstKey] = {
+            id: event.value,
+            ...event.additionalData
+          };
+        }
+      } else {
+        data[firstKey] = event.value;
+      }
+    } else {
+      if (data[firstKey]) {
+        this.generateData(keys.join('.'), data[firstKey], event);
+      } else {
+        data[firstKey] = {};
+        this.generateData(keys.join('.'), data[firstKey], event);
+      }
+    }
+
+    return data;
   }
 
   public parseConfig(metadata: Field[]) {
@@ -166,7 +214,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   public checkShowRules(rule: any[]): boolean {
     let approvedRules = 0;
     let rulesNumber = rule.length;
-    let data = this.form.value;
+    let data = this.fullData;
 
     rule.forEach((el: any) => {
       if (typeof el === 'string') {
@@ -206,7 +254,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public removeValuesOfHiddenFields(metadata: Field[], data): void {
     metadata.forEach((el: Field) => {
-      if (el.hide && el.key) {
+      if (el.hide && el.key && !el.saveField) {
         this.removeValue(el.key, data);
       }
     });
@@ -227,7 +275,7 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public filterSendData(metadata: Field[], data) {
     metadata.forEach((el) => {
-      if (el.send === false) {
+      if (el.send === false && !el.saveField) {
         this.removeValue(el.key, data);
       } else if (el.children) {
         this.filterSendData(el.children, data);

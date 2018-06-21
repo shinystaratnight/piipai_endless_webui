@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 
 import { Observable } from 'rxjs/Observable';
 
-import { UserService } from './user.service';
+import { GenericFormService } from '../dynamic-form/services/generic-form.service';
+import { Role } from './user.service';
 
 export interface Page {
   name: string;
@@ -17,40 +17,40 @@ export interface Page {
 @Injectable()
 export class NavigationService {
 
-  public currentRole: string;
-  public navigationList: any = {};
+  public currentRole: Role;
   public userModels: any;
   public models: any;
-  public endpoint = '/ecore/api/v2/core/extranetnavigations/?limit=-1';
-  public userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/?limit=-1';
-  public modelsListEndpoint = '/ecore/api/v2/core/dashboardmodules/?limit=-1';
   public error;
   public parsedByPermissions: boolean;
 
+  public navigationList: any = {};
+  public endpoint = '/ecore/api/v2/core/extranetnavigations/?limit=-1';
+  public userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/?limit=-1';
+  public modelsListEndpoint = '/ecore/api/v2/core/dashboardmodules/?limit=-1';
   public linksList: Page[] = [];
 
   constructor(
     private gfs: GenericFormService,
   ) { }
 
-  public getPages(role) {
-    if (!this.navigationList[role]) {
-      let query = `&role=${role}`;
+  public getPages(role: Role) {
+    if (!this.navigationList[role.id]) {
+      let query = `&role=${role.id}`;
       return this.gfs.getAll(`${this.endpoint}${query}`)
         .map(
         (res: any) => {
           if (res.results) {
             this.currentRole = role;
-            this.navigationList[role] = res.results;
+            this.navigationList[role.id] = res.results;
             this.linksList.length = 0;
-            this.generateLinks(this.navigationList[role], this.linksList);
+            this.generateLinks(this.navigationList[role.id], this.linksList);
 
-            return this.navigationList[role];
+            return this.navigationList[role.id];
           }
         }
       );
     } else {
-      return Observable.of(this.navigationList[role]);
+      return Observable.of(this.navigationList[role.id]);
     }
   }
 
@@ -80,11 +80,11 @@ export class NavigationService {
     return this.getPages(this.currentRole);
   }
 
-  public setCurrentRole(role) {
+  public setCurrentRole(role: Role) {
     this.currentRole = role;
-    if (this.navigationList[role]) {
+    if (this.navigationList[role.id]) {
       this.linksList.length = 0;
-      this.generateLinks(this.navigationList[role], this.linksList);
+      this.generateLinks(this.navigationList[role.id], this.linksList);
     }
   }
 
@@ -96,5 +96,4 @@ export class NavigationService {
       }
     });
   }
-
 }

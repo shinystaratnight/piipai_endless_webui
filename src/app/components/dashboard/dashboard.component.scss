@@ -1,6 +1,8 @@
 @import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
 
 .dashboard {
+  padding-top: 31px;
 
   a:hover {
     text-decoration: underline;
@@ -42,6 +44,128 @@
   .widget:hover {
     .icon {
       display: block;
+    }
+  }
+
+  .title,
+  &-wrapper {
+    width: calc(100% - 285px);
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    @include media-breakpoint-down('md') {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .title {
+    margin-bottom: 16px;
+
+    font-size: 36px;
+    line-height: 1;
+    font-weight: normal;
+
+    color: #4f4f4f;
+  }
+
+  &-wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    padding: 24px;
+    padding-bottom: calc(24px - 2%);
+
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba($gray, 0.1);
+  }
+
+  .widget-item {
+    width: 49%;
+
+    margin-bottom: calc(2%);
+
+    border: 1px solid rgba(51, 51, 51, .2);
+    border-radius: 5px;
+
+    &:nth-child(4n + 1) .widget-header {
+      background: linear-gradient(45deg, #7faefe 0%, #80f0fe 100%);
+    }
+
+    &:nth-child(4n + 2) .widget-header {
+      background: linear-gradient(45deg, #ffd181 0%, #ff8080 100%);
+    }
+
+    &:nth-child(4n + 3) .widget-header {
+      background: linear-gradient(45deg, #ff7fb7 0%, #ff8080 100%);
+    }
+
+    &:nth-child(4n + 4) .widget-header {
+      background: linear-gradient(45deg, #4ed063 0%, #befe8e 100%);
+    }
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  a.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 24px;
+
+    &:hover svg path {
+      fill: $gray;
+      opacity: .6;
+    }
+
+    svg {
+      height: 24px;
+      width: 24px;
+
+      transform: rotate(-90deg);
+
+      path {
+        fill: white;
+      }
+    }
+
+  }
+
+  .widget-title {
+    margin-bottom: 0;
+
+    font-size: 24px;
+    line-height: 1.2;
+
+    color: white;
+  }
+
+  .widget-description {
+    font-size: 14px;
+    line-height: 16px;
+
+    color: white;
+  }
+
+  a.widget-footer {
+    display: block;
+
+    padding: 1rem;
+
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+
+    color: $gray;
+    opacity: .6;
+
+    &:hover {
+      opacity: 1;
     }
   }
 }

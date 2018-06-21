@@ -11,7 +11,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import { UserService, User, NavigationService, Page } from '../../../services';
+import { UserService, User, NavigationService, Page, Role } from '../../../services';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -49,7 +49,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   public user: User;
 
   @Output()
-  public update: EventEmitter<string> = new EventEmitter();
+  public update: EventEmitter<Role> = new EventEmitter();
 
   public headerHeight: number;
   public error: any;
@@ -97,7 +97,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public getUserInformation() {
     if (this.user && this.user.data.contact) {
-      this.currentRole = this.user.currentRole;
+      this.currentRole = this.user.currentRole.id;
       this.greeting = `Welcome, ${this.user.data.contact.__str__}`;
       this.candidate = this.user.data.contact.contact_type === 'candidate';
       this.company = this.user.data.contact.company;
@@ -138,7 +138,11 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     this.userService.logout();
   }
 
-  public changeRole(role) {
+  public changeRole(id: string) {
+    const role  = this.user.roles.find((el: Role) => el.id === id);
+
+    this.currentRole = role.id;
+
     this.update.emit(role);
   }
 

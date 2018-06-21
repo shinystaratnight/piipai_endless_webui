@@ -1,5 +1,6 @@
 body {
   font-family: 'Source Sans Pro', sans-serif;
+  -webkit-font-smoothing: antialiased;
 
   font-size: 16px;
   line-height: 20px;
@@ -9,12 +10,14 @@ body {
   background-color: #f5f5f5;
 }
 
-
-label, b {
+label,
+b {
   font-weight: 500;
 }
 
 button {
+  font-family: inherit;
+
   cursor: pointer;
 }
 
@@ -42,9 +45,7 @@ i {
   opacity: 1;
 }
 
-input[type="checkbox"]:checked ~ .custom-checkbox {
-  font-size: 12px;
-
+input[type='checkbox']:checked ~ .custom-checkbox {
   border-color: $brand-primary;
 
   background-color: $brand-primary;
@@ -64,34 +65,53 @@ input[type="checkbox"]:checked ~ .custom-checkbox {
 }
 
 input {
-  border-color: rgba(#333, .2);
+  border-color: rgba(#333, 0.2);
+
+  font-family: inherit;
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus
+  &:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px rgba($brand-primary, .2) inset;
+    box-shadow: 0 0 0px 1000px rgba($brand-primary, .2) inset;
+
+    transition: background-color 5000s ease-in-out 5000s;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        -webkit-box-shadow: 0 0 0px 1000px rgba(map-get($theme-colors, $item), .2) inset;
+        box-shadow: 0 0 0px 1000px rgba(map-get($theme-colors, $item), .2) inset;
+      }
+    }
+  }
 }
 
 input.not-empty,
 select.not-empty {
-  border-color: rgba(#333, .3);
+  border-color: rgba(#333, 0.3);
 
   background-color: #fefefe;
 
   & ~ .addon {
-    border-color: rgba(#333, .8);
+    border-color: rgba(#333, 0.8) !important;
   }
 }
 
 .custom-checkbox {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
 
   min-width: 1rem;
   height: 1rem;
 
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 
   font-size: 12px;
 
   border: 1px solid #bdbdbd;
-  border-radius: .2rem;
+  border-radius: 0.2rem;
 
   cursor: pointer;
 
@@ -107,7 +127,7 @@ select.not-empty {
 }
 
 .modal {
-  z-index: 1;
+  z-index: 2;
 }
 
 .input-group .form-control,
@@ -116,20 +136,23 @@ select.not-empty {
 }
 
 .tooltip {
-
   color: $gray;
   opacity: 1;
+
+  z-index: 3;
 
   &.show {
     opacity: 1;
   }
 
   &-inner {
+    min-width: 200px;
+
     font-size: 12px;
 
     background-color: white;
     color: inherit;
-    box-shadow: 0 0 8px 2px rgba($gray, .3);
+    box-shadow: 0 0 8px 2px rgba($gray, 0.3);
 
     .tooltip-right &::before {
       width: 10px;
@@ -138,9 +161,25 @@ select.not-empty {
       border: none;
 
       transform: rotate(45deg);
-      box-shadow: -4px 4px 15px 1px rgba($gray, .2);
+      box-shadow: -4px 4px 15px 1px rgba($gray, 0.2);
+    }
+
+    .tooltip-bottom &::before {
+      width: 10px;
+      height: 10px;
+
+      border: none;
+
+      background-color: #fff;
+
+      transform: rotate(45deg);
+      box-shadow: 4px -4px 15px 1px rgba($gray, 0.2);
     }
   }
+}
+
+.btn {
+  border-radius: 100px;
 }
 
 .btn-primary {
@@ -148,37 +187,39 @@ select.not-empty {
   background-color: $brand-primary;
 
   &:focus {
-    box-shadow: 0 0 2px rgba($brand-primary, .5);
+    box-shadow: 0 0 2px rgba($brand-primary, 0.5);
 
     @each $item in $themes {
       .#{$item}-theme & {
-        box-shadow: 0 0 2px rgba(map-get($theme-colors, $item), .5);
+        box-shadow: 0 0 2px rgba(map-get($theme-colors, $item), 0.5);
       }
     }
   }
 }
 
 .badge {
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: normal;
 
-  padding: .56rem;
+  line-height: 1;
+
+  padding: 0.56rem;
 
   border-radius: 50px;
 
-  background-color: rgba($brand-primary, .5);
+  background-color: rgba($brand-primary, 0.5);
   color: inherit;
 
   @each $item in $themes {
     .#{$item}-theme & {
-      background-color: rgba(map-get($theme-colors, $item), .5);
+      background-color: rgba(map-get($theme-colors, $item), 0.5);
     }
   }
 }
 
 .btn-outline-primary {
-  font-size: .625rem;
-  padding: .25rem;
+  font-size: 0.625rem;
+  padding: 0.25rem;
 
   @each $item in $themes {
     .#{$item}-theme & {
@@ -199,11 +240,18 @@ select.not-empty {
   }
 }
 
+.modal-header {
+  background-color: #fff;
+}
+
 .modal-content {
   max-height: 90vh;
+
   margin-top: 5vh;
+
   overflow: auto;
-  box-shadow: 0 0 10px 4px rgba(0, 0, 0, .2);
+
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
 
   .modal-header-wrapper {
     position: sticky;
@@ -212,32 +260,40 @@ select.not-empty {
     z-index: 100;
   }
 
+  .modal-body {
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
   .modal-title {
     overflow: hidden;
     white-space: nowrap;
   }
 
   @include media-breakpoint-down('md') {
-    max-height: 100%;
+    max-height: 75vh;
   }
 }
 
 .group-button {
-  font-size: .7rem;
+  font-size: 0.7rem;
+  border-color: lighten($brand-primary, 15%);
   background-color: lighten($brand-primary, 15%);
 
   @each $item in $themes {
     .#{$item}-theme & {
+      border-color: lighten(map-get($theme-colors, $item), 15%) !important;
       background-color: lighten(map-get($theme-colors, $item), 15%) !important;
     }
   }
 
   &:hover,
   &:focus {
+    border-color: darken($brand-primary, 10%);
     background-color: darken($brand-primary, 10%);
 
     @each $item in $themes {
       .#{$item}-theme & {
+        border-color: darken(map-get($theme-colors, $item), 10%) !important;
         background-color: darken(map-get($theme-colors, $item), 10%) !important;
       }
     }
@@ -247,6 +303,13 @@ select.not-empty {
 .form-list .form-group,
 .form-list .form-control {
   margin-bottom: 0;
+}
+
+.form-control {
+  font-size: 14px;
+  line-height: 16px;
+
+  border-radius: 0;
 }
 
 .form-control:focus {
@@ -261,6 +324,48 @@ select.not-empty {
 
 .list-group-item:last-child {
   border-radius: 0;
+}
+
+.nav-tabs {
+  align-items: flex-end;
+  flex-wrap: wrap;
+
+  justify-content: space-around !important;
+
+  border: none;
+  border-bottom: 2px solid rgba(#e5e5e5, 0.8);
+
+  .nav-link {
+    padding: 6px;
+    padding-bottom: 8px;
+
+    font-size: 14px;
+    line-height: 14px;
+
+    border: none;
+
+    color: rgba(black, 0.43);
+
+    &.active {
+      padding: 6px;
+
+      background-color: transparent;
+      border-color: none;
+
+      color: inherit;
+
+      border-bottom: 2px solid $brand-primary;
+    }
+  }
+}
+
+.tab-pane {
+  padding: 32px 40px;
+  padding-bottom: 0;
+
+  @include media-breakpoint-down('md') {
+    padding: 20px;
+  }
 }
 
 .page-item.active .page-link {
@@ -301,10 +406,21 @@ select.not-empty {
   }
 }
 
+@each $item in $themes {
+  .#{$item}-theme .nav-link.active {
+    border-color: map-get($theme-colors, $item);
+  }
+}
+
 /*---------- jtsage-datebox-bootstrap4 ---------- */
+
+.ui-datebox-container .form-control {
+  padding-right: 0;
+}
 
 .ui-datebox-container.dropdown-menu {
   width: auto;
+  min-width: 225px;
   max-width: 250px;
   border: none;
 
@@ -355,16 +471,20 @@ select.not-empty {
   }
 
   .ui-datebox-controls {
-    a {
+    .btn {
       border-radius: 50px;
 
       &:hover {
+        border-color: $brand-primary;
+
         background-color: $brand-primary;
 
         color: white;
 
         @each $item in $themes {
           .#{$item}-theme & {
+            border-color: map-get($theme-colors, $item);
+
             background-color: map-get($theme-colors, $item);
           }
         }
@@ -381,9 +501,8 @@ select.not-empty {
     width: 2rem;
     height: 2rem;
 
-    font-size: .7rem;
-    line-height: .7rem;
-
+    font-size: 0.7rem;
+    line-height: 0.7rem;
 
     padding: 0;
 
@@ -443,15 +562,13 @@ select.not-empty {
   }
 }
 
-.datepicker {
-  flex-wrap: wrap;
+.jtsage-datebox-backdrop-div {
+  z-index: 1;
+}
 
+.datepicker {
   .input-group-addon {
     width: 38px;
-  }
-
-  .input-group:first-child {
-    margin-bottom: .2rem;
   }
 
   h4 {
@@ -460,6 +577,10 @@ select.not-empty {
 }
 
 /*---------- Custom styles ---------- */
+
+.form-control.not-empty[readonly] {
+  background-color: transparent;
+}
 
 .contact-avatar {
   display: flex;
@@ -482,18 +603,30 @@ select.not-empty {
   @each $item in $themes {
     .#{$item}-theme & {
       background: map-get($theme-colors, $item);
-      background: -webkit-linear-gradient(to bottom, map-get($theme-colors, $item), #f2fcfe);
-      background: linear-gradient(to bottom, map-get($theme-colors, $item), #f2fcfe);
+      background: -webkit-linear-gradient(
+        to bottom,
+        map-get($theme-colors, $item),
+        #f2fcfe
+      );
+      background: linear-gradient(
+        to bottom,
+        map-get($theme-colors, $item),
+        #f2fcfe
+      );
     }
   }
 }
 
 .btn-shadow {
   box-shadow: 0px 4px 6px 0 rgba(black, 0.1);
+
+  &:hover {
+    box-shadow: none;
+  }
 }
 
 .description {
-  color: rgba($gray, .7);
+  color: rgba($gray, 0.7);
 }
 
 .icon {
@@ -509,7 +642,7 @@ iframe.send-sms {
 .send-message.close {
   position: fixed;
   right: -1rem;
-  top: .5rem;
+  top: 0.5rem;
   color: $brand-primary;
   z-index: 1000;
 
@@ -529,9 +662,9 @@ iframe.send-sms {
 }
 
 .badge.badge-outline {
-  padding: .25rem .4rem;
+  padding: 0.25rem 0.4rem;
 
-  font-size: .75rem;
+  font-size: 0.75rem;
 
   border: 1px solid $brand-primary;
 
@@ -543,5 +676,157 @@ iframe.send-sms {
       border-color: map-get($theme-colors, $item);
       color: map-get($theme-colors, $item);
     }
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .page-item.active .page-link {
+    background-color: map-get($theme-colors, $item);
+    border-color: map-get($theme-colors, $item);
+  }
+
+  .#{$item}-theme .page-link {
+    color: map-get($theme-colors, $item);
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme button.btn.active {
+    border-color: map-get($theme-colors, $item);
+
+    background-color: map-get($theme-colors, $item);
+  }
+}
+
+.form-page {
+  padding: 16px 10px;
+}
+
+.modal-content .has-tabs .button-save {
+  display: none;
+}
+
+.modal-content .has-tabs .close {
+  display: none;
+}
+
+.modal-content .has-tabs .save {
+  margin-left: auto;
+}
+
+.form-navigation {
+  width: calc(100% - 285px);
+  max-width: 80%;
+
+  margin: 0 auto 16px;
+
+  a {
+    font-size: 14px;
+    line-height: 16px;
+
+    color: $brand-primary;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        color: map-get($theme-colors, $item);
+      }
+    }
+  }
+
+  svg {
+    margin-bottom: 1px;
+
+    @each $item in $themes {
+      .#{$item}-theme & path {
+        fill: map-get($theme-colors, $item);
+      }
+    }
+  }
+
+  @include media-breakpoint-down('lg') {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.form-content {
+  position: relative;
+
+  width: calc(100% - 285px);
+  max-width: 80%;
+  margin: 0 auto;
+
+  padding: 32px 0;
+
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba($gray, 0.1);
+
+  @include media-breakpoint-down('lg') {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .button-delete {
+    position: absolute;
+    top: 25px;
+    right: 24px;
+
+    font-size: 14px;
+    line-height: 18px;
+
+    color: $gray;
+    opacity: 0.3;
+
+    background-color: transparent;
+
+    @include media-breakpoint-down('md') {
+      top: 4px;
+      right: 4px;
+    }
+
+    &:hover,
+    &:focus {
+      opacity: 1;
+
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  .button-close {
+    margin-left: auto;
+    margin-right: 20px;
+
+    font-weight: normal;
+
+    color: #333;
+    opacity: 0.3;
+
+    &:hover,
+    &:focus {
+      opacity: 0.8;
+    }
+  }
+
+  .has-tabs .button-edit {
+    display: none;
+  }
+
+  .has-tabs .button-save {
+    display: none;
+  }
+
+  .has-tabs .button-close {
+    display: none;
+  }
+
+  .datatable-body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .btn {
+    font-size: 14px;
+    line-height: 18px;
   }
 }
