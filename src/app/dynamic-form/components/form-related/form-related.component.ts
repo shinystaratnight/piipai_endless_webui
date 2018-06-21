@@ -107,7 +107,6 @@ export class FormRelatedComponent
 
   public linkPath: string;
   public allowPermissions: string[];
-  public relatedAutocomplete: any;
   public autocompleteDisplay: boolean;
   public currentQuery: string;
 
@@ -276,22 +275,6 @@ export class FormRelatedComponent
                 this.viewMode = true;
               }
             }
-          }
-          if (this.relatedAutocomplete) {
-            const query = {};
-            this.relatedAutocomplete.related.forEach((field) => {
-              if (field === 'state') {
-                query['region'] = `{state.id}`;
-              } else {
-                query[field] = `{${field}.id}`;
-              }
-
-              if (field === 'country') {
-                query['code2'] = this.relatedAutocomplete.search;
-              }
-            });
-
-            this.getOptions.call(this, this.relatedAutocomplete.search, 0 , false, this.setValue, undefined, query); //tslint:disable-line
           }
         }
       });
@@ -884,6 +867,7 @@ export class FormRelatedComponent
           .getByQuery(endpoint + id + '/', `?${this.generateFields(this.fields)}`)
           .subscribe(
             (res: any) => {
+              this.lastElement = 0;
               if (res) {
                 const path = this.getLinkPath(this.config.endpoint);
                 if (path) {
@@ -913,8 +897,6 @@ export class FormRelatedComponent
     let result;
     if (this.config.showIf && this.checkExistKey(this.config.showIf, key)) {
       result = this.checkShowRules(this.config.showIf, data);
-    } else if (this.relatedAutocomplete && this.relatedAutocomplete.related && this.checkExistKey(this.relatedAutocomplete.related, key)) { //tslint:disable-line
-      result = this.checkShowRules(this.relatedAutocomplete.related, data);
     }
     return result || false;
   }
