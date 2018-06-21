@@ -319,7 +319,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         (this.id || this.edit ? '?type=form' : '?type=formadd') + (this.metadataQuery ? `&${this.metadataQuery}` : '') //tslint:disable-line
       )
       .subscribe(
-        ((data: any) => {
+        (data: any) => {
           this.setModeForElement(data, this.mode);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
@@ -358,8 +358,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             this.show = true;
             this.checkFormInfoElement(this.metadata);
           }
-        }),
-        ((error: any) => this.metadataError = error));
+        },
+        (error: any) => this.metadataError = error);
   }
 
   public updateCheckObject(metadata) {

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { CookieService } from 'angular2-cookie/core';
+import { LocalStorageService } from 'ng2-webstorage';
+
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -27,8 +29,13 @@ export interface User {
     },
     user: string;
   };
-  roles: string[];
-  currentRole: string;
+  roles: Role[];
+  currentRole: Role;
+}
+
+export interface Role {
+  __str__: string;
+  id: string;
 }
 
 @Injectable()
@@ -45,17 +52,36 @@ export class UserService {
     private router: Router,
     private cookie: CookieService,
     private navigation: NavigationService,
-    private permission: CheckPermissionService
+    private permission: CheckPermissionService,
+    private storage: LocalStorageService
   ) {}
 
   public getUserData(): Observable<User> {
     if (!this.user) {
       return Observable.combineLatest(this.service.getAll(this.authEndpoint), this.getUserRoles())
         .map(
-          (res: [User, { roles: string[] }]) => {
-            this.user = res[0];
-            this.user.roles = res[1].roles;
-            this.user.currentRole = this.user.data.contact.contact_type || res[1].roles[0];
+          (res: [User, { roles: Role[] }]) => {
+            const user: User = res[0];
+            const roles: Role[] = res[1].roles;
+
+            user.roles = roles;
+
+            let role: Role;
+            if (this.storage.retrieve('role')) {
+              role = roles.find(
+                (el) => el.id === this.storage.retrieve('role').id
+              );
+            } else {
+              role = roles.find(
+                (el) => el.__str__.includes(user.data.contact.contact_type)
+              );
+            }
+
+            user.currentRole = role || roles[0];
+
+            this.storage.store('role', user.currentRole);
+
+            this.user = user;
             return this.user;
           })
         .catch((err: any) => Observable.throw(err));
@@ -64,12 +90,13 @@ export class UserService {
     }
   }
 
-  public getUserRoles() {
+  public getUserRoles(): Observable<{ roles: Role[] }> {
     return this.service.getAll(this.rolesEndpoint);
   }
 
   public currentRole(role) {
     this.user.currentRole = role;
+    this.storage.store('role', role);
     this.navigation.setCurrentRole(role);
   }
 
@@ -80,6 +107,7 @@ export class UserService {
           this.user = null;
           this.navigation.navigationList = {};
           this.permission.permissions = null;
+          this.storage.clear('role');
           this.cookie.remove('sessionid');
           this.router.navigate(['login']);
         }

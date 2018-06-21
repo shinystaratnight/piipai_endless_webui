@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SiteService, PageData } from '../../services/site.service';
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
-import { NavigationService } from '../../services/navigation.service';
-import { UserService, User } from '../../services/user.service';
-
-import { CheckPermissionService } from '../../shared/services/check-permission';
+import { SiteService, PageData, UserService, User, Role, NavigationService } from '../../services/';
+import { GenericFormService } from '../../dynamic-form/services/';
+import { CheckPermissionService, ToastrService, MessageType } from '../../shared/services/';
 
 @Component({
   selector: 'site',
-  templateUrl: 'site.component.html'
+  templateUrl: './site.component.html'
 })
 
 export class SiteComponent implements OnInit {
@@ -18,6 +15,7 @@ export class SiteComponent implements OnInit {
   public pageData: PageData;
   public user: User;
   public dashboard: boolean = true;
+  public currentRole: Role;
 
   public modulesList: any;
   public userModules: any;
@@ -50,13 +48,15 @@ export class SiteComponent implements OnInit {
     private genericFormService: GenericFormService,
     private navigationService: NavigationService,
     private userService: UserService,
-    private permission: CheckPermissionService
+    private permission: CheckPermissionService,
+    private ts: ToastrService
   ) {}
 
   public ngOnInit() {
     this.loadScript();
     this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
     this.user = this.userService.user;
+    this.currentRole = this.user.currentRole;
     this.updateJiraTask(this.user.currentRole);
     this.route.url.subscribe(
       (url: any) => {
@@ -101,8 +101,12 @@ export class SiteComponent implements OnInit {
         if (pageData.pathData.path === '/profile/') {
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-        } else if (!pageData.endpoint) {
-          this.router.navigate(['/']);
+        } else if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
+          setTimeout(() => {
+            this.ts.sendMessage('Page not found!', MessageType.error);
+          }, 2000);
+
+          this.router.navigate(['']);
           return;
         } else {
           setTimeout(() => {
@@ -139,10 +143,11 @@ export class SiteComponent implements OnInit {
     }
   }
 
-  public updateNavigationList(role: string) {
+  public updateNavigationList(role: Role) {
     this.updateJiraTask(role);
 
     this.userService.currentRole(role);
+    this.currentRole = role;
     this.navigationService.getPages(role)
       .subscribe((pages: any) => {
         this.permission.parseNavigation(this.permission.permissions, pages);
@@ -154,9 +159,9 @@ export class SiteComponent implements OnInit {
       });
   }
 
-  public updateJiraTask(role: string) {
+  public updateJiraTask(role: Role) {
     const trigger = document.getElementById('atlwdg-trigger');
-    if (role === 'client' || role === 'candidate') {
+    if (role.__str__.includes('client') || role.__str__.includes('candidate')) {
       if (!trigger) {
         document.getElementsByTagName('head')[0].appendChild(this.Jira);
       } else {
@@ -289,5 +294,13 @@ export class SiteComponent implements OnInit {
       }
     });
     return active;
+  }
+
+  public getClientId(): string | undefined {
+    if (this.currentRole.__str__.includes('client')) {
+      return this.currentRole.id;
+    }
+
+    return undefined;
   }
 }

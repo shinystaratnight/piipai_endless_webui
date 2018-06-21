@@ -240,4 +240,8 @@ export class DashboardComponent implements OnChanges, OnDestroy {
     });
     return array;
   }
+
+  public checkOnManager() {
+    return this.userService.user.currentRole.__str__.includes('manager');
+  }
 }

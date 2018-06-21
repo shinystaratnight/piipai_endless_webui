@@ -84,7 +84,12 @@
   </div>
 
   <div class="datatable-list" *ngSwitchCase="'list'">
-    <generic-list [listNameCache]="listNameCache" [allowPermissions]="permissionMethods" [endpoint]="pageData.endpoint"></generic-list>
+    <generic-list
+      [clientId]="getClientId()"
+      [listNameCache]="listNameCache"
+      [allowPermissions]="permissionMethods"
+      [endpoint]="pageData.endpoint">
+    </generic-list>
   </div>
 
   <div *ngSwitchCase="'profile'">

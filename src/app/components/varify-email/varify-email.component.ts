@@ -24,7 +24,7 @@ export class VerifyEmailComponent implements OnInit {
             this.ts.sendMessage(res.message, MessageType.success);
           }, 2000);
 
-          this.router.navigate(['/']);
+          this.router.navigate(['']);
         }
     );
   }

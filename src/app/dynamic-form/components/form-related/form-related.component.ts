@@ -167,11 +167,11 @@ export class FormRelatedComponent
       this.viewMode = true;
     }
 
-    if (this.config.metadata_query) {
+    if (this.config.metadata_query instanceof Object) {
       this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
     }
 
-    if (this.config.add_metadata_query) {
+    if (this.config.add_metadata_query instanceof Object) {
       this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
     }
   }

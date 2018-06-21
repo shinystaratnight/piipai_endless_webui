@@ -1,4 +1,4 @@
-<div class="dashboard" *ngIf="userService.user.currentRole === 'manager'">
+<div class="dashboard" *ngIf="checkOnManager()">
   <div class="welcome d-flex align-items-center justify-content-center flex-column"
     *ngIf="userModules && !userModules.length">
     <span class="text-muted"><b>Modify your dashboard by adding widgets!</b></span>

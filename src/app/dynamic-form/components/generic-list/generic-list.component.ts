@@ -61,6 +61,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
   @Input()
   public listNameCache: any;
 
+  @Input()
+  public clientId: string;
+
   @Output()
   public checkedObjects: EventEmitter<any> = new EventEmitter();
 
@@ -119,7 +122,11 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   public getMetadata(endpoint, table, inner = false, outer = null, formset = undefined) {
     this.gfs
-      .getMetadata(formset ? `${endpoint}${formset}` + (this.metadataQuery ? `&${this.metadataQuery}` : '') : endpoint + (this.metadataQuery ? `&${this.metadataQuery}` : '')) //tslint:disable-line
+      .getMetadata(
+        formset
+          ? `${endpoint}${formset}` + (this.metadataQuery ? `&${this.metadataQuery}` : '')
+          : endpoint + (this.metadataQuery ? `&${this.metadataQuery}` : '')
+      )
       .subscribe(
         (metadata) => {
           table.metadata = metadata;
@@ -192,7 +199,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   public getData(endpoint, query = null, table, first = false, target = null) {
     if (first && !this.query) {
-      this.gfs.getAll(endpoint).subscribe(
+      this.gfs.getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : ''))
+        .subscribe(
         (data) => {
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
@@ -219,7 +227,14 @@ export class GenericListComponent implements OnInit, OnDestroy {
       } else {
         newQuery = this.query;
       }
-      this.gfs.getByQuery(endpoint, newQuery).subscribe(
+      this.gfs.getByQuery(
+        endpoint,
+        newQuery
+          ? this.clientId
+            ? newQuery + `&role=${this.clientId}`
+            : newQuery
+          : newQuery
+        ).subscribe(
         (data) => {
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
@@ -236,7 +251,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         }
       );
     } else {
-      this.gfs.getAll(endpoint).subscribe(
+      this.gfs.getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : '')).subscribe(
         (data) => {
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);

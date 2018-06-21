@@ -1,19 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SettingsService } from './settings.service';
 
-import { UserService } from '../services/user.service';
 import { Subscription } from 'rxjs/Subscription';
+
+import { SettingsService } from './settings.service';
+import { UserService, Role, User } from '../services/user.service';
+import { Page } from '../services/navigation.service';
 
 @Component({
   selector: 'settings-page',
-  templateUrl: 'settings.component.html'
+  templateUrl: './settings.component.html'
 })
 
 export class SettingsComponent implements OnInit, OnDestroy {
 
-  public user: any;
-  public pagesList: any;
+  public user: User;
+  public pagesList: Page[];
 
   public url: any;
 
@@ -43,7 +45,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.settingsSubscription.unsubscribe();
   }
 
-  public updateNavigation(role) {
+  public updateNavigation(role: Role) {
     this.userService.currentRole(role);
     setTimeout(() => {
       this.router.navigate(['']);

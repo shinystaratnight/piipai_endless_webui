@@ -32,13 +32,13 @@
     <h5 class="form-info-title" *ngIf="config && viewMode">
 
       <span *ngIf="!this.averageScore && this.averageScore !== 0">
-        {{title}}&nbsp;
-        <i class="info" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
+        {{title}}
+        <i class="info ml-2" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
       </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
-        {{title}}&nbsp;
+        {{title}}
         <span class="score" [style.color]="colors[getScore(this.averageScore)]">
-          |&nbsp;{{this.averageScore}}
+          &nbsp;|&nbsp;{{this.averageScore}}
           <i fa name="star"></i>
         </span>
       </span>
