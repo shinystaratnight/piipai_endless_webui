@@ -27,8 +27,8 @@
       </div>
     </h5>
   </div>
-  <div class="datatable-content">
-    <div class="filter-wrapper" *ngIf="(first || poped) && showFilters" [class.open]="!filtersHidden" [class.in-form]="inForm">
+  <div [class.open]="!filtersHidden" class="datatable-content">
+    <div scroll class="filter-wrapper" *ngIf="(first || poped) && showFilters" [class.open]="!filtersHidden" [class.in-form]="inForm">
       <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
     </div>
     <div class="background" (click)="filtersHidden = !filtersHidden"></div>
