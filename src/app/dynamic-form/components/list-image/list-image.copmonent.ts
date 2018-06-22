@@ -23,7 +23,7 @@ export class ListImageComponent implements OnInit {
       this.src = (this.config.value && this.config.value.thumb)
         ? this.config.value.thumb : false;
 
-      if (this.config.value && this.config.file) {
+      if (this.config.value && this.config.file === undefined) {
         this.file = this.config.value;
       }
     } else if (this.config.type === 'icon') {
