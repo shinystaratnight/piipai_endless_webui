@@ -19,7 +19,7 @@
         <a class="link" [href]="link || value" target="_blank">|&nbsp;Open in new tab</a>
       </span>
       <span *ngIf="(link || value) && !viewMode && config.templateOptions.file == undefined">
-        {{getExtension(link || value) | uppercase}} file
+        <a [href]="link || value" target="_blank">{{getExtension(link || value) | uppercase}} file</a>
         <a class="link" href="" (click)="upload($event)">|&nbsp;Upload new file</a>
       </span>
       <span *ngIf="!value && !contactAvatar && !link && viewMode ">-</span>
