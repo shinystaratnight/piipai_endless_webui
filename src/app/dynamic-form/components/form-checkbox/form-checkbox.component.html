@@ -17,7 +17,7 @@
         </div>
         {{config.templateOptions.label}}
       </label>
-      <i class="info" *ngIf="config.templateOptions.description" placement="right" [ngbTooltip]="config.templateOptions.description">i</i>
+      <info [description]="config.templateOptions.description"></info>
     </div>
   </div>
   <div *ngIf="errors">
@@ -40,7 +40,7 @@
           *ngIf="config.templateOptions && config.templateOptions.type === 'icon'"></i>
         <i class="pr-2" fa [name]="checkboxValue" [ngClass]="[checkboxClass]" *ngIf="config.templateOptions && config.templateOptions.type === 'checkbox'"></i>
         <label class="mb-0" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
-        <i class="info" *ngIf="config.templateOptions.description" placement="right" [ngbTooltip]="config.templateOptions.description">i</i>
+        <info [description]="config.templateOptions.description"></info>
       </div>
     </div>
   </div>

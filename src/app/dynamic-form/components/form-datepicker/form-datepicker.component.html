@@ -3,6 +3,7 @@
     <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
       {{config.templateOptions.label}}:
     </label>
+    <info [description]="config.templateOptions.description"></info>
     <div class="input-group form-element-content datepicker mb-2">
       <input [hidden]="config.templateOptions.type === 'time'" class="form-control"
         #d
@@ -16,9 +17,6 @@
         [(ngModel)]="time">
     </div>
   </div>
-  <small class="text-muted" *ngIf="config.templateOptions.description">
-    {{config.templateOptions.description}}
-  </small>
   <div *ngIf="errors">
     <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
   </div>
@@ -35,10 +33,8 @@
     <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
       {{config.templateOptions.label}}:
     </label>
+    <info [description]="config.templateOptions.description"></info>
     <div class="form-element-content">{{displayValue || '-'}}</div>
   </div>
-  <small class="text-muted" *ngIf="config.templateOptions.description">
-    {{config.templateOptions.description}}
-  </small>
 </div>
 

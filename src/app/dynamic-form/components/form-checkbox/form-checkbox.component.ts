@@ -17,7 +17,6 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 @Component({
   selector: 'form-checkbox',
   templateUrl: './form-checkbox.component.html',
-  styleUrls: ['./form-checkbox.component.scss']
 })
 
 export class FormCheckboxComponent

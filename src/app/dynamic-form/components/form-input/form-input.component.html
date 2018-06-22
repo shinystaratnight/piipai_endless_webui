@@ -3,6 +3,7 @@
     <label class="col-form-label form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
+    <info [description]="config.templateOptions.description"></info>
     <div class="form-element-content" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon || config.key === 'password'">
       <input
         *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))
@@ -82,14 +83,9 @@
             </span>
           </template>
         </ngb-rating>
-        <!-- &nbsp;
-        | {{displayValue}} -->
       </div>
     </div>
   </div>
-  <small class="text-muted" *ngIf="config.templateOptions.description">
-    {{config.templateOptions.description}}
-  </small>
   <div *ngIf="errors">
     <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
   </div>

@@ -25,7 +25,7 @@
       </option>
   </select>
 
-  <i *ngIf="getState(currentState).state === 0" class="info" placement="right" [ngbTooltip]="requirements">i</i>
+  <info *ngIf="getState(currentState).state === 0" [description]="requirements"></info>
   <button type="button" (click)="open(getState(currentState))" *ngIf="getState(currentState).state === 1" class="btn btn-sm badge badge-outline">
     <i fa name="check"></i>
   </button>

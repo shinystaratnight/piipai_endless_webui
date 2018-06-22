@@ -33,7 +33,7 @@
 
       <span *ngIf="!this.averageScore && this.averageScore !== 0">
         {{title}}
-        <i class="info ml-2" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
+        <info [description]="description"></info>
       </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
         {{title}}
@@ -48,7 +48,6 @@
       [group]="group">
     </ng-container>
 
-    <!-- <div class="description" *ngIf="company">{{company}}</div> -->
     <div *ngIf="config && config.metadata['company'] && config.editForm">
       <ng-container formElement
         [config]="config.metadata['company']"
