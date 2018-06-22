@@ -172,10 +172,17 @@ export class FormPictureComponent
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.picture, this.config);
+    if (this.picture) {
+      this.addFlags(this.picture, this.config);
+    }
   }
 
-  public upload(): void {
+  public upload(e): void {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
     this.picture.nativeElement.click();
   }
 
@@ -296,6 +303,10 @@ export class FormPictureComponent
     this.event.emit({
       type: 'changeImage'
     });
+  }
+
+  public getExtension(link: string) {
+    return link.split('.').pop();
   }
 
 }

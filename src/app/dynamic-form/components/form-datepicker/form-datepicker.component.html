@@ -34,7 +34,7 @@
       {{config.templateOptions.label}}:
     </label>
     <info [description]="config.templateOptions.description"></info>
-    <div class="form-element-content">{{displayValue || '-'}}</div>
+    <div [class.readonly-value]="editMode" class="form-element-content">{{displayValue || '-'}}</div>
   </div>
 </div>
 

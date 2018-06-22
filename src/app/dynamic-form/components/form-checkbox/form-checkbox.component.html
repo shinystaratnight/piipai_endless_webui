@@ -1,5 +1,8 @@
 <div class="form-group" [formGroup]="group" *ngIf="!config.hide && !viewMode">
   <div class="form-element">
+    <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label && config.templateOptions.text" [attr.for]="key">
+      {{config.templateOptions.label}}:
+    </label>
     <div class="form-element-content">
       <label class="form-element-checkbox" *ngIf="label && config.templateOptions.label" [attr.for]="key">
         <i class="mr-1" *ngIf="config.templateOptions.type === 'icon'"
@@ -15,7 +18,7 @@
         <div *ngIf="config.templateOptions.type !== 'icon'" class="custom-checkbox">
           <i fa name="check"></i>
         </div>
-        {{config.templateOptions.label}}
+        {{config.templateOptions.text || config.templateOptions.label}}
       </label>
       <info [description]="config.templateOptions.description"></info>
     </div>
@@ -30,6 +33,9 @@
 
 <div class="form-group" *ngIf="viewMode && !config.hide">
   <div class="form-element">
+    <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label && config.templateOptions.text" [attr.for]="key">
+      {{config.templateOptions.label}}:
+    </label>
     <div class="form-element-content">
       <div class="form-element-checkbox">
         <span *ngIf="config.templateOptions && config.templateOptions.type === 'text'">
@@ -39,7 +45,7 @@
           [ngClass]="[checkboxClass]"
           *ngIf="config.templateOptions && config.templateOptions.type === 'icon'"></i>
         <i class="pr-2" fa [name]="checkboxValue" [ngClass]="[checkboxClass]" *ngIf="config.templateOptions && config.templateOptions.type === 'checkbox'"></i>
-        <label class="mb-0" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
+        <label class="mb-0" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label || config.templateOptions.label}}</label>
         <info [description]="config.templateOptions.description"></info>
       </div>
     </div>
