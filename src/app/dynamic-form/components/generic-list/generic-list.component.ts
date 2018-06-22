@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { GenericFormService, FilterService } from './../../services';
@@ -63,6 +63,12 @@ export class GenericListComponent implements OnInit, OnDestroy {
   @Input()
   public upload: Subject<boolean>;
 
+  @Input()
+  public clientId: string;
+
+  @Input()
+  public listNameCache: any;
+
   @Output()
   public checkedObjects: EventEmitter<any> = new EventEmitter();
 
@@ -87,14 +93,16 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public cashData: any[];
   public uploading: boolean;
 
-  public subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[];
 
   constructor(
     private gfs: GenericFormService,
     private fs: FilterService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    this.subscriptions = [];
+  }
 
   public ngOnInit() {
     this.tables.push(this.createTableData(this.endpoint));
@@ -132,11 +140,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => {
-      if (subscription) {
-        subscription.unsubscribe();
-      }
-    });
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   public uploadMore() {
@@ -149,10 +153,18 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public getMetadata(endpoint, table, inner = false, outer = null, formset = undefined) {
     this.gfs
       .getMetadata(
-        formset ? `${endpoint}${formset}` + (this.metadataQuery ? `&${this.metadataQuery}` : '') : endpoint + (this.metadataQuery ? `&${this.metadataQuery}` : '')) //tslint:disable-line
+        formset
+          ? `${endpoint}${formset}` + (this.metadataQuery ? `&${this.metadataQuery}` : '')
+          : endpoint + (this.metadataQuery ? `&${this.metadataQuery}` : '')
+      )
       .subscribe(
         (metadata) => {
           table.metadata = metadata;
+
+          if (this.listNameCache && !this.listNameCache[this.endpoint]) {
+            this.listNameCache[this.endpoint] = metadata && metadata.list && metadata.list.label;
+          }
+
           if (!this.delay) {
             table.query = {
               sort: this.prepareSortQuery(this.getSortedFields(metadata.list.columns))
@@ -217,7 +229,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   public getData(endpoint, query = null, table, first = false, target = null, add = false) {
     if (first && !this.query) {
-      this.gfs.getAll(endpoint).subscribe(
+      this.gfs.getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : ''))
+        .subscribe(
         (data) => {
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
@@ -244,7 +257,14 @@ export class GenericListComponent implements OnInit, OnDestroy {
       } else {
         newQuery = this.query;
       }
-      this.gfs.getByQuery(endpoint, newQuery).subscribe(
+      this.gfs.getByQuery(
+        endpoint,
+        newQuery
+          ? this.clientId
+            ? newQuery + `&role=${this.clientId}`
+            : newQuery
+          : newQuery
+        ).subscribe(
         (data) => {
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
@@ -267,7 +287,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         }
       );
     } else {
-      this.gfs.getAll(endpoint).subscribe(
+      this.gfs.getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : '')).subscribe(
         (data) => {
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);

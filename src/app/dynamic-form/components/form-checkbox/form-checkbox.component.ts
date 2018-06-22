@@ -1,13 +1,28 @@
-import { Component, OnInit, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+
+import { Subscription } from 'rxjs/Subscription';
+
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
   selector: 'form-checkbox',
-  templateUrl: 'form-checkbox.component.html'
+  templateUrl: './form-checkbox.component.html',
+  styleUrls: ['./form-checkbox.component.scss']
 })
 
-export class FormCheckboxComponent extends BasicElementComponent implements OnInit, AfterViewInit {
+export class FormCheckboxComponent
+  extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('checkbox')
   public checkbox;
@@ -29,9 +44,15 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  private subscriptions: Subscription[];
+
   constructor(
-    private fb: FormBuilder
-  ) { super(); }
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
+  ) {
+    super();
+    this.subscriptions = [];
+  }
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
@@ -41,9 +62,13 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
     this.createEvent();
   }
 
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -51,13 +76,17 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
         } else {
           this.config.hide = hide;
         }
+
+        this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
         } else {
@@ -65,6 +94,8 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
         }
         this.setInitValue();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 

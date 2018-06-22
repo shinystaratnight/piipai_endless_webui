@@ -19,11 +19,9 @@
         </div>
         {{config.templateOptions.label}}
       </label>
+      <i class="info" *ngIf="config.templateOptions.description" placement="right" [ngbTooltip]="config.templateOptions.description">i</i>
     </div>
   </div>
-  <small class="text-muted" *ngIf="config.templateOptions.description">
-    {{config.templateOptions.description}}
-  </small>
   <div *ngIf="errors">
     <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
   </div>
@@ -44,10 +42,8 @@
           *ngIf="config.templateOptions && config.templateOptions.type === 'icon'"></i>
         <i class="pr-2" fa [name]="checkboxValue" [ngClass]="[checkboxClass]" *ngIf="config.templateOptions && config.templateOptions.type === 'checkbox'"></i>
         <label class="mb-0" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
+        <i class="info" *ngIf="config.templateOptions.description" placement="right" [ngbTooltip]="config.templateOptions.description">i</i>
       </div>
     </div>
   </div>
-  <small class="text-muted" *ngIf="config.templateOptions.description">
-    {{config.templateOptions.description}}
-  </small>
 </div>

@@ -1,7 +1,17 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { BasicElementComponent } from './../basic-element/basic-element.component';
+
+import { Subscription } from 'rxjs/Subscription';
 import moment from 'moment-timezone';
+
+import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
   selector: 'form-datepicker',
@@ -10,7 +20,7 @@ import moment from 'moment-timezone';
 
 export class FormDatepickerComponent
   extends BasicElementComponent
-  implements OnInit, AfterViewInit {
+  implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('d')
   public d;
@@ -37,11 +47,15 @@ export class FormDatepickerComponent
 
   public viewMode: boolean;
 
+  private subscriptions: Subscription[];
+
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
   ) {
     super();
     this.$ = require('jquery');
+    this.subscriptions = [];
   }
 
   public ngOnInit() {
@@ -63,10 +77,14 @@ export class FormDatepickerComponent
     });
   }
 
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      this.config.hidden.subscribe((hide) => {
-        if (hide) {
+      const subscription = this.config.hidden.subscribe((hide) => {
+        if (hide && !this.config.hide) {
           this.config.hide = hide;
           if (this.group.get(this.key).value) {
             this.group.get(this.key).patchValue(undefined);
@@ -75,13 +93,17 @@ export class FormDatepickerComponent
         } else {
           this.config.hide = hide;
         }
+
+        this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
           this.group.get(this.key).patchValue(undefined);
@@ -90,6 +112,8 @@ export class FormDatepickerComponent
         }
         this.setInitValue(moment);
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
@@ -208,7 +232,8 @@ export class FormDatepickerComponent
         this.group.get(this.key).patchValue(date.format('YYYY-MM-DD'));
         this.event.emit({
           el: this.config,
-          type: 'change'
+          type: 'change',
+          value: this.group.get(this.key).value
         });
       }
     } else if (this.config.templateOptions.type === 'datetime') {
@@ -222,7 +247,8 @@ export class FormDatepickerComponent
         this.group.get(this.key).patchValue(date.format());
         this.event.emit({
           el: this.config,
-          type: 'change'
+          type: 'change',
+          value: this.group.get(this.key).value
         });
       }
     }
@@ -236,7 +262,8 @@ export class FormDatepickerComponent
       this.group.get(this.key).patchValue(time.format('HH:mm:ss'));
       this.event.emit({
         el: this.config,
-        type: 'change'
+        type: 'change',
+        value: this.group.get(this.key).value
       });
     }
   }

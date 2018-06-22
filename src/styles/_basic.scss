@@ -69,6 +69,8 @@ input[type='checkbox']:checked ~ .custom-checkbox {
 input {
   border-color: rgba(#333, 0.2);
 
+  font-family: inherit;
+
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus
@@ -566,7 +568,7 @@ select.not-empty {
 }
 
 .jtsage-datebox-backdrop-div {
-  z-index: 20;
+  z-index: 1;
 }
 
 .datepicker {
@@ -583,6 +585,10 @@ select.not-empty {
 
 .site-page {
   margin-top: 72px;
+}
+
+.form-control.not-empty[readonly] {
+  background-color: transparent;
 }
 
 .contact-avatar {
@@ -702,7 +708,54 @@ iframe.send-sms {
 }
 
 .form-page {
-  padding: 48px 10px;
+  padding: 16px 10px;
+}
+
+.modal-content .has-tabs .button-save {
+  display: none;
+}
+
+.modal-content .has-tabs .close {
+  display: none;
+}
+
+.modal-content .has-tabs .save {
+  margin-left: auto;
+}
+
+.form-navigation {
+  width: calc(100% - 285px);
+  max-width: 80%;
+
+  margin: 0 auto 16px;
+
+  a {
+    font-size: 14px;
+    line-height: 16px;
+
+    color: $brand-primary;
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        color: map-get($theme-colors, $item);
+      }
+    }
+  }
+
+  svg {
+    margin-bottom: 1px;
+
+    @each $item in $themes {
+      .#{$item}-theme & path {
+        fill: map-get($theme-colors, $item);
+      }
+    }
+  }
+
+  @include media-breakpoint-down('lg') {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .form-content {
@@ -736,6 +789,7 @@ iframe.send-sms {
     background-color: transparent;
 
     @include media-breakpoint-down('md') {
+      top: 4px;
       right: 4px;
     }
 

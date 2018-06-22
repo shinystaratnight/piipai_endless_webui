@@ -10,7 +10,7 @@
           <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
         </div>
         <div class="form-element-content-actions"
-          *ngIf="config.options && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete)" >
+          *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete)" >
           <button type="button"
             *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
             (click)="open('update')">
@@ -30,7 +30,7 @@
               [name]="'times'"></i>
           </button>
         </div>
-        <div class="autocomplete" [hidden]="hideAutocomplete" style="top: 2.4rem">
+        <div class="autocomplete" [hidden]="hideAutocomplete" style="top: 1.4rem">
           <input type="text" class="form-control mb-1" autocomplete="off"
             #search="ngModel"
             #searchElement
@@ -46,7 +46,7 @@
             [hidden]="!(previewList && previewList.length)">
             <ul class="list-group w-100">
               <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
-                *ngFor="let option of previewList"
+                *ngFor="let option of previewList; trackBy: trackByFn"
                 (click)="setValue(option)">{{option.__str__}}</li>
             </ul>
             <div class="autocomplete-preloader" *ngIf="skipScroll">
@@ -62,13 +62,26 @@
         {{config.templateOptions.label}}:
       </label>
       <div class="form-element-content flex-column align-items-start" [class.many]="config.many && results" style="position: relative">
-        <input type="text" class="form-control custom-select autocomplete-value" autocomplete="off"
+        <input type="text" class="form-control autocomplete-value" autocomplete="off"
+          #search="ngModel"
+          #searchElement
           [(ngModel)]="searchValue"
           [ngModelOptions]="{standalone: true}"
           (focus)="generateList()"
-          (blur)="resetList()"
-          (keyup)="filter(searchValue)">
-        <div class="autocomplete" [hidden]="!(previewList && previewList.length)" style="top: 2.4rem">
+          (blur)="resetList()">
+
+        <div class="form-element-content-actions"
+          *ngIf="config.options && config.templateOptions.add" >
+            <button type="button"
+              *ngIf="config.templateOptions.add && checkPermission('post')"
+              (click)="open('post')">
+                <i class="text-success icon"
+                  fa
+                  [name]="'plus'" >
+                </i>
+            </button>
+        </div>
+        <div class="autocomplete" [hidden]="!(previewList && previewList.length)" style="top: 1.4rem">
           <div class="autocomplete-list"
             infinite-scroll
             [infiniteScrollDistance]="modalScrollDistance"
@@ -86,11 +99,11 @@
           </div>
         </div>
         <div class="d-flex flex-wrap align-items-center mt-2">
-          <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal"
+          <span class="badge badge-outline mt-2" style="white-space: normal"
             *ngFor="let item of results; let i = index">
             {{item.__str__}}
-            <i fa class="icon ml-2"
-              (click)="deleteItem(i)"
+            <i fa class="ml-2"
+              (click)="deleteItem(i, item)"
               [name]="'times'"></i>
           </span>
         </div>
@@ -100,8 +113,9 @@
     <small class="text-muted" *ngIf="config.templateOptions.description">
       {{config.templateOptions.description}}
     </small>
-    <div *ngIf="errors">
-      <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
+    <div *ngIf="errors && errors[config.key]">
+      <div class="text-danger mt-1">{{errors[config.key][0]}}</div>
+      <a *ngIf="errors[config.key][1] && errors[config.key][2]" [routerLink]="[errors[config.key][2]]">{{errors[config.key][1]}}</a>
     </div>
     <div *ngIf="message">
       <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
@@ -185,9 +199,9 @@
       </span>
     </div>
     <div *ngIf="config.many && results && config.templateOptions.deleteList"  class="d-flex flex-wrap align-items-center mt-2">
-      <span class="d-flex align-items-center badge badge-default mb-1 mr-2 p-2" style="white-space: normal" *ngFor="let item of results; let i = index">
+      <span class="badge badge-outline mt-2" style="white-space: normal" *ngFor="let item of results; let i = index">
         {{item.__str__}}
-        <i fa class="text-white icon ml-2" (click)="deleteItem(i, item, config.templateOptions.deleteList)" [name]="'times'"></i>
+        <i fa class="text-white ml-2" (click)="deleteItem(i, item, config.templateOptions.deleteList)" [name]="'times'"></i>
       </span>
     </div>
   </div>
@@ -215,9 +229,10 @@
           [data]="modalData.data"
           [edit]="modalData.edit"
           [id]="modalData.id"
+          [metadataQuery]="modalData.mode === 'edit' ? config.metadata_query : config.add_metadata_query"
           (event)="formEvent($event, c, type)"
           (errorForm)="formError($event)">
-            <button *ngIf="checkPermission('update')" type="submit" class="btn btn-primary" [disabled]="saveProcess">
+            <button *ngIf="checkPermission('update')" type="submit" class="btn btn-primary button-save" [disabled]="saveProcess">
               Save
               <spinner *ngIf="saveProcess"></spinner>
             </button>

@@ -2,9 +2,21 @@
 
 <div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
   <div *ngSwitchCase="'form'" class="form-page">
+    <div *ngIf="listName && !(pageData.pathData.postfix && pageData.pathData.postfix === 'fillin')" class="form-navigation">
+      <a [routerLink]="pageData.pathData.path">
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="12px" height="6px" style="transform: rotate(90deg)" viewBox="0 0 612 612" xml:space="preserve">
+          <path stroke-width="2" stroke="green" d="M604.501,134.782c-9.999-10.05-26.222-10.05-36.221,0L306.014,422.558L43.721,134.782
+           c-9.999-10.05-26.223-10.05-36.222,0s-9.999,26.35,0,36.399l279.103,306.241c5.331,5.357,12.422,7.652,19.386,7.296
+           c6.988,0.356,14.055-1.939,19.386-7.296l279.128-306.268C614.5,161.106,614.5,144.832,604.501,134.782z"/>
+        </svg>
+
+        Back to {{listName | lowercase}} list
+      </a>
+    </div>
+
     <div class="form-content"
       *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'">
-      <div [class.modal-form]="pageData.pathData.modal">
         <generic-form
           *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit'"
           [title]="pageData.pathData.title"
@@ -13,6 +25,7 @@
           [id]="pageData.pathData.id"
           [edit]="pageData.pathData.postfix"
           [mode]="formMode"
+          [path]="pageData.pathData.path"
           (event)="formEvent($event)"
           (modeEvent)="modeEvent($event)"
           (errorForm)="formError($event)"
@@ -58,24 +71,31 @@
           [endpoint]="pageData.endpoint"
           [pageData]="pageData">
         </fill-in>
-      </div>
     </div>
-    <form-builder
-      *ngIf="pageData.endpoint === '/ecore/api/v2/core/forms/'"
-      [path]="pageData.pathData.path"
-      [endpoint]="pageData.endpoint"
-      [id]="pageData.pathData.id"
-      (str)="changeFormLabel($event)">
-    </form-builder>
+    <div class="form-content"
+      *ngIf="pageData.endpoint === '/ecore/api/v2/core/forms/'">
+        <form-builder
+          [path]="pageData.pathData.path"
+          [endpoint]="pageData.endpoint"
+          [id]="pageData.pathData.id"
+          (str)="changeFormLabel($event)">
+        </form-builder>
+    </div>
   </div>
 
-  <div class="datatable-list pb-3" *ngSwitchCase="'list'"
+  <div class="datatable-list" *ngSwitchCase="'list'"
     infinite-scroll
     infiniteScrollThrottle="500"
     infiniteScrollDistance="2"
     [scrollWindow]="true"
     (scrolled)="onModalScrollDown()">
-    <generic-list [upload]="upload" [allowPermissions]="permissionMethods" [endpoint]="pageData.endpoint"></generic-list>
+      <generic-list
+        [upload]="upload"
+        [clientId]="getClientId()"
+        [listNameCache]="listNameCache"
+        [allowPermissions]="permissionMethods"
+        [endpoint]="pageData.endpoint">
+      </generic-list>
   </div>
 
   <div *ngSwitchCase="'profile'">
@@ -88,3 +108,5 @@
   [userModules]="userModules"
   [modulesList]="modulesList"
   (changeWidgetList)="updateNavigation($event)"></dashboard>
+
+<my-toast></my-toast>

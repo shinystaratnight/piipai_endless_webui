@@ -5,7 +5,9 @@
     </label>
     <div class="form-element-content" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon || config.key === 'password'">
       <input
-        *ngIf="(config.type !== 'static' || config.key === 'strength') && !viewMode && (config.type !== 'address' && config.key !== 'address' && config.key !== 'street_address')"
+        *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))
+          && (!viewMode && !config.read_only)
+          && (config.type !== 'address' && config.key !== 'address' && config.key !== 'street_address')"
         class="form-control"
         [class.not-empty]="group.get(key).value"
         autocomplete="off"
@@ -35,7 +37,7 @@
           </ul>
         </div>
       </div>
-      <div *ngIf="viewMode && config.type !== 'static' && config.templateOptions.type !== 'score'">{{displayValue}}</div>
+      <div *ngIf="(viewMode || config.read_only) && config.type !== 'static' && config.templateOptions.type !== 'score'">{{displayValue}}</div>
       <div *ngIf="config.templateOptions.addon" class="addon">
         <i *ngIf="config.templateOptions.addon.indexOf('.') === -1" fa [name]="config.templateOptions.addon"></i>
         <img *ngIf="config.templateOptions.addon.indexOf('.') > -1" [src]="config.templateOptions.addon">

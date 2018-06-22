@@ -7,7 +7,9 @@ import {
   ViewEncapsulation,
   ChangeDetectorRef
 } from '@angular/core';
+
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs/Subscription';
 
 import { FormatString } from '../../../helpers/format';
 import { GenericFormService } from '../../services';
@@ -38,11 +40,15 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public selectArray: any[];
   public updated: boolean;
 
+  private subscriptions: Subscription[];
+
   constructor(
     public modalService: NgbModal,
     private genericFormService: GenericFormService,
     private cd: ChangeDetectorRef
-  ) {}
+  ) {
+    this.subscriptions = [];
+  }
 
   public ngOnInit() {
     this.dropdown = this.config.dropdown;
@@ -52,7 +58,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       this.initialize();
     }
     if (this.config.timelineSubject) {
-      this.config.timelineSubject.subscribe((value) => {
+      const subscription = this.config.timelineSubject.subscribe((value) => {
         this.config.options = value;
 
         if (this.dropdown) {
@@ -61,6 +67,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
         this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
@@ -115,6 +123,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     if (this.modalRef) {
       this.modalRef.close();
     }
+
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   public open(state): void {

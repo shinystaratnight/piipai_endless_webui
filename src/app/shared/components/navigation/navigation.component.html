@@ -1,6 +1,6 @@
 <header #header class="page-header">
   <div class="logo">
-    <a class="logo-link" routerLink="/"><img src="/assets/img/new-software.svg"></a>
+    <a class="logo-link" routerLink=""><img src="/assets/img/new-software.svg"></a>
   </div>
   <nav #nav class="navigation flex-xl-unordered" [ngClass]="{'flex-first': pages}" *ngIf="pages && pages.length">
     <button class=" d-flex align-items-center hamburger hamburger--spring hidden-xl-up" type="button"
@@ -30,9 +30,9 @@
       <li>
         <div *ngIf="user && user.roles && user.roles.length" class="form-inline role">
           <span class="mr-1">Role:</span>
-          <select class="form-control form-control-sm" id="role" [(ngModel)]="currentRole" (ngModelChange)="changeRole($event)">
-            <option *ngFor="let role of user.roles" [value]="role">
-              <small>{{role}}</small>
+          <select class="form-control form-control-sm" id="role" [ngModel]="currentRole" (ngModelChange)="changeRole($event)">
+            <option *ngFor="let role of user.roles" [value]="role.id">
+              <small>{{role.__str__}}</small>
             </option>
           </select>
         </div>

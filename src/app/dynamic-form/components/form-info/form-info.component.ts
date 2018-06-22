@@ -1,4 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'form-info',
@@ -6,7 +8,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./form-info.component.scss']
 })
 
-export class FormInfoComponent implements OnInit {
+export class FormInfoComponent implements OnInit, OnDestroy {
   public config: any;
   public group: any;
 
@@ -20,6 +22,8 @@ export class FormInfoComponent implements OnInit {
   public contactAvatar: string;
   public created_at: string; //tslint:disable-line
   public updated_at: string; //tslint:disable-line
+  public job_title: string; //tslint:disable-line
+  public company: string;
 
   public color: any;
   public colorAttr: string;
@@ -39,6 +43,12 @@ export class FormInfoComponent implements OnInit {
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
+
+  private subscriptions: Subscription[];
+
+  constructor() {
+    this.subscriptions = [];
+  }
 
   public ngOnInit() {
     this.checkModeProperty();
@@ -82,6 +92,10 @@ export class FormInfoComponent implements OnInit {
         }
       }
     }
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   public getConfig(name: string) {
@@ -137,9 +151,11 @@ export class FormInfoComponent implements OnInit {
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode) => {
         this.viewMode = mode === 'view';
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 }

@@ -580,6 +580,12 @@ export class DynamicListComponent implements
           obj['skillName'] = col.label;
           obj['description'] = col.description;
           obj['redirect'] = element.redirect;
+          obj['file'] = element.file;
+          if (element.hasOwnProperty('file')) {
+            const keys = element.field.split('.');
+            keys[keys.length - 1] = '__str__';
+            obj['contactName'] = this.getValueByKey(keys.join('.'), el);
+          }
           if (element.display) {
             obj.display = this.format(element.display.replace(/{field}/gi, `{${element.field}}`), el); //tslint:disable-line
           }
@@ -1224,6 +1230,7 @@ export class DynamicListComponent implements
     this.modalInfo.endpoint = e.endpoint;
     this.modalInfo.label = e.label;
     this.modalInfo.id = e.id;
+    this.modalInfo.mode = 'edit';
     this.modalInfo.dontUseMetadataQuery = true;
     this.open(this.modal, {size: 'lg'});
   }

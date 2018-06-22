@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
@@ -27,6 +27,9 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
   public markDisabled: Function;
   public vacancyDate: any;
   public vacancyDates: string[];
+  public dates: any[] = [];
+
+  @ViewChild('calendar') public calendar: ElementRef;
 
   constructor(
     private fb: FormBuilder
@@ -79,6 +82,8 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
 
   public selectVacancyDate(e, time = moment) {
     const date = time([e.year, e.month - 1, e.day]).format(this.dateFormat);
+
+    this.dates.push(e);
     this.vacancyDates = this.vacancyDates || [];
     if (this.vacancyDates.indexOf(date) === -1) {
       this.vacancyDates.push(date);
@@ -89,10 +94,60 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
       el: this.config,
       type: 'change'
     });
+
+    setTimeout(() => {
+      this.markSelectedDates(this.dates);
+    }, 10);
   }
 
-  public removeDate(date) {
+  public removeDate(date, time = moment) {
+    const month = time(date).month() + 1;
+    const day = time(date).date();
+
+    const dateObj = this.dates.find((el) => el.month === month && el.day === day);
+    const removeDate = dateObj && this.dates.splice(this.dates.indexOf(dateObj), 1);
+
     this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
+    this.vacancyDate = this.vacancyDates[0];
+
+    setTimeout(() => {
+      this.markSelectedDates(removeDate, true);
+    }, 10);
+  }
+
+  public markSelectedDates(data = [], remove?) {
+    const calendar = this.calendar.nativeElement;
+    const monthes = {};
+    data.forEach((el) => {
+      if (!monthes[el.month]) {
+        monthes[el.month] = {
+          dates: [el.day + '']
+        };
+      } else {
+        monthes[el.month].dates.push(el.day + '');
+      }
+    });
+
+    Object.keys(monthes).forEach((month) => {
+      const dates = calendar.querySelectorAll(`[ng-reflect-current-month="${month}"]`);
+      const days = [].filter.call(dates, (day) => monthes[month].dates.indexOf(day.innerText) > -1);
+
+      [].forEach.call(days, (day) => {
+        if (remove) {
+          day.classList.remove('bg-primary');
+          day.classList.remove('text-white');
+        } else {
+          day.classList.add('bg-primary');
+          day.classList.add('text-white');
+        }
+      });
+    });
+  }
+
+  public eventHandler(e) {
+    if (e.target.classList.contains('ngb-dp-navigation-chevron')) {
+      this.markSelectedDates(this.dates);
+    }
   }
 
 }

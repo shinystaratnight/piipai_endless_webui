@@ -12,6 +12,7 @@ import {
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/finally';
 
@@ -20,7 +21,6 @@ import { GenericFormService, FormService } from '../../services/';
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
-import { Subscription } from 'rxjs/Subscription';
 
 interface HiddenFields {
   elements: Field[];
@@ -86,6 +86,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   public metadataQuery: string;
 
+  @Input() public path: string;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -142,8 +144,11 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     '/ecore/api/v2/candidate/candidatecontacts/': '__str__',
   };
 
-  public subscriptions: Subscription[];
   public formId: number;
+
+  public checkObject: any = {};
+
+  private subscriptions: Subscription[];
 
   constructor(
     private service: GenericFormService,
@@ -166,18 +171,19 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
     this.formId = this.formService.registerForm(this.endpoint, this.mode);
 
-    this.subscriptions.push(
-      this.formService.getForm(this.formId).mode
-        .skip(1)
-        .subscribe((mode: string) => {
-          this.mode = mode;
-          this.modeEvent.emit(this.mode);
-        })
-    );
+    const subscription = this.formService
+      .getForm(this.formId).mode
+      .skip(1)
+      .subscribe((mode: string) => {
+        this.mode = mode;
+        this.modeEvent.emit(this.mode);
+      });
+
+    this.subscriptions.push(subscription);
   }
 
   public ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription && subscription.unsubscribe());
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -313,7 +319,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         (this.id || this.edit ? '?type=form' : '?type=formadd') + (this.metadataQuery ? `&${this.metadataQuery}` : '') //tslint:disable-line
       )
       .subscribe(
-        ((data: any) => {
+        (data: any) => {
           this.setModeForElement(data, this.mode);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
@@ -322,6 +328,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           this.checkRuleElement(this.metadata);
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
+          this.updateCheckObject(this.metadata);
 
           this.addAutocompleteProperty(this.metadata);
           this.getData(this.metadata);
@@ -351,8 +358,65 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             this.show = true;
             this.checkFormInfoElement(this.metadata);
           }
-        }),
-        ((error: any) => this.metadataError = error));
+        },
+        (error: any) => this.metadataError = error);
+  }
+
+  public updateCheckObject(metadata) {
+    metadata.forEach((el) => {
+      if (el.key && el.checkObject) {
+        this.checkObject[el.key] = el.checkObject;
+      } else if (el.children) {
+        this.updateCheckObject(el.children);
+      }
+    });
+  }
+
+  public parseCheckObject(data) {
+    if (this.endpoint === '/ecore/api/v2/core/companycontacts/') {
+      const keys = Object.keys(this.checkObject);
+      if (keys.length) {
+        const formatString = new FormatString();
+
+        keys.forEach((key) => {
+          const query = { ...this.checkObject[key].query };
+          const queryParams = Object.keys(query);
+          queryParams.forEach((param) => {
+            query[param] = typeof query[param] === 'string'
+              ? formatString.format(query[param], data)
+              : query[param];
+          });
+
+          let send = !queryParams.some((param) => query[param] == null || query[param] === '');
+          if (send && this.checkObject[key].cache) {
+            send = queryParams.some((param) => query[param] !== this.checkObject[key].cache[param]);
+          }
+          this.checkObject[key].cache = query;
+
+          if (send) {
+            this.service.getByQuery(
+              this.checkObject[key].endpoint,
+              '?' + Object.keys(query)
+                .map((param) => `${param}=${query[param]}`)
+                .join('&')
+            ).subscribe((res) => {
+              if (res.count) {
+                const errors = {
+                  [key]: [
+                    this.checkObject[key].error,
+                    `${res.results[0].__str__}`,
+                    `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change` //tslint:disable-line
+                  ]
+                };
+                this.errors = this.updateErrors(this.errors, errors, this.response);
+              } else {
+                this.errors = this.updateErrors(this.errors, { [key]: '  ' }, this.response);
+              }
+            });
+          }
+        });
+      }
+    }
   }
 
   public addAutocompleteProperty(metadata: any, property?: Subject<any>) {
@@ -517,27 +581,27 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             obj['value'] = data[key];
           }
         }
-        if (obj.type === 'related') {
-          let endpoint;
-          if (obj.value) {
-            if (obj.value instanceof Object) {
-              if (obj.value.id && obj.value.__str__) {
-                obj.options = [obj.value];
-              }
-            } else if (Array.isArray(obj.value) && obj.value.length) {
-              if (!(obj.value[0] instanceof Object) && !obj.list) {
-                endpoint = obj.endpoint;
-              }
-            } else {
-              endpoint = obj.endpoint && `${obj.endpoint}${obj.value}/`;
-            }
-          } else {
-            obj.options = [];
-          }
-          if (endpoint) {
-            this.getRalatedData(metadata, obj.key, endpoint, {}, null, 'value', true);
-          }
-        }
+        // if (obj.type === 'related') {
+        //   let endpoint;
+        //   if (obj.value) {
+        //     if (obj.value instanceof Object) {
+        //       // if (obj.value.id && obj.value.__str__) {
+        //       //   obj.options = [obj.value];
+        //       // }
+        //     } else if (Array.isArray(obj.value) && obj.value.length) {
+        //       if (!(obj.value[0] instanceof Object) && !obj.list) {
+        //         endpoint = obj.endpoint;
+        //       }
+        //     } else {
+        //       endpoint = obj.endpoint && `${obj.endpoint}${obj.value}/`;
+        //     }
+        //   } else {
+        //     obj.options = [];
+        //   }
+        //   if (endpoint) {
+        //     this.getRalatedData(metadata, obj.key, endpoint, {}, null, 'value', true);
+        //   }
+        // }
       }
     } else {
       if (data[prop]) {
@@ -573,7 +637,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         status: 'success'
       });
     } else {
-      Observable.forkJoin(...requests)
+      const subscription = Observable.forkJoin(...requests)
         .finally(() => {
           this.event.emit({
             type: 'sendForm',
@@ -587,6 +651,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             result[fields[i]] = el;
           });
         });
+
+      this.subscriptions.push(subscription);
     }
   }
 
@@ -759,8 +825,22 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         event.el.endpoint, null, event.query, undefined, false);
     } else if (event.type === 'updateData') {
       this.updateDataOfReplaceElements(event.el);
+    } else if (event.type === 'address') {
+      this.parseAddress(event.value, event.el);
     }
     this.event.emit(event);
+  }
+
+  public parseAddress(data, el) {
+    this.service.submitForm('/ecore/api/v2/core/addresses/parse/', data)
+      .subscribe(
+        (res) => {
+          this.parseError({});
+          el.autocompleteData.next(res);
+        },
+        (err: any) => {
+          this.parseError(Object.assign({}, this.errors, { [el.key]: err.errors}));
+        });
   }
 
   public buttonActionHandler(e) {
@@ -1042,11 +1122,16 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public updateWorkflowData(event) {
-    if (event && event.el) {
-      if (event.el.key === 'workflow' || event.el.key === 'number' || event.el.key === 'company') {
-        this.workflowData[event.el.key] = Array.isArray(event.value)
-          ? event.value[0].id : event.value;
-        this.getDataOfWorkflownode();
+    if (this.endpoint === '/ecore/api/v2/core/workflownodes/') {
+      if (event && event.el) {
+        if (event.el.key === 'workflow'
+          || event.el.key === 'number'
+          || event.el.key === 'company'
+        ) {
+          this.workflowData[event.el.key] = Array.isArray(event.value)
+            ? event.value[0].id : event.value;
+          this.getDataOfWorkflownode();
+        }
       }
     }
   }
