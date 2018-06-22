@@ -172,7 +172,9 @@ export class FormPictureComponent
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.picture, this.config);
+    if (this.picture) {
+      this.addFlags(this.picture, this.config);
+    }
   }
 
   public upload(): void {
