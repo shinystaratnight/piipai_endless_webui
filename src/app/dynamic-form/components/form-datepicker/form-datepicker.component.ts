@@ -46,6 +46,7 @@ export class FormDatepickerComponent
   public timeFormat: string = 'hh:mm A';
 
   public viewMode: boolean;
+  public editMode: boolean;
 
   private subscriptions: Subscription[];
 
@@ -56,6 +57,7 @@ export class FormDatepickerComponent
     super();
     this.$ = require('jquery');
     this.subscriptions = [];
+    this.editMode = true;
   }
 
   public ngOnInit() {
@@ -106,9 +108,12 @@ export class FormDatepickerComponent
       const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+          this.editMode = false;
+
           this.group.get(this.key).patchValue(undefined);
         } else {
           this.viewMode = this.config.read_only || false;
+          this.editMode = true;
         }
         this.setInitValue(moment);
       });

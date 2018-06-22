@@ -12,23 +12,29 @@
       (change)="fileChangeEvent($event)"
       [attr.name]="key">
     <div class="form-element-picture">
-      <img class="image-preview" *ngIf="value" [src]="value" alt="image">
+      <img class="image-preview" *ngIf="value && config.templateOptions.file === false" [src]="value" alt="image">
       <div *ngIf="contactAvatar && !fileName" class="contact-avatar">{{contactAvatar}}</div>
-      <span *ngIf="link">PDF file <a class="link" [href]="link" target="_blanck">|&nbsp;Open in new tab</a></span>
+      <span *ngIf="(link || value) && viewMode && config.templateOptions.file == undefined">
+        {{getExtension(link || value) | uppercase}} file
+        <a class="link" [href]="link || value" target="_blank">|&nbsp;Open in new tab</a>
+      </span>
+      <span *ngIf="(link || value) && !viewMode && config.templateOptions.file == undefined">
+        {{getExtension(link || value) | uppercase}} file
+        <a class="link" href="" (click)="upload($event)">|&nbsp;Upload new file</a>
+      </span>
       <span *ngIf="!value && !contactAvatar && !link && viewMode ">-</span>
-      <div *ngIf="!viewMode && !config.read_only" class="d-flex align-items-center flex-wrap mt-3">
-        <button type="button" class="btn btn-primary btn-sm text-white d-flex align-items-center"
+      <span *ngIf="(!link && !value) && !viewMode && !config.read_only && config.templateOptions.file == undefined" class="link ml-0" (click)="upload()">Upload new file</span>
+      <div *ngIf="!viewMode && !config.read_only && config.templateOptions.file === false" class="d-flex align-items-center flex-wrap mt-1">
+        <button type="button" class="btn btn-primary btn-sm text-white actions"
           (click)="upload()">
-          <i fa class="mr-1"
-            [name]="'upload'"></i>
-          {{config.templateOptions.label_upload}}
+          <i fa [name]="'upload'"></i>
+          <span *ngIf="config.templateOptions.label_upload">{{config.templateOptions.label_upload}}</span>
         </button>
         <span class="p-1">or</span>
-        <button type="button" class="btn btn-success btn-sm text-white d-flex"
+        <button type="button" class="btn btn-success btn-sm text-white actions"
           (click)="open()">
-          <i fa class="mr-1"
-            [name]="'camera'"></i>
-          {{config.templateOptions.label_photo}}
+          <i fa [name]="'camera'"></i>
+          <span *ngIf="config.templateOptions.label_photo">{{config.templateOptions.label_photo}}</span>
         </button>
       </div>
       <div class="mt-1" *ngIf="fileName && !config.read_only && !config.view"><i class="text-muted">file:</i> {{fileName}}</div>
@@ -63,7 +69,7 @@
 
   <div class="modal-footer justify-content-start">
     <button *ngIf="photoExist" type="button" class="btn btn-success" (click)="save(c)">Save</button>
-    <button type="button" class="btn btn-primary" (click)="getPhoto()">{{photoExist ? 'Try again' : config.templateOptions.label_photo}}</button>
+    <button type="button" class="btn btn-primary" (click)="getPhoto()">{{photoExist ? 'Try again' : config.templateOptions.label_photo || 'Take a photo'}}</button>
     <button type="button" class="btn btn-secondary" (click)="c()">Cancel</button>
   </div>
 </template>

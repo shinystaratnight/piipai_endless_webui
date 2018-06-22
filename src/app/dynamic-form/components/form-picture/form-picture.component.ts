@@ -177,7 +177,12 @@ export class FormPictureComponent
     }
   }
 
-  public upload(): void {
+  public upload(e): void {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
     this.picture.nativeElement.click();
   }
 
@@ -298,6 +303,10 @@ export class FormPictureComponent
     this.event.emit({
       type: 'changeImage'
     });
+  }
+
+  public getExtension(link: string) {
+    return link.split('.').pop();
   }
 
 }

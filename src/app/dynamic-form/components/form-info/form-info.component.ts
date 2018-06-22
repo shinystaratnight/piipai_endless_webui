@@ -72,27 +72,23 @@ export class FormInfoComponent implements OnInit, OnDestroy {
           this.color = this.config.values[key].color;
           this.colorAttr = this.config.values[key].color_attr;
         } else if (key === 'picture') {
-          this[key] = this.getValue(this.config.values[key], this.config.value)
-            || (this.config.companyPicture ? '/assets/img/logo.svg' : null);
+          this[key] = this.getValue(this.config.values[key], this.config.value, 'picture')
+            || (this.getConfig('picture')
+              && this.getConfig('picture').companyContact ? '/assets/img/logo.svg' : null);
         } else {
           this[key] = this.getValue(this.config.values[key], this.config.value);
         }
       });
 
       if (!this.picture) {
+        const nameElements = this.title.split(' ');
 
-        if (this.config.metadata['link']) {
-          this.picture = '/assets/img/logo.svg';
-        } else {
-          const nameElements = this.title.split(' ');
-
-          if (nameElements && nameElements.length) {
-            if (nameElements.length === 2) {
-              this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-            } else if (nameElements.length === 3) {
-              nameElements.shift();
-              this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-            }
+        if (nameElements && nameElements.length) {
+          if (nameElements.length === 2) {
+            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
+          } else if (nameElements.length === 3) {
+            nameElements.shift();
+            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
           }
         }
       }
@@ -114,15 +110,19 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     return this.config.metadata[name];
   }
 
-  public getValue(key: string, data: any): any {
+  public getValue(key: string, data: any, type?: string): any {
     if (key) {
       let keys = key.split('.');
       let prop = keys.shift();
 
       if (!keys.length) {
+        if (data[prop] instanceof Object && type === 'picture') {
+          return data[prop].origin;
+        }
+
         return data[prop];
       } else if (data[prop]) {
-        return this.getValue(keys.join('.'), data[prop]);
+        return this.getValue(keys.join('.'), data[prop], type);
       }
     }
   }

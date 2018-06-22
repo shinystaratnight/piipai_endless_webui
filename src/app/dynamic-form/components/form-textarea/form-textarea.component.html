@@ -14,7 +14,7 @@
         [attr.id]="key"
         [attr.name]="key"
         [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''"></textarea>
-        <span *ngIf="viewMode">{{displayValue}}</span>
+        <span [class.readonly-value]="editMode" *ngIf="viewMode">{{displayValue}}</span>
     </div>
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">

@@ -1,10 +1,15 @@
 <div class="form-info-wrapper">
   <div class=form-info-left>
     <div class="form-info-image">
-      <img *ngIf="picture" [src]="picture">
-      <div *ngIf="contactAvatar" class="contact-avatar">
+      <img *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture">
+      <div *ngIf="contactAvatar && !(config && config.metadata['picture'] && !viewMode && config.editForm)" class="contact-avatar">
         {{contactAvatar}}
       </div>
+
+      <ng-container formElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
+        [config]="config.metadata['picture']"
+        [group]="group">
+      </ng-container>
     </div>
   </div>
 
@@ -20,7 +25,7 @@
         [group]="group">
       </ng-container>
 
-      <a class="client-link" [href]="link" *ngIf="config && viewMode && link">{{link}}</a>
+      <a class="client-link" target="_blanck" [href]="link" *ngIf="config && viewMode && link">{{link}}</a>
 
       <ng-container formElement *ngIf="config && config.metadata['link'] && !viewMode && config.editForm"
         [config]="config.metadata['link']"
