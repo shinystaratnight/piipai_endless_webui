@@ -55,8 +55,23 @@
         </span>
       </span>
     </h5>
-    <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode"
+    <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
       [config]="getConfig('title')"
+      [group]="group">
+    </ng-container>
+
+    <ng-container formElement *ngIf="config && config.metadata['title_title'] && !viewMode"
+      [config]="getConfig('title_title')"
+      [group]="group">
+    </ng-container>
+
+    <ng-container formElement *ngIf="config && config.metadata['first_name'] && !viewMode"
+      [config]="getConfig('first_name')"
+      [group]="group">
+    </ng-container>
+
+    <ng-container formElement *ngIf="config && config.metadata['last_name'] && !viewMode"
+      [config]="getConfig('last_name')"
       [group]="group">
     </ng-container>
 
