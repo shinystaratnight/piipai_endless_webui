@@ -1,8 +1,9 @@
 <div class="form-group" [formGroup]="group" *ngIf="!config.hide">
   <div class="form-element">
-    <label class="form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions.label">
-      {{config.templateOptions.label}}
+    <label class="col-form-label form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions.label">
+      {{config.templateOptions.label}}:
     </label>
+    <info [description]="config.templateOptions.description"></info>
     <div class="form-element-content" style="height: auto; max-height: none">
       <textarea
         rows="5"
@@ -14,12 +15,9 @@
         [attr.id]="key"
         [attr.name]="key"
         [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''"></textarea>
-        <span *ngIf="viewMode">{{displayValue}}</span>
+        <span [class.readonly-value]="editMode" *ngIf="viewMode">{{displayValue}}</span>
     </div>
   </div>
-  <small class="text-muted" *ngIf="config.templateOptions.description">
-    {{config.templateOptions.description}}
-  </small>
   <div *ngIf="errors">
     <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
   </div>

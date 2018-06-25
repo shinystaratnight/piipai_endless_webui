@@ -43,6 +43,7 @@ export class FormInputComponent
   public viewMode: boolean;
   public formData: any;
   public autocompleteValue: any;
+  public editMode: boolean;
 
   public query = '';
   public list = [];
@@ -66,6 +67,8 @@ export class FormInputComponent
   ) {
     super();
     this.subscriptions = [];
+
+    this.editMode = true;
   }
 
   public ngOnInit() {
@@ -149,12 +152,15 @@ export class FormInputComponent
       const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+          this.editMode = false;
 
           if (this.group.get(this.key) && !this.config.hide) {
             this.group.get(this.key).patchValue(undefined);
           }
         } else {
           this.viewMode = this.config.read_only || false;
+
+          this.editMode = true;
 
           setTimeout(() => {
             if (!this.config.read_only) {

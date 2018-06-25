@@ -32,6 +32,7 @@ export class FormTextareaComponent
 
   public viewMode: boolean;
   public displayValue: string;
+  public editMode: boolean;
 
   private subscriptions: Subscription[];
 
@@ -41,6 +42,7 @@ export class FormTextareaComponent
   ) {
     super();
     this.subscriptions = [];
+    this.editMode = true;
   }
 
   public ngOnInit() {
@@ -78,9 +80,12 @@ export class FormTextareaComponent
       const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+          this.editMode = false;
+
           this.group.get(this.key).patchValue(undefined);
         } else {
           this.viewMode = this.config.read_only || false;
+          this.editMode = true;
         }
         this.setInitValue();
       });

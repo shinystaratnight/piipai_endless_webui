@@ -21,6 +21,10 @@ button {
   cursor: pointer;
 }
 
+option {
+  background-color: white;
+}
+
 a {
   color: inherit;
 
@@ -28,6 +32,7 @@ a {
   &:focus,
   &.active {
     color: $brand-primary;
+    opacity: 1;
 
     &.not-underline {
       text-decoration: none;
@@ -829,4 +834,8 @@ iframe.send-sms {
     font-size: 14px;
     line-height: 18px;
   }
+}
+
+.readonly-value {
+  opacity: .6;
 }

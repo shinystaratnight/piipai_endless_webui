@@ -192,10 +192,10 @@
   </label>
   <div class="form-element-content" [class.many]="config.many && results">
     <span *ngIf="!displayValue && !(customTemplate && customTemplate.length) && (!results || results.length === 0)">-</span>
-    <a *ngIf="!config.many && displayValue && this.linkPath && !(customTemplate && customTemplate.length)" href="{{this.linkPath}}" (click)="open('update', $event)">{{displayValue}}</a>
+    <a [class.readonly-value]="editMode" *ngIf="!config.many && displayValue && this.linkPath && !(customTemplate && customTemplate.length)" href="{{this.linkPath}}" (click)="open('update', $event)">{{displayValue}}</a>
     <div *ngIf="config.many && results && !config.templateOptions.deleteList">
       <span *ngFor="let item of results; let l = last">
-        <a href="/" (click)="open('update', $event, item)">{{item.__str__}}</a>;
+        <a [class.readonly-value]="editMode" href="/" (click)="open('update', $event, item)">{{item.__str__}}</a>;
       </span>
     </div>
     <div *ngIf="config.many && results && config.templateOptions.deleteList"  class="d-flex flex-wrap align-items-center mt-2">
