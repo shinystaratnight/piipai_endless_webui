@@ -77,9 +77,11 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
       &:first-child {
         padding-left: 16px;
+        padding-right: 16px;
       }
 
       &:last-child {
+        padding-left: 16px;
         padding-right: 16px;
       }
     }
@@ -203,19 +205,34 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       position: fixed;
       top: 72px;
 
-      width: calc(100% - 305px);
-      max-width: 1260px;
+      width: calc(100% - 40px);
+      max-width: 1240px;
+
+      padding-right: 20px;
 
       z-index: 1;
 
+      box-sizing: content-box;
+
+      &.open-filters {
+        width: calc(100% - 305px);
+      }
+
       @include media-breakpoint-down('lg') {
-        width: 969px;
+        width: 969px !important;
+        max-width: calc(100% - 20px);
+
+        padding-right: 0;
       }
     }
   }
 
   &-body {
     width: 100%;
+
+    &.in-form .open-filters {
+      width: calc(100% - 285px);
+    }
 
     padding-right: 10px;
     padding-left: 10px;
@@ -224,10 +241,10 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   @include media-breakpoint-up('xl') {
     &-list &-body,
     &-body.open-filters {
-      width: calc(100% - 285px);
       max-width: 1280px;
 
       margin: 0 auto;
+      padding: 0 20px;
     }
   }
 
@@ -255,7 +272,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     align-items: flex-start;
     justify-content: space-around;
 
-    &.open {
+    &.open:not(.in-form) {
       margin-left: 265px;
 
       @include media-breakpoint-down('lg') {
@@ -313,8 +330,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       top: 72px;
       left: 0;
 
-      min-height: calc(100vh - 72px + 31px);
-      // width: calc(100% - 285px);
+      height: calc(100vh - 41px);
 
       overflow: auto;
       z-index: 1;

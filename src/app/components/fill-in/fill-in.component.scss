@@ -1,6 +1,10 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
 
+:host {
+  margin-top: 72px;
+}
+
 .buttons {
   padding: 1rem 40px 0;
 

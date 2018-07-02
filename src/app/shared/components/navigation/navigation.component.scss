@@ -178,9 +178,12 @@ $header-bg: #fdfdfd;
           }
 
           .navigation-item.opened > .navigation-list-nested {
+            position: relative;
             display: flex;
 
             box-shadow: inset 0 0 4px 2px rgba($gray, .2);
+
+            z-index: 2;
           }
 
           & .navigation-list-nested {
@@ -385,17 +388,11 @@ $header-bg: #fdfdfd;
 }
 
 .r3sourcer .page-header .logo {
-  // background-image: url(/assets/img/new-software.svg);
-  // background-repeat: no-repeat;
-  // background-size: auto 40px;
-  // background-position: left center;
-
   img {
     height: 40px;
   }
 
   @include media-breakpoint-down('lg') {
     justify-content: center;
-    // background-position: center center;
   }
 }

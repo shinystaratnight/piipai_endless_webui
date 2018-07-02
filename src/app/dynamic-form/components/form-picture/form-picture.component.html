@@ -12,7 +12,7 @@
       (change)="fileChangeEvent($event)"
       [attr.name]="key">
     <div class="form-element-picture">
-      <img class="image-preview" *ngIf="value && config.templateOptions.file === false" [src]="value" alt="image">
+      <img class="image-preview" [class.start]="config.templateOptions.start" *ngIf="value && config.templateOptions.file === false" [src]="value" alt="image">
       <div *ngIf="contactAvatar && !fileName" class="contact-avatar">{{contactAvatar}}</div>
       <span *ngIf="(link || value) && viewMode && config.templateOptions.file == undefined">
         {{getExtension(link || value) | uppercase}} file

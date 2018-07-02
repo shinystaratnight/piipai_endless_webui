@@ -149,7 +149,7 @@ export class DynamicListComponent implements
       ? changes['innerTables'].currentValue
       : this.innerTables;
 
-    const addData = changes['addData'].currentValue;
+    const addData = changes['addData'] && changes['addData'].currentValue;
 
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;
@@ -189,6 +189,8 @@ export class DynamicListComponent implements
 
     if (changes.hasOwnProperty('data') && changes['data'].isFirstChange()) {
       this.body.push(...this.generateBody(config, data, innerTables));
+    } else if (changes.hasOwnProperty('data') && !changes['data'].isFirstChange()) {
+      this.body = [...this.generateBody(config, data, innerTables)];
     }
 
     if (changes.hasOwnProperty('addData') && !changes['addData'].isFirstChange()) {

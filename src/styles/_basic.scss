@@ -116,14 +116,9 @@ select.not-empty {
   margin-right: 0.5rem;
 
   border: 1px solid #bdbdbd;
-  border-radius: 0.2rem;
+  border-radius: 2px;
 
   cursor: pointer;
-
-  // svg {
-  //   height: 12px;
-  //   width: 12px;
-  // }
 
   i {
     opacity: 0;
@@ -217,12 +212,12 @@ select.not-empty {
 
   border-radius: 50px;
 
-  background-color: rgba($brand-primary, 0.5);
+  background-color: rgba($brand-primary, 0.2);
   color: inherit;
 
   @each $item in $themes {
     .#{$item}-theme & {
-      background-color: rgba(map-get($theme-colors, $item), 0.5);
+      background-color: rgba(map-get($theme-colors, $item), 0.2);
     }
   }
 }
@@ -252,6 +247,10 @@ select.not-empty {
 
 .modal-header {
   background-color: #fff;
+}
+
+.modal-backdrop {
+  z-index: 2;
 }
 
 .modal-content {

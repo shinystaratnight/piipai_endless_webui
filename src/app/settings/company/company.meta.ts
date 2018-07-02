@@ -4,7 +4,7 @@ export const meta = [
     type: 'collapse',
     children: [
       {
-        type: 'picture',
+        type: 'input',
         key: 'company_settings.logo',
         read_only: false,
         companyContact: true,
@@ -12,10 +12,10 @@ export const meta = [
           label: 'Logo',
           label_upload: 'Choose a file',
           label_photo: 'Take a photo',
-          type: 'file',
+          type: 'picture',
           required: false,
-          file: true,
-          photo: false
+          file: false,
+          start: true
         }
       },
       {

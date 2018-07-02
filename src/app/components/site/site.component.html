@@ -85,8 +85,6 @@
 
   <div class="datatable-list" *ngSwitchCase="'list'"
     infinite-scroll
-    infiniteScrollThrottle="500"
-    infiniteScrollDistance="2"
     [scrollWindow]="true"
     (scrolled)="onModalScrollDown()">
       <generic-list
