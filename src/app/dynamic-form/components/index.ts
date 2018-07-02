@@ -1,6 +1,7 @@
 import { ActionElementComponent } from './action-element/action-element.component';
 
 import { ProfileComponent } from './profile/profile.component';
+import { InfoComponent } from './info/info.component';
 
 // Filters
 import { FilterChoiceComponent } from './filter-choice/filter-choice.component';
@@ -96,6 +97,7 @@ export const components = [
   GenericListComponent,
   ActionElementComponent,
   ProfileComponent,
+  InfoComponent,
 
   ...entryComponents,
 ];

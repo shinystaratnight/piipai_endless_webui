@@ -6,44 +6,6 @@
     position: relative;
 
     display: flex;
-
-    .info {
-      position: relative;
-      top: -2px;
-
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-
-      width: 1rem;
-      height: 1rem;
-
-      padding-right: 1px;
-
-      font-size: 12px;
-      line-height: 12px;
-
-      border-radius: 50%;
-      border: 1px solid $gray;
-
-      color: $gray;
-      opacity: .5;
-      cursor: pointer;
-
-      &:hover {
-        border-color: $brand-primary;
-        color: $brand-primary;
-
-        opacity: 1;
-
-        @each $item in $themes {
-          .#{$item}-theme & {
-            border-color: map-get($theme-colors, $item);
-            color: map-get($theme-colors, $item);
-          }
-        }
-      }
-    }
   }
 
   &-title {

@@ -109,6 +109,7 @@ export class FormRelatedComponent
   public allowPermissions: string[];
   public autocompleteDisplay: boolean;
   public currentQuery: string;
+  public editMode: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -127,6 +128,7 @@ export class FormRelatedComponent
   ) {
     super();
     this.subscriptions = [];
+    this.editMode = true;
   }
 
   public ngOnInit() {
@@ -245,6 +247,7 @@ export class FormRelatedComponent
       this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+          this.editMode = false;
 
           this.group.get(this.key).patchValue('');
           this.displayValue = undefined;
@@ -255,6 +258,7 @@ export class FormRelatedComponent
           }
         } else {
           this.viewMode = this.config.read_only || false;
+          this.editMode = true;
         }
         this.setInitValue();
       });
@@ -687,7 +691,7 @@ export class FormRelatedComponent
       }
     } else {
       this.displayValue = '';
-      this.group.get(this.key).patchValue(undefined);
+      this.group.get(this.key).patchValue('');
     }
     this.changeList();
     this.eventHandler({type: 'change'}, item && item[this.param], item);

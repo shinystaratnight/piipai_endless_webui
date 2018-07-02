@@ -1,7 +1,7 @@
 @import '../../../../styles/variables.scss';
 
 $width: 320px;
-$height: 150px;
+$height: 80px;
 
 .picture {
   video {
@@ -23,6 +23,8 @@ $height: 150px;
 }
 
 .image-preview {
+  align-self: center;
+
   width: $height;
   height: $height;
 
@@ -36,7 +38,32 @@ $height: 150px;
 .contact-avatar {
   width: $height;
   height: $height;
+}
 
-  font-size: 46px;
-  line-height: 1.25;
+.link {
+  margin-left: 4px;
+
+  font-size: 12px;
+  line-height: 14px;
+
+  color: $brand-primary;
+
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.actions {
+  display: inline-flex;
+
+  span {
+    margin-left: .5rem;
+  }
+}
+
+.form-element-picture {
+  display: flex;
+  flex-direction: column;
 }
