@@ -100,7 +100,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public getConfig(name: string) {
-    if (name === 'title' && !this.config.editForm) {
+    if ((name === 'title' && !this.config.editForm) || name === 'link') {
       const config = this.config.metadata[name];
 
       config.templateOptions.label = `${config.key[0].toUpperCase()}${config.key.slice(1)}`;
