@@ -20,14 +20,14 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
 
   public event: EventEmitter<any> = new EventEmitter();
 
-  public displayMonths = 2;
-  public navigation = 'arrows';
+  public displayMonths = 3;
+  public navigation = 'none';
   public dateFormat = 'YYYY-MM-DD';
   public minDate: any;
   public markDisabled: Function;
   public vacancyDate: any;
   public vacancyDates: string[];
-  public dates: any[] = [];
+  public dates: any = {};
 
   @ViewChild('calendar') public calendar: ElementRef;
 
@@ -83,9 +83,10 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
   public selectVacancyDate(e, time = moment) {
     const date = time([e.year, e.month - 1, e.day]).format(this.dateFormat);
 
-    this.dates.push(e);
     this.vacancyDates = this.vacancyDates || [];
     if (this.vacancyDates.indexOf(date) === -1) {
+      this.dates[date] = null;
+
       this.vacancyDates.push(date);
     }
 
@@ -96,58 +97,40 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
     });
 
     setTimeout(() => {
-      this.markSelectedDates(this.dates);
+      this.markSelectedDates(date);
     }, 10);
   }
 
   public removeDate(date, time = moment) {
-    const month = time(date).month() + 1;
-    const day = time(date).date();
-
-    const dateObj = this.dates.find((el) => el.month === month && el.day === day);
-    const removeDate = dateObj && this.dates.splice(this.dates.indexOf(dateObj), 1);
-
     this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
     this.vacancyDate = this.vacancyDates[0];
 
     setTimeout(() => {
-      this.markSelectedDates(removeDate, true);
+      this.markSelectedDates(date, true);
     }, 10);
   }
 
-  public markSelectedDates(data = [], remove?) {
+  public markSelectedDates(date?, remove?) {
     const calendar = this.calendar.nativeElement;
-    const monthes = {};
-    data.forEach((el) => {
-      if (!monthes[el.month]) {
-        monthes[el.month] = {
-          dates: [el.day + '']
-        };
-      } else {
-        monthes[el.month].dates.push(el.day + '');
-      }
-    });
+    const selectedDate = calendar.querySelectorAll(`.bg-primary:not(.not-current)`);
+    const currentDate = selectedDate[0];
 
-    Object.keys(monthes).forEach((month) => {
-      const dates = calendar.querySelectorAll(`[ng-reflect-current-month="${month}"]`);
-      const days = [].filter.call(dates, (day) => monthes[month].dates.indexOf(day.innerText) > -1);
-
-      [].forEach.call(days, (day) => {
-        if (remove) {
-          day.classList.remove('bg-primary');
-          day.classList.remove('text-white');
-        } else {
-          day.classList.add('bg-primary');
-          day.classList.add('text-white');
-        }
-      });
-    });
-  }
-
-  public eventHandler(e) {
-    if (e.target.classList.contains('ngb-dp-navigation-chevron')) {
-      this.markSelectedDates(this.dates);
+    if (date && !this.dates[date]) {
+      this.dates[date] = currentDate.parentElement;
     }
-  }
 
+    if (remove) {
+      this.dates[date].children[0].classList.remove('bg-primary');
+      this.dates[date].children[0].classList.remove('text-white');
+      this.dates[date].children[0].classList.remove('not-current');
+
+      delete this.dates[date];
+    }
+    Object.keys(this.dates).forEach((el) => {
+      this.dates[el].children[0].classList.add('bg-primary');
+      this.dates[el].children[0].classList.add('text-white');
+      this.dates[el].children[0].classList.add('not-current');
+    });
+
+  }
 }
