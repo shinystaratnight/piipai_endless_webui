@@ -28,7 +28,7 @@
       <a class="client-link" target="_blanck" [href]="link" *ngIf="config && viewMode && link">{{link}}</a>
 
       <ng-container formElement *ngIf="config && config.metadata['link'] && !viewMode && config.editForm"
-        [config]="config.metadata['link']"
+        [config]="getConfig('link')"
         [group]="group">
       </ng-container>
     </p>
@@ -82,8 +82,8 @@
       </ng-container>
     </div>
 
-    <p *ngIf="config && viewMode" class="description">{{address}} <span class="address-hq" *ngIf="config.metadata['link']">|&nbsp;HQ</span></p>
-    <p *ngIf="config && config.metadata['address'] && !viewMode && config.editForm">
+    <p *ngIf="config && viewMode" class="description">{{address}} <span class="address-hq" *ngIf="config.metadata['link'] && address">|&nbsp;HQ</span></p>
+    <p *ngIf="config && config.metadata['address'] && address && !viewMode && config.editForm">
       <ng-container formElement
         [config]="config.metadata['address']"
         [group]="group">

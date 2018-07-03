@@ -40,6 +40,7 @@ export class SiteComponent implements OnInit {
   public listName: string;
 
   public listNameCache = {};
+  public errors: any;
 
   constructor(
     private router: Router,
@@ -259,7 +260,8 @@ export class SiteComponent implements OnInit {
 
   public deleteElement(element) {
     this.genericFormService.delete(element.endpoint, element.pathData.id).subscribe(
-      (res: any) => this.router.navigate([element.pathData.path])
+      (res: any) => this.router.navigate([element.pathData.path]),
+      (err: any) => this.errors = err.errors
     );
   }
 
