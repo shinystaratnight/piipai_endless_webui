@@ -427,6 +427,18 @@ select.not-empty {
   padding-right: 0;
 }
 
+.ui-datebox-container .btn-group-vertical {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+
+  .btn {
+    padding: 5px;
+    font-size: 12px;
+  }
+}
+
 .ui-datebox-container.dropdown-menu {
   width: auto;
   min-width: 225px;
