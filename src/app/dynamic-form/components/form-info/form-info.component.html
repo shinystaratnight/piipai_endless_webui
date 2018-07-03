@@ -44,11 +44,23 @@
     <h5 class="form-info-title" *ngIf="config && viewMode">
 
       <span *ngIf="!this.averageScore && this.averageScore !== 0">
-        {{title}}
+        <span class="view-mode" *ngIf="titlePath">
+          <ng-container formElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
+            [config]="getConfig('title')"
+            [group]="group">
+          </ng-container>
+        </span>
+
+        <span *ngIf="!titlePath">{{title}}</span>
         <info [description]="description"></info>
       </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
-        {{title}}
+        <span class="view-mode" *ngIf="titlePath">
+          <ng-container formElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
+            [config]="getConfig('title')"
+            [group]="group">
+          </ng-container>
+        </span>
         <span class="score" [style.color]="colors[getScore(this.averageScore)]">
           &nbsp;|&nbsp;{{this.averageScore}}
           <i fa name="star"></i>
@@ -82,7 +94,15 @@
       </ng-container>
     </div>
 
-    <p *ngIf="config && viewMode" class="description">{{address}} <span class="address-hq" *ngIf="config.metadata['link'] && address">|&nbsp;HQ</span></p>
+    <p *ngIf="config && viewMode && address" class="description">
+      <ng-container *ngIf="!(config.metadata['link'] && address)" formElement
+        [config]="config.metadata['address']"
+        [group]="group">
+      </ng-container>
+      <span *ngIf="config.metadata['link'] && address">
+        {{address}} <span class="address-hq">|&nbsp;HQ</span>
+      </span>
+    </p>
     <p *ngIf="config && config.metadata['address'] && address && !viewMode && config.editForm">
       <ng-container formElement
         [config]="config.metadata['address']"

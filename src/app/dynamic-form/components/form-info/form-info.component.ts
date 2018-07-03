@@ -24,6 +24,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public updated_at: string; //tslint:disable-line
   public job_title: string; //tslint:disable-line
   public company: string;
+  public titlePath: boolean;
 
   public color: any;
   public colorAttr: string;
@@ -91,6 +92,10 @@ export class FormInfoComponent implements OnInit, OnDestroy {
             this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
           }
         }
+      }
+
+      if (this.config.metadata['title'] && this.config.metadata['title'].value instanceof Object) {
+        this.titlePath = true;
       }
     }
   }

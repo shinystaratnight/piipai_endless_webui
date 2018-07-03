@@ -16,14 +16,12 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/filter';
 
-
 import { GenericFormService } from '../../services';
 import { CheckPermissionService } from '../../../shared/services';
 import { NavigationService, UserService } from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
-
 
 export interface RelatedObject {
   id: string;

@@ -171,6 +171,8 @@ export class FormDatepickerComponent
           useFocus: true,
           useHeader: false,
           calHighToday: false,
+          calUsePickers: true,
+          useCancelButton: true,
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
