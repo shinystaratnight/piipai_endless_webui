@@ -20,7 +20,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
 
   public event: EventEmitter<any> = new EventEmitter();
 
-  public displayMonths = 2;
+  public displayMonths = 3;
   public navigation = 'none';
   public dateFormat = 'YYYY-MM-DD';
   public minDate: any;
