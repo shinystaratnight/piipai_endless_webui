@@ -72,8 +72,9 @@ export class FormInfoComponent implements OnInit, OnDestroy {
           this.color = this.config.values[key].color;
           this.colorAttr = this.config.values[key].color_attr;
         } else if (key === 'picture') {
-          this[key] = this.getValue(this.config.values[key], this.config.value)
-            || (this.config.companyPicture ? '/assets/img/logo.svg' : null);
+          this[key] = this.getValue(this.config.values[key], this.config.value, 'picture')
+            || (this.getConfig('picture')
+              && this.getConfig('picture').companyContact ? '/assets/img/logo.svg' : null);
         } else {
           this[key] = this.getValue(this.config.values[key], this.config.value);
         }
@@ -99,7 +100,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public getConfig(name: string) {
-    if (name === 'title' && !this.config.editForm) {
+    if ((name === 'title' && !this.config.editForm) || name === 'link') {
       const config = this.config.metadata[name];
 
       config.templateOptions.label = `${config.key[0].toUpperCase()}${config.key.slice(1)}`;
@@ -109,15 +110,19 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     return this.config.metadata[name];
   }
 
-  public getValue(key: string, data: any): any {
+  public getValue(key: string, data: any, type?: string): any {
     if (key) {
       let keys = key.split('.');
       let prop = keys.shift();
 
       if (!keys.length) {
+        if (data[prop] instanceof Object && type === 'picture') {
+          return data[prop].origin;
+        }
+
         return data[prop];
       } else if (data[prop]) {
-        return this.getValue(keys.join('.'), data[prop]);
+        return this.getValue(keys.join('.'), data[prop], type);
       }
     }
   }

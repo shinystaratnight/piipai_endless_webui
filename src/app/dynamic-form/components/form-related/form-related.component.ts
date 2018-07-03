@@ -107,9 +107,9 @@ export class FormRelatedComponent
 
   public linkPath: string;
   public allowPermissions: string[];
-  public relatedAutocomplete: any;
   public autocompleteDisplay: boolean;
   public currentQuery: string;
+  public editMode: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -128,6 +128,7 @@ export class FormRelatedComponent
   ) {
     super();
     this.subscriptions = [];
+    this.editMode = true;
   }
 
   public ngOnInit() {
@@ -229,7 +230,7 @@ export class FormRelatedComponent
       const subscription = this.config.hidden.subscribe((hide) => {
         if (hide && !this.config.hide) {
           this.displayValue = null;
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key).patchValue('');
           this.setInitValue();
         }
         this.config.hide = hide;
@@ -246,8 +247,9 @@ export class FormRelatedComponent
       this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+          this.editMode = false;
 
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key).patchValue('');
           this.displayValue = undefined;
 
           this.autocompleteDisplay = false;
@@ -256,6 +258,7 @@ export class FormRelatedComponent
           }
         } else {
           this.viewMode = this.config.read_only || false;
+          this.editMode = true;
         }
         this.setInitValue();
       });
@@ -276,22 +279,6 @@ export class FormRelatedComponent
                 this.viewMode = true;
               }
             }
-          }
-          if (this.relatedAutocomplete) {
-            const query = {};
-            this.relatedAutocomplete.related.forEach((field) => {
-              if (field === 'state') {
-                query['region'] = `{state.id}`;
-              } else {
-                query[field] = `{${field}.id}`;
-              }
-
-              if (field === 'country') {
-                query['code2'] = this.relatedAutocomplete.search;
-              }
-            });
-
-            this.getOptions.call(this, this.relatedAutocomplete.search, 0 , false, this.setValue, undefined, query); //tslint:disable-line
           }
         }
       });
@@ -704,7 +691,7 @@ export class FormRelatedComponent
       }
     } else {
       this.displayValue = '';
-      this.group.get(this.key).patchValue(undefined);
+      this.group.get(this.key).patchValue('');
     }
     this.changeList();
     this.eventHandler({type: 'change'}, item && item[this.param], item);
@@ -884,6 +871,7 @@ export class FormRelatedComponent
           .getByQuery(endpoint + id + '/', `?${this.generateFields(this.fields)}`)
           .subscribe(
             (res: any) => {
+              this.lastElement = 0;
               if (res) {
                 const path = this.getLinkPath(this.config.endpoint);
                 if (path) {
@@ -913,8 +901,6 @@ export class FormRelatedComponent
     let result;
     if (this.config.showIf && this.checkExistKey(this.config.showIf, key)) {
       result = this.checkShowRules(this.config.showIf, data);
-    } else if (this.relatedAutocomplete && this.relatedAutocomplete.related && this.checkExistKey(this.relatedAutocomplete.related, key)) { //tslint:disable-line
-      result = this.checkShowRules(this.relatedAutocomplete.related, data);
     }
     return result || false;
   }

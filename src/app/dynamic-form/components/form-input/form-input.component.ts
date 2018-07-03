@@ -43,6 +43,7 @@ export class FormInputComponent
   public viewMode: boolean;
   public formData: any;
   public autocompleteValue: any;
+  public editMode: boolean;
 
   public query = '';
   public list = [];
@@ -66,10 +67,13 @@ export class FormInputComponent
   ) {
     super();
     this.subscriptions = [];
+
+    this.editMode = true;
   }
 
   public ngOnInit() {
-    if (this.config.type !== 'static' || this.config.key === 'strength') {
+    if (this.config.type !== 'static'
+      || (this.config.type === 'static' || !this.config.read_only)) {
       this.addControl(this.config, this.fb);
     }
     this.setInitValue();
@@ -77,7 +81,8 @@ export class FormInputComponent
     this.checkHiddenProperty();
     this.checkAutocomplete();
     this.checkFormData();
-    if (this.config.type !== 'static' || this.config.key === 'strength') {
+    if (this.config.type !== 'static'
+      || (this.config.type === 'static' && !this.config.read_only)) {
       this.createEvent();
     }
   }
@@ -125,7 +130,7 @@ export class FormInputComponent
   }
 
   public checkHiddenProperty() {
-    if (this.config && this.config.hidden && (this.config.type !== 'static' || this.config.key === 'strength')) { //tslint:disable-line
+    if (this.config && this.config.hidden && (this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))) { //tslint:disable-line
       const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
@@ -147,12 +152,23 @@ export class FormInputComponent
       const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+          this.editMode = false;
 
           if (this.group.get(this.key) && !this.config.hide) {
             this.group.get(this.key).patchValue(undefined);
           }
         } else {
           this.viewMode = this.config.read_only || false;
+
+          this.editMode = true;
+
+          setTimeout(() => {
+            if (!this.config.read_only) {
+              if (this.input) {
+                this.addFlags(this.input, this.config);
+              }
+            }
+          }, 200);
         }
         this.autocompleteValue = undefined;
         this.setInitValue();
@@ -177,7 +193,8 @@ export class FormInputComponent
   }
 
   public setInitValue() {
-    if (this.config.type !== 'static' || this.config.key === 'strength') {
+    if (this.config.type !== 'static'
+      || (this.config.type === 'static' && !this.config.read_only)) {
       if (this.autocompleteValue) {
         this.displayValue = this.autocompleteValue;
         this.group.get(this.key).patchValue(this.autocompleteValue);
