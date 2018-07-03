@@ -33,7 +33,7 @@ import { directives } from './directives';
     FormsModule,
     RouterModule,
     AgmCoreModule.forRoot({
-      apiKey: process.env.GOOGLE_GEO_CODING_API_KEY || environment.GOOGLE_GEO_CODING_API_KEY
+      apiKey: (<any> process.env).GOOGLE_GEO_CODING_API_KEY || environment.GOOGLE_GEO_CODING_API_KEY
     }),
     InfiniteScrollModule,
     GooglePlaceModule,
