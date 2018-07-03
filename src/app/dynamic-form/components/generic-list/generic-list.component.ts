@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  EventEmitter,
+  Output,
+  OnDestroy
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { GenericFormService, FilterService } from './../../services';

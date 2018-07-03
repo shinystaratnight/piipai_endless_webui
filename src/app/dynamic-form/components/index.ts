@@ -2,6 +2,7 @@ import { ActionElementComponent } from './action-element/action-element.componen
 
 import { ProfileComponent } from './profile/profile.component';
 import { InfoComponent } from './info/info.component';
+import { WebcamComponent } from './webcam/webcam.component';
 
 // Filters
 import { FilterChoiceComponent } from './filter-choice/filter-choice.component';
@@ -52,6 +53,7 @@ export * from './generic-list/generic-list.component';
 export * from './action-element/action-element.component';
 export * from './basic-element/basic-element.component';
 export * from './profile/profile.component';
+export * from './webcam/webcam.component';
 
 export const entryComponents = [
   FilterChoiceComponent,
@@ -98,6 +100,7 @@ export const components = [
   ActionElementComponent,
   ProfileComponent,
   InfoComponent,
+  WebcamComponent,
 
   ...entryComponents,
 ];

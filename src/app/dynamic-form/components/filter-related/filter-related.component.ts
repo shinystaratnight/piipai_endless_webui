@@ -10,12 +10,10 @@ import {
   ElementRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgModel } from '@angular/forms';
 
 import { GenericFormService } from './../../services/generic-form.service';
 import { FilterService } from './../../services/filter.service';
 
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/skip';

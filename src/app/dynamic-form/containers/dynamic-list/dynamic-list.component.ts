@@ -1571,4 +1571,13 @@ export class DynamicListComponent implements
     }
   }
 
+  public toggleFilterBlock() {
+    this.filtersHidden = !this.filtersHidden;
+
+    if (!this.filtersHidden) {
+      document.body.classList.add('scroll-hidden');
+    } else {
+      document.body.classList.remove('scroll-hidden');
+    }
+  }
 }

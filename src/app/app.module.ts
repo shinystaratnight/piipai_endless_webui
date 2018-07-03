@@ -32,8 +32,6 @@ import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawe
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
-import { DefaultRequestOptions } from './services/default-request-options.service';
-
 import { SharedModule } from './shared/shared.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';

@@ -587,6 +587,14 @@ select.not-empty {
 
 /*---------- Custom styles ---------- */
 
+
+
+.scroll-hidden {
+  @include media-breakpoint-down('lg') {
+    overflow: hidden;
+  }
+}
+
 .site-page {
   margin-top: 72px;
 }
