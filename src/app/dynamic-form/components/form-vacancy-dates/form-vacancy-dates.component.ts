@@ -88,6 +88,16 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
       this.dates[date] = null;
 
       this.vacancyDates.push(date);
+
+      setTimeout(() => {
+        this.markSelectedDates(date);
+      }, 100);
+    } else {
+      this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
+
+      setTimeout(() => {
+        this.markSelectedDates(date, true);
+      }, 100);
     }
 
     this.group.get(this.key).patchValue(this.vacancyDates);
@@ -95,10 +105,6 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
       el: this.config,
       type: 'change'
     });
-
-    setTimeout(() => {
-      this.markSelectedDates(date);
-    }, 10);
   }
 
   public removeDate(date, time = moment) {
