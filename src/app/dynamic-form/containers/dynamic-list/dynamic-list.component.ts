@@ -889,25 +889,27 @@ export class DynamicListComponent implements
   }
 
   public initPagination(data) {
-    if (data !== this.currentData || data.count !== this.count) {
-      this.selectedAll = false;
-      let count = data.count;
-      let length = data.results.length;
-      this.count = length;
-      if (length === 0) {
-        this.pageSize = 10;
-        this.page = 1;
-        return;
-      }
-      if (!this.offset) {
-        this.page = 1;
-      } else if (this.offset) {
-        this.page = (this.offset / this.limit) + 1;
-      }
-      if (!this.limit) {
-        this.pageSize = 10;
-      } else {
-        this.pageSize = (count / this.limit) * 10;
+    if (this.inForm) {
+      if (data !== this.currentData || data.count !== this.count) {
+        this.selectedAll = false;
+        let count = data.count;
+        let length = data.results.length;
+        this.count = length;
+        if (length === 0) {
+          this.pageSize = 10;
+          this.page = 1;
+          return;
+        }
+        if (!this.offset) {
+          this.page = 1;
+        } else if (this.offset) {
+          this.page = (this.offset / this.limit) + 1;
+        }
+        if (!this.limit) {
+          this.pageSize = 10;
+        } else {
+          this.pageSize = (count / this.limit) * 10;
+        }
       }
     }
   }

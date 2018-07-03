@@ -128,11 +128,11 @@ select.not-empty {
 /*---------- Bootstrap ---------- */
 
 .modal-backdrop {
-  z-index: 1;
+  z-index: 3;
 }
 
 .modal {
-  z-index: 2;
+  z-index: 3;
 }
 
 .input-group .form-control,
