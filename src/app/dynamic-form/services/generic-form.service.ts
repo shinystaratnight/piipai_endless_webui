@@ -7,6 +7,7 @@ import 'rxjs/add/operator/catch';
 import { CookieService } from 'angular2-cookie/core';
 
 import { ErrorsService } from '../../shared/services/errors.service';
+import { metadata } from '../../metadata';
 
 @Injectable()
 export class GenericFormService {
@@ -36,6 +37,24 @@ export class GenericFormService {
   public getMetadata(endpoint, query = '') {
     let headers = new Headers();
     this.updateHeaders(headers);
+    console.log(query);
+
+    if (metadata[endpoint]) {
+      let type = '';
+
+      if (query.includes('formadd')) {
+        type = 'formadd';
+      } else if (query.includes('form')) {
+        type = 'form';
+      } else {
+        type = 'list';
+      }
+
+      const stringifyMetadata = JSON.stringify(metadata[endpoint][type]);
+
+      return Observable.of(JSON.parse(stringifyMetadata));
+    }
+
     return this.http.options(`${endpoint}${query}`, { headers })
       .map((response: any) => response.json())
       .catch((error: any) => this.errorHandler(error));

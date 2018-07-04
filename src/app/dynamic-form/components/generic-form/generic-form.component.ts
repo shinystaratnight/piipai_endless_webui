@@ -158,28 +158,9 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    if (this.id && !this.mode) {
-      this.mode = 'view';
-      setTimeout(() => {
-        this.modeEvent.emit(this.mode);
-      }, 100);
-    }
-
     if (this.endpoint.indexOf('candidate_fill')) {
       this.candidateFill = true;
     }
-
-    this.formId = this.formService.registerForm(this.endpoint, this.mode);
-
-    const subscription = this.formService
-      .getForm(this.formId).mode
-      .skip(1)
-      .subscribe((mode: string) => {
-        this.mode = mode;
-        this.modeEvent.emit(this.mode);
-      });
-
-    this.subscriptions.push(subscription);
   }
 
   public ngOnDestroy() {
@@ -187,16 +168,39 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
+
+    if (!this.formId) {
+      if (this.id && !this.mode) {
+        this.mode = 'view';
+        setTimeout(() => {
+          this.modeEvent.emit(this.mode);
+        }, 100);
+      }
+
+      this.formId = this.formService.registerForm(this.endpoint, this.mode);
+
+      const subscription = this.formService
+        .getForm(this.formId).mode
+        .skip(1)
+        .subscribe((mode: string) => {
+          this.mode = mode;
+          this.modeEvent.emit(this.mode);
+        });
+
+      this.subscriptions.push(subscription);
+    }
+
     Object.keys(changes).forEach((input) => {
       if (input === 'mode') {
         this.resetData(this.errors);
         this.resetData(this.response);
 
+        console.log('this', this);
         this.toggleModeMetadata(this.metadata, this.mode);
       }
     });
 
-    if (this.currentId !== this.id) {
+    if (this.currentId !== this.id && this.metadata) {
       this.currentId = this.id;
       this.editForm = true;
       this.splitElements.forEach((el) => {
@@ -320,6 +324,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       )
       .subscribe(
         (data: any) => {
+          console.log(this.mode);
           this.setModeForElement(data, this.mode);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
