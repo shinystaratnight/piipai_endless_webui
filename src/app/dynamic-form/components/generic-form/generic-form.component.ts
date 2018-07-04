@@ -195,7 +195,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         this.resetData(this.errors);
         this.resetData(this.response);
 
-        console.log('this', this);
         this.toggleModeMetadata(this.metadata, this.mode);
       }
     });
@@ -324,7 +323,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       )
       .subscribe(
         (data: any) => {
-          console.log(this.mode);
           this.setModeForElement(data, this.mode);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);

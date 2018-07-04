@@ -37,9 +37,20 @@ export class GenericFormService {
   public getMetadata(endpoint, query = '') {
     let headers = new Headers();
     this.updateHeaders(headers);
-    console.log(query);
 
-    if (metadata[endpoint]) {
+    if (endpoint.includes('/submit')) {
+      endpoint = 'submit';
+    }
+
+    if (endpoint.includes('/evaluate')) {
+      endpoint = 'evaluate';
+    }
+
+    if (endpoint.includes('/not_agree')) {
+      endpoint = 'not_agree';
+    }
+
+    if (metadata[endpoint] && !query.includes('formset')) {
       let type = '';
 
       if (query.includes('formadd')) {
@@ -50,7 +61,8 @@ export class GenericFormService {
         type = 'list';
       }
 
-      const stringifyMetadata = JSON.stringify(metadata[endpoint][type]);
+      const stringifyMetadata =
+        JSON.stringify(metadata[endpoint][type]);
 
       return Observable.of(JSON.parse(stringifyMetadata));
     }
