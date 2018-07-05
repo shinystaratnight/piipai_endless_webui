@@ -173,6 +173,8 @@ export class FormDatepickerComponent
           calHighToday: false,
           calUsePickers: true,
           useCancelButton: true,
+          calYearPickMax: 6,
+          calYearPickMin: -100,
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
