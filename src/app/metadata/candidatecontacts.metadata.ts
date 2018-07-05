@@ -2684,5 +2684,6 @@ const contact = [
 export const metadata = {
   list,
   form,
-  formadd
+  formadd,
+  contact
 };

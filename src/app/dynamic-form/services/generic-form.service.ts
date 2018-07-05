@@ -58,9 +58,6 @@ export class GenericFormService {
       endpoint = 'fillin';
     }
 
-    console.log('endpoint', endpoint);
-    console.log('query', query);
-
     if (metadata[endpoint]) {
       let type = '';
 

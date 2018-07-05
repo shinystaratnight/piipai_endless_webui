@@ -177,7 +177,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         }, 100);
       }
 
-      console.log(this.mode);
       this.formId = this.formService.registerForm(this.endpoint, this.mode);
 
       const subscription = this.formService
@@ -290,16 +289,18 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public toggleModeMetadata(metadata: Field[], mode: string) {
-    metadata.forEach((el) => {
-      if (el.key) {
-        el.mode.next(mode);
-        if (el.type === 'related' && el.list) {
-          this.toggleModeMetadata(el.metadata, mode);
+    if (metadata.length) {
+      metadata.forEach((el) => {
+        if (el.key && el.mode) {
+          el.mode.next(mode);
+          if (el.type === 'related' && el.list) {
+            this.toggleModeMetadata(el.metadata, mode);
+          }
+        } else if (el.children) {
+          this.toggleModeMetadata(el.children, mode);
         }
-      } else if (el.children) {
-        this.toggleModeMetadata(el.children, mode);
-      }
-    });
+      });
+    }
   }
 
   public formChange(data) {

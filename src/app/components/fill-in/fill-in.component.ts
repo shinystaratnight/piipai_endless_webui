@@ -29,7 +29,6 @@ export class FillInComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    console.log(this);
     this.meta = [
       {
         type: 'list',
