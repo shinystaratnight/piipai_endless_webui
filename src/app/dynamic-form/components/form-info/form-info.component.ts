@@ -98,10 +98,21 @@ export class FormInfoComponent implements OnInit, OnDestroy {
         this.titlePath = true;
       }
     }
+
+    this.createEvent();
   }
 
   public ngOnDestroy() {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
+  public createEvent() {
+    this.event.emit({
+      type: 'create',
+      el: this.config,
+      value: this.config.key === 'id'
+        && { id: this.config.value.id }
+    });
   }
 
   public getConfig(name: string) {
