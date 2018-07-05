@@ -80,6 +80,8 @@ export class GenericFormService {
         type = 'job';
       } else if (query.includes('shift_date')) {
         type = 'shiftDate';
+      } else if (query.includes('extend')) {
+        type = 'extend';
       } else if (query.includes('formset')) {
         type = 'formset';
       } else if (query.includes('form')) {
