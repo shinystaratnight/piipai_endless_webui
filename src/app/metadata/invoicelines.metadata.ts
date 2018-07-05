@@ -90,6 +90,188 @@ const form = [
   { key: 'vat' }
 ];
 
+const formset = {
+  fields: [
+    {
+      key: 'timesheet',
+      templateOptions: {
+        link: null,
+        label: 'Timesheets',
+        type: 'link',
+        text: 'Timesheet'
+      },
+      type: 'link'
+    },
+    {
+      key: 'vat.name',
+      read_only: false,
+      templateOptions: { required: true, label: 'Code', max: 64, type: 'text' },
+      type: 'input'
+    },
+    {
+      key: 'unit_price',
+      read_only: false,
+      templateOptions: { required: true, label: 'Rate', type: 'number' },
+      type: 'input'
+    },
+    {
+      key: 'amount',
+      read_only: false,
+      templateOptions: { required: true, label: 'Amount', type: 'number' },
+      type: 'input'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'editForm',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      key: 'units',
+      read_only: false,
+      templateOptions: { required: true, label: 'Units', type: 'number' },
+      type: 'input'
+    },
+    {
+      key: 'notes',
+      read_only: false,
+      templateOptions: { required: true, label: 'Notes', type: 'textarea' },
+      type: 'textarea'
+    },
+    {
+      key: 'date',
+      read_only: false,
+      templateOptions: { required: true, label: 'Date', type: 'date' },
+      type: 'datepicker'
+    },
+    {
+      many: false,
+      key: 'timesheet.job_offer.candidate_contact',
+      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Candidate contact',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'date',
+        sort: true,
+        sort_field: 'date',
+        content: [{ type: 'datepicker', field: 'date' }],
+        label: 'Date'
+      },
+      {
+        name: 'units',
+        sort: true,
+        sort_field: 'units',
+        content: [{ type: 'input', field: 'units' }],
+        label: 'Units'
+      },
+      {
+        name: 'notes',
+        sort: true,
+        sort_field: 'notes',
+        content: [{ type: 'textarea', field: 'notes' }],
+        label: 'Notes'
+      },
+      {
+        name: 'timesheet.job_offer.candidate_contact',
+        sort: true,
+        sort_field: 'timesheet.job_offer.candidate_contact',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            type: 'related',
+            field: 'timesheet.job_offer.candidate_contact'
+          }
+        ],
+        label: 'Candidate contact'
+      },
+      {
+        name: 'unit_price',
+        sort: true,
+        sort_field: 'unit_price',
+        content: [{ type: 'input', field: 'unit_price' }],
+        label: 'Rate'
+      },
+      {
+        name: 'amount',
+        sort: true,
+        sort_field: 'amount',
+        content: [{ type: 'input', field: 'amount' }],
+        label: 'Amount'
+      },
+      {
+        name: 'code',
+        content: [{ label: 'Code', type: 'text', field: 'vat.name' }],
+        label: 'Code',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'timesheets',
+        content: [
+          {
+            text: 'Timesheet',
+            endpoint: '/ecore/api/v2/hr/timesheets/{timesheet.id}',
+            label: 'Timesheets',
+            type: 'link',
+            field: 'timesheet'
+          }
+        ],
+        label: 'Timesheets',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/core/invoicelines/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: ' '
+      }
+    ],
+    list: 'invoiceline',
+    editDisable: false,
+    label: 'Invoice Line',
+    pagination_label: 'Invoice Line',
+    search_enabled: false
+  }
+};
+
 const formadd = [
   {
     list: false,
@@ -155,6 +337,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

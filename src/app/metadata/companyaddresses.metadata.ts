@@ -400,6 +400,194 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      key: 'primary_contact',
+      templateOptions: {
+        link: null,
+        label: 'Primary Contact',
+        type: 'link',
+        text: 'Primary Contact'
+      },
+      type: 'link'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'editForm',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      default: true,
+      key: 'active',
+      read_only: false,
+      templateOptions: { required: false, label: 'Active', type: 'checkbox' },
+      type: 'checkbox'
+    },
+    {
+      key: 'phone_fax',
+      read_only: false,
+      templateOptions: { required: false, label: 'Fax', type: 'text' },
+      type: 'input'
+    },
+    {
+      default: false,
+      key: 'hq',
+      read_only: false,
+      templateOptions: { required: false, label: 'HQ', type: 'checkbox' },
+      type: 'checkbox'
+    },
+    {
+      key: 'address',
+      templateOptions: {
+        link: null,
+        label: 'Address',
+        type: 'link',
+        text: 'Address'
+      },
+      type: 'link'
+    },
+    {
+      key: 'phone_landline',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Landline Phone',
+        type: 'text'
+      },
+      type: 'input'
+    }
+  ],
+  list: {
+    actions: {
+      button_label: 'Go',
+      decline_label: 'Decline',
+      label: 'Actions',
+      options: [
+        {
+          message: 'Are you sure?',
+          endpoint: '/ecore/api/v2/core/companyaddresses/delete/',
+          label: 'Delete selected',
+          confirm: true
+        },
+        {
+          message: 'Are you sure?',
+          endpoint: '/ecore/api/v2/core/companyaddresses/sendsms/',
+          label: 'Send sms',
+          confirm: false
+        }
+      ],
+      agree_label: 'Agree'
+    },
+    columns: [
+      {
+        name: 'hq',
+        sort: true,
+        sort_field: 'hq',
+        content: [{ type: 'checkbox', field: 'hq' }],
+        label: 'HQ'
+      },
+      {
+        name: 'address',
+        sort_field: 'address',
+        title: null,
+        sort: true,
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/addresses/{address.id}/',
+            label: 'Address',
+            type: 'link',
+            field: 'address'
+          }
+        ],
+        label: 'Address',
+        delim: null
+      },
+      {
+        name: 'primary_contact',
+        sort_field: 'primary_contact',
+        title: null,
+        context_menu: [
+          { endpoint: '/', label: 'Send SMS' },
+          { endpoint: '/', label: 'Add New Company Contact' },
+          { endpoint: '/', label: 'Manage Branch Contacts' },
+          { endpoint: '/', label: 'Add Note' },
+          { endpoint: '/', label: 'Add Activity' }
+        ],
+        sort: true,
+        content: [
+          {
+            endpoint:
+              '/ecore/api/v2/core/companycontacts/{primary_contact.id}/',
+            label: 'Primary Contact',
+            type: 'link',
+            field: 'primary_contact'
+          }
+        ],
+        label: 'Primary Contact',
+        delim: null
+      },
+      {
+        name: 'phone_landline',
+        sort: true,
+        sort_field: 'phone_landline',
+        content: [{ type: 'input', field: 'phone_landline' }],
+        label: 'Landline Phone'
+      },
+      {
+        name: 'phone_fax',
+        sort: true,
+        sort_field: 'phone_fax',
+        content: [{ type: 'input', field: 'phone_fax' }],
+        label: 'Fax'
+      },
+      {
+        name: 'active',
+        sort: true,
+        sort_field: 'active',
+        content: [{ type: 'checkbox', field: 'active' }],
+        label: 'Active'
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/core/companyaddresses/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: null
+      }
+    ],
+    list: 'companyaddress',
+    editDisable: false,
+    highlight: { values: { master: true }, field: 'company.type' },
+    label: 'Client Company Address',
+    pagination_label: 'Client Company Addresses',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     key: 'name',
@@ -578,6 +766,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

@@ -116,6 +116,81 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      default: false,
+      key: 'confirmed_available',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Confirmed Available',
+        type: 'checkbox'
+      },
+      type: 'checkbox'
+    },
+    {
+      many: false,
+      key: 'job_offer',
+      endpoint: '/ecore/api/v2/hr/joboffers/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Job offer',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      key: 'target_date',
+      read_only: false,
+      templateOptions: { required: false, label: 'Target Date', type: 'date' },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'target_date',
+        sort: true,
+        sort_field: 'target_date',
+        content: [{ type: 'datepicker', field: 'target_date' }],
+        label: 'Target Date'
+      },
+      {
+        name: 'confirmed_available',
+        sort: true,
+        sort_field: 'confirmed_available',
+        content: [{ type: 'checkbox', field: 'confirmed_available' }],
+        label: 'Confirmed Available'
+      },
+      {
+        name: 'job_offer',
+        sort: true,
+        sort_field: 'job_offer',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/hr/joboffers/',
+            type: 'related',
+            field: 'job_offer'
+          }
+        ],
+        label: 'Job offer'
+      }
+    ],
+    list: 'carrierlist',
+    editDisable: false,
+    label: 'Carrier List',
+    pagination_label: 'Carrier List',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     key: 'id',
@@ -420,6 +495,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

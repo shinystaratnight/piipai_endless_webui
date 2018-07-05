@@ -80,6 +80,12 @@ import * as unapproved from './unapproved.metadata';
 import * as submit from './submit.metadata';
 import * as evaluate from './evaluate.metadata';
 import * as notAgree from './not_agree.metadata';
+import * as globalpermissions from './globalpermissions.metadata';
+import * as joboffersCandidateManager from './joboffers.candidate.metadata';
+import * as shifts from './shifts.metadata';
+import * as jobtags from './jobtags.metadata';
+import * as extend from './extend.metadata';
+import * as fillin from './fillin.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -164,4 +170,10 @@ export const metadata = {
   'submit': submit.metadata,
   'evaluate': evaluate.metadata,
   'not_agree': notAgree.metadata,
+  '/ecore/api/v2/company-settings/globalpermissions/': globalpermissions.metadata,
+  '/ecore/api/v2/hr/joboffers/candidate/': joboffersCandidateManager.metadata,
+  '/ecore/api/v2/hr/shifts/': shifts.metadata,
+  '/ecore/api/v2/hr/jobtags/': jobtags.metadata,
+  'extend': extend.metadata,
+  'fillin': fillin.metadata,
 };

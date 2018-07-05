@@ -605,6 +605,141 @@ const list = {
   ]
 };
 
+const supervisor = {
+  fields: [
+    {
+      default: 'contact_pictures/default_picture.jpg',
+      key: 'job_offer.candidate_contact.contact.picture',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        file: false,
+        label: 'Picture',
+        max: 255,
+        type: 'picture'
+      },
+      type: 'input'
+    },
+    {
+      default: '2018-07-05T15:30:00+10:00',
+      key: 'shift_ended_at',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Shift ended at',
+        type: 'static',
+        text: '{shift_ended_at__time}'
+      },
+      type: 'static'
+    },
+    {
+      default: '2018-07-05T12:00:00+10:00',
+      key: 'break_started_at',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Break',
+        type: 'static',
+        text: '{break_started_at__time} - {break_ended_at__time}'
+      },
+      type: 'static'
+    },
+    {
+      key: 'job_offer.candidate_contact',
+      templateOptions: { link: null, label: '', type: 'link', text: '' },
+      type: 'link'
+    },
+    {
+      key: 'position',
+      read_only: true,
+      templateOptions: { required: false, label: 'Position', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'shift_started_at',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Shift date',
+        type: 'static',
+        text: '{shift_started_at__date}'
+      },
+      type: 'static'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'job_offer.candidate_contact.contact.picture',
+        sort_field: 'job_offer.candidate_contact.contact.picture',
+        title: null,
+        sort: true,
+        content: [
+          {
+            file: false,
+            type: 'picture',
+            field: 'job_offer.candidate_contact.contact.picture'
+          }
+        ],
+        label: 'Picture',
+        delim: null
+      },
+      {
+        name: 'position',
+        content: [
+          {
+            endpoint:
+              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
+            type: 'link',
+            field: 'job_offer.candidate_contact'
+          },
+          { label: 'Position', type: 'static', field: 'position' }
+        ],
+        label: 'Position',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'times',
+        content: [
+          {
+            text: '{shift_started_at__date}',
+            label: 'Shift date',
+            type: 'static',
+            field: 'shift_started_at'
+          },
+          {
+            text: '{shift_started_at__time}',
+            label: 'Shift started at',
+            type: 'static',
+            field: 'shift_started_at'
+          },
+          {
+            text: '{break_started_at__time} - {break_ended_at__time}',
+            label: 'Break',
+            type: 'static',
+            field: 'break_started_at'
+          },
+          {
+            text: '{shift_ended_at__time}',
+            label: 'Shift ended at',
+            type: 'static',
+            field: 'shift_ended_at'
+          }
+        ],
+        label: 'Times',
+        title: null,
+        delim: null
+      }
+    ],
+    list: 'timesheet',
+    editDisable: false,
+    label: 'Timesheet Entry',
+    pagination_label: 'Timesheet Entry',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     key: 'id',
@@ -1039,6 +1174,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  supervisor,
   form,
   formadd
 };

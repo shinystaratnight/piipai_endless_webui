@@ -178,6 +178,150 @@ const list = {
   ]
 };
 
+const company = {
+  fields: [
+    {
+      default: false,
+      key: 'effective',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Effective',
+        type: 'checkbox'
+      },
+      type: 'checkbox'
+    },
+    {
+      key: 'valid_until',
+      read_only: false,
+      templateOptions: { required: false, label: 'Valid Until', type: 'date' },
+      type: 'datepicker'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'editForm',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      key: 'approved_at',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Approved At',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    },
+    {
+      many: false,
+      key: 'approved_by',
+      endpoint: '/ecore/api/v2/core/companycontacts/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Approved by',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      key: 'valid_from',
+      read_only: true,
+      templateOptions: { required: false, label: 'Valid From', type: 'date' },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'valid_from',
+        sort_field: 'valid_from',
+        title: null,
+        sort: true,
+        content: [{ type: 'datepicker', field: 'valid_from' }],
+        label: 'Valid From',
+        delim: null
+      },
+      {
+        name: 'valid_until',
+        sort_field: 'valid_until',
+        title: null,
+        sort: true,
+        content: [{ type: 'datepicker', field: 'valid_until' }],
+        label: 'Valid Until',
+        delim: null
+      },
+      {
+        name: 'effective',
+        sort: true,
+        sort_field: 'effective',
+        content: [{ type: 'checkbox', field: 'effective' }],
+        label: 'Effective'
+      },
+      {
+        name: 'approved_by',
+        sort: true,
+        sort_field: 'approved_by',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/companycontacts/',
+            type: 'related',
+            field: 'approved_by'
+          }
+        ],
+        label: 'Approved by'
+      },
+      {
+        name: 'approved_at',
+        sort: true,
+        sort_field: 'approved_at',
+        content: [{ type: 'datepicker', field: 'approved_at' }],
+        label: 'Approved At'
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/pricing/pricelists/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: null
+      }
+    ],
+    list: 'pricelist',
+    editDisable: false,
+    label: 'Price List',
+    pagination_label: 'Price List',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     list: false,
@@ -376,6 +520,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  company,
   form,
   formadd
 };

@@ -102,6 +102,204 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      key: 'had_ppe_and_tickets',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        values: { false: 'times', true: 'check', null: 'minus-circle' },
+        label: 'Had ppe and tickets',
+        type: 'icon'
+      },
+      type: 'checkbox'
+    },
+    {
+      key: 'met_expectations',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        values: { false: 'times', true: 'check', null: 'minus-circle' },
+        label: 'Met expectations',
+        type: 'icon'
+      },
+      type: 'checkbox'
+    },
+    {
+      key: 'was_motivated',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        values: { false: 'times', true: 'check', null: 'minus-circle' },
+        label: 'Was motivated',
+        type: 'icon'
+      },
+      type: 'checkbox'
+    },
+    {
+      key: 'representation',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        values: { false: 'times', true: 'check', null: 'minus-circle' },
+        label: 'Representation',
+        type: 'icon'
+      },
+      type: 'checkbox'
+    },
+    {
+      key: 'reference_timesheet',
+      templateOptions: { link: null, label: '', type: 'link', text: '' },
+      type: 'link'
+    },
+    {
+      key: 'evaluated_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Evaluated at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    },
+    {
+      key: 'was_on_time',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        values: { false: 'times', true: 'check', null: 'minus-circle' },
+        label: 'Was on time',
+        type: 'icon'
+      },
+      type: 'checkbox'
+    },
+    {
+      many: false,
+      key: 'supervisor',
+      endpoint: '/ecore/api/v2/core/companycontacts/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Supervisor',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      default: 0,
+      key: 'level_of_communication',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Level of communication',
+        type: 'skills',
+        options: [
+          { value: 0, label: 'Not Rated' },
+          { value: 1, label: 'Impossible' },
+          { value: 2, label: 'Hard' },
+          { value: 3, label: 'Decent' },
+          { value: 4, label: 'Good' },
+          { value: 5, label: 'Excellent' }
+        ]
+      },
+      type: 'skills'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'supervisor',
+        sort: true,
+        sort_field: 'supervisor',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/companycontacts/',
+            type: 'related',
+            field: 'supervisor'
+          }
+        ],
+        label: 'Supervisor'
+      },
+      {
+        name: 'evaluated_at',
+        sort: true,
+        sort_field: 'evaluated_at',
+        content: [{ type: 'datepicker', field: 'evaluated_at' }],
+        label: 'Evaluated at'
+      },
+      {
+        name: 'parameters',
+        content: [
+          {
+            label: 'Level of communication',
+            type: 'skills',
+            field: 'level_of_communication'
+          },
+          {
+            values: { false: 'times', true: 'check', null: 'minus-circle' },
+            label: 'Was on time',
+            type: 'icon',
+            field: 'was_on_time'
+          },
+          {
+            values: { false: 'times', true: 'check', null: 'minus-circle' },
+            label: 'Was motivated',
+            type: 'icon',
+            field: 'was_motivated'
+          },
+          {
+            values: { false: 'times', true: 'check', null: 'minus-circle' },
+            label: 'Had ppe and tickets',
+            type: 'icon',
+            field: 'had_ppe_and_tickets'
+          },
+          {
+            values: { false: 'times', true: 'check', null: 'minus-circle' },
+            label: 'Met expectations',
+            type: 'icon',
+            field: 'met_expectations'
+          },
+          {
+            values: { false: 'times', true: 'check', null: 'minus-circle' },
+            label: 'Representation',
+            type: 'icon',
+            field: 'representation'
+          }
+        ],
+        label: 'Parameters',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'reference_timesheet',
+        sort_field: 'reference_timesheet',
+        title: null,
+        sort: true,
+        content: [
+          {
+            endpoint: '/ecore/api/v2/hr/timesheets/{reference_timesheet.id}',
+            type: 'link',
+            field: 'reference_timesheet'
+          }
+        ],
+        label: '',
+        delim: null
+      }
+    ],
+    list: 'candidateevaluation',
+    editDisable: false,
+    label: 'Candidate Evaluation',
+    pagination_label: 'Candidate Evaluation',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     list: false,
@@ -370,6 +568,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

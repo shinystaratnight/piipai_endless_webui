@@ -584,6 +584,239 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      key: 'is_fulfilled_today',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        values: {
+          '0': 'times-circle',
+          '1': 'check-circle',
+          '2': 'exclamation-circle',
+          '3': 'minus-circle',
+          null: 'minus-circle'
+        },
+        label: 'Is fulfilled today',
+        type: 'icon',
+        color: { '0': 'danger', '1': 'success', '2': 'warning' }
+      },
+      type: 'checkbox'
+    },
+    {
+      key: 'active_states',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Active states',
+        type: 'static'
+      },
+      type: 'static'
+    },
+    {
+      key: '__str__',
+      read_only: true,
+      templateOptions: { required: false, label: 'Job', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'fillin',
+        label: '',
+        type: 'button',
+        text: 'Fill in'
+      },
+      type: 'button'
+    },
+    {
+      many: false,
+      key: 'position',
+      endpoint: '/ecore/api/v2/skills/skills/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Position',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      key: 'is_fulfilled',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        values: {
+          '0': 'times-circle',
+          '1': 'check-circle',
+          '2': 'exclamation-circle',
+          '3': 'minus-circle',
+          null: 'minus-circle'
+        },
+        label: 'Is fulfilled',
+        type: 'icon',
+        color: { '0': 'danger', '1': 'success', '2': 'warning' }
+      },
+      type: 'checkbox'
+    },
+    {
+      default: '07:00:00',
+      key: 'default_shift_starting_time',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Shift Starting Time',
+        type: 'time'
+      },
+      type: 'datepicker'
+    },
+    {
+      key: 'work_start_date',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Work Start Date',
+        type: 'date'
+      },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: '__str__',
+        content: [{ type: 'static', field: '__str__' }],
+        label: 'Job'
+      },
+      {
+        name: 'position',
+        sort: true,
+        sort_field: 'position',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/skills/skills/',
+            type: 'related',
+            field: 'position'
+          }
+        ],
+        label: 'Position'
+      },
+      {
+        name: 'work_start_date',
+        sort: true,
+        sort_field: 'work_start_date',
+        content: [{ type: 'datepicker', field: 'work_start_date' }],
+        label: 'Work Start Date'
+      },
+      {
+        name: 'shift_starting_time',
+        content: [
+          {
+            label: 'Shift Starting Time',
+            type: 'datepicker',
+            field: 'default_shift_starting_time'
+          }
+        ],
+        label: 'Shift Starting Time',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'fill_in',
+        content: [
+          {
+            action: 'fillin',
+            hidden: 'hide_fillin',
+            icon: 'fa-sign-in',
+            text: 'Fill in',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Fill in',
+        title: null,
+        delim: ' '
+      },
+      {
+        name: 'fulfilled',
+        content: [
+          {
+            color: { '0': 'danger', '1': 'success', '2': 'warning' },
+            values: {
+              '0': 'times-circle',
+              '1': 'check-circle',
+              '2': 'exclamation-circle',
+              '3': 'minus-circle',
+              null: 'minus-circle'
+            },
+            type: 'icon',
+            field: 'is_fulfilled_today'
+          },
+          {
+            color: { '0': 'danger', '1': 'success', '2': 'warning' },
+            values: {
+              '0': 'times-circle',
+              '1': 'check-circle',
+              '2': 'exclamation-circle',
+              '3': 'minus-circle',
+              null: 'minus-circle'
+            },
+            type: 'icon',
+            field: 'is_fulfilled'
+          }
+        ],
+        label: 'Fulfilled',
+        title: 'today / next day',
+        delim: '/'
+      },
+      {
+        name: 'state',
+        content: [{ type: 'static', field: 'active_states' }],
+        label: 'State',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/hr/jobs/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: ' '
+      }
+    ],
+    buttons: [],
+    list: 'job',
+    editDisable: false,
+    label: 'Job',
+    pagination_label: 'Job',
+    search_enabled: true
+  }
+};
+
 const form = [
   {
     label: '{jobsite.__str__} {position.__str__} {work_start_date}',
@@ -1238,6 +1471,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

@@ -345,6 +345,136 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      many: false,
+      key: 'primary_contact',
+      endpoint: '/ecore/api/v2/core/companycontacts/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Primary contact',
+        type: 'related'
+      },
+      read_only: false,
+      type: 'related'
+    },
+    {
+      key: '__str__',
+      read_only: true,
+      templateOptions: { required: false, label: 'Jobsite', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'editForm',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      key: 'start_date',
+      read_only: false,
+      templateOptions: { required: false, label: 'Start Date', type: 'date' },
+      type: 'datepicker'
+    },
+    {
+      key: 'end_date',
+      read_only: false,
+      templateOptions: { required: false, label: 'End Date', type: 'date' },
+      type: 'datepicker'
+    },
+    {
+      key: 'notes',
+      read_only: false,
+      templateOptions: { required: false, label: 'Notes', type: 'text' },
+      type: 'input'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: '__str__',
+        content: [{ type: 'static', field: '__str__' }],
+        label: 'Jobsite'
+      },
+      {
+        name: 'primary_contact',
+        sort: true,
+        sort_field: 'primary_contact',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/companycontacts/',
+            type: 'related',
+            field: 'primary_contact'
+          }
+        ],
+        label: 'Primary contact'
+      },
+      {
+        name: 'start_date',
+        sort: true,
+        sort_field: 'start_date',
+        content: [{ type: 'datepicker', field: 'start_date' }],
+        label: 'Start Date'
+      },
+      {
+        name: 'end_date',
+        sort: true,
+        sort_field: 'end_date',
+        content: [{ type: 'datepicker', field: 'end_date' }],
+        label: 'End Date'
+      },
+      {
+        name: 'notes',
+        sort: true,
+        sort_field: 'notes',
+        content: [{ type: 'input', field: 'notes' }],
+        label: 'Notes'
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/hr/jobsites/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: null
+      }
+    ],
+    buttons: [],
+    list: 'jobsite',
+    editDisable: false,
+    label: 'Jobsite',
+    pagination_label: 'Jobsite',
+    search_enabled: true
+  }
+};
+
 const form = [
   {
     values: {
@@ -924,6 +1054,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

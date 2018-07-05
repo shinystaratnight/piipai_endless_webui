@@ -27,6 +27,132 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      key: 'created_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Created by', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'delete',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      key: 'note',
+      read_only: false,
+      templateOptions: { required: false, label: 'Notes', type: 'text' },
+      type: 'input'
+    },
+    {
+      key: 'updated_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Updated at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    },
+    {
+      key: 'updated_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Updated by', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'created_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Created at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'note',
+        sort: true,
+        sort_field: 'note',
+        content: [{ type: 'input', field: 'note' }],
+        label: 'Notes'
+      },
+      {
+        name: 'created',
+        content: [
+          { type: 'datepicker', field: 'created_at' },
+          { type: 'static', field: 'created_by' }
+        ],
+        label: 'Created',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'updated',
+        content: [
+          { type: 'datepicker', field: 'updated_at' },
+          { type: 'static', field: 'updated_by' }
+        ],
+        label: 'Updated',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'id',
+        sort_field: 'id',
+        title: 'Edit',
+        sort: true,
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/core/notes/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: '',
+        delim: null
+      },
+      {
+        name: 'id',
+        sort_field: 'id',
+        title: 'Delete',
+        sort: true,
+        content: [
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: '',
+        delim: null
+      }
+    ],
+    list: 'note',
+    editDisable: false,
+    label: 'Contact Note',
+    pagination_label: 'Contact Note',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     list: false,
@@ -95,6 +221,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

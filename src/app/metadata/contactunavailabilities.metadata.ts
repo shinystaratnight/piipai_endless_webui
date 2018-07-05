@@ -40,6 +40,145 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      key: 'unavailable_from',
+      read_only: false,
+      templateOptions: { required: false, label: 'From', type: 'date' },
+      type: 'datepicker'
+    },
+    {
+      key: 'unavailable_until',
+      read_only: false,
+      templateOptions: { required: false, label: 'Until', type: 'date' },
+      type: 'datepicker'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'delete',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      key: 'notes',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        description: 'Unavailability Description',
+        label: 'Notes',
+        type: 'text'
+      },
+      type: 'input'
+    },
+    {
+      key: 'updated_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Updated at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    },
+    {
+      key: 'created_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Created at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'unavailable_from',
+        sort: true,
+        sort_field: 'unavailable_from',
+        content: [{ type: 'datepicker', field: 'unavailable_from' }],
+        label: 'From'
+      },
+      {
+        name: 'unavailable_until',
+        sort: true,
+        sort_field: 'unavailable_until',
+        content: [{ type: 'datepicker', field: 'unavailable_until' }],
+        label: 'Until'
+      },
+      {
+        name: 'notes',
+        sort: true,
+        sort_field: 'notes',
+        content: [{ type: 'input', field: 'notes' }],
+        label: 'Notes'
+      },
+      {
+        name: 'created_at',
+        sort: true,
+        sort_field: 'created_at',
+        content: [{ type: 'datepicker', field: 'created_at' }],
+        label: 'Created at'
+      },
+      {
+        name: 'updated_at',
+        sort: true,
+        sort_field: 'updated_at',
+        content: [{ type: 'datepicker', field: 'updated_at' }],
+        label: 'Updated at'
+      },
+      {
+        name: 'id',
+        sort_field: 'id',
+        title: 'Edit',
+        sort: true,
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/core/contactunavailabilities/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: '',
+        delim: null
+      },
+      {
+        name: 'id',
+        sort_field: 'id',
+        title: 'Delete',
+        sort: true,
+        content: [
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: '',
+        delim: null
+      }
+    ],
+    list: 'contactunavailability',
+    editDisable: false,
+    label: 'Contact Unavailability',
+    pagination_label: 'Contact Unavailability',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     key: 'id',
@@ -166,6 +305,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

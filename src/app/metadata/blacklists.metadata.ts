@@ -145,6 +145,110 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      many: false,
+      key: 'company',
+      endpoint: '/ecore/api/v2/core/companies/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Company',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      many: false,
+      key: 'jobsite',
+      endpoint: '/ecore/api/v2/hr/jobsites/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Jobsite',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      many: false,
+      key: 'timesheet',
+      endpoint: '/ecore/api/v2/hr/timesheets/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Timesheet',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'company',
+        sort: true,
+        sort_field: 'company',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/companies/',
+            type: 'related',
+            field: 'company'
+          }
+        ],
+        label: 'Company'
+      },
+      {
+        name: 'timesheet',
+        sort: true,
+        sort_field: 'timesheet',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/hr/timesheets/',
+            type: 'related',
+            field: 'timesheet'
+          }
+        ],
+        label: 'Timesheet'
+      },
+      {
+        name: 'jobsite',
+        sort: true,
+        sort_field: 'jobsite',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/hr/jobsites/',
+            type: 'related',
+            field: 'jobsite'
+          }
+        ],
+        label: 'Jobsite'
+      }
+    ],
+    list: 'blacklist',
+    editDisable: false,
+    label: 'Black list',
+    pagination_label: 'Black list',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     key: 'id',
@@ -361,6 +465,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

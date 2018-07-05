@@ -51,6 +51,103 @@ const list = {
   ]
 };
 
+const pricelist = {
+  fields: [
+    {
+      key: 'hourly_rate',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Hourly Rate',
+        type: 'number'
+      },
+      type: 'input'
+    },
+    {
+      many: false,
+      key: 'skill',
+      endpoint: '/ecore/api/v2/skills/skills/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Skill',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'editForm',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'skill',
+        sort: true,
+        sort_field: 'skill',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/skills/skills/',
+            type: 'related',
+            field: 'skill'
+          }
+        ],
+        label: 'Skill'
+      },
+      {
+        name: 'hourly_rate',
+        sort: true,
+        sort_field: 'hourly_rate',
+        content: [{ type: 'input', field: 'hourly_rate' }],
+        label: 'Hourly Rate'
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/pricing/pricelistrates/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: ' '
+      }
+    ],
+    buttons: [],
+    list: 'pricelistrate',
+    editDisable: false,
+    label: 'Price List Rate',
+    pagination_label: 'Price List Rate',
+    search_enabled: true
+  }
+};
+
 const form = [
   {
     list: false,
@@ -141,6 +238,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  pricelist,
   form,
   formadd
 };

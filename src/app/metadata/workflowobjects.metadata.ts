@@ -109,6 +109,115 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      key: 'created_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Created by', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'state_name',
+      read_only: true,
+      templateOptions: { required: false, label: 'State name', type: 'static' },
+      type: 'static'
+    },
+    {
+      default: true,
+      key: 'active',
+      read_only: false,
+      templateOptions: { required: false, label: 'Active', type: 'checkbox' },
+      type: 'checkbox'
+    },
+    {
+      key: 'comment',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        description: 'State Change Comment',
+        label: 'Comments',
+        type: 'text'
+      },
+      type: 'input'
+    },
+    {
+      key: 'updated_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Updated at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    },
+    {
+      key: 'updated_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Updated by', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'created_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Created at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'state_name',
+        content: [{ type: 'static', field: 'state_name' }],
+        label: 'State name'
+      },
+      {
+        name: 'comment',
+        sort: true,
+        sort_field: 'comment',
+        content: [{ type: 'input', field: 'comment' }],
+        label: 'Comments'
+      },
+      {
+        name: 'active',
+        sort: true,
+        sort_field: 'active',
+        content: [{ type: 'checkbox', field: 'active' }],
+        label: 'Active'
+      },
+      {
+        name: 'created',
+        content: [
+          { type: 'datepicker', field: 'created_at' },
+          { type: 'static', field: 'created_by' }
+        ],
+        label: 'Created',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'updated',
+        content: [
+          { type: 'datepicker', field: 'updated_at' },
+          { type: 'static', field: 'updated_by' }
+        ],
+        label: 'Updated',
+        title: null,
+        delim: null
+      }
+    ],
+    list: 'workflowobject',
+    editDisable: false,
+    label: 'Workflow object',
+    pagination_label: 'Workflow object',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     key: 'object_id',
@@ -219,6 +328,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

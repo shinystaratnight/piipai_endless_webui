@@ -51,6 +51,111 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      default: 0,
+      key: 'fixed_addition',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        description: 'adds after multiplying when set',
+        label: 'Fixed Addition',
+        type: 'number'
+      },
+      type: 'input'
+    },
+    {
+      default: 0,
+      key: 'fixed_override',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Fixed Rate Override',
+        type: 'number'
+      },
+      type: 'input'
+    },
+    {
+      default: 1.0,
+      key: 'multiplier',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        description: '1.00 = none',
+        label: 'Multiplier',
+        type: 'number'
+      },
+      type: 'input'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'editForm',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'multiplier',
+        sort: true,
+        sort_field: 'multiplier',
+        content: [{ type: 'input', field: 'multiplier' }],
+        label: 'Multiplier'
+      },
+      {
+        name: 'fixed_addition',
+        sort: true,
+        sort_field: 'fixed_addition',
+        content: [{ type: 'input', field: 'fixed_addition' }],
+        label: 'Fixed Addition'
+      },
+      {
+        name: 'fixed_override',
+        sort: true,
+        sort_field: 'fixed_override',
+        content: [{ type: 'input', field: 'fixed_override' }],
+        label: 'Fixed Rate Override'
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/pricing/ratecoefficientmodifiers/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: ' '
+      }
+    ],
+    list: 'ratecoefficientmodifier',
+    editDisable: false,
+    label: 'Rate Coefficient Modifier',
+    pagination_label: 'Rate Coefficient Modifier',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     key: 'id',
@@ -229,6 +334,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };

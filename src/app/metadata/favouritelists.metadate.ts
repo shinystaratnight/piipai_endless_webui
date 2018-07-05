@@ -246,6 +246,167 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      many: false,
+      key: 'company',
+      endpoint: '/ecore/api/v2/core/companies/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Company',
+        type: 'related'
+      },
+      read_only: false,
+      type: 'related'
+    },
+    {
+      many: false,
+      key: 'company.manager',
+      endpoint: '/ecore/api/v2/core/companycontacts/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Company Manager',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      many: false,
+      key: 'job',
+      endpoint: '/ecore/api/v2/hr/jobs/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Job',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      many: false,
+      key: 'jobsite',
+      endpoint: '/ecore/api/v2/hr/jobsites/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Jobsite',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      many: false,
+      key: 'company_contact',
+      endpoint: '/ecore/api/v2/core/companycontacts/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Company contact',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'company_contact',
+        sort: true,
+        sort_field: 'company_contact',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/companycontacts/',
+            type: 'related',
+            field: 'company_contact'
+          }
+        ],
+        label: 'Company contact'
+      },
+      {
+        name: 'company_manager',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/companycontacts/',
+            label: 'Company Manager',
+            type: 'related',
+            field: 'company.manager'
+          }
+        ],
+        label: 'Company Manager',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'company',
+        sort: true,
+        sort_field: 'company',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/companies/',
+            type: 'related',
+            field: 'company'
+          }
+        ],
+        label: 'Company'
+      },
+      {
+        name: 'jobsite',
+        sort: true,
+        sort_field: 'jobsite',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/hr/jobsites/',
+            type: 'related',
+            field: 'jobsite'
+          }
+        ],
+        label: 'Jobsite'
+      },
+      {
+        name: 'job',
+        sort: true,
+        sort_field: 'job',
+        content: [
+          { endpoint: '/ecore/api/v2/hr/jobs/', type: 'related', field: 'job' }
+        ],
+        label: 'Job'
+      }
+    ],
+    list: 'favouritelist',
+    editDisable: false,
+    label: 'Favourite list',
+    pagination_label: 'Favourite list',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     list: false,
@@ -333,6 +494,132 @@ const form = [
     many: false
   }
 ];
+
+const job = {
+  fields: [
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'delete',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      many: false,
+      key: 'candidate_contact',
+      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Candidate contact',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      many: false,
+      key: 'job',
+      endpoint: '/ecore/api/v2/hr/jobs/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Job',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      many: false,
+      key: 'company_contact',
+      endpoint: '/ecore/api/v2/core/companycontacts/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Company contact',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'company_contact',
+        sort: true,
+        sort_field: 'company_contact',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/companycontacts/',
+            type: 'related',
+            field: 'company_contact'
+          }
+        ],
+        label: 'Company contact'
+      },
+      {
+        name: 'candidate_contact',
+        sort: true,
+        sort_field: 'candidate_contact',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            type: 'related',
+            field: 'candidate_contact'
+          }
+        ],
+        label: 'Candidate contact'
+      },
+      {
+        name: 'job',
+        sort: true,
+        sort_field: 'job',
+        content: [
+          { endpoint: '/ecore/api/v2/hr/jobs/', type: 'related', field: 'job' }
+        ],
+        label: 'Job'
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: ' '
+      }
+    ],
+    list: 'favouritelist',
+    editDisable: false,
+    label: 'Favourite list',
+    pagination_label: 'Favourite list',
+    search_enabled: false
+  }
+};
 
 const formadd = [
   {
@@ -424,6 +711,8 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
-  formadd
+  formadd,
+  job
 };

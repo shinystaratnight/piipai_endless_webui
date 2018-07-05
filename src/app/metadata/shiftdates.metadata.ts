@@ -165,8 +165,66 @@ const formadd = [
   }
 ];
 
+const jobAdd = [
+  {
+    hide: true,
+    many: false,
+    key: 'job',
+    endpoint: '/ecore/api/v2/hr/jobs/',
+    collapsed: false,
+    list: false,
+    templateOptions: {
+      add: true,
+      delete: false,
+      edit: true,
+      values: ['__str__'],
+      label: 'Job',
+      type: 'related'
+    },
+    read_only: true,
+    type: 'related'
+  },
+  {
+    key: 'shift_date',
+    read_only: false,
+    templateOptions: {
+      required: true,
+      label: 'Shift date',
+      type: 'date'
+    },
+    type: 'datepicker'
+  },
+  {
+    prefilled: {
+      date: '{id}'
+    },
+    collapsed: false,
+    unique: ['time'],
+    endpoint: '/ecore/api/v2/hr/shifts/',
+    delay: true,
+    templateOptions: {
+      add_label: 'Add',
+      label: 'Shifts',
+      type: 'list',
+      text: 'Shifts'
+    },
+    metadata_query: {
+      editable_type: 'shift_date'
+    },
+    default: {
+      date__shift_date: '{shift_date}',
+      job: '{job.id}'
+    },
+    type: 'list',
+    query: {
+      date: '{id}'
+    }
+  }
+];
+
 export const metadata = {
   list,
   form,
-  formadd
+  formadd,
+  jobAdd
 };

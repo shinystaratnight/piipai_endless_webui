@@ -50,11 +50,41 @@ export class GenericFormService {
       endpoint = 'not_agree';
     }
 
-    if (metadata[endpoint] && !query.includes('formset')) {
+    if (endpoint.includes('/extend')) {
+      endpoint = 'extend';
+    }
+
+    if (endpoint.includes('/fillin')) {
+      endpoint = 'fillin';
+    }
+
+    console.log('endpoint', endpoint);
+    console.log('query', query);
+
+    if (metadata[endpoint]) {
       let type = '';
 
       if (query.includes('formadd')) {
         type = 'formadd';
+        if (query.includes('job')) {
+          type = 'jobAdd';
+        }
+
+        if (query.includes('contact')) {
+          type = 'contact';
+        }
+      } else if (query.includes('pricelist')) {
+        type = 'pricelist';
+      } else if (query.includes('company')) {
+        type = 'company';
+      } else if (query.includes('supervisor')) {
+        type = 'supervisor';
+      } else if (query.includes('job')) {
+        type = 'job';
+      } else if (query.includes('shift_date')) {
+        type = 'shiftDate';
+      } else if (query.includes('formset')) {
+        type = 'formset';
       } else if (query.includes('form')) {
         type = 'form';
       } else {

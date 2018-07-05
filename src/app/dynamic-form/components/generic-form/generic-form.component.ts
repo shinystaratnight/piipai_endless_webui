@@ -177,6 +177,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         }, 100);
       }
 
+      console.log(this.mode);
       this.formId = this.formService.registerForm(this.endpoint, this.mode);
 
       const subscription = this.formService

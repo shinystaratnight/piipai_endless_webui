@@ -269,6 +269,233 @@ const list = {
   ]
 };
 
+const formset = {
+  fields: [
+    {
+      default: 0.0,
+      key: 'total',
+      read_only: false,
+      templateOptions: { required: false, label: 'Total', type: 'number' },
+      type: 'input'
+    },
+    {
+      key: 'separation_rule',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Separation rule',
+        max: 255,
+        type: 'text'
+      },
+      type: 'input'
+    },
+    {
+      default: 0.0,
+      key: 'tax',
+      read_only: false,
+      templateOptions: { required: false, label: 'GST', type: 'number' },
+      type: 'input'
+    },
+    {
+      key: 'period',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Period',
+        max: 255,
+        type: 'text'
+      },
+      type: 'input'
+    },
+    {
+      many: false,
+      key: 'customer_company',
+      endpoint: '/ecore/api/v2/core/companies/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Customer company',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      default: 0.0,
+      key: 'total_with_tax',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Total with GST',
+        type: 'number'
+      },
+      type: 'input'
+    },
+    {
+      key: 'date',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Creation date',
+        type: 'date'
+      },
+      type: 'datepicker'
+    },
+    {
+      key: 'number',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Number',
+        max: 20,
+        type: 'text'
+      },
+      type: 'input'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'emptyPost',
+        label: '',
+        type: 'button',
+        text: 'Approve'
+      },
+      type: 'button'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'customer_company',
+        sort: true,
+        sort_field: 'customer_company',
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/companies/',
+            type: 'related',
+            field: 'customer_company'
+          }
+        ],
+        label: 'Customer company'
+      },
+      {
+        name: 'date',
+        sort: true,
+        sort_field: 'date',
+        content: [{ type: 'datepicker', field: 'date' }],
+        label: 'Creation date'
+      },
+      {
+        name: 'total',
+        sort: true,
+        sort_field: 'total',
+        content: [{ type: 'input', field: 'total' }],
+        label: 'Total'
+      },
+      {
+        name: 'tax',
+        sort: true,
+        sort_field: 'tax',
+        content: [{ type: 'input', field: 'tax' }],
+        label: 'GST'
+      },
+      {
+        name: 'total_with_tax',
+        sort: true,
+        sort_field: 'total_with_tax',
+        content: [{ type: 'input', field: 'total_with_tax' }],
+        label: 'Total with GST'
+      },
+      {
+        name: 'period',
+        sort: true,
+        sort_field: 'period',
+        content: [{ type: 'input', field: 'period' }],
+        label: 'Period'
+      },
+      {
+        name: 'separation_rule',
+        sort: true,
+        sort_field: 'separation_rule',
+        content: [{ type: 'input', field: 'separation_rule' }],
+        label: 'Separation rule'
+      },
+      {
+        name: 'number',
+        sort_field: 'number',
+        title: null,
+        sort: true,
+        content: [{ type: 'text', field: 'number' }],
+        label: 'Number',
+        delim: null
+      },
+      {
+        name: 'id',
+        sort_field: 'id',
+        title: null,
+        sort: true,
+        content: [
+          {
+            action: 'previewInvoice',
+            endpoint: '/ecore/api/v2/core/invoices/{id}/pdf/',
+            icon: 'fa-eye',
+            text: 'Preview',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: '',
+        delim: null
+      },
+      {
+        name: 'id',
+        sort_field: 'id',
+        title: null,
+        sort: true,
+        content: [
+          {
+            action: 'printInvoice',
+            endpoint: '/ecore/api/v2/core/invoices/{id}/pdf/',
+            icon: 'fa-print',
+            text: 'Print',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: '',
+        delim: null
+      },
+      {
+        name: 'id',
+        sort_field: 'id',
+        title: null,
+        sort: true,
+        content: [
+          {
+            action: 'emptyPost',
+            endpoint: '/ecore/api/v2/core/invoices/{id}/approve/',
+            icon: 'fa-external-link',
+            text: 'Approve',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: '',
+        delim: null
+      }
+    ],
+    list: 'invoice',
+    editDisable: false,
+    label: 'Company Invoice',
+    pagination_label: 'Company Invoice',
+    search_enabled: false
+  }
+};
+
 const form = [
   {
     label: '{customer_company.__str__} - {date}',
@@ -2061,6 +2288,7 @@ const formadd = [
 
 export const metadata = {
   list,
+  formset,
   form,
   formadd
 };
