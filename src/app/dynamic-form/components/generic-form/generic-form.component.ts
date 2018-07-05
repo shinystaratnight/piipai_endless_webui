@@ -158,28 +158,9 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    if (this.id && !this.mode) {
-      this.mode = 'view';
-      setTimeout(() => {
-        this.modeEvent.emit(this.mode);
-      }, 100);
-    }
-
     if (this.endpoint.indexOf('candidate_fill')) {
       this.candidateFill = true;
     }
-
-    this.formId = this.formService.registerForm(this.endpoint, this.mode);
-
-    const subscription = this.formService
-      .getForm(this.formId).mode
-      .skip(1)
-      .subscribe((mode: string) => {
-        this.mode = mode;
-        this.modeEvent.emit(this.mode);
-      });
-
-    this.subscriptions.push(subscription);
   }
 
   public ngOnDestroy() {
@@ -187,6 +168,28 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
+
+    if (!this.formId) {
+      if (this.id && !this.mode) {
+        this.mode = 'view';
+        setTimeout(() => {
+          this.modeEvent.emit(this.mode);
+        }, 100);
+      }
+
+      this.formId = this.formService.registerForm(this.endpoint, this.mode);
+
+      const subscription = this.formService
+        .getForm(this.formId).mode
+        .skip(1)
+        .subscribe((mode: string) => {
+          this.mode = mode;
+          this.modeEvent.emit(this.mode);
+        });
+
+      this.subscriptions.push(subscription);
+    }
+
     Object.keys(changes).forEach((input) => {
       if (input === 'mode') {
         this.resetData(this.errors);
@@ -196,7 +199,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       }
     });
 
-    if (this.currentId !== this.id) {
+    if (this.currentId !== this.id && this.metadata) {
       this.currentId = this.id;
       this.editForm = true;
       this.splitElements.forEach((el) => {
@@ -286,16 +289,18 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public toggleModeMetadata(metadata: Field[], mode: string) {
-    metadata.forEach((el) => {
-      if (el.key) {
-        el.mode.next(mode);
-        if (el.type === 'related' && el.list) {
-          this.toggleModeMetadata(el.metadata, mode);
+    if (metadata.length) {
+      metadata.forEach((el) => {
+        if (el.key && el.mode) {
+          el.mode.next(mode);
+          if (el.type === 'related' && el.list) {
+            this.toggleModeMetadata(el.metadata, mode);
+          }
+        } else if (el.children) {
+          this.toggleModeMetadata(el.children, mode);
         }
-      } else if (el.children) {
-        this.toggleModeMetadata(el.children, mode);
-      }
-    });
+      });
+    }
   }
 
   public formChange(data) {

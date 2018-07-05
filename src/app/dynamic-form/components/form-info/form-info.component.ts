@@ -82,7 +82,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       });
 
       if (!this.picture) {
-        const nameElements = this.title.split(' ');
+        const nameElements = this.title && this.title.split(' ');
 
         if (nameElements && nameElements.length) {
           if (nameElements.length === 2) {

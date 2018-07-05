@@ -1,0 +1,28 @@
+const formadd = [
+  {
+    key: 'username',
+    type: 'input',
+    templateOptions: {
+      max: 255,
+      required: true,
+      type: 'text',
+      label: 'Phone or E-mail address'
+    },
+    read_only: false
+  },
+  {
+    key: 'password',
+    type: 'input',
+    templateOptions: {
+      max: 128,
+      required: false,
+      type: 'password',
+      label: 'Password (optional)'
+    },
+    read_only: false
+  }
+];
+
+export const metadata = {
+  formadd
+};
