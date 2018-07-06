@@ -306,6 +306,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   };
 
   public resetFilter() {
+    this.query = '';
     this.deleteValue();
     this.fs.generateQuery('', this.config.key, this.config.listName, this.item);
     this.changeQuery();

@@ -96,6 +96,8 @@
   <div *ngSwitchCase="'profile'">
     <profile [id]="user.data.contact.contact_id"></profile>
   </div>
+
+  <map *ngSwitchCase="'map'"></map>
 </div>
 
 <dashboard *ngIf="dashboard"

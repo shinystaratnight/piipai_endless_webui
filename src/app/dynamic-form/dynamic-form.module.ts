@@ -10,9 +10,6 @@ import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { WebCamComponent } from 'ng2-webcam';
 import { ButtonRadioDirective } from 'ngx-bootstrap';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
-import { GooglePlaceModule } from 'ng2-google-place-autocomplete';
-
-import { environment } from '../environment';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -32,18 +29,17 @@ import { directives } from './directives';
     Angular2FontawesomeModule,
     FormsModule,
     RouterModule,
-    AgmCoreModule.forRoot({
-      apiKey: (<any> process.env).GOOGLE_GEO_CODING_API_KEY || environment.GOOGLE_GEO_CODING_API_KEY
-    }),
+    AgmCoreModule,
     InfiniteScrollModule,
-    GooglePlaceModule,
     SharedModule,
   ],
   exports: [
     fromComponents.GenericFormComponent,
     fromComponents.GenericListComponent,
     fromContainers.DynamicFormComponent,
-    fromComponents.ProfileComponent],
+    fromComponents.ProfileComponent,
+    fromContainers.FilterBlockComponent
+  ],
   declarations: [
     WebCamComponent,
     PdfViewerComponent,
