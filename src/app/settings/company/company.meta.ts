@@ -14,8 +14,7 @@ export const meta = [
           label_photo: 'Take a photo',
           type: 'file',
           required: false,
-          file: true,
-          photo: false
+          file: false
         }
       },
       {
