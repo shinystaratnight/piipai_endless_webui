@@ -1134,7 +1134,9 @@ const form = [
     collapsed: false,
     prefilled: {
       job: '{id}',
-      company_contact: '{customer_representative.id}'
+      company_contact: '{customer_representative.id}',
+      jobsite: '{jobsite.id}',
+      company: '{customer_company.id}',
     },
     type: 'list',
     query: {

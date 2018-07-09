@@ -4,7 +4,7 @@
       <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
         {{config.templateOptions.label}}:
       </label>
-      <div class="form-element-content flex-row" style="position: relative">
+      <div class="form-element-content flex-row edit" style="position: relative">
         <div class="form-control autocomplete-value"
           (click)="openAutocomplete()">
           <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
@@ -61,7 +61,7 @@
       <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
         {{config.templateOptions.label}}:
       </label>
-      <div class="form-element-content flex-column align-items-start" [class.many]="config.many && results" style="position: relative">
+      <div class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results" style="position: relative">
         <input type="text" class="form-control autocomplete-value" autocomplete="off"
           #search="ngModel"
           #searchElement
@@ -134,12 +134,6 @@
         aria-controls="collapseExample"
         style="cursor: pointer"></i>
           {{config.templateOptions.label}}
-      <!-- <button *ngIf="config.templateOptions.label"
-        type="button"
-        class="text-white btn btn-sm group-button ml-auto mr-2"
-        (click)="open('add')">
-          Add
-      </button> -->
     </h6>
     <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list-related p-2">
       <table *ngIf="dataOfList" class="table table-bordered mb-1">

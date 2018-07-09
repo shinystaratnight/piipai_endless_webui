@@ -280,10 +280,23 @@ export class FormRelatedComponent
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
-        if (this.checkRelatedField(formData.key, formData.data)) {
+        if (
+          this.checkRelatedField(formData.key, formData.data) ||
+          (this.config.default && !this.config.default.includes('session'))
+        ) {
           if (this.config.default && !this.config.hide && !this.config.value) {
             const format = new FormatString();
-            const id = format.format(this.config.default, this.formData);
+            let id;
+            if (typeof this.config.default === 'string') {
+              id = format.format(this.config.default, this.formData);
+            } else if (Array.isArray(this.config.default)) {
+              this.config.default.forEach((el) => {
+                if (!id) {
+                  id = format.format(el, this.formData);
+                }
+              });
+            }
+
             if (id) {
               this.getOptions.call(this, '', 0, false, this.setValue, id);
               if (this.config.read_only) {
