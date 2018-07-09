@@ -125,7 +125,6 @@
     display: flex;
 
     width: 80%;
-    max-width: 300px;
 
     height: 22px;
     max-height: 22px;
@@ -133,6 +132,10 @@
 
     font-size: 14px;
     line-height: 20px;
+
+    &.edit {
+      max-width: 300px;
+    }
 
     .description & {
       font-size: 12px;

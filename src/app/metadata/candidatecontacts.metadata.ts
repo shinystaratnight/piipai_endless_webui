@@ -1409,6 +1409,7 @@ const form = [
         templateOptions: {
           label: 'Favorite List',
           type: 'list',
+          add_label: '+ Add item',
           text: 'Favorite List'
         },
         collapsed: false,

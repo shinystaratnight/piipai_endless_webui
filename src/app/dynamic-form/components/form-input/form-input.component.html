@@ -4,7 +4,7 @@
       {{config.templateOptions.label}}:
     </label>
     <info [description]="config.templateOptions.description"></info>
-    <div class="form-element-content" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon || config.key === 'password'">
+    <div class="form-element-content edit" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon || config.key === 'password'">
       <input
         *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))
           && (!viewMode && !config.read_only)
