@@ -8,7 +8,7 @@ const mapFilters = [
         label: 'All Clients'
       },
       {
-        value: 'only_hq',
+        value: 'only_hqs',
         label: 'Only Client HQs'
       },
       {
@@ -16,7 +16,7 @@ const mapFilters = [
         label: 'All Jobsites'
       }
     ],
-    query: 'filterby',
+    query: 'filter_by',
     default: null,
     type: 'select'
   },

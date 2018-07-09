@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { MapService, Marker } from './map.service';
 
 import { FilterService } from '../../dynamic-form/services/filter.service';
@@ -9,7 +9,7 @@ import { metadata } from '../../metadata/jobsite-map.metadata';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy {
 
   @ViewChild('filterBlock') public elementRef: ElementRef;
 
@@ -81,6 +81,14 @@ export class MapComponent implements OnInit {
     this.filtersOfList = this.filterService.getFiltersByEndpoint(this.mapService.endpoint);
   }
 
+  public ngOnDestroy() {
+    this.filterService.filters = {
+      endpoint: this.mapService.endpoint,
+      list: null
+    };
+    this.filterService.resetQueries(this.config.list);
+  }
+
   public getPositions(query: string =  '') {
     this.types.forEach((el) => {
       this.icons[el].exist = false;
@@ -139,7 +147,7 @@ export class MapComponent implements OnInit {
   }
 
   public trackByFn(index, item) {
-    return index;
+    return item.latitude + item.longitude;
   }
 
   public mapReady(e) {

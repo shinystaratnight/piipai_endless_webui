@@ -4,9 +4,12 @@
 .filters {
 
   &-block {
+    height: calc(100vh - 72px);
     width: 265px;
 
     padding: 0 10px;
+
+    overflow: auto;
 
     @include media-breakpoint-down('lg') {
       max-height: 100vh;

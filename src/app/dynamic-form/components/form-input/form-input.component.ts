@@ -197,7 +197,9 @@ export class FormInputComponent
       || (this.config.type === 'static' && !this.config.read_only)) {
       if (this.autocompleteValue) {
         this.displayValue = this.autocompleteValue;
-        this.group.get(this.key).patchValue(this.autocompleteValue);
+        if (this.group.get(this.key)) {
+          this.group.get(this.key).patchValue(this.autocompleteValue);
+        }
       } else if (this.config.value === 0
         || this.config.value
         || this.config.default
@@ -209,7 +211,10 @@ export class FormInputComponent
             : (typeof this.config.default === 'string')
               ? format.format(this.config.default, this.formData)
               : this.config.default;
-          this.group.get(this.key).patchValue(value);
+
+          if (this.group.get(this.key)) {
+            this.group.get(this.key).patchValue(value);
+          }
 
           if (this.config.type === 'address'
             || this.key === 'address'

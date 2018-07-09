@@ -11,6 +11,15 @@
   height: calc(100vh - 78px);
 }
 
+.filter-wrapper {
+  height: calc(100vh - 72px);
+  max-height: calc(100vh - 72px);
+  width: 265px;
+  min-width: 265px;
+
+  overflow-y: auto;
+}
+
 @include media-breakpoint-down('sm') {
   .filter-wrapper {
     margin-left: -235px;
