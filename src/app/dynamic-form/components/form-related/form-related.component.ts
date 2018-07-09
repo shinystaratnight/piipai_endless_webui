@@ -259,8 +259,21 @@ export class FormRelatedComponent
           this.editMode = true;
         }
         this.setInitValue();
+        this.eventHandler(
+          {type: 'change'},
+          this.group.get(this.key).value,
+          this.resetAdditionalData()
+        );
       });
     }
+  }
+
+  public resetAdditionalData() {
+    const res = {};
+    if (this.group.get(this.key).value === '') {
+      this.fields.forEach((el) => res[el] = null);
+    }
+    return res;
   }
 
   public checkFormData() {
