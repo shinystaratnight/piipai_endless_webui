@@ -1422,6 +1422,7 @@ const form = [
         templateOptions: {
           label: 'Black List',
           type: 'list',
+          add_label: '+ Add item',
           text: 'Black List'
         },
         collapsed: false,
