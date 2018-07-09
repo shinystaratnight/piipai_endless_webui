@@ -19,6 +19,17 @@ const list = {
       {
         content: [
           {
+            endpoint: '/ecore/api/v2/core/companycontacts/{company_contact.id}',
+            field: 'company_contact',
+            type: 'link'
+          }
+        ],
+        name: 'company_contact',
+        label: 'Client Contact'
+      },
+      {
+        content: [
+          {
             endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
@@ -32,9 +43,9 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/',
+            endpoint: '/ecore/api/v2/hr/timesheets/{timesheet.id}',
             field: 'timesheet',
-            type: 'related'
+            type: 'link'
           }
         ],
         name: 'timesheet',
@@ -45,9 +56,9 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/jobsites/',
+            endpoint: '/ecore/api/v2/hr/jobsites/{jobsite.id}',
             field: 'jobsite',
-            type: 'related'
+            type: 'link'
           }
         ],
         name: 'jobsite',
@@ -57,7 +68,7 @@ const list = {
       }
     ],
     pagination_label: 'Black list',
-    search_enabled: false,
+    search_enabled: true,
     editDisable: false,
     filters: [
       {
