@@ -1404,6 +1404,7 @@ const form = [
         templateOptions: {
           label: 'Carrier List',
           type: 'list',
+          add_label: '+ Add item',
           text: 'Carrier List'
         },
         collapsed: false,
