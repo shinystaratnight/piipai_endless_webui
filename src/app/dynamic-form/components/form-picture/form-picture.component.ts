@@ -5,12 +5,16 @@ import {
   ViewChild,
   AfterViewInit,
   ElementRef,
-  EventEmitter
+  EventEmitter,
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { FallbackDispatcher } from 'ng2-webcam';
 
+import { FallbackDispatcher } from 'ng2-webcam';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs/Subscription';
+
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
@@ -19,7 +23,9 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
   styleUrls: ['./form-picture.component.scss']
 })
 
-export class FormPictureComponent extends BasicElementComponent implements OnInit, AfterViewInit {
+export class FormPictureComponent
+  extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('modal')
   public modal;
@@ -63,10 +69,13 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     cameraType: 'front'
   };
 
+  private subscriptions: Subscription[];
+
   constructor(
     private fb: FormBuilder,
     public modalService: NgbModal,
-    private element: ElementRef
+    private element: ElementRef,
+    private cd: ChangeDetectorRef
   ) {
     super();
     this.onSuccess = (stream: any) => {
@@ -78,6 +87,7 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     this.onError = (err) => {
       this.err = err;
     };
+    this.subscriptions = [];
   }
 
   public ngOnInit(): void {
@@ -89,9 +99,13 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     this.createEvent();
   }
 
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s.unsubscribe());
+  }
+
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -99,13 +113,17 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
         } else {
           this.config.hide = hide;
         }
+
+        this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
         } else {
@@ -113,6 +131,8 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
         }
         this.setInitValue();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
@@ -132,7 +152,7 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     }
 
     if (!this.value) {
-      this.value = this.config.companyContact ? '/assets/img/logo.svg' : '';
+      this.value = this.config.companyContact && this.config.key === 'logo' ? '/assets/img/logo.svg' : ''; //tslint:disable-line
 
       if (!this.value && this.config.contactName) {
         const nameElements = this.config.contactName.split(' ');
@@ -152,10 +172,17 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
   }
 
   public ngAfterViewInit() {
-    this.addFlags(this.picture, this.config);
+    if (this.picture) {
+      this.addFlags(this.picture, this.config);
+    }
   }
 
-  public upload(): void {
+  public upload(e): void {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
     this.picture.nativeElement.click();
   }
 
@@ -276,6 +303,10 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     this.event.emit({
       type: 'changeImage'
     });
+  }
+
+  public getExtension(link: string) {
+    return link.split('.').pop();
   }
 
 }

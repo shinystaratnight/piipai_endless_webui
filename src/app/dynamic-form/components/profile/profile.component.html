@@ -1,0 +1,162 @@
+<div *ngIf="data" class="container profile py-5 d-flex flex-column justify-content-start">
+
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-start w-100 mb-3">
+    <div class="d-flex flex-column block">
+
+      <div class="element d-flex align-items-center p-2 px-4 mb-3">
+        <img *ngIf="data.contact.picture && data.contact.picture.origin" class="avatar mr-3" [src]="data.contact.picture && data.contact.picture.origin" alt="Profile">
+        <div *ngIf="data.contactAvatar" class="contact-avatar avatar">{{data.contactAvatar}}</div>
+        <span class="name mr-auto">{{data.contact.__str__}}</span>
+      </div>
+
+      <div class="element mb-3 mb-md-0">
+        <div class="text-white element-header p-2"
+          (click)="residency.isCollapsed = !residency.isCollapsed"
+          [attr.aria-expanded]="!residency.isCollapsed" aria-controls="collapseExample">
+            <i fa class="element-icon m-0 mr-2" [name]="residency.isCollapsed ? 'plus' : 'close'"></i>
+            Residency
+          </div>
+        <div id="collapseExample" [ngbCollapse]="residency.isCollapsed">
+          <div *ngFor="let item of residency.viewData; let odd = odd" class="element-item p-2" [ngClass]="{'odd': odd}">
+            <span class="pr-2"><b>{{item[0]}}</b></span>
+            <span class="pl-md-2">{{item[1]}}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="block element">
+      <div class="text-white element-header p-2"
+        (click)="personalTraits.isCollapsed = !personalTraits.isCollapsed"
+        [attr.aria-expanded]="!personalTraits.isCollapsed" aria-controls="collapseExample">
+          <i fa class="element-icon m-0 mr-2" [name]="personalTraits.isCollapsed ? 'plus' : 'close'"></i>
+          Personal Traits
+        </div>
+      <div id="collapseExample" [ngbCollapse]="personalTraits.isCollapsed">
+        <div *ngFor="let item of personalTraits.viewData; let odd = odd" class="element-item p-2" [ngClass]="{'odd': odd}">
+          <span class="pr-2"><b>{{item[0]}}</b></span>
+          <span class="pl-md-2">{{item[1]}}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="element mb-3">
+    <div class="text-white element-header p-2"
+      (click)="skills.isCollapsed = !skills.isCollapsed"
+      [attr.aria-expanded]="!skills.isCollapsed" aria-controls="collapseExample">
+        <i fa class="element-icon m-0 mr-2" [name]="skills.isCollapsed ? 'plus' : 'close'"></i>
+        Skills
+    </div>
+    <div id="collapseExample" [ngbCollapse]="skills.isCollapsed">
+      <div style="overflow-x: auto">
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th *ngFor="let item of skills.viewData.label">{{item}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of skills.viewData.row" class="item">
+              <td *ngFor="let cell of row.values; let f = first" >
+                <div class="d-flex align-items-center">
+                  <span class="pr-1">{{cell}}</span>
+                  <ngb-rating *ngIf="cell.length === 1" [rate]="cell[0]" max="5" [readonly]="true">
+                    <template let-fill="fill" let-index="index">
+                      <span *ngIf="fill === 100" class="star full">&#9733;</span>
+                      <span *ngIf="fill === 0" class="star">&#9733;</span>
+                      <span *ngIf="fill < 100 && fill > 0" class="star">
+                        <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                      </span>
+                    </template>
+                  </ngb-rating>
+                  <i fa class="edit icon text-muted ml-1 mr-2"
+                    *ngIf="false"
+                    [name]="'pencil'"
+                    (click)="openModal(cell, 'skills', row.id)"></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="element mb-3">
+    <div class="text-white element-header p-2"
+      (click)="tags.isCollapsed = !tags.isCollapsed"
+      [attr.aria-expanded]="!tags.isCollapsed" aria-controls="collapseExample">
+        <i fa class="element-icon m-0 mr-2" [name]="tags.isCollapsed ? 'plus' : 'close'"></i>
+        Tags
+    </div>
+    <div id="collapseExample" [ngbCollapse]="tags.isCollapsed">
+      <div style="overflow-x: auto">
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th *ngFor="let item of tags.viewData.label">{{item}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of tags.viewData.row" class="item">
+              <td *ngFor="let cell of row.values; let f = first">
+                <div class="d-flex align-items-center justify-content-between">
+                  <a *ngIf="cell.map" [href]="cell[0]">Link</a>
+                  <span *ngIf="!cell.map">{{cell}}</span>
+                  <i fa class="edit icon text-muted ml-1 mr-2"
+                    *ngIf="false"
+                    [name]="'pencil'"
+                    (click)="openModal(cell, 'tags', row.id)"></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="element">
+    <div class="text-white element-header p-2"
+      (click)="contactDetails.isCollapsed = !contactDetails.isCollapsed"
+      [attr.aria-expanded]="!contactDetails.isCollapsed" aria-controls="collapseExample">
+        <i fa class="element-icon m-0 mr-2" [name]="contactDetails.isCollapsed ? 'plus' : 'close'"></i>
+        Contact Details
+      </div>
+    <div id="collapseExample" [ngbCollapse]="contactDetails.isCollapsed">
+      <div *ngFor="let item of contactDetails.viewData; let odd = odd" class="element-item p-2" [ngClass]="{'odd': odd}">
+        <span class="pr-2"><b>{{item[0]}}</b></span>
+        <a class="pl-md-2" *ngIf="item[2]" [href]="item[2] + item[1]">{{item[1]}}</a>
+        <span *ngIf="!item[2]" class="pl-md-2">{{item[1]}}</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="!data" class="spinner">
+  <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
+</div>
+
+<template #modal let-c="close">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{modalData.title}}</h5>
+        <button type="button" class="close" (click)="c()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c)">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </generic-form>
+    </div>
+  </div>
+</template>

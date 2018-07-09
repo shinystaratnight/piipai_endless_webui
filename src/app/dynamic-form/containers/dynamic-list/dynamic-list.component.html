@@ -35,7 +35,7 @@
     <div [class.card-block]="poped" class="datatable-body" [class.open-filters]="!filtersHidden && showFilters">
       <h2 class="datatable-label"
         *ngIf="(config.list && (inForm && (config.list.search_enabled || (config.list.buttons && config.list.buttons.length)) && !delay) || (!inForm && !poped))">
-        <span *ngIf="!inForm" class="mr-auto">{{config.list.label}}</span>
+        <span *ngIf="!inForm" class="mr-auto my-1">{{config.list.label}}</span>
         <list-buttons
           [buttons]="config.list.buttons"
           [first]="first"
@@ -58,7 +58,7 @@
           class="datatable-search"
           *ngIf="config.list.search_enabled"
           [count]="data.count"
-          [label]="config.list.label"
+          [label]="config.list.pagination_label || config.list.label"
           [list]="config.list.list"
           (event)="filterHandler($event)">
         </list-search-bar>
@@ -69,7 +69,7 @@
         <table class="table table-sm" *ngIf="config.list">
           <thead class="thead-default">
             <tr>
-              <th *ngIf="(!inForm && config.list.actions) || actions || !noneEdit" class="active first-cell" style="width: 2rem">
+              <th *ngIf="(!inForm && config.list.actions) || actions || (!noneEdit && !inForm)" class="active first-cell" style="width: 2rem">
                 <div *ngIf="(!inForm && config.list.actions) || actions">
                   <label for="all-checkbox">All</label>
                   <input
@@ -107,7 +107,7 @@
             <ng-container *ngFor="let row of body">
               <tr [class.main]="row.additionalBody && !row.collapsed" [class.table-warning]="row.highlight && row.highlight.highlight"
                 [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
-                <td *ngIf="(!inForm && config.list.actions) || actions || !noneEdit" class="first-cell">
+                <td *ngIf="(!inForm && config.list.actions) || actions || (!noneEdit && !inForm)" class="first-cell">
                   <label *ngIf="config.list.actions || actions">
                     <input type="checkbox"
                       class="form-check-input"
@@ -133,23 +133,25 @@
 
                 <td *ngFor="let cell of row.content" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
                   <ng-container
+                    *ngIf="cell.name !== 'actions'"
                     listElement
                     [config]="cell.content"
                     (event)="eventHandler($event)"
                     (buttonAction)="buttonHandler($event)">
                   </ng-container>
-                  <!-- <div *ngIf="cell.contextMenu" ngbDropdown class="d-inline-block">
-                    <i fa
-                      id="dropdownBasic1"
-                      class="text-muted p-2 icon"
-                      [class.dropdown-toggle]="false"
-                      [name]="'ellipsis-v'"
-                      [border]=true
-                      ngbDropdownToggle></i>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownBasic1">
-                      <button class="dropdown-item" *ngFor="let field of cell.contextMenu" (click)="openModal(modal, field)">{{field.label}}</button>
-                    </div>
-                  </div> -->
+
+                  <ng-container *ngIf="cell.name === 'actions'">
+                    <template #actionsTemplate>
+                      <ng-container
+                        listElement
+                        [config]="cell.content"
+                        (event)="eventHandler($event)"
+                        (buttonAction)="buttonHandler($event, cell.pop = pop)">
+                      </ng-container>
+                    </template>
+                    <i fa class="icon px-1 ml-4" name="ellipsis-v" placement="bottom" #pop="ngbPopover" [ngbPopover]="actionsTemplate" style="opacity: .3"></i>
+                  </ng-container>
+
                   <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
                     <list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></list-table>
                   </div>
@@ -213,7 +215,7 @@
           size="sm"
           (pageChange)="pageChange()">
         </ngb-pagination>
-        <div class="ml-2">{{data.count}} {{config.list.label}}</div>
+        <div class="ml-2">{{data.count}} {{config.list.pagination_label || config.list.label}}</div>
       </div>
     </div>
   </div>
@@ -223,10 +225,10 @@
 <template #modal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
-      <div class="modal-header bg-primary text-white">
+      <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
         <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
-          <span class="text-white" aria-hidden="true">&times;</span>
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
     </div>
@@ -241,7 +243,7 @@
         [edit]="modalInfo.edit"
         (event)="formEvent($event, c)"
         (errorForm)="formError($event)">
-          <button type="submit" class="btn btn-secondary bg-primary text-white" [disabled]="saveProcess">
+          <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
             Save
             <spinner *ngIf="saveProcess"></spinner>
           </button>

@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
-import { NavigationService, Page } from '../../services/navigation.service';
+import { Page, UserService } from '../../services/';
 
 export interface UserModelData {
   dashboard_module: string;
@@ -22,11 +22,13 @@ export interface UserModelData {
 
 export interface WidgetItem {
   label: string;
+  name?: string;
+  addLabel?: string;
+  description?: string;
   link: string;
   endpoint: string;
   position: number;
   ui_config: any;
-  labelOfWidgetGroup: string;
   id: string;
 }
 
@@ -72,7 +74,7 @@ export class DashboardComponent implements OnChanges, OnDestroy {
   constructor(
     public modalService: NgbModal,
     private genericFormService: GenericFormService,
-    private navigationService: NavigationService
+    public userService: UserService
   ) { }
 
   public ngOnChanges() {
@@ -110,12 +112,14 @@ export class DashboardComponent implements OnChanges, OnDestroy {
     });
   }
 
-  public selectModule(widget) {
+  public selectModule(widget, c) {
     this.userModelData = <any> {};
     this.userModelData.dashboard_module = widget.id;
     this.userModelData.position = this.getLastPosition() + 1;
     this.userModelData.ui_config = {};
     this.selectedWidget = widget;
+
+    this.addModule(c);
   }
 
   public addModule(closeModal) {
@@ -154,21 +158,24 @@ export class DashboardComponent implements OnChanges, OnDestroy {
     this.userModules.forEach((el) => {
       let widgetInfo = this.getInfoAboutWidget(el, ['module_data']);
       if (widgetInfo) {
-        let labelOfWidgetGroup = widgetInfo.module_data.app
-          .split('_')
-          .map((elem) => elem.toUpperCase())
-          .join(' ');
-        let appName = widgetInfo.module_data.app.replace(/_/, '-');
-        let modelName = widgetInfo.module_data.plural_name.split(' ').join('').toLowerCase();
-        let endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
+        let endpoint;
+        if (!widgetInfo.module_data.endpoint) {
+          let appName = widgetInfo.module_data.app.replace(/_/, '-');
+          let modelName = widgetInfo.module_data.plural_name.split(' ').join('').toLowerCase();
+          endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
+        } else {
+          endpoint = widgetInfo.module_data.endpoint;
+        }
         let link = this.getLinkByEndpoint(this.pages, endpoint);
         let widget = <WidgetItem> {
-          label: el.dashboard_module.name,
-          link: (el.ui_config && el.ui_config.display_on_navbar) ? link || '/' : '/',
+          label: widgetInfo.module_data.label || widgetInfo.module_data.plural_name,
+          name: widgetInfo.module_data.name,
+          addLabel: widgetInfo.module_data.add_label,
+          description: widgetInfo.module_data.description,
+          link: el.ui_config ? link || '/' : '/',
           endpoint,
           position: el.position,
           ui_config: el.ui_config,
-          labelOfWidgetGroup,
           id: el.id
         };
         this.widgets.push(widget);
@@ -232,5 +239,11 @@ export class DashboardComponent implements OnChanges, OnDestroy {
       }
     });
     return array;
+  }
+
+  public checkOnManager() {
+    if (this.userService.user) {
+      return this.userService.user.currentRole.__str__.includes('manager');
+    }
   }
 }

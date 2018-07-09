@@ -26,6 +26,16 @@
     justify-content: space-between;
     align-items: center;
 
+    height: 22px;
+
+    min-height: 22px;
+
+    .filter-related & {
+      height: auto;
+
+      min-height: auto;
+    }
+
     border: 1px solid rgba($gray, .2);
 
     background-color: #fefefe;
@@ -43,6 +53,11 @@
 
     &.active {
       border-color: $gray;
+    }
+
+    .form-element &.form-control {
+      padding: 0;
+      padding-right: 65px;
     }
   }
 
@@ -90,5 +105,13 @@
         background-color: map-get($theme-colors, $item);
       }
     }
+  }
+
+  &-preloader {
+    padding: .2rem;
+
+    text-align: center;
+
+    background-color: rgba($gray, .1);
   }
 }

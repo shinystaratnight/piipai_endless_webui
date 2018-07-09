@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
@@ -20,13 +20,16 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
 
   public event: EventEmitter<any> = new EventEmitter();
 
-  public displayMonths = 2;
-  public navigation = 'arrows';
+  public displayMonths = 3;
+  public navigation = 'none';
   public dateFormat = 'YYYY-MM-DD';
   public minDate: any;
   public markDisabled: Function;
   public vacancyDate: any;
   public vacancyDates: string[];
+  public dates: any = {};
+
+  @ViewChild('calendar') public calendar: ElementRef;
 
   constructor(
     private fb: FormBuilder
@@ -79,9 +82,22 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
 
   public selectVacancyDate(e, time = moment) {
     const date = time([e.year, e.month - 1, e.day]).format(this.dateFormat);
+
     this.vacancyDates = this.vacancyDates || [];
     if (this.vacancyDates.indexOf(date) === -1) {
+      this.dates[date] = null;
+
       this.vacancyDates.push(date);
+
+      setTimeout(() => {
+        this.markSelectedDates(date);
+      }, 100);
+    } else {
+      this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
+
+      setTimeout(() => {
+        this.markSelectedDates(date, true);
+      }, 100);
     }
 
     this.group.get(this.key).patchValue(this.vacancyDates);
@@ -91,8 +107,36 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
     });
   }
 
-  public removeDate(date) {
+  public removeDate(date, time = moment) {
     this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
+    this.vacancyDate = this.vacancyDates[0];
+
+    setTimeout(() => {
+      this.markSelectedDates(date, true);
+    }, 10);
   }
 
+  public markSelectedDates(date?, remove?) {
+    const calendar = this.calendar.nativeElement;
+    const selectedDate = calendar.querySelectorAll(`.bg-primary:not(.not-current)`);
+    const currentDate = selectedDate[0];
+
+    if (date && !this.dates[date]) {
+      this.dates[date] = currentDate.parentElement;
+    }
+
+    if (remove) {
+      this.dates[date].children[0].classList.remove('bg-primary');
+      this.dates[date].children[0].classList.remove('text-white');
+      this.dates[date].children[0].classList.remove('not-current');
+
+      delete this.dates[date];
+    }
+    Object.keys(this.dates).forEach((el) => {
+      this.dates[el].children[0].classList.add('bg-primary');
+      this.dates[el].children[0].classList.add('text-white');
+      this.dates[el].children[0].classList.add('not-current');
+    });
+
+  }
 }

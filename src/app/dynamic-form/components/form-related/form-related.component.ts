@@ -1,20 +1,26 @@
 import {
   Component,
   OnInit,
-  AfterViewInit,
   ViewChild,
   Output,
   EventEmitter,
-  OnDestroy } from '@angular/core';
+  OnDestroy,
+  ChangeDetectorRef,
+  AfterViewChecked,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { BasicElementComponent } from './../basic-element/basic-element.component';
 
-import { GenericFormService } from './../../services/generic-form.service';
-import { CheckPermissionService } from '../../../shared/services/check-permission';
-import { NavigationService } from '../../../services/navigation.service';
-import { Field } from '../../models/field.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/skip';
+import 'rxjs/add/operator/filter';
 
+import { GenericFormService } from '../../services';
+import { CheckPermissionService } from '../../../shared/services';
+import { NavigationService, UserService } from '../../../services';
+import { BasicElementComponent } from '../basic-element/basic-element.component';
+import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
 
 export interface RelatedObject {
@@ -35,16 +41,19 @@ export interface CustomField {
 
 @Component({
   selector: 'form-related',
-  templateUrl: 'form-related.component.html',
+  templateUrl: './form-related.component.html',
   styleUrls: ['./form-related.component.scss']
 })
 
 export class FormRelatedComponent
   extends BasicElementComponent
-    implements OnInit, OnDestroy {
+    implements OnInit, OnDestroy, AfterViewChecked {
 
   @ViewChild('search')
   public search;
+
+  @ViewChild('searchElement')
+  public searchElement;
 
   @ViewChild('modal')
   public modal;
@@ -52,7 +61,7 @@ export class FormRelatedComponent
   @ViewChild('tableWrapper')
   public tableWrapper: any;
 
-  public config;
+  public config: Field;
   public group: FormGroup;
   public errors: any;
   public message: any;
@@ -74,9 +83,11 @@ export class FormRelatedComponent
 
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
-  public count: number;
+
+  public skipScroll = false;
 
   public dataOfList: any;
+  public count: number;
   public isCollapsed: boolean = false;
 
   public replaceElements: any = [];
@@ -94,9 +105,15 @@ export class FormRelatedComponent
 
   public linkPath: string;
   public allowPermissions: string[];
+  public autocompleteDisplay: boolean;
+  public currentQuery: string;
+  public editMode: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
+
+  private searchSubscription: Subscription;
+  private subscriptions: Subscription[];
 
   constructor(
     private fb: FormBuilder,
@@ -104,7 +121,13 @@ export class FormRelatedComponent
     private genericFormService: GenericFormService,
     private permission: CheckPermissionService,
     private navigation: NavigationService,
-  ) { super(); }
+    private userService: UserService,
+    private cd: ChangeDetectorRef
+  ) {
+    super();
+    this.subscriptions = [];
+    this.editMode = true;
+  }
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
@@ -115,22 +138,25 @@ export class FormRelatedComponent
     this.param = this.config.templateOptions.param ? this.config.templateOptions.param : 'id';
     this.fields = this.config.templateOptions.values;
     this.allowPermissions = this.permission.getAllowMethods(undefined, this.config.endpoint);
-    if (this.fields) {
+    if (this.fields && this.fields.indexOf(this.param) === -1) {
       this.fields.push(this.param);
     }
+    this.checkAutocomplete();
+    this.checkFormData();
     this.setInitValue();
+    this.createEvent();
     this.checkModeProperty();
     this.checkHiddenProperty();
-    this.checkFormData();
     if (this.config.custom && this.config.custom.length) {
       this.generateCustomTemplate(this.config.custom);
     }
     if (this.config && this.config.list && this.config.data) {
-      this.config.data.subscribe((data) => {
+      const subscription = this.config.data.subscribe((data) => {
         this.generateDataForList(this.config, data);
       });
+
+      this.subscriptions.push(subscription);
     }
-    this.createEvent();
     if (this.config && this.config.metadata) {
       this.getReplaceElements(this.config.metadata);
     }
@@ -139,6 +165,35 @@ export class FormRelatedComponent
     if (this.config.editForm && this.config.read_only) {
       this.viewMode = true;
     }
+
+    if (this.config.metadata_query instanceof Object) {
+      this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
+    }
+
+    if (this.config.add_metadata_query instanceof Object) {
+      this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
+    }
+  }
+
+  public ngAfterViewChecked() {
+    if (this.search && !this.autocompleteDisplay) {
+      this.autocompleteDisplay = true;
+      this.searchSubscription = this.search.valueChanges
+        .skip(2)
+        .filter((value) => value !== null)
+        .debounceTime(400)
+        .subscribe((res) => {
+          this.filter(this.searchValue);
+        });
+    }
+  }
+
+  public parseMetadataQuery(data, field) {
+    const keys = Object.keys(data[field]);
+    const result = keys.map((query) => {
+      return `${query}=${data[field][query]}`;
+    });
+    return result.join('&');
   }
 
   public generateCustomTemplate(fieldsList) {
@@ -170,14 +225,18 @@ export class FormRelatedComponent
 
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      this.config.hidden.subscribe((hide) => {
-        if (hide) {
+      const subscription = this.config.hidden.subscribe((hide) => {
+        if (hide && !this.config.hide) {
           this.displayValue = null;
-          this.group.get(this.key).patchValue(undefined);
+          this.group.get(this.key).patchValue('');
           this.setInitValue();
         }
         this.config.hide = hide;
+
+        this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
@@ -186,8 +245,18 @@ export class FormRelatedComponent
       this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+          this.editMode = false;
+
+          this.group.get(this.key).patchValue('');
+          this.displayValue = undefined;
+
+          this.autocompleteDisplay = false;
+          if (this.searchSubscription) {
+            this.searchSubscription.unsubscribe();
+          }
         } else {
           this.viewMode = this.config.read_only || false;
+          this.editMode = true;
         }
         this.setInitValue();
       });
@@ -196,17 +265,36 @@ export class FormRelatedComponent
 
   public checkFormData() {
     if (this.config.formData) {
-      this.config.formData.subscribe((formData) => {
+      const subscription = this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
         if (this.checkRelatedField(formData.key, formData.data)) {
           if (this.config.default && !this.config.hide && !this.config.value) {
-            this.getOptions.call(this, '', 0, false, this.setValue);
-            if (this.config.read_only) {
-              this.viewMode = true;
+            const format = new FormatString();
+            const id = format.format(this.config.default, this.formData);
+            if (id) {
+              this.getOptions.call(this, '', 0, false, this.setValue, id);
+              if (this.config.read_only) {
+                this.viewMode = true;
+              }
             }
           }
         }
       });
+
+      this.subscriptions.push(subscription);
+    }
+  }
+
+  public checkAutocomplete() {
+    if (this.config.autocompleteData) {
+      const subscription = this.config.autocompleteData.subscribe((data) => {
+        if (data.hasOwnProperty(this.config.key)) {
+          this.currentQuery = undefined;
+          this.getOptions.call(this, '', 0, false, this.setValue, data[this.config.key]);
+        }
+      });
+
+      this.subscriptions.push(subscription);
     }
   }
 
@@ -235,7 +323,7 @@ export class FormRelatedComponent
             if (obj) {
               const path = this.getLinkPath(this.config.endpoint);
               if (path) {
-                this.linkPath = location.origin + path + this.group.get(this.key).value + '/change';
+                this.linkPath = location.origin + path + data[this.param] + '/change';
               } else {
                 this.linkPath = '/';
               }
@@ -244,7 +332,7 @@ export class FormRelatedComponent
           } else {
             const path = this.getLinkPath(this.config.endpoint);
             if (path) {
-              this.linkPath = location.origin + path + this.group.get(this.key).value + '/change';
+              this.linkPath = location.origin + path + data[this.param] + '/change';
             } else {
               this.linkPath = '/';
             }
@@ -258,12 +346,14 @@ export class FormRelatedComponent
             if (obj) {
               const path = this.getLinkPath(this.config.endpoint);
               if (path) {
-                this.linkPath = location.origin + path + this.group.get(this.key).value + '/change';
+                this.linkPath = location.origin + path + value + '/change';
               } else {
                 this.linkPath = '/';
               }
               this.displayValue = formatString.format(this.display, obj);
             }
+          } else {
+            this.getOptions.call(this, '', 0, false, this.setValue, data);
           }
         }
         this.group.get(this.key).patchValue(value);
@@ -285,17 +375,22 @@ export class FormRelatedComponent
             results.forEach((elem) => {
               elem.__str__ = formatString.format(this.display, elem);
             });
-            this.results = results;
+            this.results = [...results];
           });
         } else {
-          this.results = data && data !== '-' ? data : [];
+          this.results = data && data !== '-' ? [...data] : [];
         }
         this.updateData();
       }
+    } else if (this.config.default && this.config.default.includes('session')) {
+      const id = this.userService.user.data.contact.contact_id;
+
+      if (!this.config.hide) {
+        this.getOptions.call(this, '', 0, false, this.setValue, id);
+      }
+
     }
-    if (this.config.query) {
-      this.config.currentQuery = `${this.config.query}${this.config.id}`;
-    }
+
     this.generateDataForList(this.config, this.config.value);
   }
 
@@ -303,6 +398,8 @@ export class FormRelatedComponent
     if (this.modalRef) {
       this.modalRef.close();
     }
+
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   public getReplaceElements(metadata: Field[]): void {
@@ -440,7 +537,10 @@ export class FormRelatedComponent
   }
 
   public onModalScrollDown(): void {
-    this.generateList(this.searchValue, true);
+    if (!this.skipScroll && (this.previewList && this.previewList.length !== this.count)) {
+      this.skipScroll = true;
+      this.generateList(this.searchValue, true);
+    }
   }
 
   public deleteElement(closeModal): void {
@@ -457,6 +557,8 @@ export class FormRelatedComponent
   }
 
   public open(type, e = undefined, object = undefined): void {
+    const format = new FormatString();
+
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -480,7 +582,7 @@ export class FormRelatedComponent
         this.modalData.id = this.group.get(this.key).value;
       }
       if (type === 'update') {
-        this.modalData.mode = 'update';
+        this.modalData.mode = 'edit';
       }
     }
     if (this.config.prefilled) {
@@ -490,8 +592,11 @@ export class FormRelatedComponent
         this.modalData.data[el] = {
           action: 'add',
           data: {
-            value: this.config.prefilled[el],
-            read_only: true
+            value: this.config.list
+              ? this.config.prefilled[el]
+              : format.format(this.config.prefilled[el], this.formData),
+            read_only: true,
+            editForm: true
           }
         };
       });
@@ -500,17 +605,21 @@ export class FormRelatedComponent
   }
 
   public openAutocomplete(): void {
-      this.searchValue = null;
-      this.hideAutocomplete = false;
-      this.generateList(this.searchValue);
-      setTimeout(() => {
-        this.search.nativeElement.focus();
-      }, 50);
+    if (this.config.type !== 'address') {
+      if (this.hideAutocomplete === true) {
+        this.searchValue = null;
+        this.generateList(this.searchValue);
+        setTimeout(() => {
+          this.searchElement.nativeElement.focus();
+        }, 50);
+      }
+    }
   }
 
   public generateList(value, concat = false): void {
+    this.currentQuery = null;
+    this.hideAutocomplete = false;
     if (this.config.useOptions) {
-      this.hideAutocomplete = false;
       if (this.searchValue) {
         this.filter(this.searchValue);
       } else {
@@ -524,7 +633,6 @@ export class FormRelatedComponent
         this.generatePreviewList(this.list);
       }
     } else {
-      this.hideAutocomplete = false;
       this.getOptions(value, this.lastElement, concat);
     }
   }
@@ -541,9 +649,6 @@ export class FormRelatedComponent
       this.lastElement = 0;
       this.hideAutocomplete = true;
       this.count = null;
-      if (!this.config.many) {
-        this.searchValue = null;
-      }
     }, 150);
   }
 
@@ -576,6 +681,7 @@ export class FormRelatedComponent
     if (item) {
       if (this.config.many) {
         this.results.push(item);
+        this.hideAutocomplete = true;
         this.updateData();
       } else {
         this.displayValue = formatString.format(this.display, item);
@@ -583,19 +689,22 @@ export class FormRelatedComponent
       }
     } else {
       this.displayValue = '';
-      this.group.get(this.key).patchValue(undefined);
+      this.group.get(this.key).patchValue('');
     }
     this.changeList();
-    this.eventHandler({type: 'change'}, item && item[this.param]);
+    this.eventHandler({type: 'change'}, item && item[this.param], item);
     this.searchValue = null;
     this.list = null;
     this.count = null;
     this.previewList = null;
+    this.cd.detectChanges();
   }
 
   public deleteItem(index: number, item: any, api: boolean) {
-    if (api) {
-      this.genericFormService.delete(this.config.endpoint, item[this.param], 'delete')
+    if (api || this.config.send === false) {
+      this.genericFormService.delete(
+        this.config.endpoint, item[this.param],
+        this.config.send !== false && 'delete')
         .subscribe(() => {
           if (this.results[index]) {
             this.results.splice(index, 1);
@@ -611,11 +720,12 @@ export class FormRelatedComponent
     }
   }
 
-  public eventHandler(e, value) {
+  public eventHandler(e, value, additionalData?) {
     this.event.emit({
       type: e.type,
       el: this.config,
-      value
+      value,
+      additionalData
     });
   }
 
@@ -642,10 +752,14 @@ export class FormRelatedComponent
       closeModal();
       this.saveProcess = false;
       const formatString = new FormatString();
+      if (this.config.many) {
+        this.setValue(e.data);
+        return;
+      }
       this.group.get(this.key).patchValue(e.data[this.param]);
       this.config.value = e.data[this.param];
       this.displayValue = formatString.format(this.display, e.data);
-      this.eventHandler({type: 'change'}, e.data[this.param]);
+      this.eventHandler({type: 'change'}, e.data[this.param], e.data);
     } else if (e.type === 'sendForm' && e.status === 'success' && this.config.list) {
       closeModal();
       this.saveProcess = false;
@@ -688,45 +802,88 @@ export class FormRelatedComponent
     if (queries) {
       const keys = Object.keys(queries);
       keys.forEach((el) => {
-        query += `${el}=${format.format(queries[el], this.formData)}&`;
+        query += typeof queries[el] === 'string'
+          ? `${el}=${format.format(queries[el], this.formData)}&`
+          : `${el}=${queries[el]}&`;
       });
       query = query.slice(0, query.length - 1);
     }
     return query.length > 1 ? query : '';
   }
 
-  public getOptions(value, offset, concat = false, callback?) {
+  public getOptions(value, offset, concat = false, callback?, id?, customQuery?) {
     let endpoint = this.config.endpoint;
-    let query = '';
-    if (value) {
-      query += `?search=${value}&`;
-    }
-    query += !query ? '?' : '';
-    query += `limit=${this.limit}&offset=${offset}`;
-    query += this.generateFields(this.fields);
-    query += this.generateQuery(this.config.query);
-    if (!this.count || (this.count && offset < this.count && concat)) {
-      this.lastElement += this.limit;
-      this.genericFormService.getByQuery(endpoint, query).subscribe(
-        (res: any) => {
-          this.count = res.count;
-          if (res.results && res.results.length) {
-            const formatString = new FormatString();
-            res.results.forEach((el) => {
-              el.__str__ = formatString.format(this.display, el);
-            });
-            if (concat) {
-              this.previewList.push(...res.results);
-            } else {
-              this.previewList = res.results;
-            }
+    if (endpoint) {
+      let query = '';
+      if (value) {
+        query += `?search=${value}&`;
+      }
+      query += !query ? '?' : '';
+      query += `limit=${this.limit}&offset=${offset}`;
+      query += this.generateFields(this.fields);
+      query += this.generateQuery(this.config.query);
+      if (customQuery) {
+        query += this.generateQuery(customQuery);
+      }
+      if (query !== this.currentQuery
+          && (!this.count || (this.count && offset < this.count && concat))) {
+        this.lastElement += this.limit;
+        this.currentQuery = query;
+        if (!id) {
+          this.genericFormService.getByQuery(endpoint, query).subscribe(
+            (res: any) => {
+              this.skipScroll = false;
+              this.count = res.count;
+              if (res.results && res.results.length) {
+                const formatString = new FormatString();
+                res.results.forEach((el) => {
+                  el.__str__ = formatString.format(this.display, el);
+                });
+                if (concat && this.previewList) {
+                  this.previewList.push(...res.results);
+                } else {
+                  this.previewList = res.results;
+                }
 
-          }
-          if (callback) {
-            callback.call(this, res.results[0]);
-          }
+              }
+              if (callback) {
+                const target = res.results.find((el) => el.id === id);
+
+                const item = target || res.results[0];
+
+                if (item) {
+                  const path = this.getLinkPath(this.config.endpoint);
+                  if (path) {
+                    this.linkPath = location.origin + path + item[this.param] + '/change';
+                  } else {
+                    this.linkPath = '/';
+                  }
+
+                  callback.call(this, item);
+                }
+              }
+            }
+          );
+        } else {
+          this.genericFormService
+          .getByQuery(endpoint + id + '/', `?${this.generateFields(this.fields)}`)
+          .subscribe(
+            (res: any) => {
+              this.lastElement = 0;
+              if (res) {
+                const path = this.getLinkPath(this.config.endpoint);
+                if (path) {
+                  this.linkPath = location.origin + path + res[this.param] + '/change';
+                } else {
+                  this.linkPath = '/';
+                }
+
+                callback.call(this, res);
+              }
+            }
+          );
         }
-      );
+      }
     }
   }
 
@@ -797,5 +954,9 @@ export class FormRelatedComponent
       let combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
     }
+  }
+
+  public trackByFn(value) {
+    return value[this.param];
   }
 }

@@ -19,7 +19,7 @@
   <div class="list-info-block">
     <h5 class="list-info-title">
       <span *ngIf="!this.averageScore && this.averageScore !== 0">
-        {{title}}&nbsp;<i class="info" *ngIf="description" placement="right" [ngbTooltip]="this.description">i</i>
+        {{title}}<info [description]="description"></info>
       </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
         {{title}}&nbsp;&nbsp;

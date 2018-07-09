@@ -9,6 +9,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { FilterDateComponent } from './filter-date.component';
 
+import { Subject } from 'rxjs/Subject';
+
 describe('FilterDateComponent', () => {
   let fixture: ComponentFixture<FilterDateComponent>;
   let comp: FilterDateComponent;
@@ -69,6 +71,7 @@ describe('FilterDateComponent', () => {
     TestBed.compileComponents().then(() => {
       fixture = TestBed.createComponent(FilterDateComponent);
       comp = fixture.componentInstance;
+      comp.filterSubscription = new Subject().subscribe();
     });
   }));
 

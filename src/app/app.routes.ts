@@ -1,44 +1,41 @@
-import { ContactRegistrationFormComponent }
-  from './components/contact-registration-form/contact-registration-form.component';
-import { LoginFormComponent } from './components/login-form/login-form.component';
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { SiteComponent } from './components/site/site.component';
-import { AuthGuard } from './services/auth-guard';
-import { NotAuthorizedGuard } from './services/not-authorized-guard';
 
-import { UserService } from './services/user.service';
-import { NavigationService } from './services/navigation.service';
-import { SettingsService } from './services/settings.service';
+import {
+  SiteComponent,
+  LoginFormComponent,
+  ContactRegistrationFormComponent,
+  VerifyEmailComponent
+} from './components';
+
+import { UserService, NavigationService, SettingsService } from './services';
+
+import { AuthGuard, NotAuthorizedGuard } from './guards';
 
 import { DataResolver } from './app.resolver';
 
 export const ROUTES: Routes = [
   {
+    path: 'core/contacts/:id/verify_email',
+    component: VerifyEmailComponent
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: '/'
   },
-  // {
-  //   path: 'home',
-  //   component: HomeComponent,
-  //   canActivate: [NotAuthorizedGuard]
-  // },
   {
     path: 'login',
     component: LoginFormComponent,
-    canActivate: [NotAuthorizedGuard]
+    canActivate: [NotAuthorizedGuard],
+    resolve: {
+      settings: SettingsService
+    }
   },
   {
     path: 'login/:token',
     component: LoginFormComponent,
     canActivate: [NotAuthorizedGuard]
   },
-  // {
-  //   path: 'registration',
-  //   component: ContactRegistrationFormComponent,
-  //   canActivate: [NotAuthorizedGuard]
-  // },
   {
     path: 'registration/password',
     component: ContactRegistrationFormComponent,

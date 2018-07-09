@@ -4,9 +4,14 @@ import {
   AfterViewInit,
   ViewChild,
   Output,
-  EventEmitter
+  EventEmitter,
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+
+import { Subscription } from 'rxjs/Subscription';
+
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
@@ -14,7 +19,9 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
   templateUrl: 'form-select.component.html'
 })
 
-export class FormSelectComponent extends BasicElementComponent implements OnInit, AfterViewInit {
+export class FormSelectComponent
+  extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('select')
   public select;
 
@@ -33,9 +40,15 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  private subscriptions: Subscription[];
+
   constructor(
-    private fb: FormBuilder
-  ) { super(); }
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
+  ) {
+    super();
+    this.subscriptions = [];
+  }
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
@@ -46,9 +59,13 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
     this.createEvent();
   }
 
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -56,20 +73,27 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
         } else {
           this.config.hide = hide;
         }
+
+        this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+          this.group.get(this.key).patchValue(undefined);
         } else {
           this.viewMode = this.config.read_only || false;
         }
         this.setInitValue();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 

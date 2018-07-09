@@ -1,0 +1,74 @@
+<header #header class="page-header">
+  <a routerLink="" class="logo"></a>
+  <nav #nav class="navigation flex-xl-unordered" [ngClass]="{'flex-first': pages}" *ngIf="pages && pages.length">
+    <button class=" d-flex align-items-center hamburger hamburger--spring hidden-xl-up" type="button"
+      [ngClass]="{'is-active': isCollapsed}"
+      (click)="showNavigation($event)">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+    <ul class="navigation-list navigation-list-parent" [ngClass]="{'show': isCollapsed}" [ngStyle]="{'top.px': (isCollapsed) ? headerHeight : 0}">
+      <template *ngFor="let page of pages" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page, first: true, height: headerHeight}"></template>
+    </ul>
+  </nav>
+  <div #userBlock class="user" *ngIf="user">
+    <div class="user-block">
+      <div class="user-info hidden-sm-down">
+        <span>{{user.data.contact.__str__}}</span>
+        <span *ngIf="company" class="description">{{company}}</span>
+      </div>
+      <img *ngIf="picture" [src]="picture" width="50px" height="50px">
+      <div *ngIf="contactAvatar" class="contact-avatar">{{contactAvatar}}</div>
+
+      <i class="user-icon" fa name="angle-down" (click)="hideUserBlock($event)"></i>
+    </div>
+
+    <ul *ngIf="!hideUserMenu" class="user-menu">
+      <li>
+        <div *ngIf="user && user.roles && user.roles.length" class="form-inline role">
+          <span class="mr-1">Role:</span>
+          <select class="form-control form-control-sm" id="role" [ngModel]="currentRole" (ngModelChange)="changeRole($event)">
+            <option *ngFor="let role of user.roles" [value]="role.id">
+              <small>{{role.__str__}}</small>
+            </option>
+          </select>
+        </div>
+      </li>
+      <li *ngIf="candidate"><a routerLink="/profile">Profile</a></li>
+      <li class="hidden-md-up description">
+        <span>{{user.data.contact.__str__}}</span><br>
+        <span *ngIf="company">{{company}}</span>
+      </li>
+      <li><a routerLink="/">Change password</a></li>
+      <li><a routerLink="/" (click)="logOut()">Log out</a></li>
+    </ul>
+  </div>
+</header>
+
+<template #list let-p="pages" let-h="height">
+  <ul *ngIf="!isCollapsed && p.length" class="navigation-list-nested">
+    <template *ngFor="let page of p" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page}"></template>
+  </ul>
+  <ul *ngIf="isCollapsed && p.length" class="navigation-list-nested">
+    <template *ngFor="let page of p" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page}"></template>
+  </ul>
+</template>
+
+<template #item let-p="page" let-f="first" let-h="height">
+  <li class="navigation-item" [class.disabled]="p.disabled" [class.opened]="p.opened">
+    <a *ngIf="!p.disabled" [routerLink]="p.url !== '/' ? [p.url] : null" class="navigation-link" [class.active]="p.active"
+      (click)="clickActione($event, p)">{{p.name}}</a>
+    <span class="navigation-link disabled" *ngIf="p.disabled" (click)="isCollapsed = false">{{p.name}}</span>
+    <i fa class="icon" [class.active]="p.active" name="circle"></i>
+
+    <i fa
+      class="icon-link"
+      [class.extend]="p.childrens && p.childrens.length"
+      [name]="p.opened ? 'minus' : 'plus'">
+    </i>
+
+    <template *ngIf="p.childrens && f" [ngTemplateOutlet]="list" [ngOutletContext]="{pages: p.childrens, height: h}"></template>
+    <template *ngIf="p.childrens && !f" [ngTemplateOutlet]="list" [ngOutletContext]="{pages: p.childrens}"></template>
+  </li>
+</template>

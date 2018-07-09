@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { LoginService } from './../../services/login.service';
@@ -6,23 +6,56 @@ import { LoginService } from './../../services/login.service';
 @Component({
   selector: 'login-form',
   templateUrl: 'login-form.component.html',
-  styleUrls: ['./login-form.component.scss']
+  styleUrls: ['./login-form.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class LoginFormComponent implements OnInit {
 
-  public error: any = {};
-  public response: any;
-  public token: boolean = false;
-  public endpoint = `/ecore/api/v2/auth/login/`;
   public label: any;
-  public type: string;
-
+  public response: any;
   public loginProcess: boolean;
+  public settings: any;
+
+  public error = {};
+  public token = false;
+  public endpoint = `/ecore/api/v2/auth/login/`;
+  public rememberMe = false;
+  public additionalData = {
+    remember_me: false
+  };
+
+  public data = {
+    username: {
+      action: 'add',
+      data: {
+        label: '',
+        templateOptions: {
+          required: true,
+          placeholder: 'Login',
+          addon: '/assets/img/mail.svg',
+          max: 255
+        }
+      }
+    },
+    password: {
+      action: 'add',
+      data: {
+        label: '',
+        templateOptions: {
+          required: false,
+          placeholder: 'Password',
+          addon: '/assets/img/key.svg',
+          type: 'password',
+          max: 128
+        }
+      }
+    }
+  };
 
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   public ngOnInit() {
@@ -32,22 +65,14 @@ export class LoginFormComponent implements OnInit {
         this.tokenAuth(this.token);
       }
     });
-    this.route.queryParams.subscribe((params) => {
-      let type = params['type'];
-      this.type = type;
-      if (type === 'crm' || type === 'extranet') {
-        this.label = type === 'crm' ? 'CRM' :
-          type === 'extranet' ? 'Extranet Login' : '';
-      } else {
-        this.label = 'Login';
-      }
-    });
+
+    this.settings = this.route.snapshot.data['settings'];
   }
 
   public tokenAuth(token) {
     this.loginService.loginWithToken(token).subscribe(
       (res: any) => {
-          this.router.navigate([res.data.redirect_to]);
+        this.router.navigate([res.data.redirect_to]);
       },
       (err) => this.router.navigate(['login']));
   }
@@ -74,6 +99,11 @@ export class LoginFormComponent implements OnInit {
 
   public errorHandler() {
     this.loginProcess = false;
+  }
+
+  public updateCheckbox(value: boolean) {
+    this.rememberMe = value;
+    this.additionalData.remember_me = this.rememberMe;
   }
 
 }

@@ -1,6 +1,5 @@
 import {
   Component,
-  ViewContainerRef,
   OnInit,
   ViewChild,
   AfterViewInit,
@@ -8,71 +7,94 @@ import {
   EventEmitter,
   ElementRef,
   HostListener,
-  ViewEncapsulation
+  ViewEncapsulation,
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { FormatString } from '../../../helpers/format';
-
+import { Subscription } from 'rxjs/Subscription';
 import * as moment from 'moment-timezone';
+
+import { Field } from '../../models';
+import { FormatString } from '../../../helpers/format';
+import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 @Component({
   selector: 'form-input',
-  templateUrl: 'form-input.component.html',
+  templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
-export class FormInputComponent extends BasicElementComponent implements OnInit, AfterViewInit {
-  @ViewChild('input')
-  public input;
+export class FormInputComponent
+  extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy {
 
-  public config;
+  public config: Field;
   public group: FormGroup;
   public errors: any;
   public message: any;
   public key: any;
+
   public label: boolean;
+  public filteredList: any[];
+  public displayValue: string;
+  public viewMode: boolean;
+  public formData: any;
+  public autocompleteValue: any;
+  public editMode: boolean;
 
   public query = '';
-  public filteredList: any[];
   public list = [];
   public limit = 10;
   public lastElement = 0;
-  public elementRef;
   public hideAutocomplete = true;
-
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
+  public address = '';
 
-  public displayValue: string;
+  @ViewChild('input') public input;
 
-  public viewMode: boolean;
+  @Output() public event: EventEmitter<any> = new EventEmitter();
 
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  private subscriptions: Subscription[];
 
   constructor(
     private fb: FormBuilder,
-    private myElement: ElementRef
+    public elementRef: ElementRef,
+    private cd: ChangeDetectorRef
   ) {
     super();
-    this.elementRef = myElement;
+    this.subscriptions = [];
+
+    this.editMode = true;
   }
 
   public ngOnInit() {
-    if (this.config.type !== 'static') {
+    if (this.config.type !== 'static'
+      || (this.config.type === 'static' || !this.config.read_only)) {
       this.addControl(this.config, this.fb);
     }
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
-    if (this.config.type !== 'static') {
+    this.checkAutocomplete();
+    this.checkFormData();
+    if (this.config.type !== 'static'
+      || (this.config.type === 'static' && !this.config.read_only)) {
       this.createEvent();
     }
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
+  public checkFormData() {
     if (this.config.formData) {
-      this.config.formData.subscribe((data) => {
+      const subscription = this.config.formData.subscribe((data) => {
+        this.formData = data.data;
         if (this.config.type === 'static' && this.config.key === 'total_worked') {
           const shiftStart = moment(data.data.shift_started_at);
           const shiftEnded = moment(data.data.shift_ended_at);
@@ -93,14 +115,23 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
               this.displayValue = `${shiftDiff} - 00:00 = ${shiftDiff} hours`;
             }
           }
+        } else {
+          if (this.config.type !== 'address'
+            && this.key !== 'address'
+            && this.key !== 'street_address') {
+            this.setInitValue();
+          }
         }
+
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkHiddenProperty() {
-    if (this.config && this.config.hidden && this.config.type !== 'static') {
-      this.config.hidden.subscribe((hide) => {
+    if (this.config && this.config.hidden && (this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))) { //tslint:disable-line
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -108,31 +139,84 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
         } else {
           this.config.hide = hide;
         }
+
+        this.cd.detectChanges();
       });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
+          this.editMode = false;
+
+          if (this.group.get(this.key) && !this.config.hide) {
+            this.group.get(this.key).patchValue(undefined);
+          }
         } else {
           this.viewMode = this.config.read_only || false;
+
+          this.editMode = true;
+
+          setTimeout(() => {
+            if (!this.config.read_only) {
+              if (this.input) {
+                this.addFlags(this.input, this.config);
+              }
+            }
+          }, 200);
         }
+        this.autocompleteValue = undefined;
         this.setInitValue();
       });
+
+      this.subscriptions.push(subscription);
+    }
+  }
+
+  public checkAutocomplete() {
+    if (this.config.autocompleteData) {
+      const subscription = this.config.autocompleteData.subscribe((data) => {
+        if (data.hasOwnProperty(this.config.key)) {
+          this.autocompleteValue = data[this.config.key];
+        }
+
+        this.cd.detectChanges();
+      });
+
+      this.subscriptions.push(subscription);
     }
   }
 
   public setInitValue() {
-    if (this.config.type !== 'static') {
-      if (this.config.value === 0 || this.config.value ||
-        this.config.default || this.config.default === 0) {
-        let value = (this.config.value === 0 || this.config.value) ?
-           this.config.value : this.config.default;
-        this.group.get(this.key).patchValue(value);
-        this.displayValue = value || value === 0 ? value : '-';
+    if (this.config.type !== 'static'
+      || (this.config.type === 'static' && !this.config.read_only)) {
+      if (this.autocompleteValue) {
+        this.displayValue = this.autocompleteValue;
+        this.group.get(this.key).patchValue(this.autocompleteValue);
+      } else if (this.config.value === 0
+        || this.config.value
+        || this.config.default
+        || this.config.default === 0) {
+          const format = new FormatString();
+
+          let value = (this.config.value === 0 || this.config.value)
+            ? this.config.value
+            : (typeof this.config.default === 'string')
+              ? format.format(this.config.default, this.formData)
+              : this.config.default;
+          this.group.get(this.key).patchValue(value);
+
+          if (this.config.type === 'address'
+            || this.key === 'address'
+            || this.key === 'street_address') {
+            this.address = value;
+          }
+          this.displayValue = value || value === 0 ? value : '-';
       }
     } else {
       if (this.config.value instanceof Object) {
@@ -141,6 +225,8 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
         this.displayValue = this.config.templateOptions.text || this.config.value || '-';
       }
     }
+
+    this.cd.detectChanges();
   }
 
   public ngAfterViewInit() {
@@ -201,6 +287,38 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     if (list) {
       this.list = list.slice(0, this.lastElement);
     }
+  }
+
+  public switchType(type) {
+    switch (type) {
+      case 'text':
+        this.config.templateOptions.type = 'password';
+        break;
+      case 'password':
+        this.config.templateOptions.type = 'text';
+      default:
+        break;
+    }
+  }
+
+  public getAddress(address) {
+    this.group.get(this.key).patchValue(address);
+
+    this.event.emit({
+      type: 'change',
+      el: this.config,
+      value: address
+    });
+
+    this.event.emit({
+      type: 'address',
+      el: this.config,
+      value: address
+    });
+
+    setTimeout(() => {
+      this.cd.detectChanges();
+    }, 1000);
   }
 
   @HostListener('document:click', ['$event'])

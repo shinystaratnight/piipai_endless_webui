@@ -1,51 +1,134 @@
 @import '../../../../styles/variables.scss';
 
+.badge {
+  line-height: 1.2;
+}
+
 .timeline {
+  padding-bottom: 25px;
+
+  &-select {
+    margin-left: 11px;
+    padding-right: 30px;
+
+    background: #fff url(/assets/img/down-arrow.svg) no-repeat;
+    background-position: right .75rem center;
+    background-size: 8px 8px;
+
+    -ms-progress-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+
+      .btn.btn-sm {
+        padding: 1px 2px 0px 2px;
+        margin-left: .5rem;
+
+        font-size: 12px;
+        line-height: 14px;
+
+        border-color: $brand-success;
+        color: $brand-success;
+
+        &:hover {
+          border-color: $brand-success;
+
+          background-color: $brand-success;
+          color: white;
+        }
+      }
+
+      & .timeline-element {
+        margin-bottom: 0;
+      }
+    }
+  }
+
   &-element {
     display: inline-block;
-    padding: 1.25rem;
+    margin-bottom: 16px;
+
     transition: .3s;
+
+    cursor: default;
+
+    &-wrapper {
+      display: inline-block;
+
+      &.dropdown-wrapper {
+        display: none;
+      }
+    }
 
     &-wrapper:hover .timeline-requirements {
       display: block;
     }
 
-    &.active:hover,
-    &.active:focus,
-    &.allowed:hover,
-    &.allowed:focus {
+    &.active:hover:not(.timeline-select),
+    &.active:focus:not(.timeline-select),
+    &.allowed:hover:not(.timeline-select),
+    &.allowed:focus:not(.timeline-select) {
       cursor: pointer;
       box-shadow: 2px 2px 4px rgba($brand-inverse, .3);
     }
 
   }
 
-  &-requirements {
-    position: relative;
-    display: none;
+  .info-block {
+    padding: 12px 16px;
 
-    &-item {
+    text-align: left;
+
+    h6 {
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      position: relative;
+
+      padding-left: 16px;
+
+      font-size: 12px;
+      line-height: 14px;
+
+      list-style: none;
+
+      color: rgba($gray, .7);
+    }
+
+    .icon {
       position: absolute;
-      top: 9px;
-      max-width: 300px;
-      background-color: white;
-      border: 1px solid $gray-light;
-      border-radius: .3rem;
-      z-index: 10;
+      top: 4px;
+      left: 5px;
 
-      &::before, &::after {
-        content: '';
-        position: absolute;
-        left: 20px;
-        top: -20px;
-        border: 10px solid transparent;
-        border-bottom: 10px solid $gray-light;
-      }
-      &::after {
-        border-bottom: 10px solid white;
-        top: -18px;
+      font-size: 6px !important;
+
+      color: $brand-primary;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          color: map-get($theme-colors, $item);
+        }
       }
     }
+  }
+
+  button i {
+    line-height: 14px;
+  }
+
+  option {
+    color: rgba($gray, .8);
   }
 
   .active {
@@ -60,16 +143,24 @@
   }
 
   .not-allowed {
-    border-color: rgba($brand-danger, .7);
+    border-color: #828282;
+    color: rgba($gray, .7);
+
+    opacity: .2;
   }
 
   .need-requirements {
-    border-color: rgba($brand-danger, .7);
-    color: $brand-success;
+    border-color: #828282;
+    color: rgba($gray, .7);
   }
 
   .visited {
-    background-color: rgba($brand-inverse, .5);
-    color: rgba($brand-inverse, .7);
+    border-color: $gray;
+    background-color: rgba($gray, .5);
+    color: rgba($gray, .7);
+  }
+
+  .next {
+    margin: 0 6px;
   }
 }

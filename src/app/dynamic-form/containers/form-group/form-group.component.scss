@@ -1,0 +1,13 @@
+@import '../../../../styles/variables.scss';
+
+label {
+  font-size: 14px;
+  line-height: 24px;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  opacity: .3;
+  color: $gray;
+}

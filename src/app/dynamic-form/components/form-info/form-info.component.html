@@ -1,0 +1,123 @@
+<div class="form-info-wrapper">
+  <div class=form-info-left>
+    <div class="form-info-image">
+      <img *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture">
+      <div *ngIf="contactAvatar && !(config && config.metadata['picture'] && !viewMode && config.editForm)" class="contact-avatar">
+        {{contactAvatar}}
+      </div>
+
+      <ng-container formElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
+        [config]="config.metadata['picture']"
+        [group]="group">
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="form-info-block">
+    <p>
+      <label *ngIf="config && viewMode && (available === true || available === false)" [class.text-success]="available" [class.text-danger]="!available">
+        <i class="mr-2" fa [name]="available ? 'check-circle' : 'times-circle'"></i>
+        {{available ? config.metadata['available'].templateOptions.label : 'Not' + config.metadata['available'].templateOptions.label}}
+      </label>
+
+      <ng-container formElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
+        [config]="config.metadata['available']"
+        [group]="group">
+      </ng-container>
+
+      <a class="client-link" target="_blanck" [href]="link" *ngIf="config && viewMode && link">{{link}}</a>
+
+      <ng-container formElement *ngIf="config && config.metadata['link'] && !viewMode && config.editForm"
+        [config]="getConfig('link')"
+        [group]="group">
+      </ng-container>
+    </p>
+
+    <div class="job-title" *ngIf="config && viewMode && job_title">{{job_title}}</div>
+    <div *ngIf="config && config.metadata['job_title'] && !viewMode && config.editForm">
+      <ng-container formElement
+        [config]="getConfig('job_title')"
+        [group]="group">
+      </ng-container>
+    </div>
+
+    <h5 class="form-info-title" *ngIf="config && viewMode">
+
+      <span *ngIf="!this.averageScore && this.averageScore !== 0">
+        <span class="view-mode" *ngIf="titlePath">
+          <ng-container formElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
+            [config]="getConfig('title')"
+            [group]="group">
+          </ng-container>
+        </span>
+
+        <span *ngIf="!titlePath">{{title}}</span>
+        <info [description]="description"></info>
+      </span>
+      <span *ngIf="this.averageScore || this.averageScore === 0">
+        <span class="view-mode" *ngIf="titlePath">
+          <ng-container formElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
+            [config]="getConfig('title')"
+            [group]="group">
+          </ng-container>
+        </span>
+        <span class="score" [style.color]="colors[getScore(this.averageScore)]">
+          &nbsp;|&nbsp;{{this.averageScore}}
+          <i fa name="star"></i>
+        </span>
+      </span>
+    </h5>
+    <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
+      [config]="getConfig('title')"
+      [group]="group">
+    </ng-container>
+
+    <ng-container formElement *ngIf="config && config.metadata['title_title'] && !viewMode"
+      [config]="getConfig('title_title')"
+      [group]="group">
+    </ng-container>
+
+    <ng-container formElement *ngIf="config && config.metadata['first_name'] && !viewMode"
+      [config]="getConfig('first_name')"
+      [group]="group">
+    </ng-container>
+
+    <ng-container formElement *ngIf="config && config.metadata['last_name'] && !viewMode"
+      [config]="getConfig('last_name')"
+      [group]="group">
+    </ng-container>
+
+    <div *ngIf="config && config.metadata['company'] && config.editForm">
+      <ng-container formElement
+        [config]="config.metadata['company']"
+        [group]="group">
+      </ng-container>
+    </div>
+
+    <p *ngIf="config && viewMode && address" class="description">
+      <ng-container *ngIf="!(config.metadata['link'] && address)" formElement
+        [config]="config.metadata['address']"
+        [group]="group">
+      </ng-container>
+      <span *ngIf="config.metadata['link'] && address">
+        {{address}} <span class="address-hq">|&nbsp;HQ</span>
+      </span>
+    </p>
+    <p *ngIf="config && config.metadata['address'] && address && !viewMode && config.editForm">
+      <ng-container formElement
+        [config]="config.metadata['address']"
+        [group]="group">
+      </ng-container>
+    </p>
+
+    <ng-container formElement *ngIf="config && config.metadata['timeline'] && config.editForm"
+      [config]="config.metadata['timeline']"
+      (event)="event.emit($event)">
+    </ng-container>
+  </div>
+
+  <div class="date" *ngIf="created_at || updated_at">
+    <span *ngIf="created_at"><span class="description">Created:</span> {{created_at | date:'shortDate'}} <br></span>
+    <span *ngIf="updated_at"><span class="description">Updated:</span> {{updated_at | date:'shortDate'}}</span>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 <div *ngIf="!this.config.hide">
-  <h6 class="card flex-row align-items-center" [ngClass]="{'bg-primary text-white': !isCollapsed}" *ngIf="config.templateOptions.label">
+  <h6 class="card flex-row align-items-center form-element-list" [ngClass]="{'bg-primary text-white': !isCollapsed}" *ngIf="config.templateOptions.label">
     <i
       fa
       class="p-2"
@@ -17,7 +17,20 @@
         {{config?.templateOptions?.add_label || 'Add'}}
     </button>
   </h6>
-  <div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
+
+  <div class="form-element-list-title title">
+    <div>
+      <h4>{{config.templateOptions.label}}</h4>
+      <p>{{config.help}}</p>
+    </div>
+    <button type="button" class="btn btn-primary btn-shadow"
+      *ngIf="(showButton || config.delay) && checkPermissions('post')"
+      (click)="addObject()">
+        {{config?.templateOptions?.add_label || '+ Add Item'}}
+      </button>
+  </div>
+
+  <div [ngbCollapse]="isCollapsed">
     <generic-list
       [endpoint]="config.endpoint"
       [editEndpoint]="config.edit_endpoint"
@@ -62,7 +75,7 @@
         [metadataQuery]="config.add_metadata_query"
         (event)="formEvent($event, c)"
         (errorForm)="formError($event)">
-          <button type="submit" class="btn btn-primary" [disabled]="saveProcess">
+          <button type="submit" class="btn btn-primary button-save" [disabled]="saveProcess">
             Save
             <spinner *ngIf="saveProcess"></spinner>
           </button>

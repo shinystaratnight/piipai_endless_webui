@@ -17,7 +17,7 @@ export class BasicElementComponent {
         if (config.type === 'related' && !config.many) {
           keys.push('id');
           this.addControls(this.group, keys, fb);
-        } else if (config.type !== 'static') {
+        } else if (config.type !== 'static' || (config.type === 'static' && !config.read_only)) {
           this.group.addControl(config.key, fb.control(undefined, required ? Validators.required : undefined)); //tslint:disable-line
           this.key = config.key;
         }
@@ -38,10 +38,12 @@ export class BasicElementComponent {
       let min = (config.templateOptions.min < 0) ? 0 : config.templateOptions.min;
       element.nativeElement.minLength = min;
     }
-    if (config.templateOptions.max && config.templateOptions.type === 'number') {
+    if (config.templateOptions.max
+      && (config.templateOptions.type === 'number' || config.templateOptions.type === 'score')) {
       element.nativeElement.max = config.templateOptions.max;
     }
-    if (config.templateOptions.min && config.templateOptions.type === 'number') {
+    if ((config.templateOptions.min || config.templateOptions.min === 0)
+      && (config.templateOptions.type === 'number' || config.templateOptions.type === 'score')) {
       element.nativeElement.min = config.templateOptions.min;
     }
     if (config.templateOptions.cols) {
@@ -56,7 +58,9 @@ export class BasicElementComponent {
     this.event.emit({
       type: 'create',
       el: this.config,
-      value: this.group.get(this.key).value
+      value: this.config.key === 'id'
+        ? { id: this.group.get(this.key).value }
+        : this.group.get(this.key).value
     });
   }
 

@@ -2,18 +2,24 @@ import { LoginService } from './login.service';
 import { ContactRegistrationService } from './contact-registration.service';
 import { NavigationService } from './navigation.service';
 import { UserService } from './user.service';
-import { AuthGuard } from './auth-guard';
-import { NotAuthorizedGuard } from './not-authorized-guard';
 import { SiteService } from './site.service';
 import { SettingsService } from './settings.service';
+import { VerifyService } from './verify.service';
+
+export * from './login.service';
+export * from './contact-registration.service';
+export * from './navigation.service';
+export * from './user.service';
+export * from './site.service';
+export * from './settings.service';
+export * from './verify.service';
 
 export const services = [
   LoginService,
   ContactRegistrationService,
   NavigationService,
   UserService,
-  AuthGuard,
-  NotAuthorizedGuard,
   SiteService,
-  SettingsService
+  SettingsService,
+  VerifyService,
 ];

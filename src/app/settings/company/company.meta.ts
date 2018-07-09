@@ -7,6 +7,7 @@ export const meta = [
         type: 'picture',
         key: 'company_settings.logo',
         read_only: false,
+        companyContact: true,
         templateOptions: {
           label: 'Logo',
           label_upload: 'Choose a file',
@@ -21,13 +22,13 @@ export const meta = [
         type: 'radio',
         key: 'company_settings.font',
         label: true,
-        default: 'Roboto',
+        default: 'Source Sans Pro',
         templateOptions: {
           label: 'Font',
           type: 'text',
           options: [
             { key: 'Source Sans Pro', value: 'Source Sans Pro' },
-            { key: 'Lato', value: 'Lato' },
+            { key: 'Roboto', value: 'Roboto' },
             { key: 'Barlow', value: 'Barlow' },
             { key: 'Open Sans', value: 'Open Sans' }
           ]
