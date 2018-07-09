@@ -173,8 +173,9 @@ export class FormDatepickerComponent
           calHighToday: false,
           calUsePickers: true,
           useCancelButton: true,
-          calYearPickMax: 6,
+          calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
+          maxDays: this.key.includes('birthday') && -1,
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
@@ -195,7 +196,11 @@ export class FormDatepickerComponent
           useClearButton: true,
           useFocus: true,
           useHeader: false,
+          calUsePickers: true,
           calHighToday: false,
+          calYearPickMax: this.key.includes('birthday') ? 0 : 6,
+          calYearPickMin: -100,
+          maxDays: this.key.includes('birthday') && -1,
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
