@@ -424,21 +424,6 @@ const form = [
     key: 'candidate_contact',
   },
   {
-    endpoint: '/ecore/api/v2/core/companycontacts/',
-    read_only: true,
-    templateOptions: {
-      label: 'Recruitment Agent',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'company_contact',
-  },
-  {
     endpoint: '/ecore/api/v2/core/companies/',
     read_only: true,
     templateOptions: {
@@ -482,7 +467,32 @@ const form = [
     collapsed: false,
     type: 'related',
     key: 'job',
-  }
+  },
+  {
+    endpoint: '/ecore/api/v2/core/companycontacts/',
+    read_only: true,
+    templateOptions: {
+      label: 'Recruitment Agent',
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    collapsed: false,
+    type: 'related',
+    key: 'company_contact',
+  },
+  {
+    key: 'updated_at',
+    type: 'datepicker',
+    templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
+    read_only: true
+  },
+  {
+    key: 'created_at',
+    type: 'datepicker',
+    templateOptions: { required: false, label: 'Created at', type: 'datetime' },
+    read_only: true
+  },
 ];
 
 const job = {
@@ -628,24 +638,6 @@ const formadd = [
     key: 'candidate_contact',
   },
   {
-    endpoint: '/ecore/api/v2/core/companycontacts/',
-    read_only: false,
-    templateOptions: {
-      label: 'Recruitment Agent',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-    },
-    default: 'session.contact.contact_id',
-    query: {
-      master_company: 'current'
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'company_contact',
-  },
-  {
     endpoint: '/ecore/api/v2/core/companies/',
     read_only: false,
     templateOptions: {
@@ -698,7 +690,22 @@ const formadd = [
     collapsed: false,
     type: 'related',
     key: 'job',
-  }
+  },
+  {
+    endpoint: '/ecore/api/v2/core/companycontacts/',
+    read_only: true,
+    templateOptions: {
+      label: 'Recruitment Agent',
+      values: ['__str__'],
+      type: 'related',
+    },
+    default: 'session.contact.contact_id',
+    query: {
+      master_company: 'current'
+    },
+    type: 'related',
+    key: 'company_contact',
+  },
 ];
 
 export const metadata = {

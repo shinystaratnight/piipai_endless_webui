@@ -86,6 +86,8 @@ import * as shifts from './shifts.metadata';
 import * as jobtags from './jobtags.metadata';
 import * as extend from './extend.metadata';
 import * as fillin from './fillin.metadata';
+import * as supervisorApprove from './supervisorApprove.metadata';
+import * as candidateFill from './candidateFill.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -176,4 +178,6 @@ export const metadata = {
   '/ecore/api/v2/hr/jobtags/': jobtags.metadata,
   'extend': extend.metadata,
   'fillin': fillin.metadata,
+  'supervisorApprove': supervisorApprove.metadata,
+  'candidateFill': candidateFill.metadata,
 };

@@ -700,7 +700,7 @@ const form = [
             type: 'timeline',
             query: {
               model: 'hr.jobsite',
-              object_id: '{id}'
+              object_id: ['{id.id}', '{id}']
             },
             templateOptions: {
               label: '',

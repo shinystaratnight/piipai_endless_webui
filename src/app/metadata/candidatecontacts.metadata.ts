@@ -1343,7 +1343,7 @@ const form = [
             type: 'timeline',
             query: {
               model: 'candidate.candidatecontact',
-              object_id: '{id}'
+              object_id: ['{id.id}', '{id}']
             },
             templateOptions: {
               label: '',
@@ -2151,7 +2151,7 @@ const formadd = [
             type: 'timeline',
             query: {
               model: 'candidate.candidatecontact',
-              object_id: '{id}'
+              object_id: ['{id.id}', '{id}']
             },
             templateOptions: {
               label: '',
