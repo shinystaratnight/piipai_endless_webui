@@ -43,19 +43,6 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{timesheet.id}',
-            field: 'timesheet',
-            type: 'link'
-          }
-        ],
-        name: 'timesheet',
-        sort_field: 'timesheet',
-        label: 'Timesheet',
-        sort: true
-      },
-      {
-        content: [
-          {
             endpoint: '/ecore/api/v2/hr/jobsites/{jobsite.id}',
             field: 'jobsite',
             type: 'link'
@@ -100,23 +87,6 @@ const list = {
       collapsed: false,
       type: 'related',
       key: 'candidate_contact',
-      many: false
-    },
-    {
-      list: false,
-      endpoint: '/ecore/api/v2/hr/timesheets/',
-      read_only: true,
-      templateOptions: {
-        label: 'Timesheet',
-        add: true,
-        delete: false,
-        values: ['__str__'],
-        type: 'related',
-        edit: true
-      },
-      collapsed: false,
-      type: 'related',
-      key: 'timesheet',
       many: false
     },
     {
@@ -192,23 +162,6 @@ const formset = {
       read_only: true,
       type: 'related'
     },
-    {
-      many: false,
-      key: 'timesheet',
-      endpoint: '/ecore/api/v2/hr/timesheets/',
-      collapsed: false,
-      list: false,
-      templateOptions: {
-        add: true,
-        delete: false,
-        edit: true,
-        values: ['__str__'],
-        label: 'Timesheet',
-        type: 'related'
-      },
-      read_only: true,
-      type: 'related'
-    }
   ],
   list: {
     columns: [
@@ -226,19 +179,6 @@ const formset = {
         label: 'Company'
       },
       {
-        name: 'timesheet',
-        sort: true,
-        sort_field: 'timesheet',
-        content: [
-          {
-            endpoint: '/ecore/api/v2/hr/timesheets/',
-            type: 'related',
-            field: 'timesheet'
-          }
-        ],
-        label: 'Timesheet'
-      },
-      {
         name: 'jobsite',
         sort: true,
         sort_field: 'jobsite',
@@ -250,6 +190,31 @@ const formset = {
           }
         ],
         label: 'Jobsite'
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/hr/blacklists/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: null
       }
     ],
     list: 'blacklist',
@@ -261,13 +226,6 @@ const formset = {
 };
 
 const form = [
-  // {
-  //   key: 'id',
-  //   type: 'input',
-  //   hide: true,
-  //   templateOptions: { required: false, label: 'Id', type: 'text' },
-  //   read_only: false
-  // },
   {
     list: false,
     endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
@@ -302,23 +260,6 @@ const form = [
     key: 'company',
     many: false
   },
-  // {
-  //   list: false,
-  //   endpoint: '/ecore/api/v2/hr/timesheets/',
-  //   read_only: true,
-  //   templateOptions: {
-  //     label: 'Timesheet',
-  //     add: true,
-  //     delete: false,
-  //     values: ['__str__'],
-  //     type: 'related',
-  //     edit: true
-  //   },
-  //   collapsed: false,
-  //   type: 'related',
-  //   key: 'timesheet',
-  //   many: false
-  // },
   {
     list: false,
     endpoint: '/ecore/api/v2/core/companycontacts/',
@@ -332,7 +273,7 @@ const form = [
       edit: true
     },
     query: {
-
+      company: '{company.id}'
     },
     collapsed: false,
     type: 'related',
@@ -374,25 +315,6 @@ const form = [
 ];
 
 const formadd = [
-  // {
-  //   key: 'id',
-  //   type: 'input',
-  //   hide: true,
-  //   templateOptions: { required: false, label: 'Id', type: 'text' },
-  //   read_only: false
-  // },
-  // {
-  //   key: 'updated_at',
-  //   type: 'datepicker',
-  //   templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
-  //   read_only: true
-  // },
-  // {
-  //   key: 'created_at',
-  //   type: 'datepicker',
-  //   templateOptions: { required: false, label: 'Created at', type: 'datetime' },
-  //   read_only: true
-  // },
   {
     list: false,
     endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
@@ -427,23 +349,6 @@ const formadd = [
     key: 'company',
     many: false
   },
-  // {
-  //   list: false,
-  //   endpoint: '/ecore/api/v2/hr/timesheets/',
-  //   read_only: true,
-  //   templateOptions: {
-  //     label: 'Timesheet',
-  //     add: true,
-  //     delete: false,
-  //     values: ['__str__'],
-  //     type: 'related',
-  //     edit: true
-  //   },
-  //   collapsed: false,
-  //   type: 'related',
-  //   key: 'timesheet',
-  //   many: false
-  // },
   {
     list: false,
     endpoint: '/ecore/api/v2/core/companycontacts/',
@@ -475,6 +380,9 @@ const formadd = [
       values: ['__str__'],
       type: 'related',
       edit: true
+    },
+    query: {
+      company: '{company.id}'
     },
     collapsed: false,
     type: 'related',
