@@ -107,12 +107,14 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public createEvent() {
-    this.event.emit({
-      type: 'create',
-      el: this.config,
-      value: this.config.key === 'id'
-        && { id: this.config.value.id }
-    });
+    if (this.config.value) {
+      this.event.emit({
+        type: 'create',
+        el: this.config,
+        value: this.config.key === 'id'
+          && { id: this.config.value.id }
+      });
+    }
   }
 
   public getConfig(name: string) {

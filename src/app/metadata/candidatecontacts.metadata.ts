@@ -1209,7 +1209,7 @@ const form = [
                       label: 'Bank account',
                       add: true,
                       delete: false,
-                      values: ['__str__'],
+                      values: ['__str__', 'bsb', 'account_number'],
                       type: 'related',
                       edit: true
                     },
@@ -1217,6 +1217,34 @@ const form = [
                     type: 'related',
                     key: 'bank_account',
                     many: false
+                  },
+                  {
+                    key: 'bank_account.bsb',
+                    type: 'input',
+                    showIf: ['bank_account.id'],
+                    default: '{bank_account.bsb}',
+                    send: false,
+                    templateOptions: {
+                      required: false,
+                      label: 'BSB',
+                      max: 63,
+                      type: 'text'
+                    },
+                    read_only: true
+                  },
+                  {
+                    key: 'bank_account.account_number',
+                    type: 'input',
+                    showIf: ['bank_account.id'],
+                    default: '{bank_account.account_number}',
+                    send: false,
+                    templateOptions: {
+                      required: false,
+                      label: 'Account Number',
+                      max: 63,
+                      type: 'text'
+                    },
+                    read_only: true
                   },
                   {
                     list: false,
@@ -1376,6 +1404,7 @@ const form = [
         templateOptions: {
           label: 'Carrier List',
           type: 'list',
+          add_label: '+ Add item',
           text: 'Carrier List'
         },
         collapsed: false,
@@ -1410,6 +1439,7 @@ const form = [
         templateOptions: {
           label: 'Favorite List',
           type: 'list',
+          add_label: '+ Add item',
           text: 'Favorite List'
         },
         collapsed: false,

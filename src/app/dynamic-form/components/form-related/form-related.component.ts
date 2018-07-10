@@ -259,18 +259,44 @@ export class FormRelatedComponent
           this.editMode = true;
         }
         this.setInitValue();
+        this.eventHandler(
+          {type: 'change'},
+          this.group.get(this.key).value,
+          this.resetAdditionalData()
+        );
       });
     }
+  }
+
+  public resetAdditionalData() {
+    const res = {};
+    if (this.group.get(this.key).value === '') {
+      this.fields.forEach((el) => res[el] = null);
+    }
+    return res;
   }
 
   public checkFormData() {
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
-        if (this.checkRelatedField(formData.key, formData.data)) {
+        if (
+          this.checkRelatedField(formData.key, formData.data) ||
+          (this.config.default && !this.config.default.includes('session'))
+        ) {
           if (this.config.default && !this.config.hide && !this.config.value) {
             const format = new FormatString();
-            const id = format.format(this.config.default, this.formData);
+            let id;
+            if (typeof this.config.default === 'string') {
+              id = format.format(this.config.default, this.formData);
+            } else if (Array.isArray(this.config.default)) {
+              this.config.default.forEach((el) => {
+                if (!id) {
+                  id = format.format(el, this.formData);
+                }
+              });
+            }
+
             if (id) {
               this.getOptions.call(this, '', 0, false, this.setValue, id);
               if (this.config.read_only) {
