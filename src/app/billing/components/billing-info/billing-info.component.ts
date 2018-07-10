@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Plan, Payment } from '../../models';
+import { Payment, BillingSubscription } from '../../models';
 
 @Component({
   selector: 'billing-info',
@@ -10,5 +10,5 @@ import { Plan, Payment } from '../../models';
 
 export class BillingInfoComponent {
   @Input() public payments: Payment[];
-  @Input() public currentPlan: Plan;
+  @Input() public currentPlan: BillingSubscription;
 }

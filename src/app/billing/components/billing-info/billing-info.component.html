@@ -1,16 +1,18 @@
 <div *ngIf="currentPlan">
-  <h4 class="mb-3">Your current subscription details</h4>
+  <h5 class="mb-3">Your current subscription details</h5>
 
-  <p>Price: {{currentPlan.price}}</p>
-  <p>Worker count: {{currentPlan.worker_count}}</p>
-  <p>Type: {{currentPlan.type}}</p>
-  <p>Status: {{currentPlan.status}}</p>
-  <p>Curent period start: </p>
-  <p>Curent period end: </p>
+  <div class="container">
+    <p><span>Price:</span><span>{{currentPlan.price | currency:'USD':true}}</span></p>
+    <p><span>Worker count:</span><span>{{currentPlan.worker_count}}</span></p>
+    <p><span>Type:</span><span>{{currentPlan.type}}</span></p>
+    <p><span>Status:</span><span>{{currentPlan.active && 'Active'}}</span></p>
+    <p><span>Curent period start:</span><span>{{currentPlan.current_period_start}}</span></p>
+    <p><span>Curent period end:</span><span>{{currentPlan.current_period_end}}</span></p>
+  </div>
 </div>
 
 <div *ngIf="payments">
-  <h4 class="mb-3">Your payments</h4>
+  <h5 class="mb-3">Your payments</h5>
 
   <table class="table table-default">
     <thead>
@@ -22,12 +24,14 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let payment of payments">
-        <td>{{payment.type}}</td>
-        <td>{{payment.amount | currency:'USD':true}}</td>
-        <td>{{payment.status}}</td>
-        <td>{{payment.created}}</td>
-      </tr>
+      <ng-container *ngIf="payments.length">
+        <tr *ngFor="let payment of payments">
+          <td>{{payment.type}}</td>
+          <td>{{payment.amount | currency:'USD':true}}</td>
+          <td>{{payment.status}}</td>
+          <td>{{payment.created}}</td>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
 </div>

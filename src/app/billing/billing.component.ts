@@ -4,34 +4,36 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User, UserService } from '../services/user.service';
 import { BillingService } from './services/billing-service';
 
-import { Plan, Payment } from './models';
+import { Plan, Payment, CheckInformation, BillingSubscription } from './models';
 
 @Component({
   selector: 'billing-page',
-  templateUrl: './billing.component.html'
+  templateUrl: './billing.component.html',
+  styleUrls: ['./billing.component.scss']
 })
 export class BillingComponent implements OnInit {
   public user: User;
   public pagesList: any[];
-  public currentPlan: Plan;
+  public currentPlan: BillingSubscription;
   public payments: Payment[];
+  public checkInformation: boolean;
 
   constructor(
     private userService: UserService,
     private billingService: BillingService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    this.checkInformation = true;
+  }
 
   public ngOnInit() {
     this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
 
-    this.billingService.getSubscriptionStatus()
-      .subscribe((plan: Plan) => this.currentPlan = plan);
-
-    this.billingService.getSubscriptionInfo()
-      .subscribe((payments: Payment[]) => this.payments = payments);
+    this.getSubscriptionInformation();
+    this.getPaymets();
+    this.checkPaymentInformation();
   }
 
   public updateNavigation(role: string) {
@@ -43,6 +45,35 @@ export class BillingComponent implements OnInit {
 
   public selectPlan(plan: Plan) {
     this.billingService.setPlan(plan)
+      .subscribe(() => {
+        this.getSubscriptionInformation();
+      });
+  }
+
+  public getSubscriptionInformation() {
+    this.billingService.getSubscriptionInfo()
+      .subscribe(
+        (data: { subscriptions: BillingSubscription[] }) => {
+          this.currentPlan = data.subscriptions.find((el) => el.active);
+        });
+  }
+
+  public getPaymets() {
+    this.billingService.payments()
+      .subscribe(
+        (data: { payments: Payment[]}) => this.payments = data.payments
+      );
+  }
+
+  public checkPaymentInformation() {
+    this.billingService.checkPaymentInformation()
+      .subscribe(
+        (data: CheckInformation) => this.checkInformation = data.payment_information_submited
+      );
+  }
+
+  public cancelPlan() {
+    this.billingService.cancelSubscription()
       .subscribe();
   }
 }

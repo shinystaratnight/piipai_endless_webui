@@ -1,30 +1,37 @@
-<h4>Select your plan</h4>
+<ng-container *ngIf="changeAction || !currentPlan">
+  <h4>Select your plan</h4>
 
-<form>
-  <div class="form-group">
-    <label for="employees">
-      Employees count:
-    </label>
-    <input class="form-control" size="5" type="number" name="employees" id="employees" min="1" max="1005"
-      [ngModel]="workerCount"
-      (ngModelChange)="workerCount = $event > 1006 ? 1005 : $event < 1 ? 1 : $event">
-  </div>
-</form>
+  <form>
+    <div class="form-group">
+      <label for="employees">
+        Employees count:
+      </label>
+      <input class="form-control" size="5" type="number" name="employees" id="employees" min="1" max="1005"
+        [ngModel]="workerCount"
+        (ngModelChange)="workerCount = $event > 1006 ? 1005 : $event < 1 ? 1 : $event">
+    </div>
+  </form>
 
-<div class="plan-info">
-  <div *ngFor="let plan of plans" [class.active]="plan.active" class="plan-item" (click)="selectPlan(plan)">
-    <div class="plan-name">
-      <h5>{{plan.name}} <small *ngIf="plan.save">save 25%</small></h5>
-      <p>(Pre Pay {{plan.description}})</p>
-      <i>Active</i>
-    </div>
-    <div class="plan-detail">
-      <h4>${{planPay(plan, plan.procent)}}</h4>
-      <h5>Per month</h5>
-      <p>(${{planPayYear(plan, plan.procent)}} annually)</p>
-      <p>+ ${{plan.pay}} per extra worker if over the plan, adjusted monthly.</p>
+  <div class="plan-info">
+    <div *ngFor="let plan of plans" [class.active]="checkActivePlan(plan)" class="plan-item" (click)="selectPlan(plan)">
+      <div class="plan-name">
+        <h5>{{plan.name}} <small *ngIf="plan.save">save 25%</small></h5>
+        <p>(Pre Pay {{plan.description}})</p>
+        <i>Active</i>
+      </div>
+      <div class="plan-detail">
+        <h4>${{planPay(plan, plan.procent)}}</h4>
+        <h5>Per month</h5>
+        <p>(${{planPayYear(plan, plan.procent)}} annually)</p>
+        <p>+ ${{plan.pay}} per extra worker if over the plan, adjusted monthly.</p>
+      </div>
     </div>
   </div>
+
+  <p *ngIf="workerCount > 1000" class="message">Please contact our sales staff for customized offer: <a href="mailto:sales@r3sourcer.com">sales@r3sourcer.com</a></p>
+</ng-container>
+
+<div class="buttons" *ngIf="currentPlan && !changeAction">
+  <button type="button" class="btn btn-info" (click)="changePlan()">Change subscription</button>
+  <button type="button" class="btn btn-danger" (click)="cancelPlan()">Cancel subscription</button>
 </div>
-
-<p *ngIf="workerCount > 1000" class="message">Please contact our sales staff for customized offer: <a href="mailto:sales@r3sourcer.com">sales@r3sourcer.com</a></p>

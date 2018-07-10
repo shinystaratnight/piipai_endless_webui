@@ -3,10 +3,11 @@ import {
   EventEmitter,
   Output,
   Input,
-  OnInit
+  OnInit,
+  SimpleChange
 } from '@angular/core';
 
-import { Plan } from '../../models';
+import { Plan, BillingSubscription } from '../../models';
 
 @Component({
   selector: 'billing-plan',
@@ -16,25 +17,29 @@ import { Plan } from '../../models';
 
 export class BillingPlanComponent implements OnInit {
 
-  public workerCount: number;
   public plans: Plan[];
+  public changeAction: boolean;
 
-  @Input() public currentPlan: Plan;
+  @Input() public currentPlan: BillingSubscription;
+  @Input() public workerCount: number;
 
   @Output() public selectedPlan = new EventEmitter();
+  @Output() public cancelingPlan = new EventEmitter();
+
+  constructor() {
+    this.changeAction = false;
+  }
 
   public ngOnInit() {
-    this.workerCount = this.currentPlan ? this.currentPlan.worker_count : 1;
     this.plans = [
       {
         id: 1,
         name: 'Cancel anytime',
         type: 'monthly',
         description: 'Monthly',
-        save: false,
         pay: 13,
         procent: 1,
-        active: this.currentPlan && this.currentPlan.type === 'monthly',
+        active: false,
         start: 120
       },
       {
@@ -45,13 +50,12 @@ export class BillingPlanComponent implements OnInit {
         save: true,
         pay: 10,
         procent: 0.75,
-        active: this.currentPlan && this.currentPlan.type === 'annual',
         start: 90
       }
     ];
   }
 
-  public planPay(plan: Plan, procent?: number): number {
+  public planPay(plan: Plan, procent: number = 1): number {
     const price = 120 + (this.workerCount - 10) * 11;
 
     return this.workerCount > 10 ? Math.round(price * procent) : plan.start;
@@ -71,5 +75,20 @@ export class BillingPlanComponent implements OnInit {
     };
 
     this.selectedPlan.emit(body);
+  }
+
+  public checkActivePlan(plan: Plan) {
+    if (this.currentPlan) {
+      console.log(this);
+      return this.currentPlan.type === plan.type;
+    }
+  }
+
+  public changePlan() {
+    this.changeAction = true;
+  }
+
+  public cancelPlan() {
+    this.cancelingPlan.emit();
   }
 }
