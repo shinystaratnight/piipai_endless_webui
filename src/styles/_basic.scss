@@ -550,6 +550,16 @@ select.not-empty {
         }
       }
     }
+
+    &.btn-disabled {
+      opacity: .3;
+
+      &:hover {
+        background-color: transparent;
+        color: inherit;
+        cursor: default;
+      }
+    }
   }
 
   .btn-info {

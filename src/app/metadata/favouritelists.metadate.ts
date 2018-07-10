@@ -13,7 +13,7 @@ const list = {
         ],
         name: 'company_contact',
         sort_field: 'company_contact',
-        label: 'Company contact',
+        label: 'Recruitment Agent',
         sort: true
       },
       {
@@ -53,7 +53,7 @@ const list = {
         ],
         name: 'company',
         sort_field: 'company',
-        label: 'Company',
+        label: 'Client',
         sort: true
       },
       {
@@ -107,7 +107,7 @@ const list = {
       },
       {
         key: 'company',
-        label: 'Company',
+        label: 'Client',
         type: 'related',
         data: {
           value: '__str__',
@@ -163,7 +163,7 @@ const list = {
       endpoint: '/ecore/api/v2/core/companies/',
       read_only: true,
       templateOptions: {
-        label: 'Company',
+        label: 'Client',
         add: true,
         delete: false,
         values: ['__str__'],
@@ -180,7 +180,7 @@ const list = {
       endpoint: '/ecore/api/v2/core/companycontacts/',
       read_only: true,
       templateOptions: {
-        label: 'Company contact',
+        label: 'Recruitment Agent',
         add: true,
         delete: false,
         values: ['__str__'],
@@ -259,7 +259,7 @@ const formset = {
         delete: false,
         edit: true,
         values: ['__str__'],
-        label: 'Company',
+        label: 'Client',
         type: 'related'
       },
       read_only: false,
@@ -327,7 +327,7 @@ const formset = {
         delete: false,
         edit: true,
         values: ['__str__'],
-        label: 'Company contact',
+        label: 'Recruitment Agent',
         type: 'related'
       },
       read_only: true,
@@ -347,7 +347,7 @@ const formset = {
             field: 'company_contact'
           }
         ],
-        label: 'Company contact'
+        label: 'Recruitment Agent'
       },
       {
         name: 'company_manager',
@@ -374,7 +374,7 @@ const formset = {
             field: 'company'
           }
         ],
-        label: 'Company'
+        label: 'Client'
       },
       {
         name: 'jobsite',
@@ -397,6 +397,31 @@ const formset = {
           { endpoint: '/ecore/api/v2/hr/jobs/', type: 'related', field: 'job' }
         ],
         label: 'Job'
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/hr/favouritelists/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: null
       }
     ],
     list: 'favouritelist',
@@ -409,7 +434,6 @@ const formset = {
 
 const form = [
   {
-    list: false,
     endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
@@ -423,31 +447,12 @@ const form = [
     collapsed: false,
     type: 'related',
     key: 'candidate_contact',
-    many: false
   },
   {
-    list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/ecore/api/v2/core/companies/',
     read_only: true,
     templateOptions: {
-      label: 'Company contact',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'company_contact',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
-    read_only: false,
-    templateOptions: {
-      label: 'Company',
+      label: 'Client',
       add: true,
       delete: false,
       values: ['__str__'],
@@ -457,10 +462,8 @@ const form = [
     collapsed: false,
     type: 'related',
     key: 'company',
-    many: false
   },
   {
-    list: false,
     endpoint: '/ecore/api/v2/hr/jobsites/',
     read_only: true,
     templateOptions: {
@@ -474,10 +477,8 @@ const form = [
     collapsed: false,
     type: 'related',
     key: 'jobsite',
-    many: false
   },
   {
-    list: false,
     endpoint: '/ecore/api/v2/hr/jobs/',
     read_only: true,
     templateOptions: {
@@ -491,8 +492,32 @@ const form = [
     collapsed: false,
     type: 'related',
     key: 'job',
-    many: false
-  }
+  },
+  {
+    endpoint: '/ecore/api/v2/core/companycontacts/',
+    read_only: true,
+    templateOptions: {
+      label: 'Recruitment Agent',
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    collapsed: false,
+    type: 'related',
+    key: 'company_contact',
+  },
+  {
+    key: 'updated_at',
+    type: 'datepicker',
+    templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
+    read_only: true
+  },
+  {
+    key: 'created_at',
+    type: 'datepicker',
+    templateOptions: { required: false, label: 'Created at', type: 'datetime' },
+    read_only: true
+  },
 ];
 
 const job = {
@@ -552,7 +577,7 @@ const job = {
         delete: false,
         edit: true,
         values: ['__str__'],
-        label: 'Company contact',
+        label: 'Recruitment Agent',
         type: 'related'
       },
       read_only: true,
@@ -572,7 +597,7 @@ const job = {
             field: 'company_contact'
           }
         ],
-        label: 'Company contact'
+        label: 'Recruitment Agent'
       },
       {
         name: 'candidate_contact',
@@ -600,6 +625,15 @@ const job = {
         name: 'actions',
         content: [
           {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/hr/favouritelists/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
             action: 'delete',
             icon: 'fa-times-circle',
             title: 'Delete',
@@ -623,9 +657,8 @@ const job = {
 
 const formadd = [
   {
-    list: false,
     endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
-    read_only: true,
+    read_only: false,
     templateOptions: {
       label: 'Candidate contact',
       add: true,
@@ -637,76 +670,76 @@ const formadd = [
     collapsed: false,
     type: 'related',
     key: 'candidate_contact',
-    many: false
   },
   {
-    list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
-    read_only: true,
-    templateOptions: {
-      label: 'Company contact',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'company_contact',
-    many: false
-  },
-  {
-    list: false,
     endpoint: '/ecore/api/v2/core/companies/',
     read_only: false,
     templateOptions: {
-      label: 'Company',
+      label: 'Client',
       add: true,
       delete: false,
       values: ['__str__'],
       type: 'related',
       edit: true
     },
+    default: ['{jobsite.regular_company.id}', '{job.customer_company.id}'],
     collapsed: false,
     type: 'related',
     key: 'company',
-    many: false
   },
   {
-    list: false,
     endpoint: '/ecore/api/v2/hr/jobsites/',
-    read_only: true,
+    read_only: false,
     templateOptions: {
       label: 'Jobsite',
       add: true,
       delete: false,
-      values: ['__str__'],
+      values: ['__str__', 'regular_company'],
       type: 'related',
       edit: true
     },
+    query: {
+      company: '{company.id}'
+    },
+    default: '{job.jobsite.id}',
     collapsed: false,
     type: 'related',
     key: 'jobsite',
-    many: false
   },
   {
-    list: false,
     endpoint: '/ecore/api/v2/hr/jobs/',
-    read_only: true,
+    read_only: false,
     templateOptions: {
       label: 'Job',
       add: true,
       delete: false,
-      values: ['__str__'],
+      values: ['__str__', 'jobsite', 'customer_company'],
       type: 'related',
       edit: true
+    },
+    query: {
+      customer_company: '{company.id}',
+      jobsite: '{jobsite.id}'
     },
     collapsed: false,
     type: 'related',
     key: 'job',
-    many: false
-  }
+  },
+  {
+    endpoint: '/ecore/api/v2/core/companycontacts/',
+    read_only: true,
+    templateOptions: {
+      label: 'Recruitment Agent',
+      values: ['__str__'],
+      type: 'related',
+    },
+    default: 'session.contact.contact_id',
+    query: {
+      master_company: 'current'
+    },
+    type: 'related',
+    key: 'company_contact',
+  },
 ];
 
 export const metadata = {
