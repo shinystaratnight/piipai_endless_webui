@@ -90,7 +90,12 @@ export class GenericFormService {
       } else if (query.includes('supervisor')) {
         type = 'supervisor';
       } else if (query.includes('job')) {
-        type = 'job';
+        if (query.includes('form')) {
+          type = 'form';
+        }
+        if (query.includes('formset')) {
+          type = 'job';
+        }
       } else if (query.includes('shift_date')) {
         type = 'shiftDate';
       } else if (query.includes('extend')) {

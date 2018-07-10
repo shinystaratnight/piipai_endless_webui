@@ -397,6 +397,31 @@ const formset = {
           { endpoint: '/ecore/api/v2/hr/jobs/', type: 'related', field: 'job' }
         ],
         label: 'Job'
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/hr/favouritelists/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
+        title: null,
+        delim: null
       }
     ],
     list: 'favouritelist',
@@ -599,6 +624,15 @@ const job = {
       {
         name: 'actions',
         content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/hr/favouritelists/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
           {
             action: 'delete',
             icon: 'fa-times-circle',
