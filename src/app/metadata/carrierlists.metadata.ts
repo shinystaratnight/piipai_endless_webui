@@ -192,27 +192,14 @@ const formset = {
 };
 
 const form = [
+  // {
+  //   key: 'id',
+  //   type: 'input',
+  //   hide: true,
+  //   templateOptions: { required: false, label: 'Id', type: 'text' },
+  //   read_only: false
+  // },
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
-    key: 'updated_at',
-    type: 'datepicker',
-    templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
-    read_only: true
-  },
-  {
-    key: 'created_at',
-    type: 'datepicker',
-    templateOptions: { required: false, label: 'Created at', type: 'datetime' },
-    read_only: true
-  },
-  {
-    list: false,
     endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
@@ -223,10 +210,8 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'candidate_contact',
-    many: false
   },
   {
     key: 'target_date',
@@ -245,86 +230,85 @@ const form = [
     },
     read_only: false
   },
+  // {
+  //   list: false,
+  //   endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Sent message',
+  //     add: true,
+  //     delete: false,
+  //     values: ['__str__'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   collapsed: false,
+  //   type: 'related',
+  //   key: 'sent_message',
+  //   many: false
+  // },
+  // {
+  //   list: false,
+  //   endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Reply message',
+  //     add: true,
+  //     delete: false,
+  //     values: ['__str__'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   collapsed: false,
+  //   type: 'related',
+  //   key: 'reply_message',
+  //   many: false
+  // },
+  // {
+  //   list: false,
+  //   endpoint: '/ecore/api/v2/hr/joboffers/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Job offer',
+  //     add: true,
+  //     delete: false,
+  //     values: ['__str__'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   collapsed: false,
+  //   type: 'related',
+  //   key: 'job_offer',
+  //   many: false
+  // },
+  // {
+  //   list: false,
+  //   endpoint: '/ecore/api/v2/hr/joboffers/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Referral job offer',
+  //     add: true,
+  //     delete: false,
+  //     values: ['__str__'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   collapsed: false,
+  //   type: 'related',
+  //   key: 'referral_job_offer',
+  //   many: false
+  // },
+  // {
+  //   key: 'sms_sending_scheduled_at',
+  //   type: 'datepicker',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'SMS sending scheduled at',
+  //     type: 'datetime'
+  //   },
+  //   read_only: false
+  // },
   {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: true,
-    templateOptions: {
-      label: 'Sent message',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'sent_message',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: true,
-    templateOptions: {
-      label: 'Reply message',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'reply_message',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/hr/joboffers/',
-    read_only: true,
-    templateOptions: {
-      label: 'Job offer',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'job_offer',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/hr/joboffers/',
-    read_only: true,
-    templateOptions: {
-      label: 'Referral job offer',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'referral_job_offer',
-    many: false
-  },
-  {
-    key: 'sms_sending_scheduled_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'SMS sending scheduled at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    list: false,
     endpoint: '/ecore/api/v2/skills/skills/',
     read_only: true,
     templateOptions: {
@@ -335,35 +319,32 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'skill',
-    many: false
-  }
+  },
+  {
+    key: 'updated_at',
+    type: 'datepicker',
+    templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
+    read_only: true
+  },
+  {
+    key: 'created_at',
+    type: 'datepicker',
+    templateOptions: { required: false, label: 'Created at', type: 'datetime' },
+    read_only: true
+  },
 ];
 
 const formadd = [
+  // {
+  //   key: 'id',
+  //   type: 'input',
+  //   hide: true,
+  //   templateOptions: { required: false, label: 'Id', type: 'text' },
+  //   read_only: false
+  // },
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
-    key: 'updated_at',
-    type: 'datepicker',
-    templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
-    read_only: true
-  },
-  {
-    key: 'created_at',
-    type: 'datepicker',
-    templateOptions: { required: false, label: 'Created at', type: 'datetime' },
-    read_only: true
-  },
-  {
-    list: false,
     endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
@@ -374,10 +355,8 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'candidate_contact',
-    many: false
   },
   {
     key: 'target_date',
@@ -387,7 +366,7 @@ const formadd = [
   },
   {
     key: 'confirmed_available',
-    default: false,
+    default: true,
     type: 'checkbox',
     templateOptions: {
       required: false,
@@ -396,86 +375,85 @@ const formadd = [
     },
     read_only: false
   },
+  // {
+  //   list: false,
+  //   endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Sent message',
+  //     add: true,
+  //     delete: false,
+  //     values: ['__str__'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   collapsed: false,
+  //   type: 'related',
+  //   key: 'sent_message',
+  //   many: false
+  // },
+  // {
+  //   list: false,
+  //   endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Reply message',
+  //     add: true,
+  //     delete: false,
+  //     values: ['__str__'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   collapsed: false,
+  //   type: 'related',
+  //   key: 'reply_message',
+  //   many: false
+  // },
+  // {
+  //   list: false,
+  //   endpoint: '/ecore/api/v2/hr/joboffers/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Job offer',
+  //     add: true,
+  //     delete: false,
+  //     values: ['__str__'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   collapsed: false,
+  //   type: 'related',
+  //   key: 'job_offer',
+  //   many: false
+  // },
+  // {
+  //   list: false,
+  //   endpoint: '/ecore/api/v2/hr/joboffers/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Referral job offer',
+  //     add: true,
+  //     delete: false,
+  //     values: ['__str__'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   collapsed: false,
+  //   type: 'related',
+  //   key: 'referral_job_offer',
+  //   many: false
+  // },
+  // {
+  //   key: 'sms_sending_scheduled_at',
+  //   type: 'datepicker',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'SMS sending scheduled at',
+  //     type: 'datetime'
+  //   },
+  //   read_only: false
+  // },
   {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: true,
-    templateOptions: {
-      label: 'Sent message',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'sent_message',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: true,
-    templateOptions: {
-      label: 'Reply message',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'reply_message',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/hr/joboffers/',
-    read_only: true,
-    templateOptions: {
-      label: 'Job offer',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'job_offer',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/hr/joboffers/',
-    read_only: true,
-    templateOptions: {
-      label: 'Referral job offer',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'referral_job_offer',
-    many: false
-  },
-  {
-    key: 'sms_sending_scheduled_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'SMS sending scheduled at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    list: false,
     endpoint: '/ecore/api/v2/skills/skills/',
     read_only: true,
     templateOptions: {
@@ -486,11 +464,21 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'skill',
-    many: false
-  }
+  },
+  // {
+  //   key: 'updated_at',
+  //   type: 'datepicker',
+  //   templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
+  //   read_only: true
+  // },
+  // {
+  //   key: 'created_at',
+  //   type: 'datepicker',
+  //   templateOptions: { required: false, label: 'Created at', type: 'datetime' },
+  //   read_only: true
+  // },
 ];
 
 export const metadata = {
