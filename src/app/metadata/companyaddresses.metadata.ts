@@ -14,25 +14,6 @@ const list = {
             field: 'company.name',
             type: 'link'
           },
-          {
-            endpoint: '/ecore/api/v2/core/invoices/?company={company.id}',
-            field: 'invoices_count',
-            icon: 'fa-external-link',
-            action: 'openList',
-            type: 'button',
-            label: 'Invoices:',
-            text: '{invoices_count}'
-          },
-          {
-            endpoint:
-              '/ecore/api/v2/core/orders/?provider_company={company.id}',
-            field: 'orders_count',
-            icon: 'fa-external-link',
-            action: 'openList',
-            type: 'button',
-            label: 'Orders:',
-            text: '{orders_count}'
-          }
         ],
         name: 'company',
         title: null,
@@ -148,21 +129,6 @@ const list = {
           { endpoint: '/', label: 'Fill in credit approval information' }
         ]
       },
-      {
-        content: [
-          {
-            endpoint: '/ecore/api/v2/core/companyaddresses/log/',
-            field: 'id',
-            type: 'button',
-            text: 'Open Journal',
-            action: 'openList'
-          }
-        ],
-        name: 'journal',
-        title: null,
-        label: 'Journal',
-        delim: null
-      }
     ],
     highlight: { values: { master: true }, field: 'company.type' },
     filters: [

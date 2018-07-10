@@ -236,9 +236,58 @@ const formadd = [
   }
 ];
 
+const pricelistForm = [
+  {
+    type: 'related',
+    read_only: true,
+    collapsed: false,
+    list: false,
+    templateOptions: {
+      type: 'related',
+      add: true,
+      edit: true,
+      values: ['__str__'],
+      label: 'Price list',
+      delete: false
+    },
+    endpoint: '/ecore/api/v2/pricing/pricelists/',
+    key: 'price_list',
+    many: false
+  },
+  {
+    type: 'related',
+    read_only: true,
+    collapsed: false,
+    list: false,
+    templateOptions: {
+      type: 'related',
+      add: true,
+      edit: true,
+      values: ['default_rate', '__str__'],
+      label: 'Skill',
+      delete: false
+    },
+    endpoint: '/ecore/api/v2/skills/skills/',
+    key: 'skill',
+    many: false
+  },
+  {
+    type: 'input',
+    templateOptions: {
+      type: 'text',
+      required: false,
+      label: 'Hourly Rate'
+    },
+    read_only: false,
+    default: '{skill.default_rate}',
+    key: 'hourly_rate'
+  }
+];
+
 export const metadata = {
   list,
   pricelist,
+  pricelistForm,
   form,
   formadd
 };

@@ -58,6 +58,14 @@ export class GenericFormService {
       endpoint = 'fillin';
     }
 
+    if (endpoint.includes('/candidate_fill')) {
+      endpoint = 'candidateFill';
+    }
+
+    if (endpoint.includes('/supervisor_approve')) {
+      endpoint = 'supervisorApprove';
+    }
+
     if (metadata[endpoint]) {
       let type = '';
 
@@ -71,7 +79,12 @@ export class GenericFormService {
           type = 'contact';
         }
       } else if (query.includes('pricelist')) {
-        type = 'pricelist';
+        if (query.includes('form')) {
+          type = 'pricelistForm';
+        }
+        if (query.includes('formset')) {
+          type = 'pricelist';
+        }
       } else if (query.includes('company')) {
         type = 'company';
       } else if (query.includes('supervisor')) {
