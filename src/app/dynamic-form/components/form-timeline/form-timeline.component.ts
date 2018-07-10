@@ -77,7 +77,16 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     let keys = Object.keys(this.config.query);
     keys.forEach((el) => {
       if (el === 'object_id') {
-        this.objectId = formatString.format(this.config.query[el], this.config.value);
+        if (Array.isArray(this.config.query[el])) {
+          this.config.query[el].forEach((query) => {
+            if (!this.objectId) {
+              this.objectId = formatString.format(query, this.config.value);
+            }
+          });
+        } else {
+          this.objectId = formatString.format(this.config.query[el], this.config.value);
+        }
+
         this.query.push(`${el}=${this.objectId}`);
       } else {
         this.query.push(`${el}=${this.config.query[el]}`);

@@ -411,6 +411,10 @@ export class FormRelatedComponent
     } else if (this.config.default && this.config.default.includes('session')) {
       const id = this.userService.user.data.contact.contact_id;
 
+      if (this.config.read_only) {
+        this.viewMode = true;
+      }
+
       if (!this.config.hide) {
         this.getOptions.call(this, '', 0, false, this.setValue, id);
       }
