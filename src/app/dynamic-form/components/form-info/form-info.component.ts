@@ -25,6 +25,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public job_title: string; //tslint:disable-line
   public company: string;
   public titlePath: boolean;
+  public carrier_reserve: number; //tslint:disable-line
 
   public color: any;
   public colorAttr: string;
