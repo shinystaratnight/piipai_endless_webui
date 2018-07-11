@@ -197,7 +197,7 @@ const list = {
             text: 'Send Supervisor SMS'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/candidate_fill',
+            endpoint: '/ecore/api/v2/hr/timesheets/{id}/candidate_fill/',
             field: 'id',
             showIf: [
               {
@@ -210,7 +210,7 @@ const list = {
             text: 'Fill'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/supervisor_approve',
+            endpoint: '/ecore/api/v2/hr/timesheets/{id}/supervisor_approve/',
             field: 'id',
             showIf: [
               {

@@ -167,9 +167,24 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public filter() {
-    this.item.lastElement = 0;
-    this.item.count = null;
-    this.generateList();
+    if (!this.multiple) {
+      this.item.lastElement = 0;
+      this.item.count = null;
+      this.generateList();
+    } else {
+      let filteredList;
+      if (this.searchValue && this.chashValues) {
+        filteredList = this.chashValues.filter((el) => {
+          let val = el[this.config.data.value];
+          if (val) {
+            return val.toLowerCase().indexOf(this.searchValue.toLowerCase()) > -1;
+          }
+        });
+        this.previewList = filteredList;
+      } else {
+        this.previewList = this.chashValues;
+      }
+    }
   }
 
   public onModalScrollDown() {
@@ -416,6 +431,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     if (!inside) {
       if (this.multiple && !this.item.hideAutocomplete) {
         this.item.hideAutocomplete = true;
+        this.searchValue = '';
         return;
       }
     }

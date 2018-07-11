@@ -1,12 +1,6 @@
 <div class="filter-element" [class.active]="!isCollapsed">
   <label class="filter-label" [class.active]="!isCollapsed">
     {{config.label}}
-    <!-- <i fa class="p-2 ml-auto"
-      [name]="icons[theme][isCollapsed]"
-      [border]=false
-      [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
-      (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" style="cursor: pointer">
-    </i> -->
     <i
       *ngIf="query"
       fa
