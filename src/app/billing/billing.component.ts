@@ -53,7 +53,7 @@ export class BillingComponent implements OnInit {
   public getSubscriptionInformation() {
     this.billingService.getSubscriptionInfo()
       .subscribe(
-        (data: { subscriptions: BillingSubscription[] }) => {
+        (data: any) => {
           this.currentPlan = data.subscriptions.find((el) => el.active);
         });
   }
@@ -61,14 +61,14 @@ export class BillingComponent implements OnInit {
   public getPaymets() {
     this.billingService.payments()
       .subscribe(
-        (data: { payments: Payment[]}) => this.payments = data.payments
+        (data: any) => this.payments = data.payments
       );
   }
 
   public checkPaymentInformation() {
     this.billingService.checkPaymentInformation()
       .subscribe(
-        (data: CheckInformation) => this.checkInformation = data.payment_information_submited
+        (data: any) => this.checkInformation = data.payment_information_submited
       );
   }
 
