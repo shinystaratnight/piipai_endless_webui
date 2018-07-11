@@ -1,9 +1,16 @@
 @import '../../../../styles/variables.scss';
 
-h4  {
-  margin-bottom: 1.5rem;
+h5 {
+  margin-bottom: 1rem;
 
   text-align: center;
+
+  &.title {
+    font-weight: 500;
+    text-transform: uppercase;
+
+    opacity: .6;
+  }
 }
 
 .form-group {
@@ -13,6 +20,19 @@ h4  {
 .form-control {
   display: inline-block;
   width: 100px;
+
+  margin-left: 9px;
+}
+
+.form-element {
+  text-align: center;
+}
+
+label {
+  font-size: 14px;
+  line-height: 16px;
+
+  opacity: .8;
 }
 
 .plan {

@@ -79,7 +79,6 @@ export class BillingPlanComponent implements OnInit {
 
   public checkActivePlan(plan: Plan) {
     if (this.currentPlan) {
-      console.log(this);
       return this.currentPlan.type === plan.type;
     }
   }

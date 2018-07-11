@@ -1,12 +1,12 @@
 <ng-container *ngIf="changeAction || !currentPlan">
-  <h4>Select your plan</h4>
+  <h5 class="title">Select your plan</h5>
 
   <form>
-    <div class="form-group">
+    <div class="form-element">
       <label for="employees">
         Employees count:
       </label>
-      <input class="form-control" size="5" type="number" name="employees" id="employees" min="1" max="1005"
+      <input class="form-control form-element-content" size="5" type="number" name="employees" id="employees" min="1" max="1005"
         [ngModel]="workerCount"
         (ngModelChange)="workerCount = $event > 1006 ? 1005 : $event < 1 ? 1 : $event">
     </div>
