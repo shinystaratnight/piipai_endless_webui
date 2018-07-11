@@ -1,0 +1,49 @@
+<div *ngIf="workflowList" class="form-element">
+  <label class="col-form-label form-element-label">Workflow</label>
+
+  <div class="form-element-content edit">
+    <select class="form-control custom-select"
+      [(ngModel)]="currentWorkflow">
+        <option class="text-muted" value="" [disabled]="true">Workflow</option>
+        <option *ngFor="let workflow of workflowList.keys" [value]="workflow.value">{{workflow.label}}</option>
+    </select>
+  </div>
+</div>
+
+<div class="workflow" *ngIf="currentWorkflow">
+  <h5>{{workflowList[currentWorkflow].name}}</h5>
+
+  <div class="workflow-wrapper">
+    <div class="workflow-item" *ngFor="let node of workflowList[currentWorkflow].nodes" (click)="openState(node)">
+      <div class="title">
+        {{node.name_before_activation}}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<template #modal let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">{{modalInfo.label}}</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <generic-form
+        [endpoint]="modalInfo.endpoint"
+        [id]="modalInfo.id"
+        (event)="formEvent($event, c)"
+        (errorForm)="formError($event)">
+          <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
+            Save
+            <spinner *ngIf="saveProcess"></spinner>
+          </button>
+      </generic-form>
+    </div>
+  </div>
+</template>

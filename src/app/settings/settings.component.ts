@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { SettingsService } from './settings.service';
+// import { SettingsService } from './settings.service';
 import { UserService, Role, User } from '../services/user.service';
 import { Page } from '../services/navigation.service';
 
@@ -24,25 +24,25 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private settingsService: SettingsService,
+    // private settingsService: SettingsService,
     private userService: UserService,
   ) {}
 
   public ngOnInit() {
-    let currentURL = { path: 'settings' };
+    // let currentURL = { path: 'settings' };
     this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
-    this.settingsSubscription = this.settingsService.url.subscribe((child) => {
-      this.url = [].concat(currentURL, child);
+    // this.settingsSubscription = this.settingsService.url.subscribe((child) => {
+    //   this.url = [].concat(currentURL, child);
 
-      this.setActivePage(this.pagesList, `/${this.url.map((el) => el.path).join('/')}/`);
-    });
+    //   this.setActivePage(this.pagesList, `/${this.url.map((el) => el.path).join('/')}/`);
+    // });
   }
 
   public ngOnDestroy() {
     this.setActivePage(this.pagesList, '');
 
-    this.settingsSubscription.unsubscribe();
+    // this.settingsSubscription.unsubscribe();
   }
 
   public updateNavigation(role: Role) {

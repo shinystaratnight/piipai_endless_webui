@@ -43,7 +43,9 @@ import { directives } from './directives';
     fromComponents.GenericFormComponent,
     fromComponents.GenericListComponent,
     fromContainers.DynamicFormComponent,
-    fromComponents.ProfileComponent],
+    fromComponents.ProfileComponent,
+    fromComponents.WorkflowComponent,
+  ],
   declarations: [
     WebCamComponent,
     PdfViewerComponent,

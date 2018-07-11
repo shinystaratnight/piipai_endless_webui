@@ -1,47 +1,42 @@
 <div class="form-group">
   <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
 
-  <div class="card p-2 mb-3">
+  <div class="card">
     <dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></dynamic-form>
 
-    <div class="d-flex flex-wrap align-items-center pb-2" *ngFor="let item of view; let last = last">
-      <div class="btn-group-sm mr-3 mb-1">
-        <label class="btn btn-primary mb-0" [(ngModel)]="item.operator" btnRadio="or">or</label>
-        <label class="btn btn-primary mb-0" [(ngModel)]="item.operator" btnRadio="and">and</label>
+    <div class="form-element">
+      <label class="form-element-label">
+        Choice required states:
+      </label>
+      <div>
+        <template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: 'state', data: states}"></template>
       </div>
-
-      <span class="pr-1">#{{item.id}}</span>
-
-      <span *ngFor="let value of item.values; let last = last; let i = index">
-        <span class="badge badge-default p-2 mb-1">
-          {{value}}
-          <i fa class="icon pl-2"
-            (click)="open(element, item.type, item, i)"
-            [name]="'pencil'"></i>
-        </span>
-
-        <span class="px-2"
-          *ngIf="!last">{{item.operator}}</span>
-      </span>
-
-      <i fa class="icon pl-2 text-success"
-        [name]="'plus'"
-        (click)="open(element, item.type, item)"></i>
     </div>
 
-    <div>
+    <div class="form-element">
+      <label class="form-element-label">
+        Choice required functions:
+      </label>
+
+      <div>
+        <template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: 'function', data: functions}"></template>
+      </div>
+    </div>
+
+    <!-- <div>
       <button type="button" class="btn btn-primary btn-sm"
         (click)="addNewRule()"
         [disabled]="view.length && view[view.length - 1].values.length < 1">Add rule</button>
       <button type="button" class="btn btn-primary btn-sm"
         (click)="showPreview()"
         [disabled]="view.length < 1">Preview</button>
-    </div>
+    </div> -->
 
-    <div class="mt-2" *ngFor="let item of previewRule">
+    <!-- <div class="mt-2" *ngFor="let item of previewRule">
       <b>{{item.label}}s:</b>&nbsp;{{item.value}}
-    </div>
+    </div> -->
   </div>
+
 
   <small class="text-muted"
     *ngIf="config.templateOptions.description">
@@ -61,11 +56,11 @@
   <div class="modal-body">
     <span *ngIf="editValue">{{editValue}}</span>
     <hr *ngIf="editValue">
-    <div class="btn-group-sm mr-3 mb-1">
-      <label *ngIf="!(addType !== 'new' && ruleArray.length === 0)" class="btn btn-primary mb-0" [(ngModel)]="choice" btnRadio="state" (click)="elementValue = ''">State</label>
+    <!-- <div class="btn-group-sm mr-3 mb-1">
+      <label *ngIf="!(addType !== 'new')" class="btn btn-primary mb-0" [(ngModel)]="choice" btnRadio="state" (click)="elementValue = ''">State</label>
       <label *ngIf="addType === 'function' || addType === 'new'" class="btn btn-primary mb-0" [(ngModel)]="choice" btnRadio="function" (click)="elementValue = ''">Function</label>
-      <label *ngIf="ruleArray.length" class="btn btn-primary mb-0" [(ngModel)]="choice" btnRadio="rule" (click)="elementValue = ''">Rule</label>
-    </div>
+       <label *ngIf="ruleArray.length" class="btn btn-primary mb-0" [(ngModel)]="choice" btnRadio="rule" (click)="elementValue = ''">Rule</label> -->
+    <!-- </div> -->
 
     <div [ngSwitch]="choice">
       <div *ngSwitchCase="'state'">
@@ -110,14 +105,14 @@
         </div>
       </div>
 
-      <div *ngSwitchCase="'rule'">
+      <!-- <div *ngSwitchCase="'rule'">
         <div class="form-group mt-2">
           <label for="rule">Rule</label>
           <select class="form-control custom-select" [(ngModel)]="elementValue">
             <option *ngFor="let el of ruleArray">{{el.name}}</option>
           </select>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -130,4 +125,60 @@
       *ngIf="editIndex === 0 || editIndex">Delete</button>
     <button type="button" class="btn btn-danger" (click)="c()">Cancel</button>
   </div>
+</template>
+
+<!-- <template #rule let-v="view">
+  <div class="d-flex flex-wrap align-items-center pb-2" *ngFor="let item of v; let last = last">
+    <div class="btn-group-sm mr-3 mb-1">
+      <label class="btn btn-primary mb-0" [(ngModel)]="item.operator" btnRadio="or">or</label>
+      <label class="btn btn-primary mb-0" [(ngModel)]="item.operator" btnRadio="and">and</label>
+    </div>
+
+    <span class="pr-1">#{{item.id}}</span>
+
+    <span *ngFor="let value of item.values; let last = last; let i = index">
+      <span class="badge badge-default p-2 mb-1">
+        {{value}}
+        <i fa class="icon pl-2"
+          (click)="open(element, item.type, item, i)"
+          [name]="'pencil'"></i>
+      </span>
+
+      <span class="px-2"
+        *ngIf="!last">{{item.operator}}</span>
+    </span>
+
+    <i fa class="icon pl-2 text-success"
+      [name]="'plus'"
+      (click)="open(element, item.type, item)"></i>
+  </div>
+</template> -->
+
+<template #rule let-type="type" let-data="data">
+
+  <span class="rule">
+    <ng-container *ngIf="data">
+      <span *ngFor="let item of data.data; let last = last; let index = index" class="item">
+        <span class="rule-item" *ngIf="!isObject(item)" (click)="open(element, type, data.data, index)">{{item}}</span>
+
+        <ng-container *ngIf="isObject(item)">
+          (&nbsp;<template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: type, data: item}"></template>&nbsp;)
+        </ng-container>
+
+        <span *ngIf="!last" class="btn-group-sm">
+          <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event)">or</a>
+          <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="and" (click)="changeOperator($event)">and</a>
+        </span>
+      </span>
+
+    </ng-container>
+
+  </span>
+
+  <span class="buttons" [class.hide]="data && data.data.length">
+    <button *ngIf="type === 'state'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, index)">+ State</button>
+    <button *ngIf="type === 'function'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, index)">+ Function</button>
+    <button *ngIf="data && data.data.length" type="button" class="btn btn-sm btn-link p-0 ml-1" (click)="addRule(data.data)">+ Rule</button>
+  </span>
+
 </template>

@@ -195,6 +195,10 @@ select.not-empty {
   border-color: $brand-primary;
   background-color: $brand-primary;
 
+  &.active {
+
+  }
+
   &:focus {
     box-shadow: 0 0 2px rgba($brand-primary, 0.5);
 
@@ -394,6 +398,10 @@ select.not-empty {
   .#{$item}-theme .btn-primary {
     border-color: map-get($theme-colors, $item);
     background-color: map-get($theme-colors, $item) !important;
+
+    &.active {
+      background-color: darken(map-get($theme-colors, $item), 10%) !important;
+    }
   }
 }
 

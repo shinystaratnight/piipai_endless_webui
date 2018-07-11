@@ -1,0 +1,67 @@
+@import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins.scss';
+
+.form-element {
+  margin: 0 40px;
+  margin-bottom: 1.5rem;
+}
+
+.operator {
+  opacity: .6;
+
+  &.active {
+    color: $brand-primary;
+    opacity: 1;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.item {
+  line-height: 35px;
+}
+
+.rule {
+  padding-right: 5px;
+
+  &-item {
+    padding: .2rem;
+
+    border: 1px solid $gray;
+    border-radius: 5px;
+
+    font-weight: 500;
+    white-space: nowrap;
+
+    opacity: .8;
+
+    &:hover {
+      cursor: pointer;
+
+      background-color: rgba($gray, .1);
+    }
+  }
+
+  &:hover + .buttons {
+    display: inline;
+  }
+}
+
+
+.buttons {
+  position: relative;
+
+  &:hover {
+    display: inline !important;
+  }
+
+  .btn:focus {
+    box-shadow: none;
+  }
+
+  &.hide {
+    display: none;
+  }
+}
