@@ -1127,8 +1127,22 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         let newMetadata = [ruleElement, activeMetadata];
         let endpoint = this.workflowEndpoints[el];
         let param = el === 'state' ? 'options' : el;
+
+        let query = '';
+        if (el === 'state') {
+          const company = this.getElementFromMetadata(metadata, 'company');
+          const workflow = this.getElementFromMetadata(metadata, 'workflow');
+
+          if (company) {
+            query += `company=${company.value}&`;
+          }
+
+          if (workflow) {
+            query += `workflow=${workflow.value}`;
+          }
+        }
         this.getRalatedData(newMetadata, 'rules', endpoint,
-            null, '?system=2', param);
+            null, '?limit=-1&' + query, param);
       });
     }
   }
