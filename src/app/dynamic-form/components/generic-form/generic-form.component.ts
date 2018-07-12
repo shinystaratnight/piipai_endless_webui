@@ -321,6 +321,16 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     this.parseError(Object.assign({}, this.errors));
   }
 
+  public getOptions(metadata) {
+    metadata.forEach((el) => {
+      if (el.key && el.type === 'related' && el.useOptions) {
+        this.getRalatedData(this.metadata, el.key, el.endpoint, {}, '?limit=-1');
+      } else if (el.children) {
+        this.getOptions(el.children);
+      }
+    });
+  }
+
   public getMetadata(endpoint) {
     this.service
       .getMetadata(
@@ -347,6 +357,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
           const timelineSubject = new Subject();
           this.checkTimeLine(this.metadata, timelineSubject);
+
+          this.getOptions(this.metadata);
 
           if ((this.id || this.edit) && this.metadata) {
             if (this.id) {
