@@ -915,7 +915,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             }
           }, update);
           if (key === 'rules' && this.endpoint === '/ecore/api/v2/core/workflownodes/') {
-            console.log(key);
             if (response) {
               let rules = this.getElementFromMetadata(metadata, 'rules');
               this.updateValueOfRules(response.results);
@@ -935,11 +934,9 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
               this.workflowData.workflow &&
               update
             ) {
-              console.log('helo');
               this.updateMetadata(metadata, key);
             }
           } else if (update) {
-            console.log(this);
             this.updateMetadata(metadata, key);
           }
         });
@@ -1107,7 +1104,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public checkRuleElement(metadata) {
-    console.log(this);
     let activeMetadata = {
       type: 'related',
       key: 'rules',

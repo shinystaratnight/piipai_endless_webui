@@ -44,6 +44,10 @@
             <button type="button" class="btn btn-sm btn-warning" (click)="editType = 'edit'">Edit</button>
             <button type="button" class="btn btn-sm btn-danger" (click)="deleteNode(modalInfo.nodeId, c)">Delete</button>
           </div>
+
+          <div *ngFor="let state of subStates[modalInfo.id]">
+            {{state.workflow_node.name_before_activation}}
+          </div>
         </div>
         <div *ngSwitchCase="'edit'">
           <generic-form

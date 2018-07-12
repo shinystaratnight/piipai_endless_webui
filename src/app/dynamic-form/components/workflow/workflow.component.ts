@@ -19,6 +19,7 @@ export class WorkflowComponent implements OnInit {
   public currentWorkflowNodes: any[];
   public addConfig: any[];
   public editType: string;
+  public subStates: any;
 
   @Input() public company: string;
 
@@ -44,7 +45,7 @@ export class WorkflowComponent implements OnInit {
           : [];
       });
 
-    console.log(this);
+    this.subStates = {};
   }
 
   public getNodes(id: string) {
@@ -81,7 +82,9 @@ export class WorkflowComponent implements OnInit {
         options: [],
         templateOptions: {
           add: true,
-          label: 'Workflow Node'
+          label: 'Workflow Node',
+          values: ['name_before_activation'],
+          display: '{name_before_activation}'
         },
         prefilled: {
           workflow,
@@ -147,6 +150,9 @@ export class WorkflowComponent implements OnInit {
     };
 
     this.editType = 'info';
+
+    this.workflowService.getSubStates(this.workflowId, node.workflow_node.id)
+      .subscribe((res) => this.subStates[node.workflow_node.id] = res.results);
 
     this.modalRef = this.modalService.open(this.modal, { size: 'lg' });
   }

@@ -35,7 +35,17 @@ export class WorkflowService {
   public getNodesOfCompany(workflowId: string, companyId: string) {
     const headers = this.updateHeaders();
 
-    const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true`;
+    const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true&limit=-1`; //tslint:disable-line
+
+    return this.http.get(this.companyWorkflowNodeEndpoint + query, { headers })
+      .map((res: any) => res && res.json())
+      .catch((err: any) => this.errorHandler(err));
+  }
+
+  public getSubStates(workflowId: string, parentId: string) {
+    const headers = this.updateHeaders();
+
+    const query = `?workflow_node__workflow=${workflowId}&workflow_node__parent=${parentId}&active=true&limit=-1`; //tslint:disable-line
 
     return this.http.get(this.companyWorkflowNodeEndpoint + query, { headers })
       .map((res: any) => res && res.json())
