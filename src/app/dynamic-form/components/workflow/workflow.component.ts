@@ -49,7 +49,7 @@ export class WorkflowComponent implements OnInit {
 
   public getNodes(id: string) {
     this.workflowService.getNodesOfCompany(id, this.company)
-      .subscribe((res) => this.currentWorkflowNodes = res);
+      .subscribe((res) => this.currentWorkflowNodes = res.results);
   }
 
   public addState() {
