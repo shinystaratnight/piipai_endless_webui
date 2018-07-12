@@ -61,7 +61,7 @@
       <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
         {{config.templateOptions.label}}:
       </label>
-      <div class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results" style="position: relative">
+      <div *ngIf="config.many && results && !config.useOptions" class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results" style="position: relative">
         <input type="text" class="form-control autocomplete-value" autocomplete="off"
           #search="ngModel"
           #searchElement
@@ -107,6 +107,52 @@
               [name]="'times'"></i>
           </span>
         </div>
+      </div>
+
+      <div #autocomplete class="form-element-content flex-column align-items-start edit" style="position: relative"
+        *ngIf="config.many && results && config.useOptions"
+        [class.many]="config.many && results">
+
+        <input type="text" class="form-control autocomplete-value" autocomplete="off"
+          #search="ngModel"
+          #searchElement
+          [(ngModel)]="searchValue"
+          [ngModelOptions]="{standalone: true}"
+          (focus)="generateList()">
+
+          <div class="autocomplete" [hidden]="hideAutocomplete" style="top: 1.4rem">
+            <div class="autocomplete-list">
+              <ul class="list-group w-100">
+                <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+                  *ngFor="let option of previewList; trackBy: trackByFn">
+                  <label class="d-flex align-items-center w-100">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      [(ngModel)]="option.checked"
+                      name="checked"
+                      [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="setValue(option)"
+                      hidden>
+                    <div class="custom-checkbox">
+                      <i fa name="check"></i>
+                    </div>
+                    {{option.__str__}}
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap align-items-center mt-2">
+            <span class="badge badge-outline mt-2 mr-1" style="white-space: normal"
+              *ngFor="let item of results; let i = index">
+              {{item.__str__}}
+              <i fa class="ml-2"
+                (click)="deleteItem(i, item)"
+                [name]="'times'"></i>
+            </span>
+          </div>
       </div>
     </div>
 

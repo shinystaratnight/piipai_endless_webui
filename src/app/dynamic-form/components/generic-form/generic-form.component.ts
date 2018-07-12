@@ -129,7 +129,11 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     app: `/ecore/api/v2/apps/`
   };
 
-  public workflowData = <any> {};
+  public workflowData = <any> {
+    workflow: null,
+    number: null,
+    company: null
+  };
 
   public replaceElements: Field[] = [];
 
@@ -899,7 +903,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             }
           }, update);
           if (key === 'rules' && this.endpoint === '/ecore/api/v2/core/workflownodes/') {
-            if (response.results) {
+            console.log(key);
+            if (response) {
               let rules = this.getElementFromMetadata(metadata, 'rules');
               this.updateValueOfRules(response.results);
               this.parseMetadata(rules.activeMetadata, {
@@ -912,12 +917,17 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
                 }
               }, update);
             }
-            if (this.workflowData.company &&
+            if (
+              this.workflowData.company &&
               this.workflowData.number &&
-              this.workflowData.workflow && update) {
+              this.workflowData.workflow &&
+              update
+            ) {
+              console.log('helo');
               this.updateMetadata(metadata, key);
             }
           } else if (update) {
+            console.log(this);
             this.updateMetadata(metadata, key);
           }
         });
@@ -1085,6 +1095,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public checkRuleElement(metadata) {
+    console.log(this);
     let activeMetadata = {
       type: 'related',
       key: 'rules',
@@ -1100,12 +1111,12 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     let ruleElement = this.getElementFromMetadata(metadata, 'rules');
     if (ruleElement) {
       ruleElement.activeMetadata = [activeMetadata];
-      Object.keys(this.workflowEndpoints).forEach((el) => {
+      Object.keys(this.workflowEndpoints).forEach((el, i) => {
         let newMetadata = [ruleElement, activeMetadata];
         let endpoint = this.workflowEndpoints[el];
         let param = el === 'state' ? 'options' : el;
         this.getRalatedData(newMetadata, 'rules', endpoint,
-          null, '?default=2', param, el === 'app');
+            null, '?system=2', param);
       });
     }
   }
@@ -1143,15 +1154,16 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
   public getDataOfWorkflownode() {
     let keys = Object.keys(this.workflowData);
-    let active = true;
+    const res = [];
     keys.forEach((el) => {
-      if (active) {
-        active = this.workflowData[el];
+      if (this.workflowData[el] || this.workflowData[el] === 0) {
+        res.push(true);
       } else {
         return;
       }
     });
-    if (active) {
+
+    if (res.length === keys.length) {
       let query = [];
       keys.forEach((el) => {
         if (this.workflowData[el]) {

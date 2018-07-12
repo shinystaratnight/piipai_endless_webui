@@ -1,24 +1,28 @@
-<div *ngIf="workflowList" class="form-element">
-  <label class="col-form-label form-element-label">Workflow</label>
+<div class="workflow-container">
+  <label class="workflow-title">Workflow Settings</label>
 
-  <div class="form-element-content edit">
-    <select class="form-control custom-select"
-      [(ngModel)]="currentWorkflow">
-        <option class="text-muted" value="" [disabled]="true">Workflow</option>
-        <option *ngFor="let workflow of workflowList.keys" [value]="workflow.value">{{workflow.label}}</option>
-    </select>
+  <div *ngIf="workflowList" class="form-element">
+    <label class="col-form-label form-element-label">Workflow</label>
+
+    <div class="form-element-content edit">
+      <select class="form-control custom-select"
+        [(ngModel)]="workflowId"
+        (ngModelChange)="getNodes($event)">
+          <option class="text-muted" value="" [disabled]="true">Workflow</option>
+          <option *ngFor="let workflow of workflowList" [value]="workflow.value">{{workflow.label}}</option>
+      </select>
+    </div>
   </div>
-</div>
 
-<div class="workflow" *ngIf="currentWorkflow">
-  <h5>{{workflowList[currentWorkflow].name}}</h5>
-
-  <div class="workflow-wrapper">
-    <div class="workflow-item" *ngFor="let node of workflowList[currentWorkflow].nodes" (click)="openState(node)">
-      <div class="title">
-        {{node.name_before_activation}}
+  <div class="workflow" *ngIf="currentWorkflowNodes">
+    <div class="workflow-wrapper">
+      <div class="workflow-item" *ngFor="let node of currentWorkflowNodes" (click)="openState(node)">
+        <div class="title">
+          {{node.workflow_node.name_before_activation}}
+        </div>
       </div>
 
+      <button type="button" class="btn btn-link" (click)="addState()">Add State</button>
     </div>
   </div>
 </div>
@@ -34,16 +38,51 @@
       </div>
     </div>
     <div class="modal-body">
-      <generic-form
-        [endpoint]="modalInfo.endpoint"
-        [id]="modalInfo.id"
-        (event)="formEvent($event, c)"
-        (errorForm)="formError($event)">
-          <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
-            Save
+      <div [ngSwitch]="editType">
+        <div *ngSwitchCase="'info'">
+          <div class="buttons">
+            <button type="button" class="btn btn-sm btn-warning" (click)="editType = 'edit'">Edit</button>
+            <button type="button" class="btn btn-sm btn-danger" (click)="deleteNode(modalInfo.nodeId, c)">Delete</button>
+          </div>
+        </div>
+        <div *ngSwitchCase="'edit'">
+          <generic-form
+            [endpoint]="modalInfo.endpoint"
+            [id]="modalInfo.id"
+            [data]="modalInfo.data"
+            (event)="formEvent($event, c)"
+            (errorForm)="formError($event)">
+              <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
+                Save
+                <spinner *ngIf="saveProcess"></spinner>
+              </button>
+          </generic-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template #add let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">Add State</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <dynamic-form
+        [config]="addConfig"
+        (submit)="addStateToCompany($event, c)">
+          <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
+            [disabled]="saveProcess">
+            Add
             <spinner *ngIf="saveProcess"></spinner>
           </button>
-      </generic-form>
+      </dynamic-form>
     </div>
   </div>
 </template>

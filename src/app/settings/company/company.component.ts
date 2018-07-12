@@ -29,6 +29,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
   public companySettingsData: any;
 
+  public company: string;
+
   constructor(
     private gfs: GenericFormService,
     private route: ActivatedRoute,
@@ -44,6 +46,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.config = meta;
         this.fillingForm(this.config, res);
+        this.company = res.company_settings.company;
       },
       (err: any) => this.errors = err
     );

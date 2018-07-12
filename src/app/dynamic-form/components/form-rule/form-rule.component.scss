@@ -45,16 +45,18 @@
   }
 
   &:hover + .buttons {
-    display: inline;
+    display: inline-flex;
   }
 }
 
 
 .buttons {
   position: relative;
+  display: inline-flex;
+  align-items: center;
 
   &:hover {
-    display: inline !important;
+    display: inline-flex !important;
   }
 
   .btn:focus {
@@ -64,4 +66,11 @@
   &.hide {
     display: none;
   }
+}
+
+.reset:hover {
+  text-decoration: underline;
+
+  color: black;
+  cursor: pointer;
 }

@@ -394,17 +394,6 @@ const formadd = [
     },
     read_only: false
   },
-  {
-    key: 'hardlock',
-    default: false,
-    type: 'checkbox',
-    templateOptions: {
-      required: false,
-      label: 'Hardlock',
-      type: 'checkbox'
-    },
-    read_only: false
-  }
 ];
 
 export const metadata = {

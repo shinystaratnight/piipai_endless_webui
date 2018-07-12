@@ -11,10 +11,26 @@ h5 {
   opacity: .8;
 }
 
+.workflow-title {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: .3;
+  color: #333;
+}
+
+.buttons {
+  text-align: right;
+}
+
 .workflow {
   margin-bottom: 1rem;
   margin-top: 1.5rem;
 
+  &-container {
+    margin: 40px;
+  }
 
   &-wrapper {
     display: flex;
