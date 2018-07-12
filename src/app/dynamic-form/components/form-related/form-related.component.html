@@ -37,7 +37,7 @@
             [(ngModel)]="searchValue"
             [ngModelOptions]="{standalone: true}"
             (blur)="resetList()">
-          <div #autocomplete class="autocomplete-list"
+          <div class="autocomplete-list"
             infinite-scroll
             [infiniteScrollDistance]="modalScrollDistance"
             [infiniteScrollThrottle]="modalScrollThrottle"
