@@ -67,7 +67,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   public ngOnInit(): void {
     this.addControl(this.config, this.fb);
     this.data = <any> {};
-    if (this.config.value) {
+    if (this.config.value && Object.keys(this.config.value).length) {
       this.data = JSON.parse(JSON.stringify(this.config.value));
       this.generateView(this.data);
       this.group.get(this.key).patchValue(this.data);

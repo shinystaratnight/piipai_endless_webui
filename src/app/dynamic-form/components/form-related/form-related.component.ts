@@ -425,6 +425,8 @@ export class FormRelatedComponent
         this.getOptions.call(this, '', 0, false, this.setValue, id);
       }
 
+    } else {
+      this.parseOptions();
     }
 
     this.generateDataForList(this.config, this.config.value);
@@ -436,6 +438,16 @@ export class FormRelatedComponent
     }
 
     this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
+  public parseOptions() {
+    if (this.config.options && this.config.options.length) {
+      let formatString = new FormatString();
+      this.config.options.forEach((el) => {
+        el.__str__ = formatString.format(this.display, el);
+      });
+      this.config.options.sort((p, n) => p.__str__ > n.__str__ ? 1 : -1);
+    }
   }
 
   public getReplaceElements(metadata: Field[]): void {

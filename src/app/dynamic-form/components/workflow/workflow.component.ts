@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input } from '@angular/core';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { WorkflowService } from '../../services';
 
@@ -9,22 +11,32 @@ import { WorkflowService } from '../../services';
   templateUrl: './workflow.component.html',
   styleUrls: ['./workflow.component.scss']
 })
-export class WorkflowComponent implements OnInit {
+export class WorkflowComponent implements OnInit, OnDestroy {
 
   public workflowList: any;
-  public modalRef: any;
-  public modalInfo: any;
-  public saveProcess: boolean;
-  public workflowId: string;
   public currentWorkflowNodes: any[];
-  public addConfig: any[];
-  public editType: string;
+
+  public modalRef: NgbModalRef;
+
+  public modalInfo: any;
+  public editModalInfo: any;
+
+  public saveProcess: boolean;
+
+  public workflowId: string;
+  public parentId: string;
+
   public subStates: any;
+  public acceptanceTests: any;
+
+  public addConfig: any[];
 
   @Input() public company: string;
 
   @ViewChild('modal') public modal: TemplateRef<any>;
   @ViewChild('add') public addModal: TemplateRef<any>;
+  @ViewChild('edit') public editModal: TemplateRef<any>;
+  @ViewChild('tests') public testModal: TemplateRef<any>;
 
   constructor(
     private workflowService: WorkflowService,
@@ -32,6 +44,19 @@ export class WorkflowComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
+    this.subStates = {};
+    this.acceptanceTests = {};
+
+    this.getWorkflows();
+  }
+
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
+  }
+
+  public getWorkflows() {
     this.workflowService.getWorkflowList()
       .subscribe((res: any) => {
         this.workflowList =
@@ -44,8 +69,6 @@ export class WorkflowComponent implements OnInit {
           })
           : [];
       });
-
-    this.subStates = {};
   }
 
   public getNodes(id: string) {
@@ -53,7 +76,25 @@ export class WorkflowComponent implements OnInit {
       .subscribe((res) => this.currentWorkflowNodes = res.results);
   }
 
-  public addState() {
+  public getSubstates(workflowId: string, nodeId: string) {
+    this.workflowService.getSubStates(workflowId, nodeId)
+      .subscribe((res) => this.subStates[nodeId] = res.results);
+  }
+
+  public getAcceptensTests(id: string) {
+    this.workflowService.getAcceptenceTets(id)
+      .subscribe((res) => {
+        this.acceptanceTests[id] = res.results;
+      });
+  }
+
+  public addState(parent: string) {
+    if (parent) {
+      this.parentId = parent;
+    } else {
+      this.parentId = undefined;
+    }
+
     this.addConfig = this.getAddConfig(this.company, this.workflowId);
 
     this.modalRef = this.modalService.open(this.addModal);
@@ -66,11 +107,160 @@ export class WorkflowComponent implements OnInit {
         id: this.company
       };
 
-      this.workflowService.addWorkflowToCompany(data)
-        .subscribe((res) => {
-          this.getNodes(this.workflowId);
-        });
+      if (this.parentId) {
+        this.addSubstateToCompany(this.parentId, data);
+      } else {
+        this.setState(data);
+      }
     }
+  }
+
+  public setState(data, parentId?: string) {
+    this.workflowService.addWorkflowToCompany(data)
+      .subscribe((res) => {
+        if (parentId) {
+          this.getSubstates(this.workflowId, parentId);
+        } else {
+          this.getNodes(this.workflowId);
+        }
+      });
+  }
+
+  public addSubstateToCompany(parentId: string, data) {
+    this.workflowService.setParentForSubstate(data.workflow_node.id, parentId)
+      .subscribe(() => {
+        this.setState(data, parentId);
+      });
+  }
+
+  public addAcceptenceTest(data, closeModal) {
+    closeModal();
+
+    this.workflowService.addAcceptenceTest(data)
+      .subscribe((res) => {
+        this.getAcceptensTests(res.company_workflow_node);
+      });
+  }
+
+  public addSubstate(node) {
+    const parent = node.workflow_node.id;
+
+    this.addState(parent);
+  }
+
+  public addTest(node) {
+    this.addConfig = this.getAcceptenceTestsConfig(node);
+
+    this.modalRef = this.modalService.open(this.testModal);
+  }
+
+  public openEditModal(node, closeModal) {
+    closeModal();
+
+    this.openState(node, undefined, { size: 'lg' }, 'edit');
+  }
+
+  public openState(node, closeModal, options?, type?: string) {
+    if (closeModal) {
+      closeModal();
+    }
+
+    let modal = this.modal;
+
+    if (type === 'edit') {
+      this.editModalInfo = this.generateConfigForEditModal(node);
+      modal = this.editModal;
+    } else {
+      this.modalInfo = this.generateConfigForModal(node);
+
+      this.getSubstates(this.workflowId, node.workflow_node.id);
+      this.getAcceptensTests(node.id);
+    }
+
+    this.modalRef = this.modalService.open(modal, options);
+  }
+
+  public deleteNode(id, e) {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
+    this.workflowService.deleteNode(id)
+      .subscribe((res) => {
+        this.getNodes(this.workflowId);
+      });
+  }
+
+  public deleteTest(test, node) {
+    this.workflowService.deleteTest(test.id)
+      .subscribe((res) => {
+        this.getAcceptensTests(node.id);
+      });
+  }
+
+  public deleteSubstate(node, e) {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
+    this.workflowService.deleteParentForSubstate(node.workflow_node.id)
+      .subscribe(() => {
+        this.workflowService.deleteNode(node.id)
+          .subscribe(() => {
+            this.getSubstates(this.workflowId, this.parentId);
+          });
+      });
+  }
+
+  public formEvent(e, closeModal) {
+    if (e.type === 'saveStart') {
+      this.saveProcess = true;
+    }
+    if (e.type === 'sendForm' && e.status === 'success') {
+      this.saveProcess = false;
+      closeModal();
+    }
+  }
+
+  public formError(e) {
+    this.saveProcess = false;
+  }
+
+  public generateConfigForEditModal(node) {
+    return {
+      id: node.workflow_node.id,
+      label: node.workflow_node.name_before_activation,
+      endpoint: this.workflowService.workflowNodeEndpoint,
+      data: {
+        company: {
+          action: 'add',
+          data: {
+            hide: true,
+            value: {
+              id: this.company
+            }
+          }
+        },
+        workflow: {
+          action: 'add',
+          data: {
+            hide: true
+          }
+        }
+      }
+    };
+  }
+
+  public generateConfigForModal(node) {
+    return {
+      id: node.workflow_node.id,
+      label: node.workflow_node.name_before_activation,
+      endpoint: this.workflowService.workflowNodeEndpoint,
+      nodeId: node.id,
+      node
+    };
   }
 
   public getAddConfig(company, workflow): any[] {
@@ -125,57 +315,63 @@ export class WorkflowComponent implements OnInit {
     ];
   }
 
-  public openState(node) {
-    this.modalInfo = {};
-    this.modalInfo.endpoint = this.workflowService.workflowNodeEndpoint;
-    this.modalInfo.nodeId = node.id;
-    this.modalInfo.id = node.workflow_node.id;
-    this.modalInfo.label = node.workflow_node.name_before_activation;
-    this.modalInfo.data = {
-      company: {
-        action: 'add',
-        data: {
-          hide: true,
-          value: {
-            id: this.company
-          }
-        }
+  public getAcceptenceTestsConfig(node) {
+    const formData = new BehaviorSubject({ data: {} });
+
+    return [
+      {
+        type: 'select',
+        send: false,
+        key: 'test_type',
+        formData,
+        templateOptions: {
+          required: false,
+          label: 'Test type',
+          options: [
+            {
+              value: 'skill',
+              label: 'Skill'
+            },
+            {
+              value: 'tag',
+              label: 'Tag'
+            },
+            {
+              value: 'industry',
+              label: 'Industry'
+            },
+          ]
+        },
       },
-      workflow: {
-        action: 'add',
-        data: {
-          hide: true
-        }
+      {
+        endpoint: '/ecore/api/v2/acceptance-tests/acceptancetests/',
+        read_only: false,
+        formData,
+        templateOptions: {
+          label: 'Acceptance Test',
+          add: true,
+          values: ['__str__'],
+          type: 'related',
+        },
+        query: {
+          type: '{test_type}'
+        },
+        type: 'related',
+        key: 'acceptance_test',
+      },
+      {
+        endpoint: '/ecore/api/v2/core/companyworkflownodes/',
+        read_only: false,
+        hide: true,
+        templateOptions: {
+          label: 'Acceptance Test',
+          values: ['__str__'],
+          type: 'related',
+        },
+        value: node.id,
+        type: 'related',
+        key: 'company_workflow_node',
       }
-    };
-
-    this.editType = 'info';
-
-    this.workflowService.getSubStates(this.workflowId, node.workflow_node.id)
-      .subscribe((res) => this.subStates[node.workflow_node.id] = res.results);
-
-    this.modalRef = this.modalService.open(this.modal, { size: 'lg' });
-  }
-
-  public deleteNode(id, closeModal) {
-    closeModal();
-    this.workflowService.deleteNode(id)
-      .subscribe((res) => {
-        this.getNodes(this.workflowId);
-      });
-  }
-
-  public formEvent(e, closeModal) {
-    if (e.type === 'saveStart') {
-      this.saveProcess = true;
-    }
-    if (e.type === 'sendForm' && e.status === 'success') {
-      this.saveProcess = false;
-      closeModal();
-    }
-  }
-
-  public formError(e) {
-    console.log(e);
+    ];
   }
 }

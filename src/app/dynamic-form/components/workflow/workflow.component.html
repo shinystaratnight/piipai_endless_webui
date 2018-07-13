@@ -20,9 +20,10 @@
         <div class="title">
           {{node.workflow_node.name_before_activation}}
         </div>
+        <i fa name="times" class="icon text-danger" (click)="deleteNode(node.id, $event)"></i>
       </div>
 
-      <button type="button" class="btn btn-link" (click)="addState()">Add State</button>
+      <button type="button" class="btn btn-link btn-sm" (click)="addState()">Add State</button>
     </div>
   </div>
 </div>
@@ -38,31 +39,69 @@
       </div>
     </div>
     <div class="modal-body">
-      <div [ngSwitch]="editType">
-        <div *ngSwitchCase="'info'">
-          <div class="buttons">
-            <button type="button" class="btn btn-sm btn-warning" (click)="editType = 'edit'">Edit</button>
-            <button type="button" class="btn btn-sm btn-danger" (click)="deleteNode(modalInfo.nodeId, c)">Delete</button>
+      <div class="buttons">
+        <button type="button" class="btn btn-sm btn-warning" (click)="openEditModal(modalInfo.node, c)"><i fa name="pencil"></i> Edit</button>
+      </div>
+
+      <div class="substates">
+        <div class="substates-item">
+          <label class="field-title">Substates:</label>
+
+          <div>
+            <span class="badge badge-outline mt-1 mr-1" style="white-space: normal"
+              (click)="openState(state, c)"
+              *ngFor="let state of subStates[modalInfo.id]">
+                {{state.workflow_node.name_before_activation}}
+                <i fa class="ml-2"
+                  (click)="deleteSubstate(state, $event)"
+                  name="times">
+                </i>
+            </span>
           </div>
 
-          <div *ngFor="let state of subStates[modalInfo.id]">
-            {{state.workflow_node.name_before_activation}}
-          </div>
+          <button class="btn btn-link btn-sm" (click)="addSubstate(modalInfo.node)">Add Substate</button>
         </div>
-        <div *ngSwitchCase="'edit'">
-          <generic-form
-            [endpoint]="modalInfo.endpoint"
-            [id]="modalInfo.id"
-            [data]="modalInfo.data"
-            (event)="formEvent($event, c)"
-            (errorForm)="formError($event)">
-              <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
-                Save
-                <spinner *ngIf="saveProcess"></spinner>
-              </button>
-          </generic-form>
+
+        <div class="substates-item">
+          <label class="field-title">Acceptance Tests:</label>
+          <div>
+            <span class="badge badge-outline mt-1 mr-1" style="white-space: normal"
+              *ngFor="let test of acceptanceTests[modalInfo.node.id]">
+                {{test.acceptance_test.name}}
+                <i fa class="ml-2"
+                  (click)="deleteTest(test, modalInfo.node)"
+                name="times"></i>
+            </span>
+          </div>
+          <button class="btn btn-link btn-sm" (click)="addTest(modalInfo.node)">Add Acceptence Test</button>
         </div>
       </div>
+    </div>
+  </div>
+</template>
+
+<template #edit let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">{{editModalInfo.label}}</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <generic-form
+        [endpoint]="editModalInfo.endpoint"
+        [id]="editModalInfo.id"
+        [data]="editModalInfo.data"
+        (event)="formEvent($event, c)"
+        (errorForm)="formError($event)">
+          <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
+            Save
+            <spinner *ngIf="saveProcess"></spinner>
+          </button>
+      </generic-form>
     </div>
   </div>
 </template>
@@ -81,6 +120,30 @@
       <dynamic-form
         [config]="addConfig"
         (submit)="addStateToCompany($event, c)">
+          <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
+            [disabled]="saveProcess">
+            Add
+            <spinner *ngIf="saveProcess"></spinner>
+          </button>
+      </dynamic-form>
+    </div>
+  </div>
+</template>
+
+<template #tests let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">Add State</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <dynamic-form
+        [config]="addConfig"
+        (submit)="addAcceptenceTest($event, c)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add

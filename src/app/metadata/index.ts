@@ -88,6 +88,7 @@ import * as extend from './extend.metadata';
 import * as fillin from './fillin.metadata';
 import * as supervisorApprove from './supervisorApprove.metadata';
 import * as candidateFill from './candidateFill.metadata';
+import * as acceptancetests from './acceptancetests.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -180,4 +181,5 @@ export const metadata = {
   'fillin': fillin.metadata,
   'supervisorApprove': supervisorApprove.metadata,
   'candidateFill': candidateFill.metadata,
+  '/ecore/api/v2/acceptance-tests/acceptancetests/': acceptancetests.metadata
 };

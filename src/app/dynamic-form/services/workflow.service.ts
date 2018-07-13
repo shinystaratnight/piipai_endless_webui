@@ -17,6 +17,8 @@ export class WorkflowService {
   public workflowsEndpoint = '/ecore/api/v2/core/workflows/';
   public workflowNodeEndpoint = '/ecore/api/v2/core/workflownodes/';
   public companyWorkflowNodeEndpoint = '/ecore/api/v2/core/companyworkflownodes/';
+  public acceptenceTestEnpoint = '/ecore/api/v2/acceptance-tests/acceptancetests/';
+  public acceptanceTestWorkflowNodesEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/'; //tslint:disable-line
 
   constructor(
     private http: Http,
@@ -35,7 +37,7 @@ export class WorkflowService {
   public getNodesOfCompany(workflowId: string, companyId: string) {
     const headers = this.updateHeaders();
 
-    const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true&limit=-1`; //tslint:disable-line
+    const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true&limit=-1&only_parent=2`; //tslint:disable-line
 
     return this.http.get(this.companyWorkflowNodeEndpoint + query, { headers })
       .map((res: any) => res && res.json())
@@ -52,10 +54,60 @@ export class WorkflowService {
       .catch((err: any) => this.errorHandler(err));
   }
 
+  public setParentForSubstate(nodeId: string, parentId: string) {
+    const headers = this.updateHeaders();
+
+    const body = {
+      parent: parentId
+    };
+
+    return this.http.patch(`${this.workflowNodeEndpoint}${nodeId}/`, body, { headers })
+      .map((res: any) => res && res.json())
+      .catch((err: any) => this.errorHandler(err));
+  }
+
+  public deleteParentForSubstate(nodeId: string) {
+    const headers = this.updateHeaders();
+
+    const body = {
+      parent: null
+    };
+
+    return this.http.patch(`${this.workflowNodeEndpoint}${nodeId}/`, body, { headers })
+      .map((res: any) => res && res.json())
+      .catch((err: any) => this.errorHandler(err));
+  }
+
   public deleteNode(id: string) {
     const headers = this.updateHeaders();
 
     return this.http.delete(`${this.companyWorkflowNodeEndpoint}${id}/`, { headers })
+      .map((res: any) => res && res.json())
+      .catch((err: any) => this.errorHandler(err));
+  }
+
+  public deleteTest(id: string) {
+    const headers = this.updateHeaders();
+
+    return this.http.delete(`${this.acceptanceTestWorkflowNodesEndpoint}${id}/`, { headers })
+      .map((res: any) => res && res.json())
+      .catch((err: any) => this.errorHandler(err));
+  }
+
+  public getAcceptenceTets(nodeId: string) {
+    const headers = this.updateHeaders();
+
+    const query = `?company_workflow_node=${nodeId}`;
+
+    return this.http.get(this.acceptanceTestWorkflowNodesEndpoint + query, { headers })
+      .map((res: any) => res && res.json())
+      .catch((err: any) => this.errorHandler(err));
+  }
+
+  public addAcceptenceTest(body) {
+    const headers = this.updateHeaders();
+
+    return this.http.post(this.acceptanceTestWorkflowNodesEndpoint, body, { headers })
       .map((res: any) => res && res.json())
       .catch((err: any) => this.errorHandler(err));
   }

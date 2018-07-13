@@ -378,10 +378,8 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'company',
-    many: false
   },
   {
     key: 'active',
