@@ -115,10 +115,21 @@ const form = [
       title: 'name',
       created_at: 'created_at',
       carrier_reserve: 'carrier_list_reserve',
-      updated_at: 'updated_at'
+      updated_at: 'updated_at',
     },
     type: 'info',
     key: 'id'
+  },
+  {
+    key: 'carrier_list_reserve',
+    type: 'input',
+    hide: true,
+    templateOptions: {
+      required: false,
+      label: 'Carrier list reserve',
+      type: 'number',
+    },
+    read_only: false
   },
   {
     type: 'tabs',
