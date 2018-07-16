@@ -6,8 +6,8 @@
     <p><span>Worker count:</span><span>{{currentPlan.worker_count}}</span></p>
     <p><span>Type:</span><span>{{currentPlan.type}}</span></p>
     <p><span>Status:</span><span>{{currentPlan.active && 'Active'}}</span></p>
-    <p><span>Curent period start:</span><span>{{currentPlan.current_period_start}}</span></p>
-    <p><span>Curent period end:</span><span>{{currentPlan.current_period_end}}</span></p>
+    <p><span>Curent period start:</span><span>{{currentPlan.current_period_start | dateFormat:'datetime'}}</span></p>
+    <p><span>Curent period end:</span><span>{{currentPlan.current_period_end | dateFormat:'datetime'}}</span></p>
   </div>
 </div>
 
@@ -29,7 +29,7 @@
           <td>{{payment.type}}</td>
           <td>{{payment.amount | currency:'USD':true}}</td>
           <td>{{payment.status}}</td>
-          <td>{{payment.created}}</td>
+          <td>{{payment.created | dateFormat:'datetime'}}</td>
         </tr>
       </ng-container>
     </tbody>

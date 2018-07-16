@@ -1,4 +1,4 @@
-<ng-container *ngIf="changeAction || !currentPlan">
+<ng-container *ngIf="(changeAction || !currentPlan) && !saveProcess">
   <h5 class="title">Select your plan</h5>
 
   <form>
@@ -31,7 +31,14 @@
   <p *ngIf="workerCount > 1000" class="message">Please contact our sales staff for customized offer: <a href="mailto:sales@r3sourcer.com">sales@r3sourcer.com</a></p>
 </ng-container>
 
-<div class="buttons" *ngIf="currentPlan && !changeAction">
-  <button type="button" class="btn btn-info" (click)="changePlan()">Change subscription</button>
-  <button type="button" class="btn btn-danger" (click)="cancelPlan()">Cancel subscription</button>
+<div class="spinner-wrapper" *ngIf="saveProcess">
+  Saving...
+</div>
+
+<div class="buttons" *ngIf="currentPlan && !saveProcess">
+  <button *ngIf="!changeAction" type="button" class="btn btn-info" (click)="changePlan()">Change subscription</button>
+  <button type="button" class="btn btn-danger" (click)="cancelPlan()">
+    Cancel subscription
+    <spinner *ngIf="cancelProcess"></spinner>
+  </button>
 </div>

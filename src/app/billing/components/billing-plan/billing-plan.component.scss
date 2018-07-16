@@ -37,6 +37,10 @@ label {
 
 .plan {
 
+  &-wrapper {
+    position: relative;
+  }
+
   &-info {
     display: flex;
 
@@ -159,4 +163,12 @@ p.message {
 
 .buttons {
   text-align: center;
+}
+
+.spinner-wrapper {
+  width: 100px;
+
+  text-align: center;
+
+  margin: 0 auto;
 }

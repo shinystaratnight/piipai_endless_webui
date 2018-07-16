@@ -4,7 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User, UserService } from '../services/user.service';
 import { BillingService } from './services/billing-service';
 
-import { Plan, Payment, CheckInformation, BillingSubscription } from './models';
+import { Plan, Payment, BillingSubscription } from './models';
+
+import { ToastrService } from '../shared/services';
 
 @Component({
   selector: 'billing-page',
@@ -17,12 +19,15 @@ export class BillingComponent implements OnInit {
   public currentPlan: BillingSubscription;
   public payments: Payment[];
   public checkInformation: boolean;
+  public saveProcess: boolean;
+  public cancelProcess: boolean;
 
   constructor(
     private userService: UserService,
     private billingService: BillingService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.checkInformation = true;
   }
@@ -30,8 +35,10 @@ export class BillingComponent implements OnInit {
   public ngOnInit() {
     this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
+    const subscriptions = this.route.snapshot.data['subscription'].subscriptions;
 
-    this.getSubscriptionInformation();
+    this.currentPlan = subscriptions && subscriptions.find((el) => el.active);
+
     this.getPaymets();
     this.checkPaymentInformation();
   }
@@ -44,10 +51,27 @@ export class BillingComponent implements OnInit {
   }
 
   public selectPlan(plan: Plan) {
+    const changed = plan.changed;
+    plan.changed = undefined;
+
+    this.saveProcess = true;
     this.billingService.setPlan(plan)
-      .subscribe(() => {
-        this.getSubscriptionInformation();
-      });
+      .subscribe(
+        () => {
+          this.saveProcess = false;
+
+          if (changed) {
+            this.toastr.sendMessage('Subscription has been updated', 'success');
+          } else {
+            this.toastr.sendMessage('Subscription has been created', 'success');
+          }
+
+          this.getSubscriptionInformation();
+        },
+        () => {
+          this.saveProcess = false;
+        }
+    );
   }
 
   public getSubscriptionInformation() {
@@ -73,7 +97,15 @@ export class BillingComponent implements OnInit {
   }
 
   public cancelPlan() {
+    this.cancelProcess = true;
     this.billingService.cancelSubscription()
-      .subscribe();
+      .subscribe(() => {
+        this.currentPlan = undefined;
+        this.cancelProcess = false;
+        this.toastr.sendMessage('Subscription has been canceled', 'success');
+      },
+      () => {
+        this.cancelProcess = false;
+      });
   }
 }

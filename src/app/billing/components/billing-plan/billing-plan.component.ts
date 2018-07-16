@@ -3,8 +3,7 @@ import {
   EventEmitter,
   Output,
   Input,
-  OnInit,
-  SimpleChange
+  OnInit
 } from '@angular/core';
 
 import { Plan, BillingSubscription } from '../../models';
@@ -20,6 +19,8 @@ export class BillingPlanComponent implements OnInit {
   public plans: Plan[];
   public changeAction: boolean;
 
+  @Input() public cancelProcess: boolean;
+  @Input() public saveProcess: boolean;
   @Input() public currentPlan: BillingSubscription;
   @Input() public workerCount: number;
 
@@ -68,10 +69,13 @@ export class BillingPlanComponent implements OnInit {
   }
 
   public selectPlan(plan) {
+    this.changeAction = false;
+
     const body = {
       type: plan.type,
       worker_count: this.workerCount,
-      price: plan.id === 1 ? this.planPay(plan) : this.planPayYear(plan, plan.procent)
+      price: plan.id === 1 ? this.planPay(plan) : this.planPayYear(plan, plan.procent),
+      changed: this.currentPlan
     };
 
     this.selectedPlan.emit(body);

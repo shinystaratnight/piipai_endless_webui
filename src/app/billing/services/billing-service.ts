@@ -66,7 +66,7 @@ export class BillingService {
     const headers = this.updateHeaders();
     return this.http.get(this.cancelSubscriptionEndpoint, {headers})
       .map((res: any) => res.json && res.json())
-      .catch((err: any) => this.errorService.parseErrors(err));
+      .catch((err: any) => this.errorService.parseErrors(err, true));
   }
 
   public payments() {

@@ -10,6 +10,8 @@ import { components } from './components';
 
 import { services } from './services';
 
+import { pipes } from './pipes';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -19,10 +21,12 @@ import { services } from './services';
     FormsModule,
   ],
   exports: [
-    ...components
+    ...components,
+    ...pipes
   ],
   declarations: [
     ...components,
+    ...pipes
   ],
   providers: [
     ...services

@@ -10,4 +10,5 @@ export interface Plan {
   status?: string;
   worker_count?: number;
   procent?: number;
+  changed?: any;
 }
