@@ -42,6 +42,8 @@ export class SiteComponent implements OnInit {
   public listNameCache = {};
   public errors: any;
 
+  public testPage: boolean;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -99,6 +101,7 @@ export class SiteComponent implements OnInit {
   public getPageData(url) {
     this.siteService.getDataOfPage(url, this.pagesList).subscribe(
       (pageData: PageData) => {
+        this.testPage = false;
         if (pageData.pathData.path === '/profile/') {
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
@@ -109,6 +112,14 @@ export class SiteComponent implements OnInit {
 
           this.router.navigate(['']);
           return;
+        } else if (
+          pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' &&
+          pageData.pathData.type === 'form'
+        ) {
+          this.testPage = true;
+          this.pageData = pageData;
+          this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+          console.log(this);
         } else {
           setTimeout(() => {
             this.pageData = pageData;

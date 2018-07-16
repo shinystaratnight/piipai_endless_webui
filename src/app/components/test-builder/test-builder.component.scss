@@ -1,0 +1,22 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+
+hr {
+  margin: 20px 40px;
+}
+
+.questions {
+  margin: 0 40px;
+
+  label {
+    margin-right: 1rem;
+
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    opacity: .3;
+    color: #333;
+  }
+}

@@ -1,14 +1,39 @@
+<ng-container *ngIf="acceptanceTestsMetadata">
+  <div class="test-builder">
+    <dynamic-form
+      [config]="acceptanceTestsMetadata"
+      (submit)="createTest($event)">
+      <button type="submit" class="btn btn-primary">
+        Save
+        <spinner *ngIf="saveProcess"></spinner>
+      </button>
+    </dynamic-form>
+
+    <hr>
+
+    <div class="questions">
+      <label>Questions:</label>
+
+      <button type="button" class="btn btn-sm btn-success" (click)="addQuestion()">Add Question</button>
+    </div>
+
+    <ng-container *ngFor="let item of questions">
+      <template [ngTemplateOutlet]="question" [ngOutletContext]="{config: item}"></template>
+    </ng-container>
+
+  </div>
 
 
 
-<template #question let-data="data">
-  <dynamic-form
-    [config]="questionMetadata">
-  </dynamic-form>
-</template>
+  <template #question let-config="config">
+    <dynamic-form
+      [config]="config">
+    </dynamic-form>
+  </template>
 
-<template #answer let-data="data">
-  <dynamic-form
-    [config]="answerMetadata">
-  </dynamic-form>
-</template>
+  <template #answer let-data="data">
+    <dynamic-form
+      [config]="answerMetadata">
+    </dynamic-form>
+  </template>
+</ng-container>

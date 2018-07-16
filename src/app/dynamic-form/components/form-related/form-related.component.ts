@@ -134,6 +134,7 @@ export class FormRelatedComponent
   }
 
   public ngOnInit() {
+    console.log(this);
     this.addControl(this.config, this.fb);
     this.skillEndpoint = this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
       this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
@@ -653,7 +654,7 @@ export class FormRelatedComponent
   }
 
   public openAutocomplete(): void {
-    if (this.config.type !== 'address') {
+    if (this.config.type !== 'address' && !this.config.doNotChoice) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
         this.generateList(this.searchValue);

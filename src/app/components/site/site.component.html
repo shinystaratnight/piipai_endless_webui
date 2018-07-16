@@ -16,7 +16,7 @@
     </div>
 
     <div class="form-content"
-      *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'">
+      *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !testPage || pageData.pathData.postfix === 'submit'">
         <generic-form
           *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit'"
           [title]="pageData.pathData.title"
@@ -81,6 +81,10 @@
           [id]="pageData.pathData.id"
           (str)="changeFormLabel($event)">
         </form-builder>
+    </div>
+
+    <div class="form-content" *ngIf="testPage">
+      <test-builder [id]="pageData.pathData.id"></test-builder>
     </div>
   </div>
 
