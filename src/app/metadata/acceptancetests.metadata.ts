@@ -177,7 +177,6 @@ const formadd = [
   {
     key: 'test_name',
     type: 'input',
-    read_only: false,
     templateOptions: {
       label: 'Test Name',
       type: 'text',
@@ -188,7 +187,6 @@ const formadd = [
   {
     key: 'description',
     type: 'textarea',
-    read_only: false,
     templateOptions: {
       label: 'Description',
       type: 'text',
@@ -198,7 +196,6 @@ const formadd = [
   {
     key: 'is_active',
     type: 'checkbox',
-    read_only: false,
     default: false,
     templateOptions: {
       label: 'Active',
@@ -213,7 +210,6 @@ const formadd = [
     templateOptions: {
       label: 'Valid From',
       type: 'date',
-      required: true
     }
   },
   {
@@ -223,7 +219,6 @@ const formadd = [
     templateOptions: {
       label: 'Valid Until',
       type: 'date',
-      required: true
     }
   },
 ];

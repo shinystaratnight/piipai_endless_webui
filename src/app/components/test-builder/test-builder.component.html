@@ -1,39 +1,54 @@
-<ng-container *ngIf="acceptanceTestsMetadata">
-  <div class="test-builder">
-    <dynamic-form
-      [config]="acceptanceTestsMetadata"
-      (submit)="createTest($event)">
-      <button type="submit" class="btn btn-primary">
-        Save
-        <spinner *ngIf="saveProcess"></spinner>
-      </button>
-    </dynamic-form>
+<div class="test-builder">
 
-    <hr>
+  <ng-content></ng-content>
 
-    <div class="questions">
-      <label>Questions:</label>
+  <hr>
 
-      <button type="button" class="btn btn-sm btn-success" (click)="addQuestion()">Add Question</button>
-    </div>
-
-    <ng-container *ngFor="let item of questions">
-      <template [ngTemplateOutlet]="question" [ngOutletContext]="{config: item}"></template>
-    </ng-container>
-
+  <div *ngIf="testData" class="questions">
+    <label>Questions:</label>
   </div>
 
+  <div class="questions-item" *ngFor="let item of questions; let index = index">
+    <template [ngTemplateOutlet]="question" [ngOutletContext]="{config: item, index: index}"></template>
+  </div>
 
+  <button type="button" class="btn btn-sm btn-success questions-button"
+    *ngIf="testData"
+    (click)="addQuestion(true)">
+      Add Question
+  </button>
 
-  <template #question let-config="config">
-    <dynamic-form
-      [config]="config">
-    </dynamic-form>
-  </template>
+</div>
 
-  <template #answer let-data="data">
-    <dynamic-form
-      [config]="answerMetadata">
-    </dynamic-form>
-  </template>
-</ng-container>
+<template #question let-config="config" let-index="index">
+  <dynamic-form
+    [config]="config"
+    (buttonAction)="deleteQuestion(getId(config), questions, index)"
+    (submit)="saveQuestion($event, index, getId(config))">
+  </dynamic-form>
+
+  <ng-container *ngIf="getId(config)">
+
+    <div *ngIf="testData" class="answers">
+      <label>Answers:</label>
+    </div>
+
+    <div class="answers-item" *ngFor="let item of answers[getId(config)]; let index = index">
+      <template [ngTemplateOutlet]="answer" [ngOutletContext]="{config: item, index: index, id: getId(config)}"></template>
+    </div>
+
+    <button type="button" class="btn btn-sm btn-success questions-button"
+      *ngIf="testData"
+      (click)="addAnswer(true, answers[getId(config)])">
+        Add Answer
+    </button>
+  </ng-container>
+</template>
+
+<template #answer let-config="config" let-index="index" let-id="id">
+  <dynamic-form
+    [config]="config"
+    (buttonAction)="deleteAnswer(getId(config), answers[id], index)"
+    (submit)="saveAnswer($event, index, id, getId(config))">
+  </dynamic-form>
+</template>

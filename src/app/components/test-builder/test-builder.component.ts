@@ -1,80 +1,191 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  ViewEncapsulation,
+  SimpleChanges
+} from '@angular/core';
 
 import { GenericFormService } from '../../dynamic-form/services';
 
 import { Field } from '../../dynamic-form/models';
-import { fillingForm } from '../../dynamic-form/helpers/utils';
+import {
+  fillingForm,
+  getElementFromMetadata
+} from '../../dynamic-form/helpers/utils';
 
-import * as acceptancetestquestionsMetadata from '../../metadata/acceptancetestquestions.metadata';
-import * as acceptancetestanswersMetadata from '../../metadata/acceptancetestanswers.metadata';
-import * as acceptancetestsMetadata from '../../metadata/acceptancetests.metadata';
+import * as questionMetadata from '../../metadata/acceptancetestquestions.metadata';
+import * as answerMetadata from '../../metadata/acceptancetestanswers.metadata';
+import * as testMetadata from '../../metadata/acceptancetests.metadata';
 
 @Component({
   selector: 'test-builder',
   templateUrl: './test-builder.component.html',
-  styleUrls: ['./test-builder.component.scss']
+  styleUrls: ['./test-builder.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class TestBuilderComponent implements OnInit {
+export class TestBuilderComponent implements OnInit, OnChanges {
+  @Input() public testData: any;
 
-  @Input() public id: string;
-
-  public acceptanceTestsMetadata: any[];
+  public testMetadata: Field[];
 
   public testId: string;
 
   public saveProcess: boolean;
+  public questionId: number;
 
-  public acceptancetestsEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetests/';
-  public acceptancetestquestionsEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestquestions/';
+  public testEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetests/';
+  public questionEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestquestions/';
+  public answerEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestanswers/';
 
   public questions = [];
   public answers = {};
 
-  constructor(
-    private genericFormService: GenericFormService
-  ) {
+  public configs = {
+    test: testMetadata,
+    question: questionMetadata,
+    answer: answerMetadata
+  };
 
-  }
+  constructor(private genericFormService: GenericFormService) {}
 
   public ngOnInit() {
-    console.log(this);
-    if (this.id) {
-      this.genericFormService.getAll(this.acceptancetestsEndpoint + this.id + '/')
-        .subscribe((res) => {
-          this.updateTestForm(res);
-        });
-    } else {
-      this.acceptanceTestsMetadata = acceptancetestsMetadata.metadata.formadd;
-    }
+    this.questionId = 1;
   }
 
-  public createTest(data) {
-    this.genericFormService.submitForm(this.acceptancetestsEndpoint, data)
-      .subscribe((res) => {
-        this.updateTestForm(res);
-      });
+  public ngOnChanges(changes: SimpleChanges) {
+    if (
+      changes.hasOwnProperty('testData') &&
+      !changes['testData'].isFirstChange()
+    ) {
+      this.checkQuestions(this.testData);
+    }
   }
 
   public updateTestForm(data) {
     this.testId = data.id;
-    this.acceptanceTestsMetadata = acceptancetestsMetadata.metadata.form;
-
-    fillingForm(this.acceptanceTestsMetadata, data);
+    this.testMetadata = this.createMetadata('test', 'form', data);
   }
 
-  public addQuestion() {
-    const metadata = JSON.parse(JSON.stringify(acceptancetestquestionsMetadata.metadata.formadd));
-    const test = metadata.find((el) => el.key === 'acceptance_test');
-    test.value = this.testId;
+  public createMetadata(type: string, metadataType: string, data?): Field[] {
+    const config = JSON.parse(
+      JSON.stringify(this.configs[type].metadata[metadataType])
+    );
+    if (metadataType === 'form') {
+      fillingForm(config, data);
+    }
+
+    return config;
+  }
+
+  public addQuestion(create: boolean, data?) {
+    const metadataType = create ? 'formadd' : 'form';
+    const metadata = this.createMetadata('question', metadataType, data);
+    if (create) {
+      const order = getElementFromMetadata(metadata, 'order');
+
+      if (order) {
+        order.value = ++this.questionId;
+      }
+    }
 
     this.questions.push(metadata);
   }
 
-  public addAnswer() {
+  public addAnswer(create: boolean, target, data?) {
+    const metadataType = create ? 'formadd' : 'form';
+    const metadata = this.createMetadata('answer', metadataType, data);
+    if (create) {
+      const order = getElementFromMetadata(metadata, 'order');
 
+      if (order) {
+        order.value = target.length;
+      }
+    }
+
+    target.push(metadata);
   }
 
-  public saveQuestion() {
-    this.genericFormService.submitForm()
+  public checkQuestions(data: any) {
+    if (data && data.acceptance_test_questions) {
+      const questions = data.acceptance_test_questions;
+
+      questions.forEach(question => {
+        this.addQuestion(false, question);
+
+        this.answers[question.id] = [];
+
+        this.checkAnswers(question);
+      });
+    }
+  }
+
+  public checkAnswers(data: any) {
+    if (data && data.acceptance_test_answers) {
+      const answers = data.acceptance_test_answers;
+
+      answers.forEach(answer => {
+        this.addAnswer(false, this.answers[data.id], answer);
+      });
+    }
+  }
+
+  public saveQuestion(data, index: number, update: string) {
+    data.acceptance_test = this.testData.id;
+    let action;
+    if (update) {
+      action = 'editForm';
+    } else {
+      action = 'submitForm';
+    }
+
+    this.genericFormService[action](this.questionEndpoint, data).subscribe(
+      res => {
+        const metadata = this.createMetadata('question', 'form', res);
+        this.answers[res.id] = this.answers[res.id] || [];
+
+        this.questions.splice(index, 1, metadata);
+      }
+    );
+  }
+
+  public deleteQuestion(id: string, target: any[], index: number) {
+    this.genericFormService.delete(this.questionEndpoint, id).subscribe(() => {
+      target.splice(index, 1);
+    });
+  }
+
+  public deleteAnswer(id: string, target: any[], index: number) {
+    this.genericFormService.delete(this.answerEndpoint, id).subscribe(() => {
+      target.splice(index, 1);
+    });
+  }
+
+  public saveAnswer(data, index: number, id: string, update: string) {
+    data.acceptance_test_question = id;
+
+    let action;
+    if (update) {
+      action = 'editForm';
+    } else {
+      action = 'submitForm';
+    }
+
+    this.genericFormService[action](this.answerEndpoint, data).subscribe(
+      res => {
+        const metadata = this.createMetadata('answer', 'form', res);
+
+        this.answers[id].splice(index, 1, metadata);
+      }
+    );
+  }
+
+  public getId(metadata: Field[]): string {
+    const id = getElementFromMetadata(metadata, 'id');
+
+    if (id) {
+      return id.value;
+    }
   }
 }

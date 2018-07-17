@@ -3,6 +3,7 @@ import { ActionElementComponent } from './action-element/action-element.componen
 import { ProfileComponent } from './profile/profile.component';
 import { InfoComponent } from './info/info.component';
 import { WorkflowComponent } from './workflow/workflow.component';
+import { TestGeneratorComponent } from './test-generator/test-generator.component';
 
 // Filters
 import { FilterChoiceComponent } from './filter-choice/filter-choice.component';
@@ -54,6 +55,7 @@ export * from './action-element/action-element.component';
 export * from './basic-element/basic-element.component';
 export * from './profile/profile.component';
 export * from './workflow/workflow.component';
+export * from './test-generator/test-generator.component';
 
 export const entryComponents = [
   FilterChoiceComponent,
@@ -92,6 +94,8 @@ export const entryComponents = [
   ListTableComponent,
   ListTagsComponent,
   ListTextComponent,
+
+  TestGeneratorComponent
 ];
 
 export const components = [
@@ -101,6 +105,7 @@ export const components = [
   ProfileComponent,
   InfoComponent,
   WorkflowComponent,
+  TestGeneratorComponent,
 
-  ...entryComponents,
+  ...entryComponents
 ];

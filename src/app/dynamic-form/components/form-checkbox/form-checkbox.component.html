@@ -4,7 +4,7 @@
       {{config.templateOptions.label}}:
     </label>
     <div class="form-element-content edit">
-      <label class="form-element-checkbox" *ngIf="label && config.templateOptions.label" [attr.for]="key">
+      <label class="form-element-checkbox" *ngIf="label && config.templateOptions.label">
         <i class="mr-1" *ngIf="config.templateOptions.type === 'icon'"
           [ngClass]="[checkboxClass]"
           [ngStyle]="{'color': checkboxColor}"
