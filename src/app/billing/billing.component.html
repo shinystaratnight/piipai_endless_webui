@@ -1,0 +1,14 @@
+<navigation [user]="user" [pages]="pagesList" (update)="updateNavigation($event)"></navigation>
+<div class="container">
+  <check-card *ngIf="!checkInformation"></check-card>
+  <billing-plan
+    [saveProcess]="saveProcess"
+    [cancelProcess]="cancelProcess"
+    [currentPlan]="currentPlan"
+    [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
+    (selectedPlan)="selectPlan($event)"
+    (cancelingPlan)="cancelPlan($event)"></billing-plan>
+  <billing-info [payments]="payments" [currentPlan]="currentPlan"></billing-info>
+</div>
+
+<my-toast></my-toast>
