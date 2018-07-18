@@ -65,18 +65,18 @@ const form = [
       },
       {
         key: 'question',
-        type: 'input',
+        type: 'textarea',
         templateOptions: {
           required: true,
           label: 'Question',
           max: 255,
-          type: 'text'
         },
-        read_only: false
+        read_only: true
       },
       {
         key: 'details',
         type: 'textarea',
+        read_only: true,
         templateOptions: {
           required: false,
           label: 'Details',
@@ -91,6 +91,7 @@ const form = [
           label: 'Question Type',
           options: [
             { value: 0, label: 'Options' },
+            { value: 1, label: 'Text' },
             { value: 2, label: 'Yes/No' }
           ]
         }
@@ -105,27 +106,27 @@ const form = [
           type: 'number'
         }
       },
-      {
-        type: 'button',
-        width: .2,
-        color: 'primary',
-        templateOptions: {
-          text: 'Save',
-          type: 'submit',
-          p: true,
-          small: true,
-        }
-      },
-      {
-        type: 'button',
-        width: .2,
-        color: 'danger',
-        templateOptions: {
-          text: 'Delete',
-          p: true,
-          small: true,
-        }
-      },
+      // {
+      //   type: 'button',
+      //   width: .2,
+      //   color: 'primary',
+      //   templateOptions: {
+      //     text: 'Save',
+      //     type: 'submit',
+      //     p: true,
+      //     small: true,
+      //   }
+      // },
+      // {
+      //   type: 'button',
+      //   width: .2,
+      //   color: 'danger',
+      //   templateOptions: {
+      //     text: 'Delete',
+      //     p: true,
+      //     small: true,
+      //   }
+      // },
     ]
   }
 ];
@@ -151,11 +152,10 @@ const formadd = [
     children: [
       {
         key: 'question',
-        type: 'input',
+        type: 'textarea',
         templateOptions: {
           label: 'Question',
           max: 255,
-          type: 'text'
         }
       },
       {
@@ -174,6 +174,7 @@ const formadd = [
           label: 'Question Type',
           options: [
             { value: 0, label: 'Options' },
+            { value: 1, label: 'Text' },
             { value: 2, label: 'Yes/No' }
           ]
         }
@@ -190,7 +191,7 @@ const formadd = [
       },
       {
         type: 'button',
-        width: .4,
+        width: .2,
         color: 'primary',
         templateOptions: {
           text: 'Save',

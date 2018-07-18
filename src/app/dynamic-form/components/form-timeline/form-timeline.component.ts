@@ -8,7 +8,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
 
 import { FormatString } from '../../../helpers/format';
@@ -22,17 +22,18 @@ import { GenericFormService } from '../../services';
 
 export class FormTimelineComponent implements OnInit, OnDestroy {
 
-  @ViewChild('stateModal')
-  public stateModal;
+  @ViewChild('stateModal') public stateModal;
+  @ViewChild('test') public testModal;
 
   public config: any;
   public modalData: any;
   public objectEndpoint: string;
   public stateData: any = {};
   public requirements: any[];
-  public modalRef: any;
+  public modalRef: NgbModalRef;
   public objectId: string;
   public query: any;
+  public testId: string;
 
   public currentState: any;
 
@@ -136,7 +137,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
-  public open(state): void {
+  public open(state, closeModal?): void {
+    if (closeModal) {
+      closeModal();
+    }
     this.modalData = {};
     if (state.state === 1 || state.state === 2) {
       let title = '';
@@ -148,6 +152,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         this.modalData.id = state.wf_object_id;
       }
       this.modalData.title = title;
+      this.modalData.tests = state.acceptance_tests.length && state.acceptance_tests;
+      this.modalData.substates = state.substates.length && state.substates;
+      this.modalData.workflowObject = state.wf_object_id;
       this.stateData = this.setDataForState(state);
       this.modalRef = this.modalService.open(this.stateModal, {size: 'lg'});
     }
@@ -185,6 +192,12 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       this.getTimeline();
       this.modalData = null;
     }
+  }
+
+  public fillinTest(id: string) {
+    this.testId = id;
+
+    this.modalRef = this.modalService.open(this.testModal, { size: 'lg'});
   }
 
 }

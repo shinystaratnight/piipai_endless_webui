@@ -4,8 +4,13 @@ import {
   Input,
   OnChanges,
   ViewEncapsulation,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild,
+  TemplateRef
 } from '@angular/core';
+
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { GenericFormService } from '../../dynamic-form/services';
 
@@ -27,6 +32,7 @@ import * as testMetadata from '../../metadata/acceptancetests.metadata';
 })
 export class TestBuilderComponent implements OnInit, OnChanges {
   @Input() public testData: any;
+  @ViewChild('preview') public previewModal: TemplateRef<any>;
 
   public testMetadata: Field[];
 
@@ -34,21 +40,24 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
   public saveProcess: boolean;
   public questionId: number;
-
-  public testEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetests/';
-  public questionEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestquestions/';
-  public answerEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestanswers/';
+  public modalRef: NgbModalRef;
 
   public questions = [];
   public answers = {};
 
+  public testEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetests/';
+  public questionEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestquestions/';
+  public answerEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestanswers/';
   public configs = {
     test: testMetadata,
     question: questionMetadata,
     answer: answerMetadata
   };
 
-  constructor(private genericFormService: GenericFormService) {}
+  constructor(
+    private genericFormService: GenericFormService,
+    private modalService: NgbModal
+  ) {}
 
   public ngOnInit() {
     this.questionId = 1;
@@ -63,6 +72,16 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     }
   }
 
+  public addModeProperty(metadata, mode) {
+    metadata.forEach((el) => {
+      if (el.key) {
+        el.mode = mode;
+      } else if (el.children) {
+        this.addModeProperty(el.children, mode);
+      }
+    });
+  }
+
   public updateTestForm(data) {
     this.testId = data.id;
     this.testMetadata = this.createMetadata('test', 'form', data);
@@ -72,6 +91,12 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     const config = JSON.parse(
       JSON.stringify(this.configs[type].metadata[metadataType])
     );
+
+    if (metadataType === 'form') {
+      const mode = new BehaviorSubject('edit');
+      this.addModeProperty(config, mode);
+    }
+
     if (metadataType === 'form') {
       fillingForm(config, data);
     }
@@ -87,6 +112,14 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
       if (order) {
         order.value = ++this.questionId;
+      }
+    } else {
+      const order = getElementFromMetadata(metadata, 'order');
+
+      if (order.value > this.questionId) {
+        this.questionId = order.value;
+      } else {
+        this.questionId += 1;
       }
     }
 
@@ -140,14 +173,15 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       action = 'submitForm';
     }
 
-    this.genericFormService[action](this.questionEndpoint, data).subscribe(
-      res => {
-        const metadata = this.createMetadata('question', 'form', res);
-        this.answers[res.id] = this.answers[res.id] || [];
+    this.genericFormService[action](
+      this.questionEndpoint + (update ? data.id + '/' : ''),
+      data
+    ).subscribe(res => {
+      const metadata = this.createMetadata('question', 'form', res);
+      this.answers[res.id] = this.answers[res.id] || [];
 
-        this.questions.splice(index, 1, metadata);
-      }
-    );
+      this.questions.splice(index, 1, metadata);
+    });
   }
 
   public deleteQuestion(id: string, target: any[], index: number) {
@@ -172,13 +206,14 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       action = 'submitForm';
     }
 
-    this.genericFormService[action](this.answerEndpoint, data).subscribe(
-      res => {
-        const metadata = this.createMetadata('answer', 'form', res);
+    this.genericFormService[action](
+      this.answerEndpoint + (update ? data.id + '/' : ''),
+      data
+    ).subscribe(res => {
+      const metadata = this.createMetadata('answer', 'form', res);
 
-        this.answers[id].splice(index, 1, metadata);
-      }
-    );
+      this.answers[id].splice(index, 1, metadata);
+    });
   }
 
   public getId(metadata: Field[]): string {
@@ -187,5 +222,29 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     if (id) {
       return id.value;
     }
+  }
+
+  public getType(metadata: Field[]): number {
+    const type = getElementFromMetadata(metadata, 'type');
+
+    if (type) {
+      return type.value;
+    }
+  }
+
+  public showPreview() {
+    this.modalRef = this.modalService.open(this.previewModal, { size: 'lg' });
+  }
+
+  public checkCount(type: number, length: number) {
+    if (type === 0) {
+      return true;
+    }
+
+    if (type === 2 && length < 2) {
+      return true;
+    }
+
+    return false;
   }
 }

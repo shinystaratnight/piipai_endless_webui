@@ -410,7 +410,10 @@ export class FormRelatedComponent
           });
           this.config.options.sort((p, n) => p.__str__ > n.__str__ ? 1 : -1);
         } else {
-          this.results = data && data !== '-' ? [...data] : [];
+          this.results = data && data !== '-' ? data.map((el) => {
+            el.__str__ = formatString.format(this.display, el);
+            return el;
+          }) : [];
         }
         this.updateData();
       }
@@ -665,17 +668,19 @@ export class FormRelatedComponent
   }
 
   public generateList(value, concat = false): void {
-    this.currentQuery = null;
-    this.hideAutocomplete = false;
-    if (this.config.useOptions) {
-      if (this.searchValue) {
-        this.filter(this.searchValue);
+    if (!this.config.doNotChoice) {
+      this.currentQuery = null;
+      this.hideAutocomplete = false;
+      if (this.config.useOptions) {
+        if (this.searchValue) {
+          this.filter(this.searchValue);
+        } else {
+          this.list = this.config.options;
+          this.generatePreviewList(this.list);
+        }
       } else {
-        this.list = this.config.options;
-        this.generatePreviewList(this.list);
+        this.getOptions(value, this.lastElement, concat);
       }
-    } else {
-      this.getOptions(value, this.lastElement, concat);
     }
   }
 
@@ -765,6 +770,7 @@ export class FormRelatedComponent
         .subscribe(() => {
           if (this.results[index]) {
             this.results.splice(index, 1);
+            this.config.value.splice(index, 1);
             this.changeList();
           }
         });
@@ -815,7 +821,15 @@ export class FormRelatedComponent
       this.saveProcess = false;
       const formatString = new FormatString();
       if (this.config.many) {
+        e.data.__str__ = formatString.format(this.display, e.data);
         this.setValue(e.data);
+        if (!this.config.useOptions) {
+          if (!this.config.value) {
+            this.config.value = [e.data];
+          } else {
+            this.config.value.push(e.data);
+          }
+        }
         return;
       }
       this.group.get(this.key).patchValue(e.data[this.param]);

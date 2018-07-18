@@ -89,7 +89,8 @@
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
             [path]="pageData.pathData.path"
-            [mode]="'edit'"
+            [mode]="formMode"
+            (modeEvent)="modeEvent($event)"
             (event)="formEvent($event)"
             (str)="setTestData($event)">
               <div class="d-flex">
@@ -98,6 +99,19 @@
                   (click)="deleteElement(pageData)">
                     <i fa name="trash"></i>
                     Delete
+                </button>
+
+                <button type="button" class="btn close button-close"
+                  *ngIf="formMode === 'edit'"
+                  (click)="changeMode('view')">
+                    Close without save
+                </button>
+
+                <button type="button" class="btn btn-primary btn-shadow ml-auto button-edit"
+                  *ngIf="formMode === 'view' && checkPermission('update')"
+                  (click)="changeMode('edit')">
+                    <i fa name="pencil"></i>
+                    Edit mode
                 </button>
 
                 <button type="submit" class="btn btn-primary button-save"

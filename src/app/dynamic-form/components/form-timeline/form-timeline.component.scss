@@ -4,6 +4,28 @@
   line-height: 1.2;
 }
 
+.state-info {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  .state-item {
+    width: 48%;
+  }
+
+  .state-substate {
+    width: 200px;
+
+    padding: 10px;
+    margin-bottom: 5px;
+
+    border-radius: 5px;
+    border: 1px solid $gray;
+
+    cursor: pointer;
+  }
+}
+
 .timeline {
   padding-bottom: 25px;
 

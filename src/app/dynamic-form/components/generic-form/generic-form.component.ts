@@ -123,6 +123,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     keys: [],
     observers: []
   };
+  public formData: BehaviorSubject<any>;
 
   public workflowEndpoints = {
     state: `/ecore/api/v2/core/workflownodes/`,
@@ -352,8 +353,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           this.addAutocompleteProperty(this.metadata);
           this.getData(this.metadata);
 
-          const formData = new BehaviorSubject({ data: {} });
-          this.updateFormData(this.metadata, formData);
+          this.formData = new BehaviorSubject({ data: {} });
+          this.updateFormData(this.metadata, this.formData);
 
           const timelineSubject = new Subject();
           this.checkTimeLine(this.metadata, timelineSubject);
@@ -739,7 +740,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     this.parseResponse(response);
     this.event.emit({
       type: 'sendForm',
-      data: response,
+      data: Object.assign(response, this.formData.value.data),
       status: 'success'
     });
   }
@@ -812,12 +813,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             }
           });
         });
-      });
-    } else {
-      this.event.emit({
-        type: 'sendForm',
-        data: response,
-        status: 'success'
       });
     }
   }

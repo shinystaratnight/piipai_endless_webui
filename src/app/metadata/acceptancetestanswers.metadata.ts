@@ -92,7 +92,7 @@ const form = [
           label: 'Answer',
           max: 255
         },
-        read_only: false
+        read_only: true
       },
       {
         key: 'order',
@@ -117,7 +117,7 @@ const form = [
           type: 'number',
           min: 1
         },
-        read_only: false
+        read_only: true
       },
       // {
       //   key: 'is_correct',
@@ -130,27 +130,27 @@ const form = [
       //   },
       //   read_only: false
       // },
-      {
-        type: 'button',
-        width: 0.2,
-        color: 'primary',
-        templateOptions: {
-          text: 'Save',
-          type: 'submit',
-          p: true,
-          small: true
-        }
-      },
-      {
-        type: 'button',
-        width: 0.2,
-        color: 'danger',
-        templateOptions: {
-          text: 'Delete',
-          p: true,
-          small: true
-        }
-      }
+      // {
+      //   type: 'button',
+      //   width: 0.2,
+      //   color: 'primary',
+      //   templateOptions: {
+      //     text: 'Save',
+      //     type: 'submit',
+      //     p: true,
+      //     small: true
+      //   }
+      // },
+      // {
+      //   type: 'button',
+      //   width: 0.2,
+      //   color: 'danger',
+      //   templateOptions: {
+      //     text: 'Delete',
+      //     p: true,
+      //     small: true
+      //   }
+      // }
     ]
   }
 ];

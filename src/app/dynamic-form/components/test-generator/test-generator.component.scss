@@ -1,0 +1,30 @@
+@import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins.scss';
+
+.test-wrapper {
+  padding: 0 40px;
+}
+
+.question {
+  margin-bottom: 2rem;
+}
+
+hr {
+  margin-bottom: 2rem;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.answers {
+  .form-check-label {
+    display: flex;
+    align-items: center;
+
+    input {
+      margin-right: 8px;
+    }
+  }
+}

@@ -38,7 +38,7 @@ const form = [
     children: [
       {
         type: 'group',
-        label: '',
+        label: 'General',
         name: true,
         children: [
           {
@@ -96,7 +96,7 @@ const form = [
       },
       {
         type: 'group',
-        label: '',
+        label: 'Relationships',
         name: true,
         children: [
           {
@@ -107,10 +107,14 @@ const form = [
             many: true,
             options: [],
             doNotChoice: true,
+            prefilled: {
+              acceptance_test: '{id}'
+            },
             templateOptions: {
-              label: 'Acceptance tests industries',
+              label: 'Industries',
               type: 'related',
               values: ['__str__'],
+              display: '{industry.__str__}',
               delete: true,
               add: true
             }
@@ -123,10 +127,14 @@ const form = [
             many: true,
             options: [],
             doNotChoice: true,
+            prefilled: {
+              acceptance_test: '{id}'
+            },
             templateOptions: {
-              label: 'Acceptance tests skills',
+              label: 'Skills',
               type: 'related',
               values: ['__str__'],
+              display: '{skill.__str__}',
               delete: true,
               add: true
             }
@@ -139,10 +147,14 @@ const form = [
             many: true,
             options: [],
             doNotChoice: true,
+            prefilled: {
+              acceptance_test: '{id}'
+            },
             templateOptions: {
-              label: 'Acceptance tests tags',
+              label: 'Tags',
               type: 'related',
               values: ['__str__'],
+              display: '{tag.__str__}',
               delete: true,
               add: true
             }
@@ -196,7 +208,7 @@ const formadd = [
   {
     key: 'is_active',
     type: 'checkbox',
-    default: false,
+    default: true,
     templateOptions: {
       label: 'Active',
       type: 'checkbox',

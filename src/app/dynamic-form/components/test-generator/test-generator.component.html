@@ -1,1 +1,50 @@
-<dynamic-form [config]="formConfig"></dynamic-form>
+<div class="test-wrapper" *ngIf="testData">
+  <h3>{{testData.name}}</h3>
+
+  <p *ngIf="testData.description" class="description">{{testData.description}}</p>
+
+  <hr>
+
+  <ng-container *ngFor="let question of testData.questions; let index = index">
+    <div class="question">
+      <h5>{{index + 1}}. {{question.name}}</h5>
+      <p *ngIf="question.details" class="description">{{question.details}}</p>
+
+      <ng-container [ngSwitch]="question.type">
+        <div class="answers" *ngSwitchCase="0">
+          <template [ngTemplateOutlet]="radio" [ngOutletContext]="{answers: question.answers, index: index}"></template>
+        </div>
+        <div class="answers" *ngSwitchCase="1">
+          <template [ngTemplateOutlet]="text" [ngOutletContext]="{answers: question.answers, index: index}"></template>
+        </div>
+        <div class="answers" *ngSwitchCase="2">
+          <template [ngTemplateOutlet]="radio" [ngOutletContext]="{answers: question.answers, index: index}"></template>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <button *ngIf="send" class="btn btn-primary" (click)="sendForm()">Send</button>
+</div>
+
+<template #radio let-answers="answers" let-index="index">
+  <div class="form-check" *ngFor="let answer of answers">
+    <label class="form-check-label">
+      <input type="radio" [(ngModel)]="testData.questions[index].value" [name]="answer.name" [value]="answer.score"> {{answer.answer}}
+    </label>
+  </div>
+</template>
+
+<template #text let-answer="answer">
+  <div class="form-element">
+    <div class="form-element-content edit" style="height: auto; max-height: none">
+      <textarea name="" id="" cols="30" rows="5"></textarea>
+    </div>
+  </div>
+  <div class="form-element">
+    <label class="col-form-label form-element-label" for="">Score:</label>
+    <div class="form-element-content edit">
+      <input type="number" class="form-control">
+    </div>
+  </div>
+</template>

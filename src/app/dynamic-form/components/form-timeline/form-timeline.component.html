@@ -42,10 +42,58 @@
       </button>
     </div>
 
-    <div class="modal-body" *ngIf="modalData">
-      <generic-form [endpoint]="objectEndpoint" [id]="modalData.id" [data]="stateData" (event)="sendEventHandler($event, c)">
-        <button type="submit" class="btn btn-primary">Save</button>
-      </generic-form>
+    <div class="modal-body timeline" *ngIf="modalData">
+      <ng-container *ngIf="(modalData.tests || modalData.substates) && !modalData.setActive">
+        <div class="state-info">
+          <div class="state-item">
+            <h5>Substates</h5>
+
+            <div class="state-substate"
+              [ngClass]="{
+                'need-requirements': substate.state === 0,
+                'allowed': substate.state === 1,
+                'active': substate.state === 2,
+                'visited': substate.state === 3,
+                'not-allowed': substate.state === 4
+              }"
+              *ngFor="let substate of modalData.substates"
+              (click)="open(substate, c)">
+              {{substate.name_before_activation}}
+            </div>
+
+          </div>
+
+          <div div class="state-item">
+            <h5>Acceptance Tests</h5>
+
+            <table class="table">
+              <tr>
+                <th>Name</th>
+                <th>Score</th>
+                <th>&nbsp;</th>
+              </tr>
+
+              <tr *ngFor="let test of modalData.tests">
+                <td>{{test.acceptance_test.name}}</td>
+                <td>{{test.score}}</td>
+                <td>
+                  <button *ngIf="test.score === 0" class="btn btn-sm btn-primary" (click)="fillinTest(test.acceptance_test.id)">Fill in</button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <button class="btn btn-sm btn-primary mt-3" (click)="modalData.setActive = true">
+          Activate
+        </button>
+      </ng-container>
+
+      <div *ngIf="(!modalData.tests && !modalData.substates) || modalData.setActive">
+        <generic-form [endpoint]="objectEndpoint" [id]="modalData.id" [data]="stateData" (event)="sendEventHandler($event, c)">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </generic-form>
+      </div>
     </div>
   </div>
 </template>
@@ -97,3 +145,18 @@
     </ul>
   </div>
 </template>
+
+<template #test let-c="close">
+    <div class="modal-content-wrapper">
+      <div class="modal-header-wrapper">
+        <div class="modal-header">
+          <button type="button" class="close ml-auto" aria-label="Close" (click)="c()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <test-generator [workflowObject]="modalData.workflowObject" [send]="true" [id]="testId"></test-generator>
+      </div>
+    </div>
+  </template>

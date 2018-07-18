@@ -1,7 +1,7 @@
 <h6 *ngIf="config.label" class="card bg-primary p-2 text-white">{{config.label}}</h6>
 <div class="items">
   <ng-container *ngFor="let field of config.children">
-    <div [ngStyle]="{'flex': field.width || 1, 'flex-basis': field.width * 100}" [hidden]="field.hidden || field.hide">
+    <div [class.item]="field.type === 'button'" [ngStyle]="{'flex': field.width || 1, 'flex-basis': field.width * 100}" [hidden]="field.hidden || field.hide">
       <ng-container
         formElement
         [config]="field"

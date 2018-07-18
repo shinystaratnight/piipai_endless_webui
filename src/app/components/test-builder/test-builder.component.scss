@@ -1,6 +1,20 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
 
+.description-title {
+  display: inline-block;
+
+  margin-top: 10px;
+  margin-left: 40px;
+  margin-right: 10px;
+
+  & + i {
+    visibility: hidden;
+
+    cursor: pointer;
+  }
+}
+
 .test-builder {
 
   form {
@@ -33,16 +47,23 @@
     }
 
     &-item {
-      margin: 10px 40px;
-      padding: 20px 0;
+      margin: 5px 40px;
 
       border: 1px solid rgba(51, 51, 51, .1);
       border-radius: 5px;
+
+      &:hover > .description-title + i {
+        visibility: visible;
+      }
     }
 
     &-button {
       margin-left: 40px;
     }
+  }
+
+  .answers-button {
+    margin-bottom: 10px;
   }
 }
 
