@@ -26,7 +26,46 @@ const list = {
             type: 'static'
           }
         ]
-      }
+      },
+      {
+        content: [
+          {
+            field: 'acceptance_tests_skills',
+            type: 'text',
+            label: 'Skills'
+          }
+        ],
+        name: 'acceptance_tests_skills',
+        title: null,
+        label: 'Skills',
+        delim: null
+      },
+      {
+        content: [
+          {
+            field: 'acceptance_tests_industries',
+            type: 'text',
+            label: 'Skills'
+          }
+        ],
+        name: 'acceptance_tests_industries',
+        title: null,
+        label: 'Industries',
+        delim: null
+      },
+      {
+        content: [
+          {
+            field: 'acceptance_tests_tags',
+            type: 'tags',
+            label: 'Skills'
+          }
+        ],
+        name: 'acceptance_tests_tags',
+        title: null,
+        label: 'Tags',
+        delim: null
+      },
     ],
     editDisable: false
   }

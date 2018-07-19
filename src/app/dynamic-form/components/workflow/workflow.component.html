@@ -22,9 +22,9 @@
         </div>
         <i fa name="times" class="icon text-danger" (click)="deleteNode(node.id, $event)"></i>
       </div>
-
-      <button type="button" class="btn btn-link btn-sm" (click)="addState()">Add State</button>
     </div>
+
+    <a href="" class="add-link" (click)="addState($event)">Add State</a>
   </div>
 </div>
 
@@ -40,7 +40,7 @@
     </div>
     <div class="modal-body">
       <div class="buttons">
-        <button type="button" class="btn btn-sm btn-warning" (click)="openEditModal(modalInfo.node, c)"><i fa name="pencil"></i> Edit</button>
+        <button type="button" class="btn btn-sm btn-warning" (click)="openEditModal(modalInfo.node, c)"><i fa name="pencil"></i>Edit</button>
       </div>
 
       <div class="substates">
@@ -48,7 +48,7 @@
           <label class="field-title">Substates:</label>
 
           <div>
-            <span class="badge badge-outline mt-1 mr-1" style="white-space: normal"
+            <span class="badge badge-outline mb-1 mr-1" style="white-space: normal"
               (click)="openState(state, c)"
               *ngFor="let state of subStates[modalInfo.id]">
                 {{state.workflow_node.name_before_activation}}
@@ -59,13 +59,13 @@
             </span>
           </div>
 
-          <button class="btn btn-link btn-sm" (click)="addSubstate(modalInfo.node)">Add Substate</button>
+          <a href="" class="add-link mt-1" (click)="addSubstate($event, modalInfo.node)">Add Substate</a>
         </div>
 
         <div class="substates-item">
           <label class="field-title">Acceptance Tests:</label>
           <div>
-            <span class="badge badge-outline mt-1 mr-1" style="white-space: normal"
+            <span class="badge badge-outline mb-1 mr-1" style="white-space: normal"
               *ngFor="let test of acceptanceTests[modalInfo.node.id]">
                 {{test.acceptance_test.name}}
                 <i fa class="ml-2"
@@ -73,7 +73,7 @@
                 name="times"></i>
             </span>
           </div>
-          <button class="btn btn-link btn-sm" (click)="addTest(modalInfo.node)">Add Acceptence Test</button>
+          <a href="" class="add-link mt-1" (click)="addTest($event, modalInfo.node)">Add Acceptence Test</a>
         </div>
       </div>
     </div>

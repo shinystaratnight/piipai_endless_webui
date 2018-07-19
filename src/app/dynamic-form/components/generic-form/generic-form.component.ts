@@ -345,7 +345,11 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           this.metadata = this.parseMetadata(data, this.data);
           this.saveHiddenFields(this.metadata);
           this.metadata = this.parseMetadata(data, this.relatedField);
-          this.checkRuleElement(this.metadata);
+
+          if (!(this.id || this.editForm)) {
+            this.checkRuleElement(this.metadata);
+          }
+
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
           this.updateCheckObject(this.metadata);
@@ -520,6 +524,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     this.service.getAll(endp).subscribe(
       ((data: any) => {
         this.fillingForm(this.metadata, data);
+        this.checkRuleElement(this.metadata);
+
         this.addCustomTemplates(this.metadata, data);
         this.show = true;
         const formData = new BehaviorSubject({ data });
@@ -1125,11 +1131,11 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           const workflow = this.getElementFromMetadata(metadata, 'workflow');
 
           if (company) {
-            query += `company=${company.value}&`;
+            query += `company=${company.value.id}&`;
           }
 
           if (workflow) {
-            query += `workflow=${workflow.value}`;
+            query += `workflow=${workflow.value.id}`;
           }
         }
         this.getRalatedData(newMetadata, 'rules', endpoint,

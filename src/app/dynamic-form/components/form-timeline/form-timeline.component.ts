@@ -41,6 +41,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public selectArray: any[];
   public updated: boolean;
 
+  public workflowObjectEndpoint = '/ecore/api/v2/core/workflowobjects/';
+
   private subscriptions: Subscription[];
 
   constructor(
@@ -152,11 +154,25 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         this.modalData.id = state.wf_object_id;
       }
       this.modalData.title = title;
-      this.modalData.tests = state.acceptance_tests.length && state.acceptance_tests;
+      this.modalData.tests = state.acceptance_tests.length && state.acceptance_tests.map((el) => {
+        if (el.score) {
+          const score = parseFloat(el.score);
+
+          el.score = score.toFixed(2);
+        }
+        return el;
+      });
       this.modalData.substates = state.substates.length && state.substates;
       this.modalData.workflowObject = state.wf_object_id;
+      if (state.total_score) {
+        const score = parseFloat(state.total_score);
+
+        state.total_score = score.toFixed(2);
+      }
+
+      this.modalData.state = state;
       this.stateData = this.setDataForState(state);
-      this.modalRef = this.modalService.open(this.stateModal, {size: 'lg'});
+      this.modalRef = this.modalService.open(this.stateModal);
     }
   }
 
@@ -194,14 +210,63 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     }
   }
 
-  public fillinTest(id: string) {
+  public fillinTest(e, id: string, closeModal) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeModal();
+
     this.testId = id;
+
+    if (!this.modalData.workflowObject) {
+      this.createWorkflowObject(this.modalData.state.id);
+
+      return;
+    }
 
     this.modalRef = this.modalService.open(this.testModal, { size: 'lg'});
   }
 
+  public createWorkflowObject(stateId: string) {
+    const body = {
+      object_id: this.objectId,
+      state: {
+        id: stateId
+      },
+      comment: null,
+      active: false
+    };
+
+    this.genericFormService.submitForm(this.workflowObjectEndpoint, body)
+      .subscribe((res) => {
+        this.modalData.state.wf_object_id = res.id;
+        this.modalData.workflowObject = res.id;
+
+        this.modalRef = this.modalService.open(this.testModal, { size: 'lg'});
+      });
+  }
+
   public testComplete(closeModal) {
     closeModal();
+
+    this.getTimeline();
+    this.modalData = null;
+  }
+
+  public calculateProgress(state) {
+    if (state.substates && state.substates.length) {
+      const substatesCount = state.substates.length;
+
+      let activeCount = 0;
+
+      state.substates.forEach((el) => {
+        if (el.state === 2 || el.state === 3) {
+          activeCount += 1;
+        }
+      });
+
+      return `${activeCount} / ${substatesCount}`;
+    }
+
   }
 
 }

@@ -411,7 +411,9 @@ export class FormRelatedComponent
           this.config.options.sort((p, n) => p.__str__ > n.__str__ ? 1 : -1);
         } else {
           this.results = data && data !== '-' ? data.map((el) => {
-            el.__str__ = formatString.format(this.display, el);
+            if (el.__str__) {
+              el.__str__ = formatString.format(this.display, el);
+            }
             return el;
           }) : [];
         }

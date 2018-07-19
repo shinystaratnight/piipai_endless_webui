@@ -88,7 +88,10 @@ export class WorkflowComponent implements OnInit, OnDestroy {
       });
   }
 
-  public addState(parent: string) {
+  public addState(e, parent: string) {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (parent) {
       this.parentId = parent;
     } else {
@@ -142,13 +145,16 @@ export class WorkflowComponent implements OnInit, OnDestroy {
       });
   }
 
-  public addSubstate(node) {
+  public addSubstate(e, node) {
     const parent = node.workflow_node.id;
 
-    this.addState(parent);
+    this.addState(e, parent);
   }
 
-  public addTest(node) {
+  public addTest(e, node) {
+    e.preventDefault();
+    e.stopPropagation();
+
     this.addConfig = this.getAcceptenceTestsConfig(node);
 
     this.modalRef = this.modalService.open(this.testModal);

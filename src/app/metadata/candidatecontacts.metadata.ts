@@ -652,7 +652,7 @@ const form = [
       address: 'contact.address.__str__',
       title: 'contact.__str__',
       updated_at: 'updated_at',
-      picture: 'contact.picture.thumb'
+      picture: 'contact.picture'
     },
     type: 'info',
     key: 'id'
