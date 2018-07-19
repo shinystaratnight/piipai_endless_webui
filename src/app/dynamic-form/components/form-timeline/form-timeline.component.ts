@@ -200,4 +200,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     this.modalRef = this.modalService.open(this.testModal, { size: 'lg'});
   }
 
+  public testComplete(closeModal) {
+    closeModal();
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { GenericFormService } from '../../services/generic-form.service';
 
@@ -11,6 +11,8 @@ export class TestGeneratorComponent implements OnInit {
   @Input() public id: string;
   @Input() public send: boolean;
   @Input() public workflowObject: string;
+
+  @Output() public sended: EventEmitter<any> = new EventEmitter();
 
   public testEndpoint: string;
   public answerEndpoint: string;
@@ -52,7 +54,7 @@ export class TestGeneratorComponent implements OnInit {
       details: data.details,
       type: data.type,
       order: data.order,
-      value: 0,
+      workflow_object: this.workflowObject,
       answers: []
     };
 
@@ -76,11 +78,19 @@ export class TestGeneratorComponent implements OnInit {
   }
 
   public sendForm() {
-    const body = [];
+    const body = this.testData.questions.map((question) => {
+      return {
+        acceptance_test_question: question.acceptance_test_question,
+        workflow_object: question.workflow_object,
+        answer: question.answer,
+        answer_text: question.answer_text,
+        score: question.score
+      };
+    });
 
     this.genericFormService.submitForm(this.answerEndpoint, body)
       .subscribe((res) => {
-        console.log(res);
+        this.sended.emit(true);
       });
   }
 

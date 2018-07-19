@@ -66,7 +66,7 @@
           <div div class="state-item">
             <h5>Acceptance Tests</h5>
 
-            <table class="table">
+            <table class="table table-sm">
               <tr>
                 <th>Name</th>
                 <th>Score</th>
@@ -156,7 +156,12 @@
         </div>
       </div>
       <div class="modal-body">
-        <test-generator [workflowObject]="modalData.workflowObject" [send]="true" [id]="testId"></test-generator>
+        <test-generator
+          [workflowObject]="modalData.workflowObject"
+          [send]="true"
+          [id]="testId"
+          (sended)="testComplete(c)">
+        </test-generator>
       </div>
     </div>
   </template>

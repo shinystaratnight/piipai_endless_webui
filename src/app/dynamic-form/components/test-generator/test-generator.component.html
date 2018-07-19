@@ -30,21 +30,21 @@
 <template #radio let-answers="answers" let-index="index">
   <div class="form-check" *ngFor="let answer of answers">
     <label class="form-check-label">
-      <input type="radio" [(ngModel)]="testData.questions[index].value" [name]="answer.name" [value]="answer.score"> {{answer.answer}}
+      <input type="radio" [(ngModel)]="testData.questions[index].answer" [name]="answer.name" [value]="answer.id"> {{answer.answer}}
     </label>
   </div>
 </template>
 
-<template #text let-answer="answer">
+<template #text let-answer="answer" let-index="index">
   <div class="form-element">
     <div class="form-element-content edit" style="height: auto; max-height: none">
-      <textarea name="" id="" cols="30" rows="5"></textarea>
+      <textarea name="" id="" cols="30" rows="5" [(ngModel)]="testData.questions[index].answer_text"></textarea>
     </div>
   </div>
   <div class="form-element">
     <label class="col-form-label form-element-label" for="">Score:</label>
     <div class="form-element-content edit">
-      <input type="number" class="form-control">
+      <input type="number" class="form-control" [(ngModel)]="testData.questions[index].score">
     </div>
   </div>
 </template>
