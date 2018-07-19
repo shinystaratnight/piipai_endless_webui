@@ -16,6 +16,28 @@ const list = {
     search_enabled: false,
     pagination_label: 'Acceptance Test',
     list: 'acceptancetest',
+    filters: [
+      {
+        key: 'active_states',
+        label: 'Relationships',
+        options: [
+          {
+            value: 'skill',
+            label: 'Skills'
+          },
+          {
+            value: 'tag',
+            label: 'Tags'
+          },
+          {
+            value: 'industry',
+            label: 'Industries'
+          },
+        ],
+        query: 'type',
+        type: 'select'
+      },
+    ],
     columns: [
       {
         label: 'Acceptance Test',
@@ -26,19 +48,6 @@ const list = {
             type: 'static'
           }
         ]
-      },
-      {
-        content: [
-          {
-            field: 'acceptance_tests_skills',
-            type: 'text',
-            label: 'Skills'
-          }
-        ],
-        name: 'acceptance_tests_skills',
-        title: null,
-        label: 'Skills',
-        delim: null
       },
       {
         content: [
@@ -56,8 +65,21 @@ const list = {
       {
         content: [
           {
+            field: 'acceptance_tests_skills',
+            type: 'text',
+            label: 'Skills'
+          }
+        ],
+        name: 'acceptance_tests_skills',
+        title: null,
+        label: 'Skills',
+        delim: null
+      },
+      {
+        content: [
+          {
             field: 'acceptance_tests_tags',
-            type: 'tags',
+            type: 'text',
             label: 'Skills'
           }
         ],
@@ -194,6 +216,26 @@ const form = [
               type: 'related',
               values: ['__str__'],
               display: '{tag.__str__}',
+              delete: true,
+              add: true
+            }
+          },
+          {
+            type: 'related',
+            send: false,
+            endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/',
+            key: 'acceptance_tests_workflow_nodes',
+            many: true,
+            options: [],
+            doNotChoice: true,
+            prefilled: {
+              acceptance_test: '{id}'
+            },
+            templateOptions: {
+              label: 'Workflow Node',
+              type: 'related',
+              values: ['__str__'],
+              display: '{company_workflow_node.__str__}',
               delete: true,
               add: true
             }

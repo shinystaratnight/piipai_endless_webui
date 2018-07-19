@@ -48,12 +48,12 @@
           <div>
             <h5 class="state-info-label">Substates</h5>
 
-            <div *ngFor="let substate of modalData.substates" (click)="open(substate, c)">
+            <span *ngFor="let substate of modalData.substates" (click)="open(substate, c)">
               <template
                 [ngTemplateOutlet]="stateTemplate"
                 [ngOutletContext]="{state: substate}">
               </template>
-            </div>
+            </span>
 
           </div>
 

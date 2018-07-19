@@ -151,8 +151,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       } else if (state.state === 2) {
         title = (state.name_after_activation) ? state.name_after_activation
           : state.name_before_activation;
-        this.modalData.id = state.wf_object_id;
       }
+      this.modalData.id = state.wf_object_id || undefined;
       this.modalData.title = title;
       this.modalData.tests = state.acceptance_tests.length && state.acceptance_tests.map((el) => {
         if (el.score) {

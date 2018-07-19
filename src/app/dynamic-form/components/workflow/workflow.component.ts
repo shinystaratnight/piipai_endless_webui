@@ -279,8 +279,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
         templateOptions: {
           add: true,
           label: 'Workflow Node',
-          values: ['name_before_activation'],
-          display: '{name_before_activation}'
+          values: ['__str__'],
         },
         prefilled: {
           workflow,
@@ -334,6 +333,10 @@ export class WorkflowComponent implements OnInit, OnDestroy {
           required: false,
           label: 'Test type',
           options: [
+            {
+              value: '',
+              label: 'All'
+            },
             {
               value: 'skill',
               label: 'Skill'
