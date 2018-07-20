@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 const list = {
   list: {
     list: 'jobsite',
@@ -107,12 +109,17 @@ const list = {
       {
         content: [
           {
-            field: 'active_states',
-            type: 'static'
+            values: {
+              false: 'times-circle',
+              true: 'check-circle',
+              null: 'minus-circle'
+            },
+            type: 'icon',
+            field: 'is_available'
           }
         ],
-        name: 'active_states',
-        label: 'Active states'
+        name: 'is_available',
+        label: 'Status'
       }
     ],
     pagination_label: 'Jobsite',
@@ -478,7 +485,7 @@ const formset = {
 const form = [
   {
     values: {
-      company: 'regular_company.name',
+      company: 'regular_company.short_name',
       created_at: 'created_at',
       status: {
         field: 'active_states',
@@ -816,7 +823,7 @@ const form = [
     read_only: false,
     hide: true,
     templateOptions: {
-      label: 'Master company',
+      label: 'Provider company',
       add: true,
       delete: false,
       values: ['__str__'],
@@ -883,7 +890,7 @@ const formadd = [
               label: 'Client',
               add: true,
               delete: false,
-              values: ['industry', 'short_name', '__str__'],
+              values: ['industry', 'short_name', '__str__', 'master_company', 'primary_contact'],
               type: 'related',
               edit: true
             },
@@ -1006,7 +1013,7 @@ const formadd = [
             read_only: true,
             key: 'master_company',
             templateOptions: {
-              label: 'Master company',
+              label: 'Provider company',
               add: true,
               delete: false,
               values: ['__str__'],
@@ -1032,7 +1039,7 @@ const formadd = [
               type: 'date'
             },
             showIf: ['primary_contact.id', 'address'],
-            default: '2018-07-04',
+            default: moment().tz('Australia/Sydney'),
             type: 'datepicker'
           },
           {

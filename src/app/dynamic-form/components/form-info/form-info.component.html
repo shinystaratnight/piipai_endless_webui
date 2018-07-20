@@ -17,7 +17,7 @@
     <p>
       <label *ngIf="config && viewMode && (available === true || available === false)" [class.text-success]="available" [class.text-danger]="!available">
         <i class="mr-2" fa [name]="available ? 'check-circle' : 'times-circle'"></i>
-        {{available ? config.metadata['available'].templateOptions.label : 'Not' + config.metadata['available'].templateOptions.label}}
+        {{available ? config.metadata['available'].templateOptions.label : 'Not ' + config.metadata['available'].templateOptions.label}}
       </label>
 
       <ng-container formElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
@@ -102,7 +102,6 @@
       [config]="config.metadata['carrier_reserve']"
       [group]="group">
     </ng-container>
-
 
     <p *ngIf="config && config.metadata['address'] && address && !viewMode && config.editForm">
       <ng-container formElement
