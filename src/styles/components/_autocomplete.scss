@@ -97,13 +97,7 @@
     .form-element &:hover {
       color: $gray;
       width: 100%;
-      background-color: $brand-primary;
-    }
-
-    @each $item in $themes {
-      .#{$item}-theme .form-element &:hover {
-        background-color: map-get($theme-colors, $item);
-      }
+      background-color: #eee;
     }
   }
 

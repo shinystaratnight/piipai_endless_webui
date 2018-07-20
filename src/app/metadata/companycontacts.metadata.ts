@@ -777,7 +777,7 @@ const form = [
       available: 'active',
       title: 'contact.__str__',
       updated_at: 'updated_at',
-      picture: 'contact.picture.thumb'
+      picture: 'contact.picture.origin'
     },
     type: 'info',
     key: 'id'

@@ -16,9 +16,9 @@
     </div>
 
     <div class="form-content"
-      *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'">
+      *ngIf="!reload && !(pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' && pageData.pathData.id) && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'">
         <generic-form
-          *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit'"
+          *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit' "
           [title]="pageData.pathData.title"
           [modal]="pageData.pathData.modal"
           [endpoint]="pageData.endpoint"
@@ -81,6 +81,48 @@
           [id]="pageData.pathData.id"
           (str)="changeFormLabel($event)">
         </form-builder>
+    </div>
+
+    <div class="form-content" *ngIf="!reload && (pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' && pageData.pathData.id)">
+      <test-builder [testData]="acceptenceTestData">
+          <generic-form
+            [endpoint]="pageData.endpoint"
+            [id]="pageData.pathData.id"
+            [path]="pageData.pathData.path"
+            [mode]="formMode"
+            (modeEvent)="modeEvent($event)"
+            (event)="formEvent($event)"
+            (str)="setTestData($event)">
+              <div class="d-flex">
+                <button type="button" class="btn button-delete custom-button"
+                  *ngIf="pageData.pathData.id && checkPermission('delete')"
+                  (click)="deleteElement(pageData)">
+                    <i fa name="trash"></i>
+                    Delete
+                </button>
+
+                <button type="button" class="btn close button-close"
+                  *ngIf="formMode === 'edit'"
+                  (click)="changeMode('view')">
+                    Close without save
+                </button>
+
+                <button type="button" class="btn btn-primary btn-shadow ml-auto button-edit"
+                  *ngIf="formMode === 'view' && checkPermission('update')"
+                  (click)="changeMode('edit')">
+                    <i fa name="pencil"></i>
+                    Edit mode
+                </button>
+
+                <button type="submit" class="btn btn-primary button-save"
+                  *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))"
+                  [disabled]="saveProcess">
+                    Save
+                    <spinner *ngIf="saveProcess"></spinner>
+                </button>
+              </div>
+          </generic-form>
+      </test-builder>
     </div>
   </div>
 

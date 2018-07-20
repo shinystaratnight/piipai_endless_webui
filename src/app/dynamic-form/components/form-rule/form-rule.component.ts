@@ -15,12 +15,13 @@ interface Rule {
   id: number;
   type?: string;
   operator: string;
-  values: number[]|string[];
+  data: any[];
 }
 
 @Component({
   selector: 'form-rule',
-  templateUrl: 'form-rule.component.html'
+  templateUrl: './form-rule.component.html',
+  styleUrls: ['./form-rule.component.scss']
 })
 export class FormRuleComponent extends BasicElementComponent implements OnInit, OnDestroy {
 
@@ -37,25 +38,24 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   public key: any;
   public label: boolean;
 
-  public view: Rule[];
-  public id: number;
-  public addType: string;
   public elementValue: string;
   public app: string;
   public model: string;
-  public ruleArray: any[];
   public statesArray: any[];
   public appsArray: any[];
   public modelsArray: any[];
   public functionsArray: any[];
+
   public editRule: any;
   public choice: string;
   public editIndex: number;
-  public previewRule: any[];
-  public activeStatesConfig: any[];
   public data: OutputData;
   public editValue: string;
+
   public modalRef: any;
+
+  public states: any;
+  public functions: any;
 
   constructor(
     private fb: FormBuilder,
@@ -66,18 +66,16 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
 
   public ngOnInit(): void {
     this.addControl(this.config, this.fb);
-    this.view = [];
-    this.id = 0;
-    this.ruleArray = [];
-    this.previewRule = [];
     this.data = <any> {};
-    if (this.config.value) {
-      this.data = this.config.value;
+    if (this.config.value && Object.keys(this.config.value).length) {
+      this.data = JSON.parse(JSON.stringify(this.config.value));
       this.generateView(this.data);
       this.group.get(this.key).patchValue(this.data);
     } else {
       this.config.activeMetadata[0].value = null;
-      this.view = [];
+
+      this.states = this.createRule();
+      this.functions = this.createRule();
       this.group.get(this.key).patchValue(null);
     }
   }
@@ -88,21 +86,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     }
   }
 
-  public addNewRule(): void {
-    if (this.view) {
-      if (this.view.length === 0 || this.view[this.view.length - 1].values.length > 0) {
-        this.id += 1;
-        this.view.push({
-          id: this.id,
-          operator: 'or',
-          values: []
-        });
-      }
-    }
-  }
-
-  public open(content, type, rule, index = null) {
-    this.addType = type || 'new';
+  public open(content, type, rule, index = null, item) {
     this.editRule = rule;
     this.choice = '';
     this.editValue = '';
@@ -116,13 +100,12 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     this.modelsArray = null;
     this.functionsArray = null;
 
-    if (rule && rule.values[index]) {
+    if (rule && rule[index]) {
       this.editIndex = index;
-      this.editValue = rule.values[index];
+      this.editValue = rule[index];
     }
     if (type === 'state' || type === 'function') {
       this.choice = type;
-      this.ruleArray = this.prepareRuleArray(type, rule.id);
     }
     this.modalRef = this.modalService.open(content);
   }
@@ -131,108 +114,56 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     closeModal();
     let choiceType;
     if (this.elementValue && this.editRule) {
-      if (type) {
-        choiceType = type === 'rule' ? this.addType : type;
-        this.editRule.type = choiceType;
-      }
-      if (this.editRule.values[this.editIndex]) {
-        this.editRule.values[this.editIndex] = this.elementValue;
+      if (this.editRule[this.editIndex]) {
+        this.editRule[this.editIndex] = this.elementValue;
       } else {
-        this.editRule.values.push(this.elementValue);
+        this.editRule.push(this.elementValue);
       }
     }
     this.reset();
-    this.generateData(this.view);
+    this.generateData(type);
   }
 
-  public delete(closeModal) {
+  public delete(closeModal, type) {
     closeModal();
-    let edit = this.editRule;
-    edit.values.splice(this.editIndex, 1);
-    if (!edit.values.length) {
-      edit.type = null;
-    }
+    this.editRule.splice(this.editIndex, 1);
+    this.generateData(type);
     this.reset();
   }
 
   public reset() {
     this.editRule = null;
     this.editIndex = null;
-    this.ruleArray = [];
     this.choice = '';
   }
 
-  public prepareRuleArray(type, currentId): any[] {
-    let array = [];
-    this.view.forEach((el) => {
-      if (el.type && el.type === type && el.id < currentId) {
-        array.push({
-          id: el.id,
-          name: `#${el.id}`
-        });
-      }
-    });
-    return array;
-  }
+  public parseValue(data: any, type?) {
+    let parseValue;
 
-  public showPreview() {
-    this.previewRule = [];
-    let types = ['state', 'function'];
-    types.forEach((el) => {
-      let ruleArray = this.view.filter((elem) => elem.type === el);
-      let lastElement = ruleArray.pop();
-      let parsedRuleValue = this.parseValue(lastElement);
-      this.previewRule.push({
-        label: el[0].toUpperCase() + el.slice(1),
-        value: this.generateStringOfValues(parsedRuleValue, el)
-      });
-    });
-  }
-
-  public parseValue(item): any[] {
-    let parseRule;
-    if (item && item.values) {
-      parseRule = item.values.map((el) => {
-        if (el[0] === '#') {
-          let rule = this.view.filter((elem) => +elem.id === +el.slice(1))[0];
-          el = this.parseValue(rule);
-        }
-        if (item.type === 'state') {
-          let state = this.config.options.filter((elem) => elem.name_before_activation === el)[0];
-          if (state) {
-            el = state.number;
+    if (data && data.data) {
+      parseValue = data.data.map((el) => {
+        if (el) {
+          if (el instanceof Object) {
+            el = this.parseValue(el, type);
           }
-        }
-        return el;
-      });
-      if (parseRule.length > 1) {
-        parseRule.unshift(item.operator);
-      }
-    }
-    return parseRule;
-  }
 
-  public generateStringOfValues(array, type = ''): string {
-    let value = '';
-    let operator;
-    if (array) {
-      operator = (array.length > 1) ? array.shift() : null;
-      let newArray = array.map((el) => {
-        if (Array.isArray(el)) {
-          el = this.generateStringOfValues(el, type);
+          if (type === 'state') {
+            let state = this.config.options.find((elem) => elem.name_before_activation === el);
+            if (state) {
+              el = state.number;
+            }
+          }
+
           return el;
         }
-        if (type === 'state') {
-          let stateObj = this.config.options.filter((elem) => +elem.number === +el)[0];
-          if (stateObj) {
-            el = stateObj.name_before_activation;
-          }
-        }
-        return `"${el}"`;
       });
-      value += (operator) ? newArray.join(` ${operator} `) : newArray.toString();
+
+      if (parseValue.length > 1) {
+        parseValue.unshift(data.operator);
+      }
     }
-    return `( ${value} )`;
+
+    return parseValue;
   }
 
   public generateArray(type) {
@@ -242,15 +173,8 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
       function: 'functionsArray',
       options: 'statesArray'
     };
-    if (type === 'function' || type === 'options') {
-      let existValues = this.editRule.values;
-      this[props[type]] = this.config[type].filter((el) => {
-        return (type === 'options') ? existValues.indexOf(el.name_before_activation) === -1 :
-          existValues.indexOf(el) === -1;
-      });
-    } else {
-      this[props[type]] = [].concat(this.config[type]);
-    }
+
+    this[props[type]] = [].concat(this.config[type]);
   }
 
   public getRelatedData(type) {
@@ -291,20 +215,15 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     });
   }
 
-  public generateData(view) {
-    let types = ['state', 'function'];
-    types.forEach((el) => {
-      let ruleArray = this.view.filter((elem) => elem.type === el);
-      let lastElement = ruleArray.pop();
-      let parsedRuleValue = this.parseValue(lastElement);
-      if (parsedRuleValue) {
-        if (el === 'state') {
-          this.data.required_states = parsedRuleValue;
-        } else if (el === 'function') {
-          this.data.required_functions = parsedRuleValue;
-        }
-      }
-    });
+  public generateData(type: string) {
+    if (type === 'state') {
+      this.data.required_states = this.parseValue(this.states, type);
+    }
+
+    if (type === 'function') {
+      this.data.required_functions = this.parseValue(this.functions);
+    }
+
     this.group.get(this.key).patchValue(this.data);
   }
 
@@ -314,7 +233,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
         return el.number;
       });
     }
-    this.generateData(this.view);
+    this.group.get(this.key).patchValue(this.data);
   }
 
   public generateView(data) {
@@ -326,42 +245,90 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
         let type;
         if (el === 'required_states') {
           type = 'state';
+
+          this.states = this.generateViewForType([].concat(data[el]));
         } else if (el === 'required_functions') {
           type = 'function';
+
+          this.functions = this.generateViewForType([].concat(data[el]));
         }
-        this.generateDataForView([].concat(data[el]), type);
       }
     });
   }
 
-  public generateDataForView(data, type) {
-    if (data.length === 0) {
-      this.createElement(undefined, 'or', this.id += 1, data);
-      return;
-    }
-    if (this.config.options) {
-      let operator = (data.length === 1) ? 'or' : data.shift();
-      let newData = data.map((el, i) => {
-        if (Array.isArray(el)) {
-          let id = this.generateDataForView(el, type);
-          let nemElement = `#${id}`;
-          return nemElement;
-        }
-        if (type === 'state') {
-          let obj = this.config.options.filter((prop) => prop.number === el)[0];
+  public generateViewForType(data: any[], type?) {
+    const operator = data.length > 1 ? data.shift() : 'or';
+
+    const element = {
+      type,
+      operator,
+      data: [],
+    };
+
+    data.forEach((el) => {
+      if (Array.isArray(el)) {
+        const nestedType = 'rule';
+
+        element.data.push(this.generateViewForType([].concat(el), nestedType));
+      } else {
+        if (this.config.options) {
+          let obj = this.config.options.find((prop) => prop.number === el);
           if (obj) {
             el = obj.name_before_activation;
           }
         }
-        return el;
-      });
-      this.createElement(type, operator, this.id += 1, newData);
-      return this.id;
-    }
+
+        element.data.push(el);
+      }
+    });
+
+    return element;
   }
 
-  public createElement(type, operator, id, values) {
-    this.view.push({ id, type, operator, values });
+  public createRule(type?) {
+    return {
+        type: type || '',
+        operator: 'or',
+        data: [],
+    };
+  }
+
+  public addRule(target: any) {
+    target.push(this.createRule('rule'));
+  }
+
+  public isObject(target: any): boolean {
+    return target instanceof Object;
+  }
+
+  public changeOperator(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  public resetRule(type: string) {
+    if (type === 'state') {
+      if (this.config.value && this.config.value.required_states) {
+        this.states = this.generateViewForType([].concat(this.config.value.required_states));
+        this.data.required_states = JSON.parse(JSON.stringify(this.config.value.required_states));
+      } else {
+        this.states = this.generateViewForType([]);
+        this.data.required_states = null;
+      }
+    }
+
+    if (type === 'function') {
+      if (this.config.value && this.config.value.required_functions) {
+        this.functions = this.generateViewForType([].concat(this.config.value.required_functions));
+        this.data.required_functions =
+          JSON.parse(JSON.stringify(this.config.value.required_functions));
+      } else {
+        this.functions = this.generateViewForType([]);
+        this.data.required_functions = null;
+      }
+    }
+
+    this.group.get(this.key).patchValue(this.data);
   }
 
 }

@@ -11,6 +11,7 @@ import { WebCamComponent } from 'ng2-webcam';
 import { ButtonRadioDirective } from 'ngx-bootstrap';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { GooglePlaceModule } from 'ng2-google-place-autocomplete';
+import { DndModule } from 'ng2-dnd';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -34,13 +35,16 @@ import { directives } from './directives';
     InfiniteScrollModule,
     SharedModule,
     GooglePlaceModule,
+    DndModule.forRoot()
   ],
   exports: [
     fromComponents.GenericFormComponent,
     fromComponents.GenericListComponent,
     fromContainers.DynamicFormComponent,
     fromComponents.ProfileComponent,
-    fromContainers.FilterBlockComponent
+    fromContainers.FilterBlockComponent,
+    fromComponents.WorkflowComponent,
+    fromComponents.TestGeneratorComponent,
   ],
   declarations: [
     WebCamComponent,

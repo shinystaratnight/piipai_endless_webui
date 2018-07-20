@@ -1,8 +1,13 @@
-<div *ngIf="!this.config.hide && !this.dropdown" class="timeline">
+<div *ngIf="!this.config.hide && !this.dropdown && !loading" class="timeline">
   <template *ngFor="let state of config.options; let last = last"
     [ngTemplateOutlet]="stateElement"
     [ngOutletContext]="{state: state, last: last}">
   </template>
+</div>
+
+<div *ngIf="loading && !this.dropdown" class="spinner">
+  <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
 </div>
 
 <div *ngIf="selectArray && currentState && this.dropdown" class="timeline timeline-select-wrapper">
@@ -42,23 +47,89 @@
       </button>
     </div>
 
-    <div class="modal-body" *ngIf="modalData">
-      <generic-form [endpoint]="objectEndpoint" [id]="modalData.id" [data]="stateData" (event)="sendEventHandler($event, c)">
-        <button type="submit" class="btn btn-primary">Save</button>
-      </generic-form>
+    <div class="modal-body timeline" *ngIf="modalData">
+      <ng-container *ngIf="(modalData.tests || modalData.substates) && !modalData.setActive">
+        <div class="state-info">
+          <div>
+            <h5 class="state-info-label">Substates</h5>
+
+            <span *ngFor="let substate of modalData.substates" (click)="open(substate, c)">
+              <template
+                [ngTemplateOutlet]="stateTemplate"
+                [ngOutletContext]="{state: substate}">
+              </template>
+            </span>
+
+          </div>
+
+          <div div class="state-tests">
+            <h5 class="state-info-label">Acceptance Tests</h5>
+
+            <table class="table table-sm">
+              <tr>
+                <th>Name</th>
+                <th>Score</th>
+                <th>&nbsp;</th>
+              </tr>
+
+              <tr *ngFor="let test of modalData.tests">
+                <td>{{test.acceptance_test.name}}</td>
+                <td>{{test.score}}</td>
+                <td>
+                  <a href="" *ngIf="!test.score" (click)="fillinTest($event, test.acceptance_test.id, c)">Fill in</a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="footer">
+          <button class="btn btn-sm btn-primary" (click)="modalData.setActive = true">
+            Activate
+          </button>
+
+          <span *ngIf="modalData.state.total_score">Total Score: {{modalData.state.total_score}}</span>
+        </div>
+      </ng-container>
+
+      <div *ngIf="(!modalData.tests && !modalData.substates) || modalData.setActive">
+        <generic-form
+          [mode]="'edit'"
+          [endpoint]="objectEndpoint"
+          [id]="modalData.id"
+          [data]="stateData"
+          (event)="sendEventHandler($event, c)">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </generic-form>
+      </div>
     </div>
   </div>
 </template>
 
 <template #stateElement let-state="state" let-l="last">
-  <div class="timeline-element-wrapper" style="position: relative">
-    <div class="timeline-element badge badge-outline" [ngClass]="{
-              'need-requirements': state.state === 0,
-              'allowed': state.state === 1,
-              'active': state.state === 2,
-              'visited': state.state === 3,
-              'not-allowed': state.state === 4
-            }" (click)="open(state)">
+  <div class="timeline-element-wrapper" style="position: relative" (click)="open(state)">
+    <template
+      [ngTemplateOutlet]="stateTemplate"
+      [ngOutletContext]="{state: state}">
+    </template>
+
+    <svg class="arrow" *ngIf="!l" width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0L3 3L6 0" transform="translate(1 7) rotate(-90)" stroke="#1BD168" />
+    </svg>
+  </div>
+</template>
+
+<template #stateTemplate let-state="state">
+  <div class="timeline-element badge badge-outline"
+    [ngClass]="{
+      'need-requirements': state.state === 0,
+      'allowed': state.state === 1,
+      'active': state.state === 2,
+      'visited': state.state === 3,
+      'not-allowed': state.state === 4
+    }">
       <span *ngIf="state.state === 2">
         {{(state.name_after_activation) ? state.name_after_activation : state.name_before_activation}}
       </span>
@@ -68,22 +139,20 @@
       <span *ngIf="state.state === 0" placement="bottom" [ngbTooltip]="requir">
         {{state.name_before_activation}}
       </span>
-    </div>
-    <svg class="arrow" *ngIf="!l" width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 0L3 3L6 0" transform="translate(1 7) rotate(-90)" stroke="#1BD168" />
-    </svg>
-    <template #requir>
-      <div class="info-block">
-        <h6>To activate this state, fill in the required fields:</h6>
-        <ul>
-          <li *ngFor="let option of state.requirements">
-            <i fa class="icon" name="circle"></i>
-            {{option}}
-          </li>
-        </ul>
-      </div>
-    </template>
+
+      <span class="state-progress">{{calculateProgress(state)}}</span>
   </div>
+  <template #requir>
+    <div class="info-block">
+      <h6>To activate this state, fill in the required fields:</h6>
+      <ul>
+        <li *ngFor="let option of state.requirements">
+          <i fa class="icon" name="circle"></i>
+          {{option}}
+        </li>
+      </ul>
+    </div>
+  </template>
 </template>
 
 <template #requirements>
@@ -95,5 +164,25 @@
         {{option}}
       </li>
     </ul>
+  </div>
+</template>
+
+<template #test let-c="close">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <button type="button" class="close ml-auto" aria-label="Close" (click)="c()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <test-generator
+        [workflowObject]="modalData.workflowObject"
+        [send]="true"
+        [id]="testId"
+        (sended)="testComplete(c)">
+      </test-generator>
+    </div>
   </div>
 </template>

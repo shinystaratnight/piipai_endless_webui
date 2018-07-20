@@ -1,5 +1,5 @@
 <div class="form-info-wrapper">
-  <div class=form-info-left>
+  <div class=form-info-left *ngIf="config.metadata['picture'] || contactAvatar || picture">
     <div class="form-info-image">
       <img *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture">
       <div *ngIf="contactAvatar && !(config && config.metadata['picture'] && !viewMode && config.editForm)" class="contact-avatar">
@@ -94,15 +94,16 @@
       </ng-container>
     </div>
 
-    <p *ngIf="config && viewMode && address" class="description">
-      <ng-container *ngIf="!(config.metadata['link'] && address)" formElement
-        [config]="config.metadata['address']"
-        [group]="group">
-      </ng-container>
-      <span *ngIf="config.metadata['link'] && address">
-        {{address}} <span class="address-hq">|&nbsp;HQ</span>
-      </span>
+    <p *ngIf="config && viewMode && (carrier_reserve || carrier_reserve === 0)">
+      <span >Carrier list reserve: {{carrier_reserve}}</span>
     </p>
+
+    <ng-container *ngIf="!viewMode && config.metadata['carrier_reserve']" formElement
+      [config]="config.metadata['carrier_reserve']"
+      [group]="group">
+    </ng-container>
+
+
     <p *ngIf="config && config.metadata['address'] && address && !viewMode && config.editForm">
       <ng-container formElement
         [config]="config.metadata['address']"

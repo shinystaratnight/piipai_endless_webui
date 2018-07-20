@@ -42,6 +42,8 @@ export class SiteComponent implements OnInit {
   public listNameCache = {};
   public errors: any;
 
+  public acceptenceTestData: any;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -304,5 +306,9 @@ export class SiteComponent implements OnInit {
     }
 
     return undefined;
+  }
+
+  public setTestData(data) {
+    this.acceptenceTestData = data.data;
   }
 }

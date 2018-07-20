@@ -40,7 +40,7 @@ export class SiteSettingsService {
       return this.http.get(endpoint)
         .map((res: Response) => {
           let settings = res.json();
-          this.settings = res;
+          this.settings = res.json();
           setTimeout(() => {
             let body = document.body;
             body.parentElement

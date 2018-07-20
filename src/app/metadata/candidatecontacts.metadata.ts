@@ -18,7 +18,7 @@ const list = {
                 },
                 color_attr: 'number'
               },
-              picture: 'contact.picture.thumb'
+              picture: 'contact.picture.origin'
             },
             field: 'id',
             type: 'info',
@@ -497,7 +497,7 @@ const list = {
           },
           color_attr: 'number'
         },
-        picture: 'contact.picture.thumb'
+        picture: 'contact.picture.origin'
       },
       type: 'info',
       key: 'id'
@@ -652,7 +652,7 @@ const form = [
       address: 'contact.address.__str__',
       title: 'contact.__str__',
       updated_at: 'updated_at',
-      picture: 'contact.picture.thumb'
+      picture: 'contact.picture'
     },
     type: 'info',
     key: 'id'
@@ -1488,7 +1488,7 @@ const formadd = [
       address: 'contact.address.__str__',
       title: 'contact.__str__',
       updated_at: 'updated_at',
-      picture: 'contact.picture.thumb'
+      picture: 'contact.picture'
     },
     type: 'info',
     key: 'id'

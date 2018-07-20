@@ -10,7 +10,7 @@ const list = {
               available: 'availability',
               address: 'address.__str__',
               title: '__str__',
-              picture: 'picture.thumb'
+              picture: 'picture.origin'
             },
             field: 'id',
             type: 'info',

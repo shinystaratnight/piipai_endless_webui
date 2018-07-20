@@ -102,37 +102,6 @@ const form = [
 
 const formadd = [
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: {
-      required: false,
-      label: 'Id',
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
-    key: 'updated_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Updated at',
-      type: 'datetime'
-    },
-    read_only: true
-  },
-  {
-    key: 'created_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Created at',
-      type: 'datetime'
-    },
-    read_only: true
-  },
-  {
     list: false,
     endpoint: '/ecore/api/v2/acceptance-tests/acceptancetests/',
     read_only: true,

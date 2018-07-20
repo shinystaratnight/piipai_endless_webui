@@ -89,6 +89,10 @@ import * as fillin from './fillin.metadata';
 import * as jobsiteMap from './jobsite-map.metadata';
 import * as supervisorApprove from './supervisorApprove.metadata';
 import * as candidateFill from './candidateFill.metadata';
+import * as acceptancetests from './acceptancetests.metadata';
+import * as acceptancetestindustries from './acceptancetestindustries.metadata';
+import * as acceptancetesttags from './acceptancetesttags.metadata';
+import * as acceptancetestworkflownodes from './acceptancetestworkflownodes.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -182,4 +186,8 @@ export const metadata = {
   '/ecore/api/v2/hr/jobsites/jobsite_map/': jobsiteMap.metadata,
   'supervisorApprove': supervisorApprove.metadata,
   'candidateFill': candidateFill.metadata,
+  '/ecore/api/v2/acceptance-tests/acceptancetests/': acceptancetests.metadata,
+  '/ecore/api/v2/acceptance-tests/acceptancetestindustries/': acceptancetestindustries.metadata,
+  '/ecore/api/v2/acceptance-tests/acceptancetesttags/': acceptancetesttags.metadata,
+  '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/': acceptancetestworkflownodes.metadata //tslint:disable-line
 };
