@@ -95,8 +95,13 @@
       </ng-container>
 
       <div *ngIf="(!modalData.tests && !modalData.substates) || modalData.setActive">
-        <generic-form [endpoint]="objectEndpoint" [id]="modalData.id" [data]="stateData" (event)="sendEventHandler($event, c)">
-          <button type="submit" class="btn btn-primary">Save</button>
+        <generic-form
+          [mode]="'edit'"
+          [endpoint]="objectEndpoint"
+          [id]="modalData.id"
+          [data]="stateData"
+          (event)="sendEventHandler($event, c)">
+            <button type="submit" class="btn btn-primary">Save</button>
         </generic-form>
       </div>
     </div>

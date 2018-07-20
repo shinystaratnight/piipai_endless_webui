@@ -4,7 +4,7 @@
       <h4>{{testData.name}}</h4>
       <p *ngIf="testData.description" class="description">{{testData.description}}</p>
     </div>
-    <div class="relationships">
+    <div *ngIf="testData.industries.length || testData.skills.length || testData.tags.length" class="relationships">
       <span class="description mb-2">Relationships:</span>
 
       <span *ngIf="testData.industries.length">

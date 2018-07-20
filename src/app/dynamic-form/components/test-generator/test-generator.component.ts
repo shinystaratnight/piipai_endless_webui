@@ -21,7 +21,6 @@ export class TestGeneratorComponent implements OnInit {
   constructor(private genericFormService: GenericFormService) {}
 
   public ngOnInit() {
-    console.log(this);
     this.testEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetests/';
     this.answerEndpoint = '/ecore/api/v2/acceptance-tests/workflowobjectanswers/';
 

@@ -69,7 +69,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
       requests.push(this.workflowService.updateStateOrder(body, state.id));
     });
 
-    Observable.forkJoin(requests).subscribe((res) => console.log(res));
+    Observable.forkJoin(requests).subscribe();
   }
 
   public getWorkflows() {
