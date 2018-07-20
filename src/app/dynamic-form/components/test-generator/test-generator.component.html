@@ -5,7 +5,7 @@
       <p *ngIf="testData.description" class="description">{{testData.description}}</p>
     </div>
     <div class="relationships">
-      <span class="description">Relationships:</span>
+      <span class="description mb-2">Relationships:</span>
 
       <span *ngIf="testData.industries.length">
         Industries: <span class="description" *ngFor="let item of testData.industries; let last = last">{{item.industry.name}}{{last ? '' : ', '}}</span>

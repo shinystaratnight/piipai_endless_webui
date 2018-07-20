@@ -15,12 +15,17 @@
   </div>
 
   <div class="workflow" *ngIf="currentWorkflowNodes">
-    <div [dragula]='"bag-one"' [dragulaModel]='currentWorkflowNodes' class="workflow-wrapper">
-      <div class="workflow-item" *ngFor="let node of currentWorkflowNodes" (click)="openState(node)">
-        <div class="title">
-          {{node.workflow_node.name_before_activation}}
-        </div>
-        <i fa name="times" class="icon text-danger" (click)="deleteNode(node.id, $event)"></i>
+    <div dnd-sortable-container [sortableData]="currentWorkflowNodes" class="workflow-wrapper">
+      <div class="workflow-item"
+        dnd-sortable
+        [sortableIndex]="i"
+        *ngFor="let node of currentWorkflowNodes; let i = index;"
+        (click)="openState(node)"
+        (onDragSuccess)="onDrop($event)">
+          <div class="title">
+            {{node.workflow_node.name_before_activation}}
+          </div>
+          <i fa name="times" class="icon text-danger" (click)="deleteNode(node.id, $event)"></i>
       </div>
 
     </div>

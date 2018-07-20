@@ -11,7 +11,7 @@ import { WebCamComponent } from 'ng2-webcam';
 import { ButtonRadioDirective } from 'ngx-bootstrap';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { GooglePlaceModule } from 'ng2-google-place-autocomplete';
-import { DragulaModule } from 'ng2-dragula';
+import { DndModule } from 'ng2-dnd';
 
 import { environment } from '../environment';
 
@@ -39,7 +39,7 @@ import { directives } from './directives';
     InfiniteScrollModule,
     GooglePlaceModule,
     SharedModule,
-    DragulaModule,
+    DndModule.forRoot()
   ],
   exports: [
     fromComponents.GenericFormComponent,

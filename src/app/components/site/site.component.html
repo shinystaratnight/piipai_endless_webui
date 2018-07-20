@@ -83,7 +83,7 @@
         </form-builder>
     </div>
 
-    <div class="form-content" *ngIf="(pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' && pageData.pathData.id)">
+    <div class="form-content" *ngIf="!reload && (pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' && pageData.pathData.id)">
       <test-builder [testData]="acceptenceTestData">
           <generic-form
             [endpoint]="pageData.endpoint"

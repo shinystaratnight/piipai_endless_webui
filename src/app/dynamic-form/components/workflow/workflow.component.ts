@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { DragulaService } from 'ng2-dragula';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -43,12 +42,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   constructor(
     private workflowService: WorkflowService,
     private modalService: NgbModal,
-    private dragulaService: DragulaService
-  ) {
-    this.dragulaService.drop.subscribe(() => {
-      this.onDrop(this.currentWorkflowNodes);
-    });
-  }
+  ) { }
 
   public ngOnInit() {
     this.subStates = {};
@@ -63,7 +57,9 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onDrop(states: any[]) {
+  public onDrop() {
+    const states = this.currentWorkflowNodes;
+
     const requests = [];
     states.forEach((state, i) => {
       const body = {
@@ -93,17 +89,17 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
   public getNodes(id: string) {
     this.workflowService.getNodesOfCompany(id, this.company)
-      .subscribe((res) => this.currentWorkflowNodes = res.results);
+      .subscribe((res: any) => this.currentWorkflowNodes = res.results);
   }
 
   public getSubstates(workflowId: string, nodeId: string) {
     this.workflowService.getSubStates(workflowId, nodeId)
-      .subscribe((res) => this.subStates[nodeId] = res.results);
+      .subscribe((res: any) => this.subStates[nodeId] = res.results);
   }
 
   public getAcceptensTests(id: string) {
     this.workflowService.getAcceptenceTets(id)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         this.acceptanceTests[id] = res.results;
       });
   }
@@ -179,7 +175,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     closeModal();
 
     this.workflowService.addAcceptenceTest(data)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         this.getAcceptensTests(res.company_workflow_node);
       });
   }

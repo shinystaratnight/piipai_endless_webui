@@ -33,43 +33,6 @@ const list = {
 };
 
 const form = [
-  // {
-  //   key: 'updated_at',
-  //   type: 'datepicker',
-  //   templateOptions: {
-  //     required: false,
-  //     label: 'Updated at',
-  //     type: 'datetime'
-  //   },
-  //   read_only: true
-  // },
-  // {
-  //   key: 'created_at',
-  //   type: 'datepicker',
-  //   templateOptions: {
-  //     required: false,
-  //     label: 'Created at',
-  //     type: 'datetime'
-  //   },
-  //   read_only: true
-  // },
-  // {
-  //   list: false,
-  //   endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestquestions/',
-  //   read_only: true,
-  //   templateOptions: {
-  //     label: 'Acceptance test question',
-  //     add: true,
-  //     delete: false,
-  //     values: ['__str__'],
-  //     type: 'related',
-  //     edit: true
-  //   },
-  //   collapsed: false,
-  //   type: 'related',
-  //   key: 'acceptance_test_question',
-  //   many: false
-  // },
   {
     type: 'row',
     children: [
@@ -119,94 +82,11 @@ const form = [
         },
         read_only: true
       },
-      // {
-      //   key: 'is_correct',
-      //   default: false,
-      //   type: 'checkbox',
-      //   templateOptions: {
-      //     required: false,
-      //     label: 'Is correct',
-      //     type: 'checkbox'
-      //   },
-      //   read_only: false
-      // },
-      // {
-      //   type: 'button',
-      //   width: 0.2,
-      //   color: 'primary',
-      //   templateOptions: {
-      //     text: 'Save',
-      //     type: 'submit',
-      //     p: true,
-      //     small: true
-      //   }
-      // },
-      // {
-      //   type: 'button',
-      //   width: 0.2,
-      //   color: 'danger',
-      //   templateOptions: {
-      //     text: 'Delete',
-      //     p: true,
-      //     small: true
-      //   }
-      // }
     ]
   }
 ];
 
 const formadd = [
-  // {
-  //   key: 'acceptance_test_question_rels'
-  // },
-  // {
-  //   key: 'id',
-  //   type: 'input',
-  //   hide: true,
-  //   templateOptions: {
-  //     required: false,
-  //     label: 'Id',
-  //     type: 'text'
-  //   },
-  //   read_only: false
-  // },
-  // {
-  //   key: 'updated_at',
-  //   type: 'datepicker',
-  //   templateOptions: {
-  //     required: false,
-  //     label: 'Updated at',
-  //     type: 'datetime'
-  //   },
-  //   read_only: true
-  // },
-  // {
-  //   key: 'created_at',
-  //   type: 'datepicker',
-  //   templateOptions: {
-  //     required: false,
-  //     label: 'Created at',
-  //     type: 'datetime'
-  //   },
-  //   read_only: true
-  // },
-  // {
-  //   list: false,
-  //   endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestquestions/',
-  //   read_only: true,
-  //   templateOptions: {
-  //     label: 'Acceptance test question',
-  //     add: true,
-  //     delete: false,
-  //     values: ['__str__'],
-  //     type: 'related',
-  //     edit: true
-  //   },
-  //   collapsed: false,
-  //   type: 'related',
-  //   key: 'acceptance_test_question',
-  //   many: false
-  // },
   {
     type: 'row',
     children: [
@@ -245,17 +125,6 @@ const formadd = [
         },
         read_only: false
       },
-      // {
-      //   key: 'is_correct',
-      //   default: false,
-      //   type: 'checkbox',
-      //   templateOptions: {
-      //     required: false,
-      //     label: 'Is correct',
-      //     type: 'checkbox'
-      //   },
-      //   read_only: false
-      // },
       {
         type: 'button',
         width: 0.4,
