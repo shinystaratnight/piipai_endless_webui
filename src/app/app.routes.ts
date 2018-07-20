@@ -55,6 +55,15 @@ export const ROUTES: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'billing',
+    loadChildren: './billing/billing.module#BillingModule',
+    resolve: {
+      user: UserService,
+      pagesList: NavigationService
+    },
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     component: SiteComponent,
     canActivate: [AuthGuard],

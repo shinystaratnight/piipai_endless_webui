@@ -1,35 +1,37 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
-import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
+import { SharedModule } from '../shared/shared.module';
+
+import { BillingComponent } from './billing.component';
 import { components } from './components';
 
 import { services } from './services';
 
-import { pipes } from './pipes';
+import { routes } from './billing.routing';
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
-    Angular2FontawesomeModule,
-    ToastModule.forRoot(),
+    RouterModule.forChild(routes),
+    HttpModule,
     FormsModule,
-  ],
-  exports: [
-    ...components,
-    ...pipes
+
+    Angular2FontawesomeModule,
+
+    SharedModule
   ],
   declarations: [
-    ...components,
-    ...pipes
+    BillingComponent,
+    ...components
   ],
   providers: [
     ...services
-  ],
+  ]
 })
-export class SharedModule { }
+export class BillingModule { }
