@@ -15,7 +15,7 @@
   </div>
 
   <div class="workflow" *ngIf="currentWorkflowNodes">
-    <div class="workflow-wrapper">
+    <div [dragula]='"bag-one"' [dragulaModel]='currentWorkflowNodes' class="workflow-wrapper">
       <div class="workflow-item" *ngFor="let node of currentWorkflowNodes" (click)="openState(node)">
         <div class="title">
           {{node.workflow_node.name_before_activation}}
@@ -23,8 +23,9 @@
         <i fa name="times" class="icon text-danger" (click)="deleteNode(node.id, $event)"></i>
       </div>
 
-      <a href="" class="main add-link" (click)="addState($event)">Add State</a>
     </div>
+
+    <a href="" class="main add-link" (click)="addState($event)">Add State</a>
   </div>
 </div>
 
@@ -40,7 +41,7 @@
     </div>
     <div class="modal-body">
       <div class="buttons">
-        <button type="button" class="btn btn-sm btn-warning" (click)="openEditModal(modalInfo.node, c)"><i fa name="pencil"></i>Edit</button>
+        <button type="button" class="btn btn-sm btn-warning" (click)="openEditModal(modalInfo.node, c)"><i fa name="pencil"></i> Edit</button>
       </div>
 
       <div class="substates">

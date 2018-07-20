@@ -1,5 +1,17 @@
 const formadd = [
   {
+    endpoint: '/ecore/api/v2/core/companies/',
+    read_only: true,
+    hide: true,
+    templateOptions: {
+      label: 'Acceptance test',
+      values: ['__str__'],
+    },
+    type: 'related',
+    default: 'currentCompany',
+    key: 'company',
+  },
+  {
     endpoint: '/ecore/api/v2/acceptance-tests/acceptancetests/',
     read_only: true,
     templateOptions: {
@@ -14,7 +26,10 @@ const formadd = [
     read_only: true,
     templateOptions: {
       label: 'Workflow Node',
-      values: ['__str__', 'company_workflow_node'],
+      values: ['__str__'],
+    },
+    query: {
+      company: '{company.id}'
     },
     type: 'related',
     key: 'company_workflow_node',
@@ -23,6 +38,19 @@ const formadd = [
 
 const form = [
   {
+    endpoint: '/ecore/api/v2/core/companies/',
+    read_only: true,
+    send: false,
+    hide: true,
+    templateOptions: {
+      label: 'Acceptance test',
+      values: ['__str__'],
+    },
+    type: 'related',
+    default: 'currentCompany',
+    key: 'company',
+  },
+  {
     endpoint: '/ecore/api/v2/acceptance-tests/acceptancetests/',
     read_only: true,
     templateOptions: {
@@ -37,7 +65,10 @@ const form = [
     read_only: true,
     templateOptions: {
       label: 'Workflow Node',
-      values: ['__str__', 'company_workflow_node'],
+      values: ['__str__'],
+    },
+    query: {
+      company: '{company.id}'
     },
     type: 'related',
     key: 'company_workflow_node',

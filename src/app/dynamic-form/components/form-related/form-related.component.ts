@@ -20,7 +20,7 @@ import 'rxjs/add/operator/filter';
 
 import { GenericFormService } from '../../services';
 import { CheckPermissionService } from '../../../shared/services';
-import { NavigationService, UserService } from '../../../services';
+import { NavigationService, UserService, SettingsService } from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
@@ -126,7 +126,8 @@ export class FormRelatedComponent
     private permission: CheckPermissionService,
     private navigation: NavigationService,
     private userService: UserService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private settingsService: SettingsService
   ) {
     super();
     this.subscriptions = [];
@@ -275,7 +276,9 @@ export class FormRelatedComponent
   public resetAdditionalData() {
     const res = {};
     if (this.group.get(this.key).value === '') {
-      this.fields.forEach((el) => res[el] = null);
+      if (this.fields) {
+        this.fields.forEach((el) => res[el] = null);
+      }
     }
     return res;
   }
@@ -429,6 +432,11 @@ export class FormRelatedComponent
       if (!this.config.hide) {
         this.getOptions.call(this, '', 0, false, this.setValue, id);
       }
+
+    } else if (this.config.default && this.config.default.includes('currentCompany')) {
+      const id = this.settingsService.settings.company_settings.company;
+
+      this.group.get(this.key).patchValue(id);
 
     } else {
       this.parseOptions();

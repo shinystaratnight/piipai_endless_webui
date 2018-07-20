@@ -1,7 +1,23 @@
 <div class="test-wrapper" *ngIf="testData">
-  <h3>{{testData.name}}</h3>
+  <div class="header">
+    <div class="header-title">
+      <h4>{{testData.name}}</h4>
+      <p *ngIf="testData.description" class="description">{{testData.description}}</p>
+    </div>
+    <div class="relationships">
+      <span class="description">Relationships:</span>
 
-  <p *ngIf="testData.description" class="description">{{testData.description}}</p>
+      <span *ngIf="testData.industries.length">
+        Industries: <span class="description" *ngFor="let item of testData.industries; let last = last">{{item.industry.name}}{{last ? '' : ', '}}</span>
+      </span>
+      <span *ngIf="testData.skills.length">
+        Skills: <span class="description" *ngFor="let item of testData.skills; let last = last">{{item.skill.name}}{{last ? '' : ', '}}</span>
+      </span>
+      <span *ngIf="testData.tags.length">
+        Tags: <span class="description" *ngFor="let item of testData.tags; let last = last">{{item.tag.name}}{{last ? '' : ', '}}</span>
+      </span>
+    </div>
+  </div>
 
   <hr>
 
@@ -43,8 +59,8 @@
   </div>
   <div class="form-element">
     <label class="col-form-label form-element-label" for="">Score:</label>
-    <div class="form-element-content edit">
-      <input type="number" class="form-control" [(ngModel)]="testData.questions[index].score">
+    <div class="form-element-content edit" style="width: 50px">
+      <input type="number" min="1" max="5" class="form-control" [(ngModel)]="testData.questions[index].score">
     </div>
   </div>
 </template>

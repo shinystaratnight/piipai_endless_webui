@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DragulaService } from 'ng2-dragula';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
 import { WorkflowService } from '../../services';
 
@@ -41,7 +43,12 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   constructor(
     private workflowService: WorkflowService,
     private modalService: NgbModal,
-  ) {}
+    private dragulaService: DragulaService
+  ) {
+    this.dragulaService.drop.subscribe(() => {
+      this.onDrop(this.currentWorkflowNodes);
+    });
+  }
 
   public ngOnInit() {
     this.subStates = {};
@@ -54,6 +61,19 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     if (this.modalRef) {
       this.modalRef.close();
     }
+  }
+
+  public onDrop(states: any[]) {
+    const requests = [];
+    states.forEach((state, i) => {
+      const body = {
+        order: i
+      };
+
+      requests.push(this.workflowService.updateStateOrder(body, state.id));
+    });
+
+    Observable.forkJoin(requests).subscribe((res) => console.log(res));
   }
 
   public getWorkflows() {
@@ -119,6 +139,8 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   }
 
   public setState(data, parentId?: string) {
+    data.order = this.getNextOrder();
+
     this.workflowService.addWorkflowToCompany(data)
       .subscribe((res) => {
         if (parentId) {
@@ -127,6 +149,23 @@ export class WorkflowComponent implements OnInit, OnDestroy {
           this.getNodes(this.workflowId);
         }
       });
+  }
+
+  public getNextOrder(): number {
+    let order = 0;
+
+    this.currentWorkflowNodes.forEach((el) => {
+      if (el.order > order) {
+        order = el.order;
+      }
+    });
+
+    const length = this.currentWorkflowNodes.length;
+    if (length > order) {
+      order = length;
+    }
+
+    return order;
   }
 
   public addSubstateToCompany(parentId: string, data) {

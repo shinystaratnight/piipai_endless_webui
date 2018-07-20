@@ -88,6 +88,19 @@ const list = {
         label: 'Tags',
         delim: null
       },
+      {
+        content: [
+          {
+            field: 'acceptance_tests_workflow_nodes',
+            type: 'text',
+            label: 'Workflow Node'
+          }
+        ],
+        name: 'acceptance_tests_workflow_nodes',
+        title: null,
+        label: 'Tags',
+        delim: null
+      },
     ],
     editDisable: false
   }
@@ -240,26 +253,6 @@ const form = [
               add: true
             }
           },
-          // {
-          //   key: 'created_at',
-          //   type: 'datepicker',
-          //   read_only: true,
-          //   templateOptions: {
-          //     label: 'Created at',
-          //     type: 'datetime',
-          //     required: false
-          //   }
-          // },
-          // {
-          //   key: 'updated_at',
-          //   type: 'datepicker',
-          //   read_only: true,
-          //   templateOptions: {
-          //     label: 'Updated at',
-          //     type: 'datetime',
-          //     required: false
-          //   }
-          // },
         ]
       }
     ]

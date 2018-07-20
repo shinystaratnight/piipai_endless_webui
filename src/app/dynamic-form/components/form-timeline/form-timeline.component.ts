@@ -40,6 +40,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public dropdown: boolean;
   public selectArray: any[];
   public updated: boolean;
+  public loading: boolean;
 
   public workflowObjectEndpoint = '/ecore/api/v2/core/workflowobjects/';
 
@@ -177,9 +178,11 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public getTimeline(): void {
+    this.loading = true;
 
     this.genericFormService.getByQuery(this.config.endpoint, `?${this.query.join('&')}`)
       .subscribe((res) => {
+        this.loading = false;
         this.config.timelineSubject.next(res);
       });
   }

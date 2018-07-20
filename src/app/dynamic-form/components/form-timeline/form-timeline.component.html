@@ -1,8 +1,13 @@
-<div *ngIf="!this.config.hide && !this.dropdown" class="timeline">
+<div *ngIf="!this.config.hide && !this.dropdown && !loading" class="timeline">
   <template *ngFor="let state of config.options; let last = last"
     [ngTemplateOutlet]="stateElement"
     [ngOutletContext]="{state: state, last: last}">
   </template>
+</div>
+
+<div *ngIf="loading && !this.dropdown" class="spinner">
+  <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
 </div>
 
 <div *ngIf="selectArray && currentState && this.dropdown" class="timeline timeline-select-wrapper">

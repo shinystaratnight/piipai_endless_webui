@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { meta, payrollAccounts } from './myob.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { Field } from '../../dynamic-form/models/field.model';
-// import { SettingsService } from '../settings.service';
+import { SettingsService } from '../settings.service';
 
 import moment from 'moment-timezone';
 
@@ -37,7 +37,7 @@ export class MyobComponent implements OnInit {
   constructor(
     private gfs: GenericFormService,
     private route: ActivatedRoute,
-    // private settingsService: SettingsService,
+    private settingsService: SettingsService,
     private router: Router,
   ) { }
 
@@ -49,9 +49,9 @@ export class MyobComponent implements OnInit {
 
     this.pageUrl = location.origin + location.pathname;
 
-    // this.route.url.subscribe((url) => {
-    //   this.settingsService.url = <any> url;
-    // });
+    this.route.url.subscribe((url) => {
+      this.settingsService.url = <any> url;
+    });
 
     this.route.queryParams.subscribe((params) => {
       let code = params['code'];

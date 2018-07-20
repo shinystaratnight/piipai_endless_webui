@@ -37,6 +37,9 @@ export class TestGeneratorComponent implements OnInit {
       name: data.test_name,
       description: data.description,
       relationship: '',
+      industries: data.acceptance_tests_industries,
+      skills: data.acceptance_tests_skills,
+      tags: data.acceptance_tests_tags,
       questions: []
     };
 

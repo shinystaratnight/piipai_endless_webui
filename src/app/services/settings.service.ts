@@ -13,6 +13,8 @@ export class SettingsService {
   public endpoint: string = '/ecore/api/v2/company_settings/';
   public siteEndpoint: string = '/ecore/api/v2/company_settings/site/';
 
+  public settings: any;
+
   constructor(
     private http: Http,
     private userService: UserService
@@ -37,6 +39,7 @@ export class SettingsService {
     return this.http.get(endpoint)
       .map((res: Response) => {
         let settings = res.json();
+        this.settings = settings;
         setTimeout(() => {
           let body = document.body;
           body.parentElement.classList.add(`${settings.color_scheme || settings.company_settings && settings.company_settings.color_scheme}-theme`); //tslint:disable-line

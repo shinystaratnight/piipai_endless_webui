@@ -37,7 +37,7 @@ export class WorkflowService {
   public getNodesOfCompany(workflowId: string, companyId: string) {
     const headers = this.updateHeaders();
 
-    const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true&limit=-1&only_parent=2`; //tslint:disable-line
+    const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true&limit=-1&only_parent=2&ordering=order`; //tslint:disable-line
 
     return this.http.get(this.companyWorkflowNodeEndpoint + query, { headers })
       .map((res: any) => res && res.json())
@@ -120,6 +120,14 @@ export class WorkflowService {
       .catch((err: any) => this.errorHandler(err));
   }
 
+  public updateStateOrder(data: any, id: string) {
+    const headers = this.updateHeaders();
+
+    return this.http.patch(this.companyWorkflowNodeEndpoint + id + '/', data, { headers })
+      .map((res: any) => res && res.json())
+      .catch((err: any) => Observable.of([]));
+  }
+
   public updateHeaders(): Headers {
     const headers = new Headers();
     headers.append('X-CSRFToken', this.cookie.get('csrftoken'));
@@ -127,6 +135,6 @@ export class WorkflowService {
   }
 
   public errorHandler(error) {
-    return Observable.throw(error.json());
+    return this.errors.parseErrors(error);
   }
 }

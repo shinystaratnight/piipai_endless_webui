@@ -18,6 +18,36 @@ hr {
   line-height: 16px;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  &-title {
+    min-width: 300px;
+    width: calc(100% - 400px);
+  }
+
+  .relationships {
+    display: flex;
+    flex-direction: column;
+
+    max-width: 300px;
+
+    font-size: 12px;
+    line-height: 14px;
+
+    .description {
+      font-size: 12px;
+      line-height: 14px;
+    }
+
+    & > span {
+      margin-bottom: 3px;
+    }
+  }
+}
+
 .answers {
   .form-check-label {
     display: flex;
