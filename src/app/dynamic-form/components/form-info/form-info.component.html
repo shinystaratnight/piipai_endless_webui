@@ -1,9 +1,19 @@
 <div class="form-info-wrapper">
-  <div class=form-info-left *ngIf="config.metadata['picture'] || contactAvatar || picture">
+  <div class=form-info-left *ngIf="config.metadata['picture'] || contactAvatar || picture || map">
     <div class="form-info-image">
       <img *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture">
-      <div *ngIf="contactAvatar && !(config && config.metadata['picture'] && !viewMode && config.editForm)" class="contact-avatar">
+      <div *ngIf="contactAvatar && !(config && config.metadata['picture'] && !viewMode && config.editForm) && !map" class="contact-avatar">
         {{contactAvatar}}
+      </div>
+
+      <div class="map" *ngIf="map">
+        <sebm-google-map [latitude]="map.latitude" [longitude]="map.longitude" [zoom]="13">
+          <sebm-google-map-marker [iconUrl]="'/assets/img/location-red.svg'" [latitude]="map.latitude" [longitude]="map.longitude">
+            <sebm-google-map-info-window>
+              <strong>{{map.__str__}}</strong>
+            </sebm-google-map-info-window>
+          </sebm-google-map-marker>
+        </sebm-google-map>
       </div>
 
       <ng-container formElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
@@ -17,7 +27,7 @@
     <p>
       <label *ngIf="config && viewMode && (available === true || available === false)" [class.text-success]="available" [class.text-danger]="!available">
         <i class="mr-2" fa [name]="available ? 'check-circle' : 'times-circle'"></i>
-        {{available ? config.metadata['available'].templateOptions.label : 'Not' + config.metadata['available'].templateOptions.label}}
+        {{available ? config.metadata['available'].templateOptions.label : 'Not ' + config.metadata['available'].templateOptions.label}}
       </label>
 
       <ng-container formElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
@@ -32,6 +42,14 @@
         [group]="group">
       </ng-container>
     </p>
+
+    <div class="job-title" *ngIf="config && viewMode && client">{{client.short_name}}</div>
+    <div *ngIf="config && config.metadata['client'] && !viewMode && config.editForm">
+      <ng-container formElement
+        [config]="getConfig('client')"
+        [group]="group">
+      </ng-container>
+    </div>
 
     <div class="job-title" *ngIf="config && viewMode && job_title">{{job_title}}</div>
     <div *ngIf="config && config.metadata['job_title'] && !viewMode && config.editForm">
@@ -103,8 +121,7 @@
       [group]="group">
     </ng-container>
 
-
-    <p *ngIf="config && config.metadata['address'] && address && !viewMode && config.editForm">
+    <p *ngIf="config && config.metadata['address'] && address && config.editForm">
       <ng-container formElement
         [config]="config.metadata['address']"
         [group]="group">

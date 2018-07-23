@@ -434,7 +434,6 @@ export class FormRelatedComponent
       }
 
     } else if (this.config.default && this.config.default.includes('currentCompany')) {
-      console.log(this.settingsService.settings);
       const id = this.settingsService.settings.company_settings.company;
 
       this.group.get(this.key).patchValue(id);

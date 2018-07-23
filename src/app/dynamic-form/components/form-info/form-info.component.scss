@@ -75,6 +75,11 @@ p {
     .unavailable {
       background-color: $brand-danger;
     }
+
+    .map {
+      width: 265px;
+      height: 150px;
+    }
   }
 
   &-edit-link {

@@ -26,6 +26,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public company: string;
   public titlePath: boolean;
   public carrier_reserve: number; //tslint:disable-line
+  public map: any;
+  public client: any;
 
   public color: any;
   public colorAttr: string;
@@ -53,7 +55,6 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log(this);
     this.checkModeProperty();
     if (this.config.values && this.config.value) {
       const keys = Object.keys(this.config.values);
@@ -78,6 +79,18 @@ export class FormInfoComponent implements OnInit, OnDestroy {
           this[key] = this.getValue(this.config.values[key], this.config.value, 'picture')
             || (this.getConfig('picture')
               && this.getConfig('picture').companyContact ? '/assets/img/logo.svg' : null);
+        } else if (key === 'map') {
+          this[key] = this.getValue(this.config.values[key], this.config.value);
+
+          if (this[key]) {
+            if (this[key].latitude) {
+              this[key].latitude = parseFloat(this[key].latitude);
+            }
+
+            if (this[key].longitude) {
+              this[key].longitude = parseFloat(this[key].longitude);
+            }
+          }
         } else {
           this[key] = this.getValue(this.config.values[key], this.config.value);
         }

@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 const list = {
   list: {
     list: 'jobsite',
@@ -107,12 +109,17 @@ const list = {
       {
         content: [
           {
-            field: 'active_states',
-            type: 'static'
+            values: {
+              false: 'times-circle',
+              true: 'check-circle',
+              null: 'minus-circle'
+            },
+            type: 'icon',
+            field: 'is_available'
           }
         ],
-        name: 'active_states',
-        label: 'Active states'
+        name: 'is_available',
+        label: 'Status'
       }
     ],
     pagination_label: 'Jobsite',
@@ -478,20 +485,13 @@ const formset = {
 const form = [
   {
     values: {
-      company: 'regular_company.name',
+      client: 'regular_company',
       created_at: 'created_at',
-      status: {
-        field: 'active_states',
-        color: {
-          danger: [0, 80, 90],
-          color_attr: 'number'
-        }
-      },
       available: 'is_available',
       address: 'address.__str__',
       title: 'short_name',
       updated_at: 'updated_at',
-      picture: 'regular_company.logo'
+      map: 'address'
     },
     type: 'info',
     key: 'id'
@@ -692,44 +692,6 @@ const form = [
         }
       },
       {
-        name: 'State',
-        type: 'group',
-        children: [
-          {
-            key: 'timeline',
-            type: 'timeline',
-            query: {
-              model: 'hr.jobsite',
-              object_id: ['{id.id}', '{id}']
-            },
-            templateOptions: {
-              label: '',
-              type: 'timeline',
-              text: ''
-            },
-            endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
-          },
-          {
-            endpoint: '/ecore/api/v2/core/workflowobjects/',
-            templateOptions: {
-              label: 'States history',
-              type: 'list',
-              add_label: '+ Add item',
-              text: 'States history'
-            },
-            collapsed: false,
-            prefilled: {
-              object_id: '{id}'
-            },
-            type: 'list',
-            query: {
-              object_id: '{id}'
-            },
-            help: 'Here you can see changes jobsite states'
-          }
-        ]
-      },
-      {
         endpoint: '/ecore/api/v2/core/notes/',
         templateOptions: {
           label: 'Notes',
@@ -785,20 +747,6 @@ const form = [
     type: 'checkbox'
   },
   {
-    key: 'regular_company.logo',
-    read_only: true,
-    templateOptions: {
-      required: false,
-      label: 'Logo',
-      max: 100,
-      file: false,
-      type: 'picture'
-    },
-    hide: true,
-    default: 'company_pictures/default_picture.jpg',
-    type: 'input'
-  },
-  {
     key: 'short_name',
     type: 'input',
     hide: true,
@@ -816,7 +764,7 @@ const form = [
     read_only: false,
     hide: true,
     templateOptions: {
-      label: 'Master company',
+      label: 'Provider company',
       add: true,
       delete: false,
       values: ['__str__'],
@@ -829,22 +777,21 @@ const form = [
     many: false
   },
   {
-    list: false,
+    key: 'regular_company',
     endpoint: '/ecore/api/v2/core/companies/',
-    read_only: false,
+    read_only: true,
     hide: true,
+    send: false,
     templateOptions: {
-      label: 'Regular company',
+      label: 'Client',
       add: true,
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
+      display: '{short_name}'
     },
-    collapsed: false,
     type: 'related',
-    key: 'regular_company',
-    many: false
   },
   {
     list: false,
@@ -883,7 +830,7 @@ const formadd = [
               label: 'Client',
               add: true,
               delete: false,
-              values: ['industry', 'short_name', '__str__'],
+              values: ['industry', 'short_name', '__str__', 'master_company', 'primary_contact'],
               type: 'related',
               edit: true
             },
@@ -1006,7 +953,7 @@ const formadd = [
             read_only: true,
             key: 'master_company',
             templateOptions: {
-              label: 'Master company',
+              label: 'Provider company',
               add: true,
               delete: false,
               values: ['__str__'],
@@ -1032,7 +979,7 @@ const formadd = [
               type: 'date'
             },
             showIf: ['primary_contact.id', 'address'],
-            default: '2018-07-04',
+            default: moment().tz('Australia/Sydney'),
             type: 'datepicker'
           },
           {
