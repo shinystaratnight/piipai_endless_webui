@@ -36,6 +36,7 @@ export interface Field {
   query?: any;
   currentQuery?: string;
   useOptions?: boolean;
+  doNotChoice?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;

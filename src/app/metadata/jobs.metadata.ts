@@ -913,16 +913,27 @@ const form = [
             many: false
           },
           {
+            endpoint: '/ecore/api/v2/core/tags/',
+            key: 'tags',
+            useOptions: true,
+            templateOptions: {
+              label: 'Tags',
+              values: ['__str__', 'id'],
+              type: 'related',
+            },
+            type: 'related',
+            many: true
+          },
+          {
             key: 'provider_signed_at',
             type: 'datepicker',
-            showIf: ['provider_signed_at'],
             templateOptions: {
               required: false,
               label: 'Accepted at',
               type: 'datetime'
             },
             read_only: true
-          }
+          },
         ]
       },
       {

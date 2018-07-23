@@ -378,10 +378,8 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'company',
-    many: false
   },
   {
     key: 'active',
@@ -394,17 +392,6 @@ const formadd = [
     },
     read_only: false
   },
-  {
-    key: 'hardlock',
-    default: false,
-    type: 'checkbox',
-    templateOptions: {
-      required: false,
-      label: 'Hardlock',
-      type: 'checkbox'
-    },
-    read_only: false
-  }
 ];
 
 export const metadata = {

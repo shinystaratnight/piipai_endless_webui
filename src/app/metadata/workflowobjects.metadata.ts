@@ -260,6 +260,18 @@ const form = [
     read_only: false
   },
   {
+    key: 'score',
+    type: 'input',
+    templateOptions: {
+      required: false,
+      min: 1,
+      max: 5,
+      label: 'Score',
+      type: 'number'
+    },
+    read_only: false
+  },
+  {
     key: 'active',
     default: true,
     type: 'checkbox',
@@ -310,6 +322,18 @@ const formadd = [
       label: 'Comments',
       type: 'textarea',
       description: 'State Change Comment'
+    },
+    read_only: false
+  },
+  {
+    key: 'score',
+    type: 'input',
+    templateOptions: {
+      required: false,
+      min: 1,
+      max: 5,
+      label: 'Score',
+      type: 'number'
     },
     read_only: false
   },

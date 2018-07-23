@@ -7,6 +7,8 @@ import {
   OnDestroy,
   ChangeDetectorRef,
   AfterViewChecked,
+  ElementRef,
+  HostListener,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -18,7 +20,7 @@ import 'rxjs/add/operator/filter';
 
 import { GenericFormService } from '../../services';
 import { CheckPermissionService } from '../../../shared/services';
-import { NavigationService, UserService } from '../../../services';
+import { NavigationService, UserService, SettingsService } from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
@@ -112,6 +114,8 @@ export class FormRelatedComponent
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  @ViewChild('autocomplete') public elementRef: ElementRef;
+
   private searchSubscription: Subscription;
   private subscriptions: Subscription[];
 
@@ -122,7 +126,8 @@ export class FormRelatedComponent
     private permission: CheckPermissionService,
     private navigation: NavigationService,
     private userService: UserService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private settingsService: SettingsService
   ) {
     super();
     this.subscriptions = [];
@@ -271,7 +276,9 @@ export class FormRelatedComponent
   public resetAdditionalData() {
     const res = {};
     if (this.group.get(this.key).value === '') {
-      this.fields.forEach((el) => res[el] = null);
+      if (this.fields) {
+        this.fields.forEach((el) => res[el] = null);
+      }
     }
     return res;
   }
@@ -387,24 +394,31 @@ export class FormRelatedComponent
         if (this.config.options && this.config.options.length) {
           let results = [];
           this.config.options.forEach((el) => {
+            el.__str__ = formatString.format(this.display, el);
+            el.checked = false;
             data.forEach((elem) => {
               if (elem instanceof Object) {
                 if (elem[this.param] === el[this.param]) {
+                  el.checked = true;
                   results.push(el);
                 }
               } else {
                 if (elem === el[this.param]) {
+                  el.checked = true;
                   results.push(el);
                 }
               }
             });
-            results.forEach((elem) => {
-              elem.__str__ = formatString.format(this.display, elem);
-            });
             this.results = [...results];
           });
+          this.config.options.sort((p, n) => p.__str__ > n.__str__ ? 1 : -1);
         } else {
-          this.results = data && data !== '-' ? [...data] : [];
+          this.results = data && data !== '-' ? data.map((el) => {
+            if (el.__str__) {
+              el.__str__ = formatString.format(this.display, el);
+            }
+            return el;
+          }) : [];
         }
         this.updateData();
       }
@@ -419,6 +433,13 @@ export class FormRelatedComponent
         this.getOptions.call(this, '', 0, false, this.setValue, id);
       }
 
+    } else if (this.config.default && this.config.default.includes('currentCompany')) {
+      const id = this.settingsService.settings.company_settings.company;
+
+      this.group.get(this.key).patchValue(id);
+
+    } else {
+      this.parseOptions();
     }
 
     this.generateDataForList(this.config, this.config.value);
@@ -430,6 +451,16 @@ export class FormRelatedComponent
     }
 
     this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
+  public parseOptions() {
+    if (this.config.options && this.config.options.length) {
+      let formatString = new FormatString();
+      this.config.options.forEach((el) => {
+        el.__str__ = formatString.format(this.display, el);
+      });
+      this.config.options.sort((p, n) => p.__str__ > n.__str__ ? 1 : -1);
+    }
   }
 
   public getReplaceElements(metadata: Field[]): void {
@@ -635,7 +666,7 @@ export class FormRelatedComponent
   }
 
   public openAutocomplete(): void {
-    if (this.config.type !== 'address') {
+    if (this.config.type !== 'address' && !this.config.doNotChoice) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
         this.generateList(this.searchValue);
@@ -647,27 +678,28 @@ export class FormRelatedComponent
   }
 
   public generateList(value, concat = false): void {
-    this.currentQuery = null;
-    this.hideAutocomplete = false;
-    if (this.config.useOptions) {
-      if (this.searchValue) {
-        this.filter(this.searchValue);
+    if (!this.config.doNotChoice) {
+      this.currentQuery = null;
+      this.hideAutocomplete = false;
+      if (this.config.useOptions) {
+        if (this.searchValue) {
+          this.filter(this.searchValue);
+        } else {
+          this.list = this.config.options;
+          this.generatePreviewList(this.list);
+        }
       } else {
-        const formatString = new FormatString();
-        this.config.options.forEach((el) => {
-          el.__str__ = formatString.format(this.display, el);
-        });
-        this.list = this.config.options
-          .filter((el) => !(this.results.indexOf(el) > -1))
-          .sort((p, n) => p.__str__ > n.__str__ ? 1 : -1);
-        this.generatePreviewList(this.list);
+        this.getOptions(value, this.lastElement, concat);
       }
-    } else {
-      this.getOptions(value, this.lastElement, concat);
     }
   }
 
   public generatePreviewList(list) {
+    if (this.config.options) {
+      this.previewList = list;
+      return;
+    }
+
     this.lastElement += this.limit;
     this.previewList = list.slice(0, this.lastElement);
   }
@@ -692,14 +724,13 @@ export class FormRelatedComponent
         filteredList = this.config.options.filter((el) => {
           let val = el.__str__;
           if (val) {
-            let existInConfig = val.toLowerCase().indexOf(value.toLowerCase()) > -1;
-            if (existInConfig) {
-              return this.results.indexOf(el) === -1;
-            }
+            return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
           }
         });
         this.list = filteredList;
         this.generatePreviewList(this.list);
+      } else {
+        this.generatePreviewList(this.config.options);
       }
     } else {
       this.generateList(value);
@@ -710,8 +741,17 @@ export class FormRelatedComponent
     const formatString = new FormatString();
     if (item) {
       if (this.config.many) {
-        this.results.push(item);
-        this.hideAutocomplete = true;
+
+        if (this.config.useOptions) {
+          if (item.checked) {
+            this.results.push(item);
+          } else {
+            this.results.splice(this.results.indexOf(item), 1);
+          }
+        } else {
+          this.results.push(item);
+        }
+
         this.updateData();
       } else {
         this.displayValue = formatString.format(this.display, item);
@@ -723,11 +763,13 @@ export class FormRelatedComponent
     }
     this.changeList();
     this.eventHandler({type: 'change'}, item && item[this.param], item);
-    this.searchValue = null;
-    this.list = null;
-    this.count = null;
-    this.previewList = null;
-    this.cd.detectChanges();
+    if (!this.config.useOptions) {
+      this.searchValue = null;
+      this.list = null;
+      this.count = null;
+      this.previewList = null;
+      this.cd.detectChanges();
+    }
   }
 
   public deleteItem(index: number, item: any, api: boolean) {
@@ -738,11 +780,17 @@ export class FormRelatedComponent
         .subscribe(() => {
           if (this.results[index]) {
             this.results.splice(index, 1);
+            this.config.value.splice(index, 1);
             this.changeList();
           }
         });
     } else {
       if (this.results[index]) {
+        const val = this.config.options
+          .find((el) => el[this.param] === this.results[index][this.param]);
+        if (val) {
+          val.checked = false;
+        }
         this.results.splice(index, 1);
         this.changeList();
         this.updateData();
@@ -783,7 +831,15 @@ export class FormRelatedComponent
       this.saveProcess = false;
       const formatString = new FormatString();
       if (this.config.many) {
+        e.data.__str__ = formatString.format(this.display, e.data);
         this.setValue(e.data);
+        if (!this.config.useOptions) {
+          if (!this.config.value) {
+            this.config.value = [e.data];
+          } else {
+            this.config.value.push(e.data);
+          }
+        }
         return;
       }
       this.group.get(this.key).patchValue(e.data[this.param]);
@@ -988,5 +1044,24 @@ export class FormRelatedComponent
 
   public trackByFn(value) {
     return value[this.param];
+  }
+
+  @HostListener('document:click', ['$event'])
+  public handleClick(event) {
+    let clickedComponent = event.target;
+    let inside = false;
+    if (this.elementRef) {
+      do {
+        if (clickedComponent === this.elementRef.nativeElement) {
+          inside = true;
+        }
+        clickedComponent = clickedComponent.parentNode;
+      } while (clickedComponent);
+      if (!inside) {
+        this.hideAutocomplete = true;
+        this.cd.detectChanges();
+        return;
+      }
+    }
   }
 }

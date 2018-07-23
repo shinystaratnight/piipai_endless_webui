@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormBuilderComponent } from './form-builder/form-builder.component';
 import { FillInComponent } from './fill-in/fill-in.component';
 import { VerifyEmailComponent } from './varify-email/varify-email.component';
+import { TestBuilderComponent } from './test-builder/test-builder.component';
 
 export * from './contact-registration-form/contact-registration-form.component';
 export * from './dashboard/dashboard.component';
@@ -13,6 +14,7 @@ export * from './form-builder/form-builder.component';
 export * from './login-form/login-form.component';
 export * from './site/site.component';
 export * from './varify-email/varify-email.component';
+export * from './test-builder/test-builder.component';
 
 export const components = [
   LoginFormComponent,
@@ -21,5 +23,6 @@ export const components = [
   DashboardComponent,
   FormBuilderComponent,
   FillInComponent,
-  VerifyEmailComponent
+  VerifyEmailComponent,
+  TestBuilderComponent
 ];

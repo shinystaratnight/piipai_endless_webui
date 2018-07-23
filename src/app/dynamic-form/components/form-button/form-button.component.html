@@ -1,6 +1,6 @@
 <div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden">
   <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
-  <button type="button"
+  <button [type]="config.templateOptions.type ? config.templateOptions.type : 'button'"
     *ngIf="!config.hidden && (config.templateOptions.text || repeatArray && repeatArray.length > 1)"
     [ngClass]="[buttonClass]"
     [ngStyle]="{'backgroundColor': config.color}"
@@ -9,15 +9,18 @@
     [class.btn-sm]="config.templateOptions.small"
     [class.px-2]="config.templateOptions.p"
     [class.pl-4.pr-4]="!config.templateOptions.p"
-    [class.btn-primary]="!config.list"
     [class.text-white]="buttonClass || config.color"
     (click)="action($event)">
-      <span class="d-flex align-items-center justify-content-between">
+      <span *ngIf="repeatArray" class="d-flex align-items-center justify-content-between">
         <i fa
           [ngClass]="{'text-white': buttonClass, 'mr-1': !last || first}"
           *ngFor="let icon of repeatArray; let last = last; let first = first"
-          [name]="config.templateOptions.icon"></i>{{config.templateOptions.text}}
+          [name]="config.templateOptions.icon">
+        </i>
+        {{config.templateOptions.text}}
       </span>
+
+      <span *ngIf="!repeatArray">{{config.templateOptions.text}}</span>
   </button>
   <span class="custom-button" *ngIf="!config.hidden && !config.templateOptions.text && repeatArray && repeatArray.length === 1" (click)="action($event)">
     <i class="icon" fa [name]="config.templateOptions.icon"

@@ -1,5 +1,5 @@
 <div class="form-info-wrapper">
-  <div class=form-info-left *ngIf="config.metadata['picture']">
+  <div class=form-info-left *ngIf="config.metadata['picture'] || contactAvatar">
     <div class="form-info-image">
       <img *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture">
       <div *ngIf="contactAvatar && !(config && config.metadata['picture'] && !viewMode && config.editForm)" class="contact-avatar">
