@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { meta } from './company.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { SettingsService } from '../settings.service';
+import { SiteSettingsService } from '../../services';
 
 @Component({
   selector: 'company',
@@ -35,7 +36,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
     private gfs: GenericFormService,
     private route: ActivatedRoute,
     private settingsService: SettingsService,
-    private router: Router
+    private siteSettings: SiteSettingsService
   ) { }
 
   public ngOnInit() {
@@ -74,6 +75,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
     this.saveProcess = true;
     this.gfs.submitForm(this.endpoint, data).subscribe(
       (res: any) => {
+        this.siteSettings.settings = data;
         this.saveProcess = false;
         this.savedTheme = null;
         this.savedFont = null;

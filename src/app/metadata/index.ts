@@ -86,6 +86,7 @@ import * as shifts from './shifts.metadata';
 import * as jobtags from './jobtags.metadata';
 import * as extend from './extend.metadata';
 import * as fillin from './fillin.metadata';
+import * as jobsiteMap from './jobsite-map.metadata';
 import * as supervisorApprove from './supervisorApprove.metadata';
 import * as candidateFill from './candidateFill.metadata';
 import * as acceptancetests from './acceptancetests.metadata';
@@ -182,6 +183,7 @@ export const metadata = {
   '/ecore/api/v2/hr/jobtags/': jobtags.metadata,
   'extend': extend.metadata,
   'fillin': fillin.metadata,
+  '/ecore/api/v2/hr/jobsites/jobsite_map/': jobsiteMap.metadata,
   'supervisorApprove': supervisorApprove.metadata,
   'candidateFill': candidateFill.metadata,
   '/ecore/api/v2/acceptance-tests/acceptancetests/': acceptancetests.metadata,

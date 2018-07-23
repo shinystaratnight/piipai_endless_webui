@@ -182,17 +182,17 @@ export class SiteComponent implements OnInit {
     }
   }
 
-  public getPageNavigation(url) {
-    if (!this.modulesList) {
+  public getPageNavigation(url: any[]) {
+    if (!this.modulesList && !url.length) {
       this.getModelsList(url);
     }
     if (!this.pagesList) {
       this.getPages(url);
     }
-    if (!this.userModules) {
+    if (!this.userModules && !url.length) {
       this.getUserModules(url);
     }
-    if (this.modulesList && this.userModules && this.pagesList) {
+    if (this.pagesList) {
       this.getPageData(url);
     }
   }

@@ -13,8 +13,6 @@ import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { GooglePlaceModule } from 'ng2-google-place-autocomplete';
 import { DndModule } from 'ng2-dnd';
 
-import { environment } from '../environment';
-
 import { SharedModule } from '../shared/shared.module';
 
 import { services } from './services';
@@ -33,12 +31,10 @@ import { directives } from './directives';
     Angular2FontawesomeModule,
     FormsModule,
     RouterModule,
-    AgmCoreModule.forRoot({
-      apiKey: (<any> process.env).GOOGLE_GEO_CODING_API_KEY || environment.GOOGLE_GEO_CODING_API_KEY
-    }),
+    AgmCoreModule,
     InfiniteScrollModule,
-    GooglePlaceModule,
     SharedModule,
+    GooglePlaceModule,
     DndModule.forRoot()
   ],
   exports: [
@@ -46,6 +42,7 @@ import { directives } from './directives';
     fromComponents.GenericListComponent,
     fromContainers.DynamicFormComponent,
     fromComponents.ProfileComponent,
+    fromContainers.FilterBlockComponent,
     fromComponents.WorkflowComponent,
     fromComponents.TestGeneratorComponent,
   ],

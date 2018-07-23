@@ -8,7 +8,7 @@ import 'rxjs/add/operator/catch';
 import { UserService } from './user.service';
 
 @Injectable()
-export class SettingsService {
+export class SiteSettingsService {
 
   public endpoint: string = '/ecore/api/v2/company_settings/';
   public siteEndpoint: string = '/ecore/api/v2/company_settings/site/';
@@ -36,18 +36,23 @@ export class SettingsService {
   }
 
   private getSettings(endpoint: string): Observable<any> {
-    return this.http.get(endpoint)
-      .map((res: Response) => {
-        let settings = res.json();
-        this.settings = settings;
-        setTimeout(() => {
-          let body = document.body;
-          body.parentElement.classList.add(`${settings.color_scheme || settings.company_settings && settings.company_settings.color_scheme}-theme`); //tslint:disable-line
-          body.style.fontFamily = `${settings.font || (settings.company_settings && settings.company_settings.font)}, sans-serif`;
-        }, 700);
-        return res.json();
-      })
-      .catch((err: any) => Observable.of(true));
+    if (!this.settings) {
+      return this.http.get(endpoint)
+        .map((res: Response) => {
+          let settings = res.json();
+          this.settings = res.json();
+          setTimeout(() => {
+            let body = document.body;
+            body.parentElement
+              .classList.add(`${settings.color_scheme || settings.company_settings && settings.company_settings.color_scheme}-theme`); //tslint:disable-line
+            body.style.fontFamily = `${settings.font || (settings.company_settings && settings.company_settings.font)}, sans-serif`;
+          }, 700);
+          return res.json();
+        })
+        .catch((err: any) => Observable.of(true));
+    } else {
+      return Observable.of(this.settings);
+    }
   }
 
 }

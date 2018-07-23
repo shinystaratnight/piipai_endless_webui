@@ -84,6 +84,12 @@ export class SiteService {
         type: 'profile',
         path: this.generatePath(urlCopy)
       };
+    } else if (lastElement === 'map') {
+      urlCopy.push(lastElement);
+      data = {
+        type: 'map',
+        path: this.generatePath(urlCopy)
+      };
     } else {
       urlCopy.push(lastElement);
       if (urlCopy.indexOf('settings') > -1) {

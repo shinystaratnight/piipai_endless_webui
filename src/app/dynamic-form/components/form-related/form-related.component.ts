@@ -20,7 +20,7 @@ import 'rxjs/add/operator/filter';
 
 import { GenericFormService } from '../../services';
 import { CheckPermissionService } from '../../../shared/services';
-import { NavigationService, UserService, SettingsService } from '../../../services';
+import { NavigationService, UserService, SiteSettingsService } from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
@@ -127,7 +127,7 @@ export class FormRelatedComponent
     private navigation: NavigationService,
     private userService: UserService,
     private cd: ChangeDetectorRef,
-    private settingsService: SettingsService
+    private settingsService: SiteSettingsService
   ) {
     super();
     this.subscriptions = [];
@@ -434,6 +434,7 @@ export class FormRelatedComponent
       }
 
     } else if (this.config.default && this.config.default.includes('currentCompany')) {
+      console.log(this.settingsService.settings);
       const id = this.settingsService.settings.company_settings.company;
 
       this.group.get(this.key).patchValue(id);

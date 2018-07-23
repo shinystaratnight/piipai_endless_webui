@@ -12,6 +12,7 @@ import { ListColumnComponent } from './list-column/list-column.component';
 
 export * from './dynamic-form/dynamic-form.component';
 export * from './dynamic-list/dynamic-list.component';
+export * from './filter-block/filter-block.component';
 
 export const entryComponents = [
   DynamicFormComponent,
