@@ -140,112 +140,6 @@ const list = {
         label: 'State',
         delim: null
       },
-      {
-        content: [
-          {
-            field: 'title',
-            type: 'static'
-          }
-        ],
-        name: 'title',
-        title: null,
-        label: 'Title',
-        delim: null
-      },
-      {
-        delim: null,
-        label: 'Created at',
-        sort: true,
-        content: [
-          {
-            field: 'created_at',
-            type: 'datepicker',
-            label: 'Created at'
-          }
-        ],
-        name: 'created_at',
-        title: null,
-        sort_field: 'created_at'
-      },
-      {
-        delim: null,
-        label: 'Updated at',
-        sort: true,
-        content: [
-          {
-            field: 'updated_at',
-            type: 'datepicker',
-            label: 'Updated at'
-          }
-        ],
-        name: 'updated_at',
-        title: null,
-        sort_field: 'updated_at'
-      },
-      {
-        delim: null,
-        label: 'Published',
-        sort: true,
-        content: [
-          {
-            field: 'published',
-            type: 'checkbox',
-            label: 'Published'
-          }
-        ],
-        name: 'published',
-        title: null,
-        sort_field: 'published'
-      },
-      {
-        delim: null,
-        label: 'Publishing Date',
-        sort: true,
-        content: [
-          {
-            field: 'publish_on',
-            type: 'datepicker',
-            label: 'Publishing Date'
-          }
-        ],
-        name: 'publish_on',
-        title: null,
-        sort_field: 'publish_on'
-      },
-      {
-        delim: null,
-        label: 'Expiration date',
-        sort: true,
-        content: [
-          {
-            field: 'expires_on',
-            type: 'datepicker',
-            label: 'Expiration date'
-          }
-        ],
-        name: 'expires_on',
-        title: null,
-        sort_field: 'expires_on'
-      }
-    ],
-    tabs: [
-      {
-        label: 'Details',
-        is_collapsed: false,
-        fields: ['fulfilled', 'actions', 'timesheets', 'activities', 'state']
-      },
-      {
-        label: 'Other',
-        is_collapsed: true,
-        fields: [
-          'title',
-          'created_at',
-          'updated_at',
-          'published',
-          'publish_on',
-          'expires_on'
-        ]
-      }
     ],
     pagination_label: 'Job',
     search_enabled: true,
@@ -847,28 +741,6 @@ const form = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companycontacts/',
-            read_only: true,
-            key: 'customer_representative',
-            templateOptions: {
-              label: 'Client representative',
-              add: true,
-              delete: false,
-              values: ['__str__'],
-              type: 'related',
-              edit: true
-            },
-            collapsed: false,
-            default: '{jobsite.primary_contact.id}',
-            showIf: ['jobsite.id'],
-            type: 'related',
-            query: {
-              jobsites: '{jobsite.id}'
-            },
-            many: false
-          },
-          {
-            list: false,
             endpoint: '/ecore/api/v2/core/companies/',
             read_only: true,
             key: 'provider_company',
@@ -1015,27 +887,31 @@ const form = [
             },
             read_only: false
           },
-          {
-            list: false,
-            endpoint: '/ecore/api/v2/skills/skillbaserates/',
-            read_only: false,
-            key: 'hourly_rate_default',
-            templateOptions: {
-              label: 'Candidate rate default',
-              add: true,
-              delete: false,
-              values: ['hourly_rate'],
-              type: 'related',
-              edit: true,
-              display: '${hourly_rate}/h'
-            },
-            collapsed: false,
-            type: 'related',
-            query: {
-              skill: '{position.id}'
-            },
-            many: false
-          },
+
+          // upper_rate_limit
+          // lower_rate_limit
+
+          // {
+          //   list: false,
+          //   endpoint: '/ecore/api/v2/skills/skillbaserates/',
+          //   read_only: false,
+          //   key: 'hourly_rate_default',
+          //   templateOptions: {
+          //     label: 'Candidate rate default',
+          //     add: true,
+          //     delete: false,
+          //     values: ['hourly_rate'],
+          //     type: 'related',
+          //     edit: true,
+          //     display: '${hourly_rate}/h'
+          //   },
+          //   collapsed: false,
+          //   type: 'related',
+          //   query: {
+          //     skill: '{position.id}'
+          //   },
+          //   many: false
+          // },
           {
             key: 'notes',
             type: 'textarea',
@@ -1069,7 +945,8 @@ const form = [
       job: '{id}'
     },
     prefilled: {
-      job: '{id}'
+      job: '{id}',
+      skill: '{position.id}'
     },
     type: 'list',
     add_metadata_query: {
@@ -1165,7 +1042,6 @@ const formadd = [
         type: 'column',
         children: [
           {
-            list: false,
             endpoint: '/ecore/api/v2/core/companies/',
             read_only: true,
             key: 'customer_company',
@@ -1173,38 +1049,11 @@ const formadd = [
               label: 'Client',
               add: true,
               delete: false,
-              values: ['__str__'],
+              values: ['__str__', 'master_company', 'primary_contact'],
               type: 'related',
               edit: true
             },
-            collapsed: false,
             type: 'related',
-            query: {
-              fields: 'primary_contact'
-            },
-            many: false
-          },
-          {
-            list: false,
-            endpoint: '/ecore/api/v2/core/companycontacts/',
-            read_only: true,
-            key: 'customer_representative',
-            templateOptions: {
-              label: 'Client representative',
-              add: true,
-              delete: false,
-              values: ['__str__'],
-              type: 'related',
-              edit: true
-            },
-            collapsed: false,
-            default: '{jobsite.primary_contact.id}',
-            showIf: ['jobsite.id'],
-            type: 'related',
-            query: {
-              jobsites: '{jobsite.id}'
-            },
-            many: false
           },
           {
             list: false,
@@ -1252,6 +1101,43 @@ const formadd = [
             many: false
           },
           {
+            endpoint: '/ecore/api/v2/core/companycontacts/',
+            read_only: true,
+            key: 'customer_representative',
+            templateOptions: {
+              label: 'Client representative',
+              add: true,
+              delete: false,
+              values: ['__str__'],
+              type: 'related',
+              edit: true
+            },
+            additional_text: 'Or',
+            default: '{jobsite.primary_contact.id}',
+            type: 'related',
+            query: {
+              jobsites: '{jobsite.id}'
+            },
+          },
+          {
+            endpoint: '/ecore/api/v2/hr/jobsites/',
+            read_only: false,
+            key: 'jobsite',
+            templateOptions: {
+              label: 'Jobsite',
+              add: true,
+              delete: false,
+              values: ['primary_contact', '__str__'],
+              type: 'related',
+              edit: true
+            },
+            type: 'related',
+            query: {
+              company: '{customer_company.id}',
+              primary_contact: '{customer_representative.id}'
+            },
+          },
+          {
             key: 'provider_signed_at',
             type: 'datepicker',
             showIf: ['provider_signed_at'],
@@ -1267,27 +1153,6 @@ const formadd = [
       {
         type: 'column',
         children: [
-          {
-            list: false,
-            endpoint: '/ecore/api/v2/hr/jobsites/',
-            read_only: false,
-            key: 'jobsite',
-            templateOptions: {
-              label: 'Jobsite',
-              add: true,
-              delete: false,
-              values: ['primary_contact', '__str__'],
-              type: 'related',
-              edit: true
-            },
-            collapsed: false,
-            type: 'related',
-            query: {
-              company: '{customer_company.id}',
-              primary_contact: '{customer_representative.id}'
-            },
-            many: false
-          },
           {
             list: false,
             endpoint: '/ecore/api/v2/skills/skills/',
@@ -1379,107 +1244,6 @@ const formadd = [
       }
     ]
   },
-  {
-    endpoint: '/ecore/api/v2/hr/shifts/',
-    metadata_query: {
-      editable_type: 'job'
-    },
-    add_endpoint: '/ecore/api/v2/hr/shiftdates/',
-    collapsed: false,
-    edit_endpoint: '/ecore/api/v2/hr/shiftdates/{date.id}',
-    templateOptions: {
-      label: 'Shift Dates',
-      type: 'list',
-      add_label: 'Add',
-      text: 'Shift Dates'
-    },
-    query: {
-      job: '{id}'
-    },
-    prefilled: {
-      job: '{id}'
-    },
-    type: 'list',
-    add_metadata_query: {
-      fieldsets_type: 'job'
-    }
-  },
-  {
-    endpoint: '/ecore/api/v2/hr/jobtags/',
-    templateOptions: {
-      label: 'Job Tags',
-      type: 'list',
-      add_label: 'Add',
-      text: 'Job Tags'
-    },
-    collapsed: true,
-    prefilled: {
-      job: '{id}'
-    },
-    type: 'list',
-    query: {
-      job: '{id}'
-    }
-  },
-  {
-    endpoint: '/ecore/api/v2/hr/joboffers/',
-    add_endpoint: '/ecore/api/v2/hr/jobs/{id}/fillin/',
-    templateOptions: {
-      label: 'Job Offers',
-      type: 'list',
-      add_label: 'Fill in',
-      text: 'Job Offers'
-    },
-    collapsed: false,
-    type: 'list',
-    query: {
-      job: '{id}'
-    },
-    add_metadata_query: {
-      type: 'list'
-    }
-  },
-  {
-    label: 'Job state timeline',
-    type: 'row',
-    children: [
-      {
-        key: 'timeline',
-        type: 'timeline',
-        query: {
-          model: 'hr.job',
-          object_id: '{id}'
-        },
-        templateOptions: {
-          label: 'States Timeline',
-          type: 'timeline',
-          text: 'States Timeline'
-        },
-        endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
-      }
-    ]
-  },
-  {
-    endpoint: '/ecore/api/v2/hr/favouritelists/',
-    metadata_query: {
-      editable_type: 'job'
-    },
-    templateOptions: {
-      label: 'Favourite List',
-      type: 'list',
-      add_label: 'Add',
-      text: 'Favourite List'
-    },
-    collapsed: false,
-    prefilled: {
-      job: '{id}',
-      company_contact: '{customer_representative.id}'
-    },
-    type: 'list',
-    query: {
-      company_contact: '{customer_representative.id}'
-    }
-  }
 ];
 
 export const metadata = {

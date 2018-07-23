@@ -37,6 +37,9 @@ export interface Field {
   currentQuery?: string;
   useOptions?: boolean;
   doNotChoice?: boolean;
+  defaultData?: any;
+  delay?: any;
+  delayData?: any;
   templateOptions?: {
     label?: string;
     type?: string;

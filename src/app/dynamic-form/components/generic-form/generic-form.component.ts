@@ -1019,7 +1019,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           el.hide = true;
         }
       }
-      if (el.type === 'list') {
+      if (el.type === 'list' || el.type === 'related') {
         if (el.delay && !this.editForm) {
           el.delayData = this.delayData;
         } else {

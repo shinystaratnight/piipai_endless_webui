@@ -155,23 +155,25 @@ const formadd = [
 const shiftDate = {
   fields: [
     {
-      default: 0.0,
-      key: 'hourly_rate.hourly_rate',
-      read_only: false,
+      key: 'date',
+      endpoint: '/ecore/api/v2/hr/shiftdates/',
+      hide: true,
       templateOptions: {
-        required: false,
-        display: '${field}/h',
-        label: 'Candidate rate',
-        type: 'text'
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Date',
+        type: 'related'
       },
-      type: 'input'
+      type: 'related'
     },
     {
       key: 'time',
       read_only: false,
       templateOptions: {
         required: true,
-        label: 'Shift start time',
+        label: 'Time',
         type: 'time'
       },
       type: 'datepicker'
@@ -181,13 +183,36 @@ const shiftDate = {
       key: 'workers',
       read_only: false,
       templateOptions: {
-        required: false,
         min: 1,
+        required: false,
         label: 'Workers',
         max: 32767,
         type: 'number'
       },
       type: 'input'
+    },
+    {
+      many: false,
+      key: 'hourly_rate',
+      endpoint: '/ecore/api/v2/skills/skillbaserates/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Hourly rate',
+        type: 'related'
+      },
+      query: {
+        skill: '{skill.id}'
+      },
+      prefilled: {
+        skill: '{skill.id}'
+      },
+      read_only: false,
+      type: 'related'
     }
   ],
   list: {

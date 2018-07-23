@@ -93,6 +93,7 @@ import * as acceptancetests from './acceptancetests.metadata';
 import * as acceptancetestindustries from './acceptancetestindustries.metadata';
 import * as acceptancetesttags from './acceptancetesttags.metadata';
 import * as acceptancetestworkflownodes from './acceptancetestworkflownodes.metadata';
+import * as skillbaserates from './skillbaserates.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -189,5 +190,6 @@ export const metadata = {
   '/ecore/api/v2/acceptance-tests/acceptancetests/': acceptancetests.metadata,
   '/ecore/api/v2/acceptance-tests/acceptancetestindustries/': acceptancetestindustries.metadata,
   '/ecore/api/v2/acceptance-tests/acceptancetesttags/': acceptancetesttags.metadata,
-  '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/': acceptancetestworkflownodes.metadata //tslint:disable-line
+  '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/': acceptancetestworkflownodes.metadata, //tslint:disable-line,
+  '/ecore/api/v2/skills/skillbaserates/': skillbaserates.metadata,
 };

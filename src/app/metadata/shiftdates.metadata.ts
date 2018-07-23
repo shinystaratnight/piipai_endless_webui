@@ -168,6 +168,21 @@ const formadd = [
 const jobAdd = [
   {
     hide: true,
+    endpoint: '/ecore/api/v2/skills/skills/',
+    read_only: true,
+    templateOptions: {
+      label: 'Skill',
+      add: true,
+      delete: false,
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    type: 'related',
+    key: 'skill',
+  },
+  {
+    hide: true,
     many: false,
     key: 'job',
     endpoint: '/ecore/api/v2/hr/jobs/',
@@ -198,27 +213,26 @@ const jobAdd = [
     prefilled: {
       date: '{id}'
     },
-    collapsed: false,
-    unique: ['time'],
+    list: true,
+    send: false,
+    key: 'shifts',
     endpoint: '/ecore/api/v2/hr/shifts/',
     delay: true,
     templateOptions: {
       add_label: 'Add',
       label: 'Shifts',
-      type: 'list',
+      type: 'related',
       text: 'Shifts'
     },
     metadata_query: {
       editable_type: 'shift_date'
     },
-    default: {
+    showIf: ['shift_date'],
+    defaultData: {
       date__shift_date: '{shift_date}',
       job: '{job.id}'
     },
-    type: 'list',
-    query: {
-      date: '{id}'
-    }
+    type: 'related',
   }
 ];
 
