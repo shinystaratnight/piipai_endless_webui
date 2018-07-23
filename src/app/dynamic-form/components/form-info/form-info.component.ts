@@ -55,7 +55,6 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log(this);
     this.checkModeProperty();
     if (this.config.values && this.config.value) {
       const keys = Object.keys(this.config.values);
