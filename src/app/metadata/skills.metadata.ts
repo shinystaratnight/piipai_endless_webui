@@ -112,7 +112,7 @@ const form = [
   {
     values: {
       available: 'active',
-      title: 'name',
+      skill_title: 'name',
       created_at: 'created_at',
       carrier_reserve: 'carrier_list_reserve',
       updated_at: 'updated_at',
@@ -296,7 +296,7 @@ const formadd = [
   {
     values: {
       available: 'active',
-      title: 'name',
+      skill_title: 'name',
       created_at: 'created_at',
       carrier_reserve: 'carrier_list_reserve',
       updated_at: 'updated_at'

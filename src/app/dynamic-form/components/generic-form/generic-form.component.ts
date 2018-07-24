@@ -124,6 +124,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     observers: []
   };
   public formData: BehaviorSubject<any>;
+  public hasTabs: boolean;
 
   public workflowEndpoints = {
     state: `/ecore/api/v2/core/workflownodes/`,
@@ -361,6 +362,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
           this.formData = new BehaviorSubject({ data: {} });
           this.updateFormData(this.metadata, this.formData);
+          this.checkMetadataOnTabElement(this.metadata);
 
           const timelineSubject = new Subject();
           this.checkTimeLine(this.metadata, timelineSubject);
@@ -388,6 +390,16 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           }
         },
         (error: any) => this.metadataError = error);
+  }
+
+  public checkMetadataOnTabElement(metadata) {
+    metadata.forEach((el) => {
+      if (el.type === 'tabs') {
+        this.hasTabs = true;
+      } else if (el.children) {
+        this.checkMetadataOnTabElement(el.children);
+      }
+    });
   }
 
   public updateCheckObject(metadata) {
@@ -1310,9 +1322,5 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         this.addCustomTemplates(el.children, data);
       }
     });
-  }
-
-  public hasTabs() {
-    return this.formService.getForm(this.formId).hasTabs;
   }
 }

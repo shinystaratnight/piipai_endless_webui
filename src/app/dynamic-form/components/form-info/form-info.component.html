@@ -69,7 +69,8 @@
           </ng-container>
         </span>
 
-        <span *ngIf="!titlePath">{{title}}</span>
+        <span *ngIf="!titlePath && title">{{title}}</span>
+        <span *ngIf="!titlePath && skill_title">{{skill_title}}</span>
         <info [description]="description"></info>
       </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
@@ -87,6 +88,11 @@
     </h5>
     <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
       [config]="getConfig('title')"
+      [group]="group">
+    </ng-container>
+
+    <ng-container formElement *ngIf="config && config.metadata['skill_title'] && !viewMode && !config.metadata['title_title']"
+      [config]="getConfig('skill_title')"
       [group]="group">
     </ng-container>
 

@@ -45,8 +45,6 @@ export class FormTabsComponent implements OnInit, OnDestroy {
 
     this.canUpdate = this.formService.getAllowedMethods(this.formId).indexOf('update') > -1 && this.config.editForm; //tslint:disable-line
 
-    form.hasTabs = true;
-
     this.modeSubscription = form.mode.subscribe((mode) => {
       this.mode = mode;
     });
