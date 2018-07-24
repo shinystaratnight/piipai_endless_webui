@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 const list = {
   list: {
     list: 'job',
@@ -891,27 +893,27 @@ const form = [
           // upper_rate_limit
           // lower_rate_limit
 
-          // {
-          //   list: false,
-          //   endpoint: '/ecore/api/v2/skills/skillbaserates/',
-          //   read_only: false,
-          //   key: 'hourly_rate_default',
-          //   templateOptions: {
-          //     label: 'Candidate rate default',
-          //     add: true,
-          //     delete: false,
-          //     values: ['hourly_rate'],
-          //     type: 'related',
-          //     edit: true,
-          //     display: '${hourly_rate}/h'
-          //   },
-          //   collapsed: false,
-          //   type: 'related',
-          //   query: {
-          //     skill: '{position.id}'
-          //   },
-          //   many: false
-          // },
+          {
+            list: false,
+            endpoint: '/ecore/api/v2/skills/skillbaserates/',
+            read_only: false,
+            key: 'hourly_rate_default',
+            templateOptions: {
+              label: 'Candidate rate default',
+              add: true,
+              delete: false,
+              values: ['hourly_rate'],
+              type: 'related',
+              edit: true,
+              display: '${hourly_rate}/h'
+            },
+            collapsed: false,
+            type: 'related',
+            query: {
+              skill: '{position.id}'
+            },
+            many: false
+          },
           {
             key: 'notes',
             type: 'textarea',
@@ -1188,7 +1190,7 @@ const formadd = [
           },
           {
             key: 'work_start_date',
-            default: '2018-07-04',
+            default: moment().tz('Australia/Sydney'),
             type: 'datepicker',
             templateOptions: {
               required: false,
