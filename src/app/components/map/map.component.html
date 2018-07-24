@@ -1,0 +1,48 @@
+
+<div #filterBlock class="filter-wrapper" [class.open]="!filterBlockHidden">
+  <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+</div>
+
+<div class="map" *ngIf="markers">
+  <sebm-google-map
+    (idle)="mapReady($event)"
+    [latitude]="(currentPosition && currentPosition.latitude) || defaultLatitude"
+    [longitude]="(currentPosition && currentPosition.longitude) || defaultlongitude"
+    [zoom]="13"
+    [mapTypeControl]="true">
+      <sebm-google-map-marker
+        *ngFor="let marker of markers; trackBy: trackByFn"
+        [iconUrl]="icons[marker.type].path"
+        [latitude]="marker.latitude"
+        [longitude]="marker.longitude">
+          <sebm-google-map-info-window>
+            <strong>{{marker.name}}</strong>
+            <br>
+            <p *ngIf="marker.contact">{{marker.__str__}}</p>
+            <p *ngIf="marker.contact">{{marker.contact.name}} {{marker.contact.phone_mobile}}</p>
+          </sebm-google-map-info-window>
+      </sebm-google-map-marker>
+  </sebm-google-map>
+</div>
+
+<div *ngIf="markers" class="legend">
+  <ng-container *ngFor="let type of types; trackBy: trackByFn">
+    <div *ngIf="icons[type].exist" class="item">
+      <img [src]="icons[type].path">
+      {{icons[type].name}}
+    </div>
+  </ng-container>
+</div>
+
+<div class="preloader" *ngIf="preloader">
+  <div class="lds-roller">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>

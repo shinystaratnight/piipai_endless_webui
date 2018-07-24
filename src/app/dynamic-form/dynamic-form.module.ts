@@ -10,8 +10,7 @@ import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { ButtonsModule } from 'ngx-bootstrap';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { GooglePlaceModule } from 'ng2-google-place-autocomplete';
-
-import { environment } from '../environment';
+import { DndModule } from 'ng2-dnd';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -31,19 +30,21 @@ import { directives } from './directives';
     Angular2FontawesomeModule,
     FormsModule,
     RouterModule,
-    AgmCoreModule.forRoot({
-      apiKey: (<any> process.env).GOOGLE_GEO_CODING_API_KEY || environment.GOOGLE_GEO_CODING_API_KEY
-    }),
+    AgmCoreModule,
     InfiniteScrollModule,
-    GooglePlaceModule,
     SharedModule,
     ButtonsModule.forRoot()
+    GooglePlaceModule,
+    DndModule.forRoot()
   ],
   exports: [
     fromComponents.GenericFormComponent,
     fromComponents.GenericListComponent,
     fromContainers.DynamicFormComponent,
     fromComponents.ProfileComponent,
+    fromContainers.FilterBlockComponent,
+    fromComponents.WorkflowComponent,
+    fromComponents.TestGeneratorComponent,
   ],
   declarations: [
     PdfViewerComponent,

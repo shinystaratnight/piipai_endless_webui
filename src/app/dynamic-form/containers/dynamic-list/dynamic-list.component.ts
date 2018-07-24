@@ -619,9 +619,12 @@ export class DynamicListComponent implements
               props = element.field.split('.');
               this.setValue(el, props, obj);
             }
-
             let indexOf = element.endpoint.indexOf('{field}');
+
+            obj.notParsedEndpoint = element.notParsedEndpoint;
             if (element.endpoint[element.endpoint.length - 1] !== '/') {
+              obj.notParsedEndpoint = element.endpoint;
+              element.notParsedEndpoint = element.endpoint;
               element.endpoint += '/';
             }
             if (indexOf) {
@@ -1428,7 +1431,9 @@ export class DynamicListComponent implements
         longitude: +this.getPropValue(el, 'contact.address.longitude'),
         name: this.getPropValue(el, 'contact.__str__'),
         description: this.getPropValue(el, 'contact.address.__str__'),
-        iconUrl: '/assets/img/location-blue.svg'
+        iconUrl: '/assets/img/location-blue.svg',
+        id: this.getPropValue(el, 'id'),
+        selected: this.select[this.getPropValue(el, 'id')],
       });
     });
     if (this.supportData) {
@@ -1484,6 +1489,7 @@ export class DynamicListComponent implements
 
   public editForm(e) {
     let endpoint;
+    let id;
     if (this.editEndpoint) {
       endpoint = this.format(
         this.editEndpoint,
@@ -1491,10 +1497,22 @@ export class DynamicListComponent implements
       );
     } else {
       endpoint = e.el.endpoint;
+      if (e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/') {
+        const arr: string[] = e.el.endpoint.split('/');
+        arr.pop();
+        const lastElement = arr.pop();
+        if (lastElement === 'extend') {
+          endpoint = [...arr, 'extend'].join('/');
+        } else {
+          id = lastElement
+          endpoint = [...arr, ''].join('/');
+        }
+      }
     }
     this.modalInfo = {};
     this.modalInfo.type = 'form';
     this.modalInfo.endpoint = endpoint;
+    this.modalInfo.id = id;
     this.modalInfo.mode = 'edit';
     this.modalInfo.edit = true;
     this.modalInfo.dontUseMetadataQuery = e.value === 'editModal';
@@ -1582,4 +1600,12 @@ export class DynamicListComponent implements
       document.body.classList.remove('scroll-hidden');
     }
   }
+
+  public markerClick(e) {
+    e.selected = !e.selected;
+    this.select[e.id] = e.selected;
+
+    this.emitSelect();
+  }
+
 }

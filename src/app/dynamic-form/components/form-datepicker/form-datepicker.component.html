@@ -4,7 +4,7 @@
       {{config.templateOptions.label}}:
     </label>
     <info [description]="config.templateOptions.description"></info>
-    <div class="input-group form-element-content datepicker mb-2">
+    <div class="input-group form-element-content datepicker mb-2 edit">
       <input [hidden]="config.templateOptions.type === 'time'" class="form-control"
         #d
         data-role="datebox"
@@ -20,7 +20,7 @@
   <div *ngIf="errors">
     <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
   </div>
-  <div *ngIf="group.get(key).getError('required') && !errors[config.key]">
+  <div *ngIf="group.get(key).getError('required') && errors && !errors[config.key]">
     <div class="text-danger mt-1">This field is required.</div>
   </div>
   <div *ngIf="message">

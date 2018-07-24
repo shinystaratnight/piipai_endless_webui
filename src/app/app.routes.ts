@@ -4,10 +4,10 @@ import {
   SiteComponent,
   LoginFormComponent,
   ContactRegistrationFormComponent,
-  VerifyEmailComponent
+  VerifyEmailComponent,
 } from './components';
 
-import { UserService, NavigationService, SettingsService } from './services';
+import { UserService, NavigationService, SiteSettingsService } from './services';
 
 import { AuthGuard, NotAuthorizedGuard } from './guards';
 
@@ -28,7 +28,7 @@ export const ROUTES: Routes = [
     component: LoginFormComponent,
     canActivate: [NotAuthorizedGuard],
     resolve: {
-      settings: SettingsService
+      settings: SiteSettingsService
     }
   },
   {
@@ -41,7 +41,7 @@ export const ROUTES: Routes = [
     component: ContactRegistrationFormComponent,
     canActivate: [AuthGuard],
     resolve: {
-      settings: SettingsService
+      settings: SiteSettingsService
     }
   },
   {
@@ -50,7 +50,16 @@ export const ROUTES: Routes = [
     resolve: {
       user: UserService,
       pagesList: NavigationService,
-      settings: SettingsService
+      settings: SiteSettingsService
+    },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'billing',
+    loadChildren: './billing/billing.module#BillingModule',
+    resolve: {
+      user: UserService,
+      pagesList: NavigationService
     },
     canActivate: [AuthGuard]
   },
@@ -59,7 +68,7 @@ export const ROUTES: Routes = [
     component: SiteComponent,
     canActivate: [AuthGuard],
     resolve: {
-      settings: SettingsService
+      settings: SiteSettingsService
     }
   }
 ];

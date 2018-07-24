@@ -27,6 +27,10 @@ option {
   background-color: white;
 }
 
+select {
+  font-family: inherit;
+}
+
 a {
   color: inherit;
 
@@ -127,6 +131,10 @@ select.not-empty {
 
 /*---------- Bootstrap ---------- */
 
+.popover {
+  z-index: 1;
+}
+
 .modal-backdrop {
   z-index: 3;
 }
@@ -190,6 +198,10 @@ select.not-empty {
 .btn-primary {
   border-color: $brand-primary;
   background-color: $brand-primary;
+
+  &.active {
+
+  }
 
   &:focus {
     box-shadow: 0 0 2px rgba($brand-primary, 0.5);
@@ -266,10 +278,12 @@ select.not-empty {
     position: sticky;
     width: 100%;
     top: 0;
-    z-index: 100;
+    z-index: 1200;
   }
 
   .modal-body {
+    padding-bottom: 60px;
+
     border-radius: 0.5rem 0.5rem 0 0;
   }
 
@@ -394,6 +408,10 @@ select.not-empty {
   .#{$item}-theme .btn-primary {
     border-color: map-get($theme-colors, $item);
     background-color: map-get($theme-colors, $item) !important;
+
+    &.active {
+      background-color: darken(map-get($theme-colors, $item), 10%) !important;
+    }
   }
 }
 
@@ -421,10 +439,50 @@ select.not-empty {
   }
 }
 
+/* in-flight clone */
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  pointer-events: none;
+}
+/* high-performance display:none; helper */
+.gu-hide {
+  left: -9999px !important;
+}
+/* added to mirrorContainer (default = body) while dragging */
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+/* added to the source element while its mirror is dragged */
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
+
 /*---------- jtsage-datebox-bootstrap4 ---------- */
 
 .ui-datebox-container .form-control {
   padding-right: 0;
+}
+
+.ui-datebox-container .btn-group-vertical {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+
+  .btn {
+    padding: 5px;
+    font-size: 12px;
+  }
 }
 
 .ui-datebox-container.dropdown-menu {
@@ -536,6 +594,16 @@ select.not-empty {
         .#{$item}-theme & {
           background-color: map-get($theme-colors, $item);
         }
+      }
+    }
+
+    &.btn-disabled {
+      opacity: .3;
+
+      &:hover {
+        background-color: transparent;
+        color: inherit;
+        cursor: default;
       }
     }
   }
@@ -854,4 +922,8 @@ iframe.send-sms {
 
 .readonly-value {
   opacity: .6;
+}
+
+.sebm-google-map-container-inner {
+  height: 100% !important;
 }

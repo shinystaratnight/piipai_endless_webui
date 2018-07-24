@@ -8,7 +8,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
 
 import { FormatString } from '../../../helpers/format';
@@ -22,23 +22,27 @@ import { GenericFormService } from '../../services';
 
 export class FormTimelineComponent implements OnInit, OnDestroy {
 
-  @ViewChild('stateModal')
-  public stateModal;
+  @ViewChild('stateModal') public stateModal;
+  @ViewChild('test') public testModal;
 
   public config: any;
   public modalData: any;
   public objectEndpoint: string;
   public stateData: any = {};
   public requirements: any[];
-  public modalRef: any;
+  public modalRef: NgbModalRef;
   public objectId: string;
   public query: any;
+  public testId: string;
 
   public currentState: any;
 
   public dropdown: boolean;
   public selectArray: any[];
   public updated: boolean;
+  public loading: boolean;
+
+  public workflowObjectEndpoint = '/ecore/api/v2/core/workflowobjects/';
 
   private subscriptions: Subscription[];
 
@@ -77,7 +81,16 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     let keys = Object.keys(this.config.query);
     keys.forEach((el) => {
       if (el === 'object_id') {
-        this.objectId = formatString.format(this.config.query[el], this.config.value);
+        if (Array.isArray(this.config.query[el])) {
+          this.config.query[el].forEach((query) => {
+            if (!this.objectId) {
+              this.objectId = formatString.format(query, this.config.value);
+            }
+          });
+        } else {
+          this.objectId = formatString.format(this.config.query[el], this.config.value);
+        }
+
         this.query.push(`${el}=${this.objectId}`);
       } else {
         this.query.push(`${el}=${this.config.query[el]}`);
@@ -127,7 +140,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
-  public open(state): void {
+  public open(state, closeModal?): void {
+    if (closeModal) {
+      closeModal();
+    }
     this.modalData = {};
     if (state.state === 1 || state.state === 2) {
       let title = '';
@@ -136,18 +152,37 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       } else if (state.state === 2) {
         title = (state.name_after_activation) ? state.name_after_activation
           : state.name_before_activation;
-        this.modalData.id = state.wf_object_id;
       }
+      this.modalData.id = state.wf_object_id || undefined;
       this.modalData.title = title;
+      this.modalData.tests = state.acceptance_tests.length && state.acceptance_tests.map((el) => {
+        if (el.score) {
+          const score = parseFloat(el.score);
+
+          el.score = score.toFixed(2);
+        }
+        return el;
+      });
+      this.modalData.substates = state.substates.length && state.substates;
+      this.modalData.workflowObject = state.wf_object_id;
+      if (state.total_score) {
+        const score = parseFloat(state.total_score);
+
+        state.total_score = score.toFixed(2);
+      }
+
+      this.modalData.state = state;
       this.stateData = this.setDataForState(state);
-      this.modalRef = this.modalService.open(this.stateModal, {size: 'lg'});
+      this.modalRef = this.modalService.open(this.stateModal);
     }
   }
 
   public getTimeline(): void {
+    this.loading = true;
 
     this.genericFormService.getByQuery(this.config.endpoint, `?${this.query.join('&')}`)
       .subscribe((res) => {
+        this.loading = false;
         this.config.timelineSubject.next(res);
       });
   }
@@ -176,6 +211,65 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       this.getTimeline();
       this.modalData = null;
     }
+  }
+
+  public fillinTest(e, id: string, closeModal) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeModal();
+
+    this.testId = id;
+
+    if (!this.modalData.workflowObject) {
+      this.createWorkflowObject(this.modalData.state.id);
+
+      return;
+    }
+
+    this.modalRef = this.modalService.open(this.testModal, { size: 'lg'});
+  }
+
+  public createWorkflowObject(stateId: string) {
+    const body = {
+      object_id: this.objectId,
+      state: {
+        id: stateId
+      },
+      comment: null,
+      active: false
+    };
+
+    this.genericFormService.submitForm(this.workflowObjectEndpoint, body)
+      .subscribe((res) => {
+        this.modalData.state.wf_object_id = res.id;
+        this.modalData.workflowObject = res.id;
+
+        this.modalRef = this.modalService.open(this.testModal, { size: 'lg'});
+      });
+  }
+
+  public testComplete(closeModal) {
+    closeModal();
+
+    this.getTimeline();
+    this.modalData = null;
+  }
+
+  public calculateProgress(state) {
+    if (state.substates && state.substates.length) {
+      const substatesCount = state.substates.length;
+
+      let activeCount = 0;
+
+      state.substates.forEach((el) => {
+        if (el.state === 2 || el.state === 3) {
+          activeCount += 1;
+        }
+      });
+
+      return `${activeCount} / ${substatesCount}`;
+    }
+
   }
 
 }

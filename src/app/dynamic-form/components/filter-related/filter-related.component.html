@@ -1,15 +1,6 @@
 <div class="filter-element" [class.active]="!isCollapsed">
   <label class="filter-label related" [class.active]="!isCollapsed">
     {{config.label}}
-    <!-- <i
-      fa
-      class="p-2 ml-auto"
-      [name]="icons[theme][isCollapsed]"
-      [border]=false
-      [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
-      (click)="isCollapsed = !isCollapsed"
-      [attr.aria-expanded]="!isCollapsed"
-      style="cursor: pointer"></i> -->
     <i
       *ngIf="query"
       fa
@@ -43,6 +34,13 @@
             <a (click)="resetAll(previewList)">Reset All</a>
           </li>
         </ul>
+        <input #search="ngModel"
+          *ngIf="multiple"
+          name="search"
+          type="text"
+          class="form-control mb-1"
+          [(ngModel)]="searchValue"
+          [ngModelOptions]="{standalone: true}">
         <div class="autocomplete-list"
           infinite-scroll
           [infiniteScrollDistance]="modalScrollDistance"

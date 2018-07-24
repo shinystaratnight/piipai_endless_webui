@@ -7,6 +7,7 @@ import 'rxjs/add/operator/catch';
 import { CookieService } from 'angular2-cookie/core';
 
 import { ErrorsService } from '../../shared/services/errors.service';
+import { metadata } from '../../metadata';
 
 @Injectable()
 export class GenericFormService {
@@ -36,6 +37,83 @@ export class GenericFormService {
   public getMetadata(endpoint, query = '') {
     let headers = new Headers();
     this.updateHeaders(headers);
+
+    if (endpoint.includes('/submit')) {
+      endpoint = 'submit';
+    }
+
+    if (endpoint.includes('/evaluate')) {
+      endpoint = 'evaluate';
+    }
+
+    if (endpoint.includes('/not_agree')) {
+      endpoint = 'not_agree';
+    }
+
+    if (endpoint.includes('/extend')) {
+      endpoint = 'extend';
+    }
+
+    if (endpoint.includes('/fillin')) {
+      endpoint = 'fillin';
+    }
+
+    if (endpoint.includes('/candidate_fill')) {
+      endpoint = 'candidateFill';
+    }
+
+    if (endpoint.includes('/supervisor_approve')) {
+      endpoint = 'supervisorApprove';
+    }
+
+    if (metadata[endpoint]) {
+      let type = '';
+
+      if (query.includes('formadd')) {
+        type = 'formadd';
+        if (query.includes('job')) {
+          type = 'jobAdd';
+        }
+
+        if (query.includes('contact')) {
+          type = 'contact';
+        }
+      } else if (query.includes('pricelist')) {
+        if (query.includes('form')) {
+          type = 'pricelistForm';
+        }
+        if (query.includes('formset')) {
+          type = 'pricelist';
+        }
+      } else if (query.includes('company')) {
+        type = 'company';
+      } else if (query.includes('supervisor')) {
+        type = 'supervisor';
+      } else if (query.includes('job')) {
+        if (query.includes('form')) {
+          type = 'form';
+        }
+        if (query.includes('formset')) {
+          type = 'job';
+        }
+      } else if (query.includes('shift_date')) {
+        type = 'shiftDate';
+      } else if (query.includes('extend')) {
+        type = 'extend';
+      } else if (query.includes('formset')) {
+        type = 'formset';
+      } else if (query.includes('form')) {
+        type = 'form';
+      } else {
+        type = 'list';
+      }
+
+      const stringifyMetadata =
+        JSON.stringify(metadata[endpoint][type]);
+
+      return Observable.of(JSON.parse(stringifyMetadata));
+    }
+
     return this.http.options(`${endpoint}${query}`, { headers })
       .map((response: any) => response.json())
       .catch((error: any) => this.errorHandler(error));

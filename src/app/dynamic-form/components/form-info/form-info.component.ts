@@ -15,6 +15,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public picture: string;
   public available: boolean;
   public title: string;
+  public skill_title: string; //tslint:disable-line
   public address: string;
   public description: string;
   public status: any[];
@@ -24,6 +25,10 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public updated_at: string; //tslint:disable-line
   public job_title: string; //tslint:disable-line
   public company: string;
+  public titlePath: boolean;
+  public carrier_reserve: number; //tslint:disable-line
+  public map: any;
+  public client: any;
 
   public color: any;
   public colorAttr: string;
@@ -75,13 +80,25 @@ export class FormInfoComponent implements OnInit, OnDestroy {
           this[key] = this.getValue(this.config.values[key], this.config.value, 'picture')
             || (this.getConfig('picture')
               && this.getConfig('picture').companyContact ? '/assets/img/logo.svg' : null);
+        } else if (key === 'map') {
+          this[key] = this.getValue(this.config.values[key], this.config.value);
+
+          if (this[key]) {
+            if (this[key].latitude) {
+              this[key].latitude = parseFloat(this[key].latitude);
+            }
+
+            if (this[key].longitude) {
+              this[key].longitude = parseFloat(this[key].longitude);
+            }
+          }
         } else {
           this[key] = this.getValue(this.config.values[key], this.config.value);
         }
       });
 
       if (!this.picture) {
-        const nameElements = this.title.split(' ');
+        const nameElements = this.title && this.title.split(' ');
 
         if (nameElements && nameElements.length) {
           if (nameElements.length === 2) {
@@ -92,15 +109,32 @@ export class FormInfoComponent implements OnInit, OnDestroy {
           }
         }
       }
+
+      if (this.config.metadata['title'] && this.config.metadata['title'].value instanceof Object) {
+        this.titlePath = true;
+      }
     }
+
+    this.createEvent();
   }
 
   public ngOnDestroy() {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
+  public createEvent() {
+    if (this.config.value) {
+      this.event.emit({
+        type: 'create',
+        el: this.config,
+        value: this.config.key === 'id'
+          && { id: this.config.value.id }
+      });
+    }
+  }
+
   public getConfig(name: string) {
-    if ((name === 'title' && !this.config.editForm) || name === 'link') {
+    if (name === 'title' && !this.config.editForm) {
       const config = this.config.metadata[name];
 
       config.templateOptions.label = `${config.key[0].toUpperCase()}${config.key.slice(1)}`;

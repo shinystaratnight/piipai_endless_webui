@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
@@ -10,46 +10,23 @@ import { CustomEvent } from '../../models/custom-event.model';
   styleUrls: ['./dynamic-form.component.scss']
 })
 
-export class DynamicFormComponent implements OnInit, OnChanges {
-  @Input()
-  public config: Field[] = [];
-
-  @Input()
-  public errors: any = {};
-
-  @Input()
-  public message: any = {};
-
-  @Input()
-  public data: any;
-
-  @Input()
-  public commonFields: any;
-
-  @Input()
-  public hiddenFields: any;
-
+export class DynamicFormComponent implements OnInit {
+  @Input() public config: Field[] = [];
+  @Input() public errors: any = {};
+  @Input() public message: any = {};
+  @Input() public data: any;
+  @Input() public commonFields: any;
+  @Input() public hiddenFields: any;
   @Input() public formId: number;
+  @Input() public form: FormGroup;
 
-  @Output()
-  public submit: EventEmitter<any> = new EventEmitter<any>();
-
-  @Output()
-  public formChange: EventEmitter<any> = new EventEmitter<any>();
-
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public buttonAction: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public resourseData: EventEmitter<any> = new EventEmitter();
-
+  @Output() public submit: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public formChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public event: EventEmitter<any> = new EventEmitter();
+  @Output() public buttonAction: EventEmitter<any> = new EventEmitter();
+  @Output() public resourseData: EventEmitter<any> = new EventEmitter();
   @Output() public changeValue: EventEmitter<any> = new EventEmitter();
 
-  @Input()
-  public form: FormGroup;
   public currentForm: any;
   public fullData: any;
 
@@ -58,16 +35,6 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   public ngOnInit() {
     this.form = this.form || this.fb.group({});
     this.currentForm = this.config;
-  }
-
-  public ngOnChanges() {
-    this.addData(this.data, this.form);
-    if (this.config !== this.currentForm && this.currentForm !== undefined) {
-      this.currentForm = this.config;
-      let oldValues = this.getValues(this.form, this.commonFields);
-      this.formChange.emit(oldValues);
-      this.form = this.fb.group({});
-    }
   }
 
   public getValues(data, list) {
@@ -179,30 +146,6 @@ export class DynamicFormComponent implements OnInit, OnChanges {
 
   public resourseDataHandler(e) {
     this.resourseData.emit(e);
-  }
-
-  public addData(data, form) {
-    if (data && form) {
-      let keys = Object.keys(data);
-      keys.forEach((el) => {
-        if (el.indexOf('.') > -1) {
-          this.updateForm(el.split('.'), data, form, el);
-        } else {
-          this.updateForm([el], data, form, el);
-        }
-      });
-    }
-  }
-
-  public updateForm(keys, data, form, field) {
-    let key = keys.shift();
-    if (keys.length === 0) {
-      if (data[field].action === 'update') {
-        form.get(key).patchValue(data[field].value);
-      }
-    } else {
-      this.updateForm(keys, data, form.get(key), field);
-    }
   }
 
   public checkHiddenFields(field: Field): void {

@@ -322,6 +322,9 @@
         <strong>{{marker.name}}</strong>
         <br>
         <p>{{marker.description}}</p>
+        <button *ngIf="!marker.label" type="button" class="btn btn-sm btn-success" (click)="markerClick(marker)" style="font-size: 10px;">
+          {{ marker.selected ? 'Selected' : 'Select' }}
+        </button>
       </sebm-google-map-info-window>
     </sebm-google-map-marker>
   </sebm-google-map>

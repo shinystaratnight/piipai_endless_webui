@@ -10,6 +10,8 @@
     padding-left: 10px;
     padding-right: 5px;
 
+    overflow: auto;
+
     @include media-breakpoint-down('lg') {
       max-height: 100vh;
     }

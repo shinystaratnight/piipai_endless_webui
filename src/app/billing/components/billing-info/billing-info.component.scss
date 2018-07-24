@@ -1,0 +1,27 @@
+h5 {
+  margin-bottom: 1rem;
+
+  font-weight: 500;
+  text-transform: uppercase;
+
+  opacity: .6;
+
+  // text-align: center;
+}
+
+div {
+  margin: 2rem 0;
+}
+
+p {
+  display: flex;
+
+  span:first-child {
+    width: 150px;
+
+    font-size: 14px;
+    line-height: 16px;
+
+    opacity: .8;
+  }
+}

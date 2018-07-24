@@ -7,23 +7,24 @@ import {
   OnDestroy,
   ChangeDetectorRef,
   AfterViewChecked,
+  ElementRef,
+  HostListener,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/filter';
 
-
 import { GenericFormService } from '../../services';
 import { CheckPermissionService } from '../../../shared/services';
-import { NavigationService, UserService } from '../../../services';
+import { NavigationService, UserService, SiteSettingsService } from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
-
 
 export interface RelatedObject {
   id: string;
@@ -114,6 +115,8 @@ export class FormRelatedComponent
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  @ViewChild('autocomplete') public elementRef: ElementRef;
+
   private searchSubscription: Subscription;
   private subscriptions: Subscription[];
 
@@ -124,7 +127,8 @@ export class FormRelatedComponent
     private permission: CheckPermissionService,
     private navigation: NavigationService,
     private userService: UserService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private settingsService: SiteSettingsService
   ) {
     super();
     this.subscriptions = [];
@@ -149,6 +153,7 @@ export class FormRelatedComponent
     this.createEvent();
     this.checkModeProperty();
     this.checkHiddenProperty();
+    this.getDefaultDataForListType();
     if (this.config.custom && this.config.custom.length) {
       this.generateCustomTemplate(this.config.custom);
     }
@@ -168,6 +173,13 @@ export class FormRelatedComponent
       this.viewMode = true;
     }
 
+    if (this.config.delay) {
+      this.config.data = {
+        sendData: []
+      };
+      this.config.delayData[this.config.endpoint] = this.config;
+    }
+
     if (this.config.metadata_query instanceof Object) {
       this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
     }
@@ -184,8 +196,39 @@ export class FormRelatedComponent
         .skip(2)
         .filter((value) => value !== null)
         .debounceTime(400)
-        .subscribe((res) => {
+        .subscribe(() => {
           this.filter(this.searchValue);
+        });
+    }
+  }
+
+  public getDefaultDataForListType() {
+    if (this.config.defaultData) {
+      let query = '?limit=-1&';
+      const params = [];
+      const format = new FormatString();
+      Object.keys(this.config.defaultData).forEach((el) => {
+        const value = format.format(this.config.defaultData[el], this.formData);
+
+        query += `${el}=${format.format(this.config.defaultData[el], this.formData) || false}&`;
+      });
+
+      const metadata = JSON.parse(JSON.stringify(this.config.metadata));
+      metadata.forEach((el) => {
+        if (el.key) {
+          el.mode = new BehaviorSubject('view');
+          el.read_only = true;
+          if (el.query) {
+            Object.keys(el.query).forEach((query) => {
+              el.query[query] = format.format(el.query[query], this.formData);
+            });
+          }
+        }
+      });
+
+      this.genericFormService.getByQuery(this.config.endpoint, query)
+        .subscribe((res) => {
+          this.generateDataForList({ list: true, metadata }, res.results);
         });
     }
   }
@@ -261,18 +304,50 @@ export class FormRelatedComponent
           this.editMode = true;
         }
         this.setInitValue();
+        this.eventHandler(
+          {type: 'change'},
+          this.group.get(this.key).value,
+          this.resetAdditionalData()
+        );
       });
     }
+  }
+
+  public resetAdditionalData() {
+    const res = {};
+    if (this.group.get(this.key).value === '') {
+      if (this.fields) {
+        this.fields.forEach((el) => res[el] = null);
+      }
+    }
+    return res;
   }
 
   public checkFormData() {
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
-        if (this.checkRelatedField(formData.key, formData.data)) {
+        if (
+          this.checkRelatedField(formData.key, formData.data) ||
+          (this.config.default && !this.config.default.includes('session'))
+        ) {
+          if (this.config.defaultData) {
+            this.getDefaultDataForListType();
+          }
+
           if (this.config.default && !this.config.hide && !this.config.value) {
             const format = new FormatString();
-            const id = format.format(this.config.default, this.formData);
+            let id;
+            if (typeof this.config.default === 'string') {
+              id = format.format(this.config.default, this.formData);
+            } else if (Array.isArray(this.config.default)) {
+              this.config.default.forEach((el) => {
+                if (!id) {
+                  id = format.format(el, this.formData);
+                }
+              });
+            }
+
             if (id) {
               this.getOptions.call(this, '', 0, false, this.setValue, id);
               if (this.config.read_only) {
@@ -363,34 +438,52 @@ export class FormRelatedComponent
         if (this.config.options && this.config.options.length) {
           let results = [];
           this.config.options.forEach((el) => {
+            el.__str__ = formatString.format(this.display, el);
+            el.checked = false;
             data.forEach((elem) => {
               if (elem instanceof Object) {
                 if (elem[this.param] === el[this.param]) {
+                  el.checked = true;
                   results.push(el);
                 }
               } else {
                 if (elem === el[this.param]) {
+                  el.checked = true;
                   results.push(el);
                 }
               }
             });
-            results.forEach((elem) => {
-              elem.__str__ = formatString.format(this.display, elem);
-            });
             this.results = [...results];
           });
+          this.config.options.sort((p, n) => p.__str__ > n.__str__ ? 1 : -1);
         } else {
-          this.results = data && data !== '-' ? [...data] : [];
+          this.results = data && data !== '-' ? data.map((el) => {
+            if (el.__str__) {
+              el.__str__ = formatString.format(this.display, el);
+            }
+            return el;
+          }) : [];
         }
         this.updateData();
       }
     } else if (this.config.default && this.config.default.includes('session')) {
       const id = this.userService.user.data.contact.contact_id;
 
+      if (this.config.read_only) {
+        this.viewMode = true;
+      }
+
       if (!this.config.hide) {
         this.getOptions.call(this, '', 0, false, this.setValue, id);
       }
 
+    } else if (this.config.default && this.config.default.includes('currentCompany')) {
+      const id = this.settingsService.settings.company_settings.company;
+
+      this.group.get(this.key).patchValue(id);
+
+    } else {
+      this.parseOptions();
     }
 
     this.generateDataForList(this.config, this.config.value);
@@ -402,6 +495,16 @@ export class FormRelatedComponent
     }
 
     this.subscriptions.forEach((s) => s && s.unsubscribe());
+  }
+
+  public parseOptions() {
+    if (this.config.options && this.config.options.length) {
+      let formatString = new FormatString();
+      this.config.options.forEach((el) => {
+        el.__str__ = formatString.format(this.display, el);
+      });
+      this.config.options.sort((p, n) => p.__str__ > n.__str__ ? 1 : -1);
+    }
   }
 
   public getReplaceElements(metadata: Field[]): void {
@@ -420,7 +523,7 @@ export class FormRelatedComponent
       let value = [];
       if (data) {
         data.forEach((el) => {
-          let object = this.createObject();
+          let object = this.createObject(config.metadata);
           object['id'] = el.id;
           object['allData'] = el;
           this.fillingForm(object.metadata, el);
@@ -436,24 +539,42 @@ export class FormRelatedComponent
     }
   }
 
-  public createObject(): RelatedObject {
+  public createObject(metadata: Field[] = this.config.metadata): RelatedObject {
     let object = {
       id: undefined,
       allData: undefined,
       data: this.fb.group({}),
       metadata: []
     };
-    object.metadata = this.config.metadata.map((el) => {
+    const format = new FormatString();
+    object.metadata = metadata.map((el) => {
       let element = Object.assign({}, el);
       element.mode = el.mode;
+
+      if (el.query) {
+        const newQuery = {};
+        Object.keys(el.query).forEach((query) => {
+          newQuery[query] = format.format(el.query[query], this.formData);
+        });
+
+        element.query = newQuery;
+      }
+
+      if (el.prefilled) {
+        const newPrefilled = {};
+        Object.keys(el.prefilled).forEach((field) => {
+          newPrefilled[field] = format.format(el.prefilled[field], this.formData);
+        });
+
+        element.prefilled = newPrefilled;
+      }
+
       return element;
     });
     return object;
   }
 
-  public addObject(e): void {
-    e.preventDefault();
-    e.stopPropagation();
+  public addObject(): void {
     if (this.dataOfList) {
       let object = this.createObject();
       this.dataOfList.push(object);
@@ -501,6 +622,10 @@ export class FormRelatedComponent
         }
         return object;
       });
+      if (this.config.delayData) {
+        this.config.data.sendData = value.filter((el) => !el.id);
+      }
+
       this.group.get(this.key).patchValue(value);
     }
   }
@@ -607,7 +732,7 @@ export class FormRelatedComponent
   }
 
   public openAutocomplete(): void {
-    if (this.config.type !== 'address') {
+    if (this.config.type !== 'address' && !this.config.doNotChoice) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
         this.generateList(this.searchValue);
@@ -619,27 +744,28 @@ export class FormRelatedComponent
   }
 
   public generateList(value, concat = false): void {
-    this.currentQuery = null;
-    this.hideAutocomplete = false;
-    if (this.config.useOptions) {
-      if (this.searchValue) {
-        this.filter(this.searchValue);
+    if (!this.config.doNotChoice) {
+      this.currentQuery = null;
+      this.hideAutocomplete = false;
+      if (this.config.useOptions) {
+        if (this.searchValue) {
+          this.filter(this.searchValue);
+        } else {
+          this.list = this.config.options;
+          this.generatePreviewList(this.list);
+        }
       } else {
-        const formatString = new FormatString();
-        this.config.options.forEach((el) => {
-          el.__str__ = formatString.format(this.display, el);
-        });
-        this.list = this.config.options
-          .filter((el) => !(this.results.indexOf(el) > -1))
-          .sort((p, n) => p.__str__ > n.__str__ ? 1 : -1);
-        this.generatePreviewList(this.list);
+        this.getOptions(value, this.lastElement, concat);
       }
-    } else {
-      this.getOptions(value, this.lastElement, concat);
     }
   }
 
   public generatePreviewList(list) {
+    if (this.config.options) {
+      this.previewList = list;
+      return;
+    }
+
     this.lastElement += this.limit;
     this.previewList = list.slice(0, this.lastElement);
   }
@@ -664,14 +790,13 @@ export class FormRelatedComponent
         filteredList = this.config.options.filter((el) => {
           let val = el.__str__;
           if (val) {
-            let existInConfig = val.toLowerCase().indexOf(value.toLowerCase()) > -1;
-            if (existInConfig) {
-              return this.results.indexOf(el) === -1;
-            }
+            return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
           }
         });
         this.list = filteredList;
         this.generatePreviewList(this.list);
+      } else {
+        this.generatePreviewList(this.config.options);
       }
     } else {
       this.generateList(value);
@@ -682,8 +807,17 @@ export class FormRelatedComponent
     const formatString = new FormatString();
     if (item) {
       if (this.config.many) {
-        this.results.push(item);
-        this.hideAutocomplete = true;
+
+        if (this.config.useOptions) {
+          if (item.checked) {
+            this.results.push(item);
+          } else {
+            this.results.splice(this.results.indexOf(item), 1);
+          }
+        } else {
+          this.results.push(item);
+        }
+
         this.updateData();
       } else {
         this.displayValue = formatString.format(this.display, item);
@@ -695,11 +829,13 @@ export class FormRelatedComponent
     }
     this.changeList();
     this.eventHandler({type: 'change'}, item && item[this.param], item);
-    this.searchValue = null;
-    this.list = null;
-    this.count = null;
-    this.previewList = null;
-    this.cd.detectChanges();
+    if (!this.config.useOptions) {
+      this.searchValue = null;
+      this.list = null;
+      this.count = null;
+      this.previewList = null;
+      this.cd.detectChanges();
+    }
   }
 
   public deleteItem(index: number, item: any, api: boolean) {
@@ -710,11 +846,17 @@ export class FormRelatedComponent
         .subscribe(() => {
           if (this.results[index]) {
             this.results.splice(index, 1);
+            this.config.value.splice(index, 1);
             this.changeList();
           }
         });
     } else {
       if (this.results[index]) {
+        const val = this.config.options
+          .find((el) => el[this.param] === this.results[index][this.param]);
+        if (val) {
+          val.checked = false;
+        }
         this.results.splice(index, 1);
         this.changeList();
         this.updateData();
@@ -755,7 +897,15 @@ export class FormRelatedComponent
       this.saveProcess = false;
       const formatString = new FormatString();
       if (this.config.many) {
+        e.data.__str__ = formatString.format(this.display, e.data);
         this.setValue(e.data);
+        if (!this.config.useOptions) {
+          if (!this.config.value) {
+            this.config.value = [e.data];
+          } else {
+            this.config.value.push(e.data);
+          }
+        }
         return;
       }
       this.group.get(this.key).patchValue(e.data[this.param]);
@@ -960,5 +1110,24 @@ export class FormRelatedComponent
 
   public trackByFn(value) {
     return value[this.param];
+  }
+
+  @HostListener('document:click', ['$event'])
+  public handleClick(event) {
+    let clickedComponent = event.target;
+    let inside = false;
+    if (this.elementRef) {
+      do {
+        if (clickedComponent === this.elementRef.nativeElement) {
+          inside = true;
+        }
+        clickedComponent = clickedComponent.parentNode;
+      } while (clickedComponent);
+      if (!inside) {
+        this.hideAutocomplete = true;
+        this.cd.detectChanges();
+        return;
+      }
+    }
   }
 }

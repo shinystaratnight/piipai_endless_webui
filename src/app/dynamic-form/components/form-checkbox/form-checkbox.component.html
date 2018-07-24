@@ -3,8 +3,8 @@
     <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label && config.templateOptions.text" [attr.for]="key">
       {{config.templateOptions.label}}:
     </label>
-    <div class="form-element-content">
-      <label class="form-element-checkbox" *ngIf="label && config.templateOptions.label" [attr.for]="key">
+    <div class="form-element-content edit">
+      <label class="form-element-checkbox" *ngIf="label && config.templateOptions.label">
         <i class="mr-1" *ngIf="config.templateOptions.type === 'icon'"
           [ngClass]="[checkboxClass]"
           [ngStyle]="{'color': checkboxColor}"

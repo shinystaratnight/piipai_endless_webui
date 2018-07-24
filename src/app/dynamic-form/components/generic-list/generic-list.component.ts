@@ -162,12 +162,13 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public getMetadata(endpoint, table, inner = false, outer = null, formset = undefined) {
+    let query = formset || '';
+    if (this.metadataQuery) {
+      query += `&${this.metadataQuery}`;
+    }
+
     this.gfs
-      .getMetadata(
-        formset
-          ? `${endpoint}${formset}` + (this.metadataQuery ? `&${this.metadataQuery}` : '')
-          : endpoint + (this.metadataQuery ? `&${this.metadataQuery}` : '')
-      )
+      .getMetadata(endpoint, query)
       .subscribe(
         (metadata) => {
           table.metadata = metadata;
@@ -252,8 +253,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
           }
           table.offset = table.limit;
           if (this.inForm) {
-            endpoint += '?type=formset';
-            this.getMetadata(endpoint, table);
+            const formset = '?type=formset';
+            this.getMetadata(endpoint, table, null, null, formset);
           } else {
             this.getMetadata(endpoint, table);
           }

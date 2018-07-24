@@ -171,6 +171,11 @@ export class FormDatepickerComponent
           useFocus: true,
           useHeader: false,
           calHighToday: false,
+          calUsePickers: true,
+          useCancelButton: true,
+          calYearPickMax: this.key.includes('birthday') ? 0 : 6,
+          calYearPickMin: -100,
+          maxDays: this.key.includes('birthday') && -1,
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
@@ -191,7 +196,11 @@ export class FormDatepickerComponent
           useClearButton: true,
           useFocus: true,
           useHeader: false,
+          calUsePickers: true,
           calHighToday: false,
+          calYearPickMax: this.key.includes('birthday') ? 0 : 6,
+          calYearPickMin: -100,
+          maxDays: this.key.includes('birthday') && -1,
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
@@ -235,11 +244,7 @@ export class FormDatepickerComponent
           this.date = date.format(this.dateFormat);
         }
         this.group.get(this.key).patchValue(date.format('YYYY-MM-DD'));
-        this.event.emit({
-          el: this.config,
-          type: 'change',
-          value: this.group.get(this.key).value
-        });
+        this.emitChanges();
       }
     } else if (this.config.templateOptions.type === 'datetime') {
       if (date) {
@@ -250,11 +255,7 @@ export class FormDatepickerComponent
           this.time = date.format(this.timeFormat);
         }
         this.group.get(this.key).patchValue(date.format());
-        this.event.emit({
-          el: this.config,
-          type: 'change',
-          value: this.group.get(this.key).value
-        });
+        this.emitChanges()
       }
     }
   }
@@ -265,11 +266,7 @@ export class FormDatepickerComponent
         this.time = time.format(this.timeFormat);
       }
       this.group.get(this.key).patchValue(time.format('HH:mm:ss'));
-      this.event.emit({
-        el: this.config,
-        type: 'change',
-        value: this.group.get(this.key).value
-      });
+      this.emitChanges();
     }
   }
 
@@ -295,5 +292,15 @@ export class FormDatepickerComponent
       }
       this.updateTime(time);
     }
+  }
+
+  public emitChanges() {
+    setTimeout(() => {
+      this.event.emit({
+        el: this.config,
+        type: 'change',
+        value: this.group.get(this.key).value
+      });
+    }, 150);
   }
 }

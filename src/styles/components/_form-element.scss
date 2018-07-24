@@ -10,6 +10,20 @@
   }
 }
 
+.view-mode .form-element {
+  display: inline;
+
+  .form-element-content {
+    display: inline;
+
+    a {
+      font-size: 18px;
+      line-height: 20px;
+      font-weight: 600;
+    }
+  }
+}
+
 .form-element {
 
   font-size: 14px;
@@ -114,7 +128,6 @@
     display: flex;
 
     width: 80%;
-    max-width: 300px;
 
     height: 22px;
     max-height: 22px;
@@ -122,6 +135,15 @@
 
     font-size: 14px;
     line-height: 20px;
+
+    &.edit {
+      max-width: 300px;
+    }
+
+    .description & {
+      font-size: 12px;
+      line-height: 14px;
+    }
 
     .form-info-wrapper & {
       width: 100%;

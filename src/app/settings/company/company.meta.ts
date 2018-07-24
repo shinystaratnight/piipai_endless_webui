@@ -1,8 +1,9 @@
 export const meta = [
   {
-    name: 'Company Settings',
-    type: 'collapse',
+    type: 'group',
+    label: 'Company Setting',
     children: [
+
       {
         type: 'input',
         key: 'company_settings.logo',
@@ -14,8 +15,7 @@ export const meta = [
           label_photo: 'Take a photo',
           type: 'picture',
           required: false,
-          file: false,
-          start: true
+          file: false
         }
       },
       {
@@ -64,67 +64,72 @@ export const meta = [
     ]
   },
   {
-    name: 'Payslip Rule',
-    type: 'collapse',
+    type: 'row',
     children: [
       {
-        type: 'select',
-        key: 'payslip_rule.period',
-        read_only: false,
-        templateOptions: {
-          label: 'Period',
-          required: true,
-          options: [
-            { value: 'weekly', label: 'Weekly' },
-            { value: 'fortnightly', label: 'Fortnightly' },
-            { value: 'monthly', label: 'Monthly' },
-            { value: 'daily', label: 'Daily' },
-          ]
-        }
+        label: 'Payslip Rule',
+        type: 'group',
+        children: [
+          {
+            type: 'select',
+            key: 'payslip_rule.period',
+            read_only: false,
+            templateOptions: {
+              label: 'Period',
+              required: true,
+              options: [
+                { value: 'weekly', label: 'Weekly' },
+                { value: 'fortnightly', label: 'Fortnightly' },
+                { value: 'monthly', label: 'Monthly' },
+                { value: 'daily', label: 'Daily' },
+              ]
+            }
+          }
+        ]
+      },
+      {
+        label: 'Invoice Rule',
+        type: 'group',
+        children: [
+          {
+            type: 'select',
+            key: 'invoice_rule.period',
+            read_only: false,
+            templateOptions: {
+              label: 'Period',
+              required: true,
+              options: [
+                { value: 'weekly', label: 'Weekly' },
+                { value: 'fortnightly', label: 'Fortnightly' },
+                { value: 'monthly', label: 'Monthly' },
+                { value: 'daily', label: 'Daily' },
+              ]
+            }
+          },
+          {
+            type: 'select',
+            key: 'invoice_rule.separation_rule',
+            read_only: false,
+            templateOptions: {
+              label: 'Separation rule',
+              required: true,
+              options: [
+                { value: 'one_invoce', label: 'One invoce' },
+                { value: 'per_jobsite', label: 'Per jobsite' },
+                { value: 'per_candidate', label: 'Per candidate' }
+              ]
+            }
+          },
+          {
+            type: 'checkbox',
+            key: 'invoice_rule.show_candidate_name',
+            default: false,
+            templateOptions: {
+              label: 'Show candidate name',
+            }
+          }
+        ]
       }
     ]
   },
-  {
-    name: 'Invoice Rule',
-    type: 'collapse',
-    children: [
-      {
-        type: 'select',
-        key: 'invoice_rule.period',
-        read_only: false,
-        templateOptions: {
-          label: 'Period',
-          required: true,
-          options: [
-            { value: 'weekly', label: 'Weekly' },
-            { value: 'fortnightly', label: 'Fortnightly' },
-            { value: 'monthly', label: 'Monthly' },
-            { value: 'daily', label: 'Daily' },
-          ]
-        }
-      },
-      {
-        type: 'select',
-        key: 'invoice_rule.separation_rule',
-        read_only: false,
-        templateOptions: {
-          label: 'Separation rule',
-          required: true,
-          options: [
-            { value: 'one_invoce', label: 'One invoce' },
-            { value: 'per_jobsite', label: 'Per jobsite' },
-            { value: 'per_candidate', label: 'Per candidate' }
-          ]
-        }
-      },
-      {
-        type: 'checkbox',
-        key: 'invoice_rule.show_candidate_name',
-        default: false,
-        templateOptions: {
-          label: 'Show candidate name',
-        }
-      }
-    ]
-  }
 ];

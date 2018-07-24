@@ -99,7 +99,7 @@ export class FormCheckboxComponent
   }
 
   public setInitValue() {
-    let value = this.config.value || (this.viewMode === false && this.config.default); //tslint:disable-line
+    let value = this.config.value || (!this.viewMode && this.config.default); //tslint:disable-line
     if (this.viewMode) {
       if (this.config.templateOptions.type === 'checkbox') {
         this.defaultValues(value);

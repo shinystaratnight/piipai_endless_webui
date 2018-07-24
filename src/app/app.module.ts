@@ -23,7 +23,7 @@ import { ROUTES } from './app.routes';
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { NoContentComponent } from './pages/no-content';
-import { components } from './components';
+import * as formComponents from './components';
 import { services } from './services';
 import { guards } from './guards';
 import { Ng2Webstorage } from 'ng2-webstorage';
@@ -31,12 +31,17 @@ import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
+import { AgmCoreModule } from 'angular2-google-maps/core';
+
+import { DefaultRequestOptions } from './services/default-request-options.service';
 
 import { SharedModule } from './shared/shared.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import moment from 'moment-timezone';
+
+import { environment } from './environment';
 
 moment.tz.setDefault('Australia/Sydney');
 
@@ -57,13 +62,16 @@ const APP_PROVIDERS = [
   declarations: [
     AppComponent,
     NoContentComponent,
-    ...components
+    ...formComponents.components
   ],
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    AgmCoreModule.forRoot({
+      apiKey: (<any> process.env).GOOGLE_GEO_CODING_API_KEY || environment.GOOGLE_GEO_CODING_API_KEY
+    }),
     NgbModule.forRoot(),
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules }),
@@ -77,7 +85,8 @@ const APP_PROVIDERS = [
     APP_PROVIDERS,
     ...services,
     ...guards,
-    CookieService
+    CookieService,
+    ...formComponents.providers
   ]
 })
 export class AppModule {}

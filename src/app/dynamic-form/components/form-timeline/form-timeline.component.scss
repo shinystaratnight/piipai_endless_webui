@@ -4,6 +4,53 @@
   line-height: 1.2;
 }
 
+.state-info {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  &-label {
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    opacity: .3;
+    color: #333;
+  }
+
+  .state-tests {
+    min-width: 300px;
+  }
+
+  .state-substate {
+    width: 200px;
+
+    padding: 10px;
+    margin-bottom: 5px;
+
+    border-radius: 5px;
+    border: 1px solid $gray;
+
+    cursor: pointer;
+  }
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-top: 10px;
+}
+
+.state-progress {
+  font-size: 12px;
+  line-height: 14px;
+
+  margin-left: 10px;
+}
+
 .timeline {
   padding-bottom: 25px;
 
@@ -50,7 +97,7 @@
 
   &-element {
     display: inline-block;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
 
     transition: .3s;
 
