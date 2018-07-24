@@ -15,6 +15,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public picture: string;
   public available: boolean;
   public title: string;
+  public skill_title: string; //tslint:disable-line
   public address: string;
   public description: string;
   public status: any[];
