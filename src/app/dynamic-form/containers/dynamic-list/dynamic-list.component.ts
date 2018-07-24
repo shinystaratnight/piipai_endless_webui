@@ -1455,7 +1455,9 @@ export class DynamicListComponent implements
         longitude: +this.getPropValue(el, 'contact.address.longitude'),
         name: this.getPropValue(el, 'contact.__str__'),
         description: this.getPropValue(el, 'contact.address.__str__'),
-        iconUrl: '/assets/img/location-blue.svg'
+        iconUrl: '/assets/img/location-blue.svg',
+        id: this.getPropValue(el, 'id'),
+        selected: this.select[this.getPropValue(el, 'id')],
       });
     });
     if (this.supportData) {
@@ -1522,8 +1524,13 @@ export class DynamicListComponent implements
       if (e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/') {
         const arr: string[] = e.el.endpoint.split('/');
         arr.pop();
-        id = arr.pop();
-        endpoint = [...arr, ''].join('/');
+        const lastElement = arr.pop();
+        if (lastElement === 'extend') {
+          endpoint = [...arr, 'extend'].join('/');
+        } else {
+          id = lastElement
+          endpoint = [...arr, ''].join('/');
+        }
       }
     }
     this.modalInfo = {};
@@ -1606,6 +1613,13 @@ export class DynamicListComponent implements
     } else {
       return false;
     }
+  }
+
+  public markerClick(e) {
+    e.selected = !e.selected;
+    this.select[e.id] = e.selected;
+
+    this.emitSelect();
   }
 
 }
