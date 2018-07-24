@@ -1,5 +1,7 @@
 <header #header class="page-header">
-  <a routerLink="" class="logo"></a>
+  <a routerLink="" [class.logo]="!logo">
+    <img class="logo-img" *ngIf="logo" [src]="logo">
+  </a>
   <nav #nav class="navigation flex-xl-unordered" [ngClass]="{'flex-first': pages}" *ngIf="pages && pages.length">
     <button class=" d-flex align-items-center hamburger hamburger--spring hidden-xl-up" type="button"
       [ngClass]="{'is-active': isCollapsed}"

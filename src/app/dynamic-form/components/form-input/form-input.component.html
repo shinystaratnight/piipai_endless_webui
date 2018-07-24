@@ -8,7 +8,7 @@
       <input
         *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))
           && (!viewMode && !config.read_only)
-          && (config.type !== 'address' && config.key !== 'address' && config.key !== 'street_address')"
+          && (config.type !== 'address' && config.key !== 'address' && !config.key.includes('street_address'))"
         class="form-control"
         [class.not-empty]="group.get(key).value"
         autocomplete="off"
@@ -23,7 +23,7 @@
         [readonly]="config.read_only" [value]="config.value === 0 || config.value ? config.value : group.get(key).value === 0 || group.get(key).value ? group.get(key).value : ''">
 
       <input type="text" class="form-control" id="autocomplete"
-        *ngIf="config.type !== 'static' && !viewMode && (config.type === 'address' || config.key === 'address' || config.key === 'street_address')"
+        *ngIf="config.type !== 'static' && !viewMode && (config.type === 'address' || config.key === 'address' || config.key.includes('street_address'))"
         ng2-google-place-autocomplete
         [(ngModel)]="address"
         [ngModelOptions]="{standalone: true}"

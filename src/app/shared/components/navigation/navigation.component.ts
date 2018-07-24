@@ -48,6 +48,9 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public user: User;
 
+  @Input()
+  public logo: string;
+
   @Output()
   public update: EventEmitter<Role> = new EventEmitter();
 

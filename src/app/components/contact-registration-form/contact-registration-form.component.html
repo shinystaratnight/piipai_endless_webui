@@ -1,4 +1,20 @@
-<div class="container">
+<navigation [logo]="settings.logo"></navigation>
+
+<div *ngIf="config" class="site-page">
+  <div class="form-page">
+    <div class="form-content">
+      <dynamic-form
+        [config]="config.ui_config"
+        (event)="eventHandler($event)">
+        <button type="submit" class="btn btn-primary">
+          {{config.save_button_text}}
+        </button>
+      </dynamic-form>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container">
   <div class="card mt-3 mb-3">
     <h5 class="card-header p-3 bg-primary text-white">Registration</h5>
 
@@ -34,4 +50,4 @@
     </div>
 
   </div>
-</div>
+</div> -->

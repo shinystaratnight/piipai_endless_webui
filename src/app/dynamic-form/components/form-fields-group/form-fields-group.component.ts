@@ -50,6 +50,7 @@ export class FormFieldsGroupComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
+    console.log(this);
     if (this.config.value) {
       let value = this.config.value;
       this.groupId = value[0].id;

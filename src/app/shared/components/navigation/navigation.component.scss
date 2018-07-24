@@ -73,6 +73,10 @@ $header-bg: white;
     background-repeat: no-repeat;
     background-size: auto 40px;
     background-position: 2rem center;
+
+    &-img {
+      height: 40px;
+    }
   }
 
  .navigation {

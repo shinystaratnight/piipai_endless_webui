@@ -37,6 +37,14 @@ export const ROUTES: Routes = [
     canActivate: [NotAuthorizedGuard]
   },
   {
+    path: 'registration',
+    component: ContactRegistrationFormComponent,
+    canActivate: [AuthGuard],
+    resolve: {
+      settings: SiteSettingsService
+    }
+  },
+  {
     path: 'registration/password',
     component: ContactRegistrationFormComponent,
     canActivate: [AuthGuard],

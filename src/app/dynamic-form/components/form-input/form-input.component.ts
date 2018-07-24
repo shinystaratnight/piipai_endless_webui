@@ -72,6 +72,8 @@ export class FormInputComponent
   }
 
   public ngOnInit() {
+    console.log(this);
+
     if (this.config.type !== 'static'
       || (this.config.type === 'static' || !this.config.read_only)) {
       this.addControl(this.config, this.fb);

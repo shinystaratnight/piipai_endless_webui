@@ -108,6 +108,8 @@ export class GenericFormService {
         type = 'list';
       }
 
+      console.log(endpoint, type);
+
       const stringifyMetadata =
         JSON.stringify(metadata[endpoint][type]);
 
