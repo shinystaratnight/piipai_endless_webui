@@ -55,6 +55,8 @@
           </div>
         </div>
       </div>
+
+      <div *ngIf="config.additional_text" class="additional-text">{{config.additional_text}}</div>
     </div>
 
     <div class="form-element" *ngIf="config.many">
@@ -180,36 +182,46 @@
         aria-controls="collapseExample"
         style="cursor: pointer"></i>
           {{config.templateOptions.label}}
+      <button *ngIf="(showButton || config.delay) && checkPermission('post')"
+        type="button"
+        class="text-white btn btn-sm group-button ml-auto mr-2"
+        (click)="addObject()">
+          Add
+      </button>
     </h6>
     <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list-related p-2">
       <table *ngIf="dataOfList" class="table table-bordered mb-1">
         <thead>
           <tr>
-            <th *ngFor="let col of config.metadata">
-              {{col.templateOptions.label}}
-            </th>
+            <ng-container *ngFor="let col of config.metadata">
+              <th *ngIf="!col.hide">
+                {{col.templateOptions.label}}
+              </th>
+            </ng-container>
             <th style="width: 100px">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let object of dataOfList; let index = index">
-            <td *ngFor="let field of object.metadata;">
-              <ng-container
-                formElement
-                [label]="false"
-                [config]="field"
-                [group]="object.data"
-                (event)="updateValue($event)">
-              </ng-container>
-            </td>
+            <ng-container *ngFor="let field of object.metadata">
+              <td *ngIf="!field.hide">
+                <ng-container
+                  formElement
+                  [label]="false"
+                  [config]="field"
+                  [group]="object.data"
+                  (event)="updateValue($event)">
+                </ng-container>
+              </td>
+            </ng-container>
             <td>
               <span *ngIf="object.id" class="d-flex align-items-center">
-                <i fa class="icon text-danger mx-2" title="Delete"
+                <!-- <i fa class="icon text-danger mx-2" title="Delete"
                   [name]="'times-circle'"
-                  (click)="deleteObject(object)"></i>
-                <i fa class="icon text-warning mx-2" title="Edit"
+                  (click)="deleteObject(object)"></i> -->
+                <!-- <i fa class="icon text-warning mx-2" title="Edit"
                   [name]="'pencil'"
-                  (click)="editObject(object)"></i>
+                  (click)="editObject(object)"></i> -->
                 <i *ngIf="skillEndpoint && !object.allData.default_rate" fa class="icon text-primary mx-2" title="Set as default"
                   [name]="'check'"
                   (click)="setAsDefault(object)"></i>
@@ -221,7 +233,8 @@
           </tr>
         </tbody>
       </table>
-      <a href="#" (click)="addObject($event)"><small><i fa name="plus" class="text-success"></i></small> Add</a>
+
+      <div class="text-danger my-2" *ngIf="config.message">{{config.message}}</div>
     </div>
   </div>
 </div>

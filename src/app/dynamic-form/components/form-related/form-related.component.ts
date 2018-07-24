@@ -14,6 +14,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/filter';
@@ -152,6 +153,7 @@ export class FormRelatedComponent
     this.createEvent();
     this.checkModeProperty();
     this.checkHiddenProperty();
+    this.getDefaultDataForListType();
     if (this.config.custom && this.config.custom.length) {
       this.generateCustomTemplate(this.config.custom);
     }
@@ -171,6 +173,13 @@ export class FormRelatedComponent
       this.viewMode = true;
     }
 
+    if (this.config.delay) {
+      this.config.data = {
+        sendData: []
+      };
+      this.config.delayData[this.config.endpoint] = this.config;
+    }
+
     if (this.config.metadata_query instanceof Object) {
       this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
     }
@@ -187,8 +196,39 @@ export class FormRelatedComponent
         .skip(2)
         .filter((value) => value !== null)
         .debounceTime(400)
-        .subscribe((res) => {
+        .subscribe(() => {
           this.filter(this.searchValue);
+        });
+    }
+  }
+
+  public getDefaultDataForListType() {
+    if (this.config.defaultData) {
+      let query = '?limit=-1&';
+      const params = [];
+      const format = new FormatString();
+      Object.keys(this.config.defaultData).forEach((el) => {
+        const value = format.format(this.config.defaultData[el], this.formData);
+
+        query += `${el}=${format.format(this.config.defaultData[el], this.formData) || false}&`;
+      });
+
+      const metadata = JSON.parse(JSON.stringify(this.config.metadata));
+      metadata.forEach((el) => {
+        if (el.key) {
+          el.mode = new BehaviorSubject('view');
+          el.read_only = true;
+          if (el.query) {
+            Object.keys(el.query).forEach((query) => {
+              el.query[query] = format.format(el.query[query], this.formData);
+            });
+          }
+        }
+      });
+
+      this.genericFormService.getByQuery(this.config.endpoint, query)
+        .subscribe((res) => {
+          this.generateDataForList({ list: true, metadata }, res.results);
         });
     }
   }
@@ -291,6 +331,10 @@ export class FormRelatedComponent
           this.checkRelatedField(formData.key, formData.data) ||
           (this.config.default && !this.config.default.includes('session'))
         ) {
+          if (this.config.defaultData) {
+            this.getDefaultDataForListType();
+          }
+
           if (this.config.default && !this.config.hide && !this.config.value) {
             const format = new FormatString();
             let id;
@@ -479,7 +523,7 @@ export class FormRelatedComponent
       let value = [];
       if (data) {
         data.forEach((el) => {
-          let object = this.createObject();
+          let object = this.createObject(config.metadata);
           object['id'] = el.id;
           object['allData'] = el;
           this.fillingForm(object.metadata, el);
@@ -495,24 +539,42 @@ export class FormRelatedComponent
     }
   }
 
-  public createObject(): RelatedObject {
+  public createObject(metadata: Field[] = this.config.metadata): RelatedObject {
     let object = {
       id: undefined,
       allData: undefined,
       data: this.fb.group({}),
       metadata: []
     };
-    object.metadata = this.config.metadata.map((el) => {
+    const format = new FormatString();
+    object.metadata = metadata.map((el) => {
       let element = Object.assign({}, el);
       element.mode = el.mode;
+
+      if (el.query) {
+        const newQuery = {};
+        Object.keys(el.query).forEach((query) => {
+          newQuery[query] = format.format(el.query[query], this.formData);
+        });
+
+        element.query = newQuery;
+      }
+
+      if (el.prefilled) {
+        const newPrefilled = {};
+        Object.keys(el.prefilled).forEach((field) => {
+          newPrefilled[field] = format.format(el.prefilled[field], this.formData);
+        });
+
+        element.prefilled = newPrefilled;
+      }
+
       return element;
     });
     return object;
   }
 
-  public addObject(e): void {
-    e.preventDefault();
-    e.stopPropagation();
+  public addObject(): void {
     if (this.dataOfList) {
       let object = this.createObject();
       this.dataOfList.push(object);
@@ -560,6 +622,10 @@ export class FormRelatedComponent
         }
         return object;
       });
+      if (this.config.delayData) {
+        this.config.data.sendData = value.filter((el) => !el.id);
+      }
+
       this.group.get(this.key).patchValue(value);
     }
   }

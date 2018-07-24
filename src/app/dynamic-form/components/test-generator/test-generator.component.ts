@@ -97,5 +97,3 @@ export class TestGeneratorComponent implements OnInit {
   }
 
 }
-
-// acceptance_test_question, workflow_object, answer, answer_text, score
