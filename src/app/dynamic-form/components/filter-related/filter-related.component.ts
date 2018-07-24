@@ -65,6 +65,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public cashResults: any[];
   public subscription: Subscription;
   public filterSubscription: Subscription;
+  public querySubscription: Subscription;
 
   @ViewChild('search')
   public search;
@@ -84,7 +85,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.multiple) {
       this.limit = -1;
     }
-    this.route.queryParams.subscribe(
+    this.querySubscription = this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
     this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
@@ -112,6 +113,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    this.querySubscription.unsubscribe();
     this.filterSubscription.unsubscribe();
   }
 

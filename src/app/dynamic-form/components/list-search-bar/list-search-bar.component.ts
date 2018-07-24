@@ -1,14 +1,16 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { FilterService } from './../../services/filter.service';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'list-search-bar',
   templateUrl: 'list-search-bar.component.html',
   styleUrls: ['./list-search-bar.component.scss']
 })
-export class ListSerachBarComponent implements OnInit {
+export class ListSerachBarComponent implements OnInit, OnDestroy {
 
   @Input() public count: string;
   @Input() public label: string;
@@ -20,6 +22,7 @@ export class ListSerachBarComponent implements OnInit {
   public event: EventEmitter<any> = new EventEmitter();
 
   public searchValue: string;
+  public querySubscription: Subscription;
 
   constructor(
     private fs: FilterService,
@@ -27,9 +30,13 @@ export class ListSerachBarComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.route.queryParams.subscribe(
+    this.querySubscription = this.route.queryParams.subscribe(
       (params) => this.updateSearchBar()
     );
+  }
+
+  public ngOnDestroy() {
+    this.querySubscription.unsubscribe();
   }
 
   public search(event) {

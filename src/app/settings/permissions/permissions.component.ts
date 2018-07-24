@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { PermissionsService } from './permissions.service';
 import { SettingsService } from '../settings.service';
@@ -28,7 +30,7 @@ export interface Group {
   styleUrls: ['./permissions.component.scss']
 })
 
-export class PermissionsComponent implements OnInit {
+export class PermissionsComponent implements OnInit, OnDestroy {
 
   public permissionsList: Permission[];
   public targetPermissions: Permission[];
@@ -51,6 +53,8 @@ export class PermissionsComponent implements OnInit {
 
   public name: string;
 
+  public urlSubscription: Subscription;
+
   constructor(
     private service: PermissionsService,
     private route: ActivatedRoute,
@@ -58,12 +62,16 @@ export class PermissionsComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.route.url.subscribe((url) => {
+    this.urlSubscription = this.route.url.subscribe((url) => {
       this.settingsService.url = <any> url;
     });
     this.getPermissions();
     this.getGroups();
     this.getUsers();
+  }
+
+  public ngOnDestroy() {
+    this.urlSubscription.unsubscribe();
   }
 
   public getGroups(): void {

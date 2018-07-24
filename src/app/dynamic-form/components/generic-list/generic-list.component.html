@@ -72,3 +72,9 @@
     </div>
   </ng-container>
 </div>
+
+<button title="Load more" class="load-more"
+  *ngIf="tables[0] && tables[0].data && !inForm && (tables[0].offset < tables[0].data.count) && !uploading"
+  (click)="loadMoreHandler()">
+    <i fa name="angle-down" class="text-white"></i>
+</button>

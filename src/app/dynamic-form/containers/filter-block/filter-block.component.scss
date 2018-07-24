@@ -5,6 +5,7 @@
 
   &-block {
     width: 250px;
+    height: calc(100vh - 76px);
 
     padding-bottom: 50px;
     padding-left: 10px;
@@ -13,7 +14,10 @@
     overflow: auto;
 
     @include media-breakpoint-down('lg') {
+      height: 100vh;
       max-height: 100vh;
+
+      padding-bottom: 0px;
     }
   }
 

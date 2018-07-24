@@ -136,13 +136,13 @@ export class GenericListComponent implements OnInit, OnDestroy {
           const table = this.getFirstTable();
 
           if (table.offset < table.data.count) {
-          if (data && !this.uploading) {
-            this.uploading = true;
+            if (data && !this.uploading) {
+              this.uploading = true;
 
-            setTimeout(() => {
-              this.uploadMore();
-            }, 500);
-          }
+              setTimeout(() => {
+                this.uploadMore();
+              }, 500);
+            }
           }
         });
 
@@ -198,7 +198,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
               table.offset = 0;
             }
             if (!this.inForm) {
-              this.route.queryParams.subscribe(
+              const paramsSubscription = this.route.queryParams.subscribe(
                 (params) => {
                   let target = this.getTable(table.list);
                   if (target && target.first) {
@@ -206,6 +206,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
                   }
                 }
               );
+
+              this.subscriptions.push(paramsSubscription);
             } else if (!this.delay) {
               this.getData(endpoint, this.generateQuery(table.query), table);
             }
@@ -635,6 +637,10 @@ export class GenericListComponent implements OnInit, OnDestroy {
       checkedData: e,
       filters: this.fs.queries.find((el) => el.list === this.tables[0].list)
     });
+  }
+
+  public loadMoreHandler() {
+    this.upload.next(true);
   }
 
 }

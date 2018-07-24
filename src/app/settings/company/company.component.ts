@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { meta } from './company.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
@@ -32,6 +33,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
   public company: string;
 
+  public urlSubscription: Subscription;
+
   constructor(
     private gfs: GenericFormService,
     private route: ActivatedRoute,
@@ -40,7 +43,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
-    this.route.url.subscribe((url) => {
+    this.urlSubscription = this.route.url.subscribe((url) => {
       this.settingsService.url = <any> url;
     });
     this.gfs.getAll(this.endpoint).subscribe(
@@ -54,6 +57,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.urlSubscription.unsubscribe();
     this.resetSettings();
   }
 

@@ -317,6 +317,7 @@ export class DynamicListComponent implements
         list: null
       };
       this.filterService.resetQueries(this.config.list.list);
+      this.filtersOfList = undefined;
       if (this.modalRef) {
         this.modalRef.close();
       }

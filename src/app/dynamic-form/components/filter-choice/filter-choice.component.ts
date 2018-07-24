@@ -1,12 +1,14 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { FilterService } from './../../services/filter.service';
 import { ActivatedRoute } from '@angular/router';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'filter-choice',
   templateUrl: 'filter-choice.component.html'
 })
-export class FilterChoiceComponent implements OnInit {
+export class FilterChoiceComponent implements OnInit, OnDestroy {
   public config: any;
   public query: any;
   public isCollapsed: boolean = true;
@@ -22,6 +24,8 @@ export class FilterChoiceComponent implements OnInit {
     }
   };
 
+  public querySubscription: Subscription;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -31,11 +35,15 @@ export class FilterChoiceComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.route.queryParams.subscribe(
+    this.querySubscription = this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
     this.isCollapsed = this.query ? false : true;
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
+  }
+
+  public ngOnDestroy() {
+    this.querySubscription.unsubscribe();
   }
 
   public select(value) {
