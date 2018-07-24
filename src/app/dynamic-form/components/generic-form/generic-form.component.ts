@@ -243,6 +243,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           const key = value.replace('.__str__', '');
           const element = this.getElementFromMetadata(metadata, key);
 
+          const fieldsWithLabel = ['carrier_list_reserve', 'website', 'name'];
+
           if (element) {
             element.saveField = true;
             infoElement.metadata[el] = Object.assign(
@@ -254,7 +256,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
               {
                 templateOptions: {
                   ...element.templateOptions,
-                  label: element.type !== 'checkbox' ? '' : element.templateOptions.label
+                  label: element.type === 'checkbox' || fieldsWithLabel.indexOf(element.key) > -1 ? element.templateOptions.label : ''
                 }
               }
             );
