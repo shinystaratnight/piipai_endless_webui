@@ -33,8 +33,6 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 
-import { DefaultRequestOptions } from './services/default-request-options.service';
-
 import { SharedModule } from './shared/shared.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
