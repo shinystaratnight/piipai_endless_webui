@@ -263,7 +263,25 @@ const form = [
             ]
           }
         ]
-      }
+      },
+      {
+        endpoint: '/ecore/api/v2/skills/skilltags/',
+        templateOptions: {
+          label: 'Skill tags',
+          type: 'list',
+          add_label: '+ Add item',
+          text: 'Skill tags'
+        },
+        collapsed: false,
+        prefilled: {
+          skill: '{id}'
+        },
+        type: 'list',
+        query: {
+          skill: '{id}'
+        },
+        help: 'Here you can see the tags which belong to the skill'
+      },
     ]
   },
   {

@@ -623,27 +623,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             obj['value'] = data[key];
           }
         }
-        // if (obj.type === 'related') {
-        //   let endpoint;
-        //   if (obj.value) {
-        //     if (obj.value instanceof Object) {
-        //       // if (obj.value.id && obj.value.__str__) {
-        //       //   obj.options = [obj.value];
-        //       // }
-        //     } else if (Array.isArray(obj.value) && obj.value.length) {
-        //       if (!(obj.value[0] instanceof Object) && !obj.list) {
-        //         endpoint = obj.endpoint;
-        //       }
-        //     } else {
-        //       endpoint = obj.endpoint && `${obj.endpoint}${obj.value}/`;
-        //     }
-        //   } else {
-        //     obj.options = [];
-        //   }
-        //   if (endpoint) {
-        //     this.getRalatedData(metadata, obj.key, endpoint, {}, null, 'value', true);
-        //   }
-        // }
       }
     } else {
       if (data[prop]) {

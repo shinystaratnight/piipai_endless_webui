@@ -94,6 +94,7 @@ import * as acceptancetestindustries from './acceptancetestindustries.metadata';
 import * as acceptancetesttags from './acceptancetesttags.metadata';
 import * as acceptancetestworkflownodes from './acceptancetestworkflownodes.metadata';
 import * as skillbaserates from './skillbaserates.metadata';
+import * as skilltags from './skilltags.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -136,6 +137,7 @@ export const metadata = {
   '/ecore/api/v2/sms-interface/smstemplates/': smstemplates.metadata,
   '/ecore/api/v2/core/tags/': tags.metadata,
   '/ecore/api/v2/skills/skills/': skills.metadata,
+  '/ecore/api/v2/skills/skilltags/': skilltags.metadata,
   '/ecore/api/v2/candidate/visatypes/': visatypes.metadata,
   '/ecore/api/v2/hr/blacklists/': blacklists.metadata,
   '/ecore/api/v2/hr/favouritelists/': favouritelists.metadata,
