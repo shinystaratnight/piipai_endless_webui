@@ -696,17 +696,9 @@ const form = [
                           label: 'Days'
                         },
                         {
-                          value: 'day_of_month',
-                          label: 'Day of the month'
-                        },
-                        {
                           value: 'days_eom',
                           label: 'Days after EOM'
                         },
-                        {
-                          value: 'day_of_month_eom',
-                          label: 'Day of month after EOM'
-                        }
                       ]
                     },
                     read_only: false
