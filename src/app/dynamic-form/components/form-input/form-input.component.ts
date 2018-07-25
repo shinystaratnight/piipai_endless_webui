@@ -134,6 +134,7 @@ export class FormInputComponent
   public checkIfExistDefaultValue() {
     if (
       this.config.default &&
+      typeof this.config.default === 'string' &&
       this.config.default.includes('{') &&
       this.config.default.includes('}')
     ) {
