@@ -48,11 +48,14 @@ const form = [
     key: 'parent',
     type: 'related',
     endpoint: '/ecore/api/v2/core/tags/',
+    hideIfNull: true,
     templateOptions: {
       values: ['__str__'],
       label: 'Parent',
+      add: true,
+      edit: true,
     },
-    read_only: true
+    read_only: false
   },
   {
     key: 'active',
@@ -67,11 +70,20 @@ const form = [
   },
   {
     key: 'evidence_required_for_approval',
-    default: false,
     type: 'checkbox',
     templateOptions: {
       required: false,
       label: 'Evidence required for approval',
+      type: 'checkbox'
+    },
+    read_only: false
+  },
+  {
+    key: 'confidential',
+    type: 'checkbox',
+    templateOptions: {
+      required: false,
+      label: 'Confidential',
       type: 'checkbox'
     },
     read_only: false
@@ -114,11 +126,20 @@ const formadd = [
   },
   {
     key: 'evidence_required_for_approval',
-    default: false,
     type: 'checkbox',
     templateOptions: {
       required: false,
       label: 'Evidence required for approval',
+      type: 'checkbox'
+    },
+    read_only: false
+  },
+  {
+    key: 'confidential',
+    type: 'checkbox',
+    templateOptions: {
+      required: false,
+      label: 'Confidential',
       type: 'checkbox'
     },
     read_only: false

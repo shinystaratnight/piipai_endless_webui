@@ -32,6 +32,7 @@ export interface Field {
   customValue?: any;
   default?: any;
   autocompleteData?: Subject<any>;
+  timelineSubject?: Subject<any>;
   autocomplete?: any[];
   query?: any;
   currentQuery?: string;
@@ -40,6 +41,7 @@ export interface Field {
   defaultData?: any;
   delay?: any;
   delayData?: any;
+  formId: number;
   templateOptions?: {
     label?: string;
     type?: string;

@@ -13,6 +13,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/debounceTime';
@@ -69,48 +70,49 @@ export class FormRelatedComponent
   public errors: any;
   public message: any;
   public key: any;
+
   public label: boolean;
+  public isCollapsed: boolean;
+  public viewMode: boolean;
+  public editMode: boolean;
+  public saveProcess: boolean;
+  public linkPath: string;
+
   public display: string;
   public param: string;
+
   public list: any[];
+  public previewList: any[];
   public results: any;
   public displayValue: any;
-  public limit: number = 10;
-  public previewList: any[];
+
   public lastElement: number = 0;
+  public limit: number = 10;
+  public count: number;
   public searchValue: any;
+  public fields: string[];
+
   public hideAutocomplete: boolean = true;
   public modalData: any = {};
   public modalRef: any;
-  public formData: any = {};
 
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
-
   public skipScroll = false;
 
   public dataOfList: any;
-  public count: number;
-  public isCollapsed: boolean = false;
+  public formData: any = {};
+  public allowPermissions: string[];
 
   public replaceElements: any = [];
 
   public listElement: Field;
 
-  public viewMode: boolean;
-
   public skillEndpoint: boolean;
   public customTemplate: CustomField[];
 
-  public fields: string[];
-
-  public saveProcess: boolean;
-
-  public linkPath: string;
-  public allowPermissions: string[];
   public autocompleteDisplay: boolean;
   public currentQuery: string;
-  public editMode: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -137,16 +139,21 @@ export class FormRelatedComponent
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
+
     this.skillEndpoint = this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
       this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
-    this.display =
-      this.config.templateOptions.display ? this.config.templateOptions.display : '{__str__}';
-    this.param = this.config.templateOptions.param ? this.config.templateOptions.param : 'id';
-    this.fields = this.config.templateOptions.values;
-    this.allowPermissions = this.permission.getAllowMethods(undefined, this.config.endpoint);
-    if (this.fields && this.fields.indexOf(this.param) === -1) {
+
+    this.display = this.config.templateOptions.display || '{__str__}';
+    this.param = this.config.templateOptions.param || 'id';
+    this.fields = this.config.templateOptions.values || ['__str__'];
+    this.isCollapsed = this.config.collapsed;
+    this.viewMode = this.config.editForm && this.config.read_only;
+
+    if (this.fields.indexOf(this.param) === -1) {
       this.fields.push(this.param);
     }
+
+    this.getAllowPermissions();
     this.checkAutocomplete();
     this.checkFormData();
     this.setInitValue();
@@ -154,38 +161,13 @@ export class FormRelatedComponent
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.getDefaultDataForListType();
-    if (this.config.custom && this.config.custom.length) {
-      this.generateCustomTemplate(this.config.custom);
-    }
-    if (this.config && this.config.list && this.config.data) {
-      const subscription = this.config.data.subscribe((data) => {
-        this.generateDataForList(this.config, data);
-      });
+    this.checkCustomTemplate();
+    this.checkIfListType();
+    this.checkDelayData();
+    this.checkMetadataQuery();
 
-      this.subscriptions.push(subscription);
-    }
     if (this.config && this.config.metadata) {
       this.getReplaceElements(this.config.metadata);
-    }
-    this.isCollapsed = this.config.collapsed;
-
-    if (this.config.editForm && this.config.read_only) {
-      this.viewMode = true;
-    }
-
-    if (this.config.delay) {
-      this.config.data = {
-        sendData: []
-      };
-      this.config.delayData[this.config.endpoint] = this.config;
-    }
-
-    if (this.config.metadata_query instanceof Object) {
-      this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
-    }
-
-    if (this.config.add_metadata_query instanceof Object) {
-      this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
     }
   }
 
@@ -199,6 +181,45 @@ export class FormRelatedComponent
         .subscribe(() => {
           this.filter(this.searchValue);
         });
+    }
+  }
+
+  public checkMetadataQuery() {
+    const properties = ['metadata_query', 'add_metadata_query'];
+
+    properties.forEach((prop: string) => {
+      this.config[prop] = this.config[prop] && this.parseMetadataQuery(this.config, prop);
+    });
+  }
+
+  public checkDelayData() {
+    if (this.config.delay) {
+      this.config.data = {
+        sendData: []
+      };
+      this.config.delayData[this.config.endpoint] = this.config;
+    }
+  }
+
+  public checkIfListType() {
+    if (this.config && this.config.list && this.config.data) {
+      const subscription = this.config.data.subscribe((data) => {
+        this.generateDataForList(this.config, data);
+      });
+
+      this.subscriptions.push(subscription);
+    }
+  }
+
+  public checkCustomTemplate() {
+    if (this.config.custom && this.config.custom.length) {
+      this.generateCustomTemplate(this.config.custom);
+    }
+  }
+
+  public getAllowPermissions() {
+    if (this.allowPermissions) {
+      this.allowPermissions = this.permission.getAllowMethods(undefined, this.config.endpoint);
     }
   }
 
@@ -228,7 +249,7 @@ export class FormRelatedComponent
 
       this.genericFormService.getByQuery(this.config.endpoint, query)
         .subscribe((res) => {
-          this.generateDataForList({ list: true, metadata }, res.results);
+          this.generateDataForList(<any> { list: true, metadata }, res.results);
         });
     }
   }
@@ -289,6 +310,7 @@ export class FormRelatedComponent
     if (this.config && this.config.mode) {
       this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
+
           this.viewMode = true;
           this.editMode = false;
 
@@ -299,16 +321,17 @@ export class FormRelatedComponent
           if (this.searchSubscription) {
             this.searchSubscription.unsubscribe();
           }
-        } else {
+          this.setInitValue();
+          this.eventHandler(
+            {type: 'change'},
+            this.group.get(this.key).value,
+            this.resetAdditionalData()
+          );
+        } else if (mode === 'edit') {
           this.viewMode = this.config.read_only || false;
           this.editMode = true;
+          this.setInitValue();
         }
-        this.setInitValue();
-        this.eventHandler(
-          {type: 'change'},
-          this.group.get(this.key).value,
-          this.resetAdditionalData()
-        );
       });
     }
   }
