@@ -44,6 +44,7 @@ export class FormDatepickerComponent
   public dateFormat: string = 'DD/MM/YYYY';
   public datetimeFormat: string = 'DD/MM/YYYY hh:mm A';
   public timeFormat: string = 'hh:mm A';
+  public timeZone: string;
 
   public viewMode: boolean;
   public editMode: boolean;
@@ -58,6 +59,7 @@ export class FormDatepickerComponent
     this.$ = require('jquery');
     this.subscriptions = [];
     this.editMode = true;
+    this.timeZone = 'Australia/Sydney';
   }
 
   public ngOnInit() {
@@ -129,7 +131,7 @@ export class FormDatepickerComponent
       if (type === 'date' || type === 'datetime') {
         this.setDate(data, moment);
         this.displayValue = data ?
-                            moment.tz(data, 'Australia/Sydney')
+                            moment.tz(data, this.timeZone)
                                   .format(type === 'date' ? this.dateFormat : this.datetimeFormat) :
                             '-';
       } else if (type === 'time') {
@@ -141,7 +143,7 @@ export class FormDatepickerComponent
       if (type === 'date' || type === 'datetime') {
         this.setDate(data, moment);
         this.displayValue = data ?
-                            moment.tz(data, 'Australia/Sydney')
+                            moment.tz(data, this.timeZone)
                                   .format(type === 'date' ? this.dateFormat : this.datetimeFormat) :
                             '-';
       } else if (type === 'time') {
@@ -173,6 +175,7 @@ export class FormDatepickerComponent
           calHighToday: false,
           calUsePickers: true,
           useCancelButton: true,
+          calYearPickRelative: false,
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
           maxDays: this.key.includes('birthday') && -1,
@@ -198,6 +201,7 @@ export class FormDatepickerComponent
           useHeader: false,
           calUsePickers: true,
           calHighToday: false,
+          calYearPickRelative: false,
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
           maxDays: this.key.includes('birthday') && -1,
