@@ -46,11 +46,11 @@ const form = [
   },
   {
     key: 'parent',
-    type: 'input',
+    type: 'related',
+    endpoint: '/ecore/api/v2/core/tags/',
     templateOptions: {
-      required: false,
+      values: ['__str__'],
       label: 'Parent',
-      type: 'text'
     },
     read_only: true
   },
@@ -92,11 +92,12 @@ const formadd = [
   },
   {
     key: 'parent',
-    type: 'input',
+    type: 'related',
+    endpoint: '/ecore/api/v2/core/tags/',
     templateOptions: {
-      required: false,
+      values: ['__str__'],
+      add: true,
       label: 'Parent',
-      type: 'text'
     },
     read_only: true
   },

@@ -154,7 +154,12 @@
                         (buttonAction)="buttonHandler($event, cell.pop = pop)">
                       </ng-container>
                     </template>
-                    <i fa class="icon px-1 ml-4" name="ellipsis-v" placement="bottom" #pop="ngbPopover" [ngbPopover]="actionsTemplate" style="opacity: .3"></i>
+                    <i fa class="icon px-1" style="opacity: .3; margin-left: 8px"
+                      name="ellipsis-v"
+                      placement="bottom"
+                      #pop="ngbPopover"
+                      [ngbPopover]="actionsTemplate">
+                    </i>
                   </ng-container>
 
                   <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
