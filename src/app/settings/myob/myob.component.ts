@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { meta, payrollAccounts } from './myob.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
@@ -13,7 +15,7 @@ import moment from 'moment-timezone';
   templateUrl: 'myob.component.html'
 })
 
-export class MyobComponent implements OnInit {
+export class MyobComponent implements OnInit, OnDestroy {
 
   public endpoint: string = '/ecore/api/v2/company_settings/';
   public pageUrl: string;
@@ -34,6 +36,9 @@ export class MyobComponent implements OnInit {
   public connectProcess: boolean;
   public connectButton: any;
 
+  public querySubscription: Subscription;
+  public urlSubscription: Subscription;
+
   constructor(
     private gfs: GenericFormService,
     private route: ActivatedRoute,
@@ -49,11 +54,11 @@ export class MyobComponent implements OnInit {
 
     this.pageUrl = location.origin + location.pathname;
 
-    this.route.url.subscribe((url) => {
+    this.urlSubscription = this.route.url.subscribe((url) => {
       this.settingsService.url = <any> url;
     });
 
-    this.route.queryParams.subscribe((params) => {
+    this.querySubscription = this.route.queryParams.subscribe((params) => {
       let code = params['code'];
       if (code) {
         this.getMyobApiKey(() => {
@@ -75,6 +80,11 @@ export class MyobComponent implements OnInit {
     this.connectButton = {
       text: 'Connect'
     };
+  }
+
+  public ngOnDestroy() {
+    this.urlSubscription.unsubscribe();
+    this.querySubscription.unsubscribe();
   }
 
   public getMyobApiKey(callback) {

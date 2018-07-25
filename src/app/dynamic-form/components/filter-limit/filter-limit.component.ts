@@ -19,6 +19,7 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
   public inputs: any[];
 
   private filterSubscription: Subscription;
+  private querySubscription: Subscription;
 
   constructor(
     private fs: FilterService,
@@ -26,11 +27,12 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
-    this.route.queryParams.subscribe((param) => this.updateFilter());
+    this.querySubscription = this.route.queryParams.subscribe((param) => this.updateFilter());
     this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter);
   }
 
   public ngOnDestroy() {
+    this.querySubscription.unsubscribe();
     this.filterSubscription.unsubscribe();
   }
 

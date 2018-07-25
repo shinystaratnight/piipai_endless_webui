@@ -16,14 +16,14 @@ export class MoveDirective {
   public offsetLeft: any;
 
   @Input()
-  private parent: any;
+  public parent: any;
 
   @Output()
-  private active: EventEmitter<any> = new EventEmitter();
+  public active: EventEmitter<any> = new EventEmitter();
 
-  private isMovable: boolean = false;
+  public isMovable: boolean = false;
 
-  private pos: any = { x: 0, y: 0 };
+  public pos: any = { x: 0, y: 0 };
 
   constructor(
     private el: ElementRef
@@ -32,36 +32,36 @@ export class MoveDirective {
   }
 
   @HostListener('mousedown', ['$event'])
-  private onMouseDown($event) {
+  public onMouseDown($event) {
     this.down();
   };
 
   @HostListener('document:mousemove', ['$event'])
-  private onMouseMove($event) {
+  public onMouseMove($event) {
     this.move($event);
   };
 
   @HostListener('document:mouseup', ['$event'])
-  private onMouseUp($event) {
+  public onMouseUp($event) {
     this.end();
   };
 
   @HostListener('touchstart')
-  private onTouchStart() {
+  public onTouchStart() {
     this.down();
   };
 
   @HostListener('document:touchmove', ['$event'])
-  private onToucMove($event) {
+  public onToucMove($event) {
     this.move($event);
   };
 
   @HostListener('touchstart')
-  private onTouchEnd() {
+  public onTouchEnd() {
     this.end();
   };
 
-  private updatePosition(x: number = 0, y: number = 0) {
+  public updatePosition(x: number = 0, y: number = 0) {
       this.pos.x += x;
       this.pos.y += y;
 
@@ -69,7 +69,7 @@ export class MoveDirective {
       this.parent.style.top = (this.pos.y + this.offsetTop) + 'px';
   }
 
-  private down() {
+  public down() {
     this.offsetTop = this.parent.offsetTop;
     this.offsetLeft = this.parent.offsetLeft;
     this.updatePosition();
@@ -78,14 +78,14 @@ export class MoveDirective {
     this.active.emit(true);
   }
 
-  private move($event) {
+  public move($event) {
     if (!this.isMovable) {
       return;
     }
     this.updatePosition($event.movementX, $event.movementY);
   }
 
-  private end() {
+  public end() {
     this.isMovable = false;
     this.pos.x = 0;
     this.pos.y = 0;

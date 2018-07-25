@@ -8,6 +8,8 @@ body {
   color: $gray;
 
   background-color: #f5f5f5;
+
+  -webkit-font-smoothing: antialiased
 }
 
 label,
@@ -117,10 +119,8 @@ select.not-empty {
 
   margin-right: 0.5rem;
 
-  font-size: 12px;
-
   border: 1px solid #bdbdbd;
-  border-radius: 0.2rem;
+  border-radius: 2px;
 
   cursor: pointer;
 
@@ -136,11 +136,11 @@ select.not-empty {
 }
 
 .modal-backdrop {
-  z-index: 1;
+  z-index: 3;
 }
 
 .modal {
-  z-index: 2;
+  z-index: 3;
 }
 
 .input-group .form-control,
@@ -224,12 +224,12 @@ select.not-empty {
 
   border-radius: 50px;
 
-  background-color: rgba($brand-primary, 0.5);
+  background-color: rgba($brand-primary, 0.2);
   color: inherit;
 
   @each $item in $themes {
     .#{$item}-theme & {
-      background-color: rgba(map-get($theme-colors, $item), 0.5);
+      background-color: rgba(map-get($theme-colors, $item), 0.2);
     }
   }
 }
@@ -259,6 +259,10 @@ select.not-empty {
 
 .modal-header {
   background-color: #fff;
+}
+
+.modal-backdrop {
+  z-index: 2;
 }
 
 .modal-content {
@@ -651,6 +655,18 @@ select.not-empty {
 
 /*---------- Custom styles ---------- */
 
+
+
+.scroll-hidden {
+  @include media-breakpoint-down('lg') {
+    overflow: hidden;
+  }
+}
+
+.site-page {
+  margin-top: 72px;
+}
+
 .form-control.not-empty[readonly] {
   background-color: transparent;
 }
@@ -910,4 +926,58 @@ iframe.send-sms {
 
 .sebm-google-map-container-inner {
   height: 100% !important;
+}
+
+.load-more {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+  border: none;
+
+  opacity: .8;
+
+  background-color: $brand-success;
+  box-shadow: 3px 3px 7px rgba(51, 51, 51, .2);
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
+
+  i {
+    position: relative;
+    top: 0px;
+
+    font-size: 20px;
+
+    animation-name: loadmore;
+    animation-duration: 1.3s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+}
+
+
+@keyframes loadmore {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    top: 2.5px;
+    opacity: .5;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }

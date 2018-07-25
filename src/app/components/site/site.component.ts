@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Subject } from 'rxjs/Subject';
+
 import { SiteService, PageData, UserService, User, Role, NavigationService } from '../../services/';
 import { GenericFormService } from '../../dynamic-form/services/';
 import { CheckPermissionService, ToastrService, MessageType } from '../../shared/services/';
@@ -37,6 +39,7 @@ export class SiteComponent implements OnInit {
   public Jira: any;
   public jiraLoaded: boolean;
 
+  public upload: Subject<boolean> = new Subject();
   public listName: string;
 
   public listNameCache = {};
@@ -96,6 +99,10 @@ export class SiteComponent implements OnInit {
         this.approvedStorage = e.data.status;
       }
     }
+  }
+
+  public onModalScrollDown() {
+    this.upload.next(true);
   }
 
   public getPageData(url) {

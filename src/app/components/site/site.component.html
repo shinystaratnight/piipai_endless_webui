@@ -126,13 +126,17 @@
     </div>
   </div>
 
-  <div class="datatable-list" *ngSwitchCase="'list'">
-    <generic-list
-      [clientId]="getClientId()"
-      [listNameCache]="listNameCache"
-      [allowPermissions]="permissionMethods"
-      [endpoint]="pageData.endpoint">
-    </generic-list>
+  <div class="datatable-list" *ngSwitchCase="'list'"
+    infinite-scroll
+    [scrollWindow]="true"
+    (scrolled)="onModalScrollDown()">
+      <generic-list
+        [upload]="upload"
+        [clientId]="getClientId()"
+        [listNameCache]="listNameCache"
+        [allowPermissions]="permissionMethods"
+        [endpoint]="pageData.endpoint">
+      </generic-list>
   </div>
 
   <div *ngSwitchCase="'profile'">

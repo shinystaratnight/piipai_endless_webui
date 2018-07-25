@@ -27,6 +27,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   public theme: string;
   public type: string;
   public filterSubscription: Subscription;
+  public querySubscription: Subscription;
 
   @Output() public event: EventEmitter<any> = new EventEmitter();
 
@@ -34,7 +35,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.type = this.config.type === 'multiple' ? 'data' : 'options';
-    this.route.queryParams.subscribe(
+    this.querySubscription = this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
     this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
@@ -56,6 +57,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.querySubscription.unsubscribe();
     this.filterSubscription.unsubscribe();
   }
 

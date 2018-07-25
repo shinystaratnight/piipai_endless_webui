@@ -1,0 +1,12 @@
+<div id="webcam">
+
+  <video id="video" *ngIf="isSupportWebRTC" [src]="videoSrc">Video stream not available</video>
+
+  <object *ngIf="isFallback" id="XwebcamXobjectX" width="320" height="240" data="{{options.fallbackSrc}}">
+    Video stream not available
+    <param name="FlashVars" value="mode=callback&amp;quality=200">
+    <param name="allowScriptAccess" value="always">
+    <param name="movie" value="{{options.fallbackSrc}}">
+  </object>
+
+</div>

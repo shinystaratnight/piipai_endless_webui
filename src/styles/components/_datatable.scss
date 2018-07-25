@@ -40,7 +40,13 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   }
 
   .datatable-list & {
+    position: relative;
+
     padding: 31px 0 0 0;
+
+    .spinner {
+      margin: 0 auto 20px;
+    }
   }
 
   .table-wrapper {
@@ -61,15 +67,29 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     color: $gray;
 
+    @include media-breakpoint-down('md') {
+      min-width: 989px;
+    }
+
     td {
       border-top: none;
 
       padding: .3rem;
 
-      padding-top: 9px;
-      padding-bottom: 9px;
+      padding-top: 16px;
+      padding-bottom: 16px;
 
       background-color: white;
+
+      &:first-child {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      &:last-child {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
     }
 
     tbody tr {
@@ -147,7 +167,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     color: rgba(black, .2);
     text-transform: uppercase;
 
-    background-color: white;
+    background-color: transparent;
 
     label {
       display: inline;
@@ -183,11 +203,42 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     align-items: center;
     flex-wrap: wrap;
 
-    margin: 1rem 0;
+    padding: 1rem 0;
+
+    background-color: #f5f5f5;
+
+    &.scrolled {
+      position: fixed;
+      top: 72px;
+
+      width: calc(100% - 40px);
+      max-width: 1240px;
+
+      padding-right: 20px;
+
+      z-index: 1;
+
+      box-sizing: content-box;
+
+      &.open-filters {
+        width: calc(100% - 305px);
+      }
+
+      @include media-breakpoint-down('lg') {
+        width: 969px !important;
+        max-width: calc(100% - 20px);
+
+        padding-right: 0;
+      }
+    }
   }
 
   &-body {
     width: 100%;
+
+    &.in-form .open-filters {
+      width: calc(100% - 285px);
+    }
 
     padding-right: 10px;
     padding-left: 10px;
@@ -196,10 +247,29 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   @include media-breakpoint-up('xl') {
     &-list &-body,
     &-body.open-filters {
-      width: calc(100% - 285px);
-      max-width: 80%;
+      max-width: 1280px;
 
       margin: 0 auto;
+      padding: 0 20px;
+    }
+  }
+
+  @include media-breakpoint-down('lg') {
+    &-list &-body,
+    &-body.open-filters {
+      width: 989px;
+
+      min-width: 989px;
+    }
+  }
+
+  @include media-breakpoint-down('md') {
+    &-list &-body,
+    &-body.open-filters {
+      width: auto;
+
+      min-width: auto;
+      max-width: 100%;
     }
   }
 
@@ -207,6 +277,14 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     display: flex;
     align-items: flex-start;
     justify-content: space-around;
+
+    &.open:not(.in-form) {
+      margin-left: 265px;
+
+      @include media-breakpoint-down('lg') {
+        margin-left: 0;
+      }
+    }
 
     &-list & {
       min-height: calc(100vh - 72px - 31px);
@@ -240,6 +318,8 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     display: none;
     width: 265px;
 
+    margin-right: 0 5px;
+
     align-self: stretch;
 
     margin-top: -31px;
@@ -251,29 +331,40 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       display: block;
     }
 
-    @include media-breakpoint-down('lg') {
-      display: block;
+    &:not(.in-form) {
       position: fixed;
-      top: 0;
-      left: -265px;
+      top: 72px;
+      left: 0;
 
-      margin-top: 0;
-      padding-top: 0;
+      height: calc(100vh - 41px);
 
-      background-color: white;
-      transition: left .5s ease;
+      overflow: auto;
+      z-index: 2;
 
-      z-index: 20;
+      @include media-breakpoint-down('lg') {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: -265px;
 
-      &.open {
-        left: 0;
+        margin-top: 0;
+        padding-top: 0;
 
-        min-height: 100vh;
+        background-color: white;
+        transition: left .5s ease;
 
-        overflow: auto;
+        z-index: 20;
 
-        & ~ .background {
-          display: block;
+        &.open {
+          left: 0;
+
+          min-height: 100vh;
+
+          overflow: auto;
+
+          & ~ .background {
+            display: block;
+          }
         }
       }
     }
@@ -304,6 +395,8 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     color: rgba(black, .5);
     box-shadow: 0 0 6px rgba(black, .1);
+
+    background-color: #fdfdfd;
 
     path {
       fill: rgba(black, .5);

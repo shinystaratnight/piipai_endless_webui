@@ -8,10 +8,22 @@
     display: flex;
   }
 
-  &-title span {
-    font-size: 18px;
-    line-height: 20px;
-    font-weight: 600;
+  &-title {
+    span {
+      font-size: 18px;
+      line-height: 18px;
+      font-weight: 600;
+    }
+
+    .score {
+      margin-left: 8px;
+      padding-left: 8px;
+
+      font-size: 14px;
+      vertical-align: top;
+
+      border-left: 1px solid black;
+    }
   }
 
   &-left {
@@ -26,7 +38,7 @@
       width: 54px;
       height: 54px;
 
-      margin-bottom: .5rem;
+      // margin-bottom: .5rem;
 
       border-radius: 50%;
 
@@ -68,6 +80,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    margin-top: .5rem;
 
     color: rgba($gray, .3);
 
@@ -145,6 +159,11 @@
       margin-right: .2rem;
     }
   }
+}
+
+.description {
+  font-size: 12px;
+  line-height: 14px;
 }
 
 .more {
