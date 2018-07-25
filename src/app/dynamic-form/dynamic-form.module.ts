@@ -33,7 +33,7 @@ import { directives } from './directives';
     AgmCoreModule,
     InfiniteScrollModule,
     SharedModule,
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
     GooglePlaceModule,
     DndModule.forRoot()
   ],
