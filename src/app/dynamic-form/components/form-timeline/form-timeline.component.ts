@@ -184,7 +184,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.loading = false;
         this.config.timelineSubject.next(res);
-      });
+      }, (err: any) => this.loading = false);
   }
 
   public setDataForState(state): {} {
