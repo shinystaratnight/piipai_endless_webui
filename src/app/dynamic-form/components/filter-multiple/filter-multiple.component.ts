@@ -171,7 +171,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
               el.checked = false;
             }
           } else {
-            if (first) {
+            if (first && this.config.preset) {
               el.checked = true;
             }
             if (el.checked) {
