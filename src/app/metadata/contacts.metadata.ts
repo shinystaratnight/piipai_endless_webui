@@ -59,7 +59,7 @@ const list = {
             inline: true
           },
           {
-            endpoint: '/ecore/api/v2/core/companies/{candidate_contacts.id}',
+            endpoint: '/ecore/api/v2/core/companies/{master_company.id}',
             field: 'master_company',
             type: 'link',
             display: 'Master Company',
