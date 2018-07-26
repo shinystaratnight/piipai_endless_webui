@@ -531,12 +531,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         elements.forEach((item, i) => {
           let keyValue = item.split('=');
           let key = (el === 'filter') ? 'f.' :
-            (el === 'sort') ? 's.' :
-            (el === 'pagination') ? 'p.' : '';
-          // if (el === 'pagination') {
-          //   queryParams[`${list}.${key}page`] = this.setPage(keyValue[0], keyValue[1]);
-          //   return;
-          // }
+            (el === 'sort') ? 's.' : '';
           if (key === 'f.') {
             queryParams[`${list}.${key}${keyValue[0]}-${i}`] = keyValue[1];
           } else {
@@ -545,9 +540,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
         });
       }
     });
-    // if (filter) {
-    //   queryParams[`${list}.p.page`] = 1;
-    // }
     this.router.navigate([], { queryParams });
   }
 
