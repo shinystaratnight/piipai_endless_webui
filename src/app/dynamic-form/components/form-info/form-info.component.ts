@@ -66,16 +66,18 @@ export class FormInfoComponent implements OnInit, OnDestroy {
         if (key === 'status') {
           this[key] = this.getValue(this.config.values[key].field, this.config.value);
 
-          if (this[key].length > 4) {
-            this.statusList = this[key].slice(0, 4);
+          if (this[key]) {
+            if (this[key].length > 4) {
+              this.statusList = this[key].slice(0, 4);
 
-            this.more = true;
-          } else {
-            this.statusList = this[key];
+              this.more = true;
+            } else {
+              this.statusList = this[key];
+            }
+
+            this.color = this.config.values[key].color;
+            this.colorAttr = this.config.values[key].color_attr;
           }
-
-          this.color = this.config.values[key].color;
-          this.colorAttr = this.config.values[key].color_attr;
         } else if (key === 'picture') {
           this[key] = this.getValue(this.config.values[key], this.config.value, 'picture')
             || (this.getConfig('picture')
