@@ -713,7 +713,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public saveForm(endpoint: string, data, edit?: boolean) {
-    if (endpoint[endpoint.length] !== '/') {
+    if (endpoint[endpoint.length - 1] !== '/') {
       endpoint += '/';
     }
 

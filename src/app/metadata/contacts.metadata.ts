@@ -418,9 +418,8 @@ const form = [
                     many: false
                   },
                   {
-                    list: false,
                     endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
-                    read_only: false,
+                    doNotChoice: true,
                     add_metadata_query: {
                       fieldsets_type: 'contact'
                     },
@@ -429,10 +428,8 @@ const form = [
                       add: true,
                       delete: false,
                       values: ['__str__'],
-                      type: 'related',
                       edit: true
                     },
-                    collapsed: false,
                     send: false,
                     prefilled: {
                       contact: '{id.id}'
@@ -450,16 +447,14 @@ const form = [
                   {
                     list: false,
                     endpoint: '/ecore/api/v2/core/companycontacts/',
-                    read_only: false,
+                    doNotChoice: true,
                     templateOptions: {
                       label: 'Company Contact',
                       add: true,
                       delete: false,
                       values: ['__str__'],
-                      type: 'related',
                       edit: true
                     },
-                    collapsed: false,
                     send: false,
                     prefilled: {
                       contact: '{id.id}'
