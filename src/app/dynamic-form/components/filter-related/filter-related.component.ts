@@ -13,6 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { GenericFormService } from './../../services/generic-form.service';
 import { FilterService } from './../../services/filter.service';
+import { SiteSettingsService } from '../../../services/site-settings.service';
+import { FormatString } from '../../../helpers/format';
 
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
@@ -77,7 +79,8 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     private fs: FilterService,
     private route: ActivatedRoute,
     private genericFormService: GenericFormService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private siteSettingsService: SiteSettingsService,
   ) {}
 
   public ngOnInit() {
@@ -333,7 +336,13 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.getOptions(this.searchValue);
       return `Selected ${value.length} ${this.config.label}`;
     }
-    let endpoint;
+    const formatString = new FormatString();
+
+    let endpoint =
+      this.config.data.endpoint.includes('{')
+      ? formatString.format(this.config.data.endpoint, this.siteSettingsService.settings)
+      : undefined;
+
     const index = this.config.data.endpoint.indexOf('?');
     if (index !== -1) {
       endpoint = this.config.data.endpoint.slice(0, index)
@@ -351,17 +360,20 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public getOptions(value, concat = false) {
-    let endpoint = this.config.data.endpoint;
+    const formatString = new FormatString();
+    let endpoint =
+      this.config.data.endpoint.includes('{')
+      ? formatString.format(this.config.data.endpoint, this.siteSettingsService.settings)
+      : undefined;
     let offset = this.item.lastElement;
-    let display = this.config.data.value;
-    let key = this.config.data.key;
     let query = '';
 
     if (value) {
       query += endpoint.indexOf('?') === -1 ? `?search=${value}` : `&search=${value}`;
     }
     query += !query && endpoint.indexOf('?') === -1 ? '?' : '&';
-    query += `limit=${this.limit}&offset=${offset}&fields=${display}&fields=${key}`;
+    query += `&limit=${this.limit}&offset=${offset}`;
+    query += this.generateFields(this.config.data);
     if (!this.item.count || (this.item.count && offset < this.item.count && concat)) {
       this.item.lastElement += this.limit;
       this.genericFormService.getByQuery(endpoint, query).subscribe(
@@ -371,6 +383,12 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
           if (res.results) {
             if (concat) {
               if (this.previewList) {
+                res.results.forEach((el) => {
+                  if (el) {
+                    el.__str__ = this.getValue(el, this.config.data.value);
+                  }
+                });
+
                 this.previewList.push(...res.results);
               }
             } else {
@@ -387,12 +405,47 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.selected = this.filterSelectedValues(this.previewList);
                 return;
               }
+              res.results.forEach((el) => {
+                if (el) {
+                  el.__str__ = this.getValue(el, this.config.data.value);
+                }
+              });
+
               this.previewList = res.results;
             }
           }
         }
       );
     }
+  }
+
+  public getValue(data: any, value) {
+    let result;
+
+    if (Array.isArray(value)) {
+      value.forEach((el) => {
+        result = result ? result : data[el];
+      })
+    } else {
+      result = data[value];
+    }
+
+    return result;
+  }
+
+  public generateFields(data: any): string {
+    let query = '&';
+    query += `fields=${data.key}&`;
+
+    if (Array.isArray(data.value)) {
+      data.value.forEach((el) => {
+        query += `fields=${el}&`;
+      });
+    } else {
+      query += `fields=${data.value}&`;
+    }
+
+    return query;
   }
 
   public selectAll(list) {

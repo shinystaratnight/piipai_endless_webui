@@ -125,47 +125,14 @@ const list = {
       {
         key: 'status',
         label: 'Status',
-        options: [
-          {
-            value: 0,
-            label: 'Sales Failed'
-          },
-          {
-            value: 10,
-            label: 'Found Lead'
-          },
-          {
-            value: 20,
-            label: 'Analyzed'
-          },
-          {
-            value: 30,
-            label: 'Qualified Lead'
-          },
-          {
-            value: 40,
-            label: 'Proposal Presented'
-          },
-          {
-            value: 60,
-            label: 'Contract Signed'
-          },
-          {
-            value: 70,
-            label: 'Extranet Access'
-          },
-          {
-            value: 80,
-            label: 'Credit Hold'
-          },
-          {
-            value: 90,
-            label: 'Contract Terminated'
-          }
-        ],
+        data: {
+          value: ['name_after_activation', 'name_before_activation'],
+          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel',
+          key: 'number'
+        },
         query: 'status',
         default: null,
-        type: 'select'
+        type: 'related'
       },
       {
         key: 'portfolio_manager',
