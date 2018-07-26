@@ -101,7 +101,8 @@
           </div>
         </div>
         <div class="d-flex flex-wrap align-items-center mt-2">
-          <span class="badge badge-outline mt-2 mr-1" style="white-space: normal"
+          <span class="badge badge-outline mt-2 mr-1" style="white-space: normal; cursor: pointer"
+            (click)="open('update', $event, item)"
             *ngFor="let item of results; let i = index">
             {{item.__str__}}
             <i fa class="ml-2"
@@ -156,17 +157,6 @@
             </span>
           </div>
       </div>
-    </div>
-
-    <small class="text-muted" *ngIf="config.templateOptions.description">
-      {{config.templateOptions.description}}
-    </small>
-    <div *ngIf="errors && errors[config.key]">
-      <div class="text-danger mt-1">{{errors[config.key][0]}}</div>
-      <a *ngIf="errors[config.key][1] && errors[config.key][2]" [routerLink]="[errors[config.key][2]]">{{errors[config.key][1]}}</a>
-    </div>
-    <div *ngIf="message">
-      <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
     </div>
   </div>
 
@@ -261,6 +251,17 @@
 
   <template [ngTemplateOutlet]="custom"></template>
 
+</div>
+
+<small class="text-muted" *ngIf="config.templateOptions.description">
+  {{config.templateOptions.description}}
+</small>
+<div *ngIf="errors && errors[config.key]">
+  <div class="text-danger mt-1">{{errors[config.key][0]}}</div>
+  <a *ngIf="errors[config.key][1] && errors[config.key][2]" [routerLink]="[errors[config.key][2]]">{{errors[config.key][1]}}</a>
+</div>
+<div *ngIf="message">
+  <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
 </div>
 
 <template #modal let-c="close" let-d="dismiss">
