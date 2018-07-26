@@ -188,19 +188,19 @@ export const metadata = {
   '/ecore/api/v2/hr/timesheets/approved/': approved.metadata,
   '/ecore/api/v2/hr/timesheets/history/': history.metadata,
   '/ecore/api/v2/hr/timesheets/unapproved/': unapproved.metadata,
-  submit: submit.metadata,
-  evaluate: evaluate.metadata,
-  not_agree: notAgree.metadata,
+  'submit': submit.metadata,
+  'evaluate': evaluate.metadata,
+  'not_agree': notAgree.metadata,
   '/ecore/api/v2/company-settings/globalpermissions/':
     globalpermissions.metadata,
   '/ecore/api/v2/hr/joboffers/candidate/': joboffersCandidateManager.metadata,
   '/ecore/api/v2/hr/shifts/': shifts.metadata,
   '/ecore/api/v2/hr/jobtags/': jobtags.metadata,
-  extend: extend.metadata,
-  fillin: fillin.metadata,
+  'extend': extend.metadata,
+  'fillin': fillin.metadata,
   '/ecore/api/v2/hr/jobsites/jobsite_map/': jobsiteMap.metadata,
-  supervisorApprove: supervisorApprove.metadata,
-  candidateFill: candidateFill.metadata,
+  'supervisorApprove': supervisorApprove.metadata,
+  'candidateFill': candidateFill.metadata,
   '/ecore/api/v2/acceptance-tests/acceptancetests/': acceptancetests.metadata,
   '/ecore/api/v2/acceptance-tests/acceptancetestindustries/':
     acceptancetestindustries.metadata,
@@ -209,5 +209,5 @@ export const metadata = {
   '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/':
     acceptancetestworkflownodes.metadata, //tslint:disable-line,
   '/ecore/api/v2/skills/skillbaserates/': skillbaserates.metadata,
-  profile: profile.metadata
+  'profile': profile.metadata
 };

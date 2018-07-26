@@ -347,4 +347,4 @@ const form = [
 
 export const metadata = {
   form
-}
+};

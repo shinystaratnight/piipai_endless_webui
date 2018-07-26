@@ -149,7 +149,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public getMetadata(endpoint) {
-    this.service.getMetadata(endpoint + '?type=form').subscribe(
+    this.service.getMetadata(endpoint, '?type=form').subscribe(
       (res: any) => {
         this.metadata = res;
         this.getData();
