@@ -126,11 +126,11 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.config.delayData[this.config.endpoint] = this.config;
     }
 
-    if (this.config.metadata_query) {
+    if (this.config.metadata_query && typeof this.config.metadata_query !== 'string') {
       this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
     }
 
-    if (this.config.add_metadata_query) {
+    if (this.config.add_metadata_query && typeof this.config.add_metadata_query !== 'string') {
       this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
     }
 
