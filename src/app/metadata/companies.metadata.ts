@@ -173,7 +173,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
+          endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'portfolio_manager'
@@ -181,43 +181,14 @@ const list = {
       {
         key: 'state',
         label: 'State',
-        options: [
-          {
-            value: '052a4f5e-27f9-45bb-b664-5da958d8553f',
-            label: 'ACT'
-          },
-          {
-            value: '0cb841f6-6462-4a9d-9e79-d590adc52c6b',
-            label: 'Tasmania'
-          },
-          {
-            value: '534ba565-8b6c-4a3c-b587-9f4c1f636e13',
-            label: 'Victoria'
-          },
-          {
-            value: '613f3583-b8e7-40f4-97b1-3c851176e3e5',
-            label: 'New South Wales'
-          },
-          {
-            value: '8df75dfd-ba2c-47f6-b377-12bed7abbe2f',
-            label: 'Northern Territory'
-          },
-          {
-            value: '9e8bb936-a4ff-4b1d-ac61-afff7cd2a78a',
-            label: 'Western Australia'
-          },
-          {
-            value: 'ce446764-be32-427d-a413-1af16fe3b5bb',
-            label: 'Queensland'
-          },
-          {
-            value: 'da6e1f8d-3e3d-4df6-81d7-b867a43e774a',
-            label: 'South Australia'
-          }
-        ],
+        data: {
+          value: 'name',
+          endpoint: '/ecore/api/v2/core/regions/',
+          key: 'id'
+        },
         query: 'state',
         default: null,
-        type: 'select'
+        type: 'related'
       },
       {
         key: 'credit_check',
@@ -234,7 +205,8 @@ const list = {
         ],
         query: 'credit_check',
         default: null,
-        type: 'select'
+        unique: ['data'],
+        type: 'checkbox'
       },
       {
         key: 'approved_credit_limit',
@@ -262,7 +234,7 @@ const list = {
       type: 'static',
       templateOptions: {
         required: false,
-        label: 'Terms of pay',
+        label: 'Days To NET Days',
         type: 'static'
       },
       read_only: true
@@ -549,7 +521,7 @@ const form = [
                   {
                     list: false,
                     endpoint: '/ecore/api/v2/core/companies/',
-                    read_only: false,
+                    read_only: true,
                     key: 'master_company',
                     templateOptions: {
                       label: 'Master company',
@@ -693,7 +665,7 @@ const form = [
                     type: 'select',
                     templateOptions: {
                       required: false,
-                      label: 'Terms of Payment',
+                      label: 'Days To NET Days',
                       type: 'select',
                       options: [
                         {
