@@ -43,7 +43,7 @@ export class SiteComponent implements OnInit {
   public listName: string;
 
   public listNameCache = {};
-  public errors: any;
+  public errors: any = {};
 
   public acceptenceTestData: any;
 

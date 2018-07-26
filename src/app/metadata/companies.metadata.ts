@@ -494,6 +494,18 @@ const form = [
                 type: 'group',
                 children: [
                   {
+                    key: 'short_name',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Short name',
+                      description: 'Used for Jobsite naming',
+                      max: 31,
+                      type: 'text'
+                    },
+                    read_only: false
+                  },
+                  {
                     key: 'business_id',
                     type: 'input',
                     templateOptions: {
