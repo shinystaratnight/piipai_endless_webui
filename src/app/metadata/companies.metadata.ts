@@ -443,7 +443,8 @@ const form = [
                     },
                     collapsed: false,
                     prefilled: {
-                      company: '{id.id}'
+                      company: '{id.id}',
+                      content_type: '{model_content_type}',
                     },
                     type: 'related',
                     query: {

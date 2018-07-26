@@ -141,7 +141,7 @@
   </div>
 
   <div class="date" *ngIf="created_at || updated_at">
-    <span *ngIf="created_at"><span class="description">Created:</span> {{created_at | date:'shortDate'}} <br></span>
-    <span *ngIf="updated_at"><span class="description">Updated:</span> {{updated_at | date:'shortDate'}}</span>
+    <span *ngIf="created_at"><span class="description">Created:</span> {{created_at | dateFormat:'date'}} <br></span>
+    <span *ngIf="updated_at"><span class="description">Updated:</span> {{updated_at | dateFormat:'date'}}</span>
   </div>
 </div>

@@ -990,7 +990,8 @@ const form = [
         },
         collapsed: false,
         prefilled: {
-          object_id: '{id}'
+          object_id: '{id}',
+          content_type: '{model_content_type}',
         },
         type: 'list',
         query: {
