@@ -146,6 +146,7 @@ const list = {
       list: false,
       endpoint: '/ecore/api/v2/core/companies/',
       read_only: true,
+      hide: true,
       templateOptions: {
         label: 'Company',
         add: true,
@@ -267,6 +268,7 @@ const form = [
     list: false,
     endpoint: '/ecore/api/v2/core/companies/',
     read_only: true,
+    hide: true,
     templateOptions: {
       label: 'Company',
       add: true,
@@ -370,6 +372,7 @@ const formadd = [
     list: false,
     endpoint: '/ecore/api/v2/core/companies/',
     read_only: true,
+    hide: true,
     templateOptions: {
       label: 'Company',
       add: true,
