@@ -47,6 +47,11 @@ export interface Field {
     message: string,
     visible?: boolean
   };
+  checkObject?: any;
+  saveRelated?: any;
+  values?: any;
+  related?: any;
+  readonly?: any;
   templateOptions?: {
     label?: string;
     type?: string;

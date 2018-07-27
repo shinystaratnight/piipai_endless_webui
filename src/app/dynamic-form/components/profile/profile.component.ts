@@ -188,7 +188,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public getSkillMetadata() {
-    this.service.getMetadata(this.skillsEndpoint + '?type=form').subscribe(
+    this.service.getMetadata(this.skillsEndpoint, '?type=form').subscribe(
       (res: any) => {
         this.skillsMetadata = res;
         this.getTagMetadata();
@@ -197,7 +197,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public getTagMetadata() {
-    this.service.getMetadata(this.tagsEndpoint + '?type=form').subscribe(
+    this.service.getMetadata(this.tagsEndpoint, '?type=form').subscribe(
       (res: any) => {
         this.tagsMetadata = res;
         this.generateView();

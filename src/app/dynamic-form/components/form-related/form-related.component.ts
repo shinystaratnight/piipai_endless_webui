@@ -218,7 +218,7 @@ export class FormRelatedComponent
   }
 
   public getAllowPermissions() {
-    if (this.allowPermissions) {
+    if (!this.allowPermissions) {
       this.allowPermissions = this.permission.getAllowMethods(undefined, this.config.endpoint);
     }
   }

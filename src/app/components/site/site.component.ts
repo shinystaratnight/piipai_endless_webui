@@ -136,6 +136,9 @@ export class SiteComponent implements OnInit {
         } else {
           setTimeout(() => {
             this.pageData = pageData;
+            if (pageData.pathData.id) {
+              this.formMode = 'view';
+            }
             this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
             if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
               this.formStorage = true;

@@ -142,6 +142,15 @@ export class GenericFormService {
       .catch((error: any) => this.errorHandler(error));
   }
 
+  public updateForm(endpoint, data) {
+    let headers = new Headers();
+    this.updateHeaders(headers);
+    return this.http
+      .patch(endpoint, data, { headers })
+      .map((response: any) => (response._body ? response.json() : {}))
+      .catch((error: any) => this.errorHandler(error));
+  }
+
   public callAction(endpoint, data) {
     let headers = new Headers();
     this.updateHeaders(headers);

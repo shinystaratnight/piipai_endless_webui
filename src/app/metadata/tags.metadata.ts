@@ -34,6 +34,17 @@ const list = {
 
 const form = [
   {
+    key: 'id',
+    type: 'input',
+    hide: true,
+    templateOptions: {
+      required: true,
+      label: 'Id',
+      type: 'text'
+    },
+    read_only: false
+  },
+  {
     key: 'name',
     type: 'input',
     templateOptions: {
@@ -52,6 +63,24 @@ const form = [
     templateOptions: {
       values: ['__str__'],
       label: 'Parent',
+      add: true,
+      edit: true,
+    },
+    read_only: false
+  },
+  {
+    key: 'children',
+    many: true,
+    type: 'related',
+    endpoint: '/ecore/api/v2/core/tags/',
+    saveRelated: {
+      get: 'children',
+      set: 'parent',
+    },
+    hideIfNull: true,
+    templateOptions: {
+      values: ['__str__'],
+      label: 'Child',
       add: true,
       edit: true,
     },
@@ -87,7 +116,27 @@ const form = [
       type: 'checkbox'
     },
     read_only: false
-  }
+  },
+  {
+    key: 'skills',
+    many: true,
+    type: 'related',
+    endpoint: '/ecore/api/v2/skills/skilltags/',
+    hideIfNull: true,
+    doNotChoice: true,
+    send: false,
+    prefilled: {
+      tag: '{id.id}'
+    },
+    templateOptions: {
+      values: ['__str__'],
+      label: 'Skills',
+      delete: true,
+      add: true,
+      edit: true,
+    },
+    read_only: false
+  },
 ];
 
 const formadd = [
