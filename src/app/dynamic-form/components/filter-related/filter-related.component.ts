@@ -209,7 +209,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.onChange();
     } else {
       this.item.data = value[this.config.data.key];
-      this.item.displayValue = value[this.config.data.value];
+      this.item.displayValue = this.getValue(value, this.config.data.value);
       this.item.count = null;
       this.item.hideAutocomplete = true;
       this.searchValue = null;
@@ -336,27 +336,36 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.getOptions(this.searchValue);
       return `Selected ${value.length} ${this.config.label}`;
     }
-    const formatString = new FormatString();
+    let endpoint;
 
-    let endpoint =
-      this.config.data.endpoint.includes('{')
-      ? formatString.format(this.config.data.endpoint, this.siteSettingsService.settings)
-      : undefined;
-
-    const index = this.config.data.endpoint.indexOf('?');
-    if (index !== -1) {
-      endpoint = this.config.data.endpoint.slice(0, index)
-        + `${value}/`
-        + this.config.data.endpoint.slice(index);
+    if (this.config.data.endpoint.includes('{')) {
+      const formatString = new FormatString();
+      let endpoint = formatString.format(this.config.data.endpoint, this.siteSettingsService.settings);
+      endpoint += `&number=${value}`;
+      this.genericFormService.getAll(endpoint).subscribe(
+        (res: any) => {
+          if (res.results) {
+            this.item.displayValue = this.getValue(res.results[0], this.config.data.value);;
+          }
+        }
+      );
     } else {
-      endpoint = `${this.config.data.endpoint}${value}/`;
-    }
-    let display = this.config.data.value;
-    this.genericFormService.getAll(endpoint).subscribe(
-      (res: any) => {
-        this.item.displayValue = res[display];
+      const index = this.config.data.endpoint.indexOf('?');
+      if (index !== -1) {
+        endpoint = this.config.data.endpoint.slice(0, index)
+          + `${value}/`
+          + this.config.data.endpoint.slice(index);
+      } else {
+        endpoint = `${this.config.data.endpoint}${value}/`;
       }
-    );
+      let display = this.config.data.value;
+      this.genericFormService.getAll(endpoint).subscribe(
+        (res: any) => {
+          this.item.displayValue = res[display];
+        }
+      );
+    }
+
   }
 
   public getOptions(value, concat = false) {
@@ -364,7 +373,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     let endpoint =
       this.config.data.endpoint.includes('{')
       ? formatString.format(this.config.data.endpoint, this.siteSettingsService.settings)
-      : undefined;
+      : this.config.data.endpoint;
     let offset = this.item.lastElement;
     let query = '';
 
