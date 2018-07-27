@@ -10,7 +10,7 @@
           <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
         </div>
         <div class="form-element-content-actions"
-          *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete)" >
+          *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete) && !(config.errorMessage && config.errorMessage.visible)" >
           <button type="button"
             *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
             (click)="open('update')">
@@ -262,6 +262,9 @@
 </div>
 <div *ngIf="message">
   <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
+</div>
+<div *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible">
+  <div class="text-danger mt-1">{{config.errorMessage.message}}</div>
 </div>
 
 <template #modal let-c="close" let-d="dismiss">

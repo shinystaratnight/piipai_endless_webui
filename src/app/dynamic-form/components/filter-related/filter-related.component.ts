@@ -392,6 +392,8 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
           }
         }
       );
+    } else {
+      this.skipScroll = false;
     }
   }
 
