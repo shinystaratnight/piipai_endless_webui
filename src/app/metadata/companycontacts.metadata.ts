@@ -7,93 +7,42 @@ const list = {
       {
         content: [
           {
-            field: 'job_title',
-            type: 'input'
-          }
-        ],
-        name: 'job_title',
-        sort_field: 'job_title',
-        label: 'Job title',
-        sort: true
-      },
-      {
-        content: [
-          {
             values: {
-              'Mr.': 'Mr.',
-              'Ms.': 'Ms.',
-              'Mrs.': 'Mrs.',
-              'Dr.': 'Dr.'
+              available: 'contact.is_available',
+              address: 'contact.address.__str__',
+              title: 'contact.__str__',
+              job_title: 'job_title',
+              company: 'company.__str__',
+              picture: 'contact.picture.origin'
             },
-            field: 'contact.title',
-            type: 'select'
+            field: 'id',
+            type: 'info',
+            label: 'Personal Info'
           }
         ],
-        name: 'contact.title',
-        sort_field: 'contact.title',
-        label: 'Title',
-        sort: true
-      },
-      {
-        content: [
-          {
-            field: 'contact.first_name',
-            type: 'input'
-          }
-        ],
-        name: 'contact.first_name',
-        sort_field: 'contact.first_name',
-        label: 'First Name',
-        sort: true
-      },
-      {
-        content: [
-          {
-            field: 'contact.last_name',
-            type: 'input'
-          }
-        ],
-        name: 'contact.last_name',
-        sort_field: 'contact.last_name',
-        label: 'Last Name',
-        sort: true
-      },
-      {
-        content: [
-          {
-            field: 'contact.phone_mobile',
-            type: 'link',
-            link: 'tel:{contact.phone_mobile}'
-          },
-          {
-            icon: 'fa-commenting',
-            action: 'sendSMS',
-            fields: [
-              {
-                field: 'contact.phone_mobile',
-                type: 'link'
-              }
-            ],
-            type: 'button',
-            text: 'SMS'
-          }
-        ],
-        name: 'mobile_phone',
+        name: 'personal_info',
         title: null,
-        label: 'Mobile Phone',
+        label: 'Personal Info',
         delim: null
       },
       {
         content: [
           {
             field: 'contact.email',
-            type: 'input'
+            type: 'link',
+            label: 'E-mail',
+            link: 'mailto:{contact.email}'
+          },
+          {
+            field: 'contact.phone_mobile',
+            type: 'link',
+            link: 'tel:{contact.phone_mobile}'
           }
         ],
-        name: 'contact.email',
-        sort_field: 'contact.email',
-        label: 'E-mail',
-        sort: true
+        name: 'contacts',
+        title: null,
+        label: 'Contacts',
+        delim: null
       },
       {
         content: [

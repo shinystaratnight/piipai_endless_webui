@@ -445,7 +445,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
                   [key]: [
                     this.checkObject[key].error,
                     `${res.results[0].__str__}`,
-                    `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change` //tslint:disable-line
+                    `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change`, //tslint:disable-line
+                    Object.assign(res.results[0].company_contact, {endpoint: this.endpoint})
                   ]
                 };
                 this.updateErrors(this.errors, errors, this.response);
