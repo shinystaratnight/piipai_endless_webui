@@ -641,17 +641,6 @@ const list = {
         },
         query: 'company'
       },
-      {
-        key: 'manager',
-        label: 'Manager',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/?is_manager=3',
-          key: 'id'
-        },
-        query: 'manager'
-      }
     ],
     search_enabled: true,
     editDisable: false,
