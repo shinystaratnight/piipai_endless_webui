@@ -499,12 +499,13 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
                   [key]: [
                     this.checkObject[key].error,
                     `${res.results[0].__str__}`,
-                    `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change` //tslint:disable-line
+                    `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change`, //tslint:disable-line
+                    Object.assign(res.results[0].company_contact, {endpoint: this.endpoint})
                   ]
                 };
-                this.errors = this.updateErrors(this.errors, errors, this.response);
+                this.updateErrors(this.errors, errors, this.response);
               } else {
-                this.errors = this.updateErrors(this.errors, { [key]: '  ' }, this.response);
+                this.updateErrors(this.errors, { [key]: '  ' }, this.response);
               }
             });
           }
@@ -767,6 +768,10 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public saveForm(endpoint: string, data, edit?: boolean) {
+    if (endpoint[endpoint.length - 1] !== '/') {
+      endpoint += '/';
+    }
+
     this.event.emit({
       type: 'saveStart'
     });
@@ -810,7 +815,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     }
     this.resetData(this.errors);
     this.resetData(this.response);
-    this.errors = this.updateErrors(this.errors, errors, this.response);
+    this.updateErrors(this.errors, errors, this.response);
     this.errorForm.emit(this.errors);
     this.formService.getForm(this.formId).setSaveProcess(false);
   }
@@ -908,7 +913,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           el.autocompleteData.next(res);
         },
         (err: any) => {
-          this.parseError(Object.assign({}, this.errors, { [el.key]: err.errors}));
+          this.parseError(Object.assign(this.errors, { [el.key]: err.errors}));
         });
   }
 
@@ -1121,8 +1126,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     });
   }
 
-  public updateErrors(err, errors, response, field = '') {
-    let error = err ? err : {};
+  public updateErrors(error, errors, response, field = '') {
     if (errors) {
       let keyss = Object.keys(errors);
       keyss.forEach((el) => {
@@ -1139,7 +1143,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         }
       });
     }
-    return error;
   }
 
   public resetData(data) {
@@ -1177,11 +1180,11 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           const company = this.getElementFromMetadata(metadata, 'company');
           const workflow = this.getElementFromMetadata(metadata, 'workflow');
 
-          if (company) {
+          if (company && company.value) {
             query += `company=${company.value.id}&`;
           }
 
-          if (workflow) {
+          if (workflow && workflow.value) {
             query += `workflow=${workflow.value.id}`;
           }
         }
@@ -1214,9 +1217,10 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           || event.el.key === 'number'
           || event.el.key === 'company'
         ) {
-          this.workflowData[event.el.key] = Array.isArray(event.value)
-            ? event.value[0].id : event.value;
-          this.getDataOfWorkflownode();
+          if (this.workflowData[event.el.key] !== event.value) {
+            this.workflowData[event.el.key] = event.value;
+            this.getDataOfWorkflownode();
+          }
         }
       }
     }

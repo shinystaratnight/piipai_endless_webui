@@ -42,6 +42,11 @@ export interface Field {
   delay?: any;
   delayData?: any;
   formId: number;
+  errorMessage?: {
+    field: string,
+    message: string,
+    visible?: boolean
+  };
   templateOptions?: {
     label?: string;
     type?: string;

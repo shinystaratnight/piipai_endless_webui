@@ -350,6 +350,14 @@ export class FormRelatedComponent
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
+        if (this.config.errorMessage) {
+          if (!this.getValueByKey(this.config.errorMessage.field, this.formData)) {
+            this.config.errorMessage.visible = true;
+          } else {
+            this.config.errorMessage.visible = false;
+          }
+        }
+
         if (
           this.checkRelatedField(formData.key, formData.data) ||
           (this.config.default && !this.config.default.includes('session'))

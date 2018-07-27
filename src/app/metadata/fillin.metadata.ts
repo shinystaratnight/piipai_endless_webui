@@ -319,6 +319,7 @@ const list = {
         label: 'Shifts',
         type: 'multiple',
         display: '__str__',
+        preset: true,
         data: {
           data: 'shifts'
         },

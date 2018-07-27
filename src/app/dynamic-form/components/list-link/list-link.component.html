@@ -39,7 +39,11 @@
       <span *ngFor="let item of value; let l = last; let i = index">
         <a class="link" [attr.href]="href[i]" *ngIf="item && !link" [title]="config.title || ''">{{item.__str__}}</a>
 
-        <a class="link" routerLink="{{href[i]}}/change" *ngIf="item && link && config.link" [title]="config.title || ''">
+        <a class="link"
+          [attr.href]="href[i]"
+          [attr.title]="config.title || ''"
+          (click)="action($event, i)"
+          *ngIf="item && link && config.link">
           {{item.__str__}}
           <span *ngIf="config.fields">
             <ng-container *ngFor="let field of config.fields" listElement [config]="field"></ng-container>

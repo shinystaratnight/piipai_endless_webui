@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subject } from 'rxjs/Subject';
 
-import { SiteService, PageData, UserService, User, Role, NavigationService } from '../../services/';
+import { SiteService, PageData, UserService, User, Role, NavigationService, SiteSettingsService } from '../../services/';
 import { GenericFormService } from '../../dynamic-form/services/';
 import { CheckPermissionService, ToastrService, MessageType } from '../../shared/services/';
 
@@ -43,9 +43,10 @@ export class SiteComponent implements OnInit {
   public listName: string;
 
   public listNameCache = {};
-  public errors: any;
+  public errors: any = {};
 
   public acceptenceTestData: any;
+  public additionalData: any;
 
   constructor(
     private router: Router,
@@ -55,7 +56,8 @@ export class SiteComponent implements OnInit {
     private navigationService: NavigationService,
     private userService: UserService,
     private permission: CheckPermissionService,
-    private ts: ToastrService
+    private ts: ToastrService,
+    private siteSettingsService: SiteSettingsService,
   ) {}
 
   public ngOnInit() {
@@ -108,7 +110,20 @@ export class SiteComponent implements OnInit {
   public getPageData(url) {
     this.siteService.getDataOfPage(url, this.pagesList).subscribe(
       (pageData: PageData) => {
-        if (pageData.pathData.path === '/profile/') {
+        if (pageData.endpoint === '/ecore/api/v2/core/workflownodes/') {
+          this.additionalData = {
+            company: {
+              action: 'add',
+              data: {
+                value: {
+                  id: this.siteSettingsService.settings.company_settings.company
+                }
+              }
+            }
+          }
+          this.pageData = pageData;
+          this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+        } else if (pageData.pathData.path === '/profile/') {
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
         } else if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {

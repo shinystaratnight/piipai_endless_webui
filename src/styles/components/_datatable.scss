@@ -236,7 +236,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   &-body {
     width: 100%;
 
-    &.in-form .open-filters {
+    &.in-form.open-filters {
       width: calc(100% - 285px);
     }
 

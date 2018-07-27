@@ -48,18 +48,18 @@ const list = {
               '/ecore/api/v2/candidate/candidatecontacts/{candidate_contacts.id}',
             field: 'candidate_contacts',
             type: 'link',
-            display: 'Candidate',
+            display: 'Candidate contact',
             inline: true
           },
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/{company_contact.id}',
+            endpoint: '/ecore/api/v2/core/companycontacts/{company_contact.id}/change',
             field: 'company_contact',
             type: 'link',
-            display: 'Company Contact',
+            display: 'Client contact',
             inline: true
           },
           {
-            endpoint: '/ecore/api/v2/core/companies/{candidate_contacts.id}',
+            endpoint: '/ecore/api/v2/core/companies/{master_company.id}',
             field: 'master_company',
             type: 'link',
             display: 'Master Company',
@@ -79,43 +79,14 @@ const list = {
       {
         key: 'state',
         label: 'State',
-        options: [
-          {
-            value: '052a4f5e-27f9-45bb-b664-5da958d8553f',
-            label: 'ACT'
-          },
-          {
-            value: '0cb841f6-6462-4a9d-9e79-d590adc52c6b',
-            label: 'Tasmania'
-          },
-          {
-            value: '534ba565-8b6c-4a3c-b587-9f4c1f636e13',
-            label: 'Victoria'
-          },
-          {
-            value: '613f3583-b8e7-40f4-97b1-3c851176e3e5',
-            label: 'New South Wales'
-          },
-          {
-            value: '8df75dfd-ba2c-47f6-b377-12bed7abbe2f',
-            label: 'Northern Territory'
-          },
-          {
-            value: '9e8bb936-a4ff-4b1d-ac61-afff7cd2a78a',
-            label: 'Western Australia'
-          },
-          {
-            value: 'ce446764-be32-427d-a413-1af16fe3b5bb',
-            label: 'Queensland'
-          },
-          {
-            value: 'da6e1f8d-3e3d-4df6-81d7-b867a43e774a',
-            label: 'South Australia'
-          }
-        ],
+        data: {
+          value: 'name',
+          endpoint: '/ecore/api/v2/core/regions/?country=AU',
+          key: 'id'
+        },
         query: 'state',
         default: null,
-        type: 'select'
+        type: 'related'
       },
       {
         key: 'contact_type',
@@ -153,6 +124,7 @@ const list = {
         ],
         query: 'is_available',
         default: null,
+        unique: ['data'],
         type: 'checkbox'
       },
       {
@@ -170,6 +142,7 @@ const list = {
         ],
         query: 'phone_mobile_verified',
         default: null,
+        unique: ['data'],
         type: 'checkbox'
       },
       {
@@ -187,6 +160,7 @@ const list = {
         ],
         query: 'email_verified',
         default: null,
+        unique: ['data'],
         type: 'checkbox'
       }
     ]
@@ -418,9 +392,8 @@ const form = [
                     many: false
                   },
                   {
-                    list: false,
                     endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
-                    read_only: false,
+                    doNotChoice: true,
                     add_metadata_query: {
                       fieldsets_type: 'contact'
                     },
@@ -429,17 +402,18 @@ const form = [
                       add: true,
                       delete: false,
                       values: ['__str__'],
-                      type: 'related',
                       edit: true
                     },
-                    collapsed: false,
                     send: false,
+                    errorMessage: {
+                      field: 'birthday',
+                      message: 'Birthday is required'
+                    },
                     prefilled: {
                       contact: '{id.id}'
                     },
                     type: 'related',
                     key: 'candidate_contacts',
-                    many: false
                   }
                 ],
                 width: 0.25
@@ -450,16 +424,14 @@ const form = [
                   {
                     list: false,
                     endpoint: '/ecore/api/v2/core/companycontacts/',
-                    read_only: false,
+                    doNotChoice: true,
                     templateOptions: {
                       label: 'Company Contact',
                       add: true,
                       delete: false,
                       values: ['__str__'],
-                      type: 'related',
                       edit: true
                     },
-                    collapsed: false,
                     send: false,
                     prefilled: {
                       contact: '{id.id}'
@@ -528,7 +500,8 @@ const form = [
         },
         collapsed: false,
         prefilled: {
-          object_id: '{id}'
+          object_id: '{id}',
+          content_type: '{model_content_type}',
         },
         type: 'list',
         query: {
