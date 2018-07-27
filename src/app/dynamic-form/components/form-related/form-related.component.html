@@ -10,7 +10,7 @@
           <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
         </div>
         <div class="form-element-content-actions"
-          *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete)" >
+          *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete) && !(config.errorMessage && config.errorMessage.visible)" >
           <button type="button"
             *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
             (click)="open('update')">
@@ -138,7 +138,9 @@
                       (ngModelChange)="setValue(option)"
                       hidden>
                     <div class="custom-checkbox">
-                      <i fa name="check"></i>
+                      <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.08284 4.87574C2.92663 5.03195 2.67337 5.03195 2.51716 4.87574L1.12071 3.47929C0.888359 3.24694 0.511641 3.24694 0.279289 3.47929C0.0469372 3.71164 0.0469373 4.08836 0.279289 4.32071L2.37574 6.41716C2.61005 6.65147 2.98995 6.65147 3.22426 6.41716L8.52071 1.12071C8.75306 0.888359 8.75306 0.511642 8.52071 0.279289C8.28836 0.0469374 7.91164 0.0469372 7.67929 0.279289L3.08284 4.87574Z" fill="white" stroke="#FDFDFD" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
                     </div>
                     {{option.__str__}}
                   </label>
@@ -258,10 +260,17 @@
 </small>
 <div *ngIf="errors && errors[config.key]">
   <div class="text-danger mt-1">{{errors[config.key][0]}}</div>
-  <a *ngIf="errors[config.key][1] && errors[config.key][2]" [routerLink]="[errors[config.key][2]]">{{errors[config.key][1]}}</a>
+  <a *ngIf="errors[config.key][1] && errors[config.key][2]"
+    [attr.href]="errors[config.key][2]"
+    (click)="open('update', $event, errors[config.key][3])">
+      {{errors[config.key][1]}}
+  </a>
 </div>
 <div *ngIf="message">
   <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
+</div>
+<div *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible">
+  <div class="text-danger mt-1">{{config.errorMessage.message}}</div>
 </div>
 
 <template #modal let-c="close" let-d="dismiss">

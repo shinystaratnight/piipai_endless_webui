@@ -52,7 +52,7 @@
             <li class="list-group-item autocomplete-item" (click)="setValue(defaultValue, item)">All</li>
             <li class="list-group-item autocomplete-item"
               *ngFor="let option of previewList"
-              (click)="setValue(option)">{{option[config.data.value]}}</li>
+              (click)="setValue(option)">{{option.__str__}}</li>
           </ul>
 
           <ul *ngIf="multiple" class="list-group w-100">

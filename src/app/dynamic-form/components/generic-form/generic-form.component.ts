@@ -445,7 +445,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
                   [key]: [
                     this.checkObject[key].error,
                     `${res.results[0].__str__}`,
-                    `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change` //tslint:disable-line
+                    `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change`, //tslint:disable-line
+                    Object.assign(res.results[0].company_contact, {endpoint: this.endpoint})
                   ]
                 };
                 this.updateErrors(this.errors, errors, this.response);
@@ -1125,11 +1126,11 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           const company = this.getElementFromMetadata(metadata, 'company');
           const workflow = this.getElementFromMetadata(metadata, 'workflow');
 
-          if (company) {
+          if (company && company.value) {
             query += `company=${company.value.id}&`;
           }
 
-          if (workflow) {
+          if (workflow && workflow.value) {
             query += `workflow=${workflow.value.id}`;
           }
         }
@@ -1162,9 +1163,10 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           || event.el.key === 'number'
           || event.el.key === 'company'
         ) {
-          this.workflowData[event.el.key] = Array.isArray(event.value)
-            ? event.value[0].id : event.value;
-          this.getDataOfWorkflownode();
+          if (this.workflowData[event.el.key] !== event.value) {
+            this.workflowData[event.el.key] = event.value;
+            this.getDataOfWorkflownode();
+          }
         }
       }
     }

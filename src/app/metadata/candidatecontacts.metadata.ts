@@ -267,70 +267,16 @@ const list = {
         type: 'related'
       },
       {
-        key: 'active_states',
-        label: 'Active states',
-        options: [
-          {
-            value: 0,
-            label: 'Failed to recruit'
-          },
-          {
-            value: 10,
-            label: 'New Candidate Registered'
-          },
-          {
-            value: 11,
-            label: 'Phone Verified'
-          },
-          {
-            value: 12,
-            label: 'E-mail Verified'
-          },
-          {
-            value: 20,
-            label: 'Phone Interview Passed'
-          },
-          {
-            value: 22,
-            label: 'Theory Test Passed'
-          },
-          {
-            value: 23,
-            label: 'Skill Test Passed'
-          },
-          {
-            value: 25,
-            label: 'Practical Test Passed'
-          },
-          {
-            value: 30,
-            label: 'Live Interview Passed'
-          },
-          {
-            value: 40,
-            label: 'Immigration Information Filled'
-          },
-          {
-            value: 45,
-            label: 'Tax Information Form Filled'
-          },
-          {
-            value: 70,
-            label: 'Recruited - Available for Hire'
-          },
-          {
-            value: 80,
-            label: 'Suspended/Retired'
-          },
-          {
-            value: 90,
-            label: 'Banned'
-          }
-        ],
-        query: 'active_states',
-        multiple: true,
+        key: 'status',
+        label: 'Status',
+        data: {
+          value: ['name_after_activation', 'name_before_activation'],
+          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact',
+          key: 'number'
+        },
+        query: 'status',
         default: null,
-        type: 'select'
+        type: 'related'
       },
       {
         key: 'contact.gender',
