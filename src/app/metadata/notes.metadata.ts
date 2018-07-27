@@ -155,21 +155,15 @@ const formset = {
 
 const form = [
   {
-    list: false,
     endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
     read_only: true,
+    hide: true,
     templateOptions: {
       label: 'Content type',
-      add: true,
-      delete: false,
       values: ['__str__'],
-      type: 'related',
-      edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'content_type',
-    many: false
   },
   {
     key: 'object_id',
@@ -188,33 +182,35 @@ const form = [
 
 const formadd = [
   {
-    list: false,
     endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
     read_only: true,
+    hide: true,
     templateOptions: {
       label: 'Content type',
-      add: true,
-      delete: false,
       values: ['__str__'],
-      type: 'related',
-      edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'content_type',
-    many: false
   },
   {
     key: 'object_id',
     type: 'input',
     hide: true,
-    templateOptions: { required: true, label: 'Object id', type: 'text' },
+    templateOptions: {
+      required: true,
+      label: 'Object id',
+      type: 'text'
+    },
     read_only: false
   },
   {
     key: 'note',
     type: 'textarea',
-    templateOptions: { required: false, label: 'Notes', type: 'textarea' },
+    templateOptions: {
+      required: false,
+      label: 'Notes',
+      type: 'textarea'
+    },
     read_only: false
   }
 ];
