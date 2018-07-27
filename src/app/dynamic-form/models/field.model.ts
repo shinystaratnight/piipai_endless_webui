@@ -40,6 +40,11 @@ export interface Field {
   defaultData?: any;
   delay?: any;
   delayData?: any;
+  errorMessage?: {
+    field: string,
+    message: string,
+    visible?: boolean
+  };
   templateOptions?: {
     label?: string;
     type?: string;

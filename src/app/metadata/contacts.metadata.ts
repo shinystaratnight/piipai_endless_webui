@@ -81,7 +81,7 @@ const list = {
         label: 'State',
         data: {
           value: 'name',
-          endpoint: '/ecore/api/v2/core/regions/',
+          endpoint: '/ecore/api/v2/core/regions/?country=AU',
           key: 'id'
         },
         query: 'state',
@@ -405,7 +405,10 @@ const form = [
                       edit: true
                     },
                     send: false,
-                    showIf: ['birthday'],
+                    errorMessage: {
+                      field: 'birthday',
+                      message: 'Birthday is required'
+                    },
                     prefilled: {
                       contact: '{id.id}'
                     },
