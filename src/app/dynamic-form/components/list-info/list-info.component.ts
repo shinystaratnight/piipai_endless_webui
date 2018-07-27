@@ -19,6 +19,8 @@ export class ListInfoComponent implements OnInit {
   public status: any[];
   public averageScore: any;
   public contactAvatar: string;
+  public job_title: string;
+  public company: string;
 
   public color: any;
   public colorAttr: string;

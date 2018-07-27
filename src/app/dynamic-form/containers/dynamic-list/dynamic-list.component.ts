@@ -107,7 +107,8 @@ export class DynamicListComponent implements
   public pictures = [
     '/ecore/api/v2/core/contacts/',
     '/ecore/api/v2/candidate/candidatecontacts/',
-    '/ecore/api/v2/core/companies/'
+    '/ecore/api/v2/core/companies/',
+    '/ecore/api/v2/core/companycontacts/'
   ];
 
   constructor(
