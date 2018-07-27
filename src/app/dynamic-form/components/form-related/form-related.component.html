@@ -260,7 +260,11 @@
 </small>
 <div *ngIf="errors && errors[config.key]">
   <div class="text-danger mt-1">{{errors[config.key][0]}}</div>
-  <a *ngIf="errors[config.key][1] && errors[config.key][2]" [routerLink]="[errors[config.key][2]]">{{errors[config.key][1]}}</a>
+  <a *ngIf="errors[config.key][1] && errors[config.key][2]"
+    [attr.href]="errors[config.key][2]"
+    (click)="open('update', $event, errors[config.key][3])">
+      {{errors[config.key][1]}}
+  </a>
 </div>
 <div *ngIf="message">
   <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
