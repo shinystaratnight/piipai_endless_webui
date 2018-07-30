@@ -1120,7 +1120,7 @@ const form = [
                       label: 'Superannuation fund',
                       add: true,
                       delete: false,
-                      values: ['__str__'],
+                      values: ['__str__', 'name', 'membership_number'],
                       type: 'related',
                       edit: true
                     },
@@ -1128,6 +1128,30 @@ const form = [
                     type: 'related',
                     key: 'superannuation_fund',
                     many: false
+                  },
+                  {
+                    key: 'superannuation_fund.name',
+                    type: 'input',
+                    showIf: ['superannuation_fund.id'],
+                    default: '{superannuation_fund.name}',
+                    templateOptions: {
+                      required: false,
+                      label: 'Name',
+                      type: 'text'
+                    },
+                    read_only: true
+                  },
+                  {
+                    key: 'superannuation_fund.membership_number',
+                    type: 'input',
+                    showIf: ['superannuation_fund.id'],
+                    default: '{superannuation_fund.membership_number}',
+                    templateOptions: {
+                      required: false,
+                      label: 'Employer Membership Number',
+                      type: 'text'
+                    },
+                    read_only: true
                   },
                   {
                     key: 'super_member_number',
