@@ -254,10 +254,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
         formElement.templateOptions.label : '';
     });
     let prop = (element === 'skills') ? 'candidate_skills' :
-      (element === 'tags') ? 'tag_rels' : null;
+      (element === 'tags') ? 'tag_list' : null;
     data.row = [];
     if (prop) {
       apiData[prop].forEach((el) => {
+        if (element === 'tags' && el.tag.confidential) {
+          return;
+        }
+
         let item = {
           id: '',
           values: []

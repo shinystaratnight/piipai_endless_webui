@@ -244,15 +244,18 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     this.formData = new BehaviorSubject({ data: {} });
     this.modeBehaviorSubject = new BehaviorSubject(this.mode);
 
+    const timelineSubject = new Subject();
     const props = {
       formId: this.formId,
       formData: this.formData,
       mode: this.mode === 'view' ? this.modeBehaviorSubject : undefined,
-      timelineSubject: new Subject(),
       autocompleteData: new Subject(),
     };
 
     return (el: Field) => {
+      if (el.key === 'timeline' || (el.endpoint &&  el.endpoint === '/ecore/api/v2/core/workflowobjects/')) {
+        el.timelineSubject = timelineSubject;
+      }
       if (el.type === 'tabs') {
         this.hasTabs = true;
       }
@@ -278,16 +281,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       }
     };
   }
-
-  // public setFormIdToField(metadata: Field[]) {
-  //   metadata.forEach((el) => {
-  //     if (el.key) {
-  //       el.formId = this.formId;
-  //     } else if (el.children) {
-  //       this.setFormIdToField(el.children);
-  //     }
-  //   });
-  // }
 
   public checkFormInfoElement(metadata: any[]) {
     const infoElement = getElementFromMetadata(metadata, 'id');
@@ -334,16 +327,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
-  // public checkTimeLine(metadata, subject) {
-  //   metadata.forEach((el) => {
-  //     if (el.key === 'timeline' || (el.endpoint &&  el.endpoint === '/ecore/api/v2/core/workflowobjects/')) { //tslint:disable-line
-  //       el.timelineSubject = subject;
-  //     } else if (el.children) {
-  //       this.checkTimeLine(el.children, subject);
-  //     }
-  //   });
-  // }
-
   public setModeForElement(metadata: Field[], mode) {
     if (mode === 'view') {
       metadata.forEach((el) => {
@@ -360,19 +343,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     if (this.modeBehaviorSubject) {
       this.modeBehaviorSubject.next(mode);
     }
-
-    // if (metadata.length) {
-    //   metadata.forEach((el) => {
-    //     if (el.key && el.mode) {
-    //       el.mode.next(mode);
-    //       if (el.type === 'related' && el.list) {
-    //         this.toggleModeMetadata(el.metadata, mode);
-    //       }
-    //     } else if (el.children) {
-    //       this.toggleModeMetadata(el.children, mode);
-    //     }
-    //   });
-    // }
   }
 
   public formChange(data) {
@@ -389,16 +359,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     this.parseError(Object.assign({}, this.errors));
   }
 
-  // public getOptions(metadata) {
-  //   metadata.forEach((el) => {
-  //     if (el.key && el.type === 'related' && el.useOptions) {
-  //       this.getRalatedData(this.metadata, el.key, el.endpoint, {}, '?limit=-1');
-  //     } else if (el.children) {
-  //       this.getOptions(el.children);
-  //     }
-  //   });
-  // }
-
   public getMetadata(endpoint) {
     this.service
       .getMetadata(
@@ -407,10 +367,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       )
       .subscribe(
         (data: any) => {
-          // this.setModeForElement(data, this.mode);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
-          // this.saveHiddenFields(this.metadata);
           this.metadata = this.parseMetadata(data, this.relatedField);
 
           if (!(this.id || this.editForm)) {
@@ -419,21 +377,9 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
-          // this.updateCheckObject(this.metadata);
-          // this.setFormIdToField(this.metadata);
           this.updateMetadataByProps(this.metadata, this.generateActionToSetProps());
 
-          // this.addAutocompleteProperty(this.metadata);
           this.getData(this.metadata);
-
-          // this.formData = new BehaviorSubject({ data: {} });
-          // this.updateFormData(this.metadata, this.formData);
-          // this.checkMetadataOnTabElement(this.metadata);
-
-          // const timelineSubject = new Subject();
-          // this.checkTimeLine(this.metadata, timelineSubject);
-
-          // this.getOptions(this.metadata);
 
           if ((this.id || this.edit) && this.metadata) {
             if (this.id) {
@@ -457,26 +403,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         },
         (error: any) => this.metadataError = error);
   }
-
-  // public checkMetadataOnTabElement(metadata) {
-  //   metadata.forEach((el) => {
-  //     if (el.type === 'tabs') {
-  //       this.hasTabs = true;
-  //     } else if (el.children) {
-  //       this.checkMetadataOnTabElement(el.children);
-  //     }
-  //   });
-  // }
-
-  // public updateCheckObject(metadata) {
-  //   metadata.forEach((el) => {
-  //     if (el.key && el.checkObject) {
-  //       this.checkObject[el.key] = el.checkObject;
-  //     } else if (el.children) {
-  //       this.updateCheckObject(el.children);
-  //     }
-  //   });
-  // }
 
   public parseCheckObject(data) {
     if (this.endpoint === '/ecore/api/v2/core/companycontacts/') {
@@ -525,32 +451,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
   }
-
-  // public addAutocompleteProperty(metadata: any, property?: Subject<any>) {
-  //   property = property || new Subject<any>();
-  //   metadata.forEach((element) => {
-  //     if (element.key) {
-  //       element.autocompleteData = property;
-  //     } else if (element.children) {
-  //       this.addAutocompleteProperty(element.children, property);
-  //     }
-  //   });
-  // }
-
-  // public saveHiddenFields(metadata: Field[]) {
-  //   metadata.forEach((el) => {
-  //     if (el.showIf && el.showIf.length) {
-  //       if (this.hiddenFields.keys.indexOf(el.key) === -1) {
-  //         this.hiddenFields.keys.push(el.key);
-  //         this.hiddenFields.elements.push(el);
-  //         this.hiddenFields.observers = this.observeFields(el.showIf, this.hiddenFields.observers);
-  //         el.hidden = new BehaviorSubject(true);
-  //       }
-  //     } else if (el.children) {
-  //       this.saveHiddenFields(el.children);
-  //     }
-  //   });
-  // }
 
   public observeFields(fields: any[], observers) {
     fields.forEach((field: any) => {
