@@ -21,6 +21,7 @@ import { GenericFormService, FormService } from '../../services/';
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
+import { getElementFromMetadata } from '../../helpers/utils';
 
 interface HiddenFields {
   elements: Field[];
@@ -124,6 +125,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     observers: []
   };
   public formData: BehaviorSubject<any>;
+  public modeBehaviorSubject: BehaviorSubject<string>;
   public hasTabs: boolean;
 
   public workflowEndpoints = {
@@ -142,6 +144,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   public format = new FormatString();
 
   public delayData = {};
+  public saveRelatedData: Array<{ get: string, set: string }> = [];
+  public delayRequests: any[];
 
   public candidateFill: boolean;
 
@@ -174,15 +178,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-
     if (!this.formId) {
-      if (this.id && !this.mode) {
-        this.mode = 'view';
-        setTimeout(() => {
-          this.modeEvent.emit(this.mode);
-        }, 100);
-      }
-
       this.formId = this.formService.registerForm(this.endpoint, this.mode);
 
       const subscription = this.formService
@@ -201,7 +197,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         this.resetData(this.errors);
         this.resetData(this.response);
 
-        this.toggleModeMetadata(this.metadata, this.mode);
+        this.toggleModeMetadata(this.mode);
       }
     });
 
@@ -227,22 +223,76 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     }
     if (this.id && this.mode && this.metadata) {
       if (this.mode === 'edit') {
-        this.toggleModeMetadata(this.metadata, this.mode);
+        this.toggleModeMetadata(this.mode);
       }
     }
   }
 
+  public updateMetadataByProps(metadata: Field[], callback) {
+    metadata.forEach((el) => {
+      if (el) {
+        callback.call(this, el);
+      }
+
+      if (el.children) {
+        this.updateMetadataByProps(el.children, callback);
+      }
+    });
+  }
+
+  public generateActionToSetProps(): Function {
+    this.formData = new BehaviorSubject({ data: {} });
+    this.modeBehaviorSubject = new BehaviorSubject(this.mode);
+
+    const timelineSubject = new Subject();
+    const props = {
+      formId: this.formId,
+      formData: this.formData,
+      mode: this.mode === 'view' ? this.modeBehaviorSubject : undefined,
+      autocompleteData: new Subject(),
+    };
+
+    return (el: Field) => {
+      if (el.key === 'timeline' || (el.endpoint &&  el.endpoint === '/ecore/api/v2/core/workflowobjects/')) {
+        el.timelineSubject = timelineSubject;
+      }
+      if (el.type === 'tabs') {
+        this.hasTabs = true;
+      }
+      if (el.key || el.type === 'list') {
+        el = Object.assign(el, props);
+      }
+      if (el.showIf && el.showIf.length) {
+        if (this.hiddenFields.keys.indexOf(el.key) === -1) {
+          this.hiddenFields.keys.push(el.key);
+          this.hiddenFields.elements.push(el);
+          this.hiddenFields.observers = this.observeFields(el.showIf, this.hiddenFields.observers);
+          el.hidden = new BehaviorSubject(true);
+        }
+      }
+      if (el.key && el.checkObject) {
+        this.checkObject[el.key] = el.checkObject;
+      }
+      if (el.key && el.type === 'related' && el.useOptions) {
+        this.getRalatedData(this.metadata, el.key, el.endpoint, {}, '?limit=-1');
+      }
+      if (el.key && el.saveRelated) {
+        this.saveRelatedData.push(el.saveRelated);
+      }
+    };
+  }
+
   public checkFormInfoElement(metadata: any[]) {
-    const infoElement = this.getElementFromMetadata(metadata, 'id');
+    const infoElement = getElementFromMetadata(metadata, 'id');
 
     if (infoElement && infoElement.type === 'info') {
       const keys = Object.keys(infoElement.values);
-      infoElement.metadata = {};
+      infoElement.metadata = <any> {};
       keys.forEach((el) => {
         const value = infoElement.values[el];
         if (typeof value === 'string') {
           const key = value.replace('.__str__', '');
-          const element = this.getElementFromMetadata(metadata, key);
+          const element = getElementFromMetadata(metadata, key);
 
           const fieldsWithLabel = ['carrier_list_reserve', 'website', 'name'];
 
@@ -257,7 +307,10 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
               {
                 templateOptions: {
                   ...element.templateOptions,
-                  label: element.type === 'checkbox' || fieldsWithLabel.indexOf(element.key) > -1 ? element.templateOptions.label : ''
+                  label: element.type === 'checkbox' ||
+                    fieldsWithLabel.indexOf(element.key) > -1 ?
+                      element.templateOptions.label :
+                      ''
                 }
               }
             );
@@ -265,23 +318,13 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         }
       });
 
-      const timeline = this.getElementFromMetadata(metadata, 'timeline');
+      const timeline = getElementFromMetadata(metadata, 'timeline');
 
       if (timeline) {
         infoElement.metadata['timeline'] = Object.assign({}, timeline);
         infoElement.metadata['timeline'].dropdown = true;
       }
     }
-  }
-
-  public checkTimeLine(metadata, subject) {
-    metadata.forEach((el) => {
-      if (el.key === 'timeline' || (el.endpoint &&  el.endpoint === '/ecore/api/v2/core/workflowobjects/')) { //tslint:disable-line
-        el.timelineSubject = subject;
-      } else if (el.children) {
-        this.checkTimeLine(el.children, subject);
-      }
-    });
   }
 
   public setModeForElement(metadata: Field[], mode) {
@@ -296,18 +339,9 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
-  public toggleModeMetadata(metadata: Field[], mode: string) {
-    if (metadata.length) {
-      metadata.forEach((el) => {
-        if (el.key && el.mode) {
-          el.mode.next(mode);
-          if (el.type === 'related' && el.list) {
-            this.toggleModeMetadata(el.metadata, mode);
-          }
-        } else if (el.children) {
-          this.toggleModeMetadata(el.children, mode);
-        }
-      });
+  public toggleModeMetadata(mode: string) {
+    if (this.modeBehaviorSubject) {
+      this.modeBehaviorSubject.next(mode);
     }
   }
 
@@ -325,16 +359,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     this.parseError(Object.assign({}, this.errors));
   }
 
-  public getOptions(metadata) {
-    metadata.forEach((el) => {
-      if (el.key && el.type === 'related' && el.useOptions) {
-        this.getRalatedData(this.metadata, el.key, el.endpoint, {}, '?limit=-1');
-      } else if (el.children) {
-        this.getOptions(el.children);
-      }
-    });
-  }
-
   public getMetadata(endpoint) {
     this.service
       .getMetadata(
@@ -343,10 +367,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       )
       .subscribe(
         (data: any) => {
-          this.setModeForElement(data, this.mode);
           this.getReplaceElements(data);
           this.metadata = this.parseMetadata(data, this.data);
-          this.saveHiddenFields(this.metadata);
           this.metadata = this.parseMetadata(data, this.relatedField);
 
           if (!(this.id || this.editForm)) {
@@ -355,19 +377,9 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
           this.checkFormBuilder(this.metadata, this.endpoint);
           this.checkFormStorage(this.metadata, this.endpoint);
-          this.updateCheckObject(this.metadata);
+          this.updateMetadataByProps(this.metadata, this.generateActionToSetProps());
 
-          this.addAutocompleteProperty(this.metadata);
           this.getData(this.metadata);
-
-          this.formData = new BehaviorSubject({ data: {} });
-          this.updateFormData(this.metadata, this.formData);
-          this.checkMetadataOnTabElement(this.metadata);
-
-          const timelineSubject = new Subject();
-          this.checkTimeLine(this.metadata, timelineSubject);
-
-          this.getOptions(this.metadata);
 
           if ((this.id || this.edit) && this.metadata) {
             if (this.id) {
@@ -390,26 +402,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           }
         },
         (error: any) => this.metadataError = error);
-  }
-
-  public checkMetadataOnTabElement(metadata) {
-    metadata.forEach((el) => {
-      if (el.type === 'tabs') {
-        this.hasTabs = true;
-      } else if (el.children) {
-        this.checkMetadataOnTabElement(el.children);
-      }
-    });
-  }
-
-  public updateCheckObject(metadata) {
-    metadata.forEach((el) => {
-      if (el.key && el.checkObject) {
-        this.checkObject[el.key] = el.checkObject;
-      } else if (el.children) {
-        this.updateCheckObject(el.children);
-      }
-    });
   }
 
   public parseCheckObject(data) {
@@ -458,32 +450,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         });
       }
     }
-  }
-
-  public addAutocompleteProperty(metadata: any, property?: Subject<any>) {
-    property = property || new Subject<any>();
-    metadata.forEach((element) => {
-      if (element.key) {
-        element.autocompleteData = property;
-      } else if (element.children) {
-        this.addAutocompleteProperty(element.children, property);
-      }
-    });
-  }
-
-  public saveHiddenFields(metadata: Field[]) {
-    metadata.forEach((el) => {
-      if (el.showIf && el.showIf.length) {
-        if (this.hiddenFields.keys.indexOf(el.key) === -1) {
-          this.hiddenFields.keys.push(el.key);
-          this.hiddenFields.elements.push(el);
-          this.hiddenFields.observers = this.observeFields(el.showIf, this.hiddenFields.observers);
-          el.hidden = new BehaviorSubject(true);
-        }
-      } else if (el.children) {
-        this.saveHiddenFields(el.children);
-      }
-    });
   }
 
   public observeFields(fields: any[], observers) {
@@ -556,6 +522,12 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
   public fillingForm(metadata, data) {
     metadata.forEach((el) => {
+      if (el.saveRelated) {
+        const value = this.getValueOfData(data, el.key, metadata, {});
+        el.saveRelated['data'] =
+          Array.isArray(value) && value.length ? value.map((el) => el.id) : value;
+      }
+
       if (el.templateOptions) {
         el.templateOptions.label = this.format.format(el.templateOptions.label, data);
         el.templateOptions.text = this.format.format(el.templateOptions.text, data);
@@ -643,7 +615,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     keys.forEach((key, index, arr) => {
       if (data[key] instanceof Object) {
         if (data[key].id) {
-          const el = this.getElementFromMetadata(this.metadata, key);
+          const el = getElementFromMetadata(this.metadata, key);
 
           requests.push(this.createRequest(el.endpoint, data[key].id));
           fields.push(key);
@@ -682,6 +654,46 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     return this.service.getAll(endpoint + id + '/');
   }
 
+  public createDelayRequests(data: any) {
+    this.delayRequests = [];
+
+    this.saveRelatedData.forEach((field: {get: string, set: string, data: any}) => {
+      const target = this.getValueOfData(data, field.get, {}, this.metadata);
+
+      if (Array.isArray(target)) {
+        const addArray = target.filter((a) => !field.data.find((b) => a === b));
+        const removeArray = field.data.filter((a) => !target.find((b) => a === b));
+
+        if (addArray.length) {
+          addArray.forEach(
+            (el) => this.delayRequests.push(this.createRelateRequest(el, field, data.id))
+          );
+        }
+
+        if (removeArray) {
+          removeArray.forEach(
+            (el) => this.delayRequests.push(this.createRelateRequest(el, field, null))
+          );
+        }
+
+      } else {
+        if (target !== field.data) {
+          this.delayRequests.push(this.createRelateRequest(target, field, data.id));
+        } else {
+          this.delayRequests.push(this.createRelateRequest(target, field, null));
+        }
+      }
+    });
+  }
+
+  public createRelateRequest(id: string, field, data: any) {
+    return this.service.updateForm(this.endpoint + id + '/', { [field.set]: data });
+  }
+
+  public checkExistValue(target: string[], value: string) {
+    return target.indexOf(value) > -1;
+  }
+
   public submitForm(data) {
     if (!this.checkDelayData()) {
       return;
@@ -700,6 +712,10 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       this.checkRelatedData(newData);
 
       return;
+    }
+
+    if (this.saveRelatedData) {
+      this.createDelayRequests(newData);
     }
 
     if (this.editForm || this.edit) {
@@ -726,27 +742,41 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     if (edit) {
       this.service.editForm(endpoint, data)
         .subscribe(
-          (response: any) => this.responseHandler(response),
+          (response: any) => this.responseHandler(response, data),
           (errors: any) => this.parseError(errors.errors)
         );
     } else {
       this.service.submitForm(endpoint, data)
       .subscribe(
-        (response: any) => this.responseHandler(response),
+        (response: any) => this.responseHandler(response, data),
         (errors: any) => this.parseError(errors.errors)
       );
 
     }
   }
 
-  public responseHandler(response: any) {
+  public responseHandler(response: any, sendData: any) {
     this.formService.getForm(this.formId).setSaveProcess(false);
     this.parseResponse(response);
-    this.event.emit({
-      type: 'sendForm',
-      data: Object.assign(response, this.formData.value.data),
-      status: 'success'
-    });
+    if (this.delayRequests && this.delayRequests.length) {
+      const subscription = Observable.forkJoin(...this.delayRequests)
+        .finally(() => {
+          this.event.emit({
+            type: 'sendForm',
+            viewData: response,
+            sendData,
+            status: 'success'
+          });
+        }).subscribe();
+
+      this.subscriptions.push(subscription);
+    } else {
+      this.event.emit({
+        type: 'sendForm',
+        data: Object.assign(response, this.formData.value.data),
+        status: 'success'
+      });
+    }
   }
 
   public parseError(errors) {
@@ -915,7 +945,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           }, update);
           if (key === 'rules' && this.endpoint === '/ecore/api/v2/core/workflownodes/') {
             if (response) {
-              let rules = this.getElementFromMetadata(metadata, 'rules');
+              let rules = getElementFromMetadata(metadata, 'rules');
               this.updateValueOfRules(response.results);
               this.parseMetadata(rules.activeMetadata, {
                 [key]: {
@@ -1026,7 +1056,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       }
       if (el && el.key && params && !!params[el.key]) {
         if (params[el.key].action === 'add') {
-          let elem = this.getElementFromMetadata(metadata, el.key);
+          let elem = getElementFromMetadata(metadata, el.key);
           elem = Object.assign(elem, params[elem.key].data);
           if (elem.related) {
             this.resetRalatedData(metadata, elem.related.reset);
@@ -1038,7 +1068,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             this.getValueOfData(params[el.key].data.value, el.key, elem, metadata);
           }
         } else if (params[el.key].update) {
-          let elem = this.getElementFromMetadata(metadata, el.key);
+          let elem = getElementFromMetadata(metadata, el.key);
           if (elem.related) {
             this.resetRalatedData(metadata, elem.related.reset);
           }
@@ -1050,7 +1080,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             `${params[el.key].query}${params[el.key].id}&limit=-1`);
         } else if (params[el.key].action === 'update') {
           if (params[el.key].block) {
-            let elem = this.getElementFromMetadata(metadata, el.key);
+            let elem = getElementFromMetadata(metadata, el.key);
             elem.read_only = true;
           }
         }
@@ -1113,9 +1143,9 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         param: 'number'
       }
     };
-    let ruleElement = this.getElementFromMetadata(metadata, 'rules');
+    let ruleElement = getElementFromMetadata(metadata, 'rules');
     if (ruleElement) {
-      ruleElement.activeMetadata = [activeMetadata];
+      ruleElement.activeMetadata = <any> [activeMetadata];
       Object.keys(this.workflowEndpoints).forEach((el, i) => {
         let newMetadata = [ruleElement, activeMetadata];
         let endpoint = this.workflowEndpoints[el];
@@ -1123,8 +1153,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
         let query = '';
         if (el === 'state') {
-          const company = this.getElementFromMetadata(metadata, 'company');
-          const workflow = this.getElementFromMetadata(metadata, 'workflow');
+          const company = getElementFromMetadata(metadata, 'company');
+          const workflow = getElementFromMetadata(metadata, 'workflow');
 
           if (company && company.value) {
             query += `company=${company.value.id}&`;
@@ -1138,22 +1168,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             null, '?limit=-1&' + query, param);
       });
     }
-  }
-
-  public getElementFromMetadata(metadata, key): any {
-    let element = null;
-    metadata.forEach((el) => {
-      if (el.key === key) {
-        if (!element) {
-          element = el;
-        }
-      } else if (el.children) {
-        if (!element) {
-          element = this.getElementFromMetadata(el.children, key);
-        }
-      }
-    });
-    return element;
   }
 
   public updateWorkflowData(event) {
@@ -1193,14 +1207,14 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         }
       });
       query.push('limit=-1');
-      let element = this.getElementFromMetadata(this.metadata, 'rules');
+      let element = getElementFromMetadata(this.metadata, 'rules');
       this.getRalatedData(this.metadata,
         'rules', this.workflowEndpoints.state, null, `?${query.join('&')}`);
     }
   }
 
   public updateMetadata(data, key) {
-    let element = this.getElementFromMetadata(data, key);
+    let element = getElementFromMetadata(data, key);
     data.forEach((el, i) => {
       if (el.key === key) {
         data.splice(i, 1, Object.assign({}, element));
@@ -1214,7 +1228,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     let key = 'rules';
     if (res && res.length > 0) {
       let result = res.filter((el) => el.number === +this.workflowData.number)[0];
-      let element = this.getElementFromMetadata(this.metadata, key);
+      let element = getElementFromMetadata(this.metadata, key);
       if (result) {
         element.value = result.rules;
       } else {

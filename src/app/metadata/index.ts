@@ -95,6 +95,7 @@ import * as acceptancetesttags from './acceptancetesttags.metadata';
 import * as acceptancetestworkflownodes from './acceptancetestworkflownodes.metadata';
 import * as skillbaserates from './skillbaserates.metadata';
 import * as skilltags from './skilltags.metadata';
+import * as profile from './profile.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -111,7 +112,8 @@ export const metadata = {
   '/ecore/api/v2/hr/timesheets/': timesheets.metadata,
   '/ecore/api/v2/candidate/superannuationfunds/': superannuationfunds.metadata,
   '/ecore/api/v2/core/invoices/': invoices.metadata,
-  '/ecore/api/v2/skills/employmentclassifications/': employmentclassifications.metadata,
+  '/ecore/api/v2/skills/employmentclassifications/':
+    employmentclassifications.metadata,
   '/ecore/api/v2/activity/activities/': activities.metadata,
   '/ecore/api/v2/core/dashboardmodules/': dashboardmodules.metadata,
   '/ecore/api/v2/core/userdashboardmodules/': userdashboardmodules.metadata,
@@ -128,9 +130,12 @@ export const metadata = {
   '/ecore/api/v2/core/formfields/': formfields.metadata,
   '/ecore/api/v2/core/formfieldgroups/': formfieldgroups.metadata,
   '/ecore/api/v2/core/formstorages/': formstorages.metadata,
-  '/ecore/api/v2/acceptance-tests/acceptancetestquestions/': acceptancetestquestions.metadata,
-  '/ecore/api/v2/acceptance-tests/acceptancetestanswers/': acceptancetestanswers.metadata,
-  '/ecore/api/v2/acceptance-tests/acceptancetestskills/': acceptancetestskills.metadata,
+  '/ecore/api/v2/acceptance-tests/acceptancetestquestions/':
+    acceptancetestquestions.metadata,
+  '/ecore/api/v2/acceptance-tests/acceptancetestanswers/':
+    acceptancetestanswers.metadata,
+  '/ecore/api/v2/acceptance-tests/acceptancetestskills/':
+    acceptancetestskills.metadata,
   '/ecore/api/v2/candidate/interviewschedules/': interviewschedules.metadata,
   '/ecore/api/v2/core/users/': users.metadata,
   '/ecore/api/v2/sms-interface/smsmessages/': smsmessages.metadata,
@@ -143,11 +148,13 @@ export const metadata = {
   '/ecore/api/v2/hr/favouritelists/': favouritelists.metadata,
   '/ecore/api/v2/hr/carrierlists/': carrierlists.metadata,
   '/ecore/api/v2/core/companyaddresses/': companyaddresses.metadata,
-  '/ecore/api/v2/core/companycontactrelationships/': companycontactrelationships.metadata,
+  '/ecore/api/v2/core/companycontactrelationships/':
+    companycontactrelationships.metadata,
   '/ecore/api/v2/core/companylocalizations/': companylocalizations.metadata,
   '/ecore/api/v2/core/companyrels/': companyrels.metadata,
   '/ecore/api/v2/core/companytradereferences/': companytradereferences.metadata,
-  '/ecore/api/v2/core/contactunavailabilities/': contactunavailabilities.metadata,
+  '/ecore/api/v2/core/contactunavailabilities/':
+    contactunavailabilities.metadata,
   '/ecore/api/v2/core/notes/': notes.metadata,
   '/ecore/api/v2/core/orders/': orders.metadata,
   '/ecore/api/v2/hr/shiftdates/': shiftdates.metadata,
@@ -158,15 +165,19 @@ export const metadata = {
   '/ecore/api/v2/candidate/candidaterels/': candidaterels.metadata,
   '/ecore/api/v2/hr/candidateevaluations/': candidateevaluations.metadata,
   '/ecore/api/v2/hr/timesheetissues/': timesheetissues.metadata,
-  '/ecore/api/v2/pricing/ratecoefficientgroups/': ratecoefficientgroups.metadata,
-  '/ecore/api/v2/pricing/ratecoefficientmodifiers/': ratecoefficientmodifiers.metadata,
-  '/ecore/api/v2/pricing/dynamiccoefficientrules/': dynamiccoefficientrules.metadata,
+  '/ecore/api/v2/pricing/ratecoefficientgroups/':
+    ratecoefficientgroups.metadata,
+  '/ecore/api/v2/pricing/ratecoefficientmodifiers/':
+    ratecoefficientmodifiers.metadata,
+  '/ecore/api/v2/pricing/dynamiccoefficientrules/':
+    dynamiccoefficientrules.metadata,
   '/ecore/api/v2/pricing/weekdayworkrules/': weekdayworkrules.metadata,
   '/ecore/api/v2/pricing/overtimeworkrules/': overtimeworkrules.metadata,
   '/ecore/api/v2/pricing/allowanceworkrules/': allowanceworkrules.metadata,
   '/ecore/api/v2/pricing/timeofdayworkrules/': timeofdayworkrules.metadata,
   '/ecore/api/v2/pricing/pricelistrates/': pricelistrates.metadata,
-  '/ecore/api/v2/pricing/pricelistratecoefficients/': pricelistratecoefficients.metadata,
+  '/ecore/api/v2/pricing/pricelistratecoefficients/':
+    pricelistratecoefficients.metadata,
   '/ecore/api/v2/core/invoicelines/': invoicelines.metadata,
   '/ecore/api/v2/hr/payslips/': payslips.metadata,
   '/ecore/api/v2/hr/paysliplines/': paysliplines.metadata,
@@ -180,7 +191,8 @@ export const metadata = {
   'submit': submit.metadata,
   'evaluate': evaluate.metadata,
   'not_agree': notAgree.metadata,
-  '/ecore/api/v2/company-settings/globalpermissions/': globalpermissions.metadata,
+  '/ecore/api/v2/company-settings/globalpermissions/':
+    globalpermissions.metadata,
   '/ecore/api/v2/hr/joboffers/candidate/': joboffersCandidateManager.metadata,
   '/ecore/api/v2/hr/shifts/': shifts.metadata,
   '/ecore/api/v2/hr/jobtags/': jobtags.metadata,
@@ -190,8 +202,12 @@ export const metadata = {
   'supervisorApprove': supervisorApprove.metadata,
   'candidateFill': candidateFill.metadata,
   '/ecore/api/v2/acceptance-tests/acceptancetests/': acceptancetests.metadata,
-  '/ecore/api/v2/acceptance-tests/acceptancetestindustries/': acceptancetestindustries.metadata,
-  '/ecore/api/v2/acceptance-tests/acceptancetesttags/': acceptancetesttags.metadata,
-  '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/': acceptancetestworkflownodes.metadata, //tslint:disable-line,
+  '/ecore/api/v2/acceptance-tests/acceptancetestindustries/':
+    acceptancetestindustries.metadata,
+  '/ecore/api/v2/acceptance-tests/acceptancetesttags/':
+    acceptancetesttags.metadata,
+  '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/':
+    acceptancetestworkflownodes.metadata, //tslint:disable-line,
   '/ecore/api/v2/skills/skillbaserates/': skillbaserates.metadata,
+  'profile': profile.metadata
 };

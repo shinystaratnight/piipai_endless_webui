@@ -1498,8 +1498,8 @@ export class DynamicListComponent implements
         this.data.results.find((el) => el.id === e.el.rowId)
       );
     } else {
-      endpoint = e.el.endpoint;
-      if (e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/') {
+      endpoint = e.el.endpoint || this.endpoint;
+      if (e.el.notParsedEndpoint && e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/') {
         const arr: string[] = e.el.endpoint.split('/');
         arr.pop();
         const lastElement = arr.pop();
@@ -1514,7 +1514,7 @@ export class DynamicListComponent implements
     this.modalInfo = {};
     this.modalInfo.type = 'form';
     this.modalInfo.endpoint = endpoint;
-    this.modalInfo.id = id;
+    this.modalInfo.id = id || e.el.rowId;
     this.modalInfo.mode = 'edit';
     this.modalInfo.edit = true;
     this.modalInfo.dontUseMetadataQuery = e.value === 'editModal';

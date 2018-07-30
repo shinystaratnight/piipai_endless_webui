@@ -11,26 +11,27 @@ import { metadata } from '../../metadata';
 
 @Injectable()
 export class GenericFormService {
-
   constructor(
     private http: Http,
     private cookie: CookieService,
     private errors: ErrorsService
-  ) { }
+  ) {}
 
   public getByQuery(endpoint, query) {
     let headers = new Headers();
     this.updateHeaders(headers);
-    return this.http.get(`${endpoint}${query}`, { headers })
-      .map((response: any) => response._body ? response.json() : {})
+    return this.http
+      .get(`${endpoint}${query}`, { headers })
+      .map((response: any) => (response._body ? response.json() : {}))
       .catch((error: any) => this.errorHandler(error));
   }
 
   public getAll(endpoint) {
     let headers = new Headers();
     this.updateHeaders(headers);
-    return this.http.get(endpoint, { headers })
-      .map((response: any) => response._body ? response.json() : {})
+    return this.http
+      .get(endpoint, { headers })
+      .map((response: any) => (response._body ? response.json() : {}))
       .catch((error: any) => this.errorHandler(error));
   }
 
@@ -64,6 +65,10 @@ export class GenericFormService {
 
     if (endpoint.includes('/supervisor_approve')) {
       endpoint = 'supervisorApprove';
+    }
+
+    if (endpoint.includes('/profile')) {
+      endpoint = 'profile';
     }
 
     if (metadata[endpoint]) {
@@ -108,13 +113,13 @@ export class GenericFormService {
         type = 'list';
       }
 
-      const stringifyMetadata =
-        JSON.stringify(metadata[endpoint][type]);
+      const stringifyMetadata = JSON.stringify(metadata[endpoint][type]);
 
       return Observable.of(JSON.parse(stringifyMetadata));
     }
 
-    return this.http.options(`${endpoint}${query}`, { headers })
+    return this.http
+      .options(`${endpoint}${query}`, { headers })
       .map((response: any) => response.json())
       .catch((error: any) => this.errorHandler(error));
   }
@@ -122,32 +127,45 @@ export class GenericFormService {
   public submitForm(endpoint, data) {
     let headers = new Headers();
     this.updateHeaders(headers);
-    return this.http.post(endpoint, data, { headers })
-      .map((response: any) => response._body ? response.json() : {})
+    return this.http
+      .post(endpoint, data, { headers })
+      .map((response: any) => (response._body ? response.json() : {}))
       .catch((error: any) => this.errorHandler(error));
   }
 
   public editForm(endpoint, data) {
     let headers = new Headers();
     this.updateHeaders(headers);
-    return this.http.put(endpoint, data, { headers })
-      .map((response: any) => response._body ? response.json() : {})
+    return this.http
+      .put(endpoint, data, { headers })
+      .map((response: any) => (response._body ? response.json() : {}))
+      .catch((error: any) => this.errorHandler(error));
+  }
+
+  public updateForm(endpoint, data) {
+    let headers = new Headers();
+    this.updateHeaders(headers);
+    return this.http
+      .patch(endpoint, data, { headers })
+      .map((response: any) => (response._body ? response.json() : {}))
       .catch((error: any) => this.errorHandler(error));
   }
 
   public callAction(endpoint, data) {
     let headers = new Headers();
     this.updateHeaders(headers);
-    return this.http.post(endpoint, data, { headers })
-      .map((response: any) => response._body ? response.json() : {})
+    return this.http
+      .post(endpoint, data, { headers })
+      .map((response: any) => (response._body ? response.json() : {}))
       .catch((error: any) => this.errorHandler(error));
   }
 
   public delete(endpoint, id, postfix?) {
     let headers = new Headers();
     this.updateHeaders(headers);
-    return this.http.delete(`${endpoint}${id}/` + (postfix ? `${postfix}/` : ''), { headers })
-      .map((response: any) => response._body ? response.json() : {})
+    return this.http
+      .delete(`${endpoint}${id}/` + (postfix ? `${postfix}/` : ''), { headers })
+      .map((response: any) => (response._body ? response.json() : {}))
       .catch((error: any) => this.errors.parseErrors(error));
   }
 
