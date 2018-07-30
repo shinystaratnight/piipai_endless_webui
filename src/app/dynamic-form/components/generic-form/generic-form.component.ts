@@ -405,7 +405,10 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public parseCheckObject(data) {
-    if (this.endpoint === '/ecore/api/v2/core/companycontacts/') {
+    if (
+      this.endpoint === '/ecore/api/v2/core/companycontacts/'
+      || this.endpoint === '/ecore/api/v2/candidate/candidatecontacts/'
+    ) {
       const keys = Object.keys(this.checkObject);
       if (keys.length) {
         const formatString = new FormatString();
@@ -432,15 +435,28 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
                 .map((param) => `${param}=${query[param]}`)
                 .join('&')
             ).subscribe((res) => {
+              console.log(this);
               if (res.count) {
-                const errors = {
-                  [key]: [
-                    this.checkObject[key].error,
-                    `${res.results[0].__str__}`,
-                    `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change`, //tslint:disable-line
-                    Object.assign(res.results[0].company_contact, {endpoint: this.endpoint})
-                  ]
-                };
+                let errors;
+                if (this.endpoint === '/ecore/api/v2/core/companycontacts/') {
+                  errors = {
+                    [key]: [
+                      this.checkObject[key].error,
+                      `${res.results[0].__str__}`,
+                      `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change`, //tslint:disable-line
+                      Object.assign(res.results[0].company_contact, {endpoint: this.endpoint})
+                    ]
+                  };
+                } else if (this.endpoint === '/ecore/api/v2/candidate/candidatecontacts/') {
+                  errors = {
+                    [key]: [
+                      this.checkObject[key].error,
+                      `${res.results[0].__str__}`,
+                      `${this.path || '/candidate/candidatecontacts/'}${res.results[0].id}/change`, //tslint:disable-line
+                      Object.assign(res.results[0], {endpoint: this.endpoint})
+                    ]
+                  };
+                }
                 this.updateErrors(this.errors, errors, this.response);
               } else {
                 this.updateErrors(this.errors, { [key]: '  ' }, this.response);
@@ -657,8 +673,11 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   public createDelayRequests(data: any) {
     this.delayRequests = [];
 
-    this.saveRelatedData.forEach((field: {get: string, set: string, data: any}) => {
+    this.saveRelatedData.forEach((field: {get: string, set: string, data: any, endpoint?: string}) => {
       const target = this.getValueOfData(data, field.get, {}, this.metadata);
+      const format = new FormatString();
+
+      const endpoint = field.endpoint && format.format(field.endpoint, data);
 
       if (Array.isArray(target)) {
         const addArray = target.filter((a) => !field.data.find((b) => a === b));
@@ -666,28 +685,28 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
         if (addArray.length) {
           addArray.forEach(
-            (el) => this.delayRequests.push(this.createRelateRequest(el, field, data.id))
+            (el) => this.delayRequests.push(this.createRelateRequest(el, field, data.id, endpoint))
           );
         }
 
         if (removeArray) {
           removeArray.forEach(
-            (el) => this.delayRequests.push(this.createRelateRequest(el, field, null))
+            (el) => this.delayRequests.push(this.createRelateRequest(el, field, null, endpoint))
           );
         }
 
       } else {
         if (target !== field.data) {
-          this.delayRequests.push(this.createRelateRequest(target, field, data.id));
+          this.delayRequests.push(this.createRelateRequest(target, field, data.id, endpoint));
         } else {
-          this.delayRequests.push(this.createRelateRequest(target, field, null));
+          this.delayRequests.push(this.createRelateRequest(target, field, null, endpoint));
         }
       }
     });
   }
 
-  public createRelateRequest(id: string, field, data: any) {
-    return this.service.updateForm(this.endpoint + id + '/', { [field.set]: data });
+  public createRelateRequest(id: string, field, data: any, endpoint?) {
+    return this.service.updateForm(endpoint || this.endpoint + id + '/', { [field.set]: data });
   }
 
   public checkExistValue(target: string[], value: string) {
