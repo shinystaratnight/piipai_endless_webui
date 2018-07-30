@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
 
 const list = {
   list: {
@@ -152,17 +152,17 @@ const list = {
           {
             label: 'Yesterday',
             query:
-              'shift_dates__shift_date_0=2018-07-03&shift_dates__shift_date_1=2018-07-03'
+              `shift_dates__shift_date_0=${yesterdayFormatDate}&shift_dates__shift_date_1=${yesterdayFormatDate}`
           },
           {
             label: 'Today',
             query:
-              'shift_dates__shift_date_0=2018-07-04&shift_dates__shift_date_1=2018-07-04'
+              `shift_dates__shift_date_0=${todayFormatDate}&shift_dates__shift_date_1=${todayFormatDate}`
           },
           {
             label: 'Tomorrow',
             query:
-              'shift_dates__shift_date_0=2018-07-05&shift_dates__shift_date_1=2018-07-05'
+              `shift_dates__shift_date_0=${tomorrowFormatDate}&shift_dates__shift_date_1=${tomorrowFormatDate}`
           }
         ],
         key: 'shift_dates.shift_date',
@@ -207,7 +207,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
+          endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'provider_representative'
@@ -215,56 +215,18 @@ const list = {
       {
         key: 'active_states',
         label: 'State',
-        options: [
-          {
-            value: 10,
-            label: 'New'
-          },
-          {
-            value: 20,
-            label: 'Confirmed'
-          },
-          {
-            value: 30,
-            label: 'Filled'
-          },
-          {
-            value: 40,
-            label: 'On-Hold'
-          },
-          {
-            value: 50,
-            label: 'Active'
-          },
-          {
-            value: 60,
-            label: 'Completed'
-          }
-        ],
+        data: {
+          value: ['name_after_activation', 'name_before_activation'],
+          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=hr.job',
+          key: 'number'
+        },
         query: 'active_states',
         default: null,
-        type: 'select'
-      },
-      {
-        key: 'published',
-        label: 'Published',
-        options: [
-          {
-            value: 'True',
-            label: 'True'
-          },
-          {
-            value: 'False',
-            label: 'False'
-          }
-        ],
-        query: 'published',
-        default: null,
-        type: 'select'
+        type: 'related'
       },
       {
         key: 'customer_company',
-        label: 'Customer company',
+        label: 'Client',
         type: 'related',
         data: {
           value: '__str__',
@@ -1190,7 +1152,7 @@ const formadd = [
           },
           {
             key: 'work_start_date',
-            default: moment().tz('Australia/Sydney'),
+            default: todayFormatDate,
             type: 'datepicker',
             templateOptions: {
               required: false,

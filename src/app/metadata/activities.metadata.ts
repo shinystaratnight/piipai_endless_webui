@@ -1,3 +1,5 @@
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+
 const list = {
   list: {
     list: 'activity',
@@ -138,15 +140,15 @@ const list = {
         list: [
           {
             label: 'Yesterday',
-            query: 'starts_at_0=2018-07-03&starts_at_1=2018-07-03'
+            query: `starts_at_0=${yesterdayFormatDate}&starts_at_1=${yesterdayFormatDate}`
           },
           {
             label: 'Today',
-            query: 'starts_at_0=2018-07-04&starts_at_1=2018-07-04'
+            query: `starts_at_0=${todayFormatDate}&starts_at_1=${todayFormatDate}`
           },
           {
             label: 'Tomorrow',
-            query: 'starts_at_0=2018-07-05&starts_at_1=2018-07-05'
+            query: `starts_at_0=${tomorrowFormatDate}&starts_at_1=${tomorrowFormatDate}`
           }
         ],
         key: 'starts_at',
@@ -167,15 +169,15 @@ const list = {
         list: [
           {
             label: 'Yesterday',
-            query: 'ends_at_0=2018-07-03&ends_at_1=2018-07-03'
+            query: `ends_at_0=${yesterdayFormatDate}&ends_at_1=${yesterdayFormatDate}`
           },
           {
             label: 'Today',
-            query: 'ends_at_0=2018-07-04&ends_at_1=2018-07-04'
+            query: `ends_at_0=${todayFormatDate}&ends_at_1=${todayFormatDate}`
           },
           {
             label: 'Tomorrow',
-            query: 'ends_at_0=2018-07-05&ends_at_1=2018-07-05'
+            query: `ends_at_0=${tomorrowFormatDate}&ends_at_1=${tomorrowFormatDate}`
           }
         ],
         key: 'ends_at',
