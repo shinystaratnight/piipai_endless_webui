@@ -267,14 +267,14 @@ const list = {
         type: 'related'
       },
       {
-        key: 'status',
+        key: 'active_states',
         label: 'Status',
         data: {
           value: ['name_after_activation', 'name_before_activation'],
           endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact',
           key: 'number'
         },
-        query: 'status',
+        query: 'active_states',
         default: null,
         type: 'related'
       },
