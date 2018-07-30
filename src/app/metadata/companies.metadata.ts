@@ -201,7 +201,7 @@ const list = {
       type: 'static',
       templateOptions: {
         required: false,
-        label: 'Days To NET Days',
+        label: 'Terms of Payment',
         type: 'static'
       },
       read_only: true
@@ -632,7 +632,7 @@ const form = [
                     type: 'select',
                     templateOptions: {
                       required: false,
-                      label: 'Days To NET Days',
+                      label: 'Terms of Payment',
                       type: 'select',
                       options: [
                         {
@@ -645,7 +645,7 @@ const form = [
                         },
                         {
                           value: 'days',
-                          label: 'Days'
+                          label: 'NET Days'
                         },
                         {
                           value: 'days_eom',
