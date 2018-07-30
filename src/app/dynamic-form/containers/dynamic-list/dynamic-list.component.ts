@@ -1497,6 +1497,12 @@ export class DynamicListComponent implements
         this.editEndpoint,
         this.data.results.find((el) => el.id === e.el.rowId)
       );
+
+      const arr: string[] = endpoint.split('/');
+      const lastElement = arr.pop();
+
+      id = lastElement
+      endpoint = [...arr, ''].join('/');
     } else {
       endpoint = e.el.endpoint || this.endpoint;
       if (e.el.notParsedEndpoint && e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/') {
