@@ -111,6 +111,8 @@ export class FormDatepickerComponent
         if (mode === 'view') {
           this.viewMode = true;
           this.editMode = false;
+          this.date = '';
+          this.time = '';
 
           this.group.get(this.key).patchValue(undefined);
         } else {
@@ -156,6 +158,18 @@ export class FormDatepickerComponent
   public identifyDevice() {
     let deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
     return deviceNamesReg.test(navigator.userAgent.toLowerCase());
+  }
+
+  public setDatepickerDate() {
+    if (this.init) {
+      this.$(this.d.nativeElement).datebox('setTheDate', this.date);
+    }
+  }
+
+  public setTimepickerTime() {
+    if (this.init) {
+      this.$(this.t.nativeElement).datebox('setTheDate', this.time);
+    }
   }
 
   public ngAfterViewInit() {
@@ -246,6 +260,7 @@ export class FormDatepickerComponent
       if (date) {
         if (!this.date) {
           this.date = date.format(this.dateFormat);
+          this.setDatepickerDate();
         }
         this.group.get(this.key).patchValue(date.format('YYYY-MM-DD'));
         this.emitChanges();
@@ -254,9 +269,11 @@ export class FormDatepickerComponent
       if (date) {
         if (!this.date) {
           this.date = date.format(this.dateFormat);
+          this.setDatepickerDate();
         }
         if (!this.time) {
           this.time = date.format(this.timeFormat);
+          this.setTimepickerTime();
         }
         this.group.get(this.key).patchValue(date.format());
         this.emitChanges()

@@ -4,6 +4,7 @@ import {
   EventEmitter,
   OnInit,
   OnDestroy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
@@ -37,7 +38,8 @@ export class FormTabsComponent implements OnInit, OnDestroy {
   @Output() public buttonAction = new EventEmitter();
 
   constructor(
-    private formService: FormService
+    private formService: FormService,
+    private cd: ChangeDetectorRef,
   ) {}
 
   public ngOnInit() {
@@ -47,6 +49,8 @@ export class FormTabsComponent implements OnInit, OnDestroy {
 
     this.modeSubscription = form.mode.subscribe((mode) => {
       this.mode = mode;
+
+      this.cd.markForCheck();
     });
 
     this.saveSubscription = form.saveProcess.subscribe((saving) => {
@@ -68,6 +72,8 @@ export class FormTabsComponent implements OnInit, OnDestroy {
   }
 
   public changeMode(mode: string) {
+    this.mode = mode;
+
     this.formService.changeModeOfForm(this.formId, mode);
   }
 
