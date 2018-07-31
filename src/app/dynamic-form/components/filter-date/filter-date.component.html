@@ -1,44 +1,28 @@
-<div class="filter-element" [class.active]="!isCollapsed">
-  <label class="filter-label" [class.active]="!isCollapsed">
+<div class="filter-element">
+  <label class="filter-label">
     {{config.label}}
-    <!-- <i
-      fa
-      class="p-2 ml-auto"
-      [name]="icons[theme][isCollapsed]"
-      [border]=false
-      (click)="isCollapsed = !isCollapsed"
-      [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
-      [attr.aria-expanded]="!isCollapsed"
-      style="cursor: pointer"></i> -->
-    <i
+    <i class="text-danger ml-1" style="cursor: pointer"
       *ngIf="query"
-      fa
-      class="text-danger ml-1"
-      [name]="'times-circle'"
-      [border]="true"
-      style="cursor: pointer"
-      (click)="resetFilter()"></i>
+      fa [name]="'times-circle'"
+      (click)="resetFilter()">
+    </i>
   </label>
-  <div [ngbCollapse]="isCollapsed" class="filter-date-wrapper">
+  <div class="filter-date-wrapper">
     <ul class="list-inline d-flex justify-content-between my-1">
-      <li
+      <li style="cursor: pointer"
         *ngFor="let item of config.list"
         [class.text-primary]="query === item.query"
-        style="cursor: pointer"
         (click)="selectQuery(item.query)">
           {{item.label}}
       </li>
     </ul>
 
     <div class="input-group datepicker" [class.mb-1]="!l" *ngFor="let input of config.input; let l = last">
-      <input
-        class="form-control filter-date"
-        [class.active]="data[input.query]"
+      <input class="form-control filter-date"
         #d
-        data-role="datebox"
+        [class.active]="data[input.query]"
         [attr.name]="input.query"
-        [(ngModel)]="data[input.query]"
-        (ngModelChange)="onChange()">
+        [(ngModel)]="data[input.query]">
       <div class="placeholder">
          {{input.label}}
       </div>
