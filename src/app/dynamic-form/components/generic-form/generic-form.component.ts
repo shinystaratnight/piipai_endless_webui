@@ -141,7 +141,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log(this);
     if (this.endpoint.indexOf('candidate_fill')) {
       this.candidateFill = true;
     }
