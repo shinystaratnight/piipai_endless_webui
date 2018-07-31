@@ -394,9 +394,6 @@ const form = [
                   {
                     endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
                     doNotChoice: true,
-                    add_metadata_query: {
-                      fieldsets_type: 'contact'
-                    },
                     templateOptions: {
                       label: 'Candidate Contact',
                       add: true,

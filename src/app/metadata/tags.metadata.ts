@@ -73,9 +73,12 @@ const form = [
     many: true,
     type: 'related',
     endpoint: '/ecore/api/v2/core/tags/',
-    saveRelated: {
-      get: 'children',
-      set: 'parent',
+    update: {
+      getValue: 'children',
+      setValue: {
+        field: 'parent',
+        value: '{id}'
+      },
     },
     hideIfNull: true,
     templateOptions: {

@@ -146,7 +146,6 @@ export class FormDatepickerComponent
   public setInitValue(moment) {
     let type = this.config.templateOptions.type;
 
-
     if (this.config.value || this.group.get(this.key).value) {
       let data = this.config.value ? this.config.value : this.group.get(this.key).value;
       console.log(data);
