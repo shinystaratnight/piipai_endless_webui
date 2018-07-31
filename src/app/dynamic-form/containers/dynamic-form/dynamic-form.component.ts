@@ -84,7 +84,12 @@ export class DynamicFormComponent implements OnInit {
     }
     setTimeout(() => {
       if (e.el && e.el.formData) {
-        if ((e.type === 'change' || e.type === 'create') && e.el && e.el.key) {
+        if (
+          (e.type === 'change' || e.type === 'create' || e.type === 'blur')
+          && e.el
+          && e.el.key
+          && !e.el.key.includes('address')
+        ) {
           const newData = this.generateData(e.el.key, e.el.formData.getValue().data, e);
           this.fullData = newData;
           if (this.hiddenFields && this.hiddenFields.observers.indexOf(key) > -1) {

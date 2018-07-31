@@ -48,10 +48,10 @@ export interface Field {
     visible?: boolean
   };
   checkObject?: any;
-  saveRelated?: any;
   values?: any;
   related?: any;
   readonly?: any;
+  update?: any;
   templateOptions?: {
     label?: string;
     type?: string;

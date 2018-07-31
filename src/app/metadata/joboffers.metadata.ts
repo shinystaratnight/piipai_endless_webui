@@ -14,11 +14,26 @@ const list = {
       {
         content: [
           {
-            values: { '0': 'Undefined', '1': 'Accepted', '2': 'Cancelled' },
+            values: {
+              0: 'minus-circle',
+              1: 'check-circle',
+              2: 'times-circle',
+              null: 'minus-circle'
+            },
+            color: {
+              1: 'danger',
+              2: 'success',
+            },
+            type: 'icon',
+            field: 'status'
+          },
+          {
+            values: { 0: 'Undefined', 1: 'Accepted', 2: 'Cancelled' },
             field: 'status',
             type: 'select'
           }
         ],
+        delim: ' ',
         name: 'status',
         sort_field: 'status',
         label: 'Status',
@@ -200,9 +215,9 @@ const formset = {
           { value: 2, label: 'Cancelled' }
         ],
         values: {
-          '0': 'minus-circle',
-          '1': 'check-circle',
-          '2': 'times-circle',
+          0: 'minus-circle',
+          1: 'check-circle',
+          2: 'times-circle',
           null: 'minus-circle'
         },
         label: 'Status',
@@ -266,16 +281,16 @@ const formset = {
         content: [
           {
             values: {
-              '0': 'minus-circle',
-              '1': 'check-circle',
-              '2': 'times-circle',
+              0: 'minus-circle',
+              1: 'check-circle',
+              2: 'times-circle',
               null: 'minus-circle'
             },
             type: 'icon',
             field: 'status'
           },
           {
-            values: { '0': 'Undefined', '1': 'Accepted', '2': 'Cancelled' },
+            values: { 0: 'Undefined', 1: 'Accepted', 2: 'Cancelled' },
             type: 'select',
             field: 'status'
           }

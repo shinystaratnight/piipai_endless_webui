@@ -29,6 +29,22 @@ interface HiddenFields {
   observers: string[];
 }
 
+interface UpdateRelatedFieldConfig {
+  before?: boolean;
+  endpoint?: string;
+  getValue: string;
+  setValue: {
+    field: string;
+    value: string;
+  };
+  data?: any;
+}
+
+interface UpdateDataInfo {
+  config: UpdateRelatedFieldConfig[];
+  requests?: any[];
+}
+
 @Component({
   selector: 'generic-form',
   templateUrl: 'generic-form.component.html'
@@ -36,125 +52,73 @@ interface HiddenFields {
 
 export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
-  @Input()
-  public endpoint: string = '';
-
-  @Input()
-  public data = {};
-
-  @Input()
-  public modal: boolean;
-
-  @Input()
-  public title: boolean;
-
-  @Input()
-  public needData: boolean = true;
-
-  @Input()
-  public response: any = {};
-
-  @Input()
-  public errors = {};
-
-  @Input()
-  public relatedField = {};
-
-  @Input()
-  public form: any;
-
-  @Input()
-  public id: string;
-
-  @Input()
-  public commonFields: string;
-
-  @Input()
-  public hide: boolean;
-
-  @Input()
-  public edit: boolean;
-
-  @Input()
-  public showResponse: boolean = false;
-
-  @Input()
-  public mode: string;
-
-  @Input()
-  public delay: boolean;
-
-  @Input()
-  public metadataQuery: string;
-
+  @Input() public modal: boolean;
+  @Input() public title: boolean;
+  @Input() public form: any;
+  @Input() public id: string;
+  @Input() public commonFields: string;
+  @Input() public hide: boolean;
+  @Input() public edit: boolean;
+  @Input() public mode: string;
+  @Input() public delay: boolean;
+  @Input() public metadataQuery: string;
   @Input() public path: string;
 
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  @Input() public endpoint: string = '';
+  @Input() public data = {};
+  @Input() public needData: boolean = true;
+  @Input() public response: any = {};
+  @Input() public errors = {};
+  @Input() public relatedField = {};
+  @Input() public showResponse: boolean = false;
 
-  @Output()
-  public buttonAction: EventEmitter<any> = new EventEmitter();
+  @Output() public event: EventEmitter<any> = new EventEmitter();
+  @Output() public buttonAction: EventEmitter<any> = new EventEmitter();
+  @Output() public redirect: EventEmitter<any> = new EventEmitter();
+  @Output() public responseForm: EventEmitter<any> = new EventEmitter();
+  @Output() public errorForm: EventEmitter<any> = new EventEmitter();
+  @Output() public str: EventEmitter<any> = new EventEmitter();
+  @Output() public modeEvent: EventEmitter<any> = new EventEmitter();
 
-  @Output()
-  public redirect: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public responseForm: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public errorForm: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public str: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public modeEvent: EventEmitter<any> = new EventEmitter();
-
-  public metadata: Field[] = [];
-  public metadataError = [];
-  public sendData = null;
   public currentEndpoint: string;
   public currentId: string;
+  public formId: number;
+  public metadata: Field[] = [];
+
+  public hasTabs: boolean;
+  public candidateFill: boolean;
+  public formData: BehaviorSubject<any>;
+  public modeBehaviorSubject: BehaviorSubject<string>;
+
+  public metadataError = [];
   public splitElements: any[] = [];
-  public show: boolean = false;
+  public showForm: boolean = false;
   public editForm: boolean = false;
-  public formObject: any;
   public hiddenFields: HiddenFields = {
     elements: [],
     keys: [],
     observers: []
   };
-  public formData: BehaviorSubject<any>;
-  public modeBehaviorSubject: BehaviorSubject<string>;
-  public hasTabs: boolean;
-
   public workflowEndpoints = {
     state: `/ecore/api/v2/core/workflownodes/`,
     app: `/ecore/api/v2/apps/`
   };
-
+  public pictures = {
+    '/ecore/api/v2/core/contacts/': '__str__',
+    '/ecore/api/v2/candidate/candidatecontacts/': '__str__',
+  };
   public workflowData = <any> {
     workflow: null,
     number: null,
     company: null
   };
-
   public replaceElements: Field[] = [];
+  public delayData = {};
 
   public format = new FormatString();
 
-  public delayData = {};
-  public saveRelatedData: Array<{ get: string, set: string }> = [];
-  public delayRequests: any[];
-
-  public candidateFill: boolean;
-
-  public pictures = {
-    '/ecore/api/v2/core/contacts/': '__str__',
-    '/ecore/api/v2/candidate/candidatecontacts/': '__str__',
-  };
-
-  public formId: number;
+  public updateDataBeforeSendForm: UpdateDataInfo;
+  public updateDataAfterSendForm: UpdateDataInfo;
 
   public checkObject: any = {};
 
@@ -165,6 +129,15 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     private formService: FormService,
   ) {
     this.subscriptions = [];
+
+    this.updateDataAfterSendForm = {
+      config: [],
+      requests: []
+    };
+    this.updateDataBeforeSendForm = {
+      config: [],
+      requests: []
+    };
   }
 
   public ngOnInit() {
@@ -253,15 +226,21 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     };
 
     return (el: Field) => {
-      if (el.key === 'timeline' || (el.endpoint &&  el.endpoint === '/ecore/api/v2/core/workflowobjects/')) {
+      if (
+        el.key === 'timeline'
+        || (el.endpoint &&  el.endpoint === '/ecore/api/v2/core/workflowobjects/')
+      ) {
         el.timelineSubject = timelineSubject;
       }
+
       if (el.type === 'tabs') {
         this.hasTabs = true;
       }
+
       if (el.key || el.type === 'list') {
         el = Object.assign(el, props);
       }
+
       if (el.showIf && el.showIf.length) {
         if (this.hiddenFields.keys.indexOf(el.key) === -1) {
           this.hiddenFields.keys.push(el.key);
@@ -270,14 +249,21 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
           el.hidden = new BehaviorSubject(true);
         }
       }
+
       if (el.key && el.checkObject) {
         this.checkObject[el.key] = el.checkObject;
       }
+
       if (el.key && el.type === 'related' && el.useOptions) {
         this.getRalatedData(this.metadata, el.key, el.endpoint, {}, '?limit=-1');
       }
-      if (el.key && el.saveRelated) {
-        this.saveRelatedData.push(el.saveRelated);
+
+      if (el.key && el.update) {
+        if (el.update.before) {
+          this.updateDataBeforeSendForm.config.push(el.update);
+        } else {
+          this.updateDataAfterSendForm.config.push(el.update);
+        }
       }
     };
   }
@@ -385,19 +371,19 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
             if (this.id) {
               this.editForm = true;
             }
-            this.show = false;
+            this.showForm = false;
             if (this.needData) {
               this.getDataForForm(this.endpoint, this.id);
               this.updateElements(this.metadata, 'id', 'list', this.id);
               this.updateElements(this.metadata, 'editForm', undefined, true);
             } else {
-              this.show = true;
+              this.showForm = true;
             }
           } else {
             this.str.emit({
               str: 'Add'
             });
-            this.show = true;
+            this.showForm = true;
             this.checkFormInfoElement(this.metadata);
           }
         },
@@ -405,7 +391,10 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   public parseCheckObject(data) {
-    if (this.endpoint === '/ecore/api/v2/core/companycontacts/') {
+    if (
+      this.endpoint === '/ecore/api/v2/core/companycontacts/'
+      || this.endpoint === '/ecore/api/v2/candidate/candidatecontacts/'
+    ) {
       const keys = Object.keys(this.checkObject);
       if (keys.length) {
         const formatString = new FormatString();
@@ -432,15 +421,28 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
                 .map((param) => `${param}=${query[param]}`)
                 .join('&')
             ).subscribe((res) => {
+              console.log(this);
               if (res.count) {
-                const errors = {
-                  [key]: [
-                    this.checkObject[key].error,
-                    `${res.results[0].__str__}`,
-                    `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change`, //tslint:disable-line
-                    Object.assign(res.results[0].company_contact, {endpoint: this.endpoint})
-                  ]
-                };
+                let errors;
+                if (this.endpoint === '/ecore/api/v2/core/companycontacts/') {
+                  errors = {
+                    [key]: [
+                      this.checkObject[key].error,
+                      `${res.results[0].__str__}`,
+                      `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change`, //tslint:disable-line
+                      Object.assign(res.results[0].company_contact, {endpoint: this.endpoint})
+                    ]
+                  };
+                } else if (this.endpoint === '/ecore/api/v2/candidate/candidatecontacts/') {
+                  errors = {
+                    [key]: [
+                      this.checkObject[key].error,
+                      `${res.results[0].__str__}`,
+                      `${this.path || '/candidate/candidatecontacts/'}${res.results[0].id}/change`, //tslint:disable-line
+                      Object.assign(res.results[0], {endpoint: this.endpoint})
+                    ]
+                  };
+                }
                 this.updateErrors(this.errors, errors, this.response);
               } else {
                 this.updateErrors(this.errors, { [key]: '  ' }, this.response);
@@ -508,7 +510,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         this.checkRuleElement(this.metadata);
 
         this.addCustomTemplates(this.metadata, data);
-        this.show = true;
+        this.showForm = true;
         const formData = new BehaviorSubject({ data });
         this.updateFormData(this.metadata, formData);
         this.checkFormInfoElement(this.metadata);
@@ -522,9 +524,9 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
   public fillingForm(metadata, data) {
     metadata.forEach((el) => {
-      if (el.saveRelated) {
+      if (el.update) {
         const value = this.getValueOfData(data, el.key, metadata, {});
-        el.saveRelated['data'] =
+        el.update['data'] =
           Array.isArray(value) && value.length ? value.map((el) => el.id) : value;
       }
 
@@ -584,7 +586,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     });
   }
 
-  public getValueOfData(data, key, obj, metadata, update = false) {
+  public getValueOfData(data, key, obj, metadata?, update = false) {
     let keys = key.split('.');
     let prop = keys.shift();
     if (keys.length === 0) {
@@ -654,40 +656,53 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     return this.service.getAll(endpoint + id + '/');
   }
 
-  public createDelayRequests(data: any) {
-    this.delayRequests = [];
+  public createUpdateRequests(data: any, info: UpdateDataInfo) {
+    const store = {};
+    info.config.forEach((config: UpdateRelatedFieldConfig) => {
+      const currentValue = this.getValueOfData(data, config.getValue, {});
 
-    this.saveRelatedData.forEach((field: {get: string, set: string, data: any}) => {
-      const target = this.getValueOfData(data, field.get, {}, this.metadata);
-
-      if (Array.isArray(target)) {
-        const addArray = target.filter((a) => !field.data.find((b) => a === b));
-        const removeArray = field.data.filter((a) => !target.find((b) => a === b));
-
-        if (addArray.length) {
-          addArray.forEach(
-            (el) => this.delayRequests.push(this.createRelateRequest(el, field, data.id))
-          );
+      if (config.data !== currentValue) {
+        let endpoint;
+        if (config.endpoint) {
+          endpoint = this.format.format(config.endpoint, data);
+          store[endpoint] = store[endpoint] || {};
+        } else if (!Array.isArray(currentValue)) {
+          endpoint = `${this.endpoint}${data.id}/`;
+          store[endpoint] = store[endpoint] || {};
         }
 
-        if (removeArray) {
-          removeArray.forEach(
-            (el) => this.delayRequests.push(this.createRelateRequest(el, field, null))
-          );
-        }
+        if (Array.isArray(currentValue)) {
+          console.log(config);
+          const addArray = currentValue.filter((a) => !config.data.find((b) => a === b));
+          const removeArray = config.data.filter((a) => !currentValue.find((b) => a === b));
+          const value = this.format.format(config.setValue.value, data);
 
-      } else {
-        if (target !== field.data) {
-          this.delayRequests.push(this.createRelateRequest(target, field, data.id));
+          if (addArray.length) {
+            addArray.forEach((el) => {
+              const end = `${this.endpoint}${el}/`;
+              store[end] = {...store[end], [config.setValue.field]: value};
+            });
+          }
+
+          if (removeArray) {
+            removeArray.forEach((el) => {
+              const end = `${this.endpoint}${el}/`;
+              store[end] = {...store[end], [config.setValue.field]: null};
+            });
+          }
         } else {
-          this.delayRequests.push(this.createRelateRequest(target, field, null));
+          store[endpoint] = {...store[endpoint], [config.setValue.field]: currentValue};
         }
       }
     });
+
+    info.requests = Object.keys(store).map((el) => {
+      return this.createUpdateRequest(el, store[el]);
+    });
   }
 
-  public createRelateRequest(id: string, field, data: any) {
-    return this.service.updateForm(this.endpoint + id + '/', { [field.set]: data });
+  public createUpdateRequest(endpoint: string, data: any) {
+    return this.service.updateForm(endpoint, data);
   }
 
   public checkExistValue(target: string[], value: string) {
@@ -700,9 +715,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     const newData = this.form
-      ? Object.assign({}, data, this.form)
+      ? {...data, ...this.form}
       : data || {};
-    this.sendData = newData;
 
     if (this.response.message) {
       this.response.message = '';
@@ -714,18 +728,35 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       return;
     }
 
-    if (this.saveRelatedData) {
-      this.createDelayRequests(newData);
+    if (this.updateDataAfterSendForm.config.length) {
+      this.createUpdateRequests(newData, this.updateDataAfterSendForm);
     }
 
+    if (this.updateDataBeforeSendForm.config.length) {
+      this.createUpdateRequests(newData, this.updateDataBeforeSendForm);
+
+      const subscription = Observable.forkJoin(...this.updateDataBeforeSendForm.requests)
+        .subscribe(() => {
+          this.sendForm(newData);
+        });
+
+      this.subscriptions.push(subscription);
+
+      return;
+    }
+
+    this.sendForm(newData);
+  }
+
+  public sendForm(data: any) {
     if (this.editForm || this.edit) {
       const endpoint = this.editForm
         ? `${this.endpoint}${(this.id ? this.id + '/' : '')}`
         : this.endpoint;
 
-      this.saveForm(endpoint, newData, true);
+      this.saveForm(endpoint, data, true);
     } else {
-      this.saveForm(this.endpoint, newData);
+      this.saveForm(this.endpoint, data);
     }
   }
 
@@ -758,8 +789,8 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   public responseHandler(response: any, sendData: any) {
     this.formService.getForm(this.formId).setSaveProcess(false);
     this.parseResponse(response);
-    if (this.delayRequests && this.delayRequests.length) {
-      const subscription = Observable.forkJoin(...this.delayRequests)
+    if (this.updateDataAfterSendForm.requests.length) {
+      const subscription = Observable.forkJoin(...this.updateDataAfterSendForm.requests)
         .finally(() => {
           this.event.emit({
             type: 'sendForm',
@@ -782,10 +813,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   public parseError(errors) {
     if (errors) {
       if (errors.register) {
-        this.redirect.emit({
-          field: errors.register,
-          value: this.sendData.username
-        });
+        this.redirect.emit();
         return;
       }
     }

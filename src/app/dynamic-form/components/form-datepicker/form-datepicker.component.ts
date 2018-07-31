@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
 import moment from 'moment-timezone';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { FormatString } from '../../../helpers/format';
 
 @Component({
   selector: 'form-datepicker',
@@ -40,6 +41,7 @@ export class FormDatepickerComponent
   public $: any;
   public mobileDevice: boolean;
   public displayValue: string;
+  public formData: any;
 
   public dateFormat: string = 'DD/MM/YYYY';
   public datetimeFormat: string = 'DD/MM/YYYY hh:mm A';
@@ -63,10 +65,12 @@ export class FormDatepickerComponent
   }
 
   public ngOnInit() {
+    console.log(this);
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.setInitValue(moment);
     this.checkModeProperty();
     this.checkHiddenProperty();
+    this.checkFormData();
     this.mobileDevice = this.identifyDevice();
     this.createEvent();
     this.group.get(this.key).valueChanges.subscribe((val) => {
@@ -126,10 +130,25 @@ export class FormDatepickerComponent
     }
   }
 
+  public checkFormData() {
+    if (this.config.formData) {
+      const subscription = this.config.formData.subscribe((data) => {
+        if (data.key !== this.config.key && this.config.default && this.config.default.includes('{')) {
+          this.formData = data.data;
+          this.setInitValue(moment);
+        }
+      });
+
+      this.subscriptions.push(subscription);
+    }
+  }
+
   public setInitValue(moment) {
     let type = this.config.templateOptions.type;
+
     if (this.config.value || this.group.get(this.key).value) {
       let data = this.config.value ? this.config.value : this.group.get(this.key).value;
+      console.log(data);
       if (type === 'date' || type === 'datetime') {
         this.setDate(data, moment);
         this.displayValue = data ?
@@ -141,7 +160,15 @@ export class FormDatepickerComponent
         this.displayValue = data ? moment(data, 'HH:mm:ss').format('hh:mm A') : '-';
       }
     } else if (this.config.default && this.config.default !== '-') {
-      let data = this.config.default;
+      let data;
+
+      if (this.config.default.includes('{')) {
+        const format = new FormatString();
+        data = format.format(this.config.default, this.formData);
+      } else {
+        data = this.config.default;
+      }
+
       if (type === 'date' || type === 'datetime') {
         this.setDate(data, moment);
         this.displayValue = data ?
