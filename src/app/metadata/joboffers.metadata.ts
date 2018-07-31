@@ -389,7 +389,7 @@ const formset = {
         ],
         label: 'Actions',
         title: null,
-        delim: ' '
+        delim: null
       }
     ],
     list: 'joboffer',

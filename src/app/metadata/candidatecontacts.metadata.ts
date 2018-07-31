@@ -1,3 +1,5 @@
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+
 const list = {
   list: {
     list: 'candidatecontact',
@@ -347,11 +349,11 @@ const list = {
         list: [
           {
             label: 'Yesterday',
-            query: 'created_at_0=2018-07-03&created_at_1=2018-07-03'
+            query: `created_at_0=${yesterdayFormatDate}&created_at_1=${yesterdayFormatDate}`
           },
           {
             label: 'Today',
-            query: 'created_at_0=2018-07-04&created_at_1=2018-07-04'
+            query: `created_at_0=${todayFormatDate}&created_at_1=${todayFormatDate}`
           }
         ],
         key: 'created_at',
@@ -597,7 +599,7 @@ const form = [
       available: 'contact.is_available',
       address: 'contact.address.__str__',
       title: 'contact.__str__',
-      updated_at: 'updated_at',
+      updated_at: 'contact.__str__',
       picture: 'contact.picture'
     },
     type: 'info',
@@ -1120,7 +1122,7 @@ const form = [
                       label: 'Superannuation fund',
                       add: true,
                       delete: false,
-                      values: ['__str__'],
+                      values: ['__str__', 'name', 'membership_number'],
                       type: 'related',
                       edit: true
                     },
@@ -1128,6 +1130,30 @@ const form = [
                     type: 'related',
                     key: 'superannuation_fund',
                     many: false
+                  },
+                  {
+                    key: 'superannuation_fund.name',
+                    type: 'input',
+                    showIf: ['superannuation_fund.id'],
+                    default: '{superannuation_fund.name}',
+                    templateOptions: {
+                      required: false,
+                      label: 'Name',
+                      type: 'text'
+                    },
+                    read_only: true
+                  },
+                  {
+                    key: 'superannuation_fund.membership_number',
+                    type: 'input',
+                    showIf: ['superannuation_fund.id'],
+                    default: '{superannuation_fund.membership_number}',
+                    templateOptions: {
+                      required: false,
+                      label: 'Employer Membership Number',
+                      type: 'text'
+                    },
+                    read_only: true
                   },
                   {
                     key: 'super_member_number',

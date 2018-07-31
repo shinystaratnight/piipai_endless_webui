@@ -1,3 +1,5 @@
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+
 const list = {
   list: {
     list: 'timesheet',
@@ -282,15 +284,15 @@ const list = {
         list: [
           {
             label: 'Yesterday',
-            query: 'shift_started_at_0=2018-07-03&shift_started_at_1=2018-07-03'
+            query: `shift_started_at_0=${yesterdayFormatDate}&shift_started_at_1=${yesterdayFormatDate}`
           },
           {
             label: 'Today',
-            query: 'shift_started_at_0=2018-07-04&shift_started_at_1=2018-07-04'
+            query: `shift_started_at_0=${todayFormatDate}&shift_started_at_1=${todayFormatDate}`
           },
           {
             label: 'Tomorrow',
-            query: 'shift_started_at_0=2018-07-05&shift_started_at_1=2018-07-05'
+            query: `shift_started_at_0=${tomorrowFormatDate}&shift_started_at_1=${tomorrowFormatDate}`
           }
         ],
         key: 'shift_started_at',

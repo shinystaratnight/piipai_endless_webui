@@ -421,7 +421,7 @@ const job = {
         ],
         label: 'Actions',
         title: null,
-        delim: ' '
+        delim: null
       }
     ],
     buttons: [],
