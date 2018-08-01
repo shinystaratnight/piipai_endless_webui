@@ -545,7 +545,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   public parseUrl(queryParams, list) {
     this.fs.resetQueries(list);
-    let pagination = {};
     let sorted = {};
     let queryList = {
       filter: '',
@@ -568,19 +567,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
             endpoint: this.endpoint
           };
           queryList['filter'] += `${name.slice(0, name.indexOf('-'))}=${queryParams[el]}&`;
-        }
-        // else if (params[1] === 'p') {
-        //   let offset;
-        //   if (params[2] === 'page') {
-        //     pagination['page']
-        //       = ((queryParams[el] - 1) * this.limit > this.count && this.limit !== 1)
-        //         ? 1 : queryParams[el];
-        //     queryList['pagination']
-        //       = `limit=${(this.limit ? this.limit : 10)}&offset=${isNaN(this.limit * (pagination['page'] - 1)) ? 0 : //tslint:disable-line
-        //         this.limit * (pagination['page'] - 1)}`;
-        //   }
-        // }
-        else if (params[1] === 's') {
+        } else if (params[1] === 's') {
           let fields = queryParams[el].split(',');
           fields.forEach((elem) => {
             let order = elem[0] === '-' ? 'desc' : 'asc';
@@ -590,12 +577,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
         }
       }
     });
-    // table.limit = this.limit;
-    // table.offset = 0;
-    // let page = pagination['page'];
-    // if (page) {
-    //   table.offset = (page === 1) ? 0 : (page - 1) * this.limit;
-    // }
     table.sorted = sorted;
     Object.keys(queryList).forEach((el) => {
       if (el === 'filter') {

@@ -19,7 +19,7 @@ export class ListInfoComponent implements OnInit {
   public status: any[];
   public averageScore: any;
   public contactAvatar: string;
-  public job_title: string;
+  public job_title: string; //tslint:disable-line
   public company: string;
 
   public color: any;

@@ -27,7 +27,7 @@ import { GenericFormService } from './../../services';
 })
 
 export class DynamicListComponent implements
-  OnInit, OnChanges, OnDestroy, AfterContentChecked, AfterViewInit {
+  OnInit, OnChanges, OnDestroy, AfterContentChecked {
 
   @Input() public config: any;
   @Input() public data: any;
@@ -327,41 +327,6 @@ export class DynamicListComponent implements
 
   public ngAfterContentChecked() {
     this.checkOverfow();
-  }
-
-  public ngAfterViewInit() {
-    // if (this.datatable && !this.inForm) {
-    //   let listButtons: any = this.datatable.nativeElement.getElementsByClassName('list-buttons');
-    //   let filterWrapper: any =
-    //     this.datatable.nativeElement.getElementsByClassName('filter-wrapper');
-    //   let width: any = window.innerWidth;
-    //   let offsetTop;
-    //   if (listButtons && listButtons.length && width > 992) {
-    //     this.calcButton(offsetTop, listButtons, filterWrapper);
-    //     this.calcTable();
-    //   }
-
-    //   let resizeTimeout;
-    //   window.addEventListener('resize', () => {
-    //     if (!resizeTimeout) {
-    //       resizeTimeout = setTimeout(() => {
-    //         resizeTimeout = null;
-    //         if (listButtons && listButtons.length && window.innerWidth > 992) {
-    //           this.calcButton(offsetTop, listButtons, filterWrapper);
-    //           this.calcTable();
-    //         } else {
-    //           filterWrapper[0].style.top = 0;
-    //           filterWrapper[0].style.height = 'auto';
-
-    //           if (this.tableWrapper) {
-    //             let tableWrapperEl = this.tableWrapper.nativeElement;
-    //             tableWrapperEl.style.maxHeight = 'auto';
-    //           }
-    //         }
-    //       }, 66);
-    //     }
-    //   }, false);
-    // }
   }
 
   public parseMultipleFilter(filters: any[]): void {
@@ -1492,6 +1457,7 @@ export class DynamicListComponent implements
   public editForm(e) {
     let endpoint;
     let id;
+    let withoutId;
     if (this.editEndpoint) {
       endpoint = this.format(
         this.editEndpoint,
@@ -1501,26 +1467,31 @@ export class DynamicListComponent implements
       const arr: string[] = endpoint.split('/');
       const lastElement = arr.pop();
 
-      id = lastElement
+      id = lastElement;
       endpoint = [...arr, ''].join('/');
     } else {
       endpoint = e.el.endpoint || this.endpoint;
-      if (e.el.notParsedEndpoint && e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/') {
+      if (
+        e.el.notParsedEndpoint
+        && e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/'
+      ) {
         const arr: string[] = e.el.endpoint.split('/');
         arr.pop();
         const lastElement = arr.pop();
         if (lastElement === 'extend') {
           endpoint = [...arr, 'extend'].join('/');
+          withoutId = true;
         } else {
-          id = lastElement
+          id = lastElement;
           endpoint = [...arr, ''].join('/');
         }
       }
     }
+    console.log(endpoint);
     this.modalInfo = {};
     this.modalInfo.type = 'form';
     this.modalInfo.endpoint = endpoint;
-    this.modalInfo.id = id || e.el.rowId;
+    this.modalInfo.id = id || (!withoutId && e.el.rowId);
     this.modalInfo.mode = 'edit';
     this.modalInfo.edit = true;
     this.modalInfo.dontUseMetadataQuery = e.value === 'editModal';

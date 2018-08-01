@@ -52,8 +52,6 @@ interface UpdateDataInfo {
 
 export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
 
-  @Input() public modal: boolean;
-  @Input() public title: boolean;
   @Input() public form: any;
   @Input() public id: string;
   @Input() public commonFields: string;
@@ -526,7 +524,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       if (el.update) {
         const value = this.getValueOfData(data, el.key, metadata, {});
         el.update['data'] =
-          Array.isArray(value) && value.length ? value.map((el) => el.id) : value;
+          Array.isArray(value) && value.length ? value.map((item) => item.id) : value;
       }
 
       if (el.templateOptions) {

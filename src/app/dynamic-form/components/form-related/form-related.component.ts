@@ -241,8 +241,8 @@ export class FormRelatedComponent
           el.mode = new BehaviorSubject('view');
           el.read_only = true;
           if (el.query) {
-            Object.keys(el.query).forEach((query) => {
-              el.query[query] = format.format(el.query[query], this.formData);
+            Object.keys(el.query).forEach((param) => {
+              el.query[param] = format.format(el.query[param], this.formData);
             });
           }
         }

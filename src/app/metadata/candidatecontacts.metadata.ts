@@ -273,7 +273,7 @@ const list = {
         label: 'Status',
         data: {
           value: ['name_after_activation', 'name_before_activation'],
-          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact',
+          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact', //tslint:disable-line
           key: 'number'
         },
         query: 'active_states',
@@ -1154,18 +1154,6 @@ const form = [
                       type: 'text'
                     },
                     read_only: true
-                  },
-                  {
-                    key: 'super_member_number',
-                    type: 'input',
-                    showIf: ['superannuation_fund.id'],
-                    templateOptions: {
-                      required: false,
-                      label: 'Super Member Number',
-                      max: 63,
-                      type: 'text'
-                    },
-                    read_only: false
                   }
                 ],
                 width: 0.25

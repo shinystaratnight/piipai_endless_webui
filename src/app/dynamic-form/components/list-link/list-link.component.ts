@@ -83,9 +83,9 @@ export class ListLinkComponent implements OnInit {
 
       this.event.emit({
         target: 'form',
-        endpoint: endpoint,
+        endpoint,
         label: (<any> this.value[index]).__str__,
-        id: id
+        id
       });
       return;
     }

@@ -1,4 +1,8 @@
-<navigation [user]="user" [pages]="pagesList" (update)="updateNavigationList($event)"></navigation>
+<navigation
+  [user]="user"
+  [pages]="pagesList"
+  (update)="updateNavigationList($event)">
+</navigation>
 
 <div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
   <div *ngSwitchCase="'form'" class="form-page">
@@ -19,8 +23,6 @@
       *ngIf="!reload && !(pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' && pageData.pathData.id) && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'">
         <generic-form
           *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit' "
-          [title]="pageData.pathData.title"
-          [modal]="pageData.pathData.modal"
           [endpoint]="pageData.endpoint"
           [id]="pageData.pathData.id"
           [edit]="pageData.pathData.postfix"

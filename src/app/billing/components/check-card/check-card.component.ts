@@ -9,11 +9,11 @@ import { environment } from '../../../environment';
 
 const style = {
   base: {
-    color: '#32325d',
-    lineHeight: '18px',
-    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-    fontSmoothing: 'antialiased',
-    fontSize: '16px',
+    'color': '#32325d',
+    'lineHeight': '18px',
+    'fontFamily': '"Helvetica Neue", Helvetica, sans-serif',
+    'fontSmoothing': 'antialiased',
+    'fontSize': '16px',
     '::placeholder': {
       color: '#aab7c4'
     }
@@ -43,7 +43,7 @@ export class CheckCardComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.stripe = (<any> window).Stripe(process.env.STRIPE_PUBLIC_API_KEY || environment.STRIPE_PUBLIC_API_KEY); //tslint:disable-line
+    this.stripe = (<any> window).Stripe((<any> process.env).STRIPE_PUBLIC_API_KEY || environment.STRIPE_PUBLIC_API_KEY); //tslint:disable-line
     const elements = this.stripe.elements();
     this.card = elements.create('card', { style });
     this.card.mount('#card-element');

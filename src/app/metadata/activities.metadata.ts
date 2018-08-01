@@ -19,11 +19,11 @@ const list = {
         content: [
           {
             values: {
-              '1': 'Bottom',
-              '2': 'Low',
-              '3': 'Normal',
-              '4': 'High',
-              '5': 'Top'
+              1: 'Bottom',
+              2: 'Low',
+              3: 'Normal',
+              4: 'High',
+              5: 'Top'
             },
             field: 'priority',
             type: 'select'

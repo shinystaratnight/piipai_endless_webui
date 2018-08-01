@@ -3,7 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subject } from 'rxjs/Subject';
 
-import { SiteService, PageData, UserService, User, Role, NavigationService, SiteSettingsService } from '../../services/';
+import {
+  SiteService,
+  PageData,
+  UserService,
+  User,
+  Role,
+  NavigationService,
+  SiteSettingsService
+} from '../../services/';
 import { GenericFormService } from '../../dynamic-form/services/';
 import { CheckPermissionService, ToastrService, MessageType } from '../../shared/services/';
 
@@ -120,7 +128,7 @@ export class SiteComponent implements OnInit {
                 }
               }
             }
-          }
+          };
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
         } else if (pageData.pathData.path === '/profile/') {
