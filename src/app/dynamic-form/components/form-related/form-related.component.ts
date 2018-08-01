@@ -113,6 +113,7 @@ export class FormRelatedComponent
 
   public autocompleteDisplay: boolean;
   public currentQuery: string;
+  public currentId: string;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -378,7 +379,6 @@ export class FormRelatedComponent
                 }
               });
             }
-
             if (id) {
               this.getOptions.call(this, '', 0, false, this.setValue, id);
               if (this.config.read_only) {
@@ -1008,10 +1008,11 @@ export class FormRelatedComponent
       if (customQuery) {
         query += this.generateQuery(customQuery);
       }
-      if (query !== this.currentQuery
+      if ((query !== this.currentQuery || id !== this.currentId)
           && (!this.count || (this.count && offset < this.count && concat))) {
         this.lastElement += this.limit;
         this.currentQuery = query;
+        this.currentId = id;
         if (!id) {
           this.genericFormService.getByQuery(endpoint, query).subscribe(
             (res: any) => {

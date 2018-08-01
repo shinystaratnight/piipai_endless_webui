@@ -1476,7 +1476,7 @@ const formadd = [
         'first_name',
         'last_name',
         'email',
-        'phone_number',
+        'phone_mobile',
         'birthday',
         'address'
       ],
@@ -1552,6 +1552,7 @@ const formadd = [
     type: 'datepicker',
     showIf: ['contact.id'],
     default: '{contact.birthday}',
+    shouldUpdate: true,
     templateOptions: {
       required: true,
       label: 'Birthday',

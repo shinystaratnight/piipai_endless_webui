@@ -65,7 +65,6 @@ export class FormDatepickerComponent
   }
 
   public ngOnInit() {
-    console.log(this);
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.setInitValue(moment);
     this.checkModeProperty();
@@ -146,9 +145,8 @@ export class FormDatepickerComponent
   public setInitValue(moment) {
     let type = this.config.templateOptions.type;
 
-    if (this.config.value || this.group.get(this.key).value) {
+    if ((this.config.value || this.group.get(this.key).value) && !this.config.shouldUpdate) {
       let data = this.config.value ? this.config.value : this.group.get(this.key).value;
-      console.log(data);
       if (type === 'date' || type === 'datetime') {
         this.setDate(data, moment);
         this.displayValue = data ?
@@ -285,7 +283,7 @@ export class FormDatepickerComponent
   public updateDate(date) {
     if (this.config.templateOptions.type === 'date') {
       if (date) {
-        if (!this.date) {
+        if (!this.date || this.config.shouldUpdate) {
           this.date = date.format(this.dateFormat);
           this.setDatepickerDate();
         }
@@ -294,11 +292,11 @@ export class FormDatepickerComponent
       }
     } else if (this.config.templateOptions.type === 'datetime') {
       if (date) {
-        if (!this.date) {
+        if (!this.date || this.config.shouldUpdate) {
           this.date = date.format(this.dateFormat);
           this.setDatepickerDate();
         }
-        if (!this.time) {
+        if (!this.time || this.config.shouldUpdate) {
           this.time = date.format(this.timeFormat);
           this.setTimepickerTime();
         }
