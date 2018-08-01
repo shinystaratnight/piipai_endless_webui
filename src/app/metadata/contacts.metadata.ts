@@ -619,7 +619,6 @@ const form = [
 
 const formadd = [
   {
-    label: 'General',
     type: 'row',
     children: [
       {

@@ -46,7 +46,6 @@ const form = [
       },
       {
         key: 'break_started_at',
-        default: '2018-07-05T12:00:00+10:00',
         type: 'datepicker',
         templateOptions: {
           type: 'datetime',
@@ -57,7 +56,6 @@ const form = [
       },
       {
         key: 'break_ended_at',
-        default: '2018-07-05T12:30:00+10:00',
         type: 'datepicker',
         templateOptions: {
           type: 'datetime',
@@ -68,7 +66,6 @@ const form = [
       },
       {
         key: 'shift_ended_at',
-        default: '2018-07-05T15:30:00+10:00',
         type: 'datepicker',
         templateOptions: {
           type: 'datetime',
@@ -83,5 +80,6 @@ const form = [
 ];
 
 export const metadata = {
-  form
+  form,
+  list: {}
 };
