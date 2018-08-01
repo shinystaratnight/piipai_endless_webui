@@ -278,6 +278,7 @@ select.not-empty {
   }
 
   .modal-body {
+    padding-top: 40px;
     padding-bottom: 60px;
 
     border-radius: 0.5rem 0.5rem 0 0;
@@ -349,7 +350,7 @@ select.not-empty {
   align-items: flex-end;
   flex-wrap: wrap;
 
-  justify-content: space-around !important;
+  padding: 0 40px;
 
   border: none;
   border-bottom: 2px solid rgba(#e5e5e5, 0.8);
@@ -357,6 +358,7 @@ select.not-empty {
   .nav-link {
     padding: 6px;
     padding-bottom: 8px;
+    margin-right: 15px;
 
     font-size: 14px;
     line-height: 14px;

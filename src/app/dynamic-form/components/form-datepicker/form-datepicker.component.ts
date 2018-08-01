@@ -187,13 +187,21 @@ export class FormDatepickerComponent
 
   public setDatepickerDate() {
     if (this.init) {
-      this.$(this.d.nativeElement).datebox('setTheDate', this.date);
+      if (this.date) {
+        this.$(this.d.nativeElement).datebox('setTheDate', this.date);
+      } else {
+        this.$(this.d.nativeElement).datebox('refresh');
+      }
     }
   }
 
   public setTimepickerTime() {
     if (this.init) {
-      this.$(this.t.nativeElement).datebox('setTheDate', this.time);
+      if (this.time) {
+        this.$(this.t.nativeElement).datebox('setTheDate', this.time);
+      } else {
+        this.$(this.t.nativeElement).datebox('refresh');
+      }
     }
   }
 
@@ -325,6 +333,10 @@ export class FormDatepickerComponent
         date = moment(value);
       }
       this.updateDate(date);
+    } else if (!this.config.hide && this.config.shouldUpdate) {
+      this.date = '';
+      this.group.get(this.key).patchValue('');
+      this.setDatepickerDate();
     }
   }
 
@@ -337,6 +349,10 @@ export class FormDatepickerComponent
         time = moment(value, 'HH:mm:ss');
       }
       this.updateTime(time);
+    } else if (!this.config.hide && this.config.shouldUpdate) {
+      this.time = '';
+      this.group.get(this.key).patchValue('');
+      this.setTimepickerTime();
     }
   }
 

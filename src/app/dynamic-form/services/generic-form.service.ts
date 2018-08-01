@@ -39,7 +39,7 @@ export class GenericFormService {
     let headers = new Headers();
     this.updateHeaders(headers);
 
-    if (endpoint.includes('/submit')) {
+    if (endpoint.includes('/submit/')) {
       endpoint = 'submit';
     }
 

@@ -88,7 +88,7 @@ export class DynamicFormComponent implements OnInit {
           (e.type === 'change' || e.type === 'create' || e.type === 'blur')
           && e.el
           && e.el.key
-          && !e.el.key.includes('address')
+          && e.el.key !== 'address'
         ) {
           const newData = this.generateData(e.el.key, e.el.formData.getValue().data, e);
           this.fullData = newData;

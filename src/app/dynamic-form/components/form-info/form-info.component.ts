@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class FormInfoComponent implements OnInit, OnDestroy {
   public config: any;
   public group: any;
+  public errors: any;
 
   public picture: string;
   public available: boolean;

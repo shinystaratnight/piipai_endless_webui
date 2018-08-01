@@ -41,6 +41,13 @@
         [config]="getConfig('link')"
         [group]="group">
       </ng-container>
+
+      <ng-container *ngIf="errors">
+        <div class="text-danger mt-1" *ngIf="errors[config.values['link']]">
+          {{errors[config.values['link']]}}
+        </div>
+      </ng-container>
+
     </p>
 
     <div class="job-title" *ngIf="config && viewMode && client">{{client.short_name}}</div>
@@ -48,6 +55,12 @@
       <ng-container formElement
         [config]="getConfig('client')"
         [group]="group">
+      </ng-container>
+
+      <ng-container *ngIf="errors">
+        <div class="text-danger mt-1" *ngIf="errors[config.values['client']]">
+          {{errors[config.values['client']]}}
+        </div>
       </ng-container>
     </div>
 
@@ -86,10 +99,18 @@
         </span>
       </span>
     </h5>
-    <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
-      [config]="getConfig('title')"
-      [group]="group">
-    </ng-container>
+    <p>
+      <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
+        [config]="getConfig('title')"
+        [group]="group">
+      </ng-container>
+
+      <ng-container *ngIf="errors">
+        <div class="text-danger mt-1" *ngIf="errors[config.values['title']]">
+          {{errors[config.values['title']]}}
+        </div>
+      </ng-container>
+    </p>
 
     <ng-container formElement *ngIf="config && config.metadata['skill_title'] && !viewMode && !config.metadata['title_title']"
       [config]="getConfig('skill_title')"
