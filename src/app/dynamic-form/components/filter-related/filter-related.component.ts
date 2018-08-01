@@ -155,9 +155,10 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       }
       setTimeout(() => {
         if (!this.multiple) {
+          autocomplete.children[1].scrollTo({ top: 0 });
           autocomplete.children[0].focus();
         }
-      }, 50);
+      }, 150);
   }
 
   public resetList() {
