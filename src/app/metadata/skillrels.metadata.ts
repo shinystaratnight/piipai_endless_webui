@@ -40,14 +40,14 @@ const list = {
         content: [
           {
             values: {
-              '0': 'Inexperienced',
-              '2592000': '1 Month',
-              '7776000': '3 Months',
-              '15552000': '6 Months',
-              '31536000': '1 Year',
-              '63072000': '2 Years',
-              '94608000': '3 Years',
-              '157680000': '5 Years or more'
+              0: 'Inexperienced',
+              2592000: '1 Month',
+              7776000: '3 Months',
+              15552000: '6 Months',
+              31536000: '1 Year',
+              63072000: '2 Years',
+              94608000: '3 Years',
+              157680000: '5 Years or more'
             },
             field: 'prior_experience',
             type: 'select'
@@ -281,14 +281,14 @@ const formset = {
         content: [
           {
             values: {
-              '0': 'Inexperienced',
-              '2592000': '1 Month',
-              '7776000': '3 Months',
-              '15552000': '6 Months',
-              '31536000': '1 Year',
-              '63072000': '2 Years',
-              '94608000': '3 Years',
-              '157680000': '5 Years or more'
+              0: 'Inexperienced',
+              2592000: '1 Month',
+              7776000: '3 Months',
+              15552000: '6 Months',
+              31536000: '1 Year',
+              63072000: '2 Years',
+              94608000: '3 Years',
+              157680000: '5 Years or more'
             },
             type: 'select',
             field: 'prior_experience'

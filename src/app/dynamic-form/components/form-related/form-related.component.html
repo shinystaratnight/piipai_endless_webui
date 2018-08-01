@@ -173,7 +173,7 @@
         aria-controls="collapseExample"
         style="cursor: pointer"></i>
           {{config.templateOptions.label}}
-      <button *ngIf="(showButton || config.delay) && checkPermission('post')"
+      <button *ngIf="config.delay && checkPermission('post')"
         type="button"
         class="text-white btn btn-sm group-button ml-auto mr-2"
         (click)="addObject()">

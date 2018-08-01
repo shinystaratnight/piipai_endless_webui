@@ -132,7 +132,11 @@ export class FormDatepickerComponent
   public checkFormData() {
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((data) => {
-        if (data.key !== this.config.key && this.config.default && this.config.default.includes('{')) {
+        if (
+          data.key !== this.config.key
+          && this.config.default
+          && this.config.default.includes('{')
+        ) {
           this.formData = data.data;
           this.setInitValue(moment);
         }
@@ -309,7 +313,7 @@ export class FormDatepickerComponent
           this.setTimepickerTime();
         }
         this.group.get(this.key).patchValue(date.format());
-        this.emitChanges()
+        this.emitChanges();
       }
     }
   }

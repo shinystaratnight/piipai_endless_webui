@@ -207,7 +207,7 @@ export const metadata = {
   '/ecore/api/v2/acceptance-tests/acceptancetesttags/':
     acceptancetesttags.metadata,
   '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/':
-    acceptancetestworkflownodes.metadata, //tslint:disable-line,
+    acceptancetestworkflownodes.metadata,
   '/ecore/api/v2/skills/skillbaserates/': skillbaserates.metadata,
   'profile': profile.metadata
 };

@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import moment from 'moment-timezone';
 
 @Pipe({
-  name: 'dateFormat'
+  name: 'dateFormat' //tslint:disable-line
 })
 export class DateFormatPipe implements PipeTransform {
   public transform(value: string, format: string): number {

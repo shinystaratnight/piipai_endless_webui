@@ -11,8 +11,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { GenericFormService } from './../../services/generic-form.service';
-import { FilterService } from './../../services/filter.service';
+import { GenericFormService, FilterService } from './../../services/';
 import { SiteSettingsService } from '../../../services/site-settings.service';
 import { FormatString } from '../../../helpers/format';
 
@@ -341,12 +340,13 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
     if (this.config.data.endpoint.includes('{')) {
       const formatString = new FormatString();
-      let endpoint = formatString.format(this.config.data.endpoint, this.siteSettingsService.settings);
+      endpoint =
+        formatString.format(this.config.data.endpoint, this.siteSettingsService.settings);
       endpoint += `&number=${value}`;
       this.genericFormService.getAll(endpoint).subscribe(
         (res: any) => {
           if (res.results) {
-            this.item.displayValue = this.getValue(res.results[0], this.config.data.value);;
+            this.item.displayValue = this.getValue(res.results[0], this.config.data.value);
           }
         }
       );
@@ -437,7 +437,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     if (Array.isArray(value)) {
       value.forEach((el) => {
         result = result ? result : data[el];
-      })
+      });
     } else {
       result = data[value];
     }

@@ -30,6 +30,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public carrier_reserve: number; //tslint:disable-line
   public map: any;
   public client: any;
+  public link: string;
 
   public color: any;
   public colorAttr: string;

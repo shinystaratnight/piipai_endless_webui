@@ -6,11 +6,11 @@ const list = {
     label: 'Candidate Contact',
     highlight: {
       values: {
-        '1': 'lightgreen',
-        '2': '#dcdcdc',
-        '3': 'red',
-        '4': '#ff7f00',
-        '5': '#ff7f50'
+        1: 'lightgreen',
+        2: '#dcdcdc',
+        3: 'red',
+        4: '#ff7f00',
+        5: '#ff7f50'
       },
       field: 'color'
     },
@@ -171,8 +171,8 @@ const list = {
           {
             type: 'select',
             values: {
-              '1': 'Own Car',
-              '2': 'Public Transportation'
+              1: 'Own Car',
+              2: 'Public Transportation'
             },
             field: 'transportation_to_work'
           }

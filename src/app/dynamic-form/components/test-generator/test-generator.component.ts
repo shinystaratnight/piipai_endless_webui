@@ -26,7 +26,7 @@ export class TestGeneratorComponent implements OnInit {
 
     this.genericFormService
       .getAll(`${this.testEndpoint}${this.id}/`)
-      .subscribe(res => {
+      .subscribe((res) => {
         this.generateTestForm(res);
       });
   }

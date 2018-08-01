@@ -284,7 +284,7 @@ const list = {
         list: [
           {
             label: 'Yesterday',
-            query: `shift_started_at_0=${yesterdayFormatDate}&shift_started_at_1=${yesterdayFormatDate}`
+            query: `shift_started_at_0=${yesterdayFormatDate}&shift_started_at_1=${yesterdayFormatDate}` //tslint:disable-line
           },
           {
             label: 'Today',
@@ -292,7 +292,7 @@ const list = {
           },
           {
             label: 'Tomorrow',
-            query: `shift_started_at_0=${tomorrowFormatDate}&shift_started_at_1=${tomorrowFormatDate}`
+            query: `shift_started_at_0=${tomorrowFormatDate}&shift_started_at_1=${tomorrowFormatDate}` //tslint:disable-line
           }
         ],
         key: 'shift_started_at',

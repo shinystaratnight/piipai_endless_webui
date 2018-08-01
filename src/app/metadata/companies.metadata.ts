@@ -127,7 +127,7 @@ const list = {
         label: 'Status',
         data: {
           value: ['name_after_activation', 'name_before_activation'],
-          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel',
+          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel', //tslint:disable-line
           key: 'number'
         },
         query: 'status',

@@ -47,7 +47,7 @@ const formset = {
         sort_field: 'status',
         content: [
           {
-            values: { '0': 'Undefined', '1': 'Accepted', '2': 'Cancelled' },
+            values: { 0: 'Undefined', 1: 'Accepted', 2: 'Cancelled' },
             type: 'select',
             field: 'status'
           }

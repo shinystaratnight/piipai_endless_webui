@@ -144,7 +144,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     if (data && data.acceptance_test_questions) {
       const questions = data.acceptance_test_questions;
 
-      questions.forEach(question => {
+      questions.forEach((question) => {
         this.addQuestion(false, question);
 
         this.answers[question.id] = [];
@@ -158,7 +158,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     if (data && data.acceptance_test_answers) {
       const answers = data.acceptance_test_answers;
 
-      answers.forEach(answer => {
+      answers.forEach((answer) => {
         this.addAnswer(false, this.answers[data.id], answer);
       });
     }
@@ -176,7 +176,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     this.genericFormService[action](
       this.questionEndpoint + (update ? data.id + '/' : ''),
       data
-    ).subscribe(res => {
+    ).subscribe((res) => {
       const metadata = this.createMetadata('question', 'form', res);
       this.answers[res.id] = this.answers[res.id] || [];
 
@@ -209,7 +209,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     this.genericFormService[action](
       this.answerEndpoint + (update ? data.id + '/' : ''),
       data
-    ).subscribe(res => {
+    ).subscribe((res) => {
       const metadata = this.createMetadata('answer', 'form', res);
 
       this.answers[id].splice(index, 1, metadata);

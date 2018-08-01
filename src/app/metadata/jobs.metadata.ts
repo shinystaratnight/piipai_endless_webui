@@ -152,17 +152,17 @@ const list = {
           {
             label: 'Yesterday',
             query:
-              `shift_dates__shift_date_0=${yesterdayFormatDate}&shift_dates__shift_date_1=${yesterdayFormatDate}`
+              `shift_dates__shift_date_0=${yesterdayFormatDate}&shift_dates__shift_date_1=${yesterdayFormatDate}` //tslint:disable-line
           },
           {
             label: 'Today',
             query:
-              `shift_dates__shift_date_0=${todayFormatDate}&shift_dates__shift_date_1=${todayFormatDate}`
+              `shift_dates__shift_date_0=${todayFormatDate}&shift_dates__shift_date_1=${todayFormatDate}` //tslint:disable-line
           },
           {
             label: 'Tomorrow',
             query:
-              `shift_dates__shift_date_0=${tomorrowFormatDate}&shift_dates__shift_date_1=${tomorrowFormatDate}`
+              `shift_dates__shift_date_0=${tomorrowFormatDate}&shift_dates__shift_date_1=${tomorrowFormatDate}` //tslint:disable-line
           }
         ],
         key: 'shift_dates.shift_date',
@@ -217,7 +217,7 @@ const list = {
         label: 'State',
         data: {
           value: ['name_after_activation', 'name_before_activation'],
-          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=hr.job',
+          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=hr.job', //tslint:disable-line
           key: 'number'
         },
         query: 'active_states',
@@ -450,15 +450,15 @@ const formset = {
       templateOptions: {
         required: false,
         values: {
-          '0': 'times-circle',
-          '1': 'check-circle',
-          '2': 'exclamation-circle',
-          '3': 'minus-circle',
+          0: 'times-circle',
+          1: 'check-circle',
+          2: 'exclamation-circle',
+          3: 'minus-circle',
           null: 'minus-circle'
         },
         label: 'Is fulfilled today',
         type: 'icon',
-        color: { '0': 'danger', '1': 'success', '2': 'warning' }
+        color: { 0: 'danger', 1: 'success', 2: 'warning' }
       },
       type: 'checkbox'
     },
@@ -511,15 +511,15 @@ const formset = {
       templateOptions: {
         required: false,
         values: {
-          '0': 'times-circle',
-          '1': 'check-circle',
-          '2': 'exclamation-circle',
-          '3': 'minus-circle',
+          0: 'times-circle',
+          1: 'check-circle',
+          2: 'exclamation-circle',
+          3: 'minus-circle',
           null: 'minus-circle'
         },
         label: 'Is fulfilled',
         type: 'icon',
-        color: { '0': 'danger', '1': 'success', '2': 'warning' }
+        color: { 0: 'danger', 1: 'success', 2: 'warning' }
       },
       type: 'checkbox'
     },
@@ -605,24 +605,24 @@ const formset = {
         name: 'fulfilled',
         content: [
           {
-            color: { '0': 'danger', '1': 'success', '2': 'warning' },
+            color: { 0: 'danger', 1: 'success', 2: 'warning' },
             values: {
-              '0': 'times-circle',
-              '1': 'check-circle',
-              '2': 'exclamation-circle',
-              '3': 'minus-circle',
+              0: 'times-circle',
+              1: 'check-circle',
+              2: 'exclamation-circle',
+              3: 'minus-circle',
               null: 'minus-circle'
             },
             type: 'icon',
             field: 'is_fulfilled_today'
           },
           {
-            color: { '0': 'danger', '1': 'success', '2': 'warning' },
+            color: { 0: 'danger', 1: 'success', 2: 'warning' },
             values: {
-              '0': 'times-circle',
-              '1': 'check-circle',
-              '2': 'exclamation-circle',
-              '3': 'minus-circle',
+              0: 'times-circle',
+              1: 'check-circle',
+              2: 'exclamation-circle',
+              3: 'minus-circle',
               null: 'minus-circle'
             },
             type: 'icon',

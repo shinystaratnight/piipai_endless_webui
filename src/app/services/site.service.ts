@@ -9,8 +9,6 @@ interface PathData {
   path: string;
   id?: string;
   postfix?: string;
-  modal?: boolean;
-  title?: string;
 }
 
 export interface PageData {
@@ -72,8 +70,6 @@ export class SiteService {
       };
       if (lastElement === 'submit') {
         data.postfix = 'submit';
-        data.modal = true;
-        data.title = 'TimeSheet filling';
       }
       if (lastElement === 'fillin') {
         data.postfix = 'fillin';
