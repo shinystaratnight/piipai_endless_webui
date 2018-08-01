@@ -421,7 +421,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
                 .map((param) => `${param}=${query[param]}`)
                 .join('&')
             ).subscribe((res) => {
-              console.log(this);
               if (res.count) {
                 let errors;
                 if (this.endpoint === '/ecore/api/v2/core/companycontacts/') {
@@ -672,7 +671,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         }
 
         if (Array.isArray(currentValue)) {
-          console.log(config);
           const addArray = currentValue.filter((a) => !config.data.find((b) => a === b));
           const removeArray = config.data.filter((a) => !currentValue.find((b) => a === b));
           const value = this.format.format(config.setValue.value, data);
@@ -849,7 +847,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     this.resetData(this.response);
 
     if (!this.editForm && this.showResponse) {
-      this.response = response;
+      this.response = {...response};
     }
 
     this.responseForm.emit(response);
