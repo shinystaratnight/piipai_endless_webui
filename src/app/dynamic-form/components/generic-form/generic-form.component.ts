@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   Input,
   EventEmitter,
   Output,
@@ -50,7 +49,7 @@ interface UpdateDataInfo {
   templateUrl: 'generic-form.component.html'
 })
 
-export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
+export class GenericFormComponent implements OnChanges, OnDestroy {
 
   @Input() public form: any;
   @Input() public id: string;
@@ -84,7 +83,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   public metadata: Field[] = [];
 
   public hasTabs: boolean;
-  public candidateFill: boolean;
   public formData: BehaviorSubject<any>;
   public modeBehaviorSubject: BehaviorSubject<string>;
 
@@ -136,12 +134,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
       config: [],
       requests: []
     };
-  }
-
-  public ngOnInit() {
-    if (this.endpoint.indexOf('candidate_fill')) {
-      this.candidateFill = true;
-    }
   }
 
   public ngOnDestroy() {
@@ -199,7 +191,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
-  public updateMetadataByProps(metadata: Field[], callback) {
+  public updateMetadataByProps(metadata: Field[], callback: Function) {
     metadata.forEach((el) => {
       if (el) {
         callback.call(this, el);
@@ -311,36 +303,10 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
-  public setModeForElement(metadata: Field[], mode) {
-    if (mode === 'view') {
-      metadata.forEach((el) => {
-        if (el.key) {
-          el.mode = new BehaviorSubject(mode);
-        } else if (el.children) {
-          this.setModeForElement(el.children, mode);
-        }
-      });
-    }
-  }
-
   public toggleModeMetadata(mode: string) {
     if (this.modeBehaviorSubject) {
       this.modeBehaviorSubject.next(mode);
     }
-  }
-
-  public formChange(data) {
-    let newData = {};
-    Object.keys(data).forEach((el) => {
-      newData[el] = {
-        action: 'add',
-        data: {
-          value: data[el]
-        }
-      };
-    });
-    this.metadata = this.parseMetadata(this.metadata, newData);
-    this.parseError(Object.assign({}, this.errors));
   }
 
   public getMetadata(endpoint) {
@@ -420,24 +386,15 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
                 .join('&')
             ).subscribe((res) => {
               if (res.count) {
+                const config = this.checkObject[key];
                 let errors;
                 if (this.endpoint === '/ecore/api/v2/core/companycontacts/') {
                   errors = {
-                    [key]: [
-                      this.checkObject[key].error,
-                      `${res.results[0].__str__}`,
-                      `${this.path || '/core/companycontacts/'}${res.results[0].company_contact.id}/change`, //tslint:disable-line
-                      Object.assign(res.results[0].company_contact, {endpoint: this.endpoint})
-                    ]
+                    [key]: this.generateCustomError(res, config, '/core/companycontacts/', 'company_contact') //tslint:disable-line
                   };
                 } else if (this.endpoint === '/ecore/api/v2/candidate/candidatecontacts/') {
                   errors = {
-                    [key]: [
-                      this.checkObject[key].error,
-                      `${res.results[0].__str__}`,
-                      `${this.path || '/candidate/candidatecontacts/'}${res.results[0].id}/change`, //tslint:disable-line
-                      Object.assign(res.results[0], {endpoint: this.endpoint})
-                    ]
+                    [key]: this.generateCustomError(res, config, '/candidate/candidatecontacts/')
                   };
                 }
                 this.updateErrors(this.errors, errors, this.response);
@@ -449,6 +406,17 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
         });
       }
     }
+  }
+
+  public generateCustomError(response: any, field?: any, path?: string, property?: string) {
+    const object = property ? response.results[0][property] : response.results[0];
+
+    return [
+      field.error,
+      object.__str__,
+      `${this.path || path}${object.id}/change`,
+      { ...object, endpoint: this.endpoint }
+    ];
   }
 
   public observeFields(fields: any[], observers) {
@@ -785,6 +753,7 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
   public responseHandler(response: any, sendData: any) {
     this.formService.getForm(this.formId).setSaveProcess(false);
     this.parseResponse(response);
+
     if (this.updateDataAfterSendForm.requests.length) {
       const subscription = Observable.forkJoin(...this.updateDataAfterSendForm.requests)
         .finally(() => {
@@ -897,8 +866,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     } else if (event.type === 'update' && event.el.key === 'timeline') {
       this.getRalatedData(this.metadata, event.el.key,
         event.el.endpoint, null, event.query, undefined, false);
-    } else if (event.type === 'updateData') {
-      this.updateDataOfReplaceElements(event.el);
     } else if (event.type === 'address') {
       this.parseAddress(event.value, event.el);
     }
@@ -928,7 +895,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     }
     this.service.getMetadata(endpoint, query).subscribe(
       (response: any) => {
-        this.setModeForElement(response.fields, this.mode);
         this.parseMetadata(metadata, {
           [key]: {
             action: 'add',
@@ -947,7 +913,6 @@ export class GenericFormComponent implements OnChanges, OnInit, OnDestroy {
     if (!endpoint) {
       return;
     }
-    let currentQuery = query;
     let fieldsQuery;
     if (fields) {
       fieldsQuery = this.generateQueryForRelatedFields(fields);

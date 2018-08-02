@@ -52,6 +52,7 @@ export interface Field {
   related?: any;
   readonly?: any;
   update?: any;
+  updateFormData?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;

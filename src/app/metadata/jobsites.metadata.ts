@@ -868,6 +868,7 @@ const formadd = [
             list: false,
             endpoint: '/ecore/api/v2/core/addresses/',
             read_only: false,
+            updateFormData: true,
             templateOptions: {
               label: 'Address',
               add: true,
