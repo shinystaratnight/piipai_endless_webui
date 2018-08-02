@@ -53,6 +53,7 @@ export interface Field {
   readonly?: any;
   update?: any;
   updateFormData?: boolean;
+  isPrefilled?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;
