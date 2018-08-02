@@ -141,6 +141,15 @@ select.not-empty {
 
 .modal {
   z-index: 3;
+
+
+  &[id*='jtdb'] {
+    z-index: 22;
+
+    .modal-backdrop {
+      z-index: 21;
+    }
+  }
 }
 
 .input-group .form-control,
@@ -198,10 +207,6 @@ select.not-empty {
 .btn-primary {
   border-color: $brand-primary;
   background-color: $brand-primary;
-
-  &.active {
-
-  }
 
   &:focus {
     box-shadow: 0 0 2px rgba($brand-primary, 0.5);
@@ -480,6 +485,12 @@ select.not-empty {
   .btn {
     padding: 5px;
     font-size: 12px;
+
+    &:last-child:not(:first-child),
+    &:first-child:not(:last-child),
+    &:not(:first-child):not(:last-child) {
+      border-radius: 50px;
+    }
   }
 }
 

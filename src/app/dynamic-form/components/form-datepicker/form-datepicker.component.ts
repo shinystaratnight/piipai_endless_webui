@@ -248,6 +248,7 @@ export class FormDatepickerComponent
           overrideTimeFormat: 12,
           overrideTimeOutput: '%I:%M %p',
           useClearButton: true,
+          useCancelButton: true,
           useFocus: true,
           useHeader: false,
           calUsePickers: true,

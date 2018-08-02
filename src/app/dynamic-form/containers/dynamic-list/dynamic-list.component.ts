@@ -1155,10 +1155,6 @@ export class DynamicListComponent implements
       name: object.job_offer.candidate_contact.contact.__str__
     };
     this.open(this.evaluateModal, {size: 'lg'});
-    let modalContent: any = document.getElementsByClassName('modal-content')[0];
-    if (modalContent) {
-      modalContent.style.overflow = 'visible';
-    }
   }
 
   public approveTimesheet(e) {
