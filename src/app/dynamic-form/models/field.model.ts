@@ -52,6 +52,7 @@ export interface Field {
   related?: any;
   readonly?: any;
   update?: any;
+  updateFormData?: boolean;
   isPrefilled?: boolean;
   templateOptions?: {
     label?: string;

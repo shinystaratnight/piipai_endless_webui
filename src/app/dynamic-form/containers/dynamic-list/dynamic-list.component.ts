@@ -1495,7 +1495,7 @@ export class DynamicListComponent implements
     this.modalInfo.id = id || (!withoutId && e.el.rowId);
     this.modalInfo.mode = 'edit';
     this.modalInfo.edit = true;
-    this.modalInfo.dontUseMetadataQuery = e.value === 'editModal';
+    this.modalInfo.dontUseMetadataQuery = e.value === 'editModal' || e.value === 'editForm';
     this.open(this.modal, {size: 'lg'});
   }
 

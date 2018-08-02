@@ -21,7 +21,6 @@ export class DynamicFormComponent implements OnInit {
   @Input() public form: FormGroup;
 
   @Output() public submit: EventEmitter<any> = new EventEmitter<any>();
-  @Output() public formChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() public event: EventEmitter<any> = new EventEmitter();
   @Output() public buttonAction: EventEmitter<any> = new EventEmitter();
   @Output() public resourseData: EventEmitter<any> = new EventEmitter();
@@ -88,7 +87,7 @@ export class DynamicFormComponent implements OnInit {
           (e.type === 'change' || e.type === 'create' || e.type === 'blur')
           && e.el
           && e.el.key
-          && e.el.key !== 'address'
+          && (e.el.key !== 'address' || e.el.updateFormData)
         ) {
           const newData = this.generateData(e.el.key, e.el.formData.getValue().data, e);
           this.fullData = newData;

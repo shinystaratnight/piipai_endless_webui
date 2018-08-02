@@ -134,8 +134,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         .debounceTime(200)
         .subscribe((data) => {
           const table = this.getFirstTable();
-
-          if (table.offset < table.data.count) {
+          if (table.offset < table.data.count || table.offset === table.count) {
             if (data && !this.uploading) {
               this.uploading = true;
 
@@ -253,7 +252,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
           if (this.paginated === 'on') {
             this.calcPagination(data);
           }
-          table.offset = table.limit;
+          table.offset = 0;
           if (this.inForm) {
             const formset = '?type=formset';
             this.getMetadata(endpoint, table, null, null, formset);
