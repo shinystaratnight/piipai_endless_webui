@@ -497,7 +497,11 @@ export class FormRelatedComponent
         }
         this.updateData();
       }
-    } else if (this.config.default && this.config.default.includes('session')) {
+    } else if (
+      this.config.default
+      && this.config.default.includes('session')
+      && !this.config.editForm
+    ) {
       const id = this.userService.user.data.contact.contact_id;
 
       if (this.config.read_only) {
@@ -754,6 +758,7 @@ export class FormRelatedComponent
               ? this.config.prefilled[el]
               : format.format(this.config.prefilled[el], this.formData),
             read_only: true,
+            isPrefilled: true,
             editForm: true
           }
         };

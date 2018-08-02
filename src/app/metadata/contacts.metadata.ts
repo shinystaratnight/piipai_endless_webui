@@ -407,7 +407,8 @@ const form = [
                       message: 'Birthday is required'
                     },
                     prefilled: {
-                      contact: '{id.id}'
+                      contact: '{id.id}',
+                      birthday: '{birthday}'
                     },
                     type: 'related',
                     key: 'candidate_contacts',

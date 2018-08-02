@@ -136,6 +136,7 @@ export class FormDatepickerComponent
           data.key !== this.config.key
           && this.config.default
           && this.config.default.includes('{')
+          && !this.config.isPrefilled
         ) {
           this.formData = data.data;
           this.setInitValue(moment);
@@ -149,7 +150,10 @@ export class FormDatepickerComponent
   public setInitValue(moment) {
     let type = this.config.templateOptions.type;
 
-    if ((this.config.value || this.group.get(this.key).value) && !this.config.shouldUpdate) {
+    if (
+      (this.config.value || this.group.get(this.key).value)
+      && (!this.config.shouldUpdate || this.config.isPrefilled)
+    ) {
       let data = this.config.value ? this.config.value : this.group.get(this.key).value;
       if (type === 'date' || type === 'datetime') {
         this.setDate(data, moment);
