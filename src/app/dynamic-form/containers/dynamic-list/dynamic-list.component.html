@@ -284,7 +284,7 @@
   </div>
 </template>
 
-<template #evaluateModal let-c="close">
+<template #evaluateModal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -296,16 +296,16 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <generic-form
-          [needData]="modalInfo.needData"
-          [endpoint]="modalInfo.endpoint"
-          [data]="modalInfo.data"
-          [edit]="modalInfo.edit"
-          (event)="evaluateEvent($event, c)">
-            <button class="btn btn-primary mr-auto text-white">Submit</button>
-        </generic-form>
-      </div>
+    </div>
+    <div class="modal-body">
+      <generic-form
+        [needData]="modalInfo.needData"
+        [endpoint]="modalInfo.endpoint"
+        [data]="modalInfo.data"
+        [edit]="modalInfo.edit"
+        (event)="evaluateEvent($event, c)">
+          <button class="btn btn-primary mr-auto text-white">Submit</button>
+      </generic-form>
     </div>
   </div>
 </template>
