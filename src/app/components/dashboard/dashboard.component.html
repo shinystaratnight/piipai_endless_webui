@@ -1,13 +1,13 @@
 <div class="dashboard" *ngIf="checkOnManager()">
   <div class="welcome d-flex align-items-center justify-content-center flex-column"
-    *ngIf="userModules && !userModules.length">
+    *ngIf="widgets && !widgets.length">
     <span class="text-muted"><b>Modify your dashboard by adding widgets!</b></span>
     <button class="add-widget icon btn btn-primary mt-2 px-4 d-flex align-items-center justify-content-center" (click)="openModal()">
       <span class="text-white"><b>Add Widget</b></span>
     </button>
   </div>
 
-  <div *ngIf="userModules && userModules.length">
+  <div *ngIf="widgets && widgets.length">
     <h3 class="title">Dashboard</h3>
     <div class="dashboard-wrapper">
       <ng-container *ngFor="let widget of widgets">
@@ -37,30 +37,28 @@
 </div>
 
 <template #modal let-c="close">
-  <div class="dashboard">
-    <div class="modal-content-wrapper">
-      <div class="modal-header-wrapper">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">Widgets</h5>
-          <button type="button" class="close ml-2" (click)="c()">
-            <span class="text-white" aria-hidden="true">&times;</span>
-          </button>
-        </div>
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">Widgets</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="c()">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
+    </div>
 
-      <div class="modal-body">
-        <div class="d-flex justify-content-around align-items-stretch flex-wrap flex-column">
-          <div *ngIf="!selectedWidget">
-            <div class="widget-preview p-2 d-flex justify-content-center align-items-center"
-              *ngFor="let widget of availableModules"
-              (click)="selectModule(widget, c)">
-                <span class="text-muted"><b>{{widget.content_type.name}}</b></span>
-            </div>
+    <div class="modal-body">
+      <div class="d-flex justify-content-around align-items-stretch flex-wrap flex-column">
+        <div *ngIf="!selectedWidget">
+          <div class="widget-preview p-2 d-flex justify-content-center align-items-center"
+            *ngFor="let widget of availableModules"
+            (click)="selectModule(widget, c)">
+              <span class="text-muted"><b>{{widget.content_type.name}}</b></span>
           </div>
-          <div class="d-flex justify-content-center align-content-center p-3"
-            *ngIf="availableModules && !availableModules.length">
-              <span class="text-muted">No Widgets</span>
-          </div>
+        </div>
+        <div class="d-flex justify-content-center align-content-center p-3"
+          *ngIf="availableModules && !availableModules.length">
+            <span class="text-muted">No Widgets</span>
         </div>
       </div>
     </div>
