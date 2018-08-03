@@ -1149,6 +1149,10 @@ export class FormRelatedComponent
     return value[this.param];
   }
 
+  public isArray(target: any) {
+    return Array.isArray(target);
+  }
+
   @HostListener('document:click', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;

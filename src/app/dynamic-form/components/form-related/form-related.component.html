@@ -259,7 +259,7 @@
 <small class="text-muted" *ngIf="config.templateOptions.description">
   {{config.templateOptions.description}}
 </small>
-<div *ngIf="errors && errors[config.key] && errors[config.key].length > 1">
+<div *ngIf="errors && errors[config.key] && isArray(errors[config.key]) && errors[config.key].length > 1">
   <div class="text-danger mt-1">{{errors[config.key][0]}}</div>
   <a *ngIf="errors[config.key][1] && errors[config.key][2]"
     [attr.href]="errors[config.key][2]"
@@ -267,7 +267,7 @@
       {{errors[config.key][1]}}
   </a>
 </div>
-<div *ngIf="errors && errors[config.key] && errors[config.key].length === 1">
+<div *ngIf="errors && errors[config.key] && (errors[config.key].length === 1 || !isArray(errors[config.key]))">
   <div class="text-danger mt-1 mb-2">{{errors[config.key]}}</div>
 </div>
 <div *ngIf="message">
