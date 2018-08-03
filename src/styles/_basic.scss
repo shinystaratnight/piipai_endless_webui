@@ -131,6 +131,51 @@ select.not-empty {
 
 /*---------- Bootstrap ---------- */
 
+.rounded {
+  border-color: rgba(0, 0, 0, .2) !important;
+}
+
+.ngb-dp-week {
+
+  .btn-primary,
+  .outside,
+  .btn-secondary {
+    padding: 7px;
+
+    font-size: 12px;
+    line-height: 16px;
+
+    border-radius: 50%;
+  }
+
+  .btn-secondary {
+    color: $gray;
+  }
+
+  .outside {
+    opacity: .2;
+  }
+}
+
+.ngb-dp-weekday {
+  font-size: 10px;
+  font-style: normal;
+  line-height: 12px;
+
+  color: $gray !important;
+  opacity: .6;
+}
+
+.ngb-dp-month-name {
+  height: auto !important;
+
+  font-size: 16px !important;
+  line-height: 1;
+
+  color: black;
+  opacity: .8;
+}
+
 .popover {
   z-index: 1;
 }
@@ -926,6 +971,27 @@ iframe.send-sms {
   .btn {
     font-size: 14px;
     line-height: 18px;
+  }
+}
+
+.dynamic-form {
+  margin: 0 20px;
+}
+
+.edit-form .dynamic-form {
+  margin-top: 40px;
+}
+
+.has-tabs {
+
+  .dynamic-form {
+    margin: 40px;
+
+    margin-bottom: 0;
+
+    @include media-breakpoint-down('md') {
+      margin: 20px;
+    }
   }
 }
 

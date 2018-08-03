@@ -1,17 +1,20 @@
 <div class="form-group">
-  <label>{{config.templateOptions.label}}:</label>
-  <div #calendar class="vacancy-dates-wrapper mb-2">
+  <!-- <label>{{config.templateOptions.label}}:</label> -->
+
+
+  <div #calendar class="vacancy-dates-wrapper">
     <ngb-datepicker
       [ngModel]="vacancyDate"
       [minDate]="minDate"
       [markDisabled]="markDisabled"
       [displayMonths]="displayMonths"
       [navigation]="navigation"
-      (ngModelChange)="selectVacancyDate($event)"></ngb-datepicker>
+      (ngModelChange)="selectVacancyDate($event)">
+    </ngb-datepicker>
   </div>
 
-  <span class="d-inline-flex align-items-center badge  badge-default mb-1 mr-2 p-2" *ngFor="let date of vacancyDates">
+  <!-- <span class="d-inline-flex align-items-center badge  badge-default mb-1 mr-2 p-2" *ngFor="let date of vacancyDates">
     {{date}}
     <i fa name="times" class="text-white icon ml-2" (click)="removeDate(date)"></i>
-  </span>
+  </span> -->
 </div>

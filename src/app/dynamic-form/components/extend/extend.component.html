@@ -1,0 +1,27 @@
+<div class="wrapper">
+  <div class="title">Select Dates</div>
+
+  <ng-container
+    formElement
+    [config]="viewConfig.shiftsDates"
+    [group]="viewData"
+    (event)="eventHandler($event)">
+  </ng-container>
+
+  <b>Extend:</b>
+
+  <ng-container
+    formElement
+    [config]="viewConfig.extendDates"
+    [group]="viewData">
+  </ng-container>
+
+  <ng-container
+    formElement
+    [config]="viewConfig.extendCandidates"
+    [group]="viewData">
+  </ng-container>
+
+</div>
+
+
