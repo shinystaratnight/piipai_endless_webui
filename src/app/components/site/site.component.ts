@@ -186,7 +186,9 @@ export class SiteComponent implements OnInit {
     this.currentRole = role;
     this.navigationService.getPages(role)
       .subscribe((pages: any) => {
-        this.permission.parseNavigation(this.permission.permissions, pages);
+        if (!role.__str__.includes('candidate')) {
+          this.permission.parseNavigation(this.permission.permissions, pages);
+        }
         this.pagesList = pages;
 
         if (this.router.url !== '/') {

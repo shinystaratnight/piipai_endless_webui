@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 
+import { CookieService } from 'angular2-cookie/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { SiteService, PageData } from '../../services/site.service';
 import { ErrorsService } from './errors.service';
-import { CookieService } from 'angular2-cookie/core';
+import { SiteService, PageData } from '../../services/site.service';
 import { Page, NavigationService } from '../../services/navigation.service';
 
 interface Permission {
