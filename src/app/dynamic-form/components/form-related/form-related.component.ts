@@ -26,6 +26,7 @@ import { NavigationService, UserService, SiteSettingsService } from '../../../se
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
+import { Subject } from 'rxjs/Subject';
 
 export interface RelatedObject {
   id: string;
@@ -114,6 +115,7 @@ export class FormRelatedComponent
   public autocompleteDisplay: boolean;
   public currentQuery: string;
   public currentId: string;
+  public update: Subject<any>;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -170,6 +172,8 @@ export class FormRelatedComponent
     if (this.config && this.config.metadata) {
       this.getReplaceElements(this.config.metadata);
     }
+
+    this.update = new Subject();
   }
 
   public ngAfterViewChecked() {
@@ -1034,6 +1038,8 @@ export class FormRelatedComponent
                   this.previewList = res.results;
                 }
 
+                this.updatePosition();
+
               }
               if (callback) {
                 const target = res.results.find((el) => el.id === id);
@@ -1151,6 +1157,10 @@ export class FormRelatedComponent
 
   public isArray(target: any) {
     return Array.isArray(target);
+  }
+
+  public updatePosition() {
+    this.update.next();
   }
 
   @HostListener('document:click', ['$event'])

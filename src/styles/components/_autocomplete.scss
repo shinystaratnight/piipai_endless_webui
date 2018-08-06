@@ -4,11 +4,13 @@
   width: 100%;
 
   margin-top: 5px;
-  padding: 0 13px;
+  margin-bottom: 20px;
+  padding: 7px 13px;
 
   border-radius: 4px;
 
   background-color: white;
+  border: 1px solid rgba($gray, .1);
   box-shadow: 0 0 12px rgba($gray, .15);
   z-index: 30;
 
@@ -63,7 +65,7 @@
 
   &-list {
     width: 100%;
-    max-height: 200px;
+    max-height: 120px;
 
     overflow-y: auto;
 
