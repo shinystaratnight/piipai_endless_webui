@@ -676,31 +676,6 @@ const formadd = [
             read_only: false
           },
           {
-            key: 'gender',
-            type: 'select',
-            templateOptions: {
-              required: false,
-              label: 'Gender',
-              type: 'select',
-              options: [
-                {
-                  value: 'male',
-                  label: 'Male'
-                },
-                {
-                  value: 'female',
-                  label: 'Female'
-                }
-              ]
-            },
-            read_only: false
-          }
-        ]
-      },
-      {
-        type: 'column',
-        children: [
-          {
             key: 'email',
             type: 'input',
             templateOptions: {
@@ -718,6 +693,31 @@ const formadd = [
               required: true,
               label: 'Mobile Phone',
               type: 'text'
+            },
+            read_only: false
+          },
+        ]
+      },
+      {
+        type: 'column',
+        children: [
+          {
+            key: 'gender',
+            type: 'select',
+            templateOptions: {
+              required: false,
+              label: 'Gender',
+              type: 'select',
+              options: [
+                {
+                  value: 'male',
+                  label: 'Male'
+                },
+                {
+                  value: 'female',
+                  label: 'Female'
+                }
+              ]
             },
             read_only: false
           },
