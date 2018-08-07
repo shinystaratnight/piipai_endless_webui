@@ -53,7 +53,6 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
   @Input() public form: any;
   @Input() public id: string;
-  @Input() public commonFields: string;
   @Input() public hide: boolean;
   @Input() public edit: boolean;
   @Input() public mode: string;
@@ -141,7 +140,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (!this.formId) {
+    if (!this.formId && this.formId !== 0) {
       this.formId = this.formService.registerForm(this.endpoint, this.mode);
 
       const subscription = this.formService

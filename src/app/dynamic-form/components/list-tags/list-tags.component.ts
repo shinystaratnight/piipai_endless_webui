@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { FormatString } from '../../../helpers/format';
+
 @Component({
   selector: 'list-tags',
   templateUrl: 'list-tags.component.html',
@@ -16,8 +18,16 @@ export class ListTagsComponent implements OnInit {
   public colorAttr: string;
 
   public ngOnInit() {
-    this.display = this.config.display || '__str__';
+    const formatSting = new FormatString();
+
+    this.display = this.config.display || '{__str__}';
     this.tags = this.config.value;
+
+    this.tags.forEach((el) => {
+      if (el) {
+        el.__str__ = formatSting.format(this.display, el);
+      }
+    });
 
     this.color = this.config.color;
     this.colorAttr = this.config.color_attr;
