@@ -21,6 +21,7 @@
         <th>Amount</th>
         <th>Status</th>
         <th>Created</th>
+        <th>Invoice URL</th>
       </tr>
     </thead>
     <tbody>
@@ -30,6 +31,7 @@
           <td>{{payment.amount | currency:'USD':true}}</td>
           <td>{{payment.status}}</td>
           <td>{{payment.created | dateFormat:'datetime'}}</td>
+          <td>{{payment.invoice_url}}</td>
         </tr>
       </ng-container>
     </tbody>
