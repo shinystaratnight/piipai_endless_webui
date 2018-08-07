@@ -259,23 +259,26 @@
 <small class="text-muted" *ngIf="config.templateOptions.description">
   {{config.templateOptions.description}}
 </small>
-<div *ngIf="errors && errors[config.key] && isArray(errors[config.key]) && errors[config.key].length > 1">
-  <div class="text-danger mt-1">{{errors[config.key][0]}}</div>
-  <a *ngIf="errors[config.key][1] && errors[config.key][2]"
-    [attr.href]="errors[config.key][2]"
-    (click)="open('update', $event, errors[config.key][3])">
-      {{errors[config.key][1]}}
-  </a>
-</div>
-<div *ngIf="errors && errors[config.key] && (errors[config.key].length === 1 || !isArray(errors[config.key]))">
-  <div class="text-danger mt-1 mb-2">{{errors[config.key]}}</div>
-</div>
-<div *ngIf="message">
-  <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
-</div>
-<div *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible">
-  <div class="text-danger mt-1">{{config.errorMessage.message}}</div>
-</div>
+
+<ng-container *ngIf="!config.hide">
+  <div *ngIf="errors && errors[config.key] && isArray(errors[config.key]) && errors[config.key].length > 1">
+    <div class="text-danger mt-1">{{errors[config.key][0]}}</div>
+    <a *ngIf="errors[config.key][1] && errors[config.key][2]"
+      [attr.href]="errors[config.key][2]"
+      (click)="open('update', $event, errors[config.key][3])">
+        {{errors[config.key][1]}}
+    </a>
+  </div>
+  <div *ngIf="errors && errors[config.key] && (errors[config.key].length === 1 || !isArray(errors[config.key]))">
+    <div class="text-danger mt-1 mb-2">{{errors[config.key]}}</div>
+  </div>
+  <div *ngIf="message">
+    <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
+  </div>
+  <div *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible">
+    <div class="text-danger mt-1">{{config.errorMessage.message}}</div>
+  </div>
+</ng-container>
 
 <template #modal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">

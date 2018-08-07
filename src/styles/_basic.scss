@@ -129,6 +129,11 @@ select.not-empty {
   }
 }
 
+form.ng-invalid button[type="submit"] {
+  background-color: rgba(51, 51, 51, .3) !important;
+  border-color: rgba(51, 51, 51, .3) !important;
+}
+
 /*---------- Bootstrap ---------- */
 
 .popover {

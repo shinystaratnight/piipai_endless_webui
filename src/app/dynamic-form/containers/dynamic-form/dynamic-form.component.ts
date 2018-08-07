@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 
 import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
@@ -29,7 +29,10 @@ export class DynamicFormComponent implements OnInit {
   public currentForm: any;
   public fullData: any;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
+  ) {}
 
   public ngOnInit() {
     this.form = this.form || this.fb.group({});
@@ -99,6 +102,10 @@ export class DynamicFormComponent implements OnInit {
             data: newData
           });
         }
+
+        setTimeout(() => {
+          this.cd.detectChanges();
+        }, 1000);
       }
     }, 50);
   }

@@ -141,7 +141,7 @@ export class FormRelatedComponent
   }
 
   public ngOnInit() {
-    this.addControl(this.config, this.fb);
+    this.addControl(this.config, this.fb, this.config.templateOptions.required);
 
     this.skillEndpoint = this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
       this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
