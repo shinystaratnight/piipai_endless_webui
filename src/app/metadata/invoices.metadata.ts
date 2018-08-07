@@ -105,7 +105,6 @@ const list = {
       {
         delim: null,
         label: '',
-        sort: true,
         content: [
           {
             endpoint: '/ecore/api/v2/core/invoices/{id}/pdf/',
@@ -123,7 +122,6 @@ const list = {
       {
         delim: null,
         label: '',
-        sort: true,
         content: [
           {
             endpoint: '/ecore/api/v2/core/invoices/{id}/pdf/',
@@ -141,7 +139,6 @@ const list = {
       {
         delim: null,
         label: '',
-        sort: true,
         content: [
           {
             endpoint: '/ecore/api/v2/core/invoices/{id}/approve/',

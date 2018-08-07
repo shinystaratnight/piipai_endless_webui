@@ -134,7 +134,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         .debounceTime(200)
         .subscribe((data) => {
           const table = this.getFirstTable();
-          if (table.offset < table.data.count || table.offset === table.count) {
+          if (table.offset < table.data.count && table.data.count !== table.limit) {
             if (data && !this.uploading) {
               this.uploading = true;
 
@@ -330,7 +330,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     if (!this.limit) {
       let length = data.results.length;
       this.count = data.count;
-      this.limit = this.calcLimit(data.count, length) || null;
+      this.limit = this.calcLimit(data.count, length);
       if (this.limit) {
         this.updateTables('limit');
       }
@@ -338,7 +338,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public calcLimit(count, length) {
-    return count > length ? length : null;
+    return count > length ? length : count;
   }
 
   public updateTables(prop) {
@@ -369,10 +369,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
       }
       if (table && table.first && !this.inForm) {
         if (e.type === 'filter') {
-          this.updateUrl(table.query, e.list, true);
-        } else {
-          this.updateUrl(table.query, e.list, false);
+          table.offset = 0;
         }
+        this.updateUrl(table.query, e.list);
       } else {
         this.getData(this.getTable(e.list).endpoint, this.generateQuery(table.query), table);
         if (e.query) {
@@ -521,7 +520,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     );
   }
 
-  public updateUrl(query, list, filter) {
+  public updateUrl(query, list) {
     let queryParams = {};
     let keys = Object.keys(query);
     keys.forEach((el) => {
@@ -533,7 +532,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
             (el === 'sort') ? 's.' : '';
           if (key === 'f.') {
             queryParams[`${list}.${key}${keyValue[0]}-${i}`] = keyValue[1];
-          } else {
+          } else if (el !== 'pagination') {
             queryParams[`${list}.${key}${keyValue[0]}`] = keyValue[1];
           }
         });
