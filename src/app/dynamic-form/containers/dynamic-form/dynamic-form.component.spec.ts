@@ -71,7 +71,6 @@ describe('DynamicFormComponent', () => {
 
     it('should update values', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = <any> ['some'];
-      comp.commonFields = [];
       let form = fb.group({});
       comp.form = form;
       let currentForm = [];

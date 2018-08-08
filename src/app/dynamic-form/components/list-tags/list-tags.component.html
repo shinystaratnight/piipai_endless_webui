@@ -3,6 +3,6 @@
     [class.badge-outline]="config.outline"
     [ngClass]="[checkClass(tag)]"
     *ngFor="let tag of tags">
-      {{tag[display]}}
+      {{tag.__str__}}
   </span>
 </div>

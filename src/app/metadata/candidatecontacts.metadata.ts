@@ -71,7 +71,8 @@ const list = {
         content: [
           {
             field: 'tag_list',
-            type: 'tags'
+            type: 'tags',
+            display: '{tag.name}'
           }
         ],
         name: 'tag_list',

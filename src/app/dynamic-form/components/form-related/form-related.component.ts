@@ -116,6 +116,7 @@ export class FormRelatedComponent
   public currentQuery: string;
   public currentId: string;
   public update: Subject<any>;
+  public manual: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -355,40 +356,62 @@ export class FormRelatedComponent
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
-        if (this.config.errorMessage) {
-          if (!this.getValueByKey(this.config.errorMessage.field, this.formData)) {
-            this.config.errorMessage.visible = true;
-          } else {
-            this.config.errorMessage.visible = false;
-          }
-        }
-
-        if (
-          this.checkRelatedField(formData.key, formData.data) ||
-          (this.config.default && !this.config.default.includes('session'))
-        ) {
-          if (this.config.defaultData) {
-            this.getDefaultDataForListType();
-          }
-
-          if (this.config.default && !this.config.hide && !this.config.value) {
-            const format = new FormatString();
-            let id;
-            if (typeof this.config.default === 'string') {
-              id = format.format(this.config.default, this.formData);
-            } else if (Array.isArray(this.config.default)) {
-              this.config.default.forEach((el) => {
-                if (!id) {
-                  id = format.format(el, this.formData);
-                }
-              });
+        if (this.config.key !== formData.key) {
+          if (this.config.errorMessage) {
+            if (!this.getValueByKey(this.config.errorMessage.field, this.formData)) {
+              this.config.errorMessage.visible = true;
+            } else {
+              this.config.errorMessage.visible = false;
             }
-            if (id) {
-              this.getOptions.call(this, '', 0, false, this.setValue, id);
-              if (this.config.read_only) {
-                this.viewMode = true;
+          }
+
+          if (
+            this.checkRelatedField(formData.key, formData.data) ||
+            (
+              this.config.default
+              && !this.config.default.includes('session')
+              && !(formData.reset && formData.reset.indexOf(this.config.key) > -1)
+            )
+          ) {
+            if (this.config.defaultData) {
+              this.getDefaultDataForListType();
+            }
+
+            if (this.config.default && !this.config.hide && !this.config.value) {
+              const format = new FormatString();
+              let id;
+              if (typeof this.config.default === 'string') {
+                id = format.format(this.config.default, this.formData);
+              } else if (Array.isArray(this.config.default)) {
+                this.config.default.forEach((el) => {
+                  if (!id) {
+                    id = format.format(el, this.formData);
+                  }
+                });
+              }
+              if (id && id !== this.group.get(this.key).value) {
+                this.getOptions.call(this, '', 0, false, this.setValue, id);
+                if (this.config.read_only) {
+                  this.viewMode = true;
+                }
               }
             }
+          }
+
+          if (
+            formData.reset
+            && formData.reset.indexOf(this.config.key) > -1
+          ) {
+            if (this.group.get(this.key).value) {
+              this.displayValue = '';
+              this.group.get(this.key).patchValue('');
+              this.eventHandler(
+                {type: 'reset'},
+                this.group.get(this.key).value,
+                this.resetAdditionalData()
+              );
+            }
+
           }
         }
       });
@@ -635,7 +658,7 @@ export class FormRelatedComponent
 
   public editObject(object: RelatedObject): void {
     if (object.id) {
-      this.open('update', undefined, object);
+      this.open('update', object);
     }
   }
 
@@ -722,13 +745,9 @@ export class FormRelatedComponent
     this.displayValue = null;
   }
 
-  public open(type, e = undefined, object = undefined): void {
+  public open(type, object = undefined) {
     const format = new FormatString();
 
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
     if (!this.checkPermission(type) && this.config.endpoint) {
       return;
     }
@@ -769,6 +788,8 @@ export class FormRelatedComponent
       });
     }
     this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
+
+    return false;
   }
 
   public openAutocomplete(): void {
@@ -843,39 +864,72 @@ export class FormRelatedComponent
     }
   }
 
-  public setValue(item) {
-    const formatString = new FormatString();
+  public setValue(item, manual?: boolean, update?: boolean) {
+    let updated = false;
+
     if (item) {
       if (this.config.many) {
-
-        if (this.config.useOptions) {
-          if (item.checked) {
-            this.results.push(item);
-          } else {
-            this.results.splice(this.results.indexOf(item), 1);
-          }
-        } else {
-          this.results.push(item);
-        }
-
-        this.updateData();
+        updated = this.updateValueOfManyType(item);
       } else {
-        this.displayValue = formatString.format(this.display, item);
-        this.group.get(this.key).patchValue(item[this.param]);
+        updated = this.updateValueOfSingleType(item, update);
       }
     } else {
-      this.displayValue = '';
-      this.group.get(this.key).patchValue('');
+      updated = this.resetValue();
     }
+
+    if (updated || update) {
+      this.eventHandler(
+        {type: 'change'},
+        (item && item[this.param]),
+        item,
+        manual
+      );
+    }
+
     this.changeList();
-    this.eventHandler({type: 'change'}, item && item[this.param], item);
     if (!this.config.useOptions) {
       this.searchValue = null;
       this.list = null;
       this.count = null;
       this.previewList = null;
-      this.cd.detectChanges();
     }
+    this.cd.detectChanges();
+  }
+
+  public resetValue(): boolean {
+    this.displayValue = '';
+    this.group.get(this.key).patchValue('');
+
+    return true;
+  }
+
+  public updateValueOfSingleType(item: any, update?: boolean): boolean {
+    if (item[this.param] !== this.group.get(this.key).value || update) {
+      const formatString = new FormatString();
+
+      this.displayValue = formatString.format(this.display, item);
+      this.group.get(this.key).patchValue(item[this.param]);
+
+      return true;
+    }
+
+    return false;
+  }
+
+  public updateValueOfManyType(item: any): boolean {
+    if (this.config.useOptions) {
+      if (item.checked) {
+        this.results.push(item);
+      } else {
+        this.results.splice(this.results.indexOf(item), 1);
+      }
+    } else {
+      this.results.push(item);
+    }
+
+    this.updateData();
+
+    return true;
   }
 
   public deleteItem(index: number, item: any, api: boolean) {
@@ -904,12 +958,13 @@ export class FormRelatedComponent
     }
   }
 
-  public eventHandler(e, value, additionalData?) {
+  public eventHandler(e, value, additionalData?, manual?: boolean) {
     this.event.emit({
       type: e.type,
       el: this.config,
       value,
-      additionalData
+      additionalData,
+      manual
     });
   }
 
@@ -1073,7 +1128,7 @@ export class FormRelatedComponent
                   this.linkPath = '/';
                 }
 
-                callback.call(this, res);
+                callback.call(this, res, false, true);
               }
             }
           );
