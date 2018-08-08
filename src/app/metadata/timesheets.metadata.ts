@@ -118,6 +118,16 @@ const list = {
             ]
           },
           {
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
+            field: 'supervisor_sms',
+            type: 'link',
+            showIf: [
+              {
+                supervisor_sms: true
+              }
+            ]
+          },
+          {
             values: {
               false: 'times',
               true: 'check',
@@ -129,6 +139,16 @@ const list = {
             showIf: [
               {
                 supervisor_approved: true
+              }
+            ]
+          },
+          {
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
+            field: 'candidate_sms',
+            type: 'link',
+            showIf: [
+              {
+                candidate_sms: true
               }
             ]
           },
@@ -236,9 +256,9 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{related_sms.id}/change',
             field: 'related_sms',
-            type: 'related'
+            type: 'link'
           }
         ],
         name: 'related_sms',
