@@ -682,6 +682,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
+    reset: ['jobsite', 'job'],
     default: ['{jobsite.regular_company.id}', '{job.customer_company.id}'],
     collapsed: false,
     type: 'related',
@@ -701,6 +702,7 @@ const formadd = [
     query: {
       company: '{company.id}'
     },
+    reset: ['job'],
     default: '{job.jobsite.id}',
     collapsed: false,
     type: 'related',

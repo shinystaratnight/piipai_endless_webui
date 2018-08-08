@@ -7,7 +7,8 @@ import {
   ComponentRef,
   OnChanges,
   Output,
-  EventEmitter
+  EventEmitter,
+  SimpleChanges
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
@@ -103,7 +104,7 @@ export class FormElementDirective implements OnInit, OnChanges {
     private container: ViewContainerRef
   ) {}
 
-  public ngOnChanges() {
+  public ngOnChanges(changes: SimpleChanges) {
     if (this.component) {
       this.component.instance.config = this.config;
       this.component.instance.label = this.label;

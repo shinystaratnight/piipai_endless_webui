@@ -149,7 +149,14 @@ export class FormInputComponent
   }
 
   public checkHiddenProperty() {
-    if (this.config && this.config.hidden && (this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))) { //tslint:disable-line
+    if (
+      this.config
+      && this.config.hidden
+      && (
+        this.config.type !== 'static'
+        || (this.config.type === 'static' && !this.config.read_only)
+      )
+    ) {
       const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;

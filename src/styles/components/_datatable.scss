@@ -278,6 +278,10 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     align-items: flex-start;
     justify-content: space-around;
 
+    &:not(.in-form) .datatable-header {
+      background-color: #f5f5f5;
+    }
+
     &.open:not(.in-form) {
       margin-left: 265px;
 

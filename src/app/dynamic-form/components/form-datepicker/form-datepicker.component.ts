@@ -4,7 +4,9 @@ import {
   ViewChild,
   AfterViewInit,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  HostListener,
+  ElementRef,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -13,6 +15,7 @@ import moment from 'moment-timezone';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { FormatString } from '../../../helpers/format';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'form-datepicker',
@@ -42,6 +45,8 @@ export class FormDatepickerComponent
   public mobileDevice: boolean;
   public displayValue: string;
   public formData: any;
+  public opened: boolean;
+  public update: Subject<any>;
 
   public dateFormat: string = 'DD/MM/YYYY';
   public datetimeFormat: string = 'DD/MM/YYYY hh:mm A';
@@ -55,7 +60,8 @@ export class FormDatepickerComponent
 
   constructor(
     private fb: FormBuilder,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private el: ElementRef
   ) {
     super();
     this.$ = require('jquery');
@@ -65,6 +71,8 @@ export class FormDatepickerComponent
   }
 
   public ngOnInit() {
+    this.update = new Subject();
+
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.setInitValue(moment);
     this.checkModeProperty();
@@ -234,6 +242,10 @@ export class FormDatepickerComponent
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
           maxDays: this.key.includes('birthday') && -1,
+          openCallback: () => {
+            this.opened = this.d.nativeElement;
+            this.updatePosition();
+          },
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
@@ -243,6 +255,7 @@ export class FormDatepickerComponent
             } else {
               this.group.get(this.key).patchValue(null);
             }
+            this.opened = false;
           }
         });
       }
@@ -261,6 +274,10 @@ export class FormDatepickerComponent
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
           maxDays: this.key.includes('birthday') && -1,
+          openCallback: () => {
+            this.opened = this.t.nativeElement;
+            this.updatePosition();
+          },
           closeCallback: () => {
             let date = this.d.nativeElement.value;
             let time = this.t.nativeElement.value;
@@ -270,6 +287,7 @@ export class FormDatepickerComponent
             } else {
               this.group.get(this.key).patchValue(null);
             }
+            this.opened = false;
           }
         });
       }
@@ -282,6 +300,10 @@ export class FormDatepickerComponent
           useFocus: true,
           useHeader: false,
           calHighToday: false,
+          openCallback: () => {
+            this.opened = this.t.nativeElement;
+            this.updatePosition();
+          },
           closeCallback: () => {
             let time = this.t.nativeElement.value;
             if (time) {
@@ -289,6 +311,7 @@ export class FormDatepickerComponent
             } else {
               this.group.get(this.key).patchValue(null);
             }
+            this.opened = false;
           }
         });
       }
@@ -373,5 +396,24 @@ export class FormDatepickerComponent
         value: this.group.get(this.key).value
       });
     }, 150);
+  }
+
+  public updatePosition() {
+    this.update.next();
+  }
+
+  @HostListener('document:click', ['$event'])
+  public handleClick(event) {
+    let clickedComponent = event.target;
+    let inside = false;
+    do {
+      if (clickedComponent === this.el.nativeElement) {
+        inside = true;
+      }
+      clickedComponent = clickedComponent.parentNode;
+    } while (clickedComponent);
+    if (!inside && this.opened) {
+      this.$(this.opened).datebox('close');
+    }
   }
 }

@@ -550,12 +550,13 @@ export class DynamicListComponent implements
           obj['description'] = col.description;
           obj['redirect'] = element.redirect;
           obj['file'] = element.file;
+          obj['display'] = element.display;
           if (element.hasOwnProperty('file')) {
             const keys = element.field.split('.');
             keys[keys.length - 1] = '__str__';
             obj['contactName'] = this.getValueByKey(keys.join('.'), el);
           }
-          if (element.display) {
+          if (element.display && element.type !== 'tags') {
             obj.display = this.format(element.display.replace(/{field}/gi, `{${element.field}}`), el); //tslint:disable-line
           }
           if (element.type === 'datepicker') {
