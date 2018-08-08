@@ -247,6 +247,18 @@ form.ng-invalid button[type="submit"] {
       transform: rotate(45deg);
       box-shadow: 4px -4px 15px 1px rgba($gray, 0.2);
     }
+
+    .tooltip-left &::before {
+      width: 10px;
+      height: 10px;
+
+      border: none;
+
+      background-color: #fff;
+
+      transform: rotate(45deg);
+      box-shadow: 4px -4px 15px 1px rgba($gray, 0.2);
+    }
   }
 }
 
@@ -331,8 +343,8 @@ form.ng-invalid button[type="submit"] {
   }
 
   .modal-body {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    // padding-top: 40px;
+    // padding-bottom: 40px;
 
     border-radius: 0.5rem 0.5rem 0 0;
   }
@@ -1053,6 +1065,51 @@ iframe.send-sms {
     animation-iteration-count: infinite;
   }
 }
+
+.info-block {
+    padding: 12px 16px;
+
+    text-align: left;
+
+    h6 {
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      position: relative;
+
+      padding-left: 16px;
+
+      font-size: 12px;
+      line-height: 14px;
+
+      list-style: none;
+
+      color: rgba($gray, .7);
+    }
+
+    .icon {
+      position: absolute;
+      top: 4px;
+      left: 5px;
+
+      font-size: 6px !important;
+
+      color: $brand-primary;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          color: map-get($theme-colors, $item);
+        }
+      }
+    }
+  }
 
 
 @keyframes loadmore {
