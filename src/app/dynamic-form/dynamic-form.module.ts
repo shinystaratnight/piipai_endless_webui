@@ -41,6 +41,7 @@ import { directives } from './directives';
     fromComponents.GenericFormComponent,
     fromComponents.GenericListComponent,
     fromContainers.DynamicFormComponent,
+    fromContainers.DynamicListComponent,
     fromComponents.ProfileComponent,
     fromContainers.FilterBlockComponent,
     fromComponents.WorkflowComponent,

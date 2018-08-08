@@ -96,6 +96,8 @@ import * as acceptancetestworkflownodes from './acceptancetestworkflownodes.meta
 import * as skillbaserates from './skillbaserates.metadata';
 import * as skilltags from './skilltags.metadata';
 import * as profile from './profile.metadata';
+import * as billingcompanies from './billingcompanies.metadata';
+import * as billingdoscounts from './billingdiscount.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -209,5 +211,7 @@ export const metadata = {
   '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/':
     acceptancetestworkflownodes.metadata,
   '/ecore/api/v2/skills/skillbaserates/': skillbaserates.metadata,
-  'profile': profile.metadata
+  'profile': profile.metadata,
+  '/ecore/api/v2/billing/companies/': billingcompanies.metadata,
+  '/ecore/api/v2/billing/discounts/': billingdoscounts.metadata,
 };

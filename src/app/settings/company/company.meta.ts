@@ -60,6 +60,15 @@ export const meta = [
           label: 'Forwarding number',
           type: 'text',
         }
+      },
+      {
+        type: 'input',
+        key: 'company_settings.billing_email',
+        templateOptions: {
+          max: 32,
+          label: 'Billing email',
+          type: 'email',
+        }
       }
     ]
   },
