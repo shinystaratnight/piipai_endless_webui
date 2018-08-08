@@ -90,11 +90,10 @@ const form = [
   {
     key: 'message_text_template',
     default: '',
-    type: 'input',
+    type: 'textarea',
     templateOptions: {
       required: false,
       label: 'Text template',
-      type: 'text'
     },
     read_only: false
   },
@@ -219,13 +218,12 @@ const formadd = [
   {
     key: 'message_text_template',
     default: '',
-    type: 'input',
+    type: 'textarea',
     templateOptions: {
       required: false,
       label: 'Text template',
       type: 'text'
     },
-    read_only: false
   },
   {
     key: 'reply_timeout',
