@@ -1092,9 +1092,6 @@ export class FormRelatedComponent
                 } else {
                   this.previewList = res.results;
                 }
-
-                this.updatePosition();
-
               }
               if (callback) {
                 const target = res.results.find((el) => el.id === id);
@@ -1112,6 +1109,7 @@ export class FormRelatedComponent
                   callback.call(this, item);
                 }
               }
+              this.updatePosition();
             }
           );
         } else {
