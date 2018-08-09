@@ -121,11 +121,7 @@ const list = {
             endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
             field: 'supervisor_sms',
             type: 'link',
-            showIf: [
-              {
-                supervisor_sms: true
-              }
-            ]
+            showIf: ['supervisor_sms']
           },
           {
             values: {
@@ -146,11 +142,7 @@ const list = {
             endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
             field: 'candidate_sms',
             type: 'link',
-            showIf: [
-              {
-                candidate_sms: true
-              }
-            ]
+            showIf: ['candidate_sms']
           },
           {
             endpoint:
