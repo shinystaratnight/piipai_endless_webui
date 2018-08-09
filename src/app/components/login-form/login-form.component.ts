@@ -89,7 +89,7 @@ export class LoginFormComponent implements OnInit {
 
   public redirectHandler(data) {
     this.loginService.username = data;
-    location.href = '/ecore/register/';
+    this.router.navigate(['/registration']);
   }
 
   public formEvent(e) {

@@ -3,15 +3,13 @@ import { Routes } from '@angular/router';
 import {
   SiteComponent,
   LoginFormComponent,
-  ContactRegistrationFormComponent,
   VerifyEmailComponent,
+  RegistrationFormComponent
 } from './components';
 
 import { UserService, NavigationService, SiteSettingsService } from './services';
 
 import { AuthGuard, NotAuthorizedGuard } from './guards';
-
-import { DataResolver } from './app.resolver';
 
 export const ROUTES: Routes = [
   {
@@ -37,8 +35,16 @@ export const ROUTES: Routes = [
     canActivate: [NotAuthorizedGuard]
   },
   {
+    path: 'registration',
+    component: RegistrationFormComponent,
+    canActivate: [NotAuthorizedGuard],
+    resolve: {
+      settings: SiteSettingsService
+    }
+  },
+  {
     path: 'registration/password',
-    component: ContactRegistrationFormComponent,
+    component: RegistrationFormComponent,
     canActivate: [AuthGuard],
     resolve: {
       settings: SiteSettingsService

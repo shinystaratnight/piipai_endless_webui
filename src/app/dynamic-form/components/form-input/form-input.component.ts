@@ -207,8 +207,17 @@ export class FormInputComponent
   public checkAutocomplete() {
     if (this.config.autocompleteData) {
       const subscription = this.config.autocompleteData.subscribe((data) => {
-        if (data.hasOwnProperty(this.config.key)) {
-          this.autocompleteValue = data[this.config.key];
+        const key = this.propertyMatches(Object.keys(data), this.config.key);
+        if (
+          key
+          && (
+            this.config.type !== 'address'
+            && this.config.key !== 'address'
+            && !this.config.key.includes('street_address')
+          )
+        ) {
+          this.autocompleteValue = data[key];
+          this.setInitValue();
         }
 
         this.cd.detectChanges();
@@ -216,6 +225,10 @@ export class FormInputComponent
 
       this.subscriptions.push(subscription);
     }
+  }
+
+  public propertyMatches(keys: string[], key: string): string {
+    return keys.find((el) => key.includes(el));
   }
 
   public setInitValue() {

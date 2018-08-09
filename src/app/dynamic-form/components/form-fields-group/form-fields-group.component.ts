@@ -50,29 +50,31 @@ export class FormFieldsGroupComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    if (this.config.value) {
-      let value = this.config.value;
-      this.groupId = value[0].id;
-      this.parseValueFromApi(value[0], this.config.fields);
-      this.groups = this.config.fields;
-      this.addCollapseProperty(this.groups);
-      this.activeFields = value[0].field_list.sort((p, n) => {
+    if (this.config.fields && this.config.fields.length) {
+      if (this.config.value) {
+        let value = this.config.value;
+        this.groupId = value[0].id;
+        this.parseValueFromApi(value[0], this.config.fields);
+        this.groups = this.config.fields;
+        this.addCollapseProperty(this.groups);
+        this.activeFields = value[0].field_list.sort((p, n) => {
+          return p.position > n.position ? 1 : -1;
+        });
+        this.activeFields.forEach((el) => {
+          if (el.position > this.lastPosition) {
+            this.lastPosition = el.position;
+          }
+        });
+      } else {
+        this.groups = this.config.fields;
+        this.addCollapseProperty(this.groups);
+        this.createGroup();
+      }
+      this.activeFields = this.getActiveFields(this.groups);
+      this.activeFields.sort((p, n) => {
         return p.position > n.position ? 1 : -1;
       });
-      this.activeFields.forEach((el) => {
-        if (el.position > this.lastPosition) {
-          this.lastPosition = el.position;
-        }
-      });
-    } else {
-      this.groups = this.config.fields;
-      this.addCollapseProperty(this.groups);
-      this.createGroup();
     }
-    this.activeFields = this.getActiveFields(this.groups);
-    this.activeFields.sort((p, n) => {
-      return p.position > n.position ? 1 : -1;
-    });
     this.fields = {
       modelfield: {
         endpoint: '/ecore/api/v2/core/modelformfields/',

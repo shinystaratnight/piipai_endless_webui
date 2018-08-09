@@ -1,0 +1,31 @@
+<div class="site-page">
+  <div class="form-page">
+
+    <div class="header">
+      <img class="logo" [src]="settings.logo || '/assets/img/new-software.svg'">
+
+      <h3 class="title">{{settings.company_name}}</h3>
+      <h4 *ngIf="config" class="form-name">{{config.title}}</h4>
+    </div>
+
+
+    <div class="form-content">
+      <form-builder-form
+        [id]="settings.register_form_id"
+        (formConfig)="setFormConfig($event)">
+      </form-builder-form>
+    </div>
+  </div>
+</div>
+
+<!-- <generic-form
+  *ngIf="password"
+  [edit]="true"
+  [endpoint]="endpoint"
+  [response]="response"
+  [errors]="error"
+  (event)="eventHandler($event)">
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary pl-4 pr-4 mt-3">Save</button>
+    </div>
+</generic-form> -->
