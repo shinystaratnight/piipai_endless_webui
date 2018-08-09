@@ -1,4 +1,4 @@
-<div *ngIf="(!viewMode || config.list) && !config.hide">
+<div dropDown [element]="'.autocomplete'" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide">
   <div *ngIf="!config.list" class="form-group" [formGroup]="group">
     <div class="form-element" *ngIf="!config.many">
       <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
@@ -10,7 +10,7 @@
           <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
         </div>
         <div class="form-element-content-actions"
-          *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete)" >
+          *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete) && !(config.errorMessage && config.errorMessage.visible)" >
           <button type="button"
             *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
             (click)="open('update')">
@@ -47,7 +47,7 @@
             <ul class="list-group w-100">
               <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
                 *ngFor="let option of previewList; trackBy: trackByFn"
-                (click)="setValue(option)">{{option.__str__}}</li>
+                (click)="setValue(option, true)">{{option.__str__}}</li>
             </ul>
             <div class="autocomplete-preloader" *ngIf="skipScroll">
               <spinner></spinner>
@@ -93,7 +93,7 @@
             <ul class="list-group w-100">
               <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
                 *ngFor="let option of previewList; trackBy: trackByFn"
-                (click)="setValue(option)">{{option.__str__}}</li>
+                (click)="setValue(option, true)">{{option.__str__}}</li>
             </ul>
             <div class="autocomplete-preloader" *ngIf="skipScroll">
               <spinner></spinner>
@@ -101,7 +101,7 @@
           </div>
         </div>
         <div class="d-flex flex-wrap align-items-center mt-2">
-          <span class="badge badge-outline mt-2 mr-1" style="white-space: normal"
+          <span class="badge badge-outline mt-2 mr-1" style="white-space: normal;"
             *ngFor="let item of results; let i = index">
             {{item.__str__}}
             <i fa class="ml-2"
@@ -134,10 +134,12 @@
                       [(ngModel)]="option.checked"
                       name="checked"
                       [ngModelOptions]="{standalone: true}"
-                      (ngModelChange)="setValue(option)"
+                      (ngModelChange)="setValue(option, true)"
                       hidden>
                     <div class="custom-checkbox">
-                      <i fa name="check"></i>
+                      <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.08284 4.87574C2.92663 5.03195 2.67337 5.03195 2.51716 4.87574L1.12071 3.47929C0.888359 3.24694 0.511641 3.24694 0.279289 3.47929C0.0469372 3.71164 0.0469373 4.08836 0.279289 4.32071L2.37574 6.41716C2.61005 6.65147 2.98995 6.65147 3.22426 6.41716L8.52071 1.12071C8.75306 0.888359 8.75306 0.511642 8.52071 0.279289C8.28836 0.0469374 7.91164 0.0469372 7.67929 0.279289L3.08284 4.87574Z" fill="white" stroke="#FDFDFD" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
                     </div>
                     {{option.__str__}}
                   </label>
@@ -157,17 +159,6 @@
           </div>
       </div>
     </div>
-
-    <small class="text-muted" *ngIf="config.templateOptions.description">
-      {{config.templateOptions.description}}
-    </small>
-    <div *ngIf="errors && errors[config.key]">
-      <div class="text-danger mt-1">{{errors[config.key][0]}}</div>
-      <a *ngIf="errors[config.key][1] && errors[config.key][2]" [routerLink]="[errors[config.key][2]]">{{errors[config.key][1]}}</a>
-    </div>
-    <div *ngIf="message">
-      <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
-    </div>
   </div>
 
   <div class="form-list" *ngIf="config.list">
@@ -182,7 +173,7 @@
         aria-controls="collapseExample"
         style="cursor: pointer"></i>
           {{config.templateOptions.label}}
-      <button *ngIf="(showButton || config.delay) && checkPermission('post')"
+      <button *ngIf="config.delay && checkPermission('post')"
         type="button"
         class="text-white btn btn-sm group-button ml-auto mr-2"
         (click)="addObject()">
@@ -239,31 +230,57 @@
   </div>
 </div>
 
-<div class="form-group form-element" [class.custom]="customTemplate" *ngIf="viewMode && !config.list && !config.hide">
-  <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label">
-    {{config.templateOptions.label}}<span *ngIf="!customTemplate">:</span>
-  </label>
-  <div class="form-element-content" [class.many]="config.many && results">
-    <span *ngIf="!displayValue && !(customTemplate && customTemplate.length) && (!results || results.length === 0)">-</span>
-    <a [class.readonly-value]="editMode" *ngIf="!config.many && displayValue && this.linkPath && !(customTemplate && customTemplate.length)" href="{{this.linkPath}}" (click)="open('update', $event)">{{displayValue}}</a>
-    <div *ngIf="config.many && results && !config.templateOptions.deleteList">
-      <span *ngFor="let item of results; let l = last">
-        <a [class.readonly-value]="editMode" href="/" (click)="open('update', $event, item)">{{item.__str__}}</a>;
-      </span>
+<div class="form-group form-element"
+  [class.custom]="customTemplate"
+  *ngIf="viewMode && !config.list && !config.hide && !((!this.displayValue && !results.length) && config.hideIfNull)">
+    <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label">
+      {{config.templateOptions.label}}<span *ngIf="!customTemplate">:</span>
+    </label>
+    <div class="form-element-content" [class.many]="config.many && results">
+      <span *ngIf="!displayValue && !(customTemplate && customTemplate.length) && (!results || results.length === 0)">-</span>
+      <a [class.readonly-value]="editMode" *ngIf="!config.many && displayValue && this.linkPath && !(customTemplate && customTemplate.length)" href="{{this.linkPath}}" (click)="open('update')">{{displayValue}}</a>
+      <div *ngIf="config.many && results && !config.templateOptions.deleteList">
+        <span *ngFor="let item of results; let l = last">
+          <a [class.readonly-value]="editMode" href="/" (click)="open('update', item)">{{item.__str__}}</a>;
+        </span>
+      </div>
+      <div *ngIf="config.many && results && config.templateOptions.deleteList"  class="d-flex flex-wrap align-items-center mt-2">
+        <span class="badge badge-outline mt-2 mr-1" style="white-space: normal" *ngFor="let item of results; let i = index">
+          {{item.__str__}}
+          <i fa class="text-white ml-2" (click)="deleteItem(i, item, config.templateOptions.deleteList)" [name]="'times'"></i>
+        </span>
+      </div>
     </div>
-    <div *ngIf="config.many && results && config.templateOptions.deleteList"  class="d-flex flex-wrap align-items-center mt-2">
-      <span class="badge badge-outline mt-2 mr-1" style="white-space: normal" *ngFor="let item of results; let i = index">
-        {{item.__str__}}
-        <i fa class="text-white ml-2" (click)="deleteItem(i, item, config.templateOptions.deleteList)" [name]="'times'"></i>
-      </span>
-    </div>
-  </div>
 
-  <template [ngTemplateOutlet]="custom"></template>
+    <template [ngTemplateOutlet]="custom"></template>
 
 </div>
 
-<template #modal let-c="close" let-d="dismiss">
+<small class="text-muted" *ngIf="config.templateOptions.description">
+  {{config.templateOptions.description}}
+</small>
+
+<ng-container *ngIf="!config.hide">
+  <div *ngIf="errors && errors[config.key] && isArray(errors[config.key]) && errors[config.key].length > 1">
+    <div class="text-danger mt-1">{{errors[config.key][0]}}</div>
+    <a *ngIf="errors[config.key][1] && errors[config.key][2]"
+      [attr.href]="errors[config.key][2]"
+      (click)="open('update', errors[config.key][3])">
+        {{errors[config.key][1]}}
+    </a>
+  </div>
+  <div *ngIf="errors && errors[config.key] && (errors[config.key].length === 1 || !isArray(errors[config.key]))">
+    <div class="text-danger mt-1 mb-2">{{errors[config.key]}}</div>
+  </div>
+  <div *ngIf="message">
+    <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
+  </div>
+  <div *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible">
+    <div class="text-danger mt-1">{{config.errorMessage.message}}</div>
+  </div>
+</ng-container>
+
+<template #modal let-c="close">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -325,7 +342,7 @@
     <span *ngFor="let field of customTemplate">
       <i fa *ngIf="field.value && field.icon" [name]="field.icon" class="text-primary"></i>
       <span *ngIf="field.value && !field.link && !field.prefix && !field.outside">{{field.value}}</span>
-      <a *ngIf="field.value && field.link" href="{{linkPath}}" (click)="open('update', $event)">{{field.value}}</a>
+      <a *ngIf="field.value && field.link" href="{{linkPath}}" (click)="open('update')">{{field.value}}</a>
       <a *ngIf="field.value && field.prefix" href="{{field.prefix + field.value}}">{{field.value}}</a>
       <a *ngIf="field.value && field.outside" href="{{field.value}}">{{field.value}}</a>
     </span>

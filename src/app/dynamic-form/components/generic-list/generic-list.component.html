@@ -1,4 +1,4 @@
-<div class="datatable-wrapper" *ngFor="let table of tables; let last = last" [ngClass]="{'pb-3': last && minimizedTable.length}">
+<div class="datatable-wrapper" *ngFor="let table of tables; let last = last">
   <dynamic-list
     *ngIf="table.metadata && table.data"
     [inForm]="inForm"
@@ -28,11 +28,12 @@
     [metadataQuery]="metadataQuery"
     [addMetadataQuery]="addMetadataQuery"
     [editEndpoint]="editEndpoint"
+    [addData]="table.addData"
     (checkedObjects)="checkedHandler($event)"
     (list)="listHandler($event)"
     (event)="eventHandler($event)">
   </dynamic-list>
-  <div *ngIf="!(table.metadata && table.data)" class="spinner">
+  <div class="spinner" [class.invisible]="!(!(table.metadata && table.data) || uploading)">
     <div class="double-bounce1"></div>
     <div class="double-bounce2"></div>
   </div>
@@ -71,3 +72,9 @@
     </div>
   </ng-container>
 </div>
+
+<button title="Load more" class="load-more"
+  *ngIf="tables[0] && tables[0].data && !inForm && (tables[0].offset < tables[0].data.count) && !uploading && (tables[0].data.count !== tables[0].limit)"
+  (click)="loadMoreHandler()">
+    <i fa name="angle-down" class="text-white"></i>
+</button>

@@ -6,11 +6,14 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { Role } from './user.service';
+
 @Injectable()
 export class LoginService {
 
   public url: string;
-  public _username: any;
+  private _username: any;
+  private _role: Role;
 
   constructor(private http: Http) {}
 
@@ -20,6 +23,14 @@ export class LoginService {
 
   get username() {
     return this._username;
+  }
+
+  set role(role: Role) {
+    this._role = role;
+  }
+
+  get role() {
+    return this._role;
   }
 
   public loginWithToken(token) {

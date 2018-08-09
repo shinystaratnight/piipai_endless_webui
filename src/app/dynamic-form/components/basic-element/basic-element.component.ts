@@ -8,7 +8,7 @@ export class BasicElementComponent {
   public config: any;
   public event: EventEmitter<any> = new EventEmitter();
 
-  public addControl(config, fb: FormBuilder, required?) {
+  public addControl(config, fb: FormBuilder, required?: boolean) {
     if (config.key) {
       const keys = config.key.split('.');
       if (keys.length > 1) {
@@ -16,7 +16,7 @@ export class BasicElementComponent {
       } else {
         if (config.type === 'related' && !config.many) {
           keys.push('id');
-          this.addControls(this.group, keys, fb);
+          this.addControls(this.group, keys, fb, required);
         } else if (config.type !== 'static' || (config.type === 'static' && !config.read_only)) {
           this.group.addControl(config.key, fb.control(undefined, required ? Validators.required : undefined)); //tslint:disable-line
           this.key = config.key;
@@ -64,27 +64,27 @@ export class BasicElementComponent {
     });
   }
 
-  private addElement(group, el, fb) {
-    group.addControl(el, fb.control(''));
+  private addElement(group, el, fb, required?: boolean) {
+    group.addControl(el, fb.control('', required ? Validators.required : undefined));
   }
 
   private addGroup(group, el, fb) {
     group.addControl(el, fb.group({}));
   }
 
-  private addControls(group, keys: string[], fb) {
+  private addControls(group, keys: string[], fb, required?: boolean) {
     const el = keys.shift();
     if (keys.length === 0) {
       if (!group.get(el)) {
-        this.addElement(group, el, fb);
+        this.addElement(group, el, fb, required);
       }
       this.key = el;
       this.group = group;
     } else if (!group.get(el)) {
       this.addGroup(group, el, fb);
-      this.addControls(group.get(el), keys, fb);
+      this.addControls(group.get(el), keys, fb, required);
     } else {
-      this.addControls(group.get(el), keys, fb);
+      this.addControls(group.get(el), keys, fb, required);
     }
   };
 }

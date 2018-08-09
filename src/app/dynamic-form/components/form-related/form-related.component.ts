@@ -13,6 +13,7 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/debounceTime';
@@ -25,6 +26,7 @@ import { NavigationService, UserService, SiteSettingsService } from '../../../se
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
+import { Subject } from 'rxjs/Subject';
 
 export interface RelatedObject {
   id: string;
@@ -69,48 +71,52 @@ export class FormRelatedComponent
   public errors: any;
   public message: any;
   public key: any;
+
   public label: boolean;
+  public isCollapsed: boolean;
+  public viewMode: boolean;
+  public editMode: boolean;
+  public saveProcess: boolean;
+  public linkPath: string;
+
   public display: string;
   public param: string;
+
   public list: any[];
+  public previewList: any[];
   public results: any;
   public displayValue: any;
-  public limit: number = 10;
-  public previewList: any[];
+
   public lastElement: number = 0;
+  public limit: number = 10;
+  public count: number;
   public searchValue: any;
+  public fields: string[];
+
   public hideAutocomplete: boolean = true;
   public modalData: any = {};
   public modalRef: any;
-  public formData: any = {};
 
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
-
   public skipScroll = false;
 
   public dataOfList: any;
-  public count: number;
-  public isCollapsed: boolean = false;
+  public formData: any = {};
+  public allowPermissions: string[];
 
   public replaceElements: any = [];
 
   public listElement: Field;
 
-  public viewMode: boolean;
-
   public skillEndpoint: boolean;
   public customTemplate: CustomField[];
 
-  public fields: string[];
-
-  public saveProcess: boolean;
-
-  public linkPath: string;
-  public allowPermissions: string[];
   public autocompleteDisplay: boolean;
   public currentQuery: string;
-  public editMode: boolean;
+  public currentId: string;
+  public update: Subject<any>;
+  public manual: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -136,17 +142,22 @@ export class FormRelatedComponent
   }
 
   public ngOnInit() {
-    this.addControl(this.config, this.fb);
+    this.addControl(this.config, this.fb, this.config.templateOptions.required);
+
     this.skillEndpoint = this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
       this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
-    this.display =
-      this.config.templateOptions.display ? this.config.templateOptions.display : '{__str__}';
-    this.param = this.config.templateOptions.param ? this.config.templateOptions.param : 'id';
-    this.fields = this.config.templateOptions.values;
-    this.allowPermissions = this.permission.getAllowMethods(undefined, this.config.endpoint);
-    if (this.fields && this.fields.indexOf(this.param) === -1) {
+
+    this.display = this.config.templateOptions.display || '{__str__}';
+    this.param = this.config.templateOptions.param || 'id';
+    this.fields = this.config.templateOptions.values || ['__str__'];
+    this.isCollapsed = this.config.collapsed;
+    this.viewMode = this.config.editForm && this.config.read_only;
+
+    if (this.fields.indexOf(this.param) === -1) {
       this.fields.push(this.param);
     }
+
+    this.getAllowPermissions();
     this.checkAutocomplete();
     this.checkFormData();
     this.setInitValue();
@@ -154,39 +165,16 @@ export class FormRelatedComponent
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.getDefaultDataForListType();
-    if (this.config.custom && this.config.custom.length) {
-      this.generateCustomTemplate(this.config.custom);
-    }
-    if (this.config && this.config.list && this.config.data) {
-      const subscription = this.config.data.subscribe((data) => {
-        this.generateDataForList(this.config, data);
-      });
+    this.checkCustomTemplate();
+    this.checkIfListType();
+    this.checkDelayData();
+    this.checkMetadataQuery();
 
-      this.subscriptions.push(subscription);
-    }
     if (this.config && this.config.metadata) {
       this.getReplaceElements(this.config.metadata);
     }
-    this.isCollapsed = this.config.collapsed;
 
-    if (this.config.editForm && this.config.read_only) {
-      this.viewMode = true;
-    }
-
-    if (this.config.delay) {
-      this.config.data = {
-        sendData: []
-      };
-      this.config.delayData[this.config.endpoint] = this.config;
-    }
-
-    if (this.config.metadata_query instanceof Object) {
-      this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
-    }
-
-    if (this.config.add_metadata_query instanceof Object) {
-      this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
-    }
+    this.update = new Subject();
   }
 
   public ngAfterViewChecked() {
@@ -199,6 +187,45 @@ export class FormRelatedComponent
         .subscribe(() => {
           this.filter(this.searchValue);
         });
+    }
+  }
+
+  public checkMetadataQuery() {
+    const properties = ['metadata_query', 'add_metadata_query'];
+
+    properties.forEach((prop: string) => {
+      this.config[prop] = this.config[prop] && this.parseMetadataQuery(this.config, prop);
+    });
+  }
+
+  public checkDelayData() {
+    if (this.config.delay) {
+      this.config.data = {
+        sendData: []
+      };
+      this.config.delayData[this.config.endpoint] = this.config;
+    }
+  }
+
+  public checkIfListType() {
+    if (this.config && this.config.list && this.config.data) {
+      const subscription = this.config.data.subscribe((data) => {
+        this.generateDataForList(this.config, data);
+      });
+
+      this.subscriptions.push(subscription);
+    }
+  }
+
+  public checkCustomTemplate() {
+    if (this.config.custom && this.config.custom.length) {
+      this.generateCustomTemplate(this.config.custom);
+    }
+  }
+
+  public getAllowPermissions() {
+    if (!this.allowPermissions) {
+      this.allowPermissions = this.permission.getAllowMethods(undefined, this.config.endpoint);
     }
   }
 
@@ -219,8 +246,8 @@ export class FormRelatedComponent
           el.mode = new BehaviorSubject('view');
           el.read_only = true;
           if (el.query) {
-            Object.keys(el.query).forEach((query) => {
-              el.query[query] = format.format(el.query[query], this.formData);
+            Object.keys(el.query).forEach((param) => {
+              el.query[param] = format.format(el.query[param], this.formData);
             });
           }
         }
@@ -228,7 +255,7 @@ export class FormRelatedComponent
 
       this.genericFormService.getByQuery(this.config.endpoint, query)
         .subscribe((res) => {
-          this.generateDataForList({ list: true, metadata }, res.results);
+          this.generateDataForList(<any> { list: true, metadata }, res.results);
         });
     }
   }
@@ -289,6 +316,7 @@ export class FormRelatedComponent
     if (this.config && this.config.mode) {
       this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
+
           this.viewMode = true;
           this.editMode = false;
 
@@ -299,16 +327,17 @@ export class FormRelatedComponent
           if (this.searchSubscription) {
             this.searchSubscription.unsubscribe();
           }
-        } else {
+          this.setInitValue();
+          this.eventHandler(
+            {type: 'change'},
+            this.group.get(this.key).value,
+            this.resetAdditionalData()
+          );
+        } else if (mode === 'edit') {
           this.viewMode = this.config.read_only || false;
           this.editMode = true;
+          this.setInitValue();
         }
-        this.setInitValue();
-        this.eventHandler(
-          {type: 'change'},
-          this.group.get(this.key).value,
-          this.resetAdditionalData()
-        );
       });
     }
   }
@@ -327,33 +356,62 @@ export class FormRelatedComponent
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
-        if (
-          this.checkRelatedField(formData.key, formData.data) ||
-          (this.config.default && !this.config.default.includes('session'))
-        ) {
-          if (this.config.defaultData) {
-            this.getDefaultDataForListType();
+        if (this.config.key !== formData.key) {
+          if (this.config.errorMessage) {
+            if (!this.getValueByKey(this.config.errorMessage.field, this.formData)) {
+              this.config.errorMessage.visible = true;
+            } else {
+              this.config.errorMessage.visible = false;
+            }
           }
 
-          if (this.config.default && !this.config.hide && !this.config.value) {
-            const format = new FormatString();
-            let id;
-            if (typeof this.config.default === 'string') {
-              id = format.format(this.config.default, this.formData);
-            } else if (Array.isArray(this.config.default)) {
-              this.config.default.forEach((el) => {
-                if (!id) {
-                  id = format.format(el, this.formData);
-                }
-              });
+          if (
+            this.checkRelatedField(formData.key, formData.data) ||
+            (
+              this.config.default
+              && !this.config.default.includes('session')
+              && !(formData.reset && formData.reset.indexOf(this.config.key) > -1)
+            )
+          ) {
+            if (this.config.defaultData) {
+              this.getDefaultDataForListType();
             }
 
-            if (id) {
-              this.getOptions.call(this, '', 0, false, this.setValue, id);
-              if (this.config.read_only) {
-                this.viewMode = true;
+            if (this.config.default && !this.config.hide && !this.config.value) {
+              const format = new FormatString();
+              let id;
+              if (typeof this.config.default === 'string') {
+                id = format.format(this.config.default, this.formData);
+              } else if (Array.isArray(this.config.default)) {
+                this.config.default.forEach((el) => {
+                  if (!id) {
+                    id = format.format(el, this.formData);
+                  }
+                });
+              }
+              if (id && id !== this.group.get(this.key).value) {
+                this.getOptions.call(this, '', 0, false, this.setValue, id);
+                if (this.config.read_only) {
+                  this.viewMode = true;
+                }
               }
             }
+          }
+
+          if (
+            formData.reset
+            && formData.reset.indexOf(this.config.key) > -1
+          ) {
+            if (this.group.get(this.key).value) {
+              this.displayValue = '';
+              this.group.get(this.key).patchValue('');
+              this.eventHandler(
+                {type: 'reset'},
+                this.group.get(this.key).value,
+                this.resetAdditionalData()
+              );
+            }
+
           }
         }
       });
@@ -466,7 +524,11 @@ export class FormRelatedComponent
         }
         this.updateData();
       }
-    } else if (this.config.default && this.config.default.includes('session')) {
+    } else if (
+      this.config.default
+      && this.config.default.includes('session')
+      && !this.config.editForm
+    ) {
       const id = this.userService.user.data.contact.contact_id;
 
       if (this.config.read_only) {
@@ -596,7 +658,7 @@ export class FormRelatedComponent
 
   public editObject(object: RelatedObject): void {
     if (object.id) {
-      this.open('update', undefined, object);
+      this.open('update', object);
     }
   }
 
@@ -683,13 +745,9 @@ export class FormRelatedComponent
     this.displayValue = null;
   }
 
-  public open(type, e = undefined, object = undefined): void {
+  public open(type, object = undefined) {
     const format = new FormatString();
 
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
     if (!this.checkPermission(type) && this.config.endpoint) {
       return;
     }
@@ -723,12 +781,15 @@ export class FormRelatedComponent
               ? this.config.prefilled[el]
               : format.format(this.config.prefilled[el], this.formData),
             read_only: true,
+            isPrefilled: true,
             editForm: true
           }
         };
       });
     }
     this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
+
+    return false;
   }
 
   public openAutocomplete(): void {
@@ -803,39 +864,72 @@ export class FormRelatedComponent
     }
   }
 
-  public setValue(item) {
-    const formatString = new FormatString();
+  public setValue(item, manual?: boolean, update?: boolean) {
+    let updated = false;
+
     if (item) {
       if (this.config.many) {
-
-        if (this.config.useOptions) {
-          if (item.checked) {
-            this.results.push(item);
-          } else {
-            this.results.splice(this.results.indexOf(item), 1);
-          }
-        } else {
-          this.results.push(item);
-        }
-
-        this.updateData();
+        updated = this.updateValueOfManyType(item);
       } else {
-        this.displayValue = formatString.format(this.display, item);
-        this.group.get(this.key).patchValue(item[this.param]);
+        updated = this.updateValueOfSingleType(item, update);
       }
     } else {
-      this.displayValue = '';
-      this.group.get(this.key).patchValue('');
+      updated = this.resetValue();
     }
+
+    if (updated || update) {
+      this.eventHandler(
+        {type: 'change'},
+        (item && item[this.param]),
+        item,
+        manual
+      );
+    }
+
     this.changeList();
-    this.eventHandler({type: 'change'}, item && item[this.param], item);
     if (!this.config.useOptions) {
       this.searchValue = null;
       this.list = null;
       this.count = null;
       this.previewList = null;
-      this.cd.detectChanges();
     }
+    this.cd.detectChanges();
+  }
+
+  public resetValue(): boolean {
+    this.displayValue = '';
+    this.group.get(this.key).patchValue('');
+
+    return true;
+  }
+
+  public updateValueOfSingleType(item: any, update?: boolean): boolean {
+    if (item[this.param] !== this.group.get(this.key).value || update) {
+      const formatString = new FormatString();
+
+      this.displayValue = formatString.format(this.display, item);
+      this.group.get(this.key).patchValue(item[this.param]);
+
+      return true;
+    }
+
+    return false;
+  }
+
+  public updateValueOfManyType(item: any): boolean {
+    if (this.config.useOptions) {
+      if (item.checked) {
+        this.results.push(item);
+      } else {
+        this.results.splice(this.results.indexOf(item), 1);
+      }
+    } else {
+      this.results.push(item);
+    }
+
+    this.updateData();
+
+    return true;
   }
 
   public deleteItem(index: number, item: any, api: boolean) {
@@ -864,12 +958,13 @@ export class FormRelatedComponent
     }
   }
 
-  public eventHandler(e, value, additionalData?) {
+  public eventHandler(e, value, additionalData?, manual?: boolean) {
     this.event.emit({
       type: e.type,
       el: this.config,
       value,
-      additionalData
+      additionalData,
+      manual
     });
   }
 
@@ -977,10 +1072,11 @@ export class FormRelatedComponent
       if (customQuery) {
         query += this.generateQuery(customQuery);
       }
-      if (query !== this.currentQuery
+      if ((query !== this.currentQuery || id !== this.currentId)
           && (!this.count || (this.count && offset < this.count && concat))) {
         this.lastElement += this.limit;
         this.currentQuery = query;
+        this.currentId = id;
         if (!id) {
           this.genericFormService.getByQuery(endpoint, query).subscribe(
             (res: any) => {
@@ -996,7 +1092,6 @@ export class FormRelatedComponent
                 } else {
                   this.previewList = res.results;
                 }
-
               }
               if (callback) {
                 const target = res.results.find((el) => el.id === id);
@@ -1014,6 +1109,7 @@ export class FormRelatedComponent
                   callback.call(this, item);
                 }
               }
+              this.updatePosition();
             }
           );
         } else {
@@ -1030,7 +1126,7 @@ export class FormRelatedComponent
                   this.linkPath = '/';
                 }
 
-                callback.call(this, res);
+                callback.call(this, res, false, true);
               }
             }
           );
@@ -1110,6 +1206,14 @@ export class FormRelatedComponent
 
   public trackByFn(value) {
     return value[this.param];
+  }
+
+  public isArray(target: any) {
+    return Array.isArray(target);
+  }
+
+  public updatePosition() {
+    this.update.next();
   }
 
   @HostListener('document:click', ['$event'])

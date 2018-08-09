@@ -71,10 +71,13 @@
   }
 
   .custom-checkbox {
-    min-width: 12px;
+    width: 12px;
     height: 12px;
 
-    font-size: 8px;
+    svg {
+      height: 5px;
+      width: 7px;
+    }
   }
 
   .form-group {
@@ -85,10 +88,15 @@
     }
   }
 
-  .custom-select {
+  .custom-select,
+  select.form-control {
     background: #fff url(/assets/img/down-arrow.svg) no-repeat;
     background-position: right .75rem center;
     background-size: 8px 8px;
+
+    -webkit-appearance: none;
+    -moz-appearance:    none;
+    appearance:         none;
 
     &:focus {
       background: url(/assets/img/down-arrow.svg) no-repeat;

@@ -7,7 +7,6 @@ import {
   EventEmitter,
   Output
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -45,31 +44,22 @@ export interface WidgetGroup {
 
 export class DashboardComponent implements OnChanges, OnDestroy {
 
-  @ViewChild('modal')
-  public modal: any;
-
   public userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/';
   public modelsListEndpoint = '/ecore/api/v2/core/dashboardmodules/';
   public modalRef: any;
   public userModelData: UserModelData;
-
-  @Input()
-  public modulesList: any;
-
-  @Input()
-  public userModules: any;
-
-  @Output()
-  public changeWidgetList: EventEmitter<any> = new EventEmitter();
-
   public availableModules: any;
   public widgetList: WidgetGroup[];
-
-  @Input()
-  public pages: Page[];
-
   public widgets: WidgetItem[];
   public selectedWidget: any;
+
+  @Input() public modulesList: any;
+  @Input() public userModules: any;
+  @Input() public pages: Page[];
+
+  @Output() public changeWidgetList: EventEmitter<any> = new EventEmitter();
+
+  @ViewChild('modal') public modal: any;
 
   constructor(
     public modalService: NgbModal,
@@ -81,7 +71,9 @@ export class DashboardComponent implements OnChanges, OnDestroy {
     if (this.pages && this.userModules && this.modulesList) {
       this.widgetList = [];
       this.widgets = [];
-      this.generateWidgetList();
+      if (this.userModules.length && this.modulesList.length) {
+        this.generateWidgetList();
+      }
     }
   }
 

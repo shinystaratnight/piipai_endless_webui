@@ -1,3 +1,5 @@
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+
 const list = {
   list: {
     list: 'timesheet',
@@ -116,6 +118,16 @@ const list = {
             ]
           },
           {
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
+            field: 'supervisor_sms',
+            type: 'link',
+            showIf: [
+              {
+                supervisor_sms: true
+              }
+            ]
+          },
+          {
             values: {
               false: 'times',
               true: 'check',
@@ -127,6 +139,16 @@ const list = {
             showIf: [
               {
                 supervisor_approved: true
+              }
+            ]
+          },
+          {
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
+            field: 'candidate_sms',
+            type: 'link',
+            showIf: [
+              {
+                candidate_sms: true
               }
             ]
           },
@@ -197,7 +219,7 @@ const list = {
             text: 'Send Supervisor SMS'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/candidate_fill/',
+            endpoint: '/ecore/api/v2/hr/timesheets/{id}/candidate_fill',
             field: 'id',
             showIf: [
               {
@@ -210,7 +232,7 @@ const list = {
             text: 'Fill'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/supervisor_approve/',
+            endpoint: '/ecore/api/v2/hr/timesheets/{id}/supervisor_approve',
             field: 'id',
             showIf: [
               {
@@ -234,9 +256,9 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{related_sms.id}/change',
             field: 'related_sms',
-            type: 'related'
+            type: 'link'
           }
         ],
         name: 'related_sms',
@@ -282,15 +304,15 @@ const list = {
         list: [
           {
             label: 'Yesterday',
-            query: 'shift_started_at_0=2018-07-03&shift_started_at_1=2018-07-03'
+            query: `shift_started_at_0=${yesterdayFormatDate}&shift_started_at_1=${yesterdayFormatDate}` //tslint:disable-line
           },
           {
             label: 'Today',
-            query: 'shift_started_at_0=2018-07-04&shift_started_at_1=2018-07-04'
+            query: `shift_started_at_0=${todayFormatDate}&shift_started_at_1=${todayFormatDate}`
           },
           {
             label: 'Tomorrow',
-            query: 'shift_started_at_0=2018-07-05&shift_started_at_1=2018-07-05'
+            query: `shift_started_at_0=${tomorrowFormatDate}&shift_started_at_1=${tomorrowFormatDate}` //tslint:disable-line
           }
         ],
         key: 'shift_started_at',

@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 
 import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
@@ -15,13 +15,11 @@ export class DynamicFormComponent implements OnInit {
   @Input() public errors: any = {};
   @Input() public message: any = {};
   @Input() public data: any;
-  @Input() public commonFields: any;
   @Input() public hiddenFields: any;
   @Input() public formId: number;
   @Input() public form: FormGroup;
 
   @Output() public submit: EventEmitter<any> = new EventEmitter<any>();
-  @Output() public formChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() public event: EventEmitter<any> = new EventEmitter();
   @Output() public buttonAction: EventEmitter<any> = new EventEmitter();
   @Output() public resourseData: EventEmitter<any> = new EventEmitter();
@@ -30,7 +28,10 @@ export class DynamicFormComponent implements OnInit {
   public currentForm: any;
   public fullData: any;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
+  ) {}
 
   public ngOnInit() {
     this.form = this.form || this.fb.group({});
@@ -84,17 +85,29 @@ export class DynamicFormComponent implements OnInit {
     }
     setTimeout(() => {
       if (e.el && e.el.formData) {
-        if ((e.type === 'change' || e.type === 'create') && e.el && e.el.key) {
+        if (
+          (e.type === 'change' || e.type === 'reset' || e.type === 'create' || e.type === 'blur')
+          && e.el
+          && e.el.key
+          && (e.el.key !== 'address' || e.el.updateFormData)
+        ) {
           const newData = this.generateData(e.el.key, e.el.formData.getValue().data, e);
           this.fullData = newData;
           if (this.hiddenFields && this.hiddenFields.observers.indexOf(key) > -1) {
             this.parseConfig(this.hiddenFields.elements);
           }
-          e.el.formData.next({
-            key: e.el.key,
-            data: newData
-          });
+          if (e.type !== 'reset') {
+            e.el.formData.next({
+              key: e.el.key,
+              data: this.fullData,
+              reset: e.manual && e.el.reset
+            });
+          }
         }
+
+        setTimeout(() => {
+          this.cd.detectChanges();
+        }, 1000);
       }
     }, 50);
   }

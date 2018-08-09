@@ -5,4 +5,5 @@ export interface CustomEvent {
   el: Field;
   value: any;
   additionalData?: any;
+  manual?: boolean;
 }

@@ -1,7 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SiteService, PageData, UserService, User, Role, NavigationService } from '../../services/';
+import { Subject } from 'rxjs/Subject';
+
+import {
+  SiteService,
+  PageData,
+  UserService,
+  User,
+  Role,
+  NavigationService,
+  SiteSettingsService
+} from '../../services/';
 import { GenericFormService } from '../../dynamic-form/services/';
 import { CheckPermissionService, ToastrService, MessageType } from '../../shared/services/';
 
@@ -37,12 +47,14 @@ export class SiteComponent implements OnInit {
   public Jira: any;
   public jiraLoaded: boolean;
 
+  public upload: Subject<boolean> = new Subject();
   public listName: string;
 
   public listNameCache = {};
-  public errors: any;
+  public errors: any = {};
 
   public acceptenceTestData: any;
+  public additionalData: any;
 
   constructor(
     private router: Router,
@@ -52,7 +64,8 @@ export class SiteComponent implements OnInit {
     private navigationService: NavigationService,
     private userService: UserService,
     private permission: CheckPermissionService,
-    private ts: ToastrService
+    private ts: ToastrService,
+    private siteSettingsService: SiteSettingsService,
   ) {}
 
   public ngOnInit() {
@@ -98,10 +111,27 @@ export class SiteComponent implements OnInit {
     }
   }
 
+  public onModalScrollDown() {
+    this.upload.next(true);
+  }
+
   public getPageData(url) {
     this.siteService.getDataOfPage(url, this.pagesList).subscribe(
       (pageData: PageData) => {
-        if (pageData.pathData.path === '/profile/') {
+        if (pageData.endpoint === '/ecore/api/v2/core/workflownodes/') {
+          this.additionalData = {
+            company: {
+              action: 'add',
+              data: {
+                value: {
+                  id: this.siteSettingsService.settings.company_settings.company
+                }
+              }
+            }
+          };
+          this.pageData = pageData;
+          this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+        } else if (pageData.pathData.path === '/profile/') {
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
         } else if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
@@ -114,6 +144,9 @@ export class SiteComponent implements OnInit {
         } else {
           setTimeout(() => {
             this.pageData = pageData;
+            if (pageData.pathData.id) {
+              this.formMode = 'view';
+            }
             this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
             if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
               this.formStorage = true;
@@ -153,7 +186,9 @@ export class SiteComponent implements OnInit {
     this.currentRole = role;
     this.navigationService.getPages(role)
       .subscribe((pages: any) => {
-        this.permission.parseNavigation(this.permission.permissions, pages);
+        if (!role.__str__.includes('candidate')) {
+          this.permission.parseNavigation(this.permission.permissions, pages);
+        }
         this.pagesList = pages;
 
         if (this.router.url !== '/') {

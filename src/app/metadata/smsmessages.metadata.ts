@@ -1,3 +1,5 @@
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+
 const list = {
   list: {
     list: 'smsmessage',
@@ -189,11 +191,11 @@ const list = {
         list: [
           {
             label: 'Yesterday',
-            query: 'created_at_0=2018-07-03&created_at_1=2018-07-03'
+            query: `created_at_0=${yesterdayFormatDate}&created_at_1=${yesterdayFormatDate}`
           },
           {
             label: 'Today',
-            query: 'created_at_0=2018-07-04&created_at_1=2018-07-04'
+            query: `created_at_0=${todayFormatDate}&created_at_1=${todayFormatDate}`
           }
         ],
         key: 'created_at',

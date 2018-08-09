@@ -11,10 +11,12 @@ import { Subscription } from 'rxjs/Subscription';
 export class FormInfoComponent implements OnInit, OnDestroy {
   public config: any;
   public group: any;
+  public errors: any;
 
   public picture: string;
   public available: boolean;
   public title: string;
+  public skill_title: string; //tslint:disable-line
   public address: string;
   public description: string;
   public status: any[];
@@ -28,6 +30,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public carrier_reserve: number; //tslint:disable-line
   public map: any;
   public client: any;
+  public link: string;
 
   public color: any;
   public colorAttr: string;
@@ -65,16 +68,18 @@ export class FormInfoComponent implements OnInit, OnDestroy {
         if (key === 'status') {
           this[key] = this.getValue(this.config.values[key].field, this.config.value);
 
-          if (this[key].length > 4) {
-            this.statusList = this[key].slice(0, 4);
+          if (this[key]) {
+            if (this[key].length > 4) {
+              this.statusList = this[key].slice(0, 4);
 
-            this.more = true;
-          } else {
-            this.statusList = this[key];
+              this.more = true;
+            } else {
+              this.statusList = this[key];
+            }
+
+            this.color = this.config.values[key].color;
+            this.colorAttr = this.config.values[key].color_attr;
           }
-
-          this.color = this.config.values[key].color;
-          this.colorAttr = this.config.values[key].color_attr;
         } else if (key === 'picture') {
           this[key] = this.getValue(this.config.values[key], this.config.value, 'picture')
             || (this.getConfig('picture')

@@ -149,7 +149,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public getMetadata(endpoint) {
-    this.service.getMetadata(endpoint + '?type=form').subscribe(
+    this.service.getMetadata(endpoint, '?type=form').subscribe(
       (res: any) => {
         this.metadata = res;
         this.getData();
@@ -188,7 +188,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public getSkillMetadata() {
-    this.service.getMetadata(this.skillsEndpoint + '?type=form').subscribe(
+    this.service.getMetadata(this.skillsEndpoint, '?type=form').subscribe(
       (res: any) => {
         this.skillsMetadata = res;
         this.getTagMetadata();
@@ -197,7 +197,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public getTagMetadata() {
-    this.service.getMetadata(this.tagsEndpoint + '?type=form').subscribe(
+    this.service.getMetadata(this.tagsEndpoint, '?type=form').subscribe(
       (res: any) => {
         this.tagsMetadata = res;
         this.generateView();
@@ -254,10 +254,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
         formElement.templateOptions.label : '';
     });
     let prop = (element === 'skills') ? 'candidate_skills' :
-      (element === 'tags') ? 'tag_rels' : null;
+      (element === 'tags') ? 'tag_list' : null;
     data.row = [];
     if (prop) {
       apiData[prop].forEach((el) => {
+        if (element === 'tags' && el.tag.confidential) {
+          return;
+        }
+
         let item = {
           id: '',
           values: []

@@ -2,7 +2,9 @@
 @import '../../node_modules/bootstrap/scss/variables.scss';
 
 // Color variables
-$brand-primary:             #28A3FC;
+$brand-primary:               #28A3FC;
+$brand-success:               rgb(50, 186, 94);
+$brand-danger:                rgb(250, 92, 70);
 $breadcrumb-bg:               transparent;
 $breadcrumb-divider:          ">";
 $breadcrumb-item-padding:     .2rem;

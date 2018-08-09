@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
 import { SharedModule } from '../shared/shared.module';
+import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
 
 import { BillingComponent } from './billing.component';
 import { components } from './components';
@@ -24,7 +25,8 @@ import { routes } from './billing.routing';
 
     Angular2FontawesomeModule,
 
-    SharedModule
+    SharedModule,
+    DynamicFormModule
   ],
   declarations: [
     BillingComponent,

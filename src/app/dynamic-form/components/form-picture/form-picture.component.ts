@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { FallbackDispatcher } from 'ng2-webcam';
+import { FallbackDispatcher } from '../webcam/fallback.dispatcher';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -20,7 +20,7 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 @Component({
   selector: 'form-picture',
   templateUrl: 'form-picture.component.html',
-  styleUrls: ['./form-picture.component.scss']
+  styleUrls: ['./form-picture.component.scss'],
 })
 
 export class FormPictureComponent
@@ -80,7 +80,7 @@ export class FormPictureComponent
     super();
     this.onSuccess = (stream: any) => {
       if (stream instanceof FallbackDispatcher) {
-        this.flashPlayer = <FallbackDispatcher> stream;
+        this.flashPlayer = stream;
         this.onFallback();
       }
     };

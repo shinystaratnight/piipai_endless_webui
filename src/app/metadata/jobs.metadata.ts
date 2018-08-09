@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
 
 const list = {
   list: {
@@ -152,17 +152,17 @@ const list = {
           {
             label: 'Yesterday',
             query:
-              'shift_dates__shift_date_0=2018-07-03&shift_dates__shift_date_1=2018-07-03'
+              `shift_dates__shift_date_0=${yesterdayFormatDate}&shift_dates__shift_date_1=${yesterdayFormatDate}` //tslint:disable-line
           },
           {
             label: 'Today',
             query:
-              'shift_dates__shift_date_0=2018-07-04&shift_dates__shift_date_1=2018-07-04'
+              `shift_dates__shift_date_0=${todayFormatDate}&shift_dates__shift_date_1=${todayFormatDate}` //tslint:disable-line
           },
           {
             label: 'Tomorrow',
             query:
-              'shift_dates__shift_date_0=2018-07-05&shift_dates__shift_date_1=2018-07-05'
+              `shift_dates__shift_date_0=${tomorrowFormatDate}&shift_dates__shift_date_1=${tomorrowFormatDate}` //tslint:disable-line
           }
         ],
         key: 'shift_dates.shift_date',
@@ -207,7 +207,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
+          endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'provider_representative'
@@ -215,56 +215,18 @@ const list = {
       {
         key: 'active_states',
         label: 'State',
-        options: [
-          {
-            value: 10,
-            label: 'New'
-          },
-          {
-            value: 20,
-            label: 'Confirmed'
-          },
-          {
-            value: 30,
-            label: 'Filled'
-          },
-          {
-            value: 40,
-            label: 'On-Hold'
-          },
-          {
-            value: 50,
-            label: 'Active'
-          },
-          {
-            value: 60,
-            label: 'Completed'
-          }
-        ],
+        data: {
+          value: ['name_after_activation', 'name_before_activation'],
+          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=hr.job', //tslint:disable-line
+          key: 'number'
+        },
         query: 'active_states',
         default: null,
-        type: 'select'
-      },
-      {
-        key: 'published',
-        label: 'Published',
-        options: [
-          {
-            value: 'True',
-            label: 'True'
-          },
-          {
-            value: 'False',
-            label: 'False'
-          }
-        ],
-        query: 'published',
-        default: null,
-        type: 'select'
+        type: 'related'
       },
       {
         key: 'customer_company',
-        label: 'Customer company',
+        label: 'Client',
         type: 'related',
         data: {
           value: '__str__',
@@ -488,15 +450,15 @@ const formset = {
       templateOptions: {
         required: false,
         values: {
-          '0': 'times-circle',
-          '1': 'check-circle',
-          '2': 'exclamation-circle',
-          '3': 'minus-circle',
+          0: 'times-circle',
+          1: 'check-circle',
+          2: 'exclamation-circle',
+          3: 'minus-circle',
           null: 'minus-circle'
         },
         label: 'Is fulfilled today',
         type: 'icon',
-        color: { '0': 'danger', '1': 'success', '2': 'warning' }
+        color: { 0: 'danger', 1: 'success', 2: 'warning' }
       },
       type: 'checkbox'
     },
@@ -549,15 +511,15 @@ const formset = {
       templateOptions: {
         required: false,
         values: {
-          '0': 'times-circle',
-          '1': 'check-circle',
-          '2': 'exclamation-circle',
-          '3': 'minus-circle',
+          0: 'times-circle',
+          1: 'check-circle',
+          2: 'exclamation-circle',
+          3: 'minus-circle',
           null: 'minus-circle'
         },
         label: 'Is fulfilled',
         type: 'icon',
-        color: { '0': 'danger', '1': 'success', '2': 'warning' }
+        color: { 0: 'danger', 1: 'success', 2: 'warning' }
       },
       type: 'checkbox'
     },
@@ -643,24 +605,24 @@ const formset = {
         name: 'fulfilled',
         content: [
           {
-            color: { '0': 'danger', '1': 'success', '2': 'warning' },
+            color: { 0: 'danger', 1: 'success', 2: 'warning' },
             values: {
-              '0': 'times-circle',
-              '1': 'check-circle',
-              '2': 'exclamation-circle',
-              '3': 'minus-circle',
+              0: 'times-circle',
+              1: 'check-circle',
+              2: 'exclamation-circle',
+              3: 'minus-circle',
               null: 'minus-circle'
             },
             type: 'icon',
             field: 'is_fulfilled_today'
           },
           {
-            color: { '0': 'danger', '1': 'success', '2': 'warning' },
+            color: { 0: 'danger', 1: 'success', 2: 'warning' },
             values: {
-              '0': 'times-circle',
-              '1': 'check-circle',
-              '2': 'exclamation-circle',
-              '3': 'minus-circle',
+              0: 'times-circle',
+              1: 'check-circle',
+              2: 'exclamation-circle',
+              3: 'minus-circle',
               null: 'minus-circle'
             },
             type: 'icon',
@@ -1024,7 +986,6 @@ const form = [
     collapsed: false,
     prefilled: {
       job: '{id}',
-      company_contact: '{customer_representative.id}',
       jobsite: '{jobsite.id}',
       company: '{customer_company.id}',
     },
@@ -1190,7 +1151,7 @@ const formadd = [
           },
           {
             key: 'work_start_date',
-            default: moment().tz('Australia/Sydney'),
+            default: todayFormatDate,
             type: 'datepicker',
             templateOptions: {
               required: false,

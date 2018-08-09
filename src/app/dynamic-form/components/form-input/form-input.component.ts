@@ -97,42 +97,68 @@ export class FormInputComponent
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((data) => {
         this.formData = data.data;
-        if (this.config.type === 'static' && this.config.key === 'total_worked') {
-          const shiftStart = moment(data.data.shift_started_at);
-          const shiftEnded = moment(data.data.shift_ended_at);
-          const breakStart = moment(data.data.break_started_at);
-          const breakEnded = moment(data.data.break_ended_at);
-
-          if (shiftStart.isBefore(shiftEnded) && breakStart.isBefore(breakEnded)) {
-            const shiftTime = moment.utc(shiftEnded.diff(shiftStart));
-            const breakTime = moment.utc(breakEnded.diff(breakStart));
-
-            const shiftDiff = shiftTime.format('HH:mm');
-            if (breakStart && breakEnded && !data.data.no_break) {
-              const breakDiff = breakTime.format('HH:mm');
-              const totalTime = moment.utc(shiftTime.diff(breakTime)).format('HH:mm');
-
-              this.displayValue = `${shiftDiff} - ${breakDiff} = ${totalTime} hours`;
-            } else {
-              this.displayValue = `${shiftDiff} - 00:00 = ${shiftDiff} hours`;
-            }
-          }
-        } else {
-          if (this.config.type !== 'address'
-            && this.key !== 'address'
-            && this.key !== 'street_address') {
-            this.setInitValue();
-          }
-        }
-
+        this.checkTimesheetTime(data);
+        this.checkIfExistDefaultValue();
       });
 
       this.subscriptions.push(subscription);
     }
   }
 
+  public checkTimesheetTime(data: { key: string, data: any }) {
+    const keys = ['shift_started_at', 'shift_ended_at', 'break_started_at', 'break_ended_at'];
+
+    if (keys.indexOf(data.key) > -1) {
+      if (this.config.type === 'static' && this.config.key === 'total_worked') {
+        const shiftStart = moment(data.data.shift_started_at);
+        const shiftEnded = moment(data.data.shift_ended_at);
+        const breakStart = moment(data.data.break_started_at);
+        const breakEnded = moment(data.data.break_ended_at);
+
+        if (shiftStart.isBefore(shiftEnded) && breakStart.isBefore(breakEnded)) {
+          const shiftTime = moment.utc(shiftEnded.diff(shiftStart));
+          const breakTime = moment.utc(breakEnded.diff(breakStart));
+
+          const shiftDiff = shiftTime.format('HH:mm');
+          if (breakStart && breakEnded && !data.data.no_break) {
+            const breakDiff = breakTime.format('HH:mm');
+            const totalTime = moment.utc(shiftTime.diff(breakTime)).format('HH:mm');
+
+            this.displayValue = `${shiftDiff} - ${breakDiff} = ${totalTime} hours`;
+          } else {
+            this.displayValue = `${shiftDiff} - 00:00 = ${shiftDiff} hours`;
+          }
+        }
+      }
+    }
+  }
+
+  public checkIfExistDefaultValue() {
+    if (
+      this.config.default &&
+      typeof this.config.default === 'string' &&
+      this.config.default.includes('{') &&
+      this.config.default.includes('}')
+    ) {
+      if (
+        this.config.type !== 'address' &&
+        this.key !== 'address' &&
+        this.key !== 'street_address'
+      ) {
+        this.setInitValue();
+      }
+    }
+  }
+
   public checkHiddenProperty() {
-    if (this.config && this.config.hidden && (this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))) { //tslint:disable-line
+    if (
+      this.config
+      && this.config.hidden
+      && (
+        this.config.type !== 'static'
+        || (this.config.type === 'static' && !this.config.read_only)
+      )
+    ) {
       const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;

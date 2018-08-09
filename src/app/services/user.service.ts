@@ -11,6 +11,7 @@ import 'rxjs/add/observable/combineLatest';
 
 import { NavigationService } from './navigation.service';
 import { CheckPermissionService } from '../shared/services';
+import { LoginService } from './login.service';
 
 export interface User {
   status: string;
@@ -36,6 +37,7 @@ export interface User {
 export interface Role {
   __str__: string;
   id: string;
+  name: string;
 }
 
 @Injectable()
@@ -53,7 +55,8 @@ export class UserService {
     private cookie: CookieService,
     private navigation: NavigationService,
     private permission: CheckPermissionService,
-    private storage: LocalStorageService
+    private storage: LocalStorageService,
+    private loginService: LoginService
   ) {}
 
   public getUserData(): Observable<User> {
@@ -63,6 +66,7 @@ export class UserService {
           (res: [User, { roles: Role[] }]) => {
             const user: User = res[0];
             const roles: Role[] = res[1].roles;
+            const redirectRole = this.loginService.role;
 
             user.roles = roles;
 
@@ -75,6 +79,16 @@ export class UserService {
               role = roles.find(
                 (el) => el.__str__.includes(user.data.contact.contact_type)
               );
+            }
+
+            if (redirectRole) {
+              const existRole = roles.find((el) => el.id === redirectRole.id );
+              if (existRole) {
+                role = existRole;
+              } else {
+                role = redirectRole;
+                roles.push(role);
+              }
             }
 
             user.currentRole = role || roles[0];

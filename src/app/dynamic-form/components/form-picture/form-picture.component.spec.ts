@@ -6,8 +6,8 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormPictureComponent } from './form-picture.component';
-import { WebCamComponent } from 'ng2-webcam';
-import { FallbackDispatcher } from 'ng2-webcam';
+import { WebcamComponent } from 'webcam';
+import { FallbackDispatcher } from 'webcam';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -37,7 +37,7 @@ describe('FormPictureComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         FormPictureComponent,
-        WebCamComponent
+        WebcamComponent
       ],
       providers: [FormBuilder],
       imports: [ReactiveFormsModule, NgbModule.forRoot()],

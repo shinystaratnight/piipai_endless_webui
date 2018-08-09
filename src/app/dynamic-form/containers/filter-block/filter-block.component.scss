@@ -4,17 +4,20 @@
 .filters {
 
   &-block {
-    height: calc(100vh - 72px);
-    width: 265px;
+    width: 250px;
+    height: calc(100vh - 76px);
 
-    padding: 0 10px;
+    padding-bottom: 50px;
+    padding-left: 10px;
+    padding-right: 5px;
 
     overflow: auto;
 
     @include media-breakpoint-down('lg') {
+      height: 100vh;
       max-height: 100vh;
 
-      overflow: auto;
+      padding-bottom: 0px;
     }
   }
 

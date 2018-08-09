@@ -1,12 +1,18 @@
+:host {
+  display: block;
+
+  padding: 0 40px;
+}
+
 h5 {
   margin-bottom: 1rem;
 
-  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
   text-transform: uppercase;
 
-  opacity: .6;
-
-  // text-align: center;
+  opacity: .3;
 }
 
 div {
@@ -16,12 +22,16 @@ div {
 p {
   display: flex;
 
+  font-size: 14px;
+  line-height: 20px;
+
   span:first-child {
     width: 150px;
 
-    font-size: 14px;
-    line-height: 16px;
+    font-family: 'Roboto';
+    font-size: 12px;
+    line-height: 14px;
 
-    opacity: .8;
+    opacity: .3;
   }
 }

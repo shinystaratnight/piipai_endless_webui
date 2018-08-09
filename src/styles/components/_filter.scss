@@ -84,7 +84,7 @@
     }
 
     .custom-checkbox {
-      min-width: .875rem;
+      width: .875rem;
       height: .875rem;
     }
 
@@ -104,7 +104,7 @@
 
         color: rgba($gray, .4);
 
-        z-index: 20;
+        z-index: 1;
       }
     }
   }

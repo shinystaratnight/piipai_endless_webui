@@ -8,49 +8,40 @@ import {
   OnDestroy
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { Subscription } from 'rxjs/Subscription';
+
 import moment from 'moment-timezone';
 
 import { FilterService } from './../../services/filter.service';
+
+interface Params {
+  [query: string]: string;
+}
 
 @Component({
   selector: 'filter-date',
   templateUrl: 'filter-date.component.html'
 })
 export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
-  public from: any;
-  public to: any;
-  public picker: boolean = false;
   public config: any;
-  public data = {};
+  public data: Params;
   public query: string;
-  public dateFormat: string = 'DD/MM/YYYY';
-  public datetimeFormat: string = 'DD/MM/YYYY hh:mm:ss';
-  public moment: any = moment;
-  public isCollapsed: boolean = true;
-
-  public init: boolean = false;
   public mobileDevice: boolean;
   public $: any;
-  public icons = {
-    r3sourcer: {
-      true: 'angle-right',
-      false: 'angle-down'
-    },
-    default: {
-      true: 'eye',
-      false: 'eye-slash'
-    }
-  };
-  public theme: string;
+
+  public displayFormat: string = 'DD/MM/YYYY';
+  public queryFormat: string = 'YYYY-MM-DD';
+  public timeZone: string = 'Australia/Sydney';
+  public moment: any = moment;
+  public init: boolean = false;
 
   public filterSubscription: Subscription;
+  public querySubscription: Subscription;
 
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  @Output() public event: EventEmitter<any> = new EventEmitter();
 
-  @ViewChildren('d')
-  public d: any;
+  @ViewChildren('d') public d: any;
 
   constructor(
     private fs: FilterService,
@@ -60,18 +51,15 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.createInputs(this.config.input, this.data);
-    this.route.queryParams.subscribe(
-      (params) => this.updateFilter()
-    );
-    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter);
-    this.isCollapsed = (this.query || this.picker) ||
-      document.body.classList.contains('r3sourcer') ? false : true;
+    this.data = this.createInputs(this.config.input);
     this.mobileDevice = this.identifyDevice();
-    this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
+
+    this.querySubscription = this.route.queryParams.subscribe(() => this.updateFilter());
+    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter);
   }
 
   public ngOnDestroy() {
+    this.querySubscription.unsubscribe();
     this.filterSubscription.unsubscribe();
   }
 
@@ -89,11 +77,13 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
           mode: dateType,
           dateFormat: '%d/%m/%Y',
           overrideDateFormat: '%d/%m/%Y',
-          useClearButton: false,
+          useClearButton: true,
+          useCancelButton: true,
           useHeader: false,
+          useFocus: true,
           calHighToday: false,
           closeCallback: () => {
-            let date = el.nativeElement.value;
+            const date = el.nativeElement.value;
             this.onChange(date, el.nativeElement.name);
           }
         });
@@ -102,42 +92,38 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public selectQuery(query) {
-    this.picker = false;
+  public selectQuery(query: string) {
     this.resetData(this.data);
-    const newQuery = this.parseDate(query, moment, 'YYYY-MM-DD');
-    this.query = newQuery;
-    this.fs.generateQuery(newQuery, this.config.key, this.config.listName, { data: this.data, query }); //tslint:disable-line
-    this.changeQuery();
-    this.updateConfig();
-  }
 
-  public onChange(date, name) {
-    this.picker = true;
-    this.query = '';
-    let query = '';
-    this.data[name] = date;
-    let keys = Object.keys(this.data);
-    keys.forEach((el) => {
-      if (this.data[el]) {
-        query += `${el}=${this.data[el]}&`;
-      }
-    });
+    const params = this.getParams(query);
+    const queryParams = this.convert(undefined, this.queryFormat, params, moment);
+    this.query = this.getQuery(queryParams);
+
     this.fs.generateQuery(
-      query.substring(0, query.length - 1),
-        this.config.key, this.config.listName, { data: this.data });
+      this.query,
+      this.config.key,
+      this.config.listName,
+      { data: this.data, query }
+    );
+
     this.changeQuery();
-    this.updateConfig();
   }
 
-  public updateConfig() {
-    this.config.input.forEach((el, i, arr) => {
-      if (el.query.indexOf('_0') > 0) {
-        el.maxDate = this.data[arr[1].query];
-      } else if (el.query.indexOf('_1') > 0) {
-        el.minDate = this.data[arr[0].query];
-      }
-    });
+  public onChange(date: string, param: string) {
+    this.query = '';
+    this.data[param] = date;
+
+    const queryParams = this.convert(this.displayFormat, this.queryFormat, this.data, moment);
+    const query = this.getQuery(queryParams);
+
+    this.fs.generateQuery(
+      query,
+      this.config.key,
+      this.config.listName,
+      { data: this.data }
+    );
+
+    this.changeQuery();
   }
 
   public changeQuery() {
@@ -146,45 +132,34 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  public parseDate(date, moment, format = undefined) {
-    let result = {};
-    let queries = [];
-    let dates = date.split('&');
-    const newDate = [];
-    dates.forEach((el) => {
-      let query = el.split('=');
-      const date = moment.tz(query[1], format || this.dateFormat, 'Australia/Sydney').format(this.dateFormat); //tslint:disable-line
-      query[1] = date;
-      newDate.push(query.join('='));
-      queries.push(query[0]);
-      result[query[0]] = date;
-    });
-    queries.forEach((el) => {
-      this.data[el] = result[el];
-    });
-    return newDate.join('&');
-  }
+  public createInputs(inputs: any[]): Params {
+    const params = {};
 
-  public createInputs(inputs, data) {
     inputs.forEach((el) => {
-      data[el.query] = '';
+      params[el.query] = '';
     });
+
+    return params;
   }
 
-  public resetData(data) {
-    let keys = Object.keys(data);
-    keys.forEach((el) => {
-      data[el] = '';
-    });
+  public resetData(data: {[key: string]: string}) {
+    const keys = Object.keys(data);
+
+    if (keys.length) {
+      keys.forEach((el) => {
+        data[el] = '';
+      });
+    }
   }
 
   public updateFilter() {
-    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    const data = this.fs.getQueries(this.config.listName, this.config.key);
+
     if (data) {
       if (data.byQuery) {
         this.query = data.query;
-        this.parseDate(data.query, moment);
-        this.picker = true;
+        const params = this.getParams(this.query);
+        this.data = this.convert(this.queryFormat, this.displayFormat, params, moment);
       } else {
         this.data = data.data;
         this.query = data.query;
@@ -192,17 +167,59 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.query = '';
       this.resetData(this.data);
-      this.picker = false;
     }
-    this.updateConfig();
   }
 
   public resetFilter() {
     this.query = null;
     this.resetData(this.data);
-    this.picker = false;
+
     this.fs.generateQuery(this.query, this.config.key, this.config.listName);
     this.changeQuery();
+  }
+
+  public convert(from: string, to: string, params: Params, moment) {
+    const newParams = {...params};
+
+    Object.keys(newParams).forEach((el) => {
+      newParams[el] = newParams[el]
+        ? this.parseDateValue(newParams[el], moment, from).format(to)
+        : '';
+    });
+
+    return newParams;
+  }
+
+  public parseDateValue(date: string, moment, format: string) {
+    return format
+      ? moment.tz(date, format, this.timeZone)
+      : moment.tz(date, this.timeZone);
+  }
+
+  public getParams(query: string): Params {
+    const params = query.split('&');
+    const result = {};
+
+    params.forEach((param) => {
+      const parts = param.split('=');
+      result[parts[0]] = parts[1];
+    });
+
+    return result;
+  }
+
+  public getQuery(params: Params): string {
+    const keys = Object.keys(params);
+
+    if (keys.length) {
+      const quesries = keys.map((param) => {
+        return `${param}=${params[param]}`;
+      });
+
+      return quesries.join('&');
+    }
+
+    return '';
   }
 
 }

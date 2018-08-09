@@ -41,6 +41,13 @@
         [config]="getConfig('link')"
         [group]="group">
       </ng-container>
+
+      <ng-container *ngIf="errors">
+        <div class="text-danger mt-1" *ngIf="errors[config.values['link']]">
+          {{errors[config.values['link']]}}
+        </div>
+      </ng-container>
+
     </p>
 
     <div class="job-title" *ngIf="config && viewMode && client">{{client.short_name}}</div>
@@ -48,6 +55,12 @@
       <ng-container formElement
         [config]="getConfig('client')"
         [group]="group">
+      </ng-container>
+
+      <ng-container *ngIf="errors">
+        <div class="text-danger mt-1" *ngIf="errors[config.values['client']]">
+          {{errors[config.values['client']]}}
+        </div>
       </ng-container>
     </div>
 
@@ -69,7 +82,8 @@
           </ng-container>
         </span>
 
-        <span *ngIf="!titlePath">{{title}}</span>
+        <span *ngIf="!titlePath && title">{{title}}</span>
+        <span *ngIf="!titlePath && skill_title">{{skill_title}}</span>
         <info [description]="description"></info>
       </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
@@ -85,8 +99,21 @@
         </span>
       </span>
     </h5>
-    <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
-      [config]="getConfig('title')"
+    <p>
+      <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
+        [config]="getConfig('title')"
+        [group]="group">
+      </ng-container>
+
+      <ng-container *ngIf="errors">
+        <div class="text-danger mt-1" *ngIf="errors[config.values['title']]">
+          {{errors[config.values['title']]}}
+        </div>
+      </ng-container>
+    </p>
+
+    <ng-container formElement *ngIf="config && config.metadata['skill_title'] && !viewMode && !config.metadata['title_title']"
+      [config]="getConfig('skill_title')"
       [group]="group">
     </ng-container>
 
@@ -135,7 +162,7 @@
   </div>
 
   <div class="date" *ngIf="created_at || updated_at">
-    <span *ngIf="created_at"><span class="description">Created:</span> {{created_at | date:'shortDate'}} <br></span>
-    <span *ngIf="updated_at"><span class="description">Updated:</span> {{updated_at | date:'shortDate'}}</span>
+    <span *ngIf="created_at"><span class="description">Created:</span> {{created_at | dateFormat:'date'}} <br></span>
+    <span *ngIf="updated_at"><span class="description">Updated:</span> {{updated_at | dateFormat:'date'}}</span>
   </div>
 </div>

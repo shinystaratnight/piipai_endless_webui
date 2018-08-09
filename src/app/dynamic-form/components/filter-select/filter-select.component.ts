@@ -26,6 +26,7 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
   };
   public theme: string;
   public filterSubscription: Subscription;
+  public querySubscription: Subscription;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -40,13 +41,14 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
     this.data = this.config.default || '';
-    this.route.queryParams.subscribe(
+    this.querySubscription = this.route.queryParams.subscribe(
       (params) => this.updateFilter()
     );
     this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
   }
 
   public ngOnDestroy() {
+    this.querySubscription.unsubscribe();
     this.filterSubscription.unsubscribe();
   }
 

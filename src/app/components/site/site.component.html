@@ -1,4 +1,8 @@
-<navigation [user]="user" [pages]="pagesList" (update)="updateNavigationList($event)"></navigation>
+<navigation
+  [user]="user"
+  [pages]="pagesList"
+  (update)="updateNavigationList($event)">
+</navigation>
 
 <div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
   <div *ngSwitchCase="'form'" class="form-page">
@@ -19,13 +23,12 @@
       *ngIf="!reload && !(pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' && pageData.pathData.id) && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'">
         <generic-form
           *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit' "
-          [title]="pageData.pathData.title"
-          [modal]="pageData.pathData.modal"
           [endpoint]="pageData.endpoint"
           [id]="pageData.pathData.id"
           [edit]="pageData.pathData.postfix"
           [mode]="formMode"
           [errors]="errors"
+          [data]="additionalData"
           [path]="pageData.pathData.path"
           (event)="formEvent($event)"
           (modeEvent)="modeEvent($event)"
@@ -126,13 +129,17 @@
     </div>
   </div>
 
-  <div class="datatable-list" *ngSwitchCase="'list'">
-    <generic-list
-      [clientId]="getClientId()"
-      [listNameCache]="listNameCache"
-      [allowPermissions]="permissionMethods"
-      [endpoint]="pageData.endpoint">
-    </generic-list>
+  <div class="datatable-list" *ngSwitchCase="'list'"
+    infinite-scroll
+    [scrollWindow]="true"
+    (scrolled)="onModalScrollDown()">
+      <generic-list
+        [upload]="upload"
+        [clientId]="getClientId()"
+        [listNameCache]="listNameCache"
+        [allowPermissions]="permissionMethods"
+        [endpoint]="pageData.endpoint">
+      </generic-list>
   </div>
 
   <div *ngSwitchCase="'profile'">

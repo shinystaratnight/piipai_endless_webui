@@ -72,6 +72,7 @@ export class LoginFormComponent implements OnInit {
   public tokenAuth(token) {
     this.loginService.loginWithToken(token).subscribe(
       (res: any) => {
+        this.loginService.role = res.data.role;
         this.router.navigate([res.data.redirect_to]);
       },
       (err) => this.router.navigate(['login']));

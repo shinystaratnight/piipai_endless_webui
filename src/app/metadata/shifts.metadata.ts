@@ -268,10 +268,10 @@ const job = {
       templateOptions: {
         required: false,
         values: {
-          '0': 'times-circle',
-          '1': 'check-circle',
-          '2': 'exclamation-circle',
-          '3': 'minus-circle',
+          0: 'times-circle',
+          1: 'check-circle',
+          2: 'exclamation-circle',
+          3: 'minus-circle',
           null: 'minus-circle'
         },
         label: 'Fulfilled',
@@ -383,10 +383,10 @@ const job = {
         content: [
           {
             values: {
-              '0': 'times-circle',
-              '1': 'check-circle',
-              '2': 'exclamation-circle',
-              '3': 'minus-circle',
+              0: 'times-circle',
+              1: 'check-circle',
+              2: 'exclamation-circle',
+              3: 'minus-circle',
               null: 'minus-circle'
             },
             label: 'Fulfilled',
@@ -421,7 +421,7 @@ const job = {
         ],
         label: 'Actions',
         title: null,
-        delim: ' '
+        delim: null
       }
     ],
     buttons: [],

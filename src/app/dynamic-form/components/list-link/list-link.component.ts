@@ -35,7 +35,6 @@ export class ListLinkComponent implements OnInit {
   public lickView;
 
   public ngOnInit() {
-
     if (this.config.value && this.config.value instanceof Object && !Array.isArray(this.config.value)) { //tslint:disable-line
       this.value = this.config.value && (this.config.text || this.config.value.__str__);
     } else {
@@ -69,9 +68,28 @@ export class ListLinkComponent implements OnInit {
     return reg.test(value) ? true : false;
   }
 
-  public action(e) {
+  public action(e, index) {
     e.preventDefault();
     e.stopPropagation();
+    if (index || index === 0) {
+      let endpoint = this.href[index];
+
+      let newEndpoint = endpoint.split('/');
+      newEndpoint.pop();
+      newEndpoint.pop();
+      let id = newEndpoint.pop();
+
+      endpoint = '/ecore/api/v2' + [...newEndpoint, ''].join('/');
+
+      this.event.emit({
+        target: 'form',
+        endpoint,
+        label: (<any> this.value[index]).__str__,
+        id
+      });
+      return;
+    }
+
     if (this.value) {
       let arr = this.config.endpoint.split('/');
       let id = arr[arr.length - 2];

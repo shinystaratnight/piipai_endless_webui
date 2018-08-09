@@ -18,11 +18,11 @@
     *ngIf="!buttons">
     <a class="btn btn-primary btn-shadow datatable-button first text-white" routerLink="add"
       *ngIf="first && !inForm && checkPermission('post')">
-        <span class="button-icon"></span> Add new {{label}}
+        <span class="button-icon"></span> Add new <span style="text-transform: lowercase">{{label}}</span>
       </a>
       <button *ngIf="(!first || inForm) && checkPermission('post')" class="datatable-button ml-auto"
         (click)="buttonAction('add_object')">
-        <span class="button-icon"></span> Add new {{label}}
+        <span class="button-icon"></span> Add new <span style="text-transform: lowercase">{{label}}</span>
       </button>
   </div>
   <button class="btn btn-primary btn-shadow datatable-button hidden-sm-down ml-2"

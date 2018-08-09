@@ -12,6 +12,7 @@ export class ListSkillsComponent implements OnInit {
   public config: any;
 
   public colors = {
+    0: '#bdbdbd',
     1: '#FA5C46',
     2: '#fc9183',
     3: '#FFA236',

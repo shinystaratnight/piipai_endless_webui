@@ -102,7 +102,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.user && this.user.data.contact) {
       this.currentRole = this.user.currentRole.id;
       this.greeting = `Welcome, ${this.user.data.contact.__str__}`;
-      this.candidate = this.user.data.contact.contact_type === 'candidate';
+      this.checkCandidateRole(this.user.currentRole);
       this.company = this.user.data.contact.company;
       this.picture = this.user.data.contact.picture && this.user.data.contact.picture.origin;
 
@@ -121,6 +121,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.greeting = `Welcome, Anonymous User`;
     }
+  }
+
+  public checkCandidateRole(role) {
+    this.candidate = role.__str__.includes('candidate');
   }
 
   public hideUserBlock(e) {
@@ -143,6 +147,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public changeRole(id: string) {
     const role  = this.user.roles.find((el: Role) => el.id === id);
+
+    this.checkCandidateRole(role);
 
     this.currentRole = role.id;
 

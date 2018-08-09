@@ -2,6 +2,7 @@ import { ActionElementComponent } from './action-element/action-element.componen
 
 import { ProfileComponent } from './profile/profile.component';
 import { InfoComponent } from './info/info.component';
+import { WebcamComponent } from './webcam/webcam.component';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { TestGeneratorComponent } from './test-generator/test-generator.component';
 
@@ -28,7 +29,6 @@ import { FormOptionsComponent } from './form-options/form-options.component';
 import { FormPictureComponent } from './form-picture/form-picture.component';
 import { FormRadioComponent } from './form-radio/form-radio.component';
 import { FormRelatedComponent } from './form-related/form-related.component';
-import { FormReplaceComponent } from './form-replace/form-replace.component';
 import { FormRuleComponent } from './form-rule/form-rule.component';
 import { FormSelectComponent } from './form-select/form-select.component';
 import { FormTextareaComponent } from './form-textarea/form-textarea.component';
@@ -54,6 +54,7 @@ export * from './generic-list/generic-list.component';
 export * from './action-element/action-element.component';
 export * from './basic-element/basic-element.component';
 export * from './profile/profile.component';
+export * from './webcam/webcam.component';
 export * from './workflow/workflow.component';
 export * from './test-generator/test-generator.component';
 
@@ -77,7 +78,6 @@ export const entryComponents = [
   FormPictureComponent,
   FormRadioComponent,
   FormRelatedComponent,
-  FormReplaceComponent,
   FormRuleComponent,
   FormSelectComponent,
   FormTextareaComponent,
@@ -104,6 +104,7 @@ export const components = [
   ActionElementComponent,
   ProfileComponent,
   InfoComponent,
+  WebcamComponent,
   WorkflowComponent,
   TestGeneratorComponent,
 
