@@ -1,0 +1,14 @@
+<div *ngIf="config" class="form-builder-form">
+  <dynamic-form
+    [config]="config.ui_config"
+    (event)="eventHandler($event)"
+    (submit)="submitForm($event)">
+    <div class="footer">
+      <button type="submit" class="btn btn-primary">
+        {{config.save_button_text}}
+      </button>
+    </div>
+  </dynamic-form>
+</div>
+
+<my-toast></my-toast>

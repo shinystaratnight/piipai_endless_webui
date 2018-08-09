@@ -423,14 +423,19 @@ export class FormRelatedComponent
   public checkAutocomplete() {
     if (this.config.autocompleteData) {
       const subscription = this.config.autocompleteData.subscribe((data) => {
-        if (data.hasOwnProperty(this.config.key)) {
+        const key = this.propertyMatches(Object.keys(data), this.config.key);
+        if (key) {
           this.currentQuery = undefined;
-          this.getOptions.call(this, '', 0, false, this.setValue, data[this.config.key]);
+          this.getOptions.call(this, '', 0, false, this.setValue, data[key]);
         }
       });
 
       this.subscriptions.push(subscription);
     }
+  }
+
+  public propertyMatches(keys: string[], key: string): string {
+    return keys.find((el) => key.includes(el));
   }
 
   public getLinkPath(endpoint): string {

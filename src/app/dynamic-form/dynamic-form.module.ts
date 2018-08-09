@@ -46,6 +46,7 @@ import { directives } from './directives';
     fromContainers.FilterBlockComponent,
     fromComponents.WorkflowComponent,
     fromComponents.TestGeneratorComponent,
+    fromContainers.FormBuilderFormComponent,
   ],
   declarations: [
     PdfViewerComponent,

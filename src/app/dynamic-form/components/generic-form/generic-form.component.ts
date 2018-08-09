@@ -1256,26 +1256,25 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public checkFormBuilder(metadata: any[], endpoint: string) {
-    console.log(this);
-    // if (endpoint === '/ecore/api/v2/core/forms/') {
-    //   let groupElement: any;
-    //   let groupKey: string = 'groups';
-    //   metadata.forEach((el, i) => {
-    //     if (el.key === groupKey) {
-    //       groupElement = metadata.splice(i, 1)[0];
-    //     }
-    //   });
-    //   if (groupElement) {
-    //     groupElement.read_only = false;
-    //     groupElement.createOnly = true;
-    //     groupElement.type = 'fieldsGroup';
-    //     if (this.editForm) {
-    //       metadata.push(groupElement);
-    //     } else {
-    //       this.splitElements.push(groupElement);
-    //     }
-    //   }
-    // }
+    if (endpoint === '/ecore/api/v2/core/forms/') {
+      let groupElement: any;
+      let groupKey: string = 'groups';
+      metadata.forEach((el, i) => {
+        if (el.key === groupKey) {
+          groupElement = metadata.splice(i, 1)[0];
+        }
+      });
+      if (groupElement) {
+        groupElement.read_only = false;
+        groupElement.createOnly = true;
+        groupElement.type = 'fieldsGroup';
+        if (this.editForm) {
+          metadata.push(groupElement);
+        } else {
+          this.splitElements.push(groupElement);
+        }
+      }
+    }
     if (endpoint === '/ecore/api/v2/core/selectformfields/' ||
         endpoint === '/ecore/api/v2/core/radiobuttonsformfields/') {
           metadata.forEach((el) => {
