@@ -586,6 +586,7 @@ export class FormRelatedComponent
 
   public generateDataForList(config: Field, data = undefined): void {
     if (config.list && config.metadata) {
+      this.prefilledAttributes();
       this.dataOfList = [];
       let value = [];
       if (data) {
@@ -603,6 +604,22 @@ export class FormRelatedComponent
         let object = this.createObject();
         this.dataOfList.push(object);
       }
+    }
+  }
+
+  public prefilledAttributes() {
+    if (this.config && this.config.metadata) {
+      this.config.metadata.forEach((el) => {
+        if (el && el.attributes) {
+          const formatString = new FormatString();
+          const attributes = Object.keys(el.attributes);
+
+          attributes.forEach((key) => {
+            el.templateOptions[key] =
+              formatString.format(el.attributes[key], this.formData);
+          });
+        }
+      });
     }
   }
 

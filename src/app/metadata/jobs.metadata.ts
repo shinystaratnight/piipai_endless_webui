@@ -1113,7 +1113,7 @@ const formadd = [
               label: 'Position',
               add: false,
               delete: false,
-              values: ['__str__', 'upper_rate_limit', 'lower_rate_limit'],
+              values: ['__str__', 'upper_rate_limit', 'lower_rate_limit', 'default_rate'],
               type: 'related',
               edit: true
             },
@@ -1166,6 +1166,7 @@ const formadd = [
               max: '{position.upper_rate_limit}',
               min: '{position.lower_rate_limit}'
             },
+            default: '{position.default_rate}',
             templateOptions: {
               label: 'Candidate rate default',
               type: 'number',

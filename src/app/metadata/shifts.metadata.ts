@@ -192,14 +192,17 @@ const shiftDate = {
       type: 'input'
     },
     {
-      key: 'hourly_rate_default',
+      key: 'hourly_rate',
       type: 'input',
+      attributes: {
+        max: '{skill.upper_rate_limit}',
+        min: '{skill.lower_rate_limit}'
+      },
+      default: '{skill.default_rate}',
       templateOptions: {
         label: 'Candidate rate default',
-        max: 32767,
         type: 'number',
-        text: '${hourly_rate_default}/h',
-        min: 1
+        text: '${hourly_rate}/h',
       }
     },
   ],
