@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
       .mergeMap((response: any) => {
         const role: Role = response[0].currentRole;
 
-        if (role.__str__.includes('manager') || role.__str__.includes('client')) {
+        if (role.__str__.includes('manager')) {
           return this.checkPermissionServise.checkPermission(
               response[0].data.user,
               (<any> route)._urlSegment.segments,
