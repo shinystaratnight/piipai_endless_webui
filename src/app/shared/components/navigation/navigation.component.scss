@@ -80,6 +80,10 @@ $header-bg: #fdfdfd;
 
       padding: 0;
     }
+
+    &-img {
+      height: 40px;
+    }
   }
 
  .navigation {
@@ -384,15 +388,5 @@ $header-bg: #fdfdfd;
         flex-wrap: nowrap;
       }
     }
-  }
-}
-
-.r3sourcer .page-header {
-  .logo-img {
-    height: 40px;
-  }
-
-  @include media-breakpoint-down('lg') {
-    justify-content: center;
   }
 }

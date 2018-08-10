@@ -98,6 +98,7 @@ import * as skilltags from './skilltags.metadata';
 import * as profile from './profile.metadata';
 import * as billingcompanies from './billingcompanies.metadata';
 import * as billingdoscounts from './billingdiscount.metadata';
+import * as tokenlogins from './tokenlogins.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -214,4 +215,5 @@ export const metadata = {
   'profile': profile.metadata,
   '/ecore/api/v2/billing/companies/': billingcompanies.metadata,
   '/ecore/api/v2/billing/discounts/': billingdoscounts.metadata,
+  '/ecore/api/v2/login/tokenlogins/': tokenlogins.metadata,
 };
