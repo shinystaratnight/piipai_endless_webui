@@ -118,12 +118,6 @@ const list = {
             ]
           },
           {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
-            field: 'supervisor_sms',
-            type: 'link',
-            showIf: ['supervisor_sms']
-          },
-          {
             values: {
               false: 'times',
               true: 'check',
@@ -138,30 +132,6 @@ const list = {
               }
             ]
           },
-          {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
-            field: 'candidate_sms',
-            type: 'link',
-            showIf: ['candidate_sms']
-          },
-          {
-            endpoint:
-              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
-            field: 'going_to_work_sent_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
-            type: 'button',
-            text: 'Candidate Going To Work'
-          },
-          {
-            endpoint:
-              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
-            field: 'going_to_work_reply_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
-            type: 'button',
-            text: 'Reply'
-          }
         ],
         name: 'confirmations',
         title: null,
@@ -248,10 +218,41 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{related_sms.id}/change',
-            field: 'related_sms',
-            type: 'link'
-          }
+            endpoint:
+              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
+            field: 'going_to_work_sent_sms',
+            icon: 'fa-commenting',
+            action: 'editForm',
+            type: 'button',
+            text: 'Candidate Going To Work'
+          },
+          {
+            endpoint:
+              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
+            field: 'going_to_work_reply_sms',
+            icon: 'fa-commenting',
+            action: 'editForm',
+            type: 'button',
+            text: 'Reply'
+          },
+          {
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
+            field: 'candidate_sms',
+            icon: 'fa-commenting',
+            action: 'editForm',
+            type: 'button',
+            text: 'Candidate TS',
+            showIf: ['candidate_sms']
+          },
+          {
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
+            field: 'supervisor_sms',
+            icon: 'fa-commenting',
+            action: 'editForm',
+            type: 'button',
+            text: 'Supervisor TS',
+            showIf: ['supervisor_sms']
+          },
         ],
         name: 'related_sms',
         title: null,
