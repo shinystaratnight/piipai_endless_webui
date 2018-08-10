@@ -56,10 +56,11 @@ export class FormBuilderFormComponent implements OnInit {
     this.service.parseAddress(data)
       .subscribe(
         (res) => {
+          this.parseError({ [el.key]: [] });
           el.autocompleteData.next(res);
         },
         (err: any) => {
-          this.parseError(Object.assign({}, this.error, { [el.key]: err.errors}));
+          this.parseError(Object.assign({}, this.error, { [el.key]: err.errors }));
         });
   }
 
