@@ -117,6 +117,7 @@ export class FormRelatedComponent
   public currentId: string;
   public update: Subject<any>;
   public manual: boolean;
+  public hideDetail: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -425,6 +426,8 @@ export class FormRelatedComponent
       const subscription = this.config.autocompleteData.subscribe((data) => {
         const key = this.propertyMatches(Object.keys(data), this.config.key);
         if (key) {
+          this.hideDetail = true;
+          this.viewMode = true;
           this.currentQuery = undefined;
           this.getOptions.call(this, '', 0, false, this.setValue, data[key]);
         }
@@ -768,6 +771,10 @@ export class FormRelatedComponent
   }
 
   public open(type, object = undefined) {
+    if (this.hideDetail) {
+      return false;
+    }
+
     const format = new FormatString();
 
     if (!this.checkPermission(type) && this.config.endpoint) {
@@ -776,9 +783,13 @@ export class FormRelatedComponent
     this.modalData = {};
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
-    this.modalData.endpoint = object && object.endpoint || this.config.endpoint;
-    if (object && object.endpoint) {
-      this.modalData.edit = true;
+    if (object.endpoint) {
+      const parts = object.endpoint.split('/');
+      parts.pop();
+      object[this.param] = parts.pop();
+      this.modalData.endpoint = [].concat(parts, '').join('/');
+    } else {
+      this.modalData.endpoint = this.config.endpoint;
     }
     if (type === 'update' || type === 'delete') {
       if (object) {
