@@ -783,7 +783,7 @@ export class FormRelatedComponent
     this.modalData = {};
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
-    if (object.endpoint) {
+    if (object && object.endpoint) {
       const parts = object.endpoint.split('/');
       parts.pop();
       object[this.param] = parts.pop();
