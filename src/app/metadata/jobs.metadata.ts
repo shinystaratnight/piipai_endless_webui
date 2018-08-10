@@ -851,30 +851,18 @@ const form = [
             },
             read_only: false
           },
-
-          // upper_rate_limit
-          // lower_rate_limit
-
           {
-            list: false,
-            endpoint: '/ecore/api/v2/skills/skillbaserates/',
-            read_only: false,
             key: 'hourly_rate_default',
+            type: 'input',
+            attributes: {
+              max: '{position.upper_rate_limit}',
+              min: '{position.lower_rate_limit}'
+            },
             templateOptions: {
               label: 'Candidate rate default',
-              add: true,
-              delete: false,
-              values: ['hourly_rate'],
-              type: 'related',
-              edit: true,
-              display: '${hourly_rate}/h'
-            },
-            collapsed: false,
-            type: 'related',
-            query: {
-              skill: '{position.id}'
-            },
-            many: false
+              type: 'number',
+              text: '${hourly_rate_default}/h',
+            }
           },
           {
             key: 'notes',
@@ -1125,7 +1113,7 @@ const formadd = [
               label: 'Position',
               add: false,
               delete: false,
-              values: ['__str__'],
+              values: ['__str__', 'upper_rate_limit', 'lower_rate_limit'],
               type: 'related',
               edit: true
             },
@@ -1172,25 +1160,17 @@ const formadd = [
             read_only: false
           },
           {
-            list: false,
-            endpoint: '/ecore/api/v2/skills/skillbaserates/',
-            read_only: false,
             key: 'hourly_rate_default',
+            type: 'input',
+            attributes: {
+              max: '{position.upper_rate_limit}',
+              min: '{position.lower_rate_limit}'
+            },
             templateOptions: {
               label: 'Candidate rate default',
-              add: true,
-              delete: false,
-              values: ['hourly_rate'],
-              type: 'related',
-              edit: true,
-              display: '${hourly_rate}/h'
-            },
-            collapsed: false,
-            type: 'related',
-            query: {
-              skill: '{position.id}'
-            },
-            many: false
+              type: 'number',
+              text: '${hourly_rate_default}/h',
+            }
           },
           {
             key: 'notes',

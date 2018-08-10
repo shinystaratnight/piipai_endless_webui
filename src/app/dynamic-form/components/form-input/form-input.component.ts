@@ -97,9 +97,28 @@ export class FormInputComponent
         this.formData = data.data;
         this.checkTimesheetTime(data);
         this.checkIfExistDefaultValue();
+        this.checkAttributes();
       });
 
       this.subscriptions.push(subscription);
+    }
+  }
+
+  public checkAttributes() {
+    if (this.config.attributes) {
+      const formatString = new FormatString();
+      const attributes = Object.keys(this.config.attributes);
+
+      attributes.forEach((key) => {
+        this.config.templateOptions[key] =
+          formatString.format(this.config.attributes[key], this.formData);
+      });
+
+      if (!this.config.read_only) {
+        if (this.input) {
+          this.addFlags(this.input, this.config);
+        }
+      }
     }
   }
 
@@ -232,6 +251,7 @@ export class FormInputComponent
   }
 
   public setInitValue() {
+    const format = new FormatString();
     if (this.config.type !== 'static'
       || (this.config.type === 'static' && !this.config.read_only)) {
       if (this.autocompleteValue) {
@@ -243,7 +263,6 @@ export class FormInputComponent
         || this.config.value
         || this.config.default
         || this.config.default === 0) {
-          const format = new FormatString();
 
           let value = (this.config.value === 0 || this.config.value)
             ? this.config.value
@@ -266,7 +285,12 @@ export class FormInputComponent
       if (this.config.value instanceof Object) {
         this.displayValue = this.config.value.__str__ || '-';
       } else {
-        this.displayValue = this.config.templateOptions.text || this.config.value || '-';
+        const text = format.format(
+          this.config.templateOptions.text,
+          { [this.config.key]: this.config.value }
+        );
+
+        this.displayValue = text || this.config.value || '-';
       }
     }
 
