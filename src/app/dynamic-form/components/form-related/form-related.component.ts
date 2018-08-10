@@ -759,9 +759,13 @@ export class FormRelatedComponent
     this.modalData = {};
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
-    this.modalData.endpoint = object && object.endpoint || this.config.endpoint;
-    if (object && object.endpoint) {
-      this.modalData.edit = true;
+    if (object.endpoint) {
+      const parts = object.endpoint.split('/');
+      parts.pop();
+      object[this.param] = parts.pop();
+      this.modalData.endpoint = [].concat(parts, '').join('/');
+    } else {
+      this.modalData.endpoint = this.config.endpoint;
     }
     if (type === 'update' || type === 'delete') {
       if (object) {
