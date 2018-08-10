@@ -216,7 +216,8 @@ export class FormInputComponent
             && !this.config.key.includes('street_address')
           )
         ) {
-          this.autocompleteValue = data[key];
+          this.viewMode = true;
+          this.autocompleteValue = data[key] || '-';
           this.setInitValue();
         }
 

@@ -1,6 +1,7 @@
 <div *ngIf="config" class="form-builder-form">
   <dynamic-form
     [config]="config.ui_config"
+    [errors]="error"
     (event)="eventHandler($event)"
     (submit)="submitForm($event)">
     <div class="footer">
