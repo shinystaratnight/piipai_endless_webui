@@ -147,6 +147,10 @@
 
     &.edit {
       max-width: 300px;
+
+      .form-builder-form & {
+        max-width: 100%;
+      }
     }
 
     .description & {
@@ -210,7 +214,12 @@
     font-size: 12px;
     line-height: 14px;
 
-    color: $gray;
-    opacity: .3;
+    color: rgba($gray, .3);
+
+    .form-builder-form &.required::after {
+      content: '*';
+
+      color: $brand-danger;
+    }
   }
 }
