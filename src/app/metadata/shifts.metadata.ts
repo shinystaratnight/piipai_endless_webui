@@ -192,28 +192,19 @@ const shiftDate = {
       type: 'input'
     },
     {
-      many: false,
       key: 'hourly_rate',
-      endpoint: '/ecore/api/v2/skills/skillbaserates/',
-      collapsed: false,
-      list: false,
+      type: 'input',
+      attributes: {
+        max: '{skill.upper_rate_limit}',
+        min: '{skill.lower_rate_limit}'
+      },
+      default: '{skill.default_rate}',
       templateOptions: {
-        add: true,
-        delete: false,
-        edit: true,
-        values: ['__str__'],
-        label: 'Hourly rate',
-        type: 'related'
-      },
-      query: {
-        skill: '{skill.id}'
-      },
-      prefilled: {
-        skill: '{skill.id}'
-      },
-      read_only: false,
-      type: 'related'
-    }
+        label: 'Candidate rate default',
+        type: 'number',
+        text: '${hourly_rate}/h',
+      }
+    },
   ],
   list: {
     columns: [
