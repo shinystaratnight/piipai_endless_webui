@@ -2,6 +2,8 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/cor
 
 import { Subscription } from 'rxjs/Subscription';
 
+import { getContactAvatar } from '../../../helpers/utils';
+
 @Component({
   selector: 'form-info',
   templateUrl: './form-info.component.html',
@@ -101,17 +103,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
         }
       });
 
-      if (!this.picture) {
-        const nameElements = this.title && this.title.split(' ');
-
-        if (nameElements && nameElements.length) {
-          if (nameElements.length === 2) {
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          } else if (nameElements.length === 3) {
-            nameElements.shift();
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          }
-        }
+      if (!this.picture && this.title) {
+        this.contactAvatar = getContactAvatar(this.title);
       }
 
       if (this.config.metadata['title'] && this.config.metadata['title'].value instanceof Object) {

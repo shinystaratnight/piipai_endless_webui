@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { getContactAvatar } from '../../../helpers/utils';
+
 @Component({
   selector: 'list-image',
   templateUrl: './list-image.component.html',
@@ -38,16 +40,7 @@ export class ListImageComponent implements OnInit {
     }
 
     if (!this.src && this.config.contactName) {
-      const nameElements = this.config.contactName.split(' ');
-
-      if (nameElements && nameElements.length) {
-        if (nameElements.length === 2) {
-          this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-        } else if (nameElements.length === 3) {
-          nameElements.shift();
-          this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-        }
-      }
+      this.contactAvatar = getContactAvatar(this.config.contactName);
     }
   }
 

@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
+import { getContactAvatar } from '../../../helpers/utils';
+
 @Component({
   selector: 'list-info',
   templateUrl: 'list-info.component.html',
@@ -67,16 +69,7 @@ export class ListInfoComponent implements OnInit {
       });
 
       if (this.picture == null) {
-        const nameElements = this.title.split(' ');
-
-        if (nameElements && nameElements.length) {
-          if (nameElements.length === 2) {
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          } else if (nameElements.length > 2) {
-            nameElements.shift();
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          }
-        }
+        this.contactAvatar = getContactAvatar(this.title);
       }
     }
   }
