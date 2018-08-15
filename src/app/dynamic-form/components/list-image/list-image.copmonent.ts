@@ -61,4 +61,8 @@ export class ListImageComponent implements OnInit {
       'text-danger' : 'text-muted';
   }
 
+  public getExtension(link: string) {
+    return link.split('.').pop();
+  }
+
 }
