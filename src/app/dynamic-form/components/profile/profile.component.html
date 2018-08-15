@@ -5,7 +5,7 @@
 
       <div class="element d-flex align-items-center p-2 px-4 mb-3">
         <img *ngIf="data.contact.picture && data.contact.picture.origin" class="avatar mr-3" [src]="data.contact.picture && data.contact.picture.origin" alt="Profile">
-        <div *ngIf="data.contactAvatar" class="contact-avatar avatar">{{data.contactAvatar}}</div>
+        <div *ngIf="data.contactAvatar && !(data.contact.picture && data.contact.picture.origin)" class="contact-avatar avatar">{{data.contactAvatar}}</div>
         <span class="name mr-auto">{{data.contact.__str__}}</span>
       </div>
 
