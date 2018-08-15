@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/{company}',
+            endpoint: '/ecore/api/v2/core/companies/{company.id}',
             field: 'company',
             type: 'link',
           }
@@ -74,6 +74,21 @@ const list = {
         name: 'duration_in_months',
         label: 'Duration in months'
       },
+      {
+        content: [
+          {
+            field: 'active',
+            type: 'icon',
+            values: {
+              false: 'times-circle',
+              true: 'check-circle',
+              null: 'minus-circle'
+            }
+          }
+        ],
+        name: 'active',
+        label: 'Active'
+      }
     ],
     editDisable: true
   },
