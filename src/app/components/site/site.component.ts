@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subject } from 'rxjs/Subject';
 
@@ -56,6 +58,11 @@ export class SiteComponent implements OnInit {
   public acceptenceTestData: any;
   public additionalData: any;
 
+  public modalRef: NgbModalRef;
+
+  @ViewChild('modal') public modal;
+  @ViewChild('forgotPassword') public forgotPasswordModal;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -66,6 +73,7 @@ export class SiteComponent implements OnInit {
     private permission: CheckPermissionService,
     private ts: ToastrService,
     private siteSettingsService: SiteSettingsService,
+    private modalService: NgbModal,
   ) {}
 
   public ngOnInit() {
@@ -345,5 +353,17 @@ export class SiteComponent implements OnInit {
 
   public setTestData(data) {
     this.acceptenceTestData = data.data;
+  }
+
+  public openChangePassword() {
+    this.modalRef = this.modalService.open(this.modal);
+  }
+
+  public openResetForm() {
+    this.modalRef.close();
+
+    this.modalRef = this.modalService.open(this.forgotPasswordModal);
+
+    return false;
   }
 }

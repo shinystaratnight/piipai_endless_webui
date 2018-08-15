@@ -1,3 +1,5 @@
+import { todayFormatDate } from './utils';
+
 const list = {
   list: {
     list: 'user',
@@ -168,6 +170,46 @@ const form = [
     read_only: true
   },
   {
+    type: 'collapse',
+    name: 'Password',
+    children: [
+      {
+        type: 'related',
+        key: 'password',
+        endpoint: '/ecore/api/v2/core/user/password/',
+        send: false,
+        doNotChoice: true,
+        templateOptions: {
+          label: 'Password',
+          add: true,
+          edit: true,
+        }
+      },
+      {
+        type: 'button',
+        color: 'primary',
+        templateOptions: {
+          text: 'Send by SMS',
+          type: 'button',
+          small: true,
+          icon: 'envelope',
+          p: true,
+        }
+      },
+      {
+        type: 'button',
+        color: 'primary',
+        templateOptions: {
+          text: 'Send by Email',
+          type: 'button',
+          small: true,
+          icon: 'envelope',
+          p: true,
+        }
+      }
+    ]
+  },
+  {
     endpoint: '/ecore/api/v2/company-settings/globalpermissions/',
     templateOptions: {
       label: 'Global Permissions',
@@ -205,7 +247,7 @@ const formadd = [
   },
   {
     key: 'date_joined',
-    default: '2018-07-04T09:45:11.622691Z',
+    default: todayFormatDate,
     type: 'datepicker',
     templateOptions: {
       required: false,

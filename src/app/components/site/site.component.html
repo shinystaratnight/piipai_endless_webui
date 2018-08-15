@@ -2,7 +2,8 @@
   logo="/assets/img/new-software.svg"
   [user]="user"
   [pages]="pagesList"
-  (update)="updateNavigationList($event)">
+  (update)="updateNavigationList($event)"
+  (changePasswordEmitter)="openChangePassword()">
 </navigation>
 
 <div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
@@ -157,3 +158,44 @@
   (changeWidgetList)="updateNavigation($event)"></dashboard>
 
 <my-toast></my-toast>
+
+<template #modal let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">Change Password</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="pb-3 form-builder-form">
+      <generic-form endpoint="/ecore/api/v2/password/change/">
+        <a class="forgot" href="" (click)="openResetForm()">Forgot Password?</a>
+        <div class="d-flex align-items-center">
+          <button type="submit" class="btn btn-success ml-auto">Save</button>
+        </div>
+      </generic-form>
+    </div>
+  </div>
+</template>
+
+<template #forgotPassword let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">Password Reset</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="pb-3 form-builder-form">
+      <generic-form endpoint="/ecore/api/v2/password/forgot/">
+        <div class="d-flex align-items-center">
+          <button type="submit" class="btn btn-success ml-auto">Reset</button>
+        </div>
+      </generic-form>
+    </div>
+  </div>
+</template>

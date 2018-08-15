@@ -99,6 +99,9 @@ import * as profile from './profile.metadata';
 import * as billingcompanies from './billingcompanies.metadata';
 import * as billingdoscounts from './billingdiscount.metadata';
 import * as tokenlogins from './tokenlogins.metadata';
+import * as passwordforgot from './passwordforgot.metadata';
+import * as passwordchange from './passwordchange.metadata';
+import * as userpassword from './userpassword.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -216,4 +219,7 @@ export const metadata = {
   '/ecore/api/v2/billing/companies/': billingcompanies.metadata,
   '/ecore/api/v2/billing/discounts/': billingdoscounts.metadata,
   '/ecore/api/v2/login/tokenlogins/': tokenlogins.metadata,
+  '/ecore/api/v2/password/forgot/': passwordforgot.metadata,
+  '/ecore/api/v2/password/change/': passwordchange.metadata,
+  '/ecore/api/v2/core/user/password/': userpassword.metadata,
 };
