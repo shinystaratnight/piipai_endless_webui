@@ -4,6 +4,8 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from '../../services/generic-form.service';
 
+import { getContactAvatar } from '../../../helpers/utils';
+
 interface ViewElement {
   type: string;
   isCollapsed: boolean;
@@ -161,22 +163,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.data = res;
 
-        const nameElements = res.contact.__str__.split(' ');
-
-        if (nameElements && nameElements.length) {
-          if (nameElements.length === 2) {
-            this.data.contactAvatar = nameElements
-              .map((el) => el[0])
-              .join('')
-              .toUpperCase();
-          } else if (nameElements.length === 3) {
-            nameElements.shift();
-            this.data.contactAvatar = nameElements
-              .map((el) => el[0])
-              .join('')
-              .toUpperCase();
-          }
-        }
+        this.data.contactAvatar = getContactAvatar(res.contact.__str__);
 
         this.generate('personalTraits');
         this.generate('residency');
