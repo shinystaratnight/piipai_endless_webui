@@ -1086,8 +1086,8 @@ export class DynamicListComponent implements
     this.modalInfo.edit = true;
     this.modalInfo.needData = false;
     this.modalInfo.label = {
-      picture: object.picture && object.picture.thumb ?
-         object.picture.thumb : '/assets/img/avatar.png',
+      picture: object.picture && object.picture.origin ?
+         object.picture.origin : '/assets/img/avatar.png',
       name: object.job_offer.candidate_contact.contact.__str__
     };
     this.open(this.evaluateModal);
@@ -1151,8 +1151,8 @@ export class DynamicListComponent implements
       }
     };
     this.modalInfo.label = {
-      picture: object.picture && object.picture.thumb ?
-         object.picture.thumb : '/assets/img/avatar.png',
+      picture: object.picture && object.picture.origin ?
+         object.picture.origin : '/assets/img/avatar.png',
       name: object.job_offer.candidate_contact.contact.__str__
     };
     this.open(this.evaluateModal, {size: 'lg'});
