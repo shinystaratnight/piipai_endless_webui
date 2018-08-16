@@ -11,7 +11,7 @@ const list = {
               address: 'address.__str__',
               description: 'description',
               title: 'name',
-              picture: 'logo.thumb'
+              picture: 'logo.origin'
             },
             field: 'id',
             type: 'info',
@@ -264,7 +264,7 @@ const list = {
         address: 'address.__str__',
         description: 'description',
         title: 'name',
-        picture: 'logo.thumb'
+        picture: 'logo.origin'
       },
       type: 'info',
       key: 'id'

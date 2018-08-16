@@ -1,5 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from './../../dynamic-form/services/generic-form.service';
 
@@ -19,6 +21,9 @@ export class FormBuilderComponent {
   @Input()
   public path: string;
 
+  @ViewChild('modal')
+  public modalTemplate: ElementRef;
+
   @Output()
   public str: EventEmitter<any> = new EventEmitter();
 
@@ -26,14 +31,17 @@ export class FormBuilderComponent {
   public previewLink: string;
   public data: any;
   public error: any;
+  public config: any;
+  public modalRef: NgbModalRef;
 
   public links: any[];
   public domain = location.origin;
 
   constructor(
     private router: Router,
+    private modalService: NgbModal,
     private genericFormService: GenericFormService
-  ) {}
+  ) { }
 
   public eventHandler(event: any) {
     if (event.type === 'sendForm' && event.status === 'success' && !this.id) {
@@ -85,6 +93,16 @@ export class FormBuilderComponent {
         str: e.str
       });
     }
+  }
+
+  public showPreview() {
+    this.modalRef = this.modalService.open(this.modalTemplate);
+
+    return false;
+  }
+
+  public setFormConfig(config) {
+    this.config = config;
   }
 
   public delete() {

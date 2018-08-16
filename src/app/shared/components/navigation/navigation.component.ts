@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 
 import { UserService, User, NavigationService, Page, Role } from '../../../services';
+import { getContactAvatar } from '../../../helpers/utils';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -94,16 +95,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
       this.picture = this.user.data.contact.picture && this.user.data.contact.picture.origin;
 
       if (!this.picture) {
-        const nameElements = this.user.data.contact.__str__.split(' ');
-
-        if (nameElements && nameElements.length) {
-          if (nameElements.length === 2) {
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          } else if (nameElements.length === 3) {
-            nameElements.shift();
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          }
-        }
+        this.contactAvatar = getContactAvatar(this.user.data.contact.__str__);
       }
     } else {
       this.greeting = `Welcome, Anonymous User`;
