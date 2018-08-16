@@ -4,6 +4,8 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from '../../services/generic-form.service';
 
+import { getContactAvatar } from '../../../helpers/utils';
+
 interface ViewElement {
   type: string;
   isCollapsed: boolean;
@@ -102,8 +104,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.contactDetails.elementList = [
         'contact.email',
         'contact.phone_mobile',
-        'contact.address.phone_landline',
-        'contact.address.phone_fax',
+        'contact.address.street_address',
         'contact.address.city',
         'contact.address.postal_code',
         'contact.address.state',
@@ -162,22 +163,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.data = res;
 
-        const nameElements = res.contact.__str__.split(' ');
-
-        if (nameElements && nameElements.length) {
-          if (nameElements.length === 2) {
-            this.data.contactAvatar = nameElements
-              .map((el) => el[0])
-              .join('')
-              .toUpperCase();
-          } else if (nameElements.length === 3) {
-            nameElements.shift();
-            this.data.contactAvatar = nameElements
-              .map((el) => el[0])
-              .join('')
-              .toUpperCase();
-          }
-        }
+        this.data.contactAvatar = getContactAvatar(res.contact.__str__);
 
         this.generate('personalTraits');
         this.generate('residency');
@@ -191,7 +177,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.service.getMetadata(this.skillsEndpoint, '?type=form').subscribe(
       (res: any) => {
         this.skillsMetadata = res;
-        this.getTagMetadata();
+        this.getSkills();
       },
       (error: any) => this.error = error);
   }
@@ -200,6 +186,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.service.getMetadata(this.tagsEndpoint, '?type=form').subscribe(
       (res: any) => {
         this.tagsMetadata = res;
+        this.getTags();
+      },
+      (error: any) => this.error = error);
+  }
+
+  public getSkills() {
+    this.service.getByQuery(this.skillsEndpoint, `?candidate_contact=${this.id}`).subscribe(
+      (res: any) => {
+        this.data.candidate_skills = res.results;
+        this.getTagMetadata();
+      },
+      (error: any) => this.error = error);
+  }
+
+  public getTags() {
+    this.service.getByQuery(this.tagsEndpoint, `?candidate_contact=${this.id}`).subscribe(
+      (res: any) => {
+        this.data.tag_list = res.results;
         this.generateView();
       },
       (error: any) => this.error = error);

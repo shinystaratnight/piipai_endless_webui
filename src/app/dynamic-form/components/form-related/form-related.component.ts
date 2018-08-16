@@ -589,6 +589,7 @@ export class FormRelatedComponent
 
   public generateDataForList(config: Field, data = undefined): void {
     if (config.list && config.metadata) {
+      this.prefilledAttributes();
       this.dataOfList = [];
       let value = [];
       if (data) {
@@ -606,6 +607,22 @@ export class FormRelatedComponent
         let object = this.createObject();
         this.dataOfList.push(object);
       }
+    }
+  }
+
+  public prefilledAttributes() {
+    if (this.config && this.config.metadata) {
+      this.config.metadata.forEach((el) => {
+        if (el && el.attributes) {
+          const formatString = new FormatString();
+          const attributes = Object.keys(el.attributes);
+
+          attributes.forEach((key) => {
+            el.templateOptions[key] =
+              formatString.format(el.attributes[key], this.formData);
+          });
+        }
+      });
     }
   }
 
@@ -766,9 +783,13 @@ export class FormRelatedComponent
     this.modalData = {};
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
-    this.modalData.endpoint = object && object.endpoint || this.config.endpoint;
     if (object && object.endpoint) {
-      this.modalData.edit = true;
+      const parts = object.endpoint.split('/');
+      parts.pop();
+      object[this.param] = parts.pop();
+      this.modalData.endpoint = [].concat(parts, '').join('/');
+    } else {
+      this.modalData.endpoint = this.config.endpoint;
     }
     if (type === 'update' || type === 'delete') {
       if (object) {

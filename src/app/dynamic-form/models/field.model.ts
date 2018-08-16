@@ -55,6 +55,7 @@ export interface Field {
   updateFormData?: boolean;
   isPrefilled?: boolean;
   reset?: string[];
+  attributes?: { [key: string]: string },
   templateOptions?: {
     label?: string;
     type?: string;

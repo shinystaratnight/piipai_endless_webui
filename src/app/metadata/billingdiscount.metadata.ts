@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/{company}',
+            endpoint: '/ecore/api/v2/core/companies/{company.id}',
             field: 'company',
             type: 'link',
           }
@@ -74,8 +74,22 @@ const list = {
         name: 'duration_in_months',
         label: 'Duration in months'
       },
+      {
+        content: [
+          {
+            field: 'active',
+            type: 'icon',
+            values: {
+              false: 'times-circle',
+              true: 'check-circle',
+              null: 'minus-circle'
+            }
+          }
+        ],
+        name: 'active',
+        label: 'Active'
+      }
     ],
-    editDisable: true
   },
   fields: []
 };
@@ -176,7 +190,105 @@ const formadd = [
   },
 ];
 
+const form = [
+  {
+    endpoint: '/ecore/api/v2/core/companies/',
+    read_only: true,
+    templateOptions: {
+      label: 'Client',
+      add: true,
+      delete: false,
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    type: 'related',
+    key: 'company',
+  },
+  {
+    key: 'payment_type',
+    type: 'select',
+    templateOptions: {
+      required: true,
+      label: 'Payment type',
+      options: [
+        {
+          value: 'sms',
+          label: 'SMS'
+        },
+        {
+          value: 'subscription',
+          label: 'Subscription'
+        },
+        {
+          value: 'extra_workers',
+          label: 'Extra Workers'
+        },
+      ],
+      type: 'select'
+    }
+  },
+  {
+    key: 'percent_off',
+    type: 'input',
+    templateOptions: {
+      label: 'Percent off',
+      type: 'number',
+      max: 100,
+      min: 0
+    }
+  },
+  {
+    key: 'amount_off',
+    type: 'input',
+    templateOptions: {
+      label: 'Amount off',
+      type: 'number',
+    }
+  },
+  {
+    key: 'duration',
+    type: 'select',
+    templateOptions: {
+      required: true,
+      label: 'Duration',
+      options: [
+        {
+          value: 'once',
+          label: 'Once'
+        },
+        {
+          value: 'repeating',
+          label: 'Repeating'
+        },
+        {
+          value: 'forever',
+          label: 'Forever'
+        },
+      ],
+      type: 'select'
+    }
+  },
+  {
+    key: 'duration_in_months',
+    type: 'input',
+    templateOptions: {
+      label: 'Duration in months',
+      type: 'number',
+    }
+  },
+  {
+    key: 'active',
+    type: 'checkbox',
+    templateOptions: {
+      label: 'Active',
+      type: 'number',
+    }
+  },
+];
+
 export const metadata = {
   list,
-  formadd
+  formadd,
+  form,
 };

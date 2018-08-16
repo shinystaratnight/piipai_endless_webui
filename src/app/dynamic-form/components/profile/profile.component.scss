@@ -90,4 +90,20 @@
     text-transform: uppercase;
     font-weight: bold;
   }
+
+  .star {
+    position: relative;
+    display: inline-block;
+    font-size: 1.5rem;
+    color: #bdbdbd;
+  }
+  .full {
+    color: $brand-primary;
+  }
+  .half {
+    position: absolute;
+    display: inline-block;
+    overflow: hidden;
+    color: $brand-primary;
+  }
 }

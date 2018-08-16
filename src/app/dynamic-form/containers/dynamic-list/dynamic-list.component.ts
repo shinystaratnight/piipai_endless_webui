@@ -91,6 +91,7 @@ export class DynamicListComponent implements
   public searchFilter: any;
   public position: { top, left };
   public noneEdit: boolean;
+  public fullData: any;
 
   public body: any[] = [];
   public select: any = {};
@@ -189,12 +190,20 @@ export class DynamicListComponent implements
     }
 
     if (changes.hasOwnProperty('data') && changes['data'].isFirstChange()) {
+      this.fullData = data;
       this.body.push(...this.generateBody(config, data, innerTables));
     } else if (changes.hasOwnProperty('data') && !changes['data'].isFirstChange()) {
+      this.fullData = data;
       this.body = [...this.generateBody(config, data, innerTables)];
     }
 
     if (changes.hasOwnProperty('addData') && !changes['addData'].isFirstChange()) {
+      this.fullData = {
+        ...this.fullData,
+        [this.responseField]: [
+          ...this.fullData[this.responseField],
+          ...addData[this.responseField]
+        ]};
       this.body.push(...this.generateBody(config, addData, innerTables));
     }
   }
@@ -1079,90 +1088,104 @@ export class DynamicListComponent implements
   }
 
   public evaluate(e) {
-    let object = this.data[this.responseField].filter((el) => el.id === e.el.rowId)[0];
-    this.modalInfo = {};
-    this.modalInfo.type = 'evaluate';
-    this.modalInfo.endpoint = e.el.endpoint;
-    this.modalInfo.edit = true;
-    this.modalInfo.needData = false;
-    this.modalInfo.label = {
-      picture: object.picture && object.picture.thumb ?
-         object.picture.thumb : '/assets/img/avatar.png',
-      name: object.job_offer.candidate_contact.contact.__str__
-    };
-    this.open(this.evaluateModal);
+    const object = this.fullData[this.responseField].find((el) => el.id === e.el.rowId);
+    if (object) {
+      const contact = object.job_offer.candidate_contact.contact;
+      this.modalInfo = {};
+      this.modalInfo.type = 'evaluate';
+      this.modalInfo.endpoint = e.el.endpoint;
+      this.modalInfo.edit = true;
+      this.modalInfo.needData = false;
+      this.modalInfo.label = {
+        picture:
+          contact.picture &&
+          contact.picture.origin
+            ? contact.picture.origin
+            : '/assets/img/avatar.png',
+        name: contact.__str__
+      };
+      this.open(this.evaluateModal);
+    }
   }
 
   public changeTimesheet(e) {
-    let object = this.data[this.responseField].filter((el) => el.id === e.el.rowId)[0];
-    this.modalInfo = {};
-    this.modalInfo.type = 'evaluate';
-    this.modalInfo.endpoint = e.el.endpoint;
-    this.modalInfo.edit = true;
-    this.modalInfo.needData = false;
-    this.modalInfo.data = {
-      shift_started_at: {
-        action: 'add',
-        data: {
-          value: object.shift_started_at
+    const object = this.fullData[this.responseField].find((el) => el.id === e.el.rowId)[0];
+    if (object) {
+      const contact = object.job_offer.candidate_contact.contact;
+      this.modalInfo = {};
+      this.modalInfo.type = 'evaluate';
+      this.modalInfo.endpoint = e.el.endpoint;
+      this.modalInfo.edit = true;
+      this.modalInfo.needData = false;
+      this.modalInfo.data = {
+        shift_started_at: {
+          action: 'add',
+          data: {
+            value: object.shift_started_at
+          }
+        },
+        break_started_at: {
+          action: 'add',
+          data: {
+            value: object.break_started_at
+          }
+        },
+        break_ended_at: {
+          action: 'add',
+          data: {
+            value: object.break_ended_at
+          }
+        },
+        shift_ended_at: {
+          action: 'add',
+          data: {
+            value: object.shift_ended_at
+          }
+        },
+        supervisor: {
+          action: 'add',
+          data: {
+            value: object.supervisor
+          }
+        },
+        position: {
+          action: 'add',
+          data: {
+            value: object.position
+          }
+        },
+        company: {
+          action: 'add',
+          data: {
+            value: object.company
+          }
+        },
+        jobsite: {
+          action: 'add',
+          data: {
+            value: object.jobsite
+          }
         }
-      },
-      break_started_at: {
-        action: 'add',
-        data: {
-          value: object.break_started_at
-        }
-      },
-      break_ended_at: {
-        action: 'add',
-        data: {
-          value: object.break_ended_at
-        }
-      },
-      shift_ended_at: {
-        action: 'add',
-        data: {
-          value: object.shift_ended_at
-        }
-      },
-      supervisor: {
-        action: 'add',
-        data: {
-          value: object.supervisor
-        }
-      },
-      position: {
-        action: 'add',
-        data: {
-          value: object.position
-        }
-      },
-      company: {
-        action: 'add',
-        data: {
-          value: object.company
-        }
-      },
-      jobsite: {
-        action: 'add',
-        data: {
-          value: object.jobsite
-        }
-      }
-    };
-    this.modalInfo.label = {
-      picture: object.picture && object.picture.thumb ?
-         object.picture.thumb : '/assets/img/avatar.png',
-      name: object.job_offer.candidate_contact.contact.__str__
-    };
-    this.open(this.evaluateModal, {size: 'lg'});
+      };
+      this.modalInfo.label = {
+        picture:
+          contact.picture &&
+          contact.picture.origin
+            ? contact.picture.origin
+            : '/assets/img/avatar.png',
+        name: contact.__str__
+      };
+      this.open(this.evaluateModal, {size: 'lg'});
+    }
   }
 
   public approveTimesheet(e) {
-    let object = this.data[this.responseField].filter((el) => el.id === e.el.rowId)[0];
-    this.approveEndpoint = e.el.endpoint;
-    e.el.endpoint = this.format(this.evaluateEndpoint, object);
-    this.evaluate(e);
+    let object = this.fullData[this.responseField].find((el) => el.id === e.el.rowId);
+    if (object) {
+      this.approveEndpoint = e.el.endpoint;
+      e.el.endpoint = this.format(this.evaluateEndpoint, object);
+      this.evaluate(e);
+    }
   }
 
   public openFrame(e, param = 'recipient') {

@@ -4,7 +4,7 @@
 <span *ngIf="config.delim && !last">{{config.delim}}</span>
 <a *ngIf="file" [href]="file" target="_blank">
   <i fa name="file" class="mr-2"></i>
-  PDF File
+  {{getExtension(file) | uppercase}} File
 </a>
 <div *ngIf="contactAvatar" class="contact-avatar">{{contactAvatar}}</div>
 <br *ngIf="!config.hidden && !config.delim">
