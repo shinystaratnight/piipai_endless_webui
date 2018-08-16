@@ -1,9 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { FormBuilderService } from '../../services/form-builder.service';
 import { ToastrService } from '../../../shared/services/toastr.service';
+import { HiddenFields } from '../../components/generic-form/generic-form.component';
+import { Field } from '../../models/field.model';
 
 @Component({
   selector: 'form-builder-form',
@@ -18,6 +21,11 @@ export class FormBuilderFormComponent implements OnInit {
   @Output() public formConfig: EventEmitter<any> = new EventEmitter();
 
   public error = {};
+  public hiddenFields: HiddenFields = {
+    elements: [],
+    keys: [],
+    observers: []
+  };
 
   constructor(
     private service: FormBuilderService,
@@ -34,6 +42,7 @@ export class FormBuilderFormComponent implements OnInit {
         this.config = res;
         this.formConfig.emit(res);
 
+        this.updateConfig(this.config.ui_config);
         this.addAutocompleteProperty(this.config.ui_config);
       });
   }
@@ -106,5 +115,57 @@ export class FormBuilderFormComponent implements OnInit {
         this.addAutocompleteProperty(element.children, property);
       }
     });
+  }
+
+  public updateConfig(config: Field[]) {
+    const streetAddress = config.find((field) => {
+      if (field.key) {
+        return field.key.includes('street_address');
+      }
+    });
+
+    if (streetAddress) {
+      streetAddress.updateFormData = true;
+      streetAddress.formData = new BehaviorSubject({data: {}});
+      config.forEach((field) => {
+        if (
+          field.key &&
+          (field.key.includes('postal_code') ||
+          field.key.includes('state') ||
+          field.key.includes('country') ||
+          field.key.includes('city'))
+        ) {
+          field.showIf = [streetAddress.key];
+        }
+
+        if (field.showIf && field.showIf.length) {
+          if (this.hiddenFields.keys.indexOf(field.key) === -1) {
+            this.hiddenFields.keys.push(field.key);
+            this.hiddenFields.elements.push(field);
+            this.hiddenFields.observers =
+              this.observeFields(field.showIf, this.hiddenFields.observers);
+            field.hidden = new BehaviorSubject(true);
+          }
+        }
+      });
+    }
+  }
+
+  public observeFields(fields: any[], observers) {
+    fields.forEach((field: any) => {
+      if (field instanceof Object) {
+        const keys = Object.keys(field);
+        keys.forEach((key) => {
+          if (observers.indexOf(key) === -1) {
+            observers.push(key);
+          }
+        });
+      } else {
+        if (observers.indexOf(field) === -1) {
+          observers.push(field);
+        }
+      }
+    });
+    return observers;
   }
 }

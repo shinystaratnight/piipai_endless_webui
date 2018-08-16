@@ -32,22 +32,4 @@ export class RegistrationFormComponent implements OnInit {
     this.config = config;
   }
 
-  public updateConfig(config: Field[]) {
-    const streetAddress = config.find(field =>
-      field.key.includes('street_address')
-    );
-
-    if (streetAddress) {
-      config.forEach(field => {
-        if (
-          field.key.includes('postal_code') ||
-          field.key.includes('state') ||
-          field.key.includes('country') ||
-          field.key.includes('city')
-        ) {
-          console.log(field.key);
-        }
-      });
-    }
-  }
 }
