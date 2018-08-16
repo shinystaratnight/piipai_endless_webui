@@ -22,7 +22,7 @@ import { Field } from '../../models/field.model';
 import { FormatString } from '../../../helpers/format';
 import { getElementFromMetadata } from '../../helpers/utils';
 
-interface HiddenFields {
+export interface HiddenFields {
   elements: Field[];
   keys: string[];
   observers: string[];

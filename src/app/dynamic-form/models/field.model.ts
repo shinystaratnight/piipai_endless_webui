@@ -43,9 +43,9 @@ export interface Field {
   delayData?: any;
   formId: number;
   errorMessage?: {
-    field: string,
-    message: string,
-    visible?: boolean
+    field: string;
+    message: string;
+    visible?: boolean;
   };
   checkObject?: any;
   values?: any;
@@ -68,4 +68,43 @@ export interface Field {
     values?: string[];
     text?: string;
   };
-};
+}
+
+interface BasicFormElement {
+  key: string;
+  type: string;
+
+  mode?: BehaviorSubject<string>;
+  hidden?: BehaviorSubject<boolean>;
+
+  default?: any;
+  read_only?: boolean;
+  value?: any;
+  hide?: boolean;
+
+  templateOptions: {
+    label: string;
+    placeholder?: string;
+    description?: string;
+  };
+}
+
+interface FormCheckboxField extends BasicFormElement {
+  templateOptions: {
+    label: string;
+    color: string;
+    values: { [key: string]: string };
+  };
+}
+
+interface FormInputField extends BasicFormElement {
+  templateOptions: {
+    label: string;
+    max: number;
+    min: number;
+    type: string;
+    required?: string;
+  };
+}
+
+// export type Field = FormInputField | FormCheckboxField;
