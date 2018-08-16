@@ -22,8 +22,8 @@ export class ListImageComponent implements OnInit {
     let defaultAvatar: string;
     if (this.config.type === 'picture') {
       defaultAvatar = this.config.default;
-      this.src = (this.config.value && this.config.value.thumb)
-        ? this.config.value.thumb : false;
+      this.src = (this.config.value && this.config.value.origin)
+        ? this.config.value.origin : false;
 
       if (this.config.value && this.config.file === undefined) {
         this.file = this.config.value;
