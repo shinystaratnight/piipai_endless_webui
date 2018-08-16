@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'discount',
     label: 'Discount',
+    search_enabled: true,
     columns: [
       {
         content: [
@@ -90,6 +91,19 @@ const list = {
         label: 'Active'
       }
     ],
+    filters: [
+      {
+        key: 'company',
+        label: 'Company',
+        type: 'related',
+        data: {
+          value: '__str__',
+          endpoint: '/ecore/api/v2/core/companies/?type=master',
+          key: 'id'
+        },
+        query: 'company'
+      }
+    ],
   },
   fields: []
 };
@@ -104,6 +118,9 @@ const formadd = [
       values: ['__str__'],
       type: 'related',
       edit: true
+    },
+    query: {
+      type: 'master'
     },
     type: 'related',
     key: 'company',
