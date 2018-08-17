@@ -17,15 +17,6 @@ export class RegistrationFormComponent implements OnInit {
 
   public ngOnInit() {
     this.settings = this.route.snapshot.data['settings'];
-
-    // this.route.url.subscribe((url) => {
-    //   let urlCopy = [].concat(url);
-    //   let lastElement = urlCopy.pop().path;
-    //   if (lastElement === 'password') {
-    //     this.endpoint = `${this.contactEndpoint}${user.id}/password/`;
-    //     this.password = true;
-    //   }
-    // });
   }
 
   public setFormConfig(config: Field[]) {

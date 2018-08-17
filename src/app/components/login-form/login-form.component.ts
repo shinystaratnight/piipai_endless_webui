@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { LoginService } from './../../services/login.service';
 
@@ -9,12 +11,15 @@ import { LoginService } from './../../services/login.service';
   styleUrls: ['./login-form.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class LoginFormComponent implements OnInit {
+export class LoginFormComponent implements OnInit, OnDestroy {
+
+  @ViewChild('modal') public modal;
 
   public label: any;
   public response: any;
   public loginProcess: boolean;
   public settings: any;
+  public modalRef: NgbModalRef;
 
   public error = {};
   public token = false;
@@ -56,6 +61,7 @@ export class LoginFormComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private route: ActivatedRoute,
+    private modalService: NgbModal,
   ) {}
 
   public ngOnInit() {
@@ -67,6 +73,12 @@ export class LoginFormComponent implements OnInit {
     });
 
     this.settings = this.route.snapshot.data['settings'];
+  }
+
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
   }
 
   public tokenAuth(token) {
@@ -105,6 +117,12 @@ export class LoginFormComponent implements OnInit {
   public updateCheckbox(value: boolean) {
     this.rememberMe = value;
     this.additionalData.remember_me = this.rememberMe;
+  }
+
+  public openResetForm() {
+    this.modalRef = this.modalService.open(this.modal);
+
+    return false;
   }
 
 }

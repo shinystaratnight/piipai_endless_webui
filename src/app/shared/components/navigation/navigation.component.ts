@@ -28,32 +28,19 @@ import 'rxjs/add/operator/debounceTime';
 
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild('header')
-  public header: any;
+  @ViewChild('header') public header: any;
+  @ViewChild('list') public list: any;
+  @ViewChild('item') public item: any;
+  @ViewChild('nav') public nav: any;
+  @ViewChild('userBlock') public userBlock: any;
+  @ViewChild('modal') public modal: any;
 
-  @ViewChild('list')
-  public list: any;
+  @Input() public pages: Page[];
+  @Input() public user: User;
+  @Input() public logo: string;
 
-  @ViewChild('item')
-  public item: any;
-
-  @ViewChild('nav')
-  public nav: any;
-
-  @ViewChild('userBlock')
-  public userBlock: any;
-
-  @Input()
-  public pages: Page[];
-
-  @Input()
-  public user: User;
-
-  @Input()
-  public logo: string;
-
-  @Output()
-  public update: EventEmitter<Role> = new EventEmitter();
+  @Output() public update: EventEmitter<Role> = new EventEmitter();
+  @Output() public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
 
   public headerHeight: number;
   public error: any;
@@ -156,6 +143,13 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     if (p.url !== '/') {
       this.isCollapsed = false;
     }
+
+    return false;
+  }
+
+  public changePassword() {
+    this.hideUserMenu = true;
+    this.changePasswordEmitter.emit();
 
     return false;
   }

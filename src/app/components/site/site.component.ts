@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subject } from 'rxjs/Subject';
 
@@ -20,12 +22,13 @@ import { CheckPermissionService, ToastrService, MessageType } from '../../shared
   templateUrl: './site.component.html'
 })
 
-export class SiteComponent implements OnInit {
+export class SiteComponent implements OnInit, OnDestroy {
 
   public pageData: PageData;
   public user: User;
   public dashboard: boolean = true;
   public currentRole: Role;
+  public changePasswordEndpoint: string;
 
   public modulesList: any;
   public userModules: any;
@@ -56,6 +59,11 @@ export class SiteComponent implements OnInit {
   public acceptenceTestData: any;
   public additionalData: any;
 
+  public modalRef: NgbModalRef;
+
+  @ViewChild('modal') public modal;
+  @ViewChild('forgotPassword') public forgotPasswordModal;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -66,12 +74,16 @@ export class SiteComponent implements OnInit {
     private permission: CheckPermissionService,
     private ts: ToastrService,
     private siteSettingsService: SiteSettingsService,
+    private modalService: NgbModal,
   ) {}
 
   public ngOnInit() {
     this.loadScript();
     this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
     this.user = this.userService.user;
+    this.changePasswordEndpoint =
+      `/ecore/api/v2/core/contacts/${this.user.data.contact.id}/change_password/`;
+
     this.currentRole = this.user.currentRole;
     this.updateJiraTask(this.user.currentRole);
     this.route.url.subscribe(
@@ -87,6 +99,12 @@ export class SiteComponent implements OnInit {
         }
       }
     );
+  }
+
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
   }
 
   public loadScript() {
@@ -345,5 +363,26 @@ export class SiteComponent implements OnInit {
 
   public setTestData(data) {
     this.acceptenceTestData = data.data;
+  }
+
+  public openChangePassword() {
+    this.modalRef = this.modalService.open(this.modal);
+  }
+
+  public openResetForm() {
+    this.modalRef.close();
+
+    this.modalRef = this.modalService.open(this.forgotPasswordModal);
+
+    return false;
+  }
+
+  public resetEvent(response) {
+    if (response && response.status === 'success') {
+      this.userService.logout();
+      setTimeout(() => {
+        this.ts.sendMessage(response.data.message, 'success');
+      }, 1000);
+    }
   }
 }
