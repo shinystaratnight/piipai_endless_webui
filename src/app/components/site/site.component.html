@@ -170,7 +170,7 @@
       </div>
     </div>
     <div class="pb-3 form-builder-form">
-      <generic-form endpoint="/ecore/api/v2/password/change/">
+      <generic-form [endpoint]="changePasswordEndpoint">
         <a class="forgot" href="" (click)="openResetForm()">Forgot Password?</a>
         <div class="d-flex align-items-center">
           <button type="submit" class="btn btn-success ml-auto">Save</button>
@@ -191,7 +191,7 @@
       </div>
     </div>
     <div class="pb-3 form-builder-form">
-      <generic-form endpoint="/ecore/api/v2/password/forgot/">
+      <generic-form endpoint="/ecore/api/v2/core/contacts/forgot_password/" (event)="resetEvent($event)">
         <div class="d-flex align-items-center">
           <button type="submit" class="btn btn-success ml-auto">Reset</button>
         </div>
