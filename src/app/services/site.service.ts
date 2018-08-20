@@ -73,6 +73,7 @@ export class SiteService {
       }
       if (lastElement === 'fillin') {
         data.postfix = 'fillin';
+        data.type = 'list';
       }
     } else if (lastElement === 'profile') {
       urlCopy.push(lastElement);

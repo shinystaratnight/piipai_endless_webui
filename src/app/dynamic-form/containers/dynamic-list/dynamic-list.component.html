@@ -33,9 +33,15 @@
     </div>
     <div class="background" (click)="toggleFilterBlock()"></div>
     <div [class.card-block]="poped" class="datatable-body" [class.in-form]="inForm" [class.open-filters]="!filtersHidden && showFilters">
-      <h2 class="datatable-label"
+      <ng-content></ng-content>
+
+      <h2 class="datatable-label" [class.has-description]="description"
         *ngIf="(config.list && (inForm && (config.list.search_enabled || (config.list.buttons && config.list.buttons.length)) && !delay) || (!inForm && !poped))">
-        <span *ngIf="!inForm" class="mr-auto my-1">{{config.list.label}}</span>
+        <span *ngIf="!inForm && !description" class="mr-auto my-1">{{label || config.list.label}}</span>
+        <p *ngIf="description">
+          <span>{{label || config.list.label}}</span> <br>
+          <span class="description">{{description}}</span>
+        </p>
         <list-buttons
           [buttons]="config.list.buttons"
           [first]="first"
@@ -179,7 +185,8 @@
               <tr *ngIf="row.additionalBody && !row.collapsed">
                 <td *ngIf="(!inForm && config.list.actions) || actions || !noneEdit">&nbsp;</td>
                 <td [attr.colspan]="row.content.length">
-                  <table class="table table-sm">
+
+                  <table *ngIf="!row.additionalBody.inline" class="table table-sm">
                     <thead>
                       <tr>
                         <th *ngFor="let acell of row.additionalBody.content">{{acell.label}}</th>
@@ -203,6 +210,23 @@
                       </tr>
                     </tbody>
                   </table>
+
+                  <ng-container *ngIf="row.additionalBody.inline">
+                    <div class="additional-data-wrapper" *ngFor="let acell of row.additionalBody.content">
+                      <span class="additional-data-label">{{acell.label}}</span>
+                      <div class="additional-data inline" *ngFor="let field of acell.content">
+                        <span class="additional-data-content">
+                          <ng-container *ngFor="let innerField of field.content"
+                            listElement
+                            [config]="innerField"
+                            (event)="eventHandler($event)"
+                            (buttonAction)="buttonHandler($event)">
+                          </ng-container>
+                        </span>
+                      </div>
+                    </div>
+                  </ng-container>
+
                 </td>
                 <td *ngIf="config.list.tabs">&nbsp;</td>
               </tr>
