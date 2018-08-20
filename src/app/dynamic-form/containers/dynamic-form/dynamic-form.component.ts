@@ -154,7 +154,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public buttonActionHandler(e) {
-    this.buttonAction.emit(e);
+    this.buttonAction.emit({...e, data: this.form.value});
   }
 
   public resourseDataHandler(e) {

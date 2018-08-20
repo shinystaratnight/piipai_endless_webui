@@ -17,6 +17,8 @@ import 'rxjs/add/operator/finally';
 
 import { GenericFormService, FormService } from '../../services/';
 
+import { ToastrService } from '../../../shared/services/toastr.service';
+
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
@@ -122,6 +124,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   constructor(
     private service: GenericFormService,
     private formService: FormService,
+    private toastrService: ToastrService,
   ) {
     this.subscriptions = [];
 
@@ -884,7 +887,27 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public buttonActionHandler(e) {
+    if (e.value === 'autoGenerate') {
+      this.generatePassword(e);
+    }
+
     this.buttonAction.emit(e);
+  }
+
+  public generatePassword(e) {
+    const formatString = new FormatString();
+
+    const endpoint = formatString.format(
+      '/ecore/api/v2/core/contacts/{contact.id}/send_password/',
+      e.data
+    );
+
+    if (e.data.by_email || e.data.by_phone) {
+      this.service.submitForm(endpoint, { email: e.data.by_email, sms: e.data.by_phone })
+        .subscribe((res: any) => {
+          this.toastrService.sendMessage(res.message, 'success');
+        });
+    }
   }
 
   public getRelatedMetadata(metadata, key, endpoint, metadataQuery) {

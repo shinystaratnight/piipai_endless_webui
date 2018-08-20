@@ -176,37 +176,62 @@ const form = [
       {
         type: 'related',
         key: 'password',
-        endpoint: '/ecore/api/v2/core/user/password/',
+        value: {
+          id: true,
+          __str__: '******',
+        },
+        endpoint: '/ecore/api/v2/core/contacts/{id}/password/',
+        editEndpoint: '/ecore/api/v2/core/contacts/{contact.id}/password/',
         send: false,
         doNotChoice: true,
+        useValue: true,
         templateOptions: {
           label: 'Password',
-          add: true,
-          edit: true,
+          edit: true
         }
       },
       {
-        type: 'button',
-        color: 'primary',
-        templateOptions: {
-          text: 'Send by SMS',
-          type: 'button',
-          small: true,
-          icon: 'envelope',
-          p: true,
-        }
+        label: 'Auto generate',
+        type: 'group',
+        children: [
+          {
+            key: 'by_email',
+            default: true,
+            templateOptions: {
+              required: false,
+              label: 'Send to email',
+              type: 'checkbox'
+            },
+            value: true,
+            send: false,
+            type: 'checkbox'
+          },
+          {
+            key: 'by_phone',
+            default: true,
+            templateOptions: {
+              required: false,
+              label: 'Send to mobile phone',
+              type: 'checkbox'
+            },
+            value: true,
+            send: false,
+            type: 'checkbox'
+          },
+          {
+            type: 'button',
+            color: 'primary',
+            templateOptions: {
+              action: 'autoGenerate',
+              text: 'Send',
+              type: 'button',
+              small: true,
+              icon: 'envelope',
+              p: true
+            }
+          }
+        ]
       },
-      {
-        type: 'button',
-        color: 'primary',
-        templateOptions: {
-          text: 'Send by Email',
-          type: 'button',
-          small: true,
-          icon: 'envelope',
-          p: true,
-        }
-      }
     ]
   },
   {
