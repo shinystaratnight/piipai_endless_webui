@@ -12,6 +12,8 @@ span {
   display: flex;
   flex-wrap: wrap;
 
+  margin-bottom: -.3rem;
+
   &.column {
     align-items: flex-start;
     flex-direction: column;

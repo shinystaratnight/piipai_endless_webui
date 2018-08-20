@@ -95,7 +95,9 @@ export const entryComponents = [
   ListTagsComponent,
   ListTextComponent,
 
-  TestGeneratorComponent
+  TestGeneratorComponent,
+
+  InfoComponent,
 ];
 
 export const components = [
@@ -103,7 +105,6 @@ export const components = [
   GenericListComponent,
   ActionElementComponent,
   ProfileComponent,
-  InfoComponent,
   WebcamComponent,
   WorkflowComponent,
   TestGeneratorComponent,

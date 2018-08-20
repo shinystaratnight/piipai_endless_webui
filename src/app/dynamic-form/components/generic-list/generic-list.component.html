@@ -32,6 +32,7 @@
     (checkedObjects)="checkedHandler($event)"
     (list)="listHandler($event)"
     (event)="eventHandler($event)">
+      <ng-content></ng-content>
   </dynamic-list>
   <div class="spinner" [class.invisible]="!(!(table.metadata && table.data) || uploading)">
     <div class="double-bounce1"></div>

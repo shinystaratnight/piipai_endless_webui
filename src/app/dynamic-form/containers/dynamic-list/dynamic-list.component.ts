@@ -18,8 +18,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import moment from 'moment-timezone';
 
-import { FilterService } from './../../services';
-import { GenericFormService } from './../../services';
+import { FilterService, GenericFormService } from './../../services';
+import { FormatString } from '../../../helpers/format';
 
 @Component({
   selector: 'dynamic-list',
@@ -92,6 +92,8 @@ export class DynamicListComponent implements
   public position: { top, left };
   public noneEdit: boolean;
   public fullData: any;
+  public label: string;
+  public description: string;
 
   public body: any[] = [];
   public select: any = {};
@@ -190,6 +192,9 @@ export class DynamicListComponent implements
     }
 
     if (changes.hasOwnProperty('data') && changes['data'].isFirstChange()) {
+      this.label = this.getFormat('label', data, config);
+      this.description = this.getFormat('description', data, config);
+
       this.fullData = data;
       this.body.push(...this.generateBody(config, data, innerTables));
     } else if (changes.hasOwnProperty('data') && !changes['data'].isFirstChange()) {
@@ -206,6 +211,16 @@ export class DynamicListComponent implements
         ]};
       this.body.push(...this.generateBody(config, addData, innerTables));
     }
+  }
+
+  public getFormat(property: string, data, config): string {
+    const formatString = new FormatString();
+
+    if (data instanceof Object) {
+      return formatString.format(config.list[property], data);
+    }
+
+    return config.list[property];
   }
 
   public updateFilters() {
@@ -266,6 +281,9 @@ export class DynamicListComponent implements
           body = this.prepareData(mainMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
           body.forEach((main) => {
             additionalBody.forEach((additional) => {
+              if (this.tabs && this.tabs[0].inline) {
+                additional.inline = true;
+              }
               if (main.id === additional.id) {
                 if (!additional.parsed) {
                   main.additionalBody = this.parseAdditionalBody(additional);

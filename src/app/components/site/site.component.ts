@@ -34,6 +34,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   public userModules: any;
   public pagesList: any;
   public formLabel: string;
+  public fillInData: any;
 
   public formStorage: boolean;
   public formStorageEndpoint: string;
@@ -58,6 +59,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public acceptenceTestData: any;
   public additionalData: any;
+  public data: any;
 
   public modalRef: NgbModalRef;
 
@@ -99,6 +101,13 @@ export class SiteComponent implements OnInit, OnDestroy {
         }
       }
     );
+    this.fillInData = {
+      responseField: 'list',
+      paginated: 'off',
+      supportData: 'job',
+      metaType: true,
+      actions: true,
+    };
   }
 
   public ngOnDestroy() {
@@ -384,5 +393,34 @@ export class SiteComponent implements OnInit, OnDestroy {
         this.ts.sendMessage(response.data.message, 'success');
       }, 1000);
     }
+  }
+
+  public checkedObjects(e) {
+    const shifts = e.filters.keys.date.value.filter((el) => el.checked);
+    this.data = {
+      candidates: e.checkedData,
+      shifts: shifts.map((el) => el.data.id)
+    };
+  }
+
+  public back() {
+    this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']); //tslint:disable-line
+
+    return false;
+  }
+
+  public sendData() {
+    if (this.data) {
+      this.genericFormService.submitForm(this.pageData.endpoint, this.data).subscribe(
+        (res: any) => this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
+        (err: any) => this.error = err
+      );
+    }
+  }
+
+  public getId(path: string): string {
+    const keys = path.split('/');
+
+    return keys[keys.length - 3];
   }
 }
