@@ -789,7 +789,13 @@ export class FormRelatedComponent
       object[this.param] = parts.pop();
       this.modalData.endpoint = [].concat(parts, '').join('/');
     } else {
-      this.modalData.endpoint = this.config.endpoint;
+      let endpoint;
+      if (this.config.editEndpoint) {
+        const formatString = new FormatString();
+        endpoint = formatString.format(this.config.editEndpoint, this.formData);
+      }
+
+      this.modalData.endpoint = endpoint || this.config.endpoint;
     }
     if (type === 'update' || type === 'delete') {
       if (object) {
@@ -797,7 +803,9 @@ export class FormRelatedComponent
         this.modalData.id = object[this.param];
       } else {
         this.modalData.title = this.displayValue;
-        this.modalData.id = this.group.get(this.key).value;
+        this.modalData.id = !this.config.editEndpoint && this.group.get(this.key).value;
+        this.modalData.needData = this.config.editEndpoint ? false : true;
+        this.modalData.edit = this.config.editEndpoint && true;
       }
       if (type === 'update') {
         this.modalData.mode = 'edit';
@@ -1036,9 +1044,12 @@ export class FormRelatedComponent
         }
         return;
       }
-      this.group.get(this.key).patchValue(e.data[this.param]);
-      this.config.value = e.data[this.param];
-      this.displayValue = formatString.format(this.display, e.data);
+      this.group.get(this.key)
+        .patchValue(this.config.useValue ? this.config.value[this.param] : e.data[this.param]);
+      this.config.value = this.config.useValue ? this.config.value : e.data[this.param];
+      this.displayValue = this.config.useValue
+        ? formatString.format(this.display, this.config.value)
+        : formatString.format(this.display, e.data);
       this.eventHandler({type: 'change'}, e.data[this.param], e.data);
     } else if (e.type === 'sendForm' && e.status === 'success' && this.config.list) {
       closeModal();

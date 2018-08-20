@@ -221,5 +221,5 @@ export const metadata = {
   '/ecore/api/v2/login/tokenlogins/': tokenlogins.metadata,
   '/ecore/api/v2/core/contacts/forgot_password/': passwordforgot.metadata,
   'change_password': passwordchange.metadata,
-  '/ecore/api/v2/core/user/password/': userpassword.metadata,
+  'password': userpassword.metadata,
 };
