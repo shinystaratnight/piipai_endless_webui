@@ -28,6 +28,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   public additionalData = {
     remember_me: false
   };
+  public subdomain: boolean;
 
   public data = {
     username: {
@@ -73,6 +74,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     });
 
     this.settings = this.route.snapshot.data['settings'];
+    this.subdomain = location.host.split('.').length > 2;
   }
 
   public ngOnDestroy() {
@@ -105,8 +107,10 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   }
 
   public redirectHandler(data) {
-    this.loginService.username = data;
-    this.router.navigate(['/registration']);
+    if (this.subdomain) {
+      this.loginService.username = data;
+      this.router.navigate(['/registration']);
+    }
   }
 
   public formEvent(e) {
