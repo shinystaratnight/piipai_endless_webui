@@ -58,7 +58,13 @@ export class SiteSettingsService {
 
           return settings;
         })
-        .catch((err: any) => Observable.of(true));
+        .catch((err: any) => {
+          if (err.status === 404) {
+            location.href = 'http://r3sourcer.com';
+          }
+
+          return Observable.of(true);
+        });
     } else if (this.settings && this.authorized) {
       return Observable.of(this.settings);
     }
