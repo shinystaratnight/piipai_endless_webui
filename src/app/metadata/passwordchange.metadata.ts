@@ -1,4 +1,4 @@
-const formadd = [
+const form = [
   {
     type: 'input',
     key: 'old_password',
@@ -9,7 +9,7 @@ const formadd = [
   },
   {
     type: 'input',
-    key: 'new_password',
+    key: 'password',
     templateOptions: {
       label: 'New Password',
       type: 'password',
@@ -30,5 +30,5 @@ const formadd = [
 ];
 
 export const metadata = {
-  formadd
+  form
 };

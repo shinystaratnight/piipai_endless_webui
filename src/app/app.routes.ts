@@ -9,7 +9,7 @@ import {
 
 import { UserService, NavigationService, SiteSettingsService } from './services';
 
-import { AuthGuard, NotAuthorizedGuard } from './guards';
+import { AuthGuard, NotAuthorizedGuard, SubdomainGuard } from './guards';
 
 export const ROUTES: Routes = [
   {
@@ -37,15 +37,7 @@ export const ROUTES: Routes = [
   {
     path: 'registration',
     component: RegistrationFormComponent,
-    canActivate: [NotAuthorizedGuard],
-    resolve: {
-      settings: SiteSettingsService
-    }
-  },
-  {
-    path: 'registration/password',
-    component: RegistrationFormComponent,
-    canActivate: [AuthGuard],
+    canActivate: [NotAuthorizedGuard, SubdomainGuard],
     resolve: {
       settings: SiteSettingsService
     }
