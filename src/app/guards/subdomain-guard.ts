@@ -5,7 +5,7 @@ import { UserService } from '../services';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
-export class SubdomenGuard implements CanActivate {
+export class SubdomainGuard implements CanActivate {
 
   constructor(
     private router: Router,
