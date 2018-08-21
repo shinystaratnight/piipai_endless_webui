@@ -61,6 +61,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   @Input() public delay: boolean;
   @Input() public metadataQuery: string;
   @Input() public path: string;
+  @Input() public checkEmail: string;
 
   @Input() public endpoint: string = '';
   @Input() public data = {};
@@ -191,6 +192,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         this.toggleModeMetadata(this.mode);
       }
     }
+  }
+
+  public isEmail(value) {
+    let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,4}))$/; //tslint:disable-line
+
+    return reg.test(value) ? true : false;
   }
 
   public updateMetadataByProps(metadata: Field[], callback: Function) {
@@ -681,8 +688,16 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     }
 
     const newData = this.form
-      ? {...data, ...this.form}
-      : data || {};
+    ? {...data, ...this.form}
+    : data || {};
+
+    if (this.checkEmail) {
+      if (!this.isEmail(newData.username)) {
+        this.parseError({username: 'Invalid email address'});
+
+        return;
+      }
+    }
 
     if (this.response.message) {
       this.response.message = '';

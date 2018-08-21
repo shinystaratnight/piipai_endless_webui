@@ -201,7 +201,7 @@
       </div>
     </div>
     <div class="pb-3 form-builder-form">
-      <generic-form [endpoint]="changePasswordEndpoint" [edit]="true" [needData]="false">
+      <generic-form [endpoint]="changePasswordEndpoint" [edit]="true" [needData]="false" (event)="resetEvent($event)">
         <a class="forgot" href="" (click)="openResetForm()">Forgot Password?</a>
         <div class="d-flex align-items-center">
           <button type="submit" class="btn btn-success ml-auto">Save</button>
