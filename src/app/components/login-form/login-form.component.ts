@@ -91,6 +91,11 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   }
 
   public responseHandler(response) {
+    if (response.data && response.data.redirect) {
+      location.href = response.data.redirect;
+
+      return;
+    }
     if (response.data) {
       this.router.navigate(['']);
     } else if (response.status === 'success') {
