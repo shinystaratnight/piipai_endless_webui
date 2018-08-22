@@ -48,6 +48,8 @@ import { ListSkillsComponent } from './list-skills/list-skills.component';
 import { ListTableComponent } from './list-table/list-table.component';
 import { ListTagsComponent } from './list-tags/list-tags.component';
 import { ListTextComponent } from './list-text/list-text.component';
+import { ListFillinTagsComponent } from './list-fillin-tags/list-fillin-tags.component';
+import { ListAvailableComponent } from './list-available/list-available.component';
 
 export * from './generic-form/generic-form.component';
 export * from './generic-list/generic-list.component';
@@ -94,10 +96,12 @@ export const entryComponents = [
   ListTableComponent,
   ListTagsComponent,
   ListTextComponent,
+  ListFillinTagsComponent,
+  ListAvailableComponent,
 
   TestGeneratorComponent,
 
-  InfoComponent,
+  InfoComponent
 ];
 
 export const components = [

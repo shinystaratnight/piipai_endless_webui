@@ -574,7 +574,7 @@ export class DynamicListComponent implements
           obj['inline'] = element.inline;
           obj['outline'] = element.outline;
           obj['skillName'] = col.label;
-          obj['description'] = col.description;
+          obj['description'] = element.description;
           obj['redirect'] = element.redirect;
           obj['file'] = element.file;
           obj['display'] = element.display;
