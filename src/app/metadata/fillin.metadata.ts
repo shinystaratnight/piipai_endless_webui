@@ -3,7 +3,8 @@ const list = {
     pagination_label: 'Candidate Contact',
     list: 'fillin',
     editDisable: true,
-    label: '{job.__str__}',
+    label: '{job.position}',
+    description: '{job.jobsite}',
     // highlight: {
     //   values: {
     //     1: 'lightgreen',
@@ -176,7 +177,7 @@ const list = {
         label: 'Skills score'
       },
       {
-        name: 'tag_rels',
+        name: 'tags',
         content: [
           // {
           //   endpoint: '/ecore/api/v2/candidate/tagrels/',
@@ -184,14 +185,11 @@ const list = {
           //   field: 'tag_rels'
           // },
           {
-            field: 'tag_rels',
-            type: 'tags',
-            display: '{tag.name}'
+            field: 'tags',
+            type: 'fillintags',
           }
         ],
-        sort: true,
-        sort_field: 'tag_rels',
-        label: 'Tag rels'
+        label: 'Tags'
       },
       // {
       //   name: 'count_timesheets',
@@ -262,18 +260,26 @@ const list = {
         sort_field: 'candidate_scores.reliability',
         label: 'Reliability'
       },
-      // {
-      //   name: 'candidate_scores.average_score',
-      //   content: [
-      //     {
-      //       type: 'input',
-      //       field: 'candidate_scores.average_score'
-      //     }
-      //   ],
-      //   sort: true,
-      //   sort_field: 'candidate_scores__average_score',
-      //   label: 'Average Score'
-      // },
+      {
+        name: 'candidate_scores.loyalty',
+        content: [
+          {
+            type: 'skills',
+            field: 'candidate_scores.loyalty'
+          }
+        ],
+        label: 'Loyality'
+      },
+      {
+        name: 'candidate_scores.recruitment_score',
+        content: [
+          {
+            type: 'skills',
+            field: 'candidate_scores.recruitment_score'
+          }
+        ],
+        label: 'Recruitment'
+      },
       // {
       //   name: 'strength',
       //   content: [
@@ -315,16 +321,18 @@ const list = {
         is_collapsed: true,
         inline: true,
         fields: [
+          'candidate_scores.recruitment_score',
           'evaluation',
           'skills_score',
           'candidate_scores.reliability',
+          'candidate_scores.loyalty'
         ]
       },
       {
         label: 'Tags',
         is_collapsed: true,
         inline: true,
-        fields: ['tag_rels']
+        fields: ['tags']
       },
     ],
     buttons: [

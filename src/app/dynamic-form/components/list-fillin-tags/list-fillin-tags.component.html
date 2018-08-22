@@ -1,0 +1,17 @@
+<template [ngTemplateOutlet]="tags" [ngOutletContext]="{type: 'required'}"></template>
+<template [ngTemplateOutlet]="tags" [ngOutletContext]="{type: 'existing'}"></template>
+<template [ngTemplateOutlet]="tags" [ngOutletContext]="{type: 'missing'}"></template>
+
+
+<template #tags let-type="type">
+  <div *ngIf="config.value[type] && config.value[type].length" class="tags-list">
+    <ng-container *ngFor="let tag of config.value[type]">
+      <span class="badge"
+        [ngClass]="[type]">
+          {{tag}}
+      </span>
+    </ng-container>
+
+    <span class="description">{{labels[type]}}</span>
+  </div>
+</template>
