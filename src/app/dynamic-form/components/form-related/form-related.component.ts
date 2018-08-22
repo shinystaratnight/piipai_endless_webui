@@ -802,7 +802,10 @@ export class FormRelatedComponent
         this.modalData.title = object.allData ? object.allData.__str__ : object.__str__;
         this.modalData.id = object[this.param];
       } else {
-        this.modalData.title = this.displayValue;
+        this.modalData.title = this.config.templateOptions.editLabel || this.displayValue;
+        this.modalData.description = this.config.templateOptions.editDescription
+          ? format.format(this.config.templateOptions.editDescription, this.formData)
+          : '';
         this.modalData.id = !this.config.editEndpoint && this.group.get(this.key).value;
         this.modalData.needData = this.config.editEndpoint ? false : true;
         this.modalData.edit = this.config.editEndpoint && true;

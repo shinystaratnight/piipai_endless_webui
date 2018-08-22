@@ -69,6 +69,8 @@ export interface Field {
     param?: string;
     values?: string[];
     text?: string;
+    editLabel?: string;
+    editDescription?: string;
   };
 }
 

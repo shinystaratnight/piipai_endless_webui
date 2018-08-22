@@ -62,8 +62,8 @@
                   Edit mode
               </button>
 
-              <button type="submit" class="btn btn-primary button-save"
-                *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))"
+              <button type="submit" class="btn btn-primary button-save save"
+                *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/ecore/api/v2/core/users/')"
                 [disabled]="saveProcess">
                   Save
                   <spinner *ngIf="saveProcess"></spinner>
@@ -139,17 +139,17 @@
   <ng-container *ngSwitchCase="'list'">
     <div class="datatable-list"
       *ngIf="!pageData.pathData.postfix"
-    infinite-scroll
-    [scrollWindow]="true"
-    (scrolled)="onModalScrollDown()">
-      <generic-list
-        [upload]="upload"
-        [clientId]="getClientId()"
-        [listNameCache]="listNameCache"
-        [allowPermissions]="permissionMethods"
-        [endpoint]="pageData.endpoint">
-      </generic-list>
-  </div>
+      infinite-scroll
+      [scrollWindow]="true"
+      (scrolled)="onModalScrollDown()">
+        <generic-list
+          [upload]="upload"
+          [clientId]="getClientId()"
+          [listNameCache]="listNameCache"
+          [allowPermissions]="permissionMethods"
+          [endpoint]="pageData.endpoint">
+        </generic-list>
+    </div>
 
     <div class="datatable-list" *ngIf="pageData.pathData.postfix && pageData.pathData.postfix === 'fillin'">
       <generic-list
@@ -222,7 +222,7 @@
       </div>
     </div>
     <div class="pb-3 form-builder-form">
-      <generic-form endpoint="/ecore/api/v2/core/contacts/forgot_password/" (event)="resetEvent($event)">
+      <generic-form endpoint="/ecore/api/v2/core/contacts/forgot_password/" [data]="passwordData" (event)="resetEvent($event)">
         <div class="d-flex align-items-center">
           <button type="submit" class="btn btn-success ml-auto">Reset</button>
         </div>

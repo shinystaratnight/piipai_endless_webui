@@ -22,6 +22,7 @@ export interface User {
         origin: string;
         thumb: string;
       },
+      email: string;
       contact_id: string;
       contact_type: string;
       id: string;
