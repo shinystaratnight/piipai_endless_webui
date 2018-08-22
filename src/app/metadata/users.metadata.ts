@@ -187,6 +187,8 @@ const form = [
         useValue: true,
         templateOptions: {
           label: 'Password',
+          editLabel: 'Change password',
+          editDescription: 'Enter a new password for the user: {contact.__str__}',
           edit: true
         }
       },

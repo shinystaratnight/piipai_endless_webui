@@ -61,6 +61,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   public additionalData: any;
   public data: any;
   public endpointWithoutViewMode: string[];
+  public passwordData: any;
 
   public modalRef: NgbModalRef;
 
@@ -387,6 +388,15 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public openResetForm() {
     this.modalRef.close();
+    this.passwordData = {
+      email: {
+        action: 'add',
+        data: {
+          value: this.user.data.contact.email,
+          read_only: true
+        }
+      }
+    };
 
     this.modalRef = this.modalService.open(this.forgotPasswordModal);
 
