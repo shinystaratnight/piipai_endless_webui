@@ -60,6 +60,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   public acceptenceTestData: any;
   public additionalData: any;
   public data: any;
+  public endpointWithoutViewMode: string[];
 
   public modalRef: NgbModalRef;
 
@@ -108,6 +109,9 @@ export class SiteComponent implements OnInit, OnDestroy {
       metaType: true,
       actions: true,
     };
+    this.endpointWithoutViewMode = [
+      '/ecore/api/v2/core/users/'
+    ];
   }
 
   public ngOnDestroy() {
@@ -171,7 +175,10 @@ export class SiteComponent implements OnInit, OnDestroy {
         } else {
           setTimeout(() => {
             this.pageData = pageData;
-            if (pageData.pathData.id) {
+            if (
+              pageData.pathData.id &&
+              this.endpointWithoutViewMode.indexOf(pageData.endpoint) === -1
+            ) {
               this.formMode = 'view';
             }
             this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
