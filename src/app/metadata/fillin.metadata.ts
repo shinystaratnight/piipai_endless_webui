@@ -17,6 +17,22 @@ const list = {
     // },
     columns: [
       {
+        name: 'favourite',
+        content: [
+          {
+            type: 'icon',
+            field: 'favourite',
+            values: {
+              false: 'star',
+              true: 'star',
+            },
+            color: {
+              true: 'primary'
+            }
+          },
+        ],
+      },
+      {
         name: 'contact.__str__',
         content: [
           {
@@ -46,7 +62,7 @@ const list = {
           }
         ],
         title: null,
-        delim: null,
+        delim: ' ',
         label: 'Hourly rate'
       },
       // {
@@ -63,32 +79,32 @@ const list = {
       //   label: 'Recruitment agent'
       // },
       {
+        name: 'available',
+        content: [
+          {
+            type: 'available',
+            field: 'available'
+          }
+        ],
+        label: 'Available'
+      },
+      {
         name: 'timesheet',
         content: [
           {
             type: 'static',
             field: 'count_timesheets',
             label: 'Total',
-            // display: '{field} day(s)',
+            display: '{field} day(s)',
           },
           {
             type: 'static',
             field: 'days_from_last_timesheet',
             label: 'From last',
-            // display: '{field} day(s)',
-          },
-        ],
-        label: 'Timesheet'
-      },
-      {
-        name: 'available',
-        content: [
-          {
-            type: 'static',
-            field: 'available'
+            display: '{field} day(s)',
           }
         ],
-        label: 'Available'
+        label: 'Timesheet'
       },
       // {
       //   name: 'days_from_last_timesheet',
@@ -186,7 +202,7 @@ const list = {
           // },
           {
             field: 'tags',
-            type: 'fillintags',
+            type: 'fillintags'
           }
         ],
         label: 'Tags'
@@ -333,7 +349,7 @@ const list = {
         is_collapsed: true,
         inline: true,
         fields: ['tags']
-      },
+      }
     ],
     buttons: [
       {
@@ -421,7 +437,7 @@ const list = {
         min: 0,
         max: 200,
         key: 'distance_to_jobsite'
-      },
+      }
     ]
   },
   fields: [
@@ -652,6 +668,15 @@ const list = {
       many: false,
       key: 'nationality',
       read_only: true
+    },
+    {
+      key: 'favourite',
+      templateOptions: {
+        color: {
+          true: 'warning',
+          false: 'default'
+        }
+      }
     }
   ]
 };

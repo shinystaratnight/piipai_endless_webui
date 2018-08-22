@@ -1,4 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnDestroy
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -29,16 +35,19 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   public filterSubscription: Subscription;
   public querySubscription: Subscription;
 
-  @Output() public event: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   constructor(private fs: FilterService, private route: ActivatedRoute) {}
 
   public ngOnInit() {
     this.type = this.config.type === 'multiple' ? 'data' : 'options';
-    this.querySubscription = this.route.queryParams.subscribe(
-      (params) => this.updateFilter()
+    this.querySubscription = this.route.queryParams.subscribe((params) =>
+      this.updateFilter()
     );
-    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
+    this.filterSubscription = this.fs.reset.subscribe(() =>
+      this.updateFilter()
+    );
     this.isCollapsed =
       this.query || document.body.classList.contains('r3sourcer')
         ? false
