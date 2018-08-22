@@ -771,6 +771,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     this.formService.getForm(this.formId).setSaveProcess(false);
     this.parseResponse(response);
 
+    if (response.message) {
+      setTimeout(() => {
+        this.toastrService.sendMessage(response.message, 'success');
+      }, 500);
+    }
+
     if (this.updateDataAfterSendForm.requests.length) {
       const subscription = Observable.forkJoin(...this.updateDataAfterSendForm.requests)
         .finally(() => {

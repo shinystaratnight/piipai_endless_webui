@@ -10,6 +10,7 @@ import {
   ElementRef,
   HostListener,
 } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -135,7 +136,8 @@ export class FormRelatedComponent
     private navigation: NavigationService,
     private userService: UserService,
     private cd: ChangeDetectorRef,
-    private settingsService: SiteSettingsService
+    private settingsService: SiteSettingsService,
+    private sanitizer: DomSanitizer
   ) {
     super();
     this.subscriptions = [];
@@ -803,9 +805,13 @@ export class FormRelatedComponent
         this.modalData.id = object[this.param];
       } else {
         this.modalData.title = this.config.templateOptions.editLabel || this.displayValue;
-        this.modalData.description = this.config.templateOptions.editDescription
+        const description = this.config.templateOptions.editDescription
           ? format.format(this.config.templateOptions.editDescription, this.formData)
           : '';
+
+        if (description) {
+          this.modalData.description = this.sanitizer.bypassSecurityTrustHtml(description);
+        }
         this.modalData.id = !this.config.editEndpoint && this.group.get(this.key).value;
         this.modalData.needData = this.config.editEndpoint ? false : true;
         this.modalData.edit = this.config.editEndpoint && true;

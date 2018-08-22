@@ -292,9 +292,7 @@
 
     <div class="modal-body">
       <div *ngIf="modalData.type !== 'delete'">
-        <div class="description" *ngIf="modalData.description">
-          {{modalData.description}}
-        </div>
+        <div class="description" *ngIf="modalData.description" [innerHTML]="modalData.description"></div>
 
         <generic-form
           [endpoint]="modalData.endpoint"
