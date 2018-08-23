@@ -22,7 +22,7 @@ export class InfoComponent implements OnInit {
   public config: any;
 
   public ngOnInit() {
-    if (this.config.description) {
+    if (this.config && this.config.description) {
       this.description = this.config.description;
     }
   }
