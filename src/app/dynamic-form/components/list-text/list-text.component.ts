@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import moment from 'moment-timezone';
 
+import { FormatString } from '../../../helpers/format';
+
 @Component({
   selector: 'list-text',
   templateUrl: './list-text.component.html',
@@ -86,6 +88,10 @@ export class ListTextComponent implements OnInit {
               'text-danger' : 'text-muted';
         }
       }
+    } else if (this.config.setColor) {
+      let classes = ['primary', 'danger', 'info', 'success', 'warning'];
+      let color = this.config.color;
+      this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
     }
   }
 

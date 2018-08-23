@@ -2,7 +2,8 @@
   <span [class.description]="config.description" class="d-inline-flex align-items-center flex-wrap" *ngIf="value || value === 0">
     <span [title]="config.title || ''">
       <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
-      <span *ngIf="!iconView">{{value}}</span>
+      <span *ngIf="!iconView && !iconClass">{{value}}</span>
+      <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{value}}</span>
       <i fa *ngIf="iconView" [name]="value" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></i>
     </span>
   </span>

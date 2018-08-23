@@ -5,16 +5,6 @@ const list = {
     editDisable: true,
     label: '{job.position}',
     description: '{job.jobsite}',
-    // highlight: {
-    //   values: {
-    //     1: 'lightgreen',
-    //     2: '#dcdcdc',
-    //     3: 'red',
-    //     4: '#ff7f00',
-    //     5: '#ff7f50'
-    //   },
-    //   field: 'color'
-    // },
     columns: [
       {
         name: 'favourite',
@@ -52,7 +42,9 @@ const list = {
           {
             type: 'static',
             display: '${field}/h',
-            field: 'hourly_rate'
+            field: 'hourly_rate',
+            color: 'danger',
+            setColor: '{overpriced}'
           },
           {
             type: 'description',
@@ -65,19 +57,6 @@ const list = {
         delim: ' ',
         label: 'Hourly rate'
       },
-      // {
-      //   name: 'recruitment_agent',
-      //   content: [
-      //     {
-      //       endpoint: '/ecore/api/v2/core/companycontacts/',
-      //       type: 'related',
-      //       field: 'recruitment_agent'
-      //     }
-      //   ],
-      //   sort: true,
-      //   sort_field: 'recruitment_agent',
-      //   label: 'Recruitment agent'
-      // },
       {
         name: 'available',
         content: [
@@ -106,16 +85,6 @@ const list = {
         ],
         label: 'Timesheet'
       },
-      // {
-      //   name: 'days_from_last_timesheet',
-      //   content: [
-      //     {
-      //       type: 'static',
-      //       field: 'days_from_last_timesheet'
-      //     }
-      //   ],
-      //   label: 'Days from last timesheet'
-      // },
       {
         name: 'distance',
         content: [
@@ -148,38 +117,6 @@ const list = {
         ],
         label: 'Distance/time'
       },
-      // {
-      //   title: null,
-      //   content: [
-
-      //   ],
-      //   delim: null,
-      //   label: 'Distance to jobsite',
-      //   name: 'distance_to_jobsite',
-      //   sort: true,
-      //   sort_field: 'distance_to_jobsite'
-      // },
-      // {
-      //   title: null,
-      //   content: [
-      //     {
-      //       endpoint: '/ecore/api/v2/distances/',
-      //       field: 'time_to_jobsite',
-      //       async: true,
-      //       type: 'static',
-      //       request_field: 'time',
-      //       method: 'post',
-      //       query: {
-      //         candidates: '{id}'
-      //       }
-      //     }
-      //   ],
-      //   delim: null,
-      //   label: 'Time to jobsite',
-      //   name: 'time_to_jobsite',
-      //   sort: true,
-      //   sort_field: 'time_to_jobsite'
-      // },
       {
         name: 'skills_score',
         content: [
@@ -195,11 +132,6 @@ const list = {
       {
         name: 'tags',
         content: [
-          // {
-          //   endpoint: '/ecore/api/v2/candidate/tagrels/',
-          //   type: 'related',
-          //   field: 'tag_rels'
-          // },
           {
             field: 'tags',
             type: 'fillintags'
@@ -207,45 +139,6 @@ const list = {
         ],
         label: 'Tags'
       },
-      // {
-      //   name: 'count_timesheets',
-      //   content: [
-      //     {
-      //       type: 'static',
-      //       field: 'count_timesheets'
-      //     }
-      //   ],
-      //   label: 'Count timesheets'
-      // },
-      // {
-      //   name: 'contact.gender',
-      //   content: [
-      //     {
-      //       type: 'select',
-      //       values: {
-      //         male: 'Male',
-      //         female: 'Female'
-      //       },
-      //       field: 'contact.gender'
-      //     }
-      //   ],
-      //   sort: true,
-      //   sort_field: 'contact.gender',
-      //   label: 'Gender'
-      // },
-      // {
-      //   name: 'nationality',
-      //   content: [
-      //     {
-      //       endpoint: '/ecore/api/v2/core/countries/',
-      //       type: 'related',
-      //       field: 'nationality'
-      //     }
-      //   ],
-      //   sort: true,
-      //   sort_field: 'nationality',
-      //   label: 'Nationality'
-      // },
       {
         title: null,
         content: [
@@ -296,30 +189,6 @@ const list = {
         ],
         label: 'Recruitment'
       },
-      // {
-      //   name: 'strength',
-      //   content: [
-      //     {
-      //       type: 'input',
-      //       field: 'strength'
-      //     }
-      //   ],
-      //   sort: true,
-      //   sort_field: 'strength',
-      //   label: 'Strength'
-      // },
-      // {
-      //   name: 'language',
-      //   content: [
-      //     {
-      //       type: 'input',
-      //       field: 'language'
-      //     }
-      //   ],
-      //   sort: true,
-      //   sort_field: 'language',
-      //   label: 'Language'
-      // },
       {
         name: 'evaluation',
         content: [
@@ -369,9 +238,8 @@ const list = {
           data: 'shifts'
         },
         key: 'date',
-        query: {
-          shifts: '{id}'
-        }
+        param: '{id}',
+        query: 'shifts'
       },
       {
         key: 'available',
@@ -436,7 +304,8 @@ const list = {
         label: 'Distance',
         min: 0,
         max: 200,
-        key: 'distance_to_jobsite'
+        key: 'distance_to_jobsite',
+        query: 'distance_to_jobsite'
       }
     ]
   },
