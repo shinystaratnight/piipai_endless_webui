@@ -220,6 +220,7 @@ module.exports = function (options) {
         "window.jQuery": "jquery",
         Tether: "tether",
         "window.Tether": "tether",
+        noUiSlider: 'nouislider',
       }),
 
       /*

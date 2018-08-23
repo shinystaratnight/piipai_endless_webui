@@ -578,6 +578,7 @@ export class DynamicListComponent implements
           obj['redirect'] = element.redirect;
           obj['file'] = element.file;
           obj['display'] = element.display;
+          obj['setColor'] = this.format(element.setColor, el);
           if (element.hasOwnProperty('file')) {
             const keys = element.field.split('.');
             keys[keys.length - 1] = '__str__';
