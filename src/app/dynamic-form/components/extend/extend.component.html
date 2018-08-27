@@ -22,6 +22,8 @@
       [config]="viewConfig.extendCandidates"
       [group]="viewData">
     </ng-container>
+
+    <info [placement]="'right'" [description]="fillinfo"></info>
   </div>
 
   <div class="shifts-header">
@@ -43,4 +45,12 @@
   </div>
 </template>
 
-
+<template #fillinfo>
+  <div class="info-block">
+    <h6>Use information from last fullfilled shift:</h6>
+    <ul>
+      <li><i fa class="icon" name="circle"></i>{{autoFillData.shift_datetime | dateFormat: 'datetime'}}</li>
+      <li *ngFor="let candidate of autoFillData.candidates"><i fa class="icon" name="circle"></i>{{candidate}}</li>
+    </ul>
+  </div>
+</template>
