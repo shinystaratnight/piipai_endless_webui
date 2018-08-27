@@ -712,7 +712,7 @@ const form = [
                       required: false,
                       label: 'Number Of workers',
                       max: 32767,
-                      type: 'text',
+                      type: 'number',
                       min: 1
                     },
                     read_only: false
@@ -1186,7 +1186,7 @@ const formadd = [
               required: false,
               label: 'Number Of workers',
               max: 32767,
-              type: 'text',
+              type: 'number',
               min: 1
             },
             read_only: false
@@ -1220,7 +1220,6 @@ const formadd = [
               max: '{position.upper_rate_limit}',
               min: '{position.lower_rate_limit}'
             },
-            default: '{position.default_rate}',
             templateOptions: {
               label: 'Candidate rate default',
               type: 'number',

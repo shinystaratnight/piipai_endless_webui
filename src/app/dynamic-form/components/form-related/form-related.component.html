@@ -243,7 +243,8 @@
       <a [class.readonly-value]="editMode" *ngIf="!config.many && displayValue && this.linkPath && !(customTemplate && customTemplate.length)" href="{{hideDetail ? '' : this.linkPath}}" (click)="open('update')">{{displayValue}}</a>
       <div [ngClass]="{'d-flex align-items-top flex-wrap': config.key === 'tags'}" *ngIf="config.many && results && !config.templateOptions.deleteList">
         <span [ngClass]="{'badge badge-outline mb-2 mr-1': config.key === 'tags'}" *ngFor="let item of results; let l = last">
-          <a [class.readonly-value]="editMode" href="/" (click)="open('update', item)">{{item.__str__}}</a><span *ngIf="config.key !== 'tags'">;</span>
+          <a *ngIf="config.key !== 'tags'" [class.readonly-value]="editMode" href="/" (click)="open('update', item)">{{item.__str__}};</a>
+          <span [class.readonly-value]="editMode">{{item.__str__}}</span>
         </span>
       </div>
       <div *ngIf="config.many && results && config.templateOptions.deleteList"  class="d-flex flex-wrap align-items-center mt-2">

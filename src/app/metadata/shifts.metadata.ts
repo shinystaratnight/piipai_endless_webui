@@ -347,7 +347,7 @@ const job = {
         name: 'candidate_rate',
         content: [
           {
-            display: '${field}/h',
+            display: '$ {field}',
             label: ' Candidate rate override',
             type: 'text',
             field: 'hourly_rate.hourly_rate'
