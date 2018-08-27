@@ -1033,8 +1033,8 @@ const form = [
     },
     type: 'related',
     query: {
-      company: '{customer_company.id}'
-    },
+      job: '{id}'
+    }
   }
 ];
 
