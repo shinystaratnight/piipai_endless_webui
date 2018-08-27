@@ -163,7 +163,7 @@ const form = [
             templateOptions: {
               label: 'Valid Until',
               type: 'date',
-              required: true
+              required: false
             }
           },
         ]

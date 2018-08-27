@@ -1,3 +1,5 @@
+import { todayFormatDate } from './utils';
+
 const list = {
   list: {
     list: 'user',
@@ -168,6 +170,73 @@ const form = [
     read_only: true
   },
   {
+    type: 'collapse',
+    name: 'Password',
+    children: [
+      {
+        type: 'related',
+        key: 'password',
+        value: {
+          id: true,
+          __str__: '******',
+        },
+        endpoint: '/ecore/api/v2/core/contacts/{id}/password/',
+        editEndpoint: '/ecore/api/v2/core/contacts/{contact.id}/password/',
+        send: false,
+        doNotChoice: true,
+        useValue: true,
+        templateOptions: {
+          label: 'Password',
+          editLabel: 'Change password',
+          editDescription: 'Enter a new password for the user: <b style="color: black; font-weight: bold"> {contact.__str__} </b>',
+          edit: true
+        }
+      },
+      {
+        label: 'Auto generate',
+        type: 'group',
+        children: [
+          {
+            key: 'by_email',
+            default: true,
+            templateOptions: {
+              required: false,
+              label: 'Send to email',
+              type: 'checkbox'
+            },
+            value: true,
+            send: false,
+            type: 'checkbox'
+          },
+          {
+            key: 'by_phone',
+            default: true,
+            templateOptions: {
+              required: false,
+              label: 'Send to mobile phone',
+              type: 'checkbox'
+            },
+            value: true,
+            send: false,
+            type: 'checkbox'
+          },
+          {
+            type: 'button',
+            color: 'primary',
+            templateOptions: {
+              action: 'autoGenerate',
+              text: 'Send',
+              type: 'button',
+              small: true,
+              icon: 'envelope',
+              p: true
+            }
+          }
+        ]
+      },
+    ]
+  },
+  {
     endpoint: '/ecore/api/v2/company-settings/globalpermissions/',
     templateOptions: {
       label: 'Global Permissions',
@@ -205,7 +274,7 @@ const formadd = [
   },
   {
     key: 'date_joined',
-    default: '2018-07-04T09:45:11.622691Z',
+    default: todayFormatDate,
     type: 'datepicker',
     templateOptions: {
       required: false,

@@ -16,6 +16,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { getContactAvatar } from '../../../helpers/utils';
 
 @Component({
   selector: 'form-picture',
@@ -155,16 +156,7 @@ export class FormPictureComponent
       this.value = this.config.companyContact && this.config.key === 'logo' ? '/assets/img/logo.svg' : ''; //tslint:disable-line
 
       if (!this.value && this.config.contactName) {
-        const nameElements = this.config.contactName.split(' ');
-
-        if (nameElements && nameElements.length) {
-          if (nameElements.length === 2) {
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          } else if (nameElements.length === 3) {
-            nameElements.shift();
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          }
-        }
+        this.contactAvatar = getContactAvatar(this.config.contactName);
       }
     }
 

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { Payment, BillingSubscription } from '../../models';
+import { metadata } from './billing-info.metadata';
 
 @Component({
   selector: 'billing-info',
@@ -11,4 +12,11 @@ import { Payment, BillingSubscription } from '../../models';
 export class BillingInfoComponent {
   @Input() public payments: Payment[];
   @Input() public currentPlan: BillingSubscription;
+
+  public config = metadata;
+
+  public types = {
+    annual: 'Annual',
+    monthly: 'Monthly'
+  };
 }

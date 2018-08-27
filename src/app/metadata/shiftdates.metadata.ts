@@ -174,7 +174,7 @@ const jobAdd = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['__str__'],
+      values: ['__str__', 'upper_rate_limit', 'lower_rate_limit', 'default_rate'],
       type: 'related',
       edit: true
     },

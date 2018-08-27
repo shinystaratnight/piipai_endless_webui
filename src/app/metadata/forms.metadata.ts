@@ -247,9 +247,8 @@ const form = [
     read_only: false
   },
   {
-    list: false,
     endpoint: '/ecore/api/v2/core/formfieldgroups/',
-    read_only: true,
+    read_only: false,
     templateOptions: {
       label: 'Groups',
       add: true,
@@ -258,10 +257,9 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
-    type: 'related',
+    createOnly: true,
+    type: 'fieldsGroup',
     key: 'groups',
-    many: true
   }
 ];
 

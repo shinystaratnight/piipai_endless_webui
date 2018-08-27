@@ -1,0 +1,42 @@
+@import '../../../../styles/variables.scss';
+
+.shift {
+  display: flex;
+  flex-wrap: wrap;
+
+  &-wrapper {
+    height: 21px;
+  }
+
+  &-datetime {
+    min-width: 130px;
+  }
+}
+
+.success {
+  color: $brand-success;
+
+  .shift-datetime {
+    color: $brand-success;
+  }
+}
+
+.success-blur {
+  color: rgba($brand-success, .5);
+
+  .shift-datetime {
+    color: $brand-success;
+  }
+}
+
+.danger {
+  color: $brand-danger;
+
+  .shift-datetime {
+    color: $brand-danger;
+  }
+}
+
+.description .shift-datetime {
+  opacity: .5;
+}

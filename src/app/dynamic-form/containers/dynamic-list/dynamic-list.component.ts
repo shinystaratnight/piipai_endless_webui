@@ -18,8 +18,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import moment from 'moment-timezone';
 
-import { FilterService } from './../../services';
-import { GenericFormService } from './../../services';
+import { FilterService, GenericFormService } from './../../services';
+import { FormatString } from '../../../helpers/format';
 
 @Component({
   selector: 'dynamic-list',
@@ -91,6 +91,9 @@ export class DynamicListComponent implements
   public searchFilter: any;
   public position: { top, left };
   public noneEdit: boolean;
+  public fullData: any;
+  public label: string;
+  public description: string;
 
   public body: any[] = [];
   public select: any = {};
@@ -189,14 +192,35 @@ export class DynamicListComponent implements
     }
 
     if (changes.hasOwnProperty('data') && changes['data'].isFirstChange()) {
+      this.label = this.getFormat('label', data, config);
+      this.description = this.getFormat('description', data, config);
+
+      this.fullData = data;
       this.body.push(...this.generateBody(config, data, innerTables));
     } else if (changes.hasOwnProperty('data') && !changes['data'].isFirstChange()) {
+      this.fullData = data;
       this.body = [...this.generateBody(config, data, innerTables)];
     }
 
     if (changes.hasOwnProperty('addData') && !changes['addData'].isFirstChange()) {
+      this.fullData = {
+        ...this.fullData,
+        [this.responseField]: [
+          ...this.fullData[this.responseField],
+          ...addData[this.responseField]
+        ]};
       this.body.push(...this.generateBody(config, addData, innerTables));
     }
+  }
+
+  public getFormat(property: string, data, config): string {
+    const formatString = new FormatString();
+
+    if (data instanceof Object) {
+      return formatString.format(config.list[property], data);
+    }
+
+    return config.list[property];
   }
 
   public updateFilters() {
@@ -257,6 +281,9 @@ export class DynamicListComponent implements
           body = this.prepareData(mainMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
           body.forEach((main) => {
             additionalBody.forEach((additional) => {
+              if (this.tabs && this.tabs[0].inline) {
+                additional.inline = true;
+              }
               if (main.id === additional.id) {
                 if (!additional.parsed) {
                   main.additionalBody = this.parseAdditionalBody(additional);
@@ -547,10 +574,11 @@ export class DynamicListComponent implements
           obj['inline'] = element.inline;
           obj['outline'] = element.outline;
           obj['skillName'] = col.label;
-          obj['description'] = col.description;
+          obj['description'] = element.description;
           obj['redirect'] = element.redirect;
           obj['file'] = element.file;
           obj['display'] = element.display;
+          obj['setColor'] = this.format(element.setColor, el);
           if (element.hasOwnProperty('file')) {
             const keys = element.field.split('.');
             keys[keys.length - 1] = '__str__';
@@ -1079,90 +1107,104 @@ export class DynamicListComponent implements
   }
 
   public evaluate(e) {
-    let object = this.data[this.responseField].filter((el) => el.id === e.el.rowId)[0];
-    this.modalInfo = {};
-    this.modalInfo.type = 'evaluate';
-    this.modalInfo.endpoint = e.el.endpoint;
-    this.modalInfo.edit = true;
-    this.modalInfo.needData = false;
-    this.modalInfo.label = {
-      picture: object.picture && object.picture.thumb ?
-         object.picture.thumb : '/assets/img/avatar.png',
-      name: object.job_offer.candidate_contact.contact.__str__
-    };
-    this.open(this.evaluateModal);
+    const object = this.fullData[this.responseField].find((el) => el.id === e.el.rowId);
+    if (object) {
+      const contact = object.job_offer.candidate_contact.contact;
+      this.modalInfo = {};
+      this.modalInfo.type = 'evaluate';
+      this.modalInfo.endpoint = e.el.endpoint;
+      this.modalInfo.edit = true;
+      this.modalInfo.needData = false;
+      this.modalInfo.label = {
+        picture:
+          contact.picture &&
+          contact.picture.origin
+            ? contact.picture.origin
+            : '/assets/img/avatar.png',
+        name: contact.__str__
+      };
+      this.open(this.evaluateModal);
+    }
   }
 
   public changeTimesheet(e) {
-    let object = this.data[this.responseField].filter((el) => el.id === e.el.rowId)[0];
-    this.modalInfo = {};
-    this.modalInfo.type = 'evaluate';
-    this.modalInfo.endpoint = e.el.endpoint;
-    this.modalInfo.edit = true;
-    this.modalInfo.needData = false;
-    this.modalInfo.data = {
-      shift_started_at: {
-        action: 'add',
-        data: {
-          value: object.shift_started_at
+    const object = this.fullData[this.responseField].find((el) => el.id === e.el.rowId)[0];
+    if (object) {
+      const contact = object.job_offer.candidate_contact.contact;
+      this.modalInfo = {};
+      this.modalInfo.type = 'evaluate';
+      this.modalInfo.endpoint = e.el.endpoint;
+      this.modalInfo.edit = true;
+      this.modalInfo.needData = false;
+      this.modalInfo.data = {
+        shift_started_at: {
+          action: 'add',
+          data: {
+            value: object.shift_started_at
+          }
+        },
+        break_started_at: {
+          action: 'add',
+          data: {
+            value: object.break_started_at
+          }
+        },
+        break_ended_at: {
+          action: 'add',
+          data: {
+            value: object.break_ended_at
+          }
+        },
+        shift_ended_at: {
+          action: 'add',
+          data: {
+            value: object.shift_ended_at
+          }
+        },
+        supervisor: {
+          action: 'add',
+          data: {
+            value: object.supervisor
+          }
+        },
+        position: {
+          action: 'add',
+          data: {
+            value: object.position
+          }
+        },
+        company: {
+          action: 'add',
+          data: {
+            value: object.company
+          }
+        },
+        jobsite: {
+          action: 'add',
+          data: {
+            value: object.jobsite
+          }
         }
-      },
-      break_started_at: {
-        action: 'add',
-        data: {
-          value: object.break_started_at
-        }
-      },
-      break_ended_at: {
-        action: 'add',
-        data: {
-          value: object.break_ended_at
-        }
-      },
-      shift_ended_at: {
-        action: 'add',
-        data: {
-          value: object.shift_ended_at
-        }
-      },
-      supervisor: {
-        action: 'add',
-        data: {
-          value: object.supervisor
-        }
-      },
-      position: {
-        action: 'add',
-        data: {
-          value: object.position
-        }
-      },
-      company: {
-        action: 'add',
-        data: {
-          value: object.company
-        }
-      },
-      jobsite: {
-        action: 'add',
-        data: {
-          value: object.jobsite
-        }
-      }
-    };
-    this.modalInfo.label = {
-      picture: object.picture && object.picture.thumb ?
-         object.picture.thumb : '/assets/img/avatar.png',
-      name: object.job_offer.candidate_contact.contact.__str__
-    };
-    this.open(this.evaluateModal, {size: 'lg'});
+      };
+      this.modalInfo.label = {
+        picture:
+          contact.picture &&
+          contact.picture.origin
+            ? contact.picture.origin
+            : '/assets/img/avatar.png',
+        name: contact.__str__
+      };
+      this.open(this.evaluateModal, {size: 'lg'});
+    }
   }
 
   public approveTimesheet(e) {
-    let object = this.data[this.responseField].filter((el) => el.id === e.el.rowId)[0];
-    this.approveEndpoint = e.el.endpoint;
-    e.el.endpoint = this.format(this.evaluateEndpoint, object);
-    this.evaluate(e);
+    let object = this.fullData[this.responseField].find((el) => el.id === e.el.rowId);
+    if (object) {
+      this.approveEndpoint = e.el.endpoint;
+      e.el.endpoint = this.format(this.evaluateEndpoint, object);
+      this.evaluate(e);
+    }
   }
 
   public openFrame(e, param = 'recipient') {

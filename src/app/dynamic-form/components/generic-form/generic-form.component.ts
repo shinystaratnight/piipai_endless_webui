@@ -17,12 +17,14 @@ import 'rxjs/add/operator/finally';
 
 import { GenericFormService, FormService } from '../../services/';
 
+import { ToastrService } from '../../../shared/services/toastr.service';
+
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
 import { getElementFromMetadata } from '../../helpers/utils';
 
-interface HiddenFields {
+export interface HiddenFields {
   elements: Field[];
   keys: string[];
   observers: string[];
@@ -59,6 +61,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   @Input() public delay: boolean;
   @Input() public metadataQuery: string;
   @Input() public path: string;
+  @Input() public checkEmail: string;
 
   @Input() public endpoint: string = '';
   @Input() public data = {};
@@ -122,6 +125,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   constructor(
     private service: GenericFormService,
     private formService: FormService,
+    private toastrService: ToastrService,
   ) {
     this.subscriptions = [];
 
@@ -188,6 +192,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         this.toggleModeMetadata(this.mode);
       }
     }
+  }
+
+  public isEmail(value) {
+    let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,4}))$/; //tslint:disable-line
+
+    return reg.test(value) ? true : false;
   }
 
   public updateMetadataByProps(metadata: Field[], callback: Function) {
@@ -678,8 +688,16 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     }
 
     const newData = this.form
-      ? {...data, ...this.form}
-      : data || {};
+    ? {...data, ...this.form}
+    : data || {};
+
+    if (this.checkEmail) {
+      if (!this.isEmail(newData.username)) {
+        this.parseError({username: 'Invalid email address'});
+
+        return;
+      }
+    }
 
     if (this.response.message) {
       this.response.message = '';
@@ -752,6 +770,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public responseHandler(response: any, sendData: any) {
     this.formService.getForm(this.formId).setSaveProcess(false);
     this.parseResponse(response);
+
+    if (response.message) {
+      setTimeout(() => {
+        this.toastrService.sendMessage(response.message, 'success');
+      }, 500);
+    }
 
     if (this.updateDataAfterSendForm.requests.length) {
       const subscription = Observable.forkJoin(...this.updateDataAfterSendForm.requests)
@@ -884,7 +908,27 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public buttonActionHandler(e) {
+    if (e.value === 'autoGenerate') {
+      this.generatePassword(e);
+    }
+
     this.buttonAction.emit(e);
+  }
+
+  public generatePassword(e) {
+    const formatString = new FormatString();
+
+    const endpoint = formatString.format(
+      '/ecore/api/v2/core/contacts/{contact.id}/send_password/',
+      e.data
+    );
+
+    if (e.data.by_email || e.data.by_phone) {
+      this.service.submitForm(endpoint, { email: e.data.by_email, sms: e.data.by_phone })
+        .subscribe((res: any) => {
+          this.toastrService.sendMessage(res.message, 'success');
+        });
+    }
   }
 
   public getRelatedMetadata(metadata, key, endpoint, metadataQuery) {

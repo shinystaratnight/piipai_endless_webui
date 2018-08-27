@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subject } from 'rxjs/Subject';
 
@@ -20,17 +22,19 @@ import { CheckPermissionService, ToastrService, MessageType } from '../../shared
   templateUrl: './site.component.html'
 })
 
-export class SiteComponent implements OnInit {
+export class SiteComponent implements OnInit, OnDestroy {
 
   public pageData: PageData;
   public user: User;
   public dashboard: boolean = true;
   public currentRole: Role;
+  public changePasswordEndpoint: string;
 
   public modulesList: any;
   public userModules: any;
   public pagesList: any;
   public formLabel: string;
+  public fillInData: any;
 
   public formStorage: boolean;
   public formStorageEndpoint: string;
@@ -55,6 +59,14 @@ export class SiteComponent implements OnInit {
 
   public acceptenceTestData: any;
   public additionalData: any;
+  public data: any;
+  public endpointWithoutViewMode: string[];
+  public passwordData: any;
+
+  public modalRef: NgbModalRef;
+
+  @ViewChild('modal') public modal;
+  @ViewChild('forgotPassword') public forgotPasswordModal;
 
   constructor(
     private router: Router,
@@ -66,12 +78,16 @@ export class SiteComponent implements OnInit {
     private permission: CheckPermissionService,
     private ts: ToastrService,
     private siteSettingsService: SiteSettingsService,
+    private modalService: NgbModal,
   ) {}
 
   public ngOnInit() {
     this.loadScript();
     this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
     this.user = this.userService.user;
+    this.changePasswordEndpoint =
+      `/ecore/api/v2/core/contacts/${this.user.data.contact.id}/change_password/`;
+
     this.currentRole = this.user.currentRole;
     this.updateJiraTask(this.user.currentRole);
     this.route.url.subscribe(
@@ -87,6 +103,22 @@ export class SiteComponent implements OnInit {
         }
       }
     );
+    this.fillInData = {
+      responseField: 'list',
+      paginated: 'off',
+      supportData: 'job',
+      metaType: true,
+      actions: true,
+    };
+    this.endpointWithoutViewMode = [
+      '/ecore/api/v2/core/users/'
+    ];
+  }
+
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
   }
 
   public loadScript() {
@@ -144,7 +176,10 @@ export class SiteComponent implements OnInit {
         } else {
           setTimeout(() => {
             this.pageData = pageData;
-            if (pageData.pathData.id) {
+            if (
+              pageData.pathData.id &&
+              this.endpointWithoutViewMode.indexOf(pageData.endpoint) === -1
+            ) {
               this.formMode = 'view';
             }
             this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
@@ -345,5 +380,64 @@ export class SiteComponent implements OnInit {
 
   public setTestData(data) {
     this.acceptenceTestData = data.data;
+  }
+
+  public openChangePassword() {
+    this.modalRef = this.modalService.open(this.modal);
+  }
+
+  public openResetForm() {
+    this.modalRef.close();
+    this.passwordData = {
+      email: {
+        action: 'add',
+        data: {
+          value: this.user.data.contact.email,
+          read_only: true
+        }
+      }
+    };
+
+    this.modalRef = this.modalService.open(this.forgotPasswordModal);
+
+    return false;
+  }
+
+  public resetEvent(response) {
+    if (response && response.status === 'success') {
+      this.userService.logout();
+      setTimeout(() => {
+        this.ts.sendMessage(response.data.message, 'success');
+      }, 1000);
+    }
+  }
+
+  public checkedObjects(e) {
+    const shifts = e.filters.keys.date.value.filter((el) => el.checked);
+    this.data = {
+      candidates: e.checkedData,
+      shifts: shifts.map((el) => el.data.id)
+    };
+  }
+
+  public back() {
+    this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']); //tslint:disable-line
+
+    return false;
+  }
+
+  public sendData() {
+    if (this.data) {
+      this.genericFormService.submitForm(this.pageData.endpoint, this.data).subscribe(
+        (res: any) => this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
+        (err: any) => this.error = err
+      );
+    }
+  }
+
+  public getId(path: string): string {
+    const keys = path.split('/');
+
+    return keys[keys.length - 3];
   }
 }

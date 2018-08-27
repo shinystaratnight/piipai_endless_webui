@@ -1,4 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnDestroy
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -29,16 +35,20 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   public filterSubscription: Subscription;
   public querySubscription: Subscription;
 
-  @Output() public event: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   constructor(private fs: FilterService, private route: ActivatedRoute) {}
 
   public ngOnInit() {
     this.type = this.config.type === 'multiple' ? 'data' : 'options';
-    this.querySubscription = this.route.queryParams.subscribe(
-      (params) => this.updateFilter()
+    this.querySubscription = this.route.queryParams.subscribe((params) => {
+      this.updateFilter();
+    }
     );
-    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
+    this.filterSubscription = this.fs.reset.subscribe(() =>
+      this.updateFilter()
+    );
     this.isCollapsed =
       this.query || document.body.classList.contains('r3sourcer')
         ? false
@@ -66,6 +76,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
       return {
         label: type === 'data' ? data[this.config.display] : data.label,
         query: this.config.query,
+        param: this.config.param,
         checked: type === 'data' ? true : false,
         data: type === 'data' ? data : data.value
       };
@@ -95,7 +106,11 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
               result += `${item}=${format.format(el.query[item], el.data)}&`;
             });
           } else {
-            result += `${query}=${el.data}&`;
+            if (el.param) {
+              result += `${query}=${format.format(el.param, el.data)}&`;
+            } else {
+              result += `${query}=${el.data}&`;
+            }
           }
         }
       });
@@ -123,9 +138,20 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
             el.checked = query.indexOf(result) > -1;
           });
         } else {
-          el.checked = query.indexOf(`${el.query}=${el.data}`) > -1;
+          if (el.param) {
+            const result = `${el.query}=${format.format(el.param, el.data)}`;
+            el.checked = query.indexOf(result) > -1;
+          } else {
+            el.checked = query.indexOf(`${el.query}=${el.data}`) > -1;
+          }
         }
       });
+      this.fs.generateQuery(
+      this.genericQuery(this.config.query, this.data),
+        this.config.key,
+        this.config.listName,
+        this.data
+      );
     }
   }
 

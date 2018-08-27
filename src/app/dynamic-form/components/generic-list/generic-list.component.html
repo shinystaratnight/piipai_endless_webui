@@ -32,6 +32,7 @@
     (checkedObjects)="checkedHandler($event)"
     (list)="listHandler($event)"
     (event)="eventHandler($event)">
+      <ng-content></ng-content>
   </dynamic-list>
   <div class="spinner" [class.invisible]="!(!(table.metadata && table.data) || uploading)">
     <div class="double-bounce1"></div>
@@ -74,7 +75,7 @@
 </div>
 
 <button title="Load more" class="load-more"
-  *ngIf="tables[0] && tables[0].data && !inForm && (tables[0].offset < tables[0].data.count) && !uploading"
+  *ngIf="tables[0] && tables[0].data && !inForm && (tables[0].offset < tables[0].data.count) && !uploading && (tables[0].data.count !== tables[0].limit)"
   (click)="loadMoreHandler()">
     <i fa name="angle-down" class="text-white"></i>
 </button>

@@ -17,6 +17,7 @@
         [endpoint]="endpoint"
         [data]="data"
         [errors]="error"
+        [checkEmail]="true"
         [showResponse]="true"
         [form]="additionalData"
         (redirect)="redirectHandler($event)"
@@ -33,7 +34,7 @@
             </div>
             <span>Remember me</span>
           </label>
-          <a class="forgot" [routerLink]="['/login']">Forgot Password?</a>
+          <a class="forgot" href="" (click)="openResetForm()">Forgot Password?</a>
         </div>
         <button class="btn btn-primary login-button" type="submit">Lоgin <spinner *ngIf="loginProcess"></spinner></button>
       </generic-form>
@@ -42,8 +43,8 @@
   </div>
 </div>
 
-<div class="register-link">
-  <a href="/ecore/register/">
+<div *ngIf="subdomain" class="register-link">
+  <a [routerLink]="['/registration']">
     <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 42 42">
       <polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22 " />
     </svg>
@@ -52,3 +53,23 @@
 </div>
 
 <my-toast></my-toast>
+
+<template #modal let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">Password Reset</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="pb-3 form-builder-form">
+      <generic-form [showResponse]="true" endpoint="/ecore/api/v2/core/contacts/forgot_password/">
+        <div class="d-flex align-items-center">
+          <button type="submit" class="btn btn-success ml-auto">Reset</button>
+        </div>
+      </generic-form>
+    </div>
+  </div>
+</template>

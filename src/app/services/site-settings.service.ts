@@ -10,20 +10,25 @@ import { UserService } from './user.service';
 @Injectable()
 export class SiteSettingsService {
 
-  public endpoint: string = '/ecore/api/v2/company_settings/';
-  public siteEndpoint: string = '/ecore/api/v2/company_settings/site/';
-
+  public endpoint: string;
+  public siteEndpoint: string;
   public settings: any;
+  public authorized: boolean;
 
   constructor(
     private http: Http,
     private userService: UserService
-  ) { }
+  ) {
+    this.endpoint = '/ecore/api/v2/company_settings/';
+    this.siteEndpoint = '/ecore/api/v2/company_settings/site/';
+  }
 
   public resolve() {
     return this.userService.getUserData()
       .mergeMap(
         (user: any) => {
+          this.authorized = true;
+
           if (user.data.contact.contact_type === 'manager') {
             return this.getSettings(this.endpoint);
           } else {
@@ -31,28 +36,55 @@ export class SiteSettingsService {
           }
         })
       .catch((err: any) => {
+        this.authorized = false;
+
         return this.getSettings(this.siteEndpoint);
       });
   }
 
   private getSettings(endpoint: string): Observable<any> {
-    if (!this.settings) {
+    if (!this.settings || !this.authorized) {
       return this.http.get(endpoint)
         .map((res: Response) => {
-          let settings = res.json();
-          this.settings = res.json();
+          const settings = res.json();
+
+          if (this.authorized) {
+            this.settings = settings;
+          }
+
           setTimeout(() => {
-            let body = document.body;
-            body.parentElement
-              .classList.add(`${settings.color_scheme || settings.company_settings && settings.company_settings.color_scheme}-theme`); //tslint:disable-line
-            body.style.fontFamily = `${settings.font || (settings.company_settings && settings.company_settings.font)}, sans-serif`;
-          }, 700);
-          return res.json();
+            this.updateBrowserStyles(settings);
+          }, 100);
+
+          return settings;
         })
-        .catch((err: any) => Observable.of(true));
-    } else {
+        .catch((err: any) => {
+          if (err.status === 404) {
+            location.href = 'http://r3sourcer.com';
+          }
+
+          return Observable.of(true);
+        });
+    } else if (this.settings && this.authorized) {
       return Observable.of(this.settings);
     }
+  }
+
+  private updateBrowserStyles(settings: any) {
+    document.body.parentElement.classList.add(`${this.getTheme(settings)}-theme`);
+    document.body.style.fontFamily = `${this.getFont(settings)}, sans-serif`;
+  }
+
+  private getFont(settings: any): string {
+    return settings.font
+      || settings.company_settings
+      && settings.company_settings.font;
+  }
+
+  private getTheme(settings: any): string {
+    return settings.color_scheme
+      || settings.company_settings
+      && settings.company_settings.color_scheme;
   }
 
 }

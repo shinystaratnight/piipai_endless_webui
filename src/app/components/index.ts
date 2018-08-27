@@ -1,4 +1,4 @@
-import { ContactRegistrationFormComponent } from './contact-registration-form/contact-registration-form.component'; //tslint:disable-line
+import { RegistrationFormComponent } from './registration-form/registration-form.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { SiteComponent } from './site/site.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -10,7 +10,7 @@ import { TestBuilderComponent } from './test-builder/test-builder.component';
 
 import { MapService } from './map/map.service';
 
-export * from './contact-registration-form/contact-registration-form.component';
+export * from './registration-form/registration-form.component';
 export * from './dashboard/dashboard.component';
 export * from './fill-in/fill-in.component';
 export * from './form-builder/form-builder.component';
@@ -24,7 +24,7 @@ export * from './map/map.service';
 
 export const components = [
   LoginFormComponent,
-  ContactRegistrationFormComponent,
+  RegistrationFormComponent,
   SiteComponent,
   DashboardComponent,
   FormBuilderComponent,

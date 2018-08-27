@@ -1,14 +1,14 @@
 <div *ngIf="!config.hide" class="form-group" [formGroup]="group" style="position: relative">
   <div class="form-element">
-    <label class="col-form-label form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions.label">
+    <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" [attr.for]="key" *ngIf="label && config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
     <info [description]="config.templateOptions.description"></info>
-    <div class="form-element-content edit" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon || config.key === 'password'">
+    <div class="form-element-content edit" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon">
       <input
         *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))
           && (!viewMode && !config.read_only)
-          && (config.type !== 'address' && config.key !== 'address' && config.key !== 'street_address')"
+          && (config.type !== 'address' && config.key !== 'address' && !config.key.includes('street_address'))"
         class="form-control"
         [class.not-empty]="group.get(key).value"
         autocomplete="off"
@@ -16,14 +16,14 @@
         (blur)="eventHandler($event)"
         (focus)="generateList()"
         (keyup)=filter(key)
-        [class.addon-input]="config.templateOptions.addon || config.key === 'password'"
+        [class.addon-input]="config.templateOptions.addon"
         [formControlName]="key"
         [attr.type]="config.templateOptions.type ? (config.templateOptions.type === 'score' && 'number') || config.templateOptions.type : 'text'"
         [attr.id]="key" [attr.name]="key" [attr.placeholder]="!config.templateOptions.label ? config.templateOptions.placeholder : ''"
         [readonly]="config.read_only" [value]="config.value === 0 || config.value ? config.value : group.get(key).value === 0 || group.get(key).value ? group.get(key).value : ''">
 
       <input type="text" class="form-control" id="autocomplete"
-        *ngIf="config.type !== 'static' && !viewMode && (config.type === 'address' || config.key === 'address' || config.key === 'street_address')"
+        *ngIf="config.type !== 'static' && !viewMode && (config.type === 'address' || config.key === 'address' || config.key.includes('street_address'))"
         ng2-google-place-autocomplete
         [(ngModel)]="address"
         [ngModelOptions]="{standalone: true}"
@@ -47,7 +47,7 @@
         <img *ngIf="config.templateOptions.addon.indexOf('.') > -1" [src]="config.templateOptions.addon">
       </div>
 
-      <div *ngIf="config.key === 'password'" class="password" (click)="switchType(config.templateOptions.type)">
+      <div *ngIf="config.key === 'password' && config.templateOptions.addon" class="password" (click)="switchType(config.templateOptions.type)">
         <svg width="18" height="11" viewBox="0 0 18 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
           <g id="Vector">
             <mask id="path-1-inside-1" fill="white">

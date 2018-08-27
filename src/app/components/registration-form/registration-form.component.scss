@@ -1,0 +1,42 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+
+$content-width: 340px;
+
+.header {
+  max-width: $content-width;
+
+  margin: 0 auto 16px;
+
+  line-height: 1;
+  font-weight: 400;
+  text-align: center;
+
+  color: #4f4f4f;
+
+  @include media-breakpoint-down('sm') {
+    max-width: 100%;
+  }
+}
+
+.logo {
+  height: 80px;
+}
+
+.title {
+  margin-bottom: 20px;
+
+  font-size: 32px;
+}
+
+.form-name {
+  font-size: 24px;
+}
+
+.form-content {
+  max-width: $content-width;
+
+  @include media-breakpoint-down('sm') {
+    max-width: 100%;
+  }
+}

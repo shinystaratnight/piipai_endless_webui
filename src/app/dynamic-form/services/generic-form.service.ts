@@ -71,6 +71,14 @@ export class GenericFormService {
       endpoint = 'profile';
     }
 
+    if (endpoint.includes('/change_password/')) {
+      endpoint = 'change_password';
+    }
+
+    if (endpoint.includes('/password/')) {
+      endpoint = 'password';
+    }
+
     if (metadata[endpoint]) {
       let type = '';
 

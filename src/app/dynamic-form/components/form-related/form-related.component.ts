@@ -10,6 +10,7 @@ import {
   ElementRef,
   HostListener,
 } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -117,6 +118,7 @@ export class FormRelatedComponent
   public currentId: string;
   public update: Subject<any>;
   public manual: boolean;
+  public hideDetail: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -134,7 +136,8 @@ export class FormRelatedComponent
     private navigation: NavigationService,
     private userService: UserService,
     private cd: ChangeDetectorRef,
-    private settingsService: SiteSettingsService
+    private settingsService: SiteSettingsService,
+    private sanitizer: DomSanitizer
   ) {
     super();
     this.subscriptions = [];
@@ -423,14 +426,21 @@ export class FormRelatedComponent
   public checkAutocomplete() {
     if (this.config.autocompleteData) {
       const subscription = this.config.autocompleteData.subscribe((data) => {
-        if (data.hasOwnProperty(this.config.key)) {
+        const key = this.propertyMatches(Object.keys(data), this.config.key);
+        if (key) {
+          this.hideDetail = true;
+          this.viewMode = true;
           this.currentQuery = undefined;
-          this.getOptions.call(this, '', 0, false, this.setValue, data[this.config.key]);
+          this.getOptions.call(this, '', 0, false, this.setValue, data[key]);
         }
       });
 
       this.subscriptions.push(subscription);
     }
+  }
+
+  public propertyMatches(keys: string[], key: string): string {
+    return keys.find((el) => key.includes(el));
   }
 
   public getLinkPath(endpoint): string {
@@ -581,6 +591,7 @@ export class FormRelatedComponent
 
   public generateDataForList(config: Field, data = undefined): void {
     if (config.list && config.metadata) {
+      this.prefilledAttributes();
       this.dataOfList = [];
       let value = [];
       if (data) {
@@ -598,6 +609,22 @@ export class FormRelatedComponent
         let object = this.createObject();
         this.dataOfList.push(object);
       }
+    }
+  }
+
+  public prefilledAttributes() {
+    if (this.config && this.config.metadata) {
+      this.config.metadata.forEach((el) => {
+        if (el && el.attributes) {
+          const formatString = new FormatString();
+          const attributes = Object.keys(el.attributes);
+
+          attributes.forEach((key) => {
+            el.templateOptions[key] =
+              formatString.format(el.attributes[key], this.formData);
+          });
+        }
+      });
     }
   }
 
@@ -746,6 +773,10 @@ export class FormRelatedComponent
   }
 
   public open(type, object = undefined) {
+    if (this.hideDetail) {
+      return false;
+    }
+
     const format = new FormatString();
 
     if (!this.checkPermission(type) && this.config.endpoint) {
@@ -754,17 +785,36 @@ export class FormRelatedComponent
     this.modalData = {};
     this.modalData.type = type;
     this.modalData.title = this.config.templateOptions.label;
-    this.modalData.endpoint = object && object.endpoint || this.config.endpoint;
     if (object && object.endpoint) {
-      this.modalData.edit = true;
+      const parts = object.endpoint.split('/');
+      parts.pop();
+      object[this.param] = parts.pop();
+      this.modalData.endpoint = [].concat(parts, '').join('/');
+    } else {
+      let endpoint;
+      if (this.config.editEndpoint) {
+        const formatString = new FormatString();
+        endpoint = formatString.format(this.config.editEndpoint, this.formData);
+      }
+
+      this.modalData.endpoint = endpoint || this.config.endpoint;
     }
     if (type === 'update' || type === 'delete') {
       if (object) {
         this.modalData.title = object.allData ? object.allData.__str__ : object.__str__;
         this.modalData.id = object[this.param];
       } else {
-        this.modalData.title = this.displayValue;
-        this.modalData.id = this.group.get(this.key).value;
+        this.modalData.title = this.config.templateOptions.editLabel || this.displayValue;
+        const description = this.config.templateOptions.editDescription
+          ? format.format(this.config.templateOptions.editDescription, this.formData)
+          : '';
+
+        if (description) {
+          this.modalData.description = this.sanitizer.bypassSecurityTrustHtml(description);
+        }
+        this.modalData.id = !this.config.editEndpoint && this.group.get(this.key).value;
+        this.modalData.needData = this.config.editEndpoint ? false : true;
+        this.modalData.edit = this.config.editEndpoint && true;
       }
       if (type === 'update') {
         this.modalData.mode = 'edit';
@@ -1003,9 +1053,12 @@ export class FormRelatedComponent
         }
         return;
       }
-      this.group.get(this.key).patchValue(e.data[this.param]);
-      this.config.value = e.data[this.param];
-      this.displayValue = formatString.format(this.display, e.data);
+      this.group.get(this.key)
+        .patchValue(this.config.useValue ? this.config.value[this.param] : e.data[this.param]);
+      this.config.value = this.config.useValue ? this.config.value : e.data[this.param];
+      this.displayValue = this.config.useValue
+        ? formatString.format(this.display, this.config.value)
+        : formatString.format(this.display, e.data);
       this.eventHandler({type: 'change'}, e.data[this.param], e.data);
     } else if (e.type === 'sendForm' && e.status === 'success' && this.config.list) {
       closeModal();

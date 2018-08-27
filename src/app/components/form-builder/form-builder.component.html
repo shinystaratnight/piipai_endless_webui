@@ -7,7 +7,7 @@
     (str)="eventForm($event)"
     (event)="eventHandler($event)">
     <button *ngIf="!id" type="submit" class="btn btn-primary">Save</button>
-    <div *ngIf="links" class="form-group">
+    <!-- <div *ngIf="links" class="form-group">
       <label>Company links</label>
       <div class="d-flex flex-column justify-content-center mb-2" *ngFor="let link of links">
         <b>{{link.company}}:</b>
@@ -16,10 +16,30 @@
           <a [href]="link.url" target="_blank">Preview</a>
         </span>
       </div>
-    </div>
+    </div> -->
     <div *ngIf="id" class="d-flex justify-content-between align-items-center mt-2">
       <button type="button" class="btn btn-danger" (click)="delete()">Delete</button>
+      <button type="button" class="btn btn-primary" (click)="showPreview()">Preview</button>
       <button type="submit" class="btn btn-primary">Save</button>
     </div>
   </generic-form>
 </div>
+
+<template #modal let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 *ngIf="config" class="modal-title">{{config.title}}</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <form-builder-form
+        [id]="id"
+        (formConfig)="setFormConfig($event)">
+      </form-builder-form>
+    </div>
+  </div>
+</template>

@@ -10,8 +10,8 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   }
 
   .tooltip-inner {
-    width: 255px;
-    max-width: 255px;
+    width: auto;
+    max-width: 500px;
 
     text-align: left;
   }
@@ -57,6 +57,37 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
 .datatable {
 
+  &-list .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 160px;
+      height: 40px;
+
+      margin-right: 20px;
+
+      box-shadow: 0 4px 6px 0 rgba(black, .1);
+
+      &:hover {
+        box-shadow: 0 2px 6px 0 rgba(black, .1);
+      }
+      &:active {
+        box-shadow: 0 0px 0px 0 rgba(black, .1);
+      }
+    }
+
+    .btn:last-child {
+      margin-right: 0;
+    }
+  }
+
   table {
     padding: 4px;
 
@@ -86,10 +117,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
         padding-right: 16px;
       }
 
-      &:last-child {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
     }
 
     tbody tr {
@@ -196,6 +223,18 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     border-bottom: 1px solid rgba($gray, .1);
 
     color: #4F4F4F;
+
+    &.has-description {
+      font-size: 24px;
+      line-height: 24px;
+
+      font-weight: 600;
+
+      .description {
+        font-size: 16px;
+        line-height: 1;
+      }
+    }
   }
 
   &-header {
@@ -246,6 +285,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
   @include media-breakpoint-up('xl') {
     &-list &-body,
+    &-list .buttons,
     &-body.open-filters {
       max-width: 1280px;
 
@@ -256,6 +296,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
   @include media-breakpoint-down('lg') {
     &-list &-body,
+    &-list .buttons,
     &-body.open-filters {
       width: 989px;
 
@@ -265,6 +306,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
   @include media-breakpoint-down('md') {
     &-list &-body,
+    &-list .buttons,
     &-body.open-filters {
       width: auto;
 
@@ -506,6 +548,9 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   }
 
   .last-cell {
+    padding-left: 16px;
+    padding-right: 16px;
+
     text-align: center;
   }
 
@@ -519,6 +564,30 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     display: flex;
     align-items: center;
 
+    &.inline {
+      display: inline-flex;
+
+      .additional-data-content {
+        margin-right: 28px;
+      }
+    }
+
+    &-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+
+      padding: 10px 0;
+
+      line-height: 16px;
+
+      border-bottom: 1px solid #e5e5e5;
+
+      &:first-child {
+        padding-top: 4px;
+      }
+    }
+
     .description {
       width: 85px;
 
@@ -531,6 +600,17 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     &-content {
       min-width: 120px;
+    }
+
+    &-label {
+      margin-right: 12px;
+
+      font-size: 14px;
+      line-height: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+
+      opacity: .3;
     }
 
     .description + &-content {

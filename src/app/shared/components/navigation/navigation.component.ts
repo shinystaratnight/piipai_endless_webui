@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 
 import { UserService, User, NavigationService, Page, Role } from '../../../services';
+import { getContactAvatar } from '../../../helpers/utils';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -27,29 +28,19 @@ import 'rxjs/add/operator/debounceTime';
 
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild('header')
-  public header: any;
+  @ViewChild('header') public header: any;
+  @ViewChild('list') public list: any;
+  @ViewChild('item') public item: any;
+  @ViewChild('nav') public nav: any;
+  @ViewChild('userBlock') public userBlock: any;
+  @ViewChild('modal') public modal: any;
 
-  @ViewChild('list')
-  public list: any;
+  @Input() public pages: Page[];
+  @Input() public user: User;
+  @Input() public logo: string;
 
-  @ViewChild('item')
-  public item: any;
-
-  @ViewChild('nav')
-  public nav: any;
-
-  @ViewChild('userBlock')
-  public userBlock: any;
-
-  @Input()
-  public pages: Page[];
-
-  @Input()
-  public user: User;
-
-  @Output()
-  public update: EventEmitter<Role> = new EventEmitter();
+  @Output() public update: EventEmitter<Role> = new EventEmitter();
+  @Output() public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
 
   public headerHeight: number;
   public error: any;
@@ -104,16 +95,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
       this.picture = this.user.data.contact.picture && this.user.data.contact.picture.origin;
 
       if (!this.picture) {
-        const nameElements = this.user.data.contact.__str__.split(' ');
-
-        if (nameElements && nameElements.length) {
-          if (nameElements.length === 2) {
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          } else if (nameElements.length === 3) {
-            nameElements.shift();
-            this.contactAvatar = nameElements.map((el) => el[0]).join('').toUpperCase();
-          }
-        }
+        this.contactAvatar = getContactAvatar(this.user.data.contact.__str__);
       }
     } else {
       this.greeting = `Welcome, Anonymous User`;
@@ -161,6 +143,13 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     if (p.url !== '/') {
       this.isCollapsed = false;
     }
+
+    return false;
+  }
+
+  public changePassword() {
+    this.hideUserMenu = true;
+    this.changePasswordEmitter.emit();
 
     return false;
   }

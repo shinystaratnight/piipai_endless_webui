@@ -19,6 +19,9 @@ import { ListImageComponent } from '../components/list-image/list-image.copmonen
 import { ListInfoComponent } from '../components/list-info/list-info.component';
 import { ListTagsComponent } from '../components/list-tags/list-tags.component';
 import { ListSkillsComponent } from '../components/list-skills/list-skills.component';
+import { InfoComponent } from '../components/info/info.component';
+import { ListFillinTagsComponent } from '../components/list-fillin-tags/list-fillin-tags.component';
+import { ListAvailableComponent } from '../components/list-available/list-available.component';
 
 const components = {
   text: ListTextComponent,
@@ -40,6 +43,9 @@ const components = {
   info: ListInfoComponent,
   tags: ListTagsComponent,
   skills: ListSkillsComponent,
+  description: InfoComponent,
+  fillintags: ListFillinTagsComponent,
+  available: ListAvailableComponent
 };
 
 @Directive({

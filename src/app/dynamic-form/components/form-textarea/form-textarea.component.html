@@ -1,6 +1,6 @@
 <div class="form-group" [formGroup]="group" *ngIf="!config.hide">
   <div class="form-element">
-    <label class="col-form-label form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions.label">
+    <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" [attr.for]="key" *ngIf="label && config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
     <info [description]="config.templateOptions.description"></info>
