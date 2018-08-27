@@ -10,7 +10,7 @@
     (buttonAction)="buttonActionHandler($event)"
     [message]="message">
   </ng-container>
-  <div class="text-danger mt-1 mb-3" *ngIf="errors && errors.non_field_errors">
+  <div class="text-danger mt-1 mb-3" *ngIf="errors && (errors.non_field_errors || errors.detail)">
     <div *ngFor="let error of errors.non_field_errors">{{error}}</div>
     <div *ngIf="errors.detail">{{errors.detail}}</div>
   </div>

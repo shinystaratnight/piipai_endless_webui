@@ -979,7 +979,7 @@ const form = [
     },
     type: 'list',
     query: {
-      company_contact: '{customer_representative.id}'
+      job: '{id}'
     }
   }
 ];

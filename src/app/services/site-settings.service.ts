@@ -59,7 +59,7 @@ export class SiteSettingsService {
           return settings;
         })
         .catch((err: any) => {
-          if (err.status === 404) {
+          if (err.status === 404 && location.host !== 'r3sourcer.com') {
             location.href = 'http://r3sourcer.com';
           }
 
