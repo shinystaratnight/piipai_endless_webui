@@ -348,12 +348,12 @@ const job = {
         content: [
           {
             display: '${field}/h',
-            label: 'Candidate rate',
+            label: ' Candidate rate override',
             type: 'text',
             field: 'hourly_rate.hourly_rate'
           }
         ],
-        label: 'Candidate rate',
+        label: ' Candidate rate override',
         title: null,
         delim: null
       },
