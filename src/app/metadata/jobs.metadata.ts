@@ -677,307 +677,361 @@ const formset = {
 
 const form = [
   {
-    label: '{jobsite.__str__} {position.__str__} {work_start_date}',
-    type: 'row',
+    values: {
+      status: {
+        field: 'active_states',
+      },
+      job: 'position',
+      jobsite: 'jobsite',
+      tags: 'tags',
+    },
+    type: 'info',
+    key: 'id'
+  },
+  {
+    type: 'tabs',
     children: [
       {
-        type: 'column',
+        main: true,
+        name: 'Job info',
+        type: 'group',
+        label: 'Job information',
         children: [
           {
-            list: false,
-            endpoint: '/ecore/api/v2/core/companies/',
-            read_only: true,
-            key: 'customer_company',
+            type: 'row',
+            children: [
+              {
+                label: 'General',
+                type: 'group',
+                children: [
+                  {
+                    key: 'workers',
+                    default: 1,
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Number Of workers',
+                      max: 32767,
+                      type: 'number',
+                      min: 1
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'work_start_date',
+                    default: '2018-07-04',
+                    type: 'datepicker',
+                    templateOptions: {
+                      required: false,
+                      label: 'Work Start Date',
+                      type: 'date'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'default_shift_starting_time',
+                    default: '07:00:00',
+                    type: 'datepicker',
+                    templateOptions: {
+                      required: false,
+                      label: 'Default Shift Starting Time',
+                      type: 'time'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'hourly_rate_default',
+                    type: 'input',
+                    attributes: {
+                      max: '{position.upper_rate_limit}',
+                      min: '{position.lower_rate_limit}'
+                    },
+                    templateOptions: {
+                      label: 'Candidate rate default',
+                      type: 'number',
+                      text: '${hourly_rate_default}/h',
+                    }
+                  },
+                ],
+                width: 0.33
+              },
+              {
+                label: 'Client',
+                type: 'group',
+                children: [
+                  {
+                    list: false,
+                    endpoint: '/ecore/api/v2/core/companies/',
+                    read_only: true,
+                    key: 'customer_company',
+                    templateOptions: {
+                      label: 'Client',
+                      add: true,
+                      delete: false,
+                      values: ['__str__'],
+                      type: 'related',
+                      edit: true
+                    },
+                    collapsed: false,
+                    type: 'related',
+                    query: {
+                      fields: 'primary_contact'
+                    },
+                    many: false
+                  },
+                  {
+                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    read_only: true,
+                    key: 'customer_representative',
+                    templateOptions: {
+                      label: 'Client representative',
+                      add: true,
+                      delete: false,
+                      values: ['__str__'],
+                      type: 'related',
+                      edit: true
+                    },
+                    additional_text: 'Or',
+                    default: '{jobsite.primary_contact.id}',
+                    type: 'related',
+                    query: {
+                      jobsites: '{jobsite.id}'
+                    },
+                  },
+                  {
+                    key: 'provider_signed_at',
+                    type: 'datepicker',
+                    templateOptions: {
+                      required: false,
+                      label: 'Accepted at',
+                      type: 'datetime'
+                    },
+                    read_only: true
+                  },
+                  {
+                    key: 'notes',
+                    type: 'textarea',
+                    templateOptions: {
+                      required: false,
+                      label: 'Notes',
+                      type: 'textarea',
+                      description: 'Job Description/Instructions for candidate'
+                    },
+                    read_only: false
+                  }
+                ],
+                width: 0.33
+              },
+              {
+                label: 'Provider',
+                type: 'group',
+                children: [
+                  {
+                    list: false,
+                    endpoint: '/ecore/api/v2/core/companies/',
+                    read_only: true,
+                    key: 'provider_company',
+                    templateOptions: {
+                      label: 'Provider company',
+                      add: true,
+                      delete: false,
+                      values: ['__str__'],
+                      type: 'related',
+                      edit: true
+                    },
+                    collapsed: false,
+                    default: '{customer_company.master_company.id}',
+                    showIf: ['customer_company.id'],
+                    type: 'related',
+                    query: {
+                      regular_company: '{customer_company.id}',
+                      type: 'master'
+                    },
+                    many: false
+                  },
+                  {
+                    list: false,
+                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    read_only: false,
+                    key: 'provider_representative',
+                    templateOptions: {
+                      label: 'Provider representative',
+                      add: true,
+                      delete: false,
+                      values: ['__str__'],
+                      type: 'related',
+                      edit: true
+                    },
+                    collapsed: false,
+                    default: '{customer_company.primary_contact.id}',
+                    showIf: ['provider_company.id'],
+                    type: 'related',
+                    query: {
+                      company: '{provider_company.id}'
+                    },
+                    many: false
+                  },
+                ],
+                width: 0.33
+              }
+            ]
+          }
+
+        ],
+      },
+      {
+        endpoint: '/ecore/api/v2/hr/shifts/',
+        metadata_query: {
+          editable_type: 'job'
+        },
+        add_endpoint: '/ecore/api/v2/hr/shiftdates/',
+        edit_endpoint: '/ecore/api/v2/hr/shiftdates/{date.id}',
+        templateOptions: {
+          label: 'Shift Dates',
+          type: 'list',
+          add_label: 'Add',
+          text: 'Shift Dates'
+        },
+        query: {
+          job: '{id}'
+        },
+        prefilled: {
+          job: '{id}',
+          skill: '{position.id}'
+        },
+        type: 'list',
+        add_metadata_query: {
+          fieldsets_type: 'job'
+        }
+      },
+      {
+        endpoint: '/ecore/api/v2/hr/joboffers/',
+        add_endpoint: '/ecore/api/v2/hr/jobs/{id}/fillin/',
+        templateOptions: {
+          label: 'Job Offers',
+          type: 'list',
+          add_label: 'Fill in',
+          text: 'Job Offers'
+        },
+        collapsed: false,
+        type: 'list',
+        query: {
+          job: '{id}'
+        },
+        add_metadata_query: {
+          type: 'list'
+        }
+      },
+      {
+        name: 'Job states',
+        type: 'group',
+        children: [
+          {
+            key: 'timeline',
+            type: 'timeline',
+            query: {
+              model: 'hr.job',
+              object_id: ['{id.id}' ,'{id}'],
+            },
             templateOptions: {
-              label: 'Client',
-              add: true,
-              delete: false,
-              values: ['__str__'],
-              type: 'related',
-              edit: true
+              label: 'States Timeline',
+              type: 'timeline',
+              text: 'States Timeline'
+            },
+            endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
+          },
+          {
+            endpoint: '/ecore/api/v2/core/workflowobjects/',
+            templateOptions: {
+              label: 'States history',
+              type: 'list',
+              add_label: '+ Add item',
+              text: 'States history'
             },
             collapsed: false,
-            type: 'related',
+            prefilled: {
+              object_id: '{id}'
+            },
+            type: 'list',
             query: {
-              fields: 'primary_contact'
+              model: 'hr.job',
+              object_id: '{id}'
             },
-            many: false
-          },
-          {
-            list: false,
-            endpoint: '/ecore/api/v2/core/companies/',
-            read_only: true,
-            key: 'provider_company',
-            templateOptions: {
-              label: 'Provider company',
-              add: true,
-              delete: false,
-              values: ['__str__'],
-              type: 'related',
-              edit: true
-            },
-            collapsed: false,
-            default: '{customer_company.master_company.id}',
-            showIf: ['customer_company.id'],
-            type: 'related',
-            query: {
-              regular_company: '{customer_company.id}',
-              type: 'master'
-            },
-            many: false
-          },
-          {
-            list: false,
-            endpoint: '/ecore/api/v2/core/companycontacts/',
-            read_only: false,
-            key: 'provider_representative',
-            templateOptions: {
-              label: 'Provider representative',
-              add: true,
-              delete: false,
-              values: ['__str__'],
-              type: 'related',
-              edit: true
-            },
-            collapsed: false,
-            default: '{customer_company.primary_contact.id}',
-            showIf: ['provider_company.id'],
-            type: 'related',
-            query: {
-              company: '{provider_company.id}'
-            },
-            many: false
-          },
-          {
-            endpoint: '/ecore/api/v2/core/tags/',
-            key: 'tags',
-            useOptions: true,
-            templateOptions: {
-              label: 'Tags',
-              values: ['__str__', 'id'],
-              type: 'related',
-            },
-            type: 'related',
-            many: true
-          },
-          {
-            key: 'provider_signed_at',
-            type: 'datepicker',
-            templateOptions: {
-              required: false,
-              label: 'Accepted at',
-              type: 'datetime'
-            },
-            read_only: true
-          },
+            help: 'Here you can see changes job states'
+          }
         ]
       },
       {
-        type: 'column',
-        children: [
-          {
-            list: false,
-            endpoint: '/ecore/api/v2/hr/jobsites/',
-            read_only: false,
-            key: 'jobsite',
-            templateOptions: {
-              label: 'Jobsite',
-              add: true,
-              delete: false,
-              values: ['primary_contact', '__str__'],
-              type: 'related',
-              edit: true
-            },
-            collapsed: false,
-            type: 'related',
-            query: {
-              company: '{customer_company.id}',
-              primary_contact: '{customer_representative.id}'
-            },
-            many: false
-          },
-          {
-            list: false,
-            endpoint: '/ecore/api/v2/skills/skills/',
-            read_only: true,
-            key: 'position',
-            templateOptions: {
-              label: 'Position',
-              add: false,
-              delete: false,
-              values: ['__str__'],
-              type: 'related',
-              edit: true
-            },
-            collapsed: false,
-            type: 'related',
-            query: {
-              company: '{customer_company.id}'
-            },
-            many: false
-          },
-          {
-            key: 'workers',
-            default: 1,
-            type: 'input',
-            templateOptions: {
-              required: false,
-              label: 'Number Of workers',
-              max: 32767,
-              type: 'text',
-              min: 1
-            },
-            read_only: false
-          },
-          {
-            key: 'work_start_date',
-            default: '2018-07-04',
-            type: 'datepicker',
-            templateOptions: {
-              required: false,
-              label: 'Work Start Date',
-              type: 'date'
-            },
-            read_only: false
-          },
-          {
-            key: 'default_shift_starting_time',
-            default: '07:00:00',
-            type: 'datepicker',
-            templateOptions: {
-              required: false,
-              label: 'Default Shift Starting Time',
-              type: 'time'
-            },
-            read_only: false
-          },
-          {
-            key: 'hourly_rate_default',
-            type: 'input',
-            attributes: {
-              max: '{position.upper_rate_limit}',
-              min: '{position.lower_rate_limit}'
-            },
-            templateOptions: {
-              label: 'Candidate rate default',
-              type: 'number',
-              text: '${hourly_rate_default}/h',
-            }
-          },
-          {
-            key: 'notes',
-            type: 'textarea',
-            templateOptions: {
-              required: false,
-              label: 'Notes',
-              type: 'textarea',
-              description: 'Job Description/Instructions for candidate'
-            },
-            read_only: false
-          }
-        ]
-      }
-    ]
-  },
-  {
-    endpoint: '/ecore/api/v2/hr/shifts/',
-    metadata_query: {
-      editable_type: 'job'
-    },
-    add_endpoint: '/ecore/api/v2/hr/shiftdates/',
-    collapsed: false,
-    edit_endpoint: '/ecore/api/v2/hr/shiftdates/{date.id}',
-    templateOptions: {
-      label: 'Shift Dates',
-      type: 'list',
-      add_label: 'Add',
-      text: 'Shift Dates'
-    },
-    query: {
-      job: '{id}'
-    },
-    prefilled: {
-      job: '{id}',
-      skill: '{position.id}'
-    },
-    type: 'list',
-    add_metadata_query: {
-      fieldsets_type: 'job'
-    }
-  },
-  {
-    endpoint: '/ecore/api/v2/hr/jobtags/',
-    templateOptions: {
-      label: 'Job Tags',
-      type: 'list',
-      add_label: 'Add',
-      text: 'Job Tags'
-    },
-    collapsed: true,
-    prefilled: {
-      job: '{id}'
-    },
-    type: 'list',
-    query: {
-      job: '{id}'
-    }
-  },
-  {
-    endpoint: '/ecore/api/v2/hr/joboffers/',
-    add_endpoint: '/ecore/api/v2/hr/jobs/{id}/fillin/',
-    templateOptions: {
-      label: 'Job Offers',
-      type: 'list',
-      add_label: 'Fill in',
-      text: 'Job Offers'
-    },
-    collapsed: false,
-    type: 'list',
-    query: {
-      job: '{id}'
-    },
-    add_metadata_query: {
-      type: 'list'
-    }
-  },
-  {
-    label: 'Job state timeline',
-    type: 'row',
-    children: [
-      {
-        key: 'timeline',
-        type: 'timeline',
-        query: {
-          model: 'hr.job',
-          object_id: '{id}'
+        endpoint: '/ecore/api/v2/hr/favouritelists/',
+        metadata_query: {
+          editable_type: 'job'
         },
         templateOptions: {
-          label: 'States Timeline',
-          type: 'timeline',
-          text: 'States Timeline'
+          label: 'Favourite List',
+          type: 'list',
+          add_label: 'Add',
+          text: 'Favourite List'
         },
-        endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
+        collapsed: false,
+        prefilled: {
+          job: '{id}',
+          jobsite: '{jobsite.id}',
+          company: '{customer_company.id}',
+        },
+        type: 'list',
+        query: {
+          company_contact: '{customer_representative.id}'
+        },
+        help: 'Here you can see the favorite candidates for client'
       }
-    ]
+    ],
   },
   {
-    endpoint: '/ecore/api/v2/hr/favouritelists/',
-    metadata_query: {
-      editable_type: 'job'
-    },
+    endpoint: '/ecore/api/v2/core/tags/',
+    key: 'tags',
+    hide: true,
+    useOptions: true,
     templateOptions: {
-      label: 'Favourite List',
-      type: 'list',
-      add_label: 'Add',
-      text: 'Favourite List'
+      label: 'Tags',
+      values: ['__str__', 'id'],
+      type: 'related',
     },
-    collapsed: false,
-    prefilled: {
-      job: '{id}',
-      jobsite: '{jobsite.id}',
+    type: 'related',
+    many: true
+  },
+  {
+    endpoint: '/ecore/api/v2/hr/jobsites/',
+    read_only: false,
+    key: 'jobsite',
+    hide: true,
+    templateOptions: {
+      label: 'Jobsite',
+      add: true,
+      delete: false,
+      values: ['primary_contact', '__str__'],
+      type: 'related',
+      edit: true
+    },
+    type: 'related',
+    query: {
       company: '{customer_company.id}',
+      primary_contact: '{customer_representative.id}'
     },
-    type: 'list',
+  },
+  {
+    endpoint: '/ecore/api/v2/skills/skills/',
+    read_only: true,
+    key: 'position',
+    hide: true,
+    templateOptions: {
+      label: 'Position',
+      add: false,
+      delete: false,
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    type: 'related',
     query: {
       job: '{id}'
     }
@@ -1132,7 +1186,7 @@ const formadd = [
               required: false,
               label: 'Number Of workers',
               max: 32767,
-              type: 'text',
+              type: 'number',
               min: 1
             },
             read_only: false
@@ -1166,7 +1220,6 @@ const formadd = [
               max: '{position.upper_rate_limit}',
               min: '{position.lower_rate_limit}'
             },
-            default: '{position.default_rate}',
             templateOptions: {
               label: 'Candidate rate default',
               type: 'number',
