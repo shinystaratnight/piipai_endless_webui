@@ -33,6 +33,14 @@
     <info [placement]="'left'" [description]="requirements"></info>
   </div>
 
+  <div>
+    <ng-container *ngIf="shifts">
+      <ng-container *ngFor="let shift of shifts.controls">
+        <template [ngTemplateOutlet]="date" [ngOutletContext]="{group: shift}"></template>
+      </ng-container>
+    </ng-container>
+  </div>
+
 </div>
 
 <template #requirements>
@@ -48,9 +56,25 @@
 <template #fillinfo>
   <div class="info-block">
     <h6>Use information from last fullfilled shift:</h6>
-    <ul>
-      <li><i fa class="icon" name="circle"></i>{{autoFillData.shift_datetime | dateFormat: 'datetime'}}</li>
-      <li *ngFor="let candidate of autoFillData.candidates"><i fa class="icon" name="circle"></i>{{candidate}}</li>
+    <ul *ngFor="let date of autoFillData">
+      <li><i fa class="icon" name="circle"></i>{{date.shift_datetime | dateFormat: 'datetime'}}</li>
+      <li *ngFor="let candidate of date.candidates"><i fa class="icon" name="circle"></i>{{candidate.__str__}}</li>
     </ul>
+  </div>
+</template>
+
+<template #date let-group="group">
+  <div class="row" [formGroup]="group">
+    <ng-container
+      formElement
+      [config]="viewConfig.time"
+      [group]="group">
+    </ng-container>
+
+    <ng-container
+      formElement
+      [config]="viewConfig.workers"
+      [group]="group">
+    </ng-container>
   </div>
 </template>

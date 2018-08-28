@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -14,6 +14,7 @@ export class ExtendComponent implements OnInit, OnDestroy {
 
   public config: Field;
   public viewData: FormGroup;
+  public shifts: FormArray;
   public viewConfig: { [key: string]: Field };
   public formData: any;
   public autoFillData: any;
@@ -46,7 +47,28 @@ export class ExtendComponent implements OnInit, OnDestroy {
         templateOptions: {
           label: 'Candidates'
         }
-      }
+      },
+      time: {
+        key: 'time',
+        templateOptions: {
+          required: true,
+          label: 'Select time',
+          type: 'time'
+        },
+        type: 'datepicker'
+      },
+      workers: {
+        default: 1,
+        key: 'workers',
+        templateOptions: {
+          min: 1,
+          required: false,
+          label: 'Number of workers',
+          max: 32767,
+          type: 'number'
+        },
+        type: 'input'
+      },
     };
 
     this.checkFormData();
@@ -60,6 +82,8 @@ export class ExtendComponent implements OnInit, OnDestroy {
 
   public eventHandler(e) {
     console.log(e);
+
+    this.generateShifts();
   }
 
   public checkFormData() {
@@ -72,6 +96,12 @@ export class ExtendComponent implements OnInit, OnDestroy {
 
       this.formSubscription = subscription;
     }
+  }
+
+  public generateShifts() {
+    this.shifts = this.fb.array([
+      this.fb.group({})
+    ]);
   }
 
 }
