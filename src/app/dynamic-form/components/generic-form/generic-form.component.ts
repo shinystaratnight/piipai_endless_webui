@@ -16,6 +16,7 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/finally';
 
 import { GenericFormService, FormService } from '../../services/';
+import { UserService } from '../../../services';
 
 import { ToastrService } from '../../../shared/services/toastr.service';
 
@@ -126,6 +127,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     private service: GenericFormService,
     private formService: FormService,
     private toastrService: ToastrService,
+    private userService: UserService
   ) {
     this.subscriptions = [];
 
@@ -279,7 +281,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
           const key = value.replace('.__str__', '');
           const element = getElementFromMetadata(metadata, key);
 
-          const fieldsWithLabel = ['carrier_list_reserve', 'website', 'name'];
+          const fieldsWithLabel = ['carrier_list_reserve', 'website', 'name', 'jobsite'];
 
           if (element) {
             element.saveField = true;
@@ -926,7 +928,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     if (e.data.by_email || e.data.by_phone) {
       this.service.submitForm(endpoint, { email: e.data.by_email, sms: e.data.by_phone })
         .subscribe((res: any) => {
-          this.toastrService.sendMessage(res.message, 'success');
+          if (this.id === this.userService.user.data.user) {
+            this.userService.logout();
+          }
+          setTimeout(() => {
+            this.toastrService.sendMessage(res.message, 'success');
+          }, 500);
         });
     }
   }

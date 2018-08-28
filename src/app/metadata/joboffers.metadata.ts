@@ -262,42 +262,47 @@ const formset = {
         label: 'Candidate contact'
       },
       {
+        name: 'client/candidate_rate',
+        content: [
+          { display: '${field}/h', type: 'static', field: 'client_rate' },
+          { display: '${field}/h', type: 'static', field: 'candidate_rate' }
+        ],
+        label: 'Rate',
+        title: null,
+        delim: null
+      },
+      {
         name: 'shift.date.shift_date',
         sorted: 'desc',
-        sort_field: 'shift.date.shift_date',
-        label: 'Shift date',
-        content: [{ type: 'datepicker', field: 'shift.date.shift_date' }],
-        sort: true
-      },
-      {
-        name: 'shift.time',
         sort: true,
-        sort_field: 'shift.time',
-        content: [{ type: 'datepicker', field: 'shift.time' }],
-        label: 'Time'
-      },
-      {
-        name: 'status',
         content: [
           {
-            values: {
-              0: 'minus-circle',
-              1: 'check-circle',
-              2: 'times-circle',
-              null: 'minus-circle'
-            },
-            type: 'icon',
-            field: 'status'
+            type: 'datepicker',
+            field: 'shift.date.shift_date'
           },
           {
-            values: { 0: 'Undefined', 1: 'Accepted', 2: 'Cancelled' },
-            type: 'select',
-            field: 'status'
+            type: 'datepicker',
+            field: 'shift.time'
           }
         ],
-        label: 'Status',
+        label: 'Shift info',
+      },
+      {
+        name: 'timesheets',
+        sort_field: 'timesheets',
         title: null,
-        delim: ' '
+        sort: true,
+        content: [
+          {
+            text: 'Open TimeSheet',
+            endpoint: '/ecore/api/v2/hr/timesheets/{timesheets}',
+            label: 'Timesheets',
+            type: 'link',
+            field: 'timesheets'
+          }
+        ],
+        label: 'Timesheets',
+        delim: null
       },
       {
         name: 'sms_history',
@@ -328,31 +333,27 @@ const formset = {
         delim: ' '
       },
       {
-        name: 'client/candidate_rate',
-        content: [
-          { display: '${field}/h', type: 'static', field: 'client_rate' },
-          { display: '${field}/h', type: 'static', field: 'candidate_rate' }
-        ],
-        label: 'Client/Candidate Rate',
-        title: null,
-        delim: ' / '
-      },
-      {
-        name: 'timesheets',
-        sort_field: 'timesheets',
-        title: null,
-        sort: true,
+        name: 'status',
         content: [
           {
-            text: 'Link to TimeSheet',
-            endpoint: '/ecore/api/v2/hr/timesheets/{timesheets}',
-            label: 'Timesheets',
-            type: 'link',
-            field: 'timesheets'
+            values: {
+              0: 'minus-circle',
+              1: 'check-circle',
+              2: 'times-circle',
+              null: 'minus-circle'
+            },
+            type: 'icon',
+            field: 'status'
+          },
+          {
+            values: { 0: 'Undefined', 1: 'Accepted', 2: 'Cancelled' },
+            type: 'select',
+            field: 'status'
           }
         ],
-        label: 'Timesheets',
-        delim: null
+        label: 'Status',
+        title: null,
+        delim: ' '
       },
       {
         name: 'actions',

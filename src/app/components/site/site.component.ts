@@ -406,9 +406,6 @@ export class SiteComponent implements OnInit, OnDestroy {
   public resetEvent(response) {
     if (response && response.status === 'success') {
       this.userService.logout();
-      setTimeout(() => {
-        this.ts.sendMessage(response.data.message, 'success');
-      }, 1000);
     }
   }
 

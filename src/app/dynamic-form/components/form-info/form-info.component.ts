@@ -1,4 +1,14 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnDestroy,
+  ViewChild,
+  TemplateRef
+} from '@angular/core';
+
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -33,11 +43,18 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public map: any;
   public client: any;
   public link: string;
+  public job: any;
+  public jobsite: any;
+  public tags: any;
 
   public color: any;
   public colorAttr: string;
   public className: any;
   public viewMode: boolean;
+
+  public modalRef: NgbModalRef;
+  public modalInfo: any;
+  public saveProcess: boolean;
 
   public statusList: any[];
   public more: boolean;
@@ -53,9 +70,14 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  @ViewChild('modal')
+  public modal: TemplateRef<any>;
+
   private subscriptions: Subscription[];
 
-  constructor() {
+  constructor(
+    private modalService: NgbModal
+  ) {
     this.subscriptions = [];
   }
 
@@ -193,5 +215,34 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
       this.subscriptions.push(subscription);
     }
+  }
+
+  public extendJob() {
+    this.modalInfo = {
+      type: 'form',
+      endpoint: `/ecore/api/v2/hr/jobs/${this.config.value.id.id}/extend/`,
+      mode: 'edit',
+      edit: true,
+    };
+
+    this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
+  }
+
+  public formEvent(e, closeModal) {
+    if (e.type === 'saveStart') {
+      this.saveProcess = true;
+    }
+    if (e.type === 'sendForm' && e.status === 'success') {
+      this.saveProcess = false;
+      closeModal();
+      this.event.emit({
+        type: 'update',
+        list: this.config.list.list
+      });
+    }
+  }
+
+  public formError() {
+    this.saveProcess = false;
   }
 }

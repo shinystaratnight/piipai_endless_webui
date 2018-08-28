@@ -72,6 +72,9 @@
       </ng-container>
     </div>
 
+    <p class="job" *ngIf="!titlePath && job">{{job.__str__}}</p>
+    <p class="jobsite" *ngIf="!titlePath && jobsite && viewMode">{{jobsite.__str__}}</p>
+
     <h5 class="form-info-title" *ngIf="config && viewMode">
 
       <span *ngIf="!this.averageScore && this.averageScore !== 0">
@@ -117,6 +120,19 @@
       [group]="group">
     </ng-container>
 
+    <ng-container formElement *ngIf="config && config.metadata['jobsite'] && !viewMode"
+      [config]="getConfig('jobsite')"
+      [group]="group">
+    </ng-container>
+
+    <div *ngIf="config && config.metadata['tags']" class="tags-wrapper">
+      <label>Tags:</label>
+      <ng-container formElement
+        [config]="getConfig('tags')"
+        [group]="group">
+      </ng-container>
+    </div>
+
     <ng-container formElement *ngIf="config && config.metadata['title_title'] && !viewMode"
       [config]="getConfig('title_title')"
       [group]="group">
@@ -159,6 +175,12 @@
       [config]="config.metadata['timeline']"
       (event)="event.emit($event)">
     </ng-container>
+
+    <div *ngIf="job" class="extend-block">
+      <b>Add shifts and workers</b>
+      <p>Create dates, shifts and time for tasks, add workers.</p>
+      <button class="btn btn-primary btn-shadow" type="button" (click)="extendJob()">Add shifts and workers</button>
+    </div>
   </div>
 
   <div class="date" *ngIf="created_at || updated_at">
@@ -166,3 +188,30 @@
     <span *ngIf="updated_at"><span class="description">Updated:</span> {{updated_at | dateFormat:'date'}}</span>
   </div>
 </div>
+
+<template #modal let-c="close" let-d="dismiss">
+    <div class="modal-content-wrapper">
+      <div class="modal-header-wrapper">
+        <div class="modal-header">
+          <h5 class="modal-title">{{modalInfo.label}}</h5>
+          <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <generic-form
+          [endpoint]="modalInfo.endpoint"
+          [data]="modalInfo.data"
+          [mode]="modalInfo.mode"
+          [edit]="modalInfo.edit"
+          (event)="formEvent($event, c)"
+          (errorForm)="formError($event)">
+            <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
+              Save
+              <spinner *ngIf="saveProcess"></spinner>
+            </button>
+        </generic-form>
+      </div>
+    </div>
+  </template>

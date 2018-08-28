@@ -17,6 +17,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/filter';
@@ -27,7 +28,6 @@ import { NavigationService, UserService, SiteSettingsService } from '../../../se
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
-import { Subject } from 'rxjs/Subject';
 
 export interface RelatedObject {
   id: string;
@@ -119,6 +119,7 @@ export class FormRelatedComponent
   public update: Subject<any>;
   public manual: boolean;
   public hideDetail: boolean;
+  public currentUser: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -773,6 +774,8 @@ export class FormRelatedComponent
   }
 
   public open(type, object = undefined) {
+    this.currentUser = false;
+
     if (this.hideDetail) {
       return false;
     }
@@ -811,6 +814,7 @@ export class FormRelatedComponent
 
         if (description) {
           this.modalData.description = this.sanitizer.bypassSecurityTrustHtml(description);
+          this.currentUser = this.formData['id'] === this.userService.user.data.user;
         }
         this.modalData.id = !this.config.editEndpoint && this.group.get(this.key).value;
         this.modalData.needData = this.config.editEndpoint ? false : true;
@@ -1040,6 +1044,11 @@ export class FormRelatedComponent
     if (e.type === 'sendForm' && e.status === 'success' && !this.config.list) {
       closeModal();
       this.saveProcess = false;
+
+      if (this.modalData.description && this.currentUser) {
+        this.userService.logout();
+      }
+
       const formatString = new FormatString();
       if (this.config.many) {
         e.data.__str__ = formatString.format(this.display, e.data);
