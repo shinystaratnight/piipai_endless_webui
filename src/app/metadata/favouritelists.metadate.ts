@@ -644,7 +644,6 @@ const job = {
         ],
         label: 'Actions',
         title: null,
-        delim: ' '
       }
     ],
     list: 'favouritelist',

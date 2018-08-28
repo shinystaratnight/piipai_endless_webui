@@ -7,5 +7,5 @@
   [name]="config.value ? 'check-circle' : config.value === false ? 'times-circle' : 'minus-circle'"
   [border]="true">
 </i>
-<span *ngIf="config.values">{{value}}</span>
+<span [ngClass]="[iconClass]" *ngIf="config.values">{{value}}</span>
 <br *ngIf="!config.delim">

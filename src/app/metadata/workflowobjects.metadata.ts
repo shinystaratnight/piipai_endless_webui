@@ -176,18 +176,18 @@ const formset = {
         label: 'State name'
       },
       {
-        name: 'comment',
-        sort: true,
-        sort_field: 'comment',
-        content: [{ type: 'input', field: 'comment' }],
-        label: 'Comments'
-      },
-      {
         name: 'active',
         sort: true,
         sort_field: 'active',
         content: [{ type: 'checkbox', field: 'active' }],
         label: 'Active'
+      },
+      {
+        name: 'comment',
+        sort: true,
+        sort_field: 'comment',
+        content: [{ type: 'input', field: 'comment' }],
+        label: 'Comments'
       },
       {
         name: 'created',

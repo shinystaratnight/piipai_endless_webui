@@ -568,6 +568,7 @@ export class DynamicListComponent implements
           obj['name'] = element.field;
           obj['type'] = element.type;
           obj['values'] = element.values;
+          obj['color'] = element.color;
           obj.action = element.action;
           obj['delim'] = col.delim;
           obj['title'] = col.title;
@@ -578,7 +579,15 @@ export class DynamicListComponent implements
           obj['redirect'] = element.redirect;
           obj['file'] = element.file;
           obj['display'] = element.display;
+          obj['setColorForLabel'] = element.setColorForLabel;
+          obj['noDelim'] = element.noDelim;
+          obj['placement'] = element.placement;
+          obj['hideValue'] = element.hideValue;
+          obj['help'] = element.help;
           obj['setColor'] = this.format(element.setColor, el);
+          if (element.workers_details) {
+            obj['workers_details'] = this.getValueByKey('workers_details', el);
+          }
           if (element.hasOwnProperty('file')) {
             const keys = element.field.split('.');
             keys[keys.length - 1] = '__str__';
@@ -601,6 +610,7 @@ export class DynamicListComponent implements
             if (field) {
               obj['values'] = field.templateOptions.values || element.values;
               obj['color'] = field.templateOptions.color || element.color;
+              obj['listLabel'] = field.templateOptions.listLabel || element.listLabel;
             }
           }
           if (element.link) {

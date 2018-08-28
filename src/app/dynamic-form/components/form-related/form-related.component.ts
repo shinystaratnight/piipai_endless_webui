@@ -142,6 +142,7 @@ export class FormRelatedComponent
     super();
     this.subscriptions = [];
     this.editMode = true;
+    this.update = new Subject();
   }
 
   public ngOnInit() {
@@ -176,8 +177,6 @@ export class FormRelatedComponent
     if (this.config && this.config.metadata) {
       this.getReplaceElements(this.config.metadata);
     }
-
-    this.update = new Subject();
   }
 
   public ngAfterViewChecked() {
