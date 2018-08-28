@@ -1,13 +1,19 @@
-<span *ngIf="!arrayValue">
+<label class="d-block label" *ngIf="config.templateOptions && config.templateOptions.listLabel || config.listLabel">
+  {{config.listLabel || config.templateOptions.listLabel}}:
+</label>
+
+<span *ngIf="!arrayValue && !config.hideValue">
   <span [class.description]="config.description" class="d-inline-flex align-items-center flex-wrap" *ngIf="value || value === 0">
     <span [title]="config.title || ''">
       <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
-      <span *ngIf="!iconView && !iconClass">{{value}}</span>
+      <span *ngIf="!iconView && !iconClass && !workers">{{value}}</span>
+      <span *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail" style="cursor: default">{{value}}</span>
       <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{value}}</span>
       <i fa *ngIf="iconView" [name]="value" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></i>
     </span>
   </span>
-  <span [class.description]="config.description" class="d-inline-flex align-items-center flex-wrap" *ngIf="!value && value !== 0">-</span>
+  <span [class.description]="config.description" class="d-inline-flex align-items-center flex-wrap" *ngIf="!value && value !== 0 && !(config.templateOptions && config.templateOptions.listLabel || config.listLabel)">-</span>
+  <span [class.description]="config.help" *ngIf="(value || value === 0) && config.help">{{config.help}}</span>
 </span>
 
 <span *ngIf="arrayValue">
@@ -26,3 +32,12 @@
 
 <span *ngIf="config.delim && !last">{{config.delim}}</span>
 <br *ngIf="!config.delim && config.name !== 'credit_approved'">
+
+<template #workersdetail>
+  <div *ngFor="let worker of workers">
+    <i class="text-success mr-1" *ngIf="worker.status === 'accepted'" fa name="check"></i>
+    <i class="text-danger mr-1" *ngIf="worker.status === 'cancelled'" fa name="times"></i>
+    <i class="text-default mr-1" *ngIf="worker.status === 'undefined'" fa name="minus"></i>
+    {{worker.name}}
+  </div>
+</template>
