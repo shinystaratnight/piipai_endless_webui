@@ -167,6 +167,18 @@ const formadd = [
 
 const jobAdd = [
   {
+    key: 'default_shift_starting_time',
+    type: 'datepicker',
+    send: false,
+    hide: true,
+    templateOptions: {
+      required: false,
+      label: 'Default Shift Starting Time',
+      type: 'time'
+    },
+    read_only: false
+  },
+  {
     hide: true,
     endpoint: '/ecore/api/v2/skills/skills/',
     read_only: true,
@@ -192,7 +204,7 @@ const jobAdd = [
       add: true,
       delete: false,
       edit: true,
-      values: ['__str__'],
+      values: ['__str__', 'default_shift_starting_time'],
       label: 'Job',
       type: 'related'
     },

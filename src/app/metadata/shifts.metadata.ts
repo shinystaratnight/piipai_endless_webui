@@ -171,6 +171,7 @@ const shiftDate = {
     {
       key: 'time',
       read_only: false,
+      default: '{default_shift_starting_time}',
       templateOptions: {
         required: true,
         label: 'Time',
@@ -198,7 +199,6 @@ const shiftDate = {
         max: '{skill.upper_rate_limit}',
         min: '{skill.lower_rate_limit}'
       },
-      default: '{skill.default_rate}',
       templateOptions: {
         label: 'Candidate rate default',
         type: 'number',
@@ -356,7 +356,7 @@ const job = {
             display: '$ {field}',
             label: ' Candidate rate override',
             type: 'text',
-            field: 'hourly_rate.hourly_rate'
+            field: 'hourly_rate'
           }
         ],
         label: ' Candidate rate override',

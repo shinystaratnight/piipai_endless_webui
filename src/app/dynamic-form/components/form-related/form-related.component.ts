@@ -604,9 +604,6 @@ export class FormRelatedComponent
           this.dataOfList.push(object);
         });
         this.group.get(this.key).patchValue(data);
-      } else {
-        let object = this.createObject();
-        this.dataOfList.push(object);
       }
     }
   }
@@ -655,6 +652,10 @@ export class FormRelatedComponent
         });
 
         element.prefilled = newPrefilled;
+      }
+
+      if (!el.value && typeof el.default === 'string') {
+        element.value = format.format(el.default, this.formData);
       }
 
       return element;
@@ -733,9 +734,7 @@ export class FormRelatedComponent
     let prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
-        if (!obj['value']) {
-          obj['value'] = data[key];
-        }
+        obj['value'] = data[key];
         if (obj.type === 'related') {
           if (obj.value && obj.value instanceof Object) {
             if (obj.value.id && obj.value.__str__) {
