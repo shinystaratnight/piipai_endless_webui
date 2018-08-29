@@ -72,6 +72,7 @@ export interface Field {
     description?: string;
     editLabel?: string;
     editDescription?: string;
+    info?: any;
   };
 }
 

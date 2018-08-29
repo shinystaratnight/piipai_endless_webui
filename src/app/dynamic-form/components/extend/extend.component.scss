@@ -1,3 +1,5 @@
+@import '../../../../styles/variables.scss';
+
 .title {
   margin-bottom: 22px;
 
@@ -26,4 +28,39 @@ b {
   button {
     margin-left: auto;
   }
+}
+
+.shift {
+  margin-bottom: 1rem;
+}
+
+.shift-date {
+  margin-right: 6px;
+
+  font-size: 16px;
+  line-height: 20px;
+
+  color: $brand-primary;
+}
+
+.btn-link {
+  padding: 0;
+  margin-left: 6px;
+
+  color: $brand-primary;
+  text-decoration: none;
+  border-radius: .2rem;
+}
+
+.time {
+  flex-basis: 120px;
+}
+
+.workers {
+  flex-basis: 120px;
+}
+
+.candidates {
+  flex-basis: 200px;
+  flex-grow: 1;
 }

@@ -102,7 +102,7 @@
             </div>
           </div>
         </div>
-        <div class="d-flex flex-wrap align-items-center mt-2">
+        <div *ngIf="!config.templateOptions.info" class="d-flex flex-wrap align-items-center mt-2">
           <span class="badge badge-outline mt-2 mr-1" style="white-space: normal;"
             *ngFor="let item of results; let i = index">
             {{item.__str__}}
@@ -111,6 +111,11 @@
               [name]="'times'"></i>
           </span>
         </div>
+        <ng-container *ngIf="config.templateOptions.info">
+          <div *ngFor="let item of results; let i = index" class="candidate-info">
+            <span>{{item.__str__}}</span> | <span>{{item.score}} <i fa name="star"></i></span> | <span>{{item.distance}} km</span>
+          </div>
+        </ng-container>
       </div>
 
       <div #autocomplete class="form-element-content flex-column align-items-start edit" style="position: relative"
@@ -351,4 +356,10 @@
     </span>
   </div>
   <div *ngIf="customTemplate && !customTemplate.length" class="d-flex flex-column justify-content-center">-</div>
+</template>
+
+<template #extend let-data="data">
+  <div class="candidate-info">
+    <span>{{data.__str__}}</span>|<span>{{data.score}} <i fa name="star"></i></span>|<span>{{candidate.distance}} km</span>
+  </div>
 </template>
