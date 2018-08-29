@@ -897,7 +897,8 @@ const form = [
         },
         prefilled: {
           job: '{id}',
-          skill: '{position.id}'
+          skill: '{position.id}',
+          default_shift_starting_time: '{default_shift_starting_time}'
         },
         type: 'list',
         add_metadata_query: {
