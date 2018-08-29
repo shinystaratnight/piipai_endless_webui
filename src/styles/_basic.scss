@@ -1080,49 +1080,54 @@ iframe.send-sms {
 }
 
 .info-block {
-    padding: 12px 16px;
+  padding: 12px 16px;
 
-    text-align: left;
+  text-align: left;
 
-    h6 {
-      font-size: 12px;
-      line-height: 16px;
-    }
+  h6 {
+    font-size: 12px;
+    line-height: 16px;
+  }
 
-    ul {
-      margin: 0;
-      padding: 0;
-    }
+  ul {
+    margin: 0;
+    padding: 0;
+  }
 
-    li {
-      position: relative;
+  li {
+    position: relative;
 
-      padding-left: 16px;
+    padding-left: 16px;
 
-      font-size: 12px;
-      line-height: 14px;
+    font-size: 12px;
+    line-height: 14px;
 
-      list-style: none;
+    list-style: none;
 
-      color: rgba($gray, .7);
-    }
+    color: rgba($gray, .7);
+  }
 
-    .icon {
-      position: absolute;
-      top: 4px;
-      left: 5px;
+  .icon {
+    position: absolute;
+    top: 4px;
+    left: 5px;
 
-      font-size: 6px !important;
+    font-size: 6px !important;
 
-      color: $brand-primary;
+    color: $brand-primary;
 
-      @each $item in $themes {
-        .#{$item}-theme & {
-          color: map-get($theme-colors, $item);
-        }
+    @each $item in $themes {
+      .#{$item}-theme & {
+        color: map-get($theme-colors, $item);
       }
     }
   }
+}
+
+.big-btn {
+  height: 40px;
+  width: 160px;
+}
 
 
 @keyframes loadmore {

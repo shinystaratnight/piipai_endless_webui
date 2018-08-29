@@ -1155,7 +1155,6 @@ export class FormRelatedComponent
                 }
               }
               if (res && res.length) {
-                console.log(res);
                 const formatString = new FormatString();
                 res.forEach((el) => {
                   el.__str__ = formatString.format(this.display, el);
@@ -1171,8 +1170,6 @@ export class FormRelatedComponent
                 } else {
                   this.previewList = res;
                 }
-
-                console.log(this.previewList);
               }
 
               if (callback) {
@@ -1215,7 +1212,6 @@ export class FormRelatedComponent
         }
       }
     }
-    console.log(this);
   }
 
   public checkPermission(type: string): boolean {

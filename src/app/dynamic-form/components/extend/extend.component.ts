@@ -18,7 +18,7 @@ export class ExtendComponent implements OnInit, OnDestroy {
 
   public config: Field;
   public viewData: FormGroup;
-  public shifts: any[];
+  public shifts: any[] = [];
   public viewConfig: { [key: string]: Field };
   public formData: any;
   public autoFillData: any;
@@ -64,12 +64,11 @@ export class ExtendComponent implements OnInit, OnDestroy {
   }
 
   public eventHandler(e) {
-    console.log(e);
-    console.log(this);
-    const shifts = this.viewData.value.shifts;
-    console.log(shifts);
-
-    this.generateShifts(shifts);
+    this.viewData.value.shifts.forEach((date) => {
+      if (!this.shifts.find((el) => el.date === date)) {
+        this.shifts.push(this.generateShift(date));
+      }
+    });
   }
 
   public checkFormData() {
@@ -84,21 +83,20 @@ export class ExtendComponent implements OnInit, OnDestroy {
     }
   }
 
-  public generateShifts(shifts: string[]) {
-    this.shifts = [];
+  public generateShift(date: string) {
+    const shift = {
+      date,
+      config: {
+        0: this.generateConfig(this.formData.id, date)
+      },
+      data: this.fb.array([ this.fb.group({}) ])
+    };
 
-    shifts.forEach((date, i) => {
-      const shift = {
-        date,
-        config: this.generateConfig(this.formData.id, date),
-        data: this.fb.array([ this.fb.group({}) ])
-      };
-
-      this.shifts.push(shift);
-    });
+    return shift;
   }
 
   public addTime(shift) {
+    shift.config[shift.data.length] = this.generateConfig(this.formData.id, shift.date);
     shift.data.insert(shift.length, this.fb.group({}));
   }
 
@@ -194,5 +192,9 @@ export class ExtendComponent implements OnInit, OnDestroy {
     }
 
     return data;
+  }
+
+  public removeTime(target: FormArray, index: number) {
+    target.removeAt(index);
   }
 }

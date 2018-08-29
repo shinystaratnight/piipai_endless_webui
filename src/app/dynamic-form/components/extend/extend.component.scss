@@ -32,6 +32,9 @@ b {
 
 .shift {
   margin-bottom: 1rem;
+  padding: 13px 20px;
+
+  background-color: rgba($gray, .06);
 }
 
 .shift-date {
@@ -53,14 +56,16 @@ b {
 }
 
 .time {
-  flex-basis: 120px;
+  flex: .2;
+  min-width: 120px;
 }
 
 .workers {
-  flex-basis: 120px;
+  flex: .2;
+  min-width: 120px;
 }
 
 .candidates {
-  flex-basis: 200px;
-  flex-grow: 1;
+  flex: .6;
+  min-width: 300px;
 }
