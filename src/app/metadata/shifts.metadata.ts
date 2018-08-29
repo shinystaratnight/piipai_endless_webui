@@ -340,7 +340,13 @@ const job = {
         name: 'workers',
         sort: true,
         sort_field: 'workers',
-        content: [{ type: 'input', field: 'workers' }],
+        content: [
+          {
+            type: 'input',
+            field: 'workers',
+            workers_details: true
+          }
+        ],
         label: 'Workers'
       },
       {
@@ -380,8 +386,17 @@ const job = {
               3: 'minus-circle',
               null: 'minus-circle'
             },
+            color: {
+              0: 'default',
+              1: 'success',
+              2: 'warning',
+              3: 'default',
+              null: 'default'
+            },
             label: 'Fulfilled',
+            setColorForLabel: true,
             type: 'icon',
+            showIf: ['is_fulfilled'],
             field: 'is_fulfilled'
           }
         ],

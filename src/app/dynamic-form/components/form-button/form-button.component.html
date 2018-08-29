@@ -1,13 +1,14 @@
 <div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden">
   <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
   <button [type]="config.templateOptions.type ? config.templateOptions.type : 'button'"
-    *ngIf="!config.hidden && (config.templateOptions.text || repeatArray && repeatArray.length > 1)"
+    *ngIf="!config.hidden && (config.templateOptions.text || repeatArray && repeatArray.length > 1) && config.action !== 'showDetail'"
     [ngClass]="[buttonClass]"
     [ngStyle]="{'backgroundColor': config.color}"
     class="btn"
     [class.btn-outline-primary]="config.list && !buttonClass"
     [class.btn-sm]="config.templateOptions.small"
     [class.px-2]="config.templateOptions.p"
+    [class.list]="config.templateOptions.p"
     [class.pl-4.pr-4]="!config.templateOptions.p"
     [class.text-white]="buttonClass || config.color"
     (click)="action($event)">
@@ -22,6 +23,9 @@
 
       <span *ngIf="!repeatArray">{{config.templateOptions.text}}</span>
   </button>
+  <button class="btn btn-sm list btn-outline-primary" *ngIf="config.action === 'showDetail'" [placement]="config.placement" [ngbTooltip]="detail" style="cursor: default">
+    {{config.templateOptions.text}}
+  </button>
   <span class="custom-button" *ngIf="!config.hidden && !config.templateOptions.text && repeatArray && repeatArray.length === 1" (click)="action($event)">
     <i class="icon" fa [name]="config.templateOptions.icon"
       [ngStyle]="{'color': config.text_color}" [title]="config.title">
@@ -34,4 +38,21 @@
   </small>
   <span *ngIf="config.delim">{{config.delim}}</span>
 </div>
-<br *ngIf="config.list && !config.hidden && !config.delim">
+<br *ngIf="config.list && !config.hidden && !config.delim && !config.noDelim">
+
+<template #detail>
+  <div class="line">
+    <label for="">Data:</label>
+    <p>{{config.value.sent_at | dateFormat: 'datetime'}}</p>
+  </div>
+
+  <div class="line">
+    <label for="">Status:</label>
+    <p>{{config.value.status}}</p>
+  </div>
+
+  <div class="line">
+    <label for="">Text:</label>
+    <p>{{config.value.text}}</p>
+  </div>
+</template>

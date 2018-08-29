@@ -20,6 +20,7 @@ export class ListTextComponent implements OnInit {
   public iconView: boolean;
   public iconClass: string;
   public iconColor: string;
+  public workers: any;
 
   public ngOnInit() {
     if (this.config.value || this.config.value === 0) {
@@ -32,6 +33,10 @@ export class ListTextComponent implements OnInit {
         }
       }
     }
+    if (this.config.workers_details) {
+      this.workers = this.generateWorkers(this.config.workers_details);
+    }
+
     this.checkDate(moment);
     this.customizeStatic(this.config.value);
   }
@@ -93,6 +98,25 @@ export class ListTextComponent implements OnInit {
       let color = this.config.color;
       this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
     }
+  }
+
+  public generateWorkers(data) {
+    const result = [];
+
+    const statusList = Object.keys(data);
+
+    statusList.forEach((status: string) => {
+      data[status].forEach((candidate) => {
+        if (candidate) {
+          result.push({
+            name: candidate,
+            status
+          });
+        }
+      });
+    });
+
+    return result.length && result;
   }
 
 }

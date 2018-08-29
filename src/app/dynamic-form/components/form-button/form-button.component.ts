@@ -45,17 +45,19 @@ export class FormButtonComponent implements OnInit {
   }
 
   public action(e) {
-    if (this.config.templateOptions.type !== 'submit') {
-      let id;
-      if (this.config.field === 'id') {
-        id = this.config.rowId;
+    if (this.config.action !== 'showDetail') {
+      if (this.config.templateOptions.type !== 'submit') {
+        let id;
+        if (this.config.field === 'id') {
+          id = this.config.rowId;
+        }
+        this.buttonAction.emit({
+          type: e.type,
+          el: this.config,
+          value: this.config.templateOptions.action,
+          id
+        });
       }
-      this.buttonAction.emit({
-        type: e.type,
-        el: this.config,
-        value: this.config.templateOptions.action,
-        id
-      });
     }
   }
 }

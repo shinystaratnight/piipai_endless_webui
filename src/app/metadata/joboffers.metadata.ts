@@ -159,8 +159,21 @@ const formset = {
       showIf: ['scheduled_sms_datetime'],
       key: 'scheduled_sms_datetime',
       read_only: false,
-      templateOptions: { required: false, label: 'Sheduled', type: 'datetime' },
+      templateOptions: {
+        required: false,
+        label: 'Will send',
+        type: 'datetime',
+        listLabel: 'Will send'
+      },
       type: 'datepicker'
+    },
+    {
+      key: 'credit_approved',
+      type: 'datepicker',
+      templateOptions: {
+        listLabel: 'Was sent',
+        type: 'datetime'
+      }
     },
     {
       key: 'has_send_action',
@@ -264,8 +277,18 @@ const formset = {
       {
         name: 'client/candidate_rate',
         content: [
-          { display: '${field}/h', type: 'static', field: 'client_rate' },
-          { display: '${field}/h', type: 'static', field: 'candidate_rate' }
+          {
+            display: '${field}/h',
+            type: 'static',
+            field: 'candidate_rate',
+            help: 'candidate'
+          },
+          {
+            display: '${field}/h',
+            type: 'static',
+            field: 'client_rate',
+            help: 'client'
+          }
         ],
         label: 'Rate',
         title: null,
@@ -273,6 +296,7 @@ const formset = {
       },
       {
         name: 'shift.date.shift_date',
+        sort_field: 'shift.date.shift_date',
         sorted: 'desc',
         sort: true,
         content: [
@@ -309,44 +333,67 @@ const formset = {
         content: [
           {
             showIf: ['scheduled_sms_datetime'],
-            label: 'Sheduled',
+            label: 'Will send',
             type: 'datepicker',
             field: 'scheduled_sms_datetime'
           },
           {
-            action: 'editModal',
-            text: 'Offer',
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{field}',
+            action: 'emptyPost',
+            text: 'Send now',
+            endpoint: '/ecore/api/v2/hr/joboffers/{id}/send',
             type: 'button',
-            field: 'offer_sent_by_sms.id'
+            field: 'has_send_action'
           },
+
           {
-            action: 'editModal',
-            text: 'Reply',
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{field}',
+            type: 'static',
+            hideValue: true,
+            field: 'credit_approved',
+            showIf: ['offer_sent_by_sms']
+          },
+
+          {
+            action: 'showDetail',
+            noDelim: true,
+            placement: 'right',
+            text: 'Offer',
             type: 'button',
-            field: 'reply_received_by_sms.id'
-          }
+            field: 'offer_sent_by_sms'
+          },
+
+          {
+            action: 'showDetail',
+            text: 'Reply',
+            placement: 'right',
+            type: 'button',
+            field: 'reply_received_by_sms'
+          },
+
+          {
+            action: 'emptyPost',
+            text: 'Resend new',
+            endpoint: '/ecore/api/v2/hr/joboffers/{id}/resend',
+            type: 'button',
+            field: 'has_resend_action'
+          },
         ],
         label: 'SMS History',
         title: null,
-        delim: ' '
       },
       {
         name: 'status',
         content: [
           {
             values: {
-              0: 'minus-circle',
-              1: 'check-circle',
-              2: 'times-circle',
-              null: 'minus-circle'
+              0: 'Undefined',
+              1: 'Accepted',
+              2: 'Cancelled'
             },
-            type: 'icon',
-            field: 'status'
-          },
-          {
-            values: { 0: 'Undefined', 1: 'Accepted', 2: 'Cancelled' },
+            color: {
+              0: 'muted',
+              1: 'success',
+              2: 'danger',
+            },
             type: 'select',
             field: 'status'
           }
@@ -375,24 +422,6 @@ const formset = {
             text_color: '#f32700',
             type: 'button',
             field: 'has_cancel_action'
-          },
-          {
-            action: 'emptyPost',
-            endpoint: '/ecore/api/v2/hr/joboffers/{id}/send',
-            icon: 'fa-commenting',
-            title: 'Send JO',
-            text_color: '#f0ad4e',
-            type: 'button',
-            field: 'has_send_action'
-          },
-          {
-            action: 'emptyPost',
-            endpoint: '/ecore/api/v2/hr/joboffers/{id}/resend',
-            icon: 'fa-commenting',
-            title: 'Resend JO',
-            text_color: '#f0ad4e',
-            type: 'button',
-            field: 'has_resend_action'
           },
           {
             action: 'delete',
