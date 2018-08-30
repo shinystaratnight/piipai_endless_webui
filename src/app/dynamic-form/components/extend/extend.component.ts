@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
+import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 import moment from 'moment-timezone';
 
@@ -14,23 +15,31 @@ import moment from 'moment-timezone';
   templateUrl: './extend.component.html',
   styleUrls: ['./extend.component.scss']
 })
-export class ExtendComponent implements OnInit, OnDestroy {
+export class ExtendComponent extends BasicElementComponent implements OnInit, OnDestroy {
 
   public config: Field;
+  public group: FormGroup;
   public viewData: FormGroup;
   public shifts: any[] = [];
   public viewConfig: { [key: string]: Field };
   public formData: any;
   public autoFillData: any;
+  public key: any;
+  public extendDates: boolean;
+  public extendCandidates: boolean;
+  public autofill: any;
 
   private formSubscription: Subscription;
 
   constructor(
     private fb: FormBuilder
-  ) {}
+  ) {
+    super();
+  }
 
   public ngOnInit() {
     this.viewData = this.fb.group({});
+    this.addControl(this.config, this.fb);
 
     this.viewConfig = {
       shiftsDates: {
@@ -63,12 +72,32 @@ export class ExtendComponent implements OnInit, OnDestroy {
     }
   }
 
+  public generateAutofill(data: any) {
+    if (data && data.length) {
+      this.autofill = [];
+      data.forEach((date) => {
+        this.autofill.push({
+          time: moment.tz(date.shift_datetime, 'Australia/Sydney').format('HH:mm:ss'),
+          candidates: date.candidates
+        });
+      });
+    }
+  }
+
   public eventHandler(e) {
     this.viewData.value.shifts.forEach((date) => {
       if (!this.shifts.find((el) => el.date === date)) {
         this.shifts.push(this.generateShift(date));
       }
     });
+
+    this.shifts.forEach((el, i, array) => {
+      if (this.viewData.value.shifts.indexOf(el.date) === -1) {
+        array.splice(i, 1);
+      }
+    });
+
+    this.change({ type: 'change' });
   }
 
   public checkFormData() {
@@ -77,6 +106,7 @@ export class ExtendComponent implements OnInit, OnDestroy {
         this.formData = data.data;
 
         this.autoFillData = this.formData.last_fullfilled;
+        this.generateAutofill(this.autoFillData);
       });
 
       this.formSubscription = subscription;
@@ -92,21 +122,42 @@ export class ExtendComponent implements OnInit, OnDestroy {
       data: this.fb.array([ this.fb.group({}) ])
     };
 
+    if (this.extendDates) {
+      shift['config'] = <any> {};
+      shift['data'] = this.fb.array([]);
+
+      this.autofill.forEach((el, i) => {
+        shift['config'][i] = this.generateConfig(this.formData.id, date, el.time);
+        shift['data'].insert(i, this.fb.group({}));
+      });
+    }
+
+    if (this. extendCandidates) {
+      shift['config'] = <any> {};
+      shift['data'] = this.fb.array([]);
+
+      this.autofill.forEach((el, i) => {
+        shift['config'][i] = this.generateConfig(this.formData.id, date, el.time, el.candidates);
+        shift['data'].insert(i, this.fb.group({}));
+      });
+    }
+
     return shift;
   }
 
   public addTime(shift) {
     shift.config[shift.data.length] = this.generateConfig(this.formData.id, shift.date);
-    shift.data.insert(shift.length, this.fb.group({}));
+    shift.data.insert(shift.data.length, this.fb.group({}));
   }
 
-  public generateConfig(id, date) {
+  public generateConfig(id, date, time?, candidates?) {
     const formData = new BehaviorSubject({ data: { shift: date } });
 
     return {
       time: {
         key: 'time',
         formData,
+        value: time,
         templateOptions: {
           required: true,
           label: 'Select time',
@@ -118,6 +169,7 @@ export class ExtendComponent implements OnInit, OnDestroy {
         default: 1,
         key: 'workers',
         formData,
+        value: candidates ? candidates.length : 1,
         templateOptions: {
           min: 1,
           required: false,
@@ -133,6 +185,7 @@ export class ExtendComponent implements OnInit, OnDestroy {
         key: 'candidates',
         many: true,
         formData,
+        value: candidates,
         hidden: new BehaviorSubject(true),
         templateOptions: {
           label: 'Select workers',
@@ -160,6 +213,8 @@ export class ExtendComponent implements OnInit, OnDestroy {
       key: e.el.key,
       data: newData
     });
+
+    this.change({ type: 'change' });
   }
 
   public generateData(key: string, data = {}, event: CustomEvent): any {
@@ -196,5 +251,19 @@ export class ExtendComponent implements OnInit, OnDestroy {
 
   public removeTime(target: FormArray, index: number) {
     target.removeAt(index);
+  }
+
+  public change(event) {
+    if (event.type === 'change') {
+      this.group.get(this.key).patchValue(this.shifts);
+    }
+  }
+
+  public autofillDates(event) {
+    this.extendDates = event.value;
+  }
+
+  public autofillCandidates(event) {
+    this.extendCandidates = event.value;
   }
 }

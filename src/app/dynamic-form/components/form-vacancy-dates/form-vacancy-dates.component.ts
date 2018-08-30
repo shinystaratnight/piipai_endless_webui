@@ -121,22 +121,30 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
     const selectedDate = calendar.querySelectorAll(`.bg-primary:not(.not-current)`);
     const currentDate = selectedDate[0];
 
-    if (date && !this.dates[date]) {
+    if (currentDate && date && !this.dates[date]) {
       this.dates[date] = currentDate.parentElement;
     }
 
     if (remove) {
-      this.dates[date].children[0].classList.remove('bg-primary');
-      this.dates[date].children[0].classList.remove('text-white');
-      this.dates[date].children[0].classList.remove('not-current');
+      if (this.dates[date]) {
+        this.dates[date].children[0].classList.remove('bg-primary');
+        this.dates[date].children[0].classList.remove('text-white');
+        this.dates[date].children[0].classList.remove('not-current');
+      }
 
       delete this.dates[date];
+      this.vacancyDate = '';
     }
     Object.keys(this.dates).forEach((el) => {
-      this.dates[el].children[0].classList.add('bg-primary');
-      this.dates[el].children[0].classList.add('text-white');
-      this.dates[el].children[0].classList.add('not-current');
-    });
+      if (this.dates[el]) {
+        const element = this.dates[el].children[0];
 
+        if (element) {
+          element.classList.add('bg-primary');
+          element.classList.add('text-white');
+          element.classList.add('not-current');
+        }
+      }
+    });
   }
 }

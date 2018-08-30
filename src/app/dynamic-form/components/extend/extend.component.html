@@ -1,12 +1,14 @@
 <div class="wrapper">
   <div class="title">Select Dates</div>
 
-  <ng-container
-    formElement
-    [config]="viewConfig.shiftsDates"
-    [group]="viewData"
-    (event)="eventHandler($event)">
-  </ng-container>
+  <div class="text-center">
+    <ng-container
+      formElement
+      [config]="viewConfig.shiftsDates"
+      [group]="viewData"
+      (event)="eventHandler($event)">
+    </ng-container>
+  </div>
 
   <div class="form-element-inline-container">
     <b>Extend:</b>
@@ -14,12 +16,14 @@
     <ng-container
       formElement
       [config]="viewConfig.extendDates"
+      (event)="autofillDates($event)"
       [group]="viewData">
     </ng-container>
 
     <ng-container
       formElement
       [config]="viewConfig.extendCandidates"
+      (event)="autofillCandidates($event)"
       [group]="viewData">
     </ng-container>
 
@@ -85,6 +89,7 @@
       <ng-container
         formElement
         [config]="config.workers"
+        (event)="change($event)"
         [group]="group">
       </ng-container>
     </div>
@@ -93,6 +98,7 @@
       <ng-container
         formElement
         [config]="config.candidates"
+        (event)="change($event)"
         [group]="group">
       </ng-container>
     </div>

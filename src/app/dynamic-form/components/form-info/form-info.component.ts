@@ -13,6 +13,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs/Subscription';
 
 import { getContactAvatar } from '../../../helpers/utils';
+import { FormatString } from '../../../helpers/format.ts';
 
 @Component({
   selector: 'form-info',
@@ -218,11 +219,27 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public extendJob() {
+    const formatString = new FormatString();
+
     this.modalInfo = {
       type: 'form',
       endpoint: `/ecore/api/v2/hr/jobs/${this.config.value.id.id}/extend/`,
       mode: 'edit',
       edit: true,
+      data: {
+        skill: {
+          action: 'add',
+          data: {
+            value: formatString.format('{position.id}', this.config.value)
+          }
+        },
+        job: {
+          action: 'add',
+          data: {
+            value: formatString.format('{id.id}', this.config.value)
+          }
+        }
+      }
     };
 
     this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
@@ -235,10 +252,6 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     if (e.type === 'sendForm' && e.status === 'success') {
       this.saveProcess = false;
       closeModal();
-      this.event.emit({
-        type: 'update',
-        list: this.config.list.list
-      });
     }
   }
 
