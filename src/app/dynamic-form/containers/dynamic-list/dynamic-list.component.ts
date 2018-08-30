@@ -555,7 +555,8 @@ export class DynamicListComponent implements
           name: col.name,
           content: [],
           contextMenu: col.context_menu,
-          tab: this.getTabOfColumn(col.name)
+          tab: this.getTabOfColumn(col.name),
+          width: col.width
         };
         col.content.forEach((element) => {
           if (element.showIf && !this.checkShowRules(element.showIf, el)) {
@@ -584,6 +585,8 @@ export class DynamicListComponent implements
           obj['placement'] = element.placement;
           obj['hideValue'] = element.hideValue;
           obj['help'] = element.help;
+          obj['postfix'] = element.postfix;
+          obj['content'] = element.content;
           obj['setColor'] = this.format(element.setColor, el);
           if (element.workers_details) {
             obj['workers_details'] = this.getValueByKey('workers_details', el);
@@ -664,31 +667,17 @@ export class DynamicListComponent implements
             }
           }
           if (element.type === 'button') {
-            obj.confirm = element.confirm;
-            obj.options = element.options;
-            obj.color = element.color;
-            obj.text_color = element.text_color;
-            obj.title = element.title;
-            obj.repeat = element.repeat;
-            if (element.hidden) {
-              this.setValue(el, element.hidden.split('.'), obj, 'hidden');
-            } else if (element.field) {
-              this.setValue(el, element.field.split('.'), obj, 'hidden');
-              obj.hidden = !obj.hidden;
-            }
-            if (element.replace_by) {
-              this.setValue(el, element.replace_by.split('.'), obj, 'replace_by');
-            }
-            obj.list = true;
-            obj.templateOptions = {
-              label: element.label,
-              icon: element.icon ? element.icon.slice(element.icon.indexOf('-') + 1) : null,
-              small: true,
-              mb: false,
-              p: true,
-              action: element.action,
-              text: this.format(element.text, el)
-            };
+            this.updateButtonTypeCell(obj, element, el);
+          }
+          if (element.type === 'select' && element.content) {
+            obj.content = element.content.map((elem) => {
+              const newObj = Object.assign({}, elem);
+
+              newObj['endpoint'] = this.format(elem.endpoint, el);
+
+              this.updateButtonTypeCell(newObj, elem, el);
+              return newObj;
+            });
           }
           if (element.fields) {
             obj.fields = [];
@@ -751,6 +740,34 @@ export class DynamicListComponent implements
       prepareData.push(row);
     });
     return prepareData;
+  }
+
+  public updateButtonTypeCell(obj, element, el) {
+    obj.confirm = element.confirm;
+    obj.options = element.options;
+    obj.color = element.color;
+    obj.text_color = element.text_color;
+    obj.title = element.title;
+    obj.repeat = element.repeat;
+    if (element.hidden) {
+      this.setValue(el, element.hidden.split('.'), obj, 'hidden');
+    } else if (element.field) {
+      this.setValue(el, element.field.split('.'), obj, 'hidden');
+      obj.hidden = !obj.hidden;
+    }
+    if (element.replace_by) {
+      this.setValue(el, element.replace_by.split('.'), obj, 'replace_by');
+    }
+    obj.list = true;
+    obj.templateOptions = {
+      label: element.label,
+      icon: element.icon ? element.icon.slice(element.icon.indexOf('-') + 1) : null,
+      small: true,
+      mb: false,
+      p: true,
+      action: element.action,
+      text: this.format(element.text, el)
+    };
   }
 
   public getSortedColumns(config) {

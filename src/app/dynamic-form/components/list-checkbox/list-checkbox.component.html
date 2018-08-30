@@ -7,5 +7,14 @@
   [name]="config.value ? 'check-circle' : config.value === false ? 'times-circle' : 'minus-circle'"
   [border]="true">
 </i>
-<span [ngClass]="[iconClass]" *ngIf="config.values">{{value}}</span>
+<span [ngClass]="[iconClass]" *ngIf="config.values && !config.content">{{value}}</span>
+<span [ngClass]="[iconClass]" *ngIf="config.values && config.content" placement="bottom" [ngbPopover]="actionsTemplate" style="cursor: pointer">{{value}} <span class="arrow-dowm">&nbsp;</span></span>
 <br *ngIf="!config.delim">
+
+<template #actionsTemplate>
+  <ng-container
+    listElement
+    [config]="config.content"
+    (buttonAction)="buttonHandler($event)">
+  </ng-container>
+</template>

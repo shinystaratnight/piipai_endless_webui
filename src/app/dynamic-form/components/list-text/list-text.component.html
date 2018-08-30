@@ -7,7 +7,7 @@
     <span [title]="config.title || ''">
       <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
       <span *ngIf="!iconView && !iconClass && !workers">{{value}}</span>
-      <span *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail" style="cursor: default">{{value}}</span>
+      <span class="py-1" *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail" style="cursor: default; padding-right: 1rem">{{value}}</span>
       <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{value}}</span>
       <i fa *ngIf="iconView" [name]="value" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></i>
     </span>

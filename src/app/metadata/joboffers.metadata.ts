@@ -319,6 +319,7 @@ const formset = {
         content: [
           {
             text: 'Open TimeSheet',
+            color: 'primary',
             endpoint: '/ecore/api/v2/hr/timesheets/{timesheets}',
             label: 'Timesheets',
             type: 'link',
@@ -355,9 +356,11 @@ const formset = {
           {
             action: 'showDetail',
             noDelim: true,
-            placement: 'right',
+            placement: 'left',
             text: 'Offer',
+            postfix: '|',
             type: 'button',
+            color: 'link',
             field: 'offer_sent_by_sms'
           },
 
@@ -366,6 +369,7 @@ const formset = {
             text: 'Reply',
             placement: 'right',
             type: 'button',
+            color: 'link',
             field: 'reply_received_by_sms'
           },
 
@@ -394,40 +398,48 @@ const formset = {
               1: 'success',
               2: 'danger',
             },
+            content: [
+              {
+                action: 'emptyPost',
+                endpoint: '/ecore/api/v2/hr/joboffers/{id}/accept/',
+                icon: 'fa-check',
+                title: 'Accept',
+                text_color: '#5cb85c',
+                type: 'button',
+                list: true,
+                field: 'has_accept_action',
+                templateOptions: {
+                  icon: 'check',
+                }
+              },
+              {
+                action: 'emptyPost',
+                endpoint: '/ecore/api/v2/hr/joboffers/{id}/cancel/',
+                icon: 'fa-times',
+                title: 'Cancel',
+                text_color: '#f32700',
+                type: 'button',
+                list: true,
+                field: 'has_cancel_action',
+                templateOptions: {
+                  icon: 'times',
+                }
+              },
+            ],
             type: 'select',
             field: 'status'
           }
         ],
         label: 'Status',
         title: null,
-        delim: ' '
       },
       {
         name: 'actions',
         content: [
           {
-            action: 'emptyPost',
-            endpoint: '/ecore/api/v2/hr/joboffers/{id}/accept',
-            icon: 'fa-check-circle',
-            title: 'Accept',
-            text_color: '#5cb85c',
-            type: 'button',
-            field: 'has_accept_action'
-          },
-          {
-            action: 'emptyPost',
-            endpoint: '/ecore/api/v2/hr/joboffers/{id}/cancel',
-            icon: 'fa-minus-circle',
-            title: 'Cancel',
-            text_color: '#f32700',
-            type: 'button',
-            field: 'has_cancel_action'
-          },
-          {
             action: 'delete',
-            icon: 'fa-times-circle',
+            icon: 'fa-trash',
             title: 'Delete',
-            text_color: '#f32700',
             type: 'button',
             field: 'id'
           }

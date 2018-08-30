@@ -24,6 +24,7 @@ export class ListLinkComponent implements OnInit {
   public arrayValue: boolean;
 
   public phone: boolean;
+  public linkClass: string = '';
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -53,6 +54,12 @@ export class ListLinkComponent implements OnInit {
 
     if (!this.link && this.config.link.indexOf('tel:') > -1) {
       this.phone = true;
+    }
+
+    if (this.config.color) {
+      let classes = ['primary', 'danger', 'info', 'success', 'warning'];
+      let color = this.config.color;
+      this.linkClass = classes.indexOf(color) > -1 ? `text-${color} custom-link` : '';
     }
   }
 
