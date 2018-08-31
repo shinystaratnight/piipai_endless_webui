@@ -1,0 +1,73 @@
+@import '../../../../styles/variables.scss';
+
+.title {
+  margin-bottom: 22px;
+
+  font-size: 32px;
+  line-height: 36px;
+
+  text-align: center;
+}
+
+.wrapper {
+  margin-top: -40px;
+}
+
+b {
+  position: relative;
+  top: -1px;
+
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.shifts-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  button {
+    margin-left: auto;
+  }
+}
+
+.shift {
+  margin-bottom: 1rem;
+  padding: 13px 20px;
+
+  background-color: rgba($gray, .06);
+}
+
+.shift-date {
+  margin-right: 6px;
+
+  font-size: 16px;
+  line-height: 20px;
+
+  color: $brand-primary;
+}
+
+.btn-link {
+  padding: 0;
+  margin-left: 6px;
+
+  color: $brand-primary;
+  text-decoration: none;
+  border-radius: .2rem;
+}
+
+.time {
+  flex: .2;
+  min-width: 120px;
+}
+
+.workers {
+  flex: .2;
+  min-width: 120px;
+}
+
+.candidates {
+  flex: .6;
+  min-width: 300px;
+}

@@ -41,7 +41,7 @@ export interface Field {
   defaultData?: any;
   delay?: any;
   delayData?: any;
-  formId: number;
+  formId?: number;
   errorMessage?: {
     field: string;
     message: string;
@@ -69,8 +69,10 @@ export interface Field {
     param?: string;
     values?: string[];
     text?: string;
+    description?: string;
     editLabel?: string;
     editDescription?: string;
+    info?: any;
   };
 }
 

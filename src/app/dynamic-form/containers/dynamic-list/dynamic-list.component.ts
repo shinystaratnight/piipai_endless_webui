@@ -1507,6 +1507,7 @@ export class DynamicListComponent implements
     let endpoint;
     let id;
     let withoutId;
+    let data;
     if (this.editEndpoint) {
       endpoint = this.format(
         this.editEndpoint,
@@ -1530,6 +1531,22 @@ export class DynamicListComponent implements
         if (lastElement === 'extend') {
           endpoint = [...arr, 'extend'].join('/');
           withoutId = true;
+
+          data = {
+            skill: {
+              action: 'add',
+              data: {
+                value: this.format('{position.id}', this.data.results.find((el) => el.id === e.el.rowId)) //tslint:disable-line
+              }
+            },
+            job: {
+              action: 'add',
+              data: {
+                value: e.el.rowId
+              }
+            }
+          };
+
         } else if (lastElement === 'candidate_fill') {
           endpoint = [...arr, 'candidate_fill'].join('/');
           withoutId = true;
@@ -1548,6 +1565,7 @@ export class DynamicListComponent implements
     this.modalInfo.id = id || (!withoutId && e.el.rowId);
     this.modalInfo.mode = 'edit';
     this.modalInfo.edit = true;
+    this.modalInfo.data = data;
     this.modalInfo.dontUseMetadataQuery = e.value === 'editModal' || e.value === 'editForm';
     this.open(this.modal, {size: 'lg'});
   }

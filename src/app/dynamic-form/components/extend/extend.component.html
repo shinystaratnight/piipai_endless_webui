@@ -1,0 +1,109 @@
+<div class="wrapper">
+  <div class="title">Select Dates</div>
+
+  <div class="text-center">
+    <ng-container
+      formElement
+      [config]="viewConfig.shiftsDates"
+      [group]="viewData"
+      (event)="eventHandler($event)">
+    </ng-container>
+  </div>
+
+  <div class="form-element-inline-container">
+    <b>Extend:</b>
+
+    <ng-container
+      formElement
+      [config]="viewConfig.extendDates"
+      (event)="autofillDates($event)"
+      [group]="viewData">
+    </ng-container>
+
+    <ng-container
+      formElement
+      [config]="viewConfig.extendCandidates"
+      (event)="autofillCandidates($event)"
+      [group]="viewData">
+    </ng-container>
+
+    <info [placement]="'right'" [description]="fillinfo"></info>
+  </div>
+
+  <div class="shifts-header">
+    <div class="title">Shifts</div>
+
+    <button type="button" class="btn btn-primary">Autocomplete</button>
+    <info [placement]="'left'" [description]="requirements"></info>
+  </div>
+
+
+  <ng-container *ngIf="shifts">
+    <div class="shift" *ngFor="let shift of shifts">
+      <div class="d-flex align-items-center mb-2">
+        <span class="shift-date">{{shift.date}}</span> | <button type="button" class="btn btn-link" (click)="addTime(shift)">Add shift <i fa name="plus-circle"></i></button>
+      </div>
+
+      <div class="col">
+        <ng-container *ngFor="let group of shift.data.controls; let index = index">
+          <template [ngTemplateOutlet]="date" [ngOutletContext]="{group: group, config: shift.config[index], index: index, target: shift.data}"></template>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<template #requirements>
+  <div class="info-block">
+    <h6>Fills shifts automatically using criteria:</h6>
+    <ul>
+      <li><i fa class="icon" name="circle"></i>Candidate Score</li>
+      <li><i fa class="icon" name="circle"></i>Distanse to the jobsite</li>
+    </ul>
+  </div>
+</template>
+
+<template #fillinfo>
+  <div class="info-block">
+    <h6>Use information from last fullfilled shift:</h6>
+    <ul *ngFor="let date of autoFillData">
+      <li><i fa class="icon" name="circle"></i>{{date.shift_datetime | dateFormat: 'datetime'}}</li>
+      <li *ngFor="let candidate of date.candidates"><i fa class="icon" name="circle"></i>{{candidate.__str__}}</li>
+    </ul>
+  </div>
+</template>
+
+<template #date let-group="group" let-config="config" let-index="index" let-target="target">
+
+  <div class="row">
+    <div class="time">
+      <ng-container
+        formElement
+        [config]="config.time"
+        (event)="timeChange($event, config)"
+        [group]="group">
+      </ng-container>
+    </div>
+
+    <div class="workers">
+      <ng-container
+        formElement
+        [config]="config.workers"
+        (event)="change($event)"
+        [group]="group">
+      </ng-container>
+    </div>
+
+    <div class="candidates">
+      <ng-container
+        formElement
+        [config]="config.candidates"
+        (event)="change($event)"
+        [group]="group">
+      </ng-container>
+    </div>
+
+    <i fa name="times" class="text-secondary icon align-self-start" (click)="removeTime(target, index)"></i>
+  </div>
+
+</template>

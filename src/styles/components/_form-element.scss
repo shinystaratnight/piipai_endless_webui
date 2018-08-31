@@ -209,6 +209,25 @@
     display: none;
   }
 
+  &-inline-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    height: 32px;
+
+    margin-bottom: 1rem;
+
+    .form-group {
+      margin-left: 1rem;
+    }
+
+    .form-group,
+    label {
+      margin-bottom: 0;
+    }
+  }
+
   .form-element-label {
     font-family: 'Roboto';
     font-size: 12px;

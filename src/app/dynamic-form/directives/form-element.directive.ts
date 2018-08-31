@@ -37,6 +37,7 @@ import { FormColumnComponent } from '../containers/form-column/form-column.compo
 import { FormTabsComponent } from '../containers/form-tabs/form-tabs.component';
 import { FormInfoComponent } from '../components/form-info/form-info.component';
 import { FormGroupComponent } from '../containers/form-group/form-group.component';
+import { ExtendComponent } from '../components/extend/extend.component';
 
 const components = {
   input: FormInputComponent,
@@ -65,7 +66,8 @@ const components = {
   tabs: FormTabsComponent,
   info: FormInfoComponent,
   group: FormGroupComponent,
-  address: FormInputComponent
+  address: FormInputComponent,
+  extend: ExtendComponent,
 };
 
 @Directive({

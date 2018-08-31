@@ -1,29 +1,41 @@
 const form = [
   {
-    key: 'job_shift',
+    key: 'extend',
+    type: 'extend'
+  },
+  {
+    endpoint: '/ecore/api/v2/skills/skills/',
     read_only: true,
+    key: 'skill',
+    hide: true,
     templateOptions: {
-      required: false,
-      label: 'Select Shift dates for Job extension',
-      type: 'jobdates'
+      label: 'Position',
+      add: false,
+      delete: false,
+      values: ['__str__'],
+      type: 'related',
+      edit: true
     },
-    type: 'jobdates'
+    type: 'related',
+    query: {
+      job: '{id}'
+    }
   },
   {
-    key: 'autofill',
-    read_only: false,
-    templateOptions: { required: false, label: 'Autofill', type: 'checkbox' },
-    type: 'checkbox'
+    endpoint: '/ecore/api/v2/hr/jobs/',
+    read_only: true,
+    hide: true,
+    templateOptions: {
+      label: 'Job',
+      add: true,
+      delete: false,
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    type: 'related',
+    key: 'job',
   },
-  {
-    endpoint: '/ecore/api/v2/hr/joboffers/',
-    collapsed: false,
-    metadata_query: { editable_type: 'extend' },
-    templateOptions: { label: 'Candidates', type: 'list', text: 'Candidates' },
-    showIf: [{ autofill: true }],
-    type: 'list',
-    query: { shift_date: '{latest_date}' }
-  }
 ];
 
 export const metadata = {

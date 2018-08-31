@@ -25,6 +25,8 @@ import { Field } from '../../models/field.model';
 import { FormatString } from '../../../helpers/format';
 import { getElementFromMetadata } from '../../helpers/utils';
 
+import moment from 'moment-timezone';
+
 export interface HiddenFields {
   elements: Field[];
   keys: string[];
@@ -684,7 +686,85 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     return target.indexOf(value) > -1;
   }
 
+  public extendJob(data) {
+
+    const shiftDatesRequests = {};
+
+    data.extend.forEach((shiftDate) => {
+      const body = {
+        shift_date: shiftDate.date,
+        job: data.job,
+        skill: data.skill
+      };
+      const shifts = shiftDate.data.value;
+
+      shiftDatesRequests[shiftDate.date] = {
+        shiftDate: this.service.submitForm('/ecore/api/v2/hr/shiftdates/', body),
+        shifts,
+      };
+
+    });
+
+    const dates = Object.keys(shiftDatesRequests);
+
+    if (dates.length) {
+      dates.forEach((date) => {
+        shiftDatesRequests[date].shiftDate.subscribe(
+          (res: any) => {
+            const shiftsRequests = {
+              date: res.shift_date,
+              requests: []
+            };
+
+            shiftDatesRequests[date].shifts.forEach((shift) => {
+              const body = {
+                date: res.id,
+                time: shift.time,
+                workers: shift.workers
+              };
+
+              shiftsRequests.requests.push(
+                this.service.submitForm('/ecore/api/v2/hr/shifts/', body)
+              );
+            });
+
+            if (shiftsRequests.requests.length) {
+              shiftsRequests.requests.forEach((request, i) => {
+                request.subscribe(
+                  (response) => {
+
+                    const fillInBody = {
+                      candidates: shiftDatesRequests[date].shifts[i].candidates,
+                      shifts: [response.id]
+                    };
+
+                    this.service
+                      .submitForm(`/ecore/api/v2/hr/jobs/${data.job.id}/fillin/`, fillInBody)
+                      .subscribe(() => {
+                        const message = `${shiftsRequests.date} ${moment(response.time, 'HH:mm:ss').format('hh:mm A')} created`; //tslint:disable-line
+                        this.toastrService.sendMessage(message, 'success');
+                      });
+                  }
+                );
+              });
+            }
+          },
+        );
+      });
+    }
+
+    this.event.emit({
+      type: 'sendForm',
+      status: 'success'
+    });
+  }
+
   public submitForm(data) {
+    if (data.extend) {
+      this.extendJob(data);
+      return;
+    }
+
     if (!this.checkDelayData()) {
       return;
     }

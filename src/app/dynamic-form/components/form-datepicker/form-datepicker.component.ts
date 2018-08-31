@@ -300,6 +300,7 @@ export class FormDatepickerComponent
           useFocus: true,
           useHeader: false,
           calHighToday: false,
+          bootstrapDropdownRight: false,
           openCallback: () => {
             this.opened = this.t.nativeElement;
             this.updatePosition();

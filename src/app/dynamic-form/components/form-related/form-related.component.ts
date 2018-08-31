@@ -1153,6 +1153,24 @@ export class FormRelatedComponent
                   this.previewList = res.results;
                 }
               }
+              if (res && res.length) {
+                const formatString = new FormatString();
+                res.forEach((el) => {
+                  el.__str__ = formatString.format(this.display, el);
+
+                  if (this.config.templateOptions.info) {
+                    el.score = formatString.format(this.config.templateOptions.info['score'], el);
+                    el.distance = formatString.format(this.config.templateOptions.info['distance'], el);
+                  }
+
+                });
+                if (concat && this.previewList) {
+                  this.previewList.push(...res);
+                } else {
+                  this.previewList = res;
+                }
+              }
+
               if (callback) {
                 const target = res.results.find((el) => el.id === id);
 
