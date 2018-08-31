@@ -102,3 +102,13 @@
     }
   }
 }
+
+a.custom-link:not(.default) {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

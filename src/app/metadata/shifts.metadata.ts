@@ -34,6 +34,22 @@ const list = {
 
 const form = [
   {
+    hide: true,
+    endpoint: '/ecore/api/v2/skills/skills/',
+    read_only: true,
+    send: false,
+    templateOptions: {
+      label: 'Skill',
+      add: true,
+      delete: false,
+      values: ['__str__', 'upper_rate_limit', 'lower_rate_limit', 'default_rate'],
+      type: 'related',
+      edit: true
+    },
+    type: 'related',
+    key: 'skill',
+  },
+  {
     many: false,
     key: 'date',
     endpoint: '/ecore/api/v2/hr/shiftdates/',
@@ -74,26 +90,41 @@ const form = [
     type: 'input'
   },
   {
-    many: false,
+    default: 0.0,
     key: 'hourly_rate',
-    endpoint: '/ecore/api/v2/skills/skillbaserates/',
-    collapsed: false,
-    list: false,
-    templateOptions: {
-      add: true,
-      delete: false,
-      edit: true,
-      values: ['__str__'],
-      label: 'Hourly rate',
-      type: 'related'
-    },
     read_only: false,
-    type: 'related'
-  }
+    templateOptions: {
+      required: false,
+      display: '${field}/h',
+      label: 'Candidate rate',
+      type: 'number'
+    },
+    attributes: {
+      max: '{skill.upper_rate_limit}',
+      min: '{skill.lower_rate_limit}'
+    },
+    type: 'input'
+  },
 ];
 
 const formadd = [
   {
+    hide: true,
+    endpoint: '/ecore/api/v2/skills/skills/',
+    read_only: true,
+    send: false,
+    templateOptions: {
+      label: 'Skill',
+      add: true,
+      delete: false,
+      values: ['__str__', 'upper_rate_limit', 'lower_rate_limit', 'default_rate'],
+      type: 'related',
+      edit: true
+    },
+    type: 'related',
+    key: 'skill',
+  },
+  {
     many: false,
     key: 'date',
     endpoint: '/ecore/api/v2/hr/shiftdates/',
@@ -134,22 +165,21 @@ const formadd = [
     type: 'input'
   },
   {
-    many: false,
+    default: 0.0,
     key: 'hourly_rate',
-    endpoint: '/ecore/api/v2/skills/skillbaserates/',
-    collapsed: false,
-    list: false,
-    templateOptions: {
-      add: true,
-      delete: false,
-      edit: true,
-      values: ['__str__'],
-      label: 'Hourly rate',
-      type: 'related'
-    },
     read_only: false,
-    type: 'related'
-  }
+    templateOptions: {
+      required: false,
+      display: '${field}/h',
+      label: 'Candidate rate',
+      type: 'number'
+    },
+    attributes: {
+      max: '{skill.upper_rate_limit}',
+      min: '{skill.lower_rate_limit}'
+    },
+    type: 'input'
+  },
 ];
 
 const shiftDate = {
@@ -234,10 +264,35 @@ const shiftDate = {
             display: '${field}/h',
             label: 'Candidate rate',
             type: 'text',
-            field: 'hourly_rate.hourly_rate'
+            field: 'hourly_rate'
           }
         ],
         label: 'Candidate rate',
+        title: null,
+        delim: null
+      },
+      {
+        name: 'actions',
+        content: [
+          {
+            action: 'editForm',
+            endpoint: '/ecore/api/v2/hr/shifts/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            text_color: '#f0ad4e',
+            type: 'button',
+            field: 'id'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        label: 'Actions',
         title: null,
         delim: null
       }
@@ -278,7 +333,7 @@ const job = {
     },
     {
       default: 0.0,
-      key: 'hourly_rate.hourly_rate',
+      key: 'hourly_rate',
       read_only: false,
       templateOptions: {
         required: false,
@@ -337,6 +392,18 @@ const job = {
         delim: null
       },
       {
+        name: 'time',
+        sorted: 'desc',
+        sort_field: 'time',
+        title: null,
+        sort: true,
+        content: [
+          { label: 'Shift start time', type: 'datepicker', field: 'time' }
+        ],
+        label: 'Shift start time',
+        delim: null
+      },
+      {
         name: 'workers',
         sort: true,
         sort_field: 'workers',
@@ -364,18 +431,6 @@ const job = {
         delim: null
       },
       {
-        name: 'time',
-        sorted: 'desc',
-        sort_field: 'time',
-        title: null,
-        sort: true,
-        content: [
-          { label: 'Shift start time', type: 'datepicker', field: 'time' }
-        ],
-        label: 'Shift start time',
-        delim: null
-      },
-      {
         name: 'fulfilled',
         content: [
           {
@@ -387,16 +442,21 @@ const job = {
               null: 'minus-circle'
             },
             color: {
-              0: 'default',
+              0: 'danger',
               1: 'success',
               2: 'warning',
               3: 'default',
               null: 'default'
             },
-            label: 'Fulfilled',
+            label: {
+              0: 'Unfulfilled',
+              1: 'Fulfilled',
+              2: 'Unfulfilled',
+              3: 'Unfulfilled',
+              null: 'Unfulfilled',
+            },
             setColorForLabel: true,
             type: 'icon',
-            showIf: ['is_fulfilled'],
             field: 'is_fulfilled'
           }
         ],

@@ -19,7 +19,7 @@
         </span>
       </a>
 
-      <a class="link" *ngIf="config.endpoint" href="" (click)="action($event)" [title]="config.title || ''">
+      <a class="link" [ngClass]="[linkClass]" *ngIf="config.endpoint" href="" (click)="action($event)" [title]="config.title || ''">
         {{value}}
         <span *ngIf="config.fields">
           <ng-container

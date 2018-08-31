@@ -37,7 +37,7 @@ export class FormButtonComponent implements OnInit {
 
   public customizeButton() {
     let color = this.config.color;
-    let classes = ['primary', 'danger', 'info', 'success', 'warning'];
+    let classes = ['primary', 'danger', 'info', 'success', 'warning', 'link'];
     this.buttonClass = classes.indexOf(color) > -1 ? `btn-${color}` : '';
     if (!this.buttonClass) {
       this.buttonColor = color || '';

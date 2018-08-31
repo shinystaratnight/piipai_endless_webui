@@ -932,7 +932,7 @@ const form = [
             type: 'timeline',
             query: {
               model: 'hr.job',
-              object_id: ['{id.id}' ,'{id}'],
+              object_id: ['{id.id}', '{id}'],
             },
             templateOptions: {
               label: 'States Timeline',
@@ -981,7 +981,7 @@ const form = [
         },
         type: 'list',
         query: {
-          company_contact: '{customer_representative.id}'
+          job: '{id.id}'
         },
         help: 'Here you can see the favorite candidates for client'
       }

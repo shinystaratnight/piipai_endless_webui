@@ -94,7 +94,7 @@ export class ListTextComponent implements OnInit {
         }
       }
     } else if (this.config.setColor) {
-      let classes = ['primary', 'danger', 'info', 'success', 'warning'];
+      let classes = ['primary', 'danger', 'info', 'success', 'warning', 'description', 'comment'];
       let color = this.config.color;
       this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
     }

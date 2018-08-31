@@ -142,7 +142,7 @@
                     (click)="editObject(row.id, row.__str__)"></i>
                 </td>
 
-                <td *ngFor="let cell of row.content" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
+                <td *ngFor="let cell of row.content" [ngStyle]="{'width.px': cell.width}" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
                   <ng-container
                     *ngIf="cell.name !== 'actions'"
                     listElement
@@ -160,7 +160,7 @@
                         (buttonAction)="buttonHandler($event, cell.pop = pop)">
                       </ng-container>
                     </template>
-                    <i fa class="icon px-1" style="opacity: .3; margin-left: 8px"
+                    <i fa class="icon px-3 py-1" style="opacity: .3; margin-left: 8px"
                       name="ellipsis-v"
                       placement="bottom"
                       #pop="ngbPopover"

@@ -173,39 +173,66 @@ const formset = {
       {
         name: 'state_name',
         content: [{ type: 'static', field: 'state_name' }],
-        label: 'State name'
+        label: 'State name',
+        width: 150,
       },
       {
         name: 'active',
         sort: true,
         sort_field: 'active',
         content: [{ type: 'checkbox', field: 'active' }],
-        label: 'Active'
+        label: 'Active',
+        width: 100,
       },
       {
         name: 'comment',
         sort: true,
         sort_field: 'comment',
-        content: [{ type: 'input', field: 'comment' }],
+        content: [
+          {
+            type: 'input',
+            field: 'comment',
+            color: 'comment',
+            setColor: '{comment}'
+          }
+        ],
         label: 'Comments'
       },
       {
         name: 'created',
         content: [
-          { type: 'datepicker', field: 'created_at' },
-          { type: 'static', field: 'created_by' }
+          {
+            type: 'datepicker',
+            field: 'created_at'
+          },
+          {
+            type: 'static',
+            field: 'created_by',
+            color: 'description',
+            setColor: '{created_by}'
+          }
         ],
         label: 'Created',
+        width: 150,
         title: null,
         delim: null
       },
       {
         name: 'updated',
         content: [
-          { type: 'datepicker', field: 'updated_at' },
-          { type: 'static', field: 'updated_by' }
+          {
+            type: 'datepicker',
+            field: 'updated_at'
+          },
+          {
+            type: 'static',
+            field: 'updated_by',
+            color: 'description',
+            setColor: '{updated_by}'
+          }
         ],
         label: 'Updated',
+        width: 150,
         title: null,
         delim: null
       }

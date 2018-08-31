@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'list-checkbox',
@@ -10,6 +10,8 @@ export class ListCheckboxComponent implements OnInit {
   public value: any;
   public iconClass: string = '';
 
+  public buttonAction: EventEmitter<any>;
+
   public ngOnInit() {
     if (this.config.values) {
       this.value = this.config.values[this.config.value];
@@ -20,6 +22,10 @@ export class ListCheckboxComponent implements OnInit {
       const color = this.config.color[this.config.value];
       this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
     }
+  }
+
+  public buttonHandler(event) {
+    this.buttonAction.emit(event);
   }
 
 };

@@ -48,36 +48,6 @@ const form = [
     read_only: false
   },
   {
-    key: 'workers',
-    default: 1,
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Workers',
-      max: 32767,
-      type: 'number',
-      min: 1
-    },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/skills/skillbaserates/',
-    read_only: true,
-    templateOptions: {
-      label: 'Hourly rate',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'hourly_rate',
-    many: false
-  },
-  {
     endpoint: '/ecore/api/v2/hr/shifts/',
     metadata_query: { editable_type: 'shift_date' },
     delay: true,
@@ -118,51 +88,6 @@ const formadd = [
     templateOptions: { required: true, label: 'Shift date', type: 'date' },
     read_only: false
   },
-  {
-    key: 'workers',
-    default: 1,
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Workers',
-      max: 32767,
-      type: 'number',
-      min: 1
-    },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/skills/skillbaserates/',
-    read_only: true,
-    templateOptions: {
-      label: 'Hourly rate',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'hourly_rate',
-    many: false
-  },
-  {
-    endpoint: '/ecore/api/v2/hr/shifts/',
-    metadata_query: { editable_type: 'shift_date' },
-    delay: true,
-    templateOptions: {
-      label: 'Shifts',
-      type: 'list',
-      add_label: 'Add',
-      text: 'Shifts'
-    },
-    collapsed: false,
-    prefilled: { date: '{id}' },
-    type: 'list',
-    query: { date: '{id}' }
-  }
 ];
 
 const jobAdd = [
