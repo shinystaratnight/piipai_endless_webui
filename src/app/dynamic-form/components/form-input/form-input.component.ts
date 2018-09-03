@@ -26,11 +26,8 @@ import { BasicElementComponent } from '../basic-element/basic-element.component'
   styleUrls: ['./form-input.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
-export class FormInputComponent
-  extends BasicElementComponent
+export class FormInputComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
-
   public config: Field;
   public group: FormGroup;
   public errors: any;
@@ -54,9 +51,11 @@ export class FormInputComponent
   public modalScrollThrottle = 50;
   public address = '';
 
-  @ViewChild('input') public input;
+  @ViewChild('input')
+  public input;
 
-  @Output() public event: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
   private subscriptions: Subscription[];
 
@@ -72,8 +71,10 @@ export class FormInputComponent
   }
 
   public ngOnInit() {
-    if (this.config.type !== 'static'
-      || (this.config.type === 'static' || !this.config.read_only)) {
+    if (
+      this.config.type !== 'static' ||
+      (this.config.type === 'static' || !this.config.read_only)
+    ) {
       this.addControl(this.config, this.fb);
     }
     this.setInitValue();
@@ -81,8 +82,10 @@ export class FormInputComponent
     this.checkHiddenProperty();
     this.checkAutocomplete();
     this.checkFormData();
-    if (this.config.type !== 'static'
-      || (this.config.type === 'static' && !this.config.read_only)) {
+    if (
+      this.config.type !== 'static' ||
+      (this.config.type === 'static' && !this.config.read_only)
+    ) {
       this.createEvent();
     }
   }
@@ -110,8 +113,10 @@ export class FormInputComponent
       const attributes = Object.keys(this.config.attributes);
 
       attributes.forEach((key) => {
-        this.config.templateOptions[key] =
-          formatString.format(this.config.attributes[key], this.formData);
+        this.config.templateOptions[key] = formatString.format(
+          this.config.attributes[key],
+          this.formData
+        );
       });
 
       if (!this.config.read_only) {
@@ -122,8 +127,13 @@ export class FormInputComponent
     }
   }
 
-  public checkTimesheetTime(data: { key: string, data: any }) {
-    const keys = ['shift_started_at', 'shift_ended_at', 'break_started_at', 'break_ended_at'];
+  public checkTimesheetTime(data: { key: string; data: any }) {
+    const keys = [
+      'shift_started_at',
+      'shift_ended_at',
+      'break_started_at',
+      'break_ended_at'
+    ];
 
     if (keys.indexOf(data.key) > -1) {
       if (this.config.type === 'static' && this.config.key === 'total_worked') {
@@ -132,14 +142,19 @@ export class FormInputComponent
         const breakStart = moment(data.data.break_started_at);
         const breakEnded = moment(data.data.break_ended_at);
 
-        if (shiftStart.isBefore(shiftEnded) && breakStart.isBefore(breakEnded)) {
+        if (
+          shiftStart.isBefore(shiftEnded) &&
+          breakStart.isBefore(breakEnded)
+        ) {
           const shiftTime = moment.utc(shiftEnded.diff(shiftStart));
           const breakTime = moment.utc(breakEnded.diff(breakStart));
 
           const shiftDiff = shiftTime.format('HH:mm');
           if (breakStart && breakEnded && !data.data.no_break) {
             const breakDiff = breakTime.format('HH:mm');
-            const totalTime = moment.utc(shiftTime.diff(breakTime)).format('HH:mm');
+            const totalTime = moment
+              .utc(shiftTime.diff(breakTime))
+              .format('HH:mm');
 
             this.displayValue = `${shiftDiff} - ${breakDiff} = ${totalTime} hours`;
           } else {
@@ -169,12 +184,10 @@ export class FormInputComponent
 
   public checkHiddenProperty() {
     if (
-      this.config
-      && this.config.hidden
-      && (
-        this.config.type !== 'static'
-        || (this.config.type === 'static' && !this.config.read_only)
-      )
+      this.config &&
+      this.config.hidden &&
+      (this.config.type !== 'static' ||
+        (this.config.type === 'static' && !this.config.read_only))
     ) {
       const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
@@ -228,12 +241,10 @@ export class FormInputComponent
       const subscription = this.config.autocompleteData.subscribe((data) => {
         const key = this.propertyMatches(Object.keys(data), this.config.key);
         if (
-          key
-          && (
-            this.config.type !== 'address'
-            && this.config.key !== 'address'
-            && !this.config.key.includes('street_address')
-          )
+          key &&
+          (this.config.type !== 'address' &&
+            this.config.key !== 'address' &&
+            !this.config.key.includes('street_address'))
         ) {
           this.viewMode = true;
           this.autocompleteValue = data[key] || '-';
@@ -253,43 +264,48 @@ export class FormInputComponent
 
   public setInitValue() {
     const format = new FormatString();
-    if (this.config.type !== 'static'
-      || (this.config.type === 'static' && !this.config.read_only)) {
+    if (
+      this.config.type !== 'static' ||
+      (this.config.type === 'static' && !this.config.read_only)
+    ) {
       if (this.autocompleteValue) {
         this.displayValue = this.autocompleteValue;
         if (this.group.get(this.key)) {
           this.group.get(this.key).patchValue(this.autocompleteValue);
         }
-      } else if (this.config.value === 0
-        || this.config.value
-        || this.config.default
-        || this.config.default === 0) {
-
-          let value = (this.config.value === 0 || this.config.value)
+      } else if (
+        this.config.value === 0 ||
+        this.config.value ||
+        this.config.default ||
+        this.config.default === 0
+      ) {
+        let value =
+          this.config.value === 0 || this.config.value
             ? this.config.value
-            : (typeof this.config.default === 'string')
+            : typeof this.config.default === 'string'
               ? format.format(this.config.default, this.formData)
               : this.config.default;
 
-          if (this.group.get(this.key)) {
-            this.group.get(this.key).patchValue(value);
-          }
+        if (this.group.get(this.key)) {
+          this.group.get(this.key).patchValue(value);
+        }
 
-          if (this.config.type === 'address'
-            || this.key === 'address'
-            || this.key === 'street_address') {
-            this.address = value;
-          }
-          this.displayValue = value || value === 0 ? value : '-';
+        if (
+          this.config.type === 'address' ||
+          this.key === 'address' ||
+          this.key === 'street_address'
+        ) {
+          this.address = value;
+        }
+        this.displayValue = value || value === 0 ? value : '-';
       }
     } else {
       if (this.config.value instanceof Object) {
         this.displayValue = this.config.value.__str__ || '-';
       } else {
-        const text = format.format(
-          this.config.templateOptions.text,
-          { [this.config.key]: this.config.value }
-        );
+        const text = format.format(this.config.templateOptions.text, {
+          [this.config.key]: this.config.value
+        });
 
         this.displayValue = text || this.config.value || '-';
       }
@@ -341,8 +357,9 @@ export class FormInputComponent
   public generateList(): void {
     if (this.config.autocomplete) {
       this.hideAutocomplete = false;
-      this.list = this.config.autocomplete
-        .sort((p, n) => p.name > n.name ? 1 : -1);
+      this.list = this.config.autocomplete.sort(
+        (p, n) => (p.name > n.name ? 1 : -1)
+      );
       this.generatePreviewList(this.list);
     }
   }
