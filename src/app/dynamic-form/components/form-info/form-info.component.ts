@@ -20,7 +20,6 @@ import { FormatString } from '../../../helpers/format.ts';
   templateUrl: './form-info.component.html',
   styleUrls: ['./form-info.component.scss']
 })
-
 export class FormInfoComponent implements OnInit, OnDestroy {
   public config: any;
   public group: any;
@@ -65,7 +64,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042',
+    5: '#FFD042'
   };
 
   @Output()
@@ -76,9 +75,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[];
 
-  constructor(
-    private modalService: NgbModal
-  ) {
+  constructor(private modalService: NgbModal) {
     this.subscriptions = [];
   }
 
@@ -91,7 +88,10 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
       keys.forEach((key) => {
         if (key === 'status') {
-          this[key] = this.getValue(this.config.values[key].field, this.config.value);
+          this[key] = this.getValue(
+            this.config.values[key].field,
+            this.config.value
+          );
 
           if (this[key]) {
             if (this[key].length > 4) {
@@ -106,9 +106,16 @@ export class FormInfoComponent implements OnInit, OnDestroy {
             this.colorAttr = this.config.values[key].color_attr;
           }
         } else if (key === 'picture') {
-          this[key] = this.getValue(this.config.values[key], this.config.value, 'picture')
-            || (this.getConfig('picture')
-              && this.getConfig('picture').companyContact ? '/assets/img/logo.svg' : null);
+          this[key] =
+            this.getValue(
+              this.config.values[key],
+              this.config.value,
+              'picture'
+            ) ||
+            (this.getConfig('picture') &&
+            this.getConfig('picture').companyContact
+              ? '/assets/img/logo.svg'
+              : null);
         } else if (key === 'map') {
           this[key] = this.getValue(this.config.values[key], this.config.value);
 
@@ -130,7 +137,10 @@ export class FormInfoComponent implements OnInit, OnDestroy {
         this.contactAvatar = getContactAvatar(this.title);
       }
 
-      if (this.config.metadata['title'] && this.config.metadata['title'].value instanceof Object) {
+      if (
+        this.config.metadata['title'] &&
+        this.config.metadata['title'].value instanceof Object
+      ) {
         this.titlePath = true;
       }
     }
@@ -147,8 +157,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       this.event.emit({
         type: 'create',
         el: this.config,
-        value: this.config.key === 'id'
-          && { id: this.config.value.id }
+        value: this.config.key === 'id' && { id: this.config.value.id }
       });
     }
   }
@@ -157,7 +166,9 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     if (name === 'title' && !this.config.editForm) {
       const config = this.config.metadata[name];
 
-      config.templateOptions.label = `${config.key[0].toUpperCase()}${config.key.slice(1)}`;
+      config.templateOptions.label = `${config.key[0].toUpperCase()}${config.key.slice(
+        1
+      )}`;
       return config;
     }
 
@@ -187,7 +198,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       const keys = Object.keys(this.color);
 
       keys.forEach((key) => {
-        className = this.color[key].indexOf(item[this.colorAttr]) > -1 ? key : 'success';
+        className =
+          this.color[key].indexOf(item[this.colorAttr]) > -1 ? key : 'success';
       });
     }
 
@@ -242,7 +254,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       }
     };
 
-    this.modalRef = this.modalService.open(this.modal, {size: 'lg'});
+    this.modalRef = this.modalService.open(this.modal, { size: 'lg' });
   }
 
   public formEvent(e, closeModal) {
