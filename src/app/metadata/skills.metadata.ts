@@ -115,7 +115,7 @@ const form = [
       skill_title: 'name',
       created_at: 'created_at',
       carrier_reserve: 'carrier_list_reserve',
-      updated_at: 'updated_at',
+      updated_at: 'updated_at'
     },
     type: 'info',
     key: 'id'
@@ -127,7 +127,7 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Carrier list reserve',
-      type: 'number',
+      type: 'number'
     },
     read_only: false
   },
@@ -281,7 +281,7 @@ const form = [
           skill: '{id}'
         },
         help: 'Here you can see the tags which belong to the skill'
-      },
+      }
     ]
   },
   {

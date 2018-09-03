@@ -315,6 +315,59 @@ const shiftDate = {
   }
 };
 
+const editShiftDate = [
+  {
+    key: 'date',
+    endpoint: '/ecore/api/v2/hr/shiftdates/',
+    templateOptions: {
+      add: true,
+      delete: false,
+      edit: true,
+      values: ['__str__'],
+      label: 'Date',
+      type: 'related'
+    },
+    type: 'related'
+  },
+  {
+    key: 'time',
+    read_only: false,
+    default: '{default_shift_starting_time}',
+    templateOptions: {
+      required: true,
+      label: 'Time',
+      type: 'time'
+    },
+    type: 'datepicker'
+  },
+  {
+    default: 1,
+    key: 'workers',
+    read_only: false,
+    templateOptions: {
+      min: 1,
+      required: false,
+      label: 'Workers',
+      max: 32767,
+      type: 'number'
+    },
+    type: 'input'
+  },
+  {
+    key: 'hourly_rate',
+    type: 'input',
+    attributes: {
+      max: '{skill.upper_rate_limit}',
+      min: '{skill.lower_rate_limit}'
+    },
+    templateOptions: {
+      label: 'Candidate rate default',
+      type: 'number',
+      text: '${hourly_rate}/h'
+    }
+  }
+];
+
 const job = {
   fields: [
     {
@@ -513,5 +566,6 @@ export const metadata = {
   job,
   form,
   formadd,
-  shiftDate
+  shiftDate,
+  editShiftDate
 };

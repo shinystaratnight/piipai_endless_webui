@@ -110,7 +110,11 @@ export class GenericFormService {
           type = 'job';
         }
       } else if (query.includes('shift_date')) {
-        type = 'shiftDate';
+        if (query.includes('formset')) {
+          type = 'shiftDate';
+        } else {
+          type = 'editShiftDate';
+        }
       } else if (query.includes('extend')) {
         type = 'extend';
       } else if (query.includes('formset')) {

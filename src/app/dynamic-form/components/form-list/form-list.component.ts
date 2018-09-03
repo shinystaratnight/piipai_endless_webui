@@ -196,7 +196,6 @@ export class FormListComponent implements OnInit, OnDestroy {
         }
       });
     }
-    console.log(this.modalData);
 
     const windowClass =
       this.modalData.endpoint === '/ecore/api/v2/hr/shiftdates/'

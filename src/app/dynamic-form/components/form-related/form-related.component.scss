@@ -16,12 +16,12 @@
 }
 
 .badge i {
-  font-size: .75rem;
+  font-size: 0.75rem;
 
   cursor: pointer;
 }
 
-.description  {
+.description {
   margin-left: 40px;
 
   @include media-breakpoint-down('md') {
@@ -35,6 +35,21 @@
 
   border-radius: 50px;
 
-  opacity: .7;
-  background-color: rgba($gray, .06);
+  opacity: 0.7;
+  background-color: rgba($gray, 0.06);
+}
+
+.custom-button {
+  color: $gray;
+  opacity: 0.8;
+
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  i {
+    margin-right: 12px;
+  }
 }
