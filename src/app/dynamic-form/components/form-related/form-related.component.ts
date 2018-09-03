@@ -285,7 +285,7 @@ export class FormRelatedComponent extends BasicElementComponent
   public generateCustomTemplate(fieldsList) {
     if (this.config.value) {
       this.customTemplate = fieldsList.map((el, index) => {
-        let object = <CustomField> {};
+        let object = <CustomField>{};
         object.value = this.config.customValue[index];
         object.key = el;
         if (el.indexOf('email') > -1) {

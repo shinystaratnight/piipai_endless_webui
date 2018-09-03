@@ -124,6 +124,7 @@ const form = [
     type: 'related',
     hide: true,
     read_only: true,
+    send: false,
     endpoint: '/ecore/api/v2/pricing/industries/',
     key: 'name.industry',
     templateOptions: {
@@ -137,7 +138,8 @@ const form = [
     type: 'input',
     hide: true,
     read_only: true,
-    key: 'name.name',
+    send: false,
+    key: 'name',
     templateOptions: {
       label: 'Skill name',
       type: 'text'
@@ -335,13 +337,29 @@ const form = [
 const formadd = [
   {
     type: 'related',
+    send: false,
     endpoint: '/ecore/api/v2/pricing/industries/',
-    key: 'name.industry',
+    key: 'industry',
     templateOptions: {
       label: 'Industries',
       type: 'related',
       param: 'id',
       values: ['__str__']
+    }
+  },
+  {
+    type: 'related',
+    endpoint: '/ecore/api/v2/skills/skillnames/',
+    key: 'name',
+    showIf: ['industry.id'],
+    templateOptions: {
+      label: 'Skill',
+      type: 'related',
+      param: 'id',
+      values: ['__str__']
+    },
+    query: {
+      industry: '{name.industry.id}'
     }
   }
 ];
