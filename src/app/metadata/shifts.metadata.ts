@@ -42,12 +42,17 @@ const form = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['__str__', 'upper_rate_limit', 'lower_rate_limit', 'default_rate'],
+      values: [
+        '__str__',
+        'upper_rate_limit',
+        'lower_rate_limit',
+        'default_rate'
+      ],
       type: 'related',
       edit: true
     },
     type: 'related',
-    key: 'skill',
+    key: 'skill'
   },
   {
     many: false,
@@ -104,7 +109,7 @@ const form = [
       min: '{skill.lower_rate_limit}'
     },
     type: 'input'
-  },
+  }
 ];
 
 const formadd = [
@@ -117,12 +122,17 @@ const formadd = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['__str__', 'upper_rate_limit', 'lower_rate_limit', 'default_rate'],
+      values: [
+        '__str__',
+        'upper_rate_limit',
+        'lower_rate_limit',
+        'default_rate'
+      ],
       type: 'related',
       edit: true
     },
     type: 'related',
-    key: 'skill',
+    key: 'skill'
   },
   {
     many: false,
@@ -179,7 +189,7 @@ const formadd = [
       min: '{skill.lower_rate_limit}'
     },
     type: 'input'
-  },
+  }
 ];
 
 const shiftDate = {
@@ -232,9 +242,9 @@ const shiftDate = {
       templateOptions: {
         label: 'Candidate rate default',
         type: 'number',
-        text: '${hourly_rate}/h',
+        text: '${hourly_rate}/h'
       }
-    },
+    }
   ],
   list: {
     columns: [
@@ -285,9 +295,8 @@ const shiftDate = {
           },
           {
             action: 'delete',
-            icon: 'fa-times-circle',
+            icon: 'fa-trash',
             title: 'Delete',
-            text_color: '#f32700',
             type: 'button',
             field: 'id'
           }
@@ -453,7 +462,7 @@ const job = {
               1: 'Fulfilled',
               2: 'Unfulfilled',
               3: 'Unfulfilled',
-              null: 'Unfulfilled',
+              null: 'Unfulfilled'
             },
             setColorForLabel: true,
             type: 'icon',
@@ -478,9 +487,9 @@ const job = {
           },
           {
             action: 'delete',
-            icon: 'fa-times-circle',
+            icon: 'fa-trash',
             title: 'Delete',
-            text_color: '#f32700',
+            showIf: ['can_delete'],
             type: 'button',
             field: 'id'
           }

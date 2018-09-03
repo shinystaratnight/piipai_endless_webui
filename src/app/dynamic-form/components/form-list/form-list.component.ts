@@ -25,9 +25,7 @@ import { GenericFormService } from '../../services/generic-form.service';
   templateUrl: 'form-list.component.html',
   styleUrls: ['./form-list.component.scss']
 })
-
 export class FormListComponent implements OnInit, OnDestroy {
-
   @ViewChild('modal')
   public modalTemplate: any;
 
@@ -84,7 +82,10 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.checkTimelineChange();
     }
     this.checkHiddenProperty();
-    this.allowMethods = this.permission.getAllowMethods(undefined, this.config.endpoint);
+    this.allowMethods = this.permission.getAllowMethods(
+      undefined,
+      this.config.endpoint
+    );
   }
 
   public checkHiddenProperty() {
@@ -127,12 +128,24 @@ export class FormListComponent implements OnInit, OnDestroy {
       this.config.delayData[this.config.endpoint] = this.config;
     }
 
-    if (this.config.metadata_query && typeof this.config.metadata_query !== 'string') {
-      this.config.metadata_query = this.parseMetadataQuery(this.config, 'metadata_query');
+    if (
+      this.config.metadata_query &&
+      typeof this.config.metadata_query !== 'string'
+    ) {
+      this.config.metadata_query = this.parseMetadataQuery(
+        this.config,
+        'metadata_query'
+      );
     }
 
-    if (this.config.add_metadata_query && typeof this.config.add_metadata_query !== 'string') {
-      this.config.add_metadata_query = this.parseMetadataQuery(this.config, 'add_metadata_query');
+    if (
+      this.config.add_metadata_query &&
+      typeof this.config.add_metadata_query !== 'string'
+    ) {
+      this.config.add_metadata_query = this.parseMetadataQuery(
+        this.config,
+        'add_metadata_query'
+      );
     }
 
     this.initialized = true;
@@ -154,7 +167,10 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public addObject() {
-    if (this.config.add_endpoint && this.config.add_endpoint.indexOf('fillin') > -1) {
+    if (
+      this.config.add_endpoint &&
+      this.config.add_endpoint.indexOf('fillin') > -1
+    ) {
       const urlPath = this.router.url.split('/');
       urlPath.splice(urlPath.length - 1, 1, 'fillin').join('/');
       this.router.navigateByUrl(urlPath.join('/'));
@@ -180,7 +196,17 @@ export class FormListComponent implements OnInit, OnDestroy {
         }
       });
     }
-    this.modalRef = this.modal.open(this.modalTemplate, {size: 'lg'});
+    console.log(this.modalData);
+
+    const windowClass =
+      this.modalData.endpoint === '/ecore/api/v2/hr/shiftdates/'
+        ? 'shiftdates'
+        : '';
+
+    this.modalRef = this.modal.open(this.modalTemplate, {
+      size: 'lg',
+      windowClass
+    });
   }
 
   public formEvent(e, closeModal) {
@@ -199,7 +225,10 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public updateList(event) {
-    if (this.config.delay && this.checkOnUnique(event.sendData, this.config.unique)) {
+    if (
+      this.config.delay &&
+      this.checkOnUnique(event.sendData, this.config.unique)
+    ) {
       this.addedData.push(event.viewData);
       this.config.data.sendData.push(event.sendData);
 
@@ -221,9 +250,12 @@ export class FormListComponent implements OnInit, OnDestroy {
   public checkCount(e: number): void {
     this.count = e;
     if (this.config.max) {
-      this.showButton = (this.config.templateOptions.add_label || this.config.add_endpoint) && this.config.max > this.count; //tslint:disable-line
+      this.showButton =
+        (this.config.templateOptions.add_label || this.config.add_endpoint) &&
+        this.config.max > this.count; //tslint:disable-line
     } else {
-      this.showButton = this.config.templateOptions.add_label || this.config.add_endpoint;
+      this.showButton =
+        this.config.templateOptions.add_label || this.config.add_endpoint;
     }
   }
 
@@ -272,11 +304,10 @@ export class FormListComponent implements OnInit, OnDestroy {
 
   public checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData
-        .subscribe((formData) => {
-          this.formData = formData.data;
-          this.checkDefaultValues(formData.data);
-        });
+      const subscription = this.config.formData.subscribe((formData) => {
+        this.formData = formData.data;
+        this.checkDefaultValues(formData.data);
+      });
 
       this.subscriptions.push(subscription);
     }
@@ -309,7 +340,11 @@ export class FormListComponent implements OnInit, OnDestroy {
       });
 
       if (fullfilled) {
-        this.gfs.getByQuery(this.config.endpoint, this.generateQuery(this.defaultQueries))
+        this.gfs
+          .getByQuery(
+            this.config.endpoint,
+            this.generateQuery(this.defaultQueries)
+          )
           .subscribe((res: any) => {
             this.defaultValues = res.results;
             this.updateDataInTheList(this.defaultValues, this.addedData);
@@ -337,11 +372,19 @@ export class FormListComponent implements OnInit, OnDestroy {
     const length = this.config.data.results.length;
 
     this.pasredAddedData(addedData, defaultData, this.config.unique);
-    this.pasredAddedData(this.config.data.sendData, defaultData, this.config.unique);
+    this.pasredAddedData(
+      this.config.data.sendData,
+      defaultData,
+      this.config.unique
+    );
     this.config.data.results = [...defaultData, ...addedData];
   }
 
-  public pasredAddedData(addedData: any[], defaultData: any[], fields: string[]) {
+  public pasredAddedData(
+    addedData: any[],
+    defaultData: any[],
+    fields: string[]
+  ) {
     if (!fields) {
       return;
     }

@@ -22,7 +22,7 @@ const list = {
             },
             color: {
               1: 'danger',
-              2: 'success',
+              2: 'success'
             },
             type: 'icon',
             field: 'status'
@@ -270,6 +270,11 @@ const formset = {
             endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
             type: 'related',
             field: 'candidate_contact'
+          },
+          {
+            field: 'candidate_contact.contact.phone_mobile',
+            type: 'link',
+            link: 'tel:{candidate_contact.contact.phone_mobile}'
           }
         ],
         label: 'Candidate contact'
@@ -309,7 +314,7 @@ const formset = {
             field: 'shift.time'
           }
         ],
-        label: 'Shift info',
+        label: 'Shift info'
       },
       {
         name: 'timesheets',
@@ -379,10 +384,10 @@ const formset = {
             endpoint: '/ecore/api/v2/hr/joboffers/{id}/resend',
             type: 'button',
             field: 'has_resend_action'
-          },
+          }
         ],
         label: 'SMS History',
-        title: null,
+        title: null
       },
       {
         name: 'status',
@@ -396,7 +401,7 @@ const formset = {
             color: {
               0: 'muted',
               1: 'success',
-              2: 'danger',
+              2: 'danger'
             },
             content: [
               {
@@ -409,7 +414,7 @@ const formset = {
                 list: true,
                 field: 'has_accept_action',
                 templateOptions: {
-                  icon: 'check',
+                  icon: 'check'
                 }
               },
               {
@@ -422,16 +427,16 @@ const formset = {
                 list: true,
                 field: 'has_cancel_action',
                 templateOptions: {
-                  icon: 'times',
+                  icon: 'times'
                 }
-              },
+              }
             ],
             type: 'select',
             field: 'status'
           }
         ],
         label: 'Status',
-        title: null,
+        title: null
       },
       {
         name: 'actions',

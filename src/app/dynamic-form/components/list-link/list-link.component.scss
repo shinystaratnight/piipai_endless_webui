@@ -10,22 +10,23 @@
     text-decoration: none;
   }
 
-  .btn {
+  a ~ .btn {
     display: inline-block;
     visibility: hidden;
 
-    padding: .1rem .3rem .1rem .3rem;
+    padding: 0.1rem 0.3rem 0.1rem 0.3rem;
 
-    margin-right: .2rem;
+    margin-right: 0.2rem;
     margin-bottom: 0;
 
+    font-size: 10px;
     line-height: 1;
 
     transition: none;
   }
 
   .phone {
-    margin-right: .2rem;
+    margin-right: 0.2rem;
   }
 
   &:hover {
@@ -51,7 +52,7 @@
     align-items: flex-start;
 
     a:not(.default) {
-      font-size: .9rem;
+      font-size: 0.9rem;
       font-weight: normal;
 
       color: $gray;
@@ -70,7 +71,7 @@
 
     .display {
       order: 0;
-      margin-right: .2rem;
+      margin-right: 0.2rem;
 
       &:after {
         content: ':';
@@ -81,14 +82,14 @@
   .display {
     order: 2;
 
-    color: rgba($gray, .3);
+    color: rgba($gray, 0.3);
   }
 
   a:not(.default) {
     font-size: 1rem;
     font-weight: 600;
 
-    color: rgba($gray, .8);
+    color: rgba($gray, 0.8);
 
     &:hover,
     &:focus {

@@ -412,9 +412,8 @@ const formset = {
           },
           {
             action: 'delete',
-            icon: 'fa-times-circle',
+            icon: 'fa-trash',
             title: 'Delete',
-            text_color: '#f32700',
             type: 'button',
             field: 'id'
           }
@@ -446,7 +445,7 @@ const form = [
     },
     collapsed: false,
     type: 'related',
-    key: 'candidate_contact',
+    key: 'candidate_contact'
   },
   {
     endpoint: '/ecore/api/v2/core/companies/',
@@ -461,7 +460,7 @@ const form = [
     },
     collapsed: false,
     type: 'related',
-    key: 'company',
+    key: 'company'
   },
   {
     endpoint: '/ecore/api/v2/hr/jobsites/',
@@ -476,7 +475,7 @@ const form = [
     },
     collapsed: false,
     type: 'related',
-    key: 'jobsite',
+    key: 'jobsite'
   },
   {
     endpoint: '/ecore/api/v2/hr/jobs/',
@@ -491,7 +490,7 @@ const form = [
     },
     collapsed: false,
     type: 'related',
-    key: 'job',
+    key: 'job'
   },
   {
     endpoint: '/ecore/api/v2/core/companycontacts/',
@@ -504,7 +503,7 @@ const form = [
     },
     collapsed: false,
     type: 'related',
-    key: 'company_contact',
+    key: 'company_contact'
   },
   {
     key: 'updated_at',
@@ -517,7 +516,7 @@ const form = [
     type: 'datepicker',
     templateOptions: { required: false, label: 'Created at', type: 'datetime' },
     read_only: true
-  },
+  }
 ];
 
 const job = {
@@ -635,15 +634,14 @@ const job = {
           },
           {
             action: 'delete',
-            icon: 'fa-times-circle',
+            icon: 'fa-trash',
             title: 'Delete',
-            text_color: '#f32700',
             type: 'button',
             field: 'id'
           }
         ],
         label: 'Actions',
-        title: null,
+        title: null
       }
     ],
     list: 'favouritelist',
@@ -668,7 +666,7 @@ const formadd = [
     },
     collapsed: false,
     type: 'related',
-    key: 'candidate_contact',
+    key: 'candidate_contact'
   },
   {
     endpoint: '/ecore/api/v2/core/companies/',
@@ -685,7 +683,7 @@ const formadd = [
     default: ['{jobsite.regular_company.id}', '{job.customer_company.id}'],
     collapsed: false,
     type: 'related',
-    key: 'company',
+    key: 'company'
   },
   {
     endpoint: '/ecore/api/v2/hr/jobsites/',
@@ -705,7 +703,7 @@ const formadd = [
     default: '{job.jobsite.id}',
     collapsed: false,
     type: 'related',
-    key: 'jobsite',
+    key: 'jobsite'
   },
   {
     endpoint: '/ecore/api/v2/hr/jobs/',
@@ -724,7 +722,7 @@ const formadd = [
     },
     collapsed: false,
     type: 'related',
-    key: 'job',
+    key: 'job'
   },
   {
     endpoint: '/ecore/api/v2/core/companycontacts/',
@@ -732,15 +730,15 @@ const formadd = [
     templateOptions: {
       label: 'Recruitment Agent',
       values: ['__str__'],
-      type: 'related',
+      type: 'related'
     },
     default: 'session.contact.contact_id',
     query: {
       master_company: 'current'
     },
     type: 'related',
-    key: 'company_contact',
-  },
+    key: 'company_contact'
+  }
 ];
 
 export const metadata = {

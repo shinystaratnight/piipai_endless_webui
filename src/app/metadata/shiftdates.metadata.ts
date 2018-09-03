@@ -48,19 +48,31 @@ const form = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/hr/shifts/',
-    metadata_query: { editable_type: 'shift_date' },
-    delay: true,
-    templateOptions: {
-      label: 'Shifts',
-      type: 'list',
-      add_label: 'Add',
-      text: 'Shifts'
+    prefilled: {
+      date: '{id}'
     },
-    collapsed: false,
-    prefilled: { date: '{id}' },
-    type: 'list',
-    query: { date: '{id}' }
+    list: true,
+    send: false,
+    key: 'shifts',
+    endpoint: '/ecore/api/v2/hr/shifts/',
+    delay: 'asdasdasd',
+    templateOptions: {
+      add_label: 'Add',
+      label: 'Shifts',
+      type: 'related',
+      text: 'Shifts',
+      add: true,
+      edit: true
+    },
+    metadata_query: {
+      editable_type: 'shift_date'
+    },
+    showIf: ['shift_date'],
+    defaultData: {
+      date__shift_date: '{shift_date}',
+      job: '{job.id}'
+    },
+    type: 'related'
   }
 ];
 
@@ -87,7 +99,7 @@ const formadd = [
     type: 'datepicker',
     templateOptions: { required: true, label: 'Shift date', type: 'date' },
     read_only: false
-  },
+  }
 ];
 
 const jobAdd = [
@@ -111,15 +123,20 @@ const jobAdd = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['__str__', 'upper_rate_limit', 'lower_rate_limit', 'default_rate'],
+      values: [
+        '__str__',
+        'upper_rate_limit',
+        'lower_rate_limit',
+        'default_rate'
+      ],
       type: 'related',
       edit: true
     },
     type: 'related',
-    key: 'skill',
+    key: 'skill'
   },
   {
-    hide: true,
+    // hide: true,
     many: false,
     key: 'job',
     endpoint: '/ecore/api/v2/hr/jobs/',
@@ -169,7 +186,7 @@ const jobAdd = [
       date__shift_date: '{shift_date}',
       job: '{job.id}'
     },
-    type: 'related',
+    type: 'related'
   }
 ];
 

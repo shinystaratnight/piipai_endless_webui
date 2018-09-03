@@ -1,4 +1,8 @@
-import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+import {
+  yesterdayFormatDate,
+  todayFormatDate,
+  tomorrowFormatDate
+} from './utils';
 
 const list = {
   list: {
@@ -141,7 +145,7 @@ const list = {
         title: null,
         label: 'State',
         delim: null
-      },
+      }
     ],
     pagination_label: 'Job',
     search_enabled: true,
@@ -151,18 +155,15 @@ const list = {
         list: [
           {
             label: 'Yesterday',
-            query:
-              `shift_dates__shift_date_0=${yesterdayFormatDate}&shift_dates__shift_date_1=${yesterdayFormatDate}` //tslint:disable-line
+            query: `shift_dates__shift_date_0=${yesterdayFormatDate}&shift_dates__shift_date_1=${yesterdayFormatDate}` //tslint:disable-line
           },
           {
             label: 'Today',
-            query:
-              `shift_dates__shift_date_0=${todayFormatDate}&shift_dates__shift_date_1=${todayFormatDate}` //tslint:disable-line
+            query: `shift_dates__shift_date_0=${todayFormatDate}&shift_dates__shift_date_1=${todayFormatDate}` //tslint:disable-line
           },
           {
             label: 'Tomorrow',
-            query:
-              `shift_dates__shift_date_0=${tomorrowFormatDate}&shift_dates__shift_date_1=${tomorrowFormatDate}` //tslint:disable-line
+            query: `shift_dates__shift_date_0=${tomorrowFormatDate}&shift_dates__shift_date_1=${tomorrowFormatDate}` //tslint:disable-line
           }
         ],
         key: 'shift_dates.shift_date',
@@ -207,7 +208,8 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
+          endpoint:
+            '/ecore/api/v2/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'provider_representative'
@@ -217,7 +219,8 @@ const list = {
         label: 'State',
         data: {
           value: ['name_after_activation', 'name_before_activation'],
-          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=hr.job', //tslint:disable-line
+          endpoint:
+            '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=hr.job', //tslint:disable-line
           key: 'number'
         },
         query: 'active_states',
@@ -679,11 +682,11 @@ const form = [
   {
     values: {
       status: {
-        field: 'active_states',
+        field: 'active_states'
       },
       job: 'position',
       jobsite: 'jobsite',
-      tags: 'tags',
+      tags: 'tags'
     },
     type: 'info',
     key: 'id'
@@ -749,9 +752,9 @@ const form = [
                     templateOptions: {
                       label: 'Candidate rate default',
                       type: 'number',
-                      text: '${hourly_rate_default}/h',
+                      text: '${hourly_rate_default}/h'
                     }
-                  },
+                  }
                 ],
                 width: 0.33
               },
@@ -796,7 +799,7 @@ const form = [
                     type: 'related',
                     query: {
                       jobsites: '{jobsite.id}'
-                    },
+                    }
                   },
                   {
                     key: 'provider_signed_at',
@@ -870,14 +873,13 @@ const form = [
                       company: '{provider_company.id}'
                     },
                     many: false
-                  },
+                  }
                 ],
                 width: 0.33
               }
             ]
           }
-
-        ],
+        ]
       },
       {
         endpoint: '/ecore/api/v2/hr/shifts/',
@@ -932,7 +934,7 @@ const form = [
             type: 'timeline',
             query: {
               model: 'hr.job',
-              object_id: ['{id.id}', '{id}'],
+              object_id: ['{id.id}', '{id}']
             },
             templateOptions: {
               label: 'States Timeline',
@@ -977,15 +979,15 @@ const form = [
         prefilled: {
           job: '{id}',
           jobsite: '{jobsite.id}',
-          company: '{customer_company.id}',
+          company: '{customer_company.id}'
         },
         type: 'list',
         query: {
-          job: '{id.id}'
+          job: '{id}'
         },
         help: 'Here you can see the favorite candidates for client'
       }
-    ],
+    ]
   },
   {
     endpoint: '/ecore/api/v2/core/tags/',
@@ -995,7 +997,7 @@ const form = [
     templateOptions: {
       label: 'Tags',
       values: ['__str__', 'id'],
-      type: 'related',
+      type: 'related'
     },
     type: 'related',
     many: true
@@ -1017,7 +1019,7 @@ const form = [
     query: {
       company: '{customer_company.id}',
       primary_contact: '{customer_representative.id}'
-    },
+    }
   },
   {
     endpoint: '/ecore/api/v2/skills/skills/',
@@ -1059,7 +1061,7 @@ const formadd = [
               type: 'related',
               edit: true
             },
-            type: 'related',
+            type: 'related'
           },
           {
             list: false,
@@ -1123,7 +1125,7 @@ const formadd = [
             type: 'related',
             query: {
               jobsites: '{jobsite.id}'
-            },
+            }
           },
           {
             endpoint: '/ecore/api/v2/hr/jobsites/',
@@ -1141,7 +1143,7 @@ const formadd = [
             query: {
               company: '{customer_company.id}',
               primary_contact: '{customer_representative.id}'
-            },
+            }
           },
           {
             key: 'provider_signed_at',
@@ -1168,7 +1170,12 @@ const formadd = [
               label: 'Position',
               add: false,
               delete: false,
-              values: ['__str__', 'upper_rate_limit', 'lower_rate_limit', 'default_rate'],
+              values: [
+                '__str__',
+                'upper_rate_limit',
+                'lower_rate_limit',
+                'default_rate'
+              ],
               type: 'related',
               edit: true
             },
@@ -1224,7 +1231,7 @@ const formadd = [
             templateOptions: {
               label: 'Candidate rate default',
               type: 'number',
-              text: '${hourly_rate_default}/h',
+              text: '${hourly_rate_default}/h'
             }
           },
           {
@@ -1241,7 +1248,7 @@ const formadd = [
         ]
       }
     ]
-  },
+  }
 ];
 
 export const metadata = {
