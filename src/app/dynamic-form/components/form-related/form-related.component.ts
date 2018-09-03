@@ -833,6 +833,7 @@ export class FormRelatedComponent extends BasicElementComponent
           ? object.allData.__str__
           : object.__str__;
         this.modalData.id = object[this.param];
+        this.modalData.needData = true;
       } else {
         this.modalData.title =
           this.config.templateOptions.editLabel || this.displayValue;
