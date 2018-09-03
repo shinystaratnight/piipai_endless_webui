@@ -173,6 +173,16 @@ const form = [
                     read_only: false
                   },
                   {
+                    key: 'carrier_list_reserve',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Carrier list reserve',
+                      type: 'number'
+                    },
+                    read_only: false
+                  },
+                  {
                     list: false,
                     endpoint: '/ecore/api/v2/skills/employmentclassifications/',
                     read_only: false,
@@ -188,16 +198,6 @@ const form = [
                     type: 'related',
                     key: 'employment_classification',
                     many: false
-                  },
-                  {
-                    key: 'carrier_list_reserve',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Carrier list reserve',
-                      type: 'number'
-                    },
-                    read_only: false
                   }
                 ],
                 width: 0.34
