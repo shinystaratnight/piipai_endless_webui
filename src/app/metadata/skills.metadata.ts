@@ -9,7 +9,7 @@ const list = {
         sort: true,
         content: [
           {
-            field: 'name',
+            field: 'name.name',
             type: 'text'
           }
         ],
@@ -24,7 +24,7 @@ const list = {
         content: [
           {
             field: 'active',
-            type: 'text'
+            type: 'checkbox'
           }
         ],
         name: 'active',
@@ -112,24 +112,36 @@ const form = [
   {
     values: {
       available: 'active',
-      skill_title: 'name',
+      company: 'name.industry',
+      skill_title: 'name.name',
       created_at: 'created_at',
-      carrier_reserve: 'carrier_list_reserve',
       updated_at: 'updated_at'
     },
     type: 'info',
     key: 'id'
   },
   {
-    key: 'carrier_list_reserve',
+    type: 'related',
+    hide: true,
+    read_only: true,
+    endpoint: '/ecore/api/v2/pricing/industries/',
+    key: 'name.industry',
+    templateOptions: {
+      label: 'Industries',
+      type: 'related',
+      param: 'id',
+      values: ['__str__']
+    }
+  },
+  {
     type: 'input',
     hide: true,
+    read_only: true,
+    key: 'name.name',
     templateOptions: {
-      required: false,
-      label: 'Carrier list reserve',
-      type: 'number'
-    },
-    read_only: false
+      label: 'Skill name',
+      type: 'text'
+    }
   },
   {
     type: 'tabs',
@@ -157,6 +169,16 @@ const form = [
                       type: 'text',
                       description:
                         'Abbreviation, for use by staff reports and dashboards'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'carrier_list_reserve',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Carrier list reserve',
+                      type: 'number'
                     },
                     read_only: false
                   },

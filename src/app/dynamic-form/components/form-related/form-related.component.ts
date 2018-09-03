@@ -853,6 +853,11 @@ export class FormRelatedComponent extends BasicElementComponent
         }
         this.modalData.id =
           !this.config.editEndpoint && this.group.get(this.key).value;
+
+        if (this.modalData.id instanceof Object) {
+          this.modalData.id = this.modalData.id.id;
+        }
+
         this.modalData.needData = this.config.editEndpoint ? false : true;
         this.modalData.edit = this.config.editEndpoint && true;
       }
