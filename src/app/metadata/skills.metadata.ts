@@ -124,6 +124,7 @@ const form = [
     type: 'related',
     hide: true,
     read_only: true,
+    send: false,
     endpoint: '/ecore/api/v2/pricing/industries/',
     key: 'name.industry',
     templateOptions: {
@@ -137,7 +138,8 @@ const form = [
     type: 'input',
     hide: true,
     read_only: true,
-    key: 'name.name',
+    send: false,
+    key: 'name',
     templateOptions: {
       label: 'Skill name',
       type: 'text'
@@ -334,174 +336,31 @@ const form = [
 
 const formadd = [
   {
-    values: {
-      available: 'active',
-      skill_title: 'name',
-      created_at: 'created_at',
-      carrier_reserve: 'carrier_list_reserve',
-      updated_at: 'updated_at'
-    },
-    type: 'info',
-    key: 'id'
-  },
-  {
-    type: 'tabs',
-    children: [
-      {
-        main: true,
-        name: 'Skill Info',
-        type: 'group',
-        label: 'Skill information',
-        children: [
-          {
-            type: 'row',
-            children: [
-              {
-                label: 'Additional Info',
-                type: 'group',
-                children: [
-                  {
-                    key: 'short_name',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Short Name',
-                      max: 15,
-                      type: 'text',
-                      description:
-                        'Abbreviation, for use by staff reports and dashboards'
-                    },
-                    read_only: false
-                  },
-                  {
-                    list: false,
-                    endpoint: '/ecore/api/v2/skills/employmentclassifications/',
-                    read_only: false,
-                    templateOptions: {
-                      label: 'Employment classification',
-                      add: true,
-                      delete: false,
-                      values: ['__str__'],
-                      type: 'related',
-                      edit: true
-                    },
-                    collapsed: false,
-                    type: 'related',
-                    key: 'employment_classification',
-                    many: false
-                  }
-                ],
-                width: 0.34
-              },
-              {
-                label: 'Skill Rate',
-                type: 'group',
-                children: [
-                  {
-                    key: 'lower_rate_limit',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Lower Rate Limit',
-                      type: 'number',
-                      display: '${field}/h'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'default_rate',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Default Rate',
-                      type: 'number',
-                      display: '${field}/h'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'upper_rate_limit',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Upper Rate Limit',
-                      type: 'number',
-                      display: '${field}/h'
-                    },
-                    read_only: false
-                  }
-                ],
-                width: 0.33
-              },
-              {
-                label: 'Price List Rate',
-                type: 'group',
-                children: [
-                  {
-                    key: 'price_list_lower_rate_limit',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Lower Rate Limit',
-                      type: 'number',
-                      display: '${field}/h'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'price_list_default_rate',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Default Rate',
-                      type: 'number',
-                      display: '${field}/h'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'price_list_upper_rate_limit',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Upper Rate Limit',
-                      type: 'number',
-                      display: '${field}/h'
-                    },
-                    read_only: false
-                  }
-                ],
-                width: 0.33
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    key: 'active',
-    read_only: false,
+    type: 'related',
+    send: false,
+    endpoint: '/ecore/api/v2/pricing/industries/',
+    key: 'industry',
     templateOptions: {
-      required: false,
-      label: 'Active',
-      type: 'checkbox'
-    },
-    hide: true,
-    default: false,
-    type: 'checkbox'
+      label: 'Industries',
+      type: 'related',
+      param: 'id',
+      values: ['__str__']
+    }
   },
   {
+    type: 'related',
+    endpoint: '/ecore/api/v2/skills/skillnames/',
     key: 'name',
-    type: 'input',
-    hide: true,
+    showIf: ['industry.id'],
     templateOptions: {
-      required: true,
-      label: 'Skill Name',
-      max: 63,
-      type: 'text'
+      label: 'Skill',
+      type: 'related',
+      param: 'id',
+      values: ['__str__']
     },
-    read_only: false
+    query: {
+      industry: '{name.industry.id}'
+    }
   }
 ];
 
