@@ -9,32 +9,28 @@ import { UserService } from './user.service';
 
 @Injectable()
 export class SiteSettingsService {
-
   public endpoint: string;
   public siteEndpoint: string;
   public settings: any;
   public authorized: boolean;
 
-  constructor(
-    private http: Http,
-    private userService: UserService
-  ) {
+  constructor(private http: Http, private userService: UserService) {
     this.endpoint = '/ecore/api/v2/company_settings/';
     this.siteEndpoint = '/ecore/api/v2/company_settings/site/';
   }
 
   public resolve() {
-    return this.userService.getUserData()
-      .mergeMap(
-        (user: any) => {
-          this.authorized = true;
+    return this.userService
+      .getUserData()
+      .mergeMap((user: any) => {
+        this.authorized = true;
 
-          if (user.data.contact.contact_type === 'manager') {
-            return this.getSettings(this.endpoint);
-          } else {
-            return this.getSettings(this.siteEndpoint);
-          }
-        })
+        if (user.data.contact.contact_type === 'manager') {
+          return this.getSettings(this.endpoint);
+        } else {
+          return this.getSettings(this.siteEndpoint);
+        }
+      })
       .catch((err: any) => {
         this.authorized = false;
 
@@ -44,7 +40,8 @@ export class SiteSettingsService {
 
   private getSettings(endpoint: string): Observable<any> {
     if (!this.settings || !this.authorized) {
-      return this.http.get(endpoint)
+      return this.http
+        .get(endpoint)
         .map((res: Response) => {
           const settings = res.json();
 
@@ -71,20 +68,23 @@ export class SiteSettingsService {
   }
 
   private updateBrowserStyles(settings: any) {
-    document.body.parentElement.classList.add(`${this.getTheme(settings)}-theme`);
+    document.body.parentElement.classList.add(
+      `${this.getTheme(settings)}-theme`
+    );
     document.body.style.fontFamily = `${this.getFont(settings)}, sans-serif`;
   }
 
   private getFont(settings: any): string {
-    return settings.font
-      || settings.company_settings
-      && settings.company_settings.font;
+    return (
+      settings.font ||
+      (settings.company_settings && settings.company_settings.font)
+    );
   }
 
   private getTheme(settings: any): string {
-    return settings.color_scheme
-      || settings.company_settings
-      && settings.company_settings.color_scheme;
+    return (
+      settings.color_scheme ||
+      (settings.company_settings && settings.company_settings.color_scheme)
+    );
   }
-
 }

@@ -75,6 +75,8 @@
     <p class="job" *ngIf="!titlePath && job">{{job.__str__}}</p>
     <p class="jobsite" *ngIf="!titlePath && jobsite && viewMode">{{jobsite.__str__}}</p>
 
+    <h5 class="form-info-title" *ngIf="!titlePath && skill_title">{{skill_title}}</h5>
+
     <h5 class="form-info-title" *ngIf="config && viewMode">
 
       <span *ngIf="!this.averageScore && this.averageScore !== 0">
@@ -86,7 +88,6 @@
         </span>
 
         <span *ngIf="!titlePath && title">{{title}}</span>
-        <span *ngIf="!titlePath && skill_title">{{skill_title}}</span>
         <info [description]="description"></info>
       </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
@@ -114,11 +115,6 @@
         </div>
       </ng-container>
     </p>
-
-    <ng-container formElement *ngIf="config && config.metadata['skill_title'] && !viewMode && !config.metadata['title_title']"
-      [config]="getConfig('skill_title')"
-      [group]="group">
-    </ng-container>
 
     <ng-container formElement *ngIf="config && config.metadata['jobsite'] && !viewMode"
       [config]="getConfig('jobsite')"
