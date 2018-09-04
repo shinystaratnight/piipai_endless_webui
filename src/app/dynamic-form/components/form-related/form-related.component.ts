@@ -1168,7 +1168,11 @@ export class FormRelatedComponent extends BasicElementComponent
       keys.forEach((el) => {
         query +=
           typeof queries[el] === 'string'
-            ? `${el}=${format.format(queries[el], this.formData)}&`
+            ? queries[el] === 'currentCompany'
+              ? `${el}=${
+                  this.settingsService.settings.company_settings.company
+                }&`
+              : `${el}=${format.format(queries[el], this.formData)}&`
             : `${el}=${queries[el]}&`;
       });
       query = query.slice(0, query.length - 1);
