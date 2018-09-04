@@ -37,7 +37,7 @@ export class WorkflowService {
   public getNodesOfCompany(workflowId: string, companyId: string) {
     const headers = this.updateHeaders();
 
-    const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true&limit=-1&only_parent=2&ordering=order`; //tslint:disable-line
+    const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true&limit=-1&only_parent=2&ordering=order,workflow_node.number`; //tslint:disable-line
 
     return this.http.get(this.companyWorkflowNodeEndpoint + query, { headers })
       .map((res: any) => res && res.json())
