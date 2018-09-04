@@ -113,7 +113,7 @@ const form = [
     values: {
       available: 'active',
       company: 'name.industry',
-      skill_title: 'name.name',
+      skill_title: 'name.__str__',
       created_at: 'created_at',
       updated_at: 'updated_at'
     },
@@ -122,9 +122,10 @@ const form = [
   },
   {
     type: 'related',
+    send: false,
+    saveField: false,
     hide: true,
     read_only: true,
-    send: false,
     endpoint: '/ecore/api/v2/pricing/industries/',
     key: 'name.industry',
     templateOptions: {
@@ -135,10 +136,9 @@ const form = [
     }
   },
   {
-    type: 'input',
+    type: 'related',
     hide: true,
     read_only: true,
-    send: false,
     key: 'name',
     templateOptions: {
       label: 'Skill name',
@@ -361,7 +361,32 @@ const formadd = [
     query: {
       industry: '{name.industry.id}'
     }
-  }
+  },
+  {
+    key: 'active',
+    read_only: true,
+    templateOptions: {
+      required: false,
+      label: 'Active',
+      type: 'checkbox'
+    },
+    hide: true,
+    value: false,
+    default: false,
+    type: 'checkbox'
+  },
+  {
+    endpoint: '/ecore/api/v2/core/companies/',
+    read_only: true,
+    hide: true,
+    templateOptions: {
+      label: 'Company',
+      values: ['__str__'],
+    },
+    type: 'related',
+    default: 'currentCompany',
+    key: 'company',
+  },
 ];
 
 export const metadata = {

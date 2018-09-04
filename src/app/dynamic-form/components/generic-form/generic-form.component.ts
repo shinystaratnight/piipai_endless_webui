@@ -323,7 +323,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
           ];
 
           if (element) {
-            element.saveField = true;
+            element.saveField = element.saveField !== false;
             infoElement.metadata[el] = Object.assign(
               {},
               element,
