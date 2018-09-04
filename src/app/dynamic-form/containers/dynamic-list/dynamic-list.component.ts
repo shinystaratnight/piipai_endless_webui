@@ -382,21 +382,22 @@ export class DynamicListComponent
     if (groups) {
       groups.forEach((groupName: string) => {
         const group = {};
-        body.forEach((row) => {
+        body.forEach((row, index) => {
           if (row) {
             row.content.forEach((column) => {
               if (column) {
                 if (column.name === groupName) {
-                  // console.log(column);
                   column.content.forEach((item) => {
                     if (item) {
                       if (group[item.value]) {
-                        item.value = undefined;
-                      } else {
-                        group[item.value] = true;
-                      }
+                        this.addRowToGroup(row, group[item.value]);
 
-                      console.log(item.value);
+                        item.value = undefined;
+
+                        row.hide = true;
+                      } else {
+                        group[item.value] = row;
+                      }
                     }
                   });
                 }
@@ -406,6 +407,16 @@ export class DynamicListComponent
         });
       });
     }
+  }
+
+  public addRowToGroup(row, target) {
+    target.content.forEach((column, i) => {
+      if (column) {
+        if (column.name !== 'actions') {
+          column.content.push(...row.content[i].content);
+        }
+      }
+    });
   }
 
   public parseInnerTables(innerTables) {

@@ -45,7 +45,7 @@ const form = [
     key: 'shift_date',
     type: 'datepicker',
     templateOptions: { required: true, label: 'Shift date', type: 'date' },
-    read_only: false
+    read_only: true
   },
   {
     prefilled: {
@@ -136,7 +136,6 @@ const jobAdd = [
     key: 'skill'
   },
   {
-    // hide: true,
     many: false,
     key: 'job',
     endpoint: '/ecore/api/v2/hr/jobs/',
