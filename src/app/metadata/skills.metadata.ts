@@ -359,7 +359,8 @@ const formadd = [
       values: ['__str__']
     },
     query: {
-      industry: '{name.industry.id}'
+      industry: '{industry.id}',
+      exclude_company: 'currentCompany'
     }
   },
   {
