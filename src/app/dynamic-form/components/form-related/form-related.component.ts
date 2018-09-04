@@ -414,7 +414,6 @@ export class FormRelatedComponent extends BasicElementComponent
                       }
                     });
                   }
-                  console.log(id);
                   if (id && id !== this.group.get(this.key).value) {
                     this.getOptions.call(this, '', 0, false, this.setValue, id);
                     if (this.config.read_only) {

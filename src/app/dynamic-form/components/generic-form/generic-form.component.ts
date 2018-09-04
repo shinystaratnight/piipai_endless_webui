@@ -315,12 +315,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
           const key = value.replace('.__str__', '');
           const element = getElementFromMetadata(metadata, key);
 
-          const fieldsWithLabel = [
-            'carrier_list_reserve',
-            'website',
-            'name',
-            'jobsite'
-          ];
+          const fieldsWithLabel = ['carrier_list_reserve', 'website', 'name'];
 
           if (element) {
             element.saveField = element.saveField !== false;
@@ -413,7 +408,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public parseCheckObject(data) {
     if (
       this.endpoint === '/ecore/api/v2/core/companycontacts/' ||
-      this.endpoint === '/ecore/api/v2/candidate/candidatecontacts/'
+      this.endpoint === '/ecore/api/v2/candidate/candidatecontacts/' ||
+      this.endpoint === '/ecore/api/v2/hr/jobs/'
     ) {
       const keys = Object.keys(this.checkObject);
       if (keys.length) {
@@ -459,7 +455,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
                         config,
                         '/core/companycontacts/',
                         'company_contact'
-                      ) //tslint:disable-line
+                      )
                     };
                   } else if (
                     this.endpoint ===
@@ -471,6 +467,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
                         config,
                         '/candidate/candidatecontacts/'
                       )
+                    };
+                  } else if (this.endpoint === '/ecore/api/v2/hr/jobs/') {
+                    errors = {
+                      [key]: this.generateCustomError(res, config, '/hr/jobs/')
                     };
                   }
                   this.updateErrors(this.errors, errors, this.response);
@@ -502,7 +502,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       field.error,
       object.__str__,
       `${this.path || path}${object.id}/change`,
-      { ...object, endpoint: this.endpoint }
+      { ...object, endpoint: this.endpoint + object.id + '/' }
     ];
   }
 

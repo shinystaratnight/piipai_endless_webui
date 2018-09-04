@@ -1181,6 +1181,14 @@ const formadd = [
               type: 'related',
               edit: true
             },
+            checkObject: {
+              endpoint: '/ecore/api/v2/hr/jobs/',
+              error: 'Active Job for Jobsite and Position already exist!',
+              query: {
+                jobsite: '{jobsite.id}',
+                position: '{position.id}',
+              }
+            },
             collapsed: false,
             type: 'related',
             query: {
