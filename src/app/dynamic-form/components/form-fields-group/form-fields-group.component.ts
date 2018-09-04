@@ -16,16 +16,15 @@ interface FormFieldsGroup {
   templateUrl: 'form-fields-group.component.html',
   styleUrls: ['./form-fields-group.component.scss']
 })
-
 export class FormFieldsGroupComponent implements OnInit {
-
   @ViewChild('modal')
   public modal: any;
 
   @ViewChild('modalActiveFields')
   public modalActiveFields: any;
 
-  public formFieldGroupsEndpoint: string = '/ecore/api/v2/core/formfieldgroups/';
+  public formFieldGroupsEndpoint: string =
+    '/ecore/api/v2/core/formfieldgroups/';
   public formModelFieldEndpoint: string = '/ecore/api/v2/core/modelformfields/';
   public groups: any[];
   public fields: any;
@@ -51,7 +50,7 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public ngOnInit() {
     if (this.config.fields && this.config.fields.length) {
-      if (this.config.value) {
+      if (this.config.value && this.config.value.length) {
         let value = this.config.value;
         this.groupId = value[0].id;
         this.parseValueFromApi(value[0], this.config.fields);
@@ -142,7 +141,7 @@ export class FormFieldsGroupComponent implements OnInit {
         action: 'add',
         data: {
           value: this.config.id,
-          hide : true,
+          hide: true,
           default: 0
         }
       }
@@ -157,12 +156,14 @@ export class FormFieldsGroupComponent implements OnInit {
       name: this.config.id,
       position: 0
     };
-    this.genericFormService.submitForm(this.formFieldGroupsEndpoint, body).subscribe(
-      (res: any) => {
-        this.groupId = res.id;
-      },
-      (err: any) => this.error = err
-    );
+    this.genericFormService
+      .submitForm(this.formFieldGroupsEndpoint, body)
+      .subscribe(
+        (res: any) => {
+          this.groupId = res.id;
+        },
+        (err: any) => (this.error = err)
+      );
   }
 
   public addCollapseProperty(list): void {
@@ -214,42 +215,46 @@ export class FormFieldsGroupComponent implements OnInit {
           value: id,
           hide: true
         }
-      },
+      }
     };
     this.modalRef = this.modalService.open(this.modal);
   }
 
   public toggleActiveState(field): void {
     if (field.id) {
-      this.genericFormService.delete(this.formModelFieldEndpoint, field.id).subscribe(
-        (res: any) => {
-          delete field.id;
-          delete field.position;
-          this.activeFields = this.getActiveFields(this.groups);
-          this.activeFields.sort((p, n) => {
-            return p.position > n.position ? 1 : -1;
-          });
-        },
-        (err: any) => this.error = err
-      );
+      this.genericFormService
+        .delete(this.formModelFieldEndpoint, field.id)
+        .subscribe(
+          (res: any) => {
+            delete field.id;
+            delete field.position;
+            this.activeFields = this.getActiveFields(this.groups);
+            this.activeFields.sort((p, n) => {
+              return p.position > n.position ? 1 : -1;
+            });
+          },
+          (err: any) => (this.error = err)
+        );
     } else {
-      let body = Object.assign({group: this.groupId}, field);
+      let body = Object.assign({ group: this.groupId }, field);
       body.position = this.lastPosition + 1;
       delete body.hidden;
       delete body.isCollapsed;
       delete body.model_fields;
-      this.genericFormService.submitForm(this.formModelFieldEndpoint, body).subscribe(
-        (res: any) => {
-          field.id = res.id;
-          field.position = res.position;
-          this.lastPosition = res.position;
-          this.activeFields = this.getActiveFields(this.groups);
-          this.activeFields.sort((p, n) => {
-            return p.position > n.position ? 1 : -1;
-          });
-        },
-        (err: any) => this.error = err
-      );
+      this.genericFormService
+        .submitForm(this.formModelFieldEndpoint, body)
+        .subscribe(
+          (res: any) => {
+            field.id = res.id;
+            field.position = res.position;
+            this.lastPosition = res.position;
+            this.activeFields = this.getActiveFields(this.groups);
+            this.activeFields.sort((p, n) => {
+              return p.position > n.position ? 1 : -1;
+            });
+          },
+          (err: any) => (this.error = err)
+        );
     }
   }
 
@@ -270,7 +275,7 @@ export class FormFieldsGroupComponent implements OnInit {
   public toggleRequireProperty(field): void {
     if (!field.required) {
       if (field.id) {
-        let body = Object.assign({group: this.groupId}, field);
+        let body = Object.assign({ group: this.groupId }, field);
         delete body.hidden;
         delete body.isCollapsed;
         delete body.model_fields;
@@ -282,7 +287,7 @@ export class FormFieldsGroupComponent implements OnInit {
             (res: any) => {
               field.setRequired = res.required;
             },
-            (err: any) => this.error = err
+            (err: any) => (this.error = err)
           );
       } else {
         field.setRequired = !field.setRequired;
@@ -297,8 +302,10 @@ export class FormFieldsGroupComponent implements OnInit {
     this.modalData.edit = true;
     this.modalData.title = object.__str__;
     this.modalData.container = container;
-    this.modalData.endpoint = type === 'group' ?
-      this.formFieldGroupsEndpoint : this.fields[object.field_type].endpoint;
+    this.modalData.endpoint =
+      type === 'group'
+        ? this.formFieldGroupsEndpoint
+        : this.fields[object.field_type].endpoint;
     this.modalData.id = object.id;
     if (type === 'group') {
       this.modalData.data = {
@@ -311,7 +318,7 @@ export class FormFieldsGroupComponent implements OnInit {
         form: {
           action: 'add',
           data: {
-            hide : true
+            hide: true
           }
         }
       };
@@ -322,15 +329,17 @@ export class FormFieldsGroupComponent implements OnInit {
           data: {
             hide: true
           }
-        },
+        }
       };
     }
     this.modalRef = this.modalService.open(this.modal);
   }
 
   public delete(object, container: any[], type) {
-    let endpoint = type === 'group' ?
-      this.formFieldGroupsEndpoint : this.fields[object.field_type].endpoint;
+    let endpoint =
+      type === 'group'
+        ? this.formFieldGroupsEndpoint
+        : this.fields[object.field_type].endpoint;
     let id = object.id;
     this.genericFormService.delete(endpoint, id).subscribe(
       (res: any) => {
@@ -340,7 +349,7 @@ export class FormFieldsGroupComponent implements OnInit {
           }
         });
       },
-      (err: any) => this.error = err
+      (err: any) => (this.error = err)
     );
   }
 
@@ -363,7 +372,11 @@ export class FormFieldsGroupComponent implements OnInit {
       container.sort((p, n) => {
         return p.position > n.position ? 1 : -1;
       });
-    } else if (e.type === 'blur' && this.choosenType === 'modelfield' && e.el.key === 'name') {
+    } else if (
+      e.type === 'blur' &&
+      this.choosenType === 'modelfield' &&
+      e.el.key === 'name'
+    ) {
       let element = this.config.fields.filter((el) => el.name === e.value);
       this.modalData.data = Object.assign({}, this.modalData.data);
       if (element && element[0]) {
@@ -456,19 +469,20 @@ export class FormFieldsGroupComponent implements OnInit {
     let nextPosition = type === 'up' ? item.position - 1 : item.position + 1;
     let element = this.getItemByPosition(this.activeFields, nextPosition);
     item.position = nextPosition;
-    let body = Object.assign({group: this.groupId}, item);
+    let body = Object.assign({ group: this.groupId }, item);
     delete body.hidden;
     delete body.isCollapsed;
     delete body.model_fields;
     this.genericFormService
       .editForm(`${this.formModelFieldEndpoint}${item.id}/`, body)
       .subscribe((res: any) => {
-        let newBody = Object.assign({group: this.groupId}, element);
+        let newBody = Object.assign({ group: this.groupId }, element);
         newBody.position = currentPosition;
         delete newBody.hidden;
         delete newBody.isCollapsed;
         delete newBody.model_fields;
-        this.genericFormService.editForm(`${this.formModelFieldEndpoint}${element.id}/`, newBody)
+        this.genericFormService
+          .editForm(`${this.formModelFieldEndpoint}${element.id}/`, newBody)
           .subscribe((response: any) => {
             element.position = response.position;
             this.activeFields.sort((p, n) => {
@@ -487,5 +501,4 @@ export class FormFieldsGroupComponent implements OnInit {
     });
     return element;
   }
-
 }
