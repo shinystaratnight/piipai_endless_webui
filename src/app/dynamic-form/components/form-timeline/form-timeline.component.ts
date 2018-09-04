@@ -172,7 +172,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       }
 
       this.modalData.state = state;
-      this.stateData = this.setDataForState(state);
+      this.stateData = this.setDataForState(state, !this.modalData.tests && !this.modalData.substates);
       this.modalRef = this.modalService.open(this.stateModal);
     }
   }
@@ -187,7 +187,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       }, (err: any) => this.loading = false);
   }
 
-  public setDataForState(state): {} {
+  public setDataForState(state, hideScore) {
     let fields = ['object_id', 'state', 'active'];
     let result = {};
     fields.forEach((el) => {
@@ -202,6 +202,16 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         }
       };
     });
+
+    result['score'] = {
+      action: 'add',
+      data: {
+        editForm: true,
+        hide: hideScore,
+        send: false,
+      }
+    };
+
     return result;
   }
 
