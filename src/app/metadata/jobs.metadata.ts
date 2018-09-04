@@ -1004,7 +1004,7 @@ const form = [
   },
   {
     endpoint: '/ecore/api/v2/hr/jobsites/',
-    read_only: false,
+    read_only: true,
     key: 'jobsite',
     hide: true,
     templateOptions: {

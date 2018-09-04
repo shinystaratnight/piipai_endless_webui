@@ -9,7 +9,7 @@ import {
   OnDestroy,
   AfterContentChecked,
   AfterViewInit,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -25,51 +25,87 @@ import { FormatString } from '../../../helpers/format';
   selector: 'dynamic-list',
   templateUrl: 'dynamic-list.component.html'
 })
+export class DynamicListComponent
+  implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
+  @Input()
+  public config: any;
+  @Input()
+  public data: any;
+  @Input()
+  public first: boolean;
+  @Input()
+  public id: number;
+  @Input()
+  public active: boolean;
+  @Input()
+  public limit: number;
+  @Input()
+  public offset: number;
+  @Input()
+  public sorted: any;
+  @Input()
+  public innerTables: any;
+  @Input()
+  public update: any;
+  @Input()
+  public minimized: boolean;
+  @Input()
+  public maximize: boolean;
+  @Input()
+  public endpoint: string;
+  @Input()
+  public parentEndpoint: string;
+  @Input()
+  public actionData: any;
+  @Input()
+  public supportData: any;
+  @Input()
+  public responseField: string;
+  @Input()
+  public paginated: string;
+  @Input()
+  public actions: boolean;
+  @Input()
+  public delay: boolean;
+  @Input()
+  public allowPermissions: string[];
+  @Input()
+  public metadataQuery: string;
+  @Input()
+  public addMetadataQuery: string;
+  @Input()
+  public editEndpoint: string;
+  @Input()
+  public addData: any;
 
-export class DynamicListComponent implements
-  OnInit, OnChanges, OnDestroy, AfterContentChecked {
+  @Input()
+  public refresh: boolean = false;
+  @Input()
+  public inForm: boolean = false;
 
-  @Input() public config: any;
-  @Input() public data: any;
-  @Input() public first: boolean;
-  @Input() public id: number;
-  @Input() public active: boolean;
-  @Input() public limit: number;
-  @Input() public offset: number;
-  @Input() public sorted: any;
-  @Input() public innerTables: any;
-  @Input() public update: any;
-  @Input() public minimized: boolean;
-  @Input() public maximize: boolean;
-  @Input() public endpoint: string;
-  @Input() public parentEndpoint: string;
-  @Input() public actionData: any;
-  @Input() public supportData: any;
-  @Input() public responseField: string;
-  @Input() public paginated: string;
-  @Input() public actions: boolean;
-  @Input() public delay: boolean;
-  @Input() public allowPermissions: string[];
-  @Input() public metadataQuery: string;
-  @Input() public addMetadataQuery: string;
-  @Input() public editEndpoint: string;
-  @Input() public addData: any;
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public list: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public checkedObjects: EventEmitter<string[]> = new EventEmitter();
 
-  @Input() public refresh: boolean = false;
-  @Input() public inForm: boolean = false;
-
-  @Output() public event: EventEmitter<any> = new EventEmitter();
-  @Output() public list: EventEmitter<any> = new EventEmitter();
-  @Output() public checkedObjects: EventEmitter<string[]> = new EventEmitter();
-
-  @ViewChild('modal') public modal;
-  @ViewChild('confirmModal') public confirmModal;
-  @ViewChild('evaluateModal') public evaluateModal;
-  @ViewChild('sendMessageModal') public sendMessageModal;
-  @ViewChild('datatable') public datatable;
-  @ViewChild('tableWrapper') public tableWrapper;
-  @ViewChild('showPreviewInvoice') public showPreviewInvoice;
-  @ViewChild('fillInMap') public fillInMap;
+  @ViewChild('modal')
+  public modal;
+  @ViewChild('confirmModal')
+  public confirmModal;
+  @ViewChild('evaluateModal')
+  public evaluateModal;
+  @ViewChild('sendMessageModal')
+  public sendMessageModal;
+  @ViewChild('datatable')
+  public datatable;
+  @ViewChild('tableWrapper')
+  public tableWrapper;
+  @ViewChild('showPreviewInvoice')
+  public showPreviewInvoice;
+  @ViewChild('fillInMap')
+  public fillInMap;
 
   public selectedCount: number;
   public sortedColumns: any;
@@ -89,7 +125,7 @@ export class DynamicListComponent implements
   public showFilters: boolean;
   public asyncData: any;
   public searchFilter: any;
-  public position: { top, left };
+  public position: { top; left };
   public noneEdit: boolean;
   public fullData: any;
   public label: string;
@@ -119,7 +155,7 @@ export class DynamicListComponent implements
     private modalService: NgbModal,
     private genericFormService: GenericFormService,
     private sanitizer: DomSanitizer,
-    private router: Router,
+    private router: Router
   ) {
     this.searchFilter = {
       type: 'search',
@@ -140,18 +176,20 @@ export class DynamicListComponent implements
   }
 
   public ngOnChanges(changes: SimpleChanges) {
+    const config =
+      changes['config'] && changes['config'].isFirstChange()
+        ? changes['config'].currentValue
+        : this.config;
 
-    const config = changes['config'] && changes['config'].isFirstChange()
-      ? changes['config'].currentValue
-      : this.config;
+    const data =
+      changes['data'] && changes['data'].isFirstChange()
+        ? changes['data'].currentValue
+        : this.data;
 
-    const data = changes['data'] && changes['data'].isFirstChange()
-      ? changes['data'].currentValue
-      : this.data;
-
-    const innerTables = changes['innerTables'] && changes['innerTables'].isFirstChange()
-      ? changes['innerTables'].currentValue
-      : this.innerTables;
+    const innerTables =
+      changes['innerTables'] && changes['innerTables'].isFirstChange()
+        ? changes['innerTables'].currentValue
+        : this.innerTables;
 
     const addData = changes['addData'] && changes['addData'].currentValue;
 
@@ -197,18 +235,25 @@ export class DynamicListComponent implements
 
       this.fullData = data;
       this.body.push(...this.generateBody(config, data, innerTables));
-    } else if (changes.hasOwnProperty('data') && !changes['data'].isFirstChange()) {
+    } else if (
+      changes.hasOwnProperty('data') &&
+      !changes['data'].isFirstChange()
+    ) {
       this.fullData = data;
       this.body = [...this.generateBody(config, data, innerTables)];
     }
 
-    if (changes.hasOwnProperty('addData') && !changes['addData'].isFirstChange()) {
+    if (
+      changes.hasOwnProperty('addData') &&
+      !changes['addData'].isFirstChange()
+    ) {
       this.fullData = {
         ...this.fullData,
         [this.responseField]: [
           ...this.fullData[this.responseField],
           ...addData[this.responseField]
-        ]};
+        ]
+      };
       this.body.push(...this.generateBody(config, addData, innerTables));
     }
   }
@@ -234,7 +279,9 @@ export class DynamicListComponent implements
         endpoint: this.parentEndpoint || this.endpoint,
         list: this.config.list
       };
-      this.filtersOfList = this.filterService.getFiltersByEndpoint(this.endpoint);
+      this.filtersOfList = this.filterService.getFiltersByEndpoint(
+        this.endpoint
+      );
     }
     if (this.config.list.search_enabled) {
       if (this.filtersOfList && this.filtersOfList.length > 1) {
@@ -253,13 +300,17 @@ export class DynamicListComponent implements
     this.updateMetadataByTabs(config.list.columns);
 
     if (this.tabs) {
-      const tabsMetadata = config.list.columns.filter((el) => el.tab && el.tab.is_collapsed);
+      const tabsMetadata = config.list.columns.filter(
+        (el) => el.tab && el.tab.is_collapsed
+      );
 
       if (tabsMetadata.length) {
         this.tabs.forEach((tab) => {
           if (tab.is_collapsed) {
             tab.fields.forEach((field) => {
-              this.additionalMetadata.push(tabsMetadata.find((el) => el.name === field));
+              this.additionalMetadata.push(
+                tabsMetadata.find((el) => el.name === field)
+              );
             });
           }
         });
@@ -271,14 +322,28 @@ export class DynamicListComponent implements
     let body;
 
     if (config && data[this.responseField]) {
-      this.select = {...this.select, ...this.resetSelectedElements(data[this.responseField])};
+      this.select = {
+        ...this.select,
+        ...this.resetSelectedElements(data[this.responseField])
+      };
       if (config.list) {
         this.sortedColumns = this.getSortedColumns(config.list.columns);
         if (this.tabs) {
-          const mainMetadata = config.list.columns.filter((el) => !el.tab || !el.tab.is_collapsed);
-          const additionalBody = this.prepareData(this.additionalMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
+          const mainMetadata = config.list.columns.filter(
+            (el) => !el.tab || !el.tab.is_collapsed
+          );
+          const additionalBody = this.prepareData(
+            this.additionalMetadata,
+            data[this.responseField],
+            config.list.highlight
+          );
 
-          body = this.prepareData(mainMetadata, data[this.responseField], config.list.highlight); //tslint:disable-line
+          body = this.prepareData(
+            mainMetadata,
+            data[this.responseField],
+            config.list.highlight
+          );
+          this.groupedValues(body);
           body.forEach((main) => {
             additionalBody.forEach((additional) => {
               if (this.tabs && this.tabs[0].inline) {
@@ -294,7 +359,12 @@ export class DynamicListComponent implements
             });
           });
         } else {
-          body = this.prepareData(config.list.columns, data[this.responseField], config.list.highlight); //tslint:disable-line
+          body = this.prepareData(
+            config.list.columns,
+            data[this.responseField],
+            config.list.highlight
+          );
+          this.groupedValues(body);
         }
         if (this.asyncData) {
           this.getAsyncData();
@@ -306,15 +376,52 @@ export class DynamicListComponent implements
     return body;
   }
 
+  public groupedValues(body: any[]) {
+    const groups = this.config.list.groups;
+
+    if (groups) {
+      groups.forEach((groupName: string) => {
+        const group = {};
+        body.forEach((row) => {
+          if (row) {
+            row.content.forEach((column) => {
+              if (column) {
+                if (column.name === groupName) {
+                  // console.log(column);
+                  column.content.forEach((item) => {
+                    if (item) {
+                      if (group[item.value]) {
+                        item.value = undefined;
+                      } else {
+                        group[item.value] = true;
+                      }
+
+                      console.log(item.value);
+                    }
+                  });
+                }
+              }
+            });
+          }
+        });
+      });
+    }
+  }
+
   public parseInnerTables(innerTables) {
     if (innerTables && this.innerTableCall) {
       let currentRow = innerTables[this.innerTableCall.row];
       if (currentRow) {
-        let currentCell = innerTables[this.innerTableCall.row][this.innerTableCall.cell];
+        let currentCell =
+          innerTables[this.innerTableCall.row][this.innerTableCall.cell];
         if (currentCell) {
-          let cell = innerTables[this.innerTableCall.row][this.innerTableCall.cell];
+          let cell =
+            innerTables[this.innerTableCall.row][this.innerTableCall.cell];
           if (cell.metadata && cell.data) {
-            cell.body = this.prepareData(cell.metadata.list.columns, cell.data.results);
+            cell.body = this.prepareData(
+              cell.metadata.list.columns,
+              cell.data.results
+            );
           }
         }
       }
@@ -330,7 +437,7 @@ export class DynamicListComponent implements
       if (newContent) {
         newContent.content.push(col);
       } else {
-        content.push(Object.assign({}, tab, {content: [col]}));
+        content.push(Object.assign({}, tab, { content: [col] }));
       }
     });
     body.content = content;
@@ -358,7 +465,9 @@ export class DynamicListComponent implements
 
   public parseMultipleFilter(filters: any[]): void {
     if (filters) {
-      const multipleFilters = filters.filter((filter) => filter.type === 'multiple');
+      const multipleFilters = filters.filter(
+        (filter) => filter.type === 'multiple'
+      );
       multipleFilters.forEach((filter) => {
         if (!filter.parsed) {
           if (filter.data.data) {
@@ -368,12 +477,12 @@ export class DynamicListComponent implements
 
           if (filter.data.endpoint && !filter.data.data) {
             filter.endpoint = this.format(filter.endpoint, this.data);
-            this.genericFormService.getAll(filter.endpoint).subscribe(
-              (res: any) => {
+            this.genericFormService
+              .getAll(filter.endpoint)
+              .subscribe((res: any) => {
                 filter.data = res;
                 filter.parsed = true;
-              }
-            );
+              });
           }
         }
       });
@@ -392,16 +501,22 @@ export class DynamicListComponent implements
             } else {
               query = `${query}`;
             }
-            this.genericFormService.getByQuery(endpoint, query).subscribe(
-              (res: any) => this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
-              (err: any) => this.error = err
-            );
+            this.genericFormService
+              .getByQuery(endpoint, query)
+              .subscribe(
+                (res: any) =>
+                  this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
+                (err: any) => (this.error = err)
+              );
           } else {
             const body: any = this.generateParams(this.asyncData[endpoint]);
-            this.genericFormService.submitForm(endpoint, body).subscribe(
-              (res: any) => this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
-              (err: any) => this.error = err
-            );
+            this.genericFormService
+              .submitForm(endpoint, body)
+              .subscribe(
+                (res: any) =>
+                  this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
+                (err: any) => (this.error = err)
+              );
           }
         });
       }
@@ -478,7 +593,9 @@ export class DynamicListComponent implements
   public calcTable() {
     if (this.tableWrapper) {
       let tableWrapperEl = this.tableWrapper.nativeElement;
-      tableWrapperEl.style.maxHeight = `calc(100vh - ${tableWrapperEl.offsetTop}px - 150px)`;
+      tableWrapperEl.style.maxHeight = `calc(100vh - ${
+        tableWrapperEl.offsetTop
+      }px - 150px)`;
     }
   }
 
@@ -492,12 +609,12 @@ export class DynamicListComponent implements
         count += 1;
       }
     });
-    if ((width / count) < 150) {
+    if (width / count < 150) {
       this.tableWrapper.nativeElement.style.overflowX = 'auto';
     } else {
       this.tableWrapper.nativeElement.style.overflowX = 'visible';
     }
-  };
+  }
 
   public changeTab(tab) {
     if (this.tabs) {
@@ -597,10 +714,15 @@ export class DynamicListComponent implements
             obj['contactName'] = this.getValueByKey(keys.join('.'), el);
           }
           if (element.display && element.type !== 'tags') {
-            obj.display = this.format(element.display.replace(/{field}/gi, `{${element.field}}`), el); //tslint:disable-line
+            obj.display = this.format(
+              element.display.replace(/{field}/gi, `{${element.field}}`),
+              el
+            ); //tslint:disable-line
           }
           if (element.type === 'datepicker') {
-            let field = this.config.fields.find((elem) => elem.key === element.field);
+            let field = this.config.fields.find(
+              (elem) => elem.key === element.field
+            );
             if (field) {
               obj.templateOptions = field.templateOptions;
             }
@@ -609,17 +731,23 @@ export class DynamicListComponent implements
             if (element.type === 'icon') {
               obj.label = element.label;
             }
-            let field = this.config.fields.find((elem) => elem.key === element.field);
+            let field = this.config.fields.find(
+              (elem) => elem.key === element.field
+            );
             if (field) {
               obj['values'] = field.templateOptions.values || element.values;
               obj['color'] = field.templateOptions.color || element.color;
-              obj['listLabel'] = field.templateOptions.listLabel || element.listLabel;
+              obj['listLabel'] =
+                field.templateOptions.listLabel || element.listLabel;
             }
           }
           if (element.link) {
             let indexOf = element.link.indexOf('{field}');
             if (indexOf) {
-              element.link = element.link.replace(/{field}/gi, `{${element.field}}`);
+              element.link = element.link.replace(
+                /{field}/gi,
+                `{${element.field}}`
+              );
             }
             obj['link'] = this.format(element.link, el);
             obj.text = this.format(element.text, el);
@@ -637,14 +765,19 @@ export class DynamicListComponent implements
               element.endpoint += '/';
             }
             if (indexOf) {
-              element.endpoint = element.endpoint.replace(/{field}/gi, `{${element.field}}`);
+              element.endpoint = element.endpoint.replace(
+                /{field}/gi,
+                `{${element.field}}`
+              );
             }
             if (Array.isArray(obj.value)) {
               obj.link = [];
               obj.value.forEach((val) => {
-                obj.link.push(this.format(element.endpoint, {
-                  [obj.name]: val
-                }).replace('/ecore/api/v2', ''));
+                obj.link.push(
+                  this.format(element.endpoint, {
+                    [obj.name]: val
+                  }).replace('/ecore/api/v2', '')
+                );
               });
             } else {
               obj['endpoint'] = this.format(element.endpoint, el);
@@ -656,12 +789,17 @@ export class DynamicListComponent implements
           }
           if (element.type === 'static') {
             if (element.text) {
-              obj.value = this.format(element.text.replace(/{field}/gi, `{${element.field}}`), el);
+              obj.value = this.format(
+                element.text.replace(/{field}/gi, `{${element.field}}`),
+                el
+              );
             }
             obj.label = element.label;
           }
           if (element.type === 'picture') {
-            const field = this.config.fields.find((elem) => elem.key === element.field);
+            const field = this.config.fields.find(
+              (elem) => elem.key === element.field
+            );
             if (field) {
               obj.default = field.default;
             }
@@ -690,7 +828,8 @@ export class DynamicListComponent implements
           } else if (element.field) {
             if (element.type === 'info') {
               obj.value = el;
-              obj.companyPicture = this.endpoint === '/ecore/api/v2/core/companies/';
+              obj.companyPicture =
+                this.endpoint === '/ecore/api/v2/core/companies/';
             } else {
               props = element.field.split('.');
               this.setValue(el, props, obj);
@@ -723,14 +862,16 @@ export class DynamicListComponent implements
                 request_field: element.request_field
               });
             } else {
-              this.asyncData[element.endpoint] = [{
-                method: element.method,
-                content: cell.content,
-                query,
-                field: obj,
-                id: el.id,
-                request_field: element.request_field
-              }];
+              this.asyncData[element.endpoint] = [
+                {
+                  method: element.method,
+                  content: cell.content,
+                  query,
+                  field: obj,
+                  id: el.id,
+                  request_field: element.request_field
+                }
+              ];
             }
           }
           cell.content.push(obj);
@@ -761,7 +902,9 @@ export class DynamicListComponent implements
     obj.list = true;
     obj.templateOptions = {
       label: element.label,
-      icon: element.icon ? element.icon.slice(element.icon.indexOf('-') + 1) : null,
+      icon: element.icon
+        ? element.icon.slice(element.icon.indexOf('-') + 1)
+        : null,
       small: true,
       mb: false,
       p: true,
@@ -825,7 +968,8 @@ export class DynamicListComponent implements
           object[param] = data[prop] ? data[prop].__str__ : '';
         }
       } else if (object.type === 'static' && !object[param]) {
-        object[param] = data[prop] && data[prop].__str__ ? data[prop].__str__ : data[prop];
+        object[param] =
+          data[prop] && data[prop].__str__ ? data[prop].__str__ : data[prop];
       } else if (!object[param]) {
         object[param] = data[prop];
       }
@@ -907,7 +1051,7 @@ export class DynamicListComponent implements
     this.modalInfo.endpoint = field.endpoint;
     this.modalInfo.label = field.label;
     this.modalInfo.type = 'form';
-    this.open(modal, {size: 'lg'});
+    this.open(modal, { size: 'lg' });
   }
 
   public open(modal, options = {}) {
@@ -929,7 +1073,7 @@ export class DynamicListComponent implements
         if (!this.offset) {
           this.page = 1;
         } else if (this.offset) {
-          this.page = (this.offset / this.limit) + 1;
+          this.page = this.offset / this.limit + 1;
         }
         if (!this.limit) {
           this.pageSize = 10;
@@ -974,8 +1118,10 @@ export class DynamicListComponent implements
   }
 
   public popedTable() {
-    this.filtersOfList =
-      this.filterService.getFiltersOfList(this.parentEndpoint, this.config.list.list);
+    this.filtersOfList = this.filterService.getFiltersOfList(
+      this.parentEndpoint,
+      this.config.list.list
+    );
     this.poped = true;
   }
 
@@ -983,7 +1129,7 @@ export class DynamicListComponent implements
     if (this.config.list.filters) {
       this.filterService.filters = {
         endpoint: this.parentEndpoint,
-        list: this.config.list,
+        list: this.config.list
       };
     }
     this.poped = false;
@@ -1016,7 +1162,7 @@ export class DynamicListComponent implements
       switch (e.value) {
         case 'openMap':
           this.openMap(e.el.fields);
-        break;
+          break;
         case 'openList':
         case 'openDiff':
           this[e.value](e.el.endpoint, e.el);
@@ -1084,7 +1230,7 @@ export class DynamicListComponent implements
     this.modalInfo = {};
     this.modalInfo.type = 'profile';
     this.modalInfo.id = id;
-    this.open(this.modal, {size: 'lg'});
+    this.open(this.modal, { size: 'lg' });
   }
 
   public openForm(e) {
@@ -1092,7 +1238,7 @@ export class DynamicListComponent implements
     this.modalInfo.type = 'form';
     this.modalInfo.endpoint = e.el.endpoint;
     this.modalInfo.label = e.el.value;
-    this.open(this.modal, {size: 'lg'});
+    this.open(this.modal, { size: 'lg' });
   }
 
   public setAction(e) {
@@ -1114,14 +1260,12 @@ export class DynamicListComponent implements
       closeModal();
     }
     let endpoint = modalInfo.endpoint;
-    this.genericFormService.submitForm(endpoint, {}).subscribe(
-      (res: any) => {
-        this.event.emit({
-          type: 'update',
-          list: this.config.list.list
-        });
-      }
-    );
+    this.genericFormService.submitForm(endpoint, {}).subscribe((res: any) => {
+      this.event.emit({
+        type: 'update',
+        list: this.config.list.list
+      });
+    });
   }
 
   public openMap(value) {
@@ -1130,11 +1274,13 @@ export class DynamicListComponent implements
       this.modalInfo[keys[keys.length - 1]] = +el.value;
     });
     this.modalInfo.type = 'map';
-    this.open(this.modal, {size: 'lg'});
+    this.open(this.modal, { size: 'lg' });
   }
 
   public evaluate(e) {
-    const object = this.fullData[this.responseField].find((el) => el.id === e.el.rowId);
+    const object = this.fullData[this.responseField].find(
+      (el) => el.id === e.el.rowId
+    );
     if (object) {
       const contact = object.job_offer.candidate_contact.contact;
       this.modalInfo = {};
@@ -1144,8 +1290,7 @@ export class DynamicListComponent implements
       this.modalInfo.needData = false;
       this.modalInfo.label = {
         picture:
-          contact.picture &&
-          contact.picture.origin
+          contact.picture && contact.picture.origin
             ? contact.picture.origin
             : '/assets/img/avatar.png',
         name: contact.__str__
@@ -1155,7 +1300,9 @@ export class DynamicListComponent implements
   }
 
   public changeTimesheet(e) {
-    const object = this.fullData[this.responseField].find((el) => el.id === e.el.rowId)[0];
+    const object = this.fullData[this.responseField].find(
+      (el) => el.id === e.el.rowId
+    )[0];
     if (object) {
       const contact = object.job_offer.candidate_contact.contact;
       this.modalInfo = {};
@@ -1215,18 +1362,19 @@ export class DynamicListComponent implements
       };
       this.modalInfo.label = {
         picture:
-          contact.picture &&
-          contact.picture.origin
+          contact.picture && contact.picture.origin
             ? contact.picture.origin
             : '/assets/img/avatar.png',
         name: contact.__str__
       };
-      this.open(this.evaluateModal, {size: 'lg'});
+      this.open(this.evaluateModal, { size: 'lg' });
     }
   }
 
   public approveTimesheet(e) {
-    let object = this.fullData[this.responseField].find((el) => el.id === e.el.rowId);
+    let object = this.fullData[this.responseField].find(
+      (el) => el.id === e.el.rowId
+    );
     if (object) {
       this.approveEndpoint = e.el.endpoint;
       e.el.endpoint = this.format(this.evaluateEndpoint, object);
@@ -1272,7 +1420,7 @@ export class DynamicListComponent implements
     this.modalInfo.id = e.id;
     this.modalInfo.mode = 'edit';
     this.modalInfo.dontUseMetadataQuery = true;
-    this.open(this.modal, {size: 'lg'});
+    this.open(this.modal, { size: 'lg' });
   }
 
   public addObject() {
@@ -1280,7 +1428,7 @@ export class DynamicListComponent implements
     this.modalInfo.type = 'form';
     this.modalInfo.endpoint = this.endpoint;
     this.modalInfo.label = `Add ${this.config.list.label}`;
-    this.open(this.modal, {size: 'lg'});
+    this.open(this.modal, { size: 'lg' });
   }
 
   public editObject(id, label = undefined) {
@@ -1289,7 +1437,7 @@ export class DynamicListComponent implements
     this.modalInfo.endpoint = this.endpoint;
     this.modalInfo.label = label ? label : 'Edit';
     this.modalInfo.id = id;
-    this.open(this.modal, {size: 'lg'});
+    this.open(this.modal, { size: 'lg' });
   }
 
   public activeTable(e) {
@@ -1377,7 +1525,8 @@ export class DynamicListComponent implements
           let datetime = ['date', 'time'];
           if (datetime.indexOf(propArray[1]) > -1) {
             if (data[propArray[0]]) {
-              return moment.tz(data[propArray[0]], 'Australia/Sydney')
+              return moment
+                .tz(data[propArray[0]], 'Australia/Sydney')
                 .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
             } else {
               return '';
@@ -1418,15 +1567,15 @@ export class DynamicListComponent implements
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
       if (this.approveEndpoint) {
-        this.genericFormService.editForm(this.approveEndpoint, {}).subscribe(
-          (res: any) => {
+        this.genericFormService
+          .editForm(this.approveEndpoint, {})
+          .subscribe((res: any) => {
             this.event.emit({
               type: 'update',
               list: this.config.list.list
             });
             this.approveEndpoint = null;
-          }
-        );
+          });
       } else {
         this.formEvent(e, closeModal);
       }
@@ -1453,7 +1602,7 @@ export class DynamicListComponent implements
 
   public showMap() {
     this.modalInfo = this.generateDataForFillInMap({});
-    this.open(this.fillInMap, {size: 'lg'});
+    this.open(this.fillInMap, { size: 'lg' });
   }
 
   public generateDataForFillInMap(data) {
@@ -1466,7 +1615,7 @@ export class DynamicListComponent implements
         description: this.getPropValue(el, 'contact.address.__str__'),
         iconUrl: '/assets/img/location-blue.svg',
         id: this.getPropValue(el, 'id'),
-        selected: this.select[this.getPropValue(el, 'id')],
+        selected: this.select[this.getPropValue(el, 'id')]
       });
     });
     if (this.supportData) {
@@ -1485,27 +1634,23 @@ export class DynamicListComponent implements
   }
 
   public showPreview(e) {
-    this.genericFormService.getAll(e.el.endpoint).subscribe(
-      (res: any) => {
-        this.modalInfo = {
-          url: {
-            url: res.pdf
-          }
-        };
-        this.open(this.showPreviewInvoice, {size: 'lg'});
-      }
-    );
+    this.genericFormService.getAll(e.el.endpoint).subscribe((res: any) => {
+      this.modalInfo = {
+        url: {
+          url: res.pdf
+        }
+      };
+      this.open(this.showPreviewInvoice, { size: 'lg' });
+    });
   }
 
   public printPDF(e) {
-    this.genericFormService.getAll(e.el.endpoint).subscribe(
-      (res: any) => {
-        this.modalInfo = {
-          url: this.sanitizer.bypassSecurityTrustResourceUrl(res.pdf)
-        };
-        this.open(this.sendMessageModal, {size: 'lg'});
-      }
-    );
+    this.genericFormService.getAll(e.el.endpoint).subscribe((res: any) => {
+      this.modalInfo = {
+        url: this.sanitizer.bypassSecurityTrustResourceUrl(res.pdf)
+      };
+      this.open(this.sendMessageModal, { size: 'lg' });
+    });
   }
 
   public delete(e) {
@@ -1516,7 +1661,7 @@ export class DynamicListComponent implements
           list: this.config.list.list
         });
       },
-      (err: any) => this.error = err
+      (err: any) => (this.error = err)
     );
   }
 
@@ -1539,8 +1684,8 @@ export class DynamicListComponent implements
     } else {
       endpoint = e.el.endpoint || this.endpoint;
       if (
-        e.el.notParsedEndpoint
-        && e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/'
+        e.el.notParsedEndpoint &&
+        e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/'
       ) {
         const arr: string[] = e.el.endpoint.split('/');
         arr.pop();
@@ -1553,7 +1698,10 @@ export class DynamicListComponent implements
             skill: {
               action: 'add',
               data: {
-                value: this.format('{position.id}', this.data.results.find((el) => el.id === e.el.rowId)) //tslint:disable-line
+                value: this.format(
+                  '{position.id}',
+                  this.data.results.find((el) => el.id === e.el.rowId)
+                ) //tslint:disable-line
               }
             },
             job: {
@@ -1563,7 +1711,6 @@ export class DynamicListComponent implements
               }
             }
           };
-
         } else if (lastElement === 'candidate_fill') {
           endpoint = [...arr, 'candidate_fill'].join('/');
           withoutId = true;
@@ -1583,15 +1730,16 @@ export class DynamicListComponent implements
     this.modalInfo.mode = 'edit';
     this.modalInfo.edit = true;
     this.modalInfo.data = data;
-    this.modalInfo.dontUseMetadataQuery = e.value === 'editModal' || e.value === 'editForm';
-    this.open(this.modal, {size: 'lg'});
+    this.modalInfo.dontUseMetadataQuery =
+      e.value === 'editModal' || e.value === 'editForm';
+    this.open(this.modal, { size: 'lg' });
   }
 
   public addForm(e) {
     this.modalInfo = {};
     this.modalInfo.type = 'form';
     this.modalInfo.endpoint = e.el.endpoint;
-    this.open(this.modal, {size: 'lg'});
+    this.open(this.modal, { size: 'lg' });
   }
 
   public post(e) {
@@ -1607,7 +1755,7 @@ export class DynamicListComponent implements
           list: this.config.list.list
         });
       },
-      (err: any) => this.error = err
+      (err: any) => (this.error = err)
     );
   }
 
@@ -1675,5 +1823,4 @@ export class DynamicListComponent implements
 
     this.emitSelect();
   }
-
 }

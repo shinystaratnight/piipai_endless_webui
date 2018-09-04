@@ -553,6 +553,7 @@ const job = {
       }
     ],
     buttons: [],
+    groups: ['date.shift_date'],
     list: 'shift',
     editDisable: false,
     label: 'Shift',
