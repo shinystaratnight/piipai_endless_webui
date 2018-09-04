@@ -1101,6 +1101,7 @@ const formadd = [
             },
             collapsed: false,
             default: '{customer_company.primary_contact.id}',
+            if_master: 'session.contact.contact_id',
             showIf: ['provider_company.id'],
             type: 'related',
             query: {
@@ -1122,6 +1123,7 @@ const formadd = [
             },
             additional_text: 'Or',
             default: '{jobsite.primary_contact.id}',
+            if_master: '{customer_company.primary_contact.id}',
             type: 'related',
             query: {
               jobsites: '{jobsite.id}'
