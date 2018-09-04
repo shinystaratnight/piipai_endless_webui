@@ -34,6 +34,20 @@ const list = {
 
 const form = [
   {
+    endpoint: '/ecore/api/v2/core/contacts/',
+    read_only: true,
+    templateOptions: {
+      label: 'Contact',
+      add: true,
+      delete: false,
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    type: 'related',
+    key: 'contact'
+  },
+  {
     key: 'bank_name',
     type: 'input',
     templateOptions: {
@@ -80,6 +94,20 @@ const form = [
 ];
 
 const formadd = [
+  {
+    endpoint: '/ecore/api/v2/core/contacts/',
+    read_only: false,
+    templateOptions: {
+      label: 'Contact',
+      add: true,
+      delete: false,
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    type: 'related',
+    key: 'contact'
+  },
   {
     key: 'bank_name',
     type: 'input',
