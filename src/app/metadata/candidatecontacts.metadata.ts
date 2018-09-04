@@ -274,7 +274,8 @@ const list = {
         label: 'Status',
         data: {
           value: ['name_after_activation', 'name_before_activation'],
-          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact', //tslint:disable-line
+          endpoint:
+            '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact', //tslint:disable-line
           key: 'number'
         },
         query: 'active_states',
@@ -1174,6 +1175,9 @@ const form = [
                       type: 'related',
                       edit: true
                     },
+                    prefilled: {
+                      contact: '{contact.id}'
+                    },
                     collapsed: false,
                     type: 'related',
                     key: 'bank_account',
@@ -1445,7 +1449,7 @@ const formadd = [
       endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
       error: 'This Candidate contact already exists!',
       query: {
-        contact: '{contact.id}',
+        contact: '{contact.id}'
       }
     },
     update: {
@@ -1454,7 +1458,7 @@ const formadd = [
       getValue: 'birthday',
       setValue: {
         field: 'birthday'
-      },
+      }
     },
     templateOptions: {
       add: true,
@@ -1484,7 +1488,7 @@ const formadd = [
     default: '{contact.first_name}',
     templateOptions: {
       label: 'First Name',
-      type: 'text',
+      type: 'text'
     }
   },
   {
@@ -1496,7 +1500,7 @@ const formadd = [
     default: '{contact.last_name}',
     templateOptions: {
       label: 'Last Name',
-      type: 'text',
+      type: 'text'
     }
   },
   {
@@ -1521,7 +1525,7 @@ const formadd = [
       label: 'Phone number',
       type: 'text'
     },
-    read_only: true,
+    read_only: true
   },
   {
     key: 'contact.address',
@@ -1532,9 +1536,9 @@ const formadd = [
     default: '{contact.address.id}',
     templateOptions: {
       label: 'Address',
-      values: ['__str__'],
+      values: ['__str__']
     },
-    read_only: true,
+    read_only: true
   },
   {
     key: 'birthday',
@@ -1545,7 +1549,7 @@ const formadd = [
     templateOptions: {
       required: true,
       label: 'Birthday',
-      type: 'date',
+      type: 'date'
     },
     read_only: false
   },
@@ -1562,12 +1566,12 @@ const formadd = [
     type: 'related',
     query: {
       master_company: 'current'
-    },
-  },
+    }
+  }
 ];
 
 export const metadata = {
   list,
   form,
-  formadd,
+  formadd
 };
