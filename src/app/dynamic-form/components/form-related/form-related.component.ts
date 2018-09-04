@@ -390,6 +390,40 @@ export class FormRelatedComponent extends BasicElementComponent
               this.getDefaultDataForListType();
             }
 
+            if (this.checkIfMasterCompany(this.formData)) {
+              if (this.config.if_master) {
+                if (this.config.if_master.includes('session')) {
+                  const id = this.userService.user.data.contact.contact_id;
+
+                  if (this.config.read_only) {
+                    this.viewMode = true;
+                  }
+
+                  if (!this.config.hide) {
+                    this.getOptions.call(this, '', 0, false, this.setValue, id);
+                  }
+                } else {
+                  const format = new FormatString();
+                  let id;
+                  if (typeof this.config.if_master === 'string') {
+                    id = format.format(this.config.if_master, this.formData);
+                  } else if (Array.isArray(this.config.if_master)) {
+                    this.config.if_master.forEach((el) => {
+                      if (!id) {
+                        id = format.format(el, this.formData);
+                      }
+                    });
+                  }
+                  if (id && id !== this.group.get(this.key).value) {
+                    this.getOptions.call(this, '', 0, false, this.setValue, id);
+                    if (this.config.read_only) {
+                      this.viewMode = true;
+                    }
+                  }
+                }
+              }
+            }
+
             if (
               this.config.default &&
               !this.config.hide &&
@@ -430,6 +464,15 @@ export class FormRelatedComponent extends BasicElementComponent
       });
 
       this.subscriptions.push(subscription);
+    }
+  }
+
+  public checkIfMasterCompany(data) {
+    const customerCompany = data.customer_company;
+    const providerCompany = data.provider_company;
+
+    if (customerCompany && providerCompany && !this.config.editForm) {
+      return customerCompany.id === providerCompany.id;
     }
   }
 
@@ -1128,7 +1171,7 @@ export class FormRelatedComponent extends BasicElementComponent
     ) {
       closeModal();
       this.saveProcess = false;
-      this.updateList();
+      this.updateList(e.data);
     }
   }
 
@@ -1136,7 +1179,25 @@ export class FormRelatedComponent extends BasicElementComponent
     this.saveProcess = false;
   }
 
-  public updateList() {
+  public updateList(data?) {
+    const object = this.dataOfList.find((el) => el.id === data.id);
+
+    if (object) {
+      const newMetadata = object.metadata.slice();
+      this.fillingForm(newMetadata, data);
+      object.metadata = newMetadata;
+
+      this.cd.detectChanges();
+    }
+
+    const newList = this.dataOfList.slice();
+
+    this.dataOfList = null;
+
+    setTimeout(() => {
+      this.dataOfList = newList;
+    }, 500);
+
     this.event.emit({
       type: 'updateData',
       el: this.config

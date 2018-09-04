@@ -58,6 +58,7 @@ export interface Field {
   attributes?: { [key: string]: string };
   editEndpoint?: string;
   useValue?: boolean;
+  if_master?: any;
   templateOptions?: {
     label?: string;
     type?: string;

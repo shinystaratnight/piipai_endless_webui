@@ -1004,7 +1004,7 @@ const form = [
   },
   {
     endpoint: '/ecore/api/v2/hr/jobsites/',
-    read_only: false,
+    read_only: true,
     key: 'jobsite',
     hide: true,
     templateOptions: {
@@ -1101,6 +1101,7 @@ const formadd = [
             },
             collapsed: false,
             default: '{customer_company.primary_contact.id}',
+            if_master: 'session.contact.contact_id',
             showIf: ['provider_company.id'],
             type: 'related',
             query: {
@@ -1122,6 +1123,7 @@ const formadd = [
             },
             additional_text: 'Or',
             default: '{jobsite.primary_contact.id}',
+            if_master: '{customer_company.primary_contact.id}',
             type: 'related',
             query: {
               jobsites: '{jobsite.id}'
@@ -1178,6 +1180,14 @@ const formadd = [
               ],
               type: 'related',
               edit: true
+            },
+            checkObject: {
+              endpoint: '/ecore/api/v2/hr/jobs/',
+              error: 'Active Job for Jobsite and Position already exist!',
+              query: {
+                jobsite: '{jobsite.id}',
+                position: '{position.id}',
+              }
             },
             collapsed: false,
             type: 'related',

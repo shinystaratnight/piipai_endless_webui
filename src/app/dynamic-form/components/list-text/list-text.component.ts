@@ -47,31 +47,31 @@ export class ListTextComponent implements OnInit {
       if (type === 'time') {
         if (this.arrayValue) {
           const result = this.value.map((el) => {
-            return el ? moment(el, 'hh:mm:ss').format('hh:mm A') : '-';
+            return el ? moment(el, 'hh:mm:ss').format('hh:mm A') : ' ';
           });
           this.value = result;
         } else {
-          this.value = this.value ? moment(this.value, 'hh:mm:ss').format('hh:mm A') : '-';
+          this.value = this.value ? moment(this.value, 'hh:mm:ss').format('hh:mm A') : ' ';
         }
       }
       if (type === 'date') {
         if (this.arrayValue) {
           const result = this.value.map((el) => {
-            return el ? moment(el, 'YYYY-MM-DD').format('DD/MM/YYYY') : '-';
+            return el ? moment(el, 'YYYY-MM-DD').format('DD/MM/YYYY') : ' ';
           });
           this.value = result;
         } else {
-          this.value = this.value ? moment(this.value, 'YYYY-MM-DD').format('DD/MM/YYYY') : '-';
+          this.value = this.value ? moment(this.value, 'YYYY-MM-DD').format('DD/MM/YYYY') : ' ';
         }
       }
       if (type === 'datetime') {
         if (this.arrayValue) {
           const result = this.value.map((el) => {
-            return el ? moment.tz(el, 'Australia/Sydney').format('DD/MM/YYYY hh:mm A') : '-';
+            return el ? moment.tz(el, 'Australia/Sydney').format('DD/MM/YYYY hh:mm A') : ' ';
           });
           this.value = result;
         } else {
-          this.value = this.value ? moment.tz(this.value, 'Australia/Sydney').format('DD/MM/YYYY hh:mm A') : '-'; //tslint:disable-line
+          this.value = this.value ? moment.tz(this.value, 'Australia/Sydney').format('DD/MM/YYYY hh:mm A') : ' '; //tslint:disable-line
         }
       }
     }

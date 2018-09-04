@@ -114,7 +114,7 @@
           </thead>
           <tbody *ngIf="body && !refresh">
             <ng-container *ngFor="let row of body">
-              <tr [class.main]="row.additionalBody && !row.collapsed" [class.table-warning]="row.highlight && row.highlight.highlight"
+              <tr *ngIf="!row.hide" [class.main]="row.additionalBody && !row.collapsed" [class.table-warning]="row.highlight && row.highlight.highlight"
                 [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
                 <td *ngIf="(!inForm && config.list.actions) || actions || (!noneEdit && !inForm)" class="first-cell">
                   <label *ngIf="config.list.actions || actions">
