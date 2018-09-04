@@ -1,7 +1,7 @@
 <ng-container *ngIf="list">
   <div *ngFor="let skill of dataList">
     <span class="skill-title">
-      {{skill.skill.name}}
+      {{skill.skill.__str__}}
       <span class="score"
         [style.color]="colors[getScore(skill.score)]"
         [style.borderColor]="colors[getScore(skill.score)]">
