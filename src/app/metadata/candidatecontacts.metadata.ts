@@ -1119,6 +1119,7 @@ const form = [
                     list: false,
                     endpoint: '/ecore/api/v2/candidate/superannuationfunds/',
                     read_only: false,
+                    doNotChoice: true,
                     templateOptions: {
                       label: 'Superannuation fund',
                       add: true,
@@ -1166,6 +1167,7 @@ const form = [
                     list: false,
                     endpoint: '/ecore/api/v2/core/bankaccounts/',
                     read_only: false,
+                    doNotChoice: true,
                     templateOptions: {
                       label: 'Bank account',
                       add: true,
