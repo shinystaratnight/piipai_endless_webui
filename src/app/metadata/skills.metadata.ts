@@ -113,7 +113,7 @@ const form = [
     values: {
       available: 'active',
       company: 'name.industry',
-      skill_title: 'name.name',
+      skill_title: 'name.__str__',
       created_at: 'created_at',
       updated_at: 'updated_at'
     },
@@ -122,6 +122,8 @@ const form = [
   },
   {
     type: 'related',
+    send: false,
+    saveField: false,
     hide: true,
     read_only: true,
     send: false,
@@ -135,10 +137,9 @@ const form = [
     }
   },
   {
-    type: 'input',
+    type: 'related',
     hide: true,
     read_only: true,
-    send: false,
     key: 'name',
     templateOptions: {
       label: 'Skill name',

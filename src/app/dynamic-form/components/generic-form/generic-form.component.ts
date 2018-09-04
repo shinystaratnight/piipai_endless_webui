@@ -286,7 +286,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
           const fieldsWithLabel = ['carrier_list_reserve', 'website', 'name', 'jobsite'];
 
           if (element) {
-            element.saveField = true;
+            element.saveField = element.saveField !== false;
             infoElement.metadata[el] = Object.assign(
               {},
               element,
