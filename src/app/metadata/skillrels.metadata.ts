@@ -254,7 +254,7 @@ const formset = {
         sort_field: 'skill',
         title: null,
         sort: true,
-        content: [{ label: 'Skill', type: 'text', field: 'skill.name' }],
+        content: [{ label: 'Skill', type: 'text', field: 'skill.name.name' }],
         label: 'Skill',
         delim: null
       },

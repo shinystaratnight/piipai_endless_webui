@@ -1,36 +1,51 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+  ChangeDetectorRef
+} from '@angular/core';
 
 import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
 
 @Component({
   selector: 'dynamic-form',
-  templateUrl: 'dynamic-form.component.html',
+  templateUrl: 'dynamic-form.component.html'
 })
-
 export class DynamicFormComponent implements OnInit {
-  @Input() public config: Field[] = [];
-  @Input() public errors: any = {};
-  @Input() public message: any = {};
-  @Input() public data: any;
-  @Input() public hiddenFields: any;
-  @Input() public formId: number;
-  @Input() public form: FormGroup;
+  @Input()
+  public config: Field[] = [];
+  @Input()
+  public errors: any = {};
+  @Input()
+  public message: any = {};
+  @Input()
+  public data: any;
+  @Input()
+  public hiddenFields: any;
+  @Input()
+  public formId: number;
+  @Input()
+  public form: FormGroup;
 
-  @Output() public submit: EventEmitter<any> = new EventEmitter<any>();
-  @Output() public event: EventEmitter<any> = new EventEmitter();
-  @Output() public buttonAction: EventEmitter<any> = new EventEmitter();
-  @Output() public resourseData: EventEmitter<any> = new EventEmitter();
-  @Output() public changeValue: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public submit: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public buttonAction: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public resourseData: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public changeValue: EventEmitter<any> = new EventEmitter();
 
   public currentForm: any;
   public fullData: any;
 
-  constructor(
-    private fb: FormBuilder,
-    private cd: ChangeDetectorRef
-  ) {}
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {}
 
   public ngOnInit() {
     this.form = this.form || this.fb.group({});
@@ -85,14 +100,24 @@ export class DynamicFormComponent implements OnInit {
     setTimeout(() => {
       if (e.el && e.el.formData) {
         if (
-          (e.type === 'change' || e.type === 'reset' || e.type === 'create' || e.type === 'blur')
-          && e.el
-          && e.el.key
-          && (e.el.key !== 'address' || e.el.updateFormData)
+          (e.type === 'change' ||
+            e.type === 'reset' ||
+            e.type === 'create' ||
+            e.type === 'blur') &&
+          e.el &&
+          e.el.key &&
+          (e.el.key !== 'address' || e.el.updateFormData)
         ) {
-          const newData = this.generateData(e.el.key, e.el.formData.getValue().data, e);
+          const newData = this.generateData(
+            e.el.key,
+            e.el.formData.getValue().data,
+            e
+          );
           this.fullData = newData;
-          if (this.hiddenFields && this.hiddenFields.observers.indexOf(key) > -1) {
+          if (
+            this.hiddenFields &&
+            this.hiddenFields.observers.indexOf(key) > -1
+          ) {
             this.parseConfig(this.hiddenFields.elements);
           }
           if (e.type !== 'reset') {
@@ -153,7 +178,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public buttonActionHandler(e) {
-    this.buttonAction.emit({...e, data: this.form.value});
+    this.buttonAction.emit({ ...e, data: this.form.value });
   }
 
   public resourseDataHandler(e) {
@@ -237,5 +262,4 @@ export class DynamicFormComponent implements OnInit {
       }
     });
   }
-
- }
+}
