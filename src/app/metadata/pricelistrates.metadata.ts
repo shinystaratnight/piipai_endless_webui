@@ -222,6 +222,9 @@ const formadd = [
       type: 'related',
       edit: true
     },
+    query: {
+      active: true
+    },
     collapsed: false,
     type: 'related',
     key: 'skill',
