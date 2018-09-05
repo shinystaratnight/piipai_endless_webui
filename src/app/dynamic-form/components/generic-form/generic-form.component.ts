@@ -23,7 +23,7 @@ import { ToastrService } from '../../../shared/services/toastr.service';
 import { Field } from '../../models/field.model';
 
 import { FormatString } from '../../../helpers/format';
-import { getElementFromMetadata } from '../../helpers/utils';
+import { getElementFromMetadata, removeValue } from '../../helpers/utils';
 
 import moment from 'moment-timezone';
 
@@ -129,7 +129,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     '/ecore/api/v2/core/contacts/': '__str__',
     '/ecore/api/v2/candidate/candidatecontacts/': '__str__'
   };
-  public workflowData = <any>{
+  public workflowData = <any> {
     workflow: null,
     number: null,
     company: null
@@ -143,6 +143,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public updateDataAfterSendForm: UpdateDataInfo;
 
   public checkObject: any = {};
+  public relatedObjects: any[] = [];
 
   private subscriptions: Subscription[];
 
@@ -405,6 +406,26 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       );
   }
 
+  public checkRelatedObjects(metadata, data) {
+    metadata.forEach((el) => {
+      if (el.relatedObjects) {
+        const formatedData = {};
+
+        Object.keys(el.relatedObjects.data).forEach((key) => {
+          formatedData[key] = this.format.format(el.relatedObjects.data[key], data);
+        });
+
+        this.relatedObjects.push({
+          el,
+          data: {...el.relatedObjects, data: formatedData},
+          value: el.value
+        });
+      } else if (el.children) {
+        this.checkRelatedObjects(el.children, data);
+      }
+    });
+  }
+
   public parseCheckObject(data) {
     if (
       this.endpoint === '/ecore/api/v2/core/companycontacts/' ||
@@ -559,6 +580,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     this.service.getAll(endp).subscribe((data: any) => {
       this.fillingForm(this.metadata, data);
       this.checkRuleElement(this.metadata);
+      this.checkRelatedObjects(this.metadata, data);
 
       this.addCustomTemplates(this.metadata, data);
       this.showForm = true;
@@ -618,7 +640,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         this.getValueOfData(data, el.key, el, metadata);
       } else if (el.key && el.key === 'timeline') {
         el.value = data;
-      } else if (el.type === 'list') {
+      } else if (el.type === 'list' || el.type === 'testList') {
         if (el.endpoint) {
           el.endpoint = this.format.format(el.endpoint, data);
         }
@@ -898,7 +920,63 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       return;
     }
 
+    if (this.relatedObjects.length) {
+      const requests = this.updateRelatedObjects(newData);
+
+      if (requests && requests.length) {
+        const subscription = Observable.forkJoin(
+          ...requests
+        ).subscribe(() => {
+          this.sendForm(newData);
+        });
+
+        this.subscriptions.push(subscription);
+
+        return;
+      }
+    }
+
     this.sendForm(newData);
+  }
+
+  public updateRelatedObjects(data): any[] {
+    const requests = [];
+
+    this.relatedObjects.forEach((item) => {
+      const newValue = this.getValueOfData(data, item.el.key, {});
+      const oldValue = item.value;
+
+      removeValue(item.el.key, data);
+
+      if (Array.isArray(newValue)) {
+        const addArray = newValue.filter(
+          (a) => !oldValue.find((b) => a === b[item.data.field].id)
+        );
+        const removeArray = oldValue.filter(
+          (a) => !newValue.find((b) => a[item.data.field].id === b)
+        );
+
+        if (addArray.length) {
+          addArray.forEach((el) => {
+            const body = {
+              ...item.data.data,
+              [item.data.field]: el
+            };
+
+            requests.push(this.service.submitForm(item.data.endpoint, body));
+          });
+        }
+
+        if (removeArray.length) {
+          removeArray.forEach((el) => {
+            requests.push(this.service.delete(item.data.endpoint, el.id));
+          });
+        }
+
+      }
+    });
+
+    return requests;
   }
 
   public sendForm(data: any) {

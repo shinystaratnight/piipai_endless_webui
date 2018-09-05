@@ -5,6 +5,7 @@ import { InfoComponent } from './info/info.component';
 import { WebcamComponent } from './webcam/webcam.component';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { TestGeneratorComponent } from './test-generator/test-generator.component';
+import { TestListComponent } from './test-list/test-list.component';
 
 // Filters
 import { FilterChoiceComponent } from './filter-choice/filter-choice.component';
@@ -102,6 +103,7 @@ export const entryComponents = [
   ListAvailableComponent,
 
   TestGeneratorComponent,
+  TestListComponent,
 
   InfoComponent
 ];

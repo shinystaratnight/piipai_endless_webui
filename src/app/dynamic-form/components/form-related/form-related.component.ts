@@ -570,7 +570,11 @@ export class FormRelatedComponent extends BasicElementComponent
             el.checked = false;
             data.forEach((elem) => {
               if (elem instanceof Object) {
-                if (elem[this.param] === el[this.param]) {
+                const param = this.config.relatedObjects ? this.config.relatedObjects.field + '.id' : this.param; //tslint:disable-line
+                const elemValue = { value: ''};
+                this.getValueOfData(elem, param, elemValue);
+
+                if (elemValue.value === el[this.param]) {
                   el.checked = true;
                   results.push(el);
                 }

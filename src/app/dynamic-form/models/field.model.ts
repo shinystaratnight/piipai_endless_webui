@@ -59,6 +59,8 @@ export interface Field {
   editEndpoint?: string;
   useValue?: boolean;
   if_master?: any;
+  relatedObjects?: any;
+  candidateTabs?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;
