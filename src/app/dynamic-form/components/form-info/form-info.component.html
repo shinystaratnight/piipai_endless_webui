@@ -73,7 +73,12 @@
     </div>
 
     <p class="job" *ngIf="!titlePath && job">{{job.__str__}}</p>
-    <p class="jobsite" *ngIf="!titlePath && jobsite && viewMode">{{jobsite.__str__}}</p>
+    <p class="jobsite" *ngIf="!titlePath && jobsite && config && config.metadata['jobsite']">
+      <ng-container formElement
+        [config]="getConfig('jobsite')"
+        [group]="group">
+      </ng-container>
+    </p>
 
     <h5 class="form-info-title" *ngIf="!titlePath && skill_title">{{skill_title}}</h5>
 
@@ -115,11 +120,6 @@
         </div>
       </ng-container>
     </p>
-
-    <ng-container formElement *ngIf="config && config.metadata['jobsite'] && !viewMode"
-      [config]="getConfig('jobsite')"
-      [group]="group">
-    </ng-container>
 
     <div *ngIf="config && config.metadata['tags']" class="tags-wrapper">
       <label>Tags:</label>

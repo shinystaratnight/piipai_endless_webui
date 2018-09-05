@@ -1210,6 +1210,7 @@ export class DynamicListComponent
           break;
         case 'editModal':
         case 'editForm':
+        case 'showDetail':
           this.editForm(e);
           break;
         case 'emptyPost':

@@ -1057,9 +1057,10 @@ const formadd = [
               label: 'Client',
               add: true,
               delete: false,
-              values: ['__str__', 'master_company', 'primary_contact'],
+              values: ['__str__', 'master_company', 'primary_contact', 'manager'],
               type: 'related',
-              edit: true
+              edit: true,
+              required: true
             },
             type: 'related'
           },
@@ -1111,7 +1112,7 @@ const formadd = [
           },
           {
             endpoint: '/ecore/api/v2/core/companycontacts/',
-            read_only: true,
+            read_only: false,
             key: 'customer_representative',
             templateOptions: {
               label: 'Client representative',
@@ -1123,7 +1124,7 @@ const formadd = [
             },
             additional_text: 'Or',
             default: '{jobsite.primary_contact.id}',
-            if_master: '{customer_company.primary_contact.id}',
+            if_master: '{customer_company.manager.id}',
             type: 'related',
             query: {
               jobsites: '{jobsite.id}'
@@ -1139,7 +1140,8 @@ const formadd = [
               delete: false,
               values: ['primary_contact', '__str__'],
               type: 'related',
-              edit: true
+              edit: true,
+              required: true
             },
             type: 'related',
             query: {
@@ -1179,7 +1181,8 @@ const formadd = [
                 'default_rate'
               ],
               type: 'related',
-              edit: true
+              edit: true,
+              required: true
             },
             checkObject: {
               endpoint: '/ecore/api/v2/hr/jobs/',
@@ -1192,7 +1195,8 @@ const formadd = [
             collapsed: false,
             type: 'related',
             query: {
-              company: '{customer_company.id}'
+              company: '{customer_company.id}',
+              active: true
             },
             many: false
           },

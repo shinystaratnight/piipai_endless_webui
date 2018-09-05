@@ -23,7 +23,7 @@
 
       <span *ngIf="!repeatArray">{{config.templateOptions.text}}</span>
   </button>
-  <button class="btn btn-sm btn-link" type="button" *ngIf="config.action === 'showDetail'" triggers="click:blur" [placement]="config.placement" [ngbTooltip]="detail">
+  <button class="btn btn-sm btn-link" type="button" *ngIf="config.action === 'showDetail'" [placement]="config.placement" [ngbTooltip]="detail" (click)="action($event)">
     {{config.templateOptions.text}}
   </button>
   <span class="postfix" *ngIf="config.postfix">{{config.postfix}}</span>
