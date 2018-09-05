@@ -331,7 +331,19 @@ const form = [
       type: 'text'
     },
     read_only: false
-  }
+  },
+  {
+    endpoint: '/ecore/api/v2/core/companies/',
+    read_only: true,
+    hide: true,
+    templateOptions: {
+      label: 'Company',
+      values: ['__str__'],
+    },
+    type: 'related',
+    default: 'currentCompany',
+    key: 'company',
+  },
 ];
 
 const formadd = [
@@ -340,6 +352,7 @@ const formadd = [
     send: false,
     endpoint: '/ecore/api/v2/pricing/industries/',
     key: 'industry',
+    reset: ['name'],
     templateOptions: {
       label: 'Industries',
       type: 'related',
