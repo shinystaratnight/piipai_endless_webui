@@ -218,12 +218,13 @@ const formadd = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['default_rate', '__str__'],
+      values: ['price_list_default_rate', '__str__'],
       type: 'related',
       edit: true
     },
     query: {
-      active: true
+      active: true,
+      exclude_pricelist: '{price_list.id}'
     },
     collapsed: false,
     type: 'related',
@@ -232,7 +233,7 @@ const formadd = [
   },
   {
     key: 'hourly_rate',
-    default: '{skill.default_rate}',
+    default: '{skill.price_list_default_rate}',
     type: 'input',
     templateOptions: { required: false, label: 'Hourly Rate', type: 'text' },
     read_only: false
