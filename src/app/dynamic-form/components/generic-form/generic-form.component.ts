@@ -498,7 +498,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
                     };
                   } else if (this.endpoint === '/ecore/api/v2/hr/jobs/') {
                     errors = {
-                      [key]: this.generateCustomError(res, config, '/hr/jobs/')
+                      non_field_errors: this.generateCustomError(res, config, '/hr/jobs/', '', true)
                     };
                   }
                   this.updateErrors(this.errors, errors, this.response);
@@ -520,18 +520,25 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     response: any,
     field?: any,
     path?: string,
-    property?: string
+    property?: string,
+    nonField?: boolean
   ) {
     const object = property
       ? response.results[0][property]
       : response.results[0];
 
-    return [
+    const errors = [
       field.error,
       object.__str__,
       `${this.path || path}${object.id}/change`,
       { ...object, endpoint: this.endpoint + object.id + '/' }
     ];
+
+    if (nonField) {
+      errors.unshift(true);
+    }
+
+    return errors;
   }
 
   public observeFields(fields: any[], observers) {
