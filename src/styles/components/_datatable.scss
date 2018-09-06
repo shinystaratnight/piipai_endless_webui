@@ -16,6 +16,10 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     text-align: left;
   }
 
+  .tooltip-left .tooltip-inner {
+    max-width: 300px;
+  }
+
   .custom-select {
     position: relative;
 

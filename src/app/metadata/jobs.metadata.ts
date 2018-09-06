@@ -999,6 +999,9 @@ const form = [
       values: ['__str__', 'id'],
       type: 'related'
     },
+    query: {
+      skill: '{position.id}'
+    },
     type: 'related',
     many: true
   },
@@ -1062,6 +1065,7 @@ const formadd = [
               edit: true,
               required: true
             },
+            reset: ['jobsite', 'position', 'customer_representative'],
             type: 'related'
           },
           {
@@ -1127,6 +1131,7 @@ const formadd = [
             if_master: '{customer_company.manager.id}',
             type: 'related',
             query: {
+              company: '{customer_company.id}',
               jobsites: '{jobsite.id}'
             }
           },
@@ -1195,7 +1200,7 @@ const formadd = [
             collapsed: false,
             type: 'related',
             query: {
-              company: '{customer_company.id}',
+              company: '{provider_company.id}',
               active: true
             },
             many: false

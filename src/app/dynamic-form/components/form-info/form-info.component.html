@@ -124,7 +124,7 @@
     <div *ngIf="config && config.metadata['tags']" class="tags-wrapper">
       <label>Tags:</label>
       <ng-container formElement
-        [config]="getConfig('tags')"
+        [config]="config.metadata['tags']"
         [group]="group">
       </ng-container>
     </div>
