@@ -19,6 +19,18 @@ const list = {
       },
       {
         delim: null,
+        label: 'Industry',
+        content: [
+          {
+            field: 'name.industry.name',
+            type: 'text'
+          }
+        ],
+        name: 'name.industry',
+        title: null,
+      },
+      {
+        delim: null,
         label: 'Active',
         sort: true,
         content: [
@@ -66,7 +78,19 @@ const list = {
         query: 'active',
         default: null,
         type: 'select'
-      }
+      },
+      {
+        key: 'industry',
+        label: 'Industry',
+        data: {
+          value: '__str__',
+          endpoint: '/ecore/api/v2/pricing/industries/',
+          key: 'id'
+        },
+        query: 'industry',
+        multiple: false,
+        type: 'related'
+      },
     ]
   },
   fields: [
