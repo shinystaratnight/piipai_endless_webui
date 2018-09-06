@@ -153,7 +153,7 @@ const form = [
     endpoint: '/ecore/api/v2/pricing/industries/',
     key: 'name.industry',
     templateOptions: {
-      label: 'Industries',
+      label: 'Industry',
       type: 'related',
       param: 'id',
       values: ['__str__']
@@ -378,7 +378,7 @@ const formadd = [
     key: 'industry',
     reset: ['name'],
     templateOptions: {
-      label: 'Industries',
+      label: 'Industry',
       type: 'related',
       param: 'id',
       values: ['__str__']
