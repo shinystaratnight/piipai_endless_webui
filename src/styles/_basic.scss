@@ -158,7 +158,43 @@ form.ng-invalid button[type='submit'] {
   border-color: rgba(51, 51, 51, 0.3) !important;
 }
 
+.candidate-tabs {
+  & > .nav-tabs {
+
+    justify-content: center !important;
+
+    .nav-item:nth-child(11) {
+      width: 50%;
+
+      font-weight: bold;
+      text-align: right;
+
+      a.nav-link {
+        display: inline-flex;
+      }
+    }
+
+    .nav-item:nth-child(12) {
+      width: 50%;
+
+      font-weight: bold;
+
+      a.nav-link {
+        display: inline-flex;
+      }
+    }
+  }
+}
+
 /*---------- Bootstrap ---------- */
+
+*[role="tablist"] a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
 
 .edit-form .spinner.invisible {
   height: 0;

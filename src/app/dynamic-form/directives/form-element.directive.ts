@@ -38,6 +38,7 @@ import { FormTabsComponent } from '../containers/form-tabs/form-tabs.component';
 import { FormInfoComponent } from '../components/form-info/form-info.component';
 import { FormGroupComponent } from '../containers/form-group/form-group.component';
 import { ExtendComponent } from '../components/extend/extend.component';
+import { TestListComponent } from '../components/test-list/test-list.component';
 
 const components = {
   input: FormInputComponent,
@@ -68,6 +69,7 @@ const components = {
   group: FormGroupComponent,
   address: FormInputComponent,
   extend: ExtendComponent,
+  testList: TestListComponent
 };
 
 @Directive({

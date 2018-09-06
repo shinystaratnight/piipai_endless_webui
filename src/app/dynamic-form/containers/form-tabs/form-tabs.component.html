@@ -1,5 +1,5 @@
 <div class="form-tabs">
-  <ngb-tabset>
+  <ngb-tabset [class.candidate-tabs]="config.candidateTabs">
     <ng-container *ngFor="let field of config.children; let i = index">
       <ngb-tab *ngIf="!field.hide && (!config.editForm ? field.main : true)" [title]="field.name || (field.templateOptions && field.templateOptions.label)">
         <template ngbTabContent>

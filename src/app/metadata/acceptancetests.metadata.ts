@@ -163,7 +163,6 @@ const form = [
             templateOptions: {
               label: 'Valid Until',
               type: 'date',
-              required: false
             }
           },
         ]
@@ -175,62 +174,65 @@ const form = [
         children: [
           {
             type: 'related',
-            send: false,
-            endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestindustries/',
+            endpoint: '/ecore/api/v2/pricing/industries/',
             key: 'acceptance_tests_industries',
             many: true,
-            options: [],
-            doNotChoice: true,
-            prefilled: {
-              acceptance_test: '{id}'
+            useOptions: true,
+            relatedObjects: {
+              endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestindustries/',
+              data: {
+                acceptance_test: '{id}'
+              },
+              field: 'industry'
             },
             templateOptions: {
               label: 'Industries',
               type: 'related',
               values: ['__str__'],
-              display: '{industry.__str__}',
               delete: true,
-              add: true
+              add: false
             }
           },
           {
             type: 'related',
-            send: false,
-            endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestskills/',
+            endpoint: '/ecore/api/v2/skills/skills/',
             key: 'acceptance_tests_skills',
             many: true,
-            options: [],
-            doNotChoice: true,
-            prefilled: {
-              acceptance_test: '{id}'
+            useOptions: true,
+            relatedObjects: {
+              endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestskills/',
+              data: {
+                acceptance_test: '{id}'
+              },
+              field: 'skill'
             },
             templateOptions: {
               label: 'Skills',
               type: 'related',
               values: ['__str__'],
-              display: '{skill.__str__}',
               delete: true,
-              add: true
+              add: false,
             }
           },
           {
             type: 'related',
-            send: false,
-            endpoint: '/ecore/api/v2/acceptance-tests/acceptancetesttags/',
+            endpoint: '/ecore/api/v2/core/tags/',
             key: 'acceptance_tests_tags',
             many: true,
-            options: [],
-            doNotChoice: true,
-            prefilled: {
-              acceptance_test: '{id}'
+            useOptions: true,
+            relatedObjects: {
+              endpoint: '/ecore/api/v2/acceptance-tests/acceptancetesttags/',
+              data: {
+                acceptance_test: '{id}'
+              },
+              field: 'tag'
             },
             templateOptions: {
               label: 'Tags',
               type: 'related',
               values: ['__str__'],
-              display: '{tag.__str__}',
               delete: true,
-              add: true
+              add: false
             }
           },
           {
@@ -247,8 +249,8 @@ const form = [
             templateOptions: {
               label: 'Workflow Node',
               type: 'related',
-              values: ['__str__'],
-              display: '{company_workflow_node.__str__}',
+              values: ['__str__', 'company_workflow_node'],
+              display: '{__str__}',
               delete: true,
               add: true
             }

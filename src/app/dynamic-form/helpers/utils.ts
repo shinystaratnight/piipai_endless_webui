@@ -28,7 +28,7 @@ export function getValueOfData(data, key: string, obj: Field): void {
     }
   } else {
     if (data[prop]) {
-      this.getValueOfData(data[prop], keys.join('.'), obj);
+      getValueOfData(data[prop], keys.join('.'), obj);
     }
   }
 }
@@ -47,4 +47,18 @@ export function getElementFromMetadata(metadata: Field[], key: string): Field {
     }
   });
   return element;
+}
+
+export function removeValue(key: string, data: any): void {
+  let keysArray = key.split('.');
+  let firstKey = keysArray.shift();
+
+  if (keysArray.length === 0) {
+    if (data) {
+      delete data[firstKey];
+    }
+  } else if (keysArray.length > 0) {
+    let combineKeys = keysArray.join('.');
+    this.removeValue(combineKeys, data[firstKey]);
+  }
 }

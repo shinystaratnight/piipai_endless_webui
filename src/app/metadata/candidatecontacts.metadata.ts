@@ -609,6 +609,7 @@ const form = [
   },
   {
     type: 'tabs',
+    candidateTabs: true,
     children: [
       {
         main: true,
@@ -1268,7 +1269,7 @@ const form = [
       {
         endpoint: '/ecore/api/v2/candidate/skillrels/',
         templateOptions: {
-          label: 'Candidate skills',
+          label: 'Skills',
           type: 'list',
           add_label: '+ Add item',
           text: 'Candidate skills'
@@ -1286,7 +1287,7 @@ const form = [
       {
         endpoint: '/ecore/api/v2/candidate/tagrels/',
         templateOptions: {
-          label: 'Candidate tags',
+          label: 'Tags',
           type: 'list',
           add_label: '+ Add item',
           text: 'Candidate tags'
@@ -1300,6 +1301,28 @@ const form = [
           candidate_contact: '{id}'
         },
         help: 'Here you can see the tags which belong to the candidate'
+      },
+      {
+        name: 'Tests',
+        type: 'testList',
+        endpoint: '/ecore/api/v2/candidate/candidatecontacts/{id}/tests/',
+      },
+      {
+        endpoint: '/ecore/api/v2/hr/candidateevaluations/',
+        templateOptions: {
+          label: 'Evaluations',
+          type: 'list',
+          text: 'Evaluations'
+        },
+        collapsed: false,
+        prefilled: {
+          candidate_contact: '{id}'
+        },
+        type: 'list',
+        query: {
+          candidate_contact: '{id}'
+        },
+        help: 'Here you can see evaluations for the candidate'
       },
       {
         name: 'States',
@@ -1351,20 +1374,6 @@ const form = [
           text: 'Unavailabilities'
         },
         collapsed: false
-      },
-      {
-        endpoint: '/ecore/api/v2/hr/joboffers/candidate/',
-        templateOptions: {
-          label: 'Job offers',
-          type: 'list',
-          text: 'Job offers'
-        },
-        collapsed: false,
-        type: 'list',
-        query: {
-          candidate_contact: '{id}'
-        },
-        help: 'Here you can see job offers'
       },
       {
         endpoint: '/ecore/api/v2/hr/carrierlists/',
@@ -1420,22 +1429,32 @@ const form = [
         help: 'Here you can see favorite companies for candidate'
       },
       {
-        endpoint: '/ecore/api/v2/hr/candidateevaluations/',
+        endpoint: '/ecore/api/v2/hr/joboffers/candidate/',
         templateOptions: {
-          label: 'Evaluations',
+          label: 'Job offers',
           type: 'list',
-          text: 'Evaluations'
+          text: 'Job offers'
         },
         collapsed: false,
-        prefilled: {
-          candidate_contact: '{id}'
-        },
         type: 'list',
         query: {
           candidate_contact: '{id}'
         },
-        help: 'Here you can see evaluations for the candidate'
-      }
+        help: 'Here you can see job offers'
+      },
+      {
+        endpoint: '/ecore/api/v2/hr/timesheets/',
+        templateOptions: {
+          label: 'Timesheets',
+          type: 'list',
+          text: 'Timesheets'
+        },
+        collapsed: false,
+        type: 'list',
+        query: {
+          candidate: '{id}'
+        }
+      },
     ]
   }
 ];

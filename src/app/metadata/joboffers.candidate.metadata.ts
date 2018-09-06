@@ -39,7 +39,7 @@ const formset = {
         ],
         label: 'Shift date and time',
         title: null,
-        delim: null
+        delim: ' '
       },
       {
         name: 'status',
