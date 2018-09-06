@@ -16,7 +16,7 @@ import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/finally';
 
 import { GenericFormService, FormService } from '../../services/';
-import { UserService } from '../../../services';
+import { UserService, SiteSettingsService } from '../../../services';
 
 import { ToastrService } from '../../../shared/services/toastr.service';
 
@@ -151,7 +151,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     private service: GenericFormService,
     private formService: FormService,
     private toastrService: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private settingsService: SiteSettingsService,
   ) {
     this.subscriptions = [];
 
@@ -284,16 +285,6 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         this.checkObject[el.key] = el.checkObject;
       }
 
-      if (el.key && el.type === 'related' && el.useOptions) {
-        this.getRalatedData(
-          this.metadata,
-          el.key,
-          el.endpoint,
-          {},
-          '?limit=-1'
-        );
-      }
-
       if (el.key && el.update) {
         if (el.update.before) {
           this.updateDataBeforeSendForm.config.push(el.update);
@@ -304,12 +295,28 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     };
   }
 
+  public getRelatedDataForOptions(metadata, data) {
+    metadata.forEach((el) => {
+      if (el.key && el.type === 'related' && el.useOptions) {
+        this.getRalatedData(
+          this.metadata,
+          el.key,
+          el.endpoint,
+          {},
+          '?limit=-1' + this.generateQuery(el.query, data)
+        );
+      } else if (el.children) {
+        this.getRelatedDataForOptions(el.children, data);
+      }
+    });
+  }
+
   public checkFormInfoElement(metadata: any[]) {
     const infoElement = getElementFromMetadata(metadata, 'id');
 
     if (infoElement && infoElement.type === 'info') {
       const keys = Object.keys(infoElement.values);
-      infoElement.metadata = <any>{};
+      infoElement.metadata = <any> {};
       keys.forEach((el) => {
         const value = infoElement.values[el];
         if (typeof value === 'string') {
@@ -578,6 +585,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public getDataForForm(endpoint, id) {
     let endp = id ? `${endpoint}${id}/` : endpoint;
     this.service.getAll(endp).subscribe((data: any) => {
+      this.getRelatedDataForOptions(this.metadata, data);
       this.fillingForm(this.metadata, data);
       this.checkRuleElement(this.metadata);
       this.checkRelatedObjects(this.metadata, data);
@@ -1426,6 +1434,17 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
           }
           if (update) {
             this.updateMetadata(metadata, el.key);
+
+            const formInfo = getElementFromMetadata(metadata, 'id');
+
+            if (formInfo && formInfo.metadata) {
+              const newElem = Object.assign(formInfo.metadata[el.key], params[el.key].data);
+
+              formInfo.metadata[el.key] = null;
+              setTimeout(() => {
+                formInfo.metadata[el.key] = newElem;
+              }, 200);
+            }
           }
           if (params[el.key].data && params[el.key].data.value) {
             this.getValueOfData(
@@ -1710,5 +1729,25 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         this.addCustomTemplates(el.children, data);
       }
     });
+  }
+
+  public generateQuery(queries, data) {
+    const format = new FormatString();
+    let query = '&';
+    if (queries) {
+      const keys = Object.keys(queries);
+      keys.forEach((el) => {
+        query +=
+          typeof queries[el] === 'string'
+            ? queries[el] === 'currentCompany'
+              ? `${el}=${
+                  this.settingsService.settings.company_settings.company
+                }&`
+              : `${el}=${format.format(queries[el], data)}&`
+            : `${el}=${queries[el]}&`;
+      });
+      query = query.slice(0, query.length - 1);
+    }
+    return query.length > 1 ? query : '';
   }
 }
