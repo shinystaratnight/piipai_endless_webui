@@ -360,6 +360,7 @@ const formset = {
 
           {
             action: 'showDetail',
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{offer_sent_by_sms.id}',
             noDelim: true,
             placement: 'left',
             text: 'Offer',
@@ -371,6 +372,7 @@ const formset = {
 
           {
             action: 'showDetail',
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{reply_received_by_sms.id}',
             text: 'Reply',
             placement: 'right',
             type: 'button',

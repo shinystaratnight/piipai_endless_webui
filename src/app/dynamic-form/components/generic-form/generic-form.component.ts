@@ -1079,11 +1079,13 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
           count += 1;
           this.delayData[el].message = '';
         } else {
-          this.delayData[el].message = 'This field is required.';
+          if (!this.id && !this.editForm) {
+            this.delayData[el].message = 'This field is required.';
+          }
         }
       });
 
-      return delayEndppoints.length === count;
+      return (!this.id && !this.editForm) ? delayEndppoints.length === count : true;
     }
 
     return true;
