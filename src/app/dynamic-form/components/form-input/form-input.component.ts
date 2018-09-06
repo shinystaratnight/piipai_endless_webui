@@ -177,7 +177,7 @@ export class FormInputComponent extends BasicElementComponent
         this.key !== 'address' &&
         this.key !== 'street_address'
       ) {
-        this.setInitValue();
+        this.setInitValue(true);
       }
     }
   }
@@ -262,7 +262,7 @@ export class FormInputComponent extends BasicElementComponent
     return keys.find((el) => key.includes(el));
   }
 
-  public setInitValue() {
+  public setInitValue(update?: boolean) {
     const format = new FormatString();
     if (
       this.config.type !== 'static' ||
@@ -279,12 +279,18 @@ export class FormInputComponent extends BasicElementComponent
         this.config.default ||
         this.config.default === 0
       ) {
+        let defaultValue;
+        if (update) {
+          defaultValue = typeof this.config.default === 'string'
+            ? format.format(this.config.default, this.formData)
+            : this.config.default;
+        }
+
         let value =
-          this.config.value === 0 || this.config.value
+          (this.config.value === 0 || this.config.value) &&
+          !(update && defaultValue !== this.config.value)
             ? this.config.value
-            : typeof this.config.default === 'string'
-              ? format.format(this.config.default, this.formData)
-              : this.config.default;
+            : defaultValue;
 
         if (this.group.get(this.key)) {
           this.group.get(this.key).patchValue(value);
@@ -311,7 +317,9 @@ export class FormInputComponent extends BasicElementComponent
       }
     }
 
-    this.cd.detectChanges();
+    setTimeout(() => {
+      this.cd.detectChanges();
+    }, 200);
   }
 
   public ngAfterViewInit() {
