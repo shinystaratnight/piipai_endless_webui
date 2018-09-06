@@ -380,9 +380,32 @@ export class FormRelatedComponent extends BasicElementComponent
             }
           }
 
+          if (this.config.default instanceof Object) {
+            if (
+              this.config.default.useIf &&
+              this.checkExistKey(this.config.default.useIf, formData.key)
+            ) {
+              const result = this.checkShowRules(this.config.default.useIf, formData.data);
+
+              if (result) {
+                this.getOptions.call(
+                  this,
+                  '',
+                  0,
+                  false,
+                  this.setValue,
+                  '',
+                  this.config.default.query,
+                  this.config.default.only
+                );
+              }
+            }
+          }
+
           if (
             this.checkRelatedField(formData.key, formData.data) ||
             (this.config.default &&
+              this.config.default.includes &&
               !this.config.default.includes('session') &&
               !(formData.reset && formData.reset.indexOf(this.config.key) > -1))
           ) {
@@ -603,6 +626,7 @@ export class FormRelatedComponent extends BasicElementComponent
       }
     } else if (
       this.config.default &&
+      this.config.default.includes &&
       this.config.default.includes('session') &&
       !this.config.editForm
     ) {
@@ -617,6 +641,7 @@ export class FormRelatedComponent extends BasicElementComponent
       }
     } else if (
       this.config.default &&
+      this.config.default.includes &&
       this.config.default.includes('currentCompany')
     ) {
       const id = this.settingsService.settings.company_settings.company;
@@ -1252,7 +1277,8 @@ export class FormRelatedComponent extends BasicElementComponent
     concat = false,
     callback?,
     id?,
-    customQuery?
+    customQuery?,
+    only?
   ) {
     let endpoint = this.config.endpoint;
     if (endpoint) {
@@ -1315,20 +1341,30 @@ export class FormRelatedComponent extends BasicElementComponent
               }
 
               if (callback) {
-                const target = res.results.find((el) => el.id === id);
+                let canSetValue;
 
-                const item = target || res.results[0];
+                if (only && res.results.length === only) {
+                  canSetValue = true;
+                } else if (!only) {
+                  canSetValue = true;
+                }
 
-                if (item) {
-                  const path = this.getLinkPath(this.config.endpoint);
-                  if (path) {
-                    this.linkPath =
-                      location.origin + path + item[this.param] + '/change';
-                  } else {
-                    this.linkPath = '/';
+                if (canSetValue) {
+                  const target = res.results.find((el) => el.id === id);
+
+                  const item = target || res.results[0];
+
+                  if (item) {
+                    const path = this.getLinkPath(this.config.endpoint);
+                    if (path) {
+                      this.linkPath =
+                        location.origin + path + item[this.param] + '/change';
+                    } else {
+                      this.linkPath = '/';
+                    }
+
+                    callback.call(this, item);
                   }
-
-                  callback.call(this, item);
                 }
               }
               this.updatePosition();

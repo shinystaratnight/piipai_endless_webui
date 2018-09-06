@@ -1132,7 +1132,6 @@ const formadd = [
             type: 'related',
             query: {
               company: '{customer_company.id}',
-              jobsites: '{jobsite.id}'
             }
           },
           {
@@ -1149,9 +1148,15 @@ const formadd = [
               required: true
             },
             type: 'related',
+            default: {
+              useIf: ['customer_company.id', 'customer_representative.id'],
+              query: {
+                primary_contact: '{customer_representative.id}'
+              },
+              only: 1
+            },
             query: {
               company: '{customer_company.id}',
-              primary_contact: '{customer_representative.id}'
             }
           },
           {
@@ -1200,7 +1205,7 @@ const formadd = [
             collapsed: false,
             type: 'related',
             query: {
-              company: '{provider_company.id}',
+              company: '{customer_company.id}',
               active: true
             },
             many: false
@@ -1210,7 +1215,7 @@ const formadd = [
             default: 1,
             type: 'input',
             templateOptions: {
-              required: false,
+              required: true,
               label: 'Number Of workers',
               max: 32767,
               type: 'number',

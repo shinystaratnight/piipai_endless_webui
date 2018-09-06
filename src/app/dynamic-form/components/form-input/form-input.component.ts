@@ -279,12 +279,9 @@ export class FormInputComponent extends BasicElementComponent
         this.config.default ||
         this.config.default === 0
       ) {
-        let defaultValue;
-        if (update) {
-          defaultValue = typeof this.config.default === 'string'
+        let defaultValue = typeof this.config.default === 'string'
             ? format.format(this.config.default, this.formData)
             : this.config.default;
-        }
 
         let value =
           (this.config.value === 0 || this.config.value) &&
