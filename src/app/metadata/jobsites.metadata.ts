@@ -53,7 +53,7 @@ const list = {
         ],
         name: 'regular_company',
         sort_field: 'regular_company',
-        label: 'Regular company',
+        label: 'Client',
         sort: true
       },
       {
@@ -234,7 +234,7 @@ const list = {
       endpoint: '/ecore/api/v2/core/companies/',
       read_only: true,
       templateOptions: {
-        label: 'Regular company',
+        label: 'Client',
         add: true,
         delete: false,
         values: ['__str__'],
