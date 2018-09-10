@@ -22,6 +22,7 @@ import { ListSkillsComponent } from '../components/list-skills/list-skills.compo
 import { InfoComponent } from '../components/info/info.component';
 import { ListFillinTagsComponent } from '../components/list-fillin-tags/list-fillin-tags.component';
 import { ListAvailableComponent } from '../components/list-available/list-available.component';
+import { ButtonGroupComponent } from '../containers/button-group/button-group.component';
 
 const components = {
   text: ListTextComponent,
@@ -45,7 +46,8 @@ const components = {
   skills: ListSkillsComponent,
   description: InfoComponent,
   fillintags: ListFillinTagsComponent,
-  available: ListAvailableComponent
+  available: ListAvailableComponent,
+  buttonGroup: ButtonGroupComponent
 };
 
 @Directive({

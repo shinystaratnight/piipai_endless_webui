@@ -385,7 +385,10 @@ export class FormRelatedComponent extends BasicElementComponent
               this.config.default.useIf &&
               this.checkExistKey(this.config.default.useIf, formData.key)
             ) {
-              const result = this.checkShowRules(this.config.default.useIf, formData.data);
+              const result = this.checkShowRules(
+                this.config.default.useIf,
+                formData.data
+              );
 
               if (result) {
                 this.getOptions.call(
@@ -593,8 +596,10 @@ export class FormRelatedComponent extends BasicElementComponent
             el.checked = false;
             data.forEach((elem) => {
               if (elem instanceof Object) {
-                const param = this.config.relatedObjects ? this.config.relatedObjects.field + '.id' : this.param; //tslint:disable-line
-                const elemValue = { value: ''};
+                const param = this.config.relatedObjects
+                  ? this.config.relatedObjects.field + '.id'
+                  : this.param;
+                const elemValue = { value: '' };
                 this.getValueOfData(elem, param, elemValue);
 
                 if (elemValue.value === el[this.param]) {
@@ -963,6 +968,7 @@ export class FormRelatedComponent extends BasicElementComponent
     if (this.config.type !== 'address' && !this.config.doNotChoice) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
+        this.lastElement = 0;
         this.generateList(this.searchValue);
         setTimeout(() => {
           this.searchElement.nativeElement.focus();
@@ -1308,13 +1314,15 @@ export class FormRelatedComponent extends BasicElementComponent
               this.count = res.count;
               if (res.results && res.results.length) {
                 const formatString = new FormatString();
-                res.results.forEach((el) => {
+                const results = [...res.results];
+
+                results.forEach((el) => {
                   el.__str__ = formatString.format(this.display, el);
                 });
                 if (concat && this.previewList) {
-                  this.previewList.push(...res.results);
+                  this.previewList.push(...results);
                 } else {
-                  this.previewList = res.results;
+                  this.previewList = results;
                 }
               }
               if (res && res.length) {

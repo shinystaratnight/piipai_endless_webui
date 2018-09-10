@@ -1,11 +1,15 @@
-import { Component, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy
+} from '@angular/core';
 
 @Component({
   selector: 'list-column',
   templateUrl: 'list-column.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class ListColumnComponent {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -32,5 +36,4 @@ export class ListColumnComponent {
   public buttonHandler(e) {
     this.buttonAction.emit(e);
   }
-
 }

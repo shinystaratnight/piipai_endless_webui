@@ -359,25 +359,33 @@ const formset = {
           },
 
           {
-            action: 'showDetail',
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{offer_sent_by_sms.id}',
-            noDelim: true,
-            placement: 'left',
-            text: 'Offer',
-            postfix: '|',
-            type: 'button',
-            color: 'link',
-            field: 'offer_sent_by_sms'
-          },
+            type: 'buttonGroup',
+            field: 'offer_smses',
+            content: [
+              {
+                action: 'showDetail',
+                endpoint:
+                  '/ecore/api/v2/sms-interface/smsmessages/{offer_sent_by_sms.id}',
+                noDelim: true,
+                placement: 'left',
+                text: 'Offer',
+                postfix: '|',
+                type: 'button',
+                color: 'link',
+                field: 'offer_sent_by_sms'
+              },
 
-          {
-            action: 'showDetail',
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{reply_received_by_sms.id}',
-            text: 'Reply',
-            placement: 'right',
-            type: 'button',
-            color: 'link',
-            field: 'reply_received_by_sms'
+              {
+                action: 'showDetail',
+                endpoint:
+                  '/ecore/api/v2/sms-interface/smsmessages/{reply_received_by_sms.id}',
+                text: 'Reply',
+                placement: 'right',
+                type: 'button',
+                color: 'link',
+                field: 'reply_received_by_sms'
+              }
+            ]
           },
 
           {
