@@ -750,7 +750,7 @@ const form = [
                       min: '{position.lower_rate_limit}'
                     },
                     templateOptions: {
-                      label: 'Candidate rate default',
+                      label: 'Candidate rate override',
                       type: 'number',
                       text: '${hourly_rate_default}/h'
                     }
