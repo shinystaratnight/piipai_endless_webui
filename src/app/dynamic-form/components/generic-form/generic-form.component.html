@@ -13,6 +13,7 @@
       [data]="data"
       [hiddenFields]="hiddenFields"
       [formId]="formId"
+      (formGroup)="setFormGroup($event)"
       (submit)="submitForm($event)"
       (event)="eventHandler($event)"
       (buttonAction)="buttonActionHandler($event)"
