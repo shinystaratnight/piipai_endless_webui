@@ -1713,7 +1713,16 @@ export class DynamicListComponent
                 value: this.format(
                   '{position.id}',
                   this.data.results.find((el) => el.id === e.el.rowId)
-                ) //tslint:disable-line
+                )
+              }
+            },
+            default_shift_starting_time: {
+              action: 'add',
+              data: {
+                value: this.format(
+                  '{default_shift_starting_time}',
+                  this.data.results.find((el) => el.id === e.el.rowId)
+                )
               }
             },
             job: {

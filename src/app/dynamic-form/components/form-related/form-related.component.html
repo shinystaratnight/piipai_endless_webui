@@ -118,7 +118,10 @@
         </div>
         <ng-container *ngIf="config.templateOptions.info">
           <div *ngFor="let item of results; let i = index" class="candidate-info">
-            <span>{{item.__str__}}</span> | <span>{{item.score}} <i fa name="star"></i></span> | <span>{{item.distance}} km</span>
+            <span>{{item.__str__}}</span> | <span>{{item.score || (item.candidate_scores && item.candidate_scores.average_score)}} <i fa name="star"></i></span> | <span>{{item.distance}} km</span>
+            <i *ngIf="!config.doNotChoice" fa class="icon ml-2"
+              (click)="deleteItem(i, item)"
+              [name]="'times'"></i>
           </div>
         </ng-container>
       </div>

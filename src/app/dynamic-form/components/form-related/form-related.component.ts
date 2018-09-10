@@ -385,7 +385,10 @@ export class FormRelatedComponent extends BasicElementComponent
               this.config.default.useIf &&
               this.checkExistKey(this.config.default.useIf, formData.key)
             ) {
-              const result = this.checkShowRules(this.config.default.useIf, formData.data);
+              const result = this.checkShowRules(
+                this.config.default.useIf,
+                formData.data
+              );
 
               if (result) {
                 this.getOptions.call(
@@ -593,8 +596,10 @@ export class FormRelatedComponent extends BasicElementComponent
             el.checked = false;
             data.forEach((elem) => {
               if (elem instanceof Object) {
-                const param = this.config.relatedObjects ? this.config.relatedObjects.field + '.id' : this.param; //tslint:disable-line
-                const elemValue = { value: ''};
+                const param = this.config.relatedObjects
+                  ? this.config.relatedObjects.field + '.id'
+                  : this.param;
+                const elemValue = { value: '' };
                 this.getValueOfData(elem, param, elemValue);
 
                 if (elemValue.value === el[this.param]) {
@@ -1116,11 +1121,13 @@ export class FormRelatedComponent extends BasicElementComponent
         });
     } else {
       if (this.results[index]) {
-        const val = this.config.options.find(
-          (el) => el[this.param] === this.results[index][this.param]
-        );
-        if (val) {
-          val.checked = false;
+        if (this.config.options) {
+          const val = this.config.options.find(
+            (el) => el[this.param] === this.results[index][this.param]
+          );
+          if (val) {
+            val.checked = false;
+          }
         }
         this.results.splice(index, 1);
         this.changeList();
@@ -1318,6 +1325,7 @@ export class FormRelatedComponent extends BasicElementComponent
                 }
               }
               if (res && res.length) {
+                this.count = res.length;
                 const formatString = new FormatString();
                 res.forEach((el) => {
                   el.__str__ = formatString.format(this.display, el);

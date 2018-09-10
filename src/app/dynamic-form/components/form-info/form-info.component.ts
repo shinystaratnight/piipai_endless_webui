@@ -239,6 +239,12 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       mode: 'edit',
       edit: true,
       data: {
+        default_shift_starting_time: {
+          action: 'add',
+          data: {
+            value: formatString.format('{default_shift_starting_time}', this.config.value)
+          }
+        },
         skill: {
           action: 'add',
           data: {
@@ -264,6 +270,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     if (e.type === 'sendForm' && e.status === 'success') {
       this.saveProcess = false;
       closeModal();
+
+      this.event.emit(e);
     }
   }
 
