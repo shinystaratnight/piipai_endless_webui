@@ -7,6 +7,7 @@ import {
   OnDestroy,
   SimpleChanges
 } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -144,6 +145,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
   public checkObject: any = {};
   public relatedObjects: any[] = [];
+  public formGroup: FormGroup;
 
   private subscriptions: Subscription[];
 
@@ -501,11 +503,15 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
                       non_field_errors: this.generateCustomError(res, config, '/hr/jobs/', '', true)
                     };
                   }
+                  this.formGroup.setErrors({
+                    non_field_errors: true
+                  });
                   this.updateErrors(this.errors, errors, this.response);
                 } else {
+                  this.formGroup.updateValueAndValidity({ onlySelf: true });
                   this.updateErrors(
                     this.errors,
-                    { [key]: '  ' },
+                    { [key]: '  ', non_field_errors: [''] },
                     this.response
                   );
                 }
@@ -1756,5 +1762,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       query = query.slice(0, query.length - 1);
     }
     return query.length > 1 ? query : '';
+  }
+
+  public setFormGroup(form: FormGroup) {
+    this.formGroup = form;
   }
 }

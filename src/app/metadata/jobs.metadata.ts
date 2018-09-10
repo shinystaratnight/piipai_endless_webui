@@ -1054,7 +1054,7 @@ const formadd = [
         children: [
           {
             endpoint: '/ecore/api/v2/core/companies/',
-            read_only: true,
+            read_only: false,
             key: 'customer_company',
             templateOptions: {
               label: 'Client',
@@ -1065,6 +1065,7 @@ const formadd = [
               edit: true,
               required: true
             },
+            default: '{customer_representative.company.id}',
             reset: ['jobsite', 'position', 'customer_representative'],
             type: 'related'
           },
@@ -1122,7 +1123,7 @@ const formadd = [
               label: 'Client representative',
               add: true,
               delete: false,
-              values: ['__str__'],
+              values: ['__str__', 'company'],
               type: 'related',
               edit: true
             },
@@ -1253,7 +1254,7 @@ const formadd = [
               min: '{position.lower_rate_limit}'
             },
             templateOptions: {
-              label: 'Candidate rate default',
+              label: 'Candidate rate override',
               type: 'number',
               text: '${hourly_rate_default}/h'
             }
