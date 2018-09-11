@@ -103,6 +103,7 @@ import * as passwordforgot from './passwordforgot.metadata';
 import * as passwordchange from './passwordchange.metadata';
 import * as userpassword from './userpassword.metadata';
 import * as skillname from './skillname.metadata';
+import * as smslogs from './smslogs.metadata';
 
 export const metadata = {
   '/ecore/api/v2/core/addresses/': address.metadata,
@@ -223,5 +224,6 @@ export const metadata = {
   '/ecore/api/v2/core/contacts/forgot_password/': passwordforgot.metadata,
   'change_password': passwordchange.metadata,
   'password': userpassword.metadata,
-  '/ecore/api/v2/skills/skillnames/': skillname.metadata
+  '/ecore/api/v2/skills/skillnames/': skillname.metadata,
+  '/ecore/api/v2/sms-interface/smslogs/': smslogs.metadata,
 };

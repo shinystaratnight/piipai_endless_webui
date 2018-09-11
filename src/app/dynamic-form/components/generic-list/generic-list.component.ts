@@ -356,7 +356,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
       e.type === 'filter' || e.type === 'update') {
       table.refresh = true;
       if (e.type === 'update') {
-        this.getData(this.getTable(e.list).endpoint, this.generateQuery(table.query), table);
+        table.offset = 0;
+        table.query.pagination = '';
+        this.getData(table.endpoint, this.generateQuery(table.query), table);
         return;
       }
       if (table.query[e.type] === e.query) {
@@ -373,7 +375,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         }
         this.updateUrl(table.query, e.list);
       } else {
-        this.getData(this.getTable(e.list).endpoint, this.generateQuery(table.query), table);
+        this.getData(table.endpoint, this.generateQuery(table.query), table);
         if (e.query) {
           e.query.split('&').forEach((el) => {
             let propsArray = el.split('=');
