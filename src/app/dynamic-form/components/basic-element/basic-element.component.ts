@@ -49,6 +49,9 @@ export class BasicElementComponent {
     if (config.templateOptions.cols) {
       element.nativeElement.cols = config.templateOptions.cols;
     }
+    if (config.templateOptions.disabled) {
+      element.nativeElement.disabled = config.templateOptions.disabled;
+    }
     if (config.templateOptions.rows) {
       element.nativeElement.rows = config.templateOptions.rows;
     }

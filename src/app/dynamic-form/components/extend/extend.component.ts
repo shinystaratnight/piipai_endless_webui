@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
+import { GenericFormService } from '../../services/generic-form.service';
 
 import moment from 'moment-timezone';
 
@@ -15,25 +16,24 @@ import moment from 'moment-timezone';
   templateUrl: './extend.component.html',
   styleUrls: ['./extend.component.scss']
 })
-export class ExtendComponent extends BasicElementComponent implements OnInit, OnDestroy {
-
+export class ExtendComponent extends BasicElementComponent
+  implements OnInit, OnDestroy {
   public config: Field;
   public group: FormGroup;
   public viewData: FormGroup;
   public shifts: any[] = [];
-  public viewConfig: { [key: string]: Field };
+  public viewConfig: any;
   public formData: any;
   public autoFillData: any;
   public key: any;
   public extendDates: boolean;
   public extendCandidates: boolean;
   public autofill: any;
+  public removeDate: BehaviorSubject<string> = new BehaviorSubject('');
 
   private formSubscription: Subscription;
 
-  constructor(
-    private fb: FormBuilder
-  ) {
+  constructor(private fb: FormBuilder, private gfs: GenericFormService) {
     super();
   }
 
@@ -45,6 +45,7 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
       shiftsDates: {
         key: 'shifts',
         type: 'jobdates',
+        removeDate: this.removeDate,
         value: this.config.value || []
       },
       extendDates: {
@@ -60,7 +61,7 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
         templateOptions: {
           label: 'Candidates'
         }
-      },
+      }
     };
 
     this.checkFormData();
@@ -77,7 +78,9 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
       this.autofill = [];
       data.forEach((date) => {
         this.autofill.push({
-          time: moment.tz(date.shift_datetime, 'Australia/Sydney').format('HH:mm:ss'),
+          time: moment
+            .tz(date.shift_datetime, 'Australia/Sydney')
+            .format('HH:mm:ss'),
           candidates: date.candidates
         });
       });
@@ -106,6 +109,24 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
         this.formData = data.data;
 
         this.autoFillData = this.formData.last_fullfilled;
+
+        if (!this.autoFillData) {
+          this.viewConfig.extendDates = {
+            ...this.viewConfig.extendDates,
+            templateOptions: {
+              ...this.viewConfig.extendDates.templateOptions,
+              disabled: true
+            }
+          };
+          this.viewConfig.extendCandidates = {
+            ...this.viewConfig.extendCandidates,
+            templateOptions: {
+              ...this.viewConfig.extendCandidates.templateOptions,
+              disabled: true
+            }
+          };
+        }
+
         this.generateAutofill(this.autoFillData);
       });
 
@@ -117,27 +138,44 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
     const shift = {
       date,
       config: {
-        0: this.generateConfig(this.formData.id, date)
+        0: this.generateConfig(
+          this.formData.id,
+          date,
+          this.formData['default_shift_starting_time']
+        )
       },
-      data: this.fb.array([ this.fb.group({}) ])
+      data: this.fb.array([this.fb.group({})])
     };
 
     if (this.extendDates) {
-      shift['config'] = <any> {};
+      shift['config'] = <any>{};
       shift['data'] = this.fb.array([]);
 
       this.autofill.forEach((el, i) => {
-        shift['config'][i] = this.generateConfig(this.formData.id, date, el.time);
+        shift['config'][i] = this.generateConfig(
+          this.formData.id,
+          date,
+          el.time,
+          null,
+          true
+        );
         shift['data'].insert(i, this.fb.group({}));
       });
     }
 
-    if (this. extendCandidates) {
-      shift['config'] = <any> {};
+    if (this.extendCandidates) {
+      shift['config'] = <any>{};
       shift['data'] = this.fb.array([]);
 
       this.autofill.forEach((el, i) => {
-        shift['config'][i] = this.generateConfig(this.formData.id, date, el.time, el.candidates);
+        shift['config'][i] = this.generateConfig(
+          this.formData.id,
+          date,
+          el.time,
+          el.candidates,
+          true,
+          true
+        );
         shift['data'].insert(i, this.fb.group({}));
       });
     }
@@ -146,11 +184,21 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
   }
 
   public addTime(shift) {
-    shift.config[shift.data.length] = this.generateConfig(this.formData.id, shift.date);
+    shift.config[shift.data.length] = this.generateConfig(
+      this.formData.id,
+      shift.date
+    );
     shift.data.insert(shift.data.length, this.fb.group({}));
   }
 
-  public generateConfig(id, date, time?, candidates?) {
+  public generateConfig(
+    id,
+    date,
+    time?,
+    candidates?,
+    timeReadOnly?,
+    candidateReadOnly?
+  ) {
     const formData = new BehaviorSubject({ data: { shift: date } });
 
     return {
@@ -158,17 +206,20 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
         key: 'time',
         formData,
         value: time,
+        mode: new BehaviorSubject(timeReadOnly ? 'view' : 'edit'),
         templateOptions: {
           required: true,
           label: 'Select time',
           type: 'time'
         },
+        read_only: timeReadOnly,
         type: 'datepicker'
       },
       workers: {
         default: 1,
         key: 'workers',
         formData,
+        mode: new BehaviorSubject(candidateReadOnly ? 'view' : 'edit'),
         value: candidates ? candidates.length : 1,
         templateOptions: {
           min: 1,
@@ -177,6 +228,7 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
           max: 32767,
           type: 'number'
         },
+        read_only: candidateReadOnly,
         type: 'input'
       },
       candidates: {
@@ -187,6 +239,7 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
         formData,
         value: candidates,
         hidden: new BehaviorSubject(true),
+        doNotChoice: candidateReadOnly,
         templateOptions: {
           label: 'Select workers',
           info: {
@@ -196,8 +249,12 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
           values: ['__str__']
         },
         query: {
-          shift: `{shift}T{time}%2B${moment.tz('Australia/Sydney').format('Z').slice(1)}`
-        }
+          shift: `{shift}T{time}%2B${moment
+            .tz('Australia/Sydney')
+            .format('Z')
+            .slice(1)}`
+        },
+        read_only: candidateReadOnly
       }
     };
   }
@@ -207,7 +264,11 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
       config.candidates.hidden.next(!e.value);
     }
 
-    const newData = this.generateData(e.el.key, e.el.formData.getValue().data, e);
+    const newData = this.generateData(
+      e.el.key,
+      e.el.formData.getValue().data,
+      e
+    );
 
     config.candidates.formData.next({
       key: e.el.key,
@@ -249,8 +310,15 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
     return data;
   }
 
-  public removeTime(target: FormArray, index: number) {
+  public removeTime(target: FormArray, index: number, parentIndex: number) {
     target.removeAt(index);
+
+    if (!target.length) {
+      const date = this.shifts[parentIndex].date;
+
+      this.shifts.splice(parentIndex, 1);
+      this.removeDate.next(date);
+    }
   }
 
   public change(event) {
@@ -265,5 +333,68 @@ export class ExtendComponent extends BasicElementComponent implements OnInit, On
 
   public autofillCandidates(event) {
     this.extendCandidates = event.value;
+  }
+
+  public autocompleteCandidates() {
+    this.shifts.forEach((shift) => {
+      shift.data.controls.forEach((data, i) => {
+        const candidates = shift.config[i].candidates;
+
+        if (!shift.config[i].candidates.doNotChoice) {
+          this.getCandidates(shift.date, data.value, shift.config, i);
+        }
+      });
+    });
+  }
+
+  public getCandidates(date, data, target, index) {
+    if (data.time && data.workers) {
+      const endpoint = `/ecore/api/v2/hr/jobs/${
+        this.formData.id
+      }/extend_fillin/`;
+      const timeZoneOffset = moment
+        .tz('Australia/Sydney')
+        .format('Z')
+        .slice(1);
+      const query = `?shift=${date}T${data.time}%2B${timeZoneOffset}`;
+
+      this.gfs.getByQuery(endpoint, query).subscribe((res: any[]) => {
+        this.sortCandidate(res);
+
+        const candidates = res.slice(0, data.workers);
+        target[index].candidates = {
+          ...target[index].candidates,
+          value: candidates
+        };
+        target[index].workers = {
+          ...target[index].workers,
+          value: data.workers
+        };
+
+        target[index] = { ...target[index] };
+      });
+    }
+  }
+
+  public sortCandidate(candidates) {
+    candidates.sort((prevCandidate, nextCandidate) => {
+      const prevCandidateScore = parseFloat(
+        prevCandidate.candidate_scores.average_score
+      );
+      const nextCandidateScore = parseFloat(
+        nextCandidate.candidate_scores.average_score
+      );
+
+      if (prevCandidateScore < nextCandidateScore) {
+        return 1;
+      } else if (prevCandidateScore === nextCandidateScore) {
+        if (prevCandidate.distance > nextCandidate.distance) {
+          return 1;
+        }
+        return -1;
+      } else {
+        return -1;
+      }
+    });
   }
 }

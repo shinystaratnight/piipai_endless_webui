@@ -199,6 +199,15 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
+.shifts-header .tooltip.tooltip-bottom {
+  left: auto !important;
+  right: 15px !important;
+
+  .tooltip-inner::before {
+    left: 89%;
+  }
+}
+
 /*---------- Bootstrap ---------- */
 
 *[role="tablist"] a {

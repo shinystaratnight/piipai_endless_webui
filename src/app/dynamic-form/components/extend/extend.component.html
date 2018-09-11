@@ -33,20 +33,23 @@
   <div class="shifts-header">
     <div class="title">Shifts</div>
 
-    <button type="button" class="btn btn-primary">Autocomplete</button>
-    <info [placement]="'left'" [description]="requirements"></info>
+    <button type="button" class="btn btn-primary" (click)="autocompleteCandidates()">Autocomplete</button>
+    <info [placement]="'bottom'" [description]="requirements"></info>
   </div>
 
 
   <ng-container *ngIf="shifts">
-    <div class="shift" *ngFor="let shift of shifts">
+    <div class="shift" *ngFor="let shift of shifts; let i = index">
       <div class="d-flex align-items-center mb-2">
         <span class="shift-date">{{shift.date}}</span> | <button type="button" class="btn btn-link" (click)="addTime(shift)">Add shift <i fa name="plus-circle"></i></button>
       </div>
 
       <div class="col">
         <ng-container *ngFor="let group of shift.data.controls; let index = index">
-          <template [ngTemplateOutlet]="date" [ngOutletContext]="{group: group, config: shift.config[index], index: index, target: shift.data}"></template>
+          <template
+            [ngTemplateOutlet]="date"
+            [ngOutletContext]="{group: group, config: shift.config[index], index: index, target: shift.data, parentIndex: i}">
+          </template>
         </ng-container>
       </div>
     </div>
@@ -64,16 +67,17 @@
 </template>
 
 <template #fillinfo>
-  <div class="info-block">
+  <div *ngIf="autoFillData" class="info-block">
     <h6>Use information from last fullfilled shift:</h6>
     <ul *ngFor="let date of autoFillData">
       <li><i fa class="icon" name="circle"></i>{{date.shift_datetime | dateFormat: 'datetime'}}</li>
       <li *ngFor="let candidate of date.candidates"><i fa class="icon" name="circle"></i>{{candidate.__str__}}</li>
     </ul>
   </div>
+  <div class="text-danger" *ngIf="!autoFillData">Fulfilled shift doesn't exist on this job!</div>
 </template>
 
-<template #date let-group="group" let-config="config" let-index="index" let-target="target">
+<template #date let-group="group" let-config="config" let-index="index" let-target="target" let-parentIndex="parentIndex">
 
   <div class="row">
     <div class="time">
@@ -103,7 +107,7 @@
       </ng-container>
     </div>
 
-    <i fa name="times" class="text-secondary icon align-self-start" (click)="removeTime(target, index)"></i>
+    <i fa name="times" class="text-secondary icon align-self-start" (click)="removeTime(target, index, parentIndex)"></i>
   </div>
 
 </template>

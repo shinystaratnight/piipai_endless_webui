@@ -1122,11 +1122,13 @@ export class FormRelatedComponent extends BasicElementComponent
         });
     } else {
       if (this.results[index]) {
-        const val = this.config.options.find(
-          (el) => el[this.param] === this.results[index][this.param]
-        );
-        if (val) {
-          val.checked = false;
+        if (this.config.options) {
+          const val = this.config.options.find(
+            (el) => el[this.param] === this.results[index][this.param]
+          );
+          if (val) {
+            val.checked = false;
+          }
         }
         this.results.splice(index, 1);
         this.changeList();
@@ -1326,6 +1328,7 @@ export class FormRelatedComponent extends BasicElementComponent
                 }
               }
               if (res && res.length) {
+                this.count = res.length;
                 const formatString = new FormatString();
                 res.forEach((el) => {
                   el.__str__ = formatString.format(this.display, el);
