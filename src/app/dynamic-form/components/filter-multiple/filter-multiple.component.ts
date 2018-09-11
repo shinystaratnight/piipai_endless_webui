@@ -18,7 +18,7 @@ import { FormatString } from '../../../helpers/format';
 export class FilterMultipleComponent implements OnInit, OnDestroy {
   public config: any;
   public query: string;
-  public data: any;
+  public data: any[];
   public isCollapsed: boolean = true;
   public icons = {
     r3sourcer: {
@@ -62,7 +62,19 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     if (this.config.unique) {
       setTimeout(() => {
         this.onChange(null, true);
-      }, 50);
+      }, 500);
+    }
+    if (this.config.default) {
+      const index = this.data.findIndex((el) => el.data === this.config.default);
+      if (this.data[index]) {
+        this.data[index].checked = true;
+        this.fs.generateQuery(
+          this.genericQuery(this.config.query, this.data),
+          this.config.key,
+          this.config.listName,
+          this.data
+        );
+      }
     }
   }
 
@@ -85,6 +97,13 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
 
   public onChange(index: number, first?) {
     this.checkUniqueValues(this.config.unique, this.data, first, index);
+    if (!this.config.multiple && this.config.type === 'checkbox') {
+      this.data.forEach((item, i) => {
+        if (index !== i) {
+          item.checked = false;
+        }
+      });
+    }
     this.fs.generateQuery(
       this.genericQuery(this.config.query, this.data),
       this.config.key,
