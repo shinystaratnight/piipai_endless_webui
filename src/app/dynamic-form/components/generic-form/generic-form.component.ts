@@ -7,7 +7,7 @@ import {
   OnDestroy,
   SimpleChanges
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -461,6 +461,17 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
           let send = !queryParams.some(
             (param) => query[param] == null || query[param] === ''
           );
+
+          if (!send) {
+            this.formGroup.removeControl('non_field_errors');
+            this.formGroup.updateValueAndValidity({ onlySelf: true });
+            this.updateErrors(
+              this.errors,
+              { [key]: '  ', non_field_errors: [''] },
+              this.response
+            );
+          }
+
           if (send && this.checkObject[key].cache) {
             send = queryParams.some(
               (param) => query[param] !== this.checkObject[key].cache[param]
@@ -512,11 +523,13 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
                       )
                     };
                   }
-                  this.formGroup.setErrors({
-                    non_field_errors: true
-                  });
+                  this.formGroup.setControl(
+                    'non_field_errors',
+                    new FormControl('', Validators.required)
+                  );
                   this.updateErrors(this.errors, errors, this.response);
                 } else {
+                  this.formGroup.removeControl('non_field_errors');
                   this.formGroup.updateValueAndValidity({ onlySelf: true });
                   this.updateErrors(
                     this.errors,
@@ -525,13 +538,6 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
                   );
                 }
               });
-          } else {
-            this.formGroup.updateValueAndValidity({ onlySelf: true });
-            this.updateErrors(
-              this.errors,
-              { [key]: '  ', non_field_errors: [''] },
-              this.response
-            );
           }
         });
       }
@@ -1447,11 +1453,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         }
       }
       if (el.type === 'list' || el.type === 'related') {
-        // if (el.delay && !this.editForm) {
         el.delayData = this.delayData;
-        // } else {
-        //   el.delay = undefined;
-        // }
       }
       if (el && el.key && params && !!params[el.key]) {
         if (params[el.key].action === 'add') {

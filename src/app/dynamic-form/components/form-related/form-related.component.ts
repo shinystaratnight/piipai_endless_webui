@@ -968,6 +968,7 @@ export class FormRelatedComponent extends BasicElementComponent
     if (this.config.type !== 'address' && !this.config.doNotChoice) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
+        this.count = 0;
         this.lastElement = 0;
         this.generateList(this.searchValue);
         setTimeout(() => {
@@ -1354,8 +1355,20 @@ export class FormRelatedComponent extends BasicElementComponent
               if (callback) {
                 let canSetValue;
 
-                if (only && res.results.length === only) {
-                  canSetValue = true;
+                if (only) {
+                  if (res.results.length === only) {
+                    canSetValue = true;
+                  } else if (only > res.results.length) {
+                    if (this.group.get(this.key).value) {
+                      this.displayValue = '';
+                      this.group.get(this.key).patchValue('');
+                      this.eventHandler(
+                        { type: 'reset' },
+                        this.group.get(this.key).value,
+                        this.resetAdditionalData()
+                      );
+                    }
+                  }
                 } else if (!only) {
                   canSetValue = true;
                 }
