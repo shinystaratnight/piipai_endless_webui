@@ -287,6 +287,20 @@ const list = {
         title: null,
         label: 'MYOB status',
         delim: null
+      },
+      {
+        content: [
+          {
+            endpoint: '/ecore/api/v2/core/invoices/{invoice.id}',
+            field: 'invoice',
+            type: 'link',
+            text: 'Invoice'
+          }
+        ],
+        name: 'invoice',
+        title: null,
+        label: 'Invoice',
+        delim: null
       }
     ],
     pagination_label: 'Timesheet Entry',
