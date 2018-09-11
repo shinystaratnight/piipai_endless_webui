@@ -269,7 +269,7 @@ export class FormRelatedComponent extends BasicElementComponent
       this.genericFormService
         .getByQuery(this.config.endpoint, query)
         .subscribe((res) => {
-          this.generateDataForList(<any>{ list: true, metadata }, res.results);
+          this.generateDataForList(<any> { list: true, metadata }, res.results);
         });
     }
   }
@@ -285,7 +285,7 @@ export class FormRelatedComponent extends BasicElementComponent
   public generateCustomTemplate(fieldsList) {
     if (this.config.value) {
       this.customTemplate = fieldsList.map((el, index) => {
-        let object = <CustomField>{};
+        let object = <CustomField> {};
         object.value = this.config.customValue[index];
         object.key = el;
         if (el.indexOf('email') > -1) {
@@ -1359,15 +1359,7 @@ export class FormRelatedComponent extends BasicElementComponent
                   if (res.results.length === only) {
                     canSetValue = true;
                   } else if (only > res.results.length) {
-                    if (this.group.get(this.key).value) {
-                      this.displayValue = '';
-                      this.group.get(this.key).patchValue('');
-                      this.eventHandler(
-                        { type: 'reset' },
-                        this.group.get(this.key).value,
-                        this.resetAdditionalData()
-                      );
-                    }
+                    this.clearField();
                   }
                 } else if (!only) {
                   canSetValue = true;
@@ -1497,6 +1489,18 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public updatePosition() {
     this.update.next();
+  }
+
+  public clearField() {
+    if (this.group.get(this.key).value) {
+      this.displayValue = '';
+      this.group.get(this.key).patchValue('');
+      this.eventHandler(
+        { type: 'reset' },
+        this.group.get(this.key).value,
+        this.resetAdditionalData()
+      );
+    }
   }
 
   @HostListener('document:click', ['$event'])

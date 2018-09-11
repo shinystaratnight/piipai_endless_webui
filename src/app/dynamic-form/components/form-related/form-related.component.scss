@@ -53,3 +53,14 @@
     margin-right: 12px;
   }
 }
+
+.clear-button {
+  visibility: hidden;
+
+  opacity: .5;
+  color: rgba($gray, .5);
+
+  .form-element-content:hover & {
+    visibility: visible;
+  }
+}
