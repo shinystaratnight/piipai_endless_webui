@@ -10,6 +10,7 @@ import { FormTabsComponent } from './form-tabs/form-tabs.component';
 import { ListButtonsComponent } from './list-buttons/list-buttons.component';
 import { ListColumnComponent } from './list-column/list-column.component';
 import { FormBuilderFormComponent } from './form-builder-form/form-builder-form.component';
+import { ButtonGroupComponent } from './button-group/button-group.component';
 
 export * from './dynamic-form/dynamic-form.component';
 export * from './dynamic-list/dynamic-list.component';
@@ -25,12 +26,13 @@ export const entryComponents = [
   FormHiddenComponent,
   FormRowComponent,
   FormTabsComponent,
-  ListColumnComponent
+  ListColumnComponent,
+  ButtonGroupComponent
 ];
 
 export const components = [
   ...entryComponents,
   FilterBlockComponent,
   ListButtonsComponent,
-  FormBuilderFormComponent,
+  FormBuilderFormComponent
 ];

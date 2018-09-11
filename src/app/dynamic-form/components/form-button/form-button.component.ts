@@ -6,7 +6,6 @@ import { FormGroup } from '@angular/forms';
   templateUrl: 'form-button.component.html',
   styleUrls: ['./form-button.component.scss']
 })
-
 export class FormButtonComponent implements OnInit {
   public config;
   public group: FormGroup;

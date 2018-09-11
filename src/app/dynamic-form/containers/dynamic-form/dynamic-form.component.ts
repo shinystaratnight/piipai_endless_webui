@@ -41,6 +41,8 @@ export class DynamicFormComponent implements OnInit {
   public resourseData: EventEmitter<any> = new EventEmitter();
   @Output()
   public changeValue: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public formGroup: EventEmitter<FormGroup> = new EventEmitter();
 
   public currentForm: any;
   public fullData: any;
@@ -49,6 +51,7 @@ export class DynamicFormComponent implements OnInit {
 
   public ngOnInit() {
     this.form = this.form || this.fb.group({});
+    this.formGroup.emit(this.form);
     this.currentForm = this.config;
   }
 

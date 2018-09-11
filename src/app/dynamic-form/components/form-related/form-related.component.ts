@@ -968,6 +968,7 @@ export class FormRelatedComponent extends BasicElementComponent
     if (this.config.type !== 'address' && !this.config.doNotChoice) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
+        this.lastElement = 0;
         this.generateList(this.searchValue);
         setTimeout(() => {
           this.searchElement.nativeElement.focus();
@@ -1315,13 +1316,15 @@ export class FormRelatedComponent extends BasicElementComponent
               this.count = res.count;
               if (res.results && res.results.length) {
                 const formatString = new FormatString();
-                res.results.forEach((el) => {
+                const results = [...res.results];
+
+                results.forEach((el) => {
                   el.__str__ = formatString.format(this.display, el);
                 });
                 if (concat && this.previewList) {
-                  this.previewList.push(...res.results);
+                  this.previewList.push(...results);
                 } else {
-                  this.previewList = res.results;
+                  this.previewList = results;
                 }
               }
               if (res && res.length) {

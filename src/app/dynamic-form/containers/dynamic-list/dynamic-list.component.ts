@@ -728,7 +728,7 @@ export class DynamicListComponent
             obj.display = this.format(
               element.display.replace(/{field}/gi, `{${element.field}}`),
               el
-            ); //tslint:disable-line
+            );
           }
           if (element.type === 'datepicker') {
             let field = this.config.fields.find(
@@ -817,6 +817,14 @@ export class DynamicListComponent
           }
           if (element.type === 'button') {
             this.updateButtonTypeCell(obj, element, el);
+          }
+          if (element.type === 'buttonGroup') {
+            obj.content = element.content.map((elem) => {
+              const newObj = Object.assign({}, elem);
+
+              this.updateButtonTypeCell(newObj, elem, el);
+              return newObj;
+            });
           }
           if (element.type === 'select' && element.content) {
             obj.content = element.content.map((elem) => {
@@ -1744,15 +1752,16 @@ export class DynamicListComponent
         }
       }
     }
-    this.modalInfo = {};
-    this.modalInfo.type = 'form';
-    this.modalInfo.endpoint = endpoint;
-    this.modalInfo.id = id || (!withoutId && e.el.rowId);
-    this.modalInfo.mode = 'edit';
-    this.modalInfo.edit = true;
-    this.modalInfo.data = data;
-    this.modalInfo.dontUseMetadataQuery =
-      e.value === 'editModal' || e.value === 'editForm';
+    this.modalInfo = {
+      type: 'form',
+      endpoint,
+      id: id || (!withoutId && e.el.rowId),
+      mode: 'edit',
+      edit: true,
+      data,
+      dontUseMetadataQuery: e.value === 'editModal' || e.value === 'editForm'
+    };
+
     this.open(this.modal, { size: 'lg' });
   }
 
