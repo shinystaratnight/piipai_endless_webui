@@ -109,7 +109,12 @@
                   </ul> -->
                 </th>
               </ng-container>
-              <th *ngIf="config.list.tabs" class="last-cell">More</th>
+              <th *ngIf="config.list.tabs" class="last-cell">
+                More
+                <i fa
+                  class="sort-icon"
+                  [name]="collapsed ? 'angle-down' : 'angle-up'" (click)="openAllTabs()"></i>
+              </th>
             </tr>
           </thead>
           <tbody *ngIf="body && !refresh">

@@ -149,6 +149,7 @@ export class DynamicListComponent
     '/ecore/api/v2/core/companies/',
     '/ecore/api/v2/core/companycontacts/'
   ];
+  public collapsed: boolean = true;
 
   constructor(
     private filterService: FilterService,
@@ -715,7 +716,9 @@ export class DynamicListComponent
           obj['help'] = element.help;
           obj['postfix'] = element.postfix;
           obj['content'] = element.content;
-          obj['setColor'] = this.format(element.setColor, el);
+          if (element.setColor) {
+            this.setValue(el, [element.setColor], obj, 'setColor');
+          }
           if (element.workers_details) {
             obj['workers_details'] = this.getValueByKey('workers_details', el);
           }
@@ -1852,5 +1855,13 @@ export class DynamicListComponent
     this.select[e.id] = e.selected;
 
     this.emitSelect();
+  }
+
+  public openAllTabs() {
+    this.collapsed = !this.collapsed;
+
+    this.body.forEach((row) => {
+      row.collapsed = this.collapsed;
+    });
   }
 }

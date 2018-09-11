@@ -16,9 +16,6 @@ const list = {
               false: 'star',
               true: 'star',
             },
-            color: {
-              true: 'primary'
-            }
           },
         ],
       },
@@ -34,7 +31,7 @@ const list = {
             field: 'candidate_scores.average_score'
           }
         ],
-        label: 'Candidate Contact'
+        label: 'Average score'
       },
       {
         name: 'hourly_rate',
@@ -44,12 +41,12 @@ const list = {
             display: '${field}/h',
             field: 'hourly_rate',
             color: 'danger',
-            setColor: '{overpriced}'
+            setColor: 'overpriced'
           },
           {
             type: 'description',
             field: 'overpriced',
-            description: 'Candidate rate is overpriced',
+            description: 'Candidate hourly rate is higher than job position default rate',
             showIf: ['overpriced']
           }
         ],
@@ -59,6 +56,7 @@ const list = {
       },
       {
         name: 'available',
+        width: 160,
         content: [
           {
             type: 'available',
@@ -74,7 +72,7 @@ const list = {
             type: 'static',
             field: 'count_timesheets',
             label: 'Total',
-            display: '{field} day(s)',
+            display: '{field}',
           },
           {
             type: 'static',
@@ -264,7 +262,6 @@ const list = {
         ],
         label: 'Tags',
         type: 'checkbox',
-        default: 'True',
         query: 'show_without_tags'
       },
       {
@@ -294,7 +291,7 @@ const list = {
         ],
         label: 'Transportation to Work',
         type: 'checkbox',
-        multiple: true,
+        multiple: false,
         default: null,
         query: 'transportation_to_work'
       },
@@ -542,8 +539,8 @@ const list = {
       key: 'favourite',
       templateOptions: {
         color: {
-          true: 'warning',
-          false: 'default'
+          true: 'primary',
+          false: 'opacity'
         }
       }
     }
