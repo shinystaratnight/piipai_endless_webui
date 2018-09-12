@@ -1,7 +1,18 @@
+@import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins.scss';
+
 :host {
   display: block;
 
   padding: 0 40px;
+}
+
+.form-tabs {
+  margin: 0 -40px;
+
+  @include media-breakpoint-down('md') {
+    margin: 0 -20px;
+  }
 }
 
 h5 {

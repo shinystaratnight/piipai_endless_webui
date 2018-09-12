@@ -55,7 +55,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mobileDevice = this.identifyDevice();
 
     this.querySubscription = this.route.queryParams.subscribe(() => this.updateFilter());
-    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter);
+    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
   }
 
   public ngOnDestroy() {
@@ -97,6 +97,8 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const params = this.getParams(query);
     const queryParams = this.convert(undefined, this.queryFormat, params, moment);
+
+    this.data = this.convert(undefined, this.displayFormat, params, moment);
     this.query = this.getQuery(queryParams);
 
     this.fs.generateQuery(
@@ -114,10 +116,11 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.data[param] = date;
 
     const queryParams = this.convert(this.displayFormat, this.queryFormat, this.data, moment);
-    const query = this.getQuery(queryParams);
+
+    this.query = this.getQuery(queryParams);
 
     this.fs.generateQuery(
-      query,
+      this.query,
       this.config.key,
       this.config.listName,
       { data: this.data }
