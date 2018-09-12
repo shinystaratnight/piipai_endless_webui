@@ -1371,7 +1371,11 @@ const form = [
         templateOptions: {
           label: 'Unavailabilities',
           type: 'list',
-          text: 'Unavailabilities'
+          text: 'Unavailabilities',
+          add_label: '+ Add item',
+        },
+        prefilled: {
+          contact: '{contact.id}'
         },
         collapsed: false
       },
