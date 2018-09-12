@@ -1,5 +1,11 @@
 const form = [
   {
+    type: 'input',
+    hide: true,
+    key: 'id',
+    templateOptions: {}
+  },
+  {
     key: 'job_shift',
     type: 'extend'
   },
@@ -32,21 +38,6 @@ const form = [
     query: {
       job: '{id}'
     }
-  },
-  {
-    endpoint: '/ecore/api/v2/hr/jobs/',
-    read_only: true,
-    hide: true,
-    templateOptions: {
-      label: 'Job',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    type: 'related',
-    key: 'job',
   },
 ];
 
