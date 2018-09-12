@@ -94,7 +94,7 @@ const list = {
         content: [
           {
             field: 'delivered_received_datetime',
-            type: 'static'
+            type: 'datepicker'
           }
         ],
         name: 'delivered_received_datetime',
@@ -115,7 +115,7 @@ const list = {
       }
     ],
     pagination_label: 'SMS message',
-    search_enabled: false,
+    search_enabled: true,
     editDisable: false,
     filters: [
       {
@@ -226,26 +226,10 @@ const list = {
           }
         ],
         query: 'check_reply',
+        multiple: false,
         default: null,
         type: 'checkbox'
       },
-      {
-        key: 'is_fake',
-        label: 'Fake sms',
-        options: [
-          {
-            value: 'True',
-            label: 'Yes'
-          },
-          {
-            value: 'False',
-            label: 'No'
-          }
-        ],
-        query: 'is_fake',
-        default: null,
-        type: 'checkbox'
-      }
     ]
   },
   fields: [
@@ -306,11 +290,11 @@ const list = {
     },
     {
       key: 'delivered_received_datetime',
-      type: 'static',
+      type: 'datepicker',
       templateOptions: {
         required: false,
         label: 'Delivered received datetime',
-        type: 'static'
+        type: 'datetime'
       },
       read_only: true
     },
