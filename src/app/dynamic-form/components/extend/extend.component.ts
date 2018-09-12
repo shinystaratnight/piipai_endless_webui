@@ -139,7 +139,7 @@ export class ExtendComponent extends BasicElementComponent
       date,
       config: {
         0: this.generateConfig(
-          this.formData.id,
+          this.formData.id.id,
           date,
           this.formData['default_shift_starting_time']
         )
@@ -148,12 +148,12 @@ export class ExtendComponent extends BasicElementComponent
     };
 
     if (this.extendDates) {
-      shift['config'] = <any>{};
+      shift['config'] = <any> {};
       shift['data'] = this.fb.array([]);
 
       this.autofill.forEach((el, i) => {
         shift['config'][i] = this.generateConfig(
-          this.formData.id,
+          this.formData.id.id,
           date,
           el.time,
           null,
@@ -164,12 +164,12 @@ export class ExtendComponent extends BasicElementComponent
     }
 
     if (this.extendCandidates) {
-      shift['config'] = <any>{};
+      shift['config'] = <any> {};
       shift['data'] = this.fb.array([]);
 
       this.autofill.forEach((el, i) => {
         shift['config'][i] = this.generateConfig(
-          this.formData.id,
+          this.formData.id.id,
           date,
           el.time,
           el.candidates,
@@ -185,7 +185,7 @@ export class ExtendComponent extends BasicElementComponent
 
   public addTime(shift) {
     shift.config[shift.data.length] = this.generateConfig(
-      this.formData.id,
+      this.formData.id.id,
       shift.date
     );
     shift.data.insert(shift.data.length, this.fb.group({}));
@@ -350,7 +350,7 @@ export class ExtendComponent extends BasicElementComponent
   public getCandidates(date, data, target, index) {
     if (data.time && data.workers) {
       const endpoint = `/ecore/api/v2/hr/jobs/${
-        this.formData.id
+        this.formData.id.id
       }/extend_fillin/`;
       const timeZoneOffset = moment
         .tz('Australia/Sydney')
