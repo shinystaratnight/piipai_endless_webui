@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
+
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
@@ -21,7 +23,8 @@ export class PermissionsService {
     removeUser: 'remove_user/',
     revoke: 'revoke/',
     delete: 'delete/',
-    groups: 'groups/'
+    groups: 'groups/',
+    availableGroups: 'available_groups/'
   };
 
   constructor(
@@ -66,6 +69,14 @@ export class PermissionsService {
 
   public getGroupsOnTheUser(id: string) {
     let endpoint = `${this.endpoints.user}${id}/${this.endpoints.groups}`;
+    let headers = this.updateHeaders();
+    return this.http.get(endpoint, { headers })
+                    .map((res: Response) => res.json())
+                    .catch((err: Response) => this.errorHandler(err));
+  }
+
+  public getAvailableGroupsOnTheUser(id: string) {
+    let endpoint = `${this.endpoints.user}${id}/${this.endpoints.availableGroups}`;
     let headers = this.updateHeaders();
     return this.http.get(endpoint, { headers })
                     .map((res: Response) => res.json())
