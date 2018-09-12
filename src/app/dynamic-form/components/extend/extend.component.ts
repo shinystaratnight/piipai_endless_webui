@@ -240,6 +240,7 @@ export class ExtendComponent extends BasicElementComponent
         value: candidates,
         hidden: new BehaviorSubject(true),
         doNotChoice: candidateReadOnly,
+        hideSelect: candidateReadOnly,
         templateOptions: {
           label: 'Select workers',
           info: {

@@ -130,7 +130,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     '/ecore/api/v2/core/contacts/': '__str__',
     '/ecore/api/v2/candidate/candidatecontacts/': '__str__'
   };
-  public workflowData = <any>{
+  public workflowData = <any> {
     workflow: null,
     number: null,
     company: null
@@ -892,7 +892,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
                 this.service
                   .submitForm(
-                    `/ecore/api/v2/hr/jobs/${data.job.id}/fillin/`,
+                    `/ecore/api/v2/hr/jobs/${data.id}/fillin/`,
                     fillInBody
                   )
                   .subscribe(() => {
