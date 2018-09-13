@@ -127,7 +127,8 @@ const list = {
         label: 'Status',
         data: {
           value: ['name_after_activation', 'name_before_activation'],
-          endpoint: '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel', //tslint:disable-line
+          endpoint:
+            '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel', //tslint:disable-line
           key: 'number'
         },
         query: 'status',
@@ -140,7 +141,8 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
+          endpoint:
+            '/ecore/api/v2/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'portfolio_manager'
@@ -383,7 +385,7 @@ const form = [
                     collapsed: false,
                     prefilled: {
                       company: '{id.id}',
-                      content_type: '{model_content_type}',
+                      content_type: '{model_content_type}'
                     },
                     type: 'related',
                     query: {
@@ -650,7 +652,7 @@ const form = [
                         {
                           value: 'days_eom',
                           label: 'Days after EOM'
-                        },
+                        }
                       ]
                     },
                     read_only: false
@@ -993,7 +995,7 @@ const form = [
             key: 'timeline',
             type: 'timeline',
             query: {
-              model: 'core.companyrel',
+              model: ['core.companyrel', 'core.company'],
               object_id: '{regular_company_rel.id}'
             },
             templateOptions: {
@@ -1047,7 +1049,7 @@ const form = [
         collapsed: false,
         prefilled: {
           object_id: '{id}',
-          content_type: '{model_content_type}',
+          content_type: '{model_content_type}'
         },
         type: 'list',
         query: {
