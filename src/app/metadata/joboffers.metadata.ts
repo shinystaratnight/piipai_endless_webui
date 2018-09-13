@@ -1,3 +1,5 @@
+import { timeZoneOffset } from './utils';
+
 const list = {
   list: {
     list: 'joboffer',
@@ -803,332 +805,63 @@ const form = [
 
 const formadd = [
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
-    key: 'updated_at',
-    type: 'datepicker',
-    templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
-    read_only: true
-  },
-  {
-    key: 'created_at',
-    type: 'datepicker',
-    templateOptions: { required: false, label: 'Created at', type: 'datetime' },
-    read_only: true
-  },
-  {
-    key: 'shift.id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
-    key: 'shift.time',
-    type: 'datepicker',
-    templateOptions: { required: true, label: 'Time', type: 'time' },
-    read_only: false
-  },
-  {
-    key: 'shift.date.shift_date',
-    type: 'datepicker',
-    templateOptions: { required: true, label: 'Shift date', type: 'date' },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
-    read_only: false,
+    key: 'job',
+    endpoint: '/ecore/api/v2/hr/jobs/',
+    send: false,
     templateOptions: {
-      label: 'Date',
       add: true,
       delete: false,
+      edit: true,
       values: ['__str__'],
-      type: 'related',
-      edit: true
+      label: 'Job',
+      type: 'related'
     },
-    collapsed: false,
-    type: 'related',
-    key: 'shift.date',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/hr/shifts/',
-    read_only: false,
-    templateOptions: {
-      label: 'Shift',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'shift',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
     read_only: true,
-    templateOptions: {
-      label: 'Candidate contact',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'candidate_contact',
-    many: false
+    type: 'related'
   },
   {
-    key: 'offer_sent_by_sms.id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: false,
-    templateOptions: {
-      label: 'Offer sent by sms',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'offer_sent_by_sms',
-    many: false
-  },
-  {
-    key: 'reply_received_by_sms.id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: false,
-    templateOptions: {
-      label: 'Reply received by sms',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'reply_received_by_sms',
-    many: false
-  },
-  {
-    key: 'status',
-    default: 0,
-    type: 'select',
-    templateOptions: {
-      required: false,
-      label: 'Status',
-      type: 'select',
-      options: [
-        { value: 0, label: 'Undefined' },
-        { value: 1, label: 'Accepted' },
-        { value: 2, label: 'Cancelled' }
-      ]
-    },
-    read_only: false
-  },
-  {
-    key: 'scheduled_sms_datetime',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Scheduled date',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    key: 'offer_sent_by_sms.id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: false,
-    templateOptions: {
-      label: 'Offer sent by sms',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'offer_sent_by_sms',
-    many: false
-  },
-  {
-    key: 'reply_received_by_sms.id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: false,
-    templateOptions: {
-      label: 'Reply received by sms',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'reply_received_by_sms',
-    many: false
-  },
-  {
-    key: 'shift.id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
-    key: 'shift.time',
-    type: 'datepicker',
-    templateOptions: { required: true, label: 'Time', type: 'time' },
-    read_only: false
-  },
-  {
-    key: 'shift.date.shift_date',
-    type: 'datepicker',
-    templateOptions: { required: true, label: 'Shift date', type: 'date' },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
-    read_only: false,
-    templateOptions: {
-      label: 'Date',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'shift.date',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/hr/shifts/',
-    read_only: false,
+    endpoint: '/ecore/api/v2/hr/shifts/?ordering=-date.shift_date,-time',
     templateOptions: {
       label: 'Shift',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
+      values: ['__str__', 'time', 'date', 'workers'],
+      type: 'related'
     },
-    collapsed: false,
+    query: {
+      job: '{job.id}'
+    },
     type: 'related',
-    key: 'shift',
-    many: false
+    key: 'shift'
   },
   {
-    key: 'candidate_rate',
-    type: 'static',
+    key: 'workers',
+    type: 'input',
+    send: false,
+    read_only: true,
+    showIf: ['shift.id'],
+    default: '{shift.workers}',
     templateOptions: {
-      required: false,
-      label: 'Candidate rate',
-      type: 'static'
-    },
-    read_only: true
+      label: 'Workers',
+      type: 'number'
+    }
   },
   {
-    key: 'client_rate',
-    type: 'static',
-    templateOptions: { required: false, label: 'Client rate', type: 'static' },
-    read_only: true
-  },
-  {
-    key: 'timesheets',
-    type: 'static',
-    templateOptions: { required: false, label: 'Timesheets', type: 'static' },
-    read_only: true
-  },
-  {
-    key: 'has_accept_action',
-    type: 'static',
+    type: 'related',
+    endpoint: `/ecore/api/v2/hr/jobs/{job.id}/extend_fillin/`,
+    key: 'candidate_contact',
     templateOptions: {
-      required: false,
-      label: 'Has accept action',
-      type: 'static'
+      label: 'Select worker',
+      info: {
+        score: '{candidate_scores.average_score}',
+        distance: '{distance}'
+      },
+      values: ['__str__']
     },
-    read_only: true
-  },
-  {
-    key: 'has_cancel_action',
-    type: 'static',
-    templateOptions: {
-      required: false,
-      label: 'Has cancel action',
-      type: 'static'
-    },
-    read_only: true
-  },
-  {
-    key: 'has_resend_action',
-    type: 'static',
-    templateOptions: {
-      required: false,
-      label: 'Has resend action',
-      type: 'static'
-    },
-    read_only: true
-  },
-  {
-    key: 'has_send_action',
-    type: 'static',
-    templateOptions: {
-      required: false,
-      label: 'Has send action',
-      type: 'static'
-    },
-    read_only: true
+    query: {
+      shift: `{shift.date.shift_date}T{shift.time}%2B${timeZoneOffset}`
+    }
   }
 ];
+
 const extend = {
   fields: [
     {

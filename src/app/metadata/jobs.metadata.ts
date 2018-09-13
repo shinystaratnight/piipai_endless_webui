@@ -909,16 +909,18 @@ const form = [
       },
       {
         endpoint: '/ecore/api/v2/hr/joboffers/',
-        add_endpoint: '/ecore/api/v2/hr/jobs/{id}/fillin/',
         templateOptions: {
           label: 'Job Offers',
           type: 'list',
-          add_label: 'Fill in',
+          add_label: '+ Add job offer',
           text: 'Job Offers'
         },
         collapsed: false,
         type: 'list',
         query: {
+          job: '{id}'
+        },
+        prefilled: {
           job: '{id}'
         },
         add_metadata_query: {
@@ -1060,7 +1062,12 @@ const formadd = [
               label: 'Client',
               add: true,
               delete: false,
-              values: ['__str__', 'master_company', 'primary_contact', 'manager'],
+              values: [
+                '__str__',
+                'master_company',
+                'primary_contact',
+                'manager'
+              ],
               type: 'related',
               edit: true,
               required: true
@@ -1132,7 +1139,7 @@ const formadd = [
             if_master: '{customer_company.manager.id}',
             type: 'related',
             query: {
-              company: '{customer_company.id}',
+              company: '{customer_company.id}'
             }
           },
           {
@@ -1157,7 +1164,7 @@ const formadd = [
               only: 1
             },
             query: {
-              company: '{customer_company.id}',
+              company: '{customer_company.id}'
             }
           },
           {
@@ -1200,7 +1207,7 @@ const formadd = [
               error: 'Active Job for Jobsite and Position already exist!',
               query: {
                 jobsite: '{jobsite.id}',
-                position: '{position.id}',
+                position: '{position.id}'
               }
             },
             collapsed: false,
