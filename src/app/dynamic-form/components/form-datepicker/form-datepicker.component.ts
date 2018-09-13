@@ -6,7 +6,7 @@ import {
   OnDestroy,
   ChangeDetectorRef,
   HostListener,
-  ElementRef,
+  ElementRef
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -21,11 +21,8 @@ import { Subject } from 'rxjs/Subject';
   selector: 'form-datepicker',
   templateUrl: 'form-datepicker.component.html'
 })
-
-export class FormDatepickerComponent
-  extends BasicElementComponent
+export class FormDatepickerComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
-
   @ViewChild('d')
   public d;
 
@@ -141,10 +138,10 @@ export class FormDatepickerComponent
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((data) => {
         if (
-          data.key !== this.config.key
-          && this.config.default
-          && this.config.default.includes('{')
-          && !this.config.isPrefilled
+          data.key !== this.config.key &&
+          this.config.default &&
+          this.config.default.includes('{') &&
+          !this.config.isPrefilled
         ) {
           this.formData = data.data;
           this.setInitValue(moment);
@@ -159,19 +156,24 @@ export class FormDatepickerComponent
     let type = this.config.templateOptions.type;
 
     if (
-      (this.config.value || this.group.get(this.key).value)
-      && (!this.config.shouldUpdate || this.config.isPrefilled)
+      (this.config.value || this.group.get(this.key).value) &&
+      (!this.config.shouldUpdate || this.config.isPrefilled)
     ) {
-      let data = this.config.value ? this.config.value : this.group.get(this.key).value;
+      let data = this.config.value
+        ? this.config.value
+        : this.group.get(this.key).value;
       if (type === 'date' || type === 'datetime') {
         this.setDate(data, moment);
-        this.displayValue = data ?
-                            moment.tz(data, this.timeZone)
-                                  .format(type === 'date' ? this.dateFormat : this.datetimeFormat) :
-                            '-';
+        this.displayValue = data
+          ? moment
+              .tz(data, this.timeZone)
+              .format(type === 'date' ? this.dateFormat : this.datetimeFormat)
+          : '-';
       } else if (type === 'time') {
         this.setTime(data, moment);
-        this.displayValue = data ? moment(data, 'HH:mm:ss').format('hh:mm A') : '-';
+        this.displayValue = data
+          ? moment(data, 'HH:mm:ss').format('hh:mm A')
+          : '-';
       }
     } else if (this.config.default && this.config.default !== '-') {
       let data;
@@ -185,13 +187,16 @@ export class FormDatepickerComponent
 
       if (type === 'date' || type === 'datetime') {
         this.setDate(data, moment);
-        this.displayValue = data ?
-                            moment.tz(data, this.timeZone)
-                                  .format(type === 'date' ? this.dateFormat : this.datetimeFormat) :
-                            '-';
+        this.displayValue = data
+          ? moment
+              .tz(data, this.timeZone)
+              .format(type === 'date' ? this.dateFormat : this.datetimeFormat)
+          : '-';
       } else if (type === 'time') {
         this.setTime(data, moment);
-        this.displayValue = data ? moment(data, 'HH:mm:ss').format(this.timeFormat) : '-';
+        this.displayValue = data
+          ? moment(data, 'HH:mm:ss').format(this.timeFormat)
+          : '-';
       }
     }
   }
@@ -235,7 +240,8 @@ export class FormDatepickerComponent
           useClearButton: true,
           useFocus: true,
           useHeader: false,
-          calHighToday: false,
+          calHighToday: true,
+          themeDatePick: 'primary',
           calUsePickers: true,
           useCancelButton: true,
           calYearPickRelative: false,
@@ -269,7 +275,8 @@ export class FormDatepickerComponent
           useFocus: true,
           useHeader: false,
           calUsePickers: true,
-          calHighToday: false,
+          calHighToday: true,
+          themeDatePick: 'primary',
           calYearPickRelative: false,
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
