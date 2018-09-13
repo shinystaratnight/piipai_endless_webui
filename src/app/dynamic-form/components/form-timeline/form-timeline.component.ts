@@ -79,9 +79,14 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public initialize() {
     let formatString = new FormatString();
     let keys = Object.keys(this.config.query);
+    const type = this.config.value.type;
     keys.forEach((el) => {
       if (el === 'object_id') {
         if (Array.isArray(this.config.query[el])) {
+          if (!this.objectId && type !== 'master') {
+            this.objectId = formatString.format(this.config.query[el][2], this.config.value);
+          }
+
           this.config.query[el].forEach((query) => {
             if (!this.objectId) {
               this.objectId = formatString.format(query, this.config.value);
@@ -96,7 +101,6 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
         this.query.push(`${el}=${this.objectId}`);
       } else {
-        const type = this.config.value.type;
 
         if (type && type === 'master') {
           this.query.push(`${el}=${this.config.query[el][1]}`);

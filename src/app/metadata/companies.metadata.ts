@@ -996,7 +996,7 @@ const form = [
             type: 'timeline',
             query: {
               model: ['core.companyrel', 'core.company'],
-              object_id: '{regular_company_rel.id}'
+              object_id: ['{id.id}', '{id}', '{regular_company_rel.id}']
             },
             templateOptions: {
               label: '',
