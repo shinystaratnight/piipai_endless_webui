@@ -7,6 +7,7 @@ import {
   ViewChild,
   TemplateRef
 } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -75,7 +76,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[];
 
-  constructor(private modalService: NgbModal) {
+  constructor(private modalService: NgbModal, private router: Router) {
     this.subscriptions = [];
   }
 
@@ -242,7 +243,10 @@ export class FormInfoComponent implements OnInit, OnDestroy {
         default_shift_starting_time: {
           action: 'add',
           data: {
-            value: formatString.format('{default_shift_starting_time}', this.config.value)
+            value: formatString.format(
+              '{default_shift_starting_time}',
+              this.config.value
+            )
           }
         },
         skill: {
@@ -261,6 +265,10 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     };
 
     this.modalRef = this.modalService.open(this.modal, { size: 'lg' });
+  }
+
+  public fillInJob() {
+    this.router.navigateByUrl(`/hr/jobs/${this.config.value.id.id}/fillin`);
   }
 
   public formEvent(e, closeModal) {
