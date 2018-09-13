@@ -207,6 +207,17 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
+.current-day {
+  font-size: 12px;
+
+  border-radius: 50% !important;
+
+  background-color: rgba($gray, 0.2);
+  div {
+    color: white !important;
+  }
+}
+
 /*---------- Bootstrap ---------- */
 
 *[role='tablist'] a {
