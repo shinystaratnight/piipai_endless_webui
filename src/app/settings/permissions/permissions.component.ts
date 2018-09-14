@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
 
 import { PermissionsService } from './permissions.service';
 import { SettingsService } from '../settings.service';
@@ -40,8 +42,10 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   public cashUsers: User[];
 
   public groups: Group[];
+  public userGroups: Group[];
   public targetGroups: Group[];
   public cashGroups: Group[];
+  public cashUserGroups: Group[];
 
   public targetId: string;
 
@@ -199,12 +203,16 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   }
 
   public getGroupsOfUser(id) {
-    this.service.getGroupsOnTheUser(id).subscribe(
-      (res: any) => {
-        this.targetGroups = <Group[]> res.results;
-        this.combineElement(this.targetGroups, this.groups);
-      }
-    );
+    Observable.combineLatest(
+      this.service.getAvailableGroupsOnTheUser(id),
+      this.service.getGroupsOnTheUser(id)
+    ).subscribe((response: any) => {
+      this.cashUserGroups = response[0].results;
+      this.userGroups = [...response[0].results];
+
+      this.targetGroups = <Group[]> response[1].results;
+      this.combineElement(this.targetGroups, this.userGroups);
+    });
   }
 
   public combineElement(responseData: any[], target: any[]): void {

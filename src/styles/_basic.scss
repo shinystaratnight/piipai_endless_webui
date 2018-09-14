@@ -164,7 +164,7 @@ form.ng-invalid button[type='submit'] {
     display: block;
     top: 42px;
 
-    padding: .5rem;
+    padding: 0.5rem;
 
     background-color: $gray;
     content: 'Please fill all the fields';
@@ -173,7 +173,6 @@ form.ng-invalid button[type='submit'] {
 
 .candidate-tabs {
   & > .nav-tabs {
-
     justify-content: center !important;
 
     .nav-item:nth-child(11) {
@@ -208,9 +207,20 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
+.current-day {
+  font-size: 12px;
+
+  border-radius: 50% !important;
+
+  background-color: rgba($gray, 0.2);
+  div {
+    color: white !important;
+  }
+}
+
 /*---------- Bootstrap ---------- */
 
-*[role="tablist"] a {
+*[role='tablist'] a {
   text-decoration: none;
 
   &:hover {
@@ -762,8 +772,8 @@ form.ng-invalid button[type='submit'] {
     align-items: center;
     justify-content: center;
 
-    width: 1.7rem;
-    height: 1.7rem;
+    width: 27px;
+    height: 27px;
 
     font-size: 0.7rem;
     line-height: 0.7rem;
@@ -774,6 +784,10 @@ form.ng-invalid button[type='submit'] {
     &.ui-datebox-griddate-empty {
       font-weight: normal;
       color: rgba($gray, 0.4);
+    }
+
+    &.btn-info {
+      background-color: rgba($gray, 0.2) !important;
     }
   }
 
@@ -789,7 +803,7 @@ form.ng-invalid button[type='submit'] {
 
       @each $item in $themes {
         .#{$item}-theme & {
-          background-color: map-get($theme-colors, $item);
+          background-color: map-get($theme-colors, $item) !important;
         }
       }
     }

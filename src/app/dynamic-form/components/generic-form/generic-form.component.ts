@@ -130,7 +130,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     '/ecore/api/v2/core/contacts/': '__str__',
     '/ecore/api/v2/candidate/candidatecontacts/': '__str__'
   };
-  public workflowData = <any>{
+  public workflowData = <any> {
     workflow: null,
     number: null,
     company: null
@@ -843,10 +843,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public extendJob(data) {
     const shiftDatesRequests = {};
 
-    data.extend.forEach((shiftDate) => {
+    data.job_shift.forEach((shiftDate) => {
       const body = {
         shift_date: shiftDate.date,
-        job: data.job,
+        job: data.id,
         skill: data.skill
       };
       const shifts = shiftDate.data.value;
@@ -892,7 +892,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
                 this.service
                   .submitForm(
-                    `/ecore/api/v2/hr/jobs/${data.job.id}/fillin/`,
+                    `/ecore/api/v2/hr/jobs/${data.id}/fillin/`,
                     fillInBody
                   )
                   .subscribe(() => {
@@ -916,7 +916,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public submitForm(data) {
-    if (data.extend) {
+    if (data.job_shift) {
       this.extendJob(data);
       return;
     }

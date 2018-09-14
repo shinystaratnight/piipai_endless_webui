@@ -31,7 +31,7 @@
           </template>
           <template *ngIf="targetId"
             [ngTemplateOutlet]="list"
-            [ngOutletContext]="{title: 'Groups', list: groups, param: 'name', element: 'user', type: 'group'}">
+            [ngOutletContext]="{title: 'Groups', list: userGroups, param: 'name', element: 'user', type: 'group'}">
           </template>
         </div>
       </template>

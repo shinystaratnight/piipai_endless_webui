@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { SharedModule } from '../shared/shared.module';
 import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
@@ -24,6 +25,7 @@ import { routes } from './billing.routing';
     FormsModule,
 
     Angular2FontawesomeModule,
+    NgbModule,
 
     SharedModule,
     DynamicFormModule

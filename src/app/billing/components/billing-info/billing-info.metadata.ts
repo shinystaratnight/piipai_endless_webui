@@ -74,3 +74,13 @@ export const metadata = {
     },
   ]
 };
+
+export const smsMetadata = [
+  {
+    endpoint: '/ecore/api/v2/sms-interface/smslogs/',
+    templateOptions: {
+      type: 'list',
+    },
+    type: 'list',
+  },
+];

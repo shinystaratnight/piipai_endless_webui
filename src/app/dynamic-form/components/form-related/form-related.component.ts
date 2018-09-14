@@ -1289,7 +1289,9 @@ export class FormRelatedComponent extends BasicElementComponent
     customQuery?,
     only?
   ) {
-    let endpoint = this.config.endpoint;
+    const format = new FormatString();
+
+    let endpoint = format.format(this.config.endpoint, this.formData);
     if (endpoint) {
       let query = '';
       if (value) {

@@ -39,14 +39,13 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public filterSubscription: Subscription;
   public querySubscription: Subscription;
 
-  @Output() public event: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public event: EventEmitter<any> = new EventEmitter();
 
-  @ViewChildren('d') public d: any;
+  @ViewChildren('d')
+  public d: any;
 
-  constructor(
-    private fs: FilterService,
-    private route: ActivatedRoute
-  ) {
+  constructor(private fs: FilterService, private route: ActivatedRoute) {
     this.$ = require('jquery');
   }
 
@@ -54,8 +53,12 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.data = this.createInputs(this.config.input);
     this.mobileDevice = this.identifyDevice();
 
-    this.querySubscription = this.route.queryParams.subscribe(() => this.updateFilter());
-    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter);
+    this.querySubscription = this.route.queryParams.subscribe(() =>
+      this.updateFilter()
+    );
+    this.filterSubscription = this.fs.reset.subscribe(() =>
+      this.updateFilter()
+    );
   }
 
   public ngOnDestroy() {
@@ -81,7 +84,8 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
           useCancelButton: true,
           useHeader: false,
           useFocus: true,
-          calHighToday: false,
+          themeDatePick: 'primary',
+          calHighToday: true,
           closeCallback: () => {
             const date = el.nativeElement.value;
             this.onChange(date, el.nativeElement.name);
@@ -96,15 +100,20 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.resetData(this.data);
 
     const params = this.getParams(query);
-    const queryParams = this.convert(undefined, this.queryFormat, params, moment);
+    const queryParams = this.convert(
+      undefined,
+      this.queryFormat,
+      params,
+      moment
+    );
+
+    this.data = this.convert(undefined, this.displayFormat, params, moment);
     this.query = this.getQuery(queryParams);
 
-    this.fs.generateQuery(
-      this.query,
-      this.config.key,
-      this.config.listName,
-      { data: this.data, query }
-    );
+    this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
+      data: this.data,
+      query
+    });
 
     this.changeQuery();
   }
@@ -113,15 +122,18 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.query = '';
     this.data[param] = date;
 
-    const queryParams = this.convert(this.displayFormat, this.queryFormat, this.data, moment);
-    const query = this.getQuery(queryParams);
-
-    this.fs.generateQuery(
-      query,
-      this.config.key,
-      this.config.listName,
-      { data: this.data }
+    const queryParams = this.convert(
+      this.displayFormat,
+      this.queryFormat,
+      this.data,
+      moment
     );
+
+    this.query = this.getQuery(queryParams);
+
+    this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
+      data: this.data
+    });
 
     this.changeQuery();
   }
@@ -142,7 +154,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     return params;
   }
 
-  public resetData(data: {[key: string]: string}) {
+  public resetData(data: { [key: string]: string }) {
     const keys = Object.keys(data);
 
     if (keys.length) {
@@ -159,7 +171,12 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
       if (data.byQuery) {
         this.query = data.query;
         const params = this.getParams(this.query);
-        this.data = this.convert(this.queryFormat, this.displayFormat, params, moment);
+        this.data = this.convert(
+          this.queryFormat,
+          this.displayFormat,
+          params,
+          moment
+        );
       } else {
         this.data = data.data;
         this.query = data.query;
@@ -179,7 +196,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public convert(from: string, to: string, params: Params, moment) {
-    const newParams = {...params};
+    const newParams = { ...params };
 
     Object.keys(newParams).forEach((el) => {
       newParams[el] = newParams[el]
@@ -221,5 +238,4 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return '';
   }
-
 }

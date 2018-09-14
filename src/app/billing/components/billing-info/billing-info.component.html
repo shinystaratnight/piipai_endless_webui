@@ -11,14 +11,28 @@
   </div>
 </ng-container>
 
-<ng-container *ngIf="payments">
-  <h5>Your payments</h5>
+<div class="form-tabs">
+  <ngb-tabset>
+    <ngb-tab *ngIf="payments" title="Payments">
+      <template ngbTabContent>
+        <h5>Your payments</h5>
 
-  <dynamic-list
-    [first]="true"
-    [config]="config"
-    [data]="{ results: payments }"
-    [responseField]="'results'"
-    [allowPermissions]="['get']">
-  </dynamic-list>
-</ng-container>
+        <dynamic-list
+          [first]="true"
+          [config]="config"
+          [data]="{ results: payments }"
+          [responseField]="'results'"
+          [allowPermissions]="['get']">
+        </dynamic-list>
+      </template>
+    </ngb-tab>
+
+    <ngb-tab title="SMS log">
+        <template ngbTabContent>
+          <h5>SMS log</h5>
+
+          <dynamic-form [config]="smsConfig"></dynamic-form>
+        </template>
+      </ngb-tab>
+  </ngb-tabset>
+</div>

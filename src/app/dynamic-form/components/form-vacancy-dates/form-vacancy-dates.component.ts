@@ -5,7 +5,8 @@ import {
   ViewChild,
   ElementRef,
   Input,
-  OnDestroy
+  OnDestroy,
+  AfterContentInit
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
@@ -21,7 +22,7 @@ import moment from 'moment-timezone';
   styleUrls: ['./form-vacancy-dates.component.scss']
 })
 export class FormVacancyDatesComponent extends BasicElementComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy, AfterContentInit {
   @Input()
   public deleteDate: BehaviorSubject<string>;
 
@@ -41,6 +42,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
   public vacancyDate: any;
   public vacancyDates: string[];
   public dates: any = {};
+  public todayElement: any;
 
   @ViewChild('calendar')
   public calendar: ElementRef;
@@ -69,12 +71,35 @@ export class FormVacancyDatesComponent extends BasicElementComponent
         }
       });
     }
+
+    const today = moment().tz('Australia/Sydney');
+
+    this.vacancyDate = {
+      year: today.year(),
+      month: today.month() + 1,
+      day: today.date()
+    };
   }
 
   public ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  public ngAfterContentInit() {
+    setTimeout(() => {
+      const today = this.calendar.nativeElement.querySelector('.bg-primary');
+
+      if (today) {
+        today.classList.remove('bg-primary');
+        this.todayElement = today.parentElement;
+
+        if (this.todayElement) {
+          this.todayElement.classList.add('current-day');
+        }
+      }
+    }, 500);
   }
 
   public markDisabledDates(dates: any[] = []) {
@@ -189,6 +214,9 @@ export class FormVacancyDatesComponent extends BasicElementComponent
           }
         }
       });
+      if (this.todayElement) {
+        this.todayElement.classList.add('current-day');
+      }
     }, 50);
   }
 }
