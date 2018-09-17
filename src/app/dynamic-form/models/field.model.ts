@@ -61,6 +61,7 @@ export interface Field {
   if_master?: any;
   relatedObjects?: any;
   candidateTabs?: boolean;
+  unique?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;
