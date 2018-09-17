@@ -173,7 +173,7 @@ export class ExtendComponent extends BasicElementComponent
           date,
           el.time,
           el.candidates,
-          true,
+          this.extendDates,
           true
         );
         shift['data'].insert(i, this.fb.group({}));
