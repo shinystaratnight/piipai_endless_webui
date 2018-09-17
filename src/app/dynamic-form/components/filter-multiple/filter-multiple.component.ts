@@ -44,8 +44,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     this.type = this.config.type === 'multiple' ? 'data' : 'options';
     this.querySubscription = this.route.queryParams.subscribe((params) => {
       this.updateFilter();
-    }
-    );
+    });
     this.filterSubscription = this.fs.reset.subscribe(() =>
       this.updateFilter()
     );
@@ -60,12 +59,18 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
       this.createData(this.type);
     }
     if (this.config.unique) {
-      setTimeout(() => {
-        this.onChange(null, true);
-      }, 500);
+      this.checkUniqueValues(this.config.unique, this.data, true);
+      this.fs.generateQuery(
+        this.genericQuery(this.config.query, this.data),
+        this.config.key,
+        this.config.listName,
+        this.data
+      );
     }
     if (this.config.default) {
-      const index = this.data.findIndex((el) => el.data === this.config.default);
+      const index = this.data.findIndex(
+        (el) => el.data === this.config.default
+      );
       if (this.data[index]) {
         this.data[index].checked = true;
         this.fs.generateQuery(
@@ -166,7 +171,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
         }
       });
       this.fs.generateQuery(
-      this.genericQuery(this.config.query, this.data),
+        this.genericQuery(this.config.query, this.data),
         this.config.key,
         this.config.listName,
         this.data

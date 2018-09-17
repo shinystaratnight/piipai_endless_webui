@@ -124,7 +124,7 @@ const list = {
         ],
         query: 'is_available',
         default: null,
-        unique: ['data'],
+        multiple: false,
         type: 'checkbox'
       },
       {
@@ -142,7 +142,7 @@ const list = {
         ],
         query: 'phone_mobile_verified',
         default: null,
-        unique: ['data'],
+        multiple: false,
         type: 'checkbox'
       },
       {
@@ -160,7 +160,7 @@ const list = {
         ],
         query: 'email_verified',
         default: null,
-        unique: ['data'],
+        multiple: false,
         type: 'checkbox'
       }
     ]
