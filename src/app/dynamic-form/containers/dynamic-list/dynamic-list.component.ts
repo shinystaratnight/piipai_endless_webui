@@ -1433,13 +1433,13 @@ export class DynamicListComponent
         query += `${param}[]=${encodeURIComponent(el)}&`;
       });
       query = query.slice(0, query.length - 1);
-      let url;
-      this.modalInfo = {};
-      url = param === 'recipient' ? '/ecore/twilio/' : '';
-      url += query;
-      this.modalInfo.url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      this.open(this.sendMessageModal);
     }
+    let url;
+    this.modalInfo = {};
+    url = param === 'recipient' ? '/ecore/twilio/' : '';
+    url += query;
+    this.modalInfo.url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    this.open(this.sendMessageModal);
   }
 
   public eventHandler(e) {
@@ -1623,6 +1623,9 @@ export class DynamicListComponent
           break;
         case 'openMap':
           this.showMap();
+          break;
+        case 'sendSMS':
+          this.openFrame([]);
           break;
         default:
           return;

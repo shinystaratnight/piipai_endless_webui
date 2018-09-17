@@ -230,6 +230,12 @@ const list = {
         default: null,
         type: 'checkbox'
       },
+    ],
+    buttons: [
+      {
+        action: 'sendSMS',
+        label: 'Add new sms message'
+      }
     ]
   },
   fields: [
