@@ -693,7 +693,23 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         if (el.query) {
           const queryKeys = Object.keys(el.query);
           queryKeys.forEach((elem) => {
-            el.query[elem] = this.format.format(el.query[elem], data);
+            if (Array.isArray(el.query[elem])) {
+              let value;
+              const type = data.type;
+              if (type !== 'master') {
+                value = this.format.format(el.query[elem][2], data);
+              }
+
+              el.query[elem].forEach((query) => {
+                if (!value) {
+                  value = this.format.format(query, data);
+                }
+              });
+
+              el.query[elem] = value;
+            } else {
+              el.query[elem] = this.format.format(el.query[elem], data);
+            }
           });
         }
         if (el.prefilled) {
