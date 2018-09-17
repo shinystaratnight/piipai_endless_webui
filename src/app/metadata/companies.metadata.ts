@@ -1019,7 +1019,7 @@ const form = [
             },
             type: 'list',
             query: {
-              object_id: '{regular_company_rel.id}'
+              object_id: ['{id.id}', '{id}', '{regular_company_rel.id}']
             },
             help: 'Here you can see changes client company states'
           }
