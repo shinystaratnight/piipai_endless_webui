@@ -42,12 +42,12 @@ const list = {
     search_enabled: false,
     editDisable: false,
     filters: [
-      {
-        key: 'object_id',
-        label: 'Object id',
-        type: 'text',
-        default: null
-      },
+      // {
+      //   key: 'object_id',
+      //   label: 'Object id',
+      //   type: 'text',
+      //   default: null
+      // },
       {
         key: 'active',
         label: 'Active',
@@ -65,12 +65,12 @@ const list = {
         default: null,
         type: 'checkbox'
       },
-      {
-        key: 'state.workflow.name',
-        label: 'Name',
-        type: 'text',
-        default: null
-      }
+      // {
+      //   key: 'state.workflow.name',
+      //   label: 'Name',
+      //   type: 'text',
+      //   default: null
+      // }
     ]
   },
   fields: [

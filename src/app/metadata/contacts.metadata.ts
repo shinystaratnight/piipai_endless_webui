@@ -457,7 +457,7 @@ const form = [
                       type: 'related',
                       edit: true
                     },
-                    collapsed: false,
+                    visibleMode: true,
                     send: false,
                     type: 'related',
                     key: 'candidate_contacts.recruitment_agent',

@@ -280,6 +280,7 @@ const formadd = [
   {
     endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
     read_only: true,
+    visibleMode: true,
     templateOptions: {
       label: 'Candidate contact',
       add: true,

@@ -959,7 +959,10 @@ export class FormRelatedComponent extends BasicElementComponent
         };
       });
     }
-    this.modalRef = this.modalService.open(this.modal, { size: 'lg' });
+
+    const windowClass = this.config.visibleMode && type === 'post' ? 'visible-mode' : '';
+
+    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass });
 
     return false;
   }

@@ -327,7 +327,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'candidate_contact',
     many: false
@@ -364,7 +364,7 @@ const formadd = [
     query: {
       company: '{company.id}'
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'company_contact',
     many: false
@@ -384,7 +384,7 @@ const formadd = [
     query: {
       company: '{company.id}'
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'jobsite',
     many: false

@@ -210,7 +210,7 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'company_contact',
     many: false
@@ -254,7 +254,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'company_contact',
     many: false

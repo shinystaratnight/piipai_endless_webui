@@ -128,6 +128,7 @@ const form = [
     hideIfNull: true,
     doNotChoice: true,
     send: false,
+    visibleMode: true,
     prefilled: {
       tag: '{id.id}'
     },

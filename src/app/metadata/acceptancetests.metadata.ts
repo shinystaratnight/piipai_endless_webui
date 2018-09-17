@@ -243,6 +243,7 @@ const form = [
             many: true,
             options: [],
             doNotChoice: true,
+            visibleMode: true,
             prefilled: {
               acceptance_test: '{id}'
             },

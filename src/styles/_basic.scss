@@ -296,7 +296,8 @@ form.ng-invalid button[type='submit'] {
     }
   }
 
-  &.shiftdates .modal-content {
+  &.shiftdates .modal-content,
+  &.visible-mode .modal-content {
     overflow: visible;
   }
 }
