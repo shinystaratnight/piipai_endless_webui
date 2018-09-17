@@ -306,7 +306,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
+          endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'recruitment_agent'
