@@ -5,6 +5,7 @@ const list = {
     editDisable: true,
     label: '{job.position}',
     description: '{job.jobsite}',
+    openFilter: true,
     columns: [
       {
         name: 'favourite',
@@ -14,13 +15,14 @@ const list = {
             field: 'favourite',
             values: {
               false: 'star',
-              true: 'star',
-            },
-          },
-        ],
+              true: 'star'
+            }
+          }
+        ]
       },
       {
         name: 'contact.__str__',
+        width: 175,
         content: [
           {
             type: 'static',
@@ -35,6 +37,7 @@ const list = {
       },
       {
         name: 'hourly_rate',
+        width: 90,
         content: [
           {
             type: 'static',
@@ -46,7 +49,8 @@ const list = {
           {
             type: 'description',
             field: 'overpriced',
-            description: 'Candidate hourly rate is higher than job position default rate',
+            description:
+              'Candidate hourly rate is higher than job position default rate ${default_rate}',
             showIf: ['overpriced']
           }
         ],
@@ -67,24 +71,26 @@ const list = {
       },
       {
         name: 'timesheet',
+        width: 150,
         content: [
           {
             type: 'static',
             field: 'count_timesheets',
             label: 'Total',
-            display: '{field}',
+            display: '{field}'
           },
           {
             type: 'static',
             field: 'days_from_last_timesheet',
             label: 'From last',
-            display: '{field} day(s)',
+            display: '{field} day(s)'
           }
         ],
         label: 'Timesheet'
       },
       {
         name: 'distance',
+        width: 125,
         content: [
           {
             endpoint: '/ecore/api/v2/distances/',
@@ -292,12 +298,10 @@ const list = {
         label: 'Transportation to Work',
         type: 'checkbox',
         multiple: false,
-        default: null,
         query: 'transportation_to_work'
       },
       {
         type: 'text',
-        default: null,
         label: 'Distance',
         min: 0,
         max: 200,
@@ -539,7 +543,7 @@ const list = {
       key: 'favourite',
       templateOptions: {
         color: {
-          true: 'primary',
+          true: 'warning',
           false: 'opacity'
         }
       }

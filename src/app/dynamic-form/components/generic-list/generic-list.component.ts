@@ -8,7 +8,11 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { GenericFormService, FilterService } from './../../services';
+import {
+  GenericFormService,
+  FilterService,
+  FilterQueryService
+} from './../../services';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
@@ -19,9 +23,7 @@ import 'rxjs/add/operator/debounceTime';
   selector: 'generic-list',
   templateUrl: 'generic-list.component.html'
 })
-
 export class GenericListComponent implements OnInit, OnDestroy {
-
   @Input()
   public endpoint: string = '';
 
@@ -106,7 +108,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     private gfs: GenericFormService,
     private fs: FilterService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private filterQueryService: FilterQueryService
   ) {
     this.subscriptions = [];
   }
@@ -130,11 +133,15 @@ export class GenericListComponent implements OnInit, OnDestroy {
     }
 
     if (this.upload) {
-      const subscription = this.upload.asObservable()
+      const subscription = this.upload
+        .asObservable()
         .debounceTime(200)
         .subscribe((data) => {
           const table = this.getFirstTable();
-          if (table.offset < table.data.count && table.data.count !== table.limit) {
+          if (
+            table.offset < table.data.count &&
+            table.data.count !== table.limit
+          ) {
             if (data && !this.uploading) {
               this.uploading = true;
 
@@ -156,63 +163,76 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public uploadMore() {
     const table = this.getFirstTable();
 
-    table.query.pagination = `limit=${table.limit}&offset=${table.offset + table.limit}`;
-    this.getData(table.endpoint, this.generateQuery(table.query), table, false, null, true);
+    table.query.pagination = `limit=${table.limit}&offset=${table.offset +
+      table.limit}`;
+    this.getData(
+      table.endpoint,
+      this.generateQuery(table.query),
+      table,
+      false,
+      null,
+      true
+    );
   }
 
-  public getMetadata(endpoint, table, inner = false, outer = null, formset = undefined) {
+  public getMetadata(
+    endpoint,
+    table,
+    inner = false,
+    outer = null,
+    formset = undefined
+  ) {
     let query = formset || '';
     if (this.metadataQuery) {
       query += `&${this.metadataQuery}`;
     }
 
-    this.gfs
-      .getMetadata(endpoint, query)
-      .subscribe(
-        (metadata) => {
-          table.metadata = metadata;
+    this.gfs.getMetadata(endpoint, query).subscribe((metadata) => {
+      table.metadata = metadata;
 
-          if (this.listNameCache && !this.listNameCache[this.endpoint]) {
-            this.listNameCache[this.endpoint] = metadata && metadata.list && metadata.list.label;
-          }
+      if (this.listNameCache && !this.listNameCache[this.endpoint]) {
+        this.listNameCache[this.endpoint] =
+          metadata && metadata.list && metadata.list.label;
+      }
 
-          if (!this.delay) {
-            table.query = {
-              sort: this.prepareSortQuery(this.getSortedFields(metadata.list.columns))
-            };
-          }
-          if (outer) {
-            setTimeout(() => {
-              outer.update = metadata;
-            }, 300);
-          }
-          if (!inner) {
-            table.list = metadata.list.list;
-            this.existingIds.push(this.tableId);
-            table.id = this.tableId++;
-            if (table && !table.first) {
-              table.metadata.list.list += table.id;
-              table.list += table.id;
-              table.limit = this.limit;
-              table.offset = 0;
-            }
-            if (!this.inForm) {
-              const paramsSubscription = this.route.queryParams.subscribe(
-                (params) => {
-                  let target = this.getTable(table.list);
-                  if (target && target.first) {
-                    this.parseUrl(params, table.list);
-                  }
-                }
-              );
-
-              this.subscriptions.push(paramsSubscription);
-            } else if (!this.delay) {
-              this.getData(endpoint, this.generateQuery(table.query), table);
-            }
-          }
+      if (!this.delay) {
+        table.query = {
+          sort: this.prepareSortQuery(
+            this.getSortedFields(metadata.list.columns)
+          )
+        };
+      }
+      if (outer) {
+        setTimeout(() => {
+          outer.update = metadata;
+        }, 300);
+      }
+      if (!inner) {
+        table.list = metadata.list.list;
+        this.existingIds.push(this.tableId);
+        table.id = this.tableId++;
+        if (table && !table.first) {
+          table.metadata.list.list += table.id;
+          table.list += table.id;
+          table.limit = this.limit;
+          table.offset = 0;
         }
-      );
+        if (!this.inForm) {
+          const paramsSubscription = this.route.queryParams.subscribe(
+            (params) => {
+              let target = this.getTable(table.list);
+              if (target && target.first) {
+                this.parseUrl(params, table.list);
+              }
+            }
+          );
+
+          this.subscriptions.push(paramsSubscription);
+        } else if (!this.delay) {
+          this.getData(endpoint, this.generateQuery(table.query), table);
+        }
+      }
+    });
   }
 
   public getSortedFields(columns) {
@@ -240,11 +260,30 @@ export class GenericListComponent implements OnInit, OnDestroy {
     return query;
   }
 
-  public getData(endpoint, query = null, table, first = false, target = null, add = false) {
+  public getData(
+    endpoint,
+    query = null,
+    table,
+    first = false,
+    target = null,
+    add = false,
+    fillin?
+  ) {
+    if (fillin) {
+      this.gfs.getByQuery(endpoint, query).subscribe((data) => {
+        table.refresh = false;
+        this.cashData = data;
+        table.offset = 0;
+
+        this.getMetadata(endpoint, table);
+      });
+      return;
+    }
+
     if (first && !this.query) {
-      this.gfs.getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : ''))
-        .subscribe(
-        (data) => {
+      this.gfs
+        .getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : ''))
+        .subscribe((data) => {
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           table.refresh = false;
@@ -259,8 +298,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
           } else {
             this.getMetadata(endpoint, table);
           }
-        }
-      );
+        });
     } else if (query || this.query) {
       let newQuery;
       if (query) {
@@ -271,15 +309,20 @@ export class GenericListComponent implements OnInit, OnDestroy {
       } else {
         newQuery = this.query;
       }
-      this.gfs.getByQuery(
-        endpoint,
-        newQuery
-          ? this.clientId
-            ? newQuery + `&role=${this.clientId}`
+      this.gfs
+        .getByQuery(
+          endpoint,
+          newQuery
+            ? this.clientId
+              ? newQuery + `&role=${this.clientId}`
+              : newQuery
             : newQuery
-          : newQuery
-        ).subscribe(
-        (data) => {
+        )
+        .subscribe((data) => {
+          if (this.endpoint.includes && this.endpoint.includes('fillin')) {
+            this.updateFillInList(data);
+          }
+
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           if (add) {
@@ -298,11 +341,11 @@ export class GenericListComponent implements OnInit, OnDestroy {
               target.update = data;
             }, 150);
           }
-        }
-      );
+        });
     } else {
-      this.gfs.getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : '')).subscribe(
-        (data) => {
+      this.gfs
+        .getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : ''))
+        .subscribe((data) => {
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           if (add) {
@@ -321,8 +364,17 @@ export class GenericListComponent implements OnInit, OnDestroy {
               target.update = data;
             }, 150);
           }
-        }
-      );
+        });
+    }
+  }
+
+  public updateFillInList(data) {
+    const defaultRate = 'default_rate';
+
+    if (data[this.responseField]) {
+      data[this.responseField].forEach((candidate) => {
+        candidate[defaultRate] = data.job && data.job[defaultRate];
+      });
     }
   }
 
@@ -352,8 +404,12 @@ export class GenericListComponent implements OnInit, OnDestroy {
     if (!table.query) {
       table.query = {};
     }
-    if (e.type === 'sort' || e.type === 'pagination' ||
-      e.type === 'filter' || e.type === 'update') {
+    if (
+      e.type === 'sort' ||
+      e.type === 'pagination' ||
+      e.type === 'filter' ||
+      e.type === 'update'
+    ) {
       table.refresh = true;
       if (e.type === 'update') {
         table.offset = 0;
@@ -451,9 +507,33 @@ export class GenericListComponent implements OnInit, OnDestroy {
       this.first = true;
       if (this.inForm) {
         table['data'] = this.data;
-        this.getMetadata(endpoint, table, null, null, !this.metaType && '?type=formset');
+        this.getMetadata(
+          endpoint,
+          table,
+          null,
+          null,
+          !this.metaType && '?type=formset'
+        );
       } else {
-        this.getData(endpoint, null, table, true);
+        if (endpoint && endpoint.includes('fillin')) {
+          let query = '';
+          this.gfs.getMetadata(endpoint).subscribe((metadata) => {
+            metadata.list.filters.forEach((filter) => {
+              if (filter.hasOwnProperty('default')) {
+                if (query === '') {
+                  query = '?';
+                }
+                query +=
+                  this.filterQueryService.generateQueryOf(filter.type, filter) +
+                  '&';
+              }
+            });
+
+            this.getData(endpoint, query, table, true, null, false, true);
+          });
+        } else {
+          this.getData(endpoint, null, table, true);
+        }
       }
     } else {
       let firstTable = this.getFirstTable();
@@ -481,7 +561,11 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public listHandler(e) {
-    if (this.checkList(e.endpoint) && !e.innerTable && this.tables.length < 10) {
+    if (
+      this.checkList(e.endpoint) &&
+      !e.innerTable &&
+      this.tables.length < 10
+    ) {
       this.tables.push(this.createTableData(e.endpoint));
     } else if (e.innerTable) {
       let table = this.getTable(e.list);
@@ -489,7 +573,13 @@ export class GenericListComponent implements OnInit, OnDestroy {
       table.innerTables[e.row] = table.innerTables[e.row] || {};
       table.innerTables[e.row][e.key] = {};
       this.getMetadata(e.endpoint, table.innerTables[e.row][e.key], table);
-      this.getData(e.endpoint, null, table.innerTables[e.row][e.key], false, table);
+      this.getData(
+        e.endpoint,
+        null,
+        table.innerTables[e.row][e.key],
+        false,
+        table
+      );
     }
   }
 
@@ -510,7 +600,11 @@ export class GenericListComponent implements OnInit, OnDestroy {
       (res) => {
         if (res.status === 'success') {
           if (e.action.reload) {
-            this.getData(target.endpoint, this.generateQuery(target.query), target);
+            this.getData(
+              target.endpoint,
+              this.generateQuery(target.query),
+              target
+            );
           } else {
             target.actionData = res;
           }
@@ -530,8 +624,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         let elements = query[el].split('&');
         elements.forEach((item, i) => {
           let keyValue = item.split('=');
-          let key = (el === 'filter') ? 'f.' :
-            (el === 'sort') ? 's.' : '';
+          let key = el === 'filter' ? 'f.' : el === 'sort' ? 's.' : '';
           if (key === 'f.') {
             queryParams[`${list}.${key}${keyValue[0]}-${i}`] = keyValue[1];
           } else if (el !== 'pagination') {
@@ -566,7 +659,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
             list,
             endpoint: this.endpoint
           };
-          queryList['filter'] += `${name.slice(0, name.indexOf('-'))}=${queryParams[el]}&`;
+          queryList['filter'] += `${name.slice(0, name.indexOf('-'))}=${
+            queryParams[el]
+          }&`;
         } else if (params[1] === 's') {
           let fields = queryParams[el].split(',');
           fields.forEach((elem) => {
@@ -586,7 +681,11 @@ export class GenericListComponent implements OnInit, OnDestroy {
     if (exist) {
       table.query = queryList;
       if (this.cashData) {
-        if (!table.query.filter && !table.query.sort && !table.query.pagination) {
+        if (
+          !table.query.filter &&
+          !table.query.sort &&
+          !table.query.pagination
+        ) {
           table.data = this.cashData;
           this.cashData = undefined;
         } else {
@@ -601,7 +700,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public setPage(param, value) {
     this.pagination[param] = value;
     if (this.pagination['limit'] && this.pagination['offset']) {
-      return (this.pagination['offset'] / this.pagination['limit']) + 1;
+      return this.pagination['offset'] / this.pagination['limit'] + 1;
     }
   }
 
@@ -615,5 +714,4 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public loadMoreHandler() {
     this.upload.next(true);
   }
-
 }

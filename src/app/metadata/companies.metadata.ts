@@ -174,7 +174,7 @@ const list = {
         ],
         query: 'credit_check',
         default: null,
-        unique: ['data'],
+        multiple: false,
         type: 'checkbox'
       },
       {

@@ -173,6 +173,10 @@ export class DynamicListComponent
   public ngOnInit() {
     this.updateFilters();
 
+    if (this.config.list.openFilter) {
+      this.filtersHidden = false;
+    }
+
     this.noneEdit = this.pictures.indexOf(this.endpoint) > -1;
   }
 
@@ -716,6 +720,9 @@ export class DynamicListComponent
           obj['help'] = element.help;
           obj['postfix'] = element.postfix;
           obj['content'] = element.content;
+          if (obj.description) {
+            obj.description = this.format(obj.description, el);
+          }
           if (element.setColor) {
             this.setValue(el, [element.setColor], obj, 'setColor');
           }
