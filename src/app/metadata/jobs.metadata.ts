@@ -666,7 +666,6 @@ const formset = {
         ],
         label: 'Actions',
         title: null,
-        delim: ' '
       }
     ],
     buttons: [],
@@ -866,6 +865,7 @@ const form = [
                       edit: true
                     },
                     collapsed: false,
+                    visibleMode: true,
                     default: '{customer_company.primary_contact.id}',
                     showIf: ['provider_company.id'],
                     type: 'related',
@@ -915,7 +915,7 @@ const form = [
           add_label: '+ Add job offer',
           text: 'Job Offers'
         },
-        collapsed: false,
+        visibleMode: true,
         type: 'list',
         query: {
           job: '{id}'
@@ -1112,7 +1112,7 @@ const formadd = [
               type: 'related',
               edit: true
             },
-            collapsed: false,
+            visibleMode: true,
             default: '{customer_company.primary_contact.id}',
             if_master: 'session.contact.contact_id',
             showIf: ['provider_company.id'],
@@ -1134,6 +1134,7 @@ const formadd = [
               type: 'related',
               edit: true
             },
+            visibleMode: true,
             additional_text: 'Or',
             default: '{jobsite.primary_contact.id}',
             if_master: '{customer_company.manager.id}',
@@ -1156,6 +1157,7 @@ const formadd = [
               required: true
             },
             type: 'related',
+            visibleMode: true,
             default: {
               useIf: ['customer_company.id', 'customer_representative.id'],
               query: {

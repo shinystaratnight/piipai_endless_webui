@@ -383,6 +383,7 @@ const form = [
       type: 'related',
       edit: true
     },
+    visibleMode: true,
     collapsed: false,
     type: 'related',
     key: 'approved_by',

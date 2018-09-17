@@ -382,7 +382,7 @@ const form = [
                       edit: true,
                       display: '{contact.__str__}'
                     },
-                    collapsed: false,
+                    visibleMode: true,
                     prefilled: {
                       company: '{id.id}',
                       content_type: '{model_content_type}'
@@ -940,7 +940,7 @@ const form = [
           add_label: 'Add',
           text: 'Client Contacts'
         },
-        collapsed: false,
+        visibleMode: true,
         prefilled: {
           company: '{id}'
         },
@@ -957,7 +957,7 @@ const form = [
           add_label: 'Add',
           text: 'Jobsites'
         },
-        collapsed: false,
+        visibleMode: true,
         prefilled: {
           regular_company: '{id}'
         },

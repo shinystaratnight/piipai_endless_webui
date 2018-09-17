@@ -214,22 +214,22 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'primary_contact',
     many: false
   },
-  {
-    key: 'timeline',
-    type: 'timeline',
-    query: { model: 'core.companyrel', object_id: '{id}' },
-    templateOptions: {
-      label: 'States Timeline',
-      type: 'timeline',
-      text: 'States Timeline'
-    },
-    endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
-  }
+  // {
+  //   key: 'timeline',
+  //   type: 'timeline',
+  //   query: { model: 'core.companyrel', object_id: '{id}' },
+  //   templateOptions: {
+  //     label: 'States Timeline',
+  //     type: 'timeline',
+  //     text: 'States Timeline'
+  //   },
+  //   endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
+  // }
 ];
 
 export const metadata = {

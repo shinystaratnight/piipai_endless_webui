@@ -799,7 +799,7 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'job_offer',
     many: false
@@ -1015,7 +1015,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'job_offer',
     many: false
@@ -1119,7 +1119,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'supervisor',
     many: false
@@ -1173,7 +1173,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'rate_overrides_approved_by',
     many: false

@@ -464,7 +464,7 @@ const form = [
                       edit: true,
                       display: '{contact.__str__}'
                     },
-                    collapsed: false,
+                    visibleMode: true,
                     prefilled: {
                       company: '{regular_company.id}'
                     },
@@ -795,7 +795,7 @@ const formadd = [
               type: 'related',
               edit: true
             },
-            collapsed: false,
+            visibleMode: true,
             showIf: ['regular_company.id'],
             type: 'related',
             query: {
@@ -880,7 +880,7 @@ const formadd = [
               type: 'related',
               edit: true
             },
-            collapsed: false,
+            visibleMode: true,
             default: '{regular_company.primary_contact.id}',
             showIf: ['primary_contact.id', 'address'],
             type: 'related',

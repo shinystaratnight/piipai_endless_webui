@@ -458,7 +458,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     showIf: ['company.id'],
     type: 'related',
     key: 'contact',

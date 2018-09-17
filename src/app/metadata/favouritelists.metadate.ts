@@ -664,7 +664,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'candidate_contact'
   },
@@ -701,7 +701,7 @@ const formadd = [
     },
     reset: ['job'],
     default: '{job.jobsite.id}',
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'jobsite'
   },
