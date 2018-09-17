@@ -5,6 +5,7 @@ const list = {
     editDisable: true,
     label: '{job.position}',
     description: '{job.jobsite}',
+    openFilter: true,
     columns: [
       {
         name: 'favourite',
@@ -21,6 +22,7 @@ const list = {
       },
       {
         name: 'contact.__str__',
+        width: 175,
         content: [
           {
             type: 'static',
@@ -35,6 +37,7 @@ const list = {
       },
       {
         name: 'hourly_rate',
+        width: 90,
         content: [
           {
             type: 'static',
@@ -46,7 +49,7 @@ const list = {
           {
             type: 'description',
             field: 'overpriced',
-            description: 'Candidate hourly rate is higher than job position default rate',
+            description: 'Candidate hourly rate is higher than job position default rate ${default_rate}',
             showIf: ['overpriced']
           }
         ],
@@ -67,6 +70,7 @@ const list = {
       },
       {
         name: 'timesheet',
+        width: 150,
         content: [
           {
             type: 'static',
@@ -85,6 +89,7 @@ const list = {
       },
       {
         name: 'distance',
+        width: 125,
         content: [
           {
             endpoint: '/ecore/api/v2/distances/',
@@ -539,7 +544,7 @@ const list = {
       key: 'favourite',
       templateOptions: {
         color: {
-          true: 'primary',
+          true: 'warning',
           false: 'opacity'
         }
       }

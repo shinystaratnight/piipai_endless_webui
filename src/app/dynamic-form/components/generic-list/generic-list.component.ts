@@ -280,6 +280,11 @@ export class GenericListComponent implements OnInit, OnDestroy {
           : newQuery
         ).subscribe(
         (data) => {
+          
+          if (this.endpoint.includes && this.endpoint.includes('fillin')) {
+            this.updateFillInList(data);
+          }
+
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           if (add) {
@@ -323,6 +328,16 @@ export class GenericListComponent implements OnInit, OnDestroy {
           }
         }
       );
+    }
+  }
+
+  public updateFillInList(data) {
+    const defaultRate = 'default_rate';
+
+    if (data[this.responseField]) {
+      data[this.responseField].forEach((candidate) => {
+        candidate[defaultRate] = data.job && data.job[defaultRate];
+      });
     }
   }
 
