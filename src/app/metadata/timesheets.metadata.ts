@@ -295,7 +295,13 @@ const list = {
             field: 'invoice',
             type: 'link',
             text: 'Invoice'
-          }
+          },
+          {
+            action: 'emptyPost',
+            text: 'Recreate',
+            endpoint: '/ecore/api/v2/hr/timesheets/{id}/recreate_invoice',
+            type: 'button',
+          },
         ],
         name: 'invoice',
         title: null,
