@@ -306,7 +306,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
+          endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'recruitment_agent'
@@ -784,7 +784,7 @@ const form = [
                       type: 'related',
                       edit: true
                     },
-                    collapsed: false,
+                    visibleMode: true,
                     default: 'session.contact.contact_id',
                     type: 'related',
                     query: {
@@ -1292,7 +1292,7 @@ const form = [
           add_label: '+ Add item',
           text: 'Candidate tags'
         },
-        collapsed: false,
+        visibleMode: true,
         prefilled: {
           candidate_contact: '{id}'
         },
@@ -1377,7 +1377,7 @@ const form = [
         prefilled: {
           contact: '{contact.id}'
         },
-        collapsed: false
+        visibleMode: true,
       },
       {
         endpoint: '/ecore/api/v2/hr/carrierlists/',
@@ -1387,7 +1387,7 @@ const form = [
           add_label: '+ Add item',
           text: 'Carrier List'
         },
-        collapsed: false,
+        visibleMode: true,
         prefilled: {
           candidate_contact: '{id}'
         },
@@ -1477,6 +1477,7 @@ const formadd = [
         contact: '{contact.id}'
       }
     },
+    visibleMode: true,
     update: {
       before: true,
       endpoint: '/ecore/api/v2/core/contacts/{contact.id}/',
@@ -1587,6 +1588,7 @@ const formadd = [
       values: ['__str__'],
       edit: true
     },
+    visibleMode: true,
     default: 'session.contact.contact_id',
     type: 'related',
     query: {

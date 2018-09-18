@@ -104,7 +104,7 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'provider_representative',
     many: false
@@ -121,7 +121,7 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'customer_representative',
     many: false
@@ -971,7 +971,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'provider_representative',
     many: false
@@ -988,7 +988,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'customer_representative',
     many: false

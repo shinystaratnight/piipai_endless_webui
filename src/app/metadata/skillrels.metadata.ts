@@ -372,7 +372,7 @@ const form = [
   {
     list: false,
     endpoint: '/ecore/api/v2/skills/skills/',
-    read_only: false,
+    read_only: true,
     key: 'skill',
     templateOptions: {
       label: 'Skill',
@@ -424,6 +424,7 @@ const form = [
     key: 'hourly_rate',
     default: '{skill.default_rate}',
     type: 'input',
+    useValue: true,
     templateOptions: { required: true, label: 'Skill Rate', type: 'text' },
     read_only: false
   }

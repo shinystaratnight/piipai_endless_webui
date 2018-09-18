@@ -320,7 +320,7 @@ const form = [
           add_label: '+ Add item',
           text: 'Skill tags'
         },
-        collapsed: false,
+        visibleMode: true,
         prefilled: {
           skill: '{id}'
         },
