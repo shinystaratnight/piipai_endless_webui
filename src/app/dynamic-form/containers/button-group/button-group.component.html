@@ -1,3 +1,4 @@
+<span *ngIf="data && data.length">{{config.groupLabel}}:</span>
 <div *ngFor="let row of data">
   <ng-container
     *ngFor="let field of row; let last = last"

@@ -93,7 +93,7 @@ export class DynamicFormComponent implements OnInit {
   public eventHandler(e: CustomEvent): void {
     this.event.emit(e);
 
-    if (e.type === 'change') {
+    if (e.type === 'change' || e.type === 'reset') {
       this.changeValue.emit(this.form.value);
     }
     let key;

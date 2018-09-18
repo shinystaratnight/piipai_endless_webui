@@ -1070,6 +1070,7 @@ export class FormRelatedComponent extends BasicElementComponent
       this.count = null;
       this.previewList = null;
     }
+    this.count = null;
     this.cd.detectChanges();
   }
 
@@ -1363,7 +1364,8 @@ export class FormRelatedComponent extends BasicElementComponent
                 if (only) {
                   if (res.results.length === only) {
                     canSetValue = true;
-                  } else if (only > res.results.length) {
+                  } else if (only > res.results.length || only < res.results.length) {
+                    this.count = null;
                     if (this.group.get(this.key).value) {
                       this.displayValue = '';
                       this.group.get(this.key).patchValue('');
