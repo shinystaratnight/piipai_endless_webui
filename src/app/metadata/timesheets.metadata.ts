@@ -301,6 +301,11 @@ const list = {
             text: 'Recreate',
             endpoint: '/ecore/api/v2/hr/timesheets/{id}/recreate_invoice',
             type: 'button',
+            showIf: [
+              {
+                supervisor_approved: true
+              }
+            ]
           },
         ],
         name: 'invoice',

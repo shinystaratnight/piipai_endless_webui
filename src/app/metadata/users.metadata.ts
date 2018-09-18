@@ -188,7 +188,7 @@ const form = [
         templateOptions: {
           label: 'Password',
           editLabel: 'Change password',
-          editDescription: 'Enter a new password for the user: <b style="color: black; font-weight: bold"> {contact.__str__} </b>',
+          editDescription: 'Enter a new password for the user: <b style="color: black; font-weight: bold"> {contact.__str__} </b>', //tslint:disable-line
           edit: true
         }
       },
