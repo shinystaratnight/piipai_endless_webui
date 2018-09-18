@@ -133,7 +133,9 @@ export class DynamicFormComponent implements OnInit {
         }
 
         setTimeout(() => {
-          this.cd.detectChanges();
+          if (!(<any> this.cd).destroyed) {
+            this.cd.detectChanges();
+          }
         }, 1000);
       }
     }, 50);

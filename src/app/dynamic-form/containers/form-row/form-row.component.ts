@@ -12,6 +12,7 @@ export class FormRowComponent implements OnInit {
   public group: FormGroup;
   public errors: any;
   public message: any;
+  public className: any;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -23,6 +24,8 @@ export class FormRowComponent implements OnInit {
     if (!this.config.editForm && this.config.label) {
       this.config.label = this.config.label.includes('{') ? '' : this.config.label;
     }
+
+    this.className = this.config.className || 'items';
 
     this.checkChildrenOnReadOnlyProperty();
   }

@@ -35,4 +35,7 @@
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
   </small>
+  <small class="text-danger" *ngIf="config.templateOptions.errorDescription && config.templateOptions.errorDescription.value === group.get(key).value">
+    {{config.templateOptions.errorDescription.error}}
+  </small>
 </div>
