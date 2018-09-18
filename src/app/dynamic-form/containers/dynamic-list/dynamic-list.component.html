@@ -260,7 +260,6 @@
   </div>
 </div>
 
-
 <template #modal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
@@ -299,6 +298,26 @@
       <profile [id]="modalInfo.id" *ngSwitchCase="'profile'"></profile>
     </div>
   </div>
+</template>
+
+<template #messageDetail let-c="close" let-d="dismiss">
+  <div class="message-detail-header">
+    <h5 class="message-label">{{modalInfo.label}}</h5>
+    <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <generic-form
+    [endpoint]="modalInfo.endpoint"
+    [metadataQuery]="modalInfo.metadataQuery"
+    [id]="modalInfo.id"
+    [mode]="modalInfo.mode"
+    [data]="modalInfo.data"
+    [edit]="modalInfo.edit"
+    (event)="formEvent($event, c)"
+    (errorForm)="formError($event)">
+  </generic-form>
 </template>
 
 <template #confirmModal let-c="close">

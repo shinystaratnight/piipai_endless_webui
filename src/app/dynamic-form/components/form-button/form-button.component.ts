@@ -1,12 +1,14 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'form-button',
   templateUrl: 'form-button.component.html',
   styleUrls: ['./form-button.component.scss']
 })
-export class FormButtonComponent implements OnInit {
+export class FormButtonComponent implements OnInit, OnDestroy {
   public config;
   public group: FormGroup;
   public label: boolean;
@@ -14,6 +16,9 @@ export class FormButtonComponent implements OnInit {
   public buttonClass: string;
   public buttonColor: string;
   public repeatArray: any[];
+  public showButton: boolean;
+
+  public subscriptions: Subscription[] = [];
 
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
@@ -31,7 +36,22 @@ export class FormButtonComponent implements OnInit {
     } else if (this.config.templateOptions.icon) {
       this.repeatArray = [''];
     }
+    this.checkHiddenProperty();
     this.customizeButton();
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((s) => s.unsubscribe);
+  }
+
+  public checkHiddenProperty() {
+    if (this.config && this.config.hidden && this.config.hidden.subscribe) {
+      const subscription = this.config.hidden.subscribe((hide) => {
+        this.showButton = !hide;
+      });
+
+      this.subscriptions.push(subscription);
+    }
   }
 
   public customizeButton() {

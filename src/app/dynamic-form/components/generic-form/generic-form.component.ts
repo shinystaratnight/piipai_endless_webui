@@ -370,7 +370,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       .getMetadata(
         endpoint,
         (this.id || this.edit ? '?type=form' : '?type=formadd') +
-          (this.metadataQuery ? `&${this.metadataQuery}` : '') //tslint:disable-line
+          (this.metadataQuery ? `&${this.metadataQuery}` : '')
       )
       .subscribe(
         (data: any) => {
@@ -1265,7 +1265,23 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       this.generatePassword(e);
     }
 
+    if (e.value === 'resend') {
+      this.resend(e);
+    }
+
     this.buttonAction.emit(e);
+  }
+
+  public resend(e) {
+    const endpoint = `/ecore/api/v2/hr/joboffers/${e.data.resend_id}/resend/`;
+
+    this.service.submitForm(endpoint, {})
+      .subscribe(() => {
+        this.event.emit({
+          type: 'sendForm',
+          status: 'success'
+        });
+      });
   }
 
   public generatePassword(e) {

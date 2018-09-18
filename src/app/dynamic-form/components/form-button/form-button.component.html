@@ -1,7 +1,7 @@
-<div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden">
+<div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden || showButton">
   <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
   <button [type]="config.templateOptions.type ? config.templateOptions.type : 'button'"
-    *ngIf="!config.hidden && (config.templateOptions.text || repeatArray && repeatArray.length > 1) && config.action !== 'showDetail'"
+    *ngIf="(!config.hidden || showButton) && (config.templateOptions.text || repeatArray && repeatArray.length > 1) && config.action !== 'showMessage'"
     [ngClass]="[buttonClass]"
     [ngStyle]="{'backgroundColor': config.color}"
     class="btn"
@@ -9,7 +9,6 @@
     [class.btn-sm]="config.templateOptions.small"
     [class.px-2]="config.templateOptions.p"
     [class.list]="config.templateOptions.p"
-    [class.pl-4.pr-4]="!config.templateOptions.p"
     [class.text-white]="buttonClass || config.color"
     (click)="action($event)">
       <span *ngIf="repeatArray" class="d-flex align-items-center justify-content-between">
@@ -23,7 +22,7 @@
 
       <span *ngIf="!repeatArray">{{config.templateOptions.text}}</span>
   </button>
-  <button class="btn btn-sm btn-link" type="button" *ngIf="config.action === 'showDetail'" [placement]="config.placement" [ngbTooltip]="detail" (click)="action($event)">
+  <button class="btn btn-sm btn-link" type="button" *ngIf="config.action === 'showMessage'" [placement]="config.placement" [ngbTooltip]="detail" (click)="action($event)">
     {{config.templateOptions.text}}
   </button>
   <span class="postfix" *ngIf="config.postfix">{{config.postfix}}</span>
