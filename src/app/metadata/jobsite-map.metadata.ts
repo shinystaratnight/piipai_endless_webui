@@ -48,7 +48,7 @@ const mapFilters = [
     type: 'related',
     data: {
       value: '__str__',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
       key: 'id'
     },
     query: 'portfolio_manager'
