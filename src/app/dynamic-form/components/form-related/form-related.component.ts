@@ -1338,7 +1338,7 @@ export class FormRelatedComponent extends BasicElementComponent
                 const formatString = new FormatString();
 
                 if (this.config.unique) {
-                  res = this.filterUniqueValue(res, this.results); 
+                  res = this.filterUniqueValue(res, this.results);
                 }
                 res.forEach((el) => {
                   el.__str__ = formatString.format(this.display, el);
