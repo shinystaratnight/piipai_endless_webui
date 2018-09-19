@@ -63,13 +63,15 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     }
     if (this.config.timelineSubject) {
       const subscription = this.config.timelineSubject.subscribe((value) => {
-        this.config.options = value;
+        if (value !== 'reset') {
+          this.config.options = value;
 
-        if (this.dropdown) {
-          this.updateDropdown();
+          if (this.dropdown) {
+            this.updateDropdown();
+          }
+
+          this.cd.detectChanges();
         }
-
-        this.cd.detectChanges();
       });
 
       this.subscriptions.push(subscription);
@@ -200,7 +202,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getTimeline(): void {
+  public getTimeline(resetPage?: boolean): void {
     this.loading = true;
 
     this.genericFormService
@@ -208,7 +210,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       .subscribe(
         (res) => {
           this.loading = false;
-          this.config.timelineSubject.next(res);
+          this.config.timelineSubject.next(resetPage ? 'reset' : res);
         },
         (err: any) => (this.loading = false)
       );
@@ -246,7 +248,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public sendEventHandler(e, closeModal): void {
     if (e.status === 'success') {
       closeModal();
-      this.getTimeline();
+      this.getTimeline(this.config.query.model === 'hr.job');
       this.modalData = null;
     }
   }

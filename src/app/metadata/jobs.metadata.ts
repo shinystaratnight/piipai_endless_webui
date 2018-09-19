@@ -905,7 +905,8 @@ const form = [
         type: 'list',
         add_metadata_query: {
           fieldsets_type: 'job'
-        }
+        },
+        listKey: 'shifts'
       },
       {
         endpoint: '/ecore/api/v2/hr/joboffers/',
@@ -925,7 +926,8 @@ const form = [
         },
         add_metadata_query: {
           type: 'list'
-        }
+        },
+        listKey: 'joboffers'
       },
       {
         name: 'Job states',
@@ -962,7 +964,8 @@ const form = [
               model: 'hr.job',
               object_id: '{id}'
             },
-            help: 'Here you can see changes job states'
+            help: 'Here you can see changes job states',
+            listKey: 'workflowobjects'
           }
         ]
       },
@@ -987,8 +990,9 @@ const form = [
         query: {
           job: '{id}'
         },
-        help: 'Here you can see the favorite candidates for client'
-      }
+        help: 'Here you can see the favorite candidates for client',
+        listKey: 'favouritelists'
+      },
     ]
   },
   {

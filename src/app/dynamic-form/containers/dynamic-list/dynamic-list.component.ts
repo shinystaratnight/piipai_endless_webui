@@ -108,6 +108,9 @@ export class DynamicListComponent
   @Input()
   public inForm: boolean = false;
 
+  @Input()
+  public disableActions: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -758,6 +761,9 @@ export class DynamicListComponent
           obj['postfix'] = element.postfix;
           obj['content'] = element.content;
           obj['messageType'] = element.messageType;
+          if (obj.action && this.disableActions) {
+            obj.disableAction = true;
+          }
           if (obj.description) {
             obj.description = this.format(obj.description, el);
           }
@@ -868,7 +874,12 @@ export class DynamicListComponent
           }
           if (element.type === 'buttonGroup') {
             obj.content = element.content.map((elem) => {
-              const newObj = Object.assign({}, elem, { rowId: obj.rowId });
+              const newObj = Object.assign(
+                {},
+                elem,
+                { rowId: obj.rowId },
+                { disableAction: this.disableActions }
+              );
 
               this.updateButtonTypeCell(newObj, elem, el);
               return newObj;
@@ -876,7 +887,7 @@ export class DynamicListComponent
           }
           if (element.type === 'select' && element.content) {
             obj.content = element.content.map((elem) => {
-              const newObj = Object.assign({}, elem);
+              const newObj = Object.assign({}, elem, { disableAction: this.disableActions });
 
               newObj['endpoint'] = this.format(elem.endpoint, el);
 

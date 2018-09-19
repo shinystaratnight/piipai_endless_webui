@@ -33,16 +33,16 @@ export function getValueOfData(data, key: string, obj: Field): void {
   }
 }
 
-export function getElementFromMetadata(metadata: Field[], key: string): Field {
+export function getElementFromMetadata(metadata: Field[], key: string, param = 'key'): Field {
   let element = null;
   metadata.forEach((el: Field) => {
-    if (el.key === key) {
+    if (el[param] === key) {
       if (!element) {
         element = el;
       }
     } else if (el.children) {
       if (!element) {
-        element = getElementFromMetadata(el.children, key);
+        element = getElementFromMetadata(el.children, key, param);
       }
     }
   });

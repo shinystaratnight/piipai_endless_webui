@@ -24,7 +24,7 @@
       <p>{{config.help}}</p>
     </div>
     <button type="button" class="btn btn-primary btn-shadow"
-      *ngIf="(showButton || config.delay) && checkPermissions('post')"
+      *ngIf="(showButton || config.delay) && checkPermissions('post') && !config.disableButtons"
       (click)="addObject()">
         {{config?.templateOptions?.add_label || '+ Add Item'}}
       </button>
@@ -47,6 +47,7 @@
       [allowPermissions]="allowMethods"
       [metadataQuery]="config.metadata_query"
       [addMetadataQuery]="config.add_metadata_query"
+      [disableActions]="config.disableActions"
       (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)">
