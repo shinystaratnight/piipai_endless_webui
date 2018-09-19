@@ -732,32 +732,35 @@ export class DynamicListComponent
           if (element.showIf && !this.checkShowRules(element.showIf, el)) {
             return;
           }
-          let obj: any = {};
+          let obj: any = {
+            rowId: el.id,
+            key: col.name,
+            delim: col.delim,
+            title: col.title,
+            skillName: col.label,
+            name: element.field,
+            type: element.type,
+            values: element.values,
+            color: element.color,
+            action: element.action,
+            inline: element.inline,
+            outline: element.outline,
+            description: element.description,
+            redirect: element.redirect,
+            file: element.file,
+            display: element.display,
+            setColorForLabel: element.setColorForLabel,
+            noDelim: element.noDelim,
+            placement: element.placement,
+            hideValue: element.hideValue,
+            help: element.help,
+            postfix: element.postfix,
+            content: element.content,
+            groupLabel: element.groupLabel,
+            emptyValue: element.emptyValue,
+            messageType: element.messageType
+          };
           let props;
-          obj['rowId'] = el.id;
-          obj['key'] = col.name;
-          obj['name'] = element.field;
-          obj['type'] = element.type;
-          obj['values'] = element.values;
-          obj['color'] = element.color;
-          obj.action = element.action;
-          obj['delim'] = col.delim;
-          obj['title'] = col.title;
-          obj['inline'] = element.inline;
-          obj['outline'] = element.outline;
-          obj['skillName'] = col.label;
-          obj['description'] = element.description;
-          obj['redirect'] = element.redirect;
-          obj['file'] = element.file;
-          obj['display'] = element.display;
-          obj['setColorForLabel'] = element.setColorForLabel;
-          obj['noDelim'] = element.noDelim;
-          obj['placement'] = element.placement;
-          obj['hideValue'] = element.hideValue;
-          obj['help'] = element.help;
-          obj['postfix'] = element.postfix;
-          obj['content'] = element.content;
-          obj['messageType'] = element.messageType;
           if (obj.description) {
             obj.description = this.format(obj.description, el);
           }
