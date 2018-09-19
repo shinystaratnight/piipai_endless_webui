@@ -37,7 +37,7 @@ const list = {
       },
       {
         name: 'hourly_rate',
-        width: 90,
+        width: 95,
         content: [
           {
             type: 'static',
@@ -90,7 +90,7 @@ const list = {
       },
       {
         name: 'distance',
-        width: 125,
+        width: 130,
         content: [
           {
             endpoint: '/ecore/api/v2/distances/',

@@ -117,9 +117,13 @@ export class GenericFormService {
         }
       } else if (query.includes('extend')) {
         type = 'extend';
-      } else if (query.includes('formset')) {
+      } else if (query.includes('sent')) {
+        type = 'sent';
+      } else if (query.includes('reply')) {
+        type = 'reply';
+      }else if (query.includes('formset')) {
         type = 'formset';
-      } else if (query.includes('form')) {
+      }else if (query.includes('form')) {
         type = 'form';
       } else {
         type = 'list';

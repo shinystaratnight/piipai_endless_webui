@@ -366,7 +366,8 @@ const formset = {
             groupLabel: 'Was sent',
             content: [
               {
-                action: 'showDetail',
+                action: 'showMessage',
+                messageType: 'sent',
                 endpoint:
                   '/ecore/api/v2/sms-interface/smsmessages/{offer_sent_by_sms.id}',
                 noDelim: true,
@@ -379,7 +380,8 @@ const formset = {
               },
 
               {
-                action: 'showDetail',
+                action: 'showMessage',
+                messageType: 'reply',
                 endpoint:
                   '/ecore/api/v2/sms-interface/smsmessages/{reply_received_by_sms.id}',
                 text: 'Reply',

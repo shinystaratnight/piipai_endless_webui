@@ -549,6 +549,272 @@ const form = [
   }
 ];
 
+const sent = [
+  {
+    type: 'input',
+    key: 'resend_id',
+    hide: true,
+    templateOptions: {
+      type: 'text'
+    }
+  },
+  {
+    type: 'checkbox',
+    key: 'has_resend_action',
+    hide: true,
+    templateOptions: {}
+  },
+  {
+    type: 'row',
+    className: 'col row',
+    children: [
+      {
+        key: 'from_number',
+        type: 'input',
+        templateOptions: {
+          label: 'From',
+          type: 'text'
+        },
+      },
+      {
+        key: 'to_number',
+        type: 'input',
+        templateOptions: {
+          label: 'To',
+          type: 'text'
+        },
+      },
+    ]
+  },
+  {
+    key: 'text',
+    type: 'textarea',
+    templateOptions: {
+      label: 'Text of the message',
+      type: 'textarea'
+    },
+  },
+  {
+    endpoint: '/ecore/api/v2/sms-interface/smstemplates/',
+    read_only: true,
+    templateOptions: {
+      label: 'Template',
+      values: ['__str__'],
+    },
+    type: 'related',
+    key: 'template',
+  },
+  {
+    type: 'row',
+    className: 'row col',
+    children: [
+      {
+        key: 'status',
+        type: 'select',
+        templateOptions: {
+          label: 'Status',
+          errorDescription: {
+            value: 'FAILED',
+            error: 'The contact is not available in this moment'
+          },
+          options: [
+            {
+              value: 'ACCEPTED',
+              label: 'Accepted'
+            },
+            {
+              value: 'SENT',
+              label: 'Sent'
+            },
+            {
+              value: 'QUEUED',
+              label: 'Queued'
+            },
+            {
+              value: 'SENDING',
+              label: 'Sending'
+            },
+            {
+              value: 'FAILED',
+              label: 'Failed',
+            },
+            {
+              value: 'DELIVERED',
+              label: 'Delivered'
+            },
+            {
+              value: 'UNDELIVERED',
+              label: 'Undelivered'
+            },
+            {
+              value: 'RECEIVED',
+              label: 'Received'
+            }
+          ]
+        },
+      },
+      {
+        type: 'group',
+        width: '.1',
+        children: [
+          {
+            type: 'button',
+            color: 'primary',
+            showIf: ['has_resend_action'],
+            templateOptions: {
+              action: 'resend',
+              text: 'Resend',
+              type: 'button',
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'sent_at',
+    type: 'datepicker',
+    templateOptions: {
+      label: 'Sent at',
+      type: 'datetime'
+    },
+  },
+  {
+    type: 'row',
+    className: 'row col',
+    children: [
+      {
+        key: 'delivery_timeout',
+        type: 'input',
+        templateOptions: {
+          label: 'Delivery timeout',
+          type: 'number',
+          description: 'Minutes',
+        },
+      },
+      {
+        key: 'reply_timeout',
+        type: 'input',
+        templateOptions: {
+          label: 'Reply timeout',
+          type: 'number',
+          description: 'Minutes',
+        },
+      },
+    ]
+  },
+  {
+    endpoint: null,
+    read_only: true,
+    templateOptions: {
+      label: 'Related',
+      values: ['__str__'],
+    },
+    column: true,
+    type: 'related',
+    key: 'related',
+    many: true
+  }
+];
+
+const reply = [
+  {
+    type: 'row',
+    className: 'col row',
+    children: [
+      {
+        key: 'from_number',
+        type: 'input',
+        templateOptions: {
+          label: 'From',
+          type: 'text'
+        },
+      },
+      {
+        key: 'to_number',
+        type: 'input',
+        templateOptions: {
+          label: 'To',
+          type: 'text'
+        },
+      },
+    ]
+  },
+  {
+    key: 'text',
+    type: 'textarea',
+    templateOptions: {
+      label: 'Text of the message',
+      type: 'textarea'
+    },
+  },
+  {
+    key: 'status',
+    type: 'select',
+    templateOptions: {
+      label: 'Status',
+      errorDescription: {
+        value: 'FAILED',
+        error: 'The contact is not available in this moment'
+      },
+      options: [
+        {
+          value: 'ACCEPTED',
+          label: 'Accepted'
+        },
+        {
+          value: 'SENT',
+          label: 'Sent'
+        },
+        {
+          value: 'QUEUED',
+          label: 'Queued'
+        },
+        {
+          value: 'SENDING',
+          label: 'Sending'
+        },
+        {
+          value: 'FAILED',
+          label: 'Failed',
+        },
+        {
+          value: 'DELIVERED',
+          label: 'Delivered'
+        },
+        {
+          value: 'UNDELIVERED',
+          label: 'Undelivered'
+        },
+        {
+          value: 'RECEIVED',
+          label: 'Received'
+        }
+      ]
+    },
+  },
+  {
+    key: 'sent_at',
+    type: 'datepicker',
+    templateOptions: {
+      label: 'Sent at',
+      type: 'datetime'
+    },
+  },
+  {
+    endpoint: null,
+    read_only: true,
+    templateOptions: {
+      label: 'Related',
+      values: ['__str__'],
+    },
+    column: true,
+    type: 'related',
+    key: 'related',
+    many: true
+  }
+];
+
 const formadd = [
   {
     key: 'from_number',
@@ -746,5 +1012,7 @@ const formadd = [
 export const metadata = {
   list,
   form,
-  formadd
+  formadd,
+  sent,
+  reply
 };
