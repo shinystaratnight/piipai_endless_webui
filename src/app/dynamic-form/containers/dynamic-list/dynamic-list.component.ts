@@ -1269,6 +1269,7 @@ export class DynamicListComponent
           this.editForm(e);
           break;
         case 'showMessage':
+        case 'messageDetail':
           this.showMessage(e);
           break;
         case 'emptyPost':

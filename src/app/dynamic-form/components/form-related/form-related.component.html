@@ -258,7 +258,7 @@
   </div>
 </div>
 
-<div class="form-group form-element"
+<div class="form-group form-element" [ngClass]="{'indent': config.templateOptions.indent}"
   [class.custom]="customTemplate"
   *ngIf="viewMode && !config.list && !config.hide && !((!this.displayValue && !results.length) && config.hideIfNull)">
     <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label">

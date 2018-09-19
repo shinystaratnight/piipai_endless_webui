@@ -591,7 +591,8 @@ const sent = [
     type: 'textarea',
     templateOptions: {
       label: 'Text of the message',
-      type: 'textarea'
+      type: 'textarea',
+      background: true
     },
   },
   {
@@ -600,6 +601,7 @@ const sent = [
     templateOptions: {
       label: 'Template',
       values: ['__str__'],
+      indent: true,
     },
     type: 'related',
     key: 'template',
@@ -745,7 +747,8 @@ const reply = [
     type: 'textarea',
     templateOptions: {
       label: 'Text of the message',
-      type: 'textarea'
+      type: 'textarea',
+      background: true
     },
   },
   {
