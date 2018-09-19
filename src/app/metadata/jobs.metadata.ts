@@ -985,7 +985,8 @@ const form = [
         },
         type: 'list',
         query: {
-          job: '{id}'
+          job: '{id}',
+          company_contact: 'session.contact.contact_id'
         },
         help: 'Here you can see the favorite candidates for client'
       }
