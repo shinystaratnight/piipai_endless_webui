@@ -6,6 +6,7 @@ import {
   VerifyEmailComponent,
   RegistrationFormComponent
 } from './components';
+import { RedirectComponent } from './redirect.component';
 
 import { UserService, NavigationService, SiteSettingsService } from './services';
 
@@ -60,6 +61,10 @@ export const ROUTES: Routes = [
       pagesList: NavigationService
     },
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'myob/oauth2_redirect_uri',
+    component: RedirectComponent
   },
   {
     path: '**',
