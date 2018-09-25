@@ -94,7 +94,8 @@ export class MyobComponent implements OnInit, OnDestroy {
     }
 
     const endpoint = '/ecore/api/v2/company_settings/myob_api_key/';
-    this.gfs.getAll(endpoint)
+    this.gfs
+      .getAll(endpoint)
       .subscribe(
         (res) => {
           this.myobApiKey = res.api_key;
@@ -103,27 +104,37 @@ export class MyobComponent implements OnInit, OnDestroy {
             callback.apply(this);
           }
         },
-        (err: any) => this.error = err);
+        (err: any) => this.error = err
+      );
   }
 
   public parseMYOBSettings(settings) {
     settings = JSON.parse(JSON.stringify(settings));
 
     Object.keys(this.payrollAccounts).forEach((el) => {
-        if (settings[el]) {
-          this.payrollAccounts[el].value = settings[el].id;
-        } else {
-          if (this.payrollAccounts[el] instanceof Object) {
-            this.payrollAccounts[el].value = '';
+      if (settings[el]) {
+        this.payrollAccounts[el].value = settings[el].id;
+        if (el === 'invoice_activity_account') {
+          if (this.companyFile) {
+            this.getAccountsOfCompanyFile(
+              settings['invoice_company_file'].id,
+              'invoice_activity_account',
+              settings[el].id
+            );
           }
         }
+      } else {
+        if (this.payrollAccounts[el] instanceof Object) {
+          this.payrollAccounts[el].value = '';
+        }
+      }
     });
   }
 
-  public parseAccounts(data: any[], key: string = undefined): void {
+  public parseAccounts(data: any[], key: string = undefined, value?: string): void {
     if (key) {
       this.payrollAccounts[key].options = data;
-      this.payrollAccounts[key].value = '';
+      this.payrollAccounts[key].value = value || '';
     } else {
       Object.keys(this.payrollAccounts).forEach((el: string) => {
         if (el.indexOf('_account') > -1) {
@@ -188,42 +199,71 @@ export class MyobComponent implements OnInit, OnDestroy {
 
   public getCompanyFiles() {
     const url = '/ecore/api/v2/company_settings/company_files/';
-    this.gfs.getAll(url).subscribe((res: any) => {
-      this.companyFile.list = res.company_files;
-      this.companyFile.list.forEach((el) => {
-        el.username = '';
-        el.password = '';
-      });
-      this.companyFile.isCollapsed = false;
-      this.filledCompanyFiles(this.companyFile.list);
 
-      this.getAccounts();
-    }, (err: any) => this.error = err);
+    this.gfs
+      .getAll(url)
+      .subscribe(
+        (res: any) => {
+          this.companyFile.list = res.company_files;
+          this.companyFile.list.forEach((el) => {
+            el.username = '';
+            el.password = '';
+          });
+          this.companyFile.isCollapsed = false;
+          this.filledCompanyFiles(this.companyFile.list);
+        },
+        (err: any) => this.error = err
+      );
   }
 
   public refreshCompanyFiles() {
     const url = '/ecore/api/v2/company_settings/company_files/refresh/';
-    this.gfs.getAll(url).subscribe((res: any) => {
-      this.getCompanyFiles();
-      this.getMYOBSettings();
-    }, (err: any) => this.error = err);
+    this.gfs
+      .getAll(url)
+      .subscribe(
+        (res: any) => {
+          this.getCompanyFiles();
+          this.refreshTime('company_files_last_refreshed');
+        },
+        (err: any) => this.error = err
+      );
   }
 
-  public getAccounts(refresh = false) {
-    let url = '/ecore/api/v2/company_settings/myob_accounts/';
-    if (refresh) {
-      url += 'refresh/';
+  public refreshAccounts() {
+    const companyFile = this.companyFile.list.find((el) => {
+      return el.id === this.payrollAccounts['invoice_company_file'].value;
+    });
+
+    if (companyFile) {
+      const id = companyFile.cf_id;
+      const url = `/ecore/api/v2/company_settings/company_files/${id}/accounts/refresh/`;
+
+      this.gfs
+        .getAll(url)
+        .subscribe(
+          (res: any) => {
+            this.getAccountsOfCompanyFile(
+              companyFile.id,
+              'invoice_activity_account',
+              this.payrollAccounts['invoice_activity_account'].value
+            );
+            this.refreshTime('payroll_accounts_last_refreshed');
+          },
+          (err: any) => this.error = err
+        );
     }
-    this.gfs.getAll(url).subscribe((res: any) => {
-      if (res && res.myob_accounts) {
-        this.accounts = res.myob_accounts;
-      }
-      this.parseAccounts(this.accounts);
-      if (refresh) {
-        this.getMYOBSettings();
-        this.getAccounts();
-      }
-    }, (err: any) => this.error = err);
+  }
+
+  public refreshTime(field: string) {
+    let url = '/ecore/api/v2/company_settings/myob_settings/';
+    this.gfs
+      .getAll(url)
+      .subscribe(
+        (res: any) => {
+          this.MYOBSettings[field] = res.myob_settings[field];
+        },
+        (err: any) => this.error = err
+      );
   }
 
   public updateMetadata(data, key) {
@@ -239,30 +279,53 @@ export class MyobComponent implements OnInit, OnDestroy {
 
   public getAuthData() {
     const obj = this.getElementByKey(this.config, 'auth_data_list');
-    this.gfs.getAll('/ecore/api/v2/company_settings/auth_data/')
+
+    this.gfs
+      .getAll('/ecore/api/v2/company_settings/auth_data/')
       .finally(() => {
         this.updateMetadata(this.config, 'auth_data_list');
       })
-      .subscribe((res) => {
-        this.getValueOfData(res, 'auth_data_list', obj, 'options');
-        this.getValueOfData(res, 'auth_data_list', obj);
-        this.authData = res.auth_data_list;
-       }, (err: any) => this.error = err);
+      .subscribe(
+        (res) => {
+          this.getValueOfData(res, 'auth_data_list', obj, 'options');
+          this.getValueOfData(res, 'auth_data_list', obj);
+          this.authData = res.auth_data_list;
+        },
+        (err: any) => this.error = err
+      );
   }
 
-  public getAccountsOfCompanyFile(id: string, key: string, files: boolean): void {
-    let url = '/ecore/api/v2/company_settings/company_files/';
-    this.gfs.getAll(`${url}${id}/accounts`).subscribe((res: any) => {
-      this.parseAccounts(res.myob_accounts, key);
-    }, );
+  public getAccountsOfCompanyFile(id: string, key: string, value?: string): void {
+    const url = '/ecore/api/v2/company_settings/company_files/';
+    const companyFile = this.companyFile.list.find((el) => el.id === id);
+
+    if (companyFile) {
+      this.gfs
+        .getAll(`${url}${companyFile.cf_id}/accounts/`)
+        .subscribe(
+          (res: any) => {
+            const accounts = res.myob_accounts.filter((el) => el.type.toLowerCase() === 'income');
+
+            this.parseAccounts(accounts, key, value);
+          }
+        );
+    } else {
+      this.parseAccounts([], key);
+    }
   }
 
   public getMYOBSettings() {
-    let url = '/ecore/api/v2/company_settings/myob_settings/';
-    this.gfs.getAll(url).subscribe((res: any) => {
-      this.MYOBSettings = res.myob_settings;
-      this.parseMYOBSettings(this.MYOBSettings);
-    }, (err: any) => this.error = err);
+    const url = '/ecore/api/v2/company_settings/myob_settings/';
+
+    this.gfs
+      .getAll(url)
+      .subscribe(
+        (res: any) => {
+          this.MYOBSettings = res.myob_settings;
+          this.parseMYOBSettings(this.MYOBSettings);
+        },
+        (err: any) => this.error = err
+      );
   }
 
   public filledCompanyFiles(list: any[]) {
@@ -310,7 +373,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.resetErrors();
     this.saveProcess = true;
     this.gfs.submitForm(url, data).subscribe(
-      (rse: any) => {
+      () => {
         this.saveProcess = false;
       },
       (err: any) => {
