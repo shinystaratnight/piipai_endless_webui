@@ -958,7 +958,8 @@ export class DynamicListComponent
     obj.options = element.options;
     obj.color = element.color;
     obj.text_color = element.text_color;
-    obj.title = element.title;
+    obj.title = this.format(element.title, el);
+    obj.messageType = this.format(element.messageType, el);
     obj.repeat = element.repeat;
     if (element.hidden) {
       this.setValue(el, element.hidden.split('.'), obj, 'hidden');
@@ -1823,13 +1824,17 @@ export class DynamicListComponent
     const arr: string[] = e.el.endpoint.split('/');
     arr.pop();
 
+    if (e.el.messageType) {
+      e.el.messageType = (<string> e.el.messageType).toLowerCase();
+    }
+
     const id = arr.pop();
     const endpoint = [...arr, ''].join('/');
-    const metadataQuery = `type=${e.el.messageType}`;
+    const metadataQuery = `type=${e.el.messageType === 'received' ? 'reply' : e.el.messageType}`;
 
     const label = e.el.messageType === 'sent'
       ? 'Sent message'
-      : e.el.messageType === 'reply'
+      : e.el.messageType === 'reply' || e.el.messageType === 'received'
         ? 'Received message'
         : undefined;
 
@@ -1845,7 +1850,7 @@ export class DynamicListComponent
         ['has_resend_action']: {
           action: 'add',
           data: {
-            value: this.data[this.responseField].find((row) => row.id === e.el.rowId)['has_resend_action'] //tslint:disable-line
+            value: this.fullData[this.responseField].find((row) => row.id === e.el.rowId)['has_resend_action'] //tslint:disable-line
           }
         },
         ['resend_id']: {
