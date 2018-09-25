@@ -170,6 +170,7 @@ const form = [
     list: false,
     endpoint: '/ecore/api/v2/core/companies/',
     read_only: true,
+    hide: true,
     templateOptions: {
       label: 'Company',
       add: true,
@@ -187,6 +188,7 @@ const form = [
     list: false,
     endpoint: '/ecore/api/v2/core/formbuilders/',
     read_only: true,
+    hide: true,
     templateOptions: {
       label: 'Builder',
       add: true,
@@ -203,6 +205,7 @@ const form = [
   {
     key: 'is_active',
     default: false,
+    hide: true,
     type: 'checkbox',
     templateOptions: {
       required: false,
@@ -291,6 +294,7 @@ const formadd = [
     list: false,
     endpoint: '/ecore/api/v2/core/companies/',
     read_only: true,
+    hide: true,
     templateOptions: {
       label: 'Company',
       add: true,
@@ -308,6 +312,7 @@ const formadd = [
     list: false,
     endpoint: '/ecore/api/v2/core/formbuilders/',
     read_only: true,
+    hide: true,
     templateOptions: {
       label: 'Builder',
       add: true,
@@ -324,6 +329,7 @@ const formadd = [
   {
     key: 'is_active',
     default: false,
+    hide: true,
     type: 'checkbox',
     templateOptions: {
       required: false,

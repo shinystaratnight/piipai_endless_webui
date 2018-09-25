@@ -39,6 +39,18 @@ export class FormBuilderFormComponent implements OnInit {
   public getRenderData() {
     this.service.getRenderData(this.id)
       .subscribe((res) => {
+        const bankAccount = this.getFields([], 'bank_account', res.ui_config, 0);
+
+        if (bankAccount.length) {
+          res.ui_config.push(this.createGroup('Bank Account', bankAccount));
+        }
+
+        const syperannuationFund = this.getFields([], 'superannuation_fund', res.ui_config, 0);
+
+        if (syperannuationFund.length) {
+          res.ui_config.push(this.createGroup('Superannuation fund', syperannuationFund));
+        }
+
         this.config = res;
         this.formConfig.emit(res);
 
@@ -167,5 +179,30 @@ export class FormBuilderFormComponent implements OnInit {
       }
     });
     return observers;
+  }
+
+  public createGroup(label: string, children: Field[]) {
+    return {
+      type: 'group',
+      border: true,
+      label,
+      children
+    };
+  }
+
+  public getFields(result: Field[], key: string, target: Field[], index: number) {
+    if (index === target.length) {
+      return result;
+    }
+
+    if (target[index].key && target[index].key.includes(key)) {
+      result = [...result, ...target.splice(index, 1)];
+
+      index = index - 1;
+    }
+
+    index = index + 1;
+
+    return this.getFields(result, key, target, index);
   }
 }
