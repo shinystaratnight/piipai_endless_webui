@@ -8,8 +8,6 @@ import { GenericFormService } from '../../dynamic-form/services/generic-form.ser
 import { Field } from '../../dynamic-form/models/field.model';
 import { SettingsService } from '../settings.service';
 
-import moment from 'moment-timezone';
-
 @Component({
   selector: 'myob',
   templateUrl: 'myob.component.html'
@@ -50,7 +48,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.payrollAccounts = payrollAccounts;
 
     this.MYOBSettings = (<any> this.route.snapshot.data).myobSettings.myob_settings;
-    this.parseMYOBSettings(this.MYOBSettings, moment);
+    this.parseMYOBSettings(this.MYOBSettings);
 
     this.pageUrl = location.origin + location.pathname;
 
@@ -108,33 +106,15 @@ export class MyobComponent implements OnInit, OnDestroy {
         (err: any) => this.error = err);
   }
 
-  public parseMYOBSettings(settings, moment, reset = undefined) {
-    if (!reset) {
-      settings.payroll_accounts_last_refreshed = settings.payroll_accounts_last_refreshed ?
-        moment.tz(settings.payroll_accounts_last_refreshed, 'Australia/Sydney')
-              .format('DD/MM/YYYY hh:mm A') : '';
-      settings.company_files_last_refreshed = settings.company_files_last_refreshed ?
-        moment.tz(settings.company_files_last_refreshed, 'Australia/Sydney')
-          .format('DD/MM/YYYY hh:mm A') : '';
-    }
+  public parseMYOBSettings(settings) {
+    settings = JSON.parse(JSON.stringify(settings));
 
     Object.keys(this.payrollAccounts).forEach((el) => {
         if (settings[el]) {
-          if (this.payrollAccounts[el].options && this.payrollAccounts[el].options.length) {
-            let field = this.payrollAccounts[el].options
-              .find((option) => this.payrollAccounts[el].value === option.id);
-
-            if (!field) {
-              this.payrollAccounts[el].value = undefined;
-            } else {
-              this.payrollAccounts[el].value = settings[el].id;
-            }
-          } else {
-            this.payrollAccounts[el].value = settings[el].id;
-          }
+          this.payrollAccounts[el].value = settings[el].id;
         } else {
           if (this.payrollAccounts[el] instanceof Object) {
-            this.payrollAccounts[el].value = undefined;
+            this.payrollAccounts[el].value = '';
           }
         }
     });
@@ -143,7 +123,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   public parseAccounts(data: any[], key: string = undefined): void {
     if (key) {
       this.payrollAccounts[key].options = data;
-      this.payrollAccounts[key].value = undefined;
+      this.payrollAccounts[key].value = '';
     } else {
       Object.keys(this.payrollAccounts).forEach((el: string) => {
         if (el.indexOf('_account') > -1) {
@@ -169,7 +149,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.getMyobApiKey(() => {
       const domain = 'https://secure.myob.com';
       const pathname = '/oauth2/account/authorize';
-      const query = `?client_id=${this.myobApiKey}&redirect_uri=${this.pageUrl}&response_type=code&scope=CompanyFile`; //tslint:disable-line
+      const query = `?client_id=${this.myobApiKey}&redirect_uri=${this.pageUrl}&response_type=code&scope=CompanyFile&state=${this.pageUrl}`; //tslint:disable-line
       const url = domain + pathname + query;
 
       location.href = url;
@@ -281,7 +261,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     let url = '/ecore/api/v2/company_settings/myob_settings/';
     this.gfs.getAll(url).subscribe((res: any) => {
       this.MYOBSettings = res.myob_settings;
-      this.parseMYOBSettings(this.MYOBSettings, moment);
+      this.parseMYOBSettings(this.MYOBSettings);
     }, (err: any) => this.error = err);
   }
 
@@ -291,7 +271,7 @@ export class MyobComponent implements OnInit, OnDestroy {
         this.payrollAccounts[el].options = list;
       }
     });
-    this.parseMYOBSettings(this.MYOBSettings, moment, true);
+    this.parseMYOBSettings(this.MYOBSettings);
   }
 
   public updateButton(type) {
@@ -314,9 +294,12 @@ export class MyobComponent implements OnInit, OnDestroy {
     const data = {};
     Object.keys(form).forEach((key) => {
       if (key.indexOf('company_file') > -1) {
-        data[key] = {
-          id: this.companyFile.list.find((file) => file.id === form[key]).cf_id
-        };
+        const file = this.companyFile.list.find((item) => item.id === form[key]);
+        if (file) {
+          data[key] = {
+            id: file.cf_id
+          };
+        }
       } else {
         data[key] = {
           id: form[key]
@@ -391,8 +374,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public reset() {
-    this.getAccounts();
-    this.parseMYOBSettings(this.MYOBSettings, moment, true);
+    this.parseMYOBSettings(this.MYOBSettings);
   }
 
 }

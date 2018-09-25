@@ -18,7 +18,7 @@
     style="cursor: pointer"></i>
   <span>Company File&nbsp;</span>
   <button [disabled]="!authData || !authData.length" type="button" class="btn btn-default btn-sm mx-3" (click)="refreshCompanyFiles()">Refresh</button>
-  <span>Last refreshed - {{MYOBSettings.company_files_last_refreshed}}</span>
+  <span>Last refreshed - {{MYOBSettings.company_files_last_refreshed | dateFormat: 'datetime'}}</span>
 </h6>
 <div id="collapseExample" [ngbCollapse]="companyFile.isCollapsed" class="px-2">
   <div class="row" *ngFor="let file of companyFile.list">
@@ -51,7 +51,7 @@
     style="cursor: pointer"></i>
   <span>Payroll accounts&nbsp;</span>
   <button [disabled]="!authData || !authData.length" type="button" class="btn btn-default btn-sm mx-3" (click)="getAccounts(true)">Refresh</button>
-  <span>Last refreshed - {{MYOBSettings.payroll_accounts_last_refreshed}}</span>
+  <span>Last refreshed - {{MYOBSettings.payroll_accounts_last_refreshed | dateFormat: 'datetime'}}</span>
 </h6>
 <form *ngIf="payrollAccounts" #accountForm="ngForm" id="collapseExample" [ngbCollapse]="payrollAccounts.isCollapsed" class="px-2">
   <h4>Invoice settings</h4>
@@ -61,7 +61,7 @@
       <select class="custom-select w-100"
         [(ngModel)]="payrollAccounts.invoice_company_file.value"
         name="invoice_company_file" required>
-          <option [value]="undefined">Select company file</option>
+          <option value="">Select company file</option>
           <option *ngFor="let item of payrollAccounts.invoice_company_file.options" [value]="item.id">{{item.name || item.cf_name}}</option>
       </select>
       <div class="text-danger p-2" *ngFor="let err of payrollAccounts.invoice_company_file.error">{{err}}</div>
@@ -74,7 +74,7 @@
       <select class="custom-select w-100"
         [(ngModel)]="payrollAccounts.invoice_activity_account.value"
         name="invoice_activity_account" required>
-          <option [value]="undefined">Select account</option>
+          <option value="">Select account</option>
           <option *ngFor="let item of payrollAccounts.invoice_activity_account.options" [value]="item.id">{{item.name}}</option>
       </select>
       <div class="text-danger p-2" *ngFor="let err of payrollAccounts.invoice_activity_account.error">{{err}}</div>
@@ -89,7 +89,7 @@
       <select class="custom-select w-100"
         [(ngModel)]="payrollAccounts.timesheet_company_file.value"
         name="timesheet_company_file" required>
-          <option [value]="undefined">Select company file</option>
+          <option value="">Select company file</option>
           <option *ngFor="let item of payrollAccounts.timesheet_company_file.options" [value]="item.id">{{item.name || item.cf_name}}</option>
       </select>
       <div class="text-danger p-2" *ngFor="let err of payrollAccounts.timesheet_company_file.error">{{err}}</div>
