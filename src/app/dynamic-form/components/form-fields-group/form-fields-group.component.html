@@ -56,7 +56,6 @@
       Active
     </button>
     <button type="button" class="btn btn-sm ml-2"
-            [class.btn-default]="i.setRequired"
             [class.btn-success]="i.required || i.setRequired"
             (click)="toggleRequireProperty(i)">
       Required
@@ -92,7 +91,6 @@
         [endpoint]="modalData.endpoint"
         [id]="modalData.id"
         (event)="formEvent($event, c, modalData.container, modalData.edit, modalData.type)">
-        <button type="submit" class="btn btn-primary">Save</button>
       </generic-form>
     </div>
   </div>
