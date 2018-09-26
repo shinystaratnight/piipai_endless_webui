@@ -45,4 +45,10 @@ export class FormService {
   public getForm(formId: number): Form {
     return this.forms[formId];
   }
+
+  public disableEditMode(formId: number) {
+    const form = this.getForm(formId);
+
+    form.hideEditButton = true;
+  }
 }

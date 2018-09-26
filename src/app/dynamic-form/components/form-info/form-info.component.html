@@ -172,7 +172,7 @@
       (event)="event.emit($event)">
     </ng-container>
 
-    <div *ngIf="job && !config.disableButtons" class="extend-block">
+    <div *ngIf="job && !config.disableButtons && !disableButtons" class="extend-block">
       <b>Add shifts and workers</b>
       <p>Create dates, shifts and time for tasks, add workers.</p>
       <button class="btn btn-primary btn-shadow" type="button" (click)="extendJob()">Add shifts and workers</button>

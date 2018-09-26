@@ -59,6 +59,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   public statusList: any[];
   public more: boolean;
+  public disableButtons: boolean = true;
 
   public colors = {
     1: '#FA5C46',
@@ -81,6 +82,9 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    setTimeout(() => {
+      this.disableButtons = false;
+    }, 500);
     this.checkModeProperty();
     if (this.config.values && this.config.value) {
       const keys = Object.keys(this.config.values);

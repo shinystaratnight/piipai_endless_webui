@@ -1844,9 +1844,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       const currentState = timeline.find((item) => item.state === activeNumber);
 
       if (currentState) {
-        const numberOfState = parseInt(currentState.__str__.split(' ')[0], 10);
-
-        switch (numberOfState) {
+        switch (currentState.number) {
           case 10:
             this.updateToNewMetadata();
             break;
@@ -1902,6 +1900,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       [formInfo, shifts, joboffers, favouritelists, workflowobjects],
       'disableButtons'
     );
-    this.setPropertyTrueValue([shifts, joboffers], 'disableActions');
+    this.setPropertyTrueValue([shifts, joboffers, favouritelists], 'disableActions');
+    this.formService.disableEditMode(this.formId);
   }
 }

@@ -6,7 +6,7 @@
           <div class="label" *ngIf="field.main">
             {{field.label}}
             <button type="button" class="btn edit-mode"
-              *ngIf="canUpdate && mode === 'view'"
+              *ngIf="canUpdate && mode === 'view' && !hideEditButton()"
               (click)="changeMode('edit')">
                 <i fa name="pencil"></i>
                 Edit mode

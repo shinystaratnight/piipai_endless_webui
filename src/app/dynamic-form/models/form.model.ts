@@ -8,6 +8,7 @@ export class Form {
 
   public allowMethods: string[];
   public hasTabs: boolean;
+  public hideEditButton: boolean;
 
   private _mode: BehaviorSubject<string>;
   get mode() {

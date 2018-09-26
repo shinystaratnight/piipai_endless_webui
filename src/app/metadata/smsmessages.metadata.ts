@@ -14,6 +14,7 @@ const list = {
             endpoint: '/ecore/api/v2/sms-interface/smsmessages/{id}',
             messageType: '{type}',
             color: 'link',
+            customLink: true,
             action: 'messageDetail',
           }
         ],
