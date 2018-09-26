@@ -38,7 +38,7 @@ export class FormBuilderFormComponent implements OnInit {
 
   public getRenderData() {
     this.service.getRenderData(this.id)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         const bankAccount = this.getFields([], 'bank_account', res.ui_config, 0);
 
         if (bankAccount.length) {
