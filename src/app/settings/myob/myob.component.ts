@@ -115,7 +115,7 @@ export class MyobComponent implements OnInit, OnDestroy {
       if (settings[el]) {
         this.payrollAccounts[el].value = settings[el].id;
         if (el === 'invoice_activity_account') {
-          if (this.companyFile) {
+          if (this.companyFile && settings['invoice_company_file']) {
             this.getAccountsOfCompanyFile(
               settings['invoice_company_file'].id,
               'invoice_activity_account',
@@ -172,7 +172,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     let url = `/ecore/api/v2/company_settings/myob_authorization/`;
     let body = {
       code,
-      redirect_uri: this.pageUrl
+      redirect_uri: 'http://r3sourcer.com/myob/oauth2_redirect_uri'
     };
     this.gfs.submitForm(url, body).subscribe(
       (res: any) => {
