@@ -74,7 +74,29 @@ const list = {
     ],
     pagination_label: 'User',
     search_enabled: true,
-    editDisable: false
+    editDisable: false,
+    filters: [
+      {
+        key: 'role',
+        label: 'Type of User',
+        options: [
+          {
+            value: 'candidate',
+            label: 'Candidate'
+          },
+          {
+            value: 'client',
+            label: 'Client'
+          },
+          {
+            value: 'manager',
+            label: 'Manager'
+          }
+        ],
+        query: 'role',
+        type: 'select'
+      },
+    ]
   },
   fields: [
     {
