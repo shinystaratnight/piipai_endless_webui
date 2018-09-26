@@ -735,32 +735,35 @@ export class DynamicListComponent
           if (element.showIf && !this.checkShowRules(element.showIf, el)) {
             return;
           }
-          let obj: any = {};
           let props;
-          obj['rowId'] = el.id;
-          obj['key'] = col.name;
-          obj['name'] = element.field;
-          obj['type'] = element.type;
-          obj['values'] = element.values;
-          obj['color'] = element.color;
-          obj.action = element.action;
-          obj['delim'] = col.delim;
-          obj['title'] = col.title;
-          obj['inline'] = element.inline;
-          obj['outline'] = element.outline;
-          obj['skillName'] = col.label;
-          obj['description'] = element.description;
-          obj['redirect'] = element.redirect;
-          obj['file'] = element.file;
-          obj['display'] = element.display;
-          obj['setColorForLabel'] = element.setColorForLabel;
-          obj['noDelim'] = element.noDelim;
-          obj['placement'] = element.placement;
-          obj['hideValue'] = element.hideValue;
-          obj['help'] = element.help;
-          obj['postfix'] = element.postfix;
-          obj['content'] = element.content;
-          obj['messageType'] = element.messageType;
+          let obj: any = {
+            rowId: el.id,
+            key: col.name,
+            delim: col.delim,
+            title: col.title,
+            skillName: col.label,
+            name: element.field,
+            type: element.type,
+            values: element.values,
+            color: element.color,
+            action: element.action,
+            inline: element.inline,
+            outline: element.outline,
+            description: element.description,
+            redirect: element.redirect,
+            file: element.file,
+            display: element.display,
+            setColorForLabel: element.setColorForLabel,
+            noDelim: element.noDelim,
+            placement: element.placement,
+            hideValue: element.hideValue,
+            help: element.help,
+            postfix: element.postfix,
+            content: element.content,
+            groupLabel: element.groupLabel,
+            emptyValue: element.emptyValue,
+            messageType: element.messageType
+          };
           if (obj.action && this.disableActions) {
             obj.disableAction = true;
           }
@@ -966,7 +969,8 @@ export class DynamicListComponent
     obj.options = element.options;
     obj.color = element.color;
     obj.text_color = element.text_color;
-    obj.title = element.title;
+    obj.title = this.format(element.title, el);
+    obj.messageType = this.format(element.messageType, el);
     obj.repeat = element.repeat;
     if (element.hidden) {
       this.setValue(el, element.hidden.split('.'), obj, 'hidden');
@@ -1280,6 +1284,7 @@ export class DynamicListComponent
           this.editForm(e);
           break;
         case 'showMessage':
+        case 'messageDetail':
           this.showMessage(e);
           break;
         case 'emptyPost':
@@ -1830,13 +1835,17 @@ export class DynamicListComponent
     const arr: string[] = e.el.endpoint.split('/');
     arr.pop();
 
+    if (e.el.messageType) {
+      e.el.messageType = (<string> e.el.messageType).toLowerCase();
+    }
+
     const id = arr.pop();
     const endpoint = [...arr, ''].join('/');
-    const metadataQuery = `type=${e.el.messageType}`;
+    const metadataQuery = `type=${e.el.messageType === 'received' ? 'reply' : e.el.messageType}`;
 
     const label = e.el.messageType === 'sent'
       ? 'Sent message'
-      : e.el.messageType === 'reply'
+      : e.el.messageType === 'reply' || e.el.messageType === 'received'
         ? 'Received message'
         : undefined;
 
@@ -1852,7 +1861,7 @@ export class DynamicListComponent
         ['has_resend_action']: {
           action: 'add',
           data: {
-            value: this.data[this.responseField].find((row) => row.id === e.el.rowId)['has_resend_action'] //tslint:disable-line
+            value: this.fullData[this.responseField].find((row) => row.id === e.el.rowId)['has_resend_action'] //tslint:disable-line
           }
         },
         ['resend_id']: {

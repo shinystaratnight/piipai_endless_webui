@@ -23,6 +23,7 @@ import { ROUTES } from './app.routes';
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { NoContentComponent } from './pages/no-content';
+import { RedirectComponent } from './redirect.component';
 import * as formComponents from './components';
 import { services } from './services';
 import { guards } from './guards';
@@ -60,6 +61,7 @@ const APP_PROVIDERS = [
   declarations: [
     AppComponent,
     NoContentComponent,
+    RedirectComponent,
     ...formComponents.components
   ],
   imports: [ // import Angular's modules

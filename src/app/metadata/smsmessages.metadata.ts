@@ -9,7 +9,12 @@ const list = {
         content: [
           {
             field: 'sid',
-            type: 'textarea'
+            type: 'button',
+            title: '{sid}',
+            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{id}',
+            messageType: '{type}',
+            color: 'link',
+            action: 'messageDetail',
           }
         ],
         name: 'sid',
@@ -116,7 +121,7 @@ const list = {
     ],
     pagination_label: 'SMS message',
     search_enabled: true,
-    editDisable: false,
+    editDisable: true,
     filters: [
       {
         key: 'type',
@@ -300,12 +305,11 @@ const list = {
     },
     {
       key: 'sid',
-      type: 'textarea',
+      type: 'button',
       templateOptions: {
         required: false,
         label: 'SID',
         description: 'Twillio Message ID',
-        type: 'textarea'
       },
       read_only: true
     },
@@ -591,7 +595,8 @@ const sent = [
     type: 'textarea',
     templateOptions: {
       label: 'Text of the message',
-      type: 'textarea'
+      type: 'textarea',
+      background: true
     },
   },
   {
@@ -600,6 +605,7 @@ const sent = [
     templateOptions: {
       label: 'Template',
       values: ['__str__'],
+      indent: true,
     },
     type: 'related',
     key: 'template',
@@ -745,7 +751,8 @@ const reply = [
     type: 'textarea',
     templateOptions: {
       label: 'Text of the message',
-      type: 'textarea'
+      type: 'textarea',
+      background: true
     },
   },
   {

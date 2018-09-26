@@ -218,37 +218,41 @@ const list = {
         sort: true,
         content: [
           {
+            action: 'messageDetail',
+            messageType: 'sent',
             endpoint:
               '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
             icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Candidate Going To Work'
           },
           {
+            action: 'messageDetail',
+            messageType: 'reply',
             endpoint:
               '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
             field: 'going_to_work_reply_sms',
             icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Reply'
           },
           {
+            action: 'messageDetail',
+            messageType: 'sent',
             endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
             field: 'candidate_sms',
             icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Candidate TS',
             showIf: ['candidate_sms']
           },
           {
+            action: 'messageDetail',
+            messageType: 'sent',
             endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
             field: 'supervisor_sms',
             icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Supervisor TS',
             showIf: ['supervisor_sms']

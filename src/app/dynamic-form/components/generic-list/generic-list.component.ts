@@ -274,6 +274,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   ) {
     if (fillin) {
       this.gfs.getByQuery(endpoint, query).subscribe((data) => {
+        this.updateFillInList(data);
         table.refresh = false;
         this.cashData = data;
         table.offset = 0;
@@ -322,10 +323,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
             : newQuery
         )
         .subscribe((data) => {
-          if (this.endpoint.includes && this.endpoint.includes('fillin')) {
-            this.updateFillInList(data);
-          }
-
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           if (add) {

@@ -33,12 +33,14 @@
     </i>
     {{config.title}}
   </span>
+  <span class="custom-link" (click)="action($event)">{{config.title}}</span>
   <span *ngIf="config.hidden && replacyValue">{{replacyValue}}</span>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
   </small>
   <span *ngIf="config.delim">{{config.delim}}</span>
 </div>
+<span *ngIf="config.emptyValue && config.hidden">{{config.emptyValue}}</span>
 <br *ngIf="config.list && !config.hidden && !config.delim && !config.noDelim">
 
 <template #detail>

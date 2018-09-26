@@ -363,6 +363,7 @@ const formset = {
           {
             type: 'buttonGroup',
             field: 'offer_smses',
+            groupLabel: 'Was sent',
             content: [
               {
                 action: 'showMessage',
@@ -385,6 +386,7 @@ const formset = {
                   '/ecore/api/v2/sms-interface/smsmessages/{reply_received_by_sms.id}',
                 text: 'Reply',
                 placement: 'right',
+                emptyValue: '-',
                 type: 'button',
                 color: 'link',
                 field: 'reply_received_by_sms'

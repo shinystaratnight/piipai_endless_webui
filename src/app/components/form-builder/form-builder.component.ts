@@ -36,12 +36,15 @@ export class FormBuilderComponent {
 
   public links: any[];
   public domain = location.origin;
+  public formLink: string;
 
   constructor(
     private router: Router,
     private modalService: NgbModal,
     private genericFormService: GenericFormService
-  ) { }
+  ) {
+    this.formLink = location.origin + '/registration';
+  }
 
   public eventHandler(event: any) {
     if (event.type === 'sendForm' && event.status === 'success' && !this.id) {

@@ -713,7 +713,11 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
               el.query[elem] = value;
             } else {
-              el.query[elem] = this.format.format(el.query[elem], data);
+              if (el.query[elem].indexOf('session') > -1) {
+                el.query[elem] = this.userService.user.data.contact.contact_id;
+              } else {
+                el.query[elem] = this.format.format(el.query[elem], data);
+              }
             }
           });
         }
