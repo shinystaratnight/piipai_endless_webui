@@ -43,6 +43,17 @@ const mapFilters = [
     query: 'client'
   },
   {
+    key: 'primary_contact',
+    label: 'Client Contact',
+    type: 'related',
+    data: {
+      value: '__str__',
+      endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
+      key: 'id'
+    },
+    query: 'primary_contact'
+  },
+  {
     key: 'portfolio_manager',
     label: 'Portfolio Manager',
     type: 'related',
