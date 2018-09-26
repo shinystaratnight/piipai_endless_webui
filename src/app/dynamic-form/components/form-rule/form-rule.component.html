@@ -112,8 +112,8 @@
         </ng-container>
 
         <span *ngIf="!last" class="btn-group-sm">
-          <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event)">or</a>
-          <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="and" (click)="changeOperator($event)">and</a>
+          <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event, type)">or</a>
+          <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="and" (click)="changeOperator($event, type)">and</a>
         </span>
       </span>
 

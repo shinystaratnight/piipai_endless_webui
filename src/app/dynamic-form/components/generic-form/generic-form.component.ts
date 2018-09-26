@@ -370,7 +370,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       .getMetadata(
         endpoint,
         (this.id || this.edit ? '?type=form' : '?type=formadd') +
-          (this.metadataQuery ? `&${this.metadataQuery}` : '') //tslint:disable-line
+          (this.metadataQuery ? `&${this.metadataQuery}` : '')
       )
       .subscribe(
         (data: any) => {
@@ -693,7 +693,27 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         if (el.query) {
           const queryKeys = Object.keys(el.query);
           queryKeys.forEach((elem) => {
-            el.query[elem] = this.format.format(el.query[elem], data);
+            if (Array.isArray(el.query[elem])) {
+              let value;
+              const type = data.type;
+              if (type !== 'master') {
+                value = this.format.format(el.query[elem][2], data);
+              }
+
+              el.query[elem].forEach((query) => {
+                if (!value) {
+                  value = this.format.format(query, data);
+                }
+              });
+
+              el.query[elem] = value;
+            } else {
+              if (el.query[elem].indexOf('session') > -1) {
+                el.query[elem] = this.userService.user.data.contact.contact_id;
+              } else {
+                el.query[elem] = this.format.format(el.query[elem], data);
+              }
+            }
           });
         }
         if (el.prefilled) {
@@ -1249,7 +1269,23 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       this.generatePassword(e);
     }
 
+    if (e.value === 'resend') {
+      this.resend(e);
+    }
+
     this.buttonAction.emit(e);
+  }
+
+  public resend(e) {
+    const endpoint = `/ecore/api/v2/hr/joboffers/${e.data.resend_id}/resend/`;
+
+    this.service.submitForm(endpoint, {})
+      .subscribe(() => {
+        this.event.emit({
+          type: 'sendForm',
+          status: 'success'
+        });
+      });
   }
 
   public generatePassword(e) {

@@ -74,7 +74,29 @@ const list = {
     ],
     pagination_label: 'User',
     search_enabled: true,
-    editDisable: false
+    editDisable: false,
+    filters: [
+      {
+        key: 'role',
+        label: 'Type of User',
+        options: [
+          {
+            value: 'candidate',
+            label: 'Candidate'
+          },
+          {
+            value: 'client',
+            label: 'Client'
+          },
+          {
+            value: 'manager',
+            label: 'Manager'
+          }
+        ],
+        query: 'role',
+        type: 'select'
+      },
+    ]
   },
   fields: [
     {
@@ -188,7 +210,7 @@ const form = [
         templateOptions: {
           label: 'Password',
           editLabel: 'Change password',
-          editDescription: 'Enter a new password for the user: <b style="color: black; font-weight: bold"> {contact.__str__} </b>',
+          editDescription: 'Enter a new password for the user: <b style="color: black; font-weight: bold"> {contact.__str__} </b>', //tslint:disable-line
           edit: true
         }
       },

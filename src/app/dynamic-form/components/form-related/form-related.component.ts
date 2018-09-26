@@ -269,7 +269,7 @@ export class FormRelatedComponent extends BasicElementComponent
       this.genericFormService
         .getByQuery(this.config.endpoint, query)
         .subscribe((res) => {
-          this.generateDataForList(<any>{ list: true, metadata }, res.results);
+          this.generateDataForList(<any> { list: true, metadata }, res.results);
         });
     }
   }
@@ -285,7 +285,7 @@ export class FormRelatedComponent extends BasicElementComponent
   public generateCustomTemplate(fieldsList) {
     if (this.config.value) {
       this.customTemplate = fieldsList.map((el, index) => {
-        let object = <CustomField>{};
+        let object = <CustomField> {};
         object.value = this.config.customValue[index];
         object.key = el;
         if (el.indexOf('email') > -1) {
@@ -959,7 +959,10 @@ export class FormRelatedComponent extends BasicElementComponent
         };
       });
     }
-    this.modalRef = this.modalService.open(this.modal, { size: 'lg' });
+
+    const windowClass = this.config.visibleMode && type === 'post' ? 'visible-mode' : '';
+
+    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass });
 
     return false;
   }
@@ -1067,6 +1070,7 @@ export class FormRelatedComponent extends BasicElementComponent
       this.count = null;
       this.previewList = null;
     }
+    this.count = null;
     this.cd.detectChanges();
   }
 
@@ -1333,6 +1337,10 @@ export class FormRelatedComponent extends BasicElementComponent
               if (res && res.length) {
                 this.count = res.length;
                 const formatString = new FormatString();
+
+                if (this.config.unique) {
+                  res = this.filterUniqueValue(res, this.results);
+                }
                 res.forEach((el) => {
                   el.__str__ = formatString.format(this.display, el);
 
@@ -1360,7 +1368,8 @@ export class FormRelatedComponent extends BasicElementComponent
                 if (only) {
                   if (res.results.length === only) {
                     canSetValue = true;
-                  } else if (only > res.results.length) {
+                  } else if (only > res.results.length || only < res.results.length) {
+                    this.count = null;
                     if (this.group.get(this.key).value) {
                       this.displayValue = '';
                       this.group.get(this.key).patchValue('');
@@ -1499,6 +1508,12 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public updatePosition() {
     this.update.next();
+  }
+
+  public filterUniqueValue(target: any[], data: any[]): any[] {
+    return target.filter((el) => {
+      return !data.find((elem) => el[this.param] === elem[this.param]);
+    });
   }
 
   @HostListener('document:click', ['$event'])

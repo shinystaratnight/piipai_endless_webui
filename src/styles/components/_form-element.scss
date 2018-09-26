@@ -141,6 +141,11 @@
     font-size: 14px;
     line-height: 20px;
 
+    .message-detail & {
+      width: auto;
+      max-width: unset !important;
+    }
+
     .form-builder-form & {
       width: 100%;
     }
@@ -234,6 +239,10 @@
     line-height: 14px;
 
     color: rgba($gray, .3);
+
+    .message-detail & {
+      text-transform: uppercase;
+    }
 
     .form-builder-form &.required::after {
       content: '*';

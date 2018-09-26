@@ -173,7 +173,7 @@ export class ExtendComponent extends BasicElementComponent
           date,
           el.time,
           el.candidates,
-          true,
+          this.extendDates,
           true
         );
         shift['data'].insert(i, this.fb.group({}));
@@ -241,6 +241,7 @@ export class ExtendComponent extends BasicElementComponent
         hidden: new BehaviorSubject(true),
         doNotChoice: candidateReadOnly,
         hideSelect: candidateReadOnly,
+        unique: true,
         templateOptions: {
           label: 'Select workers',
           info: {

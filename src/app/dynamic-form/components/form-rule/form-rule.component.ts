@@ -301,9 +301,11 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     return target instanceof Object;
   }
 
-  public changeOperator(e) {
+  public changeOperator(e, type) {
     e.preventDefault();
     e.stopPropagation();
+
+    this.generateData(type);
   }
 
   public resetRule(type: string) {

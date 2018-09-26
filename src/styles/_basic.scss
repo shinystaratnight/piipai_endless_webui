@@ -207,6 +207,10 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
+.message-detail .tooltip-inner {
+  min-width: auto;
+}
+
 .current-day {
   font-size: 12px;
 
@@ -296,8 +300,36 @@ form.ng-invalid button[type='submit'] {
     }
   }
 
-  &.shiftdates .modal-content {
+  &.shiftdates .modal-content,
+  &.visible-mode .modal-content {
     overflow: visible;
+  }
+
+  &.message-detail .modal-content {
+    padding: 20px;
+
+    .dynamic-form {
+      margin-top: 0;
+    }
+  }
+}
+
+.message-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 40px;
+
+  .message-label {
+    margin-left: 20px;
+
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  button {
+    align-self: flex-start;
   }
 }
 

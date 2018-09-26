@@ -627,7 +627,7 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     prefilled: { company: '{company.id}' },
     type: 'related',
     query: { company: '{company.id}' },

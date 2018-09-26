@@ -29,83 +29,120 @@ export class DynamicListComponent
   implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
   @Input()
   public config: any;
+
   @Input()
   public data: any;
+
   @Input()
   public first: boolean;
+
   @Input()
   public id: number;
+
   @Input()
   public active: boolean;
+
   @Input()
   public limit: number;
+
   @Input()
   public offset: number;
+
   @Input()
   public sorted: any;
+
   @Input()
   public innerTables: any;
+
   @Input()
   public update: any;
+
   @Input()
   public minimized: boolean;
+
   @Input()
   public maximize: boolean;
+
   @Input()
   public endpoint: string;
+
   @Input()
   public parentEndpoint: string;
+
   @Input()
   public actionData: any;
+
   @Input()
   public supportData: any;
+
   @Input()
   public responseField: string;
+
   @Input()
   public paginated: string;
+
   @Input()
   public actions: boolean;
+
   @Input()
   public delay: boolean;
+
   @Input()
   public allowPermissions: string[];
+
   @Input()
   public metadataQuery: string;
+
   @Input()
   public addMetadataQuery: string;
+
   @Input()
   public editEndpoint: string;
+
   @Input()
   public addData: any;
 
   @Input()
   public refresh: boolean = false;
+
   @Input()
   public inForm: boolean = false;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
+
   @Output()
   public list: EventEmitter<any> = new EventEmitter();
+
   @Output()
   public checkedObjects: EventEmitter<string[]> = new EventEmitter();
 
   @ViewChild('modal')
   public modal;
+
   @ViewChild('confirmModal')
   public confirmModal;
+
   @ViewChild('evaluateModal')
   public evaluateModal;
+
   @ViewChild('sendMessageModal')
   public sendMessageModal;
+
   @ViewChild('datatable')
   public datatable;
+
   @ViewChild('tableWrapper')
   public tableWrapper;
+
   @ViewChild('showPreviewInvoice')
   public showPreviewInvoice;
+
   @ViewChild('fillInMap')
   public fillInMap;
+
+  @ViewChild('messageDetail')
+  public messageDetail;
 
   public selectedCount: number;
   public sortedColumns: any;
@@ -695,31 +732,35 @@ export class DynamicListComponent
           if (element.showIf && !this.checkShowRules(element.showIf, el)) {
             return;
           }
-          let obj: any = {};
+          let obj: any = {
+            rowId: el.id,
+            key: col.name,
+            delim: col.delim,
+            title: col.title,
+            skillName: col.label,
+            name: element.field,
+            type: element.type,
+            values: element.values,
+            color: element.color,
+            action: element.action,
+            inline: element.inline,
+            outline: element.outline,
+            description: element.description,
+            redirect: element.redirect,
+            file: element.file,
+            display: element.display,
+            setColorForLabel: element.setColorForLabel,
+            noDelim: element.noDelim,
+            placement: element.placement,
+            hideValue: element.hideValue,
+            help: element.help,
+            postfix: element.postfix,
+            content: element.content,
+            groupLabel: element.groupLabel,
+            emptyValue: element.emptyValue,
+            messageType: element.messageType
+          };
           let props;
-          obj['rowId'] = el.id;
-          obj['key'] = col.name;
-          obj['name'] = element.field;
-          obj['type'] = element.type;
-          obj['values'] = element.values;
-          obj['color'] = element.color;
-          obj.action = element.action;
-          obj['delim'] = col.delim;
-          obj['title'] = col.title;
-          obj['inline'] = element.inline;
-          obj['outline'] = element.outline;
-          obj['skillName'] = col.label;
-          obj['description'] = element.description;
-          obj['redirect'] = element.redirect;
-          obj['file'] = element.file;
-          obj['display'] = element.display;
-          obj['setColorForLabel'] = element.setColorForLabel;
-          obj['noDelim'] = element.noDelim;
-          obj['placement'] = element.placement;
-          obj['hideValue'] = element.hideValue;
-          obj['help'] = element.help;
-          obj['postfix'] = element.postfix;
-          obj['content'] = element.content;
           if (obj.description) {
             obj.description = this.format(obj.description, el);
           }
@@ -830,7 +871,7 @@ export class DynamicListComponent
           }
           if (element.type === 'buttonGroup') {
             obj.content = element.content.map((elem) => {
-              const newObj = Object.assign({}, elem);
+              const newObj = Object.assign({}, elem, { rowId: obj.rowId });
 
               this.updateButtonTypeCell(newObj, elem, el);
               return newObj;
@@ -917,7 +958,8 @@ export class DynamicListComponent
     obj.options = element.options;
     obj.color = element.color;
     obj.text_color = element.text_color;
-    obj.title = element.title;
+    obj.title = this.format(element.title, el);
+    obj.messageType = this.format(element.messageType, el);
     obj.repeat = element.repeat;
     if (element.hidden) {
       this.setValue(el, element.hidden.split('.'), obj, 'hidden');
@@ -1228,8 +1270,11 @@ export class DynamicListComponent
           break;
         case 'editModal':
         case 'editForm':
-        case 'showDetail':
           this.editForm(e);
+          break;
+        case 'showMessage':
+        case 'messageDetail':
+          this.showMessage(e);
           break;
         case 'emptyPost':
           this.post(e);
@@ -1776,6 +1821,51 @@ export class DynamicListComponent
     };
 
     this.open(this.modal, { size: 'lg' });
+  }
+
+  public showMessage(e) {
+    const arr: string[] = e.el.endpoint.split('/');
+    arr.pop();
+
+    if (e.el.messageType) {
+      e.el.messageType = (<string> e.el.messageType).toLowerCase();
+    }
+
+    const id = arr.pop();
+    const endpoint = [...arr, ''].join('/');
+    const metadataQuery = `type=${e.el.messageType === 'received' ? 'reply' : e.el.messageType}`;
+
+    const label = e.el.messageType === 'sent'
+      ? 'Sent message'
+      : e.el.messageType === 'reply' || e.el.messageType === 'received'
+        ? 'Received message'
+        : undefined;
+
+    this.modalInfo = {
+      metadataQuery,
+      label,
+      type: 'form',
+      endpoint,
+      id,
+      mode: 'view',
+      edit: true,
+      data: {
+        ['has_resend_action']: {
+          action: 'add',
+          data: {
+            value: this.fullData[this.responseField].find((row) => row.id === e.el.rowId)['has_resend_action'] //tslint:disable-line
+          }
+        },
+        ['resend_id']: {
+          action: 'add',
+          data: {
+            value: e.el.rowId
+          }
+        }
+      },
+    };
+
+    this.open(this.messageDetail, { windowClass: 'message-detail' });
   }
 
   public addForm(e) {

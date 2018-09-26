@@ -218,37 +218,41 @@ const list = {
         sort: true,
         content: [
           {
+            action: 'messageDetail',
+            messageType: 'sent',
             endpoint:
               '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
             icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Candidate Going To Work'
           },
           {
+            action: 'messageDetail',
+            messageType: 'reply',
             endpoint:
               '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
             field: 'going_to_work_reply_sms',
             icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Reply'
           },
           {
+            action: 'messageDetail',
+            messageType: 'sent',
             endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
             field: 'candidate_sms',
             icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Candidate TS',
             showIf: ['candidate_sms']
           },
           {
+            action: 'messageDetail',
+            messageType: 'sent',
             endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
             field: 'supervisor_sms',
             icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Supervisor TS',
             showIf: ['supervisor_sms']
@@ -301,6 +305,11 @@ const list = {
             text: 'Recreate',
             endpoint: '/ecore/api/v2/hr/timesheets/{id}/recreate_invoice',
             type: 'button',
+            showIf: [
+              {
+                supervisor_approved: true
+              }
+            ]
           },
         ],
         name: 'invoice',
@@ -799,7 +808,7 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'job_offer',
     many: false
@@ -1015,7 +1024,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'job_offer',
     many: false
@@ -1119,7 +1128,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'supervisor',
     many: false
@@ -1173,7 +1182,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'rate_overrides_approved_by',
     many: false

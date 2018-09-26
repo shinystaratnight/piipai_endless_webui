@@ -285,7 +285,7 @@ export class FormInputComponent extends BasicElementComponent
 
         let value =
           (this.config.value === 0 || this.config.value) &&
-          !(update && defaultValue !== this.config.value)
+          !(update && defaultValue !== this.config.value && !this.config.useValue)
             ? this.config.value
             : defaultValue;
 

@@ -258,7 +258,7 @@
   </div>
 </div>
 
-<div class="form-group form-element"
+<div class="form-group form-element" [ngClass]="{'indent': config.templateOptions.indent}"
   [class.custom]="customTemplate"
   *ngIf="viewMode && !config.list && !config.hide && !((!this.displayValue && !results.length) && config.hideIfNull)">
     <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label">
@@ -268,7 +268,7 @@
       <span *ngIf="!displayValue && !(customTemplate && customTemplate.length) && (!results || results.length === 0)">-</span>
       <a [class.readonly-value]="editMode" *ngIf="!config.many && displayValue && this.linkPath && !(customTemplate && customTemplate.length)" href="{{hideDetail ? '' : this.linkPath}}" (click)="open('update')">{{displayValue}}</a>
       <div [ngClass]="{'d-flex align-items-top flex-wrap': config.key === 'tags'}" *ngIf="config.many && results && !config.templateOptions.deleteList">
-        <span [ngClass]="{'badge badge-outline mb-2 mr-1': config.key === 'tags'}" *ngFor="let item of results; let l = last">
+        <span [ngClass]="{'badge badge-outline mb-2 mr-1': config.key === 'tags', 'd-block': config.column}" *ngFor="let item of results; let l = last">
           <a *ngIf="config.key !== 'tags'" [class.readonly-value]="editMode" href="/" (click)="open('update', item)">{{item.__str__}};</a>
           <span *ngIf="config.key === 'tags'" [class.readonly-value]="editMode">{{item.__str__}}</span>
         </span>
@@ -276,7 +276,7 @@
       <div *ngIf="config.many && results && config.templateOptions.deleteList"  class="d-flex flex-wrap align-items-center mt-2">
         <span class="badge badge-outline mt-2 mr-1" style="white-space: normal" *ngFor="let item of results; let i = index">
           {{item.__str__}}
-          <i fa class="text-white ml-2" (click)="deleteItem(i, item, config.templateOptions.deleteList)" [name]="'times'"></i>
+          <i fa class="ml-2" (click)="deleteItem(i, item, config.templateOptions.deleteList)" [name]="'times'"></i>
         </span>
       </div>
     </div>
@@ -379,8 +379,8 @@
   <div *ngIf="customTemplate && !customTemplate.length" class="d-flex flex-column justify-content-center">-</div>
 </template>
 
-<template #extend let-data="data">
+<!-- <template #extend let-data="data">
   <div class="candidate-info">
     <span>{{data.__str__}}</span>|<span>{{data.score}} <i fa name="star"></i></span>|<span>{{candidate.distance}} km</span>
   </div>
-</template>
+</template> -->

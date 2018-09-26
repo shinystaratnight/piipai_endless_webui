@@ -102,7 +102,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'candidates',
     many: true
