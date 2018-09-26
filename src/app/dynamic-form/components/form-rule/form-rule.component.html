@@ -9,7 +9,7 @@
         Choice required states: <span class="reset" (click)="resetRule('state')">Reset</span>
       </label>
       <div>
-        <template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: 'state', data: states}"></template>
+        <template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: 'state', data: states, parent: states}"></template>
       </div>
     </div>
 
@@ -19,7 +19,7 @@
       </label>
 
       <div>
-        <template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: 'function', data: functions}"></template>
+        <template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: 'function', data: functions, parent: functions}"></template>
       </div>
     </div>
   </div>
@@ -100,15 +100,15 @@
   </div>
 </template>
 
-<template #rule let-type="type" let-data="data">
+<template #rule let-type="type" let-data="data" let-parent="parent">
 
   <span class="rule">
     <ng-container *ngIf="data">
       <span *ngFor="let item of data.data; let last = last; let index = index" class="item">
-        <span class="rule-item" *ngIf="!isObject(item)" (click)="open(element, type, data.data, index)">{{item}}</span>
+        <span class="rule-item" *ngIf="!isObject(item)" (click)="open(element, type, data.data, index, data, parent)">{{item}}</span>
 
         <ng-container *ngIf="isObject(item)">
-          (&nbsp;<template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: type, data: item}"></template>&nbsp;)
+          (&nbsp;<template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: type, data: item, parent: data.data}"></template>&nbsp;)
         </ng-container>
 
         <span *ngIf="!last" class="btn-group-sm">
@@ -121,9 +121,9 @@
   </span>
 
   <span class="buttons" [class.hide]="data && data.data.length">
-    <button *ngIf="type === 'state'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, index)">+ State</button>
-    <button *ngIf="type === 'function'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, index)">+ Function</button>
-    <button *ngIf="data && data.data.length" type="button" class="btn btn-sm btn-link p-0 ml-1" (click)="addRule(data.data)">+ Rule</button>
+    <button *ngIf="type === 'state'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, index, data, parent)">+ State</button>
+    <button *ngIf="type === 'function'" type="button" class="btn btn-sm btn-link p-0 ml-2" (click)="open(element, type, data.data, index, data, parent)">+ Function</button>
+    <button type="button" class="btn btn-sm btn-link p-0 ml-1" (click)="addRule(data.data)">+ Rule</button>
   </span>
 
 </template>
