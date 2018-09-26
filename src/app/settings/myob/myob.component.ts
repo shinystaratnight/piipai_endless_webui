@@ -172,7 +172,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     let url = `/ecore/api/v2/company_settings/myob_authorization/`;
     let body = {
       code,
-      redirect_uri: this.pageUrl
+      redirect_uri: 'http://r3sourcer.com/myob/oauth2_redirect_uri'
     };
     this.gfs.submitForm(url, body).subscribe(
       (res: any) => {
