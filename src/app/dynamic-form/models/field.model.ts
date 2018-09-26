@@ -78,6 +78,7 @@ export interface Field {
     editLabel?: string;
     editDescription?: string;
     info?: any;
+    bottom: boolean;
   };
 }
 
