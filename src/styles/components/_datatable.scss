@@ -118,7 +118,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
       &:first-child {
         padding-left: 16px;
-        padding-right: 16px;
+        padding-right: 9px;
       }
 
     }
@@ -533,7 +533,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   }
 
   .first-cell {
-    text-align: center;
+    text-align: right;
 
     &-link {
       display: flex;

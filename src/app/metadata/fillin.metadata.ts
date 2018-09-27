@@ -9,10 +9,12 @@ const list = {
     columns: [
       {
         name: 'favourite',
+        width: 24,
         content: [
           {
             type: 'icon',
             field: 'favourite',
+            fontSize: 20,
             values: {
               false: 'star',
               true: 'star'

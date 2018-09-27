@@ -763,7 +763,8 @@ export class DynamicListComponent
             groupLabel: element.groupLabel,
             emptyValue: element.emptyValue,
             messageType: element.messageType,
-            customLink: element.customLink
+            customLink: element.customLink,
+            fontSize: element.fontSize,
           };
           if (obj.action && this.disableActions) {
             obj.disableAction = true;
