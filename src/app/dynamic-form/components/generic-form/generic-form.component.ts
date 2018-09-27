@@ -490,7 +490,18 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
                 this.checkObject[key].endpoint,
                 '?' +
                   Object.keys(query)
-                    .map((param) => `${param}=${query[param]}`)
+                    .map((param) => {
+                      if (Array.isArray(query[param])) {
+                        let newQuery = '';
+                        query[param].forEach((el) => {
+                          newQuery += `${param}=${el}&`;
+                        });
+
+                        return newQuery;
+                      }
+
+                      return `${param}=${query[param]}`;
+                    })
                     .join('&')
               )
               .subscribe((res) => {

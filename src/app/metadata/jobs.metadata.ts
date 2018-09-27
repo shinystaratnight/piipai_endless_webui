@@ -1214,7 +1214,8 @@ const formadd = [
               error: 'Active Job for Jobsite and Position already exist!',
               query: {
                 jobsite: '{jobsite.id}',
-                position: '{position.id}'
+                position: '{position.id}',
+                state: ['10', '20', '40'],
               }
             },
             collapsed: false,
