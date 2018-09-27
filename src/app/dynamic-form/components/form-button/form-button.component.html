@@ -27,7 +27,7 @@
     {{config.templateOptions.text}}
   </button>
   <span class="postfix" *ngIf="config.postfix">{{config.postfix}}</span>
-  <span class="custom-button" *ngIf="!config.hidden && !config.templateOptions.text && repeatArray && repeatArray.length === 1" (click)="action($event)">
+  <span class="custom-button" *ngIf="!config.hidden && !config.templateOptions.text && repeatArray && repeatArray.length === 1 && !config.disableAction" (click)="action($event)">
     <i class="icon" fa [name]="config.templateOptions.icon"
       [ngStyle]="{'color': config.text_color}" [title]="config.title">
     </i>
