@@ -579,21 +579,47 @@ const sent = [
     className: 'col row',
     children: [
       {
-        key: 'from_number',
-        type: 'input',
-        templateOptions: {
-          label: 'From',
-          type: 'text'
-        },
+        type: 'group',
+        label: 'From',
+        children: [
+          {
+            key: 'from.__str__',
+            read_only: true,
+            type: 'static',
+            templateOptions: {
+              bottom: true
+            },
+          },
+          {
+            key: 'from_number',
+            type: 'input',
+            templateOptions: {
+              type: 'text'
+            },
+          },
+        ]
       },
       {
-        key: 'to_number',
-        type: 'input',
-        templateOptions: {
-          label: 'To',
-          type: 'text'
-        },
-      },
+        type: 'group',
+        label: 'To',
+        children: [
+          {
+            key: 'to.__str__',
+            read_only: true,
+            type: 'static',
+            templateOptions: {
+              bottom: true
+            },
+          },
+          {
+            key: 'to_number',
+            type: 'input',
+            templateOptions: {
+              type: 'text'
+            },
+          },
+        ]
+      }
     ]
   },
   {
@@ -735,21 +761,47 @@ const reply = [
     className: 'col row',
     children: [
       {
-        key: 'from_number',
-        type: 'input',
-        templateOptions: {
-          label: 'From',
-          type: 'text'
-        },
+        type: 'group',
+        label: 'From',
+        children: [
+          {
+            key: 'from.__str__',
+            read_only: true,
+            type: 'static',
+            templateOptions: {
+              bottom: true
+            },
+          },
+          {
+            key: 'from_number',
+            type: 'input',
+            templateOptions: {
+              type: 'text'
+            },
+          },
+        ]
       },
       {
-        key: 'to_number',
-        type: 'input',
-        templateOptions: {
-          label: 'To',
-          type: 'text'
-        },
-      },
+        type: 'group',
+        label: 'To',
+        children: [
+          {
+            key: 'to.__str__',
+            read_only: true,
+            type: 'static',
+            templateOptions: {
+              bottom: true
+            },
+          },
+          {
+            key: 'to_number',
+            type: 'input',
+            templateOptions: {
+              type: 'text'
+            },
+          },
+        ]
+      }
     ]
   },
   {
