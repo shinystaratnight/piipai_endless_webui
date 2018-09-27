@@ -582,6 +582,7 @@ const sent = [
       {
         type: 'group',
         label: 'From',
+        normal: true,
         children: [
           {
             key: 'from.__str__',
@@ -603,6 +604,7 @@ const sent = [
       {
         type: 'group',
         label: 'To',
+        normal: true,
         children: [
           {
             key: 'to.__str__',
@@ -763,6 +765,7 @@ const reply = [
     children: [
       {
         type: 'group',
+        normal: true,
         label: 'From',
         children: [
           {
@@ -784,6 +787,7 @@ const reply = [
       },
       {
         type: 'group',
+        normal: true,
         label: 'To',
         children: [
           {

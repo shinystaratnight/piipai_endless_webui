@@ -65,6 +65,7 @@ export interface Field {
   visibleMode?: boolean;
   disableButtons?: boolean;
   disableActions?: boolean;
+  normal?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;
