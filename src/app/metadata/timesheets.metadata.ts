@@ -1158,7 +1158,7 @@ const formadd = [
     endpoint: '/ecore/api/v2/skills/skillbaserates/',
     read_only: true,
     templateOptions: {
-      label: 'Candidate rate',
+      label: 'Candidate rate override',
       add: true,
       delete: false,
       values: ['__str__'],
