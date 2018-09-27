@@ -240,7 +240,7 @@ const list = {
     buttons: [
       {
         action: 'sendSMS',
-        label: 'Add new sms message'
+        label: 'Create new SMS'
       }
     ]
   },
