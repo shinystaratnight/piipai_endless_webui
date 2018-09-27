@@ -47,6 +47,8 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   public functionsArray: any[];
 
   public editRule: any;
+  public parentRule: any;
+  public editItem: any;
   public choice: string;
   public editIndex: number;
   public data: OutputData;
@@ -86,11 +88,13 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     }
   }
 
-  public open(content, type, rule, index = null, item) {
+  public open(content, type, rule, index = null, item, parent) {
     this.editRule = rule;
     this.choice = '';
     this.editValue = '';
     this.editIndex = null;
+    this.editItem = item;
+    this.parentRule = parent;
 
     this.app = '';
     this.model = '';
@@ -127,13 +131,22 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   public delete(closeModal, type) {
     closeModal();
     this.editRule.splice(this.editIndex, 1);
+    if (this.editRule.length === 0) {
+      const index = this.parentRule.indexOf(this.editItem);
+
+      if (index > -1) {
+        this.parentRule.splice(index, 1);
+      }
+    }
     this.generateData(type);
     this.reset();
   }
 
   public reset() {
     this.editRule = null;
+    this.parentRule = null;
     this.editIndex = null;
+    this.editItem = null;
     this.choice = '';
   }
 
@@ -254,6 +267,14 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
         }
       }
     });
+
+    if (!this.states) {
+      this.states = this.createRule();
+    }
+
+    if (!this.functions) {
+      this.functions = this.createRule();
+    }
   }
 
   public generateViewForType(data: any[], type?) {
