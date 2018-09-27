@@ -63,6 +63,8 @@ export interface Field {
   candidateTabs?: boolean;
   unique?: boolean;
   visibleMode?: boolean;
+  disableButtons?: boolean;
+  disableActions?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;

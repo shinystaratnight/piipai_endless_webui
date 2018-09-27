@@ -10,6 +10,7 @@
     [class.px-2]="config.templateOptions.p"
     [class.list]="config.templateOptions.p"
     [class.text-white]="buttonClass || config.color"
+    [disabled]="config.disableAction"
     (click)="action($event)">
       <span *ngIf="repeatArray" class="d-flex align-items-center justify-content-between">
         <i fa
@@ -32,7 +33,7 @@
     </i>
     {{config.title}}
   </span>
-  <span class="custom-link" (click)="action($event)">{{config.title}}</span>
+  <span *ngIf="config.customLink" class="custom-link" (click)="action($event)">{{config.title}}</span>
   <span *ngIf="config.hidden && replacyValue">{{replacyValue}}</span>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}

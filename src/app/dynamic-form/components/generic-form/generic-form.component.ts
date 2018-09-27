@@ -248,6 +248,11 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     this.modeBehaviorSubject = new BehaviorSubject(this.mode);
 
     const timelineSubject = new Subject();
+    this.subscriptions.push(
+      timelineSubject.subscribe(
+        (timeline) => this.checkTimeline(timeline)
+      )
+    );
     const props = {
       formId: this.formId,
       formData: this.formData,
@@ -1822,5 +1827,80 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
   public setFormGroup(form: FormGroup) {
     this.formGroup = form;
+  }
+
+  public checkTimeline(timeline) {
+    if (this.endpoint === '/ecore/api/v2/hr/jobs/') {
+      if (timeline === 'reset') {
+        this.event.emit({
+          type: 'sendForm',
+          data: Object.assign(this.formData.value.data),
+          status: 'success'
+        });
+        return;
+      }
+
+      const activeNumber = 2;
+      const currentState = timeline.find((item) => item.state === activeNumber);
+
+      if (currentState) {
+        switch (currentState.number) {
+          case 10:
+            this.updateToNewMetadata();
+            break;
+          case 40:
+            this.updateToOnHoldMetadata();
+            break;
+          case 60:
+            this.updateToCompletedMetadata();
+            break;
+          default:
+            break;
+        }
+
+      }
+
+    }
+  }
+
+  public setPropertyTrueValue(fields: Field[], prop: string) {
+    fields.forEach((el) => {
+      if (el) {
+        el[prop] = true;
+      }
+    });
+  }
+
+  public updateToOnHoldMetadata() {
+    const formInfo = getElementFromMetadata(this.metadata, 'id');
+    const shifts = getElementFromMetadata(this.metadata, 'shifts', 'listKey');
+    const joboffers = getElementFromMetadata(this.metadata, 'joboffers', 'listKey');
+
+    this.setPropertyTrueValue([formInfo, shifts, joboffers], 'disableButtons');
+  }
+
+  public updateToNewMetadata() {
+    const formInfo = getElementFromMetadata(this.metadata, 'id');
+    const shifts = getElementFromMetadata(this.metadata, 'shifts', 'listKey');
+    const joboffers = getElementFromMetadata(this.metadata, 'joboffers', 'listKey');
+    const favouritelists = getElementFromMetadata(this.metadata, 'favouritelists', 'listKey');
+
+    this.setPropertyTrueValue([formInfo], 'disableButtons');
+    this.setPropertyTrueValue([shifts, joboffers, favouritelists], 'hide');
+  }
+
+  public updateToCompletedMetadata() {
+    const formInfo = getElementFromMetadata(this.metadata, 'id');
+    const shifts = getElementFromMetadata(this.metadata, 'shifts', 'listKey');
+    const joboffers = getElementFromMetadata(this.metadata, 'joboffers', 'listKey');
+    const favouritelists = getElementFromMetadata(this.metadata, 'favouritelists', 'listKey');
+    const workflowobjects = getElementFromMetadata(this.metadata, 'workflowobjects', 'listKey');
+
+    this.setPropertyTrueValue(
+      [formInfo, shifts, joboffers, favouritelists, workflowobjects],
+      'disableButtons'
+    );
+    this.setPropertyTrueValue([shifts, joboffers, favouritelists], 'disableActions');
+    this.formService.disableEditMode(this.formId);
   }
 }

@@ -108,6 +108,9 @@ export class DynamicListComponent
   @Input()
   public inForm: boolean = false;
 
+  @Input()
+  public disableActions: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -732,6 +735,7 @@ export class DynamicListComponent
           if (element.showIf && !this.checkShowRules(element.showIf, el)) {
             return;
           }
+          let props;
           let obj: any = {
             rowId: el.id,
             key: col.name,
@@ -758,9 +762,12 @@ export class DynamicListComponent
             content: element.content,
             groupLabel: element.groupLabel,
             emptyValue: element.emptyValue,
-            messageType: element.messageType
+            messageType: element.messageType,
+            customLink: element.customLink
           };
-          let props;
+          if (obj.action && this.disableActions) {
+            obj.disableAction = true;
+          }
           if (obj.description) {
             obj.description = this.format(obj.description, el);
           }
@@ -871,7 +878,12 @@ export class DynamicListComponent
           }
           if (element.type === 'buttonGroup') {
             obj.content = element.content.map((elem) => {
-              const newObj = Object.assign({}, elem, { rowId: obj.rowId });
+              const newObj = Object.assign(
+                {},
+                elem,
+                { rowId: obj.rowId },
+                { disableAction: this.disableActions }
+              );
 
               this.updateButtonTypeCell(newObj, elem, el);
               return newObj;
@@ -879,7 +891,7 @@ export class DynamicListComponent
           }
           if (element.type === 'select' && element.content) {
             obj.content = element.content.map((elem) => {
-              const newObj = Object.assign({}, elem);
+              const newObj = Object.assign({}, elem, { disableAction: this.disableActions });
 
               newObj['endpoint'] = this.format(elem.endpoint, el);
 
