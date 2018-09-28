@@ -11,3 +11,12 @@ label {
   opacity: .3;
   color: $gray;
 }
+
+.normal {
+  margin-bottom: 0;
+
+  font-weight: 400;
+  opacity: 1;
+
+  color: rgba($gray, .3);
+}
