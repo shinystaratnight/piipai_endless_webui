@@ -7,6 +7,11 @@
 .field {
   border-bottom: 1px solid rgba($brand-inverse, .1);
   transition: background-color .5s;
+
+  &-name {
+    text-transform: capitalize;
+  }
+
   &:hover {
     background-color: rgba($brand-success, .2);
   }

@@ -68,7 +68,8 @@ const list = {
     ],
     pagination_label: 'Form',
     search_enabled: false,
-    editDisable: false
+    editDisable: false,
+    buttons: [],
   },
   fields: [
     {
