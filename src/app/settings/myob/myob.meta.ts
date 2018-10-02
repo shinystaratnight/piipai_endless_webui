@@ -29,7 +29,7 @@ export const payrollAccounts = {
     value: ''
   },
   invoice_activity_account: {
-    label: 'Activity account',
+    label: 'Income account',
     key: 'invoice_activity_account',
     value: ''
   },

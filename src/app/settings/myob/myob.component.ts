@@ -10,7 +10,8 @@ import { SettingsService } from '../settings.service';
 
 @Component({
   selector: 'myob',
-  templateUrl: 'myob.component.html'
+  templateUrl: './myob.component.html',
+  styleUrls: ['./myob.component.scss']
 })
 
 export class MyobComponent implements OnInit, OnDestroy {
@@ -27,6 +28,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   public accounts: any[];
   public MYOBSettings: any;
   public error: any;
+  public viewMode: boolean;
 
   public keysOfPayroll: string[];
   public authData: any[];
@@ -78,6 +80,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.connectButton = {
       text: 'Connect'
     };
+    this.viewMode = true;
   }
 
   public ngOnDestroy() {
@@ -353,6 +356,10 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public sendForm(form) {
+    if (this.viewMode) {
+      return;
+    }
+
     let url = '/ecore/api/v2/company_settings/myob_settings/';
     const data = {};
     Object.keys(form).forEach((key) => {
@@ -375,6 +382,8 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.gfs.submitForm(url, data).subscribe(
       () => {
         this.saveProcess = false;
+        this.viewMode = true;
+        this.getMYOBSettings();
       },
       (err: any) => {
         this.saveProcess = false;
@@ -437,6 +446,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public reset() {
+    this.viewMode = true;
     this.parseMYOBSettings(this.MYOBSettings);
   }
 
