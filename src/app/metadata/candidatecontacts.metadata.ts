@@ -107,20 +107,20 @@ const list = {
         title: null,
         sort_field: 'candidate_scores.loyalty'
       },
-      {
-        delim: null,
-        label: 'Strength',
-        sort: true,
-        content: [
-          {
-            field: 'strength',
-            type: 'skills'
-          }
-        ],
-        name: 'strength',
-        title: null,
-        sort_field: 'strength'
-      },
+      // {
+      //   delim: null,
+      //   label: 'Strength',
+      //   sort: true,
+      //   content: [
+      //     {
+      //       field: 'strength',
+      //       type: 'skills'
+      //     }
+      //   ],
+      //   name: 'strength',
+      //   title: null,
+      //   sort_field: 'strength'
+      // },
       {
         content: [
           {
@@ -200,18 +200,18 @@ const list = {
         name: 'bmi',
         label: 'Bmi'
       },
-      {
-        content: [
-          {
-            field: 'language',
-            type: 'input'
-          }
-        ],
-        name: 'language',
-        sort_field: 'language',
-        label: 'Language',
-        sort: true
-      }
+      // {
+      //   content: [
+      //     {
+      //       field: 'language',
+      //       type: 'input'
+      //     }
+      //   ],
+      //   name: 'language',
+      //   sort_field: 'language',
+      //   label: 'Language',
+      //   sort: true
+      // }
     ],
     tabs: [
       {
@@ -220,7 +220,7 @@ const list = {
         fields: [
           'nationality',
           'contact.gender',
-          'language',
+          // 'language',
           'transportation_to_work'
         ]
       },
@@ -235,7 +235,7 @@ const list = {
         fields: [
           'candidate_scores.reliability',
           'candidate_scores.loyalty',
-          'strength'
+          // 'strength'
         ]
       },
       {
@@ -401,19 +401,19 @@ const list = {
       },
       read_only: true
     },
-    {
-      key: 'strength',
-      default: 0,
-      type: 'skills',
-      templateOptions: {
-        required: false,
-        label: 'Strength',
-        max: 32767,
-        type: 'skills',
-        min: 0
-      },
-      read_only: true
-    },
+    // {
+    //   key: 'strength',
+    //   default: 0,
+    //   type: 'skills',
+    //   templateOptions: {
+    //     required: false,
+    //     label: 'Strength',
+    //     max: 32767,
+    //     type: 'skills',
+    //     min: 0
+    //   },
+    //   read_only: true
+    // },
     {
       key: 'candidate_scores.reliability',
       type: 'skills',
@@ -523,19 +523,19 @@ const list = {
       },
       read_only: true
     },
-    {
-      key: 'language',
-      default: 0,
-      type: 'input',
-      templateOptions: {
-        required: false,
-        label: 'Language',
-        type: 'number',
-        min: 0,
-        max: 32767
-      },
-      read_only: true
-    },
+    // {
+    //   key: 'language',
+    //   default: 0,
+    //   type: 'input',
+    //   templateOptions: {
+    //     required: false,
+    //     label: 'Language',
+    //     type: 'number',
+    //     min: 0,
+    //     max: 32767
+    //   },
+    //   read_only: true
+    // },
     {
       key: 'contact.email',
       type: 'link',
@@ -847,19 +847,19 @@ const form = [
                     },
                     read_only: false
                   },
-                  {
-                    key: 'language',
-                    default: 0,
-                    type: 'static',
-                    templateOptions: {
-                      required: false,
-                      label: 'Language',
-                      max: 5,
-                      type: 'score',
-                      min: 0
-                    },
-                    read_only: false
-                  },
+                  // {
+                  //   key: 'language',
+                  //   default: 0,
+                  //   type: 'static',
+                  //   templateOptions: {
+                  //     required: false,
+                  //     label: 'Language',
+                  //     max: 5,
+                  //     type: 'score',
+                  //     min: 0
+                  //   },
+                  //   read_only: false
+                  // },
                   {
                     key: 'transportation_to_work',
                     type: 'select',
@@ -943,7 +943,8 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Reliability',
-                      type: 'score'
+                      type: 'score',
+                      danger: 'No rating'
                     },
                     read_only: true
                   },
@@ -954,23 +955,24 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Loyalty',
-                      type: 'score'
+                      type: 'score',
+                      danger: 'No rating'
                     },
                     read_only: true
                   },
-                  {
-                    key: 'strength',
-                    default: 0,
-                    type: 'static',
-                    templateOptions: {
-                      required: false,
-                      label: 'Strength',
-                      max: 5,
-                      type: 'score',
-                      min: 0
-                    },
-                    read_only: false
-                  }
+                  // {
+                  //   key: 'strength',
+                  //   default: 0,
+                  //   type: 'static',
+                  //   templateOptions: {
+                  //     required: false,
+                  //     label: 'Strength',
+                  //     max: 5,
+                  //     type: 'score',
+                  //     min: 0
+                  //   },
+                  //   read_only: false
+                  // }
                 ],
                 width: 0.25
               },
