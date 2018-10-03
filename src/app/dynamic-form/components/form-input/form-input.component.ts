@@ -412,6 +412,14 @@ export class FormInputComponent extends BasicElementComponent
     }, 1000);
   }
 
+  public parseScore(score) {
+    if (!score) {
+      return 0;
+    }
+
+    return parseFloat(score);
+  }
+
   @HostListener('document:click', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;
