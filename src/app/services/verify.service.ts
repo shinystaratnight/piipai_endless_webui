@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class VerifyService {
@@ -10,8 +12,11 @@ export class VerifyService {
   ) {}
 
   public verifyEmail(endpoint) {
-    return this.http.get(endpoint)
-      .map((res: Response) => res.json && res.json())
-      .catch((err: any) => Observable.throw(err));
+    return this.http
+      .get(endpoint)
+      .pipe(
+        map((res: Response) => res.json && res.json()),
+        catchError((err: any) => Observable.throw(err))
+      );
   }
 }
