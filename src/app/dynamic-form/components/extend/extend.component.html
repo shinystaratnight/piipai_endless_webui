@@ -46,17 +46,14 @@
 
       <div class="col">
         <ng-container *ngFor="let group of shift.data.controls; let index = index">
-          <template
-            [ngTemplateOutlet]="date"
-            [ngOutletContext]="{group: group, config: shift.config[index], index: index, target: shift.data, parentIndex: i}">
-          </template>
+          <ng-container *ngTemplateOutlet="date; context: {group: group, config: shift.config[index], index: index, target: shift.data, parentIndex: i}"></ng-container>
         </ng-container>
       </div>
     </div>
   </ng-container>
 </div>
 
-<template #requirements>
+<ng-template #requirements>
   <div class="info-block">
     <h6>Fills shifts automatically using criteria:</h6>
     <ul>
@@ -64,9 +61,9 @@
       <li><i fa class="icon" name="circle"></i>Distanse to the jobsite</li>
     </ul>
   </div>
-</template>
+</ng-template>
 
-<template #fillinfo>
+<ng-template #fillinfo>
   <div *ngIf="autoFillData" class="info-block">
     <h6>Use information from last fullfilled shift:</h6>
     <ul *ngFor="let date of autoFillData">
@@ -75,9 +72,9 @@
     </ul>
   </div>
   <div class="text-danger" *ngIf="!autoFillData">Fulfilled shift doesn't exist on this job!</div>
-</template>
+</ng-template>
 
-<template #date let-group="group" let-config="config" let-index="index" let-target="target" let-parentIndex="parentIndex">
+<ng-template #date let-group="group" let-config="config" let-index="index" let-target="target" let-parentIndex="parentIndex">
 
   <div class="row">
     <div class="time">
@@ -110,4 +107,4 @@
     <i fa name="times" class="text-secondary icon align-self-start" (click)="removeTime(target, index, parentIndex)"></i>
   </div>
 
-</template>
+</ng-template>

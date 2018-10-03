@@ -43,7 +43,7 @@
 <span *ngIf="config.emptyValue && config.hidden">{{config.emptyValue}}</span>
 <br *ngIf="config.list && !config.hidden && !config.delim && !config.noDelim">
 
-<template #detail>
+<ng-template #detail>
   <div class="line">
     <label for="">Data:</label>
     <p>{{config.value.sent_at | dateFormat: 'datetime'}}</p>
@@ -58,4 +58,4 @@
     <label for="">Text:</label>
     <p>{{config.value.text}}</p>
   </div>
-</template>
+</ng-template>

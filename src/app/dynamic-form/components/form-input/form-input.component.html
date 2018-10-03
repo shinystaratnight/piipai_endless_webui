@@ -78,13 +78,13 @@
       <div [class.readonly-value]="editMode" *ngIf="config.type === 'static' && config.templateOptions.type !== 'score'">{{displayValue}}</div>
       <div class="rating" *ngIf="viewMode && config.templateOptions.type === 'score'">
         <ngb-rating [rate]="config.value" max="5" [readonly]="true">
-          <template let-fill="fill" let-index="index">
+          <ng-template let-fill="fill" let-index="index">
             <span *ngIf="fill === 100" class="star full">&#9733;</span>
             <span *ngIf="fill === 0" class="star">&#9733;</span>
             <span *ngIf="fill < 100 && fill > 0" class="star">
               <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
             </span>
-          </template>
+          </ng-template>
         </ngb-rating>
       </div>
     </div>

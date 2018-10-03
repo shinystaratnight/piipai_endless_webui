@@ -49,7 +49,7 @@
   </div>
 </div>
 
-<template #modal let-c="close">
+<ng-template #modal let-c="close">
   <div class="modal-header">
     <h5 class="modal-title">{{config.templateOptions.label_photo}}</h5>
     <button type="button" class="close" (click)="c()">
@@ -70,4 +70,4 @@
     <button type="button" class="btn btn-primary" (click)="getPhoto()">{{photoExist ? 'Try again' : config.templateOptions.label_photo || 'Take a photo'}}</button>
     <button type="button" class="btn btn-secondary" (click)="c()">Cancel</button>
   </div>
-</template>
+</ng-template>

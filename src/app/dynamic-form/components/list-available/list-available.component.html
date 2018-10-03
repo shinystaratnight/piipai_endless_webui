@@ -2,7 +2,7 @@
   <span class="shift-status">{{type.text}}</span>
   <info *ngIf="type.shifts.length" [description]="shifts" [triggersType]="'click'"></info>
 
-  <template #shifts>
+  <ng-template #shifts>
     <ng-container *ngFor="let shift of type.shifts">
       <div class="shift">
         <div class="shift-datetime">
@@ -14,7 +14,7 @@
       </div>
 
     </ng-container>
-  </template>
+  </ng-template>
   <br>
 </div>
 

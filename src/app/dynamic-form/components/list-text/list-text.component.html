@@ -33,11 +33,11 @@
 <span *ngIf="config.delim && !last">{{config.delim}}</span>
 <br *ngIf="!config.delim && config.name !== 'credit_approved'">
 
-<template #workersdetail>
+<ng-template #workersdetail>
   <div *ngFor="let worker of workers">
     <i class="text-success mr-1" *ngIf="worker.status === 'accepted'" fa name="check"></i>
     <i class="text-danger mr-1" *ngIf="worker.status === 'cancelled'" fa name="times"></i>
     <i class="text-default mr-1" *ngIf="worker.status === 'undefined'" fa name="minus"></i>
     {{worker.name}}
   </div>
-</template>
+</ng-template>

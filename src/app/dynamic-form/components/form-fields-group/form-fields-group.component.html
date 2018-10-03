@@ -4,11 +4,11 @@
     <i fa [name]="'search'" class="text-muted search-icon" ></i>
   </div>
   <button *ngIf="activeFields && activeFields.length" type="button" class="btn btn-primary my-2" (click)="openActiveFields()">Edit positions</button>
-  <template [ngTemplateOutlet]="list" [ngOutletContext]="{list: groups}"></template>
+  <ng-container *ngTemplateOutlet="list; context: {list: groups}"></ng-container>
 </div>
 
 
-<template #list let-l="list">
+<ng-template #list let-l="list">
   <div *ngFor="let item of l">
     <div *ngIf="item.model_fields && !item.hidden" class="d-flex justify-content-center flex-column">
       <div class="d-flex align-items-center p-2 group">
@@ -37,16 +37,16 @@
         </div>
       </div>
       <div class="pl-4" [ngbCollapse]="item.isCollapsed">
-        <template [ngTemplateOutlet]="list" [ngOutletContext]="{list: item.model_fields}"></template>
+        <ng-container *ngTemplateOutlet="list; context: {list: item.model_fields}"></ng-container>
       </div>
     </div>
     <div *ngIf="item.name && !item.model_fields && !item.hidden">
-      <template [ngTemplateOutlet]="field" [ngOutletContext]="{field: item}"></template>
+      <ng-container *ngTemplateOutlet="field; context: {field: item}"></ng-container>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #field let-i="field">
+<ng-template #field let-i="field">
   <div class="d-flex align-items-center p-2 field">
     <span class="field-name">{{i.label}}</span>
     <button type="button" class="btn btn-sm ml-auto"
@@ -61,9 +61,9 @@
       Required
     </button>
   </div>
-</template>
+</ng-template>
 
-<template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header bg-primary text-white">
@@ -85,27 +85,27 @@
             {{fields[type].label}}
         </span>
       </div>
-      <generic-form
+      <app-generic-form
         *ngIf="(modalData.type === 'field' && choosenType) || modalData.type === 'group'"
         [data]="modalData.data"
         [endpoint]="modalData.endpoint"
         [id]="modalData.id"
         (event)="formEvent($event, c, modalData.container, modalData.edit, modalData.type)">
-      </generic-form>
+      </app-generic-form>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #modalActiveFields let-c="close" let-d="dismiss">
-    <div class="modal-content-wrapper">
-      <div class="modal-body">
-        <div class="d-flex flex-column" *ngFor="let item of activeFields; let l = last; let f = first">
-          <h4 class="badge badge-primary d-flex align-items-center p-2" [class.mb-0]="l">
-            <span class="mr-auto">{{item.label}}</span>
-            <i *ngIf="!f" fa [name]="'angle-up'" class="icon text-white m-1" (click)="changePosition(item, 'up')"></i>
-            <i *ngIf="!l" fa [name]="'angle-down'" class="icon text-white m-1 ml-3" (click)="changePosition(item, 'down')"></i>
-          </h4>
-        </div>
+<ng-template #modalActiveFields let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-body">
+      <div class="d-flex flex-column" *ngFor="let item of activeFields; let l = last; let f = first">
+        <h4 class="badge badge-primary d-flex align-items-center p-2" [class.mb-0]="l">
+          <span class="mr-auto">{{item.label}}</span>
+          <i *ngIf="!f" fa [name]="'angle-up'" class="icon text-white m-1" (click)="changePosition(item, 'up')"></i>
+          <i *ngIf="!l" fa [name]="'angle-down'" class="icon text-white m-1 ml-3" (click)="changePosition(item, 'down')"></i>
+        </h4>
       </div>
     </div>
-  </template>
+  </div>
+</ng-template>

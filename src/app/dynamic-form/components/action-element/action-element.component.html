@@ -8,7 +8,7 @@
   <button class="btn btn-primary btn-shadow" type="button" (click)="toDoAction()">{{label}}</button>
 </div>
 
-<template #content let-c="close" let-d="dismiss">
+<ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
     <p>{{action.message}}</p>
     <button type="button" class="close" aria-label="Close" (click)="d(false)">
@@ -19,4 +19,4 @@
     <button type="button" class="btn btn-secondary" (click)="c(true)">{{config.agree_label}}</button>
     <button type="button" class="btn btn-secondary" (click)="c(false)">{{config.decline_label}}</button>
   </div>
-</template>
+</ng-template>

@@ -9,7 +9,7 @@
 
     <i fa name="trash" class="text-danger" (click)="deleteQuestion(getId(item), questions, index)"></i>
 
-    <template [ngTemplateOutlet]="question" [ngOutletContext]="{config: item, index: index}"></template>
+    <ng-container *ngTemplateOutlet="question; context: {config: item, index: index}"></ng-container>
   </div>
 
   <button type="button" class="btn btn-sm btn-success questions-button"
@@ -24,7 +24,7 @@
 
 </div>
 
-<template #question let-config="config" let-index="index">
+<ng-template #question let-config="config" let-index="index">
   <dynamic-form
     [config]="config"
     (submit)="saveQuestion($event, index, getId(config))">
@@ -37,7 +37,7 @@
 
       <i fa name="trash" class="text-danger" (click)="deleteAnswer(getId(item), answers[getId(config)], index)"></i>
 
-      <template [ngTemplateOutlet]="answer" [ngOutletContext]="{config: item, index: index, id: getId(config)}"></template>
+      <ng-container *ngTemplateOutlet="answer; context: {config: item, index: index, id: getId(config)}"></ng-container>
     </div>
 
     <button type="button" class="btn btn-sm btn-success answers-button"
@@ -46,16 +46,16 @@
         Add Answer
     </button>
   </ng-container>
-</template>
+</ng-template>
 
-<template #answer let-config="config" let-index="index" let-id="id">
+<ng-template #answer let-config="config" let-index="index" let-id="id">
   <dynamic-form
     [config]="config"
     (submit)="saveAnswer($event, index, id, getId(config))">
   </dynamic-form>
-</template>
+</ng-template>
 
-<template #preview let-c="close">
+<ng-template #preview let-c="close">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -68,4 +68,4 @@
       <test-generator [id]="testData.id"></test-generator>
     </div>
   </div>
-</template>
+</ng-template>

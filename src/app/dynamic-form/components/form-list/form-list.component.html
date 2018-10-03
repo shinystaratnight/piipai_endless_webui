@@ -31,7 +31,7 @@
   </div>
 
   <div [ngbCollapse]="isCollapsed">
-    <generic-list
+    <app-generic-list
       [endpoint]="config.endpoint"
       [editEndpoint]="config.edit_endpoint"
       [query]="query"
@@ -51,13 +51,13 @@
       (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
       (event)="eventHandler($event)">
-    </generic-list>
+    </app-generic-list>
 
     <div class="text-danger my-2" *ngIf="config.message">{{config.message}}</div>
   </div>
 </div>
 
-<template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header bg-primary text-white">
@@ -69,7 +69,7 @@
     </div>
 
     <div class="modal-body">
-      <generic-form
+      <app-generic-form
         [delay]="config.delay"
         [endpoint]="modalData.endpoint"
         [data]="modalData.data"
@@ -80,7 +80,7 @@
             Save
             <spinner *ngIf="saveProcess"></spinner>
           </button>
-      </generic-form>
+      </app-generic-form>
     </div>
   </div>
-</template>
+</ng-template>

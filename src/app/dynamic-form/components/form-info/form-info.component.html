@@ -186,7 +186,7 @@
   </div>
 </div>
 
-<template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-c="close" let-d="dismiss">
     <div class="modal-content-wrapper">
       <div class="modal-header-wrapper">
         <div class="modal-header">
@@ -197,7 +197,7 @@
         </div>
       </div>
       <div class="modal-body">
-        <generic-form
+        <app-generic-form
           [endpoint]="modalInfo.endpoint"
           [data]="modalInfo.data"
           [mode]="modalInfo.mode"
@@ -211,7 +211,7 @@
               <spinner *ngIf="saveProcess"></spinner>
             </button>
           </div>
-        </generic-form>
+        </app-generic-form>
       </div>
     </div>
-  </template>
+  </ng-template>

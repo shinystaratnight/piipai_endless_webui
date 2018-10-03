@@ -60,14 +60,14 @@
           </svg>
           Filters
         </button>
-        <list-search-bar
+        <app-list-search-bar
           class="datatable-search"
           *ngIf="config.list.search_enabled"
           [count]="data.count"
           [label]="config.list.pagination_label || config.list.label"
           [list]="config.list.list"
           (event)="filterHandler($event)">
-        </list-search-bar>
+        </app-list-search-bar>
       </div>
       <action-element *ngIf="config.list.actions && !inForm" [count]="selectedCount" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
 
@@ -157,14 +157,14 @@
                   </ng-container>
 
                   <ng-container *ngIf="cell.name === 'actions'">
-                    <template #actionsTemplate>
+                    <ng-template #actionsTemplate>
                       <ng-container
                         listElement
                         [config]="cell.content"
                         (event)="eventHandler($event)"
                         (buttonAction)="buttonHandler($event, cell.pop = pop)">
                       </ng-container>
-                    </template>
+                    </ng-template>
                     <i fa class="icon px-3 py-1" style="opacity: .3; margin-left: 8px"
                       name="ellipsis-v"
                       placement="bottom"
@@ -260,7 +260,7 @@
   </div>
 </div>
 
-<template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -271,7 +271,7 @@
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
-      <generic-form
+      <app-generic-form
         *ngSwitchCase="'form'"
         [endpoint]="modalInfo.endpoint"
         [metadataQuery]="!modalInfo.dontUseMetadataQuery ? addMetadataQuery || metadataQuery : ''"
@@ -286,7 +286,7 @@
             Save
             <spinner *ngIf="saveProcess"></spinner>
           </button>
-      </generic-form>
+      </app-generic-form>
       <sebm-google-map
         *ngSwitchCase="'map'"
         [latitude]="modalInfo.latitude"
@@ -298,9 +298,9 @@
       <profile [id]="modalInfo.id" *ngSwitchCase="'profile'"></profile>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #messageDetail let-c="close" let-d="dismiss">
+<ng-template #messageDetail let-c="close" let-d="dismiss">
   <div class="message-detail-header">
     <h5 class="message-label">{{modalInfo.label}}</h5>
     <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
@@ -308,7 +308,7 @@
     </button>
   </div>
 
-  <generic-form
+  <app-generic-form
     [endpoint]="modalInfo.endpoint"
     [metadataQuery]="modalInfo.metadataQuery"
     [id]="modalInfo.id"
@@ -317,10 +317,10 @@
     [edit]="modalInfo.edit"
     (event)="formEvent($event, c)"
     (errorForm)="formError($event)">
-  </generic-form>
-</template>
+  </app-generic-form>
+</ng-template>
 
-<template #confirmModal let-c="close">
+<ng-template #confirmModal let-c="close">
   <div class="modal-header">
     <p>{{modalInfo.message}}</p>
     <button type="button" class="close" aria-label="Close" (click)="d(false)">
@@ -331,9 +331,9 @@
     <button type="button" class="btn btn-secondary" (click)="callAction(modalInfo, c)">{{modalInfo.agree_label}}</button>
     <button type="button" class="btn btn-secondary" (click)="c(false)">{{modalInfo.decline_label}}</button>
   </div>
-</template>
+</ng-template>
 
-<template #evaluateModal let-c="close" let-d="dismiss">
+<ng-template #evaluateModal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -347,33 +347,33 @@
       </div>
     </div>
     <div class="modal-body">
-      <generic-form
+      <app-generic-form
         [needData]="modalInfo.needData"
         [endpoint]="modalInfo.endpoint"
         [data]="modalInfo.data"
         [edit]="modalInfo.edit"
         (event)="evaluateEvent($event, c)">
           <button class="btn btn-primary mr-auto text-white">Submit</button>
-      </generic-form>
+      </app-generic-form>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #sendMessageModal let-c="close">
+<ng-template #sendMessageModal let-c="close">
   <div class="modal-body">
     <iframe class="send-sms" [src]="modalInfo.url" frameborder="0"></iframe>
     <br>
   </div>
-</template>
+</ng-template>
 
-<template #showPreviewInvoice>
+<ng-template #showPreviewInvoice>
   <div class="modal-body">
     <pdf-viewer [src]="modalInfo.url" [render-text]="true" style="display: block;"></pdf-viewer>
     <br>
   </div>
-</template>
+</ng-template>
 
-<template #fillInMap>
+<ng-template #fillInMap>
   <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13" [mapTypeControl]="true">
     <sebm-google-map-marker [iconUrl]="marker.iconUrl" *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
       <sebm-google-map-info-window>
@@ -386,4 +386,4 @@
       </sebm-google-map-info-window>
     </sebm-google-map-marker>
   </sebm-google-map>
-</template>
+</ng-template>
