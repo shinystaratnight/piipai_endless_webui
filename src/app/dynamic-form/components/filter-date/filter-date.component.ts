@@ -9,9 +9,10 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import moment from 'moment-timezone';
+import * as jquery from 'jquery';
 
 import { FilterService } from './../../services/filter.service';
 
@@ -20,7 +21,7 @@ interface Params {
 }
 
 @Component({
-  selector: 'filter-date',
+  selector: 'app-filter-date',
   templateUrl: 'filter-date.component.html'
 })
 export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -30,11 +31,11 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public mobileDevice: boolean;
   public $: any;
 
-  public displayFormat: string = 'DD/MM/YYYY';
-  public queryFormat: string = 'YYYY-MM-DD';
-  public timeZone: string = 'Australia/Sydney';
+  public displayFormat = 'DD/MM/YYYY';
+  public queryFormat = 'YYYY-MM-DD';
+  public timeZone = 'Australia/Sydney';
   public moment: any = moment;
-  public init: boolean = false;
+  public init = false;
 
   public filterSubscription: Subscription;
   public querySubscription: Subscription;
@@ -46,7 +47,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public d: any;
 
   constructor(private fs: FilterService, private route: ActivatedRoute) {
-    this.$ = require('jquery');
+    this.$ = jquery;
   }
 
   public ngOnInit() {
@@ -67,13 +68,13 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public identifyDevice() {
-    let deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+    const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
     return deviceNamesReg.test(navigator.userAgent.toLowerCase());
   }
 
   public ngAfterViewInit() {
     if (!this.init && this.d) {
-      let dateType = this.mobileDevice ? 'flipbox' : 'calbox';
+      const dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       this.init = true;
       this.d.forEach((el) => {
         this.$(el.nativeElement).datebox({
@@ -195,7 +196,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.changeQuery();
   }
 
-  public convert(from: string, to: string, params: Params, moment) {
+  public convert(from: string, to: string, params: Params, moment) { //tslint:disable-line
     const newParams = { ...params };
 
     Object.keys(newParams).forEach((el) => {
@@ -207,7 +208,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     return newParams;
   }
 
-  public parseDateValue(date: string, moment, format: string) {
+  public parseDateValue(date: string, moment, format: string) { //tslint:disable-line
     return format
       ? moment.tz(date, format, this.timeZone)
       : moment.tz(date, this.timeZone);

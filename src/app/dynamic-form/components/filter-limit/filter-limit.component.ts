@@ -1,11 +1,11 @@
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../services/filter.service';
 
 @Component({
-  selector: 'filter-limit',
+  selector: 'app-filter-limit',
   templateUrl: 'filter-limit.component.html',
   styleUrls: ['./filter-limit.component.scss']
 })
@@ -68,7 +68,7 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
   }
 
   private updateFilter() {
-    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    const data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
       if (data.byQuery) {
         this.query = data.query;

@@ -7,12 +7,15 @@ import {
   AfterViewInit
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
+
+import * as nouislider from 'nouislider';
+import * as wnumb from 'wnumb';
 
 import { FilterService } from './../../services/filter.service';
 
 @Component({
-  selector: 'filter-range',
+  selector: 'app-filter-range',
   templateUrl: 'filter-range.component.html'
 })
 
@@ -21,7 +24,7 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
   public config: any;
   public query: string;
   public data: any;
-  public isCollapsed: boolean = true;
+  public isCollapsed = true;
   public icons = {
     r3sourcer: {
       true: 'angle-right',
@@ -47,7 +50,7 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
     private fs: FilterService,
     private route: ActivatedRoute
   ) {
-    this.slider = require('nouislider');
+    this.slider = nouislider;
   }
 
   public ngOnInit() {
@@ -82,7 +85,7 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (rangePicker && !this.noUiSlider) {
 
-      const wNumb = require('wnumb');
+      const wNumb = wnumb;
 
       this.noUiSlider = this.slider.create(rangePicker, {
         start: [80],
@@ -144,7 +147,7 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
   public updateFilter() {
     this.data = '';
     this.query = '';
-    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    const data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
       if (data.byQuery) {
         this.parseQuery(data.query);

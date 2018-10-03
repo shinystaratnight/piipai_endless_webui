@@ -2,16 +2,16 @@ import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/cor
 import { FilterService } from './../../services/filter.service';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'filter-choice',
+  selector: 'app-filter-choice',
   templateUrl: 'filter-choice.component.html'
 })
 export class FilterChoiceComponent implements OnInit, OnDestroy {
   public config: any;
   public query: any;
-  public isCollapsed: boolean = true;
+  public isCollapsed = true;
   public theme: string;
   public icons = {
     r3sourcer: {
@@ -65,7 +65,7 @@ export class FilterChoiceComponent implements OnInit, OnDestroy {
   }
 
   public updateFilter() {
-    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    const data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data && data.byQuery) {
       this.query = data.query.split('=')[1];
     } else {

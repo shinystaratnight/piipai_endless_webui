@@ -6,20 +6,20 @@ import {
   OnDestroy
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../services/filter.service';
 import { FormatString } from '../../../helpers/format';
 
 @Component({
-  selector: 'filter-multiple',
+  selector: 'app-filter-multiple',
   templateUrl: './filter-multiple.component.html'
 })
 export class FilterMultipleComponent implements OnInit, OnDestroy {
   public config: any;
   public query: string;
   public data: any[];
-  public isCollapsed: boolean = true;
+  public isCollapsed = true;
   public icons = {
     r3sourcer: {
       true: 'angle-right',
@@ -181,7 +181,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
 
   public updateFilter() {
     this.query = '';
-    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    const data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
       if (data.byQuery) {
         if (!this.data) {
