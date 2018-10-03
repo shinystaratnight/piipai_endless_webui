@@ -5,31 +5,15 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title><%= htmlWebpackPlugin.options.title %></title>
-
-  <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
-
-  <% if (webpackConfig.htmlElements.headTags) { %>
-  <!-- Configured Head Tags  -->
-  <%= webpackConfig.htmlElements.headTags %>
-  <% } %>
-
-  <!-- base url -->
-  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+  <title>R3sourcer</title>
+  <base href="/">
 
   <link href="https://fonts.googleapis.com/css?family=Barlow:400,600|Open+Sans:400,600|Roboto|Source+Sans+Pro:400,600" rel="stylesheet">
 </head>
 
 <body class="r3sourcer">
 
-  <app>
-    Loading...
-  </app>
-
-  <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
-  <!-- Webpack Dev Server reload -->
-  <script src="/webpack-dev-server.js"></script>
-  <% } %>
+  <app></app>
 
   <script src="https://js.stripe.com/v3/"></script>
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0-XgGs0g5awE_VtUh-_oHlU0nzhy4oOM&libraries=places"></script>

@@ -66,6 +66,7 @@ export interface Field {
   disableButtons?: boolean;
   disableActions?: boolean;
   normal?: boolean;
+  hideIfNull?: boolean;
   templateOptions?: {
     label?: string;
     type?: string;

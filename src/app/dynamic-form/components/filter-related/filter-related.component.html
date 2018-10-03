@@ -46,7 +46,7 @@
           [infiniteScrollDistance]="modalScrollDistance"
           [infiniteScrollThrottle]="modalScrollThrottle"
           [scrollWindow]="false"
-          (scrolled)="onModalScrollDown(item)"
+          (scrolled)="onModalScrollDown()"
           [hidden]="!(previewList && previewList.length)">
           <ul *ngIf="!multiple" class="list-group w-100">
             <li class="list-group-item autocomplete-item" (click)="setValue(defaultValue, item)">All</li>

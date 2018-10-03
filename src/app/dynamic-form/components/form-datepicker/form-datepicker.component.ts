@@ -328,7 +328,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     }
   }
 
-  public updateDate(date) {
+  public updateDate(date?) {
     if (this.config.templateOptions.type === 'date') {
       if (date) {
         if (!this.date || this.config.shouldUpdate) {

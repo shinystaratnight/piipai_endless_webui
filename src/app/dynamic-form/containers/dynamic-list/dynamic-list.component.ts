@@ -1528,7 +1528,7 @@ export class DynamicListComponent
     this.open(this.modal, { size: 'lg' });
   }
 
-  public activeTable(e) {
+  public activeTable() {
     if (this.poped) {
       this.event.emit({
         type: 'active',
