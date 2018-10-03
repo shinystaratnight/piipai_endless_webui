@@ -12,7 +12,6 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Subscription, Subject } from 'rxjs';
 import moment from 'moment-timezone';
-import * as jquery from 'jquery';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { FormatString } from '../../../helpers/format';
@@ -38,7 +37,6 @@ export class FormDatepickerComponent extends BasicElementComponent
   public date: any;
   public label: boolean;
   public init: boolean;
-  public $: any;
   public mobileDevice: boolean;
   public displayValue: string;
   public formData: any;
@@ -61,7 +59,6 @@ export class FormDatepickerComponent extends BasicElementComponent
     private el: ElementRef
   ) {
     super();
-    this.$ = jquery;
     this.subscriptions = [];
     this.editMode = true;
     this.timeZone = 'Australia/Sydney';
@@ -209,9 +206,9 @@ export class FormDatepickerComponent extends BasicElementComponent
   public setDatepickerDate() {
     if (this.init) {
       if (this.date) {
-        this.$(this.d.nativeElement).datebox('setTheDate', this.date);
+        (window as any).$(this.d.nativeElement).datebox('setTheDate', this.date);
       } else {
-        this.$(this.d.nativeElement).datebox('refresh');
+        (window as any).$(this.d.nativeElement).datebox('refresh');
       }
     }
   }
@@ -219,9 +216,9 @@ export class FormDatepickerComponent extends BasicElementComponent
   public setTimepickerTime() {
     if (this.init) {
       if (this.time) {
-        this.$(this.t.nativeElement).datebox('setTheDate', this.time);
+        (window as any).$(this.t.nativeElement).datebox('setTheDate', this.time);
       } else {
-        this.$(this.t.nativeElement).datebox('refresh');
+        (window as any).$(this.t.nativeElement).datebox('refresh');
       }
     }
   }
@@ -233,7 +230,7 @@ export class FormDatepickerComponent extends BasicElementComponent
       this.init = true;
       const type = this.config.templateOptions.type;
       if (type === 'date' || type === 'datetime') {
-        this.$(this.d.nativeElement).datebox({
+        (window as any).$(this.d.nativeElement).datebox({
           mode: dateType,
           dateFormat: '%d/%m/%Y',
           overrideDateFormat: '%d/%m/%Y',
@@ -266,7 +263,7 @@ export class FormDatepickerComponent extends BasicElementComponent
         });
       }
       if (type === 'datetime') {
-        this.$(this.t.nativeElement).datebox({
+        (window as any).$(this.t.nativeElement).datebox({
           mode: timeType,
           overrideTimeFormat: 12,
           overrideTimeOutput: '%I:%M %p',
@@ -299,7 +296,7 @@ export class FormDatepickerComponent extends BasicElementComponent
         });
       }
       if (type === 'time') {
-        this.$(this.t.nativeElement).datebox({
+        (window as any).$(this.t.nativeElement).datebox({
           mode: timeType,
           overrideTimeFormat: 12,
           overrideTimeOutput: '%I:%M %p',
@@ -421,7 +418,7 @@ export class FormDatepickerComponent extends BasicElementComponent
       clickedComponent = clickedComponent.parentNode;
     } while (clickedComponent);
     if (!inside && this.opened) {
-      this.$(this.opened).datebox('close');
+      (window as any).$(this.opened).datebox('close');
     }
   }
 }

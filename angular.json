@@ -34,8 +34,7 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
-              "node_modules/jquery-ui/ui/jquery-1-7.js",
-              "node_modules/jquery-ui/ui/widget.js",
+              "node_modules/jquery-ui-dist/jquery-ui.js",
               "node_modules/bootstrap/dist/js/bootstrap.js",
               "node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.js"
             ]

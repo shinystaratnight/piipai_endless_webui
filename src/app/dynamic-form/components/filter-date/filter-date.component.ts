@@ -12,7 +12,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import moment from 'moment-timezone';
-import * as jquery from 'jquery';
 
 import { FilterService } from './../../services/filter.service';
 
@@ -29,7 +28,6 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public data: Params;
   public query: string;
   public mobileDevice: boolean;
-  public $: any;
 
   public displayFormat = 'DD/MM/YYYY';
   public queryFormat = 'YYYY-MM-DD';
@@ -46,9 +44,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('d')
   public d: any;
 
-  constructor(private fs: FilterService, private route: ActivatedRoute) {
-    this.$ = jquery;
-  }
+  constructor(private fs: FilterService, private route: ActivatedRoute) { }
 
   public ngOnInit() {
     this.data = this.createInputs(this.config.input);
@@ -77,7 +73,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
       const dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       this.init = true;
       this.d.forEach((el) => {
-        this.$(el.nativeElement).datebox({
+        (window as any).$(el.nativeElement).datebox({
           mode: dateType,
           dateFormat: '%d/%m/%Y',
           overrideDateFormat: '%d/%m/%Y',
