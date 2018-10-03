@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GenericFormService } from './generic-form.service';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class FilterService {
@@ -51,7 +51,7 @@ export class FilterService {
     } else {
       this._paramsOfFilters[params.param] = params.value;
     }
-    let filters = this.getFiltersByEndpoint(params.endpoint);
+    const filters = this.getFiltersByEndpoint(params.endpoint);
     if (filters) {
       this.parseFilters(filters, this.paramsOfFilters, params.list);
     }
@@ -88,9 +88,9 @@ export class FilterService {
     return this.parseQueries(this.queries, list);
   }
 
-  public generateQuery(query, key, list, value = undefined) {
+  public generateQuery(query, key, list, value?) {
     if (this.queries.length > 0) {
-      let el = this.queries.filter((elem) => elem.list === list);
+      const el = this.queries.filter((elem) => elem.list === list);
       if (el[0]) {
         el[0].keys[key] = { query, value };
       } else {
@@ -113,7 +113,7 @@ export class FilterService {
     let query = '';
     queries.forEach((el) => {
       if (el.list === list) {
-        let keys = Object.keys(el.keys);
+        const keys = Object.keys(el.keys);
         keys.forEach((elem) => {
           if (el.keys[elem].query) {
             query += `${el.keys[elem].query}&`;
@@ -131,7 +131,7 @@ export class FilterService {
         if (params[el.query]) {
           let query = '';
           if (params[el.query].indexOf('&') > -1) {
-            let array = params[el.query].split('&');
+            const array = params[el.query].split('&');
             array.forEach((elem) => {
               query += `${el.query}=${elem}&`;
             });
