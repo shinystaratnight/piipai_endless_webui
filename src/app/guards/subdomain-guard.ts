@@ -2,21 +2,21 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 
 import { UserService } from '../services';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class SubdomainGuard implements CanActivate {
 
   constructor(
     private router: Router,
-    private UserService: UserService
+    private userService: UserService
   ) {}
 
   public canActivate(): Observable<boolean> {
     const subdomen = location.host.split('.').length > 2;
 
     if (subdomen) {
-      return Observable.of(true);
+      return of(true);
     } else {
       this.router.navigate(['']);
     }
