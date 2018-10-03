@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 
-import { CookieService } from 'angular2-cookie/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { CookieService } from 'ngx-cookie';
+
+import { Observable, combineLatest, of } from 'rxjs';
+import { map, catchError, mergeMap } from 'rxjs/operators';
 
 import { ErrorsService } from './errors.service';
 import { SiteService, PageData } from '../../services/site.service';
@@ -48,7 +48,7 @@ export class CheckPermissionService {
     if (!this.permissions) {
       return this.getUserPermissions(id);
     } else {
-      return Observable.of(this.permissions);
+      return of(this.permissions);
     }
   }
 
@@ -56,17 +56,18 @@ export class CheckPermissionService {
     const permissions: Observable<Permission[]> = this.getPermissions(id);
     const page: Observable<PageData> = this.siteService.getDataOfPage(url, list);
 
-    return Observable.combineLatest(permissions, page)
-      .mergeMap((data: [Permission[], PageData]) => {
-        if (!this.navigationService.parsedByPermissions) {
-          this.parseNavigation(data[0], list);
-        }
+    return combineLatest(permissions, page)
+      .pipe(
+        mergeMap((data: [Permission[], PageData]) => {
+          if (!this.navigationService.parsedByPermissions) {
+            this.parseNavigation(data[0], list);
+          }
 
-        const method = this.parseMethod(data[1].pathData.type, data[1].pathData.id);
+          const method = this.parseMethod(data[1].pathData.type, data[1].pathData.id);
 
-        return Observable.of(this.getAllowMethods(data[0], data[1].endpoint)
-          .indexOf(method) > -1);
-      });
+          return of(this.getAllowMethods(data[0], data[1].endpoint).indexOf(method) > -1);
+        })
+      );
 
   }
 
@@ -117,17 +118,20 @@ export class CheckPermissionService {
   }
 
   private getUserPermissions(id: string): Observable<Permission[]> {
-    let headers = new Headers();
+    const headers = new Headers();
     this.updateHeaders(headers);
-    return this.http.get(this.userPermissionEndpoint + id + '/', { headers })
-      .map((response: Response) => {
-        const body: PermissionResponse = response.json();
-        const permissions: Permission[] = [...body.permission_list, ...body.group_permission_list];
-        this.permissions = permissions;
+    return this.http
+      .get(this.userPermissionEndpoint + id + '/', { headers })
+      .pipe(
+        map((response: Response) => {
+          const body: PermissionResponse = response.json();
+          const permissions: Permission[] = [...body.permission_list, ...body.group_permission_list];
+          this.permissions = permissions;
 
-        return this.permissions;
-      })
-      .catch((error: Response) => this.error.parseErrors(error));
+          return this.permissions;
+        }),
+        catchError((error: Response) => this.error.parseErrors(error))
+      );
   }
 
   private filterPermissions(array: Permission[]): Permission[] {
