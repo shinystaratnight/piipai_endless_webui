@@ -1,10 +1,10 @@
-<navigation
+<app-navigation
   logo="/assets/img/new-software.svg"
   [user]="user"
   [pages]="pagesList"
   (update)="updateNavigationList($event)"
   (changePasswordEmitter)="openChangePassword()">
-</navigation>
+</app-navigation>
 
 <div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
   <div *ngSwitchCase="'form'" class="form-page">

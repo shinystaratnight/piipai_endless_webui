@@ -14,13 +14,11 @@ import {
 import { UserService, User, NavigationService, Page, Role } from '../../../services';
 import { getContactAvatar } from '../../../helpers/utils';
 
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/debounceTime';
+import { Observable, Subscription, fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
-  selector: 'navigation',
+  selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -44,8 +42,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public headerHeight: number;
   public error: any;
-  public isCollapsed: boolean = false;
-  public hideUserMenu: boolean = true;
+  public isCollapsed = false;
+  public hideUserMenu = true;
   public greeting: string;
   public userPicture: string;
   public candidate: boolean;
@@ -69,8 +67,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     const header = this.header.nativeElement;
     this.headerHeight = header.offsetHeight - 1;
 
-    this.resizeSubscription = Observable.fromEvent(window, 'resize')
-      .debounceTime(200)
+    this.resizeSubscription = fromEvent(window, 'resize')
+      .pipe(
+        debounceTime(200)
+      )
       .subscribe(() => {
         if (window.innerWidth > 1200 && this.isCollapsed === true) {
           this.isCollapsed = false;
