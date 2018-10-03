@@ -3,13 +3,13 @@ import { Response } from '@angular/http';
 
 import { of, throwError } from 'rxjs';
 
-import { ToastrService, MessageType } from './toastr.service';
+import { ToastService, MessageType } from './toast.service';
 
 @Injectable()
 export class ErrorsService {
 
   constructor(
-    private ts: ToastrService
+    private ts: ToastService
   ) {}
 
   public parseErrors(error: Response, close = false) {

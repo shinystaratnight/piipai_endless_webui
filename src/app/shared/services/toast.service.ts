@@ -14,7 +14,7 @@ export const MessageType = {
 };
 
 @Injectable()
-export class ToastrService {
+export class ToastService {
 
   private _messages: BehaviorSubject<Message>;
 
