@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Subject } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 import { FormBuilderService } from '../../services';
 import { ToastService } from '../../../shared/services';
