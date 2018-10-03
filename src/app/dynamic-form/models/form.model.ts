@@ -1,6 +1,6 @@
 import { Inject } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 let counter = 0;
 
