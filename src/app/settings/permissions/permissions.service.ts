@@ -30,7 +30,7 @@ export class PermissionsService {
     private cookie: CookieService
   ) { }
 
-  public getAllPermissions(query) {
+  public getAllPermissions(query?) {
     const endpoint = `${this.endpoints.base}${this.endpoints.all}?limit=-1`;
     const headers = this.updateHeaders();
     return this.http
