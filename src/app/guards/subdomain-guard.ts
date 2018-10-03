@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 
-import { UserService } from '../services';
 import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class SubdomainGuard implements CanActivate {
 
   constructor(
-    private router: Router,
-    private userService: UserService
+    private router: Router
   ) {}
 
   public canActivate(): Observable<boolean> {
