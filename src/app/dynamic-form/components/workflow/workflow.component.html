@@ -125,7 +125,7 @@
     <div class="modal-body">
       <dynamic-form
         [config]="addConfig"
-        (submit)="addStateToCompany($event, c)">
+        (submitForm)="addStateToCompany($event, c)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add
@@ -149,7 +149,7 @@
     <div class="modal-body">
       <dynamic-form
         [config]="addConfig"
-        (submit)="addAcceptenceTest($event, c)">
+        (submitForm)="addAcceptenceTest($event, c)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add

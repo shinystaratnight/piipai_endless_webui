@@ -14,7 +14,7 @@
       [hiddenFields]="hiddenFields"
       [formId]="formId"
       (formGroup)="setFormGroup($event)"
-      (submit)="submitForm($event)"
+      (submitForm)="submitForm($event)"
       (event)="eventHandler($event)"
       (buttonAction)="buttonActionHandler($event)"
       (changeValue)="parseCheckObject($event)">

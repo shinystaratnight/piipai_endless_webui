@@ -32,7 +32,7 @@ export class DynamicFormComponent implements OnInit {
   public form: FormGroup;
 
   @Output()
-  public submit: EventEmitter<any> = new EventEmitter<any>();
+  public submitForm: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
   @Output()
@@ -87,7 +87,7 @@ export class DynamicFormComponent implements OnInit {
       this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
     }
     this.filterSendData(this.config, data);
-    this.submit.emit(data);
+    this.submitForm.emit(data);
   }
 
   public eventHandler(e: CustomEvent): void {
