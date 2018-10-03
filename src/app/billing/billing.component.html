@@ -8,7 +8,7 @@
 <div class="site-page">
   <div class="form-page">
     <div class="form-content">
-      <check-card *ngIf="!checkInformation"></check-card>
+      <app-check-card *ngIf="!checkInformation"></app-check-card>
       <billing-plan
         [saveProcess]="saveProcess"
         [cancelProcess]="cancelProcess"
