@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { VerifyService } from '../../services';
-import { ToastrService, MessageType } from '../../shared/services';
+import { ToastService, MessageType } from '../../shared/services';
 
 @Component({
-  selector: 'verify-email',
+  selector: 'app-verify-email',
   template: '',
 })
 export class VerifyEmailComponent implements OnInit {
@@ -13,7 +13,7 @@ export class VerifyEmailComponent implements OnInit {
   constructor(
     private router: Router,
     private vs: VerifyService,
-    private ts: ToastrService
+    private ts: ToastService
   ) {}
 
   public ngOnInit() {
