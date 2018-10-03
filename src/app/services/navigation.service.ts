@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 import { Role } from './user.service';
@@ -36,44 +37,49 @@ export class NavigationService {
   public getPages(role: Role) {
     if (!this.navigationList[role.id]) {
       const query = `&role=${role.id}`;
-      return this.gfs.getAll(`${this.endpoint}${query}`)
-        .map(
-        (res: any) => {
-          if (res.results) {
-            this.currentRole = role;
-            this.navigationList[role.id] = res.results;
-            this.linksList.length = 0;
-            this.generateLinks(this.navigationList[role.id], this.linksList);
+      return this.gfs
+        .getAll(`${this.endpoint}${query}`)
+        .pipe(
+          map((res: any) => {
+            if (res.results) {
+              this.currentRole = role;
+              this.navigationList[role.id] = res.results;
+              this.linksList.length = 0;
+              this.generateLinks(this.navigationList[role.id], this.linksList);
 
-            return this.navigationList[role.id];
-          }
-        }
-      );
+              return this.navigationList[role.id];
+            }
+          })
+        );
     } else {
       return of(this.navigationList[role.id]);
     }
   }
 
   public getUserModules() {
-    return this.gfs.getAll(this.userModelsEndpoint).map(
-      (res: any) => {
-        if (res.results) {
-          this.userModels = res.results;
-          return this.userModels;
-        }
-      }
+    return this.gfs
+      .getAll(this.userModelsEndpoint)
+      .pipe(
+        map((res: any) => {
+          if (res.results) {
+            this.userModels = res.results;
+            return this.userModels;
+          }
+        })
     );
   }
 
   public getModules() {
-    return this.gfs.getAll(this.modelsListEndpoint).map(
-      (res: any) => {
-        if (res.results) {
-          this.models = res.results;
-          return this.models;
-        }
-      }
-    );
+    return this.gfs
+      .getAll(this.modelsListEndpoint)
+      .pipe(
+        map((res: any) => {
+          if (res.results) {
+            this.models = res.results;
+            return this.models;
+          }
+        })
+      );
   }
 
   public resolve() {
