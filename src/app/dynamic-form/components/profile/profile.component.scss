@@ -32,11 +32,11 @@
       display: flex;
       align-items: center;
       transition: all .5s;
-      background-color: $gray-dark;
+      background-color: $gray-900;
 
       &:hover {
         cursor: pointer;
-        background-color: rgba($gray-dark, .8);
+        background-color: rgba($gray-900, .8);
       }
     }
 
@@ -70,7 +70,7 @@
       }
 
       &.odd {
-        background-color: rgba($gray-dark, .1);
+        background-color: rgba($gray-900, .1);
       }
     }
   }

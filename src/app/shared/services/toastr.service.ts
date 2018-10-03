@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { skip } from 'rxjs/operators';
 
 export interface Message {
   message: string;
@@ -19,7 +19,7 @@ export class ToastrService {
   private _messages: BehaviorSubject<Message>;
 
   get message(): Observable<Message> {
-    return this._messages.asObservable().skip(1);
+    return this._messages.asObservable().pipe(skip(1));
   }
 
   constructor() {

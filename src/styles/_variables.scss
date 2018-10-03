@@ -1,3 +1,4 @@
+@import '../../node_modules/bootstrap/scss/functions.scss';
 @import '../../node_modules/bootstrap/scss/variables.scss';
 
 // Color variables
@@ -9,6 +10,13 @@ $breadcrumb-bg: transparent;
 $breadcrumb-divider: '>';
 $breadcrumb-item-padding: 0.2rem;
 $gray: #333;
+
+$brand-primary: $primary;
+$brand-success: $success;
+$brand-danger: $danger;
+$brand-warning: $warning;
+$brand-info: $info;
+$brand-secondary: $secondary;
 
 // Theme color
 $themes: ('default', 'labour', 'indigo', 'teal', 'brown');
