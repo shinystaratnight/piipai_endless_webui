@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+import { throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { Role } from './user.service';
 
@@ -35,10 +33,13 @@ export class LoginService {
 
   public loginWithToken(token) {
     this.username = null;
-    let url = `/ecore/api/v2/auth/${token}/login_by_token/`;
-    return this.http.get(url)
-      .map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json() || 'Server error'));
+    const url = `/ecore/api/v2/auth/${token}/login_by_token/`;
+    return this.http
+      .get(url)
+      .pipe(
+        map((res: Response) => res.json()),
+        catchError((error: any) => throwError(error.json() || 'Server error'))
+      );
   }
 
 }
