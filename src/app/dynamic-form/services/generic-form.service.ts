@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
-import { CookieService } from 'angular2-cookie/core';
+import { CookieService } from 'ngx-cookie';
 
 import { ErrorsService } from '../../shared/services/errors.service';
 import { metadata } from '../../metadata';
@@ -18,25 +17,29 @@ export class GenericFormService {
   ) {}
 
   public getByQuery(endpoint, query) {
-    let headers = new Headers();
+    const headers = new Headers();
     this.updateHeaders(headers);
     return this.http
       .get(`${endpoint}${query}`, { headers })
-      .map((response: any) => (response._body ? response.json() : {}))
-      .catch((error: any) => this.errorHandler(error));
+      .pipe(
+        map((response: any) => (response._body ? response.json() : {})),
+        catchError((error: any) => this.errorHandler(error))
+      );
   }
 
   public getAll(endpoint) {
-    let headers = new Headers();
+    const headers = new Headers();
     this.updateHeaders(headers);
     return this.http
       .get(endpoint, { headers })
-      .map((response: any) => (response._body ? response.json() : {}))
-      .catch((error: any) => this.errorHandler(error));
+      .pipe(
+        map((response: any) => (response._body ? response.json() : {})),
+        catchError((error: any) => this.errorHandler(error))
+      );
   }
 
   public getMetadata(endpoint, query = '') {
-    let headers = new Headers();
+    const headers = new Headers();
     this.updateHeaders(headers);
 
     if (endpoint.includes('/submit/')) {
@@ -121,9 +124,9 @@ export class GenericFormService {
         type = 'sent';
       } else if (query.includes('reply')) {
         type = 'reply';
-      }else if (query.includes('formset')) {
+      } else if (query.includes('formset')) {
         type = 'formset';
-      }else if (query.includes('form')) {
+      } else if (query.includes('form')) {
         type = 'form';
       } else {
         type = 'list';
@@ -131,58 +134,70 @@ export class GenericFormService {
 
       const stringifyMetadata = JSON.stringify(metadata[endpoint][type]);
 
-      return Observable.of(JSON.parse(stringifyMetadata));
+      return of(JSON.parse(stringifyMetadata));
     }
 
     return this.http
       .options(`${endpoint}${query}`, { headers })
-      .map((response: any) => response.json())
-      .catch((error: any) => this.errorHandler(error));
+      .pipe(
+        map((response: any) => response.json()),
+        catchError((error: any) => this.errorHandler(error))
+      );
   }
 
   public submitForm(endpoint, data) {
-    let headers = new Headers();
+    const headers = new Headers();
     this.updateHeaders(headers);
     return this.http
       .post(endpoint, data, { headers })
-      .map((response: any) => (response._body ? response.json() : {}))
-      .catch((error: any) => this.errorHandler(error));
+      .pipe(
+        map((response: any) => (response._body ? response.json() : {})),
+        catchError((error: any) => this.errorHandler(error))
+      );
   }
 
   public editForm(endpoint, data) {
-    let headers = new Headers();
+    const headers = new Headers();
     this.updateHeaders(headers);
     return this.http
       .put(endpoint, data, { headers })
-      .map((response: any) => (response._body ? response.json() : {}))
-      .catch((error: any) => this.errorHandler(error));
+      .pipe(
+        map((response: any) => (response._body ? response.json() : {})),
+        catchError((error: any) => this.errorHandler(error))
+      );
   }
 
   public updateForm(endpoint, data) {
-    let headers = new Headers();
+    const headers = new Headers();
     this.updateHeaders(headers);
     return this.http
       .patch(endpoint, data, { headers })
-      .map((response: any) => (response._body ? response.json() : {}))
-      .catch((error: any) => this.errorHandler(error));
+      .pipe(
+        map((response: any) => (response._body ? response.json() : {})),
+        catchError((error: any) => this.errorHandler(error))
+      );
   }
 
   public callAction(endpoint, data) {
-    let headers = new Headers();
+    const headers = new Headers();
     this.updateHeaders(headers);
     return this.http
       .post(endpoint, data, { headers })
-      .map((response: any) => (response._body ? response.json() : {}))
-      .catch((error: any) => this.errorHandler(error));
+      .pipe(
+        map((response: any) => (response._body ? response.json() : {})),
+        catchError((error: any) => this.errorHandler(error))
+      );
   }
 
   public delete(endpoint, id, postfix?) {
-    let headers = new Headers();
+    const headers = new Headers();
     this.updateHeaders(headers);
     return this.http
       .delete(`${endpoint}${id}/` + (postfix ? `${postfix}/` : ''), { headers })
-      .map((response: any) => (response._body ? response.json() : {}))
-      .catch((error: any) => this.errors.parseErrors(error));
+      .pipe(
+        map((response: any) => (response._body ? response.json() : {})),
+        catchError((error: any) => this.errors.parseErrors(error))
+      );
   }
 
   public updateHeaders(headers) {
