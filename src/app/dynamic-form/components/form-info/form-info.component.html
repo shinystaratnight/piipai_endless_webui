@@ -7,13 +7,13 @@
       </div>
 
       <div class="map" *ngIf="map">
-        <sebm-google-map [latitude]="map.latitude" [longitude]="map.longitude" [zoom]="13">
-          <sebm-google-map-marker [iconUrl]="'/assets/img/location-red.svg'" [latitude]="map.latitude" [longitude]="map.longitude">
-            <sebm-google-map-info-window>
+        <agm-map [latitude]="map.latitude" [longitude]="map.longitude" [zoom]="13">
+          <agm-marker [iconUrl]="'/assets/img/location-red.svg'" [latitude]="map.latitude" [longitude]="map.longitude">
+            <agm-info-window>
               <strong>{{map.__str__}}</strong>
-            </sebm-google-map-info-window>
-          </sebm-google-map-marker>
-        </sebm-google-map>
+            </agm-info-window>
+          </agm-marker>
+        </agm-map>
       </div>
 
       <ng-container formElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"

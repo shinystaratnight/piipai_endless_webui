@@ -287,14 +287,14 @@
             <spinner *ngIf="saveProcess"></spinner>
           </button>
       </app-generic-form>
-      <sebm-google-map
+      <agm-map
         *ngSwitchCase="'map'"
         [latitude]="modalInfo.latitude"
         [longitude]="modalInfo.longitude"
         [zoom]="13"
         [mapTypeControl]="true">
-          <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
-      </sebm-google-map>
+          <agm-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></agm-marker>
+      </agm-map>
       <profile [id]="modalInfo.id" *ngSwitchCase="'profile'"></profile>
     </div>
   </div>
@@ -374,16 +374,16 @@
 </ng-template>
 
 <ng-template #fillInMap>
-  <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13" [mapTypeControl]="true">
-    <sebm-google-map-marker [iconUrl]="marker.iconUrl" *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
-      <sebm-google-map-info-window>
+  <agm-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13" [mapTypeControl]="true">
+    <agm-marker [iconUrl]="marker.iconUrl" *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
+      <agm-info-window>
         <strong>{{marker.name}}</strong>
         <br>
         <p>{{marker.description}}</p>
         <button *ngIf="!marker.label" type="button" class="btn btn-sm btn-success" (click)="markerClick(marker)" style="font-size: 10px;">
           {{ marker.selected ? 'Selected' : 'Select' }}
         </button>
-      </sebm-google-map-info-window>
-    </sebm-google-map-marker>
-  </sebm-google-map>
+      </agm-info-window>
+    </agm-marker>
+  </agm-map>
 </ng-template>
