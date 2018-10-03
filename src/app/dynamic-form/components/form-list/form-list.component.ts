@@ -9,10 +9,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import 'rxjs/add/operator/skip';
 
 import { FormatString } from '../../../helpers/format';
 

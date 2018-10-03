@@ -18,10 +18,6 @@ import { FormatString } from '../../../helpers/format';
 import { Subscription } from 'rxjs';
 import { debounceTime, skip, filter } from 'rxjs/operators';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/skip';
-import 'rxjs/add/operator/filter';
-
 @Component({
   selector: 'app-filter-related',
   templateUrl: 'filter-related.component.html'
