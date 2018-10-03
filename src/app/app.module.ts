@@ -22,7 +22,7 @@ import { ROUTES } from './app.routes';
 // App is our top level component
 import { AppComponent } from './app.component';
 // import { APP_RESOLVER_PROVIDERS } from './app.resolver';
-// import { NoContentComponent } from './pages/no-content';
+import { NoContentComponent } from './pages/no-content';
 import { RedirectComponent } from './redirect.component';
 import * as formComponents from './components';
 import { services } from './services';
@@ -60,7 +60,7 @@ import '../../node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.js';
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
-    // NoContentComponent,
+    NoContentComponent,
     RedirectComponent,
     ...formComponents.components
   ],

@@ -8,7 +8,7 @@ import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawe
 import { AgmCoreModule } from '@agm/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 // import { ButtonsModule } from 'ngx-bootstrap';
-import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DndModule } from 'ng2-dnd';
 
@@ -35,7 +35,8 @@ import { directives } from './directives';
     SharedModule,
     // ButtonsModule.forRoot(),
     GooglePlaceModule,
-    DndModule.forRoot()
+    DndModule.forRoot(),
+    PdfViewerModule
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -49,7 +50,7 @@ import { directives } from './directives';
     fromContainers.FormBuilderFormComponent,
   ],
   declarations: [
-    PdfViewerComponent,
+    // PdfViewerComponent,
     fromComponents.WebcamComponent,
 
     ...fromComponents.components,

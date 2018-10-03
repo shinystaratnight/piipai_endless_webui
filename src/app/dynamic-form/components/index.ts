@@ -30,6 +30,7 @@ import { FormOptionsComponent } from './form-options/form-options.component';
 import { FormPictureComponent } from './form-picture/form-picture.component';
 import { FormRadioComponent } from './form-radio/form-radio.component';
 import { FormRelatedComponent } from './form-related/form-related.component';
+import { FormReplaceComponent } from './form-replace/form-replace.component';
 import { FormRuleComponent } from './form-rule/form-rule.component';
 import { FormSelectComponent } from './form-select/form-select.component';
 import { FormTextareaComponent } from './form-textarea/form-textarea.component';
@@ -89,6 +90,7 @@ export const entryComponents = [
   FormVacancyDatesComponent,
   FormInfoComponent,
   ExtendComponent,
+  FormReplaceComponent,
 
   ListCheckboxComponent,
   ListImageComponent,
