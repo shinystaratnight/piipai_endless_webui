@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { meta, payrollAccounts } from './myob.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
@@ -9,14 +9,14 @@ import { Field } from '../../dynamic-form/models/field.model';
 import { SettingsService } from '../settings.service';
 
 @Component({
-  selector: 'myob',
+  selector: 'app-myob',
   templateUrl: './myob.component.html',
   styleUrls: ['./myob.component.scss']
 })
 
 export class MyobComponent implements OnInit, OnDestroy {
 
-  public endpoint: string = '/ecore/api/v2/company_settings/';
+  public endpoint = '/ecore/api/v2/company_settings/';
   public pageUrl: string;
   public errors: any;
   public response: any;
@@ -59,7 +59,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     });
 
     this.querySubscription = this.route.queryParams.subscribe((params) => {
-      let code = params['code'];
+      const code = params['code'];
       if (code) {
         this.getMyobApiKey(() => {
           this.config = meta;
@@ -134,7 +134,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     });
   }
 
-  public parseAccounts(data: any[], key: string = undefined, value?: string): void {
+  public parseAccounts(data: any[], key?: string, value?: string): void {
     if (key) {
       this.payrollAccounts[key].options = data;
       this.payrollAccounts[key].value = value || '';
@@ -172,8 +172,8 @@ export class MyobComponent implements OnInit, OnDestroy {
 
   public saveInfo(code: string) {
     this.connectProcess = true;
-    let url = `/ecore/api/v2/company_settings/myob_authorization/`;
-    let body = {
+    const url = `/ecore/api/v2/company_settings/myob_authorization/`;
+    const body = {
       code,
       redirect_uri: 'http://r3sourcer.com/myob/oauth2_redirect_uri'
     };
@@ -258,7 +258,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public refreshTime(field: string) {
-    let url = '/ecore/api/v2/company_settings/myob_settings/';
+    const url = '/ecore/api/v2/company_settings/myob_settings/';
     this.gfs
       .getAll(url)
       .subscribe(
@@ -270,7 +270,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public updateMetadata(data, key) {
-    let element = this.getElementByKey(data, key);
+    const element = this.getElementByKey(data, key);
     data.forEach((el, i) => {
       if (el.key === key) {
         data.splice(i, 1, Object.assign({}, element));
@@ -360,7 +360,7 @@ export class MyobComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let url = '/ecore/api/v2/company_settings/myob_settings/';
+    const url = '/ecore/api/v2/company_settings/myob_settings/';
     const data = {};
     Object.keys(form).forEach((key) => {
       if (key.indexOf('company_file') > -1) {
@@ -393,8 +393,8 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public getValueOfData(data, key: string, obj: Field, param?: string): void {
-    let keys = key.split('.');
-    let prop = keys.shift();
+    const keys = key.split('.');
+    const prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
         if (param) {
