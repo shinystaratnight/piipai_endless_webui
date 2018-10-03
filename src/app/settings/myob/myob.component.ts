@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 import { meta, payrollAccounts } from './myob.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
@@ -285,9 +286,11 @@ export class MyobComponent implements OnInit, OnDestroy {
 
     this.gfs
       .getAll('/ecore/api/v2/company_settings/auth_data/')
-      .finally(() => {
-        this.updateMetadata(this.config, 'auth_data_list');
-      })
+      .pipe(
+        finalize(() => {
+          this.updateMetadata(this.config, 'auth_data_list');
+        })
+      )
       .subscribe(
         (res) => {
           this.getValueOfData(res, 'auth_data_list', obj, 'options');
