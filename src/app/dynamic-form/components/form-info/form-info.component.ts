@@ -11,13 +11,13 @@ import { Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { getContactAvatar } from '../../../helpers/utils';
 import { FormatString } from '../../../helpers/format.ts';
 
 @Component({
-  selector: 'form-info',
+  selector: 'app-form-info',
   templateUrl: './form-info.component.html',
   styleUrls: ['./form-info.component.scss']
 })
@@ -59,7 +59,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   public statusList: any[];
   public more: boolean;
-  public disableButtons: boolean = true;
+  public disableButtons = true;
 
   public colors = {
     1: '#FA5C46',
@@ -182,8 +182,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   public getValue(key: string, data: any, type?: string): any {
     if (key) {
-      let keys = key.split('.');
-      let prop = keys.shift();
+      const keys = key.split('.');
+      const prop = keys.shift();
 
       if (!keys.length) {
         if (data[prop] instanceof Object && type === 'picture') {

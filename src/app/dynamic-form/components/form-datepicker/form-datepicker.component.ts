@@ -10,15 +10,15 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, Subject } from 'rxjs';
 import moment from 'moment-timezone';
+import * as jquery from 'jquery';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { FormatString } from '../../../helpers/format';
-import { Subject } from 'rxjs/Subject';
 
 @Component({
-  selector: 'form-datepicker',
+  selector: 'app-form-datepicker',
   templateUrl: 'form-datepicker.component.html'
 })
 export class FormDatepickerComponent extends BasicElementComponent
@@ -45,9 +45,9 @@ export class FormDatepickerComponent extends BasicElementComponent
   public opened: boolean;
   public update: Subject<any>;
 
-  public dateFormat: string = 'DD/MM/YYYY';
-  public datetimeFormat: string = 'DD/MM/YYYY hh:mm A';
-  public timeFormat: string = 'hh:mm A';
+  public dateFormat = 'DD/MM/YYYY';
+  public datetimeFormat = 'DD/MM/YYYY hh:mm A';
+  public timeFormat = 'hh:mm A';
   public timeZone: string;
 
   public viewMode: boolean;
@@ -61,7 +61,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     private el: ElementRef
   ) {
     super();
-    this.$ = require('jquery');
+    this.$ = jquery;
     this.subscriptions = [];
     this.editMode = true;
     this.timeZone = 'Australia/Sydney';
@@ -152,14 +152,14 @@ export class FormDatepickerComponent extends BasicElementComponent
     }
   }
 
-  public setInitValue(moment) {
-    let type = this.config.templateOptions.type;
+  public setInitValue(moment) { //tslint:disable-line
+    const type = this.config.templateOptions.type;
 
     if (
       (this.config.value || this.group.get(this.key).value) &&
       (!this.config.shouldUpdate || this.config.isPrefilled)
     ) {
-      let data = this.config.value
+      const data = this.config.value
         ? this.config.value
         : this.group.get(this.key).value;
       if (type === 'date' || type === 'datetime') {
@@ -202,7 +202,7 @@ export class FormDatepickerComponent extends BasicElementComponent
   }
 
   public identifyDevice() {
-    let deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+    const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
     return deviceNamesReg.test(navigator.userAgent.toLowerCase());
   }
 
@@ -228,10 +228,10 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   public ngAfterViewInit() {
     if (!this.init) {
-      let dateType = this.mobileDevice ? 'flipbox' : 'calbox';
-      let timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';
+      const dateType = this.mobileDevice ? 'flipbox' : 'calbox';
+      const timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';
       this.init = true;
-      let type = this.config.templateOptions.type;
+      const type = this.config.templateOptions.type;
       if (type === 'date' || type === 'datetime') {
         this.$(this.d.nativeElement).datebox({
           mode: dateType,
@@ -253,10 +253,10 @@ export class FormDatepickerComponent extends BasicElementComponent
             this.updatePosition();
           },
           closeCallback: () => {
-            let date = this.d.nativeElement.value;
-            let time = this.t.nativeElement.value;
+            const date = this.d.nativeElement.value;
+            const time = this.t.nativeElement.value;
             if (date) {
-              let fullDate = date + (time ? ` ${time}` : '');
+              const fullDate = date + (time ? ` ${time}` : '');
               this.setDate(fullDate, moment, true);
             } else {
               this.group.get(this.key).patchValue(null);
@@ -286,10 +286,10 @@ export class FormDatepickerComponent extends BasicElementComponent
             this.updatePosition();
           },
           closeCallback: () => {
-            let date = this.d.nativeElement.value;
-            let time = this.t.nativeElement.value;
+            const date = this.d.nativeElement.value;
+            const time = this.t.nativeElement.value;
             if (date) {
-              let fullDate = date + (time ? ` ${time}` : '');
+              const fullDate = date + (time ? ` ${time}` : '');
               this.setDate(fullDate, moment, true);
             } else {
               this.group.get(this.key).patchValue(null);
@@ -313,7 +313,7 @@ export class FormDatepickerComponent extends BasicElementComponent
             this.updatePosition();
           },
           closeCallback: () => {
-            let time = this.t.nativeElement.value;
+            const time = this.t.nativeElement.value;
             if (time) {
               this.setTime(time, moment, true);
             } else {
@@ -364,7 +364,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     }
   }
 
-  public setDate(value, moment, picker = false) {
+  public setDate(value, moment, picker = false) { //tslint:disable-line
     let date;
     if (value) {
       if (picker) {
@@ -380,7 +380,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     }
   }
 
-  public setTime(value, moment, picker = false) {
+  public setTime(value, moment, picker = false) { //tslint:disable-line
     let time;
     if (value) {
       if (picker) {

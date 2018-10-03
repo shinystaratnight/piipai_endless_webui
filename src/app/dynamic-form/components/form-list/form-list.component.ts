@@ -11,8 +11,7 @@ import { Router } from '@angular/router';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subscription } from 'rxjs/Subscription';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import 'rxjs/add/operator/skip';
 
 import { FormatString } from '../../../helpers/format';
@@ -21,7 +20,7 @@ import { CheckPermissionService } from '../../../shared/services/check-permissio
 import { GenericFormService } from '../../services/generic-form.service';
 
 @Component({
-  selector: 'form-list',
+  selector: 'app-form-list',
   templateUrl: 'form-list.component.html',
   styleUrls: ['./form-list.component.scss']
 })
@@ -112,8 +111,8 @@ export class FormListComponent implements OnInit, OnDestroy {
     this.update = new BehaviorSubject(false);
     this.isCollapsed = this.config.collapsed ? this.config.collapsed : false;
     if (this.config.query) {
-      let queryKeys = Object.keys(this.config.query);
-      let queryArray = [];
+      const queryKeys = Object.keys(this.config.query);
+      const queryArray = [];
       queryKeys.forEach((el) => {
         queryArray.push(`${el}=${this.config.query[el]}`);
       });
@@ -271,7 +270,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (!fields) {
       return true;
     }
-    let check: boolean = true;
+    let check = true;
     fields.forEach((el: string) => {
       const inputValue = this.getValueByKey(el, data);
       this.config.data.sendData.find((field) => {
@@ -292,12 +291,12 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public getValueByKey(key: string, data: any): any {
-    let keysArray = key.split('.');
-    let firstKey = keysArray.shift();
+    const keysArray = key.split('.');
+    const firstKey = keysArray.shift();
     if (keysArray.length === 0) {
       return data && data[firstKey];
     } else if (keysArray.length > 0) {
-      let combineKeys = keysArray.join('.');
+      const combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
     }
   }
