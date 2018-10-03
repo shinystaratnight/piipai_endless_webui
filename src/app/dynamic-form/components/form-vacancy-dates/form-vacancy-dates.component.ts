@@ -11,13 +11,12 @@ import {
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subscription } from 'rxjs/Subscription';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 import moment from 'moment-timezone';
 
 @Component({
-  selector: 'form-vacancy-dates',
+  selector: 'app-form-vacancy-dates',
   templateUrl: 'form-vacancy-dates.component.html',
   styleUrls: ['./form-vacancy-dates.component.scss']
 })

@@ -8,12 +8,12 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
-  selector: 'form-textarea',
+  selector: 'app-form-textarea',
   templateUrl: 'form-textarea.component.html',
   styleUrls: ['./form-textarea.component.scss']
 })
