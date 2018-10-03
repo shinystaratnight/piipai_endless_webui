@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
-import { CookieService } from 'angular2-cookie/core';
+import { CookieService } from 'ngx-cookie';
 
 import { ErrorsService } from '../../shared/services/errors.service';
 
@@ -29,9 +28,12 @@ export class WorkflowService {
   public getWorkflowList() {
     const headers = this.updateHeaders();
 
-    return this.http.get(this.workflowsEndpoint, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => this.errorHandler(err));
+    return this.http
+      .get(this.workflowsEndpoint, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => this.errorHandler(err))
+      );
   }
 
   public getNodesOfCompany(workflowId: string, companyId: string) {
@@ -39,9 +41,12 @@ export class WorkflowService {
 
     const query = `?workflow_node__workflow=${workflowId}&company=${companyId}&active=true&limit=-1&only_parent=2&ordering=order,workflow_node.number`; //tslint:disable-line
 
-    return this.http.get(this.companyWorkflowNodeEndpoint + query, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => this.errorHandler(err));
+    return this.http
+      .get(this.companyWorkflowNodeEndpoint + query, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => this.errorHandler(err))
+      );
   }
 
   public getSubStates(workflowId: string, parentId: string) {
@@ -49,9 +54,12 @@ export class WorkflowService {
 
     const query = `?workflow_node__workflow=${workflowId}&workflow_node__parent=${parentId}&active=true&limit=-1`; //tslint:disable-line
 
-    return this.http.get(this.companyWorkflowNodeEndpoint + query, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => this.errorHandler(err));
+    return this.http
+      .get(this.companyWorkflowNodeEndpoint + query, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => this.errorHandler(err))
+      );
   }
 
   public setParentForSubstate(nodeId: string, parentId: string) {
@@ -61,9 +69,12 @@ export class WorkflowService {
       parent: parentId
     };
 
-    return this.http.patch(`${this.workflowNodeEndpoint}${nodeId}/`, body, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => this.errorHandler(err));
+    return this.http
+      .patch(`${this.workflowNodeEndpoint}${nodeId}/`, body, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => this.errorHandler(err))
+      );
   }
 
   public deleteParentForSubstate(nodeId: string) {
@@ -73,25 +84,34 @@ export class WorkflowService {
       parent: null
     };
 
-    return this.http.patch(`${this.workflowNodeEndpoint}${nodeId}/`, body, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => this.errorHandler(err));
+    return this.http
+      .patch(`${this.workflowNodeEndpoint}${nodeId}/`, body, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => this.errorHandler(err))
+      );
   }
 
   public deleteNode(id: string) {
     const headers = this.updateHeaders();
 
-    return this.http.delete(`${this.companyWorkflowNodeEndpoint}${id}/`, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => this.errorHandler(err));
+    return this.http
+      .delete(`${this.companyWorkflowNodeEndpoint}${id}/`, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => this.errorHandler(err))
+      );
   }
 
   public deleteTest(id: string) {
     const headers = this.updateHeaders();
 
-    return this.http.delete(`${this.acceptanceTestWorkflowNodesEndpoint}${id}/`, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => this.errorHandler(err));
+    return this.http
+      .delete(`${this.acceptanceTestWorkflowNodesEndpoint}${id}/`, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => this.errorHandler(err))
+      );
   }
 
   public getAcceptenceTets(nodeId: string) {
@@ -99,33 +119,45 @@ export class WorkflowService {
 
     const query = `?company_workflow_node=${nodeId}`;
 
-    return this.http.get(this.acceptanceTestWorkflowNodesEndpoint + query, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => this.errorHandler(err));
+    return this.http
+      .get(this.acceptanceTestWorkflowNodesEndpoint + query, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => this.errorHandler(err))
+      );
   }
 
   public addAcceptenceTest(body) {
     const headers = this.updateHeaders();
 
-    return this.http.post(this.acceptanceTestWorkflowNodesEndpoint, body, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => this.errorHandler(err));
+    return this.http
+      .post(this.acceptanceTestWorkflowNodesEndpoint, body, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => this.errorHandler(err))
+      );
   }
 
   public addWorkflowToCompany(data) {
     const headers = this.updateHeaders();
 
-    return this.http.post(this.companyWorkflowNodeEndpoint, data, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => this.errorHandler(err));
+    return this.http
+      .post(this.companyWorkflowNodeEndpoint, data, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => this.errorHandler(err))
+      );
   }
 
   public updateStateOrder(data: any, id: string) {
     const headers = this.updateHeaders();
 
-    return this.http.patch(this.companyWorkflowNodeEndpoint + id + '/', data, { headers })
-      .map((res: any) => res && res.json())
-      .catch((err: any) => Observable.of([]));
+    return this.http
+      .patch(this.companyWorkflowNodeEndpoint + id + '/', data, { headers })
+      .pipe(
+        map((res: any) => res && res.json()),
+        catchError((err: any) => of([]))
+      );
   }
 
   public updateHeaders(): Headers {
