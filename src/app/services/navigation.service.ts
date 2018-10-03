@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 import { Role } from './user.service';
@@ -35,7 +35,7 @@ export class NavigationService {
 
   public getPages(role: Role) {
     if (!this.navigationList[role.id]) {
-      let query = `&role=${role.id}`;
+      const query = `&role=${role.id}`;
       return this.gfs.getAll(`${this.endpoint}${query}`)
         .map(
         (res: any) => {
@@ -50,7 +50,7 @@ export class NavigationService {
         }
       );
     } else {
-      return Observable.of(this.navigationList[role.id]);
+      return of(this.navigationList[role.id]);
     }
   }
 
