@@ -11,7 +11,7 @@
 </h6>
 <div id="collapseExample" [ngbCollapse]="isCollapsed" class="px-2">
   <ng-container *ngFor="let field of config.children;"
-    formElement
+    appFormElement
     [config]="field"
     [group]="group"
     [errors]="errors"

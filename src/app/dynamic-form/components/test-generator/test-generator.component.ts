@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { GenericFormService } from '../../services/generic-form.service';
 
 @Component({
-  selector: 'test-generator',
+  selector: 'app-test-generator',
   templateUrl: './test-generator.component.html',
   styleUrls: ['./test-generator.component.scss']
 })

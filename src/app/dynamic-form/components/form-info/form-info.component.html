@@ -16,7 +16,7 @@
         </agm-map>
       </div>
 
-      <ng-container formElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
+      <ng-container appFormElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
         [config]="config.metadata['picture']"
         [group]="group">
       </ng-container>
@@ -30,14 +30,14 @@
         {{available ? config.metadata['available'].templateOptions.label : 'Not ' + config.metadata['available'].templateOptions.label}}
       </label>
 
-      <ng-container formElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
+      <ng-container appFormElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
         [config]="config.metadata['available']"
         [group]="group">
       </ng-container>
 
       <a class="client-link" target="_blanck" [href]="link" *ngIf="config && viewMode && link">{{link}}</a>
 
-      <ng-container formElement *ngIf="config && config.metadata['link'] && !viewMode && config.editForm"
+      <ng-container appFormElement *ngIf="config && config.metadata['link'] && !viewMode && config.editForm"
         [config]="getConfig('link')"
         [group]="group">
       </ng-container>
@@ -52,7 +52,7 @@
 
     <div class="job-title" *ngIf="config && viewMode && client">{{client.short_name}}</div>
     <div *ngIf="config && config.metadata['client'] && !viewMode && config.editForm">
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="getConfig('client')"
         [group]="group">
       </ng-container>
@@ -66,7 +66,7 @@
 
     <div class="job-title" *ngIf="config && viewMode && job_title">{{job_title}}</div>
     <div *ngIf="config && config.metadata['job_title'] && !viewMode && config.editForm">
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="getConfig('job_title')"
         [group]="group">
       </ng-container>
@@ -74,7 +74,7 @@
 
     <p class="job" *ngIf="!titlePath && job">{{job.__str__}}</p>
     <p class="jobsite" *ngIf="!titlePath && jobsite && config && config.metadata['jobsite']">
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="getConfig('jobsite')"
         [group]="group">
       </ng-container>
@@ -86,18 +86,18 @@
 
       <span *ngIf="!this.averageScore && this.averageScore !== 0">
         <span class="view-mode" *ngIf="titlePath">
-          <ng-container formElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
+          <ng-container appFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
             [config]="getConfig('title')"
             [group]="group">
           </ng-container>
         </span>
 
         <span *ngIf="!titlePath && title">{{title}}</span>
-        <info class="ml-1" [description]="description"></info>
+        <app-info class="ml-1" [description]="description"></app-info>
       </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
         <span class="view-mode" *ngIf="titlePath">
-          <ng-container formElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
+          <ng-container appFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
             [config]="getConfig('title')"
             [group]="group">
           </ng-container>
@@ -109,7 +109,7 @@
       </span>
     </h5>
     <p>
-      <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
+      <ng-container appFormElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
         [config]="getConfig('title')"
         [group]="group">
       </ng-container>
@@ -123,29 +123,29 @@
 
     <div *ngIf="config && config.metadata['tags']" class="tags-wrapper">
       <label>Tags:</label>
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="config.metadata['tags']"
         [group]="group">
       </ng-container>
     </div>
 
-    <ng-container formElement *ngIf="config && config.metadata['title_title'] && !viewMode"
+    <ng-container appFormElement *ngIf="config && config.metadata['title_title'] && !viewMode"
       [config]="getConfig('title_title')"
       [group]="group">
     </ng-container>
 
-    <ng-container formElement *ngIf="config && config.metadata['first_name'] && !viewMode"
+    <ng-container appFormElement *ngIf="config && config.metadata['first_name'] && !viewMode"
       [config]="getConfig('first_name')"
       [group]="group">
     </ng-container>
 
-    <ng-container formElement *ngIf="config && config.metadata['last_name'] && !viewMode"
+    <ng-container appFormElement *ngIf="config && config.metadata['last_name'] && !viewMode"
       [config]="getConfig('last_name')"
       [group]="group">
     </ng-container>
 
     <div *ngIf="config && config.metadata['company'] && config.editForm">
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="config.metadata['company']"
         [group]="group">
       </ng-container>
@@ -155,19 +155,19 @@
       <span >Carrier list reserve: {{carrier_reserve}}</span>
     </p>
 
-    <ng-container *ngIf="!viewMode && config.metadata['carrier_reserve']" formElement
+    <ng-container *ngIf="!viewMode && config.metadata['carrier_reserve']" appFormElement
       [config]="config.metadata['carrier_reserve']"
       [group]="group">
     </ng-container>
 
     <p *ngIf="config && config.metadata['address'] && address && config.editForm">
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="config.metadata['address']"
         [group]="group">
       </ng-container>
     </p>
 
-    <ng-container formElement *ngIf="config && config.metadata['timeline'] && config.editForm"
+    <ng-container appFormElement *ngIf="config && config.metadata['timeline'] && config.editForm"
       [config]="config.metadata['timeline']"
       (event)="event.emit($event)">
     </ng-container>

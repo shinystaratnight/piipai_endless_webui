@@ -2,7 +2,7 @@
   <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
   <ng-container
     *ngFor="let field of metadata;"
-    formElement
+    appFormElement
     [config]="field"
     [group]="selfGroup"
     [errors]="errors"

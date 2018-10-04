@@ -4,7 +4,7 @@
       <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" *ngIf="label && config.templateOptions.label" [attr.for]="key">
         {{config.templateOptions.label}}:
       </label>
-      <info [description]="config.templateOptions.description"></info>
+      <app-info [description]="config.templateOptions.description"></app-info>
       <div class="form-element-content flex-row edit" style="position: relative">
         <div class="form-control autocomplete-value"
           (click)="openAutocomplete()">
@@ -64,7 +64,7 @@
       <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
         {{config.templateOptions.label}}:
       </label>
-      <info [description]="config.templateOptions.description"></info>
+      <app-info [description]="config.templateOptions.description"></app-info>
       <div *ngIf="config.many && results && !config.useOptions" class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results" style="position: relative">
         <input [hidden]="config.hideSelect" type="text" class="form-control autocomplete-value" autocomplete="off"
           #search="ngModel"
@@ -211,7 +211,7 @@
             <ng-container *ngFor="let field of object.metadata">
               <td *ngIf="!field.hide">
                 <ng-container
-                  formElement
+                  appFormElement
                   [label]="false"
                   [config]="field"
                   [group]="object.data"

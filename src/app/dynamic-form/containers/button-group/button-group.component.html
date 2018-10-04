@@ -2,7 +2,7 @@
 <div *ngFor="let row of data">
   <ng-container
     *ngFor="let field of row; let last = last"
-    listElement
+    appListElement
     [last]="last"
     [config]="field"
     [length]="config.length"

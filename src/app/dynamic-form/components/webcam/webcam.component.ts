@@ -29,7 +29,7 @@ interface MediaDevice {
  * Render WebCam Component
  */
 @Component({
-  selector: 'webcam',
+  selector: 'app-webcam',
   templateUrl: './webcam.component.html'
 })
 export class WebcamComponent implements OnInit, AfterViewInit {
@@ -90,10 +90,6 @@ export class WebcamComponent implements OnInit, AfterViewInit {
     this.startCapturingVideo();
   }
 
-  /**
-   * Switch to facing mode and setup web camera
-   * @returns {void}
-   */
   public onWebRTC(): any {
     // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
     if (this.browser.mediaDevices.enumerateDevices && this.options.video) {
@@ -113,14 +109,10 @@ export class WebcamComponent implements OnInit, AfterViewInit {
     }
   }
 
-  /**
-   * Setup web camera using native browser API
-   * @returns {void}
-   */
   public setWebcam(): any {
     // constructing a getUserMedia config-object and
     // an string (we will try both)
-    let optionObject = { audio: false, video: false };
+    const optionObject = { audio: false, video: false };
     let optionString = '';
     let container: any;
     let video: any;
@@ -185,7 +177,7 @@ export class WebcamComponent implements OnInit, AfterViewInit {
     };
 
     promisifyGetUserMedia().then((stream) => {
-      let webcamUrl = URL.createObjectURL(stream);
+      const webcamUrl = URL.createObjectURL(stream);
       this.videoSrc = this.sanitizer.bypassSecurityTrustResourceUrl(webcamUrl);
       this.onSuccess(stream); // TODO stream :MediaStream
     }).catch((err) => {
@@ -196,7 +188,6 @@ export class WebcamComponent implements OnInit, AfterViewInit {
   /**
    * Add <param>'s into fallback object
    * @param cam - Flash web camera instance
-   * @returns {void}
    */
   public addFallbackParams(cam: any): any {
     const paramFlashVars = document.createElement('param');
@@ -225,7 +216,6 @@ export class WebcamComponent implements OnInit, AfterViewInit {
   /**
    * On web camera using flash fallback
    * .swf file is necessary
-   * @returns {void}
    */
   public onFallback(): any {
     // Act as a plain getUserMedia shield if no fallback is required
@@ -255,7 +245,6 @@ export class WebcamComponent implements OnInit, AfterViewInit {
 
   /**
    * Start capturing video stream
-   * @returns {void}
    */
   public startCapturingVideo(): any {
     if (this.isSupportWebRTC) {

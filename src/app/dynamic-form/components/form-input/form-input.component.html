@@ -3,7 +3,7 @@
     <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" [attr.for]="key" *ngIf="label && config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
-    <info [description]="config.templateOptions.description"></info>
+    <app-info [description]="config.templateOptions.description"></app-info>
     <div class="form-element-content edit" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon">
       <input
         *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))

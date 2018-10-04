@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'list-link',
+  selector: 'app-list-link',
   templateUrl: 'list-link.component.html',
   styleUrls: ['./list-link.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -24,7 +24,7 @@ export class ListLinkComponent implements OnInit {
   public arrayValue: boolean;
 
   public phone: boolean;
-  public linkClass: string = '';
+  public linkClass = '';
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -57,8 +57,8 @@ export class ListLinkComponent implements OnInit {
     }
 
     if (this.config.color) {
-      let classes = ['primary', 'danger', 'info', 'success', 'warning'];
-      let color = this.config.color;
+      const classes = ['primary', 'danger', 'info', 'success', 'warning'];
+      const color = this.config.color;
       this.linkClass = classes.indexOf(color) > -1 ? `text-${color} custom-link` : '';
     }
   }
@@ -70,7 +70,7 @@ export class ListLinkComponent implements OnInit {
   }
 
   public isPhone(value) {
-    let reg = /^\+(?:[0-9] ?){6,14}[0-9]$/;
+    const reg = /^\+(?:[0-9] ?){6,14}[0-9]$/;
 
     return reg.test(value) ? true : false;
   }
@@ -81,10 +81,10 @@ export class ListLinkComponent implements OnInit {
     if (index || index === 0) {
       let endpoint = this.href[index];
 
-      let newEndpoint = endpoint.split('/');
+      const newEndpoint = endpoint.split('/');
       newEndpoint.pop();
       newEndpoint.pop();
-      let id = newEndpoint.pop();
+      const id = newEndpoint.pop();
 
       endpoint = '/ecore/api/v2' + [...newEndpoint, ''].join('/');
 
@@ -98,10 +98,10 @@ export class ListLinkComponent implements OnInit {
     }
 
     if (this.value) {
-      let arr = this.config.endpoint.split('/');
-      let id = arr[arr.length - 2];
+      const arr = this.config.endpoint.split('/');
+      const id = arr[arr.length - 2];
       arr.splice(arr.length - 2, 1);
-      let endpoint = arr.join('/');
+      const endpoint = arr.join('/');
       if (this.config.action) {
         this.buttonAction.emit({
           el: this.config,

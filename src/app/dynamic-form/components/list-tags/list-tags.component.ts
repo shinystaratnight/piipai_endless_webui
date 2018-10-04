@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormatString } from '../../../helpers/format';
 
 @Component({
-  selector: 'list-tags',
+  selector: 'app-list-tags',
   templateUrl: 'list-tags.component.html',
   styleUrls: ['./list-tags.component.scss']
 })

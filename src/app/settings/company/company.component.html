@@ -2,7 +2,7 @@
 
 <hr>
 
-<dynamic-form
+<app-dynamic-form
   [config]="config"
   (submitForm)="submitForm($event)"
   (event)="eventHandler($event)">
@@ -12,4 +12,4 @@
       <spinner *ngIf="saveProcess"></spinner>
     </button>
   </div>
-</dynamic-form>
+</app-dynamic-form>

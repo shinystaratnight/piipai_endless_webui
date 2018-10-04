@@ -55,7 +55,7 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public ngOnInit() {
     this.querySubscription = this.route.queryParams.subscribe(
-      (params) => this.updateFilter()
+      () => this.updateFilter()
     );
     this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;

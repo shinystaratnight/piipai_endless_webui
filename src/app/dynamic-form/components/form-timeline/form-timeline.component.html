@@ -31,7 +31,7 @@
       </option>
   </select>
 
-  <info *ngIf="getState(currentState).state === 0" [description]="requirements"></info>
+  <app-info *ngIf="getState(currentState).state === 0" [description]="requirements"></app-info>
   <button type="button" (click)="open(getState(currentState))" *ngIf="getState(currentState).state === 1" class="btn btn-sm badge badge-outline">
     <i fa name="check"></i>
   </button>
@@ -170,12 +170,12 @@
       </div>
     </div>
     <div class="modal-body">
-      <test-generator
+      <app-test-generator
         [workflowObject]="modalData.workflowObject"
         [send]="true"
         [id]="testId"
         (sended)="testComplete(c)">
-      </test-generator>
+      </app-test-generator>
     </div>
   </div>
 </ng-template>

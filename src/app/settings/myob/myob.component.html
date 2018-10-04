@@ -1,11 +1,11 @@
-<dynamic-form
+<app-dynamic-form
   [config]="config"
   (event)="eventHandler($event)">
     <button (click)="connectHandler()" type="submit" class="btn btn-default mb-2 ml-2" [ngStyle]="{'background-color': connectButton.color}" [disabled]="connectProcess">
       {{connectProcess ? 'Connecting' : connectButton.text}}
       <spinner *ngIf="connectProcess"></spinner>
     </button>
-</dynamic-form>
+</app-dynamic-form>
 
 <div class="content">
   <h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !companyFile.isCollapsed}">

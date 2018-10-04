@@ -1,5 +1,5 @@
 <div class="datatable-wrapper" *ngFor="let table of tables; let last = last">
-  <dynamic-list
+  <app-dynamic-list
     *ngIf="table.metadata && table.data"
     [inForm]="inForm"
     [config]="table.metadata"
@@ -34,7 +34,7 @@
     (list)="listHandler($event)"
     (event)="eventHandler($event)">
       <ng-content></ng-content>
-  </dynamic-list>
+  </app-dynamic-list>
   <div class="spinner" [class.invisible]="!(!(table.metadata && table.data) || uploading)">
     <div class="double-bounce1"></div>
     <div class="double-bounce2"></div>

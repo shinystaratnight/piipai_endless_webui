@@ -42,7 +42,7 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
     this.data = this.config.default || '';
     this.querySubscription = this.route.queryParams.subscribe(
-      (params) => this.updateFilter()
+      () => this.updateFilter()
     );
     this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
   }

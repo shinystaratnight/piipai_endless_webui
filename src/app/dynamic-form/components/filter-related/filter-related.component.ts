@@ -86,7 +86,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.limit = -1;
     }
     this.querySubscription = this.route.queryParams.subscribe(
-      (params) => this.updateFilter()
+      () => this.updateFilter()
     );
     this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;

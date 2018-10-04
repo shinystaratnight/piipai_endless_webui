@@ -123,7 +123,7 @@
       </div>
     </div>
     <div class="modal-body">
-      <dynamic-form
+      <app-dynamic-form
         [config]="addConfig"
         (submitForm)="addStateToCompany($event, c)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
@@ -131,7 +131,7 @@
             Add
             <spinner *ngIf="saveProcess"></spinner>
           </button>
-      </dynamic-form>
+      </app-dynamic-form>
     </div>
   </div>
 </ng-template>
@@ -147,7 +147,7 @@
       </div>
     </div>
     <div class="modal-body">
-      <dynamic-form
+      <app-dynamic-form
         [config]="addConfig"
         (submitForm)="addAcceptenceTest($event, c)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
@@ -155,7 +155,7 @@
             Add
             <spinner *ngIf="saveProcess"></spinner>
           </button>
-      </dynamic-form>
+      </app-dynamic-form>
     </div>
   </div>
 </ng-template>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'list-available',
+  selector: 'app-list-available',
   templateUrl: './list-available.component.html',
   styleUrls: ['./list-available.component.scss']
 })

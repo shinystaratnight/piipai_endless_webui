@@ -3,7 +3,7 @@
 
   <div class="text-center">
     <ng-container
-      formElement
+      appFormElement
       [config]="viewConfig.shiftsDates"
       [group]="viewData"
       (event)="eventHandler($event)">
@@ -14,27 +14,27 @@
     <b>Extend:</b>
 
     <ng-container
-      formElement
+      appFormElement
       [config]="viewConfig.extendDates"
       (event)="autofillDates($event)"
       [group]="viewData">
     </ng-container>
 
     <ng-container
-      formElement
+      appFormElement
       [config]="viewConfig.extendCandidates"
       (event)="autofillCandidates($event)"
       [group]="viewData">
     </ng-container>
 
-    <info [placement]="'right'" [description]="fillinfo"></info>
+    <app-info [placement]="'right'" [description]="fillinfo"></app-info>
   </div>
 
   <div class="shifts-header">
     <div class="title">Shifts</div>
 
     <button type="button" class="btn btn-primary" (click)="autocompleteCandidates()">Autocomplete</button>
-    <info [placement]="'bottom'" [description]="requirements"></info>
+    <app-info [placement]="'bottom'" [description]="requirements"></app-info>
   </div>
 
 
@@ -79,7 +79,7 @@
   <div class="row">
     <div class="time">
       <ng-container
-        formElement
+        appFormElement
         [config]="config.time"
         (event)="timeChange($event, config)"
         [group]="group">
@@ -88,7 +88,7 @@
 
     <div class="workers">
       <ng-container
-        formElement
+        appFormElement
         [config]="config.workers"
         (event)="change($event)"
         [group]="group">
@@ -97,7 +97,7 @@
 
     <div class="candidates">
       <ng-container
-        formElement
+        appFormElement
         [config]="config.candidates"
         (event)="change($event)"
         [group]="group">

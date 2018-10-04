@@ -36,7 +36,7 @@ export class FilterChoiceComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.querySubscription = this.route.queryParams.subscribe(
-      (params) => this.updateFilter()
+      () => this.updateFilter()
     );
     this.isCollapsed = this.query ? false : true;
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';

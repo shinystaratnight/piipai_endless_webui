@@ -5,7 +5,7 @@
   </div>
   <div *ngFor="let field of config;">
     <ng-container
-      filterElement
+      appFilterElement
       (event)="changeQuery($event)"
       [config]="field">
     </ng-container>

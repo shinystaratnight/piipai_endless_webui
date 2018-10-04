@@ -8,7 +8,6 @@ import {
   ViewChild,
   OnDestroy,
   AfterContentChecked,
-  AfterViewInit,
   SimpleChanges
 } from '@angular/core';
 import { Router } from '@angular/router';
@@ -22,7 +21,7 @@ import { FilterService, GenericFormService } from './../../services';
 import { FormatString } from '../../../helpers/format';
 
 @Component({
-  selector: 'dynamic-list',
+  selector: 'app-dynamic-list',
   templateUrl: 'dynamic-list.component.html'
 })
 export class DynamicListComponent
@@ -103,10 +102,10 @@ export class DynamicListComponent
   public addData: any;
 
   @Input()
-  public refresh: boolean = false;
+  public refresh = false;
 
   @Input()
-  public inForm: boolean = false;
+  public inForm = false;
 
   @Input()
   public disableActions: boolean;
@@ -174,14 +173,14 @@ export class DynamicListComponent
   public body: any[] = [];
   public select: any = {};
   public filtersOfList: any[] = [];
-  public selectedAll: boolean = false;
+  public selectedAll = false;
   public modalInfo: any = {};
   public pagination: any = {};
-  public pageSize: number = 0;
-  public poped: boolean = false;
-  public move: boolean = false;
-  public refreshing: boolean = false;
-  public filtersHidden: boolean = true;
+  public pageSize = 0;
+  public poped = false;
+  public move = false;
+  public refreshing = false;
+  public filtersHidden = true;
   public additionalMetadata: any[] = [];
   public pictures = [
     '/ecore/api/v2/core/contacts/',
@@ -189,7 +188,7 @@ export class DynamicListComponent
     '/ecore/api/v2/core/companies/',
     '/ecore/api/v2/core/companycontacts/'
   ];
-  public collapsed: boolean = true;
+  public collapsed = true;
 
   constructor(
     private filterService: FilterService,
@@ -256,7 +255,7 @@ export class DynamicListComponent
     }
     if (this.sorted) {
       this.sortedColumns = this.sorted;
-      let names = Object.keys(this.sorted);
+      const names = Object.keys(this.sorted);
       if (names.length) {
         names.forEach((el) => {
           this.updateSort(config.list.columns, el, this.sorted[el]);
@@ -466,12 +465,12 @@ export class DynamicListComponent
 
   public parseInnerTables(innerTables) {
     if (innerTables && this.innerTableCall) {
-      let currentRow = innerTables[this.innerTableCall.row];
+      const currentRow = innerTables[this.innerTableCall.row];
       if (currentRow) {
-        let currentCell =
+        const currentCell =
           innerTables[this.innerTableCall.row][this.innerTableCall.cell];
         if (currentCell) {
-          let cell =
+          const cell =
             innerTables[this.innerTableCall.row][this.innerTableCall.cell];
           if (cell.metadata && cell.data) {
             cell.body = this.prepareData(
@@ -581,7 +580,7 @@ export class DynamicListComponent
 
   public generateParams(elements: any[]) {
     if (elements && elements.length) {
-      let params = {};
+      const params = {};
       elements.forEach((element) => {
         if (element.query) {
           const keys = Object.keys(element.query);
@@ -648,7 +647,7 @@ export class DynamicListComponent
 
   public calcTable() {
     if (this.tableWrapper) {
-      let tableWrapperEl = this.tableWrapper.nativeElement;
+      const tableWrapperEl = this.tableWrapper.nativeElement;
       tableWrapperEl.style.maxHeight = `calc(100vh - ${
         tableWrapperEl.offsetTop
       }px - 150px)`;
@@ -656,7 +655,7 @@ export class DynamicListComponent
   }
 
   public checkOverfow() {
-    let width = this.tableWrapper.nativeElement.offsetWidth;
+    const width = this.tableWrapper.nativeElement.offsetWidth;
     let count = 0;
     this.config.list.columns.forEach((el) => {
       if (!el.tab) {
@@ -679,14 +678,13 @@ export class DynamicListComponent
           el.is_collapsed = !el.is_collapsed;
         }
       });
-      let collapsedTabs = this.tabs.filter((el) => el.is_collapsed);
     }
   }
 
   public getTabOfColumn(name) {
     let tab;
     if (this.tabs) {
-      let filteredTabs = this.tabs.filter((el) => {
+      const filteredTabs = this.tabs.filter((el) => {
         let result = false;
         el.fields.forEach((field) => {
           if (field === name) {
@@ -710,9 +708,9 @@ export class DynamicListComponent
 
   public prepareData(config, data, highlight = null) {
     this.asyncData = {};
-    let prepareData = [];
+    const prepareData = [];
     data.forEach((el) => {
-      let row = {
+      const row = {
         id: el.id,
         __str__: el.__str__,
         collapsed: true,
@@ -722,7 +720,7 @@ export class DynamicListComponent
         this.addHighlight(highlight.field, el, row, highlight.values);
       }
       config.forEach((col) => {
-        let cell = {
+        const cell = {
           id: el.id,
           label: col.label,
           name: col.name,
@@ -736,7 +734,7 @@ export class DynamicListComponent
             return;
           }
           let props;
-          let obj: any = {
+          const obj: any = {
             rowId: el.id,
             key: col.name,
             delim: col.delim,
@@ -790,7 +788,7 @@ export class DynamicListComponent
             );
           }
           if (element.type === 'datepicker') {
-            let field = this.config.fields.find(
+            const field = this.config.fields.find(
               (elem) => elem.key === element.field
             );
             if (field) {
@@ -801,7 +799,7 @@ export class DynamicListComponent
             if (element.type === 'icon') {
               obj.label = element.label;
             }
-            let field = this.config.fields.find(
+            const field = this.config.fields.find(
               (elem) => elem.key === element.field
             );
             if (field) {
@@ -812,7 +810,7 @@ export class DynamicListComponent
             }
           }
           if (element.link) {
-            let indexOf = element.link.indexOf('{field}');
+            const indexOf = element.link.indexOf('{field}');
             if (indexOf) {
               element.link = element.link.replace(
                 /{field}/gi,
@@ -826,7 +824,7 @@ export class DynamicListComponent
               props = element.field.split('.');
               this.setValue(el, props, obj);
             }
-            let indexOf = element.endpoint.indexOf('{field}');
+            const indexOf = element.endpoint.indexOf('{field}');
 
             obj.notParsedEndpoint = element.notParsedEndpoint;
             if (element.endpoint[element.endpoint.length - 1] !== '/') {
@@ -903,7 +901,7 @@ export class DynamicListComponent
           if (element.fields) {
             obj.fields = [];
             element.fields.forEach((field, index) => {
-              let item = Object.assign({}, field);
+              const item = Object.assign({}, field);
               obj.fields[index] = item;
               props = field.field.split('.');
               this.setValue(el, props, item);
@@ -998,7 +996,7 @@ export class DynamicListComponent
   }
 
   public getSortedColumns(config) {
-    let result = {};
+    const result = {};
     config.forEach((el) => {
       if (el.sorted) {
         result[el.sort_field] = el.sorted;
@@ -1043,7 +1041,7 @@ export class DynamicListComponent
   }
 
   public setValue(data, props, object, param = 'value') {
-    let prop = props.shift();
+    const prop = props.shift();
     if (props.length === 0) {
       if (object.type === 'related' && !object[param]) {
         if (Array.isArray(data[prop])) {
@@ -1077,7 +1075,7 @@ export class DynamicListComponent
   }
 
   public selectAll() {
-    let keys = Object.keys(this.select);
+    const keys = Object.keys(this.select);
     keys.forEach((el) => {
       this.select[el] = this.selectedAll;
     });
@@ -1094,7 +1092,7 @@ export class DynamicListComponent
   }
 
   public resetSelectedElements(data) {
-    let select = {};
+    const select = {};
     data.forEach((el) => {
       select[el.id] = false;
     });
@@ -1146,8 +1144,8 @@ export class DynamicListComponent
     if (this.inForm) {
       if (data !== this.currentData || data.count !== this.count) {
         this.selectedAll = false;
-        let count = data.count;
-        let length = data.results.length;
+        const count = data.count;
+        const length = data.results.length;
         this.count = length;
         if (length === 0) {
           this.pageSize = 10;
@@ -1171,7 +1169,7 @@ export class DynamicListComponent
   public sortTable(sorted) {
     let query = 'ordering=';
     let queries = '';
-    let columns = Object.keys(sorted);
+    const columns = Object.keys(sorted);
     columns.forEach((el) => {
       if (sorted[el] === 'desc') {
         queries += `-${el},`;
@@ -1311,10 +1309,10 @@ export class DynamicListComponent
   }
 
   public showCandidateProfile(e) {
-    let arr = e.el.endpoint.split('/');
-    let id = arr[arr.length - 2];
+    const arr = e.el.endpoint.split('/');
+    const id = arr[arr.length - 2];
     arr.splice(arr.length - 2, 1);
-    let endpoint = arr.join('/');
+    const endpoint = arr.join('/');
     this.modalInfo = {};
     this.modalInfo.type = 'profile';
     this.modalInfo.id = id;
@@ -1343,11 +1341,11 @@ export class DynamicListComponent
     }
   }
 
-  public callAction(modalInfo, closeModal = undefined) {
+  public callAction(modalInfo, closeModal?) {
     if (closeModal) {
       closeModal();
     }
-    let endpoint = modalInfo.endpoint;
+    const endpoint = modalInfo.endpoint;
     this.genericFormService.submitForm(endpoint, {}).subscribe((res: any) => {
       this.event.emit({
         type: 'update',
@@ -1358,7 +1356,7 @@ export class DynamicListComponent
 
   public openMap(value) {
     value.forEach((el) => {
-      let keys = el.field.split('.');
+      const keys = el.field.split('.');
       this.modalInfo[keys[keys.length - 1]] = +el.value;
     });
     this.modalInfo.type = 'map';
@@ -1460,7 +1458,7 @@ export class DynamicListComponent
   }
 
   public approveTimesheet(e) {
-    let object = this.fullData[this.responseField].find(
+    const object = this.fullData[this.responseField].find(
       (el) => el.id === e.el.rowId
     );
     if (object) {
@@ -1472,7 +1470,7 @@ export class DynamicListComponent
 
   public openFrame(e, param = 'recipient') {
     let query = '?';
-    let contacts = [];
+    const contacts = [];
     if (e && e.length) {
       e.forEach((el) => {
         if (el) {
@@ -1519,7 +1517,7 @@ export class DynamicListComponent
     this.open(this.modal, { size: 'lg' });
   }
 
-  public editObject(id, label = undefined) {
+  public editObject(id, label?) {
     this.modalInfo = {};
     this.modalInfo.type = 'form';
     this.modalInfo.endpoint = this.endpoint;
@@ -1538,10 +1536,10 @@ export class DynamicListComponent
   }
 
   public addHighlight(prop, data, row, values) {
-    let props = prop.split('.');
-    let key = props.shift();
+    const props = prop.split('.');
+    const key = props.shift();
     if (props.length === 0) {
-      let property = data[prop];
+      const property = data[prop];
       row.highlight = false;
       if (typeof values[property] === 'boolean') {
         row.highlight = {
@@ -1576,17 +1574,17 @@ export class DynamicListComponent
   }
 
   public format(str, data) {
-    let open = '{';
-    let close = '}';
-    let pieces = [];
+    const open = '{';
+    const close = '}';
+    const pieces = [];
     let before;
     let propValue;
     let pos = 0;
     let trail;
     while (true && str) {
-      let start = str.indexOf(open, pos);
-      let end = str.indexOf(close, pos);
-      let key = str.substring(start + 1, end);
+      const start = str.indexOf(open, pos);
+      const end = str.indexOf(close, pos);
+      const key = str.substring(start + 1, end);
       if (start === -1 || end === -1) {
         trail = str.substr(pos);
         if (trail !== '') {
@@ -1604,13 +1602,13 @@ export class DynamicListComponent
   }
 
   public getPropValue(data, key: string) {
-    let props = key.split('.');
-    let prop = props.shift();
+    const props = key.split('.');
+    const prop = props.shift();
     if (!props.length) {
       if (data) {
         if (prop.indexOf('__') > -1) {
-          let propArray = prop.split('__');
-          let datetime = ['date', 'time'];
+          const propArray = prop.split('__');
+          const datetime = ['date', 'time'];
           if (datetime.indexOf(propArray[1]) > -1) {
             if (data[propArray[0]]) {
               return moment
@@ -1715,7 +1713,7 @@ export class DynamicListComponent
         longitude: this.data[this.supportData].longitude,
         name: this.data[this.supportData].__str__,
         description: this.data[this.supportData].address,
-        label: this.sanitizer.bypassSecurityTrustStyle("{ color: 'green'}"),
+        label: this.sanitizer.bypassSecurityTrustStyle('{ color: "green"}'),
         iconUrl: '/assets/img/location-red.svg'
       });
       data.latitude = this.data[this.supportData].latitude;
@@ -1907,11 +1905,11 @@ export class DynamicListComponent
 
   public checkShowRules(rule: any[], data): boolean {
     let approvedRules = 0;
-    let rulesNumber = rule.length;
+    const rulesNumber = rule.length;
 
     rule.forEach((el: any) => {
       if (typeof el === 'string') {
-        let value = this.getValueByKey(el, data);
+        const value = this.getValueByKey(el, data);
 
         if (value && value !== '0') {
           approvedRules += 1;
@@ -1919,9 +1917,9 @@ export class DynamicListComponent
           return;
         }
       } else if (el instanceof Object) {
-        let key = Object.keys(el)[0];
-        let targetValue = el[key];
-        let value = this.getValueByKey(key, data);
+        const key = Object.keys(el)[0];
+        const targetValue = el[key];
+        const value = this.getValueByKey(key, data);
 
         if (value === targetValue) {
           approvedRules += 1;
@@ -1935,12 +1933,12 @@ export class DynamicListComponent
   }
 
   public getValueByKey(key: string, data: any): any {
-    let keysArray = key.split('.');
-    let firstKey = keysArray.shift();
+    const keysArray = key.split('.');
+    const firstKey = keysArray.shift();
     if (keysArray.length === 0) {
       return data && data[firstKey];
     } else if (keysArray.length > 0) {
-      let combineKeys = keysArray.join('.');
+      const combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
     }
   }

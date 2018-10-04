@@ -29,7 +29,7 @@ const components = {
 };
 
 @Directive({
-  selector: '[filterElement]'
+  selector: '[appFilterElement]'
 })
 export class FilterElementDirective implements OnInit, OnChanges {
   @Input()

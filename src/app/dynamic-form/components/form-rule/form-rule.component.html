@@ -2,7 +2,7 @@
   <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
 
   <div class="card">
-    <dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></dynamic-form>
+    <app-dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></app-dynamic-form>
 
     <div class="form-element">
       <label class="form-element-label">

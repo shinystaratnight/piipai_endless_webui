@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 
 import { of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -7,8 +7,6 @@ import { map, catchError } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie';
 
 import { ErrorsService } from '../../shared/services/errors.service';
-
-import { metadata } from '../../metadata';
 
 @Injectable()
 export class WorkflowService {

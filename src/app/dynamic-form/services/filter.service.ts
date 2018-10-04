@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { GenericFormService } from './generic-form.service';
 import { Subject } from 'rxjs';
 
 @Injectable()
@@ -17,9 +16,7 @@ export class FilterService {
     return this._reset.asObservable();
   }
 
-  constructor(
-    private gfs: GenericFormService
-  ) {
+  constructor() {
     this._filters = {};
     this._paramsOfFilters = {};
   }

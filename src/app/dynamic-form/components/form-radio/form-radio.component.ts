@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 @Component({
-  selector: 'form-radio',
+  selector: 'app-form-radio',
   templateUrl: 'form-radio.component.html',
   styleUrls: ['./form-radio.component.scss']
 })

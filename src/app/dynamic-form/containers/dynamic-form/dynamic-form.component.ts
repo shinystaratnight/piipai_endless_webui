@@ -12,7 +12,7 @@ import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
 
 @Component({
-  selector: 'dynamic-form',
+  selector: 'app-dynamic-form',
   templateUrl: 'dynamic-form.component.html'
 })
 export class DynamicFormComponent implements OnInit {
@@ -56,7 +56,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public getValues(data, list) {
-    let values = {};
+    const values = {};
     if (list) {
       list.forEach((el) => {
         values[el] = this.getValue(data, el);
@@ -68,7 +68,7 @@ export class DynamicFormComponent implements OnInit {
   public getValue(data, key) {
     if (data) {
       if (key.indexOf('.') > -1) {
-        let keys = key.split('.');
+        const keys = key.split('.');
         return this.getValue(data.get(keys.shift()), keys.join('.'));
       } else {
         return data.get(key).value;
@@ -82,7 +82,7 @@ export class DynamicFormComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    let data = this.form.value;
+    const data = this.form.value;
     if (this.hiddenFields) {
       this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
     }
@@ -191,19 +191,19 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public checkHiddenFields(field: Field): void {
-    let rule = field.showIf;
-    let show = this.checkShowRules(rule);
+    const rule = field.showIf;
+    const show = this.checkShowRules(rule);
     field.hidden.next(!show);
   }
 
   public checkShowRules(rule: any[]): boolean {
     let approvedRules = 0;
-    let rulesNumber = rule.length;
-    let data = this.fullData;
+    const rulesNumber = rule.length;
+    const data = this.fullData;
 
     rule.forEach((el: any) => {
       if (typeof el === 'string') {
-        let value = this.getValueByKey(el, data);
+        const value = this.getValueByKey(el, data);
 
         if (value && value !== '0') {
           approvedRules += 1;
@@ -211,9 +211,9 @@ export class DynamicFormComponent implements OnInit {
           return;
         }
       } else if (el instanceof Object) {
-        let key = Object.keys(el)[0];
-        let targetValue = el[key];
-        let value = this.getValueByKey(key, data);
+        const key = Object.keys(el)[0];
+        const targetValue = el[key];
+        const value = this.getValueByKey(key, data);
 
         if (value === targetValue) {
           approvedRules += 1;
@@ -227,12 +227,12 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public getValueByKey(key: string, data: any): any {
-    let keysArray = key.split('.');
-    let firstKey = keysArray.shift();
+    const keysArray = key.split('.');
+    const firstKey = keysArray.shift();
     if (keysArray.length === 0) {
       return data && data[firstKey];
     } else if (keysArray.length > 0) {
-      let combineKeys = keysArray.join('.');
+      const combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
     }
   }
@@ -246,14 +246,14 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public removeValue(key: string, data: any): void {
-    let keysArray = key.split('.');
-    let firstKey = keysArray.shift();
+    const keysArray = key.split('.');
+    const firstKey = keysArray.shift();
     if (keysArray.length === 0) {
       if (data) {
         delete data[firstKey];
       }
     } else if (keysArray.length > 0) {
-      let combineKeys = keysArray.join('.');
+      const combineKeys = keysArray.join('.');
       this.removeValue(combineKeys, data[firstKey]);
     }
   }

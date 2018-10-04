@@ -13,7 +13,7 @@
         <span *ngIf="config.fields">
           <ng-container
             *ngFor="let field of config.fields"
-            listElement
+            appListElement
             [config]="field">
           </ng-container>
         </span>
@@ -24,7 +24,7 @@
         <span *ngIf="config.fields">
           <ng-container
             *ngFor="let field of config.fields"
-            listElement
+            appListElement
             [config]="field"
             (event)="eventHandler($event)"
             (buttonAction)="buttonHandler($event)"></ng-container>
@@ -46,7 +46,7 @@
           *ngIf="item && link && config.link">
           {{item.__str__}}
           <span *ngIf="config.fields">
-            <ng-container *ngFor="let field of config.fields" listElement [config]="field"></ng-container>
+            <ng-container *ngFor="let field of config.fields" appListElement [config]="field"></ng-container>
           </span>
         </a>
 

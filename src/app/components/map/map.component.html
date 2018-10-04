@@ -1,6 +1,6 @@
 
 <div #filterBlock class="filter-wrapper" [class.open]="!filterBlockHidden">
-  <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+  <app-filter-block [config]="filtersOfList" (event)="filterHandler($event)"></app-filter-block>
 </div>
 
 <div class="map" *ngIf="markers">
