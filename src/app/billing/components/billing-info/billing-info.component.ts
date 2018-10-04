@@ -4,7 +4,7 @@ import { Payment, BillingSubscription } from '../../models';
 import { metadata, smsMetadata } from './billing-info.metadata';
 
 @Component({
-  selector: 'billing-info',
+  selector: 'app-billing-info',
   templateUrl: 'billing-info.component.html',
   styleUrls: ['./billing-info.component.scss']
 })

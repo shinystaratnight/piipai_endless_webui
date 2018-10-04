@@ -9,14 +9,14 @@
   <div class="form-page">
     <div class="form-content">
       <app-check-card *ngIf="!checkInformation"></app-check-card>
-      <billing-plan
+      <app-billing-plan
         [saveProcess]="saveProcess"
         [cancelProcess]="cancelProcess"
         [currentPlan]="currentPlan"
         [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
         (selectedPlan)="selectPlan($event)"
-        (cancelingPlan)="cancelPlan()"></billing-plan>
-      <billing-info [payments]="payments" [currentPlan]="currentPlan"></billing-info>
+        (cancelingPlan)="cancelPlan()"></app-billing-plan>
+      <app-billing-info [payments]="payments" [currentPlan]="currentPlan"></app-billing-info>
     </div>
   </div>
 </div>

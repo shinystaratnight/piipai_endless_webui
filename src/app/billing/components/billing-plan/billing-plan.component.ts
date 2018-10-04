@@ -9,7 +9,7 @@ import {
 import { Plan, BillingSubscription } from '../../models';
 
 @Component({
-  selector: 'billing-plan',
+  selector: 'app-billing-plan',
   templateUrl: 'billing-plan.component.html',
   styleUrls: ['./billing-plan.component.scss']
 })
