@@ -93,7 +93,7 @@
         </span>
 
         <span *ngIf="!titlePath && title">{{title}}</span>
-        <info [description]="description"></info>
+        <info class="ml-1" [description]="description"></info>
       </span>
       <span *ngIf="this.averageScore || this.averageScore === 0">
         <span class="view-mode" *ngIf="titlePath">

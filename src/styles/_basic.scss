@@ -198,12 +198,12 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
-.shifts-header .tooltip.tooltip-bottom {
+.shifts-header .tooltip.bs-tooltip-bottom {
   left: auto !important;
   right: 15px !important;
 
-  .tooltip-inner::before {
-    left: 89%;
+  .arrow {
+    left: 86% !important;
   }
 }
 
@@ -244,13 +244,24 @@ form.ng-invalid button[type='submit'] {
 .ngb-dp-week {
   .btn-primary,
   .outside,
-  .btn-secondary {
+  .btn-secondary,
+  .btn-light {
     padding: 7px;
 
     font-size: 12px;
     line-height: 16px;
 
     border-radius: 50%;
+  }
+
+  .btn-light {
+    background-color: #fff;
+  }
+
+  .btn-light:hover {
+    color: #212529;
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
   }
 
   .btn-secondary {
@@ -260,6 +271,30 @@ form.ng-invalid button[type='submit'] {
   .outside {
     opacity: 0.2;
   }
+
+  .ngb-dp-day:focus {
+    outline: none;
+  }
+}
+
+.btn-secondary {
+  color: #292b2c;
+  background-color: #fff;
+  border-color: transparent;
+}
+
+.btn-default {
+  color: $gray;
+  background: #fdfdfd;
+  border: none;
+}
+
+.form-check {
+  padding-left: 0;
+}
+
+.form-element-checkbox {
+  margin-bottom: 4px;
 }
 
 .ngb-dp-weekday {
@@ -286,7 +321,7 @@ form.ng-invalid button[type='submit'] {
 }
 
 .modal-backdrop {
-  z-index: 3;
+  z-index: 3 !important;
 }
 
 .modal {
@@ -296,7 +331,7 @@ form.ng-invalid button[type='submit'] {
     z-index: 22;
 
     .modal-backdrop {
-      z-index: 21;
+      z-index: 21 !important;
     }
   }
 
@@ -350,6 +385,20 @@ form.ng-invalid button[type='submit'] {
     opacity: 1;
   }
 
+  .arrow {
+    width: 10px;
+    height: 10px;
+  }
+
+  .arrow::before {
+    width: 10px;
+    height: 10px;
+
+    border: none;
+
+    background-color: white;
+  }
+
   &-inner {
     min-width: 200px;
     max-width: 350px;
@@ -360,48 +409,30 @@ form.ng-invalid button[type='submit'] {
     color: inherit;
     box-shadow: 0 0 8px 2px rgba($gray, 0.3);
 
-    .tooltip-right &::before {
-      width: 10px;
-      height: 10px;
+  }
 
-      border: none;
+  &.bs-tooltip-right .arrow::before {
+    right: -2px;
 
+    transform: rotate(45deg);
+    box-shadow: -4px 4px 15px 1px rgba($gray, 0.2);
+  }
+
+  &.bs-tooltip-left .arrow {
+    right: 2px;
+
+    &::before {
       transform: rotate(45deg);
-      box-shadow: -4px 4px 15px 1px rgba($gray, 0.2);
+      box-shadow: 4px -4px 15px 1px rgba($gray, 0.2);
     }
+  }
 
-    .tooltip-left &::before {
-      width: 10px;
-      height: 10px;
+  &.bs-tooltip-bottom .arrow {
+    top: 2px;
 
-      border: none;
-
-      transform: rotate(135deg);
+    &::before {
+      transform: rotate(45deg);
       box-shadow: -4px -4px 15px 1px rgba($gray, 0.2);
-    }
-
-    .tooltip-bottom &::before {
-      width: 10px;
-      height: 10px;
-
-      border: none;
-
-      background-color: #fff;
-
-      transform: rotate(45deg);
-      box-shadow: 4px -4px 15px 1px rgba($gray, 0.2);
-    }
-
-    .tooltip-left &::before {
-      width: 10px;
-      height: 10px;
-
-      border: none;
-
-      background-color: #fff;
-
-      transform: rotate(45deg);
-      box-shadow: 4px -4px 15px 1px rgba($gray, 0.2);
     }
   }
 }
@@ -1285,6 +1316,10 @@ iframe.send-sms {
 .big-btn {
   height: 40px;
   width: 160px;
+}
+
+.permissions .nav {
+  margin-left: 3rem;
 }
 
 @keyframes loadmore {

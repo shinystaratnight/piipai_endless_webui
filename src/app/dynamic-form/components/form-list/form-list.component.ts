@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { skip } from 'rxjs/operators';
 
 import { FormatString } from '../../../helpers/format';
 
@@ -313,7 +314,9 @@ export class FormListComponent implements OnInit, OnDestroy {
   public checkTimelineChange() {
     if (this.config.timelineSubject) {
       const subscription = this.config.timelineSubject
-        .skip(1)
+        .pipe(
+          skip(1)
+        )
         .subscribe(() => this.update.next(true));
 
       this.subscriptions.push(subscription);

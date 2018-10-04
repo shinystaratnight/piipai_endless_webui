@@ -3,7 +3,7 @@
     <label class="col-form-label form-element-label" *ngIf="config.label">
       {{config.templateOptions.label}}:
     </label>
-    <div class="edit d-flex justify-content-start flex-wrap"
+    <div class="edit d-flex justify-content-start flex-wrap pl-4"
       [ngClass]="{'flex-column': !config.templateOptions.inline, 'align-items-center flex-row mb-0 inline': config.templateOptions.inline}" >
       <div class="form-element-checkbox" *ngFor="let radio of config.templateOptions.options">
         <label [attr.for]="radio.key" class="form-check-label d-flex align-items-center">
@@ -16,7 +16,7 @@
             [name]="key"
             [hidden]="config.templateOptions.type === 'color'"
             [checked]="radio.key === value">
-          <span class="color-preview" *ngIf="config.templateOptions.type === 'color'" [ngStyle]="{backgroundColor: radio.value}"></span>
+          <span class="color-preview mr-2" *ngIf="config.templateOptions.type === 'color'" [ngStyle]="{backgroundColor: radio.value}"></span>
           <ng-container *ngIf="config.templateOptions.type === 'text'">
             {{radio.value}}
           </ng-container>

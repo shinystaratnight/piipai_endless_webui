@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { getContactAvatar } from '../../../helpers/utils';
 
 @Component({
-  selector: 'list-image',
+  selector: 'app-list-image',
   templateUrl: './list-image.component.html',
   styleUrls: ['./list-image.component.scss']
 })
@@ -45,7 +45,7 @@ export class ListImageComponent implements OnInit {
   }
 
   public getColor(value) {
-    this.iconClass = this.config.color[value] ? `text-${this.config.color[value]}` : 'text-muted';
+    this.iconClass = this.config.color[value] ? `text-${this.config.color[value]} mr-1` : 'text-muted mr-1';
   }
 
   public setClass(value) {

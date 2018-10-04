@@ -7,21 +7,18 @@
           fa
           class="ml-2 icon"
           [name]="'window-minimize'"
-          [border]="true"
           (click)="minimizeTable()"
           aria-hidden="true"></i>
         <i
           fa
           class="ml-2 icon"
           [name]="'window-maximize'"
-          [border]="true"
           (click)="unpopedTable()"
           aria-hidden="true"></i>
         <i
           fa
           class="ml-2 icon"
           [name]="'times'"
-          [border]="true"
           (click)="closeTable()"
           aria-hidden="true"></i>
       </div>
@@ -100,7 +97,6 @@
                     *ngIf="field.sort && !delay"
                     [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'"
                     [class.active]="field.sorted && !delay"
-                    [border]=true
                     (click)="sorting(field, field.sorted === 'desc' ? 'asc' : 'desc')"></i>
                   <!-- (click)="field.openSort = !field.openSort"></i> -->
                   <!-- <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">

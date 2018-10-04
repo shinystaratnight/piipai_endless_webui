@@ -8,8 +8,9 @@ import {
   OnDestroy,
   AfterContentInit
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -48,7 +49,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
 
   private subscription: Subscription;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private ngbCalendar: NgbCalendar) {
     super();
   }
 
@@ -145,30 +146,32 @@ export class FormVacancyDatesComponent extends BasicElementComponent
   }
 
   public selectVacancyDate(e, time = moment) {
-    const date = time([e.year, e.month - 1, e.day]).format(this.dateFormat);
+    if (e) {
+      const date = time([e.year, e.month - 1, e.day]).format(this.dateFormat);
 
-    this.vacancyDates = this.vacancyDates || [];
-    if (this.vacancyDates.indexOf(date) === -1) {
-      this.dates[date] = null;
+      this.vacancyDates = this.vacancyDates || [];
+      if (this.vacancyDates.indexOf(date) === -1) {
+        this.dates[date] = null;
 
-      this.vacancyDates.push(date);
+        this.vacancyDates.push(date);
 
-      setTimeout(() => {
-        this.markSelectedDates(date);
-      }, 50);
-    } else {
-      this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
+        setTimeout(() => {
+          this.markSelectedDates(date);
+        }, 50);
+      } else {
+        this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
 
-      setTimeout(() => {
-        this.markSelectedDates(date, true);
-      }, 50);
+        setTimeout(() => {
+          this.markSelectedDates(date, true);
+        }, 50);
+      }
+
+      this.group.get(this.key).patchValue(this.vacancyDates);
+      this.event.emit({
+        el: this.config,
+        type: 'change'
+      });
     }
-
-    this.group.get(this.key).patchValue(this.vacancyDates);
-    this.event.emit({
-      el: this.config,
-      type: 'change'
-    });
   }
 
   public removeDate(date, time = moment) {
@@ -217,5 +220,11 @@ export class FormVacancyDatesComponent extends BasicElementComponent
         this.todayElement.classList.add('current-day');
       }
     }, 50);
+  }
+
+  public isToday(month: number, day: number): boolean {
+    const today = this.ngbCalendar.getToday();
+
+    return today.month === month && today.day === day;
   }
 }

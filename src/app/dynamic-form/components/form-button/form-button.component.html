@@ -23,10 +23,10 @@
 
       <span *ngIf="!repeatArray">{{config.templateOptions.text}}</span>
   </button>
-  <button class="btn btn-sm btn-link" type="button" *ngIf="config.action === 'showMessage'" [placement]="config.placement" [ngbTooltip]="detail" (click)="action($event)">
+  <button class="btn btn-sm btn-link mr-1" type="button" *ngIf="config.action === 'showMessage'" [placement]="config.placement" [ngbTooltip]="detail" triggers="click:click" (click)="action($event)">
     {{config.templateOptions.text}}
   </button>
-  <span class="postfix" *ngIf="config.postfix">{{config.postfix}}</span>
+  <span class="postfix mr-1" *ngIf="config.postfix">{{config.postfix}}</span>
   <span class="custom-button" *ngIf="!config.hidden && !config.templateOptions.text && repeatArray && repeatArray.length === 1 && !config.disableAction" (click)="action($event)">
     <i class="icon" fa [name]="config.templateOptions.icon"
       [ngStyle]="{'color': config.text_color}" [title]="config.title">

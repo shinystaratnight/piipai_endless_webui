@@ -1,6 +1,6 @@
 <div class="shift-wrapper" [ngClass]="[getClass(type.text)]" *ngFor="let type of config.value">
   <span class="shift-status">{{type.text}}</span>
-  <info *ngIf="type.shifts.length" [description]="shifts" [triggersType]="'click'"></info>
+  <info class="ml-1" *ngIf="type.shifts.length" [description]="shifts" [triggersType]="'click'"></info>
 
   <ng-template #shifts>
     <ng-container *ngFor="let shift of type.shifts">

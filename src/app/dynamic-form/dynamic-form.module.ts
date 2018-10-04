@@ -7,7 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { AgmCoreModule } from '@agm/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-// import { ButtonsModule } from 'ngx-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DndModule } from 'ng2-dnd';
@@ -33,7 +33,7 @@ import { directives } from './directives';
     AgmCoreModule,
     InfiniteScrollModule,
     SharedModule,
-    // ButtonsModule.forRoot(),
+    ButtonsModule.forRoot(),
     GooglePlaceModule,
     DndModule.forRoot(),
     PdfViewerModule

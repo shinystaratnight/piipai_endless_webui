@@ -1,9 +1,9 @@
 <header #header class="page-header">
-  <a routerLink="" [class.logo]="!logo">
+  <a class="order-1 order-xl-0" routerLink="" [class.logo]="!logo">
     <img class="logo-img" *ngIf="logo" [src]="logo">
   </a>
-  <nav #nav class="navigation flex-xl-unordered" [ngClass]="{'flex-first': pages}" *ngIf="pages && pages.length">
-    <button class=" d-flex align-items-center hamburger hamburger--spring hidden-xl-up" type="button"
+  <nav #nav class="navigation order-0" [ngClass]="{'flex-first': pages}" *ngIf="pages && pages.length">
+    <button class=" d-flex align-items-center hamburger hamburger--spring d-xl-none" type="button"
       [ngClass]="{'is-active': isCollapsed}"
       (click)="showNavigation($event)">
       <span class="hamburger-box">
@@ -16,7 +16,7 @@
       </ng-container>
     </ul>
   </nav>
-  <div #userBlock class="user" *ngIf="user">
+  <div #userBlock class="user order-1" *ngIf="user">
     <div class="user-block">
       <div class="user-info hidden-sm-down">
         <span>{{user.data.contact.__str__}}</span>

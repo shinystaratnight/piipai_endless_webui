@@ -3,7 +3,7 @@
 </label>
 
 <span *ngIf="!arrayValue && !config.hideValue">
-  <span [class.description]="config.description" class="d-inline-flex align-items-center flex-wrap" *ngIf="value || value === 0">
+  <span [class.description]="config.description" class="d-inline-flex align-items-center flex-wrap mr-1" *ngIf="value || value === 0">
     <span [title]="config.title || ''">
       <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
       <span *ngIf="!iconView && !iconClass && !workers">{{value}}</span>
@@ -30,7 +30,7 @@
   </span>
 </span>
 
-<span *ngIf="config.delim && !last">{{config.delim}}</span>
+<span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">{{config.delim}}</span>
 <br *ngIf="!config.delim && config.name !== 'credit_approved'">
 
 <ng-template #workersdetail>

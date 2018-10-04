@@ -111,8 +111,8 @@
           (&nbsp;<ng-container *ngTemplateOutlet="rule; context: {type: type, data: item, parent: data.data}"></ng-container>&nbsp;)
         </ng-container>
 
-        <span *ngIf="!last" class="btn-group-sm">
-          <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event, type)">or</a>
+        <span *ngIf="!last" class="btn-group-sm mx-1">
+          <a href="" class="operator mr-1" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event, type)">or</a>
           <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="and" (click)="changeOperator($event, type)">and</a>
         </span>
       </span>

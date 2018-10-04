@@ -2,9 +2,7 @@ import {
   Component,
   ViewChild,
   OnInit,
-  Output,
   OnDestroy,
-  ViewEncapsulation,
   ChangeDetectorRef
 } from '@angular/core';
 
