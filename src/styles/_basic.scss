@@ -548,6 +548,18 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
+.accordion button {
+  width: 100%;
+
+  text-decoration: none;
+
+  &:hover,
+  &:active,
+  &:focus {
+    text-decoration: none !important;
+  }
+}
+
 .group-button {
   font-size: 0.7rem;
   border-color: lighten($brand-primary, 15%);

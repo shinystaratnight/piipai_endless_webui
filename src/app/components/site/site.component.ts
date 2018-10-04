@@ -94,7 +94,9 @@ export class SiteComponent implements OnInit, OnDestroy {
       (url: any) => {
         this.formLabel = '';
         this.pageData = null;
-        this.getPageNavigation(url);
+        setTimeout(() => {
+          this.getPageNavigation(url);
+        }, 0);
         if (url.length) {
           this.formMode = '';
           this.dashboard = false;
