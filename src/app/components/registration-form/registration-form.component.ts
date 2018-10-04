@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Field } from '../../dynamic-form/models/field.model';
 
 @Component({
-  selector: 'registration-form',
+  selector: 'app-registration-form',
   templateUrl: 'registration-form.component.html',
   styleUrls: ['./registration-form.component.scss']
 })
