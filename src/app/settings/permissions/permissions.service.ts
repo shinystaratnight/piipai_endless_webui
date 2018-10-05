@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 
-import { Observable, combineLatest } from 'rxjs';
+import { throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import { CookieService } from 'ngx-cookie';
@@ -221,7 +221,7 @@ export class PermissionsService {
   }
 
   public errorHandler(error) {
-    return Observable.throw(error.json() || 'Server error.');
+    return throwError(error.json() || 'Server error.');
   }
 
 }
