@@ -51,7 +51,7 @@
                 (click)="setValue(option, true)">{{option.__str__}}</li>
             </ul>
             <div class="autocomplete-preloader" *ngIf="skipScroll">
-              <spinner></spinner>
+              <app-spinner></app-spinner>
             </div>
           </div>
         </div>
@@ -103,7 +103,7 @@
               </li>
             </ul>
             <div class="autocomplete-preloader" *ngIf="skipScroll">
-              <spinner></spinner>
+              <app-spinner></app-spinner>
             </div>
           </div>
         </div>
@@ -331,7 +331,7 @@
           (errorForm)="formError($event)">
             <button *ngIf="checkPermission('update')" type="submit" class="btn btn-primary button-save" [disabled]="saveProcess">
               Save
-              <spinner *ngIf="saveProcess"></spinner>
+              <app-spinner *ngIf="saveProcess"></app-spinner>
             </button>
         </app-generic-form>
       </div>

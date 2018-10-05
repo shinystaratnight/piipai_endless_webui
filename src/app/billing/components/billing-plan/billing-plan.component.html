@@ -32,13 +32,13 @@
 </ng-container>
 
 <div class="spinner-wrapper" *ngIf="saveProcess">
-  Saving... <spinner></spinner>
+  Saving... <app-spinner></app-spinner>
 </div>
 
 <div class="buttons" *ngIf="currentPlan && !saveProcess">
   <button *ngIf="!changeAction" type="button" class="btn btn-info" (click)="changePlan()">Change subscription</button>
   <button type="button" class="btn btn-danger" (click)="cancelPlan()">
     Cancel subscription
-    <spinner *ngIf="cancelProcess"></spinner>
+    <app-spinner *ngIf="cancelProcess"></app-spinner>
   </button>
 </div>

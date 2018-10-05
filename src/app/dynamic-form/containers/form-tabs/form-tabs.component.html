@@ -22,7 +22,7 @@
               [class.ml-auto]="mode !== 'edit'"
               *ngIf="mode === 'edit' || !config.editForm">
                 {{mode !== 'edit' ? 'Save' : 'Save changes'}}
-                <spinner *ngIf="saving"></spinner>
+                <app-spinner *ngIf="saving"></app-spinner>
             </button>
           </div>
 

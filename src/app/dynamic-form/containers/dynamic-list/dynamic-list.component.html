@@ -280,7 +280,7 @@
         (errorForm)="formError($event)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
             Save
-            <spinner *ngIf="saveProcess"></spinner>
+            <app-spinner *ngIf="saveProcess"></app-spinner>
           </button>
       </app-generic-form>
       <agm-map

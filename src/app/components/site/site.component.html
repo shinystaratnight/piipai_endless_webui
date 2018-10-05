@@ -52,7 +52,7 @@
                 *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/ecore/api/v2/core/users/')"
                 [disabled]="saveProcess">
                   Save
-                  <spinner *ngIf="saveProcess"></spinner>
+                  <app-spinner *ngIf="saveProcess"></app-spinner>
               </button>
 
               <button type="button" class="btn btn-success mr-2 ml-auto"
@@ -109,7 +109,7 @@
                   *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))"
                   [disabled]="saveProcess">
                     Save
-                    <spinner *ngIf="saveProcess"></spinner>
+                    <app-spinner *ngIf="saveProcess"></app-spinner>
                 </button>
               </div>
           </app-generic-form>

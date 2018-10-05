@@ -14,7 +14,7 @@ import {
 import { UserService, User, NavigationService, Page, Role } from '../../../services';
 import { getContactAvatar } from '../../../helpers/utils';
 
-import { Observable, Subscription, fromEvent } from 'rxjs';
+import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
