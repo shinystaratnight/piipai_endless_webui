@@ -6,10 +6,10 @@ import { BillingService } from './services/billing-service';
 
 import { Plan, Payment, BillingSubscription } from './models';
 
-import { ToastrService } from '../shared/services';
+import { ToastService } from '../shared/services';
 
 @Component({
-  selector: 'billing-page',
+  selector: 'app-billing-page',
   templateUrl: './billing.component.html',
   styleUrls: ['./billing.component.scss']
 })
@@ -27,7 +27,7 @@ export class BillingComponent implements OnInit {
     private billingService: BillingService,
     private route: ActivatedRoute,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastService
   ) {
     this.checkInformation = true;
   }

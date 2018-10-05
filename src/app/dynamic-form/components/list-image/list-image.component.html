@@ -9,7 +9,7 @@
 
 <img *ngIf="src" [src]="src" width="60" height="60">
 <i *ngIf="icon && !config.setColorForLabel" fa [name]="icon" [ngClass]="[iconClass]" [title]="config.title || ''" [ngStyle]="{'fontSize.px': config.fontSize}"></i>
-<span *ngIf="config.delim && !last">{{config.delim}}</span>
+<span class="mr-1" *ngIf="config.delim && !last">{{config.delim}}</span>
 <a *ngIf="file" [href]="file" target="_blank">
   <i fa name="file" class="mr-2"></i>
   {{getExtension(file) | uppercase}} File

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import {
   SiteService,
@@ -15,10 +15,10 @@ import {
   SiteSettingsService
 } from '../../services/';
 import { GenericFormService } from '../../dynamic-form/services/';
-import { CheckPermissionService, ToastrService, MessageType } from '../../shared/services/';
+import { CheckPermissionService, ToastService, MessageType } from '../../shared/services/';
 
 @Component({
-  selector: 'site',
+  selector: 'app-site',
   templateUrl: './site.component.html'
 })
 
@@ -26,7 +26,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public pageData: PageData;
   public user: User;
-  public dashboard: boolean = true;
+  public dashboard = true;
   public currentRole: Role;
   public changePasswordEndpoint: string;
 
@@ -76,7 +76,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     private userService: UserService,
     private permission: CheckPermissionService,
-    private ts: ToastrService,
+    private ts: ToastService,
     private siteSettingsService: SiteSettingsService,
     private modalService: NgbModal,
   ) {}
@@ -94,7 +94,9 @@ export class SiteComponent implements OnInit, OnDestroy {
       (url: any) => {
         this.formLabel = '';
         this.pageData = null;
-        this.getPageNavigation(url);
+        setTimeout(() => {
+          this.getPageNavigation(url);
+        }, 0);
         if (url.length) {
           this.formMode = '';
           this.dashboard = false;
@@ -239,7 +241,7 @@ export class SiteComponent implements OnInit, OnDestroy {
         document.getElementsByTagName('head')[0].appendChild(this.Jira);
       } else {
         setTimeout(() => {
-          let link = document.getElementById('atlwdg-trigger');
+          const link = document.getElementById('atlwdg-trigger');
           if (link) {
             document.getElementById('atlwdg-trigger').style.display = 'block';
           }
@@ -346,8 +348,8 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public approveFormStorage(element) {
-    let endpoint = `${this.formStorageEndpoint}${element.pathData.id}/approve/`;
-    let body = {
+    const endpoint = `${this.formStorageEndpoint}${element.pathData.id}/approve/`;
+    const body = {
       status: 'True'
     };
     this.genericFormService.submitForm(endpoint, body).subscribe(

@@ -2,14 +2,14 @@
   <label *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
 
   <div class="card">
-    <dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></dynamic-form>
+    <app-dynamic-form [config]="config.activeMetadata" (event)="changeActiveStates($event)"></app-dynamic-form>
 
     <div class="form-element">
       <label class="form-element-label">
         Choice required states: <span class="reset" (click)="resetRule('state')">Reset</span>
       </label>
       <div>
-        <template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: 'state', data: states, parent: states}"></template>
+        <ng-container *ngTemplateOutlet="rule; context: {type: 'state', data: states, parent: states}"></ng-container>
       </div>
     </div>
 
@@ -19,7 +19,7 @@
       </label>
 
       <div>
-        <template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: 'function', data: functions, parent: functions}"></template>
+        <ng-container *ngTemplateOutlet="rule; context: {type: 'function', data: functions, parent: functions}"></ng-container>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@
   </div>
 </div>
 
-<template #element let-c="close" let-d="dismiss">
+<ng-template #element let-c="close" let-d="dismiss">
   <div class="modal-body">
     <span *ngIf="editValue">{{editValue}}</span>
     <hr *ngIf="editValue">
@@ -98,9 +98,9 @@
       *ngIf="editIndex === 0 || editIndex">Delete</button>
     <button type="button" class="btn btn-danger" (click)="c()">Cancel</button>
   </div>
-</template>
+</ng-template>
 
-<template #rule let-type="type" let-data="data" let-parent="parent">
+<ng-template #rule let-type="type" let-data="data" let-parent="parent">
 
   <span class="rule">
     <ng-container *ngIf="data">
@@ -108,11 +108,11 @@
         <span class="rule-item" *ngIf="!isObject(item)" (click)="open(element, type, data.data, index, data, parent)">{{item}}</span>
 
         <ng-container *ngIf="isObject(item)">
-          (&nbsp;<template [ngTemplateOutlet]="rule" [ngOutletContext]="{type: type, data: item, parent: data.data}"></template>&nbsp;)
+          (&nbsp;<ng-container *ngTemplateOutlet="rule; context: {type: type, data: item, parent: data.data}"></ng-container>&nbsp;)
         </ng-container>
 
-        <span *ngIf="!last" class="btn-group-sm">
-          <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event, type)">or</a>
+        <span *ngIf="!last" class="btn-group-sm mx-1">
+          <a href="" class="operator mr-1" [(ngModel)]="data.operator" btnRadio="or" (click)="changeOperator($event, type)">or</a>
           <a href="" class="operator" [(ngModel)]="data.operator" btnRadio="and" (click)="changeOperator($event, type)">and</a>
         </span>
       </span>
@@ -126,4 +126,4 @@
     <button type="button" class="btn btn-sm btn-link p-0 ml-1" (click)="addRule(data.data)">+ Rule</button>
   </span>
 
-</template>
+</ng-template>

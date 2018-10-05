@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input } from '@an
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, forkJoin } from 'rxjs';
 
 import { WorkflowService } from '../../services';
 
 @Component({
-  selector: 'workflow',
+  selector: 'app-workflow',
   templateUrl: './workflow.component.html',
   styleUrls: ['./workflow.component.scss']
 })
@@ -69,7 +68,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
       requests.push(this.workflowService.updateStateOrder(body, state.id));
     });
 
-    Observable.forkJoin(requests).subscribe();
+    forkJoin(requests).subscribe();
   }
 
   public getWorkflows() {

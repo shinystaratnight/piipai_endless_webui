@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'redirect',
+  selector: 'app-redirect',
   template: ''
 })
 export class RedirectComponent implements OnInit, OnDestroy {

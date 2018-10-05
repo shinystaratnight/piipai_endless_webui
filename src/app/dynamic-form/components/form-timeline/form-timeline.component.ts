@@ -2,20 +2,18 @@ import {
   Component,
   ViewChild,
   OnInit,
-  Output,
   OnDestroy,
-  ViewEncapsulation,
   ChangeDetectorRef
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { FormatString } from '../../../helpers/format';
 import { GenericFormService } from '../../services';
 
 @Component({
-  selector: 'form-timeline',
+  selector: 'app-form-timeline',
   templateUrl: 'form-timeline.component.html',
   styleUrls: ['./form-timeline.component.scss']
 })
@@ -79,8 +77,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public initialize() {
-    let formatString = new FormatString();
-    let keys = Object.keys(this.config.query);
+    const formatString = new FormatString();
+    const keys = Object.keys(this.config.query);
     const type = this.config.value.type;
     keys.forEach((el) => {
       if (el === 'object_id') {
@@ -217,10 +215,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public setDataForState(state, hideScore) {
-    let fields = ['object_id', 'state', 'active'];
-    let result = {};
+    const fields = ['object_id', 'state', 'active'];
+    const result = {};
     fields.forEach((el) => {
-      let value =
+      const value =
         el === 'state' ? state.id : el === 'object_id' ? this.objectId : true;
       result[el] = {
         action: 'add',

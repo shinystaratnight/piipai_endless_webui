@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
@@ -12,7 +11,7 @@ import { GenericFormService } from '../../services/generic-form.service';
 import moment from 'moment-timezone';
 
 @Component({
-  selector: 'extend',
+  selector: 'app-extend',
   templateUrl: './extend.component.html',
   styleUrls: ['./extend.component.scss']
 })

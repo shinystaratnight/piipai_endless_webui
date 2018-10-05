@@ -1,10 +1,10 @@
 import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'form-button',
+  selector: 'app-form-button',
   templateUrl: 'form-button.component.html',
   styleUrls: ['./form-button.component.scss']
 })
@@ -55,8 +55,8 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   }
 
   public customizeButton() {
-    let color = this.config.color;
-    let classes = ['primary', 'danger', 'info', 'success', 'warning', 'link'];
+    const color = this.config.color;
+    const classes = ['primary', 'danger', 'info', 'success', 'warning', 'link'];
     this.buttonClass = classes.indexOf(color) > -1 ? `btn-${color}` : '';
     if (!this.buttonClass) {
       this.buttonColor = color || '';

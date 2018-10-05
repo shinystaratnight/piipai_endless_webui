@@ -73,7 +73,7 @@ const components = {
 };
 
 @Directive({
-  selector: '[formElement]'
+  selector: '[appFormElement]'
 })
 export class FormElementDirective implements OnInit, OnChanges {
   @Input()

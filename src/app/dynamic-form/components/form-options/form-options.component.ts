@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 
@@ -11,7 +11,7 @@ interface Option {
 }
 
 @Component({
-  selector: 'form-options',
+  selector: 'app-form-options',
   templateUrl: 'form-options.component.html'
 })
 
@@ -75,7 +75,7 @@ export class FormOptionsComponent extends BasicElementComponent implements OnIni
   }
 
   public updateValue() {
-    let value = this.optionsArray.filter((el) => {
+    const value = this.optionsArray.filter((el) => {
       if ((el.label || el.label === '0') && (el.value || el.value === '0')) {
         return true;
       }

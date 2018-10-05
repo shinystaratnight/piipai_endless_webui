@@ -64,13 +64,13 @@
                 <div class="d-flex align-items-center">
                   <span class="pr-1">{{cell}}</span>
                   <ngb-rating *ngIf="cell.length === 1" [rate]="cell[0]" max="5" [readonly]="true">
-                    <template let-fill="fill" let-index="index">
+                    <ng-template let-fill="fill" let-index="index">
                       <span *ngIf="fill === 100" class="star full">&#9733;</span>
                       <span *ngIf="fill === 0" class="star">&#9733;</span>
                       <span *ngIf="fill < 100 && fill > 0" class="star">
                         <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
                       </span>
-                    </template>
+                    </ng-template>
                   </ngb-rating>
                   <i fa class="edit icon text-muted ml-1 mr-2"
                     *ngIf="false"
@@ -142,7 +142,7 @@
   <div class="double-bounce2"></div>
 </div>
 
-<template #modal let-c="close">
+<ng-template #modal let-c="close">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header bg-primary text-white">
@@ -154,9 +154,9 @@
     </div>
 
     <div class="modal-body">
-      <generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c)">
+      <app-generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c)">
         <button type="submit" class="btn btn-primary">Save</button>
-      </generic-form>
+      </app-generic-form>
     </div>
   </div>
-</template>
+</ng-template>

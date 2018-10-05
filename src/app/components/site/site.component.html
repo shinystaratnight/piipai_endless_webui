@@ -1,21 +1,20 @@
-<navigation
+<app-navigation
   logo="/assets/img/new-software.svg"
   [user]="user"
   [pages]="pagesList"
   (update)="updateNavigationList($event)"
   (changePasswordEmitter)="openChangePassword()">
-</navigation>
+</app-navigation>
 
 <div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
   <div *ngSwitchCase="'form'" class="form-page">
-    <template *ngIf="listName && !(pageData.pathData.postfix && pageData.pathData.postfix === 'fillin')"
-      [ngTemplateOutlet]="backward"
-      [ngOutletContext]="{title: listName}">
-    </template>
+    <ng-container *ngIf="listName && !(pageData.pathData.postfix && pageData.pathData.postfix === 'fillin')">
+      <ng-container *ngTemplateOutlet="backward; context: {title: listName}"></ng-container>
+    </ng-container>
 
     <div class="form-content"
       *ngIf="!reload && !(pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' && pageData.pathData.id) && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'">
-        <generic-form
+        <app-generic-form
           *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit' "
           [endpoint]="pageData.endpoint"
           [id]="pageData.pathData.id"
@@ -53,7 +52,7 @@
                 *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/ecore/api/v2/core/users/')"
                 [disabled]="saveProcess">
                   Save
-                  <spinner *ngIf="saveProcess"></spinner>
+                  <app-spinner *ngIf="saveProcess"></app-spinner>
               </button>
 
               <button type="button" class="btn btn-success mr-2 ml-auto"
@@ -62,21 +61,21 @@
                   Approve
               </button>
             </div>
-        </generic-form>
+        </app-generic-form>
     </div>
     <div class="form-content"
       *ngIf="pageData.endpoint === '/ecore/api/v2/core/forms/'">
-        <form-builder
+        <app-form-builder
           [path]="pageData.pathData.path"
           [endpoint]="pageData.endpoint"
           [id]="pageData.pathData.id"
           (str)="changeFormLabel($event)">
-        </form-builder>
+        </app-form-builder>
     </div>
 
     <div class="form-content" *ngIf="!reload && (pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' && pageData.pathData.id)">
-      <test-builder [testData]="acceptenceTestData">
-          <generic-form
+      <app-test-builder [testData]="acceptenceTestData">
+          <app-generic-form
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
             [path]="pageData.pathData.path"
@@ -110,11 +109,11 @@
                   *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))"
                   [disabled]="saveProcess">
                     Save
-                    <spinner *ngIf="saveProcess"></spinner>
+                    <app-spinner *ngIf="saveProcess"></app-spinner>
                 </button>
               </div>
-          </generic-form>
-      </test-builder>
+          </app-generic-form>
+      </app-test-builder>
     </div>
   </div>
 
@@ -124,17 +123,17 @@
       infinite-scroll
       [scrollWindow]="true"
       (scrolled)="onModalScrollDown()">
-        <generic-list
+        <app-generic-list
           [upload]="upload"
           [clientId]="getClientId()"
           [listNameCache]="listNameCache"
           [allowPermissions]="permissionMethods"
           [endpoint]="pageData.endpoint">
-        </generic-list>
+        </app-generic-list>
     </div>
 
     <div class="datatable-list" *ngIf="pageData.pathData.postfix && pageData.pathData.postfix === 'fillin'">
-      <generic-list
+      <app-generic-list
         [responseField]="fillInData.responseField || 'results'"
         [paginated]="fillInData.paginated || 'on'"
         [supportData]="fillInData.supportData"
@@ -145,12 +144,9 @@
         [allowPermissions]="permissionMethods"
         [endpoint]="pageData.endpoint"
         (checkedObjects)="checkedObjects($event)">
-          <template
-            [ngTemplateOutlet]="backward"
-            [ngOutletContext]="{form: true}">
-          </template>
-      </generic-list>
-      <div class="buttons">
+          <ng-container *ngTemplateOutlet="backward; context: {form: true}"></ng-container>
+      </app-generic-list>
+      <div class="buttons mb-5">
         <button type="button" class="btn btn-default" (click)="back()">Cancel</button>
         <button type="button" class="btn btn-primary pr-3" (click)="sendData()">Fill in</button>
       </div>
@@ -158,21 +154,21 @@
   </ng-container>
 
   <div *ngSwitchCase="'profile'">
-    <profile [id]="user.data.contact.candidate_contact"></profile>
+    <app-profile [id]="user.data.contact.candidate_contact"></app-profile>
   </div>
 
   <map *ngSwitchCase="'map'"></map>
 </div>
 
-<dashboard *ngIf="dashboard"
+<app-dashboard *ngIf="dashboard"
   [pages]="pagesList"
   [userModules]="userModules"
   [modulesList]="modulesList"
-  (changeWidgetList)="updateNavigation($event)"></dashboard>
+  (changeWidgetList)="updateNavigation($event)"></app-dashboard>
 
-<my-toast></my-toast>
+<app-toast></app-toast>
 
-<template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -183,17 +179,17 @@
       </div>
     </div>
     <div class="pb-3 form-builder-form">
-      <generic-form [endpoint]="changePasswordEndpoint" [edit]="true" [needData]="false" (event)="resetEvent($event)">
+      <app-generic-form [endpoint]="changePasswordEndpoint" [edit]="true" [needData]="false" (event)="resetEvent($event)">
         <a class="forgot" href="" (click)="openResetForm()">Forgot Password?</a>
         <div class="d-flex align-items-center">
           <button type="submit" class="btn btn-success ml-auto">Save</button>
         </div>
-      </generic-form>
+      </app-generic-form>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #forgotPassword let-c="close" let-d="dismiss">
+<ng-template #forgotPassword let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -204,16 +200,16 @@
       </div>
     </div>
     <div class="pb-3 form-builder-form">
-      <generic-form endpoint="/ecore/api/v2/core/contacts/forgot_password/" [data]="passwordData" (event)="resetEvent($event)">
+      <app-generic-form endpoint="/ecore/api/v2/core/contacts/forgot_password/" [data]="passwordData" (event)="resetEvent($event)">
         <div class="d-flex align-items-center">
           <button type="submit" class="btn btn-success ml-auto">Reset</button>
         </div>
-      </generic-form>
+      </app-generic-form>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #backward let-title="title" let-job="form">
+<ng-template #backward let-title="title" let-job="form">
   <div class="form-navigation">
     <ng-container *ngIf="job">
       <a href="" (click)="back($event)">
@@ -242,4 +238,4 @@
     </ng-container>
 
   </div>
-</template>
+</ng-template>

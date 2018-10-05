@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { CookieService } from 'angular2-cookie/core';
-import { LocalStorageService } from 'ng2-webstorage';
+import { CookieService } from 'ngx-cookie';
+import { LocalStorageService } from 'ngx-webstorage';
 
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/switchMap';
+import { Observable, throwError, of } from 'rxjs';
+import { switchMap, catchError, map } from 'rxjs/operators';
 
 import { NavigationService } from './navigation.service';
 import { CheckPermissionService } from '../shared/services';
@@ -44,8 +44,8 @@ export interface Role {
 @Injectable()
 export class UserService {
 
-  public authEndpoint: string = '/ecore/api/v2/auth/restore_session/';
-  public logoutEndpoint: string = '/ecore/api/v2/auth/logout/';
+  public authEndpoint = '/ecore/api/v2/auth/restore_session/';
+  public logoutEndpoint = '/ecore/api/v2/auth/logout/';
   public rolesEndpoint = '/ecore/api/v2/core/users/roles/';
   public user: User;
   public error: any;
@@ -64,47 +64,50 @@ export class UserService {
     if (!this.user) {
       return this.service
         .getAll(this.authEndpoint)
-        .switchMap(
-          (user: User) => this.getUserRoles(),
-          (user: User, role: { roles: Role[] }) => [user, role])
-        .map((res: [User, { roles: Role[] }]) => {
-          const user: User = res[0];
-          const roles: Role[] = res[1].roles;
-          const redirectRole = this.loginService.role;
+        .pipe(
+          switchMap(
+            (user: User) => this.getUserRoles(),
+            (user: User, role: { roles: Role[] }) => [user, role]
+          ),
+          map((res: [User, { roles: Role[] }]) => {
+            const user: User = res[0];
+            const roles: Role[] = res[1].roles;
+            const redirectRole = this.loginService.role;
 
-          user.roles = roles;
+            user.roles = roles;
 
-          let role: Role;
-          if (this.storage.retrieve('role')) {
-            role = roles.find(
-              (el) => el.id === this.storage.retrieve('role').id
-            );
-          } else {
-            role = roles.find(
-              (el) => el.__str__.includes(user.data.contact.contact_type)
-            );
-          }
-
-          if (redirectRole) {
-            const existRole = roles.find((el) => el.id === redirectRole.id );
-            if (existRole) {
-              role = existRole;
+            let role: Role;
+            if (this.storage.retrieve('role')) {
+              role = roles.find(
+                (el) => el.id === this.storage.retrieve('role').id
+              );
             } else {
-              role = redirectRole;
-              roles.push(role);
+              role = roles.find(
+                (el) => el.__str__.includes(user.data.contact.contact_type)
+              );
             }
-          }
 
-          user.currentRole = role || roles[0];
+            if (redirectRole) {
+              const existRole = roles.find((el) => el.id === redirectRole.id );
+              if (existRole) {
+                role = existRole;
+              } else {
+                role = redirectRole;
+                roles.push(role);
+              }
+            }
 
-          this.storage.store('role', user.currentRole);
+            user.currentRole = role || roles[0];
 
-          this.user = user;
-          return this.user;
-        })
-      .catch((err: any) => Observable.throw(err));
+            this.storage.store('role', user.currentRole);
+
+            this.user = user;
+            return this.user;
+          }),
+          catchError((err: any) => throwError(err))
+        );
     } else {
-      return Observable.of(this.user);
+      return of(this.user);
     }
   }
 

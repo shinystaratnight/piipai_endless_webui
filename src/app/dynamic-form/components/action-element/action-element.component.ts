@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormatString } from '../../../helpers/format';
 
 @Component({
-  selector: 'action-element',
+  selector: 'app-action-element',
   templateUrl: 'action-element.component.html',
   styleUrls: ['./action-element.component.scss']
 })
@@ -51,7 +51,7 @@ export class ActionElementComponent implements OnChanges {
         });
         this.action = '';
       }
-    }, (reason) => {
+    }, () => {
       return false;
     });
   }

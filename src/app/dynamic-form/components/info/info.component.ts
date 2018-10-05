@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'info',
+  selector: 'app-info',
   template: `
     <i class="info"
       *ngIf="description"

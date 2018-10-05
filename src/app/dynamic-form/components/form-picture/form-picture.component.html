@@ -3,7 +3,7 @@
     <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" [hidden]="config.custom" *ngIf="label && config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
-    <info [description]="config.templateOptions.description"></info>
+    <app-info [description]="config.templateOptions.description"></app-info>
     <input
       #picture
       accept="image/*,application/pdf"
@@ -49,7 +49,7 @@
   </div>
 </div>
 
-<template #modal let-c="close">
+<ng-template #modal let-c="close">
   <div class="modal-header">
     <h5 class="modal-title">{{config.templateOptions.label_photo}}</h5>
     <button type="button" class="close" (click)="c()">
@@ -58,7 +58,7 @@
   </div>
 
   <div class="modal-body picture d-inline-block d-flex justify-content-around flex-wrap" style="overflow: auto">
-    <webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError"></webcam>
+    <app-webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError"></app-webcam>
     <div class="photo d-flex justify-content-center align-items-center">
       <span *ngIf="!photoExist" class="text-white">Photo</span>
       <canvas [hidden]="!photoExist"></canvas>
@@ -70,4 +70,4 @@
     <button type="button" class="btn btn-primary" (click)="getPhoto()">{{photoExist ? 'Try again' : config.templateOptions.label_photo || 'Take a photo'}}</button>
     <button type="button" class="btn btn-secondary" (click)="c()">Cancel</button>
   </div>
-</template>
+</ng-template>

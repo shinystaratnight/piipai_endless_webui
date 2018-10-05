@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import { FormatString } from '../../../helpers/format';
 
 @Component({
-  selector: 'list-text',
+  selector: 'app-list-text',
   templateUrl: './list-text.component.html',
   styleUrls: ['./list-text.component.scss']
 })
@@ -41,8 +41,8 @@ export class ListTextComponent implements OnInit {
     this.customizeStatic(this.config.value);
   }
 
-  public checkDate(moment) {
-    let type = this.config.templateOptions && this.config.templateOptions.type;
+  public checkDate(moment) { //tslint:disable-line
+    const type = this.config.templateOptions && this.config.templateOptions.type;
     if (type === 'time' || type === 'date' || type === 'datetime') {
       if (type === 'time') {
         if (this.arrayValue) {
@@ -81,8 +81,8 @@ export class ListTextComponent implements OnInit {
     if (this.config && this.config.values) {
       this.iconView = true;
       this.value = this.config.values[value];
-      let color = this.config.color;
-      let classes = ['primary', 'danger', 'info', 'success', 'warning'];
+      const color = this.config.color;
+      const classes = ['primary', 'danger', 'info', 'success', 'warning'];
       this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
       if (!this.iconClass) {
         if (color) {
@@ -94,8 +94,8 @@ export class ListTextComponent implements OnInit {
         }
       }
     } else if (this.config.setColor) {
-      let classes = ['primary', 'danger', 'info', 'success', 'warning', 'description', 'comment'];
-      let color = this.config.color;
+      const classes = ['primary', 'danger', 'info', 'success', 'warning', 'description', 'comment'];
+      const color = this.config.color;
       this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
     }
   }

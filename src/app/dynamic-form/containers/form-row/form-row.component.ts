@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'form-row',
+  selector: 'app-form-row',
   templateUrl: 'form-row.component.html',
   styleUrls: ['./form-row.component.scss']
 })

@@ -1,14 +1,22 @@
+@import '../../node_modules/bootstrap/scss/functions.scss';
 @import '../../node_modules/bootstrap/scss/variables.scss';
 
 // Color variables
-$brand-primary: #28a3fc;
-$brand-success: rgb(50, 186, 94);
-$brand-danger: rgb(250, 92, 70);
-$brand-info: #28a3fc;
+$primary: #28a3fc;
+$success: rgb(50, 186, 94);
+$danger: rgb(250, 92, 70);
+$info: #28a3fc;
 $breadcrumb-bg: transparent;
 $breadcrumb-divider: '>';
 $breadcrumb-item-padding: 0.2rem;
 $gray: #333;
+
+$brand-primary: $primary;
+$brand-success: $success;
+$brand-danger: $danger;
+$brand-warning: $warning;
+$brand-info: $info;
+$brand-secondary: $secondary;
 
 // Theme color
 $themes: ('default', 'labour', 'indigo', 'teal', 'brown');

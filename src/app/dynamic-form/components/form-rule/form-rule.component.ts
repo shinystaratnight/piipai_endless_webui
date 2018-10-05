@@ -19,7 +19,7 @@ interface Rule {
 }
 
 @Component({
-  selector: 'form-rule',
+  selector: 'app-form-rule',
   templateUrl: './form-rule.component.html',
   styleUrls: ['./form-rule.component.scss']
 })
@@ -116,7 +116,6 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
 
   public done(closeModal, type) {
     closeModal();
-    let choiceType;
     if (this.elementValue && this.editRule) {
       if (this.editRule[this.editIndex]) {
         this.editRule[this.editIndex] = this.elementValue;
@@ -161,7 +160,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
           }
 
           if (type === 'state') {
-            let state = this.config.options.find((elem) => elem.name_before_activation === el);
+            const state = this.config.options.find((elem) => elem.name_before_activation === el);
             if (state) {
               el = state.number;
             }
@@ -180,7 +179,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   }
 
   public generateArray(type) {
-    let props = {
+    const props = {
       app: 'appsArray',
       model: 'modelsArray',
       function: 'functionsArray',
@@ -191,7 +190,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   }
 
   public getRelatedData(type) {
-    let params = {
+    const params = {
       model: {
         param: 'app',
         query: `?app_name=`,
@@ -250,7 +249,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   }
 
   public generateView(data) {
-    let attr = Object.keys(data);
+    const attr = Object.keys(data);
     attr.forEach((el) => {
       if (el === 'active') {
         this.config.activeMetadata[0].value = data[el];
@@ -293,7 +292,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
         element.data.push(this.generateViewForType([].concat(el), nestedType));
       } else {
         if (this.config.options) {
-          let obj = this.config.options.find((prop) => prop.number === el);
+          const obj = this.config.options.find((prop) => prop.number === el);
           if (obj) {
             el = obj.name_before_activation;
           }

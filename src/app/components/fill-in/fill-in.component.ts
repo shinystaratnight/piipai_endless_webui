@@ -1,11 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 
 @Component({
-  selector: 'fill-in',
+  selector: 'app-fill-in',
   templateUrl: './fill-in.component.html',
   styleUrls: ['./fill-in.component.scss']
 })
@@ -23,7 +22,6 @@ export class FillInComponent implements OnInit {
   public err: any;
 
   constructor(
-    private location: Location,
     private gfs: GenericFormService,
     private router: Router
   ) {}

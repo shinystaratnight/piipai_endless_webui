@@ -5,7 +5,7 @@
       <div class="double-bounce1"></div>
       <div class="double-bounce2"></div>
     </div>
-    <dynamic-form
+    <app-dynamic-form
       *ngIf="showForm"
       [config]="metadata"
       [errors]="errors"
@@ -14,10 +14,10 @@
       [hiddenFields]="hiddenFields"
       [formId]="formId"
       (formGroup)="setFormGroup($event)"
-      (submit)="submitForm($event)"
+      (submitForm)="submitForm($event)"
       (event)="eventHandler($event)"
       (buttonAction)="buttonActionHandler($event)"
       (changeValue)="parseCheckObject($event)">
       <ng-content></ng-content>
-    </dynamic-form>
+    </app-dynamic-form>
 </div>

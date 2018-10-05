@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 
-import { Observable } from 'rxjs/Observable';
+import { of, throwError } from 'rxjs';
 
-import { ToastrService, MessageType } from './toastr.service';
+import { ToastService, MessageType } from './toast.service';
 
 @Injectable()
 export class ErrorsService {
 
   constructor(
-    private ts: ToastrService
+    private ts: ToastService
   ) {}
 
   public parseErrors(error: Response, close = false) {
@@ -21,17 +21,17 @@ export class ErrorsService {
     }
 
     if (error.status === 403) {
-      let body = error.json();
+      const body = error.json();
       this.ts.sendMessage(
         body.errors.detail,
         MessageType.error
       );
-      return Observable.throw(error.json && error.json());
+      return throwError(error.json && error.json());
     }
     if (!close) {
-      return Observable.throw(error.json && error.json());
+      return throwError(error.json && error.json());
     } else {
-      return Observable.of([]);
+      return of([]);
     }
   }
 

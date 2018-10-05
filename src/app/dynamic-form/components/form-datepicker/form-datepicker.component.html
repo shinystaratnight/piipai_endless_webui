@@ -1,9 +1,9 @@
-<div dropDown [element]="'.ui-datebox-container'" [update]="update" class="form-group" [target]="opened" [hidden]="config.hide || viewMode || config.read_only">
+<div appDropDown [element]="'.ui-datebox-container'" [update]="update" class="form-group" [target]="opened" [hidden]="config.hide || viewMode || config.read_only">
   <div class="form-element" (click)="updateDate()">
     <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" *ngIf="label && config.templateOptions.label" [attr.for]="key">
       {{config.templateOptions.label}}:
     </label>
-    <info [description]="config.templateOptions.description"></info>
+    <app-info [description]="config.templateOptions.description"></app-info>
     <div class="input-group form-element-content datepicker mb-2 edit">
       <input [hidden]="config.templateOptions.type === 'time'" class="form-control"
         #d
@@ -33,7 +33,7 @@
     <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
       {{config.templateOptions.label}}:
     </label>
-    <info [description]="config.templateOptions.description"></info>
+    <app-info [description]="config.templateOptions.description"></app-info>
     <div [class.readonly-value]="editMode" class="form-element-content">{{displayValue || '-'}}</div>
   </div>
 </div>

@@ -37,7 +37,7 @@ export interface WidgetGroup {
 }
 
 @Component({
-  selector: 'dashboard',
+  selector: 'app-dashboard',
   templateUrl: 'dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -92,7 +92,7 @@ export class DashboardComponent implements OnChanges, OnDestroy {
   public getAvaliableModules() {
     return this.modulesList.filter((el) => {
       let result;
-      let exist = this.userModules.filter((elem) => {
+      const exist = this.userModules.filter((elem) => {
         if (elem.dashboard_module.id === el.id) {
           return true;
         }
@@ -148,18 +148,18 @@ export class DashboardComponent implements OnChanges, OnDestroy {
 
   public generateWidgetList() {
     this.userModules.forEach((el) => {
-      let widgetInfo = this.getInfoAboutWidget(el, ['module_data']);
+      const widgetInfo = this.getInfoAboutWidget(el, ['module_data']);
       if (widgetInfo) {
         let endpoint;
         if (!widgetInfo.module_data.endpoint) {
-          let appName = widgetInfo.module_data.app.replace(/_/, '-');
-          let modelName = widgetInfo.module_data.plural_name.split(' ').join('').toLowerCase();
+          const appName = widgetInfo.module_data.app.replace(/_/, '-');
+          const modelName = widgetInfo.module_data.plural_name.split(' ').join('').toLowerCase();
           endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
         } else {
           endpoint = widgetInfo.module_data.endpoint;
         }
-        let link = this.getLinkByEndpoint(this.pages, endpoint);
-        let widget = <WidgetItem> {
+        const link = this.getLinkByEndpoint(this.pages, endpoint);
+        const widget = <WidgetItem> {
           label: widgetInfo.module_data.label || widgetInfo.module_data.plural_name,
           name: widgetInfo.module_data.name,
           addLabel: widgetInfo.module_data.add_label,
@@ -173,15 +173,15 @@ export class DashboardComponent implements OnChanges, OnDestroy {
         this.widgets.push(widget);
       }
     });
-    let groups = this.getListOfGroupsName(this.widgets, 'labelOfWidgetGroup');
-    let widgetGroups = this.generateGroupsOfWidgets(groups, this.widgets);
+    const groups = this.getListOfGroupsName(this.widgets, 'labelOfWidgetGroup');
+    const widgetGroups = this.generateGroupsOfWidgets(groups, this.widgets);
     Object.keys(widgetGroups).forEach((el) => {
       this.widgetList.push(widgetGroups[el]);
     });
   }
 
   public generateGroupsOfWidgets(groups, widgets) {
-    let widgetGroup = {};
+    const widgetGroup = {};
     groups.forEach((el) => {
       widgetGroup[el] = {
         label: el,
@@ -195,8 +195,8 @@ export class DashboardComponent implements OnChanges, OnDestroy {
   }
 
   public getInfoAboutWidget(widget, params) {
-    let result = <any> {};
-    let widgetElement = this.modulesList.filter((el) => {
+    const result = <any> {};
+    const widgetElement = this.modulesList.filter((el) => {
       if (el.id === widget.dashboard_module.id) {
         return true;
       }
@@ -224,7 +224,7 @@ export class DashboardComponent implements OnChanges, OnDestroy {
   }
 
   public getListOfGroupsName(widgets, param): string[] {
-    let array: string[] = [];
+    const array: string[] = [];
     widgets.forEach((el) => {
       if (array.indexOf(el[param]) === -1) {
         array.push(el[param]);

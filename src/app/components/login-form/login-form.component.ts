@@ -6,7 +6,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LoginService } from './../../services/login.service';
 
 @Component({
-  selector: 'login-form',
+  selector: 'app-login-form',
   templateUrl: 'login-form.component.html',
   styleUrls: ['./login-form.component.scss'],
   encapsulation: ViewEncapsulation.None

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Page } from './navigation.service';
 
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 
 interface PathData {
   type: string;
@@ -22,13 +22,13 @@ export class SiteService {
   public list: Page[];
 
   public getDataOfPage(url: any, list) {
-    return Observable.of(this.generateData(list, url));
+    return of(this.generateData(list, url));
   }
 
   public generateData(list: Page[], url: any[]): PageData {
-    let pathData: PathData = this.getTypeOfPage(url);
-    let element: Page = this.getElementFromList(list, pathData.path);
-    let data: PageData = {
+    const pathData: PathData = this.getTypeOfPage(url);
+    const element: Page = this.getElementFromList(list, pathData.path);
+    const data: PageData = {
       endpoint: element ? element.endpoint : '/',
       pathData
     };
@@ -52,17 +52,17 @@ export class SiteService {
     }
 
     let data: PathData;
-    let urlCopy = url.map((el) => {
+    const urlCopy = url.map((el) => {
       return el.path;
     });
-    let lastElement = urlCopy.pop();
+    const lastElement = urlCopy.pop();
     if (lastElement === 'add') {
       data = {
         type: 'form',
         path: this.generatePath(urlCopy)
       };
     } else if (lastElement === 'change' || lastElement === 'submit' || lastElement === 'fillin') {
-      let id = urlCopy.pop();
+      const id = urlCopy.pop();
       data = {
         type: 'form',
         path: this.generatePath(urlCopy),

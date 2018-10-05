@@ -1,24 +1,24 @@
-<navigation
+<app-navigation
   logo="/assets/img/new-software.svg"
   [user]="user"
   [pages]="pagesList"
   (update)="updateNavigation($event)">
-</navigation>
+</app-navigation>
 
-<div class="site-page">
+<div class="site-page pt-5">
   <div class="form-page">
     <div class="form-content">
-      <check-card *ngIf="!checkInformation"></check-card>
-      <billing-plan
+      <app-check-card *ngIf="!checkInformation"></app-check-card>
+      <app-billing-plan
         [saveProcess]="saveProcess"
         [cancelProcess]="cancelProcess"
         [currentPlan]="currentPlan"
         [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
         (selectedPlan)="selectPlan($event)"
-        (cancelingPlan)="cancelPlan($event)"></billing-plan>
-      <billing-info [payments]="payments" [currentPlan]="currentPlan"></billing-info>
+        (cancelingPlan)="cancelPlan()"></app-billing-plan>
+      <app-billing-info [payments]="payments" [currentPlan]="currentPlan"></app-billing-info>
     </div>
   </div>
 </div>
 
-<my-toast></my-toast>
+<app-toast></app-toast>

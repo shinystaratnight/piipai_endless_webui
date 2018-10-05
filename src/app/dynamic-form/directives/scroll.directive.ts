@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[scroll]'
+  selector: '[appScroll]'
 })
 export class ScrollDirective implements AfterViewInit {
 

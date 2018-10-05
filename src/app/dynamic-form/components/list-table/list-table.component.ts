@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'list-table',
+  selector: 'app-list-table',
   templateUrl: 'list-table.component.html'
 })
 

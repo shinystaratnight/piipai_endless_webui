@@ -1,12 +1,12 @@
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { EventEmitter } from '@angular/forms/src/facade/async';
+import { EventEmitter } from '@angular/core';
 
 export class BasicElementComponent {
 
   public group: FormGroup;
   public key: any;
   public config: any;
-  public event: EventEmitter<any> = new EventEmitter();
+  public event = new EventEmitter();
 
   public addControl(config, fb: FormBuilder, required?: boolean) {
     if (config.key) {
@@ -35,7 +35,7 @@ export class BasicElementComponent {
       element.nativeElement.maxLength = config.templateOptions.max;
     }
     if (config.templateOptions.min) {
-      let min = (config.templateOptions.min < 0) ? 0 : config.templateOptions.min;
+      const min = (config.templateOptions.min < 0) ? 0 : config.templateOptions.min;
       element.nativeElement.minLength = min;
     }
     if (config.templateOptions.max
@@ -89,5 +89,5 @@ export class BasicElementComponent {
     } else {
       this.addControls(group.get(el), keys, fb, required);
     }
-  };
+  }
 }

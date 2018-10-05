@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { SettingsService } from './settings.service';
 import { UserService, Role, User } from '../services/user.service';
 import { Page } from '../services/navigation.service';
 
 @Component({
-  selector: 'settings-page',
+  selector: 'app-settings-page',
   templateUrl: './settings.component.html'
 })
 
@@ -29,7 +29,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    let currentURL = { path: 'settings' };
+    const currentURL = { path: 'settings' };
     this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
     this.settingsSubscription = this.settingsService.url.subscribe((child) => {

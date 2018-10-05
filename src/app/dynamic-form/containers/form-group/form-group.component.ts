@@ -1,8 +1,8 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'form-group',
+  selector: 'app-form-group',
   templateUrl: './form-group.component.html',
   styleUrls: ['./form-group.component.scss']
 })

@@ -1,5 +1,5 @@
 <div #datatable [class.on-list]="!inForm" [ngClass]="{'poped card p-0': poped}" class="mw-100 datatable" (click)="activeTable()" [hidden]="minimized">
-  <div move [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
+  <div appMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
       <div class="d-flex fustify-content-center align-items-center">
@@ -7,29 +7,26 @@
           fa
           class="ml-2 icon"
           [name]="'window-minimize'"
-          [border]="true"
           (click)="minimizeTable()"
           aria-hidden="true"></i>
         <i
           fa
           class="ml-2 icon"
           [name]="'window-maximize'"
-          [border]="true"
           (click)="unpopedTable()"
           aria-hidden="true"></i>
         <i
           fa
           class="ml-2 icon"
           [name]="'times'"
-          [border]="true"
           (click)="closeTable()"
           aria-hidden="true"></i>
       </div>
     </h5>
   </div>
   <div [class.open]="!filtersHidden" class="datatable-content" [class.in-form]="inForm">
-    <div scroll [enable]="!inForm" class="filter-wrapper" *ngIf="(first || poped) && showFilters" [class.open]="!filtersHidden" [class.in-form]="inForm">
-      <filter-block [config]="filtersOfList" (event)="filterHandler($event)"></filter-block>
+    <div appScroll [enable]="!inForm" class="filter-wrapper" *ngIf="(first || poped) && showFilters" [class.open]="!filtersHidden" [class.in-form]="inForm">
+      <app-filter-block [config]="filtersOfList" (event)="filterHandler($event)"></app-filter-block>
     </div>
     <div class="background" (click)="toggleFilterBlock()"></div>
     <div [class.card-block]="poped" class="datatable-body" [class.in-form]="inForm" [class.open-filters]="!filtersHidden && showFilters">
@@ -42,7 +39,7 @@
           <span>{{label || config.list.label}}</span> <br>
           <span class="description">{{description}}</span>
         </p>
-        <list-buttons
+        <app-list-buttons
           [buttons]="config.list.buttons"
           [first]="first"
           [inForm]="inForm"
@@ -50,9 +47,9 @@
           [poped]="poped"
           [allowPermissions]="allowPermissions"
           (event)="buttonAction($event)">
-        </list-buttons>
+        </app-list-buttons>
       </h2>
-      <div scroll [enable]="!inForm" *ngIf="showFilters || config.list.search_enabled" class="datatable-header" [class.open-filters]="!filtersHidden && showFilters">
+      <div appScroll [enable]="!inForm" *ngIf="showFilters || config.list.search_enabled" class="datatable-header" [class.open-filters]="!filtersHidden && showFilters">
         <button [class.active]="!filtersHidden" class="btn btn-outline-secondary filter-button mr-3" (click)="toggleFilterBlock()" *ngIf="showFilters">
           <svg width="20" height="15" viewBox="0 0 20 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M 5.58236 3.51318C 4.87141 3.51318 4.29285 2.93807 4.29285 2.23032C 4.29285 1.52304 4.87141 0.94746 5.58236 0.94746C 6.29331 0.94746 6.87189 1.52304 6.87189 2.23032C 6.87189 2.93807 6.29331 3.51318 5.58236 3.51318ZM 19.0476 1.77933L 8.09522 1.77933C 7.9776 1.77933 7.87332 1.82623 7.78998 1.89682C 7.62665 0.826186 6.70379 1.30114e-07 5.58236 1.30114e-07C 4.49808 1.30114e-07 3.59142 0.770285 3.38523 1.78975C 3.36761 1.78786 3.35189 1.77933 3.33332 1.77933L 0.476187 1.77933C 0.21333 1.77933 -2.46465e-06 1.99156 -2.46465e-06 2.25306C -2.46465e-06 2.51456 0.21333 2.72679 0.476187 2.72679L 3.33332 2.72679C 3.35618 2.72679 3.37523 2.71684 3.39713 2.714C 3.61999 3.7112 4.51332 4.46064 5.58236 4.46064C 6.68903 4.46064 7.60522 3.65672 7.7857 2.60599C 7.86951 2.67894 7.97569 2.72679 8.09522 2.72679L 19.5238 2.72679C 19.7871 2.72679 20 2.51456 20 2.25306C 20 1.99156 19.7871 1.77933 19.5238 1.77933L 19.0476 1.77933ZM 19.5238 7.46419L 16.8252 7.46419C 16.7067 6.34381 15.7633 5.46505 14.6067 5.46505C 13.45 5.46505 12.5067 6.34381 12.3886 7.46419L 0.476231 7.46419C 0.213374 7.46419 4.11318e-05 7.67594 4.11318e-05 7.93792C 4.11318e-05 8.19941 0.213374 8.41164 0.476231 8.41164L 12.4943 8.41164C 12.7957 9.28899 13.6238 9.92569 14.6067 9.92569C 15.5895 9.92569 16.4176 9.28899 16.7195 8.41164L 19.5238 8.41164C 19.7867 8.41164 20 8.19941 20 7.93792C 20 7.67594 19.7867 7.46419 19.5238 7.46419ZM 14.6067 8.97823C 13.8957 8.97823 13.3172 8.40264 13.3172 7.69536C 13.3172 6.98809 13.8957 6.41251 14.6067 6.41251C 15.3176 6.41251 15.8962 6.98809 15.8962 7.69536C 15.8962 8.40264 15.3176 8.97823 14.6067 8.97823ZM 20 12.6749C 20 12.4134 19.7871 12.2012 19.5238 12.2012L 8.09522 12.2012C 7.97284 12.2012 7.86331 12.2505 7.77903 12.3263C 7.57141 11.3082 6.66569 10.5394 5.58236 10.5394C 4.53855 10.5394 3.66666 11.2561 3.41809 12.2183C 3.38952 12.213 3.36332 12.2012 3.33332 12.2012L 0.476187 12.2012C 0.21333 12.2012 -2.46465e-06 12.4134 -2.46465e-06 12.6749C -2.46465e-06 12.9369 0.21333 13.1487 0.476187 13.1487L 3.33332 13.1487C 3.34951 13.1487 3.36284 13.1416 3.37808 13.1397C 3.55665 14.1932 4.47332 15 5.58236 15C 6.72712 15 7.66283 14.1392 7.79712 13.0359C 7.87902 13.1032 7.98045 13.1487 8.09522 13.1487L 19.5238 13.1487C 19.7871 13.1487 20 12.9369 20 12.6749ZM 5.58236 14.0525C 4.87141 14.0525 4.29285 13.4774 4.29285 12.7697C 4.29285 12.0624 4.87141 11.4868 5.58236 11.4868C 6.29331 11.4868 6.87189 12.0624 6.87189 12.7697C 6.87189 13.4774 6.29331 14.0525 5.58236 14.0525Z"
@@ -60,16 +57,16 @@
           </svg>
           Filters
         </button>
-        <list-search-bar
+        <app-list-search-bar
           class="datatable-search"
           *ngIf="config.list.search_enabled"
           [count]="data.count"
           [label]="config.list.pagination_label || config.list.label"
           [list]="config.list.list"
           (event)="filterHandler($event)">
-        </list-search-bar>
+        </app-list-search-bar>
       </div>
-      <action-element *ngIf="config.list.actions && !inForm" [count]="selectedCount" [config]="config.list.actions" (event)="actionHandler($event)"></action-element>
+      <app-action-element *ngIf="config.list.actions && !inForm" [count]="selectedCount" [config]="config.list.actions" (event)="actionHandler($event)"></app-action-element>
 
       <div #tableWrapper class="table-wrapper">
         <table class="table table-sm" *ngIf="config.list">
@@ -90,7 +87,7 @@
               <ng-container *ngFor="let field of config.list.columns">
                 <th *ngIf="!(field.tab && field.tab.is_collapsed)">
                   <ng-container
-                    listElement
+                    appListElement
                     [head]="true"
                     [config]="field"
                     (event)="sorting(field)">
@@ -100,7 +97,6 @@
                     *ngIf="field.sort && !delay"
                     [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'"
                     [class.active]="field.sorted && !delay"
-                    [border]=true
                     (click)="sorting(field, field.sorted === 'desc' ? 'asc' : 'desc')"></i>
                   <!-- (click)="field.openSort = !field.openSort"></i> -->
                   <!-- <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">
@@ -150,21 +146,21 @@
                 <td *ngFor="let cell of row.content" [ngStyle]="{'width.px': cell.width}" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
                   <ng-container
                     *ngIf="cell.name !== 'actions'"
-                    listElement
+                    appListElement
                     [config]="cell.content"
                     (event)="eventHandler($event)"
                     (buttonAction)="buttonHandler($event)">
                   </ng-container>
 
                   <ng-container *ngIf="cell.name === 'actions'">
-                    <template #actionsTemplate>
+                    <ng-template #actionsTemplate>
                       <ng-container
-                        listElement
+                        appListElement
                         [config]="cell.content"
                         (event)="eventHandler($event)"
                         (buttonAction)="buttonHandler($event, cell.pop = pop)">
                       </ng-container>
-                    </template>
+                    </ng-template>
                     <i fa class="icon px-3 py-1" style="opacity: .3; margin-left: 8px"
                       name="ellipsis-v"
                       placement="bottom"
@@ -174,7 +170,7 @@
                   </ng-container>
 
                   <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
-                    <list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></list-table>
+                    <app-list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></app-list-table>
                   </div>
                 </td>
 
@@ -204,7 +200,7 @@
                             <span *ngIf="field.content && acell.content.length > 1 && acell.label !== 'Character'" class="description">{{field.label}}</span>
                             <span class="additional-data-content">
                               <ng-container *ngFor="let innerField of field.content"
-                                listElement
+                                appListElement
                                 [config]="innerField"
                                 (event)="eventHandler($event)"
                                 (buttonAction)="buttonHandler($event)">
@@ -222,7 +218,7 @@
                       <div class="additional-data inline" *ngFor="let field of acell.content">
                         <span class="additional-data-content">
                           <ng-container *ngFor="let innerField of field.content"
-                            listElement
+                            appListElement
                             [config]="innerField"
                             (event)="eventHandler($event)"
                             (buttonAction)="buttonHandler($event)">
@@ -260,7 +256,7 @@
   </div>
 </div>
 
-<template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -271,7 +267,7 @@
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
-      <generic-form
+      <app-generic-form
         *ngSwitchCase="'form'"
         [endpoint]="modalInfo.endpoint"
         [metadataQuery]="!modalInfo.dontUseMetadataQuery ? addMetadataQuery || metadataQuery : ''"
@@ -284,23 +280,23 @@
         (errorForm)="formError($event)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
             Save
-            <spinner *ngIf="saveProcess"></spinner>
+            <app-spinner *ngIf="saveProcess"></app-spinner>
           </button>
-      </generic-form>
-      <sebm-google-map
+      </app-generic-form>
+      <agm-map
         *ngSwitchCase="'map'"
         [latitude]="modalInfo.latitude"
         [longitude]="modalInfo.longitude"
         [zoom]="13"
         [mapTypeControl]="true">
-          <sebm-google-map-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></sebm-google-map-marker>
-      </sebm-google-map>
-      <profile [id]="modalInfo.id" *ngSwitchCase="'profile'"></profile>
+          <agm-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></agm-marker>
+      </agm-map>
+      <app-profile [id]="modalInfo.id" *ngSwitchCase="'profile'"></app-profile>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #messageDetail let-c="close" let-d="dismiss">
+<ng-template #messageDetail let-c="close" let-d="dismiss">
   <div class="message-detail-header">
     <h5 class="message-label">{{modalInfo.label}}</h5>
     <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
@@ -308,7 +304,7 @@
     </button>
   </div>
 
-  <generic-form
+  <app-generic-form
     [endpoint]="modalInfo.endpoint"
     [metadataQuery]="modalInfo.metadataQuery"
     [id]="modalInfo.id"
@@ -317,10 +313,10 @@
     [edit]="modalInfo.edit"
     (event)="formEvent($event, c)"
     (errorForm)="formError($event)">
-  </generic-form>
-</template>
+  </app-generic-form>
+</ng-template>
 
-<template #confirmModal let-c="close">
+<ng-template #confirmModal let-c="close">
   <div class="modal-header">
     <p>{{modalInfo.message}}</p>
     <button type="button" class="close" aria-label="Close" (click)="d(false)">
@@ -331,9 +327,9 @@
     <button type="button" class="btn btn-secondary" (click)="callAction(modalInfo, c)">{{modalInfo.agree_label}}</button>
     <button type="button" class="btn btn-secondary" (click)="c(false)">{{modalInfo.decline_label}}</button>
   </div>
-</template>
+</ng-template>
 
-<template #evaluateModal let-c="close" let-d="dismiss">
+<ng-template #evaluateModal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -347,43 +343,43 @@
       </div>
     </div>
     <div class="modal-body">
-      <generic-form
+      <app-generic-form
         [needData]="modalInfo.needData"
         [endpoint]="modalInfo.endpoint"
         [data]="modalInfo.data"
         [edit]="modalInfo.edit"
         (event)="evaluateEvent($event, c)">
           <button class="btn btn-primary mr-auto text-white">Submit</button>
-      </generic-form>
+      </app-generic-form>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #sendMessageModal let-c="close">
+<ng-template #sendMessageModal let-c="close">
   <div class="modal-body">
     <iframe class="send-sms" [src]="modalInfo.url" frameborder="0"></iframe>
     <br>
   </div>
-</template>
+</ng-template>
 
-<template #showPreviewInvoice>
+<ng-template #showPreviewInvoice>
   <div class="modal-body">
     <pdf-viewer [src]="modalInfo.url" [render-text]="true" style="display: block;"></pdf-viewer>
     <br>
   </div>
-</template>
+</ng-template>
 
-<template #fillInMap>
-  <sebm-google-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13" [mapTypeControl]="true">
-    <sebm-google-map-marker [iconUrl]="marker.iconUrl" *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
-      <sebm-google-map-info-window>
+<ng-template #fillInMap>
+  <agm-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13" [mapTypeControl]="true">
+    <agm-marker [iconUrl]="marker.iconUrl" *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
+      <agm-info-window>
         <strong>{{marker.name}}</strong>
         <br>
         <p>{{marker.description}}</p>
         <button *ngIf="!marker.label" type="button" class="btn btn-sm btn-success" (click)="markerClick(marker)" style="font-size: 10px;">
           {{ marker.selected ? 'Selected' : 'Select' }}
         </button>
-      </sebm-google-map-info-window>
-    </sebm-google-map-marker>
-  </sebm-google-map>
-</template>
+      </agm-info-window>
+    </agm-marker>
+  </agm-map>
+</ng-template>

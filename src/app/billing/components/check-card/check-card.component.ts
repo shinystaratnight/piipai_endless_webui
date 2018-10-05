@@ -25,7 +25,7 @@ const style = {
 };
 
 @Component({
-  selector: 'check-card',
+  selector: 'app-check-card',
   templateUrl: './check-card.component.html',
   styleUrls: ['./check-card.component.scss'],
   encapsulation: ViewEncapsulation.None

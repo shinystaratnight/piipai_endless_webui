@@ -28,13 +28,13 @@
 
       <ng-container [ngSwitch]="question.type">
         <div class="answers" *ngSwitchCase="0">
-          <template [ngTemplateOutlet]="radio" [ngOutletContext]="{answers: question.answers, index: index}"></template>
+          <ng-container *ngTemplateOutlet="radio; context: {answers: question.answers, index: index}"></ng-container>
         </div>
         <div class="answers" *ngSwitchCase="1">
-          <template [ngTemplateOutlet]="text" [ngOutletContext]="{answers: question.answers, index: index}"></template>
+          <ng-container *ngTemplateOutlet="text; context: {answers: question.answers, index: index}"></ng-container>
         </div>
         <div class="answers" *ngSwitchCase="2">
-          <template [ngTemplateOutlet]="radio" [ngOutletContext]="{answers: question.answers, index: index}"></template>
+          <ng-container *ngTemplateOutlet="radio; context: {answers: question.answers, index: index}"></ng-container>
         </div>
       </ng-container>
     </div>
@@ -43,15 +43,15 @@
   <button *ngIf="send" class="btn btn-primary" (click)="sendForm()">Send</button>
 </div>
 
-<template #radio let-answers="answers" let-index="index">
+<ng-template #radio let-answers="answers" let-index="index">
   <div class="form-check" *ngFor="let answer of answers">
     <label class="form-check-label">
       <input type="radio" [(ngModel)]="testData.questions[index].answer" [name]="answer.name" [value]="answer.id"> {{answer.answer}}
     </label>
   </div>
-</template>
+</ng-template>
 
-<template #text let-answer="answer" let-index="index">
+<ng-template #text let-answer="answer" let-index="index">
   <div class="form-element">
     <div class="form-element-content edit" style="height: auto; max-height: none">
       <textarea name="" id="" cols="30" rows="5" [(ngModel)]="testData.questions[index].answer_text"></textarea>
@@ -63,4 +63,4 @@
       <input type="number" min="1" max="5" class="form-control" [(ngModel)]="testData.questions[index].score">
     </div>
   </div>
-</template>
+</ng-template>

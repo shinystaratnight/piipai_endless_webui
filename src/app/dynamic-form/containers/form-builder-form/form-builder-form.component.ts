@@ -1,15 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject, BehaviorSubject } from 'rxjs';
 
-import { FormBuilderService } from '../../services/form-builder.service';
-import { ToastrService } from '../../../shared/services/toastr.service';
+import { FormBuilderService } from '../../services';
+import { ToastService } from '../../../shared/services';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
-import { Field } from '../../models/field.model';
+import { Field } from '../../models';
 
 @Component({
-  selector: 'form-builder-form',
+  selector: 'app-form-builder-form',
   templateUrl: './form-builder-form.component.html',
   styleUrls: ['./form-builder-form.component.scss']
 })
@@ -29,7 +28,7 @@ export class FormBuilderFormComponent implements OnInit {
 
   constructor(
     private service: FormBuilderService,
-    private toastr: ToastrService
+    private toastr: ToastService
   ) { }
 
   public ngOnInit() {
@@ -92,7 +91,7 @@ export class FormBuilderFormComponent implements OnInit {
 
   public resetData(data) {
     if (data) {
-      let keys = Object.keys(data);
+      const keys = Object.keys(data);
       keys.forEach((el) => {
         delete data[el];
       });
@@ -101,7 +100,7 @@ export class FormBuilderFormComponent implements OnInit {
 
   public updateErrors(error, errors, response, field = '') {
     if (errors) {
-      let keyss = Object.keys(errors);
+      const keyss = Object.keys(errors);
       keyss.forEach((el) => {
         if (errors[el].length) {
           if (field) {

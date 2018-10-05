@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
 
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from '../../services/generic-form.service';
 
@@ -24,7 +24,7 @@ interface TableElement {
 }
 
 @Component({
-  selector: 'profile',
+  selector: 'app-profile',
   templateUrl: 'profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
@@ -36,9 +36,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   @ViewChild('modal')
   public modal;
 
-  public endpoint: string = '/ecore/api/v2/candidate/candidatecontacts/';
-  public skillsEndpoint: string = '/ecore/api/v2/candidate/skillrels/';
-  public tagsEndpoint: string = '/ecore/api/v2/candidate/tagrels/';
+  public endpoint = '/ecore/api/v2/candidate/candidatecontacts/';
+  public skillsEndpoint = '/ecore/api/v2/candidate/skillrels/';
+  public tagsEndpoint = '/ecore/api/v2/candidate/tagrels/';
 
   public metadata: any[];
   public data: any;
@@ -138,7 +138,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public prepareData(title, element, id) {
-    let data = {
+    const data = {
       title: '',
       endpoint: '',
       id: ''
@@ -210,7 +210,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public generateView() {
-    let components = ['skills', 'tags'];
+    const components = ['skills', 'tags'];
     components.forEach((el) => {
       this.generate(el);
     });
@@ -230,15 +230,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public generateList(elements, data, element) {
     elements.forEach((el) => {
-      let item = [];
+      const item = [];
       let options;
-      let formElement = this.getItemFromMetadata(this.metadata, el);
+      const formElement = this.getItemFromMetadata(this.metadata, el);
       item.push((formElement && formElement.templateOptions.label)
         ? formElement.templateOptions.label : '');
       if (formElement && formElement.type === 'select') {
         options = formElement.templateOptions.options;
       }
-      let valueElement = this.getValueOfData(this.data, el, options);
+      const valueElement = this.getValueOfData(this.data, el, options);
       item.push(valueElement ? valueElement : (el === 'nationality') ? 'Other' : '-');
       if (this.isEmail(valueElement)) {
         item.push('mailto:');
@@ -250,14 +250,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public generateTable(elements, data: TableElement, element) {
-    let metadata = this[element + 'Metadata'];
-    let apiData = this.data;
+    const metadata = this[element + 'Metadata'];
+    const apiData = this.data;
     data.label = elements.map((el) => {
-      let formElement = this.getItemFromMetadata(metadata, el);
+      const formElement = this.getItemFromMetadata(metadata, el);
       return (formElement && formElement.templateOptions.label) ?
         formElement.templateOptions.label : '';
     });
-    let prop = (element === 'skills') ? 'candidate_skills' :
+    const prop = (element === 'skills') ? 'candidate_skills' :
       (element === 'tags') ? 'tag_list' : null;
     data.row = [];
     if (prop) {
@@ -266,13 +266,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
           return;
         }
 
-        let item = {
+        const item = {
           id: '',
           values: []
         };
         elements.forEach((elem) => {
           let options;
-          let formElement = this.getItemFromMetadata(metadata, elem);
+          const formElement = this.getItemFromMetadata(metadata, elem);
           if (formElement && formElement.type === 'select') {
             options = formElement.templateOptions.options;
           }
@@ -309,8 +309,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public getValueOfData(data, key: string, options: any[] = null) {
-    let keys = key.split('.');
-    let prop = keys.shift();
+    const keys = key.split('.');
+    const prop = keys.shift();
     if (data) {
       if (keys.length === 0) {
         let value;
@@ -335,26 +335,26 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public isEmail(value) {
-    let reg =
+    const reg =
        /^[a-z][a-zA-Z0-9_.]*(\.[a-zA-Z][a-zA-Z0-9_.]*)?@[a-z][a-zA-Z-0-9]*\.[a-z]+(\.[a-z]+)?$/;
 
     return reg.test(value) ? true : false;
   }
 
   public isPhone(value) {
-    let reg = /^\+(?:[0-9] ?){6,14}[0-9]$/;
+    const reg = /^\+(?:[0-9] ?){6,14}[0-9]$/;
 
     return reg.test(value) ? true : false;
   }
 
   public isLink(value) {
-    let reg = /^(https?:\/\/)/;
+    const reg = /^(https?:\/\/)/;
 
     return reg.test(value) ? true : false;
   }
 
   public refreshProfile() {
-    let components = ['personalTraits', 'residency', 'contactDetails', 'skills', 'tags'];
+    const components = ['personalTraits', 'residency', 'contactDetails', 'skills', 'tags'];
     components.forEach((el) => {
       this[el].viewData = [];
       this.generate(el);

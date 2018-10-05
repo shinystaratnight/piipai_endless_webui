@@ -6,7 +6,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { GenericFormService } from './../../dynamic-form/services/generic-form.service';
 
 @Component({
-  selector: 'form-builder',
+  selector: 'app-form-builder',
   templateUrl: 'form-builder.component.html'
 })
 

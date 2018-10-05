@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { meta } from './company.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
@@ -9,13 +9,13 @@ import { SettingsService } from '../settings.service';
 import { SiteSettingsService } from '../../services';
 
 @Component({
-  selector: 'company',
+  selector: 'app-company',
   templateUrl: 'company.component.html'
 })
 
 export class CompanyComponent implements OnInit, OnDestroy {
 
-  public endpoint: string = '/ecore/api/v2/company_settings/';
+  public endpoint = '/ecore/api/v2/company_settings/';
 
   public errors: any;
   public response: any;
@@ -62,13 +62,13 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   public resetSettings() {
-    let body = document.body;
+    const body = document.body;
     body.parentElement.classList.remove(this.currentTheme);
     if (this.savedTheme) {
       body.parentElement.classList.add(`${this.savedTheme}-theme`);
     }
     if (this.savedFont) {
-      let font = `${this.savedFont}, sans-serif`;
+      const font = `${this.savedFont}, sans-serif`;
       body.style.fontFamily = font;
     } else {
       body.style.fontFamily = null;
@@ -102,8 +102,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   public getValueOfData(data, key, obj) {
-    let keys = key.split('.');
-    let prop = keys.shift();
+    const keys = key.split('.');
+    const prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
         obj['value'] = data[key];
@@ -124,13 +124,13 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
   public eventHandler(e) {
     if (e.type === 'change' && e.el.type === 'radio' && e.value) {
-      let body = document.body;
+      const body = document.body;
       if (e.el.templateOptions.type === 'color') {
         body.parentElement.classList.remove(this.currentTheme);
         body.parentElement.classList.add(`${e.value}-theme`);
         this.currentTheme = `${e.value}-theme`;
       } else if (e.el.templateOptions.type === 'text') {
-        let font = `${e.value}, sans-serif`;
+        const font = `${e.value}, sans-serif`;
         body.style.fontFamily = font;
         this.currentFont = e.value;
       }

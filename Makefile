@@ -1,5 +1,5 @@
 all:
 	npm install
-	npm run build:prod
+	ng build --prod
 	rm -rf /www/*
 	cp -r dist/* /www/

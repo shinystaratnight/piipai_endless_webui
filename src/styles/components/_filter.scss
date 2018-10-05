@@ -36,6 +36,10 @@
     }
 
     .input-group-addon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       width: 50px;
 
       border-right: 1px solid rgba($gray, .2);

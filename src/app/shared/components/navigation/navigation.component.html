@@ -1,9 +1,9 @@
 <header #header class="page-header">
-  <a routerLink="" [class.logo]="!logo">
+  <a class="order-1 order-xl-0" routerLink="" [class.logo]="!logo">
     <img class="logo-img" *ngIf="logo" [src]="logo">
   </a>
-  <nav #nav class="navigation flex-xl-unordered" [ngClass]="{'flex-first': pages}" *ngIf="pages && pages.length">
-    <button class=" d-flex align-items-center hamburger hamburger--spring hidden-xl-up" type="button"
+  <nav #nav class="navigation order-0" [ngClass]="{'flex-first': pages}" *ngIf="pages && pages.length">
+    <button class=" d-flex align-items-center hamburger hamburger--spring d-xl-none" type="button"
       [ngClass]="{'is-active': isCollapsed}"
       (click)="showNavigation($event)">
       <span class="hamburger-box">
@@ -11,10 +11,12 @@
       </span>
     </button>
     <ul class="navigation-list navigation-list-parent" [ngClass]="{'show': isCollapsed}" [ngStyle]="{'top.px': (isCollapsed) ? headerHeight : 0}">
-      <template *ngFor="let page of pages" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page, first: true, height: headerHeight}"></template>
+      <ng-container *ngFor="let page of pages">
+        <ng-container *ngTemplateOutlet="item; context: {page: page, first: true, height: headerHeight}"></ng-container>
+      </ng-container>
     </ul>
   </nav>
-  <div #userBlock class="user" *ngIf="user">
+  <div #userBlock class="user order-1" *ngIf="user">
     <div class="user-block">
       <div class="user-info hidden-sm-down">
         <span>{{user.data.contact.__str__}}</span>
@@ -48,16 +50,20 @@
   </div>
 </header>
 
-<template #list let-p="pages" let-h="height">
+<ng-template #list let-p="pages" let-h="height">
   <ul *ngIf="!isCollapsed && p.length" class="navigation-list-nested">
-    <template *ngFor="let page of p" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page}"></template>
+    <ng-container *ngFor="let page of p">
+      <ng-container *ngTemplateOutlet="item; context: {page: page}"></ng-container>
+    </ng-container>
   </ul>
   <ul *ngIf="isCollapsed && p.length" class="navigation-list-nested">
-    <template *ngFor="let page of p" [ngTemplateOutlet]="item" [ngOutletContext]="{page: page}"></template>
+    <ng-container *ngFor="let page of p">
+      <ng-container *ngTemplateOutlet="item; context: {page: page}"></ng-container>
+    </ng-container>
   </ul>
-</template>
+</ng-template>
 
-<template #item let-p="page" let-f="first" let-h="height">
+<ng-template #item let-p="page" let-f="first" let-h="height">
   <li class="navigation-item" [class.disabled]="p.disabled" [class.opened]="p.opened">
     <a *ngIf="!p.disabled" [routerLink]="p.url !== '/' ? [p.url] : null" class="navigation-link" [class.active]="p.active"
       (click)="clickActione($event, p)">{{p.name}}</a>
@@ -70,7 +76,12 @@
       [name]="p.opened ? 'minus' : 'plus'">
     </i>
 
-    <template *ngIf="p.childrens && f" [ngTemplateOutlet]="list" [ngOutletContext]="{pages: p.childrens, height: h}"></template>
-    <template *ngIf="p.childrens && !f" [ngTemplateOutlet]="list" [ngOutletContext]="{pages: p.childrens}"></template>
+    <ng-container *ngIf="p.childrens && f">
+      <ng-container *ngTemplateOutlet="list; context: {pages: p.childrens, height: h}"></ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="p.childrens && !f">
+      <ng-container *ngTemplateOutlet="list; context: {pages: p.childrens}"></ng-container>
+    </ng-container>
   </li>
-</template>
+</ng-template>

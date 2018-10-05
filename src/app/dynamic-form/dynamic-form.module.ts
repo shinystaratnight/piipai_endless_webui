@@ -5,11 +5,11 @@ import { RouterModule } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
-import { AgmCoreModule } from 'angular2-google-maps/core';
-import { InfiniteScrollModule } from 'angular2-infinite-scroll';
+import { AgmCoreModule } from '@agm/core';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ButtonsModule } from 'ngx-bootstrap';
-import { PdfViewerComponent } from 'ng2-pdf-viewer';
-import { GooglePlaceModule } from 'ng2-google-place-autocomplete';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DndModule } from 'ng2-dnd';
 
 import { SharedModule } from '../shared/shared.module';
@@ -35,7 +35,8 @@ import { directives } from './directives';
     SharedModule,
     ButtonsModule.forRoot(),
     GooglePlaceModule,
-    DndModule.forRoot()
+    DndModule.forRoot(),
+    PdfViewerModule
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -49,7 +50,7 @@ import { directives } from './directives';
     fromContainers.FormBuilderFormComponent,
   ],
   declarations: [
-    PdfViewerComponent,
+    // PdfViewerComponent,
     fromComponents.WebcamComponent,
 
     ...fromComponents.components,

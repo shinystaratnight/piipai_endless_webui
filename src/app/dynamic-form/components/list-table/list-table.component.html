@@ -8,7 +8,7 @@
     <tr *ngFor="let row of config.body">
       <td *ngFor="let cell of row.content" [attr.data-label]="cell.label">
         <ng-container
-          listElement
+          appListElement
           [config]="cell.content">
         </ng-container>
       </td>

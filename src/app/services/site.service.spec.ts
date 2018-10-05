@@ -1,10 +1,6 @@
 import { async, inject, TestBed } from '@angular/core/testing';
 
-import { NavigationService, Page } from './navigation.service';
-
-import { Observable } from 'rxjs/Observable';
-
-import { SiteService, PageData } from './site.service';
+import { SiteService } from './site.service';
 
 describe('UserService', () => {
 

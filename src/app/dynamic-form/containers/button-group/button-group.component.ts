@@ -9,7 +9,7 @@ import { getValueOfData } from '../../helpers/utils';
 import { FormatString } from '../../../helpers/format';
 
 @Component({
-  selector: 'button-group',
+  selector: 'app-button-group',
   templateUrl: './button-group.component.html'
 })
 export class ButtonGroupComponent implements OnInit {

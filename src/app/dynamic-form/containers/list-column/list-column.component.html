@@ -7,7 +7,7 @@
 <div *ngIf="!head">
   <ng-container
     *ngFor="let field of config; let last = last"
-    listElement
+    appListElement
     [last]="last"
     [config]="field"
     [length]="config.length"

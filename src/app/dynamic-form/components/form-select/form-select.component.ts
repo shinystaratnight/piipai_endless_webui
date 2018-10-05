@@ -10,12 +10,12 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
-  selector: 'form-select',
+  selector: 'app-form-select',
   templateUrl: 'form-select.component.html'
 })
 

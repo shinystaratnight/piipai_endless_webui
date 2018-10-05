@@ -10,10 +10,10 @@ import { FormGroup } from '@angular/forms';
 
 import { FormService } from '../../services';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'form-tabs',
+  selector: 'app-form-tabs',
   templateUrl: './form-tabs.component.html',
   styleUrls: ['./form-tabs.component.scss']
 })

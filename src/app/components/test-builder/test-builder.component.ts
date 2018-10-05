@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 import { GenericFormService } from '../../dynamic-form/services';
 
@@ -25,7 +25,7 @@ import * as answerMetadata from '../../metadata/acceptancetestanswers.metadata';
 import * as testMetadata from '../../metadata/acceptancetests.metadata';
 
 @Component({
-  selector: 'test-builder',
+  selector: 'app-test-builder',
   templateUrl: './test-builder.component.html',
   styleUrls: ['./test-builder.component.scss'],
   encapsulation: ViewEncapsulation.None

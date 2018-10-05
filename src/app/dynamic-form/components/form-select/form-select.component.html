@@ -3,7 +3,7 @@
     <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" *ngIf="label && config.templateOptions.label" [attr.for]="key">
       {{config.templateOptions.label}}
     </label>
-    <info [description]="config.templateOptions.description"></info>
+    <app-info [description]="config.templateOptions.description"></app-info>
     <div class="form-element-content edit">
       <select
         class="form-control custom-select"

@@ -3,7 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { getContactAvatar } from '../../../helpers/utils';
 
 @Component({
-  selector: 'list-info',
+  selector: 'app-list-info',
   templateUrl: 'list-info.component.html',
   styleUrls: ['./list-info.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -76,8 +76,8 @@ export class ListInfoComponent implements OnInit {
 
   public getValue(key: string, data: any): any {
     if (key) {
-      let keys = key.split('.');
-      let prop = keys.shift();
+      const keys = key.split('.');
+      const prop = keys.shift();
 
       if (!keys.length) {
         return data[prop];

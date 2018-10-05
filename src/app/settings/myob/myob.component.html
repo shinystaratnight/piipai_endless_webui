@@ -1,18 +1,17 @@
-<dynamic-form
+<app-dynamic-form
   [config]="config"
   (event)="eventHandler($event)">
     <button (click)="connectHandler()" type="submit" class="btn btn-default mb-2 ml-2" [ngStyle]="{'background-color': connectButton.color}" [disabled]="connectProcess">
       {{connectProcess ? 'Connecting' : connectButton.text}}
-      <spinner *ngIf="connectProcess"></spinner>
+      <app-spinner *ngIf="connectProcess"></app-spinner>
     </button>
-</dynamic-form>
+</app-dynamic-form>
 
 <div class="content">
   <h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !companyFile.isCollapsed}">
     <i fa
       class="p-2"
       [name]="companyFile.isCollapsed ? 'eye' : 'eye-slash'"
-      [border]=false
       (click)="companyFile.isCollapsed = !companyFile.isCollapsed"
       [attr.aria-expanded]="!companyFile.isCollapsed"
       aria-controls="collapseExample"
@@ -45,7 +44,6 @@
     <i fa
       class="p-2"
       [name]="payrollAccounts.isCollapsed ? 'eye' : 'eye-slash'"
-      [border]=false
       (click)="payrollAccounts.isCollapsed = !payrollAccounts.isCollapsed"
       [attr.aria-expanded]="!payrollAccounts.isCollapsed"
       aria-controls="collapseExample"
@@ -118,7 +116,7 @@
         [disabled]="saveProcess || !accountForm.valid"
         (click)="sendForm(accountForm.value)">
         Save
-        <spinner *ngIf="saveProcess"></spinner>
+        <app-spinner *ngIf="saveProcess"></app-spinner>
       </button>
     </div>
 

@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import * as moment from 'moment-timezone';
 
 import { Field } from '../../models';
@@ -21,7 +21,7 @@ import { FormatString } from '../../../helpers/format';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 @Component({
-  selector: 'form-input',
+  selector: 'app-form-input',
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -279,11 +279,11 @@ export class FormInputComponent extends BasicElementComponent
         this.config.default ||
         this.config.default === 0
       ) {
-        let defaultValue = typeof this.config.default === 'string'
+        const defaultValue = typeof this.config.default === 'string'
             ? format.format(this.config.default, this.formData)
             : this.config.default;
 
-        let value =
+        const value =
           (this.config.value === 0 || this.config.value) &&
           !(update && defaultValue !== this.config.value && !this.config.useValue)
             ? this.config.value
@@ -339,7 +339,7 @@ export class FormInputComponent extends BasicElementComponent
 
   public filter(key) {
     this.lastElement = 0;
-    let query = this.group.get(key).value;
+    const query = this.group.get(key).value;
     if (query !== '') {
       if (this.config.autocomplete) {
         this.filteredList = this.config.autocomplete.filter((el) => {
@@ -387,6 +387,7 @@ export class FormInputComponent extends BasicElementComponent
         break;
       case 'password':
         this.config.templateOptions.type = 'text';
+        break;
       default:
         break;
     }

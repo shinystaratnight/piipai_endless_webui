@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { GenericFormService } from './../../services/generic-form.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface FormFieldsGroup {
   fields: string[];
@@ -12,7 +12,7 @@ interface FormFieldsGroup {
 }
 
 @Component({
-  selector: 'form-fields-group',
+  selector: 'app-form-fields-group',
   templateUrl: 'form-fields-group.component.html',
   styleUrls: ['./form-fields-group.component.scss']
 })
@@ -23,9 +23,8 @@ export class FormFieldsGroupComponent implements OnInit {
   @ViewChild('modalActiveFields')
   public modalActiveFields: any;
 
-  public formFieldGroupsEndpoint: string =
-    '/ecore/api/v2/core/formfieldgroups/';
-  public formModelFieldEndpoint: string = '/ecore/api/v2/core/modelformfields/';
+  public formFieldGroupsEndpoint = '/ecore/api/v2/core/formfieldgroups/';
+  public formModelFieldEndpoint = '/ecore/api/v2/core/modelformfields/';
   public groups: any[];
   public fields: any;
   public choosenType: string;
@@ -41,7 +40,7 @@ export class FormFieldsGroupComponent implements OnInit {
   public search: string;
   public activeFields: any[];
 
-  public lastPosition: number = 0;
+  public lastPosition = 0;
 
   constructor(
     private modalService: NgbModal,
@@ -51,7 +50,7 @@ export class FormFieldsGroupComponent implements OnInit {
   public ngOnInit() {
     if (this.config.fields && this.config.fields.length) {
       if (this.config.value && this.config.value.length) {
-        let value = this.config.value;
+        const value = this.config.value;
         this.groupId = value[0].id;
         this.parseValueFromApi(value[0], this.config.fields);
         this.groups = this.config.fields;
@@ -150,7 +149,7 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   public createGroup(): void {
-    let body = {
+    const body = {
       field_list: [],
       form: this.config.id,
       name: this.config.id,
@@ -236,7 +235,7 @@ export class FormFieldsGroupComponent implements OnInit {
           (err: any) => (this.error = err)
         );
     } else {
-      let body = Object.assign({ group: this.groupId }, field);
+      const body = Object.assign({ group: this.groupId }, field);
       body.position = this.lastPosition + 1;
       delete body.hidden;
       delete body.isCollapsed;
@@ -259,13 +258,13 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   public getActiveFields(array) {
-    let results = [];
+    const results = [];
     array.forEach((el) => {
       if (el.id) {
         results.push(el);
       }
       if (el.model_fields) {
-        let activeChildrens = this.getActiveFields(el.model_fields);
+        const activeChildrens = this.getActiveFields(el.model_fields);
         results.push(...activeChildrens);
       }
     });
@@ -275,7 +274,7 @@ export class FormFieldsGroupComponent implements OnInit {
   public toggleRequireProperty(field): void {
     if (!field.required) {
       if (field.id) {
-        let body = Object.assign({ group: this.groupId }, field);
+        const body = Object.assign({ group: this.groupId }, field);
         delete body.hidden;
         delete body.isCollapsed;
         delete body.model_fields;
@@ -336,11 +335,11 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   public delete(object, container: any[], type) {
-    let endpoint =
+    const endpoint =
       type === 'group'
         ? this.formFieldGroupsEndpoint
         : this.fields[object.field_type].endpoint;
-    let id = object.id;
+    const id = object.id;
     this.genericFormService.delete(endpoint, id).subscribe(
       (res: any) => {
         container.forEach((el, i) => {
@@ -360,7 +359,7 @@ export class FormFieldsGroupComponent implements OnInit {
         this.updateObject(container, e.data);
       } else {
         if (type === 'field') {
-          let data = {
+          const data = {
             polymorphic_ctype: {
               id: this.choosenType
             }
@@ -377,7 +376,7 @@ export class FormFieldsGroupComponent implements OnInit {
       this.choosenType === 'modelfield' &&
       e.el.key === 'name'
     ) {
-      let element = this.config.fields.filter((el) => el.name === e.value);
+      const element = this.config.fields.filter((el) => el.name === e.value);
       this.modalData.data = Object.assign({}, this.modalData.data);
       if (element && element[0]) {
         ['required', 'help_text', 'label', 'name'].forEach((el) => {
@@ -433,7 +432,7 @@ export class FormFieldsGroupComponent implements OnInit {
     array.forEach((el) => {
       let self = false;
       let children = false;
-      let val = el.label;
+      const val = el.label;
       if (val && val.toLowerCase().indexOf(value.toLowerCase()) > -1) {
         self = true;
       }
@@ -465,18 +464,18 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   public changePosition(item, type) {
-    let currentPosition = item.position;
-    let nextPosition = type === 'up' ? item.position - 1 : item.position + 1;
-    let element = this.getItemByPosition(this.activeFields, nextPosition);
+    const currentPosition = item.position;
+    const nextPosition = type === 'up' ? item.position - 1 : item.position + 1;
+    const element = this.getItemByPosition(this.activeFields, nextPosition);
     item.position = nextPosition;
-    let body = Object.assign({ group: this.groupId }, item);
+    const body = Object.assign({ group: this.groupId }, item);
     delete body.hidden;
     delete body.isCollapsed;
     delete body.model_fields;
     this.genericFormService
       .editForm(`${this.formModelFieldEndpoint}${item.id}/`, body)
       .subscribe((res: any) => {
-        let newBody = Object.assign({ group: this.groupId }, element);
+        const newBody = Object.assign({ group: this.groupId }, element);
         newBody.position = currentPosition;
         delete newBody.hidden;
         delete newBody.isCollapsed;

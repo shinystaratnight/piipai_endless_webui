@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'form-column',
+  selector: 'app-form-column',
   templateUrl: 'form-column.component.html'
 })
 

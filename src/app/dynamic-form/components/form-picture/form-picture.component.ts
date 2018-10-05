@@ -13,13 +13,13 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { FallbackDispatcher } from '../webcam/fallback.dispatcher';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { getContactAvatar } from '../../../helpers/utils';
 
 @Component({
-  selector: 'form-picture',
+  selector: 'app-form-picture',
   templateUrl: 'form-picture.component.html',
   styleUrls: ['./form-picture.component.scss'],
 })
@@ -43,9 +43,9 @@ export class FormPictureComponent
   public message: any;
   public key: any;
   public label: boolean;
-  public photoExist: boolean = false;
+  public photoExist = false;
   public mime: string;
-  public fileName: string = '';
+  public fileName = '';
   public onSuccess;
   public onError;
   public flashPlayer: any;
@@ -142,8 +142,8 @@ export class FormPictureComponent
       if (this.config.value instanceof Object && this.config.value.origin) {
         this.value = this.config.value.origin;
       } else if (typeof this.config.value === 'string') {
-        let imageType = /^image\//;
-        let pdfType = /pdf$/;
+        const imageType = /^image\//;
+        const pdfType = /pdf$/;
         if (pdfType.test(this.config.value)) {
           this.link = this.config.value;
         } else {
@@ -185,7 +185,7 @@ export class FormPictureComponent
 
   public getPhoto() {
     this.fileName = '';
-    let canvas = this.createPhoto();
+    const canvas = this.createPhoto();
     this.base64 = canvas.toDataURL(this.mime);
   }
 
@@ -213,18 +213,18 @@ export class FormPictureComponent
 
   public fileChangeEvent(e) {
     this.updateValue('', '', true);
-    let file = e.target.files[0];
+    const file = e.target.files[0];
     if (file) {
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = () => {
-        let imageType = /^image\//;
-        let pdfType = /pdf$/;
+        const imageType = /^image\//;
+        const pdfType = /pdf$/;
 
         if (!imageType.test(file.type) && !pdfType.test(file.type)) {
           return;
         }
         if (reader.result) {
-          let name = file.name;
+          const name = file.name;
           this.updateValue(name, reader.result, imageType.test(file.type));
         }
       };
@@ -252,14 +252,14 @@ export class FormPictureComponent
       FallbackDispatcher.implementExternal({
         onSave: (data) => {
           try {
-            let col = data.split(';');
+            const col = data.split(';');
             let tmp = null;
 
             for (let i = 0; i < w; i++) {
               tmp = parseInt(col[i], 10);
-              externData.imgData.data[externData.pos + 0] = (tmp >> 16) & 0xff;
-              externData.imgData.data[externData.pos + 1] = (tmp >> 8) & 0xff;
-              externData.imgData.data[externData.pos + 2] = tmp & 0xff;
+              externData.imgData.data[externData.pos + 0] = (tmp >> 16) & 0xff; //tslint:disable-line
+              externData.imgData.data[externData.pos + 1] = (tmp >> 8) & 0xff; //tslint:disable-line
+              externData.imgData.data[externData.pos + 2] = tmp & 0xff; //tslint:disable-line
               externData.imgData.data[externData.pos + 3] = 0xff;
               externData.pos += 4;
             }

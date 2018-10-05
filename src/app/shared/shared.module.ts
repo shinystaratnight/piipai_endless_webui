@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
-import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import { ToastrModule } from 'ngx-toastr';
 
 import { components } from './components';
 
@@ -17,7 +17,7 @@ import { pipes } from './pipes';
     CommonModule,
     RouterModule,
     Angular2FontawesomeModule,
-    ToastModule.forRoot(),
+    ToastrModule.forRoot(),
     FormsModule,
   ],
   exports: [

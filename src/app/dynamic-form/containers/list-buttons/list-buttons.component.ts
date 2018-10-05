@@ -7,7 +7,7 @@ interface Button {
 }
 
 @Component({
-  selector: 'list-buttons',
+  selector: 'app-list-buttons',
   templateUrl: 'list-buttons.component.html',
   styleUrls: ['./list-buttons.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

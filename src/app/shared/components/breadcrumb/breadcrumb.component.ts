@@ -10,7 +10,7 @@ export interface Breadcrumb {
 }
 
 @Component({
-  selector: 'breadcrumb',
+  selector: 'app-breadcrumb',
   templateUrl: 'breadcrumb.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -27,7 +27,7 @@ export class BreadcrumbComponent implements OnChanges {
   public url: any;
 
   @Input()
-  public byRoute: boolean = true;
+  public byRoute = true;
 
   public list: Breadcrumb[] = [];
 
@@ -57,18 +57,18 @@ export class BreadcrumbComponent implements OnChanges {
   }
 
   public generateData(url) {
-    let urlCopy = url.map((el) => {
+    const urlCopy = url.map((el) => {
       return el.path;
     });
     this.generateBreadcrumb(urlCopy);
   }
 
   public generateBreadcrumb(url) {
-    let fullPath = `/${url.join('/')}/`;
+    const fullPath = `/${url.join('/')}/`;
     url.forEach((el, i) => {
-      let path = `/${url.slice(0, i + 1).join('/')}/`;
-      let label = '';
-      let exist = this.getElement(path, this.navigationList);
+      const path = `/${url.slice(0, i + 1).join('/')}/`;
+      const label = '';
+      const exist = this.getElement(path, this.navigationList);
       if (exist) {
         this.list.push({
           path,

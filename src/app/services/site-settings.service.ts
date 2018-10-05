@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Observable, of } from 'rxjs';
+import { map, catchError, mergeMap } from 'rxjs/operators';
 
 import { UserService } from './user.service';
 
@@ -22,48 +21,52 @@ export class SiteSettingsService {
   public resolve() {
     return this.userService
       .getUserData()
-      .mergeMap((user: any) => {
-        this.authorized = true;
+      .pipe(
+        mergeMap((user: any) => {
+          this.authorized = true;
 
-        if (user.data.contact.contact_type === 'manager') {
-          return this.getSettings(this.endpoint);
-        } else {
+          if (user.data.contact.contact_type === 'manager') {
+            return this.getSettings(this.endpoint);
+          } else {
+            return this.getSettings(this.siteEndpoint);
+          }
+        }),
+        catchError((err: any) => {
+          this.authorized = false;
+
           return this.getSettings(this.siteEndpoint);
-        }
-      })
-      .catch((err: any) => {
-        this.authorized = false;
-
-        return this.getSettings(this.siteEndpoint);
-      });
+        })
+      );
   }
 
   private getSettings(endpoint: string): Observable<any> {
     if (!this.settings || !this.authorized) {
       return this.http
         .get(endpoint)
-        .map((res: Response) => {
-          const settings = res.json();
+        .pipe(
+          map((res: Response) => {
+            const settings = res.json();
 
-          if (this.authorized) {
-            this.settings = settings;
-          }
+            if (this.authorized) {
+              this.settings = settings;
+            }
 
-          setTimeout(() => {
-            this.updateBrowserStyles(settings);
-          }, 100);
+            setTimeout(() => {
+              this.updateBrowserStyles(settings);
+            }, 100);
 
-          return settings;
-        })
-        .catch((err: any) => {
-          if (err.status === 404 && location.host !== 'r3sourcer.com') {
-            location.href = 'http://r3sourcer.com';
-          }
+            return settings;
+          }),
+          catchError((err: any) => {
+            if (err.status === 404 && location.host !== 'r3sourcer.com') {
+              location.href = 'http://r3sourcer.com';
+            }
 
-          return Observable.of(true);
-        });
+            return of(true);
+          })
+        );
     } else if (this.settings && this.authorized) {
-      return Observable.of(this.settings);
+      return of(this.settings);
     }
   }
 

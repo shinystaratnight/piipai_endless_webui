@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/combineLatest';
+import { Observable, Subscription, combineLatest } from 'rxjs';
 
 import { PermissionsService } from './permissions.service';
 import { SettingsService } from '../settings.service';
@@ -27,7 +25,7 @@ export interface Group {
 }
 
 @Component({
-  selector: 'permissions',
+  selector: 'app-permissions',
   templateUrl: 'permissions.component.html',
   styleUrls: ['./permissions.component.scss']
 })
@@ -203,7 +201,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
   }
 
   public getGroupsOfUser(id) {
-    Observable.combineLatest(
+    combineLatest(
       this.service.getAvailableGroupsOnTheUser(id),
       this.service.getGroupsOnTheUser(id)
     ).subscribe((response: any) => {
@@ -227,13 +225,13 @@ export class PermissionsComponent implements OnInit, OnDestroy {
 
   public filter(value, type, target, element) {
     type = type === 'list' ? element : type;
-    let source = type === 'user' ? this.cashUsers :
+    const source = type === 'user' ? this.cashUsers :
       type === 'group' ? this.cashGroups :
       type === 'permission' ? this.cashPermissions : null;
     if (value && source) {
       target.length = 0;
-      let newArray = source.filter((el) => {
-        let val = el.name;
+      const newArray = source.filter((el) => {
+        const val = el.name;
         if (val) {
           return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
         }
@@ -258,7 +256,7 @@ export class PermissionsComponent implements OnInit, OnDestroy {
     this.permissionsList = [].concat(this.cashPermissions);
     this.resetData(this.groups);
     this.resetData(this.permissionsList);
-  };
+  }
 
   public resetData(array: any[]) {
     array.forEach((el) => {

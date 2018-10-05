@@ -10,12 +10,12 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
-  selector: 'form-checkbox',
+  selector: 'app-form-checkbox',
   templateUrl: './form-checkbox.component.html',
 })
 
@@ -35,8 +35,8 @@ export class FormCheckboxComponent
   public label: boolean;
 
   public checkboxValue: string;
-  public checkboxClass: string = '';
-  public checkboxColor: string = '';
+  public checkboxClass = '';
+  public checkboxColor = '';
 
   public viewMode: boolean;
 
@@ -126,8 +126,8 @@ export class FormCheckboxComponent
 
   public customizeCheckbox(value): void {
     this.checkboxValue = this.config.templateOptions.values[value];
-    let color = this.config.templateOptions.color;
-    let classes = ['primary', 'danger', 'info', 'success', 'warning'];
+    const color = this.config.templateOptions.color;
+    const classes = ['primary', 'danger', 'info', 'success', 'warning'];
     this.checkboxClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
     if (!this.checkboxClass) {
       this.checkboxColor = color || '';
