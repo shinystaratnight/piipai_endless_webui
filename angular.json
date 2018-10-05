@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "webui6": {
+    "webui": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -108,7 +108,7 @@
         }
       }
     },
-    "webui6-e2e": {
+    "webui-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {

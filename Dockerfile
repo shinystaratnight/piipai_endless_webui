@@ -1,4 +1,4 @@
-FROM node:10.11
+FROM node:8.12
 WORKDIR /code
 ADD Makefile /code
 RUN npm install --global @angular/cli@6
