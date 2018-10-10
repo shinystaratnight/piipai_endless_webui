@@ -1,10 +1,10 @@
 <ng-container *ngIf="config.label && config.label.slice">
-  <span *ngIf="!config.setColorForLabel">{{config.label}}</span>
-  <span *ngIf="config.setColorForLabel" [ngClass]="[iconClass]">{{config.label}}</span>
+  <span *ngIf="!config.setColorForLabel">{{config.label}}&nbsp;</span>
+  <span *ngIf="config.setColorForLabel" [ngClass]="[iconClass]">{{config.label}}&nbsp;</span>
 </ng-container>
 <ng-container *ngIf="config.label && !config.label.slice">
-  <span *ngIf="!config.setColorForLabel">{{config.label[config.value]}}</span>
-  <span *ngIf="config.setColorForLabel" [ngClass]="[iconClass]">{{config.label[config.value]}}</span>
+  <span *ngIf="!config.setColorForLabel">{{config.label[config.value]}}&nbsp;</span>
+  <span *ngIf="config.setColorForLabel" [ngClass]="[iconClass]">{{config.label[config.value]}}&nbsp;</span>
 </ng-container>
 
 <img *ngIf="src" [src]="src" width="60" height="60">
