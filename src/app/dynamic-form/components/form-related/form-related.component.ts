@@ -384,6 +384,11 @@ export class FormRelatedComponent extends BasicElementComponent
               this.config.default.useIf &&
               this.checkExistKey(this.config.default.useIf, formData.key)
             ) {
+              if (this.config.default.manual) {
+                if (!formData.manual) {
+                  return;
+                }
+              }
               const result = this.checkShowRules(
                 this.config.default.useIf,
                 formData.data

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
-import { Observable, combineLatest, of } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 import { tap, mergeMap, catchError } from 'rxjs/operators';
 
-import { UserService, User, NavigationService, Role } from '../services/';
+import { UserService, User, NavigationService, Role, SiteSettingsService } from '../services/';
 import { CheckPermissionService } from '../shared/services/';
 
 @Injectable()
@@ -15,6 +15,7 @@ export class AuthGuard implements CanActivate {
     private userServise: UserService,
     private checkPermissionServise: CheckPermissionService,
     private navigationService: NavigationService,
+    private siteSettings: SiteSettingsService
   ) {}
 
   public canActivate(
@@ -26,7 +27,9 @@ export class AuthGuard implements CanActivate {
         mergeMap((user: User) => {
           return combineLatest(
             of(user),
-            this.navigationService.getPages(user.currentRole)
+            this.navigationService.getPages(user.currentRole),
+            this.siteSettings.resolve(),
+            this.checkPermissionServise.getPermissions(user.data.user)
           );
         }),
         mergeMap((response: any) => {

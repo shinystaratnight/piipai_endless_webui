@@ -1,5 +1,5 @@
 <div appDropDown [element]="'.ui-datebox-container'" [update]="update" class="form-group" [target]="opened" [hidden]="config.hide || viewMode || config.read_only">
-  <div class="form-element" (click)="updateDate()">
+  <div class="form-element" (click)="updateDate(undefined, $event)">
     <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" *ngIf="label && config.templateOptions.label" [attr.for]="key">
       {{config.templateOptions.label}}:
     </label>
@@ -9,6 +9,7 @@
         #d
         data-role="datebox"
         [(ngModel)]="date"
+
         [attr.id]="key"
         [attr.name]="key">
       <input [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')" class="form-control"
@@ -29,7 +30,7 @@
 </div>
 
 <div class="form-group" *ngIf="(viewMode && !config.hide) || (config.read_only && !config.hide)">
-  <div class="form-element" (click)="updateDate()">
+  <div class="form-element" (click)="updateDate(undefined, $event)">
     <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
       {{config.templateOptions.label}}:
     </label>

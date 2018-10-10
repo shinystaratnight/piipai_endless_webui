@@ -7,7 +7,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 
 import { Observable, throwError, of } from 'rxjs';
-import { switchMap, catchError, map } from 'rxjs/operators';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 
 import { NavigationService } from './navigation.service';
 import { CheckPermissionService } from '../shared/services';
@@ -65,43 +65,40 @@ export class UserService {
       return this.service
         .getAll(this.authEndpoint)
         .pipe(
-          switchMap(
-            (user: User) => this.getUserRoles(),
-            (user: User, role: { roles: Role[] }) => [user, role]
-          ),
-          map((res: [User, { roles: Role[] }]) => {
-            const user: User = res[0];
-            const roles: Role[] = res[1].roles;
-            const redirectRole = this.loginService.role;
+          mergeMap((user: User) => {
+            this.user = user;
 
-            user.roles = roles;
-
+            return this.getUserRoles();
+          }),
+          map((res: { roles: Role[] }) => {
+            const redirectRole: Role = this.loginService.role;
+            const storageRole: Role = this.storage.retrieve('role');
             let role: Role;
-            if (this.storage.retrieve('role')) {
-              role = roles.find(
-                (el) => el.id === this.storage.retrieve('role').id
+
+            if (storageRole) {
+              role = res.roles.find(
+                (el) => el.id === storageRole.id
               );
             } else {
-              role = roles.find(
-                (el) => el.__str__.includes(user.data.contact.contact_type)
+              role = res.roles.find(
+                (el) => el.__str__.includes(this.user.data.contact.contact_type)
               );
             }
 
             if (redirectRole) {
-              const existRole = roles.find((el) => el.id === redirectRole.id );
+              const existRole = res.roles.find((el) => el.id === redirectRole.id );
               if (existRole) {
                 role = existRole;
               } else {
                 role = redirectRole;
-                roles.push(role);
+                res.roles.push(role);
               }
             }
 
-            user.currentRole = role || roles[0];
+            this.user.currentRole = role || this.user.roles[0];
+            this.user.roles = res.roles;
+            this.storage.store('role', this.user.currentRole);
 
-            this.storage.store('role', user.currentRole);
-
-            this.user = user;
             return this.user;
           }),
           catchError((err: any) => throwError(err))

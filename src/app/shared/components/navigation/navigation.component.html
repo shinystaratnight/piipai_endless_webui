@@ -18,7 +18,7 @@
   </nav>
   <div #userBlock class="user order-1" *ngIf="user">
     <div class="user-block">
-      <div class="user-info hidden-sm-down">
+      <div class="user-info d-xl-flex">
         <span>{{user.data.contact.__str__}}</span>
         <span *ngIf="company" class="description">{{company}}</span>
       </div>
@@ -40,7 +40,7 @@
         </div>
       </li>
       <li *ngIf="candidate"><a routerLink="/profile">Profile</a></li>
-      <li class="hidden-md-up description">
+      <li class="d-xl-none description">
         <span>{{user.data.contact.__str__}}</span><br>
         <span *ngIf="company">{{company}}</span>
       </li>

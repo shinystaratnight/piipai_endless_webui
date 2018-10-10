@@ -1168,7 +1168,8 @@ const formadd = [
               query: {
                 primary_contact: '{customer_representative.id}'
               },
-              only: 1
+              only: 1,
+              manual: true
             },
             query: {
               company: '{customer_company.id}'

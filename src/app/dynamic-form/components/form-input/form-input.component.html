@@ -24,12 +24,13 @@
 
       <input type="text" class="form-control" id="autocomplete"
         *ngIf="config.type !== 'static' && !viewMode && (config.type === 'address' || config.key === 'address' || config.key.includes('street_address'))"
-        ng2-google-place-autocomplete
+        [options]="googleOptions"
+        ngx-google-places-autocomplete
         [(ngModel)]="address"
         [ngModelOptions]="{standalone: true}"
         [attr.id]="key"
         [attr.name]="key"
-        (setAddress) = "getAddress($event)">
+        (onAddressChange) = "getAddress($event)">
       <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutocomplete">
         <div class="autocomplete-list" infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
           [scrollWindow]="false" (scrolled)="onModalScrollDown()">

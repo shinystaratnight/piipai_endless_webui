@@ -32,7 +32,10 @@ export class ExtendComponent extends BasicElementComponent
 
   private formSubscription: Subscription;
 
-  constructor(private fb: FormBuilder, private gfs: GenericFormService) {
+  constructor(
+    private fb: FormBuilder,
+    private gfs: GenericFormService
+  ) {
     super();
   }
 
@@ -341,7 +344,7 @@ export class ExtendComponent extends BasicElementComponent
       shift.data.controls.forEach((data, i) => {
         const candidates = shift.config[i].candidates;
 
-        if (!shift.config[i].candidates.doNotChoice) {
+        if (!candidates.doNotChoice) {
           this.getCandidates(shift.date, data.value, shift.config, i);
         }
       });
@@ -363,16 +366,25 @@ export class ExtendComponent extends BasicElementComponent
         this.sortCandidate(res);
 
         const candidates = res.slice(0, data.workers);
-        target[index].candidates = {
-          ...target[index].candidates,
+        const newConfig = { ...target[index] };
+        newConfig.candidates = {
+          ...newConfig.candidates,
           value: candidates
         };
-        target[index].workers = {
-          ...target[index].workers,
+        newConfig.workers = {
+          ...newConfig.workers,
           value: data.workers
         };
+        newConfig.time = {
+          ...newConfig.time,
+          value: data.time
+        };
 
-        target[index] = { ...target[index] };
+        setTimeout(() => {
+          target[index] = { ...newConfig };
+        }, 0);
+
+        target[index] = null;
       });
     }
   }
