@@ -1532,6 +1532,7 @@ export class FormRelatedComponent extends BasicElementComponent
         clickedComponent = clickedComponent.parentNode;
       } while (clickedComponent);
       if (!inside) {
+        this.resetList();
         this.hideAutocomplete = true;
         this.cd.detectChanges();
         return;

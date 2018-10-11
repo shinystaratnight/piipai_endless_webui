@@ -49,7 +49,8 @@ moment.tz.setDefault('Australia/Sydney');
     HttpModule,
     CookieModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: environment.GOOGLE_GEO_CODING_API_KEY
+      apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
+      libraries: ['places']
     }),
     NgbModule.forRoot(),
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
