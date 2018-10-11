@@ -17,12 +17,13 @@
   <div>
     <span class="skill-title">
       {{config.skillName}}
-      <span class="score"
+      <span *ngIf="getScore(config.value)" class="score"
         [style.color]="colors[getScore(config.value)]"
         [style.borderColor]="colors[getScore(config.value)]">
           {{config.value}}&nbsp;
           <i fa name="star"></i>
       </span>
+      <span class="text-danger">&nbsp;|&nbsp; No rating</span>
     </span>
   </div>
 </ng-container>
