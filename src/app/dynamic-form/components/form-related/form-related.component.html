@@ -31,13 +31,12 @@
               [name]="'times'"></i>
           </button>
         </div>
-        <div class="autocomplete" [hidden]="hideAutocomplete" style="top: 1.4rem">
+        <div #autocomplete class="autocomplete" [hidden]="hideAutocomplete" style="top: 1.4rem">
           <input type="text" class="form-control mb-1" autocomplete="off"
             #search="ngModel"
             #searchElement
             [(ngModel)]="searchValue"
-            [ngModelOptions]="{standalone: true}"
-            (blur)="resetList()">
+            [ngModelOptions]="{standalone: true}">
           <div class="autocomplete-list"
             infinite-scroll
             [infiniteScrollDistance]="modalScrollDistance"
@@ -65,14 +64,13 @@
         {{config.templateOptions.label}}:
       </label>
       <app-info [description]="config.templateOptions.description"></app-info>
-      <div *ngIf="config.many && results && !config.useOptions" class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results" style="position: relative">
+      <div #autocomplete *ngIf="config.many && results && !config.useOptions" class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results" style="position: relative">
         <input [hidden]="config.hideSelect" type="text" class="form-control autocomplete-value" autocomplete="off"
           #search="ngModel"
           #searchElement
           [(ngModel)]="searchValue"
           [ngModelOptions]="{standalone: true}"
-          (focus)="generateList()"
-          (blur)="resetList()">
+          (focus)="generateList()">
 
         <div class="form-element-content-actions"
           *ngIf="config.options && config.templateOptions.add" >
