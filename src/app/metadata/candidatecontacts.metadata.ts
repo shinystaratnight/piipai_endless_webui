@@ -230,7 +230,7 @@ const list = {
         fields: ['height', 'weight', 'bmi']
       },
       {
-        label: 'Character',
+        label: 'Scores',
         is_collapsed: true,
         fields: [
           'candidate_scores.reliability',
