@@ -986,8 +986,9 @@ const form = [
                     type: 'static',
                     templateOptions: {
                       required: false,
-                      label: 'Recruitment Score',
-                      type: 'score'
+                      label: 'Average test',
+                      type: 'score',
+                      danger: 'No rating'
                     },
                     read_only: true
                   },
@@ -997,8 +998,9 @@ const form = [
                     type: 'static',
                     templateOptions: {
                       required: false,
-                      label: 'Client Score',
-                      type: 'score'
+                      label: 'Client feedback',
+                      type: 'score',
+                      danger: 'No rating'
                     },
                     read_only: true
                   }
