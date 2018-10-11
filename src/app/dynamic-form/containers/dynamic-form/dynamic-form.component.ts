@@ -127,7 +127,8 @@ export class DynamicFormComponent implements OnInit {
             e.el.formData.next({
               key: e.el.key,
               data: this.fullData,
-              reset: e.manual && e.el.reset
+              reset: e.manual && e.el.reset,
+              manual: e.manual
             });
           }
         }

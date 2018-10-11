@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
-import { Observable, of } from 'rxjs';
+import { Http, Headers } from '@angular/http';
+import { of, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import { CookieService } from 'ngx-cookie';
@@ -205,6 +205,6 @@ export class GenericFormService {
   }
 
   public errorHandler(error) {
-    return Observable.throw(error.json());
+    return throwError(error.json());
   }
 }

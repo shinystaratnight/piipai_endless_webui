@@ -13,7 +13,10 @@ export class SiteSettingsService {
   public settings: any;
   public authorized: boolean;
 
-  constructor(private http: Http, private userService: UserService) {
+  constructor(
+    private http: Http,
+    private userService: UserService
+  ) {
     this.endpoint = '/ecore/api/v2/company_settings/';
     this.siteEndpoint = '/ecore/api/v2/company_settings/site/';
   }

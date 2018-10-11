@@ -46,7 +46,9 @@
 
       <div class="col">
         <ng-container *ngFor="let group of shift.data.controls; let index = index">
-          <ng-container *ngTemplateOutlet="date; context: {group: group, config: shift.config[index], index: index, target: shift.data, parentIndex: i}"></ng-container>
+          <ng-container *ngIf="shift.config[index]">
+            <ng-container *ngTemplateOutlet="date; context: {group: group, config: shift.config[index], index: index, target: shift.data, parentIndex: i}"></ng-container>
+          </ng-container>
         </ng-container>
       </div>
     </div>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 
 import { UserService } from '../services';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class NotAuthorizedGuard implements CanActivate {
     private userService: UserService
   ) {}
 
-  public canActivate() {
+  public canActivate(): Observable<boolean> {
     return this.userService
       .getUserData()
       .pipe(

@@ -50,6 +50,11 @@ export class FormInputComponent extends BasicElementComponent
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
   public address = '';
+  public googleOptions = {
+    componentRestrictions: {
+      country: 'AU'
+    }
+  };
 
   @ViewChild('input')
   public input;

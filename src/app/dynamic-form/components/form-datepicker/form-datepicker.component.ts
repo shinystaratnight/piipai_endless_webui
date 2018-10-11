@@ -325,7 +325,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     }
   }
 
-  public updateDate(date?) {
+  public updateDate(date?, e?) {
     if (this.config.templateOptions.type === 'date') {
       if (date) {
         if (!this.date || this.config.shouldUpdate) {
@@ -348,6 +348,15 @@ export class FormDatepickerComponent extends BasicElementComponent
         this.group.get(this.key).patchValue(date.format());
         this.emitChanges();
       }
+    }
+
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      setTimeout(() => {
+        return e;
+      }, 200);
     }
   }
 
