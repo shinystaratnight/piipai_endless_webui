@@ -1388,7 +1388,7 @@ export class DynamicListComponent
   public changeTimesheet(e) {
     const object = this.fullData[this.responseField].find(
       (el) => el.id === e.el.rowId
-    )[0];
+    );
     if (object) {
       const contact = object.job_offer.candidate_contact.contact;
       this.modalInfo = {};

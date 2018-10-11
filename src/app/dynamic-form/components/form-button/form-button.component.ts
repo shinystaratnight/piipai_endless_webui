@@ -66,7 +66,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   public action(e) {
     if (this.config.templateOptions.type !== 'submit' && !this.config.disableAction) {
       let id;
-      if (this.config.field === 'id') {
+      if (this.config.name === 'id') {
         id = this.config.rowId;
       }
       this.buttonAction.emit({
