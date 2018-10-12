@@ -234,9 +234,11 @@ const list = {
         is_collapsed: true,
         hideLabel: true,
         fields: [
+          'candidate_scores.recruitment_score',
+          'candidate_scores.client_feedback',
           'candidate_scores.reliability',
           'candidate_scores.loyalty',
-          // 'strength'
+          // 'strength'      
         ]
       },
       {
