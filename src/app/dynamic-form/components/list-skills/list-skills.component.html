@@ -23,7 +23,7 @@
           {{config.value}}&nbsp;
           <i fa name="star"></i>
       </span>
-      <span class="text-danger">&nbsp;|&nbsp; No rating</span>
+      <span *ngIf="!getScore(config.value)" class="text-danger">&nbsp;|&nbsp; No rating</span>
     </span>
   </div>
 </ng-container>

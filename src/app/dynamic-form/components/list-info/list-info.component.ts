@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { getContactAvatar } from '../../../helpers/utils';
+import { getValueOfData } from '../../helpers/utils';
 
 @Component({
   selector: 'app-list-info',
@@ -20,6 +21,7 @@ export class ListInfoComponent implements OnInit {
   public description: string;
   public status: any[];
   public averageScore: any;
+  public averageScoreDescription: any;
   public contactAvatar: string;
   public job_title: string; //tslint:disable-line
   public company: string;
@@ -72,6 +74,34 @@ export class ListInfoComponent implements OnInit {
         this.contactAvatar = getContactAvatar(this.title);
       }
     }
+
+    if (this.config.value) {
+      this.generateAverageScoreTooltip(this.config.value);
+    }
+  }
+
+  public generateAverageScoreTooltip(data) {
+    const scores = [
+      { label: 'Loyalty', key: 'candidate_scores.loyalty' },
+      { label: 'Client feedback', key: 'candidate_scores.client_feedback' },
+      { label: 'Avarage test', key: 'candidate_scores.recruitment_score' },
+      { label: 'Reliability', key: 'candidate_scores.reliability' },
+    ];
+
+    this.averageScoreDescription = {
+      includes: this.filterScores(scores, data, 'includes'),
+      excludes: this.filterScores(scores, data)
+    };
+  }
+
+  public filterScores(scores, data, type?: string) {
+    return scores
+      .filter((el) => {
+        getValueOfData(data, el.key, el);
+        el.score = this.getScore(el.value);
+
+        return type === 'includes' ? el.score : !el.score;
+      });
   }
 
   public getValue(key: string, data: any): any {
