@@ -238,7 +238,7 @@ const list = {
           'candidate_scores.client_feedback',
           'candidate_scores.reliability',
           'candidate_scores.loyalty',
-          // 'strength'      
+          // 'strength'
         ]
       },
       {
