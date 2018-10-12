@@ -107,6 +107,34 @@ const list = {
         title: null,
         sort_field: 'candidate_scores.loyalty'
       },
+      {
+        delim: null,
+        label: 'Average test',
+        sort: true,
+        content: [
+          {
+            field: 'candidate_scores.recruitment_score',
+            type: 'skills'
+          }
+        ],
+        name: 'candidate_scores.recruitment_score',
+        title: null,
+        sort_field: 'candidate_scores.recruitment_score'
+      },
+      {
+        delim: null,
+        label: 'Client feedback',
+        sort: true,
+        content: [
+          {
+            field: 'candidate_scores.client_feedback',
+            type: 'skills'
+          }
+        ],
+        name: 'candidate_scores.client_feedback',
+        title: null,
+        sort_field: 'candidate_scores.client_feedback'
+      },
       // {
       //   delim: null,
       //   label: 'Strength',
