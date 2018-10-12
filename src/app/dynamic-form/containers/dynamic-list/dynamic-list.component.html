@@ -197,7 +197,7 @@
                       <tr>
                         <td *ngFor="let acell of row.additionalBody.content">
                           <div class="additional-data" *ngFor="let field of acell.content">
-                            <span *ngIf="field.content && acell.content.length > 1 && acell.label !== 'Character'" class="description">{{field.label}}</span>
+                            <span *ngIf="field.content && acell.content.length > 1 && !acell.hideLabel" class="description">{{field.label}}</span>
                             <span class="additional-data-content">
                               <ng-container *ngFor="let innerField of field.content"
                                 appListElement

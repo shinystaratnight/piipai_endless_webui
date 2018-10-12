@@ -723,6 +723,7 @@ export class DynamicListComponent
         const cell = {
           id: el.id,
           label: col.label,
+          hideLabel: col.hideLabel,
           name: col.name,
           content: [],
           contextMenu: col.context_menu,

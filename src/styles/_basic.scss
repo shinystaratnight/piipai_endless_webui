@@ -415,7 +415,7 @@ form.ng-invalid button[type='submit'] {
     right: -2px;
 
     transform: rotate(45deg);
-    box-shadow: -4px 4px 15px 1px rgba($gray, 0.2);
+    box-shadow: -4px 4px 5px 0 rgba($gray, 0.2);
   }
 
   &.bs-tooltip-left .arrow {
@@ -423,7 +423,7 @@ form.ng-invalid button[type='submit'] {
 
     &::before {
       transform: rotate(45deg);
-      box-shadow: 4px -4px 15px 1px rgba($gray, 0.2);
+      box-shadow: 4px -4px 5px 0 rgba($gray, 0.2);
     }
   }
 
@@ -432,7 +432,7 @@ form.ng-invalid button[type='submit'] {
 
     &::before {
       transform: rotate(45deg);
-      box-shadow: -4px -4px 15px 1px rgba($gray, 0.2);
+      box-shadow: -4px -4px 5px 0 rgba($gray, 0.2);
     }
   }
 }
@@ -1286,6 +1286,8 @@ iframe.send-sms {
   text-align: left;
 
   h6 {
+    margin-bottom: 4px;
+
     font-size: 12px;
     line-height: 16px;
   }

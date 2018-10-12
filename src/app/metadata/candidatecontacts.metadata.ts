@@ -187,7 +187,7 @@ const list = {
         ],
         name: 'transportation_to_work',
         sort_field: 'transportation_to_work',
-        label: 'Transportation to Work',
+        label: 'Transportation',
         sort: true
       },
       {
@@ -232,6 +232,7 @@ const list = {
       {
         label: 'Scores',
         is_collapsed: true,
+        hideLabel: true,
         fields: [
           'candidate_scores.reliability',
           'candidate_scores.loyalty',
@@ -331,7 +332,7 @@ const list = {
       },
       {
         key: 'transportation_to_work',
-        label: 'Transportation to Work',
+        label: 'Transportation',
         options: [
           {
             value: 1,
@@ -477,7 +478,7 @@ const list = {
       type: 'select',
       templateOptions: {
         required: false,
-        label: 'Transportation to Work',
+        label: 'Transportation',
         options: [
           {
             value: 1,
@@ -865,7 +866,7 @@ const form = [
                     type: 'select',
                     templateOptions: {
                       required: false,
-                      label: 'Transportation to Work',
+                      label: 'Transportation',
                       type: 'select',
                       options: [
                         {
@@ -921,7 +922,7 @@ const form = [
                 width: 0.25
               },
               {
-                label: 'Character',
+                label: 'Scores',
                 type: 'group',
                 children: [
                   {
