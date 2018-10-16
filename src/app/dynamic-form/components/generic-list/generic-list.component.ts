@@ -79,6 +79,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
   @Input()
   public disableActions: boolean;
 
+  @Input()
+  public inlineFilters: boolean;
+
   @Output()
   public checkedObjects: EventEmitter<any> = new EventEmitter();
 

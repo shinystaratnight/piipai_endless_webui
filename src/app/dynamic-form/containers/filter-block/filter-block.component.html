@@ -1,10 +1,11 @@
-<div class="filters-block">
+<div class="filters-block" [class.inline]="inline">
   <div class="filters-label">
     <h5>Filters</h5>
     <span class="reset" (click)="resetAll()">Reset all</span>
   </div>
-  <div *ngFor="let field of config;">
+  <div [class.inline-container]="inline">
     <ng-container
+      *ngFor="let field of config"
       appFilterElement
       (event)="changeQuery($event)"
       [config]="field">

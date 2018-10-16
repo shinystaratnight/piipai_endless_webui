@@ -21,7 +21,7 @@ interface Params {
 
 @Component({
   selector: 'app-filter-date',
-  templateUrl: 'filter-date.component.html'
+  templateUrl: './filter-date.component.html'
 })
 export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public config: any;

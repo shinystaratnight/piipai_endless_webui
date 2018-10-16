@@ -110,6 +110,9 @@ export class DynamicListComponent
   @Input()
   public disableActions: boolean;
 
+  @Input()
+  public inlineFilters: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 

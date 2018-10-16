@@ -24,12 +24,15 @@
       </div>
     </h5>
   </div>
-  <div [class.open]="!filtersHidden" class="datatable-content" [class.in-form]="inForm">
-    <div appScroll [enable]="!inForm" class="filter-wrapper" *ngIf="(first || poped) && showFilters" [class.open]="!filtersHidden" [class.in-form]="inForm">
+  <div class="datatable-content"
+    [ngClass]="{'open': !filtersHidden, 'in-form': inForm, 'inline-filters': inlineFilters}">
+    <div appScroll [enable]="!inForm" class="filter-wrapper" *ngIf="(first || poped) && showFilters && !inlineFilters" [class.open]="!filtersHidden" [class.in-form]="inForm">
       <app-filter-block [config]="filtersOfList" (event)="filterHandler($event)"></app-filter-block>
     </div>
     <div class="background" (click)="toggleFilterBlock()"></div>
-    <div [class.card-block]="poped" class="datatable-body" [class.in-form]="inForm" [class.open-filters]="!filtersHidden && showFilters">
+    <div class="datatable-body"
+      [ngClass]="{'card-block': poped, 'in-form': inForm, 'open-filters': !filtersHidden && showFilters, 'inline-filters': inlineFilters}">
+
       <ng-content></ng-content>
 
       <h2 class="datatable-label" [class.has-description]="description"
@@ -66,6 +69,17 @@
           (event)="filterHandler($event)">
         </app-list-search-bar>
       </div>
+
+      <div class="filter-wrapper inline"
+        *ngIf="(first || poped) && showFilters && inlineFilters"
+        appScroll
+        [enable]="!inForm"
+        [ngClass]="{'open': !filtersHidden, 'in-form': inForm}">
+          <app-filter-block [inline]="true" [config]="filtersOfList" (event)="filterHandler($event)"></app-filter-block>
+      </div>
+
+      <div class="background" (click)="toggleFilterBlock()"></div>
+
       <app-action-element *ngIf="config.list.actions && !inForm" [count]="selectedCount" [config]="config.list.actions" (event)="actionHandler($event)"></app-action-element>
 
       <div #tableWrapper class="table-wrapper">

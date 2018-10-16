@@ -17,7 +17,7 @@
       </li>
     </ul>
 
-    <div class="input-group datepicker" [class.mb-1]="!l" *ngFor="let input of config.input; let l = last">
+    <div class="input-group datepicker" *ngFor="let input of config.input">
       <input class="form-control filter-date"
         #d
         [class.active]="data[input.query]"
