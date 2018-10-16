@@ -29,7 +29,7 @@
       <span class="title" *ngIf="this.averageScore || this.averageScore === 0">
         {{title}}
         <span class="score" [placement]="'right'" [ngbTooltip]="avarage" [style.color]="colors[getScore(this.averageScore)]" [style.borderColor]="colors[getScore(this.averageScore)]">
-          {{this.averageScore}}
+          {{this.averageScore | number:'1.0'}}
           <i fa name="star"></i>
         </span>
       </span>

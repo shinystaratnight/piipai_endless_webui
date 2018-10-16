@@ -22,6 +22,7 @@ export class ListSkillsComponent implements OnInit {
   public list: boolean;
   public dataList: any[];
   public more: boolean;
+  public evaluationCount: string;
 
   public ngOnInit() {
     if (Array.isArray(this.config.value)) {
@@ -34,7 +35,15 @@ export class ListSkillsComponent implements OnInit {
         this.dataList = this.config.value;
       }
 
+    } else {
+      if (this.config.value && this.config.name === 'evaluation') {
+        const values = (this.config.value as string).split(' ');
+
+        this.config.value = values[0];
+        this.evaluationCount = values[1];
+      }
     }
+
   }
 
   public getScore(score) {
