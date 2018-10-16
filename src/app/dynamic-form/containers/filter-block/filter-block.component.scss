@@ -67,9 +67,4 @@
   }
 }
 
-@include media-breakpoint-up('xl') {
-  .inline-container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-}
+

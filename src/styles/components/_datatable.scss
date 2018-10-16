@@ -250,6 +250,10 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     background-color: #f5f5f5;
 
+    &.in-form {
+      background-color: transparent;
+    }
+
     &.scrolled {
       position: fixed;
       top: 72px;
