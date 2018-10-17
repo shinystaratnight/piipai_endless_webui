@@ -82,7 +82,8 @@ export interface Field {
     editLabel?: string;
     editDescription?: string;
     info?: any;
-    bottom: boolean;
+    bottom?: boolean;
+    inlineFilters?: boolean;
   };
 }
 

@@ -9,6 +9,9 @@ export class FilterBlockComponent {
   @Input()
   public config: any[] = [];
 
+  @Input()
+  public inline: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
