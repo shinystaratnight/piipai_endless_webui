@@ -5,8 +5,7 @@
       <span class="score"
         [style.color]="colors[getScore(skill.score)]"
         [style.borderColor]="colors[getScore(skill.score)]">
-          {{skill.score | number:'1.0'}}&nbsp;
-          <i fa name="star"></i>
+          {{skill.score | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
       </span>
     </span>
   </div>
@@ -17,13 +16,13 @@
   <div>
     <span class="skill-title">
       {{config.skillName}} {{evaluationCount}}
-      <span *ngIf="getScore(config.value)" class="score"
+      <span class="score"
+        *ngIf="getScore(config.value)"
         [style.color]="colors[getScore(config.value)]"
         [style.borderColor]="colors[getScore(config.value)]">
-          {{config.value | number:'1.0'}}&nbsp;
-          <i fa name="star"></i>
+          {{config.value | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
       </span>
-      <span *ngIf="!getScore(config.value)" class="text-danger">&nbsp;|&nbsp; No rating</span>
+      <span class="text-danger" *ngIf="!getScore(config.value)">&nbsp;|&nbsp;No rating</span>
     </span>
   </div>
 </ng-container>

@@ -135,20 +135,20 @@ const list = {
         title: null,
         sort_field: 'candidate_scores.client_feedback'
       },
-      // {
-      //   delim: null,
-      //   label: 'Strength',
-      //   sort: true,
-      //   content: [
-      //     {
-      //       field: 'strength',
-      //       type: 'skills'
-      //     }
-      //   ],
-      //   name: 'strength',
-      //   title: null,
-      //   sort_field: 'strength'
-      // },
+      {
+        delim: null,
+        label: 'Average skill',
+        sort: true,
+        content: [
+          {
+            field: 'candidate_scores.skill_score',
+            type: 'skills'
+          }
+        ],
+        name: 'candidate_scores.skill_score',
+        title: null,
+        sort_field: 'candidate_scores.skill_score'
+      },
       {
         content: [
           {
@@ -228,18 +228,6 @@ const list = {
         name: 'bmi',
         label: 'Bmi'
       },
-      // {
-      //   content: [
-      //     {
-      //       field: 'language',
-      //       type: 'input'
-      //     }
-      //   ],
-      //   name: 'language',
-      //   sort_field: 'language',
-      //   label: 'Language',
-      //   sort: true
-      // }
     ],
     tabs: [
       {
@@ -248,7 +236,6 @@ const list = {
         fields: [
           'nationality',
           'contact.gender',
-          // 'language',
           'transportation_to_work'
         ]
       },
@@ -261,12 +248,13 @@ const list = {
         label: 'Scores',
         is_collapsed: true,
         hideLabel: true,
+        width: 180,
         fields: [
           'candidate_scores.recruitment_score',
           'candidate_scores.client_feedback',
           'candidate_scores.reliability',
           'candidate_scores.loyalty',
-          // 'strength'
+          'candidate_scores.skill_score',
         ]
       },
       {
@@ -432,19 +420,6 @@ const list = {
       },
       read_only: true
     },
-    // {
-    //   key: 'strength',
-    //   default: 0,
-    //   type: 'skills',
-    //   templateOptions: {
-    //     required: false,
-    //     label: 'Strength',
-    //     max: 32767,
-    //     type: 'skills',
-    //     min: 0
-    //   },
-    //   read_only: true
-    // },
     {
       key: 'candidate_scores.reliability',
       type: 'skills',
@@ -554,19 +529,6 @@ const list = {
       },
       read_only: true
     },
-    // {
-    //   key: 'language',
-    //   default: 0,
-    //   type: 'input',
-    //   templateOptions: {
-    //     required: false,
-    //     label: 'Language',
-    //     type: 'number',
-    //     min: 0,
-    //     max: 32767
-    //   },
-    //   read_only: true
-    // },
     {
       key: 'contact.email',
       type: 'link',
@@ -878,19 +840,6 @@ const form = [
                     },
                     read_only: false
                   },
-                  // {
-                  //   key: 'language',
-                  //   default: 0,
-                  //   type: 'static',
-                  //   templateOptions: {
-                  //     required: false,
-                  //     label: 'Language',
-                  //     max: 5,
-                  //     type: 'score',
-                  //     min: 0
-                  //   },
-                  //   read_only: false
-                  // },
                   {
                     key: 'transportation_to_work',
                     type: 'select',
@@ -991,19 +940,6 @@ const form = [
                     },
                     read_only: true
                   },
-                  // {
-                  //   key: 'strength',
-                  //   default: 0,
-                  //   type: 'static',
-                  //   templateOptions: {
-                  //     required: false,
-                  //     label: 'Strength',
-                  //     max: 5,
-                  //     type: 'score',
-                  //     min: 0
-                  //   },
-                  //   read_only: false
-                  // }
                 ],
                 width: 0.25
               },
@@ -1034,7 +970,19 @@ const form = [
                       danger: 'No rating'
                     },
                     read_only: true
-                  }
+                  },
+                  {
+                    key: 'candidate_scores.skill_score',
+                    send: false,
+                    type: 'static',
+                    templateOptions: {
+                      required: false,
+                      label: 'Average skill',
+                      type: 'score',
+                      danger: 'No rating'
+                    },
+                    read_only: true
+                  },
                 ],
                 width: 0.25
               }
