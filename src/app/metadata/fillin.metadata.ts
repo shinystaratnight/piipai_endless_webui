@@ -133,7 +133,7 @@ const list = {
         ],
         sort: true,
         sort_field: 'skills_score',
-        label: 'Skills score'
+        label: 'Average skills'
       },
       {
         name: 'tags',
@@ -193,7 +193,7 @@ const list = {
             field: 'candidate_scores.recruitment_score'
           }
         ],
-        label: 'Recruitment'
+        label: 'Average test'
       },
       {
         name: 'evaluation',
@@ -203,7 +203,7 @@ const list = {
             field: 'evaluation'
           }
         ],
-        label: 'Evaluation'
+        label: 'Client feedback'
       }
     ],
     tabs: [

@@ -103,7 +103,7 @@
           </ng-container>
         </span>
         <span class="score" [style.color]="colors[getScore(this.averageScore)]">
-          &nbsp;|&nbsp;{{this.averageScore}}
+          &nbsp;|&nbsp;{{this.averageScore | number:'1.0'}}
           <i fa name="star"></i>
         </span>
       </span>

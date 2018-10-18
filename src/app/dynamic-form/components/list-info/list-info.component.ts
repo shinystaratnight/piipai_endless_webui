@@ -86,6 +86,7 @@ export class ListInfoComponent implements OnInit {
       { label: 'Client feedback', key: 'candidate_scores.client_feedback' },
       { label: 'Avarage test', key: 'candidate_scores.recruitment_score' },
       { label: 'Reliability', key: 'candidate_scores.reliability' },
+      { label: 'Average Skill', key: 'candidate_scores.skill_score' },
     ];
 
     this.averageScoreDescription = {
