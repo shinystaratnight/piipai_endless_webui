@@ -209,11 +209,11 @@ const list = {
         type: 'date',
         input: [
           {
-            label: 'From date',
+            label: 'From',
             query: 'created_at_0'
           },
           {
-            label: 'To date',
+            label: 'To',
             query: 'created_at_1'
           }
         ]

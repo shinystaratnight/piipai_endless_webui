@@ -1,4 +1,4 @@
-<div class="filter-element">
+<div class="filter-element datepicker-element">
   <label class="filter-label">
     {{config.label}}
     <i class="text-danger ml-1" style="cursor: pointer"
@@ -8,15 +8,14 @@
     </i>
   </label>
   <div class="filter-date-wrapper">
-    <ul class="list-inline d-flex justify-content-between my-1">
-      <li style="cursor: pointer"
+    <ul class="list-inline dates my-1">
+      <li class="dates-item"
         *ngFor="let item of config.list"
         [class.text-primary]="query === item.query"
         (click)="selectQuery(item.query)">
-          {{item.label}}
+          <a href="#">{{item.label}}</a>
       </li>
     </ul>
-
     <div class="input-group datepicker" *ngFor="let input of config.input">
       <input class="form-control filter-date"
         #d
@@ -24,8 +23,9 @@
         [attr.name]="input.query"
         [(ngModel)]="data[input.query]">
       <div class="placeholder">
-         {{input.label}}
+          {{input.label}}
       </div>
     </div>
+    <div class="delimiter"></div>
   </div>
 </div>

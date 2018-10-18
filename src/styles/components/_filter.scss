@@ -25,23 +25,56 @@
     @include media-breakpoint-up('xl') {
       .inline-container & {
         display: inline-flex;
-        align-items: center;
+        align-items: flex-start;
         flex-wrap: wrap;
 
-        padding: 0 15px;
+        padding: 0;
+        padding-left: 12px;
+
         border-bottom: none;
-        border-right: 1px solid rgba(51, 51, 51, .3);
 
-        .list-inline li {
-          margin-right: 5px;
+        .filter-label {
+          margin-top: 12px;
+        }
 
-          &:last-child {
-            margin-right: 10px;
+        .filter-select-wrapper {
+          display: flex;
+          align-items: center;
+
+          max-width: 200px;
+          height: 42px;
+
+          label {
+            margin-bottom: 0;
+          }
+
+          select {
+            width: 150px;
+          }
+
+          .form-check {
+            margin-right: 9px;
+
+            &:last-child {
+              margin-right: 0;
+            }
           }
         }
 
+        &:not(.datepicker-element) {
+          padding-right: 12px;
+
+          border-right: 1px solid rgba(#e5e5e5, .8);
+        }
+
+        .dates {
+          order: 2;
+        }
+
         .datepicker {
-          width: 200px;
+          width: 157px;
+
+          margin-bottom: 0;
 
           .input-group {
             width: auto;
@@ -55,17 +88,27 @@
 
         .filter-label {
           margin-bottom: 0;
-          margin-right: 10px;
-        }
-
-        .filter-select-wrapper {
-          width: 200px;
+          margin-right: 8px;
         }
 
         .filter-date-wrapper {
           display: flex;
           align-items: center;
           flex-wrap: wrap;
+
+          width: 325px;
+
+          margin-right: 12px;
+
+          .delimiter {
+            position: relative;
+            right: -12px;
+            display: block;
+
+            height: 40px;
+
+            border-right: 1px solid rgba(#e5e5e5, .8);
+          }
         }
       }
     }
@@ -147,8 +190,15 @@
     .datepicker {
       display: relative;
 
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
       input {
-        padding-left: 5rem;
+        padding-left: 3rem;
+        padding-right: 0;
       }
 
       .placeholder {
@@ -156,7 +206,7 @@
         top: 10px;
         left: 16px;
 
-        font-size: .8rem;
+        font-size: 12px;
 
         color: rgba($gray, .4);
 
