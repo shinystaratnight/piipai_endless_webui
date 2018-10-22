@@ -84,7 +84,7 @@
 
     <h5 class="form-info-title" *ngIf="config && viewMode">
 
-      <span *ngIf="!this.averageScore && this.averageScore !== 0">
+      <span *ngIf="!averageScore && averageScore !== 0">
         <span class="view-mode" *ngIf="titlePath">
           <ng-container appFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
             [config]="getConfig('title')"
@@ -95,17 +95,22 @@
         <span *ngIf="!titlePath && title">{{title}}</span>
         <app-info class="ml-1" [description]="description"></app-info>
       </span>
-      <span *ngIf="this.averageScore || this.averageScore === 0">
+      <span *ngIf="averageScore || averageScore === 0">
         <span class="view-mode" *ngIf="titlePath">
           <ng-container appFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
             [config]="getConfig('title')"
             [group]="group">
           </ng-container>
         </span>
-        <span class="score" [style.color]="colors[getScore(this.averageScore)]">
-          &nbsp;|&nbsp;{{this.averageScore | number:'1.0'}}
-          <i fa name="star"></i>
+        <span class="score"
+          *ngIf="getScore(averageScore)"
+          [style.color]="colors[getScore(averageScore)]">
+            &nbsp;|&nbsp;{{averageScore | number:'1.1-1'}}<i fa name="star"></i>
         </span>
+      </span>
+      <span class="score text-danger"
+        *ngIf="!getScore(averageScore) && isCandidatePage()">
+          &nbsp;|&nbsp;No rating
       </span>
     </h5>
     <p>

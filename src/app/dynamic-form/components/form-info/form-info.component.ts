@@ -157,6 +157,14 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
+  public isCandidatePage(): boolean {
+    if (this.config.value && this.config.value instanceof Object) {
+      return this.config.value.hasOwnProperty('average_score');
+    }
+
+    return false;
+  }
+
   public createEvent() {
     if (this.config.value) {
       this.event.emit({

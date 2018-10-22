@@ -86,13 +86,21 @@ export class ListInfoComponent implements OnInit {
       { label: 'Client feedback', key: 'candidate_scores.client_feedback' },
       { label: 'Avarage test', key: 'candidate_scores.recruitment_score' },
       { label: 'Reliability', key: 'candidate_scores.reliability' },
-      { label: 'Average Skill', key: 'candidate_scores.skill_score' },
+      { label: 'Average skill', key: 'candidate_scores.skill_score' },
     ];
 
     this.averageScoreDescription = {
       includes: this.filterScores(scores, data, 'includes'),
       excludes: this.filterScores(scores, data)
     };
+  }
+
+  public isCandidatePage(): boolean {
+    if (this.config.value && this.config.value instanceof Object) {
+      return this.config.value.hasOwnProperty('average_score');
+    }
+
+    return false;
   }
 
   public filterScores(scores, data, type?: string) {

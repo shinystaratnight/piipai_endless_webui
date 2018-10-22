@@ -23,15 +23,23 @@
   <div class="list-info-block">
     <span *ngIf="job_title">{{job_title}}</span>
     <h5 class="list-info-title">
-      <span class="title" *ngIf="!this.averageScore && this.averageScore !== 0">
+      <span class="title" *ngIf="!getScore(averageScore)">
         {{title}}<app-info class="ml-1" [description]="description"></app-info>
       </span>
-      <span class="title" *ngIf="this.averageScore || this.averageScore === 0">
+      <span class="title" *ngIf="getScore(averageScore)">
         {{title}}
-        <span class="score" [placement]="'right'" [ngbTooltip]="avarage" [style.color]="colors[getScore(this.averageScore)]" [style.borderColor]="colors[getScore(this.averageScore)]">
-          {{this.averageScore | number:'1.0'}}
-          <i fa name="star"></i>
+        <span class="score"
+          [placement]="'right'"
+          [ngbTooltip]="avarage"
+          [style.color]="colors[getScore(averageScore)]"
+          [style.borderColor]="colors[getScore(averageScore)]">
+            {{this.averageScore | number:'1.1-1'}}<i fa name="star"></i>
         </span>
+      </span>
+      <span class="score text-danger"
+        *ngIf="!getScore(averageScore) && isCandidatePage()"
+        [style.borderColor]="colors[1]">
+          No rating
       </span>
     </h5>
     <p class="description" *ngIf="company">{{company}}</p>

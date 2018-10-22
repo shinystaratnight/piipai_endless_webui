@@ -209,7 +209,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td *ngFor="let acell of row.additionalBody.content">
+                        <td *ngFor="let acell of row.additionalBody.content" [ngStyle]="{'width.px': acell.width}">
                           <div class="additional-data" *ngFor="let field of acell.content">
                             <span *ngIf="field.content && acell.content.length > 1 && !acell.hideLabel" class="description">{{field.label}}</span>
                             <span class="additional-data-content">
