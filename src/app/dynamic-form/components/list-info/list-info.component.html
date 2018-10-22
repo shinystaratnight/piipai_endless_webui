@@ -33,10 +33,10 @@
           [ngbTooltip]="avarage"
           [style.color]="colors[getScore(averageScore)]"
           [style.borderColor]="colors[getScore(averageScore)]">
-            {{this.averageScore | number:'1.1-1'}}<i fa name="star"></i>
+            {{this.averageScore | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
         </span>
       </span>
-      <span class="score text-danger"
+      <span class="score text-danger mt-0"
         *ngIf="!getScore(averageScore) && isCandidatePage()"
         [style.borderColor]="colors[1]">
           No rating
