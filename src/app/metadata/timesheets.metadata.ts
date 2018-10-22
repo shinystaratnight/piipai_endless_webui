@@ -342,11 +342,11 @@ const list = {
         type: 'date',
         input: [
           {
-            label: 'From date',
+            label: 'From',
             query: 'shift_started_at_0'
           },
           {
-            label: 'To date',
+            label: 'To',
             query: 'shift_started_at_1'
           }
         ]

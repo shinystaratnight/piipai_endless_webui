@@ -1073,6 +1073,7 @@ export class FormRelatedComponent extends BasicElementComponent
       this.list = null;
       this.count = null;
       this.previewList = null;
+      this.hideAutocomplete = true;
     }
     this.count = null;
     this.cd.detectChanges();

@@ -171,11 +171,11 @@ const list = {
         type: 'date',
         input: [
           {
-            label: 'From date',
+            label: 'From',
             query: 'shift_dates__shift_date_0'
           },
           {
-            label: 'To date',
+            label: 'To',
             query: 'shift_dates__shift_date_1'
           }
         ]

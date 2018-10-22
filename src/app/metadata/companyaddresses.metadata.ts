@@ -198,8 +198,8 @@ const list = {
         label: 'Updated at',
         type: 'date',
         input: [
-          { label: 'From date', query: 'updated_at_0' },
-          { label: 'To date', query: 'updated_at_1' }
+          { label: 'From', query: 'updated_at_0' },
+          { label: 'To', query: 'updated_at_1' }
         ]
       }
     ],

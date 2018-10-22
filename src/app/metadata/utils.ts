@@ -15,3 +15,15 @@ export const timeZoneOffset = moment
   .tz('Australia/Sydney')
   .format('Z')
   .slice(1);
+export const weekStart = today
+  .startOf('isoWeek')
+  .format();
+export const weekEnd = today
+  .endOf('isoWeek')
+  .format();
+export const monthStart = today
+  .startOf('month')
+  .format();
+export const monthEnd = today
+  .endOf('month')
+  .format();

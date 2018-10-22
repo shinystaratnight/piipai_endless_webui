@@ -21,7 +21,8 @@ interface Params {
 
 @Component({
   selector: 'app-filter-date',
-  templateUrl: './filter-date.component.html'
+  templateUrl: './filter-date.component.html',
+  styleUrls: ['./filter-date.component.scss']
 })
 export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public config: any;
@@ -113,6 +114,8 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.changeQuery();
+
+    return false;
   }
 
   public onChange(date: string, param: string) {

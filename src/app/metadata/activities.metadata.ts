@@ -156,11 +156,11 @@ const list = {
         type: 'date',
         input: [
           {
-            label: 'From date',
+            label: 'From',
             query: 'starts_at_0'
           },
           {
-            label: 'To date',
+            label: 'To',
             query: 'starts_at_1'
           }
         ]
@@ -185,11 +185,11 @@ const list = {
         type: 'date',
         input: [
           {
-            label: 'From date',
+            label: 'From',
             query: 'ends_at_0'
           },
           {
-            label: 'To date',
+            label: 'To',
             query: 'ends_at_1'
           }
         ]

@@ -1,4 +1,4 @@
-import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+import { yesterdayFormatDate, todayFormatDate, weekStart, weekEnd, monthStart, monthEnd } from './utils';
 
 const formset = {
   list: {
@@ -123,44 +123,35 @@ const formset = {
       {
         list: [
           {
+            label: 'Today',
+            query: `created_at_0=${todayFormatDate}&created_at_1=${todayFormatDate}`
+          },
+          {
             label: 'Yesterday',
             query: `created_at_0=${yesterdayFormatDate}&created_at_1=${yesterdayFormatDate}`
           },
           {
-            label: 'Today',
-            query: `created_at_0=${todayFormatDate}&created_at_1=${todayFormatDate}`
-          }
+            label: 'This week',
+            query: `created_at_0=${weekStart}&created_at_1=${weekEnd}`
+          },
+          {
+            label: 'This month',
+            query: `created_at_0=${monthStart}&created_at_1=${monthEnd}`
+          },
         ],
         key: 'created_at',
         label: 'Created at',
         type: 'date',
         input: [
           {
-            label: 'From date',
+            label: 'From',
             query: 'created_at_0'
           },
           {
-            label: 'To date',
+            label: 'To',
             query: 'created_at_1'
           }
         ]
-      },
-      {
-        key: 'type',
-        label: 'Type',
-        options: [
-          {
-            value: 'SENT',
-            label: 'SMS sent'
-          },
-          {
-            value: 'RECEIVED',
-            label: 'SMS received'
-          }
-        ],
-        query: 'type',
-        default: null,
-        type: 'select'
       },
       {
         key: 'status',
@@ -203,6 +194,24 @@ const formset = {
         default: null,
         type: 'select'
       },
+      {
+        key: 'type',
+        label: 'Type',
+        options: [
+          {
+            value: 'SENT',
+            label: 'SMS sent'
+          },
+          {
+            value: 'RECEIVED',
+            label: 'SMS received'
+          }
+        ],
+        query: 'type',
+        multiple: false,
+        default: null,
+        type: 'checkbox'
+      }
     ]
   },
   fields: []
