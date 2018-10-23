@@ -33,7 +33,7 @@
           [ngbTooltip]="avarage"
           [style.color]="colors[getScore(averageScore)]"
           [style.borderColor]="colors[getScore(averageScore)]">
-            {{this.averageScore | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
+            {{averageScore | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
         </span>
       </span>
       <span class="score text-danger mt-0"
@@ -60,7 +60,7 @@
     <ng-container *ngIf="averageScoreDescription.includes.length">
       <h6 class="subtitle">Average includes</h6>
       <ul class="mb-2">
-        <li class="mb-1" *ngFor="let scoreItem of averageScoreDescription.includes">
+        <li [class.mb-1]="!l" *ngFor="let scoreItem of averageScoreDescription.includes; let l = last">
           <ng-container *ngTemplateOutlet="score; context: {name: scoreItem.label, score: scoreItem.score}"></ng-container>
         </li>
       </ul>
@@ -68,8 +68,8 @@
 
     <ng-container *ngIf="averageScoreDescription.excludes.length">
       <h6 class="subtitle">Excludes</h6>
-      <ul class="mb-2">
-        <li class="mb-1" *ngFor="let scoreItem of averageScoreDescription.excludes">
+      <ul>
+        <li [class.mb-1]="!l" *ngFor="let scoreItem of averageScoreDescription.excludes; let l = last">
           <ng-container *ngTemplateOutlet="score; context: {name: scoreItem.label, score: scoreItem.score}"></ng-container>
         </li>
       </ul>
@@ -82,7 +82,7 @@
   {{name}}
   <ng-container *ngIf="score">
     <span [style.color]="colors[score]" [style.borderColor]="colors[score]">
-      {{score}}
+      {{score | number:'1.1-1'}}
       <i fa name="star"></i>
     </span>
   </ng-container>
