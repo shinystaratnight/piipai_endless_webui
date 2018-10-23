@@ -395,7 +395,7 @@ const form = [
       required: false,
       label: 'Score',
       max: 5,
-      type: 'number',
+      type: 'score',
       min: 0
     },
     read_only: false
@@ -475,7 +475,7 @@ const formadd = [
       required: false,
       label: 'Score',
       max: 5,
-      type: 'number',
+      type: 'score',
       min: 0
     },
     read_only: false

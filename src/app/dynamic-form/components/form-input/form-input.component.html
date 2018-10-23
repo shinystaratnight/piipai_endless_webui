@@ -8,7 +8,8 @@
       <input
         *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))
           && (!viewMode && !config.read_only)
-          && (config.type !== 'address' && config.key !== 'address' && !config.key.includes('street_address'))"
+          && (config.type !== 'address' && config.key !== 'address' && !config.key.includes('street_address'))
+          && config.templateOptions.type !== 'score'"
         class="form-control"
         [class.not-empty]="group.get(key).value"
         autocomplete="off"
@@ -31,6 +32,25 @@
         [attr.id]="key"
         [attr.name]="key"
         (onAddressChange) = "getAddress($event)">
+
+      <ngb-rating
+        *ngIf="!viewMode && config.templateOptions.type === 'score'"
+        max="5"
+        [formControl]="group.get(key)">
+          <ng-template let-fill="fill" let-index="index">
+            <span *ngIf="fill === 100" class="star full">&#9733;</span>
+            <span *ngIf="fill === 0" class="star">&#9733;</span>
+            <span *ngIf="fill < 100 && fill > 0" class="star">
+              <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+            </span>
+          </ng-template>
+      </ngb-rating>
+      <span class="score"
+        *ngIf="!viewMode && config.templateOptions.type === 'score'"
+        [style.borderColor]="colors[group.get(key).value]"
+        [style.color]="colors[group.get(key).value]">
+          &nbsp;{{group.get(key).value | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
+      </span>
       <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutocomplete">
         <div class="autocomplete-list" infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
           [scrollWindow]="false" (scrolled)="onModalScrollDown()">
@@ -88,7 +108,10 @@
           </ng-template>
         </ngb-rating>
       </div>
-      <div *ngIf="viewMode && config.templateOptions.type === 'score' && !parseScore(config.value) && config.templateOptions.danger" class="text-danger">{{config.templateOptions.danger}}</div>
+      <div class="text-danger"
+        *ngIf="viewMode && config.templateOptions.type === 'score' && !parseScore(config.value) && config.templateOptions.danger">
+          {{config.templateOptions.danger}}
+      </div>
     </div>
   </div>
   <div *ngIf="errors">

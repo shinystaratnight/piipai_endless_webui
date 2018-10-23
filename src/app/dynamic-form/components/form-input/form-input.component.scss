@@ -8,7 +8,7 @@
   position: relative;
   display: inline-block;
   font-size: 1.5rem;
-  color: #bdbdbd;
+  color: rgba(#bdbdbd, .3);
 }
 .full {
   color: #ffd042;
@@ -112,4 +112,20 @@
   align-items: flex-start;
 
   color: $brand-primary;
+}
+
+.score {
+  display: inline-block;
+
+  height: 14px;
+  line-height: 14px;
+
+  margin-top: 3px;
+  margin-left: 4px;
+  padding-left: 4px;
+
+  font-size: 14px;
+  vertical-align: top;
+
+  border-left: 1px solid black;
 }

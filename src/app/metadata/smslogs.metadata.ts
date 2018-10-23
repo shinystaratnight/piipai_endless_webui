@@ -214,7 +214,14 @@ const formset = {
       }
     ]
   },
-  fields: []
+  fields: [
+    {
+      key: 'sent_at',
+      templateOptions: {
+        type: 'datetime'
+      }
+    }
+  ]
 };
 
 export const metadata = {

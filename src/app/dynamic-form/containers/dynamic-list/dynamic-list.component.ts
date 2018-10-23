@@ -1835,7 +1835,14 @@ export class DynamicListComponent
       dontUseMetadataQuery: e.value === 'editModal' || e.value === 'editForm'
     };
 
-    this.open(this.modal, { size: 'lg' });
+    let size = 'lg';
+
+    if (this.modalInfo.endpoint.includes('/ecore/api/v2/candidate/skillrels/')) {
+      size = undefined;
+      this.modalInfo.label = 'Edit skills';
+    }
+
+    this.modalRef = this.open(this.modal, { size });
   }
 
   public showMessage(e) {

@@ -201,8 +201,14 @@ export class FormListComponent implements OnInit, OnDestroy {
         ? 'shiftdates'
         : '';
 
+    let size = 'lg';
+
+    if (this.modalData.endpoint.includes('/ecore/api/v2/candidate/skillrels/')) {
+      size = undefined;
+    }
+
     this.modalRef = this.modal.open(this.modalTemplate, {
-      size: 'lg',
+      size: size as any,
       windowClass
     });
   }
