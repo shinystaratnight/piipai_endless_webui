@@ -84,6 +84,9 @@ export interface Field {
     info?: any;
     bottom?: boolean;
     inlineFilters?: boolean;
+    addon?: string;
+    placeholder?: string;
+    danger?: string;
   };
 }
 
