@@ -23,6 +23,10 @@
     }
 
     @include media-breakpoint-up('xl') {
+      .inline-container {
+        margin: 0 -12px;
+      }
+
       .inline-container & {
         display: inline-flex;
         align-items: flex-start;
@@ -32,6 +36,10 @@
         padding-left: 12px;
 
         border-bottom: none;
+
+        .reset-icon {
+          display: none;
+        }
 
         .filter-label {
           margin-top: 12px;

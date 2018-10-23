@@ -104,13 +104,15 @@
         </span>
         <span class="score"
           *ngIf="getScore(averageScore)"
+          [style.borderColor]="colors[getScore(averageScore)]"
           [style.color]="colors[getScore(averageScore)]">
-            &nbsp;|&nbsp;{{averageScore | number:'1.1-1'}}<i fa name="star"></i>
+            &nbsp;{{averageScore | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
         </span>
       </span>
-      <span class="score text-danger"
+      <span class="score text-danger mt-0"
+        [style.borderColor]="colors[1]"
         *ngIf="!getScore(averageScore) && isCandidatePage()">
-          &nbsp;|&nbsp;No rating
+          &nbsp;No rating
       </span>
     </h5>
     <p>

@@ -22,7 +22,11 @@
         [style.borderColor]="colors[getScore(config.value)]">
           {{config.value | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
       </span>
-      <span class="text-danger" *ngIf="!getScore(config.value)">&nbsp;|&nbsp;No rating</span>
+      <span class="score text-danger"
+        [style.borderColor]="colors[1]"
+        *ngIf="!getScore(config.value)">
+          No rating
+      </span>
     </span>
   </div>
 </ng-container>

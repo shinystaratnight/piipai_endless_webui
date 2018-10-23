@@ -67,4 +67,8 @@
   }
 }
 
-
+@include media-breakpoint-up('xl') {
+  .inline-container {
+    margin: 0 -12px;
+  }
+}
