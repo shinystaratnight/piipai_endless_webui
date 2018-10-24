@@ -34,7 +34,7 @@ export class SiteSettingsService {
             return this.getSettings(this.siteEndpoint);
           }
         }),
-        catchError((err: any) => {
+        catchError(() => {
           this.authorized = false;
 
           return this.getSettings(this.siteEndpoint);
@@ -54,17 +54,19 @@ export class SiteSettingsService {
               this.settings = settings;
             }
 
+            if (settings.redirect_to) {
+              location.href = settings.redirect_to;
+
+              return of(true);
+            }
+
             setTimeout(() => {
               this.updateBrowserStyles(settings);
             }, 100);
 
             return settings;
           }),
-          catchError((err: any) => {
-            if (err.status === 404 && location.host !== 'r3sourcer.com') {
-              location.href = 'http://r3sourcer.com';
-            }
-
+          catchError(() => {
             return of(true);
           })
         );
@@ -73,11 +75,11 @@ export class SiteSettingsService {
     }
   }
 
-  private updateBrowserStyles(settings: any) {
+  private updateBrowserStyles(settings: any): void {
     document.body.parentElement.classList.add(
       `${this.getTheme(settings)}-theme`
     );
-    document.body.style.fontFamily = `${this.getFont(settings)}, sans-serif`;
+    document.body.style.fontFamily = `${this.getFont(settings) || 'Source Sans Pro'}, sans-serif`;
   }
 
   private getFont(settings: any): string {
