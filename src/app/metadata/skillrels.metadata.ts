@@ -389,14 +389,14 @@ const form = [
   },
   {
     key: 'score',
-    default: 0,
     type: 'input',
     templateOptions: {
-      required: false,
+      required: true,
       label: 'Score',
       max: 5,
       type: 'score',
-      min: 0
+      min: 0,
+      noneValue: 'Please add skill rating'
     },
     read_only: false
   },
@@ -423,9 +423,16 @@ const form = [
   {
     key: 'hourly_rate',
     default: '{skill.default_rate}',
+    updated: ['skill'],
     type: 'input',
     useValue: true,
-    templateOptions: { required: true, label: 'Skill Rate', type: 'text' },
+    templateOptions: {
+      required: true,
+      label: 'Skill Rate',
+      type: 'number',
+      step: '0.01',
+      icon: '$'
+    },
     read_only: false
   }
 ];
@@ -469,14 +476,14 @@ const formadd = [
   },
   {
     key: 'score',
-    default: 0,
     type: 'input',
     templateOptions: {
-      required: false,
+      required: true,
       label: 'Score',
       max: 5,
       type: 'score',
-      min: 0
+      min: 0,
+      noneValue: 'Please add skill rating'
     },
     read_only: false
   },
@@ -503,8 +510,15 @@ const formadd = [
   {
     key: 'hourly_rate',
     default: '{skill.default_rate}',
+    updated: ['skill'],
     type: 'input',
-    templateOptions: { required: true, label: 'Skill Rate', type: 'text' },
+    templateOptions: {
+      required: true,
+      label: 'Skill Rate',
+      type: 'number',
+      step: '0.01',
+      icon: '$'
+    },
     read_only: false
   }
 ];

@@ -55,6 +55,9 @@ export class BasicElementComponent {
     if (config.templateOptions.rows) {
       element.nativeElement.rows = config.templateOptions.rows;
     }
+    if (config.templateOptions.step) {
+      element.nativeElement.step = config.templateOptions.step;
+    }
   }
 
   public createEvent() {

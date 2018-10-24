@@ -324,6 +324,27 @@ form.ng-invalid button[type='submit'] {
   z-index: 3 !important;
 }
 
+.small-modal {
+  .modal-dialog {
+    width: 400px;
+
+    .form-element-content {
+      width: auto;
+      max-width: none;
+    }
+
+    .button-save {
+      display: block;
+
+      margin: 0 auto;
+      margin-top: 30px;
+
+      width: 160px;
+      height: 40px;
+    }
+  }
+}
+
 .modal {
   z-index: 3;
 
@@ -1218,7 +1239,7 @@ iframe.send-sms {
   margin: 0 20px;
 }
 
-.edit-form .dynamic-form {
+.edit-form.has-tabs .dynamic-form {
   margin-top: 40px;
 }
 

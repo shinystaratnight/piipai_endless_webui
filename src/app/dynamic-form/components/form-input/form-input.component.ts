@@ -41,6 +41,7 @@ export class FormInputComponent extends BasicElementComponent
   public formData: any;
   public autocompleteValue: any;
   public editMode: boolean;
+  public hovered: number;
 
   public query = '';
   public list = [];
@@ -57,6 +58,7 @@ export class FormInputComponent extends BasicElementComponent
   };
 
   public colors = {
+    0: '#FA5C46',
     1: '#FA5C46',
     2: '#fc9183',
     3: '#FFA236',
@@ -88,7 +90,9 @@ export class FormInputComponent extends BasicElementComponent
       this.config.type !== 'static' ||
       (this.config.type === 'static' || !this.config.read_only)
     ) {
-      this.addControl(this.config, this.fb);
+      const required = this.config.key === 'score' && this.config.templateOptions.required;
+
+      this.addControl(this.config, this.fb, required);
     }
     this.setInitValue();
     this.checkModeProperty();
@@ -112,7 +116,7 @@ export class FormInputComponent extends BasicElementComponent
       const subscription = this.config.formData.subscribe((data) => {
         this.formData = data.data;
         this.checkTimesheetTime(data);
-        this.checkIfExistDefaultValue();
+        this.checkIfExistDefaultValue(data.key);
         this.checkAttributes();
       });
 
@@ -178,7 +182,7 @@ export class FormInputComponent extends BasicElementComponent
     }
   }
 
-  public checkIfExistDefaultValue() {
+  public checkIfExistDefaultValue(field: string) {
     if (
       this.config.default &&
       typeof this.config.default === 'string' &&
@@ -190,6 +194,9 @@ export class FormInputComponent extends BasicElementComponent
         this.key !== 'address' &&
         this.key !== 'street_address'
       ) {
+        if (this.config.updated && !this.config.updated.includes(field)) {
+          return;
+        }
         this.setInitValue(true);
       }
     }
