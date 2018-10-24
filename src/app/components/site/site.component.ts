@@ -169,12 +169,9 @@ export class SiteComponent implements OnInit, OnDestroy {
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
         } else if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
-
-          if (!pageData.pathData.path.includes('login')) {
-            setTimeout(() => {
-              this.ts.sendMessage('Page not found!', MessageType.error);
-            }, 2000);
-          }
+          setTimeout(() => {
+            this.ts.sendMessage('Page not found!', MessageType.error);
+          }, 2000);
 
           this.router.navigate(['']);
           return;

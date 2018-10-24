@@ -124,15 +124,15 @@ const list = {
         label: 'Distance/time'
       },
       {
-        name: 'skills_score',
+        name: 'candidate_scores.skill_score',
         content: [
           {
             type: 'skills',
-            field: 'skills_score'
+            field: 'candidate_scores.skill_score'
           }
         ],
         sort: true,
-        sort_field: 'skills_score',
+        sort_field: 'candidate_scores.skill_score',
         label: 'Average skills'
       },
       {
@@ -196,11 +196,11 @@ const list = {
         label: 'Average test'
       },
       {
-        name: 'evaluation',
+        name: 'candidate_scores.client_feedback',
         content: [
           {
             type: 'skills',
-            field: 'evaluation'
+            field: 'candidate_scores.client_feedback'
           }
         ],
         label: 'Client feedback'
@@ -213,8 +213,8 @@ const list = {
         inline: true,
         fields: [
           'candidate_scores.recruitment_score',
-          'evaluation',
-          'skills_score',
+          'candidate_scores.client_feedback',
+          'candidate_scores.skill_score',
           'candidate_scores.reliability',
           'candidate_scores.loyalty'
         ]
@@ -370,7 +370,7 @@ const list = {
         required: false
       },
       type: 'static',
-      key: 'evaluation',
+      key: 'candidate_scores.client_feedback',
       read_only: true
     },
     {
@@ -421,7 +421,7 @@ const list = {
         required: false
       },
       type: 'static',
-      key: 'skills_score',
+      key: 'candidate_scores.skill_score',
       read_only: true
     },
     {

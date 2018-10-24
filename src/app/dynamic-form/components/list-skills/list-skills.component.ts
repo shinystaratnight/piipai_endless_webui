@@ -19,6 +19,7 @@ export class ListSkillsComponent implements OnInit {
     4: '#ffbf00',
     5: '#FFD042',
   };
+  public countFields = ['candidate_scores.client_feedback', 'candidate_scores.skill_score'];
   public list: boolean;
   public dataList: any[];
   public more: boolean;
@@ -36,7 +37,7 @@ export class ListSkillsComponent implements OnInit {
       }
 
     } else {
-      if (this.config.value && this.config.name === 'evaluation') {
+      if (this.config.value && this.countFields.includes(this.config.name)) {
         const values = (this.config.value as string).split(' ');
 
         this.config.value = values[0];

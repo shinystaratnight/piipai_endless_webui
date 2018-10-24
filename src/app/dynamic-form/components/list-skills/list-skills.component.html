@@ -3,9 +3,15 @@
     <span class="skill-title">
       {{skill.skill.__str__}}
       <span class="score"
+        *ngIf="getScore(skill.score)"
         [style.color]="colors[getScore(skill.score)]"
         [style.borderColor]="colors[getScore(skill.score)]">
           {{skill.score | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
+      </span>
+      <span class="score text-danger"
+        *ngIf="!getScore(skill.score)"
+        [style.borderColor]="colors[1]">
+          No rating
       </span>
     </span>
   </div>
