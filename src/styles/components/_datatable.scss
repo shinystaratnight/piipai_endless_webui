@@ -94,6 +94,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
   table {
     padding: 4px;
+    padding-top: 20px;
 
     border-collapse: separate;
     border-spacing: 0 6px;
@@ -185,7 +186,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   thead th {
     position: relative;
 
-    padding: .3rem;
+    padding: 0 .3rem;
 
     vertical-align: top;
     font-size: .875rem;
