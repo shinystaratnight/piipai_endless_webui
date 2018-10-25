@@ -250,7 +250,8 @@ export class ExtendComponent extends BasicElementComponent
             score: '{candidate_scores.average_score}',
             distance: '{distance}'
           },
-          values: ['__str__']
+          values: ['__str__'],
+          dontSendFields: true,
         },
         query: {
           shift: `{shift}T{time}%2B${moment

@@ -69,6 +69,7 @@ export interface Field {
   hideIfNull?: boolean;
   updated?: string[];
   templateOptions?: {
+    dontSendFields?: boolean;
     label?: string;
     type?: string;
     min?: number;

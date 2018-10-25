@@ -1308,7 +1308,9 @@ export class FormRelatedComponent extends BasicElementComponent
       }
       query += !query ? '?' : '';
       query += `limit=${this.limit}&offset=${offset}`;
-      query += this.generateFields(this.fields);
+      if (!this.config.templateOptions.dontSendFields) {
+        query += this.generateFields(this.fields);
+      }
       query += this.generateQuery(this.config.query);
       if (customQuery) {
         query += this.generateQuery(customQuery);
