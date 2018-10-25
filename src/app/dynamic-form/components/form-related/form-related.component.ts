@@ -1074,6 +1074,7 @@ export class FormRelatedComponent extends BasicElementComponent
       this.count = null;
       this.previewList = null;
       this.hideAutocomplete = true;
+      this.lastElement = 0;
     }
     this.count = null;
     this.cd.detectChanges();
@@ -1330,10 +1331,25 @@ export class FormRelatedComponent extends BasicElementComponent
               this.count = res.count;
               if (res.results && res.results.length) {
                 const formatString = new FormatString();
-                const results = [...res.results];
+                let results = [...res.results];
+
+                if (this.config.unique) {
+                  results = this.filterUniqueValue(res.results, this.results);
+                }
 
                 results.forEach((el) => {
                   el.__str__ = formatString.format(this.display, el);
+
+                  if (this.config.templateOptions.info) {
+                    el.score = formatString.format(
+                      this.config.templateOptions.info['score'],
+                      el
+                    );
+                    el.distance = formatString.format(
+                      this.config.templateOptions.info['distance'],
+                      el
+                    );
+                  }
                 });
                 if (concat && this.previewList) {
                   this.previewList.push(...results);
@@ -1350,17 +1366,6 @@ export class FormRelatedComponent extends BasicElementComponent
                 }
                 res.forEach((el) => {
                   el.__str__ = formatString.format(this.display, el);
-
-                  if (this.config.templateOptions.info) {
-                    el.score = formatString.format(
-                      this.config.templateOptions.info['score'],
-                      el
-                    );
-                    el.distance = formatString.format(
-                      this.config.templateOptions.info['distance'],
-                      el
-                    );
-                  }
                 });
                 if (concat && this.previewList) {
                   this.previewList.push(...res);

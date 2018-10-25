@@ -363,10 +363,10 @@ export class ExtendComponent extends BasicElementComponent
         .slice(1);
       const query = `?shift=${date}T${data.time}%2B${timeZoneOffset}`;
 
-      this.gfs.getByQuery(endpoint, query).subscribe((res: any[]) => {
-        this.sortCandidate(res);
+      this.gfs.getByQuery(endpoint, query).subscribe((res: any) => {
+        this.sortCandidate(res.results);
 
-        const candidates = res.slice(0, data.workers);
+        const candidates = res.results.slice(0, data.workers);
         const newConfig = { ...target[index] };
         newConfig.candidates = {
           ...newConfig.candidates,

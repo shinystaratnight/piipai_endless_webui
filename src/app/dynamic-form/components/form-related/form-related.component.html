@@ -96,7 +96,7 @@
                 (click)="setValue(option, true)">
                   {{option.__str__}}
                   <span *ngIf="config.templateOptions.info">
-                    | <span>{{option.candidate_scores.average_score | number:'1.1-1'}} <i fa name="star"></i></span> | <span>{{option.distance}} km</span>
+                    | <span>{{option.score | number:'1.1-1'}} <i fa name="star"></i></span> | <span>{{option.distance}} km</span>
                   </span>
               </li>
             </ul>
