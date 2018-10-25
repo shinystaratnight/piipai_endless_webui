@@ -51,7 +51,7 @@ export class FormSelectComponent
   }
 
   public ngOnInit() {
-    this.addControl(this.config, this.fb);
+    this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.options = this.config.templateOptions.options.sort((p, n) => p.label > n.label ? 1 : -1 );
     this.setInitValue();
     this.checkModeProperty();
