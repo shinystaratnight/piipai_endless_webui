@@ -80,11 +80,11 @@
 <ng-template #score let-name="name" let-score="score">
   <i fa class="icon text-warning" name="circle"></i>
   {{name}}
-  <ng-container *ngIf="score">
-    <span [style.color]="colors[score]" [style.borderColor]="colors[score]">
+  <ng-container *ngIf="getScore(score)">
+    <span [style.color]="colors[getScore(score)]" [style.borderColor]="colors[getScore(score)]">
       {{score | number:'1.1-1'}}
       <i fa name="star"></i>
     </span>
   </ng-container>
-  <span *ngIf="!score" class="text-danger">No rating</span>
+  <span *ngIf="!getScore(score)" class="text-danger">No rating</span>
 </ng-template>

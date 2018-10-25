@@ -1848,6 +1848,10 @@ export class DynamicListComponent
       windowClass = 'small-modal';
     }
 
+    if (this.modalInfo.endpoint.includes('/extend')) {
+      windowClass = 'extend-modal';
+    }
+
     this.modalRef = this.open(this.modal, { size, windowClass });
   }
 

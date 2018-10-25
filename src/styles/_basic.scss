@@ -324,6 +324,11 @@ form.ng-invalid button[type='submit'] {
   z-index: 3 !important;
 }
 
+.extend-modal .modal-body {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
 .small-modal {
   .modal-dialog {
     width: 400px;
