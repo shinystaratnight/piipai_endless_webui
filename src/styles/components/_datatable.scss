@@ -647,6 +647,10 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     &.inline {
       display: inline-flex;
 
+      .score {
+        margin-top: 1px;
+      }
+
       .additional-data-content {
         margin-right: 28px;
       }
