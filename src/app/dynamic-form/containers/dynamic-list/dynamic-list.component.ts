@@ -19,6 +19,7 @@ import moment from 'moment-timezone';
 
 import { FilterService, GenericFormService } from './../../services';
 import { FormatString } from '../../../helpers/format';
+import { smallModalEndpoints } from '../../helpers/small-modal';
 
 @Component({
   selector: 'app-dynamic-list',
@@ -1836,13 +1837,18 @@ export class DynamicListComponent
     };
 
     let size = 'lg';
+    let windowClass = '';
 
     if (this.modalInfo.endpoint.includes('/ecore/api/v2/candidate/skillrels/')) {
-      size = undefined;
       this.modalInfo.label = 'Edit skills';
     }
 
-    this.modalRef = this.open(this.modal, { size });
+    if (smallModalEndpoints.includes(this.modalInfo.endpoint)) {
+      size = undefined;
+      windowClass = 'small-modal';
+    }
+
+    this.modalRef = this.open(this.modal, { size, windowClass });
   }
 
   public showMessage(e) {

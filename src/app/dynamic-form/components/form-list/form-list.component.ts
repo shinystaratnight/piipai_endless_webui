@@ -14,6 +14,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
 import { FormatString } from '../../../helpers/format';
+import { smallModalEndpoints } from '../../helpers/small-modal';
 
 import { CheckPermissionService } from '../../../shared/services/check-permission';
 import { GenericFormService } from '../../services/generic-form.service';
@@ -195,13 +196,18 @@ export class FormListComponent implements OnInit, OnDestroy {
       });
     }
 
-    const windowClass =
+    let windowClass =
       this.modalData.endpoint === '/ecore/api/v2/hr/shiftdates/' ||
       this.config.visibleMode
         ? 'shiftdates'
         : '';
 
     let size = 'lg';
+
+    if (smallModalEndpoints.includes(this.modalData.endpoint)) {
+      size = undefined;
+      windowClass += ' small-modal';
+    }
 
     if (this.modalData.endpoint.includes('/ecore/api/v2/candidate/skillrels/')) {
       size = undefined;

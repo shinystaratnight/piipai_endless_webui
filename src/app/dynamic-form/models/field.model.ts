@@ -67,6 +67,7 @@ export interface Field {
   disableActions?: boolean;
   normal?: boolean;
   hideIfNull?: boolean;
+  updated?: string[];
   templateOptions?: {
     label?: string;
     type?: string;
@@ -87,6 +88,9 @@ export interface Field {
     addon?: string;
     placeholder?: string;
     danger?: string;
+    step?: number;
+    icon?: string;
+    noneValue?: string;
   };
 }
 
