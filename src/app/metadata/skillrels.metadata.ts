@@ -375,6 +375,7 @@ const form = [
     read_only: true,
     key: 'skill',
     templateOptions: {
+      required: true,
       label: 'Skill',
       add: true,
       delete: false,
@@ -404,7 +405,7 @@ const form = [
     key: 'prior_experience',
     type: 'select',
     templateOptions: {
-      required: false,
+      required: true,
       label: 'Prior Experience',
       type: 'select',
       options: [
@@ -462,6 +463,7 @@ const formadd = [
     read_only: false,
     key: 'skill',
     templateOptions: {
+      required: true,
       label: 'Skill',
       add: true,
       delete: false,
@@ -491,7 +493,7 @@ const formadd = [
     key: 'prior_experience',
     type: 'select',
     templateOptions: {
-      required: false,
+      required: true,
       label: 'Prior Experience',
       type: 'select',
       options: [
