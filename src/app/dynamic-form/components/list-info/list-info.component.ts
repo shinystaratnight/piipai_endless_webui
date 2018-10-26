@@ -107,9 +107,10 @@ export class ListInfoComponent implements OnInit {
     return scores
       .filter((el) => {
         getValueOfData(data, el.key, el);
-        el.score = this.getScore(el.value);
+        const score = this.getScore(el.value);
+        el.score = el.value;
 
-        return type === 'includes' ? el.score : !el.score;
+        return type === 'includes' ? score : !score;
       });
   }
 

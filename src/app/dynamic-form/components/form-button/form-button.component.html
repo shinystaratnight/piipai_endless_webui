@@ -23,7 +23,7 @@
 
       <span *ngIf="!repeatArray">{{config.templateOptions.text}}</span>
   </button>
-  <button class="btn btn-sm btn-link mr-1" type="button" *ngIf="config.action === 'showMessage'" [placement]="config.placement" [ngbTooltip]="detail" triggers="click:click" (click)="action($event)">
+  <button class="btn btn-sm btn-link mr-1" type="button" *ngIf="config.action === 'showMessage'" [placement]="config.placement" [ngbTooltip]="detail" (click)="action($event)">
     {{config.templateOptions.text}}
   </button>
   <span class="postfix mr-1" *ngIf="config.postfix">{{config.postfix}}</span>
