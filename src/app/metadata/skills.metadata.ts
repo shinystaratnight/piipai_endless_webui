@@ -207,23 +207,6 @@ const form = [
                       type: 'number'
                     },
                     read_only: false
-                  },
-                  {
-                    list: false,
-                    endpoint: '/ecore/api/v2/skills/employmentclassifications/',
-                    read_only: false,
-                    templateOptions: {
-                      label: 'Employment classification',
-                      add: true,
-                      delete: false,
-                      values: ['__str__'],
-                      type: 'related',
-                      edit: true
-                    },
-                    collapsed: false,
-                    type: 'related',
-                    key: 'employment_classification',
-                    many: false
                   }
                 ],
                 width: 0.34
@@ -317,7 +300,7 @@ const form = [
         templateOptions: {
           label: 'Skill tags',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Skill tags'
         },
         visibleMode: true,

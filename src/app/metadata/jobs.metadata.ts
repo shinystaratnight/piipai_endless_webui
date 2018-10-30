@@ -891,7 +891,7 @@ const form = [
         templateOptions: {
           label: 'Shift Dates',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Shift Dates'
         },
         query: {
@@ -952,7 +952,7 @@ const form = [
             templateOptions: {
               label: 'States history',
               type: 'list',
-              add_label: '+ Add item',
+              add_label: '+ Add',
               text: 'States history'
             },
             collapsed: false,
@@ -977,7 +977,7 @@ const form = [
         templateOptions: {
           label: 'Favourite List',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Favourite List'
         },
         collapsed: false,
