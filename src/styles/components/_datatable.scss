@@ -532,6 +532,10 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       margin-right: 10px;
     }
 
+    &:focus {
+      box-shadow: none !important;
+    }
+
     &:hover,
     &.active {
       border-color: $brand-primary;
