@@ -1374,6 +1374,10 @@ export class FormRelatedComponent extends BasicElementComponent
                 }
               }
 
+              if (!this.previewList) {
+                this.previewList = [];
+              }
+
               if (callback) {
                 let canSetValue;
 
