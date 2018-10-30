@@ -407,7 +407,7 @@ const form = [
     templateOptions: {
       label: 'Price List Rates',
       type: 'list',
-      add_label: 'Add',
+      add_label: '+ Add',
       text: 'Price List Rates'
     },
     collapsed: false,
@@ -505,7 +505,7 @@ const formadd = [
     templateOptions: {
       label: 'Price List Rates',
       type: 'list',
-      add_label: 'Add',
+      add_label: '+ Add',
       text: 'Price List Rates'
     },
     collapsed: false,

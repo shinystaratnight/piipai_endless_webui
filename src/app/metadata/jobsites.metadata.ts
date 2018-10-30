@@ -615,7 +615,7 @@ const form = [
         templateOptions: {
           label: 'Jobs',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Jobs'
         },
         collapsed: false,
@@ -634,7 +634,7 @@ const form = [
         templateOptions: {
           label: 'Notes',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Notes'
         },
         collapsed: false,

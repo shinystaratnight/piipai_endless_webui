@@ -57,7 +57,7 @@ const form = [
     endpoint: '/ecore/api/v2/hr/shifts/',
     delay: 'asdasdasd',
     templateOptions: {
-      add_label: 'Add',
+      add_label: '+ Add',
       label: 'Shifts',
       type: 'related',
       text: 'Shifts',
@@ -172,7 +172,7 @@ const jobAdd = [
     endpoint: '/ecore/api/v2/hr/shifts/',
     delay: true,
     templateOptions: {
-      add_label: 'Add',
+      add_label: '+ Add',
       label: 'Shifts',
       type: 'related',
       text: 'Shifts'

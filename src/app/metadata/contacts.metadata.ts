@@ -493,7 +493,7 @@ const form = [
         templateOptions: {
           label: 'Notes',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Notes'
         },
         collapsed: false,

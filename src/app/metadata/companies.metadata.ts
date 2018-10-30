@@ -918,7 +918,7 @@ const form = [
         templateOptions: {
           label: 'Company Address',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Company Address'
         },
         collapsed: false,
@@ -937,7 +937,7 @@ const form = [
         templateOptions: {
           label: 'Client Contacts',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Client Contacts'
         },
         visibleMode: true,
@@ -954,7 +954,7 @@ const form = [
         templateOptions: {
           label: 'Jobsites',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Jobsites'
         },
         visibleMode: true,
@@ -975,7 +975,7 @@ const form = [
         templateOptions: {
           label: 'Price list',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Price list'
         },
         collapsed: false,
@@ -1010,7 +1010,7 @@ const form = [
             templateOptions: {
               label: 'States history',
               type: 'list',
-              add_label: '+ Add item',
+              add_label: '+ Add',
               text: 'States history'
             },
             collapsed: false,
@@ -1043,7 +1043,7 @@ const form = [
         templateOptions: {
           label: 'Notes',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Notes'
         },
         collapsed: false,

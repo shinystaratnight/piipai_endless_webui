@@ -1254,7 +1254,7 @@ const form = [
         templateOptions: {
           label: 'Skills',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Candidate skills'
         },
         collapsed: false,
@@ -1272,7 +1272,7 @@ const form = [
         templateOptions: {
           label: 'Tags',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Candidate tags'
         },
         visibleMode: true,
@@ -1330,7 +1330,7 @@ const form = [
             templateOptions: {
               label: 'States history',
               type: 'list',
-              add_label: '+ Add item',
+              add_label: '+ Add',
               text: 'States history'
             },
             collapsed: false,
@@ -1355,7 +1355,7 @@ const form = [
           label: 'Unavailabilities',
           type: 'list',
           text: 'Unavailabilities',
-          add_label: '+ Add item',
+          add_label: '+ Add',
         },
         prefilled: {
           contact: '{contact.id}'
@@ -1367,7 +1367,7 @@ const form = [
         templateOptions: {
           label: 'Carrier List',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Carrier List'
         },
         visibleMode: true,
@@ -1385,7 +1385,7 @@ const form = [
         templateOptions: {
           label: 'Black List',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Black List'
         },
         collapsed: false,
@@ -1402,7 +1402,7 @@ const form = [
         templateOptions: {
           label: 'Favorite List',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Favorite List'
         },
         collapsed: false,
