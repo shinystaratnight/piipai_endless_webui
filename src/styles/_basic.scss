@@ -1426,3 +1426,13 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
 
   color: $brand-primary;
 }
+
+.form-builder-form {
+  form {
+    margin: 0 40px;
+  }
+
+  .form-content {
+    width: 530px;
+  }
+}
