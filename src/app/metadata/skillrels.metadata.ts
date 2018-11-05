@@ -383,6 +383,7 @@ const form = [
       type: 'related',
       edit: true
     },
+    visibleMode: true,
     collapsed: false,
     type: 'related',
     query: { exclude: '{candidate_contact.id}' },
@@ -471,6 +472,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
+    visibleMode: true,
     collapsed: false,
     type: 'related',
     query: { exclude: '{candidate_contact.id}' },
