@@ -1,4 +1,4 @@
-<div #datatable [class.on-list]="!inForm" [ngClass]="{'poped card p-0': poped}" class="mw-100 datatable" (click)="activeTable()" [hidden]="minimized">
+<div #datatable [class.mobile]="identifyDevice()" [class.on-list]="!inForm" [ngClass]="{'poped card p-0': poped}" class="mw-100 datatable" (click)="activeTable()" [hidden]="minimized">
   <div appMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
@@ -82,7 +82,13 @@
 
       <app-action-element *ngIf="config.list.actions && !inForm" [count]="selectedCount" [config]="config.list.actions" (event)="actionHandler($event)"></app-action-element>
 
-      <div #tableWrapper class="table-wrapper">
+      <ng-container *ngIf="identifyDevice()">
+        <div class="mobile-item" *ngFor="let row of body">
+          <ng-container *ngTemplateOutlet="getView(); context: {data: row}"></ng-container>
+        </div>
+      </ng-container>
+
+      <div #tableWrapper [hidden]="identifyDevice()" class="table-wrapper">
         <table class="table table-sm" *ngIf="config.list">
           <thead class="thead-default">
             <tr>
@@ -396,4 +402,69 @@
       </agm-info-window>
     </agm-marker>
   </agm-map>
+</ng-template>
+
+<ng-template #approved>
+  aaproved
+</ng-template>
+
+<ng-template #history>
+  history
+</ng-template>
+
+<ng-template #unapproved let-data="data">
+  <div class="header">
+    <div class="d-flex justify-content-center flex-column">
+      <ng-container *ngFor="let field of getElement('position', data.content).content"
+        appListElement
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+    <div class="d-flex align-items-center">
+      <ng-container *ngFor="let field of getElement('job_offer.candidate_contact.contact.picture', data.content).content"
+        appListElement
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+
+  </div>
+  <div class="body">
+    <label>Times</label>
+    <ng-container *ngFor="let field of getElement('times', data.content).content"
+      appListElement
+      [config]="field"
+      (event)="eventHandler($event)"
+      (buttonAction)="buttonHandler($event)">
+    </ng-container>
+  </div>
+  <div class="footer">
+    <div class="button-wrapper">
+      <ng-container *ngFor="let field of getElement('approve', data.content).content"
+        appListElement
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+    <div class="button-wrapper">
+      <ng-container *ngFor="let field of getElement('change', data.content).content"
+        appListElement
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+    <div class="button-wrapper">
+      <ng-container *ngFor="let field of getElement('evaluate', data.content).content"
+        appListElement
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+  </div>
 </ng-template>

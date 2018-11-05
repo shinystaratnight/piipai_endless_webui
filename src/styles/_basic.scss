@@ -1426,3 +1426,17 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
 
   color: $brand-primary;
 }
+
+
+/* Mobile */
+
+.mobile-timesheets {
+  .nav.nav-tabs {
+    padding: 0;
+    justify-content: space-around !important;
+
+    .nav-link {
+      margin-right: 0;
+    }
+  }
+}
