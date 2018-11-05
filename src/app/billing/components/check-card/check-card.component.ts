@@ -43,7 +43,7 @@ export class CheckCardComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.stripe = (<any> window).Stripe((<any> process.env).STRIPE_PUBLIC_API_KEY || environment.STRIPE_PUBLIC_API_KEY); //tslint:disable-line
+    this.stripe = (<any> window).Stripe(environment.STRIPE_PUBLIC_API_KEY);
     const elements = this.stripe.elements();
     this.card = elements.create('card', { style });
     this.card.mount('#card-element');
