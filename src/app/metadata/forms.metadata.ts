@@ -50,21 +50,21 @@ const list = {
         ],
         name: 'builder',
         sort_field: 'builder',
-        label: 'Builder',
+        label: 'Entity',
         sort: true
       },
-      {
-        content: [
-          {
-            field: 'is_active',
-            type: 'checkbox'
-          }
-        ],
-        name: 'is_active',
-        sort_field: 'is_active',
-        label: 'Is active',
-        sort: true
-      }
+      // {
+      //   content: [
+      //     {
+      //       field: 'is_active',
+      //       type: 'checkbox'
+      //     }
+      //   ],
+      //   name: 'is_active',
+      //   sort_field: 'is_active',
+      //   label: 'Is active',
+      //   sort: true
+      // }
     ],
     pagination_label: 'Form',
     search_enabled: false,
@@ -77,7 +77,7 @@ const list = {
       endpoint: '/ecore/api/v2/core/formbuilders/',
       read_only: true,
       templateOptions: {
-        label: 'Builder',
+        label: 'Entity',
         add: true,
         delete: false,
         values: ['__str__'],
@@ -89,17 +89,17 @@ const list = {
       key: 'builder',
       many: false
     },
-    {
-      key: 'is_active',
-      default: false,
-      type: 'checkbox',
-      templateOptions: {
-        required: false,
-        label: 'Is active',
-        type: 'checkbox'
-      },
-      read_only: true
-    },
+    // {
+    //   key: 'is_active',
+    //   default: false,
+    //   type: 'checkbox',
+    //   templateOptions: {
+    //     required: false,
+    //     label: 'Is active',
+    //     type: 'checkbox'
+    //   },
+    //   read_only: true
+    // },
     {
       key: 'title',
       default: '',
@@ -191,7 +191,7 @@ const form = [
     read_only: true,
     hide: true,
     templateOptions: {
-      label: 'Builder',
+      label: 'Entity',
       add: true,
       delete: false,
       values: ['__str__'],
@@ -203,18 +203,18 @@ const form = [
     key: 'builder',
     many: false
   },
-  {
-    key: 'is_active',
-    default: false,
-    hide: true,
-    type: 'checkbox',
-    templateOptions: {
-      required: false,
-      label: 'Is active',
-      type: 'checkbox'
-    },
-    read_only: false
-  },
+  // {
+  //   key: 'is_active',
+  //   default: false,
+  //   hide: true,
+  //   type: 'checkbox',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Is active',
+  //     type: 'checkbox'
+  //   },
+  //   read_only: false
+  // },
   {
     key: 'short_description',
     default: '',
@@ -315,7 +315,7 @@ const formadd = [
     read_only: true,
     hide: true,
     templateOptions: {
-      label: 'Builder',
+      label: 'Entity',
       add: true,
       delete: false,
       values: ['__str__'],
@@ -327,18 +327,18 @@ const formadd = [
     key: 'builder',
     many: false
   },
-  {
-    key: 'is_active',
-    default: false,
-    hide: true,
-    type: 'checkbox',
-    templateOptions: {
-      required: false,
-      label: 'Is active',
-      type: 'checkbox'
-    },
-    read_only: false
-  },
+  // {
+  //   key: 'is_active',
+  //   default: false,
+  //   hide: true,
+  //   type: 'checkbox',
+  //   templateOptions: {
+  //     required: false,
+  //     label: 'Is active',
+  //     type: 'checkbox'
+  //   },
+  //   read_only: false
+  // },
   {
     key: 'short_description',
     default: '',

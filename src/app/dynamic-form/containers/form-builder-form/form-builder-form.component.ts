@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Subject, BehaviorSubject } from 'rxjs';
 
@@ -28,6 +29,7 @@ export class FormBuilderFormComponent implements OnInit {
 
   constructor(
     private service: FormBuilderService,
+    private router: Router,
     private toastr: ToastService
   ) { }
 
@@ -67,7 +69,10 @@ export class FormBuilderFormComponent implements OnInit {
   public submitForm(data: any) {
     this.service.sendFormData(this.id, data)
       .subscribe(
-        (res: any) => { this.toastr.sendMessage(this.config.submit_message, 'success'); },
+        (res: any) => {
+          this.toastr.sendMessage(this.config.submit_message, 'success');
+          this.router.navigate(['/login']);
+        },
         (err: any) => { this.parseError(err.errors); }
       );
   }
