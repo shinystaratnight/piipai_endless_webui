@@ -738,7 +738,38 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   }
 }
 
+.sort-dropdown {
+
+  label {
+    font-size: .875rem;
+    line-height: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: rgba(black, .5);
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+
+    padding: 5px;
+
+    opacity: .6;
+
+    &.activated {
+      font-weight: 600;
+      opacity: 1;
+    }
+  }
+
+  .dropdown-toggle::after {
+    display: none;
+  }
+}
+
 .mobile-item {
+  margin-bottom: 1rem;
+
   border-radius: 4px;
 
   box-shadow: $nested-shadow;
@@ -792,14 +823,15 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   .footer {
     display: flex;
 
-    button {
-      padding: 0 !important;
+    &.footer-container {
+      padding: 10px;
     }
 
     .button-wrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       flex: 1;
-
-      padding: 5px;
 
       text-align: center;
 

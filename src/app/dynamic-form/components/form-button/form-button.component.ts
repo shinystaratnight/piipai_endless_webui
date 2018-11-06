@@ -65,7 +65,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
         this.buttonColor = color || '';
       }
     } else {
-      this.textClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
+      this.textClass = classes.indexOf(color) > -1 ? `text-${color} py-2` : '';
     }
   }
 

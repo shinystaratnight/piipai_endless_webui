@@ -1,6 +1,10 @@
 @import '../../../../styles/variables.scss';
 @import '../../../../styles/mixins.scss';
 
+:host {
+  display: inline-flex;
+}
+
 .custom-button {
   color: $gray;
   opacity: .8;

@@ -565,9 +565,6 @@ form.ng-invalid button[type='submit'] {
   }
 
   .modal-body {
-    // padding-top: 40px;
-    // padding-bottom: 40px;
-
     border-radius: 0.5rem 0.5rem 0 0;
   }
 
@@ -577,7 +574,7 @@ form.ng-invalid button[type='submit'] {
   }
 
   @include media-breakpoint-down('md') {
-    max-height: 75vh;
+    max-height: 85vh;
   }
 }
 

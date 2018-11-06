@@ -82,6 +82,28 @@
 
       <app-action-element *ngIf="config.list.actions && !inForm" [count]="selectedCount" [config]="config.list.actions" (event)="actionHandler($event)"></app-action-element>
 
+      <div ngbDropdown class="sort-dropdown" *ngIf="identifyDevice()">
+        <label ngbDropdownToggle>
+          Sort by
+        </label>
+        <i class="sort-icon"
+          fa
+          name="angle-down">
+        </i>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <div *ngFor="let field of config.list.columns">
+            <span *ngIf="field.sort" class="dropdown-item" [class.activated]="field.sorted"
+              (click)="sortedField = field; sorting(field, field.sorted === 'desc' ? 'asc' : 'desc')">
+              {{field.label}}
+              <i class="sort-icon"
+                fa
+                [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'">
+              </i>
+            </span>
+          </div>
+        </div>
+      </div>
+
       <ng-container *ngIf="identifyDevice()">
         <div class="mobile-item" *ngFor="let row of body">
           <ng-container *ngTemplateOutlet="getView(); context: {data: row}"></ng-container>
@@ -404,20 +426,13 @@
   </agm-map>
 </ng-template>
 
-<ng-template #approved>
-  aaproved
-</ng-template>
-
-<ng-template #history>
-  history
-</ng-template>
-
-<ng-template #unapproved let-data="data">
+<ng-template #approved let-data="data">
   <div class="header">
     <div class="d-flex justify-content-center flex-column">
       <ng-container *ngFor="let field of getElement('position', data.content).content"
         appListElement
         [config]="field"
+        [length]="getElement('position', data.content).content.length"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)">
       </ng-container>
@@ -430,12 +445,94 @@
         (buttonAction)="buttonHandler($event)">
       </ng-container>
     </div>
-
   </div>
   <div class="body">
     <label>Times</label>
     <ng-container *ngFor="let field of getElement('times', data.content).content"
       appListElement
+      [config]="field"
+      [length]="getElement('times', data.content).content.length"
+      (event)="eventHandler($event)"
+      (buttonAction)="buttonHandler($event)">
+    </ng-container>
+  </div>
+  <div class="footer">
+    <div class="button-wrapper">
+      <ng-container *ngFor="let field of getElement('evaluate', data.content).content"
+        appListElement
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #history let-data="data">
+  <div class="header">
+    <div class="d-flex justify-content-center flex-column">
+      <ng-container *ngFor="let field of getElement('jobsite', data.content).content"
+        appListElement
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+  </div>
+  <div class="body">
+    <ng-container *ngFor="let field of getElement('going_to_work', data.content).content"
+      appListElement
+      [config]="field"
+      (event)="eventHandler($event)"
+      (buttonAction)="buttonHandler($event)">
+    </ng-container>
+
+    <label class="mt-2">Times</label>
+    <ng-container *ngFor="let field of getElement('times', data.content).content"
+      appListElement
+      [config]="field"
+      [length]="getElement('times', data.content).content.length"
+      (event)="eventHandler($event)"
+      (buttonAction)="buttonHandler($event)">
+    </ng-container>
+  </div>
+  <div class="footer footer-container">
+    <div class="d-flex justify-content-center flex-column">
+      <ng-container *ngFor="let field of getElement('signed_by', data.content).content"
+        appListElement
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #unapproved let-data="data">
+  <div class="header">
+    <div class="d-flex justify-content-center flex-column">
+      <ng-container *ngFor="let field of getElement('position', data.content).content"
+        appListElement
+        [config]="field"
+        [length]="getElement('position', data.content).content.length"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+    <div class="d-flex align-items-center">
+      <ng-container *ngFor="let field of getElement('job_offer.candidate_contact.contact.picture', data.content).content"
+        appListElement
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+  </div>
+  <div class="body">
+    <label>Times</label>
+    <ng-container *ngFor="let field of getElement('times', data.content).content"
+      appListElement
+      [length]="getElement('times', data.content).content.length"
       [config]="field"
       (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">

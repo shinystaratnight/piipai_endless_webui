@@ -207,6 +207,7 @@ export class DynamicListComponent
     '/ecore/api/v2/hr/timesheets/unapproved/',
   ];
   public collapsed = true;
+  public sortedField: any;
 
   constructor(
     private filterService: FilterService,

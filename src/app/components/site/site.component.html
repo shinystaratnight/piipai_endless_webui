@@ -168,7 +168,7 @@
   [modulesList]="modulesList"
   (changeWidgetList)="updateNavigation($event)"></app-dashboard>
 
-<app-mobile-timesheets *ngIf="identifyDevice()"></app-mobile-timesheets>
+<app-mobile-timesheets [clientId]="getClientId()" *ngIf="identifyDevice()"></app-mobile-timesheets>
 
 <app-toast></app-toast>
 

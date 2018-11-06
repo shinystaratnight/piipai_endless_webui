@@ -2,7 +2,7 @@ const list = {
   list: {
     list: 'timesheet',
     search_enabled: false,
-    pagination_label: 'Timesheet Entry',
+    pagination_label: 'Unapproved timesheets',
     buttons: [],
     columns: [
       {
@@ -130,7 +130,7 @@ const list = {
       }
     ],
     editDisable: true,
-    label: 'Timesheet Entry'
+    label: 'Unapproved timesheets'
   },
   fields: [
     {
@@ -208,5 +208,6 @@ const list = {
 };
 
 export const metadata = {
-  list
+  list,
+  formset: list
 };

@@ -1,4 +1,4 @@
-<div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden || showButton">
+<div class="form-group d-inline-flex" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden || showButton">
   <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
   <button [type]="config.templateOptions.type ? config.templateOptions.type : 'button'"
     *ngIf="(!config.hidden || showButton) && (config.templateOptions.text || repeatArray && repeatArray.length > 1) && config.action !== 'showMessage'"
