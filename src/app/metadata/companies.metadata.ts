@@ -914,7 +914,7 @@ const form = [
       },
       {
         endpoint: '/ecore/api/v2/core/companyaddresses/',
-        delay: true,
+        // delay: true,
         templateOptions: {
           label: 'Company Address',
           type: 'list',
