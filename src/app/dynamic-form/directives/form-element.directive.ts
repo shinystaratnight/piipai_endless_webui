@@ -83,6 +83,9 @@ export class FormElementDirective implements OnInit, OnChanges {
   public label = true;
 
   @Input()
+  public last: boolean;
+
+  @Input()
   public group: FormGroup;
 
   @Input()
@@ -116,6 +119,7 @@ export class FormElementDirective implements OnInit, OnChanges {
       this.component.instance.message = this.message;
       this.component.instance.buttonAction = this.buttonAction;
       this.component.instance.formId = this.formId;
+      this.component.instance.last = this.last;
     }
   }
 
@@ -141,6 +145,7 @@ export class FormElementDirective implements OnInit, OnChanges {
       this.component.instance.message = this.message;
       this.component.instance.buttonAction = this.buttonAction;
       this.component.instance.formId = this.formId;
+      this.component.instance.last = this.last;
     }
   }
 

@@ -1,7 +1,8 @@
 <form class="dynamic-form" [formGroup]="form" (ngSubmit)="handleSubmit($event)">
   <ng-container
-    *ngFor="let field of config;"
+    *ngFor="let field of config; let last = last"
     appFormElement
+    [last]="last"
     [config]="field"
     [group]="form"
     [errors]="errors"

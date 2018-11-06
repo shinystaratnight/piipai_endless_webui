@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -13,6 +13,9 @@ export class FormRowComponent implements OnInit {
   public errors: any;
   public message: any;
   public className: any;
+
+  @Input()
+  public last: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
