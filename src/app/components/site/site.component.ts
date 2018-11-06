@@ -65,6 +65,12 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public modalRef: NgbModalRef;
 
+  public mobileDesign = [
+    '/ecore/api/v2/hr/timesheets/approved/',
+    '/ecore/api/v2/hr/timesheets/history/',
+    '/ecore/api/v2/hr/timesheets/unapproved/',
+  ];
+
   @ViewChild('modal') public modal;
   @ViewChild('forgotPassword') public forgotPasswordModal;
 
@@ -438,5 +444,14 @@ export class SiteComponent implements OnInit, OnDestroy {
     const keys = path.split('/');
 
     return keys[keys.length - 3];
+  }
+
+  public identifyDevice() {
+    if (this.pageData) {
+      if (this.user.currentRole.__str__.includes('client') && this.pageData.pathData.path === '/' ) {
+        const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+        return deviceNamesReg.test(navigator.userAgent.toLowerCase());
+      }
+    }
   }
 }

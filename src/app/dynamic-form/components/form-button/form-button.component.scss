@@ -1,6 +1,10 @@
 @import '../../../../styles/variables.scss';
 @import '../../../../styles/mixins.scss';
 
+:host {
+  display: inline-flex;
+}
+
 .custom-button {
   color: $gray;
   opacity: .8;
@@ -26,7 +30,7 @@ button {
   margin-bottom: 6px;
 
   &.list {
-    font-size: 10px;
+    font-size: 12px;
     line-height: 1;
   }
 }

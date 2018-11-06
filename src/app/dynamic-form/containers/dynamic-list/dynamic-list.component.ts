@@ -150,6 +150,15 @@ export class DynamicListComponent
   @ViewChild('messageDetail')
   public messageDetail;
 
+  @ViewChild('approved')
+  public approved;
+
+  @ViewChild('history')
+  public history;
+
+  @ViewChild('unapproved')
+  public unapproved;
+
   public selectedCount: number;
   public sortedColumns: any;
   public reason: any;
@@ -192,7 +201,13 @@ export class DynamicListComponent
     '/ecore/api/v2/core/companies/',
     '/ecore/api/v2/core/companycontacts/'
   ];
+  public mobileDesign = [
+    '/ecore/api/v2/hr/timesheets/approved/',
+    '/ecore/api/v2/hr/timesheets/history/',
+    '/ecore/api/v2/hr/timesheets/unapproved/',
+  ];
   public collapsed = true;
+  public sortedField: any;
 
   constructor(
     private filterService: FilterService,
@@ -768,6 +783,7 @@ export class DynamicListComponent
             messageType: element.messageType,
             customLink: element.customLink,
             fontSize: element.fontSize,
+            inverse: element.inverse,
           };
           if (obj.action && this.disableActions) {
             obj.disableAction = true;
@@ -1759,6 +1775,21 @@ export class DynamicListComponent
     );
   }
 
+  public identifyDevice() {
+    let changeDesign = false;
+
+    this.mobileDesign.forEach((el) => {
+      if (this.endpoint.includes(el)) {
+        changeDesign = true;
+      }
+    });
+
+    if (changeDesign) {
+      const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+      return deviceNamesReg.test(navigator.userAgent.toLowerCase());
+    }
+  }
+
   public editForm(e) {
     let endpoint;
     let id;
@@ -1995,5 +2026,20 @@ export class DynamicListComponent
     this.body.forEach((row) => {
       row.collapsed = this.collapsed;
     });
+  }
+
+  public getView() {
+    switch (this.endpoint) {
+      case '/ecore/api/v2/hr/timesheets/approved/':
+        return this.approved;
+      case '/ecore/api/v2/hr/timesheets/history/':
+        return this.history;
+      case '/ecore/api/v2/hr/timesheets/unapproved/':
+        return this.unapproved;
+    }
+  }
+
+  public getElement(name: string, row: any[]): any {
+    return row.find((el) => el.name === name);
   }
 }

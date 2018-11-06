@@ -1,0 +1,34 @@
+<div class="mobile-timesheets">
+  <ngb-tabset>
+    <ngb-tab title="Approved">
+      <ng-template ngbTabContent>
+        <app-generic-list
+          [clientId]="clientId"
+          [inForm]="true"
+          [allowPermissions]="['update', 'delete', 'get', 'post']"
+          endpoint="/ecore/api/v2/hr/timesheets/approved/">
+        </app-generic-list>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="History">
+      <ng-template ngbTabContent>
+        <app-generic-list
+          [clientId]="clientId"
+          [inForm]="true"
+          [allowPermissions]="['update', 'delete', 'get', 'post']"
+          endpoint="/ecore/api/v2/hr/timesheets/history/">
+        </app-generic-list>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Unapproved">
+      <ng-template ngbTabContent>
+        <app-generic-list
+          [clientId]="clientId"
+          [inForm]="true"
+          [allowPermissions]="['update', 'delete', 'get', 'post']"
+          endpoint="/ecore/api/v2/hr/timesheets/unapproved/">
+        </app-generic-list>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

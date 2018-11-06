@@ -2,7 +2,7 @@ const list = {
   list: {
     list: 'timesheet',
     search_enabled: false,
-    pagination_label: 'Timesheet Entry',
+    pagination_label: 'Approved timesheets',
     buttons: [],
     columns: [
       {
@@ -79,7 +79,8 @@ const list = {
             icon: 'fa-star',
             type: 'button',
             color: 'warning',
-            repeat: 5,
+            inverse: true,
+            text: 'Evaluate',
             endpoint: '/ecore/api/v2/hr/timesheets/{id}/evaluate/',
             field: 'id',
             action: 'evaluateCandidate',
@@ -89,7 +90,7 @@ const list = {
       }
     ],
     editDisable: true,
-    label: 'Timesheet Entry'
+    label: 'Approved timesheets'
   },
   fields: [
     {
@@ -167,5 +168,6 @@ const list = {
 };
 
 export const metadata = {
-  list
+  list,
+  formset: list
 };

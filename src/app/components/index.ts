@@ -7,6 +7,7 @@ import { FillInComponent } from './fill-in/fill-in.component';
 import { VerifyEmailComponent } from './varify-email/varify-email.component';
 import { MapComponent } from './map/map.component';
 import { TestBuilderComponent } from './test-builder/test-builder.component';
+import { MobileTimesheetsComponent } from './mobile-timesheets/mobile-timesheets.component';
 
 import { MapService } from './map/map.service';
 
@@ -31,7 +32,8 @@ export const components = [
   FillInComponent,
   VerifyEmailComponent,
   MapComponent,
-  TestBuilderComponent
+  TestBuilderComponent,
+  MobileTimesheetsComponent,
 ];
 
 export const providers = [

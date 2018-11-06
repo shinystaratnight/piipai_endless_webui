@@ -2,7 +2,7 @@ const list = {
   list: {
     list: 'timesheet',
     search_enabled: false,
-    pagination_label: 'Timesheet Entry',
+    pagination_label: 'Unapproved timesheets',
     buttons: [],
     columns: [
       {
@@ -80,6 +80,7 @@ const list = {
             type: 'button',
             color: 'success',
             label: 'Approve',
+            inverse: true,
             endpoint: '/ecore/api/v2/hr/timesheets/{id}/approve/',
             replace_by: 'supervisor',
             field: 'id',
@@ -100,6 +101,7 @@ const list = {
             type: 'button',
             color: 'danger',
             label: 'Change',
+            inverse: true,
             endpoint: '/ecore/api/v2/hr/timesheets/{id}/not_agree/',
             field: 'id',
             action: 'changeTimesheet',
@@ -115,10 +117,11 @@ const list = {
         content: [
           {
             label: 'Evaluate',
+            text: 'Evaluate',
             icon: 'fa-star',
             type: 'button',
             color: 'warning',
-            repeat: 5,
+            inverse: true,
             endpoint: '/ecore/api/v2/hr/timesheets/{id}/evaluate/',
             field: 'id',
             action: 'evaluateCandidate'
@@ -127,7 +130,7 @@ const list = {
       }
     ],
     editDisable: true,
-    label: 'Timesheet Entry'
+    label: 'Unapproved timesheets'
   },
   fields: [
     {
@@ -205,5 +208,6 @@ const list = {
 };
 
 export const metadata = {
-  list
+  list,
+  formset: list
 };

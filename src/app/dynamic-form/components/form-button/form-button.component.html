@@ -1,15 +1,15 @@
-<div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden || showButton">
+<div class="form-group d-inline-flex" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden || showButton">
   <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
   <button [type]="config.templateOptions.type ? config.templateOptions.type : 'button'"
     *ngIf="(!config.hidden || showButton) && (config.templateOptions.text || repeatArray && repeatArray.length > 1) && config.action !== 'showMessage'"
-    [ngClass]="[buttonClass]"
-    [ngStyle]="{'backgroundColor': config.color}"
+    [ngClass]="[buttonClass, textClass]"
+    [ngStyle]="{'backgroundColor': config.inverse ? 'white' : config.color}"
     class="btn"
-    [class.btn-outline-primary]="config.list && !buttonClass"
+    [class.btn-outline-primary]="config.list && !buttonClass && !config.inverse"
     [class.btn-sm]="config.templateOptions.small"
     [class.px-2]="config.templateOptions.p"
     [class.list]="config.templateOptions.p"
-    [class.text-white]="buttonClass || config.color"
+    [class.text-white]="(buttonClass || config.color) && !config.inverse"
     [disabled]="config.disableAction"
     (click)="action($event)">
       <span *ngIf="repeatArray" class="d-flex align-items-center justify-content-between">

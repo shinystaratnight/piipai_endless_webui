@@ -13,7 +13,8 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   public group: FormGroup;
   public label: boolean;
   public replacyValue: string;
-  public buttonClass: string;
+  public buttonClass = '';
+  public textClass = '';
   public buttonColor: string;
   public repeatArray: any[];
   public showButton: boolean;
@@ -57,9 +58,14 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   public customizeButton() {
     const color = this.config.color;
     const classes = ['primary', 'danger', 'info', 'success', 'warning', 'link'];
-    this.buttonClass = classes.indexOf(color) > -1 ? `btn-${color}` : '';
-    if (!this.buttonClass) {
-      this.buttonColor = color || '';
+
+    if (!this.config.inverse) {
+      this.buttonClass = classes.indexOf(color) > -1 ? `btn-${color}` : '';
+      if (!this.buttonClass) {
+        this.buttonColor = color || '';
+      }
+    } else {
+      this.textClass = classes.indexOf(color) > -1 ? `text-${color} py-2` : '';
     }
   }
 
