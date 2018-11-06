@@ -1942,7 +1942,7 @@ export class DynamicListComponent
     this.genericFormService.submitForm(e.el.endpoint, {}).subscribe(
       (res: any) => {
         if (e.el && e.el.redirect) {
-          location.href = e.el.redirect;
+          location.href = res.redirect_to || e.el.redirect;
           return;
         }
 
