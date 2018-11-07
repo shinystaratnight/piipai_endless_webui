@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
-import { Observable } from 'rxjs';
+import { throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class VerifyService {
       .get(endpoint)
       .pipe(
         map((res: Response) => res.json && res.json()),
-        catchError((err: any) => Observable.throw(err))
+        catchError((err: any) => throwError(err))
       );
   }
 }
