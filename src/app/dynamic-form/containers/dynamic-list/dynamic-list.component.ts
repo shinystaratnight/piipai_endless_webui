@@ -20,6 +20,7 @@ import moment from 'moment-timezone';
 import { FilterService, GenericFormService } from './../../services';
 import { FormatString } from '../../../helpers/format';
 import { smallModalEndpoints } from '../../helpers/small-modal';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-dynamic-list',
@@ -214,7 +215,8 @@ export class DynamicListComponent
     private modalService: NgbModal,
     private genericFormService: GenericFormService,
     private sanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
+    private storage: LocalStorageService
   ) {
     this.searchFilter = {
       type: 'search',
@@ -1942,6 +1944,7 @@ export class DynamicListComponent
     this.genericFormService.submitForm(e.el.endpoint, {}).subscribe(
       (res: any) => {
         if (e.el && e.el.redirect) {
+          this.storage.clear('role');
           location.href = res.redirect_to || e.el.redirect;
           return;
         }
