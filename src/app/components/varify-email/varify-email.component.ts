@@ -38,7 +38,7 @@ export class VerifyEmailComponent implements OnInit {
                 this.ts.sendMessage(res.message, MessageType.success);
 
                 const user = this.userService.user;
-                if (user.currentRole && user.currentRole.__str__.includes('candidate')) {
+                if (user && user.currentRole && user.currentRole.__str__.includes('candidate')) {
 
                   this.router.navigate(['profile']);
                 }
