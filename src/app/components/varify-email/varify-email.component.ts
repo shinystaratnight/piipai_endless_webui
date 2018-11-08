@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { VerifyService } from '../../services';
+import { VerifyService, UserService } from '../../services';
 import { ToastService, MessageType } from '../../shared/services';
 
 import { of } from 'rxjs';
@@ -19,7 +19,8 @@ export class VerifyEmailComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private vs: VerifyService,
-    private ts: ToastService
+    private ts: ToastService,
+    private userService: UserService
   ) {}
 
   public ngOnInit() {
@@ -35,6 +36,13 @@ export class VerifyEmailComponent implements OnInit {
             if (res.message) {
               setTimeout(() => {
                 this.ts.sendMessage(res.message, MessageType.success);
+
+                const user = this.userService.user;
+                if (user && user.currentRole && user.currentRole.__str__.includes('candidate')) {
+
+                  this.router.navigate(['profile']);
+                }
+
               }, 2000);
             } else if (res.statusText) {
               setTimeout(() => {

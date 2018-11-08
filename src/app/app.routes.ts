@@ -14,7 +14,7 @@ import { AuthGuard, NotAuthorizedGuard, SubdomainGuard } from './guards';
 
 export const ROUTES: Routes = [
   {
-    path: 'contacts/verify_email',
+    path: 'contacts/verify_email/',
     component: VerifyEmailComponent
   },
   {
