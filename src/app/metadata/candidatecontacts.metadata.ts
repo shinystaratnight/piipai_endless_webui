@@ -1197,23 +1197,23 @@ const form = [
                     },
                     read_only: true
                   },
-                  {
-                    list: false,
-                    endpoint: '/ecore/api/v2/skills/employmentclassifications/',
-                    read_only: false,
-                    templateOptions: {
-                      label: 'Employment classification',
-                      add: true,
-                      delete: false,
-                      values: ['__str__'],
-                      type: 'related',
-                      edit: true
-                    },
-                    collapsed: false,
-                    type: 'related',
-                    key: 'employment_classification',
-                    many: false
-                  }
+                  // {
+                  //   list: false,
+                  //   endpoint: '/ecore/api/v2/skills/employmentclassifications/',
+                  //   read_only: false,
+                  //   templateOptions: {
+                  //     label: 'Employment classification',
+                  //     add: true,
+                  //     delete: false,
+                  //     values: ['__str__'],
+                  //     type: 'related',
+                  //     edit: true
+                  //   },
+                  //   collapsed: false,
+                  //   type: 'related',
+                  //   key: 'employment_classification',
+                  //   many: false
+                  // }
                 ],
                 width: 0.5
               },
