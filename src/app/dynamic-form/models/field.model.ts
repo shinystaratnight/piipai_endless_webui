@@ -92,6 +92,7 @@ export interface Field {
     step?: number;
     icon?: string;
     noneValue?: string;
+    full?: boolean;
   };
 }
 

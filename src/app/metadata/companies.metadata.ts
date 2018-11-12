@@ -405,29 +405,6 @@ const form = [
                     },
                     read_only: true
                   },
-                  {
-                    key: 'manager.contact.email',
-                    send: false,
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'E-mail',
-                      max: 255,
-                      type: 'text'
-                    },
-                    read_only: true
-                  },
-                  {
-                    key: 'manager.contact.phone_mobile',
-                    send: false,
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Phone number',
-                      type: 'text'
-                    },
-                    read_only: true
-                  }
                 ],
                 width: 0.25
               },
@@ -458,6 +435,12 @@ const form = [
                     },
                     read_only: false
                   },
+                ],
+                width: 0.25
+              },
+              {
+                type: 'group',
+                children: [
                   {
                     list: false,
                     endpoint: '/ecore/api/v2/pricing/industries/',
@@ -487,31 +470,6 @@ const form = [
                     },
                     read_only: false
                   },
-                  {
-                    list: false,
-                    endpoint: '/ecore/api/v2/core/companies/',
-                    read_only: true,
-                    key: 'master_company',
-                    templateOptions: {
-                      label: 'Master company',
-                      add: true,
-                      delete: false,
-                      values: ['__str__'],
-                      type: 'related',
-                      edit: true
-                    },
-                    collapsed: false,
-                    showIf: [
-                      {
-                        type: 'regular'
-                      }
-                    ],
-                    type: 'related',
-                    query: {
-                      type: 'master'
-                    },
-                    many: false
-                  }
                 ],
                 width: 0.25
               },
@@ -545,15 +503,29 @@ const form = [
                     many: false
                   },
                   {
-                    key: 'primary_contact_phone',
-                    send: false,
-                    type: 'input',
+                    list: false,
+                    endpoint: '/ecore/api/v2/core/companies/',
+                    read_only: true,
+                    key: 'master_company',
                     templateOptions: {
-                      required: false,
-                      label: 'Phone number',
-                      type: 'text'
+                      label: 'Master company',
+                      add: true,
+                      delete: false,
+                      values: ['__str__'],
+                      type: 'related',
+                      edit: true
                     },
-                    read_only: true
+                    collapsed: false,
+                    showIf: [
+                      {
+                        type: 'regular'
+                      }
+                    ],
+                    type: 'related',
+                    query: {
+                      type: 'master'
+                    },
+                    many: false
                   }
                 ],
                 width: 0.25
@@ -564,7 +536,23 @@ const form = [
             type: 'row',
             children: [
               {
-                label: 'Credit Info',
+                key: 'description',
+                type: 'textarea',
+                templateOptions: {
+                  full: true,
+                  required: false,
+                  label: 'Public description',
+                  type: 'textarea'
+                },
+                read_only: false
+              }
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                label: 'Credit Info and billing terms',
                 type: 'group',
                 children: [
                   {
@@ -676,7 +664,6 @@ const form = [
                 width: 0.25
               },
               {
-                label: 'Banking Detail',
                 type: 'group',
                 children: [
                   {
@@ -854,19 +841,7 @@ const form = [
                       text: 'Show name'
                     },
                     read_only: false
-                  }
-                ],
-                width: 0.25
-              }
-            ]
-          },
-          {
-            type: 'row',
-            children: [
-              {
-                label: 'Timesheet',
-                type: 'group',
-                children: [
+                  },
                   {
                     key: 'timesheet_approval_scheme',
                     default: 'PIN',
@@ -890,23 +865,6 @@ const form = [
                   }
                 ],
                 width: 0.25
-              },
-              {
-                label: 'About Company',
-                type: 'group',
-                children: [
-                  {
-                    key: 'description',
-                    type: 'textarea',
-                    templateOptions: {
-                      required: false,
-                      label: 'Public description',
-                      type: 'textarea'
-                    },
-                    read_only: false
-                  }
-                ],
-                width: 0.75
               }
             ]
           }
@@ -914,7 +872,6 @@ const form = [
       },
       {
         endpoint: '/ecore/api/v2/core/companyaddresses/',
-        // delay: true,
         templateOptions: {
           label: 'Company Address',
           type: 'list',
