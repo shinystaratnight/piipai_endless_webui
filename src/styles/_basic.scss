@@ -229,6 +229,15 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
+.fillin-map .close-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  padding: 5px 10px;
+  z-index: 2;
+}
+
 /*---------- Bootstrap ---------- */
 
 *[role='tablist'] a {
