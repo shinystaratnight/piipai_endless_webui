@@ -185,9 +185,13 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public deleteQuestion(id: string, target: any[], index: number) {
-    this.genericFormService.delete(this.questionEndpoint, id).subscribe(() => {
+    if (id) {
+      this.genericFormService.delete(this.questionEndpoint, id).subscribe(() => {
+        target.splice(index, 1);
+      });
+    } else {
       target.splice(index, 1);
-    });
+    }
   }
 
   public deleteAnswer(id: string, target: any[], index: number) {
