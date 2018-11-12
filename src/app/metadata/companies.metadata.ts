@@ -929,6 +929,7 @@ const form = [
         metadata_query: {
           editable_type: 'company'
         },
+        visibleMode: true,
         templateOptions: {
           label: 'Price list',
           type: 'list',

@@ -152,6 +152,7 @@ const form = [
   {
     list: false,
     endpoint: '/ecore/api/v2/pricing/pricelists/',
+    visibleMode: true,
     read_only: true,
     templateOptions: {
       label: 'Price list',
@@ -196,6 +197,7 @@ const formadd = [
   {
     list: false,
     endpoint: '/ecore/api/v2/pricing/pricelists/',
+    visibleMode: true,
     read_only: true,
     templateOptions: {
       label: 'Price list',
@@ -254,6 +256,7 @@ const pricelistForm = [
       label: 'Price list',
       delete: false
     },
+    visibleMode: true,
     endpoint: '/ecore/api/v2/pricing/pricelists/',
     key: 'price_list',
     many: false
