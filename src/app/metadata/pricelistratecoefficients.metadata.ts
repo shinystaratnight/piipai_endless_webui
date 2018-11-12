@@ -50,6 +50,7 @@ const form = [
   {
     list: false,
     endpoint: '/ecore/api/v2/pricing/pricelists/',
+    visibleMode: true,
     read_only: true,
     templateOptions: {
       label: 'Price list',
@@ -106,6 +107,7 @@ const formadd = [
   {
     list: false,
     endpoint: '/ecore/api/v2/pricing/pricelists/',
+    visibleMode: true,
     read_only: true,
     templateOptions: {
       label: 'Price list',
