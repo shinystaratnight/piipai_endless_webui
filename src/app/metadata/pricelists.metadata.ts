@@ -372,7 +372,6 @@ const form = [
     read_only: false
   },
   {
-    list: false,
     endpoint: '/ecore/api/v2/core/companycontacts/',
     read_only: true,
     templateOptions: {
@@ -384,10 +383,11 @@ const form = [
       edit: true
     },
     visibleMode: true,
-    collapsed: false,
     type: 'related',
     key: 'approved_by',
-    many: false
+    query: {
+      company: '{company.id}'
+    }
   },
   {
     key: 'approved_at',
@@ -471,7 +471,6 @@ const formadd = [
     read_only: false
   },
   {
-    list: false,
     endpoint: '/ecore/api/v2/core/companycontacts/',
     read_only: true,
     templateOptions: {
@@ -482,10 +481,11 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'approved_by',
-    many: false
+    query: {
+      company: '{company.id}'
+    }
   },
   {
     key: 'approved_at',
