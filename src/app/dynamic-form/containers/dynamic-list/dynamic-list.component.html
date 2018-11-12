@@ -397,7 +397,7 @@
   </div>
 </ng-template>
 
-<ng-template #sendMessageModal let-c="close">
+<ng-template #sendMessageModal>
   <div class="modal-body">
     <iframe class="send-sms" [src]="modalInfo.url" frameborder="0"></iframe>
     <br>
@@ -411,7 +411,11 @@
   </div>
 </ng-template>
 
-<ng-template #fillInMap>
+<ng-template #fillInMap let-c="close">
+  <button type="button" class="close-button close ml-2" aria-label="Close"
+    (click)="c()">
+      <span aria-hidden="true">&times;</span>
+  </button>
   <agm-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13" [mapTypeControl]="true">
     <agm-marker [iconUrl]="marker.iconUrl" *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
       <agm-info-window>

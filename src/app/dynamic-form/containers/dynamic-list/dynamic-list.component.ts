@@ -1715,7 +1715,7 @@ export class DynamicListComponent
 
   public showMap() {
     this.modalInfo = this.generateDataForFillInMap({});
-    this.open(this.fillInMap, { size: 'lg' });
+    this.open(this.fillInMap, { size: 'lg', windowClass: 'fillin-map' });
   }
 
   public generateDataForFillInMap(data) {
