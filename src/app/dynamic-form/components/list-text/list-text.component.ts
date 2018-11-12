@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import moment from 'moment-timezone';
 
 import { FormatString } from '../../../helpers/format';
+import { getValueOfData } from '../../helpers/utils';
 
 @Component({
   selector: 'app-list-text',
@@ -30,6 +31,15 @@ export class ListTextComponent implements OnInit {
         this.value = this.config.value;
         if (Array.isArray(this.value)) {
           this.arrayValue = true;
+
+          if (this.config.param) {
+            this.value.forEach((el) => {
+              const obj = { value: '' };
+              getValueOfData(el, this.config.param, obj);
+
+              el.__str__ = obj.value || el.__str__;
+            });
+          }
         }
       }
     }

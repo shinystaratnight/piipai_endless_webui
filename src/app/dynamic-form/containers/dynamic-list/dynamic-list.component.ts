@@ -786,6 +786,7 @@ export class DynamicListComponent
             customLink: element.customLink,
             fontSize: element.fontSize,
             inverse: element.inverse,
+            param: element.param
           };
           if (obj.action && this.disableActions) {
             obj.disableAction = true;
