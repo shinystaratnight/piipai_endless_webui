@@ -54,7 +54,8 @@ const list = {
           {
             field: 'acceptance_tests_industries',
             type: 'text',
-            label: 'Skills'
+            label: 'Skills',
+            param: 'industry.name'
           }
         ],
         name: 'acceptance_tests_industries',
@@ -67,7 +68,8 @@ const list = {
           {
             field: 'acceptance_tests_skills',
             type: 'text',
-            label: 'Skills'
+            label: 'Skills',
+            param: 'skill.name'
           }
         ],
         name: 'acceptance_tests_skills',
@@ -80,7 +82,8 @@ const list = {
           {
             field: 'acceptance_tests_tags',
             type: 'text',
-            label: 'Skills'
+            label: 'Skills',
+            param: 'tag.name'
           }
         ],
         name: 'acceptance_tests_tags',
@@ -93,12 +96,13 @@ const list = {
           {
             field: 'acceptance_tests_workflow_nodes',
             type: 'text',
-            label: 'Workflow Node'
+            label: 'Workflow Node',
+            param: 'company_workflow_node.name'
           }
         ],
         name: 'acceptance_tests_workflow_nodes',
         title: null,
-        label: 'Tags',
+        label: 'Workflow nodes',
         delim: null
       },
     ],
