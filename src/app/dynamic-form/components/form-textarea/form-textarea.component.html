@@ -4,7 +4,7 @@
       {{config.templateOptions.label}}:
     </label>
     <app-info [description]="config.templateOptions.description"></app-info>
-    <div class="form-element-content edit" style="height: auto; max-height: none">
+    <div class="form-element-content edit" [class.full-width]="config.templateOptions.full" style="height: auto; max-height: none">
       <textarea
         rows="2"
         *ngIf="!viewMode"

@@ -141,6 +141,7 @@
     font-size: 14px;
     line-height: 20px;
 
+
     .message-detail & {
       width: auto;
       max-width: unset !important;
@@ -156,6 +157,11 @@
       .form-builder-form & {
         max-width: 100%;
       }
+    }
+
+    &.full-width {
+      width: 100%;
+      max-width: 100%;
     }
 
     .description & {
