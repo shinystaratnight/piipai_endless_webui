@@ -1101,46 +1101,26 @@ const form = [
                     read_only: false
                   },
                   {
-                    list: false,
                     endpoint: '/ecore/api/v2/candidate/superannuationfunds/',
                     read_only: false,
-                    doNotChoice: true,
                     templateOptions: {
-                      label: 'Superannuation fund',
-                      add: true,
-                      delete: false,
-                      values: ['__str__', 'name', 'membership_number'],
+                      label: 'Superannual Fund Name',
+                      values: ['__str__'],
                       type: 'related',
-                      edit: true
                     },
-                    collapsed: false,
                     type: 'related',
                     key: 'superannuation_fund',
-                    many: false
                   },
                   {
-                    key: 'superannuation_fund.name',
+                    key: 'superannuation_membership_number',
                     type: 'input',
-                    showIf: ['superannuation_fund.id'],
-                    default: '{superannuation_fund.name}',
                     templateOptions: {
                       required: false,
-                      label: 'Name',
+                      label: 'Employee membership number',
+                      max: 255,
                       type: 'text'
                     },
-                    read_only: true
-                  },
-                  {
-                    key: 'superannuation_fund.membership_number',
-                    type: 'input',
-                    showIf: ['superannuation_fund.id'],
-                    default: '{superannuation_fund.membership_number}',
-                    templateOptions: {
-                      required: false,
-                      label: 'Employer Membership Number',
-                      type: 'text'
-                    },
-                    read_only: true
+                    read_only: false
                   }
                 ],
                 width: 0.25
@@ -1197,23 +1177,6 @@ const form = [
                     },
                     read_only: true
                   },
-                  // {
-                  //   list: false,
-                  //   endpoint: '/ecore/api/v2/skills/employmentclassifications/',
-                  //   read_only: false,
-                  //   templateOptions: {
-                  //     label: 'Employment classification',
-                  //     add: true,
-                  //     delete: false,
-                  //     values: ['__str__'],
-                  //     type: 'related',
-                  //     edit: true
-                  //   },
-                  //   collapsed: false,
-                  //   type: 'related',
-                  //   key: 'employment_classification',
-                  //   many: false
-                  // }
                 ],
                 width: 0.5
               },
