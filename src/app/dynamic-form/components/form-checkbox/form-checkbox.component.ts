@@ -55,6 +55,7 @@ export class FormCheckboxComponent
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
+    this.viewMode = this.config.read_only;
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
