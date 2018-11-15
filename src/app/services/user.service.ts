@@ -10,7 +10,7 @@ import { Observable, throwError, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
 import { NavigationService } from './navigation.service';
-import { CheckPermissionService } from '../shared/services';
+import { CheckPermissionService, ToastService, MessageType } from '../shared/services';
 import { LoginService } from './login.service';
 
 export interface User {
@@ -57,7 +57,8 @@ export class UserService {
     private navigation: NavigationService,
     private permission: CheckPermissionService,
     private storage: LocalStorageService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private toastService: ToastService
   ) {}
 
   public getUserData(): Observable<User> {
@@ -71,6 +72,12 @@ export class UserService {
             return this.getUserRoles();
           }),
           map((res: { roles: Role[] }) => {
+            if (!this.user.data.contact.contact_type || !res.roles.length) {
+              this.logout();
+
+              this.toastService.sendMessage('User is invalid', MessageType.error);
+            }
+
             const redirectRole: Role = this.loginService.role;
             const storageRole: Role = this.storage.retrieve('role');
             let role: Role;
