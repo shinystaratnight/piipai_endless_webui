@@ -100,6 +100,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     }
     if (response.data) {
       this.router.navigate(['']);
+      this.loginProcess = false;
     } else if (response.status === 'success') {
       this.error = {};
       this.loginProcess = false;
