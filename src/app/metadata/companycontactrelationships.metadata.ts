@@ -161,7 +161,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/core/companycontacts/{company_contact.id}',
+            endpoint: '/core/companycontacts/{company_contact.id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -200,7 +200,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: false,
     templateOptions: {
       label: 'Company contact',
@@ -244,7 +244,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: false,
     templateOptions: {
       label: 'Company contact',

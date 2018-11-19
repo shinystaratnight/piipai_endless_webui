@@ -8,17 +8,17 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/{company.id}',
+            endpoint: '/core/companies/{company.id}',
             field: 'company',
             type: 'link'
           },
           {
-            endpoint: '/ecore/api/v2/hr/jobsites/{jobsite.id}',
+            endpoint: '/hr/jobsites/{jobsite.id}',
             field: 'jobsite',
             type: 'link'
           },
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/{supervisor.id}',
+            endpoint: '/core/companycontacts/{supervisor.id}',
             field: 'supervisor',
             type: 'link'
           }
@@ -31,13 +31,13 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/skills/skills/{position.id}',
+            endpoint: '/skills/skills/{position.id}',
             field: 'position',
             type: 'link'
           },
           {
             endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
+              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
             field: 'job_offer.candidate_contact',
             type: 'link'
           }
@@ -50,7 +50,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/jobs/{job.id}',
+            endpoint: '/hr/jobs/{job.id}',
             field: 'job',
             type: 'link',
             text: 'Job'
@@ -141,7 +141,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/confirm',
+            endpoint: '/hr/timesheets/{id}/confirm',
             field: 'id',
             icon: 'fa-external-link',
             text: 'Confirm',
@@ -155,7 +155,7 @@ const list = {
             type: 'button'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/resend_sms',
+            endpoint: '/hr/timesheets/{id}/resend_sms',
             field: 'resend_sms_candidate',
             showIf: [
               {
@@ -168,7 +168,7 @@ const list = {
             text: 'Send TS SMS'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/resend_supervisor_sms',
+            endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
             field: 'resend_sms_supervisor',
             showIf: [
               {
@@ -181,7 +181,7 @@ const list = {
             text: 'Send Supervisor SMS'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/candidate_fill',
+            endpoint: '/hr/timesheets/{id}/candidate_fill',
             field: 'id',
             showIf: [
               {
@@ -194,7 +194,7 @@ const list = {
             text: 'Fill'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/supervisor_approve',
+            endpoint: '/hr/timesheets/{id}/supervisor_approve',
             field: 'id',
             showIf: [
               {
@@ -221,7 +221,7 @@ const list = {
             action: 'messageDetail',
             messageType: 'sent',
             endpoint:
-              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
+              '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
             icon: 'fa-commenting',
             type: 'button',
@@ -231,7 +231,7 @@ const list = {
             action: 'messageDetail',
             messageType: 'reply',
             endpoint:
-              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
+              '/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
             field: 'going_to_work_reply_sms',
             icon: 'fa-commenting',
             type: 'button',
@@ -240,7 +240,7 @@ const list = {
           {
             action: 'messageDetail',
             messageType: 'sent',
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
+            endpoint: '/sms-interface/smsmessages/{candidate_sms.id}',
             field: 'candidate_sms',
             icon: 'fa-commenting',
             type: 'button',
@@ -250,7 +250,7 @@ const list = {
           {
             action: 'messageDetail',
             messageType: 'sent',
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
+            endpoint: '/sms-interface/smsmessages/{supervisor_sms.id}',
             field: 'supervisor_sms',
             icon: 'fa-commenting',
             type: 'button',
@@ -274,7 +274,7 @@ const list = {
             ]
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/sync',
+            endpoint: '/hr/timesheets/{id}/sync',
             field: 'id',
             showIf: [
               {
@@ -295,7 +295,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/invoices/{invoice.id}',
+            endpoint: '/core/invoices/{invoice.id}',
             field: 'invoice',
             type: 'link',
             text: 'Invoice'
@@ -303,7 +303,7 @@ const list = {
           {
             action: 'emptyPost',
             text: 'Recreate',
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/recreate_invoice',
+            endpoint: '/hr/timesheets/{id}/recreate_invoice',
             type: 'button',
             showIf: [
               {
@@ -357,7 +357,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
+          endpoint: '/core/companycontacts/',
           key: 'id'
         },
         query: 'supervisor'
@@ -368,7 +368,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate'
@@ -379,7 +379,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companies/',
+          endpoint: '/core/companies/',
           key: 'id'
         },
         query: 'company'
@@ -390,7 +390,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/hr/jobsites/',
+          endpoint: '/hr/jobsites/',
           key: 'id'
         },
         query: 'jobsite'
@@ -514,7 +514,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+      endpoint: '/sms-interface/smsmessages/',
       read_only: true,
       templateOptions: {
         label: 'Related sms',
@@ -733,7 +733,7 @@ const supervisor = {
         content: [
           {
             endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
+              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
             type: 'link',
             field: 'job_offer.candidate_contact'
           },
@@ -798,7 +798,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/joboffers/',
+    endpoint: '/hr/joboffers/',
     read_only: false,
     templateOptions: {
       label: 'Job offer',
@@ -815,7 +815,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: true,
     templateOptions: {
       label: 'Going to work sent sms',
@@ -832,7 +832,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: true,
     templateOptions: {
       label: 'Going to work reply sms',
@@ -902,7 +902,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Supervisor',
@@ -939,7 +939,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skillbaserates/',
+    endpoint: '/skills/skillbaserates/',
     read_only: true,
     templateOptions: {
       label: 'Candidate rate',
@@ -956,7 +956,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Rate overrides approved by',
@@ -983,7 +983,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: true,
     templateOptions: {
       label: 'Related sms',
@@ -1014,7 +1014,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/joboffers/',
+    endpoint: '/hr/joboffers/',
     read_only: false,
     templateOptions: {
       label: 'Job offer',
@@ -1031,7 +1031,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: true,
     templateOptions: {
       label: 'Going to work sent sms',
@@ -1048,7 +1048,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: true,
     templateOptions: {
       label: 'Going to work reply sms',
@@ -1118,7 +1118,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Supervisor',
@@ -1155,7 +1155,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skillbaserates/',
+    endpoint: '/skills/skillbaserates/',
     read_only: true,
     templateOptions: {
       label: 'Candidate rate override',
@@ -1172,7 +1172,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Rate overrides approved by',
@@ -1199,7 +1199,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: true,
     templateOptions: {
       label: 'Related sms',
@@ -1224,17 +1224,17 @@ const formset = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/{company.id}',
+            endpoint: '/core/companies/{company.id}',
             field: 'company',
             type: 'link'
           },
           {
-            endpoint: '/ecore/api/v2/hr/jobsites/{jobsite.id}',
+            endpoint: '/hr/jobsites/{jobsite.id}',
             field: 'jobsite',
             type: 'link'
           },
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/{supervisor.id}',
+            endpoint: '/core/companycontacts/{supervisor.id}',
             field: 'supervisor',
             type: 'link'
           }
@@ -1247,13 +1247,13 @@ const formset = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/skills/skills/{position.id}',
+            endpoint: '/skills/skills/{position.id}',
             field: 'position',
             type: 'link'
           },
           {
             endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
+              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
             field: 'job_offer.candidate_contact',
             type: 'link'
           }
@@ -1266,7 +1266,7 @@ const formset = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/jobs/{job.id}',
+            endpoint: '/hr/jobs/{job.id}',
             field: 'job',
             type: 'link',
             text: 'Job'
@@ -1357,7 +1357,7 @@ const formset = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/confirm',
+            endpoint: '/hr/timesheets/{id}/confirm',
             field: 'id',
             icon: 'fa-external-link',
             text: 'Confirm',
@@ -1371,7 +1371,7 @@ const formset = {
             type: 'button'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/resend_sms',
+            endpoint: '/hr/timesheets/{id}/resend_sms',
             field: 'resend_sms_candidate',
             showIf: [
               {
@@ -1384,7 +1384,7 @@ const formset = {
             text: 'Send TS SMS'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/resend_supervisor_sms',
+            endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
             field: 'resend_sms_supervisor',
             showIf: [
               {
@@ -1397,7 +1397,7 @@ const formset = {
             text: 'Send Supervisor SMS'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/candidate_fill',
+            endpoint: '/hr/timesheets/{id}/candidate_fill',
             field: 'id',
             showIf: [
               {
@@ -1410,7 +1410,7 @@ const formset = {
             text: 'Fill'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/supervisor_approve',
+            endpoint: '/hr/timesheets/{id}/supervisor_approve',
             field: 'id',
             showIf: [
               {
@@ -1435,7 +1435,7 @@ const formset = {
         content: [
           {
             endpoint:
-              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
+              '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
             icon: 'fa-commenting',
             action: 'editForm',
@@ -1444,7 +1444,7 @@ const formset = {
           },
           {
             endpoint:
-              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
+              '/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
             field: 'going_to_work_reply_sms',
             icon: 'fa-commenting',
             action: 'editForm',
@@ -1452,7 +1452,7 @@ const formset = {
             text: 'Reply'
           },
           {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
+            endpoint: '/sms-interface/smsmessages/{candidate_sms.id}',
             field: 'candidate_sms',
             icon: 'fa-commenting',
             action: 'editForm',
@@ -1461,7 +1461,7 @@ const formset = {
             showIf: ['candidate_sms']
           },
           {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
+            endpoint: '/sms-interface/smsmessages/{supervisor_sms.id}',
             field: 'supervisor_sms',
             icon: 'fa-commenting',
             action: 'editForm',
@@ -1486,7 +1486,7 @@ const formset = {
             ]
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/sync',
+            endpoint: '/hr/timesheets/{id}/sync',
             field: 'id',
             showIf: [
               {
@@ -1626,7 +1626,7 @@ const formset = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+      endpoint: '/sms-interface/smsmessages/',
       read_only: true,
       templateOptions: {
         label: 'Related sms',

@@ -25,9 +25,9 @@ export class NavigationService {
   public parsedByPermissions: boolean;
 
   public navigationList: any = {};
-  public endpoint = '/ecore/api/v2/core/extranetnavigations/?limit=-1';
-  public userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/?limit=-1';
-  public modelsListEndpoint = '/ecore/api/v2/core/dashboardmodules/?limit=-1';
+  public endpoint = '/core/extranetnavigations/?limit=-1';
+  public userModelsEndpoint = '/core/userdashboardmodules/?limit=-1';
+  public modelsListEndpoint = '/core/dashboardmodules/?limit=-1';
   public linksList: Page[] = [];
 
   constructor(

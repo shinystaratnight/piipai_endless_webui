@@ -60,7 +60,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/cities/',
+    endpoint: '/core/cities/',
     read_only: true,
     templateOptions: {
       label: 'City',
@@ -88,7 +88,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/regions/',
+    endpoint: '/core/regions/',
     read_only: true,
     templateOptions: {
       label: 'State',
@@ -105,7 +105,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/countries/',
+    endpoint: '/core/countries/',
     read_only: true,
     templateOptions: {
       label: 'Country',

@@ -9,7 +9,7 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/core/forms/{form.id}/',
+            endpoint: '/core/forms/{form.id}/',
             field: 'form',
             type: 'link',
             label: 'Form'
@@ -25,7 +25,7 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/{company.id}/',
+            endpoint: '/core/companies/{company.id}/',
             field: 'company',
             type: 'link',
             label: 'Company'
@@ -137,7 +137,7 @@ const form = [
     children: [
       {
         list: false,
-        endpoint: '/ecore/api/v2/core/companies/',
+        endpoint: '/core/companies/',
         read_only: true,
         templateOptions: {
           label: 'Company',
@@ -197,7 +197,7 @@ const formadd = [
     children: [
       {
         list: false,
-        endpoint: '/ecore/api/v2/core/companies/',
+        endpoint: '/core/companies/',
         read_only: true,
         templateOptions: {
           label: 'Company',

@@ -44,9 +44,9 @@ export interface Role {
 @Injectable()
 export class UserService {
 
-  public authEndpoint = '/ecore/api/v2/auth/restore_session/';
-  public logoutEndpoint = '/ecore/api/v2/auth/logout/';
-  public rolesEndpoint = '/ecore/api/v2/core/users/roles/';
+  public authEndpoint = '/auth/restore_session/';
+  public logoutEndpoint = '/auth/logout/';
+  public rolesEndpoint = '/core/users/roles/';
   public user: User;
   public error: any;
 

@@ -23,7 +23,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   public error = {};
   public token = false;
-  public endpoint = `/ecore/api/v2/auth/login/`;
+  public endpoint = `/auth/login/`;
   public rememberMe = false;
   public additionalData = {
     remember_me: false

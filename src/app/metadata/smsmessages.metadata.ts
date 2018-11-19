@@ -11,7 +11,7 @@ const list = {
             field: 'sid',
             type: 'button',
             title: '{sid}',
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{id}',
+            endpoint: '/sms-interface/smsmessages/{id}',
             messageType: '{type}',
             color: 'link',
             customLink: true,
@@ -29,7 +29,7 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/sms-interface/smstemplates/{template.id}',
+            endpoint: '/sms-interface/smstemplates/{template.id}',
             field: 'template',
             type: 'link'
           }
@@ -188,7 +188,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/sms-interface/smstemplates/',
+          endpoint: '/sms-interface/smstemplates/',
           key: 'id'
         },
         query: 'template'
@@ -467,7 +467,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smstemplates/',
+    endpoint: '/sms-interface/smstemplates/',
     read_only: true,
     templateOptions: {
       label: 'Template',
@@ -635,7 +635,7 @@ const sent = [
     },
   },
   {
-    endpoint: '/ecore/api/v2/sms-interface/smstemplates/',
+    endpoint: '/sms-interface/smstemplates/',
     read_only: true,
     templateOptions: {
       label: 'Template',
@@ -986,7 +986,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smstemplates/',
+    endpoint: '/sms-interface/smstemplates/',
     read_only: true,
     templateOptions: {
       label: 'Template',

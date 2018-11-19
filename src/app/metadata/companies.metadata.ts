@@ -26,7 +26,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/{manager.id}/',
+            endpoint: '/core/companycontacts/{manager.id}/',
             field: 'manager.contact',
             type: 'link',
             display: '{manager.job_title}'
@@ -55,7 +55,7 @@ const list = {
         content: [
           {
             endpoint:
-              '/ecore/api/v2/core/companycontacts/{primary_contact.id}/',
+              '/core/companycontacts/{primary_contact.id}/',
             field: 'primary_contact',
             type: 'link',
             label: 'Manager',
@@ -128,7 +128,7 @@ const list = {
         data: {
           value: ['name_after_activation', 'name_before_activation'],
           endpoint:
-            '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel', //tslint:disable-line
+            '/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel', //tslint:disable-line
           key: 'number'
         },
         query: 'status',
@@ -142,7 +142,7 @@ const list = {
         data: {
           value: '__str__',
           endpoint:
-            '/ecore/api/v2/core/companycontacts/?master_company=current',
+            '/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'portfolio_manager'
@@ -152,7 +152,7 @@ const list = {
         label: 'State',
         data: {
           value: 'name',
-          endpoint: '/ecore/api/v2/core/regions/?country=AU',
+          endpoint: '/core/regions/?country=AU',
           key: 'id'
         },
         query: 'state',
@@ -370,7 +370,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     read_only: false,
                     key: 'manager',
                     templateOptions: {
@@ -443,7 +443,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/pricing/industries/',
+                    endpoint: '/pricing/industries/',
                     read_only: false,
                     templateOptions: {
                       label: 'Industry',
@@ -479,7 +479,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     read_only: false,
                     key: 'primary_contact',
                     templateOptions: {
@@ -504,7 +504,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companies/',
+                    endpoint: '/core/companies/',
                     read_only: true,
                     key: 'master_company',
                     templateOptions: {
@@ -871,7 +871,7 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/core/companyaddresses/',
+        endpoint: '/core/companyaddresses/',
         templateOptions: {
           label: 'Company Address',
           type: 'list',
@@ -889,8 +889,8 @@ const form = [
         help: 'All addresses of the company'
       },
       {
-        endpoint: '/ecore/api/v2/core/companycontactrelationships/',
-        add_endpoint: '/ecore/api/v2/core/companycontacts/',
+        endpoint: '/core/companycontactrelationships/',
+        add_endpoint: '/core/companycontacts/',
         templateOptions: {
           label: 'Client Contacts',
           type: 'list',
@@ -907,7 +907,7 @@ const form = [
         }
       },
       {
-        endpoint: '/ecore/api/v2/hr/jobsites/',
+        endpoint: '/hr/jobsites/',
         templateOptions: {
           label: 'Jobsites',
           type: 'list',
@@ -925,7 +925,7 @@ const form = [
         help: 'Jobsites from the client company'
       },
       {
-        endpoint: '/ecore/api/v2/pricing/pricelists/',
+        endpoint: '/pricing/pricelists/',
         metadata_query: {
           editable_type: 'company'
         },
@@ -961,10 +961,10 @@ const form = [
               type: 'timeline',
               text: ''
             },
-            endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
+            endpoint: '/core/workflownodes/timeline/'
           },
           {
-            endpoint: '/ecore/api/v2/core/workflowobjects/',
+            endpoint: '/core/workflowobjects/',
             templateOptions: {
               label: 'States history',
               type: 'list',
@@ -984,7 +984,7 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/core/invoices/',
+        endpoint: '/core/invoices/',
         type: 'list',
         query: {
           customer_company: '{id}'
@@ -997,7 +997,7 @@ const form = [
         collapsed: false
       },
       {
-        endpoint: '/ecore/api/v2/core/notes/',
+        endpoint: '/core/notes/',
         templateOptions: {
           label: 'Notes',
           type: 'list',
@@ -1078,7 +1078,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/addresses/',
+    endpoint: '/core/addresses/',
     read_only: true,
     hide: true,
     templateOptions: {

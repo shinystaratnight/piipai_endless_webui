@@ -60,7 +60,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Provider company',
@@ -77,7 +77,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Customer company',
@@ -94,7 +94,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Provider representative',
@@ -111,7 +111,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Customer representative',
@@ -927,7 +927,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Provider company',
@@ -944,7 +944,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Customer company',
@@ -961,7 +961,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Provider representative',
@@ -978,7 +978,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Customer representative',

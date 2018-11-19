@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
           }
@@ -19,7 +19,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/skills/skills/',
+            endpoint: '/skills/skills/',
             field: 'skill',
             type: 'related'
           }
@@ -69,7 +69,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate_contact'
@@ -79,7 +79,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       read_only: true,
       templateOptions: {
         label: 'Candidate contact',
@@ -109,7 +109,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/skills/skills/',
+      endpoint: '/skills/skills/',
       read_only: true,
       templateOptions: {
         label: 'Skill',
@@ -321,7 +321,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/candidate/skillrels/{id}',
+            endpoint: '/candidate/skillrels/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -353,7 +353,7 @@ const formset = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -371,7 +371,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     key: 'skill',
     templateOptions: {
@@ -442,7 +442,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -460,7 +460,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: false,
     key: 'skill',
     templateOptions: {

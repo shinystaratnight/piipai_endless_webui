@@ -10,7 +10,7 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/{company.id}/',
+            endpoint: '/core/companies/{company.id}/',
             field: 'company.name',
             type: 'link'
           },
@@ -138,7 +138,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companies/',
+          endpoint: '/core/companies/',
           key: 'id'
         },
         query: 'company'
@@ -149,7 +149,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/contacts/',
+          endpoint: '/core/contacts/',
           key: 'id'
         },
         query: 'primary_contact__contact'
@@ -178,7 +178,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
+          endpoint: '/core/companycontacts/',
           key: 'id'
         },
         query: 'portfolio_manager'
@@ -208,13 +208,13 @@ const list = {
     actions: {
       options: [
         {
-          endpoint: '/ecore/api/v2/core/companyaddresses/delete/',
+          endpoint: '/core/companyaddresses/delete/',
           label: 'Delete selected',
           confirm: true,
           message: 'Are you sure?'
         },
         {
-          endpoint: '/ecore/api/v2/core/companyaddresses/sendsms/',
+          endpoint: '/core/companyaddresses/sendsms/',
           label: 'Send sms',
           confirm: false,
           message: 'Are you sure?'
@@ -437,13 +437,13 @@ const formset = {
       options: [
         {
           message: 'Are you sure?',
-          endpoint: '/ecore/api/v2/core/companyaddresses/delete/',
+          endpoint: '/core/companyaddresses/delete/',
           label: 'Delete selected',
           confirm: true
         },
         {
           message: 'Are you sure?',
-          endpoint: '/ecore/api/v2/core/companyaddresses/sendsms/',
+          endpoint: '/core/companyaddresses/sendsms/',
           label: 'Send sms',
           confirm: false
         }
@@ -465,7 +465,7 @@ const formset = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/core/addresses/{address.id}/',
+            endpoint: '/core/addresses/{address.id}/',
             label: 'Address',
             type: 'link',
             field: 'address'
@@ -489,7 +489,7 @@ const formset = {
         content: [
           {
             endpoint:
-              '/ecore/api/v2/core/companycontacts/{primary_contact.id}/',
+              '/core/companycontacts/{primary_contact.id}/',
             label: 'Primary Contact',
             type: 'link',
             field: 'primary_contact'
@@ -524,7 +524,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/core/companyaddresses/{id}',
+            endpoint: '/core/companyaddresses/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -563,7 +563,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: false,
     templateOptions: {
       label: 'Company',
@@ -580,7 +580,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/addresses/',
+    endpoint: '/core/addresses/',
     read_only: false,
     templateOptions: {
       label: 'Address',
@@ -616,7 +616,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: false,
     key: 'primary_contact',
     templateOptions: {
@@ -651,7 +651,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: false,
     templateOptions: {
       label: 'Company',
@@ -668,7 +668,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/addresses/',
+    endpoint: '/core/addresses/',
     read_only: false,
     templateOptions: {
       label: 'Address',
@@ -704,7 +704,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: false,
     key: 'primary_contact',
     templateOptions: {

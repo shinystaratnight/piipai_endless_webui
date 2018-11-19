@@ -160,14 +160,14 @@ describe('SiteComponent', () => {
         comp.pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/core/contacts/',
+            endpoint: '/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
           }
         ];
         pageData = {
-          endpoint: '/ecore/api/v2/contacts/',
+          endpoint: '/contacts/',
           pathData: {
             type: 'form',
             path: '/contact/',
@@ -216,7 +216,7 @@ describe('SiteComponent', () => {
         let pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/core/contacts/',
+            endpoint: '/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -243,7 +243,7 @@ describe('SiteComponent', () => {
         let pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/core/contacts/',
+            endpoint: '/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -270,7 +270,7 @@ describe('SiteComponent', () => {
         let pagesList = [
           {
             childrens: [],
-            endpoint: '/ecore/api/v2/core/contacts/',
+            endpoint: '/core/contacts/',
             name: 'Contact',
             url: '/contacts/',
             __str__: 'Contact'
@@ -320,7 +320,7 @@ describe('SiteComponent', () => {
         status: 'success'
       };
       comp.pageData = {
-        endpoint: '/ecore/api/v2/contacts/',
+        endpoint: '/contacts/',
         pathData: {
           type: 'form',
           path: '/contact/',
@@ -405,7 +405,7 @@ describe('SiteComponent', () => {
       comp.pages = [
         {
           childrens: [],
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           name: 'Candidate Contact',
           url: '/candidatecontacts/',
           __str__: 'Candidate Contact'
@@ -495,7 +495,7 @@ describe('SiteComponent', () => {
   describe('approveFormStorage method', () => {
     it('should approve form storage',
       async(inject([Router], (router: Router) => {
-        comp.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
+        comp.formStorageEndpoint = '/core/formstorages/';
         const element = {
           pathData: {
             id: '123',

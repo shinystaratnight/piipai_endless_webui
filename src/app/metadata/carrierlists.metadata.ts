@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
           }
@@ -33,7 +33,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/joboffers/',
+            endpoint: '/hr/joboffers/',
             field: 'job_offer',
             type: 'related'
           }
@@ -54,7 +54,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate_contact'
@@ -64,7 +64,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       read_only: true,
       templateOptions: {
         label: 'Candidate contact',
@@ -81,7 +81,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/hr/joboffers/',
+      endpoint: '/hr/joboffers/',
       read_only: true,
       templateOptions: {
         label: 'Job offer',
@@ -132,7 +132,7 @@ const formset = {
     {
       many: false,
       key: 'job_offer',
-      endpoint: '/ecore/api/v2/hr/joboffers/',
+      endpoint: '/hr/joboffers/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -175,7 +175,7 @@ const formset = {
         sort_field: 'job_offer',
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/joboffers/',
+            endpoint: '/hr/joboffers/',
             type: 'related',
             field: 'job_offer'
           }
@@ -187,7 +187,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/hr/carrierlists/{id}',
+            endpoint: '/hr/carrierlists/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -218,7 +218,7 @@ const formset = {
 
 const form = [
   {
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate contact',
@@ -249,7 +249,7 @@ const form = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
       label: 'Skill',
@@ -278,7 +278,7 @@ const form = [
 
 const formadd = [
   {
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     visibleMode: true,
     templateOptions: {
@@ -310,7 +310,7 @@ const formadd = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
       label: 'Skill',

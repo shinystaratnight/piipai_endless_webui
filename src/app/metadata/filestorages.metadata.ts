@@ -66,7 +66,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+    endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     templateOptions: {
       label: 'Owner type',
@@ -148,7 +148,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+    endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     templateOptions: {
       label: 'Owner type',

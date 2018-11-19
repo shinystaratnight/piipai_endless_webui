@@ -13,7 +13,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class VerifyEmailComponent implements OnInit {
 
-  public verifyEndpoint = '/ecore/api/v2/core/contacts/verify_email/';
+  public verifyEndpoint = '/core/contacts/verify_email/';
 
   constructor(
     private router: Router,

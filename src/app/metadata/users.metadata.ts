@@ -8,7 +8,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/contacts/',
+            endpoint: '/core/contacts/',
             field: 'contact',
             type: 'related'
           }
@@ -57,7 +57,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/auth/{id}/loginas/',
+            endpoint: '/auth/{id}/loginas/',
             field: 'id',
             action: 'emptyPost',
             type: 'button',
@@ -112,7 +112,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/contacts/',
+      endpoint: '/core/contacts/',
       read_only: true,
       templateOptions: {
         label: 'Contact',
@@ -165,7 +165,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     read_only: true,
     templateOptions: {
       label: 'Contact',
@@ -202,8 +202,8 @@ const form = [
           id: true,
           __str__: '******',
         },
-        endpoint: '/ecore/api/v2/core/contacts/{id}/password/',
-        editEndpoint: '/ecore/api/v2/core/contacts/{contact.id}/password/',
+        endpoint: '/core/contacts/{id}/password/',
+        editEndpoint: '/core/contacts/{contact.id}/password/',
         send: false,
         doNotChoice: true,
         useValue: true,
@@ -259,7 +259,7 @@ const form = [
     ]
   },
   {
-    endpoint: '/ecore/api/v2/company-settings/globalpermissions/',
+    endpoint: '/company-settings/globalpermissions/',
     templateOptions: {
       label: 'Global Permissions',
       type: 'list',
@@ -279,7 +279,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     read_only: true,
     templateOptions: {
       label: 'Contact',
@@ -306,7 +306,7 @@ const formadd = [
     read_only: true
   },
   {
-    endpoint: '/ecore/api/v2/company-settings/globalpermissions/',
+    endpoint: '/company-settings/globalpermissions/',
     templateOptions: {
       label: 'Global Permissions',
       type: 'list',

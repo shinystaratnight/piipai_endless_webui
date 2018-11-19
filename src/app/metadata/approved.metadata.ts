@@ -28,7 +28,7 @@ const list = {
         content: [
           {
             endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
+              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
             type: 'link',
             field: 'job_offer.candidate_contact',
             action: 'showCandidateProfile'
@@ -81,7 +81,7 @@ const list = {
             color: 'warning',
             inverse: true,
             text: 'Evaluate',
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/evaluate/',
+            endpoint: '/hr/timesheets/{id}/evaluate/',
             field: 'id',
             action: 'evaluateCandidate',
             hidden: 'evaluated'

@@ -149,8 +149,8 @@ export class FormRelatedComponent extends BasicElementComponent
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
 
     this.skillEndpoint =
-      this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
-      this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
+      this.config.endpoint === '/skills/skillbaserates/' ||
+      this.config.endpoint === '/pricing/pricelistrates/';
 
     this.display = this.config.templateOptions.display || '{__str__}';
     this.param = this.config.templateOptions.param || 'id';

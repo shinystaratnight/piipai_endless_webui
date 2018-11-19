@@ -11,13 +11,13 @@ import { Plan } from '../models';
 @Injectable()
 export class BillingService {
 
-  private cardInfoEndpoint = '/ecore/api/v2/billing/stripe_customer/';
-  private subscriptionInfoEndpoint = '/ecore/api/v2/billing/subscription/list/';
-  private subscriptionStatusEndpoint = '/ecore/api/v2/billing/subscription/status/';
-  private planEndpoint = '/ecore/api/v2/billing/subscription/create/';
-  private checkPaymentInformationEndpoint = '/ecore/api/v2/billing/check_payment_information/'; //tslint:disable-line
-  private cancelSubscriptionEndpoint = '/ecore/api/v2/billing/subscription/cancel/';
-  private paymentsEndpoint = '/ecore/api/v2/billing/payments/';
+  private cardInfoEndpoint = '/billing/stripe_customer/';
+  private subscriptionInfoEndpoint = '/billing/subscription/list/';
+  private subscriptionStatusEndpoint = '/billing/subscription/status/';
+  private planEndpoint = '/billing/subscription/create/';
+  private checkPaymentInformationEndpoint = '/billing/check_payment_information/'; //tslint:disable-line
+  private cancelSubscriptionEndpoint = '/billing/subscription/cancel/';
+  private paymentsEndpoint = '/billing/payments/';
 
   constructor(
     private http: Http,

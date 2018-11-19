@@ -33,7 +33,7 @@ export class LoginService {
 
   public loginWithToken(token) {
     this.username = null;
-    const url = `/ecore/api/v2/auth/${token}/login_by_token/`;
+    const url = `/auth/${token}/login_by_token/`;
     return this.http
       .get(url)
       .pipe(

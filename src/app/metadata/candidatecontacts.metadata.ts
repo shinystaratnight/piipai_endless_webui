@@ -168,7 +168,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/countries/',
+            endpoint: '/core/countries/',
             field: 'nationality',
             type: 'related'
           }
@@ -269,7 +269,7 @@ const list = {
         label: 'Skills',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/skills/skills/',
+          endpoint: '/skills/skills/',
           key: 'id'
         },
         query: 'skill',
@@ -281,7 +281,7 @@ const list = {
         label: 'Tags',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/tags/',
+          endpoint: '/core/tags/',
           key: 'id'
         },
         query: 'tag',
@@ -294,7 +294,7 @@ const list = {
         data: {
           value: ['name_after_activation', 'name_before_activation'],
           endpoint:
-            '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact', //tslint:disable-line
+            '/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact', //tslint:disable-line
           key: 'number'
         },
         query: 'active_states',
@@ -325,7 +325,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
+          endpoint: '/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'recruitment_agent'
@@ -397,7 +397,7 @@ const list = {
     actions: {
       options: [
         {
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/sendsms/',
+          endpoint: '/candidate/candidatecontacts/sendsms/',
           label: 'Send sms',
           confirm: false,
           message: 'Are you sure?'
@@ -562,7 +562,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/countries/',
+      endpoint: '/core/countries/',
       read_only: true,
       templateOptions: {
         label: 'Nationality',
@@ -630,7 +630,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/contacts/',
+                    endpoint: '/core/contacts/',
                     read_only: true,
                     key: 'contact',
                     hide: true,
@@ -651,7 +651,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/addresses/',
+                    endpoint: '/core/addresses/',
                     read_only: true,
                     hide: true,
                     templateOptions: {
@@ -766,7 +766,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     read_only: false,
                     key: 'recruitment_agent',
                     templateOptions: {
@@ -1047,7 +1047,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/countries/',
+                    endpoint: '/core/countries/',
                     read_only: false,
                     templateOptions: {
                       label: 'Nationality',
@@ -1101,7 +1101,7 @@ const form = [
                     read_only: false
                   },
                   {
-                    endpoint: '/ecore/api/v2/candidate/superannuationfunds/',
+                    endpoint: '/candidate/superannuationfunds/',
                     read_only: false,
                     templateOptions: {
                       label: 'Superannual Fund Name',
@@ -1130,7 +1130,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/bankaccounts/',
+                    endpoint: '/core/bankaccounts/',
                     read_only: false,
                     doNotChoice: true,
                     templateOptions: {
@@ -1213,7 +1213,7 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/candidate/skillrels/',
+        endpoint: '/candidate/skillrels/',
         templateOptions: {
           label: 'Skills',
           type: 'list',
@@ -1231,7 +1231,7 @@ const form = [
         help: 'Here you can see the skills which belong to the candidate'
       },
       {
-        endpoint: '/ecore/api/v2/candidate/tagrels/',
+        endpoint: '/candidate/tagrels/',
         templateOptions: {
           label: 'Tags',
           type: 'list',
@@ -1251,10 +1251,10 @@ const form = [
       {
         name: 'Tests',
         type: 'testList',
-        endpoint: '/ecore/api/v2/candidate/candidatecontacts/{id}/tests/',
+        endpoint: '/candidate/candidatecontacts/{id}/tests/',
       },
       {
-        endpoint: '/ecore/api/v2/hr/candidateevaluations/',
+        endpoint: '/hr/candidateevaluations/',
         templateOptions: {
           label: 'Evaluations',
           type: 'list',
@@ -1286,10 +1286,10 @@ const form = [
               type: 'timeline',
               text: ''
             },
-            endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
+            endpoint: '/core/workflownodes/timeline/'
           },
           {
-            endpoint: '/ecore/api/v2/core/workflowobjects/',
+            endpoint: '/core/workflowobjects/',
             templateOptions: {
               label: 'States history',
               type: 'list',
@@ -1309,7 +1309,7 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/core/contactunavailabilities/',
+        endpoint: '/core/contactunavailabilities/',
         type: 'list',
         query: {
           contact: '{contact.id}'
@@ -1326,7 +1326,7 @@ const form = [
         visibleMode: true,
       },
       {
-        endpoint: '/ecore/api/v2/hr/carrierlists/',
+        endpoint: '/hr/carrierlists/',
         templateOptions: {
           label: 'Carrier List',
           type: 'list',
@@ -1344,7 +1344,7 @@ const form = [
         help: 'Here you can see information about carrier of candidate'
       },
       {
-        endpoint: '/ecore/api/v2/hr/blacklists/',
+        endpoint: '/hr/blacklists/',
         templateOptions: {
           label: 'Black List',
           type: 'list',
@@ -1361,7 +1361,7 @@ const form = [
         }
       },
       {
-        endpoint: '/ecore/api/v2/hr/favouritelists/',
+        endpoint: '/hr/favouritelists/',
         templateOptions: {
           label: 'Favorite List',
           type: 'list',
@@ -1379,7 +1379,7 @@ const form = [
         help: 'Here you can see favorite companies for candidate'
       },
       {
-        endpoint: '/ecore/api/v2/hr/joboffers/candidate/',
+        endpoint: '/hr/joboffers/candidate/',
         templateOptions: {
           label: 'Job offers',
           type: 'list',
@@ -1393,7 +1393,7 @@ const form = [
         help: 'Here you can see job offers'
       },
       {
-        endpoint: '/ecore/api/v2/hr/timesheets/',
+        endpoint: '/hr/timesheets/',
         templateOptions: {
           label: 'Timesheets',
           type: 'list',
@@ -1413,11 +1413,11 @@ const formadd = [
   {
     many: false,
     key: 'contact',
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     collapsed: false,
     list: false,
     checkObject: {
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       error: 'This Candidate contact already exists!',
       query: {
         contact: '{contact.id}'
@@ -1426,7 +1426,7 @@ const formadd = [
     visibleMode: true,
     update: {
       before: true,
-      endpoint: '/ecore/api/v2/core/contacts/{contact.id}/',
+      endpoint: '/core/contacts/{contact.id}/',
       getValue: 'birthday',
       setValue: {
         field: 'birthday'
@@ -1501,7 +1501,7 @@ const formadd = [
   },
   {
     key: 'contact.address',
-    endpoint: '/ecore/api/v2/core/addresses/',
+    endpoint: '/core/addresses/',
     send: false,
     type: 'related',
     showIf: ['contact.id'],
@@ -1526,7 +1526,7 @@ const formadd = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     key: 'recruitment_agent',
     templateOptions: {
       label: 'Recruitment agent',

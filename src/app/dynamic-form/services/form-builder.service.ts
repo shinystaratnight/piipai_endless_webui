@@ -8,8 +8,8 @@ import { ErrorsService } from '../../shared/services/errors.service';
 @Injectable()
 export class FormBuilderService {
 
-  public formEndpoint = '/ecore/api/v2/core/forms/';
-  public parseAddressEndpoint = '/ecore/api/v2/core/addresses/parse/';
+  public formEndpoint = '/core/forms/';
+  public parseAddressEndpoint = '/core/addresses/parse/';
 
   constructor(
     private http: Http,

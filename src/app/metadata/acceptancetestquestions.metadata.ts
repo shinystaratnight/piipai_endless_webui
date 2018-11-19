@@ -37,7 +37,7 @@ const form = [
     type: 'row',
     children: [
       {
-        endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestanswers/',
+        endpoint: '/acceptance-tests/acceptancetestanswers/',
         read_only: true,
         templateOptions: {
           label: 'Acceptance test answers',

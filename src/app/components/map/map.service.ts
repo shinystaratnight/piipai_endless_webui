@@ -21,7 +21,7 @@ export interface Marker {
 @Injectable()
 export class MapService {
 
-  public endpoint = '/ecore/api/v2/hr/jobsites/jobsite_map/';
+  public endpoint = '/hr/jobsites/jobsite_map/';
 
   constructor(
     private http: Http,

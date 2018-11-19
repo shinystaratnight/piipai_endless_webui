@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prod": "ng build --prod --configuration=production",
+    "stage": "ng build --prod --configuration=stage"
   },
   "browser": {
     "zlib": false

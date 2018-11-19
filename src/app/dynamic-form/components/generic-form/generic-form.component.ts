@@ -119,12 +119,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     observers: []
   };
   public workflowEndpoints = {
-    state: `/ecore/api/v2/core/workflownodes/`,
-    app: `/ecore/api/v2/apps/`
+    state: `/core/workflownodes/`,
+    app: `/apps/`
   };
   public pictures = {
-    '/ecore/api/v2/core/contacts/': '__str__',
-    '/ecore/api/v2/candidate/candidatecontacts/': '__str__'
+    '/core/contacts/': '__str__',
+    '/candidate/candidatecontacts/': '__str__'
   };
   public workflowData = <any> {
     workflow: null,
@@ -262,7 +262,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     return (el: Field) => {
       if (
         el.key === 'timeline' ||
-        (el.endpoint && el.endpoint === '/ecore/api/v2/core/workflowobjects/')
+        (el.endpoint && el.endpoint === '/core/workflowobjects/')
       ) {
         el.timelineSubject = timelineSubject;
       }
@@ -444,9 +444,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
   public parseCheckObject(data) {
     if (
-      this.endpoint === '/ecore/api/v2/core/companycontacts/' ||
-      this.endpoint === '/ecore/api/v2/candidate/candidatecontacts/' ||
-      this.endpoint === '/ecore/api/v2/hr/jobs/'
+      this.endpoint === '/core/companycontacts/' ||
+      this.endpoint === '/candidate/candidatecontacts/' ||
+      this.endpoint === '/hr/jobs/'
     ) {
       const keys = Object.keys(this.checkObject);
       if (keys.length) {
@@ -507,7 +507,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
                 if (res.count) {
                   const config = this.checkObject[key];
                   let errors;
-                  if (this.endpoint === '/ecore/api/v2/core/companycontacts/') {
+                  if (this.endpoint === '/core/companycontacts/') {
                     errors = {
                       [key]: this.generateCustomError(
                         res,
@@ -518,7 +518,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
                     };
                   } else if (
                     this.endpoint ===
-                    '/ecore/api/v2/candidate/candidatecontacts/'
+                    '/candidate/candidatecontacts/'
                   ) {
                     errors = {
                       [key]: this.generateCustomError(
@@ -527,7 +527,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
                         '/candidate/candidatecontacts/'
                       )
                     };
-                  } else if (this.endpoint === '/ecore/api/v2/hr/jobs/') {
+                  } else if (this.endpoint === '/hr/jobs/') {
                     errors = {
                       non_field_errors: this.generateCustomError(
                         res,
@@ -674,7 +674,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       }
       if (el.type === 'input') {
         if (el.templateOptions && el.templateOptions.type === 'picture') {
-          el.companyContact = this.endpoint === '/ecore/api/v2/core/companies/';
+          el.companyContact = this.endpoint === '/core/companies/';
           if (this.pictures[this.endpoint]) {
             el.contactName = data['__str__'];
           }
@@ -890,7 +890,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
       shiftDatesRequests[shiftDate.date] = {
         shiftDate: this.service.submitForm(
-          '/ecore/api/v2/hr/shiftdates/',
+          '/hr/shiftdates/',
           body
         ),
         shifts
@@ -915,7 +915,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
             };
 
             shiftsRequests.requests.push(
-              this.service.submitForm('/ecore/api/v2/hr/shifts/', body)
+              this.service.submitForm('/hr/shifts/', body)
             );
           });
 
@@ -929,14 +929,14 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
                 this.service
                   .submitForm(
-                    `/ecore/api/v2/hr/jobs/${data.id}/fillin/`,
+                    `/hr/jobs/${data.id}/fillin/`,
                     fillInBody
                   )
                   .subscribe(() => {
                     const message = `${shiftsRequests.date} ${moment(
                       response.time,
                       'HH:mm:ss'
-                    ).format('hh:mm A')} created`; //tslint:disable-line
+                    ).format('hh:mm A')} created`;
                     this.toastrService.sendMessage(message, 'success');
                   });
               });
@@ -1271,7 +1271,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
   public parseAddress(data, el) {
     this.service
-      .submitForm('/ecore/api/v2/core/addresses/parse/', data)
+      .submitForm('/core/addresses/parse/', data)
       .subscribe(
         (res) => {
           this.parseError({});
@@ -1296,7 +1296,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public resend(e) {
-    const endpoint = `/ecore/api/v2/hr/joboffers/${e.data.resend_id}/resend/`;
+    const endpoint = `/hr/joboffers/${e.data.resend_id}/resend/`;
 
     this.service.submitForm(endpoint, {})
       .subscribe(() => {
@@ -1311,7 +1311,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     const formatString = new FormatString();
 
     const endpoint = formatString.format(
-      '/ecore/api/v2/core/contacts/{contact.id}/send_password/',
+      '/core/contacts/{contact.id}/send_password/',
       e.data
     );
 
@@ -1383,7 +1383,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         );
         if (
           key === 'rules' &&
-          this.endpoint === '/ecore/api/v2/core/workflownodes/'
+          this.endpoint === '/core/workflownodes/'
         ) {
           if (response) {
             const rules = getElementFromMetadata(metadata, 'rules');
@@ -1657,7 +1657,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public updateWorkflowData(event) {
-    if (this.endpoint === '/ecore/api/v2/core/workflownodes/') {
+    if (this.endpoint === '/core/workflownodes/') {
       if (event && event.el) {
         if (
           event.el.key === 'workflow' ||
@@ -1747,7 +1747,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public checkFormStorage(metadata: any[], endpoint: string) {
-    if (endpoint === '/ecore/api/v2/core/formstorages/') {
+    if (endpoint === '/core/formstorages/') {
       metadata.forEach((el, i) => {
         if (el.key === 'data') {
           el.type = 'json';
@@ -1762,7 +1762,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public checkFormBuilder(metadata: any[], endpoint: string) {
-    if (endpoint === '/ecore/api/v2/core/forms/') {
+    if (endpoint === '/core/forms/') {
       let groupElement: any;
       const groupKey = 'groups';
       metadata.forEach((el, i) => {
@@ -1782,8 +1782,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       }
     }
     if (
-      endpoint === '/ecore/api/v2/core/selectformfields/' ||
-      endpoint === '/ecore/api/v2/core/radiobuttonsformfields/'
+      endpoint === '/core/selectformfields/' ||
+      endpoint === '/core/radiobuttonsformfields/'
     ) {
       metadata.forEach((el) => {
         if (el.key === 'choices') {
@@ -1844,7 +1844,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public checkTimeline(timeline) {
-    if (this.endpoint === '/ecore/api/v2/hr/jobs/') {
+    if (this.endpoint === '/hr/jobs/') {
       if (timeline === 'reset') {
         this.event.emit({
           type: 'sendForm',

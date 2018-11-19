@@ -19,7 +19,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/contacts/',
+          endpoint: '/core/contacts/',
           key: 'id'
         },
         query: 'contact'
@@ -141,7 +141,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/core/contactunavailabilities/{id}',
+            endpoint: '/core/contactunavailabilities/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -201,7 +201,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     read_only: true,
     templateOptions: {
       label: 'Contact',
@@ -251,7 +251,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     read_only: true,
     templateOptions: {
       label: 'Contact',

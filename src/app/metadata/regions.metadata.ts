@@ -112,7 +112,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/countries/',
+    endpoint: '/core/countries/',
     read_only: true,
     templateOptions: {
       label: 'Country',
@@ -240,7 +240,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/countries/',
+    endpoint: '/core/countries/',
     read_only: true,
     templateOptions: {
       label: 'Country',

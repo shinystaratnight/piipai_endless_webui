@@ -45,7 +45,7 @@ const list = {
         content: [
           { type: 'static', field: 'jobsite' },
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             field: 'supervisor'
           }
@@ -71,7 +71,7 @@ const list = {
         title: null,
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             field: 'supervisor'
           },
@@ -99,7 +99,7 @@ const list = {
       collapsed: false,
       read_only: true,
       key: 'supervisor',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       type: 'related',
       templateOptions: {
         edit: true,

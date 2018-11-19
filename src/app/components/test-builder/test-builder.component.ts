@@ -45,9 +45,9 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public questions = [];
   public answers = {};
 
-  public testEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetests/';
-  public questionEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestquestions/';
-  public answerEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestanswers/';
+  public testEndpoint = '/acceptance-tests/acceptancetests/';
+  public questionEndpoint = '/acceptance-tests/acceptancetestquestions/';
+  public answerEndpoint = '/acceptance-tests/acceptancetestanswers/';
   public configs = {
     test: testMetadata,
     question: questionMetadata,

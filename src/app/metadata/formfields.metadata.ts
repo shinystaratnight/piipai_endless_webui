@@ -35,7 +35,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/modelformfields/',
+    endpoint: '/core/modelformfields/',
     read_only: true,
     templateOptions: {
       label: 'Modelformfield',
@@ -52,7 +52,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/selectformfields/',
+    endpoint: '/core/selectformfields/',
     read_only: true,
     templateOptions: {
       label: 'Selectformfield',
@@ -69,7 +69,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/dateformfields/',
+    endpoint: '/core/dateformfields/',
     read_only: true,
     templateOptions: {
       label: 'Dateformfield',
@@ -86,7 +86,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/checkboxformfields/',
+    endpoint: '/core/checkboxformfields/',
     read_only: true,
     templateOptions: {
       label: 'Checkboxformfield',
@@ -103,7 +103,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/radiobuttonsformfields/',
+    endpoint: '/core/radiobuttonsformfields/',
     read_only: true,
     templateOptions: {
       label: 'Radiobuttonsformfield',
@@ -120,7 +120,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/fileformfields/',
+    endpoint: '/core/fileformfields/',
     read_only: true,
     templateOptions: {
       label: 'Fileformfield',
@@ -137,7 +137,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/imageformfields/',
+    endpoint: '/core/imageformfields/',
     read_only: true,
     templateOptions: {
       label: 'Imageformfield',
@@ -154,7 +154,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/numberformfields/',
+    endpoint: '/core/numberformfields/',
     read_only: true,
     templateOptions: {
       label: 'Numberformfield',
@@ -171,7 +171,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/textformfields/',
+    endpoint: '/core/textformfields/',
     read_only: true,
     templateOptions: {
       label: 'Textformfield',
@@ -188,7 +188,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/textareaformfields/',
+    endpoint: '/core/textareaformfields/',
     read_only: true,
     templateOptions: {
       label: 'Textareaformfield',
@@ -216,7 +216,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+    endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     templateOptions: {
       label: 'Polymorphic ctype',
@@ -233,7 +233,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/formfieldgroups/',
+    endpoint: '/core/formfieldgroups/',
     read_only: true,
     templateOptions: {
       label: 'Group',
@@ -337,7 +337,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/modelformfields/',
+    endpoint: '/core/modelformfields/',
     read_only: true,
     templateOptions: {
       label: 'Modelformfield',
@@ -354,7 +354,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/selectformfields/',
+    endpoint: '/core/selectformfields/',
     read_only: true,
     templateOptions: {
       label: 'Selectformfield',
@@ -371,7 +371,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/dateformfields/',
+    endpoint: '/core/dateformfields/',
     read_only: true,
     templateOptions: {
       label: 'Dateformfield',
@@ -388,7 +388,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/checkboxformfields/',
+    endpoint: '/core/checkboxformfields/',
     read_only: true,
     templateOptions: {
       label: 'Checkboxformfield',
@@ -405,7 +405,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/radiobuttonsformfields/',
+    endpoint: '/core/radiobuttonsformfields/',
     read_only: true,
     templateOptions: {
       label: 'Radiobuttonsformfield',
@@ -422,7 +422,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/fileformfields/',
+    endpoint: '/core/fileformfields/',
     read_only: true,
     templateOptions: {
       label: 'Fileformfield',
@@ -439,7 +439,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/imageformfields/',
+    endpoint: '/core/imageformfields/',
     read_only: true,
     templateOptions: {
       label: 'Imageformfield',
@@ -456,7 +456,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/numberformfields/',
+    endpoint: '/core/numberformfields/',
     read_only: true,
     templateOptions: {
       label: 'Numberformfield',
@@ -473,7 +473,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/textformfields/',
+    endpoint: '/core/textformfields/',
     read_only: true,
     templateOptions: {
       label: 'Textformfield',
@@ -490,7 +490,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/textareaformfields/',
+    endpoint: '/core/textareaformfields/',
     read_only: true,
     templateOptions: {
       label: 'Textareaformfield',
@@ -518,7 +518,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+    endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     templateOptions: {
       label: 'Polymorphic ctype',
@@ -535,7 +535,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/formfieldgroups/',
+    endpoint: '/core/formfieldgroups/',
     read_only: true,
     templateOptions: {
       label: 'Group',

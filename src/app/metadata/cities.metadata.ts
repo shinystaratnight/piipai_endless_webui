@@ -133,7 +133,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/regions/',
+    endpoint: '/core/regions/',
     read_only: true,
     templateOptions: {
       label: 'Region',
@@ -150,7 +150,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/countries/',
+    endpoint: '/core/countries/',
     read_only: true,
     templateOptions: {
       label: 'Country',
@@ -322,7 +322,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/regions/',
+    endpoint: '/core/regions/',
     read_only: true,
     templateOptions: {
       label: 'Region',
@@ -339,7 +339,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/countries/',
+    endpoint: '/core/countries/',
     read_only: true,
     templateOptions: {
       label: 'Country',

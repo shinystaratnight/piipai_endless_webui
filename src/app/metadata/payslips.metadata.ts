@@ -26,7 +26,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/paysliplines/',
+    endpoint: '/hr/paysliplines/',
     read_only: true,
     templateOptions: {
       label: 'Payslip lines',
@@ -95,7 +95,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skillbaserates/',
+    endpoint: '/skills/skillbaserates/',
     read_only: true,
     templateOptions: {
       label: 'Hourly rate',
@@ -132,7 +132,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Company',
@@ -149,7 +149,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate',
@@ -179,7 +179,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/paysliplines/',
+    endpoint: '/hr/paysliplines/',
     read_only: true,
     templateOptions: {
       label: 'Payslip lines',
@@ -232,7 +232,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skillbaserates/',
+    endpoint: '/skills/skillbaserates/',
     read_only: true,
     templateOptions: {
       label: 'Hourly rate',
@@ -261,7 +261,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Company',
@@ -278,7 +278,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate',

@@ -95,7 +95,7 @@ const list = {
         width: 130,
         content: [
           {
-            endpoint: '/ecore/api/v2/distances/',
+            endpoint: '/distances/',
             field: 'distance_to_jobsite',
             async: true,
             type: 'static',
@@ -109,7 +109,7 @@ const list = {
             }
           },
           {
-            endpoint: '/ecore/api/v2/distances/',
+            endpoint: '/distances/',
             field: 'time_to_jobsite',
             async: true,
             type: 'static',
@@ -456,7 +456,7 @@ const list = {
         type: 'related',
         values: ['__str__']
       },
-      endpoint: '/ecore/api/v2/candidate/tagrels/',
+      endpoint: '/candidate/tagrels/',
       list: false,
       collapsed: false,
       type: 'related',
@@ -516,7 +516,7 @@ const list = {
         type: 'related',
         values: ['__str__']
       },
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       list: false,
       collapsed: false,
       type: 'related',
@@ -533,7 +533,7 @@ const list = {
         type: 'related',
         values: ['__str__']
       },
-      endpoint: '/ecore/api/v2/core/countries/',
+      endpoint: '/core/countries/',
       list: false,
       collapsed: false,
       type: 'related',

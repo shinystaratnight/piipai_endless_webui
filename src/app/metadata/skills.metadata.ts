@@ -84,7 +84,7 @@ const list = {
         label: 'Industry',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/pricing/industries/',
+          endpoint: '/pricing/industries/',
           key: 'id'
         },
         query: 'industry',
@@ -150,7 +150,7 @@ const form = [
     saveField: false,
     hide: true,
     read_only: true,
-    endpoint: '/ecore/api/v2/pricing/industries/',
+    endpoint: '/pricing/industries/',
     key: 'name.industry',
     templateOptions: {
       label: 'Industry',
@@ -296,7 +296,7 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/skills/skilltags/',
+        endpoint: '/skills/skilltags/',
         templateOptions: {
           label: 'Skill tags',
           type: 'list',
@@ -340,7 +340,7 @@ const form = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -357,7 +357,7 @@ const formadd = [
   {
     type: 'related',
     send: false,
-    endpoint: '/ecore/api/v2/pricing/industries/',
+    endpoint: '/pricing/industries/',
     key: 'industry',
     reset: ['name'],
     templateOptions: {
@@ -369,7 +369,7 @@ const formadd = [
   },
   {
     type: 'related',
-    endpoint: '/ecore/api/v2/skills/skillnames/',
+    endpoint: '/skills/skillnames/',
     key: 'name',
     showIf: ['industry.id'],
     templateOptions: {
@@ -397,7 +397,7 @@ const formadd = [
     type: 'checkbox'
   },
   {
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     hide: true,
     templateOptions: {

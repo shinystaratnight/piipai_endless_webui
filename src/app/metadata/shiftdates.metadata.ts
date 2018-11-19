@@ -26,7 +26,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/jobs/',
+    endpoint: '/hr/jobs/',
     read_only: true,
     templateOptions: {
       label: 'Job',
@@ -54,7 +54,7 @@ const form = [
     list: true,
     send: false,
     key: 'shifts',
-    endpoint: '/ecore/api/v2/hr/shifts/',
+    endpoint: '/hr/shifts/',
     delay: 'asdasdasd',
     templateOptions: {
       add_label: '+ Add',
@@ -79,7 +79,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/jobs/',
+    endpoint: '/hr/jobs/',
     read_only: true,
     templateOptions: {
       label: 'Job',
@@ -117,7 +117,7 @@ const jobAdd = [
   },
   {
     hide: true,
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
       label: 'Skill',
@@ -138,7 +138,7 @@ const jobAdd = [
   {
     many: false,
     key: 'job',
-    endpoint: '/ecore/api/v2/hr/jobs/',
+    endpoint: '/hr/jobs/',
     collapsed: false,
     list: false,
     templateOptions: {
@@ -169,7 +169,7 @@ const jobAdd = [
     list: true,
     send: false,
     key: 'shifts',
-    endpoint: '/ecore/api/v2/hr/shifts/',
+    endpoint: '/hr/shifts/',
     delay: true,
     templateOptions: {
       add_label: '+ Add',

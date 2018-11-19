@@ -17,8 +17,8 @@ export class SiteSettingsService {
     private http: Http,
     private userService: UserService
   ) {
-    this.endpoint = '/ecore/api/v2/company_settings/';
-    this.siteEndpoint = '/ecore/api/v2/company_settings/site/';
+    this.endpoint = '/company_settings/';
+    this.siteEndpoint = '/company_settings/site/';
   }
 
   public resolve() {

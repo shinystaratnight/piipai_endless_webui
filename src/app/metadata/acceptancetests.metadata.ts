@@ -178,12 +178,12 @@ const form = [
         children: [
           {
             type: 'related',
-            endpoint: '/ecore/api/v2/pricing/industries/',
+            endpoint: '/pricing/industries/',
             key: 'acceptance_tests_industries',
             many: true,
             useOptions: true,
             relatedObjects: {
-              endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestindustries/',
+              endpoint: '/acceptance-tests/acceptancetestindustries/',
               data: {
                 acceptance_test: '{id}'
               },
@@ -199,12 +199,12 @@ const form = [
           },
           {
             type: 'related',
-            endpoint: '/ecore/api/v2/skills/skills/',
+            endpoint: '/skills/skills/',
             key: 'acceptance_tests_skills',
             many: true,
             useOptions: true,
             relatedObjects: {
-              endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestskills/',
+              endpoint: '/acceptance-tests/acceptancetestskills/',
               data: {
                 acceptance_test: '{id}'
               },
@@ -220,12 +220,12 @@ const form = [
           },
           {
             type: 'related',
-            endpoint: '/ecore/api/v2/core/tags/',
+            endpoint: '/core/tags/',
             key: 'acceptance_tests_tags',
             many: true,
             useOptions: true,
             relatedObjects: {
-              endpoint: '/ecore/api/v2/acceptance-tests/acceptancetesttags/',
+              endpoint: '/acceptance-tests/acceptancetesttags/',
               data: {
                 acceptance_test: '{id}'
               },
@@ -242,7 +242,7 @@ const form = [
           {
             type: 'related',
             send: false,
-            endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/',
+            endpoint: '/acceptance-tests/acceptancetestworkflownodes/',
             key: 'acceptance_tests_workflow_nodes',
             many: true,
             options: [],

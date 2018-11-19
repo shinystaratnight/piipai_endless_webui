@@ -46,7 +46,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Company contact',
@@ -63,7 +63,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/dashboardmodules/',
+    endpoint: '/core/dashboardmodules/',
     read_only: true,
     templateOptions: {
       label: 'Dashboard module',
@@ -117,7 +117,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Company contact',
@@ -134,7 +134,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/dashboardmodules/',
+    endpoint: '/core/dashboardmodules/',
     read_only: true,
     templateOptions: {
       label: 'Dashboard module',

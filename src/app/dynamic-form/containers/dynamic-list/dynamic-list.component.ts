@@ -197,15 +197,15 @@ export class DynamicListComponent
   public filtersHidden = true;
   public additionalMetadata: any[] = [];
   public pictures = [
-    '/ecore/api/v2/core/contacts/',
-    '/ecore/api/v2/candidate/candidatecontacts/',
-    '/ecore/api/v2/core/companies/',
-    '/ecore/api/v2/core/companycontacts/'
+    '/core/contacts/',
+    '/candidate/candidatecontacts/',
+    '/core/companies/',
+    '/core/companycontacts/'
   ];
   public mobileDesign = [
-    '/ecore/api/v2/hr/timesheets/approved/',
-    '/ecore/api/v2/hr/timesheets/history/',
-    '/ecore/api/v2/hr/timesheets/unapproved/',
+    '/hr/timesheets/approved/',
+    '/hr/timesheets/history/',
+    '/hr/timesheets/unapproved/',
   ];
   public collapsed = true;
   public sortedField: any;
@@ -868,7 +868,7 @@ export class DynamicListComponent
                 obj.link.push(
                   this.format(element.endpoint, {
                     [obj.name]: val
-                  }).replace('/ecore/api/v2', '')
+                  })
                 );
               });
             } else {
@@ -934,7 +934,7 @@ export class DynamicListComponent
             if (element.type === 'info') {
               obj.value = el;
               obj.companyPicture =
-                this.endpoint === '/ecore/api/v2/core/companies/';
+                this.endpoint === '/core/companies/';
             } else {
               props = element.field.split('.');
               this.setValue(el, props, obj);
@@ -1873,7 +1873,7 @@ export class DynamicListComponent
     let size = 'lg';
     let windowClass = '';
 
-    if (this.modalInfo.endpoint.includes('/ecore/api/v2/candidate/skillrels/')) {
+    if (this.modalInfo.endpoint.includes('/candidate/skillrels/')) {
       this.modalInfo.label = 'Edit skills';
     }
 
@@ -2034,11 +2034,11 @@ export class DynamicListComponent
 
   public getView() {
     switch (this.endpoint) {
-      case '/ecore/api/v2/hr/timesheets/approved/':
+      case '/hr/timesheets/approved/':
         return this.approved;
-      case '/ecore/api/v2/hr/timesheets/history/':
+      case '/hr/timesheets/history/':
         return this.history;
-      case '/ecore/api/v2/hr/timesheets/unapproved/':
+      case '/hr/timesheets/unapproved/':
         return this.unapproved;
     }
   }

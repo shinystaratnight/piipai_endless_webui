@@ -205,7 +205,7 @@ export class FormListComponent implements OnInit, OnDestroy {
       windowClass += ' small-modal';
     }
 
-    if (this.modalData.endpoint.includes('/ecore/api/v2/candidate/skillrels/')) {
+    if (this.modalData.endpoint.includes('/candidate/skillrels/')) {
       size = undefined;
     }
 

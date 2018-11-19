@@ -35,7 +35,7 @@ const list = {
 const form = [
   {
     hide: true,
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     send: false,
     templateOptions: {
@@ -57,7 +57,7 @@ const form = [
   {
     many: false,
     key: 'date',
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
+    endpoint: '/hr/shiftdates/',
     collapsed: false,
     list: false,
     templateOptions: {
@@ -115,7 +115,7 @@ const form = [
 const formadd = [
   {
     hide: true,
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     send: false,
     templateOptions: {
@@ -137,7 +137,7 @@ const formadd = [
   {
     many: false,
     key: 'date',
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
+    endpoint: '/hr/shiftdates/',
     collapsed: false,
     list: false,
     templateOptions: {
@@ -196,7 +196,7 @@ const shiftDate = {
   fields: [
     {
       key: 'date',
-      endpoint: '/ecore/api/v2/hr/shiftdates/',
+      endpoint: '/hr/shiftdates/',
       hide: true,
       templateOptions: {
         add: true,
@@ -286,7 +286,7 @@ const shiftDate = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/hr/shifts/{id}',
+            endpoint: '/hr/shifts/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -318,7 +318,7 @@ const shiftDate = {
 const editShiftDate = [
   {
     key: 'date',
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
+    endpoint: '/hr/shiftdates/',
     templateOptions: {
       add: true,
       delete: false,
@@ -531,7 +531,7 @@ const job = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/hr/shiftdates/{id}',
+            endpoint: '/hr/shiftdates/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',

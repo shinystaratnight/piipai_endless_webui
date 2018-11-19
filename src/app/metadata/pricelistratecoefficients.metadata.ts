@@ -49,7 +49,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/pricelists/',
+    endpoint: '/pricing/pricelists/',
     visibleMode: true,
     read_only: true,
     templateOptions: {
@@ -67,7 +67,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/ratecoefficients/',
+    endpoint: '/pricing/ratecoefficients/',
     read_only: true,
     templateOptions: {
       label: 'Rate coefficient',
@@ -106,7 +106,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/pricelists/',
+    endpoint: '/pricing/pricelists/',
     visibleMode: true,
     read_only: true,
     templateOptions: {
@@ -124,7 +124,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/ratecoefficients/',
+    endpoint: '/pricing/ratecoefficients/',
     read_only: true,
     templateOptions: {
       label: 'Rate coefficient',

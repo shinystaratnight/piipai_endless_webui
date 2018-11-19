@@ -26,7 +26,7 @@ export interface PermissionResponse {
 export class CheckPermissionService {
 
   private _permissions: Permission[];
-  private userPermissionEndpoint = `/ecore/api/v2/permissions/user/`;
+  private userPermissionEndpoint = `/permissions/user/`;
 
   constructor(
     private http: Http,

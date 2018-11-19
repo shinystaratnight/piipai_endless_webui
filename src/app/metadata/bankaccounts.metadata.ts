@@ -34,7 +34,7 @@ const list = {
 
 const form = [
   {
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     read_only: true,
     templateOptions: {
       label: 'Contact',
@@ -95,7 +95,7 @@ const form = [
 
 const formadd = [
   {
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     read_only: false,
     templateOptions: {
       label: 'Contact',

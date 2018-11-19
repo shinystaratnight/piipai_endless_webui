@@ -3,7 +3,7 @@ const list = {
     {
       many: false,
       key: 'tag',
-      endpoint: '/ecore/api/v2/core/tags/',
+      endpoint: '/core/tags/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -20,7 +20,7 @@ const list = {
     {
       many: false,
       key: 'job',
-      endpoint: '/ecore/api/v2/hr/jobs/',
+      endpoint: '/hr/jobs/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -43,7 +43,7 @@ const list = {
         sort_field: 'job',
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/jobs/',
+            endpoint: '/hr/jobs/',
             type: 'related',
             field: 'job'
           }
@@ -56,7 +56,7 @@ const list = {
         sort_field: 'tag',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/tags/',
+            endpoint: '/core/tags/',
             type: 'related',
             field: 'tag'
           }
@@ -68,7 +68,7 @@ const list = {
       {
         data: {
           key: 'id',
-          endpoint: '/ecore/api/v2/hr/jobs/',
+          endpoint: '/hr/jobs/',
           value: '__str__'
         },
         key: 'job',
@@ -90,7 +90,7 @@ const form = [
     hide: true,
     many: false,
     key: 'job',
-    endpoint: '/ecore/api/v2/hr/jobs/',
+    endpoint: '/hr/jobs/',
     collapsed: false,
     list: false,
     templateOptions: {
@@ -107,7 +107,7 @@ const form = [
   {
     many: false,
     key: 'tag',
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     collapsed: false,
     list: false,
     templateOptions: {
@@ -128,7 +128,7 @@ const formadd = [
     hide: true,
     many: false,
     key: 'job',
-    endpoint: '/ecore/api/v2/hr/jobs/',
+    endpoint: '/hr/jobs/',
     collapsed: false,
     list: false,
     templateOptions: {
@@ -145,7 +145,7 @@ const formadd = [
   {
     many: false,
     key: 'tag',
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     collapsed: false,
     list: false,
     templateOptions: {
@@ -166,7 +166,7 @@ const formset = {
     {
       many: false,
       key: 'tag',
-      endpoint: '/ecore/api/v2/core/tags/',
+      endpoint: '/core/tags/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -199,7 +199,7 @@ const formset = {
         sort_field: 'tag',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/tags/',
+            endpoint: '/core/tags/',
             type: 'related',
             field: 'tag'
           }
@@ -211,7 +211,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/hr/jobtags/{id}',
+            endpoint: '/hr/jobtags/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',

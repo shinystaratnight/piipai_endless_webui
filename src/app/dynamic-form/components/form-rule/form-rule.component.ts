@@ -194,12 +194,12 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
       model: {
         param: 'app',
         query: `?app_name=`,
-        endpoint: '/ecore/api/v2/models/'
+        endpoint: '/models/'
       },
       function: {
         param: 'model',
         query: `?app_name=${this.app}&model_name=`,
-        endpoint: '/ecore/api/v2/functions/'
+        endpoint: '/functions/'
       }
     };
     if (type === 'model') {

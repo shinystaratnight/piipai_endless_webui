@@ -69,7 +69,7 @@ const form = [
     read_only: true
   },
   {
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     key: 'skill',
     templateOptions: {
       add: true,
@@ -141,7 +141,7 @@ const formadd = [
     read_only: true
   },
   {
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     key: 'skill',
     templateOptions: {
       add: true,

@@ -11,11 +11,11 @@ import { ErrorsService } from '../../shared/services/errors.service';
 @Injectable()
 export class WorkflowService {
 
-  public workflowsEndpoint = '/ecore/api/v2/core/workflows/';
-  public workflowNodeEndpoint = '/ecore/api/v2/core/workflownodes/';
-  public companyWorkflowNodeEndpoint = '/ecore/api/v2/core/companyworkflownodes/';
-  public acceptenceTestEnpoint = '/ecore/api/v2/acceptance-tests/acceptancetests/';
-  public acceptanceTestWorkflowNodesEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestworkflownodes/'; //tslint:disable-line
+  public workflowsEndpoint = '/core/workflows/';
+  public workflowNodeEndpoint = '/core/workflownodes/';
+  public companyWorkflowNodeEndpoint = '/core/companyworkflownodes/';
+  public acceptenceTestEnpoint = '/acceptance-tests/acceptancetests/';
+  public acceptanceTestWorkflowNodesEndpoint = '/acceptance-tests/acceptancetestworkflownodes/'; //tslint:disable-line
 
   constructor(
     private http: Http,

@@ -44,8 +44,8 @@ export interface WidgetGroup {
 
 export class DashboardComponent implements OnChanges, OnDestroy {
 
-  public userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/';
-  public modelsListEndpoint = '/ecore/api/v2/core/dashboardmodules/';
+  public userModelsEndpoint = '/core/userdashboardmodules/';
+  public modelsListEndpoint = '/core/dashboardmodules/';
   public modalRef: any;
   public userModelData: UserModelData;
   public availableModules: any;
@@ -154,7 +154,7 @@ export class DashboardComponent implements OnChanges, OnDestroy {
         if (!widgetInfo.module_data.endpoint) {
           const appName = widgetInfo.module_data.app.replace(/_/, '-');
           const modelName = widgetInfo.module_data.plural_name.split(' ').join('').toLowerCase();
-          endpoint = `/ecore/api/v2/${appName}/${modelName}/`;
+          endpoint = `/${appName}/${modelName}/`;
         } else {
           endpoint = widgetInfo.module_data.endpoint;
         }
