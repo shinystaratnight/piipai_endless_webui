@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
@@ -36,7 +37,8 @@ import { directives } from './directives';
     ButtonsModule.forRoot(),
     GooglePlaceModule,
     DndModule.forRoot(),
-    PdfViewerModule
+    PdfViewerModule,
+    HttpClientModule
   ],
   exports: [
     fromComponents.GenericFormComponent,

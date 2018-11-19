@@ -1,9 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
-import {
-  NgModule
-} from '@angular/core';
+import { NgModule } from '@angular/core';
 
 import {
   RouterModule,
@@ -32,6 +31,9 @@ import moment from 'moment-timezone';
 
 import { environment } from './environment';
 
+import { interceptors } from './interceptors';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
+
 moment.tz.setDefault('Australia/Sydney');
 
 @NgModule({
@@ -46,6 +48,7 @@ moment.tz.setDefault('Australia/Sydney');
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     HttpModule,
     CookieModule.forRoot(),
     AgmCoreModule.forRoot({
@@ -63,7 +66,8 @@ moment.tz.setDefault('Australia/Sydney');
   providers: [
     ...services,
     ...guards,
-    ...formComponents.providers
+    ...formComponents.providers,
+    ...interceptors
   ]
 })
 export class AppModule {}
