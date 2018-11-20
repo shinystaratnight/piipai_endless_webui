@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
-import { CookieService } from 'ngx-cookie';
-
-import { map, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 import { ErrorsService } from '../../shared/services/errors.service';
 import { Plan } from '../models';
@@ -15,89 +13,68 @@ export class BillingService {
   private subscriptionInfoEndpoint = '/billing/subscription/list/';
   private subscriptionStatusEndpoint = '/billing/subscription/status/';
   private planEndpoint = '/billing/subscription/create/';
-  private checkPaymentInformationEndpoint = '/billing/check_payment_information/'; //tslint:disable-line
+  private checkPaymentInformationEndpoint = '/billing/check_payment_information/';
   private cancelSubscriptionEndpoint = '/billing/subscription/cancel/';
   private paymentsEndpoint = '/billing/payments/';
 
   constructor(
-    private http: Http,
-    private cookie: CookieService,
+    private http: HttpClient,
     private errorService: ErrorsService,
   ) {}
 
   public setCardInfo(body) {
-    const headers = this.updateHeaders();
     return this.http
-      .post(this.cardInfoEndpoint, body, {headers})
+      .post(this.cardInfoEndpoint, body)
       .pipe(
-        map((res: any) => res.json && res.json()),
         catchError((err: any) => this.errorService.parseErrors(err))
       );
   }
 
   public getSubscriptionInfo() {
-    const headers = this.updateHeaders();
     return this.http
-      .get(this.subscriptionInfoEndpoint, {headers})
+      .get(this.subscriptionInfoEndpoint)
       .pipe(
-        map((res: any) => res.json && res.json()),
         catchError((err: any) => this.errorService.parseErrors(err))
       );
   }
 
   public getSubscriptionStatus() {
-    const headers = this.updateHeaders();
     return this.http
-      .get(this.subscriptionStatusEndpoint, {headers})
+      .get(this.subscriptionStatusEndpoint)
       .pipe(
-        map((res: any) => res.json && res.json()),
         catchError((err: any) => this.errorService.parseErrors(err))
       );
   }
 
   public setPlan(body: Plan) {
-    const headers = this.updateHeaders();
     return this.http
-      .post(this.planEndpoint, body, {headers})
+      .post(this.planEndpoint, body)
       .pipe(
-        map((res: any) => res.json && res.json()),
         catchError((err: any) => this.errorService.parseErrors(err))
       );
   }
 
   public checkPaymentInformation() {
-    const headers = this.updateHeaders();
     return this.http
-      .get(this.checkPaymentInformationEndpoint, {headers})
+      .get(this.checkPaymentInformationEndpoint)
       .pipe(
-        map((res: any) => res.json && res.json()),
         catchError((err: any) => this.errorService.parseErrors(err))
       );
   }
 
   public cancelSubscription() {
-    const headers = this.updateHeaders();
     return this.http
-      .get(this.cancelSubscriptionEndpoint, {headers})
+      .get(this.cancelSubscriptionEndpoint)
       .pipe(
-        map((res: any) => res.json && res.json()),
         catchError((err: any) => this.errorService.parseErrors(err, true))
       );
   }
 
   public payments() {
-    const headers = this.updateHeaders();
     return this.http
-      .get(this.paymentsEndpoint, {headers})
+      .get(this.paymentsEndpoint)
       .pipe(
-        map((res: any) => res.json && res.json()),
         catchError((err: any) => this.errorService.parseErrors(err))
       );
-  }
-
-  public updateHeaders() {
-    const headers = new Headers();
-    headers.append('X-CSRFToken', this.cookie.get('csrftoken'));
-    return headers;
   }
 }

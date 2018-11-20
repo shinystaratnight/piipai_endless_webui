@@ -9,11 +9,11 @@ import {
 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { BehaviorSubject, Observable, Subject, Subscription, forkJoin } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip } from 'rxjs/operators';
 
 import { GenericFormService, FormService } from '../../services/';
-import { UserService, SiteSettingsService } from '../../../services';
+import { UserService, SiteSettingsService, AuthService } from '../../../services';
 
 import { ToastService } from '../../../shared/services';
 
@@ -150,6 +150,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     private formService: FormService,
     private toastrService: ToastService,
     private userService: UserService,
+    private authService: AuthService,
     private settingsService: SiteSettingsService
   ) {
     this.subscriptions = [];
@@ -1320,7 +1321,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         .submitForm(endpoint, { email: e.data.by_email, sms: e.data.by_phone })
         .subscribe((res: any) => {
           if (this.id === this.userService.user.data.user) {
-            this.userService.logout();
+            this.authService.logout();
           }
           setTimeout(() => {
             this.toastrService.sendMessage(res.message, 'success');

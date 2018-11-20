@@ -1,17 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { CookieService } from 'ngx-cookie';
 import { LocalStorageService } from 'ngx-webstorage';
-
-import { GenericFormService } from '../dynamic-form/services/generic-form.service';
-
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
+import { GenericFormService } from '../dynamic-form/services/generic-form.service';
+import { ToastService, MessageType, CheckPermissionService } from '../shared/services';
 import { NavigationService } from './navigation.service';
-import { CheckPermissionService, ToastService, MessageType } from '../shared/services';
-import { LoginService } from './login.service';
+import { AuthService } from './auth.service';
 
 export interface User {
   status: string;
@@ -45,20 +40,16 @@ export interface Role {
 export class UserService {
 
   public authEndpoint = '/auth/restore_session/';
-  public logoutEndpoint = '/auth/logout/';
   public rolesEndpoint = '/core/users/roles/';
   public user: User;
   public error: any;
 
   constructor(
     private service: GenericFormService,
-    private router: Router,
-    private cookie: CookieService,
     private navigation: NavigationService,
-    private permission: CheckPermissionService,
     private storage: LocalStorageService,
-    private loginService: LoginService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private authService: AuthService
   ) {}
 
   public getUserData(): Observable<User> {
@@ -73,12 +64,12 @@ export class UserService {
           }),
           map((res: { roles: Role[] }) => {
             if (!this.user.data.contact.contact_type || !res.roles.length) {
-              this.logout();
+              this.authService.logout();
 
               this.toastService.sendMessage('User is invalid', MessageType.error);
             }
 
-            const redirectRole: Role = this.loginService.role;
+            const redirectRole: Role = this.authService.role;
             const storageRole: Role = this.storage.retrieve('role');
             let role: Role;
 
@@ -123,22 +114,6 @@ export class UserService {
     this.user.currentRole = role;
     this.storage.store('role', role);
     this.navigation.setCurrentRole(role);
-  }
-
-  public logout() {
-    this.service.submitForm(this.logoutEndpoint, {1: ''}).subscribe(
-      (res: any) => {
-        if (res.status === 'success') {
-          this.user = null;
-          this.navigation.navigationList = {};
-          this.permission.permissions = null;
-          this.storage.clear('role');
-          this.cookie.remove('sessionid');
-          this.router.navigate(['login']);
-        }
-      },
-      (err: any) => this.error = err
-    );
   }
 
   public resolve() {

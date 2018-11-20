@@ -9,6 +9,7 @@ import {
   SiteService,
   PageData,
   UserService,
+  AuthService,
   User,
   Role,
   NavigationService,
@@ -81,6 +82,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     private genericFormService: GenericFormService,
     private navigationService: NavigationService,
     private userService: UserService,
+    private authService: AuthService,
     private permission: CheckPermissionService,
     private ts: ToastService,
     private siteSettingsService: SiteSettingsService,
@@ -412,7 +414,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public resetEvent(response) {
     if (response && response.status === 'success') {
-      this.userService.logout();
+      this.authService.logout();
     }
   }
 

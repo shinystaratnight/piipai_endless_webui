@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
-import { throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
-import { CookieService } from 'ngx-cookie';
+import { ErrorsService } from '../../shared/services/errors.service';
 
 @Injectable()
 export class PermissionsService {
 
   public endpoints = {
-    base: 'ecore/api/v2/permissions/',
-    user: 'ecore/api/v2/permissions/user/',
-    group: 'ecore/api/v2/permissions/group/',
-    users: 'ecore/api/v2/company_settings/users/',
+    base: '/permissions/',
+    user: '/permissions/user/',
+    group: '/permissions/group/',
+    users: '/company_settings/users/',
     all: 'all/',
     add: 'set/',
     create: 'create/',
@@ -26,40 +25,34 @@ export class PermissionsService {
   };
 
   constructor(
-    private http: Http,
-    private cookie: CookieService
+    private http: HttpClient,
+    private errors: ErrorsService
   ) { }
 
   public getAllPermissions(query?) {
     const endpoint = `${this.endpoints.base}${this.endpoints.all}?limit=-1`;
-    const headers = this.updateHeaders();
     return this.http
-      .get(endpoint, { headers })
+      .get(endpoint)
       .pipe(
-        map((res: Response) => res.json()),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
   public getAllUsers() {
     const endpoint = `${this.endpoints.users}`;
-    const headers = this.updateHeaders();
     return this.http
-      .get(endpoint, { headers })
+      .get(endpoint)
       .pipe(
-        map((res: Response) => res.json()),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
   public getPermissionsOfUser(id) {
     const endpoint = `${this.endpoints.user}${id}/`;
-    const headers = this.updateHeaders();
     return this.http
-      .get(endpoint, { headers })
+      .get(endpoint)
       .pipe(
-        map((res: Response) => res.json()),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
@@ -68,34 +61,28 @@ export class PermissionsService {
     const body = {
       permission_list: permissions
     };
-    const headers = this.updateHeaders();
     return this.http
-      .post(endpoint, body, { headers })
+      .post(endpoint, body)
       .pipe(
-        map((res: Response) => res),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
   public getGroupsOnTheUser(id: string) {
     const endpoint = `${this.endpoints.user}${id}/${this.endpoints.groups}`;
-    const headers = this.updateHeaders();
     return this.http
-      .get(endpoint, { headers })
+      .get(endpoint)
       .pipe(
-        map((res: Response) => res.json()),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
   public getAvailableGroupsOnTheUser(id: string) {
     const endpoint = `${this.endpoints.user}${id}/${this.endpoints.availableGroups}`;
-    const headers = this.updateHeaders();
     return this.http
-      .get(endpoint, { headers })
+      .get(endpoint)
       .pipe(
-        map((res: Response) => res.json()),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
@@ -104,57 +91,47 @@ export class PermissionsService {
     const body = {
       permission_list: permissions
     };
-    const headers = this.updateHeaders();
     return this.http
-      .post(endpoint, body, { headers })
+      .post(endpoint, body)
       .pipe(
-        map((res: Response) => res),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
   public getAllGroups() {
     const endpoint = `${this.endpoints.base}${this.endpoints.groups}`;
-    const headers = this.updateHeaders();
     return this.http
-      .get(endpoint, { headers })
+      .get(endpoint)
       .pipe(
-        map((res: Response) => res.json()),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
   public getAllPermissionsOfTheGroup(id) {
     const endpoint = `${this.endpoints.group}${id}/`;
-    const headers = this.updateHeaders();
     return this.http
-      .get(endpoint, { headers })
+      .get(endpoint)
       .pipe(
-        map((res: Response) => res.json()),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
   public createGroup(name: string) {
     const endpoint = `${this.endpoints.base}${this.endpoints.groups}${this.endpoints.create}`;
     const body = {name};
-    const headers = this.updateHeaders();
     return this.http
-      .post(endpoint, body, { headers })
+      .post(endpoint, body)
       .pipe(
-        map((res: Response) => res),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
   public deleteGroup(id: string) {
     const endpoint = `${this.endpoints.group}${id}/${this.endpoints.delete}`;
-    const headers = this.updateHeaders();
     return this.http
-      .get(endpoint, { headers })
+      .get(endpoint)
       .pipe(
-        map((res: Response) => res.json()),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
@@ -163,12 +140,10 @@ export class PermissionsService {
     const body = {
       permission_list: permissions
     };
-    const headers = this.updateHeaders();
     return this.http
-      .post(endpoint, body, { headers })
+      .post(endpoint, body)
       .pipe(
-        map((res: Response) => res),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
@@ -177,12 +152,10 @@ export class PermissionsService {
     const body = {
       user_id: userId
     };
-    const headers = this.updateHeaders();
     return this.http
-      .post(endpoint, body, { headers })
+      .post(endpoint, body)
       .pipe(
-        map((res: Response) => res),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
@@ -191,12 +164,10 @@ export class PermissionsService {
     const body = {
       user_id: userId
     };
-    const headers = this.updateHeaders();
     return this.http
-      .post(endpoint, body, { headers })
+      .post(endpoint, body)
       .pipe(
-        map((res: Response) => res),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
   }
 
@@ -205,23 +176,11 @@ export class PermissionsService {
     const body = {
       permission_list: permissions
     };
-    const headers = this.updateHeaders();
     return this.http
-      .post(endpoint, body, { headers })
+      .post(endpoint, body)
       .pipe(
-        map((res: Response) => res),
-        catchError((err: Response) => this.errorHandler(err))
+        catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
       );
-  }
-
-  public updateHeaders() {
-    const headers = new Headers();
-    headers.append('X-CSRFToken', this.cookie.get('csrftoken'));
-    return headers;
-  }
-
-  public errorHandler(error) {
-    return throwError(error.json() || 'Server error.');
   }
 
 }

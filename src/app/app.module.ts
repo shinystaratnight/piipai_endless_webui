@@ -1,38 +1,31 @@
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
-import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, PreloadAllModules } from '@angular/router';
 
-import {
-  RouterModule,
-  PreloadAllModules
-} from '@angular/router';
+import { AgmCoreModule } from '@agm/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Ng2Webstorage } from 'ngx-webstorage';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
 import { ROUTES } from './app.routes';
+
 import { AppComponent } from './app.component';
-import { NoContentComponent } from './pages/no-content';
 import { RedirectComponent } from './redirect.component';
+
 import * as formComponents from './components';
 import { services } from './services';
 import { guards } from './guards';
-import { Ng2Webstorage } from 'ngx-webstorage';
-import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
-import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
-import { CookieModule } from 'ngx-cookie';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { AgmCoreModule } from '@agm/core';
+import { interceptors } from './interceptors';
 
+import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 import { SharedModule } from './shared/shared.module';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from '../environments/environment';
 
 import moment from 'moment-timezone';
-
-import { environment } from './environment';
-
-import { interceptors } from './interceptors';
-import { ErrorInterceptor } from './interceptors/error.interceptor';
 
 moment.tz.setDefault('Australia/Sydney');
 
@@ -40,7 +33,6 @@ moment.tz.setDefault('Australia/Sydney');
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
-    NoContentComponent,
     RedirectComponent,
     ...formComponents.components
   ],
@@ -49,8 +41,6 @@ moment.tz.setDefault('Australia/Sydney');
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpModule,
-    CookieModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
       libraries: ['places']

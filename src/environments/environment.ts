@@ -2,9 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { environmentShared } from './environment.shared';
+
 export const environment = {
+  ...environmentShared,
   production: false,
-  api: 'http://api.localhost'
+  api: 'http://api.localhost',
 };
 
 /*

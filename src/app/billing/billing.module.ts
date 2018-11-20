@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
@@ -21,7 +20,6 @@ import { routes } from './billing.routing';
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    HttpModule,
     FormsModule,
 
     Angular2FontawesomeModule,

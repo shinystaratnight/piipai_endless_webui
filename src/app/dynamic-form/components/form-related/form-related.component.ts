@@ -23,6 +23,7 @@ import { GenericFormService } from '../../services';
 import { CheckPermissionService } from '../../../shared/services';
 import {
   NavigationService,
+  AuthService,
   UserService,
   SiteSettingsService
 } from '../../../services';
@@ -134,6 +135,7 @@ export class FormRelatedComponent extends BasicElementComponent
     private genericFormService: GenericFormService,
     private permission: CheckPermissionService,
     private navigation: NavigationService,
+    private authService: AuthService,
     private userService: UserService,
     private cd: ChangeDetectorRef,
     private settingsService: SiteSettingsService,
@@ -1182,7 +1184,7 @@ export class FormRelatedComponent extends BasicElementComponent
       this.saveProcess = false;
 
       if (this.modalData.description && this.currentUser) {
-        this.userService.logout();
+        this.authService.logout();
       }
 
       const formatString = new FormatString();

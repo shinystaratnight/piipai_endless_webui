@@ -2,8 +2,9 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, OnDestroy } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { LocalStorageService } from 'ngx-webstorage';
 
-import { LoginService } from './../../services/login.service';
+import { AuthService, UserService } from '../../services';
 
 @Component({
   selector: 'app-login-form',
@@ -25,9 +26,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   public token = false;
   public endpoint = `/auth/login/`;
   public rememberMe = false;
-  public additionalData = {
-    remember_me: false
-  };
   public subdomain: boolean;
 
   public data = {
@@ -59,13 +57,16 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private loginService: LoginService,
+    private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
     private modalService: NgbModal,
+    private storage: LocalStorageService,
+    private userService: UserService
   ) {}
 
   public ngOnInit() {
+    this.userService.user = null;
     this.route.params.subscribe((params) => {
       this.token = params['token'];
       if (this.token) {
@@ -84,32 +85,38 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   }
 
   public tokenAuth(token) {
-    this.loginService.loginWithToken(token).subscribe(
+    this.authService.loginWithToken(token).subscribe(
       (res: any) => {
-        this.loginService.role = res.data.role;
+        this.authService.role = res.data.role;
         this.router.navigateByUrl(res.data.redirect_to);
       },
-      (err) => this.router.navigate(['login']));
+      () => this.router.navigate(['login']));
   }
 
   public responseHandler(response) {
-    if (response.data && response.data.redirect) {
-      location.href = response.data.redirect;
-
-      return;
-    }
     if (response.data) {
+      const { access_token = '', refresh_token = '' } = {...response.data};
+
+      this.storage.store('user', { access_token, refresh_token, rememberMe: this.rememberMe });
+
+      if (response.data.redirect) {
+        location.href = response.data.redirect;
+
+        return;
+      }
+
       this.router.navigate(['']);
-      this.loginProcess = false;
-    } else if (response.status === 'success') {
-      this.error = {};
-      this.loginProcess = false;
     }
+
+    if (response.status === 'success') {
+      this.error = {};
+    }
+
+    this.loginProcess = false;
   }
 
   public redirectHandler(data) {
     if (this.subdomain) {
-      this.loginService.username = data;
       this.router.navigate(['/registration']);
     }
   }
@@ -122,11 +129,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   public errorHandler() {
     this.loginProcess = false;
-  }
-
-  public updateCheckbox(value: boolean) {
-    this.rememberMe = value;
-    this.additionalData.remember_me = this.rememberMe;
   }
 
   public openResetForm() {
