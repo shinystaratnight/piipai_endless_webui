@@ -157,6 +157,7 @@ export class FormBuilderFormComponent implements OnInit {
           field.key.includes('city'))
         ) {
           field.showIf = [streetAddress.key];
+          field.send = false;
         }
 
         if (field.showIf && field.showIf.length) {
