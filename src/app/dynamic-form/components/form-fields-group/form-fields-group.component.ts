@@ -3,12 +3,16 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { GenericFormService } from './../../services/generic-form.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-interface FormFieldsGroup {
-  fields: string[];
-  form: string;
+interface Field {
+  help_text: string;
+  isCollapsed: boolean;
+  label: string;
+  model_fields?: Field[];
   name: string;
-  position: number;
-  id: number;
+  required: boolean;
+  position?: number;
+  id?: number;
+  hidden?: boolean;
 }
 
 @Component({
@@ -219,7 +223,15 @@ export class FormFieldsGroupComponent implements OnInit {
     this.modalRef = this.modalService.open(this.modal);
   }
 
-  public toggleActiveState(field): void {
+  public toggleActiveState(field: Field, remove?): void {
+    const removeField = remove || this.isActive(field);
+
+    if (field.model_fields) {
+      this.setActiveForRequiredFields(field.model_fields, removeField);
+
+      return;
+    }
+
     if (field.id) {
       this.genericFormService
         .delete(this.formModelFieldEndpoint, field.id)
@@ -234,7 +246,7 @@ export class FormFieldsGroupComponent implements OnInit {
           },
           (err: any) => (this.error = err)
         );
-    } else {
+    } else if (!removeField) {
       const body = Object.assign({ group: this.groupId }, field);
       body.position = this.lastPosition + 1;
       delete body.hidden;
@@ -499,5 +511,19 @@ export class FormFieldsGroupComponent implements OnInit {
       }
     });
     return element;
+  }
+
+  public setActiveForRequiredFields(data: any[], remove?): any {
+    data.forEach((el) => {
+      if (el.required) {
+        this.toggleActiveState(el, remove);
+      }
+    });
+  }
+
+  public isActive(field: Field) {
+    if (field.model_fields) {
+      return field.model_fields.some((item) => !!item.id);
+    }
   }
 }
