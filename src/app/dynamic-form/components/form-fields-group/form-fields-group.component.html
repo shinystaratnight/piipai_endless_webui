@@ -21,7 +21,8 @@
             Active
           </button>
           <button type="button" class="btn btn-sm m-1 ml-2"
-                  [class.btn-success]="item.required || item.setRequired"
+                  [class.btn-success]="item.required || item.setRequired || isRequired(item)"
+                  [disabled]="d"
                   (click)="toggleRequireProperty(item)">
             Required
           </button>
@@ -56,6 +57,7 @@
     </button>
     <button type="button" class="btn btn-sm ml-2"
             [class.btn-success]="i.required || i.setRequired"
+            [disabled]="d"
             (click)="toggleRequireProperty(i)">
       Required
     </button>

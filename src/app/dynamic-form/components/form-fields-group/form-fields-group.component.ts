@@ -227,7 +227,7 @@ export class FormFieldsGroupComponent implements OnInit {
     const removeField = remove || this.isActive(field);
 
     if (field.model_fields) {
-      this.setActiveForRequiredFields(field.model_fields, removeField);
+      this.setActiveForFields(field.model_fields, removeField);
 
       return;
     }
@@ -283,7 +283,15 @@ export class FormFieldsGroupComponent implements OnInit {
     return results;
   }
 
-  public toggleRequireProperty(field): void {
+  public toggleRequireProperty(field, remove?): void {
+    const removeField = remove || this.isRequired(field);
+
+    if (field.model_fields) {
+      this.setRequireForFields(field.model_fields, removeField);
+
+      return;
+    }
+
     if (!field.required) {
       if (field.id) {
         const body = Object.assign({ group: this.groupId }, field);
@@ -513,15 +521,27 @@ export class FormFieldsGroupComponent implements OnInit {
     return element;
   }
 
-  public setActiveForRequiredFields(data: any[], remove?): any {
+  public setActiveForFields(data: any[], remove?): any {
     data.forEach((el) => {
       this.toggleActiveState(el, remove);
+    });
+  }
+
+  public setRequireForFields(data: any[], remove?): any {
+    data.forEach((el) => {
+      this.toggleRequireProperty(el, remove);
     });
   }
 
   public isActive(field: Field) {
     if (field.model_fields) {
       return field.model_fields.some((item) => !!item.id);
+    }
+  }
+
+  public isRequired(field: Field) {
+    if (field.model_fields) {
+      return field.model_fields.some((item) => !!item.required);
     }
   }
 }
