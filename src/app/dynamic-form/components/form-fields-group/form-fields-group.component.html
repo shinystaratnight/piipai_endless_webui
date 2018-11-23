@@ -16,13 +16,11 @@
         <div class="ml-auto d-flex align-items-center flex-wrap">
           <button type="button" class="btn btn-sm m-1"
                   [class.btn-success]="item.id || isActive(item)"
-                  [disabled]="d"
                   (click)="toggleActiveState(item)">
             Active
           </button>
           <button type="button" class="btn btn-sm m-1 ml-2"
                   [class.btn-success]="item.required || item.setRequired || isRequired(item)"
-                  [disabled]="d"
                   (click)="toggleRequireProperty(item)">
             Required
           </button>
