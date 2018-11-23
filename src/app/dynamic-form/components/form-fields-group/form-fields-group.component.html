@@ -4,24 +4,23 @@
     <i fa [name]="'search'" class="text-muted search-icon" ></i>
   </div>
   <button *ngIf="activeFields && activeFields.length" type="button" class="btn btn-primary my-2" (click)="openActiveFields()">Edit positions</button>
-  <ng-container *ngTemplateOutlet="list; context: {list: groups}"></ng-container>
+  <ng-container *ngTemplateOutlet="list; context: {list: groups, disabled: false}"></ng-container>
 </div>
 
 
-<ng-template #list let-l="list">
+<ng-template #list let-l="list" let-d="disabled">
   <div *ngFor="let item of l">
     <div *ngIf="item.model_fields && !item.hidden" class="d-flex justify-content-center flex-column">
       <div class="d-flex align-items-center p-2 group">
         <b class="field-name text-muted">{{item.label}}</b>
         <div class="ml-auto d-flex align-items-center flex-wrap">
           <button type="button" class="btn btn-sm m-1"
-                  [class.btn-default]="!item.id && !isActive(item)"
                   [class.btn-success]="item.id || isActive(item)"
+                  [disabled]="d"
                   (click)="toggleActiveState(item)">
             Active
           </button>
           <button type="button" class="btn btn-sm m-1 ml-2"
-                  [class.btn-default]="item.setRequired"
                   [class.btn-success]="item.required || item.setRequired"
                   (click)="toggleRequireProperty(item)">
             Required
@@ -37,21 +36,21 @@
         </div>
       </div>
       <div class="pl-4" [ngbCollapse]="item.isCollapsed">
-        <ng-container *ngTemplateOutlet="list; context: {list: item.model_fields}"></ng-container>
+        <ng-container *ngTemplateOutlet="list; context: {list: item.model_fields, disabled: true}"></ng-container>
       </div>
     </div>
     <div *ngIf="item.name && !item.model_fields && !item.hidden">
-      <ng-container *ngTemplateOutlet="field; context: {field: item}"></ng-container>
+      <ng-container *ngTemplateOutlet="field; context: {field: item, disabled: d}"></ng-container>
     </div>
   </div>
 </ng-template>
 
-<ng-template #field let-i="field">
+<ng-template #field let-i="field" let-d="disabled">
   <div class="d-flex align-items-center p-2 field">
     <span class="field-name">{{i.label}}</span>
     <button type="button" class="btn btn-sm ml-auto"
-            [class.btn-default]="!i.id"
             [class.btn-success]="i.id"
+            [disabled]="d"
             (click)="toggleActiveState(i)">
       Active
     </button>

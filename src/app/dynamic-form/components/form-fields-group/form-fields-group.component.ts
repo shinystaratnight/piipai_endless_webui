@@ -515,9 +515,7 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public setActiveForRequiredFields(data: any[], remove?): any {
     data.forEach((el) => {
-      if (el.required) {
-        this.toggleActiveState(el, remove);
-      }
+      this.toggleActiveState(el, remove);
     });
   }
 
