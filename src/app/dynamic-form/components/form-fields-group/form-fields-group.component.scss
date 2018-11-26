@@ -36,3 +36,9 @@
     right: .7rem;
   }
 }
+
+.btn-success:focus, .btn-success.focus,
+.btn:focus, .btn.focus,
+.btn-success:focus, .btn-success.focus {
+  box-shadow: none;
+}

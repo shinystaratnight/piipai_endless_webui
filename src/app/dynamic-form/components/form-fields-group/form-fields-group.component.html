@@ -20,7 +20,7 @@
             Active
           </button>
           <button type="button" class="btn btn-sm m-1 ml-2"
-                  [class.btn-success]="item.required || item.setRequired || isRequired(item)"
+                  [class.btn-success]="item.required || isRequired(item)"
                   (click)="toggleRequireProperty(item)">
             Required
           </button>
@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="pl-4" [ngbCollapse]="item.isCollapsed">
-        <ng-container *ngTemplateOutlet="list; context: {list: item.model_fields, disabled: true}"></ng-container>
+        <ng-container *ngTemplateOutlet="list; context: {list: item.model_fields, disabled: disableSubfields(item)}"></ng-container>
       </div>
     </div>
     <div *ngIf="item.name && !item.model_fields && !item.hidden">
@@ -54,7 +54,8 @@
       Active
     </button>
     <button type="button" class="btn btn-sm ml-2"
-            [class.btn-success]="i.required || i.setRequired"
+            [class.btn-success]="i.required"
+            [disabled]="d"
             (click)="toggleRequireProperty(i)">
       Required
     </button>
