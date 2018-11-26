@@ -21,6 +21,7 @@
           </button>
           <button type="button" class="btn btn-sm m-1 ml-2"
                   [class.btn-success]="item.required || isRequired(item)"
+                  [disabled]="disableRequired(item)"
                   (click)="toggleRequireProperty(item)">
             Required
           </button>
