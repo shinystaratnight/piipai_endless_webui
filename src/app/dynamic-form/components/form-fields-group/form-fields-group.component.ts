@@ -46,6 +46,34 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public lastPosition = 0;
 
+  public positions = {
+    'contact__title': 1,
+    'contact__first_name': 2,
+    'contact__last_name': 3,
+    'contact__email': 4,
+    'contact__phone_mobile': 5,
+    'contact__gender': 6,
+    'contact__birthday': 7,
+    'contact__address__street_address': 8,
+    'contact__address__city': 9,
+    'contact__address__postal_code': 10,
+    'contact__address__state': 11,
+    'contact__address__country': 12,
+    'contact__picture': 13,
+    'tax_file_number': 14,
+    'bank_account__bank_name': 15,
+    'bank_account__bank_account_name': 16,
+    'bank_account__bsb': 17,
+    'bank_account__account_number': 18,
+    'superannuation_fund': 19,
+    'superannuation_membership_number': 20,
+    'residency': 21,
+    'nationality': 22,
+    'transportation_to_work': 23,
+    'weight': 24,
+    'height': 25
+  };
+
   constructor(
     private modalService: NgbModal,
     private genericFormService: GenericFormService
@@ -248,7 +276,7 @@ export class FormFieldsGroupComponent implements OnInit {
         );
     } else if (!removeField) {
       const body = Object.assign({ group: this.groupId }, field);
-      body.position = this.lastPosition + 1;
+      body.position = this.positions[field.name];
       delete body.hidden;
       delete body.isCollapsed;
       delete body.model_fields;
