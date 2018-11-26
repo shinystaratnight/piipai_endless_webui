@@ -585,4 +585,8 @@ export class FormFieldsGroupComponent implements OnInit {
   public disableRequired(field): boolean {
     return field.name === 'contact__address';
   }
+
+  public disableContactButton(field): boolean {
+    return field.name === 'contact';
+  }
 }

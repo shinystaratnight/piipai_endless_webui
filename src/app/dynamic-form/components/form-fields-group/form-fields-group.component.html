@@ -15,13 +15,14 @@
         <b class="field-name text-muted">{{item.label}}</b>
         <div class="ml-auto d-flex align-items-center flex-wrap">
           <button type="button" class="btn btn-sm m-1"
-                  [class.btn-success]="item.id || isActive(item)"
+                  [class.btn-success]="item.id || isActive(item) || disableContactButton(item)"
+                  [disabled]="disableContactButton(item)"
                   (click)="toggleActiveState(item)">
             Active
           </button>
           <button type="button" class="btn btn-sm m-1 ml-2"
-                  [class.btn-success]="item.required || isRequired(item)"
-                  [disabled]="disableRequired(item)"
+                  [class.btn-success]="item.required || isRequired(item) || disableContactButton(field)"
+                  [disabled]="disableRequired(item) || disableContactButton(item)"
                   (click)="toggleRequireProperty(item)">
             Required
           </button>
