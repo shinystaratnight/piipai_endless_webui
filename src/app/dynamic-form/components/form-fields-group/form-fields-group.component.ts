@@ -292,24 +292,29 @@ export class FormFieldsGroupComponent implements OnInit {
       return;
     }
 
-    if (!field.required) {
-      if (field.id) {
-        const body = Object.assign({ group: this.groupId }, field);
-        delete body.hidden;
-        delete body.isCollapsed;
-        delete body.model_fields;
-        delete body.setRequired;
-        body.required = !field.setRequired;
-        this.genericFormService
-          .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
-          .subscribe(
-            (res: any) => {
-              field.setRequired = res.required;
-            },
-            (err: any) => (this.error = err)
-          );
+    if (field.id) {
+      const body = Object.assign({ group: this.groupId }, field);
+      delete body.hidden;
+      delete body.isCollapsed;
+      delete body.model_fields;
+      if (removeField) {
+        body.required = false;
       } else {
-        field.setRequired = !field.setRequired;
+        body.required = !field.required;
+      }
+      this.genericFormService
+        .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
+        .subscribe(
+          (res: any) => {
+            field.required = res.required;
+          },
+          (err: any) => (this.error = err)
+        );
+    } else {
+      if (removeField) {
+        field.required = false;
+      } else {
+        field.required = !field.required;
       }
     }
   }
@@ -542,6 +547,12 @@ export class FormFieldsGroupComponent implements OnInit {
   public isRequired(field: Field) {
     if (field.model_fields) {
       return field.model_fields.some((item) => !!item.required);
+    }
+  }
+
+  public disableSubfields(field): boolean {
+    if (field.name === 'bank_account' || field.name === 'contact__address') {
+      return true;
     }
   }
 }
