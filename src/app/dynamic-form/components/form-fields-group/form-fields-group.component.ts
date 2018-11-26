@@ -551,8 +551,10 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   public disableSubfields(field): boolean {
-    if (field.name === 'bank_account' || field.name === 'contact__address') {
-      return true;
-    }
+    return field.name === 'bank_account' || field.name === 'contact__address';
+  }
+
+  public disableRequired(field): boolean {
+    return field.name === 'contact__address';
   }
 }
