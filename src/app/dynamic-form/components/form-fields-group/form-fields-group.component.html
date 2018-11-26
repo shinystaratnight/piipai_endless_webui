@@ -3,7 +3,7 @@
     <input type="text" class="form-control w-100" [(ngModel)]="search" (keyup)="filter(search)" placeholder="Search">
     <i fa [name]="'search'" class="text-muted search-icon" ></i>
   </div>
-  <button *ngIf="activeFields && activeFields.length" type="button" class="btn btn-primary my-2" (click)="openActiveFields()">Edit positions</button>
+  <!--<button *ngIf="activeFields && activeFields.length" type="button" class="btn btn-primary my-2" (click)="openActiveFields()">Edit positions</button>-->
   <ng-container *ngTemplateOutlet="list; context: {list: groups, disabled: false}"></ng-container>
 </div>
 
