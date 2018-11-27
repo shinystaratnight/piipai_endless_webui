@@ -92,7 +92,7 @@ export class FormPictureComponent
   }
 
   public ngOnInit(): void {
-    this.addControl(this.config, this.fb);
+    this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.mime = 'image/jpeg';
     this.setInitValue();
     this.checkModeProperty();
