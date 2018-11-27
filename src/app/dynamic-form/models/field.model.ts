@@ -68,6 +68,7 @@ export interface Field {
   normal?: boolean;
   hideIfNull?: boolean;
   updated?: string[];
+  formBuilder?: boolean;
   templateOptions?: {
     dontSendFields?: boolean;
     label?: string;

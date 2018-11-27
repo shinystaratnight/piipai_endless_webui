@@ -90,7 +90,8 @@ export class FormInputComponent extends BasicElementComponent
       this.config.type !== 'static' ||
       (this.config.type === 'static' || !this.config.read_only)
     ) {
-      const required = (this.config.key === 'score' || this.config.key === 'hourly_rate') && this.config.templateOptions.required;
+      let required = (this.config.key === 'score' || this.config.key === 'hourly_rate') && this.config.templateOptions.required;
+      required = required || (this.config.formBuilder && this.config.templateOptions.required);
 
       this.addControl(this.config, this.fb, required);
     }
