@@ -21,7 +21,7 @@
   <div *ngIf="errors">
     <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
   </div>
-  <div *ngIf="group.get(key).getError('required') && errors && !errors[config.key]">
+  <div *ngIf="group.get(key).getError('required') && errors && !errors[config.key] && !config.formBuilder">
     <div class="text-danger mt-1">This field is required.</div>
   </div>
   <div *ngIf="message">
