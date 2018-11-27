@@ -1,5 +1,6 @@
 <div *ngIf="config" class="form-builder-form">
   <app-dynamic-form
+    [formBuilder]="true"
     [config]="config.ui_config"
     [errors]="error"
     [hiddenFields]="hiddenFields"
