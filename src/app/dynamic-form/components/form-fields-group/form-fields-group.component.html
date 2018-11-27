@@ -51,13 +51,13 @@
     <span class="field-name">{{i.label}}</span>
     <button type="button" class="btn btn-sm ml-auto"
             [class.btn-success]="i.id"
-            [disabled]="d"
+            [disabled]="d || i.disabled"
             (click)="toggleActiveState(i)">
       Active
     </button>
     <button type="button" class="btn btn-sm ml-2"
             [class.btn-success]="i.required"
-            [disabled]="d"
+            [disabled]="d || i.disabled"
             (click)="toggleRequireProperty(i)">
       Required
     </button>
