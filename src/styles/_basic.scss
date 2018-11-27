@@ -174,7 +174,7 @@ form.ng-invalid button[type='submit'] {
     padding: 0.2rem;
 
     background-color: $gray;
-    content: 'Please fill all the fields';
+    content: 'Please fill all the REQUIRED fields';
   }
 }
 
