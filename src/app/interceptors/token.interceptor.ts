@@ -19,7 +19,7 @@ export class TokenInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const user = this.storage.retrieve('user');
 
-    if (user && !this.isRefresh(req.url)) {
+    if (user && !this.isRefresh(req.url) && !this.isLoginByToken(req.url)) {
       const helper = new JwtHelperService();
       const tokenIsExpired = helper.isTokenExpired(user.access_token);
 
@@ -58,5 +58,9 @@ export class TokenInterceptor implements HttpInterceptor {
 
   isRefresh(url: string) {
     return url.includes('/token/refresh/');
+  }
+
+  isLoginByToken(url: string) {
+    return url.includes('/login_by_token');
   }
 }
