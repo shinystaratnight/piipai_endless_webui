@@ -13,6 +13,7 @@ interface Field {
   position?: number;
   id?: number;
   hidden?: boolean;
+  disabled?: boolean;
 }
 
 @Component({
@@ -199,6 +200,8 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public addCollapseProperty(list): void {
     list.forEach((el) => {
+      this.lockUserField(el);
+
       if (el.model_fields) {
         el.isCollapsed = true;
         el.model_fields.forEach((field) => {
@@ -280,6 +283,7 @@ export class FormFieldsGroupComponent implements OnInit {
       delete body.hidden;
       delete body.isCollapsed;
       delete body.model_fields;
+      delete body.disabled;
       this.genericFormService
         .submitForm(this.formModelFieldEndpoint, body)
         .subscribe(
@@ -588,5 +592,24 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public disableContactButton(field): boolean {
     return field.name === 'contact';
+  }
+
+  lockUserField(field: Field) {
+    const lockedFields = [
+      'contact__first_name',
+      'contact__last_name',
+      'contact__email',
+      'contact__phone_mobile'
+    ];
+
+    if (lockedFields.includes(field.name)) {
+      field.disabled = true;
+      if (!field.id) {
+        field.required = true;
+        this.toggleActiveState(field);
+      } else if (field.id && !field.required) {
+        this.toggleRequireProperty(field);
+      }
+    }
   }
 }
