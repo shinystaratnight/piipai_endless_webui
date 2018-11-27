@@ -21,6 +21,7 @@ import { FilterService, GenericFormService } from './../../services';
 import { FormatString } from '../../../helpers/format';
 import { smallModalEndpoints } from '../../helpers/small-modal';
 import { LocalStorageService } from 'ngx-webstorage';
+import { AuthService } from '../../../services';
 
 @Component({
   selector: 'app-dynamic-list',
@@ -216,7 +217,8 @@ export class DynamicListComponent
     private genericFormService: GenericFormService,
     private sanitizer: DomSanitizer,
     private router: Router,
-    private storage: LocalStorageService
+    private storage: LocalStorageService,
+    private authService: AuthService
   ) {
     this.searchFilter = {
       type: 'search',
@@ -1946,7 +1948,15 @@ export class DynamicListComponent
       (res: any) => {
         if (e.el && e.el.redirect) {
           this.storage.clear('role');
-          location.href = res.redirect_to || e.el.redirect;
+          const redirect = res.redirect_to || e.el.redirect;
+
+          if (redirect !== '/') {
+            location.href = redirect;
+          } else {
+            this.authService.storeToken({ data: res});
+            location.href = redirect;
+          }
+
           return;
         }
 

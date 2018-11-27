@@ -37,6 +37,12 @@ export class AuthService {
     return !!this.storage.retrieve('user');
   }
 
+  public storeToken(response, rememberMe?) {
+    const { access_token = '', refresh_token = '' } = {...response.data};
+
+    this.storage.store('user', { access_token, refresh_token, rememberMe });
+  }
+
   public refreshJWTToken(user) {
     const { refresh_token = '' } = { ...user };
     return this.http.post(this.refreshTokenEndpoint, { refresh: refresh_token })
@@ -52,6 +58,9 @@ export class AuthService {
     const url = `/auth/${token}/login_by_token/`;
     return this.http.get(url)
       .pipe(
+        tap((response: any) => {
+          this.storeToken(response);
+        }),
         catchError((error: any) => this.error.parseErrors(error))
       );
   }

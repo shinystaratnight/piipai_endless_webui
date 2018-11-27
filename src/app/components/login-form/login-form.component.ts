@@ -88,6 +88,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     this.authService.loginWithToken(token).subscribe(
       (res: any) => {
         this.authService.role = res.data.role;
+        this.authService.storeToken({ data: res });
         this.router.navigateByUrl(res.data.redirect_to);
       },
       () => this.router.navigate(['login']));
@@ -95,9 +96,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   public responseHandler(response) {
     if (response.data) {
-      const { access_token = '', refresh_token = '' } = {...response.data};
-
-      this.storage.store('user', { access_token, refresh_token, rememberMe: this.rememberMe });
+      this.authService.storeToken(response);
 
       if (response.data.redirect) {
         location.href = response.data.redirect;
