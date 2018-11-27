@@ -14,7 +14,7 @@
       [attr.name]="key">
     <div class="form-element-picture">
       <img class="image-preview" [class.start]="config.templateOptions.start" *ngIf="value && config.templateOptions.file === false" [src]="value" alt="image">
-      <div *ngIf="contactAvatar && !fileName" class="contact-avatar">{{contactAvatar}}</div>
+      <div *ngIf="contactAvatar && !fileName && !value" class="contact-avatar">{{contactAvatar}}</div>
       <span *ngIf="(link || value) && viewMode && config.templateOptions.file == undefined">
         {{getExtension(link || value) | uppercase}} file
         <a class="link" [href]="link || value" target="_blank">|&nbsp;Open in new tab</a>
