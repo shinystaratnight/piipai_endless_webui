@@ -12,7 +12,7 @@ export class BasicElementComponent {
     if (config.key) {
       const keys = config.key.split('.');
       if (keys.length > 1) {
-        this.addControls(this.group, keys, fb);
+        this.addControls(this.group, keys, fb, required);
       } else {
         if (config.type === 'related' && !config.many) {
           keys.push('id');

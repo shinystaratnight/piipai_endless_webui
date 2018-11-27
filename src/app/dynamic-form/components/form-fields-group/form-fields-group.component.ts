@@ -3,12 +3,17 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { GenericFormService } from './../../services/generic-form.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-interface FormFieldsGroup {
-  fields: string[];
-  form: string;
+interface Field {
+  help_text: string;
+  isCollapsed: boolean;
+  label: string;
+  model_fields?: Field[];
   name: string;
-  position: number;
-  id: number;
+  required: boolean;
+  position?: number;
+  id?: number;
+  hidden?: boolean;
+  disabled?: boolean;
 }
 
 @Component({
@@ -41,6 +46,34 @@ export class FormFieldsGroupComponent implements OnInit {
   public activeFields: any[];
 
   public lastPosition = 0;
+
+  public positions = {
+    'contact__title': 1,
+    'contact__first_name': 2,
+    'contact__last_name': 3,
+    'contact__email': 4,
+    'contact__phone_mobile': 5,
+    'contact__gender': 6,
+    'contact__birthday': 7,
+    'contact__address__street_address': 8,
+    'contact__address__city': 9,
+    'contact__address__postal_code': 10,
+    'contact__address__state': 11,
+    'contact__address__country': 12,
+    'contact__picture': 13,
+    'tax_file_number': 14,
+    'bank_account__bank_name': 15,
+    'bank_account__bank_account_name': 16,
+    'bank_account__bsb': 17,
+    'bank_account__account_number': 18,
+    'superannuation_fund': 19,
+    'superannuation_membership_number': 20,
+    'residency': 21,
+    'nationality': 22,
+    'transportation_to_work': 23,
+    'weight': 24,
+    'height': 25
+  };
 
   constructor(
     private modalService: NgbModal,
@@ -167,6 +200,8 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public addCollapseProperty(list): void {
     list.forEach((el) => {
+      this.lockUserField(el);
+
       if (el.model_fields) {
         el.isCollapsed = true;
         el.model_fields.forEach((field) => {
@@ -219,7 +254,15 @@ export class FormFieldsGroupComponent implements OnInit {
     this.modalRef = this.modalService.open(this.modal);
   }
 
-  public toggleActiveState(field): void {
+  public toggleActiveState(field: Field, remove?): void {
+    const removeField = remove || this.isActive(field);
+
+    if (field.model_fields) {
+      this.setActiveForFields(field.model_fields, removeField);
+
+      return;
+    }
+
     if (field.id) {
       this.genericFormService
         .delete(this.formModelFieldEndpoint, field.id)
@@ -234,12 +277,13 @@ export class FormFieldsGroupComponent implements OnInit {
           },
           (err: any) => (this.error = err)
         );
-    } else {
+    } else if (!removeField) {
       const body = Object.assign({ group: this.groupId }, field);
-      body.position = this.lastPosition + 1;
+      body.position = this.positions[field.name];
       delete body.hidden;
       delete body.isCollapsed;
       delete body.model_fields;
+      delete body.disabled;
       this.genericFormService
         .submitForm(this.formModelFieldEndpoint, body)
         .subscribe(
@@ -271,25 +315,38 @@ export class FormFieldsGroupComponent implements OnInit {
     return results;
   }
 
-  public toggleRequireProperty(field): void {
-    if (!field.required) {
-      if (field.id) {
-        const body = Object.assign({ group: this.groupId }, field);
-        delete body.hidden;
-        delete body.isCollapsed;
-        delete body.model_fields;
-        delete body.setRequired;
-        body.required = !field.setRequired;
-        this.genericFormService
-          .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
-          .subscribe(
-            (res: any) => {
-              field.setRequired = res.required;
-            },
-            (err: any) => (this.error = err)
-          );
+  public toggleRequireProperty(field, remove?): void {
+    const removeField = remove || this.isRequired(field);
+
+    if (field.model_fields) {
+      this.setRequireForFields(field.model_fields, removeField);
+
+      return;
+    }
+
+    if (field.id) {
+      const body = Object.assign({ group: this.groupId }, field);
+      delete body.hidden;
+      delete body.isCollapsed;
+      delete body.model_fields;
+      if (removeField) {
+        body.required = false;
       } else {
-        field.setRequired = !field.setRequired;
+        body.required = !field.required;
+      }
+      this.genericFormService
+        .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
+        .subscribe(
+          (res: any) => {
+            field.required = res.required;
+          },
+          (err: any) => (this.error = err)
+        );
+    } else {
+      if (removeField) {
+        field.required = false;
+      } else {
+        field.required = !field.required;
       }
     }
   }
@@ -499,5 +556,60 @@ export class FormFieldsGroupComponent implements OnInit {
       }
     });
     return element;
+  }
+
+  public setActiveForFields(data: any[], remove?): any {
+    data.forEach((el) => {
+      this.toggleActiveState(el, remove);
+    });
+  }
+
+  public setRequireForFields(data: any[], remove?): any {
+    data.forEach((el) => {
+      this.toggleRequireProperty(el, remove);
+    });
+  }
+
+  public isActive(field: Field) {
+    if (field.model_fields) {
+      return field.model_fields.some((item) => !!item.id);
+    }
+  }
+
+  public isRequired(field: Field) {
+    if (field.model_fields) {
+      return field.model_fields.some((item) => !!item.required);
+    }
+  }
+
+  public disableSubfields(field): boolean {
+    return field.name === 'bank_account' || field.name === 'contact__address';
+  }
+
+  public disableRequired(field): boolean {
+    return field.name === 'contact__address';
+  }
+
+  public disableContactButton(field): boolean {
+    return field.name === 'contact';
+  }
+
+  lockUserField(field: Field) {
+    const lockedFields = [
+      'contact__first_name',
+      'contact__last_name',
+      'contact__email',
+      'contact__phone_mobile'
+    ];
+
+    if (lockedFields.includes(field.name)) {
+      field.disabled = true;
+      if (!field.id) {
+        field.required = true;
+        this.toggleActiveState(field);
+      } else if (field.id && !field.required) {
+        this.toggleRequireProperty(field);
+      }
+    }
   }
 }

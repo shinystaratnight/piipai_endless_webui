@@ -30,6 +30,8 @@ export class DynamicFormComponent implements OnInit {
   public formId: number;
   @Input()
   public form: FormGroup;
+  @Input()
+  public formBuilder: boolean;
 
   @Output()
   public submitForm: EventEmitter<any> = new EventEmitter<any>();
@@ -53,6 +55,17 @@ export class DynamicFormComponent implements OnInit {
     this.form = this.form || this.fb.group({});
     this.formGroup.emit(this.form);
     this.currentForm = this.config;
+    this.addFormBuilderStatus(this.config);
+  }
+
+  addFormBuilderStatus(config) {
+    config.forEach((el) => {
+      el.formBuilder = this.formBuilder;
+
+      if (el.children) {
+        this.addFormBuilderStatus(el.children);
+      }
+    });
   }
 
   public getValues(data, list) {

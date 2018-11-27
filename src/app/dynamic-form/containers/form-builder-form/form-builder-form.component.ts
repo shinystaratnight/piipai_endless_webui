@@ -47,6 +47,11 @@ export class FormBuilderFormComponent implements OnInit {
         }
 
         const syperannuationFund = this.getFields([], 'superannuation_fund', res.ui_config, 0);
+        const employee = this.getFields([], 'superannuation_membership_number', res.ui_config, 0);
+
+        if (employee) {
+          syperannuationFund.push(...employee);
+        }
 
         if (syperannuationFund.length) {
           res.ui_config.push(this.createGroup('Superannuation fund', syperannuationFund));
@@ -152,6 +157,7 @@ export class FormBuilderFormComponent implements OnInit {
           field.key.includes('city'))
         ) {
           field.showIf = [streetAddress.key];
+          field.send = false;
         }
 
         if (field.showIf && field.showIf.length) {
