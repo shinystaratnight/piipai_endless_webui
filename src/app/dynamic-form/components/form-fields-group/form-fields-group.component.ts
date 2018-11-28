@@ -28,8 +28,8 @@ export class FormFieldsGroupComponent implements OnInit {
   @ViewChild('modalActiveFields')
   public modalActiveFields: any;
 
-  public formFieldGroupsEndpoint = '/ecore/api/v2/core/formfieldgroups/';
-  public formModelFieldEndpoint = '/ecore/api/v2/core/modelformfields/';
+  public formFieldGroupsEndpoint = '/core/formfieldgroups/';
+  public formModelFieldEndpoint = '/core/modelformfields/';
   public groups: any[];
   public fields: any;
   public choosenType: string;
@@ -108,46 +108,46 @@ export class FormFieldsGroupComponent implements OnInit {
     }
     this.fields = {
       modelfield: {
-        endpoint: '/ecore/api/v2/core/modelformfields/',
+        endpoint: '/core/modelformfields/',
         label: 'Model field'
       },
       group: {
         label: 'Custom fields:'
       },
       textareafield: {
-        endpoint: '/ecore/api/v2/core/textareaformfields/',
+        endpoint: '/core/textareaformfields/',
         label: 'TextArea field'
       },
       numberfield: {
-        endpoint: '/ecore/api/v2/core/numberformfields/',
+        endpoint: '/core/numberformfields/',
         label: 'Number field'
       },
       selectfield: {
-        endpoint: '/ecore/api/v2/core/selectformfields/',
+        endpoint: '/core/selectformfields/',
         label: 'Select field'
       },
       filefield: {
-        endpoint: '/ecore/api/v2/core/fileformfields/',
+        endpoint: '/core/fileformfields/',
         label: 'File field'
       },
       imagefield: {
-        endpoint: '/ecore/api/v2/core/imageformfields/',
+        endpoint: '/core/imageformfields/',
         label: 'Image field'
       },
       checkboxfield: {
-        endpoint: '/ecore/api/v2/core/checkboxformfields/',
+        endpoint: '/core/checkboxformfields/',
         label: 'Checkbox field'
       },
       datefield: {
-        endpoint: '/ecore/api/v2/core/dateformfields/',
+        endpoint: '/core/dateformfields/',
         label: 'Date field'
       },
       radiobuttonsfield: {
-        endpoint: '/ecore/api/v2/core/radiobuttonsformfields/',
+        endpoint: '/core/radiobuttonsformfields/',
         label: 'Radio button field'
       },
       textfield: {
-        endpoint: '/ecore/api/v2/core/textformfields/',
+        endpoint: '/core/textformfields/',
         label: 'Text field'
       }
     };

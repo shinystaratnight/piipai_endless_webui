@@ -538,7 +538,7 @@ describe('FormRuleComponent', () => {
       let result = {
         type: 'change',
         el: {
-          endpoint: '/ecore/api/v2/models/',
+          endpoint: '/models/',
           type: 'rule',
           related: {
             field: 'rules',
@@ -568,7 +568,7 @@ describe('FormRuleComponent', () => {
       let result = {
         type: 'change',
         el: {
-          endpoint: '/ecore/api/v2/functions/',
+          endpoint: '/functions/',
           type: 'rule',
           related: {
             field: 'rules',

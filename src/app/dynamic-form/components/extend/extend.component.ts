@@ -235,7 +235,7 @@ export class ExtendComponent extends BasicElementComponent
       },
       candidates: {
         type: 'related',
-        endpoint: `/ecore/api/v2/hr/jobs/${id}/extend_fillin/`,
+        endpoint: `/hr/jobs/${id}/extend_fillin/`,
         key: 'candidates',
         many: true,
         formData,
@@ -354,7 +354,7 @@ export class ExtendComponent extends BasicElementComponent
 
   public getCandidates(date, data, target, index) {
     if (data.time && data.workers) {
-      const endpoint = `/ecore/api/v2/hr/jobs/${
+      const endpoint = `/hr/jobs/${
         this.formData.id.id
       }/extend_fillin/`;
       const timeZoneOffset = moment

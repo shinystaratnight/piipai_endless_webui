@@ -17,7 +17,7 @@ import { SettingsService } from '../settings.service';
 
 export class MyobComponent implements OnInit, OnDestroy {
 
-  public endpoint = '/ecore/api/v2/company_settings/';
+  public endpoint = '/company_settings/';
   public pageUrl: string;
   public errors: any;
   public response: any;
@@ -97,7 +97,7 @@ export class MyobComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const endpoint = '/ecore/api/v2/company_settings/myob_api_key/';
+    const endpoint = '/company_settings/myob_api_key/';
     this.gfs
       .getAll(endpoint)
       .subscribe(
@@ -173,7 +173,7 @@ export class MyobComponent implements OnInit, OnDestroy {
 
   public saveInfo(code: string) {
     this.connectProcess = true;
-    const url = `/ecore/api/v2/company_settings/myob_authorization/`;
+    const url = `/company_settings/myob_authorization/`;
     const body = {
       code,
       redirect_uri: 'http://r3sourcer.com/myob/oauth2_redirect_uri'
@@ -190,7 +190,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public testCompanyFile(file) {
-    const url = '/ecore/api/v2/company_settings/company_files/check/';
+    const url = '/company_settings/company_files/check/';
     const body = {
       id: file.cf_id,
       username: file.username,
@@ -202,7 +202,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public getCompanyFiles() {
-    const url = '/ecore/api/v2/company_settings/company_files/';
+    const url = '/company_settings/company_files/';
 
     this.gfs
       .getAll(url)
@@ -221,7 +221,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public refreshCompanyFiles() {
-    const url = '/ecore/api/v2/company_settings/company_files/refresh/';
+    const url = '/company_settings/company_files/refresh/';
     this.gfs
       .getAll(url)
       .subscribe(
@@ -240,7 +240,7 @@ export class MyobComponent implements OnInit, OnDestroy {
 
     if (companyFile) {
       const id = companyFile.cf_id;
-      const url = `/ecore/api/v2/company_settings/company_files/${id}/accounts/refresh/`;
+      const url = `/company_settings/company_files/${id}/accounts/refresh/`;
 
       this.gfs
         .getAll(url)
@@ -259,7 +259,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public refreshTime(field: string) {
-    const url = '/ecore/api/v2/company_settings/myob_settings/';
+    const url = '/company_settings/myob_settings/';
     this.gfs
       .getAll(url)
       .subscribe(
@@ -285,7 +285,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     const obj = this.getElementByKey(this.config, 'auth_data_list');
 
     this.gfs
-      .getAll('/ecore/api/v2/company_settings/auth_data/')
+      .getAll('/company_settings/auth_data/')
       .pipe(
         finalize(() => {
           this.updateMetadata(this.config, 'auth_data_list');
@@ -302,7 +302,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public getAccountsOfCompanyFile(id: string, key: string, value?: string): void {
-    const url = '/ecore/api/v2/company_settings/company_files/';
+    const url = '/company_settings/company_files/';
     const companyFile = this.companyFile.list.find((el) => el.id === id);
 
     if (companyFile) {
@@ -321,7 +321,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public getMYOBSettings() {
-    const url = '/ecore/api/v2/company_settings/myob_settings/';
+    const url = '/company_settings/myob_settings/';
 
     this.gfs
       .getAll(url)
@@ -363,7 +363,7 @@ export class MyobComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const url = '/ecore/api/v2/company_settings/myob_settings/';
+    const url = '/company_settings/myob_settings/';
     const data = {};
     Object.keys(form).forEach((key) => {
       if (key.indexOf('company_file') > -1) {

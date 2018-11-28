@@ -1,3 +1,7 @@
+import { environmentShared } from './environment.shared';
+
 export const environment = {
-  production: true
+  ...environmentShared,
+  production: true,
+  api: 'http://api.r3sourcer.com',
 };

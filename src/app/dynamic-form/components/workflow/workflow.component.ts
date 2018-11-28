@@ -387,7 +387,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
         },
       },
       {
-        endpoint: '/ecore/api/v2/acceptance-tests/acceptancetests/',
+        endpoint: '/acceptance-tests/acceptancetests/',
         read_only: false,
         formData,
         templateOptions: {
@@ -403,7 +403,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
         key: 'acceptance_test',
       },
       {
-        endpoint: '/ecore/api/v2/core/companyworkflownodes/',
+        endpoint: '/core/companyworkflownodes/',
         read_only: false,
         hide: true,
         templateOptions: {

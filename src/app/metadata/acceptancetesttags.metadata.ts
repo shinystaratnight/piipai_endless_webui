@@ -1,6 +1,6 @@
 const form = [
   {
-    endpoint: '/ecore/api/v2/acceptance-tests/acceptancetests/',
+    endpoint: '/acceptance-tests/acceptancetests/',
     read_only: true,
     templateOptions: {
       label: 'Acceptance test',
@@ -11,7 +11,7 @@ const form = [
     key: 'acceptance_test'
   },
   {
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     read_only: true,
     templateOptions: {
       label: 'Tag',
@@ -25,7 +25,7 @@ const form = [
 
 const formadd = [
   {
-    endpoint: '/ecore/api/v2/acceptance-tests/acceptancetests/',
+    endpoint: '/acceptance-tests/acceptancetests/',
     read_only: true,
     templateOptions: {
       label: 'Acceptance test',
@@ -36,7 +36,7 @@ const formadd = [
     key: 'acceptance_test'
   },
   {
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     read_only: true,
     templateOptions: {
       label: 'Tag',

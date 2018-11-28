@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
-
-import { CookieService } from 'ngx-cookie';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, catchError, mergeMap } from 'rxjs/operators';
@@ -26,12 +24,12 @@ export interface PermissionResponse {
 export class CheckPermissionService {
 
   private _permissions: Permission[];
-  private userPermissionEndpoint = `/ecore/api/v2/permissions/user/`;
+  private userPermissionEndpoint = `/permissions/user/`;
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private error: ErrorsService,
-    private cookie: CookieService,
+
     private siteService: SiteService,
     private navigationService: NavigationService,
   ) { }
@@ -118,19 +116,16 @@ export class CheckPermissionService {
   }
 
   private getUserPermissions(id: string): Observable<Permission[]> {
-    const headers = new Headers();
-    this.updateHeaders(headers);
     return this.http
-      .get(this.userPermissionEndpoint + id + '/', { headers })
+      .get(this.userPermissionEndpoint + id + '/')
       .pipe(
-        map((response: Response) => {
-          const body: PermissionResponse = response.json();
-          const permissions: Permission[] = [...body.permission_list, ...body.group_permission_list];
+        map((response: PermissionResponse) => {
+          const permissions: Permission[] = [...response.permission_list, ...response.group_permission_list];
           this.permissions = permissions;
 
           return this.permissions;
         }),
-        catchError((error: Response) => this.error.parseErrors(error))
+        catchError((error: HttpErrorResponse) => this.error.parseErrors(error))
       );
   }
 
@@ -149,9 +144,4 @@ export class CheckPermissionService {
       return result;
     }
   }
-
-  private updateHeaders(headers) {
-    headers.append('X-CSRFToken', this.cookie.get('csrftoken'));
-  }
-
 }

@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 
 import { BillingService } from '../../services/billing-service';
-import { environment } from '../../../environment';
+import { environment } from '../../../../environments/environment';
 
 const style = {
   base: {

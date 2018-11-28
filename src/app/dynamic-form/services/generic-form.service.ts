@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
-import { of, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-import { CookieService } from 'ngx-cookie';
 
 import { ErrorsService } from '../../shared/services/errors.service';
 import { metadata } from '../../metadata';
@@ -11,37 +10,27 @@ import { metadata } from '../../metadata';
 @Injectable()
 export class GenericFormService {
   constructor(
-    private http: Http,
-    private cookie: CookieService,
+    private http: HttpClient,
     private errors: ErrorsService
   ) {}
 
-  public getByQuery(endpoint, query) {
-    const headers = new Headers();
-    this.updateHeaders(headers);
+  public getByQuery(endpoint, query): any {
     return this.http
-      .get(`${endpoint}${query}`, { headers })
+      .get(`${endpoint}${query}`)
       .pipe(
-        map((response: any) => (response._body ? response.json() : {})),
-        catchError((error: any) => this.errorHandler(error))
+        catchError((error: any) => this.errors.parseErrors(error))
       );
   }
 
-  public getAll(endpoint) {
-    const headers = new Headers();
-    this.updateHeaders(headers);
+  public getAll(endpoint): any {
     return this.http
-      .get(endpoint, { headers })
+      .get(endpoint)
       .pipe(
-        map((response: any) => (response._body ? response.json() : {})),
-        catchError((error: any) => this.errorHandler(error))
+        catchError((error: any) => this.errors.parseErrors(error))
       );
   }
 
-  public getMetadata(endpoint, query = '') {
-    const headers = new Headers();
-    this.updateHeaders(headers);
-
+  public getMetadata(endpoint, query = ''): any {
     if (endpoint.includes('/submit/')) {
       endpoint = 'submit';
     }
@@ -138,73 +127,49 @@ export class GenericFormService {
     }
 
     return this.http
-      .options(`${endpoint}${query}`, { headers })
+      .options(`${endpoint}${query}`)
       .pipe(
-        map((response: any) => response.json()),
-        catchError((error: any) => this.errorHandler(error))
-      );
-  }
-
-  public submitForm(endpoint, data) {
-    const headers = new Headers();
-    this.updateHeaders(headers);
-    return this.http
-      .post(endpoint, data, { headers })
-      .pipe(
-        map((response: any) => (response._body ? response.json() : {})),
-        catchError((error: any) => this.errorHandler(error))
-      );
-  }
-
-  public editForm(endpoint, data) {
-    const headers = new Headers();
-    this.updateHeaders(headers);
-    return this.http
-      .put(endpoint, data, { headers })
-      .pipe(
-        map((response: any) => (response._body ? response.json() : {})),
-        catchError((error: any) => this.errorHandler(error))
-      );
-  }
-
-  public updateForm(endpoint, data) {
-    const headers = new Headers();
-    this.updateHeaders(headers);
-    return this.http
-      .patch(endpoint, data, { headers })
-      .pipe(
-        map((response: any) => (response._body ? response.json() : {})),
-        catchError((error: any) => this.errorHandler(error))
-      );
-  }
-
-  public callAction(endpoint, data) {
-    const headers = new Headers();
-    this.updateHeaders(headers);
-    return this.http
-      .post(endpoint, data, { headers })
-      .pipe(
-        map((response: any) => (response._body ? response.json() : {})),
-        catchError((error: any) => this.errorHandler(error))
-      );
-  }
-
-  public delete(endpoint, id, postfix?) {
-    const headers = new Headers();
-    this.updateHeaders(headers);
-    return this.http
-      .delete(`${endpoint}${id}/` + (postfix ? `${postfix}/` : ''), { headers })
-      .pipe(
-        map((response: any) => (response._body ? response.json() : {})),
         catchError((error: any) => this.errors.parseErrors(error))
       );
   }
 
-  public updateHeaders(headers) {
-    headers.append('X-CSRFToken', this.cookie.get('csrftoken'));
+  public submitForm(endpoint, data): any {
+    return this.http
+      .post(endpoint, data)
+      .pipe(
+        catchError((error: any) => this.errors.parseErrors(error))
+      );
   }
 
-  public errorHandler(error) {
-    return throwError(error.json());
+  public editForm(endpoint, data): any {
+    return this.http
+      .put(endpoint, data)
+      .pipe(
+        catchError((error: any) => this.errors.parseErrors(error))
+      );
+  }
+
+  public updateForm(endpoint, data): any {
+    return this.http
+      .patch(endpoint, data)
+      .pipe(
+        catchError((error: any) => this.errors.parseErrors(error))
+      );
+  }
+
+  public callAction(endpoint, data): any {
+    return this.http
+      .post(endpoint, data)
+      .pipe(
+        catchError((error: any) => this.errors.parseErrors(error))
+      );
+  }
+
+  public delete(endpoint, id, postfix?): any {
+    return this.http
+      .delete(`${endpoint}${id}/` + (postfix ? `${postfix}/` : ''))
+      .pipe(
+        catchError((error: any) => this.errors.parseErrors(error))
+      );
   }
 }

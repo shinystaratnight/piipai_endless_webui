@@ -260,7 +260,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/workflownodes/',
+    endpoint: '/core/workflownodes/',
     read_only: false,
     templateOptions: {
       label: 'State',
@@ -326,7 +326,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/workflownodes/',
+    endpoint: '/core/workflownodes/',
     read_only: false,
     templateOptions: {
       label: 'State',

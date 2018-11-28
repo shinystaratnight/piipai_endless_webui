@@ -30,7 +30,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             field: 'company',
             type: 'related'
           }
@@ -43,7 +43,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/formbuilders/',
+            endpoint: '/core/formbuilders/',
             field: 'builder',
             type: 'related'
           }
@@ -74,7 +74,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/formbuilders/',
+      endpoint: '/core/formbuilders/',
       read_only: true,
       templateOptions: {
         label: 'Entity',
@@ -114,7 +114,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       read_only: true,
       templateOptions: {
         label: 'Company',
@@ -169,7 +169,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -187,7 +187,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/formbuilders/',
+    endpoint: '/core/formbuilders/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -251,7 +251,7 @@ const form = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/core/formfieldgroups/',
+    endpoint: '/core/formfieldgroups/',
     read_only: false,
     templateOptions: {
       label: 'Groups',
@@ -293,7 +293,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -311,7 +311,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/formbuilders/',
+    endpoint: '/core/formbuilders/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -376,7 +376,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/formfieldgroups/',
+    endpoint: '/core/formfieldgroups/',
     read_only: true,
     templateOptions: {
       label: 'Groups',

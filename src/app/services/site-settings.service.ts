@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { map, catchError, mergeMap } from 'rxjs/operators';
 
 import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class SiteSettingsService {
@@ -14,43 +15,41 @@ export class SiteSettingsService {
   public authorized: boolean;
 
   constructor(
-    private http: Http,
-    private userService: UserService
+    private http: HttpClient,
+    private userService: UserService,
+    private authService: AuthService
   ) {
-    this.endpoint = '/ecore/api/v2/company_settings/';
-    this.siteEndpoint = '/ecore/api/v2/company_settings/site/';
+    this.endpoint = '/company_settings/';
+    this.siteEndpoint = '/company_settings/site/';
   }
 
   public resolve() {
-    return this.userService
-      .getUserData()
-      .pipe(
-        mergeMap((user: any) => {
-          this.authorized = true;
+    if (this.authService.isAuthorized) {
+      return this.userService
+        .getUserData()
+        .pipe(
+          mergeMap((user: any) => {
+            this.authorized = true;
 
-          if (user.data.contact.contact_type === 'manager') {
-            return this.getSettings(this.endpoint);
-          } else {
-            return this.getSettings(this.siteEndpoint);
-          }
-        }),
-        catchError(() => {
-          this.authorized = false;
-
-          return this.getSettings(this.siteEndpoint);
-        })
-      );
+            if (user.data.contact.contact_type === 'manager') {
+              return this.getSettings(this.endpoint);
+            } else {
+              return this.getSettings(this.siteEndpoint);
+            }
+          })
+        );
+    } else {
+      return this.getSettings(this.siteEndpoint);
+    }
   }
 
   private getSettings(endpoint: string): Observable<any> {
-    if (!this.settings || !this.authorized) {
+    if (!this.settings || !this.authService.isAuthorized) {
       return this.http
         .get(endpoint)
         .pipe(
-          map((res: Response) => {
-            const settings = res.json();
-
-            if (this.authorized) {
+          map((settings: any) => {
+            if (this.authService.isAuthorized) {
               this.settings = settings;
             }
 
@@ -70,7 +69,7 @@ export class SiteSettingsService {
             return of(true);
           })
         );
-    } else if (this.settings && this.authorized) {
+    } else if (this.settings && this.authService.isAuthorized) {
       return of(this.settings);
     }
   }

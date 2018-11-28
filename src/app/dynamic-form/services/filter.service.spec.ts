@@ -102,7 +102,7 @@ describe('FilterService', () => {
 
     describe('getFiltersByEndpoint method', () => {
       it('should list of filters by endpoint', inject([FilterService], (fs: FilterService) => {
-        let endpoint = '/ecore/api/v2/contacts/';
+        let endpoint = '/contacts/';
         fs.filters = {
           endpoint,
           list
@@ -117,7 +117,7 @@ describe('FilterService', () => {
           inject(
             [FilterService], (s: FilterService) => {
             spyOn(s, 'deleteFilters');
-            let endpoint = '/ecore/api/v2/contacts/';
+            let endpoint = '/contacts/';
             s.filters = {
               endpoint,
               list
@@ -132,7 +132,7 @@ describe('FilterService', () => {
     describe('deleteFilters method', () => {
       it('should delete filters of list',
           inject([FilterService], (s: FilterService) => {
-            let endpoint = '/ecore/api/v2/contacts/';
+            let endpoint = '/contacts/';
             s.filters = {
               endpoint,
               list
@@ -147,7 +147,7 @@ describe('FilterService', () => {
       it('should delete filters of list',
           inject([FilterService], (s: FilterService) => {
             spyOn(s, 'parseQueries');
-            let endpoint = '/ecore/api/v2/contacts/';
+            let endpoint = '/contacts/';
             s.filters = {
               endpoint,
               list
@@ -162,7 +162,7 @@ describe('FilterService', () => {
       it('should generate queries object',
           inject([FilterService], (s: FilterService) => {
             let query = 'from=20-03-17&to=27-03-17';
-            let endpoint = '/ecore/api/v2/contacts/';
+            let endpoint = '/contacts/';
             s.filters = {
               endpoint,
               list
@@ -205,7 +205,7 @@ describe('FilterService', () => {
     describe('parseQueries method', () => {
       it('should generate queries object',
           inject([FilterService], (s: FilterService) => {
-            let endpoint = '/ecore/api/v2/contacts/';
+            let endpoint = '/contacts/';
             s.filters = {
               endpoint,
               list
@@ -237,7 +237,7 @@ describe('FilterService', () => {
     describe('parseFilters method', () => {
 
       it('should parse params from URL', inject([FilterService], (s: FilterService) => {
-        let endpoint = '/ecore/api/v2/contacts/';
+        let endpoint = '/contacts/';
         s.filters = {
           endpoint,
           list
@@ -263,7 +263,7 @@ describe('FilterService', () => {
     describe('getQueries method', () => {
       it('should return queries data of filter',
           inject([FilterService], (s: FilterService) => {
-            let endpoint = '/ecore/api/v2/contacts/';
+            let endpoint = '/contacts/';
             s.filters = {
               endpoint,
               list
@@ -283,7 +283,7 @@ describe('FilterService', () => {
 
       it('should return query by URL',
           inject([FilterService], (s: FilterService) => {
-            let endpoint = '/ecore/api/v2/contacts/';
+            let endpoint = '/contacts/';
             s.filters = {
               endpoint,
               list
@@ -308,7 +308,7 @@ describe('FilterService', () => {
     describe('resetQueries method', () => {
       it('should reset quries of list',
           inject([FilterService], (s: FilterService) => {
-            let endpoint = '/ecore/api/v2/contacts/';
+            let endpoint = '/contacts/';
             s.filters = {
               endpoint,
               list

@@ -49,7 +49,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     read_only: true,
     templateOptions: {
       label: 'Jobsite',
@@ -111,7 +111,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     read_only: true,
     templateOptions: {
       label: 'Jobsite',

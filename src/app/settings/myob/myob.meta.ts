@@ -9,7 +9,7 @@ export const meta = [
         key: 'auth_data_list',
         type: 'related',
         many: true,
-        endpoint: '/ecore/api/v2/company_settings/auth_data/',
+        endpoint: '/company_settings/auth_data/',
         mode: new BehaviorSubject('view'),
         templateOptions: {
           label: 'Authorized accounts',

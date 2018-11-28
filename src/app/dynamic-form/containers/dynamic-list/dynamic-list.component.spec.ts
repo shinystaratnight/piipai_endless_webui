@@ -52,7 +52,7 @@ describe('DynamicListComponent', () => {
               text: '{first_name}',
               label: 'Test',
               async: true,
-              endpoint: '/ecore/api/v2/localization/{id}',
+              endpoint: '/localization/{id}',
               method: 'post',
               query: {
                 type: '{company.type}',
@@ -128,7 +128,7 @@ describe('DynamicListComponent', () => {
               field: 'gender',
               type: 'text',
               async: true,
-              endpoint: '/ecore/api/v2/localization/{id}',
+              endpoint: '/localization/{id}',
               method: 'post',
               query: {
                 type: '{company.type}',
@@ -164,7 +164,7 @@ describe('DynamicListComponent', () => {
             {
               field: 'last_name',
               type: 'link',
-              endpoint: '/ecore/api/v2/contacts/{id}',
+              endpoint: '/contacts/{id}',
             }
           ],
           context_menu: [
@@ -180,7 +180,7 @@ describe('DynamicListComponent', () => {
 
   let data = {
     count: 4,
-    next: '/ecore/api/v2/core/companyaddresses/?limit=1&offset=1',
+    next: '/core/companyaddresses/?limit=1&offset=1',
     results: [{
         title: null,
         first_name: null,
@@ -322,7 +322,7 @@ describe('DynamicListComponent', () => {
       comp.config = config;
       comp.data = data;
       comp.actionData = {};
-      comp.actionEndpoint = '/ecore/api/v2/core/companyaddresses/sendsms/';
+      comp.actionEndpoint = '/core/companyaddresses/sendsms/';
       comp.currentActionData = {
         phone_mobile: ['+380983456723']
       };
@@ -416,7 +416,7 @@ describe('DynamicListComponent', () => {
       async(inject([FilterService], (fs: FilterService) => {
         comp.first = true;
         comp.config = config;
-        comp.endpoint = '/ecore/api/v2/contacts/';
+        comp.endpoint = '/contacts/';
         comp.modalRef = {
           close() {
             return true;
@@ -466,7 +466,7 @@ describe('DynamicListComponent', () => {
         {
           type: 'multiple',
           data: {
-            endpoint: '/ecore/api/v2/hr/vacancy/{id}/shifts/'
+            endpoint: '/hr/vacancy/{id}/shifts/'
           }
         }
       ];
@@ -480,7 +480,7 @@ describe('DynamicListComponent', () => {
   describe('getAsyncData method', () => {
     it('should get async data by get request', () => {
       comp.asyncData = {
-        '/ecore/api/v2/locatozation/?code=AU': [
+        '/locatozation/?code=AU': [
           {
             method: 'get',
             content: [{}],
@@ -499,7 +499,7 @@ describe('DynamicListComponent', () => {
 
     it('should get async data by post request', () => {
       comp.asyncData = {
-        '/ecore/api/v2/locatozation/?code=AU': [
+        '/locatozation/?code=AU': [
           {
             method: 'post',
             content: [{}],
@@ -509,7 +509,7 @@ describe('DynamicListComponent', () => {
           }
         ]
       };
-      comp.endpoint = '/ecore/api/v2/hr/vacancies/';
+      comp.endpoint = '/hr/vacancies/';
       comp.data = {
         vacancy: {
           id: '123'
@@ -838,7 +838,7 @@ describe('DynamicListComponent', () => {
                   name: 'last_name',
                   type: 'link',
                   values: undefined,
-                  endpoint: '/ecore/api/v2/contacts/8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
+                  endpoint: '/contacts/8ffddc8b-058b-4d71-94fb-f95eed60cbf9',
                   value: 'Testovich',
                   delim: undefined,
                   title: undefined,
@@ -1079,7 +1079,7 @@ describe('DynamicListComponent', () => {
     it('should open modal', async(() => {
       let field = {
         label: 'Company',
-        endpoint: '/ecore/api/v2/core/companyaddresses',
+        endpoint: '/core/companyaddresses',
         type: 'form'
       };
       spyOn(comp, 'open');
@@ -1417,7 +1417,7 @@ describe('DynamicListComponent', () => {
     it('should open candidate profile', () => {
       const event = {
         el: {
-          endpoint: '/ecore/api/v2/candidate/candidate/123/'
+          endpoint: '/candidate/candidate/123/'
         }
       };
       spyOn(comp, 'open');
@@ -1544,7 +1544,7 @@ describe('DynamicListComponent', () => {
       let event = {
         el: {
           rowId: 123,
-          endpoint: '/ecore/api/v2/contacts/'
+          endpoint: '/contacts/'
         }
       };
       let mockData = {
@@ -1586,7 +1586,7 @@ describe('DynamicListComponent', () => {
       let event = {
         el: {
           rowId: 123,
-          endpoint: '/ecore/api/v2/contacts/'
+          endpoint: '/contacts/'
         }
       };
       let mockData = {
@@ -1628,7 +1628,7 @@ describe('DynamicListComponent', () => {
       let event = {
         el: {
           rowId: 123,
-          endpoint: '/ecore/api/v2/contacts/'
+          endpoint: '/contacts/'
         }
       };
       let mockData = {
@@ -1728,7 +1728,7 @@ describe('DynamicListComponent', () => {
       let event = {
         el: {
           rowId: 123,
-          endpoint: '/ecore/api/v2/contacts/'
+          endpoint: '/contacts/'
         }
       };
       let mockData = {
@@ -1754,7 +1754,7 @@ describe('DynamicListComponent', () => {
       comp.approveTimesheet(event);
       expect(comp.evaluate).toHaveBeenCalled();
       expect(comp.format).toHaveBeenCalled();
-      expect(comp.approveEndpoint).toEqual('/ecore/api/v2/contacts/');
+      expect(comp.approveEndpoint).toEqual('/contacts/');
     });
   });
 
@@ -1799,7 +1799,7 @@ describe('DynamicListComponent', () => {
   describe('addObject method', () => {
     it('should open modal for create new object', () => {
       comp.config = config;
-      comp.endpoint = '/ecore/api/v2/companies/';
+      comp.endpoint = '/companies/';
       comp.addObject();
       expect(comp.modalInfo).toEqual({
         type: 'form',
@@ -2175,7 +2175,7 @@ describe('DynamicListComponent', () => {
       const event = {
         el: {
           id: '123',
-          endpoint: '/ecore/api/v2/contacts/123/'
+          endpoint: '/contacts/123/'
         }
       };
       comp.config = Object.assign({}, config);
@@ -2184,7 +2184,7 @@ describe('DynamicListComponent', () => {
       comp.editForm(event);
       expect(comp.modalInfo).toEqual({
         type: 'form',
-        endpoint: '/ecore/api/v2/contacts/123/',
+        endpoint: '/contacts/123/',
         mode: 'edit',
         edit: true,
       });

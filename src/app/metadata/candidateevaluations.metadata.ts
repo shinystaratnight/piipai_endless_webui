@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
           }
@@ -19,7 +19,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             field: 'supervisor',
             type: 'related'
           }
@@ -47,7 +47,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate_contact'
@@ -57,7 +57,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       read_only: true,
       templateOptions: {
         label: 'Candidate contact',
@@ -74,7 +74,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       read_only: true,
       templateOptions: {
         label: 'Supervisor',
@@ -177,7 +177,7 @@ const formset = {
     {
       many: false,
       key: 'supervisor',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -219,7 +219,7 @@ const formset = {
         sort_field: 'supervisor',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             field: 'supervisor'
           }
@@ -283,7 +283,7 @@ const formset = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{reference_timesheet.id}',
+            endpoint: '/hr/timesheets/{reference_timesheet.id}',
             type: 'link',
             field: 'reference_timesheet'
           }
@@ -303,7 +303,7 @@ const formset = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate contact',
@@ -320,7 +320,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Supervisor',
@@ -416,7 +416,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/timesheets/',
+    endpoint: '/hr/timesheets/',
     read_only: true,
     templateOptions: {
       label: 'Reference timesheet',
@@ -436,7 +436,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate contact',
@@ -453,7 +453,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Supervisor',
@@ -549,7 +549,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/timesheets/',
+    endpoint: '/hr/timesheets/',
     read_only: true,
     templateOptions: {
       label: 'Reference timesheet',

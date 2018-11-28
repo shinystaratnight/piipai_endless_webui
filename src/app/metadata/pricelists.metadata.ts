@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             field: 'company',
             type: 'related'
           }
@@ -59,7 +59,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             field: 'approved_by',
             type: 'related'
           }
@@ -92,7 +92,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companies/',
+          endpoint: '/core/companies/',
           key: 'id'
         },
         query: 'company'
@@ -112,7 +112,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       read_only: true,
       templateOptions: {
         label: 'Company',
@@ -139,7 +139,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       read_only: true,
       templateOptions: {
         label: 'Approved by',
@@ -220,7 +220,7 @@ const company = {
     {
       many: false,
       key: 'approved_by',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -274,7 +274,7 @@ const company = {
         sort_field: 'approved_by',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             field: 'approved_by'
           }
@@ -293,7 +293,7 @@ const company = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/pricing/pricelists/{id}',
+            endpoint: '/pricing/pricelists/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -325,7 +325,7 @@ const company = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Company',
@@ -372,7 +372,7 @@ const form = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Approved by',
@@ -400,7 +400,7 @@ const form = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/pricing/pricelistrates/',
+    endpoint: '/pricing/pricelistrates/',
     metadata_query: {
       editable_type: 'pricelist'
     },
@@ -424,7 +424,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Company',
@@ -471,7 +471,7 @@ const formadd = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Approved by',
@@ -498,7 +498,7 @@ const formadd = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/pricing/pricelistrates/',
+    endpoint: '/pricing/pricelistrates/',
     metadata_query: {
       editable_type: 'pricelist'
     },

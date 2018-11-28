@@ -23,6 +23,7 @@ import { GenericFormService } from '../../services';
 import { CheckPermissionService } from '../../../shared/services';
 import {
   NavigationService,
+  AuthService,
   UserService,
   SiteSettingsService
 } from '../../../services';
@@ -134,6 +135,7 @@ export class FormRelatedComponent extends BasicElementComponent
     private genericFormService: GenericFormService,
     private permission: CheckPermissionService,
     private navigation: NavigationService,
+    private authService: AuthService,
     private userService: UserService,
     private cd: ChangeDetectorRef,
     private settingsService: SiteSettingsService,
@@ -149,8 +151,8 @@ export class FormRelatedComponent extends BasicElementComponent
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
 
     this.skillEndpoint =
-      this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
-      this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
+      this.config.endpoint === '/skills/skillbaserates/' ||
+      this.config.endpoint === '/pricing/pricelistrates/';
 
     this.display = this.config.templateOptions.display || '{__str__}';
     this.param = this.config.templateOptions.param || 'id';
@@ -1182,7 +1184,7 @@ export class FormRelatedComponent extends BasicElementComponent
       this.saveProcess = false;
 
       if (this.modalData.description && this.currentUser) {
-        this.userService.logout();
+        this.authService.logout();
       }
 
       const formatString = new FormatString();

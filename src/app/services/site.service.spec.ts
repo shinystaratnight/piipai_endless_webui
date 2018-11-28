@@ -24,7 +24,7 @@ describe('UserService', () => {
             {
               name: 'Contact',
               url: '/contact/',
-              endpoint: '/ecore/api/v2/contacts',
+              endpoint: '/contacts',
               __str__: 'Contact',
               childrens: []
             }
@@ -51,7 +51,7 @@ describe('UserService', () => {
         {
           name: 'Contact',
           url: '/contact/',
-          endpoint: '/ecore/api/v2/contacts',
+          endpoint: '/contacts',
           __str__: 'Contact',
           childrens: []
         }
@@ -160,13 +160,13 @@ describe('UserService', () => {
         {
           name: 'Contact',
           url: '/contact/',
-          endpoint: '/ecore/api/v2/contacts',
+          endpoint: '/contacts',
           __str__: 'Contact',
           childrens: [
             {
               name: 'Candidate Contact',
               url: '/contact/candidate/',
-              endpoint: '/ecore/api/v2/candidatecontact',
+              endpoint: '/candidatecontact',
               __str__: 'Candidate Contact',
               childrens: []
             }

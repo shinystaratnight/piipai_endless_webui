@@ -24,12 +24,12 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/jobsites/',
+            endpoint: '/hr/jobsites/',
             field: 'jobsite',
             type: 'related'
           },
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             field: 'jobsite.primary_contact',
             type: 'related'
           },
@@ -47,7 +47,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/skills/skills/',
+            endpoint: '/skills/skills/',
             field: 'position',
             type: 'related'
           }
@@ -116,7 +116,7 @@ const list = {
             text: 'Fill-in'
           },
           {
-            endpoint: '/ecore/api/v2/hr/jobs/{id}/extend',
+            endpoint: '/hr/jobs/{id}/extend',
             field: 'id',
             showIf: [
               {
@@ -186,7 +186,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/hr/jobsites/',
+          endpoint: '/hr/jobsites/',
           key: 'id'
         },
         query: 'jobsite'
@@ -197,7 +197,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/skills/skills/',
+          endpoint: '/skills/skills/',
           key: 'id'
         },
         query: 'position'
@@ -209,7 +209,7 @@ const list = {
         data: {
           value: '__str__',
           endpoint:
-            '/ecore/api/v2/core/companycontacts/?master_company=current',
+            '/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'provider_representative'
@@ -220,7 +220,7 @@ const list = {
         data: {
           value: ['name_after_activation', 'name_before_activation'],
           endpoint:
-            '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=hr.job', //tslint:disable-line
+            '/core/workflownodes/?company={company_settings.company}&content_type=hr.job', //tslint:disable-line
           key: 'number'
         },
         query: 'active_states',
@@ -233,7 +233,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companies/',
+          endpoint: '/core/companies/',
           key: 'id'
         },
         query: 'customer_company'
@@ -264,7 +264,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/skills/skills/',
+      endpoint: '/skills/skills/',
       read_only: true,
       templateOptions: {
         label: 'Position',
@@ -323,7 +323,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/hr/jobsites/',
+      endpoint: '/hr/jobsites/',
       read_only: true,
       templateOptions: {
         label: 'Jobsite',
@@ -405,7 +405,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       read_only: true,
       templateOptions: {
         label: 'Primary contact',
@@ -494,7 +494,7 @@ const formset = {
     {
       many: false,
       key: 'position',
-      endpoint: '/ecore/api/v2/skills/skills/',
+      endpoint: '/skills/skills/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -561,7 +561,7 @@ const formset = {
         sort_field: 'position',
         content: [
           {
-            endpoint: '/ecore/api/v2/skills/skills/',
+            endpoint: '/skills/skills/',
             type: 'related',
             field: 'position'
           }
@@ -648,7 +648,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/hr/jobs/{id}',
+            endpoint: '/hr/jobs/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -763,7 +763,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companies/',
+                    endpoint: '/core/companies/',
                     read_only: true,
                     key: 'customer_company',
                     templateOptions: {
@@ -782,7 +782,7 @@ const form = [
                     many: false
                   },
                   {
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     read_only: true,
                     key: 'customer_representative',
                     templateOptions: {
@@ -830,7 +830,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companies/',
+                    endpoint: '/core/companies/',
                     read_only: true,
                     key: 'provider_company',
                     templateOptions: {
@@ -853,7 +853,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     read_only: false,
                     key: 'provider_representative',
                     templateOptions: {
@@ -882,13 +882,13 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/hr/shifts/',
+        endpoint: '/hr/shifts/',
         metadata_query: {
           editable_type: 'job'
         },
         visibleMode: true,
-        add_endpoint: '/ecore/api/v2/hr/shiftdates/',
-        edit_endpoint: '/ecore/api/v2/hr/shiftdates/{date.id}',
+        add_endpoint: '/hr/shiftdates/',
+        edit_endpoint: '/hr/shiftdates/{date.id}',
         templateOptions: {
           label: 'Shift Dates',
           type: 'list',
@@ -910,7 +910,7 @@ const form = [
         listKey: 'shifts'
       },
       {
-        endpoint: '/ecore/api/v2/hr/joboffers/',
+        endpoint: '/hr/joboffers/',
         templateOptions: {
           label: 'Job Offers',
           type: 'list',
@@ -946,10 +946,10 @@ const form = [
               type: 'timeline',
               text: 'States Timeline'
             },
-            endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
+            endpoint: '/core/workflownodes/timeline/'
           },
           {
-            endpoint: '/ecore/api/v2/core/workflowobjects/',
+            endpoint: '/core/workflowobjects/',
             templateOptions: {
               label: 'States history',
               type: 'list',
@@ -971,7 +971,7 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/hr/favouritelists/',
+        endpoint: '/hr/favouritelists/',
         metadata_query: {
           editable_type: 'job'
         },
@@ -998,7 +998,7 @@ const form = [
     ]
   },
   {
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     key: 'tags',
     hide: true,
     useOptions: true,
@@ -1014,7 +1014,7 @@ const form = [
     many: true
   },
   {
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     read_only: true,
     key: 'jobsite',
     hide: true,
@@ -1033,7 +1033,7 @@ const form = [
     }
   },
   {
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     key: 'position',
     hide: true,
@@ -1061,7 +1061,7 @@ const formadd = [
         type: 'column',
         children: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             read_only: false,
             key: 'customer_company',
             templateOptions: {
@@ -1084,7 +1084,7 @@ const formadd = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             read_only: true,
             key: 'provider_company',
             templateOptions: {
@@ -1107,7 +1107,7 @@ const formadd = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             read_only: false,
             key: 'provider_representative',
             templateOptions: {
@@ -1129,7 +1129,7 @@ const formadd = [
             many: false
           },
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             read_only: false,
             key: 'customer_representative',
             templateOptions: {
@@ -1150,7 +1150,7 @@ const formadd = [
             }
           },
           {
-            endpoint: '/ecore/api/v2/hr/jobsites/',
+            endpoint: '/hr/jobsites/',
             read_only: false,
             key: 'jobsite',
             templateOptions: {
@@ -1194,7 +1194,7 @@ const formadd = [
         children: [
           {
             list: false,
-            endpoint: '/ecore/api/v2/skills/skills/',
+            endpoint: '/skills/skills/',
             read_only: true,
             key: 'position',
             templateOptions: {
@@ -1212,7 +1212,7 @@ const formadd = [
               required: true
             },
             checkObject: {
-              endpoint: '/ecore/api/v2/hr/jobs/',
+              endpoint: '/hr/jobs/',
               error: 'Active Job for Jobsite and Position already exist!',
               query: {
                 jobsite: '{jobsite.id}',

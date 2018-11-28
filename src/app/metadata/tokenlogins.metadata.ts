@@ -67,7 +67,7 @@ const form = [
   {
     key: 'contact',
     collapsed: false,
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     read_only: true,
     templateOptions: {
       edit: true,
@@ -172,7 +172,7 @@ const formadd = [
   {
     key: 'contact',
     collapsed: false,
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     read_only: true,
     templateOptions: {
       edit: true,

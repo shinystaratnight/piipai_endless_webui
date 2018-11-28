@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
-import { map, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 import { ErrorsService } from '../../shared/services/errors.service';
 
 @Injectable()
 export class FormBuilderService {
 
-  public formEndpoint = '/ecore/api/v2/core/forms/';
-  public parseAddressEndpoint = '/ecore/api/v2/core/addresses/parse/';
+  public formEndpoint = '/core/forms/';
+  public parseAddressEndpoint = '/core/addresses/parse/';
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private errorsService: ErrorsService,
   ) { }
 
@@ -20,7 +20,6 @@ export class FormBuilderService {
     return this.http
       .get(this.formEndpoint + id + '/render/')
       .pipe(
-        map((res: any) => res.json()),
         catchError((error: any) => this.errorsService.parseErrors(error))
       );
   }
@@ -29,7 +28,6 @@ export class FormBuilderService {
     return this.http
       .post(this.formEndpoint + id + '/submit/', data)
       .pipe(
-        map((res: any) => res.json()),
         catchError((error: any) => this.errorsService.parseErrors(error))
       );
   }
@@ -38,7 +36,6 @@ export class FormBuilderService {
     return this.http
       .post(this.parseAddressEndpoint, data)
       .pipe(
-        map((res: any) => res.json()),
         catchError((error: any) => this.errorsService.parseErrors(error))
       );
   }

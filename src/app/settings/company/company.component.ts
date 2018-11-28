@@ -15,7 +15,7 @@ import { SiteSettingsService } from '../../services';
 
 export class CompanyComponent implements OnInit, OnDestroy {
 
-  public endpoint = '/ecore/api/v2/company_settings/';
+  public endpoint = '/company_settings/';
 
   public errors: any;
   public response: any;

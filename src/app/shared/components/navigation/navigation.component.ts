@@ -11,7 +11,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import { UserService, User, NavigationService, Page, Role } from '../../../services';
+import { User, AuthService, Page, Role } from '../../../services';
 import { getContactAvatar } from '../../../helpers/utils';
 
 import { Subscription, fromEvent } from 'rxjs';
@@ -55,8 +55,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   public resizeSubscription: Subscription;
 
   constructor(
-    private navigationService: NavigationService,
-    private userService: UserService,
+    private authService: AuthService,
   ) { }
 
   public ngOnInit() {
@@ -121,7 +120,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public logOut() {
-    this.userService.logout();
+    this.authService.logout();
   }
 
   public changeRole(id: string) {

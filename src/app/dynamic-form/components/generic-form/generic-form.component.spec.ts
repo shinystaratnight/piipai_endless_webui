@@ -108,8 +108,8 @@ describe('GenericFormComponent', () => {
       });
 
       it('should called getMetadata method', async(() => {
-        let endpoint = '/ecore/api/v2/contacts';
-        let currentEndpoint = '/ecore/api/v2/countries';
+        let endpoint = '/contacts';
+        let currentEndpoint = '/countries';
         response = {
           status: 'success',
           type: 'input'
@@ -123,7 +123,7 @@ describe('GenericFormComponent', () => {
       }));
 
       it('should called parseMetadata method', async(() => {
-        let endpoint = '/ecore/api/v2/contacts';
+        let endpoint = '/contacts';
         let data = { row: { data: { value: 'value' } } };
         let config = [{key: 'row'}, {key: 'row'}];
         comp.currentEndpoint = endpoint;
@@ -136,11 +136,11 @@ describe('GenericFormComponent', () => {
       }));
 
       it('should parse endpoint', async(() => {
-        let endpoint = '/ecore/api/v2/contacts/?company=123';
+        let endpoint = '/contacts/?company=123';
         comp.endpoint = endpoint;
         spyOn(comp, 'getMetadata');
         comp.ngOnChanges();
-        expect(comp.currentEndpoint).toEqual('/ecore/api/v2/contacts/');
+        expect(comp.currentEndpoint).toEqual('/contacts/');
         expect(comp.getMetadata).toHaveBeenCalledWith(comp.endpoint);
       }));
 
@@ -452,7 +452,7 @@ describe('GenericFormComponent', () => {
           },
           {
             type: 'list',
-            endpoint: '/ecore/api/v2/candidatecontact/',
+            endpoint: '/candidatecontact/',
             query: {
               contact: '{id}'
             },
@@ -476,7 +476,7 @@ describe('GenericFormComponent', () => {
         expect(config[0].data instanceof BehaviorSubject).toBeTruthy();
         expect(config[2]).toEqual({
           type: 'list',
-          endpoint: '/ecore/api/v2/candidatecontact/',
+          endpoint: '/candidatecontact/',
           query: {
             contact: '123'
           },
@@ -873,7 +873,7 @@ describe('GenericFormComponent', () => {
 
       it('should get all elements', async(() => {
         let key = 'address.country';
-        let endpoint = '/ecore/api/v2/countries';
+        let endpoint = '/countries';
         let inner = true;
         response = {
           results: [{ id: 2, name: 'Australia' }]
@@ -886,7 +886,7 @@ describe('GenericFormComponent', () => {
 
       it('should get elements by query', async(() => {
         let key = 'address.country';
-        let endpoint = '/ecore/api/v2/countries';
+        let endpoint = '/countries';
         let query = '?region=5';
         let param = 'app';
         let fields = {};
@@ -905,7 +905,7 @@ describe('GenericFormComponent', () => {
 
       it('should update metadata for rules type', async(() => {
         let key = 'rules';
-        let endpoint = '/ecore/api/v2/core/workflownodes/';
+        let endpoint = '/core/workflownodes/';
         let query = '?company=123&workflow=124';
         response = {
           results: [
@@ -968,26 +968,26 @@ describe('GenericFormComponent', () => {
         let config = [{
           type: 'related',
           key: 'address.country',
-          endpoint: '/ecore/api/v2/countries'
+          endpoint: '/countries'
         }, {
           type: 'row',
           children: [{
             type: 'related',
             key: 'address.city',
-            endpoint: '/ecore/api/v2/cities'
+            endpoint: '/cities'
           }]
         }];
         spyOn(comp, 'getRalatedData');
         comp.getData(config, 'address.city', '?region=2');
         expect(comp.getRalatedData).toHaveBeenCalledWith(
-          config[1]['children'], 'address.city', '/ecore/api/v2/cities', {}, '?region=2&limit=-1');
+          config[1]['children'], 'address.city', '/cities', {}, '?region=2&limit=-1');
       }));
 
       it('should get all related data', async(() => {
         let config = [{
           type: 'related',
           key: 'address.country',
-          endpoint: '/ecore/api/v2/countries',
+          endpoint: '/countries',
           list: true,
           metadata_query: {
             vacancie: true
@@ -1001,7 +1001,7 @@ describe('GenericFormComponent', () => {
           children: [{
             type: 'related',
             key: 'address.city',
-            endpoint: '/ecore/api/v2/cities',
+            endpoint: '/cities',
             templateOptions: {
               display: 'name',
               param: 'id'
@@ -1045,7 +1045,7 @@ describe('GenericFormComponent', () => {
         let config = [{
           type: 'related',
           key: fieldCountry,
-          endpoint: '/ecore/api/v2/countries',
+          endpoint: '/countries',
           readonly: false,
           related: {
             reset: 'region'
@@ -1055,7 +1055,7 @@ describe('GenericFormComponent', () => {
           children: [{
             type: 'related',
             key: fieldCity,
-            endpoint: '/ecore/api/v2/cities'
+            endpoint: '/cities'
           }, {
             type: 'business_id',
             key: 'input'
@@ -1110,7 +1110,7 @@ describe('GenericFormComponent', () => {
         let config = [{
           type: 'related',
           key: fieldCountry,
-          endpoint: '/ecore/api/v2/countries',
+          endpoint: '/countries',
           options: [{
               key: 1,
               name: 'Tampa'
@@ -1120,7 +1120,7 @@ describe('GenericFormComponent', () => {
           children: [{
             type: 'related',
             key: fieldCity,
-            endpoint: '/ecore/api/v2/cities',
+            endpoint: '/cities',
             options: [{
               key: 1,
               name: 'Tampa'
@@ -1301,7 +1301,7 @@ describe('GenericFormComponent', () => {
         }];
         comp.metadata = config;
         comp.workflowEndpoints = {
-          state: '/ecore/api/v2/workflownodes',
+          state: '/workflownodes',
           app: ''
         };
         spyOn(comp, 'getElementFromMetadata').and.returnValue(config[0]);
@@ -1427,7 +1427,7 @@ describe('GenericFormComponent', () => {
 
     describe('checkFormStorage method', () => {
       it('should update metadata for formStorage page', () => {
-        const endpoint = '/ecore/api/v2/core/formstorages/';
+        const endpoint = '/core/formstorages/';
         const config = <any> [
           {
             type: 'collapse',
@@ -1453,7 +1453,7 @@ describe('GenericFormComponent', () => {
 
     describe('checkFormBuilder method', () => {
       it('should remove groups element of from builder', () => {
-        let endpoint = '/ecore/api/v2/core/forms/';
+        let endpoint = '/core/forms/';
         let config = [
           { key: 'groups' }
         ];
@@ -1469,7 +1469,7 @@ describe('GenericFormComponent', () => {
       });
 
       it('should update groups element of form builder', () => {
-        let endpoint = '/ecore/api/v2/core/forms/';
+        let endpoint = '/core/forms/';
         let config = <any> [
           { key: 'groups' }
         ];
@@ -1484,7 +1484,7 @@ describe('GenericFormComponent', () => {
       });
 
       it('should change choice element on formOptions type', () => {
-        let endpoint = '/ecore/api/v2/core/radiobuttonsformfields/';
+        let endpoint = '/core/radiobuttonsformfields/';
         let config = <any> [
           { key: 'choices' }
         ];

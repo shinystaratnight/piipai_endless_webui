@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
           }
@@ -19,7 +19,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/tags/',
+            endpoint: '/core/tags/',
             field: 'tag',
             type: 'related'
           }
@@ -32,7 +32,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             field: 'verified_by',
             type: 'related'
           }
@@ -60,7 +60,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate_contact'
@@ -70,7 +70,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       read_only: true,
       templateOptions: {
         label: 'Candidate contact',
@@ -87,7 +87,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       read_only: true,
       templateOptions: {
         label: 'Verified by',
@@ -115,7 +115,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/tags/',
+      endpoint: '/core/tags/',
       read_only: true,
       templateOptions: {
         label: 'Tag',
@@ -138,7 +138,7 @@ const formset = {
     {
       many: false,
       key: 'tag',
-      endpoint: '/ecore/api/v2/core/tags/',
+      endpoint: '/core/tags/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -176,7 +176,7 @@ const formset = {
     {
       many: false,
       key: 'verified_by',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -199,7 +199,7 @@ const formset = {
         sort_field: 'tag',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/tags/',
+            endpoint: '/core/tags/',
             type: 'related',
             field: 'tag'
           }
@@ -212,7 +212,7 @@ const formset = {
         sort_field: 'verified_by',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             field: 'verified_by'
           }
@@ -233,7 +233,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/candidate/tagrels/{id}',
+            endpoint: '/candidate/tagrels/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -265,7 +265,7 @@ const formset = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -283,7 +283,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     read_only: false,
     key: 'tag',
     templateOptions: {
@@ -312,7 +312,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Verified by',
@@ -333,7 +333,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -351,7 +351,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     read_only: false,
     key: 'tag',
     templateOptions: {
@@ -381,7 +381,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Verified by',

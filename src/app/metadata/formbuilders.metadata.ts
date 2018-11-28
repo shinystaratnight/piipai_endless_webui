@@ -35,7 +35,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/forms/',
+    endpoint: '/core/forms/',
     read_only: true,
     templateOptions: {
       label: 'Forms',
@@ -83,7 +83,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+    endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     templateOptions: {
       label: 'Content type',
@@ -103,7 +103,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/forms/',
+    endpoint: '/core/forms/',
     read_only: true,
     templateOptions: {
       label: 'Forms',
@@ -151,7 +151,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+    endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     templateOptions: {
       label: 'Content type',

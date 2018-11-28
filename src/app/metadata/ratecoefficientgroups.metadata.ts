@@ -30,7 +30,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/ratecoefficients/',
+    endpoint: '/pricing/ratecoefficients/',
     read_only: true,
     templateOptions: {
       label: 'Rate coefficients',
@@ -75,7 +75,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/ratecoefficients/',
+    endpoint: '/pricing/ratecoefficients/',
     read_only: true,
     templateOptions: {
       label: 'Rate coefficients',

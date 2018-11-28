@@ -56,7 +56,7 @@ const form = [
                 many: false,
                 key: 'visa_type',
                 list: false,
-                endpoint: '/ecore/api/v2/candidate/visatypes/',
+                endpoint: '/candidate/visatypes/',
                 collapsed: false
               },
               {
@@ -83,7 +83,7 @@ const form = [
                 many: false,
                 key: 'nationality',
                 list: false,
-                endpoint: '/ecore/api/v2/core/countries/',
+                endpoint: '/core/countries/',
                 collapsed: false
               }
             ],
@@ -222,7 +222,7 @@ const form = [
     many: true,
     key: 'candidate_skills',
     list: true,
-    endpoint: '/ecore/api/v2/candidate/skillrels/',
+    endpoint: '/candidate/skillrels/',
     collapsed: true
   },
   {
@@ -239,7 +239,7 @@ const form = [
     many: true,
     key: 'tag_rels',
     list: true,
-    endpoint: '/ecore/api/v2/candidate/tagrels/',
+    endpoint: '/candidate/tagrels/',
     collapsed: true
   },
   {
@@ -302,7 +302,7 @@ const form = [
         many: false,
         key: 'contact.address.city',
         list: false,
-        endpoint: '/ecore/api/v2/core/cities/',
+        endpoint: '/core/cities/',
         collapsed: false
       },
       {
@@ -319,7 +319,7 @@ const form = [
         many: false,
         key: 'contact.address.state',
         list: false,
-        endpoint: '/ecore/api/v2/core/regions/',
+        endpoint: '/core/regions/',
         collapsed: false
       },
       {
@@ -336,7 +336,7 @@ const form = [
         many: false,
         key: 'contact.address.country',
         list: false,
-        endpoint: '/ecore/api/v2/core/countries/',
+        endpoint: '/core/countries/',
         default: 'AU',
         collapsed: false
       }

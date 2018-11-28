@@ -36,7 +36,7 @@ import { directives } from './directives';
     ButtonsModule.forRoot(),
     GooglePlaceModule,
     DndModule.forRoot(),
-    PdfViewerModule
+    PdfViewerModule,
   ],
   exports: [
     fromComponents.GenericFormComponent,

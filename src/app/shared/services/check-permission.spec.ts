@@ -20,7 +20,7 @@ import { Permission } from '../../settings/permissions/permissions.component';
 
 describe('CheckPermissionService', () => {
 
-  const url: string = `/ecore/api/v2/login/`;
+  const url = `/login/`;
 
   const mockErrorsService = {
     parseErrors() {

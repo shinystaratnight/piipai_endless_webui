@@ -28,7 +28,7 @@ const list = {
         content: [
           {
             endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
+              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
             type: 'link',
             field: 'job_offer.candidate_contact',
             action: 'showCandidateProfile'
@@ -81,7 +81,7 @@ const list = {
             color: 'success',
             label: 'Approve',
             inverse: true,
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/approve/',
+            endpoint: '/hr/timesheets/{id}/approve/',
             replace_by: 'supervisor',
             field: 'id',
             action: 'approveTimesheet',
@@ -102,7 +102,7 @@ const list = {
             color: 'danger',
             label: 'Change',
             inverse: true,
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/not_agree/',
+            endpoint: '/hr/timesheets/{id}/not_agree/',
             field: 'id',
             action: 'changeTimesheet',
             hidden: 'supervisor_approved_at'
@@ -122,7 +122,7 @@ const list = {
             type: 'button',
             color: 'warning',
             inverse: true,
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/evaluate/',
+            endpoint: '/hr/timesheets/{id}/evaluate/',
             field: 'id',
             action: 'evaluateCandidate'
           }

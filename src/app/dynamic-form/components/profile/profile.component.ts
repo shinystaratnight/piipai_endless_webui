@@ -36,9 +36,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   @ViewChild('modal')
   public modal;
 
-  public endpoint = '/ecore/api/v2/candidate/candidatecontacts/';
-  public skillsEndpoint = '/ecore/api/v2/candidate/skillrels/';
-  public tagsEndpoint = '/ecore/api/v2/candidate/tagrels/';
+  public endpoint = '/candidate/candidatecontacts/';
+  public skillsEndpoint = '/candidate/skillrels/';
+  public tagsEndpoint = '/candidate/tagrels/';
 
   public metadata: any[];
   public data: any;

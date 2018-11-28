@@ -139,7 +139,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/payslips/',
+    endpoint: '/hr/payslips/',
     read_only: true,
     templateOptions: {
       label: 'Payslip',
@@ -231,7 +231,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/payslips/',
+    endpoint: '/hr/payslips/',
     read_only: true,
     templateOptions: {
       label: 'Payslip',

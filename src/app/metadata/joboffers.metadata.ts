@@ -52,7 +52,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate_contact'
@@ -111,7 +111,7 @@ const formset = {
     {
       many: false,
       key: 'candidate_contact',
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -269,7 +269,7 @@ const formset = {
         sort_field: 'candidate_contact',
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             type: 'related',
             field: 'candidate_contact'
           },
@@ -327,7 +327,7 @@ const formset = {
           {
             text: 'Open TimeSheet',
             color: 'primary',
-            endpoint: '/ecore/api/v2/hr/timesheets/{timesheets}',
+            endpoint: '/hr/timesheets/{timesheets}',
             label: 'Timesheets',
             type: 'link',
             field: 'timesheets'
@@ -348,7 +348,7 @@ const formset = {
           {
             action: 'emptyPost',
             text: 'Send now',
-            endpoint: '/ecore/api/v2/hr/joboffers/{id}/send',
+            endpoint: '/hr/joboffers/{id}/send',
             type: 'button',
             field: 'has_send_action'
           },
@@ -369,7 +369,7 @@ const formset = {
                 action: 'showMessage',
                 messageType: 'sent',
                 endpoint:
-                  '/ecore/api/v2/sms-interface/smsmessages/{offer_sent_by_sms.id}',
+                  '/sms-interface/smsmessages/{offer_sent_by_sms.id}',
                 noDelim: true,
                 placement: 'left',
                 text: 'Offer',
@@ -383,7 +383,7 @@ const formset = {
                 action: 'showMessage',
                 messageType: 'reply',
                 endpoint:
-                  '/ecore/api/v2/sms-interface/smsmessages/{reply_received_by_sms.id}',
+                  '/sms-interface/smsmessages/{reply_received_by_sms.id}',
                 text: 'Reply',
                 placement: 'right',
                 emptyValue: '-',
@@ -397,7 +397,7 @@ const formset = {
           {
             action: 'emptyPost',
             text: 'Resend new',
-            endpoint: '/ecore/api/v2/hr/joboffers/{id}/resend',
+            endpoint: '/hr/joboffers/{id}/resend',
             type: 'button',
             field: 'has_resend_action'
           }
@@ -422,7 +422,7 @@ const formset = {
             content: [
               {
                 action: 'emptyPost',
-                endpoint: '/ecore/api/v2/hr/joboffers/{id}/accept/',
+                endpoint: '/hr/joboffers/{id}/accept/',
                 icon: 'fa-check',
                 title: 'Accept',
                 text_color: '#5cb85c',
@@ -435,7 +435,7 @@ const formset = {
               },
               {
                 action: 'emptyPost',
-                endpoint: '/ecore/api/v2/hr/joboffers/{id}/cancel/',
+                endpoint: '/hr/joboffers/{id}/cancel/',
                 icon: 'fa-times',
                 title: 'Cancel',
                 text_color: '#f32700',
@@ -519,7 +519,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
+    endpoint: '/hr/shiftdates/',
     read_only: false,
     templateOptions: {
       label: 'Date',
@@ -536,7 +536,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/shifts/',
+    endpoint: '/hr/shifts/',
     read_only: false,
     templateOptions: {
       label: 'Shift',
@@ -553,7 +553,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate contact',
@@ -577,7 +577,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: false,
     templateOptions: {
       label: 'Offer sent by sms',
@@ -601,7 +601,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: false,
     templateOptions: {
       label: 'Reply received by sms',
@@ -651,7 +651,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: false,
     templateOptions: {
       label: 'Offer sent by sms',
@@ -675,7 +675,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: false,
     templateOptions: {
       label: 'Reply received by sms',
@@ -711,7 +711,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
+    endpoint: '/hr/shiftdates/',
     read_only: false,
     templateOptions: {
       label: 'Date',
@@ -728,7 +728,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/shifts/',
+    endpoint: '/hr/shifts/',
     read_only: false,
     templateOptions: {
       label: 'Shift',
@@ -810,7 +810,7 @@ const form = [
 const formadd = [
   {
     key: 'job',
-    endpoint: '/ecore/api/v2/hr/jobs/',
+    endpoint: '/hr/jobs/',
     send: false,
     templateOptions: {
       add: true,
@@ -824,7 +824,7 @@ const formadd = [
     type: 'related'
   },
   {
-    endpoint: '/ecore/api/v2/hr/shifts/?ordering=-date.shift_date,-time',
+    endpoint: '/hr/shifts/?ordering=-date.shift_date,-time',
     templateOptions: {
       label: 'Shift',
       values: ['__str__', 'time', 'date', 'workers'],
@@ -850,7 +850,7 @@ const formadd = [
   },
   {
     type: 'related',
-    endpoint: `/ecore/api/v2/hr/jobs/{job.id}/extend_fillin/`,
+    endpoint: `/hr/jobs/{job.id}/extend_fillin/`,
     key: 'candidate_contact',
     templateOptions: {
       label: 'Select worker',
@@ -871,7 +871,7 @@ const extend = {
     {
       many: false,
       key: 'candidate_contact',
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -911,7 +911,7 @@ const extend = {
         name: 'candidate',
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             label: 'Candidate',
             type: 'related',
             field: 'candidate_contact'

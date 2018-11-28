@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             field: 'company',
             type: 'related'
           }
@@ -19,7 +19,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/{company_contact.id}',
+            endpoint: '/core/companycontacts/{company_contact.id}',
             field: 'company_contact',
             type: 'link'
           }
@@ -30,7 +30,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
           }
@@ -43,7 +43,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/jobsites/{jobsite.id}',
+            endpoint: '/hr/jobsites/{jobsite.id}',
             field: 'jobsite',
             type: 'link'
           }
@@ -64,7 +64,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate_contact'
@@ -74,7 +74,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       read_only: true,
       templateOptions: {
         label: 'Candidate contact',
@@ -91,7 +91,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       read_only: true,
       templateOptions: {
         label: 'Company',
@@ -108,7 +108,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/hr/jobsites/',
+      endpoint: '/hr/jobsites/',
       read_only: true,
       templateOptions: {
         label: 'Jobsite',
@@ -131,7 +131,7 @@ const formset = {
     {
       many: false,
       key: 'company',
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -148,7 +148,7 @@ const formset = {
     {
       many: false,
       key: 'jobsite',
-      endpoint: '/ecore/api/v2/hr/jobsites/',
+      endpoint: '/hr/jobsites/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -171,7 +171,7 @@ const formset = {
         sort_field: 'company',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             type: 'related',
             field: 'company'
           }
@@ -184,7 +184,7 @@ const formset = {
         sort_field: 'jobsite',
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/jobsites/',
+            endpoint: '/hr/jobsites/',
             type: 'related',
             field: 'jobsite'
           }
@@ -196,7 +196,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/hr/blacklists/{id}',
+            endpoint: '/hr/blacklists/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -228,7 +228,7 @@ const formset = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate contact',
@@ -245,7 +245,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Client',
@@ -262,7 +262,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Client contact',
@@ -282,7 +282,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     read_only: true,
     templateOptions: {
       label: 'Jobsite',
@@ -317,7 +317,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate contact',
@@ -334,7 +334,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Client',
@@ -351,7 +351,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Client contact',
@@ -371,7 +371,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     read_only: true,
     templateOptions: {
       label: 'Jobsite',

@@ -40,7 +40,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public updated: boolean;
   public loading: boolean;
 
-  public workflowObjectEndpoint = '/ecore/api/v2/core/workflowobjects/';
+  public workflowObjectEndpoint = '/core/workflowobjects/';
 
   private subscriptions: Subscription[];
 
@@ -55,7 +55,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.dropdown = this.config.dropdown;
     this.query = [];
-    this.objectEndpoint = '/ecore/api/v2/core/workflowobjects/';
+    this.objectEndpoint = '/core/workflowobjects/';
     if (!this.config.hide) {
       this.initialize();
     }

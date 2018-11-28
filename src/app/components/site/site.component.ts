@@ -9,6 +9,7 @@ import {
   SiteService,
   PageData,
   UserService,
+  AuthService,
   User,
   Role,
   NavigationService,
@@ -66,9 +67,9 @@ export class SiteComponent implements OnInit, OnDestroy {
   public modalRef: NgbModalRef;
 
   public mobileDesign = [
-    '/ecore/api/v2/hr/timesheets/approved/',
-    '/ecore/api/v2/hr/timesheets/history/',
-    '/ecore/api/v2/hr/timesheets/unapproved/',
+    '/hr/timesheets/approved/',
+    '/hr/timesheets/history/',
+    '/hr/timesheets/unapproved/',
   ];
 
   @ViewChild('modal') public modal;
@@ -81,6 +82,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     private genericFormService: GenericFormService,
     private navigationService: NavigationService,
     private userService: UserService,
+    private authService: AuthService,
     private permission: CheckPermissionService,
     private ts: ToastService,
     private siteSettingsService: SiteSettingsService,
@@ -89,10 +91,9 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.loadScript();
-    this.formStorageEndpoint = '/ecore/api/v2/core/formstorages/';
+    this.formStorageEndpoint = '/core/formstorages/';
     this.user = this.userService.user;
-    this.changePasswordEndpoint =
-      `/ecore/api/v2/core/contacts/${this.user.data.contact.id}/change_password/`;
+    this.changePasswordEndpoint = `/core/contacts/${this.user.data.contact.id}/change_password/`;
 
     this.currentRole = this.user.currentRole;
     this.updateJiraTask(this.user.currentRole);
@@ -119,7 +120,7 @@ export class SiteComponent implements OnInit, OnDestroy {
       actions: true,
     };
     this.endpointWithoutViewMode = [
-      '/ecore/api/v2/core/users/'
+      '/core/users/'
     ];
   }
 
@@ -158,7 +159,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   public getPageData(url) {
     this.siteService.getDataOfPage(url, this.pagesList).subscribe(
       (pageData: PageData) => {
-        if (pageData.endpoint === '/ecore/api/v2/core/workflownodes/') {
+        if (pageData.endpoint === '/core/workflownodes/') {
           this.additionalData = {
             company: {
               action: 'add',
@@ -191,7 +192,7 @@ export class SiteComponent implements OnInit, OnDestroy {
               this.formMode = 'view';
             }
             this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-            if (pageData.endpoint === '/ecore/api/v2/core/formstorages/') {
+            if (pageData.endpoint === '/core/formstorages/') {
               this.formStorage = true;
             } else {
               this.formStorage = false;
@@ -413,7 +414,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public resetEvent(response) {
     if (response && response.status === 'success') {
-      this.userService.logout();
+      this.authService.logout();
     }
   }
 

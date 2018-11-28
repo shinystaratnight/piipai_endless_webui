@@ -248,7 +248,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
     this.modalInfo = {
       type: 'form',
-      endpoint: `/ecore/api/v2/hr/jobs/${this.config.value.id.id}/extend/`,
+      endpoint: `/hr/jobs/${this.config.value.id.id}/extend/`,
       mode: 'edit',
       edit: true,
       data: {

@@ -10,17 +10,12 @@ import { RedirectComponent } from './redirect.component';
 
 import { UserService, NavigationService, SiteSettingsService } from './services';
 
-import { AuthGuard, NotAuthorizedGuard, SubdomainGuard } from './guards';
+import { AuthGuard, NotAuthorizedGuard, SubdomainGuard, PermissionGuard } from './guards';
 
 export const ROUTES: Routes = [
   {
     path: 'contacts/verify_email/',
     component: VerifyEmailComponent
-  },
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: '/'
   },
   {
     path: 'login',
@@ -51,7 +46,7 @@ export const ROUTES: Routes = [
       pagesList: NavigationService,
       settings: SiteSettingsService
     },
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, PermissionGuard]
   },
   {
     path: 'billing',
@@ -60,7 +55,7 @@ export const ROUTES: Routes = [
       user: UserService,
       pagesList: NavigationService
     },
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, PermissionGuard]
   },
   {
     path: 'myob/oauth2_redirect_uri',
@@ -69,7 +64,7 @@ export const ROUTES: Routes = [
   {
     path: '**',
     component: SiteComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, PermissionGuard],
     resolve: {
       settings: SiteSettingsService
     }

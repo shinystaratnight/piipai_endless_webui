@@ -14,9 +14,9 @@
       </ng-container>
 
       <div class="form-content"
-        *ngIf="!reload && !(pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' && pageData.pathData.id) && pageData.endpoint !== '/ecore/api/v2/core/forms/' || pageData.pathData.postfix === 'submit'">
+        *ngIf="!reload && !(pageData.endpoint === '/acceptance-tests/acceptancetests/' && pageData.pathData.id) && pageData.endpoint !== '/core/forms/' || pageData.pathData.postfix === 'submit'">
           <app-generic-form
-            *ngIf="!reload && pageData.endpoint !== '/ecore/api/v2/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit' "
+            *ngIf="!reload && pageData.endpoint !== '/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit' "
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
             [edit]="pageData.pathData.postfix"
@@ -50,7 +50,7 @@
                 </button>
 
                 <button type="submit" class="btn btn-primary button-save save"
-                  *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/ecore/api/v2/core/users/')"
+                  *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/core/users/')"
                   [disabled]="saveProcess">
                     Save
                     <app-spinner *ngIf="saveProcess"></app-spinner>
@@ -65,7 +65,7 @@
           </app-generic-form>
       </div>
       <div class="form-content"
-        *ngIf="pageData.endpoint === '/ecore/api/v2/core/forms/'">
+        *ngIf="pageData.endpoint === '/core/forms/'">
           <app-form-builder
             [path]="pageData.pathData.path"
             [endpoint]="pageData.endpoint"
@@ -74,7 +74,7 @@
           </app-form-builder>
       </div>
 
-      <div class="form-content" *ngIf="!reload && (pageData.endpoint === '/ecore/api/v2/acceptance-tests/acceptancetests/' && pageData.pathData.id)">
+      <div class="form-content" *ngIf="!reload && (pageData.endpoint === '/acceptance-tests/acceptancetests/' && pageData.pathData.id)">
         <app-test-builder [testData]="acceptenceTestData">
             <app-generic-form
               [endpoint]="pageData.endpoint"
@@ -204,7 +204,7 @@
       </div>
     </div>
     <div class="pb-3 form-builder-form">
-      <app-generic-form endpoint="/ecore/api/v2/core/contacts/forgot_password/" [data]="passwordData" (event)="resetEvent($event)">
+      <app-generic-form endpoint="/core/contacts/forgot_password/" [data]="passwordData" (event)="resetEvent($event)">
         <div class="d-flex align-items-center">
           <button type="submit" class="btn btn-success ml-auto">Reset</button>
         </div>

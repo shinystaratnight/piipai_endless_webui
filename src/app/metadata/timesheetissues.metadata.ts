@@ -61,7 +61,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/timesheets/',
+    endpoint: '/hr/timesheets/',
     read_only: true,
     templateOptions: {
       label: 'Time sheet',
@@ -99,7 +99,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Supervisor',
@@ -126,7 +126,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Account representative',
@@ -177,7 +177,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/timesheets/',
+    endpoint: '/hr/timesheets/',
     read_only: true,
     templateOptions: {
       label: 'Time sheet',
@@ -215,7 +215,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Supervisor',
@@ -242,7 +242,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Account representative',
