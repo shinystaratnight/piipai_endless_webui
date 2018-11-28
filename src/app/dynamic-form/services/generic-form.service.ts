@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 
 import { ErrorsService } from '../../shared/services/errors.service';
@@ -133,9 +133,18 @@ export class GenericFormService {
       );
   }
 
-  public submitForm(endpoint, data): any {
+  public submitForm(endpoint, data, formData?): any {
+    let headers = {};
+
+    if (formData) {
+      const newHeaders = new HttpHeaders();
+      newHeaders.set('Accept', 'application/json');
+
+      headers = newHeaders;
+    }
+
     return this.http
-      .post(endpoint, data)
+      .post(endpoint, data, { headers })
       .pipe(
         catchError((error: any) => this.errors.parseErrors(error))
       );

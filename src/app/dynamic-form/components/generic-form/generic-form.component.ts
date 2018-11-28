@@ -69,6 +69,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public path: string;
   @Input()
   public checkEmail: string;
+  @Input()
+  public sendFormData: boolean;
 
   @Input()
   public endpoint = '';
@@ -963,7 +965,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       return;
     }
 
-    const newData = this.form ? { ...data, ...this.form } : data || {};
+    let newData = this.form ? { ...data, ...this.form } : data || {};
 
     if (this.checkEmail) {
       if (!this.isEmail(newData.username)) {
@@ -971,6 +973,18 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
         return;
       }
+    }
+
+    if (this.sendFormData) {
+      const formData = new FormData();
+
+      for (const prop in newData) {
+        if (newData.hasOwnProperty(prop)) {
+          formData.append(prop, newData[prop]);
+        }
+      }
+
+      newData = formData;
     }
 
     if (this.response.message) {
@@ -1084,14 +1098,14 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         .editForm(endpoint, data)
         .subscribe(
           (response: any) => this.responseHandler(response, data),
-          (errors: any) => this.parseError(errors.errors)
+          (errors: any) => this.parseError(errors.errors, errors.error)
         );
     } else {
       this.service
-        .submitForm(endpoint, data)
+        .submitForm(endpoint, data, this.sendFormData)
         .subscribe(
           (response: any) => this.responseHandler(response, data),
-          (errors: any) => this.parseError(errors.errors)
+          (errors: any) => this.parseError(errors.errors, errors.error)
         );
     }
   }
@@ -1132,7 +1146,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     }
   }
 
-  public parseError(errors) {
+  public parseError(errors, err?) {
     if (errors) {
       if (errors.register) {
         this.redirect.emit();
@@ -1142,7 +1156,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     this.resetData(this.errors);
     this.resetData(this.response);
     this.updateErrors(this.errors, errors, this.response);
-    this.errorForm.emit(this.errors);
+    this.errorForm.emit({...err, ...this.errors});
     this.formService.getForm(this.formId).setSaveProcess(false);
   }
 

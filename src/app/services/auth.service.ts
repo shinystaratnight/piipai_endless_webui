@@ -38,8 +38,15 @@ export class AuthService {
   }
 
   public storeToken(response, rememberMe?) {
-    const { access_token = '', refresh_token = '' } = {...response.data};
+    let data = {};
 
+    if (response.data) {
+      data = response.data;
+    } else {
+      data = response;
+    }
+
+    const { access_token = '', refresh_token = '',  } = {...data};
     this.storage.store('user', { access_token, refresh_token, rememberMe });
   }
 

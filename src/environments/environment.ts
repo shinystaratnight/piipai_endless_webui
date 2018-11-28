@@ -8,6 +8,7 @@ export const environment = {
   ...environmentShared,
   production: false,
   api: 'http://api.localhost',
+  clientId: 'CjhLI0kLEbKnK0uqY8ciMFkORTwj3SgfqAiU7KgK'
 };
 
 /*
