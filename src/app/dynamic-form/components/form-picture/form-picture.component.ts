@@ -62,7 +62,7 @@ export class FormPictureComponent
   public options = {
     audio: false,
     video: true,
-    width: 320,
+    width: 240,
     height: 240,
     fallbackMode: 'callback',
     fallbackSrc: 'assets/jscam_canvas_only.swf',
@@ -180,7 +180,7 @@ export class FormPictureComponent
 
   public open(): void {
     this.photoExist = false;
-    this.modalService.open(this.modal, {size: 'lg'});
+    this.modalService.open(this.modal, { windowClass: 'medium-modal' });
   }
 
   public getPhoto() {

@@ -366,6 +366,10 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
+.medium-modal .modal-dialog {
+  max-width: 600px;
+}
+
 .modal {
   z-index: 3;
 

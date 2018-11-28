@@ -176,9 +176,16 @@ export class WebcamComponent implements OnInit, AfterViewInit {
       });
     };
 
-    promisifyGetUserMedia().then((stream) => {
-      const webcamUrl = URL.createObjectURL(stream);
-      this.videoSrc = this.sanitizer.bypassSecurityTrustResourceUrl(webcamUrl);
+    promisifyGetUserMedia()
+    .then((stream: any) => {
+      const constraints = {
+        advanced: [
+          {width: 1280, height: 1280},
+          {aspectRatio: 1}
+        ]
+      };
+      stream.getVideoTracks()[0].applyConstraints(constraints);
+      video.srcObject = stream;
       this.onSuccess(stream); // TODO stream :MediaStream
     }).catch((err) => {
       this.onError(err);
