@@ -7,7 +7,7 @@
       </div>
 
       <div class="map" *ngIf="map">
-        <agm-map [latitude]="map.latitude" [longitude]="map.longitude" [zoom]="13">
+        <agm-map [zoomControl]="false" [streetViewControl]="false" [latitude]="map.latitude" [longitude]="map.longitude" [zoom]="13">
           <agm-marker [iconUrl]="'/assets/img/location-red.svg'" [latitude]="map.latitude" [longitude]="map.longitude">
             <agm-info-window>
               <strong>{{map.__str__}}</strong>
