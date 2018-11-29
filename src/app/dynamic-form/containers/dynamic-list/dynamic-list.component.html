@@ -399,7 +399,7 @@
 
 <ng-template #sendMessageModal>
   <div class="modal-body">
-    <iframe class="send-sms" [src]="modalInfo.url" frameborder="0"></iframe>
+    <iframe class="send-sms" [src]="modalInfo.url" frameborder="0" sandbox="allow-same-origin"></iframe>
     <br>
   </div>
 </ng-template>
