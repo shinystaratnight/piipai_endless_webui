@@ -1549,7 +1549,7 @@ export class FormRelatedComponent extends BasicElementComponent
         if (this.previewList) {
           this.resetList();
           this.hideAutocomplete = true;
-          this.cd.detectChanges();
+          this.cd.markForCheck();
           return;
         }
       }
