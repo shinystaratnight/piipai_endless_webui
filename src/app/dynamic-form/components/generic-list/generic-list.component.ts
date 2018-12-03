@@ -145,7 +145,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         .subscribe((data) => {
           const table = this.getFirstTable();
           if (
-            table.offset < table.data.count &&
+            table.offset < (table.data && table.data.count) &&
             table.data.count !== table.limit
           ) {
             if (data && !this.uploading) {

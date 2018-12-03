@@ -1025,6 +1025,22 @@ const form = [
                     read_only: false
                   },
                   {
+                    key: 'visa_type',
+                    type: 'related',
+                    endpoint: '/candidate/visatypes/',
+                    showIf: [
+                      {
+                        residency: 3
+                      }
+                    ],
+                    templateOptions: {
+                      required: false,
+                      label: 'Visa Type',
+                      type: 'related'
+                    },
+                    read_only: false
+                  },
+                  {
                     key: 'visa_expiry_date',
                     type: 'datepicker',
                     showIf: [
@@ -1038,7 +1054,7 @@ const form = [
                       type: 'date'
                     },
                     read_only: false
-                  }
+                  },
                 ],
                 width: 0.25
               },

@@ -22,7 +22,7 @@ export class ErrorsService {
 
     if (error.status === 403) {
       this.ts.sendMessage(
-        (error as any).errors.detail,
+        error.error.errors.detail,
         MessageType.error
       );
       return throwError(error);
