@@ -25,11 +25,11 @@ export class ErrorsService {
         (error as any).errors.detail,
         MessageType.error
       );
-      return throwError(error);
+      return throwError(error.error);
     }
 
     if (!close) {
-      return throwError(error);
+      return throwError(error.error);
     } else {
       return of([]);
     }
