@@ -1093,14 +1093,14 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         .editForm(endpoint, data)
         .subscribe(
           (response: any) => this.responseHandler(response, data),
-          (errors: any) => this.parseError(errors.errors, errors.error)
+          (errors: any) => this.parseError(errors.errors)
         );
     } else {
       this.service
         .submitForm(endpoint, data)
         .subscribe(
           (response: any) => this.responseHandler(response, data),
-          (errors: any) => this.parseError(errors.errors, errors.error)
+          (errors: any) => this.parseError(errors.errors)
         );
     }
   }
@@ -1141,7 +1141,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     }
   }
 
-  public parseError(errors, err?) {
+  public parseError(errors) {
     if (errors) {
       if (errors.register) {
         this.redirect.emit();
@@ -1151,7 +1151,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     this.resetData(this.errors);
     this.resetData(this.response);
     this.updateErrors(this.errors, errors, this.response);
-    this.errorForm.emit({...err, ...this.errors});
+    this.errorForm.emit(this.errors);
     this.formService.getForm(this.formId).setSaveProcess(false);
   }
 

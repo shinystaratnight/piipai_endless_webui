@@ -29,7 +29,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   public endpoint = `/auth/login/`;
   public rememberMe = false;
   public subdomain: boolean;
-  public errorDescription: string;
 
   public data = {
     client_id: {
@@ -129,10 +128,8 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  public errorHandler(err) {
+  public errorHandler() {
     this.loginProcess = false;
-
-    this.errorDescription = err.error_description;
   }
 
   public openResetForm() {
