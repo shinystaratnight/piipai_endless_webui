@@ -23,6 +23,8 @@ import { smallModalEndpoints } from '../../helpers/small-modal';
 import { LocalStorageService } from 'ngx-webstorage';
 import { AuthService } from '../../../services';
 
+import { environment } from '../../../../environments/environment';
+
 @Component({
   selector: 'app-dynamic-list',
   templateUrl: 'dynamic-list.component.html'
@@ -1518,8 +1520,9 @@ export class DynamicListComponent
     }
     let url;
     this.modalInfo = {};
-    url = param === 'recipient' ? '/ecore/twilio/' : '';
+    url = param === 'recipient' ? `${environment.api}/twilio/` : '';
     url += query;
+    url += `&token=${this.storage.retrieve('user').access_token}`;
     this.modalInfo.url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     this.open(this.sendMessageModal);
   }

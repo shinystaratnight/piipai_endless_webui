@@ -110,7 +110,7 @@ export class FormSelectComponent
     if (this.config.value != undefined) { //tslint:disable-line
       this.group.get(this.key).patchValue(this.config.value);
     }
-    if (this.viewMode && !this.config.hide) {
+    if ((this.viewMode || this.config.read_only) && !this.config.hide) {
       this.displayValue = this.getValue(this.options, this.config.value);
     }
   }
