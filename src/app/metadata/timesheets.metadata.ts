@@ -95,12 +95,7 @@ const list = {
             },
             field: 'going_to_work_confirmation',
             type: 'icon',
-            label: 'Morning check',
-            showIf: [
-              {
-                going_to_work_confirmation: true
-              }
-            ]
+            label: 'Pre-shift check',
           },
           {
             values: {
@@ -144,7 +139,7 @@ const list = {
             endpoint: '/hr/timesheets/{id}/confirm',
             field: 'id',
             icon: 'fa-external-link',
-            text: 'Confirm',
+            text: 'Confirm Check',
             label: 'Morning check:',
             showIf: [
               {
@@ -1311,12 +1306,7 @@ const formset = {
             },
             field: 'going_to_work_confirmation',
             type: 'icon',
-            label: 'Morning check',
-            showIf: [
-              {
-                going_to_work_confirmation: true
-              }
-            ]
+            label: 'Pre-shift check'
           },
           {
             values: {
@@ -1360,7 +1350,7 @@ const formset = {
             endpoint: '/hr/timesheets/{id}/confirm',
             field: 'id',
             icon: 'fa-external-link',
-            text: 'Confirm',
+            text: 'Confirm Check',
             label: 'Morning check:',
             showIf: [
               {
