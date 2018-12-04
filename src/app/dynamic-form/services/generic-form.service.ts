@@ -134,17 +134,8 @@ export class GenericFormService {
   }
 
   public submitForm(endpoint, data, formData?): any {
-    let headers = {};
-
-    if (formData) {
-      const newHeaders = new HttpHeaders();
-      newHeaders.set('Accept', 'application/json');
-
-      headers = newHeaders;
-    }
-
     return this.http
-      .post(endpoint, data, { headers })
+      .post(endpoint, data)
       .pipe(
         catchError((error: any) => this.errors.parseErrors(error))
       );

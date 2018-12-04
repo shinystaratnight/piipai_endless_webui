@@ -69,8 +69,6 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public path: string;
   @Input()
   public checkEmail: string;
-  @Input()
-  public sendFormData: boolean;
 
   @Input()
   public endpoint = '';
@@ -974,7 +972,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       return;
     }
 
-    let newData = this.form ? { ...data, ...this.form } : data || {};
+    const newData = this.form ? { ...data, ...this.form } : data || {};
 
     if (this.checkEmail) {
       if (!this.isEmail(newData.username)) {
@@ -982,18 +980,6 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
         return;
       }
-    }
-
-    if (this.sendFormData) {
-      const formData = new FormData();
-
-      for (const prop in newData) {
-        if (newData.hasOwnProperty(prop)) {
-          formData.append(prop, newData[prop]);
-        }
-      }
-
-      newData = formData;
     }
 
     if (this.response.message) {
@@ -1111,7 +1097,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         );
     } else {
       this.service
-        .submitForm(endpoint, data, this.sendFormData)
+        .submitForm(endpoint, data)
         .subscribe(
           (response: any) => this.responseHandler(response, data),
           (errors: any) => this.parseError(errors.errors, errors.error)

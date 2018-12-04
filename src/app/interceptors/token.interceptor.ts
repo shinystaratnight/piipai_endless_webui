@@ -21,21 +21,15 @@ export class TokenInterceptor implements HttpInterceptor {
 
     if (user && !this.isRefresh(req.url) && !this.isLoginByToken(req.url)) {
       const helper = new JwtHelperService();
-      const tokenIsExpired = helper.isTokenExpired(user.access_token);
+      const tokenIsExpired = helper.isTokenExpired(user.access_token_jwt);
 
       if (tokenIsExpired && user.rememberMe) {
-        const refreshTokenIsExpired = helper.isTokenExpired(user.refresh_token);
-
-        if (refreshTokenIsExpired) {
-          this.authService.logout();
-        } else {
-          return this.authService.refreshJWTToken(user)
-            .pipe(
-              switchMap((res) => {
-                return next.handle(this.createRequest(req, this.storage.retrieve('user')));
-              })
-            );
-        }
+        return this.authService.refreshJWTToken(user)
+          .pipe(
+            switchMap((res) => {
+              return next.handle(this.createRequest(req, this.storage.retrieve('user')));
+            })
+          );
       } else if (user) {
         return next.handle(this.createRequest(req, user));
       }
@@ -51,13 +45,13 @@ export class TokenInterceptor implements HttpInterceptor {
 
     return request.clone({
       setHeaders: {
-        Authorization: `Bearer ${user.access_token}`
+        Authorization: `JWT ${user.access_token_jwt}`
       }
     });
   }
 
   isRefresh(url: string) {
-    return url.includes('/token/refresh/');
+    return url.includes('/oauth2/revoke_token/');
   }
 
   isLoginByToken(url: string) {

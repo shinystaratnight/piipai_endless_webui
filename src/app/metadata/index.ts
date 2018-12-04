@@ -190,7 +190,7 @@ export const metadata = {
   '/hr/payslips/': payslips.metadata,
   '/hr/paysliplines/': paysliplines.metadata,
   '/hr/paysliprules/': paysliprules.metadata,
-  '/oauth2/token/': login.metadata,
+  '/auth/login/': login.metadata,
   '/hr/joboffers-candidate/': joboffersCandidate.metadata,
   '/hr/timesheets-candidate/': timesheetsCandidate.metadata,
   '/hr/timesheets/approved/': approved.metadata,

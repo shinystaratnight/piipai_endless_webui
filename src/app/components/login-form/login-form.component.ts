@@ -26,7 +26,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   public error = {};
   public token = false;
-  public endpoint = `/oauth2/token/`;
+  public endpoint = `/auth/login/`;
   public rememberMe = false;
   public subdomain: boolean;
   public errorDescription: string;
@@ -104,14 +104,13 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   public responseHandler(response) {
     if (response.data) {
-      this.authService.storeToken(response);
-
       if (response.data.redirect) {
         location.href = response.data.redirect;
 
         return;
       }
 
+      this.authService.storeToken(response, this.rememberMe);
       this.router.navigate(['']);
     }
 

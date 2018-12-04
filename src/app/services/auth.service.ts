@@ -8,11 +8,12 @@ import { catchError, tap } from 'rxjs/operators';
 import { Role } from './user.service';
 import { NavigationService } from './navigation.service';
 import { CheckPermissionService, ErrorsService } from '../shared/services';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
   public loginWithTokenEndpoint: string;
-  public refreshTokenEndpoint = '/token/refresh/';
+  public refreshTokenEndpoint = '/oauth2/revoke_token/';
 
   private _role: Role;
 
@@ -46,13 +47,18 @@ export class AuthService {
       data = response;
     }
 
-    const { access_token = '', refresh_token = '',  } = {...data};
-    this.storage.store('user', { access_token, refresh_token, rememberMe });
+    const { access_token = '', access_token_jwt = '', refresh_token = '',  } = {...data};
+    this.storage.store('user', { access_token, refresh_token, access_token_jwt, rememberMe });
   }
 
   public refreshJWTToken(user) {
-    const { refresh_token = '' } = { ...user };
-    return this.http.post(this.refreshTokenEndpoint, { refresh: refresh_token })
+    const { access_token = '' } = { ...user };
+    const body = {
+      token: access_token,
+      client_id: environment.clientId
+    };
+
+    return this.http.post(this.refreshTokenEndpoint, body)
       .pipe(
         tap((response: any) => {
           this.storage.store('user', { ...user, access_token: response.access });

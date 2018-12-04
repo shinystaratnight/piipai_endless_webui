@@ -7,7 +7,7 @@ export const environment = {
   STRIPE_PUBLIC_API_KEY: 'pk_test_d5AKTy7WjvRJBJ9wZduzAFjI',
   production: false,
   api: 'http://api.localhost',
-  clientId: 'CjhLI0kLEbKnK0uqY8ciMFkORTwj3SgfqAiU7KgK'
+  clientId: '8r4TRg70aq8snA4ctHWtk4UoywVxJBuYummkVs5l'
 };
 
 /*
