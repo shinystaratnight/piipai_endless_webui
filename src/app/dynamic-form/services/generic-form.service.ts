@@ -133,7 +133,7 @@ export class GenericFormService {
       );
   }
 
-  public submitForm(endpoint, data, formData?): any {
+  public submitForm(endpoint, data): any {
     return this.http
       .post(endpoint, data)
       .pipe(
