@@ -227,7 +227,11 @@ export class DynamicFormComponent implements OnInit {
       } else if (el instanceof Object) {
         const key = Object.keys(el)[0];
         const targetValue = el[key];
-        const value = this.getValueByKey(key, data);
+        let value = this.getValueByKey(key, data);
+
+        if (typeof targetValue === 'number') {
+          value = parseFloat(value);
+        }
 
         if (value === targetValue) {
           approvedRules += 1;

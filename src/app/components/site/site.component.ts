@@ -455,4 +455,9 @@ export class SiteComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  public permissionErrorHandler() {
+    const path = this.pageData && this.pageData.pathData && this.pageData.pathData.path || '/';
+    this.router.navigate([path]);
+  }
 }

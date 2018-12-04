@@ -10,7 +10,7 @@ import {
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
-import { finalize, skip } from 'rxjs/operators';
+import { finalize, skip, catchError } from 'rxjs/operators';
 
 import { GenericFormService, FormService } from '../../services/';
 import { UserService, SiteSettingsService, AuthService } from '../../../services';
@@ -99,6 +99,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public str: EventEmitter<any> = new EventEmitter();
   @Output()
   public modeEvent: EventEmitter<any> = new EventEmitter();
+  @Output()
+  public permissionError: EventEmitter<any> = new EventEmitter();
 
   public currentEndpoint: string;
   public currentId: string;
@@ -635,22 +637,29 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
   public getDataForForm(endpoint, id) {
     const endp = id ? `${endpoint}${id}/` : endpoint;
-    this.service.getAll(endp).subscribe((data: any) => {
-      this.getRelatedDataForOptions(this.metadata, data);
-      this.fillingForm(this.metadata, data);
-      this.checkRuleElement(this.metadata);
-      this.checkRelatedObjects(this.metadata, data);
+    this.service.getAll(endp)
+      .pipe(
+        catchError((res) => {
+          this.permissionError.emit();
+          return res;
+        })
+      )
+      .subscribe((data: any) => {
+        this.getRelatedDataForOptions(this.metadata, data);
+        this.fillingForm(this.metadata, data);
+        this.checkRuleElement(this.metadata);
+        this.checkRelatedObjects(this.metadata, data);
 
-      this.addCustomTemplates(this.metadata, data);
-      this.showForm = true;
-      const formData = new BehaviorSubject({ data });
-      this.updateFormData(this.metadata, formData);
-      this.checkFormInfoElement(this.metadata);
-      this.str.emit({
-        str: data && data.__str__ ? data.__str__ : '',
-        data
+        this.addCustomTemplates(this.metadata, data);
+        this.showForm = true;
+        const formData = new BehaviorSubject({ data });
+        this.updateFormData(this.metadata, formData);
+        this.checkFormInfoElement(this.metadata);
+        this.str.emit({
+          str: data && data.__str__ ? data.__str__ : '',
+          data
+        });
       });
-    });
   }
 
   public fillingForm(metadata, data) {
