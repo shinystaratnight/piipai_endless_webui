@@ -1522,6 +1522,7 @@ export class DynamicListComponent
     this.modalInfo = {};
     url = param === 'recipient' ? `${environment.api}/twilio/` : '';
     url += query;
+    url += `&token=${this.storage.retrieve('user').access_token}`;
     this.modalInfo.url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     this.open(this.sendMessageModal);
   }
