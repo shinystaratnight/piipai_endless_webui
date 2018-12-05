@@ -3,4 +3,5 @@ export const environment = {
   STRIPE_PUBLIC_API_KEY: 'pk_test_d5AKTy7WjvRJBJ9wZduzAFjI',
   production: true,
   api: 'http://api.r3sourcertest.com',
+  clientId: ''
 };

@@ -17,6 +17,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import moment from 'moment-timezone';
 
+import { JwtHelperService } from '@auth0/angular-jwt';
+
 import { FilterService, GenericFormService } from './../../services';
 import { FormatString } from '../../../helpers/format';
 import { smallModalEndpoints } from '../../helpers/small-modal';
@@ -1951,15 +1953,17 @@ export class DynamicListComponent
       (res: any) => {
         if (e.el && e.el.redirect) {
           this.storage.clear('role');
-          const redirect = res.redirect_to || e.el.redirect;
 
-          if (redirect !== '/') {
-            location.href = redirect;
-          } else {
-            this.authService.storeToken({ data: res});
-            location.href = redirect;
+          const helper = new JwtHelperService();
+          const token = helper.decodeToken(res.access_token_jwt);
+
+          const redirect = token.origin;
+
+          if (redirect === location.origin) {
+            this.authService.storeToken({ data: res });
           }
 
+          location.href = redirect;
           return;
         }
 

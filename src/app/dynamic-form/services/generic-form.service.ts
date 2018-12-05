@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 
 import { ErrorsService } from '../../shared/services/errors.service';

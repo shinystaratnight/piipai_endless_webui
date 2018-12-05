@@ -6,6 +6,8 @@ import { LocalStorageService } from 'ngx-webstorage';
 
 import { AuthService, UserService } from '../../services';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-login-form',
   templateUrl: 'login-form.component.html',
@@ -29,6 +31,12 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   public subdomain: boolean;
 
   public data = {
+    client_id: {
+      action: 'add',
+      data: {
+        value: environment.clientId
+      }
+    },
     username: {
       action: 'add',
       data: {
@@ -61,7 +69,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private modalService: NgbModal,
-    private storage: LocalStorageService,
     private userService: UserService
   ) {}
 
@@ -96,19 +103,14 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   public responseHandler(response) {
     if (response.data) {
-      this.authService.storeToken(response);
-
       if (response.data.redirect) {
         location.href = response.data.redirect;
 
         return;
       }
 
+      this.authService.storeToken(response, this.rememberMe);
       this.router.navigate(['']);
-    }
-
-    if (response.status === 'success') {
-      this.error = {};
     }
 
     this.loginProcess = false;
