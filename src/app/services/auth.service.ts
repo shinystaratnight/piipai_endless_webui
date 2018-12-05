@@ -56,7 +56,7 @@ export class AuthService {
     const body = {
       refresh_token,
       client_id: environment.clientId,
-      grand_type: 'refresh_token'
+      grant_type: 'refresh_token'
     };
 
     return this.http.post(this.refreshTokenEndpoint, body)
