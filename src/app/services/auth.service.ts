@@ -13,7 +13,7 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class AuthService {
   public loginWithTokenEndpoint: string;
-  public refreshTokenEndpoint = '/oauth2/revoke_token/';
+  public refreshTokenEndpoint = '/oauth2/token/';
 
   private _role: Role;
 
@@ -52,16 +52,21 @@ export class AuthService {
   }
 
   public refreshJWTToken(user) {
-    const { access_token = '' } = { ...user };
+    const { refresh_token = '' } = { ...user };
     const body = {
-      token: access_token,
-      client_id: environment.clientId
+      refresh_token,
+      client_id: environment.clientId,
+      grand_type: 'refresh_token'
     };
 
     return this.http.post(this.refreshTokenEndpoint, body)
       .pipe(
         tap((response: any) => {
-          this.storage.store('user', { ...user, access_token: response.access });
+          this.storage.store('user', {
+            ...user,
+            access_token: response.access_token_jwt,
+            refresh_token: response.refresh_token
+          });
         }),
         catchError((error: any) => this.error.parseErrors(error))
       );

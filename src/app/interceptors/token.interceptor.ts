@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { switchMap, catchError } from 'rxjs/operators';
 
 import { LocalStorageService } from 'ngx-webstorage';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -28,6 +28,10 @@ export class TokenInterceptor implements HttpInterceptor {
           .pipe(
             switchMap((res) => {
               return next.handle(this.createRequest(req, this.storage.retrieve('user')));
+            }),
+            catchError((err) => {
+              this.authService.logout();
+              return of(err);
             })
           );
       } else if (user) {
@@ -51,7 +55,7 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   isRefresh(url: string) {
-    return url.includes('/oauth2/revoke_token/');
+    return url.includes('/oauth2/token/');
   }
 
   isLoginByToken(url: string) {
