@@ -1190,7 +1190,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       this.response = { ...response };
     }
 
-    this.responseForm.emit(response);
+    this.responseForm.emit({...response, formData: this.formData.value.data});
     const delayEndppoints = Object.keys(this.delayData);
 
     if (delayEndppoints.length) {

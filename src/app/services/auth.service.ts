@@ -38,7 +38,7 @@ export class AuthService {
     return !!this.storage.retrieve('user');
   }
 
-  public storeToken(response, rememberMe?) {
+  public storeToken(response, rememberMe?, username?) {
     let data = {};
 
     if (response.data) {
@@ -48,13 +48,14 @@ export class AuthService {
     }
 
     const { access_token = '', access_token_jwt = '', refresh_token = '',  } = {...data};
-    this.storage.store('user', { access_token, refresh_token, access_token_jwt, rememberMe });
+    this.storage.store('user', { access_token, refresh_token, access_token_jwt, rememberMe, username });
   }
 
   public refreshJWTToken(user) {
-    const { refresh_token = '' } = { ...user };
+    const { refresh_token = '', username = '' } = { ...user };
     const body = {
       refresh_token,
+      username,
       client_id: environment.clientId,
       grant_type: 'refresh_token'
     };
