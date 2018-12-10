@@ -153,6 +153,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     return false;
   }
 
+  public getDisableTitle(menu: string): string {
+    return `You do not have permission to access ${menu}. Please contact your administrator.`;
+  }
+
   @HostListener('document:click', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;
