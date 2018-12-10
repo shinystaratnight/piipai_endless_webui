@@ -67,7 +67,7 @@
   <li class="navigation-item" [class.disabled]="p.disabled" [class.opened]="p.opened">
     <a *ngIf="!p.disabled" [routerLink]="p.url !== '/' ? [p.url] : null" class="navigation-link" [class.active]="p.active"
       (click)="clickActione($event, p)">{{p.name}}</a>
-    <span class="navigation-link disabled" *ngIf="p.disabled" (click)="isCollapsed = false">{{p.name}}</span>
+    <span class="navigation-link disabled" *ngIf="p.disabled" (click)="isCollapsed = false" [attr.title]="getDisableTitle(p.name)">{{p.name}}</span>
     <i fa class="icon" [class.active]="p.active" name="circle"></i>
 
     <i fa
