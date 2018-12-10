@@ -329,6 +329,7 @@ const form = [
     read_only: true,
     templateOptions: {
       label: 'Company',
+      required: true,
       add: true,
       delete: false,
       values: ['__str__'],
@@ -344,7 +345,8 @@ const form = [
     key: 'valid_from',
     type: 'datepicker',
     templateOptions: {
-      required: false,
+      required: true,
+      hidePreviewError: true,
       label: 'Valid From',
       type: 'date'
     },
@@ -354,7 +356,8 @@ const form = [
     key: 'valid_until',
     type: 'datepicker',
     templateOptions: {
-      required: false,
+      required: true,
+      hidePreviewError: true,
       label: 'Valid Until',
       type: 'date'
     },
@@ -428,6 +431,7 @@ const formadd = [
     read_only: true,
     templateOptions: {
       label: 'Company',
+      required: true,
       add: true,
       delete: false,
       values: ['__str__'],
@@ -443,7 +447,8 @@ const formadd = [
     key: 'valid_from',
     type: 'datepicker',
     templateOptions: {
-      required: false,
+      required: true,
+      hidePreviewError: true,
       label: 'Valid From',
       type: 'date'
     },
@@ -453,7 +458,8 @@ const formadd = [
     key: 'valid_until',
     type: 'datepicker',
     templateOptions: {
-      required: false,
+      required: true,
+      hidePreviewError: true,
       label: 'Valid Until',
       type: 'date'
     },
