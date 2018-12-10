@@ -1,6 +1,6 @@
 import { ActionElementComponent } from './action-element/action-element.component';
 
-import { ProfileComponent } from './profile/profile.component';
+// import { ProfileComponent } from './profile/profile.component';
 import { InfoComponent } from './info/info.component';
 import { WebcamComponent } from './webcam/webcam.component';
 import { WorkflowComponent } from './workflow/workflow.component';
@@ -58,7 +58,7 @@ export * from './generic-form/generic-form.component';
 export * from './generic-list/generic-list.component';
 export * from './action-element/action-element.component';
 export * from './basic-element/basic-element.component';
-export * from './profile/profile.component';
+// export * from './profile/profile.component';
 export * from './webcam/webcam.component';
 export * from './workflow/workflow.component';
 export * from './test-generator/test-generator.component';
@@ -114,7 +114,7 @@ export const components = [
   GenericFormComponent,
   GenericListComponent,
   ActionElementComponent,
-  ProfileComponent,
+  // ProfileComponent,
   WebcamComponent,
   WorkflowComponent,
   TestGeneratorComponent,

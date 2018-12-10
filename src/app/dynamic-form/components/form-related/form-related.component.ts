@@ -890,6 +890,10 @@ export class FormRelatedComponent extends BasicElementComponent
 
     const format = new FormatString();
 
+    if (type === 'update' && !this.config.templateOptions.edit) {
+      return false;
+    }
+
     if (!this.checkPermission(type) && this.config.endpoint) {
       return;
     }

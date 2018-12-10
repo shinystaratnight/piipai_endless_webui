@@ -263,7 +263,7 @@
     </label>
     <div class="form-element-content" [class.many]="config.many && results">
       <span *ngIf="!displayValue && !(customTemplate && customTemplate.length) && (!results || results.length === 0)">-</span>
-      <a [class.readonly-value]="editMode" *ngIf="!config.many && displayValue && this.linkPath && !(customTemplate && customTemplate.length)" href="{{hideDetail ? '' : this.linkPath}}" (click)="open('update')">{{displayValue}}</a>
+      <a [class.readonly-value]="editMode" [class.readonly]="!config.templateOptions.edit" *ngIf="!config.many && displayValue && this.linkPath && !(customTemplate && customTemplate.length)" href="{{hideDetail ? '' : this.linkPath}}" (click)="open('update')">{{displayValue}}</a>
       <div [ngClass]="{'d-flex align-items-top flex-wrap': config.key === 'tags'}" *ngIf="config.many && results && !config.templateOptions.deleteList">
         <span [ngClass]="{'badge badge-outline mb-2 mr-1': config.key === 'tags', 'd-block': config.column}" *ngFor="let item of results; let l = last">
           <a *ngIf="config.key !== 'tags'" [class.readonly-value]="editMode" href="/" (click)="open('update', item)">{{item.__str__}};</a>

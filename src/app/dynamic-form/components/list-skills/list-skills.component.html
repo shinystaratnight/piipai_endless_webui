@@ -2,37 +2,47 @@
   <div *ngFor="let skill of dataList">
     <span class="skill-title">
       {{skill.skill.__str__}}
-      <span class="score"
-        *ngIf="getScore(skill.score)"
-        [style.color]="colors[getScore(skill.score)]"
-        [style.borderColor]="colors[getScore(skill.score)]">
-          {{skill.score | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
-      </span>
-      <span class="score text-danger"
-        *ngIf="!getScore(skill.score)"
-        [style.borderColor]="colors[1]">
-          No rating
-      </span>
+
+      <ng-container *ngTemplateOutlet="score; context: {score: getScore(skill.score), value: skill.score}"></ng-container>
     </span>
   </div>
   <a class="more" href *ngIf="more" (click)="showMore($event)">{{config.value.length - 4}} more</a>
 </ng-container>
 
-<ng-container *ngIf="!list">
+<ng-container *ngIf="config.stars && !list">
+  <ngb-rating [rate]="getScore(config.value)" max="5" [readonly]="true">
+    <ng-template let-fill="fill" let-index="index">
+      <span *ngIf="fill === 100" class="star full">&#9733;</span>
+      <span *ngIf="fill === 0" class="star">&#9733;</span>
+      <span *ngIf="fill < 100 && fill > 0" class="star">
+        <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+      </span>
+    </ng-template>
+  </ngb-rating>
+
+  <ng-container *ngTemplateOutlet="score; context: {score: getScore(config.value), value: config.value}"></ng-container>
+</ng-container>
+
+<ng-container *ngIf="!list && !config.stars">
   <div>
     <span class="skill-title">
       {{config.skillName}} {{evaluationCount}}
-      <span class="score"
-        *ngIf="getScore(config.value)"
-        [style.color]="colors[getScore(config.value)]"
-        [style.borderColor]="colors[getScore(config.value)]">
-          {{config.value | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
-      </span>
-      <span class="score text-danger"
-        [style.borderColor]="colors[1]"
-        *ngIf="!getScore(config.value)">
-          No rating
-      </span>
+
+      <ng-container *ngTemplateOutlet="score; context: {score: getScore(config.value), value: config.value}"></ng-container>
     </span>
   </div>
 </ng-container>
+
+<ng-template #score let-score="score" let-value="value">
+  <span class="score"
+    *ngIf="score"
+    [style.color]="colors[score]"
+    [style.borderColor]="colors[score]">
+      {{value | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
+  </span>
+  <span class="score text-danger"
+    [style.borderColor]="colors[1]"
+    *ngIf="!score">
+      No rating
+  </span>
+</ng-template>

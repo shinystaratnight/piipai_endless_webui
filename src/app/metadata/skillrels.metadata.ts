@@ -527,9 +527,190 @@ const formadd = [
   }
 ];
 
+const profile = {
+  fields: [
+    {
+      key: 'skill.name',
+      read_only: false,
+      templateOptions: {
+        required: true,
+        label: 'Skill',
+        max: 63,
+        type: 'text'
+      },
+      type: 'input'
+    },
+    {
+      key: 'created_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Created by', type: 'static' },
+      type: 'static'
+    },
+    {
+      default: 0,
+      key: 'score',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        min: 0,
+        label: 'Score',
+        max: 32767,
+        type: 'number'
+      },
+      type: 'input'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'editForm',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      key: 'hourly_rate',
+      read_only: false,
+      templateOptions: {
+        required: true,
+        display: '${field}/h',
+        label: 'Skill Rate',
+        type: 'static'
+      },
+      type: 'static'
+    },
+    {
+      key: 'updated_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Updated at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    },
+    {
+      key: 'prior_experience',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        options: [
+          { value: 0, label: 'Inexperienced' },
+          { value: 2592000, label: '1 Month' },
+          { value: 7776000, label: '3 Months' },
+          { value: 15552000, label: '6 Months' },
+          { value: 31536000, label: '1 Year' },
+          { value: 63072000, label: '2 Years' },
+          { value: 94608000, label: '3 Years' },
+          { value: 157680000, label: '5 Years or more' }
+        ],
+        label: 'Prior Experience',
+        type: 'select'
+      },
+      type: 'select'
+    },
+    {
+      key: 'updated_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Updated by', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'created_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Created at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'skill',
+        sort_field: 'skill',
+        title: null,
+        sort: true,
+        content: [{ label: 'Skill', type: 'text', field: 'skill.name.name' }],
+        label: 'Skill',
+        delim: null
+      },
+      {
+        name: 'score',
+        sort: true,
+        sort_field: 'score',
+        content: [
+          {
+            type: 'skills',
+            field: 'score',
+            stars: true,
+          }
+        ],
+        label: 'Score'
+      },
+      {
+        name: 'prior_experience',
+        sort: true,
+        sort_field: 'prior_experience',
+        content: [
+          {
+            values: {
+              0: 'Inexperienced',
+              2592000: '1 Month',
+              7776000: '3 Months',
+              15552000: '6 Months',
+              31536000: '1 Year',
+              63072000: '2 Years',
+              94608000: '3 Years',
+              157680000: '5 Years or more'
+            },
+            type: 'select',
+            field: 'prior_experience'
+          }
+        ],
+        label: 'Prior Experience'
+      },
+      // {
+      //   name: 'actions',
+      //   content: [
+      //     {
+      //       action: 'editForm',
+      //       endpoint: '/candidate/skillrels/{id}',
+      //       icon: 'fa-pencil',
+      //       title: 'Edit',
+      //       text_color: '#f0ad4e',
+      //       type: 'button',
+      //       field: 'id'
+      //     },
+      //     {
+      //       action: 'delete',
+      //       icon: 'fa-times-circle',
+      //       title: 'Delete',
+      //       text_color: '#f32700',
+      //       type: 'button',
+      //       field: 'id'
+      //     }
+      //   ],
+      //   label: 'Actions',
+      //   title: null,
+      //   delim: null
+      // }
+    ],
+    list: 'skillrel',
+    editDisable: false,
+    label: 'Candidate Skill',
+    pagination_label: 'Candidate Skill',
+    search_enabled: false
+  }
+};
+
 export const metadata = {
   list,
   formset,
   form,
-  formadd
+  formadd,
+  profile
 };

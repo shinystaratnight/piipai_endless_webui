@@ -9,6 +9,7 @@ interface PathData {
   path: string;
   id?: string;
   postfix?: string;
+  metadataQuery?: string;
 }
 
 export interface PageData {
@@ -78,7 +79,8 @@ export class SiteService {
     } else if (lastElement === 'profile') {
       urlCopy.push(lastElement);
       data = {
-        type: 'profile',
+        type: 'form',
+        metadataQuery: 'type=profile',
         path: this.generatePath(urlCopy)
       };
     } else if (lastElement === 'map') {

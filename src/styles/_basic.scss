@@ -1118,6 +1118,11 @@ iframe.send-sms {
 
 .form-page {
   padding: 0 10px 16px;
+
+  &.profile-page {
+    position: relative;
+    top: 50px;
+  }
 }
 
 .modal-content .has-tabs .button-save {

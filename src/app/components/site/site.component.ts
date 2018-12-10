@@ -15,7 +15,7 @@ import {
   NavigationService,
   SiteSettingsService
 } from '../../services/';
-import { GenericFormService } from '../../dynamic-form/services/';
+import { GenericFormService, FormMode } from '../../dynamic-form/services/';
 import { CheckPermissionService, ToastService, MessageType } from '../../shared/services/';
 
 @Component({
@@ -35,15 +35,22 @@ export class SiteComponent implements OnInit, OnDestroy {
   public userModules: any;
   public pagesList: any;
   public formLabel: string;
-  public fillInData: any;
+  public fillInData = {
+    responseField: 'list',
+    paginated: 'off',
+    supportData: 'job',
+    metaType: true,
+    actions: true,
+  };
+  public FormMode = FormMode;
 
   public formStorage: boolean;
-  public formStorageEndpoint: string;
+  public formStorageEndpoint = '/core/formstorages/';
   public approvedStorage: boolean;
 
   public error: any;
 
-  public formMode: string;
+  public formMode: FormMode;
 
   public saveProcess: boolean;
   public permissionMethods: string[];
@@ -61,7 +68,9 @@ export class SiteComponent implements OnInit, OnDestroy {
   public acceptenceTestData: any;
   public additionalData: any;
   public data: any;
-  public endpointWithoutViewMode: string[];
+  public endpointWithoutViewMode: string[] = [
+    '/core/users/'
+  ];
   public passwordData: any;
 
   public modalRef: NgbModalRef;
@@ -91,12 +100,11 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.loadScript();
-    this.formStorageEndpoint = '/core/formstorages/';
     this.user = this.userService.user;
-    this.changePasswordEndpoint = `/core/contacts/${this.user.data.contact.id}/change_password/`;
-
     this.currentRole = this.user.currentRole;
+    this.changePasswordEndpoint = `/core/contacts/${this.user.data.contact.id}/change_password/`;
     this.updateJiraTask(this.user.currentRole);
+
     this.route.url.subscribe(
       (url: any) => {
         this.formLabel = '';
@@ -105,23 +113,13 @@ export class SiteComponent implements OnInit, OnDestroy {
           this.getPageNavigation(url);
         }, 0);
         if (url.length) {
-          this.formMode = '';
+          this.formMode = null;
           this.dashboard = false;
         } else {
           this.dashboard = true;
         }
       }
     );
-    this.fillInData = {
-      responseField: 'list',
-      paginated: 'off',
-      supportData: 'job',
-      metaType: true,
-      actions: true,
-    };
-    this.endpointWithoutViewMode = [
-      '/core/users/'
-    ];
   }
 
   public ngOnDestroy() {
@@ -172,7 +170,10 @@ export class SiteComponent implements OnInit, OnDestroy {
           };
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-        } else if (pageData.pathData.path === '/profile/') {
+        } else if (this.isProfilePage(pageData)) {
+          pageData.pathData.id = this.user.data.contact.candidate_contact;
+          pageData.endpoint = '/candidate/candidatecontacts/';
+          this.formMode = FormMode.View;
           this.pageData = pageData;
           this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
         } else if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
@@ -189,7 +190,7 @@ export class SiteComponent implements OnInit, OnDestroy {
               pageData.pathData.id &&
               this.endpointWithoutViewMode.indexOf(pageData.endpoint) === -1
             ) {
-              this.formMode = 'view';
+              this.formMode = FormMode.View;
             }
             this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
             if (pageData.endpoint === '/core/formstorages/') {
@@ -302,7 +303,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     );
   }
 
-  public changeMode(mode: string) {
+  public changeMode(mode: FormMode) {
     this.formMode = mode;
   }
 
@@ -323,7 +324,7 @@ export class SiteComponent implements OnInit, OnDestroy {
         return;
       }
       this.saveProcess = false;
-      this.formMode = 'view';
+      this.formMode = FormMode.View;
       this.reload = true;
       setTimeout(() => {
         this.reload = false;
@@ -335,7 +336,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.saveProcess = false;
   }
 
-  public modeEvent(mode) {
+  public modeEvent(mode: FormMode) {
     this.formMode = mode;
   }
 
@@ -459,5 +460,15 @@ export class SiteComponent implements OnInit, OnDestroy {
   public permissionErrorHandler() {
     const path = this.pageData && this.pageData.pathData && this.pageData.pathData.path || '/';
     this.router.navigate([path]);
+  }
+
+  public showDeleteButton() {
+    return this.pageData.pathData.id
+      && this.checkPermission('delete')
+      && !this.isProfilePage(this.pageData);
+  }
+
+  public isProfilePage(page: PageData) {
+    return page.pathData.path === '/profile/';
   }
 }

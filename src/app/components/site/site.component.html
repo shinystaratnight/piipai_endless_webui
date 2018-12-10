@@ -8,8 +8,8 @@
 
 <ng-container *ngIf="!identifyDevice()">
   <div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
-    <div *ngSwitchCase="'form'" class="form-page">
-      <ng-container *ngIf="listName && !(pageData.pathData.postfix && pageData.pathData.postfix === 'fillin')">
+    <div *ngSwitchCase="'form'" class="form-page" [class.profile-page]="isProfilePage(pageData)">
+      <ng-container *ngIf="listName && !(pageData.pathData.postfix && pageData.pathData.postfix === 'fillin') && !isProfilePage(pageData)">
         <ng-container *ngTemplateOutlet="backward; context: {title: listName}"></ng-container>
       </ng-container>
 
@@ -24,6 +24,7 @@
             [errors]="errors"
             [data]="additionalData"
             [path]="pageData.pathData.path"
+            [metadataQuery]="pageData.pathData.metadataQuery"
             (event)="formEvent($event)"
             (modeEvent)="modeEvent($event)"
             (errorForm)="formError($event)"
@@ -31,34 +32,34 @@
             (str)="changeFormLabel($event)">
               <div class="d-flex">
                 <button type="button" class="btn button-delete custom-button"
-                  *ngIf="pageData.pathData.id && checkPermission('delete')"
+                  *ngIf="showDeleteButton()"
                   (click)="deleteElement(pageData)">
                     <i fa name="trash"></i>
                     Delete
                 </button>
 
                 <button type="button" class="btn close button-close"
-                  *ngIf="formMode === 'edit'"
-                  (click)="changeMode('view')">
+                  *ngIf="formMode === FormMode.Edit"
+                  (click)="changeMode(FormMode.View)">
                     Close without save
                 </button>
 
                 <button type="button" class="btn btn-primary btn-shadow ml-auto button-edit"
-                  *ngIf="formMode === 'view' && checkPermission('update')"
-                  (click)="changeMode('edit')">
+                  *ngIf="formMode === FormMode.View && checkPermission('update')"
+                  (click)="changeMode(FormMode.Edit)">
                     <i fa name="pencil"></i>
                     Edit mode
                 </button>
 
                 <button type="submit" class="btn btn-primary button-save save"
-                  *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/core/users/')"
+                  *ngIf="!formStorage && formMode !== FormMode.View && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/core/users/')"
                   [disabled]="saveProcess">
                     Save
                     <app-spinner *ngIf="saveProcess"></app-spinner>
                 </button>
 
                 <button type="button" class="btn btn-success mr-2 ml-auto"
-                  *ngIf="formStorage && !approvedStorage && formMode === 'edit' && checkPermission('post')"
+                  *ngIf="formStorage && !approvedStorage && formMode === FormMode.Edit && checkPermission('post')"
                   (click)="approveFormStorage(pageData)">
                     Approve
                 </button>
@@ -95,20 +96,20 @@
                   </button>
 
                   <button type="button" class="btn close button-close"
-                    *ngIf="formMode === 'edit'"
-                    (click)="changeMode('view')">
+                    *ngIf="formMode === FormMode.Edit"
+                    (click)="changeMode(FormMode.View)">
                       Close without save
                   </button>
 
                   <button type="button" class="btn btn-primary btn-shadow ml-auto button-edit"
-                    *ngIf="formMode === 'view' && checkPermission('update')"
-                    (click)="changeMode('edit')">
+                    *ngIf="formMode === FormMode.View && checkPermission('update')"
+                    (click)="changeMode(FormMode.Edit)">
                       <i fa name="pencil"></i>
                       Edit mode
                   </button>
 
                   <button type="submit" class="btn btn-primary button-save"
-                    *ngIf="!formStorage && formMode !== 'view' && (checkPermission('post') || checkPermission('update'))"
+                    *ngIf="!formStorage && formMode !== FormMode.View && (checkPermission('post') || checkPermission('update'))"
                     [disabled]="saveProcess">
                       Save
                       <app-spinner *ngIf="saveProcess"></app-spinner>
@@ -154,10 +155,6 @@
         </div>
       </div>
     </ng-container>
-
-    <div *ngSwitchCase="'profile'">
-      <app-profile [id]="user.data.contact.candidate_contact"></app-profile>
-    </div>
 
     <app-map *ngSwitchCase="'map'"></app-map>
   </div>

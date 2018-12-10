@@ -69,6 +69,8 @@ export interface Field {
   hideIfNull?: boolean;
   updated?: string[];
   formBuilder?: boolean;
+  hideEditButton?: boolean;
+  inline?: boolean;
   templateOptions?: {
     dontSendFields?: boolean;
     label?: string;
@@ -94,6 +96,9 @@ export interface Field {
     icon?: string;
     noneValue?: string;
     full?: boolean;
+    add?: boolean;
+    edit?: boolean;
+    delete?: boolean;
   };
 }
 

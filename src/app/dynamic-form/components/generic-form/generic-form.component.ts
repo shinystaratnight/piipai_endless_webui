@@ -12,7 +12,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
 
-import { GenericFormService, FormService } from '../../services/';
+import { GenericFormService, FormService, FormMode } from '../../services/';
 import { UserService, SiteSettingsService, AuthService } from '../../../services';
 
 import { ToastService } from '../../../shared/services';
@@ -60,7 +60,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   @Input()
   public edit: boolean;
   @Input()
-  public mode: string;
+  public mode: FormMode;
   @Input()
   public delay: boolean;
   @Input()
@@ -183,7 +183,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         .pipe(
           skip(1)
         )
-        .subscribe((mode: string) => {
+        .subscribe((mode: FormMode) => {
           this.mode = mode;
           this.modeEvent.emit(this.mode);
         });
