@@ -1611,25 +1611,19 @@ const profile = [
                     read_only: true
                   },
                   {
-                    list: false,
                     endpoint: '/core/contacts/',
                     read_only: true,
                     key: 'contact',
                     hide: true,
                     templateOptions: {
                       label: 'Contact',
-                      add: true,
-                      delete: false,
                       values: ['__str__'],
                       type: 'related',
-                      edit: true
                     },
-                    collapsed: false,
                     type: 'related',
                     query: {
                       candidate: true
                     },
-                    many: false
                   },
                   {
                     endpoint: '/core/addresses/',

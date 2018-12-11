@@ -1345,7 +1345,10 @@ export class DynamicListComponent
     arr.splice(arr.length - 2, 1);
     const endpoint = arr.join('/');
     this.modalInfo = {};
-    this.modalInfo.type = 'profile';
+    this.modalInfo.type = 'form';
+    this.modalInfo.mode = 'view';
+    this.modalInfo.endpoint = '/candidate/candidatecontacts/';
+    this.metadataQuery = 'type=profile';
     this.modalInfo.id = id;
     this.open(this.modal, { size: 'lg' });
   }
