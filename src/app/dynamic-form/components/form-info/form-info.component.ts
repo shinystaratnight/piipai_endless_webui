@@ -47,6 +47,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public job: any;
   public jobsite: any;
   public tags: any;
+  public birthday: string;
 
   public color: any;
   public colorAttr: string;

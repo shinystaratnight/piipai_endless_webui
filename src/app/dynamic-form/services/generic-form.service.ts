@@ -94,6 +94,8 @@ export class GenericFormService {
         type = 'company';
       } else if (query.includes('supervisor')) {
         type = 'supervisor';
+      } else if (query.includes('profile')) {
+        type = 'profile';
       } else if (query.includes('job')) {
         if (query.includes('form')) {
           type = 'form';

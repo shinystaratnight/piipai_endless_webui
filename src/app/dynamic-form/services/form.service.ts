@@ -4,6 +4,11 @@ import { CheckPermissionService } from '../../shared/services';
 
 import { Form } from '../models/form.model';
 
+export enum FormMode {
+  View = 'view',
+  Edit = 'edit'
+}
+
 @Injectable()
 export class FormService {
 

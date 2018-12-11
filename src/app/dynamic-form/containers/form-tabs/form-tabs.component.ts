@@ -78,7 +78,7 @@ export class FormTabsComponent implements OnInit, OnDestroy {
   }
 
   public hideEditButton() {
-    return this.formService.getForm(this.formId).hideEditButton;
+    return this.formService.getForm(this.formId).hideEditButton || this.config.hideEditButton;
   }
 
 }

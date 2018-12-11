@@ -57,3 +57,10 @@
     margin-right: 12px;
   }
 }
+
+a.readonly:hover,
+a.readonly:focus {
+  text-decoration: none;
+  color: inherit;
+  cursor: text;
+}
