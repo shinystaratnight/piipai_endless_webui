@@ -1,74 +1,94 @@
 export const meta = [
   {
-    type: 'group',
-    label: 'Company Setting',
+    type: 'row',
     children: [
-
       {
-        type: 'input',
-        key: 'company_settings.logo',
-        read_only: false,
-        companyContact: true,
-        templateOptions: {
-          label: 'Logo',
-          label_upload: 'Choose a file',
-          label_photo: 'Take a photo',
-          type: 'picture',
-          required: false,
-          file: false
-        }
+        type: 'group',
+        label: 'Company Setting',
+        children: [
+          {
+            type: 'input',
+            key: 'company_settings.logo',
+            read_only: false,
+            companyContact: true,
+            templateOptions: {
+              label: 'Logo',
+              label_upload: 'Choose a file',
+              label_photo: 'Take a photo',
+              type: 'picture',
+              required: false,
+              file: false
+            }
+          },
+          {
+            type: 'radio',
+            key: 'company_settings.font',
+            label: true,
+            default: 'Source Sans Pro',
+            templateOptions: {
+              label: 'Font',
+              type: 'text',
+              options: [
+                { key: 'Source Sans Pro', value: 'Source Sans Pro' },
+                { key: 'Roboto', value: 'Roboto' },
+                { key: 'Barlow', value: 'Barlow' },
+                { key: 'Open Sans', value: 'Open Sans' }
+              ]
+            }
+          },
+          {
+            type: 'radio',
+            key: 'company_settings.color_scheme',
+            default: 'default',
+            label: true,
+            templateOptions: {
+              label: 'Color scheme',
+              type: 'color',
+              inline: true,
+              options: [
+                { key: 'default', value: '#28A3FC' },
+                { key: 'labour', value: '#f58926' },
+                { key: 'indigo', value: '#3f51b5' },
+                { key: 'teal', value: '#009688' },
+                { key: 'brown', value: '#795548' }
+              ]
+            }
+          },
+        ]
       },
       {
-        type: 'radio',
-        key: 'company_settings.font',
-        label: true,
-        default: 'Source Sans Pro',
-        templateOptions: {
-          label: 'Font',
-          type: 'text',
-          options: [
-            { key: 'Source Sans Pro', value: 'Source Sans Pro' },
-            { key: 'Roboto', value: 'Roboto' },
-            { key: 'Barlow', value: 'Barlow' },
-            { key: 'Open Sans', value: 'Open Sans' }
-          ]
-        }
-      },
-      {
-        type: 'radio',
-        key: 'company_settings.color_scheme',
-        default: 'default',
-        label: true,
-        templateOptions: {
-          label: 'Color scheme',
-          type: 'color',
-          inline: true,
-          options: [
-            { key: 'default', value: '#28A3FC' },
-            { key: 'labour', value: '#f58926' },
-            { key: 'indigo', value: '#3f51b5' },
-            { key: 'teal', value: '#009688' },
-            { key: 'brown', value: '#795548' }
-          ]
-        }
-      },
-      {
-        type: 'input',
-        key: 'company_settings.forwarding_number',
-        templateOptions: {
-          max: 32,
-          label: 'Forwarding number',
-          type: 'text',
-        }
-      },
-      {
-        type: 'input',
-        key: 'company_settings.billing_email',
-        templateOptions: {
-          max: 32,
-          label: 'Billing email',
-          type: 'email',
-        }
+        type: 'group',
+        children: [
+          {
+            type: 'input',
+            key: 'company_settings.forwarding_number',
+            templateOptions: {
+              max: 32,
+              label: 'Forwarding number',
+              type: 'text',
+            }
+          },
+          {
+            type: 'input',
+            key: 'company_settings.billing_email',
+            templateOptions: {
+              max: 32,
+              label: 'Billing email',
+              type: 'email',
+            }
+          },
+          {
+            key: 'company_settings.sms_enabled',
+            type: 'checkbox',
+            read_only: false,
+            templateOptions: {
+              label: 'SMS sending enabled',
+              type: 'checkbox',
+              description: 'Please deselect this checkbox if you want to disable sms sending from r3sourcer software',
+              required: false
+            }
+          },
+        ]
       }
     ]
   },
