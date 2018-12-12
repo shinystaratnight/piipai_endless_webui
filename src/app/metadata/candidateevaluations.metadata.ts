@@ -253,7 +253,7 @@ const formset = {
         sort: true,
         content: [
           {
-            text: 'Open TimeSheet',
+            text: 'Show timesheet',
             color: 'primary',
             endpoint: '/hr/timesheets/{reference_timesheet.id}',
             label: 'reference_timesheet',
