@@ -18,7 +18,7 @@ p {
     flex-wrap: wrap;
 
     margin-top: -40px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   &-title span {
@@ -283,5 +283,15 @@ p {
     .#{$item}-theme & {
       color: map-get($theme-colors, $item);
     }
+  }
+}
+
+.address-field {
+  margin-top: -10px;
+
+  color: #828282;
+
+  .form-group {
+    margin-bottom: 11px;
   }
 }

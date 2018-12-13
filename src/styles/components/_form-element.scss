@@ -141,6 +141,9 @@
     font-size: 14px;
     line-height: 20px;
 
+    .address-field & {
+      font-size: 12px;
+    }
 
     .message-detail & {
       width: auto;
