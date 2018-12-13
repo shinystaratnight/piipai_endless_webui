@@ -167,7 +167,7 @@
       [group]="group">
     </ng-container>
 
-    <p *ngIf="config && config.metadata['address'] && config.editForm">
+    <p class="address-field" *ngIf="config && config.metadata['address'] && config.editForm">
       <ng-container appFormElement
         [config]="config.metadata['address']"
         [group]="group">

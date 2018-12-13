@@ -711,7 +711,7 @@ const form = [
                     templateOptions: {
                       placeholder: 'E-mail',
                       required: true,
-                      label: '',
+                      label: 'E-mail',
                       max: 255,
                       type: 'text'
                     },
@@ -723,7 +723,7 @@ const form = [
                     templateOptions: {
                       placeholder: 'Mobile phone',
                       required: true,
-                      label: '',
+                      label: 'Phone number',
                       type: 'text'
                     },
                     read_only: false
@@ -770,7 +770,7 @@ const form = [
                     read_only: false,
                     key: 'recruitment_agent',
                     templateOptions: {
-                      label: '',
+                      label: 'Name',
                       add: true,
                       delete: false,
                       values: ['__str__'],
@@ -791,7 +791,7 @@ const form = [
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: '',
+                      label: 'Phone number',
                       type: 'text'
                     },
                     read_only: true
@@ -1686,7 +1686,7 @@ const profile = [
                     templateOptions: {
                       placeholder: 'E-mail',
                       required: true,
-                      label: '',
+                      label: 'E-mail',
                       max: 255,
                       type: 'text'
                     },
@@ -1698,7 +1698,7 @@ const profile = [
                     templateOptions: {
                       placeholder: 'Mobile phone',
                       required: true,
-                      label: '',
+                      label: 'Phone number',
                       type: 'text'
                     },
                     read_only: false
@@ -1711,44 +1711,26 @@ const profile = [
                 type: 'group',
                 children: [
                   {
-                    endpoint: '/core/companycontacts/',
-                    read_only: true,
-                    key: 'recruitment_agent',
-                    templateOptions: {
-                      label: '',
-                      values: ['__str__'],
-                      type: 'related',
-                    },
-                    visibleMode: true,
-                    default: 'session.contact.contact_id',
-                    type: 'related',
-                    query: {
-                      master_company: 'current'
-                    },
-                  },
-                  {
-                    key: 'recruitment_agent.contact.phone_mobile',
-                    send: false,
+                    key: 'emergency_contact_name',
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: '',
+                      label: 'Name',
+                      max: 63,
                       type: 'text'
                     },
-                    read_only: true
+                    read_only: false
                   },
                   {
-                    key: 'recruitment_agent.contact',
-                    read_only: false,
-                    hide: true,
+                    key: 'emergency_contact_phone',
+                    type: 'input',
                     templateOptions: {
-                      required: true,
-                      label: '',
+                      required: false,
+                      label: 'Phone Number',
                       type: 'text'
                     },
-                    send: false,
-                    type: 'input'
-                  }
+                    read_only: false
+                  },
                 ],
                 width: 0.5
               }
@@ -2076,6 +2058,19 @@ const profile = [
           candidate_contact: '{id}'
         },
         help: 'Here you can see the tags which belong to the candidate'
+      },
+      {
+        endpoint: '/hr/candidateevaluations/',
+        templateOptions: {
+          label: 'Evaluations',
+          text: 'Evaluations',
+          add_label: '',
+        },
+        type: 'list',
+        query: {
+          candidate_contact: '{id}'
+        },
+        help: 'Here you can see evaluations for the candidate'
       },
     ]
   }
