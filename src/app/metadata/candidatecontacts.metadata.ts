@@ -1707,7 +1707,7 @@ const profile = [
                 width: 0.5
               },
               {
-                label: 'Emergency',
+                label: 'Emergency contact',
                 type: 'group',
                 children: [
                   {
@@ -2065,6 +2065,9 @@ const profile = [
           label: 'Evaluations',
           text: 'Evaluations',
           add_label: '',
+        },
+        metadata_query: {
+          type: 'profile'
         },
         type: 'list',
         query: {
