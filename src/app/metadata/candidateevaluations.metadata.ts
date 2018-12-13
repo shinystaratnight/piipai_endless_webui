@@ -227,54 +227,24 @@ const formset = {
         label: 'Supervisor'
       },
       {
+        name: 'level_of_communication',
+        sort: true,
+        sort_field: 'level_of_communication',
+        label: 'Evaluation',
+        content: [
+          {
+            display: 'Score',
+            type: 'skills',
+            field: 'level_of_communication'
+          }
+        ],
+      },
+      {
         name: 'evaluated_at',
         sort: true,
         sort_field: 'evaluated_at',
         content: [{ type: 'datepicker', field: 'evaluated_at' }],
         label: 'Evaluated at'
-      },
-      {
-        name: 'parameters',
-        content: [
-          {
-            label: 'Level of communication',
-            type: 'skills',
-            field: 'level_of_communication'
-          },
-          {
-            values: { false: 'times', true: 'check', null: 'minus-circle' },
-            label: 'Was on time',
-            type: 'icon',
-            field: 'was_on_time'
-          },
-          {
-            values: { false: 'times', true: 'check', null: 'minus-circle' },
-            label: 'Was motivated',
-            type: 'icon',
-            field: 'was_motivated'
-          },
-          {
-            values: { false: 'times', true: 'check', null: 'minus-circle' },
-            label: 'Had ppe and tickets',
-            type: 'icon',
-            field: 'had_ppe_and_tickets'
-          },
-          {
-            values: { false: 'times', true: 'check', null: 'minus-circle' },
-            label: 'Met expectations',
-            type: 'icon',
-            field: 'met_expectations'
-          },
-          {
-            values: { false: 'times', true: 'check', null: 'minus-circle' },
-            label: 'Representation',
-            type: 'icon',
-            field: 'representation'
-          }
-        ],
-        label: 'Parameters',
-        title: null,
-        delim: null
       },
       {
         name: 'reference_timesheet',
@@ -283,14 +253,17 @@ const formset = {
         sort: true,
         content: [
           {
+            text: 'Show timesheet',
+            color: 'primary',
             endpoint: '/hr/timesheets/{reference_timesheet.id}',
+            label: 'reference_timesheet',
             type: 'link',
             field: 'reference_timesheet'
           }
         ],
-        label: '',
+        label: 'Related timesheet',
         delim: null
-      }
+      },
     ],
     list: 'candidateevaluation',
     editDisable: false,

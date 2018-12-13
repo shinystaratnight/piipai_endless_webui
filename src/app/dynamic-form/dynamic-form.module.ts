@@ -43,14 +43,12 @@ import { directives } from './directives';
     fromComponents.GenericListComponent,
     fromContainers.DynamicFormComponent,
     fromContainers.DynamicListComponent,
-    // fromComponents.ProfileComponent,
     fromContainers.FilterBlockComponent,
     fromComponents.WorkflowComponent,
     fromComponents.TestGeneratorComponent,
     fromContainers.FormBuilderFormComponent,
   ],
   declarations: [
-    // PdfViewerComponent,
     fromComponents.WebcamComponent,
 
     ...fromComponents.components,
