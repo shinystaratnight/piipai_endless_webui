@@ -7,12 +7,16 @@
   <span *ngIf="config.setColorForLabel" [ngClass]="[iconClass]">{{config.label[config.value]}}&nbsp;</span>
 </ng-container>
 
+<span class="description" *ngIf=emptyValue>{{config.emptyValue}}</span>
+
 <img *ngIf="src" [src]="src" width="60" height="60">
 <i *ngIf="icon && !config.setColorForLabel" fa [name]="icon" [ngClass]="[iconClass]" [title]="config.title || ''" [ngStyle]="{'fontSize.px': config.fontSize}"></i>
 <span class="mr-1" *ngIf="config.delim && !last">{{config.delim}}</span>
 <a *ngIf="file" [href]="file" target="_blank">
-  <i fa name="file" class="mr-2"></i>
-  {{getExtension(file) | uppercase}} File
+  <i fa name="file" class="file-icon"></i>
+  <i fa name="download" class="download-icon"></i>
+  <span *ngIf="config.display">{{config.display}}</span>
+  <span *ngIf="!config.display">{{getExtension(file) | uppercase}} File</span>
 </a>
 <div *ngIf="contactAvatar" class="contact-avatar">{{contactAvatar}}</div>
 <br *ngIf="!config.hidden && !config.delim">

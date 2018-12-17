@@ -1,3 +1,22 @@
+const listColumns = {
+  'verification_evidence': {
+    name: 'verification_evidence',
+    sort_field: 'verification_evidence',
+    title: null,
+    sort: true,
+    content: [
+      {
+        type: 'picture',
+        display: 'Сertificate of education',
+        emptyValue: 'Not verify',
+        field: 'verification_evidence'
+      }
+    ],
+    label: 'Verification Evidence',
+    delim: null
+  }
+};
+
 const list = {
   list: {
     list: 'tagrel',
@@ -214,20 +233,18 @@ const formset = {
           {
             endpoint: '/core/companycontacts/',
             type: 'related',
-            field: 'verified_by'
+            field: 'verified_by.contact'
+          },
+          {
+            endpoint: '/core/companycontacts/',
+            type: 'text',
+            description: ' ',
+            field: 'verified_by.job_title'
           }
         ],
         label: 'Verified by'
       },
-      {
-        name: 'verification_evidence',
-        sort_field: 'verification_evidence',
-        title: null,
-        sort: true,
-        content: [{ type: 'picture', field: 'verification_evidence' }],
-        label: 'Verification Evidence',
-        delim: null
-      },
+      listColumns['verification_evidence'],
       {
         name: 'actions',
         content: [
@@ -480,20 +497,18 @@ const profile = {
           {
             endpoint: '/core/companycontacts/',
             type: 'related',
-            field: 'verified_by'
+            field: 'verified_by.contact'
+          },
+          {
+            endpoint: '/core/companycontacts/',
+            type: 'text',
+            description: ' ',
+            field: 'verified_by.job_title'
           }
         ],
         label: 'Verified by'
       },
-      {
-        name: 'verification_evidence',
-        sort_field: 'verification_evidence',
-        title: null,
-        sort: true,
-        content: [{ type: 'picture', field: 'verification_evidence' }],
-        label: 'Verification Evidence',
-        delim: null
-      },
+      listColumns['verification_evidence'],
       // {
       //   name: 'actions',
       //   content: [

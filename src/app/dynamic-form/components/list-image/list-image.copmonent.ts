@@ -58,4 +58,8 @@ export class ListImageComponent implements OnInit {
     return link.split('.').pop();
   }
 
+  get emptyValue() {
+    return !this.file && !this.src && !this.contactAvatar;
+  }
+
 }

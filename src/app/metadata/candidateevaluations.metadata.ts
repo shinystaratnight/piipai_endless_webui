@@ -1,3 +1,68 @@
+const formFields = {
+  'reference_timesheet.shift_started_at': {
+    key: 'reference_timesheet.shift_started_at',
+    read_only: false,
+    templateOptions: {
+      required: false,
+      listLabel: 'Start',
+      inlineLabel: true,
+      label: 'Evaluated at',
+      type: 'datetime'
+    },
+    type: 'datepicker'
+  },
+  'reference_timesheet.shift_ended_at': {
+    key: 'reference_timesheet.shift_ended_at',
+    read_only: false,
+    templateOptions: {
+      required: false,
+      listLabel: 'End',
+      inlineLabel: true,
+      label: 'Evaluated at',
+      type: 'datetime'
+    },
+    type: 'datepicker'
+  },
+};
+
+const listColumns = {
+  'jobsite': {
+    name: 'jobsite',
+    sort: true,
+    sort_field: 'jobsi',
+    content: [
+      {
+        type: 'text',
+        field: 'jobsite.name'
+      },
+      {
+        type: 'text',
+        description: ' ',
+        field: 'position.name'
+      }
+    ],
+    label: 'Jobsite/Position'
+  },
+  supervisor: {
+    name: 'supervisor',
+    sort: true,
+    sort_field: 'supervisor',
+    content: [
+      {
+        endpoint: '/core/companycontacts/',
+        type: 'related',
+        field: 'supervisor'
+      },
+      {
+        type: 'text',
+        description: ' ',
+        field: 'supervisor.job_title'
+      }
+    ],
+    label: 'Supervisor'
+  }
+};
+
 const list = {
   list: {
     list: 'candidateevaluation',
@@ -163,6 +228,8 @@ const formset = {
       },
       type: 'datepicker'
     },
+    formFields['reference_timesheet.shift_started_at'],
+    formFields['reference_timesheet.shift_ended_at'],
     {
       key: 'was_on_time',
       read_only: false,
@@ -213,19 +280,8 @@ const formset = {
   ],
   list: {
     columns: [
-      {
-        name: 'supervisor',
-        sort: true,
-        sort_field: 'supervisor',
-        content: [
-          {
-            endpoint: '/core/companycontacts/',
-            type: 'related',
-            field: 'supervisor'
-          }
-        ],
-        label: 'Supervisor'
-      },
+      listColumns['jobsite'],
+      listColumns.supervisor,
       {
         name: 'level_of_communication',
         sort: true,
@@ -259,7 +315,17 @@ const formset = {
             label: 'reference_timesheet',
             type: 'link',
             field: 'reference_timesheet'
-          }
+          },
+          {
+            type: 'datepicker',
+            listLabel: 'Start',
+            field: 'reference_timesheet.shift_started_at'
+          },
+          {
+            type: 'datepicker',
+            listLabel: 'End',
+            field: 'reference_timesheet.shift_ended_at'
+          },
         ],
         label: 'Related timesheet',
         delim: null
@@ -334,6 +400,8 @@ const profile = {
       },
       type: 'datepicker'
     },
+    formFields['reference_timesheet.shift_started_at'],
+    formFields['reference_timesheet.shift_ended_at'],
     {
       key: 'was_on_time',
       read_only: false,
@@ -384,19 +452,8 @@ const profile = {
   ],
   list: {
     columns: [
-      {
-        name: 'supervisor',
-        sort: true,
-        sort_field: 'supervisor',
-        content: [
-          {
-            endpoint: '/core/companycontacts/',
-            type: 'related',
-            field: 'supervisor'
-          }
-        ],
-        label: 'Supervisor'
-      },
+      listColumns['jobsite'],
+      listColumns.supervisor,
       {
         name: 'level_of_communication',
         sort: true,
@@ -431,7 +488,17 @@ const profile = {
             display: 'Show timesheet',
             type: 'text',
             field: 'reference_timesheet'
-          }
+          },
+          {
+            type: 'datepicker',
+            listLabel: 'Start',
+            field: 'reference_timesheet.shift_started_at'
+          },
+          {
+            type: 'datepicker',
+            listLabel: 'End',
+            field: 'reference_timesheet.shift_ended_at'
+          },
         ],
         label: 'Related timesheet',
         delim: null
