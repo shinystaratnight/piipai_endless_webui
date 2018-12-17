@@ -5,8 +5,19 @@
       <a #view class="link default" [class.phone]="phone" [attr.href]="href" *ngIf="config.value && !link" [title]="config.title || ''">
         {{config.value}}
       </a>
-      <button type="button" *ngIf="phone" class="btn btn-outline-primary" (click)="sendSms()">SMS</button>
-      <button type="button" *ngIf="phone" class="btn btn-outline-primary" (click)="lickView.nativeElement.click()">Call</button>
+      <button type="button" class="btn btn-outline-primary"
+        *ngIf="phone"
+        [attr.title]="smsDisabledTitle"
+        [class.disabled]="smsDisabled"
+        (click)="sendSms()"
+        [disabled]="smsDisabled">
+          SMS
+      </button>
+      <button type="button" class="btn btn-outline-primary"
+        *ngIf="phone"
+        (click)="lickView.nativeElement.click()">
+          Call
+      </button>
 
       <a class="link" routerLink="{{href}}" *ngIf="config.value && link && config.link" [title]="config.title || ''">
         {{value}}
