@@ -104,14 +104,12 @@ const list = {
       key: 'approved_at',
       type: 'datepicker',
       templateOptions: {
-        required: false,
         label: 'Approved At',
         type: 'datetime'
       },
       read_only: true
     },
     {
-      list: false,
       endpoint: '/core/companies/',
       read_only: true,
       templateOptions: {
@@ -122,44 +120,36 @@ const list = {
         type: 'related',
         edit: true
       },
-      collapsed: false,
       type: 'related',
       key: 'company',
-      many: false
     },
     {
       key: 'valid_from',
       type: 'datepicker',
       templateOptions: {
-        required: false,
         label: 'Valid From',
         type: 'date'
       },
       read_only: true
     },
     {
-      list: false,
       endpoint: '/core/companycontacts/',
       read_only: true,
       templateOptions: {
         label: 'Approved by',
         add: true,
-        delete: false,
         values: ['__str__'],
         type: 'related',
         edit: true
       },
-      collapsed: false,
       type: 'related',
       key: 'approved_by',
-      many: false
     },
     {
       key: 'effective',
       default: false,
       type: 'checkbox',
       templateOptions: {
-        required: false,
         label: 'Effective',
         type: 'checkbox'
       },
@@ -169,7 +159,6 @@ const list = {
       key: 'valid_until',
       type: 'datepicker',
       templateOptions: {
-        required: false,
         label: 'Valid Until',
         type: 'date'
       },
@@ -185,7 +174,6 @@ const company = {
       key: 'effective',
       read_only: false,
       templateOptions: {
-        required: false,
         label: 'Effective',
         type: 'checkbox'
       },
@@ -194,7 +182,10 @@ const company = {
     {
       key: 'valid_until',
       read_only: false,
-      templateOptions: { required: false, label: 'Valid Until', type: 'date' },
+      templateOptions: {
+        label: 'Valid Until',
+        type: 'date'
+      },
       type: 'datepicker'
     },
     {
@@ -211,33 +202,31 @@ const company = {
       key: 'approved_at',
       read_only: false,
       templateOptions: {
-        required: false,
         label: 'Approved At',
         type: 'datetime'
       },
       type: 'datepicker'
     },
     {
-      many: false,
       key: 'approved_by',
       endpoint: '/core/companycontacts/',
-      collapsed: false,
-      list: false,
       templateOptions: {
         add: true,
-        delete: false,
         edit: true,
         values: ['__str__'],
         label: 'Approved by',
         type: 'related'
       },
-      read_only: true,
+      read_only: false,
       type: 'related'
     },
     {
       key: 'valid_from',
       read_only: true,
-      templateOptions: { required: false, label: 'Valid From', type: 'date' },
+      templateOptions: {
+        label: 'Valid From',
+        type: 'date'
+      },
       type: 'datepicker'
     }
   ],
@@ -324,22 +313,18 @@ const company = {
 
 const form = [
   {
-    list: false,
     endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Company',
       required: true,
       add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'company',
-    many: false
   },
   {
     key: 'valid_from',
@@ -368,7 +353,6 @@ const form = [
     default: false,
     type: 'checkbox',
     templateOptions: {
-      required: false,
       label: 'Effective',
       type: 'checkbox'
     },
@@ -376,11 +360,10 @@ const form = [
   },
   {
     endpoint: '/core/companycontacts/',
-    read_only: true,
+    read_only: false,
     templateOptions: {
       label: 'Approved by',
       add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
       edit: true
@@ -396,7 +379,6 @@ const form = [
     key: 'approved_at',
     type: 'datepicker',
     templateOptions: {
-      required: false,
       label: 'Approved At',
       type: 'datetime'
     },
@@ -413,7 +395,6 @@ const form = [
       add_label: '+ Add',
       text: 'Price List Rates'
     },
-    collapsed: false,
     prefilled: {
       price_list: '{id}'
     },
@@ -426,22 +407,18 @@ const form = [
 
 const formadd = [
   {
-    list: false,
     endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Company',
       required: true,
       add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'company',
-    many: false
   },
   {
     key: 'valid_from',
@@ -470,7 +447,6 @@ const formadd = [
     default: false,
     type: 'checkbox',
     templateOptions: {
-      required: false,
       label: 'Effective',
       type: 'checkbox'
     },
@@ -482,7 +458,6 @@ const formadd = [
     templateOptions: {
       label: 'Approved by',
       add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
       edit: true
@@ -497,32 +472,11 @@ const formadd = [
     key: 'approved_at',
     type: 'datepicker',
     templateOptions: {
-      required: false,
       label: 'Approved At',
       type: 'datetime'
     },
     read_only: false
   },
-  {
-    endpoint: '/pricing/pricelistrates/',
-    metadata_query: {
-      editable_type: 'pricelist'
-    },
-    templateOptions: {
-      label: 'Price List Rates',
-      type: 'list',
-      add_label: '+ Add',
-      text: 'Price List Rates'
-    },
-    collapsed: false,
-    prefilled: {
-      price_list: '{id}'
-    },
-    type: 'list',
-    query: {
-      price_list: '{id}'
-    }
-  }
 ];
 
 export const metadata = {
