@@ -1,3 +1,5 @@
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+
 const list = {
   list: {
     list: 'carrierlist',
@@ -58,6 +60,35 @@ const list = {
           key: 'id'
         },
         query: 'candidate_contact'
+      },
+      {
+        list: [
+          {
+            label: 'Yesterday',
+            query: `target_date_0=${yesterdayFormatDate}&target_date_1=${yesterdayFormatDate}`
+          },
+          {
+            label: 'Today',
+            query: `target_date_0=${todayFormatDate}&target_date_1=${todayFormatDate}`
+          },
+          {
+            label: 'Tomorrow',
+            query: `target_date_0=${tomorrowFormatDate}&target_date_1=${tomorrowFormatDate}`
+          }
+        ],
+        key: 'target_date',
+        label: 'Target date',
+        type: 'date',
+        input: [
+          {
+            label: 'From',
+            query: 'target_date_0'
+          },
+          {
+            label: 'To',
+            query: 'target_date_1'
+          }
+        ]
       }
     ]
   },
@@ -234,8 +265,12 @@ const form = [
   {
     key: 'target_date',
     type: 'datepicker',
-    templateOptions: { required: false, label: 'Target Date', type: 'date' },
-    read_only: false
+    templateOptions: {
+      required: false,
+      label: 'Target Date',
+      type: 'date'
+    },
+    read_only: true
   },
   {
     key: 'confirmed_available',
@@ -288,6 +323,9 @@ const formadd = [
       values: ['__str__'],
       type: 'related',
       edit: true
+    },
+    query: {
+      active_states: 70
     },
     type: 'related',
     key: 'candidate_contact',
