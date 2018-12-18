@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { SiteSettingsService } from '../../../services/site-settings.service';
 
 @Component({
   selector: 'app-form-checkbox',
@@ -38,6 +39,9 @@ export class FormCheckboxComponent
   public checkboxClass = '';
   public checkboxColor = '';
 
+  public isDisabled: boolean;
+  public disabledTitle: string;
+
   public viewMode: boolean;
 
   @Output()
@@ -47,7 +51,8 @@ export class FormCheckboxComponent
 
   constructor(
     private fb: FormBuilder,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private siteSettings: SiteSettingsService
   ) {
     super();
     this.subscriptions = [];
@@ -60,6 +65,14 @@ export class FormCheckboxComponent
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.createEvent();
+
+    this.isDisabled = this.checkDisabled();
+    this.disabledTitle = this.getDisabledTitle(this.isDisabled);
+
+    if (this.isDisabled) {
+      this.group.get(this.key).patchValue(false);
+      this.group.get(this.key).disable();
+    }
   }
 
   public ngOnDestroy() {
@@ -147,5 +160,15 @@ export class FormCheckboxComponent
       el: this.config,
       value: this.group.controls[this.key].value
     });
+  }
+
+  public checkDisabled(): boolean {
+    return this.config.key === 'by_phone' && !this.siteSettings.isSmsEnabled();
+  }
+
+  public getDisabledTitle(disabled?: boolean): string {
+    return disabled
+      ? this.siteSettings.getSmsSendTitle()
+      : '';
   }
 }

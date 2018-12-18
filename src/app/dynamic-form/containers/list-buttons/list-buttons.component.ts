@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
+import { SiteSettingsService } from '../../../services/site-settings.service';
+
 interface Button {
   label: string;
   endpoint: string;
@@ -34,10 +36,28 @@ export class ListButtonsComponent {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  constructor(
+    private siteSettings: SiteSettingsService
+  ) {}
+
+  get smsTitle() {
+    return this.isDisableSmsButton
+      ? this.siteSettings.getSmsSendTitle()
+      : '';
+  }
+
+  public isDisableSmsButton(action: string) {
+    if (action === 'sendSMS') {
+      return !this.siteSettings.isSmsEnabled();
+    }
+  }
+
   public buttonAction(type) {
-    this.event.emit({
-      type
-    });
+    if (!this.isDisableSmsButton) {
+      this.event.emit({
+        type
+      });
+    }
   }
 
   public checkPermission(type: string): boolean {

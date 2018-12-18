@@ -3,6 +3,8 @@ import { FormGroup } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
+import { SiteSettingsService } from '../../../services/site-settings.service';
+
 @Component({
   selector: 'app-form-button',
   templateUrl: 'form-button.component.html',
@@ -19,10 +21,17 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   public repeatArray: any[];
   public showButton: boolean;
 
+  public isDisabled: boolean;
+  public disabledTitle: string;
+
   public subscriptions: Subscription[] = [];
 
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
+
+  constructor(
+    private siteSettings: SiteSettingsService
+  ) {}
 
   public ngOnInit() {
     if (this.config.replace_by) {
@@ -39,6 +48,9 @@ export class FormButtonComponent implements OnInit, OnDestroy {
     }
     this.checkHiddenProperty();
     this.customizeButton();
+
+    this.isDisabled = this.checkSmsDisabled(this.config.endpoint);
+    this.disabledTitle = this.getSmsTitle(this.isDisabled);
   }
 
   public ngOnDestroy() {
@@ -70,17 +82,46 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   }
 
   public action(e) {
-    if (this.config.templateOptions.type !== 'submit' && !this.config.disableAction) {
-      let id;
-      if (this.config.name === 'id') {
-        id = this.config.rowId;
+    if (!this.checkSmsDisabled(this.config.endpoint)) {
+      if (this.config.templateOptions.type !== 'submit' && !this.config.disableAction) {
+        let id;
+        if (this.config.name === 'id') {
+          id = this.config.rowId;
+        }
+        this.buttonAction.emit({
+          type: e.type,
+          el: this.config,
+          value: this.config.templateOptions.action,
+          id
+        });
       }
-      this.buttonAction.emit({
-        type: e.type,
-        el: this.config,
-        value: this.config.templateOptions.action,
-        id
+    }
+  }
+
+  public checkSmsDisabled(endpoint = ''): boolean {
+    if (!this.siteSettings.isSmsEnabled()) {
+      if (this.config.templateOptions.action === 'resend') {
+        return true;
+      }
+
+      const endpointParts = [
+        'resend_sms',
+        'resend_supervisor_sms',
+        'candidate_fill',
+        'supervisor_approve',
+        'send',
+        'resend',
+      ];
+
+      return endpointParts.some((part) => {
+        return endpoint.indexOf(part) !== -1;
       });
     }
+  }
+
+  public getSmsTitle(disabled?: boolean): string {
+    return disabled
+      ? this.siteSettings.getSmsSendTitle()
+      : '';
   }
 }

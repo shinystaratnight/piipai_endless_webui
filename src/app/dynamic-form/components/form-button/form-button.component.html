@@ -10,7 +10,9 @@
     [class.px-2]="config.templateOptions.p"
     [class.list]="config.templateOptions.p"
     [class.text-white]="(buttonClass || config.color) && !config.inverse"
-    [disabled]="config.disableAction"
+    [class.disabled]="isDisabled"
+    [attr.title]="disabledTitle"
+    [disabled]="config.disableAction || isDisabled"
     (click)="action($event)">
       <span *ngIf="repeatArray" class="d-flex align-items-center justify-content-between">
         <i fa

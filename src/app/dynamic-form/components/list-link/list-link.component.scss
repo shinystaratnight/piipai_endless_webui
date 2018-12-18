@@ -31,8 +31,6 @@
 
   &:hover {
     .phone {
-      // text-decoration: underline;
-
       color: $brand-primary;
 
       @each $item in $themes {

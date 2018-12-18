@@ -5,7 +5,12 @@
       <option [value]="{}" disabled>Action</option>
       <option *ngFor="let option of config.options" [ngValue]="option">{{option.label}}</option>
   </select>
-  <button class="btn btn-primary btn-shadow" type="button" (click)="toDoAction()">{{label}}</button>
+  <button class="btn btn-primary btn-shadow" type="button"
+    (click)="toDoAction()"
+    [attr.title]="getSmsTitle(action.endpoint)"
+    [disabled]="isDisableSmsButton(action.endpoint)">
+      {{label}}
+  </button>
 </div>
 
 <ng-template #content let-c="close" let-d="dismiss">

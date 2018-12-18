@@ -43,6 +43,18 @@ export class SiteSettingsService {
     }
   }
 
+  public isSmsEnabled() {
+    return this.settings.company_settings.sms_enabled;
+  }
+
+  public getCompanyName() {
+    return this.settings.company_settings.company_name;
+  }
+
+  public getSmsSendTitle() {
+    return `SMS sending is disabled for ${this.getCompanyName()}, please contact your administrator.`;
+  }
+
   private getSettings(endpoint: string): Observable<any> {
     if (!this.settings || !this.authService.isAuthorized) {
       return this.http

@@ -8,8 +8,10 @@
           <span class="button-icon"></span> {{button.label}}
         </a>
         <button *ngIf="!first || inForm || button.action !== 'add_object'" class="btn btn-primary btn-shadow datatable-button"
+          [attr.title]="smsTitle"
           [ngClass]="{'mx-2': !(f || l)}"
-          (click)="buttonAction(button.action)">
+          (click)="buttonAction(button.action)"
+          [disabled]="isDisableSmsButton(button.action)">
             {{button.label}}
         </button>
       </div>

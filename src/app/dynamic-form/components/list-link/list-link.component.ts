@@ -7,6 +7,8 @@ import {
   ViewChild
 } from '@angular/core';
 
+import { SiteSettingsService } from '../../../services/site-settings.service';
+
 @Component({
   selector: 'app-list-link',
   templateUrl: 'list-link.component.html',
@@ -22,6 +24,8 @@ export class ListLinkComponent implements OnInit {
   public value: string | string[];
   public last: boolean;
   public arrayValue: boolean;
+  public smsDisabled: boolean;
+  public smsDisabledTitle: string;
 
   public phone: boolean;
   public linkClass = '';
@@ -34,6 +38,10 @@ export class ListLinkComponent implements OnInit {
 
   @ViewChild('view')
   public lickView;
+
+  constructor(
+    private siteSettings: SiteSettingsService
+  ) {}
 
   public ngOnInit() {
     if (this.config.value && this.config.value instanceof Object && !Array.isArray(this.config.value)) { //tslint:disable-line
@@ -61,6 +69,11 @@ export class ListLinkComponent implements OnInit {
       const color = this.config.color;
       this.linkClass = classes.indexOf(color) > -1 ? `text-${color} custom-link` : '';
     }
+
+    this.smsDisabled = !this.siteSettings.isSmsEnabled();
+    this.smsDisabledTitle = this.smsDisabled
+      ? this.siteSettings.getSmsSendTitle()
+      : '';
   }
 
   public isEmail(value) {
@@ -127,17 +140,19 @@ export class ListLinkComponent implements OnInit {
   }
 
   public sendSms() {
-    this.buttonAction.emit({
-      type: 'click',
-      value: 'sendSMS',
-      el: Object.assign({}, this.config, {
-        fields: [{
-          type: 'link',
-          field: this.config.key,
-          value: this.config.value
-        }]
-      })
-    });
+    if (!this.smsDisabled) {
+      this.buttonAction.emit({
+        type: 'click',
+        value: 'sendSMS',
+        el: Object.assign({}, this.config, {
+          fields: [{
+            type: 'link',
+            field: this.config.key,
+            value: this.config.value
+          }]
+        })
+      });
+    }
   }
 
 }

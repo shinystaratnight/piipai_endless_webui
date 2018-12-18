@@ -557,6 +557,12 @@ form.ng-invalid button[type='submit'] {
       &:hover {
         background-color: map-get($theme-colors, $item);
         color: white;
+
+        &.disabled {
+          background-color: #fff;
+          color: map-get($theme-colors, $item);
+          cursor: default;
+        }
       }
     }
   }
