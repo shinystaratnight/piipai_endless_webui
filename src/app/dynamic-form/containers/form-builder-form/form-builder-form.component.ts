@@ -27,6 +27,18 @@ export class FormBuilderFormComponent implements OnInit {
     observers: []
   };
 
+  public industyField = {
+    type: 'related',
+    send: false,
+    endpoint: '/pricing/industries/',
+    key: 'industry',
+    templateOptions: {
+      label: 'Industry',
+      type: 'related',
+      values: ['__str__', 'id']
+    }
+  };
+
   constructor(
     private service: FormBuilderService,
     private router: Router,
@@ -40,22 +52,7 @@ export class FormBuilderFormComponent implements OnInit {
   public getRenderData() {
     this.service.getRenderData(this.id)
       .subscribe((res: any) => {
-        const bankAccount = this.getFields([], 'bank_account', res.ui_config, 0);
-
-        if (bankAccount.length) {
-          res.ui_config.push(this.createGroup('Bank Account', bankAccount));
-        }
-
-        const syperannuationFund = this.getFields([], 'superannuation_fund', res.ui_config, 0);
-        const employee = this.getFields([], 'superannuation_membership_number', res.ui_config, 0);
-
-        if (employee) {
-          syperannuationFund.push(...employee);
-        }
-
-        if (syperannuationFund.length) {
-          res.ui_config.push(this.createGroup('Superannuation fund', syperannuationFund));
-        }
+        this.updateConfigByGroups(res.ui_config);
 
         this.config = res;
         this.formConfig.emit(res);
@@ -200,7 +197,7 @@ export class FormBuilderFormComponent implements OnInit {
     };
   }
 
-  public getFields(result: Field[], key: string, target: Field[], index: number) {
+  public getFields(result: Field[], key: string, target: Field[], index: number): Field[] {
     if (index === target.length) {
       return result;
     }
@@ -214,5 +211,48 @@ export class FormBuilderFormComponent implements OnInit {
     index = index + 1;
 
     return this.getFields(result, key, target, index);
+  }
+
+  public updateSkillField(field: Field, formData: BehaviorSubject<any>): Field {
+    return {
+      ...field,
+      query: {
+        industry: '{industry.id}',
+      },
+      formData,
+      many: true,
+    };
+  }
+
+  private updateConfigByGroups(fields: Field[]): void {
+    this.createNewGroup(fields, 'bank_account', 'Bank Account');
+
+    const skills = this.getFields([], 'skill', fields, 0);
+    if (skills.length) {
+      const formData = new BehaviorSubject({});
+      skills[0] = this.updateSkillField(skills[0], formData);
+      skills.unshift({ ...this.industyField, formData });
+      fields.push(this.createGroup('Skills', skills));
+    }
+
+    this.createNewGroup(
+      fields,
+      ['superannuation_fund', 'superannuation_membership_number'],
+      'Superannuation fund'
+    );
+  }
+
+  private createNewGroup(fields: Field[], fieldKey: string | string[], groupLabel: string): void {
+    let findedFields = [];
+
+    if (Array.isArray(fieldKey)) {
+      fieldKey.forEach((key) => findedFields.push(...this.getFields([], key, fields, 0)));
+    } else {
+      findedFields = this.getFields([], fieldKey, fields, 0);
+    }
+
+    if (findedFields.length) {
+      fields.push(this.createGroup(groupLabel, findedFields));
+    }
   }
 }

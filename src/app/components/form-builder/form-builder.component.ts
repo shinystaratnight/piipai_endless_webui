@@ -56,7 +56,7 @@ export class FormBuilderComponent {
           groups: {
             action: 'add',
             data: {
-              fields: event.data.model_fields
+              fields: [...event.data.model_fields, ...event.data.extra_fields]
             }
           },
           id: {
@@ -83,7 +83,7 @@ export class FormBuilderComponent {
         groups: {
           action: 'add',
           data: {
-            fields: e.data.model_fields,
+            fields: [...e.data.model_fields, ...e.data.extra_fields],
             id: e.data.id
           }
         }
