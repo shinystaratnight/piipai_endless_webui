@@ -49,9 +49,8 @@ const listColumns = {
     sort_field: 'supervisor',
     content: [
       {
-        endpoint: '/core/companycontacts/',
-        type: 'related',
-        field: 'supervisor'
+        type: 'text',
+        field: 'supervisor.contact.name'
       },
       {
         type: 'text',
