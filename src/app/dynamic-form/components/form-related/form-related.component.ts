@@ -1015,7 +1015,7 @@ export class FormRelatedComponent extends BasicElementComponent
     }
 
     this.lastElement += this.limit;
-    this.previewList = list.slice(0, this.lastElement);
+    this.previewList = list ? list.slice(0, this.lastElement) : [];
   }
 
   public resetList() {

@@ -14,6 +14,7 @@ interface Field {
   id?: number;
   hidden?: boolean;
   disabled?: boolean;
+  content_type: number;
 }
 
 @Component({
@@ -30,6 +31,7 @@ export class FormFieldsGroupComponent implements OnInit {
 
   public formFieldGroupsEndpoint = '/core/formfieldgroups/';
   public formModelFieldEndpoint = '/core/modelformfields/';
+  public relatedformfieldsEndpoint = '/core/relatedformfields/';
   public groups: any[];
   public fields: any;
   public choosenType: string;
@@ -72,7 +74,8 @@ export class FormFieldsGroupComponent implements OnInit {
     'nationality': 22,
     'transportation_to_work': 23,
     'weight': 24,
-    'height': 25
+    'height': 25,
+    'skill': 26,
   };
 
   constructor(
@@ -257,6 +260,8 @@ export class FormFieldsGroupComponent implements OnInit {
   public toggleActiveState(field: Field, remove?): void {
     const removeField = remove || this.isActive(field);
 
+    const endpoint = this.getEndpoint(field);
+
     if (field.model_fields) {
       this.setActiveForFields(field.model_fields, removeField);
 
@@ -265,7 +270,7 @@ export class FormFieldsGroupComponent implements OnInit {
 
     if (field.id) {
       this.genericFormService
-        .delete(this.formModelFieldEndpoint, field.id)
+        .delete(endpoint, field.id)
         .subscribe(
           (res: any) => {
             delete field.id;
@@ -285,7 +290,7 @@ export class FormFieldsGroupComponent implements OnInit {
       delete body.model_fields;
       delete body.disabled;
       this.genericFormService
-        .submitForm(this.formModelFieldEndpoint, body)
+        .submitForm(endpoint, body)
         .subscribe(
           (res: any) => {
             field.id = res.id;
@@ -299,6 +304,12 @@ export class FormFieldsGroupComponent implements OnInit {
           (err: any) => (this.error = err)
         );
     }
+  }
+
+  public getEndpoint(field: Field): string {
+    return field.content_type === 97
+      ? this.relatedformfieldsEndpoint
+      : this.formModelFieldEndpoint;
   }
 
   public getActiveFields(array) {
@@ -318,6 +329,8 @@ export class FormFieldsGroupComponent implements OnInit {
   public toggleRequireProperty(field, remove?): void {
     const removeField = remove || this.isRequired(field);
 
+    const endpoint = this.getEndpoint(field);
+
     if (field.model_fields) {
       this.setRequireForFields(field.model_fields, removeField);
 
@@ -335,7 +348,7 @@ export class FormFieldsGroupComponent implements OnInit {
         body.required = !field.required;
       }
       this.genericFormService
-        .editForm(`${this.formModelFieldEndpoint}${field.id}/`, body)
+        .editForm(`${endpoint}${field.id}/`, body)
         .subscribe(
           (res: any) => {
             field.required = res.required;
