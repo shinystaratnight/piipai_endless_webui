@@ -793,7 +793,7 @@ export class DynamicListComponent
             fontSize: element.fontSize,
             inverse: element.inverse,
             param: element.param,
-            stars: element.stars
+            stars: element.stars,
           };
           if (obj.action && this.disableActions) {
             obj.disableAction = true;

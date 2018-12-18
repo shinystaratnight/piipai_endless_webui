@@ -19,3 +19,24 @@ img {
   color: #bdbdbd;
   opacity: .3;
 }
+
+.download-icon,
+.file-icon {
+  width: 12px;
+  margin-right: .5rem;
+}
+
+.download-icon {
+  display: none;
+}
+
+a:hover {
+  .file-icon {
+    display: none;
+  }
+
+  .download-icon {
+    display: inline-block;
+  }
+}
+

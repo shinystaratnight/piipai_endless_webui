@@ -1,5 +1,7 @@
-<label class="d-block label" *ngIf="config.templateOptions && config.templateOptions.listLabel || config.listLabel">
-  {{config.listLabel || config.templateOptions.listLabel}}:
+<label class="label"
+  [class.inline]="config.templateOptions.inlineLabel"
+  *ngIf="config.templateOptions && config.templateOptions.listLabel || config.listLabel">
+    {{config.listLabel || config.templateOptions.listLabel}}:
 </label>
 
 <span *ngIf="!arrayValue && !config.hideValue">
