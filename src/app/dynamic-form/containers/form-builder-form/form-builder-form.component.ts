@@ -221,6 +221,7 @@ export class FormBuilderFormComponent implements OnInit {
       },
       formData,
       many: true,
+      unique: true,
     };
   }
 
