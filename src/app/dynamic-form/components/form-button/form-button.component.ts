@@ -107,8 +107,6 @@ export class FormButtonComponent implements OnInit, OnDestroy {
       const endpointParts = [
         'resend_sms',
         'resend_supervisor_sms',
-        'candidate_fill',
-        'supervisor_approve',
         'send',
         'resend',
       ];

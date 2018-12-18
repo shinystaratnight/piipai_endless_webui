@@ -40,20 +40,20 @@ export class ListButtonsComponent {
     private siteSettings: SiteSettingsService
   ) {}
 
-  get smsTitle() {
-    return this.isDisableSmsButton
+  public getSmsTitle(action: string): string {
+    return this.isDisableSmsButton(action)
       ? this.siteSettings.getSmsSendTitle()
       : '';
   }
 
-  public isDisableSmsButton(action: string) {
+  public isDisableSmsButton(action: string): boolean {
     if (action === 'sendSMS') {
       return !this.siteSettings.isSmsEnabled();
     }
   }
 
-  public buttonAction(type) {
-    if (!this.isDisableSmsButton) {
+  public buttonAction(type: string): void {
+    if (!this.isDisableSmsButton(type)) {
       this.event.emit({
         type
       });

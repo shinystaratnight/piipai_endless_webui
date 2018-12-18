@@ -163,7 +163,9 @@ export class FormCheckboxComponent
   }
 
   public checkDisabled(): boolean {
-    return this.config.key === 'by_phone' && !this.siteSettings.isSmsEnabled();
+    const disableFields = ['by_phone', 'send_supervisor_message', 'send_candidate_message'];
+
+    return disableFields.indexOf(this.config.key) !== -1 && !this.siteSettings.isSmsEnabled();
   }
 
   public getDisabledTitle(disabled?: boolean): string {
