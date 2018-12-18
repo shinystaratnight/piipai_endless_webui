@@ -81,8 +81,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.siteSettings.settings = data;
         this.saveProcess = false;
-        this.savedTheme = null;
-        this.savedFont = null;
+        this.savedTheme = data.company_settings.color_scheme;
+        this.savedFont = data.company_settings.font;
       },
       (err: any) => {
         this.saveProcess = false;
