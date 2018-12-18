@@ -9,6 +9,8 @@ import { GenericFormService } from '../../dynamic-form/services/generic-form.ser
 import { Field } from '../../dynamic-form/models/field.model';
 import { SettingsService } from '../settings.service';
 
+import * as moment from 'moment-timezone';
+
 @Component({
   selector: 'app-myob',
   templateUrl: './myob.component.html',
@@ -246,22 +248,29 @@ export class MyobComponent implements OnInit, OnDestroy {
         .getAll(url)
         .subscribe(
           (res: any) => {
-            this.getAccountsOfCompanyFile(
-              companyFile.id,
+            const accounts = res.filter((el) => el.type.toLowerCase() === 'income');
+
+            this.parseAccounts(
+              accounts,
               'invoice_activity_account',
               this.payrollAccounts['invoice_activity_account'].value
             );
-            this.refreshTime('payroll_accounts_last_refreshed');
+
+            this.refreshTime('payroll_accounts_last_refreshed', true);
           },
           (err: any) => this.error = err
         );
     }
   }
 
-  public refreshTime(field: string) {
+  public refreshTime(field: string, now?: boolean) {
+    if (now) {
+      this.MYOBSettings[field] = moment().format();
+      return;
+    }
+
     const url = '/company_settings/myob_settings/';
-    this.gfs
-      .getAll(url)
+    this.gfs.getAll(url)
       .subscribe(
         (res: any) => {
           this.MYOBSettings[field] = res.myob_settings[field];
