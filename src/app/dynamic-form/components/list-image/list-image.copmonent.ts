@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
-import { getContactAvatar } from '../../../helpers/utils';
+import { getContactAvatar, isCandidate, isMobile } from '../../helpers';
 
 @Component({
   selector: 'app-list-image',
@@ -17,6 +17,11 @@ export class ListImageComponent implements OnInit {
   public last: boolean;
   public file: string;
   public contactAvatar: string;
+
+  public isMobileDevice = isMobile() && isCandidate();
+
+  @ViewChild('filelink')
+  public link: ElementRef<HTMLAnchorElement>;
 
   public ngOnInit() {
     let defaultAvatar: string;
@@ -56,6 +61,10 @@ export class ListImageComponent implements OnInit {
 
   public getExtension(link: string) {
     return link.split('.').pop();
+  }
+
+  public downloadFile() {
+    this.link.nativeElement.click();
   }
 
   get emptyValue() {

@@ -17,6 +17,7 @@ import {
 } from '../../services/';
 import { GenericFormService, FormMode } from '../../dynamic-form/services/';
 import { CheckPermissionService, ToastService, MessageType } from '../../shared/services/';
+import { isMobile, isCandidate } from '../../helpers/utils';
 
 @Component({
   selector: 'app-site',
@@ -80,6 +81,8 @@ export class SiteComponent implements OnInit, OnDestroy {
     '/hr/timesheets/history/',
     '/hr/timesheets/unapproved/',
   ];
+
+  public isMobileDevice = isMobile() && isCandidate();
 
   @ViewChild('modal') public modal;
   @ViewChild('forgotPassword') public forgotPasswordModal;
@@ -451,8 +454,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   public identifyDevice() {
     if (this.pageData) {
       if (this.user.currentRole.__str__.includes('client') && this.pageData.pathData.path === '/' ) {
-        const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
-        return deviceNamesReg.test(navigator.userAgent.toLowerCase());
+        return isMobile();
       }
     }
   }

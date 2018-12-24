@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import moment from 'moment-timezone';
 
 import { FilterService } from './../../services/filter.service';
+import { isMobile } from '../../helpers';
 
 interface Params {
   [query: string]: string;
@@ -49,7 +50,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit() {
     this.data = this.createInputs(this.config.input);
-    this.mobileDevice = this.identifyDevice();
+    this.mobileDevice = isMobile();
 
     this.querySubscription = this.route.queryParams.subscribe(() =>
       this.updateFilter()
@@ -62,11 +63,6 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngOnDestroy() {
     this.querySubscription.unsubscribe();
     this.filterSubscription.unsubscribe();
-  }
-
-  public identifyDevice() {
-    const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
-    return deviceNamesReg.test(navigator.userAgent.toLowerCase());
   }
 
   public ngAfterViewInit() {

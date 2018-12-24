@@ -19,6 +19,11 @@ p {
 
     margin-top: -40px;
     margin-bottom: 10px;
+
+    &.mobile {
+      flex-wrap: nowrap;
+      margin-top: 0;
+    }
   }
 
   &-title span {
@@ -29,10 +34,16 @@ p {
 
   &-left {
     margin-right: 1rem;
+
+    .mobile & {
+      margin: 0;
+      order: 1;
+    }
   }
 
   &-image {
     position: relative;
+    text-align: center;
 
     img,
     .contact-avatar {
@@ -294,4 +305,14 @@ p {
   .form-group {
     margin-bottom: 11px;
   }
+}
+
+.mobile .score {
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1;
 }

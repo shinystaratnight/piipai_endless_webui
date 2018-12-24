@@ -1568,7 +1568,8 @@ const profile = [
       birthday: 'contact.birthday'
     },
     type: 'info',
-    key: 'id'
+    key: 'id',
+    hideOnMobile: true,
   },
   {
     type: 'tabs',
@@ -1580,6 +1581,22 @@ const profile = [
         type: 'group',
         label: 'Personal information',
         children: [
+          {
+            type: 'row',
+            showOnMobile: true,
+            children: [
+              {
+                values: {
+                  address: 'contact.address.__str__',
+                  title: 'contact.__str__',
+                  picture: 'contact.picture',
+                  birthday: 'contact.birthday'
+                },
+                type: 'info',
+                key: 'id',
+              }
+            ]
+          },
           {
             type: 'row',
             children: [
@@ -2036,7 +2053,7 @@ const profile = [
         query: {
           candidate_contact: '{id}'
         },
-        help: 'Here you can see the skills which belong to the candidate'
+        help: 'Here you can see skills'
       },
       {
         endpoint: '/candidate/tagrels/',
@@ -2057,7 +2074,7 @@ const profile = [
         query: {
           candidate_contact: '{id}'
         },
-        help: 'Here you can see the tags which belong to the candidate'
+        help: 'Here you can see tags'
       },
       {
         endpoint: '/hr/candidateevaluations/',
@@ -2073,7 +2090,7 @@ const profile = [
         query: {
           candidate_contact: '{id}'
         },
-        help: 'Here you can see evaluations for the candidate'
+        help: 'Here you can see evaluations'
       },
     ]
   }

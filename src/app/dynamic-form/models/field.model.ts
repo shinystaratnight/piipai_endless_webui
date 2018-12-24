@@ -71,6 +71,8 @@ export interface Field {
   formBuilder?: boolean;
   hideEditButton?: boolean;
   inline?: boolean;
+  hideOnMobile?: boolean;
+  showOnMobile?: boolean;
   templateOptions?: {
     dontSendFields?: boolean;
     label?: string;

@@ -7,7 +7,7 @@
 </app-navigation>
 
 <ng-container *ngIf="!identifyDevice()">
-  <div class="site-page" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
+  <div class="site-page" [class.mobile-device]="isMobileDevice" *ngIf="pageData && !dashboard" [ngSwitch]="pageData.pathData.type">
     <div *ngSwitchCase="'form'" class="form-page" [class.profile-page]="isProfilePage(pageData)">
       <ng-container *ngIf="listName && !(pageData.pathData.postfix && pageData.pathData.postfix === 'fillin') && !isProfilePage(pageData)">
         <ng-container *ngTemplateOutlet="backward; context: {title: listName}"></ng-container>

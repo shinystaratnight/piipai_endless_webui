@@ -82,7 +82,7 @@
 
       <app-action-element *ngIf="config.list.actions && !inForm" [count]="selectedCount" [config]="config.list.actions" (event)="actionHandler($event)"></app-action-element>
 
-      <div ngbDropdown class="sort-dropdown" *ngIf="identifyDevice()">
+      <div ngbDropdown class="sort-dropdown" *ngIf="identifyDevice() || isMobileDevice">
         <label ngbDropdownToggle>
           Sort by
         </label>
@@ -186,6 +186,7 @@
                 </td>
 
                 <td *ngFor="let cell of row.content" [ngStyle]="{'width.px': cell.width}" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
+                  <label class="cell-label" *ngIf="isMobileDevice">{{cell.label}}</label>
                   <ng-container
                     *ngIf="cell.name !== 'actions'"
                     appListElement

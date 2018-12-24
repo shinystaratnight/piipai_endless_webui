@@ -1,6 +1,8 @@
 import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+import { isMobile, isCandidate } from '../../helpers';
+
 @Component({
   selector: 'app-form-row',
   templateUrl: 'form-row.component.html',
@@ -13,6 +15,8 @@ export class FormRowComponent implements OnInit {
   public errors: any;
   public message: any;
   public className: any;
+
+  public isMobileDevice = isMobile() && isCandidate();
 
   @Input()
   public last: boolean;

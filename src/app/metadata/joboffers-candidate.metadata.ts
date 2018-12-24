@@ -49,7 +49,7 @@ const list = {
       },
       {
         label: 'Job Site - Map',
-        delim: ' ',
+        delim: null,
         name: 'job_site_-_map',
         title: null,
         content: [
@@ -90,7 +90,7 @@ const list = {
       },
       {
         label: 'Status',
-        delim: null,
+        delim: ' ',
         name: 'status',
         title: null,
         content: [

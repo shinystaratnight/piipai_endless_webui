@@ -20,7 +20,7 @@ import { ToastService } from '../../../shared/services';
 import { Field } from '../../models';
 
 import { FormatString } from '../../../helpers/format';
-import { getElementFromMetadata, removeValue } from '../../helpers/utils';
+import { getElementFromMetadata, removeValue, isCandidate, isMobile } from '../../helpers';
 
 import moment from 'moment-timezone';
 
@@ -321,7 +321,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   }
 
   public checkFormInfoElement(metadata: any[]) {
-    const infoElement = getElementFromMetadata(metadata, 'id');
+    let infoElement = getElementFromMetadata(metadata, 'id');
+    if (infoElement && infoElement.hideOnMobile && isMobile() && isCandidate()) {
+      const index = metadata.indexOf(infoElement);
+      metadata.splice(index, 1);
+      infoElement = getElementFromMetadata(metadata, 'id');
+    }
 
     if (infoElement && infoElement.type === 'info') {
       const keys = Object.keys(infoElement.values);

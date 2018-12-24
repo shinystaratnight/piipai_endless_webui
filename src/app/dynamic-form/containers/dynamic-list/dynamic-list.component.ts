@@ -21,6 +21,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { FilterService, GenericFormService } from './../../services';
 import { FormatString } from '../../../helpers/format';
+import { isMobile, isCandidate } from '../../helpers';
 import { smallModalEndpoints } from '../../helpers/small-modal';
 import { LocalStorageService } from 'ngx-webstorage';
 import { AuthService } from '../../../services';
@@ -214,6 +215,7 @@ export class DynamicListComponent
   ];
   public collapsed = true;
   public sortedField: any;
+  public isMobileDevice = isMobile() && isCandidate();
 
   constructor(
     private filterService: FilterService,
@@ -1799,8 +1801,7 @@ export class DynamicListComponent
     });
 
     if (changeDesign) {
-      const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
-      return deviceNamesReg.test(navigator.userAgent.toLowerCase());
+      return isMobile();
     }
   }
 
