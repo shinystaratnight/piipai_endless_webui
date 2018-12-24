@@ -16,6 +16,7 @@ import { Field } from '../../models';
 export class FormBuilderFormComponent implements OnInit {
 
   @Input() public id: string;
+  @Input() public companyId: string;
   @Input() public config: any;
 
   @Output() public formConfig: EventEmitter<any> = new EventEmitter();
@@ -36,7 +37,8 @@ export class FormBuilderFormComponent implements OnInit {
       label: 'Industry',
       type: 'related',
       values: ['__str__', 'id']
-    }
+    },
+    query: {}
   };
 
   constructor(
@@ -47,6 +49,10 @@ export class FormBuilderFormComponent implements OnInit {
 
   public ngOnInit() {
     this.getRenderData();
+
+    this.industyField.query = {
+      comapny: this.companyId
+    }
   }
 
   public getRenderData() {

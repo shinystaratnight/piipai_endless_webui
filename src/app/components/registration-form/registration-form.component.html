@@ -12,6 +12,7 @@
     <div class="form-content">
       <app-form-builder-form
         [id]="settings.register_form_id"
+        [companyId]="settings.company"
         (formConfig)="setFormConfig($event)">
       </app-form-builder-form>
     </div>
