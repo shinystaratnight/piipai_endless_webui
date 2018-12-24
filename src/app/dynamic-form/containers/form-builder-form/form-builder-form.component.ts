@@ -51,8 +51,8 @@ export class FormBuilderFormComponent implements OnInit {
     this.getRenderData();
 
     this.industyField.query = {
-      comapny: this.companyId
-    }
+      company: this.companyId
+    };
   }
 
   public getRenderData() {
