@@ -1793,7 +1793,7 @@ export class DynamicListComponent
     let changeDesign = false;
 
     this.mobileDesign.forEach((el) => {
-      if (this.endpoint.includes(el)) {
+      if (this.endpoint && this.endpoint.includes(el)) {
         changeDesign = true;
       }
     });
