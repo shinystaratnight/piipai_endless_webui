@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 
 import { Subscription, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
@@ -29,6 +30,8 @@ export class ExtendComponent extends BasicElementComponent
   public extendCandidates: boolean;
   public autofill: any;
   public removeDate: BehaviorSubject<string> = new BehaviorSubject('');
+  public availabilityCandidates: any;
+  public someUnavailable: boolean;
 
   private formSubscription: Subscription;
 
@@ -109,8 +112,8 @@ export class ExtendComponent extends BasicElementComponent
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((data) => {
         this.formData = data.data;
-
         this.autoFillData = this.formData.last_fullfilled;
+        this.availabilityCandidates = this.getAvailabilityCandidates(this.formData.available, this.autoFillData[0].candidates);
 
         if (!this.autoFillData) {
           this.viewConfig.extendDates = {
@@ -134,6 +137,45 @@ export class ExtendComponent extends BasicElementComponent
 
       this.formSubscription = subscription;
     }
+  }
+
+  public getAvailabilityCandidates(data: any, candidates: any[]): any {
+    const lastCandidates = this.getCandidatesFromLastShift(data, candidates);
+    const result = [];
+
+    for (const candidate in lastCandidates) {
+      if (data.hasOwnProperty(candidate)) {
+        const candidateInfo = {
+          candidateName: candidate,
+          shifts: []
+        };
+        const shifts = [];
+        candidateInfo.shifts = shifts;
+
+        data[candidate].forEach((el) => {
+          if (el) {
+            shifts.push(...el.shifts);
+          }
+        });
+
+        if (candidateInfo.shifts.length > 0) {
+          this.someUnavailable = true;
+        }
+
+        result.push(candidateInfo);
+      }
+    }
+
+    return result;
+  }
+
+  public getCandidatesFromLastShift(availability: any, candidates: any[]): any {
+    const result = {};
+    candidates.forEach((el) => {
+      result[el.__str__] = availability[el.__str__];
+    });
+
+    return result;
   }
 
   public generateShift(date: string) {
@@ -179,10 +221,60 @@ export class ExtendComponent extends BasicElementComponent
           true
         );
         shift['data'].insert(i, this.fb.group({}));
+
+        setTimeout(() => {
+          this.getAvailableCandidate(el.candidates, date, el.time, shift['config'], i);
+        }, 100);
       });
     }
 
     return shift;
+  }
+
+  public getAvailableCandidate(
+    candidates: any[],
+    date: string,
+    time: string,
+    config: any,
+    index: number
+  ) {
+    const availableCandidates = [];
+    candidates.forEach((candidate) => {
+      if (this.checkCandidateAvailability(candidate.__str__, this.availabilityCandidates, date)) {
+        availableCandidates.push(candidate);
+      }
+    });
+
+    if (availableCandidates.length < candidates.length) {
+      const workers = candidates.length - availableCandidates.length;
+
+      this.getCandidates(date, { time, workers })
+        .subscribe((candidateList) => {
+          this.updateShift(
+            { time, workers: candidates.length },
+            config,
+            index,
+            candidateList.slice(0, workers)
+          );
+        });
+    }
+  }
+
+  public checkCandidateAvailability(candidate: string, available: any[], date: string): boolean {
+    const candidateInfo = available.find((el) => el.candidateName === candidate);
+
+    if (candidateInfo) {
+      if (!candidateInfo.shifts.length) {
+        return true;
+      }
+
+      return !candidateInfo.shifts.some((el) => {
+        const shiftDate = moment.tz(el.datetime, 'Australia/Sydney')
+          .format('YYYY-MM-DD');
+
+        return shiftDate === date;
+      });
+    }
   }
 
   public addTime(shift) {
@@ -342,52 +434,65 @@ export class ExtendComponent extends BasicElementComponent
 
   public autocompleteCandidates() {
     this.shifts.forEach((shift) => {
-      shift.data.controls.forEach((data, i) => {
-        const candidates = shift.config[i].candidates;
+      shift.data.controls.forEach((control, i) => {
+        const data = control.value;
+        const config = shift.config;
+        const candidatesConfig = config[i].candidates;
 
-        if (!candidates.doNotChoice) {
-          this.getCandidates(shift.date, data.value, shift.config, i);
+        if (!candidatesConfig.doNotChoice) {
+          this.getCandidates(shift.date, data)
+            .subscribe((candidates) => {
+              this.updateShift(
+                data,
+                config,
+                i,
+                candidates.slice(0, data.workers)
+              );
+            });
         }
       });
     });
   }
 
-  public getCandidates(date, data, target, index) {
+  public getCandidates(date: string, data: any) {
     if (data.time && data.workers) {
-      const endpoint = `/hr/jobs/${
-        this.formData.id.id
-      }/extend_fillin/`;
-      const timeZoneOffset = moment
-        .tz('Australia/Sydney')
-        .format('Z')
-        .slice(1);
+      const endpoint = `/hr/jobs/${this.formData.id.id}/extend_fillin/`;
+      const timeZoneOffset = moment.tz('Australia/Sydney').format('Z').slice(1);
       const query = `?shift=${date}T${data.time}%2B${timeZoneOffset}`;
 
-      this.gfs.getByQuery(endpoint, query).subscribe((res: any) => {
-        this.sortCandidate(res.results);
+      return this.gfs.getByQuery(endpoint, query).pipe(
+        map(
+          (res: any) => {
+            this.sortCandidate(res.results);
 
-        const candidates = res.results.slice(0, data.workers);
-        const newConfig = { ...target[index] };
-        newConfig.candidates = {
-          ...newConfig.candidates,
-          value: candidates
-        };
-        newConfig.workers = {
-          ...newConfig.workers,
-          value: data.workers
-        };
-        newConfig.time = {
-          ...newConfig.time,
-          value: data.time
-        };
-
-        setTimeout(() => {
-          target[index] = { ...newConfig };
-        }, 0);
-
-        target[index] = null;
-      });
+            return res.results;
+          })
+        );
     }
+  }
+
+  public updateShift(data: any, config: any, index: number, candidates: any[]) {
+    const newConfig = {
+      ...config[index],
+      candidates: {
+        ...config[index].candidates,
+        value: candidates
+      },
+      workers: {
+        ...config[index].workers,
+        value: data.workers
+      },
+      time: {
+        ...config[index].time,
+        value: data.time
+      }
+    };
+
+    setTimeout(() => {
+      config[index] = { ...newConfig };
+    }, 0);
+
+    config[index] = null;
   }
 
   public sortCandidate(candidates) {

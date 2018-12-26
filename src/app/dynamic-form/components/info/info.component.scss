@@ -25,6 +25,12 @@
   opacity: .5;
   cursor: pointer;
 
+  &.danger {
+    border-color: $brand-danger;
+    color: $brand-danger;
+    opacity: 1;
+  }
+
   &:hover {
     border-color: $brand-primary;
     color: $brand-primary;

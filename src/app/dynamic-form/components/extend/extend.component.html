@@ -27,7 +27,21 @@
       [group]="viewData">
     </ng-container>
 
-    <app-info [placement]="'right'" [description]="fillinfo"></app-info>
+    <app-info class="pl-2"
+      *ngIf="!someUnavailable"
+      placement="right"
+      [description]="fillinfo">
+    </app-info>
+
+    <app-info class="pl-2"
+      *ngIf="someUnavailable"
+      [danger]="true"
+      placement="right"
+      [triggersType]="'click:click'"
+      [description]="availableinfo">
+    </app-info>
+
+    <span class="text-success pl-2" *ngIf="someUnavailable">| Candidate was replaced for some dates, due to unavailability</span>
   </div>
 
   <div class="shifts-header">
@@ -109,4 +123,28 @@
     <i fa name="times" class="text-secondary icon align-self-start" (click)="removeTime(target, index, parentIndex)"></i>
   </div>
 
+</ng-template>
+
+<ng-template #availableinfo>
+  <div class="available-info">
+    <h6 class="available-info-title">Unavailable candidates , dates and reason</h6>
+
+    <div class="candidate-available-info" *ngFor="let candidate of availabilityCandidates">
+      <span class="candidate-name">{{candidate.candidateName}}</span>
+        <div class="available-info-detail" *ngFor="let shift of candidate.shifts">
+          <div class="available-info-datetime">
+            {{shift.datetime | dateFormat:'datetime'}}
+          </div>
+          <span *ngFor="let message of shift.messages">
+            {{message.status}}&nbsp;
+            <a class="description"
+              *ngIf="message.job"
+              href="{{'/hr/jobs/' + message.job + '/change'}}"
+              target="_black">
+                &nbsp;to {{message.message}}
+            </a>
+          </span>
+        </div>
+    </div>
+  </div>
 </ng-template>
