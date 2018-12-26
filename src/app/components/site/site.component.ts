@@ -83,8 +83,8 @@ export class SiteComponent implements OnInit, OnDestroy {
   ];
 
   get isMobileDevice() {
-    return isMobile() && isCandidate()
-  };
+    return isMobile() && isCandidate();
+  }
 
   @ViewChild('modal') public modal;
   @ViewChild('forgotPassword') public forgotPasswordModal;
