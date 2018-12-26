@@ -6,7 +6,7 @@
         {{contactAvatar}}
       </div>
 
-      <span class="score"
+      <span class="score d-block"
         *ngIf="isMobileDevice && getScore(averageScore)"
         [style.borderColor]="colors[getScore(averageScore)]"
         [style.color]="colors[getScore(averageScore)]">

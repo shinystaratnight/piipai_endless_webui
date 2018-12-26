@@ -82,7 +82,9 @@ export class SiteComponent implements OnInit, OnDestroy {
     '/hr/timesheets/unapproved/',
   ];
 
-  public isMobileDevice = isMobile() && isCandidate();
+  get isMobileDevice() {
+    return isMobile() && isCandidate();
+  }
 
   @ViewChild('modal') public modal;
   @ViewChild('forgotPassword') public forgotPasswordModal;
