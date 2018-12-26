@@ -15,6 +15,7 @@ import moment from 'moment-timezone';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { FormatString } from '../../../helpers/format';
+import { isMobile } from '../../helpers';
 
 @Component({
   selector: 'app-form-datepicker',
@@ -72,7 +73,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.checkFormData();
-    this.mobileDevice = this.identifyDevice();
+    this.mobileDevice = isMobile();
     this.createEvent();
     this.group.get(this.key).valueChanges.subscribe((val) => {
       if (!val) {
@@ -196,11 +197,6 @@ export class FormDatepickerComponent extends BasicElementComponent
           : '-';
       }
     }
-  }
-
-  public identifyDevice() {
-    const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
-    return deviceNamesReg.test(navigator.userAgent.toLowerCase());
   }
 
   public setDatepickerDate() {

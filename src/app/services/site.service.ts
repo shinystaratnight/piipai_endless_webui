@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { Page } from './navigation.service';
-
 import { of } from 'rxjs';
+
+import { Page } from './navigation.service';
 
 interface PathData {
   type: string;
@@ -22,7 +22,7 @@ export class SiteService {
 
   public list: Page[];
 
-  public getDataOfPage(url: any, list) {
+  public getDataOfPage(url: any, list: Page[]) {
     return of(this.generateData(list, url));
   }
 

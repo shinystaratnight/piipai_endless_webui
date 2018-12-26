@@ -1,10 +1,17 @@
-<div class="form-info-wrapper">
+<div *ngIf="!(config.hideOnMobile && isMobileDevice)" class="form-info-wrapper" [class.mobile]="isMobileDevice">
   <div class=form-info-left *ngIf="config.metadata['picture'] || contactAvatar || picture || map">
     <div class="form-info-image">
       <img *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture">
       <div *ngIf="contactAvatar && !(config && config.metadata['picture'] && !viewMode && config.editForm) && !map" class="contact-avatar">
         {{contactAvatar}}
       </div>
+
+      <span class="score"
+        *ngIf="isMobileDevice && getScore(averageScore)"
+        [style.borderColor]="colors[getScore(averageScore)]"
+        [style.color]="colors[getScore(averageScore)]">
+          &nbsp;{{averageScore | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
+      </span>
 
       <div class="map" *ngIf="map">
         <agm-map [zoomControl]="false" [streetViewControl]="false" [latitude]="map.latitude" [longitude]="map.longitude" [zoom]="13">
@@ -102,7 +109,7 @@
             [group]="group">
           </ng-container>
         </span>
-        <span class="score"
+        <span [hidden]="isMobileDevice" class="score"
           *ngIf="getScore(averageScore)"
           [style.borderColor]="colors[getScore(averageScore)]"
           [style.color]="colors[getScore(averageScore)]">

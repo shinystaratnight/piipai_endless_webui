@@ -13,8 +13,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subscription } from 'rxjs';
 
-import { getContactAvatar } from '../../../helpers/utils';
-import { FormatString } from '../../../helpers/format.ts';
+import { getContactAvatar, isCandidate, isMobile } from '../../helpers';
+import { FormatString } from '../../../helpers/format';
 
 @Component({
   selector: 'app-form-info',
@@ -61,6 +61,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public statusList: any[];
   public more: boolean;
   public disableButtons = true;
+  public isMobileDevice = isMobile() && isCandidate();
 
   public colors = {
     1: '#FA5C46',
@@ -78,7 +79,10 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[];
 
-  constructor(private modalService: NgbModal, private router: Router) {
+  constructor(
+    private modalService: NgbModal,
+    private router: Router,
+  ) {
     this.subscriptions = [];
   }
 

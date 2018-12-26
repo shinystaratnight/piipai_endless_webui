@@ -8,9 +8,10 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { FormService } from '../../services';
-
 import { Subscription } from 'rxjs';
+
+import { FormService } from '../../services';
+import { isMobile, isCandidate } from '../../helpers';
 
 @Component({
   selector: 'app-form-tabs',
@@ -36,6 +37,8 @@ export class FormTabsComponent implements OnInit, OnDestroy {
 
   @Output() public event = new EventEmitter();
   @Output() public buttonAction = new EventEmitter();
+
+  public isMobileDevice = isMobile() && isCandidate();
 
   constructor(
     private formService: FormService,

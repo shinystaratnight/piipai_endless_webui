@@ -141,6 +141,16 @@
     font-size: 14px;
     line-height: 20px;
 
+    .mobile-device & {
+      display: inline-block;
+      width: auto;
+      margin-left: 5px;
+    }
+
+    .mobile .form-info-wrapper & {
+      margin-left: 0;
+    }
+
     .address-field & {
       font-size: 12px;
     }
@@ -247,7 +257,15 @@
     font-size: 12px;
     line-height: 14px;
 
-    color: rgba($gray, .3);
+    color: $gray;
+    opacity: .3;
+
+    .mobile-device & {
+      font-size: 15px;
+      line-height: 16px;
+
+      opacity: .6;
+    }
 
     .message-detail & {
       text-transform: uppercase;

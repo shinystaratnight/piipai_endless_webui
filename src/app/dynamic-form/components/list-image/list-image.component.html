@@ -12,11 +12,16 @@
 <img *ngIf="src" [src]="src" width="60" height="60">
 <i *ngIf="icon && !config.setColorForLabel" fa [name]="icon" [ngClass]="[iconClass]" [title]="config.title || ''" [ngStyle]="{'fontSize.px': config.fontSize}"></i>
 <span class="mr-1" *ngIf="config.delim && !last">{{config.delim}}</span>
-<a *ngIf="file" [href]="file" target="_blank">
-  <i fa name="file" class="file-icon"></i>
-  <i fa name="download" class="download-icon"></i>
-  <span *ngIf="config.display">{{config.display}}</span>
-  <span *ngIf="!config.display">{{getExtension(file) | uppercase}} File</span>
-</a>
+<div *ngIf="file" [class.mobile]="isMobileDevice">
+  <a #filelink
+    [href]="file"
+    target="_blank">
+      <i #emmi fa name="file" class="file-icon"></i>
+      <i fa name="download" class="download-icon"></i>
+      <span *ngIf="config.display">{{config.display}}</span>
+      <span *ngIf="!config.display">{{getExtension(file) | uppercase}} File</span>
+  </a>
+  <i *ngIf="file" class="upload-button" (click)="downloadFile()" fa name="download"></i>
+</div>
 <div *ngIf="contactAvatar" class="contact-avatar">{{contactAvatar}}</div>
 <br *ngIf="!config.hidden && !config.delim">

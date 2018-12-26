@@ -5,10 +5,10 @@
   display: flex;
   flex-wrap: wrap;
 
-  padding-bottom: 20px;
+  padding-bottom: 12px;
   margin-bottom: 20px;
 
-  border-bottom: 1px solid rgba($gray, .05);
+  border-bottom: 2px solid rgba($gray, .05);
 
   &.last {
     border-bottom: none;

@@ -214,6 +214,59 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     }
   }
 
+  .mobile-device & {
+    table {
+      display: block;
+
+      @include media-breakpoint-down('md') {
+        min-width: auto;
+      }
+    }
+
+    thead {
+      display: none;
+    }
+
+    tr {
+      box-shadow: none;
+      border-radius: 0;
+
+      &:hover,
+      &:active,
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    td {
+      padding: 8px 16px;
+    }
+
+    tr,
+    td,
+    tbody {
+      display: block;
+    }
+
+    tr:nth-child(odd) {
+      background-color: rgba($gray, .03);
+
+      td {
+        background-color: transparent;
+      }
+    }
+
+    .cell-label {
+      margin-bottom: 0;
+      font-size: 14px;
+      line-height: 24px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: $gray;
+      opacity: .3;
+    }
+  }
+
   &-label {
     display: flex;
     justify-content: space-between;
