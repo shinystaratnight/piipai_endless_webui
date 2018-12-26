@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { LocalStorageService } from 'ngx-webstorage';
+import { Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { Role } from './user.service';
@@ -14,6 +15,7 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   public loginWithTokenEndpoint: string;
   public refreshTokenEndpoint = '/oauth2/token/';
+  public logoutAction: Subject<any> = new Subject();
 
   private _role: Role;
 
@@ -89,6 +91,7 @@ export class AuthService {
     this.permission.permissions = null;
     this.storage.clear('role');
     this.storage.clear('user');
+    this.logoutAction.next(true);
     this.router.navigate(['login']);
   }
 }

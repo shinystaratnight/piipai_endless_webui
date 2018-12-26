@@ -13,6 +13,7 @@ export class SiteSettingsService {
   public siteEndpoint: string;
   public settings: any;
   public authorized: boolean;
+  public currentEndpoint: string;
 
   constructor(
     private http: HttpClient,
@@ -32,7 +33,9 @@ export class SiteSettingsService {
             this.authorized = true;
 
             if (user.data.contact.contact_type === 'manager') {
-              return this.getSettings(this.endpoint);
+              const update = this.currentEndpoint !== this.endpoint;
+
+              return this.getSettings(this.endpoint, update);
             } else {
               return this.getSettings(this.siteEndpoint);
             }
@@ -55,8 +58,10 @@ export class SiteSettingsService {
     return `SMS sending is disabled for ${this.getCompanyName()}, please contact your administrator.`;
   }
 
-  private getSettings(endpoint: string): Observable<any> {
-    if (!this.settings || !this.authService.isAuthorized) {
+  private getSettings(endpoint: string, update?: boolean): Observable<any> {
+    this.currentEndpoint = endpoint;
+
+    if (!this.settings || !this.authService.isAuthorized || update) {
       return this.http
         .get(endpoint)
         .pipe(
