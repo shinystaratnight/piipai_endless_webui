@@ -158,6 +158,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostListener('document:click', ['$event'])
+  @HostListener('document:touchstart', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;
     let inside = false;
