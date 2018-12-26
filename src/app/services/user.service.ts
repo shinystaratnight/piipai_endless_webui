@@ -67,7 +67,11 @@ export class UserService {
             if (!this.user.data.contact.contact_type || !res.roles.length) {
               this.authService.logout();
 
-              this.toastService.sendMessage('User is invalid', MessageType.error);
+              setTimeout(() => {
+                this.toastService.sendMessage('User is invalid', MessageType.error);
+              }, 2000);
+              throw 'User is invalid';
+              return;
             }
 
             const redirectRole: Role = this.authService.role;
