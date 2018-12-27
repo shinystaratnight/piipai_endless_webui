@@ -69,7 +69,7 @@ export class UserService {
 
               setTimeout(() => {
                 this.toastService.sendMessage('User is invalid', MessageType.error);
-              }, 2000);
+              }, 1000);
               throw 'User is invalid';
               return;
             }
