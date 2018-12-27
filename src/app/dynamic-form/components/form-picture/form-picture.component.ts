@@ -214,6 +214,14 @@ export class FormPictureComponent
   public fileChangeEvent(e) {
     this.updateValue('', '', true);
     const file = e.target.files[0];
+
+    if (file.size > 1000000) {
+      this.errors[this.key] = 'File is too large!';
+    } else {
+      this.errors[this.key] = '';
+    }
+
+
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
