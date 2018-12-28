@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { meta } from './company.meta';
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
+import { Field } from '../../dynamic-form/models';
+import { GenericFormService } from '../../dynamic-form/services';
 import { SettingsService } from '../settings.service';
 import { SiteSettingsService } from '../../services';
 
@@ -16,6 +17,11 @@ import { SiteSettingsService } from '../../services';
 export class CompanyComponent implements OnInit, OnDestroy {
 
   public endpoint = '/company_settings/';
+  public hiddenFields = {
+    elements: [],
+    keys: [],
+    observers: []
+  };
 
   public errors: any;
   public response: any;
@@ -50,10 +56,49 @@ export class CompanyComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.config = meta;
         this.fillingForm(this.config, res);
+        this.updateMetadataByProps(this.config);
         this.company = res.company_settings.company;
       },
       (err: any) => this.errors = err
     );
+  }
+
+  public updateMetadataByProps(metadata: Field[]) {
+    metadata.forEach((el) => {
+      if (el.showIf && el.showIf.length) {
+          if (this.hiddenFields.keys.indexOf(el.key) === -1) {
+            this.hiddenFields.keys.push(el.key);
+            this.hiddenFields.elements.push(el);
+            this.hiddenFields.observers = this.observeFields(
+              el.showIf,
+              this.hiddenFields.observers
+            );
+            el.hidden = new BehaviorSubject(true);
+          }
+        }
+
+      if (el.children) {
+        this.updateMetadataByProps(el.children);
+      }
+    });
+  }
+
+  public observeFields(fields: any[], observers) {
+    fields.forEach((field: any) => {
+      if (field instanceof Object) {
+        const keys = Object.keys(field);
+        keys.forEach((key) => {
+          if (observers.indexOf(key) === -1) {
+            observers.push(key);
+          }
+        });
+      } else {
+        if (observers.indexOf(field) === -1) {
+          observers.push(field);
+        }
+      }
+    });
+    return observers;
   }
 
   public ngOnDestroy() {
