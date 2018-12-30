@@ -4,6 +4,7 @@
 
 <app-dynamic-form
   [config]="config"
+  [hiddenFields]="hiddenFields"
   (submitForm)="submitForm($event)"
   (event)="eventHandler($event)">
   <div class="d-flex">

@@ -1,3 +1,6 @@
+import { BehaviorSubject } from 'rxjs';
+const formData = new BehaviorSubject({ data: {} });
+
 export const meta = [
   {
     type: 'row',
@@ -86,6 +89,31 @@ export const meta = [
               type: 'checkbox',
               description: 'Please deselect this checkbox if you want to disable sms sending from r3sourcer software',
               required: false
+            }
+          },
+          {
+            key: 'company_settings.pre_shift_sms_enabled',
+            type: 'checkbox',
+            formData,
+            read_only: false,
+            templateOptions: {
+              label: 'Pre-Shift check enabled',
+              type: 'checkbox',
+              required: false
+            }
+          },
+          {
+            type: 'input',
+            key: 'company_settings.pre_shift_sms_delta',
+            formData,
+            showIf: [{
+              'company_settings.pre_shift_sms_enabled': true
+            }],
+            templateOptions: {
+              max: 240,
+              min: 1,
+              label: 'Pre-Shift check SMS time interval (minutes)',
+              type: 'number',
             }
           },
         ]
