@@ -35,24 +35,26 @@ export class NavigationService {
   ) { }
 
   public getPages(role: Role) {
-    if (!this.navigationList[role.id]) {
-      const query = `&role=${role.id}`;
-      return this.gfs
-        .getAll(`${this.endpoint}${query}`)
-        .pipe(
-          map((res: any) => {
-            if (res.results) {
-              this.currentRole = role;
-              this.navigationList[role.id] = res.results;
-              this.linksList.length = 0;
-              this.generateLinks(this.navigationList[role.id], this.linksList);
+    if (role) {
+      if (!this.navigationList[role.id]) {
+        const query = `&role=${role.id}`;
+        return this.gfs
+          .getAll(`${this.endpoint}${query}`)
+          .pipe(
+            map((res: any) => {
+              if (res.results) {
+                this.currentRole = role;
+                this.navigationList[role.id] = res.results;
+                this.linksList.length = 0;
+                this.generateLinks(this.navigationList[role.id], this.linksList);
 
-              return this.navigationList[role.id];
-            }
-          })
-        );
-    } else {
-      return of(this.navigationList[role.id]);
+                return this.navigationList[role.id];
+              }
+            })
+          );
+      } else {
+        return of(this.navigationList[role.id]);
+      }
     }
   }
 
