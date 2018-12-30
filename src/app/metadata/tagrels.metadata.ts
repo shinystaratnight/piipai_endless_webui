@@ -7,7 +7,7 @@ const listColumns = {
     content: [
       {
         type: 'picture',
-        display: 'Сertificate of education',
+        display: 'View document',
         emptyValue: 'Not verify',
         field: 'verification_evidence'
       }
