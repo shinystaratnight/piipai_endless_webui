@@ -28,20 +28,19 @@
     </ng-container>
 
     <app-info class="pl-2"
-      *ngIf="!someUnavailable"
+      *ngIf="!someUnavailable || !viewData.value.extendCandidates"
       placement="right"
       [description]="fillinfo">
     </app-info>
 
     <app-info class="pl-2"
-      *ngIf="someUnavailable"
+      *ngIf="someUnavailable && viewData.value.extendCandidates"
       [danger]="true"
       placement="right"
-      [triggersType]="'click:click'"
       [description]="availableinfo">
     </app-info>
 
-    <span class="text-success pl-2" *ngIf="someUnavailable">| Candidate was replaced for some dates, due to unavailability</span>
+    <span class="text-success pl-2" *ngIf="someUnavailable && viewData.value.extendCandidates">| Candidate was replaced for some dates, due to unavailability</span>
   </div>
 
   <div class="shifts-header">
