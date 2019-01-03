@@ -69,7 +69,7 @@ const list = {
         ]
       },
       {
-        label: 'Total',
+        label: 'Total hours',
         delim: null,
         name: 'totalTime',
         content: [
@@ -80,7 +80,7 @@ const list = {
         ]
       },
       {
-        label: 'Approve',
+        label: 'Approve/Change',
         delim: null,
         name: 'approve',
         title: null,
@@ -91,11 +91,21 @@ const list = {
             type: 'button',
             color: 'success',
             label: 'Approve',
-            inverse: true,
             endpoint: '/hr/timesheets/{id}/approve/',
             replace_by: 'supervisor',
             field: 'id',
             action: 'approveTimesheet',
+            hidden: 'supervisor_approved_at'
+          },
+          {
+            text: 'Change',
+            icon: 'fa-pencil',
+            type: 'button',
+            color: 'danger',
+            label: 'Change',
+            endpoint: '/hr/timesheets/{id}/not_agree/',
+            field: 'id',
+            action: 'changeTimesheet',
             hidden: 'supervisor_approved_at'
           }
         ]
@@ -104,6 +114,7 @@ const list = {
         label: 'Change',
         delim: null,
         name: 'change',
+        hide: true,
         title: null,
         content: [
           {
@@ -112,7 +123,6 @@ const list = {
             type: 'button',
             color: 'danger',
             label: 'Change',
-            inverse: true,
             endpoint: '/hr/timesheets/{id}/not_agree/',
             field: 'id',
             action: 'changeTimesheet',
@@ -132,7 +142,6 @@ const list = {
             icon: 'fa-star',
             type: 'button',
             color: 'warning',
-            inverse: true,
             endpoint: '/hr/timesheets/{id}/evaluate/',
             field: 'id',
             action: 'evaluateCandidate'

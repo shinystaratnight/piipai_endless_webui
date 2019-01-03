@@ -753,6 +753,7 @@ export class DynamicListComponent
           id: el.id,
           label: col.label,
           hideLabel: col.hideLabel,
+          hide: col.hide,
           name: col.name,
           content: [],
           contextMenu: col.context_menu,
@@ -1109,7 +1110,7 @@ export class DynamicListComponent
 
     const totalTime = moment.duration(workTime - breakTime);
 
-    return `${totalTime.hours()}h ${totalTime.minutes()}m`;
+    return `${totalTime.hours()}hr ${totalTime.minutes()}min`;
   }
 
   public checkValue(obj) {
@@ -2086,5 +2087,9 @@ export class DynamicListComponent
 
   public getElement(name: string, row: any[]): any {
     return row.find((el) => el.name === name);
+  }
+
+  public inverseButton(field) {
+    return { ...field, inverse: true };
   }
 }

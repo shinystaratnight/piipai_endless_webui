@@ -127,25 +127,27 @@
                 </div>
               </th>
               <ng-container *ngFor="let field of config.list.columns">
-                <th *ngIf="!(field.tab && field.tab.is_collapsed)">
-                  <ng-container
-                    appListElement
-                    [head]="true"
-                    [config]="field"
-                    (event)="sorting(field)">
-                  </ng-container>
-                  <i fa
-                    class="sort-icon"
-                    *ngIf="field.sort && !delay"
-                    [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'"
-                    [class.active]="field.sorted && !delay"
-                    (click)="sorting(field, field.sorted === 'desc' ? 'asc' : 'desc')"></i>
-                  <!-- (click)="field.openSort = !field.openSort"></i> -->
-                  <!-- <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">
-                    <li [class.active]="field.sorted === 'asc'" (click)="sorting(field, 'asc'); field.openSort = false">Alphabetically A-Z</li>
-                    <li [class.active]="field.sorted === 'desc'" (click)="sorting(field, 'desc'); field.openSort = false">Alphabetically Z-A</li>
-                  </ul> -->
-                </th>
+                <ng-container *ngIf="!field.hide">
+                  <th *ngIf="!(field.tab && field.tab.is_collapsed)">
+                    <ng-container
+                      appListElement
+                      [head]="true"
+                      [config]="field"
+                      (event)="sorting(field)">
+                    </ng-container>
+                    <i fa
+                      class="sort-icon"
+                      *ngIf="field.sort && !delay"
+                      [name]="field.sorted === 'asc' ? 'angle-up' : 'angle-down'"
+                      [class.active]="field.sorted && !delay"
+                      (click)="sorting(field, field.sorted === 'desc' ? 'asc' : 'desc')"></i>
+                    <!-- (click)="field.openSort = !field.openSort"></i> -->
+                    <!-- <ul *ngIf="field.sort && !delay && field.openSort" class="sort-parameters">
+                      <li [class.active]="field.sorted === 'asc'" (click)="sorting(field, 'asc'); field.openSort = false">Alphabetically A-Z</li>
+                      <li [class.active]="field.sorted === 'desc'" (click)="sorting(field, 'desc'); field.openSort = false">Alphabetically Z-A</li>
+                    </ul> -->
+                  </th>
+                </ng-container>
               </ng-container>
               <th *ngIf="config.list.tabs" class="last-cell">
                 More
@@ -185,37 +187,39 @@
                     (click)="editObject(row.id, row.__str__)"></i>
                 </td>
 
-                <td *ngFor="let cell of row.content" [ngStyle]="{'width.px': cell.width}" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
-                  <label class="cell-label" *ngIf="isMobileDevice">{{cell.label}}</label>
-                  <ng-container
-                    *ngIf="cell.name !== 'actions'"
-                    appListElement
-                    [config]="cell.content"
-                    (event)="eventHandler($event)"
-                    (buttonAction)="buttonHandler($event)">
-                  </ng-container>
+                <ng-container *ngFor="let cell of row.content">
+                  <td *ngIf="!cell.hide" [ngStyle]="{'width.px': cell.width}" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
+                    <label class="cell-label" *ngIf="isMobileDevice">{{cell.label}}</label>
+                    <ng-container
+                      *ngIf="cell.name !== 'actions'"
+                      appListElement
+                      [config]="cell.content"
+                      (event)="eventHandler($event)"
+                      (buttonAction)="buttonHandler($event)">
+                    </ng-container>
 
-                  <ng-container *ngIf="cell.name === 'actions'">
-                    <ng-template #actionsTemplate>
-                      <ng-container
-                        appListElement
-                        [config]="cell.content"
-                        (event)="eventHandler($event)"
-                        (buttonAction)="buttonHandler($event, cell.pop = pop)">
-                      </ng-container>
-                    </ng-template>
-                    <i fa class="icon px-3 py-1" style="opacity: .3; margin-left: 8px"
-                      name="ellipsis-v"
-                      placement="bottom"
-                      #pop="ngbPopover"
-                      [ngbPopover]="actionsTemplate">
-                    </i>
-                  </ng-container>
+                    <ng-container *ngIf="cell.name === 'actions'">
+                      <ng-template #actionsTemplate>
+                        <ng-container
+                          appListElement
+                          [config]="cell.content"
+                          (event)="eventHandler($event)"
+                          (buttonAction)="buttonHandler($event, cell.pop = pop)">
+                        </ng-container>
+                      </ng-template>
+                      <i fa class="icon px-3 py-1" style="opacity: .3; margin-left: 8px"
+                        name="ellipsis-v"
+                        placement="bottom"
+                        #pop="ngbPopover"
+                        [ngbPopover]="actionsTemplate">
+                      </i>
+                    </ng-container>
 
-                  <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
-                    <app-list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></app-list-table>
-                  </div>
-                </td>
+                    <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
+                      <app-list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></app-list-table>
+                    </div>
+                  </td>
+                </ng-container>
 
                 <td *ngIf="config.list.tabs" class="last-cell">
                   <i fa
@@ -541,12 +545,20 @@
       (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">
     </ng-container>
+    <span style="font-size: 14px; opacity: .5">Total hours:&nbsp;</span>
+    <ng-container *ngFor="let field of getElement('totalTime', data.content).content"
+      appListElement
+      [length]="getElement('totalTime', data.content).content.length"
+      [config]="field"
+      (event)="eventHandler($event)"
+      (buttonAction)="buttonHandler($event)">
+    </ng-container>
   </div>
   <div class="footer">
     <div class="button-wrapper">
-      <ng-container *ngFor="let field of getElement('approve', data.content).content"
+      <ng-container *ngFor="let field of getElement('approve', data.content).content.slice(0, 1)"
         appListElement
-        [config]="field"
+        [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)">
       </ng-container>
@@ -554,7 +566,7 @@
     <div class="button-wrapper">
       <ng-container *ngFor="let field of getElement('change', data.content).content"
         appListElement
-        [config]="field"
+        [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)">
       </ng-container>
@@ -562,7 +574,7 @@
     <div class="button-wrapper">
       <ng-container *ngFor="let field of getElement('evaluate', data.content).content"
         appListElement
-        [config]="field"
+        [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)">
       </ng-container>
