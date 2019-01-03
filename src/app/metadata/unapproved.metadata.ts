@@ -69,6 +69,17 @@ const list = {
         ]
       },
       {
+        label: 'Total',
+        delim: null,
+        name: 'totalTime',
+        content: [
+          {
+            type: 'text',
+            field: 'totalTime',
+          }
+        ]
+      },
+      {
         label: 'Approve',
         delim: null,
         name: 'approve',

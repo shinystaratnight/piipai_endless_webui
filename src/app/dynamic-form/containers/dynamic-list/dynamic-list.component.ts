@@ -1086,11 +1086,30 @@ export class DynamicListComponent
         object[param] =
           data[prop] && data[prop].__str__ ? data[prop].__str__ : data[prop];
       } else if (!object[param]) {
-        object[param] = data[prop];
+        if (prop === 'totalTime') {
+          object[param] = this.getTotalTime(data);
+        } else {
+          object[param] = data[prop];
+        }
       }
     } else if (data[prop]) {
       this.setValue(data[prop], props, object, param);
     }
+  }
+
+  public getTotalTime(data) {
+    const break_ended_at = moment.tz(data.break_ended_at, 'Australia/Sydney');
+    const break_started_at = moment.tz(data.break_started_at, 'Australia/Sydney');
+    const shift_ended_at = moment.tz(data.shift_ended_at, 'Australia/Sydney');
+    const shift_started_at = moment.tz(data.shift_started_at, 'Australia/Sydney');
+
+
+    const breakTime = break_ended_at.diff(break_started_at);
+    const workTime = shift_ended_at.diff(shift_started_at);
+
+    const totalTime = moment.duration(workTime - breakTime);
+
+    return `${totalTime.hours()}h ${totalTime.minutes()}m`;
   }
 
   public checkValue(obj) {
