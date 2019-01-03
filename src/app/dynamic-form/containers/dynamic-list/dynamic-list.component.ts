@@ -753,6 +753,7 @@ export class DynamicListComponent
           id: el.id,
           label: col.label,
           hideLabel: col.hideLabel,
+          hide: col.hide,
           name: col.name,
           content: [],
           contextMenu: col.context_menu,
@@ -1086,11 +1087,30 @@ export class DynamicListComponent
         object[param] =
           data[prop] && data[prop].__str__ ? data[prop].__str__ : data[prop];
       } else if (!object[param]) {
-        object[param] = data[prop];
+        if (prop === 'totalTime') {
+          object[param] = this.getTotalTime(data);
+        } else {
+          object[param] = data[prop];
+        }
       }
     } else if (data[prop]) {
       this.setValue(data[prop], props, object, param);
     }
+  }
+
+  public getTotalTime(data) {
+    const break_ended_at = moment.tz(data.break_ended_at, 'Australia/Sydney');
+    const break_started_at = moment.tz(data.break_started_at, 'Australia/Sydney');
+    const shift_ended_at = moment.tz(data.shift_ended_at, 'Australia/Sydney');
+    const shift_started_at = moment.tz(data.shift_started_at, 'Australia/Sydney');
+
+
+    const breakTime = break_ended_at.diff(break_started_at);
+    const workTime = shift_ended_at.diff(shift_started_at);
+
+    const totalTime = moment.duration(workTime - breakTime);
+
+    return `${totalTime.hours()}hr ${totalTime.minutes()}min`;
   }
 
   public checkValue(obj) {
@@ -1489,7 +1509,7 @@ export class DynamicListComponent
             : '/assets/img/avatar.png',
         name: contact.__str__
       };
-      this.open(this.evaluateModal, { size: 'lg' });
+      this.open(this.evaluateModal, { size: 'lg', windowClass: 'visible-mode' });
     }
   }
 
@@ -2067,5 +2087,9 @@ export class DynamicListComponent
 
   public getElement(name: string, row: any[]): any {
     return row.find((el) => el.name === name);
+  }
+
+  public inverseButton(field) {
+    return { ...field, inverse: true };
   }
 }

@@ -832,6 +832,15 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
+.ui-datebox-flipcontent div {
+  width: 70px !important;
+}
+
+.ui-datebox-flipcenter {
+  width: 236px !important;
+  height: 36px !important;
+}
+
 .ui-datebox-container.dropdown-menu {
   width: auto;
   min-width: 210px;
