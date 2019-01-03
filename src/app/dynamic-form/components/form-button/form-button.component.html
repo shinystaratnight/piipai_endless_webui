@@ -43,6 +43,7 @@
   <span *ngIf="config.delim">{{config.delim}}</span>
 </div>
 <span *ngIf="config.emptyValue && config.hidden">{{config.emptyValue}}</span>
+<span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">{{config.delim}}</span>
 <br *ngIf="config.list && !config.hidden && !config.delim && !config.noDelim">
 
 <ng-template #detail>
