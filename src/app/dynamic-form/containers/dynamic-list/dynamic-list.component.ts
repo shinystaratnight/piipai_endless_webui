@@ -1489,7 +1489,7 @@ export class DynamicListComponent
             : '/assets/img/avatar.png',
         name: contact.__str__
       };
-      this.open(this.evaluateModal, { size: 'lg' });
+      this.open(this.evaluateModal, { size: 'lg', windowClass: 'visible-mode' });
     }
   }
 

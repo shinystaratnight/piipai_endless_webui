@@ -80,6 +80,11 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
           useFocus: true,
           themeDatePick: 'primary',
           calHighToday: true,
+          beforeOpenCallback: () => {
+            setTimeout(() => {
+              this.refreshDatebox(el.nativeElement);
+            }, 200);
+          },
           closeCallback: () => {
             const date = el.nativeElement.value;
             this.onChange(date, el.nativeElement.name);
@@ -87,6 +92,12 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         el.nativeElement.readOnly = false;
       });
+    }
+  }
+
+  public refreshDatebox(element: HTMLElement) {
+    if (element) {
+      (window as any).$(element).datebox('refresh');
     }
   }
 

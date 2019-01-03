@@ -241,9 +241,13 @@ export class FormDatepickerComponent extends BasicElementComponent
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
           maxDays: this.key.includes('birthday') && -1,
-          openCallback: () => {
+          bootstrapDropdownRight: dateType === 'calbox',
+          beforeOpenCallback: () => {
             this.opened = this.d.nativeElement;
             this.updatePosition();
+            setTimeout(() => {
+              this.refreshDatebox(this.d.nativeElement);
+            }, 200);
           },
           closeCallback: () => {
             const date = this.d.nativeElement.value;
@@ -274,9 +278,13 @@ export class FormDatepickerComponent extends BasicElementComponent
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
           maxDays: this.key.includes('birthday') && -1,
-          openCallback: () => {
+          bootstrapDropdownRight: timeType === 'timebox',
+          beforeOpenCallback: () => {
             this.opened = this.t.nativeElement;
             this.updatePosition();
+            setTimeout(() => {
+              this.refreshDatebox(this.t.nativeElement);
+            }, 200);
           },
           closeCallback: () => {
             const date = this.d.nativeElement.value;
@@ -300,10 +308,13 @@ export class FormDatepickerComponent extends BasicElementComponent
           useFocus: true,
           useHeader: false,
           calHighToday: false,
-          bootstrapDropdownRight: false,
-          openCallback: () => {
+          bootstrapDropdownRight: timeType === 'timebox',
+          beforeOpenCallback: () => {
             this.opened = this.t.nativeElement;
             this.updatePosition();
+            setTimeout(() => {
+              this.refreshDatebox(this.t.nativeElement);
+            }, 200);
           },
           closeCallback: () => {
             const time = this.t.nativeElement.value;
@@ -353,6 +364,12 @@ export class FormDatepickerComponent extends BasicElementComponent
       setTimeout(() => {
         return e;
       }, 200);
+    }
+  }
+
+  public refreshDatebox(element: HTMLElement) {
+    if (element) {
+      (window as any).$(element).datebox('refresh');
     }
   }
 
@@ -412,6 +429,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     this.update.next();
   }
 
+  @HostListener('document:touchstart', ['$event'])
   @HostListener('document:click', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;
