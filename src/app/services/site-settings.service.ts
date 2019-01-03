@@ -47,11 +47,15 @@ export class SiteSettingsService {
   }
 
   public isSmsEnabled() {
-    return this.settings.company_settings.sms_enabled;
+    if (this.settings.company_settings) {
+      return this.settings.company_settings.sms_enabled;
+    }
   }
 
   public getCompanyName() {
-    return this.settings.company_settings.company_name;
+    if (this.settings.company_settings) {
+      return this.settings.company_settings.company_name;
+    }
   }
 
   public getSmsSendTitle() {
