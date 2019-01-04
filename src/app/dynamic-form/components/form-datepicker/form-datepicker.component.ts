@@ -209,6 +209,12 @@ export class FormDatepickerComponent extends BasicElementComponent
     }
   }
 
+  public closeDatePicker(element) {
+    if (element) {
+      (window as any).$(element).datebox('close');
+    }
+  }
+
   public setTimepickerTime() {
     if (this.init) {
       if (this.time) {
@@ -247,6 +253,10 @@ export class FormDatepickerComponent extends BasicElementComponent
             this.updatePosition();
             setTimeout(() => {
               this.refreshDatebox(this.d.nativeElement);
+              if (type === 'datetime') {
+                this.closeDatePicker(this.t.nativeElement);
+                this.opened = this.d.nativeElement;
+              }
             }, 200);
           },
           closeCallback: () => {
@@ -258,7 +268,6 @@ export class FormDatepickerComponent extends BasicElementComponent
             } else {
               this.group.get(this.key).patchValue(null);
             }
-            this.opened = false;
           }
         });
       }
@@ -284,6 +293,7 @@ export class FormDatepickerComponent extends BasicElementComponent
             this.updatePosition();
             setTimeout(() => {
               this.refreshDatebox(this.t.nativeElement);
+              this.closeDatePicker(this.d.nativeElement);
             }, 200);
           },
           closeCallback: () => {
@@ -295,7 +305,6 @@ export class FormDatepickerComponent extends BasicElementComponent
             } else {
               this.group.get(this.key).patchValue(null);
             }
-            this.opened = false;
           }
         });
       }
@@ -323,7 +332,6 @@ export class FormDatepickerComponent extends BasicElementComponent
             } else {
               this.group.get(this.key).patchValue(null);
             }
-            this.opened = false;
           }
         });
       }
@@ -358,12 +366,9 @@ export class FormDatepickerComponent extends BasicElementComponent
     }
 
     if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-
       setTimeout(() => {
         return e;
-      }, 200);
+      }, 100);
     }
   }
 

@@ -61,6 +61,10 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
 .datatable {
 
+  &-list {
+    padding-bottom: 65px;
+  }
+
   &-list .buttons {
     display: flex;
     align-items: center;

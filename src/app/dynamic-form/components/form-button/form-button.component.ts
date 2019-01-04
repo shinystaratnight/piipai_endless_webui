@@ -20,6 +20,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   public buttonColor: string;
   public repeatArray: any[];
   public showButton: boolean;
+  public last: boolean;
 
   public isDisabled: boolean;
   public disabledTitle: string;

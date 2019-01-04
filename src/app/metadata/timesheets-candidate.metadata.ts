@@ -40,6 +40,17 @@ const list = {
         ]
       },
       {
+        label: 'Total hours',
+        delim: null,
+        name: 'totalTime',
+        content: [
+          {
+            type: 'text',
+            field: 'totalTime',
+          }
+        ]
+      },
+      {
         label: 'Jobsite',
         delim: null,
         name: 'jobsite',
