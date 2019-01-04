@@ -236,7 +236,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.currentRole = role;
     this.navigationService.getPages(role)
       .subscribe((pages: any) => {
-        if (!role.__str__.includes('candidate')) {
+        if (!role.__str__.includes('candidate') && !role.__str__.includes('client')) {
           this.permission.parseNavigation(this.permission.permissions, pages);
         }
         this.pagesList = pages;
