@@ -31,7 +31,8 @@ export class ExtendComponent extends BasicElementComponent
   public autofill: any;
   public removeDate: BehaviorSubject<string> = new BehaviorSubject('');
   public availabilityCandidates: any;
-  public someUnavailable: boolean;
+  public autocompleteProcess: boolean;
+  public showAvailability: boolean;
 
   private formSubscription: Subscription;
 
@@ -106,6 +107,7 @@ export class ExtendComponent extends BasicElementComponent
     });
 
     this.change({ type: 'change' });
+    this.checkDates();
   }
 
   public checkFormData() {
@@ -145,24 +147,17 @@ export class ExtendComponent extends BasicElementComponent
 
     for (const candidate in lastCandidates) {
       if (data.hasOwnProperty(candidate)) {
-        const candidateInfo = {
-          candidateName: candidate,
-          shifts: []
-        };
         const shifts = [];
-        candidateInfo.shifts = shifts;
-
         data[candidate].forEach((el) => {
           if (el) {
             shifts.push(...el.shifts);
           }
         });
 
-        if (candidateInfo.shifts.length > 0) {
-          this.someUnavailable = true;
-        }
-
-        result.push(candidateInfo);
+        result.push({
+          candidateName: candidate,
+          shifts
+        });
       }
     }
 
@@ -433,8 +428,9 @@ export class ExtendComponent extends BasicElementComponent
   }
 
   public autocompleteCandidates() {
+    this.autocompleteProcess = true;
     this.shifts.forEach((shift) => {
-      shift.data.controls.forEach((control, i) => {
+      shift.data.controls.forEach((control, i, arr) => {
         const data = control.value;
         const config = shift.config;
         const candidatesConfig = config[i].candidates;
@@ -448,9 +444,29 @@ export class ExtendComponent extends BasicElementComponent
                 i,
                 candidates.slice(0, data.workers)
               );
+
+              if (i === arr.length - 1) {
+                this.autocompleteProcess = false;
+              }
             });
         }
       });
+    });
+  }
+
+  public checkDates() {
+    this.showAvailability = false;
+    const selectedDates = this.shifts.map((el) => el.date);
+
+    this.availabilityCandidates.forEach((candidate) => {
+      candidate.shifts.forEach((shift) => {
+        const date = moment.tz(shift.datetime, 'Australia/Sydney').format('YYYY-MM-DD');
+
+        shift.show = selectedDates.includes(date);
+      });
+
+      candidate.show = candidate.shifts.some((shift) => shift.show);
+      this.showAvailability = this.showAvailability || candidate.show;
     });
   }
 
