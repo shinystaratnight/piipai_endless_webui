@@ -28,25 +28,25 @@
     </ng-container>
 
     <app-info class="pl-2"
-      *ngIf="!someUnavailable || !viewData.value.extendCandidates"
+      *ngIf="!showAvailability || !viewData.value.extendCandidates"
       placement="right"
       [description]="fillinfo">
     </app-info>
 
     <app-info class="pl-2"
-      *ngIf="someUnavailable && viewData.value.extendCandidates"
+      *ngIf="showAvailability && viewData.value.extendCandidates"
       [danger]="true"
       placement="right"
       [description]="availableinfo">
     </app-info>
 
-    <span class="text-success pl-2" *ngIf="someUnavailable && viewData.value.extendCandidates">| Candidate was replaced for some dates, due to unavailability</span>
+    <span class="text-success pl-2" *ngIf="showAvailability && viewData.value.extendCandidates">| Candidate was replaced for some dates, due to unavailability</span>
   </div>
 
   <div class="shifts-header">
     <div class="title">Shifts</div>
 
-    <button type="button" class="btn btn-primary" (click)="autocompleteCandidates()">Autocomplete</button>
+    <button type="button" class="btn btn-primary" (click)="autocompleteCandidates()">Autocomplete <app-spinner *ngIf="autocompleteProcess"></app-spinner></button>
     <app-info [placement]="'bottom'" [description]="requirements"></app-info>
   </div>
 
@@ -129,21 +129,25 @@
     <h6 class="available-info-title">Unavailable candidates , dates and reason</h6>
 
     <div class="candidate-available-info" *ngFor="let candidate of availabilityCandidates">
-      <span class="candidate-name">{{candidate.candidateName}}</span>
+      <ng-container *ngIf="candidate.show">
+        <span class="candidate-name">{{candidate.candidateName}}</span>
         <div class="available-info-detail" *ngFor="let shift of candidate.shifts">
-          <div class="available-info-datetime">
-            {{shift.datetime | dateFormat:'datetime'}}
-          </div>
-          <span *ngFor="let message of shift.messages">
-            {{message.status}}&nbsp;
-            <a class="description"
-              *ngIf="message.job"
-              href="{{'/hr/jobs/' + message.job + '/change'}}"
-              target="_black">
-                &nbsp;to {{message.message}}
-            </a>
-          </span>
+          <ng-container *ngIf="shift.show">
+            <div class="available-info-datetime">
+              {{shift.datetime | dateFormat:'datetime'}}
+            </div>
+            <span *ngFor="let message of shift.messages">
+              {{message.status}}&nbsp;
+              <a class="description"
+                *ngIf="message.job"
+                href="{{'/hr/jobs/' + message.job + '/change'}}"
+                target="_black">
+                  &nbsp;to {{message.message}}
+              </a>
+            </span>
+          </ng-container>
         </div>
+      </ng-container>
     </div>
   </div>
 </ng-template>
