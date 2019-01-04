@@ -1488,6 +1488,35 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
   color: $brand-primary;
 }
 
+.evaluate-label {
+  opacity: .7;
+  margin: 20px;
+}
+
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  color: rgba(#bdbdbd, .3);
+
+  &-lg {
+    font-size: 38px;
+  }
+}
+.full {
+  color: #ffd042;
+}
+.half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #ffd042;
+}
+
+ngb-rating:focus {
+  outline: none;
+}
+
 
 /* Mobile */
 

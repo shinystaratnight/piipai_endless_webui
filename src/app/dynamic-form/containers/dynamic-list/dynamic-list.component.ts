@@ -1437,6 +1437,14 @@ export class DynamicListComponent
             : '/assets/img/avatar.png',
         name: contact.__str__
       };
+      this.modalInfo.data = {
+        was_on_time: true,
+        was_motivated: true,
+        had_ppe_and_tickets: true,
+        met_expectations: true,
+        representation: true,
+        level_of_communication: 1
+      };
       this.open(this.evaluateModal);
     }
   }
