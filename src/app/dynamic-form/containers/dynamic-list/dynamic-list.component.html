@@ -380,30 +380,69 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">
-          Evaluate
+          <ng-container *ngIf="modalInfo.evaluate">
+            Evaluate
+          </ng-container>
+
+          <ng-container *ngIf="!modalInfo.evaluate">
+            <ng-container *ngIf="modalInfo.label.picture">
+              <img class="mr-2" alt="Photo" width="40" height="40"
+                [src]="modalInfo.label.picture">
+            </ng-container>
+
+            <ng-container *ngIf="!modalInfo.label.picture">
+              <span class="mr-2 contact-avatar avatar">{{modalInfo.label.contactAvatar}}</span>
+            </ng-container>
+
+            {{modalInfo.label.name}}
+          </ng-container>
         </h5>
         <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
     </div>
-    <div class="modal-body text-center">
-      <img [src]="modalInfo.label.picture" alt="Photo" style="border-radius: 50%" height="100" width="100">
-      <p class="evaluate-label">{{modalInfo.label.name}}</p>
-      <hr width="100">
+    <div *ngIf="!modalInfo.evaluate" class="modal-body">
+      <app-generic-form
+        [needData]="modalInfo.needData"
+        [endpoint]="modalInfo.endpoint"
+        [data]="modalInfo.data"
+        [edit]="modalInfo.edit"
+        (event)="evaluateEvent($event, c)">
+          <button class="btn btn-primary mr-auto text-white">Submit</button>
+      </app-generic-form>
+    </div>
 
-      <ngb-rating max="5" min="1" [(ngModel)]="modalInfo.data.level_of_communication">
+    <ng-container *ngIf="modalInfo.evaluate">
+      <div class="modal-body text-center">
+        <ng-container *ngIf="modalInfo.label.picture">
+          <img  [src]="modalInfo.label.picture" alt="Photo" style="border-radius: 50%" height="100" width="100">
+        </ng-container>
+
+        <ng-container *ngIf="!modalInfo.label.picture">
+          <span class="contact-avatar contact-avatar-lg">{{modalInfo.label.contactAvatar}}</span>
+        </ng-container>
+
+        <p class="evaluate-label">{{modalInfo.label.name}}</p>
+        <hr width="100">
+
+        <ngb-rating max="5" min="1" [(ngModel)]="modalInfo.data.level_of_communication">
           <ng-template let-fill="fill" let-index="index">
             <span *ngIf="fill === 100" class="star star-lg full">&#9733;</span>
             <span *ngIf="fill === 0" class="star star-lg">
               {{modalInfo.data.level_of_communication ? '&#9733;' : '&#9734;'}}
             </span>
           </ng-template>
-      </ngb-rating>
-    </div>
-    <div class="modal-footer justify-content-center">
-      <button type="button" class="btn big-btn btn-shadow btn-primary button-save">Save</button>
-    </div>
+        </ngb-rating>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn big-btn btn-shadow btn-primary button-save"
+          (click)="sendEvaluateData(modalInfo.endpoint, modalInfo.data)">
+            Save
+            <app-spinner *ngIf="saveProcess"></app-spinner>
+        </button>
+      </div>
+    </ng-container>
   </div>
 </ng-template>
 
