@@ -1,4 +1,37 @@
 import { yesterdayFormatDate, todayFormatDate } from './utils';
+import { createFilter, Type } from '../dynamic-form/models/filters';
+
+const filters = {
+  avarageScore: createFilter(Type.Range, {
+    key: 'candidate_scores.average_score',
+    label: 'Overal score',
+    max: 5
+  }),
+  skill: createFilter(Type.Relared, {
+    key: 'skill',
+    label: 'Skills',
+    endpoint: '/skills/skills/',
+    multiple: true
+  }),
+  tag: createFilter(Type.Relared, {
+    key: 'tag',
+    label: 'Tags',
+    endpoint: '/core/tags/',
+    multiple: true
+  }),
+  activeState: createFilter(Type.Relared, {
+    key: 'active_states',
+    label: 'Status',
+    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact',
+    display: ['name_after_activation', 'name_before_activation'],
+    parameter: 'number'
+  }),
+  recruitmentAgent: createFilter(Type.Relared, {
+    key: 'recruitment_agent',
+    label: 'Recruitment agent',
+    endpoint: '/core/companycontacts/?master_company=current',
+  })
+};
 
 const list = {
   list: {
@@ -264,43 +297,9 @@ const list = {
       }
     ],
     filters: [
-      {
-        key: 'skill',
-        label: 'Skills',
-        data: {
-          value: '__str__',
-          endpoint: '/skills/skills/',
-          key: 'id'
-        },
-        query: 'skill',
-        multiple: true,
-        type: 'related'
-      },
-      {
-        key: 'tag',
-        label: 'Tags',
-        data: {
-          value: '__str__',
-          endpoint: '/core/tags/',
-          key: 'id'
-        },
-        query: 'tag',
-        multiple: true,
-        type: 'related'
-      },
-      {
-        key: 'active_states',
-        label: 'Status',
-        data: {
-          value: ['name_after_activation', 'name_before_activation'],
-          endpoint:
-            '/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact', //tslint:disable-line
-          key: 'number'
-        },
-        query: 'active_states',
-        default: null,
-        type: 'related'
-      },
+      filters.skill,
+      filters.tag,
+      filters.activeState,
       {
         key: 'contact.gender',
         label: 'Gender',
@@ -319,35 +318,8 @@ const list = {
         default: null,
         type: 'checkbox'
       },
-      {
-        key: 'recruitment_agent',
-        label: 'Recruitment agent',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/companycontacts/?master_company=current',
-          key: 'id'
-        },
-        query: 'recruitment_agent'
-      },
-      {
-        key: 'candidate_scores.average_score',
-        label: 'Overal score',
-        max: 5,
-        input: [
-          {
-            label: 'From',
-            query: 'candidate_scores__average_score_0'
-          },
-          {
-            label: 'To',
-            query: 'candidate_scores__average_score_1'
-          }
-        ],
-        default: null,
-        type: 'range',
-        min: null
-      },
+      filters.recruitmentAgent,
+      filters.avarageScore,
       {
         key: 'transportation_to_work',
         label: 'Transportation',
