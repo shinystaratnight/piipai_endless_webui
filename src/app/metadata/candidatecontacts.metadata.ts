@@ -1395,6 +1395,24 @@ const form = [
         help: 'Here you can see favorite companies for candidate'
       },
       {
+        endpoint: '/core/notes/',
+        templateOptions: {
+          label: 'Notes',
+          type: 'list',
+          add_label: '+ Add',
+          text: 'Notes'
+        },
+        collapsed: false,
+        prefilled: {
+          object_id: '{id}',
+          content_type: '{model_content_type}',
+        },
+        type: 'list',
+        query: {
+          object_id: '{id}'
+        }
+      },
+      {
         endpoint: '/hr/joboffers/candidate/',
         templateOptions: {
           label: 'Job offers',
