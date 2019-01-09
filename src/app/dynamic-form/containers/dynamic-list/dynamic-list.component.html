@@ -513,7 +513,7 @@
     <div class="button-wrapper">
       <ng-container *ngFor="let field of getElement('evaluate', data.content).content"
         appListElement
-        [config]="field"
+        [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)">
       </ng-container>
