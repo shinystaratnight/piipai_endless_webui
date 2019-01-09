@@ -1,3 +1,33 @@
+import { createFilter, Type } from '../dynamic-form/models/filters';
+
+const filters = {
+  companyContact: createFilter(Type.Relared, {
+    key: 'company_contact',
+    label: 'Company contact',
+    endpoint: '/core/companycontacts/',
+  }),
+  candidateContact: createFilter(Type.Relared, {
+    key: 'candidate_contact',
+    label: 'Candidate contact',
+    endpoint: '/candidate/candidatecontacts/',
+  }),
+  company: createFilter(Type.Relared, {
+    key: 'company',
+    label: 'Client',
+    endpoint: '/core/companies/',
+  }),
+  jobsite: createFilter(Type.Relared, {
+    key: 'jobsite',
+    label: 'Client',
+    endpoint: '/hr/jobsites/',
+  }),
+  job: createFilter(Type.Relared, {
+    key: 'job',
+    label: 'Job',
+    endpoint: '/hr/jobs/',
+  })
+};
+
 const list = {
   list: {
     list: 'favouritelist',
@@ -33,7 +63,7 @@ const list = {
         content: [
           {
             endpoint: '/core/companycontacts/',
-            field: 'company.manager',
+            field: 'company.primary_contact',
             type: 'related',
             label: 'Company Manager'
           }
@@ -83,61 +113,11 @@ const list = {
     search_enabled: false,
     editDisable: false,
     filters: [
-      {
-        key: 'company_contact',
-        label: 'Company contact',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/companycontacts/',
-          key: 'id'
-        },
-        query: 'company_contact'
-      },
-      {
-        key: 'candidate_contact',
-        label: 'Candidate contact',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/candidate/candidatecontacts/',
-          key: 'id'
-        },
-        query: 'candidate_contact'
-      },
-      {
-        key: 'company',
-        label: 'Client',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/companies/',
-          key: 'id'
-        },
-        query: 'company'
-      },
-      {
-        key: 'jobsite',
-        label: 'Jobsite',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/hr/jobsites/',
-          key: 'id'
-        },
-        query: 'jobsite'
-      },
-      {
-        key: 'job',
-        label: 'Job',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/hr/jobs/',
-          key: 'id'
-        },
-        query: 'job'
-      }
+      filters.companyContact,
+      filters.candidateContact,
+      filters.company,
+      filters.jobsite,
+      filters.job
     ]
   },
   fields: [
@@ -155,7 +135,7 @@ const list = {
       },
       collapsed: false,
       type: 'related',
-      key: 'company.manager',
+      key: 'company.primary_contact',
       many: false
     },
     {

@@ -1,3 +1,30 @@
+import { createFilter, Type } from '../dynamic-form/models/filters';
+
+const filters = {
+  status: createFilter(Type.Relared, {
+    key: 'status',
+    label: 'Status',
+    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel',
+    display: ['name_after_activation', 'name_before_activation'],
+    parameter: 'number'
+  }),
+  manager: createFilter(Type.Relared, {
+    key: 'portfolio_manager',
+    label: 'Portfolio Manager',
+    endpoint: '/core/companycontacts/?master_company=current',
+  }),
+  state: createFilter(Type.Relared, {
+    key: 'state',
+    label: 'State',
+    endpoint: '/core/regions/?country=AU',
+    display: 'name',
+  }),
+  creditLimit: createFilter(Type.Range, {
+    key: 'approved_credit_limit',
+    label: 'Credit Limit'
+  })
+};
+
 const list = {
   list: {
     list: 'company',
@@ -26,21 +53,21 @@ const list = {
       {
         content: [
           {
-            endpoint: '/core/companycontacts/{manager.id}/',
-            field: 'manager.contact',
+            endpoint: '/core/companycontacts/{primary_contact.id}/',
+            field: 'primary_contact.contact',
             type: 'link',
-            display: '{manager.job_title}'
+            display: '{primary_contact.job_title}'
           },
           {
-            field: 'manager.contact.email',
+            field: 'primary_contact.contact.email',
             type: 'link',
             label: 'E-mail',
-            link: 'mailto:{manager.contact.email}'
+            link: 'mailto:{primary_contact.contact.email}'
           },
           {
-            field: 'manager.contact.phone_mobile',
+            field: 'primary_contact.contact.phone_mobile',
             type: 'link',
-            link: 'tel:{manager.contact.phone_mobile}'
+            link: 'tel:{primary_contact.contact.phone_mobile}'
           }
         ],
         name: 'primary_contact',
@@ -54,12 +81,11 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint:
-              '/core/companycontacts/{primary_contact.id}/',
-            field: 'primary_contact',
+            endpoint: '/core/companycontacts/{manager.id}/',
+            field: 'manager',
             type: 'link',
             label: 'Manager',
-            display: '{primary_contact.job_title}'
+            display: '{manager.job_title}'
           }
         ],
         name: 'manager',
@@ -122,43 +148,9 @@ const list = {
     search_enabled: true,
     editDisable: false,
     filters: [
-      {
-        key: 'status',
-        label: 'Status',
-        data: {
-          value: ['name_after_activation', 'name_before_activation'],
-          endpoint:
-            '/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel', //tslint:disable-line
-          key: 'number'
-        },
-        query: 'status',
-        default: null,
-        type: 'related'
-      },
-      {
-        key: 'portfolio_manager',
-        label: 'Portfolio Manager',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint:
-            '/core/companycontacts/?master_company=current',
-          key: 'id'
-        },
-        query: 'portfolio_manager'
-      },
-      {
-        key: 'state',
-        label: 'State',
-        data: {
-          value: 'name',
-          endpoint: '/core/regions/?country=AU',
-          key: 'id'
-        },
-        query: 'state',
-        default: null,
-        type: 'related'
-      },
+      filters.state,
+      filters.manager,
+      filters.state,
       {
         key: 'credit_check',
         label: 'Credit Check',
@@ -177,24 +169,7 @@ const list = {
         multiple: false,
         type: 'checkbox'
       },
-      {
-        key: 'approved_credit_limit',
-        label: 'Credit Limit',
-        max: null,
-        input: [
-          {
-            label: 'From',
-            query: 'approved_credit_limit_0'
-          },
-          {
-            label: 'To',
-            query: 'approved_credit_limit_1'
-          }
-        ],
-        default: null,
-        type: 'range',
-        min: null
-      }
+      filters.creditLimit,
     ]
   },
   fields: [
@@ -219,7 +194,7 @@ const list = {
       read_only: true
     },
     {
-      key: 'primary_contact',
+      key: 'manager',
       type: 'link',
       templateOptions: {
         label: 'Manager',
@@ -286,7 +261,7 @@ const list = {
       read_only: true
     },
     {
-      key: 'manager.contact.phone_mobile',
+      key: 'primary_contact.contact.phone_mobile',
       type: 'link',
       templateOptions: {
         label: '',
@@ -297,7 +272,7 @@ const list = {
       read_only: true
     },
     {
-      key: 'manager.contact.email',
+      key: 'primary_contact.contact.email',
       type: 'link',
       templateOptions: {
         label: 'E-mail',
@@ -319,7 +294,7 @@ const list = {
       read_only: true
     },
     {
-      key: 'manager.contact',
+      key: 'primary_contact.contact',
       type: 'link',
       templateOptions: {
         label: '',
@@ -372,12 +347,12 @@ const form = [
                     list: false,
                     endpoint: '/core/companycontacts/',
                     read_only: false,
-                    key: 'manager',
+                    key: 'primary_contact',
                     templateOptions: {
                       label: 'Name',
                       add: true,
                       delete: false,
-                      values: ['contact'],
+                      values: ['contact', 'job_title'],
                       type: 'related',
                       edit: true,
                       display: '{contact.__str__}'
@@ -394,9 +369,11 @@ const form = [
                     many: false
                   },
                   {
-                    key: 'manager.job_title',
+                    key: 'primary_contact.job_title',
                     send: false,
                     type: 'input',
+                    default: '{primary_contact.job_title}',
+                    showIf: ['primary_contact.id'],
                     templateOptions: {
                       required: false,
                       label: 'Job Title',
@@ -481,7 +458,7 @@ const form = [
                     list: false,
                     endpoint: '/core/companycontacts/',
                     read_only: false,
-                    key: 'primary_contact',
+                    key: 'manager',
                     templateOptions: {
                       label: 'Name',
                       add: false,
