@@ -148,7 +148,7 @@ const list = {
     search_enabled: true,
     editDisable: false,
     filters: [
-      filters.state,
+      filters.status,
       filters.manager,
       filters.state,
       {
