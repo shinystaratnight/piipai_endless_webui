@@ -13,24 +13,23 @@ import {
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { LocalStorageService } from 'ngx-webstorage';
 
 import moment from 'moment-timezone';
 
-import { JwtHelperService } from '@auth0/angular-jwt';
-
-import { FilterService, GenericFormService } from './../../services';
-import { FormatString } from '../../../helpers/format';
-import { isMobile, isCandidate } from '../../helpers';
-import { smallModalEndpoints } from '../../helpers/small-modal';
-import { LocalStorageService } from 'ngx-webstorage';
+import { FilterService, GenericFormService } from '../../services';
 import { AuthService } from '../../../services';
+import { FormatString } from '../../../helpers/format';
+import { createAddAction, isMobile, isCandidate, getContactAvatar, smallModalEndpoints } from '../../helpers';
 
 import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dynamic-list',
-  templateUrl: 'dynamic-list.component.html'
+  templateUrl: './dynamic-list.component.html',
+  styleUrls: ['./dynamic-list.component.scss']
 })
 export class DynamicListComponent
   implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
@@ -172,8 +171,11 @@ export class DynamicListComponent
   public page: any;
   public currentData: any;
   public count: number;
-  public innerTableCall: any;
-  public modalRef: any;
+  public innerTableCall = {
+    row: '',
+    cell: ''
+  };
+  public modalRef: NgbModalRef;
   public tabs: any;
   public evaluateEndpoint: string;
   public approveEndpoint: string;
@@ -183,7 +185,11 @@ export class DynamicListComponent
   public saveProcess: boolean;
   public showFilters: boolean;
   public asyncData: any;
-  public searchFilter: any;
+  public searchFilter = {
+    type: 'search',
+    query: 'search',
+    key: 'search'
+  };
   public position: { top; left };
   public noneEdit: boolean;
   public fullData: any;
@@ -225,18 +231,7 @@ export class DynamicListComponent
     private router: Router,
     private storage: LocalStorageService,
     private authService: AuthService
-  ) {
-    this.searchFilter = {
-      type: 'search',
-      query: 'search',
-      key: 'search'
-    };
-
-    this.innerTableCall = {
-      row: '',
-      cell: ''
-    };
-  }
+  ) {}
 
   public ngOnInit() {
     this.updateFilters();
@@ -1366,27 +1361,33 @@ export class DynamicListComponent
     const id = arr[arr.length - 2];
     arr.splice(arr.length - 2, 1);
     const endpoint = arr.join('/');
-    this.modalInfo = {};
-    this.modalInfo.type = 'form';
-    this.modalInfo.mode = 'view';
-    this.modalInfo.endpoint = '/candidate/candidatecontacts/';
-    this.metadataQuery = 'type=profile';
-    this.modalInfo.id = id;
+    this.modalInfo = {
+      type: 'form',
+      mode: 'view',
+      endpoint: '/candidate/candidatecontacts/',
+      metadataQuery: 'type=profile',
+      id
+    };
+
     this.open(this.modal, { size: 'lg' });
   }
 
   public openForm(e) {
-    this.modalInfo = {};
-    this.modalInfo.type = 'form';
-    this.modalInfo.endpoint = e.el.endpoint;
-    this.modalInfo.label = e.el.value;
+    this.modalInfo = {
+      type: 'form',
+      endpoint: e.el.endpoint,
+      label: e.el.value
+    };
+
     this.open(this.modal, { size: 'lg' });
   }
 
   public setAction(e) {
-    this.modalInfo = {};
-    this.modalInfo.type = 'action';
-    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo = {
+      type: 'action',
+      endpoint: e.el.endpoint
+    };
+
     if (e.el.confirm && e.el.options) {
       this.modalInfo.message = e.el.options.message;
       this.modalInfo.agree_label = e.el.options.agree_label;
@@ -1419,109 +1420,112 @@ export class DynamicListComponent
     this.open(this.modal, { size: 'lg' });
   }
 
-  public evaluate(e) {
-    const object = this.fullData[this.responseField].find(
-      (el) => el.id === e.el.rowId
-    );
-    if (object) {
-      const contact = object.job_offer.candidate_contact.contact;
-      this.modalInfo = {};
-      this.modalInfo.type = 'evaluate';
-      this.modalInfo.endpoint = e.el.endpoint;
-      this.modalInfo.edit = true;
-      this.modalInfo.needData = false;
-      this.modalInfo.label = {
-        picture:
-          contact.picture && contact.picture.origin
-            ? contact.picture.origin
-            : '/assets/img/avatar.png',
-        name: contact.__str__
+  public evaluate(e, data?) {
+    if (!data) {
+      data = this.getRowData(e);
+    }
+
+    if (data) {
+      const contact = data.job_offer.candidate_contact.contact;
+      this.modalInfo = {
+        type: 'evaluate',
+        endpoint: e.el.endpoint,
+        edit: true,
+        evaluate: true,
+        label: {
+          picture: contact.picture && contact.picture.origin,
+          contactAvatar: getContactAvatar(contact.__str__),
+          name: contact.__str__
+        },
+        data: {
+          was_on_time: true,
+          was_motivated: true,
+          had_ppe_and_tickets: true,
+          met_expectations: true,
+          representation: true,
+          level_of_communication: 1
+        }
       };
-      this.open(this.evaluateModal);
+
+      this.open(this.evaluateModal, { windowClass: 'small-modal' });
     }
   }
 
+  public sendEvaluateData(endpoint, data) {
+    this.saveProcess = true;
+    data.level_of_communication = data.level_of_communication + '';
+
+    this.genericFormService.editForm(endpoint, data)
+      .subscribe((res) => {
+        this.modalRef.close();
+        this.saveProcess = false;
+        this.event.emit({
+          type: 'update',
+          list: this.config.list.list
+        });
+      });
+  }
+
   public changeTimesheet(e) {
-    const object = this.fullData[this.responseField].find(
-      (el) => el.id === e.el.rowId
-    );
-    if (object) {
-      const contact = object.job_offer.candidate_contact.contact;
-      this.modalInfo = {};
-      this.modalInfo.type = 'evaluate';
-      this.modalInfo.endpoint = e.el.endpoint;
-      this.modalInfo.edit = true;
-      this.modalInfo.needData = false;
-      this.modalInfo.data = {
-        shift_started_at: {
-          action: 'add',
-          data: {
-            value: object.shift_started_at
-          }
+    const data = this.getRowData(e);
+
+    if (data) {
+      const contact = data.job_offer.candidate_contact.contact;
+      this.modalInfo = {
+        type: 'evaluate',
+        endpoint: e.el.endpoint,
+        edit: true,
+        label: {
+          picture: contact.picture && contact.picture.origin,
+          contactAvatar: getContactAvatar(contact.__str__),
+          name: contact.__str__
         },
-        break_started_at: {
-          action: 'add',
-          data: {
-            value: object.break_started_at
-          }
-        },
-        break_ended_at: {
-          action: 'add',
-          data: {
-            value: object.break_ended_at
-          }
-        },
-        shift_ended_at: {
-          action: 'add',
-          data: {
-            value: object.shift_ended_at
-          }
-        },
-        supervisor: {
-          action: 'add',
-          data: {
-            value: object.supervisor
-          }
-        },
-        position: {
-          action: 'add',
-          data: {
-            value: object.position
-          }
-        },
-        company: {
-          action: 'add',
-          data: {
-            value: object.company
-          }
-        },
-        jobsite: {
-          action: 'add',
-          data: {
-            value: object.jobsite
-          }
+        data: {
+          shift_started_at: createAddAction({
+            value: data.shift_started_at
+          }),
+          break_started_at: createAddAction({
+            value: data.break_started_at
+          }),
+          break_ended_at: createAddAction({
+            value: data.break_ended_at
+          }),
+          shift_ended_at: createAddAction({
+            value: data.shift_ended_at
+          }),
+          supervisor: createAddAction({
+            value: data.supervisor
+          }),
+          position: createAddAction({
+            value: data.position
+          }),
+          company: createAddAction({
+            value: data.company
+          }),
+          jobsite: createAddAction({
+            value: data.jobsite
+          })
         }
       };
-      this.modalInfo.label = {
-        picture:
-          contact.picture && contact.picture.origin
-            ? contact.picture.origin
-            : '/assets/img/avatar.png',
-        name: contact.__str__
-      };
+
       this.open(this.evaluateModal, { size: 'lg', windowClass: 'visible-mode' });
     }
   }
 
   public approveTimesheet(e) {
-    const object = this.fullData[this.responseField].find(
-      (el) => el.id === e.el.rowId
-    );
-    if (object) {
+    const data = this.getRowData(e);
+
+    if (data) {
       this.approveEndpoint = e.el.endpoint;
-      e.el.endpoint = this.format(this.evaluateEndpoint, object);
-      this.evaluate(e);
+      e.el.endpoint = this.format(this.evaluateEndpoint, data);
+      this.evaluate(e, data);
     }
+  }
+
+  public getRowData(event): any {
+    return this.fullData[this.responseField].find(
+      (el) => el.id === event.el.rowId
+    );
   }
 
   public openFrame(e, param = 'recipient') {
@@ -1556,30 +1560,36 @@ export class DynamicListComponent
   }
 
   public eventHandler(e) {
-    this.modalInfo = {};
-    this.modalInfo.type = e.target;
-    this.modalInfo.endpoint = e.endpoint;
-    this.modalInfo.label = e.label;
-    this.modalInfo.id = e.id;
-    this.modalInfo.mode = 'edit';
-    this.modalInfo.dontUseMetadataQuery = true;
+    this.modalInfo = {
+      type: e.target,
+      endpoint: e.endpoint,
+      label: e.label,
+      id: e.id,
+      mode: 'edit',
+      dontUseMetadataQuery: true
+    };
+
     this.open(this.modal, { size: 'lg' });
   }
 
   public addObject() {
-    this.modalInfo = {};
-    this.modalInfo.type = 'form';
-    this.modalInfo.endpoint = this.endpoint;
-    this.modalInfo.label = `Add ${this.config.list.label}`;
+    this.modalInfo = {
+      type: 'form',
+      endpoint: this.endpoint,
+      label: `Add ${this.config.list.label}`
+    };
+
     this.open(this.modal, { size: 'lg' });
   }
 
   public editObject(id, label?) {
-    this.modalInfo = {};
-    this.modalInfo.type = 'form';
-    this.modalInfo.endpoint = this.endpoint;
-    this.modalInfo.label = label ? label : 'Edit';
-    this.modalInfo.id = id;
+    this.modalInfo = {
+      type: 'form',
+      endpoint: this.endpoint,
+      label: label ? label : 'Edit',
+      id
+    };
+
     this.open(this.modal, { size: 'lg' });
   }
 
@@ -1918,7 +1928,7 @@ export class DynamicListComponent
       windowClass = 'extend-modal';
     }
 
-    this.modalRef = this.open(this.modal, { size, windowClass });
+    this.open(this.modal, { size, windowClass });
   }
 
   public showMessage(e) {
@@ -1951,7 +1961,7 @@ export class DynamicListComponent
         ['has_resend_action']: {
           action: 'add',
           data: {
-            value: this.fullData[this.responseField].find((row) => row.id === e.el.rowId)['has_resend_action'] //tslint:disable-line
+            value: this.getRowData(e)['has_resend_action']
           }
         },
         ['resend_id']: {
@@ -1967,9 +1977,11 @@ export class DynamicListComponent
   }
 
   public addForm(e) {
-    this.modalInfo = {};
-    this.modalInfo.type = 'form';
-    this.modalInfo.endpoint = e.el.endpoint;
+    this.modalInfo = {
+      type: 'form',
+      endpoint: e.el.endpoint
+    };
+
     this.open(this.modal, { size: 'lg' });
   }
 

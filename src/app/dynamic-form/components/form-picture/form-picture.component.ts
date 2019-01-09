@@ -153,7 +153,7 @@ export class FormPictureComponent
     }
 
     if (!this.value) {
-      this.value = this.config.companyContact && this.config.key === 'logo' ? '/assets/img/logo.svg' : ''; //tslint:disable-line
+      this.value = this.config.companyContact && this.config.key === 'logo' ? '/assets/img/logo.svg' : '';
 
       if (!this.value && this.config.contactName) {
         this.contactAvatar = getContactAvatar(this.config.contactName);

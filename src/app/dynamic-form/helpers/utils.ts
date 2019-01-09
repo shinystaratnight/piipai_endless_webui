@@ -62,3 +62,10 @@ export function removeValue(key: string, data: any): void {
     this.removeValue(combineKeys, data[firstKey]);
   }
 }
+
+export function createAddAction(data) {
+  return {
+    action: 'add',
+    data
+  };
+}

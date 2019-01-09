@@ -572,6 +572,8 @@ form.ng-invalid button[type='submit'] {
 
 .modal-header {
   background-color: #fff;
+
+  align-items: center;
 }
 
 .modal-content {
@@ -1033,12 +1035,12 @@ form.ng-invalid button[type='submit'] {
 }
 
 .contact-avatar {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
   font-size: 20px;
-  line-height: 24px;
+  line-height: 1.2;
 
   font-weight: 600;
 
@@ -1486,6 +1488,36 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
   border: none;
 
   color: $brand-primary;
+}
+
+.evaluate-label {
+  opacity: .7;
+  margin: 20px;
+}
+
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  color: rgba(#bdbdbd, .3);
+}
+
+.star.star-lg {
+  font-size: 38px;
+}
+
+.full {
+  color: #ffd042;
+}
+.half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #ffd042;
+}
+
+ngb-rating:focus {
+  outline: none;
 }
 
 

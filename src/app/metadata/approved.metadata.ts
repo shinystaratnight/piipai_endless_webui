@@ -79,7 +79,6 @@ const list = {
             icon: 'fa-star',
             type: 'button',
             color: 'warning',
-            inverse: true,
             text: 'Evaluate',
             endpoint: '/hr/timesheets/{id}/evaluate/',
             field: 'id',
