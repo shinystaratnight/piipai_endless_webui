@@ -1,0 +1,27 @@
+<div class="calendar-header">
+  <h2>Calendar</h2>
+
+  <div class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
+    <label [btnRadio]="range.Month" role="button"  [class.active]="range.Month === currentRange.value">Month</label>
+    <label [btnRadio]="range.Week" role="button"  [class.active]="range.Week === currentRange.value">Week</label>
+    <label [btnRadio]="range.Day" role="button"  [class.active]="range.Day === currentRange.value">Day</label>
+  </div>
+
+  <div class="d-flex align-items-center">
+    <button type="button" class="prev" (click)="changeRange(false)">
+      <i fa name="chevron-left"></i>
+    </button>
+
+    <span class="range-title">{{rangeTitle}}</span>
+
+    <button type="button" class="next" (click)="changeRange(true)">
+      <i fa name="chevron-right"></i>
+    </button>
+  </div>
+</div>
+
+<div class="filters"></div>
+
+<div class="calendar">
+
+</div>

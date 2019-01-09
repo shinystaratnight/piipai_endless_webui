@@ -8,6 +8,7 @@ import { VerifyEmailComponent } from './varify-email/varify-email.component';
 import { MapComponent } from './map/map.component';
 import { TestBuilderComponent } from './test-builder/test-builder.component';
 import { MobileTimesheetsComponent } from './mobile-timesheets/mobile-timesheets.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 import { MapService } from './map/map.service';
 
@@ -34,6 +35,7 @@ export const components = [
   MapComponent,
   TestBuilderComponent,
   MobileTimesheetsComponent,
+  CalendarComponent,
 ];
 
 export const providers = [

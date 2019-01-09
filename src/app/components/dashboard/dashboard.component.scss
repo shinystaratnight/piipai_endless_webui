@@ -78,9 +78,10 @@
 
     padding: 24px;
     padding-bottom: calc(24px - 2%);
+    border-radius: .3rem;
 
     background-color: #fff;
-    box-shadow: 0 0 8px rgba($gray, 0.1);
+    box-shadow: $container-box-shadow;
   }
 
   .widget-item {
