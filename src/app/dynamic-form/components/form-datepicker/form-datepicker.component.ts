@@ -365,10 +365,22 @@ export class FormDatepickerComponent extends BasicElementComponent
       }
     }
 
+    if (this.d.nativeElement && this.key.includes('birthday')) {
+      this.updateBirthdayYearPickMax();
+    }
+
     if (e) {
       setTimeout(() => {
         return e;
       }, 100);
+    }
+  }
+
+  public updateBirthdayYearPickMax() {
+    if (this.group.get(this.key).value && this.config.templateOptions.type === 'date') {
+      const maxValue = moment().year() - moment(this.group.get(this.key).value, 'YYYY-MM-DD').year();
+
+      this.setDatepickerProp('calYearPickMax', maxValue, this.d.nativeElement);
     }
   }
 
@@ -432,6 +444,12 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   public updatePosition() {
     this.update.next();
+  }
+
+  public setDatepickerProp(propName: string, value: any, target: HTMLElement) {
+    (window as any).$(target).datebox({
+      [propName]: value
+    });
   }
 
   @HostListener('document:touchstart', ['$event'])
