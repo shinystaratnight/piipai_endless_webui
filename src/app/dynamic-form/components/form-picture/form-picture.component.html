@@ -44,6 +44,7 @@
   <div *ngIf="errors">
     <div class="text-danger mt-1" *ngIf="errors[key]">{{errors[key]}}</div>
   </div>
+  <div class="text-danger mt-1" *ngIf="sizeError">{{sizeError}}</div>
   <div *ngIf="message">
     <div *ngIf="message[key]" class="text-success mt-1">{{message[key]}}</div>
   </div>
