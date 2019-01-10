@@ -52,6 +52,7 @@ export class FormPictureComponent
   public err: any;
   public base64: string;
   public link: string;
+  public sizeError: string;
 
   public value: any;
 
@@ -216,11 +217,10 @@ export class FormPictureComponent
     const file = e.target.files[0];
 
     if (file.size > 1000000) {
-      this.errors[this.key] = 'File is too large!';
+      this.sizeError = 'File is too large!';
     } else {
-      this.errors[this.key] = '';
+      this.sizeError = '';
     }
-
 
     if (file) {
       const reader = new FileReader();
