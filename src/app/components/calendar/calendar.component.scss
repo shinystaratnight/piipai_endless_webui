@@ -54,6 +54,13 @@ h2 {
 .range-title {
   font-size: 24px;
   opacity: .8;
+
+  &-wrapper {
+    display: flex;
+    flex-basis: 300px;
+    justify-content: flex-end;
+    align-items: center;
+  }
 }
 
 .next,
@@ -86,5 +93,40 @@ h2 {
 
   &:focus {
     outline: 0;
+  }
+}
+
+.calendar {
+  padding: $block-padding;
+}
+
+.header-item {
+  text-align: center;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 8px 0;
+  opacity: .4;
+}
+
+.month-day {
+  height: 68px;
+  padding: 8px 9px 8px 12px;
+
+  border: 1px solid #e0e0e0;
+}
+
+.date {
+  font-size: 20px;
+  line-height: 1;
+  opacity: .4;
+}
+
+.grid {
+  &-row {
+    display: flex;
+  }
+
+  &-item {
+    flex: 1 1;
   }
 }

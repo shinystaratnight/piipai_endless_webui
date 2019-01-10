@@ -11,6 +11,8 @@ import { MobileTimesheetsComponent } from './mobile-timesheets/mobile-timesheets
 import { CalendarComponent } from './calendar/calendar.component';
 
 import { MapService } from './map/map.service';
+import { CalendarService } from './calendar/calendar.service';
+import { CalendarDataService } from './calendar/calendar-data.service';
 
 export * from './registration-form/registration-form.component';
 export * from './dashboard/dashboard.component';
@@ -40,4 +42,6 @@ export const components = [
 
 export const providers = [
   MapService,
+  CalendarService,
+  CalendarDataService,
 ];

@@ -3,7 +3,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 
 import * as moment from 'moment-timezone';
 
-enum Range { Month = 'month', Week = 'week', Day = 'day' }
+import { CalendarService, Range, CalendarData } from './calendar.service';
+import { CalendarDataService } from './calendar-data.service';
 
 @Component({
   selector: 'app-calendar',
@@ -13,72 +14,99 @@ enum Range { Month = 'month', Week = 'week', Day = 'day' }
 export class CalendarComponent implements OnInit {
   public range = Range;
   public currentRange: FormControl;
+  public rangeTitle: string;
+  public calendarData: CalendarData;
+  public shifts: any;
+
   private currentDate: any;
 
-  public rangeTitle: string;
 
-  ngOnInit() {
-    this.currentRange = new FormControl(Range.Month);
-    this.currentRange.valueChanges.subscribe((value: Range) => {
-      this.getCurrentRangeLabel(value);
-    });
-    this.currentRange.patchValue(Range.Month);
+  constructor(
+    private calendar: CalendarService,
+    private data: CalendarDataService
+  ) {}
+
+  get isMonthRange() {
+    return this.currentRange.value === Range.Month;
   }
 
-  getCurrentRangeLabel(type: Range, date?: string) {
+  get isWeekRange() {
+    return this.currentRange.value === Range.Week;
+  }
+
+  get isDayRange() {
+    return this.currentRange.value === Range.Day;
+  }
+
+  ngOnInit() {
+    this.currentDate = this.calendar.getToday();
+    this.currentRange = new FormControl('');
+
+    this.currentRange.valueChanges
+      .subscribe((value: Range) => {
+        this.currentDate = this.calendar.getToday();
+
+        this.updateCalendar(this.currentDate, value);
+      });
+
+    this.data.getShiftsByDate(this.currentDate.format(this.calendar.filterFormat), null).subscribe(
+      (data) => {
+        this.prepareData(data);
+        this.currentRange.patchValue(Range.Month);
+      }
+    );
+  }
+
+  private prepareData(data) {
+    if (data.results.length) {
+      this.shifts = data.results.map((shift) => {
+        return {
+          date: shift.date.shift_date,
+          time: shift.time,
+          name: shift.date.job.name,
+          is_fulfilled: shift.is_fulfilled
+        };
+      });
+    }
+  }
+
+  private generateCalendar(date, type: Range) {
+    let calendarData;
+
     switch (type) {
       case Range.Month:
-        this.generateMonth(date);
+        calendarData = this.calendar.generateMonth(date, this.shifts);
         break;
       case Range.Week:
-        this.generateWeek(date);
+        calendarData = this.calendar.generateWeek(date);
         break;
       case Range.Day:
-        this.generateDay(date);
+        calendarData = this.calendar.generateDay(date);
         break;
 
       default:
         break;
     }
+
+    this.calendarData = calendarData;
   }
 
   changeRange(increment: boolean) {
-    const newDate = this.updateDate(this.currentDate, this.currentRange.value, increment);
+    this.currentDate = this.updateDate(this.currentDate, this.currentRange.value, increment);
 
-    this.getCurrentRangeLabel(this.currentRange.value, newDate);
+    this.updateCalendar(this.currentDate, this.currentRange.value);
   }
 
-
-  private generateMonth(date?: string) {
-    this.currentDate = date || this.getNow();
-    this.rangeTitle = this.currentDate.format('MMMM YYYY');
-
+  private updateCalendar(date: any, type: Range) {
+    this.updateCalendarHeader(date, type);
+    this.generateCalendar(date, type);
   }
 
-  private generateWeek(date?: string) {
-    this.currentDate = date || this.getNow();
-
-    const start = this.currentDate.clone().weekday(0);
-    const end = this.currentDate.clone().weekday(6);
-
-    this.rangeTitle = `${start.format('MMM Do')} - ${end.format('MMM Do')}`;
-  }
-
-  private generateDay(date?: any) {
-    this.currentDate = date || this.getNow();
-
-    this.rangeTitle = this.currentDate.format('MMMM Do YYYY');
-  }
-
-  private getNow() {
-    return moment().tz('Australia/Sydney');
+  private updateCalendarHeader(date: any, type: Range) {
+    this.rangeTitle = this.calendar.getRangeFormatDate(date, type);
   }
 
   private updateDate(date: any, type: Range, increment: boolean) {
     return increment ? date.add(1, type) : date.add(-1, type);
-  }
-
-  private resetRangeDates(type: Range) {
-
   }
 }

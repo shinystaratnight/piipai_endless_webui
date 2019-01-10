@@ -1,13 +1,13 @@
 <div class="calendar-header">
-  <h2>Calendar</h2>
+  <h2 class="mr-auto">Calendar</h2>
 
   <div class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
-    <label [btnRadio]="range.Month" role="button"  [class.active]="range.Month === currentRange.value">Month</label>
-    <label [btnRadio]="range.Week" role="button"  [class.active]="range.Week === currentRange.value">Week</label>
-    <label [btnRadio]="range.Day" role="button"  [class.active]="range.Day === currentRange.value">Day</label>
+    <label [btnRadio]="range.Month" role="button"  [class.active]="isMonthRange">Month</label>
+    <label [btnRadio]="range.Week" role="button"  [class.active]="isWeekRange">Week</label>
+    <label [btnRadio]="range.Day" role="button"  [class.active]="isDayRange">Day</label>
   </div>
 
-  <div class="d-flex align-items-center">
+  <div class="range-title-wrapper">
     <button type="button" class="prev" (click)="changeRange(false)">
       <i fa name="chevron-left"></i>
     </button>
@@ -23,5 +23,38 @@
 <div class="filters"></div>
 
 <div class="calendar">
+  <ng-container *ngIf="isMonthRange">
+    <ng-container *ngTemplateOutlet="monthCalendar"></ng-container>
+  </ng-container>
 
+  <ng-container *ngIf="isWeekRange">
+    <ng-container *ngTemplateOutlet="weekCalendar"></ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="isDayRange">
+    <ng-container *ngTemplateOutlet="dayCalendar"></ng-container>
+  </ng-container>
 </div>
+
+<ng-template #monthCalendar>
+  <div class="grid-row">
+    <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
+  </div>
+  <div class="grid-row" *ngFor="let week of calendarData?.body">
+    <span class="grid-item month-day" *ngFor="let day of week">
+      <span class="date">{{day.label}}</span>
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #weekCalendar>
+  <div class="grid-row">
+    <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
+  </div>
+</ng-template>
+
+<ng-template #dayCalendar>
+  <div class="grid-row">
+    <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
+  </div>
+</ng-template>
