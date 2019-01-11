@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 
@@ -8,7 +9,7 @@ export class CalendarDataService {
     private genericFormService: GenericFormService
   ) {}
 
-  getShiftsByDate(date: string, company?: string) {
-    return this.genericFormService.getByQuery('/hr/shifts/', `?date__shift_date=${date}&limit=-1`);
+  getShiftsByQuery(params: HttpParams) {
+    return this.genericFormService.get('/hr/shifts/', params);
   }
 }

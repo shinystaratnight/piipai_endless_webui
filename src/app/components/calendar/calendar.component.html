@@ -41,9 +41,38 @@
     <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
   </div>
   <div class="grid-row" *ngFor="let week of calendarData?.body">
-    <span class="grid-item month-day" *ngFor="let day of week">
-      <span class="date">{{day.label}}</span>
-    </span>
+    <ng-container *ngFor="let day of week">
+      <span *ngIf="!day.tooltip" class="grid-item month-day"><span class="date">{{day.label}}</span></span>
+
+      <span class="grid-item month-day"
+        *ngIf="day.tooltip"
+        [class.active]="day.isOpen"
+        triggers="click:click"
+        [ngbTooltip]="monthTooltip"
+        placement="bottom"
+        (shown)="day.isOpen = true"
+        (hidden)="day.isOpen = false">
+
+        <span class="date">{{day.label}}</span>
+
+        <div class="shift-groups">
+          <div *ngIf="day.tooltip[1].length" class="badge badge-success">{{day.tooltip[1].length}}</div>
+          <div *ngIf="day.tooltip[0].length" class="badge badge-danger">{{day.tooltip[0].length}}</div>
+          <div *ngIf="day.tooltip[2].length" class="badge badge-warning">{{day.tooltip[2].length}}</div>
+        </div>
+
+        <ng-template #monthTooltip>
+          <div class="shift-tooltip">
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'Filled'}"></ng-container>
+
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'Unfilled'}"></ng-container>
+
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'Pending'}"></ng-container>
+          </div>
+        </ng-template>
+      </span>
+    </ng-container>
+
   </div>
 </ng-template>
 
@@ -56,5 +85,18 @@
 <ng-template #dayCalendar>
   <div class="grid-row">
     <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
+  </div>
+</ng-template>
+
+<ng-template #shiftGroup let-shifts="shifts" let-className="className" let-name="name">
+  <div class="mb-3" *ngIf="shifts.length">
+    <p class="shift-tooltip-title">
+      {{name}} <span [ngClass]="'badge badge-' + className">{{shifts.length}}</span>
+    </p>
+
+    <div class="shift-name" *ngFor="let shift of shifts">
+      <i fa name="circle" [ngClass]="'mr-2 text-' + className"></i>
+      {{shift.name}}
+    </div>
   </div>
 </ng-template>

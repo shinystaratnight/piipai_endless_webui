@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment-timezone';
 
 export enum Range { Month = 'month', Week = 'week', Day = 'day' }
+export enum ShiftStatus { Unfilled, Filled, Pending }
 
 export interface CalendarData {
   header: string[];
@@ -53,11 +54,14 @@ export class CalendarService {
       }
 
       const date = currentDay.format(this.filterFormat);
+      const newData = data.filter((el) => el.date === date);
 
       row.push({
         date,
+        data: newData,
         label: currentDay.format('D'),
-        data: data.find((el) => el.date === date)
+        tooltip: this.generateTooltipForMonth(newData),
+        isOpen: false
       });
 
         currentDay.add(1, 'day');
@@ -93,7 +97,23 @@ export class CalendarService {
   }
 
   getToday() {
-    return moment().tz('Australia/Sydney');
+    return moment('2016-12-08').tz('Australia/Sydney');
+  }
+
+  private generateTooltipForMonth(data: any[]) {
+    if (data.length) {
+      const result = {
+        [ShiftStatus.Unfilled]: [],
+        [ShiftStatus.Filled]: [],
+        [ShiftStatus.Pending]: []
+      };
+
+      data.forEach((shift) => {
+        result[shift.is_fulfilled].push(shift);
+      });
+
+      return result;
+    }
   }
 
   private getHeader(type: Range, from: any): string[] {

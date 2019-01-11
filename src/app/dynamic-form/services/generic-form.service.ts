@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -13,6 +13,14 @@ export class GenericFormService {
     private http: HttpClient,
     private errors: ErrorsService
   ) {}
+
+  get(endpoint, params = {}) {
+    const options = {
+      params: new HttpParams({ fromObject: params})
+    };
+
+    return this.http.get(endpoint, options);
+  }
 
   public getByQuery(endpoint, query): any {
     return this.http

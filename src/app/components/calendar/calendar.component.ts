@@ -46,15 +46,35 @@ export class CalendarComponent implements OnInit {
       .subscribe((value: Range) => {
         this.currentDate = this.calendar.getToday();
 
-        this.updateCalendar(this.currentDate, value);
+        const range = this.calendar.getRangeDates(this.currentDate, value);
+        const query = this.generateQuery(range.start, range.end);
+
+        this.getShifts(query, value);
       });
 
-    this.data.getShiftsByDate(this.currentDate.format(this.calendar.filterFormat), null).subscribe(
-      (data) => {
-        this.prepareData(data);
-        this.currentRange.patchValue(Range.Month);
-      }
-    );
+    this.currentRange.patchValue(Range.Month);
+  }
+
+  changeRange(increment: boolean) {
+    this.currentDate = this.updateDate(this.currentDate, this.currentRange.value, increment);
+
+    this.updateCalendar(this.currentDate, this.currentRange.value);
+  }
+
+  private getShifts(query: any, range: Range) {
+    this.data.getShiftsByQuery(query).subscribe((data) => {
+
+      this.updateCalendar(this.currentDate, range);
+    });
+  }
+
+  private generateQuery(from: any, to: any) {
+    return {
+      ['date__shift_date_0']: from.format(this.calendar.filterFormat),
+      ['date__shift_date_1']: to.format(this.calendar.filterFormat),
+      client: 'f8b78178-0d83-4ebf-85f5-23bcb84a18be',
+      fields: ['id', 'date', 'is_fulfilled'],
+    };
   }
 
   private prepareData(data) {
@@ -89,12 +109,6 @@ export class CalendarComponent implements OnInit {
     }
 
     this.calendarData = calendarData;
-  }
-
-  changeRange(increment: boolean) {
-    this.currentDate = this.updateDate(this.currentDate, this.currentRange.value, increment);
-
-    this.updateCalendar(this.currentDate, this.currentRange.value);
   }
 
   private updateCalendar(date: any, type: Range) {
