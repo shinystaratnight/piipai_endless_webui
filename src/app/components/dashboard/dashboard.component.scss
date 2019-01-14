@@ -2,8 +2,6 @@
 @import '../../../styles/mixins.scss';
 
 .dashboard {
-  margin-top: 72px;
-  padding-top: 31px;
 
   a:hover {
     text-decoration: underline;
@@ -48,33 +46,9 @@
     }
   }
 
-  .title,
-  &-wrapper {
-    width: calc(100% - 285px);
-    max-width: 900px;
-
-    margin: 0 auto;
-
-    @include media-breakpoint-down('md') {
-      width: 100%;
-      max-width: 100%;
-    }
-  }
-
-  .title {
-    margin-bottom: 16px;
-
-    font-size: 36px;
-    line-height: 1;
-    font-weight: normal;
-
-    color: #4f4f4f;
-  }
-
   &-wrapper {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    flex-direction: column;
 
     padding: 24px;
     padding-bottom: calc(24px - 2%);
@@ -85,16 +59,12 @@
   }
 
   .widget-item {
-    width: 49%;
+    width: 100%;
 
     margin-bottom: calc(2%);
 
     border: 1px solid rgba(51, 51, 51, .2);
     border-radius: 5px;
-
-    @include media-breakpoint-down('sm') {
-      width: 100%;
-    }
 
     &:nth-child(4n + 1) .widget-header {
       background: linear-gradient(45deg, #7faefe 0%, #80f0fe 100%);

@@ -20,7 +20,57 @@
   </div>
 </div>
 
-<div class="filters"></div>
+<div class="filters filters-inline">
+  <app-filter-related (event)="changeQuery($event)" [config]="filters.client"></app-filter-related>
+  <app-filter-related (event)="changeQuery($event)" [config]="filters.candidate"></app-filter-related>
+
+  <div class="filter-element" #filter>
+    <label class="filter-label related">Info layers</label>
+
+    <div class="filter-related">
+      <div class="d-flex justify-content-center align-items-center autocomplete-filter" style="position: relative">
+        <div class="form-control autocomplete-value"
+          (click)="openAutocomplete($event)">
+            <div style="overflow: hidden; white-space: nowrap">{{status.displayValue(status.data)}} layers</div>
+            <i fa [name]="status.hideAutocomplete ? 'angle-down' : 'angle-up'" class="text-md-white ml-2"></i>
+        </div>
+
+        <div class="autocomplete" [hidden]="status.hideAutocomplete" [ngStyle]="{'top.px': topHeight}">
+          <div class="autocomplete-list">
+            <ul class="list-group w-100">
+              <li class="list-group-item autocomplete-item form-check">
+                <ng-container *ngTemplateOutlet="statusItem; context: {type: '1', label: 'Filled shifts', className: 'success'}"></ng-container>
+              </li>
+              <li class="list-group-item autocomplete-item form-check">
+                <ng-container *ngTemplateOutlet="statusItem; context: {type: '0', label: 'Unfilled shifts', className: 'danger'}"></ng-container>
+              </li>
+              <li class="list-group-item autocomplete-item form-check">
+                <ng-container *ngTemplateOutlet="statusItem; context: {type: '2', label: 'Pending', className: 'warning'}"></ng-container>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #statusItem let-type="type" let-display="label" let-className="className">
+  <label class="d-flex align-items-center">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      [(ngModel)]="status.data[type]"
+      (ngModelChange)="changeQuery()"
+      hidden>
+    <div [ngClass]="className + ' custom-checkbox'">
+      <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.08284 4.87574C2.92663 5.03195 2.67337 5.03195 2.51716 4.87574L1.12071 3.47929C0.888359 3.24694 0.511641 3.24694 0.279289 3.47929C0.0469372 3.71164 0.0469373 4.08836 0.279289 4.32071L2.37574 6.41716C2.61005 6.65147 2.98995 6.65147 3.22426 6.41716L8.52071 1.12071C8.75306 0.888359 8.75306 0.511642 8.52071 0.279289C8.28836 0.0469374 7.91164 0.0469372 7.67929 0.279289L3.08284 4.87574Z" fill="white" stroke="#FDFDFD" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    {{display}}
+  </label>
+</ng-template>
 
 <div class="calendar">
   <ng-container *ngIf="isMonthRange">
@@ -63,11 +113,11 @@
 
         <ng-template #monthTooltip>
           <div class="shift-tooltip">
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'Filled'}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'Filled', status: 'accepted'}"></ng-container>
 
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'Unfilled'}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'Unfilled', status: 'cancelled'}"></ng-container>
 
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'Pending'}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'Pending', status: 'undefined'}"></ng-container>
           </div>
         </ng-template>
       </span>
@@ -88,7 +138,7 @@
   </div>
 </ng-template>
 
-<ng-template #shiftGroup let-shifts="shifts" let-className="className" let-name="name">
+<ng-template #shiftGroup let-shifts="shifts" let-className="className" let-name="name" let-status="status">
   <div class="mb-3" *ngIf="shifts.length">
     <p class="shift-tooltip-title">
       {{name}} <span [ngClass]="'badge badge-' + className">{{shifts.length}}</span>
@@ -96,7 +146,16 @@
 
     <div class="shift-name" *ngFor="let shift of shifts">
       <i fa name="circle" [ngClass]="'mr-2 text-' + className"></i>
-      {{shift.name}}
+      <div>
+        {{shift.position}} <br>
+        <span class="shift-jobsite">{{shift.jobsite}}</span> <br>
+        <div *ngIf="shift.candidates[status].length" class="shift-candidates">
+          <span class="mr-1">Candidate ({{shift.candidates[status].length}}):</span>
+          <div>
+            <div *ngFor="let name of shift.candidates[status]">{{name}}</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>

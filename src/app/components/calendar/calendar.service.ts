@@ -97,7 +97,7 @@ export class CalendarService {
   }
 
   getToday() {
-    return moment('2016-12-08').tz('Australia/Sydney');
+    return moment().tz('Australia/Sydney');
   }
 
   private generateTooltipForMonth(data: any[]) {

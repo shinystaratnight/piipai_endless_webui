@@ -137,6 +137,33 @@ h2 {
   }
 }
 
+.filters {
+  display: flex;
+  padding: $block-padding;
+}
+
+app-filter-related {
+  flex: 1 1;
+
+  margin-right: 24px;
+}
+
+.filter-element {
+  flex: 1 1;
+}
+
+.custom-checkbox.success {
+  border-color: $brand-success
+}
+
+.custom-checkbox.danger {
+  border-color: $brand-danger
+}
+
+.custom-checkbox.warning {
+  border-color: $brand-warning
+}
+
 .shift {
 
   &-groups {
@@ -183,7 +210,18 @@ h2 {
     }
   }
 
+  &-jobsite {
+    font-size: 12px;
+    line-height: 14px;
+    opacity: .5;
+  }
 
+  &-candidates {
+    display: flex;
+    font-size: 12px;
+    line-height: 16px;
+    color: $brand-primary;
+  }
 }
 
 .badge {

@@ -60,6 +60,7 @@ export * from './basic-element/basic-element.component';
 export * from './webcam/webcam.component';
 export * from './workflow/workflow.component';
 export * from './test-generator/test-generator.component';
+export * from './filter-related/filter-related.component';
 
 export const entryComponents = [
   FilterChoiceComponent,
