@@ -13,10 +13,21 @@ export interface CalendarData {
 @Injectable()
 export class CalendarService {
   public filterFormat = 'YYYY-MM-DD';
+  public calendarTimes = [
+    '00:00 AM',
+    '3:00',
+    '6:00 AM',
+    '9:00',
+    '12:00 PM',
+    '15:00',
+    '18:00 PM',
+    '21:00',
+    '23:59 PM'
+  ];
 
   private rangeFormat = {
     month: 'MMMM YYYY',
-    week: 'MMM Do',
+    week: 'MMM D',
     day: 'D MMMM YYYY',
   };
 
@@ -25,6 +36,8 @@ export class CalendarService {
     week: 'ddd / D MMM',
     day: 'D MMMM YYYY / dddd',
   };
+
+  private calendarHeight = 370;
 
   public getRangeFormatDate(date: any, type: Range) {
     if (type === Range.Week) {
@@ -64,7 +77,7 @@ export class CalendarService {
         isOpen: false
       });
 
-        currentDay.add(1, 'day');
+      currentDay.add(1, 'day');
     }
 
     return {
@@ -73,11 +86,31 @@ export class CalendarService {
     };
   }
 
-  public generateWeek(from: any) {
+  public generateWeek(from: any, data: any) {
     const header = this.getHeader(Range.Week, from);
 
+    const range = this.getRangeDates(from, Range.Week);
+    const body = [];
+
+    const currentDay = range.start.clone();
+    while (currentDay.isBefore(range.end)) {
+
+      const date = currentDay.format(this.filterFormat);
+      const newData = data.filter((el) => el.date === date);
+
+      body.push({
+        date,
+        data: newData,
+        isOpen: false,
+      });
+
+      currentDay.add(1, 'day');
+    }
+
     return {
-      header
+      header,
+      body,
+      lines: this.calculateLines()
     };
   }
 
@@ -98,6 +131,51 @@ export class CalendarService {
 
   getToday() {
     return moment().tz('Australia/Sydney');
+  }
+
+  calculateShiftSize(start: string) {
+    const timesheetTime = 8.5;
+    const startMoment = moment.tz(start, 'hh:mm:ss', 'Australia/Sydney');
+
+    const time = {
+      hours: startMoment.hour(),
+      monite: startMoment.minute(),
+    };
+
+    return {
+      top: Math.round((this.calendarHeight / 24) * time.hours) + 'px',
+      height: Math.round((this.calendarHeight / 24) * timesheetTime) + 'px'
+    };
+  }
+
+  calculateTimes() {
+    return this.calendarTimes.map((time, i, arr) => {
+      const result = {};
+      if (i === 0) {
+        result['top'] = 0;
+        result['bottom'] = 'auto';
+      }
+
+      if (i === (arr.length - 1)) {
+        result['top'] = 'auto';
+        result['bottom'] = 0;
+      }
+
+      return {
+        time,
+        top: (this.calendarHeight / 8) * i - 6,
+        ...result
+      };
+    });
+  }
+
+  calculateLines() {
+    return this.calendarTimes.map((time, i) => {
+      return {
+        top: (this.calendarHeight / 8) * i,
+        class: (i % 2 !== 0) ? 'dotted' : ''
+      };
+    });
   }
 
   private generateTooltipForMonth(data: any[]) {

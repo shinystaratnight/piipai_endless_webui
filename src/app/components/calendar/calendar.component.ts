@@ -20,6 +20,7 @@ export class CalendarComponent implements OnInit {
   public shifts: any;
   public filters = filters;
   public topHeight: any;
+  public calendarTimes: any[];
 
   @ViewChild('filter')
   public filter: ElementRef;
@@ -59,6 +60,7 @@ export class CalendarComponent implements OnInit {
   ngOnInit() {
     this.currentDate = this.calendar.getToday();
     this.currentRange = new FormControl('');
+    this.calendarTimes = this.calendar.calculateTimes();
 
     this.currentRange.valueChanges
       .subscribe((value: Range) => {
@@ -94,6 +96,26 @@ export class CalendarComponent implements OnInit {
     }
   }
 
+  getColor(data: number) {
+    const classes = {
+      0: 'bg-danger',
+      1: 'bg-success',
+      2: 'bg-warning'
+    };
+
+    return classes[data];
+  }
+
+  getStatus(data: number) {
+    const statuses = {
+      0: 'cancelled',
+      1: 'accepted',
+      2: 'undefined'
+    };
+
+    return statuses[data];
+  }
+
   private changeCalendar(type?: Range) {
     const rangeType = type || this.currentRange.value;
 
@@ -115,7 +137,7 @@ export class CalendarComponent implements OnInit {
     const filterList = {
       ['date__shift_date_0']: from.format(this.calendar.filterFormat),
       ['date__shift_date_1']: to.format(this.calendar.filterFormat),
-      fields: ['id', 'date', 'is_fulfilled', 'workers_details'],
+      fields: ['id', 'date', 'is_fulfilled', 'workers_details', 'time'],
       limit: -1,
     };
 
@@ -146,6 +168,7 @@ export class CalendarComponent implements OnInit {
               position: shift.date.job.position.name,
               is_fulfilled: shift.is_fulfilled,
               candidates: shift.workers_details,
+              timesheet: this.calendar.calculateShiftSize(shift.time),
             };
           });
       }
@@ -160,7 +183,7 @@ export class CalendarComponent implements OnInit {
         calendarData = this.calendar.generateMonth(date, this.shifts);
         break;
       case Range.Week:
-        calendarData = this.calendar.generateWeek(date);
+        calendarData = this.calendar.generateWeek(date, this.shifts);
         break;
       case Range.Day:
         calendarData = this.calendar.generateDay(date);

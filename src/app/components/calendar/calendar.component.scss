@@ -97,7 +97,20 @@ h2 {
 }
 
 .calendar {
+  height: 450px;
   padding: $block-padding;
+
+  &-line {
+    position: absolute;
+    left: 55px;
+    right: 0;
+
+    border-bottom: 1px solid rgba($gray, .1);
+
+    &.dotted {
+      border-bottom-style: dotted;
+    }
+  }
 }
 
 .header-item {
@@ -128,12 +141,18 @@ h2 {
 
 .grid {
   &-row {
+    position: relative;
     display: flex;
   }
 
   &-item {
     position: relative;
     flex: 1 1;
+  }
+
+  &-body {
+    height: 370px;
+    overflow: hidden;
   }
 }
 
@@ -222,6 +241,48 @@ app-filter-related {
     line-height: 16px;
     color: $brand-primary;
   }
+
+  &-item {
+    position: absolute;
+    display: flex;
+    width: 6px;
+
+    background-color: #fff;
+
+
+    &:hover {
+      width: 200px;
+      box-shadow: 0 2px 12px 0 rgba(51, 51, 51, 0.25);
+      z-index: 2;
+
+      .content {
+        display: block;
+      }
+    }
+
+    .border {
+      width: 6px;
+
+      border-radius: 2px;
+    }
+
+    .content {
+      display: none;
+      margin-left: .5rem;
+      font-size: 12px;
+      line-height: 16px;
+
+      .badge {
+        max-width: none;
+        margin-top: .5rem;
+        margin-left: 0;
+        margin-bottom: 10px;
+        font-size: 12px;
+        line-height: 12px;
+        border-radius: .2rem;
+      }
+    }
+  }
 }
 
 .badge {
@@ -250,4 +311,28 @@ app-filter-related {
     color: white;
     background-color: $brand-warning;
   }
+}
+
+.times {
+  position: relative;
+  flex-basis: 55px;
+
+  &-item {
+    position: absolute;
+    font-size: 10px;
+    line-height: 12px;
+    opacity: .5;
+
+    &:nth-child(even) {
+      opacity: .2;
+    };
+  }
+}
+
+.week-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+
+  border: 1px solid #bdbdbd;
 }

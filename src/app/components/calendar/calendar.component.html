@@ -113,11 +113,11 @@
 
         <ng-template #monthTooltip>
           <div class="shift-tooltip">
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'Filled', status: 'accepted'}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'Filled', status: 'accepted', month: true}"></ng-container>
 
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'Unfilled', status: 'cancelled'}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'Unfilled', status: 'cancelled', month: true}"></ng-container>
 
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'Pending', status: 'undefined'}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'Pending', status: 'undefined', month: true}"></ng-container>
           </div>
         </ng-template>
       </span>
@@ -128,8 +128,31 @@
 
 <ng-template #weekCalendar>
   <div class="grid-row">
+    <div class="times"></div>
     <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
   </div>
+  <div class="grid-row grid-body">
+    <div [ngClass]="['calendar-line', line.class]" [style.top.px]="line.top" *ngFor="let line of calendarData.lines"></div>
+    <div class="times">
+      <ng-container *ngTemplateOutlet="times"></ng-container>
+    </div>
+    <span class="grid-item week-item" *ngFor="let day of calendarData.body">
+      <div class="shift-item" *ngFor="let shift of day.data; let index = index" [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 8">
+        <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
+
+        <div class="content">
+          <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">Start - {{shift.time}}</span>
+
+          <ng-container *ngTemplateOutlet="shiftItem; context: { shift: shift, status: getStatus(shift.is_fulfilled)}"></ng-container>
+        </div>
+
+      </div>
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #times>
+  <span class="times-item" [style.top.px]="time.top" [style.bottom.px]="time.bottom" *ngFor="let time of calendarTimes">{{time.time}}</span>
 </ng-template>
 
 <ng-template #dayCalendar>
@@ -145,16 +168,21 @@
     </p>
 
     <div class="shift-name" *ngFor="let shift of shifts">
-      <i fa name="circle" [ngClass]="'mr-2 text-' + className"></i>
+      <i fa name="circle" [ngClass]="'text-' + className"></i>
+
+      <ng-container *ngTemplateOutlet="shiftItem; context: { shift: shift, status: status }"></ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #shiftItem let-shift="shift" let-status="status">
+  <div>
+    {{shift.position}} <br>
+    <span class="shift-jobsite">{{shift.jobsite}}</span> <br>
+    <div *ngIf="shift.candidates[status].length" class="shift-candidates">
+      <span class="mr-1">Candidate ({{shift.candidates[status].length}}):</span>
       <div>
-        {{shift.position}} <br>
-        <span class="shift-jobsite">{{shift.jobsite}}</span> <br>
-        <div *ngIf="shift.candidates[status].length" class="shift-candidates">
-          <span class="mr-1">Candidate ({{shift.candidates[status].length}}):</span>
-          <div>
-            <div *ngFor="let name of shift.candidates[status]">{{name}}</div>
-          </div>
-        </div>
+        <div *ngFor="let name of shift.candidates[status]">{{name}}</div>
       </div>
     </div>
   </div>
