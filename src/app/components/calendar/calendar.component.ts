@@ -26,7 +26,7 @@ export class CalendarComponent implements OnInit {
 
   private client: string;
   private candidate: string;
-  private status = {
+  public status = {
     hideAutocomplete: true,
     displayValue(data) {
       return Object.keys(data).filter((key) => data[key]).length;
