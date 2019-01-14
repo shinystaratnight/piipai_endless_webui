@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  Input,
   Output,
   EventEmitter,
   ViewChild,
@@ -23,7 +24,7 @@ import { debounceTime, skip, filter } from 'rxjs/operators';
   templateUrl: 'filter-related.component.html'
 })
 export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy {
-  public config: any;
+  @Input() public config: any;
   public data: any;
   public item: any;
   public query: string;
@@ -259,7 +260,9 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public changeQuery() {
     this.event.emit({
-      list: this.config.listName
+      list: this.config.listName,
+      key: this.config.query,
+      value: this.item
     });
   }
 

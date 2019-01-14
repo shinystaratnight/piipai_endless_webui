@@ -7,8 +7,7 @@
     </button>
   </div>
 
-  <div class="px-3" *ngIf="widgets && widgets.length">
-    <h3 class="title">Dashboard</h3>
+  <div *ngIf="widgets && widgets.length">
     <div class="dashboard-wrapper">
       <ng-container *ngFor="let widget of widgets">
         <div class="widget-item">

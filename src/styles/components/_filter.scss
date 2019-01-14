@@ -8,6 +8,11 @@
 
     text-transform: uppercase;
     color: rgba(black, .35);
+
+    .filters-inline & {
+      font-size: 12px;
+      line-height: 14px;
+    }
   }
 
   &-element {
@@ -17,6 +22,11 @@
     font-size: .8rem;
 
     border-bottom: 1px solid rgba($gray, .1);
+
+    .filters-inline & {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
 
     .datepicker:nth-child(2) {
       margin-bottom: 0.3rem;
@@ -171,6 +181,10 @@
       background-color: #fdfdfd;
 
       transition: none;
+
+      .filters-inline & {
+        border-radius: .2rem;
+      }
 
       &:focus {
         border: 1px solid $gray;

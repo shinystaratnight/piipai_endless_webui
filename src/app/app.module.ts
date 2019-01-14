@@ -6,6 +6,7 @@ import { RouterModule, PreloadAllModules } from '@angular/router';
 
 import { AgmCoreModule } from '@agm/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap';
 import { Ng2Webstorage } from 'ngx-webstorage';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
@@ -46,6 +47,7 @@ moment.tz.setDefault('Australia/Sydney');
       libraries: ['places']
     }),
     NgbModule.forRoot(),
+    ButtonsModule.forRoot(),
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules }),
     DynamicFormModule,

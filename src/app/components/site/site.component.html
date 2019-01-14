@@ -160,13 +160,19 @@
   </div>
 </ng-container>
 
-<app-dashboard *ngIf="dashboard"
-  [pages]="pagesList"
-  [userModules]="userModules"
-  [modulesList]="modulesList"
-  (changeWidgetList)="updateNavigation($event)"></app-dashboard>
+<div class="dashboard" *ngIf="dashboard">
+  <app-dashboard
+    class="dashboard-item"
+    [pages]="pagesList"
+    [userModules]="userModules"
+    [modulesList]="modulesList"
+    (changeWidgetList)="updateNavigation($event)"></app-dashboard>
+
+  <app-calendar class="dashboard-item"></app-calendar>
+</div>
 
 <app-mobile-timesheets [clientId]="getClientId()" *ngIf="identifyDevice()"></app-mobile-timesheets>
+
 
 <app-toast></app-toast>
 

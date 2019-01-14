@@ -8,8 +8,11 @@ import { VerifyEmailComponent } from './varify-email/varify-email.component';
 import { MapComponent } from './map/map.component';
 import { TestBuilderComponent } from './test-builder/test-builder.component';
 import { MobileTimesheetsComponent } from './mobile-timesheets/mobile-timesheets.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 import { MapService } from './map/map.service';
+import { CalendarService } from './calendar/calendar.service';
+import { CalendarDataService } from './calendar/calendar-data.service';
 
 export * from './registration-form/registration-form.component';
 export * from './dashboard/dashboard.component';
@@ -34,8 +37,11 @@ export const components = [
   MapComponent,
   TestBuilderComponent,
   MobileTimesheetsComponent,
+  CalendarComponent,
 ];
 
 export const providers = [
   MapService,
+  CalendarService,
+  CalendarDataService,
 ];
