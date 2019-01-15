@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import * as moment from 'moment-timezone';
+import { Moment } from 'moment-timezone';
 
 import { CalendarService, Range, CalendarData } from './calendar.service';
 import { CalendarDataService } from './calendar-data.service';
@@ -46,7 +46,7 @@ export class CalendarComponent implements OnInit {
       2: false,
     }
   };
-  private currentDate: any;
+  private currentDate: Moment;
   private lastData: any;
 
   constructor(
@@ -141,7 +141,7 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  private generateQuery(from: any, to: any, client?, candidate?) {
+  private generateQuery(from: Moment, to: Moment, client?, candidate?) {
     const filterList = {
       ['date__shift_date_0']: from.format(this.calendar.filterFormat),
       ['date__shift_date_1']: to.format(this.calendar.filterFormat),
@@ -195,7 +195,7 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  private generateCalendar(date, type: Range) {
+  private generateCalendar(date: Moment, type: Range) {
     let calendarData;
 
     switch (type) {
@@ -216,16 +216,16 @@ export class CalendarComponent implements OnInit {
     this.calendarData = calendarData;
   }
 
-  private updateCalendar(date: any, type: Range) {
+  private updateCalendar(date: Moment, type: Range) {
     this.updateCalendarHeader(date, type);
     this.generateCalendar(date, type);
   }
 
-  private updateCalendarHeader(date: any, type: Range) {
+  private updateCalendarHeader(date: Moment, type: Range) {
     this.rangeTitle = this.calendar.getRangeFormatDate(date, type);
   }
 
-  private updateDate(date: any, type: Range, increment: boolean) {
+  private updateDate(date: Moment, type: Range, increment: boolean) {
     return increment ? date.add(1, type) : date.add(-1, type);
   }
 

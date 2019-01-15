@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import * as moment from 'moment-timezone';
+import { TimeService } from '../../services/time.service';
+import { Moment } from 'moment-timezone';
 
 export enum Range { Month = 'month', Week = 'week', Day = 'day' }
 export enum ShiftStatus { Unfilled, Filled, Pending }
@@ -39,7 +40,11 @@ export class CalendarService {
 
   private calendarHeight = 370;
 
-  public getRangeFormatDate(date: any, type: Range) {
+  constructor(
+    private time: TimeService
+  ) {}
+
+  public getRangeFormatDate(date: Moment, type: Range) {
     if (type === Range.Week) {
       const start = date.clone().weekday(0);
       const end = date.clone().weekday(6);
@@ -50,7 +55,7 @@ export class CalendarService {
     return date.format(this.rangeFormat[type]);
   }
 
-  public generateMonth(from: any, data: any): CalendarData {
+  public generateMonth(from: Moment, data: any): CalendarData {
     const header = this.getHeader(Range.Month, from);
 
     const range = this.getRangeDates(from, Range.Month);
@@ -87,7 +92,7 @@ export class CalendarService {
     };
   }
 
-  public generateWeek(from: any, data: any) {
+  public generateWeek(from: Moment, data: any) {
     const header = this.getHeader(Range.Week, from);
 
     const range = this.getRangeDates(from, Range.Week);
@@ -115,7 +120,7 @@ export class CalendarService {
     };
   }
 
-  public generateDay(from: any) {
+  public generateDay(from: Moment) {
     const header = this.getHeader(Range.Day, from);
 
     return {
@@ -123,7 +128,7 @@ export class CalendarService {
     };
   }
 
-  getRangeDates(date: any, type: Range): { start: any, end: any } {
+  getRangeDates(date: Moment, type: Range): { start: Moment, end: Moment } {
     return {
       start: date.clone().startOf(type),
       end: date.clone().endOf(type)
@@ -131,12 +136,12 @@ export class CalendarService {
   }
 
   getToday() {
-    return moment().tz('Australia/Sydney');
+    return this.time.getToday();
   }
 
   calculateShiftSize(start: string) {
     const timesheetTime = 8.5;
-    const startMoment = moment.tz(start, 'hh:mm:ss', 'Australia/Sydney');
+    const startMoment = this.time.instance(start, 'hh:mm:ss');
 
     const time = {
       hours: startMoment.hour(),
@@ -195,7 +200,7 @@ export class CalendarService {
     }
   }
 
-  private getHeader(type: Range, from: any): string[] {
+  private getHeader(type: Range, from: Moment): string[] {
     const result = [];
     if (type !== Range.Day) {
 
