@@ -240,6 +240,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public updateNavigationList(role: Role) {
     this.updateJiraTask(role);
+    this.dashboard = false;
 
     this.userService.currentRole(role);
     this.currentRole = role;
@@ -252,6 +253,8 @@ export class SiteComponent implements OnInit, OnDestroy {
 
         if (this.router.url !== '/') {
           this.router.navigate(['']);
+        } else {
+          this.dashboard = true;
         }
       });
   }

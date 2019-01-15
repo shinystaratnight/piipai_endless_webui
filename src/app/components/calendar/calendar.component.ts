@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import * as moment from 'moment-timezone';
@@ -26,11 +26,14 @@ export class CalendarComponent implements OnInit {
     1: { color: 'bg-success', key: 'accepted' },
     2: { color: 'bg-warning', key: 'undefined' },
   };
+  public showClientFilter = true;
+
+  @Input()
+  public client: string;
 
   @ViewChild('filter')
   public filter: ElementRef;
 
-  private client: string;
   private candidate: string;
   private status = {
     hideAutocomplete: true,
@@ -68,8 +71,13 @@ export class CalendarComponent implements OnInit {
     this.currentRange = new FormControl('');
     this.calendarTimes = this.calendar.calculateTimes();
 
+    if (this.client) {
+      this.showClientFilter = false;
+    }
+
     this.currentRange.valueChanges
       .subscribe((value: Range) => {
+        this.calendarData = undefined;
         this.currentDate = this.calendar.getToday();
 
         this.changeCalendar(value);
@@ -157,22 +165,19 @@ export class CalendarComponent implements OnInit {
     this.lastData = data;
 
     if (data.results.length) {
-      const filteredData = data.results.filter((shift) => this.status.data[shift.is_fulfilled]);
-
-      if (filteredData.length) {
-        this.shifts = filteredData
-          .map((shift) => {
-            return {
-              date: shift.date.shift_date,
-              time: shift.time,
-              jobsite: shift.date.job.jobsite.name,
-              position: shift.date.job.position.name,
-              is_fulfilled: this.getFulfilledStatus(shift.is_fulfilled, shift.workers_details),
-              candidates: shift.workers_details,
-              timesheet: this.calendar.calculateShiftSize(shift.time),
-            };
-          });
-      }
+      this.shifts = data.results
+        .map((shift) => {
+          return {
+            date: shift.date.shift_date,
+            time: shift.time,
+            jobsite: shift.date.job.jobsite.name,
+            position: shift.date.job.position.name,
+            is_fulfilled: this.getFulfilledStatus(shift.is_fulfilled, shift.workers_details),
+            candidates: shift.workers_details,
+            timesheet: this.calendar.calculateShiftSize(shift.time),
+          };
+        })
+        .filter((shift) => this.status.data[shift.is_fulfilled]);
     }
   }
 

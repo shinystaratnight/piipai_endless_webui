@@ -9,6 +9,7 @@ import { MapComponent } from './map/map.component';
 import { TestBuilderComponent } from './test-builder/test-builder.component';
 import { MobileTimesheetsComponent } from './mobile-timesheets/mobile-timesheets.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarTooltipDirective } from './calendar/calendar-tooltip.directive';
 
 import { MapService } from './map/map.service';
 import { CalendarService } from './calendar/calendar.service';
@@ -38,6 +39,7 @@ export const components = [
   TestBuilderComponent,
   MobileTimesheetsComponent,
   CalendarComponent,
+  CalendarTooltipDirective,
 ];
 
 export const providers = [

@@ -162,6 +162,7 @@
 
 <div class="dashboard" *ngIf="dashboard && isManager">
   <app-dashboard
+    *ngIf="isManager"
     class="dashboard-item"
     [pages]="pagesList"
     [userModules]="userModules"

@@ -59,13 +59,15 @@ export class DynamicFormComponent implements OnInit {
   }
 
   addFormBuilderStatus(config) {
-    config.forEach((el) => {
-      el.formBuilder = this.formBuilder;
+    if (config) {
+      config.forEach((el) => {
+        el.formBuilder = this.formBuilder;
 
-      if (el.children) {
-        this.addFormBuilderStatus(el.children);
-      }
-    });
+        if (el.children) {
+          this.addFormBuilderStatus(el.children);
+        }
+      });
+    }
   }
 
   public getValues(data, list) {
