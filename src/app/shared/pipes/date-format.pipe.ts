@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 @Pipe({
   name: 'dateFormat' //tslint:disable-line
 })
 export class DateFormatPipe implements PipeTransform {
-  public transform(value: string, format: string): number {
+  public transform(value: string, format: string): string {
     const formats = {
       date: 'DD/MM/YYYY',
       datetime: 'DD/MM/YYYY hh:mm A',

@@ -9,7 +9,7 @@ import { CustomEvent } from '../../models/custom-event.model';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { GenericFormService } from '../../services/generic-form.service';
 
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-extend',

@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 import { FilterService } from './../../services/filter.service';
 import { isMobile } from '../../helpers';

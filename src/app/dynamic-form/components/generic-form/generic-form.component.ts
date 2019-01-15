@@ -22,7 +22,7 @@ import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
 import { getElementFromMetadata, removeValue, isCandidate, isMobile } from '../../helpers';
 
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 export interface HiddenFields {
   elements: Field[];

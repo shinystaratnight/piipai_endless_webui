@@ -11,7 +11,7 @@ import {
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Subscription, Subject } from 'rxjs';
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { FormatString } from '../../../helpers/format';
