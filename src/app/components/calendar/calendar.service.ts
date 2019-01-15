@@ -74,7 +74,8 @@ export class CalendarService {
         data: newData,
         label: currentDay.format('D'),
         tooltip: this.generateTooltipForMonth(newData),
-        isOpen: false
+        isOpen: false,
+        today: currentDay.format(this.filterFormat) === this.getToday().format(this.filterFormat)
       });
 
       currentDay.add(1, 'day');

@@ -17,7 +17,7 @@ import {
 } from '../../services/';
 import { GenericFormService, FormMode } from '../../dynamic-form/services/';
 import { CheckPermissionService, ToastService, MessageType } from '../../shared/services/';
-import { isMobile, isCandidate } from '../../helpers/utils';
+import { isMobile, isCandidate, isClient, isManager } from '../../helpers/utils';
 
 @Component({
   selector: 'app-site',
@@ -85,6 +85,14 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   get isMobileDevice() {
     return isMobile() && isCandidate();
+  }
+
+  get isClient() {
+    return isClient();
+  }
+
+  get isManager() {
+    return isManager();
   }
 
   @ViewChild('modal') public modal;

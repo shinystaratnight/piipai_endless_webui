@@ -21,6 +21,11 @@ export class CalendarComponent implements OnInit {
   public filters = filters;
   public topHeight: any;
   public calendarTimes: any[];
+  public shiftStatus = {
+    0: { color: 'bg-danger', key: 'cancelled' },
+    1: { color: 'bg-success', key: 'accepted' },
+    2: { color: 'bg-warning', key: 'undefined' },
+  };
 
   @ViewChild('filter')
   public filter: ElementRef;
@@ -39,6 +44,7 @@ export class CalendarComponent implements OnInit {
     }
   };
   private currentDate: any;
+  private lastData: any;
 
   constructor(
     private calendar: CalendarService,
@@ -87,6 +93,12 @@ export class CalendarComponent implements OnInit {
     this.changeCalendar();
   }
 
+  updateLayers() {
+    this.prepareData(this.lastData);
+
+    this.updateCalendar(this.currentDate, this.currentRange.value);
+  }
+
   openAutocomplete(event) {
     const target = event.target;
     this.status.hideAutocomplete = !this.status.hideAutocomplete;
@@ -96,24 +108,12 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  getColor(data: number) {
-    const classes = {
-      0: 'bg-danger',
-      1: 'bg-success',
-      2: 'bg-warning'
-    };
-
-    return classes[data];
+  getColor(status: number) {
+    return this.shiftStatus[status].color;
   }
 
-  getStatus(data: number) {
-    const statuses = {
-      0: 'cancelled',
-      1: 'accepted',
-      2: 'undefined'
-    };
-
-    return statuses[data];
+  getStatus(status: number) {
+    return this.shiftStatus[status].key;
   }
 
   private changeCalendar(type?: Range) {
@@ -154,6 +154,7 @@ export class CalendarComponent implements OnInit {
 
   private prepareData(data) {
     this.shifts = [];
+    this.lastData = data;
 
     if (data.results.length) {
       const filteredData = data.results.filter((shift) => this.status.data[shift.is_fulfilled]);
@@ -166,12 +167,26 @@ export class CalendarComponent implements OnInit {
               time: shift.time,
               jobsite: shift.date.job.jobsite.name,
               position: shift.date.job.position.name,
-              is_fulfilled: shift.is_fulfilled,
+              is_fulfilled: this.getFulfilledStatus(shift.is_fulfilled, shift.workers_details),
               candidates: shift.workers_details,
               timesheet: this.calendar.calculateShiftSize(shift.time),
             };
           });
       }
+    }
+  }
+
+  private getFulfilledStatus(status: number, workers: any) {
+    if (status === 1) {
+      return status;
+    }
+
+    if (status === 0 && !workers.undefined.length) {
+      return 0;
+    }
+
+    if (status === 0 && workers.undefined.length) {
+      return 2;
     }
   }
 

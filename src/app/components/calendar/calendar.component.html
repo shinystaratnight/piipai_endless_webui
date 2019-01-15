@@ -39,10 +39,10 @@
           <div class="autocomplete-list">
             <ul class="list-group w-100">
               <li class="list-group-item autocomplete-item form-check">
-                <ng-container *ngTemplateOutlet="statusItem; context: {type: '1', label: 'Filled shifts', className: 'success'}"></ng-container>
+                <ng-container *ngTemplateOutlet="statusItem; context: {type: '1', label: 'Fulfilled', className: 'success'}"></ng-container>
               </li>
               <li class="list-group-item autocomplete-item form-check">
-                <ng-container *ngTemplateOutlet="statusItem; context: {type: '0', label: 'Unfilled shifts', className: 'danger'}"></ng-container>
+                <ng-container *ngTemplateOutlet="statusItem; context: {type: '0', label: 'Unfulfilled', className: 'danger'}"></ng-container>
               </li>
               <li class="list-group-item autocomplete-item form-check">
                 <ng-container *ngTemplateOutlet="statusItem; context: {type: '2', label: 'Pending', className: 'warning'}"></ng-container>
@@ -61,7 +61,7 @@
       type="checkbox"
       class="form-check-input"
       [(ngModel)]="status.data[type]"
-      (ngModelChange)="changeQuery()"
+      (ngModelChange)="updateLayers()"
       hidden>
     <div [ngClass]="className + ' custom-checkbox'">
       <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -92,7 +92,7 @@
   </div>
   <div class="grid-row" *ngFor="let week of calendarData?.body">
     <ng-container *ngFor="let day of week">
-      <span *ngIf="!day.tooltip" class="grid-item month-day"><span class="date">{{day.label}}</span></span>
+      <span *ngIf="!day.tooltip" class="grid-item month-day"><span class="date" [class.today]="day.today">{{day.label}}</span></span>
 
       <span class="grid-item month-day"
         *ngIf="day.tooltip"
@@ -103,7 +103,7 @@
         (shown)="day.isOpen = true"
         (hidden)="day.isOpen = false">
 
-        <span class="date">{{day.label}}</span>
+        <span class="date" [class.today]="day.today">{{day.label}}</span>
 
         <div class="shift-groups">
           <div *ngIf="day.tooltip[1].length" class="badge badge-success">{{day.tooltip[1].length}}</div>
