@@ -257,6 +257,10 @@ export class FormDatepickerComponent extends BasicElementComponent
                 this.closeDatePicker(this.t.nativeElement);
                 this.opened = this.d.nativeElement;
               }
+
+              if (this.d.nativeElement && this.key.includes('birthday')) {
+                this.updateBirthdayYearPickMax();
+              }
             }, 200);
           },
           closeCallback: () => {
@@ -363,10 +367,6 @@ export class FormDatepickerComponent extends BasicElementComponent
         this.group.get(this.key).patchValue(date.format());
         this.emitChanges();
       }
-    }
-
-    if (this.d.nativeElement && this.key.includes('birthday')) {
-      this.updateBirthdayYearPickMax();
     }
 
     if (e) {

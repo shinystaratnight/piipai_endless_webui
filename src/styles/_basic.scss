@@ -370,7 +370,7 @@ form.ng-invalid button[type='submit'] {
 
 .small-modal {
   .modal-dialog {
-    width: 400px;
+    max-width: 400px;
 
     .form-element-content {
       width: auto;

@@ -18,7 +18,7 @@ const filters = {
   }),
   jobsite: createFilter(Type.Relared, {
     key: 'jobsite',
-    label: 'Client',
+    label: 'Jobsite',
     endpoint: '/hr/jobsites/',
   }),
   job: createFilter(Type.Relared, {
@@ -58,20 +58,6 @@ const list = {
         sort_field: 'candidate_contact',
         label: 'Candidate contact',
         sort: true
-      },
-      {
-        content: [
-          {
-            endpoint: '/core/companycontacts/',
-            field: 'company.primary_contact',
-            type: 'related',
-            label: 'Company Manager'
-          }
-        ],
-        name: 'company_manager',
-        title: null,
-        label: 'Company Manager',
-        delim: null
       },
       {
         content: [
@@ -328,20 +314,6 @@ const formset = {
           }
         ],
         label: 'Recruitment Agent'
-      },
-      {
-        name: 'company_manager',
-        content: [
-          {
-            endpoint: '/core/companycontacts/',
-            label: 'Company Manager',
-            type: 'related',
-            field: 'company.manager'
-          }
-        ],
-        label: 'Company Manager',
-        title: null,
-        delim: null
       },
       {
         name: 'company',
