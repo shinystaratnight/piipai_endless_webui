@@ -17,7 +17,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageService } from 'ngx-webstorage';
 
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 import { FilterService, GenericFormService } from '../../services';
 import { AuthService } from '../../../services';

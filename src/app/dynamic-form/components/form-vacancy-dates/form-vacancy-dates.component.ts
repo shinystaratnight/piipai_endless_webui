@@ -14,7 +14,7 @@ import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-form-vacancy-dates',

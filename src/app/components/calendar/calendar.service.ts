@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import * as moment from 'moment-timezone';
+import { TimeService } from '../../services/time.service';
+import { Moment } from 'moment-timezone';
 
 export enum Range { Month = 'month', Week = 'week', Day = 'day' }
 export enum ShiftStatus { Unfilled, Filled, Pending }
@@ -13,10 +14,21 @@ export interface CalendarData {
 @Injectable()
 export class CalendarService {
   public filterFormat = 'YYYY-MM-DD';
+  public calendarTimes = [
+    '00:00 AM',
+    '3:00',
+    '6:00 AM',
+    '9:00',
+    '12:00 PM',
+    '15:00',
+    '18:00 PM',
+    '21:00',
+    '23:59 PM'
+  ];
 
   private rangeFormat = {
     month: 'MMMM YYYY',
-    week: 'MMM Do',
+    week: 'MMM D',
     day: 'D MMMM YYYY',
   };
 
@@ -26,7 +38,13 @@ export class CalendarService {
     day: 'D MMMM YYYY / dddd',
   };
 
-  public getRangeFormatDate(date: any, type: Range) {
+  private calendarHeight = 370;
+
+  constructor(
+    private time: TimeService
+  ) {}
+
+  public getRangeFormatDate(date: Moment, type: Range) {
     if (type === Range.Week) {
       const start = date.clone().weekday(0);
       const end = date.clone().weekday(6);
@@ -37,7 +55,7 @@ export class CalendarService {
     return date.format(this.rangeFormat[type]);
   }
 
-  public generateMonth(from: any, data: any): CalendarData {
+  public generateMonth(from: Moment, data: any): CalendarData {
     const header = this.getHeader(Range.Month, from);
 
     const range = this.getRangeDates(from, Range.Month);
@@ -61,10 +79,11 @@ export class CalendarService {
         data: newData,
         label: currentDay.format('D'),
         tooltip: this.generateTooltipForMonth(newData),
-        isOpen: false
+        isOpen: false,
+        today: currentDay.format(this.filterFormat) === this.getToday().format(this.filterFormat)
       });
 
-        currentDay.add(1, 'day');
+      currentDay.add(1, 'day');
     }
 
     return {
@@ -73,15 +92,35 @@ export class CalendarService {
     };
   }
 
-  public generateWeek(from: any) {
+  public generateWeek(from: Moment, data: any) {
     const header = this.getHeader(Range.Week, from);
 
+    const range = this.getRangeDates(from, Range.Week);
+    const body = [];
+
+    const currentDay = range.start.clone();
+    while (currentDay.isBefore(range.end)) {
+
+      const date = currentDay.format(this.filterFormat);
+      const newData = data.filter((el) => el.date === date);
+
+      body.push({
+        date,
+        data: newData,
+        isOpen: false,
+      });
+
+      currentDay.add(1, 'day');
+    }
+
     return {
-      header
+      header,
+      body,
+      lines: this.calculateLines()
     };
   }
 
-  public generateDay(from: any) {
+  public generateDay(from: Moment) {
     const header = this.getHeader(Range.Day, from);
 
     return {
@@ -89,7 +128,7 @@ export class CalendarService {
     };
   }
 
-  getRangeDates(date: any, type: Range): { start: any, end: any } {
+  getRangeDates(date: Moment, type: Range): { start: Moment, end: Moment } {
     return {
       start: date.clone().startOf(type),
       end: date.clone().endOf(type)
@@ -97,7 +136,52 @@ export class CalendarService {
   }
 
   getToday() {
-    return moment().tz('Australia/Sydney');
+    return this.time.getToday();
+  }
+
+  calculateShiftSize(start: string) {
+    const timesheetTime = 8.5;
+    const startMoment = this.time.instance(start, 'hh:mm:ss');
+
+    const time = {
+      hours: startMoment.hour(),
+      monite: startMoment.minute(),
+    };
+
+    return {
+      top: Math.round((this.calendarHeight / 24) * time.hours) + 'px',
+      height: Math.round((this.calendarHeight / 24) * timesheetTime) + 'px'
+    };
+  }
+
+  calculateTimes() {
+    return this.calendarTimes.map((time, i, arr) => {
+      const result = {};
+      if (i === 0) {
+        result['top'] = 0;
+        result['bottom'] = 'auto';
+      }
+
+      if (i === (arr.length - 1)) {
+        result['top'] = 'auto';
+        result['bottom'] = 0;
+      }
+
+      return {
+        time,
+        top: (this.calendarHeight / 8) * i - 6,
+        ...result
+      };
+    });
+  }
+
+  calculateLines() {
+    return this.calendarTimes.map((time, i) => {
+      return {
+        top: (this.calendarHeight / 8) * i,
+        class: (i % 2 !== 0) ? 'dotted' : ''
+      };
+    });
   }
 
   private generateTooltipForMonth(data: any[]) {
@@ -116,7 +200,7 @@ export class CalendarService {
     }
   }
 
-  private getHeader(type: Range, from: any): string[] {
+  private getHeader(type: Range, from: Moment): string[] {
     const result = [];
     if (type !== Range.Day) {
 

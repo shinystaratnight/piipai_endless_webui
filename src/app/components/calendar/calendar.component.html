@@ -4,7 +4,7 @@
   <div class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
     <label [btnRadio]="range.Month" role="button"  [class.active]="isMonthRange">Month</label>
     <label [btnRadio]="range.Week" role="button"  [class.active]="isWeekRange">Week</label>
-    <label [btnRadio]="range.Day" role="button"  [class.active]="isDayRange">Day</label>
+    <label [btnRadio]="range.Day" role="button"  [class.active]="isDayRange" [disabled]="true">Day</label>
   </div>
 
   <div class="range-title-wrapper">
@@ -21,7 +21,7 @@
 </div>
 
 <div class="filters filters-inline">
-  <app-filter-related (event)="changeQuery($event)" [config]="filters.client"></app-filter-related>
+  <app-filter-related *ngIf="showClientFilter" (event)="changeQuery($event)" [config]="filters.client"></app-filter-related>
   <app-filter-related (event)="changeQuery($event)" [config]="filters.candidate"></app-filter-related>
 
   <div class="filter-element" #filter>
@@ -39,10 +39,10 @@
           <div class="autocomplete-list">
             <ul class="list-group w-100">
               <li class="list-group-item autocomplete-item form-check">
-                <ng-container *ngTemplateOutlet="statusItem; context: {type: '1', label: 'Filled shifts', className: 'success'}"></ng-container>
+                <ng-container *ngTemplateOutlet="statusItem; context: {type: '1', label: 'Fulfilled', className: 'success'}"></ng-container>
               </li>
               <li class="list-group-item autocomplete-item form-check">
-                <ng-container *ngTemplateOutlet="statusItem; context: {type: '0', label: 'Unfilled shifts', className: 'danger'}"></ng-container>
+                <ng-container *ngTemplateOutlet="statusItem; context: {type: '0', label: 'Unfulfilled', className: 'danger'}"></ng-container>
               </li>
               <li class="list-group-item autocomplete-item form-check">
                 <ng-container *ngTemplateOutlet="statusItem; context: {type: '2', label: 'Pending', className: 'warning'}"></ng-container>
@@ -61,7 +61,7 @@
       type="checkbox"
       class="form-check-input"
       [(ngModel)]="status.data[type]"
-      (ngModelChange)="changeQuery()"
+      (ngModelChange)="updateLayers()"
       hidden>
     <div [ngClass]="className + ' custom-checkbox'">
       <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,6 +73,10 @@
 </ng-template>
 
 <div class="calendar">
+  <div *ngIf="!calendarData" class="spinner">
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
+  </div>
   <ng-container *ngIf="isMonthRange">
     <ng-container *ngTemplateOutlet="monthCalendar"></ng-container>
   </ng-container>
@@ -92,7 +96,7 @@
   </div>
   <div class="grid-row" *ngFor="let week of calendarData?.body">
     <ng-container *ngFor="let day of week">
-      <span *ngIf="!day.tooltip" class="grid-item month-day"><span class="date">{{day.label}}</span></span>
+      <span *ngIf="!day.tooltip" class="grid-item month-day"><span class="date" [class.today]="day.today">{{day.label}}</span></span>
 
       <span class="grid-item month-day"
         *ngIf="day.tooltip"
@@ -103,7 +107,7 @@
         (shown)="day.isOpen = true"
         (hidden)="day.isOpen = false">
 
-        <span class="date">{{day.label}}</span>
+        <span class="date" [class.today]="day.today">{{day.label}}</span>
 
         <div class="shift-groups">
           <div *ngIf="day.tooltip[1].length" class="badge badge-success">{{day.tooltip[1].length}}</div>
@@ -113,11 +117,11 @@
 
         <ng-template #monthTooltip>
           <div class="shift-tooltip">
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'Filled', status: 'accepted'}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'Filled', status: 'accepted', month: true}"></ng-container>
 
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'Unfilled', status: 'cancelled'}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'Unfilled', status: 'cancelled', month: true}"></ng-container>
 
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'Pending', status: 'undefined'}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'Pending', status: 'undefined', month: true}"></ng-container>
           </div>
         </ng-template>
       </span>
@@ -128,8 +132,33 @@
 
 <ng-template #weekCalendar>
   <div class="grid-row">
+    <div class="times"></div>
     <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
   </div>
+  <div class="grid-row grid-body">
+    <div [ngClass]="['calendar-line', line.class]" [style.top.px]="line.top" *ngFor="let line of calendarData?.lines"></div>
+    <div class="times">
+      <ng-container *ngTemplateOutlet="times"></ng-container>
+    </div>
+    <span class="grid-item week-item" *ngFor="let day of calendarData?.body">
+      <ng-container *ngFor="let shift of day.data; let index = index">
+        <div class="shift-item" appCalendarTooltip [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 8">
+          <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
+
+          <div class="content">
+            <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">Start - {{shift.time}}</span>
+
+            <ng-container *ngTemplateOutlet="shiftItem; context: { shift: shift, status: getStatus(shift.is_fulfilled)}"></ng-container>
+          </div>
+
+        </div>
+      </ng-container>
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #times>
+  <span class="times-item" [style.top.px]="time.top" [style.bottom.px]="time.bottom" *ngFor="let time of calendarTimes">{{time.time}}</span>
 </ng-template>
 
 <ng-template #dayCalendar>
@@ -145,16 +174,43 @@
     </p>
 
     <div class="shift-name" *ngFor="let shift of shifts">
-      <i fa name="circle" [ngClass]="'mr-2 text-' + className"></i>
+      <i fa name="circle" [ngClass]="'text-' + className"></i>
+
+      <ng-container *ngTemplateOutlet="shiftItem; context: { shift: shift, status: status }"></ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #shiftItem let-shift="shift" let-status="status">
+  <div>
+    {{shift.position}} <br>
+    <span class="shift-jobsite">{{shift.jobsite}}</span> <br>
+    <div *ngIf="shift.candidates[status].length" class="shift-candidates">
+      <span class="mr-1" style="min-width: 85px">Candidate ({{shift.candidates[status].length}}):</span>
       <div>
-        {{shift.position}} <br>
-        <span class="shift-jobsite">{{shift.jobsite}}</span> <br>
-        <div *ngIf="shift.candidates[status].length" class="shift-candidates">
-          <span class="mr-1">Candidate ({{shift.candidates[status].length}}):</span>
-          <div>
-            <div *ngFor="let name of shift.candidates[status]">{{name}}</div>
+        <div *ngFor="let name of shift.candidates[status]">{{name}}</div>
+
+        <ng-container *ngIf="shift.candidates[getStatus(0)].length && getStatus(0) !== status">
+          <div *ngFor="let name of shift.candidates[getStatus(0)]">
+            <i fa name="times" class="text-danger"></i>
+            {{name}}
           </div>
-        </div>
+        </ng-container>
+
+        <ng-container *ngIf="shift.candidates[getStatus(1)].length && getStatus(1) !== status">
+          <div *ngFor="let name of shift.candidates[getStatus(1)]">
+            <i fa name="check" class="text-success"></i>
+            {{name}}
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="shift.candidates[getStatus(2)].length && getStatus(2) !== status">
+          <div *ngFor="let name of shift.candidates[getStatus(2)]">
+            <i fa name="minus-circle" class="text-warning"></i>
+            {{name}}
+          </div>
+        </ng-container>
+
       </div>
     </div>
   </div>

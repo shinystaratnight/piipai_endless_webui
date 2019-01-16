@@ -1,7 +1,7 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import * as moment from 'moment-timezone';
+import { Moment } from 'moment-timezone';
 
 import { CalendarService, Range, CalendarData } from './calendar.service';
 import { CalendarDataService } from './calendar-data.service';
@@ -20,11 +20,20 @@ export class CalendarComponent implements OnInit {
   public shifts: any;
   public filters = filters;
   public topHeight: any;
+  public calendarTimes: any[];
+  public shiftStatus = {
+    0: { color: 'bg-danger', key: 'cancelled' },
+    1: { color: 'bg-success', key: 'accepted' },
+    2: { color: 'bg-warning', key: 'undefined' },
+  };
+  public showClientFilter = true;
+
+  @Input()
+  public client: string;
 
   @ViewChild('filter')
   public filter: ElementRef;
 
-  private client: string;
   private candidate: string;
   public status = {
     hideAutocomplete: true,
@@ -37,7 +46,8 @@ export class CalendarComponent implements OnInit {
       2: false,
     }
   };
-  private currentDate: any;
+  private currentDate: Moment;
+  private lastData: any;
 
   constructor(
     private calendar: CalendarService,
@@ -59,9 +69,15 @@ export class CalendarComponent implements OnInit {
   ngOnInit() {
     this.currentDate = this.calendar.getToday();
     this.currentRange = new FormControl('');
+    this.calendarTimes = this.calendar.calculateTimes();
+
+    if (this.client) {
+      this.showClientFilter = false;
+    }
 
     this.currentRange.valueChanges
       .subscribe((value: Range) => {
+        this.calendarData = undefined;
         this.currentDate = this.calendar.getToday();
 
         this.changeCalendar(value);
@@ -85,6 +101,12 @@ export class CalendarComponent implements OnInit {
     this.changeCalendar();
   }
 
+  updateLayers() {
+    this.prepareData(this.lastData);
+
+    this.updateCalendar(this.currentDate, this.currentRange.value);
+  }
+
   openAutocomplete(event) {
     const target = event.target;
     this.status.hideAutocomplete = !this.status.hideAutocomplete;
@@ -92,6 +114,14 @@ export class CalendarComponent implements OnInit {
     if (target.classList.contains('autocomplete-value')) {
       this.topHeight = target.offsetHeight + 1;
     }
+  }
+
+  getColor(status: number) {
+    return this.shiftStatus[status].color;
+  }
+
+  getStatus(status: number) {
+    return this.shiftStatus[status].key;
   }
 
   private changeCalendar(type?: Range) {
@@ -111,11 +141,11 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  private generateQuery(from: any, to: any, client?, candidate?) {
+  private generateQuery(from: Moment, to: Moment, client?, candidate?) {
     const filterList = {
       ['date__shift_date_0']: from.format(this.calendar.filterFormat),
       ['date__shift_date_1']: to.format(this.calendar.filterFormat),
-      fields: ['id', 'date', 'is_fulfilled', 'workers_details'],
+      fields: ['id', 'date', 'is_fulfilled', 'workers_details', 'time'],
       limit: -1,
     };
 
@@ -132,27 +162,40 @@ export class CalendarComponent implements OnInit {
 
   private prepareData(data) {
     this.shifts = [];
+    this.lastData = data;
 
     if (data.results.length) {
-      const filteredData = data.results.filter((shift) => this.status.data[shift.is_fulfilled]);
-
-      if (filteredData.length) {
-        this.shifts = filteredData
-          .map((shift) => {
-            return {
-              date: shift.date.shift_date,
-              time: shift.time,
-              jobsite: shift.date.job.jobsite.name,
-              position: shift.date.job.position.name,
-              is_fulfilled: shift.is_fulfilled,
-              candidates: shift.workers_details,
-            };
-          });
-      }
+      this.shifts = data.results
+        .map((shift) => {
+          return {
+            date: shift.date.shift_date,
+            time: shift.time,
+            jobsite: shift.date.job.jobsite.name,
+            position: shift.date.job.position.name,
+            is_fulfilled: this.getFulfilledStatus(shift.is_fulfilled, shift.workers_details),
+            candidates: shift.workers_details,
+            timesheet: this.calendar.calculateShiftSize(shift.time),
+          };
+        })
+        .filter((shift) => this.status.data[shift.is_fulfilled]);
     }
   }
 
-  private generateCalendar(date, type: Range) {
+  private getFulfilledStatus(status: number, workers: any) {
+    if (status === 1) {
+      return status;
+    }
+
+    if (status === 0 && !workers.undefined.length) {
+      return 0;
+    }
+
+    if (status === 0 && workers.undefined.length) {
+      return 2;
+    }
+  }
+
+  private generateCalendar(date: Moment, type: Range) {
     let calendarData;
 
     switch (type) {
@@ -160,7 +203,7 @@ export class CalendarComponent implements OnInit {
         calendarData = this.calendar.generateMonth(date, this.shifts);
         break;
       case Range.Week:
-        calendarData = this.calendar.generateWeek(date);
+        calendarData = this.calendar.generateWeek(date, this.shifts);
         break;
       case Range.Day:
         calendarData = this.calendar.generateDay(date);
@@ -173,16 +216,16 @@ export class CalendarComponent implements OnInit {
     this.calendarData = calendarData;
   }
 
-  private updateCalendar(date: any, type: Range) {
+  private updateCalendar(date: Moment, type: Range) {
     this.updateCalendarHeader(date, type);
     this.generateCalendar(date, type);
   }
 
-  private updateCalendarHeader(date: any, type: Range) {
+  private updateCalendarHeader(date: Moment, type: Range) {
     this.rangeTitle = this.calendar.getRangeFormatDate(date, type);
   }
 
-  private updateDate(date: any, type: Range, increment: boolean) {
+  private updateDate(date: Moment, type: Range, increment: boolean) {
     return increment ? date.add(1, type) : date.add(-1, type);
   }
 

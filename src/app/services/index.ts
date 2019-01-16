@@ -4,6 +4,7 @@ import { SiteService } from './site.service';
 import { SiteSettingsService } from './site-settings.service';
 import { VerifyService } from './verify.service';
 import { AuthService } from './auth.service';
+import { TimeService } from './time.service';
 
 export * from './navigation.service';
 export * from './user.service';
@@ -18,5 +19,6 @@ export const services = [
   SiteService,
   SiteSettingsService,
   VerifyService,
-  AuthService
+  AuthService,
+  TimeService,
 ];

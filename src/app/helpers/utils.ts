@@ -26,3 +26,15 @@ export function isCandidate(): boolean {
 
   return role.__str__.includes('candidate');
 }
+
+export function isClient(): boolean {
+  const role = storage.retrieve('role');
+
+  return role.__str__.includes('client');
+}
+
+export function isManager(): boolean {
+  const role = storage.retrieve('role');
+
+  return role.__str__.includes('manager');
+}

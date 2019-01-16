@@ -160,8 +160,9 @@
   </div>
 </ng-container>
 
-<div class="dashboard" *ngIf="dashboard">
+<div class="dashboard" *ngIf="dashboard && isManager">
   <app-dashboard
+    *ngIf="isManager"
     class="dashboard-item"
     [pages]="pagesList"
     [userModules]="userModules"
@@ -172,7 +173,6 @@
 </div>
 
 <app-mobile-timesheets [clientId]="getClientId()" *ngIf="identifyDevice()"></app-mobile-timesheets>
-
 
 <app-toast></app-toast>
 

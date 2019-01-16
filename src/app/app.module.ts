@@ -26,7 +26,7 @@ import { SharedModule } from './shared/shared.module';
 
 import { environment } from '../environments/environment';
 
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 moment.tz.setDefault('Australia/Sydney');
 
