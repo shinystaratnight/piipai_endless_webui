@@ -1,0 +1,31 @@
+<ng-container *ngIf="isYearRange">
+  <app-date-range [type]="type" [date]="date" (dateChange)="changeCalendar($event)"></app-date-range>
+
+  <div class="body">
+    <div class="calendar-row" *ngFor="let row of yearBody">
+      <div class="calendar-item" *ngFor="let month of row">
+        <button type="button" class="calendar-button"
+          [class.active]="month.active"
+          (click)="changeDate(month.date)">
+            {{month.label}}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isWeekRange">
+  <app-date-range [type]="type" [date]="date" (dateChange)="changeCalendar($event)"></app-date-range>
+
+  <div class="body">
+
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isDayRange">
+  <app-date-range [type]="type" [date]="date" (dateChange)="changeCalendar($event)"></app-date-range>
+
+  <div class="body">
+
+  </div>
+</ng-container>
