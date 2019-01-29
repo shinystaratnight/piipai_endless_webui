@@ -188,7 +188,7 @@
       <button *ngIf="config.delay && checkPermission('post')"
         type="button"
         class="text-white btn btn-sm group-button ml-auto mr-2"
-        (click)="addObject()">
+        (click)="addObject($event)">
           Add
       </button>
     </h6>
@@ -227,11 +227,11 @@
                 </i>
 
                 <ng-template #actionsTemplate>
-                  <span class="custom-button" *ngIf="config.templateOptions.delete && checkPermission('delete')" (click)="deleteObject(object)">
+                  <span class="custom-button" *ngIf="config.templateOptions.delete && checkPermission('delete')" (click)="deleteObject(object, $event)">
                     <i fa class="icon text-danger mx-2" title="Delete" name="trash"></i>
                     Delete
                   </span>
-                  <span class="custom-button" *ngIf="config.templateOptions.edit && checkPermission('update')" (click)="editObject(object)">
+                  <span class="custom-button" *ngIf="config.templateOptions.edit && checkPermission('update')" (click)="editObject(object, $event)">
                     <i fa class="icon text-warning mx-2" title="Edit" name="pencil"></i>
                     Edit
                   </span>
@@ -243,7 +243,7 @@
 
               </span>
               <span *ngIf="!object.id" class="d-flex align-items-center">
-                <i fa class="icon text-danger mx-2" title="Delete" [name]="'times-circle'" (click)="removeItem(index)"></i>
+                <i fa class="icon text-danger mx-2" title="Delete" [name]="'times-circle'" (click)="removeItem(index, $event)"></i>
               </span>
             </td>
           </tr>

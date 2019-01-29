@@ -773,14 +773,18 @@ export class FormRelatedComponent extends BasicElementComponent
     return object;
   }
 
-  public addObject(): void {
+  public addObject(e) {
+    e.stopPropagation();
+    e.preventDefault();
     if (this.dataOfList) {
       const object = this.createObject();
       this.dataOfList.push(object);
     }
   }
 
-  public deleteObject(object: RelatedObject): void {
+  public deleteObject(object: RelatedObject, e): void {
+    e.stopPropagation();
+    e.preventDefault();
     if (object.id) {
       this.genericFormService
         .delete(this.config.endpoint, object.id)
@@ -791,7 +795,9 @@ export class FormRelatedComponent extends BasicElementComponent
     }
   }
 
-  public editObject(object: RelatedObject): void {
+  public editObject(object: RelatedObject, e): void {
+    e.stopPropagation();
+    e.preventDefault();
     if (object.id) {
       this.open('update', object);
     }
@@ -1271,7 +1277,9 @@ export class FormRelatedComponent extends BasicElementComponent
     return query;
   }
 
-  public removeItem(index) {
+  public removeItem(index, e) {
+    e.stopPropagation();
+    e.preventDefault();
     this.dataOfList.splice(index, 1);
     this.updateValue({});
   }
