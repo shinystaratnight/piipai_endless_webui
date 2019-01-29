@@ -69,7 +69,8 @@ const form = [
     },
     showIf: ['shift_date'],
     defaultData: {
-      date__shift_date: '{shift_date}',
+      date__shift_date_0: '{shift_date}',
+      date__shift_date_1: '{shift_date}',
       job: '{job.id}'
     },
     type: 'related'
@@ -182,7 +183,8 @@ const jobAdd = [
     },
     showIf: ['shift_date'],
     defaultData: {
-      date__shift_date: '{shift_date}',
+      date__shift_date_0: '{shift_date}',
+      date__shift_date_1: '{shift_date}',
       job: '{job.id}'
     },
     type: 'related'
