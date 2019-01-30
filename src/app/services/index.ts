@@ -12,6 +12,7 @@ export * from './site.service';
 export * from './site-settings.service';
 export * from './verify.service';
 export * from './auth.service';
+export * from './time.service';
 
 export const services = [
   NavigationService,

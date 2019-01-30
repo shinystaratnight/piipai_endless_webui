@@ -4,7 +4,7 @@
   <div class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
     <label [btnRadio]="range.Month" role="button"  [class.active]="isMonthRange">Month</label>
     <label [btnRadio]="range.Week" role="button"  [class.active]="isWeekRange">Week</label>
-    <label [btnRadio]="range.Day" role="button"  [class.active]="isDayRange" [disabled]="true">Day</label>
+    <label [btnRadio]="range.Day" role="button"  [class.active]="isDayRange">Day</label>
   </div>
 
   <div class="range-title-wrapper">
@@ -12,11 +12,19 @@
       <i fa name="chevron-left"></i>
     </button>
 
-    <span class="range-title">{{rangeTitle}}</span>
-
     <button type="button" class="next" (click)="changeRange(true)">
       <i fa name="chevron-right"></i>
     </button>
+
+    <span class="range-title">{{rangeTitle}}</span>
+
+    <i fa
+      class="p-2"
+      name="angle-down"
+      (click)="openDropdown()">
+    </i>
+
+    <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown" (change)="setDate($event)"></app-datepicker>
   </div>
 </div>
 
@@ -77,15 +85,15 @@
     <div class="double-bounce1"></div>
     <div class="double-bounce2"></div>
   </div>
-  <ng-container *ngIf="isMonthRange">
+  <ng-container *ngIf="isMonthRange && calendarData">
     <ng-container *ngTemplateOutlet="monthCalendar"></ng-container>
   </ng-container>
 
-  <ng-container *ngIf="isWeekRange">
+  <ng-container *ngIf="isWeekRange && calendarData">
     <ng-container *ngTemplateOutlet="weekCalendar"></ng-container>
   </ng-container>
 
-  <ng-container *ngIf="isDayRange">
+  <ng-container *ngIf="isDayRange && calendarData">
     <ng-container *ngTemplateOutlet="dayCalendar"></ng-container>
   </ng-container>
 </div>
@@ -117,9 +125,9 @@
 
         <ng-template #monthTooltip>
           <div class="shift-tooltip">
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'Filled', status: 'accepted', month: true}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[1], className: 'success', name: 'Fulfilled', status: 'accepted', month: true}"></ng-container>
 
-            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'Unfilled', status: 'cancelled', month: true}"></ng-container>
+            <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[0], className: 'danger', name: 'Unfulfilled', status: 'cancelled', month: true}"></ng-container>
 
             <ng-container *ngTemplateOutlet="shiftGroup; context: {shifts: day.tooltip[2], className: 'warning', name: 'Pending', status: 'undefined', month: true}"></ng-container>
           </div>
@@ -163,7 +171,30 @@
 
 <ng-template #dayCalendar>
   <div class="grid-row">
+    <div class="times"></div>
     <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
+  </div>
+  <div class="grid-row grid-body">
+    <div [ngClass]="['calendar-line', line.class]" [style.top.px]="line.top" *ngFor="let line of calendarData?.lines"></div>
+    <div class="times">
+      <ng-container *ngTemplateOutlet="times"></ng-container>
+    </div>
+    <span class="grid-item day-item">
+      <ng-container *ngFor="let shift of calendarData?.body.data; let index = index">
+        <div class="shift-item preview" appCalendarTooltip [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 120 + index * 8">
+          <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
+
+          <div class="content">
+            <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">Start - {{shift.time}}</span>
+
+            <ng-container *ngTemplateOutlet="shiftItem; context: { shift: shift, status: getStatus(shift.is_fulfilled)}"></ng-container>
+          </div>
+
+          <div class="white-shadow"></div>
+        </div>
+      </ng-container>
+      <div class="grid-item" style="min-width: 130px;" [style.margin-left.px]="calendarData?.body.data.length * 120 + calendarData?.body.data.length * 8"></div>
+    </span>
   </div>
 </ng-template>
 
@@ -188,7 +219,12 @@
     <div *ngIf="shift.candidates[status].length" class="shift-candidates">
       <span class="mr-1" style="min-width: 85px">Candidate ({{shift.candidates[status].length}}):</span>
       <div>
-        <div *ngFor="let name of shift.candidates[status]">{{name}}</div>
+        <div *ngFor="let name of shift.candidates[status]">
+          <i fa *ngIf="getStatus(0) === status" name="times" class="text-danger"></i>
+          <i fa *ngIf="getStatus(1) === status" name="check" class="text-success"></i>
+          <i fa *ngIf="getStatus(2) === status" name="minus-circle" class="text-warning"></i>
+          {{name}}
+        </div>
 
         <ng-container *ngIf="shift.candidates[getStatus(0)].length && getStatus(0) !== status">
           <div *ngFor="let name of shift.candidates[getStatus(0)]">

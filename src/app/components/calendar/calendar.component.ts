@@ -3,9 +3,12 @@ import { FormGroup, FormControl } from '@angular/forms';
 
 import { Moment } from 'moment-timezone';
 
-import { CalendarService, Range, CalendarData } from './calendar.service';
+import { CalendarService, CalendarData } from './calendar.service';
+import { DateRange } from '../../helpers';
 import { CalendarDataService } from './calendar-data.service';
 import { filters } from './calendar-filters.meta';
+
+import { DatepickerComponent } from '../../shared/components/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-calendar',
@@ -13,7 +16,7 @@ import { filters } from './calendar-filters.meta';
   styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent implements OnInit {
-  public range = Range;
+  public range = DateRange;
   public currentRange: FormControl;
   public rangeTitle: string;
   public calendarData: CalendarData;
@@ -27,12 +30,16 @@ export class CalendarComponent implements OnInit {
     2: { color: 'bg-warning', key: 'undefined' },
   };
   public showClientFilter = true;
+  public showCalendarDropdown: boolean;
 
   @Input()
   public client: string;
 
   @ViewChild('filter')
   public filter: ElementRef;
+
+  @ViewChild(DatepickerComponent)
+  public datepicker: ElementRef;
 
   private candidate: string;
   public status = {
@@ -46,7 +53,7 @@ export class CalendarComponent implements OnInit {
       2: false,
     }
   };
-  private currentDate: Moment;
+  public currentDate: Moment;
   private lastData: any;
 
   constructor(
@@ -55,15 +62,21 @@ export class CalendarComponent implements OnInit {
   ) {}
 
   get isMonthRange() {
-    return this.currentRange.value === Range.Month;
+    return this.currentRange.value === DateRange.Month;
   }
 
   get isWeekRange() {
-    return this.currentRange.value === Range.Week;
+    return this.currentRange.value === DateRange.Week;
   }
 
   get isDayRange() {
-    return this.currentRange.value === Range.Day;
+    return this.currentRange.value === DateRange.Day;
+  }
+
+  get rangeForDropdown() {
+    if (this.currentRange.value === DateRange.Month) {
+      return DateRange.Year;
+    }
   }
 
   ngOnInit() {
@@ -76,14 +89,14 @@ export class CalendarComponent implements OnInit {
     }
 
     this.currentRange.valueChanges
-      .subscribe((value: Range) => {
+      .subscribe((value: DateRange) => {
         this.calendarData = undefined;
         this.currentDate = this.calendar.getToday();
 
         this.changeCalendar(value);
       });
 
-    this.currentRange.patchValue(Range.Month);
+    this.currentRange.patchValue(DateRange.Month);
   }
 
   changeRange(increment: boolean) {
@@ -91,6 +104,13 @@ export class CalendarComponent implements OnInit {
     this.currentDate = this.updateDate(this.currentDate, rangeType, increment);
 
     this.changeCalendar(rangeType);
+  }
+
+  setDate(date: Moment) {
+    this.showCalendarDropdown = false;
+    this.currentDate = date;
+
+    this.changeCalendar(this.currentRange.value);
   }
 
   changeQuery(event?) {
@@ -124,7 +144,13 @@ export class CalendarComponent implements OnInit {
     return this.shiftStatus[status].key;
   }
 
-  private changeCalendar(type?: Range) {
+  openDropdown() {
+    setTimeout(() => {
+      this.showCalendarDropdown = true;
+    }, 100);
+  }
+
+  private changeCalendar(type?: DateRange) {
     const rangeType = type || this.currentRange.value;
 
     const range = this.calendar.getRangeDates(this.currentDate, rangeType);
@@ -133,7 +159,7 @@ export class CalendarComponent implements OnInit {
     this.getShifts(query, rangeType);
   }
 
-  private getShifts(query: any, range: Range) {
+  private getShifts(query: any, range: DateRange) {
     this.data.getShiftsByQuery(query).subscribe((data) => {
       this.prepareData(data);
 
@@ -195,18 +221,18 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  private generateCalendar(date: Moment, type: Range) {
+  private generateCalendar(date: Moment, type: DateRange) {
     let calendarData;
 
     switch (type) {
-      case Range.Month:
+      case DateRange.Month:
         calendarData = this.calendar.generateMonth(date, this.shifts);
         break;
-      case Range.Week:
+      case DateRange.Week:
         calendarData = this.calendar.generateWeek(date, this.shifts);
         break;
-      case Range.Day:
-        calendarData = this.calendar.generateDay(date);
+      case DateRange.Day:
+        calendarData = this.calendar.generateDay(date, this.shifts);
         break;
 
       default:
@@ -216,31 +242,37 @@ export class CalendarComponent implements OnInit {
     this.calendarData = calendarData;
   }
 
-  private updateCalendar(date: Moment, type: Range) {
+  private updateCalendar(date: Moment, type: DateRange) {
     this.updateCalendarHeader(date, type);
     this.generateCalendar(date, type);
   }
 
-  private updateCalendarHeader(date: Moment, type: Range) {
+  private updateCalendarHeader(date: Moment, type: DateRange) {
     this.rangeTitle = this.calendar.getRangeFormatDate(date, type);
   }
 
-  private updateDate(date: Moment, type: Range, increment: boolean) {
+  private updateDate(date: Moment, type: DateRange, increment: boolean) {
     return increment ? date.add(1, type) : date.add(-1, type);
   }
 
   @HostListener('document:click', ['$event'])
+  @HostListener('document:touchstart', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;
     let inside = false;
     do {
-      if (clickedComponent === this.filter.nativeElement) {
+      if (clickedComponent === this.filter.nativeElement || (this.datepicker && clickedComponent === this.datepicker.nativeElement)) {
         inside = true;
       }
       clickedComponent = clickedComponent.parentNode;
     } while (clickedComponent);
     if (!inside) {
-      this.status.hideAutocomplete = true;
+      if (!this.status.hideAutocomplete) {
+        this.status.hideAutocomplete = true;
+      }
+      if (this.showCalendarDropdown) {
+        this.showCalendarDropdown = false;
+      }
     }
   }
 }

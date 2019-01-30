@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { TimeService } from '../../services/time.service';
 import { Moment } from 'moment-timezone';
 
-export enum Range { Month = 'month', Week = 'week', Day = 'day' }
+import { TimeService } from '../../services/time.service';
+import { DateRange } from '../../helpers';
+
 export enum ShiftStatus { Unfilled, Filled, Pending }
 
 export interface CalendarData {
   header: string[];
-  body: any[];
+  body: any;
 }
 
 @Injectable()
@@ -44,8 +45,8 @@ export class CalendarService {
     private time: TimeService
   ) {}
 
-  public getRangeFormatDate(date: Moment, type: Range) {
-    if (type === Range.Week) {
+  public getRangeFormatDate(date: Moment, type: DateRange) {
+    if (type === DateRange.Week) {
       const start = date.clone().weekday(0);
       const end = date.clone().weekday(6);
 
@@ -56,9 +57,9 @@ export class CalendarService {
   }
 
   public generateMonth(from: Moment, data: any): CalendarData {
-    const header = this.getHeader(Range.Month, from);
+    const header = this.getHeader(DateRange.Month, from);
 
-    const range = this.getRangeDates(from, Range.Month);
+    const range = this.getRangeDates(from, DateRange.Month);
     const firstDay = range.start.weekday(0);
     const lastDay = range.end.weekday(6);
     const body = [];
@@ -93,9 +94,9 @@ export class CalendarService {
   }
 
   public generateWeek(from: Moment, data: any) {
-    const header = this.getHeader(Range.Week, from);
+    const header = this.getHeader(DateRange.Week, from);
 
-    const range = this.getRangeDates(from, Range.Week);
+    const range = this.getRangeDates(from, DateRange.Week);
     const body = [];
 
     const currentDay = range.start.clone();
@@ -120,15 +121,24 @@ export class CalendarService {
     };
   }
 
-  public generateDay(from: Moment) {
-    const header = this.getHeader(Range.Day, from);
+  public generateDay(from: Moment, data: any) {
+    const header = this.getHeader(DateRange.Day, from);
+
+    const date = from.format(this.filterFormat);
+    const body = {
+      date,
+      data: data.filter((el) => el.date === date),
+      isOpen: false
+    };
 
     return {
-      header
+      header,
+      body,
+      lines: this.calculateLines()
     };
   }
 
-  getRangeDates(date: Moment, type: Range): { start: Moment, end: Moment } {
+  getRangeDates(date: Moment, type: DateRange): { start: Moment, end: Moment } {
     return {
       start: date.clone().startOf(type),
       end: date.clone().endOf(type)
@@ -200,9 +210,9 @@ export class CalendarService {
     }
   }
 
-  private getHeader(type: Range, from: Moment): string[] {
+  private getHeader(type: DateRange, from: Moment): string[] {
     const result = [];
-    if (type !== Range.Day) {
+    if (type !== DateRange.Day) {
 
       for (let day = 0; day < 7; day++) {
         result.push(from.clone().weekday(day).format(this.headerFormat[type]));
