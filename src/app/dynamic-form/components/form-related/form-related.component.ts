@@ -119,6 +119,7 @@ export class FormRelatedComponent extends BasicElementComponent
   public manual: boolean;
   public hideDetail: boolean;
   public currentUser: boolean;
+  public listDefaultQuery: string;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -253,6 +254,12 @@ export class FormRelatedComponent extends BasicElementComponent
           this.formData
         ) || false}&`;
       });
+
+      if (this.listDefaultQuery === query) {
+        return;
+      }
+
+      this.listDefaultQuery = query;
 
       const metadata = JSON.parse(JSON.stringify(this.config.metadata));
       metadata.forEach((el) => {
