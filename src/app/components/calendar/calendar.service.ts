@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { Moment } from 'moment-timezone';
 
-import { TimeService } from '../../services/time.service';
-import { DateRange } from '../../helpers';
+import { DateRange, rangeFormats, weekEnd, weekStart } from '../../helpers';
+import { DatepickerService } from '../../shared/services';
+import { TimeService } from '../../shared/services';
+
 
 export enum ShiftStatus { Unfilled, Filled, Pending }
 
@@ -14,7 +16,6 @@ export interface CalendarData {
 
 @Injectable()
 export class CalendarService {
-  public filterFormat = 'YYYY-MM-DD';
   public calendarTimes = [
     '00:00 AM',
     '3:00',
@@ -27,122 +28,68 @@ export class CalendarService {
     '23:59 PM'
   ];
 
-  private rangeFormat = {
-    month: 'MMMM YYYY',
-    week: 'MMM D',
-    day: 'D MMMM YYYY',
-  };
-
-  private headerFormat = {
-    month: 'ddd',
-    week: 'ddd / D MMM',
-    day: 'D MMMM YYYY / dddd',
-  };
-
   private calendarHeight = 370;
 
   constructor(
-    private time: TimeService
+    private time: TimeService,
+    private datepickerService: DatepickerService
   ) {}
 
   public getRangeFormatDate(date: Moment, type: DateRange) {
     if (type === DateRange.Week) {
-      const start = date.clone().weekday(0);
-      const end = date.clone().weekday(6);
+      const start = date.clone().weekday(weekStart);
+      const end = date.clone().weekday(weekEnd);
 
-      return `${start.format(this.rangeFormat[type])} - ${end.format(this.rangeFormat[type])}`;
+      return `${start.format(rangeFormats[type])} - ${end.format(rangeFormats[type])}`;
     }
 
-    return date.format(this.rangeFormat[type]);
+    return date.format(rangeFormats[type]);
   }
 
   public generateMonth(from: Moment, data: any): CalendarData {
-    const header = this.getHeader(DateRange.Month, from);
-
-    const range = this.getRangeDates(from, DateRange.Month);
-    const firstDay = range.start.weekday(0);
-    const lastDay = range.end.weekday(6);
-    const body = [];
-    let row;
-
-    const currentDay = firstDay.clone();
-    while (currentDay.isBefore(lastDay)) {
-      if (currentDay.day() === 0) {
-        row = [];
-        body.push(row);
-      }
-
-      const date = currentDay.format(this.filterFormat);
-      const newData = data.filter((el) => el.date === date);
-
-      row.push({
-        date,
-        data: newData,
-        label: currentDay.format('D'),
-        tooltip: this.generateTooltipForMonth(newData),
-        isOpen: false,
-        today: currentDay.format(this.filterFormat) === this.getToday().format(this.filterFormat)
+    return this.datepickerService.generateMonth(from, (body) => {
+      return body.map((row) => {
+        return row.map((day) => {
+          const newData = data.filter((el) => el.date === day.date);
+          return {
+            ...day,
+            data: newData,
+            tooltip: this.generateTooltipForMonth(newData),
+            isOpen: false,
+          };
+        });
       });
-
-      currentDay.add(1, 'day');
-    }
-
-    return {
-      header,
-      body,
-    };
+    });
   }
 
   public generateWeek(from: Moment, data: any) {
-    const header = this.getHeader(DateRange.Week, from);
-
-    const range = this.getRangeDates(from, DateRange.Week);
-    const body = [];
-
-    const currentDay = range.start.clone();
-    while (currentDay.isBefore(range.end)) {
-
-      const date = currentDay.format(this.filterFormat);
-      const newData = data.filter((el) => el.date === date);
-
-      body.push({
-        date,
-        data: newData,
-        isOpen: false,
+    return this.datepickerService.generateWeek(from, (body) => {
+      return body.map((day) => {
+        const newData = data.filter((el) => el.date === day.date);
+        return {
+          ...day,
+          data: newData,
+          tooltip: this.generateTooltipForMonth(newData),
+          isOpen: false,
+          lines: this.calculateLines(),
+        };
       });
-
-      currentDay.add(1, 'day');
-    }
-
-    return {
-      header,
-      body,
-      lines: this.calculateLines()
-    };
+    });
   }
 
   public generateDay(from: Moment, data: any) {
-    const header = this.getHeader(DateRange.Day, from);
-
-    const date = from.format(this.filterFormat);
-    const body = {
-      date,
-      data: data.filter((el) => el.date === date),
-      isOpen: false
-    };
-
-    return {
-      header,
-      body,
-      lines: this.calculateLines()
-    };
+    return this.datepickerService.generateDay(from, (body) => {
+      return {
+        ...body,
+        data: data.filter((el) => el.date === body.date),
+        isOpen: false,
+        lines: this.calculateLines()
+      };
+    });
   }
 
   getRangeDates(date: Moment, type: DateRange): { start: Moment, end: Moment } {
-    return {
-      start: date.clone().startOf(type),
-      end: date.clone().endOf(type)
-    };
+    return this.datepickerService.getRangeDates(date, type);
   }
 
   getToday() {
@@ -209,19 +156,4 @@ export class CalendarService {
       return result;
     }
   }
-
-  private getHeader(type: DateRange, from: Moment): string[] {
-    const result = [];
-    if (type !== DateRange.Day) {
-
-      for (let day = 0; day < 7; day++) {
-        result.push(from.clone().weekday(day).format(this.headerFormat[type]));
-      }
-    } else {
-      result.push(from.clone().format(this.headerFormat[type]));
-    }
-
-    return result;
-  }
-
 }

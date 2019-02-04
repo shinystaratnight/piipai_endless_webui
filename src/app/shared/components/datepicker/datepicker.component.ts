@@ -2,8 +2,8 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
 import { Moment } from 'moment-timezone';
 
-import { DateRangeService } from '../../services';
-import { DateRange } from '../../../helpers';
+import { DateRangeService, DatepickerService } from '../../services';
+import { DateRange, filterDateFormat } from '../../../helpers';
 
 @Component({
   selector: 'app-datepicker',
@@ -21,13 +21,10 @@ export class DatepickerComponent implements OnInit {
 
   rangeTitle: string;
   yearBody: any;
+  monthBody: any;
 
   get isYearRange() {
     return this.dateRangeService.isYearRange(this.type);
-  }
-
-  get isMonthRange() {
-    return this.dateRangeService.isMonthRange(this.type);
   }
 
   get isWeekRange() {
@@ -39,54 +36,71 @@ export class DatepickerComponent implements OnInit {
   }
 
   constructor(
-    private dateRangeService: DateRangeService
+    private dateRangeService: DateRangeService,
+    private datepickerService: DatepickerService
   ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     this.fillCalendar();
   }
 
-  fillCalendar() {
+  public fillCalendar() {
     switch (this.type) {
       case DateRange.Year:
         this.generateYearCalendar();
         break;
+
+      case DateRange.Week:
+        this.generateMonthCalendar();
+        break;
+
+      case DateRange.Day:
+        this.generateMonthCalendar();
+        break;
     }
   }
 
-  changeCalendar(date: Moment) {
+  public changeCalendar(date: Moment) {
     this.date = date;
 
     this.fillCalendar();
   }
 
-  changeDate(date: Moment) {
+  public changeDate(date: Moment) {
     this.change.emit(date);
   }
 
-  generateYearCalendar() {
-    const range = this.dateRangeService.getRangeDates(this.date, DateRange.Year);
-
-    const body = [];
-    let row;
-
-    const currentDay = range.start.clone();
-    while (currentDay.isBefore(range.end)) {
-      if (currentDay.month() % 3 === 0) {
-        row = [];
-        body.push(row);
-      }
-
-      row.push({
-        label: currentDay.format('MMMM'),
-        date: currentDay.clone(),
-        active: currentDay.month() === this.date.month()
-      });
-
-      currentDay.add(1, DateRange.Month);
+  public isActiveWeek(week: any[]) {
+    if (week) {
+      return week.some((day) => day.active);
     }
+  }
 
-    this.yearBody = body;
+  private generateYearCalendar() {
+    this.yearBody = this.datepickerService.generateYear(this.date, (body) => {
+      return body.map((row) => {
+        return row.map((month) => {
+          return {
+            ...month,
+            active: month.month === this.date.month()
+          };
+        });
+      });
+    });
+  }
+
+  private generateMonthCalendar() {
+    this.monthBody = this.datepickerService.generateMonth(this.date, (body) => {
+      return body.map((week) => {
+        return week.map((day) => {
+          return {
+            ...day,
+            currentMonth: day.month === this.date.month(),
+            active: day.date === this.date.format(filterDateFormat)
+          };
+        });
+      });
+    });
   }
 
 }

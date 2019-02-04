@@ -4,7 +4,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Moment } from 'moment-timezone';
 
 import { CalendarService, CalendarData } from './calendar.service';
-import { DateRange } from '../../helpers';
+import { DateRange, filterDateFormat } from '../../helpers';
 import { CalendarDataService } from './calendar-data.service';
 import { filters } from './calendar-filters.meta';
 
@@ -77,6 +77,8 @@ export class CalendarComponent implements OnInit {
     if (this.currentRange.value === DateRange.Month) {
       return DateRange.Year;
     }
+
+    return this.currentRange.value;
   }
 
   ngOnInit() {
@@ -169,8 +171,8 @@ export class CalendarComponent implements OnInit {
 
   private generateQuery(from: Moment, to: Moment, client?, candidate?) {
     const filterList = {
-      ['date__shift_date_0']: from.format(this.calendar.filterFormat),
-      ['date__shift_date_1']: to.format(this.calendar.filterFormat),
+      ['date__shift_date_0']: from.format(filterDateFormat),
+      ['date__shift_date_1']: to.format(filterDateFormat),
       fields: ['id', 'date', 'is_fulfilled', 'workers_details', 'time'],
       limit: -1,
     };

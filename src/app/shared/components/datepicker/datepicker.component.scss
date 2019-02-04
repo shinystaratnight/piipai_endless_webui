@@ -16,24 +16,63 @@
 }
 
 .calendar {
+  &-header {
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    font-size: 10px;
+    line-height: 12;
+
+    opacity: .5;
+  }
+
   &-row {
     display: flex;
     align-items: center;
+
+    margin-top: 3px;
+    margin-bottom: 3px;
+
+    &.active {
+      background-color: $brand-primary;
+      border-radius: 50px;
+
+      cursor: pointer;
+
+      & .calendar-button,
+      & .description {
+        color: white;
+      }
+    }
+
+    &.week:not(.active):hover {
+      background-color: #f2f2f2;
+      border-radius: 50px;
+    }
+
   }
 
   &-item {
     flex: 1 1;
 
+    font-size: 12px;
+    line-height: 1;
+
     text-align: center;
+
+    .description {
+      opacity: .2;
+      color: $gray;
+    }
   }
 
   &-button {
-    padding: 5px 8px;
-    margin-top: 6px;
-    margin-bottom: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-    font-size: 12px;
-    line-height: 1;
+    min-height: 28px;
+    min-width: 28px;
 
     border: 0;
     border-radius: 50px;

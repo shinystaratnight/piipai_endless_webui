@@ -7,7 +7,7 @@
     </button>
   </div>
 
-  <div *ngIf="widgets && widgets.length">
+  <ng-container *ngIf="widgets && widgets.length">
     <div class="dashboard-wrapper">
       <ng-container *ngFor="let widget of widgets">
         <div class="widget-item">
@@ -32,7 +32,7 @@
         </div>
       </ng-container>
     </div>
-  </div>
+  </ng-container>
 </div>
 
 <ng-template #modal let-c="close">
