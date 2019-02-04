@@ -8,6 +8,8 @@ import { ToastNoAnimationModule } from 'ngx-toastr';
 
 import { components } from './components';
 
+import { directives } from './directives';
+
 import { services } from './services';
 
 import { pipes } from './pipes';
@@ -22,11 +24,13 @@ import { pipes } from './pipes';
   ],
   exports: [
     ...components,
-    ...pipes
+    ...pipes,
+    ...directives,
   ],
   declarations: [
     ...components,
-    ...pipes
+    ...pipes,
+    ...directives,
   ],
   providers: [
     ...services

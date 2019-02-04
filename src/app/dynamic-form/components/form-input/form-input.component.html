@@ -12,6 +12,7 @@
           && (config.type !== 'address' && config.key !== 'address' && !config.key.includes('street_address'))
           && config.templateOptions.type !== 'score'"
         class="form-control"
+        appInputFocus
         [class.pl-2]="config.templateOptions.icon"
         [class.not-empty]="group.get(key).value"
         autocomplete="off"
