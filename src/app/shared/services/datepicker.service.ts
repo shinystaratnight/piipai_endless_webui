@@ -136,9 +136,10 @@ export class DatepickerService {
   private getHeader(type: DateRange, from: Moment, range?: { start: Moment, end: Moment }): string[] {
     const result = [];
 
-    const start = range && range.start.clone() || from;
+    let start = range && range.start.clone() || from;
 
     if (type !== DateRange.Day) {
+      start = start.clone().weekday(weekStart);
 
       for (let day = 0; day < 7; day++) {
         result.push(start.clone().add(day, DateRange.Day).format(this.headerFormat[type]));

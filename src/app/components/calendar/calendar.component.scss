@@ -56,13 +56,16 @@ h2 {
 }
 
 .range-title {
+  min-width: 200px;
+
+  text-align: center;
   font-size: 24px;
   opacity: .8;
 
   &-wrapper {
     position: relative;
     display: flex;
-    flex-basis: 400px;
+    flex-basis: 410px;
     justify-content: flex-end;
     align-items: center;
   }
