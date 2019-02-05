@@ -56,13 +56,16 @@ h2 {
 }
 
 .range-title {
+  min-width: 200px;
+
+  text-align: center;
   font-size: 24px;
   opacity: .8;
 
   &-wrapper {
     position: relative;
     display: flex;
-    flex-basis: 360px;
+    flex-basis: 410px;
     justify-content: flex-end;
     align-items: center;
   }
@@ -110,7 +113,6 @@ app-datepicker {
 }
 
 .calendar {
-  height: 450px;
   padding: $block-padding;
 
   &-line {

@@ -24,7 +24,7 @@
       (click)="openDropdown()">
     </i>
 
-    <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown" (change)="setDate($event)"></app-datepicker>
+    <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown" (change)="setDate($event)" [range]="customRange"></app-datepicker>
   </div>
 </div>
 
@@ -103,7 +103,7 @@
     <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
   </div>
   <div class="grid-row" *ngFor="let week of calendarData?.body">
-    <ng-container *ngFor="let day of week">
+    <ng-container *ngFor="let day of week; let last = last; let first = first">
       <span *ngIf="!day.tooltip" class="grid-item month-day"><span class="date" [class.today]="day.today">{{day.label}}</span></span>
 
       <span class="grid-item month-day"
@@ -111,7 +111,7 @@
         [class.active]="day.isOpen"
         triggers="click:click"
         [ngbTooltip]="monthTooltip"
-        placement="bottom"
+        [placement]="last ? 'left' : first ? 'right' : 'bottom'"
         (shown)="day.isOpen = true"
         (hidden)="day.isOpen = false">
 
@@ -144,7 +144,7 @@
     <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
   </div>
   <div class="grid-row grid-body">
-    <div [ngClass]="['calendar-line', line.class]" [style.top.px]="line.top" *ngFor="let line of calendarData?.lines"></div>
+    <div [ngClass]="['calendar-line', line.class]" [style.top.px]="line.top" *ngFor="let line of calendarData?.body.lines"></div>
     <div class="times">
       <ng-container *ngTemplateOutlet="times"></ng-container>
     </div>
@@ -175,7 +175,7 @@
     <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
   </div>
   <div class="grid-row grid-body">
-    <div [ngClass]="['calendar-line', line.class]" [style.top.px]="line.top" *ngFor="let line of calendarData?.lines"></div>
+    <div [ngClass]="['calendar-line', line.class]" [style.top.px]="line.top" *ngFor="let line of calendarData?.body.lines"></div>
     <div class="times">
       <ng-container *ngTemplateOutlet="times"></ng-container>
     </div>
@@ -217,7 +217,7 @@
     {{shift.position}} <br>
     <span class="shift-jobsite">{{shift.jobsite}}</span> <br>
     <div *ngIf="shift.candidates[status].length" class="shift-candidates">
-      <span class="mr-1" style="min-width: 85px">Candidate ({{shift.candidates[status].length}}):</span>
+      <span class="mr-1" style="min-width: 80px">Candidate ({{shift.candidates[status].length}}):</span>
       <div>
         <div *ngFor="let name of shift.candidates[status]">
           <i fa *ngIf="getStatus(0) === status" name="times" class="text-danger"></i>

@@ -2,30 +2,26 @@ import { Injectable } from '@angular/core';
 
 import { Moment } from 'moment-timezone';
 
-import { rangeFormats, DateRange } from '../../helpers';
+import { rangeFormats, DateRange, weekEnd, weekStart } from '../../helpers';
+import { TimeService } from './time.service';
 
 @Injectable()
 export class DateRangeService {
 
-  getRangeDates(date: Moment, type: DateRange): { start: Moment, end: Moment } {
-    return {
-      start: date.clone().startOf(type),
-      end: date.clone().endOf(type)
-    };
-  }
+  constructor(private time: TimeService) {}
 
-  nextRange(date: Moment, type: DateRange) {
+  public nextRange(date: Moment, type: DateRange) {
     return this.updateDate(date, type, 1);
   }
 
-  previousRange(date: Moment, type: DateRange) {
+  public previousRange(date: Moment, type: DateRange) {
     return this.updateDate(date, type, -1);
   }
 
-  getRangeTitle(date: Moment, type: DateRange) {
+  public getRangeTitle(date: Moment, type: DateRange) {
     if (type === DateRange.Week) {
-      const start = date.clone().weekday(0);
-      const end = date.clone().weekday(6);
+      const start = date.clone().weekday(weekStart);
+      const end = date.clone().weekday(weekEnd);
 
       return `${start.format(rangeFormats[type])} - ${end.format(rangeFormats[type])}`;
     }
@@ -33,19 +29,19 @@ export class DateRangeService {
     return date.format(rangeFormats[type]);
   }
 
-  isYearRange(type: DateRange) {
+  public isYearRange(type: DateRange) {
     return type === DateRange.Year;
   }
 
-  isMonthRange(type: DateRange) {
+  public isMonthRange(type: DateRange) {
     return type === DateRange.Month;
   }
 
-  isWeekRange(type: DateRange) {
+  public isWeekRange(type: DateRange) {
     return type === DateRange.Week;
   }
 
-  isDayRange(type: DateRange) {
+  public isDayRange(type: DateRange) {
     return type === DateRange.Day;
   }
 
