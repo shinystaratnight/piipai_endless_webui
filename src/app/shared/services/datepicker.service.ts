@@ -86,8 +86,8 @@ export class DatepickerService {
     };
   }
 
-  public generateWeek(from: Moment, updateBody?: Function): DatepickerData {
-    const range = this.getRangeDates(from, DateRange.Week);
+  public generateWeek(from: Moment, updateBody?: Function, range?: { start: Moment, end: Moment }): DatepickerData {
+    range = range || this.getRangeDates(from, DateRange.Week);
     let body = [];
 
     const currentDay = range.start.clone();
@@ -107,7 +107,7 @@ export class DatepickerService {
     }
 
     return {
-      header: this.getHeader(DateRange.Week, from),
+      header: this.getHeader(DateRange.Week, from, range),
       body,
     };
   }
@@ -133,16 +133,18 @@ export class DatepickerService {
     };
   }
 
-  private getHeader(type: DateRange, from: Moment): string[] {
+  private getHeader(type: DateRange, from: Moment, range?: { start: Moment, end: Moment }): string[] {
     const result = [];
+
+    const start = range && range.start.clone() || from;
 
     if (type !== DateRange.Day) {
 
       for (let day = 0; day < 7; day++) {
-        result.push(from.clone().weekday(day).format(this.headerFormat[type]));
+        result.push(start.clone().add(day, DateRange.Day).format(this.headerFormat[type]));
       }
     } else {
-      result.push(from.clone().format(this.headerFormat[type]));
+      result.push(start.format(this.headerFormat[type]));
     }
 
     return result;

@@ -24,7 +24,7 @@
       (click)="openDropdown()">
     </i>
 
-    <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown" (change)="setDate($event)"></app-datepicker>
+    <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown" (change)="setDate($event)" [range]="customRange"></app-datepicker>
   </div>
 </div>
 
@@ -217,7 +217,7 @@
     {{shift.position}} <br>
     <span class="shift-jobsite">{{shift.jobsite}}</span> <br>
     <div *ngIf="shift.candidates[status].length" class="shift-candidates">
-      <span class="mr-1" style="min-width: 85px">Candidate ({{shift.candidates[status].length}}):</span>
+      <span class="mr-1" style="min-width: 80px">Candidate ({{shift.candidates[status].length}}):</span>
       <div>
         <div *ngFor="let name of shift.candidates[status]">
           <i fa *ngIf="getStatus(0) === status" name="times" class="text-danger"></i>

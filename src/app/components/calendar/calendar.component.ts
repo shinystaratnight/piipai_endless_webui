@@ -54,6 +54,7 @@ export class CalendarComponent implements OnInit {
     }
   };
   public currentDate: Moment;
+  public customRange: {start: Moment, end: Moment};
   private lastData: any;
 
   constructor(
@@ -102,15 +103,23 @@ export class CalendarComponent implements OnInit {
   }
 
   changeRange(increment: boolean) {
+    this.customRange = undefined;
     const rangeType = this.currentRange.value;
     this.currentDate = this.updateDate(this.currentDate, rangeType, increment);
 
     this.changeCalendar(rangeType);
   }
 
-  setDate(date: Moment) {
+  setDate(date: any) {
     this.showCalendarDropdown = false;
-    this.currentDate = date;
+
+    if (date.start) {
+      this.customRange = date;
+      this.currentDate = date.start;
+    } else {
+      this.currentDate = date;
+      this.customRange = undefined;
+    }
 
     this.changeCalendar(this.currentRange.value);
   }
@@ -155,7 +164,7 @@ export class CalendarComponent implements OnInit {
   private changeCalendar(type?: DateRange) {
     const rangeType = type || this.currentRange.value;
 
-    const range = this.calendar.getRangeDates(this.currentDate, rangeType);
+    const range = this.customRange || this.calendar.getRangeDates(this.currentDate, rangeType);
     const query = this.generateQuery(range.start, range.end, this.client, this.candidate);
 
     this.getShifts(query, rangeType);
@@ -231,7 +240,7 @@ export class CalendarComponent implements OnInit {
         calendarData = this.calendar.generateMonth(date, this.shifts);
         break;
       case DateRange.Week:
-        calendarData = this.calendar.generateWeek(date, this.shifts);
+        calendarData = this.calendar.generateWeek(date, this.shifts, this.customRange);
         break;
       case DateRange.Day:
         calendarData = this.calendar.generateDay(date, this.shifts);
@@ -250,7 +259,7 @@ export class CalendarComponent implements OnInit {
   }
 
   private updateCalendarHeader(date: Moment, type: DateRange) {
-    this.rangeTitle = this.calendar.getRangeFormatDate(date, type);
+    this.rangeTitle = this.calendar.getRangeFormatDate(date, type, this.customRange);
   }
 
   private updateDate(date: Moment, type: DateRange, increment: boolean) {

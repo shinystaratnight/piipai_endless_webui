@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { ToastNoAnimationModule } from 'ngx-toastr';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { components } from './components';
 
@@ -19,6 +20,7 @@ import { pipes } from './pipes';
     Angular2FontawesomeModule,
     ToastNoAnimationModule.forRoot(),
     FormsModule,
+    NgbTooltipModule,
   ],
   exports: [
     ...components,

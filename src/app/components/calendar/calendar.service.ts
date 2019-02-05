@@ -35,10 +35,10 @@ export class CalendarService {
     private datepickerService: DatepickerService
   ) {}
 
-  public getRangeFormatDate(date: Moment, type: DateRange) {
+  public getRangeFormatDate(date: Moment, type: DateRange, range?: { start: Moment, end: Moment }) {
     if (type === DateRange.Week) {
-      const start = date.clone().weekday(weekStart);
-      const end = date.clone().weekday(weekEnd);
+      const start = (range && range.start) || date.clone().weekday(weekStart);
+      const end = (range && range.end) || date.clone().weekday(weekEnd);
 
       return `${start.format(rangeFormats[type])} - ${end.format(rangeFormats[type])}`;
     }
@@ -62,7 +62,7 @@ export class CalendarService {
     });
   }
 
-  public generateWeek(from: Moment, data: any) {
+  public generateWeek(from: Moment, data: any, range?: { start: Moment, end: Moment }) {
     return this.datepickerService.generateWeek(from, (body) => {
       return body.map((day) => {
         const newData = data.filter((el) => el.date === day.date);
@@ -74,7 +74,7 @@ export class CalendarService {
           lines: this.calculateLines(),
         };
       });
-    });
+    }, range);
   }
 
   public generateDay(from: Moment, data: any) {
