@@ -1,0 +1,61 @@
+$brand-primary:  #28a3fc;
+
+.tracking {
+  &-timeline {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin: 40px 17px 0;
+
+    .line {
+      height: 4px;
+      width: calc(100% - 32px);
+
+      background-color: $brand-primary;
+    }
+
+    .circle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      height: 16px;
+      width: 16px;
+
+      border-radius: 50%;
+
+      background-color: $brand-primary;
+
+      &-inner {
+        height: 8px;
+        width: 8px;
+
+        border-radius: 50%;
+
+        background-color: #fff;
+      }
+    }
+  }
+
+  &-times {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 5px 16px 20px;
+
+    .title {
+      font-size: 16px;
+      line-height: 1;
+
+      color: $brand-primary;
+    }
+  }
+
+  &-time {
+    font-size: 14px;
+    line-height: 16px;
+  }
+}

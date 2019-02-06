@@ -14,3 +14,36 @@
 
   font-size: 32px;
 }
+
+.tracking-header {
+  position: relative;
+
+  padding: 20px 16px;
+
+  .title {
+    font-size: 26px;
+    line-height: 28px;
+  }
+
+  .jobsite {
+    margin: 0;
+
+    font-size: 16px;
+    line-height: 20px;
+
+    opacity: .7;
+  }
+
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+  }
+}
+
+.tracking-map {
+  height: 48px;
+  width: 200px;
+
+  margin-right: 20px;
+}

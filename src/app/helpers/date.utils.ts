@@ -1,3 +1,5 @@
+export const timeZone = 'Australia/Sydney';
+
 export enum DateRange { Year = 'year', Month = 'month', Week = 'week', Day = 'day' }
 
 export const filterDateFormat = 'YYYY-MM-DD';

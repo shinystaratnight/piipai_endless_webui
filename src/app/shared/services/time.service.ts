@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import * as moment from 'moment-timezone';
-moment.tz.setDefault('Australia/Sydney');
+import { timeZone } from '../../helpers';
+moment.tz.setDefault(timeZone);
 
 moment.updateLocale('en', {
   week: {
