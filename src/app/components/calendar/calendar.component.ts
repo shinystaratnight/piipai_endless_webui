@@ -1,10 +1,13 @@
-import { Component, Input, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, TemplateRef, OnDestroy } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Moment } from 'moment-timezone';
 
 import { CalendarService, CalendarData } from './calendar.service';
 import { DateRange, filterDateFormat } from '../../helpers';
+import { FormatString } from '../../helpers/format';
 import { CalendarDataService } from './calendar-data.service';
 import { filters } from './calendar-filters.meta';
 
@@ -15,7 +18,7 @@ import { DatepickerComponent } from '../../shared/components/datepicker/datepick
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
   public range = DateRange;
   public currentRange: FormControl;
   public rangeTitle: string;
@@ -41,6 +44,9 @@ export class CalendarComponent implements OnInit {
   @ViewChild(DatepickerComponent)
   public datepicker: ElementRef;
 
+  @ViewChild('modal')
+  public modal: TemplateRef<any>;
+
   private candidate: string;
   public status = {
     hideAutocomplete: true,
@@ -55,11 +61,16 @@ export class CalendarComponent implements OnInit {
   };
   public currentDate: Moment;
   public customRange: {start: Moment, end: Moment};
+  public modalInfo: any;
+  public saveProcess: boolean;
+  private modalRef: NgbModalRef;
   private lastData: any;
 
   constructor(
     private calendar: CalendarService,
-    private data: CalendarDataService
+    private data: CalendarDataService,
+    private modalService: NgbModal,
+    private router: Router
   ) {}
 
   get isMonthRange() {
@@ -100,6 +111,12 @@ export class CalendarComponent implements OnInit {
       });
 
     this.currentRange.patchValue(DateRange.Month);
+  }
+
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
   }
 
   changeRange(increment: boolean) {
@@ -161,6 +178,64 @@ export class CalendarComponent implements OnInit {
     }, 100);
   }
 
+  public extendJob(data) {
+    const formatString = new FormatString();
+
+    this.modalInfo = {
+      type: 'form',
+      endpoint: `/hr/jobs/${data.shift.date.job.id}/extend/`,
+      mode: 'edit',
+      edit: true,
+      data: {
+        default_shift_starting_time: {
+          action: 'add',
+          data: {
+            value: formatString.format(
+              '{data.shift.date.job.time}',
+              data
+            )
+          }
+        },
+        skill: {
+          action: 'add',
+          data: {
+            value: formatString.format('{data.shift.date.job.position.id}', data)
+          }
+        },
+        job: {
+          action: 'add',
+          data: {
+            value: formatString.format('{data.shift.date.job.id}', data)
+          }
+        }
+      }
+    };
+
+    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass: 'extend-modal' });
+  }
+
+  public fillInJob(data) {
+    this.router.navigateByUrl(`/hr/jobs/${data.shift.date.job.id}/fillin`);
+  }
+
+  public formEvent(e, closeModal) {
+    if (e.type === 'saveStart') {
+      this.saveProcess = true;
+    }
+    if (e.type === 'sendForm' && e.status === 'success') {
+      this.saveProcess = false;
+      closeModal();
+
+      setTimeout(() => {
+        this.changeCalendar();
+      }, 1000);
+    }
+  }
+
+  public formError() {
+    this.saveProcess = false;
+  }
+
   private changeCalendar(type?: DateRange) {
     const rangeType = type || this.currentRange.value;
 
@@ -205,6 +280,7 @@ export class CalendarComponent implements OnInit {
       this.shifts = data.results
         .map((shift) => {
           return {
+            shift,
             date: shift.date.shift_date,
             time: shift.time,
             jobsite: shift.date.job.jobsite.name,

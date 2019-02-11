@@ -205,6 +205,43 @@ app-filter-related {
 
 .shift {
 
+  &-action {
+    flex: 1 1;
+
+    border: 0;
+    border-radius: 5px;
+
+    font-size: 12px;
+    line-height: 18px;
+
+    color: #4f4f4f;
+    background-color: #ededed;
+
+    &:nth-child(1) {
+      border-radius: 5px 5px 0 0;
+    }
+
+    &:nth-child(2) {
+      border-radius: 0 0 5px 5px;
+    }
+
+    &:first-child:last-child {
+      border-radius: 5px;
+    }
+
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+
+      margin-left: auto;
+      padding-left: 10px;
+    }
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
+
   &-groups {
     position: absolute;
     top: 9px;

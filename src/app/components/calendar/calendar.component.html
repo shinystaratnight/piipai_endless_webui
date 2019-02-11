@@ -246,8 +246,41 @@
             {{name}}
           </div>
         </ng-container>
-
       </div>
+    </div>
+  </div>
+  <div class="shift-action-wrapper">
+    <button class="shift-action" type="button" (click)="extendJob(shift)">Extend</button>
+    <button class="shift-action" *ngIf="status !== getStatus(1)" type="button" (click)="fillInJob(shift)">Fillin</button>
+  </div>
+</ng-template>
+
+<ng-template #modal let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">{{modalInfo.label}}</h5>
+        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <app-generic-form
+        [endpoint]="modalInfo.endpoint"
+        [data]="modalInfo.data"
+        [mode]="modalInfo.mode"
+        [data]="modalInfo.data"
+        [edit]="modalInfo.edit"
+        (event)="formEvent($event, c)"
+        (errorForm)="formError($event)">
+        <div class="text-center">
+          <button type="submit" class="btn big-btn btn-shadow btn-secondary bg-primary text-white button-save mt-3 mb-4" [disabled]="saveProcess">
+            Save
+            <app-spinner *ngIf="saveProcess"></app-spinner>
+          </button>
+        </div>
+      </app-generic-form>
     </div>
   </div>
 </ng-template>
