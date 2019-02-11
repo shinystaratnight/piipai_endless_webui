@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
 import { Moment } from 'moment-timezone';
+import { TimeService } from '../../../shared/services';
 
 @Component({
   selector: 'app-time-tracking',
@@ -16,10 +17,20 @@ export class TimeTrackingComponent implements OnInit {
     break_end: Moment
   };
 
+  @Output()
+  public changeTimeTracking: EventEmitter<any> = new EventEmitter();
+
   public breakStyles: any;
+  public time: Moment;
+
+  constructor(
+    private timeService: TimeService,
+  ) {}
 
   public ngOnInit() {
     this.setBreakStyles();
+
+    this.time = this.timePoints.start;
   }
 
   public setBreakStyles() {
@@ -37,5 +48,18 @@ export class TimeTrackingComponent implements OnInit {
       width: breakWidth + '%',
       position: 'absolute'
     };
+  }
+
+  public checkPosition(event) {
+    const start = this.timePoints.start.valueOf();
+    const end = this.timePoints.end.valueOf();
+    const timesheet = end - start;
+
+    const minutes = timesheet / 1000 / 60;
+
+    const newTime = (Math.round(minutes * event)) * 60 * 1000;
+
+    this.time = this.timeService.instance(start + newTime);
+    this.changeTimeTracking.emit(this.time);
   }
 }
