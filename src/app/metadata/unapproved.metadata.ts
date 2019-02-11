@@ -160,7 +160,7 @@ const list = {
             icon: 'fa-map-marker',
             type: 'button',
             color: 'primary',
-            endpoint: '/candidate/location/{session.data.contact.candidate_contact}/history/',
+            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
             field: 'id',
             action: 'showTracking'
           }

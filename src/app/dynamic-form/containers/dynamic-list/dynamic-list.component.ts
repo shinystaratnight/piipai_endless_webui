@@ -237,6 +237,8 @@ export class DynamicListComponent
     private time: TimeService,
   ) {}
 
+  public isMobile = isMobile;
+
   public ngOnInit() {
     this.updateFilters();
 
@@ -2148,12 +2150,24 @@ export class DynamicListComponent
             longitude: paths[0].lng,
           };
 
-          this.open(this.trakingModal, { windowClass: 'small-modal' });
+          this.trackingMarkerCoordinates(start);
+
+          this.open(this.trakingModal);
         }
       });
   }
 
   public trackByTraking(data) {
     return data.log_at;
+  }
+
+  public trackingMarkerCoordinates(time) {
+    if (this.modalInfo) {
+      const item = this.modalInfo.paths.find((el) => time.format('hh:mm A') === this.time.instance(el.log_at).format('hh:mm A'));
+      if (item) {
+        this.modalInfo.markerLatitude = item.lat;
+        this.modalInfo.markerLongitude = item.lng;
+      }
+    }
   }
 }

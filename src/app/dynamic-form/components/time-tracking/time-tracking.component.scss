@@ -1,5 +1,10 @@
 $brand-primary:  #28a3fc;
 
+:host {
+  margin-top: 20px;
+  min-width: 320px
+}
+
 .tracking {
   &-timeline {
     position: relative;
@@ -7,7 +12,7 @@ $brand-primary:  #28a3fc;
     align-items: center;
     justify-content: space-between;
 
-    margin: 40px 17px 0;
+    margin: 0 24px;
 
     .line {
       height: 4px;
@@ -58,4 +63,34 @@ $brand-primary:  #28a3fc;
     font-size: 14px;
     line-height: 16px;
   }
+
+  &-slider {
+    display: flex;
+    align-items: center;
+
+    margin: 0 24px;
+  }
+}
+
+.marker {
+  position: relative;
+  top: 3px;
+  left: 0;
+  height: 40px;
+
+  font-size: 40px;
+
+  color: $brand-primary;
+}
+
+.time {
+  position: absolute;
+  top: -20px;
+  left: -13px;
+  width: 55px;
+
+  font-size: 14px;
+  line-height: 16px;
+
+  color: $brand-primary;
 }

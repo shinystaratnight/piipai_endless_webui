@@ -1,3 +1,10 @@
+<div #tracker class="tracking-slider">
+  <span class="marker" appSlider (position)="checkPosition($event)" [parentElement]="tracker">
+    <span class="time">{{time | dateFormat: 'time'}}</span>
+    <i fa name="map-marker"></i>
+  </span>
+</div>
+
 <div class="tracking-timeline">
   <div class="circle"><div class="circle-inner"></div></div>
   <div class="line"></div>
