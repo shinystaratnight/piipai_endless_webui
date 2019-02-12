@@ -10,6 +10,7 @@ import { DateRange, filterDateFormat } from '../../helpers';
 import { FormatString } from '../../helpers/format';
 import { CalendarDataService } from './calendar-data.service';
 import { filters } from './calendar-filters.meta';
+import { TimeService } from '../../shared/services';
 
 import { DatepickerComponent } from '../../shared/components/datepicker/datepicker.component';
 
@@ -70,7 +71,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private calendar: CalendarService,
     private data: CalendarDataService,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private time: TimeService,
   ) {}
 
   get isMonthRange() {
@@ -236,6 +238,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.saveProcess = false;
   }
 
+  public fillinAccess(shift) {
+    const statusSeccess = this.getStatus(shift.is_fulfilled) !== this.getStatus(1);
+    const dateSuccess = this.calendar.getToday().isBefore(this.time.instance(shift.date).add(1, DateRange.Day));
+
+    return statusSeccess && dateSuccess;
+  }
+
   private changeCalendar(type?: DateRange) {
     const rangeType = type || this.currentRange.value;
 
@@ -343,7 +352,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('document:click', ['$event'])
-  @HostListener('document:touchstart', ['$event'])
+  @HostListener('document:touch', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;
     let inside = false;

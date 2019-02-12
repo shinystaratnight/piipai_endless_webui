@@ -91,9 +91,10 @@ h2 {
 
   &:hover,
   &:active {
-    background-color: rgba($brand-primary, .6);
+    background-color: rgba($gray, .6);
 
     i {
+      position: relative;
       color: white;
       opacity: 1;
     }
@@ -102,6 +103,14 @@ h2 {
   &:focus {
     outline: 0;
   }
+}
+
+.next i {
+  right: -1px
+}
+
+.prev i {
+  left: -1px;
 }
 
 app-datepicker {
@@ -351,7 +360,11 @@ app-filter-related {
         display: block;
         min-width: auto;
 
+        padding-bottom: .5rem;
+
         opacity: 1;
+
+        overflow-y: auto;
       }
     }
 

@@ -139,7 +139,11 @@ export class DatepickerService {
     let start = range && range.start.clone() || from;
 
     if (type !== DateRange.Day) {
-      start = start.clone().weekday(weekStart);
+      if (!range) {
+        start = start.clone().weekday(weekStart);
+      } else {
+        start = start.clone();
+      }
 
       for (let day = 0; day < 7; day++) {
         result.push(start.clone().add(day, DateRange.Day).format(this.headerFormat[type]));
