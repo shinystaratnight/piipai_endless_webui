@@ -5,6 +5,14 @@
 
   height: 100%;
 
+  box-shadow: $container-box-shadow;
+
+  &.preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   a:hover {
     text-decoration: underline;
   }
@@ -59,7 +67,6 @@
     border-radius: .3rem;
 
     background-color: #fff;
-    box-shadow: $container-box-shadow;
   }
 
   .widget-item {
