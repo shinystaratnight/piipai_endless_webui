@@ -1119,7 +1119,7 @@ const formadd = [
               edit: true
             },
             visibleMode: true,
-            default: '{customer_company.primary_contact.id}',
+            default: '{customer_company.manager.id}',
             if_master: 'session.contact.contact_id',
             showIf: ['provider_company.id'],
             type: 'related',
