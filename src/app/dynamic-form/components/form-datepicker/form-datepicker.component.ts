@@ -67,13 +67,13 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   public ngOnInit() {
     this.update = new Subject();
+    this.mobileDevice = isMobile();
 
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.setInitValue(moment);
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.checkFormData();
-    this.mobileDevice = isMobile();
     this.createEvent();
     this.group.get(this.key).valueChanges.subscribe((val) => {
       if (!val) {
@@ -191,7 +191,11 @@ export class FormDatepickerComponent extends BasicElementComponent
               .format(type === 'date' ? this.dateFormat : this.datetimeFormat)
           : '-';
       } else if (type === 'time') {
-        this.setTime(data, moment);
+        if (!this.mobileDevice) {
+          this.setTime(data, moment);
+        } else {
+          this.time = data;
+        }
         this.displayValue = data
           ? moment(data, 'HH:mm:ss').format(this.timeFormat)
           : '-';
@@ -226,6 +230,10 @@ export class FormDatepickerComponent extends BasicElementComponent
   }
 
   public ngAfterViewInit() {
+    if (this.mobileDevice) {
+      return;
+    }
+
     if (!this.init) {
       const dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       const timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';
@@ -348,7 +356,11 @@ export class FormDatepickerComponent extends BasicElementComponent
     if (this.config.templateOptions.type === 'date') {
       if (date) {
         if (!this.date || this.config.shouldUpdate) {
-          this.date = date.format(this.dateFormat);
+          if (!this.mobileDevice) {
+            this.date = date.format(this.dateFormat);
+          } else {
+            this.date = date.format('YYYY-MM-DD');
+          }
           this.setDatepickerDate();
         }
         this.group.get(this.key).patchValue(date.format('YYYY-MM-DD'));
@@ -357,11 +369,19 @@ export class FormDatepickerComponent extends BasicElementComponent
     } else if (this.config.templateOptions.type === 'datetime') {
       if (date) {
         if (!this.date || this.config.shouldUpdate) {
-          this.date = date.format(this.dateFormat);
+          if (!this.mobileDevice) {
+            this.date = date.format(this.dateFormat);
+          } else {
+            this.date = date.format('YYYY-MM-DD');
+          }
           this.setDatepickerDate();
         }
         if (!this.time || this.config.shouldUpdate) {
-          this.time = date.format(this.timeFormat);
+          if (!this.mobileDevice) {
+            this.time = date.format(this.timeFormat);
+          } else {
+            this.time = date.format('H:m');
+          }
           this.setTimepickerTime();
         }
         this.group.get(this.key).patchValue(date.format());
@@ -450,6 +470,22 @@ export class FormDatepickerComponent extends BasicElementComponent
     (window as any).$(target).datebox({
       [propName]: value
     });
+  }
+
+  public changeDate(e) {
+    this.setDate(e, moment);
+  }
+
+  public changeTime(e: string) {
+    if (this.date) {
+      const hour = parseInt(e.split(':')[0], 10);
+      const minute = parseInt(e.split(':')[1], 10);
+      const datetime = moment(this.date).hour(hour).minute(minute);
+
+      this.group.get(this.key).patchValue(datetime.format());
+    } else {
+      this.setTime(e, moment);
+    }
   }
 
   @HostListener('document:touchstart', ['$event'])

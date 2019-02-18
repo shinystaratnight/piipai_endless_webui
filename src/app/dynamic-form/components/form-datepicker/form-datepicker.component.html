@@ -4,7 +4,7 @@
       {{config.templateOptions.label}}:
     </label>
     <app-info [description]="config.templateOptions.description"></app-info>
-    <div class="input-group form-element-content datepicker mb-2 edit">
+    <div *ngIf="!mobileDevice" class="input-group form-element-content datepicker mb-2 edit">
       <input [hidden]="config.templateOptions.type === 'time'" class="form-control"
         #d
         data-role="datebox"
@@ -15,6 +15,20 @@
       <input [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')" class="form-control"
         #t
         date-role="datebox"
+        [(ngModel)]="time">
+    </div>
+
+    <div *ngIf="mobileDevice" class="input-group form-element-content datepicker mb-2 edit">
+      <input type="date" class="form-control"
+        [hidden]="config.templateOptions.type === 'time'"
+        [(ngModel)]="date"
+        (ngModelChange)="changeDate($event)"
+        [attr.id]="key"
+        [attr.name]="key">
+
+      <input type="time" class="form-control"
+        [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')"
+        (ngModelChange)="changeTime($event)"
         [(ngModel)]="time">
     </div>
   </div>
