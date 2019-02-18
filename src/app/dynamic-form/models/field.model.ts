@@ -73,6 +73,11 @@ export interface Field {
   inline?: boolean;
   hideOnMobile?: boolean;
   showOnMobile?: boolean;
+  disabled?: {
+    keys: string[],
+    values: any[],
+    messages: string[]
+  };
   templateOptions?: {
     dontSendFields?: boolean;
     label?: string;

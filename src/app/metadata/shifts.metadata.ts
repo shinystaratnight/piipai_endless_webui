@@ -536,7 +536,8 @@ const job = {
             title: 'Edit',
             text_color: '#f0ad4e',
             type: 'button',
-            field: 'id'
+            field: 'id',
+            visibleMode: true,
           },
           {
             action: 'delete',

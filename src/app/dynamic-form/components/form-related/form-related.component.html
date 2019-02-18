@@ -5,7 +5,7 @@
         {{config.templateOptions.label}}:
       </label>
       <app-info [description]="config.templateOptions.description"></app-info>
-      <div class="form-element-content flex-row edit" style="position: relative">
+      <div class="form-element-content flex-row edit" style="position: relative" [class.disabled]="fieldDisabled">
         <div class="form-control autocomplete-value"
           (click)="openAutocomplete()">
           <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
