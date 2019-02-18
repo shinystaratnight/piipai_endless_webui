@@ -9,14 +9,14 @@
     [class.btn-sm]="config.templateOptions.small"
     [class.px-2]="config.templateOptions.p"
     [class.list]="config.templateOptions.p"
-    [class.text-white]="(buttonClass || config.color) && !config.inverse"
+    [class.text-white]="(buttonClass || config.color) && !config.inverse && buttonClass !== 'btn-link'"
     [class.disabled]="isDisabled"
     [attr.title]="disabledTitle"
     [disabled]="config.disableAction || isDisabled"
     (click)="action($event)">
       <span *ngIf="repeatArray" class="d-flex align-items-center justify-content-between">
         <i fa
-          [ngClass]="{'text-white': buttonClass, 'mr-1': !last || first}"
+          [ngClass]="{'text-white': buttonClass && buttonClass !== 'btn-link', 'mr-1': !last || first}"
           *ngFor="let icon of repeatArray; let last = last; let first = first"
           [name]="config.templateOptions.icon">
         </i>

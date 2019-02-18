@@ -1,5 +1,4 @@
 @import '../../../../styles/variables.scss';
-@import '../../../../styles/mixins.scss';
 
 .custom-button {
   color: $gray;
@@ -68,8 +67,12 @@ button.btn-link {
   opacity: .5;
 }
 
-.custom-link:hover {
-  text-decoration: underline;
+.custom-link {
   color: $brand-primary;
-  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }
+

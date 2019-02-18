@@ -95,7 +95,7 @@
 
       @each $item in $themes {
         .#{$item}-theme & {
-          color: map-get($theme-colors, $item);
+          color: map-get($theme-colors, $item) !important;
         }
       }
     }
