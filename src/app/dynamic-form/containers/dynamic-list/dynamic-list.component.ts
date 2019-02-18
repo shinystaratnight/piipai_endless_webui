@@ -892,10 +892,17 @@ export class DynamicListComponent
           }
           if (element.type === 'static') {
             if (element.text) {
-              obj.value = this.format(
-                element.text.replace(/{field}/gi, `{${element.field}}`),
-                el
-              );
+              if (element.field === 'totalTime') {
+                obj.value = this.format(
+                  element.text.replace(/{field}/gi, `{${element.field}}`),
+                  { ...el, totalTime: this.getTotalTime(el) }
+                );
+              } else {
+                obj.value = this.format(
+                  element.text.replace(/{field}/gi, `{${element.field}}`),
+                  el
+                );
+              }
             }
             obj.label = element.label;
           }
@@ -1100,15 +1107,19 @@ export class DynamicListComponent
   }
 
   public getTotalTime(data) {
-    const break_ended_at = this.time.instance(data.break_ended_at);
-    const break_started_at = this.time.instance(data.break_started_at);
     const shift_ended_at = this.time.instance(data.shift_ended_at);
     const shift_started_at = this.time.instance(data.shift_started_at);
 
+    let breakTime = 0;
 
-    const breakTime = break_ended_at.diff(break_started_at);
+    if (data.break_ended_at && data.break_started_at) {
+      const break_ended_at = this.time.instance(data.break_ended_at);
+      const break_started_at = this.time.instance(data.break_started_at);
+
+      breakTime = break_ended_at.diff(break_started_at);
+    }
+
     const workTime = shift_ended_at.diff(shift_started_at);
-
     const totalTime = this.time.instance.duration(workTime - breakTime);
 
     return `${totalTime.hours()}hr ${totalTime.minutes()}min`;

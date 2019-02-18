@@ -4,7 +4,7 @@
     [name]="config.iconLabel"></i>
 </span>
 
-<div *ngIf="!head">
+<ng-container *ngIf="!head">
   <ng-container
     *ngFor="let field of config; let last = last"
     appListElement
@@ -14,4 +14,4 @@
     (event)="eventHandler($event)"
     (buttonAction)="buttonHandler($event)">
   </ng-container>
-</div>
+</ng-container>

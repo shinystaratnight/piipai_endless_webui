@@ -8,21 +8,16 @@ const list = {
       {
         content: [
           {
-            endpoint: '/core/companies/{company.id}',
-            field: 'company',
-            type: 'link'
-          },
-          {
             endpoint: '/hr/jobsites/{jobsite.id}',
             field: 'jobsite',
             type: 'link'
           },
           {
-            endpoint: '/core/companycontacts/{supervisor.id}',
-            field: 'supervisor',
-            type: 'link'
+            field: 'supervisor.__str__',
+            type: 'text'
           }
         ],
+        width: 250,
         name: 'client_/_jobsite_/_supervisor',
         title: null,
         label: 'Client / Jobsite / Supervisor',
@@ -31,58 +26,76 @@ const list = {
       {
         content: [
           {
-            endpoint: '/skills/skills/{position.id}',
-            field: 'position',
+            endpoint: '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
+            field: 'job_offer.candidate_contact',
             type: 'link'
           },
           {
-            endpoint:
-              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
-            field: 'job_offer.candidate_contact',
+            field: 'position.__str__',
+            description: ' ',
+            type: 'text'
+          },
+          {
+            endpoint: '/hr/jobs/{job.id}',
+            field: 'job.id',
+            color: 'primary',
+            text: 'Job information',
             type: 'link'
           }
         ],
+        width: 200,
         name: 'position_/_candidate',
         title: null,
-        label: 'Position / Candidate',
+        label: 'Position / Candidate / Job',
         delim: null
       },
       {
         content: [
           {
-            endpoint: '/hr/jobs/{job.id}',
-            field: 'job',
-            type: 'link',
-            text: 'Job'
-          }
-        ],
-        name: 'links',
-        title: null,
-        label: 'Links',
-        delim: ' / '
-      },
-      {
-        content: [
+            title: 'Show traking map',
+            type: 'button',
+            color: 'link',
+            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
+            field: 'id',
+            action: 'showTracking',
+            customLink: true,
+          },
           {
-            field: 'shift_started_ended',
-            type: 'static'
-          }
-        ],
-        name: 'shift_started/ended',
-        title: null,
-        label: 'Shift started/ended',
-        delim: null
-      },
-      {
-        content: [
+            text: '{shift_started_at__date}',
+            type: 'static',
+            label: 'Dates',
+            field: 'shift_started_at'
+          },
           {
-            field: 'break_started_ended',
-            type: 'static'
+            text: '{shift_started_at__time}',
+            type: 'static',
+            label: 'Start',
+            field: 'shift_started_at'
+          },
+          {
+            text: '{break_started_at__time} - {break_ended_at__time}',
+            type: 'static',
+            label: 'Break',
+            field: 'break_started_at'
+          },
+          {
+            text: '{shift_ended_at__time}',
+            type: 'static',
+            label: 'End',
+            field: 'shift_ended_at'
+          },
+          {
+            text: '{totalTime}',
+            color: 'success',
+            setColor: 'shift_ended_at',
+            type: 'static',
+            label: 'Total time',
+            field: 'totalTime'
           }
         ],
-        name: 'break_started/ended',
+        name: 'time',
         title: null,
-        label: 'Break started/ended',
+        label: 'Tracking, date and times',
         delim: null
       },
       {
@@ -134,80 +147,6 @@ const list = {
         delim: null
       },
       {
-        content: [
-          {
-            endpoint: '/hr/timesheets/{id}/confirm',
-            field: 'id',
-            icon: 'fa-external-link',
-            text: 'Confirm Check',
-            label: 'Morning check:',
-            showIf: [
-              {
-                going_to_work_confirmation: null
-              }
-            ],
-            action: 'emptyPost',
-            type: 'button'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/resend_sms',
-            field: 'resend_sms_candidate',
-            showIf: [
-              {
-                resend_sms_candidate: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'emptyPost',
-            type: 'button',
-            text: 'Send TS SMS'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
-            field: 'resend_sms_supervisor',
-            showIf: [
-              {
-                resend_sms_supervisor: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'emptyPost',
-            type: 'button',
-            text: 'Send Supervisor SMS'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/candidate_fill',
-            field: 'id',
-            showIf: [
-              {
-                resend_sms_candidate: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'editForm',
-            type: 'button',
-            text: 'Fill'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/supervisor_approve',
-            field: 'id',
-            showIf: [
-              {
-                resend_sms_supervisor: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'editForm',
-            type: 'button',
-            text: 'Approve'
-          }
-        ],
-        name: 'actions',
-        title: null,
-        label: 'Actions',
-        delim: null
-      },
-      {
         delim: null,
         label: 'Related sms',
         sort: true,
@@ -215,42 +154,42 @@ const list = {
           {
             action: 'messageDetail',
             messageType: 'sent',
+            color: 'link',
             endpoint:
               '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
-            icon: 'fa-commenting',
             type: 'button',
-            text: 'Candidate Going To Work'
+            text: 'Candidate Going To Work',
           },
           {
             action: 'messageDetail',
             messageType: 'reply',
+            color: 'link',
             endpoint:
               '/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
             field: 'going_to_work_reply_sms',
-            icon: 'fa-commenting',
             type: 'button',
-            text: 'Reply'
+            text: 'Reply',
           },
           {
             action: 'messageDetail',
             messageType: 'sent',
+            color: 'link',
             endpoint: '/sms-interface/smsmessages/{candidate_sms.id}',
             field: 'candidate_sms',
-            icon: 'fa-commenting',
             type: 'button',
             text: 'Candidate TS',
-            showIf: ['candidate_sms']
+            showIf: ['candidate_sms'],
           },
           {
             action: 'messageDetail',
             messageType: 'sent',
+            color: 'link',
             endpoint: '/sms-interface/smsmessages/{supervisor_sms.id}',
             field: 'supervisor_sms',
-            icon: 'fa-commenting',
             type: 'button',
             text: 'Supervisor TS',
-            showIf: ['supervisor_sms']
+            showIf: ['supervisor_sms'],
           },
         ],
         name: 'related_sms',
@@ -276,7 +215,6 @@ const list = {
                 show_sync_button: true
               }
             ],
-            icon: 'fa-sync-alt',
             action: 'emptyPost',
             type: 'button',
             text: 'Sync'
@@ -293,7 +231,8 @@ const list = {
             endpoint: '/core/invoices/{invoice.id}',
             field: 'invoice',
             type: 'link',
-            text: 'Invoice'
+            text: 'Show invoice',
+            color: 'primary',
           },
           {
             action: 'emptyPost',
@@ -311,11 +250,92 @@ const list = {
         title: null,
         label: 'Invoice',
         delim: null
-      }
+      },
+      {
+        content: [
+          {
+            endpoint: '/hr/timesheets/{id}/confirm',
+            action: 'emptyPost',
+            icon: 'fa-external-link',
+            title: 'Confirm Check',
+            type: 'button',
+            field: 'id',
+            showIf: [
+              {
+                going_to_work_confirmation: null
+              }
+            ],
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/resend_sms',
+            field: 'resend_sms_candidate',
+            showIf: [
+              {
+                resend_sms_candidate: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'emptyPost',
+            type: 'button',
+            title: 'Send TS SMS'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
+            field: 'resend_sms_supervisor',
+            showIf: [
+              {
+                resend_sms_supervisor: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'emptyPost',
+            type: 'button',
+            title: 'Send Supervisor SMS'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/candidate_fill',
+            field: 'id',
+            showIf: [
+              {
+                resend_sms_candidate: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'editForm',
+            type: 'button',
+            title: 'Fill'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/supervisor_approve',
+            field: 'id',
+            showIf: [
+              {
+                resend_sms_supervisor: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'editForm',
+            type: 'button',
+            title: 'Approve'
+          },
+          {
+            action: 'editForm',
+            endpoint: '/hr/timesheets/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            type: 'button',
+            field: 'id'
+          },
+        ],
+        name: 'actions',
+        title: null,
+        label: 'Actions',
+        delim: null
+      },
     ],
     pagination_label: 'Timesheet Entry',
     search_enabled: false,
-    editDisable: false,
+    editDisable: true,
     filters: [
       {
         list: [
@@ -1201,21 +1221,16 @@ const formset = {
       {
         content: [
           {
-            endpoint: '/core/companies/{company.id}',
-            field: 'company',
-            type: 'link'
-          },
-          {
             endpoint: '/hr/jobsites/{jobsite.id}',
             field: 'jobsite',
             type: 'link'
           },
           {
-            endpoint: '/core/companycontacts/{supervisor.id}',
-            field: 'supervisor',
-            type: 'link'
+            field: 'supervisor.__str__',
+            type: 'text'
           }
         ],
+        width: 250,
         name: 'client_/_jobsite_/_supervisor',
         title: null,
         label: 'Client / Jobsite / Supervisor',
@@ -1224,58 +1239,76 @@ const formset = {
       {
         content: [
           {
-            endpoint: '/skills/skills/{position.id}',
-            field: 'position',
+            endpoint: '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
+            field: 'job_offer.candidate_contact',
             type: 'link'
           },
           {
-            endpoint:
-              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
-            field: 'job_offer.candidate_contact',
+            field: 'position.__str__',
+            description: ' ',
+            type: 'text'
+          },
+          {
+            endpoint: '/hr/jobs/{job.id}',
+            field: 'job.id',
+            color: 'primary',
+            text: 'Job information',
             type: 'link'
           }
         ],
+        width: 200,
         name: 'position_/_candidate',
         title: null,
-        label: 'Position / Candidate',
+        label: 'Position / Candidate / Job',
         delim: null
       },
       {
         content: [
           {
-            endpoint: '/hr/jobs/{job.id}',
-            field: 'job',
-            type: 'link',
-            text: 'Job'
-          }
-        ],
-        name: 'links',
-        title: null,
-        label: 'Links',
-        delim: ' / '
-      },
-      {
-        content: [
+            title: 'Show traking map',
+            type: 'button',
+            color: 'link',
+            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
+            field: 'id',
+            action: 'showTracking',
+            customLink: true,
+          },
           {
-            field: 'shift_started_ended',
-            type: 'static'
-          }
-        ],
-        name: 'shift_started/ended',
-        title: null,
-        label: 'Shift started/ended',
-        delim: null
-      },
-      {
-        content: [
+            text: '{shift_started_at__date}',
+            type: 'static',
+            label: 'Dates',
+            field: 'shift_started_at'
+          },
           {
-            field: 'break_started_ended',
-            type: 'static'
+            text: '{shift_started_at__time}',
+            type: 'static',
+            label: 'Start',
+            field: 'shift_started_at'
+          },
+          {
+            text: '{break_started_at__time} - {break_ended_at__time}',
+            type: 'static',
+            label: 'Break',
+            field: 'break_started_at'
+          },
+          {
+            text: '{shift_ended_at__time}',
+            type: 'static',
+            label: 'End',
+            field: 'shift_ended_at'
+          },
+          {
+            text: '{totalTime}',
+            color: 'success',
+            setColor: 'shift_ended_at',
+            type: 'static',
+            label: 'Total time',
+            field: 'totalTime'
           }
         ],
-        name: 'break_started/ended',
+        name: 'time',
         title: null,
-        label: 'Break started/ended',
+        label: 'Tracking, date and times',
         delim: null
       },
       {
@@ -1288,7 +1321,7 @@ const formset = {
             },
             field: 'going_to_work_confirmation',
             type: 'icon',
-            label: 'Pre-shift check'
+            label: 'Pre-shift check',
           },
           {
             values: {
@@ -1327,119 +1360,49 @@ const formset = {
         delim: null
       },
       {
-        content: [
-          {
-            endpoint: '/hr/timesheets/{id}/confirm',
-            field: 'id',
-            icon: 'fa-external-link',
-            text: 'Confirm Check',
-            label: 'Morning check:',
-            showIf: [
-              {
-                going_to_work_confirmation: null
-              }
-            ],
-            action: 'emptyPost',
-            type: 'button'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/resend_sms',
-            field: 'resend_sms_candidate',
-            showIf: [
-              {
-                resend_sms_candidate: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'emptyPost',
-            type: 'button',
-            text: 'Send TS SMS'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
-            field: 'resend_sms_supervisor',
-            showIf: [
-              {
-                resend_sms_supervisor: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'emptyPost',
-            type: 'button',
-            text: 'Send Supervisor SMS'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/candidate_fill',
-            field: 'id',
-            showIf: [
-              {
-                resend_sms_candidate: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'editForm',
-            type: 'button',
-            text: 'Fill'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/supervisor_approve',
-            field: 'id',
-            showIf: [
-              {
-                resend_sms_supervisor: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'editForm',
-            type: 'button',
-            text: 'Approve'
-          }
-        ],
-        name: 'actions',
-        title: null,
-        label: 'Actions',
-        delim: null
-      },
-      {
         delim: null,
         label: 'Related sms',
         sort: true,
         content: [
           {
+            action: 'messageDetail',
+            messageType: 'sent',
+            color: 'link',
             endpoint:
               '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
-            text: 'Candidate Going To Work'
+            text: 'Candidate Going To Work',
           },
           {
+            action: 'messageDetail',
+            messageType: 'reply',
+            color: 'link',
             endpoint:
               '/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
             field: 'going_to_work_reply_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
-            text: 'Reply'
+            text: 'Reply',
           },
           {
+            action: 'messageDetail',
+            messageType: 'sent',
+            color: 'link',
             endpoint: '/sms-interface/smsmessages/{candidate_sms.id}',
             field: 'candidate_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Candidate TS',
-            showIf: ['candidate_sms']
+            showIf: ['candidate_sms'],
           },
           {
+            action: 'messageDetail',
+            messageType: 'sent',
+            color: 'link',
             endpoint: '/sms-interface/smsmessages/{supervisor_sms.id}',
             field: 'supervisor_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Supervisor TS',
-            showIf: ['supervisor_sms']
+            showIf: ['supervisor_sms'],
           },
         ],
         name: 'related_sms',
@@ -1465,7 +1428,6 @@ const formset = {
                 show_sync_button: true
               }
             ],
-            icon: 'fa-sync-alt',
             action: 'emptyPost',
             type: 'button',
             text: 'Sync'
@@ -1475,11 +1437,118 @@ const formset = {
         title: null,
         label: 'MYOB status',
         delim: null
-      }
+      },
+      {
+        content: [
+          {
+            endpoint: '/core/invoices/{invoice.id}',
+            field: 'invoice',
+            type: 'link',
+            text: 'Show invoice',
+            color: 'primary',
+          },
+          {
+            action: 'emptyPost',
+            text: 'Recreate',
+            endpoint: '/hr/timesheets/{id}/recreate_invoice',
+            type: 'button',
+            showIf: [
+              {
+                supervisor_approved: true
+              }
+            ]
+          },
+        ],
+        name: 'invoice',
+        title: null,
+        label: 'Invoice',
+        delim: null
+      },
+      {
+        content: [
+          {
+            endpoint: '/hr/timesheets/{id}/confirm',
+            action: 'emptyPost',
+            icon: 'fa-external-link',
+            title: 'Confirm Check',
+            type: 'button',
+            field: 'id',
+            showIf: [
+              {
+                going_to_work_confirmation: null
+              }
+            ],
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/resend_sms',
+            field: 'resend_sms_candidate',
+            showIf: [
+              {
+                resend_sms_candidate: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'emptyPost',
+            type: 'button',
+            title: 'Send TS SMS'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
+            field: 'resend_sms_supervisor',
+            showIf: [
+              {
+                resend_sms_supervisor: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'emptyPost',
+            type: 'button',
+            title: 'Send Supervisor SMS'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/candidate_fill',
+            field: 'id',
+            showIf: [
+              {
+                resend_sms_candidate: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'editForm',
+            type: 'button',
+            title: 'Fill'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/supervisor_approve',
+            field: 'id',
+            showIf: [
+              {
+                resend_sms_supervisor: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'editForm',
+            type: 'button',
+            title: 'Approve'
+          },
+          {
+            action: 'editForm',
+            endpoint: '/hr/timesheets/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            type: 'button',
+            field: 'id'
+          },
+        ],
+        name: 'actions',
+        title: null,
+        label: 'Actions',
+        delim: null
+      },
     ],
     pagination_label: 'Timesheet Entry',
     search_enabled: false,
-    editDisable: false,
+    editDisable: true,
   },
   fields: [
     {

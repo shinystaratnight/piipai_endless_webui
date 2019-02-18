@@ -1,3 +1,5 @@
+<i *ngIf="icon && !config.setColorForLabel" fa [name]="icon" class="mr-1" [ngClass]="[iconClass]" [title]="config.title || ''" [ngStyle]="{'fontSize.px': config.fontSize}"></i>
+
 <ng-container *ngIf="config.label && config.label.slice">
   <span *ngIf="!config.setColorForLabel">{{config.label}}&nbsp;</span>
   <span *ngIf="config.setColorForLabel" [ngClass]="[iconClass]">{{config.label}}&nbsp;</span>
@@ -10,7 +12,6 @@
 <span class="description" *ngIf=emptyValue>{{config.emptyValue}}</span>
 
 <img *ngIf="src" [src]="src" width="60" height="60">
-<i *ngIf="icon && !config.setColorForLabel" fa [name]="icon" [ngClass]="[iconClass]" [title]="config.title || ''" [ngStyle]="{'fontSize.px': config.fontSize}"></i>
 <span class="mr-1" *ngIf="config.delim && !last">{{config.delim}}</span>
 <div *ngIf="file" [class.mobile]="isMobileDevice">
   <a #filelink
