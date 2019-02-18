@@ -997,7 +997,7 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public openAutocomplete(): void {
-    if (this.config.type !== 'address' && !this.config.doNotChoice) {
+    if (this.config.type !== 'address' && !this.config.doNotChoice && !this.fieldDisabled) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
         this.count = 0;

@@ -1215,7 +1215,7 @@ const formadd = [
               keys: ['customer_company.id'],
               values: [''],
               messages: ['Please select client']
-            }
+            },
             checkObject: {
               endpoint: '/hr/jobs/',
               error: 'Active Job for Jobsite and Position already exist!',
