@@ -10,7 +10,7 @@ import { RedirectComponent } from './redirect.component';
 
 import { UserService, NavigationService, SiteSettingsService } from './services';
 
-import { AuthGuard, NotAuthorizedGuard, SubdomainGuard, PermissionGuard } from './guards';
+import { AuthGuard, NotAuthorizedGuard, SubdomainGuard, PermissionGuard, LogoutGuard } from './guards';
 
 export const ROUTES: Routes = [
   {
@@ -28,7 +28,7 @@ export const ROUTES: Routes = [
   {
     path: 'login/:token',
     component: LoginFormComponent,
-    canActivate: [NotAuthorizedGuard]
+    canActivate: [LogoutGuard, NotAuthorizedGuard]
   },
   {
     path: 'registration',
