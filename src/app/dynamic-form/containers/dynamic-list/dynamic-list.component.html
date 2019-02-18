@@ -598,6 +598,27 @@
       (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">
     </ng-container>
+    <label>Tracking</label>
+    <div class="d-flex align-items-center">
+      <agm-map class="tracking-map"
+        [latitude]="-33.865143"
+        [longitude]="151.209900"
+        [zoom]="13"
+        [fullscreenControl]="false"
+        [streetViewControl]="false"
+        [mapTypeControl]="false"
+        [panControl]="false"
+        [rotateControl]="false"
+        [scaleControl]="false"
+        [zoomControl]="false">
+      </agm-map>
+      <ng-container *ngFor="let field of getElement('traking', data.content).content"
+        appListElement
+        [config]="inverseButton(field)"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+    </ng-container>
+    </div>
   </div>
   <div class="footer">
     <div class="button-wrapper">
@@ -626,3 +647,48 @@
     </div>
   </div>
 </ng-template>
+
+<ng-template #tracking let-c="close">
+  <div class="tracking-header">
+    <h5 class="title">Candidate Tracking</h5>
+    <p class="jobsite">{{modalInfo.jobsite}}</p>
+    <button type="button" class="close ml-2" aria-label="Close" (click)="c('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <agm-map
+    style="height: 320px"
+    [class.px-3]="!isMobile()"
+    [fullscreenControl]="false"
+    [streetViewControl]="false"
+    [mapTypeControl]="false"
+    [panControl]="false"
+    [rotateControl]="false"
+    [scaleControl]="false"
+    [zoomControl]="false"
+    [latitude]="modalInfo.latitude"
+    [longitude]="modalInfo.longitude"
+    [zoom]="13">
+    <agm-marker [latitude]="modalInfo.markerLatitude" [longitude]="modalInfo.markerLongitude"></agm-marker>
+    <agm-polyline strokeColor="#28a3fc">
+        <agm-polyline-point [latitude]="point.lat" [longitude]="point.lng" *ngFor="let point of modalInfo.paths; trackBy: trackByTraking">
+        </agm-polyline-point>
+        <ng-container *ngIf="modalInfo.breakPaths.length">
+          <agm-polyline-point [latitude]="point.lat" [longitude]="point.lng" *ngFor="let point of modalInfo.breakPaths; trackBy: trackByTraking">
+          </agm-polyline-point>
+        </ng-container>
+    </agm-polyline>
+  </agm-map>
+
+  <div [class.tracking-desctop]="!isMobile()" [class.pt-4]="isMobile()">
+    <div *ngIf="!isMobile()" class="tracking-title-wrapper">
+      <h5 class="tracking-title">Time and path</h5>
+      <p class="description">Moving the time slider and look the path</p>
+      <span class="tracking-time">{{modalInfo.timePoints.start | dateFormat: 'date'}}</span>
+    </div>
+
+    <app-time-tracking [timePoints]="modalInfo.timePoints" (changeTimeTracking)="trackingMarkerCoordinates($event)"></app-time-tracking>
+  </div>
+</ng-template>
+

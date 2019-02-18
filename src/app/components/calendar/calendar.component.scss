@@ -56,13 +56,16 @@ h2 {
 }
 
 .range-title {
+  min-width: 200px;
+
+  text-align: center;
   font-size: 24px;
   opacity: .8;
 
   &-wrapper {
     position: relative;
     display: flex;
-    flex-basis: 360px;
+    flex-basis: 410px;
     justify-content: flex-end;
     align-items: center;
   }
@@ -88,9 +91,10 @@ h2 {
 
   &:hover,
   &:active {
-    background-color: rgba($brand-primary, .6);
+    background-color: rgba($gray, .6);
 
     i {
+      position: relative;
       color: white;
       opacity: 1;
     }
@@ -99,6 +103,14 @@ h2 {
   &:focus {
     outline: 0;
   }
+}
+
+.next i {
+  right: -1px
+}
+
+.prev i {
+  left: -1px;
 }
 
 app-datepicker {
@@ -110,7 +122,6 @@ app-datepicker {
 }
 
 .calendar {
-  height: 450px;
   padding: $block-padding;
 
   &-line {
@@ -202,6 +213,43 @@ app-filter-related {
 }
 
 .shift {
+
+  &-action {
+    flex: 1 1;
+
+    border: 0;
+    border-radius: 5px;
+
+    font-size: 12px;
+    line-height: 18px;
+
+    color: #4f4f4f;
+    background-color: #ededed;
+
+    &:nth-child(1) {
+      border-radius: 5px 5px 0 0;
+    }
+
+    &:nth-child(2) {
+      border-radius: 0 0 5px 5px;
+    }
+
+    &:first-child:last-child {
+      border-radius: 5px;
+    }
+
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+
+      margin-left: auto;
+      padding-left: 10px;
+    }
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
 
   &-groups {
     position: absolute;
@@ -312,7 +360,11 @@ app-filter-related {
         display: block;
         min-width: auto;
 
+        padding-bottom: .5rem;
+
         opacity: 1;
+
+        overflow-y: auto;
       }
     }
 

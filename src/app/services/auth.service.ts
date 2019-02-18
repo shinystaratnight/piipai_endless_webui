@@ -86,6 +86,11 @@ export class AuthService {
       );
   }
 
+  public logoutWithoutRedirect() {
+    this.storage.clear('role');
+    this.storage.clear('user');
+  }
+
   public logout() {
     this.navigation.navigationList = {};
     this.permission.permissions = null;

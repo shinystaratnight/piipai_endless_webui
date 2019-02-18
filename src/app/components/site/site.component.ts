@@ -239,6 +239,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public updateNavigationList(role: Role) {
+    this.pageData = null;
     this.updateJiraTask(role);
     this.dashboard = false;
 

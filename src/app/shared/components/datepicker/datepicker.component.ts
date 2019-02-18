@@ -2,8 +2,8 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
 import { Moment } from 'moment-timezone';
 
-import { DateRangeService } from '../../services';
-import { DateRange } from '../../../helpers';
+import { DateRangeService, DatepickerService } from '../../services';
+import { DateRange, filterDateFormat } from '../../../helpers';
 
 @Component({
   selector: 'app-datepicker',
@@ -14,20 +14,20 @@ export class DatepickerComponent implements OnInit {
 
   @Input() type: DateRange;
   @Input() date: Moment;
+  @Input() range: { start: Moment, end: Moment };
 
   @Output() change = new EventEmitter();
 
   dateRange = DateRange;
+  showCustomWeek = false;
 
   rangeTitle: string;
   yearBody: any;
+  monthBody: any;
+  activeDates: string[];
 
   get isYearRange() {
     return this.dateRangeService.isYearRange(this.type);
-  }
-
-  get isMonthRange() {
-    return this.dateRangeService.isMonthRange(this.type);
   }
 
   get isWeekRange() {
@@ -39,54 +39,103 @@ export class DatepickerComponent implements OnInit {
   }
 
   constructor(
-    private dateRangeService: DateRangeService
+    private dateRangeService: DateRangeService,
+    private datepickerService: DatepickerService
   ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     this.fillCalendar();
+
+    this.setActiveDates(this.date, this.range);
   }
 
-  fillCalendar() {
+  public setActiveDates(from: Moment, range: { start: Moment, end: Moment }) {
+    range = range || this.datepickerService.getRangeDates(from, DateRange.Week);
+    this.activeDates = [];
+    const day = range.start.clone();
+
+    while (day.isBefore(range.end)) {
+      this.activeDates.push(day.format(filterDateFormat));
+      day.add(1, DateRange.Day);
+    }
+  }
+
+  public fillCalendar() {
     switch (this.type) {
       case DateRange.Year:
         this.generateYearCalendar();
         break;
+
+      case DateRange.Week:
+        this.generateMonthCalendar();
+        break;
+
+      case DateRange.Day:
+        this.generateMonthCalendar();
+        break;
     }
   }
 
-  changeCalendar(date: Moment) {
+  public changeCalendar(date: Moment) {
     this.date = date;
 
     this.fillCalendar();
   }
 
-  changeDate(date: Moment) {
+  public changeDate(date: Moment) {
     this.change.emit(date);
   }
 
-  generateYearCalendar() {
-    const range = this.dateRangeService.getRangeDates(this.date, DateRange.Year);
+  public isActiveDay(day: any) {
+    return this.activeDates.indexOf(day.date) > -1;
+  }
 
-    const body = [];
-    let row;
+  public isFirstActiveDay(day: any) {
+    return this.activeDates.indexOf(day.date) === 0;
+  }
 
-    const currentDay = range.start.clone();
-    while (currentDay.isBefore(range.end)) {
-      if (currentDay.month() % 3 === 0) {
-        row = [];
-        body.push(row);
-      }
+  public isLastActiveDay(day: any) {
+    return this.activeDates.indexOf(day.date) === (this.activeDates.length - 1);
+  }
 
-      row.push({
-        label: currentDay.format('MMMM'),
-        date: currentDay.clone(),
-        active: currentDay.month() === this.date.month()
+  public showCustomWeekCalendar(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.showCustomWeek = true;
+  }
+
+  public setCustomWeek(date: Moment) {
+    this.change.emit({
+      start: date.clone(),
+      end: date.clone().add(1, DateRange.Week)
+    });
+  }
+
+  private generateYearCalendar() {
+    this.yearBody = this.datepickerService.generateYear(this.date, (body) => {
+      return body.map((row) => {
+        return row.map((month) => {
+          return {
+            ...month,
+            active: month.month === this.date.month()
+          };
+        });
       });
+    });
+  }
 
-      currentDay.add(1, DateRange.Month);
-    }
-
-    this.yearBody = body;
+  private generateMonthCalendar() {
+    this.monthBody = this.datepickerService.generateMonth(this.date, (body) => {
+      return body.map((week) => {
+        return week.map((day) => {
+          return {
+            ...day,
+            currentMonth: day.month === this.date.month(),
+          };
+        });
+      });
+    });
   }
 
 }

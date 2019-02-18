@@ -15,17 +15,64 @@
 </ng-container>
 
 <ng-container *ngIf="isWeekRange">
-  <app-date-range [type]="type" [date]="date" (dateChange)="changeCalendar($event)"></app-date-range>
+  <app-date-range [type]="dateRange.Month" [date]="date" (dateChange)="changeCalendar($event)"></app-date-range>
 
   <div class="body">
+    <div class="calendar-row calendar-header">
+      <div class="calendar-item" *ngFor="let day of monthBody?.header">{{day}}</div>
+    </div>
 
+    <ng-container *ngIf="showCustomWeek">
+      <div class="calendar-row" *ngFor="let row of monthBody?.body">
+        <div class="calendar-item" *ngFor="let day of row">
+          <span class="description" *ngIf="!day.currentMonth">{{day.label}}</span>
+          <button *ngIf="day.currentMonth" type="button" class="calendar-button"
+            (click)="setCustomWeek(day.dateMoment)" placement="bottom" ngbTooltip="New start date">
+              {{day.label}}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!showCustomWeek">
+      <div class="calendar-row week" *ngFor="let row of monthBody?.body" (click)="changeDate(row[0].dateMoment)">
+        <div class="calendar-item"
+          *ngFor="let day of row"
+          [class.first]="isFirstActiveDay(day)"
+          [class.last]="isLastActiveDay(day)"
+          [class.active]="isActiveDay(day)">
+          <span class="description" *ngIf="!day.currentMonth">{{day.label}}</span>
+          <button *ngIf="day.currentMonth" type="button" class="calendar-button"
+            [class.active]="day.active">
+              {{day.label}}
+          </button>
+        </div>
+      </div>
+    </ng-container>
   </div>
+
+  <footer class="footer">
+    <button *ngIf="!showCustomWeek" type="button" class="btn btn-primary" (click)="showCustomWeekCalendar($event)">Custom week</button>
+    <div *ngIf="showCustomWeek">Select the <span class="text-primary">start</span> and end of the week</div>
+  </footer>
 </ng-container>
 
 <ng-container *ngIf="isDayRange">
-  <app-date-range [type]="type" [date]="date" (dateChange)="changeCalendar($event)"></app-date-range>
+  <app-date-range [type]="dateRange.Month" [date]="date" (dateChange)="changeCalendar($event)"></app-date-range>
 
   <div class="body">
-
+    <div class="calendar-row calendar-header">
+      <div class="calendar-item" *ngFor="let day of monthBody?.header">{{day}}</div>
+    </div>
+    <div class="calendar-row" *ngFor="let row of monthBody?.body">
+      <div class="calendar-item" *ngFor="let day of row">
+        <span class="description" *ngIf="!day.currentMonth">{{day.label}}</span>
+        <button *ngIf="day.currentMonth" type="button" class="calendar-button"
+          [class.active]="day.today"
+          (click)="changeDate(day.dateMoment)">
+            {{day.label}}
+        </button>
+      </div>
+    </div>
   </div>
 </ng-container>

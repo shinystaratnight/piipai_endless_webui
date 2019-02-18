@@ -3,6 +3,16 @@
 
 .dashboard {
 
+  height: 100%;
+
+  box-shadow: $container-box-shadow;
+
+  &.preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   a:hover {
     text-decoration: underline;
   }
@@ -49,13 +59,14 @@
   &-wrapper {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 
     padding: 24px;
     padding-bottom: calc(24px - 2%);
     border-radius: .3rem;
 
     background-color: #fff;
-    box-shadow: $container-box-shadow;
   }
 
   .widget-item {

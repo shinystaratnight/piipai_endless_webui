@@ -147,6 +147,24 @@ const list = {
             action: 'evaluateCandidate'
           }
         ]
+      },
+      {
+        label: 'Tracking',
+        delim: null,
+        name: 'traking',
+        title: null,
+        content: [
+          {
+            label: 'Traking',
+            text: 'Show',
+            icon: 'fa-map-marker',
+            type: 'button',
+            color: 'primary',
+            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
+            field: 'id',
+            action: 'showTracking'
+          }
+        ]
       }
     ],
     editDisable: true,

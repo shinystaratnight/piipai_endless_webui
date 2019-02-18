@@ -14,3 +14,73 @@
 
   font-size: 32px;
 }
+
+.tracking-header {
+  position: relative;
+
+  padding: 20px 16px;
+
+  .title {
+    font-size: 26px;
+    line-height: 28px;
+  }
+
+  .jobsite {
+    margin: 0;
+
+    font-size: 16px;
+    line-height: 20px;
+
+    opacity: .7;
+  }
+
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+  }
+}
+
+.tracking-map {
+  height: 48px;
+  width: 200px;
+
+  margin-right: 20px;
+}
+
+.tracking-title {
+  margin-top: 20px;
+
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: bold;
+}
+
+.tracking-description {
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+
+.tracking-time {
+  margin-top: 20px;
+
+  font-size: 24px;
+  line-height: 1;
+}
+
+.tracking-desctop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  padding: 0 1rem;
+
+  .tracking-title-wrapper {
+    min-width: 400px;
+  }
+
+  app-time-tracking {
+    flex: 1 1;
+  }
+}

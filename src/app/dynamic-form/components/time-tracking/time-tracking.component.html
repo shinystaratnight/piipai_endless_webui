@@ -1,0 +1,28 @@
+<div #tracker class="tracking-slider">
+  <span class="marker" appSlider (position)="checkPosition($event)" [parentElement]="tracker">
+    <span class="time">{{time | dateFormat: 'time'}}</span>
+    <i fa name="map-marker"></i>
+  </span>
+</div>
+
+<div class="tracking-timeline">
+  <div class="circle"><div class="circle-inner"></div></div>
+  <div class="line"></div>
+  <div class="line bg-warning" [ngStyle]="breakStyles"></div>
+  <div class="circle"><div class="circle-inner"></div></div>
+</div>
+
+<div class="tracking-times">
+  <div class="text-left">
+    <span class="title">Start</span><br>
+    <span class="tracking-time">{{timePoints.start | dateFormat: 'time'}}</span>
+  </div>
+  <div class="text-center">
+    <span class="title text-warning">Break</span><br>
+    <span class="tracking-time">{{timePoints.break_start | dateFormat: 'time'}}</span> - <span class="tracking-time">{{timePoints.break_end | dateFormat: 'time'}}</span>
+  </div>
+  <div class="text-right">
+    <span class="title">End</span><br>
+    <span class="tracking-time">{{timePoints.end | dateFormat: 'time'}}</span>
+  </div>
+</div>

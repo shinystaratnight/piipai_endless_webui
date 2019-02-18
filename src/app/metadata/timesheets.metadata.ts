@@ -933,21 +933,12 @@ const form = [
     read_only: false
   },
   {
-    list: false,
-    endpoint: '/skills/skillbaserates/',
-    read_only: true,
     templateOptions: {
-      label: 'Candidate rate',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
+      label: 'Candidate rate override',
+      type: 'number',
     },
-    collapsed: false,
-    type: 'related',
+    type: 'input',
     key: 'candidate_rate',
-    many: false
   },
   {
     list: false,
@@ -1149,21 +1140,12 @@ const formadd = [
     read_only: false
   },
   {
-    list: false,
-    endpoint: '/skills/skillbaserates/',
-    read_only: true,
     templateOptions: {
       label: 'Candidate rate override',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
+      type: 'number',
     },
-    collapsed: false,
-    type: 'related',
+    type: 'input',
     key: 'candidate_rate',
-    many: false
   },
   {
     list: false,

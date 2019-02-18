@@ -17,10 +17,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageService } from 'ngx-webstorage';
 
-import * as moment from 'moment-timezone';
-
+import { TimeService } from '../../../shared/services';
 import { FilterService, GenericFormService } from '../../services';
-import { AuthService } from '../../../services';
+import { AuthService, UserService } from '../../../services';
 import { FormatString } from '../../../helpers/format';
 import { createAddAction, isMobile, isCandidate, getContactAvatar, smallModalEndpoints } from '../../helpers';
 
@@ -165,6 +164,9 @@ export class DynamicListComponent
   @ViewChild('unapproved')
   public unapproved;
 
+  @ViewChild('tracking')
+  public trakingModal;
+
   public selectedCount: number;
   public sortedColumns: any;
   public reason: any;
@@ -230,8 +232,12 @@ export class DynamicListComponent
     private sanitizer: DomSanitizer,
     private router: Router,
     private storage: LocalStorageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService,
+    private time: TimeService,
   ) {}
+
+  public isMobile = isMobile;
 
   public ngOnInit() {
     this.updateFilters();
@@ -1094,16 +1100,16 @@ export class DynamicListComponent
   }
 
   public getTotalTime(data) {
-    const break_ended_at = moment.tz(data.break_ended_at, 'Australia/Sydney');
-    const break_started_at = moment.tz(data.break_started_at, 'Australia/Sydney');
-    const shift_ended_at = moment.tz(data.shift_ended_at, 'Australia/Sydney');
-    const shift_started_at = moment.tz(data.shift_started_at, 'Australia/Sydney');
+    const break_ended_at = this.time.instance(data.break_ended_at);
+    const break_started_at = this.time.instance(data.break_started_at);
+    const shift_ended_at = this.time.instance(data.shift_ended_at);
+    const shift_started_at = this.time.instance(data.shift_started_at);
 
 
     const breakTime = break_ended_at.diff(break_started_at);
     const workTime = shift_ended_at.diff(shift_started_at);
 
-    const totalTime = moment.duration(workTime - breakTime);
+    const totalTime = this.time.instance.duration(workTime - breakTime);
 
     return `${totalTime.hours()}hr ${totalTime.minutes()}min`;
   }
@@ -1343,6 +1349,9 @@ export class DynamicListComponent
           break;
         case 'fillin':
           this.fillIn(e);
+          break;
+        case 'showTracking':
+          this.showTracking(e);
           break;
         default:
           return;
@@ -1678,8 +1687,7 @@ export class DynamicListComponent
           const datetime = ['date', 'time'];
           if (datetime.indexOf(propArray[1]) > -1) {
             if (data[propArray[0]]) {
-              return moment
-                .tz(data[propArray[0]], 'Australia/Sydney')
+              return this.time.instance(data[propArray[0]])
                 .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
             } else {
               return '';
@@ -1692,6 +1700,10 @@ export class DynamicListComponent
         }
       }
     } else {
+      if (prop === 'session') {
+        return this.getPropValue(this.userService.user, props.join('.'));
+      }
+
       if (data) {
         return this.getPropValue(data[prop], props.join('.'));
       }
@@ -2103,5 +2115,59 @@ export class DynamicListComponent
 
   public inverseButton(field) {
     return { ...field, inverse: true };
+  }
+
+  public showTracking(e) {
+    this.genericFormService.getByQuery(e.el.endpoint, `?timesheet=${e.id}`)
+      .subscribe((res) => {
+        if (res.results.length) {
+          const timesheet = this.getRowData(e);
+          const break_end = this.time.instance(timesheet.break_ended_at);
+          const break_start = this.time.instance(timesheet.break_started_at);
+          const end = this.time.instance(timesheet.shift_ended_at);
+          const start = this.time.instance(timesheet.shift_started_at);
+
+          const paths = res.results.map((point) => {
+            return {
+              lat: point.latitude,
+              lng: point.longitude,
+              log_at: point.log_at
+            };
+          });
+
+          const breakPaths = paths.filter((el) => {
+            const time = this.time.instance(el.log_at);
+
+            return time.isBefore(break_end) && time.isAfter(break_start);
+          });
+
+          this.modalInfo = {
+            paths,
+            breakPaths,
+            timePoints: { start, end, break_start, break_end },
+            jobsite: timesheet.jobsite.__str__,
+            latitude: paths[0].lat,
+            longitude: paths[0].lng,
+          };
+
+          this.trackingMarkerCoordinates(start);
+
+          this.open(this.trakingModal);
+        }
+      });
+  }
+
+  public trackByTraking(data) {
+    return data.log_at;
+  }
+
+  public trackingMarkerCoordinates(time) {
+    if (this.modalInfo) {
+      const item = this.modalInfo.paths.find((el) => time.format('hh:mm A') === this.time.instance(el.log_at).format('hh:mm A'));
+      if (item) {
+        this.modalInfo.markerLatitude = item.lat;
+        this.modalInfo.markerLongitude = item.lng;
+      }
+    }
   }
 }
