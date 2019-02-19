@@ -20,7 +20,7 @@ import { Subscription, BehaviorSubject, Subject } from 'rxjs';
 import { debounceTime, skip, filter } from 'rxjs/operators';
 
 import { GenericFormService } from '../../services';
-import { CheckPermissionService } from '../../../shared/services';
+import { CheckPermissionService, ToastService, MessageType } from '../../../shared/services';
 import {
   NavigationService,
   AuthService,
@@ -142,7 +142,8 @@ export class FormRelatedComponent extends BasicElementComponent
     private userService: UserService,
     private cd: ChangeDetectorRef,
     private settingsService: SiteSettingsService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private toastr: ToastService
   ) {
     super();
     this.subscriptions = [];
@@ -804,6 +805,9 @@ export class FormRelatedComponent extends BasicElementComponent
         .subscribe((response: any) => {
           this.dataOfList.splice(this.dataOfList.indexOf(object), 1);
           this.updateValue(undefined);
+        },
+        (error) => {
+          this.toastr.sendMessage(error.errors.join(' '), MessageType.error);
         });
     }
   }

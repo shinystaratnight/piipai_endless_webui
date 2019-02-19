@@ -239,16 +239,16 @@
                 </i>
 
                 <ng-template #actionsTemplate>
-                  <span class="custom-button" *ngIf="config.templateOptions.delete && checkPermission('delete')" (click)="deleteObject(object, $event)">
-                    <i fa class="icon text-danger mx-2" title="Delete" name="trash"></i>
+                  <span class="custom-button d-block" *ngIf="config.templateOptions.delete && checkPermission('delete')" (click)="deleteObject(object, $event)">
+                    <i fa class="icon text-danger mr-2" title="Delete" name="trash"></i>
                     Delete
                   </span>
-                  <span class="custom-button" *ngIf="config.templateOptions.edit && checkPermission('update')" (click)="editObject(object, $event)">
-                    <i fa class="icon text-warning mx-2" title="Edit" name="pencil"></i>
+                  <span class="custom-button d-block" *ngIf="config.templateOptions.edit && checkPermission('update')" (click)="editObject(object, $event)">
+                    <i fa class="icon text-warning mr-2" title="Edit" name="pencil"></i>
                     Edit
                   </span>
-                  <span class="custom-button" *ngIf="skillEndpoint && !object.allData.default_rate" (click)="setAsDefault(object)">
-                    <i fa class="icon text-primary mx-2" title="Set as default"
+                  <span class="custom-button d-block" *ngIf="skillEndpoint && !object.allData.default_rate" (click)="setAsDefault(object)">
+                    <i fa class="icon text-primary mr-2" title="Set as default"
                       name="check"></i>
                   </span>
                 </ng-template>

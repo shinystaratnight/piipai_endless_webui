@@ -58,6 +58,7 @@ const form = [
     delay: 'asdasdasd',
     templateOptions: {
       add_label: '+ Add',
+      delete: true,
       label: 'Shifts',
       type: 'related',
       text: 'Shifts',
@@ -174,6 +175,7 @@ const jobAdd = [
     delay: true,
     templateOptions: {
       add_label: '+ Add',
+      delete: true,
       label: 'Shifts',
       type: 'related',
       text: 'Shifts'
