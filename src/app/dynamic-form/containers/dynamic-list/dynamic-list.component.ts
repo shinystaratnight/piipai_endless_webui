@@ -798,6 +798,7 @@ export class DynamicListComponent
             inverse: element.inverse,
             param: element.param,
             stars: element.stars,
+            visibleMode: element.visibleMode,
           };
           if (obj.action && this.disableActions) {
             obj.disableAction = true;
@@ -1949,6 +1950,10 @@ export class DynamicListComponent
 
     if (this.modalInfo.endpoint.includes('/extend')) {
       windowClass = 'extend-modal';
+    }
+
+    if (e.el.visibleMode) {
+      windowClass += ' visible-mode';
     }
 
     this.open(this.modal, { size, windowClass });

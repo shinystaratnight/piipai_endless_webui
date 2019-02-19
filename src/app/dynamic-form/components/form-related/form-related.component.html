@@ -1,59 +1,71 @@
-<div appDropDown [element]="'.autocomplete'" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide">
+<div appDropDown element=".autocomplete" [update]="update" *ngIf="(!viewMode || config.list) && !config.hide">
   <div *ngIf="!config.list" class="form-group" [formGroup]="group">
     <div class="form-element" *ngIf="!config.many">
-      <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" *ngIf="label && config.templateOptions.label" [attr.for]="key">
-        {{config.templateOptions.label}}:
+      <label class="col-form-label form-element-label"
+        [attr.for]="key"
+        [class.required]="config.templateOptions.required"
+        *ngIf="label && config.templateOptions.label">
+          {{config.templateOptions.label}}:
       </label>
+
       <app-info [description]="config.templateOptions.description"></app-info>
-      <div class="form-element-content flex-row edit" style="position: relative">
-        <div class="form-control autocomplete-value"
-          (click)="openAutocomplete()">
-          <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
-        </div>
-        <div class="form-element-content-actions"
-          *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete) && !(config.errorMessage && config.errorMessage.visible)" >
-          <button type="button"
-            *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
-            (click)="open('update')">
-            <i fa class="text-primary icon"
-              [name]="'pencil'"></i>
-          </button>
-          <button type="button"
-            *ngIf="config.templateOptions.add && checkPermission('post')"
-            (click)="open('post')">
-            <i fa class="text-success icon"
-              [name]="'plus'" ></i>
-          </button>
-          <button type="button"
-            *ngIf="config.templateOptions.delete && displayValue && checkPermission('delete')"
-            (click)="open('delete')">
-            <i fa class="text-danger icon"
-              [name]="'times'"></i>
-          </button>
-        </div>
-        <div #autocomplete class="autocomplete" [hidden]="hideAutocomplete" style="top: 1.4rem">
-          <input type="text" class="form-control mb-1" autocomplete="off"
-            #search="ngModel"
-            #searchElement
-            [(ngModel)]="searchValue"
-            [ngModelOptions]="{standalone: true}">
-          <div class="autocomplete-list"
-            infinite-scroll
-            [infiniteScrollDistance]="modalScrollDistance"
-            [infiniteScrollThrottle]="modalScrollThrottle"
-            [scrollWindow]="false"
-            (scrolled)="onModalScrollDown()"
-            [hidden]="!(previewList && previewList.length)">
-            <ul class="list-group w-100">
-              <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
-                *ngFor="let option of previewList; trackBy: trackByFn"
-                (click)="setValue(option, true)">{{option.__str__}}</li>
-            </ul>
-            <div class="autocomplete-preloader" *ngIf="skipScroll">
-              <app-spinner></app-spinner>
+
+      <div class="form-element-content flex-row edit position-relative"
+        [class.disabled]="fieldDisabled"
+        tooltipClass="dark-tooltip"
+        placement="bottom"
+        [ngbTooltip]="disableMessage">
+
+          <div class="form-control autocomplete-value"
+            (click)="openAutocomplete()">
+              <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
+          </div>
+
+          <div class="form-element-content-actions"
+            *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete) && !(config.errorMessage && config.errorMessage.visible)" >
+            <button type="button"
+              *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
+              (click)="open('update')">
+                <i class="text-primary icon" fa name="pencil"></i>
+            </button>
+            <button type="button"
+              *ngIf="config.templateOptions.add && checkPermission('post')"
+              (click)="open('post')">
+                <i class="text-success icon" fa name="plus"></i>
+            </button>
+            <button type="button"
+              *ngIf="config.templateOptions.delete && displayValue && checkPermission('delete')"
+              (click)="open('delete')">
+                <i class="text-danger icon" fa name="times"></i>
+            </button>
+          </div>
+
+          <div #autocomplete class="autocomplete" [hidden]="hideAutocomplete" style="top: 1.4rem">
+            <input type="text" class="form-control mb-1" autocomplete="off"
+              #search="ngModel"
+              #searchElement
+              [(ngModel)]="searchValue"
+              [ngModelOptions]="{standalone: true}">
+
+            <div class="autocomplete-list"
+              infinite-scroll
+              [infiniteScrollDistance]="modalScrollDistance"
+              [infiniteScrollThrottle]="modalScrollThrottle"
+              [scrollWindow]="false"
+              (scrolled)="onModalScrollDown()"
+              [hidden]="!(previewList && previewList.length)">
+
+                <ul class="list-group w-100">
+                  <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
+                    *ngFor="let option of previewList; trackBy: trackByFn"
+                    (click)="setValue(option, true)">{{option.__str__}}</li>
+                </ul>
+
+                <div class="autocomplete-preloader" *ngIf="skipScroll">
+                  <app-spinner></app-spinner>
+                </div>
             </div>
           </div>
-        </div>
       </div>
 
       <div *ngIf="config.additional_text" class="additional-text">{{config.additional_text}}</div>
@@ -345,23 +357,6 @@
   </div>
 </ng-template>
 
-<ng-template #spinner>
-  <div class="sk-fading-circle">
-    <div class="sk-circle1 sk-circle"></div>
-    <div class="sk-circle2 sk-circle"></div>
-    <div class="sk-circle3 sk-circle"></div>
-    <div class="sk-circle4 sk-circle"></div>
-    <div class="sk-circle5 sk-circle"></div>
-    <div class="sk-circle6 sk-circle"></div>
-    <div class="sk-circle7 sk-circle"></div>
-    <div class="sk-circle8 sk-circle"></div>
-    <div class="sk-circle9 sk-circle"></div>
-    <div class="sk-circle10 sk-circle"></div>
-    <div class="sk-circle11 sk-circle"></div>
-    <div class="sk-circle12 sk-circle"></div>
-  </div>
-</ng-template>
-
 <ng-template #custom>
   <div *ngIf="customTemplate && customTemplate.length" class="d-flex flex-column justify-content-center">
     <span *ngFor="let field of customTemplate">
@@ -374,9 +369,3 @@
   </div>
   <div *ngIf="customTemplate && !customTemplate.length" class="d-flex flex-column justify-content-center">-</div>
 </ng-template>
-
-<!-- <template #extend let-data="data">
-  <div class="candidate-info">
-    <span>{{data.__str__}}</span>|<span>{{data.score}} <i fa name="star"></i></span>|<span>{{candidate.distance}} km</span>
-  </div>
-</template> -->

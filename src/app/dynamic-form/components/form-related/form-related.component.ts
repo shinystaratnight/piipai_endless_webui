@@ -120,6 +120,8 @@ export class FormRelatedComponent extends BasicElementComponent
   public hideDetail: boolean;
   public currentUser: boolean;
   public listDefaultQuery: string;
+  public disableMessage: string;
+  public fieldDisabled: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -378,6 +380,10 @@ export class FormRelatedComponent extends BasicElementComponent
       const subscription = this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
         if (this.config.key !== formData.key) {
+          const disableData = this.isDisabled(this.formData);
+          this.fieldDisabled = disableData.disable;
+          this.disableMessage = disableData.messages.join(' ');
+
           if (this.config.errorMessage) {
             if (
               !this.getValueByKey(this.config.errorMessage.field, this.formData)
@@ -991,7 +997,7 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public openAutocomplete(): void {
-    if (this.config.type !== 'address' && !this.config.doNotChoice) {
+    if (this.config.type !== 'address' && !this.config.doNotChoice && !this.fieldDisabled) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
         this.count = 0;
@@ -1551,6 +1557,26 @@ export class FormRelatedComponent extends BasicElementComponent
     return target.filter((el) => {
       return !data.find((elem) => el[this.param] === elem[this.param]);
     });
+  }
+
+  public isDisabled(data) {
+    const config = this.config.disabled;
+    const messages = [];
+    let disable = false;
+
+    if (config) {
+      config.keys.forEach((key, i) => {
+        if (config.values[i] === this.getValueByKey(key, data)) {
+          disable = true;
+          messages.push(config.messages[i]);
+        }
+      });
+    }
+
+    return {
+      disable,
+      messages
+    };
   }
 
   @HostListener('document:click', ['$event'])

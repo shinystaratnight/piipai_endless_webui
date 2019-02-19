@@ -466,6 +466,10 @@ form.ng-invalid button[type='submit'] {
     border: none;
 
     background-color: white;
+
+    .dark-tooltip & {
+      background-color: #4f4f4f;
+    }
   }
 
   &-inner {
@@ -477,6 +481,11 @@ form.ng-invalid button[type='submit'] {
     background-color: white;
     color: inherit;
     box-shadow: 0 0 8px 2px rgba($gray, 0.3);
+
+    .dark-tooltip & {
+      color: #f2f2f2;
+      background: #4f4f4f;
+    }
 
     .calendar-item & {
       min-width: auto;
@@ -516,6 +525,10 @@ form.ng-invalid button[type='submit'] {
       }
     }
   }
+}
+
+.dark-tooltip .arrow::before {
+  background-color: #4f4f4f;
 }
 
 .btn {
