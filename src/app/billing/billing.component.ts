@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { User, UserService } from '../services/user.service';
@@ -11,7 +11,8 @@ import { ToastService } from '../shared/services';
 @Component({
   selector: 'app-billing-page',
   templateUrl: './billing.component.html',
-  styleUrls: ['./billing.component.scss']
+  styleUrls: ['./billing.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class BillingComponent implements OnInit {
   public user: User;
@@ -97,15 +98,10 @@ export class BillingComponent implements OnInit {
   }
 
   public cancelPlan() {
-    this.cancelProcess = true;
     this.billingService.cancelSubscription()
       .subscribe(() => {
         this.currentPlan = undefined;
-        this.cancelProcess = false;
         this.toastr.sendMessage('Subscription has been canceled', 'success');
-      },
-      () => {
-        this.cancelProcess = false;
       });
   }
 }

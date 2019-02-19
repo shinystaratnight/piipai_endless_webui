@@ -1,0 +1,25 @@
+<div class="form-tabs">
+  <ngb-tabset>
+    <ngb-tab *ngIf="payments" title="Payments">
+      <ng-template ngbTabContent>
+        <h5>Your payments</h5>
+
+        <app-dynamic-list
+          [first]="true"
+          [config]="config"
+          [data]="{ results: payments }"
+          [responseField]="'results'"
+          [allowPermissions]="['get']">
+        </app-dynamic-list>
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="SMS log">
+        <ng-template ngbTabContent>
+          <h5>SMS log</h5>
+
+          <app-dynamic-form [config]="smsConfig"></app-dynamic-form>
+        </ng-template>
+      </ngb-tab>
+  </ngb-tabset>
+</div>

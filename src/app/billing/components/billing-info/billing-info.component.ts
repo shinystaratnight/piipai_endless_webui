@@ -13,9 +13,6 @@ export class BillingInfoComponent {
   @Input() public payments: Payment[];
   @Input() public currentPlan: BillingSubscription;
 
-  public config = metadata;
-  public smsConfig = smsMetadata;
-
   public types = {
     annual: 'Annual',
     monthly: 'Monthly'
