@@ -74,6 +74,7 @@ export interface Field {
   hideOnMobile?: boolean;
   showOnMobile?: boolean;
   templateOptions?: {
+    hideLabel?: boolean;
     dontSendFields?: boolean;
     label?: string;
     type?: string;

@@ -509,11 +509,11 @@ const form = [
     ]
   },
   {
-    list: false,
     endpoint: '/core/addresses/',
     read_only: false,
     hide: true,
     templateOptions: {
+      hideLabel: true,
       label: 'Address',
       add: true,
       delete: false,
@@ -521,10 +521,8 @@ const form = [
       type: 'address',
       edit: true
     },
-    collapsed: false,
     type: 'address',
     key: 'address',
-    many: false
   },
   {
     key: 'is_available',
@@ -734,7 +732,6 @@ const formadd = [
             read_only: false
           },
           {
-            list: false,
             endpoint: '/core/addresses/',
             read_only: false,
             templateOptions: {
@@ -745,10 +742,8 @@ const formadd = [
               type: 'address',
               edit: true
             },
-            collapsed: false,
             type: 'address',
             key: 'address',
-            many: false
           }
         ]
       }
