@@ -48,7 +48,8 @@ interface UpdateDataInfo {
 
 @Component({
   selector: 'app-generic-form',
-  templateUrl: 'generic-form.component.html'
+  templateUrl: './generic-form.component.html',
+  styleUrls: ['./generic-form.component.scss']
 })
 export class GenericFormComponent implements OnChanges, OnDestroy {
   @Input()
@@ -69,6 +70,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public path: string;
   @Input()
   public checkEmail: string;
+  @Input()
+  public title: string;
 
   @Input()
   public endpoint = '';

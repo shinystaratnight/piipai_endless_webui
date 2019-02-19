@@ -190,6 +190,8 @@
                 <ng-container *ngFor="let cell of row.content">
                   <td *ngIf="!cell.hide" [ngStyle]="{'width.px': cell.width}" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
                     <label class="cell-label" *ngIf="isMobileDevice">{{cell.label}}</label>
+                    <br *ngIf="isMobileDevice">
+
                     <ng-container
                       *ngIf="cell.name !== 'actions'"
                       appListElement
