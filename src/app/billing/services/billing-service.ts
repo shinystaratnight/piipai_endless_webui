@@ -16,6 +16,8 @@ export class BillingService {
   private checkPaymentInformationEndpoint = '/billing/check_payment_information/';
   private cancelSubscriptionEndpoint = '/billing/subscription/cancel/';
   private paymentsEndpoint = '/billing/payments/';
+  private autoChargeEndpoint = '/billing/auto_charge_twilio/';
+  private fundEndpoint = '/billing/add_funds_twilio/';
 
   constructor(
     private http: HttpClient,
@@ -73,6 +75,30 @@ export class BillingService {
   public payments() {
     return this.http
       .get(this.paymentsEndpoint)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
+  }
+
+  public getCreditDetails() {
+    return this.http
+      .get(this.autoChargeEndpoint)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
+  }
+
+  public setCreditDetails(body) {
+    return this.http
+      .post(this.autoChargeEndpoint, body)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
+  }
+
+  public addFunds(body) {
+    return this.http
+      .post(this.fundEndpoint, body)
       .pipe(
         catchError((err: any) => this.errorService.parseErrors(err))
       );

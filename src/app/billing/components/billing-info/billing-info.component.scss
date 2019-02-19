@@ -1,37 +1,8 @@
-@import '../../../../styles/variables.scss';
-@import '../../../../styles/mixins.scss';
-
-:host {
-  display: block;
-
-  padding: 0 40px;
-}
-
-.form-tabs {
-  margin: 0 -40px;
-
-  @include media-breakpoint-down('md') {
-    margin: 0 -20px;
-  }
-}
-
-h5 {
-  margin-bottom: 1rem;
-
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: 600;
-  text-transform: uppercase;
-
-  opacity: .3;
-}
-
-div {
-  margin: 2rem 0;
-}
-
 p {
   display: flex;
+  align-items: center;
+
+  margin-bottom: 5px;
 
   font-size: 14px;
   line-height: 20px;

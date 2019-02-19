@@ -1,0 +1,52 @@
+<h5>Sms credit detail</h5>
+<ng-container *ngIf="smsBalance">
+  <div class="field">
+    <ng-container *ngIf="!isShowFundsForm">
+      <span>Current balance:</span>
+      <span class="value active">{{smsBalance.balance | currency:'USD'}}</span>
+      <button type="button" class="btn btn-sm btn-primary ml-3" (click)="showAddFundsForm()">Add Funds</button>
+    </ng-container>
+
+    <ng-container *ngIf="isShowFundsForm">
+      <div class="form-element">
+        <input class="form-control form-element-content" width="20" size="5" type="number" name="employees" min="1"
+          [(ngModel)]="amount">
+      </div>
+
+      <button type="button" class="btn btn-sm btn-default ml-2" (click)="cancel()">Cancel</button>
+      <button type="button" class="btn btn-sm btn-primary ml-1" (click)="addFunds()">Add Funds</button>
+    </ng-container>
+  </div>
+  <div class="field">
+    <span>Auto top-up:</span>
+    <div class="value">
+      <span [class.active]="smsBalance.auto_charge">on</span>/<span [class.active]="!smsBalance.auto_charge">off</span>
+    </div>
+    <button type="button" class="btn btn-sm btn-primary ml-3" (click)="autoCharge()">Configure Auto-charge</button>
+  </div>
+</ng-container>
+
+<p *ngIf="smsBalance">If the balance falls below $20, recharge by adding $40 from saved card</p>
+
+<ng-template #charge let-c="close" let-d="dismiss">
+  <div class="modal-header-wrapper">
+    <div class="modal-header">
+      <h5 class="modal-title">Auto-charge</h5>
+      <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <app-dynamic-form
+      [config]="modalConfig"
+      [form]="group">
+      <div class="text-center">
+        <button type="submit" class="btn big-btn btn-shadow btn-secondary bg-primary text-white button-save mt-3 mb-4" (click)="saveAutoCharge()">
+          Save
+        </button>
+      </div>
+    </app-dynamic-form>
+  </div>
+</ng-template>

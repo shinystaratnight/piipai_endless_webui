@@ -3,8 +3,11 @@ import {
   EventEmitter,
   Output,
   Input,
-  OnInit
+  ViewChild,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Plan, BillingSubscription } from '../../models';
 
@@ -14,46 +17,54 @@ import { Plan, BillingSubscription } from '../../models';
   styleUrls: ['./billing-plan.component.scss']
 })
 
-export class BillingPlanComponent implements OnInit {
+export class BillingPlanComponent implements OnChanges {
 
-  public plans: Plan[];
+  public plans: Plan[] = [
+    {
+      id: 1,
+      name: 'Cancel anytime',
+      type: 'monthly',
+      description: 'Monthly',
+      pay: 13,
+      procent: 1,
+      active: false,
+      start: 120
+    },
+    {
+      id: 2,
+      name: 'Annual plan',
+      type: 'annual',
+      description: 'Annually',
+      save: true,
+      pay: 10,
+      procent: 0.75,
+      start: 90
+    }
+  ];
   public changeAction: boolean;
+  public modalRef: NgbModalRef;
 
-  @Input() public cancelProcess: boolean;
   @Input() public saveProcess: boolean;
   @Input() public currentPlan: BillingSubscription;
   @Input() public workerCount: number;
 
+  @ViewChild('subscription') public modal;
+
   @Output() public selectedPlan = new EventEmitter();
   @Output() public cancelingPlan = new EventEmitter();
 
-  constructor() {
+  constructor(
+    private modalService: NgbModal
+  ) {
     this.changeAction = false;
   }
 
-  public ngOnInit() {
-    this.plans = [
-      {
-        id: 1,
-        name: 'Cancel anytime',
-        type: 'monthly',
-        description: 'Monthly',
-        pay: 13,
-        procent: 1,
-        active: false,
-        start: 120
-      },
-      {
-        id: 2,
-        name: 'Annual plan',
-        type: 'annual',
-        description: 'Annually',
-        save: true,
-        pay: 10,
-        procent: 0.75,
-        start: 90
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.saveProcess) {
+      if (!changes.saveProcess.currentValue && this.modalRef) {
+        this.modalRef.close();
       }
-    ];
+    }
   }
 
   public planPay(plan: Plan, procent: number = 1): number {
@@ -87,11 +98,21 @@ export class BillingPlanComponent implements OnInit {
     }
   }
 
+  public setPlan() {
+    this.openModal();
+  }
+
   public changePlan() {
     this.changeAction = true;
+
+    this.openModal();
   }
 
   public cancelPlan() {
     this.cancelingPlan.emit();
+  }
+
+  public openModal() {
+    this.modalRef = this.modalService.open(this.modal);
   }
 }

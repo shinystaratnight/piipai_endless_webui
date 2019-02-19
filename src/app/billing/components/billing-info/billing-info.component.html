@@ -1,38 +1,10 @@
 <ng-container *ngIf="currentPlan">
-  <h5 class="mb-3">Your current subscription details</h5>
+  <h5 class="mb-2">details</h5>
 
-  <div class="container">
-    <p><span>Price:</span><span>{{currentPlan.price | currency:'USD':true}}</span></p>
-    <p><span>Worker count:</span><span>{{currentPlan.worker_count}}</span></p>
-    <p><span>Type:</span><span>{{types[currentPlan.type]}}</span></p>
-    <p><span>Status:</span><span>{{currentPlan.active && 'Active'}}</span></p>
-    <p><span>Curent period start:</span><span>{{currentPlan.current_period_start | dateFormat:'datetime'}}</span></p>
-    <p><span>Curent period end:</span><span>{{currentPlan.current_period_end | dateFormat:'datetime'}}</span></p>
-  </div>
+  <p><span>Price:</span><span>{{currentPlan.price | currency:'USD'}}</span></p>
+  <p><span>Worker count:</span><span>{{currentPlan.worker_count}}</span></p>
+  <p><span>Type:</span><span>{{types[currentPlan.type]}}</span></p>
+  <p><span>Status:</span><span>{{currentPlan.active && 'Active'}}</span></p>
+  <p><span>Curent period start:</span><span>{{currentPlan.current_period_start | dateFormat:'datetime'}}</span></p>
+  <p><span>Curent period end:</span><span>{{currentPlan.current_period_end | dateFormat:'datetime'}}</span></p>
 </ng-container>
-
-<div class="form-tabs">
-  <ngb-tabset>
-    <ngb-tab *ngIf="payments" title="Payments">
-      <ng-template ngbTabContent>
-        <h5>Your payments</h5>
-
-        <app-dynamic-list
-          [first]="true"
-          [config]="config"
-          [data]="{ results: payments }"
-          [responseField]="'results'"
-          [allowPermissions]="['get']">
-        </app-dynamic-list>
-      </ng-template>
-    </ngb-tab>
-
-    <ngb-tab title="SMS log">
-        <ng-template ngbTabContent>
-          <h5>SMS log</h5>
-
-          <app-dynamic-form [config]="smsConfig"></app-dynamic-form>
-        </ng-template>
-      </ngb-tab>
-  </ngb-tabset>
-</div>

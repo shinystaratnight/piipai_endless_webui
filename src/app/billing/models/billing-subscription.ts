@@ -1,8 +1,8 @@
 export interface BillingSubscription {
   company: string;
   name: string;
-  type:	string;
-  price:	number;
+  type: string;
+  price: number;
   worker_count: number;
   created: string;
   active: boolean;
