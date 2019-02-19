@@ -486,7 +486,8 @@ const form = [
     templateOptions: {
       label: 'Rate Coefficients for Candidates',
       type: 'list',
-      text: 'Rate Coefficients for Candidates'
+      text: 'Rate Coefficients for Candidates',
+      add_label: 'Add'
     },
     collapsed: false,
     prefilled: {
@@ -505,7 +506,8 @@ const form = [
     templateOptions: {
       label: 'Rate Coefficients for Companies',
       type: 'list',
-      text: 'Rate Coefficients for Companies'
+      text: 'Rate Coefficients for Companies',
+      add_label: 'Add'
     },
     collapsed: false,
     prefilled: {
