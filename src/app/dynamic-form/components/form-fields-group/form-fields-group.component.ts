@@ -307,7 +307,7 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   public getEndpoint(field: Field): string {
-    return field.content_type === 97
+    return field.name === 'skill'
       ? this.relatedformfieldsEndpoint
       : this.formModelFieldEndpoint;
   }
