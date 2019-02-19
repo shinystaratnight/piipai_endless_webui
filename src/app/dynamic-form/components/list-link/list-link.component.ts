@@ -99,7 +99,7 @@ export class ListLinkComponent implements OnInit {
       newEndpoint.pop();
       const id = newEndpoint.pop();
 
-      endpoint = '/ecore/api/v2' + [...newEndpoint, ''].join('/');
+      endpoint = [...newEndpoint, ''].join('/');
 
       this.event.emit({
         target: 'form',
