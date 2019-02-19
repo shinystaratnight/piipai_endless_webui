@@ -17,6 +17,7 @@
         *ngIf="!reload && !(pageData.endpoint === '/acceptance-tests/acceptancetests/' && pageData.pathData.id) && pageData.endpoint !== '/core/forms/' || pageData.pathData.postfix === 'submit'">
           <app-generic-form
             *ngIf="!reload && pageData.endpoint !== '/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit' "
+            [title]="pageData.pathData.postfix === 'submit' ? 'Submit your timesheet' : ''"
             [endpoint]="pageData.endpoint"
             [id]="pageData.pathData.id"
             [edit]="pageData.pathData.postfix"
@@ -51,7 +52,7 @@
                     Edit mode
                 </button>
 
-                <button type="submit" class="btn btn-primary button-save save"
+                <button type="submit" class="btn btn-primary button-save save mt-2"
                   *ngIf="!formStorage && formMode !== FormMode.View && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/core/users/')"
                   [disabled]="saveProcess">
                     Save

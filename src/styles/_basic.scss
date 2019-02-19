@@ -1349,6 +1349,20 @@ iframe.send-sms {
   }
 }
 
+.button-save {
+  padding: 8px 20px;
+}
+
+@include media-breakpoint-down('sm') {
+  .button-save {
+    width: 100%;
+
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+
 .dynamic-form {
   margin: 0 20px;
 }

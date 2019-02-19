@@ -18,15 +18,15 @@
         [(ngModel)]="time">
     </div>
 
-    <div *ngIf="mobileDevice" class="input-group form-element-content datepicker mb-2 edit">
-      <input type="date" class="form-control"
+    <div *ngIf="mobileDevice" class="input-group form-element-content datepicker mb-2 edit w-100">
+      <input type="date" class="form-control mobile-datepicker fa-calendar"
         [hidden]="config.templateOptions.type === 'time'"
         [(ngModel)]="date"
         (ngModelChange)="changeDate($event)"
         [attr.id]="key"
         [attr.name]="key">
 
-      <input type="time" class="form-control"
+      <input type="time" class="form-control mobile-datepicker fa-clock-o"
         [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')"
         (ngModelChange)="changeTime($event)"
         [(ngModel)]="time">

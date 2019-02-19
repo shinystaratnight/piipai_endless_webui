@@ -147,9 +147,16 @@
       cursor: not-allowed;
     }
 
-    .mobile-device & {
+    .mobile-device & .readonly-value {
+      font-size: 15px;
+
+      opacity: 1;
+    }
+
+    .mobile-device &:not(.edit) {
       display: inline-block;
       width: auto;
+
       margin-left: 5px;
     }
 
@@ -172,6 +179,10 @@
 
     &.edit {
       max-width: 300px;
+
+      @include media-breakpoint-down('sm') {
+        max-width: unset;
+      }
 
       .form-builder-form & {
         max-width: 100%;
@@ -228,6 +239,33 @@
 
       background: transparent;
     }
+
+    .mobile-datepicker {
+      position: relative;
+      height: 40px;
+
+      padding: 12px;
+      padding-right: 0;
+
+      border: 1px solid $gray;
+      border-radius: 4px !important;
+
+      box-shadow: 0 0 8px 0 rgba($gray, 0.1);
+      background-color: #ffffff;
+
+      &::before {
+        font-family: FontAwesome;
+        display: inline;
+        right: 12px;
+        font-size: 14px;
+        position: absolute;
+        opacity: .5;
+      }
+
+      &:first-child {
+        margin-right: 12px;
+      }
+    }
   }
 
   &-checkbox {
@@ -267,7 +305,9 @@
     opacity: .3;
 
     .mobile-device & {
-      font-size: 15px;
+      margin-bottom: 3px;
+
+      font-size: 14px;
       line-height: 16px;
 
       opacity: .6;
