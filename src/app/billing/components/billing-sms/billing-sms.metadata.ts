@@ -1,7 +1,6 @@
 export const autoChargeMetadata = [
   {
     key: 'auto_charge',
-    default: true,
     type: 'checkbox',
     templateOptions: {
       required: true,

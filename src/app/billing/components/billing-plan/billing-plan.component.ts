@@ -6,6 +6,7 @@ import {
   ViewChild,
   OnChanges,
   SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -17,7 +18,7 @@ import { Plan, BillingSubscription } from '../../models';
   styleUrls: ['./billing-plan.component.scss']
 })
 
-export class BillingPlanComponent implements OnChanges {
+export class BillingPlanComponent implements OnChanges, OnDestroy {
 
   public plans: Plan[] = [
     {
@@ -41,7 +42,6 @@ export class BillingPlanComponent implements OnChanges {
       start: 90
     }
   ];
-  public changeAction: boolean;
   public modalRef: NgbModalRef;
 
   @Input() public saveProcess: boolean;
@@ -55,15 +55,19 @@ export class BillingPlanComponent implements OnChanges {
 
   constructor(
     private modalService: NgbModal
-  ) {
-    this.changeAction = false;
-  }
+  ) {}
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.saveProcess) {
       if (!changes.saveProcess.currentValue && this.modalRef) {
         this.modalRef.close();
       }
+    }
+  }
+
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
     }
   }
 
@@ -80,8 +84,6 @@ export class BillingPlanComponent implements OnChanges {
   }
 
   public selectPlan(plan) {
-    this.changeAction = false;
-
     const body = {
       type: plan.type,
       worker_count: this.workerCount,
@@ -103,8 +105,6 @@ export class BillingPlanComponent implements OnChanges {
   }
 
   public changePlan() {
-    this.changeAction = true;
-
     this.openModal();
   }
 

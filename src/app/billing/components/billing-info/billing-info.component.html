@@ -1,6 +1,4 @@
 <ng-container *ngIf="currentPlan">
-  <h5 class="mb-2">details</h5>
-
   <p><span>Price:</span><span>{{currentPlan.price | currency:'USD'}}</span></p>
   <p><span>Worker count:</span><span>{{currentPlan.worker_count}}</span></p>
   <p><span>Type:</span><span>{{types[currentPlan.type]}}</span></p>

@@ -173,7 +173,9 @@ p.message {
 
   background-color: #fff;
 
-  outline-width: 1px;
+  &:focus {
+    box-shadow: none;
+  }
 }
 
 .subscribe-button {

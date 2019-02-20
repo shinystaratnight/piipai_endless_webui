@@ -12,7 +12,6 @@ import { autoChargeMetadata } from './billing-sms.metadata.ts';
 })
 export class BillingSmsComponent implements OnInit, OnDestroy {
 
-  public isShowFundsForm: boolean;
   public smsBalance: any;
   public amount = 20;
   public modalConfig = autoChargeMetadata;
@@ -21,6 +20,7 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
   public additionalData: any;
 
   @ViewChild('charge') public modal;
+  @ViewChild('funds') public fundsModal;
 
   constructor(
     private billingService: BillingService,
@@ -28,6 +28,16 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.getSmsBalance();
+  }
+
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
+  }
+
+  public getSmsBalance() {
     this.billingService.getCreditDetails().subscribe(
       (res: any) => {
         this.smsBalance = res.sms_balance;
@@ -35,23 +45,16 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
     );
   }
 
-  public ngOnDestroy() {
-
-  }
-
   public showAddFundsForm() {
-    this.isShowFundsForm = true;
-  }
-
-  public cancel() {
-    this.isShowFundsForm = false;
+    this.openModal(this.fundsModal);
   }
 
   public addFunds() {
     this.billingService.addFunds({ amount: this.amount }).subscribe(
       (res: any) => {
         this.amount = 20;
-        this.isShowFundsForm = false;
+        this.modalRef.close();
+        this.getSmsBalance();
       }
     );
   }
@@ -61,11 +64,11 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
     this.modalConfig.forEach((el) => {
       el.value = this.smsBalance[el.key];
     });
-    this.openModal();
+    this.openModal(this.modal);
   }
 
-  public openModal() {
-    this.modalRef = this.modalService.open(this.modal);
+  public openModal(modal) {
+    this.modalRef = this.modalService.open(modal);
   }
 
   public saveAutoCharge() {
