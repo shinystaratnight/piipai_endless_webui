@@ -6,10 +6,10 @@
   </button>
 
   <ng-container *ngIf="currentPlan">
-      <h5 *ngIf="currentPlan" class="mb-0 mr-1">Subscription</h5>
+      <h5 *ngIf="currentPlan" class="mb-0 mr-1">Subscription details</h5>
 
       <button type="button" class="btn" title="Change"
-        *ngIf="!changeAction && currentPlan"
+        *ngIf="currentPlan"
         (click)="changePlan()">
           <i fa name="pencil" class="text-warning"></i>
       </button>
