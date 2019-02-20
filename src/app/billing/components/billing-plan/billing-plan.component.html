@@ -1,25 +1,26 @@
 <div class="d-flex align-items-center mb-2">
-  <button type="button" class="btn btn-primary subscribe-button"
-    *ngIf="!currentPlan"
-    (click)="setPlan()">
-      Subscribe
-  </button>
+  <h5 class="mb-0 mr-1">Subscription details</h5>
 
   <ng-container *ngIf="currentPlan">
-      <h5 *ngIf="currentPlan" class="mb-0 mr-1">Subscription details</h5>
 
-      <button type="button" class="btn" title="Change"
-        *ngIf="currentPlan"
-        (click)="changePlan()">
-          <i fa name="pencil" class="text-warning"></i>
-      </button>
+    <button type="button" class="btn" title="Change"
+      *ngIf="currentPlan"
+      (click)="changePlan()">
+        <i fa name="pencil" class="text-warning"></i>
+    </button>
 
-      <button type="button" class="btn" title="Unsubscribe"
-        (click)="cancelPlan()">
-          <i fa name="trash" class="text-danger"></i>
-      </button>
+    <button type="button" class="btn" title="Unsubscribe"
+      (click)="cancelPlan()">
+        <i fa name="trash" class="text-danger"></i>
+    </button>
   </ng-container>
 </div>
+
+<button type="button" class="btn btn-primary subscribe-button"
+  *ngIf="!currentPlan"
+  (click)="setPlan()">
+    Subscribe
+</button>
 
 <ng-template #subscription let-c="close" let-d="dismiss">
   <div class="modal-header-wrapper">
