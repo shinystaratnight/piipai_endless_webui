@@ -2,7 +2,7 @@
 <ng-container *ngIf="smsBalance">
   <div class="field mb-2">
     <span>Charge rate for SMS:</span>
-    <span style="opacity: 1">{{smsBalance.segment_cost | currency:'USD'}} per sergment (160 sings)</span>
+    <span style="opacity: 1">{{smsBalance.segment_cost | currency:'USD'}} per segment (160 signs)</span>
   </div>
 
   <div class="field">
@@ -70,7 +70,7 @@
     <h6 class="mt-2">so we could use SMS service!</h6>
 
     <button type="submit" class="btn big-btn btn-shadow bg-primary text-white button-save mt-3" (click)="addFunds()">
-      Save
+      Approve
     </button>
   </div>
 </ng-template>
