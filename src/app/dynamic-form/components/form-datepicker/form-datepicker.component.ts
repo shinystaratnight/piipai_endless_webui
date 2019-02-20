@@ -380,7 +380,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           if (!this.mobileDevice) {
             this.time = date.format(this.timeFormat);
           } else {
-            this.time = date.format('H:m');
+            this.time = date.format('HH:mm');
           }
           this.setTimepickerTime();
         }
