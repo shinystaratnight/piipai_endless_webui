@@ -144,13 +144,14 @@ const list = {
       },
       {
         default: null,
-        query: 'approved',
+        query: 'status',
         label: 'Status',
         options: [
-          { label: 'Approved', value: 'True' },
-          { label: 'Unapproved', value: 'False' }
+          { label: 'Pending submission', value: '4' },
+          { label: 'Pending approval', value: '5' },
+          { label: 'Approved', value: '7' }
         ],
-        key: 'approved',
+        key: 'status',
         type: 'select'
       }
     ],
