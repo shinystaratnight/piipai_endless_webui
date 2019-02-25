@@ -602,24 +602,13 @@
     </ng-container>
     <label>Tracking</label>
     <div class="d-flex align-items-center">
-      <agm-map class="tracking-map"
-        [latitude]="-33.865143"
-        [longitude]="151.209900"
-        [zoom]="13"
-        [fullscreenControl]="false"
-        [streetViewControl]="false"
-        [mapTypeControl]="false"
-        [panControl]="false"
-        [rotateControl]="false"
-        [scaleControl]="false"
-        [zoomControl]="false">
-      </agm-map>
+      <img src="/assets/img/map.png" alt="Map" height="48" width="200">
       <ng-container *ngFor="let field of getElement('traking', data.content).content"
         appListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)">
-    </ng-container>
+      </ng-container>
     </div>
   </div>
   <div class="footer">
