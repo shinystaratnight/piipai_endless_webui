@@ -448,7 +448,12 @@
   </div>
 </ng-template>
 
-<ng-template #sendMessageModal>
+<ng-template #sendMessageModal let-c="close">
+  <button type="button" class="position-absolute text-white close-button close ml-2" aria-label="Close"
+    style="top: 24px; right: 44px; z-index: 2"
+    (click)="c()">
+      <span aria-hidden="true">&times;</span>
+  </button>
   <div class="modal-body">
     <iframe class="send-sms" [src]="modalInfo.url" frameborder="0" sandbox="allow-forms allow-scripts allow-same-origin allow-modals"></iframe>
     <br>
