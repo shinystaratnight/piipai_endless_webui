@@ -406,7 +406,25 @@ form.ng-invalid button[type='submit'] {
 
   &.shiftdates .modal-content,
   &.visible-mode .modal-content {
-    overflow: visible;
+    @include media-breakpoint-up('md') {
+      overflow: visible;
+    }
+
+    @include media-breakpoint-down('sm') {
+      .form-group {
+        margin-bottom: 5px;
+      }
+
+      .modal-header {
+        padding: .5rem 1rem;
+
+        h5 {
+          font-size: 1rem;
+        }
+      }
+
+      max-height: 95vh;
+    }
   }
 
   &.message-detail .modal-content {
