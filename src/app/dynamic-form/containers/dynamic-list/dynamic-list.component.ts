@@ -1480,9 +1480,9 @@ export class DynamicListComponent
       .subscribe((res) => {
         this.modalRef.close();
         this.saveProcess = false;
-        this.event.emit({
-          type: 'update',
-          list: this.config.list.list
+        this.evaluateEvent({
+          status: 'success',
+          type: 'sendForm'
         });
       });
   }
@@ -1722,13 +1722,15 @@ export class DynamicListComponent
     }
   }
 
-  public formEvent(e, closeModal) {
+  public formEvent(e, closeModal?) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
     if (e.type === 'sendForm' && e.status === 'success') {
       this.saveProcess = false;
-      closeModal();
+      if (closeModal) {
+        closeModal();
+      }
       this.event.emit({
         type: 'update',
         list: this.config.list.list
@@ -1740,9 +1742,11 @@ export class DynamicListComponent
     this.saveProcess = false;
   }
 
-  public evaluateEvent(e, closeModal) {
+  public evaluateEvent(e, closeModal?) {
     if (e.type === 'sendForm' && e.status === 'success') {
-      closeModal();
+      if (closeModal) {
+        closeModal();
+      }
       if (this.approveEndpoint) {
         this.genericFormService
           .editForm(this.approveEndpoint, {})
