@@ -14,6 +14,8 @@ import {
 import { User, AuthService, Page, Role } from '../../../services';
 import { getContactAvatar } from '../../../helpers/utils';
 
+import { TimeService } from '../../services';
+
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -56,6 +58,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private time: TimeService
   ) { }
 
   public ngOnInit() {
@@ -83,6 +86,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.resizeSubscription) {
       this.resizeSubscription.unsubscribe();
     }
+  }
+
+  public formatDate(date) {
+    return this.time.instance(date, 'YYYY-MM-DD hh:mm:ss').format('YYYY/MM/DD');
   }
 
   public getUserInformation() {
