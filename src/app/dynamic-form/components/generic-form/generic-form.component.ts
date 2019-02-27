@@ -180,6 +180,11 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     if (!this.formId && this.formId !== 0) {
       this.formId = this.formService.registerForm(this.endpoint, this.mode);
 
+      this.event.emit({
+        type: 'formRegistration',
+        form: this.formService.getForm(this.formId)
+      });
+
       const subscription = this.formService
         .getForm(this.formId)
         .mode

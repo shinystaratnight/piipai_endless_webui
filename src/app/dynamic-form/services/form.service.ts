@@ -56,4 +56,10 @@ export class FormService {
 
     form.hideEditButton = true;
   }
+
+  public disableSaveButton(formId: number, disbable?: boolean) {
+    const form = this.getForm(formId);
+
+    form.disableSaveButton = disbable;
+  }
 }
