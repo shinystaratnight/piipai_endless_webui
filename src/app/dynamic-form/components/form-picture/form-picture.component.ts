@@ -216,7 +216,7 @@ export class FormPictureComponent
     this.updateValue('', '', true);
     const file = e.target.files[0];
 
-    if (file.size > 1000000) {
+    if (file.size > 900000) {
       this.sizeError = 'File is too large!';
     } else {
       this.sizeError = '';
