@@ -144,7 +144,8 @@ const list = {
             color: 'warning',
             endpoint: '/hr/timesheets/{id}/evaluate/',
             field: 'id',
-            action: 'evaluateCandidate'
+            action: 'evaluateCandidate',
+            hidden: 'evaluated'
           }
         ]
       },
