@@ -3,6 +3,7 @@ import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './util
 const list = {
   list: {
     list: 'timesheet',
+    innerEdit: true,
     label: 'Timesheet Entry',
     columns: [
       {
@@ -59,7 +60,16 @@ const list = {
             field: 'id',
             action: 'showTracking',
             customLink: true,
-          },
+            image: '/assets/img/map-lg.png'
+          }
+        ],
+        name: 'tracking',
+        title: null,
+        label: 'Tracking',
+        delim: null
+      },
+      {
+        content: [
           {
             text: '{shift_started_at__date}',
             type: 'static',
@@ -95,7 +105,7 @@ const list = {
         ],
         name: 'time',
         title: null,
-        label: 'Tracking, date and times',
+        label: 'Date and times',
         delim: null
       },
       {
@@ -140,6 +150,66 @@ const list = {
               }
             ]
           },
+          {
+            endpoint: '/hr/timesheets/{id}/confirm',
+            action: 'emptyPost',
+            text: 'Confirm Check',
+            type: 'button',
+            field: 'id',
+            showIf: [
+              {
+                going_to_work_confirmation: null
+              }
+            ],
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/resend_sms',
+            field: 'resend_sms_candidate',
+            showIf: [
+              {
+                resend_sms_candidate: true
+              }
+            ],
+            action: 'emptyPost',
+            type: 'button',
+            text: 'Send TS SMS'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
+            field: 'resend_sms_supervisor',
+            showIf: [
+              {
+                resend_sms_supervisor: true
+              }
+            ],
+            action: 'emptyPost',
+            type: 'button',
+            text: 'Send Supervisor SMS'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/candidate_fill',
+            field: 'id',
+            showIf: [
+              {
+                resend_sms_candidate: true
+              }
+            ],
+            action: 'editForm',
+            type: 'button',
+            text: 'Fill'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/supervisor_approve',
+            field: 'id',
+            showIf: [
+              {
+                resend_sms_supervisor: true
+              }
+            ],
+            action: 'editForm',
+            type: 'button',
+            text: 'Approve'
+          },
         ],
         name: 'confirmations',
         title: null,
@@ -159,7 +229,7 @@ const list = {
               '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
             type: 'button',
-            text: 'Candidate Going To Work',
+            text: 'Preshift check',
           },
           {
             action: 'messageDetail',
@@ -251,87 +321,29 @@ const list = {
         label: 'Invoice',
         delim: null
       },
+    ],
+    tabs: [
       {
-        content: [
-          {
-            endpoint: '/hr/timesheets/{id}/confirm',
-            action: 'emptyPost',
-            icon: 'fa-external-link',
-            title: 'Confirm Check',
-            type: 'button',
-            field: 'id',
-            showIf: [
-              {
-                going_to_work_confirmation: null
-              }
-            ],
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/resend_sms',
-            field: 'resend_sms_candidate',
-            showIf: [
-              {
-                resend_sms_candidate: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'emptyPost',
-            type: 'button',
-            title: 'Send TS SMS'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
-            field: 'resend_sms_supervisor',
-            showIf: [
-              {
-                resend_sms_supervisor: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'emptyPost',
-            type: 'button',
-            title: 'Send Supervisor SMS'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/candidate_fill',
-            field: 'id',
-            showIf: [
-              {
-                resend_sms_candidate: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'editForm',
-            type: 'button',
-            title: 'Fill'
-          },
-          {
-            endpoint: '/hr/timesheets/{id}/supervisor_approve',
-            field: 'id',
-            showIf: [
-              {
-                resend_sms_supervisor: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'editForm',
-            type: 'button',
-            title: 'Approve'
-          },
-          {
-            action: 'editForm',
-            endpoint: '/hr/timesheets/{id}',
-            icon: 'fa-pencil',
-            title: 'Edit',
-            type: 'button',
-            field: 'id'
-          },
-        ],
-        name: 'actions',
-        title: null,
-        label: 'Actions',
-        delim: null
+        label: 'Related SMS',
+        is_collapsed: true,
+        fields: [
+          'related_sms',
+        ]
       },
+      {
+        label: 'MYOB Status',
+        is_collapsed: true,
+        fields: [
+          'myob_status'
+        ]
+      },
+      {
+        label: 'Invoice',
+        is_collapsed: true,
+        fields: [
+          'invoice'
+        ]
+      }
     ],
     pagination_label: 'Timesheet Entry',
     search_enabled: false,
