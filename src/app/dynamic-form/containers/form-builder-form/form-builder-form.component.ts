@@ -142,6 +142,8 @@ export class FormBuilderFormComponent implements OnInit {
   }
 
   public updateConfig(config: Field[]) {
+    this.hideDatepickerError(config);
+
     const streetAddress = config.find((field) => {
       if (field.key) {
         return field.key.includes('street_address');
@@ -172,6 +174,15 @@ export class FormBuilderFormComponent implements OnInit {
             field.hidden = new BehaviorSubject(true);
           }
         }
+      });
+    }
+  }
+
+  public hideDatepickerError(config: Field[]) {
+    const pickers = config.filter((el) => el.type === 'datepicker');
+    if (pickers.length) {
+      pickers.forEach((el) => {
+        el.templateOptions.hidePreviewError = true;
       });
     }
   }

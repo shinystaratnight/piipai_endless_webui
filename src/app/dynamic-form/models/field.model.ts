@@ -107,6 +107,7 @@ export interface Field {
     add?: boolean;
     edit?: boolean;
     delete?: boolean;
+    hidePreviewError?: boolean;
   };
 }
 
