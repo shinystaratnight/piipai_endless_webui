@@ -6,7 +6,8 @@
     [hiddenFields]="hiddenFields"
     (event)="eventHandler($event)"
     (submitForm)="submitForm($event)">
-    <div class="footer">
+    <div class="footer position-relative">
+      <small class="required-message text-danger">* Required fields</small>
       <button type="submit" class="btn btn-primary">
         {{config.save_button_text}}
       </button>
