@@ -140,6 +140,9 @@ export class DynamicListComponent
   @ViewChild('sendMessageModal')
   public sendMessageModal;
 
+  @ViewChild('pdfDocumentModal')
+  public pdfDocumentModal;
+
   @ViewChild('datatable')
   public datatable;
 
@@ -273,6 +276,15 @@ export class DynamicListComponent
         setTimeout(() => {
           this.openFrame(this.currentActionData.phone_number);
         }, 250);
+      }
+
+      if (this.actionEndpoint.indexOf('pdf') > -1) {
+        setTimeout(() => {
+          this.modalInfo = {
+            url: this.sanitizer.bypassSecurityTrustResourceUrl(location.origin + this.currentActionData.pdf_url)
+          };
+          this.open(this.pdfDocumentModal, { size: 'lg' });
+        }, 100);
       }
       return;
     }
@@ -1177,6 +1189,8 @@ export class DynamicListComponent
   }
 
   public filterHandler(e) {
+    this.selectedAll = false;
+    this.select = {};
     if (e === 'resetAll') {
       this.event.emit({
         type: 'filter',
@@ -1832,7 +1846,7 @@ export class DynamicListComponent
   public printPDF(e) {
     this.genericFormService.getAll(e.el.endpoint).subscribe((res: any) => {
       this.modalInfo = {
-        url: this.sanitizer.bypassSecurityTrustResourceUrl(res.pdf)
+        url: this.sanitizer.bypassSecurityTrustResourceUrl(location.origin + res.pdf)
       };
       this.open(this.sendMessageModal, { size: 'lg' });
     });
