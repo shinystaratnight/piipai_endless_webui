@@ -1738,6 +1738,9 @@ export class DynamicListComponent
   }
 
   public formEvent(e, closeModal?) {
+    if (e.type === 'formRegistration') {
+      this.modalInfo.form = e.form;
+    }
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }

@@ -18,6 +18,8 @@ import { Subscription } from 'rxjs';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { getContactAvatar } from '../../../helpers/utils';
 
+import { FormService } from '../../services';
+
 @Component({
   selector: 'app-form-picture',
   templateUrl: 'form-picture.component.html',
@@ -77,7 +79,8 @@ export class FormPictureComponent
     private fb: FormBuilder,
     public modalService: NgbModal,
     private element: ElementRef,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private formService: FormService,
   ) {
     super();
     this.onSuccess = (stream: any) => {
@@ -217,9 +220,11 @@ export class FormPictureComponent
     const file = e.target.files[0];
 
     if (file.size > 900000) {
+      this.formService.disableSaveButton(this.config.formId, true);
       this.sizeError = 'File size is too large! Maximum allowed file size is 900kb.';
     } else {
       this.sizeError = '';
+      this.formService.disableSaveButton(this.config.formId, false);
     }
 
     if (file) {
