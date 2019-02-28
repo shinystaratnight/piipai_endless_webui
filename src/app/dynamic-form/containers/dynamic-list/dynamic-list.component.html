@@ -475,6 +475,17 @@
   </div>
 </ng-template>
 
+<ng-template #pdfDocumentModal let-c="close">
+  <button type="button" class="position-absolute text-white close-button close ml-2" aria-label="Close"
+    style="top: 24px; right: 44px; z-index: 2"
+    (click)="c()">
+      <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-body">
+    <object type="application/pdf" [data]="modalInfo.url" style="width: 100%; height: 80vh"></object>
+  </div>
+</ng-template>
+
 <ng-template #showPreviewInvoice>
   <div class="modal-body">
     <pdf-viewer [src]="modalInfo.url" [render-text]="true" style="display: block;"></pdf-viewer>

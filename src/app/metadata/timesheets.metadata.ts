@@ -422,7 +422,22 @@ const list = {
         },
         query: 'jobsite'
       }
-    ]
+    ],
+    actions: {
+      options: [
+        {
+          endpoint: '/hr/timesheets/generate_pdf_timesheet/',
+          label: 'Jobsite report',
+          confirm: false,
+          message: 'Are you sure?',
+          property: 'timesheets'
+        }
+      ],
+      label: 'Actions',
+      agree_label: 'Agree',
+      button_label: 'Go',
+      decline_label: 'Decline'
+    }
   },
   fields: [
     {

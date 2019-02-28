@@ -592,6 +592,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   }
 
   public callAction(data, endpoint, target, e) {
+    let body;
     const ids = [];
     const keys = Object.keys(data);
     keys.forEach((el) => {
@@ -599,7 +600,16 @@ export class GenericListComponent implements OnInit, OnDestroy {
         ids.push(el);
       }
     });
-    this.gfs.callAction(endpoint, ids).subscribe(
+
+    if (e.action.property) {
+      body = {
+        [e.action.property]: ids
+      };
+    } else {
+      body = ids;
+    }
+
+    this.gfs.callAction(endpoint, body).subscribe(
       (res) => {
         if (res.status === 'success') {
           if (e.action.reload) {
@@ -612,6 +622,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
             target.actionData = res;
           }
         }
+        target.actionData = res;
       },
       (err) => {
         this.err = err;
