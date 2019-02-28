@@ -187,39 +187,54 @@
                     (click)="editObject(row.id, row.__str__)"></i>
                 </td>
 
-                <ng-container *ngFor="let cell of row.content">
-                  <td *ngIf="!cell.hide" [ngStyle]="{'width.px': cell.width}" [attr.data-label]="cell.label" [hidden]="cell.tab && cell.tab.is_collapsed">
-                    <label class="cell-label" *ngIf="isMobileDevice">{{cell.label}}</label>
-                    <br *ngIf="isMobileDevice">
+                <ng-container *ngFor="let cell of row.content; let first = first">
+                  <td *ngIf="!cell.hide"
+                    [ngStyle]="{'width.px': cell.width}"
+                    [attr.data-label]="cell.label"
+                    [hidden]="cell.tab && cell.tab.is_collapsed">
+                      <label class="cell-label" *ngIf="isMobileDevice">{{cell.label}}</label>
+                      <br *ngIf="isMobileDevice">
 
-                    <ng-container
-                      *ngIf="cell.name !== 'actions'"
-                      appListElement
-                      [config]="cell.content"
-                      (event)="eventHandler($event)"
-                      (buttonAction)="buttonHandler($event)">
-                    </ng-container>
+                      <ng-container
+                        *ngIf="cell.name !== 'actions'"
+                        appListElement
+                        [config]="cell.content"
+                        (event)="eventHandler($event)"
+                        (buttonAction)="buttonHandler($event)">
+                      </ng-container>
 
-                    <ng-container *ngIf="cell.name === 'actions'">
-                      <ng-template #actionsTemplate>
-                        <ng-container
-                          appListElement
-                          [config]="cell.content"
-                          (event)="eventHandler($event)"
-                          (buttonAction)="buttonHandler($event, cell.pop = pop)">
-                        </ng-container>
-                      </ng-template>
-                      <i fa class="icon px-3 py-1" style="opacity: .3; margin-left: 8px"
-                        name="ellipsis-v"
-                        placement="bottom"
-                        #pop="ngbPopover"
-                        [ngbPopover]="actionsTemplate">
-                      </i>
-                    </ng-container>
+                      <ng-container *ngIf="cell.name === 'actions'">
+                        <ng-template #actionsTemplate>
+                          <ng-container
+                            appListElement
+                            [config]="cell.content"
+                            (event)="eventHandler($event)"
+                            (buttonAction)="buttonHandler($event, cell.pop = pop)">
+                          </ng-container>
+                        </ng-template>
+                        <i fa class="icon px-3 py-1" style="opacity: .3; margin-left: 8px"
+                          name="ellipsis-v"
+                          placement="bottom"
+                          #pop="ngbPopover"
+                          [ngbPopover]="actionsTemplate">
+                        </i>
+                      </ng-container>
 
-                    <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
-                      <app-list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></app-list-table>
-                    </div>
+                      <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
+                        <app-list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></app-list-table>
+                      </div>
+
+                      <ng-container *ngIf="first && config.list.innerEdit">
+                        <br>
+                        <a class="first-cell-link not-underline"
+                          [routerLink]="[row.id + '/change']">
+                            <i fa
+                              name="pencil"
+                              class="icon">
+                            </i>
+                            &nbsp;Edit
+                        </a>
+                      </ng-container>
                   </td>
                 </ng-container>
 
@@ -236,7 +251,7 @@
                 <td *ngIf="(!inForm && config.list.actions) || actions || !noneEdit">&nbsp;</td>
                 <td [attr.colspan]="row.content.length">
 
-                  <table *ngIf="!row.additionalBody.inline" class="table table-sm">
+                  <table *ngIf="!row.additionalBody.inline" class="inner-table table table-sm">
                     <thead>
                       <tr>
                         <th *ngFor="let acell of row.additionalBody.content">{{acell.label}}</th>
