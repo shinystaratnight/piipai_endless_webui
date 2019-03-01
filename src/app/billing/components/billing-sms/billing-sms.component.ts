@@ -54,7 +54,9 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.amount = 20;
         this.modalRef.close();
-        this.getSmsBalance();
+        setTimeout(() => {
+          this.getSmsBalance();
+        }, 3000);
       }
     );
   }
