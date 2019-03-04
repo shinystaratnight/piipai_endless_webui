@@ -242,7 +242,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public showPreview() {
-    this.modalRef = this.modalService.open(this.previewModal, { size: 'lg' });
+    this.modalRef = this.modalService.open(this.previewModal);
   }
 
   public checkCount(type: number, length: number) {

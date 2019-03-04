@@ -18,6 +18,8 @@ export class TestGeneratorComponent implements OnInit {
   public answerEndpoint: string;
   public testData: any;
 
+  public currentQuestion = 0;
+
   constructor(private genericFormService: GenericFormService) {}
 
   public ngOnInit() {
@@ -94,6 +96,16 @@ export class TestGeneratorComponent implements OnInit {
       .subscribe((res) => {
         this.sended.emit(true);
       });
+  }
+
+  back() {
+    if (this.currentQuestion !== 0) {
+      this.currentQuestion -= 1;
+    }
+  }
+
+  next() {
+    this.currentQuestion += 1;
   }
 
 }
