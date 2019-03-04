@@ -93,7 +93,7 @@ export class FormInputComponent extends BasicElementComponent
       let required = (this.config.key === 'score' || this.config.key === 'hourly_rate') && this.config.templateOptions.required;
       required = required || (this.config.formBuilder && this.config.templateOptions.required);
 
-      this.addControl(this.config, this.fb, required);
+      this.addControl(this.config, this.fb, required, this.config.templateOptions.min, this.config.templateOptions.max);
     }
     this.setInitValue();
     this.checkModeProperty();
