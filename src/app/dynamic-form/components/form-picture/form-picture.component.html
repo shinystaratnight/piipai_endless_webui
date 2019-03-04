@@ -16,11 +16,11 @@
       <img class="image-preview" [class.start]="config.templateOptions.start" *ngIf="value && config.templateOptions.file === false" [src]="value" alt="image">
       <div *ngIf="contactAvatar && !fileName && !value" class="contact-avatar">{{contactAvatar}}</div>
       <span *ngIf="(link || value) && viewMode && config.templateOptions.file == undefined">
-        {{getExtension(link || value) | uppercase}} file
+        {{getExtension(link || fileName ||value) | uppercase}} file
         <a class="link" [href]="link || value" target="_blank">|&nbsp;Open in new tab</a>
       </span>
       <span *ngIf="(link || value) && !viewMode && config.templateOptions.file == undefined">
-        <a *ngIf="this.config.value" [href]="link || value" target="_blank">{{getExtension(link || value) | uppercase}} file</a>
+        <a *ngIf="this.config.value" [href]="link || value" target="_blank">{{getExtension(link || fileName || value) | uppercase}} file</a>
         <a class="link" href="" (click)="upload($event)">|&nbsp;Upload new file</a>
       </span>
       <span *ngIf="!value && !contactAvatar && !link && viewMode ">-</span>
