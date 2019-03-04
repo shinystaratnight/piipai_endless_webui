@@ -257,7 +257,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.modalRef = this.modalService.open(this.testModal, { size: 'lg' });
+    this.modalRef = this.modalService.open(this.testModal);
   }
 
   public createWorkflowObject(stateId: string) {

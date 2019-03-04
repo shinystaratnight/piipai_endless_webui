@@ -1,60 +1,89 @@
 @import '../../../../styles/variables.scss';
 @import '../../../../styles/mixins.scss';
 
-.test-wrapper {
-  padding: 0 40px;
-}
+.test {
 
-.question {
-  margin-bottom: 2rem;
-}
+  &__header,
+  &__body {
+    padding: 24px 66px;
 
-hr {
-  margin-bottom: 2rem;
-}
-
-.description {
-  font-size: 14px;
-  line-height: 16px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-  &-title {
-    min-width: 300px;
-    width: calc(100% - 400px);
+    border-bottom: 1px solid rgba(#e5e5e5, .8);
   }
 
-  .relationships {
+  &__footer {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
 
-    max-width: 300px;
+    padding: 24px 66px;
+  }
+
+  &__description {
+    margin-bottom: 2px;
+
+    font-size: 18px;
+    line-height: 24px;
+
+    color: #bdbdbd;
+  }
+
+  &__name {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  &__position {
+    margin-bottom: 2px;
 
     font-size: 12px;
-    line-height: 14px;
+    line-height: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
 
-    .description {
-      font-size: 12px;
-      line-height: 14px;
-    }
+    color: $brand-primary;
+  }
 
-    & > span {
-      margin-bottom: 3px;
+  &__question {
+    margin-bottom: 30px;
+
+    font-size: 20px;
+    line-height: 24px;
+
+    &-details {
+      margin-top: -20px;
+      margin-bottom: 30px;
+
+      font-size: 14px;
+      line-height: 16px;
+
+      opacity: .7;
     }
   }
+
+  &__button {
+    width: 120px;
+
+    padding: 13px 20px;
+
+    text-align: center;
+
+    &.btn-default {
+      background-color: #f9f9f9;
+      border: 1px solid #e0e0e0;
+
+      &:hover:not([disabled]) {
+        background-color: #e0e0e0;
+        color: inherit;
+      }
+
+      &[disabled] {
+        cursor: not-allowed;
+        color: inherit;
+      }
+    }
+  }
+
 }
 
-.answers {
-  .form-check-label {
-    display: flex;
-    align-items: center;
-
-    input {
-      margin-right: 8px;
-    }
-  }
+.form-check {
+  margin-bottom: 19px;
 }
