@@ -1160,7 +1160,8 @@ const formadd = [
               values: ['primary_contact', '__str__'],
               type: 'related',
               edit: true,
-              required: true
+              required: true,
+              description: 'Only active jobsites'
             },
             type: 'related',
             visibleMode: true,
@@ -1173,7 +1174,8 @@ const formadd = [
               manual: true
             },
             query: {
-              company: '{customer_company.id}'
+              company: '{customer_company.id}',
+              is_available: 'True'
             }
           },
           {
