@@ -106,7 +106,7 @@ const form = [
       {
         type: 'button',
         width: .2,
-        color: 'warning',
+        color: 'primary',
         templateOptions: {
           type: 'submit',
           p: true,

@@ -260,14 +260,14 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public editQuestion(question) {
     const field = getElementFromMetadata(question, 'question');
     const button = getElementFromMetadata(question, 'button', 'type');
-    button.templateOptions.text = 'Edit';
+    button.templateOptions.text = 'Save';
     field.mode.next('edit');
   }
 
   public editAnswer(answer) {
     const field = getElementFromMetadata(answer, 'answer');
     const button = getElementFromMetadata(answer, 'button', 'type');
-    button.templateOptions.text = 'Edit';
+    button.templateOptions.text = 'Save';
     field.mode.next('edit');
   }
 }

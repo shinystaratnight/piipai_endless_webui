@@ -73,17 +73,18 @@ const form = [
         key: 'score',
         type: 'input',
         templateOptions: {
-          required: false,
+          required: true,
           label: 'Score',
           max: 5,
           type: 'number',
-          min: 1
+          min: 1,
+          description: 'Values can be between 1 and 5'
         },
       },
       {
         type: 'button',
         width: 0.4,
-        color: 'warning',
+        color: 'primary',
         templateOptions: {
           type: 'submit',
           p: true,
@@ -125,11 +126,12 @@ const formadd = [
         key: 'score',
         type: 'input',
         templateOptions: {
-          required: false,
+          required: true,
           label: 'Score',
           max: 5,
           type: 'number',
-          min: 1
+          min: 1,
+          description: 'Values can be between 1 and 5'
         },
         read_only: false
       },
