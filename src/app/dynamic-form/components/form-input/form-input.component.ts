@@ -219,7 +219,9 @@ export class FormInputComponent extends BasicElementComponent
           this.config.hide = hide;
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);
@@ -272,7 +274,9 @@ export class FormInputComponent extends BasicElementComponent
           this.setInitValue();
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);
@@ -336,7 +340,9 @@ export class FormInputComponent extends BasicElementComponent
     }
 
     setTimeout(() => {
-      this.cd.detectChanges();
+      if (!(<any> this.cd).destroyed) {
+        this.cd.detectChanges();
+      }
     }, 200);
   }
 
@@ -430,7 +436,9 @@ export class FormInputComponent extends BasicElementComponent
     });
 
     setTimeout(() => {
-      this.cd.detectChanges();
+      if (!(<any> this.cd).destroyed) {
+        this.cd.detectChanges();
+      }
     }, 1000);
   }
 

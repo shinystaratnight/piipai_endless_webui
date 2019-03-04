@@ -68,7 +68,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
             this.updateDropdown();
           }
 
-          this.cd.detectChanges();
+          if (!(<any> this.cd).destroyed) {
+            this.cd.detectChanges();
+          }
         }
       });
 

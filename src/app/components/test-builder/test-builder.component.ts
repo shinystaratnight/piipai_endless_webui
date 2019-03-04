@@ -92,12 +92,13 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       JSON.stringify(this.configs[type].metadata[metadataType])
     );
 
+    const mode = new BehaviorSubject('edit');
     if (metadataType === 'form') {
-      const mode = new BehaviorSubject('edit');
       this.addModeProperty(config, mode);
     }
 
     if (metadataType === 'form') {
+      mode.next('view');
       fillingForm(config, data);
     }
 
@@ -254,5 +255,19 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     }
 
     return false;
+  }
+
+  public editQuestion(question) {
+    const field = getElementFromMetadata(question, 'question');
+    const button = getElementFromMetadata(question, 'button', 'type');
+    button.templateOptions.text = 'Edit';
+    field.mode.next('edit');
+  }
+
+  public editAnswer(answer) {
+    const field = getElementFromMetadata(answer, 'answer');
+    const button = getElementFromMetadata(answer, 'button', 'type');
+    button.templateOptions.text = 'Edit';
+    field.mode.next('edit');
   }
 }
