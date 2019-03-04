@@ -8,11 +8,12 @@
     <h6 class="description description-title">Question #{{index + 1}}</h6>
 
     <i fa name="trash" class="text-danger" (click)="deleteQuestion(getId(item), questions, index)"></i>
+    <i fa name="pencil" class="text-warning ml-2" (click)="editQuestion(item)"></i>
 
     <ng-container *ngTemplateOutlet="question; context: {config: item, index: index}"></ng-container>
   </div>
 
-  <button type="button" class="btn btn-sm btn-success questions-button"
+  <button type="button" class="btn btn-sm btn-success questions-button mr-2"
     *ngIf="testData"
     (click)="addQuestion(true)">
       Add Question
@@ -36,6 +37,7 @@
       <h6 class="description description-title">Answer #{{index + 1}}</h6>
 
       <i fa name="trash" class="text-danger" (click)="deleteAnswer(getId(item), answers[getId(config)], index)"></i>
+      <i fa name="pencil" class="text-warning ml-2" (click)="editAnswer(item)"></i>
 
       <ng-container *ngTemplateOutlet="answer; context: {config: item, index: index, id: getId(config)}"></ng-container>
     </div>

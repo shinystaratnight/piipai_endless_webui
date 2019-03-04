@@ -104,7 +104,9 @@ export class FormDatepickerComponent extends BasicElementComponent
           this.config.hide = hide;
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);

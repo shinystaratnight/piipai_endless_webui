@@ -90,7 +90,9 @@ export class FormCheckboxComponent
           this.config.hide = hide;
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);

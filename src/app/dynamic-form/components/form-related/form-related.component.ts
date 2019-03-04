@@ -330,7 +330,9 @@ export class FormRelatedComponent extends BasicElementComponent
         }
         this.config.hide = hide;
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);
@@ -1106,7 +1108,10 @@ export class FormRelatedComponent extends BasicElementComponent
       this.lastElement = 0;
     }
     this.count = null;
-    this.cd.detectChanges();
+
+    if (!(<any> this.cd).destroyed) {
+      this.cd.detectChanges();
+    }
   }
 
   public resetValue(): boolean {
@@ -1264,7 +1269,9 @@ export class FormRelatedComponent extends BasicElementComponent
       this.fillingForm(newMetadata, data);
       object.metadata = newMetadata;
 
-      this.cd.detectChanges();
+      if (!(<any> this.cd).destroyed) {
+        this.cd.detectChanges();
+      }
     }
 
     const newList = this.dataOfList.slice();

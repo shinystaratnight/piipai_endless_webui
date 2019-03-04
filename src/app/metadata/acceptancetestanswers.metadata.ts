@@ -55,7 +55,6 @@ const form = [
           label: 'Answer',
           max: 255
         },
-        read_only: true
       },
       {
         key: 'order',
@@ -80,8 +79,17 @@ const form = [
           type: 'number',
           min: 1
         },
-        read_only: true
       },
+      {
+        type: 'button',
+        width: 0.4,
+        color: 'warning',
+        templateOptions: {
+          type: 'submit',
+          p: true,
+          small: true
+        }
+      }
     ]
   }
 ];
