@@ -1,3 +1,6 @@
+@import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins.scss';
+
 $brand-primary:  #28a3fc;
 
 :host {
@@ -19,6 +22,11 @@ $brand-primary:  #28a3fc;
       width: calc(100% - 32px);
 
       background-color: $brand-primary;
+
+      @include media-breakpoint-up('md') {
+        height: 2px;
+        width: calc(100% - 16px);
+      }
     }
 
     .circle {
@@ -33,6 +41,11 @@ $brand-primary:  #28a3fc;
 
       background-color: $brand-primary;
 
+      @include media-breakpoint-up('md') {
+        height: 8px;
+        width: 8px;
+      }
+
       &-inner {
         height: 8px;
         width: 8px;
@@ -40,6 +53,11 @@ $brand-primary:  #28a3fc;
         border-radius: 50%;
 
         background-color: #fff;
+
+        @include media-breakpoint-up('md') {
+          height: 4px;
+          width: 4px;
+        }
       }
     }
   }
