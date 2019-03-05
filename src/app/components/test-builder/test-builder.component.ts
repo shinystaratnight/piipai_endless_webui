@@ -133,12 +133,27 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     if (create) {
       const order = getElementFromMetadata(metadata, 'order');
 
+      const value = this.getLastOrder(target);
+
       if (order) {
-        order.value = target.length;
+        order.value = value;
       }
     }
 
     target.push(metadata);
+  }
+
+  public getLastOrder(answers) {
+    let value = 0;
+
+    answers.forEach((answer) => {
+      const order = getElementFromMetadata(answer, 'order');
+
+      value = value > order.value ? value : order.value;
+    });
+
+    return value + 1;
+
   }
 
   public checkQuestions(data: any) {
