@@ -70,7 +70,7 @@ const list = {
       },
       {
         label: 'Evaluate',
-        delim: null,
+        delim: ' ',
         name: 'evaluate',
         title: null,
         content: [
@@ -84,6 +84,16 @@ const list = {
             field: 'id',
             action: 'evaluateCandidate',
             hidden: 'evaluated'
+          },
+          {
+            score: true,
+            type: 'text',
+            field: 'evaluation.level_of_communication',
+            showIf: [
+              {
+                evaluated: true
+              }
+            ],
           }
         ]
       }

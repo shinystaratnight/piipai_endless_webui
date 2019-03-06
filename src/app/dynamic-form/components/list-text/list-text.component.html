@@ -34,7 +34,6 @@
 
 <span class="score d-block"
   *ngIf="config.score && getScore(value)"
-  [style.borderColor]="colors[getScore(value)]"
   [style.color]="colors[getScore(value)]">
     &nbsp;{{value | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
 </span>
