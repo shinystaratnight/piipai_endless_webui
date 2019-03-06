@@ -430,7 +430,8 @@ const list = {
           label: 'Jobsite report',
           confirm: false,
           message: 'Are you sure?',
-          property: 'timesheets'
+          property: 'timesheets',
+          required: true,
         }
       ],
       label: 'Actions',

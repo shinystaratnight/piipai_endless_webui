@@ -1181,6 +1181,9 @@ export class DynamicListComponent
 
   public actionHandler(e) {
     this.actionEndpoint = e.action.endpoint;
+    if (e.action.required && !Object.keys(this.select).some((el) => el && this.select[el])) {
+      return;
+    }
     this.event.emit({
       type: 'action',
       list: this.config.list.list,
