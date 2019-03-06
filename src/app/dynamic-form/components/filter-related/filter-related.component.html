@@ -33,6 +33,7 @@
             <a (click)="resetAll(previewList)">Reset All</a>
           </li>
         </ul>
+
         <input #search="ngModel"
           *ngIf="multiple"
           name="search"
@@ -40,6 +41,7 @@
           class="form-control mb-1"
           [(ngModel)]="searchValue"
           [ngModelOptions]="{standalone: true}">
+
         <div class="autocomplete-list"
           infinite-scroll
           [infiniteScrollDistance]="modalScrollDistance"
@@ -62,7 +64,7 @@
                   class="form-check-input"
                   [(ngModel)]="option.checked"
                   name="checked"
-                  (ngModelChange)="setValue(option, previewList)"
+                  (ngModelChange)="setValue(option, chashValues)"
                   hidden>
                 <div class="custom-checkbox">
                   <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">

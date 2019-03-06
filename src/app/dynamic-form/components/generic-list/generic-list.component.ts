@@ -105,6 +105,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   public cashData: any[];
   public uploading: boolean;
+  public currentQuery: any;
 
   private subscriptions: Subscription[];
 
@@ -224,14 +225,15 @@ export class GenericListComponent implements OnInit, OnDestroy {
           table.offset = 0;
         }
         if (!this.inForm) {
-          const paramsSubscription = this.route.queryParams.subscribe(
-            (params) => {
-              const target = this.getTable(table.list);
-              if (target && target.first) {
-                this.parseUrl(params, table.list);
+          const paramsSubscription = this.route.queryParams
+            .subscribe(
+              (params) => {
+                const target = this.getTable(table.list);
+                if (target && target.first) {
+                  this.parseUrl(params, table.list);
+                }
               }
-            }
-          );
+            );
 
           this.subscriptions.push(paramsSubscription);
         } else if (!this.delay) {
@@ -275,8 +277,14 @@ export class GenericListComponent implements OnInit, OnDestroy {
     add = false,
     fillin?
   ) {
+    this.currentQuery = query;
+
     if (fillin) {
       this.gfs.getByQuery(endpoint, query).subscribe((data) => {
+        if (this.currentQuery !== query) {
+          return;
+        }
+
         this.updateFillInList(data);
         table.refresh = false;
         this.cashData = data;
@@ -291,6 +299,10 @@ export class GenericListComponent implements OnInit, OnDestroy {
       this.gfs
         .getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : ''))
         .subscribe((data) => {
+          if (this.currentQuery !== query) {
+            return;
+          }
+
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           table.refresh = false;
@@ -326,6 +338,10 @@ export class GenericListComponent implements OnInit, OnDestroy {
             : newQuery
         )
         .subscribe((data) => {
+          if (this.currentQuery !== query) {
+            return;
+          }
+
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           if (add) {
@@ -349,6 +365,10 @@ export class GenericListComponent implements OnInit, OnDestroy {
       this.gfs
         .getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : ''))
         .subscribe((data) => {
+          if (this.currentQuery !== query) {
+            return;
+          }
+
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           if (add) {
@@ -701,6 +721,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
           !table.query.pagination
         ) {
           table.data = this.cashData;
+          table.refresh = false;
           this.cashData = undefined;
         } else {
           this.getData(table.endpoint, this.generateQuery(table.query), table);
