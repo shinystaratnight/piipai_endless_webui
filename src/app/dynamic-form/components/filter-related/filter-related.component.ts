@@ -146,6 +146,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.searchValue = null;
       this.item.hideAutocomplete = false;
       this.generateList();
+
       if (target.classList.contains('autocomplete-value')) {
         this.topHeight = target.offsetHeight + 1;
         autocomplete = target.nextElementSibling;
