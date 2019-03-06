@@ -23,6 +23,14 @@ export class ListTextComponent implements OnInit {
   public iconColor: string;
   public workers: any;
 
+  public colors = {
+    1: '#FA5C46',
+    2: '#fc9183',
+    3: '#FFA236',
+    4: '#ffbf00',
+    5: '#FFD042'
+  };
+
   public ngOnInit() {
     if (this.config.value || this.config.value === 0) {
       if (this.config.value && this.config.display) {
@@ -49,6 +57,10 @@ export class ListTextComponent implements OnInit {
 
     this.checkDate(moment);
     this.customizeStatic(this.config.value);
+  }
+
+  public getScore(score) {
+    return Math.floor(parseFloat(score));
   }
 
   public checkDate(moment) { //tslint:disable-line

@@ -812,6 +812,7 @@ export class DynamicListComponent
             stars: element.stars,
             visibleMode: element.visibleMode,
             image: element.image,
+            score: element.score,
           };
           if (obj.action && this.disableActions) {
             obj.disableAction = true;

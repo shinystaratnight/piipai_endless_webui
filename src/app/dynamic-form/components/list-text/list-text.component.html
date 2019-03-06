@@ -4,7 +4,7 @@
     {{config.listLabel || config.templateOptions.listLabel}}:
 </label>
 
-<span *ngIf="!arrayValue && !config.hideValue">
+<span *ngIf="!arrayValue && !config.hideValue && !config.score">
   <span [class.description]="config.description" class="d-inline-flex align-items-center flex-wrap mr-1" *ngIf="value || value === 0">
     <span [title]="config.title || ''">
       <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
@@ -30,6 +30,13 @@
     <span *ngIf="config.delim && !l">{{config.delim}}</span>
     <br *ngIf="!config.delim && !l">
   </span>
+</span>
+
+<span class="score d-block"
+  *ngIf="config.score && getScore(value)"
+  [style.borderColor]="colors[getScore(value)]"
+  [style.color]="colors[getScore(value)]">
+    &nbsp;{{value | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
 </span>
 
 <span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">{{config.delim}}</span>
