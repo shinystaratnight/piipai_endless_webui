@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'note',
     label: 'Contact Note',
+    buttons: [],
     columns: [
       {
         content: [{ field: '__str__', type: 'static' }],

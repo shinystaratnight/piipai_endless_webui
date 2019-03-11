@@ -32,6 +32,8 @@ export class DynamicFormComponent implements OnInit {
   public form: FormGroup;
   @Input()
   public formBuilder: boolean;
+  @Input()
+  public mode: string;
 
   @Output()
   public submitForm: EventEmitter<any> = new EventEmitter<any>();

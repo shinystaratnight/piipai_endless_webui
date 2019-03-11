@@ -4,6 +4,7 @@ const list = {
   list: {
     list: 'user',
     label: 'User',
+    buttons: [],
     columns: [
       {
         content: [

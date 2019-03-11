@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'superannuationfund',
     label: 'Superannuation Fund',
+    buttons: [],
     columns: [
       {
         content: [

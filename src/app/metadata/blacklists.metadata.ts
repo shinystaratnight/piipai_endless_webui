@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'blacklist',
     label: 'Black list',
+    buttons: [],
     columns: [
       {
         content: [
@@ -320,6 +321,7 @@ const formadd = [
     endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Candidate contact',
       add: true,
       delete: false,
@@ -337,6 +339,7 @@ const formadd = [
     endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Client',
       add: true,
       delete: false,

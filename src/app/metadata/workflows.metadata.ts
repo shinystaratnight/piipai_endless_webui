@@ -113,6 +113,7 @@ const formadd = [
     endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Model',
       add: true,
       delete: false,

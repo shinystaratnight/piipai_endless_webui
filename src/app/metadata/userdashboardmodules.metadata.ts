@@ -105,21 +105,11 @@ const form = [
 
 const formadd = [
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: {
-      required: false,
-      label: 'Id',
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
     list: false,
     endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Company contact',
       add: true,
       delete: false,
@@ -137,6 +127,7 @@ const formadd = [
     endpoint: '/core/dashboardmodules/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Dashboard module',
       add: true,
       delete: false,

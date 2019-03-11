@@ -243,17 +243,11 @@ const form = [
 
 const formadd = [
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
     list: false,
     endpoint: '/core/contacts/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Contact',
       add: true,
       delete: false,

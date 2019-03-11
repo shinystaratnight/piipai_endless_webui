@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'invoice',
     label: 'Company Invoice',
+    buttons: [],
     columns: [
       {
         content: [

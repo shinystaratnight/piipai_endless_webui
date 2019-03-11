@@ -303,8 +303,7 @@
     font-size: 12px;
     line-height: 14px;
 
-    color: $gray;
-    opacity: .3;
+    color: rgba($gray, .26);
 
     .mobile-device & {
       margin-bottom: 3px;
@@ -323,7 +322,7 @@
       text-transform: uppercase;
     }
 
-    .form-builder-form &.required::after {
+    .dynamic-form:not(.edit-mode) &.required::after {
       content: '*';
 
       color: $brand-danger;

@@ -66,6 +66,8 @@ export class FormInputComponent extends BasicElementComponent
     5: '#FFD042'
   };
 
+  public requiredField: boolean;
+
   @ViewChild('input')
   public input;
 
@@ -90,13 +92,13 @@ export class FormInputComponent extends BasicElementComponent
       this.config.type !== 'static' ||
       (this.config.type === 'static' || !this.config.read_only)
     ) {
-      let required = (this.config.key === 'score' || this.config.key === 'hourly_rate') && this.config.templateOptions.required;
-      required = required || (this.config.formBuilder && this.config.templateOptions.required);
+      this.requiredField = (this.config.key === 'score' || this.config.key === 'hourly_rate') && this.config.templateOptions.required;
+      this.requiredField = this.requiredField || this.config.templateOptions.required;
 
       if (this.config.templateOptions.type === 'number') {
-        this.addControl(this.config, this.fb, required, this.config.templateOptions.min, this.config.templateOptions.max);
+        this.addControl(this.config, this.fb, this.requiredField, this.config.templateOptions.min, this.config.templateOptions.max);
       } else {
-        this.addControl(this.config, this.fb, required);
+        this.addControl(this.config, this.fb, this.requiredField);
       }
 
     }

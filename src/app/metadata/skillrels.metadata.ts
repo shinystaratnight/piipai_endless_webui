@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'skillrel',
     label: 'Candidate Skill',
+    buttons: [],
     columns: [
       {
         content: [

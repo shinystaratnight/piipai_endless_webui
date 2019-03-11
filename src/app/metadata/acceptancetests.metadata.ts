@@ -301,6 +301,8 @@ const formadd = [
     type: 'datepicker',
     read_only: false,
     templateOptions: {
+      required: true,
+      hidePreviewError: true,
       label: 'Valid From',
       type: 'date',
     }
