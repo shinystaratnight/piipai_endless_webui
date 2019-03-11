@@ -14,7 +14,7 @@ export class BillingInfoComponent {
   @Input() public currentPlan: BillingSubscription;
 
   public types = {
-    annual: 'Annual',
-    monthly: 'Monthly'
+    2: 'Annual',
+    1: 'Monthly'
   };
 }

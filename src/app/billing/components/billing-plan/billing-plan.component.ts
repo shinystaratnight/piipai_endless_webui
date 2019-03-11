@@ -4,6 +4,7 @@ import {
   Output,
   Input,
   ViewChild,
+  OnInit,
   OnChanges,
   SimpleChanges,
   OnDestroy,
@@ -11,6 +12,7 @@ import {
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Plan, BillingSubscription } from '../../models';
+import { BillingService } from '../../services/billing-service';
 
 @Component({
   selector: 'app-billing-plan',
@@ -18,28 +20,19 @@ import { Plan, BillingSubscription } from '../../models';
   styleUrls: ['./billing-plan.component.scss']
 })
 
-export class BillingPlanComponent implements OnChanges, OnDestroy {
+export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
 
   public plans: Plan[] = [
     {
-      id: 1,
-      name: 'Cancel anytime',
       type: 'monthly',
-      description: 'Monthly',
-      pay: 13,
       procent: 1,
-      active: false,
-      start: 120
+      pay: 13,
     },
     {
-      id: 2,
-      name: 'Annual plan',
       type: 'annual',
-      description: 'Annually',
       save: true,
-      pay: 10,
       procent: 0.75,
-      start: 90
+      pay: 10
     }
   ];
   public modalRef: NgbModalRef;
@@ -54,8 +47,25 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   @Output() public cancelingPlan = new EventEmitter();
 
   constructor(
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private billingService: BillingService
   ) {}
+
+  public ngOnInit() {
+    this.billingService.getSubscriptionTypes()
+      .subscribe((res: { subscription_types: Plan[] }) => {
+        this.plans = this.plans.map((el) => {
+          const plan = res.subscription_types.find((item) => item.type === el.type);
+          if (plan.table_text) {
+            plan.table = plan.table_text.split(';');
+          }
+          return {
+            ...el,
+            ...plan
+          };
+        });
+      });
+  }
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.saveProcess) {
@@ -72,9 +82,11 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   public planPay(plan: Plan, procent: number = 1): number {
-    const price = 120 + (this.workerCount - 10) * 11;
+    const start = plan.start_range_price_annual || plan.start_range_price_monthly;
 
-    return this.workerCount > 10 ? Math.round(price * procent) : plan.start;
+    const price = start + (this.workerCount - plan.start_range) * plan.step_change_val;
+
+    return this.workerCount > plan.start_range ? Math.round(price * procent) : start;
   }
 
   public planPayYear(plan: Plan, procent?: number): number {
