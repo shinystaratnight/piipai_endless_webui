@@ -43,6 +43,8 @@ label {
   }
 
   &-item {
+    display: flex;
+    flex-direction: column;
     flex: 1;
 
     min-width: 200px;
@@ -122,11 +124,28 @@ label {
   }
 
   &-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+
     padding: 1rem;
 
     border-radius: 0 0 .5rem .5rem;
 
     background-color: $brand-primary;
+
+    .annually {
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+
+      border-bottom: 1px solid rgba(white, .3);
+    }
+
+    .pay {
+      font-size: 14px;
+      line-height: 16px;
+    }
 
     h4 {
       margin-bottom: 1rem;
@@ -135,6 +154,22 @@ label {
     h5 {
       text-transform: uppercase;
       margin-bottom: 1rem;
+    }
+
+    ul {
+      width: 100%;
+    }
+
+    li {
+      list-style: none;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: left;
+    }
+
+    i {
+      font-size: 10px;
+      margin-right: 5px;
     }
   }
 
