@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'dynamiccoefficientrule',
     label: 'Dynamic Coefficient Rule',
+    buttons: [],
     columns: [
       {
         content: [{ field: '__str__', type: 'static' }],
@@ -89,6 +90,7 @@ const formadd = [
     endpoint: '/pricing/ratecoefficients/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Rate coefficient',
       add: true,
       delete: false,

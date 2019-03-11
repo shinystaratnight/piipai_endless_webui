@@ -671,6 +671,7 @@ const formadd = [
     endpoint: '/core/addresses/',
     read_only: false,
     templateOptions: {
+      required: true,
       label: 'Address',
       add: true,
       delete: false,

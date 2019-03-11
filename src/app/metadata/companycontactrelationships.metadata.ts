@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'companycontactrelationship',
     label: 'Client Contact Relations',
+    buttons: [],
     columns: [
       {
         content: [{ field: '__str__', type: 'static' }],

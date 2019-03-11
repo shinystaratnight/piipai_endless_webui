@@ -650,6 +650,7 @@ const formadd = [
     endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Candidate contact',
       add: true,
       delete: false,

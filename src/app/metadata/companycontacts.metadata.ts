@@ -425,6 +425,7 @@ const formadd = [
     endpoint: '/core/companies/',
     read_only: false,
     templateOptions: {
+      required: true,
       label: 'Client',
       add: true,
       delete: false,
@@ -451,6 +452,7 @@ const formadd = [
     },
     read_only: false,
     templateOptions: {
+      required: true,
       label: 'Contact',
       add: true,
       delete: false,

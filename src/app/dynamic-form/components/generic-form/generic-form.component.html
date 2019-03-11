@@ -9,6 +9,7 @@
     </div>
     <app-dynamic-form
       *ngIf="showForm"
+      [mode]="mode"
       [config]="metadata"
       [errors]="errors"
       [message]="response"

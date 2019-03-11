@@ -55,9 +55,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
       return Object.keys(data).filter((key) => data[key]).length;
     },
     data: {
-      0: false,
-      1: false,
-      2: false,
+      0: true,
+      1: true,
+      2: true,
     }
   };
   public currentDate: Moment;

@@ -1036,21 +1036,11 @@ const form = [
 
 const formadd = [
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: {
-      required: false,
-      label: 'Id',
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
     list: false,
     endpoint: '/hr/joboffers/',
     read_only: false,
     templateOptions: {
+      required: true,
       label: 'Job offer',
       add: true,
       delete: false,

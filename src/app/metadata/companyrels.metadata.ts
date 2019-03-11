@@ -173,6 +173,7 @@ const formadd = [
     endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Master company',
       add: true,
       delete: false,
@@ -190,6 +191,7 @@ const formadd = [
     endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Regular company',
       add: true,
       delete: false,

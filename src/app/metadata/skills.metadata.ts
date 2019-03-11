@@ -361,6 +361,7 @@ const formadd = [
     key: 'industry',
     reset: ['name'],
     templateOptions: {
+      required: true,
       label: 'Industry',
       type: 'related',
       param: 'id',
@@ -373,6 +374,7 @@ const formadd = [
     key: 'name',
     showIf: ['industry.id'],
     templateOptions: {
+      required: true,
       label: 'Skill',
       type: 'related',
       param: 'id',

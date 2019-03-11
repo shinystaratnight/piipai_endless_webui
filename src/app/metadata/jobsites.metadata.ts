@@ -788,6 +788,7 @@ const formadd = [
             read_only: false,
             key: 'primary_contact',
             templateOptions: {
+              required: true,
               label: 'Primary contact',
               add: true,
               delete: false,
@@ -809,6 +810,7 @@ const formadd = [
             read_only: false,
             updateFormData: true,
             templateOptions: {
+              required: true,
               label: 'Address',
               add: true,
               delete: false,

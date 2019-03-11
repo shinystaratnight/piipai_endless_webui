@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'invoiceline',
     label: 'Invoice Line',
+    buttons: [],
     columns: [
       {
         content: [{ field: '__str__', type: 'static' }],
@@ -278,6 +279,7 @@ const formadd = [
     endpoint: '/core/invoices/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Invoice',
       add: true,
       delete: false,

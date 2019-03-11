@@ -21,6 +21,7 @@ const list = {
   list: {
     list: 'tagrel',
     label: 'Tag Relationship',
+    buttons: [],
     columns: [
       {
         content: [

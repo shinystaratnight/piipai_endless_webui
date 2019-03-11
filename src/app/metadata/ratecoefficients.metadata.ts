@@ -535,6 +535,7 @@ const formadd = [
             endpoint: '/pricing/industries/',
             read_only: true,
             templateOptions: {
+              required: true,
               label: 'Industry',
               add: true,
               delete: false,

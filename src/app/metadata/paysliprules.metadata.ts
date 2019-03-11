@@ -117,13 +117,6 @@ const form = [
 
 const formadd = [
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
     key: 'updated_at',
     type: 'datepicker',
     templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
@@ -189,6 +182,7 @@ const formadd = [
     endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Company',
       add: true,
       delete: false,

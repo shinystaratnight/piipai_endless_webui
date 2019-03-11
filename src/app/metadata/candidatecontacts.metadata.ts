@@ -1440,6 +1440,7 @@ const formadd = [
     },
     templateOptions: {
       add: true,
+      required: true,
       delete: false,
       edit: true,
       values: [

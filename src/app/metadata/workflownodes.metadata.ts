@@ -312,6 +312,7 @@ const formadd = [
     endpoint: '/core/workflows/',
     read_only: false,
     templateOptions: {
+      required: true,
       label: 'Workflow',
       add: true,
       delete: false,

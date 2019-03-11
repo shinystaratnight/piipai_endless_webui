@@ -98,6 +98,7 @@ const formadd = [
     endpoint: '/core/contacts/',
     read_only: false,
     templateOptions: {
+      required: true,
       label: 'Contact',
       add: true,
       delete: false,
