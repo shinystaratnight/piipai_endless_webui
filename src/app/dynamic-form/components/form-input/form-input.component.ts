@@ -93,7 +93,9 @@ export class FormInputComponent extends BasicElementComponent
       (this.config.type === 'static' || !this.config.read_only)
     ) {
       this.requiredField = (this.config.key === 'score' || this.config.key === 'hourly_rate') && this.config.templateOptions.required;
-      this.requiredField = this.requiredField || this.config.templateOptions.required;
+      this.requiredField = this.requiredField
+      || (this.config.templateOptions.required
+        && !(this.config.hide || this.config.send === false));
 
       if (this.config.templateOptions.type === 'number') {
         this.addControl(this.config, this.fb, this.requiredField, this.config.templateOptions.min, this.config.templateOptions.max);
