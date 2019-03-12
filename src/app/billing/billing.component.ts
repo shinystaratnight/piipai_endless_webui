@@ -42,6 +42,8 @@ export class BillingComponent implements OnInit {
 
     this.getPaymets();
     this.checkPaymentInformation();
+
+    this.setActivePage(this.pagesList, `${this.router.url}/`);
   }
 
   public updateNavigation(role: string) {
@@ -103,5 +105,19 @@ export class BillingComponent implements OnInit {
         this.currentPlan = undefined;
         this.toastr.sendMessage('Subscription has been canceled', 'success');
       });
+  }
+
+  public setActivePage(pages, path) {
+    let active = false;
+    pages.forEach((page) => {
+      if (path === page.url && page.url !== '/') {
+        active = true;
+        page.active = true;
+      } else if (page.childrens) {
+        page.active = this.setActivePage(page.childrens, path);
+        active = active || page.active;
+      }
+    });
+    return active;
   }
 }
