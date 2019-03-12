@@ -51,7 +51,8 @@
           <i>Active</i>
         </div>
         <div class="plan-detail">
-          <h4 class="mb-1">${{planPay(plan, plan.procent)}} / {{plan.amount_tag_line}}</h4>
+          <h4 class="mb-1">${{planPay(plan, plan.procent)}}</h4>
+          <p class="mb-2">{{plan.amount_tag_line}}</p>
           <p class="annually"><small>(${{planPayYear(plan, plan.procent)}} annually)</small></p>
           <ul class="p-0" *ngIf="plan.table">
             <ng-container *ngFor="let item of plan.table">

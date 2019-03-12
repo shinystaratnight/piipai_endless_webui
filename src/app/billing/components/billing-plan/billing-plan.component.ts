@@ -25,13 +25,11 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
   public plans: Plan[] = [
     {
       type: 'monthly',
-      procent: 1,
       pay: 13,
     },
     {
       type: 'annual',
       save: true,
-      procent: 0.75,
       pay: 10
     }
   ];
@@ -81,25 +79,25 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public planPay(plan: Plan, procent: number = 1): number {
+  public planPay(plan: Plan): number {
     const start = plan.start_range_price_annual || plan.start_range_price_monthly;
 
     const price = start + (this.workerCount - plan.start_range) * plan.step_change_val;
 
-    return this.workerCount > plan.start_range ? Math.round(price * procent) : start;
+    return this.workerCount > plan.start_range ? price : start;
   }
 
-  public planPayYear(plan: Plan, procent?: number): number {
-    const price = this.planPay(plan, 1);
+  public planPayYear(plan: Plan): number {
+    const price = this.planPay(plan);
 
-    return Math.round(price * 12 * procent);
+    return Math.round(price * 12);
   }
 
   public selectPlan(plan) {
     const body = {
       type: plan.type,
       worker_count: this.workerCount,
-      price: plan.id === 1 ? this.planPay(plan) : this.planPayYear(plan, plan.procent),
+      price: plan.id === 1 ? this.planPay(plan) : this.planPayYear(plan),
       changed: this.currentPlan
     };
 
