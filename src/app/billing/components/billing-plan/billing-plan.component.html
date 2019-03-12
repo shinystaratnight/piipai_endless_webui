@@ -47,13 +47,13 @@
     <div class="plan-info">
       <div *ngFor="let plan of plans" [class.active]="checkActivePlan(plan)" class="plan-item" (click)="selectPlan(plan)">
         <div class="plan-name">
-          <h6 class="mb-2">{{plan.heading}} <small *ngIf="plan.type === 'annual'">save 25%</small></h6>
-          <i>Active</i>
+          <h4 class="mb-2 pt-3">{{plan.heading}} <small *ngIf="plan.discount_comment">{{plan.discount_comment}}</small></h4>
+          <p>{{plan.heading_tag_line}}</p>
         </div>
         <div class="plan-detail">
-          <h4 class="mb-1">${{planPay(plan, plan.procent)}}</h4>
+          <h4 class="mb-1">${{planPay(plan)}}</h4>
           <p class="mb-2">{{plan.amount_tag_line}}</p>
-          <p class="annually"><small>(${{planPayYear(plan, plan.procent)}} annually)</small></p>
+          <p class="annually"><small>(${{planPayYear(plan)}} annually)</small></p>
           <ul class="p-0" *ngIf="plan.table">
             <ng-container *ngFor="let item of plan.table">
               <li *ngIf="item">
@@ -63,7 +63,7 @@
             </ng-container>
           </ul>
 
-          <p class="pay mt-auto">+ ${{plan.pay}} per extra worker if over the plan, adjusted monthly.</p>
+          <p *ngIf="plan.amount_comment" class="pay mt-auto">{{plan.amount_comment}}</p>
         </div>
       </div>
     </div>
