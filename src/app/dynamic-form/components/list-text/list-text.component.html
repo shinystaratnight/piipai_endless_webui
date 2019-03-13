@@ -32,7 +32,8 @@
   </span>
 </span>
 
-<span class="score d-block"
+<span class="score-text d-block"
+  [class.my-2]="isMobile()"
   *ngIf="config.score && getScore(value)"
   [style.color]="colors[getScore(value)]">
     &nbsp;{{value | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
