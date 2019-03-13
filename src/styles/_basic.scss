@@ -183,7 +183,8 @@ form.ng-invalid button[type='submit'] {
     }
   }
 
-  &.button-save:hover::after {
+  &.button-save:hover::after,
+  &.save:hover::after {
     position: absolute;
     display: block;
     top: -35px;

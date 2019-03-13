@@ -322,7 +322,7 @@
       text-transform: uppercase;
     }
 
-    .dynamic-form:not(.edit-mode) &.required::after {
+    .dynamic-form:not(.view-form-mode) &.required::after {
       content: '*';
 
       color: $brand-danger;

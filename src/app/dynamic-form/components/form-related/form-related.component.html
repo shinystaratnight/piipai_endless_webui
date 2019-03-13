@@ -9,6 +9,7 @@
       </label>
 
       <app-info [description]="config.templateOptions.description"></app-info>
+      <app-info *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible" [description]="config.errorMessage.message" [danger]="true"></app-info>
 
       <div class="form-element-content flex-row edit position-relative"
         [class.disabled]="fieldDisabled"
@@ -308,9 +309,6 @@
   </div>
   <div *ngIf="message">
     <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
-  </div>
-  <div *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible">
-    <div class="text-danger mt-1">{{config.errorMessage.message}}</div>
   </div>
 </ng-container>
 
