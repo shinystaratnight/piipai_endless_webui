@@ -399,12 +399,12 @@ const form = [
                       add: true,
                       delete: false,
                       values: ['__str__'],
-                      edit: true
+                      edit: true,
                     },
                     send: false,
                     errorMessage: {
                       field: 'birthday',
-                      message: 'Birthday is required'
+                      message: 'Birthday is required to create Candidate contact'
                     },
                     prefilled: {
                       contact: '{id.id}',
