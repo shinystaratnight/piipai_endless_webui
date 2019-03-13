@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment-timezone';
 
 import { FormatString } from '../../../helpers/format';
+import { isMobile } from '../../../helpers';
 import { getValueOfData } from '../../helpers/utils';
 
 @Component({
@@ -30,6 +31,8 @@ export class ListTextComponent implements OnInit {
     4: '#ffbf00',
     5: '#FFD042'
   };
+
+  public isMobile = isMobile;
 
   public ngOnInit() {
     if (this.config.value || this.config.value === 0) {
