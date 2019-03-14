@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
-import { Payment, BillingSubscription } from '../../models';
+import { Plan, Payment, BillingSubscription } from '../../models';
 import { metadata, smsMetadata } from './billing-info.metadata';
 
 @Component({
@@ -9,12 +9,20 @@ import { metadata, smsMetadata } from './billing-info.metadata';
   styleUrls: ['./billing-info.component.scss']
 })
 
-export class BillingInfoComponent {
+export class BillingInfoComponent implements OnChanges {
   @Input() public payments: Payment[];
   @Input() public currentPlan: BillingSubscription;
+  @Input() plans: Plan[];
 
-  public types = {
-    2: 'Annual',
-    1: 'Monthly'
-  };
+  types: any;
+
+  ngOnChanges() {
+    this.types = {};
+
+    if (this.plans) {
+      Object.keys(this.plans).forEach((key) => {
+        this.types[this.plans[key].id] = this.plans[key].type;
+      });
+    }
+  }
 }
