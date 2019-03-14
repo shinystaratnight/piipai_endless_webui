@@ -1305,16 +1305,15 @@ iframe.send-sms {
 
   .button-delete {
     position: absolute;
-    top: 25px;
+    top: 34px;
     right: 24px;
 
     font-size: 14px;
-    line-height: 18px;
+    line-height: 19px !important;
 
-    color: $gray;
-    opacity: 0.3;
+    color: rgba($gray, .3);
 
-    background-color: transparent;
+    background-color: white;
 
     @include media-breakpoint-down('md') {
       top: 4px;
@@ -1323,9 +1322,9 @@ iframe.send-sms {
 
     &:hover,
     &:focus {
-      opacity: 1;
+      color: $gray;
 
-      background-color: transparent;
+      background-color: white;
       border-color: transparent;
     }
   }
