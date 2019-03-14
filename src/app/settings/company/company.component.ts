@@ -5,7 +5,7 @@ import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { meta } from './company.meta';
 import { Field } from '../../dynamic-form/models';
-import { GenericFormService } from '../../dynamic-form/services';
+import { GenericFormService, FormService } from '../../dynamic-form/services';
 import { SettingsService } from '../settings.service';
 import { SiteSettingsService } from '../../services';
 
@@ -34,6 +34,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
   public saveProcess: boolean;
 
   public config;
+  public formId: number;
+  public form: any;
 
   public companySettingsData: any;
 
@@ -45,10 +47,13 @@ export class CompanyComponent implements OnInit, OnDestroy {
     private gfs: GenericFormService,
     private route: ActivatedRoute,
     private settingsService: SettingsService,
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
+    private formService: FormService
   ) { }
 
   public ngOnInit() {
+    this.formId = this.formService.registerForm(this.endpoint, 'edit');
+    this.form = this.formService.getForm(this.formId);
     this.urlSubscription = this.route.url.subscribe((url) => {
       this.settingsService.url = <any> url;
     });
@@ -65,6 +70,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
   public updateMetadataByProps(metadata: Field[]) {
     metadata.forEach((el) => {
+      el.formId = this.formId;
       if (el.showIf && el.showIf.length) {
           if (this.hiddenFields.keys.indexOf(el.key) === -1) {
             this.hiddenFields.keys.push(el.key);
