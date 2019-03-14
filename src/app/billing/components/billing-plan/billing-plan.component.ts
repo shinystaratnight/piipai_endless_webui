@@ -59,7 +59,8 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
           }
           return {
             ...el,
-            ...plan
+            ...plan,
+            procent: plan.percentage_discount ? (100 - plan.percentage_discount) / 100 : 1
           };
         });
       });
@@ -82,9 +83,9 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
   public planPay(plan: Plan): number {
     const start = plan.start_range_price_annual || plan.start_range_price_monthly;
 
-    const price = start + (this.workerCount - plan.start_range) * plan.step_change_val;
+    const price = start + (this.workerCount - plan.start_range) * (plan.step_change_val * plan.procent);
 
-    return this.workerCount > plan.start_range ? price : start;
+    return this.workerCount > plan.start_range ? Math.round(price) : start;
   }
 
   public planPayYear(plan: Plan): number {
@@ -97,7 +98,7 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
     const body = {
       type: plan.type,
       worker_count: this.workerCount,
-      price: plan.id === 1 ? this.planPay(plan) : this.planPayYear(plan),
+      price: plan.type === 'monthly' ? this.planPay(plan) : this.planPayYear(plan),
       changed: this.currentPlan
     };
 
