@@ -14,13 +14,14 @@
       <div class="row">
         <div class="col">
           <app-billing-plan
+            [plans]="plans"
             [saveProcess]="saveProcess"
             [currentPlan]="currentPlan"
             [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
             (selectedPlan)="selectPlan($event)"
             (cancelingPlan)="cancelPlan()"></app-billing-plan>
 
-          <app-billing-info [currentPlan]="currentPlan"></app-billing-info>
+          <app-billing-info [plans]="plans" [currentPlan]="currentPlan"></app-billing-info>
         </div>
 
         <div class="col">

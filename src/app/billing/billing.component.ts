@@ -22,6 +22,7 @@ export class BillingComponent implements OnInit {
   public checkInformation: boolean;
   public saveProcess: boolean;
   public cancelProcess: boolean;
+  public plans: Plan[];
 
   constructor(
     private userService: UserService,
@@ -44,6 +45,21 @@ export class BillingComponent implements OnInit {
     this.checkPaymentInformation();
 
     this.setActivePage(this.pagesList, `${this.router.url}/`);
+
+    this.billingService.getSubscriptionTypes()
+      .subscribe((res: { subscription_types: Plan[] }) => {
+        this.plans = Object.keys(res.subscription_types).map((key) => {
+          if (res.subscription_types[key].table_text) {
+            res.subscription_types[key].table = res.subscription_types[key].table_text.split(';');
+          }
+          return {
+            ...res.subscription_types[key],
+            procent: res.subscription_types[key].percentage_discount
+              ? (100 - res.subscription_types[key].percentage_discount) / 100
+              : 1
+          };
+        });
+      });
   }
 
   public updateNavigation(role: string) {

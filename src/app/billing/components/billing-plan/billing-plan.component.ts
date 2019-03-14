@@ -4,7 +4,6 @@ import {
   Output,
   Input,
   ViewChild,
-  OnInit,
   OnChanges,
   SimpleChanges,
   OnDestroy,
@@ -20,24 +19,14 @@ import { BillingService } from '../../services/billing-service';
   styleUrls: ['./billing-plan.component.scss']
 })
 
-export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
+export class BillingPlanComponent implements OnChanges, OnDestroy {
 
-  public plans: Plan[] = [
-    {
-      type: 'monthly',
-      pay: 13,
-    },
-    {
-      type: 'annual',
-      save: true,
-      pay: 10
-    }
-  ];
   public modalRef: NgbModalRef;
 
   @Input() public saveProcess: boolean;
   @Input() public currentPlan: BillingSubscription;
   @Input() public workerCount: number;
+  @Input() public plans: Plan[];
 
   @ViewChild('subscription') public modal;
 
@@ -48,23 +37,6 @@ export class BillingPlanComponent implements OnInit, OnChanges, OnDestroy {
     private modalService: NgbModal,
     private billingService: BillingService
   ) {}
-
-  public ngOnInit() {
-    this.billingService.getSubscriptionTypes()
-      .subscribe((res: { subscription_types: Plan[] }) => {
-        this.plans = this.plans.map((el) => {
-          const plan = res.subscription_types.find((item) => item.type === el.type);
-          if (plan.table_text) {
-            plan.table = plan.table_text.split(';');
-          }
-          return {
-            ...el,
-            ...plan,
-            procent: plan.percentage_discount ? (100 - plan.percentage_discount) / 100 : 1
-          };
-        });
-      });
-  }
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.saveProcess) {
