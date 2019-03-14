@@ -16,4 +16,5 @@ export interface Plan {
   amount_tag_line?: string;
   table_text?: string;
   table?: string[];
+  percentage_discount?: number;
 }
