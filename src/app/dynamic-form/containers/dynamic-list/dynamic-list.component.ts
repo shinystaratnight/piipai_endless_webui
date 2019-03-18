@@ -17,7 +17,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageService } from 'ngx-webstorage';
 
-import { TimeService } from '../../../shared/services';
+import { TimeService, ToastService, MessageType } from '../../../shared/services';
 import { FilterService, GenericFormService } from '../../services';
 import { AuthService, UserService } from '../../../services';
 import { FormatString } from '../../../helpers/format';
@@ -238,6 +238,7 @@ export class DynamicListComponent
     private authService: AuthService,
     private userService: UserService,
     private time: TimeService,
+    private toastr: ToastService,
   ) {}
 
   public isMobile = isMobile;
@@ -1182,6 +1183,7 @@ export class DynamicListComponent
   public actionHandler(e) {
     this.actionEndpoint = e.action.endpoint;
     if (e.action.required && !Object.keys(this.select).some((el) => el && this.select[el])) {
+      this.toastr.sendMessage(e.action.selectionError, MessageType.error);
       return;
     }
     this.event.emit({

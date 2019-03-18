@@ -427,7 +427,8 @@ const list = {
       options: [
         {
           endpoint: '/hr/timesheets/generate_pdf_timesheet/',
-          label: 'Jobsite report',
+          label: 'PDF by Jobsite',
+          selectionError: 'Please select at least one timesheet!',
           confirm: false,
           message: 'Are you sure?',
           property: 'timesheets',
