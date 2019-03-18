@@ -486,7 +486,12 @@
   </div>
 </ng-template>
 
-<ng-template #showPreviewInvoice>
+<ng-template #showPreviewInvoice let-c="close">
+  <button type="button" class="position-absolute close-button close ml-2" aria-label="Close"
+    style="top: 24px; right: 44px; z-index: 2"
+    (click)="c()">
+      <span aria-hidden="true">&times;</span>
+  </button>
   <div class="modal-body">
     <pdf-viewer [src]="modalInfo.url" [render-text]="true" style="display: block;"></pdf-viewer>
     <br>
