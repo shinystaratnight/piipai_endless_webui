@@ -25,9 +25,9 @@ import { FormRuleComponent } from '../components/form-rule/form-rule.component';
 import { FormTimelineComponent } from '../components/form-timeline/form-timeline.component';
 import { FormPictureComponent } from '../components/form-picture/form-picture.component';
 import { FormHiddenComponent } from '../containers/form-hidden/form-hidden.component';
-import { FormVacancyDatesComponent } from '../components/form-vacancy-dates/form-vacancy-dates.component'; //tslint:disable-line
+import { FormVacancyDatesComponent } from '../components/form-vacancy-dates/form-vacancy-dates.component';
 import { FormListComponent } from '../components/form-list/form-list.component';
-import { FormFieldsGroupComponent } from '../components/form-fields-group/form-fields-group.component'; //tslint:disable-line
+import { FormFieldsGroupComponent } from '../components/form-fields-group/form-fields-group.component';
 import { FormOptionsComponent } from '../components/form-options/form-options.component';
 import { FormRadioComponent } from '../components/form-radio/form-radio.component';
 import { FormReplaceComponent } from '../components/form-replace/form-replace.component';
@@ -39,6 +39,8 @@ import { FormInfoComponent } from '../components/form-info/form-info.component';
 import { FormGroupComponent } from '../containers/form-group/form-group.component';
 import { ExtendComponent } from '../components/extend/extend.component';
 import { TestListComponent } from '../components/test-list/test-list.component';
+import { FormEditorComponent } from '../components/form-editor/form-editor.component';
+
 
 const components = {
   input: FormInputComponent,
@@ -69,7 +71,8 @@ const components = {
   group: FormGroupComponent,
   address: FormInputComponent,
   extend: ExtendComponent,
-  testList: TestListComponent
+  testList: TestListComponent,
+  editor: FormEditorComponent,
 };
 
 @Directive({
