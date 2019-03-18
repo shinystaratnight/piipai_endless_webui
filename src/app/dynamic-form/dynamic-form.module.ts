@@ -11,6 +11,7 @@ import { ButtonsModule } from 'ngx-bootstrap';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DndModule } from 'ng2-dnd';
+import { QuillModule } from 'ngx-quill';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -37,6 +38,7 @@ import { directives } from './directives';
     GooglePlaceModule,
     DndModule.forRoot(),
     PdfViewerModule,
+    QuillModule,
   ],
   exports: [
     fromComponents.GenericFormComponent,

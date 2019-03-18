@@ -123,27 +123,27 @@ export const meta = [
   {
     type: 'row',
     children: [
-      {
-        label: 'Payslip Rule',
-        type: 'group',
-        children: [
-          {
-            type: 'select',
-            key: 'payslip_rule.period',
-            read_only: false,
-            templateOptions: {
-              label: 'Period',
-              required: true,
-              options: [
-                { value: 'weekly', label: 'Weekly' },
-                { value: 'fortnightly', label: 'Fortnightly' },
-                { value: 'monthly', label: 'Monthly' },
-                { value: 'daily', label: 'Daily' },
-              ]
-            }
-          }
-        ]
-      },
+      // {
+      //   label: 'Payslip Rule',
+      //   type: 'group',
+      //   children: [
+      //     {
+      //       type: 'select',
+      //       key: 'payslip_rule.period',
+      //       read_only: false,
+      //       templateOptions: {
+      //         label: 'Period',
+      //         required: true,
+      //         options: [
+      //           { value: 'weekly', label: 'Weekly' },
+      //           { value: 'fortnightly', label: 'Fortnightly' },
+      //           { value: 'monthly', label: 'Monthly' },
+      //           { value: 'daily', label: 'Daily' },
+      //         ]
+      //       }
+      //     }
+      //   ]
+      // },
       {
         label: 'Invoice Rule',
         type: 'group',
@@ -183,6 +183,18 @@ export const meta = [
             default: false,
             templateOptions: {
               label: 'Show candidate name',
+            }
+          }
+        ]
+      },
+      {
+        type: 'group',
+        children: [
+          {
+            type: 'editor',
+            key: 'company_settings.invoice_template',
+            templateOptions: {
+              label: 'Invoice footer comment/notes',
             }
           }
         ]
