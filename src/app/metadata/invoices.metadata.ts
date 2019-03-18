@@ -1,7 +1,7 @@
 const list = {
   list: {
     list: 'invoice',
-    label: 'Company Invoice',
+    label: 'Company Invoices',
     buttons: [],
     columns: [
       {
@@ -14,7 +14,7 @@ const list = {
         ],
         name: 'customer_company',
         sort_field: 'customer_company',
-        label: 'Customer company',
+        label: 'Client company',
         sort: true
       },
       {
@@ -197,7 +197,7 @@ const list = {
       endpoint: '/core/companies/',
       read_only: true,
       templateOptions: {
-        label: 'Customer company',
+        label: 'Client company',
         add: true,
         delete: false,
         values: ['__str__'],
@@ -316,7 +316,7 @@ const formset = {
         delete: false,
         edit: true,
         values: ['__str__'],
-        label: 'Customer company',
+        label: 'Client company',
         type: 'related'
       },
       read_only: true,
@@ -378,7 +378,7 @@ const formset = {
             field: 'customer_company'
           }
         ],
-        label: 'Customer company'
+        label: 'Client company'
       },
       {
         name: 'date',
@@ -488,7 +488,7 @@ const formset = {
     ],
     list: 'invoice',
     editDisable: false,
-    label: 'Company Invoice',
+    label: 'Company Invoices',
     pagination_label: 'Company Invoice',
     search_enabled: false
   }
@@ -541,7 +541,7 @@ const form = [
             endpoint: '/core/companies/',
             read_only: true,
             templateOptions: {
-              label: 'Customer Company',
+              label: 'Client Company',
               add: true,
               delete: false,
               values: ['__str__'],
@@ -1436,7 +1436,7 @@ const formadd = [
             endpoint: '/core/companies/',
             read_only: true,
             templateOptions: {
-              label: 'Customer Company',
+              label: 'Client Company',
               add: true,
               delete: false,
               values: ['__str__'],
