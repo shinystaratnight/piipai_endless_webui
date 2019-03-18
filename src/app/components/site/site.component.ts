@@ -361,7 +361,12 @@ export class SiteComponent implements OnInit, OnDestroy {
   public deleteElement(element) {
     this.genericFormService.delete(element.endpoint, element.pathData.id).subscribe(
       (res: any) => this.router.navigate([element.pathData.path]),
-      (err: any) => this.errors = err.errors
+      (err: any) => {
+        if (err.status === 'error') {
+          this.ts.sendMessage(err.errors.error, MessageType.error);
+        }
+        this.errors = err.errors;
+      }
     );
   }
 

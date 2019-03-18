@@ -1853,9 +1853,9 @@ export class DynamicListComponent
   public printPDF(e) {
     this.genericFormService.getAll(e.el.endpoint).subscribe((res: any) => {
       this.modalInfo = {
-        url: this.sanitizer.bypassSecurityTrustResourceUrl(location.origin + res.pdf)
+        url: this.sanitizer.bypassSecurityTrustResourceUrl(environment.api + res.pdf)
       };
-      this.open(this.sendMessageModal, { size: 'lg' });
+      this.open(this.pdfDocumentModal, { size: 'lg' });
     });
   }
 
