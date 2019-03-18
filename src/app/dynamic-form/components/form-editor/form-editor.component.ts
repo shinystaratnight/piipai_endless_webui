@@ -22,14 +22,18 @@ export class FormEditorComponent extends BasicElementComponent implements OnInit
         ['bold', 'italic', 'underline', 'strike'],
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
 
-        [{ 'size': ['small', false, 'large', 'huge'] }],
+        [{ 'size': [false, '10px', '12px', '14px', '16px', '18px', '20px', '22px'] }],
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-        [{ 'font': [] }],
         [{ 'align': [] }],
       ],
     },
   };
+
+  public customOptions = [{
+    import: 'attributors/style/size',
+    whitelist: ['10px', '12px', '14px', '16px', '18px', '20px', '22px']
+  }];
 
   constructor(
     private fb: FormBuilder
