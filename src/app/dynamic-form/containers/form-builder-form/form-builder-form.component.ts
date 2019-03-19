@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 
 import { Subject, BehaviorSubject } from 'rxjs';
 
@@ -7,6 +8,7 @@ import { FormBuilderService } from '../../services';
 import { ToastService } from '../../../shared/services';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
 import { Field } from '../../models';
+import { getElementFromMetadata } from '../../helpers';
 
 @Component({
   selector: 'app-form-builder-form',
@@ -21,12 +23,18 @@ export class FormBuilderFormComponent implements OnInit {
 
   @Output() public formConfig: EventEmitter<any> = new EventEmitter();
 
+  public form: FormGroup;
+
   public error = {};
   public hiddenFields: HiddenFields = {
     elements: [],
     keys: [],
     observers: []
   };
+
+  public currentStep = 0;
+  public saveProcess = false;
+  public errorMessage = false;
 
   public industyField = {
     type: 'related',
@@ -41,18 +49,114 @@ export class FormBuilderFormComponent implements OnInit {
     query: {}
   };
 
+  public steps = [
+    {
+      title: 'Contact information',
+      metadata: [],
+      content: [
+        'contact.picture',
+        'contact.title',
+        'contact.first_name',
+        'contact.last_name',
+        'contact.birthday',
+        'contact.gender',
+        'contact.phone_mobile',
+        'contact.email',
+        'contact.address.street_address',
+        'contact.address.city',
+        'contact.address.postal_code',
+        'contact.address.state',
+        'contact.address.country'
+      ],
+    },
+    {
+      title: 'Additional information',
+      metadata: [],
+      content: [
+        'nationality',
+        'residency',
+        'tax_file_number',
+        'transportation_to_work',
+        ['weight', 'height'],
+      ],
+    },
+    {
+      title: 'Bank and superannuation informatioin',
+      metadata: [],
+      content: [
+        'bank_account.bank_name',
+        'bank_account.bank_account_name',
+        'bank_account.bsb',
+        'bank_account.account_number',
+        'superannuation_fund',
+        'superannuation_membership_number'
+      ],
+    },
+    {
+      title: 'Industry and skills',
+      metadata: [],
+      content: [
+        'industry',
+        'skill'
+      ]
+    }
+  ];
+
   constructor(
     private service: FormBuilderService,
     private router: Router,
-    private toastr: ToastService
+    private toastr: ToastService,
   ) { }
 
   public ngOnInit() {
-    this.getRenderData();
+    this.form = new FormGroup({});
 
     this.industyField.query = {
       company: this.companyId
     };
+
+    this.getRenderData();
+  }
+
+  public generateSteps() {
+    this.steps.forEach((step) => {
+      step.metadata = [];
+      step.content.forEach((key: string | string[]) => {
+        if (Array.isArray(key)) {
+          const metadata = [];
+          key.forEach((el) => {
+            const field = getElementFromMetadata(this.config.ui_config, el);
+
+            if (field) {
+              metadata.push(field);
+            }
+          });
+
+          if (metadata.length) {
+            metadata.forEach((field, i) => {
+              if (i === 0 && metadata.length > 1) {
+                field.className = 'mr-3';
+              } else if (i > 0 && metadata.length !== i + 1) {
+                field.className = 'mx-3';
+              } else {
+                field.className = 'ml-3';
+              }
+            });
+
+            step.metadata.push({
+              type: 'row',
+              children: metadata
+            });
+          }
+        } else {
+          const field = getElementFromMetadata(this.config.ui_config, key);
+
+          if (field) {
+            step.metadata.push(field);
+          }
+        }
+      });
+    });
   }
 
   public getRenderData() {
@@ -65,7 +169,29 @@ export class FormBuilderFormComponent implements OnInit {
 
         this.updateConfig(this.config.ui_config);
         this.addAutocompleteProperty(this.config.ui_config);
+
+        this.changeType('contact.title', 'radio');
+        this.changeType('contact.gender', 'radio');
+        this.changeType('transportation_to_work', 'radio');
+
+        this.generateSteps();
+
       });
+  }
+
+  back() {
+    if (this.currentStep !== 0) {
+      this.currentStep -= 1;
+    }
+  }
+
+  next() {
+    this.currentStep += 1;
+  }
+
+  public changeType(key: string, to: string) {
+    const field = getElementFromMetadata(this.config.ui_config, key);
+    field.type = to;
   }
 
   public eventHandler(event: any) {
@@ -74,14 +200,22 @@ export class FormBuilderFormComponent implements OnInit {
     }
   }
 
-  public submitForm(data: any) {
+  public submitForm() {
+    this.saveProcess = true;
+    const data = this.form.value;
     this.service.sendFormData(this.id, data)
       .subscribe(
         (res: any) => {
+          this.saveProcess = false;
           this.toastr.sendMessage(this.config.submit_message, 'success');
           this.router.navigate(['/login']);
+          this.errorMessage = false;
         },
-        (err: any) => { this.parseError(err.errors); }
+        (err: any) => {
+          this.errorMessage = true;
+          this.parseError(err.errors);
+          this.saveProcess = false;
+         }
       );
   }
 
@@ -162,6 +296,7 @@ export class FormBuilderFormComponent implements OnInit {
           field.key.includes('city'))
         ) {
           field.showIf = [streetAddress.key];
+          field.mode = new BehaviorSubject('view');
           field.send = false;
         }
 
@@ -205,15 +340,6 @@ export class FormBuilderFormComponent implements OnInit {
     return observers;
   }
 
-  public createGroup(label: string, children: Field[]) {
-    return {
-      type: 'group',
-      border: true,
-      label,
-      children
-    };
-  }
-
   public getFields(result: Field[], key: string, target: Field[], index: number): Field[] {
     if (index === target.length) {
       return result;
@@ -243,34 +369,12 @@ export class FormBuilderFormComponent implements OnInit {
   }
 
   private updateConfigByGroups(fields: Field[]): void {
-    this.createNewGroup(fields, 'bank_account', 'Bank Account');
-
     const skills = this.getFields([], 'skill', fields, 0);
     if (skills.length) {
       const formData = new BehaviorSubject({});
       skills[0] = this.updateSkillField(skills[0], formData);
       skills.unshift({ ...this.industyField, formData });
-      fields.push(this.createGroup('Skills', skills));
-    }
-
-    this.createNewGroup(
-      fields,
-      ['superannuation_fund', 'superannuation_membership_number'],
-      'Superannuation fund'
-    );
-  }
-
-  private createNewGroup(fields: Field[], fieldKey: string | string[], groupLabel: string): void {
-    let findedFields = [];
-
-    if (Array.isArray(fieldKey)) {
-      fieldKey.forEach((key) => findedFields.push(...this.getFields([], key, fields, 0)));
-    } else {
-      findedFields = this.getFields([], fieldKey, fields, 0);
-    }
-
-    if (findedFields.length) {
-      fields.push(this.createGroup(groupLabel, findedFields));
+      fields.push(...skills);
     }
   }
 }

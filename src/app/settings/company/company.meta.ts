@@ -32,10 +32,10 @@ export const meta = [
               label: 'Font',
               type: 'text',
               options: [
-                { key: 'Source Sans Pro', value: 'Source Sans Pro' },
-                { key: 'Roboto', value: 'Roboto' },
-                { key: 'Barlow', value: 'Barlow' },
-                { key: 'Open Sans', value: 'Open Sans' }
+                { value: 'Source Sans Pro', label: 'Source Sans Pro' },
+                { value: 'Roboto', label: 'Roboto' },
+                { value: 'Barlow', label: 'Barlow' },
+                { value: 'Open Sans', label: 'Open Sans' }
               ]
             }
           },
@@ -49,11 +49,11 @@ export const meta = [
               type: 'color',
               inline: true,
               options: [
-                { key: 'default', value: '#28A3FC' },
-                { key: 'labour', value: '#f58926' },
-                { key: 'indigo', value: '#3f51b5' },
-                { key: 'teal', value: '#009688' },
-                { key: 'brown', value: '#795548' }
+                { value: 'default', label: '#28A3FC' },
+                { value: 'labour', label: '#f58926' },
+                { value: 'indigo', label: '#3f51b5' },
+                { value: 'teal', label: '#009688' },
+                { value: 'brown', label: '#795548' }
               ]
             }
           },

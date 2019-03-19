@@ -1,3 +1,5 @@
+@import '../../../../styles/variables.scss';
+
 .form-radio {
   .inline .form-check:first-child label {
     padding-left: 0;
@@ -14,4 +16,37 @@
 
 input:checked ~ .color-preview {
   transform: scale(1.2);
+}
+
+input:checked ~ .circle {
+  border-color: $brand-primary;
+
+  .inner {
+    display: block;
+  }
+}
+
+.circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 14px;
+  height: 14px;
+
+  margin-right: 9px;
+
+  border: 1px solid #828282;
+  border-radius: 50%;
+
+  .inner {
+    display: none;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background-color: $brand-primary;
+  }
 }

@@ -1389,6 +1389,9 @@ export class FormRelatedComponent extends BasicElementComponent
                     );
                   }
                 });
+
+                this.config.options = results;
+
                 if (concat && this.previewList) {
                   this.previewList.push(...results);
                 } else {

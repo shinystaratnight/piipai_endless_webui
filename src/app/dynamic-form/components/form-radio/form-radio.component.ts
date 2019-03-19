@@ -33,8 +33,8 @@ export class FormRadioComponent extends BasicElementComponent implements OnInit 
       this.value = this.config.default || '';
       this.group.get(this.key).patchValue(this.value);
     }
-    if (this.config.value || this.config.value === false || this.config.value === null) {
-      this.value = this.config.value;
+    if (this.config.value || this.config.value === false || this.config.value === null || this.group.get(this.key).value) {
+      this.value = this.config.value || this.group.get(this.key).value;
       this.group.get(this.key).patchValue(this.value);
     }
   }

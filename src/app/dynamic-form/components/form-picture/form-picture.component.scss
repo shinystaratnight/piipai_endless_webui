@@ -70,3 +70,55 @@ $height: 80px;
   display: flex;
   flex-direction: column;
 }
+
+.dropzone {
+  width: 100px;
+  height: 100px;
+
+  border: 1px dashed #ccc;
+  border-radius: 50%;
+
+  background: url('/assets/img/specialist-user.svg') 0 12px no-repeat;
+  background-image: attr(data-label);
+
+  overflow: hidden;
+
+  &-wrapper {
+    margin-right: 46px;
+  }
+
+  &-name {
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    font-size: 11px;
+    line-height: 13px;
+    text-transform: uppercase;
+
+    opacity: .8;
+  }
+}
+
+.description {
+  width: 160px;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.add-photo {
+  width: 160px;
+
+  border: 1px solid $brand-primary;
+
+  color: $brand-primary;
+  background-color: transparent;
+
+  &:hover {
+    background-color: $brand-primary;
+    color: white;
+  }
+}
