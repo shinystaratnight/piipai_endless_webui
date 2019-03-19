@@ -58,8 +58,11 @@ export class FormService {
   }
 
   public disableSaveButton(formId: number, disbable?: boolean) {
-    const form = this.getForm(formId);
+    // TODO: remove if statement
+    if (formId) {
+      const form = this.getForm(formId);
 
-    form.disableSaveButton = disbable;
+      form.disableSaveButton = disbable;
+    }
   }
 }

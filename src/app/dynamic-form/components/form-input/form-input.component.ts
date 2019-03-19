@@ -298,6 +298,16 @@ export class FormInputComponent extends BasicElementComponent
 
   public setInitValue(update?: boolean) {
     const format = new FormatString();
+
+    if (this.key === 'street_address' && this.group.get(this.key).value) {
+      this.address = this.group.get(this.key).value.formatted_address;
+    }
+
+    if (this.key === 'postal_code' && this.group.get(this.key).value) {
+      this.config.value = this.group.get(this.key).value;
+      this.displayValue = this.group.get(this.key).value;
+    }
+
     if (
       this.config.type !== 'static' ||
       (this.config.type === 'static' && !this.config.read_only)

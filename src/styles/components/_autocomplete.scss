@@ -1,5 +1,6 @@
 .autocomplete {
   position: absolute;
+  top: 1.4rem;
 
   width: 100%;
 
@@ -13,6 +14,10 @@
   border: 1px solid rgba($gray, .1);
   box-shadow: 0 0 12px rgba($gray, .15);
   z-index: 30;
+
+  .registration-form & {
+    top: 2.8rem;
+  }
 
   .form-element & input {
     @each $item in $themes {

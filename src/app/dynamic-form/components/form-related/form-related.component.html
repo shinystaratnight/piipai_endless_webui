@@ -19,7 +19,7 @@
 
           <div class="form-control autocomplete-value"
             (click)="openAutocomplete()">
-              <div style="overflow: hidden; white-space: nowrap">{{displayValue}}</div>
+              <div style="overflow: hidden; white-space: nowrap">{{displayValue || '&nbsp;'}}</div>
           </div>
 
           <div class="form-element-content-actions"
@@ -41,7 +41,7 @@
             </button>
           </div>
 
-          <div #autocomplete class="autocomplete" [hidden]="hideAutocomplete" style="top: 1.4rem">
+          <div #autocomplete class="autocomplete" [hidden]="hideAutocomplete">
             <input type="text" class="form-control mb-1" autocomplete="off"
               #search="ngModel"
               #searchElement
@@ -96,7 +96,7 @@
                 </i>
             </button>
         </div>
-        <div class="autocomplete" [hidden]="!(previewList && previewList.length)" style="top: 1.4rem">
+        <div class="autocomplete" [hidden]="!(previewList && previewList.length)">
           <div class="autocomplete-list"
             infinite-scroll
             [infiniteScrollDistance]="modalScrollDistance"
@@ -148,7 +148,7 @@
           [ngModelOptions]="{standalone: true}"
           (focus)="generateList()">
 
-          <div class="autocomplete" [hidden]="hideAutocomplete" style="top: 1.4rem">
+          <div class="autocomplete" [hidden]="hideAutocomplete">
             <div class="autocomplete-list">
               <ul class="list-group w-100">
                 <li class="list-group-item autocomplete-item p-1 pl-2" style="cursor: pointer"
