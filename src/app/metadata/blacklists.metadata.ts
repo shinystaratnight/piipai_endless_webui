@@ -2,7 +2,6 @@ const list = {
   list: {
     list: 'blacklist',
     label: 'Black list',
-    buttons: [],
     columns: [
       {
         content: [
