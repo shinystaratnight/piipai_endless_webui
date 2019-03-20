@@ -2162,7 +2162,7 @@ export class DynamicListComponent
   }
 
   public showTracking(e) {
-    this.genericFormService.getByQuery(e.el.endpoint, `?timesheet=${e.id}`)
+    this.genericFormService.getByQuery(e.el.endpoint, `?timesheet=${e.id}&limit=-1`)
       .subscribe((res) => {
         if (res.results.length) {
           const timesheet = this.getRowData(e);
