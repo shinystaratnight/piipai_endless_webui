@@ -4,7 +4,7 @@ const filters = {
   companyContact: createFilter(Type.Relared, {
     key: 'company_contact',
     label: 'Company contact',
-    endpoint: '/core/companycontacts/',
+    endpoint: '/core/companycontacts/?master_company=current',
   }),
   candidateContact: createFilter(Type.Relared, {
     key: 'candidate_contact',
