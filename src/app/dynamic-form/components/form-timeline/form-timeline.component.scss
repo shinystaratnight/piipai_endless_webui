@@ -172,3 +172,21 @@
   top: 9px;
   right: 16px;
 }
+
+.table {
+  th {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    opacity: .8;
+  }
+
+  tr:nth-child(even) {
+    background-color: rgba($brand-primary, .1);
+  }
+
+  td {
+    font-size: 14px;
+  }
+}
