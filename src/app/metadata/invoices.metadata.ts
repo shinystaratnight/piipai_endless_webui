@@ -1,8 +1,29 @@
+import { createFilter, Type } from '../dynamic-form/models/filters';
+
+const filters = {
+  recruitmentAgent: createFilter(Type.Relared, {
+    key: 'customer_company',
+    label: 'Client company',
+    endpoint: '/core/companies/',
+  }),
+  date: createFilter(Type.Date, {
+    key: 'date',
+    label: 'Date',
+    yesterday: true,
+    today: true,
+    tomorrow: true
+  })
+};
+
 const list = {
   list: {
     list: 'invoice',
     label: 'Company Invoices',
     buttons: [],
+    filters: [
+      filters.recruitmentAgent,
+      filters.date
+    ],
     columns: [
       {
         content: [
