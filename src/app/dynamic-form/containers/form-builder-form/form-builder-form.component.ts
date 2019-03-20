@@ -34,7 +34,6 @@ export class FormBuilderFormComponent implements OnInit {
 
   public currentStep = 0;
   public saveProcess = false;
-  public errorMessage = false;
 
   public industyField = {
     type: 'related',
@@ -159,6 +158,24 @@ export class FormBuilderFormComponent implements OnInit {
     });
   }
 
+  public getErrorStep(errors) {
+    let step = 3;
+    this.steps.forEach((el, i) => {
+      el.content.forEach((field) => {
+        if (Array.isArray(field)) {
+          field.forEach((item) => {
+            if (errors[item]) {
+              step = i + 1 < step ? i + 1 : step;
+            }
+          });
+        } else if (errors[field]) {
+          step = i < step ? i : step;
+        }
+      });
+    });
+    return step;
+  }
+
   public getRenderData() {
     this.service.getRenderData(this.id)
       .subscribe((res: any) => {
@@ -209,10 +226,8 @@ export class FormBuilderFormComponent implements OnInit {
           this.saveProcess = false;
           this.toastr.sendMessage(this.config.submit_message, 'success');
           this.router.navigate(['/login']);
-          this.errorMessage = false;
         },
         (err: any) => {
-          this.errorMessage = true;
           this.parseError(err.errors);
           this.saveProcess = false;
          }
@@ -234,6 +249,7 @@ export class FormBuilderFormComponent implements OnInit {
   public parseError(errors) {
     this.resetData(this.error);
     this.updateErrors(this.error, errors, {});
+    this.currentStep = this.getErrorStep(errors);
   }
 
   public resetData(data) {

@@ -36,6 +36,9 @@ export class FormPictureComponent
   @ViewChild('picture')
   public picture;
 
+  @ViewChild('dropzone')
+  public dropzone;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -106,6 +109,14 @@ export class FormPictureComponent
 
   public ngOnDestroy() {
     this.subscriptions.forEach((s) => s.unsubscribe());
+
+    if (this.dropzone) {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((event) => {
+        this.dropzone.nativeElement.removeEventHandler(event, this.stopEvent.apply(this), false);
+      });
+
+      this.dropzone.nativeElement.removeEventHandler('drop', this.handleDrop, false);
+    }
   }
 
   public checkHiddenProperty() {
@@ -179,6 +190,20 @@ export class FormPictureComponent
     if (this.picture) {
       this.addFlags(this.picture, this.config);
     }
+
+    if (this.dropzone) {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((event) => {
+        this.dropzone.nativeElement.addEventListener(event, this.stopEvent, false);
+      });
+
+      this.dropzone.nativeElement.addEventListener('drop', this.handleDrop.bind(this), false);
+    }
+  }
+
+  public stopEvent(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
   }
 
   public upload(e): void {
@@ -320,6 +345,12 @@ export class FormPictureComponent
 
   public getExtension(link: string) {
     return link.split('.').pop();
+  }
+
+  handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    this.fileChangeEvent({target: {files}});
   }
 
 }
