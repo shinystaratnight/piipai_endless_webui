@@ -49,7 +49,7 @@
     <div class="modal-body timeline" *ngIf="modalData">
       <ng-container *ngIf="(modalData.tests || modalData.substates) && !modalData.setActive">
         <div class="state-info">
-          <div>
+          <div *ngIf="modalData.substates">
             <h5 class="state-info-label">Substates</h5>
 
             <span *ngFor="let substate of modalData.substates" (click)="open(substate, c)">
