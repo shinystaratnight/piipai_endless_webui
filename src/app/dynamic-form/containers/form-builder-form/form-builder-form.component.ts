@@ -62,10 +62,10 @@ export class FormBuilderFormComponent implements OnInit {
         'contact.phone_mobile',
         'contact.email',
         'contact.address.street_address',
-        'contact.address.city',
-        'contact.address.postal_code',
-        'contact.address.state',
-        'contact.address.country'
+        // 'contact.address.city',
+        // 'contact.address.postal_code',
+        // 'contact.address.state',
+        // 'contact.address.country'
       ],
     },
     {
@@ -314,6 +314,7 @@ export class FormBuilderFormComponent implements OnInit {
           field.showIf = [streetAddress.key];
           field.mode = new BehaviorSubject('view');
           field.send = false;
+          field.hide = true;
         }
 
         if (field.showIf && field.showIf.length) {

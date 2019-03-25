@@ -109,16 +109,17 @@ $height: 80px;
   line-height: 18px;
 }
 
-.add-photo {
-  width: 160px;
+.buttons-wrapper {
 
-  border: 1px solid $brand-primary;
+  .action {
+    border: 1px solid $brand-primary;
 
-  color: $brand-primary;
-  background-color: transparent;
+    color: $brand-primary;
+    background-color: transparent;
 
-  &:hover {
-    background-color: $brand-primary;
-    color: white;
+    &:hover {
+      background-color: $brand-primary;
+      color: white;
+    }
   }
 }
