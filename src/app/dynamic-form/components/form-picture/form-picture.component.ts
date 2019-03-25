@@ -112,10 +112,10 @@ export class FormPictureComponent
 
     if (this.dropzone) {
       ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((event) => {
-        this.dropzone.nativeElement.removeEventHandler(event, this.stopEvent.apply(this), false);
+        this.dropzone.nativeElement.removeEventListener(event, this.stopEvent, false);
       });
 
-      this.dropzone.nativeElement.removeEventHandler('drop', this.handleDrop, false);
+      this.dropzone.nativeElement.removeEventListener('drop', this.handleDrop, false);
     }
   }
 
@@ -201,8 +201,10 @@ export class FormPictureComponent
   }
 
   public stopEvent(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     return false;
   }
 
