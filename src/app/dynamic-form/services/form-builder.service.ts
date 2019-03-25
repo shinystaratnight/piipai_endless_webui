@@ -10,6 +10,7 @@ export class FormBuilderService {
 
   public formEndpoint = '/core/forms/';
   public parseAddressEndpoint = '/core/addresses/parse/';
+  public contactEndpoint = '/core/contacts/validate/';
 
   constructor(
     private http: HttpClient,
@@ -35,6 +36,14 @@ export class FormBuilderService {
   public parseAddress(data) {
     return this.http
       .post(this.parseAddressEndpoint, data)
+      .pipe(
+        catchError((error: any) => this.errorsService.parseErrors(error))
+      );
+  }
+
+  public validate(key, value) {
+    return this.http
+      .get(this.contactEndpoint + `?${key}=${value}`)
       .pipe(
         catchError((error: any) => this.errorsService.parseErrors(error))
       );
