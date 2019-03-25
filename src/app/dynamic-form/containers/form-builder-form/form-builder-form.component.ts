@@ -212,6 +212,14 @@ export class FormBuilderFormComponent implements OnInit {
   }
 
   public eventHandler(event: any) {
+    if (event.type === 'blur') {
+      ['email', 'phone'].forEach((field) => {
+        if (event.el.key.indexOf(field) > -1) {
+          this.validate(field, event.value, event.el.key);
+        }
+      });
+    }
+
     if (event.type === 'address') {
       this.parseAddress(event.value, event.el);
     }
@@ -383,6 +391,21 @@ export class FormBuilderFormComponent implements OnInit {
       many: true,
       unique: true,
     };
+  }
+
+  public validate(key, value, field) {
+    this.service.validate(key, value).subscribe(
+      (res) => {
+        this.resetData(this.error);
+        this.updateErrors(this.error, {
+          [field]: ''
+        }, {});
+      },
+      (err) => {
+        this.parseError({
+          [field]: err.errors.message
+        });
+      });
   }
 
   private updateConfigByGroups(fields: Field[]): void {
