@@ -19,6 +19,53 @@ $block-padding: 20px 32px;
   border-bottom: 2px solid rgba(#e5e5e5, .8);
 }
 
+.calendar-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  margin-top: 17px;
+
+  .counter {
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+
+    width: 120px;
+
+    text-align: center;
+  }
+
+  i {
+    font-size: 8px;
+    margin-right: 6px;
+  }
+}
+
+.counter {
+  .count {
+    display: inline-flex;
+    align-items: center;
+
+    font-size: 20px;
+    line-height: 1.2;
+    font-weight: 600;
+
+    color: #4f4f4f;
+
+    &-description {
+      width: 120px;
+
+      font-size: 12px;
+      line-height: 1.17;
+      text-align: center;
+
+      color: #4f4f4f;
+      opacity: .8;
+    }
+  }
+}
+
 h2 {
   flex-basis: 300px;
   margin-bottom: 0;
