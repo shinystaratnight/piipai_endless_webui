@@ -34,6 +34,7 @@ export class FormBuilderFormComponent implements OnInit {
 
   public currentStep = 0;
   public saveProcess = false;
+  public disableNextButton = false;
 
   public industyField = {
     type: 'related',
@@ -150,7 +151,12 @@ export class FormBuilderFormComponent implements OnInit {
         } else {
           const field = getElementFromMetadata(this.config.ui_config, key);
 
+
           if (field) {
+            if (key === 'superannuation_membership_number') {
+              field.templateOptions.label = 'Superannuation membership number';
+            }
+
             step.metadata.push(field);
           }
         }
@@ -400,11 +406,13 @@ export class FormBuilderFormComponent implements OnInit {
         this.updateErrors(this.error, {
           [field]: ''
         }, {});
+        this.disableNextButton = false;
       },
       (err) => {
         this.parseError({
           [field]: err.errors.message
         });
+        this.disableNextButton = true;
       });
   }
 

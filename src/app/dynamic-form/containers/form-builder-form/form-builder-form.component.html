@@ -24,6 +24,7 @@
       </button>
 
       <button type="button" class="form__button btn btn-primary"
+        [disabled]="disableNextButton"
         *ngIf="currentStep + 1 !== steps.length"
         (click)="next()">
           Next step
