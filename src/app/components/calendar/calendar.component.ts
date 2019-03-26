@@ -306,6 +306,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   private prepareData(data) {
     this.shifts = [];
     this.lastData = data;
+    this.timesheetCounter.forEach((el) => el.count = 0);
 
     if (data.results.length) {
       this.shifts = data.results
@@ -323,7 +324,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
         })
         .filter((shift) => this.status.data[shift.is_fulfilled]);
 
-      this.timesheetCounter.forEach((el) => el.count = 0);
       this.shifts.forEach((shift) => {
         const target = this.timesheetCounter.find((counter) => counter.type === shift.is_fulfilled);
         target.count += 1;
