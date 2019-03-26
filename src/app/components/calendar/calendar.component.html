@@ -96,6 +96,17 @@
   <ng-container *ngIf="isDayRange && calendarData">
     <ng-container *ngTemplateOutlet="dayCalendar"></ng-container>
   </ng-container>
+
+  <footer class="calendar-footer">
+    <div class="counter"
+      *ngFor="let layer of timesheetCounter">
+        <span class="count">
+          <i fa name="circle" [ngClass]="layer.cssClass"></i>
+          {{layer.count}}
+        </span><br>
+        <span class="count-description">{{layer.text}} / {{currentRange.value}}</span>
+    </div>
+  </footer>
 </div>
 
 <ng-template #monthCalendar>
