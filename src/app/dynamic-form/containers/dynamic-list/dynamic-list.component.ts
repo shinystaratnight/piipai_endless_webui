@@ -1138,7 +1138,7 @@ export class DynamicListComponent
     const workTime = shift_ended_at.diff(shift_started_at);
     const totalTime = this.time.instance.duration(workTime - breakTime);
 
-    return `${totalTime.asHours().toFixed()}hr ${totalTime.minutes()}min`;
+    return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
   }
 
   public checkValue(obj) {
