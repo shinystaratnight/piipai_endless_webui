@@ -220,7 +220,7 @@ export class FormBuilderFormComponent implements OnInit {
   public eventHandler(event: any) {
     if (event.type === 'blur') {
       ['email', 'phone'].forEach((field) => {
-        if (event.el.key.indexOf(field) > -1) {
+        if (event.el.key.indexOf(field) > -1 && event.value) {
           this.validate(field, event.value, event.el.key);
         }
       });
@@ -402,16 +402,13 @@ export class FormBuilderFormComponent implements OnInit {
   public validate(key, value, field) {
     this.service.validate(key, value).subscribe(
       (res) => {
-        this.resetData(this.error);
-        this.updateErrors(this.error, {
-          [field]: ''
-        }, {});
+        delete this.error[field];
         this.disableNextButton = false;
       },
       (err) => {
-        this.parseError({
+        this.updateErrors(this.error, {
           [field]: err.errors.message
-        });
+        }, {});
         this.disableNextButton = true;
       });
   }
