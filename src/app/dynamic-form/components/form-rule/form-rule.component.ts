@@ -131,10 +131,12 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     closeModal();
     this.editRule.splice(this.editIndex, 1);
     if (this.editRule.length === 0) {
-      const index = this.parentRule.indexOf(this.editItem);
+      if (Array.isArray(this.parentRule)) {
+        const index = this.parentRule.indexOf(this.editItem);
 
-      if (index > -1) {
-        this.parentRule.splice(index, 1);
+        if (index > -1) {
+          this.parentRule.splice(index, 1);
+        }
       }
     }
     this.generateData(type);
