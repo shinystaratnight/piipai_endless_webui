@@ -231,7 +231,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       data: {
         editForm: true,
         hide: hideScore,
-        send: false
+        send: false,
+        value: 5
       }
     };
 
@@ -278,7 +279,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         this.modalData.state.wf_object_id = res.id;
         this.modalData.workflowObject = res.id;
 
-        this.modalRef = this.modalService.open(this.testModal, { size: 'lg' });
+        this.modalRef = this.modalService.open(this.testModal);
       });
   }
 
