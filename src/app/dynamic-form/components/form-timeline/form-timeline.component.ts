@@ -61,6 +61,11 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     }
     if (this.config.timelineSubject) {
       const subscription = this.config.timelineSubject.subscribe((value) => {
+        if (value === 'update') {
+          this.getTimeline();
+          return;
+        }
+
         if (value !== 'reset') {
           this.config.options = value;
 
@@ -72,6 +77,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
             this.cd.detectChanges();
           }
         }
+
       });
 
       this.subscriptions.push(subscription);

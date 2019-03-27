@@ -224,6 +224,9 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
       this.updateList(e);
+      if (this.config.timelineSubject) {
+        this.config.timelineSubject.next('update');
+      }
       this.saveProcess = false;
     }
   }
