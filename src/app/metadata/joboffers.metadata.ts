@@ -861,6 +861,7 @@ const formadd = [
       },
       values: ['__str__']
     },
+    showIf: ['shift.id'],
     query: {
       shift: `{shift.date.shift_date}T{shift.time}%2B${timeZoneOffset}`
     }
