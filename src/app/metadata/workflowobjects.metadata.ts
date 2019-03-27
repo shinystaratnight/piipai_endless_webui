@@ -289,6 +289,7 @@ const form = [
   {
     key: 'score',
     type: 'input',
+    default: 1,
     templateOptions: {
       required: false,
       min: 1,
@@ -355,6 +356,7 @@ const formadd = [
   {
     key: 'score',
     type: 'input',
+    default: 1,
     templateOptions: {
       required: false,
       min: 1,
