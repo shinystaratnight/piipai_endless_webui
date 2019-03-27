@@ -148,6 +148,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public relatedObjects: any[] = [];
   public formGroup: FormGroup;
 
+  public timelineSubject: Subject<any>;
+
   private subscriptions: Subscription[];
 
   constructor(
@@ -258,6 +260,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     this.modeBehaviorSubject = new BehaviorSubject(this.mode);
 
     const timelineSubject = new Subject();
+    this.timelineSubject = timelineSubject;
     this.subscriptions.push(
       timelineSubject.subscribe(
         (timeline) => this.checkTimeline(timeline)
@@ -272,7 +275,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
     return (el: Field) => {
       if (
-        el.key === 'timeline' ||
+        el.key === 'timeline' || el.type === 'list' || el.type === 'related' ||
         (el.endpoint && el.endpoint === '/core/workflowobjects/')
       ) {
         el.timelineSubject = timelineSubject;
@@ -1124,6 +1127,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       setTimeout(() => {
         this.toastrService.sendMessage(response.message, 'success');
       }, 500);
+    }
+
+    if (this.timelineSubject) {
+      this.timelineSubject.next('reset');
     }
 
     if (this.updateDataAfterSendForm.requests.length) {

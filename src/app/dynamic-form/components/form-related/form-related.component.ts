@@ -1219,6 +1219,10 @@ export class FormRelatedComponent extends BasicElementComponent
         this.authService.logout();
       }
 
+      if (this.config.timelineSubject) {
+        this.config.timelineSubject.next('update');
+      }
+
       const formatString = new FormatString();
       if (this.config.many) {
         e.data.__str__ = formatString.format(this.display, e.data);
