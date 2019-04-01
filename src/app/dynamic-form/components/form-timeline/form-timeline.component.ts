@@ -61,6 +61,11 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     }
     if (this.config.timelineSubject) {
       const subscription = this.config.timelineSubject.subscribe((value) => {
+        if (value === 'update') {
+          this.getTimeline();
+          return;
+        }
+
         if (value !== 'reset') {
           this.config.options = value;
 
@@ -72,6 +77,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
             this.cd.detectChanges();
           }
         }
+
       });
 
       this.subscriptions.push(subscription);
@@ -231,7 +237,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       data: {
         editForm: true,
         hide: hideScore,
-        send: false
+        send: false,
+        value: 5
       }
     };
 
@@ -278,7 +285,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         this.modalData.state.wf_object_id = res.id;
         this.modalData.workflowObject = res.id;
 
-        this.modalRef = this.modalService.open(this.testModal, { size: 'lg' });
+        this.modalRef = this.modalService.open(this.testModal);
       });
   }
 

@@ -824,14 +824,15 @@ const formadd = [
     type: 'related'
   },
   {
-    endpoint: '/hr/shifts/?ordering=-date.shift_date,-time',
+    endpoint: '/hr/shifts/',
     templateOptions: {
       label: 'Shift',
       values: ['__str__', 'time', 'date', 'workers'],
       type: 'related'
     },
     query: {
-      job: '{job.id}'
+      job: '{job.id}',
+      ordering: '-date.shift_date,-time'
     },
     type: 'related',
     key: 'shift'
@@ -860,6 +861,7 @@ const formadd = [
       },
       values: ['__str__']
     },
+    showIf: ['shift.id'],
     query: {
       shift: `{shift.date.shift_date}T{shift.time}%2B${timeZoneOffset}`
     }

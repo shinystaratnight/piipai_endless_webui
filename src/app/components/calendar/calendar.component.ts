@@ -64,6 +64,28 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public customRange: {start: Moment, end: Moment};
   public modalInfo: any;
   public saveProcess: boolean;
+
+  public timesheetCounter = [
+    {
+      type: 1,
+      count: 0,
+      cssClass: 'text-success',
+      text: 'Filled shifts'
+    },
+    {
+      type: 0,
+      count: 0,
+      cssClass: 'text-danger',
+      text: 'Unfilled shifts'
+    },
+    {
+      type: 2,
+      count: 0,
+      cssClass: 'text-warning',
+      text: 'Pending shifts'
+    }
+  ];
+
   private modalRef: NgbModalRef;
   private lastData: any;
 
@@ -284,6 +306,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   private prepareData(data) {
     this.shifts = [];
     this.lastData = data;
+    this.timesheetCounter.forEach((el) => el.count = 0);
 
     if (data.results.length) {
       this.shifts = data.results
@@ -300,6 +323,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
           };
         })
         .filter((shift) => this.status.data[shift.is_fulfilled]);
+
+      this.shifts.forEach((shift) => {
+        const target = this.timesheetCounter.find((counter) => counter.type === shift.is_fulfilled);
+        target.count += 1;
+      });
     }
   }
 

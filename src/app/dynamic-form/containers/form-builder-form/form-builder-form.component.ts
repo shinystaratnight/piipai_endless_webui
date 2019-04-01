@@ -34,6 +34,7 @@ export class FormBuilderFormComponent implements OnInit {
 
   public currentStep = 0;
   public saveProcess = false;
+  public disableNextButton = false;
 
   public industyField = {
     type: 'related',
@@ -62,10 +63,10 @@ export class FormBuilderFormComponent implements OnInit {
         'contact.phone_mobile',
         'contact.email',
         'contact.address.street_address',
-        'contact.address.city',
-        'contact.address.postal_code',
-        'contact.address.state',
-        'contact.address.country'
+        // 'contact.address.city',
+        // 'contact.address.postal_code',
+        // 'contact.address.state',
+        // 'contact.address.country'
       ],
     },
     {
@@ -150,7 +151,12 @@ export class FormBuilderFormComponent implements OnInit {
         } else {
           const field = getElementFromMetadata(this.config.ui_config, key);
 
+
           if (field) {
+            if (key === 'superannuation_membership_number') {
+              field.templateOptions.label = 'Superannuation membership number';
+            }
+
             step.metadata.push(field);
           }
         }
@@ -212,6 +218,14 @@ export class FormBuilderFormComponent implements OnInit {
   }
 
   public eventHandler(event: any) {
+    if (event.type === 'blur') {
+      ['email', 'phone'].forEach((field) => {
+        if (event.el.key.indexOf(field) > -1 && event.value) {
+          this.validate(field, event.value, event.el.key);
+        }
+      });
+    }
+
     if (event.type === 'address') {
       this.parseAddress(event.value, event.el);
     }
@@ -314,6 +328,7 @@ export class FormBuilderFormComponent implements OnInit {
           field.showIf = [streetAddress.key];
           field.mode = new BehaviorSubject('view');
           field.send = false;
+          field.hide = true;
         }
 
         if (field.showIf && field.showIf.length) {
@@ -382,6 +397,20 @@ export class FormBuilderFormComponent implements OnInit {
       many: true,
       unique: true,
     };
+  }
+
+  public validate(key, value, field) {
+    this.service.validate(key, value).subscribe(
+      (res) => {
+        delete this.error[field];
+        this.disableNextButton = false;
+      },
+      (err) => {
+        this.updateErrors(this.error, {
+          [field]: err.errors.message
+        }, {});
+        this.disableNextButton = true;
+      });
   }
 
   private updateConfigByGroups(fields: Field[]): void {
