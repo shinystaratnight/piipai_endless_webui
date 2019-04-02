@@ -3,7 +3,7 @@ import { createFilter, Type } from '../dynamic-form/models/filters';
 const filters = {
   companyContact: createFilter(Type.Relared, {
     key: 'company_contact',
-    label: 'Company contact',
+    label: 'Recruitment Agent',
     endpoint: '/core/companycontacts/?master_company=current',
   }),
   candidateContact: createFilter(Type.Relared, {
@@ -15,6 +15,11 @@ const filters = {
     key: 'company',
     label: 'Client',
     endpoint: '/core/companies/',
+  }),
+  primary_contact: createFilter(Type.Relared, {
+    key: 'company',
+    label: 'Client Contact',
+    endpoint: '/core/companycontacts/',
   }),
   jobsite: createFilter(Type.Relared, {
     key: 'jobsite',
@@ -36,19 +41,6 @@ const list = {
       {
         content: [
           {
-            endpoint: '/core/companycontacts/',
-            field: 'company_contact',
-            type: 'related'
-          }
-        ],
-        name: 'company_contact',
-        sort_field: 'company_contact',
-        label: 'Recruitment Agent',
-        sort: true
-      },
-      {
-        content: [
-          {
             endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
@@ -57,6 +49,19 @@ const list = {
         name: 'candidate_contact',
         sort_field: 'candidate_contact',
         label: 'Candidate contact',
+        sort: true
+      },
+      {
+        content: [
+          {
+            endpoint: '/core/companycontacts/',
+            field: 'company_contact',
+            type: 'related'
+          }
+        ],
+        name: 'company_contact',
+        sort_field: 'company_contact',
+        label: 'Recruitment Agent',
         sort: true
       },
       {
@@ -75,6 +80,19 @@ const list = {
       {
         content: [
           {
+            endpoint: '/core/companycontacts/',
+            field: 'jobsite.primary_contact',
+            type: 'related'
+          }
+        ],
+        name: 'jobsite.primary_contact',
+        sort_field: 'jobsite.primary_contact',
+        label: 'Client contact',
+        sort: true
+      },
+      {
+        content: [
+          {
             endpoint: '/hr/jobsites/',
             field: 'jobsite',
             type: 'related'
@@ -85,15 +103,15 @@ const list = {
         label: 'Jobsite',
         sort: true
       },
-      {
-        content: [
-          { endpoint: '/hr/jobs/', field: 'job', type: 'related' }
-        ],
-        name: 'job',
-        sort_field: 'job',
-        label: 'Job',
-        sort: true
-      }
+      // {
+      //   content: [
+      //     { endpoint: '/hr/jobs/', field: 'job', type: 'related' }
+      //   ],
+      //   name: 'job',
+      //   sort_field: 'job',
+      //   label: 'Job',
+      //   sort: true
+      // }
     ],
     pagination_label: 'Favourite list',
     search_enabled: false,
@@ -102,8 +120,9 @@ const list = {
       filters.companyContact,
       filters.candidateContact,
       filters.company,
+      filters.primary_contact,
       filters.jobsite,
-      filters.job
+      // filters.job
     ]
   },
   fields: [
@@ -341,15 +360,15 @@ const formset = {
         ],
         label: 'Jobsite'
       },
-      {
-        name: 'job',
-        sort: true,
-        sort_field: 'job',
-        content: [
-          { endpoint: '/hr/jobs/', type: 'related', field: 'job' }
-        ],
-        label: 'Job'
-      },
+      // {
+      //   name: 'job',
+      //   sort: true,
+      //   sort_field: 'job',
+      //   content: [
+      //     { endpoint: '/hr/jobs/', type: 'related', field: 'job' }
+      //   ],
+      //   label: 'Job'
+      // },
       {
         name: 'actions',
         content: [
@@ -432,6 +451,7 @@ const form = [
   {
     endpoint: '/hr/jobs/',
     read_only: true,
+    hide: true,
     templateOptions: {
       label: 'Job',
       add: true,
@@ -443,6 +463,22 @@ const form = [
     collapsed: false,
     type: 'related',
     key: 'job'
+  },
+  {
+    endpoint: '/core/companycontacts/',
+    read_only: true,
+    send: false,
+    templateOptions: {
+      label: 'Client Contact',
+      add: true,
+      delete: false,
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    collapsed: false,
+    type: 'related',
+    key: 'jobsite.primary_contact'
   },
   {
     endpoint: '/core/companycontacts/',
@@ -563,15 +599,15 @@ const job = {
         ],
         label: 'Candidate contact'
       },
-      {
-        name: 'job',
-        sort: true,
-        sort_field: 'job',
-        content: [
-          { endpoint: '/hr/jobs/', type: 'related', field: 'job' }
-        ],
-        label: 'Job'
-      },
+      // {
+      //   name: 'job',
+      //   sort: true,
+      //   sort_field: 'job',
+      //   content: [
+      //     { endpoint: '/hr/jobs/', type: 'related', field: 'job' }
+      //   ],
+      //   label: 'Job'
+      // },
       {
         name: 'actions',
         content: [
@@ -633,7 +669,7 @@ const formadd = [
       edit: true
     },
     reset: ['jobsite', 'job'],
-    default: ['{jobsite.regular_company.id}', '{job.customer_company.id}'],
+    default: ['{jobsite.regular_company.id}', '{job.customer_company.id}', '{jobsite.primary_contact.company.id}'],
     collapsed: false,
     type: 'related',
     key: 'company'
@@ -645,7 +681,7 @@ const formadd = [
       label: 'Jobsite',
       add: true,
       delete: false,
-      values: ['__str__', 'regular_company'],
+      values: ['__str__', 'regular_company', 'primary_contact'],
       type: 'related',
       edit: true
     },
@@ -661,6 +697,7 @@ const formadd = [
   {
     endpoint: '/hr/jobs/',
     read_only: false,
+    hide: true,
     templateOptions: {
       label: 'Job',
       add: true,
@@ -676,6 +713,25 @@ const formadd = [
     collapsed: false,
     type: 'related',
     key: 'job'
+  },
+  {
+    endpoint: '/core/companycontacts/',
+    send: false,
+    templateOptions: {
+      label: 'Client Contact',
+      add: true,
+      delete: false,
+      values: ['__str__', 'company'],
+      type: 'related',
+      edit: true
+    },
+    default: ['{jobsite.primary_contact.id}'],
+    query: {
+      company: '{company.id}'
+    },
+    collapsed: false,
+    type: 'related',
+    key: 'jobsite.primary_contact'
   },
   {
     endpoint: '/core/companycontacts/',
