@@ -985,7 +985,8 @@ const form = [
         prefilled: {
           job: '{id}',
           jobsite: '{jobsite.id}',
-          company: '{customer_company.id}'
+          company: '{customer_company.id}',
+          ['jobsite.primary_contact']: '{jobsite.primary_contact.id}'
         },
         type: 'list',
         query: {

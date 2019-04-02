@@ -466,6 +466,22 @@ const form = [
   {
     endpoint: '/core/companycontacts/',
     read_only: true,
+    send: false,
+    templateOptions: {
+      label: 'Client Contact',
+      add: true,
+      delete: false,
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    collapsed: false,
+    type: 'related',
+    key: 'jobsite.primary_contact'
+  },
+  {
+    endpoint: '/core/companycontacts/',
+    read_only: true,
     templateOptions: {
       label: 'Recruitment Agent',
       values: ['__str__'],
@@ -652,7 +668,7 @@ const formadd = [
       edit: true
     },
     reset: ['jobsite', 'job'],
-    default: ['{jobsite.regular_company.id}', '{job.customer_company.id}'],
+    default: ['{jobsite.regular_company.id}', '{job.customer_company.id}', '{jobsite.primary_contact.company.id}'],
     collapsed: false,
     type: 'related',
     key: 'company'
@@ -664,7 +680,7 @@ const formadd = [
       label: 'Jobsite',
       add: true,
       delete: false,
-      values: ['__str__', 'regular_company'],
+      values: ['__str__', 'regular_company', 'primary_contact'],
       type: 'related',
       edit: true
     },
@@ -677,25 +693,45 @@ const formadd = [
     type: 'related',
     key: 'jobsite'
   },
-  // {
-  //   endpoint: '/hr/jobs/',
-  //   read_only: false,
-  //   templateOptions: {
-  //     label: 'Job',
-  //     add: true,
-  //     delete: false,
-  //     values: ['__str__', 'jobsite', 'customer_company'],
-  //     type: 'related',
-  //     edit: true
-  //   },
-  //   query: {
-  //     customer_company: '{company.id}',
-  //     jobsite: '{jobsite.id}'
-  //   },
-  //   collapsed: false,
-  //   type: 'related',
-  //   key: 'job'
-  // },
+  {
+    endpoint: '/hr/jobs/',
+    read_only: false,
+    hide: true,
+    templateOptions: {
+      label: 'Job',
+      add: true,
+      delete: false,
+      values: ['__str__', 'jobsite', 'customer_company'],
+      type: 'related',
+      edit: true
+    },
+    query: {
+      customer_company: '{company.id}',
+      jobsite: '{jobsite.id}'
+    },
+    collapsed: false,
+    type: 'related',
+    key: 'job'
+  },
+  {
+    endpoint: '/core/companycontacts/',
+    send: false,
+    templateOptions: {
+      label: 'Client Contact',
+      add: true,
+      delete: false,
+      values: ['__str__', 'company'],
+      type: 'related',
+      edit: true
+    },
+    default: ['{jobsite.primary_contact.id}'],
+    query: {
+      company: '{company.id}'
+    },
+    collapsed: false,
+    type: 'related',
+    key: 'jobsite.primary_contact'
+  },
   {
     endpoint: '/core/companycontacts/',
     read_only: true,
