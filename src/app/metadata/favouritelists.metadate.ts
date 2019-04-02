@@ -448,21 +448,22 @@ const form = [
     type: 'related',
     key: 'jobsite'
   },
-  // {
-  //   endpoint: '/hr/jobs/',
-  //   read_only: true,
-  //   templateOptions: {
-  //     label: 'Job',
-  //     add: true,
-  //     delete: false,
-  //     values: ['__str__'],
-  //     type: 'related',
-  //     edit: true
-  //   },
-  //   collapsed: false,
-  //   type: 'related',
-  //   key: 'job'
-  // },
+  {
+    endpoint: '/hr/jobs/',
+    read_only: true,
+    hide: true,
+    templateOptions: {
+      label: 'Job',
+      add: true,
+      delete: false,
+      values: ['__str__'],
+      type: 'related',
+      edit: true
+    },
+    collapsed: false,
+    type: 'related',
+    key: 'job'
+  },
   {
     endpoint: '/core/companycontacts/',
     read_only: true,
