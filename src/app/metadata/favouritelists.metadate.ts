@@ -17,7 +17,7 @@ const filters = {
     endpoint: '/core/companies/',
   }),
   primary_contact: createFilter(Type.Relared, {
-    key: 'company',
+    key: 'client_contact',
     label: 'Client Contact',
     endpoint: '/core/companycontacts/',
   }),
@@ -81,12 +81,12 @@ const list = {
         content: [
           {
             endpoint: '/core/companycontacts/',
-            field: 'jobsite.primary_contact',
+            field: 'client_contact',
             type: 'related'
           }
         ],
-        name: 'jobsite.primary_contact',
-        sort_field: 'jobsite.primary_contact',
+        name: 'client_contact',
+        sort_field: 'client_contact',
         label: 'Client contact',
         sort: true
       },
@@ -467,7 +467,6 @@ const form = [
   {
     endpoint: '/core/companycontacts/',
     read_only: true,
-    send: false,
     templateOptions: {
       label: 'Client Contact',
       add: true,
@@ -478,7 +477,7 @@ const form = [
     },
     collapsed: false,
     type: 'related',
-    key: 'jobsite.primary_contact'
+    key: 'client_contact'
   },
   {
     endpoint: '/core/companycontacts/',
@@ -669,7 +668,9 @@ const formadd = [
       edit: true
     },
     reset: ['jobsite', 'job'],
-    default: ['{jobsite.regular_company.id}', '{job.customer_company.id}', '{jobsite.primary_contact.company.id}'],
+    query: {
+      id: '{jobsite.primary_contact.company.id}'
+    },
     collapsed: false,
     type: 'related',
     key: 'company'
@@ -689,7 +690,6 @@ const formadd = [
       company: '{company.id}'
     },
     reset: ['job'],
-    default: '{job.jobsite.id}',
     visibleMode: true,
     type: 'related',
     key: 'jobsite'
@@ -716,7 +716,6 @@ const formadd = [
   },
   {
     endpoint: '/core/companycontacts/',
-    send: false,
     templateOptions: {
       label: 'Client Contact',
       add: true,
@@ -725,13 +724,13 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    default: ['{jobsite.primary_contact.id}'],
     query: {
+      id: '{jobsite.primary_contact.id}',
       company: '{company.id}'
     },
     collapsed: false,
     type: 'related',
-    key: 'jobsite.primary_contact'
+    key: 'client_contact'
   },
   {
     endpoint: '/core/companycontacts/',
