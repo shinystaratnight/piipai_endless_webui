@@ -420,7 +420,6 @@ const form = [
   },
   {
     endpoint: '/core/companies/',
-    read_only: true,
     templateOptions: {
       label: 'Client',
       add: true,
@@ -429,13 +428,16 @@ const form = [
       type: 'related',
       edit: true
     },
+    reset: ['jobsite', 'client_contact'],
+    query: {
+      id: '{jobsite.primary_contact.company.id}'
+    },
     collapsed: false,
     type: 'related',
     key: 'company'
   },
   {
     endpoint: '/hr/jobsites/',
-    read_only: true,
     templateOptions: {
       label: 'Jobsite',
       add: true,
@@ -444,6 +446,10 @@ const form = [
       type: 'related',
       edit: true
     },
+    query: {
+      company: '{company.id}'
+    },
+    reset: ['client_contact'],
     collapsed: false,
     type: 'related',
     key: 'jobsite'
@@ -466,7 +472,6 @@ const form = [
   },
   {
     endpoint: '/core/companycontacts/',
-    read_only: true,
     templateOptions: {
       label: 'Client Contact',
       add: true,
@@ -474,6 +479,10 @@ const form = [
       values: ['__str__'],
       type: 'related',
       edit: true
+    },
+    query: {
+      id: '{jobsite.primary_contact.id}',
+      company: '{company.id}'
     },
     collapsed: false,
     type: 'related',
@@ -667,7 +676,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    reset: ['jobsite', 'job'],
+    reset: ['jobsite', 'client_contact'],
     query: {
       id: '{jobsite.primary_contact.company.id}'
     },
@@ -689,7 +698,7 @@ const formadd = [
     query: {
       company: '{company.id}'
     },
-    reset: ['job'],
+    reset: ['client_contact'],
     visibleMode: true,
     type: 'related',
     key: 'jobsite'
