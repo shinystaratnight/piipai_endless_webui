@@ -229,7 +229,13 @@
 
 <ng-template #shiftItem let-shift="shift" let-status="status">
   <div>
-    {{shift.position}} <br>
+    <ng-container *ngIf="isManager">
+      <a [routerLink]="shift.job_link">{{shift.position}}</a>
+    </ng-container>
+    <ng-container *ngIf="!isManager">
+      {{shift.position}}
+    </ng-container>
+    <br>
     <span class="shift-jobsite">{{shift.jobsite}}</span> <br>
     <div *ngIf="shift.candidates[status].length" class="shift-candidates">
       <span class="mr-1">Candidate&nbsp;({{shift.candidates[status].length}}):</span>

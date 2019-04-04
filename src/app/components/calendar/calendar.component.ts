@@ -6,7 +6,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Moment } from 'moment-timezone';
 
 import { CalendarService, CalendarData } from './calendar.service';
-import { DateRange, filterDateFormat } from '../../helpers';
+import { DateRange, filterDateFormat, isManager } from '../../helpers';
 import { FormatString } from '../../helpers/format';
 import { CalendarDataService } from './calendar-data.service';
 import { filters } from './calendar-filters.meta';
@@ -85,6 +85,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       text: 'Pending shifts'
     }
   ];
+  isManager = isManager;
 
   private modalRef: NgbModalRef;
   private lastData: any;
@@ -313,6 +314,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         .map((shift) => {
           return {
             shift,
+            job_link: `/hr/jobs/${shift.date.job.id}/change`,
             date: shift.date.shift_date,
             time: shift.time,
             jobsite: shift.date.job.jobsite.name,
