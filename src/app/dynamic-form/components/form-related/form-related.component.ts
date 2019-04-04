@@ -1321,15 +1321,30 @@ export class FormRelatedComponent extends BasicElementComponent
         query +=
           typeof queries[el] === 'string'
             ? queries[el] === 'currentCompany'
-              ? `${el}=${
-                  this.settingsService.settings.company_settings.company
-                }&`
+              ? `${el}=${this.settingsService.settings.company_settings.company}&`
               : `${el}=${format.format(queries[el], this.formData)}&`
-            : `${el}=${queries[el]}&`;
+            : `${el}=${this.parseQueryValue(queries[el])}&`;
       });
       query = query.slice(0, query.length - 1);
     }
     return query.length > 1 ? query : '';
+  }
+
+  public parseQueryValue(value: string | string[]) {
+    const format = new FormatString();
+    let result = '';
+    if (Array.isArray(value)) {
+      value.forEach((el) => {
+        if (result) {
+          return;
+        }
+
+        result = format.format(el, this.formData);
+      });
+    } else {
+      result = value;
+    }
+    return result;
   }
 
   public getOptions(

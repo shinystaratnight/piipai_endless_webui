@@ -69,7 +69,7 @@ const list = {
         ],
         name: 'company',
         sort_field: 'company',
-        label: 'Company',
+        label: 'Client',
         sort: true
       },
       {
@@ -288,9 +288,8 @@ const form = [
       type: 'related',
       edit: true
     },
-    reset: ['jobsite', 'client_contact'],
     query: {
-      id: '{jobsite.primary_contact.company.id}'
+      id: ['{jobsite.regular_company.id}', '{client_contact.company.id}'],
     },
     type: 'related',
     key: 'company',
@@ -306,9 +305,9 @@ const form = [
       edit: true
     },
     query: {
-      company: '{company.id}'
+      company: '{company.id}',
+      primary_contact: '{client_contact.id}'
     },
-    reset: ['client_contact'],
     type: 'related',
     key: 'jobsite',
   },
@@ -386,9 +385,8 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    reset: ['jobsite', 'client_contact'],
     query: {
-      id: '{jobsite.primary_contact.company.id}'
+      id: ['{jobsite.regular_company.id}', '{client_contact.company.id}'],
     },
     type: 'related',
     key: 'company',
@@ -404,9 +402,9 @@ const formadd = [
       edit: true
     },
     query: {
-      company: '{company.id}'
+      company: '{company.id}',
+      primary_contact: '{client_contact.id}'
     },
-    reset: ['client_contact'],
     visibleMode: true,
     type: 'related',
     key: 'jobsite',
