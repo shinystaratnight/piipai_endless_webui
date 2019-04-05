@@ -98,14 +98,16 @@
   </ng-container>
 
   <footer class="calendar-footer">
-    <div class="counter"
-      *ngFor="let layer of timesheetCounter">
-        <span class="count">
-          <i fa name="circle" [ngClass]="layer.cssClass"></i>
-          {{layer.count}}
-        </span><br>
-        <span class="count-description">{{layer.text}} / {{currentRange.value}}</span>
-    </div>
+    <ng-container *ngFor="let layer of timesheetCounter">
+      <div class="counter"
+        *ngIf="layer.count">
+          <span class="count">
+            <i fa name="circle" [ngClass]="layer.cssClass"></i>
+            {{layer.count}}
+          </span><br>
+          <span class="count-description">{{layer.text}} / {{currentRange.value}}</span>
+      </div>
+    </ng-container>
   </footer>
 </div>
 
