@@ -327,8 +327,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
         .filter((shift) => this.status.data[shift.is_fulfilled]);
 
       this.shifts.forEach((shift) => {
-        const target = this.timesheetCounter.find((counter) => counter.type === shift.is_fulfilled);
-        target.count += 1;
+        this.timesheetCounter.forEach((counter) => {
+          counter.count += shift.candidates[this.shiftStatus[counter.type].key].length;
+        });
       });
     }
   }
