@@ -100,7 +100,7 @@
   <footer class="calendar-footer">
     <ng-container *ngFor="let layer of timesheetCounter">
       <div class="counter"
-        *ngIf="layer.count">
+        *ngIf="layer.count || status.data[layer.type]">
           <span class="count">
             <i fa name="circle" [ngClass]="layer.cssClass"></i>
             {{layer.count}}
