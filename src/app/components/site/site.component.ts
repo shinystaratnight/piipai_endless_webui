@@ -152,7 +152,11 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public checkPermission(type: string): boolean {
-    return this.permissionMethods.indexOf(type) > -1;
+    if (isManager()) {
+      return this.permissionMethods.indexOf(type) > -1;
+    } else {
+      return true;
+    }
   }
 
   public changeFormLabel(e) {
