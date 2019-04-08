@@ -344,7 +344,10 @@ export class FormInputComponent extends BasicElementComponent
         ) {
           this.address = value;
         }
-        this.displayValue = value || value === 0 ? value : '-';
+        const text = format.format(this.config.templateOptions.text, {
+          [this.config.key]: value
+        });
+        this.displayValue = text || (value || value === 0 ? value : '-');
       }
     } else {
       if (this.config.value instanceof Object) {

@@ -1,7 +1,7 @@
 <div [class.mobile]="isMobileDevice" [class.mb-0]="isMobileDevice && config.label === 'Residency'">
 
   <label
-    [hidden]="isMobileDevice && labelText === ' '"
+    [hidden]="(isMobileDevice && labelText === ' ') || config.hideLabel"
     [class.normal]="config.normal"
     *ngIf="!config.main && (config.name ? config.label : true)">
       {{labelText === ' ' ? '&nbsp;' : labelText}}

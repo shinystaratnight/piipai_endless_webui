@@ -34,6 +34,7 @@ export class FormSelectComponent
   public label: boolean;
 
   public displayValue: string;
+  public textColor: string;
 
   public viewMode: boolean;
 
@@ -99,12 +100,15 @@ export class FormSelectComponent
     }
   }
 
-  public getValue(options: any[], value: string): string {
+  public getValue(options: any[], value: string): {value: string, color?: string} {
     let element = options.find((el) => el.value == value); // tslint:disable-line
     if (element) {
-      return element.label;
+      return {
+        value: element.label,
+        color: element.color
+      };
     } else {
-      return '-';
+      return { value: '-' };
     }
   }
 
@@ -113,7 +117,9 @@ export class FormSelectComponent
       this.group.get(this.key).patchValue(this.config.value);
     }
     if ((this.viewMode || this.config.read_only) && !this.config.hide) {
-      this.displayValue = this.getValue(this.options, this.config.value);
+      const option = this.getValue(this.options, this.config.value);
+      this.displayValue = option.value;
+      this.textColor = option.color ? `text-${option.color}` : '';
     }
   }
 

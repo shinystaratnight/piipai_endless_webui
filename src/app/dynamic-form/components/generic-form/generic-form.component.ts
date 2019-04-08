@@ -5,7 +5,8 @@ import {
   Output,
   OnChanges,
   OnDestroy,
-  SimpleChanges
+  SimpleChanges,
+  OnInit
 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -15,7 +16,7 @@ import { finalize, skip, catchError } from 'rxjs/operators';
 import { GenericFormService, FormService, FormMode } from '../../services/';
 import { UserService, SiteSettingsService, AuthService } from '../../../services';
 
-import { ToastService } from '../../../shared/services';
+import { ToastService, TimeService } from '../../../shared/services';
 
 import { Field } from '../../models';
 
@@ -51,7 +52,7 @@ interface UpdateDataInfo {
   templateUrl: './generic-form.component.html',
   styleUrls: ['./generic-form.component.scss']
 })
-export class GenericFormComponent implements OnChanges, OnDestroy {
+export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   @Input()
   public form: any;
   @Input()
@@ -147,6 +148,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
   public checkObject: any = {};
   public relatedObjects: any[] = [];
   public formGroup: FormGroup;
+  public formName: string;
 
   public timelineSubject: Subject<any>;
 
@@ -158,7 +160,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
     private toastrService: ToastService,
     private userService: UserService,
     private authService: AuthService,
-    private settingsService: SiteSettingsService
+    private settingsService: SiteSettingsService,
+    private time: TimeService
   ) {
     this.subscriptions = [];
 
@@ -170,6 +173,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
       config: [],
       requests: []
     };
+  }
+
+  public ngOnInit() {
+    if (this.endpoint === '/hr/timesheets/') {
+      this.formName = 'Timesheets';
+    }
   }
 
   public ngOnDestroy() {
@@ -621,7 +630,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
 
   public updateFormData(metadata, formData) {
     metadata.forEach((el) => {
-      if (el.key || el.type === 'list') {
+      if (el.key || el.type === 'list' || el.type === 'tracking') {
         el.formData = formData;
       } else if (el.children) {
         this.updateFormData(el.children, formData);
@@ -720,6 +729,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
           }
         }
         this.getValueOfData(data, el.key, el, metadata);
+        if (el.key === 'total_time') {
+          const formatString = new FormatString();
+          el.value = formatString.format('{totalTime}',
+            { ...data, totalTime: this.getTotalTime(data) }
+          );
+        }
       } else if (el.key && el.key === 'timeline') {
         el.value = data;
       } else if (el.type === 'list' || el.type === 'testList') {
@@ -768,6 +783,25 @@ export class GenericFormComponent implements OnChanges, OnDestroy {
         this.fillingForm(el.children, data);
       }
     });
+  }
+
+  public getTotalTime(data) {
+    const shift_ended_at = this.time.instance(data.shift_ended_at);
+    const shift_started_at = this.time.instance(data.shift_started_at);
+
+    let breakTime = 0;
+
+    if (data.break_ended_at && data.break_started_at) {
+      const break_ended_at = this.time.instance(data.break_ended_at);
+      const break_started_at = this.time.instance(data.break_started_at);
+
+      breakTime = break_ended_at.diff(break_started_at);
+    }
+
+    const workTime = shift_ended_at.diff(shift_started_at);
+    const totalTime = this.time.instance.duration(workTime - breakTime);
+
+    return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
   }
 
   public getValueOfData(data, key, obj, metadata?, update = false) {
