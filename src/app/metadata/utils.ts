@@ -27,3 +27,19 @@ export const monthStart = today
 export const monthEnd = today
   .endOf('month')
   .format();
+
+export enum Colors {
+  Success = 'success',
+  Warning = 'warning',
+  Danger = 'danger'
+}
+
+export enum Endpoints {
+  Company = '/core/companies/',
+  CompanyContact = '/core/companycontacts/',
+  Skills = '/skills/skills',
+  Jobsite = '/hr/jobsites/',
+  CandidateContact = '/candidate/candidatecontacts/',
+  SmsMessages = '/sms-interface/smsmessages/',
+  JobOffers = '/hr/joboffers/',
+}

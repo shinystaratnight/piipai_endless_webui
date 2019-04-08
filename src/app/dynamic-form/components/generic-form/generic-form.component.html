@@ -2,6 +2,7 @@
   [class.has-tabs]="hasTabs"
   [class.edit-form]="this.edit || this.editForm || this.id">
     <h4 *ngIf="title" class="title">{{title}}</h4>
+    <h4 *ngIf="formName" class="form-name">{{formName}}</h4>
 
     <div *ngIf="!showForm" class="spinner">
       <div class="double-bounce1"></div>

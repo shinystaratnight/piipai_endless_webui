@@ -1,4 +1,35 @@
-import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate, Endpoints, Colors } from './utils';
+import { createFilter, Type } from '../dynamic-form/models/filters';
+
+const filters = {
+  shift_started_at: createFilter(Type.Date, {
+    key: 'shift_started_at',
+    label: 'Shift Started at',
+    yesterday: true,
+    today: true,
+    tomorrow: true
+  }),
+  supervisor: createFilter(Type.Relared, {
+    key: 'supervisor',
+    label: 'Supervisor',
+    endpoint: Endpoints.CompanyContact,
+  }),
+  candidate: createFilter(Type.Relared, {
+    key: 'candidate',
+    label: 'Candidate Contact',
+    endpoint: Endpoints.CandidateContact,
+  }),
+  client: createFilter(Type.Relared, {
+    key: 'company',
+    label: 'Client',
+    endpoint: Endpoints.Company,
+  }),
+  jobsite: createFilter(Type.Relared, {
+    key: 'jobsite',
+    label: 'Jobsite',
+    endpoint: Endpoints.Jobsite,
+  }),
+};
 
 const list = {
   list: {
@@ -349,79 +380,11 @@ const list = {
     search_enabled: false,
     editDisable: true,
     filters: [
-      {
-        list: [
-          {
-            label: 'Yesterday',
-            query: `shift_started_at_0=${yesterdayFormatDate}&shift_started_at_1=${yesterdayFormatDate}` //tslint:disable-line
-          },
-          {
-            label: 'Today',
-            query: `shift_started_at_0=${todayFormatDate}&shift_started_at_1=${todayFormatDate}`
-          },
-          {
-            label: 'Tomorrow',
-            query: `shift_started_at_0=${tomorrowFormatDate}&shift_started_at_1=${tomorrowFormatDate}` //tslint:disable-line
-          }
-        ],
-        key: 'shift_started_at',
-        label: 'Shift Started at',
-        type: 'date',
-        input: [
-          {
-            label: 'From',
-            query: 'shift_started_at_0'
-          },
-          {
-            label: 'To',
-            query: 'shift_started_at_1'
-          }
-        ]
-      },
-      {
-        key: 'supervisor',
-        label: 'Supervisor',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/companycontacts/',
-          key: 'id'
-        },
-        query: 'supervisor'
-      },
-      {
-        key: 'candidate',
-        label: 'Candidate Contact',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/candidate/candidatecontacts/',
-          key: 'id'
-        },
-        query: 'candidate'
-      },
-      {
-        key: 'company',
-        label: 'Client',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/companies/',
-          key: 'id'
-        },
-        query: 'company'
-      },
-      {
-        key: 'jobsite',
-        label: 'Jobsite',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/hr/jobsites/',
-          key: 'id'
-        },
-        query: 'jobsite'
-      }
+      filters.shift_started_at,
+      filters.supervisor,
+      filters.candidate,
+      filters.client,
+      filters.jobsite,
     ],
     actions: {
       options: [
@@ -439,7 +402,8 @@ const list = {
       agree_label: 'Agree',
       button_label: 'Go',
       decline_label: 'Decline'
-    }
+    },
+    buttons: []
   },
   fields: [
     {
@@ -841,198 +805,331 @@ const form = [
     read_only: false
   },
   {
-    list: false,
-    endpoint: '/hr/joboffers/',
-    read_only: false,
+    type: 'tabs',
+    children: [
+      {
+        main: true,
+        name: 'Main information',
+        label: 'Main information',
+        type: 'group',
+        children: [
+          {
+            type: 'row',
+            children: [
+              {
+                type: 'group',
+                width: 0.2,
+                hideLabel: true,
+                children: [
+                  {
+                    endpoint: Endpoints.Company,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Client',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    key: 'company',
+                  },
+                  {
+                    endpoint: Endpoints.Skills,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Position',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    key: 'position',
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                width: 0.2,
+                hideLabel: true,
+                children: [
+                  {
+                    endpoint: Endpoints.Jobsite,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Jobsite',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    key: 'jobsite',
+                  },
+                  {
+                    endpoint: Endpoints.CandidateContact,
+                    read_only: true,
+                    send: false,
+                    templateOptions: {
+                      label: 'Candidate',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    key: 'job_offer.candidate_contact',
+                  },
+                ]
+              },
+              {
+                width: 0.2,
+                endpoint: Endpoints.CompanyContact,
+                read_only: true,
+                templateOptions: {
+                  label: 'Supervisor',
+                  values: ['__str__'],
+                  type: 'related',
+                },
+                type: 'related',
+                key: 'supervisor',
+              },
+              {
+                width: 0.2,
+                type: 'select',
+                key: 'status',
+                read_only: true,
+                templateOptions: {
+                  label: 'Status',
+                  options: [
+                    { value: 0, label: 'New', color: Colors.Success },
+                    { value: 1, label: 'Check pending', color: Colors.Warning },
+                    { value: 2, label: 'Check confirmed', color: Colors.Success },
+                    { value: 3, label: 'Check failed', color: Colors.Danger },
+                    { value: 4, label: 'Submit pending', color: Colors.Warning },
+                    { value: 5, label: 'Pending approval', color: Colors.Success },
+                    { value: 6, label: 'Supervisor modified', color: Colors.Success },
+                    { value: 7, label: 'Approved', color: Colors.Success }
+                  ],
+                }
+              },
+              {
+                type: 'static',
+                width: 0.2,
+                read_only: true,
+                send: false,
+                key: 'myob_status',
+                templateOptions: {
+                  label: 'Accounting Integration'
+                }
+              }
+            ]
+          },
+          {
+            type: 'row',
+            className: 'field',
+            children: [
+              {
+                type: 'static',
+                key: 'total_time',
+                send: false,
+                read_only: true,
+                templateOptions: {
+                  label: 'Total time',
+                  color: 'text-success',
+                }
+              },
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                type: 'group',
+                hideLabel: true,
+                width: 0.2,
+                children: [
+                  {
+                    key: 'shift_started_at',
+                    type: 'datepicker',
+                    templateOptions: {
+                      label: 'Shift Started at',
+                      type: 'datetime'
+                    },
+                  },
+                  {
+                    key: 'shift_ended_at',
+                    type: 'datepicker',
+                    templateOptions: {
+                      label: 'Shift Ended at',
+                      type: 'datetime'
+                    },
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                hideLabel: true,
+                width: 0.2,
+                children: [
+                  {
+                    key: 'break_started_at',
+                    type: 'datepicker',
+                    templateOptions: {
+                      label: 'Break Started at',
+                      type: 'datetime'
+                    },
+                  },
+                  {
+                    key: 'break_ended_at',
+                    type: 'datepicker',
+                    templateOptions: {
+                      label: 'Break Ended at',
+                      type: 'datetime'
+                    },
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                hideLabel: true,
+                width: 0.5,
+                children: [
+                  {
+                    type: 'tracking',
+                    templateOptions: {
+                      label: 'Tracking',
+                    },
+                  },
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: 'Additional information',
+        type: 'group',
+        children: [
+          {
+            type: 'row',
+            children: [
+              {
+                width: 0.25,
+                type: 'checkbox',
+                key: 'going_to_work_confirmation',
+                templateOptions: {
+                  label: 'Pre-shift check',
+                  type: 'checkbox'
+                }
+              },
+              {
+                width: 0.25,
+                endpoint: Endpoints.SmsMessages,
+                templateOptions: {
+                  label: 'Going to work sent sms',
+                  values: ['__str__'],
+                  type: 'related',
+                },
+                type: 'related',
+                key: 'going_to_work_sent_sms',
+              },
+              {
+                width: 0.25,
+                endpoint: Endpoints.SmsMessages,
+                templateOptions: {
+                  label: 'Going to work reply sms',
+                  values: ['__str__'],
+                  type: 'related',
+                },
+                type: 'related',
+                key: 'going_to_work_reply_sms',
+              }
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                width: 0.25,
+                key: 'candidate_submitted_at',
+                type: 'datepicker',
+                templateOptions: {
+                  label: 'Candidate Submitted at',
+                  type: 'datetime'
+                },
+              },
+              {
+                width: 0.25,
+                key: 'supervisor_approved_at',
+                type: 'datepicker',
+                templateOptions: {
+                  label: 'Supervisor Approved at',
+                  type: 'datetime'
+                },
+              },
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                width: 0.25,
+                type: 'input',
+                key: 'candidate_rate',
+                templateOptions: {
+                  label: 'Candidate rate override',
+                  type: 'number',
+                  text: '${candidate_rate}/h'
+                },
+              },
+              {
+                width: 0.25,
+                endpoint: Endpoints.CompanyContact,
+                type: 'related',
+                key: 'rate_overrides_approved_by',
+                templateOptions: {
+                  label: 'Rate overrides approved by',
+                  values: ['__str__'],
+                  type: 'related',
+                },
+              },
+              {
+                width: 0.25,
+                key: 'rate_overrides_approved_at',
+                type: 'datepicker',
+                templateOptions: {
+                  label: 'Rate overrides approved at',
+                  type: 'date'
+                },
+              },
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                endpoint: Endpoints.SmsMessages,
+                read_only: true,
+                templateOptions: {
+                  label: 'Related sms',
+                  values: ['__str__'],
+                  type: 'related',
+                },
+                type: 'related',
+                key: 'related_sms',
+                many: true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    endpoint: Endpoints.JobOffers,
+    hide: true,
     templateOptions: {
       label: 'Job offer',
-      add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
     },
-    visibleMode: true,
     type: 'related',
     key: 'job_offer',
-    many: false
   },
-  {
-    list: false,
-    endpoint: '/sms-interface/smsmessages/',
-    read_only: true,
-    templateOptions: {
-      label: 'Going to work sent sms',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'going_to_work_sent_sms',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/sms-interface/smsmessages/',
-    read_only: true,
-    templateOptions: {
-      label: 'Going to work reply sms',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'going_to_work_reply_sms',
-    many: false
-  },
-  {
-    key: 'going_to_work_confirmation',
-    type: 'checkbox',
-    templateOptions: {
-      required: false,
-      label: 'Going to Work',
-      type: 'checkbox'
-    },
-    read_only: false
-  },
-  {
-    key: 'shift_started_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Shift Started at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    key: 'break_started_at',
-    default: '-',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Break Started at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    key: 'break_ended_at',
-    default: '-',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Break Ended at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    key: 'shift_ended_at',
-    default: '2018-07-04T15:30:00+10:00',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Shift Ended at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/core/companycontacts/',
-    read_only: true,
-    templateOptions: {
-      label: 'Supervisor',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'supervisor',
-    many: false
-  },
-  {
-    key: 'candidate_submitted_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Candidate Submitted at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    key: 'supervisor_approved_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Supervisor Approved at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    templateOptions: {
-      label: 'Candidate rate override',
-      type: 'number',
-    },
-    type: 'input',
-    key: 'candidate_rate',
-  },
-  {
-    list: false,
-    endpoint: '/core/companycontacts/',
-    read_only: true,
-    templateOptions: {
-      label: 'Rate overrides approved by',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'rate_overrides_approved_by',
-    many: false
-  },
-  {
-    key: 'rate_overrides_approved_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Candidate and Client Rate Overrides Approved at',
-      type: 'date'
-    },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/sms-interface/smsmessages/',
-    read_only: true,
-    templateOptions: {
-      label: 'Related sms',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'related_sms',
-    many: true
-  }
 ];
 
 const formadd = [

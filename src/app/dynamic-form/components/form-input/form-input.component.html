@@ -103,7 +103,7 @@
           </g>
         </svg>
       </div>
-      <span [class.readonly-value]="editMode" *ngIf="config.type === 'static' && config.templateOptions.type !== 'score'">{{displayValue}}</span>
+      <span [ngClass]="config.templateOptions.color" *ngIf="config.type === 'static' && config.templateOptions.type !== 'score'">{{displayValue}}</span>
       <div class="rating" *ngIf="(viewMode || config.read_only) && config.templateOptions.type === 'score' && (parseScore(config.value) || !config.templateOptions.danger)">
         <ngb-rating [rate]="config.value" max="5" [readonly]="true">
           <ng-template let-fill="fill" let-index="index">

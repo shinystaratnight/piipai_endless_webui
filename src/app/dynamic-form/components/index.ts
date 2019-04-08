@@ -39,6 +39,7 @@ import { FormVacancyDatesComponent } from './form-vacancy-dates/form-vacancy-dat
 import { FormInfoComponent } from './form-info/form-info.component';
 import { ExtendComponent } from './extend/extend.component';
 import { FormEditorComponent } from './form-editor/form-editor.component';
+import { FormTrackingComponent } from './form-tracking/form-tracking.component';
 
 // List elements
 import { GenericListComponent } from './generic-list/generic-list.component';
@@ -90,9 +91,9 @@ export const entryComponents = [
   FormTimelineComponent,
   FormVacancyDatesComponent,
   FormInfoComponent,
-  ExtendComponent,
   FormReplaceComponent,
   FormEditorComponent,
+  FormTrackingComponent,
 
   ListCheckboxComponent,
   ListImageComponent,
@@ -109,6 +110,7 @@ export const entryComponents = [
   TestGeneratorComponent,
   TestListComponent,
   TimeTrackingComponent,
+  ExtendComponent,
 
   InfoComponent
 ];

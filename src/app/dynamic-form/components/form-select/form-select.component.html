@@ -29,8 +29,10 @@
   <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label">
     {{config.templateOptions.label}}:
   </label>
-  <div class="form-element-content" [class.readonly-value]="config.read_only">
-    {{displayValue || '-'}}
+  <div class="form-element-content"
+    [ngClass]="textColor"
+    [class.readonly-value]="!textColor && config.read_only">
+      {{displayValue || '-'}}
   </div>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}

@@ -40,6 +40,7 @@ import { FormGroupComponent } from '../containers/form-group/form-group.componen
 import { ExtendComponent } from '../components/extend/extend.component';
 import { TestListComponent } from '../components/test-list/test-list.component';
 import { FormEditorComponent } from '../components/form-editor/form-editor.component';
+import { FormTrackingComponent } from '../components/form-tracking/form-tracking.component';
 
 
 const components = {
@@ -73,6 +74,7 @@ const components = {
   extend: ExtendComponent,
   testList: TestListComponent,
   editor: FormEditorComponent,
+  tracking: FormTrackingComponent,
 };
 
 @Directive({
