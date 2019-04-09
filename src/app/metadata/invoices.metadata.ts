@@ -159,16 +159,34 @@ const list = {
         sort_field: 'id'
       },
       {
-        delim: null,
-        label: '',
+        delim: ' ',
+        label: 'Status',
         content: [
           {
             endpoint: '/core/invoices/{id}/approve/',
             field: 'id',
             icon: 'fa-external-link',
+            color: 'success',
             action: 'emptyPost',
             type: 'button',
-            text: 'Approve'
+            text: 'Approve',
+            hidden: 'approved'
+          },
+          {
+            showIf: ['approved'],
+            field: 'approved',
+            type: 'text',
+            color: 'success',
+            values: {
+              true: 'check-circle'
+            },
+          },
+          {
+            showIf: ['approved'],
+            field: 'approved',
+            type: 'text',
+            color: 'success',
+            display: 'Approved',
           }
         ],
         name: 'id',

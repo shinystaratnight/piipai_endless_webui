@@ -5,16 +5,23 @@
 </label>
 
 <span *ngIf="!arrayValue && !config.hideValue && !config.score">
-  <span [class.description]="config.description" class="d-inline-flex align-items-center flex-wrap mr-1" *ngIf="value || value === 0">
-    <span [title]="config.title || ''">
-      <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
-      <span *ngIf="!iconView && !iconClass && !workers">{{value}}</span>
-      <span class="py-1" *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail" style="cursor: default; padding-right: 1rem">{{value}}</span>
-      <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{value}}</span>
-      <i fa *ngIf="iconView" [name]="value" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></i>
-    </span>
+  <span class="d-inline-flex align-items-center flex-wrap mr-1"
+    *ngIf="value || value === 0"
+    [class.description]="config.description">
+      <span [title]="config.title || ''">
+        <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
+        <span *ngIf="!iconView && !iconClass && !workers">{{value}}</span>
+        <span class="py-1" *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail" style="cursor: default; padding-right: 1rem">{{value}}</span>
+        <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{value}}</span>
+        <i fa *ngIf="iconView" [name]="value" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></i>
+      </span>
   </span>
-  <span [class.description]="config.description" class="d-inline-flex align-items-center flex-wrap" *ngIf="!value && value !== 0 && !(config.templateOptions && config.templateOptions.listLabel || config.listLabel)">-</span>
+
+  <span class="d-inline-flex align-items-center flex-wrap"
+    [class.description]="config.description"
+    *ngIf="!value && value !== 0 && !(config.templateOptions && config.templateOptions.listLabel || config.listLabel)">
+      -
+  </span>
   <span [class.description]="config.help" *ngIf="(value || value === 0) && config.help">{{config.help}}</span>
 </span>
 
