@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
+
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class VerifyService {
 
   constructor(
-    private http: Http
+    private http: HttpClient
   ) {}
 
   public verifyEmail(endpoint) {
-    return this.http.get(endpoint)
-      .map((res: Response) => res.json && res.json())
-      .catch((err: any) => Observable.throw(err));
+    return this.http
+      .get(endpoint)
+      .pipe(
+        catchError((err: any) => throwError(err))
+      );
   }
 }

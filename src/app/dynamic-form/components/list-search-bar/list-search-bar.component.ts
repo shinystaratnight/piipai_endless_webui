@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { FilterService } from './../../services/filter.service';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'list-search-bar',
+  selector: 'app-list-search-bar',
   templateUrl: 'list-search-bar.component.html',
   styleUrls: ['./list-search-bar.component.scss']
 })
@@ -58,7 +58,7 @@ export class ListSerachBarComponent implements OnInit, OnDestroy {
   }
 
   public updateSearchBar() {
-    let data = this.fs.getQueries(this.list, 'search');
+    const data = this.fs.getQueries(this.list, 'search');
     if (data) {
       if (data.byQuery) {
         this.searchValue = data.query.split('=')[1];

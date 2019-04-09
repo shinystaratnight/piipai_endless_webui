@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import * as moment from 'moment-timezone';
 
 import { Field } from '../../models';
@@ -21,7 +21,7 @@ import { FormatString } from '../../../helpers/format';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 @Component({
-  selector: 'form-input',
+  selector: 'app-form-input',
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -41,6 +41,7 @@ export class FormInputComponent extends BasicElementComponent
   public formData: any;
   public autocompleteValue: any;
   public editMode: boolean;
+  public hovered: number;
 
   public query = '';
   public list = [];
@@ -50,6 +51,22 @@ export class FormInputComponent extends BasicElementComponent
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
   public address = '';
+  public googleOptions = {
+    componentRestrictions: {
+      country: 'AU'
+    }
+  };
+
+  public colors = {
+    0: '#FA5C46',
+    1: '#FA5C46',
+    2: '#fc9183',
+    3: '#FFA236',
+    4: '#ffbf00',
+    5: '#FFD042'
+  };
+
+  public requiredField: boolean;
 
   @ViewChild('input')
   public input;
@@ -75,7 +92,17 @@ export class FormInputComponent extends BasicElementComponent
       this.config.type !== 'static' ||
       (this.config.type === 'static' || !this.config.read_only)
     ) {
-      this.addControl(this.config, this.fb);
+      this.requiredField = (this.config.key === 'score' || this.config.key === 'hourly_rate') && this.config.templateOptions.required;
+      this.requiredField = this.requiredField
+      || (this.config.templateOptions.required
+        && !(this.config.hide || this.config.send === false));
+
+      if (this.config.templateOptions.type === 'number') {
+        this.addControl(this.config, this.fb, this.requiredField, this.config.templateOptions.min, this.config.templateOptions.max);
+      } else {
+        this.addControl(this.config, this.fb, this.requiredField);
+      }
+
     }
     this.setInitValue();
     this.checkModeProperty();
@@ -99,7 +126,7 @@ export class FormInputComponent extends BasicElementComponent
       const subscription = this.config.formData.subscribe((data) => {
         this.formData = data.data;
         this.checkTimesheetTime(data);
-        this.checkIfExistDefaultValue();
+        this.checkIfExistDefaultValue(data.key);
         this.checkAttributes();
       });
 
@@ -165,7 +192,7 @@ export class FormInputComponent extends BasicElementComponent
     }
   }
 
-  public checkIfExistDefaultValue() {
+  public checkIfExistDefaultValue(field: string) {
     if (
       this.config.default &&
       typeof this.config.default === 'string' &&
@@ -177,6 +204,9 @@ export class FormInputComponent extends BasicElementComponent
         this.key !== 'address' &&
         this.key !== 'street_address'
       ) {
+        if (this.config.updated && !this.config.updated.includes(field)) {
+          return;
+        }
         this.setInitValue(true);
       }
     }
@@ -198,7 +228,9 @@ export class FormInputComponent extends BasicElementComponent
           this.config.hide = hide;
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);
@@ -251,7 +283,9 @@ export class FormInputComponent extends BasicElementComponent
           this.setInitValue();
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);
@@ -264,6 +298,16 @@ export class FormInputComponent extends BasicElementComponent
 
   public setInitValue(update?: boolean) {
     const format = new FormatString();
+
+    if (this.key === 'street_address' && this.group.get(this.key).value) {
+      this.address = this.group.get(this.key).value.formatted_address;
+    }
+
+    if (this.key === 'postal_code' && this.group.get(this.key).value) {
+      this.config.value = this.group.get(this.key).value;
+      this.displayValue = this.group.get(this.key).value;
+    }
+
     if (
       this.config.type !== 'static' ||
       (this.config.type === 'static' && !this.config.read_only)
@@ -279,13 +323,13 @@ export class FormInputComponent extends BasicElementComponent
         this.config.default ||
         this.config.default === 0
       ) {
-        let defaultValue = typeof this.config.default === 'string'
+        const defaultValue = typeof this.config.default === 'string'
             ? format.format(this.config.default, this.formData)
             : this.config.default;
 
-        let value =
+        const value =
           (this.config.value === 0 || this.config.value) &&
-          !(update && defaultValue !== this.config.value)
+          !(update && defaultValue !== this.config.value && !this.config.useValue)
             ? this.config.value
             : defaultValue;
 
@@ -300,7 +344,10 @@ export class FormInputComponent extends BasicElementComponent
         ) {
           this.address = value;
         }
-        this.displayValue = value || value === 0 ? value : '-';
+        const text = format.format(this.config.templateOptions.text, {
+          [this.config.key]: value
+        });
+        this.displayValue = text || (value || value === 0 ? value : '-');
       }
     } else {
       if (this.config.value instanceof Object) {
@@ -315,7 +362,9 @@ export class FormInputComponent extends BasicElementComponent
     }
 
     setTimeout(() => {
-      this.cd.detectChanges();
+      if (!(<any> this.cd).destroyed) {
+        this.cd.detectChanges();
+      }
     }, 200);
   }
 
@@ -339,7 +388,7 @@ export class FormInputComponent extends BasicElementComponent
 
   public filter(key) {
     this.lastElement = 0;
-    let query = this.group.get(key).value;
+    const query = this.group.get(key).value;
     if (query !== '') {
       if (this.config.autocomplete) {
         this.filteredList = this.config.autocomplete.filter((el) => {
@@ -387,6 +436,7 @@ export class FormInputComponent extends BasicElementComponent
         break;
       case 'password':
         this.config.templateOptions.type = 'text';
+        break;
       default:
         break;
     }
@@ -408,8 +458,18 @@ export class FormInputComponent extends BasicElementComponent
     });
 
     setTimeout(() => {
-      this.cd.detectChanges();
+      if (!(<any> this.cd).destroyed) {
+        this.cd.detectChanges();
+      }
     }, 1000);
+  }
+
+  public parseScore(score) {
+    if (!score) {
+      return 0;
+    }
+
+    return parseFloat(score);
   }
 
   @HostListener('document:click', ['$event'])

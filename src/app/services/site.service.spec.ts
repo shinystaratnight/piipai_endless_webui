@@ -1,10 +1,6 @@
 import { async, inject, TestBed } from '@angular/core/testing';
 
-import { NavigationService, Page } from './navigation.service';
-
-import { Observable } from 'rxjs/Observable';
-
-import { SiteService, PageData } from './site.service';
+import { SiteService } from './site.service';
 
 describe('UserService', () => {
 
@@ -28,7 +24,7 @@ describe('UserService', () => {
             {
               name: 'Contact',
               url: '/contact/',
-              endpoint: '/ecore/api/v2/contacts',
+              endpoint: '/contacts',
               __str__: 'Contact',
               childrens: []
             }
@@ -55,7 +51,7 @@ describe('UserService', () => {
         {
           name: 'Contact',
           url: '/contact/',
-          endpoint: '/ecore/api/v2/contacts',
+          endpoint: '/contacts',
           __str__: 'Contact',
           childrens: []
         }
@@ -164,13 +160,13 @@ describe('UserService', () => {
         {
           name: 'Contact',
           url: '/contact/',
-          endpoint: '/ecore/api/v2/contacts',
+          endpoint: '/contacts',
           __str__: 'Contact',
           childrens: [
             {
               name: 'Candidate Contact',
               url: '/contact/candidate/',
-              endpoint: '/ecore/api/v2/candidatecontact',
+              endpoint: '/candidatecontact',
               __str__: 'Candidate Contact',
               childrens: []
             }

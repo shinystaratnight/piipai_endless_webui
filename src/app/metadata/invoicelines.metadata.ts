@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'invoiceline',
     label: 'Invoice Line',
+    buttons: [],
     columns: [
       {
         content: [{ field: '__str__', type: 'static' }],
@@ -30,7 +31,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/invoices/',
+    endpoint: '/core/invoices/',
     read_only: true,
     templateOptions: {
       label: 'Invoice',
@@ -151,7 +152,7 @@ const formset = {
     {
       many: false,
       key: 'timesheet.job_offer.candidate_contact',
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -195,7 +196,7 @@ const formset = {
         sort_field: 'timesheet.job_offer.candidate_contact',
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             type: 'related',
             field: 'timesheet.job_offer.candidate_contact'
           }
@@ -228,7 +229,7 @@ const formset = {
         content: [
           {
             text: 'Timesheet',
-            endpoint: '/ecore/api/v2/hr/timesheets/{timesheet.id}',
+            endpoint: '/hr/timesheets/{timesheet.id}',
             label: 'Timesheets',
             type: 'link',
             field: 'timesheet'
@@ -243,7 +244,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/core/invoicelines/{id}',
+            endpoint: '/core/invoicelines/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -275,9 +276,10 @@ const formset = {
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/invoices/',
+    endpoint: '/core/invoices/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Invoice',
       add: true,
       delete: false,

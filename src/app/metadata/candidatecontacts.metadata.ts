@@ -1,4 +1,37 @@
 import { yesterdayFormatDate, todayFormatDate } from './utils';
+import { createFilter, Type } from '../dynamic-form/models/filters';
+
+const filters = {
+  avarageScore: createFilter(Type.Range, {
+    key: 'candidate_scores.average_score',
+    label: 'Overal score',
+    max: 5
+  }),
+  skill: createFilter(Type.Relared, {
+    key: 'skill',
+    label: 'Skills',
+    endpoint: '/skills/skills/',
+    multiple: true
+  }),
+  tag: createFilter(Type.Relared, {
+    key: 'tag',
+    label: 'Tags',
+    endpoint: '/core/tags/',
+    multiple: true
+  }),
+  activeState: createFilter(Type.Relared, {
+    key: 'active_states',
+    label: 'Status',
+    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact',
+    display: ['name_after_activation', 'name_before_activation'],
+    parameter: 'number'
+  }),
+  recruitmentAgent: createFilter(Type.Relared, {
+    key: 'recruitment_agent',
+    label: 'Recruitment agent',
+    endpoint: '/core/companycontacts/?master_company=current',
+  })
+};
 
 const list = {
   list: {
@@ -109,17 +142,45 @@ const list = {
       },
       {
         delim: null,
-        label: 'Strength',
+        label: 'Average test',
         sort: true,
         content: [
           {
-            field: 'strength',
+            field: 'candidate_scores.recruitment_score',
             type: 'skills'
           }
         ],
-        name: 'strength',
+        name: 'candidate_scores.recruitment_score',
         title: null,
-        sort_field: 'strength'
+        sort_field: 'candidate_scores.recruitment_score'
+      },
+      {
+        delim: null,
+        label: 'Client feedback',
+        sort: true,
+        content: [
+          {
+            field: 'candidate_scores.client_feedback',
+            type: 'skills'
+          }
+        ],
+        name: 'candidate_scores.client_feedback',
+        title: null,
+        sort_field: 'candidate_scores.client_feedback'
+      },
+      {
+        delim: null,
+        label: 'Average skill',
+        sort: true,
+        content: [
+          {
+            field: 'candidate_scores.skill_score',
+            type: 'skills'
+          }
+        ],
+        name: 'candidate_scores.skill_score',
+        title: null,
+        sort_field: 'candidate_scores.skill_score'
       },
       {
         content: [
@@ -140,7 +201,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/countries/',
+            endpoint: '/core/countries/',
             field: 'nationality',
             type: 'related'
           }
@@ -187,7 +248,7 @@ const list = {
         ],
         name: 'transportation_to_work',
         sort_field: 'transportation_to_work',
-        label: 'Transportation to Work',
+        label: 'Transportation',
         sort: true
       },
       {
@@ -200,18 +261,6 @@ const list = {
         name: 'bmi',
         label: 'Bmi'
       },
-      {
-        content: [
-          {
-            field: 'language',
-            type: 'input'
-          }
-        ],
-        name: 'language',
-        sort_field: 'language',
-        label: 'Language',
-        sort: true
-      }
     ],
     tabs: [
       {
@@ -220,7 +269,6 @@ const list = {
         fields: [
           'nationality',
           'contact.gender',
-          'language',
           'transportation_to_work'
         ]
       },
@@ -230,12 +278,16 @@ const list = {
         fields: ['height', 'weight', 'bmi']
       },
       {
-        label: 'Character',
+        label: 'Scores',
         is_collapsed: true,
+        hideLabel: true,
+        width: 180,
         fields: [
+          'candidate_scores.recruitment_score',
+          'candidate_scores.client_feedback',
           'candidate_scores.reliability',
           'candidate_scores.loyalty',
-          'strength'
+          'candidate_scores.skill_score',
         ]
       },
       {
@@ -245,43 +297,9 @@ const list = {
       }
     ],
     filters: [
-      {
-        key: 'skill',
-        label: 'Skills',
-        data: {
-          value: '__str__',
-          endpoint: '/ecore/api/v2/skills/skills/',
-          key: 'id'
-        },
-        query: 'skill',
-        multiple: true,
-        type: 'related'
-      },
-      {
-        key: 'tag',
-        label: 'Tags',
-        data: {
-          value: '__str__',
-          endpoint: '/ecore/api/v2/core/tags/',
-          key: 'id'
-        },
-        query: 'tag',
-        multiple: true,
-        type: 'related'
-      },
-      {
-        key: 'active_states',
-        label: 'Status',
-        data: {
-          value: ['name_after_activation', 'name_before_activation'],
-          endpoint:
-            '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact', //tslint:disable-line
-          key: 'number'
-        },
-        query: 'active_states',
-        default: null,
-        type: 'related'
-      },
+      filters.skill,
+      filters.tag,
+      filters.activeState,
       {
         key: 'contact.gender',
         label: 'Gender',
@@ -300,38 +318,11 @@ const list = {
         default: null,
         type: 'checkbox'
       },
-      {
-        key: 'recruitment_agent',
-        label: 'Recruitment agent',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
-          key: 'id'
-        },
-        query: 'recruitment_agent'
-      },
-      {
-        key: 'candidate_scores.average_score',
-        label: 'Overal score',
-        max: 5,
-        input: [
-          {
-            label: 'From',
-            query: 'candidate_scores__average_score_0'
-          },
-          {
-            label: 'To',
-            query: 'candidate_scores__average_score_1'
-          }
-        ],
-        default: null,
-        type: 'range',
-        min: null
-      },
+      filters.recruitmentAgent,
+      filters.avarageScore,
       {
         key: 'transportation_to_work',
-        label: 'Transportation to Work',
+        label: 'Transportation',
         options: [
           {
             value: 1,
@@ -363,11 +354,11 @@ const list = {
         type: 'date',
         input: [
           {
-            label: 'From date',
+            label: 'From',
             query: 'created_at_0'
           },
           {
-            label: 'To date',
+            label: 'To',
             query: 'created_at_1'
           }
         ]
@@ -378,7 +369,7 @@ const list = {
     actions: {
       options: [
         {
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/sendsms/',
+          endpoint: '/candidate/candidatecontacts/sendsms/',
           label: 'Send sms',
           confirm: false,
           message: 'Are you sure?'
@@ -398,19 +389,6 @@ const list = {
         required: false,
         label: 'Weight, kg',
         type: 'number'
-      },
-      read_only: true
-    },
-    {
-      key: 'strength',
-      default: 0,
-      type: 'skills',
-      templateOptions: {
-        required: false,
-        label: 'Strength',
-        max: 32767,
-        type: 'skills',
-        min: 0
       },
       read_only: true
     },
@@ -477,7 +455,7 @@ const list = {
       type: 'select',
       templateOptions: {
         required: false,
-        label: 'Transportation to Work',
+        label: 'Transportation',
         options: [
           {
             value: 1,
@@ -524,19 +502,6 @@ const list = {
       read_only: true
     },
     {
-      key: 'language',
-      default: 0,
-      type: 'input',
-      templateOptions: {
-        required: false,
-        label: 'Language',
-        type: 'number',
-        min: 0,
-        max: 32767
-      },
-      read_only: true
-    },
-    {
       key: 'contact.email',
       type: 'link',
       templateOptions: {
@@ -569,7 +534,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/countries/',
+      endpoint: '/core/countries/',
       read_only: true,
       templateOptions: {
         label: 'Nationality',
@@ -637,7 +602,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/contacts/',
+                    endpoint: '/core/contacts/',
                     read_only: true,
                     key: 'contact',
                     hide: true,
@@ -658,7 +623,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/addresses/',
+                    endpoint: '/core/addresses/',
                     read_only: true,
                     hide: true,
                     templateOptions: {
@@ -718,7 +683,7 @@ const form = [
                     templateOptions: {
                       placeholder: 'E-mail',
                       required: true,
-                      label: '',
+                      label: 'E-mail',
                       max: 255,
                       type: 'text'
                     },
@@ -730,7 +695,7 @@ const form = [
                     templateOptions: {
                       placeholder: 'Mobile phone',
                       required: true,
-                      label: '',
+                      label: 'Phone number',
                       type: 'text'
                     },
                     read_only: false
@@ -773,18 +738,18 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     read_only: false,
                     key: 'recruitment_agent',
                     templateOptions: {
-                      label: '',
+                      label: 'Name',
                       add: true,
                       delete: false,
                       values: ['__str__'],
                       type: 'related',
                       edit: true
                     },
-                    collapsed: false,
+                    visibleMode: true,
                     default: 'session.contact.contact_id',
                     type: 'related',
                     query: {
@@ -798,7 +763,7 @@ const form = [
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: '',
+                      label: 'Phone number',
                       type: 'text'
                     },
                     read_only: true
@@ -848,24 +813,11 @@ const form = [
                     read_only: false
                   },
                   {
-                    key: 'language',
-                    default: 0,
-                    type: 'static',
-                    templateOptions: {
-                      required: false,
-                      label: 'Language',
-                      max: 5,
-                      type: 'score',
-                      min: 0
-                    },
-                    read_only: false
-                  },
-                  {
                     key: 'transportation_to_work',
                     type: 'select',
                     templateOptions: {
                       required: false,
-                      label: 'Transportation to Work',
+                      label: 'Transportation',
                       type: 'select',
                       options: [
                         {
@@ -921,7 +873,7 @@ const form = [
                 width: 0.25
               },
               {
-                label: 'Character',
+                label: 'Scores',
                 type: 'group',
                 children: [
                   {
@@ -943,7 +895,8 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Reliability',
-                      type: 'score'
+                      type: 'score',
+                      danger: 'No rating'
                     },
                     read_only: true
                   },
@@ -954,23 +907,11 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Loyalty',
-                      type: 'score'
+                      type: 'score',
+                      danger: 'No rating'
                     },
                     read_only: true
                   },
-                  {
-                    key: 'strength',
-                    default: 0,
-                    type: 'static',
-                    templateOptions: {
-                      required: false,
-                      label: 'Strength',
-                      max: 5,
-                      type: 'score',
-                      min: 0
-                    },
-                    read_only: false
-                  }
                 ],
                 width: 0.25
               },
@@ -984,8 +925,9 @@ const form = [
                     type: 'static',
                     templateOptions: {
                       required: false,
-                      label: 'Recruitment Score',
-                      type: 'score'
+                      label: 'Average test',
+                      type: 'score',
+                      danger: 'No rating'
                     },
                     read_only: true
                   },
@@ -995,11 +937,24 @@ const form = [
                     type: 'static',
                     templateOptions: {
                       required: false,
-                      label: 'Client Score',
-                      type: 'score'
+                      label: 'Client feedback',
+                      type: 'score',
+                      danger: 'No rating'
                     },
                     read_only: true
-                  }
+                  },
+                  {
+                    key: 'candidate_scores.skill_score',
+                    send: false,
+                    type: 'static',
+                    templateOptions: {
+                      required: false,
+                      label: 'Average skill',
+                      type: 'score',
+                      danger: 'No rating'
+                    },
+                    read_only: true
+                  },
                 ],
                 width: 0.25
               }
@@ -1042,6 +997,22 @@ const form = [
                     read_only: false
                   },
                   {
+                    key: 'visa_type',
+                    type: 'related',
+                    endpoint: '/candidate/visatypes/',
+                    showIf: [
+                      {
+                        residency: 3
+                      }
+                    ],
+                    templateOptions: {
+                      required: false,
+                      label: 'Visa Type',
+                      type: 'related'
+                    },
+                    read_only: false
+                  },
+                  {
                     key: 'visa_expiry_date',
                     type: 'datepicker',
                     showIf: [
@@ -1055,7 +1026,7 @@ const form = [
                       type: 'date'
                     },
                     read_only: false
-                  }
+                  },
                 ],
                 width: 0.25
               },
@@ -1064,7 +1035,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/countries/',
+                    endpoint: '/core/countries/',
                     read_only: false,
                     templateOptions: {
                       label: 'Nationality',
@@ -1118,46 +1089,26 @@ const form = [
                     read_only: false
                   },
                   {
-                    list: false,
-                    endpoint: '/ecore/api/v2/candidate/superannuationfunds/',
+                    endpoint: '/candidate/superannuationfunds/',
                     read_only: false,
-                    doNotChoice: true,
                     templateOptions: {
-                      label: 'Superannuation fund',
-                      add: true,
-                      delete: false,
-                      values: ['__str__', 'name', 'membership_number'],
+                      label: 'Superannual Fund Name',
+                      values: ['__str__'],
                       type: 'related',
-                      edit: true
                     },
-                    collapsed: false,
                     type: 'related',
                     key: 'superannuation_fund',
-                    many: false
                   },
                   {
-                    key: 'superannuation_fund.name',
+                    key: 'superannuation_membership_number',
                     type: 'input',
-                    showIf: ['superannuation_fund.id'],
-                    default: '{superannuation_fund.name}',
                     templateOptions: {
                       required: false,
-                      label: 'Name',
+                      label: 'Employee membership number',
+                      max: 255,
                       type: 'text'
                     },
-                    read_only: true
-                  },
-                  {
-                    key: 'superannuation_fund.membership_number',
-                    type: 'input',
-                    showIf: ['superannuation_fund.id'],
-                    default: '{superannuation_fund.membership_number}',
-                    templateOptions: {
-                      required: false,
-                      label: 'Employer Membership Number',
-                      type: 'text'
-                    },
-                    read_only: true
+                    read_only: false
                   }
                 ],
                 width: 0.25
@@ -1167,7 +1118,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/bankaccounts/',
+                    endpoint: '/core/bankaccounts/',
                     read_only: false,
                     doNotChoice: true,
                     templateOptions: {
@@ -1214,23 +1165,6 @@ const form = [
                     },
                     read_only: true
                   },
-                  {
-                    list: false,
-                    endpoint: '/ecore/api/v2/skills/employmentclassifications/',
-                    read_only: false,
-                    templateOptions: {
-                      label: 'Employment classification',
-                      add: true,
-                      delete: false,
-                      values: ['__str__'],
-                      type: 'related',
-                      edit: true
-                    },
-                    collapsed: false,
-                    type: 'related',
-                    key: 'employment_classification',
-                    many: false
-                  }
                 ],
                 width: 0.5
               },
@@ -1267,11 +1201,11 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/candidate/skillrels/',
+        endpoint: '/candidate/skillrels/',
         templateOptions: {
           label: 'Skills',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Candidate skills'
         },
         collapsed: false,
@@ -1285,14 +1219,14 @@ const form = [
         help: 'Here you can see the skills which belong to the candidate'
       },
       {
-        endpoint: '/ecore/api/v2/candidate/tagrels/',
+        endpoint: '/candidate/tagrels/',
         templateOptions: {
           label: 'Tags',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Candidate tags'
         },
-        collapsed: false,
+        visibleMode: true,
         prefilled: {
           candidate_contact: '{id}'
         },
@@ -1305,10 +1239,10 @@ const form = [
       {
         name: 'Tests',
         type: 'testList',
-        endpoint: '/ecore/api/v2/candidate/candidatecontacts/{id}/tests/',
+        endpoint: '/candidate/candidatecontacts/{id}/tests/',
       },
       {
-        endpoint: '/ecore/api/v2/hr/candidateevaluations/',
+        endpoint: '/hr/candidateevaluations/',
         templateOptions: {
           label: 'Evaluations',
           type: 'list',
@@ -1340,14 +1274,14 @@ const form = [
               type: 'timeline',
               text: ''
             },
-            endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
+            endpoint: '/core/workflownodes/timeline/'
           },
           {
-            endpoint: '/ecore/api/v2/core/workflowobjects/',
+            endpoint: '/core/workflowobjects/',
             templateOptions: {
               label: 'States history',
               type: 'list',
-              add_label: '+ Add item',
+              add_label: '+ Add',
               text: 'States history'
             },
             collapsed: false,
@@ -1363,7 +1297,7 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/core/contactunavailabilities/',
+        endpoint: '/core/contactunavailabilities/',
         type: 'list',
         query: {
           contact: '{contact.id}'
@@ -1372,22 +1306,22 @@ const form = [
           label: 'Unavailabilities',
           type: 'list',
           text: 'Unavailabilities',
-          add_label: '+ Add item',
+          add_label: '+ Add',
         },
         prefilled: {
           contact: '{contact.id}'
         },
-        collapsed: false
+        visibleMode: true,
       },
       {
-        endpoint: '/ecore/api/v2/hr/carrierlists/',
+        endpoint: '/hr/carrierlists/',
         templateOptions: {
           label: 'Carrier List',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Carrier List'
         },
-        collapsed: false,
+        visibleMode: true,
         prefilled: {
           candidate_contact: '{id}'
         },
@@ -1398,11 +1332,11 @@ const form = [
         help: 'Here you can see information about carrier of candidate'
       },
       {
-        endpoint: '/ecore/api/v2/hr/blacklists/',
+        endpoint: '/hr/blacklists/',
         templateOptions: {
           label: 'Black List',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Black List'
         },
         collapsed: false,
@@ -1415,11 +1349,11 @@ const form = [
         }
       },
       {
-        endpoint: '/ecore/api/v2/hr/favouritelists/',
+        endpoint: '/hr/favouritelists/',
         templateOptions: {
           label: 'Favorite List',
           type: 'list',
-          add_label: '+ Add item',
+          add_label: '+ Add',
           text: 'Favorite List'
         },
         collapsed: false,
@@ -1433,7 +1367,25 @@ const form = [
         help: 'Here you can see favorite companies for candidate'
       },
       {
-        endpoint: '/ecore/api/v2/hr/joboffers/candidate/',
+        endpoint: '/core/notes/',
+        templateOptions: {
+          label: 'Notes',
+          type: 'list',
+          add_label: '+ Add',
+          text: 'Notes'
+        },
+        collapsed: false,
+        prefilled: {
+          object_id: '{id}',
+          content_type: '{model_content_type}',
+        },
+        type: 'list',
+        query: {
+          object_id: '{id}'
+        }
+      },
+      {
+        endpoint: '/hr/joboffers/candidate/',
         templateOptions: {
           label: 'Job offers',
           type: 'list',
@@ -1447,7 +1399,7 @@ const form = [
         help: 'Here you can see job offers'
       },
       {
-        endpoint: '/ecore/api/v2/hr/timesheets/',
+        endpoint: '/hr/timesheets/',
         templateOptions: {
           label: 'Timesheets',
           type: 'list',
@@ -1467,19 +1419,20 @@ const formadd = [
   {
     many: false,
     key: 'contact',
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     collapsed: false,
     list: false,
     checkObject: {
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       error: 'This Candidate contact already exists!',
       query: {
         contact: '{contact.id}'
       }
     },
+    visibleMode: true,
     update: {
       before: true,
-      endpoint: '/ecore/api/v2/core/contacts/{contact.id}/',
+      endpoint: '/core/contacts/{contact.id}/',
       getValue: 'birthday',
       setValue: {
         field: 'birthday'
@@ -1487,6 +1440,7 @@ const formadd = [
     },
     templateOptions: {
       add: true,
+      required: true,
       delete: false,
       edit: true,
       values: [
@@ -1554,7 +1508,7 @@ const formadd = [
   },
   {
     key: 'contact.address',
-    endpoint: '/ecore/api/v2/core/addresses/',
+    endpoint: '/core/addresses/',
     send: false,
     type: 'related',
     showIf: ['contact.id'],
@@ -1579,7 +1533,7 @@ const formadd = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     key: 'recruitment_agent',
     templateOptions: {
       label: 'Recruitment agent',
@@ -1587,6 +1541,7 @@ const formadd = [
       values: ['__str__'],
       edit: true
     },
+    visibleMode: true,
     default: 'session.contact.contact_id',
     type: 'related',
     query: {
@@ -1595,8 +1550,546 @@ const formadd = [
   }
 ];
 
+const profile = [
+  {
+    values: {
+      address: 'contact.address.__str__',
+      title: 'contact.__str__',
+      picture: 'contact.picture',
+      birthday: 'contact.birthday'
+    },
+    type: 'info',
+    key: 'id',
+    hideOnMobile: true,
+  },
+  {
+    type: 'tabs',
+    hideEditButton: true,
+    children: [
+      {
+        main: true,
+        name: 'Personal Info',
+        type: 'group',
+        label: 'Personal information',
+        children: [
+          {
+            type: 'row',
+            showOnMobile: true,
+            children: [
+              {
+                values: {
+                  address: 'contact.address.__str__',
+                  title: 'contact.__str__',
+                  picture: 'contact.picture',
+                  birthday: 'contact.birthday'
+                },
+                type: 'info',
+                key: 'id',
+              }
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                label: 'Contacts',
+                type: 'group',
+                children: [
+                  {
+                    key: 'contact.id',
+                    type: 'input',
+                    hide: true,
+                    templateOptions: {
+                      required: false,
+                      label: 'Id',
+                      type: 'text'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'contact.birthday',
+                    type: 'datepicker',
+                    inline: true,
+                    hide: true,
+                    templateOptions: {
+                      required: true,
+                      label: 'Birthday',
+                      type: 'date'
+                    },
+                    read_only: true
+                  },
+                  {
+                    endpoint: '/core/contacts/',
+                    read_only: true,
+                    key: 'contact',
+                    hide: true,
+                    templateOptions: {
+                      label: 'Contact',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    query: {
+                      candidate: true
+                    },
+                  },
+                  {
+                    endpoint: '/core/addresses/',
+                    read_only: true,
+                    hide: true,
+                    templateOptions: {
+                      label: 'Address',
+                      add: true,
+                      delete: false,
+                      values: ['__str__'],
+                      type: 'address',
+                      edit: false
+                    },
+                    collapsed: false,
+                    send: false,
+                    type: 'address',
+                    key: 'contact.address',
+                    many: false
+                  },
+                  {
+                    key: 'contact.is_available',
+                    read_only: false,
+                    hide: true,
+                    templateOptions: {
+                      required: false,
+                      label: 'Available',
+                      type: 'checkbox'
+                    },
+                    send: false,
+                    default: true,
+                    type: 'checkbox'
+                  },
+                  {
+                    key: 'contact.first_name',
+                    type: 'input',
+                    hide: true,
+                    templateOptions: {
+                      required: true,
+                      label: 'First Name',
+                      max: 255,
+                      type: 'text'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'contact.last_name',
+                    type: 'input',
+                    hide: true,
+                    templateOptions: {
+                      required: true,
+                      label: 'Last Name',
+                      max: 255,
+                      type: 'text'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'contact.email',
+                    type: 'input',
+                    templateOptions: {
+                      placeholder: 'E-mail',
+                      required: true,
+                      label: 'E-mail',
+                      max: 255,
+                      type: 'text'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'contact.phone_mobile',
+                    type: 'input',
+                    templateOptions: {
+                      placeholder: 'Mobile phone',
+                      required: true,
+                      label: 'Phone number',
+                      type: 'text'
+                    },
+                    read_only: false
+                  }
+                ],
+                width: 0.5
+              },
+              {
+                label: 'Emergency contact',
+                type: 'group',
+                children: [
+                  {
+                    key: 'emergency_contact_name',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Name',
+                      max: 63,
+                      type: 'text'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'emergency_contact_phone',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Phone Number',
+                      type: 'text'
+                    },
+                    read_only: false
+                  },
+                ],
+                width: 0.5
+              }
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                label: 'Additional info',
+                type: 'group',
+                children: [
+                  {
+                    key: 'contact.gender',
+                    type: 'select',
+                    templateOptions: {
+                      required: false,
+                      label: 'Gender',
+                      type: 'select',
+                      options: [
+                        {
+                          value: 'male',
+                          label: 'Male'
+                        },
+                        {
+                          value: 'female',
+                          label: 'Female'
+                        }
+                      ]
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'transportation_to_work',
+                    type: 'select',
+                    templateOptions: {
+                      required: false,
+                      label: 'Transportation',
+                      type: 'select',
+                      options: [
+                        {
+                          value: 1,
+                          label: 'Own Car'
+                        },
+                        {
+                          value: 2,
+                          label: 'Public Transportation'
+                        }
+                      ]
+                    },
+                    read_only: false
+                  }
+                ],
+                width: 0.25
+              },
+              {
+                label: 'Phisical parameters',
+                type: 'group',
+                children: [
+                  {
+                    key: 'height',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Height, cm',
+                      type: 'text'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'weight',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Weight, kg',
+                      type: 'number'
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'bmi',
+                    type: 'static',
+                    templateOptions: {
+                      required: false,
+                      label: 'Bmi',
+                      type: 'static'
+                    },
+                    read_only: true
+                  }
+                ],
+                width: 0.25
+              },
+              {
+                label: 'Scores',
+                type: 'group',
+                children: [
+                  {
+                    key: 'candidate_scores.id',
+                    read_only: false,
+                    hide: true,
+                    templateOptions: {
+                      required: false,
+                      label: 'Id',
+                      type: 'text'
+                    },
+                    send: false,
+                    type: 'input'
+                  },
+                  {
+                    key: 'candidate_scores.reliability',
+                    send: false,
+                    type: 'static',
+                    templateOptions: {
+                      required: false,
+                      label: 'Reliability',
+                      type: 'score',
+                      danger: 'No rating'
+                    },
+                    read_only: true
+                  },
+                  {
+                    key: 'candidate_scores.loyalty',
+                    send: false,
+                    type: 'static',
+                    templateOptions: {
+                      required: false,
+                      label: 'Loyalty',
+                      type: 'score',
+                      danger: 'No rating'
+                    },
+                    read_only: true
+                  },
+                ],
+                width: 0.25
+              },
+              {
+                label: 'Rating',
+                type: 'group',
+                children: [
+                  {
+                    key: 'candidate_scores.recruitment_score',
+                    send: false,
+                    type: 'static',
+                    templateOptions: {
+                      required: false,
+                      label: 'Average test',
+                      type: 'score',
+                      danger: 'No rating'
+                    },
+                    read_only: true
+                  },
+                  {
+                    key: 'candidate_scores.client_feedback',
+                    send: false,
+                    type: 'static',
+                    templateOptions: {
+                      required: false,
+                      label: 'Client feedback',
+                      type: 'score',
+                      danger: 'No rating'
+                    },
+                    read_only: true
+                  },
+                  {
+                    key: 'candidate_scores.skill_score',
+                    send: false,
+                    type: 'static',
+                    templateOptions: {
+                      required: false,
+                      label: 'Average skill',
+                      type: 'score',
+                      danger: 'No rating'
+                    },
+                    read_only: true
+                  },
+                ],
+                width: 0.25
+              }
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                label: 'Residency',
+                type: 'group',
+                children: [
+                  {
+                    key: 'residency',
+                    default: 0,
+                    type: 'select',
+                    templateOptions: {
+                      required: false,
+                      label: 'Residency Status',
+                      type: 'select',
+                      options: [
+                        {
+                          value: 0,
+                          label: 'Unknown'
+                        },
+                        {
+                          value: 1,
+                          label: 'Citizen'
+                        },
+                        {
+                          value: 2,
+                          label: 'Permanent Resident'
+                        },
+                        {
+                          value: 3,
+                          label: 'Temporary Resident'
+                        }
+                      ]
+                    },
+                    read_only: false
+                  },
+                  // {
+                  //   key: 'visa_type',
+                  //   type: 'related',
+                  //   endpoint: '/candidate/visatypes/',
+                  //   showIf: [
+                  //     {
+                  //       residency: 3
+                  //     }
+                  //   ],
+                  //   templateOptions: {
+                  //     required: false,
+                  //     label: 'Visa Type',
+                  //     type: 'related'
+                  //   },
+                  //   read_only: false
+                  // },
+                  // {
+                  //   key: 'visa_expiry_date',
+                  //   type: 'datepicker',
+                  //   showIf: [
+                  //     {
+                  //       residency: 3
+                  //     }
+                  //   ],
+                  //   templateOptions: {
+                  //     required: false,
+                  //     label: 'Visa Expiry Date',
+                  //     type: 'date'
+                  //   },
+                  //   read_only: false
+                  // },
+                ],
+                width: 0.25
+              },
+              {
+                type: 'group',
+                children: [
+                  {
+                    endpoint: '/core/countries/',
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Nationality',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    key: 'nationality',
+                  },
+                  // {
+                  //   key: 'vevo_checked_at',
+                  //   type: 'datepicker',
+                  //   showIf: [
+                  //     {
+                  //       residency: 3
+                  //     }
+                  //   ],
+                  //   templateOptions: {
+                  //     required: false,
+                  //     label: 'VEVO checked at',
+                  //     type: 'date'
+                  //   },
+                  //   read_only: false
+                  // }
+                ],
+                width: 0.25
+              }
+            ]
+          }
+        ]
+      },
+      {
+        endpoint: '/candidate/skillrels/',
+        templateOptions: {
+          label: 'Skills',
+          type: 'list',
+          add_label: '',
+          text: 'Candidate skills'
+        },
+        collapsed: false,
+        prefilled: {
+          candidate_contact: '{id}'
+        },
+        metadata_query: {
+          type: 'profile'
+        },
+        type: 'list',
+        query: {
+          candidate_contact: '{id}'
+        },
+        help: 'Here you can see skills'
+      },
+      {
+        endpoint: '/candidate/tagrels/',
+        templateOptions: {
+          label: 'Tags',
+          type: 'list',
+          add_label: '',
+          text: 'Candidate tags'
+        },
+        visibleMode: true,
+        prefilled: {
+          candidate_contact: '{id}'
+        },
+        metadata_query: {
+          type: 'profile'
+        },
+        type: 'list',
+        query: {
+          candidate_contact: '{id}'
+        },
+        help: 'Here you can see tags'
+      },
+      {
+        endpoint: '/hr/candidateevaluations/',
+        templateOptions: {
+          label: 'Evaluations',
+          text: 'Evaluations',
+          add_label: '',
+        },
+        metadata_query: {
+          type: 'profile'
+        },
+        type: 'list',
+        query: {
+          candidate_contact: '{id}'
+        },
+        help: 'Here you can see evaluations'
+      },
+    ]
+  }
+];
+
 export const metadata = {
   list,
   form,
-  formadd
+  formadd,
+  profile
 };

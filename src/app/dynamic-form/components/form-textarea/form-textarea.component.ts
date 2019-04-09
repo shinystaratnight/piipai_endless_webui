@@ -8,13 +8,14 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
-  selector: 'form-textarea',
-  templateUrl: 'form-textarea.component.html'
+  selector: 'app-form-textarea',
+  templateUrl: 'form-textarea.component.html',
+  styleUrls: ['./form-textarea.component.scss']
 })
 
 export class FormTextareaComponent
@@ -33,6 +34,7 @@ export class FormTextareaComponent
   public viewMode: boolean;
   public displayValue: string;
   public editMode: boolean;
+  public className: string;
 
   private subscriptions: Subscription[];
 
@@ -51,6 +53,10 @@ export class FormTextareaComponent
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.createEvent();
+
+    this.className = this.config.templateOptions.background
+      ? 'message-text'
+      : '';
   }
 
   public ngOnDestroy() {
@@ -68,7 +74,9 @@ export class FormTextareaComponent
           this.config.hide = hide;
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);

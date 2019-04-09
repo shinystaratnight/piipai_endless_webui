@@ -1,4 +1,4 @@
-import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+import { yesterdayFormatDate, todayFormatDate } from './utils';
 
 const list = {
   list: {
@@ -9,7 +9,13 @@ const list = {
         content: [
           {
             field: 'sid',
-            type: 'textarea'
+            type: 'button',
+            title: '{sid}',
+            endpoint: '/sms-interface/smsmessages/{id}',
+            messageType: '{type}',
+            color: 'link',
+            customLink: true,
+            action: 'messageDetail',
           }
         ],
         name: 'sid',
@@ -23,7 +29,7 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/sms-interface/smstemplates/{template.id}',
+            endpoint: '/sms-interface/smstemplates/{template.id}',
             field: 'template',
             type: 'link'
           }
@@ -116,7 +122,7 @@ const list = {
     ],
     pagination_label: 'SMS message',
     search_enabled: true,
-    editDisable: false,
+    editDisable: true,
     filters: [
       {
         key: 'type',
@@ -182,7 +188,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/sms-interface/smstemplates/',
+          endpoint: '/sms-interface/smstemplates/',
           key: 'id'
         },
         query: 'template'
@@ -203,11 +209,11 @@ const list = {
         type: 'date',
         input: [
           {
-            label: 'From date',
+            label: 'From',
             query: 'created_at_0'
           },
           {
-            label: 'To date',
+            label: 'To',
             query: 'created_at_1'
           }
         ]
@@ -230,6 +236,12 @@ const list = {
         default: null,
         type: 'checkbox'
       },
+    ],
+    buttons: [
+      {
+        action: 'sendSMS',
+        label: 'Create new SMS'
+      }
     ]
   },
   fields: [
@@ -300,12 +312,11 @@ const list = {
     },
     {
       key: 'sid',
-      type: 'textarea',
+      type: 'button',
       templateOptions: {
         required: false,
         label: 'SID',
         description: 'Twillio Message ID',
-        type: 'textarea'
       },
       read_only: true
     },
@@ -456,7 +467,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smstemplates/',
+    endpoint: '/sms-interface/smstemplates/',
     read_only: true,
     templateOptions: {
       label: 'Template',
@@ -543,6 +554,331 @@ const form = [
       edit: true
     },
     collapsed: false,
+    type: 'related',
+    key: 'related',
+    many: true
+  }
+];
+
+const sent = [
+  {
+    type: 'input',
+    key: 'resend_id',
+    hide: true,
+    templateOptions: {
+      type: 'text'
+    }
+  },
+  {
+    type: 'checkbox',
+    key: 'has_resend_action',
+    hide: true,
+    templateOptions: {}
+  },
+  {
+    type: 'row',
+    className: 'col row',
+    children: [
+      {
+        type: 'group',
+        label: 'From',
+        normal: true,
+        children: [
+          {
+            key: 'from.__str__',
+            read_only: true,
+            type: 'static',
+            templateOptions: {
+              bottom: true
+            },
+          },
+          {
+            key: 'from_number',
+            type: 'input',
+            templateOptions: {
+              type: 'text'
+            },
+          },
+        ]
+      },
+      {
+        type: 'group',
+        label: 'To',
+        normal: true,
+        children: [
+          {
+            key: 'to.__str__',
+            read_only: true,
+            type: 'static',
+            templateOptions: {
+              bottom: true
+            },
+          },
+          {
+            key: 'to_number',
+            type: 'input',
+            templateOptions: {
+              type: 'text'
+            },
+          },
+        ]
+      }
+    ]
+  },
+  {
+    key: 'text',
+    type: 'textarea',
+    templateOptions: {
+      label: 'Text of the message',
+      type: 'textarea',
+      background: true
+    },
+  },
+  {
+    endpoint: '/sms-interface/smstemplates/',
+    read_only: true,
+    templateOptions: {
+      label: 'Template',
+      values: ['__str__'],
+      indent: true,
+    },
+    type: 'related',
+    key: 'template',
+  },
+  {
+    type: 'row',
+    className: 'row col',
+    children: [
+      {
+        key: 'status',
+        type: 'select',
+        templateOptions: {
+          label: 'Status',
+          errorDescription: {
+            value: 'FAILED',
+            error: 'The contact is not available in this moment'
+          },
+          options: [
+            {
+              value: 'ACCEPTED',
+              label: 'Accepted'
+            },
+            {
+              value: 'SENT',
+              label: 'Sent'
+            },
+            {
+              value: 'QUEUED',
+              label: 'Queued'
+            },
+            {
+              value: 'SENDING',
+              label: 'Sending'
+            },
+            {
+              value: 'FAILED',
+              label: 'Failed',
+            },
+            {
+              value: 'DELIVERED',
+              label: 'Delivered'
+            },
+            {
+              value: 'UNDELIVERED',
+              label: 'Undelivered'
+            },
+            {
+              value: 'RECEIVED',
+              label: 'Received'
+            }
+          ]
+        },
+      },
+      {
+        type: 'group',
+        width: '.1',
+        children: [
+          {
+            type: 'button',
+            color: 'primary',
+            showIf: ['has_resend_action'],
+            templateOptions: {
+              action: 'resend',
+              text: 'Resend',
+              type: 'button',
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'sent_at',
+    type: 'datepicker',
+    templateOptions: {
+      label: 'Sent at',
+      type: 'datetime'
+    },
+  },
+  {
+    type: 'row',
+    className: 'row col',
+    children: [
+      {
+        key: 'delivery_timeout',
+        type: 'input',
+        templateOptions: {
+          label: 'Delivery timeout',
+          type: 'number',
+          description: 'Minutes',
+        },
+      },
+      {
+        key: 'reply_timeout',
+        type: 'input',
+        templateOptions: {
+          label: 'Reply timeout',
+          type: 'number',
+          description: 'Minutes',
+        },
+      },
+    ]
+  },
+  {
+    endpoint: null,
+    read_only: true,
+    templateOptions: {
+      label: 'Related',
+      values: ['__str__'],
+    },
+    column: true,
+    type: 'related',
+    key: 'related',
+    many: true
+  }
+];
+
+const reply = [
+  {
+    type: 'row',
+    className: 'col row',
+    children: [
+      {
+        type: 'group',
+        normal: true,
+        label: 'From',
+        children: [
+          {
+            key: 'from.__str__',
+            read_only: true,
+            type: 'static',
+            templateOptions: {
+              bottom: true
+            },
+          },
+          {
+            key: 'from_number',
+            type: 'input',
+            templateOptions: {
+              type: 'text'
+            },
+          },
+        ]
+      },
+      {
+        type: 'group',
+        normal: true,
+        label: 'To',
+        children: [
+          {
+            key: 'to.__str__',
+            read_only: true,
+            type: 'static',
+            templateOptions: {
+              bottom: true
+            },
+          },
+          {
+            key: 'to_number',
+            type: 'input',
+            templateOptions: {
+              type: 'text'
+            },
+          },
+        ]
+      }
+    ]
+  },
+  {
+    key: 'text',
+    type: 'textarea',
+    templateOptions: {
+      label: 'Text of the message',
+      type: 'textarea',
+      background: true
+    },
+  },
+  {
+    key: 'status',
+    type: 'select',
+    templateOptions: {
+      label: 'Status',
+      errorDescription: {
+        value: 'FAILED',
+        error: 'The contact is not available in this moment'
+      },
+      options: [
+        {
+          value: 'ACCEPTED',
+          label: 'Accepted'
+        },
+        {
+          value: 'SENT',
+          label: 'Sent'
+        },
+        {
+          value: 'QUEUED',
+          label: 'Queued'
+        },
+        {
+          value: 'SENDING',
+          label: 'Sending'
+        },
+        {
+          value: 'FAILED',
+          label: 'Failed',
+        },
+        {
+          value: 'DELIVERED',
+          label: 'Delivered'
+        },
+        {
+          value: 'UNDELIVERED',
+          label: 'Undelivered'
+        },
+        {
+          value: 'RECEIVED',
+          label: 'Received'
+        }
+      ]
+    },
+  },
+  {
+    key: 'sent_at',
+    type: 'datepicker',
+    templateOptions: {
+      label: 'Sent at',
+      type: 'datetime'
+    },
+  },
+  {
+    endpoint: null,
+    read_only: true,
+    templateOptions: {
+      label: 'Related',
+      values: ['__str__'],
+    },
+    column: true,
     type: 'related',
     key: 'related',
     many: true
@@ -650,7 +986,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smstemplates/',
+    endpoint: '/sms-interface/smstemplates/',
     read_only: true,
     templateOptions: {
       label: 'Template',
@@ -746,5 +1082,7 @@ const formadd = [
 export const metadata = {
   list,
   form,
-  formadd
+  formadd,
+  sent,
+  reply
 };

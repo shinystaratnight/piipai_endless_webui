@@ -26,7 +26,7 @@ const mapFilters = [
     type: 'related',
     data: {
       value: '__str__',
-      endpoint: '/ecore/api/v2/hr/jobsites/',
+      endpoint: '/hr/jobsites/',
       key: 'id'
     },
     query: 'jobsite'
@@ -37,10 +37,21 @@ const mapFilters = [
     type: 'related',
     data: {
       value: '__str__',
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       key: 'id'
     },
     query: 'client'
+  },
+  {
+    key: 'primary_contact',
+    label: 'Client Contact',
+    type: 'related',
+    data: {
+      value: '__str__',
+      endpoint: '/core/companycontacts/',
+      key: 'id'
+    },
+    query: 'primary_contact'
   },
   {
     key: 'portfolio_manager',
@@ -48,7 +59,7 @@ const mapFilters = [
     type: 'related',
     data: {
       value: '__str__',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/?master_company=current',
       key: 'id'
     },
     query: 'portfolio_manager'

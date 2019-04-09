@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 const list = {
   list: {
@@ -46,7 +46,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             field: 'regular_company',
             type: 'related'
           }
@@ -59,7 +59,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             field: 'portfolio_manager',
             type: 'related'
           }
@@ -72,7 +72,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/pricing/industries/',
+            endpoint: '/pricing/industries/',
             field: 'industry',
             type: 'related'
           }
@@ -132,7 +132,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/pricing/industries/',
+          endpoint: '/pricing/industries/',
           key: 'id'
         },
         query: 'industry'
@@ -142,7 +142,7 @@ const list = {
         label: 'State',
         data: {
           value: 'name',
-          endpoint: '/ecore/api/v2/core/regions/?country=AU',
+          endpoint: '/core/regions/?country=AU',
           key: 'id'
         },
         query: 'state',
@@ -155,7 +155,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companies/',
+          endpoint: '/core/companies/',
           key: 'id'
         },
         query: 'regular_company'
@@ -166,7 +166,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/?master_company=current',
+          endpoint: '/core/companycontacts/?master_company=current',
           key: 'id'
         },
         query: 'portfolio_manager'
@@ -197,7 +197,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/pricing/industries/',
+      endpoint: '/pricing/industries/',
       read_only: true,
       templateOptions: {
         label: 'Industry',
@@ -214,7 +214,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       read_only: true,
       templateOptions: {
         label: 'Portfolio manager',
@@ -231,7 +231,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       read_only: true,
       templateOptions: {
         label: 'Client',
@@ -295,7 +295,7 @@ const formset = {
     {
       many: false,
       key: 'primary_contact',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -357,7 +357,7 @@ const formset = {
         sort_field: 'primary_contact',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             field: 'primary_contact'
           }
@@ -390,7 +390,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/hr/jobsites/{id}',
+            endpoint: '/hr/jobsites/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -452,7 +452,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     read_only: false,
                     key: 'primary_contact',
                     templateOptions: {
@@ -464,7 +464,7 @@ const form = [
                       edit: true,
                       display: '{contact.__str__}'
                     },
-                    collapsed: false,
+                    visibleMode: true,
                     prefilled: {
                       company: '{regular_company.id}'
                     },
@@ -518,7 +518,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/pricing/industries/',
+                    endpoint: '/pricing/industries/',
                     read_only: true,
                     templateOptions: {
                       label: 'Industry',
@@ -562,7 +562,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     read_only: false,
                     key: 'portfolio_manager',
                     templateOptions: {
@@ -611,11 +611,11 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/hr/jobs/',
+        endpoint: '/hr/jobs/',
         templateOptions: {
           label: 'Jobs',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Jobs'
         },
         collapsed: false,
@@ -630,11 +630,11 @@ const form = [
         }
       },
       {
-        endpoint: '/ecore/api/v2/core/notes/',
+        endpoint: '/core/notes/',
         templateOptions: {
           label: 'Notes',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Notes'
         },
         collapsed: false,
@@ -699,7 +699,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: false,
     hide: true,
     templateOptions: {
@@ -717,7 +717,7 @@ const form = [
   },
   {
     key: 'regular_company',
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     hide: true,
     send: false,
@@ -734,7 +734,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/addresses/',
+    endpoint: '/core/addresses/',
     read_only: false,
     hide: true,
     templateOptions: {
@@ -762,7 +762,7 @@ const formadd = [
         children: [
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             read_only: false,
             key: 'regular_company',
             templateOptions: {
@@ -784,10 +784,11 @@ const formadd = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             read_only: false,
             key: 'primary_contact',
             templateOptions: {
+              required: true,
               label: 'Primary contact',
               add: true,
               delete: false,
@@ -795,7 +796,7 @@ const formadd = [
               type: 'related',
               edit: true
             },
-            collapsed: false,
+            visibleMode: true,
             showIf: ['regular_company.id'],
             type: 'related',
             query: {
@@ -805,10 +806,11 @@ const formadd = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/addresses/',
+            endpoint: '/core/addresses/',
             read_only: false,
             updateFormData: true,
             templateOptions: {
+              required: true,
               label: 'Address',
               add: true,
               delete: false,
@@ -824,7 +826,7 @@ const formadd = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/pricing/industries/',
+            endpoint: '/pricing/industries/',
             read_only: true,
             templateOptions: {
               label: 'Industry',
@@ -844,7 +846,7 @@ const formadd = [
           },
           {
             checkObject: {
-              endpoint: '/ecore/api/v2/hr/jobsites/',
+              endpoint: '/hr/jobsites/',
               error: 'Job site with this name already exists, please alter it!',
               query: {
                 short_name: '{regular_company.short_name} - {address.vicinity}'
@@ -869,7 +871,7 @@ const formadd = [
         children: [
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             read_only: false,
             key: 'portfolio_manager',
             templateOptions: {
@@ -880,7 +882,7 @@ const formadd = [
               type: 'related',
               edit: true
             },
-            collapsed: false,
+            visibleMode: true,
             default: '{regular_company.primary_contact.id}',
             showIf: ['primary_contact.id', 'address'],
             type: 'related',
@@ -891,7 +893,7 @@ const formadd = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             read_only: true,
             key: 'master_company',
             templateOptions: {

@@ -58,7 +58,7 @@ const form = [
   {
     key: 'parent',
     type: 'related',
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     hideIfNull: true,
     templateOptions: {
       values: ['__str__'],
@@ -72,7 +72,7 @@ const form = [
     key: 'children',
     many: true,
     type: 'related',
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     update: {
       getValue: 'children',
       setValue: {
@@ -124,10 +124,11 @@ const form = [
     key: 'skills',
     many: true,
     type: 'related',
-    endpoint: '/ecore/api/v2/skills/skilltags/',
+    endpoint: '/skills/skilltags/',
     hideIfNull: true,
     doNotChoice: true,
     send: false,
+    visibleMode: true,
     prefilled: {
       tag: '{id.id}'
     },
@@ -157,7 +158,7 @@ const formadd = [
   {
     key: 'parent',
     type: 'related',
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     templateOptions: {
       values: ['__str__'],
       add: true,

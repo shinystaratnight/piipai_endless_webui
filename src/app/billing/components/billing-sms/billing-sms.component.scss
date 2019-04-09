@@ -1,0 +1,54 @@
+@import '../../../../styles/variables.scss';
+
+.field {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 5px;
+
+  font-size: 14px;
+  line-height: 20px;
+
+  .value {
+    width: 50px;
+  }
+
+  .active {
+    text-transform: uppercase;
+
+    opacity: 1;
+
+    &.on {
+      color: $brand-success;
+    }
+
+    &.off {
+      color: $brand-danger;
+    }
+  }
+
+  span {
+    opacity: .5;
+  }
+
+  & > span:first-child {
+    width: 150px;
+
+    font-family: 'Roboto';
+    font-size: 12px;
+    line-height: 14px;
+
+    opacity: .3;
+  }
+}
+
+p {
+  margin-top: 15px;
+
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.action-button {
+  width: 170px;
+}

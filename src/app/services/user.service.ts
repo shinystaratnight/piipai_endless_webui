@@ -1,17 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { CookieService } from 'angular2-cookie/core';
-import { LocalStorageService } from 'ng2-webstorage';
+import { LocalStorageService } from 'ngx-webstorage';
+import { Observable, throwError, of } from 'rxjs';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
-
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/switchMap';
-
+import { ToastService, MessageType, CheckPermissionService } from '../shared/services';
 import { NavigationService } from './navigation.service';
-import { CheckPermissionService } from '../shared/services';
-import { LoginService } from './login.service';
+import { AuthService } from './auth.service';
 
 export interface User {
   status: string;
@@ -25,6 +20,7 @@ export interface User {
       email: string;
       contact_id: string;
       contact_type: string;
+      candidate_contact: string;
       id: string;
       name: string;
       __str__: string;
@@ -44,67 +40,74 @@ export interface Role {
 @Injectable()
 export class UserService {
 
-  public authEndpoint: string = '/ecore/api/v2/auth/restore_session/';
-  public logoutEndpoint: string = '/ecore/api/v2/auth/logout/';
-  public rolesEndpoint = '/ecore/api/v2/core/users/roles/';
+  public authEndpoint = '/auth/restore_session/';
+  public rolesEndpoint = '/core/users/roles/';
   public user: User;
   public error: any;
 
   constructor(
     private service: GenericFormService,
-    private router: Router,
-    private cookie: CookieService,
     private navigation: NavigationService,
-    private permission: CheckPermissionService,
     private storage: LocalStorageService,
-    private loginService: LoginService
+    private toastService: ToastService,
+    private authService: AuthService
   ) {}
 
   public getUserData(): Observable<User> {
     if (!this.user) {
       return this.service
         .getAll(this.authEndpoint)
-        .switchMap(
-          (user: User) => this.getUserRoles(),
-          (user: User, role: { roles: Role[] }) => [user, role])
-        .map((res: [User, { roles: Role[] }]) => {
-          const user: User = res[0];
-          const roles: Role[] = res[1].roles;
-          const redirectRole = this.loginService.role;
+        .pipe(
+          mergeMap((user: User) => {
+            this.user = user;
 
-          user.roles = roles;
+            return this.getUserRoles();
+          }),
+          map((res: { roles: Role[] }) => {
+            if (!this.user.data.contact.contact_type || !res.roles.length) {
+              this.authService.logout();
 
-          let role: Role;
-          if (this.storage.retrieve('role')) {
-            role = roles.find(
-              (el) => el.id === this.storage.retrieve('role').id
-            );
-          } else {
-            role = roles.find(
-              (el) => el.__str__.includes(user.data.contact.contact_type)
-            );
-          }
-
-          if (redirectRole) {
-            const existRole = roles.find((el) => el.id === redirectRole.id );
-            if (existRole) {
-              role = existRole;
-            } else {
-              role = redirectRole;
-              roles.push(role);
+              setTimeout(() => {
+                this.toastService.sendMessage('User is invalid', MessageType.error);
+              }, 1000);
+              throw 'User is invalid';
+              return;
             }
-          }
 
-          user.currentRole = role || roles[0];
+            const redirectRole: Role = this.authService.role;
+            const storageRole: Role = this.storage.retrieve('role');
+            let role: Role;
 
-          this.storage.store('role', user.currentRole);
+            if (storageRole) {
+              role = res.roles.find(
+                (el) => el.id === storageRole.id
+              );
+            } else {
+              role = res.roles.find(
+                (el) => el.__str__.includes(this.user.data.contact.contact_type)
+              );
+            }
 
-          this.user = user;
-          return this.user;
-        })
-      .catch((err: any) => Observable.throw(err));
+            if (redirectRole) {
+              const existRole = res.roles.find((el) => el.id === redirectRole.id );
+              if (existRole) {
+                role = existRole;
+              } else {
+                role = redirectRole;
+                res.roles.push(role);
+              }
+            }
+
+            this.user.currentRole = role || this.user.roles[0];
+            this.user.roles = res.roles;
+            this.storage.store('role', this.user.currentRole);
+
+            return this.user;
+          }),
+          catchError((err: any) => throwError(err))
+        );
     } else {
-      return Observable.of(this.user);
+      return of(this.user);
     }
   }
 
@@ -116,22 +119,6 @@ export class UserService {
     this.user.currentRole = role;
     this.storage.store('role', role);
     this.navigation.setCurrentRole(role);
-  }
-
-  public logout() {
-    this.service.submitForm(this.logoutEndpoint, {1: ''}).subscribe(
-      (res: any) => {
-        if (res.status === 'success') {
-          this.user = null;
-          this.navigation.navigationList = {};
-          this.permission.permissions = null;
-          this.storage.clear('role');
-          this.cookie.remove('sessionid');
-          this.router.navigate(['login']);
-        }
-      },
-      (err: any) => this.error = err
-    );
   }
 
   public resolve() {

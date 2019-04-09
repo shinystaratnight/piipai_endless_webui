@@ -26,7 +26,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate contacts',
@@ -36,7 +36,8 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    hide: true,
+    visibleMode: true,
     type: 'related',
     key: 'candidate_contacts',
     many: true
@@ -51,12 +52,14 @@ const form = [
   {
     key: 'updated_at',
     type: 'datepicker',
+    hide: true,
     templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
     read_only: true
   },
   {
     key: 'created_at',
     type: 'datepicker',
+    hide: true,
     templateOptions: { required: false, label: 'Created at', type: 'datetime' },
     read_only: true
   },
@@ -69,7 +72,7 @@ const form = [
       max: 4,
       type: 'text'
     },
-    read_only: false
+    read_only: true
   },
   {
     key: 'name',
@@ -80,7 +83,7 @@ const form = [
       max: 255,
       type: 'text'
     },
-    read_only: false
+    read_only: true
   },
   {
     key: 'general_type',
@@ -103,7 +106,7 @@ const form = [
         { value: 'bridging', label: 'Bridging Visa' }
       ]
     },
-    read_only: false
+    read_only: true,
   },
   {
     key: 'work_hours_allowed',
@@ -116,21 +119,21 @@ const form = [
       type: 'number',
       min: 0
     },
-    read_only: false
+    read_only: true,
   },
   {
     key: 'is_available',
     default: true,
     type: 'checkbox',
     templateOptions: { required: false, label: 'Available', type: 'checkbox' },
-    read_only: false
+    read_only: true,
   }
 ];
 
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate contacts',

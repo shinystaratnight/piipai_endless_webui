@@ -1,14 +1,13 @@
-<div class="container mb-3">
-  <div class="row justify-content-center align-items-center">
-    <div class="col-12 col-sm-8 col-md-7 col-lg-6 mt-5">
-      <h4>Enter your payment information</h4>
+<div class="wrapper mb-3">
+  <h5>Enter your payment information</h5>
 
-      <form (submit)="checkCard($event)">
-        <div class="form-row" [class.submited]="saving">
-          <div id="card-element"></div>
-          <div id="card-errors" role="alert">{{error}}</div>
-        </div>
-      </form>
+  <form (submit)="checkCard($event)" class="d-flex mr-3">
+    <div class="form-row flex-grow-1 mr-3" [class.submited]="saving">
+      <div id="card-element"></div>
+      <div id="card-errors" role="alert">{{error}}</div>
     </div>
-  </div>
+
+    <button class="btn btn-primary align-self-start mt-1">Save</button>
+  </form>
 </div>
+

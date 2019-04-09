@@ -13,13 +13,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { FallbackDispatcher } from '../webcam/fallback.dispatcher';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { getContactAvatar } from '../../../helpers/utils';
 
+import { FormService } from '../../services';
+
 @Component({
-  selector: 'form-picture',
+  selector: 'app-form-picture',
   templateUrl: 'form-picture.component.html',
   styleUrls: ['./form-picture.component.scss'],
 })
@@ -34,6 +36,9 @@ export class FormPictureComponent
   @ViewChild('picture')
   public picture;
 
+  @ViewChild('dropzone')
+  public dropzone;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -43,15 +48,16 @@ export class FormPictureComponent
   public message: any;
   public key: any;
   public label: boolean;
-  public photoExist: boolean = false;
+  public photoExist = false;
   public mime: string;
-  public fileName: string = '';
+  public fileName = '';
   public onSuccess;
   public onError;
   public flashPlayer: any;
   public err: any;
   public base64: string;
   public link: string;
+  public sizeError: string;
 
   public value: any;
 
@@ -62,7 +68,7 @@ export class FormPictureComponent
   public options = {
     audio: false,
     video: true,
-    width: 320,
+    width: 240,
     height: 240,
     fallbackMode: 'callback',
     fallbackSrc: 'assets/jscam_canvas_only.swf',
@@ -76,7 +82,8 @@ export class FormPictureComponent
     private fb: FormBuilder,
     public modalService: NgbModal,
     private element: ElementRef,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private formService: FormService,
   ) {
     super();
     this.onSuccess = (stream: any) => {
@@ -92,7 +99,7 @@ export class FormPictureComponent
   }
 
   public ngOnInit(): void {
-    this.addControl(this.config, this.fb);
+    this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.mime = 'image/jpeg';
     this.setInitValue();
     this.checkModeProperty();
@@ -102,6 +109,14 @@ export class FormPictureComponent
 
   public ngOnDestroy() {
     this.subscriptions.forEach((s) => s.unsubscribe());
+
+    if (this.dropzone) {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((event) => {
+        this.dropzone.nativeElement.removeEventListener(event, this.stopEvent, false);
+      });
+
+      this.dropzone.nativeElement.removeEventListener('drop', this.handleDrop, false);
+    }
   }
 
   public checkHiddenProperty() {
@@ -115,7 +130,9 @@ export class FormPictureComponent
           this.config.hide = hide;
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);
@@ -138,12 +155,13 @@ export class FormPictureComponent
   }
 
   public setInitValue() {
-    if (this.config.value) {
+    if (this.config.value || this.group.get(this.key).value) {
+      this.config.value = this.config.value || this.group.get(this.key).value;
       if (this.config.value instanceof Object && this.config.value.origin) {
         this.value = this.config.value.origin;
       } else if (typeof this.config.value === 'string') {
-        let imageType = /^image\//;
-        let pdfType = /pdf$/;
+        const imageType = /^image\//;
+        const pdfType = /pdf$/;
         if (pdfType.test(this.config.value)) {
           this.link = this.config.value;
         } else {
@@ -153,7 +171,7 @@ export class FormPictureComponent
     }
 
     if (!this.value) {
-      this.value = this.config.companyContact && this.config.key === 'logo' ? '/assets/img/logo.svg' : ''; //tslint:disable-line
+      this.value = this.config.companyContact && this.config.key === 'logo' ? '/assets/img/logo.svg' : '';
 
       if (!this.value && this.config.contactName) {
         this.contactAvatar = getContactAvatar(this.config.contactName);
@@ -161,12 +179,33 @@ export class FormPictureComponent
     }
 
     this.group.get(this.key).patchValue(undefined);
+
+    if (this.config.value && (typeof this.config.valye === 'string') && this.config.value.indexOf('data:image') > -1) {
+      this.value = this.config.value;
+      this.group.get(this.key).patchValue(this.config.value);
+    }
   }
 
   public ngAfterViewInit() {
     if (this.picture) {
       this.addFlags(this.picture, this.config);
     }
+
+    if (this.dropzone) {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((event) => {
+        this.dropzone.nativeElement.addEventListener(event, this.stopEvent, false);
+      });
+
+      this.dropzone.nativeElement.addEventListener('drop', this.handleDrop.bind(this), false);
+    }
+  }
+
+  public stopEvent(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    return false;
   }
 
   public upload(e): void {
@@ -180,12 +219,12 @@ export class FormPictureComponent
 
   public open(): void {
     this.photoExist = false;
-    this.modalService.open(this.modal, {size: 'lg'});
+    this.modalService.open(this.modal, { windowClass: 'medium-modal' });
   }
 
   public getPhoto() {
     this.fileName = '';
-    let canvas = this.createPhoto();
+    const canvas = this.createPhoto();
     this.base64 = canvas.toDataURL(this.mime);
   }
 
@@ -213,18 +252,27 @@ export class FormPictureComponent
 
   public fileChangeEvent(e) {
     this.updateValue('', '', true);
-    let file = e.target.files[0];
+    const file = e.target.files[0];
+
+    if (file.size > 900000) {
+      this.formService.disableSaveButton(this.config.formId, true);
+      this.sizeError = 'File size is too large! Maximum allowed file size is 900kb.';
+    } else {
+      this.sizeError = '';
+      this.formService.disableSaveButton(this.config.formId, false);
+    }
+
     if (file) {
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = () => {
-        let imageType = /^image\//;
-        let pdfType = /pdf$/;
+        const imageType = /^image\//;
+        const pdfType = /pdf$/;
 
         if (!imageType.test(file.type) && !pdfType.test(file.type)) {
           return;
         }
         if (reader.result) {
-          let name = file.name;
+          const name = file.name;
           this.updateValue(name, reader.result, imageType.test(file.type));
         }
       };
@@ -252,14 +300,14 @@ export class FormPictureComponent
       FallbackDispatcher.implementExternal({
         onSave: (data) => {
           try {
-            let col = data.split(';');
+            const col = data.split(';');
             let tmp = null;
 
             for (let i = 0; i < w; i++) {
               tmp = parseInt(col[i], 10);
-              externData.imgData.data[externData.pos + 0] = (tmp >> 16) & 0xff;
-              externData.imgData.data[externData.pos + 1] = (tmp >> 8) & 0xff;
-              externData.imgData.data[externData.pos + 2] = tmp & 0xff;
+              externData.imgData.data[externData.pos + 0] = (tmp >> 16) & 0xff; //tslint:disable-line
+              externData.imgData.data[externData.pos + 1] = (tmp >> 8) & 0xff; //tslint:disable-line
+              externData.imgData.data[externData.pos + 2] = tmp & 0xff; //tslint:disable-line
               externData.imgData.data[externData.pos + 3] = 0xff;
               externData.pos += 4;
             }
@@ -299,6 +347,12 @@ export class FormPictureComponent
 
   public getExtension(link: string) {
     return link.split('.').pop();
+  }
+
+  handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    this.fileChangeEvent({target: {files}});
   }
 
 }

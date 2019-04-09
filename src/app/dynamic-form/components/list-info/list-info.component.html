@@ -23,15 +23,23 @@
   <div class="list-info-block">
     <span *ngIf="job_title">{{job_title}}</span>
     <h5 class="list-info-title">
-      <span *ngIf="!this.averageScore && this.averageScore !== 0">
-        {{title}}<info [description]="description"></info>
+      <span class="title" *ngIf="!getScore(averageScore)">
+        {{title}}<app-info class="ml-1" [description]="description"></app-info>
       </span>
-      <span *ngIf="this.averageScore || this.averageScore === 0">
+      <span class="title" *ngIf="getScore(averageScore)">
         {{title}}
-        <span class="score" [style.color]="colors[getScore(this.averageScore)]" [style.borderColor]="colors[getScore(this.averageScore)]">
-          {{this.averageScore}}
-          <i fa name="star"></i>
+        <span class="score"
+          [placement]="'right'"
+          [ngbTooltip]="avarage"
+          [style.color]="colors[getScore(averageScore)]"
+          [style.borderColor]="colors[getScore(averageScore)]">
+            {{averageScore | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
         </span>
+      </span>
+      <span class="score text-danger mt-0"
+        *ngIf="!getScore(averageScore) && isCandidatePage()"
+        [style.borderColor]="colors[1]">
+          No rating
       </span>
     </h5>
     <p class="description" *ngIf="company">{{company}}</p>
@@ -46,3 +54,37 @@
     </div>
   </div>
 </div>
+
+<ng-template #avarage>
+  <div *ngIf="config.value" class="info-block p-1">
+    <ng-container *ngIf="averageScoreDescription.includes.length">
+      <h6 class="subtitle">Average includes</h6>
+      <ul class="mb-2">
+        <li [class.mb-1]="!l" *ngFor="let scoreItem of averageScoreDescription.includes; let l = last">
+          <ng-container *ngTemplateOutlet="score; context: {name: scoreItem.label, score: scoreItem.score}"></ng-container>
+        </li>
+      </ul>
+    </ng-container>
+
+    <ng-container *ngIf="averageScoreDescription.excludes.length">
+      <h6 class="subtitle">Excludes</h6>
+      <ul>
+        <li [class.mb-1]="!l" *ngFor="let scoreItem of averageScoreDescription.excludes; let l = last">
+          <ng-container *ngTemplateOutlet="score; context: {name: scoreItem.label, score: scoreItem.score}"></ng-container>
+        </li>
+      </ul>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #score let-name="name" let-score="score">
+  <i fa class="icon text-warning" name="circle"></i>
+  {{name}}
+  <ng-container *ngIf="getScore(score)">
+    <span [style.color]="colors[getScore(score)]" [style.borderColor]="colors[getScore(score)]">
+      {{score | number:'1.1-1'}}
+      <i fa name="star"></i>
+    </span>
+  </ng-container>
+  <span *ngIf="!getScore(score)" class="text-danger">No rating</span>
+</ng-template>

@@ -1,12 +1,17 @@
 @import '../../../../styles/variables.scss';
 
 .group {
-  border-bottom: 1px solid rgba($brand-inverse, .1);
+  border-bottom: 1px solid rgba($gray-600, .1);
 }
 
 .field {
-  border-bottom: 1px solid rgba($brand-inverse, .1);
+  border-bottom: 1px solid rgba($gray-600, .1);
   transition: background-color .5s;
+
+  &-name {
+    text-transform: capitalize;
+  }
+
   &:hover {
     background-color: rgba($brand-success, .2);
   }
@@ -30,4 +35,10 @@
     top: .5rem;
     right: .7rem;
   }
+}
+
+.btn-success:focus, .btn-success.focus,
+.btn:focus, .btn.focus,
+.btn-success:focus, .btn-success.focus {
+  box-shadow: none;
 }

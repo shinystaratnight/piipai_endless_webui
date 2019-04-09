@@ -2,7 +2,7 @@ const list = {
   list: {
     list: 'timesheet',
     search_enabled: false,
-    pagination_label: 'Timesheet Entry',
+    pagination_label: 'Timesheet history',
     buttons: [],
     columns: [
       {
@@ -45,7 +45,7 @@ const list = {
         content: [
           { type: 'static', field: 'jobsite' },
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             field: 'supervisor'
           }
@@ -71,7 +71,7 @@ const list = {
         title: null,
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             field: 'supervisor'
           },
@@ -80,7 +80,7 @@ const list = {
       }
     ],
     editDisable: true,
-    label: 'Timesheet Entry'
+    label: 'Timesheet history'
   },
   fields: [
     {
@@ -99,7 +99,7 @@ const list = {
       collapsed: false,
       read_only: true,
       key: 'supervisor',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       type: 'related',
       templateOptions: {
         edit: true,
@@ -170,5 +170,6 @@ const list = {
 };
 
 export const metadata = {
-  list
+  list,
+  formset: list
 };

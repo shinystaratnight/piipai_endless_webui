@@ -13,6 +13,19 @@
 
     overflow: auto;
 
+    @include media-breakpoint-up('xl') {
+      &.inline {
+        width: auto;
+        height: auto;
+        max-height: none;
+
+        margin: 0;
+        padding: 0;
+
+        overflow: visible;
+      }
+    }
+
     @include media-breakpoint-down('lg') {
       height: 100vh;
       max-height: 100vh;
@@ -51,5 +64,11 @@
         color: $gray;
       }
     }
+  }
+}
+
+@include media-breakpoint-up('xl') {
+  .inline-container {
+    margin: 0 -12px;
   }
 }

@@ -2,8 +2,12 @@
 @import '../../../../styles/mixins.scss';
 
 .form-element {
-  margin: 0 40px;
+  margin: 0 40px 0 20px;
   margin-bottom: 1.5rem;
+}
+
+.card {
+  padding-top: 15px;
 }
 
 .operator {

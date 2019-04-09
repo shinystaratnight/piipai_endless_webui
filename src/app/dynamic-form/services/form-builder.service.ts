@@ -1,37 +1,51 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { catchError } from 'rxjs/operators';
 
 import { ErrorsService } from '../../shared/services/errors.service';
 
 @Injectable()
 export class FormBuilderService {
 
-  public formEndpoint = '/ecore/api/v2/core/forms/';
-  public parseAddressEndpoint = '/ecore/api/v2/core/addresses/parse/';
+  public formEndpoint = '/core/forms/';
+  public parseAddressEndpoint = '/core/addresses/parse/';
+  public contactEndpoint = '/core/contacts/validate/';
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private errorsService: ErrorsService,
   ) { }
 
   public getRenderData(id: string) {
-    return this.http.get(this.formEndpoint + id + '/render/')
-      .map((res: any) => res.json())
-      .catch((error: any) => this.errorsService.parseErrors(error));
+    return this.http
+      .get(this.formEndpoint + id + '/render/')
+      .pipe(
+        catchError((error: any) => this.errorsService.parseErrors(error))
+      );
   }
 
   public sendFormData(id: string, data: any) {
-    return this.http.post(this.formEndpoint + id + '/submit/', data)
-      .map((res: any) => res.json())
-      .catch((error: any) => this.errorsService.parseErrors(error));
+    return this.http
+      .post(this.formEndpoint + id + '/submit/', data)
+      .pipe(
+        catchError((error: any) => this.errorsService.parseErrors(error))
+      );
   }
 
   public parseAddress(data) {
-    return this.http.post(this.parseAddressEndpoint, data)
-      .map((res: any) => res.json())
-      .catch((error: any) => this.errorsService.parseErrors(error));
+    return this.http
+      .post(this.parseAddressEndpoint, data)
+      .pipe(
+        catchError((error: any) => this.errorsService.parseErrors(error))
+      );
+  }
+
+  public validate(key, value) {
+    return this.http
+      .get(this.contactEndpoint + `?${key}=${value}`)
+      .pipe(
+        catchError((error: any) => this.errorsService.parseErrors(error))
+      );
   }
 }

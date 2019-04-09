@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { getContactAvatar } from '../../../helpers/utils';
+import { getValueOfData } from '../../helpers/utils';
 
 @Component({
-  selector: 'list-info',
+  selector: 'app-list-info',
   templateUrl: 'list-info.component.html',
   styleUrls: ['./list-info.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -20,6 +21,7 @@ export class ListInfoComponent implements OnInit {
   public description: string;
   public status: any[];
   public averageScore: any;
+  public averageScoreDescription: any;
   public contactAvatar: string;
   public job_title: string; //tslint:disable-line
   public company: string;
@@ -72,12 +74,50 @@ export class ListInfoComponent implements OnInit {
         this.contactAvatar = getContactAvatar(this.title);
       }
     }
+
+    if (this.config.value) {
+      this.generateAverageScoreTooltip(this.config.value);
+    }
+  }
+
+  public generateAverageScoreTooltip(data) {
+    const scores = [
+      { label: 'Loyalty', key: 'candidate_scores.loyalty' },
+      { label: 'Client feedback', key: 'candidate_scores.client_feedback' },
+      { label: 'Avarage test', key: 'candidate_scores.recruitment_score' },
+      { label: 'Reliability', key: 'candidate_scores.reliability' },
+      { label: 'Average skill', key: 'candidate_scores.skill_score' },
+    ];
+
+    this.averageScoreDescription = {
+      includes: this.filterScores(scores, data, 'includes'),
+      excludes: this.filterScores(scores, data)
+    };
+  }
+
+  public isCandidatePage(): boolean {
+    if (this.config.value && this.config.value instanceof Object) {
+      return this.config.value.hasOwnProperty('average_score');
+    }
+
+    return false;
+  }
+
+  public filterScores(scores, data, type?: string) {
+    return scores
+      .filter((el) => {
+        getValueOfData(data, el.key, el);
+        const score = this.getScore(el.value);
+        el.score = el.value;
+
+        return type === 'includes' ? score : !score;
+      });
   }
 
   public getValue(key: string, data: any): any {
     if (key) {
-      let keys = key.split('.');
-      let prop = keys.shift();
+      const keys = key.split('.');
+      const prop = keys.shift();
 
       if (!keys.length) {
         return data[prop];

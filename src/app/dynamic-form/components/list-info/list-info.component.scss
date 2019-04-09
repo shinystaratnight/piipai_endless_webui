@@ -9,15 +9,21 @@
   }
 
   &-title {
-    span {
+    .title {
       font-size: 18px;
       line-height: 18px;
       font-weight: 600;
     }
 
     .score {
-      margin-left: 8px;
-      padding-left: 8px;
+      display: inline-block;
+
+      height: 14px;
+      line-height: 14px;
+
+      margin-top: 3px;
+      margin-left: 4px;
+      padding-left: 4px;
 
       font-size: 14px;
       vertical-align: top;

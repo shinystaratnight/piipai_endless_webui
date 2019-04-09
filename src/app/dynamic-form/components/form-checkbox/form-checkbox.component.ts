@@ -10,12 +10,13 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { SiteSettingsService } from '../../../services/site-settings.service';
 
 @Component({
-  selector: 'form-checkbox',
+  selector: 'app-form-checkbox',
   templateUrl: './form-checkbox.component.html',
 })
 
@@ -35,8 +36,11 @@ export class FormCheckboxComponent
   public label: boolean;
 
   public checkboxValue: string;
-  public checkboxClass: string = '';
-  public checkboxColor: string = '';
+  public checkboxClass = '';
+  public checkboxColor = '';
+
+  public isDisabled: boolean;
+  public disabledTitle: string;
 
   public viewMode: boolean;
 
@@ -47,7 +51,8 @@ export class FormCheckboxComponent
 
   constructor(
     private fb: FormBuilder,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private siteSettings: SiteSettingsService
   ) {
     super();
     this.subscriptions = [];
@@ -55,10 +60,19 @@ export class FormCheckboxComponent
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);
+    this.viewMode = this.config.read_only;
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.createEvent();
+
+    this.isDisabled = this.checkDisabled();
+    this.disabledTitle = this.getDisabledTitle(this.isDisabled);
+
+    if (this.isDisabled) {
+      this.group.get(this.key).patchValue(false);
+      this.group.get(this.key).disable();
+    }
   }
 
   public ngOnDestroy() {
@@ -76,7 +90,9 @@ export class FormCheckboxComponent
           this.config.hide = hide;
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);
@@ -126,8 +142,8 @@ export class FormCheckboxComponent
 
   public customizeCheckbox(value): void {
     this.checkboxValue = this.config.templateOptions.values[value];
-    let color = this.config.templateOptions.color;
-    let classes = ['primary', 'danger', 'info', 'success', 'warning'];
+    const color = this.config.templateOptions.color;
+    const classes = ['primary', 'danger', 'info', 'success', 'warning'];
     this.checkboxClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
     if (!this.checkboxClass) {
       this.checkboxColor = color || '';
@@ -146,5 +162,17 @@ export class FormCheckboxComponent
       el: this.config,
       value: this.group.controls[this.key].value
     });
+  }
+
+  public checkDisabled(): boolean {
+    const disableFields = ['by_phone', 'send_supervisor_message', 'send_candidate_message'];
+
+    return disableFields.indexOf(this.config.key) !== -1 && !this.siteSettings.isSmsEnabled();
+  }
+
+  public getDisabledTitle(disabled?: boolean): string {
+    return disabled
+      ? this.siteSettings.getSmsSendTitle()
+      : '';
   }
 }

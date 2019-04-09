@@ -7,7 +7,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/{company.id}',
+            endpoint: '/core/companies/{company.id}',
             field: 'company',
             type: 'link',
           }
@@ -98,7 +98,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companies/?type=master',
+          endpoint: '/core/companies/?type=master',
           key: 'id'
         },
         query: 'company'
@@ -110,7 +110,7 @@ const list = {
 
 const formadd = [
   {
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     templateOptions: {
       label: 'Client',
       add: true,
@@ -209,7 +209,7 @@ const formadd = [
 
 const form = [
   {
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Client',

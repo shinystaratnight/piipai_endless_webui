@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'note',
     label: 'Contact Note',
+    buttons: [],
     columns: [
       {
         content: [{ field: '__str__', type: 'static' }],
@@ -115,7 +116,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/core/notes/{id}',
+            endpoint: '/core/notes/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -155,7 +156,7 @@ const formset = {
 
 const form = [
   {
-    endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+    endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -182,7 +183,7 @@ const form = [
 
 const formadd = [
   {
-    endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+    endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     hide: true,
     templateOptions: {

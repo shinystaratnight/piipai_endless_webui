@@ -1,18 +1,18 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { FilterService } from './../../services/filter.service';
 
 @Component({
-  selector: 'filter-select',
+  selector: 'app-filter-select',
   templateUrl: 'filter-select.component.html'
 })
 export class FilterSelectComponent implements OnInit, OnDestroy {
   public config: any;
   public data: string;
   public query: string;
-  public isCollapsed: boolean = true;
+  public isCollapsed = true;
   public options: any;
   public icons = {
     r3sourcer: {
@@ -42,7 +42,7 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
     this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
     this.data = this.config.default || '';
     this.querySubscription = this.route.queryParams.subscribe(
-      (params) => this.updateFilter()
+      () => this.updateFilter()
     );
     this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
   }
@@ -76,8 +76,8 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
 
   public parseQuery(query) {
     this.query = query;
-    let value = query.split('=')[1];
-    let existValue = this.config.options.find((el) => el.value + '' === value + '');
+    const value = query.split('=')[1];
+    const existValue = this.config.options.find((el) => el.value + '' === value + '');
     if (existValue) {
       this.data = existValue.value;
     }
@@ -86,7 +86,7 @@ export class FilterSelectComponent implements OnInit, OnDestroy {
   public updateFilter() {
     this.data = '';
     this.query = '';
-    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    const data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
       if (data.byQuery) {
         this.parseQuery(data.query);

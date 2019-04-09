@@ -1,4 +1,4 @@
-<div class="dashboard" *ngIf="checkOnManager()">
+<div class="dashboard" [class.preview]="!widgets" *ngIf="checkOnManager()">
   <div class="welcome d-flex align-items-center justify-content-center flex-column"
     *ngIf="widgets && !widgets.length">
     <span class="text-muted"><b>Modify your dashboard by adding widgets!</b></span>
@@ -7,8 +7,7 @@
     </button>
   </div>
 
-  <div class="px-3" *ngIf="widgets && widgets.length">
-    <h3 class="title">Dashboard</h3>
+  <ng-container *ngIf="widgets && widgets.length">
     <div class="dashboard-wrapper">
       <ng-container *ngFor="let widget of widgets">
         <div class="widget-item">
@@ -33,10 +32,15 @@
         </div>
       </ng-container>
     </div>
+  </ng-container>
+
+  <div *ngIf="!widgets" class="spinner m-0">
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
   </div>
 </div>
 
-<template #modal let-c="close">
+<ng-template #modal let-c="close">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -63,6 +67,6 @@
       </div>
     </div>
   </div>
-</template>
+</ng-template>
 
 

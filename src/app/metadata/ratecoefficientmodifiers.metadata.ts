@@ -19,7 +19,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/pricing/ratecoefficients/',
+          endpoint: '/pricing/ratecoefficients/',
           key: 'id'
         },
         query: 'rate_coefficient'
@@ -127,7 +127,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/pricing/ratecoefficientmodifiers/{id}',
+            endpoint: '/pricing/ratecoefficientmodifiers/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -192,7 +192,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/ratecoefficients/',
+    endpoint: '/pricing/ratecoefficients/',
     read_only: true,
     templateOptions: {
       label: 'Rate coefficient',
@@ -246,13 +246,6 @@ const form = [
 
 const formadd = [
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
     key: 'updated_at',
     type: 'datepicker',
     templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
@@ -280,9 +273,10 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/ratecoefficients/',
+    endpoint: '/pricing/ratecoefficients/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Rate coefficient',
       add: true,
       delete: false,

@@ -19,7 +19,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/skills/skills/',
+          endpoint: '/skills/skills/',
           key: 'id'
         },
         query: 'skill'
@@ -30,7 +30,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/pricing/pricelists/',
+          endpoint: '/pricing/pricelists/',
           key: 'id'
         },
         query: 'price_list'
@@ -66,7 +66,7 @@ const pricelist = {
     {
       many: false,
       key: 'skill',
-      endpoint: '/ecore/api/v2/skills/skills/',
+      endpoint: '/skills/skills/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -99,7 +99,7 @@ const pricelist = {
         sort_field: 'skill',
         content: [
           {
-            endpoint: '/ecore/api/v2/skills/skills/',
+            endpoint: '/skills/skills/',
             type: 'related',
             field: 'skill'
           }
@@ -118,7 +118,7 @@ const pricelist = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/pricing/pricelistrates/{id}',
+            endpoint: '/pricing/pricelistrates/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -151,7 +151,8 @@ const pricelist = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/pricelists/',
+    endpoint: '/pricing/pricelists/',
+    visibleMode: true,
     read_only: true,
     templateOptions: {
       label: 'Price list',
@@ -168,7 +169,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
       label: 'Skill',
@@ -195,7 +196,8 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/pricelists/',
+    endpoint: '/pricing/pricelists/',
+    visibleMode: true,
     read_only: true,
     templateOptions: {
       label: 'Price list',
@@ -212,9 +214,10 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Skill',
       add: true,
       delete: false,
@@ -235,7 +238,11 @@ const formadd = [
     key: 'hourly_rate',
     default: '{skill.price_list_default_rate}',
     type: 'input',
-    templateOptions: { required: false, label: 'Hourly Rate', type: 'text' },
+    templateOptions: {
+      required: true,
+      label: 'Hourly Rate',
+      type: 'text'
+    },
     read_only: false
   }
 ];
@@ -254,7 +261,8 @@ const pricelistForm = [
       label: 'Price list',
       delete: false
     },
-    endpoint: '/ecore/api/v2/pricing/pricelists/',
+    visibleMode: true,
+    endpoint: '/pricing/pricelists/',
     key: 'price_list',
     many: false
   },
@@ -271,7 +279,7 @@ const pricelistForm = [
       label: 'Skill',
       delete: false
     },
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     key: 'skill',
     many: false
   },

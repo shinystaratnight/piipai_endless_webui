@@ -55,7 +55,6 @@ const form = [
           label: 'Answer',
           max: 255
         },
-        read_only: true
       },
       {
         key: 'order',
@@ -74,14 +73,24 @@ const form = [
         key: 'score',
         type: 'input',
         templateOptions: {
-          required: false,
+          required: true,
           label: 'Score',
           max: 5,
           type: 'number',
-          min: 1
+          min: 1,
+          description: 'Values can be between 1 and 5'
         },
-        read_only: true
       },
+      {
+        type: 'button',
+        width: 0.4,
+        color: 'primary',
+        templateOptions: {
+          type: 'submit',
+          p: true,
+          small: true
+        }
+      }
     ]
   }
 ];
@@ -117,11 +126,12 @@ const formadd = [
         key: 'score',
         type: 'input',
         templateOptions: {
-          required: false,
+          required: true,
           label: 'Score',
           max: 5,
           type: 'number',
-          min: 1
+          min: 1,
+          description: 'Values can be between 1 and 5'
         },
         read_only: false
       },

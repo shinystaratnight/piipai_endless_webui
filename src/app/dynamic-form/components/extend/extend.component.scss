@@ -71,3 +71,25 @@ b {
   flex: .6;
   min-width: 300px;
 }
+
+.available-info {
+  margin-bottom: 10px;
+
+  text-align: left;
+
+  &-detail {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &-title {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  &-datetime {
+    min-width: 130px;
+
+    color: $brand-danger;
+  }
+}

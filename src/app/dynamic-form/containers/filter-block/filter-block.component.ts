@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'filter-block',
+  selector: 'app-filter-block',
   templateUrl: 'filter-block.component.html',
   styleUrls: ['./filter-block.component.scss']
 })
@@ -9,10 +9,13 @@ export class FilterBlockComponent {
   @Input()
   public config: any[] = [];
 
+  @Input()
+  public inline: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
-  public direction: string = 'down';
+  public direction = 'down';
 
   public changeQuery(e) {
     this.event.emit(e);

@@ -45,21 +45,21 @@ const list = {
         content: [
           {
             endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{candidate_contacts.id}',
+              '/candidate/candidatecontacts/{candidate_contacts.id}',
             field: 'candidate_contacts',
             type: 'link',
             display: 'Candidate contact',
             inline: true
           },
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/{company_contact.id}/change',
+            endpoint: '/core/companycontacts/{company_contact.id}/change',
             field: 'company_contact',
             type: 'link',
             display: 'Client contact',
             inline: true
           },
           {
-            endpoint: '/ecore/api/v2/core/companies/{master_company.id}',
+            endpoint: '/core/companies/{master_company.id}',
             field: 'master_company',
             type: 'link',
             display: 'Master Company',
@@ -81,7 +81,7 @@ const list = {
         label: 'State',
         data: {
           value: 'name',
-          endpoint: '/ecore/api/v2/core/regions/?country=AU',
+          endpoint: '/core/regions/?country=AU',
           key: 'id'
         },
         query: 'state',
@@ -124,7 +124,7 @@ const list = {
         ],
         query: 'is_available',
         default: null,
-        unique: ['data'],
+        multiple: false,
         type: 'checkbox'
       },
       {
@@ -142,7 +142,7 @@ const list = {
         ],
         query: 'phone_mobile_verified',
         default: null,
-        unique: ['data'],
+        multiple: false,
         type: 'checkbox'
       },
       {
@@ -160,7 +160,7 @@ const list = {
         ],
         query: 'email_verified',
         default: null,
-        unique: ['data'],
+        multiple: false,
         type: 'checkbox'
       }
     ]
@@ -372,7 +372,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/users/',
+                    endpoint: '/core/users/',
                     read_only: true,
                     metadata_query: {
                       fieldsets_type: 'contact'
@@ -392,19 +392,19 @@ const form = [
                     many: false
                   },
                   {
-                    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+                    endpoint: '/candidate/candidatecontacts/',
                     doNotChoice: true,
                     templateOptions: {
                       label: 'Candidate Contact',
                       add: true,
                       delete: false,
                       values: ['__str__'],
-                      edit: true
+                      edit: true,
                     },
                     send: false,
                     errorMessage: {
                       field: 'birthday',
-                      message: 'Birthday is required'
+                      message: 'Birthday is required to create Candidate contact'
                     },
                     prefilled: {
                       contact: '{id.id}',
@@ -421,7 +421,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     doNotChoice: true,
                     templateOptions: {
                       label: 'Company Contact',
@@ -447,7 +447,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     read_only: true,
                     templateOptions: {
                       label: 'Recruitment Agent',
@@ -457,7 +457,7 @@ const form = [
                       type: 'related',
                       edit: true
                     },
-                    collapsed: false,
+                    visibleMode: true,
                     send: false,
                     type: 'related',
                     key: 'candidate_contacts.recruitment_agent',
@@ -465,7 +465,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companies/',
+                    endpoint: '/core/companies/',
                     read_only: true,
                     templateOptions: {
                       label: 'Master Company',
@@ -489,11 +489,11 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/core/notes/',
+        endpoint: '/core/notes/',
         templateOptions: {
           label: 'Notes',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Notes'
         },
         collapsed: false,
@@ -509,11 +509,11 @@ const form = [
     ]
   },
   {
-    list: false,
-    endpoint: '/ecore/api/v2/core/addresses/',
+    endpoint: '/core/addresses/',
     read_only: false,
     hide: true,
     templateOptions: {
+      hideLabel: true,
       label: 'Address',
       add: true,
       delete: false,
@@ -521,10 +521,8 @@ const form = [
       type: 'address',
       edit: true
     },
-    collapsed: false,
     type: 'address',
     key: 'address',
-    many: false
   },
   {
     key: 'is_available',
@@ -734,8 +732,7 @@ const formadd = [
             read_only: false
           },
           {
-            list: false,
-            endpoint: '/ecore/api/v2/core/addresses/',
+            endpoint: '/core/addresses/',
             read_only: false,
             templateOptions: {
               label: 'Address',
@@ -745,10 +742,8 @@ const formadd = [
               type: 'address',
               edit: true
             },
-            collapsed: false,
             type: 'address',
             key: 'address',
-            many: false
           }
         ]
       }

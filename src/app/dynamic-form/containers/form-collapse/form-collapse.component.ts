@@ -2,7 +2,7 @@ import { Component,  Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'form-collapse',
+  selector: 'app-form-collapse',
   templateUrl: 'form-collapse.component.html'
 })
 

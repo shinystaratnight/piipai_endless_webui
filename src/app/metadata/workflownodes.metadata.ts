@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/workflows/',
+            endpoint: '/core/workflows/',
             field: 'workflow',
             type: 'related'
           }
@@ -19,7 +19,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             field: 'company',
             type: 'related'
           }
@@ -100,7 +100,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+          endpoint: '/contenttypes/contenttypes/',
           key: 'id'
         },
         query: 'workflow__model'
@@ -144,7 +144,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       read_only: true,
       hide: true,
       templateOptions: {
@@ -173,7 +173,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/workflows/',
+      endpoint: '/core/workflows/',
       read_only: true,
       templateOptions: {
         label: 'Workflow',
@@ -205,7 +205,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/workflows/',
+    endpoint: '/core/workflows/',
     read_only: false,
     templateOptions: {
       label: 'Workflow',
@@ -266,7 +266,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -309,9 +309,10 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/workflows/',
+    endpoint: '/core/workflows/',
     read_only: false,
     templateOptions: {
+      required: true,
       label: 'Workflow',
       add: true,
       delete: false,
@@ -370,7 +371,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     hide: true,
     templateOptions: {

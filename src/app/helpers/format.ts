@@ -1,16 +1,16 @@
 export class FormatString {
   public format(str, data) {
-    let open = '{';
-    let close = '}';
-    let pieces = [];
+    const open = '{';
+    const close = '}';
+    const pieces = [];
     let before;
     let propValue;
     let pos = 0;
     let trail;
     while (true && str) {
-      let start = str.indexOf(open, pos);
-      let end = str.indexOf(close, pos);
-      let key = str.substring(start + 1, end);
+      const start = str.indexOf(open, pos);
+      const end = str.indexOf(close, pos);
+      const key = str.substring(start + 1, end);
       if (start === -1 || end === -1) {
         trail = str.substr(pos);
         if (trail !== '') {
@@ -28,8 +28,8 @@ export class FormatString {
   }
 
   public getPropValue(data, key: string) {
-    let props = key.split('.');
-    let prop = props.shift();
+    const props = key.split('.');
+    const prop = props.shift();
     if (!props.length) {
       if (data) {
         return data[prop];

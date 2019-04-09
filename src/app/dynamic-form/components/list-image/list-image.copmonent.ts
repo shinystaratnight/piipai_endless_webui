@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
-import { getContactAvatar } from '../../../helpers/utils';
+import { getContactAvatar, isCandidate, isMobile } from '../../helpers';
 
 @Component({
-  selector: 'list-image',
+  selector: 'app-list-image',
   templateUrl: './list-image.component.html',
   styleUrls: ['./list-image.component.scss']
 })
@@ -17,6 +17,11 @@ export class ListImageComponent implements OnInit {
   public last: boolean;
   public file: string;
   public contactAvatar: string;
+
+  public isMobileDevice = isMobile() && isCandidate();
+
+  @ViewChild('filelink')
+  public link: ElementRef<HTMLAnchorElement>;
 
   public ngOnInit() {
     let defaultAvatar: string;
@@ -45,7 +50,7 @@ export class ListImageComponent implements OnInit {
   }
 
   public getColor(value) {
-    this.iconClass = this.config.color[value] ? `text-${this.config.color[value]}` : 'text-muted';
+    this.iconClass = this.config.color[value] ? `text-${this.config.color[value]} mr-1` : 'text-muted mr-1';
   }
 
   public setClass(value) {
@@ -56,6 +61,14 @@ export class ListImageComponent implements OnInit {
 
   public getExtension(link: string) {
     return link.split('.').pop();
+  }
+
+  public downloadFile() {
+    this.link.nativeElement.click();
+  }
+
+  get emptyValue() {
+    return !this.file && !this.src && !this.contactAvatar;
   }
 
 }

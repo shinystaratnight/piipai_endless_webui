@@ -1,23 +1,28 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
-import { Payment, BillingSubscription } from '../../models';
+import { Plan, Payment, BillingSubscription } from '../../models';
 import { metadata, smsMetadata } from './billing-info.metadata';
 
 @Component({
-  selector: 'billing-info',
+  selector: 'app-billing-info',
   templateUrl: 'billing-info.component.html',
   styleUrls: ['./billing-info.component.scss']
 })
 
-export class BillingInfoComponent {
+export class BillingInfoComponent implements OnChanges {
   @Input() public payments: Payment[];
   @Input() public currentPlan: BillingSubscription;
+  @Input() plans: Plan[];
 
-  public config = metadata;
-  public smsConfig = smsMetadata;
+  types: any;
 
-  public types = {
-    annual: 'Annual',
-    monthly: 'Monthly'
-  };
+  ngOnChanges() {
+    this.types = {};
+
+    if (this.plans) {
+      Object.keys(this.plans).forEach((key) => {
+        this.types[this.plans[key].id] = this.plans[key].type;
+      });
+    }
+  }
 }

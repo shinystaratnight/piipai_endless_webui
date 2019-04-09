@@ -1,21 +1,27 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { meta } from './company.meta';
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
+import { Field } from '../../dynamic-form/models';
+import { GenericFormService, FormService } from '../../dynamic-form/services';
 import { SettingsService } from '../settings.service';
 import { SiteSettingsService } from '../../services';
 
 @Component({
-  selector: 'company',
+  selector: 'app-company',
   templateUrl: 'company.component.html'
 })
 
 export class CompanyComponent implements OnInit, OnDestroy {
 
-  public endpoint: string = '/ecore/api/v2/company_settings/';
+  public endpoint = '/company_settings/';
+  public hiddenFields = {
+    elements: [],
+    keys: [],
+    observers: []
+  };
 
   public errors: any;
   public response: any;
@@ -28,6 +34,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
   public saveProcess: boolean;
 
   public config;
+  public formId: number;
+  public form: any;
 
   public companySettingsData: any;
 
@@ -39,10 +47,13 @@ export class CompanyComponent implements OnInit, OnDestroy {
     private gfs: GenericFormService,
     private route: ActivatedRoute,
     private settingsService: SettingsService,
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
+    private formService: FormService
   ) { }
 
   public ngOnInit() {
+    this.formId = this.formService.registerForm(this.endpoint, 'edit');
+    this.form = this.formService.getForm(this.formId);
     this.urlSubscription = this.route.url.subscribe((url) => {
       this.settingsService.url = <any> url;
     });
@@ -50,10 +61,50 @@ export class CompanyComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.config = meta;
         this.fillingForm(this.config, res);
+        this.updateMetadataByProps(this.config);
         this.company = res.company_settings.company;
       },
       (err: any) => this.errors = err
     );
+  }
+
+  public updateMetadataByProps(metadata: Field[]) {
+    metadata.forEach((el) => {
+      el.formId = this.formId;
+      if (el.showIf && el.showIf.length) {
+          if (this.hiddenFields.keys.indexOf(el.key) === -1) {
+            this.hiddenFields.keys.push(el.key);
+            this.hiddenFields.elements.push(el);
+            this.hiddenFields.observers = this.observeFields(
+              el.showIf,
+              this.hiddenFields.observers
+            );
+            el.hidden = new BehaviorSubject(true);
+          }
+        }
+
+      if (el.children) {
+        this.updateMetadataByProps(el.children);
+      }
+    });
+  }
+
+  public observeFields(fields: any[], observers) {
+    fields.forEach((field: any) => {
+      if (field instanceof Object) {
+        const keys = Object.keys(field);
+        keys.forEach((key) => {
+          if (observers.indexOf(key) === -1) {
+            observers.push(key);
+          }
+        });
+      } else {
+        if (observers.indexOf(field) === -1) {
+          observers.push(field);
+        }
+      }
+    });
+    return observers;
   }
 
   public ngOnDestroy() {
@@ -62,13 +113,13 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   public resetSettings() {
-    let body = document.body;
+    const body = document.body;
     body.parentElement.classList.remove(this.currentTheme);
     if (this.savedTheme) {
       body.parentElement.classList.add(`${this.savedTheme}-theme`);
     }
     if (this.savedFont) {
-      let font = `${this.savedFont}, sans-serif`;
+      const font = `${this.savedFont}, sans-serif`;
       body.style.fontFamily = font;
     } else {
       body.style.fontFamily = null;
@@ -81,8 +132,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.siteSettings.settings = data;
         this.saveProcess = false;
-        this.savedTheme = null;
-        this.savedFont = null;
+        this.savedTheme = data.company_settings.color_scheme;
+        this.savedFont = data.company_settings.font;
       },
       (err: any) => {
         this.saveProcess = false;
@@ -102,8 +153,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   public getValueOfData(data, key, obj) {
-    let keys = key.split('.');
-    let prop = keys.shift();
+    const keys = key.split('.');
+    const prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
         obj['value'] = data[key];
@@ -124,13 +175,13 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
   public eventHandler(e) {
     if (e.type === 'change' && e.el.type === 'radio' && e.value) {
-      let body = document.body;
+      const body = document.body;
       if (e.el.templateOptions.type === 'color') {
         body.parentElement.classList.remove(this.currentTheme);
         body.parentElement.classList.add(`${e.value}-theme`);
         this.currentTheme = `${e.value}-theme`;
       } else if (e.el.templateOptions.type === 'text') {
-        let font = `${e.value}, sans-serif`;
+        const font = `${e.value}, sans-serif`;
         body.style.fontFamily = font;
         this.currentFont = e.value;
       }

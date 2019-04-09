@@ -31,8 +31,6 @@
 
   &:hover {
     .phone {
-      // text-decoration: underline;
-
       color: $brand-primary;
 
       @each $item in $themes {
@@ -97,7 +95,7 @@
 
       @each $item in $themes {
         .#{$item}-theme & {
-          color: map-get($theme-colors, $item);
+          color: map-get($theme-colors, $item) !important;
         }
       }
     }

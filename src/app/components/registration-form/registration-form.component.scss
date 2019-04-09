@@ -1,7 +1,7 @@
 @import '../../../styles/variables.scss';
 @import '../../../styles/mixins.scss';
 
-$content-width: 340px;
+$content-width: 540px;
 
 .header {
   max-width: $content-width;
@@ -21,16 +21,30 @@ $content-width: 340px;
 
 .logo {
   height: 80px;
+  width: 80px;
+
+  border-radius: 50%;
+  border: 1px solid #e0e0e0;
+
+  margin-bottom: 8px;
 }
 
 .title {
-  margin-bottom: 20px;
+  margin-bottom: 48px;
 
-  font-size: 32px;
+  font-size: 16px;
+  line-height: 16px;
+
+  opacity: .3;
 }
 
 .form-name {
-  font-size: 24px;
+  margin-bottom: 20px;
+
+  font-size: 32px;
+  line-height: 36px;
+
+  color: #4f4f4f;
 }
 
 .form-content {

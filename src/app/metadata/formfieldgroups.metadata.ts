@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/forms/',
+            endpoint: '/core/forms/',
             field: 'form',
             type: 'related'
           }
@@ -73,7 +73,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/forms/',
+      endpoint: '/core/forms/',
       read_only: true,
       templateOptions: {
         label: 'Form',
@@ -105,7 +105,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/forms/',
+    endpoint: '/core/forms/',
     read_only: true,
     templateOptions: {
       label: 'Form',
@@ -147,7 +147,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/formfields/',
+    endpoint: '/core/formfields/',
     read_only: true,
     templateOptions: {
       label: 'Field list',
@@ -178,7 +178,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/forms/',
+    endpoint: '/core/forms/',
     read_only: true,
     templateOptions: {
       label: 'Form',
@@ -220,7 +220,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/formfields/',
+    endpoint: '/core/formfields/',
     read_only: true,
     templateOptions: {
       label: 'Field list',

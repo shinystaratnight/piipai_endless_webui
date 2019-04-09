@@ -1,8 +1,7 @@
 <div *ngIf="!this.config.hide && !this.dropdown && !loading" class="timeline">
-  <template *ngFor="let state of config.options; let last = last"
-    [ngTemplateOutlet]="stateElement"
-    [ngOutletContext]="{state: state, last: last}">
-  </template>
+  <ng-container *ngFor="let state of config.options; let last = last">
+    <ng-container *ngTemplateOutlet="stateElement; context: {state: state, last: last}"></ng-container>
+  </ng-container>
 </div>
 
 <div *ngIf="loading && !this.dropdown" class="spinner">
@@ -32,13 +31,13 @@
       </option>
   </select>
 
-  <info *ngIf="getState(currentState).state === 0" [description]="requirements"></info>
+  <app-info *ngIf="getState(currentState).state === 0" [description]="requirements"></app-info>
   <button type="button" (click)="open(getState(currentState))" *ngIf="getState(currentState).state === 1" class="btn btn-sm badge badge-outline">
     <i fa name="check"></i>
   </button>
 </div>
 
-<template #stateModal let-c="close" let-d="dismiss">
+<ng-template #stateModal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header">
       <h5 class="modal-title">{{modalData.title}}</h5>
@@ -50,14 +49,11 @@
     <div class="modal-body timeline" *ngIf="modalData">
       <ng-container *ngIf="(modalData.tests || modalData.substates) && !modalData.setActive">
         <div class="state-info">
-          <div>
+          <div *ngIf="modalData.substates">
             <h5 class="state-info-label">Substates</h5>
 
             <span *ngFor="let substate of modalData.substates" (click)="open(substate, c)">
-              <template
-                [ngTemplateOutlet]="stateTemplate"
-                [ngOutletContext]="{state: substate}">
-              </template>
+              <ng-container *ngTemplateOutlet="stateTemplate; context: {state: substate}"></ng-container>
             </span>
 
           </div>
@@ -95,33 +91,30 @@
       </ng-container>
 
       <div *ngIf="(!modalData.tests && !modalData.substates) || modalData.setActive">
-        <generic-form
+        <app-generic-form
           [mode]="'edit'"
           [endpoint]="objectEndpoint"
           [id]="modalData.id"
           [data]="stateData"
           (event)="sendEventHandler($event, c)">
             <button type="submit" class="btn btn-primary">Save</button>
-        </generic-form>
+        </app-generic-form>
       </div>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #stateElement let-state="state" let-l="last">
+<ng-template #stateElement let-state="state" let-l="last">
   <div class="timeline-element-wrapper" style="position: relative" (click)="open(state)">
-    <template
-      [ngTemplateOutlet]="stateTemplate"
-      [ngOutletContext]="{state: state}">
-    </template>
+    <ng-container *ngTemplateOutlet="stateTemplate; context: {state: state}"></ng-container>
 
     <svg class="arrow" *ngIf="!l" width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0L3 3L6 0" transform="translate(1 7) rotate(-90)" stroke="#1BD168" />
     </svg>
   </div>
-</template>
+</ng-template>
 
-<template #stateTemplate let-state="state">
+<ng-template #stateTemplate let-state="state">
   <div class="timeline-element badge badge-outline"
     [ngClass]="{
       'need-requirements': state.state === 0,
@@ -142,7 +135,7 @@
 
       <span class="state-progress">{{calculateProgress(state)}}</span>
   </div>
-  <template #requir>
+  <ng-template #requir>
     <div class="info-block">
       <h6>To activate this state, fill in the required fields:</h6>
       <ul>
@@ -152,10 +145,10 @@
         </li>
       </ul>
     </div>
-  </template>
-</template>
+  </ng-template>
+</ng-template>
 
-<template #requirements>
+<ng-template #requirements>
   <div class="info-block">
     <h6>To activate this state, fill in the required fields:</h6>
     <ul>
@@ -165,24 +158,18 @@
       </li>
     </ul>
   </div>
-</template>
+</ng-template>
 
-<template #test let-c="close">
+<ng-template #test let-c="close">
   <div class="modal-content-wrapper">
-    <div class="modal-header-wrapper">
-      <div class="modal-header">
-        <button type="button" class="close ml-auto" aria-label="Close" (click)="c()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    </div>
-    <div class="modal-body">
-      <test-generator
-        [workflowObject]="modalData.workflowObject"
-        [send]="true"
-        [id]="testId"
-        (sended)="testComplete(c)">
-      </test-generator>
-    </div>
+    <button type="button" class="close close-button ml-auto" aria-label="Close" (click)="c()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <app-test-generator
+      [workflowObject]="modalData.workflowObject"
+      [send]="true"
+      [id]="testId"
+      (sended)="testComplete(c)">
+    </app-test-generator>
   </div>
-</template>
+</ng-template>

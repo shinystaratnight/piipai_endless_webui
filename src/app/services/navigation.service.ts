@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 import { Role } from './user.service';
@@ -24,9 +25,9 @@ export class NavigationService {
   public parsedByPermissions: boolean;
 
   public navigationList: any = {};
-  public endpoint = '/ecore/api/v2/core/extranetnavigations/?limit=-1';
-  public userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/?limit=-1';
-  public modelsListEndpoint = '/ecore/api/v2/core/dashboardmodules/?limit=-1';
+  public endpoint = '/core/extranetnavigations/?limit=-1';
+  public userModelsEndpoint = '/core/userdashboardmodules/?limit=-1';
+  public modelsListEndpoint = '/core/dashboardmodules/?limit=-1';
   public linksList: Page[] = [];
 
   constructor(
@@ -34,46 +35,53 @@ export class NavigationService {
   ) { }
 
   public getPages(role: Role) {
-    if (!this.navigationList[role.id]) {
-      let query = `&role=${role.id}`;
-      return this.gfs.getAll(`${this.endpoint}${query}`)
-        .map(
-        (res: any) => {
-          if (res.results) {
-            this.currentRole = role;
-            this.navigationList[role.id] = res.results;
-            this.linksList.length = 0;
-            this.generateLinks(this.navigationList[role.id], this.linksList);
+    if (role) {
+      if (!this.navigationList[role.id]) {
+        const query = `&role=${role.id}`;
+        return this.gfs
+          .getAll(`${this.endpoint}${query}`)
+          .pipe(
+            map((res: any) => {
+              if (res.results) {
+                this.currentRole = role;
+                this.navigationList[role.id] = res.results;
+                this.linksList.length = 0;
+                this.generateLinks(this.navigationList[role.id], this.linksList);
 
-            return this.navigationList[role.id];
-          }
-        }
-      );
-    } else {
-      return Observable.of(this.navigationList[role.id]);
+                return this.navigationList[role.id];
+              }
+            })
+          );
+      } else {
+        return of(this.navigationList[role.id]);
+      }
     }
   }
 
   public getUserModules() {
-    return this.gfs.getAll(this.userModelsEndpoint).map(
-      (res: any) => {
-        if (res.results) {
-          this.userModels = res.results;
-          return this.userModels;
-        }
-      }
+    return this.gfs
+      .getAll(this.userModelsEndpoint)
+      .pipe(
+        map((res: any) => {
+          if (res.results) {
+            this.userModels = res.results;
+            return this.userModels;
+          }
+        })
     );
   }
 
   public getModules() {
-    return this.gfs.getAll(this.modelsListEndpoint).map(
-      (res: any) => {
-        if (res.results) {
-          this.models = res.results;
-          return this.models;
-        }
-      }
-    );
+    return this.gfs
+      .getAll(this.modelsListEndpoint)
+      .pipe(
+        map((res: any) => {
+          if (res.results) {
+            this.models = res.results;
+            return this.models;
+          }
+        })
+      );
   }
 
   public resolve() {

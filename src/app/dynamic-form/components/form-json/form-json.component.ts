@@ -7,7 +7,7 @@ interface JSONPreview {
 }
 
 @Component({
-  selector: 'form-json',
+  selector: 'app-form-json',
   templateUrl: 'form-json.component.html'
 })
 
@@ -29,12 +29,12 @@ export class FormJsonComponent implements OnInit {
   }
 
   public generateViewByJSON(json: any): void {
-    let keys: string[] = Object.keys(json);
+    const keys: string[] = Object.keys(json);
     keys.forEach((el: string) => {
       if (json[el] instanceof Object) {
         this.generateViewByJSON(json[el]);
       } else {
-        let fields: string[] = el.split('__');
+        const fields: string[] = el.split('__');
         if (fields.length > 1) {
           this.previewData.push({
             title: fields.pop().split('_').join(' '),

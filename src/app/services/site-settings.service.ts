@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Observable, of } from 'rxjs';
+import { map, catchError, mergeMap } from 'rxjs/operators';
 
 import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class SiteSettingsService {
@@ -13,65 +13,93 @@ export class SiteSettingsService {
   public siteEndpoint: string;
   public settings: any;
   public authorized: boolean;
+  public currentEndpoint: string;
 
-  constructor(private http: Http, private userService: UserService) {
-    this.endpoint = '/ecore/api/v2/company_settings/';
-    this.siteEndpoint = '/ecore/api/v2/company_settings/site/';
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private authService: AuthService
+  ) {
+    this.endpoint = '/company_settings/';
+    this.siteEndpoint = '/company_settings/site/';
   }
 
   public resolve() {
-    return this.userService
-      .getUserData()
-      .mergeMap((user: any) => {
-        this.authorized = true;
+    if (this.authService.isAuthorized) {
+      return this.userService
+        .getUserData()
+        .pipe(
+          mergeMap((user: any) => {
+            this.authorized = true;
 
-        if (user.data.contact.contact_type === 'manager') {
-          return this.getSettings(this.endpoint);
-        } else {
-          return this.getSettings(this.siteEndpoint);
-        }
-      })
-      .catch((err: any) => {
-        this.authorized = false;
+            if (user.data.contact.contact_type === 'manager') {
+              const update = this.currentEndpoint !== this.endpoint;
 
-        return this.getSettings(this.siteEndpoint);
-      });
-  }
-
-  private getSettings(endpoint: string): Observable<any> {
-    if (!this.settings || !this.authorized) {
-      return this.http
-        .get(endpoint)
-        .map((res: Response) => {
-          const settings = res.json();
-
-          if (this.authorized) {
-            this.settings = settings;
-          }
-
-          setTimeout(() => {
-            this.updateBrowserStyles(settings);
-          }, 100);
-
-          return settings;
-        })
-        .catch((err: any) => {
-          if (err.status === 404 && location.host !== 'r3sourcer.com') {
-            location.href = 'http://r3sourcer.com';
-          }
-
-          return Observable.of(true);
-        });
-    } else if (this.settings && this.authorized) {
-      return Observable.of(this.settings);
+              return this.getSettings(this.endpoint, update);
+            } else {
+              return this.getSettings(this.siteEndpoint);
+            }
+          })
+        );
+    } else {
+      return this.getSettings(this.siteEndpoint);
     }
   }
 
-  private updateBrowserStyles(settings: any) {
+  public isSmsEnabled() {
+    if (this.settings.company_settings) {
+      return this.settings.company_settings.sms_enabled;
+    }
+  }
+
+  public getCompanyName() {
+    if (this.settings.company_settings) {
+      return this.settings.company_settings.company_name;
+    }
+  }
+
+  public getSmsSendTitle() {
+    return `SMS sending is disabled for ${this.getCompanyName()}, please contact your administrator.`;
+  }
+
+  private getSettings(endpoint: string, update?: boolean): Observable<any> {
+    this.currentEndpoint = endpoint;
+
+    if (!this.settings || !this.authService.isAuthorized || update) {
+      return this.http
+        .get(endpoint)
+        .pipe(
+          map((settings: any) => {
+            if (this.authService.isAuthorized) {
+              this.settings = settings;
+            }
+
+            if (settings.redirect_to) {
+              location.href = settings.redirect_to;
+
+              return of(true);
+            }
+
+            setTimeout(() => {
+              this.updateBrowserStyles(settings);
+            }, 100);
+
+            return settings;
+          }),
+          catchError(() => {
+            return of(true);
+          })
+        );
+    } else if (this.settings && this.authService.isAuthorized) {
+      return of(this.settings);
+    }
+  }
+
+  private updateBrowserStyles(settings: any): void {
     document.body.parentElement.classList.add(
       `${this.getTheme(settings)}-theme`
     );
-    document.body.style.fontFamily = `${this.getFont(settings)}, sans-serif`;
+    document.body.style.fontFamily = `${this.getFont(settings) || 'Source Sans Pro'}, sans-serif`;
   }
 
   private getFont(settings: any): string {

@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { GenericFormService } from '../../services/generic-form.service';
 
 @Component({
-  selector: 'test-generator',
+  selector: 'app-test-generator',
   templateUrl: './test-generator.component.html',
   styleUrls: ['./test-generator.component.scss']
 })
@@ -18,11 +18,13 @@ export class TestGeneratorComponent implements OnInit {
   public answerEndpoint: string;
   public testData: any;
 
+  public currentQuestion = 0;
+
   constructor(private genericFormService: GenericFormService) {}
 
   public ngOnInit() {
-    this.testEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetests/';
-    this.answerEndpoint = '/ecore/api/v2/acceptance-tests/workflowobjectanswers/';
+    this.testEndpoint = '/acceptance-tests/acceptancetests/';
+    this.answerEndpoint = '/acceptance-tests/workflowobjectanswers/';
 
     this.genericFormService
       .getAll(`${this.testEndpoint}${this.id}/`)
@@ -94,6 +96,16 @@ export class TestGeneratorComponent implements OnInit {
       .subscribe((res) => {
         this.sended.emit(true);
       });
+  }
+
+  back() {
+    if (this.currentQuestion !== 0) {
+      this.currentQuestion -= 1;
+    }
+  }
+
+  next() {
+    this.currentQuestion += 1;
   }
 
 }

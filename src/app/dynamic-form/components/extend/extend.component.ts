@@ -1,18 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subscription, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { GenericFormService } from '../../services/generic-form.service';
 
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 @Component({
-  selector: 'extend',
+  selector: 'app-extend',
   templateUrl: './extend.component.html',
   styleUrls: ['./extend.component.scss']
 })
@@ -30,10 +30,16 @@ export class ExtendComponent extends BasicElementComponent
   public extendCandidates: boolean;
   public autofill: any;
   public removeDate: BehaviorSubject<string> = new BehaviorSubject('');
+  public availabilityCandidates: any;
+  public autocompleteProcess: boolean;
+  public showAvailability: boolean;
 
   private formSubscription: Subscription;
 
-  constructor(private fb: FormBuilder, private gfs: GenericFormService) {
+  constructor(
+    private fb: FormBuilder,
+    private gfs: GenericFormService
+  ) {
     super();
   }
 
@@ -101,14 +107,15 @@ export class ExtendComponent extends BasicElementComponent
     });
 
     this.change({ type: 'change' });
+    this.checkDates();
   }
 
   public checkFormData() {
     if (this.config.formData) {
       const subscription = this.config.formData.subscribe((data) => {
         this.formData = data.data;
-
         this.autoFillData = this.formData.last_fullfilled;
+        this.availabilityCandidates = this.getAvailabilityCandidates(this.formData.available, this.autoFillData[0].candidates);
 
         if (!this.autoFillData) {
           this.viewConfig.extendDates = {
@@ -132,6 +139,38 @@ export class ExtendComponent extends BasicElementComponent
 
       this.formSubscription = subscription;
     }
+  }
+
+  public getAvailabilityCandidates(data: any, candidates: any[]): any {
+    const lastCandidates = this.getCandidatesFromLastShift(data, candidates);
+    const result = [];
+
+    for (const candidate in lastCandidates) {
+      if (data.hasOwnProperty(candidate)) {
+        const shifts = [];
+        data[candidate].forEach((el) => {
+          if (el) {
+            shifts.push(...el.shifts);
+          }
+        });
+
+        result.push({
+          candidateName: candidate,
+          shifts
+        });
+      }
+    }
+
+    return result;
+  }
+
+  public getCandidatesFromLastShift(availability: any, candidates: any[]): any {
+    const result = {};
+    candidates.forEach((el) => {
+      result[el.__str__] = availability[el.__str__];
+    });
+
+    return result;
   }
 
   public generateShift(date: string) {
@@ -173,14 +212,64 @@ export class ExtendComponent extends BasicElementComponent
           date,
           el.time,
           el.candidates,
-          true,
+          this.extendDates,
           true
         );
         shift['data'].insert(i, this.fb.group({}));
+
+        setTimeout(() => {
+          this.getAvailableCandidate(el.candidates, date, el.time, shift['config'], i);
+        }, 100);
       });
     }
 
     return shift;
+  }
+
+  public getAvailableCandidate(
+    candidates: any[],
+    date: string,
+    time: string,
+    config: any,
+    index: number
+  ) {
+    const availableCandidates = [];
+    candidates.forEach((candidate) => {
+      if (this.checkCandidateAvailability(candidate.__str__, this.availabilityCandidates, date)) {
+        availableCandidates.push(candidate);
+      }
+    });
+
+    if (availableCandidates.length < candidates.length) {
+      const workers = candidates.length - availableCandidates.length;
+
+      this.getCandidates(date, { time, workers })
+        .subscribe((candidateList) => {
+          this.updateShift(
+            { time, workers: candidates.length },
+            config,
+            index,
+            candidateList.slice(0, workers)
+          );
+        });
+    }
+  }
+
+  public checkCandidateAvailability(candidate: string, available: any[], date: string): boolean {
+    const candidateInfo = available.find((el) => el.candidateName === candidate);
+
+    if (candidateInfo) {
+      if (!candidateInfo.shifts.length) {
+        return true;
+      }
+
+      return !candidateInfo.shifts.some((el) => {
+        const shiftDate = moment.tz(el.datetime, 'Australia/Sydney')
+          .format('YYYY-MM-DD');
+
+        return shiftDate === date;
+      });
+    }
   }
 
   public addTime(shift) {
@@ -233,7 +322,7 @@ export class ExtendComponent extends BasicElementComponent
       },
       candidates: {
         type: 'related',
-        endpoint: `/ecore/api/v2/hr/jobs/${id}/extend_fillin/`,
+        endpoint: `/hr/jobs/${id}/extend_fillin/`,
         key: 'candidates',
         many: true,
         formData,
@@ -241,13 +330,15 @@ export class ExtendComponent extends BasicElementComponent
         hidden: new BehaviorSubject(true),
         doNotChoice: candidateReadOnly,
         hideSelect: candidateReadOnly,
+        unique: true,
         templateOptions: {
           label: 'Select workers',
           info: {
             score: '{candidate_scores.average_score}',
             distance: '{distance}'
           },
-          values: ['__str__']
+          values: ['__str__'],
+          dontSendFields: true,
         },
         query: {
           shift: `{shift}T{time}%2B${moment
@@ -337,44 +428,87 @@ export class ExtendComponent extends BasicElementComponent
   }
 
   public autocompleteCandidates() {
+    this.autocompleteProcess = true;
     this.shifts.forEach((shift) => {
-      shift.data.controls.forEach((data, i) => {
-        const candidates = shift.config[i].candidates;
+      shift.data.controls.forEach((control, i, arr) => {
+        const data = control.value;
+        const config = shift.config;
+        const candidatesConfig = config[i].candidates;
 
-        if (!shift.config[i].candidates.doNotChoice) {
-          this.getCandidates(shift.date, data.value, shift.config, i);
+        if (!candidatesConfig.doNotChoice) {
+          this.getCandidates(shift.date, data)
+            .subscribe((candidates) => {
+              this.updateShift(
+                data,
+                config,
+                i,
+                candidates.slice(0, data.workers)
+              );
+
+              if (i === arr.length - 1) {
+                this.autocompleteProcess = false;
+              }
+            });
         }
       });
     });
   }
 
-  public getCandidates(date, data, target, index) {
+  public checkDates() {
+    this.showAvailability = false;
+    const selectedDates = this.shifts.map((el) => el.date);
+
+    this.availabilityCandidates.forEach((candidate) => {
+      candidate.shifts.forEach((shift) => {
+        const date = moment.tz(shift.datetime, 'Australia/Sydney').format('YYYY-MM-DD');
+
+        shift.show = selectedDates.includes(date);
+      });
+
+      candidate.show = candidate.shifts.some((shift) => shift.show);
+      this.showAvailability = this.showAvailability || candidate.show;
+    });
+  }
+
+  public getCandidates(date: string, data: any) {
     if (data.time && data.workers) {
-      const endpoint = `/ecore/api/v2/hr/jobs/${
-        this.formData.id.id
-      }/extend_fillin/`;
-      const timeZoneOffset = moment
-        .tz('Australia/Sydney')
-        .format('Z')
-        .slice(1);
+      const endpoint = `/hr/jobs/${this.formData.id.id}/extend_fillin/`;
+      const timeZoneOffset = moment.tz('Australia/Sydney').format('Z').slice(1);
       const query = `?shift=${date}T${data.time}%2B${timeZoneOffset}`;
 
-      this.gfs.getByQuery(endpoint, query).subscribe((res: any[]) => {
-        this.sortCandidate(res);
+      return this.gfs.getByQuery(endpoint, query).pipe(
+        map(
+          (res: any) => {
+            this.sortCandidate(res.results);
 
-        const candidates = res.slice(0, data.workers);
-        target[index].candidates = {
-          ...target[index].candidates,
-          value: candidates
-        };
-        target[index].workers = {
-          ...target[index].workers,
-          value: data.workers
-        };
-
-        target[index] = { ...target[index] };
-      });
+            return res.results;
+          })
+        );
     }
+  }
+
+  public updateShift(data: any, config: any, index: number, candidates: any[]) {
+    const newConfig = {
+      ...config[index],
+      candidates: {
+        ...config[index].candidates,
+        value: candidates
+      },
+      workers: {
+        ...config[index].workers,
+        value: data.workers
+      },
+      time: {
+        ...config[index].time,
+        value: data.time
+      }
+    };
+
+    setTimeout(() => {
+      config[index] = { ...newConfig };
+    }, 0);
+
+    config[index] = null;
   }
 
   public sortCandidate(candidates) {

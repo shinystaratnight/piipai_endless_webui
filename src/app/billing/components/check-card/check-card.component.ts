@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 
 import { BillingService } from '../../services/billing-service';
-import { environment } from '../../../environment';
+import { environment } from '../../../../environments/environment';
 
 const style = {
   base: {
@@ -25,7 +25,7 @@ const style = {
 };
 
 @Component({
-  selector: 'check-card',
+  selector: 'app-check-card',
   templateUrl: './check-card.component.html',
   styleUrls: ['./check-card.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -43,7 +43,7 @@ export class CheckCardComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.stripe = (<any> window).Stripe((<any> process.env).STRIPE_PUBLIC_API_KEY || environment.STRIPE_PUBLIC_API_KEY); //tslint:disable-line
+    this.stripe = (<any> window).Stripe(environment.STRIPE_PUBLIC_API_KEY);
     const elements = this.stripe.elements();
     this.card = elements.create('card', { style });
     this.card.mount('#card-element');

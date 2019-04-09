@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 export const meta = [
   {
@@ -9,7 +9,7 @@ export const meta = [
         key: 'auth_data_list',
         type: 'related',
         many: true,
-        endpoint: '/ecore/api/v2/company_settings/auth_data/',
+        endpoint: '/company_settings/auth_data/',
         mode: new BehaviorSubject('view'),
         templateOptions: {
           label: 'Authorized accounts',
@@ -29,7 +29,7 @@ export const payrollAccounts = {
     value: ''
   },
   invoice_activity_account: {
-    label: 'Activity account',
+    label: 'Income account',
     key: 'invoice_activity_account',
     value: ''
   },

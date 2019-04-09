@@ -106,7 +106,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companies/?type=master',
+          endpoint: '/core/companies/?type=master',
           key: 'id'
         },
         query: 'company'

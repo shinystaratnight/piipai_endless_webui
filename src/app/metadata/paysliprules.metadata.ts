@@ -98,7 +98,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Company',
@@ -116,13 +116,6 @@ const form = [
 ];
 
 const formadd = [
-  {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
   {
     key: 'updated_at',
     type: 'datepicker',
@@ -186,9 +179,10 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Company',
       add: true,
       delete: false,

@@ -8,8 +8,11 @@
           <span class="button-icon"></span> {{button.label}}
         </a>
         <button *ngIf="!first || inForm || button.action !== 'add_object'" class="btn btn-primary btn-shadow datatable-button"
+          [attr.title]="getSmsTitle(button.action)"
           [ngClass]="{'mx-2': !(f || l)}"
-          (click)="buttonAction(button.action)">
+          (click)="buttonAction(button.action)"
+          [class.disabled]="isDisableSmsButton(button.action)"
+          [disabled]="isDisableSmsButton(button.action)">
             {{button.label}}
         </button>
       </div>
@@ -31,7 +34,7 @@
     <i
       fa
       [name]="'window-restore'"
-      [border]="true" class="text-white icon"
+      class="text-white icon"
       aria-hidden="true"></i>
   </button>
 </div>

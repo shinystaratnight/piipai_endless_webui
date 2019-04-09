@@ -2,13 +2,13 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'form-hidden',
+  selector: 'app-form-hidden',
   templateUrl: 'form-hidden.component.html'
 })
 
 export class FormHiddenComponent {
   public config: any;
-  public group: any;
+  public group: FormGroup;
   public errors: any;
   public message: any;
 

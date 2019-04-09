@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'list-column',
+  selector: 'app-list-column',
   templateUrl: 'list-column.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

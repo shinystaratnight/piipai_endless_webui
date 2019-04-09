@@ -49,7 +49,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     read_only: true,
     templateOptions: {
       label: 'Jobsite',
@@ -91,13 +91,6 @@ const form = [
 
 const formadd = [
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: { required: false, label: 'Id', type: 'text' },
-    read_only: false
-  },
-  {
     key: 'updated_at',
     type: 'datepicker',
     templateOptions: { required: false, label: 'Updated at', type: 'datetime' },
@@ -111,9 +104,10 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Jobsite',
       add: true,
       delete: false,
@@ -121,7 +115,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'jobsite',
     many: false

@@ -1,23 +1,25 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 import { meta, payrollAccounts } from './myob.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { Field } from '../../dynamic-form/models/field.model';
 import { SettingsService } from '../settings.service';
 
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 @Component({
-  selector: 'myob',
-  templateUrl: 'myob.component.html'
+  selector: 'app-myob',
+  templateUrl: './myob.component.html',
+  styleUrls: ['./myob.component.scss']
 })
 
 export class MyobComponent implements OnInit, OnDestroy {
 
-  public endpoint: string = '/ecore/api/v2/company_settings/';
+  public endpoint = '/company_settings/';
   public pageUrl: string;
   public errors: any;
   public response: any;
@@ -29,6 +31,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   public accounts: any[];
   public MYOBSettings: any;
   public error: any;
+  public viewMode: boolean;
 
   public keysOfPayroll: string[];
   public authData: any[];
@@ -50,7 +53,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.payrollAccounts = payrollAccounts;
 
     this.MYOBSettings = (<any> this.route.snapshot.data).myobSettings.myob_settings;
-    this.parseMYOBSettings(this.MYOBSettings, moment);
+    this.parseMYOBSettings(this.MYOBSettings);
 
     this.pageUrl = location.origin + location.pathname;
 
@@ -59,7 +62,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     });
 
     this.querySubscription = this.route.queryParams.subscribe((params) => {
-      let code = params['code'];
+      const code = params['code'];
       if (code) {
         this.getMyobApiKey(() => {
           this.config = meta;
@@ -80,6 +83,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.connectButton = {
       text: 'Connect'
     };
+    this.viewMode = true;
   }
 
   public ngOnDestroy() {
@@ -95,8 +99,9 @@ export class MyobComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const endpoint = '/ecore/api/v2/company_settings/myob_api_key/';
-    this.gfs.getAll(endpoint)
+    const endpoint = '/company_settings/myob_api_key/';
+    this.gfs
+      .getAll(endpoint)
       .subscribe(
         (res) => {
           this.myobApiKey = res.api_key;
@@ -105,45 +110,37 @@ export class MyobComponent implements OnInit, OnDestroy {
             callback.apply(this);
           }
         },
-        (err: any) => this.error = err);
+        (err: any) => this.error = err
+      );
   }
 
-  public parseMYOBSettings(settings, moment, reset = undefined) {
-    if (!reset) {
-      settings.payroll_accounts_last_refreshed = settings.payroll_accounts_last_refreshed ?
-        moment.tz(settings.payroll_accounts_last_refreshed, 'Australia/Sydney')
-              .format('DD/MM/YYYY hh:mm A') : '';
-      settings.company_files_last_refreshed = settings.company_files_last_refreshed ?
-        moment.tz(settings.company_files_last_refreshed, 'Australia/Sydney')
-          .format('DD/MM/YYYY hh:mm A') : '';
-    }
+  public parseMYOBSettings(settings) {
+    settings = JSON.parse(JSON.stringify(settings));
 
     Object.keys(this.payrollAccounts).forEach((el) => {
-        if (settings[el]) {
-          if (this.payrollAccounts[el].options && this.payrollAccounts[el].options.length) {
-            let field = this.payrollAccounts[el].options
-              .find((option) => this.payrollAccounts[el].value === option.id);
-
-            if (!field) {
-              this.payrollAccounts[el].value = undefined;
-            } else {
-              this.payrollAccounts[el].value = settings[el].id;
-            }
-          } else {
-            this.payrollAccounts[el].value = settings[el].id;
-          }
-        } else {
-          if (this.payrollAccounts[el] instanceof Object) {
-            this.payrollAccounts[el].value = undefined;
+      if (settings[el]) {
+        this.payrollAccounts[el].value = settings[el].id;
+        if (el === 'invoice_activity_account') {
+          if (this.companyFile && settings['invoice_company_file']) {
+            this.getAccountsOfCompanyFile(
+              settings['invoice_company_file'].id,
+              'invoice_activity_account',
+              settings[el].id
+            );
           }
         }
+      } else {
+        if (this.payrollAccounts[el] instanceof Object) {
+          this.payrollAccounts[el].value = '';
+        }
+      }
     });
   }
 
-  public parseAccounts(data: any[], key: string = undefined): void {
+  public parseAccounts(data: any[], key?: string, value?: string): void {
     if (key) {
       this.payrollAccounts[key].options = data;
-      this.payrollAccounts[key].value = undefined;
+      this.payrollAccounts[key].value = value || '';
     } else {
       Object.keys(this.payrollAccounts).forEach((el: string) => {
         if (el.indexOf('_account') > -1) {
@@ -169,7 +166,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.getMyobApiKey(() => {
       const domain = 'https://secure.myob.com';
       const pathname = '/oauth2/account/authorize';
-      const query = `?client_id=${this.myobApiKey}&redirect_uri=${this.pageUrl}&response_type=code&scope=CompanyFile`; //tslint:disable-line
+      const query = `?client_id=${this.myobApiKey}&redirect_uri=https://r3sourcer.com/myob/oauth2_redirect_uri&response_type=code&scope=CompanyFile&state=${this.pageUrl}`; //tslint:disable-line
       const url = domain + pathname + query;
 
       location.href = url;
@@ -178,10 +175,10 @@ export class MyobComponent implements OnInit, OnDestroy {
 
   public saveInfo(code: string) {
     this.connectProcess = true;
-    let url = `/ecore/api/v2/company_settings/myob_authorization/`;
-    let body = {
+    const url = `/company_settings/myob_authorization/`;
+    const body = {
       code,
-      redirect_uri: this.pageUrl
+      redirect_uri: 'https://r3sourcer.com/myob/oauth2_redirect_uri'
     };
     this.gfs.submitForm(url, body).subscribe(
       (res: any) => {
@@ -195,7 +192,7 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public testCompanyFile(file) {
-    const url = '/ecore/api/v2/company_settings/company_files/check/';
+    const url = '/company_settings/company_files/check/';
     const body = {
       id: file.cf_id,
       username: file.username,
@@ -207,47 +204,83 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public getCompanyFiles() {
-    const url = '/ecore/api/v2/company_settings/company_files/';
-    this.gfs.getAll(url).subscribe((res: any) => {
-      this.companyFile.list = res.company_files;
-      this.companyFile.list.forEach((el) => {
-        el.username = '';
-        el.password = '';
-      });
-      this.companyFile.isCollapsed = false;
-      this.filledCompanyFiles(this.companyFile.list);
+    const url = '/company_settings/company_files/';
 
-      this.getAccounts();
-    }, (err: any) => this.error = err);
+    this.gfs
+      .getAll(url)
+      .subscribe(
+        (res: any) => {
+          this.companyFile.list = res.company_files;
+          this.companyFile.list.forEach((el) => {
+            el.username = '';
+            el.password = '';
+          });
+          this.companyFile.isCollapsed = false;
+          this.filledCompanyFiles(this.companyFile.list);
+        },
+        (err: any) => this.error = err
+      );
   }
 
   public refreshCompanyFiles() {
-    const url = '/ecore/api/v2/company_settings/company_files/refresh/';
-    this.gfs.getAll(url).subscribe((res: any) => {
-      this.getCompanyFiles();
-      this.getMYOBSettings();
-    }, (err: any) => this.error = err);
+    const url = '/company_settings/company_files/refresh/';
+    this.gfs
+      .getAll(url)
+      .subscribe(
+        (res: any) => {
+          this.getCompanyFiles();
+          this.refreshTime('company_files_last_refreshed');
+        },
+        (err: any) => this.error = err
+      );
   }
 
-  public getAccounts(refresh = false) {
-    let url = '/ecore/api/v2/company_settings/myob_accounts/';
-    if (refresh) {
-      url += 'refresh/';
+  public refreshAccounts() {
+    const companyFile = this.companyFile.list.find((el) => {
+      return el.id === this.payrollAccounts['invoice_company_file'].value;
+    });
+
+    if (companyFile) {
+      const id = companyFile.cf_id;
+      const url = `/company_settings/company_files/${id}/accounts/refresh/`;
+
+      this.gfs
+        .getAll(url)
+        .subscribe(
+          (res: any) => {
+            const accounts = res.filter((el) => el.type.toLowerCase() === 'income');
+
+            this.parseAccounts(
+              accounts,
+              'invoice_activity_account',
+              this.payrollAccounts['invoice_activity_account'].value
+            );
+
+            this.refreshTime('payroll_accounts_last_refreshed', true);
+          },
+          (err: any) => this.error = err
+        );
     }
-    this.gfs.getAll(url).subscribe((res: any) => {
-      if (res && res.myob_accounts) {
-        this.accounts = res.myob_accounts;
-      }
-      this.parseAccounts(this.accounts);
-      if (refresh) {
-        this.getMYOBSettings();
-        this.getAccounts();
-      }
-    }, (err: any) => this.error = err);
+  }
+
+  public refreshTime(field: string, now?: boolean) {
+    if (now) {
+      this.MYOBSettings[field] = moment().format();
+      return;
+    }
+
+    const url = '/company_settings/myob_settings/';
+    this.gfs.getAll(url)
+      .subscribe(
+        (res: any) => {
+          this.MYOBSettings[field] = res.myob_settings[field];
+        },
+        (err: any) => this.error = err
+      );
   }
 
   public updateMetadata(data, key) {
-    let element = this.getElementByKey(data, key);
+    const element = this.getElementByKey(data, key);
     data.forEach((el, i) => {
       if (el.key === key) {
         data.splice(i, 1, Object.assign({}, element));
@@ -259,30 +292,55 @@ export class MyobComponent implements OnInit, OnDestroy {
 
   public getAuthData() {
     const obj = this.getElementByKey(this.config, 'auth_data_list');
-    this.gfs.getAll('/ecore/api/v2/company_settings/auth_data/')
-      .finally(() => {
-        this.updateMetadata(this.config, 'auth_data_list');
-      })
-      .subscribe((res) => {
-        this.getValueOfData(res, 'auth_data_list', obj, 'options');
-        this.getValueOfData(res, 'auth_data_list', obj);
-        this.authData = res.auth_data_list;
-       }, (err: any) => this.error = err);
+
+    this.gfs
+      .getAll('/company_settings/auth_data/')
+      .pipe(
+        finalize(() => {
+          this.updateMetadata(this.config, 'auth_data_list');
+        })
+      )
+      .subscribe(
+        (res) => {
+          this.getValueOfData(res, 'auth_data_list', obj, 'options');
+          this.getValueOfData(res, 'auth_data_list', obj);
+          this.authData = res.auth_data_list;
+        },
+        (err: any) => this.error = err
+      );
   }
 
-  public getAccountsOfCompanyFile(id: string, key: string, files: boolean): void {
-    let url = '/ecore/api/v2/company_settings/company_files/';
-    this.gfs.getAll(`${url}${id}/accounts`).subscribe((res: any) => {
-      this.parseAccounts(res.myob_accounts, key);
-    }, );
+  public getAccountsOfCompanyFile(id: string, key: string, value?: string): void {
+    const url = '/company_settings/company_files/';
+    const companyFile = this.companyFile.list.find((el) => el.id === id);
+
+    if (companyFile) {
+      this.gfs
+        .getAll(`${url}${companyFile.cf_id}/accounts/`)
+        .subscribe(
+          (res: any) => {
+            const accounts = res.myob_accounts.filter((el) => el.type.toLowerCase() === 'income');
+
+            this.parseAccounts(accounts, key, value);
+          }
+        );
+    } else {
+      this.parseAccounts([], key);
+    }
   }
 
   public getMYOBSettings() {
-    let url = '/ecore/api/v2/company_settings/myob_settings/';
-    this.gfs.getAll(url).subscribe((res: any) => {
-      this.MYOBSettings = res.myob_settings;
-      this.parseMYOBSettings(this.MYOBSettings, moment);
-    }, (err: any) => this.error = err);
+    const url = '/company_settings/myob_settings/';
+
+    this.gfs
+      .getAll(url)
+      .subscribe(
+        (res: any) => {
+          this.MYOBSettings = res.myob_settings;
+          this.parseMYOBSettings(this.MYOBSettings);
+        },
+        (err: any) => this.error = err
+      );
   }
 
   public filledCompanyFiles(list: any[]) {
@@ -291,7 +349,7 @@ export class MyobComponent implements OnInit, OnDestroy {
         this.payrollAccounts[el].options = list;
       }
     });
-    this.parseMYOBSettings(this.MYOBSettings, moment, true);
+    this.parseMYOBSettings(this.MYOBSettings);
   }
 
   public updateButton(type) {
@@ -310,13 +368,20 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public sendForm(form) {
-    let url = '/ecore/api/v2/company_settings/myob_settings/';
+    if (this.viewMode) {
+      return;
+    }
+
+    const url = '/company_settings/myob_settings/';
     const data = {};
     Object.keys(form).forEach((key) => {
       if (key.indexOf('company_file') > -1) {
-        data[key] = {
-          id: this.companyFile.list.find((file) => file.id === form[key]).cf_id
-        };
+        const file = this.companyFile.list.find((item) => item.id === form[key]);
+        if (file) {
+          data[key] = {
+            id: file.cf_id
+          };
+        }
       } else {
         data[key] = {
           id: form[key]
@@ -327,8 +392,10 @@ export class MyobComponent implements OnInit, OnDestroy {
     this.resetErrors();
     this.saveProcess = true;
     this.gfs.submitForm(url, data).subscribe(
-      (rse: any) => {
+      () => {
         this.saveProcess = false;
+        this.viewMode = true;
+        this.getMYOBSettings();
       },
       (err: any) => {
         this.saveProcess = false;
@@ -338,8 +405,8 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public getValueOfData(data, key: string, obj: Field, param?: string): void {
-    let keys = key.split('.');
-    let prop = keys.shift();
+    const keys = key.split('.');
+    const prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
         if (param) {
@@ -391,8 +458,8 @@ export class MyobComponent implements OnInit, OnDestroy {
   }
 
   public reset() {
-    this.getAccounts();
-    this.parseMYOBSettings(this.MYOBSettings, moment, true);
+    this.viewMode = true;
+    this.parseMYOBSettings(this.MYOBSettings);
   }
 
 }

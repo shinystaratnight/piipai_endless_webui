@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             field: 'company',
             type: 'related'
           }
@@ -59,7 +59,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             field: 'approved_by',
             type: 'related'
           }
@@ -92,7 +92,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companies/',
+          endpoint: '/core/companies/',
           key: 'id'
         },
         query: 'company'
@@ -104,15 +104,13 @@ const list = {
       key: 'approved_at',
       type: 'datepicker',
       templateOptions: {
-        required: false,
         label: 'Approved At',
         type: 'datetime'
       },
       read_only: true
     },
     {
-      list: false,
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       read_only: true,
       templateOptions: {
         label: 'Company',
@@ -122,44 +120,36 @@ const list = {
         type: 'related',
         edit: true
       },
-      collapsed: false,
       type: 'related',
       key: 'company',
-      many: false
     },
     {
       key: 'valid_from',
       type: 'datepicker',
       templateOptions: {
-        required: false,
         label: 'Valid From',
         type: 'date'
       },
       read_only: true
     },
     {
-      list: false,
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       read_only: true,
       templateOptions: {
         label: 'Approved by',
         add: true,
-        delete: false,
         values: ['__str__'],
         type: 'related',
         edit: true
       },
-      collapsed: false,
       type: 'related',
       key: 'approved_by',
-      many: false
     },
     {
       key: 'effective',
       default: false,
       type: 'checkbox',
       templateOptions: {
-        required: false,
         label: 'Effective',
         type: 'checkbox'
       },
@@ -169,7 +159,6 @@ const list = {
       key: 'valid_until',
       type: 'datepicker',
       templateOptions: {
-        required: false,
         label: 'Valid Until',
         type: 'date'
       },
@@ -185,7 +174,6 @@ const company = {
       key: 'effective',
       read_only: false,
       templateOptions: {
-        required: false,
         label: 'Effective',
         type: 'checkbox'
       },
@@ -194,7 +182,10 @@ const company = {
     {
       key: 'valid_until',
       read_only: false,
-      templateOptions: { required: false, label: 'Valid Until', type: 'date' },
+      templateOptions: {
+        label: 'Valid Until',
+        type: 'date'
+      },
       type: 'datepicker'
     },
     {
@@ -211,33 +202,31 @@ const company = {
       key: 'approved_at',
       read_only: false,
       templateOptions: {
-        required: false,
         label: 'Approved At',
         type: 'datetime'
       },
       type: 'datepicker'
     },
     {
-      many: false,
       key: 'approved_by',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
-      collapsed: false,
-      list: false,
+      endpoint: '/core/companycontacts/',
       templateOptions: {
         add: true,
-        delete: false,
         edit: true,
         values: ['__str__'],
         label: 'Approved by',
         type: 'related'
       },
-      read_only: true,
+      read_only: false,
       type: 'related'
     },
     {
       key: 'valid_from',
       read_only: true,
-      templateOptions: { required: false, label: 'Valid From', type: 'date' },
+      templateOptions: {
+        label: 'Valid From',
+        type: 'date'
+      },
       type: 'datepicker'
     }
   ],
@@ -274,7 +263,7 @@ const company = {
         sort_field: 'approved_by',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             field: 'approved_by'
           }
@@ -293,7 +282,7 @@ const company = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/pricing/pricelists/{id}',
+            endpoint: '/pricing/pricelists/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -324,27 +313,25 @@ const company = {
 
 const form = [
   {
-    list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Company',
+      required: true,
       add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'company',
-    many: false
   },
   {
     key: 'valid_from',
     type: 'datepicker',
     templateOptions: {
-      required: false,
+      required: true,
+      hidePreviewError: true,
       label: 'Valid From',
       type: 'date'
     },
@@ -354,7 +341,8 @@ const form = [
     key: 'valid_until',
     type: 'datepicker',
     templateOptions: {
-      required: false,
+      required: true,
+      hidePreviewError: true,
       label: 'Valid Until',
       type: 'date'
     },
@@ -365,51 +353,48 @@ const form = [
     default: false,
     type: 'checkbox',
     templateOptions: {
-      required: false,
       label: 'Effective',
       type: 'checkbox'
     },
     read_only: false
   },
   {
-    list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
-    read_only: true,
+    endpoint: '/core/companycontacts/',
+    read_only: false,
     templateOptions: {
       label: 'Approved by',
       add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'approved_by',
-    many: false
+    query: {
+      company: '{company.id}'
+    }
   },
   {
     key: 'approved_at',
     type: 'datepicker',
     templateOptions: {
-      required: false,
       label: 'Approved At',
       type: 'datetime'
     },
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/pricing/pricelistrates/',
+    endpoint: '/pricing/pricelistrates/',
     metadata_query: {
       editable_type: 'pricelist'
     },
     templateOptions: {
       label: 'Price List Rates',
       type: 'list',
-      add_label: 'Add',
+      add_label: '+ Add',
       text: 'Price List Rates'
     },
-    collapsed: false,
     prefilled: {
       price_list: '{id}'
     },
@@ -422,27 +407,25 @@ const form = [
 
 const formadd = [
   {
-    list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Company',
+      required: true,
       add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'company',
-    many: false
   },
   {
     key: 'valid_from',
     type: 'datepicker',
     templateOptions: {
-      required: false,
+      required: true,
+      hidePreviewError: true,
       label: 'Valid From',
       type: 'date'
     },
@@ -452,7 +435,8 @@ const formadd = [
     key: 'valid_until',
     type: 'datepicker',
     templateOptions: {
-      required: false,
+      required: true,
+      hidePreviewError: true,
       label: 'Valid Until',
       type: 'date'
     },
@@ -463,59 +447,36 @@ const formadd = [
     default: false,
     type: 'checkbox',
     templateOptions: {
-      required: false,
       label: 'Effective',
       type: 'checkbox'
     },
     read_only: false
   },
   {
-    list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Approved by',
       add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'approved_by',
-    many: false
+    query: {
+      company: '{company.id}'
+    }
   },
   {
     key: 'approved_at',
     type: 'datepicker',
     templateOptions: {
-      required: false,
       label: 'Approved At',
       type: 'datetime'
     },
     read_only: false
   },
-  {
-    endpoint: '/ecore/api/v2/pricing/pricelistrates/',
-    metadata_query: {
-      editable_type: 'pricelist'
-    },
-    templateOptions: {
-      label: 'Price List Rates',
-      type: 'list',
-      add_label: 'Add',
-      text: 'Price List Rates'
-    },
-    collapsed: false,
-    prefilled: {
-      price_list: '{id}'
-    },
-    type: 'list',
-    query: {
-      price_list: '{id}'
-    }
-  }
 ];
 
 export const metadata = {

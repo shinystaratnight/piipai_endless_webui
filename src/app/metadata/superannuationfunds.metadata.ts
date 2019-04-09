@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'superannuationfund',
     label: 'Superannuation Fund',
+    buttons: [],
     columns: [
       {
         content: [
@@ -34,56 +35,78 @@ const list = {
 
 const form = [
   {
-    key: 'name',
-    type: 'input',
-    templateOptions: {
-      required: true,
-      label: 'Name',
-      max: 76,
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
-    key: 'membership_number',
+    key: 'abn',
     type: 'input',
     templateOptions: {
       required: false,
-      label: 'Employer Membership Number',
-      max: 255,
+      label: 'ABN',
       type: 'text'
     },
-    read_only: false
-  }
-];
-
-const formadd = [
+    read_only: true
+  },
   {
     key: 'name',
     type: 'input',
     templateOptions: {
       required: true,
-      label: 'Name',
-      max: 76,
+      label: 'Fund name',
       type: 'text'
     },
-    read_only: false
+    read_only: true
   },
   {
-    key: 'membership_number',
+    key: 'usi',
     type: 'input',
     templateOptions: {
       required: false,
-      label: 'Employer Membership Number',
-      max: 255,
+      label: 'USI',
       type: 'text'
     },
-    read_only: false
+    read_only: true
+  },
+  {
+    key: 'product_name',
+    type: 'input',
+    templateOptions: {
+      required: false,
+      label: 'Product name',
+      type: 'text'
+    },
+    read_only: true
+  },
+  {
+    key: 'contribution_restrictions',
+    type: 'checkbox',
+    templateOptions: {
+      type: 'checkbox',
+      required: false,
+      label: 'Contribution restrictions',
+    },
+    read_only: true
+  },
+  {
+    key: 'from_date',
+    type: 'datepicker',
+    templateOptions: {
+      required: false,
+      label: 'From date',
+      type: 'date'
+    },
+    read_only: true
+  },
+  {
+    key: 'to_date',
+    type: 'datepicker',
+    templateOptions: {
+      required: false,
+      label: 'To date',
+      type: 'date'
+    },
+    read_only: true
   }
 ];
 
 export const metadata = {
   list,
   form,
-  formadd
 };

@@ -9,7 +9,19 @@ span {
 }
 
 label {
+  display: block;
+
   margin-bottom: 0;
+
+  &.inline {
+    display: inline-block;
+
+    &::after {
+      display: inline-block;
+
+      content: ' ';
+    }
+  }
 }
 
 .text-description {
@@ -24,4 +36,14 @@ label {
   line-height: 16px;
 
   opacity: .7;
+}
+
+.score-text {
+  display: inline-block;
+
+  height: 14px;
+  line-height: 14px;
+
+  font-size: 14px;
+  vertical-align: top;
 }

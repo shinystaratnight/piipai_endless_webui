@@ -10,12 +10,12 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
 @Component({
-  selector: 'form-select',
+  selector: 'app-form-select',
   templateUrl: 'form-select.component.html'
 })
 
@@ -34,6 +34,7 @@ export class FormSelectComponent
   public label: boolean;
 
   public displayValue: string;
+  public textColor: string;
 
   public viewMode: boolean;
 
@@ -51,7 +52,7 @@ export class FormSelectComponent
   }
 
   public ngOnInit() {
-    this.addControl(this.config, this.fb);
+    this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.options = this.config.templateOptions.options.sort((p, n) => p.label > n.label ? 1 : -1 );
     this.setInitValue();
     this.checkModeProperty();
@@ -74,7 +75,9 @@ export class FormSelectComponent
           this.config.hide = hide;
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);
@@ -97,12 +100,15 @@ export class FormSelectComponent
     }
   }
 
-  public getValue(options: any[], value: string): string {
+  public getValue(options: any[], value: string): {value: string, color?: string} {
     let element = options.find((el) => el.value == value); // tslint:disable-line
     if (element) {
-      return element.label;
+      return {
+        value: element.label,
+        color: element.color
+      };
     } else {
-      return '-';
+      return { value: '-' };
     }
   }
 
@@ -110,8 +116,10 @@ export class FormSelectComponent
     if (this.config.value != undefined) { //tslint:disable-line
       this.group.get(this.key).patchValue(this.config.value);
     }
-    if (this.viewMode && !this.config.hide) {
-      this.displayValue = this.getValue(this.options, this.config.value);
+    if ((this.viewMode || this.config.read_only) && !this.config.hide) {
+      const option = this.getValue(this.options, this.config.value);
+      this.displayValue = option.value;
+      this.textColor = option.color ? `text-${option.color}` : '';
     }
   }
 

@@ -22,7 +22,7 @@ const form = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     key: 'skill',
     hide: true,

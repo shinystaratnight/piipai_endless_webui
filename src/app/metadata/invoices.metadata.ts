@@ -1,19 +1,41 @@
+import { createFilter, Type } from '../dynamic-form/models/filters';
+
+const filters = {
+  recruitmentAgent: createFilter(Type.Relared, {
+    key: 'customer_company',
+    label: 'Client company',
+    endpoint: '/core/companies/',
+  }),
+  date: createFilter(Type.Date, {
+    key: 'date',
+    label: 'Date',
+    yesterday: true,
+    today: true,
+    tomorrow: true
+  })
+};
+
 const list = {
   list: {
     list: 'invoice',
-    label: 'Company Invoice',
+    label: 'Company Invoices',
+    buttons: [],
+    filters: [
+      filters.recruitmentAgent,
+      filters.date
+    ],
     columns: [
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             field: 'customer_company',
             type: 'related'
           }
         ],
         name: 'customer_company',
         sort_field: 'customer_company',
-        label: 'Customer company',
+        label: 'Client company',
         sort: true
       },
       {
@@ -107,7 +129,7 @@ const list = {
         label: '',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/invoices/{id}/pdf/',
+            endpoint: '/core/invoices/{id}/pdf/',
             field: 'id',
             icon: 'fa-eye',
             action: 'previewInvoice',
@@ -124,7 +146,7 @@ const list = {
         label: '',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/invoices/{id}/pdf/',
+            endpoint: '/core/invoices/{id}/pdf/',
             field: 'id',
             icon: 'fa-print',
             action: 'printInvoice',
@@ -141,7 +163,7 @@ const list = {
         label: '',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/invoices/{id}/approve/',
+            endpoint: '/core/invoices/{id}/approve/',
             field: 'id',
             icon: 'fa-external-link',
             action: 'emptyPost',
@@ -193,10 +215,10 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       read_only: true,
       templateOptions: {
-        label: 'Customer company',
+        label: 'Client company',
         add: true,
         delete: false,
         values: ['__str__'],
@@ -307,7 +329,7 @@ const formset = {
     {
       many: false,
       key: 'customer_company',
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -315,7 +337,7 @@ const formset = {
         delete: false,
         edit: true,
         values: ['__str__'],
-        label: 'Customer company',
+        label: 'Client company',
         type: 'related'
       },
       read_only: true,
@@ -372,12 +394,12 @@ const formset = {
         sort_field: 'customer_company',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             type: 'related',
             field: 'customer_company'
           }
         ],
-        label: 'Customer company'
+        label: 'Client company'
       },
       {
         name: 'date',
@@ -438,7 +460,7 @@ const formset = {
         content: [
           {
             action: 'previewInvoice',
-            endpoint: '/ecore/api/v2/core/invoices/{id}/pdf/',
+            endpoint: '/core/invoices/{id}/pdf/',
             icon: 'fa-eye',
             text: 'Preview',
             type: 'button',
@@ -456,7 +478,7 @@ const formset = {
         content: [
           {
             action: 'printInvoice',
-            endpoint: '/ecore/api/v2/core/invoices/{id}/pdf/',
+            endpoint: '/core/invoices/{id}/pdf/',
             icon: 'fa-print',
             text: 'Print',
             type: 'button',
@@ -474,7 +496,7 @@ const formset = {
         content: [
           {
             action: 'emptyPost',
-            endpoint: '/ecore/api/v2/core/invoices/{id}/approve/',
+            endpoint: '/core/invoices/{id}/approve/',
             icon: 'fa-external-link',
             text: 'Approve',
             type: 'button',
@@ -487,7 +509,7 @@ const formset = {
     ],
     list: 'invoice',
     editDisable: false,
-    label: 'Company Invoice',
+    label: 'Company Invoices',
     pagination_label: 'Company Invoice',
     search_enabled: false
   }
@@ -503,7 +525,7 @@ const form = [
         children: [
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             read_only: true,
             templateOptions: {
               label: 'Provider Company',
@@ -520,7 +542,7 @@ const form = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             read_only: true,
             templateOptions: {
               label: 'Provider Representative',
@@ -537,10 +559,10 @@ const form = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             read_only: true,
             templateOptions: {
-              label: 'Customer Company',
+              label: 'Client Company',
               add: true,
               delete: false,
               values: ['__str__'],
@@ -1371,7 +1393,7 @@ const form = [
     ]
   },
   {
-    endpoint: '/ecore/api/v2/core/invoicelines/',
+    endpoint: '/core/invoicelines/',
     templateOptions: {
       label: 'Invoice Lines',
       type: 'list',
@@ -1398,7 +1420,7 @@ const formadd = [
         children: [
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             read_only: true,
             templateOptions: {
               label: 'Provider Company',
@@ -1415,7 +1437,7 @@ const formadd = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             read_only: true,
             templateOptions: {
               label: 'Provider Representative',
@@ -1432,10 +1454,10 @@ const formadd = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             read_only: true,
             templateOptions: {
-              label: 'Customer Company',
+              label: 'Client Company',
               add: true,
               delete: false,
               values: ['__str__'],
@@ -2266,7 +2288,7 @@ const formadd = [
     ]
   },
   {
-    endpoint: '/ecore/api/v2/core/invoicelines/',
+    endpoint: '/core/invoicelines/',
     templateOptions: {
       label: 'Invoice Lines',
       type: 'list',

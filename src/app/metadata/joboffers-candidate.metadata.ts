@@ -27,7 +27,7 @@ const list = {
         name: 'shift.date.job.position',
         content: [
           {
-            endpoint: '/ecore/api/v2/skills/skills/',
+            endpoint: '/skills/skills/',
             type: 'related',
             field: 'shift.date.job.position'
           }
@@ -40,7 +40,7 @@ const list = {
         title: null,
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             type: 'related',
             label: 'Client',
             field: 'shift.date.job.customer_company'
@@ -49,7 +49,7 @@ const list = {
       },
       {
         label: 'Job Site - Map',
-        delim: ' ',
+        delim: null,
         name: 'job_site_-_map',
         title: null,
         content: [
@@ -74,7 +74,7 @@ const list = {
         title: null,
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             label: 'Job Site Contact',
             field: 'shift.date.job.jobsite.primary_contact'
@@ -90,7 +90,7 @@ const list = {
       },
       {
         label: 'Status',
-        delim: null,
+        delim: ' ',
         name: 'status',
         title: null,
         content: [
@@ -99,7 +99,7 @@ const list = {
             icon: 'fa-check-circle',
             type: 'button',
             color: 'success',
-            endpoint: '/ecore/api/v2/hr/joboffers/{id}/accept',
+            endpoint: '/hr/joboffers/{id}/accept',
             field: 'hide_buttons',
             action: 'emptyPost',
             hidden: 'hide_buttons'
@@ -109,7 +109,7 @@ const list = {
             icon: 'fa-times-circle',
             type: 'button',
             color: 'danger',
-            endpoint: '/ecore/api/v2/hr/joboffers/{id}/cancel',
+            endpoint: '/hr/joboffers/{id}/cancel',
             field: 'hide_buttons',
             action: 'emptyPost',
             hidden: 'hide_buttons'
@@ -180,7 +180,7 @@ const list = {
       collapsed: false,
       read_only: true,
       key: 'shift.date.job.jobsite.primary_contact',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       type: 'related',
       templateOptions: {
         edit: true,
@@ -238,7 +238,7 @@ const list = {
       collapsed: false,
       read_only: true,
       key: 'shift.date.job.customer_company',
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       type: 'related',
       templateOptions: {
         edit: true,
@@ -255,7 +255,7 @@ const list = {
       collapsed: false,
       read_only: true,
       key: 'shift.date.job.position',
-      endpoint: '/ecore/api/v2/skills/skills/',
+      endpoint: '/skills/skills/',
       type: 'related',
       templateOptions: {
         edit: true,
@@ -338,7 +338,7 @@ const form = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.position',
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -355,7 +355,7 @@ const form = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.customer_company',
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -383,7 +383,7 @@ const form = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.jobsite.primary_contact',
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -400,7 +400,7 @@ const form = [
     collapsed: false,
     read_only: false,
     key: 'shift.date.job.jobsite',
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -417,7 +417,7 @@ const form = [
     collapsed: false,
     read_only: false,
     key: 'shift.date.job',
-    endpoint: '/ecore/api/v2/hr/jobs/',
+    endpoint: '/hr/jobs/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -434,7 +434,7 @@ const form = [
     collapsed: false,
     read_only: false,
     key: 'shift.date',
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
+    endpoint: '/hr/shiftdates/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -451,7 +451,7 @@ const form = [
     collapsed: false,
     read_only: false,
     key: 'shift',
-    endpoint: '/ecore/api/v2/hr/shifts/',
+    endpoint: '/hr/shifts/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -468,7 +468,7 @@ const form = [
     collapsed: false,
     read_only: true,
     key: 'candidate_contact',
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -485,7 +485,7 @@ const form = [
     collapsed: false,
     read_only: true,
     key: 'offer_sent_by_sms',
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -502,7 +502,7 @@ const form = [
     collapsed: false,
     read_only: true,
     key: 'reply_received_by_sms',
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -580,7 +580,7 @@ const form = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.position',
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -597,7 +597,7 @@ const form = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.customer_company',
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -625,7 +625,7 @@ const form = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.jobsite.primary_contact',
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -642,7 +642,7 @@ const form = [
     collapsed: false,
     read_only: false,
     key: 'shift.date.job.jobsite',
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -659,7 +659,7 @@ const form = [
     collapsed: false,
     read_only: false,
     key: 'shift.date.job',
-    endpoint: '/ecore/api/v2/hr/jobs/',
+    endpoint: '/hr/jobs/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -676,7 +676,7 @@ const form = [
     collapsed: false,
     read_only: false,
     key: 'shift.date',
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
+    endpoint: '/hr/shiftdates/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -693,7 +693,7 @@ const form = [
     collapsed: false,
     read_only: false,
     key: 'shift',
-    endpoint: '/ecore/api/v2/hr/shifts/',
+    endpoint: '/hr/shifts/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -845,7 +845,7 @@ const formadd = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.position',
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -862,7 +862,7 @@ const formadd = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.customer_company',
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -890,7 +890,7 @@ const formadd = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.jobsite.primary_contact',
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -907,7 +907,7 @@ const formadd = [
     collapsed: false,
     read_only: false,
     key: 'shift.date.job.jobsite',
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -924,7 +924,7 @@ const formadd = [
     collapsed: false,
     read_only: false,
     key: 'shift.date.job',
-    endpoint: '/ecore/api/v2/hr/jobs/',
+    endpoint: '/hr/jobs/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -941,7 +941,7 @@ const formadd = [
     collapsed: false,
     read_only: false,
     key: 'shift.date',
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
+    endpoint: '/hr/shiftdates/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -958,7 +958,7 @@ const formadd = [
     collapsed: false,
     read_only: false,
     key: 'shift',
-    endpoint: '/ecore/api/v2/hr/shifts/',
+    endpoint: '/hr/shifts/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -975,7 +975,7 @@ const formadd = [
     collapsed: false,
     read_only: true,
     key: 'candidate_contact',
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -992,7 +992,7 @@ const formadd = [
     collapsed: false,
     read_only: true,
     key: 'offer_sent_by_sms',
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -1009,7 +1009,7 @@ const formadd = [
     collapsed: false,
     read_only: true,
     key: 'reply_received_by_sms',
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -1087,7 +1087,7 @@ const formadd = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.position',
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -1104,7 +1104,7 @@ const formadd = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.customer_company',
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -1132,7 +1132,7 @@ const formadd = [
     collapsed: false,
     read_only: true,
     key: 'shift.date.job.jobsite.primary_contact',
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -1149,7 +1149,7 @@ const formadd = [
     collapsed: false,
     read_only: false,
     key: 'shift.date.job.jobsite',
-    endpoint: '/ecore/api/v2/hr/jobsites/',
+    endpoint: '/hr/jobsites/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -1166,7 +1166,7 @@ const formadd = [
     collapsed: false,
     read_only: false,
     key: 'shift.date.job',
-    endpoint: '/ecore/api/v2/hr/jobs/',
+    endpoint: '/hr/jobs/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -1183,7 +1183,7 @@ const formadd = [
     collapsed: false,
     read_only: false,
     key: 'shift.date',
-    endpoint: '/ecore/api/v2/hr/shiftdates/',
+    endpoint: '/hr/shiftdates/',
     type: 'related',
     templateOptions: {
       edit: true,
@@ -1200,7 +1200,7 @@ const formadd = [
     collapsed: false,
     read_only: false,
     key: 'shift',
-    endpoint: '/ecore/api/v2/hr/shifts/',
+    endpoint: '/hr/shifts/',
     type: 'related',
     templateOptions: {
       edit: true,

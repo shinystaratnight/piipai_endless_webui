@@ -1,18 +1,9 @@
 @import '../../../../styles/variables.scss';
 
-h5 {
+h6 {
   margin-bottom: 1rem;
 
   text-align: center;
-
-  &.title {
-    font-size: 14px;
-    line-height: 18px;
-    font-weight: 600;
-    text-transform: uppercase;
-
-    opacity: .3;
-  }
 }
 
 .form-group {
@@ -45,16 +36,20 @@ label {
 
   &-info {
     display: flex;
-
-    width: 600px;
+    flex-wrap: wrap;
+    justify-content: space-between;
 
     margin: 1rem auto;
   }
 
   &-item {
+    display: flex;
+    flex-direction: column;
     flex: 1;
 
-    margin-right: 1rem;
+    min-width: 200px;
+
+    margin: 0 .25rem .25rem;
 
     text-align: center;
     border-radius: .5rem;
@@ -65,10 +60,6 @@ label {
 
     &:hover {
       box-shadow: 0 0 10px #333;
-    }
-
-    &:last-child {
-      margin-right: 0;
     }
 
     &.active {
@@ -82,6 +73,7 @@ label {
     position: relative;
 
     padding: 1rem;
+    padding-top: 0;
 
     border-radius: .5rem .5rem 0 0;
 
@@ -102,13 +94,17 @@ label {
 
     small {
       position: absolute;
-      bottom: 2px;
+      top: 0;
+      right: 0;
 
-      margin-left: 5px;
+      padding: 2px 10px;
 
       font-size: 12px;
 
-      color: yellow;
+      border-radius: 0 .4rem 0 .5rem;
+
+      color: white;
+      background-color: $brand-warning;
     }
 
     i {
@@ -133,11 +129,28 @@ label {
   }
 
   &-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+
     padding: 1rem;
 
     border-radius: 0 0 .5rem .5rem;
 
     background-color: $brand-primary;
+
+    .annually {
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+
+      border-bottom: 1px solid rgba(white, .3);
+    }
+
+    .pay {
+      font-size: 14px;
+      line-height: 16px;
+    }
 
     h4 {
       margin-bottom: 1rem;
@@ -146,6 +159,22 @@ label {
     h5 {
       text-transform: uppercase;
       margin-bottom: 1rem;
+    }
+
+    ul {
+      width: 100%;
+    }
+
+    li {
+      list-style: none;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: left;
+    }
+
+    i {
+      font-size: 10px;
+      margin-right: 5px;
     }
   }
 
@@ -177,4 +206,19 @@ p.message {
   border-radius: 50px;
 
   background-color: rgba(51, 51, 51, .1);
+}
+
+.btn:not(.btn-primary) {
+  padding: 0 5px;
+
+  background-color: #fff;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.subscribe-button {
+  margin: 0 auto;
+  padding: 4px 20px;
 }

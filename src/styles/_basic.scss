@@ -67,6 +67,24 @@ input[type='checkbox']:checked ~ .custom-checkbox {
       border-color: map-get($theme-colors, $item);
 
       background-color: map-get($theme-colors, $item);
+
+      &.success {
+        border-color: $brand-success;
+
+        background-color: $brand-success;
+      }
+
+      &.danger {
+        border-color: $brand-danger;
+
+        background-color: $brand-danger;
+      }
+
+      &.warning {
+        border-color: $brand-warning;
+
+        background-color: $brand-warning;
+      }
     }
   }
 
@@ -156,18 +174,27 @@ select.not-empty {
 form.ng-invalid button[type='submit'] {
   position: relative;
 
-  background-color: rgba(51, 51, 51, 0.3) !important;
-  border-color: rgba(51, 51, 51, 0.3) !important;
+  background-color: rgba($brand-primary, 0.55) !important;
+  border-color: transparent !important;
 
-  &:hover::after {
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: rgba(map-get($theme-colors, $item), 0.55) !important;
+    }
+  }
+
+  &.button-save:hover::after,
+  &.save:hover::after {
     position: absolute;
     display: block;
-    top: 42px;
+    top: -35px;
+    left: 0;
 
-    padding: 0.5rem;
+    padding: 0.2rem;
 
     background-color: $gray;
-    content: 'Please fill all the fields';
+    content: 'Please fill all the REQUIRED fields';
+    z-index: 1;
   }
 }
 
@@ -175,7 +202,7 @@ form.ng-invalid button[type='submit'] {
   & > .nav-tabs {
     justify-content: center !important;
 
-    .nav-item:nth-child(11) {
+    .nav-item:nth-child(12) {
       width: 50%;
 
       font-weight: bold;
@@ -186,7 +213,7 @@ form.ng-invalid button[type='submit'] {
       }
     }
 
-    .nav-item:nth-child(12) {
+    .nav-item:nth-child(13) {
       width: 50%;
 
       font-weight: bold;
@@ -198,13 +225,17 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
-.shifts-header .tooltip.tooltip-bottom {
+.shifts-header .tooltip.bs-tooltip-bottom {
   left: auto !important;
   right: 15px !important;
 
-  .tooltip-inner::before {
-    left: 89%;
+  .arrow {
+    left: 86% !important;
   }
+}
+
+.message-detail .tooltip-inner {
+  min-width: auto;
 }
 
 .current-day {
@@ -218,6 +249,15 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
+.fillin-map .close-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  padding: 5px 10px;
+  z-index: 2;
+}
+
 /*---------- Bootstrap ---------- */
 
 *[role='tablist'] a {
@@ -226,6 +266,10 @@ form.ng-invalid button[type='submit'] {
   &:hover {
     text-decoration: none;
   }
+}
+
+.col-form-label {
+  padding-bottom: 2px;
 }
 
 .edit-form .spinner.invisible {
@@ -240,13 +284,24 @@ form.ng-invalid button[type='submit'] {
 .ngb-dp-week {
   .btn-primary,
   .outside,
-  .btn-secondary {
+  .btn-secondary,
+  .btn-light {
     padding: 7px;
 
     font-size: 12px;
     line-height: 16px;
 
     border-radius: 50%;
+  }
+
+  .btn-light {
+    background-color: #fff;
+  }
+
+  .btn-light:hover {
+    color: #212529;
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
   }
 
   .btn-secondary {
@@ -256,6 +311,30 @@ form.ng-invalid button[type='submit'] {
   .outside {
     opacity: 0.2;
   }
+
+  .ngb-dp-day:focus {
+    outline: none;
+  }
+}
+
+.btn-secondary {
+  color: #292b2c;
+  background-color: #fff;
+  border-color: transparent;
+}
+
+.btn-default {
+  color: $gray;
+  background: #fdfdfd;
+  border: none;
+}
+
+.form-check {
+  padding-left: 0;
+}
+
+.form-element-checkbox {
+  margin-bottom: 4px;
 }
 
 .ngb-dp-weekday {
@@ -282,7 +361,37 @@ form.ng-invalid button[type='submit'] {
 }
 
 .modal-backdrop {
-  z-index: 3;
+  z-index: 3 !important;
+}
+
+.extend-modal .modal-body {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.small-modal {
+  .modal-dialog {
+    max-width: 400px;
+
+    .form-element-content {
+      width: auto;
+      max-width: none;
+    }
+
+    .button-save {
+      display: block;
+
+      margin: 0 auto;
+      margin-top: 30px;
+
+      width: 160px;
+      height: 40px;
+    }
+  }
+}
+
+.medium-modal .modal-dialog {
+  max-width: 600px;
 }
 
 .modal {
@@ -292,12 +401,60 @@ form.ng-invalid button[type='submit'] {
     z-index: 22;
 
     .modal-backdrop {
-      z-index: 21;
+      z-index: 21 !important;
     }
   }
 
-  &.shiftdates .modal-content {
-    overflow: visible;
+  &.shiftdates .modal-content,
+  &.visible-mode .modal-content {
+    @include media-breakpoint-up('md') {
+      overflow: visible;
+    }
+
+    @include media-breakpoint-down('sm') {
+      .form-group {
+        margin-bottom: 5px;
+      }
+
+      .modal-header {
+        padding: .5rem 1rem;
+
+        h5 {
+          font-size: 1rem;
+        }
+      }
+
+      max-height: 95vh;
+    }
+  }
+
+  &.message-detail .modal-content {
+    padding: 20px;
+
+    .dynamic-form {
+      margin-top: 0;
+    }
+  }
+}
+
+.message-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 40px;
+
+  margin-bottom: 16px;
+
+  .message-label {
+    margin-left: 20px;
+
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  button {
+    align-self: flex-start;
   }
 }
 
@@ -316,6 +473,24 @@ form.ng-invalid button[type='submit'] {
     opacity: 1;
   }
 
+  .arrow {
+    width: 10px;
+    height: 10px;
+  }
+
+  .arrow::before {
+    width: 10px;
+    height: 10px;
+
+    border: none;
+
+    background-color: white;
+
+    .dark-tooltip & {
+      background-color: #4f4f4f;
+    }
+  }
+
   &-inner {
     min-width: 200px;
     max-width: 350px;
@@ -326,50 +501,53 @@ form.ng-invalid button[type='submit'] {
     color: inherit;
     box-shadow: 0 0 8px 2px rgba($gray, 0.3);
 
-    .tooltip-right &::before {
-      width: 10px;
-      height: 10px;
-
-      border: none;
-
-      transform: rotate(45deg);
-      box-shadow: -4px 4px 15px 1px rgba($gray, 0.2);
+    .dark-tooltip & {
+      color: #f2f2f2;
+      background: #4f4f4f;
     }
 
-    .tooltip-left &::before {
-      width: 10px;
-      height: 10px;
+    .calendar-item & {
+      min-width: auto;
 
-      border: none;
-
-      transform: rotate(135deg);
-      box-shadow: -4px -4px 15px 1px rgba($gray, 0.2);
-    }
-
-    .tooltip-bottom &::before {
-      width: 10px;
-      height: 10px;
-
-      border: none;
-
-      background-color: #fff;
-
-      transform: rotate(45deg);
-      box-shadow: 4px -4px 15px 1px rgba($gray, 0.2);
-    }
-
-    .tooltip-left &::before {
-      width: 10px;
-      height: 10px;
-
-      border: none;
-
-      background-color: #fff;
-
-      transform: rotate(45deg);
-      box-shadow: 4px -4px 15px 1px rgba($gray, 0.2);
+      color: white;
+      background-color: #4f4f4f;
+      box-shadow: none;
     }
   }
+
+  &.bs-tooltip-right .arrow::before {
+    right: -2px;
+
+    transform: rotate(45deg);
+    box-shadow: -4px 4px 5px 0 rgba($gray, 0.2);
+  }
+
+  &.bs-tooltip-left .arrow {
+    right: 2px;
+
+    &::before {
+      transform: rotate(45deg);
+      box-shadow: 4px -4px 5px 0 rgba($gray, 0.2);
+    }
+  }
+
+  &.bs-tooltip-bottom .arrow {
+    top: 2px;
+
+    &::before {
+      transform: rotate(45deg);
+      box-shadow: -4px -4px 5px 0 rgba($gray, 0.2);
+
+      .calendar-item & {
+        box-shadow: none;
+        background-color: #4f4f4f;
+      }
+    }
+  }
+}
+
+.dark-tooltip .arrow::before {
+  background-color: #4f4f4f;
 }
 
 .btn {
@@ -437,6 +615,12 @@ form.ng-invalid button[type='submit'] {
       &:hover {
         background-color: map-get($theme-colors, $item);
         color: white;
+
+        &.disabled {
+          background-color: #fff;
+          color: map-get($theme-colors, $item);
+          cursor: default;
+        }
       }
     }
   }
@@ -450,6 +634,8 @@ form.ng-invalid button[type='submit'] {
 
 .modal-header {
   background-color: #fff;
+
+  align-items: center;
 }
 
 .modal-content {
@@ -467,9 +653,6 @@ form.ng-invalid button[type='submit'] {
   }
 
   .modal-body {
-    // padding-top: 40px;
-    // padding-bottom: 40px;
-
     border-radius: 0.5rem 0.5rem 0 0;
   }
 
@@ -479,7 +662,19 @@ form.ng-invalid button[type='submit'] {
   }
 
   @include media-breakpoint-down('md') {
-    max-height: 75vh;
+    max-height: 85vh;
+  }
+}
+
+.accordion button {
+  width: 100%;
+
+  text-decoration: none;
+
+  &:hover,
+  &:active,
+  &:focus {
+    text-decoration: none !important;
   }
 }
 
@@ -506,6 +701,14 @@ form.ng-invalid button[type='submit'] {
         background-color: darken(map-get($theme-colors, $item), 10%) !important;
       }
     }
+  }
+}
+
+.form-group {
+  margin-bottom: 10px;
+
+  .mobile-device & {
+    margin-bottom: 0;
   }
 }
 
@@ -543,6 +746,10 @@ form.ng-invalid button[type='submit'] {
 
   border: none;
   border-bottom: 2px solid rgba(#e5e5e5, 0.8);
+
+  .mobile-device & {
+    padding: 0 20px;
+  }
 
   .nav-link {
     padding: 6px;
@@ -663,6 +870,10 @@ form.ng-invalid button[type='submit'] {
 
   border: 1px solid rgba($gray, 0.1);
   z-index: 2 !important;
+
+  .registration-form & {
+    top: 45px;
+  }
 }
 
 .ui-datebox-container .form-control {
@@ -687,6 +898,15 @@ form.ng-invalid button[type='submit'] {
       border-radius: 50px;
     }
   }
+}
+
+.ui-datebox-flipcontent div {
+  width: 70px !important;
+}
+
+.ui-datebox-flipcenter {
+  width: 236px !important;
+  height: 36px !important;
 }
 
 .ui-datebox-container.dropdown-menu {
@@ -881,12 +1101,12 @@ form.ng-invalid button[type='submit'] {
 }
 
 .contact-avatar {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
   font-size: 20px;
-  line-height: 24px;
+  line-height: 1.2;
 
   font-weight: 600;
 
@@ -998,6 +1218,17 @@ iframe.send-sms {
 
 .form-page {
   padding: 0 10px 16px;
+
+  &.profile-page {
+    position: relative;
+    top: 50px;
+  }
+
+  .mobile-device & {
+    top: 0px;
+
+    padding: 0;
+  }
 }
 
 .modal-content .has-tabs .button-save {
@@ -1064,8 +1295,14 @@ iframe.send-sms {
 
   padding: 32px 0;
 
+  border-radius: 5px;
+
   background-color: #fff;
   box-shadow: 0 0 8px rgba($gray, 0.1);
+
+  .mobile-device & {
+    padding: 10px 0;
+  }
 
   @include media-breakpoint-down('lg') {
     width: 100%;
@@ -1074,16 +1311,15 @@ iframe.send-sms {
 
   .button-delete {
     position: absolute;
-    top: 25px;
+    top: 34px;
     right: 24px;
 
     font-size: 14px;
-    line-height: 18px;
+    line-height: 19px !important;
 
-    color: $gray;
-    opacity: 0.3;
+    color: rgba($gray, .3);
 
-    background-color: transparent;
+    background-color: white;
 
     @include media-breakpoint-down('md') {
       top: 4px;
@@ -1092,9 +1328,9 @@ iframe.send-sms {
 
     &:hover,
     &:focus {
-      opacity: 1;
+      color: $gray;
 
-      background-color: transparent;
+      background-color: white;
       border-color: transparent;
     }
   }
@@ -1137,11 +1373,29 @@ iframe.send-sms {
   }
 }
 
+.button-save {
+  padding: 8px 20px;
+
+  &[disabled] {
+    cursor: not-allowed;
+  }
+}
+
+@include media-breakpoint-down('sm') {
+  .button-save {
+    width: 100%;
+
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+
 .dynamic-form {
   margin: 0 20px;
 }
 
-.edit-form .dynamic-form {
+.edit-form.has-tabs .dynamic-form {
   margin-top: 40px;
 }
 
@@ -1150,6 +1404,10 @@ iframe.send-sms {
     margin: 40px;
 
     margin-bottom: 0;
+
+    .mobile-device & {
+      margin-top: 0;
+    }
 
     @include media-breakpoint-down('md') {
       margin: 20px;
@@ -1209,6 +1467,8 @@ iframe.send-sms {
   text-align: left;
 
   h6 {
+    margin-bottom: 4px;
+
     font-size: 12px;
     line-height: 16px;
   }
@@ -1251,6 +1511,10 @@ iframe.send-sms {
 .big-btn {
   height: 40px;
   width: 160px;
+}
+
+.permissions .nav {
+  margin-left: 3rem;
 }
 
 @keyframes loadmore {
@@ -1309,4 +1573,78 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
   border: none;
 
   color: $brand-primary;
+}
+
+.evaluate-label {
+  opacity: .7;
+  margin: 20px;
+}
+
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  color: rgba(#bdbdbd, .3);
+}
+
+.star.star-lg {
+  font-size: 38px;
+}
+
+.full {
+  color: #ffd042;
+}
+.half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #ffd042;
+}
+
+ngb-rating:focus {
+  outline: none;
+}
+
+
+/* Mobile */
+
+.mobile-timesheets {
+  .nav.nav-tabs {
+    padding: 0;
+    justify-content: space-around !important;
+
+    .nav-link {
+      margin-right: 0;
+    }
+  }
+}
+
+/* Quill */
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="10px"]::before {
+  content: '10px';
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="12px"]::before {
+  content: '12px';
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before {
+  content: '14px';
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="16px"]::before {
+  content: '16px';
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before {
+  content: '18px';
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="20px"]::before {
+  content: '20px';
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="22px"]::before {
+  content: '22px';
 }

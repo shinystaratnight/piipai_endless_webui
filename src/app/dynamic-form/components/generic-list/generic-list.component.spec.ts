@@ -587,7 +587,7 @@ describe('GenericListComponent', () => {
             pagination: 'limit=2&offset=2'
           }
         };
-        comp.endpoint = '/ecore/api/v2/contacts/?company=123';
+        comp.endpoint = '/contacts/?company=123';
         let result = comp.generateQuery(table.query);
         expect(result).toEqual(`&${table.query.sort}&${table.query.pagination}`);
       }));

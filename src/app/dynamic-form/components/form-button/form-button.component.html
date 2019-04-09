@@ -1,20 +1,22 @@
-<div class="form-group d-inline-block" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden">
+<div class="form-group d-inline-flex" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden || showButton">
   <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
   <button [type]="config.templateOptions.type ? config.templateOptions.type : 'button'"
-    *ngIf="!config.hidden && (config.templateOptions.text || repeatArray && repeatArray.length > 1) && config.action !== 'showDetail'"
-    [ngClass]="[buttonClass]"
-    [ngStyle]="{'backgroundColor': config.color}"
+    *ngIf="(!config.hidden || showButton) && (config.templateOptions.text || repeatArray && repeatArray.length > 1) && config.action !== 'showMessage'"
+    [ngClass]="[buttonClass, textClass]"
+    [ngStyle]="{'backgroundColor': config.inverse ? 'white' : config.color}"
     class="btn"
-    [class.btn-outline-primary]="config.list && !buttonClass"
+    [class.btn-outline-primary]="config.list && !buttonClass && !config.inverse"
     [class.btn-sm]="config.templateOptions.small"
-    [class.px-2]="config.templateOptions.p"
+    [class.px-2]="config.templateOptions.p && buttonClass !== 'btn-link'"
     [class.list]="config.templateOptions.p"
-    [class.pl-4.pr-4]="!config.templateOptions.p"
-    [class.text-white]="buttonClass || config.color"
+    [class.text-white]="(buttonClass || config.color) && !config.inverse && buttonClass !== 'btn-link'"
+    [class.disabled]="isDisabled"
+    [attr.title]="disabledTitle"
+    [disabled]="config.disableAction || isDisabled"
     (click)="action($event)">
       <span *ngIf="repeatArray" class="d-flex align-items-center justify-content-between">
         <i fa
-          [ngClass]="{'text-white': buttonClass, 'mr-1': !last || first}"
+          [ngClass]="{'text-white': buttonClass && buttonClass !== 'btn-link', 'mr-1': !last || first}"
           *ngFor="let icon of repeatArray; let last = last; let first = first"
           [name]="config.templateOptions.icon">
         </i>
@@ -23,25 +25,29 @@
 
       <span *ngIf="!repeatArray">{{config.templateOptions.text}}</span>
   </button>
-  <button class="btn btn-sm btn-link" type="button" *ngIf="config.action === 'showDetail'" [placement]="config.placement" [ngbTooltip]="detail" (click)="action($event)">
+  <button class="btn btn-sm btn-link mr-1" type="button" *ngIf="config.action === 'showMessage'" [placement]="config.placement" [ngbTooltip]="detail" (click)="action($event)">
     {{config.templateOptions.text}}
   </button>
-  <span class="postfix" *ngIf="config.postfix">{{config.postfix}}</span>
-  <span class="custom-button" *ngIf="!config.hidden && !config.templateOptions.text && repeatArray && repeatArray.length === 1" (click)="action($event)">
+  <span class="postfix mr-1" *ngIf="config.postfix">{{config.postfix}}</span>
+  <span class="custom-button" *ngIf="!config.hidden && !config.templateOptions.text && repeatArray && repeatArray.length === 1 && !config.disableAction" (click)="action($event)">
     <i class="icon" fa [name]="config.templateOptions.icon"
       [ngStyle]="{'color': config.text_color}" [title]="config.title">
     </i>
-    {{config.title}}
+      {{config.title}}
   </span>
+  <img *ngIf="config.customLink && config.image" [src]="config.image" alt="" (click)="action($event)" style="border-radius: 50%">
+  <span *ngIf="config.customLink && !config.image" class="custom-link" (click)="action($event)">{{config.title}}</span>
   <span *ngIf="config.hidden && replacyValue">{{replacyValue}}</span>
   <small class="text-muted" *ngIf="config.templateOptions.description">
     {{config.templateOptions.description}}
   </small>
   <span *ngIf="config.delim">{{config.delim}}</span>
 </div>
+<span *ngIf="config.emptyValue && config.hidden">{{config.emptyValue}}</span>
+<span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">{{config.delim}}</span>
 <br *ngIf="config.list && !config.hidden && !config.delim && !config.noDelim">
 
-<template #detail>
+<ng-template #detail>
   <div class="line">
     <label for="">Data:</label>
     <p>{{config.value.sent_at | dateFormat: 'datetime'}}</p>
@@ -56,4 +62,4 @@
     <label for="">Text:</label>
     <p>{{config.value.text}}</p>
   </div>
-</template>
+</ng-template>

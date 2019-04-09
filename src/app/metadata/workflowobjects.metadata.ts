@@ -42,12 +42,12 @@ const list = {
     search_enabled: false,
     editDisable: false,
     filters: [
-      {
-        key: 'object_id',
-        label: 'Object id',
-        type: 'text',
-        default: null
-      },
+      // {
+      //   key: 'object_id',
+      //   label: 'Object id',
+      //   type: 'text',
+      //   default: null
+      // },
       {
         key: 'active',
         label: 'Active',
@@ -65,12 +65,12 @@ const list = {
         default: null,
         type: 'checkbox'
       },
-      {
-        key: 'state.workflow.name',
-        label: 'Name',
-        type: 'text',
-        default: null
-      }
+      // {
+      //   key: 'state.workflow.name',
+      //   label: 'Name',
+      //   type: 'text',
+      //   default: null
+      // }
     ]
   },
   fields: [
@@ -260,7 +260,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/workflownodes/',
+    endpoint: '/core/workflownodes/',
     read_only: false,
     templateOptions: {
       label: 'State',
@@ -289,6 +289,7 @@ const form = [
   {
     key: 'score',
     type: 'input',
+    default: 1,
     templateOptions: {
       required: false,
       min: 1,
@@ -326,7 +327,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/workflownodes/',
+    endpoint: '/core/workflownodes/',
     read_only: false,
     templateOptions: {
       label: 'State',
@@ -355,6 +356,7 @@ const formadd = [
   {
     key: 'score',
     type: 'input',
+    default: 1,
     templateOptions: {
       required: false,
       min: 1,

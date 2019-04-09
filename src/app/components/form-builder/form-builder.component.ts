@@ -6,7 +6,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { GenericFormService } from './../../dynamic-form/services/generic-form.service';
 
 @Component({
-  selector: 'form-builder',
+  selector: 'app-form-builder',
   templateUrl: 'form-builder.component.html'
 })
 
@@ -36,12 +36,15 @@ export class FormBuilderComponent {
 
   public links: any[];
   public domain = location.origin;
+  public formLink: string;
 
   constructor(
     private router: Router,
     private modalService: NgbModal,
     private genericFormService: GenericFormService
-  ) { }
+  ) {
+    this.formLink = location.origin + '/registration';
+  }
 
   public eventHandler(event: any) {
     if (event.type === 'sendForm' && event.status === 'success' && !this.id) {
@@ -53,7 +56,7 @@ export class FormBuilderComponent {
           groups: {
             action: 'add',
             data: {
-              fields: event.data.model_fields
+              fields: [...event.data.model_fields, ...event.data.extra_fields]
             }
           },
           id: {
@@ -80,7 +83,7 @@ export class FormBuilderComponent {
         groups: {
           action: 'add',
           data: {
-            fields: e.data.model_fields,
+            fields: [...e.data.model_fields, ...e.data.extra_fields],
             id: e.data.id
           }
         }

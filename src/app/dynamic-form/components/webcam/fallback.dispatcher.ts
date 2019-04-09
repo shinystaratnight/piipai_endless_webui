@@ -35,15 +35,11 @@ export class FallbackDispatcher {
     };
   }
 
-  private cam: ASCamera;
-
-  constructor(camera: ASCamera) {
-    this.cam = camera;
-  }
+  constructor(private camera: ASCamera) {}
 
   public capture(x?: any) {
     try {
-      return this.cam.capture(x);
+      return this.camera.capture(x);
     } catch (e) {
       console.error(e);
     }
@@ -51,7 +47,7 @@ export class FallbackDispatcher {
 
   public save(x?: any) {
     try {
-      return this.cam.save(x);
+      return this.camera.save(x);
     } catch (e) {
       console.error(e);
     }
@@ -59,7 +55,7 @@ export class FallbackDispatcher {
 
   public setCamera(x?: any) {
     try {
-      return this.cam.setCamera(x);
+      return this.camera.setCamera(x);
     } catch (e) {
       console.error(e);
     }
@@ -67,7 +63,7 @@ export class FallbackDispatcher {
 
   public getCameraSize() {
     try {
-      return { width: this.cam.width, height: this.cam.height };
+      return { width: this.camera.width, height: this.camera.height };
     } catch (e) {
       console.error(e);
     }
@@ -75,7 +71,7 @@ export class FallbackDispatcher {
 
   public getCameraList() {
     try {
-      return this.cam.getCameraList();
+      return this.camera.getCameraList();
     } catch (e) {
       console.error(e);
     }

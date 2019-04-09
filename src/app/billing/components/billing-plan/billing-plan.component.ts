@@ -3,78 +3,74 @@ import {
   EventEmitter,
   Output,
   Input,
-  OnInit
+  ViewChild,
+  OnChanges,
+  SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Plan, BillingSubscription } from '../../models';
+import { BillingService } from '../../services/billing-service';
 
 @Component({
-  selector: 'billing-plan',
+  selector: 'app-billing-plan',
   templateUrl: 'billing-plan.component.html',
   styleUrls: ['./billing-plan.component.scss']
 })
 
-export class BillingPlanComponent implements OnInit {
+export class BillingPlanComponent implements OnChanges, OnDestroy {
 
-  public plans: Plan[];
-  public changeAction: boolean;
+  public modalRef: NgbModalRef;
 
-  @Input() public cancelProcess: boolean;
   @Input() public saveProcess: boolean;
   @Input() public currentPlan: BillingSubscription;
   @Input() public workerCount: number;
+  @Input() public plans: Plan[];
+
+  @ViewChild('subscription') public modal;
 
   @Output() public selectedPlan = new EventEmitter();
   @Output() public cancelingPlan = new EventEmitter();
 
-  constructor() {
-    this.changeAction = false;
-  }
+  constructor(
+    private modalService: NgbModal,
+    private billingService: BillingService
+  ) {}
 
-  public ngOnInit() {
-    this.plans = [
-      {
-        id: 1,
-        name: 'Cancel anytime',
-        type: 'monthly',
-        description: 'Monthly',
-        pay: 13,
-        procent: 1,
-        active: false,
-        start: 120
-      },
-      {
-        id: 2,
-        name: 'Annual plan',
-        type: 'annual',
-        description: 'Annually',
-        save: true,
-        pay: 10,
-        procent: 0.75,
-        start: 90
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.saveProcess) {
+      if (!changes.saveProcess.currentValue && this.modalRef) {
+        this.modalRef.close();
       }
-    ];
+    }
   }
 
-  public planPay(plan: Plan, procent: number = 1): number {
-    const price = 120 + (this.workerCount - 10) * 11;
-
-    return this.workerCount > 10 ? Math.round(price * procent) : plan.start;
+  public ngOnDestroy() {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
   }
 
-  public planPayYear(plan: Plan, procent?: number): number {
-    const price = this.planPay(plan, 1);
+  public planPay(plan: Plan): number {
+    const start = plan.start_range_price_annual || plan.start_range_price_monthly;
 
-    return Math.round(price * 12 * procent);
+    const price = start + (this.workerCount - plan.start_range) * (plan.step_change_val * plan.procent);
+
+    return this.workerCount > plan.start_range ? Math.round(price) : start;
+  }
+
+  public planPayYear(plan: Plan): number {
+    const price = this.planPay(plan);
+
+    return Math.round(price * 12);
   }
 
   public selectPlan(plan) {
-    this.changeAction = false;
-
     const body = {
       type: plan.type,
       worker_count: this.workerCount,
-      price: plan.id === 1 ? this.planPay(plan) : this.planPayYear(plan, plan.procent),
+      price: plan.type === 'monthly' ? this.planPay(plan) : this.planPayYear(plan),
       changed: this.currentPlan
     };
 
@@ -87,11 +83,19 @@ export class BillingPlanComponent implements OnInit {
     }
   }
 
+  public setPlan() {
+    this.openModal();
+  }
+
   public changePlan() {
-    this.changeAction = true;
+    this.openModal();
   }
 
   public cancelPlan() {
     this.cancelingPlan.emit();
+  }
+
+  public openModal() {
+    this.modalRef = this.modalService.open(this.modal);
   }
 }

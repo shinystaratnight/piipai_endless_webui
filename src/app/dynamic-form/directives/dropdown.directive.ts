@@ -7,11 +7,11 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Directive({
-  selector: '[dropDown]'
+  selector: '[appDropDown]'
 })
 export class DropdownDirective implements OnInit, OnDestroy {
 

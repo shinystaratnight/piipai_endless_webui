@@ -4,9 +4,12 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
-import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import { ToastNoAnimationModule } from 'ngx-toastr';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { components } from './components';
+
+import { directives } from './directives';
 
 import { services } from './services';
 
@@ -17,16 +20,19 @@ import { pipes } from './pipes';
     CommonModule,
     RouterModule,
     Angular2FontawesomeModule,
-    ToastModule.forRoot(),
+    ToastNoAnimationModule.forRoot(),
     FormsModule,
+    NgbTooltipModule,
   ],
   exports: [
     ...components,
-    ...pipes
+    ...pipes,
+    ...directives,
   ],
   declarations: [
     ...components,
-    ...pipes
+    ...pipes,
+    ...directives,
   ],
   providers: [
     ...services

@@ -1,11 +1,11 @@
 import { ActionElementComponent } from './action-element/action-element.component';
 
-import { ProfileComponent } from './profile/profile.component';
 import { InfoComponent } from './info/info.component';
 import { WebcamComponent } from './webcam/webcam.component';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { TestGeneratorComponent } from './test-generator/test-generator.component';
 import { TestListComponent } from './test-list/test-list.component';
+import { TimeTrackingComponent } from './time-tracking/time-tracking.component';
 
 // Filters
 import { FilterChoiceComponent } from './filter-choice/filter-choice.component';
@@ -30,6 +30,7 @@ import { FormOptionsComponent } from './form-options/form-options.component';
 import { FormPictureComponent } from './form-picture/form-picture.component';
 import { FormRadioComponent } from './form-radio/form-radio.component';
 import { FormRelatedComponent } from './form-related/form-related.component';
+import { FormReplaceComponent } from './form-replace/form-replace.component';
 import { FormRuleComponent } from './form-rule/form-rule.component';
 import { FormSelectComponent } from './form-select/form-select.component';
 import { FormTextareaComponent } from './form-textarea/form-textarea.component';
@@ -37,6 +38,8 @@ import { FormTimelineComponent } from './form-timeline/form-timeline.component';
 import { FormVacancyDatesComponent } from './form-vacancy-dates/form-vacancy-dates.component';
 import { FormInfoComponent } from './form-info/form-info.component';
 import { ExtendComponent } from './extend/extend.component';
+import { FormEditorComponent } from './form-editor/form-editor.component';
+import { FormTrackingComponent } from './form-tracking/form-tracking.component';
 
 // List elements
 import { GenericListComponent } from './generic-list/generic-list.component';
@@ -57,10 +60,10 @@ export * from './generic-form/generic-form.component';
 export * from './generic-list/generic-list.component';
 export * from './action-element/action-element.component';
 export * from './basic-element/basic-element.component';
-export * from './profile/profile.component';
 export * from './webcam/webcam.component';
 export * from './workflow/workflow.component';
 export * from './test-generator/test-generator.component';
+export * from './filter-related/filter-related.component';
 
 export const entryComponents = [
   FilterChoiceComponent,
@@ -88,7 +91,9 @@ export const entryComponents = [
   FormTimelineComponent,
   FormVacancyDatesComponent,
   FormInfoComponent,
-  ExtendComponent,
+  FormReplaceComponent,
+  FormEditorComponent,
+  FormTrackingComponent,
 
   ListCheckboxComponent,
   ListImageComponent,
@@ -104,6 +109,8 @@ export const entryComponents = [
 
   TestGeneratorComponent,
   TestListComponent,
+  TimeTrackingComponent,
+  ExtendComponent,
 
   InfoComponent
 ];
@@ -112,7 +119,6 @@ export const components = [
   GenericFormComponent,
   GenericListComponent,
   ActionElementComponent,
-  ProfileComponent,
   WebcamComponent,
   WorkflowComponent,
   TestGeneratorComponent,

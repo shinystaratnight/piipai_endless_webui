@@ -6,20 +6,16 @@ import {
   VerifyEmailComponent,
   RegistrationFormComponent
 } from './components';
+import { RedirectComponent } from './redirect.component';
 
 import { UserService, NavigationService, SiteSettingsService } from './services';
 
-import { AuthGuard, NotAuthorizedGuard, SubdomainGuard } from './guards';
+import { AuthGuard, NotAuthorizedGuard, SubdomainGuard, PermissionGuard, LogoutGuard } from './guards';
 
 export const ROUTES: Routes = [
   {
-    path: 'core/contacts/:id/verify_email',
+    path: 'contacts/verify_email/',
     component: VerifyEmailComponent
-  },
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: '/'
   },
   {
     path: 'login',
@@ -32,7 +28,7 @@ export const ROUTES: Routes = [
   {
     path: 'login/:token',
     component: LoginFormComponent,
-    canActivate: [NotAuthorizedGuard]
+    canActivate: [LogoutGuard, NotAuthorizedGuard]
   },
   {
     path: 'registration',
@@ -50,7 +46,7 @@ export const ROUTES: Routes = [
       pagesList: NavigationService,
       settings: SiteSettingsService
     },
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, PermissionGuard]
   },
   {
     path: 'billing',
@@ -59,12 +55,16 @@ export const ROUTES: Routes = [
       user: UserService,
       pagesList: NavigationService
     },
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, PermissionGuard]
+  },
+  {
+    path: 'myob/oauth2_redirect_uri',
+    component: RedirectComponent
   },
   {
     path: '**',
     component: SiteComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, PermissionGuard],
     resolve: {
       settings: SiteSettingsService
     }

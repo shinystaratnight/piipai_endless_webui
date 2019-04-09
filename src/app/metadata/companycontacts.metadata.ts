@@ -64,7 +64,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/core/companies/',
+          endpoint: '/core/companies/',
           key: 'id'
         },
         query: 'company'
@@ -75,7 +75,7 @@ const list = {
     actions: {
       options: [
         {
-          endpoint: '/ecore/api/v2/core/companycontacts/sendsms/',
+          endpoint: '/core/companycontacts/sendsms/',
           label: 'Send sms',
           confirm: false,
           message: 'Are you sure?'
@@ -274,7 +274,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/contacts/',
+                    endpoint: '/core/contacts/',
                     read_only: true,
                     hide: true,
                     templateOptions: {
@@ -292,7 +292,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companies/',
+                    endpoint: '/core/companies/',
                     read_only: true,
                     hide: true,
                     templateOptions: {
@@ -346,11 +346,11 @@ const form = [
         ]
       },
       {
-        endpoint: '/ecore/api/v2/hr/jobsites/',
+        endpoint: '/hr/jobsites/',
         templateOptions: {
           label: 'Jobsites',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Jobsites'
         },
         collapsed: false,
@@ -364,11 +364,11 @@ const form = [
         }
       },
       {
-        endpoint: '/ecore/api/v2/hr/jobs/',
+        endpoint: '/hr/jobs/',
         templateOptions: {
           label: 'Jobs',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Jobs'
         },
         collapsed: false,
@@ -382,7 +382,7 @@ const form = [
         }
       },
       {
-        endpoint: '/ecore/api/v2/hr/timesheets/',
+        endpoint: '/hr/timesheets/',
         metadata_query: {
           editable_type: 'supervisor'
         },
@@ -398,11 +398,11 @@ const form = [
         }
       },
       {
-        endpoint: '/ecore/api/v2/core/notes/',
+        endpoint: '/core/notes/',
         templateOptions: {
           label: 'Notes',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Notes'
         },
         collapsed: false,
@@ -422,9 +422,10 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: false,
     templateOptions: {
+      required: true,
       label: 'Client',
       add: true,
       delete: false,
@@ -439,9 +440,9 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/contacts/',
+    endpoint: '/core/contacts/',
     checkObject: {
-      endpoint: '/ecore/api/v2/core/companycontactrelationships/',
+      endpoint: '/core/companycontactrelationships/',
       error: 'This client contact already exists!',
       query: {
         contact: '{contact.id}',
@@ -451,6 +452,7 @@ const formadd = [
     },
     read_only: false,
     templateOptions: {
+      required: true,
       label: 'Contact',
       add: true,
       delete: false,
@@ -458,7 +460,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     showIf: ['company.id'],
     type: 'related',
     key: 'contact',

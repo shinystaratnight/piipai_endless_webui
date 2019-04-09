@@ -1,8 +1,10 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+import { isMobile, isCandidate } from '../../helpers';
+
 @Component({
-  selector: 'form-row',
+  selector: 'app-form-row',
   templateUrl: 'form-row.component.html',
   styleUrls: ['./form-row.component.scss']
 })
@@ -12,6 +14,12 @@ export class FormRowComponent implements OnInit {
   public group: FormGroup;
   public errors: any;
   public message: any;
+  public className: any;
+
+  public isMobileDevice = isMobile() && isCandidate();
+
+  @Input()
+  public last: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -23,6 +31,8 @@ export class FormRowComponent implements OnInit {
     if (!this.config.editForm && this.config.label) {
       this.config.label = this.config.label.includes('{') ? '' : this.config.label;
     }
+
+    this.className = this.config.className || 'items';
 
     this.checkChildrenOnReadOnlyProperty();
   }

@@ -40,6 +40,17 @@ const list = {
         ]
       },
       {
+        label: 'Total hours',
+        delim: null,
+        name: 'totalTime',
+        content: [
+          {
+            type: 'text',
+            field: 'totalTime',
+          }
+        ]
+      },
+      {
         label: 'Jobsite',
         delim: null,
         name: 'jobsite',
@@ -48,7 +59,7 @@ const list = {
         title: null,
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/jobsites/',
+            endpoint: '/hr/jobsites/',
             type: 'related',
             label: 'Jobsite',
             field: 'jobsite'
@@ -76,7 +87,7 @@ const list = {
         content: [
           {
             showIf: ['supervisor_approved'],
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
             field: 'supervisor'
           },
@@ -96,7 +107,7 @@ const list = {
             icon: 'fa-pencil',
             type: 'button',
             color: 'success',
-            endpoint: '/ecore/api/v2/hr/timesheets-candidate/{id}/submit/',
+            endpoint: '/hr/timesheets-candidate/{id}/submit/',
             field: 'id',
             action: 'changeTimesheet',
             hidden: 'candidate_submit_hidden'
@@ -133,13 +144,14 @@ const list = {
       },
       {
         default: null,
-        query: 'approved',
+        query: 'status',
         label: 'Status',
         options: [
-          { label: 'Approved', value: 'True' },
-          { label: 'Unapproved', value: 'False' }
+          { label: 'Pending submission', value: '4' },
+          { label: 'Pending approval', value: '5' },
+          { label: 'Approved', value: '7' }
         ],
-        key: 'approved',
+        key: 'status',
         type: 'select'
       }
     ],
@@ -175,7 +187,7 @@ const list = {
       collapsed: false,
       read_only: true,
       key: 'supervisor',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       type: 'related',
       templateOptions: {
         edit: true,
@@ -219,7 +231,7 @@ const list = {
       collapsed: false,
       read_only: true,
       key: 'jobsite',
-      endpoint: '/ecore/api/v2/hr/jobsites/',
+      endpoint: '/hr/jobsites/',
       type: 'related',
       templateOptions: {
         edit: true,

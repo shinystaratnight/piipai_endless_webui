@@ -1,3 +1,67 @@
+const formFields = {
+  'reference_timesheet.shift_started_at': {
+    key: 'reference_timesheet.shift_started_at',
+    read_only: false,
+    templateOptions: {
+      required: false,
+      listLabel: 'Start',
+      inlineLabel: true,
+      label: 'Evaluated at',
+      type: 'datetime'
+    },
+    type: 'datepicker'
+  },
+  'reference_timesheet.shift_ended_at': {
+    key: 'reference_timesheet.shift_ended_at',
+    read_only: false,
+    templateOptions: {
+      required: false,
+      listLabel: 'End',
+      inlineLabel: true,
+      label: 'Evaluated at',
+      type: 'datetime'
+    },
+    type: 'datepicker'
+  },
+};
+
+const listColumns = {
+  'jobsite': {
+    name: 'jobsite',
+    sort: true,
+    sort_field: 'jobsi',
+    content: [
+      {
+        type: 'text',
+        field: 'jobsite.name'
+      },
+      {
+        type: 'text',
+        description: ' ',
+        field: 'position.name'
+      }
+    ],
+    label: 'Jobsite/Position'
+  },
+  supervisor: {
+    name: 'supervisor',
+    sort: true,
+    sort_field: 'supervisor',
+    content: [
+      {
+        type: 'text',
+        field: 'supervisor.contact.name'
+      },
+      {
+        type: 'text',
+        description: ' ',
+        field: 'supervisor.job_title'
+      }
+    ],
+    label: 'Supervisor'
+  }
+};
+
 const list = {
   list: {
     list: 'candidateevaluation',
@@ -6,7 +70,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
           }
@@ -19,7 +83,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             field: 'supervisor',
             type: 'related'
           }
@@ -47,7 +111,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate_contact'
@@ -57,7 +121,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       read_only: true,
       templateOptions: {
         label: 'Candidate contact',
@@ -74,7 +138,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       read_only: true,
       templateOptions: {
         label: 'Supervisor',
@@ -163,6 +227,8 @@ const formset = {
       },
       type: 'datepicker'
     },
+    formFields['reference_timesheet.shift_started_at'],
+    formFields['reference_timesheet.shift_ended_at'],
     {
       key: 'was_on_time',
       read_only: false,
@@ -177,7 +243,7 @@ const formset = {
     {
       many: false,
       key: 'supervisor',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -213,18 +279,20 @@ const formset = {
   ],
   list: {
     columns: [
+      listColumns['jobsite'],
+      listColumns.supervisor,
       {
-        name: 'supervisor',
+        name: 'level_of_communication',
         sort: true,
-        sort_field: 'supervisor',
+        sort_field: 'level_of_communication',
+        label: 'Evaluation',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
-            type: 'related',
-            field: 'supervisor'
+            display: 'Score',
+            type: 'skills',
+            field: 'level_of_communication'
           }
         ],
-        label: 'Supervisor'
       },
       {
         name: 'evaluated_at',
@@ -234,47 +302,176 @@ const formset = {
         label: 'Evaluated at'
       },
       {
-        name: 'parameters',
+        name: 'reference_timesheet',
+        sort_field: 'reference_timesheet',
+        title: null,
+        sort: true,
         content: [
           {
-            label: 'Level of communication',
+            text: 'Show timesheet',
+            color: 'primary',
+            endpoint: '/hr/timesheets/{reference_timesheet.id}',
+            label: 'reference_timesheet',
+            type: 'link',
+            field: 'reference_timesheet'
+          },
+          {
+            type: 'datepicker',
+            listLabel: 'Start',
+            field: 'reference_timesheet.shift_started_at'
+          },
+          {
+            type: 'datepicker',
+            listLabel: 'End',
+            field: 'reference_timesheet.shift_ended_at'
+          },
+        ],
+        label: 'Related timesheet',
+        delim: null
+      },
+    ],
+    list: 'candidateevaluation',
+    editDisable: false,
+    label: 'Candidate Evaluation',
+    pagination_label: 'Candidate Evaluation',
+    search_enabled: false
+  }
+};
+
+const profile = {
+  fields: [
+    {
+      key: 'had_ppe_and_tickets',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        values: { false: 'times', true: 'check', null: 'minus-circle' },
+        label: 'Had ppe and tickets',
+        type: 'icon'
+      },
+      type: 'checkbox'
+    },
+    {
+      key: 'met_expectations',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        values: { false: 'times', true: 'check', null: 'minus-circle' },
+        label: 'Met expectations',
+        type: 'icon'
+      },
+      type: 'checkbox'
+    },
+    {
+      key: 'was_motivated',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        values: { false: 'times', true: 'check', null: 'minus-circle' },
+        label: 'Was motivated',
+        type: 'icon'
+      },
+      type: 'checkbox'
+    },
+    {
+      key: 'representation',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        values: { false: 'times', true: 'check', null: 'minus-circle' },
+        label: 'Representation',
+        type: 'icon'
+      },
+      type: 'checkbox'
+    },
+    {
+      key: 'reference_timesheet',
+      templateOptions: { link: null, label: '', type: 'link', text: '' },
+      type: 'link'
+    },
+    {
+      key: 'evaluated_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Evaluated at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    },
+    formFields['reference_timesheet.shift_started_at'],
+    formFields['reference_timesheet.shift_ended_at'],
+    {
+      key: 'was_on_time',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        values: { false: 'times', true: 'check', null: 'minus-circle' },
+        label: 'Was on time',
+        type: 'icon'
+      },
+      type: 'checkbox'
+    },
+    {
+      many: false,
+      key: 'supervisor',
+      endpoint: '/core/companycontacts/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Supervisor',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    },
+    {
+      default: 0,
+      key: 'level_of_communication',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Level of communication',
+        type: 'skills',
+        options: [
+          { value: 0, label: 'Not Rated' },
+          { value: 1, label: 'Impossible' },
+          { value: 2, label: 'Hard' },
+          { value: 3, label: 'Decent' },
+          { value: 4, label: 'Good' },
+          { value: 5, label: 'Excellent' }
+        ]
+      },
+      type: 'skills'
+    }
+  ],
+  list: {
+    columns: [
+      listColumns['jobsite'],
+      listColumns.supervisor,
+      {
+        name: 'level_of_communication',
+        sort: true,
+        sort_field: 'level_of_communication',
+        label: 'Evaluation',
+        content: [
+          {
+            display: 'Score',
             type: 'skills',
             field: 'level_of_communication'
-          },
-          {
-            values: { false: 'times', true: 'check', null: 'minus-circle' },
-            label: 'Was on time',
-            type: 'icon',
-            field: 'was_on_time'
-          },
-          {
-            values: { false: 'times', true: 'check', null: 'minus-circle' },
-            label: 'Was motivated',
-            type: 'icon',
-            field: 'was_motivated'
-          },
-          {
-            values: { false: 'times', true: 'check', null: 'minus-circle' },
-            label: 'Had ppe and tickets',
-            type: 'icon',
-            field: 'had_ppe_and_tickets'
-          },
-          {
-            values: { false: 'times', true: 'check', null: 'minus-circle' },
-            label: 'Met expectations',
-            type: 'icon',
-            field: 'met_expectations'
-          },
-          {
-            values: { false: 'times', true: 'check', null: 'minus-circle' },
-            label: 'Representation',
-            type: 'icon',
-            field: 'representation'
           }
         ],
-        label: 'Parameters',
-        title: null,
-        delim: null
+      },
+      {
+        name: 'evaluated_at',
+        sort: true,
+        sort_field: 'evaluated_at',
+        content: [{ type: 'datepicker', field: 'evaluated_at' }],
+        label: 'Evaluated at'
       },
       {
         name: 'reference_timesheet',
@@ -283,14 +480,28 @@ const formset = {
         sort: true,
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{reference_timesheet.id}',
-            type: 'link',
+            text: 'Show timesheet',
+            color: 'primary',
+            endpoint: '/hr/timesheets/{reference_timesheet.id}',
+            label: 'reference_timesheet',
+            display: 'Show timesheet',
+            type: 'text',
             field: 'reference_timesheet'
-          }
+          },
+          {
+            type: 'datepicker',
+            listLabel: 'Start',
+            field: 'reference_timesheet.shift_started_at'
+          },
+          {
+            type: 'datepicker',
+            listLabel: 'End',
+            field: 'reference_timesheet.shift_ended_at'
+          },
         ],
-        label: '',
+        label: 'Related timesheet',
         delim: null
-      }
+      },
     ],
     list: 'candidateevaluation',
     editDisable: false,
@@ -303,7 +514,7 @@ const formset = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate contact',
@@ -320,7 +531,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Supervisor',
@@ -416,7 +627,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/timesheets/',
+    endpoint: '/hr/timesheets/',
     read_only: true,
     templateOptions: {
       label: 'Reference timesheet',
@@ -436,9 +647,10 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Candidate contact',
       add: true,
       delete: false,
@@ -446,14 +658,14 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'candidate_contact',
     many: false
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Supervisor',
@@ -463,7 +675,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'supervisor',
     many: false
@@ -549,7 +761,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/hr/timesheets/',
+    endpoint: '/hr/timesheets/',
     read_only: true,
     templateOptions: {
       label: 'Reference timesheet',
@@ -569,6 +781,7 @@ const formadd = [
 export const metadata = {
   list,
   formset,
+  profile,
   form,
   formadd
 };

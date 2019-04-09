@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 import { GenericFormService } from '../../dynamic-form/services';
 
@@ -25,7 +25,7 @@ import * as answerMetadata from '../../metadata/acceptancetestanswers.metadata';
 import * as testMetadata from '../../metadata/acceptancetests.metadata';
 
 @Component({
-  selector: 'test-builder',
+  selector: 'app-test-builder',
   templateUrl: './test-builder.component.html',
   styleUrls: ['./test-builder.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -45,9 +45,9 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public questions = [];
   public answers = {};
 
-  public testEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetests/';
-  public questionEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestquestions/';
-  public answerEndpoint = '/ecore/api/v2/acceptance-tests/acceptancetestanswers/';
+  public testEndpoint = '/acceptance-tests/acceptancetests/';
+  public questionEndpoint = '/acceptance-tests/acceptancetestquestions/';
+  public answerEndpoint = '/acceptance-tests/acceptancetestanswers/';
   public configs = {
     test: testMetadata,
     question: questionMetadata,
@@ -92,12 +92,13 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       JSON.stringify(this.configs[type].metadata[metadataType])
     );
 
+    const mode = new BehaviorSubject('edit');
     if (metadataType === 'form') {
-      const mode = new BehaviorSubject('edit');
       this.addModeProperty(config, mode);
     }
 
     if (metadataType === 'form') {
+      mode.next('view');
       fillingForm(config, data);
     }
 
@@ -132,12 +133,27 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     if (create) {
       const order = getElementFromMetadata(metadata, 'order');
 
+      const value = this.getLastOrder(target);
+
       if (order) {
-        order.value = target.length;
+        order.value = value;
       }
     }
 
     target.push(metadata);
+  }
+
+  public getLastOrder(answers) {
+    let value = 0;
+
+    answers.forEach((answer) => {
+      const order = getElementFromMetadata(answer, 'order');
+
+      value = value > order.value ? value : order.value;
+    });
+
+    return value + 1;
+
   }
 
   public checkQuestions(data: any) {
@@ -185,15 +201,23 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public deleteQuestion(id: string, target: any[], index: number) {
-    this.genericFormService.delete(this.questionEndpoint, id).subscribe(() => {
+    if (id) {
+      this.genericFormService.delete(this.questionEndpoint, id).subscribe(() => {
+        target.splice(index, 1);
+      });
+    } else {
       target.splice(index, 1);
-    });
+    }
   }
 
   public deleteAnswer(id: string, target: any[], index: number) {
-    this.genericFormService.delete(this.answerEndpoint, id).subscribe(() => {
+    if (id) {
+      this.genericFormService.delete(this.answerEndpoint, id).subscribe(() => {
+        target.splice(index, 1);
+      });
+    } else {
       target.splice(index, 1);
-    });
+    }
   }
 
   public saveAnswer(data, index: number, id: string, update: string) {
@@ -233,7 +257,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public showPreview() {
-    this.modalRef = this.modalService.open(this.previewModal, { size: 'lg' });
+    this.modalRef = this.modalService.open(this.previewModal);
   }
 
   public checkCount(type: number, length: number) {
@@ -246,5 +270,19 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     }
 
     return false;
+  }
+
+  public editQuestion(question) {
+    const field = getElementFromMetadata(question, 'question');
+    const button = getElementFromMetadata(question, 'button', 'type');
+    button.templateOptions.text = 'Save';
+    field.mode.next('edit');
+  }
+
+  public editAnswer(answer) {
+    const field = getElementFromMetadata(answer, 'answer');
+    const button = getElementFromMetadata(answer, 'button', 'type');
+    button.templateOptions.text = 'Save';
+    field.mode.next('edit');
   }
 }

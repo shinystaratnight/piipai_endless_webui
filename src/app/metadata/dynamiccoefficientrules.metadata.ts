@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'dynamiccoefficientrule',
     label: 'Dynamic Coefficient Rule',
+    buttons: [],
     columns: [
       {
         content: [{ field: '__str__', type: 'static' }],
@@ -30,7 +31,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/ratecoefficients/',
+    endpoint: '/pricing/ratecoefficients/',
     read_only: true,
     templateOptions: {
       label: 'Rate coefficient',
@@ -86,9 +87,10 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/pricing/ratecoefficients/',
+    endpoint: '/pricing/ratecoefficients/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Rate coefficient',
       add: true,
       delete: false,

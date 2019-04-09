@@ -1,3 +1,5 @@
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+
 const list = {
   list: {
     list: 'carrierlist',
@@ -6,7 +8,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
           }
@@ -33,7 +35,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/joboffers/',
+            endpoint: '/hr/joboffers/',
             field: 'job_offer',
             type: 'related'
           }
@@ -54,17 +56,46 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate_contact'
+      },
+      {
+        list: [
+          {
+            label: 'Yesterday',
+            query: `target_date_0=${yesterdayFormatDate}&target_date_1=${yesterdayFormatDate}`
+          },
+          {
+            label: 'Today',
+            query: `target_date_0=${todayFormatDate}&target_date_1=${todayFormatDate}`
+          },
+          {
+            label: 'Tomorrow',
+            query: `target_date_0=${tomorrowFormatDate}&target_date_1=${tomorrowFormatDate}`
+          }
+        ],
+        key: 'target_date',
+        label: 'Target date',
+        type: 'date',
+        input: [
+          {
+            label: 'From',
+            query: 'target_date_0'
+          },
+          {
+            label: 'To',
+            query: 'target_date_1'
+          }
+        ]
       }
     ]
   },
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       read_only: true,
       templateOptions: {
         label: 'Candidate contact',
@@ -81,7 +112,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/hr/joboffers/',
+      endpoint: '/hr/joboffers/',
       read_only: true,
       templateOptions: {
         label: 'Job offer',
@@ -132,7 +163,7 @@ const formset = {
     {
       many: false,
       key: 'job_offer',
-      endpoint: '/ecore/api/v2/hr/joboffers/',
+      endpoint: '/hr/joboffers/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -175,7 +206,7 @@ const formset = {
         sort_field: 'job_offer',
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/joboffers/',
+            endpoint: '/hr/joboffers/',
             type: 'related',
             field: 'job_offer'
           }
@@ -187,7 +218,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/hr/carrierlists/{id}',
+            endpoint: '/hr/carrierlists/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -218,7 +249,7 @@ const formset = {
 
 const form = [
   {
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     templateOptions: {
       label: 'Candidate contact',
@@ -234,8 +265,12 @@ const form = [
   {
     key: 'target_date',
     type: 'datepicker',
-    templateOptions: { required: false, label: 'Target Date', type: 'date' },
-    read_only: false
+    templateOptions: {
+      required: false,
+      label: 'Target Date',
+      type: 'date'
+    },
+    read_only: true
   },
   {
     key: 'confirmed_available',
@@ -249,7 +284,7 @@ const form = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
       label: 'Skill',
@@ -278,8 +313,9 @@ const form = [
 
 const formadd = [
   {
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
+    visibleMode: true,
     templateOptions: {
       label: 'Candidate contact',
       add: true,
@@ -287,6 +323,9 @@ const formadd = [
       values: ['__str__'],
       type: 'related',
       edit: true
+    },
+    query: {
+      active_states: 70
     },
     type: 'related',
     key: 'candidate_contact',
@@ -309,7 +348,7 @@ const formadd = [
     read_only: false
   },
   {
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
       label: 'Skill',

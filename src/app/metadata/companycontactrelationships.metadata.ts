@@ -2,6 +2,7 @@ const list = {
   list: {
     list: 'companycontactrelationship',
     label: 'Client Contact Relations',
+    buttons: [],
     columns: [
       {
         content: [{ field: '__str__', type: 'static' }],
@@ -161,7 +162,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/core/companycontacts/{company_contact.id}',
+            endpoint: '/core/companycontacts/{company_contact.id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -200,7 +201,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: false,
     templateOptions: {
       label: 'Company contact',
@@ -210,7 +211,7 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'company_contact',
     many: false
@@ -244,7 +245,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: false,
     templateOptions: {
       label: 'Company contact',
@@ -254,7 +255,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'company_contact',
     many: false

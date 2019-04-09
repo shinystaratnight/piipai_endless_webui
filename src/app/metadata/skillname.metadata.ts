@@ -37,7 +37,7 @@ const list = {
         label: 'Industry',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/pricing/industries/',
+          endpoint: '/pricing/industries/',
           key: 'id'
         },
         query: 'industry',
@@ -61,7 +61,7 @@ const list = {
     {
       type: 'related',
       send: false,
-      endpoint: '/ecore/api/v2/pricing/industries/',
+      endpoint: '/pricing/industries/',
       key: 'industry',
       reset: ['name'],
       templateOptions: {
@@ -77,7 +77,7 @@ const list = {
 const form = [
   {
     type: 'related',
-    endpoint: '/ecore/api/v2/pricing/industries/',
+    endpoint: '/pricing/industries/',
     key: 'industry',
     read_only: true,
     templateOptions: {
@@ -103,7 +103,7 @@ const form = [
 const formadd = [
   {
     type: 'related',
-    endpoint: '/ecore/api/v2/pricing/industries/',
+    endpoint: '/pricing/industries/',
     key: 'industry',
     templateOptions: {
       label: 'Industry',

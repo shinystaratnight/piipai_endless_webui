@@ -41,7 +41,7 @@ describe('FormReplaceComponent', () => {
     elements: {
       create: {
         type: 'button',
-        endpoint: '/ecore/api/v2/{company.id}/hourly_rate/',
+        endpoint: '/{company.id}/hourly_rate/',
         query: 'rate={company.skill.hourly_rate}',
         id: '{company.id}',
         templateOptions: {
@@ -154,7 +154,7 @@ describe('FormReplaceComponent', () => {
       expect(comp.metadata).toEqual([
         {
           type: 'button',
-          endpoint: '/ecore/api/v2/123/hourly_rate/',
+          endpoint: '/123/hourly_rate/',
           query: 'rate=25',
           id: '123',
           templateOptions: {

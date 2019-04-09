@@ -1,13 +1,22 @@
 import { CheckPermissionService } from './check-permission';
 import { ErrorsService } from './errors.service';
-import { ToastrService } from './toastr.service';
+import { ToastService } from './toast.service';
+import { DateRangeService } from './date-range.service';
+import { DatepickerService } from './datepicker.service';
+import { TimeService } from './time.service';
 
 export * from './check-permission';
 export * from './errors.service';
-export * from './toastr.service';
+export * from './toast.service';
+export * from './date-range.service';
+export * from './datepicker.service';
+export * from './time.service';
 
 export const services = [
   CheckPermissionService,
   ErrorsService,
-  ToastrService,
+  ToastService,
+  DateRangeService,
+  DatepickerService,
+  TimeService
 ];

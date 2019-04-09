@@ -12,7 +12,7 @@ import { Field } from '../../models/field.model';
 import { CustomEvent } from '../../models/custom-event.model';
 
 @Component({
-  selector: 'dynamic-form',
+  selector: 'app-dynamic-form',
   templateUrl: 'dynamic-form.component.html'
 })
 export class DynamicFormComponent implements OnInit {
@@ -30,9 +30,13 @@ export class DynamicFormComponent implements OnInit {
   public formId: number;
   @Input()
   public form: FormGroup;
+  @Input()
+  public formBuilder: boolean;
+  @Input()
+  public mode: string;
 
   @Output()
-  public submit: EventEmitter<any> = new EventEmitter<any>();
+  public submitForm: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
   @Output()
@@ -53,10 +57,23 @@ export class DynamicFormComponent implements OnInit {
     this.form = this.form || this.fb.group({});
     this.formGroup.emit(this.form);
     this.currentForm = this.config;
+    this.addFormBuilderStatus(this.config);
+  }
+
+  addFormBuilderStatus(config) {
+    if (config) {
+      config.forEach((el) => {
+        el.formBuilder = this.formBuilder;
+
+        if (el.children) {
+          this.addFormBuilderStatus(el.children);
+        }
+      });
+    }
   }
 
   public getValues(data, list) {
-    let values = {};
+    const values = {};
     if (list) {
       list.forEach((el) => {
         values[el] = this.getValue(data, el);
@@ -68,7 +85,7 @@ export class DynamicFormComponent implements OnInit {
   public getValue(data, key) {
     if (data) {
       if (key.indexOf('.') > -1) {
-        let keys = key.split('.');
+        const keys = key.split('.');
         return this.getValue(data.get(keys.shift()), keys.join('.'));
       } else {
         return data.get(key).value;
@@ -82,18 +99,18 @@ export class DynamicFormComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    let data = this.form.value;
+    const data = this.form.value;
     if (this.hiddenFields) {
       this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
     }
     this.filterSendData(this.config, data);
-    this.submit.emit(data);
+    this.submitForm.emit(data);
   }
 
   public eventHandler(e: CustomEvent): void {
     this.event.emit(e);
 
-    if (e.type === 'change') {
+    if (e.type === 'change' || e.type === 'reset') {
       this.changeValue.emit(this.form.value);
     }
     let key;
@@ -127,13 +144,16 @@ export class DynamicFormComponent implements OnInit {
             e.el.formData.next({
               key: e.el.key,
               data: this.fullData,
-              reset: e.manual && e.el.reset
+              reset: e.manual && e.el.reset,
+              manual: e.manual
             });
           }
         }
 
         setTimeout(() => {
-          this.cd.detectChanges();
+          if (!(<any> this.cd).destroyed) {
+            this.cd.detectChanges();
+          }
         }, 1000);
       }
     }, 50);
@@ -189,19 +209,19 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public checkHiddenFields(field: Field): void {
-    let rule = field.showIf;
-    let show = this.checkShowRules(rule);
+    const rule = field.showIf;
+    const show = this.checkShowRules(rule);
     field.hidden.next(!show);
   }
 
   public checkShowRules(rule: any[]): boolean {
     let approvedRules = 0;
-    let rulesNumber = rule.length;
-    let data = this.fullData;
+    const rulesNumber = rule.length;
+    const data = this.fullData;
 
     rule.forEach((el: any) => {
       if (typeof el === 'string') {
-        let value = this.getValueByKey(el, data);
+        const value = this.getValueByKey(el, data);
 
         if (value && value !== '0') {
           approvedRules += 1;
@@ -209,9 +229,13 @@ export class DynamicFormComponent implements OnInit {
           return;
         }
       } else if (el instanceof Object) {
-        let key = Object.keys(el)[0];
-        let targetValue = el[key];
+        const key = Object.keys(el)[0];
+        const targetValue = el[key];
         let value = this.getValueByKey(key, data);
+
+        if (typeof targetValue === 'number') {
+          value = parseFloat(value);
+        }
 
         if (value === targetValue) {
           approvedRules += 1;
@@ -225,12 +249,12 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public getValueByKey(key: string, data: any): any {
-    let keysArray = key.split('.');
-    let firstKey = keysArray.shift();
+    const keysArray = key.split('.');
+    const firstKey = keysArray.shift();
     if (keysArray.length === 0) {
       return data && data[firstKey];
     } else if (keysArray.length > 0) {
-      let combineKeys = keysArray.join('.');
+      const combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
     }
   }
@@ -244,14 +268,14 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public removeValue(key: string, data: any): void {
-    let keysArray = key.split('.');
-    let firstKey = keysArray.shift();
+    const keysArray = key.split('.');
+    const firstKey = keysArray.shift();
     if (keysArray.length === 0) {
       if (data) {
         delete data[firstKey];
       }
     } else if (keysArray.length > 0) {
-      let combineKeys = keysArray.join('.');
+      const combineKeys = keysArray.join('.');
       this.removeValue(combineKeys, data[firstKey]);
     }
   }

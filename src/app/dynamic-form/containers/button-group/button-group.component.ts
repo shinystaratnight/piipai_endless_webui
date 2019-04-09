@@ -2,7 +2,6 @@ import {
   Component,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy,
   OnInit
 } from '@angular/core';
 
@@ -10,7 +9,7 @@ import { getValueOfData } from '../../helpers/utils';
 import { FormatString } from '../../../helpers/format';
 
 @Component({
-  selector: 'button-group',
+  selector: 'app-button-group',
   templateUrl: './button-group.component.html'
 })
 export class ButtonGroupComponent implements OnInit {
@@ -27,12 +26,16 @@ export class ButtonGroupComponent implements OnInit {
     if (this.config.value && this.config.value.length) {
       const formatString = new FormatString();
 
-      this.data = this.config.value.map((item) => {
+      this.data = this.config.value.map((item, i) => {
         const result = this.config.content.map((el) => {
           const obj = {
             ...el,
             endpoint: formatString.format(el.endpoint, item)
           };
+
+          if (this.config.value.length > 1) {
+            obj.templateOptions = { ...obj.templateOptions, text: obj.text + (i + 1) };
+          }
 
           if (obj.endpoint[obj.endpoint.length - 1] !== '/') {
             obj.notParsedEndpoint = obj.endpoint;

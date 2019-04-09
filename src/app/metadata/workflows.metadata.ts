@@ -18,7 +18,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+            endpoint: '/contenttypes/contenttypes/',
             field: 'model',
             type: 'related'
           }
@@ -36,7 +36,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+      endpoint: '/contenttypes/contenttypes/',
       read_only: true,
       templateOptions: {
         label: 'Model',
@@ -79,7 +79,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+    endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     templateOptions: {
       label: 'Model',
@@ -110,9 +110,10 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/contenttypes/contenttypes/',
+    endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Model',
       add: true,
       delete: false,

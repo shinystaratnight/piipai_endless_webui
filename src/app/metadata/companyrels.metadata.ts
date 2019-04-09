@@ -6,7 +6,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             field: 'master_company',
             type: 'related'
           }
@@ -19,7 +19,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/',
+            endpoint: '/core/companies/',
             field: 'regular_company',
             type: 'related'
           }
@@ -32,7 +32,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             field: 'primary_contact',
             type: 'related'
           }
@@ -50,7 +50,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       read_only: true,
       templateOptions: {
         label: 'Regular company',
@@ -67,7 +67,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       read_only: true,
       templateOptions: {
         label: 'Primary contact',
@@ -84,7 +84,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companies/',
+      endpoint: '/core/companies/',
       read_only: true,
       templateOptions: {
         label: 'Master company',
@@ -105,7 +105,7 @@ const list = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Master company',
@@ -122,7 +122,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
       label: 'Regular company',
@@ -139,7 +139,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Primary contact',
@@ -163,16 +163,17 @@ const form = [
       type: 'timeline',
       text: 'States Timeline'
     },
-    endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
+    endpoint: '/core/workflownodes/timeline/'
   }
 ];
 
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Master company',
       add: true,
       delete: false,
@@ -187,9 +188,10 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companies/',
+    endpoint: '/core/companies/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Regular company',
       add: true,
       delete: false,
@@ -204,7 +206,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Primary contact',
@@ -214,22 +216,22 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'primary_contact',
     many: false
   },
-  {
-    key: 'timeline',
-    type: 'timeline',
-    query: { model: 'core.companyrel', object_id: '{id}' },
-    templateOptions: {
-      label: 'States Timeline',
-      type: 'timeline',
-      text: 'States Timeline'
-    },
-    endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
-  }
+  // {
+  //   key: 'timeline',
+  //   type: 'timeline',
+  //   query: { model: 'core.companyrel', object_id: '{id}' },
+  //   templateOptions: {
+  //     label: 'States Timeline',
+  //     type: 'timeline',
+  //     text: 'States Timeline'
+  //   },
+  //   endpoint: '/core/workflownodes/timeline/'
+  // }
 ];
 
 export const metadata = {

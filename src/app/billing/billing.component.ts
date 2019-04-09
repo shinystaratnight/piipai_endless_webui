@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { User, UserService } from '../services/user.service';
@@ -6,12 +6,13 @@ import { BillingService } from './services/billing-service';
 
 import { Plan, Payment, BillingSubscription } from './models';
 
-import { ToastrService } from '../shared/services';
+import { ToastService } from '../shared/services';
 
 @Component({
-  selector: 'billing-page',
+  selector: 'app-billing-page',
   templateUrl: './billing.component.html',
-  styleUrls: ['./billing.component.scss']
+  styleUrls: ['./billing.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class BillingComponent implements OnInit {
   public user: User;
@@ -21,13 +22,14 @@ export class BillingComponent implements OnInit {
   public checkInformation: boolean;
   public saveProcess: boolean;
   public cancelProcess: boolean;
+  public plans: Plan[];
 
   constructor(
     private userService: UserService,
     private billingService: BillingService,
     private route: ActivatedRoute,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastService
   ) {
     this.checkInformation = true;
   }
@@ -41,6 +43,23 @@ export class BillingComponent implements OnInit {
 
     this.getPaymets();
     this.checkPaymentInformation();
+
+    this.setActivePage(this.pagesList, `${this.router.url}/`);
+
+    this.billingService.getSubscriptionTypes()
+      .subscribe((res: { subscription_types: Plan[] }) => {
+        this.plans = Object.keys(res.subscription_types).map((key) => {
+          if (res.subscription_types[key].table_text) {
+            res.subscription_types[key].table = res.subscription_types[key].table_text.split(';');
+          }
+          return {
+            ...res.subscription_types[key],
+            procent: res.subscription_types[key].percentage_discount
+              ? (100 - res.subscription_types[key].percentage_discount) / 100
+              : 1
+          };
+        });
+      });
   }
 
   public updateNavigation(role: string) {
@@ -97,15 +116,24 @@ export class BillingComponent implements OnInit {
   }
 
   public cancelPlan() {
-    this.cancelProcess = true;
     this.billingService.cancelSubscription()
       .subscribe(() => {
         this.currentPlan = undefined;
-        this.cancelProcess = false;
         this.toastr.sendMessage('Subscription has been canceled', 'success');
-      },
-      () => {
-        this.cancelProcess = false;
       });
+  }
+
+  public setActivePage(pages, path) {
+    let active = false;
+    pages.forEach((page) => {
+      if (path === page.url && page.url !== '/') {
+        active = true;
+        page.active = true;
+      } else if (page.childrens) {
+        page.active = this.setActivePage(page.childrens, path);
+        active = active || page.active;
+      }
+    });
+    return active;
   }
 }

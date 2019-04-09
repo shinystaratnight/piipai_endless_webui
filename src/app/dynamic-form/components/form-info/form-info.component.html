@@ -1,4 +1,4 @@
-<div class="form-info-wrapper">
+<div *ngIf="!(config.hideOnMobile && isMobileDevice)" class="form-info-wrapper" [class.mobile]="isMobileDevice">
   <div class=form-info-left *ngIf="config.metadata['picture'] || contactAvatar || picture || map">
     <div class="form-info-image">
       <img *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture">
@@ -6,17 +6,24 @@
         {{contactAvatar}}
       </div>
 
+      <span class="score d-block"
+        *ngIf="isMobileDevice && getScore(averageScore)"
+        [style.borderColor]="colors[getScore(averageScore)]"
+        [style.color]="colors[getScore(averageScore)]">
+          &nbsp;{{averageScore | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
+      </span>
+
       <div class="map" *ngIf="map">
-        <sebm-google-map [latitude]="map.latitude" [longitude]="map.longitude" [zoom]="13">
-          <sebm-google-map-marker [iconUrl]="'/assets/img/location-red.svg'" [latitude]="map.latitude" [longitude]="map.longitude">
-            <sebm-google-map-info-window>
+        <agm-map [zoomControl]="false" [streetViewControl]="false" [latitude]="map.latitude" [longitude]="map.longitude" [zoom]="13">
+          <agm-marker [iconUrl]="'/assets/img/location-red.svg'" [latitude]="map.latitude" [longitude]="map.longitude">
+            <agm-info-window>
               <strong>{{map.__str__}}</strong>
-            </sebm-google-map-info-window>
-          </sebm-google-map-marker>
-        </sebm-google-map>
+            </agm-info-window>
+          </agm-marker>
+        </agm-map>
       </div>
 
-      <ng-container formElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
+      <ng-container appFormElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
         [config]="config.metadata['picture']"
         [group]="group">
       </ng-container>
@@ -30,14 +37,14 @@
         {{available ? config.metadata['available'].templateOptions.label : 'Not ' + config.metadata['available'].templateOptions.label}}
       </label>
 
-      <ng-container formElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
+      <ng-container appFormElement *ngIf="config && config.metadata['available'] && !viewMode && config.editForm"
         [config]="config.metadata['available']"
         [group]="group">
       </ng-container>
 
       <a class="client-link" target="_blanck" [href]="link" *ngIf="config && viewMode && link">{{link}}</a>
 
-      <ng-container formElement *ngIf="config && config.metadata['link'] && !viewMode && config.editForm"
+      <ng-container appFormElement *ngIf="config && config.metadata['link'] && !viewMode && config.editForm"
         [config]="getConfig('link')"
         [group]="group">
       </ng-container>
@@ -52,7 +59,7 @@
 
     <div class="job-title" *ngIf="config && viewMode && client">{{client.short_name}}</div>
     <div *ngIf="config && config.metadata['client'] && !viewMode && config.editForm">
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="getConfig('client')"
         [group]="group">
       </ng-container>
@@ -66,7 +73,7 @@
 
     <div class="job-title" *ngIf="config && viewMode && job_title">{{job_title}}</div>
     <div *ngIf="config && config.metadata['job_title'] && !viewMode && config.editForm">
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="getConfig('job_title')"
         [group]="group">
       </ng-container>
@@ -74,7 +81,7 @@
 
     <p class="job" *ngIf="!titlePath && job">{{job.__str__}}</p>
     <p class="jobsite" *ngIf="!titlePath && jobsite && config && config.metadata['jobsite']">
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="getConfig('jobsite')"
         [group]="group">
       </ng-container>
@@ -84,32 +91,39 @@
 
     <h5 class="form-info-title" *ngIf="config && viewMode">
 
-      <span *ngIf="!this.averageScore && this.averageScore !== 0">
+      <span *ngIf="!averageScore && averageScore !== 0">
         <span class="view-mode" *ngIf="titlePath">
-          <ng-container formElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
+          <ng-container appFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
             [config]="getConfig('title')"
             [group]="group">
           </ng-container>
         </span>
 
         <span *ngIf="!titlePath && title">{{title}}</span>
-        <info [description]="description"></info>
+        <app-info class="ml-1" [description]="description"></app-info>
       </span>
-      <span *ngIf="this.averageScore || this.averageScore === 0">
+      <span *ngIf="averageScore || averageScore === 0">
         <span class="view-mode" *ngIf="titlePath">
-          <ng-container formElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
+          <ng-container appFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"
             [config]="getConfig('title')"
             [group]="group">
           </ng-container>
         </span>
-        <span class="score" [style.color]="colors[getScore(this.averageScore)]">
-          &nbsp;|&nbsp;{{this.averageScore}}
-          <i fa name="star"></i>
+        <span [hidden]="isMobileDevice" class="score"
+          *ngIf="getScore(averageScore)"
+          [style.borderColor]="colors[getScore(averageScore)]"
+          [style.color]="colors[getScore(averageScore)]">
+            &nbsp;{{averageScore | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
         </span>
+      </span>
+      <span class="score text-danger mt-0"
+        [style.borderColor]="colors[1]"
+        *ngIf="!getScore(averageScore) && isCandidatePage()">
+          &nbsp;No rating
       </span>
     </h5>
     <p>
-      <ng-container formElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
+      <ng-container appFormElement *ngIf="config && config.metadata['title'] && !viewMode && !config.metadata['title_title']"
         [config]="getConfig('title')"
         [group]="group">
       </ng-container>
@@ -123,29 +137,29 @@
 
     <div *ngIf="config && config.metadata['tags']" class="tags-wrapper">
       <label>Tags:</label>
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="config.metadata['tags']"
         [group]="group">
       </ng-container>
     </div>
 
-    <ng-container formElement *ngIf="config && config.metadata['title_title'] && !viewMode"
+    <ng-container appFormElement *ngIf="config && config.metadata['title_title'] && !viewMode"
       [config]="getConfig('title_title')"
       [group]="group">
     </ng-container>
 
-    <ng-container formElement *ngIf="config && config.metadata['first_name'] && !viewMode"
+    <ng-container appFormElement *ngIf="config && config.metadata['first_name'] && !viewMode"
       [config]="getConfig('first_name')"
       [group]="group">
     </ng-container>
 
-    <ng-container formElement *ngIf="config && config.metadata['last_name'] && !viewMode"
+    <ng-container appFormElement *ngIf="config && config.metadata['last_name'] && !viewMode"
       [config]="getConfig('last_name')"
       [group]="group">
     </ng-container>
 
     <div *ngIf="config && config.metadata['company'] && config.editForm">
-      <ng-container formElement
+      <ng-container appFormElement
         [config]="config.metadata['company']"
         [group]="group">
       </ng-container>
@@ -155,24 +169,32 @@
       <span >Carrier list reserve: {{carrier_reserve}}</span>
     </p>
 
-    <ng-container *ngIf="!viewMode && config.metadata['carrier_reserve']" formElement
+    <ng-container *ngIf="!viewMode && config.metadata['carrier_reserve']" appFormElement
       [config]="config.metadata['carrier_reserve']"
       [group]="group">
     </ng-container>
 
-    <p *ngIf="config && config.metadata['address'] && address && config.editForm">
-      <ng-container formElement
+    <p class="address-field" *ngIf="config && config.metadata['address'] && config.editForm">
+      <ng-container appFormElement
         [config]="config.metadata['address']"
         [group]="group">
       </ng-container>
     </p>
 
-    <ng-container formElement *ngIf="config && config.metadata['timeline'] && config.editForm"
+    <p *ngIf="config && config.metadata['birthday']">
+      <span class="description">Birthday:</span>&nbsp;
+      <ng-container appFormElement
+        [config]="config.metadata['birthday']"
+        [group]="group">
+      </ng-container>
+    </p>
+
+    <ng-container appFormElement *ngIf="config && config.metadata['timeline'] && config.editForm"
       [config]="config.metadata['timeline']"
       (event)="event.emit($event)">
     </ng-container>
 
-    <div *ngIf="job" class="extend-block">
+    <div *ngIf="job && !config.disableButtons && !disableButtons" class="extend-block">
       <b>Add shifts and workers</b>
       <p>Create dates, shifts and time for tasks, add workers.</p>
       <button class="btn btn-primary btn-shadow" type="button" (click)="extendJob()">Add shifts and workers</button>
@@ -186,7 +208,7 @@
   </div>
 </div>
 
-<template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-c="close" let-d="dismiss">
     <div class="modal-content-wrapper">
       <div class="modal-header-wrapper">
         <div class="modal-header">
@@ -197,7 +219,7 @@
         </div>
       </div>
       <div class="modal-body">
-        <generic-form
+        <app-generic-form
           [endpoint]="modalInfo.endpoint"
           [data]="modalInfo.data"
           [mode]="modalInfo.mode"
@@ -208,10 +230,10 @@
           <div class="text-center">
             <button type="submit" class="btn big-btn btn-shadow btn-secondary bg-primary text-white button-save mt-3 mb-4" [disabled]="saveProcess">
               Save
-              <spinner *ngIf="saveProcess"></spinner>
+              <app-spinner *ngIf="saveProcess"></app-spinner>
             </button>
           </div>
-        </generic-form>
+        </app-generic-form>
       </div>
     </div>
-  </template>
+  </ng-template>

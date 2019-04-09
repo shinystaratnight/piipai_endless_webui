@@ -34,7 +34,7 @@
   </div>
 </div>
 
-<template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -84,9 +84,9 @@
       </div>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #edit let-c="close" let-d="dismiss">
+<ng-template #edit let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -97,7 +97,7 @@
       </div>
     </div>
     <div class="modal-body">
-      <generic-form
+      <app-generic-form
         [endpoint]="editModalInfo.endpoint"
         [id]="editModalInfo.id"
         [data]="editModalInfo.data"
@@ -105,14 +105,14 @@
         (errorForm)="formError($event)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
             Save
-            <spinner *ngIf="saveProcess"></spinner>
+            <app-spinner *ngIf="saveProcess"></app-spinner>
           </button>
-      </generic-form>
+      </app-generic-form>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #add let-c="close" let-d="dismiss">
+<ng-template #add let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -123,20 +123,20 @@
       </div>
     </div>
     <div class="modal-body">
-      <dynamic-form
+      <app-dynamic-form
         [config]="addConfig"
-        (submit)="addStateToCompany($event, c)">
+        (submitForm)="addStateToCompany($event, c)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add
-            <spinner *ngIf="saveProcess"></spinner>
+            <app-spinner *ngIf="saveProcess"></app-spinner>
           </button>
-      </dynamic-form>
+      </app-dynamic-form>
     </div>
   </div>
-</template>
+</ng-template>
 
-<template #tests let-c="close" let-d="dismiss">
+<ng-template #tests let-c="close" let-d="dismiss">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -147,15 +147,15 @@
       </div>
     </div>
     <div class="modal-body">
-      <dynamic-form
+      <app-dynamic-form
         [config]="addConfig"
-        (submit)="addAcceptenceTest($event, c)">
+        (submitForm)="addAcceptenceTest($event, c)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add
-            <spinner *ngIf="saveProcess"></spinner>
+            <app-spinner *ngIf="saveProcess"></app-spinner>
           </button>
-      </dynamic-form>
+      </app-dynamic-form>
     </div>
   </div>
-</template>
+</ng-template>

@@ -1,15 +1,23 @@
-<div *ngIf="!config.hide" class="form-group" [formGroup]="group" style="position: relative">
+<div *ngIf="!config.hide" class="form-group" [class.mb-0]="config.templateOptions.bottom" [formGroup]="group" style="position: relative">
   <div class="form-element">
-    <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" [attr.for]="key" *ngIf="label && config.templateOptions.label">
-      {{config.templateOptions.label}}:
+    <label class="col-form-label form-element-label"
+      *ngIf="label && config.templateOptions.label"
+      [class.bold]="config.templateOptions.bold"
+      [class.required]="config.templateOptions.required"
+      [attr.for]="key" >
+        {{config.templateOptions.label}}:
     </label>
-    <info [description]="config.templateOptions.description"></info>
+    <app-info [description]="config.templateOptions.description"></app-info>
     <div class="form-element-content edit" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon">
+      <span class="input-icon" *ngIf="config.templateOptions.icon">{{config.templateOptions.icon}}</span>
       <input
         *ngIf="(this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))
           && (!viewMode && !config.read_only)
-          && (config.type !== 'address' && config.key !== 'address' && !config.key.includes('street_address'))"
+          && (config.type !== 'address' && config.key !== 'address' && !config.key.includes('street_address'))
+          && config.templateOptions.type !== 'score'"
         class="form-control"
+        appInputFocus
+        [class.pl-2]="config.templateOptions.icon"
         [class.not-empty]="group.get(key).value"
         autocomplete="off"
         #input
@@ -24,12 +32,36 @@
 
       <input type="text" class="form-control" id="autocomplete"
         *ngIf="config.type !== 'static' && !viewMode && (config.type === 'address' || config.key === 'address' || config.key.includes('street_address'))"
-        ng2-google-place-autocomplete
+        [options]="googleOptions"
+        ngx-google-places-autocomplete
         [(ngModel)]="address"
         [ngModelOptions]="{standalone: true}"
         [attr.id]="key"
         [attr.name]="key"
-        (setAddress) = "getAddress($event)">
+        (onAddressChange) = "getAddress($event)">
+
+      <ngb-rating
+        *ngIf="!viewMode && !config.read_only && config.templateOptions.type === 'score'"
+        max="5"
+        (hover)="hovered=$event"
+        (leave)="hovered=undefined"
+        (rateChange)="hovered=undefined"
+        [formControl]="group.get(key)">
+          <ng-template let-fill="fill" let-index="index">
+            <span *ngIf="fill === 100" [style.color]="colors[hovered || group.get(key).value]" class="star full">&#9733;</span>
+            <span *ngIf="fill === 0" [class.text-danger]="!hovered && !group.get(key).value" class="star">{{group.get(key).value ? '&#9733;' : '&#9734;'}}</span>
+            <span *ngIf="fill < 100 && fill > 0" [class.text-danger]="!group.get(key).value" class="star">
+              <span class="half" [style.width.%]="fill">{{group.get(key).value ? '&#9733;' : '&#9734;'}}</span>{{group.get(key).value ? '&#9733;' : '&#9734;'}}
+            </span>
+          </ng-template>
+      </ngb-rating>
+      <span class="score"
+        *ngIf="!viewMode && !config.read_only && config.templateOptions.type === 'score'"
+        [style.borderColor]="colors[hovered || group.get(key).value]"
+        [style.color]="colors[hovered || group.get(key).value]">
+          <span *ngIf="!hovered && !group.get(key).value" class="text-danger">{{config.templateOptions.noneValue}}</span>
+          <span *ngIf="hovered || group.get(key).value">&nbsp;{{hovered || group.get(key).value | number:'1.1-1'}}&nbsp;<i fa name="star"></i></span>
+      </span>
       <div class="autocomplete" [hidden]="!(filteredList && filteredList.length) || hideAutocomplete">
         <div class="autocomplete-list" infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
           [scrollWindow]="false" (scrolled)="onModalScrollDown()">
@@ -75,17 +107,25 @@
           </g>
         </svg>
       </div>
-      <div [class.readonly-value]="editMode" *ngIf="config.type === 'static' && config.templateOptions.type !== 'score'">{{displayValue}}</div>
-      <div class="rating" *ngIf="viewMode && config.templateOptions.type === 'score'">
+      <span *ngIf="config.type === 'static' && config.templateOptions.type !== 'score'"
+        [ngClass]="config.templateOptions.color"
+        [ngStyle]="{'fontWeight': config.templateOptions.bold ? 'bold' : 'normal'}">
+          {{displayValue}}
+      </span>
+      <div class="rating" *ngIf="(viewMode || config.read_only) && config.templateOptions.type === 'score' && (parseScore(config.value) || !config.templateOptions.danger)">
         <ngb-rating [rate]="config.value" max="5" [readonly]="true">
-          <template let-fill="fill" let-index="index">
+          <ng-template let-fill="fill" let-index="index">
             <span *ngIf="fill === 100" class="star full">&#9733;</span>
             <span *ngIf="fill === 0" class="star">&#9733;</span>
             <span *ngIf="fill < 100 && fill > 0" class="star">
               <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
             </span>
-          </template>
+          </ng-template>
         </ngb-rating>
+      </div>
+      <div class="text-danger"
+        *ngIf="(viewMode || config.read_only) && config.templateOptions.type === 'score' && !parseScore(config.value) && config.templateOptions.danger">
+          {{config.templateOptions.danger}}
       </div>
     </div>
   </div>

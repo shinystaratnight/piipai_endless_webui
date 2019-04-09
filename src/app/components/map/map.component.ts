@@ -5,7 +5,7 @@ import { FilterService } from '../../dynamic-form/services/filter.service';
 import { metadata } from '../../metadata/jobsite-map.metadata';
 
 @Component({
-  selector: 'map',
+  selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
@@ -23,7 +23,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public currentPosition: any;
   public currentQuery: string;
-  public filterBlockHidden: boolean = true;
+  public filterBlockHidden = true;
   public preloader: boolean;
 
   public icons: any;

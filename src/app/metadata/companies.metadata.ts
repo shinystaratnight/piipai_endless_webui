@@ -1,3 +1,30 @@
+import { createFilter, Type } from '../dynamic-form/models/filters';
+
+const filters = {
+  status: createFilter(Type.Relared, {
+    key: 'status',
+    label: 'Status',
+    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel',
+    display: ['name_after_activation', 'name_before_activation'],
+    parameter: 'number'
+  }),
+  manager: createFilter(Type.Relared, {
+    key: 'portfolio_manager',
+    label: 'Portfolio Manager',
+    endpoint: '/core/companycontacts/?master_company=current',
+  }),
+  state: createFilter(Type.Relared, {
+    key: 'state',
+    label: 'State',
+    endpoint: '/core/regions/?country=AU',
+    display: 'name',
+  }),
+  creditLimit: createFilter(Type.Range, {
+    key: 'approved_credit_limit',
+    label: 'Credit Limit'
+  })
+};
+
 const list = {
   list: {
     list: 'company',
@@ -26,21 +53,21 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/{manager.id}/',
-            field: 'manager.contact',
+            endpoint: '/core/companycontacts/{primary_contact.id}/',
+            field: 'primary_contact.contact',
             type: 'link',
-            display: '{manager.job_title}'
+            display: '{primary_contact.job_title}'
           },
           {
-            field: 'manager.contact.email',
+            field: 'primary_contact.contact.email',
             type: 'link',
             label: 'E-mail',
-            link: 'mailto:{manager.contact.email}'
+            link: 'mailto:{primary_contact.contact.email}'
           },
           {
-            field: 'manager.contact.phone_mobile',
+            field: 'primary_contact.contact.phone_mobile',
             type: 'link',
-            link: 'tel:{manager.contact.phone_mobile}'
+            link: 'tel:{primary_contact.contact.phone_mobile}'
           }
         ],
         name: 'primary_contact',
@@ -54,12 +81,11 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint:
-              '/ecore/api/v2/core/companycontacts/{primary_contact.id}/',
-            field: 'primary_contact',
+            endpoint: '/core/companycontacts/{manager.id}/',
+            field: 'manager',
             type: 'link',
             label: 'Manager',
-            display: '{primary_contact.job_title}'
+            display: '{manager.job_title}'
           }
         ],
         name: 'manager',
@@ -122,43 +148,9 @@ const list = {
     search_enabled: true,
     editDisable: false,
     filters: [
-      {
-        key: 'status',
-        label: 'Status',
-        data: {
-          value: ['name_after_activation', 'name_before_activation'],
-          endpoint:
-            '/ecore/api/v2/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel', //tslint:disable-line
-          key: 'number'
-        },
-        query: 'status',
-        default: null,
-        type: 'related'
-      },
-      {
-        key: 'portfolio_manager',
-        label: 'Portfolio Manager',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint:
-            '/ecore/api/v2/core/companycontacts/?master_company=current',
-          key: 'id'
-        },
-        query: 'portfolio_manager'
-      },
-      {
-        key: 'state',
-        label: 'State',
-        data: {
-          value: 'name',
-          endpoint: '/ecore/api/v2/core/regions/?country=AU',
-          key: 'id'
-        },
-        query: 'state',
-        default: null,
-        type: 'related'
-      },
+      filters.status,
+      filters.manager,
+      filters.state,
       {
         key: 'credit_check',
         label: 'Credit Check',
@@ -174,27 +166,10 @@ const list = {
         ],
         query: 'credit_check',
         default: null,
-        unique: ['data'],
+        multiple: false,
         type: 'checkbox'
       },
-      {
-        key: 'approved_credit_limit',
-        label: 'Credit Limit',
-        max: null,
-        input: [
-          {
-            label: 'From',
-            query: 'approved_credit_limit_0'
-          },
-          {
-            label: 'To',
-            query: 'approved_credit_limit_1'
-          }
-        ],
-        default: null,
-        type: 'range',
-        min: null
-      }
+      filters.creditLimit,
     ]
   },
   fields: [
@@ -219,7 +194,7 @@ const list = {
       read_only: true
     },
     {
-      key: 'primary_contact',
+      key: 'manager',
       type: 'link',
       templateOptions: {
         label: 'Manager',
@@ -286,7 +261,7 @@ const list = {
       read_only: true
     },
     {
-      key: 'manager.contact.phone_mobile',
+      key: 'primary_contact.contact.phone_mobile',
       type: 'link',
       templateOptions: {
         label: '',
@@ -297,7 +272,7 @@ const list = {
       read_only: true
     },
     {
-      key: 'manager.contact.email',
+      key: 'primary_contact.contact.email',
       type: 'link',
       templateOptions: {
         label: 'E-mail',
@@ -319,7 +294,7 @@ const list = {
       read_only: true
     },
     {
-      key: 'manager.contact',
+      key: 'primary_contact.contact',
       type: 'link',
       templateOptions: {
         label: '',
@@ -370,19 +345,19 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
+                    endpoint: '/core/companycontacts/',
                     read_only: false,
-                    key: 'manager',
+                    key: 'primary_contact',
                     templateOptions: {
                       label: 'Name',
                       add: true,
                       delete: false,
-                      values: ['contact'],
+                      values: ['contact', 'job_title'],
                       type: 'related',
                       edit: true,
                       display: '{contact.__str__}'
                     },
-                    collapsed: false,
+                    visibleMode: true,
                     prefilled: {
                       company: '{id.id}',
                       content_type: '{model_content_type}'
@@ -394,9 +369,11 @@ const form = [
                     many: false
                   },
                   {
-                    key: 'manager.job_title',
+                    key: 'primary_contact.job_title',
                     send: false,
                     type: 'input',
+                    default: '{primary_contact.job_title}',
+                    showIf: ['primary_contact.id'],
                     templateOptions: {
                       required: false,
                       label: 'Job Title',
@@ -405,29 +382,6 @@ const form = [
                     },
                     read_only: true
                   },
-                  {
-                    key: 'manager.contact.email',
-                    send: false,
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'E-mail',
-                      max: 255,
-                      type: 'text'
-                    },
-                    read_only: true
-                  },
-                  {
-                    key: 'manager.contact.phone_mobile',
-                    send: false,
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Phone number',
-                      type: 'text'
-                    },
-                    read_only: true
-                  }
                 ],
                 width: 0.25
               },
@@ -458,9 +412,15 @@ const form = [
                     },
                     read_only: false
                   },
+                ],
+                width: 0.25
+              },
+              {
+                type: 'group',
+                children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/pricing/industries/',
+                    endpoint: '/pricing/industries/',
                     read_only: false,
                     templateOptions: {
                       label: 'Industry',
@@ -487,9 +447,41 @@ const form = [
                     },
                     read_only: false
                   },
+                ],
+                width: 0.25
+              },
+              {
+                label: 'Portfolio Manager',
+                type: 'group',
+                children: [
                   {
                     list: false,
-                    endpoint: '/ecore/api/v2/core/companies/',
+                    endpoint: '/core/companycontacts/',
+                    read_only: false,
+                    key: 'manager',
+                    templateOptions: {
+                      label: 'Name',
+                      add: false,
+                      delete: false,
+                      values: ['__str__'],
+                      type: 'related',
+                      edit: true
+                    },
+                    collapsed: false,
+                    showIf: [
+                      {
+                        type: 'regular'
+                      }
+                    ],
+                    type: 'related',
+                    query: {
+                      company: '{master_company.id}'
+                    },
+                    many: false
+                  },
+                  {
+                    list: false,
+                    endpoint: '/core/companies/',
                     read_only: true,
                     key: 'master_company',
                     templateOptions: {
@@ -514,49 +506,6 @@ const form = [
                   }
                 ],
                 width: 0.25
-              },
-              {
-                label: 'Portfolio Manager',
-                type: 'group',
-                children: [
-                  {
-                    list: false,
-                    endpoint: '/ecore/api/v2/core/companycontacts/',
-                    read_only: false,
-                    key: 'primary_contact',
-                    templateOptions: {
-                      label: 'Name',
-                      add: false,
-                      delete: false,
-                      values: ['__str__'],
-                      type: 'related',
-                      edit: true
-                    },
-                    collapsed: false,
-                    showIf: [
-                      {
-                        type: 'regular'
-                      }
-                    ],
-                    type: 'related',
-                    query: {
-                      company: '{master_company.id}'
-                    },
-                    many: false
-                  },
-                  {
-                    key: 'primary_contact_phone',
-                    send: false,
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Phone number',
-                      type: 'text'
-                    },
-                    read_only: true
-                  }
-                ],
-                width: 0.25
               }
             ]
           },
@@ -564,7 +513,23 @@ const form = [
             type: 'row',
             children: [
               {
-                label: 'Credit Info',
+                key: 'description',
+                type: 'textarea',
+                templateOptions: {
+                  full: true,
+                  required: false,
+                  label: 'Public description',
+                  type: 'textarea'
+                },
+                read_only: false
+              }
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                label: 'Credit Info and billing terms',
                 type: 'group',
                 children: [
                   {
@@ -676,7 +641,6 @@ const form = [
                 width: 0.25
               },
               {
-                label: 'Banking Detail',
                 type: 'group',
                 children: [
                   {
@@ -854,19 +818,7 @@ const form = [
                       text: 'Show name'
                     },
                     read_only: false
-                  }
-                ],
-                width: 0.25
-              }
-            ]
-          },
-          {
-            type: 'row',
-            children: [
-              {
-                label: 'Timesheet',
-                type: 'group',
-                children: [
+                  },
                   {
                     key: 'timesheet_approval_scheme',
                     default: 'PIN',
@@ -890,35 +842,17 @@ const form = [
                   }
                 ],
                 width: 0.25
-              },
-              {
-                label: 'About Company',
-                type: 'group',
-                children: [
-                  {
-                    key: 'description',
-                    type: 'textarea',
-                    templateOptions: {
-                      required: false,
-                      label: 'Public description',
-                      type: 'textarea'
-                    },
-                    read_only: false
-                  }
-                ],
-                width: 0.75
               }
             ]
           }
         ]
       },
       {
-        endpoint: '/ecore/api/v2/core/companyaddresses/',
-        delay: true,
+        endpoint: '/core/companyaddresses/',
         templateOptions: {
           label: 'Company Address',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Company Address'
         },
         collapsed: false,
@@ -932,15 +866,15 @@ const form = [
         help: 'All addresses of the company'
       },
       {
-        endpoint: '/ecore/api/v2/core/companycontactrelationships/',
-        add_endpoint: '/ecore/api/v2/core/companycontacts/',
+        endpoint: '/core/companycontactrelationships/',
+        add_endpoint: '/core/companycontacts/',
         templateOptions: {
           label: 'Client Contacts',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Client Contacts'
         },
-        collapsed: false,
+        visibleMode: true,
         prefilled: {
           company: '{id}'
         },
@@ -950,14 +884,14 @@ const form = [
         }
       },
       {
-        endpoint: '/ecore/api/v2/hr/jobsites/',
+        endpoint: '/hr/jobsites/',
         templateOptions: {
           label: 'Jobsites',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Jobsites'
         },
-        collapsed: false,
+        visibleMode: true,
         prefilled: {
           regular_company: '{id}'
         },
@@ -968,14 +902,15 @@ const form = [
         help: 'Jobsites from the client company'
       },
       {
-        endpoint: '/ecore/api/v2/pricing/pricelists/',
+        endpoint: '/pricing/pricelists/',
         metadata_query: {
           editable_type: 'company'
         },
+        visibleMode: true,
         templateOptions: {
           label: 'Price list',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Price list'
         },
         collapsed: false,
@@ -1003,14 +938,14 @@ const form = [
               type: 'timeline',
               text: ''
             },
-            endpoint: '/ecore/api/v2/core/workflownodes/timeline/'
+            endpoint: '/core/workflownodes/timeline/'
           },
           {
-            endpoint: '/ecore/api/v2/core/workflowobjects/',
+            endpoint: '/core/workflowobjects/',
             templateOptions: {
               label: 'States history',
               type: 'list',
-              add_label: '+ Add item',
+              add_label: '+ Add',
               text: 'States history'
             },
             collapsed: false,
@@ -1019,14 +954,14 @@ const form = [
             },
             type: 'list',
             query: {
-              object_id: '{regular_company_rel.id}'
+              object_id: ['{id.id}', '{id}', '{regular_company_rel.id}']
             },
             help: 'Here you can see changes client company states'
           }
         ]
       },
       {
-        endpoint: '/ecore/api/v2/core/invoices/',
+        endpoint: '/core/invoices/',
         type: 'list',
         query: {
           customer_company: '{id}'
@@ -1039,11 +974,11 @@ const form = [
         collapsed: false
       },
       {
-        endpoint: '/ecore/api/v2/core/notes/',
+        endpoint: '/core/notes/',
         templateOptions: {
           label: 'Notes',
           type: 'list',
-          add_label: 'Add',
+          add_label: '+ Add',
           text: 'Notes'
         },
         collapsed: false,
@@ -1120,7 +1055,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/addresses/',
+    endpoint: '/core/addresses/',
     read_only: true,
     hide: true,
     templateOptions: {

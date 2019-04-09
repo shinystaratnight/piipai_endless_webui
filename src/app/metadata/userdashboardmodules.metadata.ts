@@ -46,7 +46,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Company contact',
@@ -56,14 +56,14 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'company_contact',
     many: false
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/dashboardmodules/',
+    endpoint: '/core/dashboardmodules/',
     read_only: true,
     templateOptions: {
       label: 'Dashboard module',
@@ -105,21 +105,11 @@ const form = [
 
 const formadd = [
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: {
-      required: false,
-      label: 'Id',
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Company contact',
       add: true,
       delete: false,
@@ -134,9 +124,10 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/dashboardmodules/',
+    endpoint: '/core/dashboardmodules/',
     read_only: true,
     templateOptions: {
+      required: true,
       label: 'Dashboard module',
       add: true,
       delete: false,

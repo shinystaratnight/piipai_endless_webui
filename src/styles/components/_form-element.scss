@@ -45,12 +45,27 @@
 
     background-color: transparent;
 
+    transition: all .7s linear;
+
+    .registration-form *:not(.ui-datebox-container) & {
+      height: auto;
+      min-height: auto;
+
+      padding: 12px 16px;
+
+      font-size: 14px;
+      line-height: 16px;
+
+      border: 1px solid rgba($gray, .2);
+      border-radius: 4px;
+    }
+
     &:focus {
-      border-bottom-color: $brand-primary;
+      border-color: $brand-primary;
 
       @each $item in $themes {
         .#{$item}-theme & {
-          border-bottom-color: map-get($theme-colors, $item);
+          border-color: map-get($theme-colors, $item);
         }
       }
     }
@@ -63,6 +78,11 @@
     padding-right: 30px;
 
     text-align: left;
+
+    .registration-form div:not(.ui-datebox-container) & {
+      height: auto;
+      min-height: auto;
+    }
   }
 
   input {
@@ -110,6 +130,19 @@
 
     border: none;
     border-bottom: 1px solid rgba($gray, .1);
+
+    .registration-form & {
+      height: auto;
+      min-height: auto;
+
+      padding: 12px 16px;
+
+      font-size: 14px;
+      line-height: 16px;
+
+      border: 1px solid rgba($gray, .2);
+      border-radius: 4px;
+    }
   }
 
   .input-group-addon {
@@ -126,6 +159,16 @@
     font-size: 14px !important;
 
     border-bottom: 1px solid rgba($gray, .1);
+
+    .registration-form & {
+      position: absolute;
+      top: 11px;
+      right: 11px;
+
+      border-bottom: none;
+
+      opacity: .7;
+    }
   }
 
   &-content {
@@ -141,6 +184,44 @@
     font-size: 14px;
     line-height: 20px;
 
+    .registration-form & {
+      height: auto;
+      max-height: none;
+      min-height: auto;
+    }
+
+    &.disabled .form-control {
+      background-color: #f2f2f2;
+
+      cursor: not-allowed;
+    }
+
+    .mobile-device & .readonly-value {
+      font-size: 15px;
+
+      opacity: 1;
+    }
+
+    .mobile-device &:not(.edit) {
+      display: inline-block;
+      width: auto;
+
+      margin-left: 5px;
+    }
+
+    .mobile .form-info-wrapper & {
+      margin-left: 0;
+    }
+
+    .address-field & {
+      font-size: 12px;
+    }
+
+    .message-detail & {
+      width: auto;
+      max-width: unset !important;
+    }
+
     .form-builder-form & {
       width: 100%;
     }
@@ -148,9 +229,18 @@
     &.edit {
       max-width: 300px;
 
+      @include media-breakpoint-down('sm') {
+        max-width: unset;
+      }
+
       .form-builder-form & {
         max-width: 100%;
       }
+    }
+
+    &.full-width {
+      width: 100%;
+      max-width: 100%;
     }
 
     .description & {
@@ -198,6 +288,35 @@
 
       background: transparent;
     }
+
+    .mobile-datepicker {
+      position: relative;
+      height: 35px;
+
+      padding-left: 6px;
+      padding-right: 0;
+
+      line-height: 35px;
+
+      border: 1px solid $gray;
+      border-radius: 4px !important;
+
+      box-shadow: 0 0 8px 0 rgba($gray, 0.1);
+      background-color: #ffffff;
+
+      &::before {
+        font-family: FontAwesome;
+        display: inline;
+        right: 12px;
+        font-size: 14px;
+        position: absolute;
+        opacity: .5;
+      }
+
+      &:first-child {
+        margin-right: 12px;
+      }
+    }
   }
 
   &-checkbox {
@@ -233,9 +352,41 @@
     font-size: 12px;
     line-height: 14px;
 
-    color: rgba($gray, .3);
+    color: rgba($gray, .26);
 
-    .form-builder-form &.required::after {
+    &.bold {
+      font-weight: bold;
+      color: inherit;
+    }
+
+    .registration-form & {
+      margin-bottom: 4px;
+
+      font-size: 11px;
+      line-height: 12px;
+      text-transform: uppercase;
+
+      color: $gray;
+    }
+
+    .mobile-device & {
+      margin-bottom: 3px;
+
+      font-size: 14px;
+      line-height: 16px;
+
+      opacity: .6;
+    }
+
+    .message-detail & {
+      text-transform: uppercase;
+    }
+
+    .form-builder-form &::first-letter {
+      text-transform: uppercase;
+    }
+
+    .dynamic-form:not(.view-form-mode) &.required::after {
       content: '*';
 
       color: $brand-danger;

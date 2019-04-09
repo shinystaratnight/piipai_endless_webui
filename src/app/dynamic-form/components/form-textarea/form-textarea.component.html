@@ -3,8 +3,8 @@
     <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" [attr.for]="key" *ngIf="label && config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
-    <info [description]="config.templateOptions.description"></info>
-    <div class="form-element-content edit" style="height: auto; max-height: none">
+    <app-info [description]="config.templateOptions.description"></app-info>
+    <div class="form-element-content edit" [class.full-width]="config.templateOptions.full" style="height: auto; max-height: none">
       <textarea
         rows="2"
         *ngIf="!viewMode"
@@ -15,7 +15,7 @@
         [attr.id]="key"
         [attr.name]="key"
         [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''"></textarea>
-        <span [class.readonly-value]="editMode" *ngIf="viewMode">{{displayValue}}</span>
+        <span [ngClass]="[className]" [class.readonly-value]="editMode" *ngIf="viewMode">{{displayValue}}</span>
     </div>
   </div>
   <div *ngIf="errors">

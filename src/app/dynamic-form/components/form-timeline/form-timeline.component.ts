@@ -2,20 +2,18 @@ import {
   Component,
   ViewChild,
   OnInit,
-  Output,
   OnDestroy,
-  ViewEncapsulation,
   ChangeDetectorRef
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { FormatString } from '../../../helpers/format';
 import { GenericFormService } from '../../services';
 
 @Component({
-  selector: 'form-timeline',
+  selector: 'app-form-timeline',
   templateUrl: 'form-timeline.component.html',
   styleUrls: ['./form-timeline.component.scss']
 })
@@ -42,7 +40,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public updated: boolean;
   public loading: boolean;
 
-  public workflowObjectEndpoint = '/ecore/api/v2/core/workflowobjects/';
+  public workflowObjectEndpoint = '/core/workflowobjects/';
 
   private subscriptions: Subscription[];
 
@@ -57,19 +55,29 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.dropdown = this.config.dropdown;
     this.query = [];
-    this.objectEndpoint = '/ecore/api/v2/core/workflowobjects/';
+    this.objectEndpoint = '/core/workflowobjects/';
     if (!this.config.hide) {
       this.initialize();
     }
     if (this.config.timelineSubject) {
       const subscription = this.config.timelineSubject.subscribe((value) => {
-        this.config.options = value;
-
-        if (this.dropdown) {
-          this.updateDropdown();
+        if (value === 'update') {
+          this.getTimeline();
+          return;
         }
 
-        this.cd.detectChanges();
+        if (value !== 'reset') {
+          this.config.options = value;
+
+          if (this.dropdown) {
+            this.updateDropdown();
+          }
+
+          if (!(<any> this.cd).destroyed) {
+            this.cd.detectChanges();
+          }
+        }
+
       });
 
       this.subscriptions.push(subscription);
@@ -77,8 +85,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public initialize() {
-    let formatString = new FormatString();
-    let keys = Object.keys(this.config.query);
+    const formatString = new FormatString();
+    const keys = Object.keys(this.config.query);
     const type = this.config.value.type;
     keys.forEach((el) => {
       if (el === 'object_id') {
@@ -132,13 +140,6 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         }
       });
 
-      if (key === 0 && !setKey) {
-        this.selectArray.forEach((el, i) => {
-          if (el.state === 1 && key === 0) {
-            key = i;
-          }
-        });
-      }
       this.currentState = this.selectArray[key] && this.selectArray[key].id;
     }
   }
@@ -200,7 +201,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getTimeline(): void {
+  public getTimeline(resetPage?: boolean): void {
     this.loading = true;
 
     this.genericFormService
@@ -208,17 +209,17 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       .subscribe(
         (res) => {
           this.loading = false;
-          this.config.timelineSubject.next(res);
+          this.config.timelineSubject.next(resetPage ? 'reset' : res);
         },
         (err: any) => (this.loading = false)
       );
   }
 
   public setDataForState(state, hideScore) {
-    let fields = ['object_id', 'state', 'active'];
-    let result = {};
+    const fields = ['object_id', 'state', 'active'];
+    const result = {};
     fields.forEach((el) => {
-      let value =
+      const value =
         el === 'state' ? state.id : el === 'object_id' ? this.objectId : true;
       result[el] = {
         action: 'add',
@@ -236,7 +237,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       data: {
         editForm: true,
         hide: hideScore,
-        send: false
+        send: false,
+        value: 5
       }
     };
 
@@ -246,7 +248,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public sendEventHandler(e, closeModal): void {
     if (e.status === 'success') {
       closeModal();
-      this.getTimeline();
+      this.getTimeline(this.config.query.model === 'hr.job');
       this.modalData = null;
     }
   }
@@ -264,7 +266,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.modalRef = this.modalService.open(this.testModal, { size: 'lg' });
+    this.modalRef = this.modalService.open(this.testModal);
   }
 
   public createWorkflowObject(stateId: string) {
@@ -283,7 +285,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         this.modalData.state.wf_object_id = res.id;
         this.modalData.workflowObject = res.id;
 
-        this.modalRef = this.modalService.open(this.testModal, { size: 'lg' });
+        this.modalRef = this.modalService.open(this.testModal);
       });
   }
 

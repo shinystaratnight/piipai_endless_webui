@@ -9,11 +9,12 @@
     </div>
 
 
-    <div class="form-content">
-      <form-builder-form
+    <div class="form-content registration-form">
+      <app-form-builder-form
         [id]="settings.register_form_id"
+        [companyId]="settings.company"
         (formConfig)="setFormConfig($event)">
-      </form-builder-form>
+      </app-form-builder-form>
     </div>
   </div>
 </div>

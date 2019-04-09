@@ -1,66 +1,65 @@
-<div class="test-wrapper" *ngIf="testData">
-  <div class="header">
-    <div class="header-title">
-      <h4>{{testData.name}}</h4>
-      <p *ngIf="testData.description" class="description">{{testData.description}}</p>
-    </div>
-    <div *ngIf="testData.industries.length || testData.skills.length || testData.tags.length" class="relationships">
-      <span class="description mb-2">Relationships:</span>
+<ng-container *ngIf="testData">
 
-      <span *ngIf="testData.industries.length">
-        Industries: <span class="description" *ngFor="let item of testData.industries; let last = last">{{item.industry.name}}{{last ? '' : ', '}}</span>
-      </span>
-      <span *ngIf="testData.skills.length">
-        Skills: <span class="description" *ngFor="let item of testData.skills; let last = last">{{item.skill.name}}{{last ? '' : ', '}}</span>
-      </span>
-      <span *ngIf="testData.tags.length">
-        Tags: <span class="description" *ngFor="let item of testData.tags; let last = last">{{item.tag.name}}{{last ? '' : ', '}}</span>
-      </span>
-    </div>
+  <div class="test__header">
+    <p class="test__description"
+      *ngIf="testData.description">
+        {{testData.description}}
+    </p>
+
+    <h4 class="test__name">{{testData.name}}</h4>
   </div>
 
-  <hr>
+  <div class="test__body">
 
-  <ng-container *ngFor="let question of testData.questions; let index = index">
-    <div class="question">
-      <h5>{{index + 1}}. {{question.name}}</h5>
-      <p *ngIf="question.details" class="description">{{question.details}}</p>
+    <span class="test__position">Question {{currentQuestion + 1}} of {{testData.questions.length}}</span>
 
-      <ng-container [ngSwitch]="question.type">
-        <div class="answers" *ngSwitchCase="0">
-          <template [ngTemplateOutlet]="radio" [ngOutletContext]="{answers: question.answers, index: index}"></template>
-        </div>
-        <div class="answers" *ngSwitchCase="1">
-          <template [ngTemplateOutlet]="text" [ngOutletContext]="{answers: question.answers, index: index}"></template>
-        </div>
-        <div class="answers" *ngSwitchCase="2">
-          <template [ngTemplateOutlet]="radio" [ngOutletContext]="{answers: question.answers, index: index}"></template>
-        </div>
-      </ng-container>
-    </div>
-  </ng-container>
+    <p class="test__question">{{testData.questions[currentQuestion].name}}</p>
 
-  <button *ngIf="send" class="btn btn-primary" (click)="sendForm()">Send</button>
-</div>
+    <p class="test__question-details">{{testData.questions[currentQuestion].details}}</p>
 
-<template #radio let-answers="answers" let-index="index">
+    <ng-container [ngSwitch]="testData.questions[currentQuestion].type">
+      <div class="answers"
+        *ngSwitchCase="0">
+          <ng-container *ngTemplateOutlet="radio; context: {answers: testData.questions[currentQuestion].answers, index: currentQuestion}"></ng-container>
+      </div>
+      <div class="answers"
+        *ngSwitchCase="1">
+          <ng-container *ngTemplateOutlet="text; context: {answers: testData.questions[currentQuestion].answers, index: currentQuestion}"></ng-container>
+      </div>
+      <div class="answers"
+        *ngSwitchCase="2">
+          <ng-container *ngTemplateOutlet="radio; context: {answers: testData.questions[currentQuestion].answers, index: currentQuestion}"></ng-container>
+      </div>
+    </ng-container>
+
+  </div>
+
+  <div class="test__footer">
+    <button type="button" class="test__button btn btn-default" (click)="back()" [disabled]="currentQuestion === 0">Back</button>
+    <button *ngIf="currentQuestion + 1 !== testData.questions.length" type="button" class="test__button btn btn-primary" (click)="next()">Next</button>
+    <button *ngIf="currentQuestion + 1 === testData.questions.length" type="submit" class="test__button btn btn-primary" (click)="sendForm()">Submit</button>
+  </div>
+
+</ng-container>
+
+<ng-template #radio let-answers="answers" let-index="index">
   <div class="form-check" *ngFor="let answer of answers">
     <label class="form-check-label">
       <input type="radio" [(ngModel)]="testData.questions[index].answer" [name]="answer.name" [value]="answer.id"> {{answer.answer}}
     </label>
   </div>
-</template>
+</ng-template>
 
-<template #text let-answer="answer" let-index="index">
+<ng-template #text let-answer="answer" let-index="index">
   <div class="form-element">
-    <div class="form-element-content edit" style="height: auto; max-height: none">
-      <textarea name="" id="" cols="30" rows="5" [(ngModel)]="testData.questions[index].answer_text"></textarea>
+    <div class="form-element-content edit mw-100 w-100" style="height: auto; max-height: none">
+      <textarea class="w-100" name="" id="" cols="30" rows="5" [(ngModel)]="testData.questions[index].answer_text"></textarea>
     </div>
   </div>
   <div class="form-element">
     <label class="col-form-label form-element-label" for="">Score:</label>
-    <div class="form-element-content edit" style="width: 50px">
+    <div class="form-element-content edit">
       <input type="number" min="1" max="5" class="form-control" [(ngModel)]="testData.questions[index].score">
     </div>
   </div>
-</template>
+</ng-template>

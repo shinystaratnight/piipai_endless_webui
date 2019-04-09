@@ -66,7 +66,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/acceptance-tests/acceptancetests/',
+    endpoint: '/acceptance-tests/acceptancetests/',
     read_only: true,
     templateOptions: {
       label: 'Acceptance test',
@@ -83,7 +83,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
       label: 'Skill',
@@ -103,7 +103,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/acceptance-tests/acceptancetests/',
+    endpoint: '/acceptance-tests/acceptancetests/',
     read_only: true,
     templateOptions: {
       label: 'Acceptance test',
@@ -120,7 +120,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
       label: 'Skill',

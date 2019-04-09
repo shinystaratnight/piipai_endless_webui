@@ -51,7 +51,7 @@ const components = {
 };
 
 @Directive({
-  selector: '[listElement]'
+  selector: '[appListElement]'
 })
 export class ListElementDirective implements OnInit, OnChanges {
   @Input()

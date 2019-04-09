@@ -11,11 +11,10 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { FormatString } from '../../../helpers/format';
 import { GenericFormService } from '../../services/generic-form.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'form-replace',
+  selector: 'app-form-replace',
   templateUrl: 'form-replace.component.html'
 })
 
@@ -66,12 +65,12 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
 
   public generateMetadata(array: any[], data: any): void {
     array.forEach((el) => {
-      let element = Object.keys(el)[0];
-      let key = el[element];
-      let value = this.getValueByKey(key, data);
+      const element = Object.keys(el)[0];
+      const key = el[element];
+      const value = this.getValueByKey(key, data);
       if (value) {
-        let format = new FormatString();
-        let elConfig = Object.assign(this.config.elements[element]);
+        const format = new FormatString();
+        const elConfig = Object.assign(this.config.elements[element]);
         if (elConfig.endpoint) {
           elConfig.endpoint = format.format(elConfig.endpoint, data);
           if (elConfig.query) {
@@ -90,13 +89,13 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
   }
 
   public getValueByKey(key: string, data: any): any {
-    let keysArray = key.split('.');
-    let firstKey = keysArray.shift();
+    const keysArray = key.split('.');
+    const firstKey = keysArray.shift();
     if (data) {
       if (keysArray.length === 0) {
         return data[firstKey];
       } else if (keysArray.length > 0) {
-        let combineKeys = keysArray.join('.');
+        const combineKeys = keysArray.join('.');
         return this.getValueByKey(combineKeys, data[firstKey]);
       }
     } else {
@@ -119,7 +118,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     }
   }
 
-  public addAction(endpoint: string, query: string = undefined, el): void {
+  public addAction(endpoint: string, query?, el?): void {
     if (query) {
       endpoint += `?${query}`;
     }

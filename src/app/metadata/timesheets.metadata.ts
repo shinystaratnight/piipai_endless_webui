@@ -1,28 +1,55 @@
-import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from './utils';
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate, Endpoints, Colors } from './utils';
+import { createFilter, Type } from '../dynamic-form/models/filters';
+
+const filters = {
+  shift_started_at: createFilter(Type.Date, {
+    key: 'shift_started_at',
+    label: 'Shift Started at',
+    yesterday: true,
+    today: true,
+    tomorrow: true
+  }),
+  supervisor: createFilter(Type.Relared, {
+    key: 'supervisor',
+    label: 'Supervisor',
+    endpoint: Endpoints.CompanyContact,
+  }),
+  candidate: createFilter(Type.Relared, {
+    key: 'candidate',
+    label: 'Candidate Contact',
+    endpoint: Endpoints.CandidateContact,
+  }),
+  client: createFilter(Type.Relared, {
+    key: 'company',
+    label: 'Client',
+    endpoint: Endpoints.Company,
+  }),
+  jobsite: createFilter(Type.Relared, {
+    key: 'jobsite',
+    label: 'Jobsite',
+    endpoint: Endpoints.Jobsite,
+  }),
+};
 
 const list = {
   list: {
     list: 'timesheet',
+    innerEdit: true,
     label: 'Timesheet Entry',
     columns: [
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/{company.id}',
-            field: 'company',
-            type: 'link'
-          },
-          {
-            endpoint: '/ecore/api/v2/hr/jobsites/{jobsite.id}',
+            endpoint: '/hr/jobsites/{jobsite.id}',
             field: 'jobsite',
             type: 'link'
           },
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/{supervisor.id}',
-            field: 'supervisor',
-            type: 'link'
+            field: 'supervisor.__str__',
+            type: 'text'
           }
         ],
+        width: 250,
         name: 'client_/_jobsite_/_supervisor',
         title: null,
         label: 'Client / Jobsite / Supervisor',
@@ -31,58 +58,85 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/skills/skills/{position.id}',
-            field: 'position',
+            endpoint: '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
+            field: 'job_offer.candidate_contact',
             type: 'link'
           },
           {
-            endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
-            field: 'job_offer.candidate_contact',
+            field: 'position.__str__',
+            description: ' ',
+            type: 'text'
+          },
+          {
+            endpoint: '/hr/jobs/{job.id}',
+            field: 'job.id',
+            color: 'primary',
+            text: 'Job information',
             type: 'link'
           }
         ],
+        width: 200,
         name: 'position_/_candidate',
         title: null,
-        label: 'Position / Candidate',
+        label: 'Position / Candidate / Job',
         delim: null
       },
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/jobs/{job.id}',
-            field: 'job',
-            type: 'link',
-            text: 'Job'
+            title: 'Show traking map',
+            type: 'button',
+            color: 'link',
+            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
+            field: 'id',
+            action: 'showTracking',
+            customLink: true,
+            image: '/assets/img/map-lg.png'
           }
         ],
-        name: 'links',
+        name: 'tracking',
         title: null,
-        label: 'Links',
-        delim: ' / '
-      },
-      {
-        content: [
-          {
-            field: 'shift_started_ended',
-            type: 'static'
-          }
-        ],
-        name: 'shift_started/ended',
-        title: null,
-        label: 'Shift started/ended',
+        label: 'Tracking',
         delim: null
       },
       {
         content: [
           {
-            field: 'break_started_ended',
-            type: 'static'
+            text: '{shift_started_at__date}',
+            type: 'static',
+            label: 'Dates',
+            field: 'shift_started_at'
+          },
+          {
+            text: '{shift_started_at__time}',
+            type: 'static',
+            label: 'Start',
+            field: 'shift_started_at'
+          },
+          {
+            text: '{break_started_at__time} - {break_ended_at__time}',
+            type: 'static',
+            label: 'Break',
+            field: 'break_started_at'
+          },
+          {
+            text: '{shift_ended_at__time}',
+            type: 'static',
+            label: 'End',
+            field: 'shift_ended_at'
+          },
+          {
+            text: '{totalTime}',
+            color: 'success',
+            setColor: 'shift_ended_at',
+            type: 'static',
+            label: 'Total time',
+            field: 'totalTime'
           }
         ],
-        name: 'break_started/ended',
+        name: 'time',
         title: null,
-        label: 'Break started/ended',
+        label: 'Date and times',
         delim: null
       },
       {
@@ -95,12 +149,7 @@ const list = {
             },
             field: 'going_to_work_confirmation',
             type: 'icon',
-            label: 'Morning check',
-            showIf: [
-              {
-                going_to_work_confirmation: true
-              }
-            ]
+            label: 'Pre-shift check',
           },
           {
             values: {
@@ -132,84 +181,70 @@ const list = {
               }
             ]
           },
-        ],
-        name: 'confirmations',
-        title: null,
-        label: 'Confirmations',
-        delim: null
-      },
-      {
-        content: [
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/confirm',
+            endpoint: '/hr/timesheets/{id}/confirm',
+            action: 'emptyPost',
+            text: 'Confirm Check',
+            type: 'button',
             field: 'id',
-            icon: 'fa-external-link',
-            text: 'Confirm',
-            label: 'Morning check:',
             showIf: [
               {
                 going_to_work_confirmation: null
               }
             ],
-            action: 'emptyPost',
-            type: 'button'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/resend_sms',
+            endpoint: '/hr/timesheets/{id}/resend_sms',
             field: 'resend_sms_candidate',
             showIf: [
               {
                 resend_sms_candidate: true
               }
             ],
-            icon: 'fa-external-link',
             action: 'emptyPost',
             type: 'button',
             text: 'Send TS SMS'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/resend_supervisor_sms',
+            endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
             field: 'resend_sms_supervisor',
             showIf: [
               {
                 resend_sms_supervisor: true
               }
             ],
-            icon: 'fa-external-link',
             action: 'emptyPost',
             type: 'button',
             text: 'Send Supervisor SMS'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/candidate_fill',
+            endpoint: '/hr/timesheets/{id}/candidate_fill',
             field: 'id',
             showIf: [
               {
                 resend_sms_candidate: true
               }
             ],
-            icon: 'fa-external-link',
             action: 'editForm',
             type: 'button',
             text: 'Fill'
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/supervisor_approve',
+            endpoint: '/hr/timesheets/{id}/supervisor_approve',
             field: 'id',
             showIf: [
               {
                 resend_sms_supervisor: true
               }
             ],
-            icon: 'fa-external-link',
             action: 'editForm',
             type: 'button',
             text: 'Approve'
-          }
+          },
         ],
-        name: 'actions',
+        name: 'confirmations',
         title: null,
-        label: 'Actions',
+        label: 'Confirmations',
         delim: null
       },
       {
@@ -218,40 +253,44 @@ const list = {
         sort: true,
         content: [
           {
+            action: 'messageDetail',
+            messageType: 'sent',
+            color: 'link',
             endpoint:
-              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
+              '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
-            text: 'Candidate Going To Work'
+            text: 'Preshift check',
           },
           {
+            action: 'messageDetail',
+            messageType: 'reply',
+            color: 'link',
             endpoint:
-              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
+              '/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
             field: 'going_to_work_reply_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
-            text: 'Reply'
+            text: 'Reply',
           },
           {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
+            action: 'messageDetail',
+            messageType: 'sent',
+            color: 'link',
+            endpoint: '/sms-interface/smsmessages/{candidate_sms.id}',
             field: 'candidate_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Candidate TS',
-            showIf: ['candidate_sms']
+            showIf: ['candidate_sms'],
           },
           {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
+            action: 'messageDetail',
+            messageType: 'sent',
+            color: 'link',
+            endpoint: '/sms-interface/smsmessages/{supervisor_sms.id}',
             field: 'supervisor_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Supervisor TS',
-            showIf: ['supervisor_sms']
+            showIf: ['supervisor_sms'],
           },
         ],
         name: 'related_sms',
@@ -270,14 +309,13 @@ const list = {
             ]
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/sync',
+            endpoint: '/hr/timesheets/{id}/sync',
             field: 'id',
             showIf: [
               {
                 show_sync_button: true
               }
             ],
-            icon: 'fa-sync-alt',
             action: 'emptyPost',
             type: 'button',
             text: 'Sync'
@@ -291,96 +329,81 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/invoices/{invoice.id}',
+            endpoint: '/core/invoices/{invoice.id}',
             field: 'invoice',
             type: 'link',
-            text: 'Invoice'
-          }
+            text: 'Show invoice',
+            color: 'primary',
+          },
+          {
+            action: 'emptyPost',
+            text: 'Recreate',
+            endpoint: '/hr/timesheets/{id}/recreate_invoice',
+            type: 'button',
+            showIf: [
+              {
+                supervisor_approved: true
+              }
+            ]
+          },
         ],
         name: 'invoice',
         title: null,
         label: 'Invoice',
         delim: null
+      },
+    ],
+    tabs: [
+      {
+        label: 'Related SMS',
+        is_collapsed: true,
+        fields: [
+          'related_sms',
+        ]
+      },
+      {
+        label: 'MYOB Status',
+        is_collapsed: true,
+        fields: [
+          'myob_status'
+        ]
+      },
+      {
+        label: 'Invoice',
+        is_collapsed: true,
+        fields: [
+          'invoice'
+        ]
       }
     ],
     pagination_label: 'Timesheet Entry',
     search_enabled: false,
-    editDisable: false,
+    editDisable: true,
     filters: [
-      {
-        list: [
-          {
-            label: 'Yesterday',
-            query: `shift_started_at_0=${yesterdayFormatDate}&shift_started_at_1=${yesterdayFormatDate}` //tslint:disable-line
-          },
-          {
-            label: 'Today',
-            query: `shift_started_at_0=${todayFormatDate}&shift_started_at_1=${todayFormatDate}`
-          },
-          {
-            label: 'Tomorrow',
-            query: `shift_started_at_0=${tomorrowFormatDate}&shift_started_at_1=${tomorrowFormatDate}` //tslint:disable-line
-          }
-        ],
-        key: 'shift_started_at',
-        label: 'Shift Started at',
-        type: 'date',
-        input: [
-          {
-            label: 'From date',
-            query: 'shift_started_at_0'
-          },
-          {
-            label: 'To date',
-            query: 'shift_started_at_1'
-          }
-        ]
-      },
-      {
-        key: 'supervisor',
-        label: 'Supervisor',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
-          key: 'id'
-        },
-        query: 'supervisor'
-      },
-      {
-        key: 'candidate',
-        label: 'Candidate Contact',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
-          key: 'id'
-        },
-        query: 'candidate'
-      },
-      {
-        key: 'company',
-        label: 'Client',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/ecore/api/v2/core/companies/',
-          key: 'id'
-        },
-        query: 'company'
-      },
-      {
-        key: 'jobsite',
-        label: 'Jobsite',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/ecore/api/v2/hr/jobsites/',
-          key: 'id'
-        },
-        query: 'jobsite'
-      }
-    ]
+      filters.shift_started_at,
+      filters.supervisor,
+      filters.candidate,
+      filters.client,
+      filters.jobsite,
+    ],
+    actions: {
+      options: [
+        {
+          endpoint: '/hr/timesheets/generate_pdf_timesheet/',
+          label: 'PDF by Jobsite',
+          selectionError: 'Please select at least one timesheet!',
+          confirm: false,
+          message: 'Are you sure?',
+          property: 'timesheets',
+          required: true,
+        }
+      ],
+      label: 'Actions',
+      agree_label: 'Agree',
+      button_label: 'Go',
+      decline_label: 'Decline'
+    },
+    buttons: []
   },
   fields: [
     {
@@ -499,7 +522,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+      endpoint: '/sms-interface/smsmessages/',
       read_only: true,
       templateOptions: {
         label: 'Related sms',
@@ -718,7 +741,7 @@ const supervisor = {
         content: [
           {
             endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
+              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
             type: 'link',
             field: 'job_offer.candidate_contact'
           },
@@ -782,226 +805,341 @@ const form = [
     read_only: false
   },
   {
-    list: false,
-    endpoint: '/ecore/api/v2/hr/joboffers/',
-    read_only: false,
+    type: 'tabs',
+    children: [
+      {
+        main: true,
+        name: 'Main information',
+        label: 'Main information',
+        type: 'group',
+        children: [
+          {
+            type: 'row',
+            children: [
+              {
+                type: 'group',
+                width: 0.2,
+                hideLabel: true,
+                children: [
+                  {
+                    endpoint: Endpoints.Company,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Client',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    key: 'company',
+                  },
+                  {
+                    endpoint: Endpoints.Skills,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Position',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    key: 'position',
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                width: 0.2,
+                hideLabel: true,
+                children: [
+                  {
+                    endpoint: Endpoints.Jobsite,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Jobsite',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    key: 'jobsite',
+                  },
+                  {
+                    endpoint: Endpoints.CandidateContact,
+                    read_only: true,
+                    send: false,
+                    templateOptions: {
+                      label: 'Candidate',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    key: 'job_offer.candidate_contact',
+                  },
+                ]
+              },
+              {
+                width: 0.2,
+                endpoint: Endpoints.CompanyContact,
+                read_only: true,
+                templateOptions: {
+                  label: 'Supervisor',
+                  values: ['__str__'],
+                  type: 'related',
+                },
+                type: 'related',
+                key: 'supervisor',
+              },
+              {
+                width: 0.2,
+                type: 'select',
+                key: 'status',
+                read_only: true,
+                templateOptions: {
+                  label: 'Status',
+                  options: [
+                    { value: 0, label: 'New', color: Colors.Success },
+                    { value: 1, label: 'Check pending', color: Colors.Warning },
+                    { value: 2, label: 'Check confirmed', color: Colors.Success },
+                    { value: 3, label: 'Check failed', color: Colors.Danger },
+                    { value: 4, label: 'Submit pending', color: Colors.Warning },
+                    { value: 5, label: 'Pending approval', color: Colors.Success },
+                    { value: 6, label: 'Supervisor modified', color: Colors.Success },
+                    { value: 7, label: 'Approved', color: Colors.Success }
+                  ],
+                }
+              },
+              {
+                type: 'static',
+                width: 0.2,
+                read_only: true,
+                send: false,
+                key: 'myob_status',
+                templateOptions: {
+                  label: 'Accounting Integration'
+                }
+              }
+            ]
+          },
+          {
+            type: 'row',
+            className: 'field',
+            children: [
+              {
+                type: 'static',
+                key: 'total_time',
+                send: false,
+                read_only: true,
+                templateOptions: {
+                  label: 'Total time',
+                  color: 'text-success',
+                  bold: true,
+                }
+              },
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                type: 'group',
+                hideLabel: true,
+                width: 0.2,
+                children: [
+                  {
+                    key: 'shift_started_at',
+                    type: 'datepicker',
+                    templateOptions: {
+                      label: 'Shift Started at',
+                      type: 'datetime'
+                    },
+                  },
+                  {
+                    key: 'shift_ended_at',
+                    type: 'datepicker',
+                    templateOptions: {
+                      label: 'Shift Ended at',
+                      type: 'datetime'
+                    },
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                hideLabel: true,
+                width: 0.2,
+                children: [
+                  {
+                    key: 'break_started_at',
+                    type: 'datepicker',
+                    templateOptions: {
+                      label: 'Break Started at',
+                      type: 'datetime'
+                    },
+                  },
+                  {
+                    key: 'break_ended_at',
+                    type: 'datepicker',
+                    templateOptions: {
+                      label: 'Break Ended at',
+                      type: 'datetime'
+                    },
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                hideLabel: true,
+                width: 0.5,
+                children: [
+                  {
+                    type: 'tracking',
+                    templateOptions: {
+                      label: 'Tracking',
+                    },
+                  },
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: 'Additional information',
+        type: 'group',
+        children: [
+          {
+            type: 'row',
+            children: [
+              {
+                width: 0.25,
+                type: 'checkbox',
+                key: 'going_to_work_confirmation',
+                templateOptions: {
+                  label: 'Pre-shift check',
+                  type: 'checkbox'
+                }
+              },
+              {
+                width: 0.25,
+                endpoint: Endpoints.SmsMessages,
+                templateOptions: {
+                  label: 'Pre-shift check sent sms',
+                  values: ['__str__'],
+                  type: 'related',
+                },
+                type: 'related',
+                key: 'going_to_work_sent_sms',
+              },
+              {
+                width: 0.25,
+                endpoint: Endpoints.SmsMessages,
+                templateOptions: {
+                  label: 'Pre-shift check reply sms',
+                  values: ['__str__'],
+                  type: 'related',
+                },
+                type: 'related',
+                key: 'going_to_work_reply_sms',
+              }
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                width: 0.25,
+                key: 'candidate_submitted_at',
+                type: 'datepicker',
+                templateOptions: {
+                  label: 'Candidate Submitted at',
+                  type: 'datetime'
+                },
+              },
+              {
+                width: 0.25,
+                key: 'supervisor_approved_at',
+                type: 'datepicker',
+                templateOptions: {
+                  label: 'Supervisor Approved at',
+                  type: 'datetime'
+                },
+              },
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                width: 0.25,
+                type: 'input',
+                key: 'candidate_rate',
+                templateOptions: {
+                  label: 'Candidate rate override',
+                  type: 'number',
+                  text: '${candidate_rate}/h'
+                },
+              },
+              {
+                width: 0.25,
+                endpoint: Endpoints.CompanyContact,
+                type: 'related',
+                key: 'rate_overrides_approved_by',
+                templateOptions: {
+                  label: 'Rate overrides approved by',
+                  values: ['__str__'],
+                  type: 'related',
+                },
+              },
+              {
+                width: 0.25,
+                key: 'rate_overrides_approved_at',
+                type: 'datepicker',
+                templateOptions: {
+                  label: 'Rate overrides approved at',
+                  type: 'date'
+                },
+              },
+            ]
+          },
+          {
+            type: 'row',
+            children: [
+              {
+                endpoint: Endpoints.SmsMessages,
+                read_only: true,
+                templateOptions: {
+                  label: 'Related sms',
+                  values: ['__str__'],
+                  type: 'related',
+                },
+                type: 'related',
+                key: 'related_sms',
+                many: true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    endpoint: Endpoints.JobOffers,
+    hide: true,
     templateOptions: {
       label: 'Job offer',
-      add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'job_offer',
-    many: false
   },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: true,
-    templateOptions: {
-      label: 'Going to work sent sms',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'going_to_work_sent_sms',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: true,
-    templateOptions: {
-      label: 'Going to work reply sms',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'going_to_work_reply_sms',
-    many: false
-  },
-  {
-    key: 'going_to_work_confirmation',
-    type: 'checkbox',
-    templateOptions: {
-      required: false,
-      label: 'Going to Work',
-      type: 'checkbox'
-    },
-    read_only: false
-  },
-  {
-    key: 'shift_started_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Shift Started at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    key: 'break_started_at',
-    default: '-',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Break Started at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    key: 'break_ended_at',
-    default: '-',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Break Ended at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    key: 'shift_ended_at',
-    default: '2018-07-04T15:30:00+10:00',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Shift Ended at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
-    read_only: true,
-    templateOptions: {
-      label: 'Supervisor',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'supervisor',
-    many: false
-  },
-  {
-    key: 'candidate_submitted_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Candidate Submitted at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    key: 'supervisor_approved_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Supervisor Approved at',
-      type: 'datetime'
-    },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/skills/skillbaserates/',
-    read_only: true,
-    templateOptions: {
-      label: 'Candidate rate',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'candidate_rate',
-    many: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
-    read_only: true,
-    templateOptions: {
-      label: 'Rate overrides approved by',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'rate_overrides_approved_by',
-    many: false
-  },
-  {
-    key: 'rate_overrides_approved_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Candidate and Client Rate Overrides Approved at',
-      type: 'date'
-    },
-    read_only: false
-  },
-  {
-    list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
-    read_only: true,
-    templateOptions: {
-      label: 'Related sms',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'related_sms',
-    many: true
-  }
 ];
 
 const formadd = [
   {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: {
-      required: false,
-      label: 'Id',
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
     list: false,
-    endpoint: '/ecore/api/v2/hr/joboffers/',
+    endpoint: '/hr/joboffers/',
     read_only: false,
     templateOptions: {
+      required: true,
       label: 'Job offer',
       add: true,
       delete: false,
@@ -1009,14 +1147,14 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'job_offer',
     many: false
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: true,
     templateOptions: {
       label: 'Going to work sent sms',
@@ -1033,7 +1171,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: true,
     templateOptions: {
       label: 'Going to work reply sms',
@@ -1103,7 +1241,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Supervisor',
@@ -1113,7 +1251,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'supervisor',
     many: false
@@ -1139,25 +1277,16 @@ const formadd = [
     read_only: false
   },
   {
-    list: false,
-    endpoint: '/ecore/api/v2/skills/skillbaserates/',
-    read_only: true,
     templateOptions: {
-      label: 'Candidate rate',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
+      label: 'Candidate rate override',
+      type: 'number',
     },
-    collapsed: false,
-    type: 'related',
+    type: 'input',
     key: 'candidate_rate',
-    many: false
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Rate overrides approved by',
@@ -1167,7 +1296,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
+    visibleMode: true,
     type: 'related',
     key: 'rate_overrides_approved_by',
     many: false
@@ -1184,7 +1313,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+    endpoint: '/sms-interface/smsmessages/',
     read_only: true,
     templateOptions: {
       label: 'Related sms',
@@ -1209,21 +1338,16 @@ const formset = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companies/{company.id}',
-            field: 'company',
-            type: 'link'
-          },
-          {
-            endpoint: '/ecore/api/v2/hr/jobsites/{jobsite.id}',
+            endpoint: '/hr/jobsites/{jobsite.id}',
             field: 'jobsite',
             type: 'link'
           },
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/{supervisor.id}',
-            field: 'supervisor',
-            type: 'link'
+            field: 'supervisor.__str__',
+            type: 'text'
           }
         ],
+        width: 250,
         name: 'client_/_jobsite_/_supervisor',
         title: null,
         label: 'Client / Jobsite / Supervisor',
@@ -1232,58 +1356,76 @@ const formset = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/skills/skills/{position.id}',
-            field: 'position',
+            endpoint: '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
+            field: 'job_offer.candidate_contact',
             type: 'link'
           },
           {
-            endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
-            field: 'job_offer.candidate_contact',
+            field: 'position.__str__',
+            description: ' ',
+            type: 'text'
+          },
+          {
+            endpoint: '/hr/jobs/{job.id}',
+            field: 'job.id',
+            color: 'primary',
+            text: 'Job information',
             type: 'link'
           }
         ],
+        width: 200,
         name: 'position_/_candidate',
         title: null,
-        label: 'Position / Candidate',
+        label: 'Position / Candidate / Job',
         delim: null
       },
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/hr/jobs/{job.id}',
-            field: 'job',
-            type: 'link',
-            text: 'Job'
-          }
-        ],
-        name: 'links',
-        title: null,
-        label: 'Links',
-        delim: ' / '
-      },
-      {
-        content: [
+            title: 'Show traking map',
+            type: 'button',
+            color: 'link',
+            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
+            field: 'id',
+            action: 'showTracking',
+            customLink: true,
+          },
           {
-            field: 'shift_started_ended',
-            type: 'static'
-          }
-        ],
-        name: 'shift_started/ended',
-        title: null,
-        label: 'Shift started/ended',
-        delim: null
-      },
-      {
-        content: [
+            text: '{shift_started_at__date}',
+            type: 'static',
+            label: 'Dates',
+            field: 'shift_started_at'
+          },
           {
-            field: 'break_started_ended',
-            type: 'static'
+            text: '{shift_started_at__time}',
+            type: 'static',
+            label: 'Start',
+            field: 'shift_started_at'
+          },
+          {
+            text: '{break_started_at__time} - {break_ended_at__time}',
+            type: 'static',
+            label: 'Break',
+            field: 'break_started_at'
+          },
+          {
+            text: '{shift_ended_at__time}',
+            type: 'static',
+            label: 'End',
+            field: 'shift_ended_at'
+          },
+          {
+            text: '{totalTime}',
+            color: 'success',
+            setColor: 'shift_ended_at',
+            type: 'static',
+            label: 'Total time',
+            field: 'totalTime'
           }
         ],
-        name: 'break_started/ended',
+        name: 'time',
         title: null,
-        label: 'Break started/ended',
+        label: 'Tracking, date and times',
         delim: null
       },
       {
@@ -1296,12 +1438,7 @@ const formset = {
             },
             field: 'going_to_work_confirmation',
             type: 'icon',
-            label: 'Morning check',
-            showIf: [
-              {
-                going_to_work_confirmation: true
-              }
-            ]
+            label: 'Pre-shift check',
           },
           {
             values: {
@@ -1340,119 +1477,49 @@ const formset = {
         delim: null
       },
       {
-        content: [
-          {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/confirm',
-            field: 'id',
-            icon: 'fa-external-link',
-            text: 'Confirm',
-            label: 'Morning check:',
-            showIf: [
-              {
-                going_to_work_confirmation: null
-              }
-            ],
-            action: 'emptyPost',
-            type: 'button'
-          },
-          {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/resend_sms',
-            field: 'resend_sms_candidate',
-            showIf: [
-              {
-                resend_sms_candidate: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'emptyPost',
-            type: 'button',
-            text: 'Send TS SMS'
-          },
-          {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/resend_supervisor_sms',
-            field: 'resend_sms_supervisor',
-            showIf: [
-              {
-                resend_sms_supervisor: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'emptyPost',
-            type: 'button',
-            text: 'Send Supervisor SMS'
-          },
-          {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/candidate_fill',
-            field: 'id',
-            showIf: [
-              {
-                resend_sms_candidate: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'editForm',
-            type: 'button',
-            text: 'Fill'
-          },
-          {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/supervisor_approve',
-            field: 'id',
-            showIf: [
-              {
-                resend_sms_supervisor: true
-              }
-            ],
-            icon: 'fa-external-link',
-            action: 'editForm',
-            type: 'button',
-            text: 'Approve'
-          }
-        ],
-        name: 'actions',
-        title: null,
-        label: 'Actions',
-        delim: null
-      },
-      {
         delim: null,
         label: 'Related sms',
         sort: true,
         content: [
           {
+            action: 'messageDetail',
+            messageType: 'sent',
+            color: 'link',
             endpoint:
-              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
+              '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
-            text: 'Candidate Going To Work'
+            text: 'Candidate Going To Work',
           },
           {
+            action: 'messageDetail',
+            messageType: 'reply',
+            color: 'link',
             endpoint:
-              '/ecore/api/v2/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
+              '/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
             field: 'going_to_work_reply_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
-            text: 'Reply'
+            text: 'Reply',
           },
           {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{candidate_sms.id}',
+            action: 'messageDetail',
+            messageType: 'sent',
+            color: 'link',
+            endpoint: '/sms-interface/smsmessages/{candidate_sms.id}',
             field: 'candidate_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Candidate TS',
-            showIf: ['candidate_sms']
+            showIf: ['candidate_sms'],
           },
           {
-            endpoint: '/ecore/api/v2/sms-interface/smsmessages/{supervisor_sms.id}',
+            action: 'messageDetail',
+            messageType: 'sent',
+            color: 'link',
+            endpoint: '/sms-interface/smsmessages/{supervisor_sms.id}',
             field: 'supervisor_sms',
-            icon: 'fa-commenting',
-            action: 'editForm',
             type: 'button',
             text: 'Supervisor TS',
-            showIf: ['supervisor_sms']
+            showIf: ['supervisor_sms'],
           },
         ],
         name: 'related_sms',
@@ -1471,14 +1538,13 @@ const formset = {
             ]
           },
           {
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/sync',
+            endpoint: '/hr/timesheets/{id}/sync',
             field: 'id',
             showIf: [
               {
                 show_sync_button: true
               }
             ],
-            icon: 'fa-sync-alt',
             action: 'emptyPost',
             type: 'button',
             text: 'Sync'
@@ -1488,11 +1554,118 @@ const formset = {
         title: null,
         label: 'MYOB status',
         delim: null
-      }
+      },
+      {
+        content: [
+          {
+            endpoint: '/core/invoices/{invoice.id}',
+            field: 'invoice',
+            type: 'link',
+            text: 'Show invoice',
+            color: 'primary',
+          },
+          {
+            action: 'emptyPost',
+            text: 'Recreate',
+            endpoint: '/hr/timesheets/{id}/recreate_invoice',
+            type: 'button',
+            showIf: [
+              {
+                supervisor_approved: true
+              }
+            ]
+          },
+        ],
+        name: 'invoice',
+        title: null,
+        label: 'Invoice',
+        delim: null
+      },
+      {
+        content: [
+          {
+            endpoint: '/hr/timesheets/{id}/confirm',
+            action: 'emptyPost',
+            icon: 'fa-external-link',
+            title: 'Confirm Check',
+            type: 'button',
+            field: 'id',
+            showIf: [
+              {
+                going_to_work_confirmation: null
+              }
+            ],
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/resend_sms',
+            field: 'resend_sms_candidate',
+            showIf: [
+              {
+                resend_sms_candidate: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'emptyPost',
+            type: 'button',
+            title: 'Send TS SMS'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/resend_supervisor_sms',
+            field: 'resend_sms_supervisor',
+            showIf: [
+              {
+                resend_sms_supervisor: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'emptyPost',
+            type: 'button',
+            title: 'Send Supervisor SMS'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/candidate_fill',
+            field: 'id',
+            showIf: [
+              {
+                resend_sms_candidate: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'editForm',
+            type: 'button',
+            title: 'Fill'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/supervisor_approve',
+            field: 'id',
+            showIf: [
+              {
+                resend_sms_supervisor: true
+              }
+            ],
+            icon: 'fa-external-link',
+            action: 'editForm',
+            type: 'button',
+            title: 'Approve'
+          },
+          {
+            action: 'editForm',
+            endpoint: '/hr/timesheets/{id}',
+            icon: 'fa-pencil',
+            title: 'Edit',
+            type: 'button',
+            field: 'id'
+          },
+        ],
+        name: 'actions',
+        title: null,
+        label: 'Actions',
+        delim: null
+      },
     ],
     pagination_label: 'Timesheet Entry',
     search_enabled: false,
-    editDisable: false,
+    editDisable: true,
   },
   fields: [
     {
@@ -1611,7 +1784,7 @@ const formset = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/sms-interface/smsmessages/',
+      endpoint: '/sms-interface/smsmessages/',
       read_only: true,
       templateOptions: {
         label: 'Related sms',

@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { Page } from './navigation.service';
+import { of } from 'rxjs';
 
-import { Observable } from 'rxjs/Observable';
+import { Page } from './navigation.service';
 
 interface PathData {
   type: string;
   path: string;
   id?: string;
   postfix?: string;
+  metadataQuery?: string;
 }
 
 export interface PageData {
@@ -21,14 +22,14 @@ export class SiteService {
 
   public list: Page[];
 
-  public getDataOfPage(url: any, list) {
-    return Observable.of(this.generateData(list, url));
+  public getDataOfPage(url: any, list: Page[]) {
+    return of(this.generateData(list, url));
   }
 
   public generateData(list: Page[], url: any[]): PageData {
-    let pathData: PathData = this.getTypeOfPage(url);
-    let element: Page = this.getElementFromList(list, pathData.path);
-    let data: PageData = {
+    const pathData: PathData = this.getTypeOfPage(url);
+    const element: Page = this.getElementFromList(list, pathData.path);
+    const data: PageData = {
       endpoint: element ? element.endpoint : '/',
       pathData
     };
@@ -52,17 +53,17 @@ export class SiteService {
     }
 
     let data: PathData;
-    let urlCopy = url.map((el) => {
+    const urlCopy = url.map((el) => {
       return el.path;
     });
-    let lastElement = urlCopy.pop();
+    const lastElement = urlCopy.pop();
     if (lastElement === 'add') {
       data = {
         type: 'form',
         path: this.generatePath(urlCopy)
       };
     } else if (lastElement === 'change' || lastElement === 'submit' || lastElement === 'fillin') {
-      let id = urlCopy.pop();
+      const id = urlCopy.pop();
       data = {
         type: 'form',
         path: this.generatePath(urlCopy),
@@ -78,7 +79,8 @@ export class SiteService {
     } else if (lastElement === 'profile') {
       urlCopy.push(lastElement);
       data = {
-        type: 'profile',
+        type: 'form',
+        metadataQuery: 'type=profile',
         path: this.generatePath(urlCopy)
       };
     } else if (lastElement === 'map') {

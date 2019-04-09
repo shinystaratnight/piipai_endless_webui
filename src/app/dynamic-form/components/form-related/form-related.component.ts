@@ -15,17 +15,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { Subscription } from 'rxjs/Subscription';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/skip';
-import 'rxjs/add/operator/filter';
+import { Subscription, BehaviorSubject, Subject } from 'rxjs';
+
+import { debounceTime, skip, filter } from 'rxjs/operators';
 
 import { GenericFormService } from '../../services';
-import { CheckPermissionService } from '../../../shared/services';
+import { CheckPermissionService, ToastService, MessageType } from '../../../shared/services';
 import {
   NavigationService,
+  AuthService,
   UserService,
   SiteSettingsService
 } from '../../../services';
@@ -50,7 +48,7 @@ export interface CustomField {
 }
 
 @Component({
-  selector: 'form-related',
+  selector: 'app-form-related',
   templateUrl: './form-related.component.html',
   styleUrls: ['./form-related.component.scss']
 })
@@ -89,13 +87,13 @@ export class FormRelatedComponent extends BasicElementComponent
   public results: any;
   public displayValue: any;
 
-  public lastElement: number = 0;
-  public limit: number = 10;
+  public lastElement = 0;
+  public limit = 10;
   public count: number;
   public searchValue: any;
   public fields: string[];
 
-  public hideAutocomplete: boolean = true;
+  public hideAutocomplete = true;
   public modalData: any = {};
   public modalRef: any;
 
@@ -121,6 +119,9 @@ export class FormRelatedComponent extends BasicElementComponent
   public manual: boolean;
   public hideDetail: boolean;
   public currentUser: boolean;
+  public listDefaultQuery: string;
+  public disableMessage: string;
+  public fieldDisabled: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -137,10 +138,12 @@ export class FormRelatedComponent extends BasicElementComponent
     private genericFormService: GenericFormService,
     private permission: CheckPermissionService,
     private navigation: NavigationService,
+    private authService: AuthService,
     private userService: UserService,
     private cd: ChangeDetectorRef,
     private settingsService: SiteSettingsService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private toastr: ToastService
   ) {
     super();
     this.subscriptions = [];
@@ -152,8 +155,8 @@ export class FormRelatedComponent extends BasicElementComponent
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
 
     this.skillEndpoint =
-      this.config.endpoint === '/ecore/api/v2/skills/skillbaserates/' ||
-      this.config.endpoint === '/ecore/api/v2/pricing/pricelistrates/';
+      this.config.endpoint === '/skills/skillbaserates/' ||
+      this.config.endpoint === '/pricing/pricelistrates/';
 
     this.display = this.config.templateOptions.display || '{__str__}';
     this.param = this.config.templateOptions.param || 'id';
@@ -187,9 +190,11 @@ export class FormRelatedComponent extends BasicElementComponent
     if (this.search && !this.autocompleteDisplay) {
       this.autocompleteDisplay = true;
       this.searchSubscription = this.search.valueChanges
-        .skip(2)
-        .filter((value) => value !== null)
-        .debounceTime(400)
+        .pipe(
+          skip(2),
+          filter((value) => value !== null),
+          debounceTime(400)
+        )
         .subscribe(() => {
           this.filter(this.searchValue);
         });
@@ -253,6 +258,12 @@ export class FormRelatedComponent extends BasicElementComponent
         ) || false}&`;
       });
 
+      if (this.listDefaultQuery === query) {
+        return;
+      }
+
+      this.listDefaultQuery = query;
+
       const metadata = JSON.parse(JSON.stringify(this.config.metadata));
       metadata.forEach((el) => {
         if (el.key) {
@@ -285,7 +296,7 @@ export class FormRelatedComponent extends BasicElementComponent
   public generateCustomTemplate(fieldsList) {
     if (this.config.value) {
       this.customTemplate = fieldsList.map((el, index) => {
-        let object = <CustomField> {};
+        const object = <CustomField> {};
         object.value = this.config.customValue[index];
         object.key = el;
         if (el.indexOf('email') > -1) {
@@ -319,7 +330,9 @@ export class FormRelatedComponent extends BasicElementComponent
         }
         this.config.hide = hide;
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);
@@ -370,6 +383,10 @@ export class FormRelatedComponent extends BasicElementComponent
       const subscription = this.config.formData.subscribe((formData) => {
         this.formData = formData.data;
         if (this.config.key !== formData.key) {
+          const disableData = this.isDisabled(this.formData);
+          this.fieldDisabled = disableData.disable;
+          this.disableMessage = disableData.messages.join(' ');
+
           if (this.config.errorMessage) {
             if (
               !this.getValueByKey(this.config.errorMessage.field, this.formData)
@@ -385,6 +402,11 @@ export class FormRelatedComponent extends BasicElementComponent
               this.config.default.useIf &&
               this.checkExistKey(this.config.default.useIf, formData.key)
             ) {
+              if (this.config.default.manual) {
+                if (!formData.manual) {
+                  return;
+                }
+              }
               const result = this.checkShowRules(
                 this.config.default.useIf,
                 formData.data
@@ -534,10 +556,10 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public setInitValue() {
-    let formatString = new FormatString();
+    const formatString = new FormatString();
     this.results = [];
     if (this.config.value || this.group.get(this.key).value) {
-      let data = this.config.value
+      const data = this.config.value
         ? this.config.value
         : this.group.get(this.key).value;
       if (!this.config.many) {
@@ -590,7 +612,7 @@ export class FormRelatedComponent extends BasicElementComponent
         this.group.get(this.key).patchValue(value);
       } else {
         if (this.config.options && this.config.options.length) {
-          let results = [];
+          const results = [];
           this.config.options.forEach((el) => {
             el.__str__ = formatString.format(this.display, el);
             el.checked = false;
@@ -669,7 +691,7 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public parseOptions() {
     if (this.config.options && this.config.options.length) {
-      let formatString = new FormatString();
+      const formatString = new FormatString();
       this.config.options.forEach((el) => {
         el.__str__ = formatString.format(this.display, el);
       });
@@ -687,14 +709,14 @@ export class FormRelatedComponent extends BasicElementComponent
     });
   }
 
-  public generateDataForList(config: Field, data = undefined): void {
+  public generateDataForList(config: Field, data?): void {
     if (config.list && config.metadata) {
       this.prefilledAttributes();
       this.dataOfList = [];
-      let value = [];
+      const value = [];
       if (data) {
         data.forEach((el) => {
-          let object = this.createObject(config.metadata);
+          const object = this.createObject(config.metadata);
           object['id'] = el.id;
           object['allData'] = el;
           this.fillingForm(object.metadata, el);
@@ -726,7 +748,7 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public createObject(metadata: Field[] = this.config.metadata): RelatedObject {
-    let object = {
+    const object = {
       id: undefined,
       allData: undefined,
       data: this.fb.group({}),
@@ -734,7 +756,7 @@ export class FormRelatedComponent extends BasicElementComponent
     };
     const format = new FormatString();
     object.metadata = metadata.map((el) => {
-      let element = Object.assign({}, el);
+      const element = Object.assign({}, el);
       element.mode = el.mode;
 
       if (el.query) {
@@ -767,25 +789,34 @@ export class FormRelatedComponent extends BasicElementComponent
     return object;
   }
 
-  public addObject(): void {
+  public addObject(e) {
+    e.stopPropagation();
+    e.preventDefault();
     if (this.dataOfList) {
-      let object = this.createObject();
+      const object = this.createObject();
       this.dataOfList.push(object);
     }
   }
 
-  public deleteObject(object: RelatedObject): void {
+  public deleteObject(object: RelatedObject, e): void {
+    e.stopPropagation();
+    e.preventDefault();
     if (object.id) {
       this.genericFormService
         .delete(this.config.endpoint, object.id)
         .subscribe((response: any) => {
           this.dataOfList.splice(this.dataOfList.indexOf(object), 1);
           this.updateValue(undefined);
+        },
+        (error) => {
+          this.toastr.sendMessage(error.errors.join(' '), MessageType.error);
         });
     }
   }
 
-  public editObject(object: RelatedObject): void {
+  public editObject(object: RelatedObject, e): void {
+    e.stopPropagation();
+    e.preventDefault();
     if (object.id) {
       this.open('update', object);
     }
@@ -793,8 +824,8 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public setAsDefault(object: RelatedObject): void {
     if (object.id) {
-      let endpoint = `${this.config.endpoint}${object.id}/`;
-      let body = {
+      const endpoint = `${this.config.endpoint}${object.id}/`;
+      const body = {
         default_rate: true,
         skill: object.allData.skill.id
       };
@@ -806,8 +837,8 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public updateValue(e): void {
     if (e.type !== 'create' && e.type !== 'updateValue') {
-      let value = this.dataOfList.map((el) => {
-        let object = el.data.value;
+      const value = this.dataOfList.map((el) => {
+        const object = el.data.value;
         if (el.id) {
           object.id = el.id;
         }
@@ -832,8 +863,8 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public getValueOfData(data, key: string, obj: Field): void {
-    let keys = key.split('.');
-    let prop = keys.shift();
+    const keys = key.split('.');
+    const prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
         obj['value'] = data[key];
@@ -875,7 +906,7 @@ export class FormRelatedComponent extends BasicElementComponent
     this.displayValue = null;
   }
 
-  public open(type, object = undefined) {
+  public open(type, object?) {
     this.currentUser = false;
 
     if (this.hideDetail) {
@@ -883,6 +914,10 @@ export class FormRelatedComponent extends BasicElementComponent
     }
 
     const format = new FormatString();
+
+    if (type === 'update' && !this.config.templateOptions.edit) {
+      return false;
+    }
 
     if (!this.checkPermission(type) && this.config.endpoint) {
       return;
@@ -959,13 +994,16 @@ export class FormRelatedComponent extends BasicElementComponent
         };
       });
     }
-    this.modalRef = this.modalService.open(this.modal, { size: 'lg' });
+
+    const windowClass = this.config.visibleMode && type === 'post' ? 'visible-mode' : '';
+
+    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass });
 
     return false;
   }
 
   public openAutocomplete(): void {
-    if (this.config.type !== 'address' && !this.config.doNotChoice) {
+    if (this.config.type !== 'address' && !this.config.doNotChoice && !this.fieldDisabled) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
         this.count = 0;
@@ -1002,7 +1040,7 @@ export class FormRelatedComponent extends BasicElementComponent
     }
 
     this.lastElement += this.limit;
-    this.previewList = list.slice(0, this.lastElement);
+    this.previewList = list ? list.slice(0, this.lastElement) : [];
   }
 
   public resetList() {
@@ -1023,7 +1061,7 @@ export class FormRelatedComponent extends BasicElementComponent
       let filteredList;
       if (value && this.config.options) {
         filteredList = this.config.options.filter((el) => {
-          let val = el.__str__;
+          const val = el.__str__;
           if (val) {
             return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
           }
@@ -1066,8 +1104,14 @@ export class FormRelatedComponent extends BasicElementComponent
       this.list = null;
       this.count = null;
       this.previewList = null;
+      this.hideAutocomplete = true;
+      this.lastElement = 0;
     }
-    this.cd.detectChanges();
+    this.count = null;
+
+    if (!(<any> this.cd).destroyed) {
+      this.cd.detectChanges();
+    }
   }
 
   public resetValue(): boolean {
@@ -1157,13 +1201,13 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public updateData() {
-    let results = this.results.map((el) => {
+    const results = this.results.map((el) => {
       return el[this.param];
     });
     this.group.get(this.key).patchValue(results);
   }
 
-  public formEvent(e, closeModal, type = undefined) {
+  public formEvent(e, closeModal, type?) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
@@ -1172,7 +1216,11 @@ export class FormRelatedComponent extends BasicElementComponent
       this.saveProcess = false;
 
       if (this.modalData.description && this.currentUser) {
-        this.userService.logout();
+        this.authService.logout();
+      }
+
+      if (this.config.timelineSubject) {
+        this.config.timelineSubject.next('update');
       }
 
       const formatString = new FormatString();
@@ -1225,7 +1273,9 @@ export class FormRelatedComponent extends BasicElementComponent
       this.fillingForm(newMetadata, data);
       object.metadata = newMetadata;
 
-      this.cd.detectChanges();
+      if (!(<any> this.cd).destroyed) {
+        this.cd.detectChanges();
+      }
     }
 
     const newList = this.dataOfList.slice();
@@ -1255,7 +1305,9 @@ export class FormRelatedComponent extends BasicElementComponent
     return query;
   }
 
-  public removeItem(index) {
+  public removeItem(index, e) {
+    e.stopPropagation();
+    e.preventDefault();
     this.dataOfList.splice(index, 1);
     this.updateValue({});
   }
@@ -1269,15 +1321,30 @@ export class FormRelatedComponent extends BasicElementComponent
         query +=
           typeof queries[el] === 'string'
             ? queries[el] === 'currentCompany'
-              ? `${el}=${
-                  this.settingsService.settings.company_settings.company
-                }&`
+              ? `${el}=${this.settingsService.settings.company_settings.company}&`
               : `${el}=${format.format(queries[el], this.formData)}&`
-            : `${el}=${queries[el]}&`;
+            : `${el}=${this.parseQueryValue(queries[el])}&`;
       });
       query = query.slice(0, query.length - 1);
     }
     return query.length > 1 ? query : '';
+  }
+
+  public parseQueryValue(value: string | string[]) {
+    const format = new FormatString();
+    let result = '';
+    if (Array.isArray(value)) {
+      value.forEach((el) => {
+        if (result) {
+          return;
+        }
+
+        result = format.format(el, this.formData);
+      });
+    } else {
+      result = value;
+    }
+    return result;
   }
 
   public getOptions(
@@ -1291,7 +1358,7 @@ export class FormRelatedComponent extends BasicElementComponent
   ) {
     const format = new FormatString();
 
-    let endpoint = format.format(this.config.endpoint, this.formData);
+    const endpoint = format.format(this.config.endpoint, this.formData);
     if (endpoint) {
       let query = '';
       if (value) {
@@ -1299,7 +1366,9 @@ export class FormRelatedComponent extends BasicElementComponent
       }
       query += !query ? '?' : '';
       query += `limit=${this.limit}&offset=${offset}`;
-      query += this.generateFields(this.fields);
+      if (!this.config.templateOptions.dontSendFields) {
+        query += this.generateFields(this.fields);
+      }
       query += this.generateQuery(this.config.query);
       if (customQuery) {
         query += this.generateQuery(customQuery);
@@ -1319,21 +1388,13 @@ export class FormRelatedComponent extends BasicElementComponent
               this.count = res.count;
               if (res.results && res.results.length) {
                 const formatString = new FormatString();
-                const results = [...res.results];
+                let results = [...res.results];
+
+                if (this.config.unique) {
+                  results = this.filterUniqueValue(res.results, this.results);
+                }
 
                 results.forEach((el) => {
-                  el.__str__ = formatString.format(this.display, el);
-                });
-                if (concat && this.previewList) {
-                  this.previewList.push(...results);
-                } else {
-                  this.previewList = results;
-                }
-              }
-              if (res && res.length) {
-                this.count = res.length;
-                const formatString = new FormatString();
-                res.forEach((el) => {
                   el.__str__ = formatString.format(this.display, el);
 
                   if (this.config.templateOptions.info) {
@@ -1347,11 +1408,34 @@ export class FormRelatedComponent extends BasicElementComponent
                     );
                   }
                 });
+
+                this.config.options = results;
+
+                if (concat && this.previewList) {
+                  this.previewList.push(...results);
+                } else {
+                  this.previewList = results;
+                }
+              }
+              if (res && res.length) {
+                this.count = res.length;
+                const formatString = new FormatString();
+
+                if (this.config.unique) {
+                  res = this.filterUniqueValue(res, this.results);
+                }
+                res.forEach((el) => {
+                  el.__str__ = formatString.format(this.display, el);
+                });
                 if (concat && this.previewList) {
                   this.previewList.push(...res);
                 } else {
                   this.previewList = res;
                 }
+              }
+
+              if (!this.previewList) {
+                this.previewList = [];
               }
 
               if (callback) {
@@ -1360,7 +1444,8 @@ export class FormRelatedComponent extends BasicElementComponent
                 if (only) {
                   if (res.results.length === only) {
                     canSetValue = true;
-                  } else if (only > res.results.length) {
+                  } else if (only > res.results.length || only < res.results.length) {
+                    this.count = null;
                     this.clearField();
                   }
                 } else if (!only) {
@@ -1443,11 +1528,11 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public checkShowRules(rule: any[], data): boolean {
     let approvedRules = 0;
-    let rulesNumber = rule.length;
+    const rulesNumber = rule.length;
 
     rule.forEach((el: any) => {
       if (typeof el === 'string') {
-        let value = this.getValueByKey(el, data);
+        const value = this.getValueByKey(el, data);
 
         if (value && value !== '0') {
           approvedRules += 1;
@@ -1455,9 +1540,9 @@ export class FormRelatedComponent extends BasicElementComponent
           return;
         }
       } else if (el instanceof Object) {
-        let key = Object.keys(el)[0];
-        let targetValue = el[key];
-        let value = this.getValueByKey(key, data);
+        const key = Object.keys(el)[0];
+        const targetValue = el[key];
+        const value = this.getValueByKey(key, data);
 
         if (value === targetValue) {
           approvedRules += 1;
@@ -1471,12 +1556,12 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public getValueByKey(key: string, data: any): any {
-    let keysArray = key.split('.');
-    let firstKey = keysArray.shift();
+    const keysArray = key.split('.');
+    const firstKey = keysArray.shift();
     if (keysArray.length === 0) {
       return data && data[firstKey];
     } else if (keysArray.length > 0) {
-      let combineKeys = keysArray.join('.');
+      const combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
     }
   }
@@ -1505,6 +1590,32 @@ export class FormRelatedComponent extends BasicElementComponent
     }
   }
 
+  public filterUniqueValue(target: any[], data: any[]): any[] {
+    return target.filter((el) => {
+      return !data.find((elem) => el[this.param] === elem[this.param]);
+    });
+  }
+
+  public isDisabled(data) {
+    const config = this.config.disabled;
+    const messages = [];
+    let disable = false;
+
+    if (config) {
+      config.keys.forEach((key, i) => {
+        if (config.values[i] === this.getValueByKey(key, data)) {
+          disable = true;
+          messages.push(config.messages[i]);
+        }
+      });
+    }
+
+    return {
+      disable,
+      messages
+    };
+  }
+
   @HostListener('document:click', ['$event'])
   public handleClick(event) {
     let clickedComponent = event.target;
@@ -1517,9 +1628,12 @@ export class FormRelatedComponent extends BasicElementComponent
         clickedComponent = clickedComponent.parentNode;
       } while (clickedComponent);
       if (!inside) {
-        this.hideAutocomplete = true;
-        this.cd.detectChanges();
-        return;
+        if (this.previewList) {
+          this.resetList();
+          this.hideAutocomplete = true;
+          this.cd.markForCheck();
+          return;
+        }
       }
     }
   }

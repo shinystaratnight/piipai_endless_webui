@@ -8,7 +8,7 @@ const formset = {
         sort_field: 'tag',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/tags/',
+            endpoint: '/core/tags/',
             type: 'related',
             field: 'tag'
           }
@@ -50,7 +50,7 @@ const formset = {
 
 const form = [
   {
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
       label: 'Skill',
@@ -60,7 +60,7 @@ const form = [
     key: 'skill',
   },
   {
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     read_only: true,
     templateOptions: {
       label: 'Tag',
@@ -73,7 +73,7 @@ const form = [
 
 const formadd = [
   {
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
       label: 'Skill',
@@ -86,7 +86,7 @@ const formadd = [
     key: 'skill',
   },
   {
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     read_only: true,
     templateOptions: {
       label: 'Tag',

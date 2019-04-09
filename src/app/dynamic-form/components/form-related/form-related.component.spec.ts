@@ -74,7 +74,7 @@ describe('FormRelatedComponent', () => {
     linksList: [
       {
         url: '/skills/skills/',
-        endpoint: '/ecore/api/v2/skills/skills/'
+        endpoint: '/skills/skills/'
       }
     ]
   };
@@ -107,7 +107,7 @@ describe('FormRelatedComponent', () => {
     it('should init default properties', async(inject([FormBuilder], (fb: FormBuilder) => {
       comp.config = Object.assign({}, config);
       comp.config.list = true;
-      comp.config.endpoint = '/ecore/api/v2/pricing/pricelistrates/';
+      comp.config.endpoint = '/pricing/pricelistrates/';
       comp.config.data = new BehaviorSubject(mockData);
       comp.key = comp.config.key;
       spyOn(comp, 'addControl');
@@ -236,7 +236,7 @@ describe('FormRelatedComponent', () => {
   describe('getLinkPath method', () => {
     it('should return url by endpoint',
       async(inject([NavigationService], (navigation: NavigationService) => {
-        const endpoint = '/ecore/api/v2/skills/skills/';
+        const endpoint = '/skills/skills/';
         let result = comp.getLinkPath(endpoint);
         expect(result).toEqual('/skills/skills/');
     })));

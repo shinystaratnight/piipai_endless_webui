@@ -11,13 +11,13 @@ import { Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
-import { getContactAvatar } from '../../../helpers/utils';
-import { FormatString } from '../../../helpers/format.ts';
+import { getContactAvatar, isCandidate, isMobile } from '../../helpers';
+import { FormatString } from '../../../helpers/format';
 
 @Component({
-  selector: 'form-info',
+  selector: 'app-form-info',
   templateUrl: './form-info.component.html',
   styleUrls: ['./form-info.component.scss']
 })
@@ -47,6 +47,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   public job: any;
   public jobsite: any;
   public tags: any;
+  public birthday: string;
 
   public color: any;
   public colorAttr: string;
@@ -59,6 +60,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   public statusList: any[];
   public more: boolean;
+  public disableButtons = true;
+  public isMobileDevice = isMobile() && isCandidate();
 
   public colors = {
     1: '#FA5C46',
@@ -76,11 +79,17 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[];
 
-  constructor(private modalService: NgbModal, private router: Router) {
+  constructor(
+    private modalService: NgbModal,
+    private router: Router,
+  ) {
     this.subscriptions = [];
   }
 
   public ngOnInit() {
+    setTimeout(() => {
+      this.disableButtons = false;
+    }, 500);
     this.checkModeProperty();
     if (this.config.values && this.config.value) {
       const keys = Object.keys(this.config.values);
@@ -153,6 +162,14 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
+  public isCandidatePage(): boolean {
+    if (this.config.value && this.config.value instanceof Object) {
+      return this.config.value.hasOwnProperty('average_score');
+    }
+
+    return false;
+  }
+
   public createEvent() {
     if (this.config.value) {
       this.event.emit({
@@ -178,8 +195,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
   public getValue(key: string, data: any, type?: string): any {
     if (key) {
-      let keys = key.split('.');
-      let prop = keys.shift();
+      const keys = key.split('.');
+      const prop = keys.shift();
 
       if (!keys.length) {
         if (data[prop] instanceof Object && type === 'picture') {
@@ -236,7 +253,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
 
     this.modalInfo = {
       type: 'form',
-      endpoint: `/ecore/api/v2/hr/jobs/${this.config.value.id.id}/extend/`,
+      endpoint: `/hr/jobs/${this.config.value.id.id}/extend/`,
       mode: 'edit',
       edit: true,
       data: {
@@ -264,7 +281,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       }
     };
 
-    this.modalRef = this.modalService.open(this.modal, { size: 'lg' });
+    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass: 'extend-modal' });
   }
 
   public fillInJob() {

@@ -171,7 +171,7 @@ describe('DashboardComponent', () => {
       let widget = {
         id: '123'
       };
-      comp.userModelsEndpoint = '/ecore/api/v2/core/userdashboardmodules/';
+      comp.userModelsEndpoint = '/core/userdashboardmodules/';
       spyOn(comp.changeWidgetList, 'emit');
       comp.removeModule(widget);
       expect(comp.changeWidgetList.emit).toHaveBeenCalledWith({
@@ -239,7 +239,7 @@ describe('DashboardComponent', () => {
         {
           name: 'Company Contacts',
           url: '/companycontacts/',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
+          endpoint: '/core/companycontacts/',
           __str__: 'Company Contacts',
           childrens: []
         }
@@ -287,7 +287,7 @@ describe('DashboardComponent', () => {
         {
           label: 'Company Contact',
           link: '/companycontact/',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
+          endpoint: '/core/companycontacts/',
           position: 2,
           ui_config: {},
           labelOfWidgetGroup: 'ENDLESS CORE',
@@ -338,12 +338,12 @@ describe('DashboardComponent', () => {
 
   describe('getLinkByEndpoint method', () => {
     it('should return link by endpoint', () => {
-      let endpoint = '/ecore/api/v2/core/companycontacts/';
+      let endpoint = '/core/companycontacts/';
       let pagesList: Page[] = [
         {
           name: 'Company Contacts',
           url: '/companycontacts/',
-          endpoint: '/ecore/api/v2/core/companycontacts/',
+          endpoint: '/core/companycontacts/',
           __str__: 'Company Contacts',
           childrens: []
         }

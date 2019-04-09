@@ -2,7 +2,7 @@ const list = {
   list: {
     list: 'timesheet',
     search_enabled: false,
-    pagination_label: 'Timesheet Entry',
+    pagination_label: 'Approved timesheets',
     buttons: [],
     columns: [
       {
@@ -28,7 +28,7 @@ const list = {
         content: [
           {
             endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
+              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
             type: 'link',
             field: 'job_offer.candidate_contact',
             action: 'showCandidateProfile'
@@ -70,7 +70,7 @@ const list = {
       },
       {
         label: 'Evaluate',
-        delim: null,
+        delim: ' ',
         name: 'evaluate',
         title: null,
         content: [
@@ -79,17 +79,27 @@ const list = {
             icon: 'fa-star',
             type: 'button',
             color: 'warning',
-            repeat: 5,
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/evaluate/',
+            text: 'Evaluate',
+            endpoint: '/hr/timesheets/{id}/evaluate/',
             field: 'id',
             action: 'evaluateCandidate',
             hidden: 'evaluated'
+          },
+          {
+            score: true,
+            type: 'text',
+            field: 'evaluation.level_of_communication',
+            showIf: [
+              {
+                evaluated: true
+              }
+            ],
           }
         ]
       }
     ],
     editDisable: true,
-    label: 'Timesheet Entry'
+    label: 'Approved timesheets'
   },
   fields: [
     {
@@ -167,5 +177,6 @@ const list = {
 };
 
 export const metadata = {
-  list
+  list,
+  formset: list
 };

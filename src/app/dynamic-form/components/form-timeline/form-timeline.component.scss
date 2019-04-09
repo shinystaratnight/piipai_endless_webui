@@ -97,7 +97,7 @@
 
   &-element {
     display: inline-block;
-    margin-bottom: 8px;
+    margin: 0 4px 8px;
 
     transition: .3s;
 
@@ -120,7 +120,7 @@
     &.allowed:hover:not(.timeline-select),
     &.allowed:focus:not(.timeline-select) {
       cursor: pointer;
-      box-shadow: 2px 2px 4px rgba($brand-inverse, .3);
+      box-shadow: 2px 2px 4px rgba($gray-600, .3);
     }
 
   }
@@ -164,5 +164,29 @@
 
   .next {
     margin: 0 6px;
+  }
+}
+
+.close-button {
+  position: absolute;
+  top: 9px;
+  right: 16px;
+}
+
+.table {
+  th {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    opacity: .8;
+  }
+
+  tr:nth-child(even) {
+    background-color: rgba($brand-primary, .1);
+  }
+
+  td {
+    font-size: 14px;
   }
 }

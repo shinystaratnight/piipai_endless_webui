@@ -1,16 +1,21 @@
-<h6 *ngIf="config.label" class="card bg-primary p-2 text-white">{{config.label}}</h6>
-<div class="items">
-  <ng-container *ngFor="let field of config.children">
-    <div [class.item]="field.type === 'button'" [ngStyle]="{'flex': field.width || 1, 'flex-basis': field.width * 100}" [hidden]="field.hidden || field.hide">
-      <ng-container
-        formElement
-        [config]="field"
-        [group]="group"
-        [errors]="errors"
-        (event)="eventHandler($event)"
-        (buttonAction)="buttonActionHandler($event)"
-        [message]="message">
-      </ng-container>
-    </div>
-  </ng-container>
-</div>
+<ng-container *ngIf="config.showOnMobile ? isMobileDevice : true">
+  <h6 *ngIf="config.label" class="card bg-primary p-2 text-white">{{config.label}}</h6>
+  <div [class]="className" [class.last]="last">
+    <ng-container *ngFor="let field of config.children">
+      <div [class.item]="field.type === 'button'"
+        [ngStyle]="{'flex': field.width || 1, 'flex-basis': field.width * 100}"
+        [hidden]="field.hidden || field.hide"
+        [ngClass]="field.className">
+          <ng-container
+            appFormElement
+            [config]="field"
+            [group]="group"
+            [errors]="errors"
+            (event)="eventHandler($event)"
+            (buttonAction)="buttonActionHandler($event)"
+            [message]="message">
+          </ng-container>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>

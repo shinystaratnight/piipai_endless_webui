@@ -20,6 +20,31 @@ const formadd = [
       label: 'Password (optional)'
     },
     read_only: false
+  },
+  {
+    key: 'client_id',
+    type: 'input',
+    hide: true,
+    templateOptions: {
+      max: 128,
+      required: false,
+      type: 'text',
+      label: 'Client Id'
+    },
+    read_only: false
+  },
+  {
+    key: 'grant_type',
+    type: 'input',
+    value: 'password',
+    hide: true,
+    templateOptions: {
+      max: 128,
+      required: false,
+      type: 'text',
+      label: 'Grant Type'
+    },
+    read_only: false
   }
 ];
 

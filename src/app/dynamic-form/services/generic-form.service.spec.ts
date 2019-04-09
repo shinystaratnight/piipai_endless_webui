@@ -16,7 +16,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 describe('GenericFormService', () => {
 
-  const url: string = `/ecore/api/v2/login/`;
+  const url: string = `/login/`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

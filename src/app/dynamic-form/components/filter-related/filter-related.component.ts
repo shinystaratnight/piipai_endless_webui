@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  Input,
   Output,
   EventEmitter,
   ViewChild,
@@ -15,21 +16,19 @@ import { GenericFormService, FilterService } from './../../services/';
 import { SiteSettingsService } from '../../../services/site-settings.service';
 import { FormatString } from '../../../helpers/format';
 
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/skip';
-import 'rxjs/add/operator/filter';
+import { Subscription } from 'rxjs';
+import { debounceTime, skip, filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'filter-related',
+  selector: 'app-filter-related',
   templateUrl: 'filter-related.component.html'
 })
 export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy {
-  public config: any;
+  @Input() public config: any;
   public data: any;
   public item: any;
   public query: string;
-  public isCollapsed: boolean = false;
+  public isCollapsed = false;
 
   public searchValue: string;
 
@@ -38,11 +37,11 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public skipScroll = false;
 
   public list: any[];
-  public limit: number = 10;
+  public limit = 10;
   public previewList: any[];
   public topHeight: number;
 
-  public settingValue: boolean = true;
+  public settingValue = true;
 
   public defaultValue: any;
   public theme: string;
@@ -88,7 +87,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.limit = -1;
     }
     this.querySubscription = this.route.queryParams.subscribe(
-      (params) => this.updateFilter()
+      () => this.updateFilter()
     );
     this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
     this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
@@ -102,10 +101,12 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public ngAfterViewInit() {
     if (this.search) {
       this.subscription = this.search.valueChanges
-        .skip(2)
-        .filter((value) => value !== null)
-        .debounceTime(400)
-        .subscribe((res) => {
+        .pipe (
+          skip(2),
+          filter((value) => value !== null),
+          debounceTime(400)
+        )
+        .subscribe(() => {
           this.filter();
         });
     }
@@ -140,11 +141,12 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
         return;
       }
       let autocomplete;
-      let target = $event.target;
+      const target = $event.target;
 
       this.searchValue = null;
       this.item.hideAutocomplete = false;
       this.generateList();
+
       if (target.classList.contains('autocomplete-value')) {
         this.topHeight = target.offsetHeight + 1;
         autocomplete = target.nextElementSibling;
@@ -178,7 +180,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       let filteredList;
       if (this.searchValue && this.chashValues) {
         filteredList = this.chashValues.filter((el) => {
-          let val = el[this.config.data.value];
+          const val = el[this.config.data.value];
           if (val) {
             return val.toLowerCase().indexOf(this.searchValue.toLowerCase()) > -1;
           }
@@ -229,7 +231,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public createElement(data?: any) {
-    let element = {
+    const element = {
       data,
       lastElement: 0,
       hideAutocomplete: true
@@ -259,7 +261,9 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public changeQuery() {
     this.event.emit({
-      list: this.config.listName
+      list: this.config.listName,
+      key: this.config.query,
+      value: this.item
     });
   }
 
@@ -279,10 +283,10 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       this.item = this.createElement(data);
       this.item['displayValue'] = data ? this.getOption(data) : 'All';
     }
-  };
+  }
 
   public updateFilter() {
-    let data = this.fs.getQueries(this.config.listName, this.config.key);
+    const data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
       if (data.byQuery) {
         if (this.settingValue) {
@@ -321,7 +325,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
           : `Select ${this.config.label}`;
       }
     }
-  };
+  }
 
   public resetFilter() {
     this.query = '';
@@ -359,7 +363,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       } else {
         endpoint = `${this.config.data.endpoint}${value}/`;
       }
-      let display = this.config.data.value;
+      const display = this.config.data.value;
       this.genericFormService.getAll(endpoint).subscribe(
         (res: any) => {
           this.item.displayValue = res[display];
@@ -371,11 +375,11 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public getOptions(value, concat = false) {
     const formatString = new FormatString();
-    let endpoint =
+    const endpoint =
       this.config.data.endpoint.includes('{')
       ? formatString.format(this.config.data.endpoint, this.siteSettingsService.settings)
       : this.config.data.endpoint;
-    let offset = this.item.lastElement;
+    const offset = this.item.lastElement;
     let query = '';
 
     if (value) {

@@ -1,8 +1,9 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { isMobile, isCandidate } from '../../helpers';
 
 @Component({
-  selector: 'form-group',
+  selector: 'app-form-group',
   templateUrl: './form-group.component.html',
   styleUrls: ['./form-group.component.scss']
 })
@@ -12,9 +13,16 @@ export class FormGroupComponent {
   public group: FormGroup;
   public errors: any;
   public message: any;
+  public isMobileDevice = isMobile() && isCandidate();
 
   @Output() public event = new EventEmitter();
   @Output() public buttonAction = new EventEmitter();
+
+  get labelText() {
+    return this.config.name
+      ? this.config.label || ''
+      : this.config.label || ' ';
+  }
 
   public eventHandler(e) {
     this.event.emit(e);

@@ -1,76 +1,53 @@
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule, RequestOptions } from '@angular/http';
-import {
-  NgModule
-} from '@angular/core';
-import {
-  removeNgStyles,
-  createNewHosts,
-  createInputTransfer
-} from '@angularclass/hmr';
-import {
-  RouterModule,
-  PreloadAllModules
-} from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, PreloadAllModules } from '@angular/router';
 
-/*
- * Platform and Environment providers/directives/pipes
- */
-import { ENV_PROVIDERS } from './environment';
+import { AgmCoreModule } from '@agm/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap';
+import { Ng2Webstorage } from 'ngx-webstorage';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
+
 import { ROUTES } from './app.routes';
-// App is our top level component
+
 import { AppComponent } from './app.component';
-import { APP_RESOLVER_PROVIDERS } from './app.resolver';
-import { NoContentComponent } from './pages/no-content';
+import { RedirectComponent } from './redirect.component';
+
 import * as formComponents from './components';
 import { services } from './services';
 import { guards } from './guards';
-import { Ng2Webstorage } from 'ng2-webstorage';
-import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
-import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
-import { CookieService } from 'angular2-cookie/services/cookies.service';
-import { InfiniteScrollModule } from 'angular2-infinite-scroll';
-import { AgmCoreModule } from 'angular2-google-maps/core';
+import { interceptors } from './interceptors';
 
+import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 import { SharedModule } from './shared/shared.module';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from '../environments/environment';
 
-import moment from 'moment-timezone';
-
-import { environment } from './environment';
+import * as moment from 'moment-timezone';
 
 moment.tz.setDefault('Australia/Sydney');
-
-import '../styles/styles.scss';
-
-import 'jquery-ui';
-import '../../node_modules/bootstrap/dist/js/bootstrap.js';
-import '../../node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.js';
-
-// Application wide providers
-const APP_PROVIDERS = [
-  ...APP_RESOLVER_PROVIDERS,
-  // AppState
-];
 
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
-    NoContentComponent,
+    RedirectComponent,
     ...formComponents.components
   ],
-  imports: [ // import Angular's modules
+  imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
+    HttpClientModule,
     AgmCoreModule.forRoot({
-      apiKey: (<any> process.env).GOOGLE_GEO_CODING_API_KEY || environment.GOOGLE_GEO_CODING_API_KEY
+      apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
+      libraries: ['places']
     }),
     NgbModule.forRoot(),
+    ButtonsModule.forRoot(),
     Ng2Webstorage.forRoot({ prefix: 'web', separator: '.' }),
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules }),
     DynamicFormModule,
@@ -78,13 +55,11 @@ const APP_PROVIDERS = [
     SharedModule,
     InfiniteScrollModule,
   ],
-  providers: [ // expose our Services and Providers into Angular's dependency injection
-    ENV_PROVIDERS,
-    APP_PROVIDERS,
+  providers: [
     ...services,
     ...guards,
-    CookieService,
-    ...formComponents.providers
+    ...formComponents.providers,
+    ...interceptors
   ]
 })
 export class AppModule {}

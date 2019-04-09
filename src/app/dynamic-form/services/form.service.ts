@@ -4,6 +4,11 @@ import { CheckPermissionService } from '../../shared/services';
 
 import { Form } from '../models/form.model';
 
+export enum FormMode {
+  View = 'view',
+  Edit = 'edit'
+}
+
 @Injectable()
 export class FormService {
 
@@ -44,5 +49,20 @@ export class FormService {
 
   public getForm(formId: number): Form {
     return this.forms[formId];
+  }
+
+  public disableEditMode(formId: number) {
+    const form = this.getForm(formId);
+
+    form.hideEditButton = true;
+  }
+
+  public disableSaveButton(formId: number, disbable?: boolean) {
+    // TODO: remove if statement
+    if (formId) {
+      const form = this.getForm(formId);
+
+      form.disableSaveButton = disbable;
+    }
   }
 }

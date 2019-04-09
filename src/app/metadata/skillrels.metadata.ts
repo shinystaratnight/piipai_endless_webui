@@ -2,11 +2,12 @@ const list = {
   list: {
     list: 'skillrel',
     label: 'Candidate Skill',
+    buttons: [],
     columns: [
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
           }
@@ -19,7 +20,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/skills/skills/',
+            endpoint: '/skills/skills/',
             field: 'skill',
             type: 'related'
           }
@@ -69,7 +70,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate_contact'
@@ -79,7 +80,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       read_only: true,
       templateOptions: {
         label: 'Candidate contact',
@@ -109,7 +110,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/skills/skills/',
+      endpoint: '/skills/skills/',
       read_only: true,
       templateOptions: {
         label: 'Skill',
@@ -321,7 +322,7 @@ const formset = {
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/candidate/skillrels/{id}',
+            endpoint: '/candidate/skillrels/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -353,7 +354,7 @@ const formset = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -371,10 +372,11 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skills/',
-    read_only: false,
+    endpoint: '/skills/skills/',
+    read_only: true,
     key: 'skill',
     templateOptions: {
+      required: true,
       label: 'Skill',
       add: true,
       delete: false,
@@ -382,6 +384,7 @@ const form = [
       type: 'related',
       edit: true
     },
+    visibleMode: true,
     collapsed: false,
     type: 'related',
     query: { exclude: '{candidate_contact.id}' },
@@ -389,14 +392,14 @@ const form = [
   },
   {
     key: 'score',
-    default: 0,
     type: 'input',
     templateOptions: {
-      required: false,
+      required: true,
       label: 'Score',
       max: 5,
-      type: 'number',
-      min: 0
+      type: 'score',
+      min: 0,
+      noneValue: 'Please add skill rating'
     },
     read_only: false
   },
@@ -404,7 +407,7 @@ const form = [
     key: 'prior_experience',
     type: 'select',
     templateOptions: {
-      required: false,
+      required: true,
       label: 'Prior Experience',
       type: 'select',
       options: [
@@ -423,8 +426,16 @@ const form = [
   {
     key: 'hourly_rate',
     default: '{skill.default_rate}',
+    updated: ['skill'],
     type: 'input',
-    templateOptions: { required: true, label: 'Skill Rate', type: 'text' },
+    useValue: true,
+    templateOptions: {
+      required: true,
+      label: 'Skill Rate',
+      type: 'number',
+      step: '0.01',
+      icon: '$'
+    },
     read_only: false
   }
 ];
@@ -432,7 +443,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -450,10 +461,11 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/skills/skills/',
+    endpoint: '/skills/skills/',
     read_only: false,
     key: 'skill',
     templateOptions: {
+      required: true,
       label: 'Skill',
       add: true,
       delete: false,
@@ -461,6 +473,7 @@ const formadd = [
       type: 'related',
       edit: true
     },
+    visibleMode: true,
     collapsed: false,
     type: 'related',
     query: { exclude: '{candidate_contact.id}' },
@@ -468,14 +481,14 @@ const formadd = [
   },
   {
     key: 'score',
-    default: 0,
     type: 'input',
     templateOptions: {
-      required: false,
+      required: true,
       label: 'Score',
       max: 5,
-      type: 'number',
-      min: 0
+      type: 'score',
+      min: 0,
+      noneValue: 'Please add skill rating'
     },
     read_only: false
   },
@@ -483,7 +496,7 @@ const formadd = [
     key: 'prior_experience',
     type: 'select',
     templateOptions: {
-      required: false,
+      required: true,
       label: 'Prior Experience',
       type: 'select',
       options: [
@@ -502,15 +515,203 @@ const formadd = [
   {
     key: 'hourly_rate',
     default: '{skill.default_rate}',
+    updated: ['skill'],
     type: 'input',
-    templateOptions: { required: true, label: 'Skill Rate', type: 'text' },
+    templateOptions: {
+      required: true,
+      label: 'Skill Rate',
+      type: 'number',
+      step: '0.01',
+      icon: '$'
+    },
     read_only: false
   }
 ];
+
+const profile = {
+  fields: [
+    {
+      key: 'skill.name',
+      read_only: false,
+      templateOptions: {
+        required: true,
+        label: 'Skill',
+        max: 63,
+        type: 'text'
+      },
+      type: 'input'
+    },
+    {
+      key: 'created_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Created by', type: 'static' },
+      type: 'static'
+    },
+    {
+      default: 0,
+      key: 'score',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        min: 0,
+        label: 'Score',
+        max: 32767,
+        type: 'number'
+      },
+      type: 'input'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'editForm',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      key: 'hourly_rate',
+      read_only: false,
+      templateOptions: {
+        required: true,
+        display: '${field}/h',
+        label: 'Skill Rate',
+        type: 'static'
+      },
+      type: 'static'
+    },
+    {
+      key: 'updated_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Updated at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    },
+    {
+      key: 'prior_experience',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        options: [
+          { value: 0, label: 'Inexperienced' },
+          { value: 2592000, label: '1 Month' },
+          { value: 7776000, label: '3 Months' },
+          { value: 15552000, label: '6 Months' },
+          { value: 31536000, label: '1 Year' },
+          { value: 63072000, label: '2 Years' },
+          { value: 94608000, label: '3 Years' },
+          { value: 157680000, label: '5 Years or more' }
+        ],
+        label: 'Prior Experience',
+        type: 'select'
+      },
+      type: 'select'
+    },
+    {
+      key: 'updated_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Updated by', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'created_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Created at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'skill',
+        sort_field: 'skill',
+        title: null,
+        sort: true,
+        content: [{ label: 'Skill', type: 'text', field: 'skill.name.name' }],
+        label: 'Skill',
+        delim: null
+      },
+      {
+        name: 'score',
+        sort: true,
+        sort_field: 'score',
+        content: [
+          {
+            type: 'skills',
+            field: 'score',
+            stars: true,
+          }
+        ],
+        label: 'Score'
+      },
+      {
+        name: 'prior_experience',
+        sort: true,
+        sort_field: 'prior_experience',
+        content: [
+          {
+            values: {
+              0: 'Inexperienced',
+              2592000: '1 Month',
+              7776000: '3 Months',
+              15552000: '6 Months',
+              31536000: '1 Year',
+              63072000: '2 Years',
+              94608000: '3 Years',
+              157680000: '5 Years or more'
+            },
+            type: 'select',
+            field: 'prior_experience'
+          }
+        ],
+        label: 'Prior Experience'
+      },
+      // {
+      //   name: 'actions',
+      //   content: [
+      //     {
+      //       action: 'editForm',
+      //       endpoint: '/candidate/skillrels/{id}',
+      //       icon: 'fa-pencil',
+      //       title: 'Edit',
+      //       text_color: '#f0ad4e',
+      //       type: 'button',
+      //       field: 'id'
+      //     },
+      //     {
+      //       action: 'delete',
+      //       icon: 'fa-times-circle',
+      //       title: 'Delete',
+      //       text_color: '#f32700',
+      //       type: 'button',
+      //       field: 'id'
+      //     }
+      //   ],
+      //   label: 'Actions',
+      //   title: null,
+      //   delim: null
+      // }
+    ],
+    list: 'skillrel',
+    editDisable: false,
+    label: 'Candidate Skill',
+    pagination_label: 'Candidate Skill',
+    search_enabled: false
+  }
+};
 
 export const metadata = {
   list,
   formset,
   form,
-  formadd
+  formadd,
+  profile
 };

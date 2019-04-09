@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'list-skills',
+  selector: 'app-list-skills',
   templateUrl: 'list-skills.component.html',
   styleUrls: ['./list-skills.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -19,9 +19,11 @@ export class ListSkillsComponent implements OnInit {
     4: '#ffbf00',
     5: '#FFD042',
   };
+  public countFields = ['candidate_scores.client_feedback', 'candidate_scores.skill_score'];
   public list: boolean;
   public dataList: any[];
   public more: boolean;
+  public evaluationCount: string;
 
   public ngOnInit() {
     if (Array.isArray(this.config.value)) {
@@ -34,7 +36,15 @@ export class ListSkillsComponent implements OnInit {
         this.dataList = this.config.value;
       }
 
+    } else {
+      if (this.config.value && this.countFields.includes(this.config.name)) {
+        const values = (this.config.value as string).split(' ');
+
+        this.config.value = values[0];
+        this.evaluationCount = values[1];
+      }
     }
+
   }
 
   public getScore(score) {

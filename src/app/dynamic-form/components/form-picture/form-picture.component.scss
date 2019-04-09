@@ -1,6 +1,6 @@
 @import '../../../../styles/variables.scss';
 
-$width: 320px;
+$width: 240px;
 $height: 80px;
 
 .picture {
@@ -13,7 +13,7 @@ $height: 80px;
     width: 100%;
     max-width: $width;
     text-align: center;
-    background-color: darken($gray-lighter, .7);
+    background-color: darken($gray-300, .7);
 
     img {
       max-height: $height;
@@ -59,6 +59,7 @@ $height: 80px;
 
 .actions {
   display: inline-flex;
+  align-items: center;
 
   span {
     margin-left: .5rem;
@@ -68,4 +69,57 @@ $height: 80px;
 .form-element-picture {
   display: flex;
   flex-direction: column;
+}
+
+.dropzone {
+  width: 100px;
+  height: 100px;
+
+  border: 1px dashed #ccc;
+  border-radius: 50%;
+
+  background: url('/assets/img/specialist-user.svg') 0 12px no-repeat;
+  background-image: attr(data-label);
+
+  overflow: hidden;
+
+  &-wrapper {
+    margin-right: 46px;
+  }
+
+  &-name {
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    font-size: 11px;
+    line-height: 13px;
+    text-transform: uppercase;
+
+    opacity: .8;
+  }
+}
+
+.description {
+  width: 160px;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.buttons-wrapper {
+
+  .action {
+    border: 1px solid $brand-primary;
+
+    color: $brand-primary;
+    background-color: transparent;
+
+    &:hover {
+      background-color: $brand-primary;
+      color: white;
+    }
+  }
 }

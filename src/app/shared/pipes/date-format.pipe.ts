@@ -1,19 +1,22 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import moment from 'moment-timezone';
+import { TimeService } from '../services';
 
 @Pipe({
   name: 'dateFormat' //tslint:disable-line
 })
 export class DateFormatPipe implements PipeTransform {
-  public transform(value: string, format: string): number {
+
+  constructor(private time: TimeService) {}
+
+  public transform(value: string, format: string): string {
     const formats = {
       date: 'DD/MM/YYYY',
       datetime: 'DD/MM/YYYY hh:mm A',
       time: 'hh:mm A',
     };
 
-    return moment.tz(value, 'Australia/Sydney')
+    return this.time.instance(value)
       .format(formats[format] ? formats[format] : format);
   }
 }

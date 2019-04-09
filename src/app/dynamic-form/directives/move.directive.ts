@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[move]',
+  selector: '[appMove]',
 })
 export class MoveDirective {
   public elem: any;
@@ -21,7 +21,7 @@ export class MoveDirective {
   @Output()
   public active: EventEmitter<any> = new EventEmitter();
 
-  public isMovable: boolean = false;
+  public isMovable = false;
 
   public pos: any = { x: 0, y: 0 };
 
@@ -34,32 +34,32 @@ export class MoveDirective {
   @HostListener('mousedown', ['$event'])
   public onMouseDown($event) {
     this.down();
-  };
+  }
 
   @HostListener('document:mousemove', ['$event'])
   public onMouseMove($event) {
     this.move($event);
-  };
+  }
 
   @HostListener('document:mouseup', ['$event'])
   public onMouseUp($event) {
     this.end();
-  };
+  }
 
   @HostListener('touchstart')
   public onTouchStart() {
     this.down();
-  };
+  }
 
   @HostListener('document:touchmove', ['$event'])
   public onToucMove($event) {
     this.move($event);
-  };
+  }
 
   @HostListener('touchstart')
   public onTouchEnd() {
     this.end();
-  };
+  }
 
   public updatePosition(x: number = 0, y: number = 0) {
       this.pos.x += x;

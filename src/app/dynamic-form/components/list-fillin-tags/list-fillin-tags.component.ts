@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'list-fillin-tags',
+  selector: 'app-list-fillin-tags',
   templateUrl: './list-fillin-tags.component.html',
   styleUrls: ['./list-fillin-tags.component.scss']
 })

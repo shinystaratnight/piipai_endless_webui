@@ -19,7 +19,7 @@ interface Rule {
 }
 
 @Component({
-  selector: 'form-rule',
+  selector: 'app-form-rule',
   templateUrl: './form-rule.component.html',
   styleUrls: ['./form-rule.component.scss']
 })
@@ -47,6 +47,8 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   public functionsArray: any[];
 
   public editRule: any;
+  public parentRule: any;
+  public editItem: any;
   public choice: string;
   public editIndex: number;
   public data: OutputData;
@@ -86,11 +88,13 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     }
   }
 
-  public open(content, type, rule, index = null, item) {
+  public open(content, type, rule, index = null, item, parent) {
     this.editRule = rule;
     this.choice = '';
     this.editValue = '';
     this.editIndex = null;
+    this.editItem = item;
+    this.parentRule = parent;
 
     this.app = '';
     this.model = '';
@@ -112,7 +116,6 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
 
   public done(closeModal, type) {
     closeModal();
-    let choiceType;
     if (this.elementValue && this.editRule) {
       if (this.editRule[this.editIndex]) {
         this.editRule[this.editIndex] = this.elementValue;
@@ -127,13 +130,24 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   public delete(closeModal, type) {
     closeModal();
     this.editRule.splice(this.editIndex, 1);
+    if (this.editRule.length === 0) {
+      if (Array.isArray(this.parentRule)) {
+        const index = this.parentRule.indexOf(this.editItem);
+
+        if (index > -1) {
+          this.parentRule.splice(index, 1);
+        }
+      }
+    }
     this.generateData(type);
     this.reset();
   }
 
   public reset() {
     this.editRule = null;
+    this.parentRule = null;
     this.editIndex = null;
+    this.editItem = null;
     this.choice = '';
   }
 
@@ -148,7 +162,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
           }
 
           if (type === 'state') {
-            let state = this.config.options.find((elem) => elem.name_before_activation === el);
+            const state = this.config.options.find((elem) => elem.name_before_activation === el);
             if (state) {
               el = state.number;
             }
@@ -167,7 +181,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   }
 
   public generateArray(type) {
-    let props = {
+    const props = {
       app: 'appsArray',
       model: 'modelsArray',
       function: 'functionsArray',
@@ -178,16 +192,16 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   }
 
   public getRelatedData(type) {
-    let params = {
+    const params = {
       model: {
         param: 'app',
         query: `?app_name=`,
-        endpoint: '/ecore/api/v2/models/'
+        endpoint: '/models/'
       },
       function: {
         param: 'model',
         query: `?app_name=${this.app}&model_name=`,
-        endpoint: '/ecore/api/v2/functions/'
+        endpoint: '/functions/'
       }
     };
     if (type === 'model') {
@@ -237,7 +251,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   }
 
   public generateView(data) {
-    let attr = Object.keys(data);
+    const attr = Object.keys(data);
     attr.forEach((el) => {
       if (el === 'active') {
         this.config.activeMetadata[0].value = data[el];
@@ -254,6 +268,14 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
         }
       }
     });
+
+    if (!this.states) {
+      this.states = this.createRule();
+    }
+
+    if (!this.functions) {
+      this.functions = this.createRule();
+    }
   }
 
   public generateViewForType(data: any[], type?) {
@@ -272,7 +294,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
         element.data.push(this.generateViewForType([].concat(el), nestedType));
       } else {
         if (this.config.options) {
-          let obj = this.config.options.find((prop) => prop.number === el);
+          const obj = this.config.options.find((prop) => prop.number === el);
           if (obj) {
             el = obj.name_before_activation;
           }
@@ -301,9 +323,11 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     return target instanceof Object;
   }
 
-  public changeOperator(e) {
+  public changeOperator(e, type) {
     e.preventDefault();
     e.stopPropagation();
+
+    this.generateData(type);
   }
 
   public resetRule(type: string) {

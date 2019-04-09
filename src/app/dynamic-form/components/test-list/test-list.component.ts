@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { GenericFormService } from '../../services/generic-form.service';
 
 @Component({
-  selector: 'test-list',
+  selector: 'app-test-list',
   templateUrl: './test-list.component.html',
   styleUrls: ['./test-list.component.scss']
 })

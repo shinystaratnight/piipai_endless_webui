@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
+import { of, throwError } from 'rxjs';
 
-import { ToastrService, MessageType } from './toastr.service';
+import { ToastService, MessageType } from './toast.service';
 
 @Injectable()
 export class ErrorsService {
 
   constructor(
-    private ts: ToastrService
+    private ts: ToastService
   ) {}
 
-  public parseErrors(error: Response, close = false) {
+  public parseErrors(error: HttpErrorResponse, close = false) {
     if (error.status === 500) {
       this.ts.sendMessage(
         'Server error',
@@ -20,18 +20,25 @@ export class ErrorsService {
       );
     }
 
-    if (error.status === 403) {
-      let body = error.json();
+    if (error.status === 401) {
       this.ts.sendMessage(
-        body.errors.detail,
+        error.error.errors.detail,
         MessageType.error
       );
-      return Observable.throw(error.json && error.json());
     }
+
+    if (error.status === 403) {
+      this.ts.sendMessage(
+        error.error.errors.detail,
+        MessageType.error
+      );
+      return throwError(error.error);
+    }
+
     if (!close) {
-      return Observable.throw(error.json && error.json());
+      return throwError(error.error);
     } else {
-      return Observable.of([]);
+      return of([]);
     }
   }
 

@@ -9,19 +9,18 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/skip';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { skip } from 'rxjs/operators';
 
 import { FormatString } from '../../../helpers/format';
+import { smallModalEndpoints } from '../../helpers/small-modal';
 
 import { CheckPermissionService } from '../../../shared/services/check-permission';
 import { GenericFormService } from '../../services/generic-form.service';
 
 @Component({
-  selector: 'form-list',
+  selector: 'app-form-list',
   templateUrl: 'form-list.component.html',
   styleUrls: ['./form-list.component.scss']
 })
@@ -101,7 +100,9 @@ export class FormListComponent implements OnInit, OnDestroy {
           this.config.hide = hide;
         }
 
-        this.cd.detectChanges();
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
+        }
       });
 
       this.subscriptions.push(subscription);
@@ -112,8 +113,8 @@ export class FormListComponent implements OnInit, OnDestroy {
     this.update = new BehaviorSubject(false);
     this.isCollapsed = this.config.collapsed ? this.config.collapsed : false;
     if (this.config.query) {
-      let queryKeys = Object.keys(this.config.query);
-      let queryArray = [];
+      const queryKeys = Object.keys(this.config.query);
+      const queryArray = [];
       queryKeys.forEach((el) => {
         queryArray.push(`${el}=${this.config.query[el]}`);
       });
@@ -197,13 +198,21 @@ export class FormListComponent implements OnInit, OnDestroy {
       });
     }
 
-    const windowClass =
-      this.modalData.endpoint === '/ecore/api/v2/hr/shiftdates/'
-        ? 'shiftdates'
-        : '';
+    let windowClass = this.config.visibleMode ? 'visible-mode' : '';
+
+    let size = 'lg';
+
+    if (smallModalEndpoints.includes(this.modalData.endpoint)) {
+      size = undefined;
+      windowClass += ' small-modal';
+    }
+
+    if (this.modalData.endpoint.includes('/candidate/skillrels/')) {
+      size = undefined;
+    }
 
     this.modalRef = this.modal.open(this.modalTemplate, {
-      size: 'lg',
+      size: size as any,
       windowClass
     });
   }
@@ -215,6 +224,9 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
       this.updateList(e);
+      if (this.config.timelineSubject) {
+        this.config.timelineSubject.next('update');
+      }
       this.saveProcess = false;
     }
   }
@@ -270,7 +282,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (!fields) {
       return true;
     }
-    let check: boolean = true;
+    let check = true;
     fields.forEach((el: string) => {
       const inputValue = this.getValueByKey(el, data);
       this.config.data.sendData.find((field) => {
@@ -291,12 +303,12 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public getValueByKey(key: string, data: any): any {
-    let keysArray = key.split('.');
-    let firstKey = keysArray.shift();
+    const keysArray = key.split('.');
+    const firstKey = keysArray.shift();
     if (keysArray.length === 0) {
       return data && data[firstKey];
     } else if (keysArray.length > 0) {
-      let combineKeys = keysArray.join('.');
+      const combineKeys = keysArray.join('.');
       return this.getValueByKey(combineKeys, data[firstKey]);
     }
   }
@@ -315,7 +327,9 @@ export class FormListComponent implements OnInit, OnDestroy {
   public checkTimelineChange() {
     if (this.config.timelineSubject) {
       const subscription = this.config.timelineSubject
-        .skip(1)
+        .pipe(
+          skip(1)
+        )
         .subscribe(() => this.update.next(true));
 
       this.subscriptions.push(subscription);

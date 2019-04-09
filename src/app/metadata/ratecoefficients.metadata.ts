@@ -16,7 +16,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/pricing/industries/',
+            endpoint: '/pricing/industries/',
             field: 'industry',
             type: 'related'
           }
@@ -39,7 +39,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/pricing/ratecoefficientgroups/',
+            endpoint: '/pricing/ratecoefficientgroups/',
             field: 'group',
             type: 'related'
           }
@@ -72,7 +72,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/pricing/industries/',
+          endpoint: '/pricing/industries/',
           key: 'id'
         },
         query: 'industry'
@@ -82,7 +82,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/pricing/ratecoefficientgroups/',
+      endpoint: '/pricing/ratecoefficientgroups/',
       read_only: true,
       templateOptions: {
         label: 'Group',
@@ -121,7 +121,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/pricing/industries/',
+      endpoint: '/pricing/industries/',
       read_only: true,
       templateOptions: {
         label: 'Industry',
@@ -159,7 +159,7 @@ const form = [
         children: [
           {
             list: false,
-            endpoint: '/ecore/api/v2/pricing/industries/',
+            endpoint: '/pricing/industries/',
             read_only: true,
             templateOptions: {
               label: 'Industry',
@@ -187,7 +187,7 @@ const form = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/pricing/ratecoefficientgroups/',
+            endpoint: '/pricing/ratecoefficientgroups/',
             read_only: true,
             templateOptions: {
               label: 'Group',
@@ -481,12 +481,13 @@ const form = [
     ]
   },
   {
-    endpoint: '/ecore/api/v2/pricing/ratecoefficientmodifiers/',
+    endpoint: '/pricing/ratecoefficientmodifiers/',
     type: 'list',
     templateOptions: {
       label: 'Rate Coefficients for Candidates',
       type: 'list',
-      text: 'Rate Coefficients for Candidates'
+      text: 'Rate Coefficients for Candidates',
+      add_label: 'Add'
     },
     collapsed: false,
     prefilled: {
@@ -500,12 +501,13 @@ const form = [
     }
   },
   {
-    endpoint: '/ecore/api/v2/pricing/ratecoefficientmodifiers/',
+    endpoint: '/pricing/ratecoefficientmodifiers/',
     type: 'list',
     templateOptions: {
       label: 'Rate Coefficients for Companies',
       type: 'list',
-      text: 'Rate Coefficients for Companies'
+      text: 'Rate Coefficients for Companies',
+      add_label: 'Add'
     },
     collapsed: false,
     prefilled: {
@@ -530,9 +532,10 @@ const formadd = [
         children: [
           {
             list: false,
-            endpoint: '/ecore/api/v2/pricing/industries/',
+            endpoint: '/pricing/industries/',
             read_only: true,
             templateOptions: {
+              required: true,
               label: 'Industry',
               add: true,
               delete: false,
@@ -558,7 +561,7 @@ const formadd = [
           },
           {
             list: false,
-            endpoint: '/ecore/api/v2/pricing/ratecoefficientgroups/',
+            endpoint: '/pricing/ratecoefficientgroups/',
             read_only: true,
             templateOptions: {
               label: 'Group',
@@ -852,7 +855,7 @@ const formadd = [
     ]
   },
   {
-    endpoint: '/ecore/api/v2/pricing/ratecoefficientmodifiers/',
+    endpoint: '/pricing/ratecoefficientmodifiers/',
     type: 'list',
     templateOptions: {
       label: 'Rate Coefficients for Candidates',
@@ -871,7 +874,7 @@ const formadd = [
     }
   },
   {
-    endpoint: '/ecore/api/v2/pricing/ratecoefficientmodifiers/',
+    endpoint: '/pricing/ratecoefficientmodifiers/',
     type: 'list',
     templateOptions: {
       label: 'Rate Coefficients for Companies',

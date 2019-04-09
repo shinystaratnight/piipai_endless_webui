@@ -18,7 +18,12 @@ p {
     flex-wrap: wrap;
 
     margin-top: -40px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+
+    &.mobile {
+      flex-wrap: nowrap;
+      margin-top: 0;
+    }
   }
 
   &-title span {
@@ -29,10 +34,16 @@ p {
 
   &-left {
     margin-right: 1rem;
+
+    .mobile & {
+      margin: 0;
+      order: 1;
+    }
   }
 
   &-image {
     position: relative;
+    text-align: center;
 
     img,
     .contact-avatar {
@@ -152,8 +163,19 @@ p {
     font-size: 1rem;
 
     .score {
+      display: inline-block;
+
+      height: 14px;
+      line-height: 14px;
+
+      margin-top: 3px;
+      margin-left: 4px;
+      padding-left: 4px;
+
       font-size: 14px;
-      line-height: 22px;
+      vertical-align: top;
+
+      border-left: 1px solid black;
     }
   }
 
@@ -273,4 +295,24 @@ p {
       color: map-get($theme-colors, $item);
     }
   }
+}
+
+.address-field {
+  margin-top: -10px;
+
+  color: #828282;
+
+  .form-group {
+    margin-bottom: 11px;
+  }
+}
+
+.mobile .score {
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1;
 }

@@ -2,7 +2,7 @@ const list = {
   list: {
     list: 'timesheet',
     search_enabled: false,
-    pagination_label: 'Timesheet Entry',
+    pagination_label: 'Unapproved timesheets',
     buttons: [],
     columns: [
       {
@@ -28,7 +28,7 @@ const list = {
         content: [
           {
             endpoint:
-              '/ecore/api/v2/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
+              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}/',
             type: 'link',
             field: 'job_offer.candidate_contact',
             action: 'showCandidateProfile'
@@ -69,7 +69,18 @@ const list = {
         ]
       },
       {
-        label: 'Approve',
+        label: 'Total hours',
+        delim: null,
+        name: 'totalTime',
+        content: [
+          {
+            type: 'text',
+            field: 'totalTime',
+          }
+        ]
+      },
+      {
+        label: 'Approve/Change',
         delim: null,
         name: 'approve',
         title: null,
@@ -80,10 +91,21 @@ const list = {
             type: 'button',
             color: 'success',
             label: 'Approve',
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/approve/',
+            endpoint: '/hr/timesheets/{id}/approve/',
             replace_by: 'supervisor',
             field: 'id',
             action: 'approveTimesheet',
+            hidden: 'supervisor_approved_at'
+          },
+          {
+            text: 'Change',
+            icon: 'fa-pencil',
+            type: 'button',
+            color: 'danger',
+            label: 'Change',
+            endpoint: '/hr/timesheets/{id}/not_agree/',
+            field: 'id',
+            action: 'changeTimesheet',
             hidden: 'supervisor_approved_at'
           }
         ]
@@ -92,6 +114,7 @@ const list = {
         label: 'Change',
         delim: null,
         name: 'change',
+        hide: true,
         title: null,
         content: [
           {
@@ -100,7 +123,7 @@ const list = {
             type: 'button',
             color: 'danger',
             label: 'Change',
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/not_agree/',
+            endpoint: '/hr/timesheets/{id}/not_agree/',
             field: 'id',
             action: 'changeTimesheet',
             hidden: 'supervisor_approved_at'
@@ -109,25 +132,54 @@ const list = {
       },
       {
         label: 'Evaluate',
-        delim: null,
+        delim: ' ',
         name: 'evaluate',
         title: null,
         content: [
           {
             label: 'Evaluate',
+            text: 'Evaluate',
             icon: 'fa-star',
             type: 'button',
             color: 'warning',
-            repeat: 5,
-            endpoint: '/ecore/api/v2/hr/timesheets/{id}/evaluate/',
+            endpoint: '/hr/timesheets/{id}/evaluate/',
             field: 'id',
-            action: 'evaluateCandidate'
+            action: 'evaluateCandidate',
+            hidden: 'evaluated'
+          },
+          {
+            score: true,
+            type: 'text',
+            field: 'evaluation.level_of_communication',
+            showIf: [
+              {
+                evaluated: true
+              }
+            ],
+          }
+        ]
+      },
+      {
+        label: 'Tracking',
+        delim: null,
+        name: 'traking',
+        title: null,
+        content: [
+          {
+            label: 'Traking',
+            text: 'Show',
+            icon: 'fa-map-marker',
+            type: 'button',
+            color: 'primary',
+            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
+            field: 'id',
+            action: 'showTracking'
           }
         ]
       }
     ],
     editDisable: true,
-    label: 'Timesheet Entry'
+    label: 'Unapproved timesheets'
   },
   fields: [
     {
@@ -205,5 +257,6 @@ const list = {
 };
 
 export const metadata = {
-  list
+  list,
+  formset: list
 };

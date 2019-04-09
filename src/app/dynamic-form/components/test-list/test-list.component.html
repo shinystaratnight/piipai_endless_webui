@@ -3,19 +3,19 @@
 <ngb-accordion *ngIf="tests" [closeOthers]="true">
   <ng-container *ngFor="let test of tests">
     <ngb-panel>
-      <template ngbPanelTitle>
+      <ng-template ngbPanelTitle>
         <div class="test-title-wrapper">
           <div class="test-title">
             <h5>{{test.acceptance_test.name}}</h5>
             <p class="description">{{test.company_workflow_node.name}}</p>
           </div>
-          <span class="score" [style.color]="colors[getScore(test.score)]">
+          <span class="score border-0" [style.color]="colors[getScore(test.score)]">
             {{test.score}}
             <i fa name="star"></i>
           </span>
         </div>
-      </template>
-      <template ngbPanelContent>
+      </ng-template>
+      <ng-template ngbPanelContent>
         <ol>
           <li *ngFor="let question of test.questions">
             <p class="question-title">{{question.question}}</p>
@@ -24,7 +24,7 @@
             <p *ngIf="question.answer"><span class="answer">Answer:</span> {{question.answer.answer}} <i class="description">({{question.answer.score}})</i></p>
           </li>
         </ol>
-      </template>
+      </ng-template>
     </ngb-panel>
   </ng-container>
 </ngb-accordion>

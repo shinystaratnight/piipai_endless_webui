@@ -5,22 +5,26 @@ const list = {
     editDisable: true,
     label: '{job.position}',
     description: '{job.jobsite}',
+    openFilter: true,
     columns: [
       {
         name: 'favourite',
+        width: 24,
         content: [
           {
             type: 'icon',
             field: 'favourite',
+            fontSize: 20,
             values: {
               false: 'star',
-              true: 'star',
-            },
-          },
-        ],
+              true: 'star'
+            }
+          }
+        ]
       },
       {
         name: 'contact.__str__',
+        width: 175,
         content: [
           {
             type: 'static',
@@ -35,6 +39,7 @@ const list = {
       },
       {
         name: 'hourly_rate',
+        width: 95,
         content: [
           {
             type: 'static',
@@ -46,7 +51,8 @@ const list = {
           {
             type: 'description',
             field: 'overpriced',
-            description: 'Candidate hourly rate is higher than job position default rate',
+            description:
+              'Candidate hourly rate is higher than job position default rate ${default_rate}',
             showIf: ['overpriced']
           }
         ],
@@ -67,27 +73,29 @@ const list = {
       },
       {
         name: 'timesheet',
+        width: 150,
         content: [
           {
             type: 'static',
             field: 'count_timesheets',
             label: 'Total',
-            display: '{field}',
+            display: '{field}'
           },
           {
             type: 'static',
             field: 'days_from_last_timesheet',
             label: 'From last',
-            display: '{field} day(s)',
+            display: '{field} day(s)'
           }
         ],
         label: 'Timesheet'
       },
       {
         name: 'distance',
+        width: 130,
         content: [
           {
-            endpoint: '/ecore/api/v2/distances/',
+            endpoint: '/distances/',
             field: 'distance_to_jobsite',
             async: true,
             type: 'static',
@@ -101,7 +109,7 @@ const list = {
             }
           },
           {
-            endpoint: '/ecore/api/v2/distances/',
+            endpoint: '/distances/',
             field: 'time_to_jobsite',
             async: true,
             type: 'static',
@@ -116,16 +124,16 @@ const list = {
         label: 'Distance/time'
       },
       {
-        name: 'skills_score',
+        name: 'candidate_scores.skill_score',
         content: [
           {
             type: 'skills',
-            field: 'skills_score'
+            field: 'candidate_scores.skill_score'
           }
         ],
         sort: true,
-        sort_field: 'skills_score',
-        label: 'Skills score'
+        sort_field: 'candidate_scores.skill_score',
+        label: 'Average skills'
       },
       {
         name: 'tags',
@@ -185,17 +193,17 @@ const list = {
             field: 'candidate_scores.recruitment_score'
           }
         ],
-        label: 'Recruitment'
+        label: 'Average test'
       },
       {
-        name: 'evaluation',
+        name: 'candidate_scores.client_feedback',
         content: [
           {
             type: 'skills',
-            field: 'evaluation'
+            field: 'candidate_scores.client_feedback'
           }
         ],
-        label: 'Evaluation'
+        label: 'Client feedback'
       }
     ],
     tabs: [
@@ -205,8 +213,8 @@ const list = {
         inline: true,
         fields: [
           'candidate_scores.recruitment_score',
-          'evaluation',
-          'skills_score',
+          'candidate_scores.client_feedback',
+          'candidate_scores.skill_score',
           'candidate_scores.reliability',
           'candidate_scores.loyalty'
         ]
@@ -292,12 +300,10 @@ const list = {
         label: 'Transportation to Work',
         type: 'checkbox',
         multiple: false,
-        default: null,
         query: 'transportation_to_work'
       },
       {
         type: 'text',
-        default: null,
         label: 'Distance',
         min: 0,
         max: 200,
@@ -364,7 +370,7 @@ const list = {
         required: false
       },
       type: 'static',
-      key: 'evaluation',
+      key: 'candidate_scores.client_feedback',
       read_only: true
     },
     {
@@ -415,7 +421,7 @@ const list = {
         required: false
       },
       type: 'static',
-      key: 'skills_score',
+      key: 'candidate_scores.skill_score',
       read_only: true
     },
     {
@@ -450,7 +456,7 @@ const list = {
         type: 'related',
         values: ['__str__']
       },
-      endpoint: '/ecore/api/v2/candidate/tagrels/',
+      endpoint: '/candidate/tagrels/',
       list: false,
       collapsed: false,
       type: 'related',
@@ -510,7 +516,7 @@ const list = {
         type: 'related',
         values: ['__str__']
       },
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       list: false,
       collapsed: false,
       type: 'related',
@@ -527,7 +533,7 @@ const list = {
         type: 'related',
         values: ['__str__']
       },
-      endpoint: '/ecore/api/v2/core/countries/',
+      endpoint: '/core/countries/',
       list: false,
       collapsed: false,
       type: 'related',
@@ -539,7 +545,7 @@ const list = {
       key: 'favourite',
       templateOptions: {
         color: {
-          true: 'primary',
+          true: 'warning',
           false: 'opacity'
         }
       }

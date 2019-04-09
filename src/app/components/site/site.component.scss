@@ -1,0 +1,20 @@
+app-calendar {
+  min-width: 840px;
+}
+
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+
+  max-width: 1250px;
+
+  margin: 100px auto 0;
+
+  &-item {
+    flex: 1 1;
+
+    margin: 0 15px 15px;
+
+    background-color: #fff;
+  }
+}

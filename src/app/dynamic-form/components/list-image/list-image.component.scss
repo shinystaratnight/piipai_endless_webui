@@ -19,3 +19,52 @@ img {
   color: #bdbdbd;
   opacity: .3;
 }
+
+.download-icon,
+.file-icon {
+  width: 12px;
+  margin-right: .5rem;
+}
+
+.download-icon {
+  display: none;
+}
+
+.mobile {
+  position: relative;
+
+  .upload-button {
+    display: inline-flex;
+  }
+
+  a {
+    color: $brand-primary;
+  }
+}
+
+.upload-button {
+  position: absolute;
+  right: 0px;
+  bottom: -10px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fdfdfd;
+}
+
+a:hover {
+  .file-icon {
+    display: none;
+  }
+
+  .download-icon {
+    display: inline-block;
+  }
+}
+

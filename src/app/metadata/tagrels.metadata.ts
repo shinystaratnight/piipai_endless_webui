@@ -1,12 +1,32 @@
+const listColumns = {
+  'verification_evidence': {
+    name: 'verification_evidence',
+    sort_field: 'verification_evidence',
+    title: null,
+    sort: true,
+    content: [
+      {
+        type: 'picture',
+        display: 'View document',
+        emptyValue: 'Not verify',
+        field: 'verification_evidence'
+      }
+    ],
+    label: 'Verification Evidence',
+    delim: null
+  }
+};
+
 const list = {
   list: {
     list: 'tagrel',
     label: 'Tag Relationship',
+    buttons: [],
     columns: [
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+            endpoint: '/candidate/candidatecontacts/',
             field: 'candidate_contact',
             type: 'related'
           }
@@ -19,7 +39,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/tags/',
+            endpoint: '/core/tags/',
             field: 'tag',
             type: 'related'
           }
@@ -32,7 +52,7 @@ const list = {
       {
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             field: 'verified_by',
             type: 'related'
           }
@@ -60,7 +80,7 @@ const list = {
         type: 'related',
         data: {
           value: '__str__',
-          endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+          endpoint: '/candidate/candidatecontacts/',
           key: 'id'
         },
         query: 'candidate_contact'
@@ -70,7 +90,7 @@ const list = {
   fields: [
     {
       list: false,
-      endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+      endpoint: '/candidate/candidatecontacts/',
       read_only: true,
       templateOptions: {
         label: 'Candidate contact',
@@ -87,7 +107,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       read_only: true,
       templateOptions: {
         label: 'Verified by',
@@ -115,7 +135,7 @@ const list = {
     },
     {
       list: false,
-      endpoint: '/ecore/api/v2/core/tags/',
+      endpoint: '/core/tags/',
       read_only: true,
       templateOptions: {
         label: 'Tag',
@@ -138,7 +158,7 @@ const formset = {
     {
       many: false,
       key: 'tag',
-      endpoint: '/ecore/api/v2/core/tags/',
+      endpoint: '/core/tags/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -176,7 +196,7 @@ const formset = {
     {
       many: false,
       key: 'verified_by',
-      endpoint: '/ecore/api/v2/core/companycontacts/',
+      endpoint: '/core/companycontacts/',
       collapsed: false,
       list: false,
       templateOptions: {
@@ -199,7 +219,7 @@ const formset = {
         sort_field: 'tag',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/tags/',
+            endpoint: '/core/tags/',
             type: 'related',
             field: 'tag'
           }
@@ -212,28 +232,26 @@ const formset = {
         sort_field: 'verified_by',
         content: [
           {
-            endpoint: '/ecore/api/v2/core/companycontacts/',
+            endpoint: '/core/companycontacts/',
             type: 'related',
-            field: 'verified_by'
+            field: 'verified_by.contact'
+          },
+          {
+            endpoint: '/core/companycontacts/',
+            type: 'text',
+            description: ' ',
+            field: 'verified_by.job_title'
           }
         ],
         label: 'Verified by'
       },
-      {
-        name: 'verification_evidence',
-        sort_field: 'verification_evidence',
-        title: null,
-        sort: true,
-        content: [{ type: 'picture', field: 'verification_evidence' }],
-        label: 'Verification Evidence',
-        delim: null
-      },
+      listColumns['verification_evidence'],
       {
         name: 'actions',
         content: [
           {
             action: 'editForm',
-            endpoint: '/ecore/api/v2/candidate/tagrels/{id}',
+            endpoint: '/candidate/tagrels/{id}',
             icon: 'fa-pencil',
             title: 'Edit',
             text_color: '#f0ad4e',
@@ -265,7 +283,7 @@ const formset = {
 const form = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -283,7 +301,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     read_only: false,
     key: 'tag',
     templateOptions: {
@@ -312,7 +330,7 @@ const form = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Verified by',
@@ -333,7 +351,7 @@ const form = [
 const formadd = [
   {
     list: false,
-    endpoint: '/ecore/api/v2/candidate/candidatecontacts/',
+    endpoint: '/candidate/candidatecontacts/',
     read_only: true,
     hide: true,
     templateOptions: {
@@ -351,7 +369,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/tags/',
+    endpoint: '/core/tags/',
     read_only: false,
     key: 'tag',
     templateOptions: {
@@ -381,7 +399,7 @@ const formadd = [
   },
   {
     list: false,
-    endpoint: '/ecore/api/v2/core/companycontacts/',
+    endpoint: '/core/companycontacts/',
     read_only: true,
     templateOptions: {
       label: 'Verified by',
@@ -399,9 +417,137 @@ const formadd = [
   }
 ];
 
+const profile = {
+  fields: [
+    {
+      many: false,
+      key: 'tag',
+      endpoint: '/core/tags/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Tag',
+        type: 'related'
+      },
+      read_only: false,
+      type: 'related'
+    },
+    {
+      key: 'id',
+      templateOptions: {
+        action: 'editForm',
+        label: '',
+        type: 'button',
+        text: ''
+      },
+      type: 'button'
+    },
+    {
+      key: 'verification_evidence',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Verification Evidence',
+        max: 100,
+        type: 'picture'
+      },
+      type: 'input'
+    },
+    {
+      many: false,
+      key: 'verified_by',
+      endpoint: '/core/companycontacts/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Verified by',
+        type: 'related'
+      },
+      read_only: true,
+      type: 'related'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'tag',
+        sort: true,
+        sort_field: 'tag',
+        content: [
+          {
+            endpoint: '/core/tags/',
+            type: 'related',
+            field: 'tag'
+          }
+        ],
+        label: 'Tag'
+      },
+      {
+        name: 'verified_by',
+        sort: true,
+        sort_field: 'verified_by',
+        content: [
+          {
+            endpoint: '/core/companycontacts/',
+            type: 'related',
+            field: 'verified_by.contact'
+          },
+          {
+            endpoint: '/core/companycontacts/',
+            type: 'text',
+            description: ' ',
+            field: 'verified_by.job_title'
+          }
+        ],
+        label: 'Verified by'
+      },
+      listColumns['verification_evidence'],
+      // {
+      //   name: 'actions',
+      //   content: [
+      //     {
+      //       action: 'editForm',
+      //       endpoint: '/candidate/tagrels/{id}',
+      //       icon: 'fa-pencil',
+      //       title: 'Edit',
+      //       text_color: '#f0ad4e',
+      //       type: 'button',
+      //       field: 'id'
+      //     },
+      //     {
+      //       action: 'delete',
+      //       icon: 'fa-times-circle',
+      //       title: 'Delete',
+      //       text_color: '#f32700',
+      //       type: 'button',
+      //       field: 'id'
+      //     }
+      //   ],
+      //   label: 'Actions',
+      //   title: null,
+      //   delim: null
+      // }
+    ],
+    list: 'tagrel',
+    editDisable: false,
+    label: 'Tag Relationship',
+    pagination_label: 'Tag Relationship',
+    search_enabled: false
+  }
+};
+
 export const metadata = {
   list,
   formset,
   form,
-  formadd
+  formadd,
+  profile
 };

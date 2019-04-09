@@ -1,10 +1,11 @@
 import { Component, Input, ViewChild, EventEmitter, Output, OnChanges } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { SiteSettingsService } from '../../../services/site-settings.service';
 import { FormatString } from '../../../helpers/format';
 
 @Component({
-  selector: 'action-element',
+  selector: 'app-action-element',
   templateUrl: 'action-element.component.html',
   styleUrls: ['./action-element.component.scss']
 })
@@ -22,7 +23,8 @@ export class ActionElementComponent implements OnChanges {
   public action: any = {};
 
   public constructor(
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private siteSettings: SiteSettingsService
   ) {}
 
   public ngOnChanges() {
@@ -51,9 +53,21 @@ export class ActionElementComponent implements OnChanges {
         });
         this.action = '';
       }
-    }, (reason) => {
+    }, () => {
       return false;
     });
+  }
+
+  public getSmsTitle(endpoint: string): string {
+    return this.isDisableSmsButton(endpoint)
+      ? this.siteSettings.getSmsSendTitle()
+      : '';
+  }
+
+  public isDisableSmsButton(endpoint = ''): boolean {
+    if (endpoint.indexOf('sendsms') !== -1) {
+      return !this.siteSettings.isSmsEnabled();
+    }
   }
 
 }

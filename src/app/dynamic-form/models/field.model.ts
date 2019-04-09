@@ -1,5 +1,5 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 export interface Field {
   type?: string;
@@ -61,7 +61,26 @@ export interface Field {
   if_master?: any;
   relatedObjects?: any;
   candidateTabs?: boolean;
+  unique?: boolean;
+  visibleMode?: boolean;
+  disableButtons?: boolean;
+  disableActions?: boolean;
+  normal?: boolean;
+  hideIfNull?: boolean;
+  updated?: string[];
+  formBuilder?: boolean;
+  hideEditButton?: boolean;
+  inline?: boolean;
+  hideOnMobile?: boolean;
+  showOnMobile?: boolean;
+  disabled?: {
+    keys: string[],
+    values: any[],
+    messages: string[]
+  };
   templateOptions?: {
+    hideLabel?: boolean;
+    dontSendFields?: boolean;
     label?: string;
     type?: string;
     min?: number;
@@ -76,6 +95,19 @@ export interface Field {
     editLabel?: string;
     editDescription?: string;
     info?: any;
+    bottom?: boolean;
+    inlineFilters?: boolean;
+    addon?: string;
+    placeholder?: string;
+    danger?: string;
+    step?: number;
+    icon?: string;
+    noneValue?: string;
+    full?: boolean;
+    add?: boolean;
+    edit?: boolean;
+    delete?: boolean;
+    hidePreviewError?: boolean;
   };
 }
 

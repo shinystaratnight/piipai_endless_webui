@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
-import { CookieService } from 'angular2-cookie/core';
-
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { catchError } from 'rxjs/operators';
 
 import { ErrorsService } from '../../shared/services/errors.service';
 import { Plan } from '../models';
@@ -13,72 +9,109 @@ import { Plan } from '../models';
 @Injectable()
 export class BillingService {
 
-  private cardInfoEndpoint = '/ecore/api/v2/billing/stripe_customer/';
-  private subscriptionInfoEndpoint = '/ecore/api/v2/billing/subscription/list/';
-  private subscriptionStatusEndpoint = '/ecore/api/v2/billing/subscription/status/';
-  private planEndpoint = '/ecore/api/v2/billing/subscription/create/';
-  private checkPaymentInformationEndpoint = '/ecore/api/v2/billing/check_payment_information/'; //tslint:disable-line
-  private cancelSubscriptionEndpoint = '/ecore/api/v2/billing/subscription/cancel/';
-  private paymentsEndpoint = '/ecore/api/v2/billing/payments/';
+  private endpoints = {
+    cardInfo: '/billing/stripe_customer/',
+    plan: '/billing/subscription/create/',
+    subscriptionInfo: '/billing/subscription/list/',
+    subscriptionStatus: '/billing/subscription/status/',
+    cancelSubscription: '/billing/subscription/cancel/',
+    subscriptionTypes: '/billing/subscription_type/',
+    checkPaymentInformation: '/billing/check_payment_information/',
+    payments: '/billing/payments/',
+    autoCharge: '/billing/auto_charge_twilio/',
+    fund: '/billing/add_funds_twilio/',
+  }
 
   constructor(
-    private http: Http,
-    private cookie: CookieService,
+    private http: HttpClient,
     private errorService: ErrorsService,
   ) {}
 
   public setCardInfo(body) {
-    const headers = this.updateHeaders();
-    return this.http.post(this.cardInfoEndpoint, body, {headers})
-      .map((res: any) => res.json && res.json())
-      .catch((err: any) => this.errorService.parseErrors(err));
+    return this.http
+      .post(this.endpoints.cardInfo, body)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
   }
 
   public getSubscriptionInfo() {
-    const headers = this.updateHeaders();
-    return this.http.get(this.subscriptionInfoEndpoint, {headers})
-      .map((res: any) => res.json && res.json())
-      .catch((err: any) => this.errorService.parseErrors(err));
+    return this.http
+      .get(this.endpoints.subscriptionInfo)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
   }
 
   public getSubscriptionStatus() {
-    const headers = this.updateHeaders();
-    return this.http.get(this.subscriptionStatusEndpoint, {headers})
-      .map((res: any) => res.json && res.json())
-      .catch((err: any) => this.errorService.parseErrors(err));
+    return this.http
+      .get(this.endpoints.subscriptionStatus)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
   }
 
   public setPlan(body: Plan) {
-    const headers = this.updateHeaders();
-    return this.http.post(this.planEndpoint, body, {headers})
-      .map((res: any) => res.json && res.json())
-      .catch((err: any) => this.errorService.parseErrors(err));
+    return this.http
+      .post(this.endpoints.plan, body)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
   }
 
   public checkPaymentInformation() {
-    const headers = this.updateHeaders();
-    return this.http.get(this.checkPaymentInformationEndpoint, {headers})
-      .map((res: any) => res.json && res.json())
-      .catch((err: any) => this.errorService.parseErrors(err));
+    return this.http
+      .get(this.endpoints.checkPaymentInformation)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
   }
 
   public cancelSubscription() {
-    const headers = this.updateHeaders();
-    return this.http.get(this.cancelSubscriptionEndpoint, {headers})
-      .map((res: any) => res.json && res.json())
-      .catch((err: any) => this.errorService.parseErrors(err, true));
+    return this.http
+      .get(this.endpoints.cancelSubscription)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err, true))
+      );
   }
 
   public payments() {
-    const headers = this.updateHeaders();
-    return this.http.get(this.paymentsEndpoint, {headers})
-      .map((res: any) => res.json && res.json())
-      .catch((err: any) => this.errorService.parseErrors(err));
+    return this.http
+      .get(this.endpoints.payments)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
   }
 
-  public updateHeaders() {
-    let headers = new Headers();
-    headers.append('X-CSRFToken', this.cookie.get('csrftoken'));
-    return headers;
+  public getCreditDetails() {
+    return this.http
+      .get(this.endpoints.autoCharge)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
+  }
+
+  public setCreditDetails(body) {
+    return this.http
+      .post(this.endpoints.autoCharge, body)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
+  }
+
+  public addFunds(body) {
+    return this.http
+      .post(this.endpoints.fund, body)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
+  }
+
+  public getSubscriptionTypes() {
+    return this.http
+      .get(this.endpoints.subscriptionTypes)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+       );
   }
 }

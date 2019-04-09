@@ -65,14 +65,14 @@ describe('BreadcrumbComponent', () => {
             {
               name: 'Contact',
               url: '/contact/',
-              endpoint: '/ecore/api/v2/contacts',
+              endpoint: '/contacts',
               __str__: 'Contact',
               childrens: []
             },
             {
               name: 'Login',
               url: '/login/',
-              endpoint: '/ecore/api/v2/login',
+              endpoint: '/login',
               __str__: 'Login',
               childrens: []
             }
@@ -104,7 +104,7 @@ describe('BreadcrumbComponent', () => {
         {
           name: 'Contact',
           url: '/contact/',
-          endpoint: '/ecore/api/v2/contact',
+          endpoint: '/contact',
           __str__: 'Contact',
           childrens: []
         }
@@ -160,13 +160,13 @@ describe('BreadcrumbComponent', () => {
         {
           name: 'Core',
           url: '/core/',
-          endpoint: '/ecore/api/v2/core/',
+          endpoint: '/core/',
           __str__: 'Core',
           childrens: [
             {
               name: 'Contact',
               url: '/core/contact/',
-              endpoint: '/ecore/api/v2/contacts/',
+              endpoint: '/contacts/',
               __str__: 'Contact',
               childrens: []
             }

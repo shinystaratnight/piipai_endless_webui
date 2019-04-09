@@ -1,14 +1,19 @@
-<div class="d-flex mb-3 form-group">
+<div class="d-flex mb-2 form-group">
   <select class="custom-select mr-2"
     [class.default]="!action.endpoint"
     [(ngModel)]="action">
       <option [value]="{}" disabled>Action</option>
       <option *ngFor="let option of config.options" [ngValue]="option">{{option.label}}</option>
   </select>
-  <button class="btn btn-primary btn-shadow" type="button" (click)="toDoAction()">{{label}}</button>
+  <button class="btn btn-primary btn-shadow" type="button"
+    (click)="toDoAction()"
+    [attr.title]="getSmsTitle(action.endpoint)"
+    [disabled]="isDisableSmsButton(action.endpoint)">
+      {{label}}
+  </button>
 </div>
 
-<template #content let-c="close" let-d="dismiss">
+<ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
     <p>{{action.message}}</p>
     <button type="button" class="close" aria-label="Close" (click)="d(false)">
@@ -19,4 +24,4 @@
     <button type="button" class="btn btn-secondary" (click)="c(true)">{{config.agree_label}}</button>
     <button type="button" class="btn btn-secondary" (click)="c(false)">{{config.decline_label}}</button>
   </div>
-</template>
+</ng-template>

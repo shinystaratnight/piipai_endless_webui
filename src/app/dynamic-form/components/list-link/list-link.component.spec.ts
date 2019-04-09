@@ -12,7 +12,7 @@ describe('ListLinkComponent', () => {
     href: 'phone',
     name: 'phone_mobile',
     type: 'link',
-    endpoint: '/ecore/api/v2/skills/skills/123/change',
+    endpoint: '/skills/skills/123/change',
     id: 'some id'
   };
 

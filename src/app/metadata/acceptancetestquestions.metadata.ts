@@ -37,7 +37,7 @@ const form = [
     type: 'row',
     children: [
       {
-        endpoint: '/ecore/api/v2/acceptance-tests/acceptancetestanswers/',
+        endpoint: '/acceptance-tests/acceptancetestanswers/',
         read_only: true,
         templateOptions: {
           label: 'Acceptance test answers',
@@ -71,12 +71,10 @@ const form = [
           label: 'Question',
           max: 255,
         },
-        read_only: true
       },
       {
         key: 'details',
         type: 'textarea',
-        read_only: true,
         templateOptions: {
           required: false,
           label: 'Details',
@@ -85,7 +83,6 @@ const form = [
       {
         key: 'type',
         type: 'select',
-        read_only: true,
         templateOptions: {
           required: false,
           label: 'Question Type',
@@ -106,6 +103,16 @@ const form = [
           type: 'number'
         }
       },
+      {
+        type: 'button',
+        width: .2,
+        color: 'primary',
+        templateOptions: {
+          type: 'submit',
+          p: true,
+          small: true,
+        }
+      }
     ]
   }
 ];

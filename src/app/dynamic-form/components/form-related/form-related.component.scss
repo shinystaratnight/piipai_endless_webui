@@ -7,6 +7,10 @@
   }
 }
 
+.indent {
+  padding-left: 16px;
+}
+
 .additional-text {
   max-width: 300px;
 
@@ -63,4 +67,11 @@
   .form-element-content:hover & {
     visibility: visible;
   }
+}
+
+a.readonly:hover,
+a.readonly:focus {
+  text-decoration: none;
+  color: inherit;
+  cursor: text;
 }

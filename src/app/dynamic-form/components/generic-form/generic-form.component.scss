@@ -1,0 +1,26 @@
+@import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins.scss';
+
+.title {
+  margin-left: 20px;
+  margin-bottom: 10px;
+
+  font-size: 24px;
+  line-height: 26px;
+}
+
+.form-name {
+  position: absolute;
+  top: 34px;
+  left: 40px;
+
+  font-size: 28px;
+  line-height: 30px;
+
+  color: #4f4f4f;
+
+  @include media-breakpoint-down('md') {
+    top: 4px;
+    left: 20px;
+  }
+}

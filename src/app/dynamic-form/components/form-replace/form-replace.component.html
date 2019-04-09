@@ -2,7 +2,7 @@
   <label *ngIf="label && config.templateOptions.label" [attr.for]="key">{{config.templateOptions.label}}</label>
   <ng-container
     *ngFor="let field of metadata;"
-    formElement
+    appFormElement
     [config]="field"
     [group]="selfGroup"
     [errors]="errors"
@@ -12,7 +12,7 @@
   </ng-container>
 </div>
 
-<template #modal let-c="close">
+<ng-template #modal let-c="close">
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header bg-primary text-white">
@@ -25,9 +25,9 @@
 
     <div class="modal-body">
       <div *ngIf="modalData.type !== 'delete'">
-        <generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c, modalData.el)">
+        <app-generic-form [endpoint]="modalData.endpoint" [id]="modalData.id" (event)="formEvent($event, c, modalData.el)">
           <button type="submit" class="btn btn-primary">Save</button>
-        </generic-form>
+        </app-generic-form>
       </div>
       <div *ngIf="modalData.type === 'delete'">
         Are you sure?
@@ -39,4 +39,4 @@
         (click)="deleteElement(c)">Delete</button>
     </div>
   </div>
-</template>
+</ng-template>
