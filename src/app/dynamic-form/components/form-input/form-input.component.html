@@ -1,7 +1,11 @@
 <div *ngIf="!config.hide" class="form-group" [class.mb-0]="config.templateOptions.bottom" [formGroup]="group" style="position: relative">
   <div class="form-element">
-    <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" [attr.for]="key" *ngIf="label && config.templateOptions.label">
-      {{config.templateOptions.label}}:
+    <label class="col-form-label form-element-label"
+      *ngIf="label && config.templateOptions.label"
+      [class.bold]="config.templateOptions.bold"
+      [class.required]="config.templateOptions.required"
+      [attr.for]="key" >
+        {{config.templateOptions.label}}:
     </label>
     <app-info [description]="config.templateOptions.description"></app-info>
     <div class="form-element-content edit" [class.showAll]="viewMode || config.type === 'static'" [class.full]="config.templateOptions.addon">
@@ -103,7 +107,11 @@
           </g>
         </svg>
       </div>
-      <span [ngClass]="config.templateOptions.color" *ngIf="config.type === 'static' && config.templateOptions.type !== 'score'">{{displayValue}}</span>
+      <span *ngIf="config.type === 'static' && config.templateOptions.type !== 'score'"
+        [ngClass]="config.templateOptions.color"
+        [ngStyle]="{'fontWeight': config.templateOptions.bold ? 'bold' : 'normal'}">
+          {{displayValue}}
+      </span>
       <div class="rating" *ngIf="(viewMode || config.read_only) && config.templateOptions.type === 'score' && (parseScore(config.value) || !config.templateOptions.danger)">
         <ngb-rating [rate]="config.value" max="5" [readonly]="true">
           <ng-template let-fill="fill" let-index="index">
