@@ -1,7 +1,7 @@
 @import '../../../styles/variables';
 
 $border-radius: .2rem;
-$block-padding: 20px 32px;
+$block-padding: 10px 32px;
 
 :host {
   display: block;
@@ -193,8 +193,8 @@ app-datepicker {
 }
 
 .month-day {
-  height: 68px;
-  padding: 8px 9px 8px 12px;
+  height: 63px;
+  padding: 5px 9px 5px 12px;
 
   border: 1px solid #e0e0e0;
 
@@ -235,6 +235,7 @@ app-datepicker {
 .filters {
   display: flex;
   padding: $block-padding;
+  padding-bottom: 0;
 }
 
 app-filter-related {
@@ -307,7 +308,11 @@ app-filter-related {
     flex-direction: column;
 
     .badge {
-      margin-bottom: 4px;
+      margin-bottom: 2px;
+      padding-top: .1rem;
+      padding-bottom: .1rem;
+
+      line-height: 10px;
     }
   }
 
