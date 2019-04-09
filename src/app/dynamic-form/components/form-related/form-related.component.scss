@@ -61,8 +61,7 @@
 .clear-button {
   visibility: hidden;
 
-  opacity: .5;
-  color: rgba($gray, .5);
+  color: rgba($gray, .8);
 
   .form-element-content:hover & {
     visibility: visible;
