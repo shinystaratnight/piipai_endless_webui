@@ -24,19 +24,25 @@
 
           <div class="form-element-content-actions"
             *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete) && !(config.errorMessage && config.errorMessage.visible)" >
+            <button *ngIf="displayValue" type="button" class="clear-button" (click)="clearField()" title="Reset">
+              <i fa class="icon" name="times"></i>
+            </button>
             <button type="button"
               *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
-              (click)="open('update')">
+              (click)="open('update')"
+              title="Edit">
                 <i class="text-primary icon" fa name="pencil"></i>
             </button>
             <button type="button"
               *ngIf="config.templateOptions.add && checkPermission('post')"
-              (click)="open('post')">
+              (click)="open('post')"
+              title="Create">
                 <i class="text-success icon" fa name="plus"></i>
             </button>
             <button type="button"
               *ngIf="config.templateOptions.delete && displayValue && checkPermission('delete')"
-              (click)="open('delete')">
+              (click)="open('delete')"
+              title="Delete">
                 <i class="text-danger icon" fa name="times"></i>
             </button>
           </div>

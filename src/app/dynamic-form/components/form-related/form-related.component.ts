@@ -1446,15 +1446,7 @@ export class FormRelatedComponent extends BasicElementComponent
                     canSetValue = true;
                   } else if (only > res.results.length || only < res.results.length) {
                     this.count = null;
-                    if (this.group.get(this.key).value) {
-                      this.displayValue = '';
-                      this.group.get(this.key).patchValue('');
-                      this.eventHandler(
-                        { type: 'reset' },
-                        this.group.get(this.key).value,
-                        this.resetAdditionalData()
-                      );
-                    }
+                    this.clearField();
                   }
                 } else if (!only) {
                   canSetValue = true;
@@ -1584,6 +1576,18 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public updatePosition() {
     this.update.next();
+  }
+
+  public clearField() {
+    if (this.group.get(this.key).value) {
+      this.displayValue = '';
+      this.group.get(this.key).patchValue('');
+      this.eventHandler(
+        { type: 'reset' },
+        this.group.get(this.key).value,
+        this.resetAdditionalData()
+      );
+    }
   }
 
   public filterUniqueValue(target: any[], data: any[]): any[] {
