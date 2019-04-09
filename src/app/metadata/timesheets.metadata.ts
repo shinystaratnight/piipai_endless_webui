@@ -930,6 +930,7 @@ const form = [
                 templateOptions: {
                   label: 'Total time',
                   color: 'text-success',
+                  bold: true,
                 }
               },
             ]
@@ -1020,7 +1021,7 @@ const form = [
                 width: 0.25,
                 endpoint: Endpoints.SmsMessages,
                 templateOptions: {
-                  label: 'Going to work sent sms',
+                  label: 'Pre-shift check sent sms',
                   values: ['__str__'],
                   type: 'related',
                 },
@@ -1031,7 +1032,7 @@ const form = [
                 width: 0.25,
                 endpoint: Endpoints.SmsMessages,
                 templateOptions: {
-                  label: 'Going to work reply sms',
+                  label: 'Pre-shift check reply sms',
                   values: ['__str__'],
                   type: 'related',
                 },

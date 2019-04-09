@@ -354,6 +354,11 @@
 
     color: rgba($gray, .26);
 
+    &.bold {
+      font-weight: bold;
+      color: inherit;
+    }
+
     .registration-form & {
       margin-bottom: 4px;
 
