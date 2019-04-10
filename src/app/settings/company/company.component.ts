@@ -8,6 +8,7 @@ import { Field } from '../../dynamic-form/models';
 import { GenericFormService, FormService } from '../../dynamic-form/services';
 import { SettingsService } from '../settings.service';
 import { SiteSettingsService } from '../../services';
+import { TimeService } from '../../shared/services';
 
 @Component({
   selector: 'app-company',
@@ -48,7 +49,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private settingsService: SettingsService,
     private siteSettings: SiteSettingsService,
-    private formService: FormService
+    private formService: FormService,
+    private time: TimeService
   ) { }
 
   public ngOnInit() {
@@ -127,6 +129,18 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   public submitForm(data) {
+    const keys = Object.keys(data.invoice_rule);
+    keys.forEach((key) => {
+      if (key.includes('period_zero_reference')) {
+        if (key === 'period_zero_reference_date') {
+          data.invoice_rule[key] = this.time.instance(data.invoice_rule[key], 'YYYY-MM-DD').date();
+        }
+
+        data.invoice_rule['period_zero_reference'] = parseInt(data.invoice_rule[key], 10);
+        delete data.invoice_rule[key];
+      }
+    });
+
     this.saveProcess = true;
     this.gfs.submitForm(this.endpoint, data).subscribe(
       (res: any) => {

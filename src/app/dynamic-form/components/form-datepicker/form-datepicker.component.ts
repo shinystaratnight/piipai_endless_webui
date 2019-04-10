@@ -69,6 +69,10 @@ export class FormDatepickerComponent extends BasicElementComponent
     this.update = new Subject();
     this.mobileDevice = isMobile();
 
+    if (this.config.customDatepicker) {
+      this.dateFormat = this.config.customDatepicker.dateFormat;
+    }
+
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.setInitValue(moment);
     this.checkModeProperty();
@@ -244,8 +248,8 @@ export class FormDatepickerComponent extends BasicElementComponent
       if (type === 'date' || type === 'datetime') {
         (window as any).$(this.d.nativeElement).datebox({
           mode: dateType,
-          dateFormat: '%d/%m/%Y',
-          overrideDateFormat: '%d/%m/%Y',
+          dateFormat: this.config.customDatepicker ? this.config.customDatepicker.datepickerFormat : '%d/%m/%Y',
+          overrideDateFormat: this.config.customDatepicker ? this.config.customDatepicker.datepickerFormat : '%d/%m/%Y',
           useClearButton: true,
           useFocus: true,
           useHeader: false,

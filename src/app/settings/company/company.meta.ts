@@ -152,6 +152,7 @@ export const meta = [
             type: 'select',
             key: 'invoice_rule.period',
             read_only: false,
+            formData,
             templateOptions: {
               label: 'Period',
               required: true,
@@ -162,6 +163,67 @@ export const meta = [
                 { value: 'daily', label: 'Daily' },
               ]
             }
+          },
+          {
+            type: 'select',
+            key: 'invoice_rule.period_zero_reference_weekly',
+            read_only: false,
+            formData,
+            templateOptions: {
+              label: 'Invoice Frequency',
+              doNotSort: true,
+              options: [
+                { value: 1, label: 'Monday' },
+                { value: 2, label: 'Tuesday' },
+                { value: 3, label: 'Wednesday' },
+                { value: 4, label: 'Thursday' },
+                { value: 5, label: 'Friday' },
+                { value: 6, label: 'Saturday' },
+                { value: 7, label: 'Sunday' },
+              ],
+            },
+            showIf: [{
+              'invoice_rule.period': 'weekly'
+            }]
+          },
+          {
+            type: 'select',
+            key: 'invoice_rule.period_zero_reference_fortnightly',
+            read_only: false,
+            formData,
+            templateOptions: {
+              label: 'Invoice Frequency',
+              doNotSort: true,
+              options: [
+                { value: 1, label: 'Monday' },
+                { value: 2, label: 'Tuesday' },
+                { value: 3, label: 'Wednesday' },
+                { value: 4, label: 'Thursday' },
+                { value: 5, label: 'Friday' },
+                { value: 6, label: 'Saturday' },
+                { value: 7, label: 'Sunday' },
+              ],
+            },
+            showIf: [{
+              'invoice_rule.period': 'fortnightly'
+            }]
+          },
+          {
+            type: 'datepicker',
+            key: 'invoice_rule.period_zero_reference_date',
+            read_only: false,
+            formData,
+            customDatepicker: {
+              dateFormat: 'DD',
+              datepickerFormat: '%d'
+            },
+            templateOptions: {
+              label: 'Invoice Frequency',
+              type: 'date'
+            },
+            showIf: [{
+              'invoice_rule.period': 'monthly'
+            }]
           },
           {
             type: 'select',
