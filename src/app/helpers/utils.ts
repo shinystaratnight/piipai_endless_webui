@@ -38,3 +38,22 @@ export function isManager(): boolean {
 
   return role.__str__.includes('manager');
 }
+
+export function getTotalTime(time, data) {
+    const shift_ended_at = time.instance(data.shift_ended_at);
+    const shift_started_at = time.instance(data.shift_started_at);
+
+    let breakTime = 0;
+
+    if (data.break_ended_at && data.break_started_at) {
+      const break_ended_at = time.instance(data.break_ended_at);
+      const break_started_at = time.instance(data.break_started_at);
+
+      breakTime = break_ended_at.diff(break_started_at);
+    }
+
+    const workTime = shift_ended_at.diff(shift_started_at);
+    const totalTime = time.instance.duration(workTime - breakTime);
+
+    return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
+  }

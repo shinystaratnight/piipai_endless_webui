@@ -103,8 +103,21 @@ export class DynamicFormComponent implements OnInit {
     if (this.hiddenFields) {
       this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
     }
+    this.setNullFields(this.config, data);
     this.filterSendData(this.config, data);
     this.submitForm.emit(data);
+  }
+
+  public setNullFields(metadata: any[], data) {
+    metadata.forEach((el) => {
+      if (el.setNull && data[el.key]) {
+        el.setNull.forEach((field) => {
+          data[field] = null;
+        });
+      } else if (el.children) {
+        this.setNullFields(el.children, data);
+      }
+    });
   }
 
   public eventHandler(e: CustomEvent): void {
