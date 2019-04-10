@@ -27,10 +27,38 @@ const form = [
         key: 'position',
         type: 'static',
         templateOptions: { type: 'static', required: false, label: 'Position' },
-        read_only: true
-      }
+        read_only: true,
+      },
     ],
     type: 'row'
+  },
+  {
+    type: 'row',
+    children: [
+      {
+        width: 0.25,
+        type: 'static',
+        key: 'total_time',
+        send: false,
+        read_only: true,
+        templateOptions: {
+          label: 'Total time',
+          color: 'text-success',
+          bold: true,
+        }
+      },
+      {
+        width: 0.25,
+        type: 'checkbox',
+        key: 'noBreak',
+        default: false,
+        send: false,
+        setNull: ['break_started_at', 'break_ended_at'],
+        templateOptions: {
+          label: 'No Break',
+        },
+      },
+    ]
   },
   {
     children: [
@@ -45,26 +73,6 @@ const form = [
         read_only: false
       },
       {
-        key: 'break_started_at',
-        type: 'datepicker',
-        templateOptions: {
-          type: 'datetime',
-          required: false,
-          label: 'Break Started at'
-        },
-        read_only: false
-      },
-      {
-        key: 'break_ended_at',
-        type: 'datepicker',
-        templateOptions: {
-          type: 'datetime',
-          required: false,
-          label: 'Break Ended at'
-        },
-        read_only: false
-      },
-      {
         key: 'shift_ended_at',
         type: 'datepicker',
         templateOptions: {
@@ -73,7 +81,43 @@ const form = [
           label: 'Shift Ended at'
         },
         read_only: false
-      }
+      },
+      {
+        type: 'group',
+        hideLabel: true,
+        children: [
+          {
+            key: 'break_started_at',
+            type: 'datepicker',
+            templateOptions: {
+              type: 'datetime',
+              required: false,
+              label: 'Break Started at'
+            },
+            saveField: true,
+            read_only: false,
+            showIf: [{ noBreak: false }]
+          },
+        ]
+      },
+      {
+        type: 'group',
+        hideLabel: true,
+        children: [
+          {
+            key: 'break_ended_at',
+            type: 'datepicker',
+            templateOptions: {
+              type: 'datetime',
+              required: false,
+              label: 'Break Ended at'
+            },
+            saveField: true,
+            read_only: false,
+            showIf: [{ noBreak: false }],
+          },
+        ]
+      },
     ],
     type: 'row'
   }

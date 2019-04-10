@@ -18,7 +18,9 @@ import * as moment from 'moment-timezone';
 
 import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
+import { getTotalTime } from '../../../helpers';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
+import { TimeService } from '../../../shared/services';
 
 @Component({
   selector: 'app-form-input',
@@ -79,7 +81,8 @@ export class FormInputComponent extends BasicElementComponent
   constructor(
     private fb: FormBuilder,
     public elementRef: ElementRef,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private time: TimeService
   ) {
     super();
     this.subscriptions = [];
@@ -126,11 +129,21 @@ export class FormInputComponent extends BasicElementComponent
       const subscription = this.config.formData.subscribe((data) => {
         this.formData = data.data;
         this.checkTimesheetTime(data);
+        this.checkTotalTime(data.data);
         this.checkIfExistDefaultValue(data.key);
         this.checkAttributes();
       });
 
       this.subscriptions.push(subscription);
+    }
+  }
+
+  public checkTotalTime(data) {
+    if (this.config.key === 'total_time') {
+      const formatString = new FormatString();
+      this.displayValue = formatString.format('{totalTime}',
+        { ...data, totalTime: getTotalTime(this.time, data) }
+      );
     }
   }
 

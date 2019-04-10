@@ -1,22 +1,23 @@
-<div [class.mobile]="isMobileDevice" [class.mb-0]="isMobileDevice && config.label === 'Residency'">
+<div [class.mobile]="isMobileDevice && !config.hideLabel"
+  [class.mb-0]="isMobileDevice && config.label === 'Residency'">
 
-  <label
-    [hidden]="(isMobileDevice && labelText === ' ') || config.hideLabel"
-    [class.normal]="config.normal"
-    *ngIf="!config.main && (config.name ? config.label : true)">
-      {{labelText === ' ' ? '&nbsp;' : labelText}}
-  </label>
+    <label
+      [hidden]="(isMobileDevice && labelText === ' ') || config.hideLabel"
+      [class.normal]="config.normal"
+      *ngIf="!config.main && (config.name ? config.label : true)">
+        {{labelText === ' ' ? '&nbsp;' : labelText}}
+    </label>
 
-  <ng-container *ngFor="let field of config.children">
-    <ng-container
-      appFormElement
-      [config]="field"
-      [group]="group"
-      [errors]="errors"
-      [message]="message"
-      (event)="eventHandler($event)"
-      (buttonAction)="buttonActionHandler($event)">
+    <ng-container *ngFor="let field of config.children">
+      <ng-container
+        appFormElement
+        [config]="field"
+        [group]="group"
+        [errors]="errors"
+        [message]="message"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonActionHandler($event)">
+      </ng-container>
     </ng-container>
-  </ng-container>
 
 </div>
