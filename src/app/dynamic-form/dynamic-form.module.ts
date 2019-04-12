@@ -12,6 +12,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DndModule } from 'ng2-dnd';
 import { QuillModule } from 'ngx-quill';
+import { SignaturePadModule } from 'angular2-signaturepad';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -39,6 +40,7 @@ import { directives } from './directives';
     DndModule.forRoot(),
     PdfViewerModule,
     QuillModule,
+    SignaturePadModule,
   ],
   exports: [
     fromComponents.GenericFormComponent,

@@ -342,7 +342,7 @@
         [edit]="modalInfo.edit"
         (event)="formEvent($event, c)"
         (errorForm)="formError($event)">
-          <button type="submit" class="btn btn-primary text-white button-save" [disabled]="saveProcess || modalInfo.form.disableSaveButton">
+          <button type="submit" class="btn btn-primary text-white button-save mt-3" [disabled]="saveProcess || modalInfo.form.disableSaveButton">
             Save
             <app-spinner *ngIf="saveProcess"></app-spinner>
           </button>
@@ -398,7 +398,7 @@
       <div class="modal-header">
         <h5 class="modal-title">
           <ng-container *ngIf="modalInfo.evaluate">
-            Evaluate
+            {{modalInfo.signature ? 'Signature' : 'Evaluate'}}
           </ng-container>
 
           <ng-container *ngIf="!modalInfo.evaluate">
@@ -430,7 +430,7 @@
       </app-generic-form>
     </div>
 
-    <ng-container *ngIf="modalInfo.evaluate">
+    <ng-container *ngIf="modalInfo.evaluate && !modalInfo.signature">
       <div class="modal-body text-center">
         <ng-container *ngIf="modalInfo.label.picture">
           <img  [src]="modalInfo.label.picture" alt="Photo" style="border-radius: 50%" height="100" width="100">
@@ -456,6 +456,20 @@
         <button type="button" class="btn big-btn btn-shadow btn-primary button-save"
           (click)="sendEvaluateData(modalInfo.endpoint, modalInfo.data)">
             Save
+            <app-spinner *ngIf="saveProcess"></app-spinner>
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="modalInfo.signature">
+      <div class="modal-body text-center">
+        <app-signature (signature)="updateSignature($event)"></app-signature>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button *ngIf="modalInfo.signature" type="button" class="btn big-btn btn-shadow btn-primary button-save"
+          (click)="sendSignature()">
+            Approve
             <app-spinner *ngIf="saveProcess"></app-spinner>
         </button>
       </div>

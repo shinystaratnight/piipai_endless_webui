@@ -6,6 +6,7 @@ import { WorkflowComponent } from './workflow/workflow.component';
 import { TestGeneratorComponent } from './test-generator/test-generator.component';
 import { TestListComponent } from './test-list/test-list.component';
 import { TimeTrackingComponent } from './time-tracking/time-tracking.component';
+import { SignatureComponent } from './signature/signature.component';
 
 // Filters
 import { FilterChoiceComponent } from './filter-choice/filter-choice.component';
@@ -111,6 +112,7 @@ export const entryComponents = [
   TestListComponent,
   TimeTrackingComponent,
   ExtendComponent,
+  SignatureComponent,
 
   InfoComponent
 ];
