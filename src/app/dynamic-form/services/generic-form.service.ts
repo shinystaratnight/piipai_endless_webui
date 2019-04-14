@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -178,6 +178,16 @@ export class GenericFormService {
   public delete(endpoint, id, postfix?): any {
     return this.http
       .delete(`${endpoint}${id}/` + (postfix ? `${postfix}/` : ''))
+      .pipe(
+        catchError((error: any) => this.errors.parseErrors(error))
+      );
+  }
+
+  public uploadFile(endpoint, data) {
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    return this.http
+      .post(endpoint, data, { headers })
       .pipe(
         catchError((error: any) => this.errors.parseErrors(error))
       );
