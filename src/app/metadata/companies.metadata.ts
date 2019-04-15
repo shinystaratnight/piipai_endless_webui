@@ -829,6 +829,10 @@ const form = [
                       type: 'select',
                       options: [
                         {
+                          value: 'BASIC',
+                          label: 'Basic'
+                        },
+                        {
                           value: 'PIN',
                           label: 'PIN'
                         },
