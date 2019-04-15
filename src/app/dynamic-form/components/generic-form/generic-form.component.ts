@@ -1354,7 +1354,26 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       this.resend(e);
     }
 
+    if (e.value === 'noBreak') {
+      this.noBreak(e);
+    }
+
     this.buttonAction.emit(e);
+  }
+
+  public noBreak(e) {
+    const noBreakCheckbox = getElementFromMetadata(this.metadata, 'noBreak');
+    const value = !noBreakCheckbox.value;
+    e.el.templateOptions.text = value ? 'Set break' : 'No Break';
+
+    this.parseMetadata(this.metadata, {
+        ['noBreak']: {
+          action: 'add',
+          data: {
+            value
+          }
+        }
+      }, true);
   }
 
   public resend(e) {
