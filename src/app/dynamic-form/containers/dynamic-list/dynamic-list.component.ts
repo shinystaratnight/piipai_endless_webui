@@ -1462,7 +1462,7 @@ export class DynamicListComponent
     this.open(this.modal, { size: 'lg' });
   }
 
-  public evaluate(e, data?) {
+  public evaluate(e, data?, signature?: boolean) {
     if (!data) {
       data = this.getRowData(e);
     }
@@ -1474,6 +1474,7 @@ export class DynamicListComponent
         endpoint: e.el.endpoint,
         edit: true,
         evaluate: true,
+        rowData: data,
         label: {
           picture: contact.picture && contact.picture.origin,
           contactAvatar: getContactAvatar(contact.__str__),
@@ -1489,8 +1490,47 @@ export class DynamicListComponent
         }
       };
 
+      if (signature) {
+        this.modalInfo.signature = {
+          endpoint: this.format(`/hr/timesheets/{id}/approve_by_signature/`, data),
+          value: ''
+        };
+      }
+
       this.open(this.evaluateModal, { windowClass: 'small-modal' });
     }
+  }
+
+  public sendSignature() {
+    const data = new FormData();
+    const image = this.convertBase64(this.modalInfo.signature.value);
+    data.append('supervisor_signature', image);
+
+    this.genericFormService
+      .uploadFile(this.modalInfo.signature.endpoint, data)
+      .subscribe(() => {
+        delete this.modalInfo.signature;
+        this.approveEndpoint = null;
+        this.modalInfo.endpoint = this.format(`/hr/timesheets/{id}/evaluate/`, this.modalInfo.rowData);
+      });
+  }
+
+  public convertBase64(url: string) {
+    const b64Data = url.slice(url.indexOf(',') + 1);
+    const byteCharacters = atob(b64Data);
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    const theBlob = new Blob([byteArray], {type: 'image/png'});
+    return new File([theBlob], 'signature.png');
+  }
+
+  public updateSignature(signature: string) {
+    this.modalInfo.signature.value = signature;
   }
 
   public sendEvaluateData(endpoint, data) {
@@ -1550,7 +1590,12 @@ export class DynamicListComponent
         }
       };
 
-      this.open(this.evaluateModal, { size: 'lg', windowClass: 'visible-mode' });
+      let windowClass = 'visible-mode';
+      if (!this.modalInfo.endpoint.includes('submit')) {
+        windowClass += ' small-modal';
+      }
+
+      this.open(this.evaluateModal, { size: 'lg', windowClass });
     }
   }
 
@@ -1560,7 +1605,8 @@ export class DynamicListComponent
     if (data) {
       this.approveEndpoint = e.el.endpoint;
       e.el.endpoint = this.format(this.evaluateEndpoint, data);
-      this.evaluate(e, data);
+
+      this.evaluate(e, data, data.company.supervisor_approved_scheme.includes('SIGNATURE'));
     }
   }
 

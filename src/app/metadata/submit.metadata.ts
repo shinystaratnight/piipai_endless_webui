@@ -52,11 +52,23 @@ const form = [
         type: 'checkbox',
         key: 'noBreak',
         default: false,
+        hide: true,
         send: false,
         setNull: ['break_started_at', 'break_ended_at'],
         templateOptions: {
           label: 'No Break',
         },
+      },
+      {
+        width: 0.25,
+        type: 'button',
+        color: 'primary',
+        templateOptions: {
+          title: 'Break',
+          action: 'noBreak',
+          text: 'No Break',
+          type: 'button',
+        }
       },
     ]
   },
