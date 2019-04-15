@@ -141,8 +141,16 @@ export class FormInputComponent extends BasicElementComponent
   public checkTotalTime(data) {
     if (this.config.key === 'total_time') {
       const formatString = new FormatString();
+      const newData = {...data};
+
+      if (newData.noBreak) {
+        newData['break_started_at'] = null;
+        newData['break_ended_at'] = null;
+        console.log(this.displayValue, data);
+      }
+
       this.displayValue = formatString.format('{totalTime}',
-        { ...data, totalTime: getTotalTime(this.time, data) }
+        { ...newData, totalTime: getTotalTime(this.time, newData) }
       );
     }
   }

@@ -1590,7 +1590,12 @@ export class DynamicListComponent
         }
       };
 
-      this.open(this.evaluateModal, { size: 'lg', windowClass: 'visible-mode small-modal' });
+      let windowClass = 'visible-mode';
+      if (!this.modalInfo.endpoint.includes('submit')) {
+        windowClass += ' small-modal';
+      }
+
+      this.open(this.evaluateModal, { size: 'lg', windowClass });
     }
   }
 
