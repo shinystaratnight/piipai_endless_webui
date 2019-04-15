@@ -591,6 +591,33 @@ const form = [
             type: 'related',
             key: 'customer_company',
             many: false
+          },
+          {
+            type: 'datepicker',
+            key: 'synced_at',
+            read_only: true,
+            templateOptions: {
+              label: 'Synced at',
+              type: 'datetime'
+            }
+          },
+          {
+            type: 'checkbox',
+            key: 'approved',
+            hide: true,
+            templateOptions: {}
+          },
+          {
+            type: 'button',
+            color: 'primary',
+            showIf: [ 'approved' ],
+            templateOptions: {
+              action: 'syncInvoice',
+              text: 'Sync',
+              type: 'button',
+              small: true,
+              p: true
+            }
           }
         ]
       },

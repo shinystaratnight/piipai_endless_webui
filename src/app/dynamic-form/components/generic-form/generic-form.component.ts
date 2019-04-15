@@ -1354,11 +1354,27 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       this.resend(e);
     }
 
+    if (e.value === 'syncInvoice') {
+      this.syncInvoice(this.id, e);
+    }
+
     if (e.value === 'noBreak') {
       this.noBreak(e);
     }
 
     this.buttonAction.emit(e);
+  }
+
+  public syncInvoice(id: string, e: any) {
+    const endpoint = `/core/invoices/${id}/sync/`;
+
+    this.service.submitForm(endpoint, {})
+      .subscribe((res) => {
+        const synced_at = getElementFromMetadata(this.metadata, 'synced_at');
+        synced_at.value = this.time.instance().format();
+        this.updateMetadata(this.metadata, 'synced_at');
+        e.el.hidden.next(true);
+      });
   }
 
   public noBreak(e) {
