@@ -110,7 +110,7 @@ import { Endpoints } from '../helpers';
 
 export const metadata = {
   [Endpoints.Address]: address.metadata,
-  [Endpoints.CandidateContact]: candidatepool.metadata,
+  [Endpoints.CandidateContact]: candidatecontacts.metadata,
   [Endpoints.CandidatePool]: candidatepool.metadata,
   [Endpoints.Contact]: contacts.metadata,
   [Endpoints.Company]: companies.metadata,
