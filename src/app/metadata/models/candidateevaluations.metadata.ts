@@ -778,10 +778,86 @@ const formadd = [
   }
 ];
 
+const candidatepool = {
+  fields: [
+    {
+      key: 'evaluated_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Evaluated at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    },
+    {
+      default: 0,
+      key: 'level_of_communication',
+      read_only: false,
+      templateOptions: {
+        required: false,
+        label: 'Level of communication',
+        type: 'skills',
+        options: [
+          { value: 0, label: 'Not Rated' },
+          { value: 1, label: 'Impossible' },
+          { value: 2, label: 'Hard' },
+          { value: 3, label: 'Decent' },
+          { value: 4, label: 'Good' },
+          { value: 5, label: 'Excellent' }
+        ]
+      },
+      type: 'skills'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'jobsite',
+        sort: true,
+        sort_field: 'jobsi',
+        content: [
+          {
+            type: 'text',
+            field: 'position.name'
+          }
+        ],
+        label: 'Position'
+      },
+      {
+        name: 'level_of_communication',
+        sort: true,
+        sort_field: 'level_of_communication',
+        label: 'Evaluation',
+        content: [
+          {
+            display: 'Score',
+            type: 'skills',
+            field: 'level_of_communication'
+          }
+        ],
+      },
+      {
+        name: 'evaluated_at',
+        sort: true,
+        sort_field: 'evaluated_at',
+        content: [{ type: 'datepicker', field: 'evaluated_at' }],
+        label: 'Evaluated at'
+      },
+    ],
+    list: 'candidateevaluation',
+    editDisable: true,
+    label: 'Candidate Evaluation',
+    pagination_label: 'Candidate Evaluation',
+    search_enabled: false
+  }
+};
+
 export const metadata = {
   list,
   formset,
   profile,
   form,
-  formadd
+  formadd,
+  candidatepool,
 };

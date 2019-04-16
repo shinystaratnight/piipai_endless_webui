@@ -1,5 +1,5 @@
-import { yesterdayFormatDate, todayFormatDate } from './utils';
-import { createFilter, Type } from '../dynamic-form/models/filters';
+import { yesterdayFormatDate, todayFormatDate } from '../helpers';
+import { createFilter, Type } from '../../dynamic-form/models/filters';
 
 const filters = {
   avarageScore: createFilter(Type.Range, {

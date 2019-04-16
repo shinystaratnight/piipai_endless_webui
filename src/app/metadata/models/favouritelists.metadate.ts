@@ -1,4 +1,4 @@
-import { createFilter, Type } from '../dynamic-form/models/filters';
+import { createFilter, Type } from '../../dynamic-form/models/filters';
 
 const filters = {
   companyContact: createFilter(Type.Relared, {

@@ -216,9 +216,62 @@ const formadd = [
   }
 ];
 
+const candidatepool = {
+  fields: [
+    {
+      key: 'created_by',
+      read_only: true,
+      templateOptions: { required: false, label: 'Created by', type: 'static' },
+      type: 'static'
+    },
+    {
+      key: 'note',
+      read_only: false,
+      templateOptions: { required: false, label: 'Notes', type: 'text' },
+      type: 'input'
+    },
+    {
+      key: 'created_at',
+      read_only: true,
+      templateOptions: {
+        required: false,
+        label: 'Created at',
+        type: 'datetime'
+      },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'note',
+        sort: true,
+        sort_field: 'note',
+        content: [{ type: 'input', field: 'note' }],
+        label: 'Notes'
+      },
+      {
+        name: 'created',
+        content: [
+          { type: 'datepicker', field: 'created_at' },
+        ],
+        label: 'Created',
+        title: null,
+        delim: null
+      }
+    ],
+    list: 'note',
+    editDisable: true,
+    label: 'Contact Note',
+    pagination_label: 'Contact Note',
+    search_enabled: false
+  }
+};
+
 export const metadata = {
   list,
   formset,
   form,
-  formadd
+  formadd,
+  candidatepool,
 };

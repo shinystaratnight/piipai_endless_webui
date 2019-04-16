@@ -113,12 +113,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     this.update = new BehaviorSubject(false);
     this.isCollapsed = this.config.collapsed ? this.config.collapsed : false;
     if (this.config.query) {
-      const queryKeys = Object.keys(this.config.query);
-      const queryArray = [];
-      queryKeys.forEach((el) => {
-        queryArray.push(`${el}=${this.config.query[el]}`);
-      });
-      this.query = queryArray.join('&');
+      this.query = this.generateQuery(this.config.query).slice(1);
     }
     if (this.config.delay) {
       this.config.data = {
@@ -375,6 +370,14 @@ export class FormListComponent implements OnInit, OnDestroy {
   public generateQuery(data: any): string {
     const keys = Object.keys(data);
     const values = keys.map((key) => {
+      if (Array.isArray(data[key])) {
+        const result = [];
+        data[key].forEach((el) => {
+          result.push(`${key}=${el}`);
+        });
+        return result.join('&');
+      }
+
       return `${key}=${data[key]}`;
     });
 

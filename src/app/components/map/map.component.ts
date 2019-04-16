@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ElementRef, ViewChild, OnDestroy } fro
 import { MapService, Marker } from './map.service';
 
 import { FilterService } from '../../dynamic-form/services/filter.service';
-import { metadata } from '../../metadata/jobsite-map.metadata';
+import { MetadataService } from '../../metadata';
 
 @Component({
   selector: 'app-map',
@@ -15,7 +15,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public config: {
     list: string;
-    filters: any[];
+    filters?: any[];
   };
 
   public filtersOfList: any[];
@@ -35,6 +35,7 @@ export class MapComponent implements OnInit, OnDestroy {
   constructor(
     private mapService: MapService,
     private filterService: FilterService,
+    private metadata: MetadataService
   ) { }
 
   public ngOnInit() {
@@ -71,8 +72,12 @@ export class MapComponent implements OnInit, OnDestroy {
     this.getCurrentPosition();
     this.config = {
       list: 'jobsitesMap',
-      filters: metadata.mapFilters,
     };
+
+    this.metadata.getMetadata('/hr/jobsites/jobsite_map/', 'filters')
+      .subscribe((filters) => {
+        this.config.filters = filters;
+      });
 
     this.filterService.filters = {
       endpoint: this.mapService.endpoint,

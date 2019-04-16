@@ -1,4 +1,4 @@
-import { createFilter, Type } from '../dynamic-form/models/filters';
+import { createFilter, Type } from '../../dynamic-form/models/filters';
 
 const filters = {
   status: createFilter(Type.Relared, {
@@ -828,6 +828,10 @@ const form = [
                       label: 'TimeSheet approval scheme',
                       type: 'select',
                       options: [
+                        {
+                          value: 'BASIC',
+                          label: 'Basic'
+                        },
                         {
                           value: 'PIN',
                           label: 'PIN'

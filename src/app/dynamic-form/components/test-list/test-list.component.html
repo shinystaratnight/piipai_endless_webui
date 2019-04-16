@@ -2,12 +2,12 @@
 
 <ngb-accordion *ngIf="tests" [closeOthers]="true">
   <ng-container *ngFor="let test of tests">
-    <ngb-panel>
+    <ngb-panel [disabled]="config.hideQuestions">
       <ng-template ngbPanelTitle>
         <div class="test-title-wrapper">
           <div class="test-title">
-            <h5>{{test.acceptance_test.name}}</h5>
-            <p class="description">{{test.company_workflow_node.name}}</p>
+            <h5 class="mb-0">{{test.acceptance_test.name}}</h5>
+            <p *ngIf="!config.hideQuestions" class="description mt-2">{{test.company_workflow_node.name}}</p>
           </div>
           <span class="score border-0" [style.color]="colors[getScore(test.score)]">
             {{test.score}}

@@ -544,10 +544,55 @@ const profile = {
   }
 };
 
+const candidatepool = {
+  fields: [
+    {
+      many: false,
+      key: 'tag',
+      endpoint: '/core/tags/',
+      collapsed: false,
+      list: false,
+      templateOptions: {
+        add: true,
+        delete: false,
+        edit: true,
+        values: ['__str__'],
+        label: 'Tag',
+        type: 'related'
+      },
+      read_only: false,
+      type: 'related'
+    },
+  ],
+  list: {
+    columns: [
+      {
+        name: 'tag',
+        sort: true,
+        sort_field: 'tag',
+        content: [
+          {
+            endpoint: '/core/tags/',
+            type: 'related',
+            field: 'tag'
+          }
+        ],
+        label: 'Tag'
+      },
+    ],
+    list: 'tagrel',
+    editDisable: true,
+    label: 'Tag Relationship',
+    pagination_label: 'Tag Relationship',
+    search_enabled: false
+  }
+};
+
 export const metadata = {
   list,
   formset,
   form,
   formadd,
-  profile
+  profile,
+  candidatepool,
 };

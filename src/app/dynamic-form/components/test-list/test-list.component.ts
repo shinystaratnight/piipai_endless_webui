@@ -25,13 +25,35 @@ export class TestListComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.gfs.getAll(this.config.endpoint).subscribe((res) => {
+    let query = '';
+    if (this.config.query) {
+      query = this.generateQuery(this.config.query);
+    }
+
+    this.gfs.getByQuery(this.config.endpoint, query).subscribe((res) => {
       this.tests = res;
     });
   }
 
   public getScore(score) {
     return Math.floor(parseFloat(score));
+  }
+
+  public generateQuery(data: any): string {
+    const keys = Object.keys(data);
+    const values = keys.map((key) => {
+      if (Array.isArray(data[key])) {
+        const result = [];
+        data[key].forEach((el) => {
+          result.push(`${key}=${el}`);
+        });
+        return result.join('&');
+      }
+
+      return `${key}=${data[key]}`;
+    });
+
+    return `?${values.join('&')}`;
   }
 
 }

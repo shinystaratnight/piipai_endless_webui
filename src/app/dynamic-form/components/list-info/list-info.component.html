@@ -23,11 +23,12 @@
   <div class="list-info-block">
     <span *ngIf="job_title">{{job_title}}</span>
     <h5 class="list-info-title">
-      <span class="title" *ngIf="!getScore(averageScore)">
+      <span class="title" *ngIf="!getScore(averageScore) && !config.hideTitle">
         {{title}}<app-info class="ml-1" [description]="description"></app-info>
       </span>
+      <span style="font-size: 14px" *ngIf="config.hideTitle">Average score</span>
       <span class="title" *ngIf="getScore(averageScore)">
-        {{title}}
+        <ng-container *ngIf="!config.hideTitle">{{title}}</ng-container>
         <span class="score"
           [placement]="'right'"
           [ngbTooltip]="avarage"

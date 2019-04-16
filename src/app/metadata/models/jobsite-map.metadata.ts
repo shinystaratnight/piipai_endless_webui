@@ -1,4 +1,4 @@
-const mapFilters = [
+const filters = [
   {
     key: 'filterby',
     label: 'By Type',
@@ -67,5 +67,5 @@ const mapFilters = [
 ];
 
 export const metadata = {
-  mapFilters
+  filters
 };
