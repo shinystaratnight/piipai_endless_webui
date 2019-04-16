@@ -10,7 +10,8 @@ import {
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { GenericFormService } from '../../dynamic-form/services';
 
@@ -19,10 +20,7 @@ import {
   fillingForm,
   getElementFromMetadata
 } from '../../dynamic-form/helpers/utils';
-
-import * as questionMetadata from '../../metadata/acceptancetestquestions.metadata';
-import * as answerMetadata from '../../metadata/acceptancetestanswers.metadata';
-import * as testMetadata from '../../metadata/acceptancetests.metadata';
+import { MetadataService } from '../../metadata';
 
 @Component({
   selector: 'app-test-builder',
@@ -48,15 +46,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public testEndpoint = '/acceptance-tests/acceptancetests/';
   public questionEndpoint = '/acceptance-tests/acceptancetestquestions/';
   public answerEndpoint = '/acceptance-tests/acceptancetestanswers/';
-  public configs = {
-    test: testMetadata,
-    question: questionMetadata,
-    answer: answerMetadata
-  };
 
   constructor(
     private genericFormService: GenericFormService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private metadata: MetadataService
   ) {}
 
   public ngOnInit() {
@@ -84,63 +78,72 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
   public updateTestForm(data) {
     this.testId = data.id;
-    this.testMetadata = this.createMetadata('test', 'form', data);
+    this.createMetadata(this.testEndpoint, 'form', data)
+      .subscribe((config: Field[]) => {
+        this.testMetadata = config;
+      });
   }
 
-  public createMetadata(type: string, metadataType: string, data?): Field[] {
-    const config = JSON.parse(
-      JSON.stringify(this.configs[type].metadata[metadataType])
-    );
+  public createMetadata(endpoint: string, metadataType: string, data?): Observable<Field[]> {
+    return this.metadata.get(endpoint, metadataType)
+      .pipe(
+        map((config: Field[]) => {
+          const mode = new BehaviorSubject('edit');
+          if (metadataType === 'form') {
+            this.addModeProperty(config, mode);
+          }
 
-    const mode = new BehaviorSubject('edit');
-    if (metadataType === 'form') {
-      this.addModeProperty(config, mode);
-    }
+          if (metadataType === 'form') {
+            mode.next('view');
+            fillingForm(config, data);
+          }
 
-    if (metadataType === 'form') {
-      mode.next('view');
-      fillingForm(config, data);
-    }
-
-    return config;
+          return config;
+        })
+      );
   }
 
   public addQuestion(create: boolean, data?) {
     const metadataType = create ? 'formadd' : 'form';
-    const metadata = this.createMetadata('question', metadataType, data);
-    if (create) {
-      const order = getElementFromMetadata(metadata, 'order');
+    this.createMetadata(this.questionEndpoint, metadataType, data)
+      .subscribe((config: Field[]) => {
+        if (create) {
+          const order = getElementFromMetadata(config, 'order');
 
-      if (order) {
-        order.value = ++this.questionId;
-      }
-    } else {
-      const order = getElementFromMetadata(metadata, 'order');
+          if (order) {
+            order.value = ++this.questionId;
+          }
+        } else {
+          const order = getElementFromMetadata(config, 'order');
 
-      if (order.value > this.questionId) {
-        this.questionId = order.value;
-      } else {
-        this.questionId += 1;
-      }
-    }
+          if (order.value > this.questionId) {
+            this.questionId = order.value;
+          } else {
+            this.questionId += 1;
+          }
+        }
 
-    this.questions.push(metadata);
+        this.questions.push(config);
+      });
   }
 
   public addAnswer(create: boolean, target, data?) {
     const metadataType = create ? 'formadd' : 'form';
-    const metadata = this.createMetadata('answer', metadataType, data);
-    if (create) {
-      const order = getElementFromMetadata(metadata, 'order');
 
-      const value = this.getLastOrder(target);
+    this.createMetadata(this.answerEndpoint, metadataType, data)
+      .subscribe((config: Field[]) => {
+        if (create) {
+          const order = getElementFromMetadata(config, 'order');
 
-      if (order) {
-        order.value = value;
-      }
-    }
+          const value = this.getLastOrder(target);
 
-    target.push(metadata);
+          if (order) {
+            order.value = value;
+          }
+        }
+
+        target.push(config);
+      });
   }
 
   public getLastOrder(answers) {
@@ -193,10 +196,12 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       this.questionEndpoint + (update ? data.id + '/' : ''),
       data
     ).subscribe((res) => {
-      const metadata = this.createMetadata('question', 'form', res);
-      this.answers[res.id] = this.answers[res.id] || [];
+      this.createMetadata(this.questionEndpoint, 'form', res)
+        .subscribe((config: Field[]) => {
+          this.answers[res.id] = this.answers[res.id] || [];
 
-      this.questions.splice(index, 1, metadata);
+          this.questions.splice(index, 1, config);
+        });
     });
   }
 
@@ -234,9 +239,10 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       this.answerEndpoint + (update ? data.id + '/' : ''),
       data
     ).subscribe((res) => {
-      const metadata = this.createMetadata('answer', 'form', res);
-
-      this.answers[id].splice(index, 1, metadata);
+      this.createMetadata(this.answerEndpoint, 'form', res)
+        .subscribe((config: Field[]) => {
+          this.answers[id].splice(index, 1, config);
+        });
     });
   }
 

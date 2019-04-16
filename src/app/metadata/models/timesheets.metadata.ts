@@ -1,5 +1,5 @@
-import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate, Endpoints, Colors } from './utils';
-import { createFilter, Type } from '../dynamic-form/models/filters';
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate, Endpoints, Colors } from '../helpers';
+import { createFilter, Type } from '../../dynamic-form/models/filters';
 
 const filters = {
   shift_started_at: createFilter(Type.Date, {
@@ -833,7 +833,7 @@ const form = [
                     key: 'company',
                   },
                   {
-                    endpoint: Endpoints.Skills,
+                    endpoint: Endpoints.Skill,
                     read_only: true,
                     templateOptions: {
                       label: 'Position',
@@ -1121,7 +1121,7 @@ const form = [
     ]
   },
   {
-    endpoint: Endpoints.JobOffers,
+    endpoint: Endpoints.JobOffer,
     hide: true,
     templateOptions: {
       label: 'Job offer',

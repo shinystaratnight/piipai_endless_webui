@@ -91,6 +91,8 @@
 
     <h5 class="form-info-title" *ngIf="config && viewMode">
 
+      <span style="font-size: 14px; font-weight: 400" *ngIf="config.hideTitle">Average score</span>
+
       <span *ngIf="!averageScore && averageScore !== 0">
         <span class="view-mode" *ngIf="titlePath">
           <ng-container appFormElement *ngIf="config && config.metadata['title'] && viewMode && !config.metadata['title_title']"

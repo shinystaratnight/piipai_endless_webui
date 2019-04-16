@@ -64,7 +64,8 @@ export class ListInfoComponent implements OnInit {
           this.colorAttr = this.config.values[key].color_attr;
         } else if (key === 'picture') {
           this[key] = this.getValue(this.config.values[key], this.config.value)
-            || (this.config.companyPicture ? '/assets/img/logo.svg' : null);
+            || (this.config.companyPicture ? '/assets/img/logo.svg' : null)
+            || (this.config.hideTitle ? '/assets/img/avatar.png' : null);
         } else {
           this[key] = this.getValue(this.config.values[key], this.config.value);
         }
