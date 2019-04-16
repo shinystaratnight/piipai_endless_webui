@@ -216,6 +216,7 @@ export class DynamicListComponent
   public pictures = [
     '/core/contacts/',
     '/candidate/candidatecontacts/',
+    '/candidate/candidatecontacts/pool/',
     '/core/companies/',
     '/core/companycontacts/'
   ];
