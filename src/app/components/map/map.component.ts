@@ -74,7 +74,7 @@ export class MapComponent implements OnInit, OnDestroy {
       list: 'jobsitesMap',
     };
 
-    this.metadata.getMetadata('/hr/jobsites/jobsite_map/', 'filters')
+    this.metadata.get('/hr/jobsites/jobsite_map/', 'filters')
       .subscribe((filters) => {
         this.config.filters = filters;
       });
