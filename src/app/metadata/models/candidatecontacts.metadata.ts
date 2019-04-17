@@ -831,6 +831,17 @@ const form = [
                       ]
                     },
                     read_only: false
+                  },
+                  {
+                    key: 'profile_price',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Prfile Price',
+                      type: 'number',
+                      display: '${profile_price}'
+                    },
+                    read_only: false
                   }
                 ],
                 width: 0.25
