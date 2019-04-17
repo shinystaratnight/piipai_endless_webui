@@ -146,7 +146,6 @@ export class FormInputComponent extends BasicElementComponent
       if (newData.noBreak) {
         newData['break_started_at'] = null;
         newData['break_ended_at'] = null;
-        console.log(this.displayValue, data);
       }
 
       this.displayValue = formatString.format('{totalTime}',
@@ -369,6 +368,10 @@ export class FormInputComponent extends BasicElementComponent
           [this.config.key]: value
         });
         this.displayValue = text || (value || value === 0 ? value : '-');
+
+        if (this.config.templateOptions.display) {
+          this.displayValue = format.format(this.config.templateOptions.display, { [this.key]: this.displayValue });
+        }
       }
     } else {
       if (this.config.value instanceof Object) {
