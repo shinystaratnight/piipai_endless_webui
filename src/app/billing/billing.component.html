@@ -8,7 +8,7 @@
 <div class="site-page pt-5 billing-page">
   <div class="form-page">
     <div class="form-content">
-      <app-check-card *ngIf="!checkInformation"></app-check-card>
+      <app-check-card [cardExist]="checkInformation"></app-check-card>
 
 
       <div class="row">

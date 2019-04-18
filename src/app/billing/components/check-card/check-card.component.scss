@@ -29,3 +29,23 @@
 .wrapper {
   max-width: 500px;
 }
+
+form {
+  display: flex;
+}
+
+.card-alert {
+  display: inline-flex;
+  align-items: center;
+
+  margin-right: 1rem;
+  padding: 0.4rem 0.6rem;
+
+  border-radius: 2px;
+
+  color: white;
+
+  i {
+    margin-right: .5rem;
+  }
+}
