@@ -816,6 +816,7 @@ export class DynamicListComponent
             image: element.image,
             score: element.score,
             hideTitle: element.hideTitle,
+            size: element.size
           };
           if (obj.action && this.disableActions) {
             obj.disableAction = true;
@@ -2019,7 +2020,7 @@ export class DynamicListComponent
       this.modalInfo.label = 'Edit skills';
     }
 
-    if (smallModalEndpoints.includes(this.modalInfo.endpoint)) {
+    if (smallModalEndpoints.includes(this.modalInfo.endpoint) || e.el.size === 'small') {
       size = undefined;
       windowClass = 'small-modal';
     }
