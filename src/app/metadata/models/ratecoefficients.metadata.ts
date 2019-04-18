@@ -213,6 +213,17 @@ const form = [
               type: 'checkbox'
             },
             read_only: false
+          },
+          {
+            key: 'overlaps',
+            default: false,
+            type: 'checkbox',
+            templateOptions: {
+              required: false,
+              label: 'Overlaps',
+              type: 'checkbox'
+            },
+            read_only: false
           }
         ]
       }
