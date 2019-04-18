@@ -49,3 +49,13 @@ form {
     margin-right: .5rem;
   }
 }
+
+.btn.btn-default {
+  line-height: 19px;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: rgba(#333, .2);
+  }
+}
