@@ -20,7 +20,7 @@ export class BillingService {
     payments: '/billing/payments/',
     autoCharge: '/billing/auto_charge_twilio/',
     fund: '/billing/add_funds_twilio/',
-  }
+  };
 
   constructor(
     private http: HttpClient,
@@ -30,6 +30,14 @@ export class BillingService {
   public setCardInfo(body) {
     return this.http
       .post(this.endpoints.cardInfo, body)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
+  }
+
+  public changeCard(body) {
+    return this.http
+      .put(this.endpoints.cardInfo, body)
       .pipe(
         catchError((err: any) => this.errorService.parseErrors(err))
       );

@@ -1,7 +1,8 @@
 import {
   Component,
   OnInit,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Input,
 } from '@angular/core';
 
 import { BillingService } from '../../services/billing-service';
@@ -34,6 +35,10 @@ export class CheckCardComponent implements OnInit {
 
   public error: string;
   public saving: boolean;
+  public newCard: boolean;
+
+  @Input()
+  public cardExist: boolean;
 
   private stripe: any;
   private card: any;
@@ -73,11 +78,28 @@ export class CheckCardComponent implements OnInit {
   }
 
   public sendToken(token) {
-    this.billingService.setCardInfo({
-      source: token
-    }).subscribe(() => {
-      this.saving = false;
-    });
+    if (this.cardExist) {
+      this.billingService.changeCard({
+        source: token
+      }).subscribe(() => {
+        this.saving = false;
+        this.cardExist = true;
+        this.newCard = false;
+      });
+    } else {
+      this.billingService.setCardInfo({
+        source: token
+      }).subscribe(() => {
+        this.saving = false;
+        this.cardExist = true;
+        this.newCard = false;
+      });
+    }
+
+  }
+
+  public showCardForm() {
+    this.newCard = true;
   }
 
 }
