@@ -659,9 +659,11 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public getDataForForm(endpoint, id) {
-    let endp = id ? `${endpoint}${id}/` : endpoint;
+    let endp = '';
     if (endpoint === '/candidate/candidatecontacts/pool/') {
-      endp += 'pool_detail/';
+      endp = id ? `/candidate/candidatecontacts/${id}/pool_detail/` : endpoint;
+    } else {
+      endp = id ? `${endpoint}${id}/` : endpoint;
     }
 
     this.service.getAll(endp)
