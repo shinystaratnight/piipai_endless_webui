@@ -76,7 +76,16 @@ const list = {
             field: 'profile_price',
             type: 'text',
             display: '${profile_price}'
-          }
+          },
+          {
+            text: 'Buy Profile',
+            type: 'button',
+            color: 'success',
+            label: 'Approve',
+            endpoint: '/candidate/candidatecontacts/{session.data.contact.company_id}/buy/',
+            field: 'id',
+            action: 'buyCandidate',
+          },
         ]
       },
       {

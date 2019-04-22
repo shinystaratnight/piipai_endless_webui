@@ -1339,6 +1339,9 @@ export class DynamicListComponent
         case 'openDiff':
           this[e.value](e.el.endpoint, e.el);
           break;
+        case 'buyCandidate':
+          this.buyCandidate(e);
+          break;
         case 'approveTimesheet':
           this.approveTimesheet(e);
           break;
@@ -1394,6 +1397,16 @@ export class DynamicListComponent
       }
     }
     return;
+  }
+
+  public buyCandidate(e) {
+    this.genericFormService.submitForm(e.el.endpoint, {})
+      .subscribe(() => {
+        this.event.emit({
+          type: 'update',
+          list: this.config.list.list
+        });
+      });
   }
 
   public fillIn(e) {
