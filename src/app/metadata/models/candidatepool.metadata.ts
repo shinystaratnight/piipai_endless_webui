@@ -82,7 +82,7 @@ const list = {
             type: 'button',
             color: 'success',
             label: 'Approve',
-            endpoint: '/candidate/candidatecontacts/{id}/buy/',
+            endpoint: '/candidate/candidatecontacts/{session.data.contact.company_id}/buy/',
             field: 'id',
             action: 'buyCandidate',
           },
