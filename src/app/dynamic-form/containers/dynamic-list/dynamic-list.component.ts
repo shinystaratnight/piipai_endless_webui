@@ -23,6 +23,8 @@ import { AuthService, UserService } from '../../../services';
 import { FormatString } from '../../../helpers/format';
 import { createAddAction, isMobile, isCandidate, getContactAvatar, smallModalEndpoints } from '../../helpers';
 
+import { Endpoints } from '../../../metadata/helpers';
+
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -228,6 +230,7 @@ export class DynamicListComponent
   public collapsed = true;
   public sortedField: any;
   public isMobileDevice = isMobile() && isCandidate();
+  public approveInvoice: boolean;
 
   constructor(
     private filterService: FilterService,
@@ -1817,6 +1820,12 @@ export class DynamicListComponent
       if (closeModal) {
         closeModal();
       }
+
+      if (this.approveInvoice && e.data.billing_email) {
+        this.post(this.approveInvoice);
+        return;
+      }
+
       this.event.emit({
         type: 'update',
         list: this.config.list.list
@@ -2104,31 +2113,55 @@ export class DynamicListComponent
   }
 
   public post(e) {
-    this.genericFormService.submitForm(e.el.endpoint, {}).subscribe(
-      (res: any) => {
-        if (e.el && e.el.redirect) {
-          this.storage.clear('role');
+    const endpoint: string = e.el.endpoint;
+    this.genericFormService
+      .submitForm(endpoint, {})
+      .subscribe(
+        (res: any) => {
+          if (e.el && e.el.redirect) {
+            this.storage.clear('role');
 
-          const helper = new JwtHelperService();
-          const token = helper.decodeToken(res.access_token_jwt);
+            const helper = new JwtHelperService();
+            const token = helper.decodeToken(res.access_token_jwt);
 
-          const redirect = token.origin;
+            const redirect = token.origin;
 
-          if (redirect === location.origin) {
-            this.authService.storeToken({ data: res });
+            if (redirect === location.origin) {
+              this.authService.storeToken({ data: res });
+            }
+
+            location.href = redirect;
+            return;
           }
 
-          location.href = redirect;
-          return;
-        }
+          this.event.emit({
+            type: 'update',
+            list: this.config.list.list
+          });
+        },
+        (err: any) => {
+          this.error = err;
+          if (endpoint.includes('/core/invoices/') && endpoint.includes('/approve/')) {
+            this.toastr.sendMessage(err.errors, MessageType.error);
+            this.approveInvoice = e;
+            const invoice = this.getRowData(e);
+            this.modalInfo = {
+              id: invoice.customer_company.id,
+              endpoint: Endpoints.Company,
+              label: invoice.customer_company.name,
+              type: 'form',
+              edit: true,
+              mode: 'edit'
+            };
+            this.open(this.modal, { size: 'lg' });
 
-        this.event.emit({
-          type: 'update',
-          list: this.config.list.list
-        });
-      },
-      (err: any) => (this.error = err)
-    );
+            setTimeout(() => {
+              const input = document.querySelector('input[name="billing_email"]') as HTMLInputElement;
+              input.focus();
+            }, 2000);
+          }
+        }
+      );
   }
 
   public checkShowRules(rule: any[], data): boolean {
