@@ -42,11 +42,12 @@ button.edit-mode {
   }
 }
 
-button.close {
+button.close-btn {
   margin-left: auto;
   margin-right: 20px;
 
   color: #333;
+  background-color: transparent;
   opacity: .3;
 
   &:hover,
