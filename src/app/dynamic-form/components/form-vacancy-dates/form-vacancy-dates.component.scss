@@ -1,4 +1,5 @@
 @import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins.scss';
 
 .vacancy-dates {
   width: 13rem;
@@ -15,6 +16,11 @@
 }
 
 .today {
-  color: white;
-  background-color: $gray-700;
+  border: 1px solid $brand-primary;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      border-color: rgba(map-get($theme-colors, $item), 0.5);
+    }
+  }
 }

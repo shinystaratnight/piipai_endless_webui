@@ -238,17 +238,6 @@ form.ng-invalid button[type='submit'] {
   min-width: auto;
 }
 
-.current-day {
-  font-size: 12px;
-
-  border-radius: 50% !important;
-
-  background-color: rgba($gray, 0.2);
-  div {
-    color: white !important;
-  }
-}
-
 .fillin-map .close-button {
   position: absolute;
   right: 0;
@@ -792,7 +781,8 @@ form.ng-invalid button[type='submit'] {
 }
 
 @each $item in $themes {
-  .#{$item}-theme .bg-primary {
+  .#{$item}-theme .bg-primary,
+  .#{$item}-theme button.bg-primary:hover {
     background-color: map-get($theme-colors, $item) !important;
   }
 }
