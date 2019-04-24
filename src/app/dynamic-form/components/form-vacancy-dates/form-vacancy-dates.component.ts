@@ -6,20 +6,21 @@ import {
   ElementRef,
   Input,
   OnDestroy,
-  AfterContentInit
+  AfterContentInit,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
-
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import * as moment from 'moment-timezone';
+import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { TimeService } from '../../../shared/services';
 
 @Component({
   selector: 'app-form-vacancy-dates',
   templateUrl: 'form-vacancy-dates.component.html',
-  styleUrls: ['./form-vacancy-dates.component.scss']
+  styleUrls: ['./form-vacancy-dates.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class FormVacancyDatesComponent extends BasicElementComponent
   implements OnInit, OnDestroy, AfterContentInit {
@@ -49,12 +50,16 @@ export class FormVacancyDatesComponent extends BasicElementComponent
 
   private subscription: Subscription;
 
-  constructor(private fb: FormBuilder, private ngbCalendar: NgbCalendar) {
+  constructor(
+    private fb: FormBuilder,
+    private ngbCalendar: NgbCalendar,
+    private time: TimeService,
+  ) {
     super();
   }
 
   public ngOnInit() {
-    this.calcMinDate(moment);
+    this.calcMinDate(this.time.instance);
     this.addControl(this.config, this.fb);
     if (this.config && this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
@@ -71,14 +76,6 @@ export class FormVacancyDatesComponent extends BasicElementComponent
         }
       });
     }
-
-    const today = moment().tz('Australia/Sydney');
-
-    this.vacancyDate = {
-      year: today.year(),
-      month: today.month() + 1,
-      day: today.date()
-    };
   }
 
   public ngOnDestroy() {
@@ -103,11 +100,11 @@ export class FormVacancyDatesComponent extends BasicElementComponent
   }
 
   public markDisabledDates(dates: any[] = []) {
-    const today = moment().tz('Australia/Sydney');
+    const today = this.time.getToday();
 
-    this.markDisabled = (date, current) => {
+    this.markDisabled = (date) => {
       const exist = dates.find((item) => {
-        const parsedDate = moment(item);
+        const parsedDate = this.time.instance(item);
 
         const year = parsedDate.year();
         const month = parsedDate.month() + 1;
@@ -115,20 +112,14 @@ export class FormVacancyDatesComponent extends BasicElementComponent
         const hour = parsedDate.hour();
         const minute = parsedDate.minute();
 
+
+
         if (
-          today.year() === date.year &&
-          today.month() + 1 === date.month &&
-          today.date() === date.day
+          today.year() === year &&
+          (today.month() + 1) === month &&
+          today.date() === day
         ) {
-          return (
-            exist ||
-            today.isAfter(
-              moment.tz(
-                [year, month - 1, day, hour, minute],
-                'Australia/Sydney'
-              )
-            )
-          );
+          return today.isAfter(this.time.instance([year, month - 1, day, hour, minute]));
         }
 
         return year === date.year && month === date.month && day === date.day;
@@ -145,7 +136,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
     };
   }
 
-  public selectVacancyDate(e, time = moment) {
+  public selectVacancyDate(e, time = this.time.instance) {
     if (e) {
       const date = time([e.year, e.month - 1, e.day]).format(this.dateFormat);
 
@@ -174,7 +165,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
     }
   }
 
-  public removeDate(date, time = moment) {
+  public removeDate(date) {
     this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
 
     setTimeout(() => {

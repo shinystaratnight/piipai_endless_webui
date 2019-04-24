@@ -230,7 +230,7 @@
           (event)="formEvent($event, c)"
           (errorForm)="formError($event)">
           <div class="text-center">
-            <button type="submit" class="btn big-btn btn-shadow btn-secondary bg-primary text-white button-save mt-3 mb-4" [disabled]="saveProcess">
+            <button type="submit" class="btn btn-shadow bg-primary text-white button-save mt-3 mb-4" [disabled]="saveProcess">
               Save
               <app-spinner *ngIf="saveProcess"></app-spinner>
             </button>
