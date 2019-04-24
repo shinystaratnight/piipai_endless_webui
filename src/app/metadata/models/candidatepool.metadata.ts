@@ -83,7 +83,7 @@ const list = {
             type: 'button',
             color: 'success',
             label: 'Approve',
-            endpoint: `${Endpoints.CandidateContact}{session.data.contact.company_id}/buy/`,
+            endpoint: `${Endpoints.CandidateContact}{id}/buy/`,
             field: 'id',
             action: 'buyCandidate',
           },
