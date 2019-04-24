@@ -1,4 +1,4 @@
-import { yesterdayFormatDate, todayFormatDate } from '../helpers';
+import { yesterdayFormatDate, todayFormatDate, Endpoints } from '../helpers';
 import { createFilter, Type } from '../../dynamic-form/models/filters';
 
 const filters = {
@@ -10,26 +10,32 @@ const filters = {
   skill: createFilter(Type.Relared, {
     key: 'skill',
     label: 'Skills',
-    endpoint: '/skills/skills/',
+    endpoint: Endpoints.Skill,
     multiple: true
   }),
   tag: createFilter(Type.Relared, {
     key: 'tag',
     label: 'Tags',
-    endpoint: '/core/tags/',
+    endpoint: Endpoints.Tag,
     multiple: true
   }),
   activeState: createFilter(Type.Relared, {
     key: 'active_states',
     label: 'Status',
-    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=candidate.candidatecontact',
+    endpoint: `${Endpoints.WorkflowNode}?company={company_settings.company}&content_type=candidate.candidatecontact`,
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
   recruitmentAgent: createFilter(Type.Relared, {
     key: 'recruitment_agent',
     label: 'Recruitment agent',
-    endpoint: '/core/companycontacts/?master_company=current',
+    endpoint: `${Endpoints.CompanyContact}?master_company=current`,
+  }),
+  created_at: createFilter(Type.Date, {
+    key: 'created_at',
+    label: 'Created at',
+    yesterday: true,
+    today: true,
   })
 };
 
@@ -338,38 +344,14 @@ const list = {
         default: null,
         type: 'checkbox'
       },
-      {
-        list: [
-          {
-            label: 'Yesterday',
-            query: `created_at_0=${yesterdayFormatDate}&created_at_1=${yesterdayFormatDate}`
-          },
-          {
-            label: 'Today',
-            query: `created_at_0=${todayFormatDate}&created_at_1=${todayFormatDate}`
-          }
-        ],
-        key: 'created_at',
-        label: 'Created at',
-        type: 'date',
-        input: [
-          {
-            label: 'From',
-            query: 'created_at_0'
-          },
-          {
-            label: 'To',
-            query: 'created_at_1'
-          }
-        ]
-      }
+      filters.created_at
     ],
     search_enabled: true,
     editDisable: false,
     actions: {
       options: [
         {
-          endpoint: '/candidate/candidatecontacts/sendsms/',
+          endpoint: `${Endpoints.CandidateContact}sendsms/`,
           label: 'Send sms',
           confirm: false,
           message: 'Are you sure?'
@@ -381,175 +363,7 @@ const list = {
       decline_label: 'Decline'
     }
   },
-  fields: [
-    {
-      key: 'weight',
-      type: 'input',
-      templateOptions: {
-        required: false,
-        label: 'Weight, kg',
-        type: 'number'
-      },
-      read_only: true
-    },
-    {
-      key: 'candidate_scores.reliability',
-      type: 'skills',
-      templateOptions: {
-        required: false,
-        label: 'Reliability',
-        type: 'skills'
-      },
-      read_only: true
-    },
-    {
-      key: 'bmi',
-      type: 'static',
-      templateOptions: {
-        required: false,
-        label: 'Bmi',
-        type: 'static'
-      },
-      read_only: true
-    },
-    {
-      read_only: true,
-      values: {
-        available: 'contact.is_available',
-        address: 'contact.address.__str__',
-        title: 'contact.__str__',
-        status: {
-          field: 'latest_state',
-          color: {
-            danger: [0, 80, 90]
-          },
-          color_attr: 'number'
-        },
-        picture: 'contact.picture.origin'
-      },
-      type: 'info',
-      key: 'id'
-    },
-    {
-      key: 'tag_list',
-      type: 'tags',
-      templateOptions: {
-        required: false,
-        label: 'Tag list',
-        type: 'tags'
-      },
-      read_only: true
-    },
-    {
-      key: 'height',
-      type: 'input',
-      templateOptions: {
-        required: false,
-        label: 'Height, cm',
-        type: 'number'
-      },
-      read_only: true
-    },
-    {
-      key: 'transportation_to_work',
-      type: 'select',
-      templateOptions: {
-        required: false,
-        label: 'Transportation',
-        options: [
-          {
-            value: 1,
-            label: 'Own Car'
-          },
-          {
-            value: 2,
-            label: 'Public Transportation'
-          }
-        ],
-        type: 'select'
-      },
-      read_only: true
-    },
-    {
-      key: 'contact.gender',
-      type: 'select',
-      templateOptions: {
-        required: false,
-        label: 'Gender',
-        options: [
-          {
-            value: 'male',
-            label: 'Male'
-          },
-          {
-            value: 'female',
-            label: 'Female'
-          }
-        ],
-        type: 'select'
-      },
-      read_only: true
-    },
-    {
-      key: 'contact.phone_mobile',
-      type: 'link',
-      templateOptions: {
-        label: '',
-        type: 'link',
-        link: 'tel:{field}',
-        text: ''
-      },
-      read_only: true
-    },
-    {
-      key: 'contact.email',
-      type: 'link',
-      templateOptions: {
-        label: 'E-mail',
-        type: 'link',
-        link: 'mailto:{field}',
-        text: 'E-mail'
-      },
-      read_only: true
-    },
-    {
-      key: 'candidate_scores.loyalty',
-      type: 'skills',
-      templateOptions: {
-        required: false,
-        label: 'Loyalty',
-        type: 'skills'
-      },
-      read_only: true
-    },
-    {
-      key: 'skill_list',
-      type: 'skills',
-      templateOptions: {
-        required: false,
-        label: 'Skills',
-        type: 'skills'
-      },
-      read_only: true
-    },
-    {
-      list: false,
-      endpoint: '/core/countries/',
-      read_only: true,
-      templateOptions: {
-        label: 'Nationality',
-        add: true,
-        delete: false,
-        values: ['__str__'],
-        type: 'related',
-        edit: true
-      },
-      collapsed: false,
-      type: 'related',
-      key: 'nationality',
-      many: false
-    }
-  ]
+  fields: []
 };
 
 const form = [
@@ -602,7 +416,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/core/contacts/',
+                    endpoint: Endpoints.Contact,
                     read_only: true,
                     key: 'contact',
                     hide: true,
@@ -623,7 +437,7 @@ const form = [
                   },
                   {
                     list: false,
-                    endpoint: '/core/addresses/',
+                    endpoint: Endpoints.Address,
                     read_only: true,
                     hide: true,
                     templateOptions: {
@@ -738,7 +552,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/core/companycontacts/',
+                    endpoint: Endpoints.CompanyContact,
                     read_only: false,
                     key: 'recruitment_agent',
                     templateOptions: {
@@ -835,13 +649,27 @@ const form = [
                   {
                     key: 'profile_price',
                     type: 'input',
+                    hide: true,
                     templateOptions: {
                       required: false,
-                      label: 'Prfile Price',
+                      label: 'Profile Price',
                       type: 'number',
                       display: '${profile_price}'
                     },
                     read_only: false
+                  },
+                  {
+                    key: 'profile_message',
+                    type: 'input',
+                    send: false,
+                    hide: true,
+                    templateOptions: {
+                      required: false,
+                      label: 'Profile Price',
+                      type: 'text',
+                      description: 'Price can be assigned only to Candidate Contact with status: Recruited',
+                    },
+                    read_only: true
                   }
                 ],
                 width: 0.25
@@ -1010,7 +838,7 @@ const form = [
                   {
                     key: 'visa_type',
                     type: 'related',
-                    endpoint: '/candidate/visatypes/',
+                    endpoint: Endpoints.CandidateVisaType,
                     showIf: [
                       {
                         residency: 3
@@ -1046,7 +874,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/core/countries/',
+                    endpoint: Endpoints.Country,
                     read_only: false,
                     templateOptions: {
                       label: 'Nationality',
@@ -1100,7 +928,7 @@ const form = [
                     read_only: false
                   },
                   {
-                    endpoint: '/candidate/superannuationfunds/',
+                    endpoint: Endpoints.CandidateSuperAnnuationFund,
                     read_only: false,
                     templateOptions: {
                       label: 'Superannual Fund Name',
@@ -1129,7 +957,7 @@ const form = [
                 children: [
                   {
                     list: false,
-                    endpoint: '/core/bankaccounts/',
+                    endpoint: Endpoints.BankAccount,
                     read_only: false,
                     doNotChoice: true,
                     templateOptions: {
@@ -1212,7 +1040,7 @@ const form = [
         ]
       },
       {
-        endpoint: '/candidate/skillrels/',
+        endpoint: Endpoints.CandidateSkill,
         templateOptions: {
           label: 'Skills',
           type: 'list',
@@ -1230,7 +1058,7 @@ const form = [
         help: 'Here you can see the skills which belong to the candidate'
       },
       {
-        endpoint: '/candidate/tagrels/',
+        endpoint: Endpoints.CandidateTag,
         templateOptions: {
           label: 'Tags',
           type: 'list',
@@ -1250,10 +1078,10 @@ const form = [
       {
         name: 'Tests',
         type: 'testList',
-        endpoint: '/candidate/candidatecontacts/{id}/tests/',
+        endpoint: `${Endpoints.CandidateContact}{id}/tests/`,
       },
       {
-        endpoint: '/hr/candidateevaluations/',
+        endpoint: Endpoints.CandidateEvaluation,
         templateOptions: {
           label: 'Evaluations',
           type: 'list',
@@ -1285,10 +1113,10 @@ const form = [
               type: 'timeline',
               text: ''
             },
-            endpoint: '/core/workflownodes/timeline/'
+            endpoint: `${Endpoints.WorkflowNode}timeline/`
           },
           {
-            endpoint: '/core/workflowobjects/',
+            endpoint: Endpoints.WorkflowObject,
             templateOptions: {
               label: 'States history',
               type: 'list',
@@ -1308,7 +1136,7 @@ const form = [
         ]
       },
       {
-        endpoint: '/core/contactunavailabilities/',
+        endpoint: Endpoints.ContactUnavailability,
         type: 'list',
         query: {
           contact: '{contact.id}'
@@ -1325,7 +1153,7 @@ const form = [
         visibleMode: true,
       },
       {
-        endpoint: '/hr/carrierlists/',
+        endpoint: Endpoints.CarrierList,
         templateOptions: {
           label: 'Carrier List',
           type: 'list',
@@ -1343,7 +1171,7 @@ const form = [
         help: 'Here you can see information about carrier of candidate'
       },
       {
-        endpoint: '/hr/blacklists/',
+        endpoint: Endpoints.BlackList,
         templateOptions: {
           label: 'Black List',
           type: 'list',
@@ -1360,7 +1188,7 @@ const form = [
         }
       },
       {
-        endpoint: '/hr/favouritelists/',
+        endpoint: Endpoints.FavouriteList,
         templateOptions: {
           label: 'Favorite List',
           type: 'list',
@@ -1378,7 +1206,7 @@ const form = [
         help: 'Here you can see favorite companies for candidate'
       },
       {
-        endpoint: '/core/notes/',
+        endpoint: Endpoints.Note,
         templateOptions: {
           label: 'Notes',
           type: 'list',
@@ -1396,7 +1224,7 @@ const form = [
         }
       },
       {
-        endpoint: '/hr/joboffers/candidate/',
+        endpoint: `${Endpoints.JobOffer}candidate/`,
         templateOptions: {
           label: 'Job offers',
           type: 'list',
@@ -1410,7 +1238,7 @@ const form = [
         help: 'Here you can see job offers'
       },
       {
-        endpoint: '/hr/timesheets/',
+        endpoint: Endpoints.Timesheet,
         templateOptions: {
           label: 'Timesheets',
           type: 'list',
@@ -1430,11 +1258,11 @@ const formadd = [
   {
     many: false,
     key: 'contact',
-    endpoint: '/core/contacts/',
+    endpoint: Endpoints.Contact,
     collapsed: false,
     list: false,
     checkObject: {
-      endpoint: '/candidate/candidatecontacts/',
+      endpoint: Endpoints.CandidateContact,
       error: 'This Candidate contact already exists!',
       query: {
         contact: '{contact.id}'
@@ -1443,7 +1271,7 @@ const formadd = [
     visibleMode: true,
     update: {
       before: true,
-      endpoint: '/core/contacts/{contact.id}/',
+      endpoint: `${Endpoints.Contact}{contact.id}/`,
       getValue: 'birthday',
       setValue: {
         field: 'birthday'
@@ -1519,7 +1347,7 @@ const formadd = [
   },
   {
     key: 'contact.address',
-    endpoint: '/core/addresses/',
+    endpoint: Endpoints.Address,
     send: false,
     type: 'related',
     showIf: ['contact.id'],
@@ -1544,7 +1372,7 @@ const formadd = [
     read_only: false
   },
   {
-    endpoint: '/core/companycontacts/',
+    endpoint: Endpoints.CompanyContact,
     key: 'recruitment_agent',
     templateOptions: {
       label: 'Recruitment agent',
@@ -1630,7 +1458,7 @@ const profile = [
                     read_only: true
                   },
                   {
-                    endpoint: '/core/contacts/',
+                    endpoint: Endpoints.Contact,
                     read_only: true,
                     key: 'contact',
                     hide: true,
@@ -1645,7 +1473,7 @@ const profile = [
                     },
                   },
                   {
-                    endpoint: '/core/addresses/',
+                    endpoint: Endpoints.Address,
                     read_only: true,
                     hide: true,
                     templateOptions: {
@@ -2004,7 +1832,7 @@ const profile = [
                 type: 'group',
                 children: [
                   {
-                    endpoint: '/core/countries/',
+                    endpoint: Endpoints.Country,
                     read_only: true,
                     templateOptions: {
                       label: 'Nationality',
@@ -2037,7 +1865,7 @@ const profile = [
         ]
       },
       {
-        endpoint: '/candidate/skillrels/',
+        endpoint: Endpoints.CandidateSkill,
         templateOptions: {
           label: 'Skills',
           type: 'list',
@@ -2058,7 +1886,7 @@ const profile = [
         help: 'Here you can see skills'
       },
       {
-        endpoint: '/candidate/tagrels/',
+        endpoint: Endpoints.CandidateTag,
         templateOptions: {
           label: 'Tags',
           type: 'list',
@@ -2079,7 +1907,7 @@ const profile = [
         help: 'Here you can see tags'
       },
       {
-        endpoint: '/hr/candidateevaluations/',
+        endpoint: Endpoints.CandidateEvaluation,
         templateOptions: {
           label: 'Evaluations',
           text: 'Evaluations',

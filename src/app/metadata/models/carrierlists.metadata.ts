@@ -363,9 +363,44 @@ const formadd = [
   }
 ];
 
+const candidatepool = {
+  fields: [
+    {
+      key: 'target_date',
+      read_only: false,
+      templateOptions: { required: false, label: 'Target Date', type: 'date' },
+      type: 'datepicker'
+    }
+  ],
+  list: {
+    columns: [
+      {
+        name: 'target_date',
+        sort: true,
+        sort_field: 'target_date',
+        content: [{ type: 'datepicker', field: 'target_date' }],
+        label: 'Target Date'
+      },
+      {
+        name: 'confirmed_available',
+        sort: true,
+        sort_field: 'confirmed_available',
+        content: [{ type: 'checkbox', field: 'confirmed_available' }],
+        label: 'Confirmed Available'
+      },
+    ],
+    list: 'carrierlist',
+    editDisable: false,
+    label: 'Carrier List',
+    pagination_label: 'Carrier List',
+    search_enabled: false
+  }
+};
+
 export const metadata = {
   list,
   formset,
   form,
-  formadd
+  formadd,
+  candidatepool
 };

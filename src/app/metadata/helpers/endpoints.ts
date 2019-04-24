@@ -18,7 +18,7 @@ export enum Endpoints {
   CompanyTradeReference = '/core/companytradereferences/',
 
   // Skill
-  Skill = '/skills/skills',
+  Skill = '/skills/skills/',
   SkillName = '/skills/skillnames/',
   SkillTag = '/skills/skilltags/',
   SkillBaseRate = '/skills/skillbaserates/',
