@@ -20,6 +20,7 @@ export interface User {
       email: string;
       contact_id: string;
       contact_type: string;
+      company_id: string;
       candidate_contact: string;
       id: string;
       name: string;

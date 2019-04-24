@@ -69,8 +69,9 @@ const list = {
       {
         name: 'profile_price',
         title: null,
-        label: 'Price',
+        label: 'Profile Price',
         delim: null,
+        center: true,
         content: [
           {
             field: 'profile_price',
@@ -82,7 +83,7 @@ const list = {
             type: 'button',
             color: 'success',
             label: 'Approve',
-            endpoint: '/candidate/candidatecontacts/{session.data.contact.company_id}/buy/',
+            endpoint: `${Endpoints.CandidateContact}{id}/buy/`,
             field: 'id',
             action: 'buyCandidate',
           },
@@ -431,6 +432,28 @@ const form = [
                       ]
                     },
                     read_only: false
+                  },
+                  {
+                    key: 'profile_price',
+                    type: 'input',
+                    templateOptions: {
+                      required: false,
+                      label: 'Prfile Price',
+                      type: 'number',
+                      display: '${profile_price}'
+                    },
+                    read_only: false
+                  },
+                  {
+                    type: 'button',
+                    color: 'success',
+                    templateOptions: {
+                      action: 'buyProfile',
+                      text: 'Buy Profile',
+                      type: 'button',
+                      small: true,
+                      p: true
+                    }
                   }
                 ],
                 width: 0.25
@@ -753,6 +776,28 @@ const form = [
           type: 'candidatepool'
         },
         visibleMode: true,
+      },
+      {
+        endpoint: Endpoints.CarrierList,
+        templateOptions: {
+          label: 'Carrier List',
+          type: 'list',
+          add_label: '+ Add',
+          text: 'Carrier List'
+        },
+        visibleMode: true,
+        prefilled: {
+          candidate_contact: '{id}'
+        },
+        type: 'list',
+        query: {
+          candidate_contact: '{id}',
+          fields: ['target_date', 'confirmed_available']
+        },
+        metadata_query: {
+          type: 'candidatepool'
+        },
+        help: 'Here you can see information about carrier of candidate'
       },
       {
         endpoint: Endpoints.Note,

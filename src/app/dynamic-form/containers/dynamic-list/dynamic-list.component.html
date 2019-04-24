@@ -128,7 +128,7 @@
               </th>
               <ng-container *ngFor="let field of config.list.columns">
                 <ng-container *ngIf="!field.hide">
-                  <th *ngIf="!(field.tab && field.tab.is_collapsed)">
+                  <th [class.text-center]="field.center" *ngIf="!(field.tab && field.tab.is_collapsed)">
                     <ng-container
                       appListElement
                       [head]="true"
@@ -189,6 +189,7 @@
 
                 <ng-container *ngFor="let cell of row.content; let first = first">
                   <td *ngIf="!cell.hide"
+                    [class.text-center]="cell.center"
                     [ngStyle]="{'width.px': cell.width}"
                     [attr.data-label]="cell.label"
                     [hidden]="cell.tab && cell.tab.is_collapsed">

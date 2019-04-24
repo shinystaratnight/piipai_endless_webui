@@ -9,6 +9,7 @@ import {
   OnInit
 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
@@ -22,6 +23,8 @@ import { Field } from '../../models';
 
 import { FormatString } from '../../../helpers/format';
 import { getElementFromMetadata, removeValue, isCandidate, isMobile } from '../../helpers';
+
+import { Endpoints } from '../../../metadata/helpers';
 
 import * as moment from 'moment-timezone';
 
@@ -161,7 +164,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     private userService: UserService,
     private authService: AuthService,
     private settingsService: SiteSettingsService,
-    private time: TimeService
+    private time: TimeService,
+    private router: Router
   ) {
     this.subscriptions = [];
 
@@ -1370,11 +1374,24 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       this.noBreak(e);
     }
 
+    if (e.value === 'buyProfile') {
+      this.buyProfile(e);
+    }
+
     this.buttonAction.emit(e);
   }
 
+  public buyProfile(e) {
+    const endpoint = `${Endpoints.CandidateContact}${this.id}/buy/`;
+
+    this.service.submitForm(endpoint, {})
+      .subscribe(() => {
+        this.router.navigate(['/candidate/candidatecontacts/pool']);
+      });
+  }
+
   public syncInvoice(id: string, e: any) {
-    const endpoint = `/core/invoices/${id}/sync/`;
+    const endpoint = `${Endpoints.Invoice}${id}/sync/`;
 
     this.service.submitForm(endpoint, {})
       .subscribe((res) => {
@@ -1949,7 +1966,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public checkTimeline(timeline) {
-    if (this.endpoint === '/hr/jobs/') {
+    if (this.endpoint === Endpoints.Job) {
       if (timeline === 'reset') {
         this.event.emit({
           type: 'sendForm',
@@ -1980,6 +1997,46 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       }
 
     }
+
+    if (this.endpoint === Endpoints.CandidateContact) {
+      if (timeline === 'reset') {
+        this.event.emit({
+          type: 'sendForm',
+          data: Object.assign(this.formData.value.data),
+          status: 'success'
+        });
+        return;
+      }
+
+      const activeNumber = 2;
+      let currentState = timeline.find((item) => item.state === activeNumber);
+
+      currentState = timeline.find((item) => item.state === activeNumber && item.number === 70) || currentState;
+
+      if (currentState) {
+        switch (currentState.number) {
+          case 70:
+            this.showPriceForCandidate();
+            break;
+          default:
+            this.showPriceMessage();
+            break;
+        }
+
+      }
+    }
+  }
+
+  public showPriceMessage() {
+    const profileMessage = getElementFromMetadata(this.metadata, 'profile_message');
+
+    profileMessage.hide = false;
+  }
+
+  public showPriceForCandidate() {
+    const profilePrice = getElementFromMetadata(this.metadata, 'profile_price');
+
+    profilePrice.hide = false;
   }
 
   public setPropertyTrueValue(fields: Field[], prop: string) {

@@ -773,6 +773,7 @@ export class DynamicListComponent
           hideLabel: col.hideLabel,
           hide: col.hide,
           name: col.name,
+          center: col.center,
           content: [],
           contextMenu: col.context_menu,
           tab: this.getTabOfColumn(col.name),
