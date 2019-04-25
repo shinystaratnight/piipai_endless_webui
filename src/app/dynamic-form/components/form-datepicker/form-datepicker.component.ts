@@ -52,7 +52,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   public viewMode: boolean;
   public editMode: boolean;
-  public currrentField: boolean;
+  public currentField: boolean;
 
   private subscriptions: Subscription[];
 
