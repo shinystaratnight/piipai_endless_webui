@@ -19,7 +19,8 @@ import { isMobile } from '../../helpers';
 
 @Component({
   selector: 'app-form-datepicker',
-  templateUrl: 'form-datepicker.component.html'
+  templateUrl: './form-datepicker.component.html',
+  styleUrls: ['./form-datepicker.component.scss']
 })
 export class FormDatepickerComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
@@ -51,6 +52,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   public viewMode: boolean;
   public editMode: boolean;
+  public currrentField: boolean;
 
   private subscriptions: Subscription[];
 

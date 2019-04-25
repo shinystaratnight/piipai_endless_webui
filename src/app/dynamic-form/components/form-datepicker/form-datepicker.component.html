@@ -1,44 +1,51 @@
-<div appDropDown [element]="'.ui-datebox-container'" [update]="update" class="form-group" [target]="opened" [hidden]="config.hide || viewMode || config.read_only">
-  <div class="form-element" (click)="updateDate(undefined, $event)">
-    <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" *ngIf="label && config.templateOptions.label" [attr.for]="key">
-      {{config.templateOptions.label}}:
-    </label>
-    <app-info [description]="config.templateOptions.description"></app-info>
-    <div *ngIf="!mobileDevice" class="input-group form-element-content datepicker mb-2 edit">
-      <input [hidden]="config.templateOptions.type === 'time'" class="form-control"
-        #d
-        data-role="datebox"
-        [(ngModel)]="date"
+<div appDropDown class="form-group"
+  [element]="'.ui-datebox-container'"
+  [class.target]="currentField"
+  [update]="update"
+  [target]="opened"
+  [hidden]="config.hide || viewMode || config.read_only"
+  (mouseover)="currentField = true"
+  (mouseleave)="currentField = false">
+    <div class="form-element" (click)="updateDate(undefined, $event)">
+      <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" *ngIf="label && config.templateOptions.label" [attr.for]="key">
+        {{config.templateOptions.label}}:
+      </label>
+      <app-info [description]="config.templateOptions.description"></app-info>
+      <div *ngIf="!mobileDevice" class="input-group form-element-content datepicker mb-2 edit">
+        <input [hidden]="config.templateOptions.type === 'time'" class="form-control"
+          #d
+          data-role="datebox"
+          [(ngModel)]="date"
 
-        [attr.id]="key"
-        [attr.name]="key">
-      <input [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')" class="form-control"
-        #t
-        date-role="datebox"
-        [(ngModel)]="time">
+          [attr.id]="key"
+          [attr.name]="key">
+        <input [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')" class="form-control"
+          #t
+          date-role="datebox"
+          [(ngModel)]="time">
+      </div>
+
+      <div *ngIf="mobileDevice" class="input-group form-element-content datepicker mb-2 edit w-100">
+        <input type="date" class="form-control mobile-datepicker fa-calendar"
+          [hidden]="config.templateOptions.type === 'time'"
+          [(ngModel)]="date"
+          (ngModelChange)="changeDate($event)"
+          [attr.id]="key"
+          [attr.name]="key">
+
+        <input type="time" class="form-control mobile-datepicker fa-clock-o"
+          [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')"
+          (ngModelChange)="changeTime($event)"
+          [(ngModel)]="time">
+      </div>
+    </div>
+    <div *ngIf="errors">
+      <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
     </div>
 
-    <div *ngIf="mobileDevice" class="input-group form-element-content datepicker mb-2 edit w-100">
-      <input type="date" class="form-control mobile-datepicker fa-calendar"
-        [hidden]="config.templateOptions.type === 'time'"
-        [(ngModel)]="date"
-        (ngModelChange)="changeDate($event)"
-        [attr.id]="key"
-        [attr.name]="key">
-
-      <input type="time" class="form-control mobile-datepicker fa-clock-o"
-        [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')"
-        (ngModelChange)="changeTime($event)"
-        [(ngModel)]="time">
+    <div *ngIf="message">
+      <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
     </div>
-  </div>
-  <div *ngIf="errors">
-    <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
-  </div>
-
-  <div *ngIf="message">
-    <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
-  </div>
 </div>
 
 <div class="form-group" [class.d-inline-block]="config.inline" *ngIf="(viewMode && !config.hide) || (config.read_only && !config.hide)">
