@@ -1,0 +1,8 @@
+:host > div {
+  position: relative;
+  display: block;
+
+  &.target {
+    z-index: 5;
+  }
+}

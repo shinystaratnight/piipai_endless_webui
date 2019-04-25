@@ -26,12 +26,13 @@ export class SignatureComponent implements AfterViewInit {
   @Output()
   public signature: EventEmitter<string> = new EventEmitter();
 
-  public signaturePadOptions: Object = {
-    'minWidth': 5,
-    'canvasHeight': 300
-  };
+  public signaturePadOptions: Object = {};
 
   ngAfterViewInit() {
+    this.signaturePad.clear();
+  }
+
+  clear() {
     this.signaturePad.clear();
   }
 
