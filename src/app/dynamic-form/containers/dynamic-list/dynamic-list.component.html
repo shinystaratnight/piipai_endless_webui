@@ -397,9 +397,9 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <h5 class="modal-title">
+        <h5 class="modal-title" [class.text-center]="modalInfo.signature">
           <ng-container *ngIf="modalInfo.evaluate">
-            {{modalInfo.signature ? 'Signature' : 'Evaluate'}}
+            {{modalInfo.signature ? 'Please Sign!' : 'Evaluate'}}
           </ng-container>
 
           <ng-container *ngIf="!modalInfo.evaluate">
