@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 
 import { FormBuilderService } from '../../services';
 import { ToastService } from '../../../shared/services';
@@ -15,7 +15,7 @@ import { getElementFromMetadata } from '../../helpers';
   templateUrl: './form-builder-form.component.html',
   styleUrls: ['./form-builder-form.component.scss']
 })
-export class FormBuilderFormComponent implements OnInit {
+export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   @Input() public id: string;
   @Input() public companyId: string;
@@ -35,6 +35,8 @@ export class FormBuilderFormComponent implements OnInit {
   public currentStep = 0;
   public saveProcess = false;
   public disableNextButton = false;
+  public formInvalid = true;
+  public formChangeSubscription: Subscription;
 
   public industyField = {
     type: 'related',
@@ -111,11 +113,21 @@ export class FormBuilderFormComponent implements OnInit {
   public ngOnInit() {
     this.form = new FormGroup({});
 
+    this.formChangeSubscription = this.form.valueChanges.subscribe(() => {
+      this.formInvalid = this.validateForm(this.currentStep);
+    });
+
     this.industyField.query = {
       company: this.companyId
     };
 
     this.getRenderData();
+  }
+
+  public ngOnDestroy() {
+    if (this.formChangeSubscription) {
+      this.formChangeSubscription.unsubscribe();
+    }
   }
 
   public generateSteps() {
@@ -137,9 +149,7 @@ export class FormBuilderFormComponent implements OnInit {
               if (i === 0 && metadata.length > 1) {
                 field.className = 'mr-3';
               } else if (i > 0 && metadata.length !== i + 1) {
-                field.className = 'mx-3';
-              } else {
-                field.className = 'ml-3';
+                field.className = 'mr-3';
               }
             });
 
@@ -411,6 +421,23 @@ export class FormBuilderFormComponent implements OnInit {
         }, {});
         this.disableNextButton = true;
       });
+  }
+
+  public validateForm(step: number) {
+    const fields = this.steps[step].content;
+    let result = false;
+
+    fields.forEach((key) => {
+      if (Array.isArray(key)) {
+        key.forEach((field) => {
+          result = (this.form.get(field) && this.form.get(field).invalid) || result;
+        });
+      } else {
+        result = (this.form.get(key) && this.form.get(key).invalid) || result;
+      }
+    });
+
+    return result;
   }
 
   private updateConfigByGroups(fields: Field[]): void {

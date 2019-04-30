@@ -1,4 +1,30 @@
-import * as moment from 'moment-timezone';
+import { Endpoints } from '../helpers';
+import { createFilter, Type } from '../../dynamic-form/models/filters';
+
+import { TimeService } from '../../shared/services/time.service';
+
+const filters = {
+  industry: createFilter(Type.Relared, {
+    key: 'industry',
+    label: 'Industry',
+    endpoint: Endpoints.Industry,
+  }),
+  state: createFilter(Type.Relared, {
+    key: 'state',
+    label: 'State',
+    endpoint: Endpoints.Region + '?country=AU',
+  }),
+  regular_company: createFilter(Type.Relared, {
+    key: 'regular_company',
+    label: 'Client',
+    endpoint: Endpoints.Company,
+  }),
+  portfolio_manager: createFilter(Type.Relared, {
+    key: 'portfolio_manager',
+    label: 'Portfolio manager',
+    endpoint: Endpoints.CompanyContact + '?master_company=current',
+  }),
+};
 
 const list = {
   list: {
@@ -126,51 +152,10 @@ const list = {
     search_enabled: true,
     editDisable: false,
     filters: [
-      {
-        key: 'industry',
-        label: 'Industry',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/pricing/industries/',
-          key: 'id'
-        },
-        query: 'industry'
-      },
-      {
-        key: 'state',
-        label: 'State',
-        data: {
-          value: 'name',
-          endpoint: '/core/regions/?country=AU',
-          key: 'id'
-        },
-        query: 'state',
-        default: null,
-        type: 'related'
-      },
-      {
-        key: 'regular_company',
-        label: 'Client',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/companies/',
-          key: 'id'
-        },
-        query: 'regular_company'
-      },
-      {
-        key: 'portfolio_manager',
-        label: 'Portfolio manager',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/companycontacts/?master_company=current',
-          key: 'id'
-        },
-        query: 'portfolio_manager'
-      },
+      filters.industry,
+      filters.state,
+      filters.regular_company,
+      filters.portfolio_manager,
     ]
   },
   fields: [
@@ -183,68 +168,6 @@ const list = {
         type: 'date'
       },
       read_only: true
-    },
-    {
-      key: 'address.city.name',
-      type: 'input',
-      templateOptions: {
-        required: true,
-        label: 'City',
-        max: 200,
-        type: 'text'
-      },
-      read_only: true
-    },
-    {
-      list: false,
-      endpoint: '/pricing/industries/',
-      read_only: true,
-      templateOptions: {
-        label: 'Industry',
-        add: true,
-        delete: false,
-        values: ['__str__'],
-        type: 'related',
-        edit: true
-      },
-      collapsed: false,
-      type: 'related',
-      key: 'industry',
-      many: false
-    },
-    {
-      list: false,
-      endpoint: '/core/companycontacts/',
-      read_only: true,
-      templateOptions: {
-        label: 'Portfolio manager',
-        add: true,
-        delete: false,
-        values: ['__str__'],
-        type: 'related',
-        edit: true
-      },
-      collapsed: false,
-      type: 'related',
-      key: 'portfolio_manager',
-      many: false
-    },
-    {
-      list: false,
-      endpoint: '/core/companies/',
-      read_only: true,
-      templateOptions: {
-        label: 'Client',
-        add: true,
-        delete: false,
-        values: ['__str__'],
-        type: 'related',
-        edit: true
-      },
-      collapsed: false,
-      type: 'related',
-      key: 'regular_company',
-      many: false
     },
     {
       key: 'end_date',
@@ -263,17 +186,6 @@ const list = {
         required: false,
         label: 'Active states',
         type: 'static'
-      },
-      read_only: true
-    },
-    {
-      key: 'address.state.name',
-      type: 'input',
-      templateOptions: {
-        required: true,
-        label: 'State',
-        max: 200,
-        type: 'text'
       },
       read_only: true
     },
@@ -427,7 +339,7 @@ const form = [
       created_at: 'created_at',
       available: 'is_available',
       address: 'address.__str__',
-      title: 'short_name',
+      title: '__str__',
       updated_at: 'updated_at',
       map: 'address'
     },
@@ -924,7 +836,7 @@ const formadd = [
               type: 'date'
             },
             showIf: ['primary_contact.id', 'address'],
-            default: moment().tz('Australia/Sydney'),
+            default: TimeService.instance().tz('Australia/Sydney'),
             type: 'datepicker'
           },
           {

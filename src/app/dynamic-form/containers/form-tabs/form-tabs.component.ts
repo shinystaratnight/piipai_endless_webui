@@ -11,7 +11,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { FormService } from '../../services';
-import { isMobile, isCandidate } from '../../helpers';
+import { isMobile, isCandidate, getValueOfData } from '../../helpers';
 
 @Component({
   selector: 'app-form-tabs',
@@ -50,20 +50,45 @@ export class FormTabsComponent implements OnInit, OnDestroy {
 
     this.canUpdate = this.formService.getAllowedMethods(this.formId).indexOf('update') > -1 && this.config.editForm; //tslint:disable-line
 
-    this.modeSubscription = form.mode.subscribe((mode) => {
-      this.mode = mode;
-
-      this.cd.markForCheck();
+    this.config.children.forEach((tab) => {
+      this.checkCustomLabel(tab);
     });
 
-    this.saveSubscription = form.saveProcess.subscribe((saving) => {
-      this.saving = saving;
-    });
+    if (form) {
+      this.modeSubscription = form.mode.subscribe((mode) => {
+        this.mode = mode;
+
+        this.cd.markForCheck();
+      });
+
+      this.saveSubscription = form.saveProcess.subscribe((saving) => {
+        this.saving = saving;
+      });
+    }
+
+  }
+
+  public checkCustomLabel(field) {
+    if (field.templateOptions && field.templateOptions.customLabel) {
+      const target = {
+        value: undefined
+      };
+
+      getValueOfData(field.formData.value.data, field.templateOptions.customLabel.field, target);
+      if (target.value) {
+        field.templateOptions.label = field.templateOptions.customLabel.values[target.value];
+      }
+    }
   }
 
   public ngOnDestroy() {
-    this.modeSubscription.unsubscribe();
-    this.saveSubscription.unsubscribe();
+    if (this.modeSubscription) {
+      this.modeSubscription.unsubscribe();
+    }
+
+    if (this.saveSubscription) {
+      this.saveSubscription.unsubscribe();
+    }
   }
 
   public eventHandler(e) {

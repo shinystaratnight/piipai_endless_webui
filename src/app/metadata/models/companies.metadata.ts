@@ -876,7 +876,14 @@ const form = [
           label: 'Client Contacts',
           type: 'list',
           add_label: '+ Add',
-          text: 'Client Contacts'
+          text: 'Client Contacts',
+          customLabel: {
+            field: 'type',
+            values: {
+              master: 'Company Contacts',
+              regular: 'Client Contacts'
+            }
+          }
         },
         visibleMode: true,
         prefilled: {

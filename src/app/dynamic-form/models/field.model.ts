@@ -108,6 +108,10 @@ export interface Field {
     edit?: boolean;
     delete?: boolean;
     hidePreviewError?: boolean;
+    customLabel?: {
+      field: string;
+      values: { [key: string]: any };
+    }
   };
 }
 

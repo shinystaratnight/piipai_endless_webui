@@ -180,7 +180,7 @@ export class FormPictureComponent
 
     this.group.get(this.key).patchValue(undefined);
 
-    if (this.config.value && (typeof this.config.valye === 'string') && this.config.value.indexOf('data:image') > -1) {
+    if (this.config.value && (typeof this.config.value === 'string') && this.config.value.indexOf('data:image') > -1) {
       this.value = this.config.value;
       this.group.get(this.key).patchValue(this.config.value);
     }
