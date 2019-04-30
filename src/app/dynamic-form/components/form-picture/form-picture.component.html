@@ -85,7 +85,10 @@
 <ng-template #pictureView>
   <div class="d-flex flex-wrap">
     <div class="text-center dropzone-wrapper">
-      <span class="dropzone-name">Add photo</span>
+      <label class="dropzone-name"
+        [class.required]="config.templateOptions.required">
+          Add photo
+      </label>
       <div class="dropzone" #dropzone>
         <img *ngIf="value" [src]="value" alt="" width="100" height="100">
       </div>

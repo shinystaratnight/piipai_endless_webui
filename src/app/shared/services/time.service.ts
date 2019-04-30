@@ -14,6 +14,8 @@ moment.locale('en');
 @Injectable()
 export class TimeService {
 
+  static instance = moment;
+
   get instance() {
     return moment;
   }

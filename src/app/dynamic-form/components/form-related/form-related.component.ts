@@ -1409,7 +1409,15 @@ export class FormRelatedComponent extends BasicElementComponent
                   }
                 });
 
-                this.config.options = results;
+                results.forEach((el) => {
+                  if (el) {
+                    this.config.options = this.config.options || [];
+
+                    if (!this.config.options.find((item) => item.id === el.id)) {
+                      this.config.options.push(el);
+                    }
+                  }
+                });
 
                 if (concat && this.previewList) {
                   this.previewList.push(...results);
