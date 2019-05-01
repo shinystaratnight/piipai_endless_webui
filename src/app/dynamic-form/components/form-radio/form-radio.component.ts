@@ -28,7 +28,7 @@ export class FormRadioComponent extends BasicElementComponent implements OnInit 
   }
 
   public ngOnInit() {
-    this.addControl(this.config, this.fb);
+    this.addControl(this.config, this.fb, this.config.templateOptions.required);
     if (!this.group.get(this.key).value && !this.config.read_only) {
       this.value = this.config.default || '';
       this.group.get(this.key).patchValue(this.value);
