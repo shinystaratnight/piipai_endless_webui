@@ -23,22 +23,24 @@
           Back
       </button>
 
-      <button type="button" class="form__button btn btn-primary"
-        [disabled]="disableNextButton || formInvalid"
-        [title]="formInvalid ? 'Please fill all the REQUIRED fields' : ''"
-        *ngIf="currentStep + 1 !== steps.length"
-        (click)="next()">
-          Next step
-      </button>
+      <div class="button-wrapper d-flex flex-column align-items-center" *ngIf="currentStep + 1 !== steps.length">
+        <button type="button" class="form__button btn btn-primary w-100"
+          [disabled]="disableNextButton || formInvalid"
+          (click)="next()">
+            Next step
+        </button>
+        <span class="error-message" *ngIf="form.invalid">Please fill all the REQUIRED fields</span>
+      </div>
 
-      <button type="submit" class="form__button btn btn-primary"
-        *ngIf="currentStep + 1 === steps.length"
-        [title]="form.invalid ? 'Please fill all the REQUIRED fields' : ''"
-        [disabled]="form.invalid || saveProcess"
-        (click)="submitForm()">
-          Register
-          <app-spinner *ngIf="saveProcess"></app-spinner>
-      </button>
+      <div class="button-wrapper d-flex flex-column align-items-center" *ngIf="currentStep + 1 === steps.length">
+        <button type="submit" class="form__button btn btn-primary"
+          [disabled]="form.invalid || saveProcess"
+          (click)="submitForm()">
+            Register
+            <app-spinner *ngIf="saveProcess"></app-spinner>
+        </button>
+        <span class="error-message" *ngIf="form.invalid">Please fill all the REQUIRED fields</span>
+      </div>
     </footer>
   </section>
 </div>
