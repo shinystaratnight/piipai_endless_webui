@@ -438,7 +438,7 @@ const form = [
                     type: 'input',
                     templateOptions: {
                       required: false,
-                      label: 'Prfile Price',
+                      label: 'Profile Price',
                       type: 'number',
                       display: '${profile_price}'
                     },
@@ -782,7 +782,6 @@ const form = [
         templateOptions: {
           label: 'Carrier List',
           type: 'list',
-          add_label: '+ Add',
           text: 'Carrier List'
         },
         visibleMode: true,
