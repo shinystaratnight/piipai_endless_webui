@@ -339,7 +339,7 @@ const form = [
       created_at: 'created_at',
       available: 'is_available',
       address: 'address.__str__',
-      title: '__str__',
+      title: 'short_name',
       updated_at: 'updated_at',
       map: 'address'
     },
@@ -640,7 +640,6 @@ const form = [
       values: ['__str__'],
       type: 'related',
       edit: true,
-      display: '{short_name}'
     },
     type: 'related',
   },

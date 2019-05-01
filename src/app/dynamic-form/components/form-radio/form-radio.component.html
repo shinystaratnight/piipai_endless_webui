@@ -1,6 +1,8 @@
 <div class="form-group form-radio" [formGroup]="group" *ngIf="!config.read_only">
   <div class="form-element">
-    <label class="col-form-label form-element-label" *ngIf="config.label || config.templateOptions.label">
+    <label class="col-form-label form-element-label"
+      [class.required]="config.templateOptions.required"
+      *ngIf="config.label || config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
     <div class="edit d-flex justify-content-start flex-wrap align-items-center flex-row mb-0 inline">

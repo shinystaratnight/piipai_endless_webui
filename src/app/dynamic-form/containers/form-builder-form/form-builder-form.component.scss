@@ -74,6 +74,11 @@
       background-color: #f9f9f9;
       border: 1px solid #e0e0e0;
 
+      &:focus,
+      &:active {
+        box-shadow: none;
+      }
+
       &:hover:not([disabled]) {
         background-color: #e0e0e0;
         color: inherit;
@@ -82,6 +87,13 @@
       &[disabled] {
         cursor: not-allowed;
         color: inherit;
+      }
+    }
+
+    &.btn-primary {
+
+      &[disabled] {
+        cursor: not-allowed;
       }
     }
   }

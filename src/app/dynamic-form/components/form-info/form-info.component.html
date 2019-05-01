@@ -57,8 +57,8 @@
 
     </p>
 
-    <div class="job-title" *ngIf="config && viewMode && client">{{client.short_name}}</div>
-    <div *ngIf="config && config.metadata['client'] && !viewMode && config.editForm">
+    <div *ngIf="config && config.metadata['client'] && config.editForm"
+      [class.remove-margin]="viewMode">
       <ng-container appFormElement
         [config]="getConfig('client')"
         [group]="group">
@@ -89,7 +89,7 @@
 
     <h5 class="form-info-title" *ngIf="!titlePath && skill_title">{{skill_title}}</h5>
 
-    <h5 class="form-info-title" *ngIf="config && viewMode">
+    <h5 class="form-info-title" *ngIf="config && viewMode && !skill_title">
 
       <span style="font-size: 14px; font-weight: 400" *ngIf="config.hideTitle">Average score</span>
 
