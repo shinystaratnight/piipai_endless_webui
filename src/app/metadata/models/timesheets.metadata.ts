@@ -820,7 +820,7 @@ const form = [
             children: [
               {
                 type: 'group',
-                width: 0.2,
+                width: 0.25,
                 hideLabel: true,
                 children: [
                   {
@@ -849,7 +849,7 @@ const form = [
               },
               {
                 type: 'group',
-                width: 0.2,
+                width: 0.25,
                 hideLabel: true,
                 children: [
                   {
@@ -878,45 +878,71 @@ const form = [
                 ]
               },
               {
-                width: 0.2,
-                endpoint: Endpoints.CompanyContact,
-                read_only: true,
-                templateOptions: {
-                  label: 'Supervisor',
-                  values: ['__str__'],
-                  type: 'related',
-                },
-                type: 'related',
-                key: 'supervisor',
+                type: 'group',
+                width: 0.25,
+                hideLabel: true,
+                children: [
+                  {
+                    endpoint: Endpoints.CompanyContact,
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Supervisor',
+                      values: ['__str__'],
+                      type: 'related',
+                    },
+                    type: 'related',
+                    key: 'supervisor',
+                  },
+                  {
+                    type: 'select',
+                    key: 'status',
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Status',
+                      options: [
+                        { value: 0, label: 'New', color: Colors.Success },
+                        { value: 1, label: 'Check pending', color: Colors.Warning },
+                        { value: 2, label: 'Check confirmed', color: Colors.Success },
+                        { value: 3, label: 'Check failed', color: Colors.Danger },
+                        { value: 4, label: 'Submit pending', color: Colors.Warning },
+                        { value: 5, label: 'Pending approval', color: Colors.Success },
+                        { value: 6, label: 'Supervisor modified', color: Colors.Success },
+                        { value: 7, label: 'Approved', color: Colors.Success }
+                      ],
+                    }
+                  },
+                ]
               },
               {
-                width: 0.2,
-                type: 'select',
-                key: 'status',
-                read_only: true,
-                templateOptions: {
-                  label: 'Status',
-                  options: [
-                    { value: 0, label: 'New', color: Colors.Success },
-                    { value: 1, label: 'Check pending', color: Colors.Warning },
-                    { value: 2, label: 'Check confirmed', color: Colors.Success },
-                    { value: 3, label: 'Check failed', color: Colors.Danger },
-                    { value: 4, label: 'Submit pending', color: Colors.Warning },
-                    { value: 5, label: 'Pending approval', color: Colors.Success },
-                    { value: 6, label: 'Supervisor modified', color: Colors.Success },
-                    { value: 7, label: 'Approved', color: Colors.Success }
-                  ],
-                }
-              },
-              {
-                type: 'static',
-                width: 0.2,
-                read_only: true,
-                send: false,
-                key: 'myob_status',
-                templateOptions: {
-                  label: 'Accounting Integration'
-                }
+                type: 'group',
+                width: 0.25,
+                hideLabel: true,
+                children: [
+                  {
+                    type: 'static',
+                    read_only: true,
+                    send: false,
+                    hide: true,
+                    key: 'supervisor_signature',
+                    templateOptions: {
+                      label: 'Signature',
+                      file: false,
+                    }
+                  },
+                  {
+                    type: 'input',
+                    read_only: true,
+                    send: false,
+                    key: 'supervisor_signature.origin',
+                    showIf: ['supervisor_signature.origin'],
+                    templateOptions: {
+                      label: 'Signature',
+                      type: 'picture',
+                      file: false,
+                      signature: true,
+                    }
+                  },
+                ]
               }
             ]
           },

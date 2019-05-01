@@ -26,7 +26,7 @@
 
   footer {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
 
     padding: 12px 20px 0;
@@ -64,7 +64,10 @@
   }
 
   &__button {
-    width: calc(188 / 418 * 100%);
+
+    &:not(.btn-primary) {
+      width: calc(188 / 418 * 100%);
+    }
 
     padding: 13px 20px;
 
@@ -97,4 +100,14 @@
       }
     }
   }
+}
+
+.button-wrapper {
+  width: calc(188 / 418 * 100%);
+}
+
+.error-message {
+  font-size: 12px;
+  opacity: .5;
+  margin-top: 8px;
 }
