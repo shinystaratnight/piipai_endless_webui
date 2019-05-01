@@ -843,7 +843,65 @@ const form = [
                       ]
                     },
                     read_only: false
-                  }
+                  },
+                  {
+                    type: 'select',
+                    key: 'invoice_rule.period_zero_reference_weekly',
+                    read_only: false,
+                    templateOptions: {
+                      label: 'Invoice generation time',
+                      doNotSort: true,
+                      options: [
+                        { value: 1, label: 'Monday' },
+                        { value: 2, label: 'Tuesday' },
+                        { value: 3, label: 'Wednesday' },
+                        { value: 4, label: 'Thursday' },
+                        { value: 5, label: 'Friday' },
+                        { value: 6, label: 'Saturday' },
+                        { value: 7, label: 'Sunday' },
+                      ],
+                    },
+                    showIf: [{
+                      'invoice_rule.period': 'weekly'
+                    }]
+                  },
+                  {
+                    type: 'select',
+                    key: 'invoice_rule.period_zero_reference_fortnightly',
+                    read_only: false,
+                    templateOptions: {
+                      label: 'Invoice generation time',
+                      doNotSort: true,
+                      options: [
+                        { value: 1, label: 'Monday' },
+                        { value: 2, label: 'Tuesday' },
+                        { value: 3, label: 'Wednesday' },
+                        { value: 4, label: 'Thursday' },
+                        { value: 5, label: 'Friday' },
+                        { value: 6, label: 'Saturday' },
+                        { value: 7, label: 'Sunday' },
+                      ],
+                    },
+                    showIf: [{
+                      'invoice_rule.period': 'fortnightly'
+                    }]
+                  },
+                  {
+                    type: 'datepicker',
+                    key: 'invoice_rule.period_zero_reference_date',
+                    read_only: false,
+                    customDatepicker: {
+                      dateFormat: 'DD',
+                      datepickerFormat: '%d'
+                    },
+                    templateOptions: {
+                      label: 'Invoice generation time',
+                      type: 'date'
+                    },
+                    showIf: [{
+                      'invoice_rule.period': 'monthly'
+                    }]
+                  },
                 ],
                 width: 0.25
               }

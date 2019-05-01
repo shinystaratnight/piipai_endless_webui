@@ -170,7 +170,7 @@ export const meta = [
             read_only: false,
             formData,
             templateOptions: {
-              label: 'Invoice Frequency',
+              label: 'Invoice generation time',
               doNotSort: true,
               options: [
                 { value: 1, label: 'Monday' },
@@ -192,7 +192,7 @@ export const meta = [
             read_only: false,
             formData,
             templateOptions: {
-              label: 'Invoice Frequency',
+              label: 'Invoice generation time',
               doNotSort: true,
               options: [
                 { value: 1, label: 'Monday' },
@@ -218,7 +218,7 @@ export const meta = [
               datepickerFormat: '%d'
             },
             templateOptions: {
-              label: 'Invoice Frequency',
+              label: 'Invoice generation time',
               type: 'date'
             },
             showIf: [{
