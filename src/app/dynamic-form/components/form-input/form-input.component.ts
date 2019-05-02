@@ -370,7 +370,10 @@ export class FormInputComponent extends BasicElementComponent
         this.displayValue = text || (value || value === 0 ? value : '-');
 
         if (this.config.templateOptions.display) {
-          this.displayValue = format.format(this.config.templateOptions.display, { [this.key]: this.displayValue });
+          this.displayValue = format.format(
+            this.config.templateOptions.display.replace(/{field}/gi, `{${this.config.key}}`),
+            { [this.key]: this.displayValue }
+          );
         }
       }
     } else {

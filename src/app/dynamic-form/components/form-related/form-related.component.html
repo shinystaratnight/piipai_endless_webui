@@ -79,8 +79,11 @@
     </div>
 
     <div class="form-element" *ngIf="config.many">
-      <label class="col-form-label form-element-label" *ngIf="label && config.templateOptions.label" [attr.for]="key">
-        {{config.templateOptions.label}}:
+      <label class="col-form-label form-element-label"
+        [attr.for]="key"
+        *ngIf="label && config.templateOptions.label"
+        [class.required]="config.templateOptions.required">
+          {{config.templateOptions.label}}:
       </label>
       <app-info [description]="config.templateOptions.description"></app-info>
       <div #autocomplete *ngIf="config.many && results && !config.useOptions" class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results" style="position: relative">

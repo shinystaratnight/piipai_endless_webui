@@ -184,6 +184,10 @@ export class FormPictureComponent
       this.value = this.config.value;
       this.group.get(this.key).patchValue(this.config.value);
     }
+
+    if (this.config.templateOptions.signature) {
+      this.group.get(this.key).patchValue(this.config.value);
+    }
   }
 
   public ngAfterViewInit() {
