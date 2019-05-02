@@ -719,24 +719,24 @@ const form = [
                     },
                     read_only: false
                   },
-                  {
-                    key: 'invoice_rule.period_zero_reference',
-                    read_only: false,
-                    templateOptions: {
-                      required: false,
-                      label: 'Period zero reference',
-                      max: 2147483647,
-                      type: 'text',
-                      min: -2147483648
-                    },
-                    showIf: [
-                      {
-                        type: 'master'
-                      }
-                    ],
-                    default: 1,
-                    type: 'input'
-                  },
+                  // {
+                  //   key: 'invoice_rule.period_zero_reference',
+                  //   read_only: false,
+                  //   templateOptions: {
+                  //     required: false,
+                  //     label: 'Period zero reference',
+                  //     max: 2147483647,
+                  //     type: 'text',
+                  //     min: -2147483648
+                  //   },
+                  //   showIf: [
+                  //     {
+                  //       type: 'master'
+                  //     }
+                  //   ],
+                  //   default: 1,
+                  //   type: 'input'
+                  // },
                   {
                     key: 'invoice_rule.serial_number',
                     type: 'input',
@@ -847,7 +847,7 @@ const form = [
                   {
                     type: 'select',
                     key: 'invoice_rule.period_zero_reference_weekly',
-                    read_only: false,
+                    default: 1,
                     templateOptions: {
                       label: 'Invoice generation time',
                       doNotSort: true,
@@ -868,7 +868,7 @@ const form = [
                   {
                     type: 'select',
                     key: 'invoice_rule.period_zero_reference_fortnightly',
-                    read_only: false,
+                    default: 1,
                     templateOptions: {
                       label: 'Invoice generation time',
                       doNotSort: true,
@@ -889,14 +889,16 @@ const form = [
                   {
                     type: 'datepicker',
                     key: 'invoice_rule.period_zero_reference_date',
-                    read_only: false,
                     customDatepicker: {
                       dateFormat: 'DD',
-                      datepickerFormat: '%d'
+                      datepickerFormat: '%d',
+                      parseFormat: 'DD'
                     },
                     templateOptions: {
                       label: 'Invoice generation time',
-                      type: 'date'
+                      type: 'date',
+                      clear: false,
+                      change: false,
                     },
                     showIf: [{
                       'invoice_rule.period': 'monthly'

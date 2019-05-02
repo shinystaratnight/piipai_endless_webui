@@ -821,6 +821,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     const prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
+        if (key.includes('period_zero_reference')) {
+          key = 'period_zero_reference';
+        }
         if (!obj['value'] || update) {
           if (key === 'id' && obj.type === 'info') {
             obj['value'] = data;
@@ -1127,6 +1130,20 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public sendForm(data: any) {
+    if (data.invoice_rule) {
+      const keys = Object.keys(data.invoice_rule);
+      keys.forEach((key) => {
+        if (key.includes('period_zero_reference')) {
+          if (key === 'period_zero_reference_date') {
+            data.invoice_rule[key] = this.time.instance(data.invoice_rule[key], 'YYYY-MM-DD').date() || undefined;
+          }
+
+          data.invoice_rule['period_zero_reference'] = parseInt(data.invoice_rule[key], 10) || undefined;
+          delete data.invoice_rule[key];
+        }
+      });
+    }
+
     if (this.editForm || this.edit) {
       const endpoint = this.editForm
         ? `${this.endpoint}${this.id ? this.id + '/' : ''}`

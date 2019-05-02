@@ -1,6 +1,6 @@
-import * as moment from 'moment-timezone';
+import { TimeService } from '../../shared/services/time.service';
 
-const today = moment().tz('Australia/Sydney');
+const today = TimeService.instance();
 
 export const todayFormatDate = today.format();
 export const yesterdayFormatDate = today
@@ -11,8 +11,7 @@ export const tomorrowFormatDate = today
   .clone()
   .add(1, 'day')
   .format();
-export const timeZoneOffset = moment
-  .tz('Australia/Sydney')
+export const timeZoneOffset = today
   .format('Z')
   .slice(1);
 export const weekStart = today

@@ -168,6 +168,7 @@ export const meta = [
             type: 'select',
             key: 'invoice_rule.period_zero_reference_weekly',
             read_only: false,
+            default: 1,
             formData,
             templateOptions: {
               label: 'Invoice generation time',
@@ -190,6 +191,7 @@ export const meta = [
             type: 'select',
             key: 'invoice_rule.period_zero_reference_fortnightly',
             read_only: false,
+            default: 1,
             formData,
             templateOptions: {
               label: 'Invoice generation time',
@@ -215,11 +217,14 @@ export const meta = [
             formData,
             customDatepicker: {
               dateFormat: 'DD',
-              datepickerFormat: '%d'
+              datepickerFormat: '%d',
+              parseFormat: 'DD'
             },
             templateOptions: {
               label: 'Invoice generation time',
-              type: 'date'
+              type: 'date',
+              clear: false,
+              change: false,
             },
             showIf: [{
               'invoice_rule.period': 'monthly'
@@ -245,6 +250,25 @@ export const meta = [
             default: false,
             templateOptions: {
               label: 'Show candidate name',
+            }
+          },
+          {
+            type: 'input',
+            key: 'invoice_rule.serial_number',
+            default: false,
+            templateOptions: {
+              label: 'Prefix',
+              type: 'text'
+            }
+          },
+          {
+            type: 'input',
+            key: 'invoice_rule.starting_number',
+            default: 1,
+            templateOptions: {
+              label: 'Start numbers from',
+              type: 'number',
+              min: 1
             }
           }
         ]
