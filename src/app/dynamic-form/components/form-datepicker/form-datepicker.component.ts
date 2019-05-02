@@ -73,6 +73,10 @@ export class FormDatepickerComponent extends BasicElementComponent
 
     if (this.config.customDatepicker) {
       this.dateFormat = this.config.customDatepicker.dateFormat;
+
+      if (this.config.value) {
+        this.config.value = moment.tz(this.config.value, this.config.customDatepicker.parseFormat, this.timeZone).format('YYYY-MM-DD');
+      }
     }
 
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
@@ -252,12 +256,14 @@ export class FormDatepickerComponent extends BasicElementComponent
           mode: dateType,
           dateFormat: this.config.customDatepicker ? this.config.customDatepicker.datepickerFormat : '%d/%m/%Y',
           overrideDateFormat: this.config.customDatepicker ? this.config.customDatepicker.datepickerFormat : '%d/%m/%Y',
-          useClearButton: true,
+          useClearButton: this.config.templateOptions.clear === false ? false : true,
           useFocus: true,
           useHeader: false,
           calHighToday: true,
           themeDatePick: 'primary',
-          calUsePickers: true,
+          calUsePickers: this.config.templateOptions.change === false ? false : true,
+          calNoHeader: this.config.templateOptions.change === false,
+          calOnlyMonth: this.config.templateOptions.change === false,
           useCancelButton: true,
           calYearPickRelative: false,
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,

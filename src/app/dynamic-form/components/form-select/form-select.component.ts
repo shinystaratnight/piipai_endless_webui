@@ -96,6 +96,8 @@ export class FormSelectComponent
           this.viewMode = this.config.read_only || false;
         }
         this.setInitValue();
+
+        this.eventHandler({ type: 'change' });
       });
 
       this.subscriptions.push(subscription);
@@ -115,11 +117,19 @@ export class FormSelectComponent
   }
 
   public setInitValue() {
-    if (this.config.value != undefined) { //tslint:disable-line
-      this.group.get(this.key).patchValue(this.config.value);
+    let value = this.config.value;
+    if (value) {
+      const option = this.getValue(this.options, this.config.value);
+      if (option.value === '-') {
+        value = this.config.default;
+      }
+    }
+
+    if (value != undefined) { //tslint:disable-line
+      this.group.get(this.key).patchValue(value);
     }
     if ((this.viewMode || this.config.read_only) && !this.config.hide) {
-      const option = this.getValue(this.options, this.config.value);
+      const option = this.getValue(this.options, value);
       this.displayValue = option.value;
       this.textColor = option.color ? `text-${option.color}` : '';
     }

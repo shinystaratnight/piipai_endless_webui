@@ -133,10 +133,10 @@ export class CompanyComponent implements OnInit, OnDestroy {
     keys.forEach((key) => {
       if (key.includes('period_zero_reference')) {
         if (key === 'period_zero_reference_date') {
-          data.invoice_rule[key] = this.time.instance(data.invoice_rule[key], 'YYYY-MM-DD').date();
+          data.invoice_rule[key] = this.time.instance(data.invoice_rule[key], 'YYYY-MM-DD').date() || undefined;
         }
 
-        data.invoice_rule['period_zero_reference'] = parseInt(data.invoice_rule[key], 10);
+        data.invoice_rule['period_zero_reference'] = parseInt(data.invoice_rule[key], 10) || undefined;
         delete data.invoice_rule[key];
       }
     });
@@ -171,6 +171,9 @@ export class CompanyComponent implements OnInit, OnDestroy {
     const prop = keys.shift();
     if (keys.length === 0) {
       if (data) {
+        if (key.includes('period_zero_reference')) {
+          key = 'period_zero_reference';
+        }
         obj['value'] = data[key];
         if (key === 'color_scheme') {
           this.currentTheme = `${data[key]}-theme`;
