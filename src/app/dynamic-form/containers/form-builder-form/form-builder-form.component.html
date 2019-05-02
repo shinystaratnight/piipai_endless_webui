@@ -29,11 +29,11 @@
           (click)="next()">
             Next step
         </button>
-        <span class="error-message" *ngIf="form.invalid">Please fill all the REQUIRED fields</span>
+        <span class="error-message" *ngIf="formInvalid">Please fill all the REQUIRED fields</span>
       </div>
 
       <div class="button-wrapper d-flex flex-column align-items-center" *ngIf="currentStep + 1 === steps.length">
-        <button type="submit" class="form__button btn btn-primary"
+        <button type="submit" class="form__button btn btn-primary w-100"
           [disabled]="form.invalid || saveProcess"
           (click)="submitForm()">
             Register
