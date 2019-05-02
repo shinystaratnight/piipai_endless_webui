@@ -942,6 +942,16 @@ const form = [
                       signature: true,
                     }
                   },
+                  {
+                    type: 'static',
+                    width: 0.2,
+                    read_only: true,
+                    send: false,
+                    key: 'myob_status',
+                    templateOptions: {
+                      label: 'Accounting Integration'
+                    }
+                  },
                 ]
               }
             ]
