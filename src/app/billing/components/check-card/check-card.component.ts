@@ -48,17 +48,22 @@ export class CheckCardComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.stripe = (<any> window).Stripe(environment.STRIPE_PUBLIC_API_KEY);
-    const elements = this.stripe.elements();
-    this.card = elements.create('card', { style });
-    this.card.mount('#card-element');
+    this.billingService.getStripeKey().subscribe((res) => {
+      const key = (res as any).public_key;
 
-    this.card.addEventListener('change', (event) => {
-      if (event.error) {
-        this.error = event.error.message;
-      } else {
-        this.error = '';
-      }
+      this.stripe = (<any> window).Stripe(key);
+      const elements = this.stripe.elements();
+      this.card = elements.create('card', { style });
+      this.card.mount('#card-element');
+
+      this.card.addEventListener('change', (event) => {
+        if (event.error) {
+          this.error = event.error.message;
+        } else {
+          this.error = '';
+        }
+      });
+
     });
   }
 

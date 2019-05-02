@@ -20,12 +20,21 @@ export class BillingService {
     payments: '/billing/payments/',
     autoCharge: '/billing/auto_charge_twilio/',
     fund: '/billing/add_funds_twilio/',
+    countryAccount: '/billing/country_account/',
   };
 
   constructor(
     private http: HttpClient,
     private errorService: ErrorsService,
   ) {}
+
+  public getStripeKey() {
+    return this.http
+      .get(this.endpoints.countryAccount)
+      .pipe(
+        catchError((err: any) => this.errorService.parseErrors(err))
+      );
+  }
 
   public setCardInfo(body) {
     return this.http
