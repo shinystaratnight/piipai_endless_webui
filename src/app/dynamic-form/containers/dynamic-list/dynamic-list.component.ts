@@ -1404,7 +1404,11 @@ export class DynamicListComponent
   }
 
   public buyCandidate(e) {
-    this.genericFormService.submitForm(e.el.endpoint, {})
+    const body = {
+      company: this.userService.user.data.contact.company_id
+    };
+
+    this.genericFormService.submitForm(e.el.endpoint, body)
       .subscribe(() => {
         this.event.emit({
           type: 'update',

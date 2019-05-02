@@ -1400,8 +1400,11 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
   public buyProfile(e) {
     const endpoint = `${Endpoints.CandidateContact}${this.id}/buy/`;
+    const body = {
+      company: this.userService.user.data.contact.company_id
+    };
 
-    this.service.submitForm(endpoint, {})
+    this.service.submitForm(endpoint, body)
       .subscribe(() => {
         this.router.navigate(['/candidate/candidatecontacts/pool']);
       });
