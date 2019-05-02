@@ -1,6 +1,6 @@
 <div *ngIf="config" class="form-builder-form">
   <section class="form">
-    <header>
+    <header *ngIf="steps.length > 1">
       <span class="form__steps">step {{currentStep + 1}} of {{steps.length}}</span>
       <h3>{{steps[currentStep].title}}</h3>
     </header>
@@ -16,8 +16,9 @@
       </app-dynamic-form>
     </div>
 
-    <footer>
+    <footer [class.justify-content-center]="steps.length ===1">
       <button type="button" class="form__button btn btn-default"
+        *ngIf="steps.length > 1"
         [disabled]="currentStep === 0"
         (click)="back()">
           Back

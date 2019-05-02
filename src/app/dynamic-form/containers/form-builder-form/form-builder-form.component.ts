@@ -171,7 +171,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           }
         }
       });
+      if (step.metadata.length === 0) {
+        step['empty'] = true;
+      }
     });
+
+    this.steps = this.steps.filter((step) => !step['empty']);
   }
 
   public getErrorStep(errors) {
@@ -224,7 +229,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   public changeType(key: string, to: string) {
     const field = getElementFromMetadata(this.config.ui_config, key);
-    field.type = to;
+    if (field) {
+      field.type = to;
+    }
   }
 
   public eventHandler(event: any) {
