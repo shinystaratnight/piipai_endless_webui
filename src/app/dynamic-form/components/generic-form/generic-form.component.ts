@@ -6,10 +6,13 @@ import {
   OnChanges,
   OnDestroy,
   SimpleChanges,
-  OnInit
+  OnInit,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
@@ -109,10 +112,17 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   @Output()
   public permissionError: EventEmitter<any> = new EventEmitter();
 
+  @ViewChild('confirmProfileModal')
+  public confirmProfileModal: ElementRef;
+
   public currentEndpoint: string;
   public currentId: string;
   public formId: number;
   public metadata: Field[] = [];
+
+  public modalInfo: any;
+  public modalRef: NgbModalRef;
+  public saveProcess: boolean;
 
   public hasTabs: boolean;
   public formData: BehaviorSubject<any>;
@@ -165,7 +175,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     private authService: AuthService,
     private settingsService: SiteSettingsService,
     private time: TimeService,
-    private router: Router
+    private router: Router,
+    private modal: NgbModal,
   ) {
     this.subscriptions = [];
 
@@ -1392,20 +1403,35 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     }
 
     if (e.value === 'buyProfile') {
-      this.buyProfile(e);
+      this.buyProfile();
     }
 
     this.buttonAction.emit(e);
   }
 
-  public buyProfile(e) {
+  public buyProfile() {
+    const price = getElementFromMetadata(this.metadata, 'profile_price');
+    this.modalInfo = {
+      amount: price.value,
+    };
+
+    this.modalRef = this.modal.open(this.confirmProfileModal);
+  }
+
+  public confirmCandidateBuy() {
+    this.saveProcess = true;
+
     const endpoint = `${Endpoints.CandidateContact}${this.id}/buy/`;
     const body = {
       company: this.userService.user.data.contact.company_id
     };
 
     this.service.submitForm(endpoint, body)
+      .pipe(finalize(() => {
+        this.saveProcess = false;
+      }))
       .subscribe(() => {
+        this.modalRef.close();
         this.router.navigate(['/candidate/candidatecontacts/pool']);
       });
   }
