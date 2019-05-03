@@ -17,6 +17,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageService } from 'ngx-webstorage';
 
+import { finalize } from 'rxjs/operators';
+
 import { TimeService, ToastService, MessageType } from '../../../shared/services';
 import { FilterService, GenericFormService } from '../../services';
 import { AuthService, UserService } from '../../../services';
@@ -171,6 +173,9 @@ export class DynamicListComponent
 
   @ViewChild('tracking')
   public trakingModal;
+
+  @ViewChild('confirmProfileModal')
+  public confirmProfileModal;
 
   public selectedCount: number;
   public sortedColumns: any;
@@ -1404,12 +1409,27 @@ export class DynamicListComponent
   }
 
   public buyCandidate(e) {
+    const rowData = this.getRowData(e);
+    this.modalInfo = {
+      amount: rowData.profile_price,
+      e
+    };
+
+    this.open(this.confirmProfileModal);
+  }
+
+  public confirmCandidateBuy() {
+    const e = this.modalInfo.e;
+    this.saveProcess = true;
+
     const body = {
       company: this.userService.user.data.contact.company_id
     };
 
     this.genericFormService.submitForm(e.el.endpoint, body)
+      .pipe(finalize(() => this.saveProcess = false))
       .subscribe(() => {
+        this.modalRef.close();
         this.event.emit({
           type: 'update',
           list: this.config.list.list
