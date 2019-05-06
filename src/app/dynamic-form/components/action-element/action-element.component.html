@@ -10,6 +10,7 @@
     [attr.title]="getSmsTitle(action.endpoint)"
     [disabled]="isDisableSmsButton(action.endpoint)">
       {{label}}
+      <app-spinner *ngIf="actionProcess"></app-spinner>
   </button>
 </div>
 

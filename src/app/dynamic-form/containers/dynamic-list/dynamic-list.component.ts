@@ -123,6 +123,9 @@ export class DynamicListComponent
   @Input()
   public inlineFilters: boolean;
 
+  @Input()
+  public actionProcess: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -282,6 +285,7 @@ export class DynamicListComponent
 
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;
+      this.actionProcess = false;
       if (this.actionEndpoint.indexOf('/sendsms/') > -1) {
         setTimeout(() => {
           this.openFrame(this.currentActionData.phone_number);
@@ -1195,6 +1199,7 @@ export class DynamicListComponent
   public actionHandler(e) {
     this.actionEndpoint = e.action.endpoint;
     if (e.action.required && !Object.keys(this.select).some((el) => el && this.select[el])) {
+      this.actionProcess = false;
       this.toastr.sendMessage(e.action.selectionError, MessageType.error);
       return;
     }
@@ -1420,6 +1425,7 @@ export class DynamicListComponent
 
   public confirmCandidateBuy() {
     const e = this.modalInfo.e;
+    const rowData = this.getRowData(e);
     this.saveProcess = true;
 
     const body = {
@@ -1430,6 +1436,7 @@ export class DynamicListComponent
       .pipe(finalize(() => this.saveProcess = false))
       .subscribe(() => {
         this.modalRef.close();
+        this.toastr.sendMessage(`${rowData.__str__} has been added to your Candidate Contact list`, MessageType.success);
         this.event.emit({
           type: 'update',
           list: this.config.list.list

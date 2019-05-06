@@ -20,7 +20,7 @@ import { finalize, skip, catchError } from 'rxjs/operators';
 import { GenericFormService, FormService, FormMode } from '../../services/';
 import { UserService, SiteSettingsService, AuthService } from '../../../services';
 
-import { ToastService, TimeService } from '../../../shared/services';
+import { ToastService, TimeService, MessageType } from '../../../shared/services';
 
 import { Field } from '../../models';
 
@@ -123,6 +123,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public modalInfo: any;
   public modalRef: NgbModalRef;
   public saveProcess: boolean;
+  public strValue: string;
 
   public hasTabs: boolean;
   public formData: BehaviorSubject<any>;
@@ -699,6 +700,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         const formData = new BehaviorSubject({ data });
         this.updateFormData(this.metadata, formData);
         this.checkFormInfoElement(this.metadata);
+        this.strValue = data.__str__;
         this.str.emit({
           str: data && data.__str__ ? data.__str__ : '',
           data
@@ -1432,6 +1434,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       }))
       .subscribe(() => {
         this.modalRef.close();
+        this.toastrService.sendMessage(`${this.strValue} has been added to your Candidate Contact list`, MessageType.success);
         this.router.navigate(['/candidate/candidatecontacts/pool']);
       });
   }
