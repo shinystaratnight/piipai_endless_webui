@@ -47,7 +47,12 @@
     <div class="plan-info">
       <div *ngFor="let plan of plans" [class.active]="checkActivePlan(plan)" class="plan-item" (click)="selectPlan(plan)">
         <div class="plan-name">
-          <h4 class="mb-2 pt-3">{{plan.heading}} <small *ngIf="plan.discount_comment">{{plan.discount_comment}}</small></h4>
+          <h4 class="mb-2 pt-3">{{plan.heading}}
+            <small *ngIf="plan.discount_comment">
+              {{plan.discount_comment}}
+              {{plan.percentage_discount ? plan.percentage_discount + '%' : ''}}
+            </small>
+          </h4>
           <p>{{plan.heading_tag_line}}</p>
         </div>
         <div class="plan-detail">
