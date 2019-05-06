@@ -123,6 +123,9 @@ export class DynamicListComponent
   @Input()
   public inlineFilters: boolean;
 
+  @Input()
+  public actionProcess: boolean;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -282,6 +285,7 @@ export class DynamicListComponent
 
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;
+      this.actionProcess = false;
       if (this.actionEndpoint.indexOf('/sendsms/') > -1) {
         setTimeout(() => {
           this.openFrame(this.currentActionData.phone_number);
@@ -1195,6 +1199,7 @@ export class DynamicListComponent
   public actionHandler(e) {
     this.actionEndpoint = e.action.endpoint;
     if (e.action.required && !Object.keys(this.select).some((el) => el && this.select[el])) {
+      this.actionProcess = false;
       this.toastr.sendMessage(e.action.selectionError, MessageType.error);
       return;
     }

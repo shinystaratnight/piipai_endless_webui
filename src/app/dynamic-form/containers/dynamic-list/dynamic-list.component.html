@@ -80,7 +80,13 @@
 
       <div class="background" (click)="toggleFilterBlock()"></div>
 
-      <app-action-element *ngIf="config.list.actions && !inForm" [count]="selectedCount" [config]="config.list.actions" (event)="actionHandler($event)"></app-action-element>
+      <app-action-element
+        *ngIf="config.list.actions && !inForm"
+        [actionProcess]="actionProcess"
+        [count]="selectedCount"
+        [config]="config.list.actions"
+        (event)="actionHandler($event)">
+      </app-action-element>
 
       <div ngbDropdown class="sort-dropdown" *ngIf="identifyDevice() || isMobileDevice">
         <label ngbDropdownToggle>
@@ -522,7 +528,7 @@
 
 <ng-template #pdfDocumentModal let-c="close">
   <button type="button" class="position-absolute text-white close-button close ml-2" aria-label="Close"
-    style="top: 24px; right: 44px; z-index: 2"
+    style="top: 32px; right: 44px; z-index: 2"
     (click)="c()">
       <span aria-hidden="true">&times;</span>
   </button>

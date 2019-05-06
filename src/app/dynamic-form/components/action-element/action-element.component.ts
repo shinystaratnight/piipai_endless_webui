@@ -12,6 +12,7 @@ import { FormatString } from '../../../helpers/format';
 export class ActionElementComponent implements OnChanges {
   @Input() public config: any;
   @Input() public count: number;
+  @Input() public actionProcess: boolean;
   @ViewChild('content') public content: any;
 
   public closeResult: string;
@@ -39,6 +40,7 @@ export class ActionElementComponent implements OnChanges {
     if (this.action && this.action.confirm) {
       this.open(this.content);
     } else if (this.action && !this.action.confirm) {
+      this.actionProcess = true;
       this.event.emit({
         action: this.action
       });
