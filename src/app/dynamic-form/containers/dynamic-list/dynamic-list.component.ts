@@ -1420,6 +1420,7 @@ export class DynamicListComponent
 
   public confirmCandidateBuy() {
     const e = this.modalInfo.e;
+    const rowData = this.getRowData(e);
     this.saveProcess = true;
 
     const body = {
@@ -1430,6 +1431,7 @@ export class DynamicListComponent
       .pipe(finalize(() => this.saveProcess = false))
       .subscribe(() => {
         this.modalRef.close();
+        this.toastr.sendMessage(`${rowData.__str__} has been added to your Candidate Contact list`, MessageType.success);
         this.event.emit({
           type: 'update',
           list: this.config.list.list
