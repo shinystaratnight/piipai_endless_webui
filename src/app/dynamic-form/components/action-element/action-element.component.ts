@@ -40,7 +40,6 @@ export class ActionElementComponent implements OnChanges {
     if (this.action && this.action.confirm) {
       this.open(this.content);
     } else if (this.action && !this.action.confirm) {
-      this.actionProcess = true;
       this.event.emit({
         action: this.action
       });
