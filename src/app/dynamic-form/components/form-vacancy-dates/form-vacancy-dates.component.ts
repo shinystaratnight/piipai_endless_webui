@@ -100,30 +100,31 @@ export class FormVacancyDatesComponent extends BasicElementComponent
   }
 
   public markDisabledDates(dates: any[] = []) {
-    const today = this.time.getToday();
+    this.markDisabled = (calendarDate) => {
 
-    this.markDisabled = (date) => {
-      const exist = dates.find((item) => {
-        const parsedDate = this.time.instance(item);
+      const exist = dates.find((shift) => {
+        const shiftDate = this.time.instance(shift);
 
-        const year = parsedDate.year();
-        const month = parsedDate.month() + 1;
-        const day = parsedDate.date();
-        const hour = parsedDate.hour();
-        const minute = parsedDate.minute();
-
-
-
-        if (
-          today.year() === year &&
-          (today.month() + 1) === month &&
-          today.date() === day
-        ) {
-          return today.isAfter(this.time.instance([year, month - 1, day, hour, minute]));
-        }
-
-        return year === date.year && month === date.month && day === date.day;
+        return shiftDate.year() === calendarDate.year
+          && shiftDate.month() + 1 === calendarDate.month
+          && shiftDate.date() === calendarDate.day;
       });
+
+      if (!exist) {
+        return exist;
+      }
+
+      const existDate = this.time.instance(exist);
+      const today = this.time.getToday();
+
+      if (
+        today.year() === existDate.year() &&
+        today.month() === existDate.month() &&
+        today.date() === existDate.date()
+      ) {
+        return today.isAfter(existDate);
+      }
+
       return exist;
     };
   }

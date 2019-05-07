@@ -96,8 +96,12 @@
           [endpoint]="objectEndpoint"
           [id]="modalData.id"
           [data]="stateData"
-          (event)="sendEventHandler($event, c)">
-            <button type="submit" class="btn btn-primary">Save</button>
+          (event)="sendEventHandler($event, c)"
+          (errorForm)="formError()">
+            <button type="submit" class="btn btn-primary">
+              Save
+              <app-spinner *ngIf="saveProcess"></app-spinner>
+            </button>
         </app-generic-form>
       </div>
     </div>
