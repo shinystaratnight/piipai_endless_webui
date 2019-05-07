@@ -39,6 +39,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public selectArray: any[];
   public updated: boolean;
   public loading: boolean;
+  public saveProcess: boolean;
 
   public workflowObjectEndpoint = '/core/workflowobjects/';
 
@@ -246,11 +247,19 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public sendEventHandler(e, closeModal): void {
+    if (e.type === 'saveStart') {
+      this.saveProcess = true;
+    }
     if (e.status === 'success') {
       closeModal();
+      this.saveProcess = false;
       this.getTimeline(this.config.query.model === 'hr.job');
       this.modalData = null;
     }
+  }
+
+  public formError() {
+    this.saveProcess = false;
   }
 
   public fillinTest(e, id: string, closeModal) {
