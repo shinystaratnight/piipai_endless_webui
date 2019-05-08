@@ -894,31 +894,6 @@ const form = [
                     key: 'supervisor',
                   },
                   {
-                    type: 'select',
-                    key: 'status',
-                    read_only: true,
-                    templateOptions: {
-                      label: 'Status',
-                      options: [
-                        { value: 0, label: 'New', color: Colors.Success },
-                        { value: 1, label: 'Check pending', color: Colors.Warning },
-                        { value: 2, label: 'Check confirmed', color: Colors.Success },
-                        { value: 3, label: 'Check failed', color: Colors.Danger },
-                        { value: 4, label: 'Submit pending', color: Colors.Warning },
-                        { value: 5, label: 'Pending approval', color: Colors.Success },
-                        { value: 6, label: 'Supervisor modified', color: Colors.Success },
-                        { value: 7, label: 'Approved', color: Colors.Success }
-                      ],
-                    }
-                  },
-                ]
-              },
-              {
-                type: 'group',
-                width: 0.25,
-                hideLabel: true,
-                children: [
-                  {
                     type: 'static',
                     read_only: true,
                     send: false,
@@ -940,6 +915,31 @@ const form = [
                       type: 'picture',
                       file: false,
                       signature: true,
+                    }
+                  },
+                ]
+              },
+              {
+                type: 'group',
+                width: 0.25,
+                hideLabel: true,
+                children: [
+                  {
+                    type: 'select',
+                    key: 'status',
+                    read_only: true,
+                    templateOptions: {
+                      label: 'Status',
+                      options: [
+                        { value: 0, label: 'New', color: Colors.Success },
+                        { value: 1, label: 'Check pending', color: Colors.Warning },
+                        { value: 2, label: 'Check confirmed', color: Colors.Success },
+                        { value: 3, label: 'Check failed', color: Colors.Danger },
+                        { value: 4, label: 'Submit pending', color: Colors.Warning },
+                        { value: 5, label: 'Pending approval', color: Colors.Success },
+                        { value: 6, label: 'Supervisor modified', color: Colors.Success },
+                        { value: 7, label: 'Approved', color: Colors.Success }
+                      ],
                     }
                   },
                   {

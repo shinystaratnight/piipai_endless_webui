@@ -209,7 +209,8 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     background-color: transparent;
 
-    span {
+    span,
+    label {
       opacity: .15;
     }
 
@@ -229,7 +230,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       color: $gray;
     }
 
-    &:first-child {
+    .table:not(.inner-table) &:first-child {
       padding-left: 16px;
     }
   }

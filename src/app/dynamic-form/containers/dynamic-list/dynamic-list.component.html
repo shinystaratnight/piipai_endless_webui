@@ -158,7 +158,7 @@
                 </ng-container>
               </ng-container>
               <th *ngIf="config.list.tabs" class="last-cell">
-                More
+                <span>More</span>
                 <i fa
                   class="sort-icon"
                   [name]="collapsed ? 'angle-down' : 'angle-up'" (click)="openAllTabs()"></i>
@@ -263,7 +263,7 @@
                   <table *ngIf="!row.additionalBody.inline" class="inner-table table table-sm">
                     <thead>
                       <tr>
-                        <th *ngFor="let acell of row.additionalBody.content">{{acell.label}}</th>
+                        <th *ngFor="let acell of row.additionalBody.content"><span>{{acell.label}}</span></th>
                       </tr>
                     </thead>
                     <tbody>
