@@ -1,3 +1,5 @@
+@import '../../../../styles/variables.scss';
+
 span {
   font-size: 14px;
   line-height: 16px;
@@ -46,4 +48,14 @@ label {
 
   font-size: 14px;
   vertical-align: top;
+}
+
+.rating {
+  display: inline-flex;
+  align-items: flex-start;
+
+  border-right: 1px solid;
+  padding-right: 5px;
+
+  color: $brand-primary;
 }

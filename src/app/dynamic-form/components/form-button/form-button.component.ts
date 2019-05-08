@@ -69,16 +69,20 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   }
 
   public customizeButton() {
-    const color = this.config.color;
-    const classes = ['primary', 'danger', 'info', 'success', 'warning', 'link'];
+    if (!this.config.shadow || this.config.inverse) {
+      const color = this.config.color;
+      const classes = ['primary', 'danger', 'info', 'success', 'warning', 'link'];
 
-    if (!this.config.inverse) {
-      this.buttonClass = classes.indexOf(color) > -1 ? `btn-${color}` : '';
-      if (!this.buttonClass) {
-        this.buttonColor = color || '';
+      if (!this.config.inverse) {
+        this.buttonClass = classes.indexOf(color) > -1 ? `btn-${color}` : '';
+        if (!this.buttonClass) {
+          this.buttonColor = color || '';
+        }
+      } else {
+        this.textClass = classes.indexOf(color) > -1 ? `text-${color} py-2` : '';
       }
     } else {
-      this.textClass = classes.indexOf(color) > -1 ? `text-${color} py-2` : '';
+      this.buttonClass = `${this.config.color}-btn`;
     }
   }
 

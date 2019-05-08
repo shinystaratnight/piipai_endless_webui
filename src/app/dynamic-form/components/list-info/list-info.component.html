@@ -6,15 +6,17 @@
         {{contactAvatar}}
       </div>
 
-      <span *ngIf="available && (picture || contactAvatar)" class="available">
-        <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3.08284 4.87574C2.92663 5.03195 2.67337 5.03195 2.51716 4.87574L1.12071 3.47929C0.888359 3.24694 0.511641 3.24694 0.279289 3.47929C0.0469372 3.71164 0.0469373 4.08836 0.279289 4.32071L2.37574 6.41716C2.61005 6.65147 2.98995 6.65147 3.22426 6.41716L8.52071 1.12071C8.75306 0.888359 8.75306 0.511642 8.52071 0.279289C8.28836 0.0469374 7.91164 0.0469372 7.67929 0.279289L3.08284 4.87574Z" fill="white" stroke="#FDFDFD" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </span>
-      <i *ngIf="!available && (picture || contactAvatar)" fa name="times" class="unavailable"></i>
+      <ng-container *ngIf="available != undefined">
+        <span *ngIf="available && (picture || contactAvatar)" class="available">
+          <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.08284 4.87574C2.92663 5.03195 2.67337 5.03195 2.51716 4.87574L1.12071 3.47929C0.888359 3.24694 0.511641 3.24694 0.279289 3.47929C0.0469372 3.71164 0.0469373 4.08836 0.279289 4.32071L2.37574 6.41716C2.61005 6.65147 2.98995 6.65147 3.22426 6.41716L8.52071 1.12071C8.75306 0.888359 8.75306 0.511642 8.52071 0.279289C8.28836 0.0469374 7.91164 0.0469372 7.67929 0.279289L3.08284 4.87574Z" fill="white" stroke="#FDFDFD" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <i *ngIf="!available && (picture || contactAvatar)" fa name="times" class="unavailable"></i>
+      </ng-container>
     </div>
 
-    <a class="list-info-edit-link not-underline" [class.pl-2]="!(picture || contactAvatar)" [routerLink]="[config.rowId + '/change']">
+    <a *ngIf="!config.editDisable" class="list-info-edit-link not-underline" [class.pl-2]="!(picture || contactAvatar)" [routerLink]="[config.rowId + '/change']">
       <i fa name="list-alt" class="edit"></i>
       Profile
     </a>
@@ -22,10 +24,12 @@
 
   <div class="list-info-block">
     <span *ngIf="job_title">{{job_title}}</span>
-    <h5 class="list-info-title">
+    <h5 class="list-info-title" [class.position]="position">
       <span class="title" *ngIf="!getScore(averageScore) && !config.hideTitle">
-        {{title}}<app-info class="ml-1" [description]="description"></app-info>
+        {{title}}
+        <app-info *ngIf="description" class="ml-1" [description]="description"></app-info>
       </span>
+
       <span style="font-size: 14px" *ngIf="config.hideTitle">Average score</span>
       <span class="title" *ngIf="getScore(averageScore)">
         <ng-container *ngIf="!config.hideTitle">{{title}}</ng-container>
@@ -43,6 +47,7 @@
           No rating
       </span>
     </h5>
+    <p *ngIf="position" class="position">{{position}}</p>
     <p class="description" *ngIf="company">{{company}}</p>
     <p class="description">{{address}}</p>
 

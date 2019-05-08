@@ -43,8 +43,20 @@
   [class.my-2]="isMobile()"
   *ngIf="config.score && getScore(value)"
   [style.color]="colors[getScore(value)]">
-    &nbsp;{{value | number:'1.1-1'}}&nbsp;<i fa name="star"></i>
+    <div class="rating" [style.borderColor]="colors[getScore(value)]">
+      <ngb-rating [rate]="config.value" max="5" [readonly]="true">
+        <ng-template let-fill="fill" let-index="index">
+          <span *ngIf="fill === 100" class="star full">&#9733;</span>
+          <span *ngIf="fill === 0" class="star">&#9733;</span>
+          <span *ngIf="fill < 100 && fill > 0" class="star">
+            <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+          </span>
+        </ng-template>
+      </ngb-rating>
+    </div>
+    &nbsp;{{value | number:'1.1-1'}}
 </span>
+
 
 <span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">{{config.delim}}</span>
 <br *ngIf="!config.delim && config.name !== 'credit_approved'">
