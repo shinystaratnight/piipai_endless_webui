@@ -262,7 +262,7 @@ export class DynamicListComponent
       this.filtersHidden = false;
     }
 
-    this.noneEdit = this.pictures.indexOf(this.endpoint) > -1;
+    this.noneEdit = this.pictures.indexOf(this.endpoint) > -1 || this.config.list.editDisable;
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -829,7 +829,8 @@ export class DynamicListComponent
             image: element.image,
             score: element.score,
             hideTitle: element.hideTitle,
-            size: element.size
+            size: element.size,
+            shadow: element.shadow,
           };
           if (obj.action && this.disableActions) {
             obj.disableAction = true;
@@ -982,6 +983,7 @@ export class DynamicListComponent
             });
           } else if (element.field) {
             if (element.type === 'info') {
+              obj.editDisable = this.config.list.editDisable;
               obj.value = el;
               obj.companyPicture =
                 this.endpoint === '/core/companies/';

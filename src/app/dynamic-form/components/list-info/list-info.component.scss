@@ -9,9 +9,14 @@
   }
 
   &-title {
+
+    &.position {
+      padding-top: 6px;
+    }
+
     .title {
       font-size: 18px;
-      line-height: 18px;
+      line-height: 20px;
       font-weight: 600;
     }
 
@@ -180,4 +185,9 @@
       color: map-get($theme-colors, $item);
     }
   }
+}
+
+.position {
+  font-size: 14px;
+  line-height: 16px;
 }

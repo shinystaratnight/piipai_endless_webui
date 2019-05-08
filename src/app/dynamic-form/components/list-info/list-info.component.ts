@@ -25,6 +25,7 @@ export class ListInfoComponent implements OnInit {
   public contactAvatar: string;
   public job_title: string; //tslint:disable-line
   public company: string;
+  position: string;
 
   public color: any;
   public colorAttr: string;

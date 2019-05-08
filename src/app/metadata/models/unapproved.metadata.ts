@@ -8,9 +8,8 @@ const list = {
       {
         label: 'Picture',
         delim: null,
+        hide: true,
         name: 'job_offer.candidate_contact.contact.picture',
-        sort: true,
-        sort_field: 'job_offer.candidate_contact.contact.picture',
         title: null,
         content: [
           {
@@ -23,6 +22,7 @@ const list = {
       {
         label: 'Position',
         delim: null,
+        hide: true,
         name: 'position',
         title: null,
         content: [
@@ -35,6 +35,43 @@ const list = {
           },
           { type: 'static', label: 'Position', field: 'position' }
         ]
+      },
+      {
+        content: [
+          {
+            values: {
+              title: 'job_offer.candidate_contact.contact.__str__',
+              picture: 'job_offer.candidate_contact.contact.picture.origin',
+              position: 'position.__str__'
+            },
+            field: 'id',
+            type: 'info',
+            label: 'Personal Info'
+          }
+        ],
+        name: 'personal_info',
+        title: null,
+        label: 'Candidate/Position',
+        delim: null
+      },
+      {
+        content: [
+          {
+            title: 'Show traking map',
+            type: 'button',
+            color: 'link',
+            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
+            field: 'id',
+            action: 'showTracking',
+            customLink: true,
+            image: '/assets/img/map-lg.png'
+          }
+        ],
+        name: 'tracking',
+        center: true,
+        title: null,
+        label: 'Tracking',
+        delim: null
       },
       {
         label: 'Times',
@@ -74,8 +111,41 @@ const list = {
         name: 'totalTime',
         content: [
           {
-            type: 'text',
+            type: 'static',
+            color: 'primary',
+            text: '{totalTime}',
+            setColor: 'shift_ended_at',
             field: 'totalTime',
+          }
+        ]
+      },
+      {
+        label: 'Evaluate',
+        delim: ' ',
+        name: 'evaluate',
+        title: null,
+        content: [
+          {
+            label: 'Evaluate',
+            text: 'Evaluate',
+            icon: 'fa-star',
+            type: 'button',
+            color: 'warning',
+            endpoint: '/hr/timesheets/{id}/evaluate/',
+            field: 'id',
+            shadow: true,
+            action: 'evaluateCandidate',
+            hidden: 'evaluated'
+          },
+          {
+            score: true,
+            type: 'text',
+            field: 'evaluation.level_of_communication',
+            showIf: [
+              {
+                evaluated: true
+              }
+            ],
           }
         ]
       },
@@ -94,6 +164,7 @@ const list = {
             endpoint: '/hr/timesheets/{id}/approve/',
             replace_by: 'supervisor',
             field: 'id',
+            shadow: true,
             action: 'approveTimesheet',
             hidden: 'supervisor_approved_at'
           },
@@ -105,6 +176,7 @@ const list = {
             label: 'Change',
             endpoint: '/hr/timesheets/{id}/not_agree/',
             field: 'id',
+            shadow: true,
             action: 'changeTimesheet',
             hidden: 'supervisor_approved_at'
           }
@@ -125,43 +197,16 @@ const list = {
             label: 'Change',
             endpoint: '/hr/timesheets/{id}/not_agree/',
             field: 'id',
+            shadow: true,
             action: 'changeTimesheet',
             hidden: 'supervisor_approved_at'
           }
         ]
       },
       {
-        label: 'Evaluate',
-        delim: ' ',
-        name: 'evaluate',
-        title: null,
-        content: [
-          {
-            label: 'Evaluate',
-            text: 'Evaluate',
-            icon: 'fa-star',
-            type: 'button',
-            color: 'warning',
-            endpoint: '/hr/timesheets/{id}/evaluate/',
-            field: 'id',
-            action: 'evaluateCandidate',
-            hidden: 'evaluated'
-          },
-          {
-            score: true,
-            type: 'text',
-            field: 'evaluation.level_of_communication',
-            showIf: [
-              {
-                evaluated: true
-              }
-            ],
-          }
-        ]
-      },
-      {
         label: 'Tracking',
         delim: null,
+        hide: true,
         name: 'traking',
         title: null,
         content: [
@@ -182,17 +227,6 @@ const list = {
     label: 'Unapproved timesheets'
   },
   fields: [
-    {
-      key: 'id',
-      type: 'button',
-      templateOptions: {
-        text: 'Approve',
-        label: 'Approve',
-        action: 'approveTimesheet',
-        type: 'button'
-      },
-      read_only: true
-    },
     {
       key: 'job_offer.candidate_contact.contact.picture',
       default: 'contact_pictures/default_picture.jpg',
