@@ -17,6 +17,7 @@ export class ListImageComponent implements OnInit {
   public last: boolean;
   public file: string;
   public contactAvatar: string;
+  public show: boolean;
 
   public isMobileDevice = isMobile() && isCandidate();
 
@@ -44,7 +45,7 @@ export class ListImageComponent implements OnInit {
       }
     }
 
-    if (!this.src && this.config.contactName) {
+    if (!this.src && this.config.contactName && !this.config.signature) {
       this.contactAvatar = getContactAvatar(this.config.contactName);
     }
   }
@@ -65,6 +66,13 @@ export class ListImageComponent implements OnInit {
 
   public downloadFile() {
     this.link.nativeElement.click();
+  }
+
+  public showSignature(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    this.show = true;
   }
 
   get emptyValue() {

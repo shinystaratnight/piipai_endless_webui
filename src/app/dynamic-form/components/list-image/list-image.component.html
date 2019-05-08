@@ -11,7 +11,14 @@
 
 <span class="description" *ngIf=emptyValue>{{config.emptyValue}}</span>
 
-<img *ngIf="src" [src]="src" width="60" height="60">
+<ng-container *ngIf="src && config.signature">
+  <a *ngIf="!show" href="#" class="text-primary" (click)="showSignature($event)">Show signature</a>
+  <img *ngIf="show" [src]="src" alt="Signature" width="112" height="36" class="signature">
+</ng-container>
+
+<ng-container *ngIf="src && !config.signature">
+  <img *ngIf="src" [src]="src" width="60" height="60">
+</ng-container>
 <span class="mr-1" *ngIf="config.delim && !last">{{config.delim}}</span>
 <div *ngIf="file" [class.mobile]="isMobileDevice">
   <a #filelink

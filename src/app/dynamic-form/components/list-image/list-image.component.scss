@@ -11,8 +11,18 @@
   background-color: #f5f5f5;
 }
 
-img {
+img:not(.signature) {
   border-radius: 50%;
+}
+
+.signature {
+  width: calc(36px / .55);
+
+  margin-top: 5px;
+
+  border: 1px solid rgba($gray, .6);
+  border-radius: 4px;
+  background: white;
 }
 
 .text-opacity {

@@ -17,6 +17,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageService } from 'ngx-webstorage';
 
+import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { TimeService, ToastService, MessageType } from '../../../shared/services';
@@ -831,6 +832,10 @@ export class DynamicListComponent
             hideTitle: element.hideTitle,
             size: element.size,
             shadow: element.shadow,
+            muted: element.muted,
+            signature: element.signature,
+            svg: element.svg,
+            process: new Subject(),
           };
           if (obj.action && this.disableActions) {
             obj.disableAction = true;
@@ -1816,11 +1821,11 @@ export class DynamicListComponent
       if (data) {
         if (prop.indexOf('__') > -1) {
           const propArray = prop.split('__');
-          const datetime = ['date', 'time'];
+          const datetime = ['date', 'time', 'datetime'];
           if (datetime.indexOf(propArray[1]) > -1) {
             if (data[propArray[0]]) {
               return this.time.instance(data[propArray[0]])
-                .format(propArray[1] === 'time' ? 'hh:mm A' : 'YYYY-MM-DD');
+                .format(propArray[1] === 'time' ? 'hh:mm A' : propArray[1] === 'datetime' ? 'DD/MM/YYYY hh:mm A' :  'DD/MM/YYYY');
             } else {
               return '';
             }
@@ -2291,8 +2296,10 @@ export class DynamicListComponent
   }
 
   public showTracking(e) {
+    e.el.process.next(true);
     this.genericFormService.getByQuery(e.el.endpoint, `?timesheet=${e.id}&limit=-1`)
       .subscribe((res) => {
+        e.el.process.next(false);
         if (res.results.length) {
           const timesheet = this.getRowData(e);
           const break_end = this.time.instance(timesheet.break_ended_at);
@@ -2326,6 +2333,8 @@ export class DynamicListComponent
           this.trackingMarkerCoordinates(start);
 
           this.open(this.trakingModal);
+        } else {
+          this.toastr.sendMessage('Location data is empty', MessageType.info);
         }
       });
   }

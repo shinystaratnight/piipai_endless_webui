@@ -10,7 +10,8 @@ export interface Message {
 
 export const MessageType = {
   success: 'success',
-  error: 'error'
+  error: 'error',
+  info: 'info'
 };
 
 @Injectable()
