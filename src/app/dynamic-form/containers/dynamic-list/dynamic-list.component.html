@@ -135,12 +135,14 @@
               <ng-container *ngFor="let field of config.list.columns">
                 <ng-container *ngIf="!field.hide">
                   <th [class.text-center]="field.center" *ngIf="!(field.tab && field.tab.is_collapsed)">
-                    <ng-container
-                      appListElement
-                      [head]="true"
-                      [config]="field"
-                      (event)="sorting(field)">
-                    </ng-container>
+                    <div class="d-inline" [class.sort]=field.sort>
+                      <ng-container
+                        appListElement
+                        [head]="true"
+                        [config]="field"
+                        (event)="sorting(field)">
+                      </ng-container>
+                    </div>
                     <i fa
                       class="sort-icon"
                       *ngIf="field.sort && !delay"

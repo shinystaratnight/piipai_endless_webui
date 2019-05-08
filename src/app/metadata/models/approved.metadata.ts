@@ -8,9 +8,8 @@ const list = {
       {
         label: 'Picture',
         delim: null,
+        hide: true,
         name: 'job_offer.candidate_contact.contact.picture',
-        sort: true,
-        sort_field: 'job_offer.candidate_contact.contact.picture',
         title: null,
         content: [
           {
@@ -23,6 +22,7 @@ const list = {
       {
         label: 'Position',
         delim: null,
+        hide: true,
         name: 'position',
         title: null,
         content: [
@@ -37,8 +37,49 @@ const list = {
         ]
       },
       {
+        content: [
+          {
+            values: {
+              title: 'job_offer.candidate_contact.contact.__str__',
+              picture: 'job_offer.candidate_contact.contact.picture.origin',
+              position: 'position.__str__'
+            },
+            field: 'id',
+            type: 'info',
+            label: 'Personal Info'
+          }
+        ],
+        name: 'personal_info',
+        title: null,
+        sort: true,
+        sort_field: 'job_offer.candidate_contact',
+        label: 'Candidate/Position',
+        delim: null
+      },
+      {
+        content: [
+          {
+            title: 'Show traking map',
+            type: 'button',
+            color: 'link',
+            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
+            field: 'id',
+            action: 'showTracking',
+            customLink: true,
+            image: '/assets/img/map-lg.png'
+          }
+        ],
+        name: 'tracking',
+        center: true,
+        title: null,
+        label: 'Tracking',
+        delim: null
+      },
+      {
         label: 'Times',
         delim: null,
+        sort: true,
+        sort_field: 'shift_started_at',
         name: 'times',
         title: null,
         content: [
@@ -69,6 +110,20 @@ const list = {
         ]
       },
       {
+        label: 'Total hours',
+        delim: null,
+        name: 'totalTime',
+        content: [
+          {
+            type: 'static',
+            color: 'primary',
+            text: '{totalTime}',
+            setColor: 'shift_ended_at',
+            field: 'totalTime',
+          }
+        ]
+      },
+      {
         label: 'Evaluate',
         delim: ' ',
         name: 'evaluate',
@@ -76,12 +131,13 @@ const list = {
         content: [
           {
             label: 'Evaluate',
-            icon: 'fa-star',
-            type: 'button',
-            color: 'warning',
             text: 'Evaluate',
+            type: 'button',
+            svg: 'evaluate',
+            color: 'warning',
             endpoint: '/hr/timesheets/{id}/evaluate/',
             field: 'id',
+            shadow: true,
             action: 'evaluateCandidate',
             hidden: 'evaluated'
           },
@@ -94,6 +150,37 @@ const list = {
                 evaluated: true
               }
             ],
+          }
+        ]
+      },
+      {
+        label: 'Status',
+        name: 'status',
+        title: null,
+        content: [
+          {
+            field: 'supervisor_approved',
+            type: 'static',
+            text: 'Approved',
+            color: 'success',
+            setColor: 'supervisor_approved',
+          },
+          {
+            field: 'supervisor.name',
+            type: 'static',
+          },
+          {
+            text: '{supervisor_approved_at__datetime}',
+            field: 'supervisor_approved_at',
+            type: 'static',
+            muted: true
+          },
+          {
+            field: 'supervisor_signature',
+            type: 'picture',
+            file: false,
+            signature: true,
+            showId: ['supervisor_signature.origin']
           }
         ]
       }
@@ -144,6 +231,18 @@ const list = {
       type: 'static',
       templateOptions: {
         text: '{shift_ended_at__time}',
+        required: false,
+        type: 'static',
+        label: 'Shift ended at'
+      },
+      read_only: true
+    },
+    {
+      key: 'supervisor_approved_at',
+      default: '2018-07-05T15:30:00+10:00',
+      type: 'static',
+      templateOptions: {
+        text: '{supervisor_approved_at__datetime}',
         required: false,
         type: 'static',
         label: 'Shift ended at'

@@ -205,10 +205,17 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     border-bottom: none;
 
     color: black;
-    opacity: .15;
     text-transform: uppercase;
 
     background-color: transparent;
+
+    span {
+      opacity: .15;
+    }
+
+    .sort span {
+      cursor: pointer;
+    }
 
     label {
       display: inline;
@@ -677,6 +684,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     font-size: 14px !important;
 
+    opacity: .15;
     cursor: pointer;
 
     &:hover {
@@ -685,6 +693,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     &.active {
       color: $gray;
+      opacity: 1;
     }
   }
 

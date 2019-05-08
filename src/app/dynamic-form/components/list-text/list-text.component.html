@@ -7,7 +7,8 @@
 <span *ngIf="!arrayValue && !config.hideValue && !config.score">
   <span class="d-inline-flex align-items-center flex-wrap mr-1"
     *ngIf="value || value === 0"
-    [class.description]="config.description">
+    [class.description]="config.description"
+    [class.text-description]="config.muted">
       <span [title]="config.title || ''">
         <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
         <span *ngIf="!iconView && !iconClass && !workers">{{value}}</span>

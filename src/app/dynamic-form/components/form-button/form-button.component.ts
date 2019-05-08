@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
@@ -24,6 +24,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
 
   public isDisabled: boolean;
   public disabledTitle: string;
+  public saveProcess: boolean;
 
   public subscriptions: Subscription[] = [];
 
@@ -31,7 +32,8 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
+    private cd: ChangeDetectorRef
   ) {}
 
   public ngOnInit() {
@@ -49,6 +51,13 @@ export class FormButtonComponent implements OnInit, OnDestroy {
     }
     this.checkHiddenProperty();
     this.customizeButton();
+
+    if (this.config.process) {
+      this.subscriptions.push(this.config.process.subscribe((value) => {
+        this.saveProcess = value;
+        this.cd.markForCheck();
+      }));
+    }
 
     this.isDisabled = this.checkSmsDisabled(this.config.endpoint);
     this.disabledTitle = this.getSmsTitle(this.isDisabled);

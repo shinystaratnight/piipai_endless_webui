@@ -50,6 +50,8 @@ const list = {
           }
         ],
         name: 'personal_info',
+        sort: true,
+        sort_field: 'job_offer.candidate_contact',
         title: null,
         label: 'Candidate/Position',
         delim: null
@@ -76,6 +78,8 @@ const list = {
       {
         label: 'Times',
         delim: null,
+        sort: true,
+        sort_field: 'shift_started_at',
         name: 'times',
         title: null,
         content: [
@@ -128,7 +132,7 @@ const list = {
           {
             label: 'Evaluate',
             text: 'Evaluate',
-            icon: 'fa-star',
+            svg: 'evaluate',
             type: 'button',
             color: 'warning',
             endpoint: '/hr/timesheets/{id}/evaluate/',
@@ -157,9 +161,9 @@ const list = {
         content: [
           {
             text: 'Approve',
-            icon: 'fa-check',
             type: 'button',
             color: 'success',
+            svg: 'approve',
             label: 'Approve',
             endpoint: '/hr/timesheets/{id}/approve/',
             replace_by: 'supervisor',
@@ -170,9 +174,9 @@ const list = {
           },
           {
             text: 'Change',
-            icon: 'fa-pencil',
             type: 'button',
             color: 'danger',
+            svg: 'change',
             label: 'Change',
             endpoint: '/hr/timesheets/{id}/not_agree/',
             field: 'id',
@@ -191,9 +195,9 @@ const list = {
         content: [
           {
             text: 'Change',
-            icon: 'fa-pencil',
             type: 'button',
             color: 'danger',
+            svg: 'change',
             label: 'Change',
             endpoint: '/hr/timesheets/{id}/not_agree/',
             field: 'id',
