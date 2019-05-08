@@ -143,6 +143,7 @@ button.btn-link {
 }
 
 .success-btn {
+  &:hover,
   &:active {
     background-color: rgba($brand-success, .2);
     box-shadow: 0px 1px 5px rgba($brand-success, 0.9);
