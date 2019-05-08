@@ -11,6 +11,7 @@ export const metadata = {
               sms: 'SMS',
               subscription: 'Subscription',
               extra_workers: 'Extra Workers',
+              candidate: 'Candidate'
             },
           }
         ],
