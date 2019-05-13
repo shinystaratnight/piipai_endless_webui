@@ -334,9 +334,7 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
-        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
@@ -371,9 +369,7 @@
 <ng-template #messageDetail let-c="close" let-d="dismiss">
   <div class="message-detail-header">
     <h5 class="message-label">{{modalInfo.label}}</h5>
-    <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
   </div>
 
   <app-generic-form
@@ -391,9 +387,7 @@
 <ng-template #confirmModal let-c="close">
   <div class="modal-header">
     <p>{{modalInfo.message}}</p>
-    <button type="button" class="close" aria-label="Close" (click)="d(false)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <app-close-button class="close-button ml-2" (click)="c()"></app-close-button>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="callAction(modalInfo, c)">{{modalInfo.agree_label}}</button>
@@ -406,9 +400,7 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title" [class.text-center]="modalInfo.signature">
-          <ng-container *ngIf="modalInfo.evaluate">
-            {{modalInfo.signature ? 'Please Sign!' : 'Evaluate'}}
-          </ng-container>
+          <ng-container *ngIf="modalInfo.evaluate">Evaluate</ng-container>
 
           <ng-container *ngIf="!modalInfo.evaluate">
             <ng-container *ngIf="modalInfo.label.picture">
@@ -423,9 +415,8 @@
             {{modalInfo.label.name}}
           </ng-container>
         </h5>
-        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
+
+        <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
       </div>
     </div>
     <div *ngIf="!modalInfo.evaluate" class="modal-body">
@@ -439,7 +430,7 @@
       </app-generic-form>
     </div>
 
-    <ng-container *ngIf="modalInfo.evaluate && !modalInfo.signature">
+    <ng-container *ngIf="modalInfo.evaluate">
       <div class="modal-body text-center">
         <ng-container *ngIf="modalInfo.label.picture">
           <img  [src]="modalInfo.label.picture" alt="Photo" style="border-radius: 50%" height="100" width="100">
@@ -469,21 +460,99 @@
         </button>
       </div>
     </ng-container>
+  </div>
+</ng-template>
 
-    <ng-container *ngIf="modalInfo.signature">
-      <div class="modal-body text-center d-flex align-items-center">
+<ng-template #approveSignature let-c="close" let-d="dismiss">
+  <div class="approve-signature-modal modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h2 class="modal-title d-flex align-items-center">
+          <div class="mr-3">
+            <img alt="Photo" width="54" height="54"
+              *ngIf="modalInfo.label.picture"
+              [src]="modalInfo.label.picture">
+
+            <span class="contact-avatar avatar"
+              *ngIf="!modalInfo.label.picture">
+                {{modalInfo.label.contactAvatar}}
+            </span>
+          </div>
+          <div class="d-flex justify-content-center flex-column">
+            Approve timesheet <br>
+            <span class="secondary-title">for {{modalInfo.label.name}}</span>
+          </div>
+        </h2>
+
+        <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
+
+      </div>
+    </div>
+
+    <div class="modal-body pt-0">
+      <div class="content-info">
+        <div class="flex-fill mt-3">
+          <h3 class="group-title">Times</h3>
+
+          <ng-container *ngTemplateOutlet="line; context: { label: 'Date', value: modalInfo.timesheet.date }"></ng-container>
+          <ng-container *ngTemplateOutlet="line; context: { label: 'Start', value: modalInfo.timesheet.started_at, muted: true }"></ng-container>
+          <ng-container *ngTemplateOutlet="line; context: { label: 'Break', value: modalInfo.timesheet.break, muted: true }"></ng-container>
+          <ng-container *ngTemplateOutlet="line; context: { label: 'End', value: modalInfo.timesheet.ended_at, muted: true }"></ng-container>
+          <ng-container *ngTemplateOutlet="line; context: { label: 'Total time', value: modalInfo.timesheet.total, totalTime: true }"></ng-container>
+
+          <ng-template #line let-label="label" let-value="value" let-total="totalTime" let-muted="muted">
+            <div class="time-line d-flex align-items-center flex-wrap" [class.text-success]="total">
+              <span class="label" [class.description]="muted">{{label}}:</span>&nbsp;
+              <span>{{value}}</span>
+            </div>
+          </ng-template>
+        </div>
+
+
+        <div class="flex-fill mt-3 evaluation-content" [class.evaluated]="modalInfo.evaluated">
+          <h3 class="group-title">Evaluation</h3>
+
+          <div class="evaluation-wrapper d-flex align-items-center text-warning">
+            <div class="rating d-inline-flex" [class.filled]="modalInfo.data.level_of_communication">
+              <ngb-rating
+                min="1"
+                max="5"
+                [(ngModel)]="modalInfo.data.level_of_communication"
+                [rate]="modalInfo.data.level_of_communication"
+                [readonly]="modalInfo.evaluated"
+                (hover)="hovered=$event"
+                (leave)="hovered=undefined"
+                (rateChange)="hovered=undefined">
+                  <ng-template let-fill="fill" let-index="index">
+                    <span *ngIf="fill === 100" class="star star-lg full">&#9733;</span>
+                    <span *ngIf="fill === 0" class="star star-lg">{{modalInfo.data.level_of_communication ? '&#9733;' : '&#9734;'}}</span>
+                  </ng-template>
+              </ngb-rating>
+            </div>
+            &nbsp;{{modalInfo.data.level_of_communication}}
+          </div>
+
+          <p class="description" *ngIf="!modalInfo.evaluated">Your rate helps to select the best candidates for your work.</p>
+        </div>
+      </div>
+
+      <div class="signature-content">
+        <h3 class="group-title">Signature</h3>
         <app-signature #canvas (signature)="updateSignature($event)"></app-signature>
-        <button type="button" class="btn clear-button ml-2" (click)="canvas.clear()">Clear</button>
       </div>
 
-      <div class="modal-footer justify-content-center py-2">
-        <button *ngIf="modalInfo.signature" type="button" class="btn big-btn btn-shadow btn-primary button-save"
-          (click)="sendSignature()">
-            Approve
-            <app-spinner *ngIf="saveProcess"></app-spinner>
-        </button>
-      </div>
-    </ng-container>
+    </div>
+
+    <div class="modal-footer justify-content-between">
+      <button type="button" class="btn clear-button" (click)="canvas.clear()">
+        Clear
+      </button>
+      <button type="button" class="btn big-btn btn-shadow btn-primary"
+        (click)="sendSignature()">
+          Approve
+          <app-spinner *ngIf="saveProcess"></app-spinner>
+      </button>
+    </div>
   </div>
 </ng-template>
 
@@ -491,9 +560,7 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <button type="button" class="close ml-auto" aria-label="Close" (click)="d('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -516,9 +583,7 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">Send message</h5>
-        <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
       </div>
     </div>
     <div class="modal-body p-0">
@@ -570,7 +635,7 @@
   </agm-map>
 </ng-template>
 
-<ng-template #approved let-data="data">
+<ng-template #history let-data="data">
   <div class="header">
     <div class="d-flex justify-content-center flex-column">
       <ng-container *ngFor="let field of getElement('position', data.content).content"
@@ -591,18 +656,24 @@
     </div>
   </div>
   <div class="body">
-    <label>Times</label>
     <ng-container *ngFor="let field of getElement('times', data.content).content"
       appListElement
-      [config]="field"
       [length]="getElement('times', data.content).content.length"
+      [config]="field"
       (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">
     </ng-container>
-  </div>
-  <div class="footer">
-    <div class="button-wrapper">
-      <ng-container *ngFor="let field of getElement('evaluate', data.content).content"
+    <span style="font-size: 14px; opacity: .5">Total hours:&nbsp;</span>
+    <ng-container *ngFor="let field of getElement('totalTime', data.content).content"
+      appListElement
+      [length]="getElement('totalTime', data.content).content.length"
+      [config]="field"
+      (event)="eventHandler($event)"
+      (buttonAction)="buttonHandler($event)">
+    </ng-container>
+    <label>Tracking</label>
+    <div class="d-flex align-items-center">
+      <ng-container *ngFor="let field of getElement('tracking', data.content).content"
         appListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
@@ -610,39 +681,9 @@
       </ng-container>
     </div>
   </div>
-</ng-template>
-
-<ng-template #history let-data="data">
-  <div class="header">
-    <div class="d-flex justify-content-center flex-column">
-      <ng-container *ngFor="let field of getElement('jobsite', data.content).content"
-        appListElement
-        [config]="field"
-        (event)="eventHandler($event)"
-        (buttonAction)="buttonHandler($event)">
-      </ng-container>
-    </div>
-  </div>
-  <div class="body">
-    <ng-container *ngFor="let field of getElement('going_to_work', data.content).content"
-      appListElement
-      [config]="field"
-      (event)="eventHandler($event)"
-      (buttonAction)="buttonHandler($event)">
-    </ng-container>
-
-    <label class="mt-2">Times</label>
-    <ng-container *ngFor="let field of getElement('times', data.content).content"
-      appListElement
-      [config]="field"
-      [length]="getElement('times', data.content).content.length"
-      (event)="eventHandler($event)"
-      (buttonAction)="buttonHandler($event)">
-    </ng-container>
-  </div>
   <div class="footer footer-container">
     <div class="d-flex justify-content-center flex-column">
-      <ng-container *ngFor="let field of getElement('signed_by', data.content).content"
+      <ng-container *ngFor="let field of getElement('status', data.content).content"
         appListElement
         [config]="field"
         (event)="eventHandler($event)"
@@ -691,8 +732,7 @@
     </ng-container>
     <label>Tracking</label>
     <div class="d-flex align-items-center">
-      <img src="/assets/img/map.png" alt="Map" height="48" width="200">
-      <ng-container *ngFor="let field of getElement('traking', data.content).content"
+      <ng-container *ngFor="let field of getElement('tracking', data.content).content"
         appListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
@@ -732,9 +772,7 @@
   <div class="tracking-header">
     <h5 class="title">Candidate Tracking</h5>
     <p class="jobsite">{{modalInfo.jobsite}}</p>
-    <button type="button" class="close ml-2" aria-label="Close" (click)="c('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <app-close-button class="close-button ml-2" (click)="c()"></app-close-button>
   </div>
 
   <agm-map
@@ -782,4 +820,3 @@
     </app-time-tracking>
   </div>
 </ng-template>
-

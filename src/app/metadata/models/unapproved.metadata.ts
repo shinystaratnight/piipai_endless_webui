@@ -86,13 +86,13 @@ const list = {
           {
             text: '{shift_started_at__date}',
             type: 'static',
-            label: 'Shift date',
+            label: 'Date',
             field: 'shift_started_at'
           },
           {
             text: '{shift_started_at__time}',
             type: 'static',
-            label: 'Shift started at',
+            label: 'Start',
             field: 'shift_started_at'
           },
           {
@@ -104,7 +104,7 @@ const list = {
           {
             text: '{shift_ended_at__time}',
             type: 'static',
-            label: 'Shift ended at',
+            label: 'End',
             field: 'shift_ended_at'
           }
         ]

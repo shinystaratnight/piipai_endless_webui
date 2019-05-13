@@ -4,6 +4,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { ToastComponent } from './toast/toast.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { DateRangeComponent } from './date-range/date-range.component';
+import { CloseButtonComponent } from './close-button/close-button.component';
 
 export * from './breadcrumb/breadcrumb.component';
 export * from './navigation/navigation.component';
@@ -18,4 +19,5 @@ export const components = [
   ToastComponent,
   DatepickerComponent,
   DateRangeComponent,
+  CloseButtonComponent,
 ];

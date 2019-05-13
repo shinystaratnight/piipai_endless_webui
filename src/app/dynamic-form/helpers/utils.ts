@@ -69,3 +69,7 @@ export function createAddAction(data) {
     data
   };
 }
+
+export function getEvaluationScore(score) {
+  return Math.floor(parseFloat(score));
+}

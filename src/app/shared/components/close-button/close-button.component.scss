@@ -1,0 +1,23 @@
+@import '../../../../styles/_variables.scss';
+
+button {
+  font-size: 1rem;
+  line-height: 1;
+
+  border: none;
+  background-color: transparent;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+svg {
+  fill: $gray;
+
+  opacity: .8;
+
+  &:hover {
+    opacity: 1;
+  }
+}

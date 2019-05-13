@@ -75,7 +75,6 @@ import * as paysliprules from './paysliprules.metadata';
 import * as login from './login.metadata';
 import * as joboffersCandidate from './joboffers-candidate.metadata';
 import * as timesheetsCandidate from './timesheets-candidate.metadata';
-import * as approved from './approved.metadata';
 import * as history from './history.metadata';
 import * as unapproved from './unapproved.metadata';
 import * as submit from './submit.metadata';
@@ -187,7 +186,6 @@ export const metadata = {
   [Endpoints.Login]: login.metadata,
   [Endpoints.JobOfferCandidate]: joboffersCandidate.metadata,
   [Endpoints.TimesheetCandidate]: timesheetsCandidate.metadata,
-  [Endpoints.TimesheetApproved]: approved.metadata,
   [Endpoints.TimesheetHistory]: history.metadata,
   [Endpoints.TimesheetUnapproved]: unapproved.metadata,
   'submit': submit.metadata,

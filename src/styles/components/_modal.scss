@@ -1,0 +1,145 @@
+.approve-modal .modal-dialog {
+  max-width: 370px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.approve-signature-modal {
+
+  $content-padding: 20px;
+
+  .modal-header {
+    padding: $content-padding;
+
+    @include media-breakpoint-down('sm') {
+      padding: $content-padding / 2 16px;
+    }
+  }
+
+  .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .modal-title {
+    font-size: 28px;
+    line-height: 30px;
+
+    @include media-breakpoint-down('sm') {
+      font-size: 20px;
+      line-height: 24px;
+    }
+
+    img {
+      border-radius: 50%;
+    }
+  }
+
+  .contact-avatar {
+    width: 54px;
+    height: 54px;
+  }
+
+  .secondary-title {
+    font-size: 16px;
+    line-height: 20px;
+
+    color: $gray;
+    opacity: .7;
+
+    @include media-breakpoint-down('sm') {
+      font-size: 14px;
+      line-height: 18px;
+    }
+  }
+
+  .modal-body {
+    padding: 0;
+  }
+
+  .group-title {
+    margin-bottom: 6px;
+
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .content-info {
+    display: flex;
+    flex-wrap: wrap;
+
+    padding: $content-padding;
+    padding-top: 0;
+
+    border-bottom: 1px solid #e9ecef;
+
+    & > div {
+      width: 50%;
+    }
+
+    @include media-breakpoint-down('sm') {
+      padding: 1rem;
+    }
+
+    .time-line,
+    .description {
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .description {
+      opacity: .4;
+    }
+  }
+
+  .evaluation-content {
+    font-size: 20px;
+
+    .rating {
+      padding-right: 5px;
+      margin-right: 2px;
+
+      &.filled {
+        border-right: 1px solid $brand-warning;
+      }
+    }
+  }
+
+  .evaluation-content.evaluated {
+    font-size: 14px;
+
+    .evaluation-wrapper,
+    .star-lg {
+      font-size: 14px;
+    }
+  }
+
+  .signature-content {
+    padding: 16px $content-padding 0;
+
+    @include media-breakpoint-down('sm') {
+      padding: 8px 1rem 0;
+    }
+  }
+
+  .clear-button {
+    width: 140px;
+
+    border-radius: 100px;
+    border: 1px solid #e0e0e0;
+
+    color: #4f4f4f;
+    background-color: #f9f9f9;
+  }
+
+  .modal-footer {
+    padding: $content-padding;
+    border-top: none;
+
+    @include media-breakpoint-down('sm') {
+      padding: 1rem;
+    }
+  }
+}

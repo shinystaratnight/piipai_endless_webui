@@ -17,7 +17,6 @@ export class ListImageComponent implements OnInit {
   public last: boolean;
   public file: string;
   public contactAvatar: string;
-  public show: boolean;
 
   public isMobileDevice = isMobile() && isCandidate();
 
@@ -25,9 +24,7 @@ export class ListImageComponent implements OnInit {
   public link: ElementRef<HTMLAnchorElement>;
 
   public ngOnInit() {
-    let defaultAvatar: string;
     if (this.config.type === 'picture') {
-      defaultAvatar = this.config.default;
       this.src = (this.config.value && this.config.value.origin)
         ? this.config.value.origin : false;
 
@@ -66,13 +63,6 @@ export class ListImageComponent implements OnInit {
 
   public downloadFile() {
     this.link.nativeElement.click();
-  }
-
-  public showSignature(e) {
-    e.stopPropagation();
-    e.preventDefault();
-
-    this.show = true;
   }
 
   get emptyValue() {
