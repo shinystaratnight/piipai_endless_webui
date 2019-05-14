@@ -531,8 +531,6 @@
             </div>
             &nbsp;{{modalInfo.data.level_of_communication}}
           </div>
-
-          <p class="description" *ngIf="!modalInfo.evaluated">Your rate helps to select the best candidates for your work.</p>
         </div>
       </div>
 
@@ -772,7 +770,7 @@
   <div class="tracking-header">
     <h5 class="title">Candidate Tracking</h5>
     <p class="jobsite">{{modalInfo.jobsite}}</p>
-    <app-close-button class="close-button ml-2" (click)="c()"></app-close-button>
+    <app-close-button class="close close-button ml-2" (click)="c()"></app-close-button>
   </div>
 
   <agm-map
@@ -809,9 +807,11 @@
 
   <div [class.tracking-desctop]="!isMobile()" [class.pt-4]="isMobile()">
     <div *ngIf="!isMobile()" class="tracking-title-wrapper">
-      <h5 class="tracking-title">Time and path</h5>
+      <h5 class="tracking-title">
+        Time and path
+        <span>{{modalInfo.timePoints.start | dateFormat: 'date'}}</span>
+      </h5>
       <p class="tracking-description">Moving the time slider and look the path</p>
-      <span class="tracking-time">{{modalInfo.timePoints.start | dateFormat: 'date'}}</span>
     </div>
 
     <app-time-tracking

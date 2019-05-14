@@ -29,9 +29,8 @@ const list = {
         sort: true,
         content: [
           {
-            endpoint: '/sms-interface/smstemplates/{template.id}',
-            field: 'template',
-            type: 'link'
+            field: 'template.__str__',
+            type: 'text'
           }
         ],
         name: 'template',

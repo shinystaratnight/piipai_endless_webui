@@ -1,3 +1,61 @@
+import { yesterdayFormatDate, todayFormatDate, Endpoints } from '../helpers';
+import { createFilter, Type } from '../../dynamic-form/models/filters';
+
+const contactTypes = [
+  {
+    value: 'candidate',
+    label: 'Candidate'
+  },
+  {
+    value: 'client',
+    label: 'Client'
+  },
+  {
+    value: 'manager',
+    label: 'Manager'
+  }
+];
+
+const yesNoOptions = [
+  {
+    value: 'True',
+    label: 'Yes'
+  },
+  {
+    value: 'False',
+    label: 'No'
+  }
+];
+
+const filters = {
+  state: createFilter(Type.Relared, {
+    key: 'state',
+    label: 'State',
+    endpoint: `${Endpoints.Region}?country=AU`,
+    display: 'name'
+  }),
+  contact_type: createFilter(Type.Select, {
+    key: 'contact_type',
+    label: 'Type of Contact',
+    values: contactTypes
+  }),
+  is_available: createFilter(Type.Checkbox, {
+    key: 'is_available',
+    label: 'Available',
+    values: yesNoOptions
+  }),
+  phone_mobile_verified: createFilter(Type.Checkbox, {
+    key: 'phone_mobile_verified',
+    label: 'Mobile Phone Verified',
+    values: yesNoOptions
+  }),
+  email_verified: createFilter(Type.Checkbox, {
+    key: 'email_verified',
+    label: 'E-mail Verified',
+    values: yesNoOptions
+  })
+};
+
 const list = {
   list: {
     list: 'contact',
@@ -76,93 +134,11 @@ const list = {
     search_enabled: true,
     editDisable: false,
     filters: [
-      {
-        key: 'state',
-        label: 'State',
-        data: {
-          value: 'name',
-          endpoint: '/core/regions/?country=AU',
-          key: 'id'
-        },
-        query: 'state',
-        default: null,
-        type: 'related'
-      },
-      {
-        key: 'contact_type',
-        label: 'Type of Contact',
-        options: [
-          {
-            value: 'candidate',
-            label: 'Candidate'
-          },
-          {
-            value: 'client',
-            label: 'Client'
-          },
-          {
-            value: 'manager',
-            label: 'Manager'
-          }
-        ],
-        query: 'contact_type',
-        default: null,
-        type: 'select'
-      },
-      {
-        key: 'is_available',
-        label: 'Available',
-        options: [
-          {
-            value: 'True',
-            label: 'Yes'
-          },
-          {
-            value: 'False',
-            label: 'No'
-          }
-        ],
-        query: 'is_available',
-        default: null,
-        multiple: false,
-        type: 'checkbox'
-      },
-      {
-        key: 'phone_mobile_verified',
-        label: 'Mobile Phone Verified',
-        options: [
-          {
-            value: 'True',
-            label: 'Yes'
-          },
-          {
-            value: 'False',
-            label: 'No'
-          }
-        ],
-        query: 'phone_mobile_verified',
-        default: null,
-        multiple: false,
-        type: 'checkbox'
-      },
-      {
-        key: 'email_verified',
-        label: 'E-mail Verified',
-        options: [
-          {
-            value: 'True',
-            label: 'Yes'
-          },
-          {
-            value: 'False',
-            label: 'No'
-          }
-        ],
-        query: 'email_verified',
-        default: null,
-        multiple: false,
-        type: 'checkbox'
-      }
+      filters.state,
+      filters.contact_type,
+      filters.is_available,
+      filters.phone_mobile_verified,
+      filters.email_verified,
     ]
   },
   fields: [

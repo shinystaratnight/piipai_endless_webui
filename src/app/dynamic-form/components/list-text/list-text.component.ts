@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import * as moment from 'moment-timezone';
 
 import { FormatString } from '../../../helpers/format';
@@ -8,7 +8,8 @@ import { getValueOfData } from '../../helpers/utils';
 @Component({
   selector: 'app-list-text',
   templateUrl: './list-text.component.html',
-  styleUrls: ['./list-text.component.scss']
+  styleUrls: ['./list-text.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ListTextComponent implements OnInit {

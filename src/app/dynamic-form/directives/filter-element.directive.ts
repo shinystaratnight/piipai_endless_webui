@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 
 import { FilterDateComponent } from '../components/filter-date/filter-date.component';
-import { FilterChoiceComponent } from '../components/filter-choice/filter-choice.component';
 import { FilterRelatedComponent } from '../components/filter-related/filter-related.component';
 import { FilterSelectComponent } from '../components/filter-select/filter-select.component';
 import { FilterRangeComponent } from '../components/filter-range/filter-range.component';

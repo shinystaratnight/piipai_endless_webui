@@ -1,0 +1,31 @@
+import { FilterModel } from './filter.model';
+
+export interface SelectFilterOptions {
+  key: string;
+  label: string;
+  query: string;
+  defaultValue?: any;
+  values: { value: string, label: string }[];
+}
+
+export const Select = 'select';
+
+export class SelectFilter implements FilterModel {
+  public type = Select;
+
+  public default: any;
+  public key: string;
+  public label: string;
+  public query: string;
+  public options: { value: string, label: string }[];
+
+  constructor(options: SelectFilterOptions) {
+    const { key, label, defaultValue = null, values = [] } = options;
+
+    this.key = key;
+    this.label = label;
+    this.default = defaultValue;
+    this.query = key.replace('.', '__');
+    this.options = [...values];
+  }
+}

@@ -21,7 +21,7 @@ import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { TimeService, ToastService, MessageType } from '../../../shared/services';
-import { FilterService, GenericFormService } from '../../services';
+import { FilterService, GenericFormService, ListStorageService } from '../../services';
 import { AuthService, UserService } from '../../../services';
 import { FormatString } from '../../../helpers/format';
 import {
@@ -257,6 +257,7 @@ export class DynamicListComponent
     private userService: UserService,
     private time: TimeService,
     private toastr: ToastService,
+    private listStorage: ListStorageService
   ) {}
 
   public isMobile = isMobile;
@@ -842,6 +843,9 @@ export class DynamicListComponent
             svg: element.svg,
             process: new Subject(),
           };
+          if (this.listStorage.hasTrackingInfo(el.id)) {
+            obj.locationDataEmpty = !this.listStorage.getTrackingInfo(el.id);
+          }
           if (obj.action && this.disableActions) {
             obj.disableAction = true;
           }
@@ -2349,11 +2353,13 @@ export class DynamicListComponent
   }
 
   public showTracking(e) {
+    console.log(e);
     e.el.process.next(true);
     this.genericFormService.getByQuery(e.el.endpoint, `?timesheet=${e.id}&limit=-1`)
+      .pipe(finalize(() => e.el.process.next(false)))
       .subscribe((res) => {
-        e.el.process.next(false);
         if (res.results.length) {
+          this.listStorage.updateTrackingInfo(e.id, true);
           const timesheet = this.getRowData(e);
           const break_end = this.time.instance(timesheet.break_ended_at);
           const break_start = this.time.instance(timesheet.break_started_at);
@@ -2387,6 +2393,8 @@ export class DynamicListComponent
 
           this.open(this.trakingModal);
         } else {
+          e.el.locationDataEmpty = true;
+          this.listStorage.updateTrackingInfo(e.id, false);
           this.toastr.sendMessage('Location data is empty', MessageType.info);
         }
       });

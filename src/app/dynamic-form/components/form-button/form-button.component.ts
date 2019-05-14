@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
@@ -8,7 +8,8 @@ import { SiteSettingsService } from '../../../services/site-settings.service';
 @Component({
   selector: 'app-form-button',
   templateUrl: 'form-button.component.html',
-  styleUrls: ['./form-button.component.scss']
+  styleUrls: ['./form-button.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormButtonComponent implements OnInit, OnDestroy {
   public config;
@@ -37,26 +38,34 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    if (this.config.replace_by) {
-      if (this.config.replace_by instanceof Object) {
-        this.replacyValue = this.config.replace_by.__str__;
+    const replace_by = this.config.replace_by;
+    const templateOptions = this.config.templateOptions;
+
+    if (replace_by) {
+      if (replace_by instanceof Object) {
+        this.replacyValue = replace_by.__str__;
       } else {
-        this.replacyValue = this.config.replace_by;
+        this.replacyValue = replace_by;
       }
     }
-    if (this.config.repeat && this.config.templateOptions.icon) {
+    if (this.config.repeat && templateOptions.icon) {
       this.repeatArray = new Array(this.config.repeat);
-    } else if (this.config.templateOptions.icon) {
+    } else if (templateOptions.icon) {
       this.repeatArray = [''];
     }
     this.checkHiddenProperty();
     this.customizeButton();
 
     if (this.config.process) {
-      this.subscriptions.push(this.config.process.subscribe((value) => {
-        this.saveProcess = value;
-        this.cd.markForCheck();
-      }));
+      const processSubscription = this.config.process
+        .subscribe(
+          (value) => {
+            this.saveProcess = value;
+            this.cd.detectChanges();
+          }
+        );
+
+      this.subscriptions.push(processSubscription);
     }
 
     this.isDisabled = this.checkSmsDisabled(this.config.endpoint);
@@ -64,16 +73,18 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.subscriptions.forEach((s) => s.unsubscribe);
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   public checkHiddenProperty() {
-    if (this.config && this.config.hidden && this.config.hidden.subscribe) {
-      const subscription = this.config.hidden.subscribe((hide) => {
+    const hidden = this.config.hidden;
+
+    if (hidden && hidden.subscribe) {
+      const hiddenSubscription = hidden.subscribe((hide) => {
         this.showButton = !hide;
       });
 
-      this.subscriptions.push(subscription);
+      this.subscriptions.push(hiddenSubscription);
     }
   }
 

@@ -1,3 +1,70 @@
+import { yesterdayFormatDate, todayFormatDate, Endpoints } from '../helpers';
+import { createFilter, Type } from '../../dynamic-form/models/filters';
+
+const filters = {
+  date: createFilter(Type.Multiple, {
+    key: 'date',
+    label: 'Shifts',
+    query: 'shifts',
+    unique: ['date'],
+    data: {
+      data: 'shifts'
+    },
+  }),
+  available: createFilter(Type.Checkbox, {
+    key: 'available',
+    label: 'Available',
+    values: [
+      {
+        label: 'Show partialy available',
+        value: 'True'
+      }
+    ],
+    defaultValue: 'True'
+  }),
+  show_without_tags: createFilter(Type.Checkbox, {
+    key: 'show_without_tags',
+    label: 'Tags',
+    values: [
+      {
+        label: 'Only job tags',
+        value: 'False'
+      }
+    ],
+  }),
+  overpriced: createFilter(Type.Checkbox, {
+    key: 'overpriced',
+    label: 'Overpriced',
+    values: [
+      {
+        label: 'Show overpriced',
+        value: 'True'
+      }
+    ],
+    defaultValue: 'True'
+  }),
+  transportation_to_work: createFilter(Type.Checkbox, {
+    key: 'transportation_to_work',
+    label: 'Transportation to Work',
+    values: [
+      {
+        label: 'Own Car',
+        value: 1
+      },
+      {
+        label: 'Public Transportation',
+        value: 2
+      }
+    ],
+  }),
+  distance_to_jobsite: createFilter(Type.Text, {
+    key: 'distance_to_jobsite',
+    label: 'Distance',
+    max: 200,
+    min: 0
+  }),
+};
+
 const list = {
   list: {
     pagination_label: 'Candidate Contact',
@@ -234,82 +301,12 @@ const list = {
     ],
     search_enabled: true,
     filters: [
-      {
-        unique: ['date'],
-        label: 'Shifts',
-        type: 'multiple',
-        display: '__str__',
-        preset: true,
-        data: {
-          data: 'shifts'
-        },
-        key: 'date',
-        param: '{id}',
-        query: 'shifts'
-      },
-      {
-        key: 'available',
-        label: 'Available',
-        options: [
-          {
-            label: 'Show partialy available',
-            value: 'True'
-          }
-        ],
-        query: 'available',
-        default: 'True',
-        type: 'checkbox'
-      },
-      {
-        key: 'show_without_tags',
-        options: [
-          {
-            label: 'Only job tags',
-            value: 'False'
-          }
-        ],
-        label: 'Tags',
-        type: 'checkbox',
-        query: 'show_without_tags'
-      },
-      {
-        key: 'overpriced',
-        options: [
-          {
-            label: 'Show overpriced',
-            value: 'True'
-          }
-        ],
-        label: 'Overpriced',
-        type: 'checkbox',
-        default: 'True',
-        query: 'overpriced'
-      },
-      {
-        key: 'transportation_to_work',
-        options: [
-          {
-            label: 'Own Car',
-            value: 1
-          },
-          {
-            label: 'Public Transportation',
-            value: 2
-          }
-        ],
-        label: 'Transportation to Work',
-        type: 'checkbox',
-        multiple: false,
-        query: 'transportation_to_work'
-      },
-      {
-        type: 'text',
-        label: 'Distance',
-        min: 0,
-        max: 200,
-        key: 'distance_to_jobsite',
-        query: 'distance_to_jobsite'
-      }
+      filters.date,
+      filters.available,
+      filters.show_without_tags,
+      filters.overpriced,
+      filters.transportation_to_work,
+      filters.distance_to_jobsite,
     ]
   },
   fields: [
