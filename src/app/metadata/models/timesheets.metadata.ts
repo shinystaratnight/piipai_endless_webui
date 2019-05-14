@@ -1146,6 +1146,7 @@ const form = [
                 templateOptions: {
                   label: 'Related sms',
                   values: ['__str__'],
+                  edit: true,
                   type: 'related',
                 },
                 type: 'related',

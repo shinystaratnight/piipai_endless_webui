@@ -749,6 +749,7 @@ const sent = [
     read_only: true,
     templateOptions: {
       label: 'Related',
+      edit: true,
       values: ['__str__'],
     },
     column: true,
@@ -876,6 +877,7 @@ const reply = [
     read_only: true,
     templateOptions: {
       label: 'Related',
+      edit: true,
       values: ['__str__'],
     },
     column: true,
