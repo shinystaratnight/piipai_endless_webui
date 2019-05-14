@@ -30,6 +30,7 @@ import {
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
 import { FormatString } from '../../../helpers/format';
+import { Endpoints } from '../../../metadata/helpers';
 
 export interface RelatedObject {
   id: string;
@@ -65,6 +66,9 @@ export class FormRelatedComponent extends BasicElementComponent
 
   @ViewChild('tableWrapper')
   public tableWrapper: any;
+
+  @ViewChild('messageDetail')
+  public messageDetail: any;
 
   public config: Field;
   public group: FormGroup;
@@ -946,6 +950,9 @@ export class FormRelatedComponent extends BasicElementComponent
           : object.__str__;
         this.modalData.id = object[this.param];
         this.modalData.needData = true;
+        if (this.modalData.endpoint === Endpoints.Timesheet) {
+          this.modalData.title = '';
+        }
       } else {
         this.modalData.title =
           this.config.templateOptions.editLabel || this.displayValue;
@@ -993,6 +1000,23 @@ export class FormRelatedComponent extends BasicElementComponent
           }
         };
       });
+    }
+
+    if (this.modalData.endpoint === Endpoints.SmsMessages) {
+      const newModal = Object.assign(this.modalData,
+        {
+          label: this.config.metadata_query.includes('sent')
+            ? 'Sent message'
+            : 'Received message',
+          mode: 'view',
+          edit: true,
+          metadataQuery: this.config.metadata_query
+        }
+      );
+
+      this.modalRef = this.modalService.open(this.messageDetail, { windowClass: 'message-detail' });
+
+      return false;
     }
 
     const windowClass = this.config.visibleMode && type === 'post' ? 'visible-mode' : '';

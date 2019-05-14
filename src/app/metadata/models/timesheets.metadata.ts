@@ -1058,10 +1058,15 @@ const form = [
               {
                 width: 0.25,
                 endpoint: Endpoints.SmsMessages,
+                read_only: true,
                 templateOptions: {
                   label: 'Pre-shift check sent sms',
                   values: ['__str__'],
                   type: 'related',
+                  edit: true
+                },
+                metadata_query: {
+                  type: 'sent'
                 },
                 type: 'related',
                 key: 'going_to_work_sent_sms',
@@ -1069,10 +1074,15 @@ const form = [
               {
                 width: 0.25,
                 endpoint: Endpoints.SmsMessages,
+                read_only: true,
                 templateOptions: {
                   label: 'Pre-shift check reply sms',
                   values: ['__str__'],
                   type: 'related',
+                  edit: true
+                },
+                metadata_query: {
+                  type: 'reply'
                 },
                 type: 'related',
                 key: 'going_to_work_reply_sms',

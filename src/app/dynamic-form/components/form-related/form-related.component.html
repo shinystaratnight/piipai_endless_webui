@@ -376,3 +376,23 @@
   </div>
   <div *ngIf="customTemplate && !customTemplate.length" class="d-flex flex-column justify-content-center">-</div>
 </ng-template>
+
+<ng-template #messageDetail let-c="close" let-d="dismiss">
+  <div class="message-detail-header">
+    <h5 class="message-label">{{modalData.label}}</h5>
+    <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <app-generic-form
+    [endpoint]="modalData.endpoint"
+    [metadataQuery]="modalData.metadataQuery"
+    [id]="modalData.id"
+    [mode]="modalData.mode"
+    [data]="modalData.data"
+    [edit]="modalData.edit"
+    (event)="formEvent($event, c)"
+    (errorForm)="formError($event)">
+  </app-generic-form>
+</ng-template>

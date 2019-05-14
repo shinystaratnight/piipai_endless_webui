@@ -82,7 +82,7 @@ const form = [
     type: 'related'
   },
   {
-    read_only: false,
+    read_only: true,
     templateOptions: {
       required: true,
       label: 'Auth Token',
@@ -93,7 +93,7 @@ const form = [
     type: 'input'
   },
   {
-    read_only: false,
+    read_only: true,
     templateOptions: {
       required: false,
       label: 'Logged in at',
@@ -103,7 +103,7 @@ const form = [
     type: 'datepicker'
   },
   {
-    read_only: false,
+    read_only: true,
     default: '/',
     templateOptions: {
       required: false,
@@ -115,7 +115,7 @@ const form = [
     type: 'input'
   },
   {
-    read_only: false,
+    read_only: true,
     default: 0,
     templateOptions: {
       options: [
