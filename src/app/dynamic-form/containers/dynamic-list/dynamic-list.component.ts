@@ -24,7 +24,13 @@ import { TimeService, ToastService, MessageType } from '../../../shared/services
 import { FilterService, GenericFormService } from '../../services';
 import { AuthService, UserService } from '../../../services';
 import { FormatString } from '../../../helpers/format';
-import { createAddAction, isMobile, isCandidate, getContactAvatar, smallModalEndpoints } from '../../helpers';
+import {
+  createAddAction,
+  isMobile,
+  isCandidate,
+  getContactAvatar,
+  smallModalEndpoints
+} from '../../helpers';
 
 import { Endpoints } from '../../../metadata/helpers';
 
@@ -166,9 +172,6 @@ export class DynamicListComponent
   @ViewChild('messageDetail')
   public messageDetail;
 
-  @ViewChild('approved')
-  public approved;
-
   @ViewChild('history')
   public history;
 
@@ -180,6 +183,9 @@ export class DynamicListComponent
 
   @ViewChild('confirmProfileModal')
   public confirmProfileModal;
+
+  @ViewChild('approveSignature')
+  public approveSignature;
 
   public selectedCount: number;
   public sortedColumns: any;
@@ -232,7 +238,6 @@ export class DynamicListComponent
     '/core/companycontacts/'
   ];
   public mobileDesign = [
-    '/hr/timesheets/approved/',
     '/hr/timesheets/history/',
     '/hr/timesheets/unapproved/',
   ];
@@ -1520,7 +1525,7 @@ export class DynamicListComponent
     this.open(this.modal, { size: 'lg' });
   }
 
-  public evaluate(e, data?, signature?: boolean) {
+  public evaluate(e, data?) {
     if (!data) {
       data = this.getRowData(e);
     }
@@ -1548,29 +1553,35 @@ export class DynamicListComponent
         }
       };
 
-      if (signature) {
-        this.modalInfo.signature = {
-          endpoint: this.format(`/hr/timesheets/{id}/approve_by_signature/`, data),
-          value: ''
-        };
-      }
-
       this.open(this.evaluateModal, { windowClass: 'small-modal' });
     }
   }
 
   public sendSignature() {
+    this.saveProcess = true;
     const data = new FormData();
     const image = this.convertBase64(this.modalInfo.signature.value);
     data.append('supervisor_signature', image);
 
+    if (this.modalInfo.data.level_of_communication && !this.modalInfo.evaluated) {
+      this.sendEvaluateData(this.modalInfo.evaluateEndpoint, this.modalInfo.data);
+    }
+
     this.genericFormService
       .uploadFile(this.modalInfo.signature.endpoint, data)
       .subscribe(() => {
-        delete this.modalInfo.signature;
-        this.approveEndpoint = null;
-        this.modalInfo.endpoint = this.format(`/hr/timesheets/{id}/evaluate/`, this.modalInfo.rowData);
-      });
+        this.saveProcess = false;
+        this.modalRef.close();
+        this.refreshList();
+      },
+      () => this.saveProcess = false);
+  }
+
+  public refreshList() {
+    this.event.emit({
+      type: 'update',
+      list: this.config.list.list
+    });
   }
 
   public convertBase64(url: string) {
@@ -1593,15 +1604,15 @@ export class DynamicListComponent
 
   public sendEvaluateData(endpoint, data) {
     this.saveProcess = true;
-    data.level_of_communication = data.level_of_communication + '';
 
     this.genericFormService.editForm(endpoint, data)
-      .subscribe((res) => {
+      .pipe(finalize(() => this.saveProcess = false))
+      .subscribe(() => {
         this.modalRef.close();
-        this.saveProcess = false;
+
         this.evaluateEvent({
-          status: 'success',
-          type: 'sendForm'
+          type: 'sendForm',
+          status: 'success'
         });
       });
   }
@@ -1659,12 +1670,56 @@ export class DynamicListComponent
 
   public approveTimesheet(e) {
     const data = this.getRowData(e);
+    const signature = data.company.supervisor_approved_scheme.includes('SIGNATURE');
 
     if (data) {
-      this.approveEndpoint = e.el.endpoint;
       e.el.endpoint = this.format(this.evaluateEndpoint, data);
 
-      this.evaluate(e, data, data.company.supervisor_approved_scheme.includes('SIGNATURE'));
+      if (signature) {
+        const contact = data.job_offer.candidate_contact.contact;
+        const score = this.getPropValue(data, 'evaluation.level_of_communication');
+        this.modalInfo = {
+          endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
+          evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
+          evaluated: data.evaluated,
+          timesheet: {
+            date: this.format('{shift_started_at__date}', data),
+            started_at: this.format('{shift_started_at__time}', data),
+            break: this.format('{break_started_at__time} - {break_ended_at__time}', data),
+            ended_at: this.format('{shift_ended_at__time}', data),
+            total: this.getTotalTime(data)
+          },
+          signature: {
+            endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
+            value: ''
+          },
+          label: {
+            picture: contact.picture && contact.picture.origin,
+            contactAvatar: getContactAvatar(contact.__str__),
+            name: contact.__str__
+          },
+          data: {
+            was_on_time: true,
+            was_motivated: true,
+            had_ppe_and_tickets: true,
+            met_expectations: true,
+            representation: true,
+            level_of_communication: score
+          }
+        };
+
+        this.open(this.approveSignature, { windowClass: 'approve-modal' });
+
+      } else if (!data.evaluated) {
+        this.approveEndpoint = `${Endpoints.Timesheet}${data.id}/approve/`;
+        this.evaluate(e, data);
+      } else {
+        this.genericFormService
+          .editForm(`${Endpoints.Timesheet}${data.id}/approve/`, {})
+          .subscribe(
+            () => this.refreshList(),
+          );
+      }
     }
   }
 
@@ -2278,8 +2333,6 @@ export class DynamicListComponent
 
   public getView() {
     switch (this.endpoint) {
-      case '/hr/timesheets/approved/':
-        return this.approved;
       case '/hr/timesheets/history/':
         return this.history;
       case '/hr/timesheets/unapproved/':

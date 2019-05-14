@@ -123,19 +123,3 @@
     margin-right: -23px;
   }
 }
-
-.clear-button {
-  font-size: 14px;
-
-  border: none;
-
-  background-color: transparent;
-  color: rgba($gray, .5);
-
-  &:hover {
-    border: none;
-
-    background-color: transparent;
-    color: $gray;
-  }
-}
