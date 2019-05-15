@@ -11,7 +11,7 @@
 
 <span class="description" *ngIf=emptyValue>{{config.emptyValue}}</span>
 
-<img alt="Signature" width="112" height="36" class="signature"
+<img alt="Signature" width="112" height="48" class="signature"
   *ngIf="src && config.signature"
   [src]="src">
 
@@ -31,4 +31,4 @@
   <i *ngIf="file" class="upload-button" (click)="downloadFile()" fa name="download"></i>
 </div>
 <div *ngIf="contactAvatar" class="contact-avatar">{{contactAvatar}}</div>
-<br *ngIf="!config.hidden && !config.delim">
+<br *ngIf="!config.hidden && !config.delim && !last">

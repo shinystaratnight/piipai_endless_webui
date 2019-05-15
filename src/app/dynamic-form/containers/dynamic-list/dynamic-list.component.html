@@ -674,16 +674,17 @@
       (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">
     </ng-container>
-    <span style="font-size: 14px; opacity: .5">Total hours:&nbsp;</span>
-    <ng-container *ngFor="let field of getElement('totalTime', data.content).content"
-      appListElement
-      [length]="getElement('totalTime', data.content).content.length"
-      [config]="field"
-      (event)="eventHandler($event)"
-      (buttonAction)="buttonHandler($event)">
-    </ng-container>
-    <label>Tracking</label>
-    <div class="d-flex align-items-center">
+    <div class="mb-3">
+      <span class="text-success" style="display: inline-block; font-size: 15px; width: 130px">Total time:&nbsp;</span>
+      <ng-container *ngFor="let field of getElement('totalTime', data.content).content"
+        appListElement
+        [length]="getElement('totalTime', data.content).content.length"
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+    <div class="d-flex align-items-center mb-2">
       <ng-container *ngFor="let field of getElement('tracking', data.content).content"
         appListElement
         [config]="inverseButton(field)"
@@ -691,11 +692,21 @@
         (buttonAction)="buttonHandler($event)">
       </ng-container>
     </div>
-  </div>
-  <div class="footer footer-container">
-    <div class="d-flex justify-content-center flex-column">
-      <ng-container *ngFor="let field of getElement('status', data.content).content"
+    <span class="label">Evaluation:</span>
+    <div class="d-inline-block">
+      <ng-container *ngFor="let field of getElement('evaluate', data.content).content"
         appListElement
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+  </div>
+  <div class="footer footer-container position-relative">
+    <div class="d-flex justify-content-center flex-column">
+      <ng-container *ngFor="let field of getElement('status', data.content).content; let last = last"
+        appListElement
+        [last]="last"
         [config]="field"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)">
@@ -733,19 +744,29 @@
       (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">
     </ng-container>
-    <span style="font-size: 14px; opacity: .5">Total hours:&nbsp;</span>
-    <ng-container *ngFor="let field of getElement('totalTime', data.content).content"
-      appListElement
-      [length]="getElement('totalTime', data.content).content.length"
-      [config]="field"
-      (event)="eventHandler($event)"
-      (buttonAction)="buttonHandler($event)">
-    </ng-container>
-    <label>Tracking</label>
-    <div class="d-flex align-items-center">
+    <div class="mb-3">
+      <span class="text-success" style="display: inline-block; font-size: 15px; width: 130px">Total time:&nbsp;</span>
+      <ng-container *ngFor="let field of getElement('totalTime', data.content).content"
+        appListElement
+        [length]="getElement('totalTime', data.content).content.length"
+        [config]="field"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+    <div class="d-flex align-items-center mb-2">
       <ng-container *ngFor="let field of getElement('tracking', data.content).content"
         appListElement
         [config]="inverseButton(field)"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+    <span class="label">Evaluation:</span>
+    <div class="d-inline-block">
+      <ng-container *ngFor="let field of getElement('evaluate', data.content).content"
+        appListElement
+        [config]="field"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)">
       </ng-container>
@@ -762,14 +783,6 @@
     </div>
     <div class="button-wrapper">
       <ng-container *ngFor="let field of getElement('change', data.content).content"
-        appListElement
-        [config]="inverseButton(field)"
-        (event)="eventHandler($event)"
-        (buttonAction)="buttonHandler($event)">
-      </ng-container>
-    </div>
-    <div class="button-wrapper">
-      <ng-container *ngFor="let field of getElement('evaluate', data.content).content"
         appListElement
         [config]="inverseButton(field)"
         (event)="eventHandler($event)"
