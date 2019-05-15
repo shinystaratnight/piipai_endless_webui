@@ -342,6 +342,10 @@ export class GenericListComponent implements OnInit, OnDestroy {
             return;
           }
 
+          if (endpoint.includes('/fillin/')) {
+            this.updateFillInList(data);
+          }
+
           this.dataLength.emit(data.count);
           this.event.emit(data[this.supportData]);
           if (add) {
