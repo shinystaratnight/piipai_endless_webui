@@ -230,68 +230,7 @@ const list = {
     editDisable: true,
     label: 'Unapproved timesheets'
   },
-  fields: [
-    {
-      key: 'job_offer.candidate_contact.contact.picture',
-      default: 'contact_pictures/default_picture.jpg',
-      type: 'input',
-      templateOptions: {
-        max: 255,
-        required: false,
-        file: false,
-        type: 'picture',
-        label: 'Picture'
-      },
-      read_only: true
-    },
-    {
-      key: 'position',
-      type: 'static',
-      templateOptions: { type: 'static', required: false, label: 'Position' },
-      read_only: true
-    },
-    {
-      key: 'job_offer.candidate_contact',
-      type: 'link',
-      templateOptions: { link: null, text: '', label: '', type: 'link' },
-      read_only: true
-    },
-    {
-      key: 'shift_ended_at',
-      default: '2018-07-05T15:30:00+10:00',
-      type: 'static',
-      templateOptions: {
-        text: '{shift_ended_at__time}',
-        required: false,
-        type: 'static',
-        label: 'Shift ended at'
-      },
-      read_only: true
-    },
-    {
-      key: 'shift_started_at',
-      type: 'static',
-      templateOptions: {
-        text: '{shift_started_at__date}',
-        required: false,
-        type: 'static',
-        label: 'Shift date'
-      },
-      read_only: true
-    },
-    {
-      key: 'break_started_at',
-      default: '2018-07-05T12:00:00+10:00',
-      type: 'static',
-      templateOptions: {
-        text: '{break_started_at__time} - {break_ended_at__time}',
-        required: false,
-        type: 'static',
-        label: 'Break'
-      },
-      read_only: true
-    }
-  ]
+  fields: []
 };
 
 export const metadata = {

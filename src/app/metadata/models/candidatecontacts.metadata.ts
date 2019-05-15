@@ -26,10 +26,40 @@ const filters = {
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
+  gender: createFilter(Type.Checkbox, {
+    key: 'contact.gender',
+    label: 'Gender',
+    multiple: true,
+    values: [
+      {
+        value: 'male',
+        label: 'Male'
+      },
+      {
+        value: 'female',
+        label: 'Female'
+      }
+    ]
+  }),
   recruitmentAgent: createFilter(Type.Relared, {
     key: 'recruitment_agent',
     label: 'Recruitment agent',
     endpoint: `${Endpoints.CompanyContact}?master_company=current`,
+  }),
+  transportation_to_work: createFilter(Type.Checkbox, {
+    key: 'transportation_to_work',
+    label: 'Transportation',
+    multiple: true,
+    values: [
+      {
+        value: 1,
+        label: 'Own Car'
+      },
+      {
+        value: 2,
+        label: 'Public Transportation'
+      }
+    ]
   }),
   created_at: createFilter(Type.Date, {
     key: 'created_at',
@@ -306,44 +336,10 @@ const list = {
       filters.skill,
       filters.tag,
       filters.activeState,
-      {
-        key: 'contact.gender',
-        label: 'Gender',
-        options: [
-          {
-            value: 'male',
-            label: 'Male'
-          },
-          {
-            value: 'female',
-            label: 'Female'
-          }
-        ],
-        query: 'contact__gender',
-        multiple: true,
-        default: null,
-        type: 'checkbox'
-      },
+      filters.gender,
       filters.recruitmentAgent,
       filters.avarageScore,
-      {
-        key: 'transportation_to_work',
-        label: 'Transportation',
-        options: [
-          {
-            value: 1,
-            label: 'Own Car'
-          },
-          {
-            value: 2,
-            label: 'Public Transportation'
-          }
-        ],
-        query: 'transportation_to_work',
-        multiple: true,
-        default: null,
-        type: 'checkbox'
-      },
+      filters.transportation_to_work,
       filters.created_at
     ],
     search_enabled: true,

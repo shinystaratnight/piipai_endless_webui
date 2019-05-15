@@ -39,9 +39,9 @@
     line-height: 28px;
 
     @include media-breakpoint-up('md') {
-      margin-bottom: 12px;
+      margin-bottom: 2px;
 
-      font-size: 32px;
+      font-size: 28px;
       line-height: 36px;
     }
   }
@@ -55,13 +55,11 @@
     opacity: .7;
 
     @include media-breakpoint-up('md') {
-      margin-bottom: 8px;
-
-      font-size: 18px;
+      margin-bottom: 20px;
     }
   }
 
-  .close {
+  .close-button {
     position: absolute;
     top: 20px;
     right: 25px;
@@ -80,7 +78,17 @@
   margin-right: 40px;
 }
 
+agm-map {
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
 .tracking-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   margin-bottom: 2px;
 
   font-size: 18px;

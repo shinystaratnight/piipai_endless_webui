@@ -132,6 +132,10 @@
 
     color: #4f4f4f;
     background-color: #f9f9f9;
+
+    &:focus {
+      box-shadow: none;
+    }
   }
 
   .modal-footer {

@@ -88,6 +88,10 @@ button.btn-link {
       justify-content: center;
       flex-direction: column;
     }
+
+    .backdrop-danger {
+      display: none;
+    }
   }
 
   .backdrop {
@@ -108,8 +112,20 @@ button.btn-link {
 
     color: white;
 
+    z-index: 2;
+
+    &-danger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      background-color: rgba($brand-danger, .7);
+      z-index: 1;
+    }
+
     span {
-      font-size: 14px;
+      font-size: 12px;
       line-height: 16px;
       font-weight: 600;
 
