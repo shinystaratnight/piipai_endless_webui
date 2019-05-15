@@ -19,10 +19,21 @@
 
           [attr.id]="key"
           [attr.name]="key">
-        <input [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')" class="form-control"
-          #t
-          date-role="datebox"
-          [(ngModel)]="time">
+        <div class="position-relative time-wrapper">
+          <input [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')" class="form-control"
+            #t
+            date-role="datebox"
+            [(ngModel)]="time">
+          <span
+            class="time"
+            *ngIf="config.templateOptions.showTime"
+            triggers="mouseover:mouseout"
+            [placement]="placement || 'right'"
+            [ngbTooltip]="'Time submitted by candidate'">
+              {{config.value | dateFormat: 'HH:mm'}}
+          </span>
+
+        </div>
       </div>
 
       <div *ngIf="mobileDevice" class="input-group form-element-content datepicker mb-2 edit w-100">

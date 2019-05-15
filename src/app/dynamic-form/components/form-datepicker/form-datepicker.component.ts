@@ -261,6 +261,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           useHeader: false,
           calHighToday: true,
           themeDatePick: 'primary',
+          bootstrapDropdownRight: false,
           calUsePickers: this.config.templateOptions.change === false ? false : true,
           calNoHeader: this.config.templateOptions.change === false,
           calOnlyMonth: this.config.templateOptions.change === false,
@@ -269,7 +270,6 @@ export class FormDatepickerComponent extends BasicElementComponent
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
           maxDays: this.key.includes('birthday') && -1,
-          bootstrapDropdownRight: dateType === 'calbox',
           beforeOpenCallback: () => {
             this.opened = this.d.nativeElement;
             this.updatePosition();

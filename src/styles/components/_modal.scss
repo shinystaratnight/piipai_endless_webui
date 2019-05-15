@@ -1,8 +1,59 @@
-.approve-modal .modal-dialog {
-  max-width: 370px;
+.approve-modal {
 
-  margin-left: auto;
-  margin-right: auto;
+  &.approve .modal-dialog {
+    max-width: 380px;
+  }
+
+  .modal-dialog {
+    max-width: 500px;
+
+
+    margin-left: auto;
+    margin-right: auto;
+
+    .dynamic-form {
+      margin: 0;
+
+      .form-element-content {
+        max-width: 195px;
+        width: auto;
+        flex-wrap: nowrap;
+
+        @include media-breakpoint-down('sm') {
+          max-width: none;
+        }
+      }
+
+      .form-element .form-element-label {
+        color: $gray;
+      }
+
+      .input-group-addon {
+        border: 1px solid rgba($gray, .6) !important;
+        border-left: none !important;
+        border-radius: 0 4px 4px 0 !important;
+        padding: 5px 6px 5px 4px;
+      }
+
+      .form-control[date-role="datebox"],
+      .form-control[data-role="datebox"] {
+        height: auto;
+        min-height: none;
+        border: 1px solid rgba($gray, .6) !important;
+        border-right: none !important;
+        border-radius: 4px 0 0 4px;
+        padding: 5px 0 5px 6px;
+      }
+
+      .input-group:first-child {
+        margin-right: 8px;
+      }
+
+      .time-wrapper > .input-group {
+        max-width: 145px;
+      }
+    }
+  }
 }
 
 .approve-signature-modal {
@@ -64,6 +115,11 @@
 
     font-size: 20px;
     line-height: 24px;
+
+    &.times {
+      position: relative;
+      top: 26px;
+    }
   }
 
   .content-info {
@@ -139,11 +195,10 @@
   }
 
   .modal-footer {
-    padding: $content-padding;
-    border-top: none;
+    width: 335px;
 
-    @include media-breakpoint-down('sm') {
-      padding: 1rem;
-    }
+    padding: $content-padding 0;
+
+    border-top: none;
   }
 }

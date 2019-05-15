@@ -4,6 +4,7 @@
     <label
       [hidden]="(isMobileDevice && labelText === ' ') || config.hideLabel"
       [class.normal]="config.normal"
+      [style.marginBottom.px]="config.marginBottom"
       *ngIf="!config.main && (config.name ? config.label : true)">
         {{labelText === ' ' ? '&nbsp;' : labelText}}
     </label>
