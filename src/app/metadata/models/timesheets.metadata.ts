@@ -1068,6 +1068,9 @@ const form = [
                 metadata_query: {
                   type: 'sent'
                 },
+                add_metadata_query: {
+                  type: 'sent'
+                },
                 type: 'related',
                 key: 'going_to_work_sent_sms',
               },
@@ -1082,6 +1085,9 @@ const form = [
                   edit: true
                 },
                 metadata_query: {
+                  type: 'reply'
+                },
+                add_metadata_query: {
                   type: 'reply'
                 },
                 type: 'related',
@@ -1157,8 +1163,14 @@ const form = [
                   label: 'Related sms',
                   values: ['__str__'],
                   edit: true,
-                  type: 'related',
                 },
+                metadata_query: {
+                  type: 'reply'
+                },
+                add_metadata_query: {
+                  type: 'reply'
+                },
+                column: true,
                 type: 'related',
                 key: 'related_sms',
                 many: true
