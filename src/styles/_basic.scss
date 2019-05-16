@@ -652,7 +652,7 @@ form.ng-invalid button[type='submit'] {
   }
 
   @include media-breakpoint-down('md') {
-    max-height: 85vh;
+    max-height: 95vh;
   }
 }
 
@@ -860,7 +860,7 @@ form.ng-invalid button[type='submit'] {
   padding: 0px 6px;
 
   border: 1px solid rgba($gray, 0.1);
-  z-index: 2 !important;
+  z-index: 6 !important;
 
   .registration-form & {
     top: 45px;
@@ -1604,6 +1604,10 @@ ngb-rating:focus {
     .nav-link {
       margin-right: 0;
     }
+  }
+
+  .tab-pane {
+    padding: 10px 0;
   }
 }
 

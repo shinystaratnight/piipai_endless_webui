@@ -44,13 +44,22 @@
       {{config.title}}
   </span>
   <div *ngIf="config.customLink && config.image" class="image-wrapper">
-    <img [src]="config.image" alt="" style="border-radius: 50%">
-    <div class="backdrop" (click)="action($event)">
-      <span>Show<br>map</span>
-      <app-spinner style="margin-left: -.5rem;" *ngIf="saveProcess"></app-spinner>
+
+    <div class="tracking-mobile">
+      <button type="button" class="btn btn-link tracking-button" (click)="action($event)">Open tracking map</button>
+
+      <img class="mobile-image" src="/assets/img/map.png" alt="map" width="123" height="40">
     </div>
-    <div *ngIf="config.locationDataEmpty" class="backdrop backdrop-danger" (click)="action($event)">
-      <span>No tracking<br>info</span>
+
+    <div class="tracking-desktop">
+      <img [src]="config.image" alt="" style="border-radius: 50%">
+      <div class="backdrop" (click)="action($event)">
+        <span>Show<br>map</span>
+        <app-spinner style="margin-left: -.5rem;" *ngIf="saveProcess"></app-spinner>
+      </div>
+      <div *ngIf="config.locationDataEmpty" class="backdrop backdrop-danger" (click)="action($event)">
+        <span>No tracking<br>info</span>
+      </div>
     </div>
   </div>
   <span *ngIf="config.customLink && !config.image" class="custom-link" (click)="action($event)">{{config.title}}</span>

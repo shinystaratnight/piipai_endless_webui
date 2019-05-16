@@ -109,7 +109,7 @@ const list = {
             color: 'success',
             endpoint: '/hr/timesheets-candidate/{id}/submit/',
             field: 'id',
-            action: 'changeTimesheet',
+            action: 'submitTimesheet',
             hidden: 'candidate_submit_hidden'
           }
         ]

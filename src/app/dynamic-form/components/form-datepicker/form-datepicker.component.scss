@@ -1,8 +1,25 @@
+@import '../../../../styles/variables.scss';
+
 :host > div {
   position: relative;
   display: block;
 
   &.target {
     z-index: 5;
+  }
+}
+
+.time {
+  position: absolute;
+  top: -19px;
+
+  font-size: 12px;
+  line-height: 18px;
+
+  opacity: .8;
+
+  &:hover {
+    color: $brand-primary;
+    opacity: 1;
   }
 }

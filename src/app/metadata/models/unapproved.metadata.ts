@@ -33,7 +33,15 @@ const list = {
             field: 'job_offer.candidate_contact',
             action: 'showCandidateProfile'
           },
-          { type: 'static', label: 'Position', field: 'position' }
+          {
+            type: 'static',
+            field: 'position'
+          },
+          {
+            type: 'static',
+            field: 'jobsite',
+            description: ' '
+          }
         ]
       },
       {
@@ -86,37 +94,31 @@ const list = {
           {
             text: '{shift_started_at__date}',
             type: 'static',
-            label: 'Date',
+            label: 'Shift date',
             field: 'shift_started_at'
           },
           {
-            text: '{shift_started_at__time}',
+            text: '{shift_started_at__time} - {shift_ended_at__time}',
             type: 'static',
-            label: 'Start',
+            label: 'Shift start/end',
             field: 'shift_started_at'
           },
           {
             text: '{break_started_at__time} - {break_ended_at__time}',
             type: 'static',
-            label: 'Break',
+            label: 'Break start/end',
             field: 'break_started_at'
           },
-          {
-            text: '{shift_ended_at__time}',
-            type: 'static',
-            label: 'End',
-            field: 'shift_ended_at'
-          }
         ]
       },
       {
-        label: 'Total hours',
+        label: 'Total time',
         delim: null,
         name: 'totalTime',
         content: [
           {
             type: 'static',
-            color: 'primary',
+            color: 'success',
             text: '{totalTime}',
             setColor: 'shift_ended_at',
             field: 'totalTime',

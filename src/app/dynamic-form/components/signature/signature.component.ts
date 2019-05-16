@@ -27,7 +27,7 @@ export class SignatureComponent implements AfterViewInit {
   public signature: EventEmitter<string> = new EventEmitter();
 
   public signaturePadOptions: Object = {
-    'canvasWidth': 325,
+    'canvasWidth': 335,
   };
 
   ngAfterViewInit() {

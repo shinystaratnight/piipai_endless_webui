@@ -1378,6 +1378,9 @@ export class DynamicListComponent
         case 'openForm':
           this.openForm(e);
           break;
+        case 'submitTimesheet':
+          this.submitTimesheet(e);
+          break;
         case 'changeTimesheet':
           this.changeTimesheet(e);
           break;
@@ -1561,24 +1564,36 @@ export class DynamicListComponent
     }
   }
 
-  public sendSignature() {
+  public sendSignature(submitButton: any) {
     this.saveProcess = true;
     const data = new FormData();
-    const image = this.convertBase64(this.modalInfo.signature.value);
-    data.append('supervisor_signature', image);
+    if (this.modalInfo.signature) {
+      const image = this.convertBase64(this.modalInfo.signature.value);
+      data.append('supervisor_signature', image);
 
-    if (this.modalInfo.data.level_of_communication && !this.modalInfo.evaluated) {
-      this.sendEvaluateData(this.modalInfo.evaluateEndpoint, this.modalInfo.data);
+      if (this.modalInfo.data.level_of_communication && !this.modalInfo.evaluated) {
+        this.sendEvaluateData(this.modalInfo.evaluateEndpoint, this.modalInfo.data);
+      }
+
+      this.genericFormService
+        .uploadFile(this.modalInfo.signature.endpoint, data)
+        .subscribe(() => {
+          if (submitButton) {
+            submitButton.click();
+          } else {
+            this.saveProcess = false;
+            this.modalRef.close();
+            this.refreshList();
+          }
+        },
+        () => this.saveProcess = false);
+    } else if (submitButton) {
+      if (this.modalInfo.data.level_of_communication && !this.modalInfo.evaluated) {
+        this.sendEvaluateData(this.modalInfo.evaluateEndpoint, this.modalInfo.data);
+      }
+
+      submitButton.click();
     }
-
-    this.genericFormService
-      .uploadFile(this.modalInfo.signature.endpoint, data)
-      .subscribe(() => {
-        this.saveProcess = false;
-        this.modalRef.close();
-        this.refreshList();
-      },
-      () => this.saveProcess = false);
   }
 
   public refreshList() {
@@ -1621,13 +1636,12 @@ export class DynamicListComponent
       });
   }
 
-  public changeTimesheet(e) {
+  public submitTimesheet(e) {
     const data = this.getRowData(e);
 
     if (data) {
       const contact = data.job_offer.candidate_contact.contact;
       this.modalInfo = {
-        type: 'evaluate',
         endpoint: e.el.endpoint,
         edit: true,
         label: {
@@ -1663,12 +1677,67 @@ export class DynamicListComponent
         }
       };
 
-      let windowClass = 'visible-mode';
-      if (!this.modalInfo.endpoint.includes('submit')) {
-        windowClass += ' small-modal';
-      }
+      const windowClass = 'visible-mode';
 
       this.open(this.evaluateModal, { size: 'lg', windowClass });
+    }
+  }
+
+  public changeTimesheet(e) {
+    const data = this.getRowData(e);
+    const signature = data.company.supervisor_approved_scheme.includes('SIGNATURE');
+
+    if (data) {
+      const contact = data.job_offer.candidate_contact.contact;
+      const score = this.getPropValue(data, 'evaluation.level_of_communication');
+      this.modalInfo = {
+        endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
+        changeEndpoint: e.el.endpoint,
+        evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
+        edit: true,
+        evaluated: data.evaluated,
+        total: this.getTotalTime(data),
+        label: {
+          picture: contact.picture && contact.picture.origin,
+          contactAvatar: getContactAvatar(contact.__str__),
+          name: contact.__str__
+        },
+        timesheetData: {
+          shift_started_at: createAddAction({
+            value: data.shift_started_at
+          }),
+          break_started_at: createAddAction({
+            value: data.break_started_at
+          }),
+          break_ended_at: createAddAction({
+            value: data.break_ended_at
+          }),
+          shift_ended_at: createAddAction({
+            value: data.shift_ended_at
+          }),
+        },
+        data: {
+          was_on_time: true,
+          was_motivated: true,
+          had_ppe_and_tickets: true,
+          met_expectations: true,
+          representation: true,
+          level_of_communication: score
+        }
+      };
+
+      let windowClass = 'approve-modal visible-mode';
+
+      if (signature) {
+        this.modalInfo.signature = {
+          endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
+          value: ''
+        };
+
+        windowClass = 'approve-modal'
+      }
+
+      this.open(this.approveSignature, { size: 'lg', windowClass });
     }
   }
 
@@ -1712,7 +1781,7 @@ export class DynamicListComponent
           }
         };
 
-        this.open(this.approveSignature, { windowClass: 'approve-modal' });
+        this.open(this.approveSignature, { windowClass: 'approve-modal approve' });
 
       } else if (!data.evaluated) {
         this.approveEndpoint = `${Endpoints.Timesheet}${data.id}/approve/`;

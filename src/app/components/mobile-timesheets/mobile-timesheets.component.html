@@ -1,22 +1,22 @@
 <div class="mobile-timesheets">
   <ngb-tabset>
-    <ngb-tab title="History">
-      <ng-template ngbTabContent>
-        <app-generic-list
-          [clientId]="clientId"
-          [inForm]="true"
-          [allowPermissions]="['update', 'delete', 'get', 'post']"
-          endpoint="/hr/timesheets/history/">
-        </app-generic-list>
-      </ng-template>
-    </ngb-tab>
-    <ngb-tab title="Unapproved">
+    <ngb-tab title="Unapproved timesheets">
       <ng-template ngbTabContent>
         <app-generic-list
           [clientId]="clientId"
           [inForm]="true"
           [allowPermissions]="['update', 'delete', 'get', 'post']"
           endpoint="/hr/timesheets/unapproved/">
+        </app-generic-list>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="All timesheets">
+      <ng-template ngbTabContent>
+        <app-generic-list
+          [clientId]="clientId"
+          [inForm]="true"
+          [allowPermissions]="['update', 'delete', 'get', 'post']"
+          endpoint="/hr/timesheets/history/">
         </app-generic-list>
       </ng-template>
     </ngb-tab>

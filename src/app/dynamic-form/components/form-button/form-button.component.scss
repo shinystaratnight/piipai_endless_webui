@@ -137,6 +137,22 @@ button.btn-link {
     height: 70px;
     width: 70px;
   }
+
+  .tracking-mobile {
+    display: none;
+
+    button {
+      width: 130px;
+
+      text-align: left;
+    }
+
+    .mobile-image {
+      width: 123px;
+      height: 40px;
+    }
+  }
+
 }
 
 .success-btn,
