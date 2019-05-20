@@ -290,11 +290,16 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public parseMetadataQuery(data, field) {
-    const keys = Object.keys(data[field]);
-    const result = keys.map((query) => {
-      return `${query}=${data[field][query]}`;
-    });
-    return result.join('&');
+    console.log(data, field);
+    if (data[field] instanceof Object) {
+      const keys = Object.keys(data[field]);
+      const result = keys.map((query) => {
+        return `${query}=${data[field][query]}`;
+      });
+      return result.join('&');
+    } else {
+      return data[field];
+    }
   }
 
   public generateCustomTemplate(fieldsList) {
