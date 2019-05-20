@@ -392,6 +392,7 @@
     [mode]="modalData.mode"
     [data]="modalData.data"
     [edit]="modalData.edit"
+    (str)="changeLabel($event)"
     (event)="formEvent($event, c)"
     (errorForm)="formError($event)">
   </app-generic-form>

@@ -78,6 +78,7 @@ export interface Field {
     values: any[],
     messages: string[]
   };
+  strField?: string;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;

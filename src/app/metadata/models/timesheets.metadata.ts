@@ -1159,6 +1159,7 @@ const form = [
               {
                 endpoint: Endpoints.SmsMessages,
                 read_only: true,
+                strField: 'type',
                 templateOptions: {
                   label: 'Related sms',
                   values: ['__str__'],
