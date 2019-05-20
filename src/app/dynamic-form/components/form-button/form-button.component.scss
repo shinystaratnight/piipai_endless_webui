@@ -79,6 +79,8 @@ button.btn-link {
 .image-wrapper {
   position: relative;
 
+  width: 100%;
+
   cursor: pointer;
 
   &:hover {
@@ -142,7 +144,7 @@ button.btn-link {
     display: none;
 
     button {
-      width: 130px;
+      width: 50%;
 
       text-align: left;
     }

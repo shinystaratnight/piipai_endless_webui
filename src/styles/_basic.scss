@@ -136,6 +136,16 @@ select.not-empty {
   }
 }
 
+.readonly-value {
+  opacity: 0.6;
+}
+
+@include media-breakpoint-up('md') {
+  .only-mobile {
+    display: none;
+  }
+}
+
 .custom-checkbox {
   display: inline-flex;
   justify-content: center;
@@ -306,18 +316,6 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
-.btn-secondary {
-  color: #292b2c;
-  background-color: #fff;
-  border-color: transparent;
-}
-
-.btn-default {
-  color: $gray;
-  background: #fdfdfd;
-  border: none;
-}
-
 .form-check {
   padding-left: 0;
 }
@@ -451,169 +449,6 @@ form.ng-invalid button[type='submit'] {
 .input-group .form-control,
 .input-group .form-control:hover {
   z-index: 1;
-}
-
-.tooltip {
-  color: $gray;
-  opacity: 1;
-
-  z-index: 3;
-
-  &.show {
-    opacity: 1;
-  }
-
-  .arrow {
-    width: 10px;
-    height: 10px;
-  }
-
-  .arrow::before {
-    width: 10px;
-    height: 10px;
-
-    border: none;
-
-    background-color: white;
-
-    .dark-tooltip & {
-      background-color: #4f4f4f;
-    }
-  }
-
-  &-inner {
-    min-width: 200px;
-    max-width: 350px;
-
-    font-size: 12px;
-
-    background-color: white;
-    color: inherit;
-    box-shadow: 0 0 8px 2px rgba($gray, 0.3);
-
-    .dark-tooltip & {
-      color: #f2f2f2;
-      background: #4f4f4f;
-    }
-
-    .calendar-item & {
-      min-width: auto;
-
-      color: white;
-      background-color: #4f4f4f;
-      box-shadow: none;
-    }
-  }
-
-  &.bs-tooltip-right .arrow::before {
-    right: -2px;
-
-    transform: rotate(45deg);
-    box-shadow: -4px 4px 5px 0 rgba($gray, 0.2);
-  }
-
-  &.bs-tooltip-left .arrow {
-    right: 2px;
-
-    &::before {
-      transform: rotate(45deg);
-      box-shadow: 4px -4px 5px 0 rgba($gray, 0.2);
-    }
-  }
-
-  &.bs-tooltip-bottom .arrow {
-    top: 2px;
-
-    &::before {
-      transform: rotate(45deg);
-      box-shadow: -4px -4px 5px 0 rgba($gray, 0.2);
-
-      .calendar-item & {
-        box-shadow: none;
-        background-color: #4f4f4f;
-      }
-    }
-  }
-}
-
-.dark-tooltip .arrow::before {
-  background-color: #4f4f4f;
-}
-
-.btn {
-  border-radius: 100px;
-}
-
-.btn-primary {
-  border-color: $brand-primary;
-  background-color: $brand-primary;
-
-  &:focus {
-    box-shadow: 0 0 2px rgba($brand-primary, 0.5);
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        box-shadow: 0 0 2px rgba(map-get($theme-colors, $item), 0.5);
-      }
-    }
-  }
-}
-
-.btn-default {
-  background-color: #fdfdfd;
-}
-
-.btn-link {
-  color: $brand-primary;
-
-  @each $item in $themes {
-    .#{$item}-theme & {
-      color: map-get($theme-colors, $item);
-    }
-  }
-}
-
-.badge {
-  font-size: 0.75rem;
-  font-weight: normal;
-
-  line-height: 1;
-
-  padding: 0.56rem;
-
-  border-radius: 50px;
-
-  background-color: rgba($brand-primary, 0.2);
-  color: inherit;
-
-  @each $item in $themes {
-    .#{$item}-theme & {
-      background-color: rgba(map-get($theme-colors, $item), 0.2);
-    }
-  }
-}
-
-.btn-outline-primary {
-  font-size: 0.625rem;
-  padding: 0.25rem;
-
-  @each $item in $themes {
-    .#{$item}-theme & {
-      border-color: map-get($theme-colors, $item);
-      color: map-get($theme-colors, $item);
-
-      &:hover {
-        background-color: map-get($theme-colors, $item);
-        color: white;
-
-        &.disabled {
-          background-color: #fff;
-          color: map-get($theme-colors, $item);
-          cursor: default;
-        }
-      }
-    }
-  }
 }
 
 .modal-lg {
@@ -783,24 +618,6 @@ form.ng-invalid button[type='submit'] {
 }
 
 @each $item in $themes {
-  .#{$item}-theme .bg-primary,
-  .#{$item}-theme button.bg-primary:hover {
-    background-color: map-get($theme-colors, $item) !important;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .btn-primary {
-    border-color: map-get($theme-colors, $item);
-    background-color: map-get($theme-colors, $item) !important;
-
-    &.active {
-      background-color: darken(map-get($theme-colors, $item), 10%) !important;
-    }
-  }
-}
-
-@each $item in $themes {
   .#{$item}-theme .text-primary {
     color: map-get($theme-colors, $item) !important;
   }
@@ -822,247 +639,6 @@ form.ng-invalid button[type='submit'] {
   .#{$item}-theme .nav-link.active {
     border-color: map-get($theme-colors, $item);
   }
-}
-
-/* in-flight clone */
-.gu-mirror {
-  position: fixed !important;
-  margin: 0 !important;
-  z-index: 9999 !important;
-  opacity: 0.8;
-  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=80)';
-  filter: alpha(opacity=80);
-  pointer-events: none;
-}
-/* high-performance display:none; helper */
-.gu-hide {
-  left: -9999px !important;
-}
-/* added to mirrorContainer (default = body) while dragging */
-.gu-unselectable {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
-}
-/* added to the source element while its mirror is dragged */
-.gu-transit {
-  opacity: 0.2;
-  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=20)';
-  filter: alpha(opacity=20);
-}
-
-/*---------- jtsage-datebox-bootstrap4 ---------- */
-
-.ui-datebox-container {
-  top: 24px;
-  margin-bottom: 5px;
-  padding: 0px 6px;
-
-  border: 1px solid rgba($gray, 0.1);
-  z-index: 6 !important;
-
-  .registration-form & {
-    top: 45px;
-  }
-}
-
-.ui-datebox-container .form-control {
-  padding-right: 0;
-}
-
-.ui-datebox-container .btn-group-vertical {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row;
-
-  .btn {
-    margin-bottom: 0px;
-    padding: 5px;
-
-    font-size: 12px;
-
-    &:last-child:not(:first-child),
-    &:first-child:not(:last-child),
-    &:not(:first-child):not(:last-child) {
-      border-radius: 50px;
-    }
-  }
-}
-
-.ui-datebox-flipcontent div {
-  width: 70px !important;
-}
-
-.ui-datebox-flipcenter {
-  width: 236px !important;
-  height: 36px !important;
-}
-
-.ui-datebox-container.dropdown-menu {
-  width: auto;
-  min-width: 210px;
-  max-width: 250px;
-
-  .ui-datebox-gridheader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    h4 {
-      margin-bottom: 0;
-    }
-  }
-
-  .ui-datebox-gridplus {
-    order: 2;
-
-    span::before {
-      content: '\f105';
-
-      font-size: 18px;
-    }
-  }
-
-  .ui-datebox-gridminus {
-    color: $gray;
-
-    span::before {
-      font-size: 18px;
-
-      content: '\f104';
-    }
-  }
-
-  .ui-datebox-datebox-group {
-    text-align: center;
-
-    input {
-      border-radius: 50px;
-    }
-
-    .fa-plus::before {
-      font-size: 18px;
-
-      content: '\f106';
-    }
-
-    .fa-minus::before {
-      font-size: 18px;
-
-      content: '\f107';
-    }
-  }
-
-  .ui-datebox-controls {
-    .btn {
-      border-radius: 50px;
-
-      &:hover {
-        border-color: $brand-primary;
-
-        background-color: $brand-primary;
-
-        color: white;
-
-        @each $item in $themes {
-          .#{$item}-theme & {
-            border-color: map-get($theme-colors, $item);
-
-            background-color: map-get($theme-colors, $item);
-          }
-        }
-      }
-    }
-  }
-
-  .btn-sm,
-  .ui-datebox-griddate {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 27px;
-    height: 27px;
-
-    font-size: 0.7rem;
-    line-height: 0.7rem;
-
-    padding: 0;
-
-    &.ui-datebox-griddate-label,
-    &.ui-datebox-griddate-empty {
-      font-weight: normal;
-      color: rgba($gray, 0.4);
-    }
-
-    &.btn-info {
-      background-color: rgba($gray, 0.2) !important;
-    }
-  }
-
-  .btn-sm {
-    border: none;
-    border-radius: 50%;
-
-    &:hover {
-      border: none;
-
-      background-color: $brand-primary;
-      color: white;
-
-      @each $item in $themes {
-        .#{$item}-theme & {
-          background-color: map-get($theme-colors, $item) !important;
-        }
-      }
-    }
-
-    &.btn-disabled {
-      opacity: 0.3;
-
-      &:hover {
-        background-color: transparent;
-        color: inherit;
-        cursor: default;
-      }
-    }
-  }
-
-  .btn-info {
-    background-color: $brand-primary;
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        background-color: map-get($theme-colors, $item);
-      }
-    }
-  }
-}
-
-.ui-datebox-container .ui-datebox-controls {
-  a {
-    margin-bottom: 5px;
-
-    border-radius: 50px;
-
-    &:hover {
-      background-color: $brand-primary;
-
-      color: white;
-
-      @each $item in $themes {
-        .#{$item}-theme & {
-          background-color: map-get($theme-colors, $item);
-        }
-      }
-    }
-  }
-}
-
-.jtsage-datebox-backdrop-div {
-  z-index: 1;
 }
 
 .datepicker {
@@ -1126,14 +702,6 @@ form.ng-invalid button[type='submit'] {
   }
 }
 
-.btn-shadow {
-  box-shadow: 0px 4px 6px 0 rgba(black, 0.1);
-
-  &:hover {
-    box-shadow: none;
-  }
-}
-
 .description {
   color: rgba($gray, 0.7);
 }
@@ -1148,44 +716,12 @@ iframe.send-sms {
   height: 80vh;
 }
 
-.send-message.close {
-  position: fixed;
-  right: -1rem;
-  top: 0.5rem;
-  color: $brand-primary;
-  z-index: 1000;
-
-  @each $item in $themes {
-    .#{$item}-theme & {
-      color: map-get($theme-colors, $item);
-    }
-  }
-}
-
 .pull-right {
   float: right;
 }
 
 .pull-left {
   float: left;
-}
-
-.badge.badge-outline {
-  padding: 0.25rem 0.4rem;
-
-  font-size: 0.75rem;
-
-  border: 1px solid $brand-primary;
-
-  background-color: white;
-  color: $brand-primary;
-
-  @each $item in $themes {
-    .#{$item}-theme & {
-      border-color: map-get($theme-colors, $item);
-      color: map-get($theme-colors, $item);
-    }
-  }
 }
 
 @each $item in $themes {
@@ -1196,14 +732,6 @@ iframe.send-sms {
 
   .#{$item}-theme .page-link {
     color: map-get($theme-colors, $item);
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme button.btn.active {
-    border-color: map-get($theme-colors, $item);
-
-    background-color: map-get($theme-colors, $item);
   }
 }
 
@@ -1232,49 +760,6 @@ iframe.send-sms {
 
 .modal-content .has-tabs .save {
   margin-left: auto;
-}
-
-.form-navigation {
-  width: calc(100% - 285px);
-  max-width: 80%;
-
-  margin: 0 auto 16px;
-  padding-top: 16px;
-
-  .datatable-body & {
-    width: auto;
-    max-width: none;
-    padding-top: 0;
-    margin-top: -16px;
-  }
-
-  a {
-    font-size: 14px;
-    line-height: 16px;
-
-    color: $brand-primary;
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        color: map-get($theme-colors, $item);
-      }
-    }
-  }
-
-  svg {
-    margin-bottom: 1px;
-
-    @each $item in $themes {
-      .#{$item}-theme & path {
-        fill: map-get($theme-colors, $item);
-      }
-    }
-  }
-
-  @include media-breakpoint-down('lg') {
-    width: 100%;
-    max-width: 100%;
-  }
 }
 
 .form-content {
@@ -1403,196 +888,13 @@ iframe.send-sms {
   }
 }
 
-.readonly-value {
-  opacity: 0.6;
-}
-
 .sebm-google-map-container-inner {
   height: 100% !important;
-}
-
-.load-more {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-
-  width: 40px;
-  height: 40px;
-
-  border-radius: 50%;
-  border: none;
-
-  opacity: 0.8;
-
-  background-color: $brand-success;
-  box-shadow: 3px 3px 7px rgba(51, 51, 51, 0.2);
-
-  &:hover {
-    opacity: 1;
-  }
-
-  &:focus,
-  &:active {
-    outline: none;
-  }
-
-  i {
-    position: relative;
-    top: 0px;
-
-    font-size: 20px;
-
-    animation-name: loadmore;
-    animation-duration: 1.3s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
-}
-
-.info-block {
-  padding: 12px 16px;
-
-  text-align: left;
-
-  h6 {
-    margin-bottom: 4px;
-
-    font-size: 12px;
-    line-height: 16px;
-  }
-
-  ul {
-    margin: 0;
-    padding: 0;
-  }
-
-  li {
-    position: relative;
-
-    padding-left: 16px;
-
-    font-size: 12px;
-    line-height: 14px;
-
-    list-style: none;
-
-    color: rgba($gray, 0.7);
-  }
-
-  .icon {
-    position: absolute;
-    top: 4px;
-    left: 5px;
-
-    font-size: 6px !important;
-
-    color: $brand-primary;
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        color: map-get($theme-colors, $item);
-      }
-    }
-  }
-}
-
-.big-btn {
-  height: 40px;
-  width: 160px;
 }
 
 .permissions .nav {
   margin-left: 3rem;
 }
-
-@keyframes loadmore {
-  0% {
-    opacity: 1;
-  }
-
-  50% {
-    top: 2.5px;
-    opacity: 0.5;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-/*---------- Slider ---------- */
-
-.noUi-connect {
-  background-color: $brand-primary;
-}
-
-.noUi-horizontal {
-  height: 4px;
-
-  .noUi-handle {
-    left: -7px;
-
-    height: 14px;
-    width: 14px;
-
-    border-radius: 50%;
-    border-color: $brand-primary;
-    border-width: 2px;
-
-    cursor: pointer;
-
-    &:before,
-    &:after {
-      content: none;
-    }
-  }
-}
-
-html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
-  right: -7px;
-}
-
-.noUi-horizontal .noUi-handle-lower .noUi-tooltip {
-  top: 14px;
-  left: 6px;
-
-  padding: 0;
-  background-color: transparent;
-  border: none;
-
-  color: $brand-primary;
-}
-
-.evaluate-label {
-  opacity: .7;
-  margin: 20px;
-}
-
-.star {
-  position: relative;
-  display: inline-block;
-  font-size: 16px;
-  color: rgba(#bdbdbd, .3);
-}
-
-.star.star-lg {
-  font-size: 28px;
-}
-
-.full {
-  color: #ffd042;
-}
-.half {
-  position: absolute;
-  display: inline-block;
-  overflow: hidden;
-  color: #ffd042;
-}
-
-ngb-rating:focus {
-  outline: none;
-}
-
 
 /* Mobile */
 
@@ -1609,34 +911,4 @@ ngb-rating:focus {
   .tab-pane {
     padding: 10px 0;
   }
-}
-
-/* Quill */
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="10px"]::before {
-  content: '10px';
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="12px"]::before {
-  content: '12px';
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before {
-  content: '14px';
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="16px"]::before {
-  content: '16px';
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before {
-  content: '18px';
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="20px"]::before {
-  content: '20px';
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="22px"]::before {
-  content: '22px';
 }

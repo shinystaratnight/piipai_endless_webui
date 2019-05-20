@@ -1,0 +1,86 @@
+.tooltip {
+  color: $gray;
+  opacity: 1;
+
+  z-index: 3;
+
+  &.show {
+    opacity: 1;
+  }
+
+  .arrow {
+    width: 10px;
+    height: 10px;
+  }
+
+  .arrow::before {
+    width: 10px;
+    height: 10px;
+
+    border: none;
+
+    background-color: white;
+
+    .dark-tooltip & {
+      background-color: #4f4f4f;
+    }
+  }
+
+  &-inner {
+    min-width: 200px;
+    max-width: 350px;
+
+    font-size: 12px;
+
+    background-color: white;
+    color: inherit;
+    box-shadow: 0 0 8px 2px rgba($gray, 0.3);
+
+    .dark-tooltip & {
+      color: #f2f2f2;
+      background: #4f4f4f;
+    }
+
+    .calendar-item & {
+      min-width: auto;
+
+      color: white;
+      background-color: #4f4f4f;
+      box-shadow: none;
+    }
+  }
+
+  &.bs-tooltip-right .arrow::before {
+    right: -2px;
+
+    transform: rotate(45deg);
+    box-shadow: -4px 4px 5px 0 rgba($gray, 0.2);
+  }
+
+  &.bs-tooltip-left .arrow {
+    right: 2px;
+
+    &::before {
+      transform: rotate(45deg);
+      box-shadow: 4px -4px 5px 0 rgba($gray, 0.2);
+    }
+  }
+
+  &.bs-tooltip-bottom .arrow {
+    top: 2px;
+
+    &::before {
+      transform: rotate(45deg);
+      box-shadow: -4px -4px 5px 0 rgba($gray, 0.2);
+
+      .calendar-item & {
+        box-shadow: none;
+        background-color: #4f4f4f;
+      }
+    }
+  }
+}
+
+.dark-tooltip .arrow::before {
+  background-color: #4f4f4f;
+}

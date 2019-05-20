@@ -95,6 +95,10 @@ export class SiteComponent implements OnInit, OnDestroy {
     return isManager();
   }
 
+  get backToListLabel() {
+    return `Back to ${this.listName.toLocaleLowerCase()} list`;
+  }
+
   @ViewChild('modal') public modal;
   @ViewChild('forgotPassword') public forgotPasswordModal;
 

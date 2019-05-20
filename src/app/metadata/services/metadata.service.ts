@@ -96,6 +96,8 @@ export class MetadataService {
         type = 'reply';
       } else if (query.includes('formset')) {
         type = 'formset';
+      } else if (query.includes('mobile')) {
+        type = 'mobile';
       } else if (query.includes('form')) {
         type = 'form';
       } else if (query.includes('filters')) {

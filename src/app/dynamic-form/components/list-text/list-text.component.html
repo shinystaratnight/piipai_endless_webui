@@ -4,18 +4,17 @@
     {{config.listLabel || config.templateOptions.listLabel}}:
 </label>
 
-<span *ngIf="!arrayValue && !config.hideValue && !config.score">
+<ng-container *ngIf="!arrayValue && !config.hideValue && !config.score">
   <span class="d-inline-flex align-items-center flex-wrap mr-1"
     *ngIf="value || value === 0"
+    [title]="config.title || ''"
     [class.description]="config.description"
     [class.text-description]="config.muted">
-      <span [title]="config.title || ''">
-        <span [ngClass]="{'label': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
-        <span *ngIf="!iconView && !iconClass && !workers">{{value}}</span>
-        <span class="py-1" *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail" style="cursor: default; padding-right: 1rem">{{value}}</span>
-        <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{value}}</span>
-        <i fa *ngIf="iconView" [name]="value" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></i>
-      </span>
+      <span [ngClass]="{'label mr-1': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
+      <span *ngIf="!iconView && !iconClass && !workers">{{value}}</span>
+      <span class="py-1" *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail" style="cursor: default; padding-right: 1rem">{{value}}</span>
+      <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{value}}</span>
+      <i fa *ngIf="iconView" [name]="value" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></i>
   </span>
 
   <span class="d-inline-flex align-items-center flex-wrap"
@@ -24,9 +23,9 @@
       -
   </span>
   <span [class.description]="config.help" *ngIf="(value || value === 0) && config.help">{{config.help}}</span>
-</span>
+</ng-container>
 
-<span *ngIf="arrayValue">
+<ng-container *ngIf="arrayValue">
   <span [class.description]="config.description" *ngFor="let item of value; let l = last">
     <span class="d-inline-flex align-items-center flex-wrap" *ngIf="item || item === 0">
       <span [title]="config.title || ''">
@@ -38,7 +37,7 @@
     <span *ngIf="config.delim && !l">{{config.delim}}</span>
     <br *ngIf="!config.delim && !l">
   </span>
-</span>
+</ng-container>
 
 <span class="score-text d-block"
   [class.my-2]="isMobile()"
@@ -57,7 +56,6 @@
     </div>
     &nbsp;{{value | number:'1.1-1'}}
 </span>
-
 
 <span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">{{config.delim}}</span>
 <br *ngIf="!config.delim && config.name !== 'credit_approved'">

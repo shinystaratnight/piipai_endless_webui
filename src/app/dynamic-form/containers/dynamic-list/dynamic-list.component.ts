@@ -1565,35 +1565,36 @@ export class DynamicListComponent
   }
 
   public sendSignature(submitButton: any) {
-    this.saveProcess = true;
-    const data = new FormData();
     if (this.modalInfo.signature) {
-      const image = this.convertBase64(this.modalInfo.signature.value);
-      data.append('supervisor_signature', image);
+      const image = this.modalInfo.signature.value;
 
-      if (this.modalInfo.data.level_of_communication && !this.modalInfo.evaluated) {
-        this.sendEvaluateData(this.modalInfo.evaluateEndpoint, this.modalInfo.data);
-      }
-
-      this.genericFormService
-        .uploadFile(this.modalInfo.signature.endpoint, data)
-        .subscribe(() => {
-          if (submitButton) {
-            submitButton.click();
-          } else {
-            this.saveProcess = false;
-            this.modalRef.close();
-            this.refreshList();
-          }
-        },
-        () => this.saveProcess = false);
-    } else if (submitButton) {
-      if (this.modalInfo.data.level_of_communication && !this.modalInfo.evaluated) {
-        this.sendEvaluateData(this.modalInfo.evaluateEndpoint, this.modalInfo.data);
-      }
-
-      submitButton.click();
+      this.modalInfo.form = { supervisor_signature: image };
     }
+
+
+    if (this.modalInfo.data.level_of_communication && !this.modalInfo.evaluated) {
+      this.sendEvaluateData(this.modalInfo.evaluateEndpoint, this.modalInfo.data);
+    }
+
+    if (this.modalInfo.changeEndpoint) {
+      setTimeout(() => {
+        submitButton.click();
+      }, 100);
+    } else {
+      this.saveProcess = true;
+
+      this.genericFormService.submitForm(this.modalInfo.endpoint, this.modalInfo.form)
+        .pipe(finalize(() => this.saveProcess = false))
+        .subscribe(() => {
+          this.modalRef.close();
+
+          this.evaluateEvent({
+            type: 'sendForm',
+            status: 'success'
+          });
+        });
+    }
+
   }
 
   public refreshList() {
@@ -1691,12 +1692,13 @@ export class DynamicListComponent
       const contact = data.job_offer.candidate_contact.contact;
       const score = this.getPropValue(data, 'evaluation.level_of_communication');
       this.modalInfo = {
-        endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
         changeEndpoint: e.el.endpoint,
         evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
         edit: true,
         evaluated: data.evaluated,
         total: this.getTotalTime(data),
+        metadataQuery: isMobile() ? 'type=mobile' : '',
+        signatureStep: false,
         label: {
           picture: contact.picture && contact.picture.origin,
           contactAvatar: getContactAvatar(contact.__str__),
@@ -1760,6 +1762,9 @@ export class DynamicListComponent
             started_at: this.format('{shift_started_at__time}', data),
             break: this.format('{break_started_at__time} - {break_ended_at__time}', data),
             ended_at: this.format('{shift_ended_at__time}', data),
+            shift_start_end: this.format('{shift_started_at__time} - {shift_ended_at__time}', data),
+            break_start_and: this.format('{break_started_at__time} - {break_ended_at__time}', data),
+            unformated_date: data.shift_started_at,
             total: this.getTotalTime(data)
           },
           signature: {

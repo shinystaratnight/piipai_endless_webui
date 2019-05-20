@@ -16,9 +16,9 @@
           #d
           data-role="datebox"
           [(ngModel)]="date"
-
           [attr.id]="key"
           [attr.name]="key">
+
         <div class="position-relative time-wrapper">
           <input [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')" class="form-control"
             #t
@@ -28,11 +28,10 @@
             class="time"
             *ngIf="config.templateOptions.showTime"
             triggers="mouseover:mouseout"
-            [placement]="placement || 'right'"
+            [placement]="placement || 'bottom'"
             [ngbTooltip]="'Time submitted by candidate'">
               {{config.value | dateFormat: 'HH:mm'}}
           </span>
-
         </div>
       </div>
 
@@ -44,10 +43,20 @@
           [attr.id]="key"
           [attr.name]="key">
 
-        <input type="time" class="form-control mobile-datepicker fa-clock-o"
-          [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')"
-          (ngModelChange)="changeTime($event)"
-          [(ngModel)]="time">
+        <div class="position-relative time-wrapper">
+          <input type="time" class="form-control mobile-datepicker fa-clock-o"
+            [hidden]="!(config.templateOptions.type === 'datetime' || config.templateOptions.type === 'time')"
+            (ngModelChange)="changeTime($event)"
+            [(ngModel)]="time">
+          <span
+            class="time"
+            *ngIf="config.templateOptions.showTime"
+            triggers="mouseover:mouseout"
+            [placement]="placement || 'bottom'"
+            [ngbTooltip]="'Time submitted by candidate'">
+              {{config.value | dateFormat: 'HH:mm'}}
+          </span>
+        </div>
       </div>
     </div>
     <div *ngIf="errors">

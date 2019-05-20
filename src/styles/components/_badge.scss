@@ -1,0 +1,37 @@
+.badge {
+  font-size: 0.75rem;
+  font-weight: normal;
+
+  line-height: 1;
+
+  padding: 0.56rem;
+
+  border-radius: 50px;
+
+  background-color: rgba($brand-primary, 0.2);
+  color: inherit;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: rgba(map-get($theme-colors, $item), 0.2);
+    }
+  }
+}
+
+.badge.badge-outline {
+  padding: 0.25rem 0.4rem;
+
+  font-size: 0.75rem;
+
+  border: 1px solid $brand-primary;
+
+  background-color: white;
+  color: $brand-primary;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      border-color: map-get($theme-colors, $item);
+      color: map-get($theme-colors, $item);
+    }
+  }
+}
