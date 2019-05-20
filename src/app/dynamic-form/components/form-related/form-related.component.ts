@@ -1019,6 +1019,10 @@ export class FormRelatedComponent extends BasicElementComponent
         }
       );
 
+      if (this.config.strField) {
+        newModal.label = '';
+      }
+
       this.modalRef = this.modalService.open(this.messageDetail, { windowClass: 'message-detail' });
 
       return false;
@@ -1029,6 +1033,16 @@ export class FormRelatedComponent extends BasicElementComponent
     this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass });
 
     return false;
+  }
+
+  public changeLabel(data: { str: string, data: any }) {
+    if (this.config.strField) {
+      const type = data.data[this.config.strField].toLowerCase();
+
+      this.modalData.label = type.includes('sent')
+        ? 'Sent message'
+        : 'Received message';
+    }
   }
 
   public openAutocomplete(): void {
