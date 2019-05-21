@@ -80,6 +80,14 @@
   width: 160px;
 }
 
+app-form-button:not(:first-child) {
+  .success-btn,
+  .danger-btn,
+  .warning-btn {
+    margin-top: 6px;
+  }
+}
+
 @each $item in $themes {
   .#{$item}-theme .bg-primary,
   .#{$item}-theme button.bg-primary:hover {

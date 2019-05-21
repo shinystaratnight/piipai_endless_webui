@@ -15,6 +15,7 @@
       <span class="py-1" *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail" style="cursor: default; padding-right: 1rem">{{value}}</span>
       <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{value}}</span>
       <i fa *ngIf="iconView" [name]="value" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></i>
+      <app-info *ngIf="config.info" [description]="config.info" placement="bottom"></app-info>
   </span>
 
   <span class="d-inline-flex align-items-center flex-wrap"

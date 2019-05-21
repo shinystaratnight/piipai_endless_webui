@@ -842,6 +842,7 @@ export class DynamicListComponent
             signature: element.signature,
             svg: element.svg,
             process: new Subject(),
+            info: element.info,
           };
           if (this.listStorage.hasTrackingInfo(el.id)) {
             obj.locationDataEmpty = !this.listStorage.getTrackingInfo(el.id);
