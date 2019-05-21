@@ -48,6 +48,10 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     padding: 31px 0 0 0;
 
+    @include media-breakpoint-down('sm') {
+      padding-top: 21px;
+    }
+
     .spinner {
       margin: 0 auto 20px;
     }
@@ -384,6 +388,12 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     padding-right: 10px;
     padding-left: 10px;
+
+    @include media-breakpoint-down('sm') {
+      &.mobile-device {
+        max-width: 364px !important;
+      }
+    }
   }
 
   @include media-breakpoint-up('xl') {
@@ -427,8 +437,8 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     &-list &-body {
       width: 100%;
 
-      padding-left: 15px;
-      padding-right: 15px;
+      padding-left: 25px;
+      padding-right: 25px;
     }
   }
 
@@ -861,6 +871,19 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     height: 46px !important;
   }
 
+  app-list-text > span {
+    width: 100%;
+  }
+
+  .body app-form-button {
+    display: flex;
+    width: 100%;
+
+    .form-group {
+      width: 100%;
+    }
+  }
+
   .header {
     display: flex;
     align-content: center;
@@ -897,7 +920,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     .label {
       display: inline-block;
-      width: 130px;
+      width: 50%;
 
       font-size: 15px;
       font-weight: normal;
@@ -953,7 +976,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     .signature {
       position: absolute;
       top: 10px;
-      right: 10px;
+      right: 11px;
     }
   }
 }

@@ -19,7 +19,7 @@
 }
 
 @include media-breakpoint-up('md') {
-  agm-map {
+  .tracking-google-map {
     margin: 0 40px 20px;
   }
 }

@@ -1,0 +1,42 @@
+/*---------- Slider ---------- */
+
+.noUi-connect {
+  background-color: $brand-primary;
+}
+
+.noUi-horizontal {
+  height: 4px;
+
+  .noUi-handle {
+    left: -7px;
+
+    height: 14px;
+    width: 14px;
+
+    border-radius: 50%;
+    border-color: $brand-primary;
+    border-width: 2px;
+
+    cursor: pointer;
+
+    &:before,
+    &:after {
+      content: none;
+    }
+  }
+}
+
+html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
+  right: -7px;
+}
+
+.noUi-horizontal .noUi-handle-lower .noUi-tooltip {
+  top: 14px;
+  left: 6px;
+
+  padding: 0;
+  background-color: transparent;
+  border: none;
+
+  color: $brand-primary;
+}

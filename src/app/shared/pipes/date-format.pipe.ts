@@ -16,6 +16,10 @@ export class DateFormatPipe implements PipeTransform {
       time: 'hh:mm A',
     };
 
+    if (!value) {
+      return '';
+    }
+
     return this.time.instance(value)
       .format(formats[format] ? formats[format] : format);
   }
