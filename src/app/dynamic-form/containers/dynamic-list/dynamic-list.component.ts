@@ -2427,7 +2427,6 @@ export class DynamicListComponent
   }
 
   public showTracking(e) {
-    console.log(e);
     e.el.process.next(true);
     this.genericFormService.getByQuery(e.el.endpoint, `?timesheet=${e.id}&limit=-1`)
       .pipe(finalize(() => e.el.process.next(false)))
