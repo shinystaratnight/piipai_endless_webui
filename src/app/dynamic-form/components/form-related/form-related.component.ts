@@ -290,7 +290,6 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public parseMetadataQuery(data, field) {
-    console.log(data, field);
     if (data[field] instanceof Object) {
       const keys = Object.keys(data[field]);
       const result = keys.map((query) => {
@@ -1008,14 +1007,15 @@ export class FormRelatedComponent extends BasicElementComponent
     }
 
     if (this.modalData.endpoint === Endpoints.SmsMessages) {
+      const messageType = (object && object.type) || this.config.metadata_query;
       const newModal = Object.assign(this.modalData,
         {
-          label: this.config.metadata_query.includes('sent')
+          label: messageType.toLowerCase().includes('sent')
             ? 'Sent message'
             : 'Received message',
           mode: 'view',
           edit: true,
-          metadataQuery: this.config.metadata_query
+          metadataQuery: messageType.toLowerCase()
         }
       );
 
