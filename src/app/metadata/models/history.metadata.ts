@@ -202,24 +202,100 @@ const list = {
             text: 'Approved',
             color: 'success',
             setColor: 'supervisor_approved',
+            showIf: [{
+              status: 7
+            }]
           },
           {
             field: 'supervisor.name',
             type: 'static',
+            showIf: [{
+              status: 7
+            }]
           },
           {
             text: '{supervisor_approved_at__datetime}',
             field: 'supervisor_approved_at',
             type: 'static',
-            muted: true
+            muted: true,
+            showIf: [{
+              status: 7
+            }]
           },
           {
             field: 'supervisor_signature',
             type: 'picture',
             file: false,
             signature: true,
-            showId: ['supervisor_signature.origin']
-          }
+            showId: ['supervisor_signature.origin'],
+            showIf: [{
+              status: 7
+            }]
+          },
+          {
+            text: 'Approve',
+            type: 'button',
+            color: 'success',
+            svg: 'approve',
+            label: 'Approve',
+            endpoint: '/hr/timesheets/{id}/approve/',
+            replace_by: 'supervisor',
+            field: 'id',
+            shadow: true,
+            action: 'approveTimesheet',
+            showIf: [{
+              status: 5
+            }]
+          },
+          {
+            text: 'Change',
+            type: 'button',
+            color: 'danger',
+            svg: 'change',
+            label: 'Change',
+            endpoint: '/hr/timesheets/{id}/not_agree/',
+            field: 'id',
+            shadow: true,
+            action: 'changeTimesheet',
+            showIf: [{
+              status: 5
+            }]
+          },
+          {
+            field: 'status',
+            type: 'static',
+            text: 'Waiting submission ',
+            color: 'danger',
+            setColor: 'status',
+            showIf: [{
+              status: 4
+            }]
+          },
+          {
+            field: 'status',
+            type: 'static',
+            text: 'Adjustment in progress',
+            info: 'Timesheet will be automatically approved in 4 hours',
+            color: 'primary',
+            setColor: 'status',
+            showIf: [{
+              status: 6
+            }]
+          },
+          {
+            text: 'Change',
+            type: 'button',
+            color: 'danger',
+            svg: 'change',
+            label: 'Change',
+            endpoint: '/hr/timesheets/{id}/not_agree/',
+            field: 'id',
+            shadow: true,
+            action: 'changeTimesheet',
+            showIf: [{
+              status: 6
+            }]
+          },
         ]
       }
     ],

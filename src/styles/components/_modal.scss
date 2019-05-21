@@ -234,6 +234,10 @@
       .form-wrapper {
         margin-bottom: -16px;
       }
+
+      .time-wrapper {
+        width: 80%;
+      }
     }
 
     @include media-breakpoint-down('sm') {
