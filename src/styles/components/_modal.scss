@@ -1,11 +1,5 @@
 .approve-modal {
 
-  @include media-breakpoint-down('sm') {
-    .modal-dialog {
-      max-width: 375px;
-    }
-  }
-
   .modal-dialog {
     max-width: 500px;
 
@@ -50,15 +44,21 @@
       .form-control[data-role="datebox"] {
         height: auto;
         min-height: none;
-        border: 1px solid rgba($gray, .6) !important;
+        border: 1px solid rgba($gray, .6);
         border-right: none !important;
         border-radius: 4px 0 0 4px;
         padding: 5px 0 5px 6px;
+
+        transition: none;
       }
 
       .time-wrapper > .input-group {
         max-width: 145px;
       }
+    }
+
+    @include media-breakpoint-down('sm') {
+      max-width: 375px;
     }
   }
 }
@@ -380,12 +380,18 @@
   }
 
   .modal-footer {
-    width: 310px;
+    width: 428px;
 
     padding: $content-padding 0;
     margin: 0 auto;
 
     border-top: none;
+
+    @include media-breakpoint-up('md') {
+      .btn-primary {
+        width: 203px;
+      }
+    }
 
     @include media-breakpoint-down('sm') {
       width: 100%;

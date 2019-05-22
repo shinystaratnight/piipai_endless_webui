@@ -8,6 +8,8 @@ import {
 } from '@angular/core';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 
+import { isMobile } from '../../helpers';
+
 @Component({
   selector: 'app-signature',
   template: `<signature-pad [options]="signaturePadOptions" (onEndEvent)="drawComplete()"></signature-pad>`,
@@ -27,7 +29,8 @@ export class SignatureComponent implements AfterViewInit {
   public signature: EventEmitter<string> = new EventEmitter();
 
   public signaturePadOptions: Object = {
-    'canvasWidth': 309,
+    'canvasWidth': isMobile() ? 309 : 426,
+    'canvasHeight': isMobile() ? 149 : 208,
   };
 
   ngAfterViewInit() {

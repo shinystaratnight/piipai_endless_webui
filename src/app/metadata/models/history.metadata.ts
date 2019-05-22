@@ -283,6 +283,15 @@ const list = {
             }]
           },
           {
+            text: '{supervisor_modified_at__datetime}',
+            field: 'supervisor_modified_at',
+            type: 'static',
+            muted: true,
+            showIf: [{
+              status: 6
+            }, 'supervisor_modified_at']
+          },
+          {
             text: 'Change',
             type: 'button',
             color: 'danger',
