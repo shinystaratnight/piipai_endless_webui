@@ -27,7 +27,7 @@
     opacity: 1;
   }
 
-  &-wrapper {
-    width: 100%;
+  .mobile-datepicker ~ &-wrapper {
+    width: 120px;
   }
 }

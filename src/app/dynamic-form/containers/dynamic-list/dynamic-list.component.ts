@@ -1718,6 +1718,9 @@ export class DynamicListComponent
           shift_ended_at: createAddAction({
             value: data.shift_ended_at
           }),
+          noBreak: createAddAction({
+            value: !data.break_started_at && !data.break_ended_at
+          }),
         },
         data: {
           was_on_time: true,

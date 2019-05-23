@@ -16,6 +16,12 @@ export function getContactAvatar(name): string {
 }
 
 export function isMobile(): boolean {
+  if (isTouchDevice) {
+    return window.innerWidth < 768;
+  }
+}
+
+export function isTouchDevice(): boolean {
   const deviceNamesReg = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
 
   return deviceNamesReg.test(navigator.userAgent.toLowerCase());
