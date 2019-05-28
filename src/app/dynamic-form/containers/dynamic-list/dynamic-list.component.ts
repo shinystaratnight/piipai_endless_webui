@@ -1552,12 +1552,7 @@ export class DynamicListComponent
           name: contact.__str__
         },
         data: {
-          was_on_time: true,
-          was_motivated: true,
-          had_ppe_and_tickets: true,
-          met_expectations: true,
-          representation: true,
-          level_of_communication: 1
+          evaluation_score: 1
         }
       };
 
@@ -1569,11 +1564,10 @@ export class DynamicListComponent
     if (this.modalInfo.signature) {
       const image = this.modalInfo.signature.value;
 
-      this.modalInfo.form = { supervisor_signature: image };
+      this.modalInfo.form.supervisor_signature = image;
     }
 
-
-    if (this.modalInfo.data.level_of_communication && !this.modalInfo.evaluated) {
+    if (this.modalInfo.data.evaluation_score && !this.modalInfo.evaluated) {
       this.sendEvaluateData(this.modalInfo.evaluateEndpoint, this.modalInfo.data);
     }
 
@@ -1691,15 +1685,16 @@ export class DynamicListComponent
 
     if (data) {
       const contact = data.job_offer.candidate_contact.contact;
-      const score = this.getPropValue(data, 'evaluation.level_of_communication');
+      const score = this.getPropValue(data, 'evaluation.evaluation_score');
       this.modalInfo = {
         changeEndpoint: e.el.endpoint,
         evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
         edit: true,
         evaluated: data.evaluated,
         total: this.getTotalTime(data),
-        metadataQuery: isMobile() ? 'type=mobile' : '',
+        metadataQuery: isMobile() && (screen as any).orientation.type.includes('portrait') ? 'type=mobile' : '',
         signatureStep: false,
+        form: {},
         label: {
           picture: contact.picture && contact.picture.origin,
           contactAvatar: getContactAvatar(contact.__str__),
@@ -1722,13 +1717,9 @@ export class DynamicListComponent
             value: !data.break_started_at && !data.break_ended_at
           }),
         },
+        changeMetadata: new Subject(),
         data: {
-          was_on_time: true,
-          was_motivated: true,
-          had_ppe_and_tickets: true,
-          met_expectations: true,
-          representation: true,
-          level_of_communication: score
+          evaluation_score: score
         }
       };
 
@@ -1740,11 +1731,25 @@ export class DynamicListComponent
           value: ''
         };
 
-        windowClass = 'approve-modal'
+        windowClass = 'approve-modal change';
       }
+
+      window.addEventListener('orientationchange', () => {
+        if (this.modalInfo.changeMetadata) {
+          this.modalInfo.metadataQuery = isMobile() && (window.screen as any).orientation.type.includes('portrait') ? 'type=mobile' : '';
+
+          setTimeout(() => {
+            this.modalInfo.changeMetadata.next(true);
+          }, 100);
+        }
+      });
 
       this.open(this.approveSignature, { size: 'lg', windowClass });
     }
+  }
+
+  public landscape() {
+    return isMobile() && (window.screen as any).orientation.type.includes('landscape');
   }
 
   public approveTimesheet(e) {
@@ -1756,7 +1761,7 @@ export class DynamicListComponent
 
       if (signature) {
         const contact = data.job_offer.candidate_contact.contact;
-        const score = this.getPropValue(data, 'evaluation.level_of_communication');
+        const score = this.getPropValue(data, 'evaluation.evaluation_score');
         this.modalInfo = {
           endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
           evaluateEndpoint: `${Endpoints.Timesheet}${data.id}/evaluate/`,
@@ -1781,12 +1786,7 @@ export class DynamicListComponent
             name: contact.__str__
           },
           data: {
-            was_on_time: true,
-            was_motivated: true,
-            had_ppe_and_tickets: true,
-            met_expectations: true,
-            representation: true,
-            level_of_communication: score
+            evaluation_score: score
           }
         };
 
@@ -2490,4 +2490,10 @@ export class DynamicListComponent
       }
     }
   }
+
+  public isInteger(value: any) {
+    return Number.isInteger(value);
+  }
+
+
 }

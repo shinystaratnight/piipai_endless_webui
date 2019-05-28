@@ -1,6 +1,7 @@
 const shiftStartField = {
   key: 'shift_started_at',
   type: 'datepicker',
+  updateFromForm: true,
   templateOptions: {
     showTime: true,
     type: 'datetime',
@@ -13,6 +14,7 @@ const shiftStartField = {
 const shiftEndField = {
   key: 'shift_ended_at',
   type: 'datepicker',
+  updateFromForm: true,
   templateOptions: {
     showTime: true,
     type: 'datetime',
@@ -25,6 +27,8 @@ const shiftEndField = {
 const breakStartField = {
   key: 'break_started_at',
   type: 'datepicker',
+  updateFromForm: true,
+  saveField: true,
   templateOptions: {
     showTime: true,
     type: 'datetime',
@@ -38,6 +42,8 @@ const breakStartField = {
 const breakEndField = {
   key: 'break_ended_at',
   type: 'datepicker',
+  updateFromForm: true,
+  saveField: true,
   templateOptions: {
     showTime: true,
     type: 'datetime',
@@ -64,10 +70,11 @@ const noBreakField = {
   key: 'noBreak',
   default: false,
   send: false,
+  updateFromForm: true,
   setNull: ['break_started_at', 'break_ended_at'],
   templateOptions: {
-    label: 'No Break',
-  },
+    label: 'No Break'
+  }
 };
 
 const signatureField = {
@@ -85,25 +92,17 @@ const form = [
     children: [
       {
         type: 'group',
+        hideLabel: true,
         marginBottom: 12,
-        children: [
-          shiftStartField,
-          shiftEndField,
-          totalTimeField,
-        ]
+        children: [noBreakField, shiftStartField, shiftEndField, totalTimeField]
       },
       {
         type: 'group',
-        hideLabel: true,
-        children: [
-          noBreakField,
-          breakStartField,
-          breakEndField,
-          signatureField,
-        ]
+        marginBottom: 12,
+        children: [breakStartField, breakEndField, signatureField]
       }
     ]
-  },
+  }
 ];
 
 const mobile = [
@@ -113,7 +112,7 @@ const mobile = [
   breakEndField,
   shiftEndField,
   totalTimeField,
-  signatureField,
+  signatureField
 ];
 
 export const metadata = {

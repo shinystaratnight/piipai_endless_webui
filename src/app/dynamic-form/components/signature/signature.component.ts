@@ -12,7 +12,7 @@ import { isMobile } from '../../helpers';
 
 @Component({
   selector: 'app-signature',
-  template: `<signature-pad [options]="signaturePadOptions" (onEndEvent)="drawComplete()"></signature-pad>`,
+  template: `<signature-pad *ngIf="show" [options]="signaturePadOptions" (onEndEvent)="drawComplete()"></signature-pad>`,
   styles: [`
     signature-pad canvas {
       border-radius: 4px;
@@ -23,18 +23,33 @@ import { isMobile } from '../../helpers';
 })
 export class SignatureComponent implements AfterViewInit {
 
+  show = true;
+
   @ViewChild(SignaturePad) signaturePad: SignaturePad;
 
   @Output()
   public signature: EventEmitter<string> = new EventEmitter();
 
-  public signaturePadOptions: Object = {
-    'canvasWidth': isMobile() ? 309 : 426,
-    'canvasHeight': isMobile() ? 149 : 208,
-  };
+  public signaturePadOptions: Object = this.generateParams();
 
   ngAfterViewInit() {
+
     this.clear();
+
+    window.addEventListener('orientationchange', () => {
+      this.show = false;
+      this.signaturePadOptions = this.generateParams();
+      setTimeout(() => {
+        this.show = true;
+      });
+    });
+  }
+
+  generateParams() {
+    return {
+      'canvasWidth': isMobile() && (window.screen as any).orientation.type.includes('portrait') ? 309 : isMobile() ? 381 : 426,
+      'canvasHeight': isMobile() && (window.screen as any).orientation.type.includes('portrait') ? 149 : isMobile() ? 183 : 208,
+    };
   }
 
   clear() {

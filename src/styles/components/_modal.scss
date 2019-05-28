@@ -1,5 +1,11 @@
 .approve-modal {
 
+  @media (max-width: 767.98px) and (orientation: landscape) {
+    &.change .modal-dialog {
+      max-width: 600px;
+    }
+  }
+
   .modal-dialog {
     max-width: 500px;
 
@@ -60,6 +66,10 @@
     @include media-breakpoint-down('sm') {
       max-width: 375px;
     }
+
+    @media (max-width: 767.98px) and (orientation: landscape) {
+      max-width: 450px;
+    }
   }
 }
 
@@ -69,6 +79,12 @@
 
   .modal-header {
     padding: $content-padding;
+
+    @media (max-width: 767.98px) and (orientation: landscape) {
+      &-wrapper {
+        display: none;
+      }
+    }
 
     @include media-breakpoint-down('sm') {
       padding: $content-padding / 2 16px;
@@ -129,10 +145,18 @@
 
     .dynamic-form {
       width: 311px;
+
+      @media (max-width: 767.98px) and (orientation: landscape) {
+        max-width: 555px;
+      }
     }
 
     &.signature-step {
       margin-left: -327px;
+
+      @media (max-width: 767.98px) and (orientation: landscape) {
+        margin-left: -555px;
+      }
     }
 
     .content-info {
@@ -194,6 +218,27 @@
     padding: $content-padding;
     padding-top: 0;
 
+    .form-wrapper {
+      width: 100%;
+
+      @media (max-width: 767.98px) and (orientation: landscape) {
+        width: 540px;
+
+        .items > div:first-child {
+          margin-right: 16px;
+        }
+
+        .form-element {
+          max-width: 260px;
+        }
+
+        .dynamic-form {
+          width: auto;
+          max-width: none;
+        }
+      }
+    }
+
     .time-line,
     .description {
       font-size: 16px;
@@ -212,6 +257,15 @@
         padding: 0;
 
         color: $brand-success;
+      }
+    }
+
+    app-form-checkbox .form-element-content {
+      position: relative;
+
+      .form-element-checkbox {
+        position: absolute;
+        right: 10px;
       }
     }
 
@@ -273,10 +327,8 @@
       }
 
       app-form-checkbox .form-element-content {
-        position: relative;
 
         .form-element-checkbox {
-          position: absolute;
           right: 30px;
 
           font-size: 16px;
@@ -308,6 +360,10 @@
           line-height: 22px;
         }
       }
+    }
+
+    @media (max-width: 767.98px) and (orientation: landscape) {
+      min-width: 540px;
     }
   }
 
@@ -377,6 +433,20 @@
       margin-top: 7px;
       margin-bottom: 34px;
     }
+
+    @media (max-width: 767.98px) and (orientation: landscape) {
+      &.btn {
+        width: 130px !important;
+      }
+
+      &:not(.signature-step) {
+        display: none;
+      }
+
+      &.only-mobile {
+        display: none;
+      }
+    }
   }
 
   .modal-footer {
@@ -400,13 +470,30 @@
 
       border-top: 1px solid rgba($gray, .1);
 
-      .clear-button {
-        display: none;
+      @media (orientation: portrait) {
+        .clear-button {
+          display: none;
+        }
       }
 
       .btn {
         width: 100%;
         margin: 0;
+      }
+    }
+
+    @media (max-width: 767.98px) and (orientation: landscape) {
+
+      .btn-primary {
+        width: 220px;
+      }
+
+      .change & .btn-primary {
+        width: 280px;
+      }
+
+      .next-button {
+        margin: 0 auto;
       }
     }
   }

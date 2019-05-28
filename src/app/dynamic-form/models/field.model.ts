@@ -74,11 +74,12 @@ export interface Field {
   hideOnMobile?: boolean;
   showOnMobile?: boolean;
   disabled?: {
-    keys: string[],
-    values: any[],
-    messages: string[]
+    keys: string[];
+    values: any[];
+    messages: string[];
   };
   strField?: string;
+  updateFromForm?: boolean;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
@@ -112,7 +113,7 @@ export interface Field {
     customLabel?: {
       field: string;
       values: { [key: string]: any };
-    }
+    };
   };
 }
 

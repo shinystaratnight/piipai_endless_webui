@@ -65,7 +65,7 @@ const form = [
     read_only: false
   },
   {
-    key: 'level_of_communication',
+    key: 'evaluation_score',
     default: 0,
     type: 'select',
     templateOptions: {

@@ -146,7 +146,7 @@ const list = {
           {
             score: true,
             type: 'text',
-            field: 'evaluation.level_of_communication',
+            field: 'evaluation.evaluation_score',
             showIf: [
               {
                 evaluated: true

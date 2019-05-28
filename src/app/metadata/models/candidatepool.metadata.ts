@@ -750,7 +750,7 @@ const form = [
         type: 'list',
         query: {
           candidate_contact: '{id}',
-          fields: ['jobsite', 'position', 'level_of_communication', 'evaluated_at']
+          fields: ['jobsite', 'position', 'evaluation_score', 'evaluated_at']
         },
         metadata_query: {
           type: 'candidatepool'
