@@ -259,7 +259,7 @@ const formset = {
     },
     {
       default: 0,
-      key: 'level_of_communication',
+      key: 'evaluation_score',
       read_only: false,
       templateOptions: {
         required: false,
@@ -282,15 +282,15 @@ const formset = {
       listColumns['jobsite'],
       listColumns.supervisor,
       {
-        name: 'level_of_communication',
+        name: 'evaluation_score',
         sort: true,
-        sort_field: 'level_of_communication',
+        sort_field: 'evaluation_score',
         label: 'Evaluation',
         content: [
           {
             display: 'Score',
             type: 'skills',
-            field: 'level_of_communication'
+            field: 'evaluation_score'
           }
         ],
       },
@@ -431,7 +431,7 @@ const profile = {
     },
     {
       default: 0,
-      key: 'level_of_communication',
+      key: 'evaluation_score',
       read_only: false,
       templateOptions: {
         required: false,
@@ -454,15 +454,15 @@ const profile = {
       listColumns['jobsite'],
       listColumns.supervisor,
       {
-        name: 'level_of_communication',
+        name: 'evaluation_score',
         sort: true,
-        sort_field: 'level_of_communication',
+        sort_field: 'evaluation_score',
         label: 'Evaluation',
         content: [
           {
             display: 'Score',
             type: 'skills',
-            field: 'level_of_communication'
+            field: 'evaluation_score'
           }
         ],
       },
@@ -557,7 +557,7 @@ const form = [
     read_only: false
   },
   {
-    key: 'level_of_communication',
+    key: 'evaluation_score',
     default: 0,
     type: 'select',
     templateOptions: {
@@ -691,7 +691,7 @@ const formadd = [
     read_only: false
   },
   {
-    key: 'level_of_communication',
+    key: 'evaluation_score',
     default: 0,
     type: 'select',
     templateOptions: {
@@ -792,7 +792,7 @@ const candidatepool = {
     },
     {
       default: 0,
-      key: 'level_of_communication',
+      key: 'evaluation_score',
       read_only: false,
       templateOptions: {
         required: false,
@@ -825,15 +825,15 @@ const candidatepool = {
         label: 'Position'
       },
       {
-        name: 'level_of_communication',
+        name: 'evaluation_score',
         sort: true,
-        sort_field: 'level_of_communication',
+        sort_field: 'evaluation_score',
         label: 'Evaluation',
         content: [
           {
             display: 'Score',
             type: 'skills',
-            field: 'level_of_communication'
+            field: 'evaluation_score'
           }
         ],
       },

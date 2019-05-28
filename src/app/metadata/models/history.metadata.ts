@@ -182,7 +182,7 @@ const list = {
           {
             score: true,
             type: 'text',
-            field: 'evaluation.level_of_communication',
+            field: 'evaluation.evaluation_score',
             showIf: [
               {
                 evaluated: true
@@ -192,10 +192,57 @@ const list = {
         ]
       },
       {
+        label: 'Approve/Change',
+        delim: null,
+        name: 'approve',
+        title: null,
+        content: [
+          {
+            text: 'Approve',
+            type: 'button',
+            color: 'success',
+            svg: 'approve',
+            label: 'Approve',
+            endpoint: '/hr/timesheets/{id}/approve/',
+            replace_by: 'supervisor',
+            field: 'id',
+            shadow: true,
+            action: 'approveTimesheet',
+            hidden: 'supervisor_approved_at'
+          }
+        ]
+      },
+      {
+        label: 'Change',
+        delim: null,
+        name: 'change',
+        hide: true,
+        title: null,
+        content: [
+          {
+            text: 'Change',
+            type: 'button',
+            color: 'danger',
+            svg: 'change',
+            label: 'Change',
+            endpoint: '/hr/timesheets/{id}/not_agree/',
+            field: 'id',
+            shadow: true,
+            action: 'changeTimesheet',
+            hidden: 'supervisor_approved_at'
+          }
+        ]
+      },
+      {
         label: 'Status',
         name: 'status',
         title: null,
         content: [
+          {
+            field: 'status',
+            type: 'static',
+            hideValue: true
+          },
           {
             field: 'supervisor_approved',
             type: 'static',
@@ -230,35 +277,6 @@ const list = {
             showId: ['supervisor_signature.origin'],
             showIf: [{
               status: 7
-            }]
-          },
-          {
-            text: 'Approve',
-            type: 'button',
-            color: 'success',
-            svg: 'approve',
-            label: 'Approve',
-            endpoint: '/hr/timesheets/{id}/approve/',
-            replace_by: 'supervisor',
-            field: 'id',
-            shadow: true,
-            action: 'approveTimesheet',
-            showIf: [{
-              status: 5
-            }]
-          },
-          {
-            text: 'Change',
-            type: 'button',
-            color: 'danger',
-            svg: 'change',
-            label: 'Change',
-            endpoint: '/hr/timesheets/{id}/not_agree/',
-            field: 'id',
-            shadow: true,
-            action: 'changeTimesheet',
-            showIf: [{
-              status: 5
             }]
           },
           {

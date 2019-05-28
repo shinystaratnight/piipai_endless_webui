@@ -1116,6 +1116,15 @@ const form = [
                   type: 'datetime'
                 },
               },
+              {
+                width: 0.25,
+                key: 'supervisor_modified_at',
+                type: 'datepicker',
+                templateOptions: {
+                  label: 'Supervisor Modified at',
+                  type: 'datetime'
+                },
+              },
             ]
           },
           {

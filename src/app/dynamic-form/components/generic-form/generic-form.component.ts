@@ -79,6 +79,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public checkEmail: string;
   @Input()
   public title: string;
+  @Input()
+  public changeMetadata: Subject<any>;
 
   @Input()
   public endpoint = '';
@@ -194,6 +196,30 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public ngOnInit() {
     if (this.endpoint === '/hr/timesheets/') {
       this.formName = 'Timesheets';
+    }
+
+    if (this.changeMetadata) {
+      const changeMetadataSubscription = this.changeMetadata.subscribe((boolean) => {
+        this.service.getMetadata(
+          this.endpoint,
+          (this.id || this.edit ? '?type=form' : '?type=formadd') +
+            (this.metadataQuery ? `&${this.metadataQuery}` : '')
+        ).subscribe((metadata) => {
+          this.hiddenFields = {
+            elements: [],
+            keys: [],
+            observers: []
+          };
+          this.parseMetadata(metadata, this.data);
+          this.metadata = metadata;
+          this.updateMetadataByProps(
+            this.metadata,
+            this.generateActionToSetProps()
+          );
+        });
+      });
+
+      this.subscriptions.push(changeMetadataSubscription);
     }
   }
 

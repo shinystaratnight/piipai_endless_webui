@@ -17,13 +17,10 @@ import { SiteSettingsService } from '../../../services/site-settings.service';
 
 @Component({
   selector: 'app-form-checkbox',
-  templateUrl: './form-checkbox.component.html',
+  templateUrl: './form-checkbox.component.html'
 })
-
-export class FormCheckboxComponent
-  extends BasicElementComponent
+export class FormCheckboxComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
-
   @ViewChild('checkbox')
   public checkbox;
 
@@ -76,12 +73,12 @@ export class FormCheckboxComponent
   }
 
   public ngOnDestroy() {
-    this.subscriptions.forEach((s) => s && s.unsubscribe());
+    this.subscriptions.forEach(s => s && s.unsubscribe());
   }
 
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      const subscription = this.config.hidden.subscribe((hide) => {
+      const subscription = this.config.hidden.subscribe(hide => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -90,7 +87,7 @@ export class FormCheckboxComponent
           this.config.hide = hide;
         }
 
-        if (!(<any> this.cd).destroyed) {
+        if (!(<any>this.cd).destroyed) {
           this.cd.detectChanges();
         }
       });
@@ -101,7 +98,7 @@ export class FormCheckboxComponent
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe((mode) => {
+      const subscription = this.config.mode.subscribe(mode => {
         if (mode === 'view') {
           this.viewMode = true;
         } else {
@@ -115,7 +112,16 @@ export class FormCheckboxComponent
   }
 
   public setInitValue() {
-    let value = this.config.value || (!this.viewMode && this.config.default); //tslint:disable-line
+    let value;
+    if (this.config.updateFromForm) {
+      value =
+        this.group.get(this.key).value !== null
+          ? this.group.get(this.key).value
+          : this.config.value || (!this.viewMode && this.config.default);
+    } else {
+      value = this.config.value || (!this.viewMode && this.config.default);
+    }
+
     if (this.viewMode) {
       if (this.config.templateOptions.type === 'checkbox') {
         this.defaultValues(value);
@@ -165,14 +171,19 @@ export class FormCheckboxComponent
   }
 
   public checkDisabled(): boolean {
-    const disableFields = ['by_phone', 'send_supervisor_message', 'send_candidate_message'];
+    const disableFields = [
+      'by_phone',
+      'send_supervisor_message',
+      'send_candidate_message'
+    ];
 
-    return disableFields.indexOf(this.config.key) !== -1 && !this.siteSettings.isSmsEnabled();
+    return (
+      disableFields.indexOf(this.config.key) !== -1 &&
+      !this.siteSettings.isSmsEnabled()
+    );
   }
 
   public getDisabledTitle(disabled?: boolean): string {
-    return disabled
-      ? this.siteSettings.getSmsSendTitle()
-      : '';
+    return disabled ? this.siteSettings.getSmsSendTitle() : '';
   }
 }

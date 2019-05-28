@@ -113,7 +113,7 @@
 
       <ng-container *ngIf="identifyDevice()">
         <div class="mobile-item" *ngFor="let row of body">
-          <ng-container *ngTemplateOutlet="getView(); context: {data: row}"></ng-container>
+          <ng-container *ngTemplateOutlet="getView(); context: {data: row, status: getElement('status', row.content) }"></ng-container>
         </div>
       </ng-container>
 
@@ -444,11 +444,11 @@
         <p class="evaluate-label">{{modalInfo.label.name}}</p>
         <hr width="100">
 
-        <ngb-rating max="5" min="1" [(ngModel)]="modalInfo.data.level_of_communication">
+        <ngb-rating max="5" min="1" [(ngModel)]="modalInfo.data.evaluation_score">
           <ng-template let-fill="fill" let-index="index">
             <span *ngIf="fill === 100" class="star star-lg full">&#9733;</span>
             <span *ngIf="fill === 0" class="star star-lg">
-              {{modalInfo.data.level_of_communication ? '&#9733;' : '&#9734;'}}
+              {{modalInfo.data.evaluation_score ? '&#9733;' : '&#9734;'}}
             </span>
           </ng-template>
         </ngb-rating>
@@ -491,7 +491,7 @@
     </div>
 
     <div class="modal-body pt-0">
-      <div [class.steps]="modalInfo.changeEndpoint && identifyDevice()"
+      <div [class.steps]="(modalInfo.changeEndpoint && identifyDevice()) || landscape()"
         [class.signature-step]="modalInfo.signatureStep">
 
         <div class="content-info">
@@ -515,7 +515,7 @@
             </div>
           </div>
 
-          <div [hidden]="!modalInfo.timesheetData" class="w-100 form-wrapper">
+          <div [hidden]="!modalInfo.timesheetData" class="form-wrapper">
             <h3 class="group-title times" [class.change-form]="modalInfo.changeEndpoint">Times</h3>
 
             <app-generic-form
@@ -523,6 +523,7 @@
               [form]="modalInfo.form"
               [endpoint]="modalInfo.changeEndpoint"
               [metadataQuery]="modalInfo.metadataQuery"
+              [changeMetadata]="modalInfo.changeMetadata"
               [data]="modalInfo.timesheetData"
               [edit]="modalInfo.edit"
               (event)="evaluateEvent($event, c)">
@@ -541,23 +542,23 @@
             <h3 class="group-title">Evaluation</h3>
 
             <div class="evaluation-wrapper d-flex align-items-center text-warning">
-              <div class="rating d-inline-flex" [class.filled]="modalInfo.data.level_of_communication">
+              <div class="rating d-inline-flex" [class.filled]="modalInfo.data.evaluation_score">
                 <ngb-rating
                   min="1"
                   max="5"
-                  [(ngModel)]="modalInfo.data.level_of_communication"
-                  [rate]="modalInfo.data.level_of_communication"
+                  [(ngModel)]="modalInfo.data.evaluation_score"
+                  [rate]="modalInfo.data.evaluation_score"
                   [readonly]="modalInfo.evaluated"
                   (hover)="hovered=$event"
                   (leave)="hovered=undefined"
                   (rateChange)="hovered=undefined">
                     <ng-template let-fill="fill" let-index="index">
                       <span *ngIf="fill === 100" class="star star-lg full">&#9733;</span>
-                      <span *ngIf="fill === 0" class="star star-lg">{{modalInfo.data.level_of_communication ? '&#9733;' : '&#9734;'}}</span>
+                      <span *ngIf="fill === 0" class="star star-lg">{{modalInfo.data.evaluation_score ? '&#9733;' : '&#9734;'}}</span>
                     </ng-template>
                 </ngb-rating>
               </div>
-              &nbsp;{{modalInfo.data.level_of_communication}}
+              &nbsp;{{modalInfo.data.evaluation_score}}
             </div>
           </div>
         </div>
@@ -565,7 +566,7 @@
         <div class="d-flex justify-content-center align-items-center flex-column">
           <div [hidden]="!modalInfo.signature" class="signature-content">
             <app-back-link
-              *ngIf="modalInfo.changeEndpoint  && identifyDevice()"
+              *ngIf="(modalInfo.changeEndpoint  && identifyDevice()) || landscape()"
               label="Back to times"
               (backEvent)="modalInfo.signatureStep = false">
             </app-back-link>
@@ -581,18 +582,18 @@
       </div>
 
       <div class="modal-footer" [class.justify-content-between]="modalInfo.signature" [class.justify-content-center]="!modalInfo.signature">
-        <button *ngIf="modalInfo.signature" type="button" class="btn clear-button" (click)="signatureCanvas.clear()">
+        <button *ngIf="modalInfo.signature" type="button" class="btn clear-button" [class.signature-step]="modalInfo.signatureStep" (click)="signatureCanvas.clear()">
           Clear
         </button>
         <button type="button" class="btn big-btn btn-shadow btn-primary"
-          *ngIf="modalInfo.changeEndpoint && identifyDevice() ? modalInfo.signatureStep : true"
+          *ngIf="(modalInfo.changeEndpoint && identifyDevice()) || landscape() ? modalInfo.signatureStep : true"
           (click)="sendSignature(sendFormButton)">
             Approve
             <app-spinner *ngIf="saveProcess"></app-spinner>
         </button>
 
-        <button type="button" class="btn big-btn btn-shadow btn-primary"
-          *ngIf="modalInfo.changeEndpoint && identifyDevice() ? !modalInfo.signatureStep : false"
+        <button type="button" class="btn big-btn btn-shadow btn-primary next-button"
+          *ngIf="(modalInfo.changeEndpoint && identifyDevice()) || landscape() ? !modalInfo.signatureStep : false"
           (click)="modalInfo.signatureStep = true">
             Next
             <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -682,7 +683,7 @@
   </agm-map>
 </ng-template>
 
-<ng-template #history let-data="data">
+<ng-template #history let-data="data" let-status="status">
   <div class="header">
     <div class="d-flex justify-content-center flex-column">
       <ng-container *ngFor="let field of getElement('position', data.content).content"
@@ -738,12 +739,32 @@
       </ng-container>
     </div>
   </div>
-  <div class="footer footer-container position-relative">
-    <div class="d-flex justify-content-center flex-column">
-      <ng-container *ngFor="let field of getElement('status', data.content).content; let last = last"
+
+  <div class="footer position-relative" [class.footer-container]="status && status.content[0].value !== 5">
+    <div class="d-flex justify-content-center flex-column" *ngIf="status && status.content[0].value !== 5">
+      <ng-container *ngFor="let field of getElement('status', data.content).content; let last = last">
+        <ng-container *ngIf="!isInteger(field.value)"
+          appListElement
+          [last]="last"
+          [config]="field"
+          (event)="eventHandler($event)"
+          (buttonAction)="buttonHandler($event)">
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <div class="button-wrapper" *ngIf="status && status.content[0].value === 5">
+      <ng-container *ngFor="let field of getElement('approve', data.content).content"
         appListElement
-        [last]="last"
-        [config]="field"
+        [config]="inverseButton(field)"
+        (event)="eventHandler($event)"
+        (buttonAction)="buttonHandler($event)">
+      </ng-container>
+    </div>
+    <div class="button-wrapper" *ngIf="status && status.content[0].value === 5">
+      <ng-container *ngFor="let field of getElement('change', data.content).content"
+        appListElement
+        [config]="inverseButton(field)"
         (event)="eventHandler($event)"
         (buttonAction)="buttonHandler($event)">
       </ng-container>
