@@ -45,7 +45,7 @@
 }
 
 .btn-shadow {
-  box-shadow: 0px 4px 6px 0 rgba(black, 0.1);
+  box-shadow: 0px 4px 6px 0 rgba(black, 0.3);
 
   &:hover {
     box-shadow: none;
@@ -81,7 +81,6 @@
 }
 
 app-form-button:not(:first-child) {
-  .success-btn,
   .danger-btn,
   .warning-btn {
     margin-top: 6px;

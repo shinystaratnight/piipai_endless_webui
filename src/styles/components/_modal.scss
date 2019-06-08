@@ -458,7 +458,7 @@
     border-top: none;
 
     @include media-breakpoint-up('md') {
-      .btn-primary {
+      .btn-success {
         width: 203px;
       }
     }
@@ -484,11 +484,13 @@
 
     @media (max-width: 767.98px) and (orientation: landscape) {
 
-      .btn-primary {
+      .btn-primary,
+      .btn-success {
         width: 220px;
       }
 
-      .change & .btn-primary {
+      .change & .btn-primary,
+      .change & .btn-success {
         width: 280px;
       }
 

@@ -353,7 +353,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
       padding-right: 20px;
 
-      z-index: 1;
+      z-index: 3;
 
       box-sizing: content-box;
 
@@ -959,9 +959,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     }
 
     .button-wrapper {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
       flex: 1;
 
       text-align: center;
@@ -970,6 +967,23 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
       .btn {
         margin-bottom: 0;
+      }
+
+      br {
+        display: none;
+      }
+
+      app-form-button {
+        display: block;
+      }
+
+      button {
+        width: 100%;
+
+        &:hover,
+        &:active {
+          background-color: rgba($gray, .3);
+        }
       }
 
       &:last-child {
@@ -983,4 +997,8 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       right: 11px;
     }
   }
+}
+
+.total-time-wrapper app-list-text {
+  display: inline-flex;
 }

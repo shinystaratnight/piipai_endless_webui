@@ -28,6 +28,31 @@ button {
     font-size: 12px;
     line-height: 1;
   }
+
+  &.inverse {
+    border-radius: 0;
+    background-color: #fff;
+
+    &.text-success:hover,
+    &.text-success:active {
+      color: white !important;
+      background-color: $brand-success;
+
+      svg path {
+        fill: white;
+      }
+    }
+
+    &.text-danger:hover,
+    &.text-danger:active {
+      color: white !important;
+      background-color: $brand-danger;
+
+      svg path {
+        fill: white;
+      }
+    }
+  }
 }
 
 .line {

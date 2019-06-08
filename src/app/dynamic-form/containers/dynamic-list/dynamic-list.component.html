@@ -585,7 +585,7 @@
         <button *ngIf="modalInfo.signature" type="button" class="btn clear-button" [class.signature-step]="modalInfo.signatureStep" (click)="signatureCanvas.clear()">
           Clear
         </button>
-        <button type="button" class="btn big-btn btn-shadow btn-primary"
+        <button type="button" class="btn big-btn btn-shadow btn-success"
           *ngIf="(modalInfo.changeEndpoint && identifyDevice()) || landscape() ? modalInfo.signatureStep : true"
           (click)="sendSignature(sendFormButton)">
             Approve
@@ -683,6 +683,17 @@
   </agm-map>
 </ng-template>
 
+<ng-template #mapModal let-c="close">
+  <app-close-button class="close-button" (click)="c()"></app-close-button>
+  <agm-map
+    [latitude]="modalInfo.latitude"
+    [longitude]="modalInfo.longitude"
+    [zoom]="13"
+    [mapTypeControl]="true">
+      <agm-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></agm-marker>
+  </agm-map>
+</ng-template>
+
 <ng-template #history let-data="data" let-status="status">
   <div class="header">
     <div class="d-flex justify-content-center flex-column">
@@ -711,8 +722,8 @@
       (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">
     </ng-container>
-    <div class="mb-3">
-      <span class="text-success" style="display: inline-block; font-size: 15px; width: 130px">Total time:&nbsp;</span>
+    <div class="mb-3 total-time-wrapper">
+      <span class="text-success mr-1" style="display: inline-block; font-size: 15px; width: 50%">Total time:&nbsp;</span>
       <ng-container *ngFor="let field of getElement('totalTime', data.content).content"
         appListElement
         [length]="getElement('totalTime', data.content).content.length"
@@ -801,8 +812,8 @@
       (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">
     </ng-container>
-    <div class="mb-3">
-      <span class="text-success" style="display: inline-block; font-size: 15px; width: 130px">Total time:&nbsp;</span>
+    <div class="mb-3 total-time-wrapper">
+      <span class="text-success mr-1" style="display: inline-block; font-size: 15px; width: 50%">Total time:&nbsp;</span>
       <ng-container *ngFor="let field of getElement('totalTime', data.content).content"
         appListElement
         [length]="getElement('totalTime', data.content).content.length"
