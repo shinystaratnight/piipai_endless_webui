@@ -1779,6 +1779,7 @@ export class DynamicListComponent
             unformated_date: data.shift_started_at,
             total: this.getTotalTime(data)
           },
+          form: {},
           signature: {
             endpoint: `${Endpoints.Timesheet}${data.id}/approve_by_signature/`,
             value: ''
