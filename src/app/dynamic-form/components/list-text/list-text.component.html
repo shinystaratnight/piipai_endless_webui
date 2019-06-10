@@ -59,7 +59,7 @@
 </span>
 
 <span [class.mr-1]="config.delim !== ' '" *ngIf="config.delim && !last">{{config.delim}}</span>
-<br *ngIf="!config.delim && config.name !== 'credit_approved'">
+<br *ngIf="!config.delim && config.name !== 'credit_approved' && !config.hideValue">
 
 <ng-template #workersdetail>
   <div *ngFor="let worker of workers">

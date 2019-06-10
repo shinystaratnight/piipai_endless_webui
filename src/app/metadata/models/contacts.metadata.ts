@@ -267,7 +267,6 @@ const form = [
                     read_only: false
                   }
                 ],
-                width: 0.34
               },
               {
                 label: 'Verification',
@@ -296,7 +295,6 @@ const form = [
                     read_only: false
                   }
                 ],
-                width: 0.33
               },
               {
                 label: 'Additional Info',
@@ -335,7 +333,6 @@ const form = [
                     read_only: false
                   }
                 ],
-                width: 0.33
               }
             ]
           },
@@ -390,7 +387,6 @@ const form = [
                     key: 'candidate_contacts',
                   }
                 ],
-                width: 0.25
               },
               {
                 type: 'group',
@@ -415,7 +411,6 @@ const form = [
                     many: true
                   }
                 ],
-                width: 0.25
               },
               {
                 label: 'Additional Info',
@@ -458,7 +453,6 @@ const form = [
                     many: false
                   }
                 ],
-                width: 0.25
               }
             ]
           }

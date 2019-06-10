@@ -169,6 +169,9 @@ export class DynamicListComponent
   @ViewChild('fillInMap')
   public fillInMap;
 
+  @ViewChild('mapModal')
+  public mapModal;
+
   @ViewChild('messageDetail')
   public messageDetail;
 
@@ -1525,12 +1528,12 @@ export class DynamicListComponent
   }
 
   public openMap(value) {
+    this.modalInfo = {};
     value.forEach((el) => {
       const keys = el.field.split('.');
       this.modalInfo[keys[keys.length - 1]] = +el.value;
     });
-    this.modalInfo.type = 'map';
-    this.open(this.modal, { size: 'lg' });
+    this.open(this.mapModal, { size: 'lg', windowClass: 'fillin-map' });
   }
 
   public evaluate(e, data?) {

@@ -195,6 +195,7 @@ const list = {
         label: 'Approve/Change',
         delim: null,
         name: 'approve',
+        hide: true,
         title: null,
         content: [
           {
@@ -265,9 +266,10 @@ const list = {
             field: 'supervisor_approved_at',
             type: 'static',
             muted: true,
-            showIf: [{
-              status: 7
-            }]
+            showIf: [
+              { status: 7 },
+              'supervisor_approved_at'
+            ]
           },
           {
             field: 'supervisor_signature',
@@ -321,6 +323,36 @@ const list = {
             action: 'changeTimesheet',
             showIf: [{
               status: 6
+            }]
+          },
+          {
+            text: 'Approve',
+            type: 'button',
+            color: 'success',
+            svg: 'approve',
+            label: 'Approve',
+            endpoint: '/hr/timesheets/{id}/approve/',
+            replace_by: 'supervisor',
+            field: 'id',
+            shadow: true,
+            action: 'approveTimesheet',
+            hidden: 'supervisor_approved_at',
+            showIf: [{
+              status: 5
+            }]
+          },
+          {
+            text: 'Change',
+            type: 'button',
+            color: 'danger',
+            svg: 'change',
+            label: 'Change',
+            endpoint: '/hr/timesheets/{id}/not_agree/',
+            field: 'id',
+            shadow: true,
+            action: 'changeTimesheet',
+            showIf: [{
+              status: 5
             }]
           },
         ]

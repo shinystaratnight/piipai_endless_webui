@@ -335,7 +335,7 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
-        <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
+        <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
@@ -370,7 +370,7 @@
 <ng-template #messageDetail let-c="close" let-d="dismiss">
   <div class="message-detail-header">
     <h5 class="message-label">{{modalInfo.label}}</h5>
-    <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
+    <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
   </div>
 
   <app-generic-form
@@ -388,7 +388,7 @@
 <ng-template #confirmModal let-c="close">
   <div class="modal-header">
     <p>{{modalInfo.message}}</p>
-    <app-close-button class="close-button ml-2" (click)="c()"></app-close-button>
+    <app-close-button class="close-button ml-auto" (click)="c()"></app-close-button>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="callAction(modalInfo, c)">{{modalInfo.agree_label}}</button>
@@ -417,7 +417,7 @@
           </ng-container>
         </h5>
 
-        <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
+        <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
       </div>
     </div>
     <div *ngIf="!modalInfo.evaluate" class="modal-body">
@@ -468,12 +468,11 @@
   <div class="approve-signature-modal modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
+        <img alt="Photo" width="54" height="54"
+          *ngIf="modalInfo.label.picture"
+          [src]="modalInfo.label.picture">
         <h2 class="modal-title d-flex align-items-center">
           <div class="mr-3">
-            <img alt="Photo" width="54" height="54"
-              *ngIf="modalInfo.label.picture"
-              [src]="modalInfo.label.picture">
-
             <span class="contact-avatar avatar"
               *ngIf="!modalInfo.label.picture">
                 {{modalInfo.label.contactAvatar}}
@@ -485,7 +484,7 @@
           </div>
         </h2>
 
-        <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
+        <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
 
       </div>
     </div>
@@ -585,7 +584,7 @@
         <button *ngIf="modalInfo.signature" type="button" class="btn clear-button" [class.signature-step]="modalInfo.signatureStep" (click)="signatureCanvas.clear()">
           Clear
         </button>
-        <button type="button" class="btn big-btn btn-shadow btn-primary"
+        <button type="button" class="btn big-btn btn-shadow btn-success"
           *ngIf="(modalInfo.changeEndpoint && identifyDevice()) || landscape() ? modalInfo.signatureStep : true"
           (click)="sendSignature(sendFormButton)">
             Approve
@@ -611,7 +610,7 @@
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
+        <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -634,7 +633,7 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">Send message</h5>
-        <app-close-button class="close-button ml-2" (click)="d()"></app-close-button>
+        <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
       </div>
     </div>
     <div class="modal-body p-0">
@@ -683,6 +682,17 @@
   </agm-map>
 </ng-template>
 
+<ng-template #mapModal let-c="close">
+  <app-close-button class="close-button" (click)="c()"></app-close-button>
+  <agm-map
+    [latitude]="modalInfo.latitude"
+    [longitude]="modalInfo.longitude"
+    [zoom]="13"
+    [mapTypeControl]="true">
+      <agm-marker [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude"></agm-marker>
+  </agm-map>
+</ng-template>
+
 <ng-template #history let-data="data" let-status="status">
   <div class="header">
     <div class="d-flex justify-content-center flex-column">
@@ -711,8 +721,8 @@
       (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">
     </ng-container>
-    <div class="mb-3">
-      <span class="text-success" style="display: inline-block; font-size: 15px; width: 130px">Total time:&nbsp;</span>
+    <div class="mb-3 total-time-wrapper">
+      <span class="text-success mr-1" style="display: inline-block; font-size: 15px; width: 50%">Total time:&nbsp;</span>
       <ng-container *ngFor="let field of getElement('totalTime', data.content).content"
         appListElement
         [length]="getElement('totalTime', data.content).content.length"
@@ -801,8 +811,8 @@
       (event)="eventHandler($event)"
       (buttonAction)="buttonHandler($event)">
     </ng-container>
-    <div class="mb-3">
-      <span class="text-success" style="display: inline-block; font-size: 15px; width: 130px">Total time:&nbsp;</span>
+    <div class="mb-3 total-time-wrapper">
+      <span class="text-success mr-1" style="display: inline-block; font-size: 15px; width: 50%">Total time:&nbsp;</span>
       <ng-container *ngFor="let field of getElement('totalTime', data.content).content"
         appListElement
         [length]="getElement('totalTime', data.content).content.length"

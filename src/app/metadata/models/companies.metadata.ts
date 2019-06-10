@@ -832,10 +832,10 @@ const form = [
                           value: 'BASIC',
                           label: 'Basic'
                         },
-                        {
-                          value: 'PIN',
-                          label: 'PIN'
-                        },
+                        // {
+                        //   value: 'PIN',
+                        //   label: 'PIN'
+                        // },
                         {
                           value: 'SIGNATURE',
                           label: 'Signature'
