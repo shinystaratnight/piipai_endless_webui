@@ -1,5 +1,21 @@
 @import '../../../../styles/variables.scss';
 
+.edit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0;
+
+  &.column {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .form-element-checkbox:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
+}
+
 .form-radio {
   .inline .form-check:first-child label {
     padding-left: 0;

@@ -4,17 +4,18 @@
 .test {
 
   &__header,
-  &__body {
-    padding: 24px 66px;
+  &__body,
+  &__footer {
+    padding: 20px 66px;
+    border-bottom: 2px solid rgba(#e5e5e5, .8);
 
-    border-bottom: 1px solid rgba(#e5e5e5, .8);
+    @include media-breakpoint-down('sm') {
+      padding: 24px 33px;
+    }
   }
 
   &__footer {
-    display: flex;
-    justify-content: space-between;
-
-    padding: 24px 66px;
+    border-bottom: none;
   }
 
   &__description {
@@ -27,6 +28,7 @@
   }
 
   &__name {
+    margin-bottom: 0;
     font-size: 24px;
     line-height: 28px;
   }
@@ -61,10 +63,9 @@
 
   &__button {
     width: 120px;
-
     padding: 13px 20px;
-
-    text-align: center;
+    font-size: 16px;
+    line-height: 18px;
 
     &.btn-default {
       background-color: #f9f9f9;
@@ -82,8 +83,4 @@
     }
   }
 
-}
-
-.form-check {
-  margin-bottom: 19px;
 }

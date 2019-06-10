@@ -5,7 +5,7 @@
       *ngIf="config.label || config.templateOptions.label">
       {{config.templateOptions.label}}:
     </label>
-    <div class="edit d-flex justify-content-start flex-wrap align-items-center flex-row mb-0 inline">
+    <div class="edit inline" [class.column]="config.templateOptions.column">
       <ng-container *ngFor="let radio of config.templateOptions.options">
         <div class="form-element-checkbox mr-4" *ngIf="radio.value">
           <label [attr.for]="radio.value" class="form-check-label d-flex align-items-center">

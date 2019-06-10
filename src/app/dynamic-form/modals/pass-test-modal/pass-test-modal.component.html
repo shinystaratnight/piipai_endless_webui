@@ -1,0 +1,9 @@
+<app-close-button (click)="dismiss()"></app-close-button>
+
+<app-test-generator
+  [workflowObject]="config.workflowObject"
+  [send]="config.send"
+  [id]="config.testId"
+  [test]="config.test"
+  (sended)="close($event)">
+</app-test-generator>

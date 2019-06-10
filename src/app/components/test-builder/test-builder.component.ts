@@ -21,6 +21,7 @@ import {
   getElementFromMetadata
 } from '../../dynamic-form/helpers/utils';
 import { MetadataService } from '../../metadata';
+import { PassTestModalComponent, PassTestModalConfig } from 'src/app/dynamic-form/modals';
 
 @Component({
   selector: 'app-test-builder',
@@ -263,7 +264,12 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public showPreview() {
-    this.modalRef = this.modalService.open(this.previewModal);
+    this.modalRef = this.modalService.open(PassTestModalComponent);
+    this.modalRef.componentInstance.config = {
+      testId: this.testData.id,
+      send: false,
+      description: this.testData.description
+    } as PassTestModalConfig;
   }
 
   public checkCount(type: number, length: number) {

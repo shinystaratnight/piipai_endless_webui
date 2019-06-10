@@ -17,6 +17,11 @@ svg {
 
   opacity: .8;
 
+  &.sm {
+    width: 8px;
+    height: 8px;
+  }
+
   &:hover {
     opacity: 1;
   }

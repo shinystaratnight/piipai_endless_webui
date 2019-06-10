@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 
 import { FormBuilderService } from '../../services';
@@ -9,6 +9,7 @@ import { ToastService } from '../../../shared/services';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
 import { Field } from '../../models';
 import { getElementFromMetadata } from '../../helpers';
+import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
 
 @Component({
   selector: 'app-form-builder-form',
@@ -24,6 +25,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   @Output() public formConfig: EventEmitter<any> = new EventEmitter();
 
   public form: FormGroup;
+  public modalRef: NgbModalRef;
 
   public error = {};
   public hiddenFields: HiddenFields = {
@@ -37,6 +39,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public disableNextButton = false;
   public formInvalid = true;
   public formChangeSubscription: Subscription;
+
+  public passedTests: any[];
 
   public industyField = {
     type: 'related',
@@ -108,6 +112,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     private service: FormBuilderService,
     private router: Router,
     private toastr: ToastService,
+    private modalService: NgbModal
   ) { }
 
   public ngOnInit() {
@@ -245,6 +250,39 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
     if (event.type === 'address') {
       this.parseAddress(event.value, event.el);
+    }
+
+    if (event.type === 'test') {
+      const tests = event.tests;
+      const passTestAction = new BehaviorSubject(0);
+
+      passTestAction.subscribe((index) => {
+        const test = tests[index];
+        this.modalRef = this.modalService.open(PassTestModalComponent);
+        this.modalRef.componentInstance.config = {
+          test,
+          description: test.description,
+          send: false
+        } as PassTestModalConfig;
+
+        this.modalRef.result
+          .then((res: any[]) => {
+            if (!this.passedTests) {
+              this.passedTests = [];
+            }
+
+            this.passedTests = [...this.passedTests, ...res];
+
+            if (tests[index + 1]) {
+              passTestAction.next(index + 1);
+            }
+          })
+          .catch(() => {
+            if (tests[index + 1]) {
+              passTestAction.next(index + 1);
+            }
+          });
+      });
     }
   }
 
@@ -413,6 +451,180 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       formData,
       many: true,
       unique: true,
+      tests: [
+        {
+          id: 'b4966aa8-b0b1-429e-858d-3ab666a04749',
+          acceptance_tests_skills: [
+            { id: '', skill: { id: '30dc3620-8977-4e4a-9072-0022bf0f68ab'} }
+          ],
+          acceptance_test_questions: [
+            {
+              id: '8addcdc0-709a-4d63-a37c-344020dbac8e',
+              question: 'What is your name?',
+              details: 'Without last name',
+              order: 4,
+              type: 1,
+              acceptance_test_answers: [],
+              __str__: 'What is your name?'
+            },
+            {
+              id: '69226e88-4d96-44a8-80fb-81636ba15566',
+              question: 'Are you sure?',
+              details: 'Details',
+              order: 3,
+              type: 2,
+              acceptance_test_answers: [
+                {
+                  id: '4a830663-add7-401f-b4be-d3a37848ed18',
+                  answer: 'Yes',
+                  order: 1,
+                  score: 5,
+                  __str__: 'Are you sure?: Yes'
+                },
+                {
+                  id: 'e3448331-9777-48e0-b2c8-f0ffa80d35dd',
+                  answer: 'No',
+                  order: 2,
+                  score: 1,
+                  __str__: 'Are you sure?: No'
+                }
+              ],
+              __str__: 'Are you sure?'
+            },
+            {
+              id: 'b47a097e-85db-4f82-b9be-f2c9d87d2fe3',
+              question: 'English',
+              details: '',
+              order: 2,
+              type: 0,
+              acceptance_test_answers: [
+                {
+                  id: '484cf13b-aa54-4cd6-b0e0-ae32c1d53efc',
+                  answer: 'Excellent',
+                  order: 1,
+                  score: 5,
+                  __str__: 'English: Excellent'
+                },
+                {
+                  id: 'd92b5642-e9c3-4058-847e-7dd3a8eafd79',
+                  answer: 'Good',
+                  order: 2,
+                  score: 4,
+                  __str__: 'English: Good'
+                },
+                {
+                  id: 'c9e6b8d6-90d4-4332-9736-72f6effb079b',
+                  answer: 'Average',
+                  order: 3,
+                  score: 3,
+                  __str__: 'English: Average'
+                },
+                {
+                  id: 'c1516b83-bba2-4cee-b2ce-069fe03c3294',
+                  answer: 'Poor',
+                  order: 4,
+                  score: 2,
+                  __str__: 'English: Poor'
+                },
+                {
+                  id: 'f2dc74fa-f0bb-45a7-81c0-72ec14c47111',
+                  answer: 'No English',
+                  order: 5,
+                  score: 1,
+                  __str__: 'English: No English'
+                }
+              ],
+              __str__: 'English'
+            }
+          ],
+        },
+        {
+          id: 'b4966aa8-b0b1-429e-858d-3ab666a04749',
+          acceptance_tests_skills: [
+            { id: '', skill: { id: '30dc3620-8977-4e4a-9072-0022bf0f68ab'} }
+          ],
+          acceptance_test_questions: [
+            {
+              id: '8addcdc0-709a-4d63-a37c-344020dbac8e',
+              question: 'What is your name?',
+              details: 'Without last name',
+              order: 4,
+              type: 1,
+              acceptance_test_answers: [],
+              __str__: 'What is your name?'
+            },
+            {
+              id: '69226e88-4d96-44a8-80fb-81636ba15566',
+              question: 'Are you sure?',
+              details: 'Details',
+              order: 3,
+              type: 2,
+              acceptance_test_answers: [
+                {
+                  id: '4a830663-add7-401f-b4be-d3a37848ed18',
+                  answer: 'Yes',
+                  order: 1,
+                  score: 5,
+                  __str__: 'Are you sure?: Yes'
+                },
+                {
+                  id: 'e3448331-9777-48e0-b2c8-f0ffa80d35dd',
+                  answer: 'No',
+                  order: 2,
+                  score: 1,
+                  __str__: 'Are you sure?: No'
+                }
+              ],
+              __str__: 'Are you sure?'
+            },
+            {
+              id: 'b47a097e-85db-4f82-b9be-f2c9d87d2fe3',
+              question: 'English',
+              details: '',
+              order: 2,
+              type: 0,
+              acceptance_test_answers: [
+                {
+                  id: '484cf13b-aa54-4cd6-b0e0-ae32c1d53efc',
+                  answer: 'Excellent',
+                  order: 1,
+                  score: 5,
+                  __str__: 'English: Excellent'
+                },
+                {
+                  id: 'd92b5642-e9c3-4058-847e-7dd3a8eafd79',
+                  answer: 'Good',
+                  order: 2,
+                  score: 4,
+                  __str__: 'English: Good'
+                },
+                {
+                  id: 'c9e6b8d6-90d4-4332-9736-72f6effb079b',
+                  answer: 'Average',
+                  order: 3,
+                  score: 3,
+                  __str__: 'English: Average'
+                },
+                {
+                  id: 'c1516b83-bba2-4cee-b2ce-069fe03c3294',
+                  answer: 'Poor',
+                  order: 4,
+                  score: 2,
+                  __str__: 'English: Poor'
+                },
+                {
+                  id: 'f2dc74fa-f0bb-45a7-81c0-72ec14c47111',
+                  answer: 'No English',
+                  order: 5,
+                  score: 1,
+                  __str__: 'English: No English'
+                }
+              ],
+              __str__: 'English'
+            }
+          ],
+        }
+      ]
     };
   }
 

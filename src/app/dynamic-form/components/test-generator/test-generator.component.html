@@ -1,5 +1,4 @@
 <ng-container *ngIf="testData">
-
   <div class="test__header">
     <p class="test__description"
       *ngIf="testData.description">
@@ -10,56 +9,39 @@
   </div>
 
   <div class="test__body">
-
     <span class="test__position">Question {{currentQuestion + 1}} of {{testData.questions.length}}</span>
+    <ng-container *ngIf="!reload">
+      <p class="test__question">{{testData.questions[currentQuestion].name}}</p>
+      <p class="test__question-details" *ngIf="testData.questions[currentQuestion].details">{{testData.questions[currentQuestion].details}}</p>
 
-    <p class="test__question">{{testData.questions[currentQuestion].name}}</p>
+      <ng-container
+        appFormElement
+        [config]="testData.questions[currentQuestion].answerMetadata"
+        [group]="testData.questions[currentQuestion].group">
+      </ng-container>
 
-    <p class="test__question-details">{{testData.questions[currentQuestion].details}}</p>
-
-    <ng-container [ngSwitch]="testData.questions[currentQuestion].type">
-      <div class="answers"
-        *ngSwitchCase="0">
-          <ng-container *ngTemplateOutlet="radio; context: {answers: testData.questions[currentQuestion].answers, index: currentQuestion}"></ng-container>
-      </div>
-      <div class="answers"
-        *ngSwitchCase="1">
-          <ng-container *ngTemplateOutlet="text; context: {answers: testData.questions[currentQuestion].answers, index: currentQuestion}"></ng-container>
-      </div>
-      <div class="answers"
-        *ngSwitchCase="2">
-          <ng-container *ngTemplateOutlet="radio; context: {answers: testData.questions[currentQuestion].answers, index: currentQuestion}"></ng-container>
-      </div>
+      <ng-container
+        *ngIf="testData.questions[currentQuestion].type === QuestionType.Text"
+        appFormElement
+        [config]="testData.questions[currentQuestion].scoreMetadata"
+        [group]="testData.questions[currentQuestion].group">
+      </ng-container>
     </ng-container>
 
+    <div *ngIf="reload" class="spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+    </div>
   </div>
 
-  <div class="test__footer">
+  <div class="test__footer d-flex justify-content-between">
     <button type="button" class="test__button btn btn-default" (click)="back()" [disabled]="currentQuestion === 0">Back</button>
     <button *ngIf="currentQuestion + 1 !== testData.questions.length" type="button" class="test__button btn btn-primary" (click)="next()">Next</button>
-    <button *ngIf="currentQuestion + 1 === testData.questions.length" type="submit" class="test__button btn btn-primary" (click)="sendForm()">Submit</button>
+    <button *ngIf="currentQuestion + 1 === testData.questions.length" type="submit" class="test__button btn btn-success" (click)="sendForm()">Submit</button>
   </div>
-
 </ng-container>
 
-<ng-template #radio let-answers="answers" let-index="index">
-  <div class="form-check" *ngFor="let answer of answers">
-    <label class="form-check-label">
-      <input type="radio" [(ngModel)]="testData.questions[index].answer" [name]="answer.name" [value]="answer.id"> {{answer.answer}}
-    </label>
-  </div>
-</ng-template>
-
-<ng-template #text let-answer="answer" let-index="index">
-  <div class="form-element">
-    <div class="form-element-content edit mw-100 w-100" style="height: auto; max-height: none">
-      <textarea class="w-100" name="" id="" cols="30" rows="5" [(ngModel)]="testData.questions[index].answer_text"></textarea>
-    </div>
-  </div>
-  <div class="form-element">
-    <label class="col-form-label form-element-label" for="">Score:</label>
-    <div class="form-element-content edit">
-      <input type="number" min="1" max="5" class="form-control" [(ngModel)]="testData.questions[index].score">
-    </div>
-  </div>
-</ng-template>
+<div *ngIf="!testData" class="spinner">
+  <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
+</div>

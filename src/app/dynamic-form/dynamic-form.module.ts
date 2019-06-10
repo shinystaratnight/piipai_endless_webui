@@ -22,6 +22,8 @@ import * as fromComponents from './components';
 
 import * as fromContainers from './containers';
 
+import { modals } from './modals';
+
 import { directives } from './directives';
 
 @NgModule({
@@ -58,14 +60,16 @@ import { directives } from './directives';
 
     ...fromComponents.components,
     ...directives,
-    ...fromContainers.components
+    ...fromContainers.components,
+    ...modals
   ],
   providers: [
     ...services,
   ],
   entryComponents: [
     ...fromComponents.entryComponents,
-    ...fromContainers.entryComponents
+    ...fromContainers.entryComponents,
+    ...modals
   ]
 })
 export class DynamicFormModule { }

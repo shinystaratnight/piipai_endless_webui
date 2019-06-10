@@ -1185,12 +1185,37 @@ export class FormRelatedComponent extends BasicElementComponent
         this.results.splice(this.results.indexOf(item), 1);
       }
     } else {
+      item.tests = this.addTests(item);
       this.results.push(item);
     }
 
     this.updateData();
 
     return true;
+  }
+
+  public addTests(item: any) {
+    if (this.config.tests) {
+      return this.config.tests.filter((test) => {
+        const skills = test.acceptance_tests_skills;
+
+        if (!skills.length) {
+          return false;
+        }
+
+        return skills.some((skillRel) => skillRel.skill.id === item.id);
+      });
+    }
+  }
+
+  public passTests(tests: any[], event) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.event.emit({
+      type: 'test',
+      tests
+    });
   }
 
   public deleteItem(index: number, item: any, api: boolean) {

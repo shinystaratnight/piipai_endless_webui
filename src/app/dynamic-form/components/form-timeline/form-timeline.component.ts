@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 
 import { FormatString } from '../../../helpers/format';
 import { GenericFormService } from '../../services';
+import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
 
 @Component({
   selector: 'app-form-timeline',
@@ -20,8 +21,6 @@ import { GenericFormService } from '../../services';
 export class FormTimelineComponent implements OnInit, OnDestroy {
   @ViewChild('stateModal')
   public stateModal;
-  @ViewChild('test')
-  public testModal;
 
   public config: any;
   public modalData: any;
@@ -275,7 +274,12 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.modalRef = this.modalService.open(this.testModal);
+    this.modalRef = this.modalService.open(PassTestModalComponent);
+    this.modalRef.componentInstance.config = {
+      send: true,
+      testId: id,
+      workflowObject: this.modalData.workflowObject
+    } as PassTestModalConfig;
   }
 
   public createWorkflowObject(stateId: string) {
@@ -294,7 +298,12 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         this.modalData.state.wf_object_id = res.id;
         this.modalData.workflowObject = res.id;
 
-        this.modalRef = this.modalService.open(this.testModal);
+        this.modalRef = this.modalService.open(PassTestModalComponent);
+        this.modalRef.componentInstance.config = {
+          send: true,
+          testId: res.id,
+          workflowObject: this.modalData.workflowObject
+        } as PassTestModalConfig;
       });
   }
 

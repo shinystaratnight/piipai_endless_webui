@@ -80,6 +80,7 @@ export interface Field {
   };
   strField?: string;
   updateFromForm?: boolean;
+  tests?: any[];
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
@@ -117,41 +118,41 @@ export interface Field {
   };
 }
 
-interface BasicFormElement {
-  key: string;
-  type: string;
+// interface BasicFormElement {
+//   key: string;
+//   type: string;
 
-  mode?: BehaviorSubject<string>;
-  hidden?: BehaviorSubject<boolean>;
+//   mode?: BehaviorSubject<string>;
+//   hidden?: BehaviorSubject<boolean>;
 
-  default?: any;
-  read_only?: boolean;
-  value?: any;
-  hide?: boolean;
+//   default?: any;
+//   read_only?: boolean;
+//   value?: any;
+//   hide?: boolean;
 
-  templateOptions: {
-    label: string;
-    placeholder?: string;
-    description?: string;
-  };
-}
+//   templateOptions: {
+//     label: string;
+//     placeholder?: string;
+//     description?: string;
+//   };
+// }
 
-interface FormCheckboxField extends BasicFormElement {
-  templateOptions: {
-    label: string;
-    color: string;
-    values: { [key: string]: string };
-  };
-}
+// interface FormCheckboxField extends BasicFormElement {
+//   templateOptions: {
+//     label: string;
+//     color: string;
+//     values: { [key: string]: string };
+//   };
+// }
 
-interface FormInputField extends BasicFormElement {
-  templateOptions: {
-    label: string;
-    max: number;
-    min: number;
-    type: string;
-    required?: string;
-  };
-}
+// interface FormInputField extends BasicFormElement {
+//   templateOptions: {
+//     label: string;
+//     max: number;
+//     min: number;
+//     type: string;
+//     required?: string;
+//   };
+// }
 
 // export type Field = FormInputField | FormCheckboxField;
