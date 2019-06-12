@@ -4,6 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { BillingService } from '../../services/billing-service';
 import { autoChargeMetadata } from './billing-sms.metadata.ts';
+import { ToastService, MessageType } from '../../../shared/services';
 
 @Component({
   selector: 'app-billing-sms',
@@ -24,7 +25,8 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
 
   constructor(
     private billingService: BillingService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private toastr: ToastService
   ) { }
 
   ngOnInit() {
@@ -37,9 +39,15 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getSmsBalance() {
+  public getSmsBalance(message?: boolean) {
     this.billingService.getCreditDetails().subscribe(
       (res: any) => {
+        if (message) {
+          if (this.smsBalance !== res.sms_balance) {
+            this.toastr.sendMessage('Balance has been updated', MessageType.success);
+          }
+        }
+
         this.smsBalance = res.sms_balance;
       }
     );
@@ -54,9 +62,10 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.amount = 20;
         this.modalRef.close();
+        this.toastr.sendMessage('Please wait a few seconds', MessageType.info);
         setTimeout(() => {
-          this.getSmsBalance();
-        }, 3000);
+          this.getSmsBalance(true);
+        }, 10000);
       }
     );
   }

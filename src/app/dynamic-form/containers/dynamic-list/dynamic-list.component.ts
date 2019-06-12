@@ -2470,6 +2470,8 @@ export class DynamicListComponent
             longitude: paths[0].lng,
           };
 
+          e.el.locationDataEmpty = false;
+          this.listStorage.updateTrackingInfo(e.id, true);
           this.trackingMarkerCoordinates(start);
 
           this.open(this.trakingModal);
