@@ -1408,7 +1408,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           el.autocompleteData.next(res);
         },
         (err: any) => {
-          this.parseError(Object.assign(this.errors, { [el.key]: err.errors }));
+          this.parseError(Object.assign({}, this.errors, { [el.key]: err.errors }));
         }
       );
   }
