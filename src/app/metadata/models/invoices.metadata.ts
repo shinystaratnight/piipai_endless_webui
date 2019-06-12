@@ -74,6 +74,7 @@ const list = {
         name: 'date',
         sort_field: 'date',
         label: 'Creation date',
+        width: 80,
         sort: true
       },
       {
@@ -110,6 +111,7 @@ const list = {
         name: 'total_with_tax',
         sort_field: 'total_with_tax',
         label: 'Total with GST',
+        width: 80,
         sort: true
       },
       {
@@ -187,6 +189,7 @@ const list = {
       {
         delim: ' ',
         label: 'Status',
+        width: 150,
         content: [
           {
             endpoint: `${Endpoints.Invoice}{id}/approve/`,
@@ -225,7 +228,18 @@ const list = {
             type: 'text',
             color: 'success',
             display: 'Approved/Synced',
-          }
+          },
+          {
+            endpoint: `${Endpoints.Invoice}{id}/sync/`,
+            field: 'id',
+            action: 'emptyPost',
+            type: 'button',
+            text: 'Sync',
+            showIf: [
+              'approved',
+              { 'synced_at': null }
+            ],
+          },
         ],
         name: 'id',
         title: null,
@@ -451,7 +465,7 @@ const form = [
           {
             type: 'button',
             color: 'primary',
-            showIf: [ 'approved' ],
+            showIf: [ 'approved', { 'synced_at': null } ],
             templateOptions: {
               action: 'syncInvoice',
               text: 'Sync',
