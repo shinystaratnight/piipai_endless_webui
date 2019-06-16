@@ -427,7 +427,9 @@
         [data]="modalInfo.data"
         [edit]="modalInfo.edit"
         (event)="evaluateEvent($event, c)">
-          <button class="btn btn-primary mr-auto text-white">Submit</button>
+          <div class="d-flex">
+            <button class="btn big-btn btn-shadow btn-primary button-save ml-lg-auto">Save</button>
+          </div>
       </app-generic-form>
     </div>
 
