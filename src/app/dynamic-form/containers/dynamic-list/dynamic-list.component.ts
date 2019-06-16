@@ -1676,7 +1676,7 @@ export class DynamicListComponent
         }
       };
 
-      const windowClass = 'visible-mode';
+      const windowClass = 'visible-mode timesheet-submit-form';
 
       this.open(this.evaluateModal, { size: 'lg', windowClass });
     }

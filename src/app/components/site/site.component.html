@@ -17,6 +17,7 @@
       </ng-container>
 
       <div class="form-content"
+        [class.timesheet-submit-form]="pageData.pathData.postfix === 'submit'"
         *ngIf="!reload && !(pageData.endpoint === '/acceptance-tests/acceptancetests/' && pageData.pathData.id) && pageData.endpoint !== '/core/forms/' || pageData.pathData.postfix === 'submit'">
           <app-generic-form
             *ngIf="!reload && pageData.endpoint !== '/core/forms/' && !pageData.pathData.postfix || pageData.pathData.postfix === 'submit' "

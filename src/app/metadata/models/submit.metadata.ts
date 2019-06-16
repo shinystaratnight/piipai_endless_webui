@@ -34,42 +34,25 @@ const form = [
   },
   {
     type: 'row',
+    hideBorder: true,
     children: [
       {
-        width: 0.25,
-        type: 'static',
-        key: 'total_time',
-        send: false,
-        read_only: true,
-        templateOptions: {
-          label: 'Total time',
-          color: 'text-success',
-          bold: true,
-        }
-      },
-      {
-        width: 0.25,
-        type: 'checkbox',
-        key: 'noBreak',
-        default: false,
-        hide: true,
-        send: false,
-        setNull: ['break_started_at', 'break_ended_at'],
-        templateOptions: {
-          label: 'No Break',
-        },
-      },
-      {
-        width: 0.25,
-        type: 'button',
-        color: 'primary',
-        templateOptions: {
-          title: 'Break',
-          action: 'noBreak',
-          text: 'No Break',
-          type: 'button',
-        }
-      },
+        type: 'group',
+        label: 'Times',
+        children: [
+          {
+            width: 0.25,
+            type: 'checkbox',
+            key: 'noBreak',
+            default: false,
+            send: false,
+            setNull: ['break_started_at', 'break_ended_at'],
+            templateOptions: {
+              label: 'No Break',
+            },
+          },
+        ]
+      }
     ]
   },
   {
@@ -80,9 +63,45 @@ const form = [
         templateOptions: {
           type: 'datetime',
           required: false,
-          label: 'Shift Started at'
+          label: 'Shift Start'
         },
         read_only: false
+      },
+      {
+        // type: 'group',
+        // hideLabel: true,
+        // children: [
+        //   {
+            key: 'break_started_at',
+            type: 'datepicker',
+            templateOptions: {
+              type: 'datetime',
+              required: false,
+              label: 'Break Start'
+            },
+            saveField: true,
+            read_only: false,
+            showIf: [{ noBreak: false }]
+        //   },
+        // ]
+      },
+      {
+        // type: 'group',
+        // hideLabel: true,
+        // children: [
+          // {
+            key: 'break_ended_at',
+            type: 'datepicker',
+            templateOptions: {
+              type: 'datetime',
+              required: false,
+              label: 'Break End'
+            },
+            saveField: true,
+            read_only: false,
+            showIf: [{ noBreak: false }],
+          // },
+      //   ]
       },
       {
         key: 'shift_ended_at',
@@ -90,48 +109,29 @@ const form = [
         templateOptions: {
           type: 'datetime',
           required: false,
-          label: 'Shift Ended at'
+          label: 'Shift End'
         },
         read_only: false
       },
-      {
-        type: 'group',
-        hideLabel: true,
-        children: [
-          {
-            key: 'break_started_at',
-            type: 'datepicker',
-            templateOptions: {
-              type: 'datetime',
-              required: false,
-              label: 'Break Started at'
-            },
-            saveField: true,
-            read_only: false,
-            showIf: [{ noBreak: false }]
-          },
-        ]
-      },
-      {
-        type: 'group',
-        hideLabel: true,
-        children: [
-          {
-            key: 'break_ended_at',
-            type: 'datepicker',
-            templateOptions: {
-              type: 'datetime',
-              required: false,
-              label: 'Break Ended at'
-            },
-            saveField: true,
-            read_only: false,
-            showIf: [{ noBreak: false }],
-          },
-        ]
-      },
     ],
+    hideBorder: true,
     type: 'row'
+  },
+  {
+    type: 'row',
+    children: [
+      {
+        type: 'static',
+        key: 'total_time',
+        send: false,
+        read_only: true,
+        templateOptions: {
+          label: 'Total time',
+          color: 'text-success',
+          inline: true
+        }
+      },
+    ]
   }
 ];
 

@@ -98,6 +98,16 @@
       height: 5px;
       width: 7px;
     }
+
+    @include media-breakpoint-down('sm') {
+      width: 20px;
+      height: 20px;
+
+      svg {
+        height: 9px;
+        width: 11px;
+      }
+    }
   }
 
   .form-group {
@@ -209,6 +219,13 @@
       margin-left: 5px;
     }
 
+    .mobile-device & {
+      height: auto;
+      min-height: auto;
+      max-height: none;
+      line-height: 17px
+    }
+
     .mobile .form-info-wrapper & {
       margin-left: 0;
     }
@@ -291,12 +308,12 @@
 
     .mobile-datepicker {
       position: relative;
-      height: 35px;
+      height: 32px;
 
       padding-left: 6px;
       padding-right: 0;
 
-      line-height: 35px;
+      line-height: 32px;
 
       border: 1px solid $gray;
       border-radius: 4px !important;
@@ -370,12 +387,15 @@
     }
 
     .mobile-device & {
-      margin-bottom: 3px;
+      padding-bottom: 2px;
 
-      font-size: 14px;
       line-height: 16px;
 
-      opacity: .6;
+      &:not(.inline) {
+        text-transform: uppercase;
+        font-weight: 600;
+        color: #bdbdbd;
+      }
     }
 
     .message-detail & {
