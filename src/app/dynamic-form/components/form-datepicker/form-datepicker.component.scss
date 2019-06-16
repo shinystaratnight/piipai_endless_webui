@@ -1,6 +1,6 @@
 @import '../../../../styles/variables.scss';
 
-:host > div {
+:host > .form-group {
   position: relative;
   display: block;
 
@@ -30,4 +30,11 @@
   .mobile-datepicker ~ &-wrapper {
     width: 120px;
   }
+}
+
+:host.mobile-device .form-element-label {
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: none;
+  color: #4f4f4f;
 }

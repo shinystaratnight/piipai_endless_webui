@@ -1,7 +1,9 @@
 <div *ngIf="!config.hide" class="form-group" [class.mb-0]="config.templateOptions.bottom" [formGroup]="group" style="position: relative">
-  <div class="form-element">
+  <div class="form-element" [class.inline]="config.templateOptions.inline">
     <label class="col-form-label form-element-label"
       *ngIf="label && config.templateOptions.label"
+      [class.inline]="config.templateOptions.inline"
+      [ngClass]="[config.templateOptions.inline ? config.templateOptions.color : '']"
       [class.bold]="config.templateOptions.bold"
       [class.required]="config.templateOptions.required"
       [attr.for]="key" >

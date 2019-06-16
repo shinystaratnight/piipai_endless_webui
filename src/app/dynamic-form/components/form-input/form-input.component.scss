@@ -1,4 +1,22 @@
 @import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins.scss';
+
+@include media-breakpoint-down('sm') {
+  .form-element.inline {
+    display: flex;
+    align-items: center;
+  }
+
+  .form-element-label.inline {
+    font-size: 16px !important;
+
+    & ~ .form-element-content {
+      width: 120px;
+      margin-left: auto;
+      font-size: 16px;
+    }
+  }
+}
 
 .showAll {
   max-height: none;

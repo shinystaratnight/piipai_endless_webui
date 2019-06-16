@@ -59,12 +59,12 @@
         </div>
       </div>
     </div>
-    <div *ngIf="errors">
-      <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
+    <div *ngIf="errors && errors[config.key]">
+      <div class="text-danger mt-1">{{errors[config.key]}}</div>
     </div>
 
-    <div *ngIf="message">
-      <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
+    <div *ngIf="message && message[config.key]">
+      <div class="text-success mt-1">{{message[config.key]}}</div>
     </div>
 </div>
 

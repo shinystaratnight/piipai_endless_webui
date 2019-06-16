@@ -114,6 +114,7 @@ export interface Field {
       field: string;
       values: { [key: string]: any };
     };
+    inline?: boolean;
   };
 }
 

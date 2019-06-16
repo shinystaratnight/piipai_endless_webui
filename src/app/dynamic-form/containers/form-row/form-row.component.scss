@@ -2,13 +2,19 @@
 @import '../../../../styles/mixins.scss';
 
 .items {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
 
   padding-bottom: 12px;
   margin-bottom: 20px;
 
-  border-bottom: 2px solid rgba($gray, .05);
+  border-bottom: 1px solid rgba($gray, 0.1);
+
+  &.hide-border,
+  &.last {
+    border-bottom: none;
+  }
 
   &.last {
     border-bottom: none;
@@ -29,4 +35,24 @@
 .item {
   display: flex;
   align-items: center;
+}
+
+@include media-breakpoint-down('md') {
+  app-form-checkbox .form-group {
+    position: absolute;
+    width: 120px;
+    top: 5px;
+    right: 0px;
+  }
+
+  .mobile {
+    margin-bottom: 0;
+  }
+
+  .form-element-content {
+    height: auto;
+    min-height: auto;
+    max-height: none;
+    line-height: 17px
+  }
 }

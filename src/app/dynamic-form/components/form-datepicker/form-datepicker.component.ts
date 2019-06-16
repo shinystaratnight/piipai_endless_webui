@@ -6,7 +6,8 @@ import {
   OnDestroy,
   ChangeDetectorRef,
   HostListener,
-  ElementRef
+  ElementRef,
+  HostBinding
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -29,6 +30,8 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   @ViewChild('t')
   public t;
+
+  @HostBinding('class.mobile-device') mobile = isMobile();
 
   public config;
   public group: FormGroup;
