@@ -348,6 +348,7 @@ form.ng-invalid button[type='submit'] {
 }
 
 .modal-backdrop {
+  bottom: -100px;
   z-index: 3 !important;
 }
 
@@ -956,4 +957,9 @@ iframe.send-sms {
       min-width: 130px;
     }
   }
+}
+
+.modal-open {
+  position: fixed;
+  width: 100%;
 }

@@ -1739,7 +1739,17 @@ export class DynamicListComponent
 
       window.addEventListener('orientationchange', () => {
         if (this.modalInfo.changeMetadata) {
-          this.modalInfo.metadataQuery = isMobile() && (window.screen as any).orientation.type.includes('portrait') ? 'type=mobile' : '';
+          let orientation;
+          if ((window as any).orientation) {
+            orientation = Math.abs((window as any).orientation);
+          } else {
+            const stringOrientation = (screen as any).msOrientation
+              || (screen as any).mozOrientation
+              || ((screen as any).orientation || {} as any).type;
+            orientation = stringOrientation.includes('landscape') ? 90 : 0;
+          }
+
+          this.modalInfo.metadataQuery = isMobile() && orientation === 90 ? '' : 'type=mobile';
 
           setTimeout(() => {
             this.modalInfo.changeMetadata.next(true);
