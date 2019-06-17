@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 
-import { isMobile } from '../../helpers';
+import { isMobile, getOrientation } from '../../helpers';
 
 @Component({
   selector: 'app-signature',
@@ -47,8 +47,8 @@ export class SignatureComponent implements AfterViewInit {
 
   generateParams() {
     return {
-      'canvasWidth': isMobile() && (window.screen as any).orientation.type.includes('portrait') ? 309 : isMobile() ? 381 : 426,
-      'canvasHeight': isMobile() && (window.screen as any).orientation.type.includes('portrait') ? 149 : isMobile() ? 183 : 208,
+      'canvasWidth': isMobile() && getOrientation() !== 90 ? 309 : isMobile() ? 381 : 426,
+      'canvasHeight': isMobile() && getOrientation() !== 90 ? 149 : isMobile() ? 183 : 208,
     };
   }
 

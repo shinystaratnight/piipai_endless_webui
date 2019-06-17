@@ -86,8 +86,9 @@ const form = [
     templateOptions: {
       required: true,
       label: 'Account Number',
-      max: 10,
-      type: 'text'
+      max: 9,
+      type: 'text',
+      description: 'Bank account number must not exceed 9 digits.'
     },
     read_only: false
   }
@@ -148,8 +149,9 @@ const formadd = [
     templateOptions: {
       required: true,
       label: 'Account Number',
-      max: 10,
-      type: 'text'
+      max: 9,
+      type: 'text',
+      description: 'Bank account number must not exceed 9 digits.'
     },
     read_only: false
   }

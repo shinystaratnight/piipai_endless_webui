@@ -29,7 +29,8 @@ import {
   isMobile,
   isCandidate,
   getContactAvatar,
-  smallModalEndpoints
+  smallModalEndpoints,
+  getOrientation
 } from '../../helpers';
 
 import { Endpoints } from '../../../metadata/helpers';
@@ -1743,15 +1744,7 @@ export class DynamicListComponent
 
       window.addEventListener('orientationchange', () => {
         if (this.modalInfo.changeMetadata) {
-          let orientation;
-          if ((window as any).orientation) {
-            orientation = Math.abs((window as any).orientation);
-          } else {
-            const stringOrientation = (screen as any).msOrientation
-              || (screen as any).mozOrientation
-              || ((screen as any).orientation || {} as any).type;
-            orientation = stringOrientation.includes('landscape') ? 90 : 0;
-          }
+          const orientation = getOrientation();
 
           this.modalInfo.metadataQuery = isMobile() && orientation === 90 ? '' : 'type=mobile';
 

@@ -73,3 +73,16 @@ export function createAddAction(data) {
 export function getEvaluationScore(score) {
   return Math.floor(parseFloat(score));
 }
+
+export function getOrientation(): number {
+  let orientation;
+  if ((window as any).orientation) {
+    orientation = Math.abs((window as any).orientation);
+  } else {
+    const stringOrientation = (screen as any).msOrientation
+      || (screen as any).mozOrientation
+      || ((screen as any).orientation || {} as any).type;
+    orientation = stringOrientation.includes('landscape') ? 90 : 0;
+  }
+  return orientation || 0;
+}
