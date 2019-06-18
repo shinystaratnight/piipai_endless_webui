@@ -166,7 +166,7 @@
 
     .evaluation-content {
       margin-top: 0;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
   }
 
@@ -328,6 +328,9 @@
         height: 40px;
 
         padding-left: 16px;
+        @media (max-width: 767.98px) and (orientation: landscape) {
+          height: 36px;
+        }
       }
 
       app-form-checkbox .form-element-content {

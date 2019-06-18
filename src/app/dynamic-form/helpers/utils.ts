@@ -76,7 +76,7 @@ export function getEvaluationScore(score) {
 
 export function getOrientation(): number {
   let orientation;
-  if ((window as any).orientation) {
+  if (Number.isInteger((window as any).orientation)) {
     orientation = Math.abs((window as any).orientation);
   } else {
     const stringOrientation = (screen as any).msOrientation
