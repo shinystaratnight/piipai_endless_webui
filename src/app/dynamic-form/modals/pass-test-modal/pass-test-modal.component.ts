@@ -23,7 +23,6 @@ export class PassTestModalComponent {
 
   close(data: any) {
     this.modal.close(data);
-    console.log('close');
   }
 
   dismiss() {

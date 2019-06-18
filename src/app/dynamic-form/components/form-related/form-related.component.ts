@@ -1208,13 +1208,13 @@ export class FormRelatedComponent extends BasicElementComponent
     }
   }
 
-  public passTests(tests: any[], event) {
+  public passTests(item: any, event) {
     event.stopPropagation();
     event.preventDefault();
 
     this.event.emit({
       type: 'test',
-      tests
+      item
     });
   }
 
