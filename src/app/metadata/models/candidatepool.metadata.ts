@@ -19,13 +19,6 @@ const filters = {
     endpoint: Endpoints.Tag,
     multiple: true
   }),
-  activeState: createFilter(Type.Relared, {
-    key: 'active_states',
-    label: 'Status',
-    endpoint: `${Endpoints.WorkflowNode}?company={company_settings.company}&content_type=candidate.candidatecontact`,
-    display: ['name_after_activation', 'name_before_activation'],
-    parameter: 'number'
-  }),
   created_at: createFilter(Type.Date, {
     key: 'created_at',
     label: 'Created at',
@@ -304,7 +297,6 @@ const list = {
     filters: [
       filters.skill,
       filters.tag,
-      filters.activeState,
       {
         key: 'contact.gender',
         label: 'Gender',
