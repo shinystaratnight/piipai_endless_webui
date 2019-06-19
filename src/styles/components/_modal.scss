@@ -89,6 +89,10 @@
   .modal-header {
     padding: $content-padding;
 
+    img {
+      border-radius: 50%;
+    }
+
     @media (max-width: 767.98px) and (orientation: landscape) {
       &-wrapper {
         display: none;
@@ -165,6 +169,12 @@
 
       @media (max-width: 767.98px) and (orientation: landscape) {
         margin-left: -555px;
+      }
+
+      @media (max-width: 767.98px) and (orientation: portrait) {
+        .signature-title {
+          margin-top: 50px;
+        }
       }
     }
 
@@ -380,6 +390,18 @@
 
     @media (max-width: 767.98px) and (orientation: landscape) {
       min-width: 540px;
+
+      .date {
+        margin-bottom: 12px;
+      }
+
+      .time-line {
+        margin-bottom: 6px;
+
+        &:last-child {
+          margin-bottom: 12px;
+        }
+      }
     }
   }
 
@@ -393,6 +415,10 @@
       align-items: center;
 
       margin-top: 8px;
+
+      .group-title {
+        width: 155px;
+      }
     }
 
     .rating {
@@ -425,7 +451,7 @@
       padding: 8px 1rem 0;
 
       .signature-title {
-        margin-bottom: 12px;
+        margin-bottom: 6px;
       }
     }
   }
@@ -444,25 +470,26 @@
     }
 
     @include media-breakpoint-down('sm') {
-      width: 136px;
+      display: none;
+      // width: 136px;
 
-      margin-top: 7px;
-      margin-bottom: 34px;
+      // margin-top: 7px;
+      // margin-bottom: 34px;
     }
 
-    @media (max-width: 767.98px) and (orientation: landscape) {
-      &.btn {
-        width: 130px !important;
-      }
+    // @media (max-width: 767.98px) and (orientation: landscape) {
+    //   &.btn {
+    //     width: 130px !important;
+    //   }
 
-      &:not(.signature-step) {
-        display: none;
-      }
+    //   &:not(.signature-step) {
+    //     display: none;
+    //   }
 
-      &.only-mobile {
-        display: none;
-      }
-    }
+    //   &.only-mobile {
+    //     display: none;
+    //   }
+    // }
   }
 
   .modal-footer {
@@ -474,6 +501,10 @@
     border-top: none;
 
     @include media-breakpoint-up('md') {
+      &.signature-step-footer {
+        justify-content: space-between;
+      }
+
       .btn-success {
         width: 203px;
       }
@@ -485,6 +516,10 @@
       padding: 12px 16px;
 
       border-top: 1px solid rgba($gray, .1);
+
+      &.signature-step-footer {
+        justify-content: center;
+      }
 
       @media (orientation: portrait) {
         .clear-button {

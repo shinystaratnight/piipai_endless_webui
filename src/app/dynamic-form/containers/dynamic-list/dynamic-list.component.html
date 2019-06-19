@@ -572,17 +572,16 @@
               (backEvent)="modalInfo.signatureStep = false">
             </app-back-link>
 
-            <h3 class="group-title signature-title">Signature</h3>
+            <h3 class="group-title signature-title d-flex align-items-center w-100">
+              Signature
+              <button *ngIf="modalInfo.signature" type="button" class="btn btn-link text-danger ml-auto pr-0 only-mobile" (click)="signatureCanvas.clear()">Clear area</button>
+            </h3>
             <app-signature #signatureCanvas (signature)="updateSignature($event)"></app-signature>
-
-            <button *ngIf="modalInfo.signature" type="button" class="btn clear-button only-mobile" (click)="signatureCanvas.clear()">
-              Clear
-            </button>
           </div>
         </div>
       </div>
 
-      <div class="modal-footer" [class.justify-content-between]="modalInfo.signature" [class.justify-content-center]="!modalInfo.signature">
+      <div class="modal-footer" [class.signature-step-footer]="modalInfo.signature">
         <button *ngIf="modalInfo.signature" type="button" class="btn clear-button" [class.signature-step]="modalInfo.signatureStep" (click)="signatureCanvas.clear()">
           Clear
         </button>
