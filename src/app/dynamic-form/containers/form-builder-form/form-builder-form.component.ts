@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 
 import { FormBuilderService } from '../../services';
@@ -9,6 +9,7 @@ import { ToastService } from '../../../shared/services';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
 import { Field } from '../../models';
 import { getElementFromMetadata } from '../../helpers';
+import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
 
 @Component({
   selector: 'app-form-builder-form',
@@ -24,6 +25,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   @Output() public formConfig: EventEmitter<any> = new EventEmitter();
 
   public form: FormGroup;
+  public modalRef: NgbModalRef;
 
   public error = {};
   public hiddenFields: HiddenFields = {
@@ -37,6 +39,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public disableNextButton = false;
   public formInvalid = true;
   public formChangeSubscription: Subscription;
+
+  public passedTests: Map<string, any[]> = new Map();
 
   public industyField = {
     type: 'related',
@@ -108,6 +112,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     private service: FormBuilderService,
     private router: Router,
     private toastr: ToastService,
+    private modalService: NgbModal
   ) { }
 
   public ngOnInit() {
@@ -200,7 +205,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public getRenderData() {
     this.service.getRenderData(this.id)
       .subscribe((res: any) => {
-        this.updateConfigByGroups(res.ui_config);
+        this.updateConfigByGroups(res.ui_config, res.tests || []);
 
         this.config = res;
         this.formConfig.emit(res);
@@ -218,13 +223,17 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    if (this.currentStep !== 0) {
-      this.currentStep -= 1;
-    }
+    setTimeout(() => {
+      if (this.currentStep !== 0) {
+        this.currentStep -= 1;
+      }
+    }, 100);
   }
 
   next() {
-    this.currentStep += 1;
+    setTimeout(() => {
+      this.currentStep += 1;
+    }, 100);
   }
 
   public changeType(key: string, to: string) {
@@ -235,23 +244,85 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   public eventHandler(event: any) {
-    if (event.type === 'blur') {
+    const { type, item, list, el, value }  = event;
+
+    if (type === 'blur') {
       ['email', 'phone'].forEach((field) => {
-        if (event.el.key.indexOf(field) > -1 && event.value) {
-          this.validate(field, event.value, event.el.key);
+        if (el.key.indexOf(field) > -1 && value) {
+          this.validate(field, value, el.key);
         }
       });
     }
 
-    if (event.type === 'address') {
-      this.parseAddress(event.value, event.el);
+    if (type === 'address') {
+      this.parseAddress(value, el);
+    }
+
+    if (type === 'chenge' && el.key === 'skill') {
+      const ids = list.map((skill: any) => skill.id);
+      if (!list.length) {
+        this.passedTests.clear();
+      } else {
+        Array.from(this.passedTests.keys(), (key: string) => {
+          if (!ids.includes(key)) {
+            this.passedTests.delete(key);
+          }
+        });
+      }
+    }
+
+    if (type === 'test') {
+      const tests = item.tests;
+      const passTestAction = new BehaviorSubject(0);
+
+      passTestAction.subscribe((index) => {
+        const test = tests[index];
+        this.modalRef = this.modalService.open(PassTestModalComponent);
+        this.modalRef.componentInstance.config = {
+          test,
+          description: test.description,
+          send: false
+        } as PassTestModalConfig;
+
+        this.modalRef.result
+          .then((res: any[]) => {
+            if (this.passedTests.has(item.id)) {
+              this.passedTests.set(item.id, [...this.passedTests.get(item.id), ...res]);
+            } else {
+              this.passedTests.set(item.id, res);
+            }
+
+            item.passed = true;
+
+            if (tests[index + 1]) {
+              passTestAction.next(index + 1);
+            }
+          })
+          .catch(() => {
+            if (tests[index + 1]) {
+              passTestAction.next(index + 1);
+            }
+          });
+      });
     }
   }
 
   public submitForm() {
     this.saveProcess = true;
-    const data = this.form.value;
-    this.service.sendFormData(this.id, data)
+    let body;
+    if (this.passedTests.size) {
+      const tests = [];
+      Array.from(this.passedTests.values()).forEach((el) => {
+        if (el) {
+          tests.push(...el);
+        }
+      });
+      body = {...this.form.value, tests };
+    } else {
+      body = this.form.value;
+    }
+
+    this.service.sendFormData(this.id, body)
       .subscribe(
         (res: any) => {
           this.saveProcess = false;
@@ -404,7 +475,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return this.getFields(result, key, target, index);
   }
 
-  public updateSkillField(field: Field, formData: BehaviorSubject<any>): Field {
+  public updateSkillField(field: Field, formData: BehaviorSubject<any>, tests: any[]): Field {
     return {
       ...field,
       query: {
@@ -413,6 +484,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       formData,
       many: true,
       unique: true,
+      tests
     };
   }
 
@@ -447,11 +519,11 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  private updateConfigByGroups(fields: Field[]): void {
+  private updateConfigByGroups(fields: Field[], tests: any[]): void {
     const skills = this.getFields([], 'skill', fields, 0);
     if (skills.length) {
       const formData = new BehaviorSubject({});
-      skills[0] = this.updateSkillField(skills[0], formData);
+      skills[0] = this.updateSkillField(skills[0], formData, tests);
       skills.unshift({ ...this.industyField, formData });
       fields.push(...skills);
     }

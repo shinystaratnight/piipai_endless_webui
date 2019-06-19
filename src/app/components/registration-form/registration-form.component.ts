@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-registration-form',
@@ -11,7 +11,7 @@ export class RegistrationFormComponent implements OnInit {
   public config: any;
   public password: boolean;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private route: ActivatedRoute) {}
 
   public ngOnInit() {
     this.settings = this.route.snapshot.data['settings'];

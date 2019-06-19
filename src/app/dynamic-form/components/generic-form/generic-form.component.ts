@@ -17,7 +17,7 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
 
-import { GenericFormService, FormService, FormMode } from '../../services/';
+import { GenericFormService, FormService, FormMode, ActionService } from '../../services/';
 import { UserService, SiteSettingsService, AuthService } from '../../../services';
 
 import { ToastService, TimeService, MessageType } from '../../../shared/services';
@@ -56,7 +56,8 @@ interface UpdateDataInfo {
 @Component({
   selector: 'app-generic-form',
   templateUrl: './generic-form.component.html',
-  styleUrls: ['./generic-form.component.scss']
+  styleUrls: ['./generic-form.component.scss'],
+  providers: [ActionService]
 })
 export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   @Input()

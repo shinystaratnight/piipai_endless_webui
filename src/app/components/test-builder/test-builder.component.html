@@ -56,12 +56,3 @@
     (submitForm)="saveAnswer($event, index, id, getId(config))">
   </app-dynamic-form>
 </ng-template>
-
-<ng-template #preview let-c="close">
-  <div class="modal-content-wrapper position-relative">
-    <button type="button" class="close ml-auto" aria-label="Close" (click)="c()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    <app-test-generator [id]="testData.id"></app-test-generator>
-  </div>
-</ng-template>

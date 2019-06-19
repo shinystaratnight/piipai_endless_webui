@@ -127,14 +127,25 @@
             </div>
           </div>
         </div>
-        <div *ngIf="!config.templateOptions.info" class="d-flex flex-wrap align-items-center mt-2">
-          <span class="badge badge-outline mt-2 mr-1" style="white-space: normal;"
-            *ngFor="let item of results; let i = index">
+        <ng-container *ngIf="!config.tests">
+          <div *ngIf="!config.templateOptions.info" class="d-flex flex-wrap align-items-center mt-2">
+            <span class="badge badge-outline mt-2 mr-1" style="white-space: normal;"
+              *ngFor="let item of results; let i = index">
+              {{item.__str__}}
+              <i fa class="ml-2"
+                (click)="deleteItem(i, item)"
+                [name]="'times'"></i>
+            </span>
+          </div>
+        </ng-container>
+
+        <div class="object-list" *ngIf="config.tests">
+          <div class="object-list__item" *ngFor="let item of results; let i = index">
             {{item.__str__}}
-            <i fa class="ml-2"
-              (click)="deleteItem(i, item)"
-              [name]="'times'"></i>
-          </span>
+            <app-close-button class="ml-2 mr-3" [sm]="true" (click)="deleteItem(i, item)"></app-close-button>
+            <button type="button" *ngIf="item.tests.length && !item.passed" class="object-list__btn btn btn-outline-primary" (click)="passTests(item, $event)">Pass test</button>
+            <button type="button" *ngIf="item.passed" disabled class="object-list__btn btn btn-outline-primary bg-primary text-white">Passed</button>
+          </div>
         </div>
         <ng-container *ngIf="config.templateOptions.info">
           <div *ngFor="let item of results; let i = index" class="candidate-info">

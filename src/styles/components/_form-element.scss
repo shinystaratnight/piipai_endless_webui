@@ -45,7 +45,7 @@
 
     background-color: transparent;
 
-    transition: border-bottom .7s linear;
+    transition: border .7s linear;
 
     .registration-form *:not(.ui-datebox-container) & {
       height: auto;
@@ -300,10 +300,10 @@
     button {
       padding: 0 5px;
 
-      border: none;
+      // border: none;
       outline: none;
 
-      background: transparent;
+      // background: transparent;
     }
 
     .mobile-datepicker {
@@ -383,7 +383,7 @@
       line-height: 12px;
       text-transform: uppercase;
 
-      color: $gray;
+      color: rgba($gray, .8);
     }
 
     .mobile-device & {

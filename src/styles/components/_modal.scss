@@ -1,3 +1,12 @@
+.modal-content {
+  app-close-button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+}
+
+
 .approve-modal {
 
   @media (max-width: 767.98px) and (orientation: landscape) {

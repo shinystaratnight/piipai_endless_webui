@@ -163,17 +163,3 @@
     </ul>
   </div>
 </ng-template>
-
-<ng-template #test let-c="close">
-  <div class="modal-content-wrapper">
-    <button type="button" class="close close-button ml-auto" aria-label="Close" (click)="c()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    <app-test-generator
-      [workflowObject]="modalData.workflowObject"
-      [send]="true"
-      [id]="testId"
-      (sended)="testComplete(c)">
-    </app-test-generator>
-  </div>
-</ng-template>
