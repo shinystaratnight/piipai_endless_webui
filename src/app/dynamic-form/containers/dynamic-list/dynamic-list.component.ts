@@ -1700,7 +1700,7 @@ export class DynamicListComponent
         edit: true,
         evaluated: data.evaluated,
         total: this.getTotalTime(data),
-        metadataQuery: isMobile() && (screen as any).orientation.type.includes('portrait') ? 'type=mobile' : '',
+        metadataQuery: isMobile() && (getOrientation() !== 90) ? 'type=mobile' : '',
         signatureStep: false,
         form: {},
         label: {
@@ -1759,7 +1759,7 @@ export class DynamicListComponent
   }
 
   public landscape() {
-    return isMobile() && (window.screen as any).orientation.type.includes('landscape');
+    return isMobile() && (getOrientation() === 90);
   }
 
   public approveTimesheet(e) {
