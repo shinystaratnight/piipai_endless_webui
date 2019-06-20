@@ -2053,25 +2053,26 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       }
 
       const activeNumber = 2;
-      const currentState = timeline.find((item) => item.state === activeNumber);
+      if (Array.isArray(timeline)) {
+        const currentState = timeline.find((item) => item.state === activeNumber);
 
-      if (currentState) {
-        switch (currentState.number) {
-          case 10:
-            this.updateToNewMetadata();
-            break;
-          case 40:
-            this.updateToOnHoldMetadata();
-            break;
-          case 60:
-            this.updateToCompletedMetadata();
-            break;
-          default:
-            break;
+        if (currentState) {
+          switch (currentState.number) {
+            case 10:
+              this.updateToNewMetadata();
+              break;
+            case 40:
+              this.updateToOnHoldMetadata();
+              break;
+            case 60:
+              this.updateToCompletedMetadata();
+              break;
+            default:
+              break;
+          }
+
         }
-
       }
-
     }
 
     if (this.endpoint === Endpoints.CandidateContact) {
@@ -2085,20 +2086,22 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       }
 
       const activeNumber = 2;
-      let currentState = timeline.find((item) => item.state === activeNumber);
+      if (Array.isArray(timeline)) {
+        let currentState = timeline.find((item) => item.state === activeNumber);
 
-      currentState = timeline.find((item) => item.state === activeNumber && item.number === 70) || currentState;
+        currentState = timeline.find((item) => item.state === activeNumber && item.number === 70) || currentState;
 
-      if (currentState) {
-        switch (currentState.number) {
-          case 70:
-            this.showPriceForCandidate();
-            break;
-          default:
-            this.showPriceMessage();
-            break;
+        if (currentState) {
+          switch (currentState.number) {
+            case 70:
+              this.showPriceForCandidate();
+              break;
+            default:
+              this.showPriceMessage();
+              break;
+          }
+
         }
-
       }
     }
   }

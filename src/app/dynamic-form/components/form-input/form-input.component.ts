@@ -14,6 +14,7 @@ import {
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
+import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import * as moment from 'moment-timezone';
 
 import { Field } from '../../models';
@@ -100,8 +101,20 @@ export class FormInputComponent extends BasicElementComponent
       } else {
         this.addControl(this.config, this.fb, this.requiredField);
       }
-
     }
+    if (this.group.get(this.key)) {
+      this.subscriptions.push(
+        this.group.get(this.key).valueChanges
+          .pipe(
+            distinctUntilChanged(),
+            debounceTime(400)
+          )
+          .subscribe(() => {
+            this.eventHandler({ type: 'blur' });
+          })
+      );
+    }
+
     this.setInitValue();
     this.checkModeProperty();
     this.checkHiddenProperty();
@@ -399,13 +412,11 @@ export class FormInputComponent extends BasicElementComponent
   }
 
   public eventHandler(e) {
-    setTimeout(() => {
-      this.event.emit({
-        type: e.type,
-        el: this.config,
-        value: this.group.get(this.key).value
-      });
-    }, 250);
+    this.event.emit({
+      type: e.type,
+      el: this.config,
+      value: this.group.get(this.key).value
+    });
   }
 
   public filter(key) {

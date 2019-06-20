@@ -29,20 +29,23 @@ export function isTouchDevice(): boolean {
 
 export function isCandidate(): boolean {
   const role = storage.retrieve('role');
-
-  return role.__str__.includes('candidate');
+  if (role) {
+    return role.__str__.includes('candidate');
+  }
 }
 
 export function isClient(): boolean {
   const role = storage.retrieve('role');
-
-  return role.__str__.includes('client');
+  if (role) {
+    return role.__str__.includes('client');
+  }
 }
 
 export function isManager(): boolean {
   const role = storage.retrieve('role');
-
-  return role.__str__.includes('manager');
+  if (role) {
+    return role.__str__.includes('manager');
+  }
 }
 
 export function getTotalTime(time, data) {

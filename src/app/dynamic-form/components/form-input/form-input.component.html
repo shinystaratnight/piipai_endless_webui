@@ -23,7 +23,6 @@
         [class.not-empty]="group.get(key).value"
         autocomplete="off"
         #input
-        (blur)="eventHandler($event)"
         (focus)="generateList()"
         (keyup)=filter(key)
         [class.addon-input]="config.templateOptions.addon"
