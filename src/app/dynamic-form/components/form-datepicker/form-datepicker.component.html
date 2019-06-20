@@ -54,7 +54,7 @@
             triggers="mouseover:mouseout"
             [placement]="placement || 'bottom'"
             [ngbTooltip]="'Time submitted by candidate'">
-              {{config.value | dateFormat: 'HH:mm'}}
+              {{config.value | dateFormat: 'hh:mm A'}}
           </span>
         </div>
       </div>
