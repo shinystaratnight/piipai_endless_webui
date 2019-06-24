@@ -51,9 +51,12 @@ export class CalendarService {
       return body.map((row) => {
         return row.map((day) => {
           const newData = data.filter((el) => el.date === day.date);
+          const availabilityData = data.find((el) => el.target_date === day.date);
           return {
             ...day,
             data: newData,
+            available: availabilityData ? availabilityData.confirmed_available : undefined,
+            availableId: availabilityData ? availabilityData.id : undefined,
             tooltip: this.generateTooltipForMonth(newData),
             isOpen: false,
           };

@@ -170,7 +170,7 @@
   </div>
 </ng-container>
 
-<div class="dashboard" *ngIf="dashboard && isManager">
+<div class="dashboard" *ngIf="dashboard && !isClient">
   <app-dashboard
     *ngIf="isManager"
     class="dashboard-item"
@@ -179,7 +179,7 @@
     [modulesList]="modulesList"
     (changeWidgetList)="updateNavigation($event)"></app-dashboard>
 
-  <app-calendar class="dashboard-item"></app-calendar>
+  <app-calendar class="dashboard-item" [role]="currentRole" [class.alone]="!isManager"></app-calendar>
 </div>
 
 <app-mobile-timesheets [clientId]="getClientId()" *ngIf="identifyDevice()"></app-mobile-timesheets>
