@@ -178,7 +178,7 @@ export class ExtendComponent extends BasicElementComponent
       date,
       config: {
         0: this.generateConfig(
-          this.formData.id.id,
+          this.getJobId(),
           date,
           this.formData['default_shift_starting_time']
         )
@@ -192,7 +192,7 @@ export class ExtendComponent extends BasicElementComponent
 
       this.autofill.forEach((el, i) => {
         shift['config'][i] = this.generateConfig(
-          this.formData.id.id,
+          this.getJobId(),
           date,
           el.time,
           null,
@@ -208,7 +208,7 @@ export class ExtendComponent extends BasicElementComponent
 
       this.autofill.forEach((el, i) => {
         shift['config'][i] = this.generateConfig(
-          this.formData.id.id,
+          this.getJobId(),
           date,
           el.time,
           el.candidates,
@@ -224,6 +224,14 @@ export class ExtendComponent extends BasicElementComponent
     }
 
     return shift;
+  }
+
+  public getJobId() {
+    if (this.formData.id instanceof Object) {
+      return this.formData.id.id;
+    } else {
+      return this.formData.id;
+    }
   }
 
   public getAvailableCandidate(
@@ -274,7 +282,7 @@ export class ExtendComponent extends BasicElementComponent
 
   public addTime(shift) {
     shift.config[shift.data.length] = this.generateConfig(
-      this.formData.id.id,
+      this.getJobId(),
       shift.date
     );
     shift.data.insert(shift.data.length, this.fb.group({}));
@@ -472,7 +480,7 @@ export class ExtendComponent extends BasicElementComponent
 
   public getCandidates(date: string, data: any) {
     if (data.time && data.workers) {
-      const endpoint = `/hr/jobs/${this.formData.id.id}/extend_fillin/`;
+      const endpoint = `/hr/jobs/${this.getJobId()}/extend_fillin/`;
       const timeZoneOffset = moment.tz('Australia/Sydney').format('Z').slice(1);
       const query = `?shift=${date}T${data.time}%2B${timeZoneOffset}`;
 

@@ -224,6 +224,14 @@ app-datepicker {
   &-item {
     position: relative;
     flex: 1 1;
+
+    &.available {
+      background-color: rgba($brand-success, .2);
+    }
+
+    &.unavailable {
+      background-color: rgba($brand-danger, .2);
+    }
   }
 
   &-body {
@@ -246,6 +254,7 @@ app-filter-related {
 
 .filter-element {
   flex: 1 1;
+  max-width: 300px;
 }
 
 .custom-checkbox.success {
@@ -412,6 +421,7 @@ app-filter-related {
       .content {
         display: block;
         min-width: auto;
+        width: 100%;
 
         padding-bottom: .5rem;
 

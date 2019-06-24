@@ -18,9 +18,14 @@ app-back-link {
 
   &-item {
     flex: 1 1;
+    max-width: 824px;
 
     margin: 0 15px 15px;
 
     background-color: #fff;
+
+    &.alone {
+      margin: 0 auto;
+    }
   }
 }

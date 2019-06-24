@@ -2,17 +2,19 @@ import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, Template
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { combineLatest } from 'rxjs';
 
 import { Moment } from 'moment-timezone';
 
 import { CalendarService, CalendarData } from './calendar.service';
 import { DateRange, filterDateFormat, isManager } from '../../helpers';
 import { FormatString } from '../../helpers/format';
-import { CalendarDataService } from './calendar-data.service';
+import { CalendarDataService, CalendarType } from './calendar-data.service';
 import { filters } from './calendar-filters.meta';
 import { TimeService } from '../../shared/services';
 
 import { DatepickerComponent } from '../../shared/components/datepicker/datepicker.component';
+import { Role, UserService } from '../../services';
 
 @Component({
   selector: 'app-calendar',
@@ -33,11 +35,21 @@ export class CalendarComponent implements OnInit, OnDestroy {
     1: { color: 'bg-success', key: 'accepted' },
     2: { color: 'bg-warning', key: 'undefined' },
   };
+  public timesheetStatus = {
+    0: { color: 'warning', key: 'Pending' },
+    1: { color: 'info', key: 'Filled' },
+    2: { color: 'success', key: 'Approved' },
+  };
   public showClientFilter = true;
   public showCalendarDropdown: boolean;
+  public clientContactCalendar: boolean;
+  public calendarType: CalendarType;
+
+  // @Input()
+  public client: string;
 
   @Input()
-  public client: string;
+  public role: Role;
 
   @ViewChild('filter')
   public filter: ElementRef;
@@ -96,6 +108,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private router: Router,
     private time: TimeService,
+    private userService: UserService,
   ) {}
 
   get isMonthRange() {
@@ -123,9 +136,21 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.currentRange = new FormControl('');
     this.calendarTimes = this.calendar.calculateTimes();
 
-    if (this.client) {
-      this.showClientFilter = false;
+    if (this.role && this.role.__str__.includes('client')) {
+      this.calendarType = CalendarType.Client;
     }
+
+    if (this.role && this.role.__str__.includes('candidate')) {
+      this.calendarType = CalendarType.Candidate;
+    }
+
+    if (this.role && this.role.__str__.includes('manager')) {
+      this.calendarType = CalendarType.Manager;
+    }
+
+    // if (this.client) {
+    //   this.showClientFilter = false;
+    // }
 
     this.currentRange.valueChanges
       .subscribe((value: DateRange) => {
@@ -268,18 +293,71 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return statusSeccess && dateSuccess;
   }
 
+  public setAvailability(event: Event, day: any, available: boolean) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { availableId, date } = day;
+
+    const body = {
+      confirmed_available: available,
+      target_date: date,
+      candidate_contact: this.userService.user.data.contact.candidate_contact
+    };
+
+    if (availableId) {
+      this.data.updateAvailable(availableId, body).subscribe(() => this.changeCalendar());
+    } else {
+      this.data.setAvailability(body).subscribe(() => this.changeCalendar());
+    }
+  }
+
   private changeCalendar(type?: DateRange) {
     const rangeType = type || this.currentRange.value;
 
     const range = this.customRange || this.calendar.getRangeDates(this.currentDate, rangeType);
-    const query = this.generateQuery(range.start, range.end, this.client, this.candidate);
 
-    this.getShifts(query, rangeType);
+    const shiftQuery = this.generateQuery(range.start, range.end, this.client, this.candidate);
+    let availabilityQuery;
+    let timesheetQuery;
+    if (this.calendarType === CalendarType.Candidate) {
+      availabilityQuery = this.generateCandidateQuery(range.start, range.end);
+      timesheetQuery = this.generateCandidateTimesheetQuery(range.start, range.end);
+    }
+
+    this.getData(rangeType, shiftQuery, availabilityQuery, timesheetQuery);
   }
 
-  private getShifts(query: any, range: DateRange) {
-    this.data.getShiftsByQuery(query).subscribe((data) => {
-      this.prepareData(data);
+  private getShifts(query: any) {
+    return this.data.getShiftsByQuery(query, this.calendarType);
+  }
+
+  private getCandidateAvailability(query: any) {
+    return this.data.getCandidateAvailability(query);
+  }
+
+  private getCandidateTimesheets(query: any) {
+    return this.data.getTimesheetInformation(query, this.calendarType);
+  }
+
+
+  private getData(range: DateRange, shiftQuery: any, availabilityQuery?: any, timesheetQuery?: any) {
+    const requests = [this.getShifts(shiftQuery)];
+
+    if (this.calendarType === CalendarType.Candidate) {
+      requests.push(this.getCandidateAvailability(availabilityQuery));
+      requests.push(this.getCandidateTimesheets(timesheetQuery));
+    }
+
+    combineLatest(requests).subscribe((data) => {
+      const availability = data[1] ? data[1]['results'] : [];
+      const timesheets = data[2] ? data[2]['results'] : [];
+
+      this.prepareData(data[0], timesheets);
+
+      if (availability.length) {
+        this.shifts.push(...availability);
+      }
 
       this.updateCalendar(this.currentDate, range);
     });
@@ -293,6 +371,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
       limit: -1,
     };
 
+    // if (this.calendarType === CalendarType.Client) {
+    //   filterList['role'] = this.role.id;
+    // }
+
     if (client) {
       filterList['client'] = client;
     }
@@ -304,14 +386,40 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return filterList;
   }
 
-  private prepareData(data) {
+  private generateCandidateQuery(from: Moment, to: Moment) {
+    const filterList = {
+      ['target_date_0']: from.format(filterDateFormat),
+      ['target_date_1']: to.format(filterDateFormat),
+      fields: ['id', 'target_date', 'confirmed_available'],
+      limit: -1,
+    };
+
+    return filterList;
+  }
+
+  private generateCandidateTimesheetQuery(from: Moment, to: Moment) {
+    const filterList = {
+      ['shift_started_at_0']: from.format(filterDateFormat),
+      ['shift_started_at_1']: to.format(filterDateFormat),
+      fields: ['id', 'candidate_filled', 'supervisor_approved', 'shift'],
+      limit: -1,
+    };
+
+    return filterList;
+  }
+
+  private prepareData(data, timesheetList?) {
     this.shifts = [];
+    data = Array.isArray(data) ? data : data.results;
+
     this.lastData = data;
     this.timesheetCounter.forEach((el) => el.count = 0);
 
-    if (data.results.length) {
-      this.shifts = data.results
+    if (data.length) {
+      this.shifts = data
         .map((shift) => {
+          const timesheets = timesheetList ? timesheetList.filter((timesheet) => shift.id === timesheet.shift.id) : [];
+
           return {
             shift,
             job_link: `/hr/jobs/${shift.date.job.id}/change`,
@@ -322,6 +430,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
             is_fulfilled: this.getFulfilledStatus(shift.is_fulfilled, shift.workers_details),
             candidates: shift.workers_details,
             timesheet: this.calendar.calculateShiftSize(shift.time),
+            timesheets,
+            timesheetStatus: this.getTimesheetsStatus(timesheets[0])
           };
         })
         .filter((shift) => this.status.data[shift.is_fulfilled]);
@@ -345,6 +455,22 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     if (status === 0 && workers.undefined.length) {
       return 2;
+    }
+  }
+
+  private getTimesheetsStatus(timesheet: any) {
+    if (timesheet) {
+      if (!timesheet.candidate_filled) {
+        return 0;
+      }
+
+      if (timesheet.candidate_filled && !timesheet.supervisor_approved) {
+        return 1;
+      }
+
+      if (timesheet.candidate_filled && timesheet.supervisor_approved) {
+        return 2;
+      }
     }
   }
 
@@ -388,7 +514,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     let clickedComponent = event.target;
     let inside = false;
     do {
-      if (clickedComponent === this.filter.nativeElement || (this.datepicker && clickedComponent === this.datepicker.nativeElement)) {
+      if (
+        (this.filter && (clickedComponent === this.filter.nativeElement))
+        || (this.datepicker && clickedComponent === this.datepicker.nativeElement)
+      ) {
         inside = true;
       }
       clickedComponent = clickedComponent.parentNode;

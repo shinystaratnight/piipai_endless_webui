@@ -29,10 +29,10 @@
 </div>
 
 <div class="filters filters-inline">
-  <app-filter-related *ngIf="showClientFilter" (event)="changeQuery($event)" [config]="filters.client"></app-filter-related>
-  <app-filter-related (event)="changeQuery($event)" [config]="filters.candidate"></app-filter-related>
+  <app-filter-related *ngIf="showClientFilter && calendarType === 0" (event)="changeQuery($event)" [config]="filters.client"></app-filter-related>
+  <app-filter-related *ngIf="calendarType === 0" (event)="changeQuery($event)" [config]="filters.candidate"></app-filter-related>
 
-  <div class="filter-element" #filter>
+  <div *ngIf="calendarType !== 2" class="filter-element" #filter>
     <label class="filter-label related">Info layers</label>
 
     <div class="filter-related">
@@ -117,7 +117,27 @@
   </div>
   <div class="grid-row" *ngFor="let week of calendarData?.body">
     <ng-container *ngFor="let day of week; let last = last; let first = first">
-      <span *ngIf="!day.tooltip" class="grid-item month-day"><span class="date" [class.today]="day.today">{{day.label}}</span></span>
+      <span *ngIf="!day.tooltip && calendarType !== 2" class="grid-item month-day"><span class="date" [class.today]="day.today">{{day.label}}</span></span>
+
+      <span class="grid-item month-day"
+        [class.available]="day.available === true"
+        [class.unavailable]="day.available === false"
+        triggers="click:click"
+        [ngbTooltip]="availabilityTooltip"
+        [placement]="last ? 'left' : first ? 'right' : 'bottom'"
+        *ngIf="!day.tooltip && calendarType === 2">
+          <span class="date" [class.today]="day.today">{{day.label}}</span>
+
+          <ng-template #availabilityTooltip>
+            <div class="shift-tooltip">
+              <h5 class="text-center">{{ day.availableId ? 'Update' : 'Confirm?'}}</h5>
+              <div class="d-flex align-items-center justify-content-between">
+                <button type="button" class="btn btn-sm btn-primary mr-auto" (click)="setAvailability($event, day, true)">Available</button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="setAvailability($event, day, false)">Unavailable</button>
+              </div>
+            </div>
+          </ng-template>
+      </span>
 
       <span class="grid-item month-day"
         *ngIf="day.tooltip"
@@ -231,15 +251,15 @@
 
 <ng-template #shiftItem let-shift="shift" let-status="status">
   <div>
-    <ng-container *ngIf="isManager">
+    <ng-container *ngIf="calendarType === 0">
       <a [routerLink]="shift.job_link">{{shift.position}}</a>
     </ng-container>
-    <ng-container *ngIf="!isManager">
+    <ng-container *ngIf="calendarType !== 0">
       {{shift.position}}
     </ng-container>
     <br>
     <span class="shift-jobsite">{{shift.jobsite}}</span> <br>
-    <div *ngIf="shift.candidates[status].length || shift.candidates[getStatus(1)].length" class="shift-candidates">
+    <div *ngIf="(shift.candidates[status].length || shift.candidates[getStatus(1)].length)" class="shift-candidates">
       <span class="mr-1">Candidate&nbsp;({{shift.candidates[status].length || shift.candidates[getStatus(1)].length}}):</span>
       <div>
         <div *ngFor="let name of shift.candidates[status]">
@@ -271,8 +291,14 @@
         </ng-container>
       </div>
     </div>
+
+    <div class="mt-2" *ngIf="calendarType === 2">
+      <b>Timesheet:</b> <br>
+      <i fa name="circle" [ngClass]="'text-' + timesheetStatus[shift.timesheetStatus].color"></i>
+      {{timesheetStatus[shift.timesheetStatus].key}}
+    </div>
   </div>
-  <div class="shift-action-wrapper">
+  <div *ngIf="calendarType !== 2" class="shift-action-wrapper">
     <button class="shift-action" type="button" (click)="extendJob(shift)">Extend</button>
     <button class="shift-action" *ngIf="fillinAccess(shift)" type="button" (click)="fillInJob(shift)">Fill in</button>
   </div>
