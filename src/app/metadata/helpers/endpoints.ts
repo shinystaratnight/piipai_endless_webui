@@ -23,6 +23,7 @@ export enum Endpoints {
   SkillTag = '/skills/skilltags/',
   SkillBaseRate = '/skills/skillbaserates/',
   SkillEmploymentClassification = '/skills/employmentclassifications/',
+  SkillRateCoefficient = '/candidate/skillratecoefficientrels/',
 
   // Billing
   BillingCompany = '/billing/companies/',
@@ -131,6 +132,7 @@ export enum Endpoints {
   PriceList = '/pricing/pricelists/',
   PriceListRate = '/pricing/pricelistrates/',
   PriceListRateCoefficient = '/pricing/pricelistratecoefficients/',
+  PriceListRateModifiers = '/pricing/pricelistratemodifiers/',
 
   Industry = '/pricing/industries/',
 

@@ -1,3 +1,5 @@
+import { Endpoints } from '../helpers';
+
 const list = {
   list: {
     list: 'pricelistrate',
@@ -136,7 +138,7 @@ const pricelist = {
         ],
         label: 'Actions',
         title: null,
-        delim: ' '
+        delim: null
       }
     ],
     buttons: [],
@@ -150,7 +152,13 @@ const pricelist = {
 
 const form = [
   {
-    list: false,
+    key: 'id',
+    type: 'input',
+    hide: true,
+    templateOptions: { required: false, label: 'Id', type: 'text' },
+    read_only: false
+  },
+  {
     endpoint: '/pricing/pricelists/',
     visibleMode: true,
     read_only: true,
@@ -162,13 +170,10 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'price_list',
-    many: false
   },
   {
-    list: false,
     endpoint: '/skills/skills/',
     read_only: true,
     templateOptions: {
@@ -179,17 +184,33 @@ const form = [
       type: 'related',
       edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'skill',
-    many: false
   },
   {
     key: 'hourly_rate',
     default: '{skill.default_rate}',
+    useValue: true,
     type: 'input',
     templateOptions: { required: false, label: 'Hourly Rate', type: 'text' },
     read_only: false
+  },
+  {
+    endpoint: Endpoints.PriceListRateModifiers,
+    type: 'list',
+    templateOptions: {
+      label: 'Price List Rate Modifier',
+      type: 'list',
+      text: 'Price List Rate Modifier',
+      add_label: 'Add'
+    },
+    collapsed: false,
+    prefilled: {
+      price_list_rate: '{id}',
+    },
+    query: {
+      price_list_rate: '{id}',
+    }
   }
 ];
 

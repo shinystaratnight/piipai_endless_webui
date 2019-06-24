@@ -1,3 +1,5 @@
+import { Endpoints } from '../helpers';
+
 const list = {
   list: {
     list: 'skillrel',
@@ -437,6 +439,23 @@ const form = [
       icon: '$'
     },
     read_only: false
+  },
+  {
+    endpoint: Endpoints.SkillRateCoefficient,
+    type: 'list',
+    templateOptions: {
+      label: 'Candidat Skill Modifier',
+      type: 'list',
+      text: 'Candidat Skill Modifier',
+      add_label: 'Add'
+    },
+    collapsed: false,
+    prefilled: {
+      skill_rel: '{id}',
+    },
+    query: {
+      skill_rel: '{id}',
+    }
   }
 ];
 

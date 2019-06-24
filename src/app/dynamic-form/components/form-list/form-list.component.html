@@ -9,7 +9,7 @@
       aria-controls="collapseExample"
       style="cursor: pointer"></i>
     {{config.templateOptions.label}}
-    <button *ngIf="(showButton || config.delay) && checkPermissions('post')"
+    <button *ngIf="(showButton || config.delay)"
       type="button"
       class="text-white btn btn-sm group-button ml-auto mr-2"
       (click)="addObject()">
@@ -62,9 +62,7 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">{{modalData.title}}</h5>
-        <button type="button" class="close ml-auto" (click)="c()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <app-close-button (click)="c()"></app-close-button>
       </div>
     </div>
 
