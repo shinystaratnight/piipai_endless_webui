@@ -31,7 +31,7 @@
               *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
               (click)="open('update')"
               title="Edit">
-                <i class="text-primary icon" fa name="pencil"></i>
+                <i class="text-warning icon" fa name="pencil"></i>
             </button>
             <button type="button"
               *ngIf="config.templateOptions.add && checkPermission('post')"

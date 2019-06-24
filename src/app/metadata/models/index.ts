@@ -104,6 +104,8 @@ import * as passwordchange from './passwordchange.metadata';
 import * as userpassword from './userpassword.metadata';
 import * as skillname from './skillname.metadata';
 import * as smslogs from './smslogs.metadata';
+import * as skillratecoefficient from './skillratecoefficientrels.metadata';
+import * as priselistratemodifiers from './pricelistratemodifiers.metadata';
 
 import { Endpoints } from '../helpers';
 
@@ -214,4 +216,6 @@ export const metadata = {
   [Endpoints.ContactPassword]: userpassword.metadata,
   [Endpoints.SkillName]: skillname.metadata,
   [Endpoints.SmsLog]: smslogs.metadata,
+  [Endpoints.SkillRateCoefficient]: skillratecoefficient.metadata,
+  [Endpoints.PriceListRateModifiers]: priselistratemodifiers.metadata
 };
