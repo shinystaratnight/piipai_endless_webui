@@ -371,9 +371,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
       limit: -1,
     };
 
-    // if (this.calendarType === CalendarType.Client) {
-    //   filterList['role'] = this.role.id;
-    // }
+    if (this.calendarType === CalendarType.Client) {
+      filterList['role'] = this.role.id;
+    }
 
     if (client) {
       filterList['client'] = client;

@@ -298,7 +298,7 @@
       {{timesheetStatus[shift.timesheetStatus].key}}
     </div>
   </div>
-  <div *ngIf="calendarType !== 2" class="shift-action-wrapper">
+  <div *ngIf="calendarType === 0" class="shift-action-wrapper">
     <button class="shift-action" type="button" (click)="extendJob(shift)">Extend</button>
     <button class="shift-action" *ngIf="fillinAccess(shift)" type="button" (click)="fillInJob(shift)">Fill in</button>
   </div>
