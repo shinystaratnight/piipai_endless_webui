@@ -263,7 +263,9 @@ export class SiteComponent implements OnInit, OnDestroy {
         if (this.router.url !== '/') {
           this.router.navigate(['']);
         } else {
-          this.dashboard = true;
+          setTimeout(() => {
+            this.dashboard = true;
+          }, 100);
         }
       });
   }
