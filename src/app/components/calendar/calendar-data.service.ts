@@ -4,7 +4,7 @@ import { HttpParams } from '@angular/common/http';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { Endpoints } from '../../metadata/helpers';
 
-export enum CalendarType {
+export enum Calendar {
   Manager,
   Client,
   Candidate
@@ -13,20 +13,19 @@ export enum CalendarType {
 @Injectable()
 export class CalendarDataService {
   private endpoints = {
-    [CalendarType.Manager]: Endpoints.Shift,
-    [CalendarType.Client]: `${Endpoints.Shift}client_contact_shifts/`,
-    [CalendarType.Candidate]: `${Endpoints.Shift}candidate_contact_shifts/`
+    [Calendar.Manager]: Endpoints.Shift,
+    [Calendar.Client]: `${Endpoints.Shift}client_contact_shifts/`
   };
 
   private timesheetEndpoints = {
-    [CalendarType.Candidate]: Endpoints.TimesheetCandidate
+    [Calendar.Candidate]: Endpoints.TimesheetCandidate
   };
 
   constructor(
     private genericFormService: GenericFormService
   ) {}
 
-  getShiftsByQuery(params: HttpParams, type: CalendarType) {
+  getShiftsByQuery(params: HttpParams, type: Calendar) {
     return this.genericFormService.get(this.endpoints[type], params);
   }
 
@@ -34,12 +33,24 @@ export class CalendarDataService {
     return this.genericFormService.get(Endpoints.CarrierList, params);
   }
 
-  getTimesheetInformation(params: HttpParams, type: CalendarType) {
+  getTimesheetInformation(params: HttpParams, type: Calendar) {
     return this.genericFormService.get(this.timesheetEndpoints[type], params);
+  }
+
+  getJobOffers(params: HttpParams) {
+    return this.genericFormService.get(Endpoints.JobOfferCandidate, params);
   }
 
   setAvailability(data: any) {
     return this.genericFormService.submitForm(Endpoints.CarrierList, data);
+  }
+
+  declineJobOffer(id: string) {
+    return this.genericFormService.submitForm(`${Endpoints.JobOffer}${id}/cancel/`, {});
+  }
+
+  acceptJobOffer(id: string) {
+    return this.genericFormService.submitForm(`${Endpoints.JobOffer}${id}/accept/`, {});
   }
 
   updateAvailable(id: boolean, data: any) {
