@@ -1,4 +1,5 @@
 import { LocalStorageService } from 'ngx-webstorage';
+import { Role } from '../services';
 
 const storage = new LocalStorageService();
 
@@ -28,23 +29,30 @@ export function isTouchDevice(): boolean {
 }
 
 export function isCandidate(): boolean {
-  const role = storage.retrieve('role');
+  const role: Role = storage.retrieve('role');
   if (role) {
     return role.__str__.includes('candidate');
   }
 }
 
 export function isClient(): boolean {
-  const role = storage.retrieve('role');
+  const role: Role = storage.retrieve('role');
   if (role) {
     return role.__str__.includes('client');
   }
 }
 
 export function isManager(): boolean {
-  const role = storage.retrieve('role');
+  const role: Role = storage.retrieve('role');
   if (role) {
     return role.__str__.includes('manager');
+  }
+}
+
+export function getRoleId(): string {
+  const role: Role = storage.retrieve('role');
+  if (role) {
+    return role.id;
   }
 }
 

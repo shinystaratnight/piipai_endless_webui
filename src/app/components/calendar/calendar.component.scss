@@ -334,6 +334,11 @@ app-filter-related {
       padding-top: 2px;
     }
 
+    .btn {
+      font-size: 12px;
+      line-height: 1;
+    }
+
     font-size: 12px;
     line-height: 16px;
     opacity: 1;
@@ -471,6 +476,11 @@ app-filter-related {
   &.badge-success {
     color: white;
     background-color: $brand-success;
+  }
+
+  &.badge-primary {
+    color: white;
+    background-color: $brand-primary;
   }
 
   &.badge-danger {

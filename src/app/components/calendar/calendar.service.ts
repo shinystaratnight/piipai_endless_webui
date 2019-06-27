@@ -7,7 +7,7 @@ import { DatepickerService } from '../../shared/services';
 import { TimeService } from '../../shared/services';
 
 
-export enum ShiftStatus { Unfilled, Filled, Pending }
+export enum Status { Unfilled, Fullfilled, Pending, Open, Filled, Approved }
 
 export interface CalendarData {
   header: string[];
@@ -55,6 +55,7 @@ export class CalendarService {
           return {
             ...day,
             data: newData,
+            jobOffers: newData.filter((el) => el.showButtons),
             available: availabilityData ? availabilityData.confirmed_available : undefined,
             availableId: availabilityData ? availabilityData.id : undefined,
             tooltip: this.generateTooltipForMonth(newData),
@@ -147,13 +148,22 @@ export class CalendarService {
   private generateTooltipForMonth(data: any[]) {
     if (data.length) {
       const result = {
-        [ShiftStatus.Unfilled]: [],
-        [ShiftStatus.Filled]: [],
-        [ShiftStatus.Pending]: []
+        [Status.Unfilled]: [],
+        [Status.Fullfilled]: [],
+        [Status.Pending]: [],
+        [Status.Open]: [],
+        [Status.Filled]: [],
+        [Status.Approved]: []
       };
 
       data.forEach((shift) => {
-        result[shift.is_fulfilled].push(shift);
+        if (Number.isInteger(shift.is_fulfilled)) {
+          result[shift.is_fulfilled].push(shift);
+        }
+
+        if (shift.timesheetStatus) {
+          result[shift.timesheetStatus].push(shift);
+        }
       });
 
       return result;
