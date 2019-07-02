@@ -92,7 +92,23 @@ a.readonly:focus {
   }
 }
 
-.form-element-content-actions button {
-  background-color: transparent;
-  border: none;
+.form-element-content-actions {
+  button,
+  i {
+    font-size: 12px;
+    line-height: 16px;
+    background-color: transparent;
+    border: none;
+    color: rgba($gray, 7);
+
+    &:hover {
+      color: $gray;
+    }
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    padding: 3px 0;
+  }
 }

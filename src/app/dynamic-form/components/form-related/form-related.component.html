@@ -22,29 +22,36 @@
               <div style="overflow: hidden; white-space: nowrap">{{displayValue || '&nbsp;'}}</div>
           </div>
 
-          <div class="form-element-content-actions"
+          <div class="form-element-content-actions d-flex align-items-center"
             *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete) && !(config.errorMessage && config.errorMessage.visible)" >
-            <button *ngIf="displayValue" type="button" class="clear-button" (click)="clearField()" title="Reset">
-              <i fa class="icon" name="times"></i>
-            </button>
-            <button type="button"
-              *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
-              (click)="open('update')"
-              title="Edit">
-                <i class="text-warning icon" fa name="pencil"></i>
-            </button>
-            <button type="button"
-              *ngIf="config.templateOptions.add && checkPermission('post')"
-              (click)="open('post')"
-              title="Create">
-                <i class="text-success icon" fa name="plus"></i>
-            </button>
-            <button type="button"
-              *ngIf="config.templateOptions.delete && displayValue && checkPermission('delete')"
-              (click)="open('delete')"
-              title="Delete">
-                <i class="text-danger icon" fa name="times"></i>
-            </button>
+              <i fa class="icon px-2 ml-2"
+                style="opacity: .3"
+                name="ellipsis-v"
+                placement="bottom"
+                #pop="ngbPopover"
+                [ngbPopover]="actionsTemplate">
+              </i>
+
+              <ng-template #actionsTemplate>
+                <button *ngIf="displayValue" type="button" (click)="clearField()">
+                  <i fa class="text-secondary mr-2" name="times"></i> Reset
+                </button>
+                <button type="button"
+                  *ngIf="config.templateOptions.add && checkPermission('post')"
+                  (click)="open('post')">
+                    <i class="text-success mr-2" fa name="plus"></i> Add new
+                </button>
+                <button type="button"
+                  *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
+                  (click)="open('update')">
+                    <i class="text-warning mr-2" fa name="pencil"></i> Edit
+                </button>
+                <button type="button"
+                  *ngIf="config.templateOptions.delete && displayValue && checkPermission('delete')"
+                  (click)="open('delete')">
+                    <i class="text-secondary mr-2" fa name="trash"></i> Delete
+                </button>
+              </ng-template>
           </div>
 
           <div #autocomplete class="autocomplete" [hidden]="hideAutocomplete">
@@ -96,14 +103,21 @@
 
         <div class="form-element-content-actions"
           *ngIf="config.options && config.templateOptions.add" >
-            <button type="button"
-              *ngIf="config.templateOptions.add && checkPermission('post')"
-              (click)="open('post')">
-                <i class="text-success icon"
-                  fa
-                  [name]="'plus'" >
-                </i>
-            </button>
+            <i fa class="icon px-2 ml-2"
+              style="opacity: .3"
+              name="ellipsis-v"
+              placement="bottom"
+              #pop="ngbPopover"
+              [ngbPopover]="manyActionsTemplate">
+            </i>
+
+            <ng-template #manyActionsTemplate>
+              <button type="button"
+                *ngIf="config.templateOptions.add && checkPermission('post')"
+                (click)="open('post')">
+                  <i class="text-success mr-2" fa name="plus"></i> Add new
+              </button>
+            </ng-template>
         </div>
         <div class="autocomplete" [hidden]="!(previewList && previewList.length)">
           <div class="autocomplete-list"

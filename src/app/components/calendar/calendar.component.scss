@@ -226,11 +226,11 @@ app-datepicker {
     flex: 1 1;
 
     &.available {
-      background-color: rgba($brand-success, .2);
+      background: linear-gradient(45deg, #fff 0%, #fff 85%, $brand-success 85%, $brand-success 100%);
     }
 
     &.unavailable {
-      background-color: rgba($brand-danger, .2);
+      background: linear-gradient(45deg, #fff 0%, #fff 85%, $brand-danger 85%, $brand-danger 100%);
     }
   }
 
