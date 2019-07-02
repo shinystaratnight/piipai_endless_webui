@@ -86,3 +86,15 @@ export function getOrientation(): number {
   }
   return orientation || 0;
 }
+
+export function generateCssStyles(styles: string[] = [], prefix: string): string[] {
+  return [styles
+    .map((modificator) => {
+      return `${prefix}__${modificator}`;
+    })
+    .reduce((prev, current) => {
+      return `${prev} ${current}`;
+    }, '')
+    .trim()
+  ];
+}

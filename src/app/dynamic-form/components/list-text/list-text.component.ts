@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import * as moment from 'moment-timezone';
 
-import { FormatString } from '../../../helpers/format';
 import { isMobile } from '../../../helpers';
-import { getValueOfData } from '../../helpers/utils';
+import { getValueOfData, generateCssStyles } from '../../helpers';
 
 @Component({
   selector: 'app-list-text',
@@ -13,6 +12,7 @@ import { getValueOfData } from '../../helpers/utils';
 })
 
 export class ListTextComponent implements OnInit {
+  private stylePrefix = 'list-text';
 
   public config: any;
   public length: any;
@@ -24,6 +24,7 @@ export class ListTextComponent implements OnInit {
   public iconClass: string;
   public iconColor: string;
   public workers: any;
+  public cssClasses: string[];
 
   public colors = {
     1: '#FA5C46',
@@ -61,6 +62,7 @@ export class ListTextComponent implements OnInit {
 
     this.checkDate(moment);
     this.customizeStatic(this.config.value);
+    this.cssClasses = generateCssStyles(this.config.styles, this.stylePrefix);
   }
 
   public getScore(score) {

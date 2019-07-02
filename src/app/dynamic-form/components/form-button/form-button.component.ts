@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { SiteSettingsService } from '../../../services/site-settings.service';
+import { generateCssStyles } from '../../helpers';
 
 @Component({
   selector: 'app-form-button',
@@ -12,6 +13,8 @@ import { SiteSettingsService } from '../../../services/site-settings.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormButtonComponent implements OnInit, OnDestroy {
+  private stylePrefix = 'app-button';
+
   public config;
   public group: FormGroup;
   public label: boolean;
@@ -26,6 +29,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   public isDisabled: boolean;
   public disabledTitle: string;
   public saveProcess: boolean;
+  public cssClasses: string;
 
   public subscriptions: Subscription[] = [];
 
@@ -70,6 +74,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
 
     this.isDisabled = this.checkSmsDisabled(this.config.endpoint);
     this.disabledTitle = this.getSmsTitle(this.isDisabled);
+    this.cssClasses = generateCssStyles(this.config.styles, this.stylePrefix)[0];
   }
 
   public ngOnDestroy() {

@@ -5,9 +5,9 @@
   </div>
   <button [type]="config.templateOptions.type ? config.templateOptions.type : 'button'"
     *ngIf="(!config.hidden || showButton) && (config.templateOptions.text || repeatArray && repeatArray.length > 1) && config.action !== 'showMessage'"
-    [ngClass]="[buttonClass, textClass, config.inverse ? 'inverse' : '']"
+    [ngClass]="[buttonClass, textClass, cssClasses, config.inverse ? 'inverse' : '']"
     class="btn"
-    [class.btn-outline-primary]="config.list && !buttonClass && !config.inverse && !config.shadow"
+    [class.btn-outline-primary]="config.list && !buttonClass && !config.inverse && !config.shadow && !cssClasses"
     [class.btn-sm]="config.templateOptions.small"
     [class.px-2]="config.templateOptions.p && buttonClass !== 'btn-link'"
     [class.list]="config.templateOptions.p"

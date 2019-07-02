@@ -110,9 +110,7 @@ const formset = {
       },
       {
         name: 'id',
-        sort_field: 'id',
         title: 'Edit',
-        sort: true,
         content: [
           {
             action: 'editForm',
@@ -129,9 +127,7 @@ const formset = {
       },
       {
         name: 'id',
-        sort_field: 'id',
         title: 'Delete',
-        sort: true,
         content: [
           {
             action: 'delete',

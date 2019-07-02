@@ -75,43 +75,10 @@ const list = {
             endpoint: `${Endpoints.CandidateLocation}{job_offer.candidate_contact.id}/history/`,
             field: 'id',
             action: 'showTracking',
-            showIf: [{ status: 4 }],
+            showIf: [{ status: [4, 5, 6, 7] }],
             customLink: true,
             image: '/assets/img/map-lg.png'
           },
-          {
-            title: 'Show traking map',
-            type: 'button',
-            color: 'link',
-            endpoint: `${Endpoints.CandidateLocation}{job_offer.candidate_contact.id}/history/`,
-            field: 'id',
-            action: 'showTracking',
-            showIf: [{ status: 5 }],
-            customLink: true,
-            image: '/assets/img/map-lg.png'
-          },
-          {
-            title: 'Show traking map',
-            type: 'button',
-            color: 'link',
-            endpoint: `${Endpoints.CandidateLocation}{job_offer.candidate_contact.id}/history/`,
-            field: 'id',
-            action: 'showTracking',
-            showIf: [{ status: 6 }],
-            customLink: true,
-            image: '/assets/img/map-lg.png'
-          },
-          {
-            title: 'Show traking map',
-            type: 'button',
-            color: 'link',
-            endpoint: `${Endpoints.CandidateLocation}{job_offer.candidate_contact.id}/history/`,
-            field: 'id',
-            action: 'showTracking',
-            showIf: [{ status: 7 }],
-            customLink: true,
-            image: '/assets/img/map-lg.png'
-          }
         ],
         name: 'tracking',
         center: true,
@@ -265,7 +232,7 @@ const list = {
             text: '{supervisor_approved_at__datetime}',
             field: 'supervisor_approved_at',
             type: 'static',
-            muted: true,
+            styles: ['muted'],
             showIf: [
               { status: 7 },
               'supervisor_approved_at'
@@ -306,7 +273,7 @@ const list = {
             text: '{supervisor_modified_at__datetime}',
             field: 'supervisor_modified_at',
             type: 'static',
-            muted: true,
+            styles: ['muted'],
             showIf: [{
               status: 6
             }, 'supervisor_modified_at']
