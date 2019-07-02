@@ -112,8 +112,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
       this.authService.storeToken(response, this.rememberMe, response.formData.username);
       this.router.navigate(['']);
     }
-
-    this.loginProcess = false;
   }
 
   public redirectHandler(data) {

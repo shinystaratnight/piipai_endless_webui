@@ -179,6 +179,9 @@ export class DynamicListComponent
   @ViewChild('history')
   public history;
 
+  @ViewChild('timesheetsCandidate')
+  public timesheetsCandidate;
+
   @ViewChild('unapproved')
   public unapproved;
 
@@ -242,8 +245,9 @@ export class DynamicListComponent
     '/core/companycontacts/'
   ];
   public mobileDesign = [
-    '/hr/timesheets/history/',
-    '/hr/timesheets/unapproved/',
+    Endpoints.TimesheetHistory,
+    Endpoints.TimesheetCandidate,
+    Endpoints.TimesheetUnapproved,
   ];
   public collapsed = true;
   public sortedField: any;
@@ -847,6 +851,7 @@ export class DynamicListComponent
             svg: element.svg,
             process: new Subject(),
             info: element.info,
+            styles: element.styles
           };
           if (this.listStorage.hasTrackingInfo(el.id)) {
             obj.locationDataEmpty = !this.listStorage.getTrackingInfo(el.id);
@@ -1968,12 +1973,16 @@ export class DynamicListComponent
     if (!props.length) {
       if (data) {
         if (prop.indexOf('__') > -1) {
-          const propArray = prop.split('__');
-          const datetime = ['date', 'time', 'datetime'];
-          if (datetime.indexOf(propArray[1]) > -1) {
-            if (data[propArray[0]]) {
-              return this.time.instance(data[propArray[0]])
-                .format(propArray[1] === 'time' ? 'hh:mm A' : propArray[1] === 'datetime' ? 'DD/MM/YYYY hh:mm A' :  'DD/MM/YYYY');
+          const [field, format] = prop.split('__');
+          const datetime = ['date', 'time', 'datetime', 'diff'];
+          if (datetime.indexOf(format) > -1) {
+            if (data[field]) {
+              if (format === 'diff') {
+                return this.time.instance(data[field]).from(this.time.instance());
+              }
+
+              return this.time.instance(data[field])
+                .format(format === 'time' ? 'hh:mm A' : format === 'datetime' ? 'DD/MM/YYYY hh:mm A' : 'DD/MM/YYYY');
             } else {
               return '';
             }
@@ -2369,7 +2378,12 @@ export class DynamicListComponent
         const targetValue = el[key];
         const value = this.getValueByKey(key, data);
 
-        if (value === targetValue) {
+        if (Array.isArray(targetValue)) {
+          const exist = targetValue.some((item) => item === value);
+          if (exist) {
+            approvedRules += 1;
+          }
+        } else if (value === targetValue) {
           approvedRules += 1;
         } else {
           return;
@@ -2426,9 +2440,11 @@ export class DynamicListComponent
 
   public getView() {
     switch (this.endpoint) {
-      case '/hr/timesheets/history/':
-        return this.history;
-      case '/hr/timesheets/unapproved/':
+      case Endpoints.TimesheetHistory:
+        return this.history
+      case Endpoints.TimesheetCandidate:
+        return this.timesheetsCandidate;
+      case Endpoints.TimesheetUnapproved:
         return this.unapproved;
     }
   }

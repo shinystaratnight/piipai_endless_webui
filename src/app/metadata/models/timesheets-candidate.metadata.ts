@@ -1,12 +1,50 @@
-import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate } from '../helpers';
+import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate, Colors, Endpoints } from '../helpers';
 
 const list = {
   list: {
     list: 'timesheet',
     search_enabled: false,
-    pagination_label: 'Timesheet Entry',
     buttons: [],
     columns: [
+      {
+        label: 'Position / Jobsite',
+        name: 'jobsite',
+        sort: true,
+        sort_field: 'jobsite',
+        content: [
+          {
+            type: 'static',
+            field: 'position',
+            styles: ['bolder']
+          },
+          {
+            endpoint: '/hr/jobsites/',
+            type: 'related',
+            label: 'Jobsite',
+            field: 'jobsite',
+            styles: ['secondary']
+          },
+        ]
+      },
+      {
+        content: [
+          {
+            title: 'Show traking map',
+            type: 'button',
+            color: 'link',
+            endpoint: `${Endpoints.CandidateLocation}{job_offer.candidate_contact.id}/history/`,
+            field: 'id',
+            action: 'showTracking',
+            customLink: true,
+            image: '/assets/img/map-lg.png'
+          },
+        ],
+        name: 'tracking',
+        center: true,
+        title: null,
+        label: 'Tracking',
+        delim: null
+      },
       {
         label: 'Times',
         delim: null,
@@ -16,102 +54,271 @@ const list = {
           {
             text: '{shift_started_at__date}',
             type: 'static',
-            label: 'Shift date',
+            label: 'Date',
             field: 'shift_started_at'
           },
           {
             text: '{shift_started_at__time}',
             type: 'static',
-            label: 'Shift started at',
+            label: 'Start',
             field: 'shift_started_at'
+          },
+          {
+            text: '-',
+            type: 'static',
+            label: 'Break',
+            field: 'break_started_at',
+            showIf: [{ status: [0, 1, 2, 3] }]
+          },
+          {
+            text: '-',
+            type: 'static',
+            label: 'End',
+            field: 'shift_ended_at',
+            showIf: [{ status: [0, 1, 2, 3] }]
           },
           {
             text: '{break_started_at__time} - {break_ended_at__time}',
             type: 'static',
             label: 'Break',
-            field: 'break_started_at'
+            field: 'break_started_at',
+            showIf: [{ status: [4, 5, 6, 7] }]
           },
           {
             text: '{shift_ended_at__time}',
             type: 'static',
-            label: 'Shift ended at',
-            field: 'shift_ended_at'
+            label: 'End',
+            field: 'shift_ended_at',
+            showIf: [{ status: [4, 5, 6, 7] }]
           }
         ]
       },
       {
-        label: 'Total hours',
+        label: 'Times',
         delim: null,
+        name: 'mobileTimes',
+        title: null,
+        hide: true,
+        content: [
+          {
+            text: '{shift_started_at__date}',
+            type: 'static',
+            label: 'Shift date',
+            field: 'shift_started_at'
+          },
+          {
+            text: '{shift_started_at__time} / -',
+            type: 'static',
+            label: 'Shift start/end',
+            field: 'shift_started_at',
+            showIf: [{ status: [0, 1, 2, 3] }]
+          },
+          {
+            text: '- / -',
+            type: 'static',
+            label: 'Break start/end',
+            field: 'break_started_at',
+            showIf: [{ status: [0, 1, 2, 3] }]
+          },
+          {
+            text: '{shift_started_at__time} / {shift_ended_at__time}',
+            type: 'static',
+            label: 'Shift start/end',
+            field: 'shift_ended_at',
+            showIf: [{ status: [4, 5, 6, 7] }]
+          },
+          {
+            text: '{break_started_at__time} / {break_ended_at__time}',
+            type: 'static',
+            label: 'Break start/end',
+            field: 'break_started_at',
+            showIf: [{ status: [4, 5, 6, 7] }]
+          },
+        ]
+      },
+      {
+        label: 'Total time',
         name: 'totalTime',
         content: [
           {
-            type: 'text',
+            type: 'static',
+            text: '{totalTime}',
             field: 'totalTime',
-          }
-        ]
-      },
-      {
-        label: 'Jobsite',
-        delim: null,
-        name: 'jobsite',
-        sort: true,
-        sort_field: 'jobsite',
-        title: null,
-        content: [
-          {
-            endpoint: '/hr/jobsites/',
-            type: 'related',
-            label: 'Jobsite',
-            field: 'jobsite'
-          }
-        ]
-      },
-      {
-        label: 'Going to work',
-        delim: null,
-        name: 'going_to_work',
-        title: null,
-        content: [
-          {
-            type: 'icon',
-            label: 'Going to work',
-            field: 'going_to_work_confirmation'
-          }
-        ]
-      },
-      {
-        label: 'Signed by',
-        delim: null,
-        name: 'signed_by',
-        title: null,
-        content: [
-          {
-            showIf: ['supervisor_approved'],
-            endpoint: '/core/companycontacts/',
-            type: 'related',
-            field: 'supervisor'
+            styles: ['success'],
+            showIf: [
+              { status: [4, 5, 6, 7] },
+            ]
           },
-          { type: 'datepicker', field: 'supervisor_approved_at' }
+          {
+            field: 'status',
+            type: 'static',
+            text: 'Not started yet',
+            styles: ['muted'],
+            showIf: [{ status: [0, 1] }]
+          },
+          {
+            field: 'status',
+            type: 'static',
+            text: 'Waiting for the timesheet',
+            styles: ['muted'],
+            showIf: [{ status: 2 }]
+          },
+          {
+            field: 'status',
+            type: 'static',
+            text: 'No record',
+            styles: ['muted'],
+            showIf: [{ status: 3 }]
+          },
         ]
       },
       {
-        label: '',
-        delim: null,
-        name: 'id',
-        sort: true,
-        sort_field: 'id',
-        title: null,
+        label: 'Status',
+        name: 'status',
         content: [
+          {
+            type: 'select',
+            field: 'status',
+            values: {
+              0: 'New',
+              1: 'Pre-Shift check pending',
+              2: 'Pre-Shift check confirmed',
+              3: 'Pre-Shift check failed',
+              4: 'Submit pending',
+              5: 'Approval pending',
+              6: 'Supervisor modified',
+              7: 'Approved',
+            },
+            color: {
+              0: Colors.Primary,
+              1: Colors.Primary,
+              2: Colors.Success,
+              3: Colors.Danger,
+              4: Colors.Primary,
+              5: Colors.Primary,
+              6: Colors.Danger,
+              7: Colors.Success,
+            }
+          },
+          {
+            field: 'status',
+            type: 'static',
+            text: 'Your shift is schedulled to start at {shift_started_at__time}',
+            styles: ['muted'],
+            showIf: [{
+              status: 0
+            }]
+          },
+          {
+            field: 'status',
+            type: 'static',
+            text: 'Confirm if you are going to work',
+            styles: ['muted'],
+            showIf: [{
+              status: 1
+            }]
+          },
+          {
+            text: 'Accept',
+            type: 'button',
+            endpoint: `${Endpoints.Timesheet}{id}/confirm/`,
+            field: 'id',
+            action: 'emptyPost',
+            noDelim: true,
+            styles: ['success', 'shadow', 'shadow-success', 'size-m', 'mr'],
+            showIf: [{
+              status: 1
+            }]
+          },
+          {
+            text: 'Decline',
+            type: 'button',
+            endpoint: `${Endpoints.Timesheet}{id}/decline/`,
+            field: 'id',
+            action: 'emptyPost',
+            styles: ['danger', 'shadow', 'shadow-danger', 'size-m'],
+            showIf: [{
+              status: 1
+            }]
+          },
+          {
+            field: 'status',
+            type: 'static',
+            text: 'Your shift will start {shift_started_at__diff}',
+            styles: ['muted'],
+            showIf: [{
+              status: 2
+            }]
+          },
+          {
+            field: 'status',
+            type: 'static',
+            text: 'Inactive timesheet will be deleted in 48 hours',
+            styles: ['muted'],
+            showIf: [{
+              status: 3
+            }]
+          },
           {
             text: 'Submit',
-            icon: 'fa-pencil',
+            type: 'button',
+            endpoint: '/hr/timesheets-candidate/{id}/submit/',
+            field: 'id',
+            action: 'submitTimesheet',
+            styles: ['success', 'shadow', 'shadow-success', 'size-l'],
+            showIf: [{
+              status: 4
+            }]
+          },
+          {
+            text: 'Edit submission',
             type: 'button',
             color: 'success',
             endpoint: '/hr/timesheets-candidate/{id}/submit/',
             field: 'id',
+            shadow: true,
             action: 'submitTimesheet',
-            hidden: 'candidate_submit_hidden'
-          }
+            styles: ['size-l'],
+            showIf: [{
+              status: 5
+            }]
+          },
+          {
+            field: 'status',
+            type: 'static',
+            text: 'Timesheet will be automatically approved in 4 hours',
+            styles: ['muted'],
+            showIf: [{
+              status: 6
+            }]
+          },
+          {
+            field: 'supervisor.name',
+            type: 'static',
+            showIf: [{
+              status: 7
+            }]
+          },
+          {
+            text: '{supervisor_approved_at__datetime}',
+            field: 'supervisor_approved_at',
+            type: 'static',
+            styles: ['muted'],
+            showIf: [
+              { status: 7 },
+              'supervisor_approved_at'
+            ]
+          },
+          {
+            field: 'supervisor_signature',
+            type: 'picture',
+            file: false,
+            signature: true,
+            showId: ['supervisor_signature.origin'],
+            showIf: [{
+              status: 7
+            }]
+          },
         ]
       }
     ],
@@ -156,7 +363,7 @@ const list = {
       }
     ],
     editDisable: true,
-    label: 'Timesheet Entry'
+    label: 'Timesheet history'
   },
   fields: [
     {
@@ -264,7 +471,25 @@ const list = {
         label: 'Break'
       },
       read_only: true
-    }
+    },
+    {
+      type: 'select',
+      key: 'status',
+      read_only: true,
+      templateOptions: {
+        label: 'Status',
+        options: [
+          { value: 0, label: 'New', color: Colors.Success },
+          { value: 1, label: 'Check pending', color: Colors.Warning },
+          { value: 2, label: 'Check confirmed', color: Colors.Success },
+          { value: 3, label: 'Check failed', color: Colors.Danger },
+          { value: 4, label: 'Submit pending', color: Colors.Warning },
+          { value: 5, label: 'Pending approval', color: Colors.Success },
+          { value: 6, label: 'Supervisor modified', color: Colors.Success },
+          { value: 7, label: 'Approved', color: Colors.Success }
+        ],
+      }
+    },
   ]
 };
 

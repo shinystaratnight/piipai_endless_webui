@@ -30,5 +30,6 @@ export const monthEnd = today
 export enum Colors {
   Success = 'success',
   Warning = 'warning',
-  Danger = 'danger'
+  Danger = 'danger',
+  Primary = 'primary'
 }

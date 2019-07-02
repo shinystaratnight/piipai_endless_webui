@@ -1,6 +1,6 @@
 @import '../../../../styles/variables.scss';
 
-span {
+:host {
   font-size: 14px;
   line-height: 16px;
 }
@@ -57,4 +57,26 @@ label {
   padding-right: 5px;
 
   color: $brand-primary;
+}
+
+.list-text {
+  &__success {
+    color: $brand-success;
+  }
+
+  &__secondary {
+    opacity: .6;
+  }
+
+  &__muted {
+    opacity: .4;
+  }
+
+  &__bolder {
+    margin-bottom: 8px;
+
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: 600;
+  }
 }

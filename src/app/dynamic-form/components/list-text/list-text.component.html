@@ -6,6 +6,7 @@
 
 <ng-container *ngIf="!arrayValue && !config.hideValue && !config.score">
   <span class="d-inline-flex align-items-center flex-wrap mr-1"
+    [ngClass]="cssClasses"
     *ngIf="value || value === 0"
     [title]="config.title || ''"
     [class.description]="config.description"
