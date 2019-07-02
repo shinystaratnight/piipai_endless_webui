@@ -1142,7 +1142,6 @@ const formadd = [
               edit: true
             },
             visibleMode: true,
-            additional_text: 'Or',
             default: '{jobsite.primary_contact.id}',
             if_master: '{customer_company.manager.id}',
             type: 'related',
