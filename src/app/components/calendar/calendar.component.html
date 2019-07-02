@@ -96,7 +96,7 @@
       <div class="counter"
         *ngIf="layer.count || status.data[layer.type]">
           <span class="count">
-            <i fa name="circle" [ngClass]="layer.cssClass"></i>
+            <i fa [name]="calendarType === 2 ? 'file' : 'circle'" [ngClass]="layer.cssClass" [ngStyle]="{fontSize: calendarType === 2 ? '16px' : '8px'}"></i>
             {{layer.count}}
           </span><br>
           <span class="count-description">{{layer.text}} / {{currentRange.value}}</span>
@@ -148,9 +148,9 @@
           <div *ngIf="day.tooltip[1].length" class="badge badge-success">{{day.tooltip[1].length}}</div>
           <div *ngIf="day.tooltip[0].length" class="badge badge-danger">{{day.tooltip[0].length}}</div>
           <div *ngIf="day.tooltip[2].length" class="badge badge-warning">{{day.tooltip[2].length}}</div>
-          <div *ngIf="day.tooltip[3].length" class="badge badge-primary">&nbsp;</div>
-          <div *ngIf="day.tooltip[4].length" class="badge badge-warning">&nbsp;</div>
-          <div *ngIf="day.tooltip[5].length" class="badge badge-success">&nbsp;</div>
+          <div *ngIf="day.tooltip[3].length"><i fa name="file" class="text-primary"></i></div>
+          <div *ngIf="day.tooltip[4].length"><i fa name="file" class="text-warning"></i></div>
+          <div *ngIf="day.tooltip[5].length"><i fa name="file" class="text-success"></i></div>
 
           <i fa name="envelope" class="text-secondary" *ngIf="day.jobOffers && day.jobOffers.length"></i>
         </div>
