@@ -24,34 +24,30 @@
 
           <div class="form-element-content-actions d-flex align-items-center"
             *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete) && !(config.errorMessage && config.errorMessage.visible)" >
-              <i fa class="icon px-2 ml-2"
-                style="opacity: .3"
-                name="ellipsis-v"
-                placement="bottom"
-                #pop="ngbPopover"
-                [ngbPopover]="actionsTemplate">
-              </i>
-
-              <ng-template #actionsTemplate>
-                <button *ngIf="displayValue" type="button" (click)="clearField()">
-                  <i fa class="text-secondary mr-2" name="times"></i> Reset
-                </button>
-                <button type="button"
-                  *ngIf="config.templateOptions.add && checkPermission('post')"
-                  (click)="open('post')">
-                    <i class="text-success mr-2" fa name="plus"></i> Add new
-                </button>
-                <button type="button"
-                  *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
-                  (click)="open('update')">
-                    <i class="text-warning mr-2" fa name="pencil"></i> Edit
-                </button>
-                <button type="button"
-                  *ngIf="config.templateOptions.delete && displayValue && checkPermission('delete')"
-                  (click)="open('delete')">
-                    <i class="text-secondary mr-2" fa name="trash"></i> Delete
-                </button>
-              </ng-template>
+              <button *ngIf="displayValue" class="clear-button mr-1" type="button" (click)="clearField()">
+                <i fa class="text-secondary" name="times"></i>
+              </button>
+              <button type="button"
+                class="btn btn-primary text-white mr-1"
+                *ngIf="config.templateOptions.add && checkPermission('post')"
+                (click)="open('post')">
+                  <!-- <i class="text-white mr-1" fa name="plus"></i>  -->
+                  Add new
+              </button>
+              <button type="button"
+                class="btn btn-warning text-white mr-1"
+                *ngIf="config.templateOptions.edit && displayValue && checkPermission('update')"
+                (click)="open('update')">
+                  <!-- <i class="text-white mr-1" fa name="pencil"></i>  -->
+                  Edit
+              </button>
+              <button type="button"
+                class="btn btn-danger text-white"
+                *ngIf="config.templateOptions.delete && displayValue && checkPermission('delete')"
+                (click)="open('delete')">
+                  <!-- <i class="text-white mr-1" fa name="trash"></i>  -->
+                  Delete
+              </button>
           </div>
 
           <div #autocomplete class="autocomplete" [hidden]="hideAutocomplete">
@@ -94,30 +90,24 @@
       </label>
       <app-info [description]="config.templateOptions.description"></app-info>
       <div #autocomplete *ngIf="config.many && results && !config.useOptions" class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results" style="position: relative">
-        <input [hidden]="config.hideSelect" type="text" class="form-control autocomplete-value" autocomplete="off"
-          #search="ngModel"
-          #searchElement
-          [(ngModel)]="searchValue"
-          [ngModelOptions]="{standalone: true}"
-          (focus)="generateList()">
+        <div class="position-relative w-100">
+          <input [hidden]="config.hideSelect" type="text" class="form-control autocomplete-value" autocomplete="off"
+            #search="ngModel"
+            #searchElement
+            [(ngModel)]="searchValue"
+            [ngModelOptions]="{standalone: true}"
+            (focus)="generateList()">
 
-        <div class="form-element-content-actions"
-          *ngIf="config.options && config.templateOptions.add" >
-            <i fa class="icon px-2 ml-2"
-              style="opacity: .3"
-              name="ellipsis-v"
-              placement="bottom"
-              #pop="ngbPopover"
-              [ngbPopover]="manyActionsTemplate">
-            </i>
-
-            <ng-template #manyActionsTemplate>
+          <div class="form-element-content-actions"
+            *ngIf="config.options && config.templateOptions.add" >
               <button type="button"
+                class="btn btn-primary text-white mr-1"
                 *ngIf="config.templateOptions.add && checkPermission('post')"
                 (click)="open('post')">
-                  <i class="text-success mr-2" fa name="plus"></i> Add new
+                  <!-- <i class="text-white mr-1" fa name="plus"></i>  -->
+                  Add new
               </button>
-            </ng-template>
+          </div>
         </div>
         <div class="autocomplete" [hidden]="!(previewList && previewList.length)">
           <div class="autocomplete-list"
@@ -208,7 +198,7 @@
             </div>
           </div>
 
-          <div class="d-flex flex-wrap align-items-center mt-2">
+          <div *ngIf="results && results.length" class="d-flex flex-wrap align-items-center">
             <span class="badge badge-outline mt-2 mr-1" style="white-space: normal"
               *ngFor="let item of results; let i = index">
               {{item.__str__}}

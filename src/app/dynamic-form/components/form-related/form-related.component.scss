@@ -62,6 +62,7 @@
   visibility: hidden;
 
   color: rgba($gray, .8);
+  background: transparent;
 
   .form-element-content:hover & {
     visibility: visible;
@@ -95,20 +96,14 @@ a.readonly:focus {
 .form-element-content-actions {
   button,
   i {
-    font-size: 12px;
-    line-height: 16px;
-    background-color: transparent;
+    font-size: 10px;
+    line-height: 11px;
     border: none;
-    color: rgba($gray, 7);
-
-    &:hover {
-      color: $gray;
-    }
   }
 
   button {
     display: flex;
     align-items: center;
-    padding: 3px 0;
+    padding: 3px 5px;
   }
 }
