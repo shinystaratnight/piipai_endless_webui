@@ -37,6 +37,11 @@
 
     min-height: 22px;
 
+    &.placeholder {
+      font-size: 12px;
+      opacity: .7;
+    }
+
     .filter-related & {
       height: auto;
 

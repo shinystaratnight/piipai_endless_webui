@@ -841,6 +841,7 @@ const form = [
                       label: 'Position',
                       values: ['__str__'],
                       type: 'related',
+                      placeholder: 'Please select role/trade'
                     },
                     type: 'related',
                     key: 'position',
