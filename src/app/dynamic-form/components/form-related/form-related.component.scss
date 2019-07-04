@@ -104,6 +104,12 @@ a.readonly:focus {
   button {
     display: flex;
     align-items: center;
+    margin-right: 4px;
     padding: 3px 5px;
+    transition: margin-right 0s;
+
+    &.alone {
+      margin-right: 34px;
+    }
   }
 }
