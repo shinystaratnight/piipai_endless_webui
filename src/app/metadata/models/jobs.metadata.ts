@@ -272,7 +272,8 @@ const list = {
         delete: false,
         values: ['__str__'],
         type: 'related',
-        edit: true
+        edit: true,
+        placeholder: 'Please select role/trade'
       },
       collapsed: false,
       type: 'related',
@@ -503,7 +504,8 @@ const formset = {
         edit: true,
         values: ['__str__'],
         label: 'Position',
-        type: 'related'
+        type: 'related',
+        placeholder: 'Please select role/trade'
       },
       read_only: true,
       type: 'related'
@@ -1044,7 +1046,8 @@ const form = [
       delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
+      edit: true,
+      placeholder: 'Please select role/trade'
     },
     type: 'related',
     query: {
@@ -1211,7 +1214,8 @@ const formadd = [
               ],
               type: 'related',
               edit: true,
-              required: true
+              required: true,
+              placeholder: 'Please select role/trade'
             },
             disabled: {
               keys: ['customer_company.id'],

@@ -113,3 +113,8 @@ a.readonly:focus {
     }
   }
 }
+
+input::placeholder {
+  font-size: 12px;
+  opacity: .7;
+}

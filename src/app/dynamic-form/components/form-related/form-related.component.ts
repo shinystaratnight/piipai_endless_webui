@@ -126,6 +126,7 @@ export class FormRelatedComponent extends BasicElementComponent
   public listDefaultQuery: string;
   public disableMessage: string;
   public fieldDisabled: boolean;
+  public placeholder: string;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
@@ -188,6 +189,9 @@ export class FormRelatedComponent extends BasicElementComponent
     if (this.config && this.config.metadata) {
       this.getReplaceElements(this.config.metadata);
     }
+
+    this.placeholder = this.config.templateOptions.placeholder ||
+      (this.config.templateOptions.edit ? 'Select or add new' : 'Select');
   }
 
   public ngAfterViewChecked() {
