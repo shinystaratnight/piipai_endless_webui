@@ -28,7 +28,8 @@
                 <i fa class="text-secondary" name="times"></i>
               </button>
               <button type="button"
-                class="btn btn-primary text-white mr-1"
+                class="btn btn-primary text-white"
+                [class.alone]="!(config.templateOptions.edit && displayValue && checkPermission('update'))"
                 *ngIf="config.templateOptions.add && checkPermission('post')"
                 (click)="open('post')">
                   <!-- <i class="text-white mr-1" fa name="plus"></i>  -->
@@ -101,7 +102,7 @@
           <div class="form-element-content-actions"
             *ngIf="config.options && config.templateOptions.add" >
               <button type="button"
-                class="btn btn-primary text-white mr-1"
+                class="btn btn-primary text-white alone"
                 *ngIf="config.templateOptions.add && checkPermission('post')"
                 (click)="open('post')">
                   <!-- <i class="text-white mr-1" fa name="plus"></i>  -->
