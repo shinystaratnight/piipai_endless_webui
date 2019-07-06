@@ -1984,7 +1984,7 @@ export class DynamicListComponent
               return this.time.instance(data[field])
                 .format(format === 'time' ? 'hh:mm A' : format === 'datetime' ? 'DD/MM/YYYY hh:mm A' : 'DD/MM/YYYY');
             } else {
-              return '';
+              return isMobile() && isCandidate() ? '-' : '';
             }
           } else {
             return data[prop];

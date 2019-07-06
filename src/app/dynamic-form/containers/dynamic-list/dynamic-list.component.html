@@ -837,7 +837,8 @@
     <div class="d-flex"
       *ngIf="status"
       [ngClass]="{'align-items-center flex-wrap justify-content-between w-100': status.content[0].value !== 7,
-                  'flex-column justify-content-center': status.content[0].value === 7}"
+                  'flex-column justify-content-center': status.content[0].value === 7,
+                  'no-signature': !status.content[status.content.length -1].value.origin && status.content[0].value === 7}"
     >
       <ng-container *ngFor="let field of getElement('status', data.content).content; let last = last">
         <ng-container

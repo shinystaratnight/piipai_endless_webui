@@ -131,18 +131,20 @@
       }
     }
 
-    .input-group {
-      input {
-        border-right: none;
-
-        &:focus {
+    @include media-breakpoint-up('md') {
+      .input-group {
+        input {
           border-right: none;
 
-          & ~ .input-group-addon {
+          &:focus {
+            border-right: none;
 
-            border-right: 1px solid $gray !important;
-            border-top: 1px solid $gray;
-            border-bottom: 1px solid $gray;
+            & ~ .input-group-addon {
+
+              border-right: 1px solid $gray !important;
+              border-top: 1px solid $gray;
+              border-bottom: 1px solid $gray;
+            }
           }
         }
       }
@@ -189,6 +191,10 @@
       &:focus {
         border: 1px solid $gray;
       }
+
+      @include media-breakpoint-down('sm') {
+        border-radius: 50px !important;
+      }
     }
 
     .default-value {
@@ -225,7 +231,7 @@
 
       .placeholder {
         position: absolute;
-        top: 10px;
+        top: 12px;
         left: 16px;
 
         font-size: 12px;
