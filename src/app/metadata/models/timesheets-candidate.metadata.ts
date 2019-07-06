@@ -1,4 +1,26 @@
-import { yesterdayFormatDate, todayFormatDate, tomorrowFormatDate, Colors, Endpoints } from '../helpers';
+import { Colors, Endpoints } from '../helpers';
+import { createFilter, Type } from '../../dynamic-form/models/filters';
+
+const statusList = [
+  { label: 'Pending submission', value: '4' },
+  { label: 'Pending approval', value: '5' },
+  { label: 'Approved', value: '7' }
+];
+
+const filters = {
+  shift_started_at: createFilter(Type.Date, {
+    key: 'shift_started_at',
+    label: 'Shift date',
+    yesterday: true,
+    today: true,
+    tomorrow: true
+  }),
+  status: createFilter(Type.Select, {
+    key: 'status',
+    label: 'Status',
+    values: statusList
+  }),
+}
 
 const list = {
   list: {
@@ -68,28 +90,28 @@ const list = {
             type: 'static',
             label: 'Break',
             field: 'break_started_at',
-            showIf: [{ status: [0, 1, 2, 3] }]
+            showIf: [{ status: [0, 1, 2, 3, 4] }]
           },
           {
             text: '-',
             type: 'static',
             label: 'End',
             field: 'shift_ended_at',
-            showIf: [{ status: [0, 1, 2, 3] }]
+            showIf: [{ status: [0, 1, 2, 3, 4] }]
           },
           {
             text: '{break_started_at__time} - {break_ended_at__time}',
             type: 'static',
             label: 'Break',
             field: 'break_started_at',
-            showIf: [{ status: [4, 5, 6, 7] }]
+            showIf: [{ status: [5, 6, 7] }]
           },
           {
             text: '{shift_ended_at__time}',
             type: 'static',
             label: 'End',
             field: 'shift_ended_at',
-            showIf: [{ status: [4, 5, 6, 7] }]
+            showIf: [{ status: [5, 6, 7] }]
           }
         ]
       },
@@ -111,28 +133,28 @@ const list = {
             type: 'static',
             label: 'Shift start/end',
             field: 'shift_started_at',
-            showIf: [{ status: [0, 1, 2, 3] }]
+            showIf: [{ status: [0, 1, 2, 3, 4] }]
           },
           {
             text: '- / -',
             type: 'static',
             label: 'Break start/end',
             field: 'break_started_at',
-            showIf: [{ status: [0, 1, 2, 3] }]
+            showIf: [{ status: [0, 1, 2, 3, 4] }]
           },
           {
             text: '{shift_started_at__time} / {shift_ended_at__time}',
             type: 'static',
             label: 'Shift start/end',
             field: 'shift_ended_at',
-            showIf: [{ status: [4, 5, 6, 7] }]
+            showIf: [{ status: [5, 6, 7] }]
           },
           {
             text: '{break_started_at__time} / {break_ended_at__time}',
             type: 'static',
             label: 'Break start/end',
             field: 'break_started_at',
-            showIf: [{ status: [4, 5, 6, 7] }]
+            showIf: [{ status: [5, 6, 7] }]
           },
         ]
       },
@@ -146,7 +168,7 @@ const list = {
             field: 'totalTime',
             styles: ['success'],
             showIf: [
-              { status: [4, 5, 6, 7] },
+              { status: [5, 6, 7] },
             ]
           },
           {
@@ -168,7 +190,7 @@ const list = {
             type: 'static',
             text: 'No record',
             styles: ['muted'],
-            showIf: [{ status: 3 }]
+            showIf: [{ status: [3, 4] }]
           },
         ]
       },
@@ -225,7 +247,7 @@ const list = {
             field: 'id',
             action: 'emptyPost',
             noDelim: true,
-            styles: ['success', 'shadow', 'shadow-success', 'size-m', 'mr'],
+            styles: ['success', 'shadow', 'shadow-success', 'size-m', 'mr', 'resize'],
             showIf: [{
               status: 1
             }]
@@ -273,12 +295,10 @@ const list = {
           {
             text: 'Edit submission',
             type: 'button',
-            color: 'success',
             endpoint: '/hr/timesheets-candidate/{id}/submit/',
             field: 'id',
-            shadow: true,
             action: 'submitTimesheet',
-            styles: ['size-l'],
+            styles: ['size-l', 'default'],
             showIf: [{
               status: 5
             }]
@@ -310,6 +330,16 @@ const list = {
             ]
           },
           {
+            text: '{supervisor_modified_at__datetime}',
+            field: 'supervisor_modified_at',
+            type: 'static',
+            styles: ['muted'],
+            showIf: [
+              { status: 7 },
+              'supervisor_modified_at'
+            ]
+          },
+          {
             field: 'supervisor_signature',
             type: 'picture',
             file: false,
@@ -323,44 +353,8 @@ const list = {
       }
     ],
     filters: [
-      {
-        key: 'shift_started_at',
-        list: [
-          {
-            query:
-              `shift_started_at_0=${yesterdayFormatDate}&shift_started_at_1=${yesterdayFormatDate}`,
-            label: 'Yesterday'
-          },
-          {
-            query:
-              `shift_started_at_0=${todayFormatDate}&shift_started_at_1=${todayFormatDate}`,
-            label: 'Today'
-          },
-          {
-            query:
-              `shift_started_at_0=${tomorrowFormatDate}&shift_started_at_1=${tomorrowFormatDate}`,
-            label: 'Tomorrow'
-          }
-        ],
-        type: 'date',
-        label: 'Shift date',
-        input: [
-          { query: 'shift_started_at_0', label: 'From date' },
-          { query: 'shift_started_at_1', label: 'To date' }
-        ]
-      },
-      {
-        default: null,
-        query: 'status',
-        label: 'Status',
-        options: [
-          { label: 'Pending submission', value: '4' },
-          { label: 'Pending approval', value: '5' },
-          { label: 'Approved', value: '7' }
-        ],
-        key: 'status',
-        type: 'select'
-      }
+      filters.shift_started_at,
+      filters.status
     ],
     editDisable: true,
     label: 'Timesheet history'

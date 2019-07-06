@@ -52,6 +52,10 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.data = this.createInputs(this.config.input);
     this.mobileDevice = isMobile();
 
+    if (this.mobileDevice) {
+      this.displayFormat = this.queryFormat;
+    }
+
     this.querySubscription = this.route.queryParams.subscribe(() =>
       this.updateFilter()
     );
@@ -93,6 +97,15 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
         el.nativeElement.readOnly = false;
       });
     }
+  }
+
+  public changeDateOnMobile(data) {
+    this.query = this.getQuery(this.data);
+    this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
+      data: this.data
+    });
+
+    this.changeQuery();
   }
 
   public refreshDatebox(element: HTMLElement) {

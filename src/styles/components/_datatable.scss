@@ -6,6 +6,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   .btn {
     border-radius: 50px;
 
+    margin-top: .3rem;
     margin-bottom: .2rem;
   }
 
@@ -993,4 +994,14 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
 .total-time-wrapper app-list-text {
   display: inline-flex;
+}
+
+.no-signature {
+  padding-left: 147px;
+
+  app-list-checkbox {
+    position: absolute;
+    top: 6px;
+    left: 13px;
+  }
 }
