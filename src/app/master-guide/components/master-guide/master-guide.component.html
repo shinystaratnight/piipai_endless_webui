@@ -1,0 +1,26 @@
+<div class="guide"
+  *ngIf="!skiped"
+  [class.guide--placeholder]="showPlaceholder"
+  [class.guide--pulse]="!inactiveIcon && !showPlaceholder"
+  [class.guide--show]="showContent">
+    <app-master-guide-icon [inactive]="inactiveIcon" (toggle)="togglePlaceholder($event)"></app-master-guide-icon>
+
+    <h5 class="guide__title" [class.guide__title--show]="showContent">
+      Start-Up Guide
+      <span *ngIf="showContent" class="guide__minimize-btn" (click)="minimize($event)">Minimize <i fa name="angle-down"></i></span>
+    </h5>
+
+    <app-master-guide-content
+      [guide]="guide"
+      *ngIf="showContent">
+    </app-master-guide-content>
+
+    <div *ngIf="!showContent" class="guide-progress">
+      <div class="guide-progress__indicator" [ngStyle]="{'width': getProgress() + '%'}"></div>
+    </div>
+
+    <div class="guide__footer" [class.guide__footer--show]="showContent">
+      <button type="button" class="btn guide__btn" (click)="skipGuide($event)">Skip</button>
+      <button *ngIf="!showContent" type="button" class="btn guide__btn guide__btn-primary" (click)="onShowContent($event)">Show</button>
+    </div>
+</div>

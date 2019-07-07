@@ -1,0 +1,41 @@
+@import '../../../../styles/variables';
+
+:host {
+  display: block;
+  padding: 5px 0;
+}
+
+.guide {
+  &__list {
+    max-height: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-y: auto
+  }
+
+  &__item {
+    display: flex;
+    padding: 5px;
+    font-size: 14px;
+
+    i {
+      margin-top: 5px;
+      font-size: 10px;
+      color: $gray-300;
+
+      &.active {
+        color: $brand-success;
+      }
+    }
+
+    a {
+      color: $brand-primary;
+    }
+
+    .custom-checkbox {
+      width: 12px;
+      height: 12px;
+    }
+  }
+}
