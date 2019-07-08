@@ -1,0 +1,124 @@
+@import '../../../../styles/variables';
+
+:host {
+  display: block;
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+}
+
+$min-width: 120px;
+$shadow: 0 0 5px rgba($brand-primary, 0.3);
+$icon-width: 70px;
+
+.guide {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: $icon-width;
+  width: $icon-width;
+  padding: 7px $icon-width / 2;
+  border-radius: $icon-width / 2;
+  background-color: white;
+  transition: all .4s ease-out;
+  overflow: hidden;
+  box-shadow: $shadow, $shadow;
+
+  &--pulse {
+    animation: shadow-pulse 1.2s infinite;
+  }
+
+  &--placeholder {
+    width: 300px;
+  }
+
+  &--show {
+    width: 300px;
+    height: auto;
+  }
+
+  &__title {
+    min-width: $min-width;
+    margin-bottom: 0;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: bold;
+
+    &--show {
+      display: flex;
+      margin-bottom: 7px;
+      padding: 7px 0 14px;
+      border-bottom: 1px solid rgba($gray, .5);
+    }
+  }
+
+  &__minimize-btn {
+    margin-left: auto;
+    font-size: 12px;
+    cursor: pointer;
+    color: $brand-secondary;
+    transition: all .4s ease-out;
+
+    &:hover {
+      color: $gray;
+    }
+  }
+
+  &-progress {
+    position: relative;
+    width: 190px;
+    height: 4px;
+    margin-top: 4px;
+    border-radius: 2px;
+    background-color: $gray-300;
+
+    &__indicator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 4px;
+      border-radius: 2px;
+      background-color: $brand-success;
+      z-index: 1;
+    }
+  }
+
+  &__footer {
+    min-width: $min-width;
+
+    &--show {
+      padding: 14px 0 7px;
+      margin-top: 7px;
+    }
+  }
+
+  &__btn {
+    margin-right: 25px;
+    padding: 0;
+    font-size: 14px;
+    line-height: 16px;
+    background-color: transparent;
+    border-radius: 0;
+    opacity: .4;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &-primary {
+      color: $brand-primary;
+      opacity: 1;
+    }
+  }
+}
+
+@keyframes shadow-pulse {
+  0% {
+    box-shadow: $shadow, $shadow;
+  }
+  100% {
+    box-shadow: $shadow, 0 0 0 16px rgba($brand-primary, 0);
+  }
+}
+
