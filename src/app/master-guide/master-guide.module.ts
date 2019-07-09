@@ -9,7 +9,6 @@ import {
   MasterGuideContentComponent,
   MasterGuideIconComponent
 } from './components';
-import { MasterGuideFooterComponent } from './components/master-guide-footer/master-guide-footer.component';
 
 @NgModule({
   imports: [CommonModule, RouterModule, Angular2FontawesomeModule, FormsModule],
@@ -17,7 +16,6 @@ import { MasterGuideFooterComponent } from './components/master-guide-footer/mas
     MasterGuideComponent,
     MasterGuideContentComponent,
     MasterGuideIconComponent,
-    MasterGuideFooterComponent
   ],
   exports: [MasterGuideComponent]
 })
