@@ -12,6 +12,8 @@ import { Subscription } from 'rxjs';
 import { FormatString } from '../../../helpers/format';
 import { GenericFormService } from '../../services';
 import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
+import { SiteSettingsService } from '../../../services';
+import { Endpoints } from '../../../metadata/helpers';
 
 @Component({
   selector: 'app-form-timeline',
@@ -24,7 +26,6 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
   public config: any;
   public modalData: any;
-  public objectEndpoint: string;
   public stateData: any = {};
   public requirements: any[];
   public modalRef: NgbModalRef;
@@ -39,23 +40,25 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public updated: boolean;
   public loading: boolean;
   public saveProcess: boolean;
+  public advancedSeving: boolean;
 
-  public workflowObjectEndpoint = '/core/workflowobjects/';
+  public workflowObjectEndpoint = Endpoints.WorkflowObject;
 
   private subscriptions: Subscription[];
 
   constructor(
     public modalService: NgbModal,
     private genericFormService: GenericFormService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private companySettings: SiteSettingsService
   ) {
     this.subscriptions = [];
   }
 
   public ngOnInit() {
+    this.advancedSeving = this.companySettings.settings.company_settings.advanced_saving;
     this.dropdown = this.config.dropdown;
     this.query = [];
-    this.objectEndpoint = '/core/workflowobjects/';
     if (!this.config.hide) {
       this.initialize();
     }
@@ -162,7 +165,16 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     if (closeModal) {
       closeModal();
     }
+    if (this.saveProcess) {
+      return;
+    }
     this.modalData = {};
+    if (state.state === 1 && !this.advancedSeving && !state.acceptance_tests.length && !state.substates.length) {
+      state.saveProcess = true;
+      this.activeState(state.id);
+      return;
+    }
+
     if (state.state === 1 || state.state === 2) {
       let title = '';
       if (state.state === 1) {
@@ -304,6 +316,25 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
           testId: res.id,
           workflowObject: this.modalData.workflowObject
         } as PassTestModalConfig;
+      });
+  }
+
+  public activeState(stateId: string) {
+    this.saveProcess = true;
+    const body = {
+      object_id: this.objectId,
+      state: {
+        id: stateId
+      },
+      comment: null,
+      active: true
+    };
+
+    this.genericFormService
+      .submitForm(this.workflowObjectEndpoint, body)
+      .subscribe((res) => {
+        this.saveProcess = false;
+        this.getTimeline(this.config.query.model === 'hr.job');
       });
   }
 

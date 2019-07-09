@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
 
 import { WorkflowService } from '../../services';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-workflow',
@@ -31,7 +32,21 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
   public addConfig: any[];
 
+  public checkboxConfig = {
+    type: 'checkbox',
+    key: 'advansed_saving',
+    value: false,
+    templateOptions: {
+      label: 'Advanced state saving'
+    }
+  }
+
+  public checkboxForm: FormGroup = new FormGroup({});
+  public checkboxSub: Subscription;
+
   @Input() public company: string;
+  @Input() public advanced: boolean;
+  @Output() public changeSaving: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('modal') public modal: TemplateRef<any>;
   @ViewChild('add') public addModal: TemplateRef<any>;
@@ -48,11 +63,19 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     this.acceptanceTests = {};
 
     this.getWorkflows();
+    this.checkboxConfig.value = this.advanced;
+    this.checkboxSub = this.checkboxForm.valueChanges.subscribe((value) => {
+      this.changeSaving.emit(value);
+    });
   }
 
   public ngOnDestroy() {
     if (this.modalRef) {
       this.modalRef.close();
+    }
+
+    if (this.checkboxSub) {
+      this.checkboxSub.unsubscribe();
     }
   }
 

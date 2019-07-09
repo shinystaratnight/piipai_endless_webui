@@ -39,6 +39,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
   public form: any;
 
   public companySettingsData: any;
+  public showWorkflow: boolean;
+  public workflowForm: any;
 
   public company: string;
 
@@ -61,10 +63,12 @@ export class CompanyComponent implements OnInit, OnDestroy {
     });
     this.gfs.getAll(this.endpoint).subscribe(
       (res: any) => {
+        this.companySettingsData = res;
         this.config = meta;
         this.fillingForm(this.config, res);
         this.updateMetadataByProps(this.config);
         this.company = res.company_settings.company;
+        this.showWorkflow = true;
       },
       (err: any) => this.errors = err
     );
@@ -89,6 +93,10 @@ export class CompanyComponent implements OnInit, OnDestroy {
         this.updateMetadataByProps(el.children);
       }
     });
+  }
+
+  public changeWorkflowSaving(value) {
+    this.workflowForm = value;
   }
 
   public observeFields(fields: any[], observers) {
@@ -129,6 +137,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   public submitForm(data) {
+    Object.assign(data.company_settings, this.workflowForm);
     const keys = Object.keys(data.invoice_rule);
     keys.forEach((key) => {
       if (key.includes('period_zero_reference')) {

@@ -32,8 +32,9 @@
   </select>
 
   <app-info *ngIf="getState(currentState).state === 0" [description]="requirements"></app-info>
-  <button type="button" (click)="open(getState(currentState))" *ngIf="getState(currentState).state === 1" class="btn btn-sm badge badge-outline">
-    <i fa name="check"></i>
+  <button type="button" (click)="open(getState(currentState))" *ngIf="getState(currentState).state === 1" class="btn btn-sm badge badge-outline" [class.active]="saveProcess">
+    <i fa name="check" *ngIf="!saveProcess"></i>
+    <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
   </button>
 </div>
 
@@ -93,7 +94,7 @@
       <div *ngIf="(!modalData.tests && !modalData.substates) || modalData.setActive">
         <app-generic-form
           [mode]="'edit'"
-          [endpoint]="objectEndpoint"
+          [endpoint]="workflowObjectEndpoint"
           [id]="modalData.id"
           [data]="stateData"
           (event)="sendEventHandler($event, c)"
@@ -125,7 +126,8 @@
       'allowed': state.state === 1,
       'active': state.state === 2,
       'visited': state.state === 3,
-      'not-allowed': state.state === 4
+      'not-allowed': state.state === 4,
+      'save': state.saveProcess
     }">
       <span *ngIf="state.state === 2">
         {{(state.name_after_activation) ? state.name_after_activation : state.name_before_activation}}
@@ -138,6 +140,8 @@
       </span>
 
       <span class="state-progress">{{calculateProgress(state)}}</span>
+
+      <app-spinner *ngIf="state.saveProcess" [sm]="true"></app-spinner>
   </div>
   <ng-template #requir>
     <div class="info-block">
