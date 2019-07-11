@@ -26,15 +26,15 @@
   opacity: .5;
 }
 
-.wrapper {
+.credit-card-wrapper {
   max-width: 500px;
+
+  form {
+    display: flex;
+  }
 }
 
-form {
-  display: flex;
-}
-
-.card-alert {
+.credit-card-alert {
   display: inline-flex;
   align-items: center;
 
