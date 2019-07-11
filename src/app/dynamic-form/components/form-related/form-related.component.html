@@ -150,7 +150,7 @@
           <div class="object-list__item" *ngFor="let item of results; let i = index">
             {{item.__str__}}
             <app-close-button class="ml-2 mr-3" [sm]="true" (click)="deleteItem(i, item)"></app-close-button>
-            <button type="button" *ngIf="item.tests.length && !item.passed" class="object-list__btn btn btn-outline-primary" (click)="passTests(item, $event)">Pass test</button>
+            <button type="button" *ngIf="item.tests && item.tests.length && !item.passed" class="object-list__btn btn btn-outline-primary" (click)="passTests(item, $event)">Pass test</button>
             <button type="button" *ngIf="item.passed" disabled class="object-list__btn btn btn-outline-primary bg-primary text-white">Passed</button>
           </div>
         </div>
