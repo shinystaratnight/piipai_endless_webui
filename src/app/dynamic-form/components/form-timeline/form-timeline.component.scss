@@ -72,16 +72,16 @@
       align-items: center;
 
       .btn.btn-sm {
-        padding: 1px 2px 0px 2px;
         margin-left: .5rem;
 
-        font-size: 12px;
+        font-size: 10px;
         line-height: 14px;
 
         border-color: $brand-success;
         color: $brand-success;
 
-        &:hover {
+        &:hover,
+        &.active {
           border-color: $brand-success;
 
           background-color: $brand-success;
@@ -188,5 +188,14 @@
 
   td {
     font-size: 14px;
+  }
+}
+
+.save {
+  background: rgba($gray, .2);
+
+  app-spinner {
+    position: relative;
+    top: -1px;
   }
 }

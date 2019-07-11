@@ -1,16 +1,26 @@
 <div class="workflow-container">
   <label class="workflow-title">Workflow Settings</label>
 
-  <div *ngIf="workflowList" class="form-element">
-    <label class="col-form-label form-element-label">Workflow</label>
+  <div class="row">
+    <div *ngIf="workflowList" class="form-element col-4">
+      <label class="col-form-label form-element-label">Workflow</label>
 
-    <div class="form-element-content edit">
-      <select class="form-control custom-select"
-        [(ngModel)]="workflowId"
-        (ngModelChange)="getNodes($event)">
-          <option class="text-muted" value="" [disabled]="true">Workflow</option>
-          <option *ngFor="let workflow of workflowList" [value]="workflow.value">{{workflow.label}}</option>
-      </select>
+      <div class="form-element-content edit">
+        <select class="form-control custom-select"
+          [(ngModel)]="workflowId"
+          (ngModelChange)="getNodes($event)">
+            <option class="text-muted" value="" [disabled]="true">Workflow</option>
+            <option *ngFor="let workflow of workflowList" [value]="workflow.value">{{workflow.label}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <ng-container
+        appFormElement
+        [config]="checkboxConfig"
+        [group]="checkboxForm">
+      </ng-container>
     </div>
   </div>
 

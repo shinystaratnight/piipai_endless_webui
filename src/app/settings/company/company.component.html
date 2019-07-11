@@ -1,4 +1,9 @@
-<app-workflow [company]="company"></app-workflow>
+<app-workflow
+  *ngIf="showWorkflow"
+  [company]="company"
+  [advanced]="companySettingsData.advanced"
+  (changeSaving)="changeWorkflowSaving($event)">
+</app-workflow>
 
 <hr>
 
