@@ -26,6 +26,7 @@ export interface User {
       name: string;
       __str__: string;
     },
+    is_primary: boolean;
     user: string;
   };
   roles: Role[];

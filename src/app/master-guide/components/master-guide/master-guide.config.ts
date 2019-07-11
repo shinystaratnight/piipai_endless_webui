@@ -1,61 +1,71 @@
 import { GuideItem } from "../../interfaces";
 
+import { Endpoints } from '../../../metadata/helpers';
+
 export const guide: GuideItem[] = [
   {
-    completed: false,
+    key: 'has_company_address',
     text: [
       'Add Your',
-      { url: '/core/companies/{company_id}/change' , text: 'Business address' }
+      { url: `${Endpoints.Company}{company_id}/change` , text: 'Business address' }
     ],
   },
   {
-    completed: true,
+    key: 'has_industry',
     text: ['Add Your industry: multiple choices available']
   },
   {
-    completed: false,
+    key: 'purpose',
     text: ['Master company purpose'],
+    endpoint: `${Endpoints.Company}{company_id}/`,
     options: [
-      { active: false, text: 'We will use software to manage our own workers' },
-      { active: false, text: 'We use software to manage hire workers for whose work we charge our clients hourly' },
-      { active: false, text: 'We use software to find candidates or to sell candidate profiles' },
+      { value: 'self_use', active: false, text: 'We will use software to manage our own workers' },
+      { value: 'hire', active: false, text: 'We use software to manage hire workers for whose work we charge our clients hourly' },
+      { value: 'recruitment', active: false, text: 'We use software to find candidates or to sell candidate profiles' },
     ]
   },
   {
-    completed: true,
+    key: 'has_skills',
     text: [
       'Add your',
-      { url: '/skills/skills/add' , text: 'Skills' },
+      { url: `${Endpoints.Skill}add` , text: 'Skills' },
       'and skill rates'
     ]
   },
   {
-    completed: false,
+    key: 'has_company_contact',
     text: [
       'Who beside you will be working with this software ( add company users',
-      { url: '/core/companies/{company_id}/change' , text: 'company users' },
+      { url: `${Endpoints.Company}{company_id}/change` , text: 'company users' },
       ')'
     ]
   },
   {
-    completed: false,
+    key: 'has_candidate',
     text: [
       'Create your first',
-      { url: '/candidate/candidatecontacts/add' , text: 'candidate' }
+      { url: `${Endpoints.Skill}add` , text: 'candidate' }
     ]
   },
   {
-    completed: false,
+    key: 'has_client',
     text: [
       'Create your first',
-      { url: '/core/companies/add' , text: 'client' }
+      { url: `${Endpoints.Company}add` , text: 'client' }
     ]
   },
   {
-    completed: false,
+    key: 'has_jobsite',
     text: [
       'Create your first',
-      { url: '/hr/jobsites/add' , text: 'jobsite' }
+      { url: `${Endpoints.Jobsite}add` , text: 'jobsite' }
+    ]
+  },
+  {
+    key: 'myob_connected',
+    text: [
+      'Integrations(MYOB only), take to Settings connect',
+      { url: `/settings/myob` , text: 'MYOB' }
     ]
   },
 ];

@@ -27,7 +27,7 @@ import { SharedModule } from './shared/shared.module';
 import { environment } from '../environments/environment';
 
 import * as moment from 'moment-timezone';
-import { MasterGuideodule } from './master-guide/master-guide.module';
+import { MasterGuideModule } from './master-guide/master-guide.module';
 
 moment.tz.setDefault('Australia/Sydney');
 
@@ -55,7 +55,7 @@ moment.tz.setDefault('Australia/Sydney');
     Angular2FontawesomeModule,
     SharedModule,
     InfiniteScrollModule,
-    MasterGuideodule,
+    MasterGuideModule,
   ],
   providers: [
     ...services,

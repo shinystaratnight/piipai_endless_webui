@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 
 import { GuideItem } from '../../interfaces';
 import { FormatString } from '../../../helpers/format';
@@ -14,6 +14,9 @@ export class MasterGuideContentComponent implements OnInit {
 
   @Input()
   guide: GuideItem[];
+
+  @Output()
+  updateEvent: EventEmitter<{value: any, item: GuideItem}> = new EventEmitter();
 
   constructor(private userService: UserService) {}
 
@@ -31,5 +34,12 @@ export class MasterGuideContentComponent implements OnInit {
 
   isArray() {
     return Array.isArray;
+  }
+
+  update(value: any, item: GuideItem) {
+    this.updateEvent.emit({
+      value,
+      item
+    });
   }
 }

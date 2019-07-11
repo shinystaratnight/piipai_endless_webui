@@ -11,6 +11,7 @@ import { PermissionsService } from './permissions/permissions.service';
 import { MyobComponent } from './myob/myob.component';
 
 import { SharedModule } from '../shared/shared.module';
+import { MasterGuideModule } from '../master-guide/master-guide.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
@@ -29,7 +30,8 @@ import { MyobResolver } from './myob/myob.resolver';
     FormsModule,
     Angular2FontawesomeModule,
     InfiniteScrollModule,
-    DynamicFormModule
+    DynamicFormModule,
+    MasterGuideModule
   ],
   declarations: [
     PermissionsComponent,
