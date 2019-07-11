@@ -1,26 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { GuideItem } from '../../interfaces';
 import { guide } from './master-guide.config';
+import { MasterGuideService } from '../../services';
+import { updateGuide } from '../../../interceptors/master-guide.interceptor';
 
 @Component({
   selector: 'app-master-guide',
   templateUrl: './master-guide.component.html',
   styleUrls: ['./master-guide.component.scss']
 })
-export class MasterGuideComponent implements OnInit {
+export class MasterGuideComponent implements OnInit, OnDestroy {
 
-  guide: GuideItem[] = guide;
+  guide: GuideItem[];
 
   showPlaceholder: boolean;
   showContent: boolean;
   inactiveIcon: boolean;
   skiped: boolean;
 
-  constructor() { }
+  private sub: Subscription;
+
+  constructor(
+    private masterGuideService: MasterGuideService
+  ) { }
 
   ngOnInit() {
     this.inactiveIcon = false;
+    this.getGuide();
+
+    const sub = updateGuide.subscribe(() => {
+      this.getGuide();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   togglePlaceholder() {
@@ -47,4 +65,29 @@ export class MasterGuideComponent implements OnInit {
     return (this.guide.filter((el) => el.completed).length / this.guide.length) * 100;
   }
 
+  update({ value, item }) {
+    this.masterGuideService.updateValue(item.endpoint, { [item.key]: value })
+  }
+
+  getGuide() {
+    this.masterGuideService.getGuide()
+      .subscribe((res: any) => {
+        const complete = Object.keys(res).every((key) => res[key]);
+
+        if (!complete) {
+          this.guide = guide.map((item) => {
+            if (item.options) {
+              item.options.forEach((option) => {
+                option.active = option.value === res.purpose;
+              });
+            }
+
+            return {
+              ...item,
+              completed: res[item.key],
+            }
+          });
+        }
+      });
+  }
 }

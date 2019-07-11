@@ -8,6 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { SharedModule } from '../shared/shared.module';
 import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
+import { MasterGuideModule } from '../master-guide/master-guide.module';
 
 import { BillingComponent } from './billing.component';
 import { components } from './components';
@@ -27,7 +28,8 @@ import { routes } from './billing.routing';
     NgbModule,
 
     SharedModule,
-    DynamicFormModule
+    DynamicFormModule,
+    MasterGuideModule
   ],
   declarations: [
     BillingComponent,

@@ -10,6 +10,8 @@ import {
   MasterGuideIconComponent
 } from './components';
 
+import { MasterGuideService } from './services';
+
 @NgModule({
   imports: [CommonModule, RouterModule, Angular2FontawesomeModule, FormsModule],
   declarations: [
@@ -17,6 +19,7 @@ import {
     MasterGuideContentComponent,
     MasterGuideIconComponent,
   ],
+  providers: [MasterGuideService],
   exports: [MasterGuideComponent]
 })
-export class MasterGuideodule {}
+export class MasterGuideModule {}

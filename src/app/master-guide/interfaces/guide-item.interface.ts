@@ -1,5 +1,7 @@
 export interface GuideItem {
-  completed: boolean;
+  key: string;
   text: any[];
-  options?: Array<{ active: boolean, text: string }>;
+  endpoint?: string;
+  completed?: boolean;
+  options?: Array<{ active: boolean, text: string, value: string }>;
 }

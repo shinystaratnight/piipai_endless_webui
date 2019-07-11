@@ -1,5 +1,5 @@
 <div class="guide"
-  *ngIf="!skiped"
+  *ngIf="!skiped && guide"
   [class.guide--placeholder]="showPlaceholder"
   [class.guide--pulse]="!inactiveIcon && !showPlaceholder"
   [class.guide--show]="showContent">
@@ -12,7 +12,8 @@
 
     <app-master-guide-content
       [guide]="guide"
-      *ngIf="showContent">
+      *ngIf="showContent"
+      (updateEvent)="update($event)">
     </app-master-guide-content>
 
     <div *ngIf="!showContent" class="guide-progress">
