@@ -1708,6 +1708,7 @@ export class DynamicListComponent
         metadataQuery: isMobile() && (getOrientation() !== 90) ? 'type=mobile' : '',
         signatureStep: false,
         form: {},
+        supervisor_signature: data.supervisor_signature.origin,
         label: {
           picture: contact.picture && contact.picture.origin,
           contactAvatar: getContactAvatar(contact.__str__),
@@ -1803,7 +1804,9 @@ export class DynamicListComponent
           },
           data: {
             evaluation_score: score
-          }
+          },
+          signatureStep: true,
+          approve: true
         };
 
         this.open(this.approveSignature, { windowClass: 'approve-modal approve' });

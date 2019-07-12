@@ -4,7 +4,8 @@ import {
   ViewChild,
   EventEmitter,
   ViewEncapsulation,
-  Output
+  Output,
+  Input
 } from '@angular/core';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 
@@ -25,6 +26,9 @@ export class SignatureComponent implements AfterViewInit {
 
   show = true;
 
+  @Input()
+  public supervisorSignature: string;
+
   @ViewChild(SignaturePad) signaturePad: SignaturePad;
 
   @Output()
@@ -33,6 +37,9 @@ export class SignatureComponent implements AfterViewInit {
   public signaturePadOptions: Object = this.generateParams();
 
   ngAfterViewInit() {
+    if (this.supervisorSignature) {
+      this.toDataURL(this.supervisorSignature, this.signaturePad.fromDataURL.bind(this), 'image/png');
+    }
 
     this.clear();
 
@@ -58,5 +65,19 @@ export class SignatureComponent implements AfterViewInit {
 
   drawComplete() {
     this.signature.emit(this.signaturePad.toDataURL());
+  }
+
+  toDataURL(src, callback, outputFormat?) {
+    const img = new Image();
+    img.src = src;
+    img.onload = (e) => {
+      const canvas: any = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.height = this.generateParams().canvasHeight;
+      canvas.width = this.generateParams().canvasWidth;
+      ctx.drawImage(img, 0, 0);
+      const dataURL = canvas.toDataURL(outputFormat);
+      callback(dataURL);
+    };
   }
 }

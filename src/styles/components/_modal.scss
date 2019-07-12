@@ -13,6 +13,42 @@
     &.change .modal-dialog {
       max-width: 600px;
     }
+
+    &.approve .modal-dialog {
+      max-width: 600px;
+
+      .content-info {
+        flex-direction: row;
+      }
+
+      .flex-fill {
+        flex: auto;
+      }
+
+      .evaluation-content {
+        align-self: flex-start;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 33px;
+      }
+
+      .group-title {
+        width: 100px;
+        margin-bottom: 5px;
+      }
+
+      .time-line {
+        margin-bottom: 0 !important;
+      }
+
+      .signature-content {
+        margin-right: auto;
+      }
+
+      .form-navigation {
+        display: none;
+      }
+    }
   }
 
   .modal-dialog {
