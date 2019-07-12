@@ -106,6 +106,7 @@ import * as skillname from './skillname.metadata';
 import * as smslogs from './smslogs.metadata';
 import * as skillratecoefficient from './skillratecoefficientrels.metadata';
 import * as priselistratemodifiers from './pricelistratemodifiers.metadata';
+import * as jobsitesclient from './jobsites-client.metadata';
 
 import { Endpoints } from '../helpers';
 
@@ -217,5 +218,6 @@ export const metadata = {
   [Endpoints.SkillName]: skillname.metadata,
   [Endpoints.SmsLog]: smslogs.metadata,
   [Endpoints.SkillRateCoefficient]: skillratecoefficient.metadata,
-  [Endpoints.PriceListRateModifiers]: priselistratemodifiers.metadata
+  [Endpoints.PriceListRateModifiers]: priselistratemodifiers.metadata,
+  [Endpoints.JobsiteClient]: jobsitesclient.metadata
 };

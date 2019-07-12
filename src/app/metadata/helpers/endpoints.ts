@@ -33,6 +33,7 @@ export enum Endpoints {
   Jobsite = '/hr/jobsites/',
   JobsiteUnavailability = '/hr/jobsiteunavailabilities/',
   JobsiteMap = '/hr/jobsites/jobsite_map/',
+  JobsiteClient = '/hr/jobsites/client_contact_jobsite/',
 
   // Job
   Job = '/hr/jobs/',

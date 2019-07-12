@@ -18,6 +18,7 @@ import {
 import { GenericFormService, FormMode } from '../../dynamic-form/services/';
 import { CheckPermissionService, ToastService, MessageType } from '../../shared/services/';
 import { isMobile, isCandidate, isClient, isManager } from '../../helpers/utils';
+import { Endpoints } from '../../metadata/helpers';
 
 @Component({
   selector: 'app-site',
@@ -214,7 +215,11 @@ export class SiteComponent implements OnInit, OnDestroy {
             ) {
               this.formMode = FormMode.View;
             }
-            this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+            if (isClient()) {
+              this.permissionMethods = ['delete', 'get', 'post', 'update'];
+            } else {
+              this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+            }
             if (pageData.endpoint === '/core/formstorages/') {
               this.formStorage = true;
             } else {
