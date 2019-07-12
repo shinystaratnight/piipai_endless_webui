@@ -502,7 +502,7 @@
     </div>
 
     <div class="modal-body pt-0">
-      <div [class.steps]="(modalInfo.changeEndpoint && identifyDevice()) || landscape()"
+      <div [class.steps]="(modalInfo.changeEndpoint && identifyDevice()) || (landscape() && !modalInfo.approve)"
         [class.signature-step]="modalInfo.signatureStep">
 
         <div class="content-info">
@@ -577,16 +577,16 @@
         <div class="d-flex justify-content-center align-items-center flex-column">
           <div [hidden]="!modalInfo.signature" class="signature-content">
             <app-back-link
-              *ngIf="(modalInfo.changeEndpoint  && identifyDevice()) || landscape()"
+              *ngIf="(modalInfo.changeEndpoint  && identifyDevice()) || (landscape() && !modalInfo.approve)"
               label="Back to times"
               (backEvent)="modalInfo.signatureStep = false">
             </app-back-link>
 
             <h3 class="group-title signature-title d-flex align-items-center w-100">
               Signature
-              <button *ngIf="modalInfo.signature" type="button" class="btn btn-link text-danger ml-auto pr-0 only-mobile" (click)="signatureCanvas.clear()">Clear area</button>
+              <button *ngIf="modalInfo.signature" type="button" class="btn btn-link text-danger ml-auto pr-0 py-0 only-mobile" (click)="signatureCanvas.clear()">Clear area</button>
             </h3>
-            <app-signature #signatureCanvas (signature)="updateSignature($event)"></app-signature>
+            <app-signature #signatureCanvas [supervisorSignature]="modalInfo.supervisor_signature" (signature)="updateSignature($event)"></app-signature>
           </div>
         </div>
       </div>
