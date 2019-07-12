@@ -3,5 +3,5 @@ export const environment = {
   STRIPE_PUBLIC_API_KEY: 'pk_live_CZ0oWG7cIXXgWwv1BDMuSSgR',
   production: true,
   api: 'https://api.r3sourcer.com',
-  clientId: 'GsZ3nrBWIFYocR2EIPJInfvlccT3Stk2NOq5cqAK'
+  clientId: 'MMtPUqBFwBDo3kVEQl6mzVm6e8h5OHclTsDcraUj'
 };
