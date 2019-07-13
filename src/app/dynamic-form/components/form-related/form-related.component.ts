@@ -681,6 +681,16 @@ export class FormRelatedComponent extends BasicElementComponent
     } else if (
       this.config.default &&
       this.config.default.includes &&
+      this.config.default.includes('client_id') &&
+      !this.config.editForm
+    ) {
+      const id = this.userService.user.currentRole.company_id;
+
+      this.group.get(this.key).patchValue(id);
+      this.getOptions.call(this, '', 0, false, this.setValue, id);
+    } else if (
+      this.config.default &&
+      this.config.default.includes &&
       this.config.default.includes('currentCompany')
     ) {
       const id = this.settingsService.settings.company_settings.company;

@@ -69,6 +69,8 @@ export class MetadataService {
         }
       } else if (query.includes('company')) {
         type = 'company';
+      } else if (query.includes('jobsite_client')) {
+        type = 'jobsite_client';
       } else if (query.includes('supervisor')) {
         type = 'supervisor';
       } else if (query.includes('profile')) {

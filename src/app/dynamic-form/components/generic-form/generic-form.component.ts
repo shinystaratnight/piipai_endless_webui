@@ -149,6 +149,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     '/core/contacts/': '__str__',
     '/candidate/candidatecontacts/': '__str__'
   };
+  public replaceEndpoints = {
+    [Endpoints.JobsiteClient]: Endpoints.Jobsite
+  }
   public workflowData = <any> {
     workflow: null,
     number: null,
@@ -702,6 +705,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public getDataForForm(endpoint, id) {
+    if (this.replaceEndpoints[endpoint]) {
+      endpoint = this.replaceEndpoints[endpoint];
+      this.endpoint = endpoint;
+      this.currentEndpoint = endpoint;
+    }
+
     let endp = '';
     if (endpoint === '/candidate/candidatecontacts/pool/') {
       endp = id ? `/candidate/candidatecontacts/${id}/pool_detail/` : endpoint;
@@ -1191,6 +1200,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
       this.saveForm(endpoint, data, true);
     } else {
+      if (this.endpoint === Endpoints.JobsiteClient) {
+        this.endpoint = Endpoints.Jobsite;
+      }
+
       this.saveForm(this.endpoint, data);
     }
   }
