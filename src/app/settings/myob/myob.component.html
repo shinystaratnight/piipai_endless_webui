@@ -1,103 +1,181 @@
 <app-dynamic-form
   [config]="config"
   (event)="eventHandler($event)">
-    <button (click)="connectHandler()" type="submit" class="btn btn-default mb-2 ml-2" [ngStyle]="{'background-color': connectButton.color}" [disabled]="connectProcess">
-      {{connectProcess ? 'Connecting' : connectButton.text}}
-      <app-spinner *ngIf="connectProcess"></app-spinner>
-    </button>
+    <div class="px-2">
+      <button type="submit" class="connect-btn btn btn-success mb-1"
+        [ngStyle]="{'background-color': connectButton.color}"
+        [disabled]="connectProcess"
+        (click)="connectHandler()">
+          {{connectProcess ? 'Connecting' : connectButton.text}}
+          <app-spinner *ngIf="connectProcess"></app-spinner>
+      </button>
+      <p class="description">
+        <span class="border rounded-circle border-info mr-1">i</span>
+        Please click button to authorize access to your MYOB online files!
+      </p>
+    </div>
 </app-dynamic-form>
 
 <div class="content">
-  <h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !companyFile.isCollapsed}">
-    <i fa
-      class="p-2"
-      [name]="companyFile.isCollapsed ? 'eye' : 'eye-slash'"
-      (click)="companyFile.isCollapsed = !companyFile.isCollapsed"
-      [attr.aria-expanded]="!companyFile.isCollapsed"
-      aria-controls="collapseExample"
-      style="cursor: pointer"></i>
-    <span>Company File&nbsp;</span>
-    <button [disabled]="!authData || !authData.length" type="button" class="btn btn-default btn-sm mx-3" (click)="refreshCompanyFiles()">Refresh</button>
-    <span>Last refreshed - {{MYOBSettings.company_files_last_refreshed | dateFormat: 'datetime'}}</span>
+  <h6 class="d-flex align-items-center rounded border mb-3"
+    [ngClass]="{'bg-primary text-white': !companyFile.isCollapsed}">
+      <i fa
+        class="p-2"
+        [name]="companyFile.isCollapsed ? 'eye' : 'eye-slash'"
+        (click)="companyFile.isCollapsed = !companyFile.isCollapsed"
+        [attr.aria-expanded]="!companyFile.isCollapsed"
+        aria-controls="collapseExample"
+        style="cursor: pointer">
+      </i>
+      <span class="mr-auto">Company File</span>
+
+      <span class="date">Last refreshed - {{MYOBSettings.company_files_last_refreshed | dateFormat: 'datetime'}}</span>
+      <button type="button" class="btn btn-default btn-sm mx-3"
+        [disabled]="!authData || !authData.length"
+        (click)="refreshCompanyFiles()">
+          Refresh
+      </button>
   </h6>
   <div id="collapseExample" [ngbCollapse]="companyFile.isCollapsed" class="px-2">
-    <div class="row" *ngFor="let file of companyFile.list">
-      <div class="col-12 col-md-3 col-lg-2 mb-2">
-        <label>{{file.name}}</label>
+
+    <div class="company-file d-flex align-items-center flex-wrap py-2" *ngFor="let file of companyFile.list">
+      <label class="label mb-0 my-1">{{file.name}}</label>
+
+      <div class="form-element my-1">
+        <div class="form-element-content">
+          <input type="text" class="form-control" placeholder="Username"
+            [(ngModel)]="file.username">
+        </div>
       </div>
-      <div class="col-12 col-md-3 col-lg-2 mb-2">
-        <input type="text" class="form-control" [(ngModel)]="file.username" placeholder="Username">
+
+      <div class="form-element my-1">
+        <div class="form-element-content">
+          <input type="password" class="form-control" placeholder="Password"
+            [(ngModel)]="file.password">
+        </div>
       </div>
-      <div class="col-12 col-md-3 col-lg-2 mb-2">
-        <input type="password" class="form-control" [(ngModel)]="file.password" placeholder="Password">
-      </div>
-      <div class="col-12 col-md-3 col-lg-2 mb-2">
-        <button type="button" class="btn btn-default mr-2" (click)="testCompanyFile(file)">Test</button>
-        <i fa [name]="file.authenticated ? 'check' : 'times'"
-          [class.text-success]="file.authenticated"
-          [class.text-danger]="!file.authenticated"></i>
-      </div>
+
+      <button type="button" class="test-btn btn btn-success mr-3 my-1"
+        (click)="testCompanyFile(file)">
+          Test
+      </button>
+
+      <i
+        fa
+        [name]="file.authenticated ? 'check' : 'times'"
+        [class.text-success]="file.authenticated"
+        [class.text-danger]="!file.authenticated">
+      </i>
     </div>
+
+    <p class="description"
+      *ngIf="companyFile">
+        <span class="border rounded-circle border-info mr-1">i</span>
+        Please enter your company file credentials!
+    </p>
   </div>
 
-  <h6 class="card flex-row align-items-center mb-3" [ngClass]="{'bg-primary text-white': !payrollAccounts.isCollapsed}">
-    <i fa
-      class="p-2"
-      [name]="payrollAccounts.isCollapsed ? 'eye' : 'eye-slash'"
-      (click)="payrollAccounts.isCollapsed = !payrollAccounts.isCollapsed"
-      [attr.aria-expanded]="!payrollAccounts.isCollapsed"
-      aria-controls="collapseExample"
-      style="cursor: pointer"></i>
-    <span>Payroll accounts&nbsp;</span>
-    <button [disabled]="!authData || !authData.length" type="button" class="btn btn-default btn-sm mx-3" (click)="refreshAccounts()">Refresh</button>
-    <span>Last refreshed - {{MYOBSettings.payroll_accounts_last_refreshed | dateFormat: 'datetime'}}</span>
+  <h6 class="d-flex align-items-center rounded border mb-3"
+    [ngClass]="{'bg-primary text-white': !payrollAccounts.isCollapsed}">
+      <i fa
+        class="p-2"
+        [name]="payrollAccounts.isCollapsed ? 'eye' : 'eye-slash'"
+        (click)="payrollAccounts.isCollapsed = !payrollAccounts.isCollapsed"
+        [attr.aria-expanded]="!payrollAccounts.isCollapsed"
+        aria-controls="collapseExample"
+        style="cursor: pointer"></i>
+      <span class="mr-auto">Payroll accounts</span>
+
+      <span class="date">Last refreshed - {{MYOBSettings.payroll_accounts_last_refreshed | dateFormat: 'datetime'}}</span>
+      <button type="button" class="btn btn-default btn-sm mx-3"
+        [disabled]="!authData || !authData.length"
+        (click)="refreshAccounts()">
+          Refresh
+      </button>
   </h6>
   <form *ngIf="payrollAccounts" #accountForm="ngForm" id="collapseExample" [ngbCollapse]="payrollAccounts.isCollapsed" class="px-2">
-    <h4>Invoice settings</h4>
-    <div class="row">
-      <label class="col-12 col-md-2 col-lg-2 d-flex align-items-center" for="invoice_company_file">{{payrollAccounts.invoice_company_file.label}}</label>
-      <div class="col-12 col-md-5 col-lg-4 mb-2">
-        <select class="custom-select w-100"
-          [(ngModel)]="payrollAccounts.invoice_company_file.value"
-          [disabled]="viewMode"
-          (ngModelChange)="getAccountsOfCompanyFile($event, 'invoice_activity_account')"
-          name="invoice_company_file" required>
-            <option value="">Select company file</option>
-            <option *ngFor="let item of payrollAccounts.invoice_company_file.options" [value]="item.id">{{item.name || item.cf_name}}</option>
-        </select>
-        <div class="text-danger p-2" *ngFor="let err of payrollAccounts.invoice_company_file.error">{{err}}</div>
+    <div class="d-flex flex-wrap">
+      <div class="flex-grow-1 flex-shrink-1 mb-3">
+        <h6 class="group-label">Invoice settings</h6>
+
+        <div class="d-flex align-items-center">
+          <div class="form-element">
+            <label class="col-form-label form-element-label">
+              {{payrollAccounts.invoice_company_file.label}}
+            </label>
+
+            <div class="form-element-content">
+              <select class="form-control custom-select" name="invoice_company_file" required
+                [(ngModel)]="payrollAccounts.invoice_company_file.value"
+                [disabled]="viewMode"
+                (ngModelChange)="getAccountsOfCompanyFile($event, 'invoice_activity_account')">
+                  <option value="">Select company file</option>
+                  <option
+                    *ngFor="let item of payrollAccounts.invoice_company_file.options"
+                    [value]="item.id">
+                      {{item.name || item.cf_name}}
+                  </option>
+              </select>
+              <ng-container *ngTemplateOutlet="errors; context: { errors: payrollAccounts.invoice_company_file.error }"></ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center">
+          <div class="form-element">
+            <label class="col-form-label form-element-label">
+              {{payrollAccounts.invoice_activity_account.label}}
+            </label>
+
+            <div class="form-element-content">
+              <select class="form-control custom-select" name="invoice_activity_account" required
+                [(ngModel)]="payrollAccounts.invoice_activity_account.value"
+                [disabled]="viewMode">
+                  <option value="">Select account</option>
+                  <option
+                    *ngFor="let item of payrollAccounts.invoice_activity_account.options"
+                    [value]="item.id">
+                      {{item.number}} - {{item.name}}
+                  </option>
+              </select>
+              <ng-container *ngTemplateOutlet="errors; context: { errors: payrollAccounts.invoice_activity_account.error }"></ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-grow-1 flex-shrink-1 mb-3">
+        <h6 class="group-label">TimeSheet Settings</h6>
+
+        <div class="d-flex align-items-center">
+          <div class="form-element">
+            <label class="col-form-label form-element-label">
+              {{payrollAccounts.timesheet_company_file.label}}
+            </label>
+
+            <div class="form-element-content">
+              <select class="form-control custom-select" name="timesheet_company_file" required
+                [(ngModel)]="payrollAccounts.timesheet_company_file.value"
+                [disabled]="viewMode">
+                  <option value="">Select company file</option>
+                  <option
+                    *ngFor="let item of payrollAccounts.timesheet_company_file.options"
+                    [value]="item.id">
+                      {{item.name || item.cf_name}}
+                  </option>
+              </select>
+              <ng-container *ngTemplateOutlet="errors; context: { errors: payrollAccounts.timesheet_company_file.error }"></ng-container>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="row">
-      <label class="col-12 col-md-2 col-lg-2 d-flex align-items-center" for="invoice_activity_account">{{payrollAccounts.invoice_activity_account.label}}</label>
-      <div class="col-12 col-md-5 col-lg-4 mb-2">
-        <select class="custom-select w-100"
-          [(ngModel)]="payrollAccounts.invoice_activity_account.value"
-          [disabled]="viewMode"
-          name="invoice_activity_account" required>
-            <option value="">Select account</option>
-            <option *ngFor="let item of payrollAccounts.invoice_activity_account.options" [value]="item.id">{{item.number}} - {{item.name}}</option>
-        </select>
-        <div class="text-danger p-2" *ngFor="let err of payrollAccounts.invoice_activity_account.error">{{err}}</div>
-      </div>
-    </div>
-
-    <br>
-    <h4>TimeSheet Settings</h4>
-    <div class="row">
-      <label class="col-12 col-md-2 col-lg-2 d-flex align-items-center" for="timesheet_company_file">{{payrollAccounts.timesheet_company_file.label}}</label>
-      <div class="col-12 col-md-5 col-lg-4 mb-2">
-        <select class="custom-select w-100"
-          [(ngModel)]="payrollAccounts.timesheet_company_file.value"
-          [disabled]="viewMode"
-          name="timesheet_company_file" required>
-            <option value="">Select company file</option>
-            <option *ngFor="let item of payrollAccounts.timesheet_company_file.options" [value]="item.id">{{item.name || item.cf_name}}</option>
-        </select>
-        <div class="text-danger p-2" *ngFor="let err of payrollAccounts.timesheet_company_file.error">{{err}}</div>
-      </div>
-    </div>
+    <p class="description mt-3"
+      *ngIf="!(payrollAccounts.invoice_company_file.value || payrollAccounts.timesheet_company_file.value || payrollAccounts.invoice_activity_account.value)">
+      <span class="border rounded-circle border-info mr-1">i</span>
+      Please assign preferred company files and accounts in “Edit mode”!
+    </p>
 
     <div *ngIf="authData && authData.length" class="d-flex justify-content-end align-items-center mt-2">
       <button type="button" class="btn btn-primary btn-shadow ml-auto button-edit"
@@ -122,3 +200,10 @@
 
   </form>
 </div>
+
+<ng-template #error let-errors="errors">
+  <div class="text-danger p-2"
+    *ngFor="let err of errors">
+      {{err}}
+  </div>
+</ng-template>

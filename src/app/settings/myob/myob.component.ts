@@ -200,6 +200,9 @@ export class MyobComponent implements OnInit, OnDestroy {
     };
     this.gfs.submitForm(url, body).subscribe((res: any) => {
       file.authenticated = res.is_valid;
+      if (res.is_valid) {
+        this.refreshAccounts();
+      }
     }, (err: any) => this.error = err);
   }
 
