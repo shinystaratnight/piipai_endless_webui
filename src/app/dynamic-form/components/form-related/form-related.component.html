@@ -363,7 +363,7 @@
           [edit]="modalData.edit"
           [id]="modalData.id"
           [metadataQuery]="modalData.mode === 'edit' ? config.metadata_query : config.add_metadata_query"
-          (event)="formEvent($event, c, type)"
+          (event)="formEvent($event, c)"
           (errorForm)="formError($event)">
             <button *ngIf="checkPermission('update')" type="submit" class="btn btn-primary button-save" [disabled]="saveProcess">
               Save

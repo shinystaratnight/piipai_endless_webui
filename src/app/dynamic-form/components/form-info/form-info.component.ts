@@ -300,6 +300,18 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     }
   }
 
+  public eventHandler(e) {
+    if (this.isCandidatePage()) {
+      if (e.additionalData
+        && e.additionalData.picture
+        && e.additionalData.picture.origin
+      ) {
+          this.picture = this.getValue('picture', e.additionalData, 'picture');
+          this.contactAvatar = undefined;
+        }
+    }
+  }
+
   public formError() {
     this.saveProcess = false;
   }

@@ -1289,7 +1289,7 @@ export class FormRelatedComponent extends BasicElementComponent
     this.group.get(this.key).patchValue(results);
   }
 
-  public formEvent(e, closeModal, type?) {
+  public formEvent(e, closeModal) {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
