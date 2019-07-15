@@ -66,6 +66,10 @@ export class FormCheckboxComponent extends BasicElementComponent
     this.isDisabled = this.checkDisabled();
     this.disabledTitle = this.getDisabledTitle(this.isDisabled);
 
+    if (this.config.templateOptions.disabled) {
+      this.group.get(this.key).disable();
+    }
+
     if (this.isDisabled) {
       this.group.get(this.key).patchValue(false);
       this.group.get(this.key).disable();

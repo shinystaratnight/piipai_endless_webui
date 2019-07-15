@@ -1049,18 +1049,23 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
                   shifts: [response.id]
                 };
 
-                this.service
+                const message = `${shiftsRequests.date} ${moment(
+                  response.time,
+                  'HH:mm:ss'
+                ).format('hh:mm A')} created`;
+
+                if (fillInBody.candidates) {
+                  this.service
                   .submitForm(
                     `/hr/jobs/${data.id}/fillin/`,
                     fillInBody
                   )
                   .subscribe(() => {
-                    const message = `${shiftsRequests.date} ${moment(
-                      response.time,
-                      'HH:mm:ss'
-                    ).format('hh:mm A')} created`;
                     this.toastrService.sendMessage(message, 'success');
                   });
+                } else {
+                  this.toastrService.sendMessage(message, 'success');
+                }
               });
             });
           }

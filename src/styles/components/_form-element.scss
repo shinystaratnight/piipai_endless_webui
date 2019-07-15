@@ -341,6 +341,10 @@
   &-checkbox {
     display: inline-flex;
     align-items: center;
+
+    &.disabled {
+      opacity: .4;
+    }
   }
 
   &-list-title {

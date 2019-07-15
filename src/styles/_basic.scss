@@ -358,9 +358,69 @@ form.ng-invalid button[type='submit'] {
   z-index: 3 !important;
 }
 
-.extend-modal .modal-body {
-  margin-top: 40px;
-  margin-bottom: 20px;
+.form-control:focus {
+  background-color: transparent !important;
+}
+
+.extend-modal {
+  .modal-dialog {
+    max-width: 805px;
+  }
+
+  .modal-body {
+    margin-top: 40px;
+    margin-bottom: 20px;
+
+    .form-element-label {
+      font-family: 'Source Sans Pro', sans-serif;
+      text-transform: uppercase;
+      color: rgba($gray, .4);
+    }
+
+    .shift .form-element-content {
+      min-height: 36px;
+      align-items: center;
+    }
+
+    .form-element-content {
+      width: auto;
+      height: auto;
+      max-height: none;
+      min-height: auto;
+
+      input {
+        padding: 10px 12px;
+        height: auto;
+        min-height: auto;
+        border: 1px solid rgba($gray, .6);
+        border-radius: .25rem;
+      }
+
+      .input-group-addon {
+        display: none;
+      }
+    }
+  }
+
+  .form-element .custom-checkbox {
+    width: 16px;
+    height: 16px;
+
+    svg {
+      width: 9px;
+      height: 7px;
+    }
+  }
+
+  .button-save {
+    display: block;
+    margin: 0 auto;
+    width: 160px;
+  }
+
+  .tooltip-inner {
+    max-width: 360px;
+  }
 }
 
 .small-modal {
