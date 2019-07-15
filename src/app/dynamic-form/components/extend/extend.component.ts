@@ -9,7 +9,33 @@ import { CustomEvent } from '../../models/custom-event.model';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { GenericFormService } from '../../services/generic-form.service';
 
-import * as moment from 'moment-timezone';
+import { FormService } from '../../services';
+import { TimeService } from '../../../shared/services';
+
+const extendConfig = {
+  shiftsDates: {
+    key: 'shifts',
+    type: 'jobdates',
+    removeDate: null,
+    value: []
+  },
+  extendDates: {
+    key: 'extendDates',
+    type: 'checkbox',
+    templateOptions: {
+      label: 'Dates',
+      disabled: false
+    }
+  },
+  extendCandidates: {
+    key: 'extendCandidates',
+    type: 'checkbox',
+    templateOptions: {
+      label: 'Candidates',
+      disabled: false
+    }
+  }
+};
 
 @Component({
   selector: 'app-extend',
@@ -38,38 +64,18 @@ export class ExtendComponent extends BasicElementComponent
 
   constructor(
     private fb: FormBuilder,
-    private gfs: GenericFormService
+    private gfs: GenericFormService,
+    private formService: FormService,
+    private time: TimeService
   ) {
     super();
   }
 
   public ngOnInit() {
+    this.formService.getForm(this.config.formId).disableSaveButton = true;
     this.viewData = this.fb.group({});
     this.addControl(this.config, this.fb);
-
-    this.viewConfig = {
-      shiftsDates: {
-        key: 'shifts',
-        type: 'jobdates',
-        removeDate: this.removeDate,
-        value: this.config.value || []
-      },
-      extendDates: {
-        key: 'extendDates',
-        type: 'checkbox',
-        templateOptions: {
-          label: 'Dates'
-        }
-      },
-      extendCandidates: {
-        key: 'extendCandidates',
-        type: 'checkbox',
-        templateOptions: {
-          label: 'Candidates'
-        }
-      }
-    };
-
+    extendConfig.shiftsDates.removeDate = this.removeDate;
     this.checkFormData();
   }
 
@@ -84,8 +90,8 @@ export class ExtendComponent extends BasicElementComponent
       this.autofill = [];
       data.forEach((date) => {
         this.autofill.push({
-          time: moment
-            .tz(date.shift_datetime, 'Australia/Sydney')
+          time: this.time
+            .instance(date.shift_datetime)
             .format('HH:mm:ss'),
           candidates: date.candidates
         });
@@ -94,6 +100,8 @@ export class ExtendComponent extends BasicElementComponent
   }
 
   public eventHandler(e) {
+    const form = this.formService.getForm(this.config.formId);
+
     this.viewData.value.shifts.forEach((date) => {
       if (!this.shifts.find((el) => el.date === date)) {
         this.shifts.push(this.generateShift(date));
@@ -106,38 +114,33 @@ export class ExtendComponent extends BasicElementComponent
       }
     });
 
+    form.disableSaveButton = !this.shifts.length;
+
     this.change({ type: 'change' });
     this.checkDates();
   }
 
   public checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData.subscribe((data) => {
+      this.formSubscription = this.config.formData.subscribe((data) => {
         this.formData = data.data;
         this.autoFillData = this.formData.last_fullfilled;
-        this.availabilityCandidates = this.getAvailabilityCandidates(this.formData.available, this.autoFillData[0].candidates);
 
-        if (!this.autoFillData) {
-          this.viewConfig.extendDates = {
-            ...this.viewConfig.extendDates,
-            templateOptions: {
-              ...this.viewConfig.extendDates.templateOptions,
-              disabled: true
-            }
-          };
-          this.viewConfig.extendCandidates = {
-            ...this.viewConfig.extendCandidates,
-            templateOptions: {
-              ...this.viewConfig.extendCandidates.templateOptions,
-              disabled: true
-            }
-          };
+        if (this.autoFillData) {
+          this.availabilityCandidates = this.getAvailabilityCandidates(this.formData.available, this.autoFillData[0].candidates);
+        }
+
+        if (!this.viewConfig) {
+          if (!this.autoFillData) {
+            extendConfig.extendDates.templateOptions.disabled = true;
+            extendConfig.extendCandidates.templateOptions.disabled = true;
+          }
+
+          this.viewConfig = extendConfig;
         }
 
         this.generateAutofill(this.autoFillData);
       });
-
-      this.formSubscription = subscription;
     }
   }
 
@@ -149,7 +152,7 @@ export class ExtendComponent extends BasicElementComponent
       if (data.hasOwnProperty(candidate)) {
         const shifts = [];
         data[candidate].forEach((el) => {
-          if (el) {
+          if (el && el.text.toLowerCase().includes('unavailable')) {
             shifts.push(...el.shifts);
           }
         });
@@ -272,7 +275,8 @@ export class ExtendComponent extends BasicElementComponent
       }
 
       return !candidateInfo.shifts.some((el) => {
-        const shiftDate = moment.tz(el.datetime, 'Australia/Sydney')
+        const shiftDate = this.time
+          .instance(el.datetime)
           .format('YYYY-MM-DD');
 
         return shiftDate === date;
@@ -349,8 +353,8 @@ export class ExtendComponent extends BasicElementComponent
           dontSendFields: true,
         },
         query: {
-          shift: `{shift}T{time}%2B${moment
-            .tz('Australia/Sydney')
+          shift: `{shift}T{time}%2B${this.time
+            .instance()
             .format('Z')
             .slice(1)}`
         },
@@ -468,7 +472,7 @@ export class ExtendComponent extends BasicElementComponent
 
     this.availabilityCandidates.forEach((candidate) => {
       candidate.shifts.forEach((shift) => {
-        const date = moment.tz(shift.datetime, 'Australia/Sydney').format('YYYY-MM-DD');
+        const date = this.time.instance(shift.datetime).format('YYYY-MM-DD');
 
         shift.show = selectedDates.includes(date);
       });
@@ -481,7 +485,7 @@ export class ExtendComponent extends BasicElementComponent
   public getCandidates(date: string, data: any) {
     if (data.time && data.workers) {
       const endpoint = `/hr/jobs/${this.getJobId()}/extend_fillin/`;
-      const timeZoneOffset = moment.tz('Australia/Sydney').format('Z').slice(1);
+      const timeZoneOffset = this.time.instance().format('Z').slice(1);
       const query = `?shift=${date}T${data.time}%2B${timeZoneOffset}`;
 
       return this.gfs.getByQuery(endpoint, query).pipe(
