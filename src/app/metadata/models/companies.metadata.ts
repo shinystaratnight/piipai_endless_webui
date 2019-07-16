@@ -419,21 +419,19 @@ const form = [
                 type: 'group',
                 children: [
                   {
-                    list: false,
                     endpoint: '/pricing/industries/',
                     read_only: false,
                     templateOptions: {
-                      label: 'Industry',
-                      add: true,
-                      delete: false,
+                      label: 'Industries',
+                      // add: true,
+                      // delete: false,
                       values: ['__str__'],
                       type: 'related',
-                      edit: true
+                      // edit: true
                     },
-                    collapsed: false,
                     type: 'related',
-                    key: 'industry',
-                    many: false
+                    key: 'industries',
+                    many: true
                   },
                   {
                     key: 'registered_for_gst',
