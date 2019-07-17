@@ -7,12 +7,16 @@ export const guide: GuideItem[] = [
     key: 'has_company_address',
     text: [
       'Add Your',
-      { url: `${Endpoints.Company}{company_id}/change` , text: 'Business address' }
+      { url: `${Endpoints.Company}{company_id}/change`, text: 'Business address' }
     ],
   },
   {
     key: 'has_industry',
-    text: ['Add Your industry: multiple choices available']
+    text: [
+      'Add Your ' ,
+      { url: `${Endpoints.Company}{company_id}/change`, text: 'industry' },
+      ': multiple choices available'
+    ]
   },
   {
     key: 'purpose',
@@ -28,7 +32,7 @@ export const guide: GuideItem[] = [
     key: 'has_skills',
     text: [
       'Add your',
-      { url: `${Endpoints.Skill}add` , text: 'Skills' },
+      { url: `${Endpoints.Skill}add`, text: 'Skills' },
       'and skill rates'
     ]
   },
@@ -36,7 +40,7 @@ export const guide: GuideItem[] = [
     key: 'has_company_contact',
     text: [
       'Who beside you will be working with this software ( add company users',
-      { url: `${Endpoints.Company}{company_id}/change` , text: 'company users' },
+      { url: `${Endpoints.Company}{company_id}/change`, text: 'company users' },
       ')'
     ]
   },
@@ -44,28 +48,28 @@ export const guide: GuideItem[] = [
     key: 'has_candidate',
     text: [
       'Create your first',
-      { url: `${Endpoints.Skill}add` , text: 'candidate' }
+      { url: `${Endpoints.Skill}add`, text: 'candidate' }
     ]
   },
   {
     key: 'has_client',
     text: [
       'Create your first',
-      { url: `${Endpoints.Company}add` , text: 'client' }
+      { url: `${Endpoints.Company}add`, text: 'client' }
     ]
   },
   {
     key: 'has_jobsite',
     text: [
       'Create your first',
-      { url: `${Endpoints.Jobsite}add` , text: 'jobsite' }
+      { url: `${Endpoints.Jobsite}add`, text: 'jobsite' }
     ]
   },
   {
     key: 'myob_connected',
     text: [
       'Integrations(MYOB only), take to Settings connect',
-      { url: `/settings/myob` , text: 'MYOB' }
+      { url: `/settings/myob`, text: 'MYOB' }
     ]
   },
 ];
