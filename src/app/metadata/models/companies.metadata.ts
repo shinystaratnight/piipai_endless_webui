@@ -423,12 +423,10 @@ const form = [
                     read_only: false,
                     templateOptions: {
                       label: 'Industries',
-                      // add: true,
-                      // delete: false,
                       values: ['__str__'],
                       type: 'related',
-                      // edit: true
                     },
+                    column: true,
                     type: 'related',
                     key: 'industries',
                     many: true
