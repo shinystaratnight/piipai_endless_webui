@@ -29,10 +29,6 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.inactiveIcon = false;
     this.getGuide();
-
-    const sub = updateGuide.subscribe(() => {
-      this.getGuide();
-    });
   }
 
   ngOnDestroy() {
@@ -75,6 +71,12 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
         const complete = Object.keys(res).every((key) => res[key]);
 
         if (!complete) {
+          if (!this.sub) {
+            this.sub = updateGuide.subscribe(() => {
+              this.getGuide();
+            });
+          }
+
           this.guide = guide.map((item) => {
             if (item.options) {
               item.options.forEach((option) => {
