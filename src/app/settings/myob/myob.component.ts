@@ -185,6 +185,7 @@ export class MyobComponent implements OnInit, OnDestroy {
         this.connectProcess = false;
         this.updateButton('success');
         this.getAuthData();
+        this.refreshCompanyFiles();
         this.router.navigate(['/settings/myob/']);
       },
       (err: any) => this.updateButton('error')
