@@ -63,7 +63,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
     });
     this.gfs.getAll(this.endpoint).subscribe(
       (res: any) => {
-        this.companySettingsData = res;
+        this.companySettingsData = res.company_settings;
         this.config = meta;
         this.fillingForm(this.config, res);
         this.updateMetadataByProps(this.config);

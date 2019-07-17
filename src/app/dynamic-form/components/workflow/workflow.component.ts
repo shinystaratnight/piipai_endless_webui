@@ -34,7 +34,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
   public checkboxConfig = {
     type: 'checkbox',
-    key: 'advansed_saving',
+    key: 'advance_state_saving',
     value: false,
     templateOptions: {
       label: 'Advanced state saving'
