@@ -1,6 +1,19 @@
 import { BehaviorSubject } from 'rxjs';
 const formData = new BehaviorSubject({ data: {} });
 
+export const purposeConfig = {
+  type: 'select',
+  key: 'purpose',
+  templateOptions: {
+    label: 'Purpose',
+    options: [
+      { value: 'hire', label: 'Hire' },
+      { value: 'self_use', label: 'Self use' },
+      { value: 'recruitment', label: 'Recruitment' }
+    ]
+  }
+}
+
 export const meta = [
   {
     type: 'row',
