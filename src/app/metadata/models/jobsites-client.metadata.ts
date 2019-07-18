@@ -644,7 +644,7 @@ const formadd = [
             endpoint: '/core/companies/',
             read_only: true,
             key: 'regular_company',
-            default: 'client_id',
+            default: 'company_id',
             templateOptions: {
               label: 'Client',
               values: ['industry', 'short_name', '__str__', 'master_company', 'primary_contact'],
@@ -672,6 +672,7 @@ const formadd = [
               type: 'related',
               edit: true
             },
+            default: 'client_contact_id',
             visibleMode: true,
             showIf: ['regular_company.id'],
             type: 'related',
