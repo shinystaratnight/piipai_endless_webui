@@ -1196,3 +1196,9 @@ export const metadata = {
   form,
   formadd
 };
+
+export const purposeOptions = {
+  hire: 'Hire',
+  self_use: 'Self use',
+  recruitment: 'Recruitment'
+};

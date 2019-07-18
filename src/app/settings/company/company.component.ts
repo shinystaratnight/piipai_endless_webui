@@ -3,12 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription, BehaviorSubject } from 'rxjs';
 
-import { meta } from './company.meta';
+import { meta, purposeConfig } from './company.meta';
 import { Field } from '../../dynamic-form/models';
 import { GenericFormService, FormService } from '../../dynamic-form/services';
 import { SettingsService } from '../settings.service';
 import { SiteSettingsService } from '../../services';
-import { TimeService } from '../../shared/services';
+import { TimeService, ToastService, MessageType } from '../../shared/services';
+import { Endpoints } from '../../metadata/helpers';
 
 @Component({
   selector: 'app-company',
@@ -35,8 +36,10 @@ export class CompanyComponent implements OnInit, OnDestroy {
   public saveProcess: boolean;
 
   public config;
+  public purposeConfig: any[];
   public formId: number;
   public form: any;
+  public companyData: any;
 
   public companySettingsData: any;
   public showWorkflow: boolean;
@@ -52,7 +55,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private siteSettings: SiteSettingsService,
     private formService: FormService,
-    private time: TimeService
+    private time: TimeService,
+    private toastr: ToastService
   ) { }
 
   public ngOnInit() {
@@ -64,6 +68,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
     this.gfs.getAll(this.endpoint).subscribe(
       (res: any) => {
         this.companySettingsData = res.company_settings;
+        this.getPurpose(res.company_settings.company);
         this.config = meta;
         this.fillingForm(this.config, res);
         this.updateMetadataByProps(this.config);
@@ -72,6 +77,26 @@ export class CompanyComponent implements OnInit, OnDestroy {
       },
       (err: any) => this.errors = err
     );
+  }
+
+  public getPurpose(id: string) {
+    this.gfs.get(Endpoints.Company + `${id}/?fields=purpose`)
+      .subscribe((res: any) => {
+        this.companyData = res;
+        this.purposeConfig = [{...purposeConfig, value: res.purpose}];
+      });
+  }
+
+  public changePurpose(event) {
+    if (event.type === 'change') {
+      const body = this.companyData;
+      body.purpose = event.value;
+
+      this.gfs.editForm(Endpoints.Company + `${this.companySettingsData.company}/change_purpose/`, body)
+        .subscribe((res) => {
+          this.toastr.sendMessage(res.message, MessageType.success);
+        });
+    }
   }
 
   public updateMetadataByProps(metadata: Field[]) {

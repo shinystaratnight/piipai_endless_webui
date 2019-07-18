@@ -1,3 +1,9 @@
+<app-dynamic-form
+  *ngIf="purposeConfig"
+  [config]="purposeConfig"
+  (event)="changePurpose($event)"
+></app-dynamic-form>
+
 <app-workflow
   *ngIf="showWorkflow"
   [company]="company"
