@@ -697,10 +697,10 @@ export class FormRelatedComponent extends BasicElementComponent
     } else if (
       this.config.default &&
       this.config.default.includes &&
-      this.config.default.includes('client_id') &&
+      (this.config.default.includes('company_id') || this.config.default.includes('client_contact_id')) &&
       !this.config.editForm
     ) {
-      const id = this.userService.user.currentRole.company_id;
+      const id = this.userService.user.currentRole[this.config.default];
 
       this.group.get(this.key).patchValue(id);
       this.getOptions.call(this, '', 0, false, this.setValue, id);
