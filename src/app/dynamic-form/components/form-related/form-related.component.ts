@@ -157,6 +157,10 @@ export class FormRelatedComponent extends BasicElementComponent
   }
 
   public ngOnInit() {
+    if (this.config.replaceKey) {
+      this.config.key = this.config.replaceKey;
+    }
+
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
 
     this.skillEndpoint =
@@ -492,10 +496,17 @@ export class FormRelatedComponent extends BasicElementComponent
               const format = new FormatString();
               let id;
               if (typeof this.config.default === 'string') {
-                if (this.config.default === 'industry.default' && this.formData.regular_company) {
-                  const industry = this.formData.regular_company.industries.find((el) => el.default);
-                  id = industry.id;
-                } else {
+                if (this.config.default === 'industry.default') {
+                  if (this.formData.regular_company) {
+                    const { industries } = this.formData.regular_company;
+
+                    if (industries) {
+                      const industry = industries.find((el) => el.default);
+
+                      id = industry.id;
+                    }
+                  }
+                }  else {
                   id = format.format(this.config.default, this.formData);
                 }
               } else if (Array.isArray(this.config.default)) {
@@ -1269,6 +1280,16 @@ export class FormRelatedComponent extends BasicElementComponent
     }
   }
 
+  public setDefault(i, item) {
+    this.results.forEach((el) => {
+      el.default = false;
+      if (el === item) {
+        el.default = true;
+      }
+    });
+    this.updateData();
+  }
+
   public eventHandler(e, value, additionalData?, manual?: boolean) {
     this.event.emit({
       type: e.type,
@@ -1289,6 +1310,15 @@ export class FormRelatedComponent extends BasicElementComponent
 
   public updateData() {
     const results = this.results.map((el) => {
+      if (this.config.sendData) {
+        const result = {};
+
+        this.config.sendData.forEach((key) => result[key] = el[key]);
+        return {
+          [this.param]: el[this.param],
+          ...result
+        }
+      }
       return el[this.param];
     });
     this.group.get(this.key).patchValue(results);
