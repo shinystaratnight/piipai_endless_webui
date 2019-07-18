@@ -34,7 +34,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
   public checkboxConfig = {
     type: 'checkbox',
-    key: 'advansed_saving',
+    key: 'advance_state_saving',
     value: false,
     templateOptions: {
       label: 'Advanced state saving'
@@ -138,7 +138,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
     this.addConfig = this.getAddConfig(this.company, this.workflowId);
 
-    this.modalRef = this.modalService.open(this.addModal);
+    this.modalRef = this.modalService.open(this.addModal, { windowClass: 'visible-mode' });
   }
 
   public addStateToCompany(data: any, closeModal) {
@@ -214,7 +214,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
     this.addConfig = this.getAcceptenceTestsConfig(node);
 
-    this.modalRef = this.modalService.open(this.testModal);
+    this.modalRef = this.modalService.open(this.testModal, { windowClass: 'visible-mode' });
   }
 
   public openEditModal(node, closeModal) {

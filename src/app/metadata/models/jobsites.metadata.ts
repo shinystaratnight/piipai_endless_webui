@@ -680,7 +680,7 @@ const formadd = [
               label: 'Client',
               add: true,
               delete: false,
-              values: ['industry', 'short_name', '__str__', 'master_company', 'primary_contact'],
+              values: ['industries', 'short_name', '__str__', 'master_company', 'primary_contact'],
               type: 'related',
               edit: true,
               required: true,
@@ -736,9 +736,8 @@ const formadd = [
             many: false
           },
           {
-            list: false,
             endpoint: '/pricing/industries/',
-            read_only: true,
+            read_only: false,
             templateOptions: {
               label: 'Industry',
               add: true,
@@ -748,12 +747,13 @@ const formadd = [
               edit: true,
               required: true,
             },
-            collapsed: false,
-            default: '{regular_company.industry.id}',
+            default: 'industry.default',
             showIf: ['primary_contact.id', 'address'],
+            query: {
+              company: '{regular_company.id}'
+            },
             type: 'related',
             key: 'industry',
-            many: false
           },
           {
             checkObject: {

@@ -492,7 +492,12 @@ export class FormRelatedComponent extends BasicElementComponent
               const format = new FormatString();
               let id;
               if (typeof this.config.default === 'string') {
-                id = format.format(this.config.default, this.formData);
+                if (this.config.default === 'industry.default' && this.formData.regular_company) {
+                  const industry = this.formData.regular_company.industries.find((el) => el.default);
+                  id = industry.id;
+                } else {
+                  id = format.format(this.config.default, this.formData);
+                }
               } else if (Array.isArray(this.config.default)) {
                 this.config.default.forEach((el) => {
                   if (!id) {
