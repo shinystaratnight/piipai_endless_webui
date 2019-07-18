@@ -134,15 +134,24 @@
             </div>
           </div>
         </div>
-        <ng-container *ngIf="!config.tests">
-          <div *ngIf="!config.templateOptions.info" class="d-flex flex-wrap align-items-center mt-2">
-            <span class="badge badge-outline mt-2 mr-1" style="white-space: normal;"
-              *ngFor="let item of results; let i = index">
-              {{item.__str__}}
-              <i fa class="ml-2"
-                (click)="deleteItem(i, item)"
-                [name]="'times'"></i>
-            </span>
+        <ng-container *ngIf="!config.tests && !config.templateOptions.info">
+          <div class="d-flex flex-wrap mt-2">
+            <ng-container *ngFor="let item of results; let i = index">
+              <span class="d-flex align-items-center text-left badge badge-outline mt-2 mr-1" style="white-space: normal">
+                <span>
+                  {{item.__str__}}
+                  <ng-container *ngIf="config.sendData">
+                    <span *ngIf="item.default" class="text-secondary">(&nbsp;default&nbsp;)</span>
+                    <button *ngIf="!item.default" type="button" class="btn btn-secondary mt-1" style="font-size: 10px; line-height: 12px" (click)="setDefault(i, item)">make default</button>
+                  </ng-container>
+                </span>
+                <app-close-button
+                  class="ml-2"
+                  [sm]="true"
+                  (click)="deleteItem(i, item)">
+                </app-close-button>
+              </span>
+            </ng-container>
           </div>
         </ng-container>
 

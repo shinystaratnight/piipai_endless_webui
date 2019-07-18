@@ -427,7 +427,9 @@ const form = [
                       type: 'related',
                     },
                     column: true,
+                    sendData: ['default'],
                     type: 'related',
+                    replaceKey: 'industries_objects',
                     key: 'industries',
                     many: true
                   },

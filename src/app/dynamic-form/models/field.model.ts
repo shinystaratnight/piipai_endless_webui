@@ -81,6 +81,9 @@ export interface Field {
   strField?: string;
   updateFromForm?: boolean;
   tests?: any[];
+  sendData?: string[];
+  column?: boolean;
+  replaceKey?: string;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
