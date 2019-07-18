@@ -8,7 +8,7 @@ import { Field } from '../../dynamic-form/models';
 import { GenericFormService, FormService } from '../../dynamic-form/services';
 import { SettingsService } from '../settings.service';
 import { SiteSettingsService } from '../../services';
-import { TimeService } from '../../shared/services';
+import { TimeService, ToastService, MessageType } from '../../shared/services';
 import { Endpoints } from '../../metadata/helpers';
 
 @Component({
@@ -55,7 +55,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private siteSettings: SiteSettingsService,
     private formService: FormService,
-    private time: TimeService
+    private time: TimeService,
+    private toastr: ToastService
   ) { }
 
   public ngOnInit() {
@@ -91,9 +92,9 @@ export class CompanyComponent implements OnInit, OnDestroy {
       const body = this.companyData;
       body.purpose = event.value;
 
-      this.gfs.updateForm(Endpoints.Company + `${this.companySettingsData.company_settings.company}/`, body)
+      this.gfs.editForm(Endpoints.Company + `${this.companySettingsData.company}/change_purpose/`, body)
         .subscribe((res) => {
-          console.log(res);
+          this.toastr.sendMessage(res.message, MessageType.success);
         });
     }
   }

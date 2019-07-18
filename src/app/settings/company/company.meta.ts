@@ -1,18 +1,35 @@
 import { BehaviorSubject } from 'rxjs';
+
+import { createFormElement, Type as FormElementType } from '../../dynamic-form/models/form-elements';
+import { purposeOptions } from '../../metadata/models/companies.metadata';
+
 const formData = new BehaviorSubject({ data: {} });
 
-export const purposeConfig = {
-  type: 'select',
-  key: 'purpose',
-  templateOptions: {
-    label: 'Purpose',
-    options: [
-      { value: 'hire', label: 'Hire' },
-      { value: 'self_use', label: 'Self use' },
-      { value: 'recruitment', label: 'Recruitment' }
-    ]
-  }
-}
+const periodOptions = {
+  weekly: 'Weekly',
+  fortnightly: 'Fortnightly',
+  monthly: 'Monthly',
+  daily: 'Daily',
+};
+
+const weekOptions = {
+  1: 'Monday',
+  2: 'Tuesday',
+  3: 'Wednesday',
+  4: 'Thursday',
+  5: 'Friday',
+  6: 'Saturday',
+  7: 'Sunday',
+};
+
+const invoiceRuleOptions = {
+  one_invoce: 'One invoce',
+  per_jobsite: 'Per jobsite',
+  per_candidate: 'Per candidate'
+};
+
+export const purposeConfig = createFormElement(FormElementType.Select, 'purpose', 'Company purpose')
+  .addOptions(purposeOptions);
 
 export const meta = [
   {
@@ -161,68 +178,33 @@ export const meta = [
         label: 'Invoice Rule',
         type: 'group',
         children: [
-          {
-            type: 'select',
-            key: 'invoice_rule.period',
-            read_only: false,
-            formData,
-            templateOptions: {
-              label: 'Period',
-              required: true,
-              options: [
-                { value: 'weekly', label: 'Weekly' },
-                { value: 'fortnightly', label: 'Fortnightly' },
-                { value: 'monthly', label: 'Monthly' },
-                { value: 'daily', label: 'Daily' },
-              ]
-            }
-          },
-          {
-            type: 'select',
-            key: 'invoice_rule.period_zero_reference_weekly',
-            read_only: false,
-            default: 1,
-            formData,
-            templateOptions: {
-              label: 'Invoice generation time',
-              doNotSort: true,
-              options: [
-                { value: 1, label: 'Monday' },
-                { value: 2, label: 'Tuesday' },
-                { value: 3, label: 'Wednesday' },
-                { value: 4, label: 'Thursday' },
-                { value: 5, label: 'Friday' },
-                { value: 6, label: 'Saturday' },
-                { value: 7, label: 'Sunday' },
-              ],
-            },
-            showIf: [{
-              'invoice_rule.period': 'weekly'
-            }]
-          },
-          {
-            type: 'select',
-            key: 'invoice_rule.period_zero_reference_fortnightly',
-            read_only: false,
-            default: 1,
-            formData,
-            templateOptions: {
-              label: 'Invoice generation time',
-              doNotSort: true,
-              options: [
-                { value: 1, label: 'Monday' },
-                { value: 2, label: 'Tuesday' },
-                { value: 3, label: 'Wednesday' },
-                { value: 4, label: 'Thursday' },
-                { value: 5, label: 'Friday' },
-                { value: 6, label: 'Saturday' },
-                { value: 7, label: 'Sunday' },
-              ],
-            },
-            showIf: [{
-              'invoice_rule.period': 'fortnightly'
-            }]
-          },
+          createFormElement(FormElementType.Select, 'invoice_rule.period', 'Period')
+            .addOptions(periodOptions)
+            .update({ formData })
+            .updateTemplate({ required: true }),
+
+          createFormElement(FormElementType.Select, 'invoice_rule.period_zero_reference_weekly', 'Invoice generation time')
+            .addOptions(weekOptions)
+            .update({
+              formData,
+              default: 1,
+              showIf: [{
+                'invoice_rule.period': 'weekly'
+              }]
+            })
+            .updateTemplate({ doNotSort: true }),
+
+          createFormElement(FormElementType.Select, 'invoice_rule.period_zero_reference_fortnightly', 'Invoice generation time')
+            .addOptions(weekOptions)
+            .update({
+              formData,
+              default: 1,
+              showIf: [{
+                'invoice_rule.period': 'fortnightly'
+              }]
+            })
+            .updateTemplate({ doNotSort: true }),
+
           {
             type: 'datepicker',
             key: 'invoice_rule.period_zero_reference_date',
@@ -243,20 +225,10 @@ export const meta = [
               'invoice_rule.period': 'monthly'
             }]
           },
-          {
-            type: 'select',
-            key: 'invoice_rule.separation_rule',
-            read_only: false,
-            templateOptions: {
-              label: 'Separation rule',
-              required: true,
-              options: [
-                { value: 'one_invoce', label: 'One invoce' },
-                { value: 'per_jobsite', label: 'Per jobsite' },
-                { value: 'per_candidate', label: 'Per candidate' }
-              ]
-            }
-          },
+          createFormElement(FormElementType.Select, 'invoice_rule.separation_rule', 'Separation rule')
+            .addOptions(invoiceRuleOptions)
+            .updateTemplate({ required: true }),
+
           {
             type: 'checkbox',
             key: 'invoice_rule.show_candidate_name',
