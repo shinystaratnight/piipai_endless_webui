@@ -18,7 +18,7 @@ import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
 
 import { GenericFormService, FormService, FormMode, ActionService } from '../../services/';
-import { UserService, SiteSettingsService, AuthService } from '../../../services';
+import { UserService, SiteSettingsService, AuthService, CompanyPurposeService, Purpose } from '../../../services';
 
 import { ToastService, TimeService, MessageType } from '../../../shared/services';
 
@@ -184,6 +184,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     private time: TimeService,
     private router: Router,
     private modal: NgbModal,
+    private purposeService: CompanyPurposeService
   ) {
     this.subscriptions = [];
 
@@ -334,6 +335,15 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         (el.endpoint && el.endpoint === '/core/workflowobjects/')
       ) {
         el.timelineSubject = timelineSubject;
+      }
+
+      if (this.purposeService.purpose === Purpose.SelfUse) {
+        const { templateOptions } = el;
+
+        if (templateOptions && templateOptions.label && templateOptions.label.toLowerCase() === 'client') {
+          el.read_only = true;
+          el.default = '{company_id}';
+        }
       }
 
       if (el.type === 'tabs') {

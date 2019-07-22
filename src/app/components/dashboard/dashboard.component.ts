@@ -195,13 +195,14 @@ export class DashboardComponent implements OnChanges, OnDestroy {
   }
 
   public getInfoAboutWidget(widget, params) {
-    const result = <any> {};
+    let result;
     const widgetElement = this.modulesList.filter((el) => {
       if (el.id === widget.dashboard_module.id) {
         return true;
       }
     });
     if (widgetElement && widgetElement[0]) {
+      result = {};
       params.forEach((el) => {
         result[el] = widgetElement[0][el];
       });

@@ -1,47 +1,30 @@
-<div class="workflow-container">
-  <label class="workflow-title">Workflow Settings</label>
+<app-dynamic-form
+  [config]="config"
+  [form]="form">
+</app-dynamic-form>
 
-  <div class="row">
-    <div *ngIf="workflowList" class="form-element col-4">
-      <label class="col-form-label form-element-label">Workflow</label>
+<div *ngIf="!config" class="spinner">
+  <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
+</div>
 
-      <div class="form-element-content edit">
-        <select class="form-control custom-select"
-          [(ngModel)]="workflowId"
-          (ngModelChange)="getNodes($event)">
-            <option class="text-muted" value="" [disabled]="true">Workflow</option>
-            <option *ngFor="let workflow of workflowList" [value]="workflow.value">{{workflow.label}}</option>
-        </select>
-      </div>
+<div class="workflow" *ngIf="currentWorkflowNodes">
+  <div dnd-sortable-container [sortableData]="currentWorkflowNodes" class="workflow-wrapper">
+    <div class="workflow-item"
+      dnd-sortable
+      [sortableIndex]="i"
+      *ngFor="let node of currentWorkflowNodes; let i = index;"
+      (click)="openState(node)"
+      (onDragSuccess)="onDrop($event)">
+        <div class="title">
+          {{node.workflow_node.name_before_activation}}
+        </div>
+        <i fa name="times" class="icon text-danger" (click)="deleteNode(node.id, $event)"></i>
     </div>
 
-    <div class="col-4">
-      <ng-container
-        appFormElement
-        [config]="checkboxConfig"
-        [group]="checkboxForm">
-      </ng-container>
-    </div>
   </div>
 
-  <div class="workflow" *ngIf="currentWorkflowNodes">
-    <div dnd-sortable-container [sortableData]="currentWorkflowNodes" class="workflow-wrapper">
-      <div class="workflow-item"
-        dnd-sortable
-        [sortableIndex]="i"
-        *ngFor="let node of currentWorkflowNodes; let i = index;"
-        (click)="openState(node)"
-        (onDragSuccess)="onDrop($event)">
-          <div class="title">
-            {{node.workflow_node.name_before_activation}}
-          </div>
-          <i fa name="times" class="icon text-danger" (click)="deleteNode(node.id, $event)"></i>
-      </div>
-
-    </div>
-
-    <a href="" class="main add-link" (click)="addState($event)">Add State</a>
-  </div>
+  <a href="" class="main add-link" (click)="addState($event)">Add State</a>
 </div>
 
 <ng-template #modal let-c="close" let-d="dismiss">

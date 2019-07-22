@@ -702,6 +702,10 @@ export class FormRelatedComponent extends BasicElementComponent
     ) {
       const id = this.userService.user.currentRole[this.config.default];
 
+      if (this.config.read_only) {
+        this.viewMode = true;
+      }
+
       this.group.get(this.key).patchValue(id);
       this.getOptions.call(this, '', 0, false, this.setValue, id);
     } else if (

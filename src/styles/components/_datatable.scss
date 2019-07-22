@@ -6,7 +6,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   .btn {
     border-radius: 50px;
 
-    margin-top: .3rem;
+    // margin-top: .3rem;
     margin-bottom: .2rem;
   }
 
@@ -610,7 +610,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     margin-right: 8px;
     margin-bottom: 0;
-    padding: 10px 27px;
+    padding: 8px 27px;
 
     border-color: rgba($gray, .1);
 
@@ -621,6 +621,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     path {
       fill: rgba(black, .5);
+      transition: .4s all;
     }
 
     svg {

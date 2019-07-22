@@ -1,3 +1,6 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+
 app-calendar {
   min-width: 840px;
 }
@@ -10,15 +13,17 @@ app-back-link {
 
 .dashboard {
   display: flex;
-  flex-wrap: wrap;
 
   max-width: 1250px;
 
   margin: 100px auto 0;
 
+  @include media-breakpoint-down('md') {
+    flex-direction: column;
+  }
+
   &-item {
-    flex: 1 1;
-    max-width: 824px;
+    max-width: 840px;
 
     margin: 0 15px 15px;
 
