@@ -404,7 +404,7 @@ const form = [
                     },
                     send: false,
                     prefilled: {
-                      contact: '{id.id}'
+                      contact: '{id}'
                     },
                     type: 'related',
                     key: 'company_contact',

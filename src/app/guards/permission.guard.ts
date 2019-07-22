@@ -6,6 +6,7 @@ import { tap, mergeMap } from 'rxjs/operators';
 
 import { UserService, User, NavigationService, Role } from '../services/';
 import { CheckPermissionService } from '../shared/services/';
+import { isManager } from '../helpers';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -22,9 +23,11 @@ export class PermissionGuard implements CanActivate {
       .getUserData()
       .pipe(
         mergeMap((user: User) => {
+          const companyId = isManager() ? user.data.contact.company_id: '';
+
           return combineLatest(
             of(user),
-            this.navigationService.getPages(user.currentRole),
+            this.navigationService.getPages(user.currentRole, companyId),
             this.checkPermissionServise.getPermissions(user.data.user)
           );
         }),

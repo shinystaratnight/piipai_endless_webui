@@ -2,60 +2,45 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
-import { map, catchError, mergeMap } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
-import { UserService } from './user.service';
 import { AuthService } from './auth.service';
+import { isManager } from '../helpers';
 
 @Injectable()
 export class SiteSettingsService {
-  public endpoint: string;
-  public siteEndpoint: string;
+  public endpoint = '/company_settings/';
+  public siteEndpoint = '/company_settings/site/';
+
   public settings: any;
   public authorized: boolean;
   public currentEndpoint: string;
 
   constructor(
     private http: HttpClient,
-    private userService: UserService,
     private authService: AuthService
-  ) {
-    this.endpoint = '/company_settings/';
-    this.siteEndpoint = '/company_settings/site/';
-  }
+  ) {}
 
   public resolve() {
-    if (this.authService.isAuthorized) {
-      return this.userService
-        .getUserData()
-        .pipe(
-          mergeMap((user: any) => {
-            this.authorized = true;
+    if (this.authService.isAuthorized && isManager()) {
+      const update = this.currentEndpoint !== this.endpoint;
 
-            if (user.data.contact.contact_type === 'manager') {
-              const update = this.currentEndpoint !== this.endpoint;
-
-              return this.getSettings(this.endpoint, update);
-            } else {
-              return this.getSettings(this.siteEndpoint);
-            }
-          })
-        );
-    } else {
-      return this.getSettings(this.siteEndpoint);
+      return this.getSettings(this.endpoint, update);
     }
+
+    return this.getSettings(this.siteEndpoint);
   }
 
-  public isSmsEnabled() {
-    if (this.settings.company_settings) {
-      return this.settings.company_settings.sms_enabled;
-    }
+  public isSmsEnabled(): boolean {
+    const { company_settings } = this.settings;
+
+    return company_settings ? company_settings.sms_enabled : false;
   }
 
-  public getCompanyName() {
-    if (this.settings.company_settings) {
-      return this.settings.company_settings.company_name;
-    }
+  public getCompanyName(): string {
+    const { company_settings } = this.settings;
+
+    return company_settings ? company_settings.company_name : '';
   }
 
   public getSmsSendTitle() {
@@ -96,23 +81,21 @@ export class SiteSettingsService {
   }
 
   private updateBrowserStyles(settings: any): void {
-    document.body.parentElement.classList.add(
-      `${this.getTheme(settings)}-theme`
-    );
-    document.body.style.fontFamily = `${this.getFont(settings) || 'Source Sans Pro'}, sans-serif`;
+    const { body } = document;
+
+    body.parentElement.classList.add(`${this.getTheme(settings)}-theme`);
+    body.style.fontFamily = `${this.getFont(settings) || 'Source Sans Pro'}, sans-serif`;
   }
 
   private getFont(settings: any): string {
-    return (
-      settings.font ||
-      (settings.company_settings && settings.company_settings.font)
-    );
+    const { font, company_settings } = settings;
+
+    return font || (company_settings && company_settings.font);
   }
 
   private getTheme(settings: any): string {
-    return (
-      settings.color_scheme ||
-      (settings.company_settings && settings.company_settings.color_scheme)
-    );
+    const { color_scheme, company_settings } = settings;
+
+    return color_scheme || (company_settings && company_settings.color_scheme);
   }
 }

@@ -1,11 +1,19 @@
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
-
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  TemplateRef,
+  Input,
+  Output,
+  EventEmitter
+} from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
 import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
 
 import { WorkflowService } from '../../services';
-import { FormGroup } from '@angular/forms';
+import { config, workflowEl } from './workflow.config';
 
 @Component({
   selector: 'app-workflow',
@@ -14,7 +22,6 @@ import { FormGroup } from '@angular/forms';
 })
 export class WorkflowComponent implements OnInit, OnDestroy {
 
-  public workflowList: any;
   public currentWorkflowNodes: any[];
 
   public modalRef: NgbModalRef;
@@ -31,18 +38,10 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   public acceptanceTests: any;
 
   public addConfig: any[];
+  public config: any[];
 
-  public checkboxConfig = {
-    type: 'checkbox',
-    key: 'advance_state_saving',
-    value: false,
-    templateOptions: {
-      label: 'Advanced state saving'
-    }
-  }
-
-  public checkboxForm: FormGroup = new FormGroup({});
-  public checkboxSub: Subscription;
+  public form: FormGroup = new FormGroup({});
+  public formSubscription: Subscription;
 
   @Input() public company: string;
   @Input() public advanced: boolean;
@@ -63,10 +62,17 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     this.acceptanceTests = {};
 
     this.getWorkflows();
-    this.checkboxConfig.value = this.advanced;
-    this.checkboxSub = this.checkboxForm.valueChanges.subscribe((value) => {
-      this.changeSaving.emit(value);
-    });
+    this.formSubscription = this.form.valueChanges
+      .subscribe((value) => {
+        const { workflow, advance_state_saving } = value;
+
+        if ((workflow !== this.workflowId) && workflow) {
+          this.workflowId = workflow;
+          this.getNodes(this.workflowId);
+        }
+
+        this.changeSaving.emit(advance_state_saving);
+      });
   }
 
   public ngOnDestroy() {
@@ -74,8 +80,8 @@ export class WorkflowComponent implements OnInit, OnDestroy {
       this.modalRef.close();
     }
 
-    if (this.checkboxSub) {
-      this.checkboxSub.unsubscribe();
+    if (this.formSubscription) {
+      this.formSubscription.unsubscribe();
     }
   }
 
@@ -97,15 +103,20 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   public getWorkflows() {
     this.workflowService.getWorkflowList()
       .subscribe((res: any) => {
-        this.workflowList =
-          res.results.length
-          ? res.results.map((el) => {
+        const { results } = res;
+        const options = results.length
+          ? results.map((el) => {
+            const { id, name } = el;
+
             return {
-              value: el.id,
-              label: el.name
+              value: id,
+              label: name
             };
           })
           : [];
+
+        workflowEl.updateTemplate({ options });
+        this.config = config;
       });
   }
 

@@ -1,8 +1,20 @@
+<div *ngIf="!purposeConfig" class="spinner">
+  <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
+</div>
+
 <app-dynamic-form
   *ngIf="purposeConfig"
   [config]="purposeConfig"
   (event)="changePurpose($event)"
 ></app-dynamic-form>
+
+<hr>
+
+<div *ngIf="!showWorkflow" class="spinner">
+  <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
+</div>
 
 <app-workflow
   *ngIf="showWorkflow"
@@ -12,6 +24,11 @@
 </app-workflow>
 
 <hr>
+
+<div *ngIf="!config" class="spinner">
+  <div class="double-bounce1"></div>
+  <div class="double-bounce2"></div>
+</div>
 
 <app-dynamic-form
   [config]="config"

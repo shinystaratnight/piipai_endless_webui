@@ -13,7 +13,8 @@ import {
   User,
   Role,
   NavigationService,
-  SiteSettingsService
+  SiteSettingsService,
+  CompanyPurposeService
 } from '../../services/';
 import { GenericFormService, FormMode } from '../../dynamic-form/services/';
 import { CheckPermissionService, ToastService, MessageType } from '../../shared/services/';
@@ -115,13 +116,14 @@ export class SiteComponent implements OnInit, OnDestroy {
     private ts: ToastService,
     private siteSettingsService: SiteSettingsService,
     private modalService: NgbModal,
+    private purposeService: CompanyPurposeService
   ) {}
 
   public ngOnInit() {
     this.loadScript();
     this.user = this.userService.user;
     this.currentRole = this.user.currentRole;
-    this.changePasswordEndpoint = `/core/contacts/${this.user.data.contact.id}/change_password/`;
+    this.changePasswordEndpoint = `${Endpoints.Contact}${this.user.data.contact.id}/change_password/`;
     this.updateJiraTask(this.user.currentRole);
 
     this.route.url.subscribe(
@@ -312,7 +314,10 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public getModelsList(url) {
     this.navigationService.getModules().subscribe(
-      (res: any) => this.modulesList = res
+      (res: any) => {
+        const data = this.purposeService.filterModules(res);
+        this.modulesList = data;
+      }
     );
   }
 
@@ -324,8 +329,9 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public getPages(url) {
     const role = this.user.currentRole;
+    const companyId = isManager() ? this.user.data.contact.company_id : '';
 
-    this.navigationService.getPages(role).subscribe(
+    this.navigationService.getPages(role, companyId).subscribe(
       (res: any) => {
         this.pagesList = res;
 

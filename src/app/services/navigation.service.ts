@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 
 import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 import { Role } from './user.service';
+import { Endpoints } from '../metadata/helpers';
+import { CompanyPurposeService, Purpose } from './company-purpose.service';
 
 export interface Page {
   name: string;
@@ -25,42 +27,68 @@ export class NavigationService {
   public parsedByPermissions: boolean;
 
   public navigationList: any = {};
-  public endpoint = '/core/extranetnavigations/?limit=-1';
-  public userModelsEndpoint = '/core/userdashboardmodules/?limit=-1';
-  public modelsListEndpoint = '/core/dashboardmodules/?limit=-1';
   public linksList: Page[] = [];
 
   constructor(
     private gfs: GenericFormService,
+    private purposeService: CompanyPurposeService
   ) { }
 
-  public getPages(role: Role) {
+  public getPages(role: Role, companyId?: string, update?: boolean) {
     if (role) {
-      if (!this.navigationList[role.id]) {
-        const query = `&role=${role.id}`;
-        return this.gfs
-          .getAll(`${this.endpoint}${query}`)
-          .pipe(
-            map((res: any) => {
-              if (res.results) {
-                this.currentRole = role;
-                this.navigationList[role.id] = res.results;
-                this.linksList.length = 0;
-                this.generateLinks(this.navigationList[role.id], this.linksList);
+      const { id } = role;
 
-                return this.navigationList[role.id];
+      if (!this.navigationList[id] || update) {
+        const query = `?limit=-1&role=${id}`;
+        return this.gfs.getByQuery(Endpoints.ExtranetNavigation, query)
+          .pipe(
+            mergeMap((res: any) => {
+              if (companyId) {
+                return this.getCompanyPurpose(companyId)
+                  .pipe(map((purpose: Purpose) => ({ purpose, list: res.results })));
+              } else {
+                return of({ list: res.results });
+              }
+            }),
+            map((res: { purpose: Purpose, list: any[] }) => {
+              if (res.list) {
+                const list = res.purpose
+                  ? this.purposeService.filterNavigationByPurpose(res.purpose, res.list)
+                  : res.list;
+                this.currentRole = role;
+                this.navigationList[id] = list;
+                this.linksList.length = 0;
+                this.generateLinks(this.navigationList[id], this.linksList);
+
+                return this.navigationList[id];
               }
             })
           );
       } else {
-        return of(this.navigationList[role.id]);
+        return of(this.navigationList[id]);
       }
     }
   }
 
+  public getCompanyPurpose(id: string): Observable<Purpose> {
+    const query = `?fields=purpose`;
+
+    return this.gfs.getByQuery(`${Endpoints.Company}${id}/`, query)
+      .pipe(
+        map((res: any) => {
+          const { purpose } = res;
+          this.purposeService.purpose = purpose;
+
+          return purpose;
+        })
+      );
+  }
+
   public getUserModules() {
+    const query = '?limit=-1';
+
     return this.gfs
-      .getAll(this.userModelsEndpoint)
+      .getByQuery(Endpoints.UserDashboardModule, query)
       .pipe(
         map((res: any) => {
           if (res.results) {
@@ -72,8 +100,10 @@ export class NavigationService {
   }
 
   public getModules() {
+    const query = '?limit=-1';
+
     return this.gfs
-      .getAll(this.modelsListEndpoint)
+      .getByQuery(Endpoints.DashboardModule, query)
       .pipe(
         map((res: any) => {
           if (res.results) {
