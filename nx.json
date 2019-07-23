@@ -1,0 +1,36 @@
+{
+  "npmScope": "webui",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "projects": {
+    "endless-webui-e2e": {
+      "tags": []
+    },
+    "endless-webui": {
+      "tags": []
+    },
+    "manager-e2e": {
+      "tags": []
+    },
+    "manager": {
+      "tags": []
+    },
+    "client-e2e": {
+      "tags": []
+    },
+    "client": {
+      "tags": []
+    },
+    "candidate-e2e": {
+      "tags": []
+    },
+    "candidate": {
+      "tags": []
+    }
+  }
+}

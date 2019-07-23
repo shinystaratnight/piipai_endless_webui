@@ -1,0 +1,247 @@
+@import '../../../../styles/variables.scss';
+
+.custom-button {
+  display: inline-flex;
+  align-items: center;
+  color: $gray;
+  opacity: .8;
+
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  fa-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 13px;
+
+    margin-right: 3px;
+  }
+}
+
+button {
+  margin-bottom: 6px;
+
+  &.list {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  &.inverse {
+    border-radius: 0;
+    background-color: #fff;
+
+    &.text-success:hover,
+    &.text-success:active {
+      color: white !important;
+      background-color: $brand-success;
+
+      svg path {
+        fill: white;
+      }
+    }
+
+    &.text-danger:hover,
+    &.text-danger:active {
+      color: white !important;
+      background-color: $brand-danger;
+
+      svg path {
+        fill: white;
+      }
+    }
+  }
+}
+
+.line {
+  display: flex;
+
+  label {
+    min-width: 50px;
+
+    font-weight: normal;
+
+    opacity: .5;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+button.btn-link {
+  padding: 0;
+
+  font-size: 14px;
+  line-height: 16px;
+
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+    opacity: .5;
+  }
+}
+
+.postfix {
+  position: relative;
+  top: -2px;
+
+  opacity: .5;
+}
+
+.custom-link {
+  color: $brand-primary;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.image-wrapper {
+  position: relative;
+
+  width: 100%;
+
+  cursor: pointer;
+
+  &:hover {
+    .backdrop {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .backdrop-danger {
+      display: none;
+    }
+  }
+
+  .backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: none;
+
+    height: 70px;
+    width: 70px;
+
+    border-radius: 50%;
+
+    text-align: center;
+
+    background-color: rgba($brand-primary, .7);
+
+    color: white;
+
+    z-index: 1;
+
+    &-danger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      background-color: rgba($brand-danger, .7);
+      z-index: 1;
+    }
+
+    span {
+      font-size: 12px;
+      line-height: 16px;
+      font-weight: 600;
+
+      text-align: center;
+    }
+  }
+
+  img {
+    height: 70px;
+    width: 70px;
+  }
+
+  .tracking-mobile {
+    display: none;
+
+    button {
+      width: 50%;
+
+      text-align: left;
+    }
+
+    .mobile-image {
+      width: 123px;
+      height: 40px;
+    }
+  }
+
+}
+
+.success-btn,
+.danger-btn,
+.warning-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 94px;
+  height: 28px;
+
+  margin-bottom: 6px;
+
+  text-align: center;
+  font-size: 14px !important;
+  line-height: 18px;
+
+  color: $gray;
+  box-shadow: 0px 1px 5px rgba(43, 46, 51, 0.2);
+  background-color: #fff;
+}
+
+.success-btn {
+  &:hover,
+  &:active {
+    background-color: rgba($brand-success, .2);
+    box-shadow: 0px 1px 5px rgba($brand-success, 0.9);
+  }
+
+  fa-icon {
+    color: $brand-success;
+  }
+}
+
+.danger-btn {
+  &:hover,
+  &:active {
+    background-color: rgba($brand-danger, .2);
+    box-shadow: 0px 1px 5px rgba($brand-danger, 0.9);
+  }
+
+  fa-icon {
+    color: $brand-danger;
+  }
+}
+
+.warning-btn {
+  &:hover,
+  &:active {
+    background-color: rgba($brand-warning, .2);
+    box-shadow: 0px 1px 5px rgba($brand-warning, 0.9);
+  }
+
+  fa-icon {
+    color: $brand-warning;
+  }
+}
+
+svg {
+  margin-right: 2px;
+}
+
