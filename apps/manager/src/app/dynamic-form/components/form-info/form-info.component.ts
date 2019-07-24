@@ -13,8 +13,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subscription } from 'rxjs';
 
-import { getContactAvatar, isCandidate, isMobile } from '../../helpers';
-import { FormatString } from '../../../helpers/format';
+import { getContactAvatar, isCandidate, isMobile, FormatString } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-info',

@@ -18,10 +18,9 @@ import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import * as moment from 'moment-timezone';
 
 import { Field } from '../../models';
-import { FormatString } from '../../../helpers/format';
-import { getTotalTime } from '../../../helpers';
+import { FormatString, getTotalTime } from '@webui/utilities';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
-import { TimeService } from '../../../shared/services';
+import { TimeService } from '@webui/shared';
 
 @Component({
   selector: 'app-form-input',

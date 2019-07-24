@@ -31,6 +31,21 @@
     },
     "candidate": {
       "tags": []
+    },
+    "utilities": {
+      "tags": []
+    },
+    "shared": {
+      "tags": []
+    },
+    "data": {
+      "tags": []
+    },
+    "core": {
+      "tags": []
+    },
+    "metadata": {
+      "tags": []
     }
   }
 }

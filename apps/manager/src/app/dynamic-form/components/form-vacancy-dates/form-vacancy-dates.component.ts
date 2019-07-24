@@ -14,7 +14,7 @@ import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { TimeService } from '../../../shared/services';
+import { TimeService } from '@webui/shared';
 
 @Component({
   selector: 'app-form-vacancy-dates',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { CheckPermissionService } from '../../shared/services';
+import { CheckPermissionService } from '@webui/core';
 
 import { Form } from '../models/form.model';
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { getContactAvatar } from '../../../helpers/utils';
+import { getContactAvatar } from '@webui/utilities';
 import { getValueOfData } from '../../helpers/utils';
 
 @Component({

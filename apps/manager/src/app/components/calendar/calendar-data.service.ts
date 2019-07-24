@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
-import { Endpoints } from '../../metadata/helpers';
+import { Endpoints } from '@webui/metadata';
 
 export enum Calendar {
   Manager,

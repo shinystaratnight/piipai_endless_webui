@@ -52,12 +52,16 @@ import { AppComponent } from './app.component';
 import { RedirectComponent } from './redirect.component';
 
 import * as formComponents from './components';
-import { services } from './services';
+// import { services } from './services';
 import { guards } from './guards';
 import { interceptors } from './interceptors';
 
 import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
-import { SharedModule } from './shared/shared.module';
+
+
+import { SharedModule } from '@webui/shared';
+import { CoreModule } from '@webui/core';
+
 
 import { environment } from '../environments/environment';
 
@@ -92,9 +96,10 @@ moment.tz.setDefault('Australia/Sydney');
     MasterGuideModule,
 
     FontAwesomeModule,
+    CoreModule,
   ],
   providers: [
-    ...services,
+    // ...services,
     ...guards,
     ...formComponents.providers,
     ...interceptors

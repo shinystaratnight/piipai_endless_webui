@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 import { getValueOfData } from '../../helpers/utils';
-import { FormatString } from '../../../helpers/format';
+import { FormatString } from '@webui/utilities';
 
 @Component({
   selector: 'app-button-group',

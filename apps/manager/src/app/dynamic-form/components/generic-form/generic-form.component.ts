@@ -18,16 +18,17 @@ import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
 
 import { GenericFormService, FormService, FormMode, ActionService } from '../../services/';
-import { UserService, SiteSettingsService, AuthService, CompanyPurposeService, Purpose } from '../../../services';
+import { UserService, SiteSettingsService, AuthService, CompanyPurposeService, Purpose } from '@webui/core';
 
-import { ToastService, TimeService, MessageType } from '../../../shared/services';
+import { ToastService, MessageType } from '@webui/core';
+import { TimeService } from '@webui/shared';
 
 import { Field } from '../../models';
 
-import { FormatString } from '../../../helpers/format';
-import { getElementFromMetadata, removeValue, isCandidate, isMobile } from '../../helpers';
+import { FormatString, isCandidate, isMobile } from '@webui/utilities';
+import { getElementFromMetadata, removeValue,  } from '../../helpers';
 
-import { Endpoints } from '../../../metadata/helpers';
+import { Endpoints } from '@webui/metadata';
 
 import * as moment from 'moment-timezone';
 

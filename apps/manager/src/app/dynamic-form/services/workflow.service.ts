@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { ErrorsService } from '../../shared/services/errors.service';
+import { ErrorsService } from '@webui/core';
 
 @Injectable()
 export class WorkflowService {

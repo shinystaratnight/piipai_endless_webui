@@ -2,8 +2,8 @@ import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from '../../services';
-import { TimeService } from '../../../shared/services/time.service';
-import { isMobile } from '../../helpers';
+import { TimeService } from '@webui/shared';
+import { isMobile } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-tracking',

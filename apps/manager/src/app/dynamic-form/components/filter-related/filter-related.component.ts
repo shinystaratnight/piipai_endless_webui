@@ -13,8 +13,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 
 import { GenericFormService, FilterService } from './../../services/';
-import { SiteSettingsService } from '../../../services/site-settings.service';
-import { FormatString } from '../../../helpers/format';
+import { SiteSettingsService } from '@webui/core';
+import { FormatString } from '@webui/utilities';
 
 import { Subscription } from 'rxjs';
 import { debounceTime, skip, filter } from 'rxjs/operators';

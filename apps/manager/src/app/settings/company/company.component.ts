@@ -7,9 +7,9 @@ import { meta, purposeConfig } from './company.meta';
 import { Field } from '../../dynamic-form/models';
 import { GenericFormService, FormService } from '../../dynamic-form/services';
 import { SettingsService } from '../settings.service';
-import { SiteSettingsService } from '../../services';
-import { TimeService, ToastService, MessageType } from '../../shared/services';
-import { Endpoints } from '../../metadata/helpers';
+import { ToastService, MessageType, SiteSettingsService } from '@webui/core';
+import { TimeService } from '@webui/shared';
+import { Endpoints } from '@webui/metadata';
 
 @Component({
   selector: 'app-company',

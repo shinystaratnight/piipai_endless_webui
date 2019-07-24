@@ -20,20 +20,14 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { TimeService, ToastService, MessageType } from '../../../shared/services';
+import { ToastService, MessageType } from '@webui/core';
+import { TimeService } from '@webui/shared';
 import { FilterService, GenericFormService, ListStorageService } from '../../services';
-import { AuthService, UserService } from '../../../services';
-import { FormatString } from '../../../helpers/format';
-import {
-  createAddAction,
-  isMobile,
-  isCandidate,
-  getContactAvatar,
-  smallModalEndpoints,
-  getOrientation
-} from '../../helpers';
+import { AuthService, UserService } from '@webui/core';
+import { FormatString, isMobile, isCandidate, getContactAvatar, } from '@webui/utilities';
+import { createAddAction, smallModalEndpoints, getOrientation } from '../../helpers';
 
-import { Endpoints } from '../../../metadata/helpers';
+import { Endpoints } from '@webui/metadata';
 
 import { environment } from '../../../../environments/environment';
 

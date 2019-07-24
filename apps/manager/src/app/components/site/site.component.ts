@@ -7,19 +7,17 @@ import { Subject } from 'rxjs';
 
 import {
   SiteService,
-  PageData,
   UserService,
   AuthService,
-  User,
-  Role,
   NavigationService,
   SiteSettingsService,
   CompanyPurposeService
-} from '../../services/';
+} from '@webui/core';
+import { PageData, User, Role } from '@webui/data';
 import { GenericFormService, FormMode } from '../../dynamic-form/services/';
-import { CheckPermissionService, ToastService, MessageType } from '../../shared/services/';
-import { isMobile, isCandidate, isClient, isManager } from '../../helpers/utils';
-import { Endpoints } from '../../metadata/helpers';
+import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
+import { isMobile, isCandidate, isClient, isManager } from '@webui/utilities';
+import { Endpoints } from '@webui/metadata';
 
 @Component({
   selector: 'app-site',

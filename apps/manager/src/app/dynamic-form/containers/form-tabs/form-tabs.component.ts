@@ -11,7 +11,8 @@ import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { FormService } from '../../services';
-import { isMobile, isCandidate, getValueOfData } from '../../helpers';
+import { getValueOfData } from '../../helpers';
+import { isMobile, isCandidate } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-tabs',

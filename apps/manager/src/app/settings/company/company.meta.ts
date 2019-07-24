@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 
 import { createFormElement, Type as FormElementType } from '../../dynamic-form/models/form-elements';
-import { purposeOptions } from '../../metadata/models/companies.metadata';
+import { purposeOptions } from '@webui/metadata';
 
 const formData = new BehaviorSubject({ data: {} });
 

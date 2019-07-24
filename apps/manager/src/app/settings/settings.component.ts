@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { SettingsService } from './settings.service';
-import { UserService, Role, User } from '../services/user.service';
-import { Page } from '../services/navigation.service';
+import { UserService } from '@webui/core';
+import { Page, Role, User } from '@webui/data';
 
 @Component({
   selector: 'app-settings-page',

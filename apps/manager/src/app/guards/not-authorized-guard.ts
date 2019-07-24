@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 
-import { AuthService } from '../services';
+import { AuthService } from '@webui/core';
 
 @Injectable()
 export class NotAuthorizedGuard implements CanActivate {

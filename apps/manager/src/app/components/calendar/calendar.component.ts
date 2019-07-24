@@ -7,14 +7,13 @@ import { combineLatest } from 'rxjs';
 import { Moment } from 'moment-timezone';
 
 import { CalendarService, CalendarData, Status } from './calendar.service';
-import { DateRange, filterDateFormat, isManager, isCandidate, isClient, getRoleId } from '../../helpers';
-import { FormatString } from '../../helpers/format';
+import { DateRange, filterDateFormat, isManager, isCandidate, isClient, getRoleId, FormatString } from '@webui/utilities';
 import { CalendarDataService, Calendar } from './calendar-data.service';
 import { filters } from './calendar-filters.meta';
-import { TimeService } from '../../shared/services';
+import { TimeService } from '@webui/shared';
 
-import { DatepickerComponent } from '../../shared/components/datepicker/datepicker.component';
-import { Role, UserService } from '../../services';
+import { DatepickerComponent } from '@webui/shared';
+import { UserService } from '@webui/core';
 
 @Component({
   selector: 'app-calendar',

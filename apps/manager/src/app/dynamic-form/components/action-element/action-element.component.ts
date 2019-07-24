@@ -1,8 +1,8 @@
 import { Component, Input, ViewChild, EventEmitter, Output, OnChanges } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { SiteSettingsService } from '../../../services/site-settings.service';
-import { FormatString } from '../../../helpers/format';
+import { SiteSettingsService } from '@webui/core';
+import { FormatString } from '@webui/utilities';
 
 @Component({
   selector: 'app-action-element',

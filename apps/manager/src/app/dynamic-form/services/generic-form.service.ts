@@ -3,8 +3,8 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
 
-import { ErrorsService } from '../../shared/services/errors.service';
-import { MetadataService } from '../../metadata';
+import { ErrorsService } from '@webui/core';
+import { MetadataService } from '@webui/metadata';
 
 @Injectable()
 export class GenericFormService {

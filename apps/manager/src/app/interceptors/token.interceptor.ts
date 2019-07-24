@@ -6,7 +6,7 @@ import { switchMap, catchError } from 'rxjs/operators';
 import { LocalStorageService } from 'ngx-webstorage';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '@webui/core';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {

@@ -10,7 +10,7 @@ import { BasicElementComponent } from '../basic-element/basic-element.component'
 import { GenericFormService } from '../../services/generic-form.service';
 
 import { FormService } from '../../services';
-import { TimeService } from '../../../shared/services';
+import { TimeService } from '@webui/shared';
 
 const extendConfig = {
   shiftsDates: {

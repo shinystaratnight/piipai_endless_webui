@@ -9,7 +9,8 @@ import {
 } from '@angular/core';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 
-import { isMobile, getOrientation } from '../../helpers';
+import { getOrientation } from '../../helpers';
+import { isMobile } from '@webui/utilities'
 
 @Component({
   selector: 'app-signature',

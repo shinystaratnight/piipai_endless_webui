@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 import * as moment from 'moment-timezone';
 
 import { FilterService } from './../../services/filter.service';
-import { isMobile } from '../../helpers';
+import { isMobile } from '@webui/utilities';
 
 interface Params {
   [query: string]: string;

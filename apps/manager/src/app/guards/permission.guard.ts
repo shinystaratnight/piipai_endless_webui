@@ -4,9 +4,10 @@ import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { combineLatest, of } from 'rxjs';
 import { tap, mergeMap } from 'rxjs/operators';
 
-import { UserService, User, NavigationService, Role } from '../services/';
-import { CheckPermissionService } from '../shared/services/';
-import { isManager } from '../helpers';
+import { UserService, NavigationService } from '@webui/core';
+import { User, Role } from '@webui/data';
+import { CheckPermissionService } from '@webui/core';
+import { isManager } from '@webui/utilities';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {

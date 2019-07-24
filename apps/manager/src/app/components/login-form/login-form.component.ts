@@ -2,9 +2,9 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, OnDestroy } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { LocalStorageService } from 'ngx-webstorage';
+// import { LocalStorageService } from 'ngx-webstorage';
 
-import { AuthService, UserService } from '../../services';
+import { AuthService, UserService } from '@webui/core';
 
 import { environment } from '../../../environments/environment';
 

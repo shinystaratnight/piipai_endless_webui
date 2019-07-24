@@ -1,6 +1,6 @@
 import { GuideItem } from "../../interfaces";
 
-import { Endpoints } from '../../../metadata/helpers';
+import { Endpoints } from '@webui/metadata';
 
 export const guide: GuideItem[] = [
   {

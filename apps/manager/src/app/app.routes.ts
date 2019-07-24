@@ -8,7 +8,7 @@ import {
 } from './components';
 import { RedirectComponent } from './redirect.component';
 
-import { UserService, NavigationService, SiteSettingsService } from './services';
+import { UserService, NavigationService, SiteSettingsService } from '@webui/core';
 
 import { AuthGuard, NotAuthorizedGuard, SubdomainGuard, PermissionGuard, LogoutGuard } from './guards';
 

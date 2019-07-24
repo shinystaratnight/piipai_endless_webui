@@ -13,7 +13,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { SiteSettingsService } from '../../../services/site-settings.service';
+import { SiteSettingsService } from '@webui/core';
 
 @Component({
   selector: 'app-form-checkbox',

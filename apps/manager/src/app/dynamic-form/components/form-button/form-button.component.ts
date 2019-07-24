@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
-import { SiteSettingsService } from '../../../services/site-settings.service';
+import { SiteSettingsService } from '@webui/core';
 import { generateCssStyles } from '../../helpers';
 
 @Component({

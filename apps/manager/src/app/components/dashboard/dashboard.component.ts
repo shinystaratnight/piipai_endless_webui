@@ -11,7 +11,8 @@ import {
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
-import { Page, UserService } from '../../services/';
+import { UserService } from '@webui/core';
+import { Page } from '@webui/data';
 
 export interface UserModelData {
   dashboard_module: string;

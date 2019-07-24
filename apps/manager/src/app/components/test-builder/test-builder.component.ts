@@ -20,7 +20,7 @@ import {
   fillingForm,
   getElementFromMetadata
 } from '../../dynamic-form/helpers/utils';
-import { MetadataService } from '../../metadata';
+import { MetadataService } from '@webui/metadata';
 import { PassTestModalComponent, PassTestModalConfig } from '../../dynamic-form/modals';
 
 @Component({

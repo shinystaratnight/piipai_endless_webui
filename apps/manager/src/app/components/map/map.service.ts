@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { catchError } from 'rxjs/operators';
 
-import { ErrorsService } from '../../shared/services/errors.service';
+import { ErrorsService } from '@webui/core';
 
 export interface Marker {
   latitude: number;

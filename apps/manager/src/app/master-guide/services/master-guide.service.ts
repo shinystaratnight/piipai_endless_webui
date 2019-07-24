@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
-import { Endpoints } from '../../metadata/helpers';
-import { ErrorsService } from '../../shared/services';
+import { Endpoints } from '@webui/metadata';
+import { ErrorsService } from '@webui/core';
 
 @Injectable()
 export class MasterGuideService {

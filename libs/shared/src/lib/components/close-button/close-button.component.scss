@@ -1,0 +1,35 @@
+@import '../../../../../../apps/manager/src/styles/variables';
+
+:host {
+  display: inline-flex;
+  align-items: center;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1rem;
+  line-height: 1;
+
+  border: none;
+  background-color: transparent;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+svg {
+  fill: $gray;
+
+  opacity: .8;
+
+  &.sm {
+    width: 8px;
+    height: 8px;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}

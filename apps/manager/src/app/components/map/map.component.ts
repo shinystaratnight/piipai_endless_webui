@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ElementRef, ViewChild, OnDestroy } fro
 import { MapService, Marker } from './map.service';
 
 import { FilterService } from '../../dynamic-form/services/filter.service';
-import { MetadataService } from '../../metadata';
+import { MetadataService } from '@webui/metadata';
 
 @Component({
   selector: 'app-map',

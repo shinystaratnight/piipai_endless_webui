@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
-import { getContactAvatar, isCandidate, isMobile } from '../../helpers';
+import { getContactAvatar, isCandidate, isMobile } from '@webui/utilities';
 
 @Component({
   selector: 'app-list-image',

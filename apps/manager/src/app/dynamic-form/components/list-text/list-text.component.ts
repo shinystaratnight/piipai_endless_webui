@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import * as moment from 'moment-timezone';
 
-import { isMobile } from '../../../helpers';
+import { isMobile } from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../helpers';
 
 @Component({

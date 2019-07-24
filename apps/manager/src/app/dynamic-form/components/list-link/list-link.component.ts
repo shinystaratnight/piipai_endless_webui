@@ -7,7 +7,7 @@ import {
   ViewChild
 } from '@angular/core';
 
-import { SiteSettingsService } from '../../../services/site-settings.service';
+import { SiteSettingsService } from '@webui/core';
 
 @Component({
   selector: 'app-list-link',

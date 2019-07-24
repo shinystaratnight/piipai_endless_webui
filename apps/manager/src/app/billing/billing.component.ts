@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { User, UserService } from '../services/user.service';
 import { BillingService } from './services/billing-service';
 
 import { Plan, Payment, BillingSubscription } from './models';
 
-import { ToastService } from '../shared/services';
+import{ User } from '@webui/data';
+import { ToastService, UserService } from '@webui/core';
 
 @Component({
   selector: 'app-billing-page',

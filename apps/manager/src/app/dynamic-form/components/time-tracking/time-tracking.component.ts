@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
 import { Moment } from 'moment-timezone';
-import { TimeService } from '../../../shared/services';
+import { TimeService } from '@webui/shared';
 
 @Component({
   selector: 'app-time-tracking',

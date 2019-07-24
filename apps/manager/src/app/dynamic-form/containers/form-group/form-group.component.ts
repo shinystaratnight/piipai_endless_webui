@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { isMobile, isCandidate } from '../../helpers';
+import { isMobile, isCandidate } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-group',

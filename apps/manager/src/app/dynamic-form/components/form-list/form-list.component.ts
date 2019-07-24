@@ -13,10 +13,10 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 
-import { FormatString } from '../../../helpers/format';
+import { FormatString } from '@webui/utilities';
 import { smallModalEndpoints } from '../../helpers/small-modal';
 
-import { CheckPermissionService } from '../../../shared/services/check-permission';
+import { CheckPermissionService } from '@webui/core';
 import { GenericFormService } from '../../services/generic-form.service';
 
 @Component({

@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../services/filter.service';
-import { FormatString } from '../../../helpers/format';
+import { FormatString } from '@webui/utilities';
 
 @Component({
   selector: 'app-filter-multiple',

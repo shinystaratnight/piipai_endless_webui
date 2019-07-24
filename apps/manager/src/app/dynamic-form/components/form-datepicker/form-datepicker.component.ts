@@ -14,9 +14,8 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subscription, Subject } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { FormatString } from '../../../helpers/format';
-import { isMobile } from '../../helpers';
-import { TimeService } from '../../../shared/services';
+import { FormatString, isMobile } from '@webui/utilities';
+import { TimeService } from '@webui/shared';
 
 @Component({
   selector: 'app-form-datepicker',

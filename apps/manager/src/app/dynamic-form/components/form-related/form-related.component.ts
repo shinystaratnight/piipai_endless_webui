@@ -20,17 +20,17 @@ import { Subscription, BehaviorSubject, Subject } from 'rxjs';
 import { debounceTime, skip, filter } from 'rxjs/operators';
 
 import { GenericFormService } from '../../services';
-import { CheckPermissionService, ToastService, MessageType } from '../../../shared/services';
+import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
 import {
   NavigationService,
   AuthService,
   UserService,
   SiteSettingsService
-} from '../../../services';
+} from '@webui/core';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
-import { FormatString } from '../../../helpers/format';
-import { Endpoints } from '../../../metadata/helpers';
+import { FormatString } from '@webui/utilities';
+import { Endpoints } from '@webui/metadata';
 
 export interface RelatedObject {
   id: string;

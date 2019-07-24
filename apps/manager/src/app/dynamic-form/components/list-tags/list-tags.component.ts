@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormatString } from '../../../helpers/format';
+import { FormatString } from '@webui/utilities';
 
 @Component({
   selector: 'app-list-tags',

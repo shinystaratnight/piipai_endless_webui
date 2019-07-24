@@ -5,7 +5,7 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, BehaviorSubject, Subscription } from 'rxjs';
 
 import { FormBuilderService } from '../../services';
-import { ToastService } from '../../../shared/services';
+import { ToastService } from '@webui/core';
 import { HiddenFields } from '../../components/generic-form/generic-form.component';
 import { Field } from '../../models';
 import { getElementFromMetadata } from '../../helpers';

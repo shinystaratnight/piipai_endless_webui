@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@webui/shared';
 import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
 import { MasterGuideModule } from '../master-guide/master-guide.module';
 

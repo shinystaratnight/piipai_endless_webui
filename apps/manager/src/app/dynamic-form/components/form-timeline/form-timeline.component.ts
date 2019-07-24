@@ -9,11 +9,11 @@ import {
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
-import { FormatString } from '../../../helpers/format';
+import { FormatString } from '@webui/utilities';
 import { GenericFormService } from '../../services';
 import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
-import { SiteSettingsService } from '../../../services';
-import { Endpoints } from '../../../metadata/helpers';
+import { SiteSettingsService } from '@webui/core';
+import { Endpoints } from '@webui/metadata';
 
 @Component({
   selector: 'app-form-timeline',

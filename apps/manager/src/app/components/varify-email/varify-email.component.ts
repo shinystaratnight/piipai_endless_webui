@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { VerifyService, UserService } from '../../services';
-import { ToastService, MessageType } from '../../shared/services';
+import { VerifyService, UserService } from '@webui/core';
+import { ToastService, MessageType } from '@webui/core';
 
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';

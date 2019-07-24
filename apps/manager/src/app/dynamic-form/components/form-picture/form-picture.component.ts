@@ -16,7 +16,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { getContactAvatar } from '../../../helpers/utils';
+import { getContactAvatar } from '@webui/utilities';
 
 import { FormService } from '../../services';
 

@@ -4,7 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { BillingService } from '../../services/billing-service';
 import { autoChargeMetadata } from './billing-sms.metadata';
-import { ToastService, MessageType } from '../../../shared/services';
+import { ToastService, MessageType } from '@webui/core';
 
 @Component({
   selector: 'app-billing-sms',

@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 
 import { GuideItem } from '../../interfaces';
-import { FormatString } from '../../../helpers/format';
-import { UserService } from '../../../services';
+import { FormatString } from '@webui/utilities';
+import { UserService } from '@webui/core';
 
 @Component({
   selector: 'app-master-guide-content',
