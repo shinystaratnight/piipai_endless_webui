@@ -1,0 +1,26 @@
+<div class="filter-element" [class.active]="!isCollapsed">
+  <label class="filter-label" [class.active]="!isCollapsed">
+    {{config.label}}
+    <!-- <i
+      fa
+      class="p-2 ml-auto"
+      [name]="icons[theme][isCollapsed]"
+      [border]=false
+      [class.text-primary]="icons[theme] === 'r3sourcer' && !isCollapsed"
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      style="cursor: pointer"></i> -->
+    <fa-icon
+      *ngIf="query"
+      class="reset-icon text-danger ml-1"
+      [icon]="['fas', 'times-circle']"
+      style="cursor: pointer"
+      (click)="resetFilter()"></fa-icon>
+  </label>
+  <div class="filter-select-wrapper">
+    <select class="form-control custom-select filter-select" [(ngModel)]="data" (change)="onChange()" [class.active]="query">
+      <option value="">All</option>
+      <option *ngFor="let option of config.options" [attr.value]="option.value" [selected]="data === option.value">{{option.label}}</option>
+    </select>
+  </div>
+</div>

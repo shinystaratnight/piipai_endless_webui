@@ -1,5 +1,5 @@
-FROM node:8.12
+FROM node:current
 WORKDIR /code
 ADD Makefile /code
-RUN npm install --global @angular/cli@6
+RUN npm install --global yarn
 ENTRYPOINT ["./docker-entrypoint.sh"]

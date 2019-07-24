@@ -1,0 +1,81 @@
+<div class="datatable-wrapper" *ngFor="let table of tables; let last = last">
+  <app-dynamic-list
+    *ngIf="table.metadata && table.data"
+    [inForm]="inForm"
+    [config]="table.metadata"
+    [data]="table.data"
+    [refresh]="table.refresh"
+    [first]="table.first"
+    [id]="table.id"
+    [active]="table.active"
+    [limit]="table.limit"
+    [offset]="table.offset"
+    [sorted]="table.sorted"
+    [innerTables]="table.innerTables"
+    [update]="table.update"
+    [minimized]="table.minimized"
+    [maximize]="table.maximize"
+    [endpoint]="table.endpoint"
+    [parentEndpoint]="table.parentEndpoint"
+    [inForm]="inForm"
+    [actionData]="table.actionData"
+    [supportData]="supportData"
+    [responseField]="responseField"
+    [paginated]="paginated"
+    [actions]="actions"
+    [delay]="delay"
+    [allowPermissions]="allowPermissions"
+    [metadataQuery]="metadataQuery"
+    [addMetadataQuery]="addMetadataQuery"
+    [editEndpoint]="editEndpoint"
+    [addData]="table.addData"
+    [disableActions]="disableActions"
+    [inlineFilters]="inlineFilters"
+    [actionProcess]="table.actionProcess"
+    (checkedObjects)="checkedHandler($event)"
+    (list)="listHandler($event)"
+    (event)="eventHandler($event)">
+      <ng-content></ng-content>
+  </app-dynamic-list>
+  <div class="spinner" [class.invisible]="!(!(table.metadata && table.data) || uploading)">
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
+  </div>
+</div>
+
+<div #list class="d-flex justify-content-start datatable-list pt-2 flex-wrap" *ngIf="minimizedTable.length">
+  <ng-container *ngFor="let table of minimizedTable">
+    <div class="datatable-item px-1 pt-1">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h6 class="d-flex justify-content-between align-items-center mb-0">
+            <span class="mr-3 title" placement="top" ngbTooltip="{{table.metadata.list.label}}">{{table.metadata.list.label}}</span>
+            <div class="d-flex fustify-content-center align-items-center">
+              <fa-icon
+                class="ml-2 icon"
+                [icon]="['fas', 'window-minimize']"
+                (click)="action('minimize', table)"
+                aria-hidden="true"></fa-icon>
+              <fa-icon
+                class="ml-2 icon"
+                [icon]="['fas', 'window-maximize']"
+                (click)="action('maximize', table)"
+                aria-hidden="true"></fa-icon>
+              <fa-icon
+                class="ml-2 icon"
+                [icon]="['fas', 'times']"
+                (click)="action('close', table)"
+                aria-hidden="true"></fa-icon>
+            </div>
+          </h6>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<button title="Load more" class="load-more"
+  *ngIf="tables[0] && tables[0].data && !inForm && (tables[0].offset < tables[0].data.count) && !uploading && (tables[0].data.count !== tables[0].limit)"
+  (click)="loadMoreHandler()">
+    <fa-icon [icon]="['fas', 'chevron-down']" class="text-white"></fa-icon>
+</button>
