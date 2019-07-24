@@ -7,6 +7,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService, UserService } from '@webui/core';
 
 import { environment } from '../../../environments/environment';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login-form',
@@ -110,8 +111,17 @@ export class LoginFormComponent implements OnInit, OnDestroy {
       }
 
       this.authService.storeToken(response, this.rememberMe, response.formData.username);
-      this.router.navigate(['']);
+
+      this.setTimezone();
     }
+  }
+
+  public setTimezone() {
+    this.userService.setTimezone()
+      .pipe(catchError(() => this.router.navigate([''])))
+      .subscribe(() => {
+        this.router.navigate(['']);
+      });
   }
 
   public redirectHandler(data) {
