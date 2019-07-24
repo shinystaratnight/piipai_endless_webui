@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { Moment } from 'moment-timezone';
 
-import { DateRange, rangeFormats, weekEnd, weekStart } from '@webui/utilities';
-import { DatepickerService, TimeService } from '@webui/shared';
+import { DateRange, rangeFormats, weekEnd, weekStart, getToday, getTimeInstance } from '@webui/utilities';
+import { DatepickerService } from '@webui/shared';
 
 export enum Status { Unfilled, Fullfilled, Pending, Open, Filled, Approved }
 
@@ -29,7 +29,6 @@ export class CalendarService {
   private calendarHeight = 370;
 
   constructor(
-    private time: TimeService,
     private datepickerService: DatepickerService
   ) {}
 
@@ -95,12 +94,12 @@ export class CalendarService {
   }
 
   getToday() {
-    return this.time.getToday();
+    return getToday();
   }
 
   calculateShiftSize(start: string) {
     const timesheetTime = 8.5;
-    const startMoment = this.time.instance(start, 'hh:mm:ss');
+    const startMoment = getTimeInstance()(start, 'hh:mm:ss');
 
     const time = {
       hours: startMoment.hour(),

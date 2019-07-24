@@ -20,7 +20,7 @@ export interface User {
     },
     is_primary: boolean;
     user: string;
+    roles: Role[];
   };
-  roles: Role[];
   currentRole: Role;
 }

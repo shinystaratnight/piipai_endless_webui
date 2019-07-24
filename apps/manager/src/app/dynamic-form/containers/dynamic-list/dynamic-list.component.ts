@@ -21,13 +21,12 @@ import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { ToastService, MessageType } from '@webui/core';
-import { TimeService } from '@webui/shared';
 import { FilterService, GenericFormService, ListStorageService } from '../../services';
 import { AuthService, UserService } from '@webui/core';
-import { FormatString, isMobile, isCandidate, getContactAvatar, } from '@webui/utilities';
+import { FormatString, isMobile, isCandidate, getContactAvatar, getTimeInstance, } from '@webui/utilities';
 import { createAddAction, smallModalEndpoints, getOrientation } from '../../helpers';
 
-import { Endpoints } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
 
 import { environment } from '../../../../environments/environment';
 
@@ -247,6 +246,7 @@ export class DynamicListComponent
   public sortedField: any;
   public isMobileDevice = isMobile() && isCandidate();
   public approveInvoice: boolean;
+  public timeInstance = getTimeInstance();
 
   constructor(
     private filterService: FilterService,
@@ -257,7 +257,6 @@ export class DynamicListComponent
     private storage: LocalStorageService,
     private authService: AuthService,
     private userService: UserService,
-    private time: TimeService,
     private toastr: ToastService,
     private listStorage: ListStorageService
   ) {}
@@ -1164,20 +1163,20 @@ export class DynamicListComponent
   }
 
   public getTotalTime(data) {
-    const shift_ended_at = this.time.instance(data.shift_ended_at);
-    const shift_started_at = this.time.instance(data.shift_started_at);
+    const shift_ended_at = this.timeInstance(data.shift_ended_at);
+    const shift_started_at = this.timeInstance(data.shift_started_at);
 
     let breakTime = 0;
 
     if (data.break_ended_at && data.break_started_at) {
-      const break_ended_at = this.time.instance(data.break_ended_at);
-      const break_started_at = this.time.instance(data.break_started_at);
+      const break_ended_at = this.timeInstance(data.break_ended_at);
+      const break_started_at = this.timeInstance(data.break_started_at);
 
       breakTime = break_ended_at.diff(break_started_at);
     }
 
     const workTime = shift_ended_at.diff(shift_started_at);
-    const totalTime = this.time.instance.duration(workTime - breakTime);
+    const totalTime = this.timeInstance.duration(workTime - breakTime);
 
     return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
   }
@@ -1980,10 +1979,10 @@ export class DynamicListComponent
           if (datetime.indexOf(format) > -1) {
             if (data[field]) {
               if (format === 'diff') {
-                return this.time.instance(data[field]).from(this.time.instance());
+                return this.timeInstance(data[field]).from(this.timeInstance());
               }
 
-              return this.time.instance(data[field])
+              return this.timeInstance(data[field])
                 .format(format === 'time' ? 'hh:mm A' : format === 'datetime' ? 'DD/MM/YYYY hh:mm A' : 'DD/MM/YYYY');
             } else {
               return isMobile() && isCandidate() ? '-' : '';
@@ -2467,10 +2466,10 @@ export class DynamicListComponent
         if (res.results.length) {
           this.listStorage.updateTrackingInfo(e.id, true);
           const timesheet = this.getRowData(e);
-          const break_end = this.time.instance(timesheet.break_ended_at);
-          const break_start = this.time.instance(timesheet.break_started_at);
-          const end = this.time.instance(timesheet.shift_ended_at);
-          const start = this.time.instance(timesheet.shift_started_at);
+          const break_end = this.timeInstance(timesheet.break_ended_at);
+          const break_start = this.timeInstance(timesheet.break_started_at);
+          const end = this.timeInstance(timesheet.shift_ended_at);
+          const start = this.timeInstance(timesheet.shift_started_at);
 
           const paths = res.results.map((point) => {
             return {
@@ -2481,7 +2480,7 @@ export class DynamicListComponent
           });
 
           const breakPaths = paths.filter((el) => {
-            const time = this.time.instance(el.log_at);
+            const time = this.timeInstance(el.log_at);
 
             return time.isBefore(break_end) && time.isAfter(break_start);
           });
@@ -2514,7 +2513,7 @@ export class DynamicListComponent
 
   public trackingMarkerCoordinates(time) {
     if (this.modalInfo) {
-      const item = this.modalInfo.paths.find((el) => time.format('hh:mm A') === this.time.instance(el.log_at).format('hh:mm A'));
+      const item = this.modalInfo.paths.find((el) => time.format('hh:mm A') === this.timeInstance(el.log_at).format('hh:mm A'));
       if (item) {
         this.modalInfo.markerLatitude = item.lat;
         this.modalInfo.markerLongitude = item.lng;

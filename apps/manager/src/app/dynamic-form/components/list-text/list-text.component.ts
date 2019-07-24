@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import * as moment from 'moment-timezone';
+// import * as moment from 'moment-timezone';
 
-import { isMobile } from '@webui/utilities';
+import { isMobile, getTimeInstance } from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../helpers';
 
 @Component({
@@ -60,7 +60,7 @@ export class ListTextComponent implements OnInit {
       this.workers = this.generateWorkers(this.config.workers_details);
     }
 
-    this.checkDate(moment);
+    this.checkDate(getTimeInstance());
     this.customizeStatic(this.config.value);
     this.cssClasses = generateCssStyles(this.config.styles, this.stylePrefix);
   }

@@ -14,7 +14,7 @@ import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { TimeService } from '@webui/shared';
+import { getTimeInstance, getToday } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-vacancy-dates',
@@ -44,6 +44,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
   public vacancyDates: string[];
   public dates: any = {};
   public todayElement: any;
+  public timeInstance = getTimeInstance();
 
   @ViewChild('calendar', { static: false })
   public calendar: ElementRef;
@@ -53,13 +54,12 @@ export class FormVacancyDatesComponent extends BasicElementComponent
   constructor(
     private fb: FormBuilder,
     private ngbCalendar: NgbCalendar,
-    private time: TimeService,
   ) {
     super();
   }
 
   public ngOnInit() {
-    this.calcMinDate(this.time.instance);
+    this.calcMinDate(this.timeInstance);
     this.addControl(this.config, this.fb);
     if (this.config && this.config.value) {
       this.group.get(this.key).patchValue(this.config.value);
@@ -103,7 +103,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
     this.markDisabled = (calendarDate) => {
 
       const exist = dates.find((shift) => {
-        const shiftDate = this.time.instance(shift);
+        const shiftDate = this.timeInstance(shift);
 
         return shiftDate.year() === calendarDate.year
           && shiftDate.month() + 1 === calendarDate.month
@@ -114,8 +114,8 @@ export class FormVacancyDatesComponent extends BasicElementComponent
         return exist;
       }
 
-      const existDate = this.time.instance(exist);
-      const today = this.time.getToday();
+      const existDate = this.timeInstance(exist);
+      const today = getToday();
 
       if (
         today.year() === existDate.year() &&
@@ -137,7 +137,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
     };
   }
 
-  public selectVacancyDate(e, time = this.time.instance) {
+  public selectVacancyDate(e, time = this.timeInstance) {
     if (e) {
       const date = time([e.year, e.month - 1, e.day]).format(this.dateFormat);
 

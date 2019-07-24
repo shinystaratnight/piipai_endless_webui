@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment-timezone';
 
-import { DateRange, filterDateFormat, weekStart, weekEnd } from '@webui/utilities';
-import { TimeService } from './time.service';
+import { DateRange, filterDateFormat, weekStart, weekEnd, getToday } from '@webui/utilities';
 
 export interface DatepickerData {
   header: string[];
@@ -17,8 +16,6 @@ export class DatepickerService {
     week: 'ddd / D MMM',
     day: 'D MMMM YYYY / dddd',
   };
-
-  constructor(private timeService: TimeService) {}
 
   public generateYear(from: Moment, updateBody?: Function) {
     const range = this.getRangeDates(from, DateRange.Year);
@@ -70,7 +67,7 @@ export class DatepickerService {
         month: currentDay.month(),
         dateMoment: currentDay.clone(),
         label: currentDay.format('D'),
-        today: date === this.timeService.getToday().format(filterDateFormat)
+        today: date === getToday().format(filterDateFormat)
       });
 
       currentDay.add(1, 'day');

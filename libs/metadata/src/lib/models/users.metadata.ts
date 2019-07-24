@@ -1,4 +1,6 @@
-import { todayFormatDate } from '../helpers';
+import { getToday } from '@webui/utilities';
+
+const todayFormatDate = getToday().format();
 
 const list = {
   list: {

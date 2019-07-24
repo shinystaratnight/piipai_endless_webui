@@ -17,7 +17,7 @@ import { PageData, User, Role } from '@webui/data';
 import { GenericFormService, FormMode } from '../../dynamic-form/services/';
 import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
 import { isMobile, isCandidate, isClient, isManager } from '@webui/utilities';
-import { Endpoints } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
 
 @Component({
   selector: 'app-site',

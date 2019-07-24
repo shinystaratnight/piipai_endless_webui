@@ -1,7 +1,5 @@
 import { Role } from '@webui/data';
 
-export const timeZone = 'Australia/Sydney';
-
 export enum DateRange { Year = 'year', Month = 'month', Week = 'week', Day = 'day' }
 
 export const filterDateFormat = 'YYYY-MM-DD';
@@ -70,20 +68,20 @@ export function getRoleId(): string {
 }
 
 export function getTotalTime(time, data) {
-  const shift_ended_at = time.instance(data.shift_ended_at);
-  const shift_started_at = time.instance(data.shift_started_at);
+  const shift_ended_at = time(data.shift_ended_at);
+  const shift_started_at = time(data.shift_started_at);
 
   let breakTime = 0;
 
   if (data.break_ended_at && data.break_started_at) {
-    const break_ended_at = time.instance(data.break_ended_at);
-    const break_started_at = time.instance(data.break_started_at);
+    const break_ended_at = time(data.break_ended_at);
+    const break_started_at = time(data.break_started_at);
 
     breakTime = break_ended_at.diff(break_started_at);
   }
 
   const workTime = shift_ended_at.diff(shift_started_at);
-  const totalTime = time.instance.duration(workTime - breakTime);
+  const totalTime = time.duration(workTime - breakTime);
 
   return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
 }

@@ -30,7 +30,7 @@ import {
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field } from '../../models';
 import { FormatString } from '@webui/utilities';
-import { Endpoints } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
 
 export interface RelatedObject {
   id: string;

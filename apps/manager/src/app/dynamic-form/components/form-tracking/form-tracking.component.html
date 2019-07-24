@@ -18,9 +18,8 @@
   <div class="tracking-header">
     <h5 class="title">Candidate Tracking</h5>
     <p class="jobsite">{{modalInfo.jobsite}}</p>
-    <button type="button" class="close ml-2" aria-label="Close" (click)="c('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+
+    <app-close-button class="close ml-2" (click)="c()"></app-close-button>
   </div>
 
   <agm-map

@@ -108,7 +108,7 @@ import * as skillratecoefficient from './skillratecoefficientrels.metadata';
 import * as priselistratemodifiers from './pricelistratemodifiers.metadata';
 import * as jobsitesclient from './jobsites-client.metadata';
 
-import { Endpoints } from '../helpers';
+import { Endpoints } from '@webui/data';
 
 export const metadata = {
   [Endpoints.Address]: address.metadata,

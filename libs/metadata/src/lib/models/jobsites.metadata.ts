@@ -1,7 +1,8 @@
-import { Endpoints } from '../helpers';
+import { Endpoints } from '@webui/data';
 import { createFilter, Type } from '../../../../../apps/manager/src/app/dynamic-form/models/filters';
+import { getToday } from '@webui/utilities';
 
-import { TimeService } from '@webui/shared';
+// import { TimeService } from '@webui/shared';
 
 const filters = {
   industry: createFilter(Type.Relared, {
@@ -835,7 +836,7 @@ const formadd = [
               type: 'date'
             },
             showIf: ['primary_contact.id', 'address'],
-            default: TimeService.instance().tz('Australia/Sydney'),
+            default: getToday(),
             type: 'datepicker'
           },
           {

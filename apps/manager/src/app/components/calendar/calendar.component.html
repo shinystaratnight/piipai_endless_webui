@@ -324,9 +324,8 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
-        <button type="button" class="close ml-auto" aria-label="Close" (click)="d('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
+
+        <app-close-button class="ml-auto" (click)="d()"></app-close-button>
       </div>
     </div>
     <div class="modal-body">

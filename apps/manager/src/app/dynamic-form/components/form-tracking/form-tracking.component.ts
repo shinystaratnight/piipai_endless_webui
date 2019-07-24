@@ -2,8 +2,7 @@ import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { GenericFormService } from '../../services';
-import { TimeService } from '@webui/shared';
-import { isMobile } from '@webui/utilities';
+import { isMobile, getTimeInstance } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-tracking',
@@ -17,13 +16,13 @@ export class FormTrackingComponent implements OnDestroy {
   public modalRef: NgbModalRef;
 
   public isMobile = isMobile;
+  public timeInstance = getTimeInstance();
 
   @ViewChild('tracking', { static: false })
   public trakingModal;
 
   constructor(
     private genericFormService: GenericFormService,
-    private time: TimeService,
     private modalService: NgbModal,
   ) {}
 
@@ -40,10 +39,10 @@ export class FormTrackingComponent implements OnDestroy {
     this.genericFormService.getByQuery(endpoint, `?timesheet=${timesheet.id.id}&limit=-1`)
       .subscribe((res) => {
         if (res.results.length) {
-          const break_end = this.time.instance(timesheet.break_ended_at);
-          const break_start = this.time.instance(timesheet.break_started_at);
-          const end = this.time.instance(timesheet.shift_ended_at);
-          const start = this.time.instance(timesheet.shift_started_at);
+          const break_end = this.timeInstance(timesheet.break_ended_at);
+          const break_start = this.timeInstance(timesheet.break_started_at);
+          const end = this.timeInstance(timesheet.shift_ended_at);
+          const start = this.timeInstance(timesheet.shift_started_at);
 
           const paths = res.results.map((point) => {
             return {
@@ -54,7 +53,7 @@ export class FormTrackingComponent implements OnDestroy {
           });
 
           const breakPaths = paths.filter((el) => {
-            const time = this.time.instance(el.log_at);
+            const time = this.timeInstance(el.log_at);
 
             return time.isBefore(break_end) && time.isAfter(break_start);
           });
@@ -77,7 +76,7 @@ export class FormTrackingComponent implements OnDestroy {
 
   public trackingMarkerCoordinates(time) {
     if (this.modalInfo) {
-      const item = this.modalInfo.paths.find((el) => time.format('hh:mm A') === this.time.instance(el.log_at).format('hh:mm A'));
+      const item = this.modalInfo.paths.find((el) => time.format('hh:mm A') === this.timeInstance(el.log_at).format('hh:mm A'));
       if (item) {
         this.modalInfo.markerLatitude = item.lat;
         this.modalInfo.markerLongitude = item.lng;

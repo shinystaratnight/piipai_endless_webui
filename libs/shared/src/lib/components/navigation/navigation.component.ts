@@ -13,9 +13,7 @@ import {
 
 import { AuthService } from '@webui/core';
 import { User, Page, Role } from '@webui/data';
-import { getContactAvatar } from '@webui/utilities';
-
-import { TimeService } from '../../services';
+import { getContactAvatar, getTimeInstance } from '@webui/utilities';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -59,7 +57,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private time: TimeService
   ) { }
 
   public ngOnInit() {
@@ -90,7 +87,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public formatDate(date) {
-    return this.time.instance(date, 'YYYY-MM-DD hh:mm:ss').format('YYYY/MM/DD');
+    return getTimeInstance()(date, 'YYYY-MM-DD hh:mm:ss').format('YYYY/MM/DD');
   }
 
   public getUserInformation() {
@@ -132,7 +129,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public changeRole(id: string) {
-    const role  = this.user.roles.find((el: Role) => el.id === id);
+    const role  = this.user.data.roles.find((el: Role) => el.id === id);
 
     this.checkCandidateRole(role);
 

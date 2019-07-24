@@ -1,13 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
-import { TimeService } from '../services';
+import { getTimeInstance } from '@webui/utilities';
 
 @Pipe({
   name: 'dateFormat' //tslint:disable-line
 })
 export class DateFormatPipe implements PipeTransform {
-
-  constructor(private time: TimeService) {}
 
   public transform(value: string, format: string): string {
     const formats = {
@@ -20,7 +17,7 @@ export class DateFormatPipe implements PipeTransform {
       return '';
     }
 
-    return this.time.instance(value)
+    return getTimeInstance()(value)
       .format(formats[format] ? formats[format] : format);
   }
 }

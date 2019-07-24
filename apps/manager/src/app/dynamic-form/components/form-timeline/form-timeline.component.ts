@@ -13,7 +13,7 @@ import { FormatString } from '@webui/utilities';
 import { GenericFormService } from '../../services';
 import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
 import { SiteSettingsService } from '@webui/core';
-import { Endpoints } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
 
 @Component({
   selector: 'app-form-timeline',

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Endpoints } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
 
 export enum Purpose {
   Hire = 'hire',

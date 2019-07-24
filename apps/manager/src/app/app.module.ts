@@ -65,10 +65,10 @@ import { CoreModule } from '@webui/core';
 
 import { environment } from '../environments/environment';
 
-import * as moment from 'moment-timezone';
+// import * as moment from 'moment-timezone';
 import { MasterGuideModule } from './master-guide/master-guide.module';
 
-moment.tz.setDefault('Australia/Sydney');
+// moment.tz.setDefault('Australia/Sydney');
 
 @NgModule({
   bootstrap: [ AppComponent ],

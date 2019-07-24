@@ -1,5 +1,6 @@
 import { createFilter, Type } from '../../../../../apps/manager/src/app/dynamic-form/models/filters';
-import { Endpoints, currency } from '../helpers';
+import { currency } from '../helpers';
+import { Endpoints } from '@webui/data';
 
 const filters = {
   recruitmentAgent: createFilter(Type.Relared, {

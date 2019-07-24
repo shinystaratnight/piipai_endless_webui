@@ -7,10 +7,9 @@ import { combineLatest } from 'rxjs';
 import { Moment } from 'moment-timezone';
 
 import { CalendarService, CalendarData, Status } from './calendar.service';
-import { DateRange, filterDateFormat, isManager, isCandidate, isClient, getRoleId, FormatString } from '@webui/utilities';
+import { DateRange, filterDateFormat, isManager, isCandidate, isClient, getRoleId, FormatString, getTimeInstance } from '@webui/utilities';
 import { CalendarDataService, Calendar } from './calendar-data.service';
 import { filters } from './calendar-filters.meta';
-import { TimeService } from '@webui/shared';
 
 import { DatepickerComponent } from '@webui/shared';
 import { UserService } from '@webui/core';
@@ -129,7 +128,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private data: CalendarDataService,
     private modalService: NgbModal,
     private router: Router,
-    private time: TimeService,
     private userService: UserService,
   ) {}
 
@@ -324,7 +322,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   public fillinAccess(shift) {
     const statusSeccess = this.getStatus(shift.is_fulfilled) !== this.getStatus(1);
-    const dateSuccess = this.calendar.getToday().isBefore(this.time.instance(shift.date).add(1, DateRange.Day));
+    const dateSuccess = this.calendar.getToday().isBefore(getTimeInstance()(shift.date).add(1, DateRange.Day));
 
     return statusSeccess && dateSuccess;
   }

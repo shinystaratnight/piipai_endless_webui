@@ -1,4 +1,4 @@
-import { Endpoints } from '../helpers';
+import { Endpoints } from '@webui/data';
 
 const list = {
   list: {
@@ -450,6 +450,7 @@ const form = [
       add_label: 'Add'
     },
     collapsed: false,
+    visibleMode: true,
     prefilled: {
       skill_rel: '{id}',
     },

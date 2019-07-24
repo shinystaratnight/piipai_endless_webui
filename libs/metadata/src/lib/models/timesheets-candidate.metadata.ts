@@ -1,4 +1,4 @@
-import { Colors, Endpoints } from '../helpers';
+import { Color, Endpoints } from '@webui/data';
 import { createFilter, Type } from '../../../../../apps/manager/src/app/dynamic-form/models/filters';
 
 const statusList = [
@@ -212,14 +212,14 @@ const list = {
               7: 'Approved',
             },
             color: {
-              0: Colors.Primary,
-              1: Colors.Primary,
-              2: Colors.Success,
-              3: Colors.Danger,
-              4: Colors.Primary,
-              5: Colors.Primary,
-              6: Colors.Danger,
-              7: Colors.Success,
+              0: Color.Primary,
+              1: Color.Primary,
+              2: Color.Success,
+              3: Color.Danger,
+              4: Color.Primary,
+              5: Color.Primary,
+              6: Color.Danger,
+              7: Color.Success,
             }
           },
           {
@@ -473,14 +473,14 @@ const list = {
       templateOptions: {
         label: 'Status',
         options: [
-          { value: 0, label: 'New', color: Colors.Success },
-          { value: 1, label: 'Check pending', color: Colors.Warning },
-          { value: 2, label: 'Check confirmed', color: Colors.Success },
-          { value: 3, label: 'Check failed', color: Colors.Danger },
-          { value: 4, label: 'Submit pending', color: Colors.Warning },
-          { value: 5, label: 'Pending approval', color: Colors.Success },
-          { value: 6, label: 'Supervisor modified', color: Colors.Success },
-          { value: 7, label: 'Approved', color: Colors.Success }
+          { value: 0, label: 'New', color: Color.Success },
+          { value: 1, label: 'Check pending', color: Color.Warning },
+          { value: 2, label: 'Check confirmed', color: Color.Success },
+          { value: 3, label: 'Check failed', color: Color.Danger },
+          { value: 4, label: 'Submit pending', color: Color.Warning },
+          { value: 5, label: 'Pending approval', color: Color.Success },
+          { value: 6, label: 'Supervisor modified', color: Color.Success },
+          { value: 7, label: 'Approved', color: Color.Success }
         ],
       }
     },

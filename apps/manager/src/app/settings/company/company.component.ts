@@ -8,8 +8,8 @@ import { Field } from '../../dynamic-form/models';
 import { GenericFormService, FormService } from '../../dynamic-form/services';
 import { SettingsService } from '../settings.service';
 import { ToastService, MessageType, SiteSettingsService } from '@webui/core';
-import { TimeService } from '@webui/shared';
-import { Endpoints } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
+import { getTimeInstance } from '@webui/utilities';
 
 @Component({
   selector: 'app-company',
@@ -55,7 +55,6 @@ export class CompanyComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private siteSettings: SiteSettingsService,
     private formService: FormService,
-    private time: TimeService,
     private toastr: ToastService
   ) { }
 
@@ -167,7 +166,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
     keys.forEach((key) => {
       if (key.includes('period_zero_reference')) {
         if (key === 'period_zero_reference_date') {
-          data.invoice_rule[key] = this.time.instance(data.invoice_rule[key], 'YYYY-MM-DD').date() || undefined;
+          data.invoice_rule[key] = getTimeInstance()(data.invoice_rule[key], 'YYYY-MM-DD').date() || undefined;
         }
 
         data.invoice_rule['period_zero_reference'] = parseInt(data.invoice_rule[key], 10) || undefined;
