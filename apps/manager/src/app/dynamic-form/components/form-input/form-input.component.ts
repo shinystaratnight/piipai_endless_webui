@@ -15,12 +15,12 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
-import * as moment from 'moment-timezone';
+// import * as moment from 'moment-timezone';
 
 import { Field } from '../../models';
-import { FormatString, getTotalTime } from '@webui/utilities';
+import { FormatString, getTotalTime, getTimeInstance } from '@webui/utilities';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
-import { TimeService } from '@webui/shared';
+// import { TimeService } from '@webui/shared';
 
 @Component({
   selector: 'app-form-input',
@@ -53,6 +53,7 @@ export class FormInputComponent extends BasicElementComponent
   public modalScrollDistance = 2;
   public modalScrollThrottle = 50;
   public address = '';
+  public timeInstance = getTimeInstance();
 
   public colors = {
     0: '#FA5C46',
@@ -77,7 +78,7 @@ export class FormInputComponent extends BasicElementComponent
     private fb: FormBuilder,
     public elementRef: ElementRef,
     private cd: ChangeDetectorRef,
-    private time: TimeService
+    // private time: TimeService
   ) {
     super();
     this.subscriptions = [];
@@ -156,7 +157,7 @@ export class FormInputComponent extends BasicElementComponent
       }
 
       this.displayValue = formatString.format('{totalTime}',
-        { ...newData, totalTime: getTotalTime(this.time, newData) }
+        { ...newData, totalTime: getTotalTime(this.timeInstance, newData) }
       );
     }
   }
@@ -191,22 +192,22 @@ export class FormInputComponent extends BasicElementComponent
 
     if (keys.indexOf(data.key) > -1) {
       if (this.config.type === 'static' && this.config.key === 'total_worked') {
-        const shiftStart = moment(data.data.shift_started_at);
-        const shiftEnded = moment(data.data.shift_ended_at);
-        const breakStart = moment(data.data.break_started_at);
-        const breakEnded = moment(data.data.break_ended_at);
+        const shiftStart = this.timeInstance(data.data.shift_started_at);
+        const shiftEnded = this.timeInstance(data.data.shift_ended_at);
+        const breakStart = this.timeInstance(data.data.break_started_at);
+        const breakEnded = this.timeInstance(data.data.break_ended_at);
 
         if (
           shiftStart.isBefore(shiftEnded) &&
           breakStart.isBefore(breakEnded)
         ) {
-          const shiftTime = moment.utc(shiftEnded.diff(shiftStart));
-          const breakTime = moment.utc(breakEnded.diff(breakStart));
+          const shiftTime = this.timeInstance.utc(shiftEnded.diff(shiftStart));
+          const breakTime = this.timeInstance.utc(breakEnded.diff(breakStart));
 
           const shiftDiff = shiftTime.format('HH:mm');
           if (breakStart && breakEnded && !data.data.no_break) {
             const breakDiff = breakTime.format('HH:mm');
-            const totalTime = moment
+            const totalTime = this.timeInstance
               .utc(shiftTime.diff(breakTime))
               .format('HH:mm');
 

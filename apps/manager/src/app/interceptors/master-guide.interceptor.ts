@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-
-import { Endpoints } from '@webui/metadata';
 import { tap } from 'rxjs/operators';
+
+import { Endpoints } from '@webui/data';
 
 export const updateGuide: Subject<any> = new Subject();
 const methods = ['DELETE', 'POST', 'PUT'];

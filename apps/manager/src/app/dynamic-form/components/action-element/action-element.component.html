@@ -17,9 +17,8 @@
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
     <p>{{action.message}}</p>
-    <button type="button" class="close ml-auto" aria-label="Close" (click)="d(false)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+
+    <app-close-button class="ml-auto" (click)="d(false)"></app-close-button>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="c(true)">{{config.agree_label}}</button>

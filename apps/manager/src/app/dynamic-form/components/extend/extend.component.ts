@@ -10,7 +10,7 @@ import { BasicElementComponent } from '../basic-element/basic-element.component'
 import { GenericFormService } from '../../services/generic-form.service';
 
 import { FormService } from '../../services';
-import { TimeService } from '@webui/shared';
+import { getTimeInstance, getTimeZoneOffset } from '@webui/utilities';
 
 const extendConfig = {
   shiftsDates: {
@@ -60,13 +60,14 @@ export class ExtendComponent extends BasicElementComponent
   public autocompleteProcess: boolean;
   public showAvailability: boolean;
 
+  public timeInstance = getTimeInstance();
+
   private formSubscription: Subscription;
 
   constructor(
     private fb: FormBuilder,
     private gfs: GenericFormService,
     private formService: FormService,
-    private time: TimeService
   ) {
     super();
   }
@@ -90,8 +91,7 @@ export class ExtendComponent extends BasicElementComponent
       this.autofill = [];
       data.forEach((date) => {
         this.autofill.push({
-          time: this.time
-            .instance(date.shift_datetime)
+          time: this.timeInstance(date.shift_datetime)
             .format('HH:mm:ss'),
           candidates: date.candidates
         });
@@ -275,8 +275,7 @@ export class ExtendComponent extends BasicElementComponent
       }
 
       return !candidateInfo.shifts.some((el) => {
-        const shiftDate = this.time
-          .instance(el.datetime)
+        const shiftDate = this.timeInstance(el.datetime)
           .format('YYYY-MM-DD');
 
         return shiftDate === date;
@@ -353,10 +352,7 @@ export class ExtendComponent extends BasicElementComponent
           dontSendFields: true,
         },
         query: {
-          shift: `{shift}T{time}%2B${this.time
-            .instance()
-            .format('Z')
-            .slice(1)}`
+          shift: `{shift}T{time}%2B${getTimeZoneOffset()}`
         },
         read_only: candidateReadOnly
       }
@@ -472,7 +468,7 @@ export class ExtendComponent extends BasicElementComponent
 
     this.availabilityCandidates.forEach((candidate) => {
       candidate.shifts.forEach((shift) => {
-        const date = this.time.instance(shift.datetime).format('YYYY-MM-DD');
+        const date = this.timeInstance(shift.datetime).format('YYYY-MM-DD');
 
         shift.show = selectedDates.includes(date);
       });
@@ -485,8 +481,7 @@ export class ExtendComponent extends BasicElementComponent
   public getCandidates(date: string, data: any) {
     if (data.time && data.workers) {
       const endpoint = `/hr/jobs/${this.getJobId()}/extend_fillin/`;
-      const timeZoneOffset = this.time.instance().format('Z').slice(1);
-      const query = `?shift=${date}T${data.time}%2B${timeZoneOffset}`;
+      const query = `?shift=${date}T${data.time}%2B${getTimeZoneOffset()}`;
 
       return this.gfs.getByQuery(endpoint, query).pipe(
         map(

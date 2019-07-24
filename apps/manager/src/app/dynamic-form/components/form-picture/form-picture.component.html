@@ -67,9 +67,8 @@
 <ng-template #modal let-c="close">
   <div class="modal-header">
     <h5 class="modal-title">{{config.templateOptions.label_photo}}</h5>
-    <button type="button" class="close" (click)="c()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+
+    <app-close-button class="ml-auto" (click)="c()"></app-close-button>
   </div>
 
   <div class="modal-body picture d-inline-block d-flex justify-content-around flex-wrap" style="overflow: auto">

@@ -11,10 +11,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import * as moment from 'moment-timezone';
+// import * as moment from 'moment-timezone';
 
 import { FilterService } from './../../services/filter.service';
-import { isMobile } from '@webui/utilities';
+import { isMobile, getTimeInstance } from '@webui/utilities';
 
 interface Params {
   [query: string]: string;
@@ -34,7 +34,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public displayFormat = 'DD/MM/YYYY';
   public queryFormat = 'YYYY-MM-DD';
   public timeZone = 'Australia/Sydney';
-  public moment: any = moment;
+  public timeInstance = getTimeInstance();
   public init = false;
 
   public filterSubscription: Subscription;
@@ -122,10 +122,10 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
       undefined,
       this.queryFormat,
       params,
-      moment
+      this.timeInstance
     );
 
-    this.data = this.convert(undefined, this.displayFormat, params, moment);
+    this.data = this.convert(undefined, this.displayFormat, params, this.timeInstance);
     this.query = this.getQuery(queryParams);
 
     this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
@@ -146,7 +146,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
       this.displayFormat,
       this.queryFormat,
       this.data,
-      moment
+      this.timeInstance
     );
 
     this.query = this.getQuery(queryParams);
@@ -195,7 +195,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
           this.queryFormat,
           this.displayFormat,
           params,
-          moment
+          this.timeInstance
         );
       } else {
         this.data = data.data;

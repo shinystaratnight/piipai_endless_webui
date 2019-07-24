@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
 import { Moment } from 'moment-timezone';
-import { TimeService } from '@webui/shared';
+import { getTimeInstance } from '@webui/utilities';
 
 @Component({
   selector: 'app-time-tracking',
@@ -22,10 +22,6 @@ export class TimeTrackingComponent implements OnInit {
 
   public breakStyles: any;
   public time: Moment;
-
-  constructor(
-    private timeService: TimeService,
-  ) {}
 
   public ngOnInit() {
     this.setBreakStyles();
@@ -59,7 +55,7 @@ export class TimeTrackingComponent implements OnInit {
 
     const newTime = (Math.round(minutes * event)) * 60 * 1000;
 
-    this.time = this.timeService.instance(start + newTime);
+    this.time = getTimeInstance()(start + newTime);
     this.changeTimeTracking.emit(this.time);
   }
 }

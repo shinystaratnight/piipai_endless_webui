@@ -34,13 +34,15 @@ export class UserService {
       return this.http
         .get(this.authEndpoint)
         .pipe(
-          mergeMap((user: User) => {
-            this.user = user;
+          // mergeMap((user: User) => {
+          //   this.user = user;
 
-            return this.getUserRoles();
-          }),
-          map((res: { roles: Role[] }) => {
-            if (!this.user.data.contact.contact_type || !res.roles.length) {
+          //   return this.getUserRoles();
+          // }),
+          map((user: User) => {
+            this.user = user;
+            const roles = user.data.roles;
+            if (!user.data.contact.contact_type || !roles.length) {
               this.authService.logout();
 
               setTimeout(() => {
@@ -55,27 +57,27 @@ export class UserService {
             let role: Role;
 
             if (storageRole) {
-              role = res.roles.find(
+              role = roles.find(
                 (el) => el.id === storageRole.id
               );
             } else {
-              role = res.roles.find(
+              role = roles.find(
                 (el) => el.__str__.includes(this.user.data.contact.contact_type)
               );
             }
 
             if (redirectRole) {
-              const existRole = res.roles.find((el) => el.id === redirectRole.id );
+              const existRole = roles.find((el) => el.id === redirectRole.id );
               if (existRole) {
                 role = existRole;
               } else {
                 role = redirectRole;
-                res.roles.push(role);
+                roles.push(role);
               }
             }
 
-            this.user.currentRole = role || this.user.roles[0];
-            this.user.roles = res.roles;
+            this.user.currentRole = role || roles[0];
+            // this.user.roles = res.roles;
             this.storage.store('role', this.user.currentRole);
 
             return this.user;

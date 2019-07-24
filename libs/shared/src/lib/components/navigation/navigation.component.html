@@ -35,10 +35,10 @@
 
     <ul *ngIf="!hideUserMenu" class="user-menu">
       <li>
-        <div *ngIf="user && user.roles && user.roles.length" class="form-inline role">
+        <div *ngIf="user && user.data.roles && user.data.roles.length" class="form-inline role">
           <span class="mr-1">Role:</span>
           <select class="form-control form-control-sm" id="role" [ngModel]="currentRole" (ngModelChange)="changeRole($event)">
-            <option *ngFor="let role of user.roles" [value]="role.id">
+            <option *ngFor="let role of user.data.roles" [value]="role.id">
               <small>{{role.__str__}}</small>
             </option>
           </select>

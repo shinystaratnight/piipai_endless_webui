@@ -14,8 +14,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subscription, Subject } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { FormatString, isMobile } from '@webui/utilities';
-import { TimeService } from '@webui/shared';
+import { FormatString, isMobile, getTimeInstance } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-datepicker',
@@ -56,13 +55,14 @@ export class FormDatepickerComponent extends BasicElementComponent
   public editMode: boolean;
   public currentField: boolean;
 
+  public timeInstance = getTimeInstance();
+
   private subscriptions: Subscription[];
 
   constructor(
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
     private el: ElementRef,
-    private moment: TimeService
   ) {
     super();
     this.subscriptions = [];
@@ -77,14 +77,13 @@ export class FormDatepickerComponent extends BasicElementComponent
       this.dateFormat = this.config.customDatepicker.dateFormat;
 
       if (this.config.value) {
-        this.config.value = this.moment
-          .instance(this.config.value, this.config.customDatepicker.parseFormat)
+        this.config.value = this.timeInstance(this.config.value, this.config.customDatepicker.parseFormat)
           .format('YYYY-MM-DD');
       }
     }
 
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
-    this.setInitValue(this.moment.instance);
+    this.setInitValue(this.timeInstance);
     this.checkModeProperty();
     this.checkHiddenProperty();
     this.checkFormData();
@@ -113,7 +112,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           if (this.group.get(this.key).value) {
             this.group.get(this.key).patchValue(undefined);
           }
-          this.setInitValue(this.moment.instance);
+          this.setInitValue(this.timeInstance);
         } else {
           this.config.hide = hide;
         }
@@ -141,7 +140,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           this.viewMode = this.config.read_only || false;
           this.editMode = true;
         }
-        this.setInitValue(this.moment.instance);
+        this.setInitValue(this.timeInstance);
       });
 
       this.subscriptions.push(subscription);
@@ -158,7 +157,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           !this.config.isPrefilled
         ) {
           this.formData = data.data;
-          this.setInitValue(this.moment.instance);
+          this.setInitValue(this.timeInstance);
         }
       });
 
@@ -312,7 +311,7 @@ export class FormDatepickerComponent extends BasicElementComponent
             const time = this.t.nativeElement.value;
             if (date) {
               const fullDate = date + (time ? ` ${time}` : '');
-              this.setDate(fullDate, this.moment.instance, true);
+              this.setDate(fullDate, this.timeInstance, true);
             } else {
               this.group.get(this.key).patchValue(null);
             }
@@ -349,7 +348,7 @@ export class FormDatepickerComponent extends BasicElementComponent
             const time = this.t.nativeElement.value;
             if (date) {
               const fullDate = date + (time ? ` ${time}` : '');
-              this.setDate(fullDate, this.moment.instance, true);
+              this.setDate(fullDate, this.timeInstance, true);
             } else {
               this.group.get(this.key).patchValue(null);
             }
@@ -376,7 +375,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           closeCallback: () => {
             const time = this.t.nativeElement.value;
             if (time) {
-              this.setTime(time, this.moment.instance, true);
+              this.setTime(time, this.timeInstance, true);
             } else {
               this.group.get(this.key).patchValue(null);
             }
@@ -438,9 +437,8 @@ export class FormDatepickerComponent extends BasicElementComponent
       this.config.templateOptions.type === 'date'
     ) {
       const maxValue =
-        this.moment.instance().year() -
-        this.moment
-          .instance(this.group.get(this.key).value, 'YYYY-MM-DD')
+        this.timeInstance().year() -
+        this.timeInstance(this.group.get(this.key).value, 'YYYY-MM-DD')
           .year();
 
       this.setDatepickerProp('calYearPickMax', maxValue, this.d.nativeElement);
@@ -518,21 +516,20 @@ export class FormDatepickerComponent extends BasicElementComponent
   }
 
   public changeDate(e) {
-    this.setDate(e, this.moment.instance);
+    this.setDate(e, this.timeInstance);
   }
 
   public changeTime(e: string) {
     if (this.date) {
       const hour = parseInt(e.split(':')[0], 10);
       const minute = parseInt(e.split(':')[1], 10);
-      const datetime = this.moment
-        .instance(this.date)
+      const datetime = this.timeInstance(this.date)
         .hour(hour)
         .minute(minute);
 
       this.group.get(this.key).patchValue(datetime.format());
     } else {
-      this.setTime(e, this.moment.instance);
+      this.setTime(e, this.timeInstance);
     }
   }
 

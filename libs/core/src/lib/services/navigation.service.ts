@@ -4,9 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { of, Observable } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 
-// import { GenericFormService } from '../dynamic-form/services/generic-form.service';
 import { Role } from '@webui/data';
-import { Endpoints } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
 import { CompanyPurposeService, Purpose } from './company-purpose.service';
 import { ErrorsService } from './errors.service';
 

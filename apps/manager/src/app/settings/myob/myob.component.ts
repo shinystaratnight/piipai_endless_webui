@@ -8,8 +8,9 @@ import { meta, payrollAccounts } from './myob.meta';
 import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
 import { Field } from '../../dynamic-form/models/field.model';
 import { SettingsService } from '../settings.service';
+import { getToday } from '@webui/utilities';
 
-import * as moment from 'moment-timezone';
+// import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-myob',
@@ -269,7 +270,7 @@ export class MyobComponent implements OnInit, OnDestroy {
 
   public refreshTime(field: string, now?: boolean) {
     if (now) {
-      this.MYOBSettings[field] = moment().format();
+      this.MYOBSettings[field] = getToday();
       return;
     }
 

@@ -1,4 +1,6 @@
-import { TimeService } from '@webui/shared';
+import { getToday } from '@webui/utilities';
+
+// import { TimeService } from '@webui/shared';
 
 const list = {
   list: {
@@ -801,7 +803,7 @@ const formadd = [
               type: 'date'
             },
             showIf: ['primary_contact.id', 'address'],
-            default: TimeService.instance().tz('Australia/Sydney'),
+            default: getToday(),
             type: 'datepicker'
           },
           {

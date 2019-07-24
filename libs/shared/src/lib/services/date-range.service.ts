@@ -3,12 +3,9 @@ import { Injectable } from '@angular/core';
 import { Moment } from 'moment-timezone';
 
 import { rangeFormats, DateRange, weekEnd, weekStart } from '@webui/utilities';
-import { TimeService } from './time.service';
 
 @Injectable()
 export class DateRangeService {
-
-  constructor(private time: TimeService) {}
 
   public nextRange(date: Moment, type: DateRange) {
     return this.updateDate(date, type, 1);

@@ -1,5 +1,5 @@
 import { createFilter, Type } from '../../../../../apps/manager/src/app/dynamic-form/models/filters';
-import { Endpoints } from '../helpers';
+import { Endpoints } from '@webui/data';
 
 const filters = {
   avarageScore: createFilter(Type.Range, {

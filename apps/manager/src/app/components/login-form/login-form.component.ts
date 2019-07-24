@@ -95,9 +95,12 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   public tokenAuth(token) {
     this.authService.loginWithToken(token).subscribe(
       (res: any) => {
-        this.authService.role = res.data.role;
-        this.authService.storeToken({ data: res });
-        this.router.navigateByUrl(res.data.redirect_to);
+
+        this.setTimezone().subscribe(() => {
+          this.authService.role = res.data.role;
+          this.authService.storeToken({ data: res });
+          this.router.navigateByUrl(res.data.redirect_to);
+        });
       },
       () => this.router.navigate(['login']));
   }
@@ -112,16 +115,15 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
       this.authService.storeToken(response, this.rememberMe, response.formData.username);
 
-      this.setTimezone();
+      this.setTimezone().subscribe(() => {
+        this.router.navigate(['']);
+      });
     }
   }
 
   public setTimezone() {
-    this.userService.setTimezone()
-      .pipe(catchError(() => this.router.navigate([''])))
-      .subscribe(() => {
-        this.router.navigate(['']);
-      });
+    return this.userService.setTimezone()
+      .pipe(catchError(() => this.router.navigate([''])));
   }
 
   public redirectHandler(data) {

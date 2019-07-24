@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
-import { Endpoints } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
 import { ErrorsService } from '@webui/core';
 
 @Injectable()

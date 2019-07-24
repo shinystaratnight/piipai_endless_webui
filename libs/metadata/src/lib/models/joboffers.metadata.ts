@@ -1,4 +1,5 @@
-import { timeZoneOffset } from '../helpers';
+// import { timeZoneOffset } from '../helpers';
+import { getTimeZoneOffset } from '@webui/utilities';
 
 const list = {
   list: {
@@ -863,7 +864,7 @@ const formadd = [
     },
     showIf: ['shift.id'],
     query: {
-      shift: `{shift.date.shift_date}T{shift.time}%2B${timeZoneOffset}`
+      shift: `{shift.date.shift_date}T{shift.time}%2B${getTimeZoneOffset()}`
     }
   }
 ];

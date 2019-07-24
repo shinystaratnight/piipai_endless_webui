@@ -21,16 +21,15 @@ import { GenericFormService, FormService, FormMode, ActionService } from '../../
 import { UserService, SiteSettingsService, AuthService, CompanyPurposeService, Purpose } from '@webui/core';
 
 import { ToastService, MessageType } from '@webui/core';
-import { TimeService } from '@webui/shared';
 
 import { Field } from '../../models';
 
-import { FormatString, isCandidate, isMobile } from '@webui/utilities';
+import { FormatString, isCandidate, isMobile, getTimeInstance } from '@webui/utilities';
 import { getElementFromMetadata, removeValue,  } from '../../helpers';
 
-import { Endpoints } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
 
-import * as moment from 'moment-timezone';
+// import * as moment from 'moment-timezone';
 
 export interface HiddenFields {
   elements: Field[];
@@ -160,6 +159,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   };
   public replaceElements: Field[] = [];
   public delayData = {};
+  public timeInstance = getTimeInstance();
 
   public format = new FormatString();
 
@@ -182,7 +182,6 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     private userService: UserService,
     private authService: AuthService,
     private settingsService: SiteSettingsService,
-    private time: TimeService,
     private router: Router,
     private modal: NgbModal,
     private purposeService: CompanyPurposeService
@@ -858,20 +857,20 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public getTotalTime(data) {
-    const shift_ended_at = this.time.instance(data.shift_ended_at);
-    const shift_started_at = this.time.instance(data.shift_started_at);
+    const shift_ended_at = this.timeInstance(data.shift_ended_at);
+    const shift_started_at = this.timeInstance(data.shift_started_at);
 
     let breakTime = 0;
 
     if (data.break_ended_at && data.break_started_at) {
-      const break_ended_at = this.time.instance(data.break_ended_at);
-      const break_started_at = this.time.instance(data.break_started_at);
+      const break_ended_at = this.timeInstance(data.break_ended_at);
+      const break_started_at = this.timeInstance(data.break_started_at);
 
       breakTime = break_ended_at.diff(break_started_at);
     }
 
     const workTime = shift_ended_at.diff(shift_started_at);
-    const totalTime = this.time.instance.duration(workTime - breakTime);
+    const totalTime = this.timeInstance.duration(workTime - breakTime);
 
     return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
   }
@@ -1060,7 +1059,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
                   shifts: [response.id]
                 };
 
-                const message = `${shiftsRequests.date} ${moment(
+                const message = `${shiftsRequests.date} ${this.timeInstance(
                   response.time,
                   'HH:mm:ss'
                 ).format('hh:mm A')} created`;
@@ -1200,7 +1199,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       keys.forEach((key) => {
         if (key.includes('period_zero_reference')) {
           if (key === 'period_zero_reference_date') {
-            data.invoice_rule[key] = this.time.instance(data.invoice_rule[key], 'YYYY-MM-DD').date() || undefined;
+            data.invoice_rule[key] = this.timeInstance(data.invoice_rule[key], 'YYYY-MM-DD').date() || undefined;
           }
 
           data.invoice_rule['period_zero_reference'] = parseInt(data.invoice_rule[key], 10) || undefined;
@@ -1501,7 +1500,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     this.service.submitForm(endpoint, {})
       .subscribe((res) => {
         const synced_at = getElementFromMetadata(this.metadata, 'synced_at');
-        synced_at.value = this.time.instance().format();
+        synced_at.value = this.timeInstance().format();
         this.updateMetadata(this.metadata, 'synced_at');
         e.el.hidden.next(true);
       });

@@ -1,18 +1,19 @@
 import { FilterModel } from './filter.model';
+import { getYesterday, getToday, getTommorrow } from '@webui/utilities';
 
-import * as moment from 'moment-timezone';
+// import * as moment from 'moment-timezone';
 
-const todayDate = moment().tz('Australia/Sydney');
+// const todayDate = moment().tz('Australia/Sydney');
 
-export const todayFormatDate = todayDate.format();
-export const yesterdayFormatDate = todayDate
-  .clone()
-  .add(-1, 'day')
-  .format();
-export const tomorrowFormatDate = todayDate
-  .clone()
-  .add(1, 'day')
-  .format();
+// export const todayFormatDate = todayDate.format();
+// export const yesterdayFormatDate = todayDate
+//   .clone()
+//   .add(-1, 'day')
+//   .format();
+// export const tomorrowFormatDate = todayDate
+//   .clone()
+//   .add(1, 'day')
+//   .format();
 
 
 export interface DateFilterOptions {
@@ -53,21 +54,21 @@ export class DateFilter implements FilterModel {
     if (yesterday) {
       this.list.push({
         label: 'Yesterday',
-        query: `${key}_0=${yesterdayFormatDate}&${key}_1=${yesterdayFormatDate}`
+        query: `${key}_0=${getYesterday()}&${key}_1=${getYesterday()}`
       });
     }
 
     if (today) {
       this.list.push({
         label: 'Today',
-        query: `${key}_0=${todayFormatDate}&${key}_1=${todayFormatDate}`
+        query: `${key}_0=${getToday()}&${key}_1=${getToday()}`
       });
     }
 
     if (tomorrow) {
       this.list.push({
         label: 'Tomorrow',
-        query: `${key}_0=${tomorrowFormatDate}&${key}_1=${tomorrowFormatDate}`
+        query: `${key}_0=${getTommorrow()}&${key}_1=${getTommorrow()}`
       });
     }
   }

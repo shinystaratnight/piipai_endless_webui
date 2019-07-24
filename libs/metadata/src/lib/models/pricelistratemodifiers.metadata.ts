@@ -1,4 +1,4 @@
-import { Endpoints } from '../helpers';
+import { Endpoints } from '@webui/data';
 
 const list = {
   list: {

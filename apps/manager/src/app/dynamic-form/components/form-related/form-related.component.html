@@ -353,9 +353,8 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">{{modalData.title}}</h5>
-        <button type="button" class="close ml-auto" (click)="c()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+
+        <app-close-button class="ml-auto" (click)="c()"></app-close-button>
       </div>
     </div>
 
@@ -407,9 +406,8 @@
 <ng-template #messageDetail let-c="close" let-d="dismiss">
   <div class="message-detail-header">
     <h5 class="message-label">{{modalData.label}}</h5>
-    <button type="button" class="close ml-2" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+
+    <app-close-button class="close ml-2" (click)="d()"></app-close-button>
   </div>
 
   <app-generic-form

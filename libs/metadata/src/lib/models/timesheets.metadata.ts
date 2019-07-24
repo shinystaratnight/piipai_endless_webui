@@ -1,4 +1,4 @@
-import { Endpoints, Colors } from '../helpers';
+import { Endpoints, Color } from '@webui/data';
 import { createFilter, Type } from '../../../../../apps/manager/src/app/dynamic-form/models/filters';
 
 const filters = {
@@ -932,14 +932,14 @@ const form = [
                     templateOptions: {
                       label: 'Status',
                       options: [
-                        { value: 0, label: 'New', color: Colors.Success },
-                        { value: 1, label: 'Check pending', color: Colors.Warning },
-                        { value: 2, label: 'Check confirmed', color: Colors.Success },
-                        { value: 3, label: 'Check failed', color: Colors.Danger },
-                        { value: 4, label: 'Submit pending', color: Colors.Warning },
-                        { value: 5, label: 'Pending approval', color: Colors.Success },
-                        { value: 6, label: 'Supervisor modified', color: Colors.Success },
-                        { value: 7, label: 'Approved', color: Colors.Success }
+                        { value: 0, label: 'New', color: Color.Success },
+                        { value: 1, label: 'Check pending', color: Color.Warning },
+                        { value: 2, label: 'Check confirmed', color: Color.Success },
+                        { value: 3, label: 'Check failed', color: Color.Danger },
+                        { value: 4, label: 'Submit pending', color: Color.Warning },
+                        { value: 5, label: 'Pending approval', color: Color.Success },
+                        { value: 6, label: 'Supervisor modified', color: Color.Success },
+                        { value: 7, label: 'Approved', color: Color.Success }
                       ],
                     }
                   },

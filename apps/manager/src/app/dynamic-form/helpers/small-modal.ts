@@ -1,3 +1,6 @@
+import { Endpoints } from '@webui/data';
+
 export const smallModalEndpoints = [
-  '/candidate/skillrels/',
+  Endpoints.CandidateSkill,
+  Endpoints.SkillRateCoefficient
 ];
