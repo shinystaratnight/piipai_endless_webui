@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { GenericFormService } from './../../dynamic-form/services/generic-form.service';
+import { GenericFormService } from '@webui/dynamic-form';
 
 @Component({
   selector: 'app-form-builder',

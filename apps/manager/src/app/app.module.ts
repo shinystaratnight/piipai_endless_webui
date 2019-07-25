@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, PreloadAllModules } from '@angular/router';
+import { RouterModule, PreloadAllModules, NoPreloading } from '@angular/router';
 
 import { AgmCoreModule } from '@agm/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -56,7 +56,7 @@ import * as formComponents from './components';
 import { guards } from './guards';
 import { interceptors } from './interceptors';
 
-import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
+import { DynamicFormModule } from '@webui/dynamic-form';
 
 
 import { SharedModule } from '@webui/shared';
@@ -65,10 +65,7 @@ import { CoreModule } from '@webui/core';
 
 import { environment } from '../environments/environment';
 
-// import * as moment from 'moment-timezone';
 import { MasterGuideModule } from './master-guide/master-guide.module';
-
-// moment.tz.setDefault('Australia/Sydney');
 
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -89,7 +86,7 @@ import { MasterGuideModule } from './master-guide/master-guide.module';
     NgbModule,
     ButtonsModule.forRoot(),
     NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
-    RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: NoPreloading }),
     DynamicFormModule,
     SharedModule,
     InfiniteScrollModule,
@@ -99,7 +96,6 @@ import { MasterGuideModule } from './master-guide/master-guide.module';
     CoreModule,
   ],
   providers: [
-    // ...services,
     ...guards,
     ...formComponents.providers,
     ...interceptors

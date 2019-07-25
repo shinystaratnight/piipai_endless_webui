@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { meta, purposeConfig } from './company.meta';
-import { Field } from '../../dynamic-form/models';
-import { GenericFormService, FormService } from '../../dynamic-form/services';
+import { GenericFormService, FormService } from '@webui/dynamic-form';
+import { Field } from '@webui/data';
 import { SettingsService } from '../settings.service';
 import { ToastService, MessageType, SiteSettingsService } from '@webui/core';
 import { Endpoints } from '@webui/data';

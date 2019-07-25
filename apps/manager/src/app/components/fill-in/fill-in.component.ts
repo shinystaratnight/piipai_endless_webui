@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
+import { GenericFormService } from '@webui/dynamic-form';
 
 @Component({
   selector: 'app-fill-in',

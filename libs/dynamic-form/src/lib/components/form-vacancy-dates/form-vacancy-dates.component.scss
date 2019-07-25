@@ -1,0 +1,26 @@
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
+
+.vacancy-dates {
+  width: 13rem;
+  border-radius: .2rem;
+  box-shadow: 0 0 2px 2px rgba($gray, .5);
+
+  &-wrapper {
+    overflow: auto;
+  }
+
+  .workers {
+    width: 5rem;
+  }
+}
+
+.today {
+  border: 1px solid $brand-primary;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      border-color: rgba(map-get($theme-colors, $item), 0.5);
+    }
+  }
+}

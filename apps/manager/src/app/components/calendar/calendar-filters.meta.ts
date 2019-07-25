@@ -1,4 +1,4 @@
-import { createFilter, Type } from '../../dynamic-form/models/filters';
+import { createFilter, Type } from '@webui/metadata';
 
 export const filters = {
   client: createFilter(Type.Relared, {

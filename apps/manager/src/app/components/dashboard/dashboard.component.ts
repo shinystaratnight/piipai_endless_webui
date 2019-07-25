@@ -10,7 +10,7 @@ import {
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
+import { GenericFormService } from '@webui/dynamic-form';
 import { UserService } from '@webui/core';
 import { Page } from '@webui/data';
 

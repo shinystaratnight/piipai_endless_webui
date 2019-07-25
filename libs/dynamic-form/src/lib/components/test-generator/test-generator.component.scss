@@ -1,0 +1,86 @@
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
+
+.test {
+
+  &__header,
+  &__body,
+  &__footer {
+    padding: 20px 66px;
+    border-bottom: 2px solid rgba(#e5e5e5, .8);
+
+    @include media-breakpoint-down('sm') {
+      padding: 24px 33px;
+    }
+  }
+
+  &__footer {
+    border-bottom: none;
+  }
+
+  &__description {
+    margin-bottom: 2px;
+
+    font-size: 18px;
+    line-height: 24px;
+
+    color: #bdbdbd;
+  }
+
+  &__name {
+    margin-bottom: 0;
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  &__position {
+    margin-bottom: 2px;
+
+    font-size: 12px;
+    line-height: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    color: $brand-primary;
+  }
+
+  &__question {
+    margin-bottom: 30px;
+
+    font-size: 20px;
+    line-height: 24px;
+
+    &-details {
+      margin-top: -20px;
+      margin-bottom: 30px;
+
+      font-size: 14px;
+      line-height: 16px;
+
+      opacity: .7;
+    }
+  }
+
+  &__button {
+    width: 120px;
+    padding: 13px 20px;
+    font-size: 16px;
+    line-height: 18px;
+
+    &.btn-default {
+      background-color: #f9f9f9;
+      border: 1px solid #e0e0e0;
+
+      &:hover:not([disabled]) {
+        background-color: #e0e0e0;
+        color: inherit;
+      }
+
+      &[disabled] {
+        cursor: not-allowed;
+        color: inherit;
+      }
+    }
+  }
+
+}

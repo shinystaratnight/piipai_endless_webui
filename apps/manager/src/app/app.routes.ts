@@ -2,9 +2,7 @@ import { Routes } from '@angular/router';
 
 import {
   SiteComponent,
-  LoginFormComponent,
   VerifyEmailComponent,
-  RegistrationFormComponent
 } from './components';
 import { RedirectComponent } from './redirect.component';
 
@@ -19,24 +17,13 @@ export const ROUTES: Routes = [
   },
   {
     path: 'login',
-    component: LoginFormComponent,
+    loadChildren: './login/login.module#LoginModule',
     canActivate: [NotAuthorizedGuard],
-    resolve: {
-      settings: SiteSettingsService
-    }
-  },
-  {
-    path: 'login/:token',
-    component: LoginFormComponent,
-    canActivate: [LogoutGuard, NotAuthorizedGuard]
   },
   {
     path: 'registration',
-    component: RegistrationFormComponent,
+    loadChildren: './register/register.module#RegisterModule',
     canActivate: [NotAuthorizedGuard, SubdomainGuard],
-    resolve: {
-      settings: SiteSettingsService
-    }
   },
   {
     path: 'settings',

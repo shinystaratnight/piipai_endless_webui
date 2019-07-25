@@ -1,0 +1,40 @@
+@import '../../../../../../styles/variables';
+
+:host > .form-group {
+  position: relative;
+  display: block;
+
+  &.target {
+    z-index: 5;
+  }
+}
+
+.time-wrapper {
+  width: 100%;
+}
+
+.time {
+  position: absolute;
+  top: -19px;
+
+  font-size: 12px;
+  line-height: 18px;
+
+  opacity: .8;
+
+  &:hover {
+    color: $brand-primary;
+    opacity: 1;
+  }
+
+  .mobile-datepicker ~ &-wrapper {
+    width: 120px;
+  }
+}
+
+:host.mobile-device .form-element-label {
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: none;
+  color: #4f4f4f;
+}

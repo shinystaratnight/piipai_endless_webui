@@ -1,5 +1,5 @@
 import { Color, Endpoints } from '@webui/data';
-import { createFilter, Type } from '../../../../../apps/manager/src/app/dynamic-form/models/filters';
+import { createFilter, Type } from '../elements';
 
 const statusList = [
   { label: 'Pending submission', value: '4' },

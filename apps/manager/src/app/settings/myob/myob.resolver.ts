@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
+import { GenericFormService } from '@webui/dynamic-form';
 
 @Injectable()
 export class MyobResolver implements Resolve<any> {

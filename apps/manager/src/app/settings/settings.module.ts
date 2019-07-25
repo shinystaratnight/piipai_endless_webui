@@ -17,7 +17,7 @@ import { MasterGuideModule } from '../master-guide/master-guide.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
+import { DynamicFormModule } from '@webui/dynamic-form';
 import { SettingsService } from './settings.service';
 
 import { MyobResolver } from './myob/myob.resolver';

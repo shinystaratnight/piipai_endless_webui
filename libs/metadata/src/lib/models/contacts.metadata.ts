@@ -1,5 +1,5 @@
 import { Endpoints } from '@webui/data';
-import { createFilter, Type } from '../../../../../apps/manager/src/app/dynamic-form/models/filters';
+import { createFilter, Type } from '../elements';
 
 const contactTypes = [
   {

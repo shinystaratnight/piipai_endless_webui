@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { MapService, Marker } from './map.service';
 
-import { FilterService } from '../../dynamic-form/services/filter.service';
+import { FilterService } from '@webui/dynamic-form';
 import { MetadataService } from '@webui/metadata';
 
 @Component({
