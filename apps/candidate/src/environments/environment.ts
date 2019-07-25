@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  GOOGLE_GEO_CODING_API_KEY: 'AIzaSyCHcLb6qY4PSNDaMCimVIcv9bn6ExWzkWs',
+  STRIPE_PUBLIC_API_KEY: 'pk_test_2MvNXfKY5LWSSkOz241aYEs4',
+  production: false,
+  api: 'https://api.r3sourcertest.com',
+  clientId: 'X4DfjpKt4jkM56QEgeYgYjP6OCxbf0WQH0oh0hXB'
 };
 
 /*
