@@ -25,8 +25,12 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "prod": "ng build --prod --configuration=production",
-    "stage": "ng build --prod --configuration=stage"
+    "prod-manager": "ng build --prod --configuration=production",
+    "prod-client": "ng build client --prod --configuration=production",
+    "prod-candidate": "ng build candidate --prod --configuration=production",
+    "stage-manager": "ng build --prod --configuration=stage",
+    "stage-client": "ng build client --prod --configuration=stage",
+    "stage-candidate": "ng build candidate --prod --configuration=stage"
   },
   "private": true,
   "dependencies": {

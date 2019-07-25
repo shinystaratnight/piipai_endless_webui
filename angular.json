@@ -50,6 +50,23 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "stage": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/client/src/environments/environment.ts",
+                  "with": "apps/client/src/environments/environment.stage.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
             }
           }
         },
@@ -167,6 +184,23 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "stage": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/candidate/src/environments/environment.ts",
+                  "with": "apps/candidate/src/environments/environment.stage.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
             }
           }
         },

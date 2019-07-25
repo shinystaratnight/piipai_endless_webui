@@ -1,3 +1,7 @@
 export const environment = {
-  production: true
+  GOOGLE_GEO_CODING_API_KEY: 'AIzaSyB0-XgGs0g5awE_VtUh-_oHlU0nzhy4oOM',
+  STRIPE_PUBLIC_API_KEY: 'pk_live_CZ0oWG7cIXXgWwv1BDMuSSgR',
+  production: true,
+  api: 'https://api.r3sourcer.com',
+  clientId: 'MMtPUqBFwBDo3kVEQl6mzVm6e8h5OHclTsDcraUj'
 };
