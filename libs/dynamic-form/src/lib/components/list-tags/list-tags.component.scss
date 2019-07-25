@@ -1,0 +1,39 @@
+@import '../../../../../../styles/variables';
+
+span {
+  padding: 2px 12px;
+  margin-right: .2rem;
+
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.tags-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  margin-bottom: -.3rem;
+
+  &.column {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .badge {
+    margin-bottom: .3rem;
+
+    &.badge-outline {
+      line-height: 1;
+    }
+  }
+
+  .success {
+    border-color: $brand-success;
+    color: $brand-success;
+  }
+
+  .danger {
+    border-color: $brand-danger;
+    color: $brand-danger;
+  }
+}

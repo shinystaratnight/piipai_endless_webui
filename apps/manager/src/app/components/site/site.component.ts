@@ -14,7 +14,7 @@ import {
   CompanyPurposeService
 } from '@webui/core';
 import { PageData, User, Role } from '@webui/data';
-import { GenericFormService, FormMode } from '../../dynamic-form/services/';
+import { GenericFormService, FormMode } from '@webui/dynamic-form';
 import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
 import { isMobile, isCandidate, isClient, isManager } from '@webui/utilities';
 import { Endpoints } from '@webui/data';

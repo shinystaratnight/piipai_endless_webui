@@ -20,7 +20,8 @@
       "@webui/shared": ["libs/shared/src/index.ts"],
       "@webui/data": ["libs/data/src/index.ts"],
       "@webui/core": ["libs/core/src/index.ts"],
-      "@webui/metadata": ["libs/metadata/src/index.ts"]
+      "@webui/metadata": ["libs/metadata/src/index.ts"],
+      "@webui/dynamic-form": ["libs/dynamic-form/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

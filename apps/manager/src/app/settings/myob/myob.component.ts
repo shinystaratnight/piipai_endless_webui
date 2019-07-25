@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { meta, payrollAccounts } from './myob.meta';
-import { GenericFormService } from '../../dynamic-form/services/generic-form.service';
-import { Field } from '../../dynamic-form/models/field.model';
+import { GenericFormService } from '@webui/dynamic-form';
+import { Field } from '@webui/data';
 import { SettingsService } from '../settings.service';
 import { getToday } from '@webui/utilities';
 

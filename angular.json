@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/client",
+            "outputPath": "dist/client",
             "index": "apps/client/src/index.html",
             "main": "apps/client/src/main.ts",
             "polyfills": "apps/client/src/polyfills.ts",
@@ -131,7 +131,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/candidate",
+            "outputPath": "dist/candidate",
             "index": "apps/candidate/src/index.html",
             "main": "apps/candidate/src/main.ts",
             "polyfills": "apps/candidate/src/polyfills.ts",
@@ -248,7 +248,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/manager",
             "index": "apps/manager/src/index.html",
             "main": "apps/manager/src/main.ts",
             "polyfills": "apps/manager/src/polyfills.ts",
@@ -507,6 +507,33 @@
             "jestConfig": "libs/metadata/jest.config.js",
             "tsConfig": "libs/metadata/tsconfig.spec.json",
             "setupFile": "libs/metadata/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {}
+    },
+    "dynamic-form": {
+      "projectType": "library",
+      "root": "libs/dynamic-form",
+      "sourceRoot": "libs/dynamic-form/src",
+      "prefix": "webui",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/dynamic-form/tsconfig.lib.json",
+              "libs/dynamic-form/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/dynamic-form/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/dynamic-form/jest.config.js",
+            "tsConfig": "libs/dynamic-form/tsconfig.spec.json",
+            "setupFile": "libs/dynamic-form/src/test-setup.ts"
           }
         }
       },

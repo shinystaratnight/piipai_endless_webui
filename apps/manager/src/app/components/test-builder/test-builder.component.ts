@@ -13,15 +13,16 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { GenericFormService } from '../../dynamic-form/services';
-
-import { Field } from '../../dynamic-form/models';
 import {
+  GenericFormService,
   fillingForm,
-  getElementFromMetadata
-} from '../../dynamic-form/helpers/utils';
+  getElementFromMetadata,
+  PassTestModalComponent,
+  PassTestModalConfig
+} from '@webui/dynamic-form';
+import { Field } from '@webui/data';
+
 import { MetadataService } from '@webui/metadata';
-import { PassTestModalComponent, PassTestModalConfig } from '../../dynamic-form/modals';
 
 @Component({
   selector: 'app-test-builder',

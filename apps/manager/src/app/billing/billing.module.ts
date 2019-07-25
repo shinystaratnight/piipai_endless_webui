@@ -8,7 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { SharedModule } from '@webui/shared';
-import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
+import { DynamicFormModule } from '@webui/dynamic-form';
 import { MasterGuideModule } from '../master-guide/master-guide.module';
 
 import { BillingComponent } from './billing.component';

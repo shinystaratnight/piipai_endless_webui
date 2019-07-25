@@ -1,4 +1,4 @@
-import { createFilter, Type } from '../../../../../apps/manager/src/app/dynamic-form/models/filters';
+import { createFilter, Type } from '../elements';
 import { Endpoints } from '@webui/data';
 
 const filters = {

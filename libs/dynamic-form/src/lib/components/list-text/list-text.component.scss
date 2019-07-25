@@ -1,0 +1,82 @@
+@import '../../../../../../styles/variables';
+
+:host {
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.label {
+  font-size: 14px;
+  opacity: .5;
+}
+
+label {
+  display: block;
+
+  margin-bottom: 0;
+
+  &.inline {
+    display: inline-block;
+
+    &::after {
+      display: inline-block;
+
+      content: ' ';
+    }
+  }
+}
+
+.text-description {
+  font-size: 12px;
+  line-height: 14px;
+
+  opacity: .4;
+}
+
+.text-comment {
+  font-size: 14px;
+  line-height: 16px;
+
+  opacity: .7;
+}
+
+.score-text {
+  display: inline-block;
+
+  line-height: 20px;
+
+  font-size: 14px;
+  vertical-align: top;
+}
+
+.rating {
+  display: inline-flex;
+  align-items: flex-start;
+
+  border-right: 1px solid;
+  padding-right: 5px;
+
+  color: $brand-primary;
+}
+
+.list-text {
+  &__success {
+    color: $brand-success;
+  }
+
+  &__secondary {
+    opacity: .6;
+  }
+
+  &__muted {
+    opacity: .4;
+  }
+
+  &__bolder {
+    margin-bottom: 8px;
+
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: 600;
+  }
+}

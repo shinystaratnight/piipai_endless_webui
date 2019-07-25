@@ -1,0 +1,53 @@
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
+
+.test-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.description {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.test-title h5 {
+  font-weight: normal;
+}
+
+.test-score {
+  color: $gray;
+}
+
+.question-title {
+  margin-bottom: 5px;
+}
+
+.question-details {
+  margin-bottom: 12px;
+}
+
+.answer {
+  font-size: 14px;
+  line-height: 12px;
+
+  color: rgba($gray, .7);
+}
+
+li {
+  margin-bottom: 24px;
+}
+
+h4 {
+  margin-bottom: 24px;
+
+  font-size: 24px;
+  line-height: 1;
+
+  color: #4f4f4f;
+}
+
+h5 {
+  text-align: start;
+}
