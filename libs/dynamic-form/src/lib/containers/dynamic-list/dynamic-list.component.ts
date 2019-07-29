@@ -28,7 +28,7 @@ import { createAddAction, smallModalEndpoints, getOrientation } from '../../help
 
 import { Endpoints } from '@webui/data';
 
-import { environment } from '../../../../../../apps/manager/src/environments/environment';
+import { environment } from '../../../../../../apps/r3sourcer/src/environments/environment';
 
 @Component({
   selector: 'app-dynamic-list',
@@ -169,13 +169,13 @@ export class DynamicListComponent
   @ViewChild('messageDetail', { static: false })
   public messageDetail;
 
-  @ViewChild('history', { static: false })
+  @ViewChild('history', { static: true })
   public history;
 
-  @ViewChild('timesheetsCandidate', { static: false })
+  @ViewChild('timesheetsCandidate', { static: true })
   public timesheetsCandidate;
 
-  @ViewChild('unapproved', { static: false })
+  @ViewChild('unapproved', { static: true })
   public unapproved;
 
   @ViewChild('tracking', { static: false })
@@ -247,6 +247,7 @@ export class DynamicListComponent
   public isMobileDevice = isMobile() && isCandidate();
   public approveInvoice: boolean;
   public timeInstance = getTimeInstance();
+  public viewInited = false;
 
   constructor(
     private filterService: FilterService,
@@ -367,6 +368,10 @@ export class DynamicListComponent
       };
       this.body.push(...this.generateBody(config, addData, innerTables));
     }
+  }
+
+  public afterViewInit() {
+    this.viewInited = true;
   }
 
   public getFormat(property: string, data, config): string {
@@ -1472,7 +1477,7 @@ export class DynamicListComponent
   }
 
   public fillIn(e) {
-    const fillInPath = `/hr/jobs/${e.el.rowId}/fillin/`;
+    const fillInPath = `/mn/hr/jobs/${e.el.rowId}/fillin/`;
     this.router.navigate([fillInPath]);
   }
 

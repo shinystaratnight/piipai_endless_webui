@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, Injector, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -11,7 +11,8 @@ import { NavigationService } from './navigation.service';
 import { CheckPermissionService } from './check-permission.service';
 import { ErrorsService } from './errors.service';
 
-import { environment } from '../../../../../apps/manager/src/environments/environment';
+import { ENV } from './env.service';
+import { isClient, isCandidate, isManager } from '@webui/utilities';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +28,8 @@ export class AuthService {
     private navigation: NavigationService,
     private permission: CheckPermissionService,
     private error: ErrorsService,
-    private router: Router
+    private router: Router,
+    @Optional() @Inject(ENV) private env: any
   ) {}
 
   set role(role: Role) {
@@ -55,12 +57,26 @@ export class AuthService {
     this.storage.store('user', { access_token, refresh_token, access_token_jwt, rememberMe, username });
   }
 
+  public getRedirectUrl() {
+    if (isClient()) {
+      return 'cl';
+    }
+
+    if (isCandidate()) {
+      return 'cd';
+    }
+
+    if (isManager()) {
+      return 'mn';
+    }
+  }
+
   public refreshJWTToken(user) {
     const { refresh_token = '', username = '' } = { ...user };
     const body = {
       refresh_token,
       username,
-      client_id: environment.clientId,
+      client_id: this.env.clientId,
       grant_type: 'refresh_token'
     };
 

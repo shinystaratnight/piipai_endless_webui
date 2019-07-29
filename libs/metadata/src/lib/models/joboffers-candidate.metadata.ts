@@ -1283,7 +1283,7 @@ const formadd = [
   }
 ];
 
-export const metadata = {
+export const joboffersCandidate = {
   list,
   form,
   formadd

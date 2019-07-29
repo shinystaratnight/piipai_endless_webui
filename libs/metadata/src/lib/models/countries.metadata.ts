@@ -438,7 +438,7 @@ const formadd = [
   }
 ];
 
-export const metadata = {
+export const countries = {
   list,
   form,
   formadd

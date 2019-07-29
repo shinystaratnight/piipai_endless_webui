@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
-
 import { ErrorsService } from '@webui/core';
 import { MetadataService } from '@webui/metadata';
+import { METADATA } from './metadata.service';
 
 @Injectable()
 export class GenericFormService {
@@ -12,6 +12,7 @@ export class GenericFormService {
     private http: HttpClient,
     private errors: ErrorsService,
     private configs: MetadataService,
+    @Optional() @Inject(METADATA) private metadata: any
   ) {}
 
   get(endpoint, params = {}) {
@@ -39,7 +40,7 @@ export class GenericFormService {
   }
 
   public getMetadata(endpoint: string, query = ''): any {
-   return this.configs.get(endpoint, query);
+   return this.configs.get(endpoint, query, this.metadata);
   }
 
   public submitForm(endpoint, data): any {

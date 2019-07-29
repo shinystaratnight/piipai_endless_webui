@@ -8,20 +8,16 @@ import { ToastNoAnimationModule } from 'ngx-toastr';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { components } from './components';
-
 import { directives } from './directives';
-
-import { services } from './services';
-
 import { pipes } from './pipes';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
     FontAwesomeModule,
     ToastNoAnimationModule.forRoot(),
-    FormsModule,
     NgbTooltipModule,
   ],
   exports: [
@@ -33,9 +29,6 @@ import { pipes } from './pipes';
     ...components,
     ...pipes,
     ...directives,
-  ],
-  providers: [
-    ...services
   ],
 })
 export class SharedModule { }

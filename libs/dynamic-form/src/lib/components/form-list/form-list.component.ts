@@ -169,7 +169,7 @@ export class FormListComponent implements OnInit, OnDestroy {
     ) {
       const urlPath = this.router.url.split('/');
       urlPath.splice(urlPath.length - 1, 1, 'fillin').join('/');
-      this.router.navigateByUrl(urlPath.join('/'));
+      this.router.navigate([urlPath.join('/')]);
       return;
     }
     this.modalData = {};

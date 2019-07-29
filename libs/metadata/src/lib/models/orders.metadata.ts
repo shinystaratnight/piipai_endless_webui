@@ -387,7 +387,7 @@ const formadd = [
   }
 ];
 
-export const metadata = {
+export const orders = {
   list,
   form,
   formadd

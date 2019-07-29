@@ -14,6 +14,7 @@ export * from './form-builder.service';
 export * from './filter-query.service';
 export * from './list-storage.service';
 export * from './action.service';
+export * from './metadata.service';
 
 export const services = [
   FilterService,

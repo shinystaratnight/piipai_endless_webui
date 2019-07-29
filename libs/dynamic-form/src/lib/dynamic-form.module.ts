@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -17,7 +17,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 
 import { SharedModule } from '@webui/shared';
 
-import { services } from './services';
+import { services, METADATA } from './services';
 
 import * as fromComponents from './components';
 
@@ -26,6 +26,7 @@ import * as fromContainers from './containers';
 import { modals } from './modals';
 
 import { directives } from './directives';
+import { MetadataModule } from '@webui/metadata';
 
 @NgModule({
   imports: [
@@ -44,6 +45,8 @@ import { directives } from './directives';
     PdfViewerModule,
     QuillModule,
     SignaturePadModule,
+
+    MetadataModule
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -73,4 +76,22 @@ import { directives } from './directives';
     ...modals
   ]
 })
-export class DynamicFormModule { }
+export class DynamicFormModule {
+  static forRoot(data: { metadata: any }): ModuleWithProviders<DynamicFormModule> {
+    return {
+      ngModule: DynamicFormModule,
+      providers: [
+        { provide: METADATA, useClass: data.metadata }
+      ]
+    };
+  }
+
+  static forChild(data: { metadata: any }): ModuleWithProviders<DynamicFormModule> {
+    return {
+      ngModule: DynamicFormModule,
+      providers: [
+        { provide: METADATA, useClass: data.metadata }
+      ]
+    };
+  }
+}

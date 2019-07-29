@@ -814,7 +814,7 @@ const form = [
   }
 ];
 
-export const metadata = {
+export const candidatepool = {
   list,
   form,
 };

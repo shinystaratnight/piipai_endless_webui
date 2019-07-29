@@ -13,7 +13,7 @@ import {
 
 import { AuthService } from '@webui/core';
 import { User, Page, Role } from '@webui/data';
-import { getContactAvatar, getTimeInstance } from '@webui/utilities';
+import { getContactAvatar, getTimeInstance, isClient, isCandidate, isManager } from '@webui/utilities';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -52,6 +52,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   public company: string;
   public picture: string;
   public contactAvatar: string;
+  public urlPrefix = isClient() ? '/cl' : isCandidate() ? '/cd' : isManager ? '/mn' : '';
 
   public resizeSubscription: Subscription;
 
@@ -149,6 +150,14 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return false;
+  }
+
+  public checkUrlPrefix(url) {
+    if (url.includes('settings') || url.includes('billing')) {
+      return false;
+    }
+
+    return true;
   }
 
   public changePassword() {

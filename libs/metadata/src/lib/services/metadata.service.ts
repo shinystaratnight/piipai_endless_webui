@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 
-import { metadata } from '../models';
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MetadataService {
-  get(endpoint: string, query: string) {
+  get(endpoint: string, query: string, metadata: any) {
     if (endpoint.includes('/submit/')) {
       endpoint = 'submit';
     }
@@ -73,8 +69,8 @@ export class MetadataService {
         type = 'jobsite_client';
       } else if (query.includes('supervisor')) {
         type = 'supervisor';
-      } else if (query.includes('profile')) {
-        type = 'profile';
+      // } else if (query.includes('profile')) {
+      //   type = 'profile';
       } else if (query.includes('job')) {
         if (query.includes('form')) {
           type = 'form';

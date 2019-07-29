@@ -21,7 +21,13 @@
       "@webui/data": ["libs/data/src/index.ts"],
       "@webui/core": ["libs/core/src/index.ts"],
       "@webui/metadata": ["libs/metadata/src/index.ts"],
-      "@webui/dynamic-form": ["libs/dynamic-form/src/index.ts"]
+      "@webui/dynamic-form": ["libs/dynamic-form/src/index.ts"],
+      "@webui/calendar": ["libs/calendar/src/index.ts"],
+      "@webui/candidate-metadata": ["libs/candidate-metadata/src/index.ts"],
+      "@webui/shared-metadata": ["libs/shared-metadata/src/index.ts"],
+      "@webui/manager-metadata": ["libs/manager-metadata/src/index.ts"],
+      "@webui/client-metadata": ["libs/client-metadata/src/index.ts"],
+      "@webui/billing-metadata": ["libs/billing-metadata/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

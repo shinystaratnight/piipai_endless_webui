@@ -5,6 +5,6 @@ import { MetadataService } from './services';
 
 @NgModule({
   imports: [CommonModule],
-  providers: [ MetadataService ]
+  providers: [MetadataService]
 })
 export class MetadataModule {}

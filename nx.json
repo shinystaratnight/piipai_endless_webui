@@ -8,24 +8,6 @@
     "nx.json": "*"
   },
   "projects": {
-    "manager-e2e": {
-      "tags": []
-    },
-    "manager": {
-      "tags": []
-    },
-    "client-e2e": {
-      "tags": []
-    },
-    "client": {
-      "tags": []
-    },
-    "candidate-e2e": {
-      "tags": []
-    },
-    "candidate": {
-      "tags": []
-    },
     "utilities": {
       "tags": []
     },
@@ -42,6 +24,30 @@
       "tags": []
     },
     "dynamic-form": {
+      "tags": []
+    },
+    "calendar": {
+      "tags": []
+    },
+    "candidate-metadata": {
+      "tags": []
+    },
+    "shared-metadata": {
+      "tags": []
+    },
+    "manager-metadata": {
+      "tags": []
+    },
+    "client-metadata": {
+      "tags": []
+    },
+    "r3sourcer-e2e": {
+      "tags": []
+    },
+    "r3sourcer": {
+      "tags": []
+    },
+    "billing-metadata": {
       "tags": []
     }
   }

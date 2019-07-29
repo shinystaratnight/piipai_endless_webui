@@ -8,7 +8,7 @@
   </ng-container>
 
   <ng-container *ngIf="path">
-    <a [routerLink]="path">
+    <a [routerLink]="urlPrefix + path">
       <ng-container *ngTemplateOutlet="arrow"></ng-container>
 
       {{label}}
