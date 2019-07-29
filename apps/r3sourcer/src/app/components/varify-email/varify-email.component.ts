@@ -40,7 +40,7 @@ export class VerifyEmailComponent implements OnInit {
                 const user = this.userService.user;
                 if (user && user.currentRole && user.currentRole.__str__.includes('candidate')) {
 
-                  this.router.navigate(['profile']);
+                  this.router.navigate(['/cd/profile']);
                 }
 
               }, 2000);
