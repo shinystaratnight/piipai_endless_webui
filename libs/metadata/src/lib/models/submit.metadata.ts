@@ -135,7 +135,7 @@ const form = [
   }
 ];
 
-export const metadata = {
+export const submit = {
   form,
   list: {}
 };

@@ -1191,7 +1191,7 @@ const formadd = [
   }
 ];
 
-export const metadata = {
+export const companies = {
   list,
   form,
   formadd

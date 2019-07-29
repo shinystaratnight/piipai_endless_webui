@@ -1991,7 +1991,7 @@ const formset = {
   ]
 };
 
-export const metadata = {
+export const timesheets = {
   list,
   supervisor,
   form,

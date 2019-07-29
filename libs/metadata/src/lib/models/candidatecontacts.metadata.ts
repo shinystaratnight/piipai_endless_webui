@@ -1826,6 +1826,7 @@ const profile = [
               },
               {
                 type: 'group',
+                label: ' ',
                 children: [
                   {
                     endpoint: Endpoints.Country,
@@ -1922,7 +1923,7 @@ const profile = [
   }
 ];
 
-export const metadata = {
+export const candidatecontacts = {
   list,
   form,
   formadd,

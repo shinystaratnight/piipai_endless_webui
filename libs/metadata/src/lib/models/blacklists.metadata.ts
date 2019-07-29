@@ -444,7 +444,7 @@ const formadd = [
   }
 ];
 
-export const metadata = {
+export const blacklists = {
   list,
   formset,
   form,

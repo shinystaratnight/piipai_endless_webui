@@ -603,7 +603,7 @@ const form = [
 
 const formadd = form;
 
-export const metadata = {
+export const invoices = {
   list,
   formset,
   form,

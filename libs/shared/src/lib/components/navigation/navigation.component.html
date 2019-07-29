@@ -35,7 +35,7 @@
 
     <ul *ngIf="!hideUserMenu" class="user-menu">
       <li>
-        <div *ngIf="user && user.data.roles && user.data.roles.length" class="form-inline role">
+        <div *ngIf="user && user.data.roles && user.data.roles.length > 1" class="form-inline role">
           <span class="mr-1">Role:</span>
           <select class="form-control form-control-sm" id="role" [ngModel]="currentRole" (ngModelChange)="changeRole($event)">
             <option *ngFor="let role of user.data.roles" [value]="role.id">
@@ -44,7 +44,7 @@
           </select>
         </div>
       </li>
-      <li *ngIf="candidate"><a routerLink="/profile">Profile</a></li>
+      <li *ngIf="candidate"><a routerLink="/cd/profile">Profile</a></li>
       <li class="d-xl-none description">
         <span>{{user.data.contact.__str__}}</span><br>
         <span *ngIf="company">{{company}}</span>
@@ -70,7 +70,7 @@
 
 <ng-template #item let-p="page" let-f="first" let-h="height">
   <li class="navigation-item" [class.disabled]="p.disabled" [class.opened]="p.opened">
-    <a *ngIf="!p.disabled" [routerLink]="p.url !== '/' ? [p.url] : null" class="navigation-link" [class.active]="p.active"
+    <a *ngIf="!p.disabled" [routerLink]="p.url !== '/' ? [checkUrlPrefix(p.url) ? urlPrefix + p.url : p.url] : null" class="navigation-link" [class.active]="p.active"
       (click)="clickActione($event, p)">{{p.name}}</a>
     <span class="navigation-link disabled" *ngIf="p.disabled" (click)="isCollapsed = false" [attr.title]="getDisableTitle(p.name)">{{p.name}}</span>
     <fa-icon class="icon" [class.active]="p.active" [icon]="['fas', 'circle']"></fa-icon>

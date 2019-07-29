@@ -284,7 +284,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public fillInJob() {
-    this.router.navigateByUrl(`/hr/jobs/${this.config.value.id.id}/fillin`);
+    this.router.navigateByUrl(`/mn/hr/jobs/${this.config.value.id.id}/fillin`);
   }
 
   public formEvent(e, closeModal) {

@@ -345,6 +345,6 @@ const form = [
   }
 ];
 
-export const metadata = {
+export const profile = {
   form
 };

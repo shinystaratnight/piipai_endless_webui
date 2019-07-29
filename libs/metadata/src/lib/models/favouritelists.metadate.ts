@@ -756,7 +756,7 @@ const formadd = [
   }
 ];
 
-export const metadata = {
+export const favouritelists = {
   list,
   formset,
   form,

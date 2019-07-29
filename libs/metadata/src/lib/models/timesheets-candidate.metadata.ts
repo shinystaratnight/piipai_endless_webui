@@ -487,6 +487,6 @@ const list = {
   ]
 };
 
-export const metadata = {
+export const timesheetsCandidate = {
   list
 };

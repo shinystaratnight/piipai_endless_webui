@@ -721,7 +721,7 @@ const formadd = [
   }
 ];
 
-export const metadata = {
+export const contacts = {
   list,
   form,
   formadd

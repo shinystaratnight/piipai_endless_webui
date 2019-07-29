@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { User, Role } from '@webui/data';
 
 import { NavigationService } from './navigation.service';
@@ -19,6 +19,7 @@ export class UserService {
   public timezoneEndpoint = '/core/users/timezone/'
   public user: User;
   public error: any;
+  public roleRedirect: string;
 
   constructor(
     private http: HttpClient,
@@ -34,11 +35,6 @@ export class UserService {
       return this.http
         .get(this.authEndpoint)
         .pipe(
-          // mergeMap((user: User) => {
-          //   this.user = user;
-
-          //   return this.getUserRoles();
-          // }),
           map((user: User) => {
             this.user = user;
             const roles = user.data.roles;
@@ -77,7 +73,6 @@ export class UserService {
             }
 
             this.user.currentRole = role || roles[0];
-            // this.user.roles = res.roles;
             this.storage.store('role', this.user.currentRole);
 
             return this.user;

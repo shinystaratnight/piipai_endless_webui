@@ -1,5 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 
+import { isClient, isCandidate, isManager } from '@webui/utilities';
+
 @Component({
   selector: 'app-back-link',
   templateUrl: './back-link.component.html',
@@ -8,6 +10,8 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, ViewEn
   encapsulation: ViewEncapsulation.None
 })
 export class BackLinkComponent {
+
+  public urlPrefix = isClient() ? '/cl' : isCandidate() ? '/cd' : isManager ? '/mn' : '';
 
   @Input() label: string;
   @Input() path: string;

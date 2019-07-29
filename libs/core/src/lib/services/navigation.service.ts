@@ -8,6 +8,7 @@ import { Role } from '@webui/data';
 import { Endpoints } from '@webui/data';
 import { CompanyPurposeService, Purpose } from './company-purpose.service';
 import { ErrorsService } from './errors.service';
+import { isClient, isCandidate } from '@webui/utilities';
 
 export interface Page {
   name: string;
