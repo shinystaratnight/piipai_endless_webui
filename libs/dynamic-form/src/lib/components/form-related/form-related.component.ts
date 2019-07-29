@@ -1220,6 +1220,10 @@ export class FormRelatedComponent extends BasicElementComponent
         this.results.splice(this.results.indexOf(item), 1);
       }
     } else {
+      if (this.key === 'industries_objects') {
+        item.default = !this.results.length;
+      }
+
       item.tests = this.addTests(item);
       this.results.push(item);
     }

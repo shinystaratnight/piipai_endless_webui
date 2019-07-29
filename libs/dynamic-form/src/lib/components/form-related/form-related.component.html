@@ -142,7 +142,7 @@
                   {{item.__str__}}
                   <ng-container *ngIf="config.sendData">
                     <span *ngIf="item.default" class="text-secondary">(&nbsp;default&nbsp;)</span>
-                    <button *ngIf="!item.default" type="button" class="btn btn-secondary mt-1" style="font-size: 10px; line-height: 12px" (click)="setDefault(i, item)">make default</button>
+                    <button *ngIf="!item.default" type="button" class="btn btn-outline-secondary mt-1" style="font-size: 10px; line-height: 12px" (click)="setDefault(i, item)">make default</button>
                   </ng-container>
                 </span>
                 <app-close-button
