@@ -2,13 +2,11 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, OnDestroy } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-// import { LocalStorageService } from 'ngx-webstorage';
-
+import { catchError } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 import { AuthService, UserService } from '@webui/core';
 
 import { environment } from '../../environments/environment';
-import { catchError } from 'rxjs/operators';
-import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -123,10 +121,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       combineLatest(requests).subscribe(() => {
         this.router.navigate([this.authService.getRedirectUrl()]);
       });
-
-      // this.setTimezone().subscribe(() => {
-      //   this.router.navigate(['']);
-      // });
     }
   }
 
