@@ -321,6 +321,14 @@ const list = {
             action: 'emptyPost',
             type: 'button',
             text: 'Sync'
+          },
+          {
+            endpoint: '/hr/timesheets/{id}/sync',
+            field: 'id',
+            showIf: [ 'myob_status' ],
+            action: 'emptyPost',
+            type: 'button',
+            text: 'Resync'
           }
         ],
         name: 'myob_status',
