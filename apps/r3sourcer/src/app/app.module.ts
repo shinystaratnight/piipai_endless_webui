@@ -53,11 +53,13 @@ import { AgmCoreModule } from '@agm/core';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { Metadata } from './metadata.config';
 import { MasterGuideModule } from './master-guide/master-guide.module';
+import { RedirectComponent } from './redirect.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    RedirectComponent
   ],
   imports: [
     BrowserModule,

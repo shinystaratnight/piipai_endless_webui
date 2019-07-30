@@ -93,7 +93,14 @@ a.readonly:focus {
   }
 }
 
+.form-element:hover .form-element-content-actions {
+  display: flex;
+}
+
 .form-element-content-actions {
+  display: none;
+  padding: 2px 0;
+
   button,
   fa-icon {
     font-size: 10px;
@@ -108,9 +115,9 @@ a.readonly:focus {
     padding: 3px 5px;
     transition: margin-right 0s;
 
-    &.alone {
-      margin-right: 34px;
-    }
+    // &.alone {
+    //   margin-right: 34px;
+    // }
   }
 }
 
