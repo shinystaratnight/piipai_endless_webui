@@ -94,10 +94,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   public tokenAuth(token) {
     this.authService.loginWithToken(token).subscribe(
       (res: any) => {
+        this.authService.storeToken({ data: res });
         this.setTimezone().subscribe(() => {
-          this.authService.role = res.data.role;
-          this.authService.storeToken({ data: res });
-          this.router.navigateByUrl(res.data.redirect_to);
+          const requests = [
+            this.setTimezone(),
+            this.userService.getUserData()
+          ];
+
+          combineLatest(requests).subscribe(() => {
+            this.router.navigate([res.data.redirect_to || this.authService.getRedirectUrl()]);
+          });
         });
       },
       () => this.router.navigate(['login']));
