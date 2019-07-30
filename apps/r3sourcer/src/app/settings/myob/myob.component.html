@@ -107,7 +107,8 @@
               <select class="form-control custom-select" name="invoice_company_file" required
                 [(ngModel)]="payrollAccounts.invoice_company_file.value"
                 [disabled]="viewMode"
-                (ngModelChange)="getAccountsOfCompanyFile($event, 'invoice_activity_account')">
+                (ngModelChange)="getAccountsOfCompanyFile($event, 'invoice_activity_account')"
+                [title]="viewMode ? 'Please use Edit mode for change it' : ''">
                   <option value="">Select company file</option>
                   <option
                     *ngFor="let item of payrollAccounts.invoice_company_file.options"
@@ -129,7 +130,8 @@
             <div class="form-element-content">
               <select class="form-control custom-select" name="invoice_activity_account" required
                 [(ngModel)]="payrollAccounts.invoice_activity_account.value"
-                [disabled]="viewMode">
+                [disabled]="viewMode"
+                [title]="viewMode ? 'Please use Edit mode for change it' : ''">
                   <option value="">Select account</option>
                   <option
                     *ngFor="let item of payrollAccounts.invoice_activity_account.options"
@@ -155,7 +157,8 @@
             <div class="form-element-content">
               <select class="form-control custom-select" name="timesheet_company_file" required
                 [(ngModel)]="payrollAccounts.timesheet_company_file.value"
-                [disabled]="viewMode">
+                [disabled]="viewMode"
+                [title]="viewMode ? 'Please use Edit mode for change it' : ''">
                   <option value="">Select company file</option>
                   <option
                     *ngFor="let item of payrollAccounts.timesheet_company_file.options"

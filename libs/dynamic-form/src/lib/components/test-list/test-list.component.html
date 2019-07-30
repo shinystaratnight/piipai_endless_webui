@@ -5,8 +5,9 @@
     <ngb-panel [disabled]="config.hideQuestions">
       <ng-template ngbPanelTitle>
         <div class="test-title-wrapper">
-          <div class="test-title">
+          <div class="test-title text-left">
             <h5 class="mb-0">{{test.acceptance_test.name}}</h5>
+            <small *ngIf="test.score === 0" class="text-danger">Please pass test in "States" tab</small>
             <p *ngIf="!config.hideQuestions" class="description mt-2">{{test.company_workflow_node.name}}</p>
           </div>
           <span class="score border-0" [style.color]="colors[getScore(test.score)]">
