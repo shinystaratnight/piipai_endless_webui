@@ -4,13 +4,17 @@ import {
   // SiteComponent,
   VerifyEmailComponent,
 } from './components';
-// import { RedirectComponent } from './redirect.component';
+import { RedirectComponent } from './redirect.component';
 
 // import { UserService, NavigationService, SiteSettingsService } from '@webui/core';
 
 import { AuthGuard, NotAuthorizedGuard, SubdomainGuard, PermissionGuard, LogoutGuard, UserService, NavigationService, SiteSettingsService, ClientGuard, CandidateGuard, ManagerGuard } from '@webui/core';
 
 export const routes: Routes = [
+  {
+    path: 'myob/oauth2_redirect_uri',
+    component: RedirectComponent
+  },
   {
     path: 'contacts/verify_email/',
     component: VerifyEmailComponent

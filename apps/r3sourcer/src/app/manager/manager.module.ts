@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+// import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, NoPreloading } from '@angular/router';
+// import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 import { AgmCoreModule } from '@agm/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonsModule } from 'ngx-bootstrap';
-import { NgxWebstorageModule } from 'ngx-webstorage';
+// import { NgxWebstorageModule } from 'ngx-webstorage';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 // import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { ROUTES } from './manager.routes';
+import { routes } from './manager.routing';
 
 import { ManagerComponent } from './manager.component';
-import { RedirectComponent } from './redirect.component';
+// import { RedirectComponent } from './redirect.component';
 
 import * as formComponents from './components';
 // import { services } from './services';
@@ -33,7 +33,7 @@ import { Metadata } from './metadata.config';
 
 // const newMetadata = Object.create(metadata);
 
-import { environment } from '../../environments/environment';
+// import { environment } from '../../environments/environment';
 
 import { MasterGuideModule } from '../master-guide/master-guide.module';
 import { CommonModule } from '@angular/common';
@@ -42,7 +42,7 @@ import { CommonModule } from '@angular/common';
   // bootstrap: [ ManagerComponent ],
   declarations: [
     ManagerComponent,
-    RedirectComponent,
+    // RedirectComponent,
     ...formComponents.components
   ],
   imports: [
@@ -58,7 +58,7 @@ import { CommonModule } from '@angular/common';
     NgbModule,
     ButtonsModule.forRoot(),
     // NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
-    RouterModule.forChild(ROUTES),
+    RouterModule.forChild(routes),
     DynamicFormModule.forChild({ metadata: Metadata }),
     SharedModule,
     InfiniteScrollModule,

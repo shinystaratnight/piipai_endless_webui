@@ -273,9 +273,12 @@ export class SiteComponent implements OnInit, OnDestroy {
 
     if (isClient()) {
       if (client) {
-        setTimeout(() => {
-          this.loader = false;
-        }, 1000);
+        this.navigationService.getPages(role)
+          .subscribe(() => {
+              setTimeout(() => {
+                this.loader = false;
+              }, 500);
+          });
       }
 
       this.router.navigate(['/cl']);

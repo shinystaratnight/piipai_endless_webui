@@ -3,13 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription, BehaviorSubject } from 'rxjs';
 
-import { meta, purposeConfig } from './company.meta';
 import { GenericFormService, FormService } from '@webui/dynamic-form';
-import { Field } from '@webui/data';
-import { SettingsService } from '../settings.service';
-import { ToastService, MessageType, SiteSettingsService } from '@webui/core';
-import { Endpoints } from '@webui/data';
+import { ToastService, MessageType, SiteSettingsService, NavigationService, CheckPermissionService } from '@webui/core';
+import { Endpoints, Field, Page } from '@webui/data';
 import { getTimeInstance } from '@webui/utilities';
+
+import { meta, purposeConfig } from './company.meta';
+import { SettingsService } from '../settings.service';
 
 @Component({
   selector: 'app-company',
@@ -55,7 +55,9 @@ export class CompanyComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private siteSettings: SiteSettingsService,
     private formService: FormService,
-    private toastr: ToastService
+    private toastr: ToastService,
+    private navigationService: NavigationService,
+    private checkPermissionService: CheckPermissionService
   ) { }
 
   public ngOnInit() {
@@ -94,6 +96,9 @@ export class CompanyComponent implements OnInit, OnDestroy {
       this.gfs.editForm(Endpoints.Company + `${this.companySettingsData.company}/change_purpose/`, body)
         .subscribe((res) => {
           this.toastr.sendMessage(res.message, MessageType.success);
+          this.navigationService.updateNavigation(this.company).subscribe((pages: Page[]) => {
+            this.checkPermissionService.parseNavigation(this.checkPermissionService.permissions, pages);
+          });
         });
     }
   }

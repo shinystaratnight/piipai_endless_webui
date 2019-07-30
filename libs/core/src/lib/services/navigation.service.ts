@@ -74,6 +74,10 @@ export class NavigationService {
     }
   }
 
+  public updateNavigation(companyId: string) {
+    return this.getPages(this.currentRole, companyId, true);
+  }
+
   public getCompanyPurpose(id: string): Observable<Purpose> {
     return this.http.get(`${Endpoints.Company}${id}/?fields=purpose`)
       .pipe(

@@ -23,7 +23,7 @@
               <div style="overflow: hidden; white-space: nowrap">{{displayValue || placeholder}}</div>
           </div>
 
-          <div class="form-element-content-actions d-flex align-items-center"
+          <div class="form-element-content-actions align-items-center"
             *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete) && !(config.errorMessage && config.errorMessage.visible)" >
               <button *ngIf="displayValue" class="clear-button mr-1" type="button" (click)="clearField()">
                 <fa-icon class="text-secondary" [icon]="['fas', 'times']"></fa-icon>
