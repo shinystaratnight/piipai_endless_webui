@@ -2329,8 +2329,15 @@ export class DynamicListComponent
             if (redirect === location.origin) {
               this.storage.clear('role');
               this.storage.clear('user');
+              this.userService.user = null;
 
               this.authService.storeToken({ data: res });
+
+              this.userService.getUserData().subscribe(() => {
+                location.href = redirect;
+              });
+
+              return;
             }
 
             location.href = redirect;
