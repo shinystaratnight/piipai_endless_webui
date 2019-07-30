@@ -2321,14 +2321,15 @@ export class DynamicListComponent
       .subscribe(
         (res: any) => {
           if (e.el && e.el.redirect) {
-            this.storage.clear('role');
-
             const helper = new JwtHelperService();
             const token = helper.decodeToken(res.access_token_jwt);
 
             const redirect = token.origin;
 
             if (redirect === location.origin) {
+              this.storage.clear('role');
+              this.storage.clear('user');
+
               this.authService.storeToken({ data: res });
             }
 
