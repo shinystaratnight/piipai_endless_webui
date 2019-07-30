@@ -273,7 +273,7 @@
 <ng-template #shiftItem let-shift="shift" let-status="status">
   <div>
     <ng-container *ngIf="calendarType === 0">
-      <a [routerLink]="shift.job_link">{{shift.position}}</a>
+      <a [routerLink]="'/mn' + shift.job_link">{{shift.position}}</a>
     </ng-container>
     <ng-container *ngIf="calendarType !== 0">
       {{shift.position}}
