@@ -29,7 +29,7 @@ import {
 } from '@webui/core';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field, Endpoints } from '@webui/data';
-import { FormatString } from '@webui/utilities';
+import { FormatString, isManager, isClient, isCandidate } from '@webui/utilities';
 
 export interface RelatedObject {
   id: string;
@@ -579,7 +579,9 @@ export class FormRelatedComponent extends BasicElementComponent
         result = el.url;
       }
     });
-    return result;
+    const prefix = isManager() ? '/mn' : isClient() ? '/cl' : isCandidate() ? '/cd' : '';
+
+    return prefix + result;
   }
 
   public setInitValue() {
@@ -1218,6 +1220,10 @@ export class FormRelatedComponent extends BasicElementComponent
         this.results.splice(this.results.indexOf(item), 1);
       }
     } else {
+      if (this.key === 'industries_objects') {
+        item.default = !this.results.length;
+      }
+
       item.tests = this.addTests(item);
       this.results.push(item);
     }

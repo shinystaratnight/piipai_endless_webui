@@ -19,6 +19,7 @@ export * from './company-purpose.service';
 export * from './check-permission.service';
 export * from './errors.service';
 export * from './toast.service';
+export * from './env.service';
 
 export const services = [
   NavigationService,

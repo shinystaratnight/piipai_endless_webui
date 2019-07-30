@@ -11,9 +11,9 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import { AuthService } from '@webui/core';
+import { AuthService, NavigationService } from '@webui/core';
 import { User, Page, Role } from '@webui/data';
-import { getContactAvatar, getTimeInstance } from '@webui/utilities';
+import { getContactAvatar, getTimeInstance, isClient, isCandidate, isManager } from '@webui/utilities';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -34,7 +34,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('userBlock', { static: false }) public userBlock: any;
   @ViewChild('modal', { static: false }) public modal: any;
 
-  @Input() public pages: Page[];
   @Input() public user: User;
   @Input() public logo: string;
 
@@ -52,11 +51,17 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   public company: string;
   public picture: string;
   public contactAvatar: string;
+  public urlPrefix = isClient() ? '/cl' : isCandidate() ? '/cd' : isManager ? '/mn' : '';
+
+  get pages(): Page[] {
+    return this.navigationService.navigationList[this.currentRole];
+  }
 
   public resizeSubscription: Subscription;
 
   constructor(
     private authService: AuthService,
+    private navigationService: NavigationService
   ) { }
 
   public ngOnInit() {
@@ -149,6 +154,14 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return false;
+  }
+
+  public checkUrlPrefix(url) {
+    if (url.includes('settings') || url.includes('billing')) {
+      return false;
+    }
+
+    return true;
   }
 
   public changePassword() {

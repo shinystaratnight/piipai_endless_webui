@@ -23,7 +23,7 @@
               <div style="overflow: hidden; white-space: nowrap">{{displayValue || placeholder}}</div>
           </div>
 
-          <div class="form-element-content-actions d-flex align-items-center"
+          <div class="form-element-content-actions align-items-center"
             *ngIf="(config.options || config.type === 'address') && (config.templateOptions.add || config.templateOptions.edit || config.templateOptions.delete) && !(config.errorMessage && config.errorMessage.visible)" >
               <button *ngIf="displayValue" class="clear-button mr-1" type="button" (click)="clearField()">
                 <fa-icon class="text-secondary" [icon]="['fas', 'times']"></fa-icon>
@@ -142,7 +142,7 @@
                   {{item.__str__}}
                   <ng-container *ngIf="config.sendData">
                     <span *ngIf="item.default" class="text-secondary">(&nbsp;default&nbsp;)</span>
-                    <button *ngIf="!item.default" type="button" class="btn btn-secondary mt-1" style="font-size: 10px; line-height: 12px" (click)="setDefault(i, item)">make default</button>
+                    <button *ngIf="!item.default" type="button" class="btn btn-outline-secondary mt-1" style="font-size: 10px; line-height: 12px" (click)="setDefault(i, item)">make default</button>
                   </ng-container>
                 </span>
                 <app-close-button

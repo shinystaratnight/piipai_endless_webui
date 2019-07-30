@@ -1,0 +1,17 @@
+<app-navigation
+  logo="/assets/img/new-software.svg"
+  [user]="user"
+  (update)="updateNavigation($event)">
+</app-navigation>
+<!-- <breadcrumb [byRoute]="false" [url]="url" [navigationList]="pagesList"></breadcrumb> -->
+
+<div class="site-page pt-5">
+  <div class="form-page">
+    <div class="form-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<app-master-guide *ngIf="user.data.is_primary"></app-master-guide>
+<app-toast></app-toast>

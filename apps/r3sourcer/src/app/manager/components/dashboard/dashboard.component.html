@@ -1,0 +1,71 @@
+<div class="dashboard" [class.preview]="!widgets" *ngIf="checkOnManager()">
+  <div class="welcome d-flex align-items-center justify-content-center flex-column"
+    *ngIf="widgets && !widgets.length">
+    <span class="text-muted"><b>Modify your dashboard by adding widgets!</b></span>
+    <button class="add-widget icon btn btn-primary mt-2 px-4 d-flex align-items-center justify-content-center" (click)="openModal()">
+      <span class="text-white"><b>Add Widget</b></span>
+    </button>
+  </div>
+
+  <ng-container *ngIf="widgets && widgets.length">
+    <div class="dashboard-wrapper">
+      <ng-container *ngFor="let widget of widgets">
+        <div class="widget-item">
+          <a [routerLink]="['/mn' + widget.link]" href="" class="widget-header">
+            <div>
+              <h3 class="widget-title">{{widget.label}}</h3>
+              <span *ngIf="widget.description" class="widget-description">{{widget.description}}</span>
+              <span *ngIf="!widget.description" class="widget-description">Open list with {{widget.plural_name | lowercase}}</span>
+            </div>
+
+            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              width="612px" height="612px" viewBox="0 0 612 612" style="enable-background:new 0 0 612 612;" xml:space="preserve">
+              <path fill="white" stroke-width="2" d="M604.501,134.782c-9.999-10.05-26.222-10.05-36.221,0L306.014,422.558L43.721,134.782
+                c-9.999-10.05-26.223-10.05-36.222,0s-9.999,26.35,0,36.399l279.103,306.241c5.331,5.357,12.422,7.652,19.386,7.296
+                c6.988,0.356,14.055-1.939,19.386-7.296l279.128-306.268C614.5,161.106,614.5,144.832,604.501,134.782z"/>
+            </svg>
+          </a>
+          <a [routerLink]="['/mn' + widget.link + '/add']" href="" class="widget-footer">
+            <span *ngIf="widget.addLabel">{{widget.addLabel}}</span>
+            <span *ngIf="!widget.addLabel">+ Add new {{widget.name | lowercase}}</span>
+          </a>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <div *ngIf="!widgets" class="spinner m-0">
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
+  </div>
+</div>
+
+<ng-template #modal let-c="close">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">Widgets</h5>
+
+        <app-close-button class="ml-auto" (click)="c()"></app-close-button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <div class="d-flex justify-content-around align-items-stretch flex-wrap flex-column">
+        <div *ngIf="!selectedWidget">
+          <div class="widget-preview p-2 d-flex justify-content-center align-items-center"
+            *ngFor="let widget of availableModules"
+            (click)="selectModule(widget, c)">
+              <span class="text-muted"><b>{{widget.content_type.name}}</b></span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center align-content-center p-3"
+          *ngIf="availableModules && !availableModules.length">
+            <span class="text-muted">No Widgets</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+

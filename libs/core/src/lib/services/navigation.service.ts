@@ -8,6 +8,7 @@ import { Role } from '@webui/data';
 import { Endpoints } from '@webui/data';
 import { CompanyPurposeService, Purpose } from './company-purpose.service';
 import { ErrorsService } from './errors.service';
+import { isClient, isCandidate } from '@webui/utilities';
 
 export interface Page {
   name: string;
@@ -71,6 +72,10 @@ export class NavigationService {
         return of(this.navigationList[id]);
       }
     }
+  }
+
+  public updateNavigation(companyId: string) {
+    return this.getPages(this.currentRole, companyId, true);
   }
 
   public getCompanyPurpose(id: string): Observable<Purpose> {

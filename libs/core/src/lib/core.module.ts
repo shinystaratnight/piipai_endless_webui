@@ -1,10 +1,26 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { services } from './services';
+import { services, ENV } from './services';
+import { guards } from './guards';
+import { interceptors } from './interceptors';
 
 @NgModule({
   imports: [CommonModule],
-  providers: [ ...services ]
+  providers: [
+    ...services,
+    ...guards,
+    ...interceptors
+  ]
 })
-export class CoreModule {}
+export class CoreModule {
+
+  static forRoot(environment: any): ModuleWithProviders<CoreModule> {
+    return {
+      ngModule: CoreModule,
+      providers: [
+        { provide: ENV, useValue: environment }
+      ]
+    };
+  }
+}

@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { User, Role } from '@webui/data';
+import { setTimeZone } from '@webui/utilities';
 
 import { NavigationService } from './navigation.service';
 import { AuthService } from './auth.service';
@@ -19,6 +20,7 @@ export class UserService {
   public timezoneEndpoint = '/core/users/timezone/'
   public user: User;
   public error: any;
+  public roleRedirect: string;
 
   constructor(
     private http: HttpClient,
@@ -34,11 +36,6 @@ export class UserService {
       return this.http
         .get(this.authEndpoint)
         .pipe(
-          // mergeMap((user: User) => {
-          //   this.user = user;
-
-          //   return this.getUserRoles();
-          // }),
           map((user: User) => {
             this.user = user;
             const roles = user.data.roles;
@@ -77,8 +74,11 @@ export class UserService {
             }
 
             this.user.currentRole = role || roles[0];
-            // this.user.roles = res.roles;
             this.storage.store('role', this.user.currentRole);
+            const timeZone = this.getTimeZone();
+            if (timeZone) {
+              setTimeZone(timeZone);
+            }
 
             return this.user;
           }),
@@ -97,12 +97,16 @@ export class UserService {
   }
 
   public setTimezone(): Observable<any> {
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const timeZone = this.getTimeZone();
 
     return this.http.post(this.timezoneEndpoint, { user_timezone: timeZone })
       .pipe(
         catchError((errors) => this.errorsService.parseErrors(errors))
       );
+  }
+
+  public getTimeZone() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
   }
 
   public currentRole(role) {

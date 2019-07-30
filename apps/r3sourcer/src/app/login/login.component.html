@@ -1,0 +1,79 @@
+<ng-container *ngIf="!token">
+  <app-navigation logo="/assets/img/new-software.svg"></app-navigation>
+
+  <div class="container">
+    <div class="login-wrapper">
+      <div class="login-title">
+        <img src="{{settings.logo || '/assets/img/logo.svg'}}" alt="R3sourcer">
+        <p>{{settings.company_name || 'R3sourcer'}}</p>
+      </div>
+
+      <div class="login-form">
+        <div class="login-label">
+          <h5 class="title">Login</h5>
+          <p class="description">Please enter your email and password</p>
+        </div>
+
+        <app-generic-form
+          [endpoint]="endpoint"
+          [data]="data"
+          [errors]="error"
+          [checkEmail]="true"
+          [showResponse]="true"
+          (redirect)="redirectHandler($event)"
+          (responseForm)="responseHandler($event)"
+          (errorForm)="errorHandler($event)"
+          (event)="formEvent($event)">
+          <div class="links form-group">
+            <label class="form-element-checkbox">
+              <input type="checkbox" class="form-check-input" [(ngModel)]="rememberMe" hidden>
+              <div class="custom-checkbox">
+                <svg width="9" height="7" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.08284 4.87574C2.92663 5.03195 2.67337 5.03195 2.51716 4.87574L1.12071 3.47929C0.888359 3.24694 0.511641 3.24694 0.279289 3.47929C0.0469372 3.71164 0.0469373 4.08836 0.279289 4.32071L2.37574 6.41716C2.61005 6.65147 2.98995 6.65147 3.22426 6.41716L8.52071 1.12071C8.75306 0.888359 8.75306 0.511642 8.52071 0.279289C8.28836 0.0469374 7.91164 0.0469372 7.67929 0.279289L3.08284 4.87574Z" fill="white" stroke="#FDFDFD" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span>Remember me</span>
+            </label>
+            <a class="forgot" href="" (click)="openResetForm()">Forgot Password?</a>
+          </div>
+          <button class="btn btn-primary login-button" type="submit">Lоgin <app-spinner *ngIf="loginProcess"></app-spinner></button>
+        </app-generic-form>
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="subdomain" class="register-link">
+    <a [routerLink]="['/registration']">
+      <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 42 42">
+        <polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22 " />
+      </svg>
+      Register
+    </a>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="token">
+  <app-site-loader></app-site-loader>
+</ng-container>
+
+<app-toast></app-toast>
+
+<ng-template #modal let-c="close" let-d="dismiss">
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">Password Reset</h5>
+
+        <app-close-button class="ml-auto" (click)="d()"></app-close-button>
+      </div>
+    </div>
+    <div class="pb-3 form-builder-form">
+      <app-generic-form [showResponse]="true" endpoint="/core/contacts/forgot_password/">
+        <div class="d-flex align-items-center">
+          <button type="submit" class="btn btn-success ml-auto">Reset</button>
+        </div>
+      </app-generic-form>
+    </div>
+  </div>
+</ng-template>
