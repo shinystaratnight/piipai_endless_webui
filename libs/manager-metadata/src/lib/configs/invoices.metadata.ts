@@ -473,6 +473,18 @@ const form = [
               small: true,
               p: true
             }
+          },
+          {
+            type: 'button',
+            color: 'primary',
+            showIf: [ 'synced_at' ],
+            templateOptions: {
+              action: 'syncInvoice',
+              text: 'Resync',
+              type: 'button',
+              small: true,
+              p: true
+            }
           }
         ]
       },

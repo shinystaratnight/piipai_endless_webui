@@ -1502,7 +1502,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         const synced_at = getElementFromMetadata(this.metadata, 'synced_at');
         synced_at.value = this.timeInstance().format();
         this.updateMetadata(this.metadata, 'synced_at');
-        e.el.hidden.next(true);
+        this.toastrService.sendMessage('The invoice will be synchronized in a few minutes', MessageType.success);
+        if (e.el.hidden) {
+          e.el.hidden.next(true);
+        }
       });
   }
 
