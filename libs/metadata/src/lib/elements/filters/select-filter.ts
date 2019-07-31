@@ -5,7 +5,7 @@ export interface SelectFilterOptions {
   label: string;
   query: string;
   defaultValue?: any;
-  values: { value: string, label: string }[];
+  values: { value: string | number, label: string }[];
 }
 
 export const Select = 'select';
@@ -17,7 +17,7 @@ export class SelectFilter implements FilterModel {
   public key: string;
   public label: string;
   public query: string;
-  public options: { value: string, label: string }[];
+  public options: { value: string | number, label: string }[];
 
   constructor(options: SelectFilterOptions) {
     const { key, label, defaultValue = null, values = [] } = options;
