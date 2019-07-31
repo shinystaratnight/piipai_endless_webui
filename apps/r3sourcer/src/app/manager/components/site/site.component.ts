@@ -369,12 +369,12 @@ export class SiteComponent implements OnInit, OnDestroy {
     }
     if (e.type === 'sendForm' && e.status === 'success') {
       if (this.pageData.pathData.postfix === 'submit') {
-        this.router.navigate([this.pageData.pathData.path]);
+        this.router.navigate(['/' + this.authService.getRedirectUrl() + this.pageData.pathData.path]);
         this.saveProcess = false;
         return;
       }
       if (!this.pageData.pathData.id) {
-        this.router.navigate([this.pageData.pathData.path + e.data.id + '/change']);
+        this.router.navigate(['/' + this.authService.getRedirectUrl() + this.pageData.pathData.path + e.data.id + '/change']);
         this.saveProcess = false;
         return;
       }
@@ -397,7 +397,7 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public deleteElement(element) {
     this.genericFormService.delete(element.endpoint, element.pathData.id).subscribe(
-      (res: any) => this.router.navigate([element.pathData.path]),
+      (res: any) => this.router.navigate(['/' + this.authService.getRedirectUrl() + element.pathData.path]),
       (err: any) => {
         if (err.status === 'error') {
           this.ts.sendMessage(err.errors.error, MessageType.error);
@@ -421,7 +421,7 @@ export class SiteComponent implements OnInit, OnDestroy {
       status: 'True'
     };
     this.genericFormService.submitForm(endpoint, body).subscribe(
-      (res: any) => this.router.navigate([element.pathData.path]),
+      (res: any) => this.router.navigate(['/' + this.authService.getRedirectUrl() + element.pathData.path]),
       (err: any) => this.error = err
     );
   }
@@ -488,7 +488,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public back() {
-    this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']); //tslint:disable-line
+    this.router.navigate(['/' + this.authService.getRedirectUrl() + this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']); //tslint:disable-line
 
     return false;
   }
@@ -496,7 +496,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   public sendData() {
     if (this.data) {
       this.genericFormService.submitForm(this.pageData.endpoint, this.data).subscribe(
-        (res: any) => this.router.navigate([this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
+        (res: any) => this.router.navigate(['/' + this.authService.getRedirectUrl() + this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
         (err: any) => this.error = err
       );
     }
@@ -517,8 +517,8 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public permissionErrorHandler() {
-    const path = this.pageData && this.pageData.pathData && this.pageData.pathData.path || '/';
-    this.router.navigate([path]);
+    const path = this.pageData && this.pageData.pathData && this.pageData.pathData.path || '';
+    this.router.navigate(['/' + this.authService.getRedirectUrl() + path]);
   }
 
   public showDeleteButton() {

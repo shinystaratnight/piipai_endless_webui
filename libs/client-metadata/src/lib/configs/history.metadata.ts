@@ -77,7 +77,7 @@ const list = {
             action: 'showTracking',
             showIf: [{ status: [4, 5, 6, 7] }],
             customLink: true,
-            image: '/assets/img/map-lg.png'
+            image: '/assets/img/map-lg.jpg'
           },
         ],
         name: 'tracking',
@@ -235,7 +235,8 @@ const list = {
             styles: ['muted'],
             showIf: [
               { status: 7 },
-              'supervisor_approved_at'
+              'supervisor_approved_at',
+              { supervisor_modified_at: null }
             ]
           },
           {
