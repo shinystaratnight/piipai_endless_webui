@@ -102,6 +102,17 @@ const list = {
         delim: null
       },
       {
+        label: 'Profile Price',
+        name: 'profile_price',
+        content: [
+          {
+            field: 'profile_price',
+            type: 'text',
+            display: '${field}'
+          }
+        ]
+      },
+      {
         content: [
           {
             field: 'contact.email',
