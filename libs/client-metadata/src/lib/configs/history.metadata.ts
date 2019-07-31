@@ -77,7 +77,7 @@ const list = {
             action: 'showTracking',
             showIf: [{ status: [4, 5, 6, 7] }],
             customLink: true,
-            image: '/assets/img/map-lg.png'
+            image: '/assets/img/map-lg.jpg'
           },
         ],
         name: 'tracking',
