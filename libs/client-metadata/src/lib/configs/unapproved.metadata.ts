@@ -74,7 +74,7 @@ const list = {
             field: 'id',
             action: 'showTracking',
             customLink: true,
-            image: '/assets/img/map-lg.png'
+            image: '/assets/img/map-lg.jpg'
           }
         ],
         name: 'tracking',
