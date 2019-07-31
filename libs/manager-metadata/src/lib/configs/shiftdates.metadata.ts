@@ -118,6 +118,18 @@ const jobAdd = [
     read_only: false
   },
   {
+    key: 'workers',
+    type: 'input',
+    send: false,
+    hide: true,
+    templateOptions: {
+      required: false,
+      label: 'Workers',
+      type: 'number'
+    },
+    read_only: false
+  },
+  {
     hide: true,
     endpoint: '/skills/skills/',
     read_only: true,

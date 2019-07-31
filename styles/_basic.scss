@@ -208,10 +208,13 @@ form.ng-invalid button[type='submit'] {
     display: block;
     top: -35px;
     left: 0;
+    width: 240px;
 
     padding: 0.2rem;
 
-    background-color: $gray;
+    font-size: 14px;
+    border-radius: .25rem;
+    background-color: rgba($gray, .8);
     content: 'Please fill all the REQUIRED fields';
     z-index: 1;
   }

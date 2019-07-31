@@ -767,6 +767,10 @@ export class FormRelatedComponent extends BasicElementComponent
           value.push(object.data.value);
           this.dataOfList.push(object);
         });
+        // if (!data.length) {
+          this.addObject();
+        // }
+
         this.group.get(this.key).patchValue(data);
       }
     }
@@ -832,9 +836,7 @@ export class FormRelatedComponent extends BasicElementComponent
     return object;
   }
 
-  public addObject(e) {
-    e.stopPropagation();
-    e.preventDefault();
+  public addObject() {
     if (this.dataOfList) {
       const object = this.createObject();
       this.dataOfList.push(object);
