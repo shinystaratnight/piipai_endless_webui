@@ -1490,7 +1490,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       .subscribe(() => {
         this.modalRef.close();
         this.toastrService.sendMessage(`${this.strValue} has been added to your Candidate Contact list`, MessageType.success);
-        this.router.navigate(['/candidate/candidatecontacts/pool']);
+        this.router.navigate(['/mn/candidate/candidatecontacts/pool']);
       });
   }
 
