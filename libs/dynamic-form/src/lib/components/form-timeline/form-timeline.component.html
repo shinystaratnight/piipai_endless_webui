@@ -82,8 +82,8 @@
         <hr>
 
         <div class="footer">
-          <button class="btn btn-sm btn-primary" (click)="modalData.setActive = true">
-            Activate
+          <button *ngIf="modalData.workflowObject && this.advancedSeving" class="btn btn-sm btn-primary" (click)="modalData.setActive = true">
+            Update
           </button>
 
           <span *ngIf="modalData.state.total_score">Total Score: {{modalData.state.total_score}}</span>

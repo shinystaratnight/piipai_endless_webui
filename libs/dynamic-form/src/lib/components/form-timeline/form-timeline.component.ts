@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { FormatString } from '@webui/utilities';
 import { GenericFormService } from '../../services';
@@ -41,6 +41,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public saveProcess: boolean;
   public advancedSeving: boolean;
+  public answerEndpoint = '/acceptance-tests/workflowobjectanswers/';
+
+  public passTestAction: BehaviorSubject<number>;
+  public passedTests: Map<string, any[]> = new Map();
 
   public workflowObjectEndpoint = Endpoints.WorkflowObject;
 
@@ -171,8 +175,69 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     this.modalData = {};
     if (state.state === 1 && !this.advancedSeving && !state.acceptance_tests.length && !state.substates.length) {
       state.saveProcess = true;
-      this.activeState(state.id);
+      this.activeState(state.id)
+        .subscribe(() => {
+          this.saveProcess = false;
+          this.getTimeline(this.config.query.model === 'hr.job');
+        });
       return;
+    }
+
+    if (state.acceptance_tests.length) {
+      const tests = state.acceptance_tests.filter((test) => test.score === 0);
+
+      if (tests.length) {
+        const passTestAction = new BehaviorSubject(0);
+
+        passTestAction.subscribe((index) => {
+          const testId = tests[index].acceptance_test.id;
+          this.modalRef = this.modalService.open(PassTestModalComponent);
+          this.modalRef.componentInstance.config = {
+            testId,
+            send: false
+          } as PassTestModalConfig;
+
+          this.modalRef.result
+            .then((res: any[]) => {
+
+              if (this.passedTests.has(testId)) {
+                this.passedTests.set(testId, [...this.passedTests.get(testId), ...res]);
+              } else {
+                this.passedTests.set(testId, res);
+              }
+
+              if (tests[index + 1]) {
+                passTestAction.next(index + 1);
+              } else if (this.passedTests.size === tests.length) {
+                if (state.wf_object_id) {
+                  const passedtests = this.updateTests(state.wf_object_id);
+
+                  this.genericFormService.submitForm(this.answerEndpoint, passedtests)
+                    .subscribe(() => {
+                      this.saveProcess = false;
+                      this.getTimeline(this.config.query.model === 'hr.job');
+                    });
+                } else {
+                  this.activeState(state.id)
+                    .subscribe((workflowObject) => {
+                      const passedtests = this.updateTests(workflowObject.id);
+
+                      this.genericFormService.submitForm(this.answerEndpoint, passedtests)
+                        .subscribe(() => {
+                          this.saveProcess = false;
+                          this.getTimeline(this.config.query.model === 'hr.job');
+                        });
+                    });
+                }
+              }
+            })
+            .catch(() => {
+              this.passedTests.clear();
+            });
+        });
+
+        return;
+      }
     }
 
     if (state.state === 1 || state.state === 2) {
@@ -211,6 +276,18 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       );
       this.modalRef = this.modalService.open(this.stateModal);
     }
+  }
+
+  public updateTests(id: string) {
+    const tests = [];
+    Array.from(this.passedTests.values()).forEach((el) => {
+      if (el) {
+        el.forEach((q) => q.workflow_object = id);
+        tests.push(...el);
+      }
+    });
+
+    return tests;
   }
 
   public getTimeline(resetPage?: boolean): void {
@@ -330,12 +407,8 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       active: true
     };
 
-    this.genericFormService
-      .submitForm(this.workflowObjectEndpoint, body)
-      .subscribe((res) => {
-        this.saveProcess = false;
-        this.getTimeline(this.config.query.model === 'hr.job');
-      });
+    return this.genericFormService
+      .submitForm(this.workflowObjectEndpoint, body);
   }
 
   public testComplete(closeModal) {
