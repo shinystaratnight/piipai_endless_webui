@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-// import * as moment from 'moment-timezone';
 
 import { isMobile, getTimeInstance } from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../helpers';
@@ -95,11 +94,11 @@ export class ListTextComponent implements OnInit {
       if (type === 'datetime') {
         if (this.arrayValue) {
           const result = this.value.map((el) => {
-            return el ? moment.tz(el, 'Australia/Sydney').format('DD/MM/YYYY hh:mm A') : ' ';
+            return el ? moment(el).format('DD/MM/YYYY hh:mm A') : ' ';
           });
           this.value = result;
         } else {
-          this.value = this.value ? moment.tz(this.value, 'Australia/Sydney').format('DD/MM/YYYY hh:mm A') : ' '; //tslint:disable-line
+          this.value = this.value ? moment(this.value).format('DD/MM/YYYY hh:mm A') : ' '; //tslint:disable-line
         }
       }
     }

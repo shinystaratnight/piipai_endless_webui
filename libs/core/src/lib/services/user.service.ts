@@ -75,10 +75,10 @@ export class UserService {
 
             this.user.currentRole = role || roles[0];
             this.storage.store('role', this.user.currentRole);
-            const timeZone = this.getTimeZone();
-            if (timeZone) {
-              setTimeZone(timeZone);
-            }
+            // const timeZone = this.getTimeZone();
+            // if (timeZone) {
+            //   setTimeZone(timeZone);
+            // }
 
             return this.user;
           }),

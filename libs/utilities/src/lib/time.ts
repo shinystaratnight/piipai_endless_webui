@@ -1,8 +1,8 @@
 import * as moment from 'moment-timezone';
 
-export const timeZone = 'Australia/Sydney';
+// export const timeZone = 'Australia/Sydney';
 
-setTimeZone(timeZone);
+// setTimeZone(timeZone);
 moment.updateLocale('en', {
   week: {
     dow : 1, // Monday is the first day of the week.
