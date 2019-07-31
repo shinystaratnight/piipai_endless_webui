@@ -237,12 +237,12 @@
       <button *ngIf="config.delay && checkPermission('post')"
         type="button"
         class="text-white btn btn-sm group-button ml-auto mr-2"
-        (click)="addObject($event)">
+        (click)="addObject()">
           Add
       </button>
     </h6>
-    <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list-related p-2">
-      <table *ngIf="dataOfList" class="table table-bordered mb-1">
+    <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list-related p-2 datatable">
+      <table *ngIf="dataOfList" class="table mb-1">
         <thead>
           <tr>
             <ng-container *ngFor="let col of config.metadata">
@@ -276,23 +276,24 @@
                 </fa-icon>
 
                 <ng-template #actionsTemplate>
-                  <span class="custom-button d-block" *ngIf="config.templateOptions.delete && checkPermission('delete')" (click)="deleteObject(object, $event)">
+                  <span class="custom-button d-flex align-items-center" *ngIf="config.templateOptions.delete && checkPermission('delete')" (click)="deleteObject(object, $event)">
                     <fa-icon class="icon text-danger mr-2" title="Delete" [icon]="['fas', 'trash']"></fa-icon>
                     Delete
                   </span>
-                  <span class="custom-button d-block" *ngIf="config.templateOptions.edit && checkPermission('update')" (click)="editObject(object, $event)">
+                  <span class="custom-button d-flex align-items-center" *ngIf="config.templateOptions.edit && checkPermission('update')" (click)="editObject(object, $event)">
                     <fa-icon class="icon text-warning mr-2" title="Edit" [icon]="['fas', 'pencil-alt']"></fa-icon>
                     Edit
                   </span>
-                  <span class="custom-button d-block" *ngIf="skillEndpoint && !object.allData.default_rate" (click)="setAsDefault(object)">
+                  <span class="custom-button d-flex align-items-center" *ngIf="skillEndpoint && !object.allData.default_rate" (click)="setAsDefault(object)">
                     <fa-icon class="icon text-primary mr-2" title="Set as default"
                       [icon]="['fas', 'check']"></fa-icon>
                   </span>
                 </ng-template>
 
               </span>
-              <span *ngIf="!object.id" class="d-flex align-items-center">
-                <fa-icon class="icon text-danger mx-2" title="Delete" [icon]="['fas', 'times-circle']" (click)="removeItem(index, $event)"></fa-icon>
+              <span *ngIf="!object.id" class="custom-button d-flex align-items-center" (click)="removeItem(index, $event)">
+                <fa-icon class="icon text-danger mr-2" title="Delete" [icon]="['fas', 'trash']"></fa-icon>
+                Delete
               </span>
             </td>
           </tr>
