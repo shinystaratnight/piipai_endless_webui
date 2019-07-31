@@ -307,6 +307,7 @@ export class ExtendComponent extends BasicElementComponent
         formData,
         value: time,
         mode: new BehaviorSubject(timeReadOnly ? 'view' : 'edit'),
+        rightPosition: false,
         templateOptions: {
           required: true,
           label: 'Select time',
