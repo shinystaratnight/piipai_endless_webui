@@ -334,7 +334,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
           maxDays: this.key.includes('birthday') && -1,
-          bootstrapDropdownRight: timeType === 'timebox',
+          bootstrapDropdownRight: this.config.rightPosition === false ? false : timeType === 'timebox',
           beforeOpenCallback: () => {
             this.opened = this.t.nativeElement;
             this.updatePosition();
@@ -364,7 +364,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           useFocus: true,
           useHeader: false,
           calHighToday: false,
-          bootstrapDropdownRight: timeType === 'timebox',
+          bootstrapDropdownRight: this.config.rightPosition === false ? false : timeType === 'timebox',
           beforeOpenCallback: () => {
             this.opened = this.t.nativeElement;
             this.updatePosition();
