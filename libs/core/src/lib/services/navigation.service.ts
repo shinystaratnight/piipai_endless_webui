@@ -4,11 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { of, Observable } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 
-import { Role } from '@webui/data';
-import { Endpoints } from '@webui/data';
+import { Endpoints, Role } from '@webui/data';
 import { CompanyPurposeService, Purpose } from './company-purpose.service';
 import { ErrorsService } from './errors.service';
-import { isClient, isCandidate } from '@webui/utilities';
 
 export interface Page {
   name: string;
@@ -54,6 +52,7 @@ export class NavigationService {
               }
             }),
             map((res: { purpose: Purpose, list: any[] }) => {
+              this.removePrefix(res.list);
               if (res.list) {
                 const list = res.purpose
                   ? this.purposeService.filterNavigationByPurpose(res.purpose, res.list)
@@ -136,6 +135,18 @@ export class NavigationService {
       target.push(el);
       if (el.childrens) {
         this.generateLinks(el.childrens, target);
+      }
+    });
+  }
+
+  public removePrefix(list: Page[]) {
+    list.forEach((page) => {
+      ['/mn/', '/cl/', '/cd/'].forEach((prefix) => {
+        page.url = page.url.replace(prefix, '/');
+      })
+
+      if (page.childrens && page.childrens.length) {
+        this.removePrefix(page.childrens);
       }
     });
   }
