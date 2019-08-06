@@ -78,21 +78,15 @@ const form = [
     read_only: false
   },
   {
-    list: false,
     endpoint: '/contenttypes/contenttypes/',
     read_only: true,
     templateOptions: {
       label: 'Model',
-      add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'model',
-    many: false
   }
 ];
 
