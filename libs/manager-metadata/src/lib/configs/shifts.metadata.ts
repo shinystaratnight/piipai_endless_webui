@@ -220,7 +220,7 @@ const shiftDate = {
       type: 'datepicker'
     },
     {
-      default: 1,
+      default: '{workers}',
       key: 'workers',
       read_only: false,
       templateOptions: {

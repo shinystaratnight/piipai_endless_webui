@@ -16,7 +16,7 @@ export const routes: Routes = [
     component: RedirectComponent
   },
   {
-    path: 'contacts/verify_email/',
+    path: 'contacts/verify_email',
     component: VerifyEmailComponent
   },
   {

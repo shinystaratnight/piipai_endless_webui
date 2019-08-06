@@ -11,8 +11,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-// import * as moment from 'moment-timezone';
-
 import { FilterService } from './../../services/filter.service';
 import { isMobile, getTimeInstance } from '@webui/utilities';
 
@@ -33,7 +31,6 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public displayFormat = 'DD/MM/YYYY';
   public queryFormat = 'YYYY-MM-DD';
-  public timeZone = 'Australia/Sydney';
   public timeInstance = getTimeInstance();
   public init = false;
 
@@ -229,8 +226,8 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public parseDateValue(date: string, moment, format: string) { //tslint:disable-line
     return format
-      ? moment.tz(date, format, this.timeZone)
-      : moment.tz(date, this.timeZone);
+      ? moment(date, format)
+      : moment(date);
   }
 
   public getParams(query: string): Params {

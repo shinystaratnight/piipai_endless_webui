@@ -61,6 +61,17 @@ const filters = {
       }
     ]
   }),
+  candidate_price: createFilter(Type.Checkbox, {
+    key: 'candidate_price',
+    label: 'Profile Price',
+    multiple: false,
+    values: [
+      {
+        value: 'True',
+        label: 'Show profiles for sale'
+      }
+    ]
+  }),
   created_at: createFilter(Type.Date, {
     key: 'created_at',
     label: 'Created at',
@@ -100,6 +111,17 @@ const list = {
         title: null,
         label: 'Personal Info',
         delim: null
+      },
+      {
+        label: 'Profile Price',
+        name: 'profile_price',
+        content: [
+          {
+            field: 'profile_price',
+            type: 'text',
+            display: '${field}'
+          }
+        ]
       },
       {
         content: [
@@ -339,6 +361,7 @@ const list = {
       filters.gender,
       filters.recruitmentAgent,
       filters.avarageScore,
+      filters.candidate_price,
       filters.transportation_to_work,
       filters.created_at
     ],
