@@ -67,7 +67,7 @@ const filters = {
     multiple: false,
     values: [
       {
-        value: true,
+        value: 'True',
         label: 'Show profiles for sale'
       }
     ]
