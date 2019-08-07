@@ -1,0 +1,35 @@
+@import '../../../../../../../styles/variables';
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  margin-bottom: 6px;
+}
+
+.required {
+  background-color: rgba($brand-success, .2);
+}
+
+.existing {
+  background-color: rgba($brand-info, .2);
+}
+
+.missing {
+  background-color: rgba($brand-danger, .2);
+}
+
+.badge {
+  padding: 2px 12px;
+  margin-bottom: .3rem;
+  margin-right: .2rem;
+
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.description{
+  margin-bottom: .3rem;
+  margin-left: 12px;
+}

@@ -10,19 +10,22 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { ListTextComponent } from '../components/list-text/list-text.component';
-import { ListColumnComponent } from '../containers/list-column/list-column.component';
-import { ListLinkComponent } from '../components/list-link/list-link.component';
-import { ListCheckboxComponent } from '../components/list-checkbox/list-checkbox.component';
-import { FormButtonComponent } from '../components/form-button/form-button.component';
-import { ListImageComponent } from '../components/list-image/list-image.copmonent';
-import { ListInfoComponent } from '../components/list-info/list-info.component';
-import { ListTagsComponent } from '../components/list-tags/list-tags.component';
-import { ListSkillsComponent } from '../components/list-skills/list-skills.component';
+import {
+  ListTextComponent,
+  ListLinkComponent,
+  ListCheckboxComponent,
+  ListImageComponent,
+  ListInfoComponent,
+  ListTagsComponent,
+  ListSkillsComponent,
+  ListFillinTagsComponent,
+  ListAvailableComponent
+} from '../components/list-elements';
+
 import { InfoComponent } from '../components/info/info.component';
-import { ListFillinTagsComponent } from '../components/list-fillin-tags/list-fillin-tags.component';
-import { ListAvailableComponent } from '../components/list-available/list-available.component';
 import { ButtonGroupComponent } from '../containers/button-group/button-group.component';
+import { ListColumnComponent } from '../containers/list-column/list-column.component';
+import { FormButtonComponent } from '../components/form-elements';
 
 const components = {
   text: ListTextComponent,

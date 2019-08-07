@@ -1,0 +1,201 @@
+@import '../../../../../../../styles/variables';
+
+.badge {
+  line-height: 1.2;
+}
+
+.state-info {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  &-label {
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    opacity: .3;
+    color: #333;
+  }
+
+  .state-tests {
+    min-width: 300px;
+  }
+
+  .state-substate {
+    width: 200px;
+
+    padding: 10px;
+    margin-bottom: 5px;
+
+    border-radius: 5px;
+    border: 1px solid $gray;
+
+    cursor: pointer;
+  }
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-top: 10px;
+}
+
+.state-progress {
+  font-size: 12px;
+  line-height: 14px;
+
+  margin-left: 10px;
+}
+
+.timeline {
+  padding-bottom: 25px;
+
+  &-select {
+    margin-left: 11px;
+    padding-right: 30px;
+
+    background: #fff url(/assets/img/down-arrow.svg) no-repeat;
+    background-position: right .75rem center;
+    background-size: 8px 8px;
+
+    -ms-progress-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+
+      .btn.btn-sm {
+        margin-left: .5rem;
+
+        font-size: 10px;
+        line-height: 14px;
+
+        border-color: $brand-success;
+        color: $brand-success;
+
+        &:hover,
+        &.active {
+          border-color: $brand-success;
+
+          background-color: $brand-success;
+          color: white;
+        }
+      }
+
+      & .timeline-element {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &-element {
+    display: inline-block;
+    margin: 0 4px 8px;
+
+    transition: .3s;
+
+    cursor: default;
+
+    &-wrapper {
+      display: inline-block;
+
+      &.dropdown-wrapper {
+        display: none;
+      }
+    }
+
+    &-wrapper:hover .timeline-requirements {
+      display: block;
+    }
+
+    &.active:hover:not(.timeline-select),
+    &.active:focus:not(.timeline-select),
+    &.allowed:hover:not(.timeline-select),
+    &.allowed:focus:not(.timeline-select) {
+      cursor: pointer;
+      box-shadow: 2px 2px 4px rgba($gray-600, .3);
+    }
+
+  }
+
+  button i {
+    line-height: 14px;
+  }
+
+  option {
+    color: rgba($gray, .8);
+  }
+
+  .active {
+    border-color: $brand-success;
+    background-color: $brand-success;
+    color: darken($brand-success, 25%);
+  }
+
+  .allowed {
+    border-color: $brand-success;
+    color: $brand-success;
+  }
+
+  .not-allowed {
+    border-color: #828282;
+    color: rgba($gray, .7);
+
+    opacity: .2;
+  }
+
+  .need-requirements {
+    border-color: #828282;
+    color: rgba($gray, .7);
+  }
+
+  .visited {
+    border-color: $gray;
+    background-color: rgba($gray, .5);
+    color: rgba($gray, .7);
+  }
+
+  .next {
+    margin: 0 6px;
+  }
+}
+
+.close-button {
+  position: absolute;
+  top: 9px;
+  right: 16px;
+}
+
+.table {
+  th {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    opacity: .8;
+  }
+
+  tr:nth-child(even) {
+    background-color: rgba($brand-primary, .1);
+  }
+
+  td {
+    font-size: 14px;
+  }
+}
+
+.save {
+  background: rgba($gray, .2);
+
+  app-spinner {
+    position: relative;
+    top: -1px;
+  }
+}
