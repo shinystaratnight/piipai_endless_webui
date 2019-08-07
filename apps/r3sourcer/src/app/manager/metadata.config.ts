@@ -23,8 +23,8 @@ import {
   regions,
   filestorages,
   extranetnavigations,
-  workflows,
-  workflownodes,
+  // workflows,
+  // workflownodes,
   workflowobjects,
   forms,
   formbuilders,
@@ -107,7 +107,9 @@ import {
   tagrels,
   skillrels,
   candidateevaluations,
-  passwordchange
+  passwordchange,
+  workflows,
+  workflownodes
 } from '@webui/shared-metadata';
 
 import { Endpoints } from '@webui/data';

@@ -10,6 +10,7 @@ const list = {
         delim: null,
         name: 'times',
         title: null,
+        width: 160,
         content: [
           {
             text: '{shift.date.shift_date__date}',
@@ -49,11 +50,15 @@ const list = {
       },
       {
         label: 'Job Site - Map',
-        delim: null,
+        delim: ' ',
         name: 'job_site_-_map',
         title: null,
         content: [
-          { type: 'related', field: 'jobsite_address' },
+          {
+            type: 'related',
+            field: 'jobsite_address',
+            inlineValue: true
+          },
           {
             text_color: '#006ce5',
             icon: 'fa-map-marker-alt',

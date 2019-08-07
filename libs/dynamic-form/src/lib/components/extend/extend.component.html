@@ -53,7 +53,7 @@
 
     <div class="shift" *ngFor="let shift of shifts; let i = index">
       <div class="d-flex align-items-center mb-2">
-        <span class="shift-date">{{shift.date}}</span><button type="button" class="btn btn-link" (click)="addTime(shift)">Add shift<fa-icon [icon]="['fas', 'plus-circle']"></fa-icon></button>
+        <span class="shift-date">{{shift.date}}</span><button type="button" class="btn btn-link d-flex align-items-center" (click)="addTime(shift)">Add shift<fa-icon class="ml-1" [icon]="['fas', 'plus-circle']"></fa-icon></button>
       </div>
 
       <div class="col">

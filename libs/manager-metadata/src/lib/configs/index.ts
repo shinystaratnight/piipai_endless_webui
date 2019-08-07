@@ -22,8 +22,6 @@ export * from './countries.metadata';
 export * from './regions.metadata';
 export * from './filestorages.metadata';
 export * from './extranetnavigations.metadata';
-export * from './workflows.metadata';
-export * from './workflownodes.metadata';
 export * from './workflowobjects.metadata';
 export * from './forms.metadata';
 export * from './formbuilders.metadata';

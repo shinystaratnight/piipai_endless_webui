@@ -320,6 +320,19 @@ $header-bg: #fdfdfd;
     }
   }
 
+  .time {
+    position: absolute;
+    right: 50px;
+    bottom: -30px;
+    padding: 0 6px;
+    font-size: 14px;
+    background-color: #fff;
+    border-radius: .25rem;
+    border: 1px solid rgba($gray, .5);
+    color: rgba($gray, .8);
+    z-index: 1;
+  }
+
   .user {
     position: relative;
 

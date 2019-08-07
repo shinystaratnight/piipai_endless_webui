@@ -21,6 +21,7 @@ import { DynamicFormModule } from '@webui/dynamic-form';
 import { SettingsService } from './settings.service';
 
 import { MyobResolver } from './myob/myob.resolver';
+import { Metadata } from './metadata.config';
 
 @NgModule({
   imports: [
@@ -31,7 +32,7 @@ import { MyobResolver } from './myob/myob.resolver';
     FormsModule,
     FontAwesomeModule,
     InfiniteScrollModule,
-    DynamicFormModule,
+    DynamicFormModule.forChild({ metadata: Metadata }),
     MasterGuideModule,
     QuillModule.forRoot(),
   ],
