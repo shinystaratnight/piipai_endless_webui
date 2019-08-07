@@ -124,7 +124,8 @@ export class ExtendComponent extends BasicElementComponent
     if (this.config.formData) {
       this.formSubscription = this.config.formData.subscribe((data) => {
         this.formData = data.data;
-        this.autoFillData = this.formData.last_fullfilled;
+        const { last_fullfilled } = this.formData;
+        this.autoFillData = last_fullfilled.length ? [last_fullfilled[0]] : last_fullfilled;
 
         if (this.autoFillData) {
           this.availabilityCandidates = this.getAvailabilityCandidates(this.formData.available, this.autoFillData[0].candidates);

@@ -21,6 +21,7 @@ export interface User {
     is_primary: boolean;
     user: string;
     roles: Role[];
+    end_trial_date?: string;
   };
   currentRole: Role;
 }
