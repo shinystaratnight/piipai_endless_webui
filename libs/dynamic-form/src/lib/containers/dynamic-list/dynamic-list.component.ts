@@ -854,7 +854,8 @@ export class DynamicListComponent
             svg: element.svg,
             process: new Subject(),
             info: element.info,
-            styles: element.styles
+            styles: element.styles,
+            inlineValue: element.inlineValue
           };
           if (this.listStorage.hasTrackingInfo(el.id)) {
             obj.locationDataEmpty = !this.listStorage.getTrackingInfo(el.id);
