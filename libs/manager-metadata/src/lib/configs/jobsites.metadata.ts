@@ -342,7 +342,8 @@ const form = [
       address: 'address.__str__',
       title: 'short_name',
       updated_at: 'updated_at',
-      map: 'address'
+      map: 'address',
+      timezone: 'timezone'
     },
     type: 'info',
     key: 'id'

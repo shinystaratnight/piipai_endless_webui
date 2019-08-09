@@ -186,6 +186,13 @@
       </ng-container>
     </p>
 
+    <app-time
+      *ngIf="timezone"
+      [timezone]="timezone"
+      description="Time at jobsite:"
+      differMessage="Timezone at jobsite differs from Your timezone!">
+    </app-time>
+
     <p *ngIf="config && config.metadata['birthday']">
       <span class="description">Birthday:</span>&nbsp;
       <ng-container appFormElement

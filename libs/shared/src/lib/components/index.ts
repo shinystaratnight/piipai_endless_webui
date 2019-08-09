@@ -5,6 +5,7 @@ import { ToastComponent } from './toast/toast.component';
 import { CloseButtonComponent } from './close-button/close-button.component';
 import { BackLinkComponent } from './back-link/back-link.component';
 import { SiteLoaderCompoennt } from './site-loader/site-loader.component';
+import { TimeComponent } from './time/time.component';
 
 export * from './breadcrumb/breadcrumb.component';
 export * from './navigation/navigation.component';
@@ -18,5 +19,6 @@ export const components = [
   ToastComponent,
   CloseButtonComponent,
   BackLinkComponent,
-  SiteLoaderCompoennt
+  SiteLoaderCompoennt,
+  TimeComponent
 ];
