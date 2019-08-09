@@ -16,7 +16,7 @@
       </ng-container>
     </ul>
   </nav>
-  <div *ngIf="localTime && user" class="time">Local time: {{localTime}}</div>
+  <app-time *ngIf="user" class="time" description="Local time"></app-time>
   <div #userBlock class="user order-1" *ngIf="user">
     <div class="user-block">
       <div class="user-info d-xl-flex">

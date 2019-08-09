@@ -13,7 +13,7 @@ import {
 
 import { AuthService, NavigationService } from '@webui/core';
 import { User, Page, Role } from '@webui/data';
-import { getContactAvatar, getTimeInstance, isClient, isCandidate, isManager } from '@webui/utilities';
+import { getContactAvatar, isClient, isCandidate, isManager } from '@webui/utilities';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -52,8 +52,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   public picture: string;
   public contactAvatar: string;
   public urlPrefix = isClient() ? '/cl' : isCandidate() ? '/cd' : isManager ? '/mn' : '';
-  public localTime: string;
-  public intervalId: any;
 
   get pages(): Page[] {
     return this.navigationService.navigationList[this.currentRole];
@@ -68,10 +66,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit() {
     this.getUserInformation();
-
-    this.intervalId = setInterval(() => {
-      this.localTime = getTimeInstance()().format('HH:mm DD/MM/YYYY (UTCZ)');
-    }, 1000);
   }
 
   public ngAfterViewInit() {
@@ -95,12 +89,6 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.resizeSubscription) {
       this.resizeSubscription.unsubscribe();
     }
-
-    clearInterval(this.intervalId)
-  }
-
-  public formatDate(date) {
-    return getTimeInstance()(date, 'YYYY-MM-DD hh:mm:ss').format('YYYY/MM/DD');
   }
 
   public getUserInformation() {
