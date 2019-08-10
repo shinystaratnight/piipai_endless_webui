@@ -102,7 +102,13 @@ export class LoginComponent implements OnInit, OnDestroy {
           ];
 
           combineLatest(requests).subscribe(() => {
-            this.router.navigate([res.data.redirect_to || this.authService.getRedirectUrl()]);
+            if (res.data.redirect_to) {
+              const redirect = res.data.redirect_to.replace('/?', '?');
+
+              this.router.navigateByUrl(redirect);
+            } else {
+              this.router.navigate([this.authService.getRedirectUrl()]);
+            }
           });
         });
       },
