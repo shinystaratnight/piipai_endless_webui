@@ -20,9 +20,8 @@ export class TimeComponent implements OnInit, OnDestroy {
   private timeFormat = 'HH:mm DD/MM/YYYY (UTCZ)';
 
   ngOnInit() {
-    const localTime = getLocalTime().format(this.timeFormat);
-
     this.intervalId = setInterval(() => {
+      const localTime = getLocalTime().format(this.timeFormat);
       const momentTime = this.timezone ? getTimeByTomezone(this.timezone) : getLocalTime();
       this.time = momentTime.format(this.timeFormat);
 
