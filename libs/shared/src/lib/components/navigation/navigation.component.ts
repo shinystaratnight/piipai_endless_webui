@@ -13,7 +13,7 @@ import {
 
 import { AuthService, NavigationService } from '@webui/core';
 import { User, Page, Role } from '@webui/data';
-import { getContactAvatar, isClient, isCandidate, isManager } from '@webui/utilities';
+import { getContactAvatar, isClient, isCandidate, isManager, getTimeInstance } from '@webui/utilities';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -105,6 +105,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.greeting = `Welcome, Anonymous User`;
     }
+  }
+
+  public formatDate(date) {
+    return getTimeInstance()(date, 'YYYY-MM-DD hh:mm:ss').format('YYYY/MM/DD');
   }
 
   public checkCandidateRole(role) {
