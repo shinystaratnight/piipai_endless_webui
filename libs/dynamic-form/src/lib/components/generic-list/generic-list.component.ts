@@ -693,7 +693,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
       if (params[0] === list) {
         exist = true;
         if (params[1] === 'f') {
-          const name = params.slice(2).toString();
+          const name = params.slice(2).join('.');
           this.fs.paramsOfFilters = {
             param: name.slice(0, name.indexOf('-')),
             value: queryParams[el],

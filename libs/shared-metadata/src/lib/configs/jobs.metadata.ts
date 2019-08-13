@@ -1,14 +1,47 @@
-// import {
-//   yesterdayFormatDate,
-//   todayFormatDate,
-//   tomorrowFormatDate
-// } from '../helpers';
-
 import { getYesterday, getToday, getTommorrow } from '@webui/utilities';
+import { createFilter, Type } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
 
 const yesterdayFormatDate = getYesterday();
 const todayFormatDate = getToday().format();
 const tomorrowFormatDate = getTommorrow();
+
+const filter = {
+  shift_dates: createFilter(Type.Date, {
+    key: 'shift_dates.shift_date',
+    label: 'Shift start date',
+    yesterday: true,
+    today: true,
+    tomorrow: true
+  }),
+  jobsite: createFilter(Type.Relared, {
+    key: 'jobsite',
+    label: 'Jobsite',
+    endpoint: Endpoints.Jobsite
+  }),
+  position: createFilter(Type.Relared, {
+    key: 'position',
+    label: 'Skill',
+    endpoint: Endpoints.Skill
+  }),
+  provider_representative: createFilter(Type.Relared, {
+    key: 'provider_representative',
+    label: 'Provider representative',
+    endpoint: '/core/companycontacts/?master_company=current'
+  }),
+  active_states: createFilter(Type.Relared, {
+    key: 'active_states',
+    label: 'State',
+    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=hr.job',
+    display: ['name_after_activation', 'name_before_activation'],
+    parameter: 'number'
+  }),
+  customer_company: createFilter(Type.Relared, {
+    key: 'customer_company',
+    label: 'Client',
+    endpoint: Endpoints.Company
+  }),
+}
 
 const list = {
   list: {
@@ -157,93 +190,12 @@ const list = {
     search_enabled: true,
     editDisable: false,
     filters: [
-      {
-        list: [
-          {
-            label: 'Yesterday',
-            query: `shift_dates__shift_date_0=${yesterdayFormatDate}&shift_dates__shift_date_1=${yesterdayFormatDate}` //tslint:disable-line
-          },
-          {
-            label: 'Today',
-            query: `shift_dates__shift_date_0=${todayFormatDate}&shift_dates__shift_date_1=${todayFormatDate}` //tslint:disable-line
-          },
-          {
-            label: 'Tomorrow',
-            query: `shift_dates__shift_date_0=${tomorrowFormatDate}&shift_dates__shift_date_1=${tomorrowFormatDate}` //tslint:disable-line
-          }
-        ],
-        key: 'shift_dates.shift_date',
-        label: 'Shift start date',
-        type: 'date',
-        input: [
-          {
-            label: 'From',
-            query: 'shift_dates__shift_date_0'
-          },
-          {
-            label: 'To',
-            query: 'shift_dates__shift_date_1'
-          }
-        ]
-      },
-      {
-        key: 'jobsite',
-        label: 'Jobsite',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/hr/jobsites/',
-          key: 'id'
-        },
-        query: 'jobsite'
-      },
-      {
-        key: 'position',
-        label: 'Skill',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/skills/skills/',
-          key: 'id'
-        },
-        query: 'position'
-      },
-      {
-        key: 'provider_representative',
-        label: 'Provider representative',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint:
-            '/core/companycontacts/?master_company=current',
-          key: 'id'
-        },
-        query: 'provider_representative'
-      },
-      {
-        key: 'active_states',
-        label: 'State',
-        data: {
-          value: ['name_after_activation', 'name_before_activation'],
-          endpoint:
-            '/core/workflownodes/?company={company_settings.company}&content_type=hr.job', //tslint:disable-line
-          key: 'number'
-        },
-        query: 'active_states',
-        default: null,
-        type: 'related'
-      },
-      {
-        key: 'customer_company',
-        label: 'Client',
-        type: 'related',
-        data: {
-          value: '__str__',
-          endpoint: '/core/companies/',
-          key: 'id'
-        },
-        query: 'customer_company'
-      }
+      filter.shift_dates,
+      filter.jobsite,
+      filter.position,
+      filter.provider_representative,
+      filter.active_states,
+      filter.customer_company
     ]
   },
   fields: [
