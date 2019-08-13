@@ -357,7 +357,6 @@ export class WorkflowComponent implements OnInit, OnDestroy {
           company,
           workflow,
           system: 2,
-          hardlock: 'False'
         }
       }
     ];
