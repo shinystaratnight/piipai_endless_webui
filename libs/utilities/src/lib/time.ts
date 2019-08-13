@@ -13,6 +13,14 @@ export function getTimeInstance() {
   return moment;
 }
 
+export function getLocalTime() {
+  return moment();
+}
+
+export function getTimeByTomezone(timezone: string) {
+  return moment.tz(timezone);
+}
+
 export function setTimeZone(timezone: string) {
   moment.tz.setDefault(timezone);
 }

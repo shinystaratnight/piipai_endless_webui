@@ -1046,3 +1046,16 @@ iframe.send-sms {
 .form-element-content-actions .popover-body {
   min-width: 100px;
 }
+
+.f-size-12 {
+  font-size: 12px;
+}
+
+.hov-opacity {
+  opacity: .7;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+}

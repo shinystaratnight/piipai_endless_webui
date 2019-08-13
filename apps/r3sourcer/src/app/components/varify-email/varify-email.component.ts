@@ -43,11 +43,11 @@ export class VerifyEmailComponent implements OnInit {
                   this.router.navigate(['/cd/profile']);
                 }
 
-              }, 2000);
+              }, 4000);
             } else if (res.statusText) {
               setTimeout(() => {
                 this.ts.sendMessage(res.statusText, MessageType.error);
-              }, 2000);
+              }, 4000);
             }
 
             this.router.navigate(['']);
