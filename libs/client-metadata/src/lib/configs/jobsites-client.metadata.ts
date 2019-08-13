@@ -1,7 +1,5 @@
 import { getToday } from '@webui/utilities';
 
-// import { TimeService } from '@webui/shared';
-
 const list = {
   list: {
     list: 'jobsite',
@@ -332,17 +330,12 @@ const form = [
                 type: 'group',
                 children: [
                   {
-                    list: false,
                     endpoint: '/core/companycontacts/',
-                    read_only: false,
                     key: 'primary_contact',
                     templateOptions: {
                       label: 'Name',
-                      add: true,
-                      delete: false,
                       values: ['contact'],
                       type: 'related',
-                      edit: true,
                       display: '{contact.__str__}'
                     },
                     visibleMode: true,
@@ -353,7 +346,6 @@ const form = [
                     query: {
                       company: '{regular_company.id}'
                     },
-                    many: false
                   },
                   {
                     key: 'primary_contact.job_title',
@@ -398,21 +390,15 @@ const form = [
                 type: 'group',
                 children: [
                   {
-                    list: false,
                     endpoint: '/pricing/industries/',
                     read_only: true,
                     templateOptions: {
                       label: 'Industry',
-                      add: true,
-                      delete: false,
                       values: ['__str__'],
                       type: 'related',
-                      edit: true
                     },
-                    collapsed: false,
                     type: 'related',
                     key: 'industry',
-                    many: false
                   },
                   {
                     key: 'start_date',
@@ -442,24 +428,18 @@ const form = [
                 type: 'group',
                 children: [
                   {
-                    list: false,
                     endpoint: '/core/companycontacts/',
                     read_only: false,
                     key: 'portfolio_manager',
                     templateOptions: {
                       label: 'Name',
-                      add: false,
-                      delete: false,
                       values: ['__str__'],
                       type: 'related',
-                      edit: true
                     },
-                    collapsed: false,
                     type: 'related',
                     query: {
                       company: '{master_company.id}'
                     },
-                    many: false
                   },
                   {
                     key: 'portfolio_manager.job_title',
@@ -498,7 +478,6 @@ const form = [
           type: 'list',
           text: 'Jobs'
         },
-        collapsed: false,
         prefilled: {
           customer_representative: '{primary_contact.id}',
           jobsite: '{id}',
@@ -520,7 +499,6 @@ const form = [
           add_label: '+ Add',
           text: 'Notes'
         },
-        collapsed: false,
         prefilled: {
           object_id: '{id}',
           content_type: '{model_content_type}',
@@ -573,30 +551,21 @@ const form = [
     type: 'input',
     hide: true,
     templateOptions: {
-      required: false,
       label: 'Site short name',
       max: 63,
       type: 'text'
     },
-    read_only: false
   },
   {
-    list: false,
     endpoint: '/core/companies/',
-    read_only: false,
     hide: true,
     templateOptions: {
       label: 'Provider company',
-      add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'master_company',
-    many: false
   },
   {
     key: 'regular_company',
@@ -606,31 +575,23 @@ const form = [
     send: false,
     templateOptions: {
       label: 'Client',
-      add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true,
     },
     type: 'related',
   },
   {
-    list: false,
     endpoint: '/core/addresses/',
     read_only: false,
     hide: true,
     templateOptions: {
       label: 'Address',
       add: true,
-      delete: false,
       values: ['__str__'],
       type: 'address',
-      edit: true
     },
-    collapsed: false,
     type: 'address',
     key: 'address',
-    many: false
   }
 ];
 

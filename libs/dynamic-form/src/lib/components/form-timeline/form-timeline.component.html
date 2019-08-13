@@ -32,9 +32,12 @@
   </select>
 
   <app-info *ngIf="getState(currentState).state === 0" [description]="requirements"></app-info>
-  <button type="button" (click)="open(getState(currentState))" *ngIf="getState(currentState).state === 1" class="btn btn-sm badge badge-outline" [class.active]="saveProcess">
-    <fa-icon [icon]="['fas', 'check']" *ngIf="!saveProcess"></fa-icon>
-    <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
+  <button type="button" class="btn btn-sm d-flex align-items-center"
+    *ngIf="getState(currentState).state === 1"
+    [class.active]="saveProcess"
+    (click)="open(getState(currentState))">
+      <fa-icon class="f-size-10" icon="check" *ngIf="!saveProcess"></fa-icon>
+      <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
   </button>
 </div>
 
