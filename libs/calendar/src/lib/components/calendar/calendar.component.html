@@ -111,7 +111,7 @@
   </div>
   <div class="grid-row" *ngFor="let week of calendarData?.body">
     <ng-container *ngFor="let day of week; let last = last; let first = first">
-      <span *ngIf="!day.tooltip && calendarType !== 2" class="grid-item month-day"><span class="date" [class.today]="day.today">{{day.label}}</span></span>
+      <span *ngIf="!day.tooltip && calendarType !== 2" class="grid-item month-day"><span class="date" [class.current-date]="day.today">{{day.label}}</span></span>
 
       <span class="grid-item month-day"
         [class.available]="day.available === true"
@@ -120,7 +120,7 @@
         [ngbTooltip]="availabilityTooltip"
         [placement]="last ? 'left' : first ? 'right' : 'bottom'"
         *ngIf="!day.tooltip && calendarType === 2">
-          <span class="date" [class.today]="day.today">{{day.label}}</span>
+          <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 
           <ng-template #availabilityTooltip>
             <div class="shift-tooltip">
@@ -142,7 +142,7 @@
         (shown)="day.isOpen = true"
         (hidden)="day.isOpen = false">
 
-        <span class="date" [class.today]="day.today">{{day.label}}</span>
+        <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 
         <div class="shift-groups">
           <div *ngIf="day.tooltip[1].length" class="badge badge-success">{{day.tooltip[1].length}}</div>
@@ -338,7 +338,7 @@
         (event)="formEvent($event, c)"
         (errorForm)="formError($event)">
         <div class="text-center">
-          <button type="submit" class="btn big-btn btn-shadow btn-secondary bg-primary text-white button-save mt-3 mb-4" [disabled]="saveProcess">
+          <button type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4" [disabled]="saveProcess">
             Save
             <app-spinner *ngIf="saveProcess"></app-spinner>
           </button>

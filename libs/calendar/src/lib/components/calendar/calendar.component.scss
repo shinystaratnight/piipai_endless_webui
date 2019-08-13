@@ -213,7 +213,7 @@ app-datepicker {
   line-height: 1;
   opacity: .7;
 
-  &.today {
+  &.current-date {
     color: $brand-primary;
     opacity: 1;
   }

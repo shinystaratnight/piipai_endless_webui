@@ -305,13 +305,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     if (e.type === 'saveStart') {
       this.saveProcess = true;
     }
-    if (e.type === 'sendForm' && e.status === 'success') {
+    if (e.type === 'extend') {
       this.saveProcess = false;
       closeModal();
-
-      setTimeout(() => {
-        this.changeCalendar();
-      }, 1000);
+      this.changeCalendar();
     }
   }
 
