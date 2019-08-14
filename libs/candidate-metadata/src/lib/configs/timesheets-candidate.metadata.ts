@@ -326,7 +326,8 @@ const list = {
             styles: ['muted'],
             showIf: [
               { status: 7 },
-              'supervisor_approved_at'
+              'supervisor_approved_at',
+              { supervisor_modified_at: null }
             ]
           },
           {

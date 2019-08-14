@@ -29,8 +29,6 @@ import { getElementFromMetadata, removeValue,  } from '../../helpers';
 
 import { Endpoints } from '@webui/data';
 
-// import * as moment from 'moment-timezone';
-
 export interface HiddenFields {
   elements: Field[];
   keys: string[];
@@ -1072,9 +1070,15 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
                   )
                   .subscribe(() => {
                     this.toastrService.sendMessage(message, 'success');
+                    this.event.emit({
+                      type: 'extend'
+                    });
                   });
                 } else {
                   this.toastrService.sendMessage(message, 'success');
+                  this.event.emit({
+                    type: 'extend'
+                  });
                 }
               });
             });
@@ -1091,6 +1095,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
   public submitForm(data) {
     if (data.job_shift) {
+      this.event.emit({
+        type: 'saveStart'
+      });
       this.extendJob(data);
       return;
     }

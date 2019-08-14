@@ -97,25 +97,29 @@
           Filter
         </button>
 
-        <div ngbDropdown placement="bottom-right" class="sort-dropdown text-right">
-            <label ngbDropdownToggle class="mb-0">
-              Sort by
-            </label>
-            <fa-icon class="sort-icon"
-              [icon]="['fas', 'chevron-down']">
-            </fa-icon>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <div *ngFor="let field of config.list.columns">
-                <span *ngIf="field.sort" class="dropdown-item" [class.activated]="field.sorted"
-                  (click)="sortedField = field; sorting(field, field.sorted === 'desc' ? 'asc' : 'desc')">
+        <!-- TODO: fix dropdown -->
+        <!-- <div ngbDropdown placement="bottom-right" class="sort-dropdown text-right">
+          <label ngbDropdownToggle class="mb-0">
+            Sort by
+          </label>
+          <fa-icon class="sort-icon"
+            icon="chevron-down">
+          </fa-icon>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <div *ngFor="let field of config.list.columns">
+              <span ngbDropdownItem
+                class="dropdown-item"
+                [class.activated]="field.sorted"
+                *ngIf="field.sort"
+                (click)="sorting(field, field.sorted === 'desc' ? 'asc' : 'desc', $event)">
                   {{field.label}}
                   <fa-icon class="sort-icon"
                     [icon]="['fas', field.sorted === 'asc' ? 'chevron-up' : 'chevron-down']">
                   </fa-icon>
-                </span>
-              </div>
+              </span>
             </div>
           </div>
+        </div> -->
       </div>
 
       <ng-container *ngIf="identifyDevice()">

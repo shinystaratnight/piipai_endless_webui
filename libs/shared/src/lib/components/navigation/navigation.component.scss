@@ -187,6 +187,10 @@ $header-bg: #fdfdfd;
 
             .navigation-list-nested fa-icon {
               top: 11px;
+
+              @include media-breakpoint-down('md') {
+                top: 6px;
+              }
             }
           }
 
@@ -277,7 +281,7 @@ $header-bg: #fdfdfd;
         display: none;
 
         position: absolute;
-        top: calc(50% - 10px);
+        top: calc(50% - 9px);
         left: 9px;
 
         font-size: 6px !important;
@@ -328,6 +332,10 @@ $header-bg: #fdfdfd;
     border-radius: .25rem;
     border: 1px solid rgba($gray, .5);
     z-index: 1;
+
+    @include media-breakpoint-down('sm') {
+      display: none;
+    }
   }
 
   .user {
