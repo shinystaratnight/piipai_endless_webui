@@ -73,7 +73,7 @@ jobs:
           name: Deploy Staging Over SSH
           command: |
             ls /home/circleci/endless_webui/dist
-            ssh ubuntu@ec2-54-66-252-95.ap-southeast-2.compute.amazonaws.com "cd endless_project/webui-app/ && rm -rf dist/*"
+            ssh ubuntu@ec2-54-66-252-95.ap-southeast-2.compute.amazonaws.com "cd endless_project/webui-app/ && rm -rf dist/* && mkdir dist"
             scp -r /home/circleci/endless_webui/dist/* ubuntu@ec2-54-66-252-95.ap-southeast-2.compute.amazonaws.com:endless_project/webui-app/dist
             ssh ubuntu@ec2-54-66-252-95.ap-southeast-2.compute.amazonaws.com "docker restart endlessproject_nginx_1"
 
@@ -93,7 +93,7 @@ jobs:
           name: Deploy Production Over SSH
           command: |
             ls /home/circleci/endless_webui/dist
-            ssh ubuntu@ec2-13-237-8-87.ap-southeast-2.compute.amazonaws.com "cd endless_project/webui-app/ && rm -rf dist/*"
+            ssh ubuntu@ec2-13-237-8-87.ap-southeast-2.compute.amazonaws.com "cd endless_project/webui-app/ && rm -rf dist/* && mkdir dist"
             scp -r /home/circleci/endless_webui/dist/* ubuntu@ec2-13-237-8-87.ap-southeast-2.compute.amazonaws.com:endless_project/webui-app/dist
             ssh ubuntu@ec2-13-237-8-87.ap-southeast-2.compute.amazonaws.com "docker restart endlessproject_nginx_1"
 
