@@ -24,7 +24,7 @@
       (click)="openDropdown()">
     </fa-icon>
 
-    <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown" (change)="setDate($event)" [range]="customRange"></app-datepicker>
+    <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown" (update)="setDate($event)" [range]="customRange"></app-datepicker>
   </div>
 </div>
 
