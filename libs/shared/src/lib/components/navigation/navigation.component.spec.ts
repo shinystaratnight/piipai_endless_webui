@@ -1,12 +1,13 @@
-import { NO_ERRORS_SCHEMA, Component } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import {
   ComponentFixture,
   TestBed,
-  inject,
-  async } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
+  async
+} from '@angular/core/testing';
 
-import { NavigationService, Page, UserService } from '../../../services';
+import { of } from 'rxjs';
+
+import { NavigationService, AuthService } from '@webui/core';
 
 import { NavigationComponent } from './navigation.component';
 
@@ -14,28 +15,19 @@ describe('NavigationComponent', () => {
 
   let comp: NavigationComponent;
   let fixture: ComponentFixture<NavigationComponent>;
-  let pages: Page[];
-  let response: any;
 
-  let mockNavigationService = {
+  const mockNavigationService = {
     getPages() {
-      return Observable.of(pages);
+      return of([]);
     }
   };
-  let mockUserService = {
-    getUserData() {
-      return Observable.of(response);
-    },
-    logout() {
-      return true;
-    }
-  };
+  const mockAuthService = {};
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [NavigationComponent],
       providers: [
-        { provide: UserService, useValue: mockUserService },
+        { provide: AuthService, useValue: mockAuthService },
         { provide: NavigationService, useValue: mockNavigationService }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -79,20 +71,23 @@ describe('NavigationComponent', () => {
 
     it('should udate user information', () => {
           comp.user = <any> {
+            currentRole: {},
             data: {
               contact: {
                 __str__: 'Mr. Tom Smith'
               }
             }
           };
+          spyOn(comp, 'checkCandidateRole');
           comp.getUserInformation();
+          expect(comp.checkCandidateRole).toHaveBeenCalled();
           expect(comp.greeting).toEqual(`Welcome, ${comp.user.data.contact.__str__}`);
     });
   });
 
   describe('hideUserBlock', () => {
     it('should hide user block', () => {
-      let event = {
+      const event = {
         preventDefault() {
           return true;
         },
@@ -113,7 +108,7 @@ describe('NavigationComponent', () => {
 
   describe('showNavigation', () => {
     it('should show navigation', () => {
-      let event = {
+      const event = {
         preventDefault() {
           return true;
         },
@@ -132,19 +127,10 @@ describe('NavigationComponent', () => {
     });
   });
 
-  describe('logout method', () => {
-    it('should call logout method of UserService',
-      async(inject([UserService], (userService: UserService) => {
-        spyOn(userService, 'logout');
-        comp.logOut();
-        expect(userService.logout).toHaveBeenCalled();
-    })));
-  });
-
   describe('handleClick method', () => {
     it('should do not change proerty', () => {
-      let component = {};
-      let event = {
+      const component = {};
+      const event = {
         target: component
       };
       comp.nav = {
@@ -158,8 +144,8 @@ describe('NavigationComponent', () => {
     });
 
     it('should change isCollapsed property', () => {
-      let component = {};
-      let event = {
+      const component = {};
+      const event = {
         target: component
       };
       comp.nav = {
@@ -171,8 +157,8 @@ describe('NavigationComponent', () => {
     });
 
     it('should change hideUserMenu property', () => {
-      let component = {};
-      let event = {
+      const component = {};
+      const event = {
         target: component
       };
       comp.userBlock = {
