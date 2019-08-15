@@ -1,11 +1,11 @@
 import {
-  address,
+  // address,
   candidatecontacts,
   candidatepool,
   contacts,
   companies,
   companycontacts,
-  jobs,
+  // jobs,
   jobsites,
   ratecoefficients,
   industries,
@@ -50,7 +50,7 @@ import {
   companyrels,
   companytradereferences,
   contactunavailabilities,
-  notes,
+  // notes,
   orders,
   shiftdates,
   joboffers,
@@ -109,7 +109,10 @@ import {
   candidateevaluations,
   passwordchange,
   workflows,
-  workflownodes
+  workflownodes,
+  jobs,
+  notes,
+  address,
 } from '@webui/shared-metadata';
 
 import { Endpoints } from '@webui/data';

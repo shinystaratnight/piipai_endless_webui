@@ -55,7 +55,7 @@ export class ExtendComponent extends BasicElementComponent
   public extendCandidates: boolean;
   public autofill: any;
   public removeDate: BehaviorSubject<string> = new BehaviorSubject('');
-  public availabilityCandidates: any;
+  public availabilityCandidates: any[] = [];
   public autocompleteProcess: boolean;
   public showAvailability: boolean;
 
@@ -124,7 +124,9 @@ export class ExtendComponent extends BasicElementComponent
       this.formSubscription = this.config.formData.subscribe((data) => {
         this.formData = data.data;
         const { last_fullfilled } = this.formData;
-        this.autoFillData = last_fullfilled.length ? [last_fullfilled[0]] : last_fullfilled;
+        if (last_fullfilled) {
+          this.autoFillData = last_fullfilled.length ? [last_fullfilled[0]] : last_fullfilled;
+        }
 
         if (this.autoFillData) {
           this.availabilityCandidates = this.getAvailabilityCandidates(this.formData.available, this.autoFillData[0].candidates);

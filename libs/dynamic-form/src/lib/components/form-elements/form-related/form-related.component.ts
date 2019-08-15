@@ -502,7 +502,9 @@ export class FormRelatedComponent extends BasicElementComponent
                     if (industries) {
                       const industry = industries.find((el) => el.default);
 
-                      id = industry.id;
+                      if (industry) {
+                        id = industry.id;
+                      }
                     }
                   }
                 }  else {
