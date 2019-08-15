@@ -11,12 +11,12 @@ import {
   OnDestroy,
 } from '@angular/core';
 
+import { Subscription, fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
 import { AuthService, NavigationService } from '@webui/core';
 import { User, Page, Role } from '@webui/data';
 import { getContactAvatar, isClient, isCandidate, isManager, getTimeInstance } from '@webui/utilities';
-
-import { Subscription, fromEvent } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navigation',
@@ -35,7 +35,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('modal', { static: false }) public modal: any;
 
   @Input() public user: User;
-  @Input() public logo: string;
+  @Input() public logo = '/assets/img/new-software.svg';
 
   @Output() public update: EventEmitter<Role> = new EventEmitter();
   @Output() public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
