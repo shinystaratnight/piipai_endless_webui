@@ -155,7 +155,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
         autocomplete = target.parentElement.nextElementSibling;
       }
       setTimeout(() => {
-        if (!this.multiple) {
+        if (!this.multiple && autocomplete) {
           autocomplete.children[1].scrollTo({ top: 0 });
           autocomplete.children[0].focus();
         }
