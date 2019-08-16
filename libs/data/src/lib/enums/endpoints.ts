@@ -76,6 +76,7 @@ export enum Endpoints {
   Workflow = '/core/workflows/',
   WorkflowNode = '/core/workflownodes/',
   WorkflowObject = '/core/workflowobjects/',
+  Timeline = '/core/workflownodes/timeline/',
 
   // Dynamic form
   Form = '/core/forms/',
@@ -92,6 +93,7 @@ export enum Endpoints {
   AcceptenceTestQuestion = '/acceptance-tests/acceptancetestquestions/',
   AcceptenceTestAnswers = '/acceptance-tests/acceptancetestanswers/',
   AcceptenceTestSkill = '/acceptance-tests/acceptancetestskills/',
+  AcceptenceTestPassAnswers = '/acceptance-tests/workflowobjectanswers/',
 
   // Rate coefficient
   RateCoefficient = '/pricing/ratecoefficients/',

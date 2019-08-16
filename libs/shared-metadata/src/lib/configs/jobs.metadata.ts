@@ -1421,17 +1421,6 @@ const formadd = [
             read_only: false
           },
           {
-            key: 'work_start_date',
-            default: todayFormatDate,
-            type: 'datepicker',
-            templateOptions: {
-              required: false,
-              label: 'Work Start Date',
-              type: 'date'
-            },
-            read_only: false
-          },
-          {
             key: 'default_shift_starting_time',
             default: '07:00:00',
             type: 'datepicker',
@@ -1443,29 +1432,15 @@ const formadd = [
             read_only: false
           },
           {
-            key: 'hourly_rate_default',
-            type: 'input',
-            attributes: {
-              max: '{position.upper_rate_limit}',
-              min: '{position.lower_rate_limit}'
-            },
+            type: 'button',
+            key: 'selectDates',
+            color: 'primary',
             templateOptions: {
-              label: 'Candidate rate override',
-              type: 'number',
-              text: '${hourly_rate_default}/h'
+              text: 'Select dates',
+              type: 'button',
+              action: 'selectDates'
             }
           },
-          {
-            key: 'notes',
-            type: 'textarea',
-            templateOptions: {
-              required: false,
-              label: 'Notes',
-              type: 'textarea',
-              description: 'Job Description/Instructions for candidate'
-            },
-            read_only: false
-          }
         ]
       }
     ]

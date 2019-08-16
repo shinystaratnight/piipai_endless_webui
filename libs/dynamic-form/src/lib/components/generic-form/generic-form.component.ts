@@ -17,17 +17,14 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
 
-import { GenericFormService, FormService, FormMode, ActionService } from '../../services/';
 import { UserService, SiteSettingsService, AuthService, CompanyPurposeService, Purpose } from '@webui/core';
-
 import { ToastService, MessageType } from '@webui/core';
-
-import { Field } from '@webui/data';
-
+import { Field, Endpoints } from '@webui/data';
 import { FormatString, isCandidate, isMobile, getTimeInstance } from '@webui/utilities';
-import { getElementFromMetadata, removeValue,  } from '../../helpers';
 
-import { Endpoints } from '@webui/data';
+import { GenericFormService, FormService, FormMode, ActionService, TimelineService, TimelineAction } from '../../services';
+import { getElementFromMetadata, removeValue,  } from '../../helpers';
+import { SelectDatesModalComponent } from '../../modals';
 
 export interface HiddenFields {
   elements: Field[];
@@ -55,7 +52,7 @@ interface UpdateDataInfo {
   selector: 'app-generic-form',
   templateUrl: './generic-form.component.html',
   styleUrls: ['./generic-form.component.scss'],
-  providers: [ActionService]
+  providers: [ActionService, TimelineService]
 })
 export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   @Input()
@@ -140,12 +137,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     observers: []
   };
   public workflowEndpoints = {
-    state: `/core/workflownodes/`,
+    state: Endpoints.WorkflowNode,
     app: `/apps/`
   };
   public pictures = {
-    '/core/contacts/': '__str__',
-    '/candidate/candidatecontacts/': '__str__'
+    [Endpoints.Contact]: '__str__',
+    [Endpoints.CandidateContact]: '__str__'
   };
   public replaceEndpoints = {
     [Endpoints.JobsiteClient]: Endpoints.Jobsite
@@ -168,10 +165,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public relatedObjects: any[] = [];
   public formGroup: FormGroup;
   public formName: string;
+  public selectedDates: string[];
 
-  public timelineSubject: Subject<any>;
-
-  private subscriptions: Subscription[];
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private service: GenericFormService,
@@ -182,10 +178,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     private settingsService: SiteSettingsService,
     private router: Router,
     private modal: NgbModal,
-    private purposeService: CompanyPurposeService
+    private purposeService: CompanyPurposeService,
+    private timelineService: TimelineService
   ) {
-    this.subscriptions = [];
-
     this.updateDataAfterSendForm = {
       config: [],
       requests: []
@@ -197,7 +192,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public ngOnInit() {
-    if (this.endpoint === '/hr/timesheets/') {
+    if (this.endpoint === Endpoints.Timesheet) {
       this.formName = 'Timesheets';
     }
 
@@ -313,10 +308,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     this.formData = new BehaviorSubject({ data: {} });
     this.modeBehaviorSubject = new BehaviorSubject(this.mode);
 
-    const timelineSubject = new Subject();
-    this.timelineSubject = timelineSubject;
     this.subscriptions.push(
-      timelineSubject.subscribe(
+      this.timelineService.action$.subscribe(
         (timeline) => this.checkTimeline(timeline)
       )
     );
@@ -328,12 +321,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     };
 
     return (el: Field) => {
-      if (
-        el.key === 'timeline' || el.type === 'list' || el.type === 'related' ||
-        (el.endpoint && el.endpoint === '/core/workflowobjects/')
-      ) {
-        el.timelineSubject = timelineSubject;
-      }
+      // if (
+      //   el.key === 'timeline' || el.type === 'list' || el.type === 'related' ||
+      //   (el.endpoint && el.endpoint === '/core/workflowobjects/')
+      // ) {
+      //   el.timelineSubject = this.timelineService.action$;
+      // }
 
       if (this.purposeService.purpose === Purpose.SelfUse) {
         const { templateOptions } = el;
@@ -523,11 +516,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public parseCheckObject(data) {
-    if (
-      this.endpoint === '/core/companycontacts/' ||
-      this.endpoint === '/candidate/candidatecontacts/' ||
-      this.endpoint === '/hr/jobs/'
-    ) {
+    const endpoints = [Endpoints.CompanyContact, Endpoints.CandidateContact, Endpoints.Job];
+
+    if (endpoints.includes(this.endpoint as Endpoints)) {
       const keys = Object.keys(this.checkObject);
       if (keys.length) {
         const formatString = new FormatString();
@@ -564,56 +555,34 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           this.checkObject[key].cache = query;
 
           if (send) {
-            this.service
-              .getByQuery(
-                this.checkObject[key].endpoint,
-                '?' +
-                  Object.keys(query)
-                    .map((param) => {
-                      if (Array.isArray(query[param])) {
-                        let newQuery = '';
-                        query[param].forEach((el) => {
-                          newQuery += `${param}=${el}&`;
-                        });
-
-                        return newQuery;
-                      }
-
-                      return `${param}=${query[param]}`;
-                    })
-                    .join('&')
-              )
+            this.service.get(this.checkObject[key].endpoint, query)
               .subscribe((res) => {
                 if (res.count) {
-                  const config = this.checkObject[key];
+                  const error = this.checkObject[key].error;
+                  const obj = res.results[0];
                   let errors;
-                  if (this.endpoint === '/core/companycontacts/') {
+                  if (this.endpoint === Endpoints.CompanyContact) {
                     errors = {
                       [key]: this.generateCustomError(
-                        res,
-                        config,
-                        '/core/companycontacts/',
-                        'company_contact'
+                        obj['company_contact'],
+                        error,
+                        '/mn/core/companycontacts/',
                       )
                     };
-                  } else if (
-                    this.endpoint ===
-                    '/candidate/candidatecontacts/'
-                  ) {
+                  } else if (this.endpoint === Endpoints.CandidateContact) {
                     errors = {
                       [key]: this.generateCustomError(
-                        res,
-                        config,
-                        '/candidate/candidatecontacts/'
+                        obj,
+                        error,
+                        '/mn/candidate/candidatecontacts/'
                       )
                     };
-                  } else if (this.endpoint === '/hr/jobs/') {
+                  } else if (this.endpoint === Endpoints.Job) {
                     errors = {
                       non_field_errors: this.generateCustomError(
-                        res,
-                        config,
-                        '/hr/jobs/',
-                        '',
+                        obj,
+                        error,
+                        '/mn/hr/jobs/',
                         true
                       )
                     };
@@ -639,22 +608,14 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     }
   }
 
-  public generateCustomError(
-    response: any,
-    field?: any,
-    path?: string,
-    property?: string,
-    nonField?: boolean
-  ) {
-    const object = property
-      ? response.results[0][property]
-      : response.results[0];
-
+  public generateCustomError(data: any, error?: any, path?: string, nonField?: boolean) {
+    const endpoint = `${this.endpoint}${data.id}/`;
+    const link = `${path || this.path}${data.id}/change`
     const errors = [
-      field.error,
-      object.__str__,
-      `${this.path || path}${object.id}/change`,
-      { ...object, endpoint: this.endpoint + object.id + '/' }
+      error,
+      data.__str__,
+      link,
+      { ...data, endpoint }
     ];
 
     if (nonField) {
@@ -720,7 +681,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     }
 
     let endp = '';
-    if (endpoint === '/candidate/candidatecontacts/pool/') {
+    if (endpoint === Endpoints.CandidatePool) {
       endp = id ? `/candidate/candidatecontacts/${id}/pool_detail/` : endpoint;
     } else {
       endp = id ? `${endpoint}${id}/` : endpoint;
@@ -774,7 +735,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       }
       if (el.type === 'input') {
         if (el.templateOptions && el.templateOptions.type === 'picture') {
-          el.companyContact = this.endpoint === '/core/companies/';
+          el.companyContact = this.endpoint === Endpoints.Company;
           if (this.pictures[this.endpoint]) {
             el.contactName = data['__str__'];
           }
@@ -1007,7 +968,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     return target.indexOf(value) > -1;
   }
 
-  public extendJob(data) {
+  public extendJob(data, sendEvent = true) {
     const shiftDatesRequests = {};
 
     data.job_shift.forEach((shiftDate) => {
@@ -1019,10 +980,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       const shifts = shiftDate.data.value;
 
       shiftDatesRequests[shiftDate.date] = {
-        shiftDate: this.service.submitForm(
-          '/hr/shiftdates/',
-          body
-        ),
+        shiftDate: this.service.submitForm(Endpoints.ShiftDate, body),
         shifts
       };
     });
@@ -1045,7 +1003,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
             };
 
             shiftsRequests.requests.push(
-              this.service.submitForm('/hr/shifts/', body)
+              this.service.submitForm(Endpoints.Shift, body)
             );
           });
 
@@ -1087,13 +1045,54 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       });
     }
 
-    this.event.emit({
-      type: 'sendForm',
-      status: 'success'
+    if (sendEvent) {
+      this.event.emit({
+        type: 'sendForm',
+        status: 'success'
+      });
+    }
+  }
+
+  public getJobStartDate() {
+    if (this.selectedDates) {
+      return this.selectedDates.reduce((prev, next) => prev > next ? next : prev);
+    }
+  }
+
+  public generateDataForJobCreation(data) {
+    const time = data.default_shift_starting_time;
+    const workers = data.workers;
+    const skill = data.position;
+    const job_shift = [];
+
+    this.selectedDates.forEach((date) => {
+      const shift = {
+        date,
+        data: {
+          value: [
+            {
+              time,
+              workers
+            }
+          ]
+        }
+      };
+
+      job_shift.push(shift);
     });
+
+    return {
+      id: data.id,
+      skill,
+      job_shift,
+    }
   }
 
   public submitForm(data) {
+    if (this.endpoint === Endpoints.Job && !this.id) {
+      data['work_start_date'] = this.getJobStartDate();
+    }
+
     if (data.job_shift) {
       this.event.emit({
         type: 'saveStart'
@@ -1257,9 +1256,48 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     }
   }
 
+  public confirmJob(id: string, response) {
+    const query = {
+      model: 'hr.job',
+      object_id: id
+    };
+
+    this.timelineService.getTimeline(query)
+      .subscribe((timeline) => {
+        const confirmState = timeline.find((state) => state.number === 20);
+
+        if (confirmState) {
+          this.timelineService.activateState(id, confirmState.id, true)
+            .pipe(finalize(() => {
+              this.event.emit({
+                type: 'sendForm',
+                data: { ...response, ...this.formData.value.data },
+                status: 'success'
+              });
+            }))
+            .subscribe(() => {
+              const shifts = this.generateDataForJobCreation(response);
+
+              this.extendJob(shifts, false);
+            });
+        }
+      }, () => {
+        this.event.emit({
+          type: 'sendForm',
+          data: { ...response, ...this.formData.value.data },
+          status: 'success'
+        });
+      });
+  }
+
   public responseHandler(response: any, sendData: any) {
     this.formService.getForm(this.formId).setSaveProcess(false);
     this.parseResponse(response);
+
+    if (this.endpoint === Endpoints.Job && !this.id && this.selectedDates && this.selectedDates.length) {
+      this.confirmJob(response.id, response);
+      return;
+    }
 
     if (response.message) {
       setTimeout(() => {
@@ -1267,9 +1305,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       }, 500);
     }
 
-    if (this.timelineSubject) {
-      this.timelineSubject.next('reset');
-    }
+    this.timelineService.emit(TimelineAction.Reset);
 
     if (this.updateDataAfterSendForm.requests.length) {
       const subscription = forkJoin(
@@ -1291,7 +1327,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     } else {
       this.event.emit({
         type: 'sendForm',
-        data: Object.assign(response, this.formData.value.data),
+        data: { ...response, ...this.formData.value.data },
         status: 'success'
       });
     }
@@ -1419,16 +1455,16 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           (response: any) => this.parseResponse(response),
           (err: any) => this.parseError(err)
         );
-    } else if (event.type === 'update' && event.el.key === 'timeline') {
-      this.getRalatedData(
-        this.metadata,
-        event.el.key,
-        event.el.endpoint,
-        null,
-        event.query,
-        undefined,
-        false
-      );
+    // } else if (event.type === 'update' && event.el.key === 'timeline') {
+    //   this.getRalatedData(
+    //     this.metadata,
+    //     event.el.key,
+    //     event.el.endpoint,
+    //     null,
+    //     event.query,
+    //     undefined,
+    //     false
+    //   );
     } else if (event.type === 'address') {
       this.parseAddress(event.value, event.el);
     }
@@ -1470,7 +1506,28 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       this.buyProfile();
     }
 
+    if (e.value === 'selectDates') {
+      this.selectDates();
+    }
+
     this.buttonAction.emit(e);
+  }
+
+  public selectDates() {
+    this.modalRef = this.modal.open(SelectDatesModalComponent, { size: 'lg', windowClass: 'extend-modal' });
+    this.modalRef.result
+      .then((dates) => {
+        this.saveDates(dates);
+      })
+      .catch(() => {});
+  }
+
+  public saveDates(dates: string[]) {
+    const button = getElementFromMetadata(this.metadata, 'selectDates');
+    this.selectedDates = dates;
+
+    button.templateOptions.additionalDescription = 'Selected dates: ' + dates.join(', ');
+    this.updateMetadata(this.metadata, 'selectDates');
   }
 
   public buyProfile() {
@@ -1619,7 +1676,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         );
         if (
           key === 'rules' &&
-          this.endpoint === '/core/workflownodes/'
+          this.endpoint === Endpoints.WorkflowNode
         ) {
           if (response) {
             const rules = getElementFromMetadata(metadata, 'rules');
@@ -1893,7 +1950,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public updateWorkflowData(event) {
-    if (this.endpoint === '/core/workflownodes/') {
+    if (this.endpoint === Endpoints.WorkflowNode) {
       if (event && event.el) {
         if (
           event.el.key === 'workflow' ||
@@ -2081,7 +2138,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
   public checkTimeline(timeline) {
     if (this.endpoint === Endpoints.Job) {
-      if (timeline === 'reset') {
+      if (timeline === TimelineAction.Reset) {
         this.event.emit({
           type: 'sendForm',
           data: Object.assign(this.formData.value.data),
@@ -2114,7 +2171,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     }
 
     if (this.endpoint === Endpoints.CandidateContact) {
-      if (timeline === 'reset') {
+      if (timeline === TimelineAction.Reset) {
         this.event.emit({
           type: 'sendForm',
           data: Object.assign(this.formData.value.data),

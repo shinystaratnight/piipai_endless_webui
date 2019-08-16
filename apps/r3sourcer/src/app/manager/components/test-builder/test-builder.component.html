@@ -7,8 +7,8 @@
   <div class="questions-item" *ngFor="let item of questions; let index = index">
     <h6 class="description description-title">Question #{{index + 1}}</h6>
 
-    <fa-icon [icon]="['fas', 'trash']" class="text-danger" (click)="deleteQuestion(getId(item), questions, index)"></fa-icon>
-    <fa-icon [icon]="['fas', 'pencil-alt']" class="text-warning ml-2" (click)="editQuestion(item)"></fa-icon>
+    <fa-icon icon="trash" class="text-danger hov-opacity" (click)="deleteQuestion(getId(item), questions, index)"></fa-icon>
+    <fa-icon icon="pencil-alt" class="text-warning hov-opacity ml-2" (click)="editQuestion(item)"></fa-icon>
 
     <ng-container *ngTemplateOutlet="question; context: {config: item, index: index}"></ng-container>
   </div>
@@ -36,8 +36,8 @@
     <div class="answers-item" *ngFor="let item of answers[getId(config)]; let index = index">
       <h6 class="description description-title">Answer #{{index + 1}}</h6>
 
-      <fa-icon [icon]="['fas', 'trash']" class="text-danger" (click)="deleteAnswer(getId(item), answers[getId(config)], index)"></fa-icon>
-      <fa-icon [icon]="['fas', 'pencil-alt']" class="text-warning ml-2" (click)="editAnswer(item)"></fa-icon>
+      <fa-icon icon="trash" class="text-danger hov-opacity" (click)="deleteAnswer(getId(item), answers[getId(config)], index)"></fa-icon>
+      <fa-icon icon="pencil-alt" class="text-warning hov-opacity ml-2" (click)="editAnswer(item)"></fa-icon>
 
       <ng-container *ngTemplateOutlet="answer; context: {config: item, index: index, id: getId(config)}"></ng-container>
     </div>
