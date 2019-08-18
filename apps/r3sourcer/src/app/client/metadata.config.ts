@@ -8,7 +8,10 @@ import {
 } from '@webui/client-metadata';
 
 import {
-  passwordchange
+  passwordchange,
+  jobs,
+  notes,
+  address
 } from '@webui/shared-metadata';
 
 export class Metadata {
@@ -17,4 +20,8 @@ export class Metadata {
   'evaluate' = evaluate;
   'not_agree' = notAgree;
   [Endpoints.ContactChangePassword] = passwordchange;
-  [Endpoints.JobsiteClient] = jobsitesclient;}
+  [Endpoints.JobsiteClient] = jobsitesclient;
+  [Endpoints.Job] = jobs;
+  [Endpoints.Note] = notes;
+  [Endpoints.Address] = address;
+}

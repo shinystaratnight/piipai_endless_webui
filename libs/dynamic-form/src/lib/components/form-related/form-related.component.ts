@@ -8,7 +8,8 @@ import {
   ChangeDetectorRef,
   AfterViewChecked,
   ElementRef,
-  HostListener
+  HostListener,
+  Optional
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -16,20 +17,22 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subscription, BehaviorSubject, Subject } from 'rxjs';
-
 import { debounceTime, skip, filter } from 'rxjs/operators';
 
-import { GenericFormService } from '../../services';
-import { CheckPermissionService, ToastService, MessageType } from '@webui/core';
 import {
   NavigationService,
   AuthService,
   UserService,
-  SiteSettingsService
+  SiteSettingsService,
+  CheckPermissionService,
+  ToastService,
+  MessageType
 } from '@webui/core';
-import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { Field, Endpoints } from '@webui/data';
 import { FormatString, isManager, isClient, isCandidate } from '@webui/utilities';
+
+import { GenericFormService, TimelineService, TimelineAction } from '../../services';
+import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 export interface RelatedObject {
   id: string;
@@ -52,22 +55,15 @@ export interface CustomField {
   templateUrl: './form-related.component.html',
   styleUrls: ['./form-related.component.scss']
 })
-export class FormRelatedComponent extends BasicElementComponent
-  implements OnInit, OnDestroy, AfterViewChecked {
-  @ViewChild('search', { static: false })
-  public search;
+export class FormRelatedComponent extends BasicElementComponent implements OnInit, OnDestroy, AfterViewChecked {
+  @ViewChild('search', { static: false }) search;
+  @ViewChild('searchElement', { static: false }) searchElement;
+  @ViewChild('modal', { static: false }) modal;
+  @ViewChild('tableWrapper', { static: false }) tableWrapper: any;
+  @ViewChild('messageDetail', { static: false }) messageDetail: any;
+  @ViewChild('autocomplete', { static: false }) elementRef: ElementRef;
 
-  @ViewChild('searchElement', { static: false })
-  public searchElement;
-
-  @ViewChild('modal', { static: false })
-  public modal;
-
-  @ViewChild('tableWrapper', { static: false })
-  public tableWrapper: any;
-
-  @ViewChild('messageDetail', { static: false })
-  public messageDetail: any;
+  @Output() event: EventEmitter<any> = new EventEmitter();
 
   public config: Field;
   public group: FormGroup;
@@ -118,7 +114,7 @@ export class FormRelatedComponent extends BasicElementComponent
   public autocompleteDisplay: boolean;
   public currentQuery: string;
   public currentId: string;
-  public update: Subject<any>;
+  public update: Subject<any> = new Subject();
   public manual: boolean;
   public hideDetail: boolean;
   public currentUser: boolean;
@@ -127,14 +123,8 @@ export class FormRelatedComponent extends BasicElementComponent
   public fieldDisabled: boolean;
   public placeholder: string;
 
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
-
-  @ViewChild('autocomplete', { static: false })
-  public elementRef: ElementRef;
-
   private searchSubscription: Subscription;
-  private subscriptions: Subscription[];
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -147,12 +137,11 @@ export class FormRelatedComponent extends BasicElementComponent
     private cd: ChangeDetectorRef,
     private settingsService: SiteSettingsService,
     private sanitizer: DomSanitizer,
-    private toastr: ToastService
+    private toastr: ToastService,
+    @Optional() private timelineService: TimelineService
   ) {
     super();
-    this.subscriptions = [];
     this.editMode = true;
-    this.update = new Subject();
   }
 
   public ngOnInit() {
@@ -308,6 +297,7 @@ export class FormRelatedComponent extends BasicElementComponent
     }
   }
 
+  // Deprecated
   public generateCustomTemplate(fieldsList) {
     if (this.config.value) {
       this.customTemplate = fieldsList.map((el, index) => {
@@ -502,7 +492,9 @@ export class FormRelatedComponent extends BasicElementComponent
                     if (industries) {
                       const industry = industries.find((el) => el.default);
 
-                      id = industry.id;
+                      if (industry) {
+                        id = industry.id;
+                      }
                     }
                   }
                 }  else {
@@ -1347,8 +1339,8 @@ export class FormRelatedComponent extends BasicElementComponent
         this.authService.logout();
       }
 
-      if (this.config.timelineSubject) {
-        this.config.timelineSubject.next('update');
+      if (this.timelineService) {
+        this.timelineService.emit(TimelineAction.Update);
       }
 
       const formatString = new FormatString();

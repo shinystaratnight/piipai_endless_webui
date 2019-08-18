@@ -1,4 +1,4 @@
-export const tests = {
+export const testMetadata = {
   form: [
     {
       type: 'row',
@@ -208,7 +208,7 @@ export const tests = {
   ]
 };
 
-export const questions = {
+export const questionMetadata = {
   form: [
     {
       type: 'row',
@@ -353,7 +353,7 @@ export const questions = {
   ]
 };
 
-export const answers = {
+export const answerMetadata = {
   form: [
     {
       type: 'row',

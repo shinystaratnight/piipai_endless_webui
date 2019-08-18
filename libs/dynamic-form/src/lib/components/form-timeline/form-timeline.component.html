@@ -32,18 +32,21 @@
   </select>
 
   <app-info *ngIf="getState(currentState).state === 0" [description]="requirements"></app-info>
-  <button type="button" (click)="open(getState(currentState))" *ngIf="getState(currentState).state === 1" class="btn btn-sm badge badge-outline" [class.active]="saveProcess">
-    <fa-icon [icon]="['fas', 'check']" *ngIf="!saveProcess"></fa-icon>
-    <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
+  <button type="button" class="btn btn-sm d-flex align-items-center"
+    *ngIf="getState(currentState).state === 1"
+    [class.active]="saveProcess"
+    (click)="open(getState(currentState))">
+      <fa-icon class="f-size-10" icon="check" *ngIf="!saveProcess"></fa-icon>
+      <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
   </button>
 </div>
 
-<ng-template #stateModal let-c="close" let-d="dismiss">
+<ng-template #stateModal let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header">
       <h5 class="modal-title">{{modalData.title}}</h5>
 
-      <app-close-button class="ml-auto" (click)="c()"></app-close-button>
+      <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
     </div>
 
     <div class="modal-body timeline" *ngIf="modalData">
@@ -52,7 +55,7 @@
           <div *ngIf="modalData.substates">
             <h5 class="state-info-label">Substates</h5>
 
-            <span *ngFor="let substate of modalData.substates" (click)="open(substate, c)">
+            <span *ngFor="let substate of modalData.substates" (click)="open(substate, modal.close)">
               <ng-container *ngTemplateOutlet="stateTemplate; context: {state: substate}"></ng-container>
             </span>
 
@@ -72,7 +75,7 @@
                 <td>{{test.acceptance_test.name}}</td>
                 <td>{{test.score}}</td>
                 <td>
-                  <a href="" *ngIf="!test.score" (click)="fillinTest($event, test.acceptance_test.id, c)">Fill in</a>
+                  <a href="" *ngIf="!test.score" (click)="fillinTest($event, test.acceptance_test.id, modal.close)">Fill in</a>
                 </td>
               </tr>
             </table>
@@ -96,7 +99,7 @@
           [endpoint]="workflowObjectEndpoint"
           [id]="modalData.id"
           [data]="stateData"
-          (event)="sendEventHandler($event, c)"
+          (event)="sendEventHandler($event, modal.close)"
           (errorForm)="formError()">
             <button type="submit" class="btn btn-primary">
               Save

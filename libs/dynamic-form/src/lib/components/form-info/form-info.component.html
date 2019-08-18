@@ -32,7 +32,7 @@
 
   <div class="form-info-block">
     <p>
-      <label *ngIf="config && viewMode && (available === true || available === false)" [class.text-success]="available" [class.text-danger]="!available">
+      <label *ngIf="config && viewMode && (available === true || available === false)" class="f-size-14" [class.text-success]="available" [class.text-danger]="!available">
         <fa-icon class="mr-2" [icon]="['fas', available ? 'check-circle' : 'times-circle']"></fa-icon>
         {{available ? config.metadata['available'].templateOptions.label : 'Not ' + config.metadata['available'].templateOptions.label}}
       </label>

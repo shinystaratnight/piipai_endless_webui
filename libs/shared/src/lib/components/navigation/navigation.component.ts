@@ -70,7 +70,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngAfterViewInit() {
     const header = this.header.nativeElement;
-    this.headerHeight = header.offsetHeight - 1;
+
+    setTimeout(() => {
+      this.headerHeight = header.offsetHeight - 1;
+    }, 200);
 
     this.resizeSubscription = fromEvent(window, 'resize')
       .pipe(

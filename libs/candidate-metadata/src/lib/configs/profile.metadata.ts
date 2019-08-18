@@ -1,6 +1,6 @@
 import { Endpoints } from '@webui/data';
 
-const form = [
+const profile = [
   {
     values: {
       address: 'contact.address.__str__',
@@ -539,5 +539,5 @@ const form = [
 ];
 
 export const metadataProfile = {
-  form
+  profile
 };

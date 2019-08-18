@@ -14,6 +14,7 @@ import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
 
 import { WorkflowService } from '../../services';
 import { config, workflowEl } from './workflow.config';
+import { getElementFromMetadata } from '../../helpers';
 
 @Component({
   selector: 'app-workflow',
@@ -71,7 +72,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
           this.getNodes(this.workflowId);
         }
 
-        this.changeSaving.emit(advance_state_saving);
+        this.changeSaving.emit({ advance_state_saving });
       });
   }
 
@@ -116,6 +117,10 @@ export class WorkflowComponent implements OnInit, OnDestroy {
           : [];
 
         workflowEl.updateTemplate({ options });
+        if (this.advanced) {
+          const saving = getElementFromMetadata(config, 'advance_state_saving');
+          saving.value = true;
+        }
         this.config = config;
       });
   }
@@ -357,7 +362,6 @@ export class WorkflowComponent implements OnInit, OnDestroy {
           company,
           workflow,
           system: 2,
-          hardlock: 'False'
         }
       }
     ];
