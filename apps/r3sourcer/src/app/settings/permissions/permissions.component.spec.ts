@@ -1,81 +1,79 @@
-import { NO_ERRORS_SCHEMA, Component } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import {
   ComponentFixture,
   TestBed,
-  inject,
-  async } from '@angular/core/testing';
+  async
+} from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
+import { of, BehaviorSubject } from 'rxjs';
 
 import { PermissionsComponent, Group, User, Permission } from './permissions.component';
 import { PermissionsService } from './permissions.service';
 import { SettingsService } from './../settings.service';
-import { ActivatedRoute } from '@angular/router';
-import { RouterModule } from '@angular/router/src/router_module';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 describe('PermissionsComponent', () => {
 
   let comp: PermissionsComponent;
   let fixture: ComponentFixture<PermissionsComponent>;
-  let response: any = {
+  const response: any = {
     data: {}
   };
 
   const mockPermissionsService = {
     getAllGroups() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     getAllUsers() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     getPermissions() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     revokePermissionsOfTheUser() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     revokePermissionsOfTheGroup() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     addPermissionsOnTheUser() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     addPermissionsOnTheGroup() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     addUserOnTheGroup() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     removeUserOnTheGroup() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     createGroup() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     deleteGroup() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     getPermissionsOfUser() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     getAllPermissionsOfTheGroup() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     getAllPermissions() {
-      return Observable.of(response.data);
+      return of(response.data);
     },
     getGroupsOnTheUser() {
-      return Observable.of(response.data);
+      return of(response.data);
     }
   };
 
-  let mockUrl: any = [{
+  const mockUrl: any = [{
     path: 'permissions'
   }];
 
   const mockActivatedRoute = {
-    url: Observable.of(mockUrl)
+    url: of(mockUrl)
   };
 
   const mockSettingsService = {

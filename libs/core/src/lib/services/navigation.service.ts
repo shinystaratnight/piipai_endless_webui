@@ -4,8 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { of, Observable } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 
-import { Endpoints, Role } from '@webui/data';
-import { CompanyPurposeService, Purpose } from './company-purpose.service';
+import { Endpoints, Role, Purpose } from '@webui/data';
+
+import { CompanyPurposeService } from './company-purpose.service';
 import { ErrorsService } from './errors.service';
 
 export interface Page {

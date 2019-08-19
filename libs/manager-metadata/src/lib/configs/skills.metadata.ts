@@ -7,6 +7,7 @@ const list = {
         delim: null,
         label: 'Skill Name',
         sort: true,
+        width: 150,
         content: [
           {
             field: 'name.name',
@@ -42,6 +43,45 @@ const list = {
         name: 'active',
         title: null,
         sort_field: 'active'
+      },
+      {
+        delim: null,
+        label: 'Candidate pay rate default',
+        content: [
+          {
+            field: 'default_rate',
+            type: 'form',
+            form: {
+              key: 'default_rate',
+              type: 'input',
+              templateOptions: {
+                type: 'number',
+                display: '${default_rate}/h'
+              },
+            },
+          }
+        ],
+        name: 'default_rate',
+      },
+      {
+        delim: null,
+        label: 'Client charge rate default',
+        content: [
+          {
+            field: 'price_list_default_rate',
+            type: 'form',
+            form: {
+              key: 'price_list_default_rate',
+              type: 'input',
+              templateOptions: {
+                type: 'number',
+                display: '${price_list_default_rate}/h'
+              },
+            },
+          }
+        ],
+        purpose: ['hire'],
+        name: 'price_list_default_rate',
       },
       {
         delim: null,
@@ -389,13 +429,11 @@ const formadd = [
     key: 'active',
     read_only: true,
     templateOptions: {
-      required: false,
       label: 'Active',
       type: 'checkbox'
     },
     hide: true,
     value: false,
-    default: false,
     type: 'checkbox'
   },
   {

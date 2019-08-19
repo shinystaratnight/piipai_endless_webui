@@ -8,11 +8,15 @@ import {
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription, BehaviorSubject } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 import { FormatString } from '@webui/utilities';
-import { GenericFormService } from '../../../services';
-import { PassTestModalComponent, PassTestModalConfig } from '../../../modals';
+// import { GenericFormService } from '../../../services';
+// import { PassTestModalComponent, PassTestModalConfig } from '../../../modals';
 import { SiteSettingsService } from '@webui/core';
+
+import { TimelineService, TimelineAction } from '../../../services';
+import { PassTestModalComponent, PassTestModalConfig } from '../../../modals';
 import { Endpoints } from '@webui/data';
 
 @Component({
@@ -21,8 +25,7 @@ import { Endpoints } from '@webui/data';
   styleUrls: ['./form-timeline.component.scss']
 })
 export class FormTimelineComponent implements OnInit, OnDestroy {
-  @ViewChild('stateModal', { static: false })
-  public stateModal;
+  @ViewChild('stateModal', { static: false }) stateModal;
 
   public config: any;
   public modalData: any;
@@ -30,7 +33,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public requirements: any[];
   public modalRef: NgbModalRef;
   public objectId: string;
-  public query: any;
+  public query: { [key: string]: string } = {};
   public testId: string;
 
   public currentState: any;
@@ -41,54 +44,47 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public saveProcess: boolean;
   public advancedSeving: boolean;
-  public answerEndpoint = '/acceptance-tests/workflowobjectanswers/';
 
   public passTestAction: BehaviorSubject<number>;
   public passedTests: Map<string, any[]> = new Map();
-
   public workflowObjectEndpoint = Endpoints.WorkflowObject;
 
-  private subscriptions: Subscription[];
+  private subscriptions: Subscription[] = [];
 
   constructor(
     public modalService: NgbModal,
-    private genericFormService: GenericFormService,
     private cd: ChangeDetectorRef,
-    private companySettings: SiteSettingsService
-  ) {
-    this.subscriptions = [];
-  }
+    private companySettings: SiteSettingsService,
+    private timelineService: TimelineService
+  ) {}
 
   public ngOnInit() {
     this.advancedSeving = this.companySettings.settings.company_settings.advance_state_saving;
     this.dropdown = this.config.dropdown;
-    this.query = [];
     if (!this.config.hide) {
       this.initialize();
     }
-    if (this.config.timelineSubject) {
-      const subscription = this.config.timelineSubject.subscribe((value) => {
-        if (value === 'update') {
-          this.getTimeline();
-          return;
+    const subscription = this.timelineService.action$.subscribe((value) => {
+      if (value === TimelineAction.Update) {
+        this.getTimeline();
+        return;
+      }
+
+      if (value !== TimelineAction.Reset) {
+        this.config.options = value;
+
+        if (this.dropdown) {
+          this.updateDropdown();
         }
 
-        if (value !== 'reset') {
-          this.config.options = value;
-
-          if (this.dropdown) {
-            this.updateDropdown();
-          }
-
-          if (!(<any> this.cd).destroyed) {
-            this.cd.detectChanges();
-          }
+        if (!(<any> this.cd).destroyed) {
+          this.cd.detectChanges();
         }
+      }
 
-      });
+    });
 
-      this.subscriptions.push(subscription);
-    }
+    this.subscriptions.push(subscription);
   }
 
   public initialize() {
@@ -114,16 +110,16 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
           );
         }
 
-        this.query.push(`${el}=${this.objectId}`);
+        this.query[el] = this.objectId;
       } else {
 
         if (type && type === 'master') {
-          this.query.push(`${el}=${this.config.query[el][1]}`);
+          this.query[el] = this.config.query[el][1];
         } else {
           if (Array.isArray(this.config.query[el])) {
-            this.query.push(`${el}=${this.config.query[el][0]}`);
+            this.query[el] = this.config.query[el][0];
           } else {
-            this.query.push(`${el}=${this.config.query[el]}`);
+            this.query[el] = this.config.query[el];
           }
         }
       }
@@ -140,7 +136,6 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       });
 
       let key = 0;
-      const setKey = false;
       this.selectArray.forEach((el, i) => {
         if (el.state === 2) {
           key = i;
@@ -175,9 +170,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     this.modalData = {};
     if (state.state === 1 && !this.advancedSeving && !state.acceptance_tests.length && !state.substates.length) {
       state.saveProcess = true;
-      this.activeState(state.id)
+      this.timelineService.activateState(this.objectId, state.id, true)
+        .pipe(finalize(() => this.saveProcess = false))
         .subscribe(() => {
-          this.saveProcess = false;
           this.getTimeline(this.config.query.model === 'hr.job');
         });
       return;
@@ -210,23 +205,11 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
                 passTestAction.next(index + 1);
               } else if (this.passedTests.size === tests.length) {
                 if (state.wf_object_id) {
-                  const passedtests = this.updateTests(state.wf_object_id);
-
-                  this.genericFormService.submitForm(this.answerEndpoint, passedtests)
-                    .subscribe(() => {
-                      this.saveProcess = false;
-                      this.getTimeline(this.config.query.model === 'hr.job');
-                    });
+                  this.savePassedTests(state.wf_object_id);
                 } else {
-                  this.activeState(state.id)
+                  this.timelineService.activateState(this.objectId, state.id, true)
                     .subscribe((workflowObject) => {
-                      const passedtests = this.updateTests(workflowObject.id);
-
-                      this.genericFormService.submitForm(this.answerEndpoint, passedtests)
-                        .subscribe(() => {
-                          this.saveProcess = false;
-                          this.getTimeline(this.config.query.model === 'hr.job');
-                        });
+                      this.savePassedTests(workflowObject.id);
                     });
                 }
               }
@@ -278,6 +261,14 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     }
   }
 
+  public savePassedTests(id: string) {
+    this.timelineService.passTests(this.updateTests(id))
+      .pipe(finalize(() => this.saveProcess = false))
+      .subscribe(() => {
+        this.getTimeline(this.config.query.model === 'hr.job');
+      });
+  }
+
   public updateTests(id: string) {
     const tests = [];
     Array.from(this.passedTests.values()).forEach((el) => {
@@ -293,15 +284,11 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public getTimeline(resetPage?: boolean): void {
     this.loading = true;
 
-    this.genericFormService
-      .getByQuery(this.config.endpoint, `?${this.query.join('&')}`)
-      .subscribe(
-        (res) => {
-          this.loading = false;
-          this.config.timelineSubject.next(resetPage ? 'reset' : res);
-        },
-        (err: any) => (this.loading = false)
-      );
+    this.timelineService.getTimeline(this.query)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe((timeline) => {
+        this.timelineService.emit(resetPage ? TimelineAction.Reset : timeline);
+      });
   }
 
   public setDataForState(state, hideScore) {
@@ -372,43 +359,20 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public createWorkflowObject(stateId: string) {
-    const body = {
-      object_id: this.objectId,
-      state: {
-        id: stateId
-      },
-      comment: null,
-      active: false
-    };
-
-    this.genericFormService
-      .submitForm(this.workflowObjectEndpoint, body)
+    this.timelineService.activateState(this.objectId, stateId)
       .subscribe((res) => {
-        this.modalData.state.wf_object_id = res.id;
-        this.modalData.workflowObject = res.id;
+        const { id } = res;
+
+        this.modalData.state.wf_object_id = id;
+        this.modalData.workflowObject = id;
 
         this.modalRef = this.modalService.open(PassTestModalComponent);
         this.modalRef.componentInstance.config = {
           send: true,
-          testId: res.id,
+          testId: id,
           workflowObject: this.modalData.workflowObject
         } as PassTestModalConfig;
       });
-  }
-
-  public activeState(stateId: string) {
-    this.saveProcess = true;
-    const body = {
-      object_id: this.objectId,
-      state: {
-        id: stateId
-      },
-      comment: null,
-      active: true
-    };
-
-    return this.genericFormService
-      .submitForm(this.workflowObjectEndpoint, body);
   }
 
   public testComplete(closeModal) {

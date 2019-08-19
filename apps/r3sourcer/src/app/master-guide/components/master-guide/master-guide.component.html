@@ -7,7 +7,10 @@
 
     <h5 class="guide__title" [class.guide__title--show]="showContent">
       Start-Up Guide
-      <span *ngIf="showContent" class="guide__minimize-btn" (click)="minimize($event)">Minimize <fa-icon [icon]="['fas', 'chevron-down']"></fa-icon></span>
+      <span *ngIf="showContent" class="guide__minimize-btn" (click)="minimize($event)">
+        Minimize
+        <fa-icon class="f-size-8 ml-1" icon="chevron-down"></fa-icon>
+      </span>
     </h5>
 
     <app-master-guide-content

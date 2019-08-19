@@ -194,6 +194,10 @@
     font-size: 14px;
     line-height: 20px;
 
+    .list-cell &.edit {
+      max-width: 100px;
+    }
+
     .registration-form & {
       height: auto;
       max-height: none;

@@ -1,5 +1,5 @@
-<div #datatable [class.mobile]="identifyDevice()" [class.on-list]="!inForm" [ngClass]="{'poped card p-0': poped}" class="mw-100 datatable" (click)="activeTable()" [hidden]="minimized">
-  <div appMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
+<div #datatable [class.mobile]="identifyDevice()" [class.on-list]="!inForm" class="mw-100 datatable">
+  <!-- <div appMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
       <div class="d-flex fustify-content-center align-items-center">
@@ -23,7 +23,7 @@
         </fa-icon>
       </div>
     </h5>
-  </div>
+  </div> -->
   <div class="datatable-content"
     [ngClass]="{'open': !filtersHidden, 'in-form': inForm, 'inline-filters': inlineFilters}">
     <div appScroll [enable]="!inForm" class="filter-wrapper" *ngIf="(first || poped) && showFilters && !inlineFilters" [class.open]="!filtersHidden" [class.in-form]="inForm">

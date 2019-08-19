@@ -5,7 +5,8 @@ import {
   OnDestroy,
   Output,
   EventEmitter,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  Optional
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -17,7 +18,7 @@ import { FormatString } from '@webui/utilities';
 import { smallModalEndpoints } from '../../../helpers';
 
 import { CheckPermissionService } from '@webui/core';
-import { GenericFormService } from '../../../services';
+import { GenericFormService, TimelineService, TimelineAction } from '../../../services';
 
 @Component({
   selector: 'app-form-list',
@@ -69,7 +70,8 @@ export class FormListComponent implements OnInit, OnDestroy {
     private permission: CheckPermissionService,
     private gfs: GenericFormService,
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    @Optional() private timelineService: TimelineService
   ) {
     this.subscriptions = [];
   }
@@ -219,8 +221,8 @@ export class FormListComponent implements OnInit, OnDestroy {
     if (e.type === 'sendForm' && e.status === 'success') {
       closeModal();
       this.updateList(e);
-      if (this.config.timelineSubject) {
-        this.config.timelineSubject.next('update');
+      if (this.timelineService) {
+        this.timelineService.emit(TimelineAction.Update);
       }
       this.saveProcess = false;
     }
@@ -320,15 +322,11 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public checkTimelineChange() {
-    if (this.config.timelineSubject) {
-      const subscription = this.config.timelineSubject
-        .pipe(
-          skip(1)
-        )
-        .subscribe(() => this.update.next(true));
+    const subscription = this.timelineService.action$
+      .pipe(skip(1))
+      .subscribe(() => this.update.next(true));
 
-      this.subscriptions.push(subscription);
-    }
+    this.subscriptions.push(subscription);
   }
 
   public checkDefaultValues(data) {

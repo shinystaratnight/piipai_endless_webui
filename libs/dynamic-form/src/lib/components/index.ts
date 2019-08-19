@@ -61,7 +61,8 @@ import {
   ListTagsComponent,
   ListTextComponent,
   ListFillinTagsComponent,
-  ListAvailableComponent
+  ListAvailableComponent,
+  ListFormComponent,
 } from './list-elements';
 
 import { ListSerachBarComponent } from './list-search-bar/list-search-bar.component';
@@ -117,6 +118,7 @@ export const entryComponents = [
   ListTextComponent,
   ListFillinTagsComponent,
   ListAvailableComponent,
+  ListFormComponent,
 
   TestGeneratorComponent,
   TestListComponent,
