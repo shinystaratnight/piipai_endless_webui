@@ -19,7 +19,12 @@ export class TimelineService {
     return this._action.asObservable();
   }
 
+  get buttonAction$() {
+    return this._buttonAction.asObservable();
+  }
+
   private _action = new Subject();
+  private _buttonAction = new Subject();
 
   constructor(
     private http: HttpClient,
@@ -56,6 +61,10 @@ export class TimelineService {
   passTests(tests: any[]): Observable<any> {
     return this.http.post(Endpoints.AcceptenceTestPassAnswers, tests)
       .pipe(catchError((error) => this.errorsService.parseErrors(error)));
+  }
+
+  editContact(action) {
+    this._buttonAction.next(action);
   }
 
 }

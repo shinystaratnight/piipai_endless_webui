@@ -31,7 +31,7 @@
       </option>
   </select>
 
-  <app-info *ngIf="getState(currentState).state === 0" [description]="requirements"></app-info>
+  <app-info *ngIf="getState(currentState).state === 0" triggersType="click:click" [description]="requirements"></app-info>
   <button type="button" class="btn btn-sm d-flex align-items-center"
     *ngIf="getState(currentState).state === 1"
     [class.active]="saveProcess"
@@ -165,6 +165,8 @@
       <li *ngFor="let option of getState(currentState).requirements">
         <fa-icon class="icon" [icon]="['fas', 'circle']"></fa-icon>
         {{option}}
+
+        <a *ngIf="verifyPhone(option)" class="text-primary" href="#" (click)="editContact($event)">Edit contact</a>
       </li>
     </ul>
   </div>

@@ -50,7 +50,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    public modalService: NgbModal,
+    private modalService: NgbModal,
     private cd: ChangeDetectorRef,
     private companySettings: SiteSettingsService,
     private timelineService: TimelineService
@@ -394,5 +394,18 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
       return `${activeCount} / ${substatesCount}`;
     }
+  }
+
+  public editContact(event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.timelineService.editContact({ type: 'editContact' });
+
+    return false;
+  }
+
+  public verifyPhone(message: string): boolean {
+    return message.includes('mobile phone');
   }
 }
