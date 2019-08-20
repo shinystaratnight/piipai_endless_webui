@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Subject, Observable, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-import { FormatString, getPropValue } from '@webui/utilities';
 import { CompanyPurposeService, ErrorsService } from '@webui/core';
-import { Endpoints } from '@webui/data';
 
 @Injectable()
 export class ListService {
@@ -35,28 +33,28 @@ export class ListService {
   }
 
   updateListObject(endpoint: string, id: string, data: any) {
-    console.log(arguments);
-    endpoint = FormatString.format(endpoint, { id });
+    this.updateActions.forEach((action) => {
+      const actionData = action(data, { purpose: this.companyPurposeService.purpose });
 
-    of(data).subscribe((res) => {
-      this.updateActions.forEach((action) => {
-        const actionData = action(res, { purpose: this.companyPurposeService.purpose });
-        console.log(actionData);
-      });
-
-      this._updateRow.next({ id, data: res });
+      if (actionData) {
+        Object.assign(data, actionData);
+      }
     });
-    // return this.service.updateForm(endpoint, data)
-    //   .pipe(
-    //     this.updateActions.forEach((action) => {
-    //       const actionData = action(res, { purpose: this.companyPurposeService.purpose });
-    //       console.log(actionData);
-    //     })
-    //   );
+
+    this.update(endpoint, data)
+      .subscribe(() => this._updateRow.next({ id, data }));
+  }
+
+  createObject(url: string, body: any) {
+    return this.http.post(url, body).pipe(
+      catchError(
+        (error: any) => this.errorsService.parseErrors(error)
+      )
+    )
   }
 
   private update(url: string, body: any): Observable<any> {
-    return this.http.patch(url, body).pipe(
+    return this.http.post(url, body).pipe(
       catchError(
         (error: any) => this.errorsService.parseErrors(error)
       )

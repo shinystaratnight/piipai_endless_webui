@@ -17,14 +17,14 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageService } from 'ngx-webstorage';
 
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { ToastService, MessageType, AuthService, UserService, CompanyPurposeService } from '@webui/core';
-import { FormatString, isMobile, isCandidate, getContactAvatar, getTimeInstance, } from '@webui/utilities';
+import { FormatString, isMobile, isCandidate, getContactAvatar, getTimeInstance, getPropValue } from '@webui/utilities';
 import { Endpoints } from '@webui/data';
 
-import { FilterService, GenericFormService, ListStorageService, ListService } from '../../services';
+import { FilterService, GenericFormService, ListStorageService, ListService,  } from '../../services';
 import { createAddAction, smallModalEndpoints, getOrientation, fillingForm, listUpdateActions } from '../../helpers';
 
 import { environment } from '../../../../../../apps/r3sourcer/src/environments/environment';
@@ -149,6 +149,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   public approveInvoice: boolean;
   public timeInstance = getTimeInstance();
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     private filterService: FilterService,
     private modalService: NgbModal,
@@ -175,15 +177,13 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
     this.noneEdit = this.pictures.indexOf(this.endpoint as Endpoints) > -1 || this.config.list.editDisable;
 
-    this.listService.updateRow$.subscribe((rowData) => {
+    this.subscriptions.push(this.listService.updateRow$.subscribe((rowData) => {
       const row = this.fullData[this.responseField].find((item) => item.id === rowData.id);
 
       Object.assign(row, rowData.data);
 
       this.body = [...this.generateBody(this.config, this.fullData, this.innerTables)];
-
-      console.log(row);
-    });
+    }));
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -491,6 +491,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         this.modalRef.close();
       }
     }
+
+    this.subscriptions.forEach(subscrption => {
+      subscrption.unsubscribe();
+    });
   }
 
   public ngAfterContentChecked() {
@@ -696,6 +700,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       const row = {
         id,
         __str__,
+        rowData: el,
         collapsed: true,
         content: []
       };
@@ -781,7 +786,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       info: element.info,
       styles: element.styles,
       inlineValue: element.inlineValue,
-      form: {...element.form}
+      form: {...element.form},
+      update: this.config.list.update,
+      create: this.config.list.create,
+      rowData: el
     };
     if (obj.form && Object.keys(obj.form).length) {
       fillingForm([obj.form], el);
@@ -1824,6 +1832,26 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     };
 
     this.open(this.modal, { size: 'lg' });
+  }
+
+  editListObject(row) {
+    const endpoint = this.config.list.editEndpoint;
+    const id = getPropValue(row.rowData, this.config.list.canEdit);
+    const label = row.__str__;
+
+    this.modalInfo = {
+      type: 'form',
+      endpoint,
+      id,
+      label,
+      mode: 'edit'
+    };
+
+    this.open(this.modal, { size: 'lg' });
+  }
+
+  canEdit(row): boolean {
+    return !!getPropValue(row.rowData, this.config.list.canEdit);
   }
 
   // public activeTable() {

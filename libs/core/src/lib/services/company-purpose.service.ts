@@ -8,7 +8,7 @@ export class CompanyPurposeService {
   public purpose: Purpose;
 
   hideListColumns = {
-    [Endpoints.Skill]: {
+    [Endpoints.SkillName]: {
       [Purpose.SelfUse]: ['price_list_default_rate'],
       [Purpose.Recruitment]: ['price_list_default_rate']
     }
