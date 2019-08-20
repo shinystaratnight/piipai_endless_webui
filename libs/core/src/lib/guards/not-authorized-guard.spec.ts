@@ -1,27 +1,33 @@
-import { async, inject, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { UserService } from '../services';
-import { Observable } from 'rxjs/Observable';
-
 import { NotAuthorizedGuard } from './not-authorized-guard';
+import { AuthService } from '../services';
+
+class MockAuthService {
+  _isAuthorized = false;
+
+  get isAuthorized() {
+    return this._isAuthorized;
+  }
+
+  set isAuthorized(value) {
+    this._isAuthorized = value;
+  }
+
+  getRedirectUrl() {
+    return '/';
+  }
+}
 
 describe('NotAuthorizedGuard', () => {
+  let guard: NotAuthorizedGuard;
+  let router: Router;
+  let authService: MockAuthService;
 
-  let response;
-  let mockRouter = {
+  const mockRouter = {
     navigate() {
       return true;
-    }
-  };
-
-  let mockUserService = {
-    getUserData() {
-      if (response.status === 'success') {
-        return Observable.of(response);
-      } else {
-        return Observable.throw(response);
-      }
     }
   };
 
@@ -30,39 +36,32 @@ describe('NotAuthorizedGuard', () => {
       providers: [
         NotAuthorizedGuard,
         { provide: Router, useValue: mockRouter },
-        { provide: UserService, useValue: mockUserService }
+        { provide: AuthService, useClass: MockAuthService }
       ],
       imports: []
     });
+
+    guard = TestBed.get(NotAuthorizedGuard);
+    router = TestBed.get(Router);
+    authService = TestBed.get(AuthService);
   });
 
-  it('should be defined', async(inject([NotAuthorizedGuard], (service) => {
-    expect(service).toBeDefined();
-  })));
+  it('should be defined', () => {
+    expect(guard).toBeDefined();
+  });
 
   describe('canActivate method', () => {
-    it('should return observable of true',
-      async(inject([NotAuthorizedGuard, Router],
-        (notAuthorizedGuard: NotAuthorizedGuard, router: Router) => {
-          response = {
-            status: 'success'
-          };
-          spyOn(router, 'navigate');
-          notAuthorizedGuard.canActivate().subscribe((res: boolean) => {
-            expect(res).toBeFalsy();
-            expect(router.navigate).toHaveBeenCalledWith(['/']);
-          });
-    })));
+    it('should return true', () => {
+      expect(guard.canActivate()).toBeTruthy();
+    });
 
-    it('should return observable of false',
-      async(inject([NotAuthorizedGuard, Router], (notAuthorizedGuard: NotAuthorizedGuard) => {
-        response = {
-          status: 'error'
-        };
-        notAuthorizedGuard.canActivate().subscribe((res: boolean) => {
-          expect(res).toBeTruthy();
-        });
-    })));
+    it('should return false', () => {
+      spyOn(router, 'navigate');
+      authService.isAuthorized = true;
+
+      expect(guard.canActivate()).toBeFalsy();
+      expect(router.navigate).toHaveBeenCalledWith([authService.getRedirectUrl()]);
+    });
   });
 
 });

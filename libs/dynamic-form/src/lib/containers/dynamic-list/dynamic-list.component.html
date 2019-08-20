@@ -1,5 +1,5 @@
-<div #datatable [class.mobile]="identifyDevice()" [class.on-list]="!inForm" [ngClass]="{'poped card p-0': poped}" class="mw-100 datatable" (click)="activeTable()" [hidden]="minimized">
-  <div appMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
+<div #datatable [class.mobile]="identifyDevice()" [class.on-list]="!inForm" class="mw-100 datatable">
+  <!-- <div appMove [parent]="datatable" *ngIf="poped" class="card-header bg-primary text-white" (active)="activeTable($event)">
     <h5 class="d-flex justify-content-between align-items-center mb-0 lead" *ngIf="config.list">
       <span [ngClass]="{'mr-5': poped}">{{config.list.label}}</span>
       <div class="d-flex fustify-content-center align-items-center">
@@ -23,7 +23,7 @@
         </fa-icon>
       </div>
     </h5>
-  </div>
+  </div> -->
   <div class="datatable-content"
     [ngClass]="{'open': !filtersHidden, 'in-form': inForm, 'inline-filters': inlineFilters}">
     <div appScroll [enable]="!inForm" class="filter-wrapper" *ngIf="(first || poped) && showFilters && !inlineFilters" [class.open]="!filtersHidden" [class.in-form]="inForm">
@@ -193,17 +193,21 @@
                       </svg>
                     </div>
                   </label>
-                  <a class="first-cell-link not-underline" *ngIf="first && !inForm && !config.list.editDisable && checkPermission('get') && !noneEdit" [routerLink]="[row.id + '/change']">
+                  <a class="first-cell-link not-underline" *ngIf="first && !config.list.editEndpoint && !inForm && !config.list.editDisable && checkPermission('get') && !noneEdit" [routerLink]="[row.id + '/change']">
                     <fa-icon
-                      [icon]="['fas', 'pencil-alt']"
+                      icon="pencil-alt"
                       class="icon">
                     </fa-icon>&nbsp;Edit
                   </a>
                   <fa-icon
-                    *ngIf="!first && !config.list.editDisable && checkPermission('get')"
-                    [icon]="['fas', 'pencil-alt']"
+                    *ngIf="!first && !config.list.editEndpoint && !config.list.editDisable && checkPermission('get')"
+                    icon="pencil-alt"
                     class="icon"
-                    (click)="editObject(row.id, row.__str__)"></fa-icon>
+                    (click)="editObject(row.id, row.__str__)">
+                  </fa-icon>
+                  <span class="first-cell-link hov-opacity" *ngIf="canEdit(row) && config.list.editEndpoint && !config.list.editDisable && checkPermission('get')" (click)="editListObject(row)">
+                    <fa-icon icon="pencil-alt" class="icon"></fa-icon>&nbsp;Edit
+                  </span>
                 </td>
 
                 <ng-container *ngFor="let cell of row.content; let first = first">
@@ -340,13 +344,13 @@
   </div>
 </div>
 
-<ng-template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
         &nbsp;
-        <app-close-button class="close-button ml-auto align-self-center" (click)="d()"></app-close-button>
+        <app-close-button class="close-button ml-auto align-self-center" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div class="modal-body" [ngSwitch]="modalInfo.type">
@@ -359,7 +363,7 @@
         [mode]="modalInfo.mode"
         [data]="modalInfo.data"
         [edit]="modalInfo.edit"
-        (event)="formEvent($event, c)"
+        (event)="formEvent($event, modal.close)"
         (errorForm)="formError($event)">
           <button type="submit" class="btn btn-shadow btn-primary text-white button-save mt-3" [disabled]="saveProcess || modalInfo.form.disableSaveButton">
             Save
@@ -378,10 +382,10 @@
   </div>
 </ng-template>
 
-<ng-template #messageDetail let-c="close" let-d="dismiss">
+<ng-template #messageDetail let-modal>
   <div class="message-detail-header">
     <h5 class="message-label">{{modalInfo.label}}</h5>
-    <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
+    <app-close-button class="close-button ml-auto" (click)="modal.dismiss()"></app-close-button>
   </div>
 
   <app-generic-form
@@ -391,23 +395,23 @@
     [mode]="modalInfo.mode"
     [data]="modalInfo.data"
     [edit]="modalInfo.edit"
-    (event)="formEvent($event, c)"
+    (event)="formEvent($event, modal.close)"
     (errorForm)="formError($event)">
   </app-generic-form>
 </ng-template>
 
-<ng-template #confirmModal let-c="close">
+<ng-template #confirmModal let-modal>
   <div class="modal-header">
     <p>{{modalInfo.message}}</p>
-    <app-close-button class="close-button ml-auto" (click)="c()"></app-close-button>
+    <app-close-button class="close-button ml-auto" (click)="modal.close()"></app-close-button>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="callAction(modalInfo, c)">{{modalInfo.agree_label}}</button>
-    <button type="button" class="btn btn-secondary" (click)="c(false)">{{modalInfo.decline_label}}</button>
+    <button type="button" class="btn btn-secondary" (click)="callAction(modalInfo, modal.close)">{{modalInfo.agree_label}}</button>
+    <button type="button" class="btn btn-secondary" (click)="modal.close(false)">{{modalInfo.decline_label}}</button>
   </div>
 </ng-template>
 
-<ng-template #evaluateModal let-c="close" let-d="dismiss">
+<ng-template #evaluateModal let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -428,7 +432,7 @@
           </ng-container>
         </h5>
 
-        <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
+        <app-close-button class="close-button ml-auto" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div *ngIf="!modalInfo.evaluate" class="modal-body">
@@ -437,7 +441,7 @@
         [endpoint]="modalInfo.endpoint"
         [data]="modalInfo.data"
         [edit]="modalInfo.edit"
-        (event)="evaluateEvent($event, c)">
+        (event)="evaluateEvent($event, modal.close)">
           <div class="d-flex">
             <button class="btn big-btn btn-shadow btn-primary button-save ml-lg-auto">Save</button>
           </div>
@@ -477,7 +481,7 @@
   </div>
 </ng-template>
 
-<ng-template #approveSignature let-c="close" let-d="dismiss">
+<ng-template #approveSignature let-modal>
   <div class="approve-signature-modal modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
@@ -497,7 +501,7 @@
           </div>
         </h2>
 
-        <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
+        <app-close-button class="close-button ml-auto" (click)="modal.dismiss()"></app-close-button>
 
       </div>
     </div>
@@ -538,7 +542,7 @@
               [changeMetadata]="modalInfo.changeMetadata"
               [data]="modalInfo.timesheetData"
               [edit]="modalInfo.edit"
-              (event)="evaluateEvent($event, c)">
+              (event)="evaluateEvent($event, modal.close)">
                 <button #sendFormButton type="submit" [hidden]="true"></button>
             </app-generic-form>
           </div>
@@ -618,11 +622,11 @@
   </div>
 </ng-template>
 
-<ng-template #confirmProfileModal let-c="close" let-d="dismiss">
+<ng-template #confirmProfileModal let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
+        <app-close-button class="close-button ml-auto" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -640,12 +644,12 @@
   </div>
 </ng-template>
 
-<ng-template #sendMessageModal let-c="close" let-d="dismiss">
+<ng-template #sendMessageModal let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">Send message</h5>
-        <app-close-button class="close-button ml-auto" (click)="d()"></app-close-button>
+        <app-close-button class="close-button ml-auto" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div class="modal-body p-0">
@@ -655,10 +659,10 @@
   </div>
 </ng-template>
 
-<ng-template #pdfDocumentModal let-c="close">
+<ng-template #pdfDocumentModal let-modal>
   <button type="button" class="position-absolute text-white close-button close ml-2" aria-label="Close"
     style="top: 32px; right: 44px; z-index: 2"
-    (click)="c()">
+    (click)="modal.close()">
       <span aria-hidden="true">&times;</span>
   </button>
   <div class="modal-body">
@@ -666,10 +670,10 @@
   </div>
 </ng-template>
 
-<ng-template #showPreviewInvoice let-c="close">
+<ng-template #showPreviewInvoice let-modal>
   <button type="button" class="position-absolute close-button close ml-2" aria-label="Close"
     style="top: 24px; right: 44px; z-index: 2"
-    (click)="c()">
+    (click)="modal.close()">
       <span aria-hidden="true">&times;</span>
   </button>
   <div class="modal-body">
@@ -678,8 +682,8 @@
   </div>
 </ng-template>
 
-<ng-template #fillInMap let-c="close">
-  <app-close-button class="close-button" (click)="c()"></app-close-button>
+<ng-template #fillInMap let-modal>
+  <app-close-button class="close-button" (click)="modal.close()"></app-close-button>
   <agm-map [latitude]="modalInfo.latitude" [longitude]="modalInfo.longitude" [zoom]="13" [mapTypeControl]="true">
     <agm-marker [iconUrl]="marker.iconUrl" *ngFor="let marker of modalInfo.markers" [latitude]="marker.latitude" [longitude]="marker.longitude">
       <agm-info-window>
@@ -694,8 +698,8 @@
   </agm-map>
 </ng-template>
 
-<ng-template #mapModal let-c="close">
-  <app-close-button class="close-button" (click)="c()"></app-close-button>
+<ng-template #mapModal let-modal>
+  <app-close-button class="close-button" (click)="modal.close()"></app-close-button>
   <agm-map
     [latitude]="modalInfo.latitude"
     [longitude]="modalInfo.longitude"
@@ -931,11 +935,11 @@
   </div>
 </ng-template>
 
-<ng-template #tracking let-c="close">
+<ng-template #tracking let-modal>
   <div class="tracking-header">
     <h5 class="title">Candidate Tracking</h5>
     <p class="jobsite">{{modalInfo.jobsite}}</p>
-    <app-close-button class="close close-button ml-2 mt-2" (click)="c()"></app-close-button>
+    <app-close-button class="close close-button ml-2 mt-2" (click)="modal.close()"></app-close-button>
   </div>
 
   <agm-map

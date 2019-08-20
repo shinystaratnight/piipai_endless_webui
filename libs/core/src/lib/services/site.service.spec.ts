@@ -20,7 +20,7 @@ describe('UserService', () => {
   describe('getDataOfPage method', () => {
     it('should create new request',
       async(inject([SiteService], (siteService: SiteService) => {
-          let list = [
+          const list = [
             {
               name: 'Contact',
               url: '/contact/',
@@ -29,7 +29,7 @@ describe('UserService', () => {
               childrens: []
             }
           ];
-          let response = {
+          const response = {
             endpoint: list[0].endpoint,
             pathData: {
               type: 'list',
@@ -37,7 +37,7 @@ describe('UserService', () => {
             }
           };
           spyOn(siteService, 'generateData').and.returnValue(response);
-          let result = siteService.getDataOfPage(list[0].endpoint, list);
+          const result = siteService.getDataOfPage(list[0].endpoint, list);
           result.subscribe((dataList) => {
             expect(dataList).toEqual(response);
           });
@@ -47,7 +47,7 @@ describe('UserService', () => {
 
   describe('generateData method', () => {
     it('should generate data of page', async(inject([SiteService], (siteService: SiteService) => {
-      let list = [
+      const list = [
         {
           name: 'Contact',
           url: '/contact/',
@@ -56,14 +56,14 @@ describe('UserService', () => {
           childrens: []
         }
       ];
-      let url = ['contact'];
-      let pathData = {
+      const url = ['contact'];
+      const pathData = {
         type: 'list',
         path: list[0].url
       };
       spyOn(siteService, 'getTypeOfPage').and.returnValue(pathData);
       spyOn(siteService, 'getElementFromList').and.returnValue(list[0]);
-      let result = siteService.generateData(list, url);
+      const result = siteService.generateData(list, url);
       expect(siteService.getTypeOfPage).toHaveBeenCalledWith(url);
       expect(siteService.getElementFromList).toHaveBeenCalledWith(list, list[0].url);
       expect(result).toEqual({
@@ -75,8 +75,8 @@ describe('UserService', () => {
 
   describe('generatePath method', () => {
     it('should generate path of url', async(inject([SiteService], (siteService: SiteService) => {
-      let url = ['contact'];
-      let result = siteService.generatePath(url);
+      const url = ['contact'];
+      const result = siteService.generatePath(url);
       expect(result).toEqual('/contact/');
     })));
   });
@@ -84,7 +84,7 @@ describe('UserService', () => {
   describe('getTypeOfPage method', () => {
     it('should return form type of page',
       async(inject([SiteService], (siteService: SiteService) => {
-        let url = [
+        const url = [
           {
             path: 'contact'
           },
@@ -93,7 +93,7 @@ describe('UserService', () => {
           }
         ];
         spyOn(siteService, 'generatePath').and.returnValue('/contact/');
-        let result = siteService.getTypeOfPage(url);
+        const result = siteService.getTypeOfPage(url);
         expect(result).toEqual({
           type: 'form',
           path: '/contact/'
@@ -102,7 +102,7 @@ describe('UserService', () => {
 
     it('should return form type of page for edit',
       async(inject([SiteService], (siteService: SiteService) => {
-        let url = [
+        const url = [
           {
             path: 'contact'
           },
@@ -114,7 +114,7 @@ describe('UserService', () => {
           }
         ];
         spyOn(siteService, 'generatePath').and.returnValue('/contact/');
-        let result = siteService.getTypeOfPage(url);
+        const result = siteService.getTypeOfPage(url);
         expect(result).toEqual({
           type: 'form',
           path: '/contact/',
@@ -124,28 +124,29 @@ describe('UserService', () => {
 
     it('should return profile type of page',
       async(inject([SiteService], (siteService: SiteService) => {
-        let url = [
+        const url = [
           {
             path: 'profile'
           }
         ];
         spyOn(siteService, 'generatePath').and.returnValue('/profile/');
-        let result = siteService.getTypeOfPage(url);
+        const result = siteService.getTypeOfPage(url);
         expect(result).toEqual({
-          type: 'profile',
-          path: '/profile/'
+          type: 'form',
+          path: '/profile/',
+          metadataQuery: 'type=profile'
         });
     })));
 
     it('should return list type of page',
       async(inject([SiteService], (siteService: SiteService) => {
-        let url = [
+        const url = [
           {
             path: 'contact'
           }
         ];
         spyOn(siteService, 'generatePath').and.returnValue('/contact/');
-        let result = siteService.getTypeOfPage(url);
+        const result = siteService.getTypeOfPage(url);
         expect(result).toEqual({
           type: 'list',
           path: '/contact/'
@@ -156,7 +157,7 @@ describe('UserService', () => {
   describe('getElementFromList method', () => {
     it('should return some element from list of pages',
       async(inject([SiteService], (siteService: SiteService) => {
-      let list = [
+      const list = [
         {
           name: 'Contact',
           url: '/contact/',
@@ -173,8 +174,8 @@ describe('UserService', () => {
           ]
         }
       ];
-      let path = list[0].childrens[0].url;
-      let result = siteService.getElementFromList(list, path);
+      const path = list[0].childrens[0].url;
+      const result = siteService.getElementFromList(list, path);
       expect(result).toEqual(list[0].childrens[0]);
     })));
   });

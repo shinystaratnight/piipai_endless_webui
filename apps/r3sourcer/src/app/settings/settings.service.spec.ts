@@ -4,7 +4,6 @@ import { SettingsService } from './settings.service';
 
 describe('SettingsService', () => {
 
-  let response;
   const url = [{
     path: 'permissions'
   }];
@@ -31,9 +30,9 @@ describe('SettingsService', () => {
 
   it('should set new url',
     async(inject([SettingsService], (service: SettingsService) => {
-      service.url = <any> [ { path: 'permissions' } ];
+      service.url = <any> url;
       service.url.subscribe((value) => {
-        expect(value).toEqual([ { path: 'permissions' } ]);
+        expect(value).toEqual(url);
       });
   })));
 

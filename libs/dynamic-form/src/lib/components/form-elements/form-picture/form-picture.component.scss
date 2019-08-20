@@ -1,0 +1,140 @@
+@import '../../../../../../../styles/variables';
+
+$width: 240px;
+$height: 80px;
+
+.picture {
+  video {
+    width: 100%;
+    max-width: $width;
+  }
+
+  .photo {
+    width: 100%;
+    max-width: $width;
+    text-align: center;
+    background-color: darken($gray-300, .7);
+
+    img {
+      max-height: $height;
+    }
+
+  }
+}
+
+.image-preview {
+  width: $height;
+  height: $height;
+
+  margin-bottom: .5rem;
+
+  border-radius: 50%;
+
+  background-color: #f5f5f5;
+
+  &.start {
+    align-self: flex-start;
+  }
+}
+
+.signature {
+  width: 80px;
+  height: 40px;
+
+  border-radius: 3px;
+  border: 1px solid rgba($gray, .7);
+}
+
+.contact-avatar {
+  width: $height;
+  height: $height;
+}
+
+.link {
+  margin-left: 4px;
+
+  font-size: 12px;
+  line-height: 14px;
+
+  color: $brand-primary;
+
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+
+  span {
+    margin-left: .5rem;
+  }
+}
+
+.form-element-picture {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropzone {
+  width: 100px;
+  height: 100px;
+
+  border: 1px dashed #ccc;
+  border-radius: 50%;
+
+  background: url('/assets/img/specialist-user.svg') 0 12px no-repeat;
+  background-image: attr(data-label);
+
+  overflow: hidden;
+
+  &-wrapper {
+    margin-right: 46px;
+  }
+
+  &-name {
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    font-size: 11px;
+    font-family: 'Roboto';
+    line-height: 13px;
+    text-transform: uppercase;
+
+    opacity: .8;
+
+    &.required::after {
+      content: '*';
+
+      color: $brand-danger;
+    }
+  }
+}
+
+.description {
+  width: 160px;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.buttons-wrapper {
+
+  .action {
+    border: 1px solid $brand-primary;
+
+    color: $brand-primary;
+    background-color: transparent;
+
+    &:hover {
+      background-color: $brand-primary;
+      color: white;
+    }
+  }
+}

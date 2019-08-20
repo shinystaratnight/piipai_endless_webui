@@ -17,16 +17,15 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageService } from 'ngx-webstorage';
 
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { ToastService, MessageType } from '@webui/core';
-import { FilterService, GenericFormService, ListStorageService } from '../../services';
-import { AuthService, UserService } from '@webui/core';
-import { FormatString, isMobile, isCandidate, getContactAvatar, getTimeInstance, } from '@webui/utilities';
-import { createAddAction, smallModalEndpoints, getOrientation } from '../../helpers';
-
+import { ToastService, MessageType, AuthService, UserService, CompanyPurposeService } from '@webui/core';
+import { FormatString, isMobile, isCandidate, getContactAvatar, getTimeInstance, getPropValue } from '@webui/utilities';
 import { Endpoints } from '@webui/data';
+
+import { FilterService, GenericFormService, ListStorageService, ListService,  } from '../../services';
+import { createAddAction, smallModalEndpoints, getOrientation, fillingForm, listUpdateActions } from '../../helpers';
 
 import { environment } from '../../../../../../apps/r3sourcer/src/environments/environment';
 
@@ -35,157 +34,59 @@ import { environment } from '../../../../../../apps/r3sourcer/src/environments/e
   templateUrl: './dynamic-list.component.html',
   styleUrls: ['./dynamic-list.component.scss']
 })
-export class DynamicListComponent
-  implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
-  @Input()
-  public config: any;
+export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
+  @Input() config: any;
+  @Input() data: any;
+  @Input() first: boolean;
+  @Input() id: number;
+  @Input() active: boolean;
+  @Input() limit: number;
+  @Input() offset: number;
+  @Input() sorted: any;
+  @Input() innerTables: any;
+  @Input() update: any;
+  @Input() minimized: boolean;
+  @Input() maximize: boolean;
+  @Input() endpoint: string;
+  @Input() parentEndpoint: string;
+  @Input() actionData: any;
+  @Input() supportData: any;
+  @Input() responseField: string;
+  @Input() paginated: string;
+  @Input() actions: boolean;
+  @Input() delay: boolean;
+  @Input() allowPermissions: string[];
+  @Input() metadataQuery: string;
+  @Input() addMetadataQuery: string;
+  @Input() editEndpoint: string;
+  @Input() addData: any;
+  @Input() refresh = false;
+  @Input() inForm = false;
+  @Input() disableActions: boolean;
+  @Input() inlineFilters: boolean;
+  @Input() actionProcess: boolean;
 
-  @Input()
-  public data: any;
+  @Output() event: EventEmitter<any> = new EventEmitter();
+  @Output() list: EventEmitter<any> = new EventEmitter();
+  @Output() checkedObjects: EventEmitter<string[]> = new EventEmitter();
 
-  @Input()
-  public first: boolean;
-
-  @Input()
-  public id: number;
-
-  @Input()
-  public active: boolean;
-
-  @Input()
-  public limit: number;
-
-  @Input()
-  public offset: number;
-
-  @Input()
-  public sorted: any;
-
-  @Input()
-  public innerTables: any;
-
-  @Input()
-  public update: any;
-
-  @Input()
-  public minimized: boolean;
-
-  @Input()
-  public maximize: boolean;
-
-  @Input()
-  public endpoint: string;
-
-  @Input()
-  public parentEndpoint: string;
-
-  @Input()
-  public actionData: any;
-
-  @Input()
-  public supportData: any;
-
-  @Input()
-  public responseField: string;
-
-  @Input()
-  public paginated: string;
-
-  @Input()
-  public actions: boolean;
-
-  @Input()
-  public delay: boolean;
-
-  @Input()
-  public allowPermissions: string[];
-
-  @Input()
-  public metadataQuery: string;
-
-  @Input()
-  public addMetadataQuery: string;
-
-  @Input()
-  public editEndpoint: string;
-
-  @Input()
-  public addData: any;
-
-  @Input()
-  public refresh = false;
-
-  @Input()
-  public inForm = false;
-
-  @Input()
-  public disableActions: boolean;
-
-  @Input()
-  public inlineFilters: boolean;
-
-  @Input()
-  public actionProcess: boolean;
-
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public list: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public checkedObjects: EventEmitter<string[]> = new EventEmitter();
-
-  @ViewChild('modal', { static: false })
-  public modal;
-
-  @ViewChild('confirmModal', { static: false })
-  public confirmModal;
-
-  @ViewChild('evaluateModal', { static: false })
-  public evaluateModal;
-
-  @ViewChild('sendMessageModal', { static: false })
-  public sendMessageModal;
-
-  @ViewChild('pdfDocumentModal', { static: false })
-  public pdfDocumentModal;
-
-  @ViewChild('datatable', { static: false })
-  public datatable;
-
-  @ViewChild('tableWrapper', { static: false })
-  public tableWrapper;
-
-  @ViewChild('showPreviewInvoice', { static: false })
-  public showPreviewInvoice;
-
-  @ViewChild('fillInMap', { static: false })
-  public fillInMap;
-
-  @ViewChild('mapModal', { static: false })
-  public mapModal;
-
-  @ViewChild('messageDetail', { static: false })
-  public messageDetail;
-
-  @ViewChild('history', { static: true })
-  public history;
-
-  @ViewChild('timesheetsCandidate', { static: true })
-  public timesheetsCandidate;
-
-  @ViewChild('unapproved', { static: true })
-  public unapproved;
-
-  @ViewChild('tracking', { static: false })
-  public trakingModal;
-
-  @ViewChild('confirmProfileModal', { static: false })
-  public confirmProfileModal;
-
-  @ViewChild('approveSignature', { static: false })
-  public approveSignature;
+  @ViewChild('modal', { static: false }) modal;
+  @ViewChild('confirmModal', { static: false }) confirmModal;
+  @ViewChild('evaluateModal', { static: false }) evaluateModal;
+  @ViewChild('sendMessageModal', { static: false }) sendMessageModal;
+  @ViewChild('pdfDocumentModal', { static: false }) pdfDocumentModal;
+  @ViewChild('datatable', { static: false }) datatable;
+  @ViewChild('tableWrapper', { static: false }) tableWrapper;
+  @ViewChild('showPreviewInvoice', { static: false }) showPreviewInvoice;
+  @ViewChild('fillInMap', { static: false }) fillInMap;
+  @ViewChild('mapModal', { static: false }) mapModal;
+  @ViewChild('messageDetail', { static: false }) messageDetail;
+  @ViewChild('history', { static: true }) history;
+  @ViewChild('timesheetsCandidate', { static: true }) timesheetsCandidate;
+  @ViewChild('unapproved', { static: true }) unapproved;
+  @ViewChild('tracking', { static: false }) trakingModal;
+  @ViewChild('confirmProfileModal', { static: false }) confirmProfileModal;
+  @ViewChild('approveSignature', { static: false }) approveSignature;
 
   public selectedCount: number;
   public sortedColumns: any;
@@ -212,7 +113,7 @@ export class DynamicListComponent
     query: 'search',
     key: 'search'
   };
-  public position: { top; left };
+  public position: { top; left; };
   public noneEdit: boolean;
   public fullData: any;
   public label: string;
@@ -231,11 +132,11 @@ export class DynamicListComponent
   public filtersHidden = true;
   public additionalMetadata: any[] = [];
   public pictures = [
-    '/core/contacts/',
-    '/candidate/candidatecontacts/',
-    '/candidate/candidatecontacts/pool/',
-    '/core/companies/',
-    '/core/companycontacts/'
+    Endpoints.Contact,
+    Endpoints.CandidateContact,
+    Endpoints.CandidatePool,
+    Endpoints.Company,
+    Endpoints.CompanyContact
   ];
   public mobileDesign = [
     Endpoints.TimesheetHistory,
@@ -247,7 +148,8 @@ export class DynamicListComponent
   public isMobileDevice = isMobile() && isCandidate();
   public approveInvoice: boolean;
   public timeInstance = getTimeInstance();
-  public viewInited = false;
+
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private filterService: FilterService,
@@ -259,7 +161,9 @@ export class DynamicListComponent
     private authService: AuthService,
     private userService: UserService,
     private toastr: ToastService,
-    private listStorage: ListStorageService
+    private listStorage: ListStorageService,
+    private purposeService: CompanyPurposeService,
+    private listService: ListService
   ) {}
 
   public isMobile = isMobile;
@@ -271,7 +175,15 @@ export class DynamicListComponent
       this.filtersHidden = false;
     }
 
-    this.noneEdit = this.pictures.indexOf(this.endpoint) > -1 || this.config.list.editDisable;
+    this.noneEdit = this.pictures.indexOf(this.endpoint as Endpoints) > -1 || this.config.list.editDisable;
+
+    this.subscriptions.push(this.listService.updateRow$.subscribe((rowData) => {
+      const row = this.fullData[this.responseField].find((item) => item.id === rowData.id);
+
+      Object.assign(row, rowData.data);
+
+      this.body = [...this.generateBody(this.config, this.fullData, this.innerTables)];
+    }));
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -291,6 +203,8 @@ export class DynamicListComponent
         : this.innerTables;
 
     const addData = changes['addData'] && changes['addData'].currentValue;
+
+    this.config.list.columns = this.purposeService.filterListColumns(this.endpoint, this.config.list.columns);
 
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;
@@ -315,9 +229,9 @@ export class DynamicListComponent
     if (data && this.paginated === 'on') {
       this.initPagination(data);
     }
-    if (this.maximize) {
-      this.unpopedTable();
-    }
+    // if (this.maximize) {
+    //   this.unpopedTable();
+    // }
     if (this.sorted) {
       this.sortedColumns = this.sorted;
       const names = Object.keys(this.sorted);
@@ -368,17 +282,12 @@ export class DynamicListComponent
       };
       this.body.push(...this.generateBody(config, addData, innerTables));
     }
-  }
-
-  public afterViewInit() {
-    this.viewInited = true;
+    this.listService.updateActions = listUpdateActions[this.endpoint];
   }
 
   public getFormat(property: string, data, config): string {
-    const formatString = new FormatString();
-
     if (data instanceof Object) {
-      return formatString.format(config.list[property], data);
+      return FormatString.format(config.list[property], data);
     }
 
     return config.list[property];
@@ -527,10 +436,8 @@ export class DynamicListComponent
 
   public addRowToGroup(row, target) {
     target.content.forEach((column, i) => {
-      if (column) {
-        if (column.name !== 'actions') {
-          column.content.push(...row.content[i].content);
-        }
+      if (column && column.name !== 'actions') {
+        column.content.push(...row.content[i].content);
       }
     });
   }
@@ -584,6 +491,10 @@ export class DynamicListComponent
         this.modalRef.close();
       }
     }
+
+    this.subscriptions.forEach(subscrption => {
+      subscrption.unsubscribe();
+    });
   }
 
   public ngAfterContentChecked() {
@@ -784,281 +695,38 @@ export class DynamicListComponent
     this.asyncData = {};
     const prepareData = [];
     data.forEach((el) => {
+      const { id, __str__ } = el;
+
       const row = {
-        id: el.id,
-        __str__: el.__str__,
+        id,
+        __str__,
+        rowData: el,
         collapsed: true,
         content: []
       };
+
       if (highlight) {
         this.addHighlight(highlight.field, el, row, highlight.values);
       }
+
       config.forEach((col) => {
+        const { label, hideLabel, hide, name, center, width } = col;
+
         const cell = {
-          id: el.id,
-          label: col.label,
-          hideLabel: col.hideLabel,
-          hide: col.hide,
-          name: col.name,
-          center: col.center,
+          id,
+          label,
+          hideLabel,
+          hide,
+          name,
+          center,
+          width: width,
           content: [],
           contextMenu: col.context_menu,
           tab: this.getTabOfColumn(col.name),
-          width: col.width
         };
         col.content.forEach((element) => {
-          if (element.showIf && !this.checkShowRules(element.showIf, el)) {
-            return;
-          }
-          let props;
-          const obj: any = {
-            rowId: el.id,
-            key: col.name,
-            delim: col.delim,
-            title: col.title,
-            skillName: col.label,
-            name: element.field,
-            type: element.type,
-            values: element.values,
-            color: element.color,
-            action: element.action,
-            inline: element.inline,
-            outline: element.outline,
-            description: element.description,
-            redirect: element.redirect,
-            file: element.file,
-            display: element.display,
-            setColorForLabel: element.setColorForLabel,
-            noDelim: element.noDelim,
-            placement: element.placement,
-            hideValue: element.hideValue,
-            help: element.help,
-            postfix: element.postfix,
-            content: element.content,
-            groupLabel: element.groupLabel,
-            emptyValue: element.emptyValue,
-            messageType: element.messageType,
-            customLink: element.customLink,
-            fontSize: element.fontSize,
-            inverse: element.inverse,
-            param: element.param,
-            stars: element.stars,
-            visibleMode: element.visibleMode,
-            image: element.image,
-            score: element.score,
-            hideTitle: element.hideTitle,
-            size: element.size,
-            shadow: element.shadow,
-            muted: element.muted,
-            signature: element.signature,
-            svg: element.svg,
-            process: new Subject(),
-            info: element.info,
-            styles: element.styles,
-            inlineValue: element.inlineValue
-          };
-          if (this.listStorage.hasTrackingInfo(el.id)) {
-            obj.locationDataEmpty = !this.listStorage.getTrackingInfo(el.id);
-          }
-          if (obj.action && this.disableActions) {
-            obj.disableAction = true;
-          }
-          if (obj.description) {
-            obj.description = this.format(obj.description, el);
-          }
-          if (element.setColor) {
-            this.setValue(el, [element.setColor], obj, 'setColor');
-          }
-          if (element.workers_details) {
-            obj['workers_details'] = this.getValueByKey('workers_details', el);
-          }
-          if (element.hasOwnProperty('file')) {
-            const keys = element.field.split('.');
-            keys[keys.length - 1] = '__str__';
-            obj['contactName'] = this.getValueByKey(keys.join('.'), el);
-          }
-          if (element.display && element.type !== 'tags') {
-            obj.display = this.format(
-              element.display.replace(/{field}/gi, `{${element.field}}`),
-              el
-            );
-          }
-          if (element.type === 'datepicker') {
-            const field = this.config.fields.find(
-              (elem) => elem.key === element.field
-            );
-            if (field) {
-              obj.templateOptions = field.templateOptions;
-            }
-          }
-          if (element.type === 'icon' || element.type === 'static') {
-            if (element.type === 'icon') {
-              obj.label = element.label;
-            }
-            const field = this.config.fields.find(
-              (elem) => elem.key === element.field
-            );
-            if (field) {
-              obj['values'] = field.templateOptions.values || element.values;
-              obj['color'] = field.templateOptions.color || element.color;
-              obj['listLabel'] =
-                field.templateOptions.listLabel || element.listLabel;
-            }
-          }
-          if (element.link) {
-            const indexOf = element.link.indexOf('{field}');
-            if (indexOf) {
-              element.link = element.link.replace(
-                /{field}/gi,
-                `{${element.field}}`
-              );
-            }
-            obj['link'] = this.format(element.link, el);
-            obj.text = this.format(element.text, el);
-          } else if (element.endpoint) {
-            if (element.field) {
-              props = element.field.split('.');
-              this.setValue(el, props, obj);
-            }
-            const indexOf = element.endpoint.indexOf('{field}');
+          const obj = this.generateContentElement(element, col, cell, el);
 
-            obj.notParsedEndpoint = element.notParsedEndpoint;
-            if (element.endpoint[element.endpoint.length - 1] !== '/') {
-              obj.notParsedEndpoint = element.endpoint;
-              element.notParsedEndpoint = element.endpoint;
-              element.endpoint += '/';
-            }
-            if (indexOf) {
-              element.endpoint = element.endpoint.replace(
-                /{field}/gi,
-                `{${element.field}}`
-              );
-            }
-            if (Array.isArray(obj.value)) {
-              obj.link = [];
-              obj.value.forEach((val) => {
-                obj.link.push(
-                  this.format(element.endpoint, {
-                    [obj.name]: val
-                  })
-                );
-              });
-            } else {
-              obj['endpoint'] = this.format(element.endpoint, el);
-            }
-            if (col.name === 'evaluate') {
-              this.evaluateEndpoint = element.endpoint;
-            }
-            obj.text = this.format(element.text, el);
-          }
-          if (element.type === 'static') {
-            if (element.text) {
-              if (element.field === 'totalTime') {
-                obj.value = this.format(
-                  element.text.replace(/{field}/gi, `{${element.field}}`),
-                  { ...el, totalTime: this.getTotalTime(el) }
-                );
-              } else {
-                obj.value = this.format(
-                  element.text.replace(/{field}/gi, `{${element.field}}`),
-                  el
-                );
-              }
-            }
-            obj.label = element.label;
-          }
-          if (element.type === 'picture') {
-            const field = this.config.fields.find(
-              (elem) => elem.key === element.field
-            );
-            if (field) {
-              obj.default = field.default;
-            }
-          }
-          if (element.type === 'button') {
-            this.updateButtonTypeCell(obj, element, el);
-          }
-          if (element.type === 'buttonGroup') {
-            obj.content = element.content.map((elem) => {
-              const newObj = Object.assign(
-                {},
-                elem,
-                { rowId: obj.rowId },
-                { disableAction: this.disableActions }
-              );
-
-              this.updateButtonTypeCell(newObj, elem, el);
-              return newObj;
-            });
-          }
-          if (element.type === 'select' && element.content) {
-            obj.content = element.content.map((elem) => {
-              const newObj = Object.assign({}, elem, { disableAction: this.disableActions });
-
-              newObj['endpoint'] = this.format(elem.endpoint, el);
-
-              this.updateButtonTypeCell(newObj, elem, el);
-              return newObj;
-            });
-          }
-          if (element.fields) {
-            obj.fields = [];
-            element.fields.forEach((field, index) => {
-              const item = Object.assign({}, field);
-              obj.fields[index] = item;
-              props = field.field.split('.');
-              this.setValue(el, props, item);
-            });
-          } else if (element.field) {
-            if (element.type === 'info') {
-              obj.editDisable = this.config.list.editDisable;
-              obj.value = el;
-              obj.companyPicture =
-                this.endpoint === '/core/companies/';
-            } else {
-              props = element.field.split('.');
-              this.setValue(el, props, obj);
-            }
-          }
-          if (!this.checkValue(obj)) {
-            delete cell.contextMenu;
-          }
-          if (element.async && obj.value === -1) {
-            element.endpoint = this.format(element.endpoint, el);
-            const query = {};
-            if (element.query) {
-              const keys = Object.keys(element.query);
-              obj.query = {};
-              keys.forEach((key) => {
-                query[key] = this.format(element.query[key], el);
-
-                if (!query[key]) {
-                  query[key] = this.format(element.query[key], this.data);
-                }
-              });
-            }
-            if (this.asyncData[element.endpoint]) {
-              this.asyncData[element.endpoint].push({
-                method: element.method,
-                content: cell.content,
-                query,
-                field: obj,
-                id: el.id,
-                request_field: element.request_field
-              });
-            } else {
-              this.asyncData[element.endpoint] = [
-                {
-                  method: element.method,
-                  content: cell.content,
-                  query,
-                  field: obj,
-                  id: el.id,
-                  request_field: element.request_field
-                }
-              ];
-            }
-          }
           cell.content.push(obj);
         });
         row.content.push(cell);
@@ -1066,6 +734,272 @@ export class DynamicListComponent
       prepareData.push(row);
     });
     return prepareData;
+  }
+
+  public generateContentElement(element, col, cell, el) {
+    if (element.showIf && !this.checkShowRules(element.showIf, el)) {
+      return;
+    }
+    let props;
+    const obj: any = {
+      rowId: el.id,
+      key: col.name,
+      delim: col.delim,
+      title: col.title,
+      skillName: col.label,
+      name: element.field,
+      type: element.type,
+      values: element.values,
+      color: element.color,
+      action: element.action,
+      inline: element.inline,
+      outline: element.outline,
+      description: element.description,
+      redirect: element.redirect,
+      file: element.file,
+      display: element.display,
+      setColorForLabel: element.setColorForLabel,
+      noDelim: element.noDelim,
+      placement: element.placement,
+      hideValue: element.hideValue,
+      help: element.help,
+      postfix: element.postfix,
+      content: element.content,
+      groupLabel: element.groupLabel,
+      emptyValue: element.emptyValue,
+      messageType: element.messageType,
+      customLink: element.customLink,
+      fontSize: element.fontSize,
+      inverse: element.inverse,
+      param: element.param,
+      stars: element.stars,
+      visibleMode: element.visibleMode,
+      image: element.image,
+      score: element.score,
+      hideTitle: element.hideTitle,
+      size: element.size,
+      shadow: element.shadow,
+      muted: element.muted,
+      signature: element.signature,
+      svg: element.svg,
+      process: new Subject(),
+      info: element.info,
+      styles: element.styles,
+      inlineValue: element.inlineValue,
+      form: {...element.form},
+      update: this.config.list.update,
+      create: this.config.list.create,
+      rowData: el
+    };
+    if (obj.form && Object.keys(obj.form).length) {
+      fillingForm([obj.form], el);
+      if (obj.form.templateOptions.display) {
+        obj.display = this.format(obj.form.templateOptions.display, el);
+      }
+    }
+    if (this.listStorage.hasTrackingInfo(el.id)) {
+      obj.locationDataEmpty = !this.listStorage.getTrackingInfo(el.id);
+    }
+    if (obj.action && this.disableActions) {
+      obj.disableAction = true;
+    }
+    if (obj.description) {
+      obj.description = this.format(obj.description, el);
+    }
+    if (element.setColor) {
+      this.setValue(el, [element.setColor], obj, 'setColor');
+    }
+    if (element.workers_details) {
+      obj['workers_details'] = this.getValueByKey('workers_details', el);
+    }
+    if (element.hasOwnProperty('file')) {
+      const keys = element.field.split('.');
+      keys[keys.length - 1] = '__str__';
+      obj['contactName'] = this.getValueByKey(keys.join('.'), el);
+    }
+    if (element.display && element.type !== 'tags') {
+      obj.display = this.format(
+        element.display.replace(/{field}/gi, `{${element.field}}`),
+        el
+      );
+    }
+    if (element.type === 'datepicker') {
+      const field = this.config.fields.find(
+        (elem) => elem.key === element.field
+      );
+      if (field) {
+        obj.templateOptions = field.templateOptions;
+      }
+    }
+    if (element.type === 'icon' || element.type === 'static') {
+      if (element.type === 'icon') {
+        obj.label = element.label;
+      }
+      const field = this.config.fields.find(
+        (elem) => elem.key === element.field
+      );
+      if (field) {
+        obj['values'] = field.templateOptions.values || element.values;
+        obj['color'] = field.templateOptions.color || element.color;
+        obj['listLabel'] =
+          field.templateOptions.listLabel || element.listLabel;
+      }
+    }
+    if (element.link) {
+      const indexOf = element.link.indexOf('{field}');
+      if (indexOf) {
+        element.link = element.link.replace(
+          /{field}/gi,
+          `{${element.field}}`
+        );
+      }
+      obj['link'] = this.format(element.link, el);
+      obj.text = this.format(element.text, el);
+    } else if (element.endpoint) {
+      if (element.field) {
+        props = element.field.split('.');
+        this.setValue(el, props, obj);
+      }
+      const indexOf = element.endpoint.indexOf('{field}');
+
+      obj.notParsedEndpoint = element.notParsedEndpoint;
+      if (element.endpoint[element.endpoint.length - 1] !== '/') {
+        obj.notParsedEndpoint = element.endpoint;
+        element.notParsedEndpoint = element.endpoint;
+        element.endpoint += '/';
+      }
+      if (indexOf) {
+        element.endpoint = element.endpoint.replace(
+          /{field}/gi,
+          `{${element.field}}`
+        );
+      }
+      if (Array.isArray(obj.value)) {
+        obj.link = [];
+        obj.value.forEach((val) => {
+          obj.link.push(
+            this.format(element.endpoint, {
+              [obj.name]: val
+            })
+          );
+        });
+      } else {
+        obj['endpoint'] = this.format(element.endpoint, el);
+      }
+      if (col.name === 'evaluate') {
+        this.evaluateEndpoint = element.endpoint;
+      }
+      obj.text = this.format(element.text, el);
+    }
+    if (element.type === 'static') {
+      if (element.text) {
+        if (element.field === 'totalTime') {
+          obj.value = this.format(
+            element.text.replace(/{field}/gi, `{${element.field}}`),
+            { ...el, totalTime: this.getTotalTime(el) }
+          );
+        } else {
+          obj.value = this.format(
+            element.text.replace(/{field}/gi, `{${element.field}}`),
+            el
+          );
+        }
+      }
+      obj.label = element.label;
+    }
+    if (element.type === 'picture') {
+      const field = this.config.fields.find(
+        (elem) => elem.key === element.field
+      );
+      if (field) {
+        obj.default = field.default;
+      }
+    }
+    if (element.type === 'button') {
+      this.updateButtonTypeCell(obj, element, el);
+    }
+    if (element.type === 'buttonGroup') {
+      obj.content = element.content.map((elem) => {
+        const newObj = Object.assign(
+          {},
+          elem,
+          { rowId: obj.rowId },
+          { disableAction: this.disableActions }
+        );
+
+        this.updateButtonTypeCell(newObj, elem, el);
+        return newObj;
+      });
+    }
+    if (element.type === 'select' && element.content) {
+      obj.content = element.content.map((elem) => {
+        const newObj = Object.assign({}, elem, { disableAction: this.disableActions });
+
+        newObj['endpoint'] = this.format(elem.endpoint, el);
+
+        this.updateButtonTypeCell(newObj, elem, el);
+        return newObj;
+      });
+    }
+    if (element.fields) {
+      obj.fields = [];
+      element.fields.forEach((field, index) => {
+        const item = Object.assign({}, field);
+        obj.fields[index] = item;
+        props = field.field.split('.');
+        this.setValue(el, props, item);
+      });
+    } else if (element.field) {
+      if (element.type === 'info') {
+        obj.editDisable = this.config.list.editDisable;
+        obj.value = el;
+        obj.companyPicture = this.endpoint === Endpoints.Company;
+      } else {
+        props = element.field.split('.');
+        this.setValue(el, props, obj);
+      }
+    }
+    if (!this.checkValue(obj)) {
+      delete cell.contextMenu;
+    }
+    if (element.async && obj.value === -1) {
+      element.endpoint = this.format(element.endpoint, el);
+      const query = {};
+      if (element.query) {
+        const keys = Object.keys(element.query);
+        obj.query = {};
+        keys.forEach((key) => {
+          query[key] = this.format(element.query[key], el);
+
+          if (!query[key]) {
+            query[key] = this.format(element.query[key], this.data);
+          }
+        });
+      }
+      if (this.asyncData[element.endpoint]) {
+        this.asyncData[element.endpoint].push({
+          method: element.method,
+          content: cell.content,
+          query,
+          field: obj,
+          id: el.id,
+          request_field: element.request_field
+        });
+      } else {
+        this.asyncData[element.endpoint] = [
+          {
+            method: element.method,
+            content: cell.content,
+            query,
+            field: obj,
+            id: el.id,
+            request_field: element.request_field
+          }
+        ];
+      }
+    }
+
+    return obj;
   }
 
   public updateButtonTypeCell(obj, element, el) {
@@ -1076,15 +1010,6 @@ export class DynamicListComponent
     obj.title = this.format(element.title, el);
     obj.messageType = this.format(element.messageType, el);
     obj.repeat = element.repeat;
-    if (element.hidden) {
-      this.setValue(el, element.hidden.split('.'), obj, 'hidden');
-    } else if (element.field) {
-      this.setValue(el, element.field.split('.'), obj, 'hidden');
-      obj.hidden = !obj.hidden;
-    }
-    if (element.replace_by) {
-      this.setValue(el, element.replace_by.split('.'), obj, 'replace_by');
-    }
     obj.list = true;
     obj.templateOptions = {
       label: element.label,
@@ -1097,6 +1022,16 @@ export class DynamicListComponent
       action: element.action,
       text: this.format(element.text, el)
     };
+
+    if (element.hidden) {
+      this.setValue(el, element.hidden.split('.'), obj, 'hidden');
+    } else if (element.field) {
+      this.setValue(el, element.field.split('.'), obj, 'hidden');
+      obj.hidden = !obj.hidden;
+    }
+    if (element.replace_by) {
+      this.setValue(el, element.replace_by.split('.'), obj, 'replace_by');
+    }
   }
 
   public getSortedColumns(config) {
@@ -1341,33 +1276,33 @@ export class DynamicListComponent
     this.poped = true;
   }
 
-  public unpopedTable() {
-    if (this.config.list.filters) {
-      this.filterService.filters = {
-        endpoint: this.parentEndpoint,
-        list: this.config.list
-      };
-    }
-    this.poped = false;
-    this.minimized = false;
-    this.maximize = false;
-  }
+  // public unpopedTable() {
+  //   if (this.config.list.filters) {
+  //     this.filterService.filters = {
+  //       endpoint: this.parentEndpoint,
+  //       list: this.config.list
+  //     };
+  //   }
+  //   this.poped = false;
+  //   this.minimized = false;
+  //   this.maximize = false;
+  // }
 
-  public minimizeTable() {
-    this.minimized = true;
-    this.event.emit({
-      type: 'minimize',
-      list: this.config.list.list
-    });
-  }
+  // public minimizeTable() {
+  //   this.minimized = true;
+  //   this.event.emit({
+  //     type: 'minimize',
+  //     list: this.config.list.list
+  //   });
+  // }
 
-  public closeTable() {
-    this.event.emit({
-      type: 'close',
-      list: this.config.list.list
-    });
-    this.filterService.resetQueries(this.config.list.list);
-  }
+  // public closeTable() {
+  //   this.event.emit({
+  //     type: 'close',
+  //     list: this.config.list.list
+  //   });
+  //   this.filterService.resetQueries(this.config.list.list);
+  // }
 
   public buttonHandler(e, action?) {
     if (action) {
@@ -1899,14 +1834,34 @@ export class DynamicListComponent
     this.open(this.modal, { size: 'lg' });
   }
 
-  public activeTable() {
-    if (this.poped) {
-      this.event.emit({
-        type: 'active',
-        list: this.config.list.list
-      });
-    }
+  editListObject(row) {
+    const endpoint = this.config.list.editEndpoint;
+    const id = getPropValue(row.rowData, this.config.list.canEdit);
+    const label = row.__str__;
+
+    this.modalInfo = {
+      type: 'form',
+      endpoint,
+      id,
+      label,
+      mode: 'edit'
+    };
+
+    this.open(this.modal, { size: 'lg' });
   }
+
+  canEdit(row): boolean {
+    return !!getPropValue(row.rowData, this.config.list.canEdit);
+  }
+
+  // public activeTable() {
+  //   if (this.poped) {
+  //     this.event.emit({
+  //       type: 'active',
+  //       list: this.config.list.list
+  //     });
+  //   }
+  // }
 
   public addHighlight(prop, data, row, values) {
     const props = prop.split('.');
