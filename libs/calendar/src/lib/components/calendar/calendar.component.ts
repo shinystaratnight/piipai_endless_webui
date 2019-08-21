@@ -12,6 +12,7 @@ import { filters } from './calendar-filters.meta';
 
 import { DatepickerComponent } from '../datepicker/datepicker.component';
 import { UserService } from '@webui/core';
+import { Endpoints } from '@webui/data';
 
 @Component({
   selector: 'app-calendar',
@@ -78,6 +79,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public modalInfo: any;
   public saveProcess: boolean;
   public availability = [];
+  public showCheckbox: boolean;
+  public selectedDates = {};
 
   public timesheetCounter = [
     {
@@ -310,6 +313,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
       closeModal();
       this.changeCalendar();
     }
+    if (e.type === 'sendForm' && e.status === 'success') {
+      this.showCheckbox = false;
+      this.selectedDates = {};
+      this.saveProcess = false;
+      closeModal();
+      setTimeout(() => {
+        this.changeCalendar();
+      }, 2000)
+    }
   }
 
   public formError() {
@@ -352,6 +364,38 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.data.acceptJobOffer(id).subscribe(() => {
       this.changeCalendar(this.currentRange.value);
     });
+  }
+
+  public selectDates() {
+    this.showCheckbox = true;
+  }
+
+  public addJob() {
+    let dates = [];
+    Object.keys(this.selectedDates).forEach((date) => {
+      if (this.selectedDates[date]) {
+        dates.push(date);
+      }
+    });
+
+    if (!dates.length) {
+      dates = undefined;
+    }
+
+    this.modalInfo = {
+      endpoint: Endpoints.Job,
+      data: {
+        shifts: {
+          action: 'add',
+          data: {
+            value: dates,
+            hide: true
+          }
+        }
+      }
+    }
+
+    this.modalService.open(this.modal, { size: 'lg' });
   }
 
   private changeCalendar(type?: DateRange) {
