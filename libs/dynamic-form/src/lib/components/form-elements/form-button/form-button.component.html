@@ -1,72 +1,79 @@
-<div class="form-group" [class.d-inline-flex]="!config.templateOptions.title && !config.inverse" [class.mb-0]="!config.templateOptions.mb && !this.group" style="white-space: nowrap" *ngIf="!config.hidden || showButton">
-  <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
-  <div class="form-element w-100" *ngIf="config.templateOptions.title">
-    <label class="col-form-label form-element-label">{{config.templateOptions.title}}:</label>
-  </div>
-  <button [type]="config.templateOptions.type ? config.templateOptions.type : 'button'"
-    *ngIf="(!config.hidden || showButton) && (config.templateOptions.text || repeatArray && repeatArray.length > 1) && config.action !== 'showMessage'"
-    [ngClass]="[buttonClass, textClass, cssClasses, config.inverse ? 'inverse' : '']"
-    class="btn"
-    [class.btn-outline-primary]="config.list && !buttonClass && !config.inverse && !config.shadow && !cssClasses"
-    [class.btn-sm]="config.templateOptions.small"
-    [class.px-2]="config.templateOptions.p && buttonClass !== 'btn-link'"
-    [class.list]="config.templateOptions.p"
-    [class.text-white]="(buttonClass || config.color) && !config.inverse && buttonClass !== 'btn-link' && !config.shadow"
-    [class.disabled]="isDisabled"
-    [attr.title]="disabledTitle"
-    [disabled]="config.disableAction || isDisabled"
-    (click)="action($event)">
-      <span *ngIf="repeatArray" class="d-flex align-items-center justify-content-between">
+<div class="form-group"
+  *ngIf="!config.hidden || showButton"
+  [class.d-inline-flex]="!config.templateOptions.title && !config.inverse"
+  [class.mb-0]="!config.templateOptions.mb && !this.group"
+  style="white-space: nowrap">
+
+    <label class="mr-1" *ngIf="label && config.templateOptions.label">{{config.templateOptions.label}}</label>
+
+    <div class="form-element w-100" *ngIf="config.templateOptions.title">
+      <label class="col-form-label form-element-label">{{config.templateOptions.title}}:</label>
+    </div>
+
+    <button [type]="config.templateOptions.type ? config.templateOptions.type : 'button'"
+      *ngIf="(!config.hidden || showButton) && (config.templateOptions.text || repeatArray && repeatArray.length > 1) && config.action !== 'showMessage'"
+      [ngClass]="[buttonClass, textClass, cssClasses, config.inverse ? 'inverse' : '']"
+      class="btn"
+      [class.btn-outline-primary]="config.list && !buttonClass && !config.inverse && !config.shadow && !cssClasses"
+      [class.btn-sm]="config.templateOptions.small"
+      [class.px-2]="config.templateOptions.p && buttonClass !== 'btn-link'"
+      [class.list]="config.templateOptions.p"
+      [class.text-white]="(buttonClass || config.color) && !config.inverse && buttonClass !== 'btn-link' && !config.shadow"
+      [class.disabled]="isDisabled"
+      [attr.title]="disabledTitle"
+      [disabled]="config.disableAction || isDisabled"
+      (click)="action($event)">
+        <span *ngIf="repeatArray" class="d-flex align-items-center justify-content-between">
+          <ng-container *ngTemplateOutlet="icon; context: { icon: config.svg }"></ng-container>
+
+          <fa-icon
+            [ngClass]="{'text-white': buttonClass && buttonClass !== 'btn-link' && !config.shadow, 'mr-1': !last || first}"
+            *ngFor="let icon of repeatArray; let last = last; let first = first"
+            [icon]="['fas', config.templateOptions.icon]">
+          </fa-icon>
+          {{config.templateOptions.text}}
+        </span>
+
         <ng-container *ngTemplateOutlet="icon; context: { icon: config.svg }"></ng-container>
 
-        <fa-icon
-          [ngClass]="{'text-white': buttonClass && buttonClass !== 'btn-link' && !config.shadow, 'mr-1': !last || first}"
-          *ngFor="let icon of repeatArray; let last = last; let first = first"
-          [icon]="['fas', config.templateOptions.icon]">
-        </fa-icon>
-        {{config.templateOptions.text}}
-      </span>
-
+        <span *ngIf="!repeatArray">{{config.templateOptions.text}}</span>
+    </button>
+    <button class="btn btn-sm btn-link mr-1" type="button" *ngIf="config.action === 'showMessage'" [placement]="config.placement" [ngbTooltip]="detail" (click)="action($event)">
+      {{config.templateOptions.text}}
+    </button>
+    <span class="postfix mr-1" *ngIf="config.postfix">{{config.postfix}}</span>
+    <span class="custom-button" *ngIf="!config.hidden && !config.templateOptions.text && repeatArray && repeatArray.length === 1 && !config.disableAction" (click)="action($event)">
       <ng-container *ngTemplateOutlet="icon; context: { icon: config.svg }"></ng-container>
+      <fa-icon class="icon" [icon]="['fas', config.templateOptions.icon]"
+        [ngStyle]="{'color': config.text_color}" [title]="config.title">
+      </fa-icon>
+        {{config.title}}
+    </span>
+    <div *ngIf="config.customLink && config.image" class="image-wrapper">
 
-      <span *ngIf="!repeatArray">{{config.templateOptions.text}}</span>
-  </button>
-  <button class="btn btn-sm btn-link mr-1" type="button" *ngIf="config.action === 'showMessage'" [placement]="config.placement" [ngbTooltip]="detail" (click)="action($event)">
-    {{config.templateOptions.text}}
-  </button>
-  <span class="postfix mr-1" *ngIf="config.postfix">{{config.postfix}}</span>
-  <span class="custom-button" *ngIf="!config.hidden && !config.templateOptions.text && repeatArray && repeatArray.length === 1 && !config.disableAction" (click)="action($event)">
-    <ng-container *ngTemplateOutlet="icon; context: { icon: config.svg }"></ng-container>
-    <fa-icon class="icon" [icon]="['fas', config.templateOptions.icon]"
-      [ngStyle]="{'color': config.text_color}" [title]="config.title">
-    </fa-icon>
-      {{config.title}}
-  </span>
-  <div *ngIf="config.customLink && config.image" class="image-wrapper">
+      <div class="tracking-mobile">
+        <button type="button" class="btn btn-link tracking-button" (click)="action($event)">Open tracking map</button>
 
-    <div class="tracking-mobile">
-      <button type="button" class="btn btn-link tracking-button" (click)="action($event)">Open tracking map</button>
-
-      <img class="mobile-image" src="/assets/img/map.jpg" alt="map" width="123" height="40">
-    </div>
-
-    <div class="tracking-desktop">
-      <img [src]="config.image" alt="" style="border-radius: 50%">
-      <div class="backdrop" (click)="action($event)">
-        <span>Show<br>map</span>
-        <app-spinner style="margin-left: -.5rem;" *ngIf="saveProcess"></app-spinner>
+        <img class="mobile-image" src="/assets/img/map.jpg" alt="map" width="123" height="40">
       </div>
-      <div *ngIf="config.locationDataEmpty" class="backdrop backdrop-danger" (click)="action($event)">
-        <span>No tracking<br>info</span>
+
+      <div class="tracking-desktop">
+        <img [src]="config.image" alt="" style="border-radius: 50%">
+        <div class="backdrop" (click)="action($event)">
+          <span>Show<br>map</span>
+          <app-spinner style="margin-left: -.5rem;" *ngIf="saveProcess"></app-spinner>
+        </div>
+        <div *ngIf="config.locationDataEmpty" class="backdrop backdrop-danger" (click)="action($event)">
+          <span>No tracking<br>info</span>
+        </div>
       </div>
     </div>
-  </div>
-  <span *ngIf="config.customLink && !config.image" class="custom-link" (click)="action($event)">{{config.title}}</span>
-  <span *ngIf="config.hidden && replacyValue">{{replacyValue}}</span>
-  <small class="text-muted" *ngIf="config.templateOptions.description">
-    {{config.templateOptions.description}}
-  </small>
-  <span *ngIf="config.delim">{{config.delim}}</span>
+    <span *ngIf="config.customLink && !config.image" class="custom-link" (click)="action($event)">{{config.title}}</span>
+    <span *ngIf="config.hidden && replacyValue">{{replacyValue}}</span>
+    <small class="text-muted" *ngIf="config.templateOptions.description">
+      {{config.templateOptions.description}}
+    </small>
+    <span *ngIf="config.delim">{{config.delim}}</span>
 </div>
 <div class="f-size-14 text-success" *ngIf="config.templateOptions.additionalDescription">
   {{config.templateOptions.additionalDescription}}

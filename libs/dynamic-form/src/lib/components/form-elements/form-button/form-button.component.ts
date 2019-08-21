@@ -58,6 +58,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
       this.repeatArray = [''];
     }
     this.checkHiddenProperty();
+    this.checkShowProperty();
     this.customizeButton();
 
     if (this.config.process) {
@@ -92,6 +93,22 @@ export class FormButtonComponent implements OnInit, OnDestroy {
       });
 
       this.subscriptions.push(hiddenSubscription);
+    }
+  }
+
+  public checkShowProperty() {
+    const show = this.config.show;
+
+    if (show && show.subscribe) {
+      this.config.hidden = true;
+      const showSubscription = show.subscribe((value) => {
+        console.log(value, this);
+        this.showButton = value;
+
+        this.cd.detectChanges();
+      });
+
+      this.subscriptions.push(showSubscription);
     }
   }
 

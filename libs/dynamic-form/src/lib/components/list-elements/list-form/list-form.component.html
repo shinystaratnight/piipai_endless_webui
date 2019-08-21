@@ -6,14 +6,6 @@
       [group]="group"
       (event)="eventHandler($event)">
     </ng-container>
-
-    <fa-icon
-      *ngIf="showSaveButton"
-      icon="check"
-      class="position-absolute text-success hov-opacity"
-      title="Save changes"
-      (click)="saveChanges()">
-    </fa-icon>
   </div>
 
   <span class="text-success f-size-12">{{value}}</span>

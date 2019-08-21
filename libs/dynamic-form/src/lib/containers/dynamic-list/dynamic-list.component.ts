@@ -17,7 +17,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LocalStorageService } from 'ngx-webstorage';
 
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { ToastService, MessageType, AuthService, UserService, CompanyPurposeService } from '@webui/core';
@@ -144,6 +144,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     Endpoints.TimesheetUnapproved,
   ];
   public collapsed = true;
+  public updateButtons = new Map();
   public sortedField: any;
   public isMobileDevice = isMobile() && isCandidate();
   public approveInvoice: boolean;
@@ -282,6 +283,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       };
       this.body.push(...this.generateBody(config, addData, innerTables));
     }
+
+    this.listService.updateButtons = this.updateButtons;
+    this.listService.data = this.fullData[this.responseField];
+    this.listService.config = this.config.list;
     this.listService.updateActions = listUpdateActions[this.endpoint];
   }
 
@@ -787,10 +792,12 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       styles: element.styles,
       inlineValue: element.inlineValue,
       form: {...element.form},
-      update: this.config.list.update,
-      create: this.config.list.create,
-      rowData: el
+      show: element.updateButton ? new BehaviorSubject(false) : undefined
     };
+    if (obj.show) {
+      this.updateButtons.set(el.id, obj.show);
+    }
+
     if (obj.form && Object.keys(obj.form).length) {
       fillingForm([obj.form], el);
       if (obj.form.templateOptions.display) {
@@ -1374,11 +1381,18 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         case 'showTracking':
           this.showTracking(e);
           break;
+        case 'updateObject':
+          this.updateListObject(e);
+          break;
         default:
           return;
       }
     }
     return;
+  }
+
+  public updateListObject(e) {
+    this.listService.saveChanges(e.id);
   }
 
   public buyCandidate(e) {
