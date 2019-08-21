@@ -205,7 +205,7 @@
                     class="icon"
                     (click)="editObject(row.id, row.__str__)">
                   </fa-icon>
-                  <span class="first-cell-link hov-opacity" *ngIf="canEdit(row) && config.list.editEndpoint && !config.list.editDisable && checkPermission('get')" (click)="editListObject(row)">
+                  <span class="first-cell-link hov-opacity" *ngIf="config.list.editEndpoint && canEdit(row) && !config.list.editDisable && checkPermission('get')" (click)="editListObject(row)">
                     <fa-icon icon="pencil-alt" class="icon"></fa-icon>&nbsp;Edit
                   </span>
                 </td>

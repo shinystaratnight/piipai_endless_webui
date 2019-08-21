@@ -105,11 +105,15 @@ const list = {
     label: 'Skill',
     update: {
       endpoint: '/skills/skills/{skill_id}/change_default/',
-      fields: ['active', 'default_rate', 'price_list_default_rate']
+      fields: ['active', 'default_rate', 'price_list_default_rate'],
+      method: 'post'
     },
     create: {
       exist: 'skill_id',
       endpoint: '/skills/skills/',
+      addFields: {
+        skill_id: 'id'
+      },
       fields: {
         name: 'id',
         industry: 'industry.id',
@@ -211,6 +215,18 @@ const list = {
         name: 'carrier_list_reserve',
         title: null,
         sort_field: 'carrier_list_reserve'
+      },
+      {
+        content: [
+          {
+            text: 'Save',
+            type: 'button',
+            field: 'id',
+            action: 'updateObject',
+            styles: ['default', 'size-m'],
+            updateButton: true
+          }
+        ]
       }
     ],
     pagination_label: 'Skill',
@@ -218,12 +234,23 @@ const list = {
     editDisable: false,
     editEndpoint: Endpoints.Skill,
     canEdit: 'skill_id',
+    buttons: [],
     filters: [
       filters.active,
       filters.industry
     ]
   },
   fields: [
+    {
+      key: 'id',
+      type: 'button',
+      templateOptions: {
+        text: 'Save',
+        label: '',
+        type: 'button'
+      },
+      read_only: true
+    },
     {
       key: 'name',
       type: 'input',

@@ -15,12 +15,11 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
-// import * as moment from 'moment-timezone';
 
 import { Field } from '@webui/data';
 import { FormatString, getTotalTime, getTimeInstance } from '@webui/utilities';
+
 import { BasicElementComponent } from '../basic-element/basic-element.component';
-// import { TimeService } from '@webui/shared';
 
 @Component({
   selector: 'app-form-input',
@@ -78,7 +77,6 @@ export class FormInputComponent extends BasicElementComponent
     private fb: FormBuilder,
     public elementRef: ElementRef,
     private cd: ChangeDetectorRef,
-    // private time: TimeService
   ) {
     super();
     this.subscriptions = [];
@@ -98,6 +96,14 @@ export class FormInputComponent extends BasicElementComponent
 
       if (this.config.templateOptions.type === 'number') {
         this.addControl(this.config, this.fb, this.requiredField, this.config.templateOptions.min, this.config.templateOptions.max);
+
+        this.subscriptions.push(this.group.get(this.key).valueChanges
+          .subscribe((value) => {
+            if (value) {
+              this.group.get(this.key).patchValue(parseFloat(value), { onlySelf: true, emitEvent: false });
+            }
+          })
+        );
       } else {
         this.addControl(this.config, this.fb, this.requiredField);
       }
