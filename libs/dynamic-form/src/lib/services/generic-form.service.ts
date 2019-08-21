@@ -1,5 +1,6 @@
 import { Injectable, Optional, Inject } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -13,7 +14,7 @@ export class GenericFormService {
   constructor(
     private http: HttpClient,
     private errors: ErrorsService,
-    private configs: MetadataService,
+    private metadataService: MetadataService,
     @Optional() @Inject(METADATA) private metadata: any
   ) {}
 
@@ -22,7 +23,10 @@ export class GenericFormService {
       params: new HttpParams({ fromObject: params})
     };
 
-    return this.http.get(endpoint, options);
+    return this.http.get(endpoint, options)
+      .pipe(
+        catchError((error: any) => this.errors.parseErrors(error))
+      );
   }
 
   public getByQuery(endpoint, query): Observable<any> {
@@ -42,7 +46,7 @@ export class GenericFormService {
   }
 
   public getMetadata(endpoint: string, query = ''): Observable<any> {
-    return this.configs.get(endpoint, query, this.metadata);
+    return this.metadataService.get(endpoint, query, this.metadata);
   }
 
   public submitForm(endpoint, data): Observable<any> {
@@ -85,7 +89,7 @@ export class GenericFormService {
       );
   }
 
-  public uploadFile(endpoint, data) {
+  public uploadFile(endpoint, data): Observable<any> {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
     return this.http

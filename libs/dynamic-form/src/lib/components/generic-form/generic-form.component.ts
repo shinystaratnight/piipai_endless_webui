@@ -17,13 +17,12 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
 import { finalize, skip, catchError } from 'rxjs/operators';
 
-import { UserService, SiteSettingsService, AuthService, CompanyPurposeService, Purpose } from '@webui/core';
-import { ToastService, MessageType } from '@webui/core';
-import { Field, Endpoints } from '@webui/data';
+import { UserService, SiteSettingsService, AuthService, CompanyPurposeService, ToastService, MessageType } from '@webui/core';
+import { Field, Purpose, Endpoints } from '@webui/data';
 import { FormatString, isCandidate, isMobile, getTimeInstance } from '@webui/utilities';
 
 import { GenericFormService, FormService, FormMode, ActionService, TimelineService, TimelineAction } from '../../services';
-import { getElementFromMetadata, removeValue,  } from '../../helpers';
+import { getElementFromMetadata, removeValue } from '../../helpers';
 
 export interface HiddenFields {
   elements: Field[];

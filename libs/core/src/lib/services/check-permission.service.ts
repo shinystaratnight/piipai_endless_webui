@@ -9,7 +9,7 @@ import { SiteService } from './site.service';
 import { NavigationService } from './navigation.service';
 import { Page, PageData } from '@webui/data';
 
-interface Permission {
+export interface Permission {
   id: number;
   name: string;
   codename: string;

@@ -1,0 +1,191 @@
+@import '../../../../../../../styles/variables';
+
+.list-info {
+
+  &-wrapper {
+    position: relative;
+
+    display: flex;
+  }
+
+  &-title {
+    position: relative;
+    margin-bottom: 4px;
+    font-size: 1rem;
+
+    fa-icon {
+      font-size: 10px;
+    }
+
+    &.position {
+      padding-top: 6px;
+    }
+
+    .title {
+      font-size: 18px;
+      line-height: 20px;
+      font-weight: 600;
+    }
+
+    .score {
+      display: inline-flex;
+
+      height: 14px;
+      line-height: 14px;
+
+      margin-top: 3px;
+      margin-left: 4px;
+      padding-left: 4px;
+
+      font-size: 14px;
+      vertical-align: top;
+
+      border-left: 1px solid black;
+    }
+  }
+
+  &-left {
+    margin-right: 1rem;
+  }
+
+  &-image {
+    position: relative;
+
+    img,
+    .contact-avatar {
+      width: 54px;
+      height: 54px;
+
+      // margin-bottom: .5rem;
+
+      border-radius: 50%;
+
+      background-color: #f5f5f5;
+    }
+
+    .available,
+    .unavailable {
+      position: absolute;
+      right: 0;
+      bottom: .1rem;
+
+      padding-top: 1px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 1rem;
+      height: 1rem;
+
+      font-size: .7rem;
+
+      border-radius: 50%;
+
+      color: white;
+    }
+
+    .available {
+      background-color: $brand-success;
+    }
+
+    .unavailable {
+      background-color: $brand-danger;
+    }
+  }
+
+  &-edit-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: .5rem;
+
+    color: rgba($gray, .3);
+
+    fa-icon {
+      font-size: 9px;
+      margin-right: .2rem;
+    }
+
+    &:hover,
+    &:hover fa-icon {
+      color: $brand-primary;
+
+      @each $item in $themes {
+        .#{$item}-theme & {
+          color: map-get($theme-colors, $item);
+        }
+      }
+    }
+  }
+
+  &-block {
+    margin-right: .5rem
+  }
+
+  &-status {
+    display: flex;
+
+    &-wrapper {
+      display: inline-flex;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .badge.badge-outline {
+      margin-bottom: .2rem;
+
+      border-color: $brand-success;
+      color: $brand-success;
+
+      &.danger {
+        color: $brand-danger;
+        border-color: $brand-danger;
+      }
+
+      &.success {
+        color: $brand-success;
+        border-color: $brand-success;
+      }
+
+      &.info {
+        color: $brand-info;
+        border-color: $brand-info;
+      }
+
+      &.warning {
+        color: $brand-warning;
+        border-color: $brand-warning;
+      }
+    }
+
+    .badge:last-child {
+      margin-bottom: 0;
+    }
+
+    .title {
+      margin-right: .2rem;
+    }
+  }
+}
+
+.description {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.more {
+  color: $brand-primary;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      color: map-get($theme-colors, $item);
+    }
+  }
+}
+
+.position {
+  font-size: 14px;
+  line-height: 16px;
+}

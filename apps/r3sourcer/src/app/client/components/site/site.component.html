@@ -1,6 +1,5 @@
 <ng-container *ngIf="!loader">
   <app-navigation
-    logo="/assets/img/new-software.svg"
     [user]="user"
     (update)="updateNavigationList($event)"
     (changePasswordEmitter)="openChangePassword()">

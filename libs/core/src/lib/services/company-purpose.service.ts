@@ -1,22 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Endpoints } from '@webui/data';
 
-export enum Purpose {
-  Hire = 'hire',
-  SelfUse = 'self_use',
-  Recruitment = 'recruitment'
-}
+import { Endpoints, Purpose } from '@webui/data';
 
 @Injectable()
 export class CompanyPurposeService {
 
   public purpose: Purpose;
 
+  hideListColumns = {
+    [Endpoints.SkillName]: {
+      [Purpose.SelfUse]: ['price_list_default_rate'],
+      [Purpose.Recruitment]: ['price_list_default_rate']
+    }
+  }
+
   public filterModules(modules: any[]) {
     switch(this.purpose) {
-      case 'recruitment':
+      case Purpose.Recruitment:
         return this.filterByEndpoint([Endpoints.Company, Endpoints.Job, Endpoints.CompanyContact], modules);
-      case 'self_use':
+      case Purpose.SelfUse:
         return this.filterByEndpoint([Endpoints.Company], modules);
       default:
         return modules;
@@ -25,13 +27,25 @@ export class CompanyPurposeService {
 
   public filterNavigationByPurpose(purpose: Purpose, navigation: any[]) {
     switch(purpose) {
-      case 'recruitment':
+      case Purpose.Recruitment:
         return this.filterByName(['allocations', 'accounts'], navigation);
-      case 'self_use':
+      case Purpose.SelfUse:
         return this.filterByName(['clients'], navigation);
       default:
         return navigation;
     }
+  }
+
+  public filterListColumns(endpoint: string, columns: any[]) {
+    const hideColumns: string[] = this.hideListColumns[endpoint];
+
+    if (hideColumns && hideColumns[this.purpose]) {
+      return columns.filter((column) => {
+        return !hideColumns[this.purpose].includes(column.name);
+      });
+    }
+
+    return columns;
   }
 
   private filterByName(keys: string[], navigation) {

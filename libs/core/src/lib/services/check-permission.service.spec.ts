@@ -1,30 +1,19 @@
-import { async, inject, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import {
-  BaseRequestOptions,
-  Http,
-  HttpModule,
-  Response,
-  ResponseOptions,
-  RequestOptions,
-  ConnectionBackend
-} from '@angular/http';
-import { MockBackend, MockConnection } from '@angular/http/testing';
-import { CookieService } from 'angular2-cookie/core';
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { CheckPermissionService, PermissionResponse } from './check-permission';
+import { throwError } from 'rxjs';
+
 import { ErrorsService } from './errors.service';
-import { Observable } from 'rxjs/Observable';
-import { SiteService } from '../../services/site.service';
-import { NavigationService } from '../../services/navigation.service';
-import { Permission } from '../../settings/permissions/permissions.component';
+import { SiteService } from './site.service';
+import { NavigationService } from './navigation.service';
+import { CheckPermissionService } from './check-permission.service';
 
 describe('CheckPermissionService', () => {
-
-  const url = `/login/`;
+  let service: CheckPermissionService;
 
   const mockErrorsService = {
     parseErrors() {
-      return Observable.throw('err');
+      return throwError('err');
     }
   };
 
@@ -42,56 +31,25 @@ describe('CheckPermissionService', () => {
     TestBed.configureTestingModule({
       providers: [
         CheckPermissionService,
-        MockBackend,
-        BaseRequestOptions,
-        CookieService,
         { provide: ErrorsService, useValue: mockErrorsService },
-        {
-          provide: Http,
-          useFactory: (backend, options) => new Http(backend, options),
-          deps: [MockBackend, BaseRequestOptions]
-        },
-        { provide: ConnectionBackend, useClass: MockBackend },
-        { provide: RequestOptions, useClass: BaseRequestOptions },
         { provide: SiteService, useValue: mockSiteService },
         { provide: NavigationService, useValue: mockNavigationService }
       ],
       imports: [
-        HttpModule
+        HttpClientTestingModule,
       ]
     });
+
+    service = TestBed.get(CheckPermissionService);
   });
 
-  it('should be defined', async(inject(
-    [CheckPermissionService, MockBackend], (service, mockBackend) => {
-
+  it('should be defined', () => {
     expect(service).toBeDefined();
-  })));
+  });
 
   describe('getPermissions method', () => {
 
-    it('should return permissions from api',
-      async(inject([CheckPermissionService, MockBackend],
-        (service: CheckPermissionService, mockBackend: MockBackend) => {
-          const mockResponse: PermissionResponse = {
-            permission_list: [],
-            group_permission_list: []
-          };
-
-          const body = JSON.stringify(mockResponse);
-
-          mockBackend.connections.subscribe((conn) => {
-            conn.mockRespond(new Response(new ResponseOptions({ body })));
-          });
-          const result = service.getPermissions('123');
-
-          result.subscribe((res) => {
-            expect(res).toEqual([]);
-          });
-    })));
-
-    it('should return permissions from cash',
-      async(inject([CheckPermissionService], (service: CheckPermissionService) => {
+    it('should return permissions from cash', () => {
         service.permissions = [{
           name: 'Name',
           id: 1,
@@ -99,7 +57,11 @@ describe('CheckPermissionService', () => {
         }];
 
         const permissions = service.getPermissions('123');
-    })));
+
+        permissions.subscribe((res) => {
+          expect(res).toEqual(service.permissions);
+        })
+    });
   });
 
 });
