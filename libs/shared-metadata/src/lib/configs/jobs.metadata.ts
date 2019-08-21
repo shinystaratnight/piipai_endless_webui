@@ -4,7 +4,7 @@ import { Endpoints } from '@webui/data';
 
 const filter = {
   shift_dates: createFilter(Type.Date, {
-    key: 'shift_dates.shift_date',
+    key: 'shift_dates__shift_date',
     label: 'Shift start date',
     yesterday: true,
     today: true,
