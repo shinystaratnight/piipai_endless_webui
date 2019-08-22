@@ -16,13 +16,29 @@ export interface CalendarData {
 export class CalendarService {
   public calendarTimes = [
     '00:00 AM',
-    '3:00',
-    '6:00 AM',
-    '9:00',
-    '12:00 PM',
+    '01:00',
+    '02:00',
+    '03:00',
+    '04:00',
+    '05:00',
+    '06:00',
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
     '15:00',
-    '18:00 PM',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
     '21:00',
+    '22:00',
+    '23:00',
     '23:59 PM'
   ];
 
@@ -127,7 +143,7 @@ export class CalendarService {
 
       return {
         time,
-        top: (this.calendarHeight / 8) * i - 6,
+        top: (this.calendarHeight / (this.calendarTimes.length - 1)) * i - 6,
         ...result
       };
     });
@@ -136,8 +152,8 @@ export class CalendarService {
   calculateLines() {
     return this.calendarTimes.map((time, i) => {
       return {
-        top: (this.calendarHeight / 8) * i,
-        class: (i % 2 !== 0) ? 'dotted' : ''
+        top: (this.calendarHeight / (this.calendarTimes.length - 1)) * i,
+        class: (i % 4 !== 0) ? 'dotted' : ''
       };
     });
   }
