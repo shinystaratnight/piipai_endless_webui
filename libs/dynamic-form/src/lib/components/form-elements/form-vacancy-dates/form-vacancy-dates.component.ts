@@ -86,14 +86,16 @@ export class FormVacancyDatesComponent extends BasicElementComponent
 
   public ngAfterContentInit() {
     setTimeout(() => {
-      const today = this.calendar.nativeElement.querySelector('.bg-primary');
+      if (this.calendar) {
+        const today = this.calendar.nativeElement.querySelector('.bg-primary');
 
-      if (today) {
-        today.classList.remove('bg-primary');
-        this.todayElement = today.parentElement;
+        if (today) {
+          today.classList.remove('bg-primary');
+          this.todayElement = today.parentElement;
 
-        if (this.todayElement) {
-          this.todayElement.classList.add('current-day');
+          if (this.todayElement) {
+            this.todayElement.classList.add('current-day');
+          }
         }
       }
     }, 500);

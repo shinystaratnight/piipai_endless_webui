@@ -2,13 +2,9 @@ import { getYesterday, getToday, getTommorrow } from '@webui/utilities';
 import { createFilter, Type } from '@webui/metadata';
 import { Endpoints } from '@webui/data';
 
-const yesterdayFormatDate = getYesterday();
-const todayFormatDate = getToday().format();
-const tomorrowFormatDate = getTommorrow();
-
 const filter = {
   shift_dates: createFilter(Type.Date, {
-    key: 'shift_dates.shift_date',
+    key: 'shift_dates__shift_date',
     label: 'Shift start date',
     yesterday: true,
     today: true,
@@ -1431,19 +1427,15 @@ const formadd = [
             },
             read_only: false
           },
-          {
-            type: 'button',
-            key: 'selectDates',
-            color: 'primary',
-            templateOptions: {
-              text: 'Select dates',
-              type: 'button',
-              action: 'selectDates'
-            }
-          },
         ]
       }
     ]
+  },
+  {
+    key: 'shifts',
+    type: 'jobdates',
+    removeDate: null,
+    value: []
   }
 ];
 

@@ -23,7 +23,6 @@ import { FormatString, isCandidate, isMobile, getTimeInstance } from '@webui/uti
 
 import { GenericFormService, FormService, FormMode, ActionService, TimelineService, TimelineAction } from '../../services';
 import { getElementFromMetadata, removeValue } from '../../helpers';
-import { SelectDatesModalComponent } from '../../modals';
 
 export interface HiddenFields {
   elements: Field[];
@@ -1052,9 +1051,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     }
   }
 
-  public getJobStartDate() {
-    if (this.selectedDates) {
-      return this.selectedDates.reduce((prev, next) => prev > next ? next : prev);
+  public getJobStartDate(shifts) {
+    if (shifts && shifts.length) {
+      return shifts.reduce((prev, next) => prev > next ? next : prev);
     }
   }
 
@@ -1089,7 +1088,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
   public submitForm(data) {
     if (this.endpoint === Endpoints.Job && !this.id) {
-      data['work_start_date'] = this.getJobStartDate();
+      data['work_start_date'] = this.getJobStartDate(data.shifts);
+      this.selectedDates = data.shifts;
     }
 
     if (data.job_shift) {
@@ -1505,28 +1505,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       this.buyProfile();
     }
 
-    if (e.value === 'selectDates') {
-      this.selectDates();
-    }
-
     this.buttonAction.emit(e);
-  }
-
-  public selectDates() {
-    this.modalRef = this.modal.open(SelectDatesModalComponent, { size: 'lg', windowClass: 'extend-modal' });
-    this.modalRef.result
-      .then((dates) => {
-        this.saveDates(dates);
-      })
-      .catch(() => {});
-  }
-
-  public saveDates(dates: string[]) {
-    const button = getElementFromMetadata(this.metadata, 'selectDates');
-    this.selectedDates = dates;
-
-    button.templateOptions.additionalDescription = 'Selected dates: ' + dates.join(', ');
-    this.updateMetadata(this.metadata, 'selectDates');
   }
 
   public buyProfile() {
