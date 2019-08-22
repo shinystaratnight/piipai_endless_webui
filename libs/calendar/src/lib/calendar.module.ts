@@ -8,8 +8,9 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonsModule } from 'ngx-bootstrap';
 
 import { CalendarComponent, DateRangeComponent, DatepickerComponent } from './components';
+import { SelectDateDirective } from './directives';
 import { CalendarTooltipDirective } from './pipes';
-import { CalendarService, CalendarDataService, DatepickerService, DateRangeService } from './services';
+import { CalendarService, CalendarDataService, DatepickerService, DateRangeService, SelectDateService } from './services';
 
 import { SharedModule } from '@webui/shared';
 import { DynamicFormModule } from '@webui/dynamic-form';
@@ -31,13 +32,15 @@ import { DynamicFormModule } from '@webui/dynamic-form';
     DateRangeComponent,
     CalendarTooltipDirective,
     DatepickerComponent,
+    SelectDateDirective,
   ],
   exports: [ CalendarComponent ],
   providers: [
     CalendarService,
     CalendarDataService,
     DatepickerService,
-    DateRangeService
+    DateRangeService,
+    SelectDateService,
   ]
 })
 export class CalendarModule {}

@@ -40,10 +40,12 @@ export class CalendarTooltipDirective {
   private leaveListener() {
     const el = this.el.nativeElement;
 
-    this.renderer.setStyle(el, 'width', undefined);
+    this.renderer.removeStyle(el, 'width');
     this.renderer.setStyle(el, 'top', this.initialTop);
-    this.renderer.setStyle(el, 'bottom', undefined);
-    this.renderer.setStyle(el, 'left', undefined);
+    this.renderer.removeStyle(el, 'bottom');
+    this.renderer.removeStyle(el, 'left');
+
+    this.renderer.removeClass(el, 'left');
   }
 
   private getSizes(el) {

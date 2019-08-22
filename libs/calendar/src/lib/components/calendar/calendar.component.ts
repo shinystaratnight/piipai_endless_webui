@@ -6,7 +6,7 @@ import { combineLatest } from 'rxjs';
 
 import { Moment } from 'moment-timezone';
 
-import { CalendarService, CalendarData, Status, CalendarDataService, Calendar } from '../../services';
+import { CalendarService, CalendarData, Status, CalendarDataService, Calendar, SelectDateService } from '../../services';
 import { DateRange, filterDateFormat, isManager, isCandidate, isClient, getRoleId, FormatString, getTimeInstance } from '@webui/utilities';
 import { filters } from './calendar-filters.meta';
 
@@ -79,8 +79,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public modalInfo: any;
   public saveProcess: boolean;
   public availability = [];
-  public showCheckbox: boolean;
-  public selectedDates = {};
+  public selectedTime: string;
 
   public timesheetCounter = [
     {
@@ -131,6 +130,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private router: Router,
     private userService: UserService,
+    private selectDateService: SelectDateService
   ) {}
 
   get isMonthRange() {
@@ -151,6 +151,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
 
     return this.currentRange.value;
+  }
+
+  get hasSelectedDates() {
+    return this.selectDateService.hasSelectedDates();
   }
 
   ngOnInit() {
@@ -187,6 +191,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       .subscribe((value: DateRange) => {
         this.calendarData = undefined;
         this.currentDate = this.calendar.getToday();
+        this.selectedTime = '07:00';
 
         this.changeCalendar(value);
       });
@@ -314,8 +319,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.changeCalendar();
     }
     if (e.type === 'sendForm' && e.status === 'success') {
-      this.showCheckbox = false;
-      this.selectedDates = {};
+      this.clearSelectedDates();
       this.saveProcess = false;
       closeModal();
       setTimeout(() => {
@@ -366,21 +370,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  public selectDates() {
-    this.showCheckbox = true;
-  }
-
   public addJob() {
-    let dates = [];
-    Object.keys(this.selectedDates).forEach((date) => {
-      if (this.selectedDates[date]) {
-        dates.push(date);
-      }
-    });
-
-    if (!dates.length) {
-      dates = undefined;
-    }
+    const dates = this.selectDateService.getSlectedDates();
 
     this.modalInfo = {
       endpoint: Endpoints.Job,
@@ -393,9 +384,34 @@ export class CalendarComponent implements OnInit, OnDestroy {
           }
         }
       }
+    };
+
+    if (this.isDayRange) {
+      this.modalInfo.data['default_shift_starting_time'] = {
+        action: 'add',
+        data: {
+          value: this.selectedTime
+        }
+      }
     }
 
     this.modalService.open(this.modal, { size: 'lg' });
+  }
+
+  isSelected(date: string) {
+    return this.selectDateService.isSelected(date);
+  }
+
+  isSelectedTime(time: string) {
+    return time === this.selectedTime;
+  }
+
+  selectTime(time) {
+    this.selectedTime = time;
+  }
+
+  clearSelectedDates() {
+    this.selectDateService.clear();
   }
 
   private changeCalendar(type?: DateRange) {
