@@ -48,8 +48,9 @@ export class DatepickerService {
 
   public generateMonth(from: Moment, updateBody?: Function): DatepickerData {
     const range = this.getRangeDates(from, DateRange.Month);
-    const firstDay = range.start.weekday(weekStart);
-    const lastDay = range.end.weekday(weekEnd);
+    const firstDay = range.start;
+    const lastDay = range.end;
+
     let body = [];
     let row;
 
@@ -124,9 +125,19 @@ export class DatepickerService {
   }
 
   public getRangeDates(date: Moment, type: DateRange): { start: Moment, end: Moment } {
+    const start = date.clone().startOf(type);
+    const end = date.clone().endOf(type);
+
+    if (type === DateRange.Month) {
+      return {
+        start: start.weekday(weekStart),
+        end: end.weekday(weekEnd)
+      }
+    }
+
     return {
-      start: date.clone().startOf(type),
-      end: date.clone().endOf(type)
+      start,
+      end
     };
   }
 
