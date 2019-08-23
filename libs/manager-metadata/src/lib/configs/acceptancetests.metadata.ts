@@ -1,3 +1,6 @@
+import { Form, DatepickerType, InputType, CheckboxType } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
+
 const list = {
   fields: [
     {
@@ -110,213 +113,72 @@ const list = {
   }
 };
 
-const form = [
-  {
-    type: 'row',
-    children: [
-      {
-        type: 'group',
-        label: 'General',
-        name: true,
-        children: [
-          {
-            key: 'test_name',
-            type: 'input',
-            templateOptions: {
-              label: 'Test Name',
-              type: 'text',
-              max: 255,
-              required: true
-            }
-          },
-          {
-            key: 'description',
-            type: 'textarea',
-            read_only: false,
-            templateOptions: {
-              label: 'Description',
-              type: 'text',
-              required: false
-            }
-          },
-          {
-            key: 'is_active',
-            type: 'checkbox',
-            read_only: false,
-            default: false,
-            templateOptions: {
-              label: 'Active',
-              type: 'checkbox',
-              required: false
-            }
-          },
-          {
-            key: 'valid_from',
-            type: 'datepicker',
-            read_only: false,
-            templateOptions: {
-              label: 'Valid From',
-              type: 'date',
-              required: true
-            }
-          },
-          {
-            key: 'valid_until',
-            type: 'datepicker',
-            read_only: false,
-            templateOptions: {
-              label: 'Valid Until',
-              type: 'date',
-            }
-          },
-        ]
-      },
-      {
-        type: 'group',
-        label: 'Relationships',
-        name: true,
-        children: [
-          {
-            type: 'related',
-            endpoint: '/pricing/industries/',
-            key: 'acceptance_tests_industries',
-            many: true,
-            useOptions: true,
-            relatedObjects: {
-              endpoint: '/acceptance-tests/acceptancetestindustries/',
-              data: {
-                acceptance_test: '{id}'
-              },
-              field: 'industry'
-            },
-            templateOptions: {
-              label: 'Industries',
-              type: 'related',
-              values: ['__str__'],
-              delete: true,
-              add: false
-            }
-          },
-          {
-            type: 'related',
-            endpoint: '/skills/skills/',
-            key: 'acceptance_tests_skills',
-            many: true,
-            useOptions: true,
-            relatedObjects: {
-              endpoint: '/acceptance-tests/acceptancetestskills/',
-              data: {
-                acceptance_test: '{id}'
-              },
-              field: 'skill'
-            },
-            templateOptions: {
-              label: 'Skills',
-              type: 'related',
-              values: ['__str__'],
-              delete: true,
-              add: false,
-            }
-          },
-          {
-            type: 'related',
-            endpoint: '/core/tags/',
-            key: 'acceptance_tests_tags',
-            many: true,
-            useOptions: true,
-            relatedObjects: {
-              endpoint: '/acceptance-tests/acceptancetesttags/',
-              data: {
-                acceptance_test: '{id}'
-              },
-              field: 'tag'
-            },
-            templateOptions: {
-              label: 'Tags',
-              type: 'related',
-              values: ['__str__'],
-              delete: true,
-              add: false
-            }
-          },
-          {
-            type: 'related',
-            send: false,
-            endpoint: '/acceptance-tests/acceptancetestworkflownodes/',
-            key: 'acceptance_tests_workflow_nodes',
-            many: true,
-            options: [],
-            doNotChoice: true,
-            visibleMode: true,
-            prefilled: {
-              acceptance_test: '{id}'
-            },
-            templateOptions: {
-              label: 'Workflow Node',
-              type: 'related',
-              values: ['__str__', 'company_workflow_node'],
-              display: '{__str__}',
-              delete: true,
-              add: true
-            }
-          },
-        ]
-      }
-    ]
-  },
-];
+const form = function() {
+  return [
+    new Form.row.element()
+      .setChildren([
+        new Form.group.element('General')
+          .setChildren([
+            new Form.input.element('test_name', 'Test Name', InputType.Text)
+              .required()
+              .updateTemplate({ max: 255 }),
 
-const formadd = [
-  {
-    key: 'test_name',
-    type: 'input',
-    templateOptions: {
-      label: 'Test Name',
-      type: 'text',
-      max: 255,
-      required: true
-    }
-  },
-  {
-    key: 'description',
-    type: 'textarea',
-    templateOptions: {
-      label: 'Description',
-      type: 'text',
-      required: false
-    }
-  },
-  {
-    key: 'is_active',
-    type: 'checkbox',
-    default: true,
-    templateOptions: {
-      label: 'Active',
-      type: 'checkbox',
-      required: false
-    }
-  },
-  {
-    key: 'valid_from',
-    type: 'datepicker',
-    read_only: false,
-    templateOptions: {
-      required: true,
-      hidePreviewError: true,
-      label: 'Valid From',
-      type: 'date',
-    }
-  },
-  {
-    key: 'valid_until',
-    type: 'datepicker',
-    read_only: false,
-    templateOptions: {
-      label: 'Valid Until',
-      type: 'date',
-    }
-  },
-];
+              new Form.textarea.element('description', 'Description'),
+
+            new Form.checkbox.element('is_active', 'Active', CheckboxType.Checkbox),
+
+            new Form.datepicker.element('valid_from', 'Valid From', DatepickerType.Date)
+              .required(),
+
+            new Form.datepicker.element('valid_until', 'Valid Until', DatepickerType.Date),
+          ]),
+
+        new Form.group.element('Relationships')
+          .setChildren([
+            new Form.related.element('acceptance_tests_industries', 'Industries', Endpoints.Industry)
+              .update({ many: true, useOptions: true })
+              .setActions(false, false, true)
+              .setRelatedObjects('industry', { ecceptance_test: '{id}' }, Endpoints.AcceptenceTestIndustry),
+
+            new Form.related.element('acceptance_tests_skills', 'Skills', Endpoints.Skill)
+              .update({ many: true, useOptions: true })
+              .setActions(false, false, true)
+              .setRelatedObjects('skill', { ecceptance_test: '{id}' }, Endpoints.AcceptenceTestSkill),
+
+            new Form.related.element('acceptance_tests_tags', 'Tags', Endpoints.Tag)
+              .update({ many: true, useOptions: true })
+              .setActions(false, false, true)
+              .setRelatedObjects('tag', { ecceptance_test: '{id}' }, Endpoints.AcceptenceTestTag),
+
+            new Form.related.element('acceptance_tests_workflow_nodes', 'Workflow Node', Endpoints.AcceptenceTestWorkflowNode)
+              .doNotSend()
+              .update({ many: true, doNotChoice: true, visibleMode: true, options: [] })
+              .setActions(true, false, true)
+              .setPerfilledFields({ acceptance_test: '{id}' })
+              .updateValues(['company_workflow_node']),
+          ])
+      ])
+  ]
+}
+
+const formadd = function() {
+  return [
+    new Form.input.element('test_name', 'Test Name', InputType.Text)
+      .required()
+      .updateTemplate({ max: 255 }),
+
+    new Form.textarea.element('description', 'Description'),
+
+    new Form.checkbox.element('is_active', 'Active', CheckboxType.Checkbox)
+      .update({ default: true }),
+
+    new Form.datepicker.element('valid_from', 'Valid From', DatepickerType.Date)
+      .required()
+      .updateTemplate({ hidePreviewError: true }),
+
+    new Form.datepicker.element('valid_until', 'Valid Until', DatepickerType.Date),
+  ];
+}
 
 export const acceptancetests = {
   list,

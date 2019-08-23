@@ -1,6 +1,6 @@
-import { createFormElement, FormElementType } from '@webui/metadata';
+import { Form } from '@webui/metadata';
 
-export const workflowEl = createFormElement(FormElementType.Select, 'workflow', 'Workflow');
+export const workflowEl = new Form.select.element('workflow', 'Workflow');
 
 export const config = [
   {

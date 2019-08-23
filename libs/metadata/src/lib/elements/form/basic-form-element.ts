@@ -6,6 +6,7 @@ export interface BasicElementTemplateOptions {
   label?: string;
   placeholder?: string;
   description?: string;
+  required?: boolean;
 }
 
 export class BasicFormElement {
@@ -39,6 +40,12 @@ export class BasicFormElement {
 
   updateTemplate(config: any) {
     Object.assign(this.templateOptions, config);
+
+    return this;
+  }
+
+  required() {
+    this.templateOptions.required = true;
 
     return this;
   }
