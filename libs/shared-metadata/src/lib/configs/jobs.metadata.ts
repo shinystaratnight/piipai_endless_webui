@@ -1339,6 +1339,14 @@ const formadd = [
               only: 1,
               manual: true
             },
+            prefilled: {
+              regular_company: '{customer_company.id}'
+            },
+            disabled: {
+              keys: ['customer_company.id'],
+              values: [''],
+              messages: ['Please select client']
+            },
             query: {
               company: '{customer_company.id}',
               is_available: 'True'
