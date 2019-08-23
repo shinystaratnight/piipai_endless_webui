@@ -93,7 +93,7 @@ a.readonly:focus {
   }
 }
 
-.form-element:hover .form-element-content-actions {
+.form-element:hover .form-element-content:not(.disabled) .form-element-content-actions {
   display: flex;
 }
 

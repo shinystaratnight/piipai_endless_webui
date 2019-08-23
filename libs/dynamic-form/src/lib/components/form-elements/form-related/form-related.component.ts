@@ -187,11 +187,13 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     this.placeholder = this.config.templateOptions.placeholder ||
       (this.config.templateOptions.edit ? 'Select or add new' : 'Select');
 
-    this.subscriptions.push(this.timelineService.buttonAction$.subscribe((action: any) => {
-      if (action.type === 'editContact' && this.config.endpoint === Endpoints.Contact && !this.config.hide) {
-        this.open('update');
-      }
-    }));
+    if (this.timelineService) {
+      this.subscriptions.push(this.timelineService.buttonAction$.subscribe((action: any) => {
+        if (action.type === 'editContact' && this.config.endpoint === Endpoints.Contact && !this.config.hide) {
+          this.open('update');
+        }
+      }));
+    }
   }
 
   public ngAfterViewChecked() {
