@@ -831,7 +831,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       );
     }
     if (element.type === 'datepicker') {
-      const field = this.config.fields.find(
+      const field = this.config.fields && this.config.fields.find(
         (elem) => elem.key === element.field
       );
       if (field) {
@@ -842,7 +842,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       if (element.type === 'icon') {
         obj.label = element.label;
       }
-      const field = this.config.fields.find(
+      const field = this.config.fields && this.config.fields.find(
         (elem) => elem.key === element.field
       );
       if (field) {
@@ -915,7 +915,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       obj.label = element.label;
     }
     if (element.type === 'picture') {
-      const field = this.config.fields.find(
+      const field = this.config.fields && this.config.fields.find(
         (elem) => elem.key === element.field
       );
       if (field) {

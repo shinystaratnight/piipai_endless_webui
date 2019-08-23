@@ -1,116 +1,51 @@
-import { Form, DatepickerType, InputType, CheckboxType } from '@webui/metadata';
+import { Form, Filter, List, DatepickerType, InputType, CheckboxType, generateOptions } from '@webui/metadata';
 import { Endpoints } from '@webui/data';
 
-const list = {
-  fields: [
-    {
-      key: '__str__',
-      type: 'static',
-      read_only: true,
-      templateOptions: {
-        label: 'Acceptance Test',
-        type: 'static',
-        required: false
-      }
-    }
-  ],
-  list: {
-    label: 'Acceptance Test',
-    search_enabled: false,
-    pagination_label: 'Acceptance Test',
-    list: 'acceptancetest',
-    filters: [
-      {
-        key: 'active_states',
-        label: 'Relationships',
-        options: [
-          {
-            value: 'skill',
-            label: 'Skills'
-          },
-          {
-            value: 'tag',
-            label: 'Tags'
-          },
-          {
-            value: 'industry',
-            label: 'Industries'
-          },
-        ],
-        query: 'type',
-        type: 'select'
-      },
-    ],
-    columns: [
-      {
-        label: 'Acceptance Test',
-        name: '__str__',
-        content: [
-          {
-            field: '__str__',
-            type: 'static'
-          }
-        ]
-      },
-      {
-        content: [
-          {
-            field: 'acceptance_tests_industries',
-            type: 'text',
-            label: 'Skills',
-            param: 'industry.name'
-          }
-        ],
-        name: 'acceptance_tests_industries',
-        title: null,
-        label: 'Industries',
-        delim: null
-      },
-      {
-        content: [
-          {
-            field: 'acceptance_tests_skills',
-            type: 'text',
-            label: 'Skills',
-            param: 'skill.name'
-          }
-        ],
-        name: 'acceptance_tests_skills',
-        title: null,
-        label: 'Skills',
-        delim: null
-      },
-      {
-        content: [
-          {
-            field: 'acceptance_tests_tags',
-            type: 'text',
-            label: 'Skills',
-            param: 'tag.name'
-          }
-        ],
-        name: 'acceptance_tests_tags',
-        title: null,
-        label: 'Tags',
-        delim: null
-      },
-      {
-        content: [
-          {
-            field: 'acceptance_tests_workflow_nodes',
-            type: 'text',
-            label: 'Workflow Node',
-            param: 'company_workflow_node.name'
-          }
-        ],
-        name: 'acceptance_tests_workflow_nodes',
-        title: null,
-        label: 'Workflow nodes',
-        delim: null
-      },
-    ],
-    editDisable: false
-  }
+const list = function() {
+  return {
+    list: new List.main.element('acceptancetest', 'Acceptance Test')
+      .disableSearch()
+      .setFilters([
+        new Filter.select.element({
+          key: 'active_states',
+          label: 'Relationships',
+          values: generateOptions({
+            skill: 'Skills',
+            tag: 'Tags',
+            industry: 'Industries'
+          })
+        })
+      ])
+      .setColumns([
+        new List.column.element('__str__', 'Acceptance Test')
+          .setContent([ new List.static.element('__str__') ]),
+
+
+        new List.column.element('acceptance_tests_industries', 'Industries')
+          .setContent([
+            new List.text.element('acceptance_tests_industries')
+              .update({ param: 'industry.name' })
+          ]),
+
+        new List.column.element('acceptance_tests_skills', 'Skills')
+          .setContent([
+            new List.text.element('acceptance_tests_skills')
+              .update({ param: 'skill.name' })
+          ]),
+
+        new List.column.element('acceptance_tests_tags', 'Tags')
+          .setContent([
+            new List.text.element('acceptance_tests_tags')
+              .update({ param: 'tag.name' })
+          ]),
+
+        new List.column.element('acceptance_tests_workflow_nodes', 'Workflow nodes')
+          .setContent([
+            new List.text.element('acceptance_tests_workflow_nodes')
+              .update({ param: 'company_workflow_node.name' })
+          ])
+      ])
+    };
 };
 
 const form = function() {
