@@ -1,139 +1,61 @@
-const form = [
-  {
-    children: [
-      {
-        key: 'supervisor',
-        type: 'static',
-        templateOptions: {
-          type: 'static',
-          required: false,
-          label: 'Supervisor'
-        },
-        read_only: true
-      },
-      {
-        key: 'company',
-        type: 'static',
-        templateOptions: { type: 'static', required: false, label: 'Company' },
-        read_only: true
-      },
-      {
-        key: 'jobsite',
-        type: 'static',
-        templateOptions: { type: 'static', required: false, label: 'Jobsite' },
-        read_only: true
-      },
-      {
-        key: 'position',
-        type: 'static',
-        templateOptions: { type: 'static', required: false, label: 'Position' },
-        read_only: true,
-      },
-    ],
-    type: 'row'
-  },
-  {
-    type: 'row',
-    hideBorder: true,
-    children: [
-      {
-        type: 'group',
-        label: 'Times',
-        children: [
-          {
-            width: 0.25,
-            type: 'checkbox',
-            key: 'noBreak',
-            default: false,
-            send: false,
-            setNull: ['break_started_at', 'break_ended_at'],
-            templateOptions: {
-              label: 'No Break',
-            },
-          },
-        ]
-      }
-    ]
-  },
-  {
-    children: [
-      {
-        key: 'shift_started_at',
-        type: 'datepicker',
-        templateOptions: {
-          type: 'datetime',
-          required: false,
-          label: 'Shift Start'
-        },
-        read_only: false
-      },
-      {
-        // type: 'group',
-        // hideLabel: true,
-        // children: [
-        //   {
-            key: 'break_started_at',
-            type: 'datepicker',
-            templateOptions: {
-              type: 'datetime',
-              required: false,
-              label: 'Break Start'
-            },
-            saveField: true,
-            read_only: false,
-            showIf: [{ noBreak: false }]
-        //   },
-        // ]
-      },
-      {
-        // type: 'group',
-        // hideLabel: true,
-        // children: [
-          // {
-            key: 'break_ended_at',
-            type: 'datepicker',
-            templateOptions: {
-              type: 'datetime',
-              required: false,
-              label: 'Break End'
-            },
-            saveField: true,
-            read_only: false,
-            showIf: [{ noBreak: false }],
-          // },
-      //   ]
-      },
-      {
-        key: 'shift_ended_at',
-        type: 'datepicker',
-        templateOptions: {
-          type: 'datetime',
-          required: false,
-          label: 'Shift End'
-        },
-        read_only: false
-      },
-    ],
-    hideBorder: true,
-    type: 'row'
-  },
-  {
-    type: 'row',
-    children: [
-      {
-        type: 'static',
-        key: 'total_time',
-        send: false,
-        read_only: true,
-        templateOptions: {
-          label: 'Total time',
-          color: 'text-success',
-          inline: true
-        }
-      },
-    ]
-  }
-];
+import { Form, CheckboxType, DatepickerType } from '@webui/metadata';
+
+const form = function() {
+  return [
+    new Form.row.element()
+      .setChildren([
+        new Form.static.element('supervisor', 'Supervisor')
+          .readOnly(),
+
+        new Form.static.element('company', 'Company')
+          .readOnly(),
+
+        new Form.static.element('jobsite', 'Jobsite')
+          .readOnly(),
+
+        new Form.static.element('position', 'Position')
+          .readOnly(),
+      ]),
+
+    new Form.row.element()
+      .noBorder()
+      .setChildren([
+        new Form.group.element('Times')
+          .setChildren([
+            new Form.checkbox.element('noBreak', 'No Break', CheckboxType.Checkbox)
+              .seDefaultValue(false)
+              .updateByNull(['break_started_at', 'break_ended_at'])
+              .setWidth(0.25)
+              .doNotSend()
+          ])
+      ]),
+
+    new Form.row.element()
+      .noBorder()
+      .setChildren([
+        new Form.datepicker.element('shift_started_at', 'Shift Start', DatepickerType.Datetime),
+
+        new Form.datepicker.element('break_started_at', 'Break Start', DatepickerType.Datetime)
+          .saveValue()
+          .setShowIfRule([ { noBreak: false } ]),
+
+        new Form.datepicker.element('break_ended_at', 'Break End', DatepickerType.Datetime)
+          .saveValue()
+          .setShowIfRule([ { noBreak: false } ]),
+
+        new Form.datepicker.element('shift_ended_at', 'Shift End', DatepickerType.Datetime)
+      ]),
+
+    new Form.row.element()
+      .setChildren([
+        new Form.static.element('total_time', 'Total time')
+          .readOnly()
+          .doNotSend()
+          .setColor('text-success')
+          .inlineValue()
+      ])
+  ]
+};
 
 export const metadataSubmit = {
   form,

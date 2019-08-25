@@ -21,6 +21,11 @@ export class BasicFormElement {
   read_only?: boolean;
   value?: any;
   hide?: boolean;
+  send?: boolean;
+  setNull?: string[];
+  width?: number;
+  showIf?: Array<string | { [key: string]: any }>;
+  saveField?: boolean;
 
   templateOptions: BasicElementTemplateOptions;
 
@@ -46,6 +51,48 @@ export class BasicFormElement {
 
   required() {
     this.templateOptions.required = true;
+
+    return this;
+  }
+
+  readOnly() {
+    this.read_only = true;
+
+    return this;
+  }
+
+  updateByNull(fields: string[]) {
+    this.setNull = [ ...fields ];
+
+    return this;
+  }
+
+  setWidth(width: number) {
+    this.width = width;
+
+    return this;
+  }
+
+  doNotSend() {
+    this.send = false;
+
+    return this;
+  }
+
+  setShowIfRule(showIf: Array<string | { [key: string]: any }>) {
+    this.showIf = [ ...showIf ];
+
+    return this;
+  }
+
+  saveValue() {
+    this.saveField = true;
+
+    return this;
+  }
+
+  seDefaultValue(value: any) {
+    this.default = value;
 
     return this;
   }

@@ -1,10 +1,12 @@
 export const Row = 'row';
 
 export class RowElement {
-
   type = Row;
-  label?: string;
+
   children: any[];
+
+  label?: string;
+  hideBorder?: boolean;
 
   constructor(label?: string) {
     this.label = label;
@@ -12,6 +14,12 @@ export class RowElement {
 
   setChildren(children: any[]) {
     this.children = [ ...children ];
+
+    return this;
+  }
+
+  noBorder() {
+    this.hideBorder = true;
 
     return this;
   }

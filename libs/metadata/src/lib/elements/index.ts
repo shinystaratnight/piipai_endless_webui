@@ -12,7 +12,8 @@ export const Form  = {
   input: forms.input,
   related: forms.related,
   group: forms.group,
-  row: forms.row
+  row: forms.row,
+  static: forms.stat
 };
 
 export const Filter = {

@@ -55,12 +55,6 @@ export class RelatedElement extends BasicFormElement {
     return this;
   }
 
-  doNotSend() {
-    this.send = false;
-
-    return this;
-  }
-
   updateValues(values: string[]) {
     this.templateOptions.values.push(...values);
 

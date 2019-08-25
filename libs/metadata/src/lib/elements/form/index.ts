@@ -4,6 +4,7 @@ import { CheckboxElement, Checkbox } from './checkbox-element';
 import { DatepickerElement, Datepicker } from './datepicker-element';
 import { InputElement, Input } from './input-element';
 import { RelatedElement, Related } from './related-element';
+import { StaticElement, Static } from './static-element';
 
 import { GroupElement, Group } from './group-element';
 import { RowElement, Row } from './row-element';
@@ -15,6 +16,7 @@ export const checkbox = { element: CheckboxElement, type: Checkbox };
 export const datepicker = { element: DatepickerElement, type: Datepicker };
 export const input = { element: InputElement, type: Input };
 export const related = { element: RelatedElement, type: Related };
+export const stat = { element: StaticElement, type: Static };
 
 export const group = { element: GroupElement, type: Group };
 export const row = { element: RowElement, type: Row };
