@@ -4,6 +4,10 @@ export class ColumnElement {
   name: string;
 
   delim?: any;
+  sort?: boolean;
+  sorted_field?: string;
+  center?: boolean;
+  hide?: boolean;
 
   content: any[];
 
@@ -18,8 +22,27 @@ export class ColumnElement {
     return this;
   }
 
+  setCenter() {
+    this.center = true;
+
+    return this;
+  }
+
   setContent(content: any[]) {
     this.content = [ ...content ];
+
+    return this;
+  }
+
+  setSort(sort: boolean, sorted_field: string) {
+    this.sort = sort;
+    this.sorted_field = sorted_field;
+
+    return this;
+  }
+
+  setHide() {
+    this.hide = true;
 
     return this;
   }

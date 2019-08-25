@@ -1,11 +1,18 @@
+import { BasicListElement } from './basic-list-element';
+
 export const Static = 'static';
 
-export class StaticElement {
-  type = Static;
-
-  field: string;
+export class StaticElement extends BasicListElement {
+  label?: string;
 
   constructor(field: string) {
-    this.field = field;
+    super(field, Static);
   }
+
+  setLabel(label: string) {
+    this.label = label;
+
+    return this;
+  }
+
 }

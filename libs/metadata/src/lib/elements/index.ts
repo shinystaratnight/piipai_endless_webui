@@ -30,6 +30,10 @@ export const List = {
   column: datalist.column,
   static: datalist.stat,
   text: datalist.text,
+  related: datalist.related,
+  button: datalist.button,
+  select: datalist.select,
+  picture: datalist.picture
 }
 
 export { DatepickerType } from './form/datepicker-element';

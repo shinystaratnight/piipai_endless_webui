@@ -9,6 +9,8 @@ export class MainElement {
 
   search_enabled?: boolean;
   pagination_label?: string;
+  editDisable?: boolean;
+  buttons?: any[];
 
   constructor(list: string, label: string) {
     this.list = list;
@@ -21,6 +23,12 @@ export class MainElement {
     return this;
   }
 
+  disableEdit() {
+    this.editDisable = true;
+
+    return this;
+  }
+
   setColumns(columns: ColumnElement[]) {
     this.columns = [ ...columns ];
 
@@ -29,6 +37,18 @@ export class MainElement {
 
   setFilters(filters: any[]) {
     this.filters = [ ...filters ];
+
+    return this;
+  }
+
+  setButtons(buttons: any[]) {
+    this.buttons = [ ...buttons ];
+
+    return this;
+  }
+
+  removeCreateButton() {
+    this.buttons = [];
 
     return this;
   }
