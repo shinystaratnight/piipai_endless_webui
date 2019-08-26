@@ -1436,19 +1436,20 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   }
 
   public showCandidateProfile(e) {
-    const arr = e.el.endpoint.split('/');
-    const id = arr[arr.length - 2];
-    arr.splice(arr.length - 2, 1);
-    const endpoint = arr.join('/');
-    this.modalInfo = {
-      type: 'form',
-      mode: 'view',
-      endpoint: '/candidate/candidatecontacts/',
-      metadataQuery: 'type=profile',
-      id
-    };
+    // console.log(e);
+    // const arr = e.el.endpoint.split('/');
+    // const id = arr[arr.length - 2];
+    // arr.splice(arr.length - 2, 1);
+    // const endpoint = arr.join('/');
+    // this.modalInfo = {
+    //   type: 'form',
+    //   mode: 'view',
+    //   endpoint: '/candidate/candidatecontacts/',
+    //   metadataQuery: 'type=profile',
+    //   id
+    // };
 
-    this.open(this.modal, { size: 'lg' });
+    // this.open(this.modal, { size: 'lg' });
   }
 
   public openForm(e) {

@@ -15,6 +15,11 @@ export class ButtonElement extends BasicListElement {
   text_color?: string;
   hidden?: string;
 
+  color?: string;
+  svg?: string;
+  shadow?: boolean;
+  replace_by?: string;
+
   constructor(field: string, action: string, title?: string) {
     super(field, Button);
 
@@ -64,6 +69,20 @@ export class ButtonElement extends BasicListElement {
 
   setHidden(value: string) {
     this.hidden = value;
+
+    return this;
+  }
+
+  customButton(color: string, svgName: string) {
+    this.color = color;
+    this.svg = svgName;
+    this.shadow = true;
+
+    return this;
+  }
+
+  addReplaceBy(field: string) {
+    this.replace_by = field;
 
     return this;
   }

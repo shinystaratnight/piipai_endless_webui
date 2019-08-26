@@ -4,6 +4,10 @@ export const Static = 'static';
 
 export class StaticElement extends BasicListElement {
   label?: string;
+  hideValue?: any;
+  color?: string;
+  setColor?: string;
+  info?: string;
 
   constructor(field: string) {
     super(field, Static);
@@ -11,6 +15,25 @@ export class StaticElement extends BasicListElement {
 
   setLabel(label: string) {
     this.label = label;
+
+    return this;
+  }
+
+  setHideValue(value: any) {
+    this.hideValue = value;
+
+    return this;
+  }
+
+  changeColor(color: string, setColorIf?: string) {
+    this.color = color;
+    this.setColor = setColorIf;
+
+    return this;
+  }
+
+  setInfoText(text: string) {
+    this.info = text;
 
     return this;
   }

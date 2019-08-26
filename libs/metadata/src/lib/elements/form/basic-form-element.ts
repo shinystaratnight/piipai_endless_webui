@@ -37,7 +37,7 @@ export class BasicFormElement {
     };
   }
 
-  update(config: Field) {
+  updateModel(config: Field) {
     Object.assign(this, config);
 
     return this;

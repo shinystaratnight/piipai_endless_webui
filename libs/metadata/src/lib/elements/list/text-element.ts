@@ -5,6 +5,7 @@ export const Text = 'text';
 export class TextElement extends BasicListElement {
   label?: string;
   param?: string;
+  score?: boolean;
 
   constructor(field: string, label?: string) {
     super(field, Text);
@@ -14,6 +15,12 @@ export class TextElement extends BasicListElement {
 
   update(config: { param: string }) {
     this.param = config.param;
+
+    return this;
+  }
+
+  scoreField() {
+    this.score = true;
 
     return this;
   }

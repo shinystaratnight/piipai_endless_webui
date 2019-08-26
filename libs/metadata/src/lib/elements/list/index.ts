@@ -9,6 +9,8 @@ import { SelectElement, Select } from './select-element';
 import { PictureElement, Picture } from './picture-element';
 import { InputElement, Input } from './input-element';
 import { IconElement, Icon } from './icon-element';
+import { InfoElement, Info } from './info-element';
+import { LinkElement, Link } from './link-element';
 
 export const column = { element: ColumnElement };
 export const main = { element: MainElement };
@@ -21,3 +23,5 @@ export const select = { element: SelectElement, type: Select };
 export const picture = { element: PictureElement, type: Picture };
 export const input = { element: InputElement, type: Input };
 export const icon = { element: IconElement, type: Icon };
+export const info = { element: InfoElement, type: Info };
+export const link = { element: LinkElement, type: Link };

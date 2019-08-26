@@ -71,23 +71,23 @@ const form = function() {
         new Form.group.element('Relationships')
           .setChildren([
             new Form.related.element('acceptance_tests_industries', 'Industries', Endpoints.Industry)
-              .update({ many: true, useOptions: true })
+              .updateModel({ many: true, useOptions: true })
               .setActions(false, false, true)
               .setRelatedObjects('industry', { ecceptance_test: '{id}' }, Endpoints.AcceptenceTestIndustry),
 
             new Form.related.element('acceptance_tests_skills', 'Skills', Endpoints.Skill)
-              .update({ many: true, useOptions: true })
+              .updateModel({ many: true, useOptions: true })
               .setActions(false, false, true)
               .setRelatedObjects('skill', { ecceptance_test: '{id}' }, Endpoints.AcceptenceTestSkill),
 
             new Form.related.element('acceptance_tests_tags', 'Tags', Endpoints.Tag)
-              .update({ many: true, useOptions: true })
+              .updateModel({ many: true, useOptions: true })
               .setActions(false, false, true)
               .setRelatedObjects('tag', { ecceptance_test: '{id}' }, Endpoints.AcceptenceTestTag),
 
             new Form.related.element('acceptance_tests_workflow_nodes', 'Workflow Node', Endpoints.AcceptenceTestWorkflowNode)
               .doNotSend()
-              .update({ many: true, doNotChoice: true, visibleMode: true, options: [] })
+              .updateModel({ many: true, doNotChoice: true, visibleMode: true, options: [] })
               .setActions(true, false, true)
               .setPerfilledFields({ acceptance_test: '{id}' })
               .updateValues(['company_workflow_node']),
@@ -105,7 +105,7 @@ const formadd = function() {
     new Form.textarea.element('description', 'Description'),
 
     new Form.checkbox.element('is_active', 'Active', CheckboxType.Checkbox)
-      .update({ default: true }),
+      .seDefaultValue(true),
 
     new Form.datepicker.element('valid_from', 'Valid From', DatepickerType.Date)
       .required()

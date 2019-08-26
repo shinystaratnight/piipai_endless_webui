@@ -39,7 +39,9 @@ export const List = {
   select: datalist.select,
   picture: datalist.picture,
   input: datalist.input,
-  icon: datalist.icon
+  icon: datalist.icon,
+  info: datalist.info,
+  link: datalist.link
 }
 
 export { DatepickerType } from './form/datepicker-element';

@@ -185,12 +185,12 @@ export const meta = [
         children: [
           new Form.select.element('invoice_rule.period', 'Period')
             .addOptions(periodOptions)
-            .update({ formData })
+            .updateModel({ formData })
             .updateTemplate({ required: true }),
 
           new Form.select.element('invoice_rule.period_zero_reference_weekly', 'Invoice generation time')
             .addOptions(weekOptions)
-            .update({
+            .updateModel({
               formData,
               default: 1,
               showIf: [{
@@ -201,7 +201,7 @@ export const meta = [
 
           new Form.select.element('invoice_rule.period_zero_reference_fortnightly', 'Invoice generation time')
             .addOptions(weekOptions)
-            .update({
+            .updateModel({
               formData,
               default: 1,
               showIf: [{

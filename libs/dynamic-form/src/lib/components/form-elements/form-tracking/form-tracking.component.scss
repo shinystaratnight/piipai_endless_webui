@@ -30,9 +30,9 @@
     line-height: 28px;
 
     @include media-breakpoint-up('md') {
-      margin-bottom: 12px;
+      margin-bottom: 2px;
 
-      font-size: 32px;
+      font-size: 28px;
       line-height: 36px;
     }
   }
@@ -46,9 +46,7 @@
     opacity: .7;
 
     @include media-breakpoint-up('md') {
-      margin-bottom: 8px;
-
-      font-size: 18px;
+      margin-bottom: 20px;
     }
   }
 
@@ -72,6 +70,10 @@
 }
 
 .tracking-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   margin-bottom: 2px;
 
   font-size: 18px;
