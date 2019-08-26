@@ -4,7 +4,7 @@
       {{config.templateOptions.label}}
     </label>
     <div class="d-flex flex-column align-items-start">
-      <div class="background"></div>
+      <div class="map-preview"></div>
 
       <button type="button" class="btn btn-primary mt-3"
         (click)="showTracking()">
@@ -14,58 +14,3 @@
   </div>
 </div>
 
-<ng-template #tracking let-modal>
-  <div class="tracking-header">
-    <h5 class="title">Candidate Tracking</h5>
-    <p class="jobsite">{{modalInfo.jobsite}}</p>
-
-    <app-close-button class="close ml-2 mt-2" (click)="modal.dismiss()"></app-close-button>
-  </div>
-
-  <agm-map
-    style="height: 320px"
-    [fullscreenControl]="false"
-    [streetViewControl]="false"
-    [mapTypeControl]="false"
-    [panControl]="false"
-    [rotateControl]="false"
-    [scaleControl]="false"
-    [zoomControl]="false"
-    [latitude]="modalInfo.latitude"
-    [longitude]="modalInfo.longitude"
-    [zoom]="13">
-    <agm-marker
-      [latitude]="modalInfo.markerLatitude"
-      [longitude]="modalInfo.markerLongitude">
-    </agm-marker>
-    <agm-polyline strokeColor="#28a3fc">
-      <agm-polyline-point
-        [latitude]="point.lat"
-        [longitude]="point.lng"
-        *ngFor="let point of modalInfo.paths; trackBy: trackByTraking">
-      </agm-polyline-point>
-      <ng-container *ngIf="modalInfo.breakPaths.length">
-        <agm-polyline-point
-          [latitude]="point.lat"
-          [longitude]="point.lng"
-          *ngFor="let point of modalInfo.breakPaths; trackBy: trackByTraking">
-        </agm-polyline-point>
-      </ng-container>
-    </agm-polyline>
-  </agm-map>
-
-  <div [class.tracking-desctop]="!isMobile()" [class.pt-4]="isMobile()">
-    <div *ngIf="!isMobile()" class="tracking-title-wrapper">
-      <h5 class="tracking-title">
-        Time and path
-        <span>{{modalInfo.timePoints.start | dateFormat: 'date'}}</span>
-      </h5>
-      <p class="tracking-description">Moving the time slider and look the path</p>
-    </div>
-
-    <app-time-tracking
-      [timePoints]="modalInfo.timePoints"
-      (changeTimeTracking)="trackingMarkerCoordinates($event)">
-    </app-time-tracking>
-  </div>
-</ng-template>
