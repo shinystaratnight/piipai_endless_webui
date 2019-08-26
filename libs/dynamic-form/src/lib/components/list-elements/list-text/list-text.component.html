@@ -10,10 +10,10 @@
     *ngIf="value || value === 0"
     [title]="config.title || ''"
     [class.description]="config.description"
-    [class.d-inline-flex]="!config.inlineValue"
-    [class.align-items-center]="!config.inlineValue"
-    [class.flex-wrap]="!config.inlineValue"
-    [class.mr-1]="!config.inlineValue"
+    [class.d-inline-flex]="!config.inline"
+    [class.align-items-center]="!config.inline"
+    [class.flex-wrap]="!config.inline"
+    [class.mr-1]="!config.inline"
     [class.text-description]="config.muted">
       <span [ngClass]="{'label mr-1': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
       <span *ngIf="!iconView && !iconClass && !workers">{{value}}</span>

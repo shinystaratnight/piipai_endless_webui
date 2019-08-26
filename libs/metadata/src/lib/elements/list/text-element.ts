@@ -1,14 +1,14 @@
+import { BasicListElement } from './basic-list-element';
+
 export const Text = 'text';
 
-export class TextElement {
-  type = Text;
-
-  field: string;
+export class TextElement extends BasicListElement {
   label?: string;
   param?: string;
 
   constructor(field: string, label?: string) {
-    this.field = field;
+    super(field, Text);
+
     this.label = label;
   }
 

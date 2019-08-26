@@ -8,6 +8,7 @@ export class ColumnElement {
   sorted_field?: string;
   center?: boolean;
   hide?: boolean;
+  width?: number;
 
   content: any[];
 
@@ -43,6 +44,12 @@ export class ColumnElement {
 
   setHide() {
     this.hide = true;
+
+    return this;
+  }
+
+  setWidth(width: number) {
+    this.width = width;
 
     return this;
   }

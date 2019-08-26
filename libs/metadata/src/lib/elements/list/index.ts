@@ -7,6 +7,8 @@ import { RelatedElement, Related } from './related-element';
 import { ButtonElement, Button } from './button-element';
 import { SelectElement, Select } from './select-element';
 import { PictureElement, Picture } from './picture-element';
+import { InputElement, Input } from './input-element';
+import { IconElement, Icon } from './icon-element';
 
 export const column = { element: ColumnElement };
 export const main = { element: MainElement };
@@ -17,3 +19,5 @@ export const related = { element: RelatedElement, type: Related };
 export const button = { element: ButtonElement, type: Button };
 export const select = { element: SelectElement, type: Select };
 export const picture = { element: PictureElement, type: Picture };
+export const input = { element: InputElement, type: Input };
+export const icon = { element: IconElement, type: Icon };
