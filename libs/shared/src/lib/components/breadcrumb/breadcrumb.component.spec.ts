@@ -6,29 +6,22 @@ import {
   async } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 
-import { Page } from '../../../services';
-import { BreadcrumbComponent, Breadcrumb } from './breadcrumb.component';
+import { BreadcrumbComponent } from './breadcrumb.component';
 
 describe('BreadcrumbComponent', () => {
-
   let comp: BreadcrumbComponent;
   let fixture: ComponentFixture<BreadcrumbComponent>;
-  let response: Page[];
-  let url = [
+
+  const url = [
     {
       path: 'core'
     }
   ];
 
-  let mockNavigationService = {
-    getPages() {
-      return Observable.of(response);
-    }
-  };
-  let mockActivatedRoute = {
-    url: Observable.of(url)
+  const mockActivatedRoute = {
+    url: of(url)
   };
 
   beforeEach(async(() => {
@@ -86,7 +79,7 @@ describe('BreadcrumbComponent', () => {
 
   describe('generateData method', () => {
     it('should call generateBreadcrumb method', () => {
-      let urlArray = [
+      const urlArray = [
         {
           path: 'contact'
         }
@@ -99,7 +92,7 @@ describe('BreadcrumbComponent', () => {
 
   describe('generateBreadcrumb method', () => {
     it('should generate data for displaying breadcrumb', () => {
-      let urlArray = ['contact'];
+      const urlArray = ['contact'];
       comp.navigationList = [
         {
           name: 'Contact',
@@ -122,7 +115,7 @@ describe('BreadcrumbComponent', () => {
     });
 
     it('should add last element when create new object', () => {
-      let urlArray = ['add'];
+      const urlArray = ['add'];
       comp.list = [];
       comp.formLabel = 'Add';
       spyOn(comp, 'getElement').and.returnValue(false);
@@ -137,7 +130,7 @@ describe('BreadcrumbComponent', () => {
     });
 
     it('should add last element when edit object', () => {
-      let urlArray = ['change'];
+      const urlArray = ['change'];
       comp.list = [];
       comp.formLabel = 'Mr. Tom Smith';
       spyOn(comp, 'getElement').and.returnValue(false);
@@ -154,7 +147,7 @@ describe('BreadcrumbComponent', () => {
 
   describe('getElement', () => {
     it('should return element from navigationList by path property', () => {
-      let path = '/core/contact/';
+      const path = '/core/contact/';
       let result;
       comp.navigationList = [
         {

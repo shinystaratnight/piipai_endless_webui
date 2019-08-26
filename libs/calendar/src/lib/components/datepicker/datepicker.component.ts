@@ -16,7 +16,7 @@ export class DatepickerComponent implements OnInit {
   @Input() date: Moment;
   @Input() range: { start: Moment, end: Moment };
 
-  @Output() change = new EventEmitter();
+  @Output() update = new EventEmitter();
 
   dateRange = DateRange;
   showCustomWeek = false;
@@ -83,7 +83,7 @@ export class DatepickerComponent implements OnInit {
   }
 
   public changeDate(date: Moment) {
-    this.change.emit(date);
+    this.update.emit(date);
   }
 
   public isActiveDay(day: any) {
@@ -106,7 +106,7 @@ export class DatepickerComponent implements OnInit {
   }
 
   public setCustomWeek(date: Moment) {
-    this.change.emit({
+    this.update.emit({
       start: date.clone(),
       end: date.clone().add(1, DateRange.Week)
     });

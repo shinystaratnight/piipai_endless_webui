@@ -1,12 +1,16 @@
 import { TestBed, async, inject } from '@angular/core/testing';
-import { Response, ResponseOptions } from '@angular/http';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 import { ErrorsService } from './errors.service';
+import { ToastService } from './toast.service';
 
 describe('ErrorsService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
-        providers: [ErrorsService]
+        providers: [ErrorsService, ToastService]
       });
     });
 
@@ -18,14 +22,16 @@ describe('ErrorsService', () => {
             detail: 'Some error'
           }
         };
-        const responseObject = new ResponseOptions({
-          body: JSON.stringify(errors)
+        const errorResponse = new HttpErrorResponse({
+          error: errors
         });
         let error;
-        const mockError = new Response(responseObject);
-        es.parseErrors(mockError).subscribe(null,
-          (err: any) => error = err
-        );
+        es.parseErrors(errorResponse).pipe(
+          catchError((err: any) => {
+            error = err;
+            return of(err);
+          })
+        ).subscribe();
         expect(error).toEqual(errors);
       })));
     });

@@ -11,7 +11,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
   GenericFormService,
   FilterService,
-  FilterQueryService
+  FilterQueryService,
+  ListService
 } from './../../services';
 
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
@@ -19,77 +20,34 @@ import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-generic-list',
-  templateUrl: 'generic-list.component.html'
+  templateUrl: './generic-list.component.html',
+  providers: [ListService]
 })
 export class GenericListComponent implements OnInit, OnDestroy {
-  @Input()
-  public endpoint = '';
+  @Input() endpoint = '';
+  @Input() editEndpoint = '';
+  @Input() inForm = false;
+  @Input() data: any;
+  @Input() query: string;
+  @Input() update: BehaviorSubject<boolean>;
+  @Input() supportData: any;
+  @Input() paginated = 'on';
+  @Input() responseField = 'results';
+  @Input() metaType: string;
+  @Input() actions = false;
+  @Input() delay = false;
+  @Input() allowPermissions: string[];
+  @Input() metadataQuery: string;
+  @Input() addMetadataQuery: string;
+  @Input() upload: Subject<boolean>;
+  @Input() clientId: string;
+  @Input() listNameCache: any;
+  @Input() disableActions: boolean;
+  @Input() inlineFilters: boolean;
 
-  @Input()
-  public editEndpoint = '';
-
-  @Input()
-  public inForm = false;
-
-  @Input()
-  public data: any;
-
-  @Input()
-  public query: string;
-
-  @Input()
-  public update: BehaviorSubject<boolean>;
-
-  @Input()
-  public supportData: any;
-
-  @Input()
-  public paginated = 'on';
-
-  @Input()
-  public responseField = 'results';
-
-  @Input()
-  public metaType: string;
-
-  @Input()
-  public actions = false;
-
-  @Input()
-  public delay = false;
-
-  @Input()
-  public allowPermissions: string[];
-
-  @Input()
-  public metadataQuery: string;
-
-  @Input()
-  public addMetadataQuery: string;
-
-  @Input()
-  public upload: Subject<boolean>;
-
-  @Input()
-  public clientId: string;
-
-  @Input()
-  public listNameCache: any;
-
-  @Input()
-  public disableActions: boolean;
-
-  @Input()
-  public inlineFilters: boolean;
-
-  @Output()
-  public checkedObjects: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
-
-  @Output()
-  public dataLength: EventEmitter<number> = new EventEmitter();
+  @Output() checkedObjects: EventEmitter<any> = new EventEmitter();
+  @Output() event: EventEmitter<any> = new EventEmitter();
+  @Output() dataLength: EventEmitter<number> = new EventEmitter();
 
   public metadata: any;
   public tables = [];
@@ -107,42 +65,30 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public uploading: boolean;
   public currentQuery: any;
 
-  private subscriptions: Subscription[];
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private gfs: GenericFormService,
     private fs: FilterService,
     private route: ActivatedRoute,
     private router: Router,
-    private filterQueryService: FilterQueryService
-  ) {
-    this.subscriptions = [];
-  }
+    private filterQueryService: FilterQueryService,
+    private listService: ListService
+  ) {}
 
   public ngOnInit() {
     this.tables.push(this.createTableData(this.endpoint));
 
     if (this.update) {
-      const subscription = this.update.subscribe((update) => {
-        if (update && !this.delay) {
-          const table = this.getFirstTable();
-          this.getData(table.endpoint, this.generateQuery(table.query), table);
-        } else if (update) {
-          const table = this.getFirstTable();
-          table['data'] = this.data;
-          table.update = Object.assign({}, this.data);
-        }
-      });
-
-      this.subscriptions.push(subscription);
+      this.subscriptions.push(this.update.subscribe((update) => {
+        const table = this.getFirstTable();
+        this.updateList(table, update);
+      }));
     }
 
     if (this.upload) {
-      const subscription = this.upload
-        .asObservable()
-        .pipe(
-          debounceTime(200)
-        )
+      const subscription = this.upload.asObservable()
+        .pipe(debounceTime(200))
         .subscribe((data) => {
           const table = this.getFirstTable();
           if (
@@ -161,17 +107,34 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
       this.subscriptions.push(subscription);
     }
+
+    this.subscriptions.push(this.listService.update$.subscribe((timestamp: number) => {
+      const table = this.getFirstTable();
+      table.offset = 0;
+      table.query.pagination = '';
+      this.updateList(table, timestamp);
+    }));
   }
 
   public ngOnDestroy() {
     this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
+  updateList(table, update) {
+    if (update && !this.delay) {
+      this.getData(table.endpoint, this.generateQuery(table.query), table);
+    } else if (update) {
+      table['data'] = this.data;
+      table.update = Object.assign({}, this.data);
+    }
+  }
+
   public uploadMore() {
     const table = this.getFirstTable();
+    const limit = table.limit;
+    const offset = table.offset + limit;
+    table.query.pagination = `limit=${limit}&offset=${offset}`;
 
-    table.query.pagination = `limit=${table.limit}&offset=${table.offset +
-      table.limit}`;
     this.getData(
       table.endpoint,
       this.generateQuery(table.query),
@@ -319,24 +282,15 @@ export class GenericListComponent implements OnInit, OnDestroy {
           }
         });
     } else if (query || this.query) {
-      let newQuery;
-      if (query) {
-        newQuery = query;
-        if (this.query) {
-          newQuery += `&${this.query}`;
-        }
-      } else {
-        newQuery = this.query;
-      }
-      this.gfs
-        .getByQuery(
-          endpoint,
-          newQuery
-            ? this.clientId
-              ? newQuery + `&role=${this.clientId}`
-              : newQuery
-            : newQuery
-        )
+      let newQuery = !query
+        ? this.query
+        : this.query
+          ? `${query}&${this.query}`
+          : query;
+
+      newQuery = this.clientId ? `${newQuery}&role=${this.clientId}` : newQuery;
+
+      this.gfs.getByQuery(endpoint, newQuery)
         .subscribe((data) => {
           if (this.currentQuery !== query) {
             return;
@@ -346,52 +300,40 @@ export class GenericListComponent implements OnInit, OnDestroy {
             this.updateFillInList(data);
           }
 
-          this.dataLength.emit(data.count);
-          this.event.emit(data[this.supportData]);
-          if (add) {
-            table.offset += table.limit;
-            table.addData = data;
-            this.uploading = false;
-          } else {
-            table.data = data;
-          }
-          if (this.paginated === 'on') {
-            this.calcPagination(data);
-          }
-          table.refresh = false;
-          if (target) {
-            setTimeout(() => {
-              target.update = data;
-            }, 150);
-          }
+          this.updateTable(data, table, target, add);
         });
     } else {
-      this.gfs
-        .getAll(endpoint + (this.clientId ? `?role=${this.clientId}` : ''))
+      endpoint = this.clientId ? `${endpoint}?role=${this.clientId}` : endpoint;
+
+      this.gfs.getAll(endpoint)
         .subscribe((data) => {
           if (this.currentQuery !== query) {
             return;
           }
 
-          this.dataLength.emit(data.count);
-          this.event.emit(data[this.supportData]);
-          if (add) {
-            table.offset += table.limit;
-            table.addData = data;
-            this.uploading = false;
-          } else {
-            table.data = data;
-          }
-          if (this.paginated === 'on') {
-            this.calcPagination(data);
-          }
-          table.refresh = false;
-          if (target) {
-            setTimeout(() => {
-              target.update = data;
-            }, 150);
-          }
+          this.updateTable(data, table, target, add);
         });
+    }
+  }
+
+  updateTable(data, table, target, add) {
+    this.dataLength.emit(data.count);
+    this.event.emit(data[this.supportData]);
+    if (add) {
+      table.offset += table.limit;
+      table.addData = data;
+      this.uploading = false;
+    } else {
+      table.data = data;
+    }
+    if (this.paginated === 'on') {
+      this.calcPagination(data);
+    }
+    table.refresh = false;
+    if (target) {
+      setTimeout(() => {
+        target.update = data;
+      }, 150);
     }
   }
 

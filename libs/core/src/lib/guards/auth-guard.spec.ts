@@ -1,82 +1,63 @@
 import { async, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { UserService, NavigationService } from '../services';
-import { Observable } from 'rxjs/Observable';
-
 import { AuthGuard } from './auth-guard';
-import { CheckPermissionService } from '../shared/services/check-permission';
+import { AuthService } from '../services';
+
+class MockAuthService {
+  _isAuthorized = true;
+
+  get isAuthorized() {
+    return this._isAuthorized;
+  }
+
+  set isAuthorized(value) {
+    this._isAuthorized = value;
+  }
+}
 
 describe('AuthGuard', () => {
+  let guard: AuthGuard;
+  let router: Router;
+  let authService: MockAuthService;
 
-  let response;
-  let mockRouter = {
+  const mockRouter = {
     navigate() {
       return true;
     }
   };
 
-  let mockUserService = {
-    getUserData() {
-      if (response.status === 'success') {
-        return Observable.of(response);
-      } else {
-        return Observable.throw(response);
-      }
-    }
-  };
-
-  const mockCheckPermissionService = {
-    CheckPermissionService() {
-      return Observable.of(true);
-    }
-  };
-
-  const mockNavigationService = {
-    getPages() {
-      return [];
-    }
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         AuthGuard,
         { provide: Router, useValue: mockRouter },
-        { provide: UserService, useValue: mockUserService },
-        { provide: CheckPermissionService, useValue: mockCheckPermissionService },
-        { provide: NavigationService, useValue: mockNavigationService }
+        { provide: AuthService, useClass: MockAuthService }
       ],
       imports: []
     });
+
+    guard = TestBed.get(AuthGuard);
+    router = TestBed.get(Router);
+    authService = TestBed.get(AuthService);
   });
 
-  it('should be defined', async(inject([AuthGuard], (service) => {
-    expect(service).toBeDefined();
-  })));
+  it('should be defined', () => {
+    expect(guard).toBeDefined();
+  });
 
   describe('canActivate method', () => {
-    it('should return observable of true',
-      async(inject([AuthGuard], (authGuard: AuthGuard) => {
-        response = {
-          status: 'success'
-        };
-        authGuard.canActivate().subscribe((res: boolean) => {
-          expect(res).toBeTruthy();
-        });
-    })));
+    it('should return true', () => {
+      expect(guard.canActivate()).toBeTruthy();
+    });
 
-    it('should return observable of false',
-      async(inject([AuthGuard, Router], (authGuard: AuthGuard, router: Router) => {
-        response = {
-          status: 'error'
-        };
-        spyOn(router, 'navigate');
-        authGuard.canActivate().subscribe((res: boolean) => {
-          expect(res).toBeFalsy();
-          expect(router.navigate).toHaveBeenCalledWith(['/home']);
-        });
-    })));
+    it('should return false', () => {
+      authService.isAuthorized = false;
+      spyOn(router, 'navigate');
+      expect(guard.canActivate()).toBeFalsy();
+      expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    });
   });
 
 });

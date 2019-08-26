@@ -1,13 +1,11 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed, async, ComponentFixture, inject } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 import { ListSerachBarComponent } from './list-search-bar.component';
 
 import { FilterService } from './../../services/filter.service';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 describe('ListLinkComponent', () => {
   let fixture: ComponentFixture<ListSerachBarComponent>;

@@ -7,6 +7,7 @@ const list = {
         delim: null,
         label: 'Skill Name',
         sort: true,
+        width: 150,
         content: [
           {
             field: 'name.name',
@@ -389,13 +390,11 @@ const formadd = [
     key: 'active',
     read_only: true,
     templateOptions: {
-      required: false,
       label: 'Active',
       type: 'checkbox'
     },
     hide: true,
     value: false,
-    default: false,
     type: 'checkbox'
   },
   {

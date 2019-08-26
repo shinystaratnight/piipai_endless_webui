@@ -3,7 +3,6 @@ import { FilterModel } from './filter.model';
 export interface SelectFilterOptions {
   key: string;
   label: string;
-  query: string;
   defaultValue?: any;
   values: { value: string | number, label: string }[];
 }

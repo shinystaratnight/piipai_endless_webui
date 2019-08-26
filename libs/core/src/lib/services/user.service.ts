@@ -45,8 +45,7 @@ export class UserService {
               setTimeout(() => {
                 this.toastService.sendMessage('User is invalid', MessageType.error);
               }, 1000);
-              throw 'User is invalid';
-              return;
+              throw Error('User is invalid');
             }
 
             const redirectRole: Role = this.authService.role;

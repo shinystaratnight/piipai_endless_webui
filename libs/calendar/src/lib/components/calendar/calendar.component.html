@@ -24,7 +24,7 @@
       (click)="openDropdown()">
     </fa-icon>
 
-    <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown" (change)="setDate($event)" [range]="customRange"></app-datepicker>
+    <app-datepicker *ngIf="showCalendarDropdown" [date]="currentDate" [type]="rangeForDropdown" (update)="setDate($event)" [range]="customRange"></app-datepicker>
   </div>
 </div>
 
@@ -74,7 +74,7 @@
   </label>
 </ng-template>
 
-<div class="calendar">
+<div class="calendar noselect">
   <div *ngIf="!calendarData" class="spinner">
     <div class="double-bounce1"></div>
     <div class="double-bounce2"></div>
@@ -102,6 +102,12 @@
           <span class="count-description">{{layer.text}} / {{currentRange.value}}</span>
       </div>
     </ng-container>
+
+    <ng-container *ngIf="isManager() && hasSelectedDates && calendarData">
+      <span class="f-size-12 hov-opacity ml-auto" (click)="clearSelectedDates()">Reset selected dates</span>
+
+      <button type="button" class="btn btn-primary ml-2" (click)="addJob()">Add Job</button>
+    </ng-container>
   </footer>
 </div>
 
@@ -111,7 +117,14 @@
   </div>
   <div class="grid-row" *ngFor="let week of calendarData?.body">
     <ng-container *ngFor="let day of week; let last = last; let first = first">
-      <span *ngIf="!day.tooltip && calendarType !== 2" class="grid-item month-day"><span class="date" [class.current-date]="day.today">{{day.label}}</span></span>
+      <span class="grid-item month-day"
+        [class.date-selected]="isSelected(day.date)"
+        *ngIf="!day.tooltip && calendarType !== 2"
+        appSelectDate
+        [disable]="!isManager()"
+        [date]="day.date">
+          <span class="date" [class.current-date]="day.today">{{day.label}}</span>
+      </span>
 
       <span class="grid-item month-day"
         [class.available]="day.available === true"
@@ -134,6 +147,10 @@
       </span>
 
       <span class="grid-item month-day"
+        [class.date-selected]="isSelected(day.date)"
+        appSelectDate
+        [date]="day.date"
+        [disable]="!isManager()"
         *ngIf="day.tooltip"
         [class.active]="day.isOpen"
         triggers="click:click"
@@ -141,6 +158,8 @@
         [placement]="last ? 'left' : first ? 'right' : 'bottom'"
         (shown)="day.isOpen = true"
         (hidden)="day.isOpen = false">
+
+        <ng-container *ngTemplateOutlet="checkbox; context: { date: day.date }"></ng-container>
 
         <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 
@@ -200,27 +219,32 @@
     <div class="times">
       <ng-container *ngTemplateOutlet="times"></ng-container>
     </div>
-    <span class="grid-item week-item" *ngFor="let day of calendarData?.body">
-      <ng-container *ngFor="let shift of day.data; let index = index">
-        <div class="shift-item" appCalendarTooltip [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 8">
-          <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
+    <span class="grid-item week-item"
+      appSelectDate
+      [class.date-selected]="isSelected(day.date)"
+      [date]="day.date"
+      [disable]="!isManager()"
+      *ngFor="let day of calendarData?.body">
+        <ng-container *ngFor="let shift of day.data; let index = index">
+          <div class="shift-item" appCalendarTooltip [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 8">
+            <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
 
-          <div class="content">
-            <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">Start - {{shift.time}}</span>
+            <div class="content">
+              <span [ngClass]="['badge', getColor(shift.is_fulfilled)]">Start - {{shift.time}}</span>
 
-            <div class="d-flex mr-2">
-              <ng-container *ngTemplateOutlet="shiftItem; context: { shift: shift, status: getStatus(shift.is_fulfilled)}"></ng-container>
+              <div class="d-flex mr-2">
+                <ng-container *ngTemplateOutlet="shiftItem; context: { shift: shift, status: getStatus(shift.is_fulfilled)}"></ng-container>
+              </div>
             </div>
-          </div>
 
-        </div>
-      </ng-container>
+          </div>
+        </ng-container>
     </span>
   </div>
 </ng-template>
 
 <ng-template #times>
-  <span class="times-item" [style.top.px]="time.top" [style.bottom.px]="time.bottom" *ngFor="let time of calendarTimes">{{time.time}}</span>
+  <span class="times-item" [class.time-selected]="isSelectedTime(time.time) && isSelected(calendarData.date)" [style.top.px]="time.top" [style.bottom.px]="time.bottom" *ngFor="let time of calendarTimes" (click)="selectTime(time.time)">{{time.time}}</span>
 </ng-template>
 
 <ng-template #dayCalendar>
@@ -233,7 +257,7 @@
     <div class="times">
       <ng-container *ngTemplateOutlet="times"></ng-container>
     </div>
-    <span class="grid-item day-item">
+    <span class="grid-item day-item" appSelectDate [class.date-selected]="isSelected(calendarData.date)" [date]="calendarData.date" [disable]="!isManager()">
       <ng-container *ngFor="let shift of calendarData?.body.data; let index = index">
         <div class="shift-item preview" appCalendarTooltip [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 120 + index * 8">
           <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
@@ -319,13 +343,13 @@
   </div>
 </ng-template>
 
-<ng-template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
 
-        <app-close-button class="ml-auto" (click)="d()"></app-close-button>
+        <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -333,9 +357,8 @@
         [endpoint]="modalInfo.endpoint"
         [data]="modalInfo.data"
         [mode]="modalInfo.mode"
-        [data]="modalInfo.data"
         [edit]="modalInfo.edit"
-        (event)="formEvent($event, c)"
+        (event)="formEvent($event, modal.close)"
         (errorForm)="formError($event)">
         <div class="text-center">
           <button type="submit" class="btn big-btn btn-shadow btn-primary text-white button-save mt-3 mb-4" [disabled]="saveProcess">

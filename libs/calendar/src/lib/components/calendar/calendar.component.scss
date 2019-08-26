@@ -512,6 +512,16 @@ app-filter-related {
     &:nth-child(even) {
       opacity: .2;
     };
+
+    &:first-child,
+    &:last-child {
+      display: none;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+
   }
 }
 
@@ -527,4 +537,40 @@ app-filter-related {
 .day-item {
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+.select-checkbox {
+  position: absolute;
+  bottom: 0;
+  left: 14px;
+}
+
+.date-selected {
+  background-color: rgba($brand-success, .2);
+}
+
+.time-selected {
+  color: $brand-success;
+  opacity: 1 !important;
+
+  &::after {
+    position: absolute;
+    top: 2px;
+    right: -13px;
+    content: '';
+    height: 7px;
+    width: 7px;
+    border-radius: 50%;
+    background-color: $brand-success;
+  }
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }

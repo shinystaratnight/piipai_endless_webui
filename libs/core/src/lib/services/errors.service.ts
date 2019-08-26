@@ -20,13 +20,6 @@ export class ErrorsService {
       );
     }
 
-    if (error.status === 401) {
-      this.ts.sendMessage(
-        error.error.errors.detail,
-        MessageType.error
-      );
-    }
-
     if (error.status === 403) {
       this.ts.sendMessage(
         error.error.errors.detail,
