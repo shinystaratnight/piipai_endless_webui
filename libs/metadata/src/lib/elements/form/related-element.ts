@@ -26,6 +26,7 @@ export class RelatedElement extends BasicFormElement {
   };
 
   prefilled?: { [key: string]: string };
+  query?: { [key: string]: any; }
 
   templateOptions: RelatedElementTemplateOptions;
 
@@ -63,6 +64,12 @@ export class RelatedElement extends BasicFormElement {
 
   setPerfilledFields(config: { [key: string]: string }) {
     this.prefilled = { ...config };
+
+    return this;
+  }
+
+  setQuery(query: { [key: string]: any }) {
+    this.query = { ...query };
 
     return this;
   }

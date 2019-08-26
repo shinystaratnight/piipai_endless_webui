@@ -2,17 +2,25 @@ import { BasicFormElement, BasicElementTemplateOptions } from './basic-form-elem
 
 export const Static = 'static';
 
+export enum StaticType {
+  Score = 'score'
+}
+
 export interface StaticElementTemplateOptions extends BasicElementTemplateOptions {
   color?: string;
   inline?: boolean;
+  type?: StaticType;
+  danger?: string;
 }
 
 export class StaticElement extends BasicFormElement {
 
   templateOptions: StaticElementTemplateOptions;
 
-  constructor(key: string, label: string) {
+  constructor(key: string, label: string, type?: StaticType) {
     super(key, label, Static);
+
+    this.templateOptions.type = type;
   }
 
   setColor(color: string) {
@@ -23,6 +31,12 @@ export class StaticElement extends BasicFormElement {
 
   inlineValue() {
     this.templateOptions.inline = true;
+
+    return this;
+  }
+
+  setDanger(value: string) {
+    this.templateOptions.danger = value;
 
     return this;
   }

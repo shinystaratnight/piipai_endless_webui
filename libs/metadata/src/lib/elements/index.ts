@@ -13,7 +13,10 @@ export const Form  = {
   related: forms.related,
   group: forms.group,
   row: forms.row,
-  static: forms.stat
+  static: forms.stat,
+  list: forms.list,
+  info: forms.info,
+  tabs: forms.tabs
 };
 
 export const Filter = {
@@ -42,5 +45,6 @@ export const List = {
 export { DatepickerType } from './form/datepicker-element';
 export { InputType } from './form/input-element';
 export { CheckboxType } from './form/checkbox-element';
+export { StaticType } from './form/static-element';
 
 export * from './form/utils';

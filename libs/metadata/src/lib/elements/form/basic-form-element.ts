@@ -96,4 +96,10 @@ export class BasicFormElement {
 
     return this;
   }
+
+  hideField() {
+    this.hide = true;
+
+    return this;
+  }
 }

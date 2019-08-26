@@ -7,6 +7,7 @@ export class RowElement {
 
   label?: string;
   hideBorder?: boolean;
+  showOnMobile?: boolean;
 
   constructor(label?: string) {
     this.label = label;
@@ -20,6 +21,12 @@ export class RowElement {
 
   noBorder() {
     this.hideBorder = true;
+
+    return this;
+  }
+
+  showOnMobileDevice() {
+    this.showOnMobile = true;
 
     return this;
   }

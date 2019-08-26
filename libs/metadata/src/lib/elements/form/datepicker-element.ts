@@ -16,9 +16,17 @@ export class DatepickerElement extends BasicFormElement {
 
   templateOptions: DatepickerElementTemplateOptions;
 
+  inline?: boolean;
+
   constructor(key: string, label: string, type: DatepickerType) {
     super(key, label, Datepicker);
 
     this.templateOptions.type = type;
+  }
+
+  setInline() {
+    this.inline = true;
+
+    return this;
   }
 }
