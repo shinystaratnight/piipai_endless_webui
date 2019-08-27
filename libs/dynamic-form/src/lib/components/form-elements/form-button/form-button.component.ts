@@ -102,7 +102,6 @@ export class FormButtonComponent implements OnInit, OnDestroy {
     if (show && show.subscribe) {
       this.config.hidden = true;
       const showSubscription = show.subscribe((value) => {
-        console.log(value, this);
         this.showButton = value;
 
         this.cd.detectChanges();
