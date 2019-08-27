@@ -55,3 +55,11 @@ export function createFilter(type: Type, options: FilterOptions): Filter {
       break;
   }
 }
+
+export const range = { element: RangeFilter, type: Range };
+export const related = { element: RelatedFilter, type: Related };
+export const date = { element: DateFilter, type: Date };
+export const checkbox = { element: CheckboxFilter, type: Checkbox };
+export const select = { element: SelectFilter, type: Select };
+export const multiple = { element: MultipleFilter, type: Multiple };
+export const text = { element: TextFilter, type: Text };

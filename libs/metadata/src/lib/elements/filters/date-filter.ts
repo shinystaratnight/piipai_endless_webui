@@ -61,7 +61,7 @@ export class DateFilter implements FilterModel {
     if (today) {
       this.list.push({
         label: 'Today',
-        query: `${key}_0=${getToday()}&${key}_1=${getToday()}`
+        query: `${key}_0=${getToday().format()}&${key}_1=${getToday().format()}`
       });
     }
 

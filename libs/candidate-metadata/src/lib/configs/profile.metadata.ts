@@ -1,542 +1,160 @@
 import { Endpoints } from '@webui/data';
+import { Form, InputType, DatepickerType, StaticType } from '@webui/metadata';
 
-const profile = [
-  {
-    values: {
-      address: 'contact.address.__str__',
-      title: 'contact.__str__',
-      picture: 'contact.picture',
-      birthday: 'contact.birthday'
-    },
-    type: 'info',
-    key: 'id',
-    hideOnMobile: true,
-  },
-  {
-    type: 'tabs',
-    hideEditButton: true,
-    children: [
-      {
-        main: true,
-        name: 'Personal Info',
-        type: 'group',
-        label: 'Personal information',
-        children: [
-          {
-            type: 'row',
-            showOnMobile: true,
-            children: [
-              {
-                values: {
-                  address: 'contact.address.__str__',
-                  title: 'contact.__str__',
-                  picture: 'contact.picture',
-                  birthday: 'contact.birthday'
-                },
-                type: 'info',
-                key: 'id',
-              }
-            ]
-          },
-          {
-            type: 'row',
-            children: [
-              {
-                label: 'Contacts',
-                type: 'group',
-                children: [
-                  {
-                    key: 'contact.id',
-                    type: 'input',
-                    hide: true,
-                    templateOptions: {
-                      required: false,
-                      label: 'Id',
-                      type: 'text'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'contact.birthday',
-                    type: 'datepicker',
-                    inline: true,
-                    hide: true,
-                    templateOptions: {
-                      required: true,
-                      label: 'Birthday',
-                      type: 'date'
-                    },
-                    read_only: true
-                  },
-                  {
-                    endpoint: Endpoints.Contact,
-                    read_only: true,
-                    key: 'contact',
-                    hide: true,
-                    templateOptions: {
-                      label: 'Contact',
-                      values: ['__str__'],
-                      type: 'related',
-                    },
-                    type: 'related',
-                    query: {
-                      candidate: true
-                    },
-                  },
-                  {
-                    endpoint: Endpoints.Address,
-                    read_only: true,
-                    hide: true,
-                    templateOptions: {
-                      label: 'Address',
-                      add: true,
-                      delete: false,
-                      values: ['__str__'],
-                      type: 'address',
-                      edit: false
-                    },
-                    collapsed: false,
-                    send: false,
-                    type: 'address',
-                    key: 'contact.address',
-                    many: false
-                  },
-                  {
-                    key: 'contact.is_available',
-                    read_only: false,
-                    hide: true,
-                    templateOptions: {
-                      required: false,
-                      label: 'Available',
-                      type: 'checkbox'
-                    },
-                    send: false,
-                    default: true,
-                    type: 'checkbox'
-                  },
-                  {
-                    key: 'contact.first_name',
-                    type: 'input',
-                    hide: true,
-                    templateOptions: {
-                      required: true,
-                      label: 'First Name',
-                      max: 255,
-                      type: 'text'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'contact.last_name',
-                    type: 'input',
-                    hide: true,
-                    templateOptions: {
-                      required: true,
-                      label: 'Last Name',
-                      max: 255,
-                      type: 'text'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'contact.email',
-                    type: 'input',
-                    templateOptions: {
-                      placeholder: 'E-mail',
-                      required: true,
-                      label: 'E-mail',
-                      max: 255,
-                      type: 'text'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'contact.phone_mobile',
-                    type: 'input',
-                    templateOptions: {
-                      placeholder: 'Mobile phone',
-                      required: true,
-                      label: 'Phone number',
-                      type: 'text'
-                    },
-                    read_only: false
-                  }
-                ],
-                width: 0.5
-              },
-              {
-                label: 'Emergency contact',
-                type: 'group',
-                children: [
-                  {
-                    key: 'emergency_contact_name',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Name',
-                      max: 63,
-                      type: 'text'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'emergency_contact_phone',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Phone Number',
-                      type: 'text'
-                    },
-                    read_only: false
-                  },
-                ],
-                width: 0.5
-              }
-            ]
-          },
-          {
-            type: 'row',
-            children: [
-              {
-                label: 'Additional info',
-                type: 'group',
-                children: [
-                  {
-                    key: 'contact.gender',
-                    type: 'select',
-                    templateOptions: {
-                      required: false,
-                      label: 'Gender',
-                      type: 'select',
-                      options: [
-                        {
-                          value: 'male',
-                          label: 'Male'
-                        },
-                        {
-                          value: 'female',
-                          label: 'Female'
-                        }
-                      ]
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'transportation_to_work',
-                    type: 'select',
-                    templateOptions: {
-                      required: false,
-                      label: 'Transportation',
-                      type: 'select',
-                      options: [
-                        {
-                          value: 1,
-                          label: 'Own Car'
-                        },
-                        {
-                          value: 2,
-                          label: 'Public Transportation'
-                        }
-                      ]
-                    },
-                    read_only: false
-                  }
-                ],
-                width: 0.25
-              },
-              {
-                label: 'Phisical parameters',
-                type: 'group',
-                children: [
-                  {
-                    key: 'height',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Height, cm',
-                      type: 'text'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'weight',
-                    type: 'input',
-                    templateOptions: {
-                      required: false,
-                      label: 'Weight, kg',
-                      type: 'number'
-                    },
-                    read_only: false
-                  },
-                  {
-                    key: 'bmi',
-                    type: 'static',
-                    templateOptions: {
-                      required: false,
-                      label: 'Bmi',
-                      type: 'static'
-                    },
-                    read_only: true
-                  }
-                ],
-                width: 0.25
-              },
-              {
-                label: 'Scores',
-                type: 'group',
-                children: [
-                  {
-                    key: 'candidate_scores.id',
-                    read_only: false,
-                    hide: true,
-                    templateOptions: {
-                      required: false,
-                      label: 'Id',
-                      type: 'text'
-                    },
-                    send: false,
-                    type: 'input'
-                  },
-                  {
-                    key: 'candidate_scores.reliability',
-                    send: false,
-                    type: 'static',
-                    templateOptions: {
-                      required: false,
-                      label: 'Reliability',
-                      type: 'score',
-                      danger: 'No rating'
-                    },
-                    read_only: true
-                  },
-                  {
-                    key: 'candidate_scores.loyalty',
-                    send: false,
-                    type: 'static',
-                    templateOptions: {
-                      required: false,
-                      label: 'Loyalty',
-                      type: 'score',
-                      danger: 'No rating'
-                    },
-                    read_only: true
-                  },
-                ],
-                width: 0.25
-              },
-              {
-                label: 'Rating',
-                type: 'group',
-                children: [
-                  {
-                    key: 'candidate_scores.recruitment_score',
-                    send: false,
-                    type: 'static',
-                    templateOptions: {
-                      required: false,
-                      label: 'Average test',
-                      type: 'score',
-                      danger: 'No rating'
-                    },
-                    read_only: true
-                  },
-                  {
-                    key: 'candidate_scores.client_feedback',
-                    send: false,
-                    type: 'static',
-                    templateOptions: {
-                      required: false,
-                      label: 'Client feedback',
-                      type: 'score',
-                      danger: 'No rating'
-                    },
-                    read_only: true
-                  },
-                  {
-                    key: 'candidate_scores.skill_score',
-                    send: false,
-                    type: 'static',
-                    templateOptions: {
-                      required: false,
-                      label: 'Average skill',
-                      type: 'score',
-                      danger: 'No rating'
-                    },
-                    read_only: true
-                  },
-                ],
-                width: 0.25
-              }
-            ]
-          },
-          {
-            type: 'row',
-            children: [
-              {
-                label: 'Residency',
-                type: 'group',
-                children: [
-                  {
-                    key: 'residency',
-                    default: 0,
-                    type: 'select',
-                    templateOptions: {
-                      required: false,
-                      label: 'Residency Status',
-                      type: 'select',
-                      options: [
-                        {
-                          value: 0,
-                          label: 'Unknown'
-                        },
-                        {
-                          value: 1,
-                          label: 'Citizen'
-                        },
-                        {
-                          value: 2,
-                          label: 'Permanent Resident'
-                        },
-                        {
-                          value: 3,
-                          label: 'Temporary Resident'
-                        }
-                      ]
-                    },
-                    read_only: false
-                  },
-                  // {
-                  //   key: 'visa_type',
-                  //   type: 'related',
-                  //   endpoint: '/candidate/visatypes/',
-                  //   showIf: [
-                  //     {
-                  //       residency: 3
-                  //     }
-                  //   ],
-                  //   templateOptions: {
-                  //     required: false,
-                  //     label: 'Visa Type',
-                  //     type: 'related'
-                  //   },
-                  //   read_only: false
-                  // },
-                  // {
-                  //   key: 'visa_expiry_date',
-                  //   type: 'datepicker',
-                  //   showIf: [
-                  //     {
-                  //       residency: 3
-                  //     }
-                  //   ],
-                  //   templateOptions: {
-                  //     required: false,
-                  //     label: 'Visa Expiry Date',
-                  //     type: 'date'
-                  //   },
-                  //   read_only: false
-                  // },
-                ],
-                width: 0.25
-              },
-              {
-                type: 'group',
-                label: ' ',
-                children: [
-                  {
-                    endpoint: Endpoints.Country,
-                    read_only: true,
-                    templateOptions: {
-                      label: 'Nationality',
-                      values: ['__str__'],
-                      type: 'related',
-                    },
-                    type: 'related',
-                    key: 'nationality',
-                  },
-                  // {
-                  //   key: 'vevo_checked_at',
-                  //   type: 'datepicker',
-                  //   showIf: [
-                  //     {
-                  //       residency: 3
-                  //     }
-                  //   ],
-                  //   templateOptions: {
-                  //     required: false,
-                  //     label: 'VEVO checked at',
-                  //     type: 'date'
-                  //   },
-                  //   read_only: false
-                  // }
-                ],
-                width: 0.25
-              }
-            ]
-          }
-        ]
-      },
-      {
-        endpoint: Endpoints.CandidateSkill,
-        templateOptions: {
-          label: 'Skills',
-          type: 'list',
-          add_label: '',
-          text: 'Candidate skills'
-        },
-        collapsed: false,
-        prefilled: {
-          candidate_contact: '{id}'
-        },
-        metadata_query: {
-          type: 'profile'
-        },
-        type: 'list',
-        query: {
-          candidate_contact: '{id}'
-        },
-        help: 'Here you can see skills'
-      },
-      {
-        endpoint: Endpoints.CandidateTag,
-        templateOptions: {
-          label: 'Tags',
-          type: 'list',
-          add_label: '',
-          text: 'Candidate tags'
-        },
-        visibleMode: true,
-        prefilled: {
-          candidate_contact: '{id}'
-        },
-        metadata_query: {
-          type: 'profile'
-        },
-        type: 'list',
-        query: {
-          candidate_contact: '{id}'
-        },
-        help: 'Here you can see tags'
-      },
-      {
-        endpoint: Endpoints.CandidateEvaluation,
-        templateOptions: {
-          label: 'Evaluations',
-          text: 'Evaluations',
-          add_label: '',
-        },
-        metadata_query: {
-          type: 'profile'
-        },
-        type: 'list',
-        query: {
-          candidate_contact: '{id}'
-        },
-        help: 'Here you can see evaluations'
-      },
-    ]
-  }
-];
+const profile = function() {
+  return [
+    new Form.info.element('id')
+      .setValues({
+        address: 'contact.address.__str__',
+        title: 'contact.__str__',
+        picture: 'contact.picture',
+        birthday: 'contact.birthday'
+      })
+      .hideOnMobileDevice(),
+
+    new Form.tabs.element(true)
+      .setChildren([
+        new Form.group.element('Personal information')
+          .mainTab('Personal Info')
+          .setChildren([
+            new Form.row.element()
+              .showOnMobileDevice()
+              .setChildren([
+                new Form.info.element('id')
+                  .setValues({
+                    address: 'contact.address.__str__',
+                    title: 'contact.__str__',
+                    picture: 'contact.picture',
+                    birthday: 'contact.birthday'
+                  })
+              ]),
+
+            new Form.row.element()
+              .setChildren([
+              new Form.group.element('Contacts')
+                .setWidth(0.5)
+                .setChildren([
+                  new Form.datepicker.element('contact.birthday', 'Birthday', DatepickerType.Date)
+                    .readOnly()
+                    .hideField()
+                    .setInline(),
+
+                  new Form.related.element('contact', 'Contact', Endpoints.Contact)
+                    .readOnly()
+                    .hideField(),
+
+                  new Form.related.element('contact.address', 'Address', Endpoints.Address)
+                    .readOnly()
+                    .hideField(),
+
+                  new Form.input.element('contact.email', 'E-mail', InputType.Text),
+
+                  new Form.input.element('contact.phone_mobile', 'Phone number', InputType.Text)
+                ]),
+
+              new Form.group.element('Emergency contact')
+                .setWidth(0.5)
+                .setChildren([
+                  new Form.input.element('emergency_contact_name', 'Name', InputType.Text),
+
+                  new Form.input.element('emergency_contact_phone', 'Phone Number', InputType.Text)
+                ]),
+            ]),
+
+            new Form.row.element()
+              .setChildren([
+              new Form.group.element('Additional info')
+                .setWidth(0.25)
+                .setChildren([
+                  new Form.select.element('contact.gender', 'Gender')
+                    .addOptions({
+                      male: 'Male',
+                      female: 'Female'
+                    }),
+
+                  new Form.select.element('transportation_to_work', 'Transportation')
+                    .addOptions({
+                      1: 'Own Car',
+                      2: 'Public Transportation'
+                    })
+                ]),
+
+              new Form.group.element('Phisical parameters')
+                .setWidth(0.25)
+                .setChildren([
+                  new Form.input.element('height', 'Height, cm', InputType.Text),
+
+                  new Form.input.element('weight', 'Weight, kg', InputType.Text),
+
+                  new Form.static.element('bmi', 'Bmi'),
+                ]),
+
+              new Form.group.element('Scores')
+                .setWidth(0.25)
+                .setChildren([
+                  new Form.static.element('candidate_scores.reliability', 'Reliability', StaticType.Score)
+                    .setDanger('No rating'),
+
+                  new Form.static.element('candidate_scores.loyalty', 'Loyalty', StaticType.Score)
+                    .setDanger('No rating')
+                ]),
+
+              new Form.group.element('Rating')
+                .setWidth(0.25)
+                .setChildren([
+                  new Form.static.element('candidate_scores.recruitment_score', 'Average test', StaticType.Score)
+                    .setDanger('No rating'),
+
+                  new Form.static.element('candidate_scores.client_feedback', 'Client feedback', StaticType.Score)
+                    .setDanger('No rating'),
+
+                  new Form.static.element('candidate_scores.skill_score', 'Average skill', StaticType.Score)
+                    .setDanger('No rating'),
+                ]),
+            ]),
+
+            new Form.row.element()
+              .setChildren([
+              new Form.group.element('Residency')
+                .setWidth(0.25)
+                .setChildren([
+                  new Form.select.element('residency', 'Residency Status')
+                    .addOptions({
+                      0: 'Unknown',
+                      1: 'Citizen',
+                      2: 'Permanent Resident',
+                      3: 'Temporary Resident'
+                    }),
+                ]),
+
+              new Form.group.element(' ')
+                .setWidth(0.25)
+                .setChildren([
+                  new Form.related.element('nationality', 'Nationality', Endpoints.Country)
+                ]),
+            ])
+          ]),
+
+        new Form.list.element('Skills', Endpoints.CandidateSkill)
+          .withoutAddButton()
+          .setAdditionalInfo('Candidate skills', 'Here you can see skills')
+          .setQuery({ candidate_contact: '{id}' })
+          .setMetadataQuery({ type: 'profile' }),
+
+        new Form.list.element('Tags', Endpoints.CandidateTag)
+          .withoutAddButton()
+          .setAdditionalInfo('Candidate tags', 'Here you can see tags')
+          .setQuery({ candidate_contact: '{id}' })
+          .setMetadataQuery({ type: 'profile' }),
+
+        new Form.list.element('Evaluations', Endpoints.CandidateTag)
+          .withoutAddButton()
+          .setAdditionalInfo('Evaluations', 'Here you can see evaluations')
+          .setQuery({ candidate_contact: '{id}' })
+          .setMetadataQuery({ type: 'profile' }),
+      ]),
+  ]
+};
 
 export const metadataProfile = {
   profile
