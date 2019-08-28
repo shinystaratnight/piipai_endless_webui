@@ -732,6 +732,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         col.content.forEach((element) => {
           const obj = this.generateContentElement(element, col, cell, el);
 
+          if (!obj) {
+            return;
+          }
+
           cell.content.push(obj);
         });
         row.content.push(cell);
