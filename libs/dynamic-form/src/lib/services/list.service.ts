@@ -16,7 +16,7 @@ export class ListService {
   changes = new Map();
 
   updateActions: Function[];
-  updateButtons: Map<string, BehaviorSubject<boolean>>;
+  updateButtons: Map<string, BehaviorSubject<boolean | string>>;
 
   config: any;
   data: any[];
@@ -40,13 +40,32 @@ export class ListService {
     this._updateList.next(Date.now());
   }
 
-  saveChanges(id: string) {
+  saveChanges() {
+    const ids = [];
+    const { required } = this.config.update;
+
+    this.changes.forEach((val, key, map) => {
+      if (this.checkRequiredFields(key, required)) {
+        ids.push(key);
+      }
+    });
+
+    ids.forEach((id: string, index: number) => {
+      const last = index === ids.length - 1;
+
+      this.saveObject(id, last);
+      const button = this.updateButtons.get(id);
+      button.next('Please wait');
+    });
+  }
+
+  saveObject(id: string, last: boolean) {
     const data = this.getRowData(id);
     const canEdit = getPropValue(data, this.config.canEdit);
     const { create } = this.config;
 
     if (canEdit) {
-      this.send(id);
+      this.send(id, last);
     } else if (create) {
       const endpoint = create.endpoint;
       const body = {};
@@ -69,12 +88,12 @@ export class ListService {
           });
 
           Object.assign(data, additionalData);
-          this.send(id);
+          this.send(id, last);
         });
     }
   }
 
-  send(id: string) {
+  send(id: string, updateList: boolean) {
     const data = this.getRowData(id);
     const { update } = this.config;
     const method = update.method;
@@ -84,8 +103,11 @@ export class ListService {
     if (this[method]) {
       this[method](endpoint, changes)
         .subscribe(() => {
-          this._updateRow.next({id, data: changes});
-          this.changes.clear();
+          this._updateRow.next({id, data: changes, updateList});
+
+          if (updateList) {
+            this.changes.clear();
+          }
         });
     }
   }
@@ -120,8 +142,24 @@ export class ListService {
 
   private showSaveButton(id: string) {
     const button = this.updateButtons.get(id);
+    const { required, requiredMessage } = this.config.update;
+    const value = this.checkRequiredFields(id, required);
 
-    button.next(true);
+    button.next(value || requiredMessage);
+  }
+
+  private checkRequiredFields(id: string, required: string | string[]): boolean {
+    let value;
+
+    if (required) {
+      if (Array.isArray(required)) {
+        value = required.map((field) => getPropValue(this.getChanges(id), field)).every((val) => Boolean(val));
+      } else {
+        value = Boolean(getPropValue(this.getChanges(id), required));
+      }
+    }
+
+    return value;
   }
 
   private getChanges(id: string): any {

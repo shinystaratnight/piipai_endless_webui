@@ -184,7 +184,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
       Object.assign(row, rowData.data);
 
-      this.body = [...this.generateBody(this.config, this.fullData, this.innerTables)];
+      if (rowData.updateList) {
+        this.body = [...this.generateBody(this.config, this.fullData, this.innerTables)];
+      }
     }));
   }
 
@@ -797,7 +799,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       styles: element.styles,
       inlineValue: element.inlineValue,
       form: {...element.form},
-      show: element.updateButton ? new BehaviorSubject(false) : undefined
+      show: element.updateButton ? new BehaviorSubject(false) : undefined,
+      required: element.required
     };
     if (obj.show) {
       this.updateButtons.set(el.id, obj.show);
@@ -1387,7 +1390,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
           this.showTracking(e);
           break;
         case 'updateObject':
-          this.updateListObject(e);
+          this.updateListObject();
           break;
         default:
           return;
@@ -1396,8 +1399,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     return;
   }
 
-  public updateListObject(e) {
-    this.listService.saveChanges(e.id);
+  public updateListObject() {
+    this.listService.saveChanges();
   }
 
   public buyCandidate(e) {
