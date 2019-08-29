@@ -32,11 +32,11 @@ $shadow: 0px 4px 6px 0;
   &__shadow {
     box-shadow: $shadow rgba(black, 0.3);
 
-    &:hover {
+    &:hover:not([disabled]) {
       box-shadow: $shadow rgba(black, 0.2);
     }
 
-    &:active {
+    &:active:not([disabled]) {
       box-shadow: none;
     }
 
@@ -89,6 +89,19 @@ $shadow: 0px 4px 6px 0;
 
     &:active {
       background-color: #98DCAE;
+    }
+  }
+
+  &__primary {
+    background-color: rgba($brand-primary, 0.2);
+
+    &:hover:not([disabled]),
+    &:focus:not([disabled]) {
+      background-color: rgba($brand-primary, 0.3);
+    }
+
+    &:active:not([disabled]) {
+      background-color: rgba($brand-primary, 0.5);
     }
   }
 
