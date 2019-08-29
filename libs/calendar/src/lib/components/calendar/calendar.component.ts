@@ -539,6 +539,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
           return {
             shift,
             job_link: `/hr/jobs/${shift.date.job.id}/change`,
+            jobsite_link: `/hr/jobsites/${shift.date.job.jobsite.id}/change`,
             date: shift.date.shift_date,
             time: shift.time,
             jobsite: shift.date.job.jobsite.name,
