@@ -10,6 +10,7 @@ export enum Status { Unfilled, Fullfilled, Pending, Open, Filled, Approved }
 export interface CalendarData {
   header: string[];
   body: any;
+  date?: string;
 }
 
 @Injectable()
