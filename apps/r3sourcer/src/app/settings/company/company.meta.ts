@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 
-import { createFormElement, FormElementType } from '@webui/metadata';
+import { Form } from '@webui/metadata';
 
 export const purposeOptions = {
   hire: 'Hire',
@@ -33,7 +33,7 @@ const invoiceRuleOptions = {
   per_candidate: 'Per candidate'
 };
 
-export const purposeConfig = createFormElement(FormElementType.Select, 'purpose', 'Company purpose')
+export const purposeConfig = new Form.select.element('purpose', 'Company purpose')
   .addOptions(purposeOptions);
 
 export const meta = [
@@ -183,14 +183,14 @@ export const meta = [
         label: 'Invoice Rule',
         type: 'group',
         children: [
-          createFormElement(FormElementType.Select, 'invoice_rule.period', 'Period')
+          new Form.select.element('invoice_rule.period', 'Period')
             .addOptions(periodOptions)
-            .update({ formData })
+            .updateModel({ formData })
             .updateTemplate({ required: true }),
 
-          createFormElement(FormElementType.Select, 'invoice_rule.period_zero_reference_weekly', 'Invoice generation time')
+          new Form.select.element('invoice_rule.period_zero_reference_weekly', 'Invoice generation time')
             .addOptions(weekOptions)
-            .update({
+            .updateModel({
               formData,
               default: 1,
               showIf: [{
@@ -199,9 +199,9 @@ export const meta = [
             })
             .updateTemplate({ doNotSort: true }),
 
-          createFormElement(FormElementType.Select, 'invoice_rule.period_zero_reference_fortnightly', 'Invoice generation time')
+          new Form.select.element('invoice_rule.period_zero_reference_fortnightly', 'Invoice generation time')
             .addOptions(weekOptions)
-            .update({
+            .updateModel({
               formData,
               default: 1,
               showIf: [{
@@ -230,7 +230,7 @@ export const meta = [
               'invoice_rule.period': 'monthly'
             }]
           },
-          createFormElement(FormElementType.Select, 'invoice_rule.separation_rule', 'Separation rule')
+          new Form.select.element('invoice_rule.separation_rule', 'Separation rule')
             .addOptions(invoiceRuleOptions)
             .updateTemplate({ required: true }),
 

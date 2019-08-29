@@ -1,207 +1,136 @@
 import { Color, Endpoints } from '@webui/data';
-import { createFilter, Type } from '@webui/metadata';
+import { List, Filter } from '@webui/metadata';
 
-const statusList = [
-  { label: 'Pending submission', value: '4' },
-  { label: 'Pending approval', value: '5' },
-  { label: 'Approved', value: '7' }
-];
+const list = function() {
+  return {
+  list: new List.main.element('timesheet', 'Timesheet history')
+    .disableSearch()
+    .disableEdit()
+    .removeCreateButton()
+    .setFilters([
+      new Filter.date.element({
+        key: 'shift_started_at',
+        label: 'Shift date',
+        yesterday: true,
+        today: true,
+        tomorrow: true
+      }),
 
-const filters = {
-  shift_started_at: createFilter(Type.Date, {
-    key: 'shift_started_at',
-    label: 'Shift date',
-    yesterday: true,
-    today: true,
-    tomorrow: true
-  }),
-  status: createFilter(Type.Select, {
-    key: 'status',
-    label: 'Status',
-    values: statusList
-  }),
-}
-
-const list = {
-  list: {
-    list: 'timesheet',
-    search_enabled: false,
-    buttons: [],
-    columns: [
-      {
-        label: 'Position / Jobsite',
-        name: 'jobsite',
-        sort: true,
-        sort_field: 'jobsite',
-        content: [
-          {
-            type: 'static',
-            field: 'position',
-            styles: ['bolder']
-          },
-          {
-            endpoint: '/hr/jobsites/',
-            type: 'related',
-            label: 'Jobsite',
-            field: 'jobsite',
-            styles: ['secondary']
-          },
-        ]
-      },
-      {
-        content: [
-          {
-            title: 'Show traking map',
-            type: 'button',
-            color: 'link',
-            endpoint: `${Endpoints.CandidateLocation}{job_offer.candidate_contact.id}/history/`,
-            field: 'id',
-            action: 'showTracking',
-            customLink: true,
-            image: '/assets/img/map-lg.jpg'
-          },
-        ],
-        name: 'tracking',
-        center: true,
-        title: null,
-        label: 'Tracking',
-        delim: null
-      },
-      {
-        label: 'Times',
-        delim: null,
-        name: 'times',
-        title: null,
-        content: [
-          {
-            text: '{shift_started_at__date}',
-            type: 'static',
-            label: 'Date',
-            field: 'shift_started_at'
-          },
-          {
-            text: '{shift_started_at__time}',
-            type: 'static',
-            label: 'Start',
-            field: 'shift_started_at'
-          },
-          {
-            text: '-',
-            type: 'static',
-            label: 'Break',
-            field: 'break_started_at',
-            showIf: [{ status: [0, 1, 2, 3, 4] }]
-          },
-          {
-            text: '-',
-            type: 'static',
-            label: 'End',
-            field: 'shift_ended_at',
-            showIf: [{ status: [0, 1, 2, 3, 4] }]
-          },
-          {
-            text: '{break_started_at__time} - {break_ended_at__time}',
-            type: 'static',
-            label: 'Break',
-            field: 'break_started_at',
-            showIf: [{ status: [5, 6, 7] }]
-          },
-          {
-            text: '{shift_ended_at__time}',
-            type: 'static',
-            label: 'End',
-            field: 'shift_ended_at',
-            showIf: [{ status: [5, 6, 7] }]
-          }
-        ]
-      },
-      {
-        label: 'Times',
-        delim: null,
-        name: 'mobileTimes',
-        title: null,
-        hide: true,
-        content: [
-          {
-            text: '{shift_started_at__date}',
-            type: 'static',
-            label: 'Shift date',
-            field: 'shift_started_at'
-          },
-          {
-            text: '{shift_started_at__time} / -',
-            type: 'static',
-            label: 'Shift start/end',
-            field: 'shift_started_at',
-            showIf: [{ status: [0, 1, 2, 3, 4] }]
-          },
-          {
-            text: '- / -',
-            type: 'static',
-            label: 'Break start/end',
-            field: 'break_started_at',
-            showIf: [{ status: [0, 1, 2, 3, 4] }]
-          },
-          {
-            text: '{shift_started_at__time} / {shift_ended_at__time}',
-            type: 'static',
-            label: 'Shift start/end',
-            field: 'shift_ended_at',
-            showIf: [{ status: [5, 6, 7] }]
-          },
-          {
-            text: '{break_started_at__time} / {break_ended_at__time}',
-            type: 'static',
-            label: 'Break start/end',
-            field: 'break_started_at',
-            showIf: [{ status: [5, 6, 7] }]
-          },
-        ]
-      },
-      {
-        label: 'Total time',
-        name: 'totalTime',
-        content: [
-          {
-            type: 'static',
-            text: '{totalTime}',
-            field: 'totalTime',
-            styles: ['success'],
-            showIf: [
-              { status: [5, 6, 7] },
-            ]
-          },
-          {
-            field: 'status',
-            type: 'static',
-            text: 'Not started yet',
-            styles: ['muted'],
-            showIf: [{ status: [0, 1] }]
-          },
-          {
-            field: 'status',
-            type: 'static',
-            text: 'Waiting for the timesheet',
-            styles: ['muted'],
-            showIf: [{ status: 2 }]
-          },
-          {
-            field: 'status',
-            type: 'static',
-            text: 'No record',
-            styles: ['muted'],
-            showIf: [{ status: [3, 4] }]
-          },
-        ]
-      },
-      {
+      new Filter.select.element({
+        key: 'status',
         label: 'Status',
-        name: 'status',
-        content: [
-          {
-            type: 'select',
-            field: 'status',
-            values: {
+        values: [
+          { label: 'Pending submission', value: '4' },
+          { label: 'Pending approval', value: '5' },
+          { label: 'Approved', value: '7' }
+        ]
+      })
+    ])
+    .setColumns([
+      new List.column.element('jobsite', 'Position / Jobsite')
+        .setSort(true, 'jobsite')
+        .setContent([
+          new List.static.element('position')
+            .setStyles(['bolder']),
+
+          new List.related.element('jobsite', Endpoints.Jobsite)
+            .setStyles(['secondary'])
+        ]),
+
+      new List.column.element('tracking', 'Tracking')
+        .setCenter()
+        .setContent([
+          new List.button.element('id', 'showTracking')
+            .setEndpoint(`${Endpoints.CandidateLocation}{job_offer.candidate_contact.id}/history/`)
+            .setCustomLink('/assets/img/map-lg.jpg')
+        ]),
+
+      new List.column.element('times', 'Times')
+        .setContent([
+          new List.static.element('shift_started_at')
+            .setLabel('Date')
+            .setDisplay('{shift_started_at__date}'),
+
+          new List.static.element('shift_started_at')
+            .setLabel('Start')
+            .setDisplay('{shift_started_at__time}'),
+
+          new List.static.element('break_started_at')
+            .setLabel('Break')
+            .setDisplay('-')
+            .setShowIfRule([{ status: [0, 1, 2, 3, 4] }]),
+
+          new List.static.element('shift_ended_at')
+            .setLabel('End')
+            .setDisplay('-')
+            .setShowIfRule([{ status: [0, 1, 2, 3, 4] }]),
+
+          new List.static.element('break_started_at')
+            .setLabel('Break')
+            .setDisplay('{break_started_at__time} - {break_ended_at__time}')
+            .setShowIfRule([{ status: [5, 6, 7] }]),
+
+          new List.static.element('shift_ended_at')
+            .setLabel('End')
+            .setDisplay('{shift_ended_at__time}')
+            .setShowIfRule([{ status: [5, 6, 7] }])
+        ]),
+
+      new List.column.element('mobileTimes', 'Times')
+        .setHide()
+        .setContent([
+          new List.static.element('shift_started_at')
+            .setLabel('Shift date')
+            .setDisplay('{shift_started_at__date}'),
+
+          new List.static.element('shift_started_at')
+            .setLabel('Shift start/end')
+            .setDisplay('{shift_started_at__time} / -')
+            .setShowIfRule([{ status: [0, 1, 2, 3, 4] }]),
+
+          new List.static.element('break_started_at')
+            .setLabel('Break start/end')
+            .setDisplay('- / -')
+            .setShowIfRule([{ status: [0, 1, 2, 3, 4] }]),
+
+          new List.static.element('shift_ended_at')
+            .setLabel('Shift start/end')
+            .setDisplay('{shift_started_at__time} / {shift_ended_at__time}')
+            .setShowIfRule([{ status: [5, 6, 7] }]),
+
+          new List.static.element('break_started_at')
+            .setLabel('Break start/end')
+            .setDisplay('{break_started_at__time} / {break_ended_at__time}')
+            .setShowIfRule([{ status: [5, 6, 7] }]),
+        ]),
+
+      new List.column.element('totalTime', 'Total time')
+        .setContent([
+          new List.static.element('totalTime')
+            .setDisplay('{totalTime}')
+            .setStyles(['success'])
+            .setShowIfRule([ { status: [5, 6, 7] } ]),
+
+          new List.static.element('status')
+            .setDisplay('Not started yet')
+            .setStyles(['muted'])
+            .setShowIfRule([{ status: [0, 1] }]),
+
+          new List.static.element('status')
+            .setDisplay('Waiting for the timesheet')
+            .setStyles(['muted'])
+            .setShowIfRule([{ status: 2 }]),
+
+          new List.static.element('status')
+            .setDisplay('No record')
+            .setStyles(['muted'])
+            .setShowIfRule([{ status: [3, 4] }]),
+        ]),
+
+      new List.column.element('status', 'Status')
+        .setContent([
+          new List.select.element('status')
+            .setValues({
               0: 'New',
               1: 'Pre-Shift check pending',
               2: 'Pre-Shift check confirmed',
@@ -210,8 +139,8 @@ const list = {
               5: 'Approval pending',
               6: 'Supervisor modified',
               7: 'Approved',
-            },
-            color: {
+            })
+            .setColors({
               0: Color.Primary,
               1: Color.Primary,
               2: Color.Success,
@@ -220,272 +149,87 @@ const list = {
               5: Color.Primary,
               6: Color.Danger,
               7: Color.Success,
-            }
-          },
-          {
-            field: 'status',
-            type: 'static',
-            text: 'Your shift is schedulled to start at {shift_started_at__time}',
-            styles: ['muted'],
-            showIf: [{
-              status: 0
-            }]
-          },
-          {
-            field: 'status',
-            type: 'static',
-            text: 'Confirm if you are going to work',
-            styles: ['muted'],
-            showIf: [{
-              status: 1
-            }]
-          },
-          {
-            text: 'Accept',
-            type: 'button',
-            endpoint: `${Endpoints.Timesheet}{id}/confirm/`,
-            field: 'id',
-            action: 'emptyPost',
-            noDelim: true,
-            styles: ['success', 'shadow', 'shadow-success', 'size-m', 'mr', 'resize'],
-            showIf: [{
-              status: 1
-            }]
-          },
-          {
-            text: 'Decline',
-            type: 'button',
-            endpoint: `${Endpoints.Timesheet}{id}/decline/`,
-            field: 'id',
-            action: 'emptyPost',
-            styles: ['danger', 'shadow', 'shadow-danger', 'size-m'],
-            showIf: [{
-              status: 1
-            }]
-          },
-          {
-            field: 'status',
-            type: 'static',
-            text: 'Your shift will start {shift_started_at__diff}',
-            styles: ['muted'],
-            showIf: [{
-              status: 2
-            }]
-          },
-          {
-            field: 'status',
-            type: 'static',
-            text: 'Inactive timesheet will be deleted in 48 hours',
-            styles: ['muted'],
-            showIf: [{
-              status: 3
-            }]
-          },
-          {
-            text: 'Submit',
-            type: 'button',
-            endpoint: '/hr/timesheets-candidate/{id}/submit/',
-            field: 'id',
-            action: 'submitTimesheet',
-            styles: ['success', 'shadow', 'shadow-success', 'size-l'],
-            showIf: [{
-              status: 4
-            }]
-          },
-          {
-            text: 'Edit submission',
-            type: 'button',
-            endpoint: '/hr/timesheets-candidate/{id}/submit/',
-            field: 'id',
-            action: 'submitTimesheet',
-            styles: ['size-l', 'default'],
-            showIf: [{
-              status: 5
-            }]
-          },
-          {
-            field: 'status',
-            type: 'static',
-            text: 'Timesheet will be automatically approved in 4 hours',
-            styles: ['muted'],
-            showIf: [{
-              status: 6
-            }]
-          },
-          {
-            field: 'supervisor.name',
-            type: 'static',
-            showIf: [{
-              status: 7
-            }]
-          },
-          {
-            text: '{supervisor_approved_at__datetime}',
-            field: 'supervisor_approved_at',
-            type: 'static',
-            styles: ['muted'],
-            showIf: [
+            }),
+
+          new List.static.element('status')
+            .setDisplay('Your shift is schedulled to start at {shift_started_at__time}')
+            .setStyles(['muted'])
+            .setShowIfRule([ { status: 0 } ]),
+
+          new List.static.element('status')
+            .setDisplay('Confirm if you are going to work')
+            .setStyles(['muted'])
+            .setShowIfRule([ { status: 1 } ]),
+
+          new List.button.element('id', 'emptyPost')
+            .setDisplay('Accept')
+            .setEndpoint(`${Endpoints.Timesheet}{id}/confirm/`)
+            .setStyles(['success', 'shadow', 'shadow-success', 'size-m', 'mr', 'resize'])
+            .setShowIfRule([ { status: 1 } ])
+            .withoutDelim(),
+
+          new List.button.element('id', 'emptyPost')
+            .setDisplay('Decline')
+            .setEndpoint(`${Endpoints.Timesheet}{id}/decline/`)
+            .setStyles(['danger', 'shadow', 'shadow-danger', 'size-m'])
+            .setShowIfRule([ { status: 1 } ]),
+
+          new List.static.element('status')
+            .setDisplay('Your shift will start {shift_started_at__diff}')
+            .setStyles(['muted'])
+            .setShowIfRule([ { status: 2 } ]),
+
+          new List.static.element('status')
+            .setDisplay('Inactive timesheet will be deleted in 48 hours')
+            .setStyles(['muted'])
+            .setShowIfRule([ { status: 3 } ]),
+
+          new List.button.element('id', 'submitTimesheet')
+            .setDisplay('Submit')
+            .setEndpoint(`${Endpoints.TimesheetCandidate}{id}/submit/`)
+            .setStyles(['success', 'shadow', 'shadow-success', 'size-l'])
+            .setShowIfRule([ { status: 4 } ]),
+
+          new List.button.element('id', 'submitTimesheet')
+            .setDisplay('Edit submission')
+            .setEndpoint(`${Endpoints.TimesheetCandidate}{id}/submit/`)
+            .setStyles(['size-l', 'default'])
+            .setShowIfRule([ { status: 5 } ]),
+
+          new List.static.element('status')
+            .setDisplay('Timesheet will be automatically approved in 4 hours')
+            .setStyles(['muted'])
+            .setShowIfRule([ { status: 6 } ]),
+
+          new List.static.element('supervisor.name')
+            .setShowIfRule([ { status: 7 } ]),
+
+          new List.static.element('supervisor_approved_at')
+            .setDisplay('{supervisor_approved_at__datetime}')
+            .setStyles(['muted'])
+            .setShowIfRule([
               { status: 7 },
               'supervisor_approved_at',
               { supervisor_modified_at: null }
-            ]
-          },
-          {
-            text: '{supervisor_modified_at__datetime}',
-            field: 'supervisor_modified_at',
-            type: 'static',
-            styles: ['muted'],
-            showIf: [
+            ]),
+
+          new List.static.element('supervisor_modified_at')
+            .setDisplay('{supervisor_modified_at__datetime}')
+            .setStyles(['muted'])
+            .setShowIfRule([
               { status: 7 },
               'supervisor_modified_at'
-            ]
-          },
-          {
-            field: 'supervisor_signature',
-            type: 'picture',
-            file: false,
-            signature: true,
-            showId: ['supervisor_signature.origin'],
-            showIf: [{
-              status: 7
-            }]
-          },
-        ]
-      }
-    ],
-    filters: [
-      filters.shift_started_at,
-      filters.status
-    ],
-    editDisable: true,
-    label: 'Timesheet history'
-  },
-  fields: [
-    {
-      key: 'id',
-      type: 'button',
-      templateOptions: {
-        text: 'Submit',
-        label: '',
-        action: 'changeTimesheet',
-        type: 'button'
-      },
-      read_only: true
-    },
-    {
-      key: 'supervisor_approved_at',
-      type: 'datepicker',
-      templateOptions: {
-        type: 'datetime',
-        required: false,
-        label: 'Supervisor Approved at'
-      },
-      read_only: true
-    },
-    {
-      list: false,
-      showIf: ['supervisor_approved'],
-      many: false,
-      collapsed: false,
-      read_only: true,
-      key: 'supervisor',
-      endpoint: '/core/companycontacts/',
-      type: 'related',
-      templateOptions: {
-        edit: true,
-        label: 'Supervisor',
-        add: true,
-        type: 'related',
-        delete: false,
-        values: ['__str__']
-      }
-    },
-    {
-      key: 'going_to_work_confirmation',
-      type: 'checkbox',
-      templateOptions: {
-        type: 'icon',
-        required: false,
-        label: 'Going to work',
-        values: {
-          false: 'times-circle',
-          true: 'check-circle',
-          null: 'minus-circle'
-        }
-      },
-      read_only: true
-    },
-    {
-      key: 'shift_ended_at',
-      default: '2018-07-04T15:30:00+10:00',
-      type: 'static',
-      templateOptions: {
-        text: '{shift_ended_at__time}',
-        required: false,
-        type: 'static',
-        label: 'Shift ended at'
-      },
-      read_only: true
-    },
-    {
-      list: false,
-      many: false,
-      collapsed: false,
-      read_only: true,
-      key: 'jobsite',
-      endpoint: '/hr/jobsites/',
-      type: 'related',
-      templateOptions: {
-        edit: true,
-        label: 'Jobsite',
-        add: true,
-        type: 'related',
-        delete: false,
-        values: ['__str__']
-      }
-    },
-    {
-      key: 'shift_started_at',
-      type: 'static',
-      templateOptions: {
-        text: '{shift_started_at__date}',
-        required: false,
-        type: 'static',
-        label: 'Shift date'
-      },
-      read_only: true
-    },
-    {
-      key: 'break_started_at',
-      default: '2018-07-04T12:00:00+10:00',
-      type: 'static',
-      templateOptions: {
-        text: '{break_started_at__time} - {break_ended_at__time}',
-        required: false,
-        type: 'static',
-        label: 'Break'
-      },
-      read_only: true
-    },
-    {
-      type: 'select',
-      key: 'status',
-      read_only: true,
-      templateOptions: {
-        label: 'Status',
-        options: [
-          { value: 0, label: 'New', color: Color.Success },
-          { value: 1, label: 'Check pending', color: Color.Warning },
-          { value: 2, label: 'Check confirmed', color: Color.Success },
-          { value: 3, label: 'Check failed', color: Color.Danger },
-          { value: 4, label: 'Submit pending', color: Color.Warning },
-          { value: 5, label: 'Pending approval', color: Color.Success },
-          { value: 6, label: 'Supervisor modified', color: Color.Success },
-          { value: 7, label: 'Approved', color: Color.Success }
-        ],
-      }
-    },
-  ]
+            ]),
+
+          new List.picture.element('supervisor_signature', false)
+            .setSignature()
+            .setShowIfRule([
+              { status: 7 },
+              'supervisor_signature.origin'
+            ])
+        ])
+    ])
+  };
 };
 
 export const metadataTimesheetsCandidate = {

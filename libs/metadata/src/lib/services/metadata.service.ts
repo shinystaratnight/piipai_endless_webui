@@ -104,7 +104,13 @@ export class MetadataService {
         type = 'list';
       }
 
-      const stringifyMetadata = JSON.stringify(metadata[endpoint][type]);
+      const res = metadata[endpoint][type];
+
+      if (res instanceof Function) {
+        return of(res());
+      }
+
+      const stringifyMetadata = JSON.stringify(res);
 
       return of(JSON.parse(stringifyMetadata));
     }
