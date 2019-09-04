@@ -8,6 +8,7 @@ export class StaticElement extends BasicListElement {
   color?: string;
   setColor?: string;
   info?: string;
+  description?: string;
 
   constructor(field: string) {
     super(field, Static);
@@ -38,4 +39,9 @@ export class StaticElement extends BasicListElement {
     return this;
   }
 
+  setDescriptionStyle() {
+    this.description = ' ';
+
+    return this;
+  }
 }

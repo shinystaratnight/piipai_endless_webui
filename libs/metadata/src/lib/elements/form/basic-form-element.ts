@@ -15,7 +15,7 @@ export class BasicFormElement {
 
   mode?: BehaviorSubject<string>;
   hidden?: BehaviorSubject<boolean>;
-  formData?: BehaviorSubject<{ data: any}>;
+  formData?: BehaviorSubject<{ data: any }>;
 
   default?: any;
   read_only?: boolean;
@@ -26,6 +26,7 @@ export class BasicFormElement {
   width?: number;
   showIf?: Array<string | { [key: string]: any }>;
   saveField?: boolean;
+  updateFromForm?: boolean;
 
   templateOptions: BasicElementTemplateOptions;
 
@@ -62,7 +63,7 @@ export class BasicFormElement {
   }
 
   updateByNull(fields: string[]) {
-    this.setNull = [ ...fields ];
+    this.setNull = [...fields];
 
     return this;
   }
@@ -80,7 +81,7 @@ export class BasicFormElement {
   }
 
   setShowIfRule(showIf: Array<string | { [key: string]: any }>) {
-    this.showIf = [ ...showIf ];
+    this.showIf = [...showIf];
 
     return this;
   }
@@ -99,6 +100,12 @@ export class BasicFormElement {
 
   hideField() {
     this.hide = true;
+
+    return this;
+  }
+
+  setUpdateFromForm() {
+    this.updateFromForm = true;
 
     return this;
   }

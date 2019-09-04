@@ -1,18 +1,22 @@
-import { BasicFormElement, BasicElementTemplateOptions } from './basic-form-element';
+import {
+  BasicFormElement,
+  BasicElementTemplateOptions
+} from './basic-form-element';
 
 export const Input = 'input';
 
 export enum InputType {
-  Text = 'text'
+  Text = 'text',
+  Picture = 'picture'
 }
 
-export interface InputElementTemplateOptions extends BasicElementTemplateOptions {
+export interface InputElementTemplateOptions
+  extends BasicElementTemplateOptions {
   max?: number;
   type: InputType;
 }
 
 export class InputElement extends BasicFormElement {
-
   templateOptions: InputElementTemplateOptions;
 
   constructor(key: string, label: string, type: InputType) {

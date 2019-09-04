@@ -1,4 +1,7 @@
-import { BasicFormElement, BasicElementTemplateOptions } from './basic-form-element';
+import {
+  BasicFormElement,
+  BasicElementTemplateOptions
+} from './basic-form-element';
 
 export const Datepicker = 'datepicker';
 
@@ -10,10 +13,10 @@ export enum DatepickerType {
 
 interface DatepickerElementTemplateOptions extends BasicElementTemplateOptions {
   type: DatepickerType;
+  showTime?: boolean;
 }
 
 export class DatepickerElement extends BasicFormElement {
-
   templateOptions: DatepickerElementTemplateOptions;
 
   inline?: boolean;
@@ -26,6 +29,12 @@ export class DatepickerElement extends BasicFormElement {
 
   setInline() {
     this.inline = true;
+
+    return this;
+  }
+
+  setShowTime() {
+    this.templateOptions.showTime = true;
 
     return this;
   }
