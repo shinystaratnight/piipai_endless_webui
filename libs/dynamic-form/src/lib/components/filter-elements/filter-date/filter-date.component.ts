@@ -12,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../../services';
-import { isMobile, getTimeInstance } from '@webui/utilities';
+import { isMobile, getTimeInstance, isTouchDevice } from '@webui/utilities';
 
 interface Params {
   [query: string]: string;
@@ -47,7 +47,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit() {
     this.data = this.createInputs(this.config.input);
-    this.mobileDevice = isMobile();
+    this.mobileDevice = isTouchDevice();
 
     if (this.mobileDevice) {
       this.displayFormat = this.queryFormat;

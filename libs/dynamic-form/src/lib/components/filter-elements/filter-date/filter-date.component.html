@@ -1,43 +1,53 @@
 <div class="filter-element datepicker-element">
   <label class="filter-label">
-    {{config.label}}
-    <fa-icon class="reset-icon text-danger ml-1" style="cursor: pointer"
+    {{ config.label }}
+    <fa-icon
+      class="reset-icon text-danger ml-1"
+      style="cursor: pointer"
       *ngIf="query"
       [icon]="['fas', 'times-circle']"
-      (click)="resetFilter()">
+      (click)="resetFilter()"
+    >
     </fa-icon>
   </label>
   <div class="filter-date-wrapper">
     <ul class="list-inline dates my-1">
-      <li class="dates-item"
+      <li
+        class="dates-item"
         *ngFor="let item of config.list"
         [class.text-primary]="query === item.query"
-        (click)="selectQuery(item.query)">
-          <a href="#">{{item.label}}</a>
+        (click)="selectQuery(item.query)"
+      >
+        <a href="#">{{ item.label }}</a>
       </li>
     </ul>
     <div class="input-group datepicker" *ngFor="let input of config.input">
       <ng-container *ngIf="!mobileDevice">
-        <input class="form-control filter-date"
+        <input
+          class="form-control filter-date"
           #d
           [class.active]="data[input.query]"
           [attr.name]="input.query"
-          [(ngModel)]="data[input.query]">
+          [(ngModel)]="data[input.query]"
+        />
         <div class="placeholder">
-            {{input.label}}
+          {{ input.label }}
         </div>
       </ng-container>
 
       <ng-container *ngIf="mobileDevice">
-        <input type="date" class="form-control filter-date"
+        <input
+          type="date"
+          class="form-control filter-date mobile"
           [class.active]="data[input.query]"
           pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
           placeholder=""
           [attr.name]="input.query"
           [(ngModel)]="data[input.query]"
-          (ngModelChange)="changeDateOnMobile($event)">
+          (ngModelChange)="changeDateOnMobile($event)"
+        />
         <div class="placeholder">
-            {{input.label}}
+          {{ input.label }}
         </div>
       </ng-container>
     </div>
