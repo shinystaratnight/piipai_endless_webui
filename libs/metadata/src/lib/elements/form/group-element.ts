@@ -9,6 +9,8 @@ export class GroupElement {
   width?: number;
   main?: boolean;
   name?: string;
+  hideLabel?: boolean;
+  marginBottom?: number;
 
   constructor(label?: string) {
     this.label = label;
@@ -22,7 +24,7 @@ export class GroupElement {
   }
 
   setChildren(children: any[]) {
-    this.children = [ ...children ];
+    this.children = [...children];
 
     return this;
   }
@@ -33,4 +35,15 @@ export class GroupElement {
     return this;
   }
 
+  doNotShowLabel() {
+    this.hideLabel = true;
+
+    return this;
+  }
+
+  setMarginBottom(value: number) {
+    this.marginBottom = value;
+
+    return this;
+  }
 }

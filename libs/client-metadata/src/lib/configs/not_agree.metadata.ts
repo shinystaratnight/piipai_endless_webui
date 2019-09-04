@@ -1,119 +1,102 @@
-const shiftStartField = {
-  key: 'shift_started_at',
-  type: 'datepicker',
-  updateFromForm: true,
-  templateOptions: {
-    showTime: true,
-    type: 'datetime',
-    required: false,
-    label: 'Shift start'
-  },
-  read_only: false
+import { Form, DatepickerType, CheckboxType, InputType } from '@webui/metadata';
+
+const shiftStartField = function() {
+  return new Form.datepicker.element(
+    'shift_started_at',
+    'Shift start',
+    DatepickerType.Datetime
+  )
+    .setShowTime()
+    .setUpdateFromForm();
 };
 
-const shiftEndField = {
-  key: 'shift_ended_at',
-  type: 'datepicker',
-  updateFromForm: true,
-  templateOptions: {
-    showTime: true,
-    type: 'datetime',
-    required: false,
-    label: 'Shift end'
-  },
-  read_only: false
+const shiftEndField = function() {
+  return new Form.datepicker.element(
+    'shift_ended_at',
+    'Shift end',
+    DatepickerType.Datetime
+  )
+    .setShowTime()
+    .setUpdateFromForm();
 };
 
-const breakStartField = {
-  key: 'break_started_at',
-  type: 'datepicker',
-  updateFromForm: true,
-  saveField: true,
-  templateOptions: {
-    showTime: true,
-    type: 'datetime',
-    required: false,
-    label: 'Break start'
-  },
-  showIf: [{ noBreak: false }],
-  read_only: false
+const breakStartField = function() {
+  return new Form.datepicker.element(
+    'break_started_at',
+    'Break start',
+    DatepickerType.Datetime
+  )
+    .setShowIfRule([{ noBreak: false }])
+    .saveValue()
+    .setShowTime()
+    .setUpdateFromForm();
 };
 
-const breakEndField = {
-  key: 'break_ended_at',
-  type: 'datepicker',
-  updateFromForm: true,
-  saveField: true,
-  templateOptions: {
-    showTime: true,
-    type: 'datetime',
-    required: false,
-    label: 'Break end'
-  },
-  showIf: [{ noBreak: false }],
-  read_only: false
+const breakEndField = function() {
+  return new Form.datepicker.element(
+    'break_ended_at',
+    'Break end',
+    DatepickerType.Datetime
+  )
+    .setShowIfRule([{ noBreak: false }])
+    .saveValue()
+    .setShowTime()
+    .setUpdateFromForm();
 };
 
-const totalTimeField = {
-  type: 'static',
-  key: 'total_time',
-  send: false,
-  read_only: true,
-  templateOptions: {
-    label: 'Total time',
-    color: 'text-success'
-  }
+const totalTimeField = function() {
+  return new Form.static.element('total_time', 'Total time')
+    .readOnly()
+    .doNotSend()
+    .setColor('text-success');
 };
 
-const noBreakField = {
-  type: 'checkbox',
-  key: 'noBreak',
-  default: false,
-  send: false,
-  updateFromForm: true,
-  setNull: ['break_started_at', 'break_ended_at'],
-  templateOptions: {
-    label: 'No Break'
-  }
+const noBreakField = function() {
+  return new Form.checkbox.element('noBreak', 'No Break', CheckboxType.Checkbox)
+    .setUpdateFromForm()
+    .doNotSend()
+    .updateByNull(['break_started_at', 'break_ended_at']);
 };
 
-const signatureField = {
-  type: 'input',
-  key: 'supervisor_signature',
-  hide: true,
-  templateOptions: {
-    type: 'picture'
-  }
+const signatureField = function() {
+  return new Form.input.element(
+    'supervisor_signature',
+    '',
+    InputType.Picture
+  ).hideField();
 };
 
-const form = [
-  {
-    type: 'row',
-    children: [
-      {
-        type: 'group',
-        hideLabel: true,
-        marginBottom: 12,
-        children: [noBreakField, shiftStartField, shiftEndField, totalTimeField]
-      },
-      {
-        type: 'group',
-        marginBottom: 12,
-        children: [breakStartField, breakEndField, signatureField]
-      }
-    ]
-  }
-];
+const form = function() {
+  return [
+    new Form.row.element().setChildren([
+      new Form.group.element()
+        .doNotShowLabel()
+        .setMarginBottom(12)
+        .setChildren([
+          noBreakField(),
+          shiftStartField(),
+          shiftEndField(),
+          totalTimeField()
+        ]),
 
-const mobile = [
-  noBreakField,
-  shiftStartField,
-  breakStartField,
-  breakEndField,
-  shiftEndField,
-  totalTimeField,
-  signatureField
-];
+      new Form.group.element()
+        .setMarginBottom(12)
+        .setChildren([breakStartField(), breakEndField(), signatureField()])
+    ])
+  ];
+};
+
+const mobile = function() {
+  return [
+    noBreakField(),
+    shiftStartField(),
+    breakStartField(),
+    breakEndField(),
+    shiftEndField(),
+    totalTimeField(),
+    signatureField()
+  ];
+};
 
 export const notAgree = {
   form,
