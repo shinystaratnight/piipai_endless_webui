@@ -9,6 +9,7 @@ export const guide: GuideItem[] = [
       'Add Your',
       {
         url: `/mn${Endpoints.Company}{company_id}/change`,
+        queryParams: { tab: 'ngb-tab-1' },
         text: 'Business address'
       }
     ]
