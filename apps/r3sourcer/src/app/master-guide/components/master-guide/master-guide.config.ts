@@ -1,4 +1,4 @@
-import { GuideItem } from "../../interfaces";
+import { GuideItem } from '../../interfaces';
 
 import { Endpoints } from '@webui/data';
 
@@ -7,13 +7,16 @@ export const guide: GuideItem[] = [
     key: 'has_company_address',
     text: [
       'Add Your',
-      { url: `/mn/${Endpoints.Company}{company_id}/change`, text: 'Business address' }
-    ],
+      {
+        url: `/mn/${Endpoints.Company}{company_id}/change`,
+        text: 'Business address'
+      }
+    ]
   },
   {
     key: 'has_industry',
     text: [
-      'Add Your ' ,
+      'Add Your ',
       { url: `/mn/${Endpoints.Company}{company_id}/change`, text: 'industry' },
       ': multiple choices available'
     ]
@@ -23,16 +26,29 @@ export const guide: GuideItem[] = [
     text: ['Master company purpose'],
     endpoint: `/mn/${Endpoints.Company}{company_id}/`,
     options: [
-      { value: 'self_use', active: false, text: 'We will use software to manage our own workers' },
-      { value: 'hire', active: false, text: 'We use software to manage hire workers for whose work we charge our clients hourly' },
-      { value: 'recruitment', active: false, text: 'We use software to find candidates or to sell candidate profiles' },
+      {
+        value: 'self_use',
+        active: false,
+        text: 'We will use software to manage our own workers'
+      },
+      {
+        value: 'hire',
+        active: false,
+        text:
+          'We use software to manage hire workers for whose work we charge our clients hourly'
+      },
+      {
+        value: 'recruitment',
+        active: false,
+        text: 'We use software to find candidates or to sell candidate profiles'
+      }
     ]
   },
   {
     key: 'has_skills',
     text: [
       'Add your',
-      { url: `/mn/${Endpoints.Skill}add`, text: 'Skills' },
+      { url: `/mn/${Endpoints.SkillName}`, text: 'Skills' },
       'and skill rates'
     ]
   },
@@ -40,7 +56,10 @@ export const guide: GuideItem[] = [
     key: 'has_company_contact',
     text: [
       'Who beside you will be working with this software ( add ',
-      { url: `/mn/${Endpoints.Company}{company_id}/change`, text: 'company users' },
+      {
+        url: `/mn/${Endpoints.Company}{company_id}/change`,
+        text: 'company users'
+      },
       ')'
     ]
   },
@@ -71,5 +90,5 @@ export const guide: GuideItem[] = [
       'Integrations (MYOB only), take to Settings connect',
       { url: `/settings/myob`, text: 'MYOB' }
     ]
-  },
+  }
 ];
