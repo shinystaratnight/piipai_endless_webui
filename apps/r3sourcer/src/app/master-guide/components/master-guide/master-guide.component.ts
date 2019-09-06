@@ -12,7 +12,6 @@ import { updateGuide } from '@webui/core';
   styleUrls: ['./master-guide.component.scss']
 })
 export class MasterGuideComponent implements OnInit, OnDestroy {
-
   guide: GuideItem[];
 
   showPlaceholder: boolean;
@@ -22,9 +21,7 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
 
   private sub: Subscription;
 
-  constructor(
-    private masterGuideService: MasterGuideService
-  ) { }
+  constructor(private masterGuideService: MasterGuideService) {}
 
   ngOnInit() {
     this.inactiveIcon = false;
@@ -58,38 +55,39 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
   }
 
   getProgress() {
-    return (this.guide.filter((el) => el.completed).length / this.guide.length) * 100;
+    return (
+      (this.guide.filter(el => el.completed).length / this.guide.length) * 100
+    );
   }
 
   update({ value, item }) {
-    this.masterGuideService.updateValue(item.endpoint, { [item.key]: value })
+    this.masterGuideService.updateValue(item.endpoint, { [item.key]: value });
   }
 
   getGuide() {
-    this.masterGuideService.getGuide()
-      .subscribe((res: any) => {
-        const complete = Object.keys(res).every((key) => res[key]);
+    this.masterGuideService.getGuide().subscribe((res: any) => {
+      const complete = Object.keys(res).every(key => res[key]);
 
-        if (!complete) {
-          if (!this.sub) {
-            this.sub = updateGuide.subscribe(() => {
-              this.getGuide();
+      if (!complete) {
+        if (!this.sub) {
+          this.sub = updateGuide.subscribe(() => {
+            this.getGuide();
+          });
+        }
+
+        this.guide = guide.map(item => {
+          if (item.options) {
+            item.options.forEach(option => {
+              option.active = option.value === res.purpose;
             });
           }
 
-          this.guide = guide.map((item) => {
-            if (item.options) {
-              item.options.forEach((option) => {
-                option.active = option.value === res.purpose;
-              });
-            }
-
-            return {
-              ...item,
-              completed: res[item.key],
-            }
-          });
-        }
-      });
+          return {
+            ...item,
+            completed: res[item.key]
+          };
+        });
+      }
+    });
   }
 }
