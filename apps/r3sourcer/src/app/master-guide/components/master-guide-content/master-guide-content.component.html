@@ -8,7 +8,9 @@
     </fa-icon>
     <p class="mb-0">
       <ng-container *ngFor="let el of item.text">
-        <a *ngIf="el.url" [routerLink]="[el.url]">&nbsp;{{ el.text }}&nbsp;</a>
+        <a *ngIf="el.url" [routerLink]="[el.url]" [queryParams]="el.queryParams"
+          >&nbsp;{{ el.text }}&nbsp;</a
+        >
         <span *ngIf="!el.url">{{ el }}</span>
       </ng-container>
 

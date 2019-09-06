@@ -4,20 +4,21 @@ const filters = {
   status: createFilter(Type.Relared, {
     key: 'status',
     label: 'Status',
-    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel',
+    endpoint:
+      '/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel',
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
   manager: createFilter(Type.Relared, {
     key: 'portfolio_manager',
     label: 'Portfolio Manager',
-    endpoint: '/core/companycontacts/?master_company=current',
+    endpoint: '/core/companycontacts/?master_company=current'
   }),
   state: createFilter(Type.Relared, {
     key: 'state',
     label: 'State',
     endpoint: '/core/regions/?country=AU',
-    display: 'name',
+    display: 'name'
   }),
   creditLimit: createFilter(Type.Range, {
     key: 'approved_credit_limit',
@@ -169,7 +170,7 @@ const list = {
         multiple: false,
         type: 'checkbox'
       },
-      filters.creditLimit,
+      filters.creditLimit
     ]
   },
   fields: [
@@ -381,7 +382,7 @@ const form = [
                       type: 'text'
                     },
                     read_only: true
-                  },
+                  }
                 ],
                 width: 0.25
               },
@@ -411,7 +412,7 @@ const form = [
                       type: 'text'
                     },
                     read_only: false
-                  },
+                  }
                 ],
                 width: 0.25
               },
@@ -424,7 +425,7 @@ const form = [
                     templateOptions: {
                       label: 'Industries',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     column: true,
                     sendData: ['default'],
@@ -444,7 +445,7 @@ const form = [
                       text: 'Registered'
                     },
                     read_only: false
-                  },
+                  }
                 ],
                 width: 0.25
               },
@@ -856,12 +857,14 @@ const form = [
                         { value: 4, label: 'Thursday' },
                         { value: 5, label: 'Friday' },
                         { value: 6, label: 'Saturday' },
-                        { value: 7, label: 'Sunday' },
-                      ],
+                        { value: 7, label: 'Sunday' }
+                      ]
                     },
-                    showIf: [{
-                      'invoice_rule.period': 'weekly'
-                    }]
+                    showIf: [
+                      {
+                        'invoice_rule.period': 'weekly'
+                      }
+                    ]
                   },
                   {
                     type: 'select',
@@ -877,12 +880,14 @@ const form = [
                         { value: 4, label: 'Thursday' },
                         { value: 5, label: 'Friday' },
                         { value: 6, label: 'Saturday' },
-                        { value: 7, label: 'Sunday' },
-                      ],
+                        { value: 7, label: 'Sunday' }
+                      ]
                     },
-                    showIf: [{
-                      'invoice_rule.period': 'fortnightly'
-                    }]
+                    showIf: [
+                      {
+                        'invoice_rule.period': 'fortnightly'
+                      }
+                    ]
                   },
                   {
                     type: 'datepicker',
@@ -896,12 +901,14 @@ const form = [
                       label: 'Invoice generation time',
                       type: 'date',
                       clear: false,
-                      change: false,
+                      change: false
                     },
-                    showIf: [{
-                      'invoice_rule.period': 'monthly'
-                    }]
-                  },
+                    showIf: [
+                      {
+                        'invoice_rule.period': 'monthly'
+                      }
+                    ]
+                  }
                 ],
                 width: 0.25
               }
