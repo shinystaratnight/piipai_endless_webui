@@ -1,13 +1,9 @@
-<app-navigation
-  [user]="user"
-  (update)="updateNavigation($event)">
-</app-navigation>
+<app-navigation [user]="user"> </app-navigation>
 
 <div class="site-page pt-5 billing-page">
   <div class="form-page">
     <div class="form-content">
       <app-check-card [cardExist]="checkInformation"></app-check-card>
-
 
       <div class="row">
         <div class="col">
@@ -17,9 +13,13 @@
             [currentPlan]="currentPlan"
             [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
             (selectedPlan)="selectPlan($event)"
-            (cancelingPlan)="cancelPlan()"></app-billing-plan>
+            (cancelingPlan)="cancelPlan()"
+          ></app-billing-plan>
 
-          <app-billing-info [plans]="plans" [currentPlan]="currentPlan"></app-billing-info>
+          <app-billing-info
+            [plans]="plans"
+            [currentPlan]="currentPlan"
+          ></app-billing-info>
         </div>
 
         <div class="col">

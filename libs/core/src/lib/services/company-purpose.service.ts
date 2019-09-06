@@ -1,10 +1,20 @@
 import { Injectable } from '@angular/core';
+import {
+  HttpClient,
+  HttpParams,
+  HttpErrorResponse
+} from '@angular/common/http';
+
+import { of, Observable } from 'rxjs';
+import { catchError, tap, map } from 'rxjs/operators';
 
 import { Endpoints, Purpose } from '@webui/data';
+import { ErrorsService } from './errors.service';
+import { ToastService, MessageType } from './toast.service';
+// import { SiteSettingsService } from './site-settings.service';
 
 @Injectable()
 export class CompanyPurposeService {
-
   public purpose: Purpose;
 
   hideListColumns = {
@@ -12,12 +22,21 @@ export class CompanyPurposeService {
       [Purpose.SelfUse]: ['price_list_default_rate'],
       [Purpose.Recruitment]: ['price_list_default_rate']
     }
-  }
+  };
+
+  constructor(
+    private http: HttpClient,
+    private errors: ErrorsService,
+    private toastr: ToastService
+  ) {}
 
   public filterModules(modules: any[]) {
-    switch(this.purpose) {
+    switch (this.purpose) {
       case Purpose.Recruitment:
-        return this.filterByEndpoint([Endpoints.Company, Endpoints.Job, Endpoints.CompanyContact], modules);
+        return this.filterByEndpoint(
+          [Endpoints.Company, Endpoints.Job, Endpoints.CompanyContact],
+          modules
+        );
       case Purpose.SelfUse:
         return this.filterByEndpoint([Endpoints.Company], modules);
       default:
@@ -26,7 +45,7 @@ export class CompanyPurposeService {
   }
 
   public filterNavigationByPurpose(purpose: Purpose, navigation: any[]) {
-    switch(purpose) {
+    switch (purpose) {
       case Purpose.Recruitment:
         return this.filterByName(['allocations', 'accounts'], navigation);
       case Purpose.SelfUse:
@@ -40,7 +59,7 @@ export class CompanyPurposeService {
     const hideColumns: string[] = this.hideListColumns[endpoint];
 
     if (hideColumns && hideColumns[this.purpose]) {
-      return columns.filter((column) => {
+      return columns.filter(column => {
         return !hideColumns[this.purpose].includes(column.name);
       });
     }
@@ -48,8 +67,36 @@ export class CompanyPurposeService {
     return columns;
   }
 
+  getPurpose(id: string): Observable<any[] | Purpose> {
+    const query = { fields: ['purpose'] };
+    const params = new HttpParams({ fromObject: query });
+
+    if (this.purpose) {
+      return of(this.purpose);
+    }
+
+    return this.http.get(Endpoints.Company + id + '/', { params }).pipe(
+      tap((res: { id: string; purpose: Purpose }) => {
+        this.purpose = res.purpose;
+      }),
+      map((res: { id: string; purpose: Purpose }) => res.purpose),
+      catchError((err: HttpErrorResponse) => this.errors.parseErrors(err))
+    );
+  }
+
+  changePurpose(id: string, purpose: Purpose) {
+    return this.http
+      .put(Endpoints.Company + id + '/change_purpose/', { purpose, id })
+      .pipe(
+        tap((res: any) => {
+          this.purpose = purpose;
+          this.toastr.sendMessage(res.message, MessageType.success);
+        })
+      );
+  }
+
   private filterByName(keys: string[], navigation) {
-    return navigation.filter((el) => {
+    return navigation.filter(el => {
       let result = true;
 
       if (keys.includes(el.name.toLowerCase())) {
@@ -65,7 +112,7 @@ export class CompanyPurposeService {
   }
 
   private filterByEndpoint(endpoints: string[], modules) {
-    return modules.filter((el) => {
+    return modules.filter(el => {
       const { endpoint } = el.module_data;
 
       if (endpoints.includes(endpoint)) {

@@ -4,7 +4,15 @@ import { Subscription } from 'rxjs';
 import { GuideItem } from '../../interfaces';
 import { guide } from './master-guide.config';
 import { MasterGuideService } from '../../services';
-import { updateGuide } from '@webui/core';
+import {
+  updateGuide,
+  // NavigationService,
+  // CheckPermissionService,
+  SiteSettingsService,
+  EventService,
+  EventType
+} from '@webui/core';
+import { Page } from '@webui/data';
 
 @Component({
   selector: 'app-master-guide',
@@ -21,7 +29,13 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
 
   private sub: Subscription;
 
-  constructor(private masterGuideService: MasterGuideService) {}
+  constructor(
+    private masterGuideService: MasterGuideService,
+    // private navigationService: NavigationService,
+    // private checkPermissionService: CheckPermissionService,
+    private siteSettings: SiteSettingsService,
+    private eventService: EventService
+  ) {}
 
   ngOnInit() {
     this.inactiveIcon = false;
@@ -60,8 +74,23 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
     );
   }
 
-  update({ value, item }) {
-    this.masterGuideService.updateValue(item.endpoint, { [item.key]: value });
+  update({ value, item, type }) {
+    if (type === 'purpose') {
+      const id = this.siteSettings.companyId;
+
+      this.masterGuideService.changePurpose(id, value).subscribe(res => {
+        item.value = value;
+        this.eventService.emit(EventType.PurposeChanged);
+        // this.navigationService
+        //   .updateNavigation(id)
+        //   .subscribe((pages: Page[]) => {
+        //     this.checkPermissionService.parseNavigation(
+        //       this.checkPermissionService.permissions,
+        //       pages
+        //     );
+        //   });
+      });
+    }
   }
 
   getGuide() {
@@ -76,10 +105,8 @@ export class MasterGuideComponent implements OnInit, OnDestroy {
         }
 
         this.guide = guide.map(item => {
-          if (item.options) {
-            item.options.forEach(option => {
-              option.active = option.value === res.purpose;
-            });
+          if (item.key === 'purpose') {
+            item.value = res.purpose;
           }
 
           return {

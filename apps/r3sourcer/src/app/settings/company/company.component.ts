@@ -4,8 +4,17 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { GenericFormService, FormService } from '@webui/dynamic-form';
-import { ToastService, MessageType, SiteSettingsService, NavigationService, CheckPermissionService } from '@webui/core';
-import { Endpoints, Field, Page } from '@webui/data';
+import {
+  // ToastService,
+  // MessageType,
+  SiteSettingsService,
+  // NavigationService,
+  // CheckPermissionService,
+  CompanyPurposeService,
+  EventService,
+  EventType
+} from '@webui/core';
+import { Endpoints, Field, Page, Purpose } from '@webui/data';
 import { getTimeInstance } from '@webui/utilities';
 
 import { meta, purposeConfig } from './company.meta';
@@ -15,9 +24,7 @@ import { SettingsService } from '../settings.service';
   selector: 'app-company',
   templateUrl: 'company.component.html'
 })
-
 export class CompanyComponent implements OnInit, OnDestroy {
-
   public endpoint = '/company_settings/';
   public hiddenFields = {
     elements: [],
@@ -55,16 +62,17 @@ export class CompanyComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private siteSettings: SiteSettingsService,
     private formService: FormService,
-    private toastr: ToastService,
-    private navigationService: NavigationService,
-    private checkPermissionService: CheckPermissionService
-  ) { }
+    // private navigationService: NavigationService,
+    // private checkPermissionService: CheckPermissionService,
+    private purpose: CompanyPurposeService,
+    private eventService: EventService
+  ) {}
 
   public ngOnInit() {
     this.formId = this.formService.registerForm(this.endpoint, 'edit');
     this.form = this.formService.getForm(this.formId);
-    this.urlSubscription = this.route.url.subscribe((url) => {
-      this.settingsService.url = <any> url;
+    this.urlSubscription = this.route.url.subscribe(url => {
+      this.settingsService.url = <any>url;
     });
     this.gfs.getAll(this.endpoint).subscribe(
       (res: any) => {
@@ -76,47 +84,47 @@ export class CompanyComponent implements OnInit, OnDestroy {
         this.company = res.company_settings.company;
         this.showWorkflow = true;
       },
-      (err: any) => this.errors = err
+      (err: any) => (this.errors = err)
     );
   }
 
   public getPurpose(id: string) {
-    this.gfs.get(Endpoints.Company + `${id}/?fields=purpose`)
-      .subscribe((res: any) => {
-        this.companyData = res;
-        this.purposeConfig = [{...purposeConfig, value: res.purpose}];
-      });
+    this.purpose.getPurpose(id).subscribe((purpose: Purpose) => {
+      this.companyData = { purpose };
+      this.purposeConfig = [{ ...purposeConfig, value: purpose }];
+    });
   }
 
   public changePurpose(event) {
     if (event.type === 'change') {
-      const body = this.companyData;
-      body.purpose = event.value;
-
-      this.gfs.editForm(Endpoints.Company + `${this.companySettingsData.company}/change_purpose/`, body)
-        .subscribe((res) => {
-          this.toastr.sendMessage(res.message, MessageType.success);
-          this.navigationService.updateNavigation(this.company).subscribe((pages: Page[]) => {
-            this.checkPermissionService.parseNavigation(this.checkPermissionService.permissions, pages);
-          });
-        });
+      this.purpose.changePurpose(this.company, event.value).subscribe(() => {
+        this.eventService.emit(EventType.PurposeChanged);
+        // this.navigationService
+        //   .updateNavigation(this.company)
+        //   .subscribe((pages: Page[]) => {
+        //     this.checkPermissionService.parseNavigation(
+        //       this.checkPermissionService.permissions,
+        //       pages
+        //     );
+        //   });
+      });
     }
   }
 
   public updateMetadataByProps(metadata: Field[]) {
-    metadata.forEach((el) => {
+    metadata.forEach(el => {
       el.formId = this.formId;
       if (el.showIf && el.showIf.length) {
-          if (this.hiddenFields.keys.indexOf(el.key) === -1) {
-            this.hiddenFields.keys.push(el.key);
-            this.hiddenFields.elements.push(el);
-            this.hiddenFields.observers = this.observeFields(
-              el.showIf,
-              this.hiddenFields.observers
-            );
-            el.hidden = new BehaviorSubject(true);
-          }
+        if (this.hiddenFields.keys.indexOf(el.key) === -1) {
+          this.hiddenFields.keys.push(el.key);
+          this.hiddenFields.elements.push(el);
+          this.hiddenFields.observers = this.observeFields(
+            el.showIf,
+            this.hiddenFields.observers
+          );
+          el.hidden = new BehaviorSubject(true);
         }
+      }
 
       if (el.children) {
         this.updateMetadataByProps(el.children);
@@ -132,7 +140,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
     fields.forEach((field: any) => {
       if (field instanceof Object) {
         const keys = Object.keys(field);
-        keys.forEach((key) => {
+        keys.forEach(key => {
           if (observers.indexOf(key) === -1) {
             observers.push(key);
           }
@@ -168,13 +176,16 @@ export class CompanyComponent implements OnInit, OnDestroy {
   public submitForm(data) {
     Object.assign(data.company_settings, this.workflowForm);
     const keys = Object.keys(data.invoice_rule);
-    keys.forEach((key) => {
+    keys.forEach(key => {
       if (key.includes('period_zero_reference')) {
         if (key === 'period_zero_reference_date') {
-          data.invoice_rule[key] = getTimeInstance()(data.invoice_rule[key], 'YYYY-MM-DD').date() || undefined;
+          data.invoice_rule[key] =
+            getTimeInstance()(data.invoice_rule[key], 'YYYY-MM-DD').date() ||
+            undefined;
         }
 
-        data.invoice_rule['period_zero_reference'] = parseInt(data.invoice_rule[key], 10) || undefined;
+        data.invoice_rule['period_zero_reference'] =
+          parseInt(data.invoice_rule[key], 10) || undefined;
         delete data.invoice_rule[key];
       }
     });
@@ -195,7 +206,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   public fillingForm(metadata, data) {
-    metadata.forEach((el) => {
+    metadata.forEach(el => {
       if (el.key) {
         this.getValueOfData(data, el.key, el);
       } else if (el.children) {
@@ -242,5 +253,4 @@ export class CompanyComponent implements OnInit, OnDestroy {
       }
     }
   }
-
 }
