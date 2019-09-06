@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import {
   SiteService,
@@ -11,7 +11,9 @@ import {
   AuthService,
   NavigationService,
   SiteSettingsService,
-  CompanyPurposeService
+  CompanyPurposeService,
+  EventService,
+  EventType
 } from '@webui/core';
 import { PageData, User, Role } from '@webui/data';
 import { GenericFormService, FormMode } from '@webui/dynamic-form';
@@ -24,9 +26,7 @@ import { Endpoints } from '@webui/data';
   templateUrl: './site.component.html',
   styleUrls: ['./site.component.scss']
 })
-
 export class SiteComponent implements OnInit, OnDestroy {
-
   public pageData: PageData;
   public user: User;
   public dashboard = true;
@@ -42,7 +42,7 @@ export class SiteComponent implements OnInit, OnDestroy {
     paginated: 'off',
     supportData: 'job',
     metaType: true,
-    actions: true,
+    actions: true
   };
   public FormMode = FormMode;
 
@@ -70,9 +70,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   public acceptenceTestData: any;
   public additionalData: any;
   public data: any;
-  public endpointWithoutViewMode: string[] = [
-    '/core/users/'
-  ];
+  public endpointWithoutViewMode: string[] = ['/core/users/'];
   public passwordData: any;
 
   public modalRef: NgbModalRef;
@@ -80,10 +78,12 @@ export class SiteComponent implements OnInit, OnDestroy {
   public mobileDesign = [
     '/hr/timesheets/approved/',
     '/hr/timesheets/history/',
-    '/hr/timesheets/unapproved/',
+    '/hr/timesheets/unapproved/'
   ];
 
   public loader: boolean;
+
+  private subscriptions: Subscription[] = [];
 
   get isMobileDevice() {
     return isMobile() && isCandidate();
@@ -116,30 +116,43 @@ export class SiteComponent implements OnInit, OnDestroy {
     private ts: ToastService,
     private siteSettingsService: SiteSettingsService,
     private modalService: NgbModal,
-    private purposeService: CompanyPurposeService
+    private purposeService: CompanyPurposeService,
+    private eventService: EventService
   ) {}
 
   public ngOnInit() {
     this.loadScript();
     this.user = this.userService.user;
     this.currentRole = this.user.currentRole;
-    this.changePasswordEndpoint = `${Endpoints.Contact}${this.user.data.contact.id}/change_password/`;
+    this.changePasswordEndpoint = `${Endpoints.Contact}${
+      this.user.data.contact.id
+    }/change_password/`;
     this.updateJiraTask(this.user.currentRole);
 
-    this.route.url.subscribe(
-      (url: any) => {
-        this.formLabel = '';
-        this.pageData = null;
-        setTimeout(() => {
-          this.getPageNavigation(url);
-        }, 0);
-        if (url.length) {
-          this.formMode = null;
-          this.dashboard = false;
-        } else {
-          this.dashboard = true;
-        }
+    this.route.url.subscribe((url: any) => {
+      this.formLabel = '';
+      this.pageData = null;
+      setTimeout(() => {
+        this.getPageNavigation(url);
+      }, 0);
+      if (url.length) {
+        this.formMode = null;
+        this.dashboard = false;
+      } else {
+        this.dashboard = true;
       }
+    });
+
+    this.subscriptions.push(
+      this.eventService.event$.subscribe((type: EventType) => {
+        if (type === EventType.RoleChanged) {
+          this.updateNavigationList();
+        }
+
+        if (type === EventType.PurposeChanged) {
+          this.getModelsList();
+        }
+      })
     );
   }
 
@@ -147,11 +160,14 @@ export class SiteComponent implements OnInit, OnDestroy {
     if (this.modalRef) {
       this.modalRef.close();
     }
+
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   public loadScript() {
     this.Jira = document.createElement('script');
-    this.Jira.src = 'https://taavisaavo.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/klpxh0/b/20/a44af77267a987a660377e5c46e0fb64/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=5a8ec06b'; //tslint:disable-line
+    this.Jira.src =
+      'https://taavisaavo.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/klpxh0/b/20/a44af77267a987a660377e5c46e0fb64/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=5a8ec06b'; //tslint:disable-line
     this.Jira.type = 'text/javascript';
     this.Jira.async = true;
     this.Jira.id = 'jira';
@@ -180,8 +196,9 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public getPageData(url) {
-    this.siteService.getDataOfPage(url, this.pagesList).subscribe(
-      (pageData: PageData) => {
+    this.siteService
+      .getDataOfPage(url, this.pagesList)
+      .subscribe((pageData: PageData) => {
         if (pageData.endpoint === '/core/workflownodes/') {
           this.additionalData = {
             company: {
@@ -194,14 +211,23 @@ export class SiteComponent implements OnInit, OnDestroy {
             }
           };
           this.pageData = pageData;
-          this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+          this.permissionMethods = this.permission.getAllowMethods(
+            undefined,
+            pageData.endpoint
+          );
         } else if (this.isProfilePage(pageData)) {
           pageData.pathData.id = this.user.data.contact.candidate_contact;
           pageData.endpoint = '/candidate/candidatecontacts/';
           this.formMode = FormMode.View;
           this.pageData = pageData;
-          this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
-        } else if (pageData.endpoint === '/' && pageData.pathData.path !== '/') {
+          this.permissionMethods = this.permission.getAllowMethods(
+            undefined,
+            pageData.endpoint
+          );
+        } else if (
+          pageData.endpoint === '/' &&
+          pageData.pathData.path !== '/'
+        ) {
           setTimeout(() => {
             this.ts.sendMessage('Page not found!', MessageType.error);
           }, 2000);
@@ -220,7 +246,10 @@ export class SiteComponent implements OnInit, OnDestroy {
             if (isClient()) {
               this.permissionMethods = ['delete', 'get', 'post', 'update'];
             } else {
-              this.permissionMethods = this.permission.getAllowMethods(undefined, pageData.endpoint);
+              this.permissionMethods = this.permission.getAllowMethods(
+                undefined,
+                pageData.endpoint
+              );
             }
             if (pageData.endpoint === '/core/formstorages/') {
               this.formStorage = true;
@@ -232,8 +261,7 @@ export class SiteComponent implements OnInit, OnDestroy {
         this.setActivePage(this.pagesList, pageData.pathData.path);
 
         this.getNameOfList(pageData);
-      }
-    );
+      });
   }
 
   public getNameOfList(pageData: PageData) {
@@ -243,24 +271,21 @@ export class SiteComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.genericFormService.getMetadata(pageData.endpoint)
-        .subscribe((list) => {
-          if (list && list.list && list.list.label) {
-            this.listName = list.list.label;
-            this.listNameCache[pageData.endpoint] = list.list.label;
-          }
-        });
+      this.genericFormService.getMetadata(pageData.endpoint).subscribe(list => {
+        if (list && list.list && list.list.label) {
+          this.listName = list.list.label;
+          this.listNameCache[pageData.endpoint] = list.list.label;
+        }
+      });
     }
   }
 
-  public updateNavigationList(role: Role) {
-
-
+  public updateNavigationList() {
     // this.pageData = null;
     // this.updateJiraTask(role);
     // this.dashboard = false;
 
-    this.userService.currentRole(role);
+    // this.userService.currentRole(role);
     this.loader = true;
 
     if (isManager()) {
@@ -315,47 +340,43 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public getPageNavigation(url: any[]) {
     if (!this.modulesList && !url.length) {
-      this.getModelsList(url);
+      this.getModelsList();
     }
     if (!this.pagesList) {
       this.getPages(url);
     }
     if (!this.userModules && !url.length) {
-      this.getUserModules(url);
+      this.getUserModules();
     }
     if (this.pagesList) {
       this.getPageData(url);
     }
   }
 
-  public getModelsList(url) {
-    this.navigationService.getModules().subscribe(
-      (res: any) => {
-        const data = this.purposeService.filterModules(res);
-        this.modulesList = data;
-      }
-    );
+  public getModelsList() {
+    this.navigationService.getModules().subscribe((res: any) => {
+      const data = this.purposeService.filterModules(res);
+      this.modulesList = data;
+    });
   }
 
-  public getUserModules(url) {
-    this.navigationService.getUserModules().subscribe(
-      (res: any) => this.userModules = res
-    );
+  public getUserModules() {
+    this.navigationService
+      .getUserModules()
+      .subscribe((res: any) => (this.userModules = res));
   }
 
   public getPages(url) {
     const role = this.user.currentRole;
-    const companyId = isManager() ? this.user.data.contact.company_id : '';
+    // const companyId = isManager() ? this.user.data.contact.company_id : '';
 
-    this.navigationService.getPages(role, companyId).subscribe(
-      (res: any) => {
-        this.pagesList = res;
+    this.navigationService.getPages(role).subscribe((res: any) => {
+      this.pagesList = res;
 
-        if (url.length) {
-          this.getPageData(url);
-        }
+      if (url.length) {
+        this.getPageData(url);
       }
-    );
+    });
   }
 
   public changeMode(mode: FormMode) {
@@ -369,12 +390,20 @@ export class SiteComponent implements OnInit, OnDestroy {
     }
     if (e.type === 'sendForm' && e.status === 'success') {
       if (this.pageData.pathData.postfix === 'submit') {
-        this.router.navigate(['/' + this.authService.getRedirectUrl() + this.pageData.pathData.path]);
+        this.router.navigate([
+          '/' + this.authService.getRedirectUrl() + this.pageData.pathData.path
+        ]);
         this.saveProcess = false;
         return;
       }
       if (!this.pageData.pathData.id) {
-        this.router.navigate(['/' + this.authService.getRedirectUrl() + this.pageData.pathData.path + e.data.id + '/change']);
+        this.router.navigate([
+          '/' +
+            this.authService.getRedirectUrl() +
+            this.pageData.pathData.path +
+            e.data.id +
+            '/change'
+        ]);
         this.saveProcess = false;
         return;
       }
@@ -396,15 +425,20 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public deleteElement(element) {
-    this.genericFormService.delete(element.endpoint, element.pathData.id).subscribe(
-      (res: any) => this.router.navigate(['/' + this.authService.getRedirectUrl() + element.pathData.path]),
-      (err: any) => {
-        if (err.status === 'error') {
-          this.ts.sendMessage(err.errors.error, MessageType.error);
+    this.genericFormService
+      .delete(element.endpoint, element.pathData.id)
+      .subscribe(
+        (res: any) =>
+          this.router.navigate([
+            '/' + this.authService.getRedirectUrl() + element.pathData.path
+          ]),
+        (err: any) => {
+          if (err.status === 'error') {
+            this.ts.sendMessage(err.errors.error, MessageType.error);
+          }
+          this.errors = err.errors;
         }
-        this.errors = err.errors;
-      }
-    );
+      );
   }
 
   public updateNavigation(e) {
@@ -416,19 +450,26 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public approveFormStorage(element) {
-    const endpoint = `${this.formStorageEndpoint}${element.pathData.id}/approve/`;
+    const endpoint = `${this.formStorageEndpoint}${
+      element.pathData.id
+    }/approve/`;
     const body = {
       status: 'True'
     };
-    this.genericFormService.submitForm(endpoint, body).subscribe(
-      (res: any) => this.router.navigate(['/' + this.authService.getRedirectUrl() + element.pathData.path]),
-      (err: any) => this.error = err
-    );
+    this.genericFormService
+      .submitForm(endpoint, body)
+      .subscribe(
+        (res: any) =>
+          this.router.navigate([
+            '/' + this.authService.getRedirectUrl() + element.pathData.path
+          ]),
+        (err: any) => (this.error = err)
+      );
   }
 
   public setActivePage(pages, path) {
     let active = false;
-    pages.forEach((page) => {
+    pages.forEach(page => {
       if (path === page.url && page.url !== '/') {
         active = true;
         page.active = true;
@@ -480,25 +521,42 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public checkedObjects(e) {
-    const shifts = e.filters.keys.date.value.filter((el) => el.checked);
+    const shifts = e.filters.keys.date.value.filter(el => el.checked);
     this.data = {
       candidates: e.checkedData,
-      shifts: shifts.map((el) => el.data.id)
+      shifts: shifts.map(el => el.data.id)
     };
   }
 
   public back() {
-    this.router.navigate(['/' + this.authService.getRedirectUrl() + this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']); //tslint:disable-line
+    this.router.navigate([
+      '/' +
+        this.authService.getRedirectUrl() +
+        this.pageData.pathData.path +
+        '/' +
+        this.getId(this.pageData.endpoint) +
+        '/change'
+    ]); //tslint:disable-line
 
     return false;
   }
 
   public sendData() {
     if (this.data) {
-      this.genericFormService.submitForm(this.pageData.endpoint, this.data).subscribe(
-        (res: any) => this.router.navigate(['/' + this.authService.getRedirectUrl() + this.pageData.pathData.path + '/' + this.getId(this.pageData.endpoint) + '/change']), //tslint:disable-line
-        (err: any) => this.error = err
-      );
+      this.genericFormService
+        .submitForm(this.pageData.endpoint, this.data)
+        .subscribe(
+          (res: any) =>
+            this.router.navigate([
+              '/' +
+                this.authService.getRedirectUrl() +
+                this.pageData.pathData.path +
+                '/' +
+                this.getId(this.pageData.endpoint) +
+                '/change'
+            ]), //tslint:disable-line
+          (err: any) => (this.error = err)
+        );
     }
   }
 
@@ -510,21 +568,30 @@ export class SiteComponent implements OnInit, OnDestroy {
 
   public identifyDevice() {
     if (this.pageData) {
-      if (this.user.currentRole.__str__.includes('client') && this.pageData.pathData.path === '/' ) {
+      if (
+        this.user.currentRole.__str__.includes('client') &&
+        this.pageData.pathData.path === '/'
+      ) {
         return isMobile();
       }
     }
   }
 
   public permissionErrorHandler() {
-    const path = this.pageData && this.pageData.pathData && this.pageData.pathData.path || '';
+    const path =
+      (this.pageData &&
+        this.pageData.pathData &&
+        this.pageData.pathData.path) ||
+      '';
     this.router.navigate(['/' + this.authService.getRedirectUrl() + path]);
   }
 
   public showDeleteButton() {
-    return this.pageData.pathData.id
-      && this.checkPermission('delete')
-      && !this.isProfilePage(this.pageData);
+    return (
+      this.pageData.pathData.id &&
+      this.checkPermission('delete') &&
+      !this.isProfilePage(this.pageData)
+    );
   }
 
   public isProfilePage(page: PageData) {

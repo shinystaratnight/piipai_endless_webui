@@ -8,15 +8,21 @@ import {
   EventEmitter,
   Output,
   ViewEncapsulation,
-  OnDestroy,
+  OnDestroy
 } from '@angular/core';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { AuthService, NavigationService } from '@webui/core';
+import { AuthService, NavigationService, UserService } from '@webui/core';
 import { User, Page, Role } from '@webui/data';
-import { getContactAvatar, isClient, isCandidate, isManager, getTimeInstance } from '@webui/utilities';
+import {
+  getContactAvatar,
+  isClient,
+  isCandidate,
+  isManager,
+  getTimeInstance
+} from '@webui/utilities';
 
 @Component({
   selector: 'app-navigation',
@@ -24,9 +30,7 @@ import { getContactAvatar, isClient, isCandidate, isManager, getTimeInstance } f
   styleUrls: ['./navigation.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
-
   @ViewChild('header', { static: false }) public header: any;
   @ViewChild('list', { static: false }) public list: any;
   @ViewChild('item', { static: false }) public item: any;
@@ -37,8 +41,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public user: User;
   @Input() public logo = '/assets/img/new-software.svg';
 
-  @Output() public update: EventEmitter<Role> = new EventEmitter();
-  @Output() public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
+  // @Output() public update: EventEmitter<Role> = new EventEmitter();
+  @Output() public changePasswordEmitter: EventEmitter<
+    any
+  > = new EventEmitter();
 
   public headerHeight: number;
   public error: any;
@@ -51,7 +57,13 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   public company: string;
   public picture: string;
   public contactAvatar: string;
-  public urlPrefix = isClient() ? '/cl' : isCandidate() ? '/cd' : isManager ? '/mn' : '';
+  public urlPrefix = isClient()
+    ? '/cl'
+    : isCandidate()
+    ? '/cd'
+    : isManager
+    ? '/mn'
+    : '';
 
   get pages(): Page[] {
     return this.navigationService.navigationList[this.currentRole];
@@ -61,8 +73,9 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private navigationService: NavigationService
-  ) { }
+    private navigationService: NavigationService,
+    private userService: UserService
+  ) {}
 
   public ngOnInit() {
     this.getUserInformation();
@@ -76,9 +89,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     }, 200);
 
     this.resizeSubscription = fromEvent(window, 'resize')
-      .pipe(
-        debounceTime(200)
-      )
+      .pipe(debounceTime(200))
       .subscribe(() => {
         if (window.innerWidth > 1200 && this.isCollapsed === true) {
           this.isCollapsed = false;
@@ -100,7 +111,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
       this.greeting = `Welcome, ${this.user.data.contact.__str__}`;
       this.checkCandidateRole(this.user.currentRole);
       this.company = this.user.data.contact.company;
-      this.picture = this.user.data.contact.picture && this.user.data.contact.picture.origin;
+      this.picture =
+        this.user.data.contact.picture && this.user.data.contact.picture.origin;
 
       if (!this.picture) {
         this.contactAvatar = getContactAvatar(this.user.data.contact.__str__);
@@ -137,13 +149,14 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public changeRole(id: string) {
-    const role  = this.user.data.roles.find((el: Role) => el.id === id);
+    const role = this.user.data.roles.find((el: Role) => el.id === id);
 
     this.checkCandidateRole(role);
 
     this.currentRole = role.id;
 
-    this.update.emit(role);
+    // this.update.emit(role);
+    this.userService.currentRole(role);
   }
 
   public clickActione(e, p) {
@@ -184,8 +197,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     let clickedComponent = event.target;
     let inside = false;
     do {
-      if ((this.nav && clickedComponent === this.nav.nativeElement) ||
-        (this.userBlock && clickedComponent === this.userBlock.nativeElement)) {
+      if (
+        (this.nav && clickedComponent === this.nav.nativeElement) ||
+        (this.userBlock && clickedComponent === this.userBlock.nativeElement)
+      ) {
         inside = true;
       }
       clickedComponent = clickedComponent.parentNode;

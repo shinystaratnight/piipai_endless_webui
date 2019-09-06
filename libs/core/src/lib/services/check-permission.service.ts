@@ -8,6 +8,7 @@ import { ErrorsService } from './errors.service';
 import { SiteService } from './site.service';
 import { NavigationService } from './navigation.service';
 import { Page, PageData } from '@webui/data';
+import { EventService, EventType } from './event.service';
 
 export interface Permission {
   id: number;
@@ -23,17 +24,28 @@ export interface PermissionResponse {
 
 @Injectable()
 export class CheckPermissionService {
-
   private _permissions: Permission[];
   private userPermissionEndpoint = `/permissions/user/`;
 
   constructor(
     private http: HttpClient,
     private error: ErrorsService,
-
     private siteService: SiteService,
     private navigationService: NavigationService,
-  ) { }
+    private eventService: EventService
+  ) {
+    this.eventService.event$.subscribe((type: EventType) => {
+      if (type === EventType.PurposeChanged) {
+        this.navigationService.updateNavigation().subscribe((pages: Page[]) => {
+          this.parseNavigation(this.permissions, pages);
+        });
+      }
+
+      if (type === EventType.Logout) {
+        this.permissions = null;
+      }
+    });
+  }
 
   get permissions() {
     return this._permissions;
@@ -51,43 +63,58 @@ export class CheckPermissionService {
     }
   }
 
-  public checkPermission(id: string, url: any[], list: Page[]): Observable<boolean> {
+  public checkPermission(
+    id: string,
+    url: any[],
+    list: Page[]
+  ): Observable<boolean> {
     const permissions: Observable<Permission[]> = this.getPermissions(id);
-    const page: Observable<PageData> = this.siteService.getDataOfPage(url, list);
+    const page: Observable<PageData> = this.siteService.getDataOfPage(
+      url,
+      list
+    );
 
-    return combineLatest(permissions, page)
-      .pipe(
-        mergeMap((data: [Permission[], PageData]) => {
-          if (!this.navigationService.parsedByPermissions) {
-            this.parseNavigation(data[0], list);
-          }
+    return combineLatest(permissions, page).pipe(
+      mergeMap((data: [Permission[], PageData]) => {
+        if (!this.navigationService.parsedByPermissions) {
+          this.parseNavigation(data[0], list);
+        }
 
-          const method = this.parseMethod(data[1].pathData.type, data[1].pathData.id);
+        const method = this.parseMethod(
+          data[1].pathData.type,
+          data[1].pathData.id
+        );
 
-          return of(this.getAllowMethods(data[0], data[1].endpoint).indexOf(method) > -1);
-        })
-      );
-
+        return of(
+          this.getAllowMethods(data[0], data[1].endpoint).indexOf(method) > -1
+        );
+      })
+    );
   }
 
-  public getAllowMethods (permissions: Permission[] = this.permissions, endpoint: string): string[] { //tslint:disable-line
+  public getAllowMethods(
+    permissions: Permission[] = this.permissions,
+    endpoint: string
+  ): string[] {
+    //tslint:disable-line
     if (endpoint === '/') {
       return ['get'];
     }
 
     if (permissions) {
-      const allowMethods: Permission[] = permissions.filter((permission) => {
+      const allowMethods: Permission[] = permissions.filter(permission => {
         const model = permission.codename.split('_')[0];
         return endpoint && endpoint.indexOf(model) > -1;
       });
 
-      return allowMethods.length ? allowMethods.map((permission: Permission) => {
-        return permission.codename.split('_').pop();
-      }) : [];
+      return allowMethods.length
+        ? allowMethods.map((permission: Permission) => {
+            return permission.codename.split('_').pop();
+          })
+        : [];
     } else {
       return ['delete', 'get', 'post', 'update'];
     }
-
   }
 
   public parseNavigation(permissions: Permission[], list: Page[]): void {
@@ -117,17 +144,18 @@ export class CheckPermissionService {
   }
 
   private getUserPermissions(id: string): Observable<Permission[]> {
-    return this.http
-      .get(this.userPermissionEndpoint + id + '/')
-      .pipe(
-        map((response: PermissionResponse) => {
-          const permissions: Permission[] = [...response.permission_list, ...response.group_permission_list];
-          this.permissions = permissions;
+    return this.http.get(this.userPermissionEndpoint + id + '/').pipe(
+      map((response: PermissionResponse) => {
+        const permissions: Permission[] = [
+          ...response.permission_list,
+          ...response.group_permission_list
+        ];
+        this.permissions = permissions;
 
-          return this.permissions;
-        }),
-        catchError((error: HttpErrorResponse) => this.error.parseErrors(error))
-      );
+        return this.permissions;
+      }),
+      catchError((error: HttpErrorResponse) => this.error.parseErrors(error))
+    );
   }
 
   private filterPermissions(array: Permission[]): Permission[] {

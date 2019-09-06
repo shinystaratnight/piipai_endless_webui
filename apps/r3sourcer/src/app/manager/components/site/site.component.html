@@ -1,7 +1,6 @@
 <ng-container *ngIf="!loader">
   <app-navigation
     [user]="user"
-    (update)="updateNavigationList($event)"
     (changePasswordEmitter)="openChangePassword()">
   </app-navigation>
 

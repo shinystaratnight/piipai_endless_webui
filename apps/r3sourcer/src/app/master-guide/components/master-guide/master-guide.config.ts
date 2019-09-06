@@ -8,7 +8,7 @@ export const guide: GuideItem[] = [
     text: [
       'Add Your',
       {
-        url: `/mn/${Endpoints.Company}{company_id}/change`,
+        url: `/mn${Endpoints.Company}{company_id}/change`,
         text: 'Business address'
       }
     ]
@@ -17,14 +17,13 @@ export const guide: GuideItem[] = [
     key: 'has_industry',
     text: [
       'Add Your ',
-      { url: `/mn/${Endpoints.Company}{company_id}/change`, text: 'industry' },
+      { url: `/mn${Endpoints.Company}{company_id}/change`, text: 'industry' },
       ': multiple choices available'
     ]
   },
   {
     key: 'purpose',
     text: ['Master company purpose'],
-    endpoint: `/mn/${Endpoints.Company}{company_id}/`,
     options: [
       {
         value: 'self_use',
@@ -48,7 +47,7 @@ export const guide: GuideItem[] = [
     key: 'has_skills',
     text: [
       'Add your',
-      { url: `/mn/${Endpoints.SkillName}`, text: 'Skills' },
+      { url: `/mn${Endpoints.SkillName}`, text: 'Skills' },
       'and skill rates'
     ]
   },
@@ -57,7 +56,7 @@ export const guide: GuideItem[] = [
     text: [
       'Who beside you will be working with this software ( add ',
       {
-        url: `/mn/${Endpoints.Company}{company_id}/change`,
+        url: `/mn${Endpoints.Company}{company_id}/change`,
         text: 'company users'
       },
       ')'
@@ -67,21 +66,21 @@ export const guide: GuideItem[] = [
     key: 'has_candidate',
     text: [
       'Create your first',
-      { url: `/mn/${Endpoints.CandidateContact}add`, text: 'candidate' }
+      { url: `/mn${Endpoints.CandidateContact}add`, text: 'candidate' }
     ]
   },
   {
     key: 'has_client',
     text: [
       'Create your first',
-      { url: `/mn/${Endpoints.Company}add`, text: 'client' }
+      { url: `/mn${Endpoints.Company}add`, text: 'client' }
     ]
   },
   {
     key: 'has_jobsite',
     text: [
       'Create your first',
-      { url: `/mn/${Endpoints.Jobsite}add`, text: 'jobsite' }
+      { url: `/mn${Endpoints.Jobsite}add`, text: 'jobsite' }
     ]
   },
   {

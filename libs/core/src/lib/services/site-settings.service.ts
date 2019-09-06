@@ -16,10 +16,13 @@ export class SiteSettingsService {
   public authorized: boolean;
   public currentEndpoint: string;
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) {}
+  get companyId() {
+    if (this.settings) {
+      return this.settings.company_settings.company;
+    }
+  }
+
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   public resolve() {
     if (this.authService.isAuthorized && isManager()) {
@@ -51,30 +54,28 @@ export class SiteSettingsService {
     this.currentEndpoint = endpoint;
 
     if (!this.settings || !this.authService.isAuthorized || update) {
-      return this.http
-        .get(endpoint)
-        .pipe(
-          map((settings: any) => {
-            if (this.authService.isAuthorized) {
-              this.settings = settings;
-            }
+      return this.http.get(endpoint).pipe(
+        map((settings: any) => {
+          if (this.authService.isAuthorized) {
+            this.settings = settings;
+          }
 
-            if (settings.redirect_to) {
-              location.href = settings.redirect_to;
+          if (settings.redirect_to) {
+            location.href = settings.redirect_to;
 
-              return of(true);
-            }
-
-            setTimeout(() => {
-              this.updateBrowserStyles(settings);
-            }, 100);
-
-            return settings;
-          }),
-          catchError(() => {
             return of(true);
-          })
-        );
+          }
+
+          setTimeout(() => {
+            this.updateBrowserStyles(settings);
+          }, 100);
+
+          return settings;
+        }),
+        catchError(() => {
+          return of(true);
+        })
+      );
     } else if (this.settings && this.authService.isAuthorized) {
       return of(this.settings);
     }
@@ -84,7 +85,8 @@ export class SiteSettingsService {
     const { body } = document;
 
     body.parentElement.classList.add(`${this.getTheme(settings)}-theme`);
-    body.style.fontFamily = `${this.getFont(settings) || 'Source Sans Pro'}, sans-serif`;
+    body.style.fontFamily = `${this.getFont(settings) ||
+      'Source Sans Pro'}, sans-serif`;
   }
 
   private getFont(settings: any): string {
