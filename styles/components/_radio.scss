@@ -2,7 +2,7 @@
 
 $diameter: 14px;
 
-input:checked ~ .circle {
+input:checked ~ .radio-circle {
   border-color: $brand-primary;
 
   .inner {
@@ -10,7 +10,7 @@ input:checked ~ .circle {
   }
 }
 
-.circle {
+.radio-circle {
   display: inline-flex;
   align-items: center;
   justify-content: center;

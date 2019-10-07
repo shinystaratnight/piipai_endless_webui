@@ -162,9 +162,9 @@
         <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 
         <div class="shift-groups">
-          <div *ngIf="day.tooltip[1].length" class="badge badge-success">{{day.tooltip[1].length}}</div>
+          <div *ngIf="day.tooltip[1].length" class="badge badge-success">{{getShiftCount(day.tooltip[1], 'accepted')}}</div>
           <div *ngIf="day.tooltip[0].length" class="badge badge-danger">{{day.tooltip[0].length}}</div>
-          <div *ngIf="day.tooltip[2].length" class="badge badge-warning">{{day.tooltip[2].length}}</div>
+          <div *ngIf="day.tooltip[2].length" class="badge badge-warning">{{getShiftCount(day.tooltip[2], 'undefined')}}</div>
           <div *ngIf="day.tooltip[3].length"><fa-icon [icon]="['fas', 'file']" class="text-primary"></fa-icon></div>
           <div *ngIf="day.tooltip[4].length"><fa-icon [icon]="['fas', 'file']" class="text-warning"></fa-icon></div>
           <div *ngIf="day.tooltip[5].length"><fa-icon [icon]="['fas', 'file']" class="text-success"></fa-icon></div>
@@ -279,7 +279,7 @@
 <ng-template #shiftGroup let-shifts="shifts" let-className="className" let-name="name" let-status="status">
   <div class="mb-3" *ngIf="shifts.length">
     <p *ngIf="status" class="shift-tooltip-title">
-      {{name}} <span [ngClass]="'badge badge-' + className">{{shifts.length}}</span>
+      {{name}} <span [ngClass]="'badge badge-' + className">{{status === 'cancelled' ? shifts.length : getShiftCount(shifts, status)}}</span>
     </p>
 
     <div class="shift-name" [class.flex-column]="!status" [class.align-items-start]="!status" *ngFor="let shift of shifts">

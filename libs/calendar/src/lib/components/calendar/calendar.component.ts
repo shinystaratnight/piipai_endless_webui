@@ -1,4 +1,14 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, TemplateRef, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewChild,
+  ElementRef,
+  TemplateRef,
+  OnDestroy,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -6,8 +16,24 @@ import { combineLatest } from 'rxjs';
 
 import { Moment } from 'moment-timezone';
 
-import { CalendarService, CalendarData, Status, CalendarDataService, Calendar, SelectDateService } from '../../services';
-import { DateRange, filterDateFormat, isManager, isCandidate, isClient, getRoleId, FormatString, getTimeInstance } from '@webui/utilities';
+import {
+  CalendarService,
+  CalendarData,
+  Status,
+  CalendarDataService,
+  Calendar,
+  SelectDateService
+} from '../../services';
+import {
+  DateRange,
+  filterDateFormat,
+  isManager,
+  isCandidate,
+  isClient,
+  getRoleId,
+  FormatString,
+  getTimeInstance
+} from '@webui/utilities';
 import { filters } from './calendar-filters.meta';
 
 import { DatepickerComponent } from '../datepicker/datepicker.component';
@@ -18,6 +44,7 @@ import { Endpoints } from '@webui/data';
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarComponent implements OnInit, OnDestroy {
   public range = DateRange;
@@ -34,14 +61,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
     [Status.Pending]: { color: 'bg-warning', key: 'undefined' },
     [Status.Open]: { color: 'bg-primary', key: '' },
     [Status.Filled]: { color: 'bg-warning', key: '' },
-    [Status.Approved]: { color: 'bg-success', key: '' },
+    [Status.Approved]: { color: 'bg-success', key: '' }
   };
 
   public statusFilter = {
     shifts: [
       { type: Status.Unfilled, color: 'danger', label: 'Unfulfilled' },
       { type: Status.Fullfilled, color: 'success', label: 'Fulfilled' },
-      { type: Status.Pending, color: 'warning', label: 'Pending' },
+      { type: Status.Pending, color: 'warning', label: 'Pending' }
     ],
     timesheets: [
       { type: Status.Open, color: 'info', label: 'Open' },
@@ -70,12 +97,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public status = {
     hideAutocomplete: true,
     displayValue(data) {
-      return Object.keys(data).filter((key) => data[key]).length;
+      return Object.keys(data).filter(key => data[key]).length;
     },
     data: {}
   };
   public currentDate: Moment;
-  public customRange: {start: Moment, end: Moment};
+  public customRange: { start: Moment; end: Moment };
   public modalInfo: any;
   public saveProcess: boolean;
   public availability = [];
@@ -130,7 +157,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private router: Router,
     private userService: UserService,
-    private selectDateService: SelectDateService
+    private selectDateService: SelectDateService,
+    private cd: ChangeDetectorRef
   ) {}
 
   get isMonthRange() {
@@ -165,7 +193,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     if (isCandidate()) {
       this.calendarType = Calendar.Candidate;
       this.statusFilterData = this.statusFilter.timesheets;
-      this.statusFilterData.forEach((status) => {
+      this.statusFilterData.forEach(status => {
         this.status.data[status.type] = true;
       });
     }
@@ -180,21 +208,22 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.statusFilterData = this.statusFilter.shifts;
     }
 
-    this.statusFilterData.forEach((status) => {
+    this.statusFilterData.forEach(status => {
       this.status.data[status.type] = true;
     });
 
-    const activeStatuses = this.statusFilterData.map((el) => el.type);
-    this.timesheetCounter = this.timesheetCounter.filter((el) => activeStatuses.indexOf(el.type) > -1);
+    const activeStatuses = this.statusFilterData.map(el => el.type);
+    this.timesheetCounter = this.timesheetCounter.filter(
+      el => activeStatuses.indexOf(el.type) > -1
+    );
 
-    this.currentRange.valueChanges
-      .subscribe((value: DateRange) => {
-        this.calendarData = undefined;
-        this.currentDate = this.calendar.getToday();
-        this.selectedTime = '07:00';
+    this.currentRange.valueChanges.subscribe((value: DateRange) => {
+      this.calendarData = undefined;
+      this.currentDate = this.calendar.getToday();
+      this.selectedTime = '07:00';
 
-        this.changeCalendar(value);
-      });
+      this.changeCalendar(value);
+    });
 
     this.currentRange.patchValue(DateRange.Month);
   }
@@ -281,16 +310,16 @@ export class CalendarComponent implements OnInit, OnDestroy {
         default_shift_starting_time: {
           action: 'add',
           data: {
-            value: formatString.format(
-              '{data.shift.date.job.time}',
-              data
-            )
+            value: formatString.format('{data.shift.date.job.time}', data)
           }
         },
         skill: {
           action: 'add',
           data: {
-            value: formatString.format('{data.shift.date.job.position.id}', data)
+            value: formatString.format(
+              '{data.shift.date.job.position.id}',
+              data
+            )
           }
         },
         job: {
@@ -302,7 +331,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
       }
     };
 
-    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass: 'extend-modal' });
+    this.modalRef = this.modalService.open(this.modal, {
+      size: 'lg',
+      windowClass: 'extend-modal'
+    });
   }
 
   public fillInJob(data) {
@@ -324,7 +356,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       closeModal();
       setTimeout(() => {
         this.changeCalendar();
-      }, 2000)
+      }, 2000);
     }
   }
 
@@ -333,8 +365,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   public fillinAccess(shift) {
-    const statusSeccess = this.getStatus(shift.is_fulfilled) !== this.getStatus(1);
-    const dateSuccess = this.calendar.getToday().isBefore(getTimeInstance()(shift.date).add(1, DateRange.Day));
+    const statusSeccess =
+      this.getStatus(shift.is_fulfilled) !== this.getStatus(1);
+    const dateSuccess = this.calendar
+      .getToday()
+      .isBefore(getTimeInstance()(shift.date).add(1, DateRange.Day));
 
     return statusSeccess && dateSuccess;
   }
@@ -352,7 +387,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     };
 
     if (availableId) {
-      this.data.updateAvailable(availableId, body).subscribe(() => this.changeCalendar());
+      this.data
+        .updateAvailable(availableId, body)
+        .subscribe(() => this.changeCalendar());
     } else {
       this.data.setAvailability(body).subscribe(() => this.changeCalendar());
     }
@@ -392,7 +429,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         data: {
           value: this.selectedTime
         }
-      }
+      };
     }
 
     this.modalService.open(this.modal, { size: 'lg' });
@@ -414,9 +451,20 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.selectDateService.clear();
   }
 
+  getShiftCount(shifts: any[], status: string) {
+    let count = 0;
+    shifts.forEach(shift => {
+      count += shift.candidates[status].length;
+    });
+
+    return count;
+  }
+
   private changeCalendar(type?: DateRange) {
     const rangeType = type || this.currentRange.value;
-    const range = this.customRange || this.calendar.getRangeDates(this.currentDate, rangeType);
+    const range =
+      this.customRange ||
+      this.calendar.getRangeDates(this.currentDate, rangeType);
 
     if (this.calendarType === Calendar.Candidate) {
       this.getDataForCandidate(rangeType, range);
@@ -441,33 +489,46 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return this.data.getJobOffers(query);
   }
 
-  private getDataForCandidate(rangeType: DateRange, range: {start: Moment, end: Moment}) {
+  private getDataForCandidate(
+    rangeType: DateRange,
+    range: { start: Moment; end: Moment }
+  ) {
     const requests = [
-      this.getCandidateAvailability(this.generateCandidateQuery(range.start, range.end)),
-      this.getCandidateTimesheets(this.generateCandidateTimesheetQuery(range.start, range.end)),
+      this.getCandidateAvailability(
+        this.generateCandidateQuery(range.start, range.end)
+      ),
+      this.getCandidateTimesheets(
+        this.generateCandidateTimesheetQuery(range.start, range.end)
+      ),
       this.getJobOffers(this.generateJobOffersQuery(range.start, range.end))
     ];
 
-    combineLatest(requests).subscribe((data) => {
-      const [ availability, timesheets, jobOffers ] = data;
+    combineLatest(requests).subscribe(data => {
+      const [availability, timesheets, jobOffers] = data;
 
-      this.prepareTimesheetsData((jobOffers as any).results, (timesheets as any).results);
+      this.prepareTimesheetsData(
+        (jobOffers as any).results,
+        (timesheets as any).results
+      );
 
       this.availability = (availability as any).results;
 
       this.shifts.push(...this.availability);
 
       this.updateCalendar(this.currentDate, rangeType);
+      this.cd.detectChanges();
     });
   }
 
+  private getData(rangeType: DateRange, range: { start: Moment; end: Moment }) {
+    const request = this.getShifts(
+      this.generateQuery(range.start, range.end, this.client, this.candidate)
+    );
 
-  private getData(rangeType: DateRange, range: {start: Moment, end: Moment}) {
-    const request = this.getShifts(this.generateQuery(range.start, range.end, this.client, this.candidate));
-
-    request.subscribe((data) => {
+    request.subscribe(data => {
       this.prepareShiftsData(data);
       this.updateCalendar(this.currentDate, rangeType);
+      this.cd.detectChanges();
     });
   }
 
@@ -476,7 +537,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       ['date__shift_date_0']: from.format(filterDateFormat),
       ['date__shift_date_1']: to.format(filterDateFormat),
       fields: ['id', 'date', 'is_fulfilled', 'workers_details', 'time'],
-      limit: -1,
+      limit: -1
     };
 
     if (this.calendarType === Calendar.Client) {
@@ -499,7 +560,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       ['target_date_0']: from.format(filterDateFormat),
       ['target_date_1']: to.format(filterDateFormat),
       fields: ['id', 'target_date', 'confirmed_available'],
-      limit: -1,
+      limit: -1
     };
 
     return filterList;
@@ -510,7 +571,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       ['shift_started_at_0']: from.format(filterDateFormat),
       ['shift_started_at_1']: to.format(filterDateFormat),
       fields: ['id', 'status', 'shift'],
-      limit: -1,
+      limit: -1
     };
 
     return filterList;
@@ -520,7 +581,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const filterList = {
       ['shift__date__shift_date_0']: from.format(filterDateFormat),
       ['shift__date__shift_date_1']: to.format(filterDateFormat),
-      limit: -1,
+      limit: -1
     };
 
     return filterList;
@@ -531,11 +592,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
     data = Array.isArray(data) ? data : data.results;
 
     this.lastData = data;
-    this.timesheetCounter.forEach((el) => el.count = 0);
+    this.timesheetCounter.forEach(el => (el.count = 0));
 
     if (data.length) {
       this.shifts = data
-        .map((shift) => {
+        .map(shift => {
           return {
             shift,
             job_link: `/hr/jobs/${shift.date.job.id}/change`,
@@ -544,16 +605,20 @@ export class CalendarComponent implements OnInit, OnDestroy {
             time: shift.time,
             jobsite: shift.date.job.jobsite.name,
             position: shift.date.job.position.name,
-            is_fulfilled: this.getFulfilledStatus(shift.is_fulfilled, shift.workers_details),
+            is_fulfilled: this.getFulfilledStatus(
+              shift.is_fulfilled,
+              shift.workers_details
+            ),
             candidates: shift.workers_details,
-            timesheet: this.calendar.calculateShiftSize(shift.time),
+            timesheet: this.calendar.calculateShiftSize(shift.time)
           };
         })
-        .filter((shift) => this.status.data[shift.is_fulfilled]);
+        .filter(shift => this.status.data[shift.is_fulfilled]);
 
-      this.shifts.forEach((shift) => {
-        this.timesheetCounter.forEach((counter) => {
-          counter.count += shift.candidates[this.shiftStatus[counter.type].key].length;
+      this.shifts.forEach(shift => {
+        this.timesheetCounter.forEach(counter => {
+          counter.count +=
+            shift.candidates[this.shiftStatus[counter.type].key].length;
         });
       });
     }
@@ -563,12 +628,16 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.shifts = [];
     this.lastData = [jobOffers, timesheetList];
 
-    this.timesheetCounter.forEach((el) => el.count = 0);
+    this.timesheetCounter.forEach(el => (el.count = 0));
 
     if (jobOffers.length) {
       this.shifts = jobOffers
-        .map((jobOffer) => {
-          const timesheets = timesheetList ? timesheetList.filter((timesheet) => jobOffer.shift.id === timesheet.shift.id) : [];
+        .map(jobOffer => {
+          const timesheets = timesheetList
+            ? timesheetList.filter(
+                timesheet => jobOffer.shift.id === timesheet.shift.id
+              )
+            : [];
 
           return {
             jobOffer,
@@ -581,10 +650,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
             timesheetStatus: this.getTimesheetsStatus(timesheets[0])
           };
         })
-        .filter((jobOffer) => this.status.data[jobOffer.timesheetStatus] || jobOffer.showButtons);
+        .filter(
+          jobOffer =>
+            this.status.data[jobOffer.timesheetStatus] || jobOffer.showButtons
+        );
 
-      this.shifts.forEach((shift) => {
-        this.timesheetCounter.forEach((counter) => {
+      this.shifts.forEach(shift => {
+        this.timesheetCounter.forEach(counter => {
           if (counter.type === shift.timesheetStatus) {
             counter.count += 1;
           }
@@ -631,7 +703,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
         calendarData = this.calendar.generateMonth(date, this.shifts);
         break;
       case DateRange.Week:
-        calendarData = this.calendar.generateWeek(date, this.shifts, this.customRange);
+        calendarData = this.calendar.generateWeek(
+          date,
+          this.shifts,
+          this.customRange
+        );
         break;
       case DateRange.Day:
         calendarData = this.calendar.generateDay(date, this.shifts);
@@ -650,7 +726,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   private updateCalendarHeader(date: Moment, type: DateRange) {
-    this.rangeTitle = this.calendar.getRangeFormatDate(date, type, this.customRange);
+    this.rangeTitle = this.calendar.getRangeFormatDate(
+      date,
+      type,
+      this.customRange
+    );
   }
 
   private updateDate(date: Moment, type: DateRange, increment: boolean) {
@@ -664,8 +744,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     let inside = false;
     do {
       if (
-        (this.filter && (clickedComponent === this.filter.nativeElement))
-        || (this.datepicker && clickedComponent === this.datepicker.nativeElement)
+        (this.filter && clickedComponent === this.filter.nativeElement) ||
+        (this.datepicker && clickedComponent === this.datepicker.nativeElement)
       ) {
         inside = true;
       }
