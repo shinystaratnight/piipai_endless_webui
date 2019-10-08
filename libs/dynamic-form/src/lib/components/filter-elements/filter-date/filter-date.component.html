@@ -15,8 +15,8 @@
       <li
         class="dates-item"
         *ngFor="let item of config.list"
-        [class.text-primary]="query === item.query"
-        (click)="selectQuery(item.query)"
+        [class.text-primary]="query === getListElementQuery(item.query)"
+        (click)="selectQuery(getListElementQuery(item.query))"
       >
         <a href="#">{{ item.label }}</a>
       </li>

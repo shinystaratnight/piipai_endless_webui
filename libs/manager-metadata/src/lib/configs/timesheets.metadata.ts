@@ -12,23 +12,23 @@ const filters = {
   supervisor: createFilter(Type.Relared, {
     key: 'supervisor',
     label: 'Supervisor',
-    endpoint: Endpoints.CompanyContact,
+    endpoint: Endpoints.CompanyContact
   }),
   candidate: createFilter(Type.Relared, {
     key: 'candidate',
     label: 'Candidate Contact',
-    endpoint: Endpoints.CandidateContact,
+    endpoint: Endpoints.CandidateContact
   }),
   client: createFilter(Type.Relared, {
     key: 'company',
     label: 'Client',
-    endpoint: Endpoints.Company,
+    endpoint: Endpoints.Company
   }),
   jobsite: createFilter(Type.Relared, {
     key: 'jobsite',
     label: 'Jobsite',
-    endpoint: Endpoints.Jobsite,
-  }),
+    endpoint: Endpoints.Jobsite
+  })
 };
 
 const list = {
@@ -58,7 +58,8 @@ const list = {
       {
         content: [
           {
-            endpoint: '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
+            endpoint:
+              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
             field: 'job_offer.candidate_contact',
             type: 'link'
           },
@@ -87,7 +88,8 @@ const list = {
             title: 'Show traking map',
             type: 'button',
             color: 'link',
-            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
+            endpoint:
+              '/candidate/location/{job_offer.candidate_contact.id}/history/',
             field: 'id',
             action: 'showTracking',
             customLink: true,
@@ -149,7 +151,7 @@ const list = {
             },
             field: 'going_to_work_confirmation',
             type: 'icon',
-            label: 'Pre-shift check',
+            label: 'Pre-shift check'
           },
           {
             values: {
@@ -191,7 +193,7 @@ const list = {
               {
                 going_to_work_confirmation: null
               }
-            ],
+            ]
           },
           {
             endpoint: '/hr/timesheets/{id}/resend_sms',
@@ -242,7 +244,7 @@ const list = {
             action: 'editForm',
             type: 'button',
             text: 'Approve'
-          },
+          }
         ],
         name: 'confirmations',
         title: null,
@@ -258,21 +260,19 @@ const list = {
             action: 'messageDetail',
             messageType: 'sent',
             color: 'link',
-            endpoint:
-              '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
+            endpoint: '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
             type: 'button',
-            text: 'Preshift check',
+            text: 'Preshift check'
           },
           {
             action: 'messageDetail',
             messageType: 'reply',
             color: 'link',
-            endpoint:
-              '/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
+            endpoint: '/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
             field: 'going_to_work_reply_sms',
             type: 'button',
-            text: 'Reply',
+            text: 'Reply'
           },
           {
             action: 'messageDetail',
@@ -282,7 +282,7 @@ const list = {
             field: 'candidate_sms',
             type: 'button',
             text: 'Candidate TS',
-            showIf: ['candidate_sms'],
+            showIf: ['candidate_sms']
           },
           {
             action: 'messageDetail',
@@ -292,8 +292,8 @@ const list = {
             field: 'supervisor_sms',
             type: 'button',
             text: 'Supervisor TS',
-            showIf: ['supervisor_sms'],
-          },
+            showIf: ['supervisor_sms']
+          }
         ],
         name: 'related_sms',
         title: null,
@@ -325,7 +325,7 @@ const list = {
           {
             endpoint: '/hr/timesheets/{id}/sync',
             field: 'id',
-            showIf: [ {sync_status: 3} ],
+            showIf: [{ sync_status: 3 }],
             action: 'emptyPost',
             type: 'button',
             text: 'Resync'
@@ -343,7 +343,7 @@ const list = {
             field: 'invoice',
             type: 'link',
             text: 'Show invoice',
-            color: 'primary',
+            color: 'primary'
           },
           {
             action: 'emptyPost',
@@ -355,35 +355,29 @@ const list = {
                 supervisor_approved: true
               }
             ]
-          },
+          }
         ],
         name: 'invoice',
         title: null,
         label: 'Invoice',
         delim: null
-      },
+      }
     ],
     tabs: [
       {
         label: 'Related SMS',
         is_collapsed: true,
-        fields: [
-          'related_sms',
-        ]
+        fields: ['related_sms']
       },
       {
         label: 'MYOB Status',
         is_collapsed: true,
-        fields: [
-          'myob_status'
-        ]
+        fields: ['myob_status']
       },
       {
         label: 'Invoice',
         is_collapsed: true,
-        fields: [
-          'invoice'
-        ]
+        fields: ['invoice']
       }
     ],
     pagination_label: 'Timesheet Entry',
@@ -394,7 +388,7 @@ const list = {
       filters.supervisor,
       filters.candidate,
       filters.client,
-      filters.jobsite,
+      filters.jobsite
     ],
     actions: {
       options: [
@@ -405,7 +399,7 @@ const list = {
           confirm: false,
           message: 'Are you sure?',
           property: 'timesheets',
-          required: true,
+          required: true
         }
       ],
       label: 'Actions',
@@ -837,10 +831,10 @@ const form = [
                     templateOptions: {
                       label: 'Client',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
-                    key: 'company',
+                    key: 'company'
                   },
                   {
                     endpoint: Endpoints.Skill,
@@ -852,8 +846,8 @@ const form = [
                       placeholder: 'Please select role/trade'
                     },
                     type: 'related',
-                    key: 'position',
-                  },
+                    key: 'position'
+                  }
                 ]
               },
               {
@@ -867,10 +861,10 @@ const form = [
                     templateOptions: {
                       label: 'Jobsite',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
-                    key: 'jobsite',
+                    key: 'jobsite'
                   },
                   {
                     endpoint: Endpoints.CandidateContact,
@@ -879,11 +873,11 @@ const form = [
                     templateOptions: {
                       label: 'Candidate',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
-                    key: 'job_offer.candidate_contact',
-                  },
+                    key: 'job_offer.candidate_contact'
+                  }
                 ]
               },
               {
@@ -897,10 +891,10 @@ const form = [
                     templateOptions: {
                       label: 'Supervisor',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
-                    key: 'supervisor',
+                    key: 'supervisor'
                   },
                   {
                     type: 'static',
@@ -910,7 +904,7 @@ const form = [
                     key: 'supervisor_signature',
                     templateOptions: {
                       label: 'Signature',
-                      file: false,
+                      file: false
                     }
                   },
                   {
@@ -923,9 +917,9 @@ const form = [
                       label: 'Signature',
                       type: 'picture',
                       file: false,
-                      signature: true,
+                      signature: true
                     }
-                  },
+                  }
                 ]
               },
               {
@@ -941,14 +935,38 @@ const form = [
                       label: 'Status',
                       options: [
                         { value: 0, label: 'New', color: Color.Success },
-                        { value: 1, label: 'Check pending', color: Color.Warning },
-                        { value: 2, label: 'Check confirmed', color: Color.Success },
-                        { value: 3, label: 'Check failed', color: Color.Danger },
-                        { value: 4, label: 'Submit pending', color: Color.Warning },
-                        { value: 5, label: 'Pending approval', color: Color.Success },
-                        { value: 6, label: 'Supervisor modified', color: Color.Success },
+                        {
+                          value: 1,
+                          label: 'Check pending',
+                          color: Color.Warning
+                        },
+                        {
+                          value: 2,
+                          label: 'Check confirmed',
+                          color: Color.Success
+                        },
+                        {
+                          value: 3,
+                          label: 'Check failed',
+                          color: Color.Danger
+                        },
+                        {
+                          value: 4,
+                          label: 'Submit pending',
+                          color: Color.Warning
+                        },
+                        {
+                          value: 5,
+                          label: 'Pending approval',
+                          color: Color.Success
+                        },
+                        {
+                          value: 6,
+                          label: 'Supervisor modified',
+                          color: Color.Success
+                        },
                         { value: 7, label: 'Approved', color: Color.Success }
-                      ],
+                      ]
                     }
                   },
                   {
@@ -960,7 +978,7 @@ const form = [
                     templateOptions: {
                       label: 'Accounting Integration'
                     }
-                  },
+                  }
                 ]
               }
             ]
@@ -977,9 +995,9 @@ const form = [
                 templateOptions: {
                   label: 'Total time',
                   color: 'text-success',
-                  bold: true,
+                  bold: true
                 }
-              },
+              }
             ]
           },
           {
@@ -996,7 +1014,7 @@ const form = [
                     templateOptions: {
                       label: 'Shift Started at',
                       type: 'datetime'
-                    },
+                    }
                   },
                   {
                     key: 'shift_ended_at',
@@ -1004,8 +1022,8 @@ const form = [
                     templateOptions: {
                       label: 'Shift Ended at',
                       type: 'datetime'
-                    },
-                  },
+                    }
+                  }
                 ]
               },
               {
@@ -1019,7 +1037,7 @@ const form = [
                     templateOptions: {
                       label: 'Break Started at',
                       type: 'datetime'
-                    },
+                    }
                   },
                   {
                     key: 'break_ended_at',
@@ -1027,8 +1045,8 @@ const form = [
                     templateOptions: {
                       label: 'Break Ended at',
                       type: 'datetime'
-                    },
-                  },
+                    }
+                  }
                 ]
               },
               {
@@ -1039,9 +1057,9 @@ const form = [
                   {
                     type: 'tracking',
                     templateOptions: {
-                      label: 'Tracking',
-                    },
-                  },
+                      label: 'Tracking'
+                    }
+                  }
                 ]
               }
             ]
@@ -1081,7 +1099,7 @@ const form = [
                   type: 'sent'
                 },
                 type: 'related',
-                key: 'going_to_work_sent_sms',
+                key: 'going_to_work_sent_sms'
               },
               {
                 width: 0.25,
@@ -1100,7 +1118,7 @@ const form = [
                   type: 'reply'
                 },
                 type: 'related',
-                key: 'going_to_work_reply_sms',
+                key: 'going_to_work_reply_sms'
               }
             ]
           },
@@ -1114,7 +1132,7 @@ const form = [
                 templateOptions: {
                   label: 'Candidate Submitted at',
                   type: 'datetime'
-                },
+                }
               },
               {
                 width: 0.25,
@@ -1123,7 +1141,7 @@ const form = [
                 templateOptions: {
                   label: 'Supervisor Approved at',
                   type: 'datetime'
-                },
+                }
               },
               {
                 width: 0.25,
@@ -1132,8 +1150,8 @@ const form = [
                 templateOptions: {
                   label: 'Supervisor Modified at',
                   type: 'datetime'
-                },
-              },
+                }
+              }
             ]
           },
           {
@@ -1147,7 +1165,7 @@ const form = [
                   label: 'Candidate rate override',
                   type: 'number',
                   text: '${candidate_rate}/h'
-                },
+                }
               },
               {
                 width: 0.25,
@@ -1157,8 +1175,8 @@ const form = [
                 templateOptions: {
                   label: 'Rate overrides approved by',
                   values: ['__str__'],
-                  type: 'related',
-                },
+                  type: 'related'
+                }
               },
               {
                 width: 0.25,
@@ -1167,8 +1185,8 @@ const form = [
                 templateOptions: {
                   label: 'Rate overrides approved at',
                   type: 'date'
-                },
-              },
+                }
+              }
             ]
           },
           {
@@ -1181,7 +1199,7 @@ const form = [
                 templateOptions: {
                   label: 'Related sms',
                   values: ['__str__'],
-                  edit: true,
+                  edit: true
                 },
                 metadata_query: {
                   type: 'reply'
@@ -1206,11 +1224,11 @@ const form = [
     templateOptions: {
       label: 'Job offer',
       values: ['__str__'],
-      type: 'related',
+      type: 'related'
     },
     type: 'related',
-    key: 'job_offer',
-  },
+    key: 'job_offer'
+  }
 ];
 
 const formadd = [
@@ -1359,10 +1377,10 @@ const formadd = [
   {
     templateOptions: {
       label: 'Candidate rate override',
-      type: 'number',
+      type: 'number'
     },
     type: 'input',
-    key: 'candidate_rate',
+    key: 'candidate_rate'
   },
   {
     list: false,
@@ -1436,7 +1454,8 @@ const formset = {
       {
         content: [
           {
-            endpoint: '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
+            endpoint:
+              '/candidate/candidatecontacts/{job_offer.candidate_contact.id}',
             field: 'job_offer.candidate_contact',
             type: 'link'
           },
@@ -1465,10 +1484,11 @@ const formset = {
             title: 'Show traking map',
             type: 'button',
             color: 'link',
-            endpoint: '/candidate/location/{job_offer.candidate_contact.id}/history/',
+            endpoint:
+              '/candidate/location/{job_offer.candidate_contact.id}/history/',
             field: 'id',
             action: 'showTracking',
-            customLink: true,
+            customLink: true
           },
           {
             text: '{shift_started_at__date}',
@@ -1518,7 +1538,7 @@ const formset = {
             },
             field: 'going_to_work_confirmation',
             type: 'icon',
-            label: 'Pre-shift check',
+            label: 'Pre-shift check'
           },
           {
             values: {
@@ -1549,7 +1569,7 @@ const formset = {
                 supervisor_approved: true
               }
             ]
-          },
+          }
         ],
         name: 'confirmations',
         title: null,
@@ -1565,21 +1585,19 @@ const formset = {
             action: 'messageDetail',
             messageType: 'sent',
             color: 'link',
-            endpoint:
-              '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
+            endpoint: '/sms-interface/smsmessages/{going_to_work_sent_sms.id}',
             field: 'going_to_work_sent_sms',
             type: 'button',
-            text: 'Candidate Going To Work',
+            text: 'Candidate Going To Work'
           },
           {
             action: 'messageDetail',
             messageType: 'reply',
             color: 'link',
-            endpoint:
-              '/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
+            endpoint: '/sms-interface/smsmessages/{going_to_work_reply_sms.id}',
             field: 'going_to_work_reply_sms',
             type: 'button',
-            text: 'Reply',
+            text: 'Reply'
           },
           {
             action: 'messageDetail',
@@ -1589,7 +1607,7 @@ const formset = {
             field: 'candidate_sms',
             type: 'button',
             text: 'Candidate TS',
-            showIf: ['candidate_sms'],
+            showIf: ['candidate_sms']
           },
           {
             action: 'messageDetail',
@@ -1599,8 +1617,8 @@ const formset = {
             field: 'supervisor_sms',
             type: 'button',
             text: 'Supervisor TS',
-            showIf: ['supervisor_sms'],
-          },
+            showIf: ['supervisor_sms']
+          }
         ],
         name: 'related_sms',
         title: null,
@@ -1642,7 +1660,7 @@ const formset = {
             field: 'invoice',
             type: 'link',
             text: 'Show invoice',
-            color: 'primary',
+            color: 'primary'
           },
           {
             action: 'emptyPost',
@@ -1654,7 +1672,7 @@ const formset = {
                 supervisor_approved: true
               }
             ]
-          },
+          }
         ],
         name: 'invoice',
         title: null,
@@ -1674,7 +1692,7 @@ const formset = {
               {
                 going_to_work_confirmation: null
               }
-            ],
+            ]
           },
           {
             endpoint: '/hr/timesheets/{id}/resend_sms',
@@ -1735,17 +1753,17 @@ const formset = {
             title: 'Edit',
             type: 'button',
             field: 'id'
-          },
+          }
         ],
         name: 'actions',
         title: null,
         label: 'Actions',
         delim: null
-      },
+      }
     ],
     pagination_label: 'Timesheet Entry',
     search_enabled: false,
-    editDisable: true,
+    editDisable: true
   },
   fields: [
     {

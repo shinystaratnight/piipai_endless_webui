@@ -15,13 +15,18 @@ import { getYesterday, getToday, getTommorrow } from '@webui/utilities';
 //   .add(1, 'day')
 //   .format();
 
-
 export interface DateFilterOptions {
   key: string;
   label: string;
   yesterday?: boolean;
   today?: boolean;
   tomorrow?: boolean;
+}
+
+export enum DateTypes {
+  Yesterday,
+  Today,
+  Tomorrow
 }
 
 export const Date = 'date';
@@ -31,11 +36,17 @@ export class DateFilter implements FilterModel {
 
   public key: string;
   public label: string;
-  public list: { label: string, query: string }[];
-  public input: { label: string, query: string }[];
+  public list: { label: string; query: DateTypes }[];
+  public input: { label: string; query: string }[];
 
   constructor(options: DateFilterOptions) {
-    const { key, label, yesterday = false, today = false, tomorrow = false } = options;
+    const {
+      key,
+      label,
+      yesterday = false,
+      today = false,
+      tomorrow = false
+    } = options;
 
     this.key = key;
     this.label = label;
@@ -52,24 +63,34 @@ export class DateFilter implements FilterModel {
 
     this.list = [];
     if (yesterday) {
-      this.list.push({
-        label: 'Yesterday',
-        query: `${key}_0=${getYesterday()}&${key}_1=${getYesterday()}`
-      });
+      this.list.push({ label: 'Yesterday', query: DateTypes.Yesterday });
     }
 
     if (today) {
       this.list.push({
         label: 'Today',
-        query: `${key}_0=${getToday().format()}&${key}_1=${getToday().format()}`
+        query: DateTypes.Today
       });
     }
 
     if (tomorrow) {
       this.list.push({
         label: 'Tomorrow',
-        query: `${key}_0=${getTommorrow()}&${key}_1=${getTommorrow()}`
+        query: DateTypes.Tomorrow
       });
     }
   }
+
+  static getQuery = (key: string, type: DateTypes) => {
+    switch (type) {
+      case DateTypes.Yesterday:
+        return `${key}_0=${getYesterday()}&${key}_1=${getYesterday()}`;
+
+      case DateTypes.Today:
+        return `${key}_0=${getToday().format()}&${key}_1=${getToday().format()}`;
+
+      case DateTypes.Tomorrow:
+        return `${key}_0=${getTommorrow()}&${key}_1=${getTommorrow()}`;
+    }
+  };
 }
