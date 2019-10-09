@@ -51,7 +51,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
 
   public metadata: any;
   public tables = [];
-  public first = false;
+  // public first = false;
   public tableId = 1;
   public existingIds: number[] = [];
   public res: any;
@@ -175,7 +175,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
             sort: this.prepareSortQuery(sortedColumns)
           };
 
-          this.updateUrl(table['query'], metadata.list.list);
+          if (!this.inForm) {
+            this.updateUrl(table['query'], metadata.list.list);
+          }
         }
       }
 
@@ -481,71 +483,71 @@ export class GenericListComponent implements OnInit, OnDestroy {
     const table = {
       endpoint,
       innerTables: {},
-      first: false
+      first: true,
+      query: {},
+      data: undefined
     };
 
-    if (!this.first) {
-      table.first = true;
-      this.first = true;
+    // if (!this.first) {
+    // table.first = true;
+    // this.first = true;
 
-      if (this.inForm) {
-        table['data'] = this.data;
+    if (this.inForm) {
+      table.data = this.data;
 
-        this.getMetadata(
-          endpoint,
-          table,
-          null,
-          null,
-          !this.metaType && '?type=formset'
-        );
-      } else {
-        if (endpoint && endpoint.includes('fillin')) {
-          let query = '';
-          this.gfs.getMetadata(endpoint).subscribe(metadata => {
-            metadata.list.filters.forEach(filter => {
-              if (filter.hasOwnProperty('default')) {
-                if (query === '') {
-                  query = '?';
-                }
-                query +=
-                  this.filterQueryService.generateQueryOf(filter.type, filter) +
-                  '&';
+      this.getMetadata(
+        endpoint,
+        table,
+        null,
+        null,
+        !this.metaType && '?type=formset'
+      );
+    } else {
+      if (endpoint && endpoint.includes('fillin')) {
+        let query = '';
+        this.gfs.getMetadata(endpoint).subscribe(metadata => {
+          metadata.list.filters.forEach(filter => {
+            if (filter.hasOwnProperty('default')) {
+              if (query === '') {
+                query = '?';
               }
-            });
-
-            this.getData(endpoint, query, table, true, null, false, true);
-          });
-        } else {
-          this.gfs.getMetadata(endpoint).subscribe(metadata => {
-            const sortedColumns = this.getSortedFields(metadata.list.columns);
-
-            if (Object.keys(sortedColumns).length) {
-              table['query'] = {
-                sort: this.prepareSortQuery(
-                  this.getSortedFields(metadata.list.columns)
-                )
-              };
-
-              this.getData(
-                endpoint,
-                this.generateQuery(table['query']),
-                table,
-                true
-              );
-            } else {
-              this.getData(endpoint, null, table, true);
+              query +=
+                this.filterQueryService.generateQueryOf(filter.type, filter) +
+                '&';
             }
           });
-        }
-      }
-    } else {
-      const firstTable = this.getFirstTable();
-      table['parentEndpoint'] = firstTable.endpoint;
-      this.getMetadata(endpoint, table);
-      if (!this.delay) {
-        this.getData(endpoint, null, table);
+
+          this.getData(endpoint, query, table, true, null, false, true);
+        });
+      } else {
+        this.gfs.getMetadata(endpoint).subscribe(metadata => {
+          const sortedColumns = this.getSortedFields(metadata.list.columns);
+
+          if (Object.keys(sortedColumns).length) {
+            table.query = {
+              sort: this.prepareSortQuery(sortedColumns)
+            };
+
+            this.getData(
+              endpoint,
+              this.generateQuery(table.query),
+              table,
+              true
+            );
+          } else {
+            this.getData(endpoint, null, table, true);
+          }
+        });
       }
     }
+    // } else {
+    //   const firstTable = this.getFirstTable();
+    //   table['parentEndpoint'] = firstTable.endpoint;
+    //   this.getMetadata(endpoint, table);
+    //   if (!this.delay) {
+    //     this.getData(endpoint, null, table);
+    //   }
+    // }
 
     return table;
   }
