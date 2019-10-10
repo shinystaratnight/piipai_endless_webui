@@ -1201,9 +1201,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         query: ''
       });
 
-      if (this.inForm) {
+      // if (this.inForm) {
         this.filterService.resetFilters(this.config.list.list);
-      }
+      // }
     } else {
       this.event.emit({
         type: 'filter',

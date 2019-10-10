@@ -5,7 +5,8 @@ import {
   EventEmitter,
   AfterViewInit,
   ViewChildren,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -43,7 +44,11 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('d')
   public d: any;
 
-  constructor(private fs: FilterService, private route: ActivatedRoute) { }
+  constructor(
+    private fs: FilterService,
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
+  ) {}
 
   public ngOnInit() {
     this.data = this.createInputs(this.config.input);
@@ -53,9 +58,13 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
       this.displayFormat = this.queryFormat;
     }
 
-    this.querySubscription = this.route.queryParams.subscribe(() =>
-      this.updateFilter()
-    );
+    this.querySubscription = this.route.queryParams.subscribe(() => {
+      setTimeout(() => {
+        if (!(this.cd as any).destroyed) {
+          this.updateFilter();
+        }
+      }, 200);
+    });
     this.filterSubscription = this.fs.reset.subscribe(() =>
       this.updateFilter()
     );
@@ -70,7 +79,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.init && this.d) {
       const dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       this.init = true;
-      this.d.forEach((el) => {
+      this.d.forEach(el => {
         (window as any).$(el.nativeElement).datebox({
           mode: dateType,
           dateFormat: '%d/%m/%Y',
@@ -122,7 +131,12 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
       this.timeInstance
     );
 
-    this.data = this.convert(undefined, this.displayFormat, params, this.timeInstance);
+    this.data = this.convert(
+      undefined,
+      this.displayFormat,
+      params,
+      this.timeInstance
+    );
     this.query = this.getQuery(queryParams);
 
     this.fs.generateQuery(this.query, this.config.key, this.config.listName, {
@@ -164,7 +178,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public createInputs(inputs: any[]): Params {
     const params = {};
 
-    inputs.forEach((el) => {
+    inputs.forEach(el => {
       params[el.query] = '';
     });
 
@@ -175,7 +189,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     const keys = Object.keys(data);
 
     if (keys.length) {
-      keys.forEach((el) => {
+      keys.forEach(el => {
         data[el] = '';
       });
     }
@@ -212,10 +226,11 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.changeQuery();
   }
 
-  public convert(from: string, to: string, params: Params, moment) { //tslint:disable-line
+  public convert(from: string, to: string, params: Params, moment) {
+    //tslint:disable-line
     const newParams = { ...params };
 
-    Object.keys(newParams).forEach((el) => {
+    Object.keys(newParams).forEach(el => {
       newParams[el] = newParams[el]
         ? this.parseDateValue(newParams[el], moment, from).format(to)
         : '';
@@ -224,17 +239,16 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     return newParams;
   }
 
-  public parseDateValue(date: string, moment, format: string) { //tslint:disable-line
-    return format
-      ? moment(date, format)
-      : moment(date);
+  public parseDateValue(date: string, moment, format: string) {
+    //tslint:disable-line
+    return format ? moment(date, format) : moment(date);
   }
 
   public getParams(query: string): Params {
     const params = query.split('&');
     const result = {};
 
-    params.forEach((param) => {
+    params.forEach(param => {
       const parts = param.split('=');
       result[parts[0]] = parts[1];
     });
@@ -246,7 +260,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     const keys = Object.keys(params);
 
     if (keys.length) {
-      const quesries = keys.map((param) => {
+      const quesries = keys.map(param => {
         return `${param}=${params[param]}`;
       });
 

@@ -1,4 +1,10 @@
-import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  OnDestroy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -9,9 +15,7 @@ import { FilterService } from '../../../services';
   templateUrl: 'filter-limit.component.html',
   styleUrls: ['./filter-limit.component.scss']
 })
-
 export class FilterLimitComponent implements OnInit, OnDestroy {
-
   public config: any;
   public event: EventEmitter<any>;
 
@@ -23,11 +27,18 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
 
   constructor(
     private fs: FilterService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
+  ) {}
 
   public ngOnInit() {
-    this.querySubscription = this.route.queryParams.subscribe((param) => this.updateFilter());
+    this.querySubscription = this.route.queryParams.subscribe(param => {
+      setTimeout(() => {
+        if (!(this.cd as any).destroyed) {
+          this.updateFilter();
+        }
+      }, 200);
+    });
     this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter);
   }
 
@@ -39,7 +50,7 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
   public onChange() {
     let query = '';
 
-    this.inputs.forEach((input) => {
+    this.inputs.forEach(input => {
       if (input.data || input.data === 0) {
         query += `${input.query}=${input.data}&`;
       }
@@ -56,7 +67,9 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
 
   public resetFilter() {
     this.query = '';
-    this.inputs = this.inputs.map((input) => Object.assign({}, input, {data: null}));
+    this.inputs = this.inputs.map(input =>
+      Object.assign({}, input, { data: null })
+    );
     this.fs.generateQuery(this.query, this.config.key, this.config.listName);
     this.emitChange();
   }
@@ -90,21 +103,21 @@ export class FilterLimitComponent implements OnInit, OnDestroy {
 
     const queryObject = this.parseQueryString(query);
 
-    this.inputs.forEach((input) => {
+    this.inputs.forEach(input => {
       input.data = queryObject[input.query];
     });
   }
 
   private createInputs() {
-    this.inputs = this.config.input.map((input) => {
-      return Object.assign({}, input, {data: null});
+    this.inputs = this.config.input.map(input => {
+      return Object.assign({}, input, { data: null });
     });
   }
 
   private parseQueryString(query: string): any {
     const queryObject = {};
 
-    query.split('&').forEach((param) => {
+    query.split('&').forEach(param => {
       const paramArray = param.split('=');
 
       queryObject[paramArray[0]] = paramArray[1];

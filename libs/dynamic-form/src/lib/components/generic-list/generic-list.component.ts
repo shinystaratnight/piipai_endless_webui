@@ -4,19 +4,19 @@ import {
   OnInit,
   EventEmitter,
   Output,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
   GenericFormService,
   FilterService,
-  FilterQueryService,
   ListService
 } from './../../services';
 
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, map, skip } from 'rxjs/operators';
 
 @Component({
   selector: 'app-generic-list',
@@ -28,7 +28,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   @Input() editEndpoint = '';
   @Input() inForm = false;
   @Input() data: any;
-  @Input() query: string;
+  @Input() query = '';
   @Input() update: BehaviorSubject<boolean>;
   @Input() supportData: any;
   @Input() paginated = 'on';
@@ -49,16 +49,12 @@ export class GenericListComponent implements OnInit, OnDestroy {
   @Output() event: EventEmitter<any> = new EventEmitter();
   @Output() dataLength: EventEmitter<number> = new EventEmitter();
 
-  public metadata: any;
   public tables = [];
-  // public first = false;
+  public first = false;
   public tableId = 1;
   public existingIds: number[] = [];
-  public res: any;
   public err: any;
-  public limit: any;
-  public pagination: any = {};
-  public count: number;
+  public limit = 10;
   public minimizedTable = [];
 
   public cashData: any[];
@@ -72,12 +68,15 @@ export class GenericListComponent implements OnInit, OnDestroy {
     private fs: FilterService,
     private route: ActivatedRoute,
     private router: Router,
-    private filterQueryService: FilterQueryService,
-    private listService: ListService
+    private listService: ListService,
+    private cd: ChangeDetectorRef
   ) {}
 
   public ngOnInit() {
-    this.tables.push(this.createTableData(this.endpoint));
+    const mainTable = this.createTable(this.endpoint);
+    this.tables.push(mainTable);
+
+    this.initTableData(mainTable);
 
     if (this.update) {
       this.subscriptions.push(
@@ -128,6 +127,34 @@ export class GenericListComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(s => s && s.unsubscribe());
   }
 
+  initTableData(table) {
+    const endpoint = table.endpoint;
+    let formset = '';
+    if (this.inForm) {
+      formset = !this.metaType && '?type=formset';
+    }
+
+    this.getMetadata(endpoint, table, formset).subscribe(data => {
+      const { isSkip } = data;
+
+      if (!this.inForm) {
+        const paramsSubscription = this.route.queryParams
+          .pipe(skip(isSkip ? 1 : 0))
+          .subscribe(params => {
+            setTimeout(() => {
+              if (table && table.first && !(this.cd as any).destroyed) {
+                this.parseUrl(params, table.list);
+              }
+            }, 200);
+          });
+
+        this.subscriptions.push(paramsSubscription);
+      } else if (!this.delay) {
+        this.getData(endpoint, this.generateQuery(table.query), table);
+      }
+    });
+  }
+
   updateList(table, update) {
     if (update && !this.delay) {
       this.getData(table.endpoint, this.generateQuery(table.query), table);
@@ -147,88 +174,95 @@ export class GenericListComponent implements OnInit, OnDestroy {
       table.endpoint,
       this.generateQuery(table.query),
       table,
-      false,
       null,
       true
     );
   }
 
-  public getMetadata(endpoint, table, inner = false, outer = null, formset?) {
+  public getMetadata(endpoint, table, formset?, inner = false, outer = null) {
     let query = formset || '';
     if (this.metadataQuery) {
       query += `&${this.metadataQuery}`;
     }
 
-    this.gfs.getMetadata(endpoint, query).subscribe(metadata => {
-      table.metadata = metadata;
+    return this.gfs.getMetadata(endpoint, query).pipe(
+      map(metadata => {
+        this.updateMetadataInfo(metadata, table);
 
-      if (this.listNameCache && !this.listNameCache[this.endpoint]) {
-        this.listNameCache[this.endpoint] =
-          metadata && metadata.list && metadata.list.label;
-      }
+        if (!this.delay) {
+          const sortedColumns = this.getSortedFields(metadata.list.columns);
 
-      if (!this.delay) {
-        const sortedColumns = this.getSortedFields(metadata.list.columns);
-
-        if (Object.keys(sortedColumns).length) {
-          table['query'] = {
-            sort: this.prepareSortQuery(sortedColumns)
-          };
-
-          if (!this.inForm) {
-            this.updateUrl(table['query'], metadata.list.list);
-          }
-        }
-      }
-
-      if (outer) {
-        setTimeout(() => {
-          outer.update = metadata;
-        }, 300);
-      }
-
-      if (!inner) {
-        table.list = metadata.list.list;
-        this.existingIds.push(this.tableId);
-        table.id = this.tableId++;
-
-        if (table && !table.first) {
-          table.metadata.list.list += table.id;
-          table.list += table.id;
-          table.limit = this.limit;
-          table.offset = 0;
-        }
-
-        if (!this.inForm) {
-          const paramsSubscription = this.route.queryParams.subscribe(
-            params => {
-              if (table && table.first) {
-                this.parseUrl(params, table.list);
+          table.query = sortedColumns.exist
+            ? {
+                filter: '',
+                sort: this.getSortQuery(sortedColumns.result),
+                pagination: ''
               }
-            }
-          );
-
-          this.subscriptions.push(paramsSubscription);
-        } else if (!this.delay) {
-          this.getData(endpoint, this.generateQuery(table.query), table);
+            : {};
         }
-      }
-    });
+
+        if (endpoint.includes('fillin')) {
+          const queryItems = metadata.list.filters
+            .filter(filter => {
+              return filter.hasOwnProperty('default') && filter.default;
+            })
+            .map(filter => `${filter.query}=${filter.default}`);
+
+          table.query.filter = queryItems.join('&');
+        }
+
+        const queryExist = this.route.snapshot.queryParamMap.keys.length;
+
+        if (
+          !this.inForm &&
+          (table.query.sort || table.query.filter) &&
+          !queryExist
+        ) {
+          this.updateUrl(table.query);
+        }
+
+        return {
+          metadata,
+          isSkip: (table.query.sort || table.query.filter) && !queryExist
+        };
+
+        // if (outer) {
+        //   setTimeout(() => {
+        //     outer.update = metadata;
+        //   }, 300);
+        // }
+      })
+    );
+  }
+
+  public updateMetadataInfo(metadata, table) {
+    const label = metadata.list.label;
+    const listKey = metadata.list.list;
+    table.metadata = metadata;
+    table.list = listKey;
+    this.existingIds.push(this.tableId);
+    table.id = this.tableId++;
+
+    if (this.listNameCache && !this.listNameCache[this.endpoint]) {
+      this.listNameCache[this.endpoint] = label;
+    }
   }
 
   public getSortedFields(columns) {
     const result = {};
+    let exist = false;
 
     columns.forEach(el => {
       if (el.sort && el.sorted) {
+        exist = true;
         result[el.sort_field] = el.sorted;
       }
     });
 
-    return result;
+    return { result, exist };
   }
 
-  public prepareSortQuery(sorted) {
+  public getSortQuery(sorted) {
     const queries = Object.keys(sorted).map(el => {
       return sorted[el] === 'desc' ? `-${el}` : el;
     });
@@ -236,101 +270,42 @@ export class GenericListComponent implements OnInit, OnDestroy {
     return `ordering=${queries.join(',')}`;
   }
 
-  public getData(
-    endpoint,
-    query = null,
-    table,
-    first = false,
-    target = null,
-    add = false,
-    fillin?
-  ) {
+  public getData(endpoint, query = '?', table, target = null, add = false) {
+    if (this.clientId) {
+      query += `&role=${this.clientId}`;
+    }
+
+    if (this.query) {
+      query += `&${this.query}`;
+    }
+
+    if (query[0] !== '?') {
+      query = `?${query}`;
+    }
+
     this.currentQuery = query;
 
-    if (fillin) {
-      this.gfs.getByQuery(endpoint, query).subscribe(data => {
-        if (this.currentQuery !== query) {
-          return;
-        }
-
-        this.updateFillInList(data);
-        this.cashData = data;
-        table.refresh = false;
-        table.offset = 0;
-
-        this.getMetadata(endpoint, table);
-      });
-
-      return;
-    }
-
-    if (first && !this.query) {
-      const newQuery = this.clientId
-        ? `${query || '?'}&role=${this.clientId}`
-        : query || '';
-
-      this.gfs.getByQuery(endpoint, newQuery).subscribe(data => {
-        if (this.currentQuery !== query) {
-          return;
-        }
-
-        this.dataLength.emit(data.count);
-        this.event.emit(data[this.supportData]);
-        this.cashData = data;
-        table.refresh = false;
-        table.offset = 0;
-
-        if (this.paginated === 'on') {
-          this.calcPagination(data);
-        }
-
-        if (this.inForm) {
-          const formset = '?type=formset';
-          this.getMetadata(endpoint, table, null, null, formset);
-        } else {
-          this.getMetadata(endpoint, table);
-        }
-      });
-    } else if (query || this.query) {
-      let newQuery = !query
-        ? this.query
-        : this.query
-        ? `${query}&${this.query}`
-        : query;
-
-      newQuery = this.clientId ? `${newQuery}&role=${this.clientId}` : newQuery;
-
-      if (newQuery[0] !== '?') {
-        newQuery = `?${newQuery}`;
+    this.gfs.getByQuery(endpoint, query).subscribe(data => {
+      if (this.currentQuery !== query) {
+        return;
       }
 
-      this.gfs.getByQuery(endpoint, newQuery).subscribe(data => {
-        if (this.currentQuery !== query) {
-          return;
-        }
+      if (query === '?') {
+        this.cashData = data;
+      }
 
-        if (endpoint.includes('/fillin/')) {
-          this.updateFillInList(data);
-        }
+      if (endpoint.includes('/fillin/')) {
+        this.updateFillInList(data);
+      }
 
-        this.updateTable(data, table, target, add);
-      });
-    } else {
-      endpoint = this.clientId ? `${endpoint}?role=${this.clientId}` : endpoint;
-
-      this.gfs.getAll(endpoint).subscribe(data => {
-        if (this.currentQuery !== query) {
-          return;
-        }
-
-        this.updateTable(data, table, target, add);
-      });
-    }
+      this.updateTable(data, table, target, add);
+    });
   }
 
   updateTable(data, table, target, add) {
     this.dataLength.emit(data.count);
     this.event.emit(data[this.supportData]);
+
     if (add) {
       table.offset += table.limit;
       table.addData = data;
@@ -338,9 +313,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
     } else {
       table.data = data;
     }
-    if (this.paginated === 'on') {
-      this.calcPagination(data);
-    }
+    // if (this.paginated === 'on') {
+    //   this.calcPagination(data);
+    // }
     table.refresh = false;
     if (target) {
       setTimeout(() => {
@@ -362,7 +337,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public calcPagination(data) {
     if (!this.limit) {
       const length = data.results.length;
-      this.count = data.count;
       this.limit = this.calcLimit(data.count, length);
 
       if (this.limit) {
@@ -411,9 +385,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
         if (e.type === 'filter') {
           table.offset = 0;
         }
-        this.updateUrl(table.query, e.list);
+        this.updateUrl(table.query);
       } else {
-        this.getData(table.endpoint, this.generateQuery(table.query), table);
+        console.log(table.query, 'query');
         if (e.query) {
           e.query.split('&').forEach(el => {
             const propsArray = el.split('=');
@@ -422,6 +396,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
             }
           });
         }
+        this.getData(table.endpoint, this.generateQuery(table.query), table);
       }
     } else if (e.type === 'close') {
       this.tables.splice(this.tables.indexOf(table), 1);
@@ -479,77 +454,16 @@ export class GenericListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public createTableData(endpoint) {
-    const table = {
+  public createTable(endpoint) {
+    return {
       endpoint,
       innerTables: {},
-      first: true,
+      first: !this.first,
       query: {},
-      data: undefined
+      data: undefined,
+      limit: this.limit,
+      offset: 0
     };
-
-    // if (!this.first) {
-    // table.first = true;
-    // this.first = true;
-
-    if (this.inForm) {
-      table.data = this.data;
-
-      this.getMetadata(
-        endpoint,
-        table,
-        null,
-        null,
-        !this.metaType && '?type=formset'
-      );
-    } else {
-      if (endpoint && endpoint.includes('fillin')) {
-        let query = '';
-        this.gfs.getMetadata(endpoint).subscribe(metadata => {
-          metadata.list.filters.forEach(filter => {
-            if (filter.hasOwnProperty('default')) {
-              if (query === '') {
-                query = '?';
-              }
-              query +=
-                this.filterQueryService.generateQueryOf(filter.type, filter) +
-                '&';
-            }
-          });
-
-          this.getData(endpoint, query, table, true, null, false, true);
-        });
-      } else {
-        this.gfs.getMetadata(endpoint).subscribe(metadata => {
-          const sortedColumns = this.getSortedFields(metadata.list.columns);
-
-          if (Object.keys(sortedColumns).length) {
-            table.query = {
-              sort: this.prepareSortQuery(sortedColumns)
-            };
-
-            this.getData(
-              endpoint,
-              this.generateQuery(table.query),
-              table,
-              true
-            );
-          } else {
-            this.getData(endpoint, null, table, true);
-          }
-        });
-      }
-    }
-    // } else {
-    //   const firstTable = this.getFirstTable();
-    //   table['parentEndpoint'] = firstTable.endpoint;
-    //   this.getMetadata(endpoint, table);
-    //   if (!this.delay) {
-    //     this.getData(endpoint, null, table);
-    //   }
-    // }
-
-    return table;
   }
 
   public getTable(name) {
@@ -572,20 +486,19 @@ export class GenericListComponent implements OnInit, OnDestroy {
       !e.innerTable &&
       this.tables.length < 10
     ) {
-      this.tables.push(this.createTableData(e.endpoint));
+      this.tables.push(this.createTable(e.endpoint));
     } else if (e.innerTable) {
       const table = this.getTable(e.list);
       table.innerTables = Object.assign({}, table.innerTables);
       table.innerTables[e.row] = table.innerTables[e.row] || {};
       table.innerTables[e.row][e.key] = {};
-      this.getMetadata(e.endpoint, table.innerTables[e.row][e.key], table);
-      this.getData(
+      this.getMetadata(
         e.endpoint,
-        null,
         table.innerTables[e.row][e.key],
-        false,
+        null,
         table
       );
+      this.getData(e.endpoint, null, table.innerTables[e.row][e.key], table);
     }
   }
 
@@ -636,7 +549,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     );
   }
 
-  public updateUrl(query, list) {
+  public updateUrl(query) {
     const queryParams = {};
     const keys = Object.keys(query);
     keys.forEach(el => {
@@ -646,9 +559,9 @@ export class GenericListComponent implements OnInit, OnDestroy {
           const keyValue = item.split('=');
           const key = el === 'filter' ? 'f.' : el === 'sort' ? 's.' : '';
           if (key === 'f.') {
-            queryParams[`${list}.${key}${keyValue[0]}-${i}`] = keyValue[1];
+            queryParams[`${key}${keyValue[0]}-${i}`] = keyValue[1];
           } else if (el !== 'pagination') {
-            queryParams[`${list}.${key}${keyValue[0]}`] = keyValue[1];
+            queryParams[`${key}${keyValue[0]}`] = keyValue[1];
           }
         });
       }
@@ -664,67 +577,56 @@ export class GenericListComponent implements OnInit, OnDestroy {
       sort: '',
       pagination: ''
     };
-    const table = this.getTable(list);
+    const table = this.getFirstTable();
     const keys = Object.keys(queryParams);
-    let exist = keys.length ? false : true;
+
     keys.forEach(el => {
       const params = el.split('.');
-      if (params[0] === list) {
-        exist = true;
-        if (params[1] === 'f') {
-          const name = params.slice(2).join('.');
-          this.fs.paramsOfFilters = {
-            param: name.slice(0, name.indexOf('-')),
-            value: queryParams[el],
-            list,
-            endpoint: this.endpoint
-          };
-          queryList['filter'] += `${name.slice(0, name.indexOf('-'))}=${
-            queryParams[el]
-          }&`;
-        } else if (params[1] === 's') {
-          const fields = queryParams[el].split(',');
-          fields.forEach(elem => {
-            const order = elem[0] === '-' ? 'desc' : 'asc';
-            sorted[elem.substring(elem[0] === '-' ? 1 : 0)] = order;
-          });
-          queryList['sort'] += `${params[2]}=${queryParams[el]}`;
-        }
+      if (params[0] === 'f') {
+        const name = params.slice(1).join('.');
+        const param = name.slice(0, name.indexOf('-'));
+        const value = queryParams[el];
+
+        this.fs.paramsOfFilters = {
+          param,
+          value,
+          list,
+          endpoint: this.endpoint
+        };
+
+        queryList.filter += `${param}=${value}&`;
+      } else if (params[0] === 's') {
+        const fields = queryParams[el].split(',');
+
+        fields.forEach(elem => {
+          const order = elem[0] === '-' ? 'desc' : 'asc';
+          sorted[elem.substring(elem[0] === '-' ? 1 : 0)] = order;
+        });
+        queryList['sort'] += `${params[1]}=${queryParams[el]}`;
       }
     });
     table.sorted = sorted;
+
     Object.keys(queryList).forEach(el => {
       if (el === 'filter') {
         queryList[el] = queryList[el].substring(0, queryList[el].length - 1);
       }
     });
-    if (exist) {
-      table.query = queryList;
 
-      if (this.cashData) {
-        if (
-          !table.query.filter &&
-          !table.query.sort &&
-          !table.query.pagination
-        ) {
-          table.data = this.cashData;
-          table.refresh = false;
-          this.cashData = undefined;
-        } else {
-          this.getData(table.endpoint, this.generateQuery(table.query), table);
-        }
+    table.query = queryList;
+
+    if (this.cashData) {
+      if (!table.query.filter && !table.query.sort && !table.query.pagination) {
+        table.data = this.cashData;
+        table.refresh = false;
+        this.cashData = undefined;
       } else {
         this.getData(table.endpoint, this.generateQuery(table.query), table);
       }
+    } else {
+      this.getData(table.endpoint, this.generateQuery(table.query), table);
     }
   }
-
-  // public setPage(param, value) {
-  //   this.pagination[param] = value;
-  //   if (this.pagination['limit'] && this.pagination['offset']) {
-  //     return this.pagination['offset'] / this.pagination['limit'] + 1;
-  //   }
-  // }
 
   public checkedHandler(e) {
     this.checkedObjects.emit({
