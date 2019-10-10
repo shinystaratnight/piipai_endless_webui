@@ -15,6 +15,8 @@ import { Subscription } from 'rxjs';
 import { FilterService } from '../../../services';
 import { isMobile, getTimeInstance, isTouchDevice } from '@webui/utilities';
 
+import { date as DateFilter } from '@webui/metadata';
+
 interface Params {
   [query: string]: string;
 }
@@ -103,6 +105,10 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
         el.nativeElement.readOnly = false;
       });
     }
+  }
+
+  public getListElementQuery(type) {
+    return DateFilter.element.getQuery(this.config.key, type);
   }
 
   public changeDateOnMobile(data) {
