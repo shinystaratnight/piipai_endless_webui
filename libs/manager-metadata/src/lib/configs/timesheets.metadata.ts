@@ -137,6 +137,9 @@ const list = {
           }
         ],
         name: 'time',
+        sort: true,
+        sorted: 'desc',
+        sort_field: 'shift_started_at',
         title: null,
         label: 'Date and times',
         delim: null

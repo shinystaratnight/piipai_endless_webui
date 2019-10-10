@@ -3,7 +3,8 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -38,12 +39,20 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
-  constructor(private fs: FilterService, private route: ActivatedRoute) {}
+  constructor(
+    private fs: FilterService,
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
+  ) {}
 
   public ngOnInit() {
     this.type = this.config.type === 'multiple' ? 'data' : 'options';
-    this.querySubscription = this.route.queryParams.subscribe((params) => {
-      this.updateFilter();
+    this.querySubscription = this.route.queryParams.subscribe(params => {
+      setTimeout(() => {
+        if (!(this.cd as any).destroyed) {
+          this.updateFilter();
+        }
+      }, 200);
     });
     this.filterSubscription = this.fs.reset.subscribe(() =>
       this.updateFilter()
@@ -67,20 +76,18 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
         this.data
       );
     }
-    if (this.config.default) {
-      const index = this.data.findIndex(
-        (el) => el.data === this.config.default
-      );
-      if (this.data[index]) {
-        this.data[index].checked = true;
-        this.fs.generateQuery(
-          this.genericQuery(this.config.query, this.data),
-          this.config.key,
-          this.config.listName,
-          this.data
-        );
-      }
-    }
+    // if (this.config.default) {
+    //   const index = this.data.findIndex(el => el.data === this.config.default);
+    //   if (this.data[index]) {
+    //     this.data[index].checked = true;
+    //     this.fs.generateQuery(
+    //       this.genericQuery(this.config.query, this.data),
+    //       this.config.key,
+    //       this.config.listName,
+    //       this.data
+    //     );
+    //   }
+    // }
   }
 
   public ngOnDestroy() {
@@ -89,7 +96,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   }
 
   public createData(type) {
-    this.data = this.config[type].map((data) => {
+    this.data = this.config[type].map(data => {
       return {
         label: type === 'data' ? data[this.config.display] : data.label,
         query: this.config.query,
@@ -122,11 +129,11 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     const format = new FormatString();
     let result = '';
     if (data) {
-      data.forEach((el) => {
+      data.forEach(el => {
         if (el.checked) {
           if (el.query instanceof Object) {
             const queries = Object.keys(el.query);
-            queries.forEach((item) => {
+            queries.forEach(item => {
               result += `${item}=${format.format(el.query[item], el.data)}&`;
             });
           } else {
@@ -153,11 +160,11 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
     const format = new FormatString();
     this.query = query;
     if (this.data) {
-      this.data.forEach((el) => {
+      this.data.forEach(el => {
         if (el.query instanceof Object) {
           const keys = Object.keys(el.query);
           let result;
-          keys.forEach((item) => {
+          keys.forEach(item => {
             result = `${item}=${format.format(el.query[item], el.data)}`;
             el.checked = query.indexOf(result) > -1;
           });
@@ -203,7 +210,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   public checkUniqueValues(unique, data, first?, index?) {
     if (unique) {
       const uniqueField = {};
-      unique.forEach((field) => {
+      unique.forEach(field => {
         if (index !== undefined && index !== null) {
           data.forEach((el, i) => {
             if (el.checked && i === index) {
@@ -234,7 +241,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
   }
 
   public resetValues() {
-    this.data.forEach((el) => {
+    this.data.forEach(el => {
       el.checked = false;
     });
   }

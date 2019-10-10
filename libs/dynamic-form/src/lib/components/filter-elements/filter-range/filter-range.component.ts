@@ -4,7 +4,8 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  AfterViewInit
+  AfterViewInit,
+  ChangeDetectorRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -18,9 +19,7 @@ import { FilterService } from './../../../services';
   selector: 'app-filter-range',
   templateUrl: 'filter-range.component.html'
 })
-
 export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
-
   public config: any;
   public query: string;
   public data: any;
@@ -48,20 +47,37 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private fs: FilterService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
   ) {
     this.slider = nouislider;
   }
 
   public ngOnInit() {
-    this.querySubscription = this.route.queryParams.subscribe(
-      () => this.updateFilter()
+    this.querySubscription = this.route.queryParams.subscribe(() => {
+      setTimeout(() => {
+        if (!(this.cd as any).destroyed) {
+          this.updateFilter();
+        }
+      }, 200);
+    });
+    this.filterSubscription = this.fs.reset.subscribe(() =>
+      this.updateFilter()
     );
-    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
-    this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
-    this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
+    this.isCollapsed =
+      this.query || document.body.classList.contains('r3sourcer')
+        ? false
+        : true;
+    this.theme = document.body.classList.contains('r3sourcer')
+      ? 'r3sourcer'
+      : 'default';
     this.data = this.data || this.config.default || 0;
-    this.fs.generateQuery(this.genericQuery(this.config.query, this.data), this.config.key, this.config.listName, this.data); //tslint:disable-line
+    this.fs.generateQuery(
+      this.genericQuery(this.config.query, this.data),
+      this.config.key,
+      this.config.listName,
+      this.data
+    ); //tslint:disable-line
   }
 
   public ngOnDestroy() {
@@ -80,11 +96,9 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngAfterViewInit() {
-
     const rangePicker = document.getElementById('slider');
 
     if (rangePicker && !this.noUiSlider) {
-
       const wNumb = wnumb;
 
       this.noUiSlider = this.slider.create(rangePicker, {

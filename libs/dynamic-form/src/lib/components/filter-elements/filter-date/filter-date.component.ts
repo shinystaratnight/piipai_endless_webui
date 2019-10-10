@@ -5,7 +5,8 @@ import {
   EventEmitter,
   AfterViewInit,
   ViewChildren,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -45,7 +46,11 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('d')
   public d: any;
 
-  constructor(private fs: FilterService, private route: ActivatedRoute) {}
+  constructor(
+    private fs: FilterService,
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
+  ) {}
 
   public ngOnInit() {
     this.data = this.createInputs(this.config.input);
@@ -55,9 +60,13 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
       this.displayFormat = this.queryFormat;
     }
 
-    this.querySubscription = this.route.queryParams.subscribe(() =>
-      this.updateFilter()
-    );
+    this.querySubscription = this.route.queryParams.subscribe(() => {
+      setTimeout(() => {
+        if (!(this.cd as any).destroyed) {
+          this.updateFilter();
+        }
+      }, 200);
+    });
     this.filterSubscription = this.fs.reset.subscribe(() =>
       this.updateFilter()
     );
