@@ -8,7 +8,7 @@ const filters = {
     unique: ['date'],
     data: {
       data: 'shifts'
-    },
+    }
   }),
   available: createFilter(Type.Checkbox, {
     key: 'available',
@@ -29,7 +29,7 @@ const filters = {
         label: 'Only job tags',
         value: 'False'
       }
-    ],
+    ]
   }),
   overpriced: createFilter(Type.Checkbox, {
     key: 'overpriced',
@@ -54,14 +54,15 @@ const filters = {
         label: 'Public Transportation',
         value: 2
       }
-    ],
+    ]
   }),
   distance_to_jobsite: createFilter(Type.Text, {
     key: 'distance_to_jobsite',
     label: 'Distance',
+    defaultValue: 80,
     max: 200,
     min: 0
-  }),
+  })
 };
 
 const list = {
@@ -305,7 +306,7 @@ const list = {
       filters.show_without_tags,
       filters.overpriced,
       filters.transportation_to_work,
-      filters.distance_to_jobsite,
+      filters.distance_to_jobsite
     ]
   },
   fields: [

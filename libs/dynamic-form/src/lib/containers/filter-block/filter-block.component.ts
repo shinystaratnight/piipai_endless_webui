@@ -11,6 +11,8 @@ export class FilterBlockComponent {
 
   @Input()
   public inline: boolean;
+  @Input()
+  public container: boolean;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();

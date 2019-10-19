@@ -36,7 +36,7 @@
 
       <div
         class="autocomplete"
-        [hidden]="item && item.hideAutocomplete"
+        [hidden]="item ? item.hideAutocomplete : true"
         [ngStyle]="{ 'top.px': topHeight }"
       >
         <input
@@ -61,7 +61,7 @@
           *ngIf="multiple"
           name="search"
           type="text"
-          class="form-control mb-1"
+          class="form-control mt-1"
           [(ngModel)]="searchValue"
           [ngModelOptions]="{ standalone: true }"
         />
@@ -73,9 +73,11 @@
           [infiniteScrollThrottle]="modalScrollThrottle"
           [scrollWindow]="false"
           (scrolled)="onModalScrollDown()"
-          [hidden]="!(previewList && previewList.length)"
         >
-          <ul *ngIf="!multiple" class="list-group w-100">
+          <ul
+            *ngIf="!multiple && previewList && previewList.length"
+            class="list-group w-100"
+          >
             <li
               class="list-group-item autocomplete-item"
               (click)="setValue(defaultValue, item)"
@@ -91,7 +93,10 @@
             </li>
           </ul>
 
-          <ul *ngIf="multiple" class="list-group w-100">
+          <ul
+            *ngIf="multiple && previewList && previewList.length"
+            class="list-group w-100"
+          >
             <li
               class="list-group-item autocomplete-item form-check"
               *ngFor="let option of previewList; let index = index"
@@ -127,8 +132,11 @@
               </label>
             </li>
           </ul>
-          <div class="autocomplete-preloader" *ngIf="skipScroll">
-            <app-spinner></app-spinner>
+          <div
+            class="d-flex align-items-center justify-content-center"
+            *ngIf="skipScroll"
+          >
+            <app-loader></app-loader>
           </div>
         </div>
       </div>

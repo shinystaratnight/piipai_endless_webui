@@ -22,14 +22,15 @@ const filters = {
   activeState: createFilter(Type.Relared, {
     key: 'active_states',
     label: 'Status',
-    endpoint: `${Endpoints.WorkflowNode}?company={company_settings.company}&content_type=candidate.candidatecontact`,
+    endpoint: `${
+      Endpoints.WorkflowNode
+    }?company={company_settings.company}&content_type=candidate.candidatecontact`,
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
   gender: createFilter(Type.Checkbox, {
     key: 'contact.gender',
     label: 'Gender',
-    multiple: true,
     values: [
       {
         value: 'male',
@@ -44,12 +45,11 @@ const filters = {
   recruitmentAgent: createFilter(Type.Relared, {
     key: 'recruitment_agent',
     label: 'Recruitment agent',
-    endpoint: `${Endpoints.CompanyContact}?master_company=current`,
+    endpoint: `${Endpoints.CompanyContact}?master_company=current`
   }),
   transportation_to_work: createFilter(Type.Checkbox, {
     key: 'transportation_to_work',
     label: 'Transportation',
-    multiple: true,
     values: [
       {
         value: 1,
@@ -76,7 +76,7 @@ const filters = {
     key: 'created_at',
     label: 'Created at',
     yesterday: true,
-    today: true,
+    today: true
   })
 };
 
@@ -318,17 +318,13 @@ const list = {
         ],
         name: 'bmi',
         label: 'Bmi'
-      },
+      }
     ],
     tabs: [
       {
         label: 'Additional Info',
         is_collapsed: true,
-        fields: [
-          'nationality',
-          'contact.gender',
-          'transportation_to_work'
-        ]
+        fields: ['nationality', 'contact.gender', 'transportation_to_work']
       },
       {
         label: 'Phisical Parameters',
@@ -345,7 +341,7 @@ const list = {
           'candidate_scores.client_feedback',
           'candidate_scores.reliability',
           'candidate_scores.loyalty',
-          'candidate_scores.skill_score',
+          'candidate_scores.skill_score'
         ]
       },
       {
@@ -686,7 +682,8 @@ const form = [
                       required: false,
                       label: 'Profile Price',
                       type: 'text',
-                      description: 'Price can be assigned only to Candidate Contact with status: Recruited',
+                      description:
+                        'Price can be assigned only to Candidate Contact with status: Recruited'
                     },
                     read_only: true
                   }
@@ -769,7 +766,7 @@ const form = [
                       danger: 'No rating'
                     },
                     read_only: true
-                  },
+                  }
                 ],
                 width: 0.25
               },
@@ -812,7 +809,7 @@ const form = [
                       danger: 'No rating'
                     },
                     read_only: true
-                  },
+                  }
                 ],
                 width: 0.25
               }
@@ -884,7 +881,7 @@ const form = [
                       type: 'date'
                     },
                     read_only: false
-                  },
+                  }
                 ],
                 width: 0.25
               },
@@ -952,10 +949,10 @@ const form = [
                     templateOptions: {
                       label: 'Superannual Fund Name',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
-                    key: 'superannuation_fund',
+                    key: 'superannuation_fund'
                   },
                   {
                     key: 'superannuation_membership_number',
@@ -1022,7 +1019,7 @@ const form = [
                       type: 'text'
                     },
                     read_only: true
-                  },
+                  }
                 ],
                 width: 0.5
               },
@@ -1097,7 +1094,7 @@ const form = [
       {
         name: 'Tests',
         type: 'testList',
-        endpoint: `${Endpoints.CandidateContact}{id}/tests/`,
+        endpoint: `${Endpoints.CandidateContact}{id}/tests/`
       },
       {
         endpoint: Endpoints.CandidateEvaluation,
@@ -1164,12 +1161,12 @@ const form = [
           label: 'Unavailabilities',
           type: 'list',
           text: 'Unavailabilities',
-          add_label: '+ Add',
+          add_label: '+ Add'
         },
         prefilled: {
           contact: '{contact.id}'
         },
-        visibleMode: true,
+        visibleMode: true
       },
       {
         endpoint: Endpoints.CarrierList,
@@ -1235,7 +1232,7 @@ const form = [
         collapsed: false,
         prefilled: {
           object_id: '{id}',
-          content_type: '{model_content_type}',
+          content_type: '{model_content_type}'
         },
         type: 'list',
         query: {
@@ -1268,7 +1265,7 @@ const form = [
         query: {
           candidate: '{id}'
         }
-      },
+      }
     ]
   }
 ];
@@ -1418,7 +1415,7 @@ const profile = [
     },
     type: 'info',
     key: 'id',
-    hideOnMobile: true,
+    hideOnMobile: true
   },
   {
     type: 'tabs',
@@ -1442,7 +1439,7 @@ const profile = [
                   birthday: 'contact.birthday'
                 },
                 type: 'info',
-                key: 'id',
+                key: 'id'
               }
             ]
           },
@@ -1484,12 +1481,12 @@ const profile = [
                     templateOptions: {
                       label: 'Contact',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
                     query: {
                       candidate: true
-                    },
+                    }
                   },
                   {
                     endpoint: Endpoints.Address,
@@ -1596,7 +1593,7 @@ const profile = [
                       type: 'text'
                     },
                     read_only: false
-                  },
+                  }
                 ],
                 width: 0.5
               }
@@ -1728,7 +1725,7 @@ const profile = [
                       danger: 'No rating'
                     },
                     read_only: true
-                  },
+                  }
                 ],
                 width: 0.25
               },
@@ -1771,7 +1768,7 @@ const profile = [
                       danger: 'No rating'
                     },
                     read_only: true
-                  },
+                  }
                 ],
                 width: 0.25
               }
@@ -1812,7 +1809,7 @@ const profile = [
                       ]
                     },
                     read_only: false
-                  },
+                  }
                   // {
                   //   key: 'visa_type',
                   //   type: 'related',
@@ -1857,11 +1854,11 @@ const profile = [
                     templateOptions: {
                       label: 'Nationality',
                       values: ['__str__'],
-                      type: 'related',
+                      type: 'related'
                     },
                     type: 'related',
-                    key: 'nationality',
-                  },
+                    key: 'nationality'
+                  }
                   // {
                   //   key: 'vevo_checked_at',
                   //   type: 'datepicker',
@@ -1931,7 +1928,7 @@ const profile = [
         templateOptions: {
           label: 'Evaluations',
           text: 'Evaluations',
-          add_label: '',
+          add_label: ''
         },
         metadata_query: {
           type: 'profile'
@@ -1941,7 +1938,7 @@ const profile = [
           candidate_contact: '{id}'
         },
         help: 'Here you can see evaluations'
-      },
+      }
     ]
   }
 ];
@@ -1950,5 +1947,6 @@ export const candidatecontacts = {
   list,
   form,
   formadd,
-  profile
+  profile,
+  filters
 };

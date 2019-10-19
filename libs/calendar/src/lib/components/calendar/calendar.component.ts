@@ -12,7 +12,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 
 import { Moment } from 'moment-timezone';
 
@@ -37,7 +37,7 @@ import {
 import { filters } from './calendar-filters.meta';
 
 import { DatepickerComponent } from '../datepicker/datepicker.component';
-import { UserService } from '@webui/core';
+import { UserService, EventService, EventType } from '@webui/core';
 import { Endpoints } from '@webui/data';
 
 @Component({
@@ -83,6 +83,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public calendarType: Calendar;
 
   public client: string;
+  public activeShift: string;
 
   @ViewChild('filter', { static: false })
   public filter: ElementRef;
@@ -150,6 +151,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   private modalRef: NgbModalRef;
   private lastData: any;
+  private subscriptions: Subscription[];
 
   constructor(
     private calendar: CalendarService,
@@ -158,7 +160,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     private router: Router,
     private userService: UserService,
     private selectDateService: SelectDateService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private eventService: EventService
   ) {}
 
   get isMonthRange() {
@@ -217,13 +220,26 @@ export class CalendarComponent implements OnInit, OnDestroy {
       el => activeStatuses.indexOf(el.type) > -1
     );
 
-    this.currentRange.valueChanges.subscribe((value: DateRange) => {
-      this.calendarData = undefined;
-      this.currentDate = this.calendar.getToday();
-      this.selectedTime = '07:00';
+    const rangeSubscription = this.currentRange.valueChanges.subscribe(
+      (value: DateRange) => {
+        this.calendarData = undefined;
+        this.currentDate = this.calendar.getToday();
+        this.selectedTime = '07:00';
 
-      this.changeCalendar(value);
+        this.changeCalendar(value);
+      }
+    );
+
+    const eventSubscription = this.eventService.event$.subscribe(event => {
+      if (event === EventType.RefreshCalendar) {
+        this.calendarData = undefined;
+        this.activeShift = undefined;
+
+        this.changeCalendar();
+      }
     });
+
+    this.subscriptions = [rangeSubscription, eventSubscription];
 
     this.currentRange.patchValue(DateRange.Month);
   }
@@ -232,6 +248,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     if (this.modalRef) {
       this.modalRef.close();
     }
+
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   changeRange(increment: boolean) {
@@ -240,6 +258,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.currentDate = this.updateDate(this.currentDate, rangeType, increment);
 
     this.changeCalendar(rangeType);
+
+    if (this.activeShift) {
+      this.eventService.emit(EventType.CalendarJobSelected, null);
+    }
   }
 
   setDate(date: any) {
@@ -295,6 +317,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   openDropdown() {
     setTimeout(() => {
       this.showCalendarDropdown = true;
+      this.cd.detectChanges();
     }, 100);
   }
 
@@ -460,6 +483,23 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return count;
   }
 
+  selectJob(event, shift) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.activeShift === shift.shift.id) {
+      this.activeShift = undefined;
+      this.eventService.emit(EventType.CalendarJobSelected, null);
+      return;
+    }
+
+    if (shift.is_fulfilled === 0) {
+      this.activeShift = shift.shift.id;
+      this.eventService.emit(EventType.CalendarJobSelected, shift);
+    }
+
+    return false;
+  }
+
   private changeCalendar(type?: DateRange) {
     const rangeType = type || this.currentRange.value;
     const range =
@@ -599,6 +639,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         .map(shift => {
           return {
             shift,
+            job: shift.date.job.id,
             job_link: `/hr/jobs/${shift.date.job.id}/change`,
             jobsite_link: `/hr/jobsites/${shift.date.job.jobsite.id}/change`,
             date: shift.date.shift_date,

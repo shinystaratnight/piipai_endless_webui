@@ -148,10 +148,6 @@ export class SiteComponent implements OnInit, OnDestroy {
         if (type === EventType.RoleChanged) {
           this.updateNavigationList();
         }
-
-        if (type === EventType.PurposeChanged) {
-          this.getModelsList();
-        }
       })
     );
   }
@@ -339,31 +335,12 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   public getPageNavigation(url: any[]) {
-    if (!this.modulesList && !url.length) {
-      this.getModelsList();
-    }
     if (!this.pagesList) {
       this.getPages(url);
-    }
-    if (!this.userModules && !url.length) {
-      this.getUserModules();
     }
     if (this.pagesList) {
       this.getPageData(url);
     }
-  }
-
-  public getModelsList() {
-    this.navigationService.getModules().subscribe((res: any) => {
-      const data = this.purposeService.filterModules(res);
-      this.modulesList = data;
-    });
-  }
-
-  public getUserModules() {
-    this.navigationService
-      .getUserModules()
-      .subscribe((res: any) => (this.userModules = res));
   }
 
   public getPages(url) {

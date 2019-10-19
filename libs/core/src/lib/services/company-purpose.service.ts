@@ -11,7 +11,6 @@ import { catchError, tap, map } from 'rxjs/operators';
 import { Endpoints, Purpose } from '@webui/data';
 import { ErrorsService } from './errors.service';
 import { ToastService, MessageType } from './toast.service';
-// import { SiteSettingsService } from './site-settings.service';
 
 @Injectable()
 export class CompanyPurposeService {
@@ -33,14 +32,22 @@ export class CompanyPurposeService {
   public filterModules(modules: any[]) {
     switch (this.purpose) {
       case Purpose.Recruitment:
+        return this.filterByEndpoint([Endpoints.CandidateContact], modules);
+      case Purpose.SelfUse:
         return this.filterByEndpoint(
-          [Endpoints.Company, Endpoints.Job, Endpoints.CompanyContact],
+          [Endpoints.CompanyContact, Endpoints.Job, Endpoints.CandidateContact],
           modules
         );
-      case Purpose.SelfUse:
-        return this.filterByEndpoint([Endpoints.Company], modules);
-      default:
-        return modules;
+      case Purpose.Hire:
+        return this.filterByEndpoint(
+          [
+            Endpoints.Company,
+            Endpoints.Job,
+            Endpoints.CompanyContact,
+            Endpoints.CandidateContact
+          ],
+          modules
+        );
     }
   }
 
@@ -112,14 +119,14 @@ export class CompanyPurposeService {
   }
 
   private filterByEndpoint(endpoints: string[], modules) {
-    return modules.filter(el => {
-      const { endpoint } = el.module_data;
+    modules.forEach(el => {
+      const { link } = el;
 
-      if (endpoints.includes(endpoint)) {
-        return false;
+      if (endpoints.includes(link)) {
+        el.is_active = true;
+      } else {
+        el.is_active = false;
       }
-
-      return true;
     });
   }
 }

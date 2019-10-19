@@ -9,6 +9,19 @@
 
     overflow: auto;
 
+    &.in-container {
+      height: 100%;
+      margin: 0 4px;
+    }
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 2px;
+      background-color: #e0e0e0;
+    }
+
     @include media-breakpoint-up('xl') {
       &.inline {
         width: auto;

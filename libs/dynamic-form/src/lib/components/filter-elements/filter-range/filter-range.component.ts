@@ -71,13 +71,6 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.theme = document.body.classList.contains('r3sourcer')
       ? 'r3sourcer'
       : 'default';
-    this.data = this.data || this.config.default || 0;
-    this.fs.generateQuery(
-      this.genericQuery(this.config.query, this.data),
-      this.config.key,
-      this.config.listName,
-      this.data
-    ); //tslint:disable-line
   }
 
   public ngOnDestroy() {
@@ -149,52 +142,42 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  public parseQuery(query) {
-    this.query = query;
-    this.data = query.split('=')[1];
-
-    if (this.noUiSlider) {
-      this.noUiSlider.set(this.data + '');
-    }
-  }
-
   public updateFilter() {
     this.data = '';
     this.query = '';
     const data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
-      if (data.byQuery) {
-        this.parseQuery(data.query);
+      this.toggle = true;
 
-        this.fs.generateQuery(
-          this.genericQuery(this.config.query, this.data),
-          this.config.key,
-          this.config.listName,
-          this.data
-        );
+      if (data.byQuery) {
+        this.query = data.query;
+        this.data = data.query.split('=')[1];
       } else {
         this.data = data;
-
-        this.fs.generateQuery(
-          this.genericQuery(this.config.query, this.data),
-          this.config.key,
-          this.config.listName,
-          this.data
-        );
-        if (this.noUiSlider) {
-          this.noUiSlider.set(this.data + '');
-        }
       }
-      this.toggle = true;
+
+      this.fs.generateQuery(
+        this.genericQuery(this.config.query, this.data),
+        this.config.key,
+        this.config.listName,
+        this.data
+      );
+
+      if (this.noUiSlider) {
+        this.noUiSlider.set(this.data + '');
+      }
     } else {
-      this.data = '';
       this.toggle = false;
     }
   }
 
   public resetFilter() {
-    this.data = this.config.defaut || 0;
     this.query = '';
+    this.data = this.config.default || 0;
+    this.toggle = false;
+    if (this.noUiSlider) {
+      this.noUiSlider.set(this.data + '');
+    }
     this.fs.generateQuery('', this.config.key, this.config.listName);
     this.changeQuery();
   }

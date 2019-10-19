@@ -169,28 +169,26 @@
   </ng-container>
 
   <div class="dashboard" *ngIf="dashboard">
-    <app-dashboard
-      *ngIf="isManager"
-      class="dashboard-item align-self-start"
-      [pages]="pagesList"
-      [userModules]="userModules"
-      [modulesList]="modulesList"
-      (changeWidgetList)="updateNavigation($event)"></app-dashboard>
+    <app-buttons-widget></app-buttons-widget>
+    <div class="d-flex" style="max-height: 660px">
+      <app-candidate-widget></app-candidate-widget>
 
-    <app-calendar class="dashboard-item" [class.alone]="!isManager"></app-calendar>
+      <app-calendar class="dashboard-item" [class.alone]="!isManager"></app-calendar>
+    </div>
+
   </div>
 
   <app-mobile-timesheets [clientId]="getClientId()" *ngIf="identifyDevice()"></app-mobile-timesheets>
 
   <app-toast></app-toast>
 
-  <ng-template #modal let-c="close" let-d="dismiss">
+  <ng-template #modal let-modal>
     <div class="modal-content-wrapper">
       <div class="modal-header-wrapper">
         <div class="modal-header">
           <h5 class="modal-title">Change Password</h5>
 
-          <app-close-button class="ml-auto" (click)="d()"></app-close-button>
+          <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
         </div>
       </div>
       <div class="pb-3 form-builder-form">
@@ -204,13 +202,13 @@
     </div>
   </ng-template>
 
-  <ng-template #forgotPassword let-c="close" let-d="dismiss">
+  <ng-template #forgotPassword let-modal>
     <div class="modal-content-wrapper">
       <div class="modal-header-wrapper">
         <div class="modal-header">
           <h5 class="modal-title">Password Reset</h5>
 
-          <app-close-button class="ml-auto" (click)="d()"></app-close-button>
+          <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
         </div>
       </div>
       <div class="pb-3 form-builder-form">

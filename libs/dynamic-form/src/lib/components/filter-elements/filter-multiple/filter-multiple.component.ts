@@ -198,6 +198,8 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
         this.parseQuery(data.query);
       } else {
         this.data = data;
+
+        this.query = this.genericQuery(this.config.query, this.data);
       }
     } else {
       if (!this.data) {
@@ -205,6 +207,7 @@ export class FilterMultipleComponent implements OnInit, OnDestroy {
       }
       this.resetValues();
     }
+    this.cd.detectChanges();
   }
 
   public checkUniqueValues(unique, data, first?, index?) {
