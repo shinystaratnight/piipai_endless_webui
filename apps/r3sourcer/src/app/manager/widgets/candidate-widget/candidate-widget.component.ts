@@ -35,6 +35,12 @@ export class CandidateWidget implements OnInit, OnDestroy {
   public loading = false;
   public filtersQuery = '';
   public activeList = Lists.CandidateContact;
+  public statusColors = {
+    0: 'danger',
+    80: 'danger',
+    90: 'danger'
+  };
+  public color_attr = 'number';
 
   public showFilters: boolean;
   public filtersOfList: any[];
@@ -71,6 +77,10 @@ export class CandidateWidget implements OnInit, OnDestroy {
 
   public getScore(score) {
     return Math.floor(parseFloat(score));
+  }
+
+  public checkClass(item) {
+    return this.statusColors[item[this.color_attr]] || '';
   }
 
   public selectCandidate(candidate) {
@@ -132,6 +142,14 @@ export class CandidateWidget implements OnInit, OnDestroy {
         this.getCandidateContacts();
         this.eventService.emit(EventType.RefreshCalendar);
       });
+  }
+
+  public togglePanel(candidate, event) {
+    event.stopPropagation();
+    event.preventDefault();
+    candidate.extend = !candidate.extend;
+
+    return false;
   }
 
   private initFilters() {

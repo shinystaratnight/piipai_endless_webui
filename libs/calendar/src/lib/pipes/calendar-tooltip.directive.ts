@@ -28,7 +28,9 @@ export class CalendarTooltipDirective implements OnChanges {
 
   @HostListener('mouseenter')
   private hoverListener() {
-    this.showTooltip();
+    if (!this.active) {
+      this.showTooltip();
+    }
   }
 
   @HostListener('mouseleave')

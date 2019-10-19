@@ -297,7 +297,6 @@ app-filter-related {
     flex: 1 1;
 
     border: 0;
-    border-radius: 5px;
 
     font-size: 12px;
     line-height: 18px;
@@ -576,5 +575,18 @@ app-filter-related {
     width: 7px;
     border-radius: 50%;
     background-color: $brand-success;
+  }
+}
+
+.job-btn {
+  padding: 9px 20px;
+  font-size: 16px;
+  line-height: 18px;
+  color: #fdfdfd;
+  background-color: $brand-primary;
+  box-shadow: 0 1px 3px 0 rgba(43, 46, 51, 0.24);
+
+  &:hover {
+    box-shadow: none;
   }
 }
