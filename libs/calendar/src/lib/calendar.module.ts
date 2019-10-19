@@ -7,10 +7,20 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonsModule } from 'ngx-bootstrap';
 
-import { CalendarComponent, DateRangeComponent, DatepickerComponent } from './components';
+import {
+  CalendarComponent,
+  DateRangeComponent,
+  DatepickerComponent
+} from './components';
 import { SelectDateDirective } from './directives';
 import { CalendarTooltipDirective } from './pipes';
-import { CalendarService, CalendarDataService, DatepickerService, DateRangeService, SelectDateService } from './services';
+import {
+  CalendarService,
+  CalendarDataService,
+  DatepickerService,
+  DateRangeService,
+  SelectDateService
+} from './services';
 
 import { SharedModule } from '@webui/shared';
 import { DynamicFormModule } from '@webui/dynamic-form';
@@ -32,15 +42,15 @@ import { DynamicFormModule } from '@webui/dynamic-form';
     DateRangeComponent,
     CalendarTooltipDirective,
     DatepickerComponent,
-    SelectDateDirective,
+    SelectDateDirective
   ],
-  exports: [ CalendarComponent ],
+  exports: [CalendarComponent],
   providers: [
     CalendarService,
     CalendarDataService,
     DatepickerService,
     DateRangeService,
-    SelectDateService,
+    SelectDateService
   ]
 })
 export class CalendarModule {}

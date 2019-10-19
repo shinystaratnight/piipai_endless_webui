@@ -387,7 +387,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
         }
         this.updateUrl(table.query);
       } else {
-        console.log(table.query, 'query');
         if (e.query) {
           e.query.split('&').forEach(el => {
             const propsArray = el.split('=');

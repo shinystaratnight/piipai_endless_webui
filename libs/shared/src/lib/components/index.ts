@@ -6,6 +6,7 @@ import { CloseButtonComponent } from './close-button/close-button.component';
 import { BackLinkComponent } from './back-link/back-link.component';
 import { SiteLoaderCompoennt } from './site-loader/site-loader.component';
 import { TimeComponent } from './time/time.component';
+import { LoaderComponent } from './loader/loader.component';
 
 export * from './breadcrumb/breadcrumb.component';
 export * from './navigation/navigation.component';
@@ -20,5 +21,6 @@ export const components = [
   CloseButtonComponent,
   BackLinkComponent,
   SiteLoaderCompoennt,
-  TimeComponent
+  TimeComponent,
+  LoaderComponent
 ];

@@ -25,8 +25,6 @@ export interface Page {
 @Injectable()
 export class NavigationService {
   public currentRole: Role;
-  public userModels: any;
-  public models: any;
   public error;
   public parsedByPermissions: boolean;
 
@@ -99,30 +97,6 @@ export class NavigationService {
 
   public updateNavigation() {
     return this.getPages(this.currentRole, true);
-  }
-
-  public getUserModules() {
-    return this.http.get(`${Endpoints.UserDashboardModule}?limit=-1`).pipe(
-      map((res: any) => {
-        if (res.results) {
-          this.userModels = res.results;
-          return this.userModels;
-        }
-      }),
-      catchError(errors => this.errorService.parseErrors(errors))
-    );
-  }
-
-  public getModules() {
-    return this.http.get(`${Endpoints.DashboardModule}?limit=-1`).pipe(
-      map((res: any) => {
-        if (res.results) {
-          this.models = res.results;
-          return this.models;
-        }
-      }),
-      catchError(errors => this.errorService.parseErrors(errors))
-    );
   }
 
   public resolve() {

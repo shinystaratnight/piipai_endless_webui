@@ -22,7 +22,8 @@ import { debounceTime, skip, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-filter-related',
-  templateUrl: 'filter-related.component.html'
+  templateUrl: 'filter-related.component.html',
+  styleUrls: ['./filter-related.component.scss']
 })
 export class FilterRelatedComponent
   implements OnInit, AfterViewInit, OnDestroy {
@@ -139,9 +140,13 @@ export class FilterRelatedComponent
   public generateList(concat = false): void {
     if (this.multiple) {
       if (!this.chashValues) {
+        this.skipScroll = true;
+        this.cd.detectChanges();
         this.getOptions(this.searchValue, concat);
       }
     } else {
+      this.skipScroll = true;
+      this.cd.detectChanges();
       this.getOptions(this.searchValue, concat);
     }
   }
@@ -152,7 +157,7 @@ export class FilterRelatedComponent
   }
 
   public openAutocomplete($event) {
-    if (this.multiple && !this.item.hideAutocomplete) {
+    if (this.multiple && (this.item && !this.item.hideAutocomplete)) {
       this.item.hideAutocomplete = true;
       return;
     }
@@ -193,6 +198,7 @@ export class FilterRelatedComponent
     if (!this.multiple) {
       this.item.lastElement = 0;
       this.item.count = null;
+      this.previewList = undefined;
       this.generateList();
     } else {
       let filteredList;
@@ -349,6 +355,8 @@ export class FilterRelatedComponent
             : `Select ${this.config.label}`;
       }
     }
+
+    this.cd.detectChanges();
   }
 
   public resetFilter() {
@@ -458,6 +466,7 @@ export class FilterRelatedComponent
               });
 
               this.previewList = res.results;
+              this.cd.detectChanges();
             }
           }
         });
@@ -531,9 +540,14 @@ export class FilterRelatedComponent
       clickedComponent = clickedComponent.parentNode;
     } while (clickedComponent);
     if (!inside) {
-      if (this.multiple && !this.item.hideAutocomplete) {
+      if (this.item && !this.item.hideAutocomplete) {
         this.item.hideAutocomplete = true;
         this.searchValue = '';
+        setTimeout(() => {
+          if (!(this.cd as any).destroyed) {
+            this.cd.detectChanges();
+          }
+        }, 200);
         return;
       }
     }

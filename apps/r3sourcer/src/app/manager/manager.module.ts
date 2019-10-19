@@ -22,9 +22,10 @@ import * as formComponents from './components';
 // import { guards } from './guards';
 // import { interceptors } from './interceptors';
 
+import { CandidateWidget, ButtonsWidget, WidgetService } from './widgets';
+
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { CalendarModule } from '@webui/calendar';
-
 
 import { SharedModule } from '@webui/shared';
 // import { CoreModule } from '@webui/core';
@@ -43,7 +44,9 @@ import { CommonModule } from '@angular/common';
   declarations: [
     ManagerComponent,
     // RedirectComponent,
-    ...formComponents.components
+    ...formComponents.components,
+    CandidateWidget,
+    ButtonsWidget
   ],
   imports: [
     CommonModule,
@@ -72,6 +75,7 @@ import { CommonModule } from '@angular/common';
     // ...guards,
     ...formComponents.providers,
     // ...interceptors
+    WidgetService
   ]
 })
 export class ManagerModule {}

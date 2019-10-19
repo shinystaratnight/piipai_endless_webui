@@ -5,6 +5,7 @@ export interface TextFilterOptions {
   label: string;
   min?: number;
   max?: number;
+  defaultValue?: number;
 }
 
 export const Text = 'text';
@@ -20,12 +21,13 @@ export class TextFilter implements FilterModel {
   public query: string;
 
   constructor(options: TextFilterOptions) {
-    const { key, label, min = null, max = null } = options;
+    const { key, label, defaultValue = 0, min = null, max = null } = options;
 
     this.key = key;
     this.label = label;
     this.min = min;
     this.max = max;
     this.query = key.replace('.', '__');
+    this.default = defaultValue;
   }
 }
