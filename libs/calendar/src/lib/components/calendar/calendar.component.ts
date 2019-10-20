@@ -492,10 +492,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (shift.is_fulfilled === 0) {
-      this.activeShift = shift.shift.id;
-      this.eventService.emit(EventType.CalendarJobSelected, shift);
-    }
+    this.activeShift = shift.shift.id;
+    this.eventService.emit(EventType.CalendarJobSelected, shift);
 
     return false;
   }

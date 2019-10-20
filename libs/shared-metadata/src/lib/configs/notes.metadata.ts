@@ -157,10 +157,10 @@ const form = [
     hide: true,
     templateOptions: {
       label: 'Content type',
-      values: ['__str__'],
+      values: ['__str__']
     },
     type: 'related',
-    key: 'content_type',
+    key: 'content_type'
   },
   {
     key: 'object_id',
@@ -184,10 +184,10 @@ const formadd = [
     hide: true,
     templateOptions: {
       label: 'Content type',
-      values: ['__str__'],
+      values: ['__str__']
     },
     type: 'related',
-    key: 'content_type',
+    key: 'content_type'
   },
   {
     key: 'object_id',
@@ -204,6 +204,8 @@ const formadd = [
     key: 'note',
     type: 'textarea',
     templateOptions: {
+      full: true,
+      rows: 7,
       required: false,
       label: 'Notes',
       type: 'textarea'
@@ -248,9 +250,7 @@ const candidatepool = {
       },
       {
         name: 'created',
-        content: [
-          { type: 'datepicker', field: 'created_at' },
-        ],
+        content: [{ type: 'datepicker', field: 'created_at' }],
         label: 'Created',
         title: null,
         delim: null
@@ -269,5 +269,5 @@ export const notes = {
   formset,
   form,
   formadd,
-  candidatepool,
+  candidatepool
 };

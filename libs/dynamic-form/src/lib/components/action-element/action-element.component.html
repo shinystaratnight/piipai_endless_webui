@@ -1,27 +1,45 @@
 <div class="d-flex mb-0 form-group align-items-center mt-3">
-  <select class="custom-select mr-2"
+  <select
+    class="custom-select mr-2"
     [class.default]="!action.endpoint"
-    [(ngModel)]="action">
-      <option [value]="{}" disabled>Action</option>
-      <option *ngFor="let option of config.options" [ngValue]="option">{{option.label}}</option>
+    [(ngModel)]="action"
+  >
+    <option [value]="{}" disabled>Action</option>
+    <option *ngFor="let option of config.options" [ngValue]="option">{{
+      option.label
+    }}</option>
   </select>
-  <button class="btn btn-primary btn-shadow" type="button"
+  <button
+    class="btn btn-primary btn-shadow mb-0"
+    type="button"
     (click)="toDoAction()"
     [attr.title]="getSmsTitle(action.endpoint)"
-    [disabled]="isDisableSmsButton(action.endpoint)">
-      {{label}}
-      <app-spinner *ngIf="actionProcess"></app-spinner>
+    [disabled]="isDisableSmsButton(action.endpoint)"
+  >
+    {{ label }}
+    <app-spinner *ngIf="actionProcess"></app-spinner>
   </button>
 </div>
 
-<ng-template #content let-c="close" let-d="dismiss">
+<ng-template #content let-modal>
   <div class="modal-header">
-    <p>{{action.message}}</p>
+    <p>{{ action.message }}</p>
 
-    <app-close-button class="ml-auto" (click)="d(false)"></app-close-button>
+    <app-close-button
+      class="ml-auto"
+      (click)="modal.dismiss(false)"
+    ></app-close-button>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="c(true)">{{config.agree_label}}</button>
-    <button type="button" class="btn btn-secondary" (click)="c(false)">{{config.decline_label}}</button>
+    <button type="button" class="btn btn-secondary" (click)="modal.close(true)">
+      {{ config.agree_label }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="modal.close(false)"
+    >
+      {{ config.decline_label }}
+    </button>
   </div>
 </ng-template>

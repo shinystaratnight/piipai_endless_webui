@@ -20,7 +20,9 @@ export class WidgetService {
       return of(this.widgets);
     }
 
-    return this.http.get(`${Endpoints.DashboardModule}?limit=-1`).pipe(
+    const params = new HttpParams({ fromObject: { limit: '-1' } });
+
+    return this.http.get(Endpoints.DashboardModule, { params }).pipe(
       map((res: any) => {
         if (res.results) {
           this.widgets = res.results;
@@ -36,9 +38,11 @@ export class WidgetService {
       return of(this.userWidgets);
     }
 
+    const params = new HttpParams({ fromObject: { limit: '-1' } });
+
     return this.getWidgets().pipe(
       mergeMap(widgets => {
-        return this.http.get(`${Endpoints.UserDashboardModule}?limit=-1`).pipe(
+        return this.http.get(Endpoints.UserDashboardModule, { params }).pipe(
           map((res: any) => {
             if (res.results) {
               const data = res.results.map(userWidget => {
@@ -73,15 +77,28 @@ export class WidgetService {
         const { results, count } = response;
 
         const candidates = results.map(candidate => {
-          const { contact } = candidate;
+          const {
+            id,
+            contact,
+            average_score,
+            latest_state,
+            skill_list,
+            tag_list
+          } = candidate;
 
           return {
-            id: candidate.id,
+            id,
             name: `${contact.first_name} ${contact.last_name}`,
             img: contact.picture.origin,
             contactAvatar: getContactAvatar(contact.__str__),
-            score: candidate.average_score,
-            skills: candidate.skill_list
+            score: average_score,
+            state: latest_state[0],
+            skills: skill_list.map(el => {
+              return { name: el.skill.__str__, score: el.score };
+            }),
+            tags: tag_list.map(el => {
+              return { name: el.tag.name };
+            })
           };
         });
 
@@ -99,20 +116,29 @@ export class WidgetService {
         const candidates = response.list;
 
         return candidates.map(candidate => {
-          const { candidate_scores, contact } = candidate;
+          const {
+            id,
+            candidate_scores,
+            contact,
+            favourite,
+            hourly_rate,
+            distance_to_jobsite,
+            overpriced,
+            tags
+          } = candidate;
 
           return {
-            id: candidate.id,
             score: candidate_scores.average_score,
             name: `${contact.first_name} ${contact.last_name}`,
             img: contact.picture && contact.picture.origin,
             contactAvatar: getContactAvatar(contact.__str__),
-            favourite: candidate.favourite,
-            hourly_rate: candidate.hourly_rate,
-            distance_to_jobsite: candidate.distance_to_jobsite,
-            overpriced: candidate.overpriced,
-            tag_rels: candidate.tag_rels,
-            skills: candidate.skill_list || []
+            scores: this.generateScores(candidate_scores),
+            distance: distance_to_jobsite,
+            id,
+            favourite,
+            hourly_rate,
+            overpriced,
+            tags
           };
         });
       }),
@@ -129,5 +155,23 @@ export class WidgetService {
     return this.http
       .post(`${Endpoints.Job}${jobId}/fillin/`, body)
       .pipe(catchError(errors => this.errorService.parseErrors(errors)));
+  }
+
+  private generateScores(scores: { [key: string]: string }) {
+    const skillMap = {
+      recruitment_score: 'Average test',
+      client_feedback: 'Client feedback',
+      skill_score: 'Average skills',
+      reliability: 'Reliability',
+      loyalty: 'Loyality'
+    };
+
+    return Object.keys(skillMap).map(key => {
+      return {
+        name: skillMap[key],
+        score: scores[key] ? scores[key].split(' ')[0] : 0,
+        count: scores[key] ? scores[key].split(' ')[1] : ''
+      };
+    });
   }
 }
