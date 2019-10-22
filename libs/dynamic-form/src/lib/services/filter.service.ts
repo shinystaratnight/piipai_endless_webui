@@ -3,7 +3,6 @@ import { Subject } from 'rxjs';
 
 @Injectable()
 export class FilterService {
-
   public _filters: any;
   public queries: any[] = [];
   public query: any;
@@ -24,13 +23,22 @@ export class FilterService {
   set filters(filters) {
     if (!this._filters[filters.endpoint]) {
       this._filters[filters.endpoint] = [];
-      if (filters && filters.list && this.filterList.indexOf(filters.list.list) < 0) {
+      if (
+        filters &&
+        filters.list &&
+        this.filterList.indexOf(filters.list.list) < 0
+      ) {
         this.filterList.push(filters.list.list);
-        filters.list.filters.forEach((el) => {
+        filters.list.filters.forEach(el => {
           el.listName = filters.list.list;
           el.endpoint = filters.endpoint;
         });
-        this.parseFilters(filters.list.filters, this.paramsOfFilters, filters.list.list, true);
+        this.parseFilters(
+          filters.list.filters,
+          this.paramsOfFilters,
+          filters.list.list,
+          true
+        );
         this._filters[filters.endpoint].push(...filters.list.filters);
       } else {
         this._filters = {};
@@ -65,14 +73,14 @@ export class FilterService {
   public getFiltersOfList(endpoint, name) {
     let result = [];
     if (endpoint && this._filters[endpoint]) {
-      result = this._filters[endpoint].filter((el) => el.listName === name);
+      result = this._filters[endpoint].filter(el => el.listName === name);
       this.deleteFilters(this._filters[endpoint], name);
     }
     return result;
   }
 
   public deleteFilters(filters, name) {
-    filters.forEach((el) => {
+    filters.forEach(el => {
       if (el.listName === name) {
         filters.splice(filters.indexOf(el), 1);
         this.deleteFilters(filters, name);
@@ -87,11 +95,11 @@ export class FilterService {
 
   public generateQuery(query, key, list, value?) {
     if (this.queries.length > 0) {
-      const el = this.queries.filter((elem) => elem.list === list);
+      const el = this.queries.filter(elem => elem.list === list);
       if (el[0]) {
         el[0].keys[key] = { query, value };
       } else {
-        this.queries.push({ list, keys: { [key]: { query, value } }});
+        this.queries.push({ list, keys: { [key]: { query, value } } });
       }
     } else {
       this.queries.push({
@@ -108,10 +116,10 @@ export class FilterService {
 
   public parseQueries(queries, list) {
     let query = '';
-    queries.forEach((el) => {
+    queries.forEach(el => {
       if (el.list === list) {
         const keys = Object.keys(el.keys);
-        keys.forEach((elem) => {
+        keys.forEach(elem => {
           if (el.keys[elem].query) {
             query += `${el.keys[elem].query}&`;
           }
@@ -124,12 +132,12 @@ export class FilterService {
 
   public parseFilters(filters, params, list, first = false) {
     if (Object.keys(params).length > 0) {
-      filters.forEach((el) => {
+      filters.forEach(el => {
         if (params[el.query]) {
           let query = '';
           if (params[el.query].indexOf('&') > -1) {
             const array = params[el.query].split('&');
-            array.forEach((elem) => {
+            array.forEach(elem => {
               query += `${el.query}=${elem}&`;
             });
             query = query.slice(0, -1);
@@ -139,13 +147,17 @@ export class FilterService {
           this.generateQuery(query, el.key, list);
         } else if (el.input) {
           let query = '';
-          el.input.forEach((elem) => {
+          el.input.forEach(elem => {
             if (params[elem.query]) {
               query += `${elem.query}=${params[elem.query]}&`;
             }
           });
           if (query) {
-            this.generateQuery(query.substring(0, query.length - 1), el.key, list);
+            this.generateQuery(
+              query.substring(0, query.length - 1),
+              el.key,
+              list
+            );
           }
         }
       });
@@ -154,7 +166,7 @@ export class FilterService {
 
   public getQueries(list, filterName) {
     let result;
-    this.queries.forEach((el) => {
+    this.queries.forEach(el => {
       if (el.list === list && el.keys[filterName]) {
         if (el.keys[filterName].value) {
           result = el.keys[filterName].value;
@@ -171,9 +183,9 @@ export class FilterService {
 
   public resetQueries(list) {
     let result;
-    this.queries.forEach((el) => {
+    this.queries.forEach(el => {
       if (el.list === list) {
-       result = el;
+        result = el;
       }
     });
     if (this.queries.indexOf(result) >= 0) {

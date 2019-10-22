@@ -29,6 +29,8 @@ import { createAddAction, smallModalEndpoints, getOrientation, fillingForm, list
 
 import { environment } from '../../../../../../apps/r3sourcer/src/environments/environment';
 
+import { TrackingModalComponent } from '../../modals';
+
 @Component({
   selector: 'app-dynamic-list',
   templateUrl: './dynamic-list.component.html',
@@ -84,7 +86,6 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   @ViewChild('history', { static: true }) history;
   @ViewChild('timesheetsCandidate', { static: true }) timesheetsCandidate;
   @ViewChild('unapproved', { static: true }) unapproved;
-  @ViewChild('tracking', { static: false }) trakingModal;
   @ViewChild('confirmProfileModal', { static: false }) confirmProfileModal;
   @ViewChild('approveSignature', { static: false }) approveSignature;
 
@@ -183,7 +184,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
       Object.assign(row, rowData.data);
 
-      this.body = [...this.generateBody(this.config, this.fullData, this.innerTables)];
+      if (rowData.updateList) {
+        this.body = [...this.generateBody(this.config, this.fullData, this.innerTables)];
+      }
     }));
   }
 
@@ -796,7 +799,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       styles: element.styles,
       inlineValue: element.inlineValue,
       form: {...element.form},
-      show: element.updateButton ? new BehaviorSubject(false) : undefined
+      show: element.updateButton ? new BehaviorSubject(false) : undefined,
+      required: element.required
     };
     if (obj.show) {
       this.updateButtons.set(el.id, obj.show);
@@ -835,7 +839,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       );
     }
     if (element.type === 'datepicker') {
-      const field = this.config.fields.find(
+      const field = this.config.fields && this.config.fields.find(
         (elem) => elem.key === element.field
       );
       if (field) {
@@ -846,7 +850,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       if (element.type === 'icon') {
         obj.label = element.label;
       }
-      const field = this.config.fields.find(
+      const field = this.config.fields && this.config.fields.find(
         (elem) => elem.key === element.field
       );
       if (field) {
@@ -919,7 +923,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       obj.label = element.label;
     }
     if (element.type === 'picture') {
-      const field = this.config.fields.find(
+      const field = this.config.fields && this.config.fields.find(
         (elem) => elem.key === element.field
       );
       if (field) {
@@ -1197,9 +1201,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         query: ''
       });
 
-      if (this.inForm) {
+      // if (this.inForm) {
         this.filterService.resetFilters(this.config.list.list);
-      }
+      // }
     } else {
       this.event.emit({
         type: 'filter',
@@ -1386,7 +1390,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
           this.showTracking(e);
           break;
         case 'updateObject':
-          this.updateListObject(e);
+          this.updateListObject();
           break;
         default:
           return;
@@ -1395,8 +1399,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     return;
   }
 
-  public updateListObject(e) {
-    this.listService.saveChanges(e.id);
+  public updateListObject() {
+    this.listService.saveChanges();
   }
 
   public buyCandidate(e) {
@@ -1436,19 +1440,20 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   }
 
   public showCandidateProfile(e) {
-    const arr = e.el.endpoint.split('/');
-    const id = arr[arr.length - 2];
-    arr.splice(arr.length - 2, 1);
-    const endpoint = arr.join('/');
-    this.modalInfo = {
-      type: 'form',
-      mode: 'view',
-      endpoint: '/candidate/candidatecontacts/',
-      metadataQuery: 'type=profile',
-      id
-    };
+    // console.log(e);
+    // const arr = e.el.endpoint.split('/');
+    // const id = arr[arr.length - 2];
+    // arr.splice(arr.length - 2, 1);
+    // const endpoint = arr.join('/');
+    // this.modalInfo = {
+    //   type: 'form',
+    //   mode: 'view',
+    //   endpoint: '/candidate/candidatecontacts/',
+    //   metadataQuery: 'type=profile',
+    //   id
+    // };
 
-    this.open(this.modal, { size: 'lg' });
+    // this.open(this.modal, { size: 'lg' });
   }
 
   public openForm(e) {
@@ -2453,59 +2458,18 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         if (res.results.length) {
           this.listStorage.updateTrackingInfo(e.id, true);
           const timesheet = this.getRowData(e);
-          const break_end = this.timeInstance(timesheet.break_ended_at);
-          const break_start = this.timeInstance(timesheet.break_started_at);
-          const end = this.timeInstance(timesheet.shift_ended_at);
-          const start = this.timeInstance(timesheet.shift_started_at);
-
-          const paths = res.results.map((point) => {
-            return {
-              lat: point.latitude,
-              lng: point.longitude,
-              log_at: point.log_at
-            };
-          });
-
-          const breakPaths = paths.filter((el) => {
-            const time = this.timeInstance(el.log_at);
-
-            return time.isBefore(break_end) && time.isAfter(break_start);
-          });
-
-          this.modalInfo = {
-            paths,
-            breakPaths,
-            timePoints: { start, end, break_start, break_end },
-            jobsite: timesheet.jobsite.__str__,
-            latitude: paths[0].lat,
-            longitude: paths[0].lng,
-          };
-
           e.el.locationDataEmpty = false;
           this.listStorage.updateTrackingInfo(e.id, true);
-          this.trackingMarkerCoordinates(start);
 
-          this.open(this.trakingModal);
+          this.modalRef = this.modalService.open(TrackingModalComponent);
+          this.modalRef.componentInstance.timesheet = timesheet;
+          this.modalRef.componentInstance.data = res.results;
         } else {
           e.el.locationDataEmpty = true;
           this.listStorage.updateTrackingInfo(e.id, false);
           this.toastr.sendMessage('Location data is empty', MessageType.info);
         }
       });
-  }
-
-  public trackByTraking(data) {
-    return data.log_at;
-  }
-
-  public trackingMarkerCoordinates(time) {
-    if (this.modalInfo) {
-      const item = this.modalInfo.paths.find((el) => time.format('hh:mm A') === this.timeInstance(el.log_at).format('hh:mm A'));
-      if (item) {
-        this.modalInfo.markerLatitude = item.lat;
-        this.modalInfo.markerLongitude = item.lng;
-      }
-    }
   }
 
   public isInteger(value: any) {

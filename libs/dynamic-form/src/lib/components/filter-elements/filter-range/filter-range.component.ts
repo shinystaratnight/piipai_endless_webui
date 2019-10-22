@@ -4,7 +4,8 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  AfterViewInit
+  AfterViewInit,
+  ChangeDetectorRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -18,9 +19,7 @@ import { FilterService } from './../../../services';
   selector: 'app-filter-range',
   templateUrl: 'filter-range.component.html'
 })
-
 export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
-
   public config: any;
   public query: string;
   public data: any;
@@ -48,20 +47,30 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private fs: FilterService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
   ) {
     this.slider = nouislider;
   }
 
   public ngOnInit() {
-    this.querySubscription = this.route.queryParams.subscribe(
-      () => this.updateFilter()
+    this.querySubscription = this.route.queryParams.subscribe(() => {
+      setTimeout(() => {
+        if (!(this.cd as any).destroyed) {
+          this.updateFilter();
+        }
+      }, 200);
+    });
+    this.filterSubscription = this.fs.reset.subscribe(() =>
+      this.updateFilter()
     );
-    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
-    this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
-    this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
-    this.data = this.data || this.config.default || 0;
-    this.fs.generateQuery(this.genericQuery(this.config.query, this.data), this.config.key, this.config.listName, this.data); //tslint:disable-line
+    this.isCollapsed =
+      this.query || document.body.classList.contains('r3sourcer')
+        ? false
+        : true;
+    this.theme = document.body.classList.contains('r3sourcer')
+      ? 'r3sourcer'
+      : 'default';
   }
 
   public ngOnDestroy() {
@@ -80,11 +89,9 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngAfterViewInit() {
-
     const rangePicker = document.getElementById('slider');
 
     if (rangePicker && !this.noUiSlider) {
-
       const wNumb = wnumb;
 
       this.noUiSlider = this.slider.create(rangePicker, {
@@ -135,52 +142,42 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  public parseQuery(query) {
-    this.query = query;
-    this.data = query.split('=')[1];
-
-    if (this.noUiSlider) {
-      this.noUiSlider.set(this.data + '');
-    }
-  }
-
   public updateFilter() {
     this.data = '';
     this.query = '';
     const data = this.fs.getQueries(this.config.listName, this.config.key);
     if (data) {
-      if (data.byQuery) {
-        this.parseQuery(data.query);
+      this.toggle = true;
 
-        this.fs.generateQuery(
-          this.genericQuery(this.config.query, this.data),
-          this.config.key,
-          this.config.listName,
-          this.data
-        );
+      if (data.byQuery) {
+        this.query = data.query;
+        this.data = data.query.split('=')[1];
       } else {
         this.data = data;
-
-        this.fs.generateQuery(
-          this.genericQuery(this.config.query, this.data),
-          this.config.key,
-          this.config.listName,
-          this.data
-        );
-        if (this.noUiSlider) {
-          this.noUiSlider.set(this.data + '');
-        }
       }
-      this.toggle = true;
+
+      this.fs.generateQuery(
+        this.genericQuery(this.config.query, this.data),
+        this.config.key,
+        this.config.listName,
+        this.data
+      );
+
+      if (this.noUiSlider) {
+        this.noUiSlider.set(this.data + '');
+      }
     } else {
-      this.data = '';
       this.toggle = false;
     }
   }
 
   public resetFilter() {
-    this.data = this.config.defaut || 0;
     this.query = '';
+    this.data = this.config.default || 0;
+    this.toggle = false;
+    if (this.noUiSlider) {
+      this.noUiSlider.set(this.data + '');
+    }
     this.fs.generateQuery('', this.config.key, this.config.listName);
     this.changeQuery();
   }

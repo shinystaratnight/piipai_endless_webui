@@ -1,4 +1,11 @@
-import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { FilterService } from '../../../services';
 import { ActivatedRoute } from '@angular/router';
 
@@ -31,15 +38,22 @@ export class FilterChoiceComponent implements OnInit, OnDestroy {
 
   constructor(
     private fs: FilterService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
   ) {}
 
   public ngOnInit() {
-    this.querySubscription = this.route.queryParams.subscribe(
-      () => this.updateFilter()
-    );
+    this.querySubscription = this.route.queryParams.subscribe(() => {
+      setTimeout(() => {
+        if (!(this.cd as any).destroyed) {
+          this.updateFilter();
+        }
+      }, 200);
+    });
     this.isCollapsed = this.query ? false : true;
-    this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
+    this.theme = document.body.classList.contains('r3sourcer')
+      ? 'r3sourcer'
+      : 'default';
   }
 
   public ngOnDestroy() {

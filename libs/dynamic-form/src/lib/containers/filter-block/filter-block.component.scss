@@ -2,16 +2,25 @@
 @import '../../../../../../styles/mixins';
 
 .filters {
-
   &-block {
-    width: 250px;
     height: calc(100vh - 76px);
 
-    padding-bottom: 50px;
-    padding-left: 10px;
-    padding-right: 5px;
+    padding: 0 10px 50px;
 
     overflow: auto;
+
+    &.in-container {
+      height: 100%;
+      margin: 0 4px;
+    }
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 2px;
+      background-color: #e0e0e0;
+    }
 
     @include media-breakpoint-up('xl') {
       &.inline {
@@ -43,7 +52,7 @@
     margin-bottom: 12px;
     padding-bottom: 10px;
 
-    border-bottom: 1px solid rgba($gray, .1);
+    border-bottom: 1px solid rgba($gray, 0.1);
 
     h5 {
       font-size: 24px;
@@ -57,7 +66,7 @@
       font-size: 0.875rem;
       line-height: 24px;
 
-      color: rgba($gray, .2);
+      color: rgba($gray, 0.2);
       cursor: pointer;
 
       &:hover {

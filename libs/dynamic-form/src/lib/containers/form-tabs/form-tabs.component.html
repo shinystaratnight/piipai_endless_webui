@@ -1,33 +1,61 @@
 <div class="form-tabs">
-  <ngb-tabset [class.candidate-tabs]="config.candidateTabs">
+  <ngb-tabset
+    [activeId]="config.activeId"
+    [class.candidate-tabs]="config.candidateTabs"
+  >
     <ng-container *ngFor="let field of config.children; let i = index">
-      <ngb-tab *ngIf="!field.hide && (!config.editForm ? field.main : true)" [title]="field.name || (field.templateOptions && field.templateOptions.label)">
+      <ngb-tab
+        [id]="'ngb-tab-' + i"
+        *ngIf="!field.hide && (!config.editForm ? field.main : true)"
+        [title]="
+          field.name || (field.templateOptions && field.templateOptions.label)
+        "
+      >
         <ng-template ngbTabContent>
-          <div class="label" *ngIf="field.main && !isMobileDevice && !config.notEdit">
-            {{field.label}}
-            <button type="button" class="btn edit-mode"
+          <div
+            class="label"
+            *ngIf="field.main && !isMobileDevice && !config.notEdit"
+          >
+            {{ field.label }}
+            <button
+              type="button"
+              class="btn edit-mode"
               *ngIf="canUpdate && mode === 'view' && !hideEditButton()"
-              (click)="changeMode('edit')">
-                <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
-                Edit mode
+              (click)="changeMode('edit')"
+            >
+              <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
+              Edit mode
             </button>
 
-            <button type="button" class="btn close-btn"
+            <button
+              type="button"
+              class="btn close-btn"
               *ngIf="mode === 'edit'"
-              (click)="changeMode('view')">
-                Close without save
+              (click)="changeMode('view')"
+            >
+              Close without save
             </button>
 
-            <button type="submit" class="btn btn-primary btn-shadow save"
+            <button
+              type="submit"
+              class="btn btn-primary btn-shadow save"
               [class.ml-auto]="mode !== 'edit'"
-              *ngIf="mode === 'edit' || !config.editForm">
-                {{mode !== 'edit' ? 'Save' : 'Save changes'}}
-                <app-spinner *ngIf="saving"></app-spinner>
+              *ngIf="mode === 'edit' || !config.editForm"
+            >
+              {{ mode !== 'edit' ? 'Save' : 'Save changes' }}
+              <app-spinner *ngIf="saving"></app-spinner>
             </button>
           </div>
 
-          <ng-container appFormElement [config]="field" [group]="group" [errors]="errors" [message]="message" (event)="eventHandler($event)"
-            (buttonAction)="buttonActionHandler($event)">
+          <ng-container
+            appFormElement
+            [config]="field"
+            [group]="group"
+            [errors]="errors"
+            [message]="message"
+            (event)="eventHandler($event)"
+            (buttonAction)="buttonActionHandler($event)"
+          >
           </ng-container>
         </ng-template>
       </ngb-tab>

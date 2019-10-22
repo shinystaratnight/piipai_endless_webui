@@ -83,6 +83,7 @@ export interface Field {
   sendData?: string[];
   column?: boolean;
   replaceKey?: string;
+  activeId?: string;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
@@ -119,6 +120,7 @@ export interface Field {
     };
     inline?: boolean;
     additionalDescription?: string;
+    rows?: number;
   };
 }
 

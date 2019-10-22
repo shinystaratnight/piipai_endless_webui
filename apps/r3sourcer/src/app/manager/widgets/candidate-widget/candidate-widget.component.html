@@ -1,0 +1,179 @@
+<div class="widget">
+  <div class="widget-header">
+    <h3 class="widget-name d-flex align-items-center justify-content-between">
+      Candidates
+
+      <button
+        *ngIf="selectedCandidates.size"
+        class="fillin-button btn btn-success"
+        (click)="sendJobOffer()"
+      >
+        Send Job Offer
+      </button>
+
+      <span
+        *ngIf="!selectedCandidates.size"
+        class="filter-button"
+        (click)="toggleFilters()"
+      >
+        Filters
+        <fa-icon icon="chevron-down" class="text-primary"></fa-icon>
+      </span>
+    </h3>
+  </div>
+
+  <div *ngIf="showFilters" class="filter-wrapper" [class.open]="true">
+    <app-filter-block
+      [container]="true"
+      [config]="filtersOfList"
+      (event)="filterHandler($event)"
+    ></app-filter-block>
+  </div>
+
+  <div
+    *ngIf="!showFilters"
+    class="widget-body list"
+    infinite-scroll
+    [infiniteScrollDistance]="modalScrollDistance"
+    [infiniteScrollThrottle]="modalScrollThrottle"
+    [scrollWindow]="false"
+    (scrolled)="onModalScrollDown()"
+  >
+    <ng-container *ngFor="let candidate of candidates">
+      <ng-container
+        *ngTemplateOutlet="item; context: { candidate: candidate }"
+      ></ng-container>
+    </ng-container>
+
+    <div
+      *ngIf="!candidates || loading"
+      class="d-flex align-items-center justify-content-center flex-fill"
+    >
+      <app-loader></app-loader>
+    </div>
+  </div>
+</div>
+
+<ng-template #item let-candidate="candidate">
+  <div
+    class="list-item"
+    [class.selected]="candidate.selected"
+    (click)="selectCandidate(candidate)"
+  >
+    <div class="list-item-header">
+      <img
+        *ngIf="candidate.img"
+        [src]="candidate.img"
+        alt=""
+        width="32"
+        height="32"
+      />
+      <div *ngIf="!candidate.img" class="contact-avatar">
+        {{ candidate.contactAvatar }}
+      </div>
+      <b class="name">{{ candidate.name }}</b>
+
+      <div class="ml-auto">
+        <ng-container
+          *ngTemplateOutlet="
+            score;
+            context: {
+              score: getScore(candidate.score),
+              value: candidate.score,
+              right: true
+            }
+          "
+        ></ng-container>
+      </div>
+
+      <fa-icon
+        icon="chevron-down"
+        class="extend-btn px-2 ml-1"
+        (click)="togglePanel(candidate, $event)"
+      ></fa-icon>
+
+      <fa-icon icon="check-circle" class="selected-icon text-success"></fa-icon>
+    </div>
+
+    <div class="list-item-content" *ngIf="candidate.extend">
+      <div *ngIf="candidate.state" class="list-item-status">
+        <span class="title">Status</span>
+        <span
+          class="badge badge-outline"
+          [ngClass]="[checkClass(candidate.state)]"
+          >{{ candidate.state.__str__ }}</span
+        >
+      </div>
+
+      <ng-container *ngIf="candidate.skills && candidate.skills.length">
+        <div class="list-item-group-title">Skills</div>
+
+        <div *ngFor="let skill of candidate.skills">
+          {{ skill.name }}
+
+          <ng-container
+            *ngTemplateOutlet="
+              score;
+              context: { score: getScore(skill.score), value: skill.score }
+            "
+          ></ng-container>
+        </div>
+      </ng-container>
+
+      <div class="d-flex justify-content-between">
+        <div *ngIf="candidate.hourly_rate">
+          <div class="list-item-group-title">Hourly rate</div>
+
+          <span [class.text-danger]="candidate.overpriced"
+            >${{ candidate.hourly_rate }}/h</span
+          >
+        </div>
+
+        <div *ngIf="candidate.distance">
+          <div class="list-item-group-title">Distance</div>
+
+          {{ candidate.distance }} km
+        </div>
+      </div>
+
+      <ng-container *ngIf="candidate.scores">
+        <div class="list-item-group-title">Scores</div>
+
+        <div *ngFor="let item of candidate.scores">
+          <span>{{ item.name }}</span>
+
+          <ng-container
+            *ngTemplateOutlet="
+              score;
+              context: { score: getScore(item.score), value: item.score }
+            "
+          ></ng-container>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="candidate.tags && candidate.tags.length">
+        <div class="list-item-group-title">Tags</div>
+
+        <div class="tags-wrapper">
+          <span class="badge" *ngFor="let tag of candidate.tags">
+            {{ tag.name }}
+          </span>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #score let-score="score" let-value="value" let-right="right">
+  <span
+    class="score d-inline-flex"
+    [class.justify-content-end]="right"
+    [style.color]="score ? colors[score] : colors[1]"
+    [style.borderColor]="score ? colors[score] : colors[1]"
+  >
+    {{ score ? (value | number: '1.1-1') : 'No rating' }}
+    <ng-container *ngIf="score">
+      <fa-icon class="ml-1" icon="star"></fa-icon>
+    </ng-container>
+  </span>
+</ng-template>

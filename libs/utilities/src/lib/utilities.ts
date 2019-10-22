@@ -1,6 +1,11 @@
 import { Role } from '@webui/data';
 
-export enum DateRange { Year = 'year', Month = 'month', Week = 'week', Day = 'day' }
+export enum DateRange {
+  Year = 'year',
+  Month = 'month',
+  Week = 'week',
+  Day = 'day'
+}
 
 export const filterDateFormat = 'YYYY-MM-DD';
 
@@ -11,7 +16,7 @@ export const rangeFormats = {
   [DateRange.Year]: 'YYYY',
   [DateRange.Month]: 'MMMM YYYY',
   [DateRange.Week]: 'MMM D',
-  [DateRange.Day]: 'D MMMM YYYY',
+  [DateRange.Day]: 'D MMMM YYYY'
 };
 
 export function getContactAvatar(name): string {
@@ -19,10 +24,16 @@ export function getContactAvatar(name): string {
 
   if (nameElements && nameElements.length) {
     if (nameElements.length === 2) {
-      return nameElements.map((el) => el[0]).join('').toUpperCase();
+      return nameElements
+        .map(el => el[0])
+        .join('')
+        .toUpperCase();
     } else if (nameElements.length > 2) {
       nameElements.shift();
-      return nameElements.map((el) => el[0]).join('').toUpperCase();
+      return nameElements
+        .map(el => el[0])
+        .join('')
+        .toUpperCase();
     }
   }
 }
@@ -33,6 +44,10 @@ export function isTouchDevice(): boolean {
   return deviceNamesReg.test(navigator.userAgent.toLowerCase());
 }
 
+export function getCurrentRole() {
+  return JSON.parse(localStorage.getItem('web.role'));
+}
+
 export function isMobile(): boolean {
   if (isTouchDevice) {
     return window.innerWidth < 768;
@@ -40,28 +55,28 @@ export function isMobile(): boolean {
 }
 
 export function isCandidate(): boolean {
-  const role: Role = JSON.parse(localStorage.getItem('web.role'));
+  const role: Role = getCurrentRole();
   if (role) {
     return role.__str__.includes('candidate');
   }
 }
 
 export function isClient(): boolean {
-  const role: Role = JSON.parse(localStorage.getItem('web.role'));
+  const role: Role = getCurrentRole();
   if (role) {
     return role.__str__.includes('client');
   }
 }
 
 export function isManager(): boolean {
-  const role: Role = JSON.parse(localStorage.getItem('web.role'));
+  const role: Role = getCurrentRole();
   if (role) {
     return role.__str__.includes('manager');
   }
 }
 
 export function getRoleId(): string {
-  const role: Role = JSON.parse(localStorage.getItem('web.role'));
+  const role: Role = getCurrentRole();
   if (role) {
     return role.id;
   }
@@ -132,4 +147,4 @@ export function format(str, data) {
 export class FormatString {
   static format = format;
   format = format;
-};
+}

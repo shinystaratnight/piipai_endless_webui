@@ -29,10 +29,6 @@ export class ListFormComponent implements OnInit {
     }
   }
 
-  saveChanges() {
-    this.service.saveChanges(this.config.rowId);
-  }
-
   private setValue(value: any, display: string) {
     this.value = value && display ? display : value;
   }

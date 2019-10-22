@@ -8,6 +8,7 @@ import { CompanyPurposeService } from './company-purpose.service';
 import { CheckPermissionService } from './check-permission.service';
 import { ErrorsService } from './errors.service';
 import { ToastService } from './toast.service';
+import { EventService } from './event.service';
 
 export * from './navigation.service';
 export * from './user.service';
@@ -20,6 +21,7 @@ export * from './check-permission.service';
 export * from './errors.service';
 export * from './toast.service';
 export * from './env.service';
+export * from './event.service';
 
 export const services = [
   NavigationService,
@@ -31,5 +33,6 @@ export const services = [
   CompanyPurposeService,
   CheckPermissionService,
   ErrorsService,
-  ToastService
+  ToastService,
+  EventService
 ];

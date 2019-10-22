@@ -1,27 +1,52 @@
 <div class="form-group" [formGroup]="group" *ngIf="!config.hide">
   <div class="form-element">
-    <label class="col-form-label form-element-label" [class.required]="config.templateOptions.required" [attr.for]="key" *ngIf="label && config.templateOptions.label">
-      {{config.templateOptions.label}}:
+    <label
+      class="col-form-label form-element-label"
+      [class.required]="config.templateOptions.required"
+      [attr.for]="key"
+      *ngIf="label && config.templateOptions.label"
+    >
+      {{ config.templateOptions.label }}:
     </label>
     <app-info [description]="config.templateOptions.description"></app-info>
-    <div class="form-element-content edit" [class.full-width]="config.templateOptions.full" style="height: auto; max-height: none">
+    <div
+      class="form-element-content edit"
+      [class.full-width]="config.templateOptions.full"
+      style="height: auto; max-height: none"
+    >
       <textarea
-        rows="2"
+        [rows]="config.templateOptions.rows || 2"
         *ngIf="!viewMode"
         class="form-control"
         #textarea
         [formControlName]="key"
-        [attr.type]="config.templateOptions.type ? config.templateOptions.type : 'text'"
+        [attr.type]="
+          config.templateOptions.type ? config.templateOptions.type : 'text'
+        "
         [attr.id]="key"
         [attr.name]="key"
-        [attr.placeholder]="config.templateOptions.placeholder ? config.templateOptions.placeholder : ''"></textarea>
-        <span [ngClass]="[className]" [class.readonly-value]="editMode" *ngIf="viewMode">{{displayValue}}</span>
+        [attr.placeholder]="
+          config.templateOptions.placeholder
+            ? config.templateOptions.placeholder
+            : ''
+        "
+      ></textarea>
+      <span
+        [ngClass]="[className]"
+        [class.readonly-value]="editMode"
+        *ngIf="viewMode"
+        >{{ displayValue }}</span
+      >
     </div>
   </div>
   <div *ngIf="errors">
-    <div class="text-danger mt-1" *ngIf="errors[config.key]">{{errors[config.key]}}</div>
+    <div class="text-danger mt-1" *ngIf="errors[config.key]">
+      {{ errors[config.key] }}
+    </div>
   </div>
   <div *ngIf="message">
-    <div *ngIf="message[config.key]" class="text-success mt-1">{{message[config.key]}}</div>
+    <div *ngIf="message[config.key]" class="text-success mt-1">
+      {{ message[config.key] }}
+    </div>
   </div>
 </div>

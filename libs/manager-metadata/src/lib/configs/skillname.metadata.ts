@@ -106,7 +106,9 @@ const list = {
     update: {
       endpoint: '/skills/skills/{skill_id}/change_default/',
       fields: ['active', 'default_rate', 'price_list_default_rate'],
-      method: 'post'
+      method: 'post',
+      required: ['active'],
+      requiredMessage: 'Please fill all fields'
     },
     create: {
       exist: 'skill_id',
@@ -223,7 +225,7 @@ const list = {
             type: 'button',
             field: 'id',
             action: 'updateObject',
-            styles: ['default', 'size-m'],
+            styles: ['primary', 'size-m', 'shadow'],
             updateButton: true
           }
         ]

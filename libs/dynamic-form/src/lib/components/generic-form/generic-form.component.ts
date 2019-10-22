@@ -11,7 +11,7 @@ import {
   ElementRef
 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { BehaviorSubject, Subject, Subscription, forkJoin } from 'rxjs';
@@ -165,6 +165,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public formName: string;
   public selectedDates: string[];
 
+  public activeTabId: string;
+
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -177,7 +179,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     private router: Router,
     private modal: NgbModal,
     private purposeService: CompanyPurposeService,
-    private timelineService: TimelineService
+    private timelineService: TimelineService,
+    private route: ActivatedRoute
   ) {
     this.updateDataAfterSendForm = {
       config: [],
@@ -226,6 +229,12 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
+    const params = this.route.snapshot.queryParams;
+
+    if (params['tab']) {
+      this.activeTabId = params['tab']
+    }
+
     if (!this.formId && this.formId !== 0) {
       this.formId = this.formService.registerForm(this.endpoint, this.mode);
 
@@ -337,6 +346,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
       if (el.type === 'tabs') {
         this.hasTabs = true;
+
+        if(this.activeTabId) {
+          el.activeId = this.activeTabId;
+        }
       }
 
       if (el.key || el.type === 'list') {

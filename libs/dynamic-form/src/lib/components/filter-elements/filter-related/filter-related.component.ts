@@ -8,7 +8,8 @@ import {
   AfterViewInit,
   OnDestroy,
   HostListener,
-  ElementRef
+  ElementRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -21,9 +22,11 @@ import { debounceTime, skip, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-filter-related',
-  templateUrl: 'filter-related.component.html'
+  templateUrl: 'filter-related.component.html',
+  styleUrls: ['./filter-related.component.scss']
 })
-export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FilterRelatedComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   @Input() public config: any;
   public data: any;
   public item: any;
@@ -79,6 +82,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     private genericFormService: GenericFormService,
     private elementRef: ElementRef,
     private siteSettingsService: SiteSettingsService,
+    private cd: ChangeDetectorRef
   ) {}
 
   public ngOnInit() {
@@ -86,24 +90,37 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.multiple) {
       this.limit = -1;
     }
-    this.querySubscription = this.route.queryParams.subscribe(
-      () => this.updateFilter()
+    this.querySubscription = this.route.queryParams.subscribe(() => {
+      setTimeout(() => {
+        if (!(this.cd as any).destroyed) {
+          this.updateFilter();
+        }
+      }, 200);
+    });
+    this.filterSubscription = this.fs.reset.subscribe(() =>
+      this.updateFilter()
     );
-    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
-    this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
+    this.isCollapsed =
+      this.query || document.body.classList.contains('r3sourcer')
+        ? false
+        : true;
     this.defaultValue = {
       [this.config.data.key]: '',
-      [this.config.data.value]: this.multiple ? `Select ${this.config.label}` : 'All'
+      [this.config.data.value]: this.multiple
+        ? `Select ${this.config.label}`
+        : 'All'
     };
-    this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
+    this.theme = document.body.classList.contains('r3sourcer')
+      ? 'r3sourcer'
+      : 'default';
   }
 
   public ngAfterViewInit() {
     if (this.search) {
       this.subscription = this.search.valueChanges
-        .pipe (
+        .pipe(
           skip(2),
-          filter((value) => value !== null),
+          filter(value => value !== null),
           debounceTime(400)
         )
         .subscribe(() => {
@@ -123,9 +140,13 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public generateList(concat = false): void {
     if (this.multiple) {
       if (!this.chashValues) {
+        this.skipScroll = true;
+        this.cd.detectChanges();
         this.getOptions(this.searchValue, concat);
       }
     } else {
+      this.skipScroll = true;
+      this.cd.detectChanges();
       this.getOptions(this.searchValue, concat);
     }
   }
@@ -136,30 +157,30 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public openAutocomplete($event) {
-      if (this.multiple && !this.item.hideAutocomplete) {
-        this.item.hideAutocomplete = true;
-        return;
-      }
-      let autocomplete;
-      const target = $event.target;
+    if (this.multiple && (this.item && !this.item.hideAutocomplete)) {
+      this.item.hideAutocomplete = true;
+      return;
+    }
+    let autocomplete;
+    const target = $event.target;
 
-      this.searchValue = null;
-      this.item.hideAutocomplete = false;
-      this.generateList();
+    this.searchValue = null;
+    this.item.hideAutocomplete = false;
+    this.generateList();
 
-      if (target.classList.contains('autocomplete-value')) {
-        this.topHeight = target.offsetHeight + 1;
-        autocomplete = target.nextElementSibling;
-      } else {
-        this.topHeight = target.parentElement.offsetHeight + 1;
-        autocomplete = target.parentElement.nextElementSibling;
+    if (target.classList.contains('autocomplete-value')) {
+      this.topHeight = target.offsetHeight + 1;
+      autocomplete = target.nextElementSibling;
+    } else {
+      this.topHeight = target.parentElement.offsetHeight + 1;
+      autocomplete = target.parentElement.nextElementSibling;
+    }
+    setTimeout(() => {
+      if (!this.multiple && autocomplete) {
+        autocomplete.children[1].scrollTo({ top: 0 });
+        autocomplete.children[0].focus();
       }
-      setTimeout(() => {
-        if (!this.multiple && autocomplete) {
-          autocomplete.children[1].scrollTo({ top: 0 });
-          autocomplete.children[0].focus();
-        }
-      }, 150);
+    }, 150);
   }
 
   public resetList() {
@@ -177,14 +198,17 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     if (!this.multiple) {
       this.item.lastElement = 0;
       this.item.count = null;
+      this.previewList = undefined;
       this.generateList();
     } else {
       let filteredList;
       if (this.searchValue && this.chashValues) {
-        filteredList = this.chashValues.filter((el) => {
+        filteredList = this.chashValues.filter(el => {
           const val = el[this.config.data.value];
           if (val) {
-            return val.toLowerCase().indexOf(this.searchValue.toLowerCase()) > -1;
+            return (
+              val.toLowerCase().indexOf(this.searchValue.toLowerCase()) > -1
+            );
           }
         });
         this.previewList = filteredList;
@@ -205,8 +229,8 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public setValue(value, list?) {
     if (this.multiple) {
-      this.selected = list.filter((item) => item.checked);
-      this.item.data = this.selected.map((el) => el[this.config.data.key]);
+      this.selected = list.filter(item => item.checked);
+      this.item.data = this.selected.map(el => el[this.config.data.key]);
       this.item.displayValue = this.selected.length
         ? `Selected ${this.selected.length} ${this.config.label}`
         : `Select ${this.config.label}`;
@@ -244,14 +268,17 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   public onChange() {
     this.fs.generateQuery(
       this.genericQuery(this.config.query),
-      this.config.key, this.config.listName, this.item);
+      this.config.key,
+      this.config.listName,
+      this.item
+    );
     this.changeQuery();
   }
 
   public genericQuery(query) {
     let result = '';
     if (Array.isArray(this.item.data)) {
-      this.item.data.forEach((el) => {
+      this.item.data.forEach(el => {
         result += `${query}=${el}&`;
       });
     } else {
@@ -317,16 +344,19 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
         this.item.data = '';
         this.item.displayValue = 'All';
       } else if (this.previewList) {
-        this.previewList.forEach((el) => {
+        this.previewList.forEach(el => {
           el.checked = false;
         });
-        this.selected = this.previewList.filter((item) => item.checked);
-        this.item.data = this.selected.map((el) => el[this.config.data.key]);
-        this.item.displayValue = this.selected && this.selected.length
-          ? `Selected ${this.selected.length} ${this.config.label}`
-          : `Select ${this.config.label}`;
+        this.selected = this.previewList.filter(item => item.checked);
+        this.item.data = this.selected.map(el => el[this.config.data.key]);
+        this.item.displayValue =
+          this.selected && this.selected.length
+            ? `Selected ${this.selected.length} ${this.config.label}`
+            : `Select ${this.config.label}`;
       }
     }
+
+    this.cd.detectChanges();
   }
 
   public resetFilter() {
@@ -346,60 +376,68 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
 
     if (this.config.data.endpoint.includes('{')) {
       const formatString = new FormatString();
-      endpoint =
-        formatString.format(this.config.data.endpoint, this.siteSettingsService.settings);
-      endpoint += `&number=${value}`;
-      this.genericFormService.getAll(endpoint).subscribe(
-        (res: any) => {
-          if (res.results) {
-            this.item.displayValue = this.getValue(res.results[0], this.config.data.value);
-          }
-        }
+      endpoint = formatString.format(
+        this.config.data.endpoint,
+        this.siteSettingsService.settings
       );
+      endpoint += `&number=${value}`;
+      this.genericFormService.getAll(endpoint).subscribe((res: any) => {
+        if (res.results) {
+          this.item.displayValue = this.getValue(
+            res.results[0],
+            this.config.data.value
+          );
+        }
+      });
     } else {
       const index = this.config.data.endpoint.indexOf('?');
       if (index !== -1) {
-        endpoint = this.config.data.endpoint.slice(0, index)
-          + `${value}/`
-          + this.config.data.endpoint.slice(index);
+        endpoint =
+          this.config.data.endpoint.slice(0, index) +
+          `${value}/` +
+          this.config.data.endpoint.slice(index);
       } else {
         endpoint = `${this.config.data.endpoint}${value}/`;
       }
       const display = this.config.data.value;
-      this.genericFormService.getAll(endpoint).subscribe(
-        (res: any) => {
-          this.item.displayValue = res[display];
-        }
-      );
+      this.genericFormService.getAll(endpoint).subscribe((res: any) => {
+        this.item.displayValue = res[display];
+      });
     }
-
   }
 
   public getOptions(value, concat = false) {
     const formatString = new FormatString();
-    const endpoint =
-      this.config.data.endpoint.includes('{')
-      ? formatString.format(this.config.data.endpoint, this.siteSettingsService.settings)
+    const endpoint = this.config.data.endpoint.includes('{')
+      ? formatString.format(
+          this.config.data.endpoint,
+          this.siteSettingsService.settings
+        )
       : this.config.data.endpoint;
     const offset = this.item.lastElement;
     let query = '';
 
     if (value) {
-      query += endpoint.indexOf('?') === -1 ? `?search=${value}` : `&search=${value}`;
+      query +=
+        endpoint.indexOf('?') === -1 ? `?search=${value}` : `&search=${value}`;
     }
     query += !query && endpoint.indexOf('?') === -1 ? '?' : '&';
     query += `&limit=${this.limit}&offset=${offset}`;
     query += this.generateFields(this.config.data);
-    if (!this.item.count || (this.item.count && offset < this.item.count && concat)) {
+    if (
+      !this.item.count ||
+      (this.item.count && offset < this.item.count && concat)
+    ) {
       this.item.lastElement += this.limit;
-      this.genericFormService.getByQuery(endpoint, query).subscribe(
-        (res: any) => {
+      this.genericFormService
+        .getByQuery(endpoint, query)
+        .subscribe((res: any) => {
           this.skipScroll = false;
           this.item.count = res.count;
           if (res.results) {
             if (concat) {
               if (this.previewList) {
-                res.results.forEach((el) => {
+                res.results.forEach(el => {
                   if (el) {
                     el.__str__ = this.getValue(el, this.config.data.value);
                   }
@@ -410,7 +448,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
             } else {
               if (!this.chashValues && this.multiple) {
                 if (this.selected) {
-                  res.results.forEach((el) => {
+                  res.results.forEach(el => {
                     if (this.selected.indexOf(el[this.config.data.key]) > -1) {
                       el.checked = true;
                     }
@@ -421,17 +459,17 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.selected = this.filterSelectedValues(this.previewList);
                 return;
               }
-              res.results.forEach((el) => {
+              res.results.forEach(el => {
                 if (el) {
                   el.__str__ = this.getValue(el, this.config.data.value);
                 }
               });
 
               this.previewList = res.results;
+              this.cd.detectChanges();
             }
           }
-        }
-      );
+        });
     } else {
       this.skipScroll = false;
     }
@@ -441,7 +479,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     let result;
 
     if (Array.isArray(value)) {
-      value.forEach((el) => {
+      value.forEach(el => {
         result = result ? result : data[el];
       });
     } else {
@@ -456,7 +494,7 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
     query += `fields=${data.key}&`;
 
     if (Array.isArray(data.value)) {
-      data.value.forEach((el) => {
+      data.value.forEach(el => {
         query += `fields=${el}&`;
       });
     } else {
@@ -467,21 +505,23 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   public selectAll(list) {
-    list.forEach((el) => {
+    list.forEach(el => {
       el.checked = true;
     });
     this.setValue(null, list);
   }
 
   public resetAll(list) {
-    list.forEach((el) => {
+    list.forEach(el => {
       el.checked = false;
     });
     this.setValue(null, list);
   }
 
   public filterSelectedValues(list) {
-    return list.filter((el) => this.selected && this.selected.indexOf(el.id) > -1);
+    return list.filter(
+      el => this.selected && this.selected.indexOf(el.id) > -1
+    );
   }
 
   public removeItem(item) {
@@ -500,12 +540,16 @@ export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy 
       clickedComponent = clickedComponent.parentNode;
     } while (clickedComponent);
     if (!inside) {
-      if (this.multiple && !this.item.hideAutocomplete) {
+      if (this.item && !this.item.hideAutocomplete) {
         this.item.hideAutocomplete = true;
         this.searchValue = '';
+        setTimeout(() => {
+          if (!(this.cd as any).destroyed) {
+            this.cd.detectChanges();
+          }
+        }, 200);
         return;
       }
     }
   }
-
 }

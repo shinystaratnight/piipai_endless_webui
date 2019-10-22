@@ -2,14 +2,29 @@ import { Injectable } from '@angular/core';
 
 import { Moment } from 'moment-timezone';
 
-import { DateRange, rangeFormats, weekEnd, weekStart, getToday, getTimeInstance } from '@webui/utilities';
+import {
+  DateRange,
+  rangeFormats,
+  weekEnd,
+  weekStart,
+  getToday,
+  getTimeInstance
+} from '@webui/utilities';
 import { DatepickerService } from './datepicker.service';
 
-export enum Status { Unfilled, Fullfilled, Pending, Open, Filled, Approved }
+export enum Status {
+  Unfilled,
+  Fullfilled,
+  Pending,
+  Open,
+  Filled,
+  Approved
+}
 
 export interface CalendarData {
   header: string[];
   body: any;
+  date?: string;
 }
 
 @Injectable()
@@ -44,68 +59,82 @@ export class CalendarService {
 
   private calendarHeight = 370;
 
-  constructor(
-    private datepickerService: DatepickerService
-  ) {}
+  constructor(private datepickerService: DatepickerService) {}
 
-  public getRangeFormatDate(date: Moment, type: DateRange, range?: { start: Moment, end: Moment }) {
+  public getRangeFormatDate(
+    date: Moment,
+    type: DateRange,
+    range?: { start: Moment; end: Moment }
+  ) {
     if (type === DateRange.Week) {
       const start = (range && range.start) || date.clone().weekday(weekStart);
       const end = (range && range.end) || date.clone().weekday(weekEnd);
 
-      return `${start.format(rangeFormats[type])} - ${end.format(rangeFormats[type])}`;
+      return `${start.format(rangeFormats[type])} - ${end.format(
+        rangeFormats[type]
+      )}`;
     }
 
     return date.format(rangeFormats[type]);
   }
 
   public generateMonth(from: Moment, data: any): CalendarData {
-    return this.datepickerService.generateMonth(from, (body) => {
-      return body.map((row) => {
-        return row.map((day) => {
-          const newData = data.filter((el) => el.date === day.date);
-          const availabilityData = data.find((el) => el.target_date === day.date);
+    return this.datepickerService.generateMonth(from, body => {
+      return body.map(row => {
+        return row.map(day => {
+          const newData = data.filter(el => el.date === day.date);
+          const availabilityData = data.find(el => el.target_date === day.date);
           return {
             ...day,
             data: newData,
-            jobOffers: newData.filter((el) => el.showButtons),
-            available: availabilityData ? availabilityData.confirmed_available : undefined,
+            jobOffers: newData.filter(el => el.showButtons),
+            available: availabilityData
+              ? availabilityData.confirmed_available
+              : undefined,
             availableId: availabilityData ? availabilityData.id : undefined,
             tooltip: this.generateTooltipForMonth(newData),
-            isOpen: false,
+            isOpen: false
           };
         });
       });
     });
   }
 
-  public generateWeek(from: Moment, data: any, range?: { start: Moment, end: Moment }) {
-    return this.datepickerService.generateWeek(from, (body) => {
-      return body.map((day) => {
-        const newData = data.filter((el) => el.date === day.date);
-        return {
-          ...day,
-          data: newData,
-          tooltip: this.generateTooltipForMonth(newData),
-          isOpen: false,
-          lines: this.calculateLines(),
-        };
-      });
-    }, range);
+  public generateWeek(
+    from: Moment,
+    data: any,
+    range?: { start: Moment; end: Moment }
+  ) {
+    return this.datepickerService.generateWeek(
+      from,
+      body => {
+        return body.map(day => {
+          const newData = data.filter(el => el.date === day.date);
+          return {
+            ...day,
+            data: newData,
+            tooltip: this.generateTooltipForMonth(newData),
+            isOpen: false,
+            lines: this.calculateLines()
+          };
+        });
+      },
+      range
+    );
   }
 
   public generateDay(from: Moment, data: any) {
-    return this.datepickerService.generateDay(from, (body) => {
+    return this.datepickerService.generateDay(from, body => {
       return {
         ...body,
-        data: data.filter((el) => el.date === body.date),
+        data: data.filter(el => el.date === body.date),
         isOpen: false,
         lines: this.calculateLines()
       };
     });
   }
 
-  getRangeDates(date: Moment, type: DateRange): { start: Moment, end: Moment } {
+  getRangeDates(date: Moment, type: DateRange): { start: Moment; end: Moment } {
     return this.datepickerService.getRangeDates(date, type);
   }
 
@@ -119,7 +148,7 @@ export class CalendarService {
 
     const time = {
       hours: startMoment.hour(),
-      monite: startMoment.minute(),
+      minute: startMoment.minute()
     };
 
     return {
@@ -136,7 +165,7 @@ export class CalendarService {
         result['bottom'] = 'auto';
       }
 
-      if (i === (arr.length - 1)) {
+      if (i === arr.length - 1) {
         result['top'] = 'auto';
         result['bottom'] = 0;
       }
@@ -153,7 +182,7 @@ export class CalendarService {
     return this.calendarTimes.map((time, i) => {
       return {
         top: (this.calendarHeight / (this.calendarTimes.length - 1)) * i,
-        class: (i % 4 !== 0) ? 'dotted' : ''
+        class: i % 4 !== 0 ? 'dotted' : ''
       };
     });
   }
@@ -169,7 +198,7 @@ export class CalendarService {
         [Status.Approved]: []
       };
 
-      data.forEach((shift) => {
+      data.forEach(shift => {
         if (Number.isInteger(shift.is_fulfilled)) {
           result[shift.is_fulfilled].push(shift);
         }

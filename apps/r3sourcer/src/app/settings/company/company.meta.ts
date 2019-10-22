@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 
-import { createFormElement, FormElementType } from '@webui/metadata';
+import { Form } from '@webui/metadata';
 
 export const purposeOptions = {
   hire: 'Hire',
@@ -14,7 +14,7 @@ const periodOptions = {
   weekly: 'Weekly',
   fortnightly: 'Fortnightly',
   monthly: 'Monthly',
-  daily: 'Daily',
+  daily: 'Daily'
 };
 
 const weekOptions = {
@@ -24,7 +24,7 @@ const weekOptions = {
   4: 'Thursday',
   5: 'Friday',
   6: 'Saturday',
-  7: 'Sunday',
+  7: 'Sunday'
 };
 
 const invoiceRuleOptions = {
@@ -33,8 +33,10 @@ const invoiceRuleOptions = {
   per_candidate: 'Per candidate'
 };
 
-export const purposeConfig = createFormElement(FormElementType.Select, 'purpose', 'Company purpose')
-  .addOptions(purposeOptions);
+export const purposeConfig = new Form.select.element(
+  'purpose',
+  'Company purpose'
+).addOptions(purposeOptions);
 
 export const meta = [
   {
@@ -66,6 +68,7 @@ export const meta = [
             templateOptions: {
               label: 'Font',
               type: 'text',
+              column: true,
               options: [
                 { value: 'Source Sans Pro', label: 'Source Sans Pro' },
                 { value: 'Roboto', label: 'Roboto' },
@@ -91,7 +94,7 @@ export const meta = [
                 { value: 'brown', label: '#795548' }
               ]
             }
-          },
+          }
         ]
       },
       {
@@ -103,7 +106,7 @@ export const meta = [
             templateOptions: {
               max: 32,
               label: 'Forwarding number',
-              type: 'text',
+              type: 'text'
             }
           },
           {
@@ -112,7 +115,7 @@ export const meta = [
             templateOptions: {
               max: 32,
               label: 'Billing email',
-              type: 'email',
+              type: 'email'
             }
           },
           {
@@ -122,7 +125,8 @@ export const meta = [
             templateOptions: {
               label: 'SMS sending enabled',
               type: 'checkbox',
-              description: 'Please deselect this checkbox if you want to disable sms sending from r3sourcer software',
+              description:
+                'Please deselect this checkbox if you want to disable sms sending from r3sourcer software',
               required: false
             }
           },
@@ -141,16 +145,18 @@ export const meta = [
             type: 'input',
             key: 'company_settings.pre_shift_sms_delta',
             formData,
-            showIf: [{
-              'company_settings.pre_shift_sms_enabled': true
-            }],
+            showIf: [
+              {
+                'company_settings.pre_shift_sms_enabled': true
+              }
+            ],
             templateOptions: {
               max: 240,
               min: 1,
               label: 'Pre-Shift check SMS time interval (minutes)',
-              type: 'number',
+              type: 'number'
             }
-          },
+          }
         ]
       }
     ]
@@ -183,30 +189,40 @@ export const meta = [
         label: 'Invoice Rule',
         type: 'group',
         children: [
-          createFormElement(FormElementType.Select, 'invoice_rule.period', 'Period')
+          new Form.select.element('invoice_rule.period', 'Period')
             .addOptions(periodOptions)
-            .update({ formData })
+            .updateModel({ formData })
             .updateTemplate({ required: true }),
 
-          createFormElement(FormElementType.Select, 'invoice_rule.period_zero_reference_weekly', 'Invoice generation time')
+          new Form.select.element(
+            'invoice_rule.period_zero_reference_weekly',
+            'Invoice generation time'
+          )
             .addOptions(weekOptions)
-            .update({
+            .updateModel({
               formData,
               default: 1,
-              showIf: [{
-                'invoice_rule.period': 'weekly'
-              }]
+              showIf: [
+                {
+                  'invoice_rule.period': 'weekly'
+                }
+              ]
             })
             .updateTemplate({ doNotSort: true }),
 
-          createFormElement(FormElementType.Select, 'invoice_rule.period_zero_reference_fortnightly', 'Invoice generation time')
+          new Form.select.element(
+            'invoice_rule.period_zero_reference_fortnightly',
+            'Invoice generation time'
+          )
             .addOptions(weekOptions)
-            .update({
+            .updateModel({
               formData,
               default: 1,
-              showIf: [{
-                'invoice_rule.period': 'fortnightly'
-              }]
+              showIf: [
+                {
+                  'invoice_rule.period': 'fortnightly'
+                }
+              ]
             })
             .updateTemplate({ doNotSort: true }),
 
@@ -224,13 +240,18 @@ export const meta = [
               label: 'Invoice generation time',
               type: 'date',
               clear: false,
-              change: false,
+              change: false
             },
-            showIf: [{
-              'invoice_rule.period': 'monthly'
-            }]
+            showIf: [
+              {
+                'invoice_rule.period': 'monthly'
+              }
+            ]
           },
-          createFormElement(FormElementType.Select, 'invoice_rule.separation_rule', 'Separation rule')
+          new Form.select.element(
+            'invoice_rule.separation_rule',
+            'Separation rule'
+          )
             .addOptions(invoiceRuleOptions)
             .updateTemplate({ required: true }),
 
@@ -239,7 +260,7 @@ export const meta = [
             key: 'invoice_rule.show_candidate_name',
             default: false,
             templateOptions: {
-              label: 'Show candidate name',
+              label: 'Show candidate name'
             }
           },
           {
@@ -270,11 +291,11 @@ export const meta = [
             type: 'editor',
             key: 'company_settings.invoice_template',
             templateOptions: {
-              label: 'Invoice footer comment/notes',
+              label: 'Invoice footer comment/notes'
             }
           }
         ]
       }
     ]
-  },
+  }
 ];
