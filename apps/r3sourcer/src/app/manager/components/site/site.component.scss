@@ -1,9 +1,7 @@
 @import '../../../../../../../styles/variables';
 @import '../../../../../../../styles/mixins';
 
-app-calendar {
-  min-width: 840px;
-}
+$grid-gap: 15px;
 
 app-back-link {
   display: block;
@@ -12,15 +10,47 @@ app-back-link {
 }
 
 .dashboard {
-  display: flex;
-  flex-direction: column;
-
   max-width: 1250px;
+  margin: 96px auto 0;
+  padding: 0 15px 24px;
 
-  margin: 100px auto 0;
-  padding-bottom: 50px;
+  display: grid;
+  grid-template-columns: calc(100% / 12);
+  grid-auto-rows: 80px;
+  grid-column-gap: $grid-gap;
+  grid-row-gap: $grid-gap;
 
-  @include media-breakpoint-down('md') {
+  @include media-breakpoint-down('sm') {
+    display: flex;
     flex-direction: column;
+  }
+
+  & > * {
+    &:first-child {
+      grid-column-start: 1;
+      grid-column-end: 12;
+      grid-row-start: 1;
+      grid-row-end: 3;
+    }
+
+    &:nth-child(2) {
+      grid-column-start: 1;
+      grid-column-end: 4;
+      grid-row-start: 3;
+      grid-row-end: 10;
+    }
+
+    &:nth-child(3) {
+      grid-column-start: 4;
+      grid-column-end: 12;
+      grid-row-start: 3;
+      grid-row-end: 10;
+    }
+
+    @include media-breakpoint-down('sm') {
+      &:not(:last-child) {
+        margin-bottom: 15px;
+      }
+    }
   }
 }

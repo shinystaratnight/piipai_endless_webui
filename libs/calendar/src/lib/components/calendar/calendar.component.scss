@@ -1,4 +1,5 @@
 @import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
 
 $border-radius: 0.2rem;
 $block-padding: 10px 32px;
@@ -6,7 +7,7 @@ $block-padding: 10px 32px;
 .widget {
   display: flex;
   flex-direction: column;
-  min-height: 600px;
+  height: 100%;
 
   &-body {
     display: flex;
@@ -17,8 +18,17 @@ $block-padding: 10px 32px;
 
 .calendar-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+
+  @include media-breakpoint-down('xs') {
+    flex-direction: column;
+
+    & > *:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
 }
 
 .calendar-footer {
@@ -26,21 +36,35 @@ $block-padding: 10px 32px;
   align-items: center;
   flex-wrap: wrap;
 
-  margin-top: auto;
+  margin-top: 15px;
 
   .counter {
-    &:not(:last-child) {
+    &:not(.last) {
       margin-right: 20px;
     }
 
     width: 120px;
 
     text-align: center;
+
+    @include media-breakpoint-down('sm') {
+      width: auto;
+    }
   }
 
   fa-icon {
     font-size: 8px;
     margin-right: 6px;
+  }
+}
+
+.counters {
+  display: flex;
+
+  @include media-breakpoint-down('sm') {
+    justify-content: space-around;
+    flex: 1 1;
+    padding: 10px;
   }
 }
 
@@ -64,6 +88,10 @@ $block-padding: 10px 32px;
 
       color: #4f4f4f;
       opacity: 0.8;
+
+      @include media-breakpoint-down('sm') {
+        display: none;
+      }
     }
   }
 }
@@ -83,6 +111,11 @@ h2 {
     line-height: 1.2;
     border: 1px solid #bdbdbd;
     opacity: 0.8;
+
+    @include media-breakpoint-down('sm') {
+      font-size: 14px;
+      padding: 3px 9px;
+    }
 
     &:first-child {
       border-top-left-radius: $border-radius;
@@ -202,13 +235,24 @@ app-datepicker {
   line-height: 20px;
   padding: 8px 0;
   color: $brand-primary;
+
+  @include media-breakpoint-down('sm') {
+    font-size: 14px;
+    line-height: 16px;
+  }
 }
 
 .month-day {
-  height: 63px;
+  min-height: 63px;
   padding: 5px 9px 5px 12px;
 
   border: 1px solid #e0e0e0;
+
+  @include media-breakpoint-down('sm') {
+    min-height: auto;
+    padding: 5px;
+    text-align: left;
+  }
 
   &.active {
     border-color: #f5f5f5;
@@ -221,6 +265,10 @@ app-datepicker {
   line-height: 1;
   opacity: 0.7;
 
+  @include media-breakpoint-down('sm') {
+    font-size: 14px;
+  }
+
   &.current-date {
     color: $brand-primary;
     opacity: 1;
@@ -231,6 +279,10 @@ app-datepicker {
   &-row {
     position: relative;
     display: flex;
+
+    &:not(:first-child) {
+      flex: 1 1;
+    }
   }
 
   &-item {
@@ -267,17 +319,23 @@ app-datepicker {
 
 .filters {
   display: flex;
-}
+  flex-wrap: wrap;
 
-app-filter-related {
-  flex: 1 1;
+  @include media-breakpoint-down('sm') {
+    flex-direction: column;
+  }
 
-  margin-right: 24px;
-}
+  & > * {
+    flex: 1 1;
 
-.filter-element {
-  flex: 1 1;
-  max-width: 300px;
+    &:not(:last-child) {
+      margin-right: 10px;
+
+      @include media-breakpoint-down('sm') {
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 .custom-checkbox.success {
@@ -337,12 +395,26 @@ app-filter-related {
     display: flex;
     flex-direction: column;
 
+    @include media-breakpoint-down('sm') {
+      top: 0px;
+      right: 0px;
+      height: 100%;
+    }
+
     .badge {
       margin-bottom: 2px;
       padding-top: 0.1rem;
       padding-bottom: 0.1rem;
 
       line-height: 10px;
+
+      @include media-breakpoint-down('sm') {
+        flex: 1 1;
+        width: 5px;
+        margin-bottom: 0;
+        padding: 0;
+        font-size: 0;
+      }
     }
   }
 
@@ -585,6 +657,11 @@ app-filter-related {
   color: #fdfdfd;
   background-color: $brand-primary;
   box-shadow: 0 1px 3px 0 rgba(43, 46, 51, 0.24);
+
+  @include media-breakpoint-down('sm') {
+    padding: 4px 10px;
+    font-size: 14px;
+  }
 
   &:hover {
     box-shadow: none;

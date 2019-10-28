@@ -49,11 +49,17 @@ export class WidgetService {
                 const widget = widgets.find(
                   el => el.id === userWidget.dashboard_module.id
                 );
+                const { module_data } = widget;
+
+                const description =
+                  module_data.description ||
+                  'Open list with' + module_data.plural_name.toLowerCase();
 
                 return {
                   ...userWidget,
-                  ...widget.module_data,
-                  is_active: widget.is_active
+                  ...module_data,
+                  is_active: widget.is_active,
+                  description
                 };
               });
 

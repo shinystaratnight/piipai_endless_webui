@@ -15,6 +15,7 @@
   }
 
   &-element {
+    min-width: 220px;
     margin-top: 10px;
     padding-bottom: 1rem;
 
@@ -190,6 +191,10 @@
 
       .filters-inline & {
         border-radius: 4px;
+
+        @include media-breakpoint-down('sm') {
+          border-radius: 4px !important;
+        }
       }
 
       &:focus {

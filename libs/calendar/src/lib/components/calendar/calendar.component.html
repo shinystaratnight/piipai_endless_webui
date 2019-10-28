@@ -1,7 +1,7 @@
 <div class="widget">
 
   <div class="widget-header calendar-header">
-    <h3 class="widget-name mr-auto">Calendar</h3>
+    <h3 class="widget-name">Calendar</h3>
 
     <div *ngIf="calendarType !== 2" class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
       <label [btnRadio]="range.Month" role="button"  [class.active]="isMonthRange">Month</label>
@@ -74,16 +74,19 @@
       </ng-container>
 
       <footer class="calendar-footer">
-        <ng-container *ngFor="let layer of timesheetCounter">
-          <div class="counter"
-            *ngIf="layer.count || status.data[layer.type]">
-              <span class="count">
-                <fa-icon [icon]="['fas', calendarType === 2 ? 'file' : 'circle']" [ngClass]="layer.cssClass" [ngStyle]="{fontSize: calendarType === 2 ? '16px' : '8px'}"></fa-icon>
-                {{layer.count}}
-              </span><br>
-              <span class="count-description">{{layer.text}} / {{currentRange.value}}</span>
-          </div>
-        </ng-container>
+        <div class="counters">
+          <ng-container *ngFor="let layer of timesheetCounter; let last = last">
+            <div class="counter"
+              [class.last]="last"
+              *ngIf="layer.count || status.data[layer.type]">
+                <span class="count" [title]="layer.text + '/' + currentRange.value">
+                  <fa-icon [icon]="['fas', calendarType === 2 ? 'file' : 'circle']" [ngClass]="layer.cssClass" [ngStyle]="{fontSize: calendarType === 2 ? '16px' : '8px'}"></fa-icon>
+                  {{layer.count}}
+                </span><br>
+                <span class="count-description">{{layer.text}} / {{currentRange.value}}</span>
+            </div>
+          </ng-container>
+        </div>
 
         <ng-container *ngIf="isManager() && hasSelectedDates && calendarData">
           <span class="f-size-12 hov-opacity ml-auto" (click)="clearSelectedDates()">Reset selected dates</span>
@@ -118,7 +121,7 @@
     <span class="grid-item header-item" *ngFor="let day of calendarData?.header">{{day}}</span>
   </div>
   <div class="grid-row" *ngFor="let week of calendarData?.body">
-    <ng-container *ngFor="let day of week; let last = last; let first = first">
+    <ng-container *ngFor="let day of week; let i = index">
       <span class="grid-item month-day"
         [class.date-selected]="isSelected(day.date)"
         *ngIf="!day.tooltip && calendarType !== 2"
@@ -133,7 +136,7 @@
         [class.unavailable]="day.available === false"
         triggers="click:click"
         [ngbTooltip]="availabilityTooltip"
-        [placement]="last ? 'left' : first ? 'right' : 'bottom'"
+        [placement]="getPlacement(i, week.length)"
         *ngIf="!day.tooltip && calendarType === 2">
           <span class="date" [class.current-date]="day.today">{{day.label}}</span>
 
@@ -157,7 +160,7 @@
         [class.active]="day.isOpen"
         triggers="click:click"
         [ngbTooltip]="monthTooltip"
-        [placement]="last ? 'left' : first ? 'right' : 'bottom'"
+        [placement]="getPlacement(i, week.length)"
         (shown)="day.isOpen = true"
         (hidden)="day.isOpen = false">
 

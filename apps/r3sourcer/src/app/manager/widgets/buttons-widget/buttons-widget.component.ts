@@ -41,7 +41,6 @@ export class ButtonsWidget implements OnInit {
         link: widget.endpoint,
         label: widget.label,
         description: widget.description,
-        plural_name: widget.plural_name,
         name: widget.name,
         add_label: widget.add_label,
         is_active: widget.is_active

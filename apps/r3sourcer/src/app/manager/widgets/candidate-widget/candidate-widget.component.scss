@@ -1,8 +1,14 @@
 @import '../../../../../../../styles/variables';
+@import '../../../../../../../styles/mixins';
 
 :host {
   flex: 1;
-  margin-right: 24px;
+}
+
+.widget {
+  @include media-breakpoint-down('sm') {
+    max-height: 500px;
+  }
 }
 
 .widget-body {
@@ -148,6 +154,7 @@
 
     .contact-avatar {
       width: 32px;
+      min-width: 32px;
       height: 32px;
       margin-right: 12px;
       font-size: 14px;

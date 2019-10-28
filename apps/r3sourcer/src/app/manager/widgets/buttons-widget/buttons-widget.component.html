@@ -5,12 +5,7 @@
         <a [routerLink]="['/mn' + button.link]" class="widget-button-header">
           <div>
             <h3 class="widget-button-title">{{ button.label }}</h3>
-            <span *ngIf="button.description" class="widget-button-description">
-              {{ button.description }}
-            </span>
-            <span *ngIf="!button.description" class="widget-button-description">
-              Open list with {{ button.plural_name | lowercase }}
-            </span>
+            {{ button.description }}
           </div>
 
           <svg
@@ -36,7 +31,7 @@
           </svg>
         </a>
         <a
-          [routerLink]="['/mn' + button.link + '/add']"
+          [routerLink]="['/mn' + button.link + 'add']"
           href=""
           class="widget-button-footer"
         >

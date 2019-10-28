@@ -170,12 +170,8 @@
 
   <div class="dashboard" *ngIf="dashboard">
     <app-buttons-widget></app-buttons-widget>
-    <div class="d-flex" style="max-height: 660px">
-      <app-candidate-widget></app-candidate-widget>
-
-      <app-calendar class="dashboard-item" [class.alone]="!isManager"></app-calendar>
-    </div>
-
+    <app-candidate-widget></app-candidate-widget>
+    <app-calendar></app-calendar>
   </div>
 
   <app-mobile-timesheets [clientId]="getClientId()" *ngIf="identifyDevice()"></app-mobile-timesheets>
