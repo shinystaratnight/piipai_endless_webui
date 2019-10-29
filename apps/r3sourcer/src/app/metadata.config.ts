@@ -1,4 +1,4 @@
-import { Endpoints } from "@webui/data";
+import { Endpoints } from '@webui/data';
 
 const formadd = [
   {
@@ -54,6 +54,22 @@ export const login = {
   formadd
 };
 
+export const forgotpassword = {
+  formadd: [
+    {
+      type: 'input',
+      key: 'email',
+      templateOptions: {
+        label: 'Email',
+        type: 'email',
+        description:
+          'Password reset instructions will be sent to this email address.'
+      }
+    }
+  ]
+};
+
 export class Metadata {
   [Endpoints.Login] = login;
+  [Endpoints.ContactForgotPassword] = forgotpassword;
 }
