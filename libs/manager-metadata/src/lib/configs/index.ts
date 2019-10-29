@@ -83,7 +83,6 @@ export * from './skilltags.metadata';
 export * from './billingcompanies.metadata';
 export * from './billingdiscount.metadata';
 export * from './tokenlogins.metadata';
-export * from './passwordforgot.metadata';
 export * from './userpassword.metadata';
 export * from './skillname.metadata';
 export * from './smslogs.metadata';
