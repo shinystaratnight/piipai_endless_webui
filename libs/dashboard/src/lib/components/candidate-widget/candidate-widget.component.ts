@@ -6,7 +6,7 @@ import { candidatecontacts, fillin } from '@webui/manager-metadata';
 import { FilterService } from '@webui/dynamic-form';
 import { Endpoints } from '@webui/data';
 
-import { WidgetService } from '../widget.service';
+import { DashboardService } from '../../services';
 
 const enum Lists {
   CandidateContact = 'candidatecontact',
@@ -60,7 +60,7 @@ export class CandidateWidget implements OnInit, OnDestroy {
   };
 
   constructor(
-    private widgetService: WidgetService,
+    private widgetService: DashboardService,
     private eventService: EventService,
     private filterService: FilterService
   ) {}

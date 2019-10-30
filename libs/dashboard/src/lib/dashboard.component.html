@@ -1,0 +1,15 @@
+<div class="dashboard">
+  <app-settings-button></app-settings-button>
+
+  <div class="widget-container">
+    <ng-container *ngFor="let row of widgets">
+      <div class="widget-row">
+        <ng-container *ngFor="let widget of row">
+          <div class="widget-wrapper" [ngStyle]="{ flex: widget.size || 1 }">
+            <ng-container appWidget [config]="widget"></ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+</div>

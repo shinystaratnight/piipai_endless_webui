@@ -320,6 +320,7 @@ app-datepicker {
 .filters {
   display: flex;
   flex-wrap: wrap;
+  margin: 0 -5px;
 
   @include media-breakpoint-down('sm') {
     flex-direction: column;
@@ -327,14 +328,8 @@ app-datepicker {
 
   & > * {
     flex: 1 1;
-
-    &:not(:last-child) {
-      margin-right: 10px;
-
-      @include media-breakpoint-down('sm') {
-        margin-right: 0;
-      }
-    }
+    margin-left: 5px;
+    margin-right: 5px;
   }
 }
 

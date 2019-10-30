@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { EventService, EventType, CompanyPurposeService } from '@webui/core';
 
-import { WidgetService } from '../widget.service';
+import { DashboardService } from '../../services';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -15,7 +15,7 @@ export class ButtonsWidget implements OnInit {
   eventSubscription: Subscription;
 
   constructor(
-    private widgetService: WidgetService,
+    private widgetService: DashboardService,
     private eventService: EventService,
     private purposeService: CompanyPurposeService
   ) {}

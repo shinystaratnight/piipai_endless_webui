@@ -1,20 +1,12 @@
-@import '../../../../../../../styles/variables';
-@import '../../../../../../../styles/mixins';
-
-:host {
-  flex: 1;
-}
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
 
 .widget {
+  max-height: 600px;
+
   @include media-breakpoint-down('sm') {
     max-height: 500px;
   }
-}
-
-.widget-body {
-  position: relative;
-  display: flex;
-  flex-direction: column;
 }
 
 .fillin-button {

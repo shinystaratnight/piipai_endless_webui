@@ -1,11 +1,11 @@
-@import '../../../../../../../styles/variables';
-@import '../../../../../../../styles/mixins';
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
 
 $min-widget-height: 198px;
 $min-button-width: 257px;
 
 :host {
-  overflow-x: auto;
+  flex: 1;
 }
 
 a:hover {
@@ -18,6 +18,7 @@ a:hover {
 
   &-body {
     display: flex;
+    flex-wrap: wrap;
     padding: 18px 14px;
 
     @include media-breakpoint-down('sm') {
@@ -66,7 +67,7 @@ a:hover {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 24px;
+      padding: 12px 24px;
       flex: 2;
 
       @include media-breakpoint-down('sm') {
@@ -101,6 +102,7 @@ a:hover {
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 12px 0;
       color: $gray;
       opacity: 0.6;
       flex: 1;

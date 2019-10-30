@@ -169,10 +169,9 @@
   </ng-container>
 
   <div class="dashboard" *ngIf="dashboard">
-    <app-buttons-widget></app-buttons-widget>
-    <app-candidate-widget></app-candidate-widget>
-    <app-calendar></app-calendar>
+    <app-dashboard></app-dashboard>
   </div>
+
 
   <app-mobile-timesheets [clientId]="getClientId()" *ngIf="identifyDevice()"></app-mobile-timesheets>
 

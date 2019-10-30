@@ -1,0 +1,43 @@
+@import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins';
+
+.dashboard {
+  position: relative;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.widget-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.widget-row {
+  display: flex;
+  padding-bottom: 24px;
+
+  .widget-wrapper {
+    flex: 1;
+
+    &:not(:last-child) {
+      margin-right: 24px;
+
+      @include media-breakpoint-down('sm') {
+        margin-right: 0;
+        margin-bottom: 24px;
+      }
+    }
+  }
+
+  @include media-breakpoint-down('sm') {
+    flex-direction: column;
+  }
+}
+
+app-settings-button {
+  position: fixed;
+  top: 118px;
+  right: 20px;
+  z-index: 2;
+}

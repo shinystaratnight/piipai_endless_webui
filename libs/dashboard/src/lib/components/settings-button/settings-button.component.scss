@@ -1,0 +1,29 @@
+@import '../../../../../../styles/variables';
+
+$shadow: 0 0 5px rgba($gray, 0.4);
+$hover-shadow: 0 0 8px rgba($gray, 0.6);
+$active-shadow: inset 0 0 3px rgba($gray, 0.3);
+
+.settings-button {
+  display: inline-flex;
+  padding: 10px;
+  border-radius: 50%;
+  color: rgba($gray, 0.7);
+  background-color: #fff;
+  box-shadow: $shadow;
+  transition: 0.2s ease-out;
+  cursor: pointer;
+
+  fa-icon {
+    font-size: 24px;
+  }
+
+  &:hover {
+    color: $gray;
+    box-shadow: $hover-shadow;
+  }
+
+  &:active {
+    box-shadow: $active-shadow;
+  }
+}
