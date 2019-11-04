@@ -305,41 +305,47 @@
 <ng-template #shiftItem let-shift="shift" let-status="status">
   <div>
     <ng-container *ngIf="calendarType === 0">
-      <a [routerLink]="'/mn' + shift.job_link">{{shift.position}}</a>
+      <a *ngIf="isManager()" [routerLink]="'/mn' + shift.job_link">{{shift.position}}</a>
+      <span *ngIf="!isManager()">{{shift.position}}</span>
     </ng-container>
     <ng-container *ngIf="calendarType !== 0">
       {{shift.position}}
     </ng-container>
     <br>
-    <a [routerLink]="'/mn' + shift.jobsite_link" class="shift-jobsite">{{shift.jobsite}}</a> <br>
+    <a *ngIf="isManager()" [routerLink]="'/mn' + shift.jobsite_link" class="shift-jobsite">{{shift.jobsite}}</a>
+    <span *ngIf="!isManager()" class="shift-jobsite">{{shift.jobsite}}</span> <br>
     <div *ngIf="status && ((shift.candidates[status].length || shift.candidates[getStatus(1)].length))" class="shift-candidates">
       <span class="mr-1">Candidate&nbsp;({{shift.candidates[status].length || shift.candidates[getStatus(1)].length}}):</span>
       <div>
-        <div *ngFor="let name of shift.candidates[status]">
+        <div *ngFor="let candidate of shift.candidates[status]">
           <fa-icon *ngIf="getStatus(0) === status" [icon]="['fas', 'times']" class="text-danger"></fa-icon>
           <fa-icon *ngIf="getStatus(1) === status" [icon]="['fas', 'check']" class="text-success"></fa-icon>
           <fa-icon *ngIf="getStatus(2) === status" [icon]="['fas', 'minus-circle']" class="text-warning"></fa-icon>
-          {{name}}
+          <a class="ml-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
+          <span class="ml-1" *ngIf="!isManager()">{{candidate.name}}</span>
         </div>
 
         <ng-container *ngIf="shift.candidates[getStatus(0)].length && getStatus(0) !== status">
-          <div *ngFor="let name of shift.candidates[getStatus(0)]">
+          <div *ngFor="let candidate of shift.candidates[getStatus(0)]">
             <fa-icon [icon]="['fas', 'times']" class="text-danger"></fa-icon>
-            {{name}}
+            <a class="ml-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
+            <span class="ml-1" *ngIf="!isManager()">{{candidate.name}}</span>
           </div>
         </ng-container>
 
         <ng-container *ngIf="shift.candidates[getStatus(1)].length && getStatus(1) !== status">
-          <div *ngFor="let name of shift.candidates[getStatus(1)]">
+          <div *ngFor="let candidate of shift.candidates[getStatus(1)]">
             <fa-icon [icon]="['fas', 'check']" class="text-success"></fa-icon>
-            {{name}}
+            <a class="ml-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
+            <span class="ml-1" *ngIf="!isManager()">{{candidate.name}}</span>
           </div>
         </ng-container>
 
         <ng-container *ngIf="shift.candidates[getStatus(2)].length && getStatus(2) !== status">
-          <div *ngFor="let name of shift.candidates[getStatus(2)]">
+          <div *ngFor="let candidate of shift.candidates[getStatus(2)]">
             <fa-icon [icon]="['fas', 'minus-circle']" class="text-warning"></fa-icon>
-            {{name}}
+            <a class="ml-1" *ngIf="isManager()" [routerLink]="getCandidateLink(candidate.id)">{{candidate.name}}</a>
+            <span class="ml-1" *ngIf="!isManager()">{{candidate.name}}</span>
           </div>
         </ng-container>
       </div>
