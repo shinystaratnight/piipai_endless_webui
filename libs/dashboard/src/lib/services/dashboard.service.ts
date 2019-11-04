@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { map, catchError, mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { ErrorsService } from '@webui/core';
 import { Endpoints } from '@webui/data';
@@ -10,70 +9,7 @@ import { getContactAvatar } from '@webui/utilities';
 
 @Injectable()
 export class DashboardService {
-  widgets: any[];
-  userWidgets: any[];
-
   constructor(private http: HttpClient, private errorService: ErrorsService) {}
-
-  getWidgets() {
-    if (this.widgets) {
-      return of(this.widgets);
-    }
-
-    const params = new HttpParams({ fromObject: { limit: '-1' } });
-
-    return this.http.get(Endpoints.DashboardModule, { params }).pipe(
-      map((res: any) => {
-        if (res.results) {
-          this.widgets = res.results;
-          return this.widgets;
-        }
-      }),
-      catchError(errors => this.errorService.parseErrors(errors))
-    );
-  }
-
-  getUserWidgets() {
-    if (this.userWidgets && this.userWidgets.length) {
-      return of(this.userWidgets);
-    }
-
-    const params = new HttpParams({ fromObject: { limit: '-1' } });
-
-    return this.getWidgets().pipe(
-      mergeMap(widgets => {
-        return this.http.get(Endpoints.UserDashboardModule, { params }).pipe(
-          map((res: any) => {
-            if (res.results) {
-              const data = res.results.map(userWidget => {
-                const widget = widgets.find(
-                  el => el.id === userWidget.dashboard_module.id
-                );
-                const { module_data } = widget;
-
-                const description =
-                  module_data.description ||
-                  'Open list with' + module_data.plural_name.toLowerCase();
-
-                return {
-                  ...userWidget,
-                  ...module_data,
-                  is_active: widget.is_active,
-                  description
-                };
-              });
-
-              this.userWidgets = data;
-              return this.userWidgets;
-            }
-
-            return [];
-          })
-        );
-      }),
-      catchError(errors => this.errorService.parseErrors(errors))
-    );
-  }
 
   getCandidates(query?: { [key: string]: any }) {
     const params = new HttpParams({ fromObject: query });

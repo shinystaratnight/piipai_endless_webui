@@ -15,11 +15,12 @@ import {
   CalendarWidgetComponent,
   CandidateWidget
 } from '../components';
+import { Type } from '../interfaces';
 
 const components = {
-  buttons: ButtonsWidget,
-  calendar: CalendarWidgetComponent,
-  candidate: CandidateWidget
+  [Type.Buttons]: ButtonsWidget,
+  [Type.Calendar]: CalendarWidgetComponent,
+  [Type.Candidates]: CandidateWidget
 };
 
 @Directive({

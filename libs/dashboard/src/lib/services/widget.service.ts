@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { map, catchError, mergeMap } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import { ErrorsService } from '@webui/core';
 import { Endpoints } from '@webui/data';
-import { getContactAvatar } from '@webui/utilities';
+
+import { Type, Widget } from '../interfaces';
+import { widgetsData } from '../helpers';
 
 @Injectable()
 export class WidgetService {
-  widgets: any[];
+  widgets: Widget[];
   userWidgets: any[];
+
+  params = new HttpParams({ fromObject: { limit: '-1' } });
 
   constructor(private http: HttpClient, private errorService: ErrorsService) {}
 
@@ -20,164 +24,130 @@ export class WidgetService {
       return of(this.widgets);
     }
 
-    const params = new HttpParams({ fromObject: { limit: '-1' } });
+    return this.http
+      .get(Endpoints.DashboardModule, { params: this.params })
+      .pipe(
+        map((res: any) => {
+          if (res.results) {
+            const widgets = res.results.map(el => {
+              const type: Type = el.module_data.model;
 
-    return this.http.get(Endpoints.DashboardModule, { params }).pipe(
-      map((res: any) => {
-        if (res.results) {
-          this.widgets = res.results;
-          return this.widgets;
-        }
-      }),
-      catchError(errors => this.errorService.parseErrors(errors))
-    );
+              return {
+                id: el.id,
+                type: el.module_data.model,
+                ...widgetsData[type]
+              };
+            });
+
+            this.widgets = widgets;
+            return this.widgets;
+          }
+        }),
+        catchError(errors => this.errorService.parseErrors(errors))
+      );
   }
 
   getUserWidgets() {
-    if (this.userWidgets && this.userWidgets.length) {
+    if (this.userWidgets) {
       return of(this.userWidgets);
     }
 
-    const params = new HttpParams({ fromObject: { limit: '-1' } });
+    return this.http
+      .get(Endpoints.UserDashboardModule, { params: this.params })
+      .pipe(
+        map((res: any) => {
+          const userWidgets = res.results.map(el => {
+            const widget = this.widgets.find(
+              item => item.id === el.dashboard_module.id
+            );
 
-    return this.getWidgets().pipe(
-      mergeMap(widgets => {
-        return this.http.get(Endpoints.UserDashboardModule, { params }).pipe(
-          map((res: any) => {
-            if (res.results) {
-              const data = res.results.map(userWidget => {
-                const widget = widgets.find(
-                  el => el.id === userWidget.dashboard_module.id
-                );
-                const { module_data } = widget;
+            const target = {
+              id: el.id,
+              widgetId: el.dashboard_module.id,
+              name: widget.name,
+              type: widget.type,
+              tooltip: false,
+              config: el.ui_config || {}
+            };
 
-                const description =
-                  module_data.description ||
-                  'Open list with' + module_data.plural_name.toLowerCase();
+            this.addPosition(target.config, widget.type);
+            return target;
+          });
 
-                return {
-                  ...userWidget,
-                  ...module_data,
-                  is_active: widget.is_active,
-                  description
-                };
-              });
-
-              this.userWidgets = data;
-              return this.userWidgets;
-            }
-
-            return [];
-          })
-        );
-      }),
-      catchError(errors => this.errorService.parseErrors(errors))
-    );
+          this.userWidgets = userWidgets;
+          return userWidgets;
+        }),
+        catchError(errors => this.errorService.parseErrors(errors))
+      );
   }
 
-  getCandidates(query?: { [key: string]: any }) {
-    const params = new HttpParams({ fromObject: query });
-
-    return this.http.get(Endpoints.CandidateContact, { params }).pipe(
-      map((response: { count: number; results: any[] }) => {
-        const { results, count } = response;
-
-        const candidates = results.map(candidate => {
-          const {
-            id,
-            contact,
-            average_score,
-            latest_state,
-            skill_list,
-            tag_list
-          } = candidate;
-
-          return {
-            id,
-            name: `${contact.first_name} ${contact.last_name}`,
-            img: contact.picture.origin,
-            contactAvatar: getContactAvatar(contact.__str__),
-            score: average_score,
-            state: latest_state[0],
-            skills: skill_list.map(el => {
-              return { name: el.skill.__str__, score: el.score };
-            }),
-            tags: tag_list.map(el => {
-              return { name: el.tag.name };
-            })
-          };
-        });
-
-        return { count, candidates };
-      }),
-      catchError(errors => this.errorService.parseErrors(errors))
-    );
+  getButtons() {
+    return [
+      {
+        link: '/hr/jobs/',
+        label: 'Jobs',
+        description: 'Open full list of jobs',
+        add_label: '+ Add new job',
+        is_active: true
+      },
+      {
+        link: '/core/companycontacts/',
+        label: 'Client contacts',
+        description: 'Open full list of client contacts',
+        add_label: '+ Add new client contact',
+        is_active: true
+      },
+      {
+        link: '/core/companies/',
+        label: 'Clients',
+        description: 'Open full list of clients',
+        add_label: '+ Add new client',
+        is_active: true
+      },
+      {
+        link: '/candidate/candidatecontacts/',
+        label: 'Candidates',
+        description: 'Open full list of candidates',
+        add_label: '+ Add new candidate contact',
+        is_active: true
+      }
+    ];
   }
 
-  getFillinCandidates(jobId: string, query: { [key: string]: any } = {}) {
-    const params = new HttpParams({ fromObject: query });
-
-    return this.http.get(`${Endpoints.Job}${jobId}/fillin/`, { params }).pipe(
-      map((response: { list: any[]; job: any }) => {
-        const candidates = response.list;
-
-        return candidates.map(candidate => {
-          const {
-            id,
-            candidate_scores,
-            contact,
-            favourite,
-            hourly_rate,
-            distance_to_jobsite,
-            overpriced,
-            tags
-          } = candidate;
-
-          return {
-            score: candidate_scores.average_score,
-            name: `${contact.first_name} ${contact.last_name}`,
-            img: contact.picture && contact.picture.origin,
-            contactAvatar: getContactAvatar(contact.__str__),
-            scores: this.generateScores(candidate_scores),
-            distance: distance_to_jobsite,
-            id,
-            favourite,
-            hourly_rate,
-            overpriced,
-            tags
-          };
-        });
-      }),
-      catchError(errors => this.errorService.parseErrors(errors))
-    );
-  }
-
-  sendJobOffers(jobId: string, shift: string, candidates: any[]) {
+  addWidget(widgetId: string, contactId: string, config: any = {}) {
     const body = {
-      shifts: [shift],
-      candidates
+      company_contact: contactId,
+      dashboard_module: widgetId,
+      position: 1,
+      ui_config: config
     };
 
     return this.http
-      .post(`${Endpoints.Job}${jobId}/fillin/`, body)
+      .post(Endpoints.UserDashboardModule, body)
       .pipe(catchError(errors => this.errorService.parseErrors(errors)));
   }
 
-  private generateScores(scores: { [key: string]: string }) {
-    const skillMap = {
-      recruitment_score: 'Average test',
-      client_feedback: 'Client feedback',
-      skill_score: 'Average skills',
-      reliability: 'Reliability',
-      loyalty: 'Loyality'
+  removeWidget(id: string) {
+    return this.http
+      .delete(`${Endpoints.UserDashboardModule}${id}/`)
+      .pipe(catchError(errors => this.errorService.parseErrors(errors)));
+  }
+
+  //! remove this method
+  private addPosition(config, type) {
+    const positions = {
+      [Type.Buttons]: '0.0',
+      [Type.Calendar]: '1.1',
+      [Type.Candidates]: '1.0'
     };
 
-    return Object.keys(skillMap).map(key => {
-      return {
-        name: skillMap[key],
-        score: scores[key] ? scores[key].split(' ')[0] : 0,
-        count: scores[key] ? scores[key].split(' ')[1] : ''
-      };
-    });
+    const sizes = {
+      [Type.Buttons]: 1,
+      [Type.Calendar]: 8 / 12,
+      [Type.Candidates]: 4 / 12
+    };
+
+    config.coords = positions[type];
+    // config.size = sizes[type];
   }
 }

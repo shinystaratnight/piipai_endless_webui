@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { EventService, EventType, CompanyPurposeService } from '@webui/core';
 
-import { DashboardService } from '../../services';
-import { Subscription } from 'rxjs';
+import { WidgetService } from '../../services/widget.service';
 
 @Component({
   selector: 'app-buttons-widget',
@@ -15,17 +15,14 @@ export class ButtonsWidget implements OnInit {
   eventSubscription: Subscription;
 
   constructor(
-    private widgetService: DashboardService,
+    private widgetService: WidgetService,
     private eventService: EventService,
     private purposeService: CompanyPurposeService
   ) {}
 
   ngOnInit() {
-    this.widgetService.getUserWidgets().subscribe(userWidgets => {
-      this.buttons = this.generateButtons(userWidgets);
-      this.purposeService.filterModules(this.buttons);
-    });
-
+    this.buttons = this.widgetService.getButtons();
+    this.purposeService.filterModules(this.buttons);
     this.eventSubscription = this.eventService.event$.subscribe(
       (type: EventType) => {
         if (type === EventType.PurposeChanged) {
@@ -33,18 +30,5 @@ export class ButtonsWidget implements OnInit {
         }
       }
     );
-  }
-
-  generateButtons(userWidgets: any[]) {
-    return userWidgets.map(widget => {
-      return {
-        link: widget.endpoint,
-        label: widget.label,
-        description: widget.description,
-        name: widget.name,
-        add_label: widget.add_label,
-        is_active: widget.is_active
-      };
-    });
   }
 }

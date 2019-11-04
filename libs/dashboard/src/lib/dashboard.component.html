@@ -1,15 +1,136 @@
-<div class="dashboard">
-  <app-settings-button></app-settings-button>
+<div *ngIf="grid" class="dashboard" cdkDropListGroup>
+  <ng-container
+    *ngTemplateOutlet="element; context: { data: grid, row: false }"
+  ></ng-container>
 
-  <div class="widget-container">
-    <ng-container *ngFor="let row of widgets">
-      <div class="widget-row">
-        <ng-container *ngFor="let widget of row">
-          <div class="widget-wrapper" [ngStyle]="{ flex: widget.size || 1 }">
-            <ng-container appWidget [config]="widget"></ng-container>
-          </div>
-        </ng-container>
-      </div>
-    </ng-container>
-  </div>
+  <button
+    *ngIf="userWidgets.length !== widgets.length"
+    type="button"
+    class="add-widget-btn"
+    (click)="openModal()"
+  >
+    <svg
+      class="add-widget-btn-icon"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px"
+      viewBox="0 0 42 42"
+    >
+      <polygon
+        points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22 "
+      />
+    </svg>
+
+    Add new widget
+  </button>
 </div>
+
+<ng-template #element let-data="data" let-row="row">
+  <ng-container *ngIf="isArray(data)">
+    <div
+      class="d-flex"
+      [class.p-2]="draging"
+      [class.m-2]="draging"
+      [ngStyle]="{
+        backgroundColor: draging ? getRandomColor() : 'transparent'
+      }"
+      cdkDropList
+      [cdkDropListConnectedTo]="[
+        'cdk-drop-list-0',
+        'cdk-drop-list-1',
+        'cdk-drop-list-2',
+        'cdk-drop-list-3'
+      ]"
+      [cdkDropListOrientation]="row ? 'horizontal' : 'vertical'"
+      [class.flex-md-column]="!row"
+      [cdkDropListData]="data"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div
+        cdkDrag
+        [cdkDragData]="el"
+        [cdkDragDisabled]="isArray(el)"
+        (cdkDragStarted)="dragStarted($event)"
+        [class.widget-wrapper]="el && el.type"
+        *ngFor="let el of data"
+      >
+        <div class="widget-placeholder" *cdkDragPlaceholder></div>
+        <div *cdkDragPreview class="preview">{{ el.name }}</div>
+        <ng-container
+          *ngTemplateOutlet="element; context: { data: el, row: !row }"
+        ></ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="data && data.config">
+    <div class="widget-placeholder" *cdkDragPlaceholder></div>
+    <ng-container
+      *ngTemplateOutlet="widgetWrapper; context: { widget: data }"
+    ></ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #widgetWrapper let-widget="widget">
+  <ng-container *ngIf="!draging">
+    <div
+      class="widget-edit-btn"
+      [class.active]="widget.tooltip"
+      [ngbTooltip]="actions"
+      [autoClose]="false"
+      #t="ngbTooltip"
+      triggers="manual"
+      placement="left-top"
+      (click)="toggleActions(t, widget)"
+    >
+      <fa-icon class="f-size-14" icon="ellipsis-h"></fa-icon>
+    </div>
+
+    <ng-container appWidget [config]="widget"></ng-container>
+
+    <ng-template #actions>
+      <div class="actions">
+        <div class="actions-item" (click)="moveWidget(t, widget)">
+          <fa-icon class="f-size-14" icon="arrows-alt"></fa-icon>Move
+        </div>
+        <div class="actions-item" (click)="removeWidget(t, widget)">
+          <fa-icon class="text-danger f-size-14" icon="trash"></fa-icon>Remove
+        </div>
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <ng-container *ngIf="draging">
+    <div class="preview">
+      {{ widget.name }}
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #modalTemplate let-modal>
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">Widgets</h5>
+        <app-close-button
+          class="close-button ml-auto"
+          (click)="modal.dismiss()"
+        ></app-close-button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="widget-list">
+        <div
+          class="widget-list-item"
+          *ngFor="let widget of widgetList"
+          (click)="addWidget(widget)"
+        >
+          <img [src]="widget.img" [attr.alt]="widget.name" />
+          <span>{{ widget.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
