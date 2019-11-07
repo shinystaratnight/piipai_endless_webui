@@ -27,10 +27,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   widgets: Widget[];
   widgetList: Widget[];
 
+  ids: Map<any, any> = new Map();
+
   grid: any;
   modalRef: NgbModalRef;
-
-  ids: string[];
 
   draging: boolean;
 
@@ -49,7 +49,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.widgetService
         .getUserWidgets()
         .subscribe((userWidgets: UserWidget[]) => {
-          console.log(userWidgets);
           this.userWidgets = userWidgets;
 
           this.grid = this.generateDashboard(userWidgets);
@@ -61,6 +60,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.modalRef) {
       this.modalRef.close();
     }
+  }
+
+  getlistsId() {
+    return [
+      ...Array.from(this.ids.values())
+        .sort((p, n) => (p > n ? -1 : 1))
+        .map(el => `list-${el}`),
+      'main-list'
+    ];
   }
 
   toggleActions(tooltip, widget) {
@@ -83,7 +91,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     widget.tooltip = false;
 
     this.widgetService.removeWidget(widget.id).subscribe(() => {
-      console.log('widget removed');
       this.userWidgets = this.userWidgets.filter(el => el.id !== widget.id);
       this.grid = this.generateDashboard(this.userWidgets);
     });
@@ -124,12 +131,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       );
     }
 
-    console.log(this.grid);
-
     this.setCoords(this.grid);
     this.draging = false;
-
     this.grid = null;
+    this.ids.clear();
 
     setTimeout(() => {
       this.grid = this.generateDashboard(this.userWidgets);
@@ -137,14 +142,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   dragStarted(e) {
-    console.log(e);
-
     this.draging = true;
-  }
-
-  getRandomColor() {
-    const hex = Math.floor(Math.random() * 0xffffff);
-    return '#' + ('000000' + hex.toString(16)).substr(-6);
   }
 
   private generateDashboard(widgets: UserWidget[]): any {
@@ -155,43 +153,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
       p.config.coords > n.config.coords ? 1 : -1
     );
 
-    const grid = [];
+    let grid = [];
 
     availableWidgets.forEach(widget => {
-      const coords = widget.config.coords;
+      const { coords } = widget.config;
 
-      this.gen(grid, widget, coords.split('.'));
+      this.gen(grid, widget, [...coords]);
     });
-
-    console.log(grid);
-
-    this.ids = [];
-    [].concat(grid, {}).forEach((el, i) => {
-      this.ids.push(`cdk-drop-list-${i}`);
-    });
-
-    console.log(this.ids);
+    grid = this.parse(grid);
+    this.updateIds(grid);
 
     return grid;
   }
 
-  private gen(target: any[], widget, coords: any[]) {
-    const pos = coords.shift();
+  private gen(parent: any[], widget: UserWidget, coords: number[]) {
+    const index = coords.shift();
 
     if (coords.length) {
-      if (!target[pos]) {
-        target[pos] = [];
-      }
-
-      this.gen(target[pos], widget, coords);
-      return;
+      parent[index] = parent[index] || [];
+      this.gen(parent[index], widget, coords);
+    } else {
+      parent[index] = widget;
     }
-
-    target[pos] = widget;
   }
 
   private setCoords(grid: any[], index: number[] = []) {
-    grid.forEach((el, i) => {
+    const arr = this.parse(grid);
+
+    arr.forEach((el, i) => {
       const coords = [...index, i];
       if (Array.isArray(el)) {
         this.setCoords(el, coords);
@@ -199,14 +188,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const widget = this.userWidgets.find(w => w.id === el.id);
 
         if (widget) {
-          console.log(widget);
-          if (coords.length === 1) {
-            coords.push(0);
-          }
-
-          widget.config.coords = coords.join('.');
+          widget.config.coords = coords;
         }
       }
     });
+  }
+
+  private updateIds(list: any[], parentId: number[] = []) {
+    list.forEach((el, i) => {
+      if (Array.isArray(el)) {
+        const id = [...parentId, i];
+        this.ids.set(el, id.join(''));
+        this.updateIds(el, id);
+      }
+    });
+  }
+
+  private parse(list: any) {
+    const newList = [];
+
+    list.forEach(el => {
+      if (list.length > 1 && !Array.isArray(el)) {
+        newList.push([el]);
+      } else if (list.length === 1 && Array.isArray(el)) {
+        const parsedList = this.parse(el);
+        newList.push(...parsedList);
+      } else if (Array.isArray(el)) {
+        newList.push(this.parse(el));
+      } else if (list.length === 0) {
+        return;
+      } else {
+        newList.push(el);
+      }
+    });
+
+    return newList;
   }
 }

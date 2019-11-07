@@ -187,22 +187,7 @@ a.forgot {
     align-items: center;
   }
 
-  svg {
-    width: 13px;
-    height: 13px;
-
+  app-icon-plus {
     margin-right: 0.5rem;
-  }
-
-  polygon {
-    fill: $brand-primary;
-    stroke: $brand-primary;
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        fill: map-get($theme-colors, $item);
-        stroke: map-get($theme-colors, $item);
-      }
-    }
   }
 }

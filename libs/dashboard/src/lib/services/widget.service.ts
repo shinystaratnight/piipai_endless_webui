@@ -136,9 +136,9 @@ export class WidgetService {
   //! remove this method
   private addPosition(config, type) {
     const positions = {
-      [Type.Buttons]: '0.0',
-      [Type.Calendar]: '1.1',
-      [Type.Candidates]: '1.0'
+      [Type.Buttons]: [0],
+      [Type.Calendar]: [1, 1],
+      [Type.Candidates]: [1, 0]
     };
 
     const sizes = {
@@ -148,6 +148,6 @@ export class WidgetService {
     };
 
     config.coords = positions[type];
-    // config.size = sizes[type];
+    config.size = sizes[type];
   }
 }

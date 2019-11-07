@@ -7,6 +7,7 @@ import { BackLinkComponent } from './back-link/back-link.component';
 import { SiteLoaderCompoennt } from './site-loader/site-loader.component';
 import { TimeComponent } from './time/time.component';
 import { LoaderComponent } from './loader/loader.component';
+import { IconPlusComponent } from './icons';
 
 export * from './breadcrumb/breadcrumb.component';
 export * from './navigation/navigation.component';
@@ -22,5 +23,6 @@ export const components = [
   BackLinkComponent,
   SiteLoaderCompoennt,
   TimeComponent,
-  LoaderComponent
+  LoaderComponent,
+  IconPlusComponent
 ];

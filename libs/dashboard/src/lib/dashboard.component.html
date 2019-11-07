@@ -1,59 +1,46 @@
-<div *ngIf="grid" class="dashboard" cdkDropListGroup>
+<div *ngIf="grid" class="dashboard">
   <ng-container
-    *ngTemplateOutlet="element; context: { data: grid, row: false }"
-  ></ng-container>
+    *ngTemplateOutlet="
+      element;
+      context: { data: grid, row: false, id: 'main-list' }
+    "
+  >
+    ></ng-container
+  >
 
   <button
     *ngIf="userWidgets.length !== widgets.length"
     type="button"
-    class="add-widget-btn"
+    class="flex-center-center add-widget-btn"
     (click)="openModal()"
   >
-    <svg
-      class="add-widget-btn-icon"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      viewBox="0 0 42 42"
-    >
-      <polygon
-        points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22 "
-      />
-    </svg>
-
-    Add new widget
+    <app-icon-plus appIcon size="md"></app-icon-plus>Add new widget
   </button>
 </div>
 
-<ng-template #element let-data="data" let-row="row">
+<ng-template #element let-data="data" let-row="row" let-id="id">
   <ng-container *ngIf="isArray(data)">
     <div
-      class="d-flex"
+      [id]="id || 'list-' + ids.get(data)"
+      class="wrapper"
+      [class.active]="data.active"
+      [class.wrapper-row]="row"
+      [class.wrapper-column]="!row"
       [class.p-2]="draging"
-      [class.m-2]="draging"
-      [ngStyle]="{
-        backgroundColor: draging ? getRandomColor() : 'transparent'
-      }"
       cdkDropList
-      [cdkDropListConnectedTo]="[
-        'cdk-drop-list-0',
-        'cdk-drop-list-1',
-        'cdk-drop-list-2',
-        'cdk-drop-list-3'
-      ]"
+      [cdkDropListConnectedTo]="getlistsId()"
       [cdkDropListOrientation]="row ? 'horizontal' : 'vertical'"
-      [class.flex-md-column]="!row"
       [cdkDropListData]="data"
       (cdkDropListDropped)="drop($event)"
+      (cdkDropListEntered)="data.active = true"
+      (cdkDropListExited)="data.active = false"
     >
       <div
         cdkDrag
         [cdkDragData]="el"
-        [cdkDragDisabled]="isArray(el)"
         (cdkDragStarted)="dragStarted($event)"
         [class.widget-wrapper]="el && el.type"
+        [ngStyle]="{ flex: el.config && data.length > 1 ? el.config.size : 1 }"
         *ngFor="let el of data"
       >
         <div class="widget-placeholder" *cdkDragPlaceholder></div>
@@ -65,7 +52,7 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="data && data.config">
+  <ng-container *ngIf="!isArray(data)">
     <div class="widget-placeholder" *cdkDragPlaceholder></div>
     <ng-container
       *ngTemplateOutlet="widgetWrapper; context: { widget: data }"
@@ -92,9 +79,9 @@
 
     <ng-template #actions>
       <div class="actions">
-        <div class="actions-item" (click)="moveWidget(t, widget)">
+        <!-- <div class="actions-item" (click)="moveWidget(t, widget)">
           <fa-icon class="f-size-14" icon="arrows-alt"></fa-icon>Move
-        </div>
+        </div> -->
         <div class="actions-item" (click)="removeWidget(t, widget)">
           <fa-icon class="text-danger f-size-14" icon="trash"></fa-icon>Remove
         </div>
@@ -123,7 +110,7 @@
     <div class="modal-body">
       <div class="widget-list">
         <div
-          class="widget-list-item"
+          class="flex-center widget-list-item"
           *ngFor="let widget of widgetList"
           (click)="addWidget(widget)"
         >
