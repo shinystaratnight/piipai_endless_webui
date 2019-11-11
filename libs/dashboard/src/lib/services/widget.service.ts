@@ -7,13 +7,21 @@ import { of } from 'rxjs';
 import { ErrorsService } from '@webui/core';
 import { Endpoints } from '@webui/data';
 
-import { Type, Widget } from '../interfaces';
+import {
+  Type,
+  Widget,
+  UserWidget,
+  GridElementType,
+  GridElement
+} from '../interfaces';
 import { widgetsData } from '../helpers';
 
 @Injectable()
 export class WidgetService {
   widgets: Widget[];
   userWidgets: any[];
+
+  listsId: string[];
 
   params = new HttpParams({ fromObject: { limit: '-1' } });
 
@@ -133,12 +141,217 @@ export class WidgetService {
       .pipe(catchError(errors => this.errorService.parseErrors(errors)));
   }
 
+  generateGrid(widgets: UserWidget[]) {
+    console.log(widgets);
+
+    this.listsId = [];
+
+    const grid = {
+      type: GridElementType.Column,
+      elements: []
+    };
+
+    widgets.forEach(widget => {
+      const { coords, size } = widget.config;
+      const widgetElement = {
+        type: GridElementType.Widget,
+        widget
+      };
+
+      this.generateGridElements(grid, widgetElement, coords);
+    });
+
+    return grid;
+  }
+
+  updateCoords(grid: GridElement) {
+    const { elements, id } = grid;
+
+    // if (type === GridElementType.Column && !id) {
+    //   grid.elements = grid.elements.map(gridElement => {
+    //     if (gridElement.type === GridElementType.Widget) {
+    //       return {
+    //         type: GridElementType.Row,
+    //         elements: [gridElement]
+    //       };
+    //     }
+
+    //     return gridElement;
+    //   });
+    // }
+
+    // if (type === GridElementType.Row && grid.elements.length > 1) {
+    //   grid.elements = grid.elements.map(gridElement => {
+    //     if (gridElement.type === GridElementType.Column) {
+    //       return gridElement;
+    //     }
+
+    //     return {
+    //       type: GridElementType.Column,
+    //       elements: [gridElement]
+    //     };
+    //   });
+    // }
+
+    // if (type !== GridElementType.Widget && grid.elements.length) {
+    //   this.parseGrid(grid);
+    //   // grid.elements = this.removeEmptyElements(grid);
+    //   this.updateElementsId(grid.elements, id);
+
+    //   grid.elements.forEach(gridElement => {
+    //     this.updateCoords(gridElement);
+    //   });
+    // }
+
+    this.parseGrid(grid);
+    // this.updateElementsId(grid.elements, id);
+  }
+
+  // private parse(list: any) {
+  //   const newList = [];
+
+  //   list.forEach(el => {
+  //     if (list.length > 1 && !Array.isArray(el)) {
+  //       newList.push([el]);
+  //     } else if (list.length === 1 && Array.isArray(el)) {
+  //       const parsedList = this.parse(el);
+  //       newList.push(...parsedList);
+  //     } else if (Array.isArray(el)) {
+  //       newList.push(this.parse(el));
+  //     } else if (list.length === 0) {
+  //       return;
+  //     } else {
+  //       newList.push(el);
+  //     }
+  //   });
+
+  //   return newList;
+  // }
+
+  private parseGrid(gridElement: GridElement) {
+    const { type, id } = gridElement;
+
+    if (type !== GridElementType.Widget) {
+      if (
+        type === GridElementType.Row &&
+        gridElement.elements.length === 1 &&
+        gridElement.elements[0].type === GridElementType.Column
+      ) {
+        gridElement.elements = gridElement.elements[0].elements;
+      }
+
+      if (type === GridElementType.Column && !id) {
+        gridElement.elements = gridElement.elements.map(el => {
+          if (el.type === GridElementType.Widget) {
+            return {
+              type: GridElementType.Row,
+              elements: [el]
+            };
+          }
+
+          return el;
+        });
+      }
+
+      if (type === GridElementType.Row && gridElement.elements.length > 1) {
+        gridElement.elements = gridElement.elements.map(el => {
+          if (el.type === GridElementType.Column) {
+            return el;
+          }
+
+          return {
+            type: GridElementType.Column,
+            elements: [el]
+          };
+        });
+      }
+
+      gridElement.elements = this.removeEmptyElements(gridElement);
+
+      if (gridElement.elements.length > 1) {
+        gridElement.elements.forEach(grid => this.parseGrid(grid));
+      }
+    }
+  }
+
+  private removeEmptyElements(element: GridElement) {
+    return element.elements.filter(gridElement => {
+      if (gridElement.type === GridElementType.Widget) {
+        return true;
+      }
+
+      return gridElement.elements && gridElement.elements.length;
+    });
+  }
+
+  private updateElementsId(elements: GridElement[], parentId?: string) {
+    elements.forEach((el, index) => {
+      if (el.type === GridElementType.Widget) {
+        el.widget.config.coords = parentId;
+        return;
+      }
+
+      Object.assign(el, { id: this.updateId(index, parentId) });
+
+      this.updateElementsId(el.elements, el.id);
+    });
+  }
+
+  private updateId(index: number | string, parentId: string) {
+    return parentId ? parentId + index : index + '';
+  }
+
+  private generateGridElements(
+    gridElement: GridElement,
+    widgetElement: GridElement,
+    coords: string
+  ) {
+    const { elements, type, id } = gridElement;
+    const index = coords.charAt(0);
+    const newId = this.updateId(index, id);
+
+    coords = coords.slice(1);
+    this.listsId.push(newId);
+
+    if (coords.length === 0 && type === GridElementType.Column) {
+      elements[index] = {
+        id: newId,
+        type: GridElementType.Row,
+        elements: [widgetElement]
+      };
+
+      return;
+    }
+
+    const newType =
+      type === GridElementType.Row
+        ? GridElementType.Column
+        : GridElementType.Row;
+
+    if (coords.length === 0) {
+      elements[index] = {
+        id: newId,
+        type: newType,
+        elements: [widgetElement]
+      };
+    } else if (coords.length) {
+      const element = elements[index] || {
+        id: newId,
+        type: newType,
+        elements: []
+      };
+
+      this.generateGridElements(element, widgetElement, coords);
+      elements[index] = element;
+    }
+  }
+
   //! remove this method
   private addPosition(config, type) {
     const positions = {
-      [Type.Buttons]: [0],
-      [Type.Calendar]: [1, 1],
-      [Type.Candidates]: [1, 0]
+      [Type.Buttons]: '0',
+      [Type.Calendar]: '11',
+      [Type.Candidates]: '10'
     };
 
     const sizes = {

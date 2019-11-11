@@ -1,12 +1,7 @@
 <div *ngIf="grid" class="dashboard">
   <ng-container
-    *ngTemplateOutlet="
-      element;
-      context: { data: grid, row: false, id: 'main-list' }
-    "
-  >
-    ></ng-container
-  >
+    *ngTemplateOutlet="column; context: { gridElement: grid }"
+  ></ng-container>
 
   <button
     *ngIf="userWidgets.length !== widgets.length"
@@ -18,7 +13,7 @@
   </button>
 </div>
 
-<ng-template #element let-data="data" let-row="row" let-id="id">
+<!-- <ng-template #element let-data="data" let-row="row" let-id="id">
   <ng-container *ngIf="isArray(data)">
     <div
       [id]="id || 'list-' + ids.get(data)"
@@ -58,6 +53,56 @@
       *ngTemplateOutlet="widgetWrapper; context: { widget: data }"
     ></ng-container>
   </ng-container>
+</ng-template> -->
+
+<ng-template #column let-gridElement="gridElement">
+  <div
+    class="wrapper wrapper-column"
+    [id]="getId(gridElement) || 'main-list'"
+    cdkDropList
+    [cdkDropListData]="gridElement.elements"
+    [cdkDropListConnectedTo]="getlistsId()"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <div cdkDrag *ngFor="let el of gridElement.elements">
+      <ng-container *ngIf="el.type === GridElementType.Row">
+        <ng-container
+          *ngTemplateOutlet="row; context: { gridElement: el }"
+        ></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="el.type === GridElementType.Widget">
+        <ng-container
+          *ngTemplateOutlet="widgetWrapper; context: { widget: el.widget }"
+        ></ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #row let-gridElement="gridElement">
+  <div
+    class="wrapper wrapper-row"
+    [id]="getId(gridElement)"
+    cdkDropList
+    [cdkDropListData]="gridElement.elements"
+    [cdkDropListConnectedTo]="getlistsId()"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <div cdkDrag *ngFor="let el of gridElement.elements">
+      <ng-container *ngIf="el.type === GridElementType.Column">
+        <ng-container
+          *ngTemplateOutlet="column; context: { gridElement: el }"
+        ></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="el.type === GridElementType.Widget">
+        <ng-container
+          *ngTemplateOutlet="widgetWrapper; context: { widget: el.widget }"
+        ></ng-container>
+      </ng-container>
+    </div>
+  </div>
 </ng-template>
 
 <ng-template #widgetWrapper let-widget="widget">

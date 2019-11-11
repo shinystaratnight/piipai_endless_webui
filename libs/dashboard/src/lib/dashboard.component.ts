@@ -13,7 +13,13 @@ import {
   transferArrayItem
 } from '@angular/cdk/drag-drop';
 
-import { Widget, UserWidget, Type } from './interfaces';
+import {
+  Widget,
+  UserWidget,
+  Type,
+  GridElementType,
+  GridElement
+} from './interfaces';
 import { WidgetService } from './services/widget.service';
 import { UserService } from '@webui/core';
 
@@ -27,12 +33,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   widgets: Widget[];
   widgetList: Widget[];
 
-  ids: Map<any, any> = new Map();
-
-  grid: any;
+  grid: GridElement;
   modalRef: NgbModalRef;
 
   draging: boolean;
+
+  GridElementType = GridElementType;
 
   @ViewChild('modalTemplate', { static: false }) modalTemplate: ElementRef;
 
@@ -52,6 +58,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.userWidgets = userWidgets;
 
           this.grid = this.generateDashboard(userWidgets);
+          console.log(this.grid);
         });
     });
   }
@@ -62,11 +69,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  getId(gridElement: GridElement) {
+    if (gridElement.id) {
+      return `list-${gridElement.id}`;
+    }
+
+    return '';
+  }
+
   getlistsId() {
+    const ids = this.widgetService.listsId;
+
     return [
-      ...Array.from(this.ids.values())
-        .sort((p, n) => (p > n ? -1 : 1))
-        .map(el => `list-${el}`),
+      ...ids.sort((p, n) => (p > n ? -1 : 1)).map(el => `list-${el}`),
       'main-list'
     ];
   }
@@ -131,17 +146,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
       );
     }
 
-    this.setCoords(this.grid);
-    this.draging = false;
-    this.grid = null;
-    this.ids.clear();
+    this.widgetService.updateCoords(this.grid);
 
-    setTimeout(() => {
-      this.grid = this.generateDashboard(this.userWidgets);
-    }, 200);
+    console.log(this.grid);
+
+    // this.setCoords(this.grid);
+    // this.draging = false;
+    // this.grid = null;
+    // this.ids.clear();
+
+    // setTimeout(() => {
+    //   this.grid = this.generateDashboard(this.userWidgets);
+    // }, 200);
   }
 
-  dragStarted(e) {
+  dragStarted() {
     this.draging = true;
   }
 
@@ -153,56 +172,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
       p.config.coords > n.config.coords ? 1 : -1
     );
 
-    let grid = [];
+    return this.widgetService.generateGrid(availableWidgets);
 
-    availableWidgets.forEach(widget => {
-      const { coords } = widget.config;
+    // let grid = [];
 
-      this.gen(grid, widget, [...coords]);
-    });
-    grid = this.parse(grid);
-    this.updateIds(grid);
+    // availableWidgets.forEach(widget => {
+    //   const { coords } = widget.config;
 
-    return grid;
+    //   this.gen(grid, widget, [...coords]);
+    // });
+    // grid = this.parse(grid);
+    // this.updateIds(grid);
+
+    // return grid;
   }
 
-  private gen(parent: any[], widget: UserWidget, coords: number[]) {
-    const index = coords.shift();
+  // private setCoords(grid: any[], index: number[] = []) {
+  //   const arr = this.parse(grid);
 
-    if (coords.length) {
-      parent[index] = parent[index] || [];
-      this.gen(parent[index], widget, coords);
-    } else {
-      parent[index] = widget;
-    }
-  }
+  //   arr.forEach((el, i) => {
+  //     const coords = [...index, i];
+  //     if (Array.isArray(el)) {
+  //       this.setCoords(el, coords);
+  //     } else {
+  //       const widget = this.userWidgets.find(w => w.id === el.id);
 
-  private setCoords(grid: any[], index: number[] = []) {
-    const arr = this.parse(grid);
-
-    arr.forEach((el, i) => {
-      const coords = [...index, i];
-      if (Array.isArray(el)) {
-        this.setCoords(el, coords);
-      } else {
-        const widget = this.userWidgets.find(w => w.id === el.id);
-
-        if (widget) {
-          widget.config.coords = coords;
-        }
-      }
-    });
-  }
-
-  private updateIds(list: any[], parentId: number[] = []) {
-    list.forEach((el, i) => {
-      if (Array.isArray(el)) {
-        const id = [...parentId, i];
-        this.ids.set(el, id.join(''));
-        this.updateIds(el, id);
-      }
-    });
-  }
+  //       if (widget) {
+  //         widget.config.coords = coords;
+  //       }
+  //     }
+  //   });
+  // }
 
   private parse(list: any) {
     const newList = [];
