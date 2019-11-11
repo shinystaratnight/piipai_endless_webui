@@ -165,10 +165,9 @@ export class MyobComponent implements OnInit, OnDestroy {
 
   public connect() {
     this.getMyobApiKey(() => {
-      const origin = location.origin;
       const domain = 'https://secure.myob.com';
       const pathname = '/oauth2/account/authorize';
-      const query = `?client_id=${this.myobApiKey}&redirect_uri=${origin}/myob/oauth2_redirect_uri&response_type=code&scope=CompanyFile&state=${this.pageUrl}`; //tslint:disable-line
+      const query = `?client_id=${this.myobApiKey}&redirect_uri=${this.getOrigin()}/myob/oauth2_redirect_uri&response_type=code&scope=CompanyFile&state=${this.pageUrl}`; //tslint:disable-line
       const url = domain + pathname + query;
 
       location.href = url;
@@ -180,7 +179,7 @@ export class MyobComponent implements OnInit, OnDestroy {
     const url = `/company_settings/myob_authorization/`;
     const body = {
       code,
-      redirect_uri: 'https://r3sourcer.com/myob/oauth2_redirect_uri'
+      redirect_uri: `${this.getOrigin()}/myob/oauth2_redirect_uri`
     };
     this.gfs.submitForm(url, body).subscribe(
       (res: any) => {
@@ -192,6 +191,10 @@ export class MyobComponent implements OnInit, OnDestroy {
       },
       (err: any) => this.updateButton('error')
     );
+  }
+
+  public getOrigin(): string {
+    return `${location.protocol}//${location.host.split('.').slice(-2).join('.')}`;
   }
 
   public testCompanyFile(file) {
