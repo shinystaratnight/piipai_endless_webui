@@ -39,7 +39,7 @@ export class PermissionGuard implements CanActivate {
       mergeMap((response: any) => {
         const role: Role = response[0].currentRole;
 
-        if (role.__str__.includes('manager')) {
+        if (role.__str__.includes('manager') || role.__str__.includes('trial')) {
           let routeSegments = (<any>route)._urlSegment.segments;
 
           if (routeSegments[0].path === 'mn') {
