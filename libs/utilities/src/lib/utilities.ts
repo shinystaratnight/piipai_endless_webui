@@ -71,7 +71,7 @@ export function isClient(): boolean {
 export function isManager(): boolean {
   const role: Role = getCurrentRole();
   if (role) {
-    return role.__str__.includes('manager');
+    return role.__str__.includes('manager') || role.__str__.includes('trial');
   }
 }
 
