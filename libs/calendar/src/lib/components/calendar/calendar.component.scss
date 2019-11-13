@@ -311,7 +311,7 @@ app-datepicker {
   }
 
   &-body {
-    height: 370px;
+    min-height: 370px;
     overflow: hidden;
     margin-bottom: 15px;
   }
