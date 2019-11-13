@@ -18,6 +18,24 @@
   &:hover .widget-edit-btn {
     display: flex;
   }
+
+  &.move {
+    position: relative;
+
+    .move-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      cursor: move;
+      background: rgba(white, 0.8);
+      z-index: 2;
+    }
+  }
 }
 
 .preview {
@@ -161,6 +179,7 @@
   }
 
   &-column {
+    height: 100%;
     flex-direction: column;
 
     & > * {
@@ -185,6 +204,15 @@
 
     @include media-breakpoint-down('sm') {
       flex-direction: column;
+
+      & > * {
+        margin-right: 0;
+        margin-bottom: 12px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
   }
 }

@@ -9,4 +9,5 @@ export interface UserWidget {
     size: number;
   };
   tooltip?: boolean;
+  move?: boolean;
 }

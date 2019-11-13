@@ -58,7 +58,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.userWidgets = userWidgets;
 
           this.grid = this.generateDashboard(userWidgets);
-          console.log(this.grid);
         });
     });
   }
@@ -67,6 +66,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.modalRef) {
       this.modalRef.close();
     }
+  }
+
+  getColumnWidth(gridElement: GridElement): { [key: string]: any } {
+    const style = {};
+
+    if (gridElement.type === GridElementType.Column && gridElement.id) {
+      const elements = gridElement.elements;
+
+      elements.forEach((el: GridElement) => {
+        if (el.type === GridElementType.Widget) {
+          const size = el.widget.config.size;
+
+          style['flex'] = Math.max(style['flex'] || 0, size);
+        }
+      });
+    }
+
+    return style;
+  }
+
+  isMove(gridElement: GridElement): boolean {
+    if (gridElement.type === GridElementType.Widget) {
+      return gridElement.widget.move;
+    }
+
+    return false;
   }
 
   getId(gridElement: GridElement) {
@@ -99,6 +124,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   moveWidget(tooltip, widget: UserWidget) {
     tooltip.close();
     widget.tooltip = false;
+    widget.move = !widget.move;
   }
 
   removeWidget(tooltip, widget: UserWidget) {
@@ -147,17 +173,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     this.widgetService.updateCoords(this.grid);
-
-    console.log(this.grid);
-
-    // this.setCoords(this.grid);
-    // this.draging = false;
-    // this.grid = null;
-    // this.ids.clear();
-
-    // setTimeout(() => {
-    //   this.grid = this.generateDashboard(this.userWidgets);
-    // }, 200);
+    this.userWidgets.forEach(el => {
+      el.move = false;
+    });
+    this.draging = false;
   }
 
   dragStarted() {
@@ -173,55 +192,5 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
 
     return this.widgetService.generateGrid(availableWidgets);
-
-    // let grid = [];
-
-    // availableWidgets.forEach(widget => {
-    //   const { coords } = widget.config;
-
-    //   this.gen(grid, widget, [...coords]);
-    // });
-    // grid = this.parse(grid);
-    // this.updateIds(grid);
-
-    // return grid;
-  }
-
-  // private setCoords(grid: any[], index: number[] = []) {
-  //   const arr = this.parse(grid);
-
-  //   arr.forEach((el, i) => {
-  //     const coords = [...index, i];
-  //     if (Array.isArray(el)) {
-  //       this.setCoords(el, coords);
-  //     } else {
-  //       const widget = this.userWidgets.find(w => w.id === el.id);
-
-  //       if (widget) {
-  //         widget.config.coords = coords;
-  //       }
-  //     }
-  //   });
-  // }
-
-  private parse(list: any) {
-    const newList = [];
-
-    list.forEach(el => {
-      if (list.length > 1 && !Array.isArray(el)) {
-        newList.push([el]);
-      } else if (list.length === 1 && Array.isArray(el)) {
-        const parsedList = this.parse(el);
-        newList.push(...parsedList);
-      } else if (Array.isArray(el)) {
-        newList.push(this.parse(el));
-      } else if (list.length === 0) {
-        return;
-      } else {
-        newList.push(el);
-      }
-    });
-
-    return newList;
   }
 }

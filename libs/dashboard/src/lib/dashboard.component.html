@@ -13,48 +13,6 @@
   </button>
 </div>
 
-<!-- <ng-template #element let-data="data" let-row="row" let-id="id">
-  <ng-container *ngIf="isArray(data)">
-    <div
-      [id]="id || 'list-' + ids.get(data)"
-      class="wrapper"
-      [class.active]="data.active"
-      [class.wrapper-row]="row"
-      [class.wrapper-column]="!row"
-      [class.p-2]="draging"
-      cdkDropList
-      [cdkDropListConnectedTo]="getlistsId()"
-      [cdkDropListOrientation]="row ? 'horizontal' : 'vertical'"
-      [cdkDropListData]="data"
-      (cdkDropListDropped)="drop($event)"
-      (cdkDropListEntered)="data.active = true"
-      (cdkDropListExited)="data.active = false"
-    >
-      <div
-        cdkDrag
-        [cdkDragData]="el"
-        (cdkDragStarted)="dragStarted($event)"
-        [class.widget-wrapper]="el && el.type"
-        [ngStyle]="{ flex: el.config && data.length > 1 ? el.config.size : 1 }"
-        *ngFor="let el of data"
-      >
-        <div class="widget-placeholder" *cdkDragPlaceholder></div>
-        <div *cdkDragPreview class="preview">{{ el.name }}</div>
-        <ng-container
-          *ngTemplateOutlet="element; context: { data: el, row: !row }"
-        ></ng-container>
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-container *ngIf="!isArray(data)">
-    <div class="widget-placeholder" *cdkDragPlaceholder></div>
-    <ng-container
-      *ngTemplateOutlet="widgetWrapper; context: { widget: data }"
-    ></ng-container>
-  </ng-container>
-</ng-template> -->
-
 <ng-template #column let-gridElement="gridElement">
   <div
     class="wrapper wrapper-column"
@@ -64,7 +22,13 @@
     [cdkDropListConnectedTo]="getlistsId()"
     (cdkDropListDropped)="drop($event)"
   >
-    <div cdkDrag *ngFor="let el of gridElement.elements">
+    <div
+      cdkDrag
+      [cdkDragDisabled]="!isMove(el)"
+      [class.move]="isMove(el)"
+      [class.widget-wrapper]="el.type === GridElementType.Widget"
+      *ngFor="let el of gridElement.elements"
+    >
       <ng-container *ngIf="el.type === GridElementType.Row">
         <ng-container
           *ngTemplateOutlet="row; context: { gridElement: el }"
@@ -89,7 +53,14 @@
     [cdkDropListConnectedTo]="getlistsId()"
     (cdkDropListDropped)="drop($event)"
   >
-    <div cdkDrag *ngFor="let el of gridElement.elements">
+    <div
+      cdkDrag
+      [cdkDragDisabled]="!isMove(el)"
+      [class.move]="isMove(el)"
+      [class.widget-wrapper]="el.type === GridElementType.Widget"
+      *ngFor="let el of gridElement.elements"
+      [ngStyle]="getColumnWidth(el)"
+    >
       <ng-container *ngIf="el.type === GridElementType.Column">
         <ng-container
           *ngTemplateOutlet="column; context: { gridElement: el }"
@@ -124,14 +95,16 @@
 
     <ng-template #actions>
       <div class="actions">
-        <!-- <div class="actions-item" (click)="moveWidget(t, widget)">
+        <div class="actions-item" (click)="moveWidget(t, widget)">
           <fa-icon class="f-size-14" icon="arrows-alt"></fa-icon>Move
-        </div> -->
+        </div>
         <div class="actions-item" (click)="removeWidget(t, widget)">
           <fa-icon class="text-danger f-size-14" icon="trash"></fa-icon>Remove
         </div>
       </div>
     </ng-template>
+
+    <div class="move-backdrop"></div>
   </ng-container>
 
   <ng-container *ngIf="draging">

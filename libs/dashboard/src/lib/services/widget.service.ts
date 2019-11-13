@@ -142,8 +142,6 @@ export class WidgetService {
   }
 
   generateGrid(widgets: UserWidget[]) {
-    console.log(widgets);
-
     this.listsId = [];
 
     const grid = {
@@ -167,109 +165,26 @@ export class WidgetService {
   updateCoords(grid: GridElement) {
     const { elements, id } = grid;
 
-    // if (type === GridElementType.Column && !id) {
-    //   grid.elements = grid.elements.map(gridElement => {
-    //     if (gridElement.type === GridElementType.Widget) {
-    //       return {
-    //         type: GridElementType.Row,
-    //         elements: [gridElement]
-    //       };
-    //     }
-
-    //     return gridElement;
-    //   });
-    // }
-
-    // if (type === GridElementType.Row && grid.elements.length > 1) {
-    //   grid.elements = grid.elements.map(gridElement => {
-    //     if (gridElement.type === GridElementType.Column) {
-    //       return gridElement;
-    //     }
-
-    //     return {
-    //       type: GridElementType.Column,
-    //       elements: [gridElement]
-    //     };
-    //   });
-    // }
-
-    // if (type !== GridElementType.Widget && grid.elements.length) {
-    //   this.parseGrid(grid);
-    //   // grid.elements = this.removeEmptyElements(grid);
-    //   this.updateElementsId(grid.elements, id);
-
-    //   grid.elements.forEach(gridElement => {
-    //     this.updateCoords(gridElement);
-    //   });
-    // }
-
     this.parseGrid(grid);
-    // this.updateElementsId(grid.elements, id);
+    this.updateElementsId(grid.elements, id);
   }
-
-  // private parse(list: any) {
-  //   const newList = [];
-
-  //   list.forEach(el => {
-  //     if (list.length > 1 && !Array.isArray(el)) {
-  //       newList.push([el]);
-  //     } else if (list.length === 1 && Array.isArray(el)) {
-  //       const parsedList = this.parse(el);
-  //       newList.push(...parsedList);
-  //     } else if (Array.isArray(el)) {
-  //       newList.push(this.parse(el));
-  //     } else if (list.length === 0) {
-  //       return;
-  //     } else {
-  //       newList.push(el);
-  //     }
-  //   });
-
-  //   return newList;
-  // }
 
   private parseGrid(gridElement: GridElement) {
     const { type, id } = gridElement;
+    let { elements } = gridElement;
 
     if (type !== GridElementType.Widget) {
-      if (
-        type === GridElementType.Row &&
-        gridElement.elements.length === 1 &&
-        gridElement.elements[0].type === GridElementType.Column
-      ) {
-        gridElement.elements = gridElement.elements[0].elements;
-      }
+      elements = this.removeEmptyElements(gridElement);
 
-      if (type === GridElementType.Column && !id) {
-        gridElement.elements = gridElement.elements.map(el => {
-          if (el.type === GridElementType.Widget) {
-            return {
-              type: GridElementType.Row,
-              elements: [el]
-            };
-          }
+      elements = this.checkMainColumnElements(type, elements, id);
+      elements = this.checkOnSingleColumn(type, elements);
+      elements = this.checkRowElements(type, elements);
 
-          return el;
-        });
-      }
+      gridElement.elements = elements;
+      elements = this.removeEmptyElements(gridElement);
 
-      if (type === GridElementType.Row && gridElement.elements.length > 1) {
-        gridElement.elements = gridElement.elements.map(el => {
-          if (el.type === GridElementType.Column) {
-            return el;
-          }
-
-          return {
-            type: GridElementType.Column,
-            elements: [el]
-          };
-        });
-      }
-
-      gridElement.elements = this.removeEmptyElements(gridElement);
-
-      if (gridElement.elements.length > 1) {
-        gridElement.elements.forEach(grid => this.parseGrid(grid));
+      if (elements.length > 0) {
+        elements.forEach(grid => this.parseGrid(grid));
       }
     }
   }
@@ -299,6 +214,67 @@ export class WidgetService {
 
   private updateId(index: number | string, parentId: string) {
     return parentId ? parentId + index : index + '';
+  }
+
+  private checkMainColumnElements(
+    type: GridElementType,
+    elements: GridElement[],
+    parentId?: string
+  ): GridElement[] {
+    if (type === GridElementType.Column && !parentId) {
+      return elements.map((el, i) => {
+        const id = i.toString();
+
+        if (el.type === GridElementType.Widget) {
+          return {
+            id,
+            type: GridElementType.Row,
+            elements: [el]
+          };
+        }
+
+        return { ...el, id };
+      });
+    }
+
+    return elements;
+  }
+
+  private checkRowElements(
+    type: GridElementType,
+    elements: GridElement[]
+  ): GridElement[] {
+    if (type === GridElementType.Row && elements.length > 1) {
+      return elements.map((el, i) => {
+        const id = i.toString();
+        if (el.type === GridElementType.Column) {
+          return { ...el, id };
+        }
+
+        return {
+          type: GridElementType.Column,
+          elements: [el],
+          id
+        };
+      });
+    }
+
+    return elements;
+  }
+
+  private checkOnSingleColumn(
+    type: GridElementType,
+    elements: GridElement[]
+  ): GridElement[] {
+    if (
+      type === GridElementType.Row &&
+      elements.length === 1 &&
+      elements[0].type === GridElementType.Column
+    ) {
+      return elements[0].elements;
+    }
+
+    return elements;
   }
 
   private generateGridElements(
@@ -355,7 +331,7 @@ export class WidgetService {
     };
 
     const sizes = {
-      [Type.Buttons]: 1,
+      [Type.Buttons]: 4 / 12,
       [Type.Calendar]: 8 / 12,
       [Type.Candidates]: 4 / 12
     };
