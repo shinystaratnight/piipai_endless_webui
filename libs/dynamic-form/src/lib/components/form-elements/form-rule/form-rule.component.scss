@@ -10,10 +10,10 @@
 }
 
 .operator {
-  opacity: .6;
+  opacity: 0.6;
 
   &.active {
-    color: $brand-primary;
+    color: $primary;
     opacity: 1;
   }
 
@@ -30,7 +30,7 @@
   padding-right: 5px;
 
   &-item {
-    padding: .2rem;
+    padding: 0.2rem;
 
     border: 1px solid $gray;
     border-radius: 5px;
@@ -38,12 +38,12 @@
     font-weight: 500;
     white-space: nowrap;
 
-    opacity: .8;
+    opacity: 0.8;
 
     &:hover {
       cursor: pointer;
 
-      background-color: rgba($gray, .1);
+      background-color: rgba($gray, 0.1);
     }
   }
 
@@ -51,7 +51,6 @@
     display: inline-flex;
   }
 }
-
 
 .buttons {
   position: relative;

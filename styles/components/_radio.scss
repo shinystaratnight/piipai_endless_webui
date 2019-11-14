@@ -3,7 +3,7 @@
 $diameter: 14px;
 
 input:checked ~ .radio-circle {
-  border-color: $brand-primary;
+  border-color: $primary;
 
   .inner {
     visibility: visible;
@@ -40,6 +40,6 @@ input:checked ~ .radio-circle {
 
     border-radius: 50%;
 
-    background-color: $brand-primary;
+    background-color: $primary;
   }
 }

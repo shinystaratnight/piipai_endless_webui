@@ -4,7 +4,7 @@
   width: 54px;
   height: 54px;
 
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 
   border-radius: 50%;
 
@@ -16,24 +16,24 @@ img:not(.signature) {
 }
 
 .signature {
-  width: calc(48px / .55);
+  width: calc(48px / 0.55);
 
   margin-top: 5px;
 
-  border: 1px solid rgba($gray, .6);
+  border: 1px solid rgba($gray, 0.6);
   border-radius: 4px;
   background: white;
 }
 
 .text-opacity {
   color: #bdbdbd;
-  opacity: .3;
+  opacity: 0.3;
 }
 
 .download-icon,
 .file-icon {
   width: 12px;
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 
 .download-icon {
@@ -48,7 +48,7 @@ img:not(.signature) {
   }
 
   a {
-    color: $brand-primary;
+    color: $primary;
   }
 }
 
@@ -77,4 +77,3 @@ a:hover {
     display: inline-block;
   }
 }
-

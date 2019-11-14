@@ -56,9 +56,9 @@
   height: 100%;
   min-width: 100px;
   min-height: 100px;
-  border: 2px dashed $brand-success;
+  border: 2px dashed $success;
   border-radius: 0.2rem;
-  background-color: rgba($brand-success, 0.2);
+  background-color: rgba($success, 0.2);
 }
 
 .widget-edit-btn {
@@ -171,7 +171,7 @@
   display: flex;
 
   &.active {
-    background-color: rgba($brand-info, 0.2);
+    background-color: rgba($info, 0.2);
   }
 
   & > * {

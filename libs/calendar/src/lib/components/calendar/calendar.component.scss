@@ -128,8 +128,8 @@ h2 {
     }
 
     &.active {
-      background-color: $brand-primary;
-      border-color: $brand-primary;
+      background-color: $primary;
+      border-color: $primary;
       color: white;
     }
   }
@@ -234,7 +234,7 @@ app-datepicker {
   font-size: 16px;
   line-height: 20px;
   padding: 8px 0;
-  color: $brand-primary;
+  color: $primary;
 
   @include media-breakpoint-down('sm') {
     font-size: 14px;
@@ -270,7 +270,7 @@ app-datepicker {
   }
 
   &.current-date {
-    color: $brand-primary;
+    color: $primary;
     opacity: 1;
   }
 }
@@ -294,8 +294,8 @@ app-datepicker {
         45deg,
         #fff 0%,
         #fff 85%,
-        $brand-success 85%,
-        $brand-success 100%
+        $success 85%,
+        $success 100%
       );
     }
 
@@ -304,8 +304,8 @@ app-datepicker {
         45deg,
         #fff 0%,
         #fff 85%,
-        $brand-danger 85%,
-        $brand-danger 100%
+        $danger 85%,
+        $danger 100%
       );
     }
   }
@@ -334,15 +334,15 @@ app-datepicker {
 }
 
 .custom-checkbox.success {
-  border-color: $brand-success;
+  border-color: $success;
 }
 
 .custom-checkbox.danger {
-  border-color: $brand-danger;
+  border-color: $danger;
 }
 
 .custom-checkbox.warning {
-  border-color: $brand-warning;
+  border-color: $warning;
 }
 
 .shift {
@@ -461,7 +461,7 @@ app-datepicker {
     display: flex;
     font-size: 12px;
     line-height: 16px;
-    color: $brand-primary;
+    color: $primary;
   }
 
   &-item {
@@ -563,20 +563,20 @@ app-datepicker {
   color: #4f4f4f;
 
   &.badge-success {
-    background-color: $brand-success;
+    background-color: $success;
   }
 
   &.badge-primary {
     color: white;
-    background-color: $brand-primary;
+    background-color: $primary;
   }
 
   &.badge-danger {
-    background-color: $brand-danger;
+    background-color: $danger;
   }
 
   &.badge-warning {
-    background-color: $brand-warning;
+    background-color: $warning;
   }
 }
 
@@ -626,11 +626,11 @@ app-datepicker {
 }
 
 .date-selected {
-  background-color: rgba($brand-success, 0.2);
+  background-color: rgba($success, 0.2);
 }
 
 .time-selected {
-  color: $brand-success;
+  color: $success;
   opacity: 1 !important;
 
   &::after {
@@ -641,7 +641,7 @@ app-datepicker {
     height: 7px;
     width: 7px;
     border-radius: 50%;
-    background-color: $brand-success;
+    background-color: $success;
   }
 }
 
@@ -650,7 +650,7 @@ app-datepicker {
   font-size: 16px;
   line-height: 18px;
   color: #fdfdfd;
-  background-color: $brand-primary;
+  background-color: $primary;
   box-shadow: 0 1px 3px 0 rgba(43, 46, 51, 0.24);
 
   @include media-breakpoint-down('sm') {

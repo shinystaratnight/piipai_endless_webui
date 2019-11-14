@@ -36,9 +36,9 @@ b {
 .shift {
   margin-bottom: 8px;
   padding: 13px 20px;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 
-  background-color: rgba($gray, .04);
+  background-color: rgba($gray, 0.04);
 }
 
 .shift-date {
@@ -48,18 +48,18 @@ b {
   font-size: 16px;
   line-height: 20px;
 
-  border-right: 1px solid rgba($gray, .3);
+  border-right: 1px solid rgba($gray, 0.3);
 
-  color: $brand-primary;
+  color: $primary;
 }
 
 .btn-link {
   padding: 0;
   margin-left: 6px;
 
-  color: $brand-primary;
+  color: $primary;
   text-decoration: none;
-  border-radius: .2rem;
+  border-radius: 0.2rem;
 
   i {
     margin-left: 6px;
@@ -100,15 +100,15 @@ b {
     min-width: 118px;
     margin-right: 12px;
 
-    color: $brand-danger;
+    color: $danger;
   }
 }
 
 .message {
   padding-left: 10px;
   margin-left: 14px;
-  border-left: 1px solid rgba($gray, .3);
+  border-left: 1px solid rgba($gray, 0.3);
   font-size: 12px;
-  color: $brand-success;
-  opacity: .8;
+  color: $success;
+  opacity: 0.8;
 }

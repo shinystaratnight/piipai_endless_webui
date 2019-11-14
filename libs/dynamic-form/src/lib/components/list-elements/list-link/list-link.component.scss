@@ -31,7 +31,7 @@
 
   &:hover {
     .phone {
-      color: $brand-primary;
+      color: $primary;
 
       @each $item in $themes {
         .#{$item}-theme & {
@@ -57,7 +57,7 @@
 
       &:hover,
       &:focus {
-        color: $brand-primary;
+        color: $primary;
 
         @each $item in $themes {
           .#{$item}-theme & {
@@ -91,7 +91,7 @@
 
     &:hover,
     &:focus {
-      color: $brand-primary;
+      color: $primary;
 
       @each $item in $themes {
         .#{$item}-theme & {

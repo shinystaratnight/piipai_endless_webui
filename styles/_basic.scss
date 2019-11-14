@@ -36,7 +36,7 @@ a {
   &:hover,
   &:focus,
   &.active {
-    color: $brand-primary;
+    color: $primary;
     opacity: 1;
 
     &.not-underline {
@@ -60,9 +60,9 @@ fa-icon {
 }
 
 input[type='checkbox']:checked ~ .custom-checkbox {
-  border-color: $brand-primary;
+  border-color: $primary;
 
-  background-color: $brand-primary;
+  background-color: $primary;
   color: white;
 
   @each $item in $themes {
@@ -72,27 +72,27 @@ input[type='checkbox']:checked ~ .custom-checkbox {
       background-color: map-get($theme-colors, $item);
 
       &.info {
-        border-color: $brand-info;
+        border-color: $info;
 
-        background-color: $brand-info;
+        background-color: $info;
       }
 
       &.success {
-        border-color: $brand-success;
+        border-color: $success;
 
-        background-color: $brand-success;
+        background-color: $success;
       }
 
       &.danger {
-        border-color: $brand-danger;
+        border-color: $danger;
 
-        background-color: $brand-danger;
+        background-color: $danger;
       }
 
       &.warning {
-        border-color: $brand-warning;
+        border-color: $warning;
 
-        background-color: $brand-warning;
+        background-color: $warning;
       }
     }
   }
@@ -110,8 +110,8 @@ input {
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus &:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px rgba($brand-primary, 0.2) inset;
-    box-shadow: 0 0 0px 1000px rgba($brand-primary, 0.2) inset;
+    -webkit-box-shadow: 0 0 0px 1000px rgba($primary, 0.2) inset;
+    box-shadow: 0 0 0px 1000px rgba($primary, 0.2) inset;
 
     transition: background-color 5000s ease-in-out 5000s;
 
@@ -198,7 +198,7 @@ select.not-empty {
 form.ng-invalid button[type='submit'] {
   position: relative;
 
-  background-color: rgba($brand-primary, 0.55) !important;
+  background-color: rgba($primary, 0.55) !important;
   border-color: transparent !important;
 
   @each $item in $themes {
@@ -585,8 +585,8 @@ form.ng-invalid button[type='submit'] {
 
 .group-button {
   font-size: 0.7rem;
-  border-color: lighten($brand-primary, 15%);
-  background-color: lighten($brand-primary, 15%);
+  border-color: lighten($primary, 15%);
+  background-color: lighten($primary, 15%);
 
   @each $item in $themes {
     .#{$item}-theme & {
@@ -597,8 +597,8 @@ form.ng-invalid button[type='submit'] {
 
   &:hover,
   &:focus {
-    border-color: darken($brand-primary, 10%);
-    background-color: darken($brand-primary, 10%);
+    border-color: darken($primary, 10%);
+    background-color: darken($primary, 10%);
 
     @each $item in $themes {
       .#{$item}-theme & {
@@ -674,7 +674,7 @@ form.ng-invalid button[type='submit'] {
 
       color: inherit;
 
-      border-bottom: 2px solid $brand-primary;
+      border-bottom: 2px solid $primary;
     }
   }
 }
@@ -689,9 +689,9 @@ form.ng-invalid button[type='submit'] {
 }
 
 .page-item.active .page-link {
-  border-color: $brand-primary;
+  border-color: $primary;
 
-  background-color: $brand-primary;
+  background-color: $primary;
   z-index: 1;
 }
 
@@ -759,9 +759,9 @@ form.ng-invalid button[type='submit'] {
 
   color: white;
 
-  background: $brand-primary;
-  background: -webkit-linear-gradient(to bottom, $brand-primary, #f2fcfe);
-  background: linear-gradient(to bottom, $brand-primary, #f2fcfe);
+  background: $primary;
+  background: -webkit-linear-gradient(to bottom, $primary, #f2fcfe);
+  background: linear-gradient(to bottom, $primary, #f2fcfe);
 
   @each $item in $themes {
     .#{$item}-theme & {

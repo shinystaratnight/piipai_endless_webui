@@ -25,7 +25,6 @@
 }
 
 .form-element {
-
   font-size: 14px;
   line-height: 16px;
 
@@ -41,11 +40,11 @@
     border-radius: 0;
     outline: none;
 
-    border-bottom: 1px solid rgba($gray, .1);
+    border-bottom: 1px solid rgba($gray, 0.1);
 
     background-color: transparent;
 
-    transition: border .7s linear;
+    transition: border 0.7s linear;
 
     .registration-form *:not(.ui-datebox-container) & {
       height: auto;
@@ -56,12 +55,12 @@
       font-size: 14px;
       line-height: 16px;
 
-      border: 1px solid rgba($gray, .2);
+      border: 1px solid rgba($gray, 0.2);
       border-radius: 4px;
     }
 
     &:focus {
-      border-color: $brand-primary;
+      border-color: $primary;
 
       @each $item in $themes {
         .#{$item}-theme & {
@@ -111,7 +110,7 @@
   }
 
   .form-group {
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
 
     .text-muted {
       width: 100%;
@@ -121,16 +120,16 @@
   .custom-select,
   select.form-control {
     background: #fff url(/assets/img/down-arrow.svg) no-repeat;
-    background-position: right .75rem center;
+    background-position: right 0.75rem center;
     background-size: 8px 8px;
 
     -webkit-appearance: none;
-    -moz-appearance:    none;
-    appearance:         none;
+    -moz-appearance: none;
+    appearance: none;
 
     &:focus {
       background: url(/assets/img/down-arrow.svg) no-repeat;
-      background-position: right .75rem center;
+      background-position: right 0.75rem center;
       background-size: 8px 8px;
     }
   }
@@ -139,7 +138,7 @@
     padding-left: 0;
 
     border: none;
-    border-bottom: 1px solid rgba($gray, .1);
+    border-bottom: 1px solid rgba($gray, 0.1);
 
     .registration-form & {
       height: auto;
@@ -150,7 +149,7 @@
       font-size: 14px;
       line-height: 16px;
 
-      border: 1px solid rgba($gray, .2);
+      border: 1px solid rgba($gray, 0.2);
       border-radius: 4px;
     }
   }
@@ -168,7 +167,7 @@
 
     font-size: 14px !important;
 
-    border-bottom: 1px solid rgba($gray, .1);
+    border-bottom: 1px solid rgba($gray, 0.1);
 
     .registration-form & {
       position: absolute;
@@ -177,7 +176,7 @@
 
       border-bottom: none;
 
-      opacity: .7;
+      opacity: 0.7;
     }
   }
 
@@ -227,7 +226,7 @@
       height: auto;
       min-height: auto;
       max-height: none;
-      line-height: 17px
+      line-height: 17px;
     }
 
     .mobile .form-info-wrapper & {
@@ -333,7 +332,7 @@
         right: 12px;
         font-size: 14px;
         position: absolute;
-        opacity: .5;
+        opacity: 0.5;
       }
 
       &:first-child {
@@ -347,7 +346,7 @@
     align-items: center;
 
     &.disabled {
-      opacity: .4;
+      opacity: 0.4;
     }
   }
 
@@ -379,7 +378,7 @@
     font-size: 12px;
     line-height: 14px;
 
-    color: rgba($gray, .26);
+    color: rgba($gray, 0.26);
 
     &.bold {
       font-weight: bold;
@@ -393,7 +392,7 @@
       line-height: 12px;
       text-transform: uppercase;
 
-      color: rgba($gray, .8);
+      color: rgba($gray, 0.8);
     }
 
     .mobile-device & {
@@ -419,7 +418,7 @@
     .dynamic-form:not(.view-form-mode) &.required::after {
       content: '*';
 
-      color: $brand-danger;
+      color: $danger;
     }
   }
 }

@@ -8,7 +8,7 @@
 }
 
 $min-width: 120px;
-$shadow: 0 0 5px rgba($brand-primary, 0.3);
+$shadow: 0 0 5px rgba($primary, 0.3);
 $icon-width: 70px;
 
 .guide {
@@ -21,7 +21,7 @@ $icon-width: 70px;
   padding: 7px $icon-width / 2;
   border-radius: $icon-width / 2;
   background-color: white;
-  transition: all .4s ease-out;
+  transition: all 0.4s ease-out;
   overflow: hidden;
   box-shadow: $shadow, $shadow;
 
@@ -49,7 +49,7 @@ $icon-width: 70px;
       display: flex;
       margin-bottom: 7px;
       padding: 7px 0 14px;
-      border-bottom: 1px solid rgba($gray, .5);
+      border-bottom: 1px solid rgba($gray, 0.5);
     }
   }
 
@@ -57,8 +57,8 @@ $icon-width: 70px;
     margin-left: auto;
     font-size: 12px;
     cursor: pointer;
-    color: $brand-secondary;
-    transition: all .4s ease-out;
+    color: $secondary;
+    transition: all 0.4s ease-out;
 
     &:hover {
       color: $gray;
@@ -79,7 +79,7 @@ $icon-width: 70px;
       left: 0;
       height: 4px;
       border-radius: 2px;
-      background-color: $brand-success;
+      background-color: $success;
       z-index: 1;
     }
   }
@@ -100,14 +100,14 @@ $icon-width: 70px;
     line-height: 16px;
     background-color: transparent;
     border-radius: 0;
-    opacity: .4;
+    opacity: 0.4;
 
     &:hover {
       opacity: 1;
     }
 
     &-primary {
-      color: $brand-primary;
+      color: $primary;
       opacity: 1;
     }
   }
@@ -118,7 +118,6 @@ $icon-width: 70px;
     box-shadow: $shadow, $shadow;
   }
   100% {
-    box-shadow: $shadow, 0 0 0 16px rgba($brand-primary, 0);
+    box-shadow: $shadow, 0 0 0 16px rgba($primary, 0);
   }
 }
-

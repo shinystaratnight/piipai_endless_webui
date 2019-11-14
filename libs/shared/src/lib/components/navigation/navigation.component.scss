@@ -62,7 +62,7 @@ $header-bg: #fdfdfd;
     &:hover,
     &:focus,
     &.active {
-      color: $brand-primary;
+      color: $primary;
 
       @each $item in $themes {
         .#{$item}-theme & {
@@ -117,7 +117,7 @@ $header-bg: #fdfdfd;
         }
 
         & > li:not(:hover) > .navigation-link.active {
-          box-shadow: inset 0 -3px 0px 0px $brand-primary;
+          box-shadow: inset 0 -3px 0px 0px $primary;
 
           @each $item in $themes {
             .#{$item}-theme & {
@@ -149,7 +149,7 @@ $header-bg: #fdfdfd;
 
             font-size: 0.6rem;
 
-            color: $brand-primary;
+            color: $primary;
 
             @each $item in $themes {
               .#{$item}-theme & {
@@ -169,7 +169,7 @@ $header-bg: #fdfdfd;
           }
 
           .navigation-item.opened {
-            color: $brand-primary;
+            color: $primary;
 
             @each $item in $themes {
               .#{$item}-theme & {
@@ -260,7 +260,7 @@ $header-bg: #fdfdfd;
       }
 
       &:hover > a {
-        color: $brand-primary;
+        color: $primary;
         cursor: pointer;
 
         @each $item in $themes {
@@ -279,7 +279,7 @@ $header-bg: #fdfdfd;
 
         font-size: 6px !important;
 
-        color: $brand-primary;
+        color: $primary;
 
         @each $item in $themes {
           .#{$item}-theme & {

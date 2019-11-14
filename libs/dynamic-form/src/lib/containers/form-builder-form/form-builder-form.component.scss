@@ -11,7 +11,6 @@
 }
 
 .form {
-
   header {
     padding: 0 20px 20px;
 
@@ -21,7 +20,7 @@
 
     text-align: center;
 
-    border-bottom: 2px solid rgba(#e5e5e5, .8);
+    border-bottom: 2px solid rgba(#e5e5e5, 0.8);
   }
 
   footer {
@@ -35,7 +34,7 @@
       padding: 24px 66px 0;
     }
 
-    border-top: 2px solid rgba(#e5e5e5, .8);
+    border-top: 2px solid rgba(#e5e5e5, 0.8);
   }
 
   .content {
@@ -54,7 +53,7 @@
     font-weight: 600;
     text-transform: uppercase;
 
-    color: $brand-primary;
+    color: $primary;
   }
 
   &__name {
@@ -64,7 +63,6 @@
   }
 
   &__button {
-
     &:not(.btn-primary) {
       width: calc(188 / 418 * 100%);
     }
@@ -94,7 +92,6 @@
     }
 
     &.btn-primary {
-
       &[disabled] {
         cursor: not-allowed;
       }
@@ -108,6 +105,6 @@
 
 .error-message {
   font-size: 12px;
-  opacity: .5;
+  opacity: 0.5;
   margin-top: 8px;
 }

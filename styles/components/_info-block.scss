@@ -35,7 +35,7 @@
 
     font-size: 6px !important;
 
-    color: $brand-primary;
+    color: $primary;
 
     @each $item in $themes {
       .#{$item}-theme & {

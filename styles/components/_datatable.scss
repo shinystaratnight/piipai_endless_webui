@@ -1,13 +1,12 @@
-$nested-shadow: 0px 0px 8px 0px rgba($gray, .1);
-$nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
+$nested-shadow: 0px 0px 8px 0px rgba($gray, 0.1);
+$nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
 
 .datatable-wrapper {
-
   .btn {
     border-radius: 50px;
 
     // margin-top: .3rem;
-    margin-bottom: .2rem;
+    margin-bottom: 0.2rem;
   }
 
   .tooltip-inner {
@@ -30,12 +29,12 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     border-radius: 50px;
     background: #fefefe url(/assets/img/down-arrow.svg) no-repeat;
-    background-position: right .75rem center;
+    background-position: right 0.75rem center;
     background-size: 8px 8px;
 
     &:focus {
       background: url(/assets/img/down-arrow.svg) no-repeat;
-      background-position: right .75rem center;
+      background-position: right 0.75rem center;
       background-size: 8px 8px;
     }
 
@@ -69,7 +68,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 }
 
 .datatable {
-
   &-list {
     padding-bottom: 65px;
   }
@@ -90,13 +88,13 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
       margin-right: 20px;
 
-      box-shadow: 0 4px 6px 0 rgba(black, .1);
+      box-shadow: 0 4px 6px 0 rgba(black, 0.1);
 
       &:hover {
-        box-shadow: 0 2px 6px 0 rgba(black, .1);
+        box-shadow: 0 2px 6px 0 rgba(black, 0.1);
       }
       &:active {
-        box-shadow: 0 0px 0px 0 rgba(black, .1);
+        box-shadow: 0 0px 0px 0 rgba(black, 0.1);
       }
     }
 
@@ -111,7 +109,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     border-collapse: separate;
     border-spacing: 0 6px;
 
-    font-size: .875rem;
+    font-size: 0.875rem;
 
     color: $gray;
 
@@ -122,7 +120,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     td {
       border-top: none;
 
-      padding: .3rem;
+      padding: 0.3rem;
 
       padding-top: 16px;
       padding-bottom: 16px;
@@ -133,11 +131,10 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
         padding-left: 16px;
         padding-right: 9px;
       }
-
     }
 
     &.inner-table td:first-child {
-      padding: .3rem;
+      padding: 0.3rem;
     }
 
     tbody tr {
@@ -184,7 +181,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       }
 
       th {
-        font-size: .75rem;
+        font-size: 0.75rem;
         font-weight: 600;
       }
 
@@ -194,7 +191,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       }
 
       .additional-data {
-        color: rgba($gray, .85);
+        color: rgba($gray, 0.85);
       }
     }
   }
@@ -216,7 +213,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     span,
     label {
-      opacity: .15;
+      opacity: 0.15;
     }
 
     .sort span {
@@ -275,7 +272,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     }
 
     tr:nth-child(odd) {
-      background-color: rgba($gray, .03);
+      background-color: rgba($gray, 0.03);
 
       td {
         background-color: transparent;
@@ -289,7 +286,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       text-transform: uppercase;
       font-weight: 600;
       color: $gray;
-      opacity: .3;
+      opacity: 0.3;
     }
   }
 
@@ -304,9 +301,9 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     font-size: 36px;
     line-height: 36px;
 
-    border-bottom: 1px solid rgba($gray, .1);
+    border-bottom: 1px solid rgba($gray, 0.1);
 
-    color: #4F4F4F;
+    color: #4f4f4f;
 
     .mobile & {
       font-size: 24px;
@@ -379,7 +376,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
           width: 100%;
         }
       }
-
     }
 
     padding-right: 10px;
@@ -449,7 +445,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       }
     }
 
-
     &:not(.in-form) .datatable-header {
       background-color: #f5f5f5;
     }
@@ -479,13 +474,13 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     .tab {
       margin: 0 1rem;
-      padding: .5rem 0;
+      padding: 0.5rem 0;
 
-      font-size: .8rem;
+      font-size: 0.8rem;
       font-weight: bold;
       text-transform: uppercase;
 
-      color: rgba($gray, .4);
+      color: rgba($gray, 0.4);
       cursor: pointer;
     }
   }
@@ -527,7 +522,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
         padding-top: 0;
 
         background-color: white;
-        transition: left .5s ease;
+        transition: left 0.5s ease;
 
         z-index: 20;
 
@@ -543,7 +538,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
           }
         }
       }
-
     }
 
     @include media-breakpoint-up('xl') {
@@ -554,7 +548,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
         margin-bottom: 16px;
         padding: 5px 10px 16px;
 
-        background-color: rgba($brand-primary, .05);
+        background-color: rgba($primary, 0.05);
 
         .input-group-addon {
           background-color: #fff;
@@ -572,7 +566,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       padding-top: 0;
 
       background-color: white;
-      transition: left .5s ease;
+      transition: left 0.5s ease;
 
       z-index: 20;
 
@@ -599,7 +593,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     width: 100vw;
     height: 100vh;
 
-    background-color: rgba($gray, .2);
+    background-color: rgba($gray, 0.2);
 
     z-index: 10;
   }
@@ -612,16 +606,16 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     margin-bottom: 0;
     padding: 8px 27px;
 
-    border-color: rgba($gray, .1);
+    border-color: rgba($gray, 0.1);
 
-    color: rgba(black, .5);
-    box-shadow: 0 0 6px rgba(black, .1);
+    color: rgba(black, 0.5);
+    box-shadow: 0 0 6px rgba(black, 0.1);
 
     background-color: #fdfdfd;
 
     path {
-      fill: rgba(black, .5);
-      transition: .4s all;
+      fill: rgba(black, 0.5);
+      transition: 0.4s all;
     }
 
     svg {
@@ -634,14 +628,14 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     &:hover,
     &.active {
-      border-color: $brand-primary;
+      border-color: $primary;
 
-      background-color: $brand-primary;
+      background-color: $primary;
 
-      color: #FDFDFD;
+      color: #fdfdfd;
 
       path {
-        fill: #FDFDFD
+        fill: #fdfdfd;
       }
 
       @each $item in $themes {
@@ -689,11 +683,11 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   }
 
   .sort-icon {
-    margin-left: .5rem;
+    margin-left: 0.5rem;
 
     font-size: 10px;
 
-    opacity: .15;
+    opacity: 0.15;
     cursor: pointer;
 
     &:hover {
@@ -707,7 +701,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   }
 
   .cell-content {
-    padding: .3rem;
+    padding: 0.3rem;
   }
 
   .first-cell {
@@ -717,7 +711,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       display: flex;
       align-items: center;
 
-      color: rgba($gray, .4);
+      color: rgba($gray, 0.4);
     }
 
     i {
@@ -777,11 +771,11 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
     .description {
       width: 85px;
 
-      margin-right: .5rem;
+      margin-right: 0.5rem;
 
-      font-size: .75rem;
+      font-size: 0.75rem;
 
-      color: rgba($gray, .55);
+      color: rgba($gray, 0.55);
     }
 
     &-content {
@@ -796,11 +790,11 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
       font-weight: 600;
       text-transform: uppercase;
 
-      opacity: .3;
+      opacity: 0.3;
     }
 
     .description + &-content {
-      min-width: calc(210px - 85px - .5rem);
+      min-width: calc(210px - 85px - 0.5rem);
     }
 
     .badge {
@@ -823,13 +817,12 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 }
 
 .sort-dropdown {
-
   label {
-    font-size: .875rem;
+    font-size: 0.875rem;
     line-height: 24px;
     font-weight: 600;
     text-transform: uppercase;
-    color: rgba(black, .5);
+    color: rgba(black, 0.5);
   }
 
   .dropdown-item {
@@ -838,7 +831,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     padding: 5px;
 
-    opacity: .6;
+    opacity: 0.6;
 
     &.activated {
       font-weight: 600;
@@ -889,7 +882,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
     padding: 10px;
 
-    border-bottom: 1px solid rgba($gray, .1);
+    border-bottom: 1px solid rgba($gray, 0.1);
 
     br {
       display: none;
@@ -903,14 +896,14 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
   .body {
     padding: 10px;
 
-    border-bottom: 1px solid rgba($gray, .1);
+    border-bottom: 1px solid rgba($gray, 0.1);
 
     label {
       display: block;
 
       margin-bottom: 2px;
 
-      font-size: .875rem;
+      font-size: 0.875rem;
       font-weight: 600;
       color: rgba(0, 0, 0, 0.2);
       text-transform: uppercase;
@@ -957,7 +950,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
       text-align: center;
 
-      border-right: 1px solid rgba($gray, .1);
+      border-right: 1px solid rgba($gray, 0.1);
 
       .btn {
         margin-bottom: 0;
@@ -976,7 +969,7 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, .3);
 
         &:hover,
         &:active {
-          background-color: rgba($gray, .3);
+          background-color: rgba($gray, 0.3);
         }
       }
 

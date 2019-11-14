@@ -1,5 +1,4 @@
 .approve-modal {
-
   @media (max-width: 767.98px) and (orientation: landscape) {
     &.change .modal-dialog {
       max-width: 600px;
@@ -76,17 +75,17 @@
         &-addon {
           padding: 5px 6px 5px 4px;
 
-          border: 1px solid rgba($gray, .6) !important;
+          border: 1px solid rgba($gray, 0.6) !important;
           border-left: none !important;
           border-radius: 0 4px 4px 0 !important;
         }
       }
 
-      .form-control[date-role="datebox"],
-      .form-control[data-role="datebox"] {
+      .form-control[date-role='datebox'],
+      .form-control[data-role='datebox'] {
         height: auto;
         min-height: none;
-        border: 1px solid rgba($gray, .6);
+        border: 1px solid rgba($gray, 0.6);
         border-right: none !important;
         border-radius: 4px 0 0 4px;
         padding: 5px 0 5px 6px;
@@ -110,7 +109,6 @@
 }
 
 .approve-signature-modal {
-
   $content-padding: 20px;
 
   .modal-header {
@@ -161,7 +159,7 @@
     line-height: 20px;
 
     color: $gray;
-    opacity: .7;
+    opacity: 0.7;
 
     @include media-breakpoint-down('sm') {
       font-size: 16px;
@@ -180,7 +178,7 @@
     padding: 0 16px;
     margin-left: 0;
 
-    transition: .4s ease margin-left;
+    transition: 0.4s ease margin-left;
     overflow: hidden;
 
     .dynamic-form {
@@ -296,7 +294,7 @@
     }
 
     .description {
-      opacity: .4;
+      opacity: 0.4;
     }
 
     app-form-input .form-element {
@@ -306,7 +304,7 @@
       &-label {
         padding: 0;
 
-        color: $brand-success;
+        color: $success;
       }
     }
 
@@ -380,7 +378,6 @@
       }
 
       app-form-checkbox .form-element-content {
-
         .form-element-checkbox {
           right: 30px;
 
@@ -400,7 +397,6 @@
       }
 
       app-form-input .form-element {
-
         &-label {
           width: 190px;
 
@@ -453,7 +449,7 @@
       margin-right: 2px;
 
       &.filled {
-        border-right: 1px solid $brand-warning;
+        border-right: 1px solid $warning;
       }
     }
   }
@@ -542,7 +538,7 @@
 
       padding: 12px 16px;
 
-      border-top: 1px solid rgba($gray, .1);
+      border-top: 1px solid rgba($gray, 0.1);
 
       &.signature-step-footer {
         justify-content: center;
@@ -561,7 +557,6 @@
     }
 
     @media (max-width: 767.98px) and (orientation: landscape) {
-
       .btn-primary,
       .btn-success {
         width: 220px;

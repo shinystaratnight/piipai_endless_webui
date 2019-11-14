@@ -13,12 +13,11 @@ $height: 80px;
     width: 100%;
     max-width: $width;
     text-align: center;
-    background-color: darken($gray-300, .7);
+    background-color: darken($gray-300, 0.7);
 
     img {
       max-height: $height;
     }
-
   }
 }
 
@@ -26,7 +25,7 @@ $height: 80px;
   width: $height;
   height: $height;
 
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 
   border-radius: 50%;
 
@@ -42,7 +41,7 @@ $height: 80px;
   height: 40px;
 
   border-radius: 3px;
-  border: 1px solid rgba($gray, .7);
+  border: 1px solid rgba($gray, 0.7);
 }
 
 .contact-avatar {
@@ -56,7 +55,7 @@ $height: 80px;
   font-size: 12px;
   line-height: 14px;
 
-  color: $brand-primary;
+  color: $primary;
 
   cursor: pointer;
 
@@ -70,7 +69,7 @@ $height: 80px;
   align-items: center;
 
   span {
-    margin-left: .5rem;
+    margin-left: 0.5rem;
   }
 }
 
@@ -105,12 +104,12 @@ $height: 80px;
     line-height: 13px;
     text-transform: uppercase;
 
-    opacity: .8;
+    opacity: 0.8;
 
     &.required::after {
       content: '*';
 
-      color: $brand-danger;
+      color: $danger;
     }
   }
 }
@@ -125,15 +124,14 @@ $height: 80px;
 }
 
 .buttons-wrapper {
-
   .action {
-    border: 1px solid $brand-primary;
+    border: 1px solid $primary;
 
-    color: $brand-primary;
+    color: $primary;
     background-color: transparent;
 
     &:hover {
-      background-color: $brand-primary;
+      background-color: $primary;
       color: white;
     }
   }

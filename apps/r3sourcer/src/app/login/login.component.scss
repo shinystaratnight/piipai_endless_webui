@@ -174,7 +174,7 @@ a.forgot {
 
   text-align: center;
 
-  color: $brand-primary;
+  color: $primary;
 
   @each $item in $themes {
     .#{$item}-theme & {

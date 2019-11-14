@@ -14,29 +14,29 @@
 }
 
 .success {
-  color: $brand-success;
+  color: $success;
 
   .shift-datetime {
-    color: $brand-success;
+    color: $success;
   }
 }
 
 .success-blur {
-  color: rgba($brand-success, .5);
+  color: rgba($success, 0.5);
 
   .shift-datetime {
-    color: $brand-success;
+    color: $success;
   }
 }
 
 .danger {
-  color: $brand-danger;
+  color: $danger;
 
   .shift-datetime {
-    color: $brand-danger;
+    color: $danger;
   }
 }
 
 .description .shift-datetime {
-  opacity: .5;
+  opacity: 0.5;
 }
