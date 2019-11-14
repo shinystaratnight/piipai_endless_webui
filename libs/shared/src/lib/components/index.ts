@@ -8,6 +8,7 @@ import { SiteLoaderCompoennt } from './site-loader/site-loader.component';
 import { TimeComponent } from './time/time.component';
 import { LoaderComponent } from './loader/loader.component';
 import { IconPlusComponent } from './icons';
+import { CheckboxComponent } from './checkbox/checkbox.component';
 
 export * from './breadcrumb/breadcrumb.component';
 export * from './navigation/navigation.component';
@@ -24,5 +25,6 @@ export const components = [
   SiteLoaderCompoennt,
   TimeComponent,
   LoaderComponent,
-  IconPlusComponent
+  IconPlusComponent,
+  CheckboxComponent
 ];

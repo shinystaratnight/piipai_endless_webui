@@ -1,0 +1,79 @@
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
+
+:host {
+  display: flex;
+}
+
+.checkbox {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+
+  fa-icon {
+    visibility: hidden;
+    font-size: 8px;
+    color: white;
+  }
+
+  &--sm {
+    width: 12px;
+    height: 12px;
+  }
+
+  &.checked {
+    border-color: $primary;
+    background-color: $primary;
+    color: white;
+
+    fa-icon {
+      visibility: visible;
+    }
+
+    &.info {
+      border-color: $info;
+      background-color: $info;
+    }
+
+    &.success {
+      border-color: $success;
+      background-color: $success;
+    }
+
+    &.danger {
+      border-color: $danger;
+      background-color: $danger;
+    }
+
+    &.warning {
+      border-color: $warning;
+      background-color: $warning;
+    }
+
+    @each $item in $themes {
+      .#{$item}-theme & {
+        border-color: map-get($theme-colors, $item);
+        background-color: map-get($theme-colors, $item);
+      }
+    }
+  }
+}
+
+@include media-breakpoint-down('sm') {
+  .checkbox,
+  .checkbox--sm {
+    width: 20px;
+    height: 20px;
+
+    fa-icon {
+      font-size: 12px;
+    }
+  }
+}

@@ -146,18 +146,8 @@
   }
 }
 
-.form-element-checkbox {
-  &:hover {
-    color: #4f4f4f;
-
-    span {
-      opacity: 1;
-    }
-
-    .custom-checkbox {
-      border-color: #4f4f4f;
-    }
-  }
+.form-element-checkbox.active span {
+  opacity: 1;
 }
 
 a.forgot {
