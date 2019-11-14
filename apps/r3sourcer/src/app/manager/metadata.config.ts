@@ -93,13 +93,13 @@ import {
   billingcompanies,
   billingdoscounts,
   tokenlogins,
-  passwordforgot,
+  // passwordforgot,
   // passwordchange,
   userpassword,
   skillname,
   smslogs,
   skillratecoefficient,
-  priselistratemodifiers,
+  priselistratemodifiers
   // jobsitesclient
 } from '@webui/manager-metadata';
 
@@ -113,6 +113,7 @@ import {
   jobs,
   notes,
   address,
+  passwordforgot
 } from '@webui/shared-metadata';
 
 import { Endpoints } from '@webui/data';

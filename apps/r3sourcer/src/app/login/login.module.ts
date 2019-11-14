@@ -16,6 +16,6 @@ import { routes } from './login.routes';
     SharedModule,
     FormsModule,
     RouterModule.forChild(routes)
-  ],
+  ]
 })
-export class LoginModule { }
+export class LoginModule {}

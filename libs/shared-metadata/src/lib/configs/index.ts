@@ -7,3 +7,4 @@ export * from './workflows.metadata';
 export * from './jobs.metadata';
 export * from './notes.metadata';
 export * from './address.metadata';
+export * from './passwordforgot.metadata';
