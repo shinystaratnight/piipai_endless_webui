@@ -62,7 +62,7 @@ export class DynamicFormComponent implements OnInit {
 
   addFormBuilderStatus(config) {
     if (config) {
-      config.forEach((el) => {
+      config.forEach(el => {
         el.formBuilder = this.formBuilder;
 
         if (el.children) {
@@ -75,7 +75,7 @@ export class DynamicFormComponent implements OnInit {
   public getValues(data, list) {
     const values = {};
     if (list) {
-      list.forEach((el) => {
+      list.forEach(el => {
         values[el] = this.getValue(data, el);
       });
     }
@@ -109,9 +109,9 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public setNullFields(metadata: any[], data) {
-    metadata.forEach((el) => {
+    metadata.forEach(el => {
       if (el.setNull && data[el.key]) {
-        el.setNull.forEach((field) => {
+        el.setNull.forEach(field => {
           data[field] = null;
         });
       } else if (el.children) {
@@ -164,7 +164,7 @@ export class DynamicFormComponent implements OnInit {
         }
 
         setTimeout(() => {
-          if (!(<any> this.cd).destroyed) {
+          if (!(<any>this.cd).destroyed) {
             this.cd.detectChanges();
           }
         }, 1000);
@@ -250,7 +250,8 @@ export class DynamicFormComponent implements OnInit {
           value = parseFloat(value);
         }
 
-        if (value === targetValue) {
+        //tslint:disable-next-line
+        if (value == targetValue) {
           approvedRules += 1;
         } else {
           return;
@@ -294,7 +295,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public filterSendData(metadata: Field[], data) {
-    metadata.forEach((el) => {
+    metadata.forEach(el => {
       if (el.send === false && !el.saveField) {
         this.removeValue(el.key, data);
       } else if (el.children) {
