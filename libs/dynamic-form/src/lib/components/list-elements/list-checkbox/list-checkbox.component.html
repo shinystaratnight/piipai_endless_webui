@@ -3,16 +3,36 @@
   [class.text-danger]="config.value === false"
   [class.text-success]="config.value === true"
   [class.text-muted]="config.value == null"
-  [icon]="['fas', config.value ? 'check-circle' : config.value === false ? 'times-circle' : 'minus-circle']">
+  [icon]="[
+    'fas',
+    config.value
+      ? 'check-circle'
+      : config.value === false
+      ? 'times-circle'
+      : 'minus-circle'
+  ]"
+>
 </fa-icon>
-<span [ngClass]="[iconClass]" *ngIf="config.values && !config.content">{{value}}</span>
-<span [ngClass]="[iconClass]" *ngIf="config.values && config.content" placement="bottom" [ngbPopover]="actionsTemplate" style="cursor: pointer">{{value}} <span class="arrow-dowm">&nbsp;</span></span>
-<br *ngIf="!config.delim">
+<span [ngClass]="[iconClass]" *ngIf="config.values && !config.content">
+  {{ value }}
+</span>
+<span
+  [ngClass]="[iconClass]"
+  *ngIf="config.values && config.content"
+  placement="bottom"
+  [ngbPopover]="actionsTemplate"
+  style="cursor: pointer"
+>
+  {{ value }}
+  <fa-icon class="ml-1" icon="chevron-down"></fa-icon>
+</span>
+<br *ngIf="!config.delim" />
 
 <ng-template #actionsTemplate>
   <ng-container
     appListElement
     [config]="config.content"
-    (buttonAction)="buttonHandler($event)">
+    (buttonAction)="buttonHandler($event)"
+  >
   </ng-container>
 </ng-template>

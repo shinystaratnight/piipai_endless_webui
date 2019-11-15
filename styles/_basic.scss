@@ -26,6 +26,7 @@ a.active {
 }
 
 fa-icon {
+  display: inline-flex;
   font-size: 12px;
 }
 
@@ -67,20 +68,6 @@ input {
   .only-mobile {
     display: none;
   }
-}
-
-.arrow-dowm {
-  display: inline-block;
-  position: relative;
-  top: 7px;
-  left: 5px;
-
-  width: 8px;
-  height: 8px;
-
-  background: #fefefe url(/assets/img/down-arrow.svg) no-repeat;
-  background-position: center center;
-  background-size: 8px 8px;
 }
 
 form.ng-invalid button[type='submit'] {
@@ -764,7 +751,7 @@ iframe.send-sms {
 
   .button-close {
     margin-left: auto;
-    margin-right: 20px;
+    margin-right: 8px;
 
     font-weight: normal;
 
@@ -792,11 +779,6 @@ iframe.send-sms {
   .datatable-body {
     padding-left: 0;
     padding-right: 0;
-  }
-
-  .btn {
-    font-size: 14px;
-    line-height: 18px;
   }
 }
 

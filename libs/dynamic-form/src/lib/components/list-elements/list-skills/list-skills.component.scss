@@ -2,7 +2,7 @@
 
 .skill-title {
   color: $gray;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 span {
@@ -11,6 +11,7 @@ span {
 
 .score {
   display: inline-flex;
+  align-items: center;
 
   height: 14px;
   line-height: 14px;

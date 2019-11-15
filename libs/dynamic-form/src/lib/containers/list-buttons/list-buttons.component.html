@@ -1,39 +1,65 @@
 <div class="d-flex align-items-center" [class.list-buttons]="first">
-  <div class="d-flex align-items-center flex-wrap ml-sm-auto"
-    *ngIf="buttons && buttons.length">
-      <div class="my-1" *ngFor="let button of buttons; let f = first; let l = last">
-        <a class="btn btn-primary btn-shadow datatable-button first" routerLink="add"
-        [ngClass]="{'mx-2': !(f || l)}"
-        *ngIf="first && !inForm && button.action === 'add_object' && checkPermission('post')">
-          <span class="button-icon"></span> {{button.label}}
-        </a>
-        <button *ngIf="!first || inForm || button.action !== 'add_object'" class="btn btn-primary btn-shadow datatable-button"
-          [attr.title]="getSmsTitle(button.action)"
-          [ngClass]="{'mx-2': !(f || l)}"
-          (click)="buttonAction(button.action)"
-          [class.disabled]="isDisableSmsButton(button.action)"
-          [disabled]="isDisableSmsButton(button.action)">
-            {{button.label}}
-        </button>
-      </div>
-  </div>
-  <div class="d-flex align-items-center ml-sm-auto w-100"
-    *ngIf="!buttons">
-    <a class="btn btn-primary btn-shadow datatable-button first text-white" routerLink="add"
-      *ngIf="first && !inForm && checkPermission('post')">
-        <span class="button-icon"></span> Add new <span style="text-transform: lowercase">{{label}}</span>
+  <div
+    class="d-flex align-items-center flex-wrap ml-sm-auto"
+    *ngIf="buttons && buttons.length"
+  >
+    <div
+      class="my-1"
+      *ngFor="let button of buttons; let f = first; let l = last"
+    >
+      <a
+        class="btn btn-primary btn-shadow datatable-button first"
+        routerLink="add"
+        [ngClass]="{ 'mx-2': !(f || l) }"
+        *ngIf="
+          first &&
+          !inForm &&
+          button.action === 'add_object' &&
+          checkPermission('post')
+        "
+      >
+        <span class="button-icon"></span> {{ button.label }}
       </a>
-      <button *ngIf="(!first || inForm) && checkPermission('post')" class="datatable-button ml-auto"
-        (click)="buttonAction('add_object')">
-        <span class="button-icon"></span> Add new <span style="text-transform: lowercase">{{label}}</span>
+      <button
+        *ngIf="!first || inForm || button.action !== 'add_object'"
+        class="btn btn-primary btn-shadow datatable-button"
+        [attr.title]="getSmsTitle(button.action)"
+        [ngClass]="{ 'mx-2': !(f || l) }"
+        (click)="buttonAction(button.action)"
+        [class.disabled]="isDisableSmsButton(button.action)"
+        [disabled]="isDisableSmsButton(button.action)"
+      >
+        {{ button.label }}
       </button>
+    </div>
   </div>
-  <button class="btn btn-primary btn-shadow datatable-button hidden-sm-down ml-2"
+  <div class="d-flex align-items-center ml-sm-auto w-100" *ngIf="!buttons">
+    <a
+      class="btn btn-primary btn-shadow datatable-button first text-white"
+      routerLink="add"
+      *ngIf="first && !inForm && checkPermission('post')"
+    >
+      <span class="button-icon mr-1"></span> Add new
+      <span class="text-lowercase">{{ label }}</span>
+    </a>
+    <button
+      *ngIf="(!first || inForm) && checkPermission('post')"
+      class="datatable-button ml-auto"
+      (click)="buttonAction('add_object')"
+    >
+      <span class="button-icon mr-1"></span> Add new
+      <span class="text-lowercase">{{ label }}</span>
+    </button>
+  </div>
+  <button
+    class="btn btn-primary btn-shadow datatable-button hidden-sm-down ml-2"
     *ngIf="!first && !poped"
-    (click)="buttonAction('poped_table')">
+    (click)="buttonAction('poped_table')"
+  >
     <fa-icon
       [icon]="['fas', 'window-restore']"
       class="text-white icon"
-      aria-hidden="true"></fa-icon>
+      aria-hidden="true"
+    ></fa-icon>
   </button>
 </div>

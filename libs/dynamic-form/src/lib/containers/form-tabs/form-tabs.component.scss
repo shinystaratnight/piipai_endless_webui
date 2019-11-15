@@ -11,6 +11,7 @@
 
 .label {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
 
   margin-bottom: 15px;
@@ -21,11 +22,6 @@
   color: #4f4f4f;
 }
 
-button {
-  font-size: 14px;
-  font-weight: normal;
-}
-
 button.edit-mode {
   align-self: center;
 
@@ -34,8 +30,8 @@ button.edit-mode {
   border: none;
 
   background-color: #fdfdfd;
-  color: rgba(black, .55);
-  box-shadow: 0 0 8px rgba(black, .15);
+  color: rgba(black, 0.55);
+  box-shadow: 0 0 8px rgba(black, 0.15);
 
   &:hover {
     background-color: #fdfdfd;
@@ -44,18 +40,14 @@ button.edit-mode {
 
 button.close-btn {
   margin-left: auto;
-  margin-right: 20px;
+  margin-right: 8px;
 
   color: #333;
   background-color: transparent;
-  opacity: .3;
+  opacity: 0.3;
 
   &:hover,
   &:focus {
-    opacity: .8;
+    opacity: 0.8;
   }
-}
-
-button.save {
-  color: white;
 }

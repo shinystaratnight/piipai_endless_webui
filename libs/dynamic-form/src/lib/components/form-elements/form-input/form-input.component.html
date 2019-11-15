@@ -140,7 +140,9 @@
         <span *ngIf="!hovered && !group.get(key).value" class="text-danger">{{
           config.templateOptions.noneValue
         }}</span>
-        <span *ngIf="hovered || group.get(key).value"
+        <span
+          class="d-flex align-items-center"
+          *ngIf="hovered || group.get(key).value"
           >&nbsp;{{
             hovered || group.get(key).value | number: '1.1-1'
           }}&nbsp;<fa-icon [icon]="['fas', 'star']"></fa-icon

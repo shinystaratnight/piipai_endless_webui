@@ -316,7 +316,7 @@
     <div *ngIf="status && ((shift.candidates[status].length || shift.candidates[getStatus(1)].length))" class="shift-candidates">
       <span class="mr-1">Candidate&nbsp;({{shift.candidates[status].length || shift.candidates[getStatus(1)].length}}):</span>
       <div>
-        <div *ngFor="let candidate of shift.candidates[status]">
+        <div class="d-flex align-items-center" *ngFor="let candidate of shift.candidates[status]">
           <fa-icon *ngIf="getStatus(0) === status" [icon]="['fas', 'times']" class="text-danger"></fa-icon>
           <fa-icon *ngIf="getStatus(1) === status" [icon]="['fas', 'check']" class="text-success"></fa-icon>
           <fa-icon *ngIf="getStatus(2) === status" [icon]="['fas', 'minus-circle']" class="text-warning"></fa-icon>

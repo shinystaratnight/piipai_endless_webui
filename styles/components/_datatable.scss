@@ -600,13 +600,16 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
 
   .filter-button {
     display: flex;
+    align-self: stretch;
     align-items: center;
 
     margin-right: 8px;
     margin-bottom: 0;
-    padding: 8px 27px;
+    padding: 10px 27px;
 
-    border-color: rgba($gray, 0.1);
+    font-size: 16px;
+    line-height: 22px;
+    border: none;
 
     color: rgba(black, 0.5);
     box-shadow: 0 0 6px rgba(black, 0.1);
