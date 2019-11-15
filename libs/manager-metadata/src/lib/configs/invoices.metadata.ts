@@ -5,7 +5,7 @@ const filters = {
   recruitmentAgent: createFilter(Type.Relared, {
     key: 'customer_company',
     label: 'Client company',
-    endpoint: Endpoints.Company,
+    endpoint: Endpoints.Company
   }),
   date: createFilter(Type.Date, {
     key: 'date',
@@ -38,7 +38,7 @@ const formFields = {
       type: 'date'
     },
     type: 'datepicker'
-  },
+  }
 };
 
 const list = {
@@ -46,10 +46,7 @@ const list = {
     list: 'invoice',
     label: 'Company Invoices',
     buttons: [],
-    filters: [
-      filters.recruitmentAgent,
-      filters.date
-    ],
+    filters: [filters.recruitmentAgent, filters.date],
     columns: [
       {
         content: [
@@ -208,7 +205,7 @@ const list = {
             color: 'success',
             values: {
               true: 'check-circle'
-            },
+            }
           },
           {
             showIf: [
@@ -220,14 +217,14 @@ const list = {
             field: 'approved',
             type: 'text',
             color: 'success',
-            display: 'Approved',
+            display: 'Approved'
           },
           {
             showIf: ['synced_at'],
             field: 'synced_at',
             type: 'text',
             color: 'success',
-            display: 'Approved/Synced',
+            display: 'Approved/Synced'
           },
           {
             endpoint: `${Endpoints.Invoice}{id}/sync/`,
@@ -235,11 +232,8 @@ const list = {
             action: 'emptyPost',
             type: 'button',
             text: 'Sync',
-            showIf: [
-              'approved',
-              { 'synced_at': null }
-            ],
-          },
+            showIf: ['approved', { synced_at: null }]
+          }
         ],
         name: 'id',
         title: null,
@@ -250,15 +244,11 @@ const list = {
     search_enabled: false,
     editDisable: false
   },
-  fields: [
-    formFields.date
-  ]
+  fields: [formFields.date]
 };
 
 const formset = {
-  fields: [
-    formFields.date
-  ],
+  fields: [formFields.date],
   list: {
     columns: [
       {
@@ -464,8 +454,9 @@ const form = [
           },
           {
             type: 'button',
+            key: 'sync',
             color: 'primary',
-            showIf: [ 'approved', { 'synced_at': null } ],
+            showIf: ['approved', { synced_at: null }],
             templateOptions: {
               action: 'syncInvoice',
               text: 'Sync',
@@ -476,8 +467,9 @@ const form = [
           },
           {
             type: 'button',
+            key: 'resync',
             color: 'primary',
-            showIf: [ 'synced_at' ],
+            showIf: ['synced_at'],
             templateOptions: {
               action: 'syncInvoice',
               text: 'Resync',
