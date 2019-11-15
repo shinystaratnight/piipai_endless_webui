@@ -498,6 +498,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  getCandidateLink(id: string) {
+    return [`/mn${Endpoints.CandidateContact}${id}/change`];
+  }
+
   private changeCalendar(type?: DateRange) {
     const rangeType = type || this.currentRange.value;
     const range =

@@ -10,7 +10,8 @@ import {
   tagrels,
   skillrels,
   candidateevaluations,
-  passwordchange
+  passwordchange,
+  passwordforgot
 } from '@webui/shared-metadata';
 
 export class Metadata {
@@ -22,4 +23,5 @@ export class Metadata {
   'submit' = metadataSubmit;
   [Endpoints.CandidateContact] = metadataProfile;
   [Endpoints.ContactChangePassword] = passwordchange;
+  [Endpoints.ContactForgotPassword] = passwordforgot;
 }

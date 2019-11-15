@@ -3,14 +3,15 @@ import {
   history,
   unapproved,
   notAgree,
-  jobsitesclient,
+  jobsitesclient
 } from '@webui/client-metadata';
 
 import {
   passwordchange,
   jobs,
   notes,
-  address
+  address,
+  passwordforgot
 } from '@webui/shared-metadata';
 
 export class Metadata {
@@ -18,6 +19,7 @@ export class Metadata {
   [Endpoints.TimesheetUnapproved] = unapproved;
   'not_agree' = notAgree;
   [Endpoints.ContactChangePassword] = passwordchange;
+  [Endpoints.ContactForgotPassword] = passwordforgot;
   [Endpoints.JobsiteClient] = jobsitesclient;
   [Endpoints.Job] = jobs;
   [Endpoints.Note] = notes;
