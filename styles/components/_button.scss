@@ -1,5 +1,33 @@
 $shadow: 0px 4px 6px 0;
 
+.ng-invalid button[type='submit'] {
+  position: relative;
+  border-color: transparent !important;
+  background-color: rgba($primary, 0.55) !important;
+  cursor: not-allowed;
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: rgba(map-get($theme-colors, $item), 0.55) !important;
+    }
+  }
+
+  &.button-save:hover::after,
+  &.save:hover::after {
+    position: absolute;
+    display: block;
+    top: -35px;
+    left: 0;
+    width: 240px;
+    padding: 0.2rem;
+    font-size: 14px;
+    border-radius: 0.25rem;
+    background-color: rgba($gray, 0.8);
+    content: 'Please fill all the REQUIRED fields';
+    z-index: 1;
+  }
+}
+
 .btn {
   border-radius: 100px;
 

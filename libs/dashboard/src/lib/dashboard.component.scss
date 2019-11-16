@@ -62,14 +62,13 @@
 }
 
 .widget-edit-btn {
+  @extend %flex-center-center;
+  @extend %circle;
   display: none;
   position: absolute;
-  align-items: center;
-  justify-content: center;
   top: -7px;
   right: -7px;
-  padding: 2px 5px;
-  border-radius: 50%;
+  padding: 5px;
   background-color: #fff;
   box-shadow: 0 0 2px rgba($gray, 0.2);
   cursor: pointer;

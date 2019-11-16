@@ -1,29 +1,3 @@
-@import '../variables.scss';
-
-.form-tabs {
-  .form-element-list {
-    display: none !important;
-  }
-
-  .form-element-list-title {
-    display: flex;
-  }
-}
-
-.view-mode .form-element {
-  display: inline;
-
-  .form-element-content {
-    display: inline;
-
-    a {
-      font-size: 18px;
-      line-height: 20px;
-      font-weight: 600;
-    }
-  }
-}
-
 .form-element {
   font-size: 14px;
   line-height: 16px;
@@ -324,6 +298,7 @@
   &-checkbox {
     display: inline-flex;
     align-items: center;
+    margin-bottom: 4px;
 
     &.disabled {
       opacity: 0.4;
@@ -402,4 +377,31 @@
       color: $danger;
     }
   }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .form-control:focus {
+    border-color: map-get($theme-colors, $item);
+  }
+}
+
+.form-group {
+  .mobile-device & {
+    margin-bottom: 0;
+  }
+}
+
+.form-list .form-group,
+.form-list .form-control {
+  margin-bottom: 0;
+}
+
+.input-group .form-control,
+.input-group .form-control:hover {
+  z-index: 1;
+}
+
+
+.form-control.not-empty[readonly] {
+  background-color: transparent;
 }

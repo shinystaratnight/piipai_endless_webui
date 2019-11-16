@@ -1,3 +1,8 @@
+.modal-backdrop {
+  bottom: -100px;
+  z-index: 3 !important;
+}
+
 .approve-modal {
   @media (max-width: 767.98px) and (orientation: landscape) {
     &.change .modal-dialog {
@@ -562,4 +567,210 @@
       }
     }
   }
+}
+
+
+.extend-modal {
+  .modal-dialog {
+    max-width: 805px;
+  }
+
+  .modal-body {
+    margin-top: 40px;
+    margin-bottom: 20px;
+
+    .form-element-label {
+      font-family: 'Source Sans Pro', sans-serif;
+      text-transform: uppercase;
+      color: rgba($gray, 0.4);
+    }
+
+    .shift .form-element-content {
+      min-height: 36px;
+      align-items: center;
+    }
+
+    .form-element-content {
+      width: auto;
+      height: auto;
+      max-height: none;
+      min-height: auto;
+
+      input {
+        padding: 10px 12px;
+        height: auto;
+        min-height: auto;
+        border: 1px solid rgba($gray, 0.6);
+        border-radius: 0.25rem;
+      }
+
+      .input-group-addon {
+        display: none;
+      }
+    }
+  }
+
+  .form-element .custom-checkbox {
+    width: 16px;
+    height: 16px;
+
+    svg {
+      width: 9px;
+      height: 7px;
+    }
+  }
+
+  .button-save {
+    display: block;
+    margin: 0 auto;
+    width: 160px;
+  }
+
+  .tooltip-inner {
+    max-width: 360px;
+  }
+}
+
+.small-modal {
+  .modal-dialog {
+    max-width: 400px;
+
+    .form-element-content {
+      width: auto;
+      max-width: none;
+    }
+
+    .button-save {
+      display: block;
+
+      margin: 0 auto;
+
+      width: 160px;
+      height: 40px;
+
+      line-height: 16px;
+    }
+  }
+}
+
+.medium-modal .modal-dialog {
+  max-width: 600px;
+}
+
+.modal {
+  z-index: 3;
+
+  &[id*='jtdb'] {
+    z-index: 22;
+
+    .modal-backdrop {
+      z-index: 21 !important;
+    }
+  }
+
+  &.shiftdates .modal-content,
+  &.visible-mode .modal-content {
+    @include media-breakpoint-up('md') {
+      overflow: visible;
+    }
+
+    @include media-breakpoint-down('sm') {
+      .form-group {
+        margin-bottom: 5px;
+      }
+
+      .modal-header {
+        padding: 0.5rem 1rem;
+
+        h5 {
+          font-size: 1rem;
+        }
+      }
+
+      max-height: 95vh;
+    }
+  }
+
+  &.message-detail .modal-content {
+    padding: 20px;
+
+    .dynamic-form {
+      margin-top: 0;
+    }
+  }
+}
+
+.message-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 40px;
+
+  margin-bottom: 16px;
+
+  .message-label {
+    margin-left: 20px;
+    margin-bottom: 0;
+
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  button {
+    align-self: flex-start;
+  }
+}
+
+.modal-lg {
+  @include media-breakpoint-up('xl') {
+    max-width: 1170px;
+  }
+}
+
+.modal-header {
+  background-color: #fff;
+
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.modal-content {
+  max-height: 95vh;
+
+  overflow: auto;
+
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
+
+  .modal-header-wrapper {
+    position: sticky;
+    width: 100%;
+    top: 0;
+    z-index: 1200;
+  }
+
+  .modal-body {
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+  .modal-title {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  @include media-breakpoint-down('md') {
+    max-height: 95vh;
+  }
+}
+
+.modal-content .has-tabs .button-save {
+  display: none;
+}
+
+.modal-content .has-tabs .close-btn {
+  display: none;
+}
+
+.modal-content .has-tabs .save {
+  margin-left: auto;
 }
