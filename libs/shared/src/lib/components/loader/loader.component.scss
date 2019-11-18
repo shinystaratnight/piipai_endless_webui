@@ -1,4 +1,5 @@
 @import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
 
 .lds-ellipsis {
   display: inline-block;
@@ -14,6 +15,12 @@
   border-radius: 50%;
   background: rgba($primary, 0.6);
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
+
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background: rgba(map-get($theme-colors, $item), 0.6);
+    }
+  }
 }
 .lds-ellipsis div:nth-child(1) {
   left: 6px;

@@ -33,6 +33,13 @@
     background-color: $primary;
     color: white;
 
+    // @each $item in $themes {
+    //   .#{$item}-theme & {
+    //     border-color: map-get($theme-colors, $item);
+    //     background-color: map-get($theme-colors, $item);
+    //   }
+    // }
+
     fa-icon {
       visibility: visible;
     }
@@ -56,13 +63,13 @@
       border-color: $warning;
       background-color: $warning;
     }
+  }
+}
 
-    @each $item in $themes {
-      .#{$item}-theme & {
-        border-color: map-get($theme-colors, $item);
-        background-color: map-get($theme-colors, $item);
-      }
-    }
+@each $item in $themes {
+  .#{$item}-theme .checkbox.checked {
+    border-color: map-get($theme-colors, $item);
+    background-color: map-get($theme-colors, $item);
   }
 }
 

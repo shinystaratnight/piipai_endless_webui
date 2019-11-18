@@ -4,7 +4,8 @@ import {
   OnInit,
   OnDestroy,
   Output,
-  EventEmitter
+  EventEmitter,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { getTimeByTomezone, getLocalTime } from '@webui/utilities';
@@ -12,7 +13,8 @@ import { getTimeByTomezone, getLocalTime } from '@webui/utilities';
 @Component({
   selector: 'app-time',
   templateUrl: './time.component.html',
-  styleUrls: ['./time.component.scss']
+  styleUrls: ['./time.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeComponent implements OnInit, OnDestroy {
   @Input() timezone: string;

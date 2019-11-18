@@ -21,10 +21,6 @@
 
     color: $primary;
 
-    &:hover {
-      cursor: pointer;
-    }
-
     @each $item in $themes {
       .#{$item}-theme & {
         color: map-get($theme-colors, $item);
