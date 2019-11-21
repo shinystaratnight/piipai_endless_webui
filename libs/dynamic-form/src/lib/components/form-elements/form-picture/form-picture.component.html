@@ -89,26 +89,14 @@
           "
           class="d-flex align-items-center flex-wrap mt-1"
         >
-          <button
-            type="button"
-            class="btn btn-primary btn-sm text-white actions"
-            (click)="upload()"
-          >
-            <fa-icon [icon]="['fas', 'upload']"></fa-icon>
-            <span *ngIf="config.templateOptions.label_upload">{{
-              config.templateOptions.label_upload
-            }}</span>
+          <button type="button" class="btn btn-primary" (click)="upload()">
+            <fa-icon [class.mr-0]="!config.templateOptions.label_upload" icon="upload"></fa-icon>
+            {{config.templateOptions.label_upload}}
           </button>
           <span class="p-1">or</span>
-          <button
-            type="button"
-            class="btn btn-success btn-sm text-white actions"
-            (click)="open()"
-          >
-            <fa-icon [icon]="['fas', 'camera']"></fa-icon>
-            <span *ngIf="config.templateOptions.label_photo">{{
-              config.templateOptions.label_photo
-            }}</span>
+          <button type="button" class="btn btn-success" (click)="open()">
+            <fa-icon [class.mr-0]="!config.templateOptions.label_photo" icon="camera"></fa-icon>
+            {{config.templateOptions.label_photo}}
           </button>
         </div>
         <div class="mt-1" *ngIf="fileName && !config.read_only && !config.view">

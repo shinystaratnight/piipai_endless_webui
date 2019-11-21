@@ -68,6 +68,10 @@
     appearance: none;
     outline: none;
 
+    option {
+      background-color: #fff;
+    }
+
     &-wrapper {
       display: flex;
       align-items: center;

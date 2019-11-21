@@ -125,7 +125,11 @@
                 (click)="setValue(option, true)">
                   {{option.__str__}}
                   <span *ngIf="config.templateOptions.info">
-                    | <span>{{option.score | number:'1.1-1'}} <fa-icon [icon]="['fas', 'star']"></fa-icon></span> | <span>{{option.distance}} km</span>
+                    <span class="d-inline-flex align-items-center mx-1" [style.color]="colors[getScore(option.score)]">
+                      {{option.score | number:'1.1-1'}}
+                      <fa-icon class="ml-1" icon="star"></fa-icon>
+                    </span>
+                    <span>{{option.distance}} km</span>
                   </span>
               </li>
             </ul>
@@ -145,11 +149,7 @@
                     <button *ngIf="!item.default" type="button" class="btn btn-outline-secondary mt-1" style="font-size: 10px; line-height: 12px" (click)="setDefault(i, item)">make default</button>
                   </ng-container>
                 </span>
-                <app-close-button
-                  class="ml-2"
-                  [sm]="true"
-                  (click)="deleteItem(i, item)">
-                </app-close-button>
+                <fa-icon class="ml-2 text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
               </span>
             </ng-container>
           </div>
@@ -158,7 +158,7 @@
         <div class="object-list" *ngIf="config.tests">
           <div class="object-list__item" *ngFor="let item of results; let i = index">
             {{item.__str__}}
-            <app-close-button class="ml-2 mr-3" [sm]="true" (click)="deleteItem(i, item)"></app-close-button>
+            <fa-icon class="ml-2 mr-3 text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
             <button type="button" *ngIf="item.tests && item.tests.length && !item.passed" class="object-list__btn btn btn-outline-primary" (click)="passTests(item, $event)">Pass test</button>
             <button type="button" *ngIf="item.passed" disabled class="object-list__btn btn btn-outline-primary bg-primary text-white">Passed</button>
           </div>
@@ -166,9 +166,9 @@
         <ng-container *ngIf="config.templateOptions.info">
           <div *ngFor="let item of results; let i = index" class="candidate-info">
             <span>{{item.__str__}}</span> | <span>{{item.score || (item.candidate_scores && item.candidate_scores.average_score)}} <i fa name="star"></i></span> | <span>{{item.distance}} km</span>
-            <fa-icon *ngIf="!config.doNotChoice" class="icon ml-2"
+            <fa-icon *ngIf="!config.doNotChoice" class="icon ml-2 text-danger"
               (click)="deleteItem(i, item)"
-              [icon]="['fas', 'times']"></fa-icon>
+              icon="times"></fa-icon>
           </div>
         </ng-container>
       </div>
@@ -211,9 +211,7 @@
             <span class="badge badge-outline mt-2 mr-1" style="white-space: normal"
               *ngFor="let item of results; let i = index">
               {{item.__str__}}
-              <fa-icon class="ml-2"
-                (click)="deleteItem(i, item)"
-                [icon]="['fas', 'times']"></fa-icon>
+              <fa-icon class="ml-2 text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
             </span>
           </div>
       </div>
@@ -319,7 +317,7 @@
       <div *ngIf="config.many && results && config.templateOptions.deleteList"  class="d-flex flex-wrap align-items-center mt-2">
         <span class="badge badge-outline mt-2 mr-1" style="white-space: normal" *ngFor="let item of results; let i = index">
           {{item.__str__}}
-          <fa-icon class="ml-2" (click)="deleteItem(i, item, config.templateOptions.deleteList)" [icon]="['fas', 'times']"></fa-icon>
+          <fa-icon class="ml-2 text-danger"  [icon]="['fas', 'times']" (click)="deleteItem(i, item, config.templateOptions.deleteList)"></fa-icon>
         </span>
       </div>
     </div>
@@ -357,7 +355,10 @@
 
     <div class="modal-body">
       <div *ngIf="modalData.type !== 'delete'">
-        <div class="description" *ngIf="modalData.description" [innerHTML]="modalData.description"></div>
+        <div class="description"
+          *ngIf="modalData.description"
+          [innerHTML]="modalData.description">
+        </div>
 
         <app-generic-form
           [endpoint]="modalData.endpoint"
@@ -400,11 +401,11 @@
   <div *ngIf="customTemplate && !customTemplate.length" class="d-flex flex-column justify-content-center">-</div>
 </ng-template>
 
-<ng-template #messageDetail let-c="close" let-d="dismiss">
+<ng-template #messageDetail let-modal>
   <div class="message-detail-header">
     <h5 class="message-label">{{modalData.label}}</h5>
 
-    <app-close-button class="close ml-2" (click)="d()"></app-close-button>
+    <app-close-button class="close ml-2" (click)="modal.dismiss()"></app-close-button>
   </div>
 
   <app-generic-form

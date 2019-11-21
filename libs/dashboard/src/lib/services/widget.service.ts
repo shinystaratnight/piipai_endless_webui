@@ -78,7 +78,6 @@ export class WidgetService {
               config: el.ui_config || {}
             };
 
-            this.addPosition(target.config, widget.type);
             return target;
           });
 
@@ -141,6 +140,12 @@ export class WidgetService {
       .pipe(catchError(errors => this.errorService.parseErrors(errors)));
   }
 
+  updateWidget(id: string, body: { ui_config: any }) {
+    return this.http
+      .patch(`${Endpoints.UserDashboardModule}${id}/`, body)
+      .pipe(catchError(errors => this.errorService.parseErrors(errors)));
+  }
+
   generateGrid(widgets: UserWidget[]) {
     this.listsId = [];
 
@@ -167,6 +172,20 @@ export class WidgetService {
 
     this.parseGrid(grid);
     this.updateElementsId(grid.elements, id);
+  }
+
+  getSizes(type: Type) {
+    const sizes = {
+      [Type.Buttons]: 4 / 12,
+      [Type.Calendar]: 8 / 12,
+      [Type.Candidates]: 4 / 12
+    };
+
+    return sizes[type];
+  }
+
+  updateDashboard() {
+    this.userWidgets = undefined;
   }
 
   private parseGrid(gridElement: GridElement) {
@@ -320,23 +339,5 @@ export class WidgetService {
       this.generateGridElements(element, widgetElement, coords);
       elements[index] = element;
     }
-  }
-
-  //! remove this method
-  private addPosition(config, type) {
-    const positions = {
-      [Type.Buttons]: '0',
-      [Type.Calendar]: '11',
-      [Type.Candidates]: '10'
-    };
-
-    const sizes = {
-      [Type.Buttons]: 4 / 12,
-      [Type.Calendar]: 8 / 12,
-      [Type.Candidates]: 4 / 12
-    };
-
-    config.coords = positions[type];
-    config.size = sizes[type];
   }
 }

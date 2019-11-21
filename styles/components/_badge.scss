@@ -19,6 +19,8 @@
 }
 
 .badge.badge-outline {
+  display: inline-flex;
+  align-items: center;
   padding: 0.25rem 0.4rem;
 
   font-size: 0.75rem;
@@ -27,6 +29,14 @@
 
   background-color: white;
   color: $primary;
+
+  & > fa-icon.text-danger {
+    display: none;
+  }
+
+  &:hover fa-icon.text-danger{
+    display: inline-flex;
+  }
 
   @each $item in $themes {
     .#{$item}-theme & {

@@ -518,6 +518,13 @@
 
     border-top: none;
 
+    .btn {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      font-size: 16px;
+      line-height: 20px;
+    }
+
     @include media-breakpoint-up('md') {
       &.signature-step-footer {
         justify-content: space-between;

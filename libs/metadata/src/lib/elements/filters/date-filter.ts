@@ -1,5 +1,13 @@
 import { FilterModel } from './filter.model';
-import { getYesterday, getToday, getTommorrow } from '@webui/utilities';
+import {
+  getYesterday,
+  getToday,
+  getTommorrow,
+  getWeekStart,
+  getWeekEnd,
+  getMonthStart,
+  getMonthEnd
+} from '@webui/utilities';
 
 // import * as moment from 'moment-timezone';
 
@@ -21,12 +29,16 @@ export interface DateFilterOptions {
   yesterday?: boolean;
   today?: boolean;
   tomorrow?: boolean;
+  week?: boolean;
+  month?: boolean;
 }
 
 export enum DateTypes {
   Yesterday,
   Today,
-  Tomorrow
+  Tomorrow,
+  Week,
+  Month
 }
 
 export const Date = 'date';
@@ -45,7 +57,9 @@ export class DateFilter implements FilterModel {
       label,
       yesterday = false,
       today = false,
-      tomorrow = false
+      tomorrow = false,
+      week = false,
+      month = false
     } = options;
 
     this.key = key;
@@ -63,7 +77,10 @@ export class DateFilter implements FilterModel {
 
     this.list = [];
     if (yesterday) {
-      this.list.push({ label: 'Yesterday', query: DateTypes.Yesterday });
+      this.list.push({
+        label: 'Yesterday',
+        query: DateTypes.Yesterday
+      });
     }
 
     if (today) {
@@ -79,6 +96,20 @@ export class DateFilter implements FilterModel {
         query: DateTypes.Tomorrow
       });
     }
+
+    if (week) {
+      this.list.push({
+        label: 'This week',
+        query: DateTypes.Week
+      });
+    }
+
+    if (month) {
+      this.list.push({
+        label: 'This month',
+        query: DateTypes.Month
+      });
+    }
   }
 
   static getQuery = (key: string, type: DateTypes) => {
@@ -91,6 +122,12 @@ export class DateFilter implements FilterModel {
 
       case DateTypes.Tomorrow:
         return `${key}_0=${getTommorrow()}&${key}_1=${getTommorrow()}`;
+
+      case DateTypes.Week:
+        return `${key}_0=${getWeekStart()}&${key}_1=${getWeekEnd()}`;
+
+      case DateTypes.Month:
+        return `${key}_0=${getMonthStart()}&${key}_1=${getMonthEnd()}`;
     }
   };
 }

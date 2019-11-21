@@ -58,10 +58,10 @@
           <h4 class="mb-1">${{planPay(plan)}}</h4>
           <p class="mb-2">{{plan.amount_tag_line}}</p>
           <p class="annually"><small>(${{planPayYear(plan)}} annually)</small></p>
-          <ul class="p-0" *ngIf="plan.table">
+          <ul class="features" *ngIf="plan.table">
             <ng-container *ngFor="let item of plan.table">
-              <li *ngIf="item">
-                <fa-icon [icon]="['fas', 'check']" class="text-white"></fa-icon>
+              <li class="features__item" *ngIf="item">
+                <fa-icon icon="check" class="features__icon"></fa-icon>
                 {{item}}
               </li>
             </ng-container>

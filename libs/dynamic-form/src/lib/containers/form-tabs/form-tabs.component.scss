@@ -2,11 +2,7 @@
 @import '../../../../../../styles/mixins';
 
 .form-tabs {
-  margin: 0 -40px;
-
-  @include media-breakpoint-down('md') {
-    margin: 0 -20px;
-  }
+  margin: 0 -20px;
 }
 
 .label {

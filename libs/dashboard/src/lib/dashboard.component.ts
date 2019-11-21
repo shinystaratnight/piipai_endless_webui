@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   grid: GridElement;
   modalRef: NgbModalRef;
 
-  draging: boolean;
+  dragging: boolean;
 
   GridElementType = GridElementType;
 
@@ -49,17 +49,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.widgetService.getWidgets().subscribe((widgets: Widget[]) => {
-      this.widgets = widgets;
-
-      this.widgetService
-        .getUserWidgets()
-        .subscribe((userWidgets: UserWidget[]) => {
-          this.userWidgets = userWidgets;
-
-          this.grid = this.generateDashboard(userWidgets);
-        });
-    });
+    this.initializeDashboard();
   }
 
   ngOnDestroy() {
@@ -134,6 +124,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.widgetService.removeWidget(widget.id).subscribe(() => {
       this.userWidgets = this.userWidgets.filter(el => el.id !== widget.id);
       this.grid = this.generateDashboard(this.userWidgets);
+      this.widgetService.updateCoords(this.grid);
+      this.updateWidgetsConfig();
     });
   }
 
@@ -145,10 +137,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   addWidget(widget: Widget) {
     const contactId = this.userService.user.data.contact.contact_id;
+    const config = {
+      coords: this.grid.elements.length.toString(),
+      size: this.widgetService.getSizes(widget.type)
+    }
 
     this.modalRef.close();
-    this.widgetService.addWidget(widget.id, contactId).subscribe(() => {
-      console.log('new widget added');
+    this.widgetService.addWidget(widget.id, contactId, config).subscribe(() => {
+      this.grid = null;
+      this.widgetService.updateDashboard();
+      this.initializeDashboard();
     });
   }
 
@@ -176,11 +174,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.userWidgets.forEach(el => {
       el.move = false;
     });
-    this.draging = false;
+    this.dragging = false;
+    this.updateWidgetsConfig();
   }
 
   dragStarted() {
-    this.draging = true;
+    this.dragging = true;
+  }
+
+  private initializeDashboard() {
+    this.widgetService.getWidgets().subscribe((widgets: Widget[]) => {
+      this.widgets = widgets;
+
+      this.widgetService
+        .getUserWidgets()
+        .subscribe((userWidgets: UserWidget[]) => {
+          this.userWidgets = userWidgets;
+
+          this.grid = this.generateDashboard(userWidgets);
+        });
+    });
+  }
+
+  private updateWidgetsConfig() {
+    this.userWidgets.forEach((widget: UserWidget) => {
+      this.widgetService.updateWidget(widget.id, { ui_config: widget.config }).subscribe();
+    });
   }
 
   private generateDashboard(widgets: UserWidget[]): any {

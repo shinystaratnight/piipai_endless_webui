@@ -19,7 +19,7 @@
         <div class="title">
           {{node.workflow_node.name_before_activation}}
         </div>
-        <fa-icon [icon]="['fas', 'times']" class="icon text-danger" (click)="deleteNode(node.id, $event)"></fa-icon>
+        <fa-icon class="icon text-danger" icon="times" (click)="deleteNode(node.id, $event)"></fa-icon>
     </div>
 
   </div>
@@ -27,18 +27,21 @@
   <a href="" class="main add-link" (click)="addState($event)">Add State</a>
 </div>
 
-<ng-template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">{{modalInfo.label}}</h5>
 
-        <app-close-button class="close ml-auto" (click)="d()"></app-close-button>
+        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div class="modal-body">
       <div class="buttons">
-        <button type="button" class="btn btn-sm btn-warning" (click)="openEditModal(modalInfo.node, c)"><fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon> Edit</button>
+        <button type="button" class="btn btn-warning text-white" (click)="openEditModal(modalInfo.node, modal.close)">
+          <fa-icon icon="pencil-alt"></fa-icon>
+          Edit
+        </button>
       </div>
 
       <div class="substates">
@@ -47,13 +50,10 @@
 
           <div>
             <span class="badge badge-outline mb-1 mr-1" style="white-space: normal"
-              (click)="openState(state, c)"
+              (click)="openState(state, modal.close)"
               *ngFor="let state of subStates[modalInfo.id]">
                 {{state.workflow_node.name_before_activation}}
-                <fa-icon class="ml-2"
-                  (click)="deleteSubstate(state, $event)"
-                  [icon]="['fas', 'times']">
-                </fa-icon>
+                <fa-icon class="ml-2 text-danger" icon="times" (click)="deleteSubstate(state, $event)"></fa-icon>
             </span>
           </div>
 
@@ -66,10 +66,7 @@
             <span class="badge badge-outline mb-1 mr-1" style="white-space: normal"
               *ngFor="let test of acceptanceTests[modalInfo.node.id]">
                 {{test.acceptance_test.name}}
-                <fa-icon class="ml-2"
-                  (click)="deleteTest(test, modalInfo.node)"
-                  [icon]="['fas', 'times']">
-                </fa-icon>
+                <fa-icon class="ml-2 text-danger" icon="times" (click)="deleteTest(test, modalInfo.node)"></fa-icon>
             </span>
           </div>
           <a href="" class="add-link mt-1" (click)="addTest($event, modalInfo.node)">Add Acceptence Test</a>
@@ -79,13 +76,13 @@
   </div>
 </ng-template>
 
-<ng-template #edit let-c="close" let-d="dismiss">
+<ng-template #edit let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">{{editModalInfo.label}}</h5>
 
-        <app-close-button class="close ml-auto" (click)="d()"></app-close-button>
+        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div class="modal-body">
@@ -93,7 +90,7 @@
         [endpoint]="editModalInfo.endpoint"
         [id]="editModalInfo.id"
         [data]="editModalInfo.data"
-        (event)="formEvent($event, c)"
+        (event)="formEvent($event, modal.close)"
         (errorForm)="formError($event)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save" [disabled]="saveProcess">
             Save
@@ -104,19 +101,19 @@
   </div>
 </ng-template>
 
-<ng-template #add let-c="close" let-d="dismiss">
+<ng-template #add let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">{{parentId ? 'Add Substate' : 'Add State'}}</h5>
 
-        <app-close-button class="close ml-auto" (click)="d()"></app-close-button>
+        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div class="modal-body">
       <app-dynamic-form
         [config]="addConfig"
-        (submitForm)="addStateToCompany($event, c)">
+        (submitForm)="addStateToCompany($event, modal.close)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add
@@ -127,19 +124,19 @@
   </div>
 </ng-template>
 
-<ng-template #tests let-c="close" let-d="dismiss">
+<ng-template #tests let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title">Add Acceptance Test</h5>
 
-        <app-close-button class="close ml-auto" (click)="d()"></app-close-button>
+        <app-close-button class="close ml-auto" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div class="modal-body">
       <app-dynamic-form
         [config]="addConfig"
-        (submitForm)="addAcceptenceTest($event, c)">
+        (submitForm)="addAcceptenceTest($event, modal.close)">
           <button type="submit" class="btn btn-secondary bg-primary text-white button-save"
             [disabled]="saveProcess">
             Add

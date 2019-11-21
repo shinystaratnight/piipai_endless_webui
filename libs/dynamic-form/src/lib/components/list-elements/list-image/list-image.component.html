@@ -1,4 +1,11 @@
-<fa-icon *ngIf="icon && !config.setColorForLabel" [icon]="['fas', icon]" class="mr-1" [ngClass]="[iconClass]" [title]="config.title || ''" [ngStyle]="{'fontSize.px': config.fontSize}"></fa-icon>
+<span *ngIf="icon && !config.setColorForLabel">
+  <fa-icon
+    [icon]="icon"
+    [ngClass]="[iconClass]"
+    [title]="config.title || ''"
+    [ngStyle]="{'fontSize.px': config.fontSize}">
+  </fa-icon>
+</span>
 
 <ng-container *ngIf="config.label && config.label.slice">
   <span *ngIf="!config.setColorForLabel">{{config.label}}&nbsp;</span>
@@ -9,7 +16,7 @@
   <span *ngIf="config.setColorForLabel" [ngClass]="[iconClass]">{{config.label[config.value]}}&nbsp;</span>
 </ng-container>
 
-<span class="description" *ngIf=emptyValue>{{config.emptyValue}}</span>
+<span class="description" *ngIf="config.emptyValue">{{config.emptyValue}}</span>
 
 <img alt="Signature" width="112" height="48" class="signature"
   *ngIf="src && config.signature"
@@ -18,7 +25,9 @@
 <ng-container *ngIf="src && !config.signature">
   <img *ngIf="src" [src]="src" width="60" height="60">
 </ng-container>
-<span class="mr-1" *ngIf="config.delim && !last">{{config.delim}}</span>
+
+<span class="mr-1" *ngIf="config.delim && config.delim.trim() && !last">{{config.delim}}</span>
+
 <div *ngIf="file" [class.mobile]="isMobileDevice">
   <a #filelink
     [href]="file"
@@ -30,5 +39,6 @@
   </a>
   <fa-icon *ngIf="file" class="upload-button" (click)="downloadFile()" [icon]="['fas', 'download']"></fa-icon>
 </div>
+
 <div *ngIf="contactAvatar" class="contact-avatar">{{contactAvatar}}</div>
 <br *ngIf="!config.hidden && !config.delim && !last">

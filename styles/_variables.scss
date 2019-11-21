@@ -1,6 +1,9 @@
 @import '../node_modules/bootstrap/scss/functions';
 @import '../node_modules/bootstrap/scss/variables';
 
+// Font
+$font-family-base: "Source Sans Pro", sans-serif;
+
 // Color variables
 $primary: #28a3fc;
 $success: #32ba5e;
@@ -47,6 +50,7 @@ $input-font-size: 14px;
 $input-line-height: 16px;
 $input-border-radius: 0;
 $input-focus-box-shadow: none;
+$custom-select-focus-box-shadow: none;
 
 // Popover
 $zindex-popover: 1;

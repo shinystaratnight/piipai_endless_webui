@@ -650,3 +650,13 @@ app-datepicker {
     box-shadow: none;
   }
 }
+
+.candidate-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  top: 2px;
+  width: 12px;
+  height: 12px;
+}

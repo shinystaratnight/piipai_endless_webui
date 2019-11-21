@@ -147,7 +147,7 @@ const profile = function() {
           .setQuery({ candidate_contact: '{id}' })
           .setMetadataQuery({ type: 'profile' }),
 
-        new Form.list.element('Evaluations', Endpoints.CandidateTag)
+        new Form.list.element('Evaluations', Endpoints.CandidateEvaluation)
           .withoutAddButton()
           .setAdditionalInfo('Evaluations', 'Here you can see evaluations')
           .setQuery({ candidate_contact: '{id}' })

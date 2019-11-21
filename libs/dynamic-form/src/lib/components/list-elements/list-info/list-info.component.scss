@@ -1,4 +1,5 @@
 @import '../../../../../../../styles/variables';
+@import '../../../../../../../styles/mixins';
 
 .list-info {
   &-wrapper {
@@ -8,13 +9,11 @@
   }
 
   &-title {
+    display: flex;
+    align-items: center;
     position: relative;
     margin-bottom: 4px;
     font-size: 1rem;
-
-    fa-icon {
-      font-size: 10px;
-    }
 
     &.position {
       padding-top: 6px;
@@ -24,6 +23,10 @@
       font-size: 18px;
       line-height: 20px;
       font-weight: 600;
+
+      & > fa-icon {
+        font-size: 10px;
+      }
     }
 
     .score {
@@ -189,3 +192,18 @@
   font-size: 14px;
   line-height: 16px;
 }
+
+// .average-info {
+//   &__title {
+//     @extend %f-w-500;
+//   }
+
+//   &__item fa-icon {
+//     position: relative;
+//     top: 2px;
+//   }
+
+//   &__score {
+//     margin-left: 0.25rem;
+//   }
+// }

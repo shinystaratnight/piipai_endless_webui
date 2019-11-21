@@ -479,15 +479,16 @@ const profile = {
         title: null,
         sort: true,
         content: [
-          {
-            text: 'Show timesheet',
-            color: 'primary',
-            endpoint: '/hr/timesheets/{reference_timesheet.id}',
-            label: 'reference_timesheet',
-            display: 'Show timesheet',
-            type: 'text',
-            field: 'reference_timesheet'
-          },
+          // TODO: Fix button
+          // {
+          //   text: 'Show timesheet',
+          //   color: 'primary',
+          //   endpoint: '/hr/timesheets/{reference_timesheet.id}',
+          //   label: 'reference_timesheet',
+          //   display: 'Show timesheet',
+          //   type: 'button',
+          //   field: 'reference_timesheet'
+          // },
           {
             type: 'datepicker',
             listLabel: 'Start',

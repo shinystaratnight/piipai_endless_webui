@@ -1,11 +1,13 @@
 import { Component, Input } from '@angular/core';
 
 import { metadata, smsMetadata } from './billing-lists.metadata';
+import { ListService } from '@webui/dynamic-form';
 
 @Component({
   selector: 'app-billing-lists',
   templateUrl: './billing-lists.component.html',
   styleUrls: ['./billing-lists.component.scss'],
+  providers: [ListService]
 })
 export class BillingListsComponent {
 

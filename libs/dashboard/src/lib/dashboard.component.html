@@ -1,4 +1,4 @@
-<div *ngIf="grid" class="dashboard">
+<div *ngIf="grid" class="dashboard" [class.dragging]="dragging">
   <ng-container
     *ngTemplateOutlet="column; context: { gridElement: grid }"
   ></ng-container>
@@ -15,6 +15,7 @@
 
 <ng-template #column let-gridElement="gridElement">
   <div
+    [class.pb-3]="!getId(gridElement)"
     class="wrapper wrapper-column"
     [id]="getId(gridElement) || 'main-list'"
     cdkDropList
@@ -25,9 +26,9 @@
     <div
       cdkDrag
       [cdkDragDisabled]="!isMove(el)"
-      [class.move]="isMove(el)"
       [class.widget-wrapper]="el.type === GridElementType.Widget"
       *ngFor="let el of gridElement.elements"
+      (cdkDragStarted)="dragging = true"
     >
       <ng-container *ngIf="el.type === GridElementType.Row">
         <ng-container
@@ -40,6 +41,9 @@
           *ngTemplateOutlet="widgetWrapper; context: { widget: el.widget }"
         ></ng-container>
       </ng-container>
+
+      <div class="widget-placeholder" *cdkDragPlaceholder></div>
+      <div class="preview" *cdkDragPreview>{{el.widget.name}}</div>
     </div>
   </div>
 </ng-template>
@@ -56,10 +60,10 @@
     <div
       cdkDrag
       [cdkDragDisabled]="!isMove(el)"
-      [class.move]="isMove(el)"
       [class.widget-wrapper]="el.type === GridElementType.Widget"
       *ngFor="let el of gridElement.elements"
       [ngStyle]="getColumnWidth(el)"
+      (cdkDragStarted)="dragging = true"
     >
       <ng-container *ngIf="el.type === GridElementType.Column">
         <ng-container
@@ -72,12 +76,15 @@
           *ngTemplateOutlet="widgetWrapper; context: { widget: el.widget }"
         ></ng-container>
       </ng-container>
+
+      <div class="widget-placeholder" *cdkDragPlaceholder></div>
+      <div class="preview" *cdkDragPreview>{{el.widget.name}}</div>
     </div>
   </div>
 </ng-template>
 
 <ng-template #widgetWrapper let-widget="widget">
-  <ng-container *ngIf="!draging">
+  <ng-container *ngIf="!dragging">
     <div
       class="widget-edit-btn"
       [class.active]="widget.tooltip"
@@ -103,15 +110,9 @@
         </div>
       </div>
     </ng-template>
-
-    <div class="move-backdrop"></div>
   </ng-container>
 
-  <ng-container *ngIf="draging">
-    <div class="preview">
-      {{ widget.name }}
-    </div>
-  </ng-container>
+  <div class="preview" *ngIf="dragging">{{ widget.name }}</div>
 </ng-template>
 
 <ng-template #modalTemplate let-modal>

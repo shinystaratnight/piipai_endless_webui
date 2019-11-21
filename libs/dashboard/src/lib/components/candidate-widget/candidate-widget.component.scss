@@ -37,6 +37,9 @@
 .filter-wrapper {
   height: 100%;
   margin: 0 14px;
+  overflow-y: auto;
+
+  @include scrollbar();
 }
 
 .list {

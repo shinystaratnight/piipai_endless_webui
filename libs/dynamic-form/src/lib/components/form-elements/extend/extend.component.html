@@ -48,7 +48,7 @@
       <div class="title">Shifts</div>
 
       <button type="button" class="btn btn-shadow btn-primary mr-3" (click)="autocompleteCandidates()">Autocomplete <app-spinner *ngIf="autocompleteProcess"></app-spinner></button>
-      <app-info [placement]="'bottom'" [description]="requirements"></app-info>
+      <app-info placement="left" [description]="requirements"></app-info>
     </div>
 
     <div class="shift" *ngFor="let shift of shifts; let i = index">
@@ -69,20 +69,30 @@
 
 <ng-template #requirements>
   <div class="info-block">
-    <h6>Fills shifts automatically using criteria:</h6>
-    <ul>
-      <li><fa-icon class="icon" [icon]="['fas', 'circle']"></fa-icon>Candidate Score</li>
-      <li><fa-icon class="icon" [icon]="['fas', 'circle']"></fa-icon>Distanse to the jobsite</li>
+    <h6 class="info-block__title">Fills shifts automatically using criteria:</h6>
+    <ul class="info-block__list">
+      <li class="info-block__item">
+        <fa-icon class="info-block__icon" icon="circle"></fa-icon>Candidate Score
+      </li>
+      <li class="info-block__item">
+        <fa-icon class="info-block__icon" icon="circle"></fa-icon>Distanse to the jobsite
+      </li>
     </ul>
   </div>
 </ng-template>
 
 <ng-template #fillinfo>
   <div *ngIf="autoFillData" class="info-block">
-    <h6>Use information from last fullfilled shift:</h6>
-    <ul *ngFor="let date of autoFillData">
-      <li><fa-icon class="icon" [icon]="['fas', 'circle']"></fa-icon>{{date.shift_datetime | dateFormat: 'datetime'}}</li>
-      <li *ngFor="let candidate of date.candidates"><fa-icon class="icon" [icon]="['fas', 'circle']"></fa-icon>{{candidate.__str__}}</li>
+    <h6 class="info-block__title">Use information from last fullfilled shift:</h6>
+    <ul class="info-block__list" *ngFor="let date of autoFillData">
+      <li class="info-block__item">
+        <fa-icon class="info-block__icon" icon="circle"></fa-icon>
+        {{date.shift_datetime | dateFormat: 'datetime'}}
+      </li>
+      <li class="info-block__item" *ngFor="let candidate of date.candidates">
+        <fa-icon class="info-block__icon" icon="circle"></fa-icon>
+        {{candidate.__str__}}
+      </li>
     </ul>
   </div>
   <div class="text-danger" *ngIf="!autoFillData">Fulfilled shift doesn't exist on this job!</div>

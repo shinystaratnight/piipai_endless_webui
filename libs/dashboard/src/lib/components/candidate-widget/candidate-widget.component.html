@@ -11,14 +11,14 @@
         Send Job Offer
       </button>
 
-      <span
+      <button
         *ngIf="!selectedCandidates.size"
-        class="filter-button"
+        class="btn btn-link filter-button"
         (click)="toggleFilters()"
       >
         Filters
-        <fa-icon icon="chevron-down" class="text-primary"></fa-icon>
-      </span>
+        <fa-icon icon="chevron-down"></fa-icon>
+      </button>
     </h3>
   </div>
 

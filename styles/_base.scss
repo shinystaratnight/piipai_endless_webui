@@ -50,7 +50,7 @@ input {
 }
 
 @include media-breakpoint-up('md') {
-  .only-mobile {
+  .btn.only-mobile {
     display: none;
   }
 }
@@ -325,16 +325,9 @@ iframe.send-sms {
 
 .dynamic-form {
   margin: 0 20px;
-}
 
-.edit-form.has-tabs .dynamic-form {
-  margin-top: 40px;
-}
-
-.has-tabs {
-  .dynamic-form {
+  .has-tabs {
     margin: 40px;
-
     margin-bottom: 0;
 
     .mobile-device & {
@@ -344,6 +337,10 @@ iframe.send-sms {
     @include media-breakpoint-down('md') {
       margin: 20px;
     }
+  }
+
+  .edit-form.has-tabs & {
+    margin-top: 40px;
   }
 }
 
@@ -437,4 +434,9 @@ iframe.send-sms {
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+// Styles for none encapsulation elements
+app-checkbox {
+  display: flex;
 }

@@ -231,6 +231,10 @@
       input {
         padding-left: 3rem;
         padding-right: 0;
+
+        &:focus {
+          border-color: $gray;
+        }
       }
 
       .placeholder {
