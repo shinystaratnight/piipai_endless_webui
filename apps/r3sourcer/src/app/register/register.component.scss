@@ -47,8 +47,9 @@ $content-width: 540px;
   color: #4f4f4f;
 }
 
-.form-content {
+.registration-form {
   max-width: $content-width;
+  padding: 0;
 
   @include media-breakpoint-down('sm') {
     max-width: 100%;

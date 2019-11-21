@@ -30,9 +30,14 @@
 .search {
   position: relative;
 
+  .form-control {
+    border: none;
+    border-bottom: 1px solid rgba($gray, 0.2);
+  }
+
   .search-icon {
     position: absolute;
-    top: 0.5rem;
+    top: 0.7rem;
     right: 0.7rem;
   }
 }

@@ -323,6 +323,16 @@ iframe.send-sms {
   }
 }
 
+.edit-form .form-name {
+  top: 16px !important;
+  left: 55px !important;
+
+  @include media-breakpoint-down('md') {
+    top: 4px !important;
+    left: 20px !important;
+  }
+}
+
 .dynamic-form {
   margin: 0 20px;
 
