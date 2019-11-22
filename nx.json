@@ -49,6 +49,9 @@
     },
     "billing-metadata": {
       "tags": []
+    },
+    "dashboard": {
+      "tags": []
     }
   }
 }

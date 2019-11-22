@@ -1,7 +1,7 @@
 <ul class="guide__list">
   <li class="guide__item" *ngFor="let item of guide">
     <fa-icon
-      class="position-relative mr-2"
+      class="guide__icon"
       icon="check"
       [class.active]="item.completed"
     >
@@ -26,7 +26,7 @@
               [value]="option.value"
               hidden
             />
-            <div class="circle sm">
+            <div class="radio-circle sm">
               <div class="inner"></div>
             </div>
             <span>{{ option.text }}</span>

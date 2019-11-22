@@ -34,11 +34,12 @@
       <span class="title" *ngIf="getScore(averageScore)">
         <ng-container *ngIf="!config.hideTitle">{{title}}</ng-container>
         <span class="score"
-          [placement]="'right'"
+          placement="right-top"
           [ngbTooltip]="avarage"
           [style.color]="colors[getScore(averageScore)]"
           [style.borderColor]="colors[getScore(averageScore)]">
-            {{averageScore | number:'1.1-1'}}&nbsp;<fa-icon [icon]="['fas', 'star']"></fa-icon>
+            {{averageScore | number:'1.1-1'}}&nbsp;
+            <fa-icon icon="star"></fa-icon>
         </span>
       </span>
       <span class="score text-danger"
@@ -64,18 +65,18 @@
 <ng-template #avarage>
   <div *ngIf="config.value" class="info-block p-1">
     <ng-container *ngIf="averageScoreDescription.includes.length">
-      <h6 class="subtitle">Average includes</h6>
-      <ul class="mb-2">
-        <li [class.mb-1]="!l" *ngFor="let scoreItem of averageScoreDescription.includes; let l = last">
+      <h6 class="info-block__title">Average includes</h6>
+      <ul class="info-block__list">
+        <li class="info-block__item" *ngFor="let scoreItem of averageScoreDescription.includes">
           <ng-container *ngTemplateOutlet="score; context: {name: scoreItem.label, score: scoreItem.score}"></ng-container>
         </li>
       </ul>
     </ng-container>
 
     <ng-container *ngIf="averageScoreDescription.excludes.length">
-      <h6 class="subtitle">Excludes</h6>
-      <ul>
-        <li [class.mb-1]="!l" *ngFor="let scoreItem of averageScoreDescription.excludes; let l = last">
+      <h6 class="info-block__title">Excludes</h6>
+      <ul class="info-block__list">
+        <li class="info-block__item" *ngFor="let scoreItem of averageScoreDescription.excludes">
           <ng-container *ngTemplateOutlet="score; context: {name: scoreItem.label, score: scoreItem.score}"></ng-container>
         </li>
       </ul>
@@ -84,13 +85,13 @@
 </ng-template>
 
 <ng-template #score let-name="name" let-score="score">
-  <fa-icon class="icon text-warning" [icon]="['fas', 'circle']"></fa-icon>
+  <fa-icon class="info-block__icon text-warning" icon="circle"></fa-icon>
   {{name}}
   <ng-container *ngIf="getScore(score)">
-    <span [style.color]="colors[getScore(score)]" [style.borderColor]="colors[getScore(score)]">
+    <span class="info-block__score" [style.color]="colors[getScore(score)]" [style.borderColor]="colors[getScore(score)]">
       {{score | number:'1.1-1'}}
-      <fa-icon [icon]="['fas', 'star']"></fa-icon>
+      <fa-icon icon="star"></fa-icon>
     </span>
   </ng-container>
-  <span *ngIf="!getScore(score)" class="text-danger">No rating</span>
+  <span *ngIf="!getScore(score)" class="info-block__score text-danger">No rating</span>
 </ng-template>

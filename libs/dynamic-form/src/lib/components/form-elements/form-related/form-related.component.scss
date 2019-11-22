@@ -26,11 +26,8 @@
 }
 
 .description {
-  margin-left: 40px;
-
-  @include media-breakpoint-down('md') {
-    margin: 20px;
-  }
+  margin-left: 19px;
+  margin-bottom: 20px;
 }
 
 .candidate-info {
@@ -90,6 +87,7 @@ a.readonly:focus {
   &__btn {
     padding: 4px 20px;
     margin-left: auto;
+    font-size: 12px;
   }
 }
 

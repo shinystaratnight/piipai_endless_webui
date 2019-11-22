@@ -1,7 +1,7 @@
 .datatable-button {
   position: relative;
 
-  padding: 10px 32px 10px 32px;
+  padding: 10px 28px;
 }
 
 .button-icon {
@@ -11,13 +11,13 @@
   &::before,
   &::after {
     position: absolute;
-    top: 20px;
+    top: 18px;
     left: 29px;
 
     display: inline-block;
 
     width: 14px;
-    height: 2px;
+    height: 1px;
 
     background-color: white;
 

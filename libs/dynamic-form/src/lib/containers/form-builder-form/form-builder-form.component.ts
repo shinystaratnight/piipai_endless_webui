@@ -33,6 +33,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     keys: [],
     observers: []
   };
+  public process: boolean;
 
   public currentStep = 0;
   public saveProcess = false;
@@ -223,17 +224,23 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    setTimeout(() => {
-      if (this.currentStep !== 0) {
-        this.currentStep -= 1;
-      }
-    }, 100);
+    if (this.currentStep !== 0) {
+      this.process = true;
+      this.currentStep -= 1;
+
+      setTimeout(() => {
+        this.process = false;
+      }, 1000)
+    }
   }
 
   next() {
+    this.currentStep += 1;
+    this.process = true;
+
     setTimeout(() => {
-      this.currentStep += 1;
-    }, 100);
+      this.process = false;
+    }, 1000);
   }
 
   public changeType(key: string, to: string) {

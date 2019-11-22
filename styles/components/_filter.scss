@@ -15,6 +15,7 @@
   }
 
   &-element {
+    min-width: 220px;
     margin-top: 10px;
     padding-bottom: 1rem;
 
@@ -177,7 +178,7 @@
     .form-control {
       height: auto !important;
 
-      padding: 9px 12px;
+      padding: 11px 12px;
 
       font-size: 14px;
       line-height: 18px;
@@ -190,6 +191,10 @@
 
       .filters-inline & {
         border-radius: 4px;
+
+        @include media-breakpoint-down('sm') {
+          border-radius: 4px !important;
+        }
       }
 
       &:focus {
@@ -214,11 +219,6 @@
       }
     }
 
-    .custom-checkbox {
-      width: 0.875rem;
-      height: 0.875rem;
-    }
-
     .datepicker {
       display: relative;
 
@@ -231,11 +231,15 @@
       input {
         padding-left: 3rem;
         padding-right: 0;
+
+        &:focus {
+          border-color: $gray;
+        }
       }
 
       .placeholder {
         position: absolute;
-        top: 12px;
+        top: 11px;
         left: 16px;
 
         font-size: 12px;
@@ -289,7 +293,7 @@
 
       font-size: 0.75rem;
 
-      color: $brand-primary;
+      color: $primary;
       cursor: pointer;
 
       @each $item in $themes {

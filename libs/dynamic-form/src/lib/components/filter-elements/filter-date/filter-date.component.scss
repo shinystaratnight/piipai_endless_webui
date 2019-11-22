@@ -10,7 +10,7 @@
 
   margin: 3px 0;
 
-  background-color: rgba($brand-primary, 0.15);
+  background-color: rgba($primary, 0.15);
   opacity: 0.6;
 
   &-item {
@@ -29,7 +29,7 @@
 }
 
 .form-control {
-  min-height: 44px;
+  min-height: 42px;
 }
 
 .delimiter {

@@ -133,10 +133,10 @@ export class ListTextComponent implements OnInit {
     const statusList = Object.keys(data);
 
     statusList.forEach((status: string) => {
-      data[status].forEach((candidate) => {
+      data[status].forEach(candidate => {
         if (candidate) {
           result.push({
-            name: candidate,
+            name: candidate.name,
             status
           });
         }

@@ -3,12 +3,13 @@ import { createFilter, Type } from '@webui/metadata';
 export const filters = {
   client: createFilter(Type.Relared, {
     key: 'client',
-    label: 'Company/Jobsite/Client contact filter',
-    endpoint: '/core/companies/',
+    // label: 'Company/Jobsite/Client contact filter',
+    label: 'Company filter',
+    endpoint: '/core/companies/'
   }),
   candidate: createFilter(Type.Relared, {
     key: 'candidate',
     label: 'Candidate contact filter',
-    endpoint: '/candidate/candidatecontacts/',
-  }),
+    endpoint: '/candidate/candidatecontacts/'
+  })
 };

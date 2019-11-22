@@ -1,6 +1,5 @@
 @import '../../../../../../styles/variables';
 
-
 .info {
   position: relative;
   top: -1px;
@@ -23,18 +22,18 @@
   border: 1px solid $gray;
 
   color: $gray;
-  opacity: .5;
+  opacity: 0.5;
   cursor: pointer;
 
   &.danger {
-    border-color: $brand-danger;
-    color: $brand-danger;
+    border-color: $danger;
+    color: $danger;
     opacity: 1;
   }
 
   &:hover {
-    border-color: $brand-primary;
-    color: $brand-primary;
+    border-color: $primary;
+    color: $primary;
 
     opacity: 1;
 

@@ -19,9 +19,9 @@ export class BackLinkComponent {
   @Output() backEvent: EventEmitter<boolean> = new EventEmitter();
 
   back(event: MouseEvent) {
-    event.stopPropagation();
     event.preventDefault();
 
     this.backEvent.emit(true);
+    return false;
   }
 }

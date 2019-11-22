@@ -37,7 +37,7 @@
     margin-bottom: 3px;
 
     &.active {
-      background-color: $brand-primary;
+      background-color: $primary;
       border-radius: 50px;
 
       cursor: pointer;
@@ -63,13 +63,13 @@
     text-align: center;
 
     &.active {
-      background-color: $brand-primary;
+      background-color: $primary;
 
       .calendar-button {
         color: white;
 
         &:hover {
-          background-color: $brand-primary;
+          background-color: $primary;
         }
       }
 
@@ -110,7 +110,7 @@
     }
 
     &.active {
-      background-color: $brand-primary;
+      background-color: $primary;
       color: white;
     }
   }

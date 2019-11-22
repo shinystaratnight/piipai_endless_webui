@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-loader',
@@ -10,6 +10,8 @@ import { Component } from '@angular/core';
       <div></div>
     </div>
   `,
-  styleUrls: ['./loader.component.scss']
+  styleUrls: ['./loader.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoaderComponent {}

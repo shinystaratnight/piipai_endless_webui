@@ -137,6 +137,8 @@
 
     margin-top: 28px;
 
+    font-size: 16px;
+    line-height: 18px;
     font-family: inherit;
     font-weight: 600;
 
@@ -146,18 +148,8 @@
   }
 }
 
-.form-element-checkbox {
-  &:hover {
-    color: #4f4f4f;
-
-    span {
-      opacity: 1;
-    }
-
-    .custom-checkbox {
-      border-color: #4f4f4f;
-    }
-  }
+.form-element-checkbox.active span {
+  opacity: 1;
 }
 
 a.forgot {
@@ -174,7 +166,7 @@ a.forgot {
 
   text-align: center;
 
-  color: $brand-primary;
+  color: $primary;
 
   @each $item in $themes {
     .#{$item}-theme & {
@@ -187,22 +179,7 @@ a.forgot {
     align-items: center;
   }
 
-  svg {
-    width: 13px;
-    height: 13px;
-
+  app-icon-plus {
     margin-right: 0.5rem;
-  }
-
-  polygon {
-    fill: $brand-primary;
-    stroke: $brand-primary;
-
-    @each $item in $themes {
-      .#{$item}-theme & {
-        fill: map-get($theme-colors, $item);
-        stroke: map-get($theme-colors, $item);
-      }
-    }
   }
 }

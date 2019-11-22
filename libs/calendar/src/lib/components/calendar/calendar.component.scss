@@ -1,4 +1,5 @@
 @import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
 
 $border-radius: 0.2rem;
 $block-padding: 10px 32px;
@@ -6,7 +7,7 @@ $block-padding: 10px 32px;
 .widget {
   display: flex;
   flex-direction: column;
-  min-height: 600px;
+  height: 100%;
 
   &-body {
     display: flex;
@@ -17,8 +18,17 @@ $block-padding: 10px 32px;
 
 .calendar-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+
+  @include media-breakpoint-down('xs') {
+    flex-direction: column;
+
+    & > *:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
 }
 
 .calendar-footer {
@@ -26,21 +36,35 @@ $block-padding: 10px 32px;
   align-items: center;
   flex-wrap: wrap;
 
-  margin-top: auto;
+  margin-top: 15px;
 
   .counter {
-    &:not(:last-child) {
+    &:not(.last) {
       margin-right: 20px;
     }
 
     width: 120px;
 
     text-align: center;
+
+    @include media-breakpoint-down('sm') {
+      width: auto;
+    }
   }
 
   fa-icon {
     font-size: 8px;
     margin-right: 6px;
+  }
+}
+
+.counters {
+  display: flex;
+
+  @include media-breakpoint-down('sm') {
+    justify-content: space-around;
+    flex: 1 1;
+    padding: 10px;
   }
 }
 
@@ -64,6 +88,10 @@ $block-padding: 10px 32px;
 
       color: #4f4f4f;
       opacity: 0.8;
+
+      @include media-breakpoint-down('sm') {
+        display: none;
+      }
     }
   }
 }
@@ -84,6 +112,11 @@ h2 {
     border: 1px solid #bdbdbd;
     opacity: 0.8;
 
+    @include media-breakpoint-down('sm') {
+      font-size: 14px;
+      padding: 3px 9px;
+    }
+
     &:first-child {
       border-top-left-radius: $border-radius;
       border-bottom-left-radius: $border-radius;
@@ -95,8 +128,8 @@ h2 {
     }
 
     &.active {
-      background-color: $brand-primary;
-      border-color: $brand-primary;
+      background-color: $primary;
+      border-color: $primary;
       color: white;
     }
   }
@@ -201,14 +234,25 @@ app-datepicker {
   font-size: 16px;
   line-height: 20px;
   padding: 8px 0;
-  color: $brand-primary;
+  color: $primary;
+
+  @include media-breakpoint-down('sm') {
+    font-size: 14px;
+    line-height: 16px;
+  }
 }
 
 .month-day {
-  height: 63px;
+  min-height: 63px;
   padding: 5px 9px 5px 12px;
 
   border: 1px solid #e0e0e0;
+
+  @include media-breakpoint-down('sm') {
+    min-height: auto;
+    padding: 5px;
+    text-align: left;
+  }
 
   &.active {
     border-color: #f5f5f5;
@@ -221,8 +265,12 @@ app-datepicker {
   line-height: 1;
   opacity: 0.7;
 
+  @include media-breakpoint-down('sm') {
+    font-size: 14px;
+  }
+
   &.current-date {
-    color: $brand-primary;
+    color: $primary;
     opacity: 1;
   }
 }
@@ -231,6 +279,10 @@ app-datepicker {
   &-row {
     position: relative;
     display: flex;
+
+    &:not(:first-child) {
+      flex: 1 1;
+    }
   }
 
   &-item {
@@ -242,8 +294,8 @@ app-datepicker {
         45deg,
         #fff 0%,
         #fff 85%,
-        $brand-success 85%,
-        $brand-success 100%
+        $success 85%,
+        $success 100%
       );
     }
 
@@ -252,14 +304,14 @@ app-datepicker {
         45deg,
         #fff 0%,
         #fff 85%,
-        $brand-danger 85%,
-        $brand-danger 100%
+        $danger 85%,
+        $danger 100%
       );
     }
   }
 
   &-body {
-    height: 370px;
+    min-height: 370px;
     overflow: hidden;
     margin-bottom: 15px;
   }
@@ -267,29 +319,18 @@ app-datepicker {
 
 .filters {
   display: flex;
-}
+  flex-wrap: wrap;
+  margin: 0 -5px;
 
-app-filter-related {
-  flex: 1 1;
+  @include media-breakpoint-down('sm') {
+    flex-direction: column;
+  }
 
-  margin-right: 24px;
-}
-
-.filter-element {
-  flex: 1 1;
-  max-width: 300px;
-}
-
-.custom-checkbox.success {
-  border-color: $brand-success;
-}
-
-.custom-checkbox.danger {
-  border-color: $brand-danger;
-}
-
-.custom-checkbox.warning {
-  border-color: $brand-warning;
+  & > * {
+    flex: 1 1;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
 }
 
 .shift {
@@ -337,12 +378,26 @@ app-filter-related {
     display: flex;
     flex-direction: column;
 
+    @include media-breakpoint-down('sm') {
+      top: 0px;
+      right: 0px;
+      height: 100%;
+    }
+
     .badge {
       margin-bottom: 2px;
       padding-top: 0.1rem;
       padding-bottom: 0.1rem;
 
       line-height: 10px;
+
+      @include media-breakpoint-down('sm') {
+        flex: 1 1;
+        width: 5px;
+        margin-bottom: 0;
+        padding: 0;
+        font-size: 0;
+      }
     }
   }
 
@@ -352,7 +407,7 @@ app-filter-related {
 
     & > fa-icon {
       width: 15px;
-      margin-top: -1px;
+      margin-top: 5px;
       font-size: 6px;
     }
 
@@ -394,7 +449,7 @@ app-filter-related {
     display: flex;
     font-size: 12px;
     line-height: 16px;
-    color: $brand-primary;
+    color: $primary;
   }
 
   &-item {
@@ -496,20 +551,20 @@ app-filter-related {
   color: #4f4f4f;
 
   &.badge-success {
-    background-color: $brand-success;
+    background-color: $success;
   }
 
   &.badge-primary {
     color: white;
-    background-color: $brand-primary;
+    background-color: $primary;
   }
 
   &.badge-danger {
-    background-color: $brand-danger;
+    background-color: $danger;
   }
 
   &.badge-warning {
-    background-color: $brand-warning;
+    background-color: $warning;
   }
 }
 
@@ -559,11 +614,11 @@ app-filter-related {
 }
 
 .date-selected {
-  background-color: rgba($brand-success, 0.2);
+  background-color: rgba($success, 0.2);
 }
 
 .time-selected {
-  color: $brand-success;
+  color: $success;
   opacity: 1 !important;
 
   &::after {
@@ -574,7 +629,7 @@ app-filter-related {
     height: 7px;
     width: 7px;
     border-radius: 50%;
-    background-color: $brand-success;
+    background-color: $success;
   }
 }
 
@@ -583,10 +638,25 @@ app-filter-related {
   font-size: 16px;
   line-height: 18px;
   color: #fdfdfd;
-  background-color: $brand-primary;
+  background-color: $primary;
   box-shadow: 0 1px 3px 0 rgba(43, 46, 51, 0.24);
+
+  @include media-breakpoint-down('sm') {
+    padding: 4px 10px;
+    font-size: 14px;
+  }
 
   &:hover {
     box-shadow: none;
   }
+}
+
+.candidate-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  top: 2px;
+  width: 12px;
+  height: 12px;
 }

@@ -1,0 +1,142 @@
+<div *ngIf="grid" class="dashboard" [class.dragging]="dragging">
+  <ng-container
+    *ngTemplateOutlet="column; context: { gridElement: grid }"
+  ></ng-container>
+
+  <button
+    *ngIf="userWidgets.length !== widgets.length"
+    type="button"
+    class="flex-center-center add-widget-btn"
+    (click)="openModal()"
+  >
+    <app-icon-plus appIcon size="md"></app-icon-plus>Add new widget
+  </button>
+</div>
+
+<ng-template #column let-gridElement="gridElement">
+  <div
+    [class.pb-3]="!getId(gridElement)"
+    class="wrapper wrapper-column"
+    [id]="getId(gridElement) || 'main-list'"
+    cdkDropList
+    [cdkDropListData]="gridElement.elements"
+    [cdkDropListConnectedTo]="getlistsId()"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <div
+      cdkDrag
+      [cdkDragDisabled]="!isMove(el)"
+      [class.widget-wrapper]="el.type === GridElementType.Widget"
+      *ngFor="let el of gridElement.elements"
+      (cdkDragStarted)="dragging = true"
+    >
+      <ng-container *ngIf="el.type === GridElementType.Row">
+        <ng-container
+          *ngTemplateOutlet="row; context: { gridElement: el }"
+        ></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="el.type === GridElementType.Widget">
+        <ng-container
+          *ngTemplateOutlet="widgetWrapper; context: { widget: el.widget }"
+        ></ng-container>
+      </ng-container>
+
+      <div class="widget-placeholder" *cdkDragPlaceholder></div>
+      <div class="preview" *cdkDragPreview>{{el.widget.name}}</div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #row let-gridElement="gridElement">
+  <div
+    class="wrapper wrapper-row"
+    [id]="getId(gridElement)"
+    cdkDropList
+    [cdkDropListData]="gridElement.elements"
+    [cdkDropListConnectedTo]="getlistsId()"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <div
+      cdkDrag
+      [cdkDragDisabled]="!isMove(el)"
+      [class.widget-wrapper]="el.type === GridElementType.Widget"
+      *ngFor="let el of gridElement.elements"
+      [ngStyle]="getColumnWidth(el)"
+      (cdkDragStarted)="dragging = true"
+    >
+      <ng-container *ngIf="el.type === GridElementType.Column">
+        <ng-container
+          *ngTemplateOutlet="column; context: { gridElement: el }"
+        ></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="el.type === GridElementType.Widget">
+        <ng-container
+          *ngTemplateOutlet="widgetWrapper; context: { widget: el.widget }"
+        ></ng-container>
+      </ng-container>
+
+      <div class="widget-placeholder" *cdkDragPlaceholder></div>
+      <div class="preview" *cdkDragPreview>{{el.widget.name}}</div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #widgetWrapper let-widget="widget">
+  <ng-container *ngIf="!dragging">
+    <div
+      class="widget-edit-btn"
+      [class.active]="widget.tooltip"
+      [ngbTooltip]="actions"
+      [autoClose]="false"
+      #t="ngbTooltip"
+      triggers="manual"
+      placement="left-top"
+      (click)="toggleActions(t, widget)"
+    >
+      <fa-icon class="f-size-14" icon="ellipsis-h"></fa-icon>
+    </div>
+
+    <ng-container appWidget [config]="widget"></ng-container>
+
+    <ng-template #actions>
+      <div class="actions">
+        <div class="actions-item" (click)="moveWidget(t, widget)">
+          <fa-icon class="f-size-14" icon="arrows-alt"></fa-icon>Move
+        </div>
+        <div class="actions-item" (click)="removeWidget(t, widget)">
+          <fa-icon class="text-danger f-size-14" icon="trash"></fa-icon>Remove
+        </div>
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <div class="preview" *ngIf="dragging">{{ widget.name }}</div>
+</ng-template>
+
+<ng-template #modalTemplate let-modal>
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">Widgets</h5>
+        <app-close-button
+          class="close-button ml-auto"
+          (click)="modal.dismiss()"
+        ></app-close-button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="widget-list">
+        <div
+          class="flex-center widget-list-item"
+          *ngFor="let widget of widgetList"
+          (click)="addWidget(widget)"
+        >
+          <img [src]="widget.img" [attr.alt]="widget.name" />
+          <span>{{ widget.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

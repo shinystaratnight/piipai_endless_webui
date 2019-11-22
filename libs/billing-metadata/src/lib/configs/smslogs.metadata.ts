@@ -1,11 +1,20 @@
-import { getYesterday, getToday, getWeekEnd, getWeekStart, getMonthStart, getMonthEnd } from '@webui/utilities';
+import { createFilter, Type, generateOptions } from '@webui/metadata';
 
-const yesterdayFormatDate = getYesterday();
-const todayFormatDate = getToday().format();
-const weekStart = getWeekStart();
-const weekEnd = getWeekEnd();
-const monthStart = getMonthStart();
-const monthEnd = getMonthEnd();
+const statuses = {
+  ['ACCEPTED']: 'Accepted',
+  ['SENT']: 'Sent',
+  ['QUEUED']: 'Queued',
+  ['SENDING']: 'Sending',
+  ['FAILED']: 'Failed',
+  ['DELIVERED']: 'Delivered',
+  ['UNDELIVERED']: 'Undelivered',
+  ['RECEIVED']: 'Received',
+};
+
+const smsTypes = {
+  ['SENT']: 'SMS sent',
+  ['RECEIVED']: 'SMS received',
+};
 
 const formset = {
   list: {
@@ -127,98 +136,24 @@ const formset = {
     editDisable: true,
     buttons: [],
     filters: [
-      {
-        list: [
-          {
-            label: 'Today',
-            query: `created_at_0=${todayFormatDate}&created_at_1=${todayFormatDate}`
-          },
-          {
-            label: 'Yesterday',
-            query: `created_at_0=${yesterdayFormatDate}&created_at_1=${yesterdayFormatDate}`
-          },
-          {
-            label: 'This week',
-            query: `created_at_0=${weekStart}&created_at_1=${weekEnd}`
-          },
-          {
-            label: 'This month',
-            query: `created_at_0=${monthStart}&created_at_1=${monthEnd}`
-          },
-        ],
+      createFilter(Type.Date, {
         key: 'created_at',
         label: 'Created at',
-        type: 'date',
-        input: [
-          {
-            label: 'From',
-            query: 'created_at_0'
-          },
-          {
-            label: 'To',
-            query: 'created_at_1'
-          }
-        ]
-      },
-      {
+        yesterday: true,
+        today: true,
+        week: true,
+        month: true
+      }),
+      createFilter(Type.Select, {
         key: 'status',
         label: 'Status',
-        options: [
-          {
-            value: 'ACCEPTED',
-            label: 'Accepted'
-          },
-          {
-            value: 'SENT',
-            label: 'Sent'
-          },
-          {
-            value: 'QUEUED',
-            label: 'Queued'
-          },
-          {
-            value: 'SENDING',
-            label: 'Sending'
-          },
-          {
-            value: 'FAILED',
-            label: 'Failed'
-          },
-          {
-            value: 'DELIVERED',
-            label: 'Delivered'
-          },
-          {
-            value: 'UNDELIVERED',
-            label: 'Undelivered'
-          },
-          {
-            value: 'RECEIVED',
-            label: 'Received'
-          }
-        ],
-        query: 'status',
-        default: null,
-        type: 'select'
-      },
-      {
+        values: generateOptions(statuses)
+      }),
+      createFilter(Type.Checkbox, {
         key: 'type',
         label: 'Type',
-        options: [
-          {
-            value: 'SENT',
-            label: 'SMS sent'
-          },
-          {
-            value: 'RECEIVED',
-            label: 'SMS received'
-          }
-        ],
-        query: 'type',
-        multiple: false,
-        default: null,
-        type: 'checkbox'
-      }
+        values: generateOptions(smsTypes)
+      }),
     ]
   },
   fields: [

@@ -114,10 +114,10 @@ h5 {
 
     &:hover {
       cursor: pointer;
-      background-color: #eee;
 
       .icon {
-        display: inline;
+        display: flex;
+        align-self: flex-start;
       }
     }
 

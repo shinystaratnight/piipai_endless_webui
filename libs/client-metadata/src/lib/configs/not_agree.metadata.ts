@@ -80,7 +80,7 @@ const form = function() {
         ]),
 
       new Form.group.element()
-        .setMarginBottom(12)
+        .setMarginBottom(18)
         .setChildren([breakStartField(), breakEndField(), signatureField()])
     ])
   ];

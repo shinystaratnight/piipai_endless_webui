@@ -1,0 +1,74 @@
+.form-tabs {
+  .form-element-list {
+    display: none !important;
+  }
+
+  .form-element-list-title {
+    display: flex;
+  }
+}
+
+.view-mode .form-element {
+  display: inline;
+
+  .form-element-content {
+    display: inline;
+
+    a {
+      font-size: 18px;
+      line-height: 20px;
+      font-weight: 600;
+    }
+  }
+}
+
+.nav-tabs {
+  align-items: flex-end;
+  flex-wrap: wrap;
+
+  padding: 0 40px;
+
+  border: none;
+  border-bottom: 2px solid rgba(#e5e5e5, 0.8);
+
+  .mobile-device & {
+    padding: 0 20px;
+  }
+
+  .nav-link {
+    padding: 6px 10px;
+    padding-bottom: 8px;
+    font-size: 14px;
+    line-height: 14px;
+
+    border: none;
+
+    color: rgba(black, 0.43);
+
+    &.active {
+      padding-bottom: 6px;
+
+      background-color: transparent;
+      border-color: none;
+
+      color: inherit;
+
+      border-bottom: 2px solid $primary;
+    }
+  }
+}
+
+.tab-pane {
+  padding: 32px 40px;
+  padding-bottom: 0;
+
+  @include media-breakpoint-down('md') {
+    padding: 20px;
+  }
+}
+
+@each $item in $themes {
+  .#{$item}-theme .nav-link.active {
+    border-color: map-get($theme-colors, $item);
+  }
+}

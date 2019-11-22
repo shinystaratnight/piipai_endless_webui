@@ -1,6 +1,6 @@
 @import '../../../../../../styles/variables';
 
-$shadow: 0 0 5px rgba($brand-primary, 0.3);
+$shadow: 0 0 5px rgba($primary, 0.3);
 
 .loader {
   border-radius: 50%;
@@ -21,6 +21,6 @@ $shadow: 0 0 5px rgba($brand-primary, 0.3);
     box-shadow: $shadow, $shadow;
   }
   100% {
-    box-shadow: $shadow, 0 0 0 16px rgba($brand-primary, 0);
+    box-shadow: $shadow, 0 0 0 16px rgba($primary, 0);
   }
 }

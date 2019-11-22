@@ -147,10 +147,10 @@
   </div>
   <ng-template #requir>
     <div class="info-block">
-      <h6>To activate this state, fill in the required fields:</h6>
-      <ul>
-        <li *ngFor="let option of state.requirements">
-          <fa-icon class="icon" [icon]="['fas', 'circle']"></fa-icon>
+      <h6 class="info-block__title">To activate this state, fill in the required fields:</h6>
+      <ul class="info-block__list">
+        <li class="info-block__item" *ngFor="let option of state.requirements">
+          <fa-icon class="info-block__icon" icon="circle"></fa-icon>
           {{option}}
         </li>
       </ul>
@@ -160,10 +160,10 @@
 
 <ng-template #requirements>
   <div class="info-block">
-    <h6>To activate this state, fill in the required fields:</h6>
-    <ul>
-      <li *ngFor="let option of getState(currentState).requirements">
-        <fa-icon class="icon" [icon]="['fas', 'circle']"></fa-icon>
+    <h6 class="info-block__title">To activate this state, fill in the required fields:</h6>
+    <ul class="info-block__list">
+      <li class="info-block__item" *ngFor="let option of getState(currentState).requirements">
+        <fa-icon class="info-block__icon" icon="circle"></fa-icon>
         {{option}}
 
         <a *ngIf="verifyPhone(option)" class="text-primary" href="#" (click)="editContact($event)">Edit contact</a>
