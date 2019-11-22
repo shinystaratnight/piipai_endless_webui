@@ -19,22 +19,19 @@
     padding: 5px;
     font-size: 14px;
 
-    & > fa-icon {
-      margin-top: 2px;
-      font-size: 10px;
-      color: $gray-300;
-
-      &.active {
-        color: $success;
-      }
-    }
-
     a {
       color: $primary;
     }
+  }
 
-    &-list fa-icon {
-      top: -2px;
+  &__icon {
+    margin-top: 5px;
+    margin-right: 5px;
+    font-size: 10px;
+    color: $gray-300;
+
+    &.active {
+      color: $success;
     }
   }
 }
