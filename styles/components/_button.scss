@@ -1,9 +1,43 @@
 $shadow: 0px 4px 6px 0;
 
-.btn {
-  border-radius: 100px;
+.ng-invalid button[type='submit'] {
+  position: relative;
+  border-color: transparent !important;
+  background-color: rgba($primary, 0.55) !important;
+  cursor: not-allowed;
 
-  transition: .4s all;
+  @each $item in $themes {
+    .#{$item}-theme & {
+      background-color: rgba(map-get($theme-colors, $item), 0.55) !important;
+    }
+  }
+
+  &.button-save:hover::after,
+  &.save:hover::after {
+    position: absolute;
+    display: block;
+    top: -35px;
+    left: 0;
+    width: 240px;
+    padding: 0.2rem;
+    font-size: 14px;
+    border-radius: 0.25rem;
+    background-color: rgba($gray, 0.8);
+    content: 'Please fill all the REQUIRED fields';
+    z-index: 1;
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  transition: 0.4s all;
+
+  & > fa-icon {
+    margin-right: 0.25rem;
+  }
 
   &:focus,
   &:active {
@@ -12,7 +46,6 @@ $shadow: 0px 4px 6px 0;
 }
 
 .app-button {
-
   &__size-m,
   &__size-l {
     padding: 6px !important;
@@ -41,20 +74,20 @@ $shadow: 0px 4px 6px 0;
     }
 
     &-success {
-      box-shadow: $shadow rgba($brand-success, .3);
+      box-shadow: $shadow rgba($success, 0.3);
 
       &:hover,
       &:focus {
-        box-shadow: $shadow rgba($brand-success, .2);
+        box-shadow: $shadow rgba($success, 0.2);
       }
     }
 
     &-danger {
-      box-shadow: $shadow rgba($brand-danger, .3);
+      box-shadow: $shadow rgba($danger, 0.3);
 
       &:hover,
       &:focus {
-        box-shadow: $shadow rgba($brand-danger, .2);
+        box-shadow: $shadow rgba($danger, 0.2);
       }
     }
   }
@@ -80,41 +113,41 @@ $shadow: 0px 4px 6px 0;
   }
 
   &__success {
-    background-color: #E7F3EB;
+    background-color: #e7f3eb;
 
     &:hover,
     &:focus {
-      background-color: #D6F1DF;
+      background-color: #d6f1df;
     }
 
     &:active {
-      background-color: #98DCAE;
+      background-color: #98dcae;
     }
   }
 
   &__primary {
-    background-color: rgba($brand-primary, 0.2);
+    background-color: rgba($primary, 0.2);
 
     &:hover:not([disabled]),
     &:focus:not([disabled]) {
-      background-color: rgba($brand-primary, 0.3);
+      background-color: rgba($primary, 0.3);
     }
 
     &:active:not([disabled]) {
-      background-color: rgba($brand-primary, 0.5);
+      background-color: rgba($primary, 0.5);
     }
   }
 
   &__danger {
-    background-color: #FFF0EB;
+    background-color: #fff0eb;
 
     &:hover,
     &:focus {
-      background-color: #FEDEDA;
+      background-color: #fededa;
     }
 
     &:active {
-      background-color: #FCADA2;
+      background-color: #fcada2;
     }
   }
 
@@ -142,11 +175,8 @@ $shadow: 0px 4px 6px 0;
 }
 
 .btn-primary {
-  border-color: $brand-primary;
-  background-color: $brand-primary;
-
   &:focus {
-    box-shadow: 0 0 2px rgba($brand-primary, 0.5);
+    box-shadow: 0 0 2px rgba($primary, 0.5);
 
     @each $item in $themes {
       .#{$item}-theme & {
@@ -157,7 +187,7 @@ $shadow: 0px 4px 6px 0;
 }
 
 .btn-link {
-  color: $brand-primary;
+  color: $primary;
 
   @each $item in $themes {
     .#{$item}-theme & {
@@ -213,17 +243,6 @@ app-form-button:not(:first-child) {
   .#{$item}-theme .bg-primary,
   .#{$item}-theme button.bg-primary:hover {
     background-color: map-get($theme-colors, $item) !important;
-  }
-}
-
-@each $item in $themes {
-  .#{$item}-theme .btn-primary {
-    border-color: transparent;
-    background-color: rgba(map-get($theme-colors, $item), .8) !important;
-
-    &:hover {
-      background-color: map-get($theme-colors, $item) !important;
-    }
   }
 }
 

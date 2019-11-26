@@ -15,7 +15,7 @@
     font-weight: 600;
     text-transform: uppercase;
 
-    opacity: .3;
+    opacity: 0.3;
     color: #333;
   }
 
@@ -59,7 +59,7 @@
     padding-right: 30px;
 
     background: #fff url(/assets/img/down-arrow.svg) no-repeat;
-    background-position: right .75rem center;
+    background-position: right 0.75rem center;
     background-size: 8px 8px;
 
     -ms-progress-appearance: none;
@@ -68,27 +68,13 @@
     appearance: none;
     outline: none;
 
+    option {
+      background-color: #fff;
+    }
+
     &-wrapper {
       display: flex;
       align-items: center;
-
-      .btn.btn-sm {
-        margin-left: .5rem;
-
-        font-size: 10px;
-        line-height: 14px;
-
-        border-color: $brand-success;
-        color: $brand-success;
-
-        &:hover,
-        &.active {
-          border-color: $brand-success;
-
-          background-color: $brand-success;
-          color: white;
-        }
-      }
 
       & .timeline-element {
         margin-bottom: 0;
@@ -100,7 +86,7 @@
     display: inline-block;
     margin: 0 4px 8px;
 
-    transition: .3s;
+    transition: 0.3s;
 
     cursor: default;
 
@@ -121,9 +107,8 @@
     &.allowed:hover:not(.timeline-select),
     &.allowed:focus:not(.timeline-select) {
       cursor: pointer;
-      box-shadow: 2px 2px 4px rgba($gray-600, .3);
+      box-shadow: 2px 2px 4px rgba($gray-600, 0.3);
     }
-
   }
 
   button i {
@@ -131,36 +116,36 @@
   }
 
   option {
-    color: rgba($gray, .8);
+    color: rgba($gray, 0.8);
   }
 
   .active {
-    border-color: $brand-success;
-    background-color: $brand-success;
-    color: darken($brand-success, 25%);
+    border-color: $success;
+    background-color: $success;
+    color: darken($success, 25%);
   }
 
   .allowed {
-    border-color: $brand-success;
-    color: $brand-success;
+    border-color: $success;
+    color: $success;
   }
 
   .not-allowed {
     border-color: #828282;
-    color: rgba($gray, .7);
+    color: rgba($gray, 0.7);
 
-    opacity: .2;
+    opacity: 0.2;
   }
 
   .need-requirements {
     border-color: #828282;
-    color: rgba($gray, .7);
+    color: rgba($gray, 0.7);
   }
 
   .visited {
     border-color: $gray;
-    background-color: rgba($gray, .5);
-    color: rgba($gray, .7);
+    background-color: rgba($gray, 0.5);
+    color: rgba($gray, 0.7);
   }
 
   .next {
@@ -180,11 +165,11 @@
     font-weight: 600;
     text-transform: uppercase;
 
-    opacity: .8;
+    opacity: 0.8;
   }
 
   tr:nth-child(even) {
-    background-color: rgba($brand-primary, .1);
+    background-color: rgba($primary, 0.1);
   }
 
   td {
@@ -193,15 +178,10 @@
 }
 
 .save {
-  background: rgba($gray, .2);
+  background: rgba($gray, 0.2);
 
   app-spinner {
     position: relative;
     top: -1px;
   }
-}
-
-button fa-icon {
-  position: relative;
-  top: 1px;
 }

@@ -128,6 +128,15 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   private searchSubscription: Subscription;
   private subscriptions: Subscription[] = [];
 
+  public colors = {
+    0: '#bdbdbd',
+    1: '#FA5C46',
+    2: '#fc9183',
+    3: '#FFA236',
+    4: '#ffbf00',
+    5: '#FFD042',
+  };
+
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
@@ -1752,6 +1761,10 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       disable,
       messages
     };
+  }
+
+  public getScore(score) {
+    return Math.floor(parseFloat(score));
   }
 
   @HostListener('document:click', ['$event'])

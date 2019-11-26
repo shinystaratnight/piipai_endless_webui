@@ -64,6 +64,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     : isManager
     ? '/mn'
     : '';
+  public initTime: boolean;
 
   get pages(): Page[] {
     return this.navigationService.navigationList[this.currentRole];

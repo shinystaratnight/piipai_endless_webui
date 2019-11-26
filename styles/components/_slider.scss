@@ -1,7 +1,7 @@
 /*---------- Slider ---------- */
 
 .noUi-connect {
-  background-color: $brand-primary;
+  background-color: $primary;
 }
 
 .noUi-horizontal {
@@ -14,7 +14,7 @@
     width: 14px;
 
     border-radius: 50%;
-    border-color: $brand-primary;
+    border-color: $primary;
     border-width: 2px;
 
     cursor: pointer;
@@ -38,5 +38,5 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
   background-color: transparent;
   border: none;
 
-  color: $brand-primary;
+  color: $primary;
 }

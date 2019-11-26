@@ -498,6 +498,18 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  getPlacement(i: number, length: number): string {
+    if (i < 2) {
+      return 'bottom-left';
+    }
+
+    if (i + 3 > length) {
+      return 'bottom-right';
+    }
+
+    return 'bottom';
+  }
+  
   getCandidateLink(id: string) {
     return [`/mn${Endpoints.CandidateContact}${id}/change`];
   }

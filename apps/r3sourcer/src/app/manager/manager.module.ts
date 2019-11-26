@@ -22,13 +22,12 @@ import * as formComponents from './components';
 // import { guards } from './guards';
 // import { interceptors } from './interceptors';
 
-import { CandidateWidget, ButtonsWidget, WidgetService } from './widgets';
-
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { CalendarModule } from '@webui/calendar';
 
 import { SharedModule } from '@webui/shared';
 // import { CoreModule } from '@webui/core';
+import { DashboardModule } from '@webui/dashboard';
 
 import { Metadata } from './metadata.config';
 
@@ -44,9 +43,7 @@ import { CommonModule } from '@angular/common';
   declarations: [
     ManagerComponent,
     // RedirectComponent,
-    ...formComponents.components,
-    CandidateWidget,
-    ButtonsWidget
+    ...formComponents.components
   ],
   imports: [
     CommonModule,
@@ -69,13 +66,13 @@ import { CommonModule } from '@angular/common';
 
     FontAwesomeModule,
     // CoreModule.forRoot(environment),
-    CalendarModule
+    CalendarModule,
+    DashboardModule
   ],
   providers: [
     // ...guards,
-    ...formComponents.providers,
+    ...formComponents.providers
     // ...interceptors
-    WidgetService
   ]
 })
 export class ManagerModule {}

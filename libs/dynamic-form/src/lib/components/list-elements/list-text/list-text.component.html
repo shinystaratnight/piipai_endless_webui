@@ -67,10 +67,10 @@
 <br *ngIf="!config.delim && config.name !== 'credit_approved' && !config.hideValue">
 
 <ng-template #workersdetail>
-  <div *ngFor="let worker of workers">
-    <fa-icon class="text-success mr-1" *ngIf="worker.status === 'accepted'" [icon]="['fas', 'check']"></fa-icon>
-    <fa-icon class="text-danger mr-1" *ngIf="worker.status === 'cancelled'" [icon]="['fas', 'times']"></fa-icon>
-    <fa-icon class="text-default mr-1" *ngIf="worker.status === 'undefined'" [icon]="['fas', 'minus']"></fa-icon>
+  <div class="worker" *ngFor="let worker of workers">
+    <fa-icon class="text-success" *ngIf="worker.status === 'accepted'" icon="check"></fa-icon>
+    <fa-icon class="text-danger" *ngIf="worker.status === 'cancelled'" icon="times"></fa-icon>
+    <fa-icon class="text-warning" *ngIf="worker.status === 'undefined'" icon="minus-circle"></fa-icon>
     {{worker.name}}
   </div>
 </ng-template>

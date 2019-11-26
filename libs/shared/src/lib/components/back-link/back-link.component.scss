@@ -19,11 +19,7 @@
     font-size: 14px;
     line-height: 16px;
 
-    color: $brand-primary;
-
-    &:hover {
-      cursor: pointer;
-    }
+    color: $primary;
 
     @each $item in $themes {
       .#{$item}-theme & {

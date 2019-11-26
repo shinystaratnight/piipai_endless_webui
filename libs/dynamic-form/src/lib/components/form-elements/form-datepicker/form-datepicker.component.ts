@@ -62,7 +62,7 @@ export class FormDatepickerComponent extends BasicElementComponent
   constructor(
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private el: ElementRef,
+    private el: ElementRef
   ) {
     super();
     this.subscriptions = [];
@@ -77,8 +77,10 @@ export class FormDatepickerComponent extends BasicElementComponent
       this.dateFormat = this.config.customDatepicker.dateFormat;
 
       if (this.config.value) {
-        this.config.value = this.timeInstance(this.config.value, this.config.customDatepicker.parseFormat)
-          .format('YYYY-MM-DD');
+        this.config.value = this.timeInstance(
+          this.config.value,
+          this.config.customDatepicker.parseFormat
+        ).format('YYYY-MM-DD');
       }
     }
 
@@ -334,7 +336,10 @@ export class FormDatepickerComponent extends BasicElementComponent
           calYearPickMax: this.key.includes('birthday') ? 0 : 6,
           calYearPickMin: -100,
           maxDays: this.key.includes('birthday') && -1,
-          bootstrapDropdownRight: this.config.rightPosition === false ? false : timeType === 'timebox',
+          bootstrapDropdownRight:
+            this.config.rightPosition === false
+              ? false
+              : timeType === 'timebox',
           beforeOpenCallback: () => {
             this.opened = this.t.nativeElement;
             this.updatePosition();
@@ -364,7 +369,10 @@ export class FormDatepickerComponent extends BasicElementComponent
           useFocus: true,
           useHeader: false,
           calHighToday: false,
-          bootstrapDropdownRight: this.config.rightPosition === false ? false : timeType === 'timebox',
+          bootstrapDropdownRight:
+            this.config.rightPosition === false
+              ? false
+              : timeType === 'timebox',
           beforeOpenCallback: () => {
             this.opened = this.t.nativeElement;
             this.updatePosition();
@@ -438,8 +446,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     ) {
       const maxValue =
         this.timeInstance().year() -
-        this.timeInstance(this.group.get(this.key).value, 'YYYY-MM-DD')
-          .year();
+        this.timeInstance(this.group.get(this.key).value, 'YYYY-MM-DD').year();
 
       this.setDatepickerProp('calYearPickMax', maxValue, this.d.nativeElement);
     }

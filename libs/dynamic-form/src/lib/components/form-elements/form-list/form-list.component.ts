@@ -322,11 +322,13 @@ export class FormListComponent implements OnInit, OnDestroy {
   }
 
   public checkTimelineChange() {
-    const subscription = this.timelineService.action$
-      .pipe(skip(1))
-      .subscribe(() => this.update.next(true));
+    if (this.timelineService) {
+      const subscription = this.timelineService.action$
+        .pipe(skip(1))
+        .subscribe(() => this.update.next(true));
 
-    this.subscriptions.push(subscription);
+      this.subscriptions.push(subscription);
+    }
   }
 
   public checkDefaultValues(data) {

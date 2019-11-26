@@ -1,10 +1,6 @@
 @import '../../../../../../../styles/variables';
 @import '../../../../../../../styles/mixins';
 
-app-calendar {
-  min-width: 840px;
-}
-
 app-back-link {
   display: block;
   padding-top: 16px;
@@ -12,15 +8,5 @@ app-back-link {
 }
 
 .dashboard {
-  display: flex;
-  flex-direction: column;
-
-  max-width: 1250px;
-
-  margin: 100px auto 0;
-  padding-bottom: 50px;
-
-  @include media-breakpoint-down('md') {
-    flex-direction: column;
-  }
+  padding-top: 116px;
 }

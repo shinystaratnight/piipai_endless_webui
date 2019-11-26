@@ -102,13 +102,19 @@
   }
 
   .ui-datebox-controls {
+    margin-bottom: 0.25rem;
+
     .btn {
       border-radius: 50px;
 
-      &:hover {
-        border-color: $brand-primary;
+      .fa {
+        margin-right: 0.25rem;
+      }
 
-        background-color: $brand-primary;
+      &:hover {
+        border-color: $primary;
+
+        background-color: $primary;
 
         color: white;
 
@@ -155,7 +161,7 @@
     &:hover {
       border: none;
 
-      background-color: $brand-primary;
+      background-color: $primary;
       color: white;
 
       @each $item in $themes {
@@ -177,7 +183,7 @@
   }
 
   .btn-info {
-    background-color: $brand-primary;
+    background-color: $primary;
 
     @each $item in $themes {
       .#{$item}-theme & {
@@ -194,7 +200,7 @@
     border-radius: 50px;
 
     &:hover {
-      background-color: $brand-primary;
+      background-color: $primary;
 
       color: white;
 

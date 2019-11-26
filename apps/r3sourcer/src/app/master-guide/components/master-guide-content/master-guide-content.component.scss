@@ -11,7 +11,7 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    overflow-y: auto
+    overflow-y: auto;
   }
 
   &__item {
@@ -19,27 +19,19 @@
     padding: 5px;
     font-size: 14px;
 
-    & > fa-icon {
-      margin-top: 2px;
-      font-size: 10px;
-      color: $gray-300;
-
-      &.active {
-        color: $brand-success;
-      }
-    }
-
     a {
-      color: $brand-primary;
+      color: $primary;
     }
+  }
 
-    .custom-checkbox {
-      width: 12px;
-      height: 12px;
-    }
+  &__icon {
+    margin-top: 5px;
+    margin-right: 5px;
+    font-size: 10px;
+    color: $gray-300;
 
-    &-list fa-icon {
-      top: -2px;
+    &.active {
+      color: $success;
     }
   }
 }

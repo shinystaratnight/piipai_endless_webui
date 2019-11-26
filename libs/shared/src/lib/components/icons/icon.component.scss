@@ -1,0 +1,33 @@
+@import '../../../../../../styles/variables';
+
+$sm: 13px;
+$md: 18px;
+
+:host {
+  display: inline-flex;
+  align-items: center;
+
+  &.sm svg {
+    width: $sm;
+    height: $sm;
+  }
+
+  &.md svg {
+    width: $md;
+    height: $md;
+  }
+
+  &.primary svg {
+    @each $item in $themes {
+      .#{$item}-theme & {
+        fill: map-get($theme-colors, $item);
+      }
+    }
+  }
+}
+
+svg {
+  width: 16px;
+  height: 16px;
+  fill: $gray;
+}

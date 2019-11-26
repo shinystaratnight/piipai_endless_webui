@@ -8,4 +8,5 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 })
 export class CloseButtonComponent {
   @Input() sm: boolean;
+  @Input() danger: boolean;
 }

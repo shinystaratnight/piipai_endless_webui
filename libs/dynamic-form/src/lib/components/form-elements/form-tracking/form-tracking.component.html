@@ -1,16 +1,18 @@
 <div class="form-group">
   <div class="form-element">
-    <label class="col-form-label form-element-label">
-      {{config.templateOptions.label}}
+    <label class="form-element-label">
+      {{ config.templateOptions.label }}
     </label>
     <div class="d-flex flex-column align-items-start">
       <div class="map-preview"></div>
 
-      <button type="button" class="btn btn-primary mt-3"
-        (click)="showTracking()">
-          Show tracking
+      <button
+        type="button"
+        class="btn btn-primary mt-3"
+        (click)="showTracking()"
+      >
+        Show tracking
       </button>
     </div>
   </div>
 </div>
-
