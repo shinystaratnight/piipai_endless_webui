@@ -32,11 +32,11 @@
   </select>
 
   <app-info *ngIf="getState(currentState).state === 0" triggersType="click:click" [description]="requirements"></app-info>
-  <button type="button" class="btn btn-sm d-flex align-items-center"
+  <button type="button" class="btn btn-sm btn-outline-success"
     *ngIf="getState(currentState).state === 1"
     [class.active]="saveProcess"
     (click)="open(getState(currentState))">
-      <fa-icon class="f-size-10" icon="check" *ngIf="!saveProcess"></fa-icon>
+      <fa-icon class="f-size-10 mr-0" icon="check" *ngIf="!saveProcess"></fa-icon>
       <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
   </button>
 </div>

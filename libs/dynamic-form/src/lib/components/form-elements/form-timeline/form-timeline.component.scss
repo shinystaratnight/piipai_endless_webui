@@ -76,24 +76,6 @@
       display: flex;
       align-items: center;
 
-      .btn.btn-sm {
-        margin-left: 0.5rem;
-
-        font-size: 10px;
-        line-height: 14px;
-
-        border-color: $success;
-        color: $success;
-
-        &:hover,
-        &.active {
-          border-color: $success;
-
-          background-color: $success;
-          color: white;
-        }
-      }
-
       & .timeline-element {
         margin-bottom: 0;
       }
@@ -202,9 +184,4 @@
     position: relative;
     top: -1px;
   }
-}
-
-button fa-icon {
-  position: relative;
-  top: 1px;
 }
