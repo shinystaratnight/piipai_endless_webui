@@ -2300,20 +2300,18 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       .subscribe(
         (res: any) => {
           if (e.el && e.el.redirect) {
+
+            // "loginas" functionlity
             const helper = new JwtHelperService();
             const token = helper.decodeToken(res.access_token_jwt);
-
             const redirect = token.origin;
 
-            if (redirect === location.origin) {
-              this.storage.clear('role');
-              this.storage.clear('user');
+            if (redirect.includes(location.host)) {
+              this.authService.logoutWithoutRedirect();
               this.userService.user = null;
-
-              this.authService.storeToken({ data: res });
-
+              this.authService.storeToken(res);
               this.userService.getUserData().subscribe(() => {
-                location.href = redirect;
+                location.href = '/';
               });
 
               return;

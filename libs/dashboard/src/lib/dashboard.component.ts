@@ -130,7 +130,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openModal() {
-    this.widgetList = this.widgets;
+    this.widgetList = this.widgets
+      .filter((el) => this.userWidgets.find(widget => el.id !== widget.widgetId));
 
     this.modalRef = this.modal.open(this.modalTemplate);
   }
