@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {
   CdkDragDrop,
@@ -37,8 +32,6 @@ export class DashboardComponent implements OnInit {
   dragging: boolean;
 
   GridElementType = GridElementType;
-
-  @ViewChild('modalTemplate', { static: false }) modalTemplate: ElementRef;
 
   constructor(
     private userService: UserService,
