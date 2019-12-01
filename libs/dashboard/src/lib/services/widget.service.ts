@@ -70,14 +70,19 @@ export class WidgetService {
             const widget = this.widgets.find(
               item => item.id === el.dashboard_module.id
             );
-
+            const defaultConfig = {
+              size: this.getSizes(widget.type),
+              coords: this.getPosition(widget.type),
+              active: false
+            };
+            const config = Object.keys(el.ui_config).length ? el.ui_config : defaultConfig;
             const target = {
               id: el.id,
               widgetId: el.dashboard_module.id,
               name: widget.name,
               type: widget.type,
               tooltip: false,
-              config: el.ui_config || {}
+              config
             };
 
             return target;
@@ -169,7 +174,7 @@ export class WidgetService {
         widget
       };
 
-      this.generateGridElements(grid, widgetElement, coords || this.getPosition(widget.type));
+      this.generateGridElements(grid, widgetElement, coords);
     });
 
     return grid;
@@ -194,7 +199,7 @@ export class WidgetService {
 
   getPosition(type: Type) {
     const coords = {
-      [Type.Buttons]: '0',
+      [Type.Buttons]: '10',
       [Type.Calendar]: '11',
       [Type.Candidates]: '0'
     }

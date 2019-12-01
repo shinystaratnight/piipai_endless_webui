@@ -7,6 +7,7 @@ export interface UserWidget {
   config: {
     coords: string;
     size: number;
+    active?: boolean;
   };
   tooltip?: boolean;
   move?: boolean;

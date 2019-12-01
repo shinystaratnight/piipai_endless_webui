@@ -1,0 +1,28 @@
+<div class="menu">
+  <h5 class="menu__title">Dashboard</h5>
+
+  <ul class="menu__list" [formGroup]="form">
+    <li class="menu__list-item" *ngFor="let item of widgets">
+      <label class="form-element-checkbox">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          [name]="item.widgetId"
+          hidden
+          [formControlName]="item.widgetId"
+        >
+
+        <app-checkbox
+          [checked]="form.get(item.widgetId).value"
+          [sm]=true>
+        </app-checkbox>
+
+        {{item.name}}
+      </label>
+    </li>
+  </ul>
+
+  <div class="menu__mark">
+    <fa-icon icon="chevron-right"></fa-icon>
+  </div>
+</div>

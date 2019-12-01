@@ -9,6 +9,12 @@
   margin: 0 auto;
   margin-top: -1rem;
   padding: 0 15px 24px;
+
+  &.loading {
+    height: 80vh;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .widget-wrapper {
@@ -197,11 +203,7 @@
     flex-direction: row;
 
     & > * {
-      margin-right: 12px;
-
-      &:last-child {
-        margin-right: 0;
-      }
+      margin: 0 6px;
     }
 
     @include media-breakpoint-down('sm') {
