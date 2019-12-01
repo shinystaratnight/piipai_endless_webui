@@ -21,13 +21,13 @@
     </style>
 
     <style>
-      .loader {
+      .site-loader {
         border-radius: 50%;
         background-color: #fff;
-        animation: shadow-pulse 1s infinite;
+        animation: site-shadow-pulse 1s infinite;
       }
 
-      .loader-wrapper {
+      .site-loader-wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -35,7 +35,7 @@
         height: 100vh;
       }
 
-      @keyframes shadow-pulse {
+      @keyframes site-shadow-pulse {
         0% {
           box-shadow: 0 0 5px rgba(40, 163, 252, 0.3), 0 0 5px rgba(40, 163, 252, 0.3);
         }
@@ -59,9 +59,9 @@
   </head>
   <body class="r3sourcer">
     <app-root>
-      <div class="loader-wrapper">
+      <div class="site-loader-wrapper">
         <img
-          class="loader"
+          class="site-loader"
           src="/assets/img/logo.svg"
           alt="R3sourcer"
           width="120"

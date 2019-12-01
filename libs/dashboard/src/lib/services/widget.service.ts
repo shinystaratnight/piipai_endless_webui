@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { map, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
 
 import { ErrorsService } from '@webui/core';
 import { Endpoints } from '@webui/data';
@@ -19,7 +19,7 @@ import { widgetsData } from '../helpers';
 @Injectable()
 export class WidgetService {
   widgets: Widget[];
-  userWidgets: any[];
+  userWidgets: UserWidget[];
 
   listsId: string[];
 
@@ -42,10 +42,10 @@ export class WidgetService {
 
               return {
                 id: el.id,
-                type: el.module_data.model,
+                type,
                 ...widgetsData[type]
               };
-            });
+            }).filter(el => widgetsData[el.type]);
 
             this.widgets = widgets;
             return this.widgets;
@@ -55,7 +55,7 @@ export class WidgetService {
       );
   }
 
-  getUserWidgets() {
+  getUserWidgets(): Observable<UserWidget[]> {
     if (this.userWidgets) {
       return of(this.userWidgets);
     }
@@ -64,18 +64,25 @@ export class WidgetService {
       .get(Endpoints.UserDashboardModule, { params: this.params })
       .pipe(
         map((res: any) => {
-          const userWidgets = res.results.map(el => {
+          const widgets = res.results.filter(el => this.existWidget(this.widgets, el));
+
+          const userWidgets = widgets.map(el => {
             const widget = this.widgets.find(
               item => item.id === el.dashboard_module.id
             );
-
+            const defaultConfig = {
+              size: this.getSizes(widget.type),
+              coords: this.getPosition(widget.type),
+              active: false
+            };
+            const config = Object.keys(el.ui_config).length ? el.ui_config : defaultConfig;
             const target = {
               id: el.id,
               widgetId: el.dashboard_module.id,
               name: widget.name,
               type: widget.type,
               tooltip: false,
-              config: el.ui_config || {}
+              config
             };
 
             return target;
@@ -86,6 +93,12 @@ export class WidgetService {
         }),
         catchError(errors => this.errorService.parseErrors(errors))
       );
+  }
+
+  existWidget(widgets: Widget[], userWidget: any) {
+    return widgets.some((widget) => {
+      return widget.id === userWidget.dashboard_module.id;
+    })
   }
 
   getButtons() {
@@ -182,6 +195,16 @@ export class WidgetService {
     };
 
     return sizes[type];
+  }
+
+  getPosition(type: Type) {
+    const coords = {
+      [Type.Buttons]: '10',
+      [Type.Calendar]: '11',
+      [Type.Candidates]: '0'
+    }
+
+    return coords[type];
   }
 
   updateDashboard() {

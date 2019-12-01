@@ -2,16 +2,17 @@
   <ng-container
     *ngTemplateOutlet="column; context: { gridElement: grid }"
   ></ng-container>
-
-  <button
-    *ngIf="userWidgets.length !== widgets.length"
-    type="button"
-    class="flex-center-center add-widget-btn"
-    (click)="openModal()"
-  >
-    <app-icon-plus appIcon size="md"></app-icon-plus>Add new widget
-  </button>
 </div>
+
+<div *ngIf="!grid" class="dashboard loading">
+  <app-loader></app-loader>
+</div>
+
+<app-dashboard-menu
+  *ngIf="widgetList"
+  [widgets]="widgetList"
+  (changed)="updateUserWidgets($event)">
+</app-dashboard-menu>
 
 <ng-template #column let-gridElement="gridElement">
   <div
@@ -36,7 +37,7 @@
         ></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="el.type === GridElementType.Widget">
+      <ng-container *ngIf="el.type === GridElementType.Widget && el.widget.config.active">
         <ng-container
           *ngTemplateOutlet="widgetWrapper; context: { widget: el.widget }"
         ></ng-container>
@@ -63,6 +64,7 @@
       [class.widget-wrapper]="el.type === GridElementType.Widget"
       *ngFor="let el of gridElement.elements"
       [ngStyle]="getColumnWidth(el)"
+      [hidden]="!isActive(el)"
       (cdkDragStarted)="dragging = true"
     >
       <ng-container *ngIf="el.type === GridElementType.Column">
@@ -71,7 +73,7 @@
         ></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="el.type === GridElementType.Widget">
+      <ng-container *ngIf="el.type === GridElementType.Widget && el.widget.config.active">
         <ng-container
           *ngTemplateOutlet="widgetWrapper; context: { widget: el.widget }"
         ></ng-container>
@@ -113,30 +115,4 @@
   </ng-container>
 
   <div class="preview" *ngIf="dragging">{{ widget.name }}</div>
-</ng-template>
-
-<ng-template #modalTemplate let-modal>
-  <div class="modal-content-wrapper">
-    <div class="modal-header-wrapper">
-      <div class="modal-header">
-        <h5 class="modal-title">Widgets</h5>
-        <app-close-button
-          class="close-button ml-auto"
-          (click)="modal.dismiss()"
-        ></app-close-button>
-      </div>
-    </div>
-    <div class="modal-body">
-      <div class="widget-list">
-        <div
-          class="flex-center widget-list-item"
-          *ngFor="let widget of widgetList"
-          (click)="addWidget(widget)"
-        >
-          <img [src]="widget.img" [attr.alt]="widget.name" />
-          <span>{{ widget.name }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
 </ng-template>

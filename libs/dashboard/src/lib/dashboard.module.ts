@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -22,7 +22,8 @@ import { DashboardService, WidgetService } from './services';
 import {
   ButtonsWidget,
   CandidateWidget,
-  CalendarWidgetComponent
+  CalendarWidgetComponent,
+  DashboardMenuComponent
 } from './components';
 import { WidgetDirective } from './directives';
 import { DashboardComponent } from './dashboard.component';
@@ -39,14 +40,16 @@ import { DashboardComponent } from './dashboard.component';
     NgbTooltipModule,
     FormsModule,
     NgbModalModule,
-    DragDropModule
+    DragDropModule,
+    ReactiveFormsModule
   ],
   declarations: [
     DashboardComponent,
     ButtonsWidget,
     CandidateWidget,
     CalendarWidgetComponent,
-    WidgetDirective
+    WidgetDirective,
+    DashboardMenuComponent
   ],
   providers: [DashboardService, WidgetService],
   entryComponents: [ButtonsWidget, CandidateWidget, CalendarWidgetComponent],

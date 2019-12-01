@@ -52,6 +52,7 @@ import { environment } from '../environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 import { AgmCoreModule } from '@agm/core';
 import { DynamicFormModule } from '@webui/dynamic-form';
+
 import { Metadata } from './metadata.config';
 import { MasterGuideModule } from './master-guide/master-guide.module';
 import { RedirectComponent } from './redirect.component';
@@ -82,38 +83,42 @@ import { RedirectComponent } from './redirect.component';
 })
 export class AppModule {
   constructor() {
-    library.add(faChevronLeft);
-    library.add(faChevronRight);
-    library.add(faPlus);
-    library.add(faCircle);
-    library.add(faCheck);
-    library.add(faMinusCircle);
-    library.add(faTimes);
-    library.add(faMinus);
-    library.add(faList);
-    library.add(faTimesCircle);
-    library.add(faStar);
-    library.add(faMapMarkerAlt);
-    library.add(faPencilAlt);
-    library.add(faTrash);
-    library.add(faCheckCircle);
-    library.add(faEyeSlash);
-    library.add(faUpload);
-    library.add(faCamera);
-    library.add(faEllipsisV);
-    library.add(faSignInAlt);
-    library.add(faChevronDown);
-    library.add(faChevronUp);
-    library.add(faEye);
-    library.add(faSearch);
-    library.add(faCreditCard);
-    library.add(faMinusSquare);
-    library.add(faPlusSquare);
-    library.add(faFile);
-    library.add(faDownload);
-    library.add(faPrint);
-    library.add(faExternalLinkAlt);
-    library.add(faEnvelope);
-    library.add(faPlusCircle);
+    const icons = [
+      faChevronLeft,
+      faChevronRight,
+      faPlus,
+      faCircle,
+      faCheck,
+      faMinusCircle,
+      faTimes,
+      faMinus,
+      faList,
+      faTimesCircle,
+      faStar,
+      faMapMarkerAlt,
+      faPencilAlt,
+      faTrash,
+      faCheckCircle,
+      faEyeSlash,
+      faUpload,
+      faCamera,
+      faEllipsisV,
+      faSignInAlt,
+      faChevronDown,
+      faChevronUp,
+      faEye,
+      faSearch,
+      faCreditCard,
+      faMinusSquare,
+      faPlusSquare,
+      faFile,
+      faDownload,
+      faPrint,
+      faExternalLinkAlt,
+      faEnvelope,
+      faPlusCircle,
+    ]
+
+    library.add(...icons);
   }
 }
