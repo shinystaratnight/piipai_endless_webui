@@ -121,6 +121,7 @@ export interface Field {
     inline?: boolean;
     additionalDescription?: string;
     rows?: number;
+    showButtonIf?: boolean; // Checkbox button
   };
 }
 

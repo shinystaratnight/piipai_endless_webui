@@ -543,7 +543,9 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'E-Mail',
-                      type: 'checkbox'
+                      type: 'checkbox',
+                      action: 'resendEmail',
+                      showButtonIf: false
                     },
                     read_only: false
                   },

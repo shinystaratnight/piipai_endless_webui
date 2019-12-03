@@ -41,6 +41,7 @@
           *ngIf="config.templateOptions.type !== 'icon'"
         ></app-checkbox>
         {{ config.templateOptions.text || config.templateOptions.label }}
+        <button *ngIf="hasButton" type="button" class="btn btn-link btn-sm ml-2" (click)="sendAction($event)">Resend</button>
       </label>
       <app-info [description]="config.templateOptions.description"></app-info>
     </div>
