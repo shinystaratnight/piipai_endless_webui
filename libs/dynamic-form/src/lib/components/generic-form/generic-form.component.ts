@@ -1518,7 +1518,21 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
       this.buyProfile();
     }
 
+    if (e.value === 'resendEmail') {
+      this.resendEmail(e);
+    }
+
     this.buttonAction.emit(e);
+  }
+
+  resendEmail(e) {
+    const endpoint = `/core/contacts/${e.data.contact.id}/emails/`;
+
+    this.service.submitForm(endpoint, {}).subscribe((res) => {
+      if (res.message) {
+        this.toastrService.sendMessage(res.message, MessageType.success);
+      }
+    });
   }
 
   public buyProfile() {
