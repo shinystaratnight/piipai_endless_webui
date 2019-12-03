@@ -18,6 +18,8 @@ $md: 18px;
   }
 
   &.primary svg {
+    fill: $primary;
+
     @each $item in $themes {
       .#{$item}-theme & {
         fill: map-get($theme-colors, $item);

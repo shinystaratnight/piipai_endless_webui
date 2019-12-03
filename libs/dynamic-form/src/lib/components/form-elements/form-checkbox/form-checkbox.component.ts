@@ -44,6 +44,9 @@ export class FormCheckboxComponent extends BasicElementComponent
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public buttonAction: EventEmitter<any> = new EventEmitter();
+
   private subscriptions: Subscription[];
 
   constructor(
@@ -53,6 +56,10 @@ export class FormCheckboxComponent extends BasicElementComponent
   ) {
     super();
     this.subscriptions = [];
+  }
+
+  get hasButton() {
+    return this.config.templateOptions.showButtonIf === this.config.value;
   }
 
   public ngOnInit() {
@@ -189,5 +196,13 @@ export class FormCheckboxComponent extends BasicElementComponent
 
   public getDisabledTitle(disabled?: boolean): string {
     return disabled ? this.siteSettings.getSmsSendTitle() : '';
+  }
+
+  sendAction(e) {
+    this.buttonAction.emit({
+      type: e.type,
+      el: this.config,
+      value: this.config.templateOptions.action,
+    })
   }
 }
