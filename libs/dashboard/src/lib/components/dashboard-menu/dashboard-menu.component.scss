@@ -3,11 +3,13 @@
 $text-color: rgba($gray, .8);
 $shadow: 0 0 5px rgba($gray, 0.3);
 
+$top: 100px;
+
 .menu {
   position: fixed;
-  top: 90px;
+  top: $top;
   left: -200px;
-  height: calc(100vh - 90px);
+  height: calc(100vh - #{$top});
   width: 200px;
   padding: 1rem;
   border-top-right-radius: .25rem;
