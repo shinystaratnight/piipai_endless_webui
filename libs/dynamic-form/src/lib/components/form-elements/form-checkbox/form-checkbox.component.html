@@ -16,6 +16,7 @@
         [attr.title]="disabledTitle"
         [class.disabled]="this.group.get(key).disabled"
         [class.description]="isDisabled"
+        [class.has-button]="hasButton"
       >
         <fa-icon
           class="mr-1"
@@ -41,7 +42,7 @@
           *ngIf="config.templateOptions.type !== 'icon'"
         ></app-checkbox>
         {{ config.templateOptions.text || config.templateOptions.label }}
-        <button *ngIf="hasButton" type="button" class="btn btn-link btn-sm ml-2" (click)="sendAction($event)">Resend</button>
+        <button *ngIf="hasButton" type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendAction($event)">Resend</button>
       </label>
       <app-info [description]="config.templateOptions.description"></app-info>
     </div>
@@ -93,9 +94,10 @@
             config.templateOptions && config.templateOptions.type === 'checkbox'
           "
         ></fa-icon>
-        <label class="mb-0" *ngIf="label && config.templateOptions.label">{{
-          config.templateOptions.text || config.templateOptions.label
-        }}</label>
+        <label [class.has-button]="hasButton" class="mb-0" *ngIf="label && config.templateOptions.label">
+          {{config.templateOptions.text || config.templateOptions.label}}
+          <button *ngIf="hasButton" type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendAction($event)">Resend</button>
+        </label>
         <app-info [description]="config.templateOptions.description"></app-info>
       </div>
     </div>
