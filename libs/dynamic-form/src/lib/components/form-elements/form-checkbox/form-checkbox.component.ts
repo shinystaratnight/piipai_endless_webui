@@ -17,7 +17,8 @@ import { SiteSettingsService } from '@webui/core';
 
 @Component({
   selector: 'app-form-checkbox',
-  templateUrl: './form-checkbox.component.html'
+  templateUrl: './form-checkbox.component.html',
+  styleUrls: ['./form-checkbox.component.scss']
 })
 export class FormCheckboxComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
