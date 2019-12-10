@@ -73,17 +73,17 @@ const form = function() {
             new Form.related.element('acceptance_tests_industries', 'Industries', Endpoints.Industry)
               .updateModel({ many: true, useOptions: true })
               .setActions(false, false, true)
-              .setRelatedObjects('industry', { ecceptance_test: '{id}' }, Endpoints.AcceptenceTestIndustry),
+              .setRelatedObjects('industry', { acceptance_test: '{id}' }, Endpoints.AcceptenceTestIndustry),
 
             new Form.related.element('acceptance_tests_skills', 'Skills', Endpoints.Skill)
               .updateModel({ many: true, useOptions: true })
               .setActions(false, false, true)
-              .setRelatedObjects('skill', { ecceptance_test: '{id}' }, Endpoints.AcceptenceTestSkill),
+              .setRelatedObjects('skill', { acceptance_test: '{id}' }, Endpoints.AcceptenceTestSkill),
 
             new Form.related.element('acceptance_tests_tags', 'Tags', Endpoints.Tag)
               .updateModel({ many: true, useOptions: true })
               .setActions(false, false, true)
-              .setRelatedObjects('tag', { ecceptance_test: '{id}' }, Endpoints.AcceptenceTestTag),
+              .setRelatedObjects('tag', { acceptance_test: '{id}' }, Endpoints.AcceptenceTestTag),
 
             new Form.related.element('acceptance_tests_workflow_nodes', 'Workflow Node', Endpoints.AcceptenceTestWorkflowNode)
               .doNotSend()
