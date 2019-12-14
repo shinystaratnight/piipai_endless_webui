@@ -178,94 +178,95 @@
           </thead>
           <tbody *ngIf="body && !refresh">
             <ng-container *ngFor="let row of body">
-              <tr *ngIf="!row.hide" [class.main]="row.additionalBody && !row.collapsed" [class.table-warning]="row.highlight && row.highlight.highlight"
-                [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}">
-                <td *ngIf="(!inForm && config.list.actions) || actions || (!noneEdit && !inForm)" class="first-cell">
-                  <label *ngIf="config.list.actions || actions">
-                    <input type="checkbox"
-                      class="form-check-input"
-                      [(ngModel)]="select[row.id]"
-                      [checked]="select[row.id]"
-                      (ngModelChange)="emitSelect()" hidden>
-                      <app-checkbox [checked]="select[row.id]"></app-checkbox>
-                  </label>
-                  <a class="first-cell-link not-underline" *ngIf="first && !config.list.editEndpoint && !inForm && !config.list.editDisable && checkPermission('get') && !noneEdit" [routerLink]="[row.id + '/change']">
+              <tr *ngIf="!row.hide"
+                [class.main]="row.additionalBody && !row.collapsed"
+                [class.table-warning]="row.highlight && row.highlight.highlight"
+                [ngStyle]="row.highlight && row.highlight.color && {'background-color': row.highlight.color}"
+                (click)="openDetails(row)">
+                  <td *ngIf="(!inForm && config.list.actions) || actions || (!noneEdit && !inForm)" class="first-cell">
+                    <label *ngIf="config.list.actions || actions">
+                      <input type="checkbox"
+                        class="form-check-input"
+                        [checked]="select[row.id]" hidden>
+                        <app-checkbox [checked]="select[row.id]" (click)="toggleCheckbox($event, row)"></app-checkbox>
+                    </label>
+                    <a class="first-cell-link not-underline" *ngIf="first && !config.list.editEndpoint && !inForm && !config.list.editDisable && checkPermission('get') && !noneEdit" [routerLink]="[row.id + '/change']">
+                      <fa-icon
+                        icon="pencil-alt"
+                        class="icon">
+                      </fa-icon>&nbsp;Edit
+                    </a>
                     <fa-icon
+                      *ngIf="!first && !config.list.editEndpoint && !config.list.editDisable && checkPermission('get')"
                       icon="pencil-alt"
-                      class="icon">
-                    </fa-icon>&nbsp;Edit
-                  </a>
-                  <fa-icon
-                    *ngIf="!first && !config.list.editEndpoint && !config.list.editDisable && checkPermission('get')"
-                    icon="pencil-alt"
-                    class="icon"
-                    (click)="editObject(row.id, row.__str__)">
-                  </fa-icon>
-                  <span class="first-cell-link hov-opacity" *ngIf="config.list.editEndpoint && canEdit(row) && !config.list.editDisable && checkPermission('get')" (click)="editListObject(row)">
-                    <fa-icon icon="pencil-alt" class="icon"></fa-icon>&nbsp;Edit
-                  </span>
-                </td>
-
-                <ng-container *ngFor="let cell of row.content; let first = first">
-                  <td *ngIf="!cell.hide"
-                    [class.text-center]="cell.center"
-                    [ngStyle]="{'width.px': cell.width}"
-                    [attr.data-label]="cell.label"
-                    [hidden]="cell.tab && cell.tab.is_collapsed">
-                      <label class="cell-label" *ngIf="isMobileDevice">{{cell.label}}</label>
-                      <br *ngIf="isMobileDevice">
-
-                      <ng-container
-                        *ngIf="cell.name !== 'actions'"
-                        appListElement
-                        [config]="cell.content"
-                        (event)="eventHandler($event)"
-                        (buttonAction)="buttonHandler($event)">
-                      </ng-container>
-
-                      <ng-container *ngIf="cell.name === 'actions'">
-                        <ng-template #actionsTemplate>
-                          <ng-container
-                            appListElement
-                            [config]="cell.content"
-                            (event)="eventHandler($event)"
-                            (buttonAction)="buttonHandler($event, cell.pop = pop)">
-                          </ng-container>
-                        </ng-template>
-                        <fa-icon class="icon px-3 py-1" style="opacity: .3; margin-left: 8px"
-                          [icon]="['fas', 'ellipsis-v']"
-                          placement="bottom"
-                          #pop="ngbPopover"
-                          [ngbPopover]="actionsTemplate">
-                        </fa-icon>
-                      </ng-container>
-
-                      <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
-                        <app-list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></app-list-table>
-                      </div>
-
-                      <ng-container *ngIf="first && config.list.innerEdit">
-                        <br>
-                        <a class="first-cell-link not-underline"
-                          [routerLink]="[row.id + '/change']">
-                            <fa-icon
-                              [icon]="['fas', 'pencil-alt']"
-                              class="icon">
-                            </fa-icon>
-                            &nbsp;Edit
-                        </a>
-                      </ng-container>
+                      class="icon"
+                      (click)="editObject(row.id, row.__str__)">
+                    </fa-icon>
+                    <span class="first-cell-link hov-opacity" *ngIf="config.list.editEndpoint && canEdit(row) && !config.list.editDisable && checkPermission('get')" (click)="editListObject(row)">
+                      <fa-icon icon="pencil-alt" class="icon"></fa-icon>&nbsp;Edit
+                    </span>
                   </td>
-                </ng-container>
 
-                <td *ngIf="config.list.tabs" class="last-cell">
-                  <fa-icon
-                    class="more-icon"
-                    [icon]="['fas', row.collapsed ? 'chevron-down' : 'chevron-up']"
-                    (click)="row.collapsed = !row.collapsed">
-                  </fa-icon>
-                </td>
+                  <ng-container *ngFor="let cell of row.content; let first = first">
+                    <td *ngIf="!cell.hide"
+                      [class.text-center]="cell.center"
+                      [ngStyle]="{'width.px': cell.width}"
+                      [attr.data-label]="cell.label"
+                      [hidden]="cell.tab && cell.tab.is_collapsed">
+                        <label class="cell-label" *ngIf="isMobileDevice">{{cell.label}}</label>
+                        <br *ngIf="isMobileDevice">
 
+                        <ng-container
+                          *ngIf="cell.name !== 'actions'"
+                          appListElement
+                          [config]="cell.content"
+                          (event)="eventHandler($event)"
+                          (buttonAction)="buttonHandler($event)">
+                        </ng-container>
+
+                        <ng-container *ngIf="cell.name === 'actions'">
+                          <ng-template #actionsTemplate>
+                            <ng-container
+                              appListElement
+                              [config]="cell.content"
+                              (event)="eventHandler($event)"
+                              (buttonAction)="buttonHandler($event, cell.pop = pop)">
+                            </ng-container>
+                          </ng-template>
+                          <fa-icon class="icon px-3 py-1" style="opacity: .3; margin-left: 8px"
+                            [icon]="['fas', 'ellipsis-v']"
+                            placement="bottom"
+                            #pop="ngbPopover"
+                            [ngbPopover]="actionsTemplate">
+                          </fa-icon>
+                        </ng-container>
+
+                        <div *ngIf="innerTables && innerTables[row.id] && innerTables[row.id][cell.name]">
+                          <app-list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></app-list-table>
+                        </div>
+
+                        <ng-container *ngIf="first && config.list.innerEdit">
+                          <br>
+                          <a class="first-cell-link not-underline"
+                            [routerLink]="[row.id + '/change']">
+                              <fa-icon
+                                [icon]="['fas', 'pencil-alt']"
+                                class="icon">
+                              </fa-icon>
+                              &nbsp;Edit
+                          </a>
+                        </ng-container>
+                    </td>
+                  </ng-container>
+
+                  <td *ngIf="config.list.tabs" class="last-cell">
+                    <button type="button" class="btn" (click)="toggleTab($event, row)">
+                      <fa-icon
+                        class="more-icon mr-0"
+                        [icon]="row.collapsed ? 'chevron-down' : 'chevron-up'">
+                      </fa-icon>
+                    </button>
+                  </td>
               </tr>
               <tr *ngIf="row.additionalBody && !row.collapsed">
                 <td *ngIf="(!inForm && config.list.actions) || actions || !noneEdit">&nbsp;</td>

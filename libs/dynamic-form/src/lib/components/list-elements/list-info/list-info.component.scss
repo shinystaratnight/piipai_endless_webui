@@ -66,35 +66,35 @@
       background-color: #f5f5f5;
     }
 
-    .available,
-    .unavailable {
-      position: absolute;
-      right: 0;
-      bottom: 0.1rem;
+    // .available,
+    // .unavailable {
+    //   position: absolute;
+    //   right: 0;
+    //   bottom: 0.1rem;
 
-      padding-top: 1px;
+    //   padding-top: 1px;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
 
-      width: 1rem;
-      height: 1rem;
+    //   width: 1rem;
+    //   height: 1rem;
 
-      font-size: 0.7rem;
+    //   font-size: 0.7rem;
 
-      border-radius: 50%;
+    //   border-radius: 50%;
 
-      color: white;
-    }
+    //   color: white;
+    // }
 
-    .available {
-      background-color: $success;
-    }
+    // .available {
+    //   background-color: $success;
+    // }
 
-    .unavailable {
-      background-color: $danger;
-    }
+    // .unavailable {
+    //   background-color: $danger;
+    // }
   }
 
   &-edit-link {
@@ -129,6 +129,7 @@
 
   &-status {
     display: flex;
+    margin-top: 1rem;
 
     &-wrapper {
       display: inline-flex;
@@ -171,9 +172,32 @@
       margin-right: 0.2rem;
     }
   }
+
+  &__icon {
+    position: absolute;
+    right: 0;
+    bottom: 0.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    font-size: .5rem;
+    color: white;
+
+    &--success {
+      background-color: $success;
+    }
+
+    &--danger {
+      background-color: $danger;
+    }
+  }
 }
 
 .description {
+  margin-bottom: 0;
   font-size: 12px;
   line-height: 14px;
 }

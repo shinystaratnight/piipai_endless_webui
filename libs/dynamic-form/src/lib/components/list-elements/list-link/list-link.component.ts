@@ -37,7 +37,7 @@ export class ListLinkComponent implements OnInit {
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('view', { static: false })
-  public lickView;
+  public linkView;
 
   constructor(
     private siteSettings: SiteSettingsService
@@ -139,7 +139,9 @@ export class ListLinkComponent implements OnInit {
     this.buttonAction.emit(e);
   }
 
-  public sendSms() {
+  public sendSms(event) {
+    event.stopPropagation();
+
     if (!this.smsDisabled) {
       this.buttonAction.emit({
         type: 'click',
@@ -153,6 +155,10 @@ export class ListLinkComponent implements OnInit {
         })
       });
     }
+  }
+
+  clickHandler(event) {
+    event.stopPropagation();
   }
 
 }
