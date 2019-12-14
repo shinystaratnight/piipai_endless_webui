@@ -10,7 +10,7 @@ import {
   AfterContentChecked,
   SimpleChanges
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -165,7 +165,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     private toastr: ToastService,
     private listStorage: ListStorageService,
     private purposeService: CompanyPurposeService,
-    private listService: ListService
+    private listService: ListService,
+    private route: ActivatedRoute
   ) {}
 
   public isMobile = isMobile;
@@ -2474,5 +2475,29 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     return Number.isInteger(value);
   }
 
+  toggleTab(event, row) {
+    event.stopPropagation();
+    row.collapsed = !row.collapsed;
+  }
 
+  toggleCheckbox(event, row) {
+    event.stopPropagation();
+    this.select[row.id] = !this.select[row.id];
+
+    this.emitSelect();
+    return false;
+  }
+
+  openDetails(row) {
+    if (
+      this.first &&
+      !this.config.list.editEndpoint &&
+      !this.inForm &&
+      !this.config.list.editDisable &&
+      this.checkPermission('get') &&
+      this.noneEdit
+    ) {
+      this.router.navigate([row.id, 'change'], { relativeTo: this.route });
+    }
+  }
 }

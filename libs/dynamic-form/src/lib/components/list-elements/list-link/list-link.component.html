@@ -2,20 +2,20 @@
   <div class="list-link" [class.inline]="config.inline">
     <span *ngIf="config.display && config.value" class="display">{{config.display}}</span>
     <span class="d-flex align-items-center" *ngIf="!arrayValue">
-      <a #view class="link default" [class.phone]="phone" [attr.href]="href" *ngIf="config.value && !link" [title]="config.title || ''">
+      <a #view class="link default" [class.phone]="phone" [attr.href]="href" *ngIf="config.value && !link" [title]="config.title || ''" (click)="clickHandler($event)">
         {{config.value}}
       </a>
       <button type="button" class="btn btn-outline-primary"
         *ngIf="phone"
         [attr.title]="smsDisabledTitle"
         [class.disabled]="smsDisabled"
-        (click)="sendSms()"
+        (click)="sendSms($event)"
         [disabled]="smsDisabled">
           SMS
       </button>
       <button type="button" class="btn btn-outline-primary"
         *ngIf="phone"
-        (click)="lickView.nativeElement.click()">
+        (click)="linkView.nativeElement.click()">
           Call
       </button>
 
