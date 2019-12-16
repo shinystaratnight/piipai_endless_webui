@@ -190,21 +190,21 @@
                         [checked]="select[row.id]" hidden>
                         <app-checkbox [checked]="select[row.id]" (click)="toggleCheckbox($event, row)"></app-checkbox>
                     </label>
-                    <a class="first-cell-link not-underline" *ngIf="first && !config.list.editEndpoint && !inForm && !config.list.editDisable && checkPermission('get') && !noneEdit" [routerLink]="[row.id + '/change']">
+                    <!-- <a class="first-cell-link not-underline" *ngIf="first && !config.list.editEndpoint && !inForm && !config.list.editDisable && checkPermission('get') && !noneEdit" [routerLink]="[row.id + '/change']">
                       <fa-icon
                         icon="pencil-alt"
                         class="icon">
                       </fa-icon>&nbsp;Edit
-                    </a>
+                    </a> -->
                     <fa-icon
                       *ngIf="!first && !config.list.editEndpoint && !config.list.editDisable && checkPermission('get')"
                       icon="pencil-alt"
                       class="icon"
                       (click)="editObject(row.id, row.__str__)">
                     </fa-icon>
-                    <span class="first-cell-link hov-opacity" *ngIf="config.list.editEndpoint && canEdit(row) && !config.list.editDisable && checkPermission('get')" (click)="editListObject(row)">
+                    <!-- <span class="first-cell-link hov-opacity" *ngIf="config.list.editEndpoint && canEdit(row) && !config.list.editDisable && checkPermission('get')" (click)="editListObject(row)">
                       <fa-icon icon="pencil-alt" class="icon"></fa-icon>&nbsp;Edit
-                    </span>
+                    </span> -->
                   </td>
 
                   <ng-container *ngFor="let cell of row.content; let first = first">
@@ -233,10 +233,12 @@
                               (buttonAction)="buttonHandler($event, cell.pop = pop)">
                             </ng-container>
                           </ng-template>
-                          <fa-icon class="icon px-3 py-1" style="opacity: .3; margin-left: 8px"
-                            [icon]="['fas', 'ellipsis-v']"
+                          <fa-icon class="icon-actions px-3 py-1 ml-2"
+                            icon="ellipsis-v"
                             placement="bottom"
                             #pop="ngbPopover"
+                            triggers="manual"
+                            (click)="toggleActions($event, pop)"
                             [ngbPopover]="actionsTemplate">
                           </fa-icon>
                         </ng-container>
@@ -245,7 +247,7 @@
                           <app-list-table *ngIf="innerTables[row.id][cell.name].body" [config]="innerTables[row.id][cell.name]"></app-list-table>
                         </div>
 
-                        <ng-container *ngIf="first && config.list.innerEdit">
+                        <!-- <ng-container *ngIf="first && config.list.innerEdit">
                           <br>
                           <a class="first-cell-link not-underline"
                             [routerLink]="[row.id + '/change']">
@@ -255,7 +257,7 @@
                               </fa-icon>
                               &nbsp;Edit
                           </a>
-                        </ng-container>
+                        </ng-container> -->
                     </td>
                   </ng-container>
 
