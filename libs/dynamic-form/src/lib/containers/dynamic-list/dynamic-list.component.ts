@@ -1858,21 +1858,21 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     this.open(this.modal, { size: 'lg' });
   }
 
-  editListObject(row) {
-    const endpoint = this.config.list.editEndpoint;
-    const id = getPropValue(row.rowData, this.config.list.canEdit);
-    const label = row.__str__;
+  // editListObject(row) {
+  //   const endpoint = this.config.list.editEndpoint;
+  //   const id = getPropValue(row.rowData, this.config.list.canEdit);
+  //   const label = row.__str__;
 
-    this.modalInfo = {
-      type: 'form',
-      endpoint,
-      id,
-      label,
-      mode: 'edit'
-    };
+  //   this.modalInfo = {
+  //     type: 'form',
+  //     endpoint,
+  //     id,
+  //     label,
+  //     mode: 'edit'
+  //   };
 
-    this.open(this.modal, { size: 'lg' });
-  }
+  //   this.open(this.modal, { size: 'lg' });
+  // }
 
   canEdit(row): boolean {
     return !!getPropValue(row.rowData, this.config.list.canEdit);
@@ -2480,6 +2480,11 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     row.collapsed = !row.collapsed;
   }
 
+  toggleActions(event, popover) {
+    event.stopPropagation();
+    popover.open();
+  }
+
   toggleCheckbox(event, row) {
     event.stopPropagation();
     this.select[row.id] = !this.select[row.id];
@@ -2489,15 +2494,34 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   }
 
   openDetails(row) {
-    if (
-      this.first &&
-      !this.config.list.editEndpoint &&
-      !this.inForm &&
-      !this.config.list.editDisable &&
-      this.checkPermission('get') &&
-      this.noneEdit
-    ) {
-      this.router.navigate([row.id, 'change'], { relativeTo: this.route });
+    if (this.checkPermission('get')) {
+      const {editEndpoint, editDisable} = this.config.list
+
+      if (
+        this.first &&
+        !editEndpoint &&
+        !this.inForm &&
+        !editDisable
+      ) {
+        this.router.navigate([row.id, 'change'], { relativeTo: this.route });
+      }
+
+      if (editEndpoint && this.canEdit(row) && !editDisable) {
+        const id = getPropValue(row.rowData, this.config.list.canEdit);
+        const label = row.__str__;
+
+        this.modalInfo = {
+          type: 'form',
+          endpoint: editEndpoint,
+          id,
+          label,
+          mode: 'edit'
+        };
+
+        this.open(this.modal, { size: 'lg' });
+      }
     }
+
+
   }
 }

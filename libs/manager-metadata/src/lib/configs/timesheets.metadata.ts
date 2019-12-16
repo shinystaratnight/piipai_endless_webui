@@ -34,7 +34,7 @@ const filters = {
 const list = {
   list: {
     list: 'timesheet',
-    innerEdit: true,
+    // innerEdit: true,
     label: 'Timesheet Entry',
     columns: [
       {
@@ -385,7 +385,7 @@ const list = {
     ],
     pagination_label: 'Timesheet Entry',
     search_enabled: false,
-    editDisable: true,
+    editDisable: false,
     filters: [
       filters.shift_started_at,
       filters.supervisor,

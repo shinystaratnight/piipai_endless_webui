@@ -14,3 +14,12 @@
 
   font-size: 32px;
 }
+
+.icon-actions {
+  opacity: .3;
+
+  &:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+}
