@@ -556,7 +556,9 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'SMS',
-                      type: 'checkbox'
+                      type: 'checkbox',
+                      action: 'resendSms',
+                      showButtonIf: false
                     },
                     read_only: false
                   }

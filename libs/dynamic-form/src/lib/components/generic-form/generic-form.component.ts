@@ -1498,35 +1498,43 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public buttonActionHandler(e) {
-    if (e.value === 'autoGenerate') {
-      this.generatePassword(e);
-    }
+    const { value } = e;
 
-    if (e.value === 'resend') {
-      this.resend(e);
-    }
+    switch(value) {
+      case 'autoGenerate':
+        this.generatePassword(e);
+        break;
 
-    if (e.value === 'syncInvoice') {
-      this.syncInvoice(this.id, e);
-    }
+      case 'resend':
+        this.resend(e);
+        break;
 
-    if (e.value === 'noBreak') {
-      this.noBreak(e);
-    }
+      case 'syncInvoice':
+        this.syncInvoice(this.id, e);
+        break;
 
-    if (e.value === 'buyProfile') {
-      this.buyProfile();
-    }
+      case 'noBreak':
+        this.noBreak(e);
+        break;
 
-    if (e.value === 'resendEmail') {
-      this.resendEmail(e);
+      case 'buyProfile':
+        this.buyProfile();
+        break;
+
+      case 'resendEmail':
+        this.resendContactCheck(e, 'emails');
+        break;
+
+      case 'resendSms':
+        this.resendContactCheck(e, 'smses');
+        break;
     }
 
     this.buttonAction.emit(e);
   }
 
-  resendEmail(e) {
-    const endpoint = `/core/contacts/${e.data.contact.id}/emails/`;
+  resendContactCheck(e, type: 'emails' | 'smses') {
+    const endpoint = `${Endpoints.Contact}${e.data.contact.id}/${type}/`;
 
     this.service.submitForm(endpoint, {}).subscribe((res) => {
       if (res.message) {
