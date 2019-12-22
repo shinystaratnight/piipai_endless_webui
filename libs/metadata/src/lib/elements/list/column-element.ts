@@ -10,6 +10,8 @@ export class ColumnElement {
   hide?: boolean;
   width?: number;
 
+  timezone?: string;
+
   content: any[];
 
   constructor(name: string, label: string) {
@@ -50,6 +52,12 @@ export class ColumnElement {
 
   setWidth(width: number) {
     this.width = width;
+
+    return this;
+  }
+
+  setTimezone(timezone: string) {
+    this.timezone = timezone;
 
     return this;
   }

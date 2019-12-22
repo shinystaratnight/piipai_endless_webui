@@ -9,7 +9,6 @@ import { getValueOfData, generateCssStyles } from '../../../helpers';
   styleUrls: ['./list-text.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class ListTextComponent implements OnInit {
   private stylePrefix = 'list-text';
 
@@ -45,7 +44,7 @@ export class ListTextComponent implements OnInit {
           this.arrayValue = true;
 
           if (this.config.param) {
-            this.value.forEach((el) => {
+            this.value.forEach(el => {
               const obj = { value: '' };
               getValueOfData(el, this.config.param, obj);
 
@@ -59,7 +58,11 @@ export class ListTextComponent implements OnInit {
       this.workers = this.generateWorkers(this.config.workers_details);
     }
 
-    this.checkDate(getTimeInstance());
+    const timeInstance = this.config.timezone
+      ? getTimeInstance().tz.setDefault(this.config.timezone)
+      : getTimeInstance();
+
+    this.checkDate(timeInstance);
     this.customizeStatic(this.config.value);
     this.cssClasses = generateCssStyles(this.config.styles, this.stylePrefix);
   }
@@ -68,37 +71,45 @@ export class ListTextComponent implements OnInit {
     return Math.floor(parseFloat(score));
   }
 
-  public checkDate(moment) { //tslint:disable-line
-    const type = this.config.templateOptions && this.config.templateOptions.type;
+  public checkDate(moment) {
+    //tslint:disable-line
+    const type =
+      this.config.templateOptions && this.config.templateOptions.type;
     if (type === 'time' || type === 'date' || type === 'datetime') {
       if (type === 'time') {
         if (this.arrayValue) {
-          const result = this.value.map((el) => {
+          const result = this.value.map(el => {
             return el ? moment(el, 'hh:mm:ss').format('hh:mm A') : ' ';
           });
           this.value = result;
         } else {
-          this.value = this.value ? moment(this.value, 'hh:mm:ss').format('hh:mm A') : ' ';
+          this.value = this.value
+            ? moment(this.value, 'hh:mm:ss').format('hh:mm A')
+            : ' ';
         }
       }
       if (type === 'date') {
         if (this.arrayValue) {
-          const result = this.value.map((el) => {
+          const result = this.value.map(el => {
             return el ? moment(el, 'YYYY-MM-DD').format('DD/MM/YYYY') : ' ';
           });
           this.value = result;
         } else {
-          this.value = this.value ? moment(this.value, 'YYYY-MM-DD').format('DD/MM/YYYY') : ' ';
+          this.value = this.value
+            ? moment(this.value, 'YYYY-MM-DD').format('DD/MM/YYYY')
+            : ' ';
         }
       }
       if (type === 'datetime') {
         if (this.arrayValue) {
-          const result = this.value.map((el) => {
+          const result = this.value.map(el => {
             return el ? moment(el).format('DD/MM/YYYY hh:mm A') : ' ';
           });
           this.value = result;
         } else {
-          this.value = this.value ? moment(this.value).format('DD/MM/YYYY hh:mm A') : ' '; //tslint:disable-line
+          this.value = this.value
+            ? moment(this.value).format('DD/MM/YYYY hh:mm A')
+            : ' '; //tslint:disable-line
         }
       }
     }
@@ -115,13 +126,24 @@ export class ListTextComponent implements OnInit {
         if (color) {
           this.iconColor = color;
         } else {
-          this.iconClass = value === true ?
-            'text-success' : value === false ?
-              'text-danger' : 'text-muted';
+          this.iconClass =
+            value === true
+              ? 'text-success'
+              : value === false
+              ? 'text-danger'
+              : 'text-muted';
         }
       }
     } else if (this.config.setColor) {
-      const classes = ['primary', 'danger', 'info', 'success', 'warning', 'description', 'comment'];
+      const classes = [
+        'primary',
+        'danger',
+        'info',
+        'success',
+        'warning',
+        'description',
+        'comment'
+      ];
       const color = this.config.color;
       this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
     }
@@ -145,5 +167,4 @@ export class ListTextComponent implements OnInit {
 
     return result.length && result;
   }
-
 }

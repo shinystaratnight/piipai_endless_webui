@@ -771,8 +771,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public updateDatepickerByTimezone(metadata, data) {
     metadata.forEach(el => {
       if (el.type === 'datepicker') {
-        if (data.time_zone) {
-          el.time_zone = data.time_zone;
+        if (data && (data.time_zone || data.timezone)) {
+          el.time_zone = data.time_zone || data.timezone;
         }
       } else if (el.children) {
         this.updateDatepickerByTimezone(el.children, data);
@@ -1947,6 +1947,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         this.parseMetadata(el.children, params);
       }
     });
+
+    this.updateDatepickerByTimezone(metadata, params);
+
     return metadata;
   }
 
