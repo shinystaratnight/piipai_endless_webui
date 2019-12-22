@@ -45,53 +45,57 @@ const list = function() {
             getChangeButton().setShowIfRule([{ supervisor_approved_at: null }])
           ]),
 
-        new List.column.element('status', 'Status').setContent([
-          new List.static.element('status').setHideValue(true),
+        new List.column.element('status', 'Status')
+          .setTimezone('time_zone')
+          .setContent([
+            new List.static.element('status').setHideValue(true),
 
-          new List.static.element('supervisor_approved')
-            .setDisplay('Approved')
-            .changeColor('success', 'supervisor_approved')
-            .setShowIfRule([{ status: 7 }]),
+            new List.static.element('supervisor_approved')
+              .setDisplay('Approved')
+              .changeColor('success', 'supervisor_approved')
+              .setShowIfRule([{ status: 7 }]),
 
-          new List.static.element('supervisor.name').setShowIfRule([
-            { status: 7 }
-          ]),
-
-          new List.static.element('supervisor_approved_at')
-            .setDisplay('{supervisor_approved_at__datetime}')
-            .setStyles(['muted'])
-            .setShowIfRule([
-              { status: 7 },
-              'supervisor_approved_at',
-              { supervisor_modified_at: null }
+            new List.static.element('supervisor.name').setShowIfRule([
+              { status: 7 }
             ]),
 
-          new List.picture.element('supervisor_signature', false)
-            .setSignature()
-            .setShowIfRule([{ status: 7 }, 'supervisor_signature.origin']),
+            new List.static.element('supervisor_approved_at')
+              .setDisplay('{supervisor_approved_at__datetime}')
+              .setStyles(['muted'])
+              .setShowIfRule([
+                { status: 7 },
+                'supervisor_approved_at',
+                { supervisor_modified_at: null }
+              ]),
 
-          new List.static.element('status')
-            .setDisplay('Waiting submission')
-            .changeColor('danger', 'status')
-            .setShowIfRule([{ status: 4 }]),
+            new List.picture.element('supervisor_signature', false)
+              .setSignature()
+              .setShowIfRule([{ status: 7 }, 'supervisor_signature.origin']),
 
-          new List.static.element('status')
-            .setDisplay('Adjustment in progress')
-            .changeColor('primary', 'status')
-            .setInfoText('Timesheet will be automatically approved in 4 hours')
-            .setShowIfRule([{ status: 6 }]),
+            new List.static.element('status')
+              .setDisplay('Waiting submission')
+              .changeColor('danger', 'status')
+              .setShowIfRule([{ status: 4 }]),
 
-          new List.static.element('supervisor_modified_at')
-            .setDisplay('{supervisor_modified_at__datetime}')
-            .setStyles(['muted'])
-            .setShowIfRule([{ status: 6 }, 'supervisor_modified_at']),
+            new List.static.element('status')
+              .setDisplay('Adjustment in progress')
+              .changeColor('primary', 'status')
+              .setInfoText(
+                'Timesheet will be automatically approved in 4 hours'
+              )
+              .setShowIfRule([{ status: 6 }]),
 
-          getChangeButton().setShowIfRule([{ status: 6 }]),
+            new List.static.element('supervisor_modified_at')
+              .setDisplay('{supervisor_modified_at__datetime}')
+              .setStyles(['muted'])
+              .setShowIfRule([{ status: 6 }, 'supervisor_modified_at']),
 
-          getApproveButton().setShowIfRule([{ status: 5 }]),
+            getChangeButton().setShowIfRule([{ status: 6 }]),
 
-          getChangeButton().setShowIfRule([{ status: 5 }])
-        ])
+            getApproveButton().setShowIfRule([{ status: 5 }]),
+
+            getChangeButton().setShowIfRule([{ status: 5 }])
+          ])
       ])
   };
 };

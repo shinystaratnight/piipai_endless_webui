@@ -5,7 +5,7 @@ import * as moment from 'moment-timezone';
 // setTimeZone(timeZone);
 moment.updateLocale('en', {
   week: {
-    dow : 1, // Monday is the first day of the week.
+    dow: 1 // Monday is the first day of the week.
   } as any
 });
 
@@ -14,7 +14,7 @@ export function getTimeInstance() {
 }
 
 export function getLocalTime() {
-  return moment();
+  return moment().clone();
 }
 
 export function getTimeByTomezone(timezone: string) {
@@ -30,29 +30,49 @@ export function getToday() {
 }
 
 export function getYesterday() {
-  return getToday().clone().add(-1, 'day').format();
+  return getToday()
+    .clone()
+    .add(-1, 'day')
+    .format();
 }
 
 export function getTommorrow() {
-  return getToday().clone().add(1, 'day').format();
+  return getToday()
+    .clone()
+    .add(1, 'day')
+    .format();
 }
 
 export function getTimeZoneOffset() {
-  return getToday().format('Z').slice(1);
+  return getToday()
+    .format('Z')
+    .slice(1);
 }
 
 export function getWeekStart() {
-  return getToday().startOf('isoWeek').format();
+  return getToday()
+    .startOf('isoWeek')
+    .format();
 }
 
 export function getWeekEnd() {
-  return getToday().endOf('isoWeek').format();
+  return getToday()
+    .endOf('isoWeek')
+    .format();
 }
 
 export function getMonthStart() {
-  return getToday().startOf('month').format();
+  return getToday()
+    .startOf('month')
+    .format();
 }
 
 export function getMonthEnd() {
-  return getToday().endOf('month').format();
+  return getToday()
+    .endOf('month')
+    .format();
 }
+
+export const dateFormat = 'DD/MM/YYYY';
+export const datetimeFormat = 'DD/MM/YYYY hh:mm A';
+export const timeFormat = 'hh:mm A';
