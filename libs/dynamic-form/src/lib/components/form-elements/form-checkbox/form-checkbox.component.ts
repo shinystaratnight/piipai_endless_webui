@@ -60,7 +60,11 @@ export class FormCheckboxComponent extends BasicElementComponent
   }
 
   get hasButton() {
-    return this.config.templateOptions.showButtonIf === this.config.value;
+    const { showButtonIf } = this.config.templateOptions;
+
+    if (typeof showButtonIf === 'boolean') {
+      return this.config.templateOptions.showButtonIf === this.config.value;
+    }
   }
 
   public ngOnInit() {
