@@ -2546,7 +2546,7 @@ export class DynamicListComponent
       .getByQuery(e.el.endpoint, `?timesheet=${e.id}&limit=-1`)
       .pipe(finalize(() => e.el.process.next(false)))
       .subscribe(res => {
-        if (res.results.length) {
+        if (res.results.length > 0) {
           this.listStorage.updateTrackingInfo(e.id, true);
           const timesheet = this.getRowData(e);
           e.el.locationDataEmpty = false;
