@@ -11,10 +11,11 @@ import { getTimeInstance } from '@webui/utilities';
 export class TimeTrackingComponent implements OnInit {
   @Input()
   public timePoints: {
-    start: Moment,
-    end: Moment,
-    break_start: Moment,
-    break_end: Moment
+    start: Moment;
+    end: Moment;
+    break_start: Moment;
+    break_end: Moment;
+    timezone?: string;
   };
 
   @Output()
@@ -53,7 +54,7 @@ export class TimeTrackingComponent implements OnInit {
 
     const minutes = timesheet / 1000 / 60;
 
-    const newTime = (Math.round(minutes * event)) * 60 * 1000;
+    const newTime = Math.round(minutes * event) * 60 * 1000;
 
     this.time = getTimeInstance()(start + newTime);
     this.changeTimeTracking.emit(this.time);

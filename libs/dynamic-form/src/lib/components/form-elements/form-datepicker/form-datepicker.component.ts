@@ -14,7 +14,19 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subscription, Subject } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { FormatString, isMobile, getTimeInstance } from '@webui/utilities';
+import {
+  FormatString,
+  isMobile,
+  getTimeInstance,
+  dateFormat,
+  datetimeFormat,
+  timeFormat
+} from '@webui/utilities';
+
+import {
+  getDatePickerConfig,
+  getTimePickerConfig
+} from './form-datepicker.config';
 
 @Component({
   selector: 'app-form-datepicker',
@@ -23,12 +35,8 @@ import { FormatString, isMobile, getTimeInstance } from '@webui/utilities';
 })
 export class FormDatepickerComponent extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('d', { static: false })
-  public d;
-
-  @ViewChild('t', { static: false })
-  public t;
-
+  @ViewChild('d', { static: false }) public d;
+  @ViewChild('t', { static: false }) public t;
   @HostBinding('class.mobile-device') mobile = isMobile();
 
   public config;
@@ -40,24 +48,24 @@ export class FormDatepickerComponent extends BasicElementComponent
   public date: any;
   public label: boolean;
   public init: boolean;
-  public mobileDevice: boolean;
+  public mobileDevice = isMobile();
   public displayValue: string;
   public formData: any;
   public opened: boolean;
-  public update: Subject<any>;
+  public update: Subject<any> = new Subject();
 
-  public dateFormat = 'DD/MM/YYYY';
-  public datetimeFormat = 'DD/MM/YYYY hh:mm A';
-  public timeFormat = 'hh:mm A';
+  public dateFormat = dateFormat;
+  public datetimeFormat = datetimeFormat;
+  public timeFormat = timeFormat;
   public timeZone: string;
 
   public viewMode: boolean;
-  public editMode: boolean;
+  public editMode = true;
   public currentField: boolean;
 
   public timeInstance = getTimeInstance();
 
-  private subscriptions: Subscription[];
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -65,13 +73,14 @@ export class FormDatepickerComponent extends BasicElementComponent
     private el: ElementRef
   ) {
     super();
-    this.subscriptions = [];
-    this.editMode = true;
   }
 
   public ngOnInit() {
-    this.update = new Subject();
-    this.mobileDevice = isMobile();
+    if (this.config.time_zone) {
+      this.timeInstance = getTimeInstance().tz.setDefault(
+        this.config.time_zone
+      );
+    }
 
     if (this.config.customDatepicker) {
       this.dateFormat = this.config.customDatepicker.dateFormat;
@@ -90,7 +99,16 @@ export class FormDatepickerComponent extends BasicElementComponent
     this.checkHiddenProperty();
     this.checkFormData();
     this.createEvent();
-    this.group.get(this.key).valueChanges.subscribe(val => {
+
+    this.subscriptions.push(this.subscribeOnChanges());
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach(s => s && s.unsubscribe());
+  }
+
+  public subscribeOnChanges(): Subscription {
+    return this.group.get(this.key).valueChanges.subscribe(val => {
       if (!val) {
         setTimeout(() => {
           this.event.emit({
@@ -100,10 +118,6 @@ export class FormDatepickerComponent extends BasicElementComponent
         }, 150);
       }
     });
-  }
-
-  public ngOnDestroy() {
-    this.subscriptions.forEach(s => s && s.unsubscribe());
   }
 
   public checkHiddenProperty() {
@@ -228,32 +242,21 @@ export class FormDatepickerComponent extends BasicElementComponent
     }
   }
 
-  public setDatepickerDate() {
-    if (this.init) {
-      if (this.date) {
-        (window as any)
-          .$(this.d.nativeElement)
-          .datebox('setTheDate', this.date);
-      } else {
-        (window as any).$(this.d.nativeElement).datebox('refresh');
-      }
-    }
-  }
-
   public closeDatePicker(element) {
     if (element) {
       (window as any).$(element).datebox('close');
     }
   }
 
-  public setTimepickerTime() {
+  setDatepickerValue(type: 'date' | 'time', value?: string) {
     if (this.init) {
-      if (this.time) {
-        (window as any)
-          .$(this.t.nativeElement)
-          .datebox('setTheDate', this.time);
+      const element = type === 'date' ? this.d : this.t;
+      const datepicker = (window as any).$(element.nativeElement);
+
+      if (value) {
+        datepicker.datebox('setTheDate', value);
       } else {
-        (window as any).$(this.t.nativeElement).datebox('refresh');
+        datepicker.datebox('refresh');
       }
     }
   }
@@ -264,35 +267,13 @@ export class FormDatepickerComponent extends BasicElementComponent
     }
 
     if (!this.init) {
-      const dateType = this.mobileDevice ? 'flipbox' : 'calbox';
-      const timeType = this.mobileDevice ? 'timeflipbox' : 'timebox';
       this.init = true;
-      const type = this.config.templateOptions.type;
+      const { type } = this.config.templateOptions;
+
       if (type === 'date' || type === 'datetime') {
-        (window as any).$(this.d.nativeElement).datebox({
-          mode: dateType,
-          dateFormat: this.config.customDatepicker
-            ? this.config.customDatepicker.datepickerFormat
-            : '%d/%m/%Y',
-          overrideDateFormat: this.config.customDatepicker
-            ? this.config.customDatepicker.datepickerFormat
-            : '%d/%m/%Y',
-          useClearButton:
-            this.config.templateOptions.clear === false ? false : true,
-          useFocus: true,
-          useHeader: false,
-          calHighToday: true,
-          themeDatePick: 'primary',
-          bootstrapDropdownRight: false,
-          calUsePickers:
-            this.config.templateOptions.change === false ? false : true,
-          calNoHeader: this.config.templateOptions.change === false,
-          calOnlyMonth: this.config.templateOptions.change === false,
-          useCancelButton: true,
-          calYearPickRelative: false,
-          calYearPickMax: this.key.includes('birthday') ? 0 : 6,
-          calYearPickMin: -100,
-          maxDays: this.key.includes('birthday') && -1,
+        const isBirthday = this.key.includes('birthday');
+        const config = getDatePickerConfig(this.config, isBirthday);
+        Object.assign(config, {
           beforeOpenCallback: () => {
             this.opened = this.d.nativeElement;
             this.updatePosition();
@@ -303,11 +284,12 @@ export class FormDatepickerComponent extends BasicElementComponent
                 this.opened = this.d.nativeElement;
               }
 
-              if (this.d.nativeElement && this.key.includes('birthday')) {
+              if (this.d.nativeElement && isBirthday) {
                 this.updateBirthdayYearPickMax();
               }
             }, 200);
           },
+
           closeCallback: () => {
             const date = this.d.nativeElement.value;
             const time = this.t.nativeElement.value;
@@ -319,27 +301,12 @@ export class FormDatepickerComponent extends BasicElementComponent
             }
           }
         });
+        (window as any).$(this.d.nativeElement).datebox(config);
       }
-      if (type === 'datetime') {
-        (window as any).$(this.t.nativeElement).datebox({
-          mode: timeType,
-          overrideTimeFormat: 12,
-          overrideTimeOutput: '%I:%M %p',
-          useClearButton: true,
-          useCancelButton: true,
-          useFocus: true,
-          useHeader: false,
-          calUsePickers: true,
-          calHighToday: true,
-          themeDatePick: 'primary',
-          calYearPickRelative: false,
-          calYearPickMax: this.key.includes('birthday') ? 0 : 6,
-          calYearPickMin: -100,
-          maxDays: this.key.includes('birthday') && -1,
-          bootstrapDropdownRight:
-            this.config.rightPosition === false
-              ? false
-              : timeType === 'timebox',
+
+      if (type === 'datetime' || type === 'time') {
+        const config = getTimePickerConfig(this.config);
+        Object.assign(config, {
           beforeOpenCallback: () => {
             this.opened = this.t.nativeElement;
             this.updatePosition();
@@ -348,48 +315,25 @@ export class FormDatepickerComponent extends BasicElementComponent
               this.closeDatePicker(this.d.nativeElement);
             }, 200);
           },
+
           closeCallback: () => {
-            const date = this.d.nativeElement.value;
             const time = this.t.nativeElement.value;
-            if (date) {
+            const date = this.d.nativeElement.value;
+
+            if (date && type === 'datetime') {
               const fullDate = date + (time ? ` ${time}` : '');
               this.setDate(fullDate, this.timeInstance, true);
-            } else {
-              this.group.get(this.key).patchValue(null);
-            }
-          }
-        });
-      }
-      if (type === 'time') {
-        (window as any).$(this.t.nativeElement).datebox({
-          mode: timeType,
-          overrideTimeFormat: 12,
-          overrideTimeOutput: '%I:%M %p',
-          useClearButton: true,
-          useFocus: true,
-          useHeader: false,
-          calHighToday: false,
-          bootstrapDropdownRight:
-            this.config.rightPosition === false
-              ? false
-              : timeType === 'timebox',
-          beforeOpenCallback: () => {
-            this.opened = this.t.nativeElement;
-            this.updatePosition();
-            setTimeout(() => {
-              this.refreshDatebox(this.t.nativeElement);
-            }, 200);
-          },
-          closeCallback: () => {
-            const time = this.t.nativeElement.value;
-            if (time) {
+            } else if (time) {
               this.setTime(time, this.timeInstance, true);
             } else {
               this.group.get(this.key).patchValue(null);
             }
           }
         });
+
+        (window as any).$(this.t.nativeElement).datebox(config);
       }
+
       this.d.nativeElement.readOnly = false;
       this.t.nativeElement.readOnly = false;
     }
@@ -404,8 +348,9 @@ export class FormDatepickerComponent extends BasicElementComponent
           } else {
             this.date = date.format('YYYY-MM-DD');
           }
-          this.setDatepickerDate();
+          this.setDatepickerValue('date', this.date);
         }
+
         this.group.get(this.key).patchValue(date.format('YYYY-MM-DD'));
         this.emitChanges();
       }
@@ -417,7 +362,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           } else {
             this.date = date.format('YYYY-MM-DD');
           }
-          this.setDatepickerDate();
+          this.setDatepickerValue('date', this.date);
         }
         if (!this.time || this.config.shouldUpdate) {
           if (!this.mobileDevice) {
@@ -425,9 +370,15 @@ export class FormDatepickerComponent extends BasicElementComponent
           } else {
             this.time = date.format('HH:mm');
           }
-          this.setTimepickerTime();
+          this.setDatepickerValue('time', this.time);
         }
-        this.group.get(this.key).patchValue(date.format());
+
+        const utcDate = date
+          .clone()
+          .utc()
+          .format();
+        this.group.get(this.key).patchValue(utcDate);
+
         this.emitChanges();
       }
     }
@@ -469,7 +420,6 @@ export class FormDatepickerComponent extends BasicElementComponent
   }
 
   public setDate(value, moment, picker = false) {
-    //tslint:disable-line
     let date;
     if (value) {
       if (picker) {
@@ -481,12 +431,11 @@ export class FormDatepickerComponent extends BasicElementComponent
     } else if (!this.config.hide && this.config.shouldUpdate) {
       this.date = '';
       this.group.get(this.key).patchValue('');
-      this.setDatepickerDate();
+      this.setDatepickerValue('date', this.date);
     }
   }
 
   public setTime(value, moment, picker = false) {
-    //tslint:disable-line
     let time;
     if (value) {
       if (picker) {
@@ -498,7 +447,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     } else if (!this.config.hide && this.config.shouldUpdate) {
       this.time = '';
       this.group.get(this.key).patchValue('');
-      this.setTimepickerTime();
+      this.setDatepickerValue('time', this.time);
     }
   }
 
@@ -526,17 +475,18 @@ export class FormDatepickerComponent extends BasicElementComponent
     this.setDate(e, this.timeInstance);
   }
 
-  public changeTime(e: string) {
+  public changeTime(time: string) {
     if (this.date) {
-      const hour = parseInt(e.split(':')[0], 10);
-      const minute = parseInt(e.split(':')[1], 10);
+      const hour = parseInt(time.split(':')[0], 10);
+      const minute = parseInt(time.split(':')[1], 10);
       const datetime = this.timeInstance(this.date)
         .hour(hour)
         .minute(minute);
 
-      this.group.get(this.key).patchValue(datetime.format());
+      const utcDatetime = datetime.utc().format();
+      this.group.get(this.key).patchValue(utcDatetime);
     } else {
-      this.setTime(e, this.timeInstance);
+      this.setTime(time, this.timeInstance);
     }
   }
 
