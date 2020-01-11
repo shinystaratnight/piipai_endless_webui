@@ -64,7 +64,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     if (!this.config.hide) {
       this.initialize();
     }
-    const subscription = this.timelineService.action$.subscribe((value) => {
+    const subscription = this.timelineService.action$.subscribe(value => {
       if (value === TimelineAction.Update) {
         this.getTimeline();
         return;
@@ -77,11 +77,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
           this.updateDropdown();
         }
 
-        if (!(<any> this.cd).destroyed) {
+        if (!(<any>this.cd).destroyed) {
           this.cd.detectChanges();
         }
       }
-
     });
 
     this.subscriptions.push(subscription);
@@ -91,14 +90,17 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     const formatString = new FormatString();
     const keys = Object.keys(this.config.query);
     const type = this.config.value.type;
-    keys.forEach((el) => {
+    keys.forEach(el => {
       if (el === 'object_id') {
         if (Array.isArray(this.config.query[el])) {
           if (!this.objectId && type !== 'master') {
-            this.objectId = formatString.format(this.config.query[el][2], this.config.value);
+            this.objectId = formatString.format(
+              this.config.query[el][2],
+              this.config.value
+            );
           }
 
-          this.config.query[el].forEach((query) => {
+          this.config.query[el].forEach(query => {
             if (!this.objectId) {
               this.objectId = formatString.format(query, this.config.value);
             }
@@ -112,7 +114,6 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
         this.query[el] = this.objectId;
       } else {
-
         if (type && type === 'master') {
           this.query[el] = this.config.query[el][1];
         } else {
@@ -131,7 +132,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
   public updateDropdown() {
     if (this.dropdown) {
-      this.selectArray = this.config.options.filter((el) => {
+      this.selectArray = this.config.options.filter(el => {
         return el.state < 3;
       });
 
@@ -148,7 +149,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
   public getState(state: string): any {
     if (this.config.options) {
-      return this.config.options.find((el) => el.id === state);
+      return this.config.options.find(el => el.id === state);
     }
   }
 
@@ -157,7 +158,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       this.modalRef.close();
     }
 
-    this.subscriptions.forEach((s) => s && s.unsubscribe());
+    this.subscriptions.forEach(s => s && s.unsubscribe());
   }
 
   public open(state, closeModal?): void {
@@ -168,10 +169,16 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       return;
     }
     this.modalData = {};
-    if (state.state === 1 && !this.advancedSeving && !state.acceptance_tests.length && !state.substates.length) {
+    if (
+      state.state === 1 &&
+      !this.advancedSeving &&
+      !state.acceptance_tests.length &&
+      !state.substates.length
+    ) {
       state.saveProcess = true;
-      this.timelineService.activateState(this.objectId, state.id, true)
-        .pipe(finalize(() => this.saveProcess = false))
+      this.timelineService
+        .activateState(this.objectId, state.id, true)
+        .pipe(finalize(() => (this.saveProcess = false)))
         .subscribe(() => {
           this.getTimeline(this.config.query.model === 'hr.job');
         });
@@ -179,12 +186,12 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
     }
 
     if (state.acceptance_tests.length) {
-      const tests = state.acceptance_tests.filter((test) => test.score === 0);
+      const tests = state.acceptance_tests.filter(test => test.score === 0);
 
       if (tests.length) {
         const passTestAction = new BehaviorSubject(0);
 
-        passTestAction.subscribe((index) => {
+        passTestAction.subscribe(index => {
           const testId = tests[index].acceptance_test.id;
           this.modalRef = this.modalService.open(PassTestModalComponent);
           this.modalRef.componentInstance.config = {
@@ -194,9 +201,11 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
           this.modalRef.result
             .then((res: any[]) => {
-
               if (this.passedTests.has(testId)) {
-                this.passedTests.set(testId, [...this.passedTests.get(testId), ...res]);
+                this.passedTests.set(testId, [
+                  ...this.passedTests.get(testId),
+                  ...res
+                ]);
               } else {
                 this.passedTests.set(testId, res);
               }
@@ -207,8 +216,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
                 if (state.wf_object_id) {
                   this.savePassedTests(state.wf_object_id);
                 } else {
-                  this.timelineService.activateState(this.objectId, state.id, true)
-                    .subscribe((workflowObject) => {
+                  this.timelineService
+                    .activateState(this.objectId, state.id, true)
+                    .subscribe(workflowObject => {
                       this.savePassedTests(workflowObject.id);
                     });
                 }
@@ -236,7 +246,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       this.modalData.title = title;
       this.modalData.tests =
         state.acceptance_tests.length &&
-        state.acceptance_tests.map((el) => {
+        state.acceptance_tests.map(el => {
           if (el.score) {
             const score = parseFloat(el.score);
 
@@ -262,8 +272,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public savePassedTests(id: string) {
-    this.timelineService.passTests(this.updateTests(id))
-      .pipe(finalize(() => this.saveProcess = false))
+    this.timelineService
+      .passTests(this.updateTests(id))
+      .pipe(finalize(() => (this.saveProcess = false)))
       .subscribe(() => {
         this.getTimeline(this.config.query.model === 'hr.job');
       });
@@ -271,9 +282,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
   public updateTests(id: string) {
     const tests = [];
-    Array.from(this.passedTests.values()).forEach((el) => {
+    Array.from(this.passedTests.values()).forEach(el => {
       if (el) {
-        el.forEach((q) => q.workflow_object = id);
+        el.forEach(q => (q.workflow_object = id));
         tests.push(...el);
       }
     });
@@ -284,9 +295,10 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public getTimeline(resetPage?: boolean): void {
     this.loading = true;
 
-    this.timelineService.getTimeline(this.query)
-      .pipe(finalize(() => this.loading = false))
-      .subscribe((timeline) => {
+    this.timelineService
+      .getTimeline(this.query)
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe(timeline => {
         this.timelineService.emit(resetPage ? TimelineAction.Reset : timeline);
       });
   }
@@ -294,7 +306,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   public setDataForState(state, hideScore) {
     const fields = ['object_id', 'state', 'active'];
     const result = {};
-    fields.forEach((el) => {
+    fields.forEach(el => {
       const value =
         el === 'state' ? state.id : el === 'object_id' ? this.objectId : true;
       result[el] = {
@@ -359,8 +371,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   }
 
   public createWorkflowObject(stateId: string) {
-    this.timelineService.activateState(this.objectId, stateId)
-      .subscribe((res) => {
+    this.timelineService
+      .activateState(this.objectId, stateId)
+      .subscribe(res => {
         const { id } = res;
 
         this.modalData.state.wf_object_id = id;
@@ -388,7 +401,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
       let activeCount = 0;
 
-      state.substates.forEach((el) => {
+      state.substates.forEach(el => {
         if (el.state === 2 || el.state === 3) {
           activeCount += 1;
         }
@@ -409,5 +422,9 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
   public verifyPhone(message: string): boolean {
     return message.includes('mobile phone');
+  }
+
+  onRefresh(): void {
+    this.timelineService.emit(TimelineAction.Update);
   }
 }

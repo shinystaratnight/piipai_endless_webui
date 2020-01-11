@@ -31,13 +31,13 @@
 }
 
 .candidate-info {
-  padding: 5px;
+  padding: 5px 10px;
   margin-top: 5px;
 
   border-radius: 50px;
 
-  opacity: 0.7;
   background-color: rgba($gray, 0.06);
+  color: rgba($gray, .7);
 }
 
 .custom-button {

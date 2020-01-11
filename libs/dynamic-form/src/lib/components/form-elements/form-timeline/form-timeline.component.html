@@ -1,6 +1,18 @@
 <div *ngIf="!this.config.hide && !this.dropdown && !loading" class="timeline">
+  <div class="text-right">
+    <button
+      type="button"
+      class="btn btn-outline-info btn-refresh mb-2"
+      (click)="onRefresh()"
+    >
+      <fa-icon class="mr-0" icon="redo"></fa-icon>
+    </button>
+  </div>
+
   <ng-container *ngFor="let state of config.options; let last = last">
-    <ng-container *ngTemplateOutlet="stateElement; context: {state: state, last: last}"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="stateElement; context: { state: state, last: last }"
+    ></ng-container>
   </ng-container>
 </div>
 
@@ -9,56 +21,89 @@
   <div class="double-bounce2"></div>
 </div>
 
-<div *ngIf="selectArray && currentState && this.dropdown" class="timeline timeline-select-wrapper">
+<div
+  *ngIf="selectArray && currentState && this.dropdown"
+  class="timeline timeline-select-wrapper"
+>
   Status:
 
-  <select class="timeline-element badge badge-outline timeline-select"
+  <select
+    class="timeline-element badge badge-outline timeline-select"
     [ngClass]="{
       'need-requirements': getState(currentState).state === 0,
-      'allowed': getState(currentState).state === 1,
-      'active': getState(currentState).state === 2,
-      'visited': getState(currentState).state === 3,
+      allowed: getState(currentState).state === 1,
+      active: getState(currentState).state === 2,
+      visited: getState(currentState).state === 3,
       'not-allowed': getState(currentState).state === 4
     }"
-    [(ngModel)]="currentState">
-      <option *ngFor="let option of selectArray" [value]="option.id">
-        <span *ngIf="option.state === 2">
-          {{(option.name_after_activation) ? option.name_after_activation : option.name_before_activation}}
-        </span>
-        <span *ngIf="option.state !== 2">
-          {{option.name_before_activation}}
-        </span>
-      </option>
+    [(ngModel)]="currentState"
+  >
+    <option *ngFor="let option of selectArray" [value]="option.id">
+      <span *ngIf="option.state === 2">
+        {{
+          option.name_after_activation
+            ? option.name_after_activation
+            : option.name_before_activation
+        }}
+      </span>
+      <span *ngIf="option.state !== 2">
+        {{ option.name_before_activation }}
+      </span>
+    </option>
   </select>
 
-  <app-info *ngIf="getState(currentState).state === 0" triggersType="click:click" [description]="requirements"></app-info>
-  <button type="button" class="btn btn-sm btn-outline-success"
+  <app-info
+    *ngIf="getState(currentState).state === 0"
+    triggersType="click:click"
+    [description]="requirements"
+  ></app-info>
+  <button
+    type="button"
+    class="btn btn-sm btn-outline-success"
     *ngIf="getState(currentState).state === 1"
     [class.active]="saveProcess"
-    (click)="open(getState(currentState))">
-      <fa-icon class="f-size-10 mr-0" icon="check" *ngIf="!saveProcess"></fa-icon>
-      <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
+    (click)="open(getState(currentState))"
+  >
+    <fa-icon class="f-size-10 mr-0" icon="check" *ngIf="!saveProcess"></fa-icon>
+    <app-spinner *ngIf="saveProcess" [sm]="true"></app-spinner>
+  </button>
+
+  <button
+    type="button"
+    class="btn btn-outline-info btn-refresh ml-1"
+    (click)="onRefresh()"
+  >
+    <fa-icon class="mr-0" [class.loading]="loading" icon="redo"></fa-icon>
   </button>
 </div>
 
 <ng-template #stateModal let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header">
-      <h5 class="modal-title">{{modalData.title}}</h5>
+      <h5 class="modal-title">{{ modalData.title }}</h5>
 
-      <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
+      <app-close-button
+        class="ml-auto"
+        (click)="modal.dismiss()"
+      ></app-close-button>
     </div>
 
     <div class="modal-body timeline" *ngIf="modalData">
-      <ng-container *ngIf="(modalData.tests || modalData.substates) && !modalData.setActive">
+      <ng-container
+        *ngIf="(modalData.tests || modalData.substates) && !modalData.setActive"
+      >
         <div class="state-info">
           <div *ngIf="modalData.substates">
             <h5 class="state-info-label">Substates</h5>
 
-            <span *ngFor="let substate of modalData.substates" (click)="open(substate, modal.close)">
-              <ng-container *ngTemplateOutlet="stateTemplate; context: {state: substate}"></ng-container>
+            <span
+              *ngFor="let substate of modalData.substates"
+              (click)="open(substate, modal.close)"
+            >
+              <ng-container
+                *ngTemplateOutlet="stateTemplate; context: { state: substate }"
+              ></ng-container>
             </span>
-
           </div>
 
           <div div class="state-tests">
@@ -72,39 +117,57 @@
               </tr>
 
               <tr *ngFor="let test of modalData.tests">
-                <td>{{test.acceptance_test.name}}</td>
-                <td>{{test.score}}</td>
+                <td>{{ test.acceptance_test.name }}</td>
+                <td>{{ test.score }}</td>
                 <td>
-                  <a href="" *ngIf="!test.score" (click)="fillinTest($event, test.acceptance_test.id, modal.close)">Fill in</a>
+                  <a
+                    href=""
+                    *ngIf="!test.score"
+                    (click)="
+                      fillinTest($event, test.acceptance_test.id, modal.close)
+                    "
+                    >Fill in</a
+                  >
                 </td>
               </tr>
             </table>
           </div>
         </div>
 
-        <hr>
+        <hr />
 
         <div class="footer">
-          <button *ngIf="modalData.workflowObject && this.advancedSeving" class="btn btn-sm btn-primary" (click)="modalData.setActive = true">
+          <button
+            *ngIf="modalData.workflowObject && this.advancedSeving"
+            class="btn btn-sm btn-primary"
+            (click)="modalData.setActive = true"
+          >
             Update
           </button>
 
-          <span *ngIf="modalData.state.total_score">Total Score: {{modalData.state.total_score}}</span>
+          <span *ngIf="modalData.state.total_score"
+            >Total Score: {{ modalData.state.total_score }}</span
+          >
         </div>
       </ng-container>
 
-      <div *ngIf="(!modalData.tests && !modalData.substates) || modalData.setActive">
+      <div
+        *ngIf="
+          (!modalData.tests && !modalData.substates) || modalData.setActive
+        "
+      >
         <app-generic-form
           [mode]="'edit'"
           [endpoint]="workflowObjectEndpoint"
           [id]="modalData.id"
           [data]="stateData"
           (event)="sendEventHandler($event, modal.close)"
-          (errorForm)="formError()">
-            <button type="submit" class="btn btn-primary">
-              Save
-              <app-spinner *ngIf="saveProcess"></app-spinner>
-            </button>
+          (errorForm)="formError()"
+        >
+          <button type="submit" class="btn btn-primary">
+            Save
+            <app-spinner *ngIf="saveProcess"></app-spinner>
+          </button>
         </app-generic-form>
       </div>
     </div>
@@ -112,46 +175,72 @@
 </ng-template>
 
 <ng-template #stateElement let-state="state" let-l="last">
-  <div class="timeline-element-wrapper" style="position: relative" (click)="open(state)">
-    <ng-container *ngTemplateOutlet="stateTemplate; context: {state: state}"></ng-container>
+  <div
+    class="timeline-element-wrapper"
+    style="position: relative"
+    (click)="open(state)"
+  >
+    <ng-container
+      *ngTemplateOutlet="stateTemplate; context: { state: state }"
+    ></ng-container>
 
-    <svg class="arrow" *ngIf="!l" width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 0L3 3L6 0" transform="translate(1 7) rotate(-90)" stroke="#1BD168" />
+    <svg
+      class="arrow"
+      *ngIf="!l"
+      width="5"
+      height="8"
+      viewBox="0 0 5 8"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0 0L3 3L6 0"
+        transform="translate(1 7) rotate(-90)"
+        stroke="#1BD168"
+      />
     </svg>
   </div>
 </ng-template>
 
 <ng-template #stateTemplate let-state="state">
-  <div class="timeline-element badge badge-outline"
+  <div
+    class="timeline-element badge badge-outline"
     [ngClass]="{
       'need-requirements': state.state === 0,
-      'allowed': state.state === 1,
-      'active': state.state === 2,
-      'visited': state.state === 3,
+      allowed: state.state === 1,
+      active: state.state === 2,
+      visited: state.state === 3,
       'not-allowed': state.state === 4,
-      'save': state.saveProcess
-    }">
-      <span *ngIf="state.state === 2">
-        {{(state.name_after_activation) ? state.name_after_activation : state.name_before_activation}}
-      </span>
-      <span *ngIf="state.state !== 2 && state.state !== 0">
-        {{state.name_before_activation}}
-      </span>
-      <span *ngIf="state.state === 0" placement="bottom" [ngbTooltip]="requir">
-        {{state.name_before_activation}}
-      </span>
+      save: state.saveProcess
+    }"
+  >
+    <span *ngIf="state.state === 2">
+      {{
+        state.name_after_activation
+          ? state.name_after_activation
+          : state.name_before_activation
+      }}
+    </span>
+    <span *ngIf="state.state !== 2 && state.state !== 0">
+      {{ state.name_before_activation }}
+    </span>
+    <span *ngIf="state.state === 0" placement="bottom" [ngbTooltip]="requir">
+      {{ state.name_before_activation }}
+    </span>
 
-      <span class="state-progress">{{calculateProgress(state)}}</span>
+    <span class="state-progress">{{ calculateProgress(state) }}</span>
 
-      <app-spinner *ngIf="state.saveProcess" [sm]="true"></app-spinner>
+    <app-spinner *ngIf="state.saveProcess" [sm]="true"></app-spinner>
   </div>
   <ng-template #requir>
     <div class="info-block">
-      <h6 class="info-block__title">To activate this state, fill in the required fields:</h6>
+      <h6 class="info-block__title">
+        To activate this state, fill in the required fields:
+      </h6>
       <ul class="info-block__list">
         <li class="info-block__item" *ngFor="let option of state.requirements">
           <fa-icon class="info-block__icon" icon="circle"></fa-icon>
-          {{option}}
+          {{ option }}
         </li>
       </ul>
     </div>
@@ -160,13 +249,24 @@
 
 <ng-template #requirements>
   <div class="info-block">
-    <h6 class="info-block__title">To activate this state, fill in the required fields:</h6>
+    <h6 class="info-block__title">
+      To activate this state, fill in the required fields:
+    </h6>
     <ul class="info-block__list">
-      <li class="info-block__item" *ngFor="let option of getState(currentState).requirements">
+      <li
+        class="info-block__item"
+        *ngFor="let option of getState(currentState).requirements"
+      >
         <fa-icon class="info-block__icon" icon="circle"></fa-icon>
-        {{option}}
+        {{ option }}
 
-        <a *ngIf="verifyPhone(option)" class="text-primary" href="#" (click)="editContact($event)">Edit contact</a>
+        <a
+          *ngIf="verifyPhone(option)"
+          class="text-primary"
+          href="#"
+          (click)="editContact($event)"
+          >Edit contact</a
+        >
       </li>
     </ul>
   </div>
