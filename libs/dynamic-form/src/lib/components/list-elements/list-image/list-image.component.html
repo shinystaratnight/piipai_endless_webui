@@ -3,46 +3,61 @@
     [icon]="icon"
     [ngClass]="[iconClass]"
     [title]="config.title || ''"
-    [ngStyle]="{'fontSize.px': config.fontSize}">
+    [ngStyle]="{ 'fontSize.px': config.fontSize }"
+  >
   </fa-icon>
 </span>
 
 <ng-container *ngIf="config.label && config.label.slice">
-  <span *ngIf="!config.setColorForLabel">{{config.label}}&nbsp;</span>
+  <span *ngIf="!config.setColorForLabel">{{ config.label }}&nbsp;</span>
   <span *ngIf="config.setColorForLabel" [ngClass]="[iconClass]">
-    {{config.label}}&nbsp;
+    {{ config.label }}&nbsp;
   </span>
 </ng-container>
 <ng-container *ngIf="config.label && !config.label.slice">
-  <span *ngIf="!config.setColorForLabel">{{config.label[config.value]}}&nbsp;</span>
+  <span *ngIf="!config.setColorForLabel">
+    {{ config.label[config.value] }}&nbsp;
+  </span>
   <span *ngIf="config.setColorForLabel" [ngClass]="[iconClass]">
-    {{config.label[config.value]}}&nbsp;
+    {{ config.label[config.value] }}&nbsp;
   </span>
 </ng-container>
 
-<span class="description" *ngIf="config.emptyValue">{{config.emptyValue}}</span>
+<span class="description" *ngIf="config.emptyValue && (!src && !file)">
+  {{ config.emptyValue }}
+</span>
 
-<img alt="Signature" width="112" height="48" class="signature"
+<img
+  alt="Signature"
+  width="112"
+  height="48"
+  class="signature"
   *ngIf="src && config.signature"
-  [src]="src">
+  [src]="src"
+/>
 
 <ng-container *ngIf="src && !config.signature">
-  <img *ngIf="src" [src]="src" width="60" height="60">
+  <img *ngIf="src" [src]="src" width="60" height="60" />
 </ng-container>
 
-<span class="mr-1" *ngIf="config.delim && !last">{{config.delim}}</span>
+<span class="mr-1" *ngIf="config.delim && !last">{{ config.delim }}</span>
 
 <div *ngIf="file" [class.mobile]="isMobileDevice">
-  <a #filelink
-    [href]="file"
-    target="_blank">
-      <fa-icon #emmi [icon]="['fas', 'file']" class="file-icon"></fa-icon>
-      <fa-icon [icon]="['fas', 'download']" class="download-icon"></fa-icon>
-      <span *ngIf="config.display">{{config.display}}</span>
-      <span *ngIf="!config.display">{{getExtension(file) | uppercase}} File</span>
+  <a #filelink [href]="file" target="_blank">
+    <fa-icon #emmi [icon]="['fas', 'file']" class="file-icon"></fa-icon>
+    <fa-icon [icon]="['fas', 'download']" class="download-icon"></fa-icon>
+    <span *ngIf="config.display">{{ config.display }}</span>
+    <span *ngIf="!config.display">
+      {{ getExtension(file) | uppercase }} File
+    </span>
   </a>
-  <fa-icon *ngIf="file" class="upload-button" (click)="downloadFile()" [icon]="['fas', 'download']"></fa-icon>
+  <fa-icon
+    *ngIf="file"
+    class="upload-button"
+    (click)="downloadFile()"
+    [icon]="['fas', 'download']"
+  ></fa-icon>
 </div>
 
-<div *ngIf="contactAvatar" class="contact-avatar">{{contactAvatar}}</div>
-<br *ngIf="!config.hidden && !config.delim && !last">
+<div *ngIf="contactAvatar" class="contact-avatar">{{ contactAvatar }}</div>
+<br *ngIf="!config.hidden && !config.delim && !last" />

@@ -64,7 +64,7 @@ const form = [
       values: ['__str__'],
       label: 'Parent',
       add: true,
-      edit: true,
+      edit: true
     },
     read_only: false
   },
@@ -78,14 +78,14 @@ const form = [
       setValue: {
         field: 'parent',
         value: '{id}'
-      },
+      }
     },
     hideIfNull: true,
     templateOptions: {
       values: ['__str__'],
       label: 'Child',
       add: true,
-      edit: true,
+      edit: true
     },
     read_only: false
   },
@@ -130,17 +130,17 @@ const form = [
     send: false,
     visibleMode: true,
     prefilled: {
-      tag: '{id.id}'
+      tag: '{id}'
     },
     templateOptions: {
       values: ['__str__'],
       label: 'Skills',
       delete: true,
       add: true,
-      edit: true,
+      edit: true
     },
     read_only: false
-  },
+  }
 ];
 
 const formadd = [
@@ -162,7 +162,7 @@ const formadd = [
     templateOptions: {
       values: ['__str__'],
       add: true,
-      label: 'Parent',
+      label: 'Parent'
     },
     read_only: true
   },
