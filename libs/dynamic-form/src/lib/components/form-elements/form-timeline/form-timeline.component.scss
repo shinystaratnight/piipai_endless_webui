@@ -185,3 +185,25 @@
     top: -1px;
   }
 }
+
+.btn-refresh {
+  padding: 5px;
+
+  fa-icon {
+    font-size: 10px;
+
+    &.loading {
+      animation: loading-rotate 1.5s infinite linear;
+    }
+  }
+}
+
+@keyframes loading-rotate {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
