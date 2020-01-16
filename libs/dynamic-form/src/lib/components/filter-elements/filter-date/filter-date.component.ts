@@ -99,8 +99,9 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
             }, 200);
           },
           closeCallback: () => {
-            const date = el.nativeElement.value;
-            if (date) {
+            const date = el.nativeElement.value || '';
+
+            if (date.trim() !== this.data[el.nativeElement.name].trim()) {
               this.onChange(date, el.nativeElement.name);
             }
           }
