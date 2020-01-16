@@ -92,6 +92,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
           useFocus: true,
           themeDatePick: 'primary',
           calHighToday: true,
+          overrideCalStartDay: 1,
           beforeOpenCallback: () => {
             setTimeout(() => {
               this.refreshDatebox(el.nativeElement);
@@ -99,7 +100,9 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
           },
           closeCallback: () => {
             const date = el.nativeElement.value;
-            this.onChange(date, el.nativeElement.name);
+            if (date) {
+              this.onChange(date, el.nativeElement.name);
+            }
           }
         });
         el.nativeElement.readOnly = false;
