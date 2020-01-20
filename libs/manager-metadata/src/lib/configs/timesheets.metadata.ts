@@ -316,7 +316,7 @@ const list = {
           {
             endpoint: '/hr/timesheets/{id}/sync',
             field: 'id',
-            showIf: [{ sync_status: [0, 1] }, 'supervisor_approved_at', 'candidate_submitted_at'],
+            showIf: [{ myob_status: ['Not Synced'] }],
             action: 'emptyPost',
             type: 'button',
             text: 'Sync'
@@ -324,7 +324,7 @@ const list = {
           {
             endpoint: '/hr/timesheets/{id}/sync',
             field: 'id',
-            showIf: [{ sync_status: [2, 3, 4] }],
+            showIf: [{ myob_status: ['Synced', 'Sync is outdated'] }],
             action: 'emptyPost',
             type: 'button',
             text: 'Resync'
