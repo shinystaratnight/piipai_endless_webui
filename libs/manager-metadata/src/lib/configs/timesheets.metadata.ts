@@ -316,11 +316,7 @@ const list = {
           {
             endpoint: '/hr/timesheets/{id}/sync',
             field: 'id',
-            showIf: [
-              {
-                show_sync_button: true
-              }
-            ],
+            showIf: [{ sync_status: [0, 1] }, 'supervisor_approved_at', 'candidate_submitted_at'],
             action: 'emptyPost',
             type: 'button',
             text: 'Sync'
@@ -328,7 +324,7 @@ const list = {
           {
             endpoint: '/hr/timesheets/{id}/sync',
             field: 'id',
-            showIf: [{ sync_status: 3 }],
+            showIf: [{ sync_status: [2, 3, 4] }],
             action: 'emptyPost',
             type: 'button',
             text: 'Resync'

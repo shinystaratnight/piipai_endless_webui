@@ -19,6 +19,7 @@ export const getDatePickerConfig = (config, isBirthday) => {
     calNoHeader: change === false,
     calOnlyMonth: change === false,
     useCancelButton: true,
+    overrideCalStartDay: 1,
     calYearPickRelative: false,
     calYearPickMax: isBirthday ? 0 : 6,
     calYearPickMin: -100,
