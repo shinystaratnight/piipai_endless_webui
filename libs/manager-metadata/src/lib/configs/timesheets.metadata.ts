@@ -304,27 +304,40 @@ const list = {
       },
       {
         content: [
+          // {
+          //   field: 'myob_status',
+          //   type: 'text',
+          //   showIf: [
+          //     {
+          //       show_sync_button: false
+          //     }
+          //   ]
+          // },
+
           {
-            field: 'myob_status',
-            type: 'text',
-            showIf: [
-              {
-                show_sync_button: false
-              }
-            ]
+            label: {
+              0: 'Not synced',
+              1: 'Sync scheduled',
+              2: 'Syncing...',
+              3: 'Synced',
+              4: 'Sync failed'
+            },
+            type: 'icon',
+            field: 'sync_status'
           },
+
           {
             endpoint: '/hr/timesheets/{id}/sync',
             field: 'id',
-            showIf: [{ myob_status: ['Not Synced'] }],
+            showIf: [{ sync_status: [0, 4] }],
             action: 'emptyPost',
             type: 'button',
             text: 'Sync'
           },
           {
-            endpoint: '/hr/timesheets/{id}/sync',
+            endpoint: '/hr/timesheets/{id}/resync',
             field: 'id',
-            showIf: [{ myob_status: ['Synced', 'Sync is outdated'] }],
+            showIf: [{ sync_status: [3] }],
             action: 'emptyPost',
             type: 'button',
             text: 'Resync'
