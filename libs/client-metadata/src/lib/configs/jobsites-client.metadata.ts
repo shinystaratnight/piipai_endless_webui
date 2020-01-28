@@ -497,8 +497,9 @@ const form = [
           label: 'Notes',
           type: 'list',
           add_label: '+ Add',
-          text: 'Notes'
+          text: 'Notes',
         },
+        add_form: true,
         prefilled: {
           object_id: '{id}',
           content_type: '{model_content_type}',

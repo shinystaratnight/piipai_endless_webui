@@ -403,8 +403,9 @@ const form = [
           label: 'Notes',
           type: 'list',
           add_label: '+ Add',
-          text: 'Notes'
+          text: 'Notes',
         },
+        add_form: true,
         collapsed: false,
         prefilled: {
           object_id: '{id}',

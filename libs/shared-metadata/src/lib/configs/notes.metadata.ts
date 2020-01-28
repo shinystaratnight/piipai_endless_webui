@@ -172,7 +172,13 @@ const form = [
   {
     key: 'note',
     type: 'textarea',
-    templateOptions: { required: false, label: 'Notes', type: 'textarea' },
+    templateOptions: {
+      rows: 3,
+      full: true,
+      required: false,
+      label: 'Notes',
+      type: 'textarea'
+    },
     read_only: false
   }
 ];
@@ -205,9 +211,9 @@ const formadd = [
     type: 'textarea',
     templateOptions: {
       full: true,
-      rows: 7,
-      required: false,
-      label: 'Notes',
+      rows: 3,
+      required: true,
+      autofocus: true,
       type: 'textarea'
     },
     read_only: false
