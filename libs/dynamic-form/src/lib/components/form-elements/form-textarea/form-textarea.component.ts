@@ -4,7 +4,8 @@ import {
   ViewChild,
   AfterViewInit,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ElementRef
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -22,7 +23,7 @@ export class FormTextareaComponent
   extends BasicElementComponent
   implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('textarea', { static: false })
-  public textarea;
+  public textarea: ElementRef;
 
   public config;
   public group: FormGroup;
@@ -115,6 +116,10 @@ export class FormTextareaComponent
     if (!this.config.read_only) {
       if (this.textarea) {
         this.addFlags(this.textarea, this.config);
+
+        if (this.config.templateOptions.autofocus) {
+          this.textarea.nativeElement.focus();
+        }
       }
     }
   }

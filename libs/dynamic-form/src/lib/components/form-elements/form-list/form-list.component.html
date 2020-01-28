@@ -1,34 +1,68 @@
 <div *ngIf="!this.config.hide">
-  <h6 class="card flex-row align-items-center form-element-list" [ngClass]="{'bg-primary text-white': !isCollapsed}" *ngIf="config.templateOptions.label">
+  <h6
+    class="card flex-row align-items-center form-element-list"
+    [ngClass]="{ 'bg-primary text-white': !isCollapsed }"
+    *ngIf="config.templateOptions.label"
+  >
     <fa-icon
       class="p-2"
       [icon]="['fas', isCollapsed ? 'eye' : 'eye-slash']"
       (click)="isCollapsed = !isCollapsed"
       [attr.aria-expanded]="!isCollapsed"
       aria-controls="collapseExample"
-      style="cursor: pointer"></fa-icon>
-    {{config.templateOptions.label}}
-    <button *ngIf="(showButton || config.delay)"
+      style="cursor: pointer"
+    ></fa-icon>
+    {{ config.templateOptions.label }}
+    <button
+      *ngIf="showButton || config.delay"
       type="button"
       class="btn btn-sm btn-primary ml-auto mr-2"
-      (click)="addObject()">
-        {{config?.templateOptions?.add_label || 'Add'}}
+      (click)="addObject()"
+    >
+      {{ config?.templateOptions?.add_label || 'Add' }}
     </button>
   </h6>
 
-  <div class="form-element-list-title title">
-    <div>
-      <h4>{{config.templateOptions.label}}</h4>
-      <p>{{config.help}}</p>
+  <div class="d-flex">
+    <div class="mr-auto">
+      <h4>{{ config.templateOptions.label }}</h4>
+      <p>{{ config.help }}</p>
     </div>
-    <button type="button" class="btn btn-primary btn-shadow"
-      *ngIf="(showButton || config.delay) && checkPermissions('post') && !config.disableButtons"
-      (click)="addObject()">
-        {{config?.templateOptions?.add_label || '+ Add'}}
-      </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-shadow align-self-center"
+      *ngIf="hasAddButton"
+      (click)="addObject()"
+    >
+      {{ config?.templateOptions?.add_label || '+ Add' }}
+    </button>
   </div>
 
   <div [ngbCollapse]="isCollapsed">
+    <ng-container *ngIf="hasAddForm">
+      <app-generic-form
+        class="d-block"
+        style="margin-top: -20px; margin-bottom: 20px;"
+        [delay]="config.delay"
+        [endpoint]="addFormConfig.endpoint"
+        [data]="addFormConfig.data"
+        [metadataQuery]="config.add_metadata_query"
+        (event)="formEvent($event)"
+        (errorForm)="formError($event)"
+      >
+        <div class="d-flex">
+          <button
+            type="submit"
+            class="btn btn-primary ml-auto"
+            [disabled]="saveProcess"
+          >
+            Add Note
+            <app-spinner *ngIf="saveProcess"></app-spinner>
+          </button>
+        </div>
+      </app-generic-form>
+    </ng-container>
+
     <app-generic-list
       [endpoint]="config.endpoint"
       [editEndpoint]="config.edit_endpoint"
@@ -49,19 +83,25 @@
       [disableActions]="config.disableActions"
       (dataLength)="checkCount($event)"
       (checkedObjects)="checkedHandler($event)"
-      (event)="eventHandler($event)">
+      (event)="eventHandler($event)"
+    >
     </app-generic-list>
 
-    <div class="text-danger my-2" *ngIf="config.message">{{config.message}}</div>
+    <div class="text-danger my-2" *ngIf="config.message">
+      {{ config.message }}
+    </div>
   </div>
 </div>
 
-<ng-template #modal let-c="close" let-d="dismiss">
+<ng-template #modal let-modal>
   <div class="modal-content-wrapper">
     <div class="modal-header-wrapper">
       <div class="modal-header">
-        <h5 class="modal-title">{{modalData.title}}</h5>
-        <app-close-button class="ml-auto" (click)="c()"></app-close-button>
+        <h5 class="modal-title">{{ modalData.title }}</h5>
+        <app-close-button
+          class="ml-auto"
+          (click)="modal.dismiss()"
+        ></app-close-button>
       </div>
     </div>
 
@@ -72,11 +112,16 @@
         [data]="modalData.data"
         [metadataQuery]="config.add_metadata_query"
         (event)="formEvent($event, c)"
-        (errorForm)="formError($event)">
-          <button type="submit" class="btn btn-primary button-save" [disabled]="saveProcess">
-            Save
-            <app-spinner *ngIf="saveProcess"></app-spinner>
-          </button>
+        (errorForm)="formError($event)"
+      >
+        <button
+          type="submit"
+          class="btn btn-primary button-save"
+          [disabled]="saveProcess"
+        >
+          Save
+          <app-spinner *ngIf="saveProcess"></app-spinner>
+        </button>
       </app-generic-form>
     </div>
   </div>
