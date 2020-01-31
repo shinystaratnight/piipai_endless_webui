@@ -49,7 +49,7 @@
       !config.shadow
     "
     [class.disabled]="isDisabled"
-    [attr.title]="disabledTitle"
+    [title]="config.disableAction || isDisabled ? disabledTitle : ''"
     [disabled]="config.disableAction || isDisabled"
     (click)="action($event)"
   >
