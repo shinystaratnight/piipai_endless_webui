@@ -191,6 +191,7 @@ const form = [
     key: 'hourly_rate',
     default: '{skill.default_rate}',
     useValue: true,
+    updated: ['skill'],
     type: 'input',
     templateOptions: { required: false, label: 'Hourly Rate', type: 'text' },
     read_only: false
@@ -258,6 +259,7 @@ const formadd = [
   {
     key: 'hourly_rate',
     default: '{skill.price_list_default_rate}',
+    updated: ['skill'],
     type: 'input',
     templateOptions: {
       required: true,

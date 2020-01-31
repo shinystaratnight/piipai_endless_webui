@@ -111,7 +111,7 @@
         [endpoint]="modalData.endpoint"
         [data]="modalData.data"
         [metadataQuery]="config.add_metadata_query"
-        (event)="formEvent($event, c)"
+        (event)="formEvent($event, modal.close)"
         (errorForm)="formError($event)"
       >
         <button
