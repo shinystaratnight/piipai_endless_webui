@@ -1,0 +1,14 @@
+{
+  "/api": {
+    "target": "https://api.r3sourcertest.com",
+    "secure": true,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true,
+    "headers": {
+      "Origin": "https://laviin.r3sourcertest.com"
+    },
+    "logLevel": "debug"
+  }
+}

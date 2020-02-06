@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
 // import { Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Role } from '@webui/data';
+import { Role, Endpoints } from '@webui/data';
 
 // import { NavigationService } from './navigation.service';
 // import { CheckPermissionService } from './check-permission.service';
@@ -15,10 +15,16 @@ import { ENV } from './env.service';
 import { isClient, isCandidate, isManager } from '@webui/utilities';
 import { EventService, EventType } from './event.service';
 
+interface AuthResponse {
+  access_token: string;
+  access_token_jwt: string;
+  refresh_token: string;
+}
+
 @Injectable()
 export class AuthService {
-  public loginWithTokenEndpoint: string;
-  public refreshTokenEndpoint = '/oauth2/token/';
+  // public loginWithTokenEndpoint: string;
+  // public refreshTokenEndpoint = '/oauth2/token/';
   // public logoutAction: Subject<any> = new Subject();
 
   private _role: Role;
@@ -38,22 +44,16 @@ export class AuthService {
     this._role = role;
   }
 
-  get role() {
+  get role(): Role {
     return this._role;
   }
 
-  get isAuthorized() {
+  get isAuthorized(): boolean {
     return !!this.storage.retrieve('user');
   }
 
-  public storeToken(response, rememberMe?, username?) {
-    let data = {};
-
-    if (response.data) {
-      data = response.data;
-    } else {
-      data = response;
-    }
+  public storeToken(response, rememberMe?: boolean, username?: string) {
+    const data: AuthResponse = response.data || response || {};
 
     const { access_token = '', access_token_jwt = '', refresh_token = '' } = {
       ...data
@@ -90,7 +90,7 @@ export class AuthService {
       grant_type: 'refresh_token'
     };
 
-    return this.http.post(this.refreshTokenEndpoint, body).pipe(
+    return this.http.post(Endpoints.TokenRefresh, body).pipe(
       tap((response: any) => {
         this.storage.store('user', {
           ...user,

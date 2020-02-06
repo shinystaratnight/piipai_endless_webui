@@ -2,13 +2,25 @@ import { Routes } from '@angular/router';
 
 import {
   // SiteComponent,
-  VerifyEmailComponent,
+  VerifyEmailComponent
 } from './components';
 import { RedirectComponent } from './redirect.component';
 
 // import { UserService, NavigationService, SiteSettingsService } from '@webui/core';
 
-import { AuthGuard, NotAuthorizedGuard, SubdomainGuard, PermissionGuard, LogoutGuard, UserService, NavigationService, SiteSettingsService, ClientGuard, CandidateGuard, ManagerGuard } from '@webui/core';
+import {
+  AuthGuard,
+  NotAuthorizedGuard,
+  SubdomainGuard,
+  PermissionGuard,
+  // LogoutGuard,
+  UserService,
+  NavigationService,
+  SiteSettingsService,
+  ClientGuard,
+  CandidateGuard,
+  ManagerGuard
+} from '@webui/core';
 
 export const routes: Routes = [
   {
@@ -22,12 +34,12 @@ export const routes: Routes = [
   {
     path: 'login',
     loadChildren: './login/login.module#LoginModule',
-    canActivate: [NotAuthorizedGuard],
+    canActivate: [NotAuthorizedGuard]
   },
   {
     path: 'registration',
     loadChildren: './register/register.module#RegisterModule',
-    canActivate: [NotAuthorizedGuard, SubdomainGuard],
+    canActivate: [NotAuthorizedGuard, SubdomainGuard]
   },
   {
     path: 'settings',

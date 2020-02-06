@@ -6,7 +6,7 @@ export const environment = {
   GOOGLE_GEO_CODING_API_KEY: 'AIzaSyCHcLb6qY4PSNDaMCimVIcv9bn6ExWzkWs',
   STRIPE_PUBLIC_API_KEY: 'pk_test_2MvNXfKY5LWSSkOz241aYEs4',
   production: false,
-  api: 'https://api.r3sourcertest.com',
+  api: 'http://localhost:4200/api',
   clientId: 'MMtPUqBFwBDo3kVEQl6mzVm6e8h5OHclTsDcraUj'
 };
 
