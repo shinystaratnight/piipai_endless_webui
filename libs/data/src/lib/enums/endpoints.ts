@@ -1,4 +1,7 @@
 export enum Endpoints {
+  // Auth
+  TokenRefresh = '/oauth2/token/',
+
   // Contact
   Contact = '/core/contacts/',
   ContactUnavailability = '/core/contactunavailabilities/',
@@ -147,6 +150,5 @@ export enum Endpoints {
   Permission = '/company-settings/globalpermissions/',
   Note = '/core/notes/',
   Order = '/core/orders/',
-  Tag = '/core/tags/',
-
+  Tag = '/core/tags/'
 }
