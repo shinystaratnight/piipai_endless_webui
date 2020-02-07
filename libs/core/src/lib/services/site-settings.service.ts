@@ -2,73 +2,61 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
 
-import { AuthService } from './auth.service';
-import { isManager } from '@webui/utilities';
+import { Endpoints } from '@webui/data';
+
+interface CompanySettings {
+  sms_enabled: boolean;
+  company_name: string;
+  company: string;
+  color_scheme: string;
+  font: string;
+  [key: string]: any;
+}
 
 @Injectable()
 export class SiteSettingsService {
-  public endpoint = '/company_settings/';
-  public siteEndpoint = '/company_settings/site/';
-
-  public settings: any;
-  public authorized: boolean;
+  public settings: CompanySettings;
   public currentEndpoint: string;
 
   get companyId() {
     if (this.settings) {
-      return this.settings.company_settings.company;
+      return this.settings.company;
     }
   }
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient) {}
 
   public resolve() {
-    if (this.authService.isAuthorized && isManager()) {
-      const update = this.currentEndpoint !== this.endpoint;
-
-      return this.getSettings(this.endpoint, update);
-    }
-
-    return this.getSettings(this.siteEndpoint);
+    return this.getSettings();
   }
 
   public isSmsEnabled(): boolean {
-    const { company_settings } = this.settings;
-
-    return company_settings ? company_settings.sms_enabled : false;
+    return this.settings.sms_enabled || false;
   }
 
   public getCompanyName(): string {
-    const { company_settings } = this.settings;
-
-    return company_settings ? company_settings.company_name : '';
+    return this.settings.company_name || '';
   }
 
   public getSmsSendTitle() {
     return `SMS sending is disabled for ${this.getCompanyName()}, please contact your administrator.`;
   }
 
-  private getSettings(endpoint: string, update?: boolean): Observable<any> {
-    this.currentEndpoint = endpoint;
-
-    if (!this.settings || !this.authService.isAuthorized || update) {
-      return this.http.get(endpoint).pipe(
-        map((settings: any) => {
-          if (this.authService.isAuthorized) {
-            this.settings = settings;
-          }
-
+  private getSettings(): Observable<CompanySettings | boolean> {
+    if (!this.settings) {
+      return this.http.get<CompanySettings>(Endpoints.CompanySettings).pipe(
+        tap(settings => {
+          this.settings = settings;
+          this.updateBrowserStyles(settings);
+        }),
+        map(settings => {
           if (settings.redirect_to) {
             location.href = settings.redirect_to;
 
-            return of(true);
+            return false;
           }
-
-          setTimeout(() => {
-            this.updateBrowserStyles(settings);
-          }, 100);
 
           return settings;
         }),
@@ -76,28 +64,15 @@ export class SiteSettingsService {
           return of(true);
         })
       );
-    } else if (this.settings && this.authService.isAuthorized) {
+    } else if (this.settings) {
       return of(this.settings);
     }
   }
 
-  private updateBrowserStyles(settings: any): void {
+  private updateBrowserStyles(settings: CompanySettings): void {
     const { body } = document;
 
-    body.parentElement.classList.add(`${this.getTheme(settings)}-theme`);
-    body.style.fontFamily = `${this.getFont(settings) ||
-      'Source Sans Pro'}, sans-serif`;
-  }
-
-  private getFont(settings: any): string {
-    const { font, company_settings } = settings;
-
-    return font || (company_settings && company_settings.font);
-  }
-
-  private getTheme(settings: any): string {
-    const { color_scheme, company_settings } = settings;
-
-    return color_scheme || (company_settings && company_settings.color_scheme);
+    body.parentElement.classList.add(`${settings.color_scheme}-theme`);
+    body.style.fontFamily = `${settings.font || 'Source Sans Pro'}, sans-serif`;
   }
 }
