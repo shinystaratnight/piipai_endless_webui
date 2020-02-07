@@ -1,7 +1,4 @@
 export enum Endpoints {
-  // Auth
-  TokenRefresh = '/oauth2/token/',
-
   // Contact
   Contact = '/core/contacts/',
   ContactUnavailability = '/core/contactunavailabilities/',
@@ -129,6 +126,7 @@ export enum Endpoints {
   // Authorization
   Login = '/auth/login/',
   LoginByToke = '/login/tokenlogins/',
+  TokenRefresh = '/oauth2/token/',
 
   // Dashboard
   DashboardModule = '/core/dashboardmodules/',
@@ -150,5 +148,7 @@ export enum Endpoints {
   Permission = '/company-settings/globalpermissions/',
   Note = '/core/notes/',
   Order = '/core/orders/',
-  Tag = '/core/tags/'
+  Tag = '/core/tags/',
+  ManagerCompanySettings = '/company_settings/',
+  CompanySettings = '/company_settings/site/'
 }
