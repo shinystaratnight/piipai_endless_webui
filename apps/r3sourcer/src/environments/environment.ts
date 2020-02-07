@@ -7,7 +7,8 @@ export const environment = {
   STRIPE_PUBLIC_API_KEY: 'pk_test_2MvNXfKY5LWSSkOz241aYEs4',
   production: false,
   api: 'http://localhost:4200/api',
-  clientId: 'MMtPUqBFwBDo3kVEQl6mzVm6e8h5OHclTsDcraUj'
+  clientId: 'MMtPUqBFwBDo3kVEQl6mzVm6e8h5OHclTsDcraUj',
+  origin: 'https://laviin.r3sourcertest.com'
 };
 
 /*

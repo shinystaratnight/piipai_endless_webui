@@ -2392,8 +2392,17 @@ export class DynamicListComponent
           const helper = new JwtHelperService();
           const token = helper.decodeToken(res.access_token_jwt);
           const redirect = token.origin;
+          const envOrigin = environment.origin;
 
-          if (redirect.includes(location.host)) {
+          let isSameOrigin;
+
+          if (envOrigin) {
+            isSameOrigin = envOrigin === redirect;
+          } else {
+            isSameOrigin = redirect.includes(location.host);
+          }
+
+          if (isSameOrigin) {
             this.authService.logoutWithoutRedirect();
             this.userService.user = null;
             this.authService.storeToken(res);
