@@ -2392,7 +2392,7 @@ export class DynamicListComponent
           const helper = new JwtHelperService();
           const token = helper.decodeToken(res.access_token_jwt);
           const redirect = token.origin;
-          const envOrigin = environment.origin;
+          const envOrigin = (environment as any).origin;
 
           let isSameOrigin;
 
