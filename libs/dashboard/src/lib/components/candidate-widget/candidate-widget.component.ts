@@ -7,6 +7,7 @@ import { FilterService } from '@webui/dynamic-form';
 import { Endpoints } from '@webui/data';
 
 import { DashboardService } from '../../services';
+import { Router } from '@angular/router';
 
 const enum Lists {
   CandidateContact = 'candidatecontact',
@@ -62,7 +63,8 @@ export class CandidateWidget implements OnInit, OnDestroy {
   constructor(
     private widgetService: DashboardService,
     private eventService: EventService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -92,6 +94,8 @@ export class CandidateWidget implements OnInit, OnDestroy {
       } else {
         this.selectedCandidates.delete(candidate.id);
       }
+    } else {
+      this.router.navigateByUrl(`/mn/candidate/candidatecontacts/${candidate.id}/change`);
     }
   }
 

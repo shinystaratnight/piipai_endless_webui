@@ -59,7 +59,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    this.advancedSeving = this.companySettings.settings.company_settings.advance_state_saving;
+    this.advancedSeving = this.companySettings.settings.advance_state_saving;
     this.dropdown = this.config.dropdown;
     if (!this.config.hide) {
       this.initialize();
