@@ -66,6 +66,10 @@
       background-color: rgba(#333, 0.03);
     }
 
+    &:hover {
+      background-color: rgba($gray, 0.1);
+    }
+
     .selected-icon {
       display: none;
       position: absolute;
