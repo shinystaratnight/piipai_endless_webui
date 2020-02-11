@@ -11,6 +11,7 @@ interface CompanySettings {
   company_name: string;
   company: string;
   color_scheme: string;
+  advance_state_saving: boolean;
   font: string;
   [key: string]: any;
 }
