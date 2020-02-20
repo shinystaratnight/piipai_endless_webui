@@ -725,7 +725,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       this.config.default.includes &&
       this.config.default.includes('currentCompany')
     ) {
-      const id = this.settingsService.settings.company_settings.company;
+      const id = this.settingsService.settings.company;
 
       this.group.get(this.key).patchValue(id);
     } else {

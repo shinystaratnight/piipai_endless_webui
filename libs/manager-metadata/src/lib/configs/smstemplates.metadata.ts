@@ -45,6 +45,15 @@ const form = [
     read_only: false
   },
   {
+    key: 'company_id',
+    type: 'related',
+    hide: true,
+    default: 'currentCompany',
+    templateOptions: {
+      label: '',
+    }
+  },
+  {
     key: 'updated_at',
     type: 'datepicker',
     templateOptions: {
