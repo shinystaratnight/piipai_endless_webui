@@ -90,6 +90,7 @@ const formset = {
       },
       {
         name: 'created',
+        width: 200,
         content: [
           { type: 'datepicker', field: 'created_at' },
           { type: 'static', field: 'created_by' }
@@ -100,6 +101,7 @@ const formset = {
       },
       {
         name: 'updated',
+        width: 200,
         content: [
           { type: 'datepicker', field: 'updated_at' },
           { type: 'static', field: 'updated_by' }
@@ -110,6 +112,7 @@ const formset = {
       },
       {
         name: 'id',
+        width: 75,
         title: 'Edit',
         content: [
           {
@@ -127,6 +130,7 @@ const formset = {
       },
       {
         name: 'id',
+        width: 75,
         title: 'Delete',
         content: [
           {

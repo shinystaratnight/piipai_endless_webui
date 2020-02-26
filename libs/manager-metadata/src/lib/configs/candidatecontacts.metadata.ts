@@ -1233,6 +1233,7 @@ const form = [
           add_label: '+ Add',
           text: 'Notes'
         },
+        add_form: true,
         collapsed: false,
         prefilled: {
           object_id: '{id}',
