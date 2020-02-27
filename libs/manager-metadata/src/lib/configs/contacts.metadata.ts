@@ -279,7 +279,9 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'E-mail Verified',
-                      type: 'checkbox'
+                      type: 'checkbox',
+                      action: 'resendEmail',
+                      showButtonIf: false
                     },
                     read_only: false
                   },
@@ -290,7 +292,9 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Phone Verified',
-                      type: 'checkbox'
+                      type: 'checkbox',
+                      action: 'resendSms',
+                      showButtonIf: false
                     },
                     read_only: false
                   }
