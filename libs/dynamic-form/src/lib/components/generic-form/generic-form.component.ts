@@ -1599,7 +1599,9 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   resendContactCheck(e, type: 'emails' | 'smses') {
-    const endpoint = `${Endpoints.Contact}${e.data.contact.id}/${type}/`;
+    const { data } = e;
+    const contactId = data.contact ? data.contact.id : data.id;
+    const endpoint = `${Endpoints.Contact}${contactId}/${type}/`;
 
     this.service.submitForm(endpoint, {}).subscribe(res => {
       if (res.message) {
