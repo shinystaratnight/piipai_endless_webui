@@ -721,7 +721,7 @@ const formadd = [
             key: 'address',
           },
           {
-            key: 'address.apartment',
+            key: 'apartment',
             type: 'input',
             templateOptions: {
               required: false,
