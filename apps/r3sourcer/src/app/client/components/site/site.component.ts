@@ -492,7 +492,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   // }
 
   public openChangePassword() {
-    this.modalRef = this.modalService.open(this.modal);
+    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
   }
 
   public openResetForm() {
@@ -507,7 +507,7 @@ export class SiteComponent implements OnInit, OnDestroy {
       }
     };
 
-    this.modalRef = this.modalService.open(this.forgotPasswordModal);
+    this.modalRef = this.modalService.open(this.forgotPasswordModal, {backdrop: 'static'});
 
     return false;
   }

@@ -1271,7 +1271,7 @@ export class DynamicListComponent
   }
 
   public open(modal, options = {}) {
-    this.modalRef = this.modalService.open(modal, options);
+    this.modalRef = this.modalService.open(modal, {...options, backdrop: 'static'});
   }
 
   public initPagination(data) {
@@ -2561,7 +2561,7 @@ export class DynamicListComponent
           e.el.locationDataEmpty = false;
           this.listStorage.updateTrackingInfo(e.id, true);
 
-          this.modalRef = this.modalService.open(TrackingModalComponent);
+          this.modalRef = this.modalService.open(TrackingModalComponent, {backdrop: 'static'});
           this.modalRef.componentInstance.timesheet = timesheet;
           this.modalRef.componentInstance.data = res.results;
         } else {

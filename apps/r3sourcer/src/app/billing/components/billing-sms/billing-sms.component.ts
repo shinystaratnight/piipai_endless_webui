@@ -79,7 +79,7 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
   }
 
   public openModal(modal) {
-    this.modalRef = this.modalService.open(modal);
+    this.modalRef = this.modalService.open(modal, {backdrop: 'static'});
   }
 
   public saveAutoCharge() {

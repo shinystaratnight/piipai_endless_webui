@@ -281,7 +281,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
       }
     };
 
-    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass: 'extend-modal' });
+    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass: 'extend-modal', backdrop: 'static' });
   }
 
   public fillInJob() {

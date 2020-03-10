@@ -158,7 +158,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public openResetForm() {
-    this.modalRef = this.modalService.open(this.modal);
+    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
 
     return false;
   }
