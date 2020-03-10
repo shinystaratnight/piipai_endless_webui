@@ -75,6 +75,7 @@
         type="text"
         class="form-control"
         id="autocomplete"
+        #adr
         *ngIf="
           config.type !== 'static' &&
           !viewMode &&
@@ -87,7 +88,7 @@
         [ngModelOptions]="{ standalone: true }"
         [attr.id]="key"
         [attr.name]="key"
-        (onAddressChange)="getAddress($event)"
+        (onAddressChange)="getAddress($event, adr.value)"
       />
 
       <ngb-rating
