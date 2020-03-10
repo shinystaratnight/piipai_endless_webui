@@ -720,17 +720,6 @@ const formadd = [
             type: 'address',
             key: 'address',
           },
-          {
-            key: 'apartment',
-            type: 'input',
-            templateOptions: {
-              required: false,
-              label: 'Apartment',
-              max: 11,
-              type: 'text'
-            },
-            read_only: false
-          },
         ]
       }
     ]

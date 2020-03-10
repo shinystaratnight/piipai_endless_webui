@@ -44,17 +44,6 @@ const formadd = [
     },
     read_only: false
   },
-  {
-    key: 'apartment',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Apartment',
-      max: 11,
-      type: 'text'
-    },
-    read_only: false
-  },
 ];
 
 const form = [
@@ -65,17 +54,6 @@ const form = [
       required: true,
       label: 'Street Address',
       max: 126,
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
-    key: 'apartment',
-    type: 'input',
-    templateOptions: {
-      required: false,
-      label: 'Apartment',
-      max: 11,
       type: 'text'
     },
     read_only: false
