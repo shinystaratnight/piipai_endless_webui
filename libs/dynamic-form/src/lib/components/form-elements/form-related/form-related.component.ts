@@ -1071,14 +1071,14 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         newModal.label = '';
       }
 
-      this.modalRef = this.modalService.open(this.messageDetail, { windowClass: 'message-detail' });
+      this.modalRef = this.modalService.open(this.messageDetail, { windowClass: 'message-detail', backdrop: 'static' });
 
       return false;
     }
 
     const windowClass = this.config.visibleMode && type === 'post' ? 'visible-mode' : '';
 
-    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass });
+    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass, backdrop: 'static' });
 
     return false;
   }

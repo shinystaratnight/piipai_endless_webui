@@ -36,7 +36,7 @@ export class FormTrackingComponent implements OnDestroy {
     this.genericFormService.getByQuery(endpoint, `?timesheet=${timesheet.id}&limit=-1`)
       .subscribe((res) => {
         if (res.results.length) {
-          this.modalRef = this.modalService.open(TrackingModalComponent);
+          this.modalRef = this.modalService.open(TrackingModalComponent, {backdrop: 'static'});
           this.modalRef.componentInstance.timesheet = timesheet;
           this.modalRef.componentInstance.data = res.results;
         }

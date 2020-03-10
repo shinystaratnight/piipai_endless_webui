@@ -223,7 +223,7 @@ export class FormPictureComponent
 
   public open(): void {
     this.photoExist = false;
-    this.modalService.open(this.modal, { windowClass: 'medium-modal' });
+    this.modalService.open(this.modal, { windowClass: 'medium-modal', backdrop: 'static' });
   }
 
   public getPhoto() {

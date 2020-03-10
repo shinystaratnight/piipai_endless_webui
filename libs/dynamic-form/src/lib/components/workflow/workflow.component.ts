@@ -154,7 +154,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
     this.addConfig = this.getAddConfig(this.company, this.workflowId);
 
-    this.modalRef = this.modalService.open(this.addModal, { windowClass: 'visible-mode' });
+    this.modalRef = this.modalService.open(this.addModal, { windowClass: 'visible-mode', backdrop: 'static' });
   }
 
   public addStateToCompany(data: any, closeModal) {
@@ -230,7 +230,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
     this.addConfig = this.getAcceptenceTestsConfig(node);
 
-    this.modalRef = this.modalService.open(this.testModal, { windowClass: 'visible-mode' });
+    this.modalRef = this.modalService.open(this.testModal, { windowClass: 'visible-mode', backdrop: 'static' });
   }
 
   public openEditModal(node, closeModal) {
@@ -256,7 +256,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
       this.getAcceptensTests(node.id);
     }
 
-    this.modalRef = this.modalService.open(modal, options);
+    this.modalRef = this.modalService.open(modal, {...options, backdrop: 'static'});
   }
 
   public deleteNode(id, e) {

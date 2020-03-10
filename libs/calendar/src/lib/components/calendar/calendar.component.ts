@@ -356,7 +356,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     this.modalRef = this.modalService.open(this.modal, {
       size: 'lg',
-      windowClass: 'extend-modal'
+      windowClass: 'extend-modal',
+      backdrop: 'static'
     });
   }
 
@@ -455,7 +456,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       };
     }
 
-    this.modalService.open(this.modal, { size: 'lg' });
+    this.modalService.open(this.modal, { size: 'lg', backdrop: 'static' });
   }
 
   isSelected(date: string) {

@@ -181,7 +181,7 @@ export class FormFieldsGroupComponent implements OnInit {
         }
       }
     };
-    this.modalRef = this.modalService.open(this.modal);
+    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
   }
 
   public createGroup(): void {
@@ -254,7 +254,7 @@ export class FormFieldsGroupComponent implements OnInit {
         }
       }
     };
-    this.modalRef = this.modalService.open(this.modal);
+    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
   }
 
   public toggleActiveState(field: Field, remove?): void {
@@ -401,7 +401,7 @@ export class FormFieldsGroupComponent implements OnInit {
         }
       };
     }
-    this.modalRef = this.modalService.open(this.modal);
+    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
   }
 
   public delete(object, container: any[], type) {
@@ -530,7 +530,7 @@ export class FormFieldsGroupComponent implements OnInit {
   }
 
   public openActiveFields() {
-    this.modalRef = this.modalService.open(this.modalActiveFields);
+    this.modalRef = this.modalService.open(this.modalActiveFields, {backdrop: 'static'});
   }
 
   public changePosition(item, type) {

@@ -111,7 +111,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     if (type === 'state' || type === 'function') {
       this.choice = type;
     }
-    this.modalRef = this.modalService.open(content);
+    this.modalRef = this.modalService.open(content, {backdrop: 'static'});
   }
 
   public done(closeModal, type) {
