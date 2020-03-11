@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
       />
     </div>
     <router-outlet (activate)="loader = false" (deactivate)="loader = true"></router-outlet>
+    <app-toast></app-toast>
   `,
 })
 export class AppComponent {
