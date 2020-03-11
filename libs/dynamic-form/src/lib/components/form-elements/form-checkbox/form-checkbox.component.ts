@@ -138,6 +138,10 @@ export class FormCheckboxComponent extends BasicElementComponent
       value = this.config.value || (!this.viewMode && this.config.default);
     }
 
+    if (this.config.value === null) {
+      value = this.config.value;
+    }
+
     if (this.viewMode) {
       if (this.config.templateOptions.type === 'checkbox') {
         this.defaultValues(value);
@@ -146,7 +150,7 @@ export class FormCheckboxComponent extends BasicElementComponent
     if (this.config.templateOptions.type === 'icon') {
       this.customizeCheckbox(value);
     }
-    this.group.get(this.key).patchValue(value || false);
+    this.group.get(this.key).patchValue(value === null ? value : (value || false));
   }
 
   public defaultValues(value) {
