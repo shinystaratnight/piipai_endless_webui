@@ -44,7 +44,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
-import { VerifyEmailComponent } from './components';
+import { VerifyEmailComponent, ToastComponent } from './components';
 
 import { routes } from './app.routing';
 
@@ -62,7 +62,8 @@ import { RedirectComponent } from './redirect.component';
   declarations: [
     AppComponent,
     VerifyEmailComponent,
-    RedirectComponent
+    RedirectComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,
