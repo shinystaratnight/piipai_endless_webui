@@ -1271,7 +1271,7 @@ export class DynamicListComponent
   }
 
   public open(modal, options = {}) {
-    this.modalRef = this.modalService.open(modal, options);
+    this.modalRef = this.modalService.open(modal, {...options, backdrop: 'static'});
   }
 
   public initPagination(data) {
@@ -2249,7 +2249,7 @@ export class DynamicListComponent
         arr.pop();
         const lastElement = arr.pop();
         if (lastElement === 'extend') {
-          endpoint = [...arr, 'extend'].join('/');
+          endpoint = [...arr, 'extend'].join('/') + '/';
           withoutId = true;
 
           data = {
@@ -2279,10 +2279,10 @@ export class DynamicListComponent
             }
           };
         } else if (lastElement === 'candidate_fill') {
-          endpoint = [...arr, 'candidate_fill'].join('/');
+          endpoint = [...arr, 'candidate_fill'].join('/') + '/';
           withoutId = true;
         } else if (lastElement === 'supervisor_approve') {
-          endpoint = [...arr, 'supervisor_approve'].join('/');
+          endpoint = [...arr, 'supervisor_approve'].join('/') + '/';
           withoutId = true;
         } else {
           id = lastElement;
@@ -2561,7 +2561,7 @@ export class DynamicListComponent
           e.el.locationDataEmpty = false;
           this.listStorage.updateTrackingInfo(e.id, true);
 
-          this.modalRef = this.modalService.open(TrackingModalComponent);
+          this.modalRef = this.modalService.open(TrackingModalComponent, {backdrop: 'static'});
           this.modalRef.componentInstance.timesheet = timesheet;
           this.modalRef.componentInstance.data = res.results;
         } else {

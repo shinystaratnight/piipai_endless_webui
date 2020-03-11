@@ -284,7 +284,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
       passTestAction.subscribe((index) => {
         const test = tests[index];
-        this.modalRef = this.modalService.open(PassTestModalComponent);
+        this.modalRef = this.modalService.open(PassTestModalComponent, {backdrop: 'static'});
         this.modalRef.componentInstance.config = {
           test,
           description: test.description,

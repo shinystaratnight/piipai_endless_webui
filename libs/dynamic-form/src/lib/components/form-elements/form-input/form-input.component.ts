@@ -481,19 +481,23 @@ export class FormInputComponent extends BasicElementComponent
     }
   }
 
-  public getAddress(address) {
-    this.group.get(this.key).patchValue(address);
+  public getAddress(address, value: string) {
+    const apartmentMath = value.match(/^(\d*)(\w+?)\//);
+    const apartment = apartmentMath ? apartmentMath[0].slice(0, -1) : undefined;
+    const data = { ...address, apartment };
+
+    this.group.get(this.key).patchValue(data);
 
     this.event.emit({
       type: 'change',
       el: this.config,
-      value: address
+      value: data
     });
 
     this.event.emit({
       type: 'address',
       el: this.config,
-      value: address
+      value: data
     });
 
     setTimeout(() => {

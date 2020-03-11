@@ -47,7 +47,7 @@ export class ActionElementComponent implements OnChanges {
   }
 
   public open(content) {
-    this.modalService.open(content).result.then((result) => {
+    this.modalService.open(content, {backdrop: 'static'}).result.then((result) => {
       if (result) {
         this.event.emit({
           action: this.action

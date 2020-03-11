@@ -193,7 +193,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
 
         passTestAction.subscribe(index => {
           const testId = tests[index].acceptance_test.id;
-          this.modalRef = this.modalService.open(PassTestModalComponent);
+          this.modalRef = this.modalService.open(PassTestModalComponent, {backdrop: 'static'});
           this.modalRef.componentInstance.config = {
             testId,
             send: false
@@ -267,7 +267,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         state,
         !this.modalData.tests && !this.modalData.substates
       );
-      this.modalRef = this.modalService.open(this.stateModal);
+      this.modalRef = this.modalService.open(this.stateModal, {backdrop: 'static'});
     }
   }
 
@@ -362,7 +362,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.modalRef = this.modalService.open(PassTestModalComponent);
+    this.modalRef = this.modalService.open(PassTestModalComponent, {backdrop: 'static'});
     this.modalRef.componentInstance.config = {
       send: true,
       testId: id,
@@ -379,7 +379,7 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         this.modalData.state.wf_object_id = id;
         this.modalData.workflowObject = id;
 
-        this.modalRef = this.modalService.open(PassTestModalComponent);
+        this.modalRef = this.modalService.open(PassTestModalComponent, {backdrop: 'static'});
         this.modalRef.componentInstance.config = {
           send: true,
           testId: id,

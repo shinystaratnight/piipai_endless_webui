@@ -43,7 +43,7 @@ const formadd = [
       type: 'text'
     },
     read_only: false
-  }
+  },
 ];
 
 const form = [

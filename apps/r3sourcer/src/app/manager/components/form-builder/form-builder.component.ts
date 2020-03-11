@@ -99,7 +99,7 @@ export class FormBuilderComponent {
   }
 
   public showPreview() {
-    this.modalRef = this.modalService.open(this.modalTemplate);
+    this.modalRef = this.modalService.open(this.modalTemplate, {backdrop: 'static'});
 
     return false;
   }

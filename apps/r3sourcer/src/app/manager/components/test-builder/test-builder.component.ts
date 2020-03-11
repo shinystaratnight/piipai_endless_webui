@@ -264,7 +264,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public showPreview() {
-    this.modalRef = this.modalService.open(PassTestModalComponent);
+    this.modalRef = this.modalService.open(PassTestModalComponent, {backdrop: 'static'});
     this.modalRef.componentInstance.config = {
       testId: this.testData.id,
       send: false,

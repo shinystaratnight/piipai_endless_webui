@@ -33,6 +33,11 @@ export class VerifyEmailComponent implements OnInit {
         )
         .subscribe(
           (res) => {
+            if (res.status && res.status === 404) {
+              this.router.navigate(['']);
+              return;
+            }
+
             if (res.message) {
               setTimeout(() => {
                 this.ts.sendMessage(res.message, MessageType.success);
@@ -43,11 +48,11 @@ export class VerifyEmailComponent implements OnInit {
                   this.router.navigate(['/cd/profile']);
                 }
 
-              }, 4000);
+              }, 200);
             } else if (res.statusText) {
               setTimeout(() => {
                 this.ts.sendMessage(res.statusText, MessageType.error);
-              }, 4000);
+              }, 200);
             }
 
             this.router.navigate(['']);

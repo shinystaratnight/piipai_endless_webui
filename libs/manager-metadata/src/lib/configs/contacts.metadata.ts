@@ -719,7 +719,7 @@ const formadd = [
             },
             type: 'address',
             key: 'address',
-          }
+          },
         ]
       }
     ]
