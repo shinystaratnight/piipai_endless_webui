@@ -2249,7 +2249,7 @@ export class DynamicListComponent
         arr.pop();
         const lastElement = arr.pop();
         if (lastElement === 'extend') {
-          endpoint = [...arr, 'extend'].join('/');
+          endpoint = [...arr, 'extend'].join('/') + '/';
           withoutId = true;
 
           data = {
@@ -2279,10 +2279,10 @@ export class DynamicListComponent
             }
           };
         } else if (lastElement === 'candidate_fill') {
-          endpoint = [...arr, 'candidate_fill'].join('/');
+          endpoint = [...arr, 'candidate_fill'].join('/') + '/';
           withoutId = true;
         } else if (lastElement === 'supervisor_approve') {
-          endpoint = [...arr, 'supervisor_approve'].join('/');
+          endpoint = [...arr, 'supervisor_approve'].join('/') + '/';
           withoutId = true;
         } else {
           id = lastElement;
