@@ -482,9 +482,10 @@ export class FormInputComponent extends BasicElementComponent
   }
 
   public getAddress(address, value: string) {
-    const apartmentMath = value.match(/^(\d*)(\w+?)\//);
-    const apartment = apartmentMath ? apartmentMath[0].slice(0, -1) : undefined;
-    const data = { ...address, apartment };
+    // const apartmentMath = value.match(/^(\d*)(\w+?)\//);
+    // const apartment = apartmentMath ? apartmentMath[0].slice(0, -1) : undefined;
+    // const data = { ...address, apartment };
+    const data = address;
 
     this.group.get(this.key).patchValue(data);
 
