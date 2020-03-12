@@ -102,8 +102,7 @@ const list = {
       {
         content: [
           {
-            endpoint:
-              '/candidate/candidatecontacts/{candidate_contacts.id}',
+            endpoint: '/candidate/candidatecontacts/{candidate_contacts.id}',
             field: 'candidate_contacts',
             type: 'link',
             display: 'Candidate contact',
@@ -138,7 +137,7 @@ const list = {
       filters.contact_type,
       filters.is_available,
       filters.phone_mobile_verified,
-      filters.email_verified,
+      filters.email_verified
     ]
   },
   fields: [
@@ -266,7 +265,7 @@ const form = [
                     },
                     read_only: false
                   }
-                ],
+                ]
               },
               {
                 label: 'Verification',
@@ -298,7 +297,7 @@ const form = [
                     },
                     read_only: false
                   }
-                ],
+                ]
               },
               {
                 label: 'Additional Info',
@@ -336,7 +335,7 @@ const form = [
                     },
                     read_only: false
                   }
-                ],
+                ]
               }
             ]
           },
@@ -376,21 +375,22 @@ const form = [
                       add: true,
                       delete: false,
                       values: ['__str__'],
-                      edit: true,
+                      edit: true
                     },
                     send: false,
                     errorMessage: {
                       field: 'birthday',
-                      message: 'Birthday is required to create Candidate contact'
+                      message:
+                        'Birthday is required to create Candidate contact'
                     },
                     prefilled: {
                       contact: '{id.id}',
                       birthday: '{birthday}'
                     },
                     type: 'related',
-                    key: 'candidate_contacts',
+                    key: 'candidate_contacts'
                   }
-                ],
+                ]
               },
               {
                 type: 'group',
@@ -414,7 +414,7 @@ const form = [
                     key: 'company_contact',
                     many: true
                   }
-                ],
+                ]
               },
               {
                 label: 'Additional Info',
@@ -456,7 +456,7 @@ const form = [
                     key: 'master_company',
                     many: false
                   }
-                ],
+                ]
               }
             ]
           }
@@ -474,7 +474,7 @@ const form = [
         collapsed: false,
         prefilled: {
           object_id: '{id}',
-          content_type: '{model_content_type}',
+          content_type: '{model_content_type}'
         },
         type: 'list',
         query: {
@@ -497,7 +497,7 @@ const form = [
       edit: true
     },
     type: 'address',
-    key: 'address',
+    key: 'address'
   },
   {
     key: 'is_available',
@@ -668,7 +668,7 @@ const formadd = [
               type: 'text'
             },
             read_only: false
-          },
+          }
         ]
       },
       {
@@ -718,8 +718,19 @@ const formadd = [
               edit: true
             },
             type: 'address',
-            key: 'address',
+            key: 'address'
           },
+          {
+            key: 'apartment',
+            type: 'input',
+            templateOptions: {
+              required: false,
+              label: 'Apartment',
+              max: 11,
+              type: 'text'
+            },
+            read_only: false
+          }
         ]
       }
     ]
