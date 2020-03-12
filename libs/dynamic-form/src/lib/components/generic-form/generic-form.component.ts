@@ -1173,6 +1173,11 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
     const newData = this.form ? { ...data, ...this.form } : data || {};
 
+    if (newData.hasOwnProperty('apartment') && newData.address) {
+      Object.assign(newData.address, {apartment: newData.apartment});
+      delete newData.apartment;
+    }
+
     if (this.checkEmail) {
       if (!this.isEmail(newData.username)) {
         this.parseError({ username: 'Invalid email address' });
