@@ -54,6 +54,7 @@ import {
 import { environment } from '../../../../../../apps/r3sourcer/src/environments/environment';
 
 import { TrackingModalComponent } from '../../modals';
+import { FilterEvent } from '../../interfaces';
 
 @Component({
   selector: 'app-dynamic-list',
@@ -197,6 +198,11 @@ export class DynamicListComponent
   public isMobile = isMobile;
 
   public ngOnInit() {
+    if (this.config.list.searchParameter) {
+      this.searchFilter.query = this.config.list.searchParameter;
+      // this.searchFilter.key = this.config.list.searchParameter;
+    }
+
     this.updateFilters();
 
     if (this.config.list.openFilter) {
@@ -1241,19 +1247,18 @@ export class DynamicListComponent
     });
   }
 
-  public filterHandler(e) {
+  public filterHandler(e: FilterEvent) {
     this.selectedAll = false;
     this.select = {};
-    if (e === 'resetAll') {
+
+    if (e.reset) {
       this.event.emit({
         type: 'filter',
-        list: this.config.list.list,
+        list: e.list,
         query: ''
       });
 
-      // if (this.inForm) {
-      this.filterService.resetFilters(this.config.list.list);
-      // }
+      this.filterService.resetFilters(e.list);
     } else {
       this.event.emit({
         type: 'filter',

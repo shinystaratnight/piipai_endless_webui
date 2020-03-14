@@ -14,6 +14,7 @@ export interface Marker {
   };
   name: string;
   type: string;
+  __str__: string;
 }
 
 const filters = [

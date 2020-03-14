@@ -46,6 +46,7 @@
       [class.in-form]="inForm"
     >
       <app-filter-block
+        [key]="config.list.list"
         [config]="filtersOfList"
         (event)="filterHandler($event)"
       ></app-filter-block>
@@ -130,6 +131,7 @@
         <app-list-search-bar
           class="datatable-search"
           *ngIf="config.list.search_enabled"
+          [param]="config.list.searchParameter"
           [count]="data.count"
           [label]="config.list.pagination_label || config.list.label"
           [list]="config.list.list"
@@ -146,6 +148,7 @@
         [ngClass]="{ open: !filtersHidden, 'in-form': inForm }"
       >
         <app-filter-block
+          [key]="config.list.list"
           [inline]="true"
           [config]="filtersOfList"
           (event)="filterHandler($event)"

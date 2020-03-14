@@ -111,7 +111,6 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.noUiSlider.on('set.one', (e, handle) => {
         const value = parseInt(e[0], 10);
-
         if (this.data !== value) {
           this.data = value;
 
@@ -151,7 +150,7 @@ export class FilterRangeComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if (data.byQuery) {
         this.query = data.query;
-        this.data = data.query.split('=')[1];
+        this.data = +data.query.split('=')[1];
       } else {
         this.data = data;
       }

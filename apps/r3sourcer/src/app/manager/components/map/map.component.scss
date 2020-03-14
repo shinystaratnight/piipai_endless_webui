@@ -18,6 +18,7 @@
   min-width: 265px;
 
   overflow-y: auto;
+  background-color: #fff;
 }
 
 @include media-breakpoint-down('sm') {

@@ -1,5 +1,6 @@
 <div #filterBlock class="filter-wrapper" [class.open]="!filterBlockHidden">
   <app-filter-block
+    [key]="config.list"
     [config]="filtersOfList"
     (event)="filterHandler($event)"
   ></app-filter-block>
