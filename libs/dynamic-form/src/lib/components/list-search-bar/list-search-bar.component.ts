@@ -1,70 +1,67 @@
-import { Component, Input, Output, OnInit, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  OnInit,
+  EventEmitter,
+  OnDestroy,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { FilterService } from './../../services/filter.service';
-
 import { Subscription } from 'rxjs';
+
+import { FilterService } from './../../services';
 
 @Component({
   selector: 'app-list-search-bar',
-  templateUrl: 'list-search-bar.component.html',
-  styleUrls: ['./list-search-bar.component.scss']
+  templateUrl: './list-search-bar.component.html',
+  styleUrls: ['./list-search-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListSerachBarComponent implements OnInit, OnDestroy {
-
   @Input() public count: string;
   @Input() public label: string;
+  @Input() public list: string;
+  @Input() public param: string;
 
-  @Input()
-  public list: string;
-
-  @Output()
-  public event: EventEmitter<any> = new EventEmitter();
+  @Output() public event: EventEmitter<any> = new EventEmitter();
 
   public searchValue: string;
-  public querySubscription: Subscription;
+  private subscription: Subscription;
+  private type = 'search';
 
-  constructor(
-    private fs: FilterService,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private fs: FilterService, private route: ActivatedRoute) {}
 
   public ngOnInit() {
-    this.querySubscription = this.route.queryParams.subscribe(
-      (params) => this.updateSearchBar()
+    this.subscription = this.route.queryParams.subscribe(() =>
+      this.updateSearchBar()
     );
   }
 
   public ngOnDestroy() {
-    this.querySubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
-  public search(event) {
-    event.preventDefault();
-    event.stopPropagation();
+  public search() {
     this.fs.generateQuery(
-      `search=${this.searchValue}`,
-      'search',
+      `${this.param || 'search'}=${this.searchValue}`,
+      this.type,
       this.list,
       { data: this.searchValue, query: this.searchValue }
     );
     this.changeQuery();
   }
 
-  public changeQuery() {
-    this.event.emit({
-      list: this.list
-    });
+  private changeQuery() {
+    this.event.emit({ list: this.list });
   }
 
-  public updateSearchBar() {
-    const data = this.fs.getQueries(this.list, 'search');
-    if (data) {
-      if (data.byQuery) {
-        this.searchValue = data.query.split('=')[1];
-      } else {
-        this.searchValue = data.data;
-      }
+  private updateSearchBar() {
+    const filterData = this.fs.getQueries(this.list, this.type);
+
+    if (filterData) {
+      const { byQuery, query, data } = filterData;
+      this.searchValue = byQuery ? query.split('=')[1] : data;
     } else {
       this.searchValue = '';
     }

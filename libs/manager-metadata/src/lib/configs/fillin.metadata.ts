@@ -73,6 +73,7 @@ const list = {
     label: '{job.position}',
     description: '{job.jobsite}',
     openFilter: true,
+    searchParameter: 'q',
     columns: [
       {
         name: 'favourite',

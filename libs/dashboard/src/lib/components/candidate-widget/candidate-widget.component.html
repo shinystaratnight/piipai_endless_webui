@@ -24,6 +24,7 @@
 
   <div *ngIf="showFilters" class="filter-wrapper" [class.open]="true">
     <app-filter-block
+      [key]="activeList"
       [container]="true"
       [config]="filtersOfList"
       (event)="filterHandler($event)"
