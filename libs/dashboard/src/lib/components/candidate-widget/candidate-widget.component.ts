@@ -8,6 +8,7 @@ import { Endpoints } from '@webui/data';
 
 import { DashboardService } from '../../services';
 import { Router } from '@angular/router';
+import { FilterEvent } from 'libs/dynamic-form/src/lib/interfaces';
 
 const enum Lists {
   CandidateContact = 'candidatecontact',
@@ -109,12 +110,12 @@ export class CandidateWidget implements OnInit, OnDestroy {
     }
   }
 
-  public filterHandler(event) {
-    if (event === 'resetAll') {
-      this.filterService.resetFilters(this.activeList);
+  public filterHandler(e: FilterEvent) {
+    if (e.reset) {
+      this.filterService.resetFilters(e.list);
     }
 
-    this.filtersQuery = this.filterService.getQuery(this.activeList);
+    this.filtersQuery = this.filterService.getQuery(e.list);
   }
 
   public toggleFilters() {
