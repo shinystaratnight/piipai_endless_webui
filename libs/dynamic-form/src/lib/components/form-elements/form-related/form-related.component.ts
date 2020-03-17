@@ -124,6 +124,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   public disableMessage: string;
   public fieldDisabled: boolean;
   public placeholder: string;
+  public loading: boolean;
 
   private searchSubscription: Subscription;
   private subscriptions: Subscription[] = [];
@@ -1119,6 +1120,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
           this.generatePreviewList(this.list);
         }
       } else {
+        this.loading = true;
         this.getOptions(value, this.lastElement, concat);
       }
     }
@@ -1523,6 +1525,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
           this.genericFormService
             .getByQuery(endpoint, query)
             .subscribe((res: any) => {
+              this.loading = false;
               this.skipScroll = false;
               this.count = res.count;
               if (res.results && res.results.length) {
@@ -1626,6 +1629,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
               `?${this.generateFields(this.fields)}`
             )
             .subscribe((res: any) => {
+              this.loading = false;
               this.lastElement = 0;
               if (res) {
                 const path = this.getLinkPath(this.config.endpoint);

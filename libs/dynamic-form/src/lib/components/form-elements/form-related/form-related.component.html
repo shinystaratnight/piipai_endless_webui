@@ -112,6 +112,10 @@
             [ngModelOptions]="{ standalone: true }"
           />
 
+          <div class="text-center" *ngIf="loading">
+            <app-loader></app-loader>
+          </div>
+
           <div
             class="autocomplete-list"
             infinite-scroll
