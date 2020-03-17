@@ -485,8 +485,10 @@ export class FormDatepickerComponent extends BasicElementComponent
 
       const utcDatetime = datetime.utc().format();
       this.group.get(this.key).patchValue(utcDatetime);
+      this.emitChanges();
     } else {
       this.setTime(time, this.timeInstance);
+      this.emitChanges();
     }
   }
 
