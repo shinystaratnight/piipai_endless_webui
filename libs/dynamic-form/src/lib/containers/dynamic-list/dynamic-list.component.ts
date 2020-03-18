@@ -1108,7 +1108,7 @@ export class DynamicListComponent
     return result;
   }
 
-  public sorting(field, type: string) {
+  public sorting(field, type?: string) {
     if (!this.delay) {
       this.sortedColumns[field.sort_field] = type;
       field.sorted = type;

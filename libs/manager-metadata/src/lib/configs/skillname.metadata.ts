@@ -163,7 +163,7 @@ const list = {
         ],
         name: 'active',
         title: null,
-        sort_field: 'active'
+        sort_field: 'skills__active'
       },
       {
         delim: null,
@@ -216,7 +216,7 @@ const list = {
         ],
         name: 'carrier_list_reserve',
         title: null,
-        sort_field: 'carrier_list_reserve'
+        sort_field: 'skills__carrier_list_reserve'
       },
       {
         content: [
