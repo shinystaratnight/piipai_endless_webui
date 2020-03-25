@@ -12,16 +12,18 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
   GenericFormService,
   FilterService,
-  ListService
+  ListService,
+  SortService
 } from './../../services';
 
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, map, skip } from 'rxjs/operators';
+import { Sort } from '../../helpers';
 
 @Component({
   selector: 'app-generic-list',
   templateUrl: './generic-list.component.html',
-  providers: [ListService]
+  providers: [ListService, SortService]
 })
 export class GenericListComponent implements OnInit, OnDestroy {
   @Input() endpoint = '';
@@ -69,7 +71,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private listService: ListService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private sortService: SortService
   ) {}
 
   public ngOnInit() {
@@ -190,12 +193,12 @@ export class GenericListComponent implements OnInit, OnDestroy {
         this.updateMetadataInfo(metadata, table);
 
         if (!this.delay) {
-          const sortedColumns = this.getSortedFields(metadata.list.columns);
+          const sortData = this.sortService.getSortedFields(metadata.list.columns);
 
-          table.query = sortedColumns.exist
+          table.query = sortData.exist
             ? {
                 filter: '',
-                sort: this.getSortQuery(sortedColumns.result),
+                sort: this.sortService.getSortQuery(sortData.result),
                 pagination: ''
               }
             : {};
@@ -246,28 +249,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
     if (this.listNameCache && !this.listNameCache[this.endpoint]) {
       this.listNameCache[this.endpoint] = label;
     }
-  }
-
-  public getSortedFields(columns) {
-    const result = {};
-    let exist = false;
-
-    columns.forEach(el => {
-      if (el.sort && el.sorted) {
-        exist = true;
-        result[el.sort_field] = el.sorted;
-      }
-    });
-
-    return { result, exist };
-  }
-
-  public getSortQuery(sorted) {
-    const queries = Object.keys(sorted).map(el => {
-      return sorted[el] === 'desc' ? `-${el}` : el;
-    });
-
-    return `ordering=${queries.join(',')}`;
   }
 
   public getData(endpoint, query = '?', table, target = null, add = false) {
@@ -598,7 +579,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         const fields = queryParams[el].split(',');
 
         fields.forEach(elem => {
-          const order = elem[0] === '-' ? 'desc' : 'asc';
+          const order = elem[0] === '-' ? Sort.DESC : Sort.ASC;
           sorted[elem.substring(elem[0] === '-' ? 1 : 0)] = order;
         });
         queryList['sort'] += `${params[1]}=${queryParams[el]}`;

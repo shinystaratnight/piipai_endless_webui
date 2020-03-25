@@ -41,14 +41,16 @@ import {
   FilterService,
   GenericFormService,
   ListStorageService,
-  ListService
+  ListService,
+  SortService
 } from '../../services';
 import {
   createAddAction,
   smallModalEndpoints,
   getOrientation,
   fillingForm,
-  listUpdateActions
+  listUpdateActions,
+  Sort
 } from '../../helpers';
 
 import { environment } from '../../../../../../apps/r3sourcer/src/environments/environment';
@@ -192,7 +194,8 @@ export class DynamicListComponent
     private listStorage: ListStorageService,
     private purposeService: CompanyPurposeService,
     private listService: ListService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private sortService: SortService
   ) {}
 
   public isMobile = isMobile;
@@ -1108,17 +1111,23 @@ export class DynamicListComponent
     return result;
   }
 
-  public sorting(field, type?: string) {
-    if (!this.delay) {
-      this.sortedColumns[field.sort_field] = type;
-      field.sorted = type;
-
-      this.event.emit({
-        type: 'sort',
-        list: this.config.list.list,
-        query: this.sortTable(this.sortedColumns)
-      });
+  sortingBy(field) {
+    if (this.delay) {
+      return;
     }
+    const { sort_field } = field;
+
+    const data = this.sortService.updateSortParams(this.sortedColumns, sort_field);
+    field.sorted = data[sort_field];
+    this.sortedColumns = data;
+
+    const query = this.sortService.getSortQuery(this.sortedColumns);
+
+    this.event.emit({
+      type: 'sort',
+      list: this.config.list.list,
+      query
+    });
   }
 
   public resetSort(field, emit) {
@@ -1129,7 +1138,7 @@ export class DynamicListComponent
         this.event.emit({
           type: 'sort',
           list: this.config.list.list,
-          query: this.sortTable(this.sortedColumns)
+          query: this.sortService.getSortQuery(this.sortedColumns)
         });
       }
     }
@@ -1276,7 +1285,10 @@ export class DynamicListComponent
   }
 
   public open(modal, options = {}) {
-    this.modalRef = this.modalService.open(modal, {...options, backdrop: 'static'});
+    this.modalRef = this.modalService.open(modal, {
+      ...options,
+      backdrop: 'static'
+    });
   }
 
   public initPagination(data) {
@@ -1303,21 +1315,6 @@ export class DynamicListComponent
         }
       }
     }
-  }
-
-  public sortTable(sorted) {
-    let query = 'ordering=';
-    let queries = '';
-    const columns = Object.keys(sorted);
-    columns.forEach(el => {
-      if (sorted[el] === 'desc') {
-        queries += `-${el},`;
-      } else if (sorted[el] === 'asc') {
-        queries += `${el},`;
-      }
-    });
-    query += queries.slice(0, queries.length - 1);
-    return query;
   }
 
   public pageChange() {
@@ -2566,7 +2563,9 @@ export class DynamicListComponent
           e.el.locationDataEmpty = false;
           this.listStorage.updateTrackingInfo(e.id, true);
 
-          this.modalRef = this.modalService.open(TrackingModalComponent, {backdrop: 'static'});
+          this.modalRef = this.modalService.open(TrackingModalComponent, {
+            backdrop: 'static'
+          });
           this.modalRef.componentInstance.timesheet = timesheet;
           this.modalRef.componentInstance.data = res.results;
         } else {
