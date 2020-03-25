@@ -683,7 +683,7 @@ const formadd = [
               label: 'Client',
               add: true,
               delete: false,
-              values: ['industries', 'short_name', '__str__', 'master_company', 'primary_contact'],
+              values: ['industries', 'short_name', '__str__', 'master_company', 'primary_contact', 'manager'],
               type: 'related',
               edit: true,
               required: true,
@@ -797,7 +797,7 @@ const formadd = [
               edit: true
             },
             visibleMode: true,
-            default: '{regular_company.primary_contact.id}',
+            default: '{regular_company.manager.id}',
             showIf: ['primary_contact.id', 'address'],
             type: 'related',
             query: {
