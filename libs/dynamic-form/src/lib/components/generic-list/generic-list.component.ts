@@ -363,7 +363,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
         table.innerTables = {};
       }
       if (table && table.first && !this.inForm) {
-        if (e.type === 'filter') {
+        if (e.type === 'filter' || e.type === 'sort') {
           table.offset = 0;
         }
         this.updateUrl(table.query);

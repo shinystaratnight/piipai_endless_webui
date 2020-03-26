@@ -284,7 +284,7 @@ export class DynamicListComponent
     // if (this.maximize) {
     //   this.unpopedTable();
     // }
-    if (this.sorted) {
+    if (changes['sorted'] && this.sorted) {
       this.sortedColumns = this.sorted;
       const names = Object.keys(this.sorted);
       if (names.length) {
@@ -1119,9 +1119,8 @@ export class DynamicListComponent
 
     const data = this.sortService.updateSortParams(this.sortedColumns, sort_field);
     field.sorted = data[sort_field];
-    this.sortedColumns = data;
 
-    const query = this.sortService.getSortQuery(this.sortedColumns);
+    const query = this.sortService.getSortQuery(data);
 
     this.event.emit({
       type: 'sort',
