@@ -155,6 +155,7 @@ const list = {
         delim: null,
         label: 'Active',
         sort: true,
+        width: 100,
         content: [
           {
             field: 'active',
@@ -208,6 +209,7 @@ const list = {
         delim: null,
         label: 'Carrier List Reserve',
         sort: true,
+        width: 170,
         content: [
           {
             field: 'carrier_list_reserve',

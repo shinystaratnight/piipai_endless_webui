@@ -685,24 +685,6 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
     }
   }
 
-  .sort-icon {
-    margin-left: 0.5rem;
-
-    font-size: 10px;
-
-    opacity: 0.15;
-    cursor: pointer;
-
-    &:hover {
-      color: $gray;
-    }
-
-    &.active {
-      color: $gray;
-      opacity: 1;
-    }
-  }
-
   .cell-content {
     padding: 0.3rem;
   }

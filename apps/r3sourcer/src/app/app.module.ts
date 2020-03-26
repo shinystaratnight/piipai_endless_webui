@@ -41,7 +41,10 @@ import {
   faEnvelope,
   faPlusCircle,
   faRedo,
-  faExclamationCircle
+  faExclamationCircle,
+  faSort,
+  faSortUp,
+  faSortDown
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
@@ -121,7 +124,10 @@ export class AppModule {
       faEnvelope,
       faPlusCircle,
       faRedo,
-      faExclamationCircle
+      faExclamationCircle,
+      faSort,
+      faSortUp,
+      faSortDown
     ]
 
     library.add(...icons);
