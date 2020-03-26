@@ -5,3 +5,9 @@ export const evaluationColors = {
   4: '#ffbf00',
   5: '#FFD042'
 };
+
+export enum Sort {
+  DEFAULT = 'default',
+  DESC = 'desc',
+  ASC = 'asc'
+}

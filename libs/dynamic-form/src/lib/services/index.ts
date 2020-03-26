@@ -18,6 +18,7 @@ export * from './action.service';
 export * from './metadata.service';
 export * from './timeline.service';
 export * from './list.service';
+export * from './sort.service';
 
 export const services = [
   FilterService,
