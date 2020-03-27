@@ -9,7 +9,7 @@
   (mouseover)="currentField = true"
   (mouseleave)="currentField = false"
 >
-  <div class="form-element" (click)="updateDate(undefined, $event)">
+  <div class="form-element">
     <label
       class="form-element-label"
       [class.required]="config.templateOptions.required"
@@ -28,7 +28,7 @@
         class="form-control"
         #d
         data-role="datebox"
-        [(ngModel)]="date"
+        [(ngModel)]="model.date"
         [attr.id]="key"
         [attr.name]="key"
       />
@@ -44,7 +44,7 @@
           class="form-control"
           #t
           date-role="datebox"
-          [(ngModel)]="time"
+          [(ngModel)]="model.time"
         />
         <span
           class="time"
@@ -66,8 +66,8 @@
         type="date"
         class="form-control mobile-datepicker fa-calendar"
         [hidden]="config.templateOptions.type === 'time'"
-        [(ngModel)]="date"
-        (ngModelChange)="changeDate($event)"
+        [(ngModel)]="model.date"
+        (ngModelChange)="updateFromMobile($event)"
         [attr.id]="key"
         [attr.name]="key"
       />
@@ -82,8 +82,8 @@
               config.templateOptions.type === 'time'
             )
           "
-          (ngModelChange)="changeTime($event)"
-          [(ngModel)]="time"
+          (ngModelChange)="updateFromMobile($event)"
+          [(ngModel)]="model.time"
         />
         <span
           class="time"
@@ -111,7 +111,7 @@
   [class.d-inline-block]="config.inline"
   *ngIf="(viewMode && !config.hide) || (config.read_only && !config.hide)"
 >
-  <div class="form-element" (click)="updateDate(undefined, $event)">
+  <div class="form-element">
     <label
       class="form-element-label"
       *ngIf="label && config.templateOptions.label"

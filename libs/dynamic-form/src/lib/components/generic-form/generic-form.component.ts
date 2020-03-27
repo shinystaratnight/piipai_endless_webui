@@ -884,20 +884,20 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public getTotalTime(data) {
-    const shift_ended_at = this.timeInstance(data.shift_ended_at);
-    const shift_started_at = this.timeInstance(data.shift_started_at);
+    const shift_ended_at = getTimeInstance()(data.shift_ended_at);
+    const shift_started_at = getTimeInstance()(data.shift_started_at);
 
     let breakTime = 0;
 
     if (data.break_ended_at && data.break_started_at) {
-      const break_ended_at = this.timeInstance(data.break_ended_at);
-      const break_started_at = this.timeInstance(data.break_started_at);
+      const break_ended_at = getTimeInstance()(data.break_ended_at);
+      const break_started_at = getTimeInstance()(data.break_started_at);
 
       breakTime = break_ended_at.diff(break_started_at);
     }
 
     const workTime = shift_ended_at.diff(shift_started_at);
-    const totalTime = this.timeInstance.duration(workTime - breakTime);
+    const totalTime = getTimeInstance().duration(workTime - breakTime);
 
     return `${Math.floor(totalTime.asHours())}hr ${totalTime.minutes()}min`;
   }
@@ -1083,7 +1083,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
                   shifts: [response.id]
                 };
 
-                const message = `${shiftsRequests.date} ${this.timeInstance(
+                const message = `${shiftsRequests.date} ${getTimeInstance()(
                   response.time,
                   'HH:mm:ss'
                 ).format('hh:mm A')} created`;
@@ -1277,7 +1277,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         if (key.includes('period_zero_reference')) {
           if (key === 'period_zero_reference_date') {
             data.invoice_rule[key] =
-              this.timeInstance(data.invoice_rule[key], 'YYYY-MM-DD').date() ||
+              getTimeInstance()(data.invoice_rule[key], 'YYYY-MM-DD').date() ||
               undefined;
           }
 
@@ -1654,7 +1654,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
     this.service.submitForm(endpoint, {}).subscribe(res => {
       const synced_at = getElementFromMetadata(this.metadata, 'synced_at');
-      synced_at.value = this.timeInstance().format();
+      synced_at.value = getTimeInstance().format();
       this.updateMetadata(this.metadata, 'synced_at');
       this.toastrService.sendMessage(
         'The invoice will be synchronized in a few minutes',

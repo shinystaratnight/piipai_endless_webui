@@ -1,4 +1,4 @@
-export const getDatePickerConfig = (config, isBirthday) => {
+export const getDatePickerConfig = (config, isBirthday: boolean) => {
   const { customDatepicker } = config;
   const { clear, change } = config.templateOptions;
 
