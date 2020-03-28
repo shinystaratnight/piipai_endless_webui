@@ -9,6 +9,7 @@ import { CheckPermissionService } from './check-permission.service';
 import { ErrorsService } from './errors.service';
 import { ToastService } from './toast.service';
 import { EventService } from './event.service';
+import { DateService } from './date.service';
 
 export * from './navigation.service';
 export * from './user.service';
@@ -22,6 +23,7 @@ export * from './errors.service';
 export * from './toast.service';
 export * from './env.service';
 export * from './event.service';
+export * from './date.service';
 
 export const services = [
   NavigationService,
@@ -34,5 +36,6 @@ export const services = [
   CheckPermissionService,
   ErrorsService,
   ToastService,
-  EventService
+  EventService,
+  DateService
 ];

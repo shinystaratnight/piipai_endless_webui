@@ -1,4 +1,4 @@
-export const getDatePickerConfig = (config, isBirthday) => {
+export const getDatePickerConfig = (config, isBirthday: boolean) => {
   const { customDatepicker } = config;
   const { clear, change } = config.templateOptions;
 
@@ -36,7 +36,7 @@ export const getTimePickerConfig = config => {
     overrideTimeOutput: '%I:%M %p',
 
     useClearButton: true,
-    useCancelButton: true,
+    useCancelButton: false,
     useFocus: true,
     useHeader: false,
     calUsePickers: true,

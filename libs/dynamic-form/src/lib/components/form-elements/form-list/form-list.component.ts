@@ -218,7 +218,8 @@ export class FormListComponent implements OnInit, OnDestroy {
 
     this.modalRef = this.modal.open(this.modalTemplate, {
       size: size as any,
-      windowClass
+      windowClass,
+      backdrop: 'static'
     });
   }
 
