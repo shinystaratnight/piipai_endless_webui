@@ -36,7 +36,7 @@ export const getTimePickerConfig = config => {
     overrideTimeOutput: '%I:%M %p',
 
     useClearButton: true,
-    useCancelButton: true,
+    useCancelButton: false,
     useFocus: true,
     useHeader: false,
     calUsePickers: true,

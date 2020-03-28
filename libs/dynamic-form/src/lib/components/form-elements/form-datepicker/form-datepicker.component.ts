@@ -481,13 +481,11 @@ export class FormDatepickerComponent extends BasicElementComponent
   }
 
   private emitChanges() {
-    setTimeout(() => {
-      this.event.emit({
-        el: this.config,
-        type: 'change',
-        value: this.group.get(this.key).value
-      });
-    }, 150);
+    this.event.emit({
+      el: this.config,
+      type: 'change',
+      value: this.group.get(this.key).value
+    });
   }
 
   // Datepicker methods
