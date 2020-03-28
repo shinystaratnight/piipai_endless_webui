@@ -6,7 +6,8 @@ import {
   OnDestroy,
   ChangeDetectorRef,
   ElementRef,
-  HostBinding
+  HostBinding,
+  HostListener
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -77,7 +78,8 @@ export class FormDatepickerComponent extends BasicElementComponent
   constructor(
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    private dateService: DateService
+    private dateService: DateService,
+    private el: ElementRef
   ) {
     super();
   }
@@ -117,7 +119,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
       Object.assign(config, {
         beforeOpenCallback: () => {
-          this.opened = this.d.nativeElement;
+          this.setOpenDatepicker(this.d);
           this.updatePosition();
           this.refreshDatebox(this.d);
 
@@ -132,6 +134,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
         closeCallback: () => {
           this.updateForm(type, this.getValue(type));
+          this.opened = null;
         }
       });
 
@@ -143,7 +146,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
       Object.assign(config, {
         beforeOpenCallback: () => {
-          this.opened = this.t.nativeElement;
+          this.setOpenDatepicker(this.t);
           this.updatePosition();
           this.refreshDatebox(this.t);
 
@@ -152,15 +155,20 @@ export class FormDatepickerComponent extends BasicElementComponent
           }
         },
 
-        closeCallback: ({date}) => {
+        closeCallback: ({ date }) => {
           const hours = date.getHours();
           const minutes = date.getMinutes();
 
-          const dateInstance = this.dateService.parse(`${hours}:${minutes}`, this.timezone, 'H:m');
+          const dateInstance = this.dateService.parse(
+            `${hours}:${minutes}`,
+            this.timezone,
+            'H:m'
+          );
           const time = this.dateService.getTime(dateInstance);
 
           this.setDatepickerValue(this.t, time);
           this.updateForm(type, this.getValue(type));
+          this.opened = null;
         }
       });
 
@@ -180,6 +188,12 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   public updatePosition() {
     this.update.next();
+  }
+
+  private setOpenDatepicker(el: ElementRef) {
+    setTimeout(() => {
+      this.opened = el.nativeElement;
+    }, 100);
   }
 
   private checkOnCustomDatepicker(config) {
@@ -505,19 +519,19 @@ export class FormDatepickerComponent extends BasicElementComponent
     dp.datebox({ [propName]: value });
   }
 
-  // @HostListener('document:touchstart', ['$event'])
-  // @HostListener('document:click', ['$event'])
-  // public handleClick(event) {
-  //   let clickedComponent = event.target;
-  //   let inside = false;
-  //   do {
-  //     if (clickedComponent === this.el.nativeElement) {
-  //       inside = true;
-  //     }
-  //     clickedComponent = clickedComponent.parentNode;
-  //   } while (clickedComponent);
-  //   if (!inside && this.opened) {
-  //     (window as any).$(this.opened).datebox('close');
-  //   }
-  // }
+  @HostListener('document:touchstart', ['$event'])
+  @HostListener('document:click', ['$event'])
+  public handleClick(event) {
+    let clickedComponent = event.target;
+    let inside = false;
+    do {
+      if (clickedComponent === this.el.nativeElement) {
+        inside = true;
+      }
+      clickedComponent = clickedComponent.parentNode;
+    } while (clickedComponent);
+    if (!inside && this.opened) {
+      (window as any).$(this.opened).datebox('close');
+    }
+  }
 }
