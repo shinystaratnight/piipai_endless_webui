@@ -20,17 +20,19 @@
 
 button.edit-mode {
   align-self: center;
-
   margin-left: auto;
-
   border: none;
-
   background-color: #fdfdfd;
   color: rgba(black, 0.55);
   box-shadow: 0 0 8px rgba(black, 0.15);
 
   &:hover {
-    background-color: #fdfdfd;
+    color: rgba(black, 0.75);
+    box-shadow: 0 0 6px rgba(black, 0.15);
+  }
+
+  &:active {
+    box-shadow: 0 0 4px rgba(black, 0.15);
   }
 }
 
