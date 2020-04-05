@@ -797,6 +797,11 @@ $nested-shadow-hover: 0px 0px 10px 0px rgba($gray, 0.3);
   }
 }
 
+.sort-icon {
+  position: relative;
+  top: 2px;
+}
+
 .sort-dropdown {
   label {
     font-size: 0.875rem;

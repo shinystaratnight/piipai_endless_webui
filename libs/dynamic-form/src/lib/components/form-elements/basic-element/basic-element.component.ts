@@ -14,7 +14,7 @@ export class BasicElementComponent {
       if (keys.length > 1) {
         this.addControls(this.group, keys, fb, required, min, max);
       } else {
-        if (config.type === 'related' && !config.many) {
+        if (config.type === 'related' && !config.many && !config.withoutIdField) {
           keys.push('id');
           this.addControls(this.group, keys, fb, required, min, max);
         } else if (config.type !== 'static' || (config.type === 'static' && !config.read_only)) {

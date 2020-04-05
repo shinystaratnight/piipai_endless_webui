@@ -7,6 +7,7 @@ export interface RelatedElementTemplateOptions extends BasicElementTemplateOptio
   add?: boolean;
   edit?: boolean;
   delete?: boolean;
+  param?: string;
 }
 
 export class RelatedElement extends BasicFormElement {
@@ -18,6 +19,7 @@ export class RelatedElement extends BasicFormElement {
   doNotChoice?: boolean;
   visibleMode?: boolean;
   send?: boolean;
+  withoutIdField?: boolean;
 
   relatedObjects?: {
     field: string;
@@ -70,6 +72,12 @@ export class RelatedElement extends BasicFormElement {
 
   setQuery(query: { [key: string]: any }) {
     this.query = { ...query };
+
+    return this;
+  }
+
+  updateTemplateOptions(key: string, value: any) {
+    this.templateOptions[key] = value;
 
     return this;
   }
