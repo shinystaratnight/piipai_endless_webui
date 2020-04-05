@@ -150,5 +150,8 @@ export enum Endpoints {
   Order = '/core/orders/',
   Tag = '/core/tags/',
   ManagerCompanySettings = '/company_settings/',
-  CompanySettings = '/company_settings/site/'
+  CompanySettings = '/company_settings/site/',
+  Language = '/languages/',
+  CandidateLanguages = '/candidate_contacts/',
+  CompanyLanguages = '/companies/'
 }

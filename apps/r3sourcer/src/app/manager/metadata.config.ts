@@ -99,8 +99,10 @@ import {
   skillname,
   smslogs,
   skillratecoefficient,
-  priselistratemodifiers
+  priselistratemodifiers,
+  candidateLanguage,
   // jobsitesclient
+  companyLanguage
 } from '@webui/manager-metadata';
 
 import {
@@ -223,4 +225,6 @@ export class Metadata {
   [Endpoints.SmsLog] = smslogs;
   [Endpoints.SkillRateCoefficient] = skillratecoefficient;
   [Endpoints.PriceListRateModifiers] = priselistratemodifiers;
+  'candidate_languages' = candidateLanguage;
+  'company_languages' = companyLanguage;
 }

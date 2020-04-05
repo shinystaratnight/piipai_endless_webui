@@ -1,4 +1,5 @@
 import { createFilter, Type } from '@webui/metadata';
+import { Endpoints } from '@webui/data';
 
 const filters = {
   status: createFilter(Type.Relared, {
@@ -1048,6 +1049,20 @@ const form = [
           text: 'Invoices'
         },
         collapsed: false
+      },
+      {
+        endpoint: `${Endpoints.CompanyLanguages}{id}/languages/`,
+        visibleMode: true,
+        templateOptions: {
+          label: 'Languages',
+          type: 'list',
+          add_label: '+ Add',
+          text: 'Languages'
+        },
+        prefilled: {
+          company_id: '{id}'
+        },
+        type: 'list',
       },
       {
         endpoint: '/core/notes/',

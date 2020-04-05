@@ -1226,6 +1226,20 @@ const form = [
         help: 'Here you can see favorite companies for candidate'
       },
       {
+        endpoint: `${Endpoints.CandidateLanguages}{id}/languages/`,
+        visibleMode: true,
+        templateOptions: {
+          label: 'Languages',
+          type: 'list',
+          add_label: '+ Add',
+          text: 'Languages'
+        },
+        prefilled: {
+          candidate_contact_id: '{id}'
+        },
+        type: 'list',
+      },
+      {
         endpoint: Endpoints.Note,
         templateOptions: {
           label: 'Notes',

@@ -59,8 +59,8 @@ input {
   & > .nav-tabs {
     justify-content: center !important;
 
-    .nav-item:nth-child(12),
-    .nav-item:nth-child(13) {
+    .nav-item:nth-child(13),
+    .nav-item:nth-child(14) {
       width: 50%;
       font-weight: bold;
 
@@ -69,7 +69,7 @@ input {
       }
     }
 
-    .nav-item:nth-child(12) {
+    .nav-item:nth-child(13) {
       text-align: right;
     }
   }

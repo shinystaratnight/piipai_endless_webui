@@ -102,6 +102,12 @@ export class CheckPermissionService {
     }
 
     if (permissions) {
+
+      // TODO: Remove it after adding permissions on backend
+      if (endpoint.includes('/companies/') && endpoint.includes('/languages/')) {
+        return ['delete', 'get', 'post', 'update'];
+      }
+
       const allowMethods: Permission[] = permissions.filter(permission => {
         const model = permission.codename.split('_')[0];
         return endpoint && endpoint.indexOf(model) > -1;

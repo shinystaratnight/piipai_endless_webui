@@ -84,6 +84,7 @@ export interface Field {
   column?: boolean;
   replaceKey?: string;
   activeId?: string;
+  withoutIdField?: boolean;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
