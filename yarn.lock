@@ -4155,6 +4155,11 @@ globby@^7.1.1:
     pify "^3.0.0"
     slash "^1.0.0"
 
+google-libphonenumber@^3.2.8:
+  version "3.2.8"
+  resolved "https://registry.yarnpkg.com/google-libphonenumber/-/google-libphonenumber-3.2.8.tgz#fb5898cbae18104d456e0fd80df52d860a3eb2b8"
+  integrity sha512-iWs1KcxOozmKQbCeGjvU0M7urrkNjBYOSBtb819RjkUNJHJLfn7DADKkKwdJTOMPLcLOE11/4h/FyFwJsTiwLg==
+
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.0.tgz#8d8fdc73977cb04104721cb53666c1ca64cd328b"
@@ -4561,6 +4566,11 @@ internal-ip@^4.2.0:
   dependencies:
     default-gateway "^4.2.0"
     ipaddr.js "^1.9.0"
+
+intl-tel-input@14.1.0:
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/intl-tel-input/-/intl-tel-input-14.1.0.tgz#8d8743037900fcc99be4c834376108acf59c1728"
+  integrity sha512-i5YVYVCwaMFvCt+TlqoDGbaVQVeIZSZeGcleDNofYFhX32/i7khBeuaugNTj/kKYXBstsa0DPHOHcYB4cj0l4A==
 
 invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
@@ -6311,6 +6321,13 @@ ngx-infinite-scroll@^7.2.0:
   integrity sha512-EcqjKpU1ukRV3YXOW8cTVtbzPpa9UPaRtYBCg0ZQH3ceCDm+xzLbd4pXy6oKAIN4zN1r/pyGuf5XOJkA8vr6yg==
   dependencies:
     opencollective-postinstall "^2.0.2"
+
+ngx-intl-tel-input@^2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/ngx-intl-tel-input/-/ngx-intl-tel-input-2.3.4.tgz#7f81a90956fd87e78eb60514634a736061d7cb70"
+  integrity sha512-8YQdd48eDfQHEvu6bWspOQXiipYwMSbZ+06u98hG1lunc5BtguK+UXFpdJHnYdFXsRZF+/L+ptLOQOItnutqCQ==
+  dependencies:
+    tslib "^1.9.0"
 
 ngx-quill@^7.1.0:
   version "7.1.0"

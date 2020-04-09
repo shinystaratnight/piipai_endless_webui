@@ -662,6 +662,7 @@ const formadd = [
           {
             key: 'phone_mobile',
             type: 'input',
+            intl: true,
             templateOptions: {
               required: true,
               label: 'Mobile Phone',
