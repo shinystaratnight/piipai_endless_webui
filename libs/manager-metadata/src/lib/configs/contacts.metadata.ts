@@ -672,68 +672,68 @@ const formadd = [
           }
         ]
       },
-      {
-        type: 'column',
-        children: [
-          {
-            key: 'gender',
-            type: 'select',
-            templateOptions: {
-              required: false,
-              label: 'Gender',
-              type: 'select',
-              options: [
-                {
-                  value: 'male',
-                  label: 'Male'
-                },
-                {
-                  value: 'female',
-                  label: 'Female'
-                }
-              ]
-            },
-            read_only: false
-          },
-          {
-            key: 'birthday',
-            type: 'datepicker',
-            templateOptions: {
-              required: false,
-              label: 'Birthday',
-              type: 'date',
-              description:
-                'Optional for Client Contacts, must be filled for Candidate contacts'
-            },
-            read_only: false
-          },
-          {
-            endpoint: '/core/addresses/',
-            read_only: false,
-            templateOptions: {
-              label: 'Address',
-              add: true,
-              delete: false,
-              values: ['__str__'],
-              type: 'address',
-              edit: true
-            },
-            type: 'address',
-            key: 'address'
-          },
-          {
-            key: 'apartment',
-            type: 'input',
-            templateOptions: {
-              required: false,
-              label: 'Apartment',
-              max: 11,
-              type: 'text'
-            },
-            read_only: false
-          }
-        ]
-      }
+      // {
+      //   type: 'column',
+      //   children: [
+      //     {
+      //       key: 'gender',
+      //       type: 'select',
+      //       templateOptions: {
+      //         required: false,
+      //         label: 'Gender',
+      //         type: 'select',
+      //         options: [
+      //           {
+      //             value: 'male',
+      //             label: 'Male'
+      //           },
+      //           {
+      //             value: 'female',
+      //             label: 'Female'
+      //           }
+      //         ]
+      //       },
+      //       read_only: false
+      //     },
+      //     {
+      //       key: 'birthday',
+      //       type: 'datepicker',
+      //       templateOptions: {
+      //         required: false,
+      //         label: 'Birthday',
+      //         type: 'date',
+      //         description:
+      //           'Optional for Client Contacts, must be filled for Candidate contacts'
+      //       },
+      //       read_only: false
+      //     },
+      //     {
+      //       endpoint: '/core/addresses/',
+      //       read_only: false,
+      //       templateOptions: {
+      //         label: 'Address',
+      //         add: true,
+      //         delete: false,
+      //         values: ['__str__'],
+      //         type: 'address',
+      //         edit: true
+      //       },
+      //       type: 'address',
+      //       key: 'address'
+      //     },
+      //     {
+      //       key: 'apartment',
+      //       type: 'input',
+      //       templateOptions: {
+      //         required: false,
+      //         label: 'Apartment',
+      //         max: 11,
+      //         type: 'text'
+      //       },
+      //       read_only: false
+      //     }
+      //   ]
+      // }
     ]
   }
 ];
