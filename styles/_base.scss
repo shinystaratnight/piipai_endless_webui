@@ -450,3 +450,25 @@ iframe.send-sms {
 app-checkbox {
   display: flex;
 }
+
+.intl-tel-input {
+  width: 100%;
+}
+
+.intl-tel-input input {
+  width: 100%;
+  font-size: 14px;
+  border: none;
+  border-bottom: 1px solid rgba($gray, .1);
+}
+
+.intl-tel-input.separate-dial-code .selected-flag {
+  background-color: transparent;
+}
+
+@each $item in $themes {
+  .#{$item}-theme .intl-tel-input input:focus {
+    outline: none;
+    border-color: map-get($theme-colors, $item);
+  }
+}

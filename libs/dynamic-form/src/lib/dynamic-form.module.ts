@@ -7,12 +7,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AgmCoreModule } from '@agm/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { ButtonsModule } from 'ngx-bootstrap';
+import { ButtonsModule, BsDropdownModule } from 'ngx-bootstrap';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DndModule } from 'ng2-dnd';
 import { QuillModule } from 'ngx-quill';
 import { SignaturePadModule } from 'angular2-signaturepad';
+
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 import { SharedModule } from '@webui/shared';
 import { MetadataModule } from '@webui/metadata';
@@ -40,6 +42,9 @@ import { directives } from './directives';
     PdfViewerModule,
     QuillModule,
     SignaturePadModule,
+
+    BsDropdownModule.forRoot(),
+    NgxIntlTelInputModule,
 
     MetadataModule
   ],
