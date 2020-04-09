@@ -1659,6 +1659,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
           MessageType.success
         );
         this.router.navigate(['/mn/candidate/candidatecontacts/pool']);
+      }, () => {
+        this.modalRef.close();
+        this.toastrService.sendMessage(`Please add Credit Card for paid services!`, MessageType.error);
+        this.router.navigate(['/billing']);
       });
   }
 

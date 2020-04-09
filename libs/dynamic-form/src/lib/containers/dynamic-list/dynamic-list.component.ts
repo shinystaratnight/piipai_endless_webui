@@ -1498,6 +1498,10 @@ export class DynamicListComponent
           type: 'update',
           list: this.config.list.list
         });
+      }, () => {
+        this.modalRef.close();
+        this.toastr.sendMessage(`Please add Credit Card for paid services!`, MessageType.error);
+        this.router.navigate(['/billing']);
       });
   }
 
