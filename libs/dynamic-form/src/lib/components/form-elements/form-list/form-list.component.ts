@@ -207,6 +207,15 @@ export class FormListComponent implements OnInit, OnDestroy {
 
     let size = 'lg';
 
+    if (
+      (endpoint.includes('/candidate_contacts/') ||
+        endpoint.includes('/companies/')) &&
+      endpoint.includes('/languages/')
+    ) {
+      size = undefined;
+      windowClass += ' small-modal';
+    }
+
     if (smallModalEndpoints.includes(endpoint)) {
       size = undefined;
       windowClass += ' small-modal';
@@ -218,7 +227,8 @@ export class FormListComponent implements OnInit, OnDestroy {
 
     this.modalRef = this.modal.open(this.modalTemplate, {
       size: size as any,
-      windowClass
+      windowClass,
+      backdrop: 'static'
     });
   }
 

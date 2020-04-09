@@ -206,6 +206,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public getRenderData() {
     this.service.getRenderData(this.id)
       .subscribe((res: any) => {
+        this.updatePhoneField(res.ui_config);
         this.updateConfigByGroups(res.ui_config, res.tests || []);
 
         this.config = res;
@@ -221,6 +222,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         this.generateSteps();
 
       });
+  }
+
+  updatePhoneField(fields: any[]) {
+    fields.forEach(el => {
+      if (el.key === 'contact.phone_mobile') {
+        el.intl = true;
+      }
+    })
   }
 
   back() {

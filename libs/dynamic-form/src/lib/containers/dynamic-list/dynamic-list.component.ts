@@ -1443,11 +1443,23 @@ export class DynamicListComponent
         case 'updateObject':
           this.updateListObject();
           break;
+        case 'setDefaultLanguage':
+          this.setDefaultLanguage(e);
+          break;
         default:
           return;
       }
     }
     return;
+  }
+
+  public setDefaultLanguage(e) {
+    this.genericFormService.updateForm(e.el.endpoint, { default: true }).subscribe(() => {
+      this.event.emit({
+        type: 'update',
+        list: this.config.list.list
+      });
+    })
   }
 
   public updateListObject() {
@@ -1486,6 +1498,10 @@ export class DynamicListComponent
           type: 'update',
           list: this.config.list.list
         });
+      }, () => {
+        this.modalRef.close();
+        this.toastr.sendMessage(`Please add Credit Card for paid services!`, MessageType.error);
+        this.router.navigate(['/billing']);
       });
   }
 

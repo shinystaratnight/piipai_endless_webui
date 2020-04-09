@@ -68,20 +68,22 @@ export class FormTabsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public checkCustomLabel(field) {
-    if (field.templateOptions && field.templateOptions.customLabel) {
+  public checkCustomLabel(field): void {
+    const { templateOptions, formData } = field;
+
+    if (templateOptions && templateOptions.customLabel) {
       const target = {
         value: undefined
       };
 
       getValueOfData(
-        field.formData.value.data,
-        field.templateOptions.customLabel.field,
+        formData.value.data,
+        templateOptions.customLabel.field,
         target
       );
       if (target.value) {
-        field.templateOptions.label =
-          field.templateOptions.customLabel.values[target.value];
+        templateOptions.label =
+          templateOptions.customLabel.values[target.value];
       }
     }
   }
@@ -100,11 +102,11 @@ export class FormTabsComponent implements OnInit, OnDestroy {
     this.event.emit(e);
   }
 
-  public buttonActionHandler(e) {
+  public buttonActionHandler(e): void {
     this.buttonAction.emit(e);
   }
 
-  public changeMode(mode: string) {
+  public changeMode(mode: string): void {
     this.mode = mode;
 
     this.formService.changeModeOfForm(this.formId, mode);

@@ -59,8 +59,8 @@ input {
   & > .nav-tabs {
     justify-content: center !important;
 
-    .nav-item:nth-child(12),
-    .nav-item:nth-child(13) {
+    .nav-item:nth-child(13),
+    .nav-item:nth-child(14) {
       width: 50%;
       font-weight: bold;
 
@@ -69,7 +69,7 @@ input {
       }
     }
 
-    .nav-item:nth-child(12) {
+    .nav-item:nth-child(13) {
       text-align: right;
     }
   }
@@ -449,4 +449,26 @@ iframe.send-sms {
 // Styles for none encapsulation elements
 app-checkbox {
   display: flex;
+}
+
+.intl-tel-input {
+  width: 100%;
+}
+
+.intl-tel-input input {
+  width: 100%;
+  font-size: 14px;
+  border: none;
+  border-bottom: 1px solid rgba($gray, .1);
+}
+
+.intl-tel-input.separate-dial-code .selected-flag {
+  background-color: transparent;
+}
+
+@each $item in $themes {
+  .#{$item}-theme .intl-tel-input input:focus {
+    outline: none;
+    border-color: map-get($theme-colors, $item);
+  }
 }

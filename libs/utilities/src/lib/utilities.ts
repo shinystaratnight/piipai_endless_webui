@@ -88,9 +88,22 @@ export function getTotalTime(time, data) {
 
   let breakTime = 0;
 
+  if (shift_ended_at.isBefore(shift_started_at)) {
+    return '0hr 0min';
+  }
+
   if (data.break_ended_at && data.break_started_at) {
     const break_ended_at = time(data.break_ended_at);
     const break_started_at = time(data.break_started_at);
+
+    if (
+      break_started_at.isAfter(shift_ended_at) ||
+      break_ended_at.isAfter(shift_ended_at) ||
+      break_started_at.isBefore(shift_started_at) ||
+      break_ended_at.isBefore(shift_started_at)
+    ) {
+      return '0hr 0min';
+    }
 
     breakTime = break_ended_at.diff(break_started_at);
   }
