@@ -43,7 +43,10 @@ import {
   FormVacancyDatesComponent,
   FormInfoComponent,
   FormEditorComponent,
-  FormTrackingComponent
+  FormTrackingComponent,
+  FormListDropdownComponent,
+  FormElementViewComponent,
+  DropdownComponent
 } from './form-elements';
 
 // import { ExtendComponent } from './extend/extend.component';
@@ -107,6 +110,7 @@ export const entryComponents = [
   FormReplaceComponent,
   FormEditorComponent,
   FormTrackingComponent,
+  FormListDropdownComponent,
 
   ListCheckboxComponent,
   ListImageComponent,
@@ -137,6 +141,8 @@ export const components = [
   WebcamComponent,
   WorkflowComponent,
   TestGeneratorComponent,
+  FormElementViewComponent,
+  DropdownComponent,
 
   SortIconComponent,
 

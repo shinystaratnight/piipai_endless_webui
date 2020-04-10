@@ -1,0 +1,19 @@
+<app-form-element-view [label]="config.templateOptions.label">
+  <span *ngIf="isViewMode">{{ displayValue }}</span>
+
+  <ng-container *ngIf="isEditMode">
+    <div class="form-control autocomplete-value" (click)="onShowDropdown()">
+      {{ displayValue }}
+    </div>
+
+    <app-dropdown
+      *ngIf="showDropdown"
+      [count]="count"
+      [loading]="loading"
+      [data]="list"
+      (upload)="onUploadMore($event)"
+      (set)="onSet($event)"
+      (search)="onSearch($event)"
+    ></app-dropdown>
+  </ng-container>
+</app-form-element-view>

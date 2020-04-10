@@ -1120,7 +1120,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
           this.generatePreviewList(this.list);
         }
       } else {
-        this.loading = true;
+        this.loading = !this.skipScroll && true;
         this.getOptions(value, this.lastElement, concat);
       }
     }
