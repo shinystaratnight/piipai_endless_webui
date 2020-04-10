@@ -8,7 +8,8 @@ import {
   ViewChild,
   OnDestroy,
   AfterContentChecked,
-  SimpleChanges
+  SimpleChanges,
+  Optional
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -195,7 +196,7 @@ export class DynamicListComponent
     private purposeService: CompanyPurposeService,
     private listService: ListService,
     private route: ActivatedRoute,
-    private sortService: SortService
+    @Optional() private sortService: SortService
   ) {}
 
   public isMobile = isMobile;

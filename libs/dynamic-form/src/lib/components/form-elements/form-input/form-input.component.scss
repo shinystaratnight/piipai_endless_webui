@@ -88,11 +88,31 @@ button.password {
   }
 }
 
-.form-control::-webkit-input-placeholder,
-.form-control::-moz-placeholder,
-.form-control:-ms-input-placeholder,
-.form-control:-moz-placeholder,
-.form-control::placeholder  {
+.form-control::-webkit-input-placeholder {
+  font-size: 14px;
+
+  opacity: 0.54;
+}
+
+.form-control::-moz-placeholder {
+  font-size: 14px;
+
+  opacity: 0.54;
+}
+
+.form-control:-ms-input-placeholder {
+  font-size: 14px;
+
+  opacity: 0.54;
+}
+
+.form-control:-moz-placeholder {
+  font-size: 14px;
+
+  opacity: 0.54;
+}
+
+.form-control::placeholder {
   font-size: 14px;
 
   opacity: 0.54;
