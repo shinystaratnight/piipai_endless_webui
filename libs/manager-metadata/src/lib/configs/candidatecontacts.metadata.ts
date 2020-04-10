@@ -561,6 +561,21 @@ const form = [
                       showButtonIf: false
                     },
                     read_only: false
+                  },
+                  {
+                    key: 'language_default',
+                    send: false,
+                    type: 'listdropdown',
+                    endpoint: `${Endpoints.CandidateLanguages}{id}/languages/`,
+                    setData: {
+                      default: true
+                    },
+                    field: 'default',
+                    templateOptions: {
+                      label: 'Default language',
+                      display: '{language.name}',
+                      param: '{language.alpha_2}/'
+                    }
                   }
                 ],
                 width: 0.25

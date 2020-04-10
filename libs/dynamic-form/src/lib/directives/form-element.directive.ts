@@ -33,7 +33,8 @@ import {
   FormJsonComponent,
   FormInfoComponent,
   FormEditorComponent,
-  FormTrackingComponent
+  FormTrackingComponent,
+  FormListDropdownComponent
 } from '../components/form-elements';
 
 import { TestListComponent } from '../components/test-list/test-list.component';
@@ -77,6 +78,7 @@ const components = {
   testList: TestListComponent,
   editor: FormEditorComponent,
   tracking: FormTrackingComponent,
+  listdropdown: FormListDropdownComponent
 };
 
 @Directive({

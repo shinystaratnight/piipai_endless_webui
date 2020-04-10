@@ -103,6 +103,7 @@ const form = [
     templateOptions: {
       required: false,
       label: 'Text template',
+      rows: 7
     },
     read_only: false
   },
@@ -166,6 +167,16 @@ const form = [
       ]
     },
     read_only: false
+  },
+  {
+    key: 'language.name',
+    type: 'input',
+    send: false,
+    read_only: true,
+    templateOptions: {
+      label: 'Language',
+      type: 'text'
+    }
   }
 ];
 
