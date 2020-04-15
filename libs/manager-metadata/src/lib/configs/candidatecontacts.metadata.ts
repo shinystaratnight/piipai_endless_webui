@@ -521,6 +521,7 @@ const form = [
                   {
                     key: 'contact.phone_mobile',
                     type: 'input',
+                    intl: true,
                     templateOptions: {
                       placeholder: 'Mobile phone',
                       required: true,
@@ -1075,6 +1076,7 @@ const form = [
                   {
                     key: 'emergency_contact_phone',
                     type: 'input',
+                    intl: true,
                     templateOptions: {
                       required: false,
                       label: 'Emergency Contact Phone Number',

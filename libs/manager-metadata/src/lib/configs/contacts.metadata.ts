@@ -257,6 +257,7 @@ const form = [
                   {
                     key: 'phone_mobile',
                     type: 'input',
+                    intl: true,
                     templateOptions: {
                       placeholder: 'Mobile phone',
                       required: true,
