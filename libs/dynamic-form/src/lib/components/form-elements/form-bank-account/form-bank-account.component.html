@@ -1,0 +1,109 @@
+<app-form-element-view [label]="config.templateOptions.label" [many]="true">
+  <div class="d-flex flex-column" *ngIf="config.many">
+    <span
+      class="d-inline-flex align-items-center my-1"
+      *ngFor="let account of accounts"
+    >
+      <a href="#" (click)="viewAccount(account, $event)">Bank Account</a>
+
+      <button
+        type="button"
+        class="btn btn-danger ml-2"
+        (click)="deleteAccount(account)"
+      >
+        Delete
+      </button>
+    </span>
+
+    <button
+      class="btn btn-primary btn-sm mt-2"
+      type="button"
+      (click)="addAccount()"
+    >
+      Add Account
+    </button>
+  </div>
+
+  <ng-container *ngIf="!config.many">
+    <ng-container *ngIf="!viewMode">
+      <div
+        class="form-control autocomplete-value"
+        [class.placeholder]="!account"
+      >
+        <div style="overflow: hidden; white-space: nowrap">
+          {{ account ? 'Bank Account' : 'Add new account' }}
+        </div>
+      </div>
+
+      <div class="form-element-content-actions align-items-center">
+        <button
+          *ngIf="!account"
+          type="button"
+          class="btn btn-primary text-white alone"
+          (click)="addAccount()"
+        >
+          Add new
+        </button>
+
+        <button
+          *ngIf="account"
+          type="button"
+          class="btn btn-warning text-white"
+          (click)="viewAccount(account)"
+        >
+          View
+        </button>
+
+        <button
+          *ngIf="account"
+          type="button"
+          class="btn btn-danger text-white"
+          (click)="deleteAccount(account)"
+        >
+          Delete
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="viewMode">
+      <a *ngIf="account" href="#" (click)="viewAccount(account, $event)"
+        >Bank Account</a
+      >
+
+      <span *ngIf="!account">-</span>
+    </ng-container>
+  </ng-container>
+</app-form-element-view>
+
+<ng-template #modal let-modal>
+  <div class="modal-content-wrapper">
+    <div class="modal-header-wrapper">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ modalData.title }}</h5>
+
+        <app-close-button
+          class="ml-auto"
+          (click)="modal.dismiss()"
+        ></app-close-button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <app-dynamic-form
+        [config]="modalData.metadata"
+        [errors]="modalData.errors"
+        (submitForm)="submitForm($event)"
+      >
+        <button
+          *ngIf="!modalData.view"
+          type="submit"
+          class="btn btn-primary button-save"
+          [disabled]="saveProcess"
+        >
+          Save
+          <app-spinner *ngIf="saveProcess"></app-spinner>
+        </button>
+      </app-dynamic-form>
+    </div>
+  </div>
+</ng-template>
