@@ -1040,7 +1040,22 @@ const form = [
                     read_only: true
                   }
                 ],
-                width: 0.5
+                width: 0.25
+              },
+              {
+                label: 'Bank Account',
+                type: 'group',
+                width: 0.25,
+                children: [
+                  {
+                    type: 'bank_account',
+                    send: false,
+                    key: 'contact_bank_account',
+                    templateOptions: {
+                      label: 'Bank account:',
+                    }
+                  }
+                ]
               },
               {
                 label: 'Emergency',

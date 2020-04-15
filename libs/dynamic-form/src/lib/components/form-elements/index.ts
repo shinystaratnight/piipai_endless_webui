@@ -22,3 +22,4 @@ export * from './form-vacancy-dates/form-vacancy-dates.component';
 export * from './form-list-dropdown/form-list-dropdown.component';
 export * from './form-element-view/form-element-view.components';
 export * from './dropdown/dropdown.component';
+export * from './form-bank-account/form-bank-account.component';

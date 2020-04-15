@@ -9,6 +9,7 @@ export class FormElementViewComponent {
 
   @Input() key: string;
   @Input() label: string;
+  @Input() many: boolean;
   @Input() errors: {[key: string]: string};
   @Input() messages: {[key: string]: string};
 
