@@ -22,6 +22,9 @@ export interface User {
     user: string;
     roles: Role[];
     end_trial_date?: string;
+    country_code?: string;
+    country_phone_prefix?: string;
+    timezone?: string;
   };
   currentRole: Role;
 }

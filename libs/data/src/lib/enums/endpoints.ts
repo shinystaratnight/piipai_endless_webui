@@ -155,3 +155,7 @@ export enum Endpoints {
   CandidateLanguages = '/candidate_contacts/',
   CompanyLanguages = '/companies/'
 }
+
+export const getBankAccountLayoutEndpoint = (countryCode: string) => {
+  return `/bank_account_layouts/${countryCode}/`;
+}
