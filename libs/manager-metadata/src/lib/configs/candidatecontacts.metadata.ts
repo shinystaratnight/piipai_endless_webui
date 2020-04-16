@@ -535,6 +535,7 @@ const form = [
                     key: 'contact.picture',
                     read_only: false,
                     candidateForm: true,
+                    hide: true,
                     templateOptions: {
                       required: false,
                       label: 'Picture',
@@ -1330,6 +1331,7 @@ const formadd = [
     endpoint: Endpoints.Contact,
     collapsed: false,
     list: false,
+    smallModal: true,
     checkObject: {
       endpoint: Endpoints.CandidateContact,
       error: 'This Candidate contact already exists!',
