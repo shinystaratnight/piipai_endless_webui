@@ -86,6 +86,7 @@ export interface Field {
   activeId?: string;
   withoutIdField?: boolean;
   intl?: boolean;
+  candidateForm?: boolean;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
@@ -126,6 +127,7 @@ export interface Field {
     showButtonIf?: boolean; // Checkbox button
     color?: any;
     bold?: any;
+    dropdownCount?: number;
   };
 }
 

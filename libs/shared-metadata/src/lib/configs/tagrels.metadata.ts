@@ -378,7 +378,8 @@ const formadd = [
       delete: false,
       values: ['__str__', 'evidence_required_for_approval'],
       type: 'related',
-      edit: true
+      edit: true,
+      dropdownCount: 9
     },
     collapsed: false,
     type: 'related',

@@ -14,6 +14,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
 import { getContactAvatar, isCandidate, isMobile, FormatString } from '@webui/utilities';
+import { GenericFormService } from '../../../services';
+import { Endpoints } from '@webui/data';
 
 @Component({
   selector: 'app-form-info',
@@ -82,6 +84,7 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   constructor(
     private modalService: NgbModal,
     private router: Router,
+    private gfs: GenericFormService
   ) {
     this.subscriptions = [];
   }
@@ -301,18 +304,44 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public eventHandler(e) {
-    if (this.isCandidatePage()) {
-      if (e.additionalData
-        && e.additionalData.picture
-        && e.additionalData.picture.origin
-      ) {
-          this.picture = this.getValue('picture', e.additionalData, 'picture');
-          this.contactAvatar = undefined;
-        }
+    if (e.type === 'patchPicture') {
+      this.updateContact({ picture: e.value });
     }
+
+    if (e.type === 'patchAddress') {
+      this.updateContact({address: e.value});
+    }
+
+    // if (this.isCandidatePage()) {
+    //   if (e.additionalData
+    //     && e.additionalData.picture
+    //     && e.additionalData.picture.origin
+    //   ) {
+    //       this.picture = this.getValue('picture', e.additionalData, 'picture');
+    //       this.contactAvatar = undefined;
+    //     }
+    // }
   }
 
   public formError() {
     this.saveProcess = false;
+  }
+
+  private updateContact(data: { picture?: string , address?: string }) {
+    const contactId = this.config.formData.value.data.contact.id;
+    const birthday = this.config.formData.value.data.contact.birthday;
+    const endpoint = `${Endpoints.Contact}${contactId}/`;
+
+    this.gfs.updateForm(endpoint, {...data, birthday}).subscribe((res) => {
+      if (data.picture) {
+        this.picture = res.picture.origin;
+        this.config.metadata['picture'].value = res.picture;
+        this.contactAvatar = null;
+      }
+
+      if (data.address) {
+        this.config.metadata['address'].value = res.address;
+      }
+    });
   }
 }

@@ -453,8 +453,9 @@ const form = [
                   {
                     list: false,
                     endpoint: Endpoints.Address,
-                    read_only: true,
+                    read_only: false,
                     hide: true,
+                    candidateForm: true,
                     templateOptions: {
                       label: 'Address',
                       add: true,
@@ -521,6 +522,7 @@ const form = [
                   {
                     key: 'contact.phone_mobile',
                     type: 'input',
+                    intl: true,
                     templateOptions: {
                       placeholder: 'Mobile phone',
                       required: true,
@@ -528,6 +530,20 @@ const form = [
                       type: 'text'
                     },
                     read_only: false
+                  },
+                  {
+                    key: 'contact.picture',
+                    read_only: false,
+                    candidateForm: true,
+                    templateOptions: {
+                      required: false,
+                      label: 'Picture',
+                      type: 'picture',
+                      file: false
+                    },
+                    send: false,
+                    default: 'contact_pictures/default_picture.jpg',
+                    type: 'input'
                   }
                 ],
                 width: 0.5
@@ -566,13 +582,14 @@ const form = [
                     key: 'language_default',
                     send: false,
                     type: 'listdropdown',
-                    endpoint: `${Endpoints.CandidateLanguages}{id}/languages/`,
+                    endpoint: `${Endpoints.CompanyLanguages}{master_company.id}/languages/`,
+                    editEndpoint: `${Endpoints.CandidateLanguages}{id}/languages/`,
                     setData: {
                       default: true
                     },
                     field: 'default',
                     templateOptions: {
-                      label: 'Default language',
+                      label: 'Default notification language',
                       display: '{language.name}',
                       param: '{language.alpha_2}/'
                     }
@@ -1075,6 +1092,7 @@ const form = [
                   {
                     key: 'emergency_contact_phone',
                     type: 'input',
+                    intl: true,
                     templateOptions: {
                       required: false,
                       label: 'Emergency Contact Phone Number',
@@ -1254,20 +1272,6 @@ const form = [
           candidate_contact: '{id}'
         },
         help: 'Here you can see favorite companies for candidate'
-      },
-      {
-        endpoint: `${Endpoints.CandidateLanguages}{id}/languages/`,
-        visibleMode: true,
-        templateOptions: {
-          label: 'Languages',
-          type: 'list',
-          add_label: '+ Add',
-          text: 'Languages'
-        },
-        prefilled: {
-          candidate_contact_id: '{id}'
-        },
-        type: 'list',
       },
       {
         endpoint: Endpoints.Note,

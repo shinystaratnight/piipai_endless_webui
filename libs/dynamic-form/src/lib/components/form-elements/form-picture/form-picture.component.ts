@@ -359,4 +359,13 @@ export class FormPictureComponent
     this.fileChangeEvent({target: {files}});
   }
 
+  patchPicture() {
+    this.event.emit({
+      type: 'patchPicture',
+      value: this.group.get(this.key).value
+    });
+
+    this.fileName = '';
+  }
+
 }

@@ -30,9 +30,14 @@ $height: 80px;
   border-radius: 50%;
 
   background-color: #f5f5f5;
+  object-fit: cover;
 
   &.start {
     align-self: flex-start;
+  }
+
+  &:hover ~ .image-profile {
+    display: block;
   }
 }
 
@@ -74,8 +79,23 @@ $height: 80px;
 }
 
 .form-element-picture {
+  position: relative;
   display: flex;
   flex-direction: column;
+
+  // align-items: center;
+}
+
+.image-profile {
+  top: 80px;
+  position: absolute;
+  display: none;
+  width: 200px !important;
+  height: 200px !important;
+  border: 1px solid $gray;
+  border-radius: 50%;
+  object-fit: cover;
+  z-index: 2;
 }
 
 .dropzone {
@@ -135,4 +155,9 @@ $height: 80px;
       color: white;
     }
   }
+}
+
+.btn-update {
+  align-self: flex-start;
+  padding: 2px 15px;
 }

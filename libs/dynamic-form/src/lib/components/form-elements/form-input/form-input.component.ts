@@ -26,6 +26,7 @@ import { Field } from '@webui/data';
 import { FormatString, getTotalTime, getTimeInstance } from '@webui/utilities';
 
 import { BasicElementComponent } from '../basic-element/basic-element.component';
+import { UserService } from '@webui/core';
 
 @Component({
   selector: 'app-form-input',
@@ -71,6 +72,7 @@ export class FormInputComponent extends BasicElementComponent
     CountryISO.Finland,
     CountryISO.Ukraine
   ];
+  selectedCountryISO: CountryISO;
 
   public colors = {
     0: '#FA5C46',
@@ -93,7 +95,11 @@ export class FormInputComponent extends BasicElementComponent
 
   get isPhoneField() {
     const { key, intl } = this.config;
-    return key.includes('phone_mobile') && intl;
+    return (
+      (key.includes('phone_mobile') ||
+        key.includes('emergency_contact_phone')) &&
+      intl
+    );
   }
 
   @ViewChild('input', { static: false })
@@ -107,7 +113,8 @@ export class FormInputComponent extends BasicElementComponent
   constructor(
     private fb: FormBuilder,
     public elementRef: ElementRef,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private userService: UserService
   ) {
     super();
     this.subscriptions = [];
@@ -175,6 +182,12 @@ export class FormInputComponent extends BasicElementComponent
       (this.config.type === 'static' && !this.config.read_only)
     ) {
       this.createEvent();
+    }
+
+    if (this.isPhoneField) {
+      this.selectedCountryISO =
+        (this.userService.user.data.country_code as CountryISO) ||
+        CountryISO.Australia;
     }
   }
 
@@ -417,6 +430,10 @@ export class FormInputComponent extends BasicElementComponent
             ? this.config.value
             : defaultValue;
 
+        if (value && this.isPhoneField) {
+          this.intl = value;
+        }
+
         if (this.group.get(this.key)) {
           this.group.get(this.key).patchValue(value);
         }
@@ -580,7 +597,7 @@ export class FormInputComponent extends BasicElementComponent
   onChangePhoneNumber(number) {
     if (number) {
       const { internationalNumber = '' } = number;
-      this.intl = number;
+      this.intl = number.number;
       this.group.get(this.key).patchValue(internationalNumber);
     }
   }
