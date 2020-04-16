@@ -159,6 +159,7 @@ const formadd = [
     key: 'parent',
     type: 'related',
     endpoint: '/core/tags/',
+    smallModal: true,
     templateOptions: {
       values: ['__str__'],
       add: true,

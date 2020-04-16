@@ -472,3 +472,11 @@ app-checkbox {
     border-color: map-get($theme-colors, $item);
   }
 }
+
+.form-control,
+.btn,
+form {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
