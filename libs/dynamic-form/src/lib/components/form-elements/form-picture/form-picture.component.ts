@@ -65,6 +65,8 @@ export class FormPictureComponent
 
   public contactAvatar: string;
 
+  isRemoved: boolean;
+
   public options = {
     audio: false,
     video: true,
@@ -366,6 +368,19 @@ export class FormPictureComponent
     });
 
     this.fileName = '';
+  }
+
+  removeImage() {
+    this.group.get(this.key).patchValue(null);
+    this.value = null;
+    this.fileName = null;
+    if (this.config.contactName) {
+      this.contactAvatar = getContactAvatar(this.config.contactName);
+    }
+
+    if (this.config.candidateForm) {
+      this.isRemoved = true;
+    }
   }
 
 }
