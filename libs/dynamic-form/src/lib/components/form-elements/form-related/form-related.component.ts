@@ -1391,6 +1391,10 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         ? formatString.format(this.display, this.config.value)
         : formatString.format(this.display, e.data);
       this.eventHandler({ type: 'change' }, e.data[this.param], e.data);
+
+      if (this.config.candidateForm) {
+        this.eventHandler({type: 'patchAddress'}, this.group.get(this.key).value);
+      }
     } else if (
       e.type === 'sendForm' &&
       e.status === 'success' &&

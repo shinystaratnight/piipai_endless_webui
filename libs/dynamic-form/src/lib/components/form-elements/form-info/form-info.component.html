@@ -25,7 +25,8 @@
 
       <ng-container appFormElement *ngIf="config && config.metadata['picture'] && !viewMode && config.editForm"
         [config]="config.metadata['picture']"
-        [group]="group">
+        [group]="group"
+        (event)="eventHandler($event)">
       </ng-container>
     </div>
   </div>
@@ -182,7 +183,8 @@
     <p class="address-field" *ngIf="config && config.metadata['address'] && config.editForm">
       <ng-container appFormElement
         [config]="config.metadata['address']"
-        [group]="group">
+        [group]="group"
+        (event)="eventHandler($event)">
       </ng-container>
     </p>
 

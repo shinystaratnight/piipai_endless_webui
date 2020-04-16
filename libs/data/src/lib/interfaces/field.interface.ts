@@ -86,6 +86,7 @@ export interface Field {
   activeId?: string;
   withoutIdField?: boolean;
   intl?: boolean;
+  candidateForm?: boolean;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;

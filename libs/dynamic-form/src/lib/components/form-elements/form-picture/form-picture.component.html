@@ -22,11 +22,11 @@
       (change)="fileChangeEvent($event)"
       [attr.name]="key"
     />
-    <ng-container *ngIf="config.key === 'contact.picture'">
+    <ng-container *ngIf="config.key === 'contact.picture' && !config.candidateForm">
       <ng-container *ngTemplateOutlet="pictureView"></ng-container>
     </ng-container>
 
-    <ng-container *ngIf="config.key !== 'contact.picture'">
+    <ng-container *ngIf="config.key !== 'contact.picture' || config.candidateForm">
       <div class="form-element-picture">
         <img
           class="image-preview"
@@ -99,9 +99,11 @@
             {{config.templateOptions.label_photo}}
           </button>
         </div>
+
         <div class="mt-1" *ngIf="fileName && !config.read_only && !config.view">
           <i class="text-muted">file:</i> {{ fileName }}
         </div>
+        <button *ngIf="fileName && config.candidateForm" type="button" class="btn btn-primary btn-sm mt-2 btn-update" (click)="patchPicture()">Update</button>
       </div>
     </ng-container>
   </div>
