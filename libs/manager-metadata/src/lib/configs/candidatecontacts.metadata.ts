@@ -567,13 +567,14 @@ const form = [
                     key: 'language_default',
                     send: false,
                     type: 'listdropdown',
-                    endpoint: `${Endpoints.CandidateLanguages}{id}/languages/`,
+                    endpoint: `${Endpoints.CompanyLanguages}{master_company.id}/languages/`,
+                    editEndpoint: `${Endpoints.CandidateLanguages}{id}/languages/`,
                     setData: {
                       default: true
                     },
                     field: 'default',
                     templateOptions: {
-                      label: 'Default language',
+                      label: 'Default notification language',
                       display: '{language.name}',
                       param: '{language.alpha_2}/'
                     }
@@ -1256,20 +1257,6 @@ const form = [
           candidate_contact: '{id}'
         },
         help: 'Here you can see favorite companies for candidate'
-      },
-      {
-        endpoint: `${Endpoints.CandidateLanguages}{id}/languages/`,
-        visibleMode: true,
-        templateOptions: {
-          label: 'Languages',
-          type: 'list',
-          add_label: '+ Add',
-          text: 'Languages'
-        },
-        prefilled: {
-          candidate_contact_id: '{id}'
-        },
-        type: 'list',
       },
       {
         endpoint: Endpoints.Note,

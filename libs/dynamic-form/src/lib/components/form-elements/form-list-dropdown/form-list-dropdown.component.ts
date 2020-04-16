@@ -24,6 +24,7 @@ export class FormListDropdownComponent implements OnInit, OnDestroy {
 
   // Dropdown
   list: any[];
+  editList: any[];
   initList: any[];
   showDropdown = false;
   loading: boolean;
@@ -34,6 +35,7 @@ export class FormListDropdownComponent implements OnInit, OnDestroy {
 
   display: string;
   endpoint: string;
+  editEndpoint: string;
 
   _mode: FormMode;
   private viewSubscription: Subscription;
@@ -52,24 +54,36 @@ export class FormListDropdownComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const formData = this.config.formData.value.data;
+    let formData = { ...this.config.formData.value.data };
+    if (typeof formData.id === 'object') {
+      formData = { ...formData, id: formData.id.id };
+    }
     this.viewSubscription = this.subscribeOnViewModeChanges(this.config);
     this.display = this.config.templateOptions.display;
     this.endpoint = FormatString.format(this.config.endpoint, formData);
+    this.editEndpoint = FormatString.format(this.config.editEndpoint, formData);
 
     this.gfs.get(this.endpoint).subscribe(res => {
       this.count = res.count;
-      this.displayValue = FormatString.format(
-        this.display,
-        this.getDisplayValue(res.results, this.config.field)
-      );
       this.list = this.updateList(res.results);
       this.initList = [...this.list];
+      this.getEditList();
     });
   }
 
   ngOnDestroy() {
     this.viewSubscription.unsubscribe();
+  }
+
+  getEditList() {
+    this.gfs.get(this.editEndpoint, { limit: -1 }).subscribe(res => {
+      this.editList = res.results;
+
+      this.displayValue = FormatString.format(
+        this.display,
+        this.getDisplayValue(res.results, this.config.field)
+      );
+    });
   }
 
   subscribeOnViewModeChanges(config: {
@@ -112,19 +126,52 @@ export class FormListDropdownComponent implements OnInit, OnDestroy {
   }
 
   onSet(value) {
-    const endpoint =
-      this.endpoint +
-      FormatString.format(this.config.templateOptions.param, value);
-
-    this.gfs.updateForm(endpoint, this.config.setData).subscribe(data => {
-      this.showDropdown = false;
-      this.offset = 0;
-      this.searchValue = '';
-      this.displayValue = FormatString.format(
-        this.display,
-        this.getDisplayValue([data], this.config.field)
+    const editEl = this.editList.find(el => {
+      const elParam = FormatString.format(
+        this.config.templateOptions.param,
+        el
       );
+      const valueParam = FormatString.format(
+        this.config.templateOptions.param,
+        value
+      );
+
+      return elParam === valueParam;
     });
+
+    if (!editEl) {
+      const body = {
+        language_id: value.language.alpha_2,
+        candidate_contact_id: this.config.formData.value.data.id.id,
+        default: true
+      };
+
+      this.gfs.submitForm(this.editEndpoint, body).subscribe(res => {
+        this.getEditList();
+        this.showDropdown = false;
+        this.offset = 0;
+        this.searchValue = '';
+        this.displayValue = FormatString.format(
+          this.display,
+          this.getDisplayValue([res], this.config.field)
+        );
+      });
+    } else {
+      const endpoint =
+        this.editEndpoint +
+        FormatString.format(this.config.templateOptions.param, value);
+
+      this.gfs.updateForm(endpoint, this.config.setData).subscribe(data => {
+        this.getEditList();
+        this.showDropdown = false;
+        this.offset = 0;
+        this.searchValue = '';
+        this.displayValue = FormatString.format(
+          this.display,
+          this.getDisplayValue([data], this.config.field)
+        );
+      });
+    }
   }
 
   onUploadMore() {
@@ -134,13 +181,11 @@ export class FormListDropdownComponent implements OnInit, OnDestroy {
       offset: this.offset,
       limit: this.limit,
       search: this.searchValue
-    }
+    };
 
-    this.gfs
-      .get(this.endpoint, params)
-      .subscribe(res => {
-        this.list = [...this.list, ...this.updateList(res.results)];
-      });
+    this.gfs.get(this.endpoint, params).subscribe(res => {
+      this.list = [...this.list, ...this.updateList(res.results)];
+    });
   }
 
   @HostListener('document:click', ['$event'])
