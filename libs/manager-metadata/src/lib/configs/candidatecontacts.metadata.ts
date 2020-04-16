@@ -453,8 +453,9 @@ const form = [
                   {
                     list: false,
                     endpoint: Endpoints.Address,
-                    read_only: true,
+                    read_only: false,
                     hide: true,
+                    candidateForm: true,
                     templateOptions: {
                       label: 'Address',
                       add: true,
@@ -529,6 +530,20 @@ const form = [
                       type: 'text'
                     },
                     read_only: false
+                  },
+                  {
+                    key: 'contact.picture',
+                    read_only: false,
+                    candidateForm: true,
+                    templateOptions: {
+                      required: false,
+                      label: 'Picture',
+                      type: 'picture',
+                      file: false
+                    },
+                    send: false,
+                    default: 'contact_pictures/default_picture.jpg',
+                    type: 'input'
                   }
                 ],
                 width: 0.5
