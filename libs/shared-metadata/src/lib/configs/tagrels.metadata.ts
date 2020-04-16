@@ -381,6 +381,7 @@ const formadd = [
       edit: true,
       dropdownCount: 9
     },
+    smallModal: true,
     collapsed: false,
     type: 'related',
     query: { exclude: '{candidate_contact.id}' },

@@ -11,7 +11,7 @@
       "
     >
       {{ config.templateOptions.label }}:
-    </label>
+    </label> <br>
     <app-info [description]="config.templateOptions.description"></app-info>
     <input
       #picture
@@ -22,11 +22,15 @@
       (change)="fileChangeEvent($event)"
       [attr.name]="key"
     />
-    <ng-container *ngIf="config.key === 'contact.picture' && !config.candidateForm">
+    <ng-container
+      *ngIf="config.key === 'contact.picture' && !config.candidateForm"
+    >
       <ng-container *ngTemplateOutlet="pictureView"></ng-container>
     </ng-container>
 
-    <ng-container *ngIf="config.key !== 'contact.picture' || config.candidateForm">
+    <ng-container
+      *ngIf="config.key !== 'contact.picture' || config.candidateForm"
+    >
       <div class="form-element-picture">
         <img
           class="image-preview"
@@ -98,7 +102,23 @@
           "
           class="d-flex align-items-center flex-wrap mt-1"
         >
-          <button type="button" class="btn btn-primary" (click)="upload()">
+        <div class="btn-group flex-wrap">
+          <button type="button" class="btn btn-default" (click)="upload()" title="Choose a file">
+            <fa-icon icon="upload"></fa-icon>
+          </button>
+          <button type="button" class="btn btn-default" (click)="open()" title="Take a photo">
+            <fa-icon icon="camera"></fa-icon>
+          </button>
+          <button *ngIf="value" type="button" class="btn btn-default" (click)="removeImage()" title="Remove">
+            <fa-icon icon="trash"></fa-icon>
+          </button>
+          <button *ngIf="(fileName || isRemoved) && config.candidateForm" type="button" class="btn btn-default" (click)="patchPicture()" title="Update">
+            <fa-icon icon="check"></fa-icon>
+          </button>
+        </div>
+
+
+          <!-- <button type="button" class="btn btn-primary" (click)="upload()">
             <fa-icon
               [class.mr-0]="!config.templateOptions.label_upload"
               icon="upload"
@@ -112,13 +132,24 @@
               icon="camera"
             ></fa-icon>
             {{ config.templateOptions.label_photo }}
-          </button>
+          </button> -->
         </div>
 
-        <div class="mt-1" style="overflow: hidden; text-overflow: ellipsis" *ngIf="fileName && !config.read_only && !config.view">
+        <div
+          class="mt-1"
+          style="overflow: hidden; text-overflow: ellipsis"
+          *ngIf="fileName && !config.read_only && !config.view"
+        >
           <i class="text-muted">file:</i> {{ fileName }}
         </div>
-        <button *ngIf="fileName && config.candidateForm" type="button" class="btn btn-primary btn-sm mt-2 btn-update" (click)="patchPicture()">Update</button>
+        <!-- <button
+          *ngIf="fileName && config.candidateForm"
+          type="button"
+          class="btn btn-primary btn-sm mt-2 btn-update"
+          (click)="patchPicture()"
+        >
+          Update
+        </button> -->
       </div>
     </ng-container>
   </div>
