@@ -126,6 +126,7 @@ export interface Field {
     showButtonIf?: boolean; // Checkbox button
     color?: any;
     bold?: any;
+    dropdownCount?: number;
   };
 }
 

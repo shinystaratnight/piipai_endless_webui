@@ -124,6 +124,7 @@
             [scrollWindow]="false"
             (scrolled)="onModalScrollDown()"
             [hidden]="!(previewList && previewList.length)"
+            [ngStyle]="{maxHeight: config.templateOptions.dropdownCount ? config.templateOptions.dropdownCount * 30 + 'px' : '120px'}"
           >
             <ul class="list-group w-100">
               <li

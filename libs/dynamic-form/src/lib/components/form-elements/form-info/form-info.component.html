@@ -2,6 +2,7 @@
   <div class=form-info-left *ngIf="config.metadata['picture'] || contactAvatar || picture || map">
     <div class="form-info-image">
       <img *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture">
+      <img class="form-info-image--preview" *ngIf="picture && !(config && config.metadata['picture'] && !viewMode && config.editForm)" [src]="picture">
       <div *ngIf="contactAvatar && !(config && config.metadata['picture'] && !viewMode && config.editForm) && !map" class="contact-avatar">
         {{contactAvatar}}
       </div>
@@ -180,7 +181,10 @@
     </ng-container>
 
     <p class="address-field" *ngIf="config && config.metadata['address'] && config.editForm">
+      <span *ngIf="viewMode && !address" class="description">Please add address (click on candidate name)</span>
+
       <ng-container appFormElement
+        *ngIf="!viewMode || address"
         [config]="config.metadata['address']"
         [group]="group">
       </ng-container>

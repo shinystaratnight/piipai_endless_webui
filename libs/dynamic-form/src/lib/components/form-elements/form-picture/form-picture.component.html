@@ -36,6 +36,15 @@
           [src]="value"
           alt="image"
         />
+
+        <img
+          class="image-profile"
+          *ngIf="value && config.templateOptions.file === false"
+          [src]="value"
+          alt="image"
+          width="200"
+          height="200"
+        />
         <div
           *ngIf="contactAvatar && !fileName && !value"
           class="contact-avatar"
@@ -90,13 +99,19 @@
           class="d-flex align-items-center flex-wrap mt-1"
         >
           <button type="button" class="btn btn-primary" (click)="upload()">
-            <fa-icon [class.mr-0]="!config.templateOptions.label_upload" icon="upload"></fa-icon>
-            {{config.templateOptions.label_upload}}
+            <fa-icon
+              [class.mr-0]="!config.templateOptions.label_upload"
+              icon="upload"
+            ></fa-icon>
+            {{ config.templateOptions.label_upload }}
           </button>
           <span class="p-1">or</span>
           <button type="button" class="btn btn-success" (click)="open()">
-            <fa-icon [class.mr-0]="!config.templateOptions.label_photo" icon="camera"></fa-icon>
-            {{config.templateOptions.label_photo}}
+            <fa-icon
+              [class.mr-0]="!config.templateOptions.label_photo"
+              icon="camera"
+            ></fa-icon>
+            {{ config.templateOptions.label_photo }}
           </button>
         </div>
         <div class="mt-1" *ngIf="fileName && !config.read_only && !config.view">
