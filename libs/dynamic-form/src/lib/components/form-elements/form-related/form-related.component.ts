@@ -1077,7 +1077,10 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       return false;
     }
 
-    const windowClass = this.config.visibleMode && type === 'post' ? 'visible-mode' : '';
+    let windowClass = this.config.visibleMode && type === 'post' ? 'visible-mode' : '';
+    if (this.config.smallModal && type === 'post') {
+      windowClass += ' small-modal';
+    }
 
     this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass, backdrop: 'static' });
 
