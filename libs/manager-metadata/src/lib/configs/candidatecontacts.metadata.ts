@@ -534,6 +534,7 @@ const form = [
                     key: 'contact.picture',
                     read_only: false,
                     candidateForm: true,
+                    hide: true,
                     templateOptions: {
                       required: false,
                       label: 'Picture',
