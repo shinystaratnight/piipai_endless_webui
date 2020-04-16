@@ -87,6 +87,7 @@ export interface Field {
   withoutIdField?: boolean;
   intl?: boolean;
   candidateForm?: boolean;
+  smallModal?: boolean;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
