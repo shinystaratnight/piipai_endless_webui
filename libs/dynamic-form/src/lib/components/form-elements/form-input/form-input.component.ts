@@ -26,7 +26,7 @@ import { Field } from '@webui/data';
 import { FormatString, getTotalTime, getTimeInstance } from '@webui/utilities';
 
 import { BasicElementComponent } from '../basic-element/basic-element.component';
-import { UserService } from '@webui/core';
+import { SiteSettingsService } from '@webui/core';
 
 @Component({
   selector: 'app-form-input',
@@ -114,7 +114,7 @@ export class FormInputComponent extends BasicElementComponent
     private fb: FormBuilder,
     public elementRef: ElementRef,
     private cd: ChangeDetectorRef,
-    private userService: UserService
+    private siteSettings: SiteSettingsService
   ) {
     super();
     this.subscriptions = [];
@@ -186,7 +186,7 @@ export class FormInputComponent extends BasicElementComponent
 
     if (this.isPhoneField) {
       this.selectedCountryISO =
-        (this.userService.user.data.country_code as CountryISO) ||
+        (this.siteSettings.settings.country_code as CountryISO) ||
         CountryISO.Australia;
     }
   }

@@ -13,6 +13,7 @@ interface CompanySettings {
   color_scheme: string;
   advance_state_saving: boolean;
   font: string;
+  country_code: string;
   [key: string]: any;
 }
 
