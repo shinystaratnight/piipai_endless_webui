@@ -24,6 +24,7 @@ export const metadata = {
             field: 'amount',
             type: 'text',
             display: '${field}',
+            currency: true
           }
         ],
         name: 'amount',

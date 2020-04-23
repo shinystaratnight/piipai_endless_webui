@@ -14,6 +14,7 @@ interface CompanySettings {
   advance_state_saving: boolean;
   font: string;
   country_code: string;
+  currency: string;
   [key: string]: any;
 }
 
