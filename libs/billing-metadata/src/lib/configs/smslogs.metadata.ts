@@ -124,7 +124,8 @@ const formset = {
           {
             field: 'cost',
             display: '$ {field}',
-            type: 'input'
+            type: 'input',
+            currency: true
           }
         ],
         name: 'cost',

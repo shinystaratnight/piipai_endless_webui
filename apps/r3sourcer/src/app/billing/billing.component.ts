@@ -6,7 +6,7 @@ import { BillingService } from './services/billing-service';
 import { Plan, Payment, BillingSubscription } from './models';
 
 import { User } from '@webui/data';
-import { ToastService, EventService, EventType } from '@webui/core';
+import { ToastService, EventService, EventType, SiteSettingsService } from '@webui/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -24,6 +24,7 @@ export class BillingComponent implements OnInit, OnDestroy {
   public saveProcess: boolean;
   public cancelProcess: boolean;
   public plans: Plan[];
+  public currency: string;
 
   subscriptions: Subscription[] = [];
 
@@ -33,7 +34,8 @@ export class BillingComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastService,
-    private eventService: EventService
+    private eventService: EventService,
+    private siteSettings: SiteSettingsService
   ) {
     this.checkInformation = true;
   }
@@ -41,8 +43,9 @@ export class BillingComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.user = this.route.snapshot.data['user'];
     this.pagesList = this.route.snapshot.data['pagesList'];
-    const subscriptions = this.route.snapshot.data['subscription']
-      .subscriptions;
+    const subscriptions = this.route.snapshot.data['subscription'].subscriptions;
+
+    this.currency = this.siteSettings.settings.currency;
 
     this.currentPlan = subscriptions && subscriptions.find(el => el.active);
 

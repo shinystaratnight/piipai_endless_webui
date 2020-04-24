@@ -12,6 +12,7 @@ export class BillingInfoComponent implements OnChanges {
   @Input() public payments: Payment[];
   @Input() public currentPlan: BillingSubscription;
   @Input() plans: Plan[];
+  @Input() currency: string = 'USD';
 
   types: any;
 

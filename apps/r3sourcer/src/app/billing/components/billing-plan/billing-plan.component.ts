@@ -27,6 +27,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   @Input() public currentPlan: BillingSubscription;
   @Input() public workerCount: number;
   @Input() public plans: Plan[];
+  @Input() public currency: string = 'USD';
 
   @ViewChild('subscription', {static: false}) public modal;
 

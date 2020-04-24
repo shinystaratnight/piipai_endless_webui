@@ -12,6 +12,7 @@
             [saveProcess]="saveProcess"
             [currentPlan]="currentPlan"
             [workerCount]="(currentPlan && currentPlan.worker_count) || 1"
+            [currency]="currency"
             (selectedPlan)="selectPlan($event)"
             (cancelingPlan)="cancelPlan()"
           ></app-billing-plan>
@@ -23,7 +24,7 @@
         </div>
 
         <div class="col">
-          <app-billing-sms></app-billing-sms>
+          <app-billing-sms [currency]="currency"></app-billing-sms>
         </div>
       </div>
 

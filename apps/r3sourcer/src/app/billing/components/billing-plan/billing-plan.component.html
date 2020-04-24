@@ -55,9 +55,9 @@
           <p>{{plan.heading_tag_line}}</p>
         </div>
         <div class="plan-detail">
-          <h4 class="mb-1">${{planPay(plan)}}</h4>
+          <h4 class="mb-1">{{planPay(plan) | currency : currency}}</h4>
           <p class="mb-2">{{plan.amount_tag_line}}</p>
-          <p class="annually"><small>(${{planPayYear(plan)}} annually)</small></p>
+          <p class="annually"><small>({{planPayYear(plan) | currency : currency}} annually)</small></p>
           <ul class="features" *ngIf="plan.table">
             <ng-container *ngFor="let item of plan.table">
               <li class="features__item" *ngIf="item">

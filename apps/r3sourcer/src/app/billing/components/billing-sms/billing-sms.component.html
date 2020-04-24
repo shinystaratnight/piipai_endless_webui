@@ -2,12 +2,12 @@
 <ng-container *ngIf="smsBalance">
   <div class="field mb-2">
     <span>Charge rate for SMS:</span>
-    <span style="opacity: 1">{{smsBalance.segment_cost | currency:'USD'}} per segment (160 signs)</span>
+    <span style="opacity: 1">{{smsBalance.segment_cost | currency: currency}} per segment (160 signs)</span>
   </div>
 
   <div class="field">
     <span>Current balance:</span>
-    <span class="value active">{{smsBalance.balance | currency:'USD'}}</span>
+    <span class="value active">{{smsBalance.balance | currency: currency}}</span>
     <button type="button" class="btn btn-sm btn-primary ml-3 action-button" (click)="showAddFundsForm()">Add Funds</button>
   </div>
 
@@ -19,7 +19,7 @@
     <button type="button" class="btn btn-sm btn-primary ml-3 action-button" (click)="autoCharge()">Configure Auto-charge</button>
   </div>
 
-  <p *ngIf="smsBalance.auto_charge">If the balance falls below {{smsBalance.top_up_limit | currency:'USD'}}, recharge by adding {{smsBalance.top_up_amount | currency:'USD'}} from saved card</p>
+  <p *ngIf="smsBalance.auto_charge">If the balance falls below {{smsBalance.top_up_limit | currency: currency}}, recharge by adding {{smsBalance.top_up_amount | currency: currency}} from saved card</p>
 </ng-container>
 
 
@@ -62,7 +62,7 @@
         <input class="form-control form-element-content" type="number" name="employees" min="20" style="width: 70px"
           [(ngModel)]="amount">
       </div>
-      <small class="description">(minimum {{20 | currency:'USD'}})</small>
+      <small class="description">(minimum {{20 | currency: currency}})</small>
     </div>
 
     <h6 class="mt-2">so we could use SMS service!</h6>

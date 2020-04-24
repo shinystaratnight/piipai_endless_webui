@@ -185,13 +185,15 @@ export class FormBankAccountComponent implements OnInit, OnDestroy {
   }
 
   private generateMetadata(view = false): any[] {
-    const fields = this.layout.fields.map(field => {
-      return new Form.input.element(
-        field.id.toString(),
-        field.description,
-        InputType.Text
-      );
-    });
+    const fields = [...this.layout.fields]
+      .sort((p, n) => p.order > n.order ? 1 : -1 )
+      .map(field => {
+        return new Form.input.element(
+          field.id.toString(),
+          field.description,
+          InputType.Text
+        );
+      });
 
     if (view) {
       fields.forEach(field => {
