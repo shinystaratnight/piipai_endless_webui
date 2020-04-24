@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -12,6 +12,8 @@ import { ToastService, MessageType } from '@webui/core';
   styleUrls: ['./billing-sms.component.scss']
 })
 export class BillingSmsComponent implements OnInit, OnDestroy {
+
+  @Input() currency: string = 'USD';
 
   public smsBalance: any;
   public amount = 20;

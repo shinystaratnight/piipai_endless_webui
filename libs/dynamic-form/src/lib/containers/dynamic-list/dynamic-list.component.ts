@@ -26,7 +26,8 @@ import {
   MessageType,
   AuthService,
   UserService,
-  CompanyPurposeService
+  CompanyPurposeService,
+  SiteSettingsService
 } from '@webui/core';
 import {
   FormatString,
@@ -58,6 +59,7 @@ import { environment } from '../../../../../../apps/r3sourcer/src/environments/e
 
 import { TrackingModalComponent } from '../../modals';
 import { FilterEvent } from '../../interfaces';
+import { formatCurrency, getCurrencySymbol } from '@angular/common';
 
 @Component({
   selector: 'app-dynamic-list',
@@ -196,7 +198,8 @@ export class DynamicListComponent
     private purposeService: CompanyPurposeService,
     private listService: ListService,
     private route: ActivatedRoute,
-    @Optional() private sortService: SortService
+    @Optional() private sortService: SortService,
+    private siteSettings: SiteSettingsService
   ) {}
 
   public isMobile = isMobile;
@@ -852,7 +855,8 @@ export class DynamicListComponent
       inlineValue: element.inlineValue,
       form: { ...element.form },
       show: element.updateButton ? new BehaviorSubject(false) : undefined,
-      required: element.required
+      required: element.required,
+      currency: element.currency
     };
     if (cell.timezone) {
       obj.timezone = this.getPropValue(el, cell.timezone);
@@ -888,10 +892,16 @@ export class DynamicListComponent
       obj['contactName'] = this.getValueByKey(keys.join('.'), el);
     }
     if (element.display && element.type !== 'tags') {
-      obj.display = this.format(
-        element.display.replace(/{field}/gi, `{${element.field}}`),
-        el
-      );
+      if (obj.currency) {
+        const value = getPropValue(el, obj.key);
+        obj.display = formatCurrency(value, 'en', getCurrencySymbol(this.siteSettings.settings.currency, 'wide') || 'USD');
+
+      } else {
+        obj.display = this.format(
+          element.display.replace(/{field}/gi, `{${element.field}}`),
+          el
+        );
+      }
     }
     if (element.type === 'datepicker') {
       const field =
