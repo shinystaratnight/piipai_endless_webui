@@ -129,7 +129,7 @@ export interface Field {
     color?: any;
     bold?: any;
     dropdownCount?: number;
-    currency: boolean;
+    currency?: boolean;
   };
 }
 
