@@ -1007,65 +1007,65 @@ const form = [
                 ],
                 width: 0.25
               },
-              {
-                type: 'group',
-                children: [
-                  {
-                    list: false,
-                    endpoint: Endpoints.BankAccount,
-                    read_only: false,
-                    doNotChoice: true,
-                    templateOptions: {
-                      label: 'Bank account',
-                      add: true,
-                      delete: false,
-                      values: ['__str__', 'bsb', 'account_number'],
-                      type: 'related',
-                      edit: true
-                    },
-                    prefilled: {
-                      contact: '{contact.id}'
-                    },
-                    collapsed: false,
-                    type: 'related',
-                    key: 'bank_account',
-                    many: false
-                  },
-                  {
-                    key: 'bank_account.bsb',
-                    type: 'input',
-                    showIf: ['bank_account.id'],
-                    default: '{bank_account.bsb}',
-                    send: false,
-                    templateOptions: {
-                      required: false,
-                      label: 'BSB',
-                      max: 63,
-                      type: 'text'
-                    },
-                    read_only: true
-                  },
-                  {
-                    key: 'bank_account.account_number',
-                    type: 'input',
-                    showIf: ['bank_account.id'],
-                    default: '{bank_account.account_number}',
-                    send: false,
-                    templateOptions: {
-                      required: false,
-                      label: 'Account Number',
-                      max: 63,
-                      type: 'text'
-                    },
-                    read_only: true
-                  }
-                ],
-                width: 0.25
-              },
+              // {
+              //   type: 'group',
+              //   children: [
+              //     {
+              //       list: false,
+              //       endpoint: Endpoints.BankAccount,
+              //       read_only: false,
+              //       doNotChoice: true,
+              //       templateOptions: {
+              //         label: 'Bank account',
+              //         add: true,
+              //         delete: false,
+              //         values: ['__str__', 'bsb', 'account_number'],
+              //         type: 'related',
+              //         edit: true
+              //       },
+              //       prefilled: {
+              //         contact: '{contact.id}'
+              //       },
+              //       collapsed: false,
+              //       type: 'related',
+              //       key: 'bank_account',
+              //       many: false
+              //     },
+              //     {
+              //       key: 'bank_account.bsb',
+              //       type: 'input',
+              //       showIf: ['bank_account.id'],
+              //       default: '{bank_account.bsb}',
+              //       send: false,
+              //       templateOptions: {
+              //         required: false,
+              //         label: 'BSB',
+              //         max: 63,
+              //         type: 'text'
+              //       },
+              //       read_only: true
+              //     },
+              //     {
+              //       key: 'bank_account.account_number',
+              //       type: 'input',
+              //       showIf: ['bank_account.id'],
+              //       default: '{bank_account.account_number}',
+              //       send: false,
+              //       templateOptions: {
+              //         required: false,
+              //         label: 'Account Number',
+              //         max: 63,
+              //         type: 'text'
+              //       },
+              //       read_only: true
+              //     }
+              //   ],
+              //   width: 0.25
+              // },
               {
                 label: 'Bank Account',
                 type: 'group',
-                width: 0.25,
+                width: 0.5,
                 children: [
                   {
                     type: 'bank_account',

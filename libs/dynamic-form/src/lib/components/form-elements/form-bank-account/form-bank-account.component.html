@@ -31,7 +31,7 @@
         [class.placeholder]="!account"
       >
         <div style="overflow: hidden; white-space: nowrap">
-          {{ account ? 'Bank Account' : 'Add new account' }}
+          {{ account ? 'View' : 'Add new account' }}
         </div>
       </div>
 
@@ -66,9 +66,7 @@
     </ng-container>
 
     <ng-container *ngIf="viewMode">
-      <a *ngIf="account" href="#" (click)="viewAccount(account, $event)"
-        >Bank Account</a
-      >
+      <a *ngIf="account" href="#" (click)="viewAccount(account, $event)">View</a>
 
       <span *ngIf="!account">-</span>
     </ng-container>
