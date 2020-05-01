@@ -285,12 +285,13 @@
                 </ng-container>
               </ng-container>
               <th *ngIf="config.list.tabs" class="last-cell">
-                <span>More</span>
-                <fa-icon
-                  class="ml-2 sort-icon icon"
-                  [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
-                  (click)="openAllTabs()"
-                ></fa-icon>
+                <span (click)="openAllTabs()" class="more__header">
+                  More
+                  <fa-icon
+                    class="ml-2 sort-icon"
+                    [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
+                  ></fa-icon>
+                </span>
               </th>
             </tr>
           </thead>
@@ -433,7 +434,7 @@
                     (click)="toggleTab($event, row)"
                   >
                     <fa-icon
-                      class="more-icon mr-0"
+                      class="more__icon mr-0"
                       [icon]="row.collapsed ? 'chevron-down' : 'chevron-up'"
                     >
                     </fa-icon>

@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { FormService } from '../../services';
 import { getValueOfData } from '../../helpers';
 import { isMobile, isCandidate } from '@webui/utilities';
+import { Form } from '../../models';
 
 @Component({
   selector: 'app-form-tabs',
@@ -33,6 +34,7 @@ export class FormTabsComponent implements OnInit, OnDestroy {
 
   public saving: boolean;
   public saveSubscription: Subscription;
+  public form: Form;
 
   @Output() public event = new EventEmitter();
   @Output() public buttonAction = new EventEmitter();
@@ -45,7 +47,7 @@ export class FormTabsComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    const form = this.formService.getForm(this.formId);
+    this.form = this.formService.getForm(this.formId);
 
     this.canUpdate =
       this.formService.getAllowedMethods(this.formId).indexOf('update') > -1 &&
@@ -55,14 +57,14 @@ export class FormTabsComponent implements OnInit, OnDestroy {
       this.checkCustomLabel(tab);
     });
 
-    if (form) {
-      this.modeSubscription = form.mode.subscribe(mode => {
+    if (this.form) {
+      this.modeSubscription = this.form.mode.subscribe(mode => {
         this.mode = mode;
 
         this.cd.markForCheck();
       });
 
-      this.saveSubscription = form.saveProcess.subscribe(saving => {
+      this.saveSubscription = this.form.saveProcess.subscribe(saving => {
         this.saving = saving;
       });
     }

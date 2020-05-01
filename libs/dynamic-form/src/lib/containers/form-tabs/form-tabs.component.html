@@ -41,6 +41,7 @@
               class="btn btn-primary btn-shadow save"
               [class.ml-auto]="mode !== 'edit'"
               *ngIf="mode === 'edit' || !config.editForm"
+              [disabled]="form && form.disableSaveButton"
             >
               {{ mode !== 'edit' ? 'Save' : 'Save changes' }}
               <app-spinner *ngIf="saving"></app-spinner>
