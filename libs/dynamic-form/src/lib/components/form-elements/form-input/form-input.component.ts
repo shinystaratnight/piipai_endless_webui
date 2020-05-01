@@ -392,6 +392,10 @@ export class FormInputComponent extends BasicElementComponent
   public setInitValue(update?: boolean) {
     const format = new FormatString();
 
+    if (this.config.value && this.config.templateOptions.round) {
+      this.config.value = parseInt(this.config.value, 10);
+    }
+
     if (this.key === 'street_address' && this.group.get(this.key).value) {
       this.address = this.group.get(this.key).value.formatted_address;
     }

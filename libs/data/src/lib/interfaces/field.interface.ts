@@ -130,6 +130,7 @@ export interface Field {
     bold?: any;
     dropdownCount?: number;
     currency?: boolean;
+    round?: true;
   };
 }
 
