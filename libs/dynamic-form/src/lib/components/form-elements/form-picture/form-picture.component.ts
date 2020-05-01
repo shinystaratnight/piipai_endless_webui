@@ -57,7 +57,7 @@ export class FormPictureComponent
   public err: any;
   public base64: string;
   public link: string;
-  public sizeError: string;
+  public sizeError: boolean;
 
   public value: any;
 
@@ -262,9 +262,9 @@ export class FormPictureComponent
 
     if (file.size > 900000) {
       this.formService.disableSaveButton(this.config.formId, true);
-      this.sizeError = 'File size is too large! Maximum allowed file size is 900kb.';
+      this.sizeError = true;
     } else {
-      this.sizeError = '';
+      this.sizeError = false;
       this.formService.disableSaveButton(this.config.formId, false);
     }
 
