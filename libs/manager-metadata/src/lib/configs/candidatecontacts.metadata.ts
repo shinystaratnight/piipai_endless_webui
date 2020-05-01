@@ -739,7 +739,8 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Height, cm',
-                      type: 'text'
+                      type: 'text',
+                      round: true
                     },
                     read_only: false
                   },
@@ -749,7 +750,8 @@ const form = [
                     templateOptions: {
                       required: false,
                       label: 'Weight, kg',
-                      type: 'number'
+                      type: 'number',
+                      round: true
                     },
                     read_only: false
                   },
