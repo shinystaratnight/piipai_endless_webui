@@ -112,7 +112,7 @@
           <button *ngIf="value" type="button" class="btn btn-default" (click)="removeImage()" title="Remove">
             <fa-icon icon="trash"></fa-icon>
           </button>
-          <button *ngIf="(fileName || isRemoved) && config.candidateForm" type="button" class="btn btn-default" (click)="patchPicture()" title="Update">
+          <button *ngIf="(fileName || isRemoved) && config.candidateForm && !sizeError" type="button" class="btn btn-default" (click)="patchPicture()" title="Update">
             <fa-icon icon="check"></fa-icon>
           </button>
         </div>
@@ -156,7 +156,10 @@
   <div *ngIf="errors">
     <div class="text-danger mt-1" *ngIf="errors[key]">{{ errors[key] }}</div>
   </div>
-  <div class="text-danger mt-1" *ngIf="sizeError">{{ sizeError }}</div>
+  <div class="text-danger mt-1 text-left" *ngIf="sizeError">
+    File size is too large! <br>
+    Maximum allowed file size is 900kb.
+  </div>
   <div *ngIf="message">
     <div *ngIf="message[key]" class="text-success mt-1">{{ message[key] }}</div>
   </div>
