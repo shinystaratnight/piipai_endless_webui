@@ -118,9 +118,9 @@ export class FormSelectComponent
 
   public setInitValue() {
     let value = this.config.value;
-    if (value) {
+    if (value || this.config.default) {
       const option = this.getValue(this.options, this.config.value);
-      if (option.value === '-') {
+      if (option.value === '-' || !option) {
         value = this.config.default;
       }
     }

@@ -153,7 +153,9 @@ export enum Endpoints {
   CompanySettings = '/company_settings/site/',
   Language = '/languages/',
   CandidateLanguages = '/candidate_contacts/',
-  CompanyLanguages = '/companies/'
+  CompanyLanguages = '/companies/',
+
+  EmailTemplate = '/email-interface/emailtemplates/'
 }
 
 export const getBankAccountLayoutEndpoint = (countryCode: string) => {

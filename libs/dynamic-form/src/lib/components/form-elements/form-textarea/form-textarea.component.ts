@@ -104,7 +104,7 @@ export class FormTextareaComponent
   }
 
   public setInitValue() {
-    if (this.config.value) {
+    if (this.config.value || this.config.value === '') {
       this.group.get(this.key).patchValue(this.config.value);
       this.displayValue = this.config.value;
     } else {
