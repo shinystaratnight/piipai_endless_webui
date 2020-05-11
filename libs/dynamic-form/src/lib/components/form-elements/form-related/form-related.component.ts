@@ -1544,7 +1544,12 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
                 }
 
                 results.forEach((el) => {
-                  el.__str__ = formatString.format(this.display, el);
+                  const display = this.config.templateOptions.listDisplay || this.display;
+                  el.__str__ = formatString.format(display, el);
+
+                  if (this.config.templateOptions.listParam) {
+                    el[this.param] = FormatString.format(this.config.templateOptions.listParam, el);
+                  }
 
                   if (this.config.templateOptions.info) {
                     el.score = formatString.format(

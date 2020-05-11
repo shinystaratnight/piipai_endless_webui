@@ -1457,11 +1457,45 @@ export class DynamicListComponent
         case 'setDefaultLanguage':
           this.setDefaultLanguage(e);
           break;
+        case 'createSmsTemplate':
+          this.openSmsTemplateModal(e);
+          break;
         default:
           return;
       }
     }
     return;
+  }
+
+  private openSmsTemplateModal(e) {
+    const {
+      name, 
+      slug, 
+      message_text_template, 
+      reply_timeout, 
+      delivery_timeout, 
+      type, 
+      company_id
+    } = this.getRowData(e);
+
+    const data = {
+      name: this.getDataAction(name),
+      slug: this.getDataAction(slug),
+      message_text_template: this.getDataAction(message_text_template),
+      reply_timeout: this.getDataAction(reply_timeout),
+      delivery_timeout: this.getDataAction(delivery_timeout),
+      type: this.getDataAction(type),
+      company: this.getDataAction(company_id)
+    }
+
+    this.modalInfo = {
+      type: 'form',
+      mode: 'edit',
+      endpoint: e.el.endpoint,
+      data
+    }
+
+    this.open(this.modal);
   }
 
   public setDefaultLanguage(e) {
@@ -2645,6 +2679,15 @@ export class DynamicListComponent
         };
 
         this.open(this.modal, { size: 'lg' });
+      }
+    }
+  }
+
+  private getDataAction(value: any, type = 'add') {
+    return {
+      action: type,
+      data: {
+        value
       }
     }
   }

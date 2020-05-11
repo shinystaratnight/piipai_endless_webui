@@ -104,7 +104,9 @@ export class DynamicFormComponent implements OnInit {
       this.removeValuesOfHiddenFields(this.hiddenFields.elements, data);
     }
     this.setNullFields(this.config, data);
+    this.replaceByData(this.config, data);
     this.filterSendData(this.config, data);
+
     this.submitForm.emit(data);
   }
 
@@ -298,6 +300,23 @@ export class DynamicFormComponent implements OnInit {
     metadata.forEach(el => {
       if (el.send === false && !el.saveField) {
         this.removeValue(el.key, data);
+      } else if (el.children) {
+        this.filterSendData(el.children, data);
+      }
+    });
+  }
+
+  public replaceByData(metadata: Field[], data) {
+    metadata.forEach(el => {
+      if (el.replaceByData) {
+        const value = this.getValueByKey(el.key, data);
+
+        if (value.id) {
+          if (el.key === 'language') {
+            data['language_id'] = value.id
+          }
+        }
+
       } else if (el.children) {
         this.filterSendData(el.children, data);
       }

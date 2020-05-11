@@ -1,3 +1,5 @@
+import { Endpoints } from '@webui/data';
+
 const list = {
   list: {
     list: 'smstemplate',
@@ -6,17 +8,41 @@ const list = {
       {
         content: [
           {
-            field: '__str__',
-            type: 'static'
+            field: 'name',
+            type: 'input'
           }
         ],
-        name: '__str__',
+        name: 'name',
         label: 'Sms Template'
-      }
+      },
+      {
+        content: [
+          {
+            field: 'language.name',
+            type: 'input'
+          }
+        ],
+        name: 'language.name',
+        label: 'Language'
+      },
+      {
+        content: [
+          {
+            endpoint: Endpoints.SmsTemplate,
+            action: 'createSmsTemplate',
+            text: 'Create New',
+            type: 'button',
+            field: 'id'
+          }
+        ],
+        name: 'actions',
+        label: 'Actions'
+      }, 
     ],
     pagination_label: 'SMS Template',
     search_enabled: false,
-    editDisable: false
+    editDisable: false,
+    buttons: []
   },
   fields: [
     {
@@ -44,15 +70,15 @@ const form = [
     },
     read_only: false
   },
-  {
-    key: 'company_id',
-    type: 'related',
-    hide: true,
-    default: 'currentCompany',
-    templateOptions: {
-      label: '',
-    }
-  },
+  // {
+  //   key: 'company_id',
+  //   type: 'input',
+  //   hide: true,
+  //   send: false,
+  //   templateOptions: {
+  //     label: '',
+  //   }
+  // },
   {
     key: 'updated_at',
     type: 'datepicker',
@@ -61,6 +87,7 @@ const form = [
       label: 'Updated at',
       type: 'datetime'
     },
+    send: false,
     read_only: true
   },
   {
@@ -71,6 +98,7 @@ const form = [
       label: 'Created at',
       type: 'datetime'
     },
+    send: false,
     read_only: true
   },
   {
@@ -135,26 +163,28 @@ const form = [
     },
     read_only: false
   },
-  {
-    list: false,
-    endpoint: '/core/companies/',
-    read_only: true,
-    templateOptions: {
-      label: 'Company',
-      add: true,
-      delete: false,
-      values: ['__str__'],
-      type: 'related',
-      edit: true
-    },
-    collapsed: false,
-    type: 'related',
-    key: 'company',
-    many: false
-  },
+  // {
+  //   list: false,
+  //   endpoint: '/core/companies/',
+  //   read_only: true,
+  //   templateOptions: {
+  //     label: 'Company',
+  //     add: true,
+  //     delete: false,
+  //     values: ['__str__'],
+  //     type: 'related',
+  //     edit: true
+  //   },
+  //   collapsed: false,
+  //   type: 'related',
+  //   send: false,
+  //   key: 'company',
+  //   many: false
+  // },
   {
     key: 'type',
     type: 'select',
+    hide: true,
     templateOptions: {
       required: true,
       label: 'Type',
@@ -169,49 +199,21 @@ const form = [
     read_only: false
   },
   {
-    key: 'language.name',
-    type: 'input',
-    send: false,
+    key: 'language',
+    type: 'related',
     read_only: true,
+    send: false,
+    replaceByData: true,
+    endpoint: '/companies/{company_id}/languages/',
     templateOptions: {
       label: 'Language',
-      type: 'text'
+      display: '{name}',
+      param: 'alpha_2'
     }
   }
 ];
 
 const formadd = [
-  {
-    key: 'id',
-    type: 'input',
-    hide: true,
-    templateOptions: {
-      required: false,
-      label: 'Id',
-      type: 'text'
-    },
-    read_only: false
-  },
-  {
-    key: 'updated_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Updated at',
-      type: 'datetime'
-    },
-    read_only: true
-  },
-  {
-    key: 'created_at',
-    type: 'datepicker',
-    templateOptions: {
-      required: false,
-      label: 'Created at',
-      type: 'datetime'
-    },
-    read_only: true
-  },
   {
     key: 'name',
     default: '',
@@ -233,7 +235,7 @@ const formadd = [
       max: 50,
       type: 'text'
     },
-    read_only: false
+    read_only: true
   },
   {
     key: 'message_text_template',
@@ -274,25 +276,22 @@ const formadd = [
     read_only: false
   },
   {
-    list: false,
-    endpoint: '/core/companies/',
+    send: false,
+    endpoint: Endpoints.Company,
+    hide: true,
     read_only: true,
     templateOptions: {
       label: 'Company',
-      add: true,
-      delete: false,
       values: ['__str__'],
       type: 'related',
-      edit: true
     },
-    collapsed: false,
     type: 'related',
     key: 'company',
-    many: false
   },
   {
     key: 'type',
     type: 'select',
+    hide: true,
     templateOptions: {
       required: true,
       label: 'Type',
@@ -305,6 +304,19 @@ const formadd = [
       ]
     },
     read_only: false
+  },
+  {
+    key: 'language',
+    type: 'related',
+    read_only: false,
+    send: false,
+    replaceByData: true,
+    endpoint: '/companies/{company.id}/languages/',
+    templateOptions: {
+      label: 'Language',
+      listDisplay: '{language.name}',
+      listParam: '{language.alpha_2}'
+    }
   }
 ];
 

@@ -3,18 +3,10 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   template: `
-    <div class="site-loader-wrapper" *ngIf="loader">
-      <img
-        class="site-loader"
-        src="/assets/img/logo.svg"
-        alt="R3sourcer"
-        width="120"
-        height="120"
-      />
-    </div>
+    <img *ngIf="loader" class="preloader" src="/assets/img/logo.svg" alt="R3sourcer" width="120" height="120" />
     <router-outlet (activate)="loader = false" (deactivate)="loader = true"></router-outlet>
     <app-toast></app-toast>
-  `,
+  `
 })
 export class AppComponent {
   loader = true;

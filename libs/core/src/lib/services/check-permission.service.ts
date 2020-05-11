@@ -104,7 +104,7 @@ export class CheckPermissionService {
     if (permissions) {
 
       // TODO: Remove it after adding permissions on backend
-      if (endpoint.includes('/companies/') && endpoint.includes('/languages/')) {
+      if (endpoint && endpoint.includes('/companies/') && endpoint.includes('/languages/')) {
         return ['delete', 'get', 'post', 'update'];
       }
 

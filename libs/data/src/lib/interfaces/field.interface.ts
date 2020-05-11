@@ -88,6 +88,7 @@ export interface Field {
   intl?: boolean;
   candidateForm?: boolean;
   smallModal?: boolean;
+  replaceByData?: boolean;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;
@@ -130,6 +131,8 @@ export interface Field {
     bold?: any;
     dropdownCount?: number;
     currency?: boolean;
+    listDisplay?: string;
+    listParam?: string;
   };
 }
 

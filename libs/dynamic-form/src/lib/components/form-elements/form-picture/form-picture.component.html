@@ -1,155 +1,82 @@
 <div class="form-group" *ngIf="!config.hide">
   <div class="form-element" [class.custom]="config.custom">
-    <label
-      class="form-element-label"
-      [class.required]="config.templateOptions.required"
-      [hidden]="config.custom"
-      *ngIf="
+    <label class="form-element-label" [class.required]="config.templateOptions.required" [hidden]="config.custom" *ngIf="
         label &&
         config.templateOptions.label &&
         config.key !== 'contact.picture'
-      "
-    >
+      ">
       {{ config.templateOptions.label }}:
     </label> <br>
     <app-info [description]="config.templateOptions.description"></app-info>
-    <input
-      #picture
-      accept="image/*,application/pdf"
-      [attr.type]="'file'"
-      [hidden]="true"
-      [attr.id]="key"
-      (change)="fileChangeEvent($event)"
-      [attr.name]="key"
-    />
-    <ng-container
-      *ngIf="config.key === 'contact.picture' && !config.candidateForm"
-    >
+    <input #picture accept="image/*,application/pdf" [attr.type]="'file'" [hidden]="true" [attr.id]="key"
+      (change)="fileChangeEvent($event)" [attr.name]="key" />
+    <ng-container *ngIf="config.key === 'contact.picture' && !config.candidateForm">
       <ng-container *ngTemplateOutlet="pictureView"></ng-container>
     </ng-container>
 
-    <ng-container
-      *ngIf="config.key !== 'contact.picture' || config.candidateForm"
-    >
+    <ng-container *ngIf="config.key !== 'contact.picture' || config.candidateForm">
       <div class="form-element-picture">
-        <img
-          class="image-preview"
-          [class.signature]="config.templateOptions.signature"
-          [class.start]="config.templateOptions.start"
-          *ngIf="value && config.templateOptions.file === false"
-          [src]="value"
-          alt="image"
-        />
+        <img class="image-preview" [class.signature]="config.templateOptions.signature"
+          [class.start]="config.templateOptions.start" *ngIf="value && config.templateOptions.file === false"
+          [src]="value" alt="image" />
 
-        <img
-          class="image-profile"
-          *ngIf="value && config.templateOptions.file === false"
-          [src]="value"
-          alt="image"
-          width="200"
-          height="200"
-        />
-        <div
-          *ngIf="contactAvatar && !fileName && !value"
-          class="contact-avatar"
-        >
+        <img class="image-profile" *ngIf="value && config.templateOptions.file === false" [src]="value" alt="image"
+          width="200" height="200" />
+        <div *ngIf="contactAvatar && !fileName && !value" class="contact-avatar">
           {{ contactAvatar }}
         </div>
-        <span
-          *ngIf="
+        <span *ngIf="
             (link || value) &&
             viewMode &&
             config.templateOptions.file == undefined
-          "
-        >
+          ">
           {{ getExtension(link || fileName || value) | uppercase }} file
-          <a class="link" [href]="link || value" target="_blank"
-            >|&nbsp;Open in new tab</a
-          >
+          <a class="link" [href]="link || value" target="_blank">|&nbsp;Open in new tab</a>
         </span>
-        <span
-          *ngIf="
+        <span *ngIf="
             (link || value) &&
             !viewMode &&
             config.templateOptions.file == undefined
-          "
-        >
-          <a *ngIf="this.config.value" [href]="link || value" target="_blank"
-            >{{ getExtension(link || fileName || value) | uppercase }} file</a
-          >
-          <a class="link" href="" (click)="upload($event)"
-            >|&nbsp;Upload new file</a
-          >
+          ">
+          <a *ngIf="this.config.value" [href]="link || value"
+            target="_blank">{{ getExtension(link || fileName || value) | uppercase }} file</a>
+          <a class="link" href="" (click)="upload($event)">|&nbsp;Upload new file</a>
         </span>
         <span *ngIf="!value && !contactAvatar && !link && viewMode">-</span>
-        <span
-          *ngIf="
+        <span *ngIf="
             !link &&
             !value &&
             !viewMode &&
             !config.read_only &&
             config.templateOptions.file == undefined
-          "
-          class="link ml-0"
-          (click)="upload()"
-          >Upload new file</span
-        >
-        <div
-          *ngIf="
+          " class="link ml-0" (click)="upload()">Upload new file</span>
+        <div *ngIf="
             !viewMode &&
             !config.read_only &&
             config.templateOptions.file === false
-          "
-          class="d-flex align-items-center flex-wrap mt-1"
-        >
-        <div class="btn-group flex-wrap">
-          <button type="button" class="btn btn-default" (click)="upload()" title="Choose a file">
-            <fa-icon icon="upload"></fa-icon>
-          </button>
-          <button type="button" class="btn btn-default" (click)="open()" title="Take a photo">
-            <fa-icon icon="camera"></fa-icon>
-          </button>
-          <button *ngIf="value" type="button" class="btn btn-default" (click)="removeImage()" title="Remove">
-            <fa-icon icon="trash"></fa-icon>
-          </button>
-          <button *ngIf="(fileName || isRemoved) && config.candidateForm && !sizeError" type="button" class="btn btn-default" (click)="patchPicture()" title="Update">
-            <fa-icon icon="check"></fa-icon>
-          </button>
+          " class="d-flex align-items-center flex-wrap mt-1">
+          <div class="btn-group flex-wrap">
+            <button type="button" class="btn btn-default" (click)="upload()" title="Choose a file">
+              <fa-icon icon="upload"></fa-icon>
+            </button>
+            <button type="button" class="btn btn-default" (click)="open()" title="Take a photo">
+              <fa-icon icon="camera"></fa-icon>
+            </button>
+            <button *ngIf="value" type="button" class="btn btn-default" (click)="removeImage()" title="Remove">
+              <fa-icon icon="trash"></fa-icon>
+            </button>
+            <button *ngIf="(fileName || isRemoved) && config.candidateForm && !sizeError" type="button"
+              class="btn btn-default" (click)="patchPicture()" title="Update">
+              <fa-icon icon="check"></fa-icon>
+            </button>
+          </div>
+
         </div>
 
-
-          <!-- <button type="button" class="btn btn-primary" (click)="upload()">
-            <fa-icon
-              [class.mr-0]="!config.templateOptions.label_upload"
-              icon="upload"
-            ></fa-icon>
-            {{ config.templateOptions.label_upload }}
-          </button>
-          <span class="p-1">or</span>
-          <button type="button" class="btn btn-success" (click)="open()">
-            <fa-icon
-              [class.mr-0]="!config.templateOptions.label_photo"
-              icon="camera"
-            ></fa-icon>
-            {{ config.templateOptions.label_photo }}
-          </button> -->
-        </div>
-
-        <div
-          class="mt-1"
-          style="overflow: hidden; text-overflow: ellipsis"
-          *ngIf="fileName && !config.read_only && !config.view"
-        >
+        <div class="mt-1" style="overflow: hidden; text-overflow: ellipsis"
+          *ngIf="fileName && !config.read_only && !config.view">
           <i class="text-muted">file:</i> {{ fileName }}
         </div>
-        <!-- <button
-          *ngIf="fileName && config.candidateForm"
-          type="button"
-          class="btn btn-primary btn-sm mt-2 btn-update"
-          (click)="patchPicture()"
-        >
-          Update
-        </button> -->
       </div>
     </ng-container>
   </div>
@@ -172,16 +99,9 @@
     <app-close-button class="ml-auto" (click)="c()"></app-close-button>
   </div>
 
-  <div
-    class="modal-body picture d-inline-block d-flex justify-content-around flex-wrap"
-    style="overflow: auto"
-  >
-    <app-webcam
-      class="d-flex align-items-center"
-      [options]="options"
-      [onSuccess]="onSuccess"
-      [onError]="onError"
-    ></app-webcam>
+  <div class="modal-body picture d-inline-block d-flex justify-content-around flex-wrap" style="overflow: auto">
+    <app-webcam class="d-flex align-items-center" [options]="options" [onSuccess]="onSuccess" [onError]="onError">
+    </app-webcam>
     <div class="photo d-flex justify-content-center align-items-center">
       <span *ngIf="!photoExist" class="text-white">Photo</span>
       <canvas [hidden]="!photoExist"></canvas>
@@ -189,12 +109,7 @@
   </div>
 
   <div class="modal-footer justify-content-start">
-    <button
-      *ngIf="photoExist"
-      type="button"
-      class="btn btn-success"
-      (click)="save(c)"
-    >
+    <button *ngIf="photoExist" type="button" class="btn btn-success" (click)="save(c)">
       Save
     </button>
     <button type="button" class="btn btn-primary" (click)="getPhoto()">
@@ -213,10 +128,7 @@
 <ng-template #pictureView>
   <div class="d-flex flex-wrap">
     <div class="text-center dropzone-wrapper">
-      <label
-        class="dropzone-name"
-        [class.required]="config.templateOptions.required"
-      >
+      <label class="dropzone-name" [class.required]="config.templateOptions.required">
         Add photo
       </label>
       <div class="dropzone" #dropzone>
@@ -224,9 +136,7 @@
       </div>
     </div>
     <div class="d-flex flex-column justify-content-center">
-      <span class="description"
-        >Drag the photo to the area or click the button</span
-      >
+      <span class="description">Drag the photo to the area or click the button</span>
       <div class="d-flex align-items-center buttons-wrapper">
         <button class="btn action mr-2" (click)="upload()">Add photo</button>
         <button class="btn action" (click)="open()">Use camera</button>
