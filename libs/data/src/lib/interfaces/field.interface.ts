@@ -133,6 +133,7 @@ export interface Field {
     currency?: boolean;
     listDisplay?: string;
     listParam?: string;
+    round?: true;
   };
 }
 
