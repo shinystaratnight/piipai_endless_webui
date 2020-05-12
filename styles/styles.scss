@@ -1,4 +1,4 @@
-@import 'variables.scss';
+@import './variables';
 @import '../node_modules/bootstrap/scss/bootstrap-reboot';
 @import '../node_modules/bootstrap/scss/type';
 @import '../node_modules/bootstrap/scss/forms';
@@ -21,8 +21,8 @@
 
 @import '../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss';
 
-@import 'base.scss';
-@import 'components/index.scss';
+@import './base';
+@import './components/index';
 
 // Font Awesome (only for jtsage-datepicker)
 @import '../node_modules/font-awesome/scss/variables';
