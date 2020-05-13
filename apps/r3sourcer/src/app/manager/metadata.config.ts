@@ -102,7 +102,8 @@ import {
   priselistratemodifiers,
   candidateLanguage,
   // jobsitesclient
-  companyLanguage
+  companyLanguage,
+  emailtemplates
 } from '@webui/manager-metadata';
 
 import {
@@ -227,4 +228,5 @@ export class Metadata {
   [Endpoints.PriceListRateModifiers] = priselistratemodifiers;
   'candidate_languages' = candidateLanguage;
   'company_languages' = companyLanguage;
+  [Endpoints.EmailTemplate] = emailtemplates;
 }

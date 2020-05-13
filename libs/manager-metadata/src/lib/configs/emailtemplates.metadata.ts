@@ -2,8 +2,8 @@ import { Endpoints } from '@webui/data';
 
 const list = {
   list: {
-    list: 'smstemplate',
-    label: 'SMS Template',
+    list: 'emailtemplates',
+    label: 'Email Template',
     columns: [
       {
         content: [
@@ -13,7 +13,7 @@ const list = {
           }
         ],
         name: 'name',
-        label: 'Sms Template'
+        label: 'Email Template'
       },
       {
         content: [
@@ -28,8 +28,8 @@ const list = {
       {
         content: [
           {
-            endpoint: Endpoints.SmsTemplate,
-            action: 'createSmsTemplate',
+            endpoint: Endpoints.EmailTemplate,
+            action: 'createEmailTemplate',
             text: 'Create New',
             type: 'button',
             field: 'id'
@@ -39,7 +39,7 @@ const list = {
         label: 'Actions'
       }, 
     ],
-    pagination_label: 'SMS Template',
+    pagination_label: 'Email Template',
     search_enabled: false,
     editDisable: false,
     buttons: []
@@ -50,7 +50,7 @@ const list = {
       type: 'static',
       templateOptions: {
         required: false,
-        label: 'Sms Template',
+        label: 'Email Template',
         type: 'static'
       },
       read_only: true
@@ -127,6 +127,16 @@ const form = [
     read_only: false
   },
   {
+    key: 'message_html_template',
+    default: '',
+    type: 'textarea',
+    templateOptions: {
+      required: false,
+      label: 'HTML template',
+      type: 'text'
+    },
+  },
+  {
     key: 'reply_timeout',
     default: 10,
     type: 'input',
@@ -158,14 +168,15 @@ const form = [
     key: 'type',
     type: 'select',
     hide: true,
+    default: 'email',
+    require: true,
     templateOptions: {
-      required: true,
       label: 'Type',
       type: 'select',
       options: [
         {
-          value: 'sms',
-          label: 'SMS'
+          value: 'email',
+          label: 'Email'
         }
       ]
     },
@@ -221,6 +232,16 @@ const formadd = [
     },
   },
   {
+    key: 'message_html_template',
+    default: '',
+    type: 'textarea',
+    templateOptions: {
+      required: false,
+      label: 'HTML template',
+      type: 'text'
+    },
+  },
+  {
     key: 'reply_timeout',
     default: 10,
     type: 'input',
@@ -265,14 +286,14 @@ const formadd = [
     key: 'type',
     type: 'select',
     hide: true,
+    default: 'email',
     templateOptions: {
-      required: true,
       label: 'Type',
       type: 'select',
       options: [
         {
-          value: 'sms',
-          label: 'SMS'
+          value: 'email',
+          label: 'Email'
         }
       ]
     },
@@ -293,7 +314,7 @@ const formadd = [
   }
 ];
 
-export const smstemplates = {
+export const emailtemplates = {
   list,
   form,
   formadd
