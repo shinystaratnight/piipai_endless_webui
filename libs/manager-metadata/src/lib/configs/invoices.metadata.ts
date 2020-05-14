@@ -149,23 +149,6 @@ const list = {
         title: null,
         sort_field: 'number'
       },
-      // {
-      //   delim: null,
-      //   label: '',
-      //   content: [
-      //     {
-      //       endpoint: `${Endpoints.Invoice}{id}/pdf/`,
-      //       field: 'id',
-      //       icon: 'fa-eye',
-      //       action: 'previewInvoice',
-      //       type: 'button',
-      //       text: 'Preview'
-      //     }
-      //   ],
-      //   name: 'id',
-      //   title: null,
-      //   sort_field: 'id'
-      // },
       {
         delim: null,
         label: '',
@@ -315,24 +298,6 @@ const formset = {
         label: 'Number',
         delim: null
       },
-      // {
-      //   name: 'id',
-      //   sort_field: 'id',
-      //   title: null,
-      //   sort: true,
-      //   content: [
-      //     {
-      //       action: 'previewInvoice',
-      //       endpoint: `${Endpoints.Invoice}{id}/pdf/`,
-      //       icon: 'fa-eye',
-      //       text: 'Preview',
-      //       type: 'button',
-      //       field: 'id'
-      //     }
-      //   ],
-      //   label: '',
-      //   delim: null
-      // },
       {
         name: 'id',
         sort_field: 'id',

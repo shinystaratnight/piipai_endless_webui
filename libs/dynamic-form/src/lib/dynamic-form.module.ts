@@ -8,9 +8,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AgmCoreModule } from '@agm/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ButtonsModule, BsDropdownModule } from 'ngx-bootstrap';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
-import { DndModule } from 'ng2-dnd';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
 import { SignaturePadModule } from 'angular2-signaturepad';
 
@@ -38,10 +37,9 @@ import { directives } from './directives';
     SharedModule,
     ButtonsModule.forRoot(),
     GooglePlaceModule,
-    DndModule.forRoot(),
-    PdfViewerModule,
     QuillModule,
     SignaturePadModule,
+    DragDropModule,
 
     BsDropdownModule.forRoot(),
     NgxIntlTelInputModule,

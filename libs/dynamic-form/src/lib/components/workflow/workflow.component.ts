@@ -11,6 +11,7 @@ import {
 import { FormGroup } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import { WorkflowService } from '../../services';
 import { config, workflowEl } from './workflow.config';
@@ -86,9 +87,10 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onDrop() {
-    const states = this.currentWorkflowNodes;
+  public onDrop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.currentWorkflowNodes, event.previousIndex, event.currentIndex);
 
+    const states = this.currentWorkflowNodes;
     const requests = [];
     states.forEach((state, i) => {
       const body = {
@@ -127,7 +129,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
 
   public getNodes(id: string) {
     this.workflowService.getNodesOfCompany(id, this.company)
-      .subscribe((res: any) => this.currentWorkflowNodes = res.results);
+      .subscribe((res: any) => this.currentWorkflowNodes = res.results.sort((p, n) => p.order > n.order ? 1 : -1));
   }
 
   public getSubstates(workflowId: string, nodeId: string) {
