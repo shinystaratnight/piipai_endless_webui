@@ -9,17 +9,17 @@
 </div>
 
 <div class="workflow" *ngIf="currentWorkflowNodes">
-  <div dnd-sortable-container [sortableData]="currentWorkflowNodes" class="workflow-wrapper">
+  <div cdkDropList (cdkDropListDropped)="onDrop($event)" class="workflow-wrapper">
     <div class="workflow-item"
-      dnd-sortable
-      [sortableIndex]="i"
-      *ngFor="let node of currentWorkflowNodes; let i = index;"
+      cdkDrag
       (click)="openState(node)"
-      (onDragSuccess)="onDrop($event)">
+      *ngFor="let node of currentWorkflowNodes">
+        <fa-icon class="mr-2 circle" icon="dot-circle"></fa-icon>
         <div class="title">
           {{node.workflow_node.name_before_activation}}
         </div>
-        <fa-icon class="icon text-danger" icon="times" (click)="deleteNode(node.id, $event)"></fa-icon>
+
+        <fa-icon class="icon text-danger ml-2" icon="times" (click)="deleteNode(node.id, $event)"></fa-icon>
     </div>
 
   </div>
