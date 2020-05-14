@@ -64,60 +64,51 @@ h5 {
   margin: 1rem 20px 1.5rem;
 
   &-wrapper {
-    display: flex;
-    flex-wrap: wrap;
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
 
     margin-bottom: 10px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      height: 100%;
+      width: 2px;
+      background-color: rgba($gray, .2);
+    }
   }
 
   &-item {
     position: relative;
+    display: inline-flex;
+    align-items: center;
 
-    display: flex;
+    margin: 4px 0;
+    padding: 4px;
 
-    flex-basis: 150px;
-    height: 50px;
-
-    padding: .5rem;
-    margin: 5px;
-
-
-    border: 1px solid rgba($gray, .5);
-    border-radius: 5px 15px;
-
-    &:not(:last-child) {
-      margin-right: 25px;
-
-      &::before {
-        position: absolute;
-        top: 15px;
-        right: -31px;
-
-        border: 10px solid transparent;
-        border-left: 10px solid rgba(51, 51, 51, .4);
-
-        content: '';
-      }
-
-      &::after {
-        position: absolute;
-        top: 15px;
-        right: -30px;
-
-        border: 10px solid transparent;
-        border-left: 10px solid white;
-
-        content: '';
-      }
+    .circle {
+      font-size: 10px;
+      box-shadow: 0 0 0 2px #fff;
+      border-radius: 50%;
     }
 
+    button {
+      display: none;
+      padding: 3px 14px;
+    }
 
     &:hover {
       cursor: pointer;
 
+      .title {
+        color: $primary;
+      }
+
       .icon {
-        display: flex;
-        align-self: flex-start;
+        opacity: 1;
       }
     }
 
@@ -128,10 +119,14 @@ h5 {
     }
 
     .icon {
-      display: none;
-
-      margin-left: auto;
+      opacity: 0;
+      color: rgba($gray, .3);
     }
   }
 }
 
+.cdk-drag-preview {
+  border-radius: 2px;
+  background-color: #fff;
+  box-shadow: 0 0 2px 2px rgba(black, .3);
+}

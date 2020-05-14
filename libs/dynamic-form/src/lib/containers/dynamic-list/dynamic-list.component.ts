@@ -110,7 +110,6 @@ export class DynamicListComponent
   @ViewChild('pdfDocumentModal', { static: false }) pdfDocumentModal;
   @ViewChild('datatable', { static: false }) datatable;
   @ViewChild('tableWrapper', { static: false }) tableWrapper;
-  @ViewChild('showPreviewInvoice', { static: false }) showPreviewInvoice;
   @ViewChild('fillInMap', { static: false }) fillInMap;
   @ViewChild('mapModal', { static: false }) mapModal;
   @ViewChild('messageDetail', { static: false }) messageDetail;
@@ -1419,9 +1418,6 @@ export class DynamicListComponent
         case 'sendSMS':
           this.openFrame(e.el.fields);
           break;
-        case 'previewInvoice':
-          this.showPreview(e);
-          break;
         case 'printInvoice':
           this.printPDF(e);
           break;
@@ -2271,17 +2267,6 @@ export class DynamicListComponent
       data.longitude = this.data[this.supportData].longitude;
     }
     return data;
-  }
-
-  public showPreview(e) {
-    this.genericFormService.getAll(e.el.endpoint).subscribe((res: any) => {
-      this.modalInfo = {
-        url: {
-          url: res.pdf
-        }
-      };
-      this.open(this.showPreviewInvoice, { size: 'lg' });
-    });
   }
 
   public printPDF(e) {
