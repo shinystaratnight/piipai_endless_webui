@@ -174,14 +174,16 @@ const form = [
   {
     key: 'language',
     type: 'related',
-    read_only: true,
+    read_only: false,
     send: false,
     replaceByData: true,
     endpoint: '/companies/{company_id}/languages/',
     templateOptions: {
       label: 'Language',
       display: '{name}',
-      param: 'alpha_2'
+      param: 'alpha_2',
+      listDisplay: '{language.name}',
+      listParam: '{language.alpha_2}'
     }
   }
 ];
