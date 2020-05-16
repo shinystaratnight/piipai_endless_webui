@@ -1549,6 +1549,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
 
                   if (this.config.templateOptions.listParam) {
                     el[this.param] = FormatString.format(this.config.templateOptions.listParam, el);
+                    el['name'] = FormatString.format(this.config.templateOptions.listDisplay, el);
                   }
 
                   if (this.config.templateOptions.info) {
