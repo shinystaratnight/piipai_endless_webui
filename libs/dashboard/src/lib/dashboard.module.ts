@@ -51,7 +51,7 @@ import { DashboardComponent } from './dashboard.component';
     WidgetDirective,
     DashboardMenuComponent
   ],
-  providers: [DashboardService, WidgetService],
+  providers: [DashboardService],
   entryComponents: [ButtonsWidget, CandidateWidget, CalendarWidgetComponent],
   exports: [DashboardComponent]
 })
