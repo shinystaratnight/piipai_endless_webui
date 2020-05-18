@@ -66,6 +66,10 @@ export enum Endpoints {
   SmsTemplate = '/sms-interface/smstemplates/',
   SmsLog = '/sms-interface/smslogs/',
 
+  // Email
+  EmailMessages = '/email-interface/emailmessages/',
+  EmailTemplate = '/email-interface/emailtemplates/',
+
   // Location
   Country = '/core/countries/',
   Region = '/core/regions/',
@@ -154,8 +158,6 @@ export enum Endpoints {
   Language = '/languages/',
   CandidateLanguages = '/candidate_contacts/',
   CompanyLanguages = '/companies/',
-
-  EmailTemplate = '/email-interface/emailtemplates/'
 }
 
 export const getBankAccountLayoutEndpoint = (countryCode: string) => {
