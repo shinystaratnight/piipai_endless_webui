@@ -260,7 +260,7 @@ export class FormPictureComponent
     this.updateValue('', '', true);
     const file = e.target.files[0];
 
-    if (file.size > 900000) {
+    if (file.size > (10 * 1024 * 1024)) {
       this.formService.disableSaveButton(this.config.formId, true);
       this.sizeError = true;
     } else {
