@@ -15,7 +15,15 @@ export class SiteService {
 
   public generateData(list: Page[], url: any[]): PageData {
     const pathData: PathData = this.getTypeOfPage(url);
-    const element: Page = this.getElementFromList(list, pathData.path);
+    let element: Page = this.getElementFromList(list, pathData.path);
+
+    // For job page on client side
+    if (pathData.postfix === 'fillin') {
+      element = {
+        endpoint: '/hr/jobs/'
+      } as Page;
+
+    }
     const data: PageData = {
       endpoint: element ? element.endpoint : '/',
       pathData

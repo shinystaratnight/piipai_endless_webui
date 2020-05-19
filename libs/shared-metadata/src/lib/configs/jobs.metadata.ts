@@ -786,6 +786,19 @@ const jobsite_client = {
             text: 'Fill in',
             type: 'button',
             field: 'id'
+          },
+          {
+            endpoint: '/hr/jobs/{id}/extend',
+            field: 'id',
+            showIf: [
+              {
+                extend: true
+              }
+            ],
+            icon: 'fa-sign-in-alt',
+            action: 'editForm',
+            type: 'button',
+            text: 'Extend'
           }
         ],
         label: 'Fill in',

@@ -58,7 +58,7 @@
             (str)="changeFormLabel($event)"
           >
             <div class="d-flex">
-              <button
+              <!-- <button
                 type="button"
                 class="btn button-delete custom-button"
                 *ngIf="showDeleteButton()"
@@ -66,7 +66,7 @@
               >
                 <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                 Delete
-              </button>
+              </button> -->
 
               <!-- <button type="button" class="btn close button-close mt-2"
                     *ngIf="formMode === FormMode.Edit"
@@ -79,7 +79,7 @@
                     (click)="changeMode(FormMode.Edit)">
                       <fa-icon [icon]="['fas', 'pencil-alt']"></fa-icon>
                       Edit mode
-                  </button>
+                  </button> -->
 
                   <button type="submit" class="btn btn-primary button-save save mt-2"
                     *ngIf="!formStorage && formMode !== FormMode.View && (checkPermission('post') || checkPermission('update')) && (pageData.endpoint !== '/core/users/')"
@@ -88,7 +88,7 @@
                       <app-spinner *ngIf="saveProcess"></app-spinner>
                   </button>
 
-                  <button type="button" class="btn btn-success mr-2 ml-auto"
+                  <!-- <button type="button" class="btn btn-success mr-2 ml-auto"
                     *ngIf="formStorage && !approvedStorage && formMode === FormMode.Edit && checkPermission('post')"
                     (click)="approveFormStorage(pageData)">
                       Approve
@@ -168,7 +168,7 @@
           </app-generic-list>
         </div>
 
-        <!-- <div class="datatable-list" *ngIf="pageData.pathData.postfix && pageData.pathData.postfix === 'fillin'">
+        <div class="datatable-list" *ngIf="pageData.pathData.postfix && pageData.pathData.postfix === 'fillin'">
           <app-generic-list
             [responseField]="fillInData.responseField || 'results'"
             [paginated]="fillInData.paginated || 'on'"
@@ -181,17 +181,17 @@
             [endpoint]="pageData.endpoint"
             (checkedObjects)="checkedObjects($event)">
 
-              <app-back-link
+              <!-- <app-back-link
                 label="Back to job info"
                 (backEvent)="back()">
-              </app-back-link>
+              </app-back-link> -->
 
           </app-generic-list>
           <div class="buttons mb-5">
             <button type="button" class="btn btn-secondary" (click)="back()">Cancel</button>
             <button type="button" class="btn btn-primary pr-3" (click)="sendData()">Fill in</button>
           </div>
-        </div> -->
+        </div>
       </ng-container>
 
       <!-- <app-map *ngSwitchCase="'map'"></app-map> -->

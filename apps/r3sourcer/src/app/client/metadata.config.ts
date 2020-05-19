@@ -3,7 +3,9 @@ import {
   history,
   unapproved,
   notAgree,
-  jobsitesclient
+  jobsitesclient,
+  extend,
+  fillin
 } from '@webui/client-metadata';
 
 import {
@@ -24,4 +26,6 @@ export class Metadata {
   [Endpoints.Job] = jobs;
   [Endpoints.Note] = notes;
   [Endpoints.Address] = address;
+  'extend' = extend;
+  'fillin' = fillin;
 }
