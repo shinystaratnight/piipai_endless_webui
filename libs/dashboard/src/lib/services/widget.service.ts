@@ -73,7 +73,7 @@ export class WidgetService {
             const defaultConfig = {
               size: this.getSizes(widget.type),
               coords: this.getPosition(widget.type),
-              active: false
+              active: true
             };
             const config = Object.keys(el.ui_config).length ? el.ui_config : defaultConfig;
             const target = {
