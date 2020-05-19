@@ -91,3 +91,4 @@ export * from './pricelistratemodifiers.metadata';
 export * from './candidatelanguage.metadata';
 export * from './companieslanguages.metadata';
 export * from './emailtemplates.metadata';
+export * from './emailmessages.metadata';
