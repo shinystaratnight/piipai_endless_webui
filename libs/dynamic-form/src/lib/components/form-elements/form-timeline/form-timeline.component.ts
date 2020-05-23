@@ -230,6 +230,15 @@ export class FormTimelineComponent implements OnInit, OnDestroy {
         });
 
         return;
+      } else {
+        state.saveProcess = true;
+        this.timelineService
+          .activateState(this.objectId, state.id, true)
+          .pipe(finalize(() => (this.saveProcess = false)))
+          .subscribe(() => {
+            this.getTimeline(this.config.query.model === 'hr.job');
+          });
+        return;
       }
     }
 
