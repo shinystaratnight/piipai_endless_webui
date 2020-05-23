@@ -1,4 +1,15 @@
 import { Endpoints } from '@webui/data';
+import { Filter } from '@webui/metadata';
+
+const filters = {
+  language: new Filter.related.element({
+    key: 'language',
+    label: 'Language',
+    endpoint: `${Endpoints.CompanyLanguages}{company}/languages/?language={filter_value}`,
+    parameter: '{language.alpha_2}',
+    display: '{language.name}',
+  })
+}
 
 const list = {
   list: {
@@ -12,6 +23,8 @@ const list = {
             type: 'input'
           }
         ],
+        sort: true,
+        sort_field: 'name',
         name: 'name',
         label: 'Sms Template'
       },
@@ -22,6 +35,8 @@ const list = {
             type: 'input'
           }
         ],
+        sort: true,
+        sort_field: 'language',
         name: 'language.name',
         label: 'Language'
       },
@@ -37,12 +52,15 @@ const list = {
         ],
         name: 'actions',
         label: 'Actions'
-      }, 
+      },
     ],
     pagination_label: 'SMS Template',
-    search_enabled: false,
+    search_enabled: true,
     editDisable: false,
-    buttons: []
+    buttons: [],
+    filters: [
+      filters.language
+    ]
   },
   fields: [
     {
@@ -102,7 +120,7 @@ const form = [
       max: 256,
       type: 'text'
     },
-    read_only: false
+    read_only: true
   },
   {
     key: 'slug',
@@ -199,7 +217,7 @@ const formadd = [
       max: 256,
       type: 'text'
     },
-    read_only: false
+    read_only: true
   },
   {
     key: 'slug',
