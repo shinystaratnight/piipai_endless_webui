@@ -314,7 +314,7 @@ export class DynamicListComponent
       this.parseMultipleFilter(config.list.filters);
     }
 
-    if (changes.hasOwnProperty('data') && changes['data'].isFirstChange()) {
+    if (changes.hasOwnProperty('data') && data && !this.fullData) {
       this.label = this.getFormat('label', data, config);
       this.description = this.getFormat('description', data, config);
 
@@ -343,7 +343,7 @@ export class DynamicListComponent
     }
 
     this.listService.updateButtons = this.updateButtons;
-    this.listService.data = this.fullData[this.responseField];
+    this.listService.data = this.fullData && this.fullData[this.responseField];
     this.listService.config = this.config.list;
     this.listService.updateActions = listUpdateActions[this.endpoint];
   }

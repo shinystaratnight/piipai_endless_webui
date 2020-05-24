@@ -130,7 +130,7 @@
         </button>
         <app-list-search-bar
           class="datatable-search"
-          *ngIf="config.list.search_enabled"
+          *ngIf="data && config.list.search_enabled"
           [param]="config.list.searchParameter"
           [count]="data.count"
           [label]="config.list.pagination_label || config.list.label"
@@ -527,11 +527,10 @@
             </ng-container>
           </tbody>
         </table>
-        <div *ngIf="refresh" class="spinner">
-          <div class="double-bounce1"></div>
-          <div class="double-bounce2"></div>
-        </div>
       </div>
+
+      <ng-content select="div.list-actions"></ng-content>
+
       <div
         *ngIf="pageSize && inForm"
         class="d-flex flex-wrap align-items-center py-3"

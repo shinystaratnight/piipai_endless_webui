@@ -60,7 +60,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
   public minimizedTable = [];
 
   public cashData: any[];
-  public uploading: boolean;
+  public isLoading: boolean;
   public currentQuery: any;
 
   private subscriptions: Subscription[] = [];
@@ -99,15 +99,13 @@ export class GenericListComponent implements OnInit, OnDestroy {
           const table = this.getFirstTable();
 
           if (
-            table.offset < (table.data && table.data.count) &&
-            table.data.count !== table.limit
+            table.offset + table.limit < (table.data && table.data.count) &&
+            table.data.count > table.limit
           ) {
-            if (data && !this.uploading) {
-              this.uploading = true;
-
+            if (data && !this.isLoading) {
               setTimeout(() => {
                 this.uploadMore();
-              }, 500);
+              }, 200);
             }
           }
         });
@@ -163,7 +161,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
       this.getData(table.endpoint, this.generateQuery(table.query), table);
     } else if (update) {
       table['data'] = this.data;
-      table.update = Object.assign({}, this.data);
+      table.update = Date.now();
     }
   }
 
@@ -265,6 +263,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     }
 
     this.currentQuery = query;
+    this.isLoading = true;
 
     this.gfs.getByQuery(endpoint, query).subscribe(data => {
       if (this.currentQuery !== query) {
@@ -278,7 +277,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
       if (endpoint.includes('/fillin/')) {
         this.updateFillInList(data);
       }
-
+      this.isLoading = false;
       this.updateTable(data, table, target, add);
     });
   }
@@ -290,7 +289,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
     if (add) {
       table.offset += table.limit;
       table.addData = data;
-      this.uploading = false;
     } else {
       table.data = data;
     }
@@ -300,7 +298,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
     table.refresh = false;
     if (target) {
       setTimeout(() => {
-        target.update = data;
+        target.update = Date.now();
       }, 150);
     }
   }

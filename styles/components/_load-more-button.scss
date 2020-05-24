@@ -1,8 +1,4 @@
 .load-more {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-
   width: 40px;
   height: 40px;
 
@@ -13,6 +9,10 @@
 
   background-color: $success;
   box-shadow: 3px 3px 7px rgba(51, 51, 51, 0.2);
+
+  &-wrapper {
+    text-align: center;
+  }
 
   &:hover {
     opacity: 1;

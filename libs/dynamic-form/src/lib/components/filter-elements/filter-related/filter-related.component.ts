@@ -230,13 +230,13 @@ export class FilterRelatedComponent
   public setValue(value, list?) {
     if (this.multiple) {
       this.selected = list.filter(item => item.checked);
-      this.item.data = this.selected.map(el => el[this.config.data.key]);
+      this.item.data = this.selected.map(el => this.getValue(el, this.config.data.key));
       this.item.displayValue = this.selected.length
         ? `Selected ${this.selected.length} ${this.config.label}`
         : `Select ${this.config.label}`;
       this.onChange();
     } else {
-      this.item.data = value[this.config.data.key];
+      this.item.data = this.getValue(value, this.config.data.key);
       this.item.displayValue = this.getValue(value, this.config.data.value);
       this.item.count = null;
       this.item.hideAutocomplete = true;
@@ -299,7 +299,6 @@ export class FilterRelatedComponent
   public parseQuery(query) {
     this.query = query;
     const queries = query.split('&');
-    const selected = queries.length;
     let data = queries.length && [];
     queries.forEach((el, i) => {
       if (queries.length) {
@@ -348,7 +347,7 @@ export class FilterRelatedComponent
           el.checked = false;
         });
         this.selected = this.previewList.filter(item => item.checked);
-        this.item.data = this.selected.map(el => el[this.config.data.key]);
+        this.item.data = this.selected.map(el => this.getValue(el, this.config.data.key));
         this.item.displayValue =
           this.selected && this.selected.length
             ? `Selected ${this.selected.length} ${this.config.label}`
@@ -376,11 +375,14 @@ export class FilterRelatedComponent
 
     if (this.config.data.endpoint.includes('{')) {
       const formatString = new FormatString();
+      const data = {
+        ...this.siteSettingsService.settings,
+        filter_value: value
+      }
       endpoint = formatString.format(
         this.config.data.endpoint,
-        this.siteSettingsService.settings
+        data
       );
-      endpoint += `&number=${value}`;
       this.genericFormService.getAll(endpoint).subscribe((res: any) => {
         if (res.results) {
           this.item.displayValue = this.getValue(
@@ -483,7 +485,11 @@ export class FilterRelatedComponent
         result = result ? result : data[el];
       });
     } else {
-      result = data[value];
+      if (value.includes('{')) {
+        result = FormatString.format(value, data);
+      } else {
+        result = data[value];
+      }
     }
 
     return result;

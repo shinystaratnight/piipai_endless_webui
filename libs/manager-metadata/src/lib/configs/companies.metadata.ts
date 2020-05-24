@@ -6,7 +6,7 @@ const filters = {
     key: 'status',
     label: 'Status',
     endpoint:
-      '/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel',
+      '/core/workflownodes/?company={company_settings.company}&content_type=core.companyrel&number={filter_value}',
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
