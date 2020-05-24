@@ -24,7 +24,7 @@ const filters = {
     label: 'Status',
     endpoint: `${
       Endpoints.WorkflowNode
-    }?company={company_settings.company}&content_type=candidate.candidatecontact`,
+    }?company={company_settings.company}&content_type=candidate.candidatecontact&number={filter_value}`,
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),

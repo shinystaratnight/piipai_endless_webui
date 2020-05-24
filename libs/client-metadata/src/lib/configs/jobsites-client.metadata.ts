@@ -476,7 +476,8 @@ const form = [
         templateOptions: {
           label: 'Jobs',
           type: 'list',
-          text: 'Jobs'
+          text: 'Jobs',
+          add_label: 'Add +'
         },
         prefilled: {
           customer_representative: '{primary_contact.id}',

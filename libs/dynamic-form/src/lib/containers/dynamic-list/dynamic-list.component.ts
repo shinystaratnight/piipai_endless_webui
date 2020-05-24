@@ -35,7 +35,9 @@ import {
   isCandidate,
   getContactAvatar,
   getTimeInstance,
-  getPropValue
+  getPropValue,
+  isManager,
+  isClient
 } from '@webui/utilities';
 import { Endpoints } from '@webui/data';
 
@@ -312,7 +314,7 @@ export class DynamicListComponent
       this.parseMultipleFilter(config.list.filters);
     }
 
-    if (changes.hasOwnProperty('data') && changes['data'].isFirstChange()) {
+    if (changes.hasOwnProperty('data') && data && !this.fullData) {
       this.label = this.getFormat('label', data, config);
       this.description = this.getFormat('description', data, config);
 
@@ -341,7 +343,7 @@ export class DynamicListComponent
     }
 
     this.listService.updateButtons = this.updateButtons;
-    this.listService.data = this.fullData[this.responseField];
+    this.listService.data = this.fullData && this.fullData[this.responseField];
     this.listService.config = this.config.list;
     this.listService.updateActions = listUpdateActions[this.endpoint];
   }
@@ -1468,12 +1470,12 @@ export class DynamicListComponent
 
   private openSmsTemplateModal(e) {
     const {
-      name, 
-      slug, 
+      name,
+      slug,
       message_text_template,
-      reply_timeout, 
-      delivery_timeout, 
-      type, 
+      reply_timeout,
+      delivery_timeout,
+      type,
       company_id
     } = this.getRowData(e);
 
@@ -1499,13 +1501,13 @@ export class DynamicListComponent
 
   private openEmailTemplateModal(e) {
     const {
-      name, 
-      slug, 
-      message_text_template, 
+      name,
+      slug,
+      message_text_template,
       message_html_template,
-      reply_timeout, 
-      delivery_timeout, 
-      type, 
+      reply_timeout,
+      delivery_timeout,
+      type,
       company_id
     } = this.getRowData(e);
 
@@ -1583,7 +1585,14 @@ export class DynamicListComponent
   }
 
   public fillIn(e) {
-    const fillInPath = `/mn/hr/jobs/${e.el.rowId}/fillin/`;
+    let fillInPath;
+
+    if (isManager()) {
+      fillInPath = `/cl/hr/jobs/${e.el.rowId}/fillin/`;
+    } else if (isClient()) {
+      fillInPath = `/cl/hr/jobs/${e.el.rowId}/fillin/`;
+    }
+
     this.router.navigate([fillInPath]);
   }
 

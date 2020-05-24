@@ -1,6 +1,6 @@
 <div class="datatable-wrapper">
   <app-dynamic-list
-    *ngIf="tables[0].metadata && tables[0].data"
+    *ngIf="tables[0].metadata"
     [inForm]="inForm"
     [config]="tables[0].metadata"
     [data]="tables[0].data"
@@ -36,12 +36,21 @@
     (list)="listHandler($event)"
     (event)="eventHandler($event)">
       <ng-content></ng-content>
-  </app-dynamic-list>
 
-  <div class="spinner" [class.invisible]="!(!(tables[0].metadata && tables[0].data) || uploading)">
-    <div class="double-bounce1"></div>
-    <div class="double-bounce2"></div>
-  </div>
+      <div class="list-actions">
+        <div class="load-more-wrapper">
+          <button title="Load more" class="load-more"
+            *ngIf="!isLoading && tables[0].data && !inForm && (tables[0].offset + tables[0].limit < tables[0].data.count) && (tables[0].data.count > tables[0].limit)"
+            (click)="loadMoreHandler()">
+              <fa-icon icon="chevron-down" class="text-white"></fa-icon>
+          </button>
+        </div>
+        <div class="spinner" *ngIf="!tables[0].data || isLoading">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+      </div>
+  </app-dynamic-list>
 </div>
 
 <!-- <div #list class="d-flex justify-content-start datatable-list pt-2 flex-wrap" *ngIf="minimizedTable.length">
@@ -74,9 +83,3 @@
     </div>
   </ng-container>
 </div> -->
-
-<button title="Load more" class="load-more"
-  *ngIf="tables[0] && tables[0].data && !inForm && (tables[0].offset < tables[0].data.count) && !uploading && (tables[0].data.count !== tables[0].limit)"
-  (click)="loadMoreHandler()">
-    <fa-icon icon="chevron-down" class="text-white"></fa-icon>
-</button>

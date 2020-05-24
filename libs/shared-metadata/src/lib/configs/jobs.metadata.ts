@@ -27,7 +27,7 @@ const filter = {
   active_states: createFilter(Type.Relared, {
     key: 'active_states',
     label: 'State',
-    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=hr.job',
+    endpoint: '/core/workflownodes/?company={company_settings.company}&content_type=hr.job&number={filter_value}',
     display: ['name_after_activation', 'name_before_activation'],
     parameter: 'number'
   }),
@@ -786,6 +786,19 @@ const jobsite_client = {
             text: 'Fill in',
             type: 'button',
             field: 'id'
+          },
+          {
+            endpoint: '/hr/jobs/{id}/extend',
+            field: 'id',
+            showIf: [
+              {
+                extend: true
+              }
+            ],
+            icon: 'fa-sign-in-alt',
+            action: 'editForm',
+            type: 'button',
+            text: 'Extend'
           }
         ],
         label: 'Fill in',
