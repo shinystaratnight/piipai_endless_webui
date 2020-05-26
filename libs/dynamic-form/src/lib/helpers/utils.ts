@@ -95,6 +95,6 @@ export function generateCssStyles(styles: string[] = [], prefix: string): string
     .reduce((prev, current) => {
       return `${prev} ${current}`;
     }, '')
-    .trim()
+    .trim() || ''
   ];
 }

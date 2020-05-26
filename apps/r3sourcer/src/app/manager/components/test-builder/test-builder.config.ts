@@ -55,9 +55,9 @@ export const testMetadata = {
               read_only: false,
               templateOptions: {
                 label: 'Valid Until',
-                type: 'date',
+                type: 'date'
               }
-            },
+            }
           ]
         },
         {
@@ -104,7 +104,7 @@ export const testMetadata = {
                 type: 'related',
                 values: ['__str__'],
                 delete: true,
-                add: false,
+                add: false
               }
             },
             {
@@ -148,11 +148,11 @@ export const testMetadata = {
                 delete: true,
                 add: true
               }
-            },
+            }
           ]
         }
       ]
-    },
+    }
   ],
 
   formadd: [
@@ -193,7 +193,7 @@ export const testMetadata = {
         required: true,
         hidePreviewError: true,
         label: 'Valid From',
-        type: 'date',
+        type: 'date'
       }
     },
     {
@@ -202,9 +202,9 @@ export const testMetadata = {
       read_only: false,
       templateOptions: {
         label: 'Valid Until',
-        type: 'date',
+        type: 'date'
       }
-    },
+    }
   ]
 };
 
@@ -246,15 +246,15 @@ export const questionMetadata = {
           templateOptions: {
             required: true,
             label: 'Question',
-            max: 255,
-          },
+            max: 255
+          }
         },
         {
           key: 'details',
           type: 'textarea',
           templateOptions: {
             required: false,
-            label: 'Details',
+            label: 'Details'
           }
         },
         {
@@ -263,11 +263,7 @@ export const questionMetadata = {
           templateOptions: {
             required: false,
             label: 'Question Type',
-            options: [
-              { value: 0, label: 'Options' },
-              { value: 1, label: 'Text' },
-              { value: 2, label: 'Yes/No' }
-            ]
+            options: [{ value: 0, label: 'Options' }, { value: 1, label: 'Text' }, { value: 2, label: 'Yes/No' }]
           }
         },
         {
@@ -282,12 +278,10 @@ export const questionMetadata = {
         },
         {
           type: 'button',
-          width: .2,
           color: 'primary',
           templateOptions: {
+            text: 'Save',
             type: 'submit',
-            p: true,
-            small: true,
           }
         }
       ]
@@ -303,7 +297,7 @@ export const questionMetadata = {
           type: 'textarea',
           templateOptions: {
             label: 'Question',
-            max: 255,
+            max: 255
           }
         },
         {
@@ -311,7 +305,7 @@ export const questionMetadata = {
           type: 'textarea',
           templateOptions: {
             required: false,
-            label: 'Details',
+            label: 'Details'
           }
         },
         {
@@ -320,11 +314,7 @@ export const questionMetadata = {
           templateOptions: {
             required: false,
             label: 'Question Type',
-            options: [
-              { value: 0, label: 'Options' },
-              { value: 1, label: 'Text' },
-              { value: 2, label: 'Yes/No' }
-            ]
+            options: [{ value: 0, label: 'Options' }, { value: 1, label: 'Text' }, { value: 2, label: 'Yes/No' }]
           }
         },
         {
@@ -339,15 +329,12 @@ export const questionMetadata = {
         },
         {
           type: 'button',
-          width: .2,
           color: 'primary',
           templateOptions: {
             text: 'Save',
             type: 'submit',
-            p: true,
-            small: true,
           }
-        },
+        }
       ]
     }
   ]
@@ -376,7 +363,7 @@ export const answerMetadata = {
             required: true,
             label: 'Answer',
             max: 255
-          },
+          }
         },
         {
           key: 'order',
@@ -401,16 +388,14 @@ export const answerMetadata = {
             type: 'number',
             min: 1,
             description: 'Values can be between 1 and 5'
-          },
+          }
         },
         {
           type: 'button',
-          width: 0.4,
           color: 'primary',
           templateOptions: {
+            text: 'Save',
             type: 'submit',
-            p: true,
-            small: true
           }
         }
       ]
@@ -459,16 +444,13 @@ export const answerMetadata = {
         },
         {
           type: 'button',
-          width: 0.4,
           color: 'primary',
           templateOptions: {
             text: 'Save',
             type: 'submit',
-            p: true,
-            small: true
           }
         }
       ]
     }
   ]
-}
+};
