@@ -89,6 +89,7 @@ export interface Field {
   candidateForm?: boolean;
   smallModal?: boolean;
   replaceByData?: boolean;
+  show?: BehaviorSubject<boolean>;
   templateOptions?: {
     hideLabel?: boolean;
     dontSendFields?: boolean;

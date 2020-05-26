@@ -25,12 +25,6 @@
         (repeatArray && repeatArray.length > 1)) &&
       config.action !== 'showMessage'
     "
-    [ngClass]="[
-      buttonClass,
-      textClass,
-      cssClasses,
-      config.inverse ? 'inverse' : ''
-    ]"
     class="btn"
     [class.btn-outline-primary]="
       config.list &&
@@ -42,6 +36,7 @@
     [class.btn-sm]="config.templateOptions.small"
     [class.px-2]="config.templateOptions.p && buttonClass !== 'btn-link'"
     [class.list]="config.templateOptions.p"
+    [class.btn-primary]="config.color && config.color === 'primary'"
     [class.text-white]="
       (buttonClass || config.color) &&
       !config.inverse &&
@@ -49,6 +44,12 @@
       !config.shadow
     "
     [class.disabled]="isDisabled"
+    [ngClass]="[
+      buttonClass || '',
+      textClass || '',
+      cssClasses || '',
+      config.inverse ? 'inverse' : ''
+    ]"
     [title]="config.disableAction || isDisabled ? disabledTitle : ''"
     [disabled]="config.disableAction || isDisabled"
     (click)="action($event)"
