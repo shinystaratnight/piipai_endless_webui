@@ -19,17 +19,18 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   public group: FormGroup;
   public label: boolean;
   public replacyValue: string;
-  public buttonClass = '';
-  public textClass = '';
   public buttonColor: string;
   public repeatArray: any[];
-  public showButton: boolean;
+  public showButton: boolean = true;
   public last: boolean;
 
   public isDisabled: boolean;
   public disabledTitle: string;
   public saveProcess: boolean;
-  public cssClasses: string;
+
+  public cssClasses = '';
+  public buttonClass = '';
+  public textClass = '';
 
   public subscriptions: Subscription[] = [];
 

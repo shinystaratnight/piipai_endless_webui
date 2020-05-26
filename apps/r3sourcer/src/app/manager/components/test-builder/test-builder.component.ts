@@ -3,14 +3,13 @@ import {
   OnInit,
   Input,
   OnChanges,
-  ViewEncapsulation,
   SimpleChanges,
   ViewChild,
   TemplateRef
 } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {
@@ -28,7 +27,6 @@ import { testMetadata, questionMetadata, answerMetadata } from './test-builder.c
   selector: 'app-test-builder',
   templateUrl: './test-builder.component.html',
   styleUrls: ['./test-builder.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class TestBuilderComponent implements OnInit, OnChanges {
   @Input() public testData: any;
@@ -95,12 +93,16 @@ export class TestBuilderComponent implements OnInit, OnChanges {
           config = JSON.parse(JSON.stringify(config));
 
           const mode = new BehaviorSubject('edit');
+          const button = getElementFromMetadata(config, 'button', 'type');
+          const hidden = new BehaviorSubject(false);
+          button.hidden = hidden;
           if (metadataType === 'form') {
             this.addModeProperty(config, mode);
           }
 
           if (metadataType === 'form') {
             mode.next('view');
+            hidden.next(true);
             fillingForm(config, data);
           }
 
@@ -287,14 +289,14 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public editQuestion(question) {
     const field = getElementFromMetadata(question, 'question');
     const button = getElementFromMetadata(question, 'button', 'type');
-    button.templateOptions.text = 'Save';
+    button.hidden.next(false);
     field.mode.next('edit');
   }
 
   public editAnswer(answer) {
     const field = getElementFromMetadata(answer, 'answer');
     const button = getElementFromMetadata(answer, 'button', 'type');
-    button.templateOptions.text = 'Save';
+    button.hidden.next(false);
     field.mode.next('edit');
   }
 }
