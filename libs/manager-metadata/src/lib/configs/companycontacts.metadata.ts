@@ -312,6 +312,55 @@ const form = [
                 width: 0.5
               },
               {
+                label: 'Notify',
+                type: 'group',
+                children: [
+                  {
+                    key: 'message_by_email',
+                    default: false,
+                    type: 'checkbox',
+                    templateOptions: {
+                      required: false,
+                      label: 'E-Mail',
+                      type: 'checkbox',
+                      action: 'resendEmail',
+                      showButtonIf: false
+                    },
+                    read_only: false
+                  },
+                  {
+                    key: 'message_by_sms',
+                    default: false,
+                    type: 'checkbox',
+                    templateOptions: {
+                      required: false,
+                      label: 'SMS',
+                      type: 'checkbox',
+                      action: 'resendSms',
+                      showButtonIf: false
+                    },
+                    read_only: false
+                  },
+                  // {
+                  //   key: 'language_default',
+                  //   send: false,
+                  //   type: 'listdropdown',
+                  //   endpoint: `${Endpoints.CompanyLanguages}{master_company.id}/languages/`,
+                  //   editEndpoint: `${Endpoints.CandidateLanguages}{id}/languages/`,
+                  //   setData: {
+                  //     default: true
+                  //   },
+                  //   field: 'default',
+                  //   templateOptions: {
+                  //     label: 'Default notification language',
+                  //     display: '{language.name}',
+                  //     param: '{language.alpha_2}/'
+                  //   }
+                  // }
+                ],
+                width: 0.25
+              },
+              {
                 label: 'Contacts',
                 type: 'group',
                 children: [
@@ -339,7 +388,7 @@ const form = [
                     read_only: true
                   }
                 ],
-                width: 0.5
+                width: 0.25
               }
             ]
           }
