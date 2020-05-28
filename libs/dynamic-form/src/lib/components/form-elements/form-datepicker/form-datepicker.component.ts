@@ -293,8 +293,8 @@ export class FormDatepickerComponent extends BasicElementComponent
       this.model.date = this.dateService.format(value, 'YYYY-MM-DD');
       this.model.time = this.dateService.format(value, 'HH:mm');
     } else {
-      this.model.date = this.dateService.getDate(value);
-      this.model.time = this.dateService.getTime(value);
+      this.model.date = this.dateService.format(value, this.formats.date);
+      this.model.time = this.dateService.format(value, this.formats.time);
     }
   }
 
@@ -322,17 +322,17 @@ export class FormDatepickerComponent extends BasicElementComponent
 
     switch (type) {
       case DateType.Date: {
-        this.displayValue = this.dateService.getDate(value);
+        this.displayValue = this.dateService.format(value, this.formats.date);
         break;
       }
 
       case DateType.Datetime: {
-        this.displayValue = this.dateService.getDateTime(value);
+        this.displayValue = this.dateService.format(value, this.formats.datetime);
         break;
       }
 
       case DateType.Time: {
-        this.displayValue = this.dateService.getTime(value);
+        this.displayValue = this.dateService.format(value, this.formats.time);
         break;
       }
     }
