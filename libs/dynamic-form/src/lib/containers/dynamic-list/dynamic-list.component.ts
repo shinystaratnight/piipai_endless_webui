@@ -2290,7 +2290,7 @@ export class DynamicListComponent
   }
 
   public delete(e) {
-    this.genericFormService.delete(this.endpoint, e.el.rowId).subscribe(
+    this.genericFormService.delete(this.endpoint, e.el.name !== 'id' ? e.el.value : e.el.rowId).subscribe(
       (res: any) => {
         this.event.emit({
           type: 'update',
