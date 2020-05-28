@@ -88,7 +88,7 @@
           </ng-container>
         </div>
 
-        <ng-container *ngIf="isManager() && hasSelectedDates && calendarData">
+        <ng-container *ngIf="(isManager() || isClient()) && hasSelectedDates && calendarData">
           <span class="f-size-12 hov-opacity ml-auto" (click)="clearSelectedDates()">Reset selected dates</span>
 
           <button type="button" class="btn job-btn ml-3" (click)="addJob()">Create Job</button>
@@ -122,7 +122,7 @@
         [class.date-selected]="isSelected(day.date)"
         *ngIf="!day.tooltip && calendarType !== 2"
         appSelectDate
-        [disable]="!isManager()"
+        [disable]="!(isManager() || isClient())"
         [date]="day.date">
           <span class="date" [class.current-date]="day.today">{{day.label}}</span>
       </span>
@@ -151,7 +151,7 @@
         [class.date-selected]="isSelected(day.date)"
         appSelectDate
         [date]="day.date"
-        [disable]="!isManager()"
+        [disable]="!(isManager() || isClient())"
         *ngIf="day.tooltip"
         [class.active]="day.isOpen"
         triggers="click:click"
@@ -222,7 +222,7 @@
       appSelectDate
       [class.date-selected]="isSelected(day.date)"
       [date]="day.date"
-      [disable]="!isManager()"
+      [disable]="!(isManager() || isClient())"
       *ngFor="let day of calendarData?.body">
         <ng-container *ngFor="let shift of day.data; let index = index">
           <div class="shift-item" [class.active]="activeShift === shift.shift.id" appCalendarTooltip [active]="activeShift === shift.shift.id" [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 8" (click)="selectJob($event, shift)">
@@ -260,7 +260,7 @@
     <div class="times">
       <ng-container *ngTemplateOutlet="times"></ng-container>
     </div>
-    <span class="grid-item day-item" appSelectDate [class.date-selected]="isSelected(calendarData.date)" [date]="calendarData.date" [disable]="!isManager()">
+    <span class="grid-item day-item" appSelectDate [class.date-selected]="isSelected(calendarData.date)" [date]="calendarData.date" [disable]="!(isManager() || isClient())">
       <ng-container *ngFor="let shift of calendarData?.body.data; let index = index">
         <div class="shift-item preview" [class.active]="activeShift === shift.shift.id" [active]="activeShift === shift.shift.id" appCalendarTooltip [ngStyle]="shift.timesheet" [style.margin-left.px]="index * 120 + index * 8" (click)="selectJob($event, shift)">
           <div [ngClass]="['border', getColor(shift.is_fulfilled)]"></div>
@@ -350,10 +350,10 @@
       </div>
     </div>
   </div>
-  <div *ngIf="calendarType === 0" class="shift-action-wrapper">
+  <div *ngIf="calendarType === 0 || calendarType === 1" class="shift-action-wrapper">
     <button class="shift-action" type="button" (click)="extendJob(shift)">Extend</button>
     <button class="shift-action" *ngIf="fillinAccess(shift)" type="button" (click)="fillInJob(shift)">Fill in</button>
-    <button class="shift-action" [class.bg-success]="activeShift === shift.shift.id" *ngIf="fillinAccess(shift)" type="button" (click)="selectJob($event, shift)">Fill</button>
+    <button class="shift-action" [class.bg-success]="activeShift === shift.shift.id" *ngIf="fillinAccess(shift) && isManager()" type="button" (click)="selectJob($event, shift)">Fill</button>
   </div>
 </ng-template>
 

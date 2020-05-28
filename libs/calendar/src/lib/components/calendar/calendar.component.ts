@@ -148,6 +148,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     }
   ];
   isManager = isManager;
+  isClient = isClient;
 
   private modalRef: NgbModalRef;
   private lastData: any;
@@ -362,7 +363,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   public fillInJob(data) {
-    this.router.navigateByUrl(`/mn/hr/jobs/${data.shift.date.job.id}/fillin`);
+    const prefix = isManager() ? 'mn' : 'cl';
+
+    this.router.navigateByUrl(`/${prefix}/hr/jobs/${data.shift.date.job.id}/fillin`);
   }
 
   public formEvent(e, closeModal) {
@@ -510,7 +513,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     return 'bottom';
   }
-  
+
   getCandidateLink(id: string) {
     return [`/mn${Endpoints.CandidateContact}${id}/change`];
   }
