@@ -39,6 +39,14 @@ const formset = function() {
             text_color: '#f0ad4e',
             type: 'button',
             field: 'language.alpha_2'
+          },
+          {
+            action: 'delete',
+            icon: 'fa-times-circle',
+            title: 'Delete',
+            text_color: '#f32700',
+            type: 'button',
+            field: 'language.alpha_2'
           }
         ])
       ]),
