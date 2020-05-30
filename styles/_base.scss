@@ -45,6 +45,10 @@ input {
   }
 }
 
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
 .readonly-value {
   opacity: 0.6;
 }
