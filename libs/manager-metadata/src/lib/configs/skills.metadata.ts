@@ -223,6 +223,8 @@ const form = [
                       required: false,
                       label: 'Lower Rate Limit',
                       type: 'number',
+                      step: 0.01,
+                      min: 0,
                       display: '${field}/h'
                     },
                     read_only: false
@@ -234,6 +236,8 @@ const form = [
                       required: false,
                       label: 'Default Rate',
                       type: 'number',
+                      step: 0.01,
+                      min: 0,
                       display: '${field}/h'
                     },
                     read_only: false
@@ -245,6 +249,8 @@ const form = [
                       required: false,
                       label: 'Upper Rate Limit',
                       type: 'number',
+                      step: 0.01,
+                      min: 0,
                       display: '${field}/h'
                     },
                     read_only: false
@@ -263,6 +269,8 @@ const form = [
                       required: false,
                       label: 'Lower Rate Limit',
                       type: 'number',
+                      step: 0.01,
+                      min: 0,
                       display: '${field}/h'
                     },
                     read_only: false
@@ -274,6 +282,8 @@ const form = [
                       required: false,
                       label: 'Default Rate',
                       type: 'number',
+                      step: 0.01,
+                      min: 0,
                       display: '${field}/h'
                     },
                     read_only: false
@@ -285,6 +295,8 @@ const form = [
                       required: false,
                       label: 'Upper Rate Limit',
                       type: 'number',
+                      step: 0.01,
+                      min: 0,
                       display: '${field}/h'
                     },
                     read_only: false

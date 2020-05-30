@@ -2688,7 +2688,11 @@ export class DynamicListComponent
     return false;
   }
 
-  openDetails(row) {
+  openDetails(row, e) {
+    if (e.target instanceof HTMLInputElement) {
+      return;
+    }
+
     if (this.checkPermission('get')) {
       const { editEndpoint, editDisable } = this.config.list;
 

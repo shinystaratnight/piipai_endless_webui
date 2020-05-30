@@ -177,6 +177,8 @@ const list = {
               key: 'default_rate',
               type: 'input',
               templateOptions: {
+                min: 0,
+                step: 0.01,
                 type: 'number',
                 display: '${default_rate}/h'
               },
@@ -196,6 +198,8 @@ const list = {
               key: 'price_list_default_rate',
               type: 'input',
               templateOptions: {
+                min: 0,
+                step: 0.01,
                 type: 'number',
                 display: '${price_list_default_rate}/h'
               },

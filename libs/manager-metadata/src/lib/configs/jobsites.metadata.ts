@@ -774,6 +774,7 @@ const formadd = [
               max: 63,
               type: 'text'
             },
+            updated: ['regular_company', 'address'],
             showIf: ['primary_contact.id', 'address'],
             default: '{regular_company.short_name} - {address.vicinity}',
             type: 'input'
