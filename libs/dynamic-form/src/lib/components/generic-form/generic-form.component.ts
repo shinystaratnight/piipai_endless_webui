@@ -162,7 +162,8 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
     [Endpoints.CandidateContact]: '__str__'
   };
   public replaceEndpoints = {
-    [Endpoints.JobsiteClient]: Endpoints.Jobsite
+    [Endpoints.JobsiteClient]: Endpoints.Jobsite,
+    [Endpoints.ClientJobs]: Endpoints.Job
   };
   public workflowData = <any>{
     workflow: null,
@@ -1312,6 +1313,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         this.endpoint = Endpoints.Jobsite;
       }
 
+      if (this.endpoint === Endpoints.ClientJobs) {
+        this.endpoint = Endpoints.Job;
+      }
+
       this.saveForm(this.endpoint, data);
     }
   }
@@ -1925,7 +1930,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
             const formInfo = getElementFromMetadata(metadata, 'id');
 
-            if (formInfo && formInfo.metadata) {
+            if (formInfo && formInfo.metadata && formInfo.metadata[el.key]) {
               const newElem = Object.assign(
                 formInfo.metadata[el.key],
                 params[el.key].data

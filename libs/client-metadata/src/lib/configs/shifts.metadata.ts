@@ -535,16 +535,6 @@ const job = {
         name: 'actions',
         content: [
           {
-            action: 'editForm',
-            endpoint: '/hr/shiftdates/{id}',
-            icon: 'fa-pencil-alt',
-            title: 'Edit',
-            text_color: '#f0ad4e',
-            type: 'button',
-            field: 'id',
-            visibleMode: true,
-          },
-          {
             action: 'delete',
             icon: 'fa-trash',
             title: 'Delete',

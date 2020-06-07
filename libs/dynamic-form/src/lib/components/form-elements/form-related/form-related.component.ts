@@ -138,6 +138,8 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     5: '#FFD042',
   };
 
+  isClient = isClient;
+
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
@@ -963,7 +965,15 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     this.displayValue = null;
   }
 
-  public open(type, object?) {
+  public open(type, object?, event?) {
+    if (isClient()) {
+      if (event) {
+        event.preventDefault();
+      }
+
+      return;
+    }
+
     this.currentUser = false;
 
     if (this.hideDetail) {
