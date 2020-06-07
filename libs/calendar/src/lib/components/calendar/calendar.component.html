@@ -313,6 +313,7 @@
     <br>
     <a *ngIf="isManager()" [routerLink]="'/mn' + shift.jobsite_link" class="shift-jobsite">{{shift.jobsite}}</a>
     <span *ngIf="!isManager()" class="shift-jobsite">{{shift.jobsite}}</span> <br>
+    <span>Workers: {{shift.shift.workers}}</span>
     <div *ngIf="status && ((shift.candidates[status].length || shift.candidates[getStatus(1)].length))" class="shift-candidates">
       <span class="mr-1">Candidate&nbsp;({{shift.candidates[status].length || shift.candidates[getStatus(1)].length}}):</span>
       <div>
