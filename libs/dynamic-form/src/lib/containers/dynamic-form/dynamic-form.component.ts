@@ -252,8 +252,11 @@ export class DynamicFormComponent implements OnInit {
           value = parseFloat(value);
         }
 
-        //tslint:disable-next-line
-        if (value == targetValue) {
+        if (targetValue[0] === '^') {
+          if (value && value.includes(targetValue.slice(1))) {
+            approvedRules += 1;
+          }
+        } else if (value == targetValue) { //tslint:disable-line
           approvedRules += 1;
         } else {
           return;

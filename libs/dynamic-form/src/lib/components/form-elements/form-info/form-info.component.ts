@@ -14,7 +14,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
 import { getContactAvatar, isCandidate, isMobile, FormatString, isClient } from '@webui/utilities';
-import { GenericFormService } from '../../../services';
+import { GenericFormService, FormService } from '../../../services';
 import { Endpoints } from '@webui/data';
 
 @Component({
@@ -73,6 +73,8 @@ export class FormInfoComponent implements OnInit, OnDestroy {
     5: '#FFD042'
   };
 
+  formId: number;
+
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -84,9 +86,16 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   constructor(
     private modalService: NgbModal,
     private router: Router,
-    private gfs: GenericFormService
+    private gfs: GenericFormService,
+    private formService: FormService
   ) {
     this.subscriptions = [];
+  }
+
+  get isCandiateContactForm() {
+    if (this.formId) {
+      return this.formService.getForm(this.formId).endpoint === Endpoints.CandidateContact
+    }
   }
 
   public ngOnInit() {
