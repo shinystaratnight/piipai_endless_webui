@@ -413,6 +413,17 @@ const form = [
                       type: 'text'
                     },
                     read_only: false
+                  },
+                  {
+                    key: 'myob_card_id',
+                    type: 'input',
+                    templateOptions: {
+                      label: 'MYOB Card ID',
+                      type: 'text'
+                    },
+                    showIf: [
+                      { ['address.name']: '^Australia' }
+                    ]
                   }
                 ],
                 width: 0.25
