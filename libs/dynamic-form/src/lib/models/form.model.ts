@@ -24,7 +24,7 @@ export class Form {
     return this._id;
   }
 
-  private endpoint: string;
+  public endpoint: string;
 
   constructor(endpoint: string, mode: string, allowMethods: string[]) {
     this._mode = new BehaviorSubject(mode);

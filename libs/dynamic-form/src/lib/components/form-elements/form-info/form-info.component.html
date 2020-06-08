@@ -182,7 +182,7 @@
     </ng-container>
 
     <p class="address-field" *ngIf="config && config.metadata['address'] && config.editForm">
-      <span *ngIf="viewMode && !address" class="description">Please add address (click on candidate name)</span>
+      <span *ngIf="viewMode && !address && isCandiateContactForm" class="description">Please add address (click on candidate name)</span>
 
       <ng-container appFormElement
         *ngIf="!viewMode || address"
