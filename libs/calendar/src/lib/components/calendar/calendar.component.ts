@@ -594,7 +594,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const filterList = {
       ['date__shift_date_0']: from.format(filterDateFormat),
       ['date__shift_date_1']: to.format(filterDateFormat),
-      fields: ['id', 'date', 'is_fulfilled', 'workers_details', 'time'],
+      fields: ['id', 'date', 'is_fulfilled', 'workers_details', 'time', 'workers'],
       limit: -1
     };
 

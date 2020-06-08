@@ -94,6 +94,8 @@ export class FormButtonComponent implements OnInit, OnDestroy {
       });
 
       this.subscriptions.push(hiddenSubscription);
+    } else if (hidden) {
+      this.showButton = false;
     }
   }
 
