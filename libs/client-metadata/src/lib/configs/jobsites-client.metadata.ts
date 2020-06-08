@@ -1,4 +1,5 @@
 import { getToday } from '@webui/utilities';
+import { Endpoints } from '@webui/data';
 
 const list = {
   list: {
@@ -338,6 +339,7 @@ const form = [
                       type: 'related',
                       display: '{contact.__str__}'
                     },
+                    read_only: true,
                     visibleMode: true,
                     prefilled: {
                       company: '{regular_company.id}'
@@ -472,7 +474,7 @@ const form = [
         ]
       },
       {
-        endpoint: '/hr/jobs/',
+        endpoint: Endpoints.Job,
         templateOptions: {
           label: 'Jobs',
           type: 'list',
@@ -609,7 +611,7 @@ const formadd = [
             endpoint: '/core/companies/',
             read_only: true,
             key: 'regular_company',
-            default: 'company_id',
+            default: '{company_id}',
             templateOptions: {
               label: 'Client',
               values: ['industry', 'short_name', '__str__', 'master_company', 'primary_contact'],
@@ -624,27 +626,21 @@ const formadd = [
             many: false
           },
           {
-            list: false,
             endpoint: '/core/companycontacts/',
-            read_only: false,
+            read_only: true,
             key: 'primary_contact',
             templateOptions: {
               required: true,
               label: 'Primary contact',
-              add: true,
-              delete: false,
               values: ['__str__'],
               type: 'related',
-              edit: true
             },
-            default: 'client_contact_id',
-            visibleMode: true,
+            default: '{regular_company.primary_contact.id}',
             showIf: ['regular_company.id'],
             type: 'related',
             query: {
               company: '{regular_company.id}'
             },
-            many: false
           },
           {
             list: false,

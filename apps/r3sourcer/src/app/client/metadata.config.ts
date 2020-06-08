@@ -5,15 +5,18 @@ import {
   notAgree,
   jobsitesclient,
   extend,
-  fillin
+  fillin,
+  jobs as clientJobs,
+  shifts,
+  joboffers
 } from '@webui/client-metadata';
 
 import {
   passwordchange,
-  jobs,
   notes,
   address,
-  passwordforgot
+  passwordforgot,
+  jobs
 } from '@webui/shared-metadata';
 
 export class Metadata {
@@ -23,9 +26,12 @@ export class Metadata {
   [Endpoints.ContactChangePassword] = passwordchange;
   [Endpoints.ContactForgotPassword] = passwordforgot;
   [Endpoints.JobsiteClient] = jobsitesclient;
+  [Endpoints.ClientJobs] = clientJobs;
   [Endpoints.Job] = jobs;
   [Endpoints.Note] = notes;
   [Endpoints.Address] = address;
   'extend' = extend;
   'fillin' = fillin;
+  [Endpoints.Shift] = shifts;
+  [Endpoints.JobOffer] = joboffers
 }
