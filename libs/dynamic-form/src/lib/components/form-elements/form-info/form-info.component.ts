@@ -13,7 +13,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Subscription } from 'rxjs';
 
-import { getContactAvatar, isCandidate, isMobile, FormatString } from '@webui/utilities';
+import { getContactAvatar, isCandidate, isMobile, FormatString, isClient } from '@webui/utilities';
 import { GenericFormService } from '../../../services';
 import { Endpoints } from '@webui/data';
 
@@ -288,7 +288,11 @@ export class FormInfoComponent implements OnInit, OnDestroy {
   }
 
   public fillInJob() {
-    this.router.navigateByUrl(`/mn/hr/jobs/${this.config.value.id.id}/fillin`);
+    if (isClient()) {
+      this.router.navigateByUrl(`/cl/hr/jobs/${this.config.value.id.id}/fillin`);
+    } else {
+      this.router.navigateByUrl(`/mn/hr/jobs/${this.config.value.id.id}/fillin`);
+    }
   }
 
   public formEvent(e, closeModal) {
