@@ -99,7 +99,7 @@ const formset = {
       read_only: true,
       templateOptions: {
         required: false,
-        display: '${field}/h',
+        display: '{currency}{field}/h',
         label: 'Candidate rate',
         type: 'static'
       },
@@ -199,7 +199,7 @@ const formset = {
       read_only: true,
       templateOptions: {
         required: false,
-        display: '${field}/h',
+        display: '{currency}{field}/h',
         label: 'Client rate',
         type: 'static'
       },
@@ -278,13 +278,13 @@ const formset = {
         name: 'client/candidate_rate',
         content: [
           {
-            display: '${field}/h',
+            display: '{currency}{field}/h',
             type: 'static',
             field: 'candidate_rate',
             help: 'candidate'
           },
           {
-            display: '${field}/h',
+            display: '{currency}{field}/h',
             type: 'static',
             field: 'client_rate',
             help: 'client'

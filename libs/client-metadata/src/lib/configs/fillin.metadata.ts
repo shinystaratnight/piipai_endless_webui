@@ -111,7 +111,7 @@ const list = {
         content: [
           {
             type: 'static',
-            display: '${field}/h',
+            display: '{currency}{field}/h',
             field: 'hourly_rate',
             color: 'danger',
             setColor: 'overpriced'
@@ -120,7 +120,7 @@ const list = {
             type: 'description',
             field: 'overpriced',
             description:
-              'Candidate hourly rate is higher than job position default rate ${default_rate}',
+              'Candidate hourly rate is higher than job position default rate {currency}{default_rate}',
             showIf: ['overpriced']
           }
         ],
@@ -405,7 +405,7 @@ const list = {
       templateOptions: {
         label: 'Hourly rate',
         type: 'static',
-        display: '${field}/h',
+        display: '{currency}{field}/h',
         required: false
       },
       type: 'static',
