@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   OnInit,
   ViewChild,
-  ElementRef
+  ElementRef,
 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -42,6 +42,7 @@ import {
   TimelineAction
 } from '../../services';
 import { getElementFromMetadata, removeValue } from '../../helpers';
+import { getCurrencySymbol } from '@angular/common';
 
 export interface HiddenFields {
   elements: Field[];
@@ -791,14 +792,16 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
             : value;
       }
 
+      const currency = getCurrencySymbol(this.settingsService.settings.currency, 'wide');
+
       if (el.templateOptions) {
         el.templateOptions.label = this.format.format(
           el.templateOptions.label,
-          data
+          {...data, currency}
         );
         el.templateOptions.text = this.format.format(
           el.templateOptions.text,
-          data
+          {...data, currency}
         );
       }
       if (el.type === 'input') {
@@ -1635,8 +1638,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
 
   public buyProfile() {
     const price = getElementFromMetadata(this.metadata, 'profile_price');
+    const currency = getCurrencySymbol(this.settingsService.settings.currency, 'wide');
+
     this.modalInfo = {
-      amount: price.value
+      amount: currency + price.value
     };
 
     this.modalRef = this.modal.open(this.confirmProfileModal);

@@ -225,7 +225,7 @@ const form = [
                       type: 'number',
                       step: 0.01,
                       min: 0,
-                      display: '${field}/h'
+                      display: '{currency}{field}/h'
                     },
                     read_only: false
                   },
@@ -238,7 +238,7 @@ const form = [
                       type: 'number',
                       step: 0.01,
                       min: 0,
-                      display: '${field}/h'
+                      display: '{currency}{field}/h'
                     },
                     read_only: false
                   },
@@ -251,7 +251,7 @@ const form = [
                       type: 'number',
                       step: 0.01,
                       min: 0,
-                      display: '${field}/h'
+                      display: '{currency}{field}/h'
                     },
                     read_only: false
                   }
@@ -271,7 +271,7 @@ const form = [
                       type: 'number',
                       step: 0.01,
                       min: 0,
-                      display: '${field}/h'
+                      display: '{currency}{field}/h'
                     },
                     read_only: false
                   },
@@ -284,7 +284,7 @@ const form = [
                       type: 'number',
                       step: 0.01,
                       min: 0,
-                      display: '${field}/h'
+                      display: '{currency}{field}/h'
                     },
                     read_only: false
                   },
@@ -297,7 +297,7 @@ const form = [
                       type: 'number',
                       step: 0.01,
                       min: 0,
-                      display: '${field}/h'
+                      display: '{currency}{field}/h'
                     },
                     read_only: false
                   }

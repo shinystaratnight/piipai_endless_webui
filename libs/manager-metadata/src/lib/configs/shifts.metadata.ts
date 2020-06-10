@@ -100,7 +100,7 @@ const form = [
     read_only: false,
     templateOptions: {
       required: false,
-      display: '${field}/h',
+      display: '{currency}{field}/h',
       label: 'Candidate rate',
       type: 'number'
     },
@@ -182,7 +182,7 @@ const formadd = [
     read_only: false,
     templateOptions: {
       required: false,
-      display: '${field}/h',
+      display: '{currency}{field}/h',
       label: 'Candidate rate',
       type: 'number',
       placeholder: 'Candidate rate'
@@ -246,8 +246,7 @@ const shiftDate = {
       templateOptions: {
         label: 'Candidate rate default',
         type: 'number',
-        text: '${hourly_rate}/h',
-        placeholder: 'Candidate rate default ($/h)'
+        text: '{currency}{hourly_rate}/h',
       }
     }
   ],
@@ -276,7 +275,7 @@ const shiftDate = {
         name: 'candidate_rate',
         content: [
           {
-            display: '${field}/h',
+            display: '{currency}{field}/h',
             label: 'Candidate rate',
             type: 'text',
             field: 'hourly_rate'
@@ -368,7 +367,7 @@ const editShiftDate = [
     templateOptions: {
       label: 'Candidate rate default',
       type: 'number',
-      text: '${hourly_rate}/h'
+      text: '{currency}{hourly_rate}/h'
     }
   }
 ];
@@ -404,7 +403,7 @@ const job = {
       read_only: false,
       templateOptions: {
         required: false,
-        display: '${field}/h',
+        display: '{currency}{field}/h',
         label: 'Candidate rate',
         type: 'text'
       },
@@ -487,7 +486,7 @@ const job = {
         name: 'candidate_rate',
         content: [
           {
-            display: '$ {field}',
+            display: '{currency}{field}',
             label: ' Candidate rate override',
             type: 'text',
             field: 'hourly_rate'

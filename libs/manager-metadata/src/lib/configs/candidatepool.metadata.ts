@@ -69,7 +69,7 @@ const list = {
           {
             field: 'profile_price',
             type: 'text',
-            display: '${profile_price}'
+            display: '{currency}{profile_price}'
           },
           {
             text: 'Buy Profile',
@@ -432,7 +432,7 @@ const form = [
                       required: false,
                       label: 'Profile Price',
                       type: 'number',
-                      display: '${profile_price}'
+                      display: '{currency}{profile_price}'
                     },
                     read_only: false
                   },

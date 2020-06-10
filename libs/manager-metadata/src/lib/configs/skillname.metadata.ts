@@ -180,7 +180,7 @@ const list = {
                 min: 0,
                 step: 0.01,
                 type: 'number',
-                display: '${default_rate}/h'
+                display: '{currency}{default_rate}/h'
               },
             },
           }
@@ -201,7 +201,7 @@ const list = {
                 min: 0,
                 step: 0.01,
                 type: 'number',
-                display: '${price_list_default_rate}/h'
+                display: '{currency}{price_list_default_rate}/h'
               },
             },
           }

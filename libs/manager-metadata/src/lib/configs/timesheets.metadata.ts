@@ -1176,7 +1176,7 @@ const form = [
                 templateOptions: {
                   label: 'Candidate rate override',
                   type: 'number',
-                  text: '${candidate_rate}/h'
+                  text: '{currency}{candidate_rate}/h'
                 }
               },
               {

@@ -197,7 +197,7 @@ const formset = {
       read_only: false,
       templateOptions: {
         required: true,
-        display: '${field}/h',
+        display: '{currency}{field}/h',
         label: 'Skill Rate',
         type: 'static'
       },
@@ -264,7 +264,7 @@ const formset = {
       {
         name: 'hourly_rate',
         content: [
-          { display: '${field}/h', type: 'static', field: 'hourly_rate' }
+          { display: '{currency}{field}/h', type: 'static', field: 'hourly_rate' }
         ],
         label: 'Skill Rate',
         title: null,
@@ -436,7 +436,7 @@ const form = [
       label: 'Skill Rate',
       type: 'number',
       step: '0.01',
-      icon: '$'
+      icon: '{currency}'
     },
     read_only: false
   },
@@ -542,7 +542,7 @@ const formadd = [
       label: 'Skill Rate',
       type: 'number',
       step: '0.01',
-      icon: '$'
+      icon: '{currency}'
     },
     read_only: false
   }
@@ -595,7 +595,7 @@ const profile = {
       read_only: false,
       templateOptions: {
         required: true,
-        display: '${field}/h',
+        display: '{currency}{field}/h',
         label: 'Skill Rate',
         type: 'static'
       },
