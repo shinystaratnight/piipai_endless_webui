@@ -422,7 +422,8 @@ const form = [
                       type: 'text'
                     },
                     showIf: [
-                      { ['address.name']: '^Australia' }
+                      { type: 'regular' },
+                      { country_code: 'AU' }
                     ]
                   }
                 ],
