@@ -10,6 +10,7 @@ import {
 
 import { Field } from '@webui/data';
 import { CustomEvent } from '../../models/custom-event.model';
+import { SiteSettingsService } from '@webui/core';
 
 @Component({
   selector: 'app-dynamic-form',
@@ -51,7 +52,7 @@ export class DynamicFormComponent implements OnInit {
   public currentForm: any;
   public fullData: any;
 
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {}
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private siteSettings: SiteSettingsService) {}
 
   public ngOnInit() {
     this.form = this.form || this.fb.group({});
@@ -255,6 +256,11 @@ export class DynamicFormComponent implements OnInit {
         if (targetValue[0] === '^') {
           if (value && value.includes(targetValue.slice(1))) {
             approvedRules += 1;
+          }
+        } else if (key === 'country_code') {
+          const country_code = this.siteSettings.settings.country_code;
+          if (country_code === targetValue) {
+            approvedRules += 1
           }
         } else if (value == targetValue) { //tslint:disable-line
           approvedRules += 1;

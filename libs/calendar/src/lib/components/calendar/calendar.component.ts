@@ -438,7 +438,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const dates = this.selectDateService.getSlectedDates();
 
     this.modalInfo = {
-      endpoint: Endpoints.Job,
+      endpoint: isClient() ? Endpoints.ClientJobs : Endpoints.Job,
       data: {
         shifts: {
           action: 'add',
