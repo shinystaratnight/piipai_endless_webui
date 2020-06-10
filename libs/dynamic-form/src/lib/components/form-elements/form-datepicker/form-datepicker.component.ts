@@ -19,7 +19,7 @@ import {
 } from './form-datepicker.config';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
-import { FormatString, isMobile } from '@webui/utilities';
+import { FormatString, isMobile, getPropValue } from '@webui/utilities';
 import { DateService, DateInstance, Format } from '@webui/core';
 
 enum DateType {
@@ -133,7 +133,12 @@ export class FormDatepickerComponent extends BasicElementComponent
         },
 
         closeCallback: () => {
-          this.updateForm(type, this.getValue(type));
+          if (this.validateTimesheetTime(this.getValue(type))) {
+            this.updateForm(type, this.getValue(type));
+          } else {
+            this.setDatepickerValue(this.d, this.model.date);
+          }
+
           this.opened = null;
         }
       });
@@ -164,10 +169,22 @@ export class FormDatepickerComponent extends BasicElementComponent
             this.timezone,
             'H:m'
           );
-          const time = this.dateService.getTime(dateInstance);
 
-          this.setDatepickerValue(this.t, time);
-          this.updateForm(type, this.getValue(type));
+          const newDateInstance = this.parseValues(
+            type,
+            { value: this.model.date, format: this.formats.date },
+            { value: `${hours}:${minutes}`, format: 'H:m' }
+          );
+
+          if (this.validateTimesheetTime(newDateInstance)) {
+            const time = this.dateService.getTime(dateInstance);
+
+            this.setDatepickerValue(this.t, time);
+            this.updateForm(type, this.getValue(type));
+          } else {
+            this.setDatepickerValue(this.t, this.model.time);
+          }
+
           this.opened = null;
         }
       });
@@ -515,6 +532,107 @@ export class FormDatepickerComponent extends BasicElementComponent
     const dp = this.getDatepicker(element);
 
     dp.datebox({ [propName]: value });
+  }
+
+  private validateTimesheetTime(date): boolean {
+    const dateUtc = date.utc();
+
+    enum TimesheetTime {
+      Start = 'shift_started_at',
+      End = 'shift_ended_at',
+      BreakStart = 'break_started_at',
+      BreakEnd = 'break_ended_at'
+    }
+
+    const timesheetKeys = [
+      TimesheetTime.Start,
+      TimesheetTime.BreakStart,
+      TimesheetTime.BreakEnd,
+      TimesheetTime.End
+    ];
+
+    if (!timesheetKeys.includes(this.config.key)) {
+      return true;
+    }
+
+    const data = this.config.formData.value.data;
+
+    const times = {};
+    timesheetKeys.forEach(key => {
+      times[key] = getPropValue(data, key) && this.parseValue(DateType.Datetime, getPropValue(data, key));
+    });
+
+    let valid = true;
+
+    switch (this.config.key) {
+      case TimesheetTime.Start:
+        if (times[TimesheetTime.BreakStart]) {
+          valid = dateUtc.isBefore(times[TimesheetTime.BreakStart]);
+        }
+
+        if (valid && times[TimesheetTime.BreakEnd]) {
+          valid = dateUtc.isBefore(times[TimesheetTime.BreakEnd]);
+        }
+
+        if (valid && times[TimesheetTime.End]) {
+          valid = dateUtc.isBefore(times[TimesheetTime.End]);
+        }
+
+        break;
+
+      case TimesheetTime.BreakStart: {
+        if (times[TimesheetTime.Start]) {
+          valid = dateUtc.isAfter(times[TimesheetTime.Start]);
+        }
+
+        if (valid && times[TimesheetTime.BreakEnd]) {
+          valid = dateUtc.isBefore(times[TimesheetTime.BreakEnd]);
+        }
+
+        if (valid && times[TimesheetTime.End]) {
+          valid = dateUtc.isBefore(times[TimesheetTime.End]);
+        }
+      break;
+
+      }
+
+      case TimesheetTime.BreakEnd: {
+        if (times[TimesheetTime.Start]) {
+          valid = dateUtc.isAfter(times[TimesheetTime.Start]);
+        }
+
+        if (valid && times[TimesheetTime.BreakStart]) {
+          valid = dateUtc.isAfter(times[TimesheetTime.BreakStart]);
+        }
+
+        if (valid && times[TimesheetTime.End]) {
+          valid = dateUtc.isBefore(times[TimesheetTime.End]);
+        }
+      break;
+
+      }
+
+      case TimesheetTime.End: {
+        if (times[TimesheetTime.Start]) {
+          valid = dateUtc.isAfter(times[TimesheetTime.Start]);
+        }
+
+        if (valid && times[TimesheetTime.BreakStart]) {
+          valid = dateUtc.isAfter(times[TimesheetTime.BreakStart]);
+        }
+
+        if (valid && times[TimesheetTime.BreakEnd]) {
+          valid = dateUtc.isAfter(times[TimesheetTime.BreakEnd]);
+        }
+        break;
+
+      }
+
+      default:
+        break;
+    }
+
+    return valid;
   }
 
   @HostListener('document:touchstart', ['$event'])
