@@ -928,7 +928,7 @@ const form = [
                     templateOptions: {
                       label: 'Candidate rate override',
                       type: 'number',
-                      text: '${hourly_rate_default}/h'
+                      text: '{currency}{hourly_rate_default}/h'
                     }
                   }
                 ],

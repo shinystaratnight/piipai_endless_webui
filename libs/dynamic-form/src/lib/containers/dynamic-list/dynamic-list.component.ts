@@ -869,7 +869,9 @@ export class DynamicListComponent
     if (obj.form && Object.keys(obj.form).length) {
       fillingForm([obj.form], el);
       if (obj.form.templateOptions.display) {
-        obj.display = this.format(obj.form.templateOptions.display, el);
+        const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+
+        obj.display = this.format(obj.form.templateOptions.display, {...el, currency});
       }
     }
     if (this.listStorage.hasTrackingInfo(el.id)) {
@@ -879,7 +881,9 @@ export class DynamicListComponent
       obj.disableAction = true;
     }
     if (obj.description) {
-      obj.description = this.format(obj.description, el);
+      const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+
+      obj.description = this.format(obj.description, {...el, currency});
     }
     if (element.setColor) {
       this.setValue(el, [element.setColor], obj, 'setColor');
@@ -898,9 +902,11 @@ export class DynamicListComponent
         obj.display = formatCurrency(value, 'en', getCurrencySymbol(this.siteSettings.settings.currency, 'wide') || 'USD');
 
       } else {
+        const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+
         obj.display = this.format(
           element.display.replace(/{field}/gi, `{${element.field}}`),
-          el
+          {...el, currency}
         );
       }
     }
@@ -1547,8 +1553,10 @@ export class DynamicListComponent
 
   public buyCandidate(e) {
     const rowData = this.getRowData(e);
+    const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+
     this.modalInfo = {
-      amount: rowData.profile_price,
+      amount: currency + rowData.profile_price,
       e
     };
 

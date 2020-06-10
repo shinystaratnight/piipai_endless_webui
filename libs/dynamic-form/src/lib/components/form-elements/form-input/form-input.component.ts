@@ -190,6 +190,12 @@ export class FormInputComponent extends BasicElementComponent
         (this.siteSettings.settings.country_code as CountryISO) ||
         CountryISO.Australia;
     }
+
+    if (this.config.templateOptions.icon) {
+      const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+
+      this.config.templateOptions.icon = FormatString.format(this.config.templateOptions.icon, { currency })
+    }
   }
 
   public ngOnDestroy() {
@@ -450,8 +456,10 @@ export class FormInputComponent extends BasicElementComponent
         ) {
           this.address = value;
         }
+        const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
         const text = format.format(this.config.templateOptions.text, {
-          [this.config.key]: value
+          [this.config.key]: value,
+          currency
         });
         this.displayValue = text || (value || value === 0 ? value : '-');
 
@@ -464,7 +472,7 @@ export class FormInputComponent extends BasicElementComponent
                 /{field}/gi,
                 `{${this.config.key}}`
               ),
-              { [this.key]: this.displayValue }
+              { [this.key]: this.displayValue, currency }
             );
           }
         }
