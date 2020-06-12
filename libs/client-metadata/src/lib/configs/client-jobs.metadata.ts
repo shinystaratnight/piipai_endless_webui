@@ -1,3 +1,5 @@
+import { Endpoints } from '@webui/data';
+
 const list = {
   list: {
     list: 'job',
@@ -1164,13 +1166,14 @@ const formadd = [
             }
           },
           {
-            endpoint: '/hr/jobsites/',
+            endpoint: Endpoints.JobsiteClient,
             read_only: false,
             key: 'jobsite',
             templateOptions: {
               label: 'Jobsite',
               values: ['primary_contact', '__str__'],
               type: 'related',
+              add: true,
               required: true,
               description: 'Only active jobsites'
             },
