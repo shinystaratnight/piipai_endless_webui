@@ -966,7 +966,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   }
 
   public open(type, object?, event?) {
-    if (isClient()) {
+    if (isClient() && type !== 'post') {
       if (event) {
         event.preventDefault();
       }
