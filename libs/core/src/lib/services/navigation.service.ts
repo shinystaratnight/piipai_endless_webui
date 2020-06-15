@@ -11,7 +11,7 @@ import { ErrorsService } from './errors.service';
 import { EventService, EventType } from './event.service';
 // import { SiteSettingsService } from './site-settings.service';
 import { UserService } from './user.service';
-import { isManager, getCurrentRole } from '@webui/utilities';
+import { isManager, getCurrentRole, isClient } from '@webui/utilities';
 
 export interface Page {
   name: string;
@@ -73,12 +73,18 @@ export class NavigationService {
           map((res: { purpose: Purpose; list: any[] }) => {
             this.removePrefix(res.list);
             if (res.list) {
-              const list = res.purpose
+              let list = res.purpose
                 ? this.purposeService.filterNavigationByPurpose(
                     res.purpose,
                     res.list
                   )
                 : res.list;
+
+              if (isClient() && !this.userService.user.data.allow_job_creation) {
+                const endpoints = [Endpoints.ClientJobs, Endpoints.JobsiteClient];
+                list = list.filter((el) => !endpoints.includes(el.endpoint));
+              }
+
               this.currentRole = role;
               this.navigationList[id] = list;
               this.linksList.length = 0;

@@ -25,6 +25,7 @@ export interface User {
     country_code?: string;
     country_phone_prefix?: string;
     timezone?: string;
+    allow_job_creation?: boolean;
   };
   currentRole: Role;
 }

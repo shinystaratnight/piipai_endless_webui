@@ -425,6 +425,25 @@ const form = [
                       { type: 'regular' },
                       { country_code: 'AU' }
                     ]
+                  },
+                  {
+                    key: 'company_settings.allow_job_creation',
+                    type: 'checkbox',
+                    templateOptions: {
+                      label: 'Allow Job/Jobsite creation',
+                      type: 'checkbox'
+                    },
+                    showIf: [
+                      { type: 'regular' }
+                    ]
+                  },
+                  {
+                    key: 'company_settings.id',
+                    type: 'related',
+                    templateOptions: {
+                      label: 'Company Settings',
+                    },
+                    hide: true
                   }
                 ],
                 width: 0.25

@@ -58,9 +58,6 @@ const list = {
     search_enabled: true,
     editDisable: false,
     buttons: [],
-    filters: [
-      filters.language
-    ]
   },
   fields: [
     {
@@ -120,7 +117,7 @@ const form = [
       max: 256,
       type: 'text'
     },
-    read_only: true
+    read_only: false
   },
   {
     key: 'slug',
