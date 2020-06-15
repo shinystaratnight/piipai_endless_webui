@@ -1,19 +1,15 @@
 import { Routes } from '@angular/router';
 
 import {
-  // SiteComponent,
   VerifyEmailComponent
 } from './components';
 import { RedirectComponent } from './redirect.component';
-
-// import { UserService, NavigationService, SiteSettingsService } from '@webui/core';
 
 import {
   AuthGuard,
   NotAuthorizedGuard,
   SubdomainGuard,
   PermissionGuard,
-  // LogoutGuard,
   UserService,
   NavigationService,
   SiteSettingsService,

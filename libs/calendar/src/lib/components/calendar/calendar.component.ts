@@ -434,6 +434,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
 
+  public canClientCreateJob(): boolean {
+    return isClient() && this.userService.user.data.allow_job_creation;
+  }
+
   public addJob() {
     const dates = this.selectDateService.getSlectedDates();
 
