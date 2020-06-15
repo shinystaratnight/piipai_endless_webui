@@ -5,9 +5,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { User, Role } from '@webui/data';
-import { setTimeZone } from '@webui/utilities';
 
-// import { NavigationService } from './navigation.service';
 import { AuthService } from './auth.service';
 import { ErrorsService } from './errors.service';
 import { ToastService, MessageType } from './toast.service';
@@ -30,7 +28,6 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    // private navigation: NavigationService,
     private storage: LocalStorageService,
     private toastService: ToastService,
     private authService: AuthService,
@@ -80,10 +77,6 @@ export class UserService {
 
           this.user.currentRole = role || roles[0];
           this.storage.store('role', this.user.currentRole);
-          // const timeZone = this.getTimeZone();
-          // if (timeZone) {
-          //   setTimeZone(timeZone);
-          // }
 
           return this.user;
         }),
@@ -92,12 +85,6 @@ export class UserService {
     } else {
       return of(this.user);
     }
-  }
-
-  public getUserRoles(): Observable<any> {
-    return this.http
-      .get(this.rolesEndpoint)
-      .pipe(catchError(errors => this.errorsService.parseErrors(errors)));
   }
 
   public setTimezone(): Observable<any> {
@@ -115,7 +102,6 @@ export class UserService {
   public currentRole(role: Role) {
     this.user.currentRole = role;
     this.storage.store('role', role);
-    // this.navigation.setCurrentRole(role);
     this.eventService.emit(EventType.RoleChanged);
   }
 
