@@ -142,7 +142,7 @@ export class FormListDropdownComponent implements OnInit, OnDestroy {
     if (!editEl) {
       const body = {
         language_id: value.language.alpha_2,
-        candidate_contact_id: this.config.formData.value.data.id.id,
+        contact_id: this.config.formData.value.data.contact.id,
         default: true
       };
 
