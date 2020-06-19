@@ -7,8 +7,8 @@ const formadd = function() {
       .updateModel({ withoutIdField: true })
       .updateTemplate({ param: 'alpha_2', display: '{name}' }),
     new Form.related.element(
-      'candidate_contact_id',
-      'Candidate Contact',
+      'contact_id',
+      'Contact',
       Endpoints.CandidateContact
     ).updateModel({ withoutIdField: true }),
     new Form.checkbox.element('default', 'Default', CheckboxType.Checkbox)
@@ -34,7 +34,7 @@ const formset = function() {
           {
             action: 'setDefaultLanguage',
             endpoint:
-              '/candidate_contacts/{candidate_contact.id}/languages/{language.alpha_2}',
+              '/contacts/{contact.id}/languages/{language.alpha_2}',
             icon: 'fa-check',
             title: 'Set Default',
             text_color: '#f0ad4e',

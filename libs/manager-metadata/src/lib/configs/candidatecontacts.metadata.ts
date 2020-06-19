@@ -585,7 +585,7 @@ const form = [
                     send: false,
                     type: 'listdropdown',
                     endpoint: `${Endpoints.CompanyLanguages}{master_company.id}/languages/`,
-                    editEndpoint: `${Endpoints.CandidateLanguages}{id}/languages/`,
+                    editEndpoint: `/contacts/{contact.id}/languages/`,
                     setData: {
                       default: true
                     },
