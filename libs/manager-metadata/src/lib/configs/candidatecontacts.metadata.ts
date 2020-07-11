@@ -725,7 +725,18 @@ const form = [
                         'Price can be assigned only to Candidate Contact with status: Recruited'
                     },
                     read_only: true
-                  }
+                  },
+                  {
+                    key: 'contact.myob_card_id',
+                    type: 'input',
+                    templateOptions: {
+                      label: 'MYOB Card ID',
+                      type: 'text'
+                    },
+                    showIf: [
+                      { ['master_company.timezone']: '^Australia' }
+                    ]
+                  },
                 ],
                 width: 0.25
               },
