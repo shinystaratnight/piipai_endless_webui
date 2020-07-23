@@ -48,6 +48,9 @@ import {
   faDotCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxWebstorageModule } from 'ngx-webstorage';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { VerifyEmailComponent, ToastComponent } from './components';
 
@@ -55,13 +58,16 @@ import { routes } from './app.routing';
 
 import { CoreModule } from '@webui/core';
 import { environment } from '../environments/environment';
-import { HttpClientModule } from '@angular/common/http';
 import { AgmCoreModule } from '@agm/core';
 import { DynamicFormModule } from '@webui/dynamic-form';
 
 import { Metadata } from './metadata.config';
 import { MasterGuideModule } from './master-guide/master-guide.module';
 import { RedirectComponent } from './redirect.component';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -80,6 +86,15 @@ import { RedirectComponent } from './redirect.component';
       apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
       libraries: ['places']
     }),
+    TranslateModule.forRoot({
+      defaultLanguage: 'en',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
+
 
     CoreModule.forRoot(environment),
     DynamicFormModule.forRoot({ metadata: Metadata }),

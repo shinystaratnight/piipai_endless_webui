@@ -34,7 +34,7 @@
           <button type="button" class="form__button btn btn-primary w-100"
             [disabled]="disableNextButton || formInvalid"
             (click)="next()">
-              Next step
+              {{ 'next' | translate }}
           </button>
           <span class="error-message" *ngIf="formInvalid">
             Please fill all the REQUIRED fields

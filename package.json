@@ -45,6 +45,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
+    "@ngx-translate/core": "12",
+    "@ngx-translate/http-loader": "4",
     "@nrwl/angular": "8.2.0",
     "angular2-signaturepad": "^2.9.0",
     "bootstrap": "^4.3.1",

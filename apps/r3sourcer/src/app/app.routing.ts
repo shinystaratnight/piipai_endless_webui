@@ -35,7 +35,7 @@ export const routes: Routes = [
   {
     path: 'registration',
     loadChildren: './register/register.module#RegisterModule',
-    canActivate: [NotAuthorizedGuard, SubdomainGuard]
+    // canActivate: [NotAuthorizedGuard, SubdomainGuard]
   },
   {
     path: 'settings',

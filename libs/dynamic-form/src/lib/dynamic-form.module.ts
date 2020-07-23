@@ -24,6 +24,8 @@ import * as fromContainers from './containers';
 import { modals } from './modals';
 import { directives } from './directives';
 
+import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslationHandler } from '@ngx-translate/core';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -44,7 +46,9 @@ import { directives } from './directives';
     BsDropdownModule.forRoot(),
     NgxIntlTelInputModule,
 
-    MetadataModule
+    MetadataModule,
+
+    TranslateModule.forChild()
   ],
   exports: [
     fromComponents.GenericFormComponent,

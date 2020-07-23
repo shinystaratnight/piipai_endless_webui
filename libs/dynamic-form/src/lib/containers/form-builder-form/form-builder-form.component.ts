@@ -51,7 +51,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     templateOptions: {
       label: 'Industry',
       type: 'related',
-      values: ['__str__', 'id']
+      values: ['__str__', 'id', 'translations']
     },
     query: {}
   };
@@ -500,7 +500,11 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       formData,
       many: true,
       unique: true,
-      tests
+      tests,
+      templateOptions: {
+        ...field.templateOptions,
+        values: ['translations', 'id', '__str__']
+      }
     };
   }
 
