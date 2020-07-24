@@ -13,6 +13,7 @@
     [class.d-inline-flex]="!config.inline"
     [class.align-items-center]="!config.inline"
     [class.flex-wrap]="!config.inline"
+    [class.bold]="config.boldClass"
     [class.mr-1]="!config.inline"
     [class.text-description]="config.muted">
       <span [ngClass]="{'label mr-1': length > 1}" *ngIf="config.label">{{config.label + ':'}} </span>
