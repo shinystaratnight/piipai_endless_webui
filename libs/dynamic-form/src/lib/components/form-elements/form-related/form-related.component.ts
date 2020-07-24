@@ -52,6 +52,10 @@ export interface CustomField {
   outside?: boolean;
 }
 
+const translationMap = {
+  'EE': 'et'
+};
+
 @Component({
   selector: 'app-form-related',
   templateUrl: './form-related.component.html',
@@ -1555,7 +1559,14 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
 
                 results.forEach((el) => {
                   const display = this.config.templateOptions.listDisplay || this.display;
-                  el.__str__ = formatString.format(display, el);
+                  if (el.translations || (el.name && el.name.translations)) {
+                    const translations = el.translations || el.name.translations;
+                    const coutryCode = this.settingsService.settings.country_code;
+                    const translation = translations.find((t) => t.language.id === translationMap[coutryCode]);
+                    el.__str__ = (translation && translation.__str__) || formatString.format(display, el);
+                  } else {
+                    el.__str__ = formatString.format(display, el);
+                  }
 
                   if (this.config.templateOptions.listParam) {
                     el[this.param] = FormatString.format(this.config.templateOptions.listParam, el);
