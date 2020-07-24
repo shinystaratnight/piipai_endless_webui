@@ -9,8 +9,7 @@ const list = {
       templateOptions: {
         add: true,
         delete: false,
-        edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'owner'],
         label: 'Tag',
         type: 'related'
       },
@@ -113,8 +112,7 @@ const form = [
     templateOptions: {
       add: true,
       delete: false,
-      edit: true,
-      values: ['__str__'],
+      values: ['__str__', 'owner'],
       label: 'Tag',
       type: 'related'
     },
@@ -151,8 +149,7 @@ const formadd = [
     templateOptions: {
       add: true,
       delete: false,
-      edit: true,
-      values: ['__str__'],
+      values: ['__str__', 'owner'],
       label: 'Tag',
       type: 'related'
     },
@@ -172,8 +169,7 @@ const formset = {
       templateOptions: {
         add: true,
         delete: false,
-        edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'owner'],
         label: 'Tag',
         type: 'related'
       },
