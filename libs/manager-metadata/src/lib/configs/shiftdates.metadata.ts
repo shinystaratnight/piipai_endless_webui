@@ -141,7 +141,8 @@ const jobAdd = [
         '__str__',
         'upper_rate_limit',
         'lower_rate_limit',
-        'default_rate'
+        'default_rate',
+        'tranlsations'
       ],
       type: 'related',
       edit: true

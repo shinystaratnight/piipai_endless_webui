@@ -10,7 +10,7 @@ const list = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'translation'],
         label: 'Tag',
         type: 'related'
       },
@@ -114,7 +114,7 @@ const form = [
       add: true,
       delete: false,
       edit: true,
-      values: ['__str__'],
+      values: ['__str__', 'translation'],
       label: 'Tag',
       type: 'related'
     },
@@ -152,7 +152,7 @@ const formadd = [
       add: true,
       delete: false,
       edit: true,
-      values: ['__str__'],
+      values: ['__str__', 'translation'],
       label: 'Tag',
       type: 'related'
     },
@@ -173,7 +173,7 @@ const formset = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'translation'],
         label: 'Tag',
         type: 'related'
       },

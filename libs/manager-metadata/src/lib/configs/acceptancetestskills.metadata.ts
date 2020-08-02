@@ -89,7 +89,7 @@ const form = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['__str__'],
+      values: ['__str__', 'tranlsations'],
       type: 'related',
       edit: true
     },
@@ -126,7 +126,7 @@ const formadd = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['__str__'],
+      values: ['__str__', 'tranlsations'],
       type: 'related',
       edit: true
     },

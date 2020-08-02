@@ -141,7 +141,7 @@ const list = {
         label: 'Tag',
         add: true,
         delete: false,
-        values: ['__str__'],
+        values: ['__str__', 'translation'],
         type: 'related',
         edit: true
       },
@@ -165,7 +165,7 @@ const formset = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'translation'],
         label: 'Tag',
         type: 'related'
       },
@@ -308,7 +308,7 @@ const form = [
       label: 'Tag',
       add: true,
       delete: false,
-      values: ['__str__'],
+      values: ['__str__', 'translation'],
       type: 'related',
       edit: true
     },
@@ -376,7 +376,7 @@ const formadd = [
       label: 'Tag',
       add: true,
       delete: false,
-      values: ['__str__', 'evidence_required_for_approval'],
+      values: ['__str__', 'evidence_required_for_approval', 'translation'],
       type: 'related',
       edit: true,
       dropdownCount: 9
@@ -431,7 +431,7 @@ const profile = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'translation'],
         label: 'Tag',
         type: 'related'
       },
@@ -558,7 +558,7 @@ const candidatepool = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'translation'],
         label: 'Tag',
         type: 'related'
       },

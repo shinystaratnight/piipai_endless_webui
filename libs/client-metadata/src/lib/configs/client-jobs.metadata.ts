@@ -177,7 +177,7 @@ const list = {
         label: 'Position',
         add: true,
         delete: false,
-        values: ['__str__'],
+        values: ['__str__', 'tranlsations'],
         type: 'related',
         edit: true,
         placeholder: 'Please select role/trade'
@@ -409,7 +409,7 @@ const formset = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'tranlsations'],
         label: 'Position',
         type: 'related',
         placeholder: 'Please select role/trade'
@@ -642,7 +642,7 @@ const jobsite_client = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'tranlsations'],
         label: 'Position',
         type: 'related',
         placeholder: 'Please select role/trade'
@@ -1069,7 +1069,7 @@ const form = [
       label: 'Position',
       add: false,
       delete: false,
-      values: ['__str__'],
+      values: ['__str__', 'tranlsations'],
       type: 'related',
       edit: true,
       placeholder: 'Please select role/trade'
@@ -1229,7 +1229,8 @@ const formadd = [
                 '__str__',
                 'upper_rate_limit',
                 'lower_rate_limit',
-                'default_rate'
+                'default_rate',
+                'tranlsations'
               ],
               type: 'related',
               edit: true,
