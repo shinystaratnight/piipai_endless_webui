@@ -1183,7 +1183,7 @@ const form = [
     useOptions: true,
     templateOptions: {
       label: 'Tags',
-      values: ['__str__', 'id', 'translation'],
+      values: ['__str__', 'id', 'owner', 'translation'],
       type: 'related'
     },
     query: {

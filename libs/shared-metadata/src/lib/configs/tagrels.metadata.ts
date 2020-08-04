@@ -141,9 +141,8 @@ const list = {
         label: 'Tag',
         add: true,
         delete: false,
-        values: ['__str__', 'translation'],
+        values: ['__str__', 'owner', 'translation'],
         type: 'related',
-        edit: true
       },
       collapsed: false,
       type: 'related',
@@ -165,7 +164,7 @@ const formset = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__', 'translation'],
+        values: ['__str__', 'owner', 'translation'],
         label: 'Tag',
         type: 'related'
       },
@@ -308,9 +307,8 @@ const form = [
       label: 'Tag',
       add: true,
       delete: false,
-      values: ['__str__', 'translation'],
+      values: ['__str__', 'owner', 'translation'],
       type: 'related',
-      edit: true
     },
     collapsed: false,
     type: 'related',
@@ -376,9 +374,8 @@ const formadd = [
       label: 'Tag',
       add: true,
       delete: false,
-      values: ['__str__', 'evidence_required_for_approval', 'translation'],
+      values: ['__str__', 'evidence_required_for_approval', 'owner', 'translation'],
       type: 'related',
-      edit: true,
       dropdownCount: 9
     },
     smallModal: true,
@@ -431,7 +428,7 @@ const profile = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__', 'translation'],
+        values: ['__str__', 'owner', 'translation'],
         label: 'Tag',
         type: 'related'
       },
@@ -558,7 +555,7 @@ const candidatepool = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__', 'translation'],
+        values: ['__str__', 'owner', 'translation'],
         label: 'Tag',
         type: 'related'
       },

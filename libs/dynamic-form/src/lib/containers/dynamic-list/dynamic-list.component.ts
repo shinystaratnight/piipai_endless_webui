@@ -857,7 +857,8 @@ export class DynamicListComponent
       form: { ...element.form },
       show: element.updateButton ? new BehaviorSubject(false) : undefined,
       required: element.required,
-      currency: element.currency
+      currency: element.currency,
+      boldClass: (el.endpoint === Endpoints.Tag || this.endpoint === Endpoints.Tag) && (el.owner === 'system' || (el.tag && el.tag.system === 'owner'))
     };
     if (cell.timezone) {
       obj.timezone = this.getPropValue(el, cell.timezone);
