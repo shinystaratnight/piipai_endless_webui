@@ -1,0 +1,11 @@
+<div class="wrapper">
+  <div class="images">
+    <img class="image" *ngFor="let image of data.values()" [src]="image" alt="" />
+  </div>
+
+  <label class="btn btn-outline" *ngIf="data.size < this.count">
+    Upload Images
+
+    <input type="file" (change)="fileChangeEvent($event)" multiple accept="images/*" />
+  </label>
+</div>

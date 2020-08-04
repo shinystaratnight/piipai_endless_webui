@@ -44,6 +44,8 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public questions = [];
   public answers = {};
 
+  pictures: Map<string, string[]> = new Map();
+
   public configMap = {
     [Endpoints.AcceptenceTest]: testMetadata,
     [Endpoints.AcceptenceTestQuestion]: questionMetadata,
@@ -64,6 +66,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       changes.hasOwnProperty('testData') &&
       !changes['testData'].isFirstChange()
     ) {
+      this.setPictures(this.testData);
       this.checkQuestions(this.testData);
     }
   }
@@ -205,6 +208,7 @@ export class TestBuilderComponent implements OnInit, OnChanges {
         .subscribe((config: Field[]) => {
           this.answers[res.id] = this.answers[res.id] || [];
           this.questions.splice(index, 1, config);
+          this.pictures.set(res.id, []);
         });
     });
   }
@@ -298,5 +302,19 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     const button = getElementFromMetadata(answer, 'button', 'type');
     button.hidden.next(false);
     field.mode.next('edit');
+  }
+
+  public onUpload(images: string[], id: string) {
+    images.forEach(el => {
+      this.genericFormService
+      .submitForm('/acceptance-tests/acceptancetestquestionpictures/', { acceptance_test_question: { id }, picture: el })
+      .subscribe(() => {})
+    });
+  }
+
+  setPictures(data: any): void {
+    data.acceptance_test_questions.forEach((question) => {
+      this.pictures.set(question.id, question.pictures.map(el => el.picture.origin));
+    });
   }
 }
