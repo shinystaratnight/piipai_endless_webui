@@ -61,7 +61,7 @@ const form = [
     endpoint: '/core/tags/',
     hideIfNull: true,
     templateOptions: {
-      values: ['__str__', 'owner'],
+      values: ['__str__', 'owner', 'translation'],
       label: 'Parent',
       add: true,
     },
@@ -81,7 +81,7 @@ const form = [
     },
     hideIfNull: true,
     templateOptions: {
-      values: ['__str__', 'owner'],
+      values: ['__str__', 'owner', 'translation'],
       label: 'Child',
       add: true,
     },
@@ -159,7 +159,7 @@ const formadd = [
     endpoint: '/core/tags/',
     smallModal: true,
     templateOptions: {
-      values: ['__str__', 'owner'],
+      values: ['__str__', 'owner', 'translation'],
       add: true,
       label: 'Parent'
     },

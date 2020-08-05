@@ -30,7 +30,7 @@ const form = [
       label: 'Position',
       add: false,
       delete: false,
-      values: ['__str__'],
+      values: ['__str__', 'tranlsations'],
       type: 'related',
       edit: true
     },

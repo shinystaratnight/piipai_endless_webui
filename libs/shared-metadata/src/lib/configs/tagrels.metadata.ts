@@ -141,7 +141,7 @@ const list = {
         label: 'Tag',
         add: true,
         delete: false,
-        values: ['__str__', 'owner'],
+        values: ['__str__', 'owner', 'translation'],
         type: 'related',
       },
       collapsed: false,
@@ -163,7 +163,8 @@ const formset = {
       templateOptions: {
         add: true,
         delete: false,
-        values: ['__str__', 'owner'],
+        edit: true,
+        values: ['__str__', 'owner', 'translation'],
         label: 'Tag',
         type: 'related'
       },
@@ -306,7 +307,7 @@ const form = [
       label: 'Tag',
       add: true,
       delete: false,
-      values: ['__str__', 'owner'],
+      values: ['__str__', 'owner', 'translation'],
       type: 'related',
     },
     collapsed: false,
@@ -373,7 +374,7 @@ const formadd = [
       label: 'Tag',
       add: true,
       delete: false,
-      values: ['__str__', 'evidence_required_for_approval', 'owner'],
+      values: ['__str__', 'evidence_required_for_approval', 'owner', 'translation'],
       type: 'related',
       dropdownCount: 9
     },
@@ -426,7 +427,8 @@ const profile = {
       templateOptions: {
         add: true,
         delete: false,
-        values: ['__str__', 'owner'],
+        edit: true,
+        values: ['__str__', 'owner', 'translation'],
         label: 'Tag',
         type: 'related'
       },
@@ -552,7 +554,8 @@ const candidatepool = {
       templateOptions: {
         add: true,
         delete: false,
-        values: ['__str__', 'owner'],
+        edit: true,
+        values: ['__str__', 'owner', 'translation'],
         label: 'Tag',
         type: 'related'
       },

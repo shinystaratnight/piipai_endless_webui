@@ -127,7 +127,7 @@ const list = {
         label: 'Industry',
         add: true,
         delete: false,
-        values: ['__str__'],
+        values: ['__str__', 'translations'],
         type: 'related',
         edit: true
       },
@@ -165,7 +165,7 @@ const form = [
               label: 'Industry',
               add: true,
               delete: false,
-              values: ['__str__'],
+              values: ['__str__', 'translations'],
               type: 'related',
               edit: true
             },
@@ -550,7 +550,7 @@ const formadd = [
               label: 'Industry',
               add: true,
               delete: false,
-              values: ['__str__'],
+              values: ['__str__', 'translations'],
               type: 'related',
               edit: true
             },

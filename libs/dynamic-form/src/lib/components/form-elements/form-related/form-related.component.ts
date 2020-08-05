@@ -1559,8 +1559,8 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
 
                 results.forEach((el) => {
                   const display = this.config.templateOptions.listDisplay || this.display;
-                  if (el.translations || (el.name && el.name.translations)) {
-                    const translations = el.translations || el.name.translations;
+                  if (el.translations || el.translation || (el.name && el.name.translations)) {
+                    const translations = el.translations || el.translation || el.name.translations;
                     const coutryCode = this.settingsService.settings.country_code;
                     const translation = translations.find((t) => t.language.id === translationMap[coutryCode]);
                     el.__str__ = (translation && translation.__str__) || formatString.format(display, el);

@@ -75,7 +75,7 @@ const pricelist = {
         add: true,
         delete: false,
         edit: true,
-        values: ['__str__'],
+        values: ['__str__', 'tranlsations'],
         label: 'Skill',
         type: 'related'
       },
@@ -180,7 +180,7 @@ const form = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['default_rate', '__str__'],
+      values: ['default_rate', '__str__', 'tranlsations'],
       type: 'related',
       edit: true
     },
@@ -243,7 +243,7 @@ const formadd = [
       label: 'Skill',
       add: true,
       delete: false,
-      values: ['price_list_default_rate', '__str__'],
+      values: ['price_list_default_rate', '__str__', 'tranlsations'],
       type: 'related',
       edit: true
     },
@@ -298,7 +298,7 @@ const pricelistForm = [
       type: 'related',
       add: true,
       edit: true,
-      values: ['default_rate', '__str__'],
+      values: ['default_rate', '__str__', 'tranlsations'],
       label: 'Skill',
       delete: false
     },

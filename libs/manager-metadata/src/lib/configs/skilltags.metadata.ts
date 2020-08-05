@@ -54,7 +54,7 @@ const form = [
     read_only: true,
     templateOptions: {
       label: 'Skill',
-      values: ['__str__'],
+      values: ['__str__', 'tranlsations'],
     },
     type: 'related',
     key: 'skill',
@@ -64,7 +64,7 @@ const form = [
     read_only: true,
     templateOptions: {
       label: 'Tag',
-      values: ['__str__', 'owner'],
+      values: ['__str__', 'owner', 'translation'],
     },
     type: 'related',
     key: 'tag'
@@ -80,7 +80,7 @@ const formadd = [
       add: true,
       delete: false,
       edit: true,
-      values: ['__str__'],
+      values: ['__str__', 'tranlsations'],
     },
     type: 'related',
     key: 'skill',
@@ -92,7 +92,8 @@ const formadd = [
       label: 'Tag',
       add: true,
       delete: false,
-      values: ['__str__', 'owner'],
+      edit: true,
+      values: ['__str__', 'owner', 'translation'],
     },
     type: 'related',
     key: 'tag'
