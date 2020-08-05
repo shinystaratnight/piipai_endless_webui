@@ -55,7 +55,8 @@ import { directives } from './directives';
     fromComponents.WorkflowComponent,
     fromComponents.TestGeneratorComponent,
     fromContainers.FormBuilderFormComponent,
-    fromComponents.FilterRelatedComponent
+    fromComponents.FilterRelatedComponent,
+    fromComponents.ImageUploaderComponent,
   ],
   declarations: [
     fromComponents.WebcamComponent,
