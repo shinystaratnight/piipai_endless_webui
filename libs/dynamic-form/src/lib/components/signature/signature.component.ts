@@ -1,36 +1,33 @@
-import {
-  Component,
-  AfterViewInit,
-  ViewChild,
-  EventEmitter,
-  ViewEncapsulation,
-  Output,
-  Input
-} from '@angular/core';
+import { Component, AfterViewInit, ViewChild, EventEmitter, ViewEncapsulation, Output, Input } from '@angular/core';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 
 import { getOrientation } from '../../helpers';
-import { isMobile } from '@webui/utilities'
+import { isMobile } from '@webui/utilities';
 
 @Component({
   selector: 'app-signature',
-  template: `<signature-pad *ngIf="show" [options]="signaturePadOptions" (onEndEvent)="drawComplete()"></signature-pad>`,
-  styles: [`
-    signature-pad canvas {
-      border-radius: 4px;
-      border: 1px solid #333;
-    }
-  `],
-  encapsulation: ViewEncapsulation.None
+  template: `<signature-pad
+    *ngIf="show"
+    [options]="signaturePadOptions"
+    (onEndEvent)="drawComplete()"
+  ></signature-pad>`,
+  styles: [
+    `
+      signature-pad canvas {
+        border-radius: 4px;
+        border: 1px solid #333;
+      }
+    `,
+  ],
+  encapsulation: ViewEncapsulation.None,
 })
 export class SignatureComponent implements AfterViewInit {
-
   show = true;
 
   @Input()
   public supervisorSignature: string;
 
-  @ViewChild(SignaturePad, { static: false }) signaturePad: SignaturePad;
+  @ViewChild(SignaturePad) signaturePad: SignaturePad;
 
   @Output()
   public signature: EventEmitter<string> = new EventEmitter();
@@ -55,8 +52,8 @@ export class SignatureComponent implements AfterViewInit {
 
   generateParams() {
     return {
-      'canvasWidth': isMobile() && getOrientation() !== 90 ? 309 : isMobile() ? 343 : 426,
-      'canvasHeight': isMobile() && getOrientation() !== 90 ? 149 : isMobile() ? 165 : 208,
+      canvasWidth: isMobile() && getOrientation() !== 90 ? 309 : isMobile() ? 343 : 426,
+      canvasHeight: isMobile() && getOrientation() !== 90 ? 149 : isMobile() ? 165 : 208,
     };
   }
 

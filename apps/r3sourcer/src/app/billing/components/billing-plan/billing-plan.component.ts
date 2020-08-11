@@ -1,13 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Output,
-  Input,
-  ViewChild,
-  OnChanges,
-  SimpleChanges,
-  OnDestroy,
-} from '@angular/core';
+import { Component, EventEmitter, Output, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Plan, BillingSubscription } from '../../models';
@@ -16,11 +7,9 @@ import { BillingService } from '../../services/billing-service';
 @Component({
   selector: 'app-billing-plan',
   templateUrl: 'billing-plan.component.html',
-  styleUrls: ['./billing-plan.component.scss']
+  styleUrls: ['./billing-plan.component.scss'],
 })
-
 export class BillingPlanComponent implements OnChanges, OnDestroy {
-
   public modalRef: NgbModalRef;
 
   @Input() public saveProcess: boolean;
@@ -29,15 +18,12 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   @Input() public plans: Plan[];
   @Input() public currency: string = 'USD';
 
-  @ViewChild('subscription', {static: false}) public modal;
+  @ViewChild('subscription') public modal;
 
   @Output() public selectedPlan = new EventEmitter();
   @Output() public cancelingPlan = new EventEmitter();
 
-  constructor(
-    private modalService: NgbModal,
-    private billingService: BillingService
-  ) {}
+  constructor(private modalService: NgbModal, private billingService: BillingService) {}
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.saveProcess) {
@@ -72,7 +58,7 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
       type: plan.type,
       worker_count: this.workerCount,
       price: plan.type === 'monthly' ? this.planPay(plan) : this.planPayYear(plan),
-      changed: this.currentPlan
+      changed: this.currentPlan,
     };
 
     this.selectedPlan.emit(body);
@@ -97,6 +83,6 @@ export class BillingPlanComponent implements OnChanges, OnDestroy {
   }
 
   public openModal() {
-    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
   }
 }

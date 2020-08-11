@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { AgmCoreModule } from '@agm/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ButtonsModule } from 'ngx-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 // import { NgxWebstorageModule } from 'ngx-webstorage';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 // import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
@@ -43,7 +43,7 @@ import { CommonModule } from '@angular/common';
   declarations: [
     ManagerComponent,
     // RedirectComponent,
-    ...formComponents.components
+    ...formComponents.components,
   ],
   imports: [
     CommonModule,
@@ -67,12 +67,12 @@ import { CommonModule } from '@angular/common';
     FontAwesomeModule,
     // CoreModule.forRoot(environment),
     CalendarModule,
-    DashboardModule
+    DashboardModule,
   ],
   providers: [
     // ...guards,
-    ...formComponents.providers
+    ...formComponents.providers,
     // ...interceptors
-  ]
+  ],
 })
 export class ManagerModule {}

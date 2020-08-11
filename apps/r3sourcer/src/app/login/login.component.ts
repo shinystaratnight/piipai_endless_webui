@@ -12,11 +12,10 @@ import { environment } from '../../environments/environment';
   selector: 'app-login',
   templateUrl: 'login.component.html',
   styleUrls: ['./login.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent implements OnInit, OnDestroy {
-
-  @ViewChild('modal', { static: false }) public modal;
+  @ViewChild('modal') public modal;
 
   public label: any;
   public response: any;
@@ -34,8 +33,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     client_id: {
       action: 'add',
       data: {
-        value: environment.clientId
-      }
+        value: environment.clientId,
+      },
     },
     username: {
       action: 'add',
@@ -45,9 +44,9 @@ export class LoginComponent implements OnInit, OnDestroy {
           required: true,
           placeholder: 'Login',
           addon: '/assets/img/mail.svg',
-          max: 255
-        }
-      }
+          max: 255,
+        },
+      },
     },
     password: {
       action: 'add',
@@ -58,10 +57,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           placeholder: 'Password',
           addon: '/assets/img/key.svg',
           type: 'password',
-          max: 128
-        }
-      }
-    }
+          max: 128,
+        },
+      },
+    },
   };
 
   constructor(
@@ -96,10 +95,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.authService.storeToken({ data: res });
         this.setTimezone().subscribe(() => {
-          const requests = [
-            this.setTimezone(),
-            this.userService.getUserData()
-          ];
+          const requests = [this.setTimezone(), this.userService.getUserData()];
 
           combineLatest(requests).subscribe(() => {
             if (res.data.redirect_to) {
@@ -112,7 +108,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           });
         });
       },
-      () => this.router.navigate(['login']));
+      () => this.router.navigate(['login'])
+    );
   }
 
   public responseHandler(response) {
@@ -125,10 +122,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       this.authService.storeToken(response, this.rememberMe, response.formData.username);
 
-      const requests = [
-        this.setTimezone(),
-        this.userService.getUserData()
-      ];
+      const requests = [this.setTimezone(), this.userService.getUserData()];
 
       combineLatest(requests).subscribe(() => {
         this.router.navigate([this.authService.getRedirectUrl()]);
@@ -137,7 +131,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public setTimezone() {
-    return this.userService.setTimezone()
+    return this.userService
+      .setTimezone()
       .pipe(catchError(() => this.router.navigate([this.authService.getRedirectUrl()])));
   }
 
@@ -158,9 +153,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public openResetForm() {
-    this.modalRef = this.modalService.open(this.modal, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(this.modal, { backdrop: 'static' });
 
     return false;
   }
-
 }

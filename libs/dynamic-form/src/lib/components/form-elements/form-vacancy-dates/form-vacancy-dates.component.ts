@@ -7,7 +7,7 @@ import {
   Input,
   OnDestroy,
   AfterContentInit,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
@@ -20,10 +20,9 @@ import { getTimeInstance, getToday } from '@webui/utilities';
   selector: 'app-form-vacancy-dates',
   templateUrl: 'form-vacancy-dates.component.html',
   styleUrls: ['./form-vacancy-dates.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
-export class FormVacancyDatesComponent extends BasicElementComponent
-  implements OnInit, OnDestroy, AfterContentInit {
+export class FormVacancyDatesComponent extends BasicElementComponent implements OnInit, OnDestroy, AfterContentInit {
   @Input()
   public deleteDate: BehaviorSubject<string>;
 
@@ -46,15 +45,12 @@ export class FormVacancyDatesComponent extends BasicElementComponent
   public todayElement: any;
   public timeInstance = getTimeInstance();
 
-  @ViewChild('calendar', { static: false })
+  @ViewChild('calendar')
   public calendar: ElementRef;
 
   private subscription: Subscription;
 
-  constructor(
-    private fb: FormBuilder,
-    private ngbCalendar: NgbCalendar,
-  ) {
+  constructor(private fb: FormBuilder, private ngbCalendar: NgbCalendar) {
     super();
   }
 
@@ -103,13 +99,14 @@ export class FormVacancyDatesComponent extends BasicElementComponent
 
   public markDisabledDates(dates: any[] = []) {
     this.markDisabled = (calendarDate) => {
-
       const exist = dates.find((shift) => {
         const shiftDate = this.timeInstance(shift);
 
-        return shiftDate.year() === calendarDate.year
-          && shiftDate.month() + 1 === calendarDate.month
-          && shiftDate.date() === calendarDate.day;
+        return (
+          shiftDate.year() === calendarDate.year &&
+          shiftDate.month() + 1 === calendarDate.month &&
+          shiftDate.date() === calendarDate.day
+        );
       });
 
       if (!exist) {
@@ -135,7 +132,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
     this.minDate = {
       year: time().year(),
       month: time().month() + 1,
-      day: time().date()
+      day: time().date(),
     };
   }
 
@@ -163,7 +160,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
       this.group.get(this.key).patchValue(this.vacancyDates);
       this.event.emit({
         el: this.config,
-        type: 'change'
+        type: 'change',
       });
     }
   }
@@ -178,9 +175,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent
 
   public markSelectedDates(date?, remove?) {
     const calendar = this.calendar.nativeElement;
-    const selectedDate = calendar.querySelectorAll(
-      `.bg-primary:not(.not-current)`
-    );
+    const selectedDate = calendar.querySelectorAll(`.bg-primary:not(.not-current)`);
     const currentDate = selectedDate[0];
 
     if (currentDate && date && !this.dates[date]) {

@@ -9,10 +9,9 @@ import { ToastService, MessageType } from '@webui/core';
 @Component({
   selector: 'app-billing-sms',
   templateUrl: './billing-sms.component.html',
-  styleUrls: ['./billing-sms.component.scss']
+  styleUrls: ['./billing-sms.component.scss'],
 })
 export class BillingSmsComponent implements OnInit, OnDestroy {
-
   @Input() currency: string = 'USD';
 
   public smsBalance: any;
@@ -22,14 +21,10 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
   public group: FormGroup;
   public additionalData: any;
 
-  @ViewChild('charge', {static: false}) public modal;
-  @ViewChild('funds', {static: false}) public fundsModal;
+  @ViewChild('charge') public modal;
+  @ViewChild('funds') public fundsModal;
 
-  constructor(
-    private billingService: BillingService,
-    private modalService: NgbModal,
-    private toastr: ToastService
-  ) { }
+  constructor(private billingService: BillingService, private modalService: NgbModal, private toastr: ToastService) {}
 
   ngOnInit() {
     this.getSmsBalance();
@@ -42,17 +37,15 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
   }
 
   public getSmsBalance(message?: boolean) {
-    this.billingService.getCreditDetails().subscribe(
-      (res: any) => {
-        if (message) {
-          if (this.smsBalance !== res.sms_balance) {
-            this.toastr.sendMessage('Balance has been updated', MessageType.success);
-          }
+    this.billingService.getCreditDetails().subscribe((res: any) => {
+      if (message) {
+        if (this.smsBalance !== res.sms_balance) {
+          this.toastr.sendMessage('Balance has been updated', MessageType.success);
         }
-
-        this.smsBalance = res.sms_balance;
       }
-    );
+
+      this.smsBalance = res.sms_balance;
+    });
   }
 
   public showAddFundsForm() {
@@ -60,16 +53,14 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
   }
 
   public addFunds() {
-    this.billingService.addFunds({ amount: this.amount }).subscribe(
-      (res: any) => {
-        this.amount = 20;
-        this.modalRef.close();
-        this.toastr.sendMessage('Please wait a few seconds', MessageType.info);
-        setTimeout(() => {
-          this.getSmsBalance(true);
-        }, 10000);
-      }
-    );
+    this.billingService.addFunds({ amount: this.amount }).subscribe((res: any) => {
+      this.amount = 20;
+      this.modalRef.close();
+      this.toastr.sendMessage('Please wait a few seconds', MessageType.info);
+      setTimeout(() => {
+        this.getSmsBalance(true);
+      }, 10000);
+    });
   }
 
   public autoCharge() {
@@ -81,14 +72,13 @@ export class BillingSmsComponent implements OnInit, OnDestroy {
   }
 
   public openModal(modal) {
-    this.modalRef = this.modalService.open(modal, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(modal, { backdrop: 'static' });
   }
 
   public saveAutoCharge() {
-    this.billingService.setCreditDetails(this.group.value)
-      .subscribe((res: any) => {
-        this.smsBalance = res.sms_balance;
-        this.modalRef.close();
-      });
+    this.billingService.setCreditDetails(this.group.value).subscribe((res: any) => {
+      this.smsBalance = res.sms_balance;
+      this.modalRef.close();
+    });
   }
 }

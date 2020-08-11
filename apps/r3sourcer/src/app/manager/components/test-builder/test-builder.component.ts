@@ -1,12 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild,
-  TemplateRef
-} from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, TemplateRef } from '@angular/core';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
@@ -17,7 +9,7 @@ import {
   fillingForm,
   getElementFromMetadata,
   PassTestModalComponent,
-  PassTestModalConfig
+  PassTestModalConfig,
 } from '@webui/dynamic-form';
 import { Field, Endpoints } from '@webui/data';
 
@@ -31,7 +23,7 @@ import { testMetadata, questionMetadata, answerMetadata } from './test-builder.c
 export class TestBuilderComponent implements OnInit, OnChanges {
   @Input() public testData: any;
 
-  @ViewChild('preview', { static: false }) public previewModal: TemplateRef<any>;
+  @ViewChild('preview') public previewModal: TemplateRef<any>;
 
   public testMetadata: Field[];
 
@@ -47,23 +39,17 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   public configMap = {
     [Endpoints.AcceptenceTest]: testMetadata,
     [Endpoints.AcceptenceTestQuestion]: questionMetadata,
-    [Endpoints.AcceptenceTestAnswers]: answerMetadata
-  }
+    [Endpoints.AcceptenceTestAnswers]: answerMetadata,
+  };
 
-  constructor(
-    private genericFormService: GenericFormService,
-    private modalService: NgbModal,
-  ) {}
+  constructor(private genericFormService: GenericFormService, private modalService: NgbModal) {}
 
   public ngOnInit() {
     this.questionId = 1;
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (
-      changes.hasOwnProperty('testData') &&
-      !changes['testData'].isFirstChange()
-    ) {
+    if (changes.hasOwnProperty('testData') && !changes['testData'].isFirstChange()) {
       this.checkQuestions(this.testData);
     }
   }
@@ -80,77 +66,73 @@ export class TestBuilderComponent implements OnInit, OnChanges {
 
   public updateTestForm(data) {
     this.testId = data.id;
-    this.createMetadata(Endpoints.AcceptenceTest, 'form', data)
-      .subscribe((config: Field[]) => {
-        this.testMetadata = config;
-      });
+    this.createMetadata(Endpoints.AcceptenceTest, 'form', data).subscribe((config: Field[]) => {
+      this.testMetadata = config;
+    });
   }
 
   public createMetadata(endpoint: string, metadataType: string, data?): Observable<Field[]> {
-    return of(this.configMap[endpoint][metadataType])
-      .pipe(
-        map((config: Field[]) => {
-          config = JSON.parse(JSON.stringify(config));
+    return of(this.configMap[endpoint][metadataType]).pipe(
+      map((config: Field[]) => {
+        config = JSON.parse(JSON.stringify(config));
 
-          const mode = new BehaviorSubject('edit');
-          const button = getElementFromMetadata(config, 'button', 'type');
-          const hidden = new BehaviorSubject(false);
-          button.hidden = hidden;
-          if (metadataType === 'form') {
-            this.addModeProperty(config, mode);
-          }
+        const mode = new BehaviorSubject('edit');
+        const button = getElementFromMetadata(config, 'button', 'type');
+        const hidden = new BehaviorSubject(false);
+        button.hidden = hidden;
+        if (metadataType === 'form') {
+          this.addModeProperty(config, mode);
+        }
 
-          if (metadataType === 'form') {
-            mode.next('view');
-            hidden.next(true);
-            fillingForm(config, data);
-          }
+        if (metadataType === 'form') {
+          mode.next('view');
+          hidden.next(true);
+          fillingForm(config, data);
+        }
 
-          return config;
-        })
-      );
+        return config;
+      })
+    );
   }
 
   public addQuestion(create: boolean, data?) {
     const metadataType = create ? 'formadd' : 'form';
-    this.createMetadata(Endpoints.AcceptenceTestQuestion, metadataType, data)
-      .subscribe((config: Field[]) => {
-        if (create) {
-          const order = getElementFromMetadata(config, 'order');
+    this.createMetadata(Endpoints.AcceptenceTestQuestion, metadataType, data).subscribe((config: Field[]) => {
+      if (create) {
+        const order = getElementFromMetadata(config, 'order');
 
-          if (order) {
-            order.value = ++this.questionId;
-          }
-        } else {
-          const order = getElementFromMetadata(config, 'order');
-
-          if (order.value > this.questionId) {
-            this.questionId = order.value;
-          } else {
-            this.questionId += 1;
-          }
+        if (order) {
+          order.value = ++this.questionId;
         }
+      } else {
+        const order = getElementFromMetadata(config, 'order');
 
-        this.questions.push(config);
-      });
+        if (order.value > this.questionId) {
+          this.questionId = order.value;
+        } else {
+          this.questionId += 1;
+        }
+      }
+
+      this.questions.push(config);
+    });
   }
 
   public addAnswer(create: boolean, target, data?) {
     const metadataType = create ? 'formadd' : 'form';
 
-    this.createMetadata(Endpoints.AcceptenceTestAnswers, metadataType, data)
-      .subscribe((config: Field[]) => {
-        if (create) {
-          const order = getElementFromMetadata(config, 'order');
-          const value = this.getLastOrder(target);
+    this.createMetadata(Endpoints.AcceptenceTestAnswers, metadataType, data).subscribe((config: Field[]) => {
+      if (create) {
+        const order = getElementFromMetadata(config, 'order');
+        const value = this.getLastOrder(target);
 
-          if (order) {
-            order.value = value;
-          }
+        if (order) {
+          order.value = value;
         }
+      }
 
-        target.push(config);
-      });
+      target.push(config);
+    });
   }
 
   public getLastOrder(answers) {
@@ -163,12 +145,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     });
 
     return value + 1;
-
   }
 
   public checkQuestions(data: any) {
     if (data && data.acceptance_test_questions) {
-      const questions = data.acceptance_test_questions.sort((prev, next) => prev.order > next.order ? 1 : -1);
+      const questions = data.acceptance_test_questions.sort((prev, next) => (prev.order > next.order ? 1 : -1));
 
       questions.forEach((question) => {
         this.addQuestion(false, question);
@@ -197,16 +178,14 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       action = 'submitForm';
     }
 
-    this.genericFormService[action](
-      Endpoints.AcceptenceTestQuestion + (update ? data.id + '/' : ''),
-      data
-    ).subscribe((res) => {
-      this.createMetadata(Endpoints.AcceptenceTestQuestion, 'form', res)
-        .subscribe((config: Field[]) => {
+    this.genericFormService[action](Endpoints.AcceptenceTestQuestion + (update ? data.id + '/' : ''), data).subscribe(
+      (res) => {
+        this.createMetadata(Endpoints.AcceptenceTestQuestion, 'form', res).subscribe((config: Field[]) => {
           this.answers[res.id] = this.answers[res.id] || [];
           this.questions.splice(index, 1, config);
         });
-    });
+      }
+    );
   }
 
   public deleteQuestion(id: string, target: any[], index: number) {
@@ -217,12 +196,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
     this.deleteObject(Endpoints.AcceptenceTestAnswers, target, index, id);
   }
 
-  public deleteObject(endpoint: string, target: any[], index: number, id: string,) {
+  public deleteObject(endpoint: string, target: any[], index: number, id: string) {
     if (id) {
-      this.genericFormService.delete(endpoint, id)
-        .subscribe(() => {
-          target.splice(index, 1);
-        });
+      this.genericFormService.delete(endpoint, id).subscribe(() => {
+        target.splice(index, 1);
+      });
     } else {
       target.splice(index, 1);
     }
@@ -238,15 +216,13 @@ export class TestBuilderComponent implements OnInit, OnChanges {
       action = 'submitForm';
     }
 
-    this.genericFormService[action](
-      Endpoints.AcceptenceTestAnswers + (update ? data.id + '/' : ''),
-      data
-    ).subscribe((res) => {
-      this.createMetadata(Endpoints.AcceptenceTestAnswers, 'form', res)
-        .subscribe((config: Field[]) => {
+    this.genericFormService[action](Endpoints.AcceptenceTestAnswers + (update ? data.id + '/' : ''), data).subscribe(
+      (res) => {
+        this.createMetadata(Endpoints.AcceptenceTestAnswers, 'form', res).subscribe((config: Field[]) => {
           this.answers[id].splice(index, 1, config);
         });
-    });
+      }
+    );
   }
 
   public getId(metadata: Field[]): string {
@@ -266,11 +242,11 @@ export class TestBuilderComponent implements OnInit, OnChanges {
   }
 
   public showPreview() {
-    this.modalRef = this.modalService.open(PassTestModalComponent, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(PassTestModalComponent, { backdrop: 'static' });
     this.modalRef.componentInstance.config = {
       testId: this.testData.id,
       send: false,
-      description: this.testData.description
+      description: this.testData.description,
     } as PassTestModalConfig;
   }
 

@@ -1,22 +1,14 @@
-import {
-  Directive,
-  HostListener,
-  ElementRef,
-  Input,
-  Renderer,
-  AfterViewInit
-} from '@angular/core';
+import { Directive, HostListener, ElementRef, Input, AfterViewInit, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[appScroll]'
+  selector: '[appScroll]',
 })
 export class ScrollDirective implements AfterViewInit {
-
   public offsetTop: number;
 
   @Input() public enable: boolean;
 
-  constructor(private el: ElementRef, public renderer: Renderer) {
+  constructor(private el: ElementRef, public renderer: Renderer2) {
     this.offsetTop = el.nativeElement.offsetTop;
   }
 
@@ -26,16 +18,13 @@ export class ScrollDirective implements AfterViewInit {
 
   @HostListener('document:scroll') public onScroll() {
     if (this.enable) {
-      const scrollTop = window.pageYOffset
-       || document.documentElement.scrollTop
-       || document.body.scrollTop || 0;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
       if (scrollTop + 85 >= this.offsetTop) {
-        this.renderer.setElementClass(this.el.nativeElement, 'scrolled', true);
+        this.renderer.addClass(this.el.nativeElement, 'scrolled');
       } else {
-        this.renderer.setElementClass(this.el.nativeElement, 'scrolled', false);
+        this.renderer.removeClass(this.el.nativeElement, 'scrolled');
       }
     }
   }
-
 }

@@ -6,7 +6,7 @@ import {
   ViewChild,
   AfterViewInit,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -18,11 +18,10 @@ import { SiteSettingsService } from '@webui/core';
 @Component({
   selector: 'app-form-checkbox',
   templateUrl: './form-checkbox.component.html',
-  styleUrls: ['./form-checkbox.component.scss']
+  styleUrls: ['./form-checkbox.component.scss'],
 })
-export class FormCheckboxComponent extends BasicElementComponent
-  implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('checkbox', { static: false })
+export class FormCheckboxComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('checkbox')
   public checkbox;
 
   public config;
@@ -50,11 +49,7 @@ export class FormCheckboxComponent extends BasicElementComponent
 
   private subscriptions: Subscription[];
 
-  constructor(
-    private fb: FormBuilder,
-    private cd: ChangeDetectorRef,
-    private siteSettings: SiteSettingsService
-  ) {
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private siteSettings: SiteSettingsService) {
     super();
     this.subscriptions = [];
   }
@@ -89,12 +84,12 @@ export class FormCheckboxComponent extends BasicElementComponent
   }
 
   public ngOnDestroy() {
-    this.subscriptions.forEach(s => s && s.unsubscribe());
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   public checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      const subscription = this.config.hidden.subscribe(hide => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
           this.config.hide = hide;
           this.group.get(this.key).patchValue(undefined);
@@ -114,7 +109,7 @@ export class FormCheckboxComponent extends BasicElementComponent
 
   public checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe(mode => {
+      const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
         } else {
@@ -150,7 +145,7 @@ export class FormCheckboxComponent extends BasicElementComponent
     if (this.config.templateOptions.type === 'icon') {
       this.customizeCheckbox(value);
     }
-    this.group.get(this.key).patchValue(value === null ? value : (value || false));
+    this.group.get(this.key).patchValue(value === null ? value : value || false);
   }
 
   public defaultValues(value) {
@@ -186,21 +181,14 @@ export class FormCheckboxComponent extends BasicElementComponent
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.controls[this.key].value
+      value: this.group.controls[this.key].value,
     });
   }
 
   public checkDisabled(): boolean {
-    const disableFields = [
-      'by_phone',
-      'send_supervisor_message',
-      'send_candidate_message'
-    ];
+    const disableFields = ['by_phone', 'send_supervisor_message', 'send_candidate_message'];
 
-    return (
-      disableFields.indexOf(this.config.key) !== -1 &&
-      !this.siteSettings.isSmsEnabled()
-    );
+    return disableFields.indexOf(this.config.key) !== -1 && !this.siteSettings.isSmsEnabled();
   }
 
   public getDisabledTitle(disabled?: boolean): string {
@@ -212,6 +200,6 @@ export class FormCheckboxComponent extends BasicElementComponent
       type: e.type,
       el: this.config,
       value: this.config.templateOptions.action,
-    })
+    });
   }
 }

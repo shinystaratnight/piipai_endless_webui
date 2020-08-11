@@ -7,7 +7,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AgmCoreModule } from '@agm/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { ButtonsModule, BsDropdownModule } from 'ngx-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
@@ -48,7 +49,7 @@ import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslation
 
     MetadataModule,
 
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -59,7 +60,7 @@ import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslation
     fromComponents.WorkflowComponent,
     fromComponents.TestGeneratorComponent,
     fromContainers.FormBuilderFormComponent,
-    fromComponents.FilterRelatedComponent
+    fromComponents.FilterRelatedComponent,
   ],
   declarations: [
     fromComponents.WebcamComponent,
@@ -67,23 +68,23 @@ import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslation
     ...fromComponents.components,
     ...directives,
     ...fromContainers.components,
-    ...modals
+    ...modals,
   ],
   providers: [...services],
-  entryComponents: [...fromComponents.entryComponents, ...fromContainers.entryComponents, ...modals]
+  entryComponents: [...fromComponents.entryComponents, ...fromContainers.entryComponents, ...modals],
 })
 export class DynamicFormModule {
   static forRoot(data: { metadata: any }): ModuleWithProviders<DynamicFormModule> {
     return {
       ngModule: DynamicFormModule,
-      providers: [{ provide: METADATA, useClass: data.metadata }]
+      providers: [{ provide: METADATA, useClass: data.metadata }],
     };
   }
 
   static forChild(data: { metadata: any }): ModuleWithProviders<DynamicFormModule> {
     return {
       ngModule: DynamicFormModule,
-      providers: [{ provide: METADATA, useClass: data.metadata }]
+      providers: [{ provide: METADATA, useClass: data.metadata }],
     };
   }
 }

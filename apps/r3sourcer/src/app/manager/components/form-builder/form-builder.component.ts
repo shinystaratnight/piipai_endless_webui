@@ -7,11 +7,9 @@ import { GenericFormService } from '@webui/dynamic-form';
 
 @Component({
   selector: 'app-form-builder',
-  templateUrl: 'form-builder.component.html'
+  templateUrl: 'form-builder.component.html',
 })
-
 export class FormBuilderComponent {
-
   @Input()
   public endpoint: string;
 
@@ -21,7 +19,7 @@ export class FormBuilderComponent {
   @Input()
   public path: string;
 
-  @ViewChild('modal', { static: false })
+  @ViewChild('modal')
   public modalTemplate: ElementRef;
 
   @Output()
@@ -38,11 +36,7 @@ export class FormBuilderComponent {
   public domain = location.origin;
   public formLink: string;
 
-  constructor(
-    private router: Router,
-    private modalService: NgbModal,
-    private genericFormService: GenericFormService
-  ) {
+  constructor(private router: Router, private modalService: NgbModal, private genericFormService: GenericFormService) {
     this.formLink = location.origin + '/registration';
   }
 
@@ -56,19 +50,19 @@ export class FormBuilderComponent {
           groups: {
             action: 'add',
             data: {
-              fields: [...event.data.model_fields, ...event.data.extra_fields]
-            }
+              fields: [...event.data.model_fields, ...event.data.extra_fields],
+            },
           },
           id: {
             action: 'add',
             data: {
-              value: event.data.id
-            }
-          }
+              value: event.data.id,
+            },
+          },
         };
       }
       this.str.emit({
-        str: event.data.__str__
+        str: event.data.__str__,
       });
     } else if (event.type === 'sendForm' && event.status === 'success' && this.id) {
       this.router.navigate([this.path]);
@@ -84,22 +78,22 @@ export class FormBuilderComponent {
           action: 'add',
           data: {
             fields: [...e.data.model_fields, ...e.data.extra_fields],
-            id: e.data.id
-          }
-        }
+            id: e.data.id,
+          },
+        },
       };
       this.str.emit({
-        str: e.data.__str__
+        str: e.data.__str__,
       });
     } else if (e.str) {
       this.str.emit({
-        str: e.str
+        str: e.str,
       });
     }
   }
 
   public showPreview() {
-    this.modalRef = this.modalService.open(this.modalTemplate, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(this.modalTemplate, { backdrop: 'static' });
 
     return false;
   }
@@ -114,7 +108,7 @@ export class FormBuilderComponent {
         (res: any) => {
           this.router.navigate([this.path]);
         },
-        (err: any) => this.error = err
+        (err: any) => (this.error = err)
       );
     }
   }

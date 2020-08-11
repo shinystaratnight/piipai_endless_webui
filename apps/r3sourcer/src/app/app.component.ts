@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
     <img *ngIf="loader" class="preloader" src="/assets/img/logo.svg" alt="R3sourcer" width="120" height="120" />
     <router-outlet (activate)="loader = false" (deactivate)="loader = true"></router-outlet>
     <app-toast></app-toast>
-  `
+  `,
 })
 export class AppComponent {
   loader = true;

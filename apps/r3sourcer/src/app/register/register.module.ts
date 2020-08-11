@@ -9,6 +9,6 @@ import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslation
 
 @NgModule({
   declarations: [RegisterComponent],
-  imports: [CommonModule, DynamicFormModule, RouterModule.forChild(routes), TranslateModule.forChild()]
+  imports: [CommonModule, DynamicFormModule, RouterModule.forChild(routes), TranslateModule.forChild()],
 })
 export class RegisterModule {}

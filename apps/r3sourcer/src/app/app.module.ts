@@ -4,8 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RouterModule, NoPreloading } from '@angular/router';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
@@ -45,7 +44,7 @@ import {
   faSort,
   faSortUp,
   faSortDown,
-  faDotCircle
+  faDotCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -79,26 +78,26 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
     AgmCoreModule.forRoot({
       apiKey: environment.GOOGLE_GEO_CODING_API_KEY,
-      libraries: ['places']
+      libraries: ['places'],
     }),
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
+        deps: [HttpClient],
+      },
     }),
 
     CoreModule.forRoot(environment),
     DynamicFormModule.forRoot({ metadata: Metadata }),
-    MasterGuideModule
+    MasterGuideModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor() {
+  constructor(library: FaIconLibrary) {
     const icons = [
       faChevronLeft,
       faChevronRight,
@@ -138,9 +137,9 @@ export class AppModule {
       faSort,
       faSortUp,
       faSortDown,
-      faDotCircle
+      faDotCircle,
     ];
 
-    library.add(...icons);
+    library.addIcons(...icons);
   }
 }

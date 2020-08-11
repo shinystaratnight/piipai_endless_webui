@@ -6,7 +6,7 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -16,13 +16,10 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 
 @Component({
   selector: 'app-form-select',
-  templateUrl: 'form-select.component.html'
+  templateUrl: 'form-select.component.html',
 })
-
-export class FormSelectComponent
-  extends BasicElementComponent
-  implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('select', { static: false })
+export class FormSelectComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('select')
   public select;
 
   public config;
@@ -43,10 +40,7 @@ export class FormSelectComponent
 
   private subscriptions: Subscription[];
 
-  constructor(
-    private fb: FormBuilder,
-    private cd: ChangeDetectorRef
-  ) {
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
     super();
     this.subscriptions = [];
   }
@@ -54,7 +48,7 @@ export class FormSelectComponent
   public ngOnInit() {
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.options = !this.config.templateOptions.doNotSort
-      ? this.config.templateOptions.options.sort((p, n) => p.label > n.label ? 1 : -1 )
+      ? this.config.templateOptions.options.sort((p, n) => (p.label > n.label ? 1 : -1))
       : this.config.templateOptions.options.slice();
     this.setInitValue();
     this.checkModeProperty();
@@ -77,7 +71,7 @@ export class FormSelectComponent
           this.config.hide = hide;
         }
 
-        if (!(<any> this.cd).destroyed) {
+        if (!(<any>this.cd).destroyed) {
           this.cd.detectChanges();
         }
       });
@@ -104,12 +98,12 @@ export class FormSelectComponent
     }
   }
 
-  public getValue(options: any[], value: string): {value: string, color?: string} {
+  public getValue(options: any[], value: string): { value: string; color?: string } {
     let element = options.find((el) => el.value == value); // tslint:disable-line
     if (element) {
       return {
         value: element.label,
-        color: element.color
+        color: element.color,
       };
     } else {
       return { value: '-' };
@@ -125,7 +119,8 @@ export class FormSelectComponent
       }
     }
 
-    if (value != undefined) { //tslint:disable-line
+    if (value != undefined) {
+      //tslint:disable-line
       this.group.get(this.key).patchValue(value);
     }
     if ((this.viewMode || this.config.read_only) && !this.config.hide) {
@@ -145,7 +140,7 @@ export class FormSelectComponent
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.get(this.key).value
+      value: this.group.get(this.key).value,
     });
   }
 }

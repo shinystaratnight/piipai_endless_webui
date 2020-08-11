@@ -8,7 +8,7 @@ import {
   EventEmitter,
   Output,
   ViewEncapsulation,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
 
 import { Subscription, fromEvent } from 'rxjs';
@@ -16,35 +16,27 @@ import { debounceTime } from 'rxjs/operators';
 
 import { AuthService, NavigationService, UserService } from '@webui/core';
 import { User, Page, Role } from '@webui/data';
-import {
-  getContactAvatar,
-  isClient,
-  isCandidate,
-  isManager,
-  getTimeInstance
-} from '@webui/utilities';
+import { getContactAvatar, isClient, isCandidate, isManager, getTimeInstance } from '@webui/utilities';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('header', { static: false }) public header: any;
-  @ViewChild('list', { static: false }) public list: any;
-  @ViewChild('item', { static: false }) public item: any;
-  @ViewChild('nav', { static: false }) public nav: any;
-  @ViewChild('userBlock', { static: false }) public userBlock: any;
-  @ViewChild('modal', { static: false }) public modal: any;
+  @ViewChild('header') public header: any;
+  @ViewChild('list') public list: any;
+  @ViewChild('item') public item: any;
+  @ViewChild('nav') public nav: any;
+  @ViewChild('userBlock') public userBlock: any;
+  @ViewChild('modal') public modal: any;
 
   @Input() public user: User;
   @Input() public logo = '/assets/img/new-software.svg';
 
   // @Output() public update: EventEmitter<Role> = new EventEmitter();
-  @Output() public changePasswordEmitter: EventEmitter<
-    any
-  > = new EventEmitter();
+  @Output() public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
 
   public headerHeight: number;
   public error: any;
@@ -57,13 +49,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   public company: string;
   public picture: string;
   public contactAvatar: string;
-  public urlPrefix = isClient()
-    ? '/cl'
-    : isCandidate()
-    ? '/cd'
-    : isManager
-    ? '/mn'
-    : '';
+  public urlPrefix = isClient() ? '/cl' : isCandidate() ? '/cd' : isManager ? '/mn' : '';
   public initTime: boolean;
 
   get pages(): Page[] {
@@ -112,8 +98,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
       this.greeting = `Welcome, ${this.user.data.contact.__str__}`;
       this.checkCandidateRole(this.user.currentRole);
       this.company = this.user.data.contact.company;
-      this.picture =
-        this.user.data.contact.picture && this.user.data.contact.picture.origin;
+      this.picture = this.user.data.contact.picture && this.user.data.contact.picture.origin;
 
       if (!this.picture) {
         this.contactAvatar = getContactAvatar(this.user.data.contact.__str__);

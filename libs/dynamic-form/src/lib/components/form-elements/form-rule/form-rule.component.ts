@@ -7,8 +7,8 @@ import { BasicElementComponent } from './../basic-element/basic-element.componen
 
 interface OutputData {
   active: number[];
-  required_states: number[]|string[];
-  required_functions: number[]|string[];
+  required_states: number[] | string[];
+  required_functions: number[] | string[];
 }
 
 interface Rule {
@@ -21,14 +21,13 @@ interface Rule {
 @Component({
   selector: 'app-form-rule',
   templateUrl: './form-rule.component.html',
-  styleUrls: ['./form-rule.component.scss']
+  styleUrls: ['./form-rule.component.scss'],
 })
 export class FormRuleComponent extends BasicElementComponent implements OnInit, OnDestroy {
-
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild('element', { static: false })
+  @ViewChild('element')
   public element: any;
 
   public config;
@@ -59,16 +58,13 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
   public states: any;
   public functions: any;
 
-  constructor(
-    private fb: FormBuilder,
-    private modalService: NgbModal
-  ) {
+  constructor(private fb: FormBuilder, private modalService: NgbModal) {
     super();
   }
 
   public ngOnInit(): void {
     this.addControl(this.config, this.fb);
-    this.data = <any> {};
+    this.data = <any>{};
     if (this.config.value && Object.keys(this.config.value).length) {
       this.data = JSON.parse(JSON.stringify(this.config.value));
       this.generateView(this.data);
@@ -111,7 +107,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     if (type === 'state' || type === 'function') {
       this.choice = type;
     }
-    this.modalRef = this.modalService.open(content, {backdrop: 'static'});
+    this.modalRef = this.modalService.open(content, { backdrop: 'static' });
   }
 
   public done(closeModal, type) {
@@ -185,7 +181,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
       app: 'appsArray',
       model: 'modelsArray',
       function: 'functionsArray',
-      options: 'statesArray'
+      options: 'statesArray',
     };
 
     this[props[type]] = [].concat(this.config[type]);
@@ -196,13 +192,13 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
       model: {
         param: 'app',
         query: `?app_name=`,
-        endpoint: '/models/'
+        endpoint: '/models/',
       },
       function: {
         param: 'model',
         query: `?app_name=${this.app}&model_name=`,
-        endpoint: '/functions/'
-      }
+        endpoint: '/functions/',
+      },
     };
     if (type === 'model') {
       this.model = null;
@@ -222,10 +218,10 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
           field: 'rules',
           param: params[type].param,
           query: params[type].query,
-          prop: type
-        }
+          prop: type,
+        },
       },
-      value: [{ [params[type].param]: this[params[type].param] }]
+      value: [{ [params[type].param]: this[params[type].param] }],
     });
   }
 
@@ -309,9 +305,9 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
 
   public createRule(type?) {
     return {
-        type: type || '',
-        operator: 'or',
-        data: [],
+      type: type || '',
+      operator: 'or',
+      data: [],
     };
   }
 
@@ -344,8 +340,7 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
     if (type === 'function') {
       if (this.config.value && this.config.value.required_functions) {
         this.functions = this.generateViewForType([].concat(this.config.value.required_functions));
-        this.data.required_functions =
-          JSON.parse(JSON.stringify(this.config.value.required_functions));
+        this.data.required_functions = JSON.parse(JSON.stringify(this.config.value.required_functions));
       } else {
         this.functions = this.generateViewForType([]);
         this.data.required_functions = null;
@@ -354,5 +349,4 @@ export class FormRuleComponent extends BasicElementComponent implements OnInit, 
 
     this.group.get(this.key).patchValue(this.data);
   }
-
 }

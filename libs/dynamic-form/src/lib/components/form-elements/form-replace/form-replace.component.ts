@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  EventEmitter,
-  ViewChild,
-  Output
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, ViewChild, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { BasicElementComponent } from '../basic-element/basic-element.component';
@@ -15,12 +8,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-form-replace',
-  templateUrl: 'form-replace.component.html'
+  templateUrl: 'form-replace.component.html',
 })
-
 export class FormReplaceComponent extends BasicElementComponent implements OnInit, OnDestroy {
-
-  @ViewChild('modal', { static: false })
+  @ViewChild('modal')
   public modalTemplate: any;
 
   @Output()
@@ -39,11 +30,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
   public modalData: any;
   public modalRef: any;
 
-  constructor(
-    private fb: FormBuilder,
-    private gfs: GenericFormService,
-    private modal: NgbModal
-  ) {
+  constructor(private fb: FormBuilder, private gfs: GenericFormService, private modal: NgbModal) {
     super();
   }
 
@@ -52,9 +39,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.selfGroup = this.fb.group({});
     this.modalData = {};
     this.addControl(this.config, this.fb);
-    this.config.data.subscribe(
-      (data: any) => this.generateMetadata(this.config.replace_by, data)
-    );
+    this.config.data.subscribe((data: any) => this.generateMetadata(this.config.replace_by, data));
   }
 
   public ngOnDestroy() {
@@ -125,17 +110,15 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.modalData = {};
     this.modalData.endpoint = endpoint;
     this.modalData.el = el;
-    this.modalRef = this.modal.open(this.modalTemplate, {size: 'lg'});
+    this.modalRef = this.modal.open(this.modalTemplate, { size: 'lg' });
   }
 
   public sendAction(endpoint: string, query: string): void {
     if (query) {
       endpoint += `?${query}`;
-      this.gfs.getByQuery(endpoint, query).subscribe(
-        (res: any) => {
-          this.updateReplace();
-        }
-      );
+      this.gfs.getByQuery(endpoint, query).subscribe((res: any) => {
+        this.updateReplace();
+      });
     } else {
       return;
     }
@@ -146,7 +129,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.modalData.endpoint = endpoint;
     this.modalData.id = el.id;
     this.modalData.el = el;
-    this.modalRef = this.modal.open(this.modalTemplate, {size: 'lg'});
+    this.modalRef = this.modal.open(this.modalTemplate, { size: 'lg' });
   }
 
   public deleteAction(endpoint: string, query: string, el) {
@@ -155,16 +138,14 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
     this.modalData.endpoint = endpoint;
     this.modalData.id = el.id;
     this.modalData.el = el;
-    this.modalRef = this.modal.open(this.modalTemplate, {size: 'lg'});
+    this.modalRef = this.modal.open(this.modalTemplate, { size: 'lg' });
   }
 
   public deleteElement(closeModal) {
     closeModal();
-    this.gfs.delete(this.modalData.endpoint, this.modalData.id).subscribe(
-      (res: any) => {
-        this.updateReplace();
-      }
-    );
+    this.gfs.delete(this.modalData.endpoint, this.modalData.id).subscribe((res: any) => {
+      this.updateReplace();
+    });
   }
 
   public formEvent(e, closeModal, el) {
@@ -177,7 +158,7 @@ export class FormReplaceComponent extends BasicElementComponent implements OnIni
   public updateReplace() {
     this.event.emit({
       type: 'updateData',
-      el: this.config
+      el: this.config,
     });
   }
 }
