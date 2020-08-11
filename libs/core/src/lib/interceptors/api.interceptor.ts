@@ -6,9 +6,7 @@ import { ENV } from '../services';
 
 @Injectable()
 export class APIInterceptor implements HttpInterceptor {
-  constructor(
-    @Optional() @Inject(ENV) private env: any
-  ) {}
+  constructor(@Optional() @Inject(ENV) private env: any) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let api: string = this.env.api;

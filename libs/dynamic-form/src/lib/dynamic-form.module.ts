@@ -69,31 +69,21 @@ import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslation
     ...fromContainers.components,
     ...modals
   ],
-  providers: [
-    ...services,
-  ],
-  entryComponents: [
-    ...fromComponents.entryComponents,
-    ...fromContainers.entryComponents,
-    ...modals
-  ]
+  providers: [...services],
+  entryComponents: [...fromComponents.entryComponents, ...fromContainers.entryComponents, ...modals]
 })
 export class DynamicFormModule {
   static forRoot(data: { metadata: any }): ModuleWithProviders<DynamicFormModule> {
     return {
       ngModule: DynamicFormModule,
-      providers: [
-        { provide: METADATA, useClass: data.metadata }
-      ]
+      providers: [{ provide: METADATA, useClass: data.metadata }]
     };
   }
 
   static forChild(data: { metadata: any }): ModuleWithProviders<DynamicFormModule> {
     return {
       ngModule: DynamicFormModule,
-      providers: [
-        { provide: METADATA, useClass: data.metadata }
-      ]
+      providers: [{ provide: METADATA, useClass: data.metadata }]
     };
   }
 }

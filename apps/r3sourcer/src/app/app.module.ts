@@ -70,12 +70,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    VerifyEmailComponent,
-    RedirectComponent,
-    ToastComponent
-  ],
+  declarations: [AppComponent, VerifyEmailComponent, RedirectComponent, ToastComponent],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: NoPreloading }),
@@ -94,7 +89,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-
 
     CoreModule.forRoot(environment),
     DynamicFormModule.forRoot({ metadata: Metadata }),
@@ -145,7 +139,7 @@ export class AppModule {
       faSortUp,
       faSortDown,
       faDotCircle
-    ]
+    ];
 
     library.add(...icons);
   }

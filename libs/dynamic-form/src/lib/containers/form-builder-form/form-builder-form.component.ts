@@ -17,7 +17,6 @@ import { PassTestModalComponent, PassTestModalConfig } from '../../modals';
   styleUrls: ['./form-builder-form.component.scss']
 })
 export class FormBuilderFormComponent implements OnInit, OnDestroy {
-
   @Input() public id: string;
   @Input() public companyId: string;
   @Input() public config: any;
@@ -69,23 +68,17 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         'contact.gender',
         'contact.phone_mobile',
         'contact.email',
-        'contact.address.street_address',
+        'contact.address.street_address'
         // 'contact.address.city',
         // 'contact.address.postal_code',
         // 'contact.address.state',
         // 'contact.address.country'
-      ],
+      ]
     },
     {
       title: 'Additional information',
       metadata: [],
-      content: [
-        'nationality',
-        'residency',
-        'tax_file_number',
-        'transportation_to_work',
-        ['weight', 'height'],
-      ],
+      content: ['nationality', 'residency', 'tax_file_number', 'transportation_to_work', ['weight', 'height']]
     },
     {
       title: 'Bank and superannuation informatioin',
@@ -97,15 +90,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         'bank_account.account_number',
         'superannuation_fund',
         'superannuation_membership_number'
-      ],
+      ]
     },
     {
       title: 'Industry and skills',
       metadata: [],
-      content: [
-        'industry',
-        'skill'
-      ]
+      content: ['industry', 'skill']
     }
   ];
 
@@ -114,7 +104,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private toastr: ToastService,
     private modalService: NgbModal
-  ) { }
+  ) {}
 
   public ngOnInit() {
     this.form = new FormGroup({});
@@ -137,12 +127,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   public generateSteps() {
-    this.steps.forEach((step) => {
+    this.steps.forEach(step => {
       step.metadata = [];
       step.content.forEach((key: string | string[]) => {
         if (Array.isArray(key)) {
           const metadata = [];
-          key.forEach((el) => {
+          key.forEach(el => {
             const field = getElementFromMetadata(this.config.ui_config, el);
 
             if (field) {
@@ -167,7 +157,6 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         } else {
           const field = getElementFromMetadata(this.config.ui_config, key);
 
-
           if (field) {
             if (key === 'superannuation_membership_number') {
               field.templateOptions.label = 'Superannuation membership number';
@@ -182,15 +171,15 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.steps = this.steps.filter((step) => !step['empty']);
+    this.steps = this.steps.filter(step => !step['empty']);
   }
 
   public getErrorStep(errors) {
     let step = 3;
     this.steps.forEach((el, i) => {
-      el.content.forEach((field) => {
+      el.content.forEach(field => {
         if (Array.isArray(field)) {
-          field.forEach((item) => {
+          field.forEach(item => {
             if (errors[item]) {
               step = i + 1 < step ? i + 1 : step;
             }
@@ -204,24 +193,22 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   public getRenderData() {
-    this.service.getRenderData(this.id)
-      .subscribe((res: any) => {
-        this.updatePhoneField(res.ui_config);
-        this.updateConfigByGroups(res.ui_config, res.tests || []);
+    this.service.getRenderData(this.id).subscribe((res: any) => {
+      this.updatePhoneField(res.ui_config);
+      this.updateConfigByGroups(res.ui_config, res.tests || []);
 
-        this.config = res;
-        this.formConfig.emit(res);
+      this.config = res;
+      this.formConfig.emit(res);
 
-        this.updateConfig(this.config.ui_config);
-        this.addAutocompleteProperty(this.config.ui_config);
+      this.updateConfig(this.config.ui_config);
+      this.addAutocompleteProperty(this.config.ui_config);
 
-        this.changeType('contact.title', 'radio');
-        this.changeType('contact.gender', 'radio');
-        this.changeType('transportation_to_work', 'radio');
+      this.changeType('contact.title', 'radio');
+      this.changeType('contact.gender', 'radio');
+      this.changeType('transportation_to_work', 'radio');
 
-        this.generateSteps();
-
-      });
+      this.generateSteps();
+    });
   }
 
   updatePhoneField(fields: any[]) {
@@ -229,7 +216,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       if (el.key === 'contact.phone_mobile') {
         el.intl = true;
       }
-    })
+    });
   }
 
   back() {
@@ -239,7 +226,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
       setTimeout(() => {
         this.process = false;
-      }, 1000)
+      }, 1000);
     }
   }
 
@@ -260,10 +247,10 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   public eventHandler(event: any) {
-    const { type, item, list, el, value }  = event;
+    const { type, item, list, el, value } = event;
 
     if (type === 'blur') {
-      ['email', 'phone'].forEach((field) => {
+      ['email', 'phone'].forEach(field => {
         if (el.key.indexOf(field) > -1 && value) {
           this.validate(field, value, el.key);
         }
@@ -291,9 +278,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       const tests = item.tests;
       const passTestAction = new BehaviorSubject(0);
 
-      passTestAction.subscribe((index) => {
+      passTestAction.subscribe(index => {
         const test = tests[index];
-        this.modalRef = this.modalService.open(PassTestModalComponent, {backdrop: 'static'});
+        this.modalRef = this.modalService.open(PassTestModalComponent, { backdrop: 'static' });
         this.modalRef.componentInstance.config = {
           test,
           description: test.description,
@@ -328,40 +315,39 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     let body;
     if (this.passedTests.size) {
       const tests = [];
-      Array.from(this.passedTests.values()).forEach((el) => {
+      Array.from(this.passedTests.values()).forEach(el => {
         if (el) {
           tests.push(...el);
         }
       });
-      body = {...this.form.value, tests };
+      body = { ...this.form.value, tests };
     } else {
       body = this.form.value;
     }
 
-    this.service.sendFormData(this.id, body)
-      .subscribe(
-        (res: any) => {
-          this.saveProcess = false;
-          this.toastr.sendMessage(this.config.submit_message, 'success');
-          this.router.navigate(['/login']);
-        },
-        (err: any) => {
-          this.parseError(err.errors);
-          this.saveProcess = false;
-         }
-      );
+    this.service.sendFormData(this.id, body).subscribe(
+      (res: any) => {
+        this.saveProcess = false;
+        this.toastr.sendMessage(this.config.submit_message, 'success');
+        this.router.navigate(['/login']);
+      },
+      (err: any) => {
+        this.parseError(err.errors);
+        this.saveProcess = false;
+      }
+    );
   }
 
   public parseAddress(data, el) {
-    this.service.parseAddress(data)
-      .subscribe(
-        (res) => {
-          this.parseError({ [el.key]: [] });
-          el.autocompleteData.next(res);
-        },
-        (err: any) => {
-          this.parseError(Object.assign({}, this.error, { [el.key]: err.errors }));
-        });
+    this.service.parseAddress(data).subscribe(
+      res => {
+        this.parseError({ [el.key]: [] });
+        el.autocompleteData.next(res);
+      },
+      (err: any) => {
+        this.parseError(Object.assign({}, this.error, { [el.key]: err.errors }));
+      }
+    );
   }
 
   public parseError(errors) {
@@ -373,7 +359,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public resetData(data) {
     if (data) {
       const keys = Object.keys(data);
-      keys.forEach((el) => {
+      keys.forEach(el => {
         delete data[el];
       });
     }
@@ -382,7 +368,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public updateErrors(error, errors, response, field = '') {
     if (errors) {
       const keyss = Object.keys(errors);
-      keyss.forEach((el) => {
+      keyss.forEach(el => {
         if (errors[el].length) {
           if (field) {
             error[`${field}.${el}`] = errors[el];
@@ -400,7 +386,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   public addAutocompleteProperty(metadata: any, property?: Subject<any>) {
     property = property || new Subject<any>();
-    metadata.forEach((element) => {
+    metadata.forEach(element => {
       if (element.key) {
         element.autocompleteData = property;
       } else if (element.children) {
@@ -412,7 +398,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   public updateConfig(config: Field[]) {
     this.hideDatepickerError(config);
 
-    const streetAddress = config.find((field) => {
+    const streetAddress = config.find(field => {
       if (field.key) {
         return field.key.includes('street_address');
       }
@@ -420,14 +406,14 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
     if (streetAddress) {
       streetAddress.updateFormData = true;
-      streetAddress.formData = new BehaviorSubject({data: {}});
-      config.forEach((field) => {
+      streetAddress.formData = new BehaviorSubject({ data: {} });
+      config.forEach(field => {
         if (
           field.key &&
           (field.key.includes('postal_code') ||
-          field.key.includes('state') ||
-          field.key.includes('country') ||
-          field.key.includes('city'))
+            field.key.includes('state') ||
+            field.key.includes('country') ||
+            field.key.includes('city'))
         ) {
           field.showIf = [streetAddress.key];
           field.mode = new BehaviorSubject('view');
@@ -439,8 +425,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           if (this.hiddenFields.keys.indexOf(field.key) === -1) {
             this.hiddenFields.keys.push(field.key);
             this.hiddenFields.elements.push(field);
-            this.hiddenFields.observers =
-              this.observeFields(field.showIf, this.hiddenFields.observers);
+            this.hiddenFields.observers = this.observeFields(field.showIf, this.hiddenFields.observers);
             field.hidden = new BehaviorSubject(true);
           }
         }
@@ -449,9 +434,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
   }
 
   public hideDatepickerError(config: Field[]) {
-    const pickers = config.filter((el) => el.type === 'datepicker');
+    const pickers = config.filter(el => el.type === 'datepicker');
     if (pickers.length) {
-      pickers.forEach((el) => {
+      pickers.forEach(el => {
         el.templateOptions.hidePreviewError = true;
       });
     }
@@ -461,7 +446,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     fields.forEach((field: any) => {
       if (field instanceof Object) {
         const keys = Object.keys(field);
-        keys.forEach((key) => {
+        keys.forEach(key => {
           if (observers.indexOf(key) === -1) {
             observers.push(key);
           }
@@ -495,7 +480,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return {
       ...field,
       query: {
-        industry: '{industry.id}',
+        industry: '{industry.id}'
       },
       formData,
       many: true,
@@ -510,25 +495,30 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   public validate(key, value, field) {
     this.service.validate(key, value).subscribe(
-      (res) => {
+      res => {
         delete this.error[field];
         this.disableNextButton = false;
       },
-      (err) => {
-        this.updateErrors(this.error, {
-          [field]: err.errors.message
-        }, {});
+      err => {
+        this.updateErrors(
+          this.error,
+          {
+            [field]: err.errors.message
+          },
+          {}
+        );
         this.disableNextButton = true;
-      });
+      }
+    );
   }
 
   public validateForm(step: number) {
     const fields = this.steps[step].content;
     let result = false;
 
-    fields.forEach((key) => {
+    fields.forEach(key => {
       if (Array.isArray(key)) {
-        key.forEach((field) => {
+        key.forEach(field => {
           result = (this.form.get(field) && this.form.get(field).invalid) || result;
         });
       } else {

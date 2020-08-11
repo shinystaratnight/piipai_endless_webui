@@ -4,10 +4,7 @@
   <div class="container">
     <div class="login-wrapper">
       <div class="login-title">
-        <img
-          src="{{ settings.logo || '/assets/img/logo.svg' }}"
-          alt="R3sourcer"
-        />
+        <img src="{{ settings.logo || '/assets/img/logo.svg' }}" alt="" />
         <p>{{ settings.company_name || 'R3sourcer' }}</p>
       </div>
 
@@ -30,18 +27,11 @@
         >
           <div class="links form-group">
             <label class="form-element-checkbox" [class.active]="rememberMe">
-              <input
-                type="checkbox"
-                class="form-check-input"
-                [(ngModel)]="rememberMe"
-                hidden
-              />
+              <input type="checkbox" class="form-check-input" [(ngModel)]="rememberMe" hidden />
               <app-checkbox [checked]="rememberMe"></app-checkbox>
               <span>Remember me</span>
             </label>
-            <a class="forgot" href="" (click)="openResetForm()"
-              >Forgot Password?</a
-            >
+            <a class="forgot" href="" (click)="openResetForm()">Forgot Password?</a>
           </div>
           <button class="btn btn-primary login-button" type="submit">
             Lоgin <app-spinner *ngIf="loginProcess"></app-spinner>
@@ -71,17 +61,11 @@
       <div class="modal-header">
         <h5 class="modal-title">Password Reset</h5>
 
-        <app-close-button
-          class="ml-auto"
-          (click)="modal.dismiss()"
-        ></app-close-button>
+        <app-close-button class="ml-auto" (click)="modal.dismiss()"></app-close-button>
       </div>
     </div>
     <div class="py-3">
-      <app-generic-form
-        [showResponse]="true"
-        endpoint="/core/contacts/forgot_password/"
-      >
+      <app-generic-form [showResponse]="true" endpoint="/core/contacts/forgot_password/">
         <div class="d-flex align-items-center">
           <button type="submit" class="btn btn-primary ml-auto">Reset</button>
         </div>

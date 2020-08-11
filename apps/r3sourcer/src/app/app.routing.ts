@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 
-import {
-  VerifyEmailComponent
-} from './components';
+import { VerifyEmailComponent } from './components';
 import { RedirectComponent } from './redirect.component';
 
 import {
@@ -34,7 +32,7 @@ export const routes: Routes = [
   },
   {
     path: 'registration',
-    loadChildren: './register/register.module#RegisterModule',
+    loadChildren: './register/register.module#RegisterModule'
     // canActivate: [NotAuthorizedGuard, SubdomainGuard]
   },
   {
