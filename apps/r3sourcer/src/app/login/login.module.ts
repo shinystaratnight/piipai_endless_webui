@@ -7,6 +7,7 @@ import { LoginComponent } from './login.component';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { SharedModule } from '@webui/shared';
 import { routes } from './login.routes';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [LoginComponent],
@@ -15,7 +16,7 @@ import { routes } from './login.routes';
     DynamicFormModule,
     SharedModule,
     FormsModule,
-    RouterModule.forChild(routes)
-  ]
+    RouterModule.forChild(routes),
+  ],
 })
 export class LoginModule {}

@@ -16,7 +16,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 import { MetadataModule } from '@webui/metadata';
 
 import { services, METADATA } from './services';
@@ -25,7 +25,13 @@ import * as fromContainers from './containers';
 import { modals } from './modals';
 import { directives } from './directives';
 
-import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslationHandler } from '@ngx-translate/core';
+import {
+  TranslateModule,
+  TranslateLoader,
+  TranslateCompiler,
+  MissingTranslationHandler,
+} from '@ngx-translate/core';
+import { MissingTranslationHelper } from '../../../../apps/r3sourcer/src/app/translate.loader';
 
 @NgModule({
   imports: [
@@ -37,7 +43,7 @@ import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslation
     RouterModule,
     AgmCoreModule,
     InfiniteScrollModule,
-    SharedModule,
+    // SharedModule,
     ButtonsModule.forRoot(),
     GooglePlaceModule,
     QuillModule,
@@ -49,7 +55,19 @@ import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslation
 
     MetadataModule,
 
-    TranslateModule.forChild(),
+    // TranslateModule.forChild({
+    //   missingTranslationHandler: {
+    //     provide: MissingTranslationHandler,
+    //     useClass: MissingTranslationHelper,
+    //   },
+    // }),
+    TranslateModule.forChild({
+      extend: true,
+      missingTranslationHandler: {
+        provide: MissingTranslationHandler,
+        useClass: MissingTranslationHelper,
+      },
+    }),
   ],
   exports: [
     fromComponents.GenericFormComponent,
@@ -71,17 +89,25 @@ import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslation
     ...modals,
   ],
   providers: [...services],
-  entryComponents: [...fromComponents.entryComponents, ...fromContainers.entryComponents, ...modals],
+  entryComponents: [
+    ...fromComponents.entryComponents,
+    ...fromContainers.entryComponents,
+    ...modals,
+  ],
 })
 export class DynamicFormModule {
-  static forRoot(data: { metadata: any }): ModuleWithProviders<DynamicFormModule> {
+  static forRoot(data: {
+    metadata: any;
+  }): ModuleWithProviders<DynamicFormModule> {
     return {
       ngModule: DynamicFormModule,
       providers: [{ provide: METADATA, useClass: data.metadata }],
     };
   }
 
-  static forChild(data: { metadata: any }): ModuleWithProviders<DynamicFormModule> {
+  static forChild(data: {
+    metadata: any;
+  }): ModuleWithProviders<DynamicFormModule> {
     return {
       ngModule: DynamicFormModule,
       providers: [{ provide: METADATA, useClass: data.metadata }],

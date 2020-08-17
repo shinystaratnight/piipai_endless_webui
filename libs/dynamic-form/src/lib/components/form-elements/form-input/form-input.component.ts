@@ -13,7 +13,11 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
-import { SearchCountryField, TooltipLabel, CountryISO } from 'ngx-intl-tel-input';
+import {
+  SearchCountryField,
+  TooltipLabel,
+  CountryISO,
+} from 'ngx-intl-tel-input';
 
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
@@ -24,6 +28,7 @@ import { FormatString, getTotalTime, getTimeInstance } from '@webui/utilities';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { SiteSettingsService } from '@webui/core';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-form-input',
@@ -31,7 +36,8 @@ import { formatCurrency, getCurrencySymbol } from '@angular/common';
   styleUrls: ['./form-input.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class FormInputComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FormInputComponent extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   public config: Field;
   public group: FormGroup;
   public errors: any;
@@ -62,7 +68,12 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   SearchCountryField = SearchCountryField;
   TooltipLabel = TooltipLabel;
   CountryISO = CountryISO;
-  preferredCountries: CountryISO[] = [CountryISO.Australia, CountryISO.Estonia, CountryISO.Finland, CountryISO.Ukraine];
+  preferredCountries: CountryISO[] = [
+    CountryISO.Australia,
+    CountryISO.Estonia,
+    CountryISO.Finland,
+    CountryISO.Ukraine,
+  ];
   selectedCountryISO: CountryISO;
 
   public colors = {
@@ -79,12 +90,18 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   get isAddressField() {
     const { type, key } = this.config;
 
-    return type === 'address' || key === 'address' || key.includes('street_address');
+    return (
+      type === 'address' || key === 'address' || key.includes('street_address')
+    );
   }
 
   get isPhoneField() {
     const { key, intl } = this.config;
-    return (key.includes('phone_mobile') || key.includes('emergency_contact_phone')) && intl;
+    return (
+      (key.includes('phone_mobile') ||
+        key.includes('emergency_contact_phone')) &&
+      intl
+    );
   }
 
   @ViewChild('input')
@@ -99,7 +116,8 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     private fb: FormBuilder,
     public elementRef: ElementRef,
     private cd: ChangeDetectorRef,
-    private siteSettings: SiteSettingsService
+    private siteSettings: SiteSettingsService,
+    private translate: TranslateService
   ) {
     super();
     this.subscriptions = [];
@@ -108,12 +126,19 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public ngOnInit() {
-    if (this.config.type !== 'static' || this.config.type === 'static' || !this.config.read_only) {
+    console.log(this);
+    if (
+      this.config.type !== 'static' ||
+      this.config.type === 'static' ||
+      !this.config.read_only
+    ) {
       this.requiredField =
-        (this.config.key === 'score' || this.config.key === 'hourly_rate') && this.config.templateOptions.required;
+        (this.config.key === 'score' || this.config.key === 'hourly_rate') &&
+        this.config.templateOptions.required;
       this.requiredField =
         this.requiredField ||
-        (this.config.templateOptions.required && !(this.config.hide || this.config.send === false));
+        (this.config.templateOptions.required &&
+          !(this.config.hide || this.config.send === false));
 
       if (this.config.templateOptions.type === 'number') {
         this.addControl(
@@ -154,18 +179,29 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     this.checkHiddenProperty();
     this.checkAutocomplete();
     this.checkFormData();
-    if (this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only)) {
+    if (
+      this.config.type !== 'static' ||
+      (this.config.type === 'static' && !this.config.read_only)
+    ) {
       this.createEvent();
     }
 
     if (this.isPhoneField) {
-      this.selectedCountryISO = (this.siteSettings.settings.country_code as CountryISO) || CountryISO.Australia;
+      this.selectedCountryISO =
+        (this.siteSettings.settings.country_code as CountryISO) ||
+        CountryISO.Australia;
     }
 
     if (this.config.templateOptions.icon) {
-      const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+      const currency = getCurrencySymbol(
+        this.siteSettings.settings.currency,
+        'wide'
+      );
 
-      this.config.templateOptions.icon = FormatString.format(this.config.templateOptions.icon, { currency });
+      this.config.templateOptions.icon = FormatString.format(
+        this.config.templateOptions.icon,
+        { currency }
+      );
     }
   }
 
@@ -210,7 +246,10 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       const attributes = Object.keys(this.config.attributes);
 
       attributes.forEach((key) => {
-        this.config.templateOptions[key] = formatString.format(this.config.attributes[key], this.formData);
+        this.config.templateOptions[key] = formatString.format(
+          this.config.attributes[key],
+          this.formData
+        );
       });
 
       if (!this.config.read_only) {
@@ -222,7 +261,12 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   }
 
   public checkTimesheetTime(data: { key: string; data: any }) {
-    const keys = ['shift_started_at', 'shift_ended_at', 'break_started_at', 'break_ended_at'];
+    const keys = [
+      'shift_started_at',
+      'shift_ended_at',
+      'break_started_at',
+      'break_ended_at',
+    ];
 
     if (keys.indexOf(data.key) > -1) {
       if (this.config.type === 'static' && this.config.key === 'total_worked') {
@@ -231,14 +275,19 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
         const breakStart = this.timeInstance(data.data.break_started_at);
         const breakEnded = this.timeInstance(data.data.break_ended_at);
 
-        if (shiftStart.isBefore(shiftEnded) && breakStart.isBefore(breakEnded)) {
+        if (
+          shiftStart.isBefore(shiftEnded) &&
+          breakStart.isBefore(breakEnded)
+        ) {
           const shiftTime = this.timeInstance.utc(shiftEnded.diff(shiftStart));
           const breakTime = this.timeInstance.utc(breakEnded.diff(breakStart));
 
           const shiftDiff = shiftTime.format('HH:mm');
           if (breakStart && breakEnded && !data.data.no_break) {
             const breakDiff = breakTime.format('HH:mm');
-            const totalTime = this.timeInstance.utc(shiftTime.diff(breakTime)).format('HH:mm');
+            const totalTime = this.timeInstance
+              .utc(shiftTime.diff(breakTime))
+              .format('HH:mm');
 
             this.displayValue = `${shiftDiff} - ${breakDiff} = ${totalTime} hours`;
           } else {
@@ -256,7 +305,11 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       this.config.default.includes('{') &&
       this.config.default.includes('}')
     ) {
-      if (this.config.type !== 'address' && this.key !== 'address' && this.key !== 'street_address') {
+      if (
+        this.config.type !== 'address' &&
+        this.key !== 'address' &&
+        this.key !== 'street_address'
+      ) {
         if (this.config.updated && !this.config.updated.includes(field)) {
           return;
         }
@@ -269,7 +322,8 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
     if (
       this.config &&
       this.config.hidden &&
-      (this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only))
+      (this.config.type !== 'static' ||
+        (this.config.type === 'static' && !this.config.read_only))
     ) {
       const subscription = this.config.hidden.subscribe((hide) => {
         if (hide) {
@@ -364,13 +418,21 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       this.displayValue = this.group.get(this.key).value;
     }
 
-    if (this.config.type !== 'static' || (this.config.type === 'static' && !this.config.read_only)) {
+    if (
+      this.config.type !== 'static' ||
+      (this.config.type === 'static' && !this.config.read_only)
+    ) {
       if (this.autocompleteValue) {
         this.displayValue = this.autocompleteValue;
         if (this.group.get(this.key)) {
           this.group.get(this.key).patchValue(this.autocompleteValue);
         }
-      } else if (this.config.value === 0 || this.config.value || this.config.default || this.config.default === 0) {
+      } else if (
+        this.config.value === 0 ||
+        this.config.value ||
+        this.config.default ||
+        this.config.default === 0
+      ) {
         const defaultValue =
           typeof this.config.default === 'string'
             ? format.format(this.config.default, this.formData)
@@ -378,7 +440,11 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
 
         const value =
           (this.config.value === 0 || this.config.value) &&
-          !(update && defaultValue !== this.config.value && !this.config.useValue)
+          !(
+            update &&
+            defaultValue !== this.config.value &&
+            !this.config.useValue
+          )
             ? this.config.value
             : defaultValue;
 
@@ -390,10 +456,17 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
           this.group.get(this.key).patchValue(value);
         }
 
-        if (this.config.type === 'address' || this.key === 'address' || this.key === 'street_address') {
+        if (
+          this.config.type === 'address' ||
+          this.key === 'address' ||
+          this.key === 'street_address'
+        ) {
           this.address = value;
         }
-        const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+        const currency = getCurrencySymbol(
+          this.siteSettings.settings.currency,
+          'wide'
+        );
         const text = format.format(this.config.templateOptions.text, {
           [this.config.key]: value,
           currency,
@@ -405,11 +478,15 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
             this.displayValue = formatCurrency(
               parseFloat(this.displayValue),
               'en',
-              getCurrencySymbol(this.siteSettings.settings.currency, 'wide') || 'USD'
+              getCurrencySymbol(this.siteSettings.settings.currency, 'wide') ||
+                'USD'
             );
           } else {
             this.displayValue = format.format(
-              this.config.templateOptions.display.replace(/{field}/gi, `{${this.config.key}}`),
+              this.config.templateOptions.display.replace(
+                /{field}/gi,
+                `{${this.config.key}}`
+              ),
               { [this.key]: this.displayValue, currency }
             );
           }
@@ -477,7 +554,9 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
   public generateList(): void {
     if (this.config.autocomplete) {
       this.hideAutocomplete = false;
-      this.list = this.config.autocomplete.sort((p, n) => (p.name > n.name ? 1 : -1));
+      this.list = this.config.autocomplete.sort((p, n) =>
+        p.name > n.name ? 1 : -1
+      );
       this.generatePreviewList(this.list);
     }
   }
@@ -553,6 +632,10 @@ export class FormInputComponent extends BasicElementComponent implements OnInit,
       this.intl = number.number;
       this.group.get(this.key).patchValue(internationalNumber);
     }
+  }
+
+  getTranslationKey(type) {
+    return `${this.config.key}.${type}`;
   }
 
   @HostListener('document:click', ['$event'])

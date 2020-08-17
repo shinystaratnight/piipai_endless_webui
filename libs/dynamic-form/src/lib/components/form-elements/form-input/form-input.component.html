@@ -327,7 +327,7 @@
     "
     [attr.id]="key"
     [attr.name]="key"
-    [attr.placeholder]="config.templateOptions.placeholder || ''"
+    [attr.placeholder]="getTranslationKey('placeholder') | translate: {Default: config.templateOptions.placeholder || ''}"
     [readonly]="config.read_only"
     [value]="
       config.value === 0 || config.value

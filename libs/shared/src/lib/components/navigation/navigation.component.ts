@@ -10,13 +10,21 @@ import {
   ViewEncapsulation,
   OnDestroy,
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { AuthService, NavigationService, UserService } from '@webui/core';
-import { User, Page, Role } from '@webui/data';
-import { getContactAvatar, isClient, isCandidate, isManager, getTimeInstance } from '@webui/utilities';
+import { User, Page, Role, Language } from '@webui/data';
+import {
+  getContactAvatar,
+  isClient,
+  isCandidate,
+  isManager,
+  getTimeInstance,
+} from '@webui/utilities';
 
 @Component({
   selector: 'app-navigation',
@@ -36,7 +44,9 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public logo = '/assets/img/new-software.svg';
 
   // @Output() public update: EventEmitter<Role> = new EventEmitter();
-  @Output() public changePasswordEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() public changePasswordEmitter: EventEmitter<
+    any
+  > = new EventEmitter();
 
   public headerHeight: number;
   public error: any;
@@ -49,23 +59,40 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   public company: string;
   public picture: string;
   public contactAvatar: string;
-  public urlPrefix = isClient() ? '/cl' : isCandidate() ? '/cd' : isManager ? '/mn' : '';
+  public urlPrefix = isClient()
+    ? '/cl'
+    : isCandidate()
+    ? '/cd'
+    : isManager
+    ? '/mn'
+    : '';
   public initTime: boolean;
+
+  language = new FormControl(Language.English);
+  Language = Language;
 
   get pages(): Page[] {
     return this.navigationService.navigationList[this.currentRole];
   }
 
   public resizeSubscription: Subscription;
+  public languageSubscription: Subscription;
 
   constructor(
     private authService: AuthService,
     private navigationService: NavigationService,
-    private userService: UserService
+    private userService: UserService,
+    private translate: TranslateService
   ) {}
 
   public ngOnInit() {
     this.getUserInformation();
+
+    this.languageSubscription = this.language.valueChanges.subscribe((v) => {
+      console.log(v, this.translate);
+      this.translate.use(v);
+      // this.translate.reloadLang(v).subscribe(() => this.translate.use(v));
+    });
   }
 
   public ngAfterViewInit() {
@@ -90,6 +117,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.resizeSubscription) {
       this.resizeSubscription.unsubscribe();
     }
+
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
   }
 
   public getUserInformation() {
@@ -98,7 +129,8 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
       this.greeting = `Welcome, ${this.user.data.contact.__str__}`;
       this.checkCandidateRole(this.user.currentRole);
       this.company = this.user.data.contact.company;
-      this.picture = this.user.data.contact.picture && this.user.data.contact.picture.origin;
+      this.picture =
+        this.user.data.contact.picture && this.user.data.contact.picture.origin;
 
       if (!this.picture) {
         this.contactAvatar = getContactAvatar(this.user.data.contact.__str__);
@@ -145,7 +177,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     this.userService.currentRole(role);
   }
 
-  public clickActione(e, p) {
+  public clickAction(e, p) {
     e.stopPropagation();
     e.preventDefault();
 

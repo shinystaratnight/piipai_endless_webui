@@ -1,3 +1,13 @@
 {
-  "next": "Next step"
+	"login": {
+		"subtitle": "Please enter your email and password",
+		"title": "Login"
+	},
+  "username": {
+    "placeholder": "Login"
+  },
+  "password": {
+    "placeholder": "Password"
+  },
+	"next": "Next step"
 }

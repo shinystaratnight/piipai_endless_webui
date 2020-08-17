@@ -1,0 +1,13 @@
+{
+	"login": {
+		"subtitle": "Введите ваш email и пароль",
+		"title": "Вход"
+	},
+  "username": {
+    "placeholder": "Вход"
+  },
+  "password": {
+    "placeholder": "Пароль"
+  },
+	"next": "Дальше"
+}

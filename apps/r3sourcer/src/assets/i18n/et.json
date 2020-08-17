@@ -1,0 +1,11 @@
+{
+	"login": {
+		"placeholder": {
+			"password": "",
+			"username": ""
+		},
+		"subtitle": "",
+		"title": ""
+	},
+	"next": "Next step"
+}

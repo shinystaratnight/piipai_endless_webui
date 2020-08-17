@@ -75,7 +75,7 @@ export class TrackingModalComponent implements OnInit {
     }
   }
 
-  public trackByTraking(data) {
+  public trackByTracking(data) {
     return data.log_at;
   }
 }

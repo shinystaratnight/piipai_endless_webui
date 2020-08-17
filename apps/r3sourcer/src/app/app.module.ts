@@ -4,7 +4,10 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RouterModule, NoPreloading } from '@angular/router';
 
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import {
+  FontAwesomeModule,
+  FaIconLibrary,
+} from '@fortawesome/angular-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
@@ -48,8 +51,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import {
+  TranslateModule,
+  TranslateLoader,
+  TranslateService,
+  MissingTranslationHandler,
+} from '@ngx-translate/core';
 
 import { VerifyEmailComponent, ToastComponent } from './components';
 
@@ -63,16 +70,24 @@ import { DynamicFormModule } from '@webui/dynamic-form';
 import { Metadata } from './metadata.config';
 import { MasterGuideModule } from './master-guide/master-guide.module';
 import { RedirectComponent } from './redirect.component';
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
-}
+import {
+  HttpLoaderFactory,
+  MissingTranslationHelper,
+} from './translate.loader';
 
 @NgModule({
-  declarations: [AppComponent, VerifyEmailComponent, RedirectComponent, ToastComponent],
+  declarations: [
+    AppComponent,
+    VerifyEmailComponent,
+    RedirectComponent,
+    ToastComponent,
+  ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: NoPreloading }),
+    RouterModule.forRoot(routes, {
+      useHash: false,
+      preloadingStrategy: NoPreloading,
+    }),
     HttpClientModule,
     FontAwesomeModule,
     NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
@@ -82,6 +97,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     TranslateModule.forRoot({
       defaultLanguage: 'en',
+      missingTranslationHandler: {
+        provide: MissingTranslationHandler,
+        useClass: MissingTranslationHelper,
+      },
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
@@ -97,7 +116,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(library: FaIconLibrary) {
+  constructor(library: FaIconLibrary, translate: TranslateService) {
     const icons = [
       faChevronLeft,
       faChevronRight,
@@ -139,6 +158,8 @@ export class AppModule {
       faSortDown,
       faDotCircle,
     ];
+
+    console.log(this);
 
     library.addIcons(...icons);
   }

@@ -112,7 +112,16 @@
       <li><a href="" (click)="changePassword()">Change password</a></li>
       <li><a routerLink="/" (click)="logOut()">Log out</a></li>
     </ul>
+
+
   </div>
+
+  <select [formControl]="language">
+    <option [value]="Language.English">English</option>
+    <option [value]="Language.Russian">Russian</option>
+    <option [value]="Language.Estonian">Estonian</option>
+    <option [value]="Language.Finnish">Finnish</option>
+  </select>
 </header>
 
 <ng-template #list let-p="pages" let-h="height">
@@ -147,7 +156,7 @@
       "
       class="navigation-link"
       [class.active]="p.active"
-      (click)="clickActione($event, p)"
+      (click)="clickAction($event, p)"
       >{{ p.name }}</a
     >
     <span

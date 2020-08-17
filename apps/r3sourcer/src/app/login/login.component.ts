@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -120,7 +126,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.authService.storeToken(response, this.rememberMe, response.formData.username);
+      this.authService.storeToken(
+        response,
+        this.rememberMe,
+        response.formData.username
+      );
 
       const requests = [this.setTimezone(), this.userService.getUserData()];
 
@@ -133,7 +143,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   public setTimezone() {
     return this.userService
       .setTimezone()
-      .pipe(catchError(() => this.router.navigate([this.authService.getRedirectUrl()])));
+      .pipe(
+        catchError(() =>
+          this.router.navigate([this.authService.getRedirectUrl()])
+        )
+      );
   }
 
   public redirectHandler(data) {
