@@ -2,15 +2,15 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { BasicElementComponent } from '../basic-element/basic-element.component';
+import { getTranslationKey } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-radio',
   templateUrl: 'form-radio.component.html',
-  styleUrls: ['./form-radio.component.scss']
+  styleUrls: ['./form-radio.component.scss'],
 })
-
-export class FormRadioComponent extends BasicElementComponent implements OnInit {
-
+export class FormRadioComponent extends BasicElementComponent
+  implements OnInit {
   public config;
   public group: FormGroup;
   public errors: any;
@@ -21,9 +21,9 @@ export class FormRadioComponent extends BasicElementComponent implements OnInit 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
-  constructor(
-    private fb: FormBuilder
-  ) {
+  getTranslationKey = getTranslationKey;
+
+  constructor(private fb: FormBuilder) {
     super();
   }
 
@@ -33,7 +33,12 @@ export class FormRadioComponent extends BasicElementComponent implements OnInit 
       this.value = this.config.default || '';
       this.group.get(this.key).patchValue(this.value);
     }
-    if (this.config.value || this.config.value === false || this.config.value === null || this.group.get(this.key).value) {
+    if (
+      this.config.value ||
+      this.config.value === false ||
+      this.config.value === null ||
+      this.group.get(this.key).value
+    ) {
       this.value = this.config.value || this.group.get(this.key).value;
       this.group.get(this.key).patchValue(this.value);
     }
@@ -43,7 +48,7 @@ export class FormRadioComponent extends BasicElementComponent implements OnInit 
     this.event.emit({
       type: e.type,
       el: this.config,
-      value: this.group.get(this.key).value
+      value: this.group.get(this.key).value,
     });
   }
 }

@@ -1,4 +1,53 @@
 {
+	"actions": "Actions",
+	"add": "Add",
+	"add_new": "Add new",
+	"add_photo": "Add photo",
+	"are_you_sure": "Are you sure?",
+	"back": "Back",
+	"cancel": "Cancel",
+	"contact": {
+		"address": {
+			"street_address": {
+				"description": "",
+				"label": "Street Address"
+			}
+		},
+		"email": {
+			"label": "Email"
+		},
+		"first_name": {
+			"label": "First Name"
+		},
+		"gender": {
+			"label": "Gender"
+		},
+		"last_name": {
+			"label": "Last Name"
+		},
+		"phone_mobile": {
+			"label": "Mobile Phone"
+		},
+		"picture": {
+			"label_photo": "Take a photo"
+		},
+		"title": {
+			"label": "Title"
+		}
+	},
+	"default": "default",
+	"delete": "Delete",
+	"drag_and_drop": "Drag the photo to the area or click the button",
+	"edit": "Edit",
+	"file": "file",
+	"file_size": "File size is too large!",
+	"height": {
+		"label": "Height, cm"
+	},
+	"industry": {
+		"description": "",
+		"label": "Industry"
+	},
 	"login": {
 		"forgot_password": "Forgot Password?",
 		"login": "Login",
@@ -7,13 +56,48 @@
 		"subtitle": "Please enter your email and password",
 		"title": "Login"
 	},
+	"make_default": "make default",
+	"max_size": "Maximum allowed file size is 10 Mb.",
+	"nationality": {
+		"label": "Nationality"
+	},
 	"next": "Next step",
+	"open_in_tab": "Open in new tab",
+	"pass_test": "Pass test",
+	"passed": "Passed",
 	"password": {
 		"placeholder": "Password",
 		"reset": "Password Reset"
 	},
+	"photo": "Photo",
+	"registration": {
+		"fill_error": "Please fill all the REQUIRED fields",
+		"of": "of",
+		"register": "Register",
+		"step": "step"
+	},
 	"reset": "Reset",
+	"residency": {
+		"label": "Residency"
+	},
+	"save": "Save",
+	"skill": {
+		"label": "Skill"
+	},
+	"take_a_photo": "Take a photo",
+	"tax_file_number": {
+		"label": "Tax file number"
+	},
+	"transportation_to_work": {
+		"label": "Transportation to work"
+	},
+	"try_again": "Try again",
+	"upload_file": "Upload new file",
+	"use_camera": "Use camera",
 	"username": {
 		"placeholder": "Login"
+	},
+	"weight": {
+		"label": "Weight, kg"
 	}
 }

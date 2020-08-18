@@ -5632,10 +5632,10 @@ internal-ip@^4.3.0:
     default-gateway "^4.2.0"
     ipaddr.js "^1.9.0"
 
-intl-tel-input@^17.0.3:
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/intl-tel-input/-/intl-tel-input-17.0.3.tgz#0f1468ac0ea573b4cedddd24db9fd5cb32eb7d86"
-  integrity sha512-vfO5yIddrkNKaJYqGySuT6lyovWZoBLU/vyGA2A4VdKIZasknpd9/emTJYIPqFzjkguFfEDUiERKFih3k9Yj3Q==
+intl-tel-input@14.1.0:
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/intl-tel-input/-/intl-tel-input-14.1.0.tgz#8d8743037900fcc99be4c834376108acf59c1728"
+  integrity sha512-i5YVYVCwaMFvCt+TlqoDGbaVQVeIZSZeGcleDNofYFhX32/i7khBeuaugNTj/kKYXBstsa0DPHOHcYB4cj0l4A==
 
 invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
@@ -6599,10 +6599,10 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-jtsage-datebox-bootstrap4@5.3.3:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/jtsage-datebox-bootstrap4/-/jtsage-datebox-bootstrap4-5.3.3.tgz#efced0ad60b20fb8fd421d8caa97ae286d9140ce"
-  integrity sha512-U0WECl1xkY+WHh6lLTqbcLABvAKt7beekICTiWpLjtj+PDZQyew+xq5svzBCY31zcZhF9sy1U55BwiuWWr+mgw==
+jtsage-datebox-bootstrap4@4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/jtsage-datebox-bootstrap4/-/jtsage-datebox-bootstrap4-4.4.1.tgz#2f90248ddc9eda03c2ecc705f8fba831da39a729"
+  integrity sha1-L5Akjdye2gPC7McF+PuoMdo5pyk=
 
 karma-source-map-support@1.4.0:
   version "1.4.0"
@@ -7379,7 +7379,7 @@ ngx-infinite-scroll@^9.0.0:
     "@scarf/scarf" "0.1.5"
     opencollective-postinstall "^2.0.2"
 
-ngx-intl-tel-input@^2.4.3:
+ngx-intl-tel-input@^2.3.4:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/ngx-intl-tel-input/-/ngx-intl-tel-input-2.4.3.tgz#d20806ae57634a946a27e7445faaf6f0c9bd9034"
   integrity sha512-7HNuMBeDH9qSS/ZA5znyK7yfxZ+EdeQuIUVQAIH5p3cLxvXKYjaGh1CzNypjFcxSgjyqrLJWRUo79lcCBoK9Dg==

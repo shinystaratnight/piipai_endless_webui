@@ -32,6 +32,7 @@ import {
   MissingTranslationHandler,
 } from '@ngx-translate/core';
 import { MissingTranslationHelper } from '../../../../apps/r3sourcer/src/app/translate.loader';
+import { SharedModule } from '@webui/shared';
 
 @NgModule({
   imports: [
@@ -43,7 +44,7 @@ import { MissingTranslationHelper } from '../../../../apps/r3sourcer/src/app/tra
     RouterModule,
     AgmCoreModule,
     InfiniteScrollModule,
-    // SharedModule,
+    SharedModule,
     ButtonsModule.forRoot(),
     GooglePlaceModule,
     QuillModule,
@@ -61,13 +62,13 @@ import { MissingTranslationHelper } from '../../../../apps/r3sourcer/src/app/tra
     //     useClass: MissingTranslationHelper,
     //   },
     // }),
-    TranslateModule.forChild({
-      extend: true,
-      missingTranslationHandler: {
-        provide: MissingTranslationHandler,
-        useClass: MissingTranslationHelper,
-      },
-    }),
+    // TranslateModule.forChild({
+    //   extend: true,
+    //   missingTranslationHandler: {
+    //     provide: MissingTranslationHandler,
+    //     useClass: MissingTranslationHelper,
+    //   },
+    // }),
   ],
   exports: [
     fromComponents.GenericFormComponent,

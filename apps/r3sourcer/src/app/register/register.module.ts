@@ -5,10 +5,15 @@ import { RouterModule } from '@angular/router';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { routes } from './register.routing';
 import { RegisterComponent } from './register.component';
-import { TranslateModule, TranslateLoader, TranslateCompiler, MissingTranslationHandler } from '@ngx-translate/core';
+import {
+  TranslateModule,
+  TranslateLoader,
+  TranslateCompiler,
+  MissingTranslationHandler,
+} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [RegisterComponent],
-  imports: [CommonModule, DynamicFormModule, RouterModule.forChild(routes), TranslateModule.forChild()],
+  imports: [CommonModule, DynamicFormModule, RouterModule.forChild(routes)],
 })
 export class RegisterModule {}

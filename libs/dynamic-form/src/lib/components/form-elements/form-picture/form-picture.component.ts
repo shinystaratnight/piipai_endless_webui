@@ -16,7 +16,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
-import { getContactAvatar } from '@webui/utilities';
+import { getContactAvatar, getTranslationKey } from '@webui/utilities';
 
 import { FormService } from '../../../services';
 
@@ -25,7 +25,8 @@ import { FormService } from '../../../services';
   templateUrl: 'form-picture.component.html',
   styleUrls: ['./form-picture.component.scss'],
 })
-export class FormPictureComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FormPictureComponent extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('modal')
   public modal;
 
@@ -74,6 +75,8 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     cameraType: 'front',
   };
 
+  getTranslationKey = getTranslationKey;
+
   private subscriptions: Subscription[];
 
   constructor(
@@ -110,10 +113,18 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
 
     if (this.dropzone) {
       ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((event) => {
-        this.dropzone.nativeElement.removeEventListener(event, this.stopEvent, false);
+        this.dropzone.nativeElement.removeEventListener(
+          event,
+          this.stopEvent,
+          false
+        );
       });
 
-      this.dropzone.nativeElement.removeEventListener('drop', this.handleDrop, false);
+      this.dropzone.nativeElement.removeEventListener(
+        'drop',
+        this.handleDrop,
+        false
+      );
     }
   }
 
@@ -169,7 +180,10 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
     }
 
     if (!this.value) {
-      this.value = this.config.companyContact && this.config.key === 'logo' ? '/assets/img/logo.svg' : '';
+      this.value =
+        this.config.companyContact && this.config.key === 'logo'
+          ? '/assets/img/logo.svg'
+          : '';
 
       if (!this.value && this.config.contactName) {
         this.contactAvatar = getContactAvatar(this.config.contactName);
@@ -178,7 +192,11 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
 
     this.group.get(this.key).patchValue(undefined);
 
-    if (this.config.value && typeof this.config.value === 'string' && this.config.value.indexOf('data:image') > -1) {
+    if (
+      this.config.value &&
+      typeof this.config.value === 'string' &&
+      this.config.value.indexOf('data:image') > -1
+    ) {
       this.value = this.config.value;
       this.group.get(this.key).patchValue(this.config.value);
     }
@@ -195,10 +213,18 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
 
     if (this.dropzone) {
       ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((event) => {
-        this.dropzone.nativeElement.addEventListener(event, this.stopEvent, false);
+        this.dropzone.nativeElement.addEventListener(
+          event,
+          this.stopEvent,
+          false
+        );
       });
 
-      this.dropzone.nativeElement.addEventListener('drop', this.handleDrop.bind(this), false);
+      this.dropzone.nativeElement.addEventListener(
+        'drop',
+        this.handleDrop.bind(this),
+        false
+      );
     }
   }
 
@@ -221,7 +247,10 @@ export class FormPictureComponent extends BasicElementComponent implements OnIni
 
   public open(): void {
     this.photoExist = false;
-    this.modalService.open(this.modal, { windowClass: 'medium-modal', backdrop: 'static' });
+    this.modalService.open(this.modal, {
+      windowClass: 'medium-modal',
+      backdrop: 'static',
+    });
   }
 
   public getPhoto() {

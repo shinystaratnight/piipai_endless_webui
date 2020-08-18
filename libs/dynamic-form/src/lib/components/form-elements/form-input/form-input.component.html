@@ -17,9 +17,9 @@
       [class.required]="config.templateOptions.required"
       [attr.for]="key"
     >
-      {{ config.templateOptions.label }}:
+      {{ getTranslationKey('label') | translate: {"Default": config.templateOptions.label} }}:
     </label>
-    <app-info [description]="config.templateOptions.description"></app-info>
+    <app-info [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description}"></app-info>
     <div
       class="form-element-content edit"
       [class.showAll]="viewMode || config.type === 'static'"

@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -51,6 +58,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       label: 'Industry',
       type: 'related',
       values: ['__str__', 'id', 'translations'],
+      description: '',
     },
     query: {},
   };
@@ -78,7 +86,13 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     {
       title: 'Additional information',
       metadata: [],
-      content: ['nationality', 'residency', 'tax_file_number', 'transportation_to_work', ['weight', 'height']],
+      content: [
+        'nationality',
+        'residency',
+        'tax_file_number',
+        'transportation_to_work',
+        ['weight', 'height'],
+      ],
     },
     {
       title: 'Bank and superannuation informatioin',
@@ -280,7 +294,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
       passTestAction.subscribe((index) => {
         const test = tests[index];
-        this.modalRef = this.modalService.open(PassTestModalComponent, { backdrop: 'static' });
+        this.modalRef = this.modalService.open(PassTestModalComponent, {
+          backdrop: 'static',
+        });
         this.modalRef.componentInstance.config = {
           test,
           description: test.description,
@@ -290,7 +306,10 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         this.modalRef.result
           .then((res: any[]) => {
             if (this.passedTests.has(item.id)) {
-              this.passedTests.set(item.id, [...this.passedTests.get(item.id), ...res]);
+              this.passedTests.set(item.id, [
+                ...this.passedTests.get(item.id),
+                ...res,
+              ]);
             } else {
               this.passedTests.set(item.id, res);
             }
@@ -345,7 +364,9 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
         el.autocompleteData.next(res);
       },
       (err: any) => {
-        this.parseError(Object.assign({}, this.error, { [el.key]: err.errors }));
+        this.parseError(
+          Object.assign({}, this.error, { [el.key]: err.errors })
+        );
       }
     );
   }
@@ -425,7 +446,10 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
           if (this.hiddenFields.keys.indexOf(field.key) === -1) {
             this.hiddenFields.keys.push(field.key);
             this.hiddenFields.elements.push(field);
-            this.hiddenFields.observers = this.observeFields(field.showIf, this.hiddenFields.observers);
+            this.hiddenFields.observers = this.observeFields(
+              field.showIf,
+              this.hiddenFields.observers
+            );
             field.hidden = new BehaviorSubject(true);
           }
         }
@@ -460,7 +484,12 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return observers;
   }
 
-  public getFields(result: Field[], key: string, target: Field[], index: number): Field[] {
+  public getFields(
+    result: Field[],
+    key: string,
+    target: Field[],
+    index: number
+  ): Field[] {
     if (index === target.length) {
       return result;
     }
@@ -476,7 +505,11 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     return this.getFields(result, key, target, index);
   }
 
-  public updateSkillField(field: Field, formData: BehaviorSubject<any>, tests: any[]): Field {
+  public updateSkillField(
+    field: Field,
+    formData: BehaviorSubject<any>,
+    tests: any[]
+  ): Field {
     return {
       ...field,
       query: {
@@ -519,7 +552,8 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
     fields.forEach((key) => {
       if (Array.isArray(key)) {
         key.forEach((field) => {
-          result = (this.form.get(field) && this.form.get(field).invalid) || result;
+          result =
+            (this.form.get(field) && this.form.get(field).invalid) || result;
         });
       } else {
         result = (this.form.get(key) && this.form.get(key).invalid) || result;

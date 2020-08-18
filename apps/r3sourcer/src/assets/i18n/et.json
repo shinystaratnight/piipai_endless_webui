@@ -1,4 +1,53 @@
 {
+	"actions": "",
+	"add": "",
+	"add_new": "",
+	"add_photo": "",
+	"are_you_sure": "",
+	"back": "",
+	"cancel": "",
+	"contact": {
+		"address": {
+			"street_address": {
+				"description": "",
+				"label": ""
+			}
+		},
+		"email": {
+			"label": ""
+		},
+		"first_name": {
+			"label": ""
+		},
+		"gender": {
+			"label": ""
+		},
+		"last_name": {
+			"label": ""
+		},
+		"phone_mobile": {
+			"label": ""
+		},
+		"picture": {
+			"label_photo": ""
+		},
+		"title": {
+			"label": ""
+		}
+	},
+	"default": "",
+	"delete": "",
+	"drag_and_drop": "",
+	"edit": "",
+	"file": "",
+	"file_size": "",
+	"height": {
+		"label": ""
+	},
+	"industry": {
+		"description": "",
+		"label": ""
+	},
 	"login": {
 		"forgot_password": "",
 		"login": "",
@@ -7,13 +56,48 @@
 		"subtitle": "",
 		"title": ""
 	},
+	"make_default": "",
+	"max_size": "",
+	"nationality": {
+		"label": ""
+	},
 	"next": "Next step",
+	"open_in_tab": "",
+	"pass_test": "",
+	"passed": "",
 	"password": {
 		"placeholder": "",
 		"reset": ""
 	},
+	"photo": "",
+	"registration": {
+		"fill_error": "",
+		"of": "",
+		"register": "",
+		"step": ""
+	},
 	"reset": "",
+	"residency": {
+		"label": ""
+	},
+	"save": "",
+	"skill": {
+		"label": ""
+	},
+	"take_a_photo": "",
+	"tax_file_number": {
+		"label": ""
+	},
+	"transportation_to_work": {
+		"label": ""
+	},
+	"try_again": "",
+	"upload_file": "",
+	"use_camera": "",
 	"username": {
 		"placeholder": ""
+	},
+	"weight": {
+		"label": ""
 	}
 }

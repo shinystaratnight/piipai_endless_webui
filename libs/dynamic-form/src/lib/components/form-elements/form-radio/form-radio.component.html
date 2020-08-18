@@ -9,7 +9,7 @@
       [class.required]="config.templateOptions.required"
       *ngIf="config.label || config.templateOptions.label"
     >
-      {{ config.templateOptions.label }}:
+      {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
     </label>
     <div class="edit inline" [class.column]="config.templateOptions.column">
       <ng-container *ngFor="let radio of config.templateOptions.options">

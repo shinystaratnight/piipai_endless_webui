@@ -13,12 +13,14 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { getTranslationKey } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-select',
   templateUrl: 'form-select.component.html',
 })
-export class FormSelectComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FormSelectComponent extends BasicElementComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('select')
   public select;
 
@@ -38,6 +40,8 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
   @Output()
   public event: EventEmitter<any> = new EventEmitter();
 
+  getTranslationKey = getTranslationKey;
+
   private subscriptions: Subscription[];
 
   constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
@@ -48,7 +52,9 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
   public ngOnInit() {
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
     this.options = !this.config.templateOptions.doNotSort
-      ? this.config.templateOptions.options.sort((p, n) => (p.label > n.label ? 1 : -1))
+      ? this.config.templateOptions.options.sort((p, n) =>
+          p.label > n.label ? 1 : -1
+        )
       : this.config.templateOptions.options.slice();
     this.setInitValue();
     this.checkModeProperty();
@@ -98,7 +104,10 @@ export class FormSelectComponent extends BasicElementComponent implements OnInit
     }
   }
 
-  public getValue(options: any[], value: string): { value: string; color?: string } {
+  public getValue(
+    options: any[],
+    value: string
+  ): { value: string; color?: string } {
     let element = options.find((el) => el.value == value); // tslint:disable-line
     if (element) {
       return {

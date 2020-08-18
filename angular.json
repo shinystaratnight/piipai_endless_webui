@@ -270,7 +270,14 @@
             "polyfills": "apps/r3sourcer/src/polyfills.ts",
             "tsConfig": "apps/r3sourcer/tsconfig.app.json",
             "assets": ["apps/r3sourcer/src/favicon.ico", "apps/r3sourcer/src/assets"],
-            "styles": ["apps/r3sourcer/src/styles.scss"],
+            "styles": [
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.css",
+              "node_modules/nouislider/distribute/nouislider.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "node_modules/intl-tel-input/build/css/intlTelInput.css",
+              "apps/r3sourcer/src/styles.scss"
+            ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
               "node_modules/jquery-ui-dist/jquery-ui.js",

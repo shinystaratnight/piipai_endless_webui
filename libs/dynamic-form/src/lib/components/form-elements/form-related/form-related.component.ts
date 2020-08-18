@@ -31,9 +31,19 @@ import {
   MessageType,
 } from '@webui/core';
 import { Field, Endpoints } from '@webui/data';
-import { FormatString, isManager, isClient, isCandidate } from '@webui/utilities';
+import {
+  FormatString,
+  isManager,
+  isClient,
+  isCandidate,
+  getTranslationKey,
+} from '@webui/utilities';
 
-import { GenericFormService, TimelineService, TimelineAction } from '../../../services';
+import {
+  GenericFormService,
+  TimelineService,
+  TimelineAction,
+} from '../../../services';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 
 export interface RelatedObject {
@@ -57,7 +67,8 @@ export interface CustomField {
   templateUrl: './form-related.component.html',
   styleUrls: ['./form-related.component.scss'],
 })
-export class FormRelatedComponent extends BasicElementComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class FormRelatedComponent extends BasicElementComponent
+  implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('search') search;
   @ViewChild('searchElement') searchElement;
   @ViewChild('modal') modal;
@@ -139,6 +150,7 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   };
 
   isClient = isClient;
+  getTranslationKey = getTranslationKey;
 
   constructor(
     private fb: FormBuilder,
@@ -166,7 +178,8 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     this.addControl(this.config, this.fb, this.config.templateOptions.required);
 
     this.skillEndpoint =
-      this.config.endpoint === '/skills/skillbaserates/' || this.config.endpoint === '/pricing/pricelistrates/';
+      this.config.endpoint === '/skills/skillbaserates/' ||
+      this.config.endpoint === '/pricing/pricelistrates/';
 
     this.display = this.config.templateOptions.display || '{__str__}';
     this.param = this.config.templateOptions.param || 'id';
@@ -196,12 +209,17 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     }
 
     this.placeholder =
-      this.config.templateOptions.placeholder || (this.config.templateOptions.edit ? 'Select or add new' : 'Select');
+      this.config.templateOptions.placeholder ||
+      (this.config.templateOptions.edit ? 'Select or add new' : 'Select');
 
     if (this.timelineService) {
       this.subscriptions.push(
         this.timelineService.buttonAction$.subscribe((action: any) => {
-          if (action.type === 'editContact' && this.config.endpoint === Endpoints.Contact && !this.config.hide) {
+          if (
+            action.type === 'editContact' &&
+            this.config.endpoint === Endpoints.Contact &&
+            !this.config.hide
+          ) {
             this.open('update');
           }
         })
@@ -228,7 +246,8 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     const properties = ['metadata_query', 'add_metadata_query'];
 
     properties.forEach((prop: string) => {
-      this.config[prop] = this.config[prop] && this.parseMetadataQuery(this.config, prop);
+      this.config[prop] =
+        this.config[prop] && this.parseMetadataQuery(this.config, prop);
     });
   }
 
@@ -259,7 +278,10 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
 
   public getAllowPermissions() {
     if (!this.allowPermissions) {
-      this.allowPermissions = this.permission.getAllowMethods(undefined, this.config.endpoint);
+      this.allowPermissions = this.permission.getAllowMethods(
+        undefined,
+        this.config.endpoint
+      );
     }
   }
 
@@ -271,7 +293,9 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       Object.keys(this.config.defaultData).forEach((el) => {
         const value = format.format(this.config.defaultData[el], this.formData);
 
-        query += `${el}=${format.format(this.config.defaultData[el], this.formData) || false}&`;
+        query += `${el}=${
+          format.format(this.config.defaultData[el], this.formData) || false
+        }&`;
       });
 
       if (this.listDefaultQuery === query) {
@@ -293,9 +317,11 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         }
       });
 
-      this.genericFormService.getByQuery(this.config.endpoint, query).subscribe((res) => {
-        this.generateDataForList(<any>{ list: true, metadata }, res.results);
-      });
+      this.genericFormService
+        .getByQuery(this.config.endpoint, query)
+        .subscribe((res) => {
+          this.generateDataForList(<any>{ list: true, metadata }, res.results);
+        });
     }
   }
 
@@ -373,7 +399,11 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
             this.searchSubscription.unsubscribe();
           }
           this.setInitValue();
-          this.eventHandler({ type: 'change' }, this.group.get(this.key).value, this.resetAdditionalData());
+          this.eventHandler(
+            { type: 'change' },
+            this.group.get(this.key).value,
+            this.resetAdditionalData()
+          );
         } else if (mode === 'edit') {
           this.viewMode = this.config.read_only || false;
           this.editMode = true;
@@ -403,7 +433,9 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
           this.disableMessage = disableData.messages.join(' ');
 
           if (this.config.errorMessage) {
-            if (!this.getValueByKey(this.config.errorMessage.field, this.formData)) {
+            if (
+              !this.getValueByKey(this.config.errorMessage.field, this.formData)
+            ) {
               this.config.errorMessage.visible = true;
             } else {
               this.config.errorMessage.visible = false;
@@ -411,13 +443,19 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
           }
 
           if (this.config.default instanceof Object) {
-            if (this.config.default.useIf && this.checkExistKey(this.config.default.useIf, formData.key)) {
+            if (
+              this.config.default.useIf &&
+              this.checkExistKey(this.config.default.useIf, formData.key)
+            ) {
               if (this.config.default.manual) {
                 if (!formData.manual) {
                   return;
                 }
               }
-              const result = this.checkShowRules(this.config.default.useIf, formData.data);
+              const result = this.checkShowRules(
+                this.config.default.useIf,
+                formData.data
+              );
 
               if (result) {
                 this.getOptions.call(
@@ -479,7 +517,11 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
               }
             }
 
-            if (this.config.default && !this.config.hide && !this.config.value) {
+            if (
+              this.config.default &&
+              !this.config.hide &&
+              !this.config.value
+            ) {
               const format = new FormatString();
               let id;
               if (typeof this.config.default === 'string') {
@@ -518,7 +560,11 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
             if (this.group.get(this.key).value) {
               this.displayValue = '';
               this.group.get(this.key).patchValue('');
-              this.eventHandler({ type: 'reset' }, this.group.get(this.key).value, this.resetAdditionalData());
+              this.eventHandler(
+                { type: 'reset' },
+                this.group.get(this.key).value,
+                this.resetAdditionalData()
+              );
             }
           }
         }
@@ -565,7 +611,13 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         result = el.url;
       }
     });
-    const prefix = isManager() ? '/mn' : isClient() ? '/cl' : isCandidate() ? '/cd' : '';
+    const prefix = isManager()
+      ? '/mn'
+      : isClient()
+      ? '/cl'
+      : isCandidate()
+      ? '/cd'
+      : '';
 
     return prefix + result;
   }
@@ -574,16 +626,21 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     const formatString = new FormatString();
     this.results = [];
     if (this.config.value || this.group.get(this.key).value) {
-      const data = this.config.value ? this.config.value : this.group.get(this.key).value;
+      const data = this.config.value
+        ? this.config.value
+        : this.group.get(this.key).value;
       if (!this.config.many) {
         let value;
         if (data instanceof Object) {
           if (this.config.options && this.config.options.length) {
-            const obj = this.config.options.find((el) => el[this.param] === data[this.param]);
+            const obj = this.config.options.find(
+              (el) => el[this.param] === data[this.param]
+            );
             if (obj) {
               const path = this.getLinkPath(this.config.endpoint);
               if (path) {
-                this.linkPath = location.origin + path + data[this.param] + '/change';
+                this.linkPath =
+                  location.origin + path + data[this.param] + '/change';
               } else {
                 this.linkPath = '/';
               }
@@ -592,7 +649,8 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
           } else {
             const path = this.getLinkPath(this.config.endpoint);
             if (path) {
-              this.linkPath = location.origin + path + data[this.param] + '/change';
+              this.linkPath =
+                location.origin + path + data[this.param] + '/change';
             } else {
               this.linkPath = '/';
             }
@@ -602,7 +660,9 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         } else {
           value = data;
           if (this.config.options && this.config.options.length) {
-            const obj = this.config.options.find((el) => el[this.param] === data);
+            const obj = this.config.options.find(
+              (el) => el[this.param] === data
+            );
             if (obj) {
               const path = this.getLinkPath(this.config.endpoint);
               if (path) {
@@ -625,7 +685,9 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
             el.checked = false;
             data.forEach((elem) => {
               if (elem instanceof Object) {
-                const param = this.config.relatedObjects ? this.config.relatedObjects.field + '.id' : this.param;
+                const param = this.config.relatedObjects
+                  ? this.config.relatedObjects.field + '.id'
+                  : this.param;
                 const elemValue = { value: '' };
                 this.getValueOfData(elem, param, elemValue);
 
@@ -674,7 +736,8 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     } else if (
       this.config.default &&
       this.config.default.includes &&
-      (this.config.default.includes('company_id') || this.config.default.includes('client_contact_id')) &&
+      (this.config.default.includes('company_id') ||
+        this.config.default.includes('client_contact_id')) &&
       !this.config.editForm
     ) {
       const id = this.userService.user.currentRole[this.config.default];
@@ -685,7 +748,11 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
 
       this.group.get(this.key).patchValue(id);
       this.getOptions.call(this, '', 0, false, this.setValue, id);
-    } else if (this.config.default && this.config.default.includes && this.config.default.includes('currentCompany')) {
+    } else if (
+      this.config.default &&
+      this.config.default.includes &&
+      this.config.default.includes('currentCompany')
+    ) {
       const id = this.settingsService.settings.company;
 
       this.group.get(this.key).patchValue(id);
@@ -756,7 +823,10 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
           const attributes = Object.keys(el.attributes);
 
           attributes.forEach((key) => {
-            el.templateOptions[key] = formatString.format(el.attributes[key], this.formData);
+            el.templateOptions[key] = formatString.format(
+              el.attributes[key],
+              this.formData
+            );
           });
         }
       });
@@ -787,7 +857,10 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
       if (el.prefilled) {
         const newPrefilled = {};
         Object.keys(el.prefilled).forEach((field) => {
-          newPrefilled[field] = format.format(el.prefilled[field], this.formData);
+          newPrefilled[field] = format.format(
+            el.prefilled[field],
+            this.formData
+          );
         });
 
         element.prefilled = newPrefilled;
@@ -840,7 +913,9 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         default_rate: true,
         skill: object.allData.skill.id,
       };
-      this.genericFormService.editForm(endpoint, body).subscribe((res: any) => this.updateList());
+      this.genericFormService
+        .editForm(endpoint, body)
+        .subscribe((res: any) => this.updateList());
     }
   }
 
@@ -893,7 +968,11 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   }
 
   public onModalScrollDown(): void {
-    if (!this.skipScroll && this.previewList && this.previewList.length !== this.count) {
+    if (
+      !this.skipScroll &&
+      this.previewList &&
+      this.previewList.length !== this.count
+    ) {
       this.skipScroll = true;
       this.generateList(this.searchValue, true);
     }
@@ -955,23 +1034,33 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     }
     if (type === 'update' || type === 'delete') {
       if (object) {
-        this.modalData.title = object.allData ? object.allData.__str__ : object.__str__;
+        this.modalData.title = object.allData
+          ? object.allData.__str__
+          : object.__str__;
         this.modalData.id = object[this.param];
         this.modalData.needData = true;
         if (this.modalData.endpoint === Endpoints.Timesheet) {
           this.modalData.title = '';
         }
       } else {
-        this.modalData.title = this.config.templateOptions.editLabel || this.displayValue;
+        this.modalData.title =
+          this.config.templateOptions.editLabel || this.displayValue;
         const description = this.config.templateOptions.editDescription
-          ? format.format(this.config.templateOptions.editDescription, this.formData)
+          ? format.format(
+              this.config.templateOptions.editDescription,
+              this.formData
+            )
           : '';
 
         if (description) {
-          this.modalData.description = this.sanitizer.bypassSecurityTrustHtml(description);
-          this.currentUser = this.formData['id'] === this.userService.user.data.user;
+          this.modalData.description = this.sanitizer.bypassSecurityTrustHtml(
+            description
+          );
+          this.currentUser =
+            this.formData['id'] === this.userService.user.data.user;
         }
-        this.modalData.id = !this.config.editEndpoint && this.group.get(this.key).value;
+        this.modalData.id =
+          !this.config.editEndpoint && this.group.get(this.key).value;
 
         if (this.modalData.id instanceof Object) {
           this.modalData.id = this.modalData.id.id;
@@ -1005,7 +1094,9 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     if (this.modalData.endpoint === Endpoints.SmsMessages) {
       const messageType = (object && object.type) || this.config.metadata_query;
       const newModal = Object.assign(this.modalData, {
-        label: messageType.toLowerCase().includes('sent') ? 'Sent message' : 'Received message',
+        label: messageType.toLowerCase().includes('sent')
+          ? 'Sent message'
+          : 'Received message',
         mode: 'view',
         edit: true,
         metadataQuery: messageType.toLowerCase(),
@@ -1015,17 +1106,25 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         newModal.label = '';
       }
 
-      this.modalRef = this.modalService.open(this.messageDetail, { windowClass: 'message-detail', backdrop: 'static' });
+      this.modalRef = this.modalService.open(this.messageDetail, {
+        windowClass: 'message-detail',
+        backdrop: 'static',
+      });
 
       return false;
     }
 
-    let windowClass = this.config.visibleMode && type === 'post' ? 'visible-mode' : '';
+    let windowClass =
+      this.config.visibleMode && type === 'post' ? 'visible-mode' : '';
     if (this.config.smallModal && type === 'post') {
       windowClass += ' small-modal';
     }
 
-    this.modalRef = this.modalService.open(this.modal, { size: 'lg', windowClass, backdrop: 'static' });
+    this.modalRef = this.modalService.open(this.modal, {
+      size: 'lg',
+      windowClass,
+      backdrop: 'static',
+    });
 
     return false;
   }
@@ -1034,12 +1133,18 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     if (this.config.strField) {
       const type = data.data[this.config.strField].toLowerCase();
 
-      this.modalData.label = type.includes('sent') ? 'Sent message' : 'Received message';
+      this.modalData.label = type.includes('sent')
+        ? 'Sent message'
+        : 'Received message';
     }
   }
 
   public openAutocomplete(): void {
-    if (this.config.type !== 'address' && !this.config.doNotChoice && !this.fieldDisabled) {
+    if (
+      this.config.type !== 'address' &&
+      !this.config.doNotChoice &&
+      !this.fieldDisabled
+    ) {
       if (this.hideAutocomplete === true) {
         this.searchValue = null;
         this.count = 0;
@@ -1127,7 +1232,12 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     }
 
     if (updated || update) {
-      this.eventHandler({ type: 'change' }, item && item[this.param], item, manual);
+      this.eventHandler(
+        { type: 'change' },
+        item && item[this.param],
+        item,
+        manual
+      );
     }
 
     this.changeList();
@@ -1214,7 +1324,11 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
   public deleteItem(index: number, item: any, api: boolean) {
     if (api || this.config.send === false) {
       this.genericFormService
-        .delete(this.config.endpoint, item[this.param], this.config.send !== false && 'delete')
+        .delete(
+          this.config.endpoint,
+          item[this.param],
+          this.config.send !== false && 'delete'
+        )
         .subscribe(() => {
           if (this.results[index]) {
             this.results.splice(index, 1);
@@ -1225,7 +1339,9 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     } else {
       if (this.results[index]) {
         if (this.config.options) {
-          const val = this.config.options.find((el) => el[this.param] === this.results[index][this.param]);
+          const val = this.config.options.find(
+            (el) => el[this.param] === this.results[index][this.param]
+          );
           if (val) {
             val.checked = false;
           }
@@ -1310,17 +1426,32 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         }
         return;
       }
-      this.group.get(this.key).patchValue(this.config.useValue ? this.config.value[this.param] : e.data[this.param]);
-      this.config.value = this.config.useValue ? this.config.value : e.data[this.param];
+      this.group
+        .get(this.key)
+        .patchValue(
+          this.config.useValue
+            ? this.config.value[this.param]
+            : e.data[this.param]
+        );
+      this.config.value = this.config.useValue
+        ? this.config.value
+        : e.data[this.param];
       this.displayValue = this.config.useValue
         ? formatString.format(this.display, this.config.value)
         : formatString.format(this.display, e.data);
       this.eventHandler({ type: 'change' }, e.data[this.param], e.data);
 
       if (this.config.candidateForm) {
-        this.eventHandler({ type: 'patchAddress' }, this.group.get(this.key).value);
+        this.eventHandler(
+          { type: 'patchAddress' },
+          this.group.get(this.key).value
+        );
       }
-    } else if (e.type === 'sendForm' && e.status === 'success' && this.config.list) {
+    } else if (
+      e.type === 'sendForm' &&
+      e.status === 'success' &&
+      this.config.list
+    ) {
       closeModal();
       this.saveProcess = false;
       this.updateList(e.data);
@@ -1413,7 +1544,15 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     return result;
   }
 
-  public getOptions(value, offset, concat = false, callback?, id?, customQuery?, only?) {
+  public getOptions(
+    value,
+    offset,
+    concat = false,
+    callback?,
+    id?,
+    customQuery?,
+    only?
+  ) {
     const format = new FormatString();
 
     const endpoint = format.format(this.config.endpoint, this.formData);
@@ -1439,113 +1578,138 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
         this.currentQuery = query;
         this.currentId = id;
         if (!id) {
-          this.genericFormService.getByQuery(endpoint, query).subscribe((res: any) => {
-            this.loading = false;
-            this.skipScroll = false;
-            this.count = res.count;
-            if (res.results && res.results.length) {
-              const formatString = new FormatString();
-              let results = [...res.results];
+          this.genericFormService
+            .getByQuery(endpoint, query)
+            .subscribe((res: any) => {
+              this.loading = false;
+              this.skipScroll = false;
+              this.count = res.count;
+              if (res.results && res.results.length) {
+                const formatString = new FormatString();
+                let results = [...res.results];
 
-              if (this.config.unique) {
-                results = this.filterUniqueValue(res.results, this.results);
-              }
-
-              results.forEach((el) => {
-                const display = this.config.templateOptions.listDisplay || this.display;
-                el.__str__ = formatString.format(display, el);
-
-                if (this.config.templateOptions.listParam) {
-                  el[this.param] = FormatString.format(this.config.templateOptions.listParam, el);
-                  el['name'] = FormatString.format(this.config.templateOptions.listDisplay, el);
+                if (this.config.unique) {
+                  results = this.filterUniqueValue(res.results, this.results);
                 }
 
-                if (this.config.templateOptions.info) {
-                  el.score = formatString.format(this.config.templateOptions.info['score'], el);
-                  el.distance = formatString.format(this.config.templateOptions.info['distance'], el);
-                }
-              });
+                results.forEach((el) => {
+                  const display =
+                    this.config.templateOptions.listDisplay || this.display;
+                  el.__str__ = formatString.format(display, el);
 
-              results.forEach((el) => {
-                if (el) {
-                  this.config.options = this.config.options || [];
-
-                  if (!this.config.options.find((item) => item.id === el.id)) {
-                    this.config.options.push(el);
+                  if (this.config.templateOptions.listParam) {
+                    el[this.param] = FormatString.format(
+                      this.config.templateOptions.listParam,
+                      el
+                    );
+                    el['name'] = FormatString.format(
+                      this.config.templateOptions.listDisplay,
+                      el
+                    );
                   }
+
+                  if (this.config.templateOptions.info) {
+                    el.score = formatString.format(
+                      this.config.templateOptions.info['score'],
+                      el
+                    );
+                    el.distance = formatString.format(
+                      this.config.templateOptions.info['distance'],
+                      el
+                    );
+                  }
+                });
+
+                results.forEach((el) => {
+                  if (el) {
+                    this.config.options = this.config.options || [];
+
+                    if (
+                      !this.config.options.find((item) => item.id === el.id)
+                    ) {
+                      this.config.options.push(el);
+                    }
+                  }
+                });
+
+                if (concat && this.previewList) {
+                  this.previewList.push(...results);
+                } else {
+                  this.previewList = results;
                 }
-              });
-
-              if (concat && this.previewList) {
-                this.previewList.push(...results);
-              } else {
-                this.previewList = results;
               }
-            }
-            if (res && res.length) {
-              this.count = res.length;
-              const formatString = new FormatString();
+              if (res && res.length) {
+                this.count = res.length;
+                const formatString = new FormatString();
 
-              if (this.config.unique) {
-                res = this.filterUniqueValue(res, this.results);
+                if (this.config.unique) {
+                  res = this.filterUniqueValue(res, this.results);
+                }
+                res.forEach((el) => {
+                  el.__str__ = formatString.format(this.display, el);
+                });
+                if (concat && this.previewList) {
+                  this.previewList.push(...res);
+                } else {
+                  this.previewList = res;
+                }
               }
-              res.forEach((el) => {
-                el.__str__ = formatString.format(this.display, el);
-              });
-              if (concat && this.previewList) {
-                this.previewList.push(...res);
-              } else {
-                this.previewList = res;
+
+              if (!this.previewList) {
+                this.previewList = [];
               }
-            }
 
-            if (!this.previewList) {
-              this.previewList = [];
-            }
+              if (callback) {
+                let canSetValue;
 
-            if (callback) {
-              let canSetValue;
-
-              if (only) {
-                if (res.results.length === only) {
+                if (only) {
+                  if (res.results.length === only) {
+                    canSetValue = true;
+                  } else if (
+                    only > res.results.length ||
+                    only < res.results.length
+                  ) {
+                    this.count = null;
+                    this.clearField();
+                  }
+                } else if (!only) {
                   canSetValue = true;
-                } else if (only > res.results.length || only < res.results.length) {
-                  this.count = null;
-                  this.clearField();
                 }
-              } else if (!only) {
-                canSetValue = true;
-              }
 
-              if (canSetValue) {
-                const target = res.results.find((el) => el.id === id);
+                if (canSetValue) {
+                  const target = res.results.find((el) => el.id === id);
 
-                const item = target || res.results[0];
+                  const item = target || res.results[0];
 
-                if (item) {
-                  const path = this.getLinkPath(this.config.endpoint);
-                  if (path) {
-                    this.linkPath = location.origin + path + item[this.param] + '/change';
-                  } else {
-                    this.linkPath = '/';
+                  if (item) {
+                    const path = this.getLinkPath(this.config.endpoint);
+                    if (path) {
+                      this.linkPath =
+                        location.origin + path + item[this.param] + '/change';
+                    } else {
+                      this.linkPath = '/';
+                    }
+
+                    callback.call(this, item);
                   }
-
-                  callback.call(this, item);
                 }
               }
-            }
-            this.updatePosition();
-          });
+              this.updatePosition();
+            });
         } else {
           this.genericFormService
-            .getByQuery(endpoint + id + '/', `?${this.generateFields(this.fields)}`)
+            .getByQuery(
+              endpoint + id + '/',
+              `?${this.generateFields(this.fields)}`
+            )
             .subscribe((res: any) => {
               this.loading = false;
               this.lastElement = 0;
               if (res) {
                 const path = this.getLinkPath(this.config.endpoint);
                 if (path) {
-                  this.linkPath = location.origin + path + res[this.param] + '/change';
+                  this.linkPath =
+                    location.origin + path + res[this.param] + '/change';
                 } else {
                   this.linkPath = '/';
                 }
@@ -1643,7 +1807,11 @@ export class FormRelatedComponent extends BasicElementComponent implements OnIni
     if (this.group.get(this.key).value) {
       this.displayValue = '';
       this.group.get(this.key).patchValue('');
-      this.eventHandler({ type: 'reset' }, this.group.get(this.key).value, this.resetAdditionalData());
+      this.eventHandler(
+        { type: 'reset' },
+        this.group.get(this.key).value,
+        this.resetAdditionalData()
+      );
     }
   }
 
