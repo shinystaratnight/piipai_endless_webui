@@ -1,11 +1,19 @@
 {
 	"login": {
-		"placeholder": {
-			"password": "",
-			"username": ""
-		},
+		"forgot_password": "",
+		"login": "",
+		"register": "",
+		"remember_me": "",
 		"subtitle": "",
 		"title": ""
 	},
-	"next": "Next step"
+	"next": "Next step",
+	"password": {
+		"placeholder": "",
+		"reset": ""
+	},
+	"reset": "",
+	"username": {
+		"placeholder": ""
+	}
 }

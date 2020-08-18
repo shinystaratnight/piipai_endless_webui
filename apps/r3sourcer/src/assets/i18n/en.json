@@ -1,13 +1,19 @@
 {
 	"login": {
+		"forgot_password": "Forgot Password?",
+		"login": "Login",
+		"register": "Register",
+		"remember_me": "Remember me",
 		"subtitle": "Please enter your email and password",
 		"title": "Login"
 	},
-  "username": {
-    "placeholder": "Login"
-  },
-  "password": {
-    "placeholder": "Password"
-  },
-	"next": "Next step"
+	"next": "Next step",
+	"password": {
+		"placeholder": "Password",
+		"reset": "Password Reset"
+	},
+	"reset": "Reset",
+	"username": {
+		"placeholder": "Login"
+	}
 }

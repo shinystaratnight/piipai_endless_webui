@@ -1,13 +1,19 @@
 {
 	"login": {
+		"forgot_password": "Забыли пароль?",
+		"login": "Войти",
+		"register": "Зарегистрироваться",
+		"remember_me": "Запомнить меня",
 		"subtitle": "Введите ваш email и пароль",
 		"title": "Вход"
 	},
-  "username": {
-    "placeholder": "Вход"
-  },
-  "password": {
-    "placeholder": "Пароль"
-  },
-	"next": "Дальше"
+	"next": "Дальше",
+	"password": {
+		"placeholder": "Пароль",
+		"reset": "Сбросить пароль"
+	},
+	"reset": "Сбросить",
+	"username": {
+		"placeholder": "Вход"
+	}
 }
