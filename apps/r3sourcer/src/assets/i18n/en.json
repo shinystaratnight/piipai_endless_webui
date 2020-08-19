@@ -1,11 +1,17 @@
 {
+	"accept": "Accept",
 	"actions": "Actions",
 	"add": "Add",
 	"add_new": "Add new",
 	"add_photo": "Add photo",
+	"all": "All",
 	"are_you_sure": "Are you sure?",
 	"back": "Back",
 	"cancel": "Cancel",
+	"client": {
+		"label": "Client"
+	},
+	"confirm_going_to_work": "Confirm if you are going to work",
 	"contact": {
 		"address": {
 			"street_address": {
@@ -35,18 +41,30 @@
 			"label": "Title"
 		}
 	},
+	"decline": "Decline",
 	"default": "default",
 	"delete": "Delete",
 	"drag_and_drop": "Drag the photo to the area or click the button",
 	"edit": "Edit",
+	"edit_submission": "Edit submission",
 	"file": "file",
 	"file_size": "File size is too large!",
 	"height": {
 		"label": "Height, cm"
 	},
+	"inactive_timesheet": "Inactive timesheet will be deleted in 48 hours",
 	"industry": {
 		"description": "",
 		"label": "Industry"
+	},
+	"job_site_-_map": {
+		"label": "Job site - map"
+	},
+	"job_site_contact": {
+		"label": "Job site contact"
+	},
+	"jobsite": {
+		"label": "Position / Jobsite"
 	},
 	"login": {
 		"forgot_password": "Forgot Password?",
@@ -58,11 +76,16 @@
 	},
 	"make_default": "make default",
 	"max_size": "Maximum allowed file size is 10 Mb.",
+	"more": "More",
 	"nationality": {
 		"label": "Nationality"
 	},
 	"next": "Next step",
+	"no_record": "No record",
+	"no_tracking_data": "No tracking info",
 	"open_in_tab": "Open in new tab",
+	"open_map": "Open Map",
+	"open_tracking_map": "Open tracking map",
 	"pass_test": "Pass test",
 	"passed": "Passed",
 	"password": {
@@ -81,12 +104,67 @@
 		"label": "Residency"
 	},
 	"save": "Save",
+	"shift": {
+		"date": {
+			"job": {
+				"notes": {
+					"label": "Notes"
+				},
+				"position": {
+					"label": "Position"
+				}
+			}
+		}
+	},
+	"show_map": "Show map",
 	"skill": {
 		"label": "Skill"
 	},
+	"status": {
+		"label": "Status"
+	},
+	"submit": "Submit",
 	"take_a_photo": "Take a photo",
 	"tax_file_number": {
 		"label": "Tax file number"
+	},
+	"times": {
+		"break_started_at": {
+			"label": "Break"
+		},
+		"label": "Times",
+		"shift": {
+			"date": {
+				"job": {
+					"notes": {
+						"label": "Notes"
+					},
+					"position": {
+						"label": "Position"
+					}
+				},
+				"shift_date": {
+					"label": "Shift date"
+				}
+			},
+			"time": {
+				"label": "Shift Time"
+			}
+		},
+		"shift_ended_at": {
+			"label": "End"
+		},
+		"shift_started_at": {
+			"date": "Date",
+			"label": "Start"
+		}
+	},
+	"timesheet_will_approved": "Timesheet will be automatically approved in 4 hours",
+	"totalTime": {
+		"label": "Total time"
+	},
+	"tracking": {
+		"label": "Tracking"
 	},
 	"transportation_to_work": {
 		"label": "Transportation to work"

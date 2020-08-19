@@ -41,7 +41,13 @@ import {
 } from '@webui/utilities';
 import { Endpoints } from '@webui/data';
 
-import { FilterService, GenericFormService, ListStorageService, ListService, SortService } from '../../services';
+import {
+  FilterService,
+  GenericFormService,
+  ListStorageService,
+  ListService,
+  SortService,
+} from '../../services';
 import {
   createAddAction,
   smallModalEndpoints,
@@ -62,7 +68,8 @@ import { formatCurrency, getCurrencySymbol } from '@angular/common';
   templateUrl: './dynamic-list.component.html',
   styleUrls: ['./dynamic-list.component.scss'],
 })
-export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
+export class DynamicListComponent
+  implements OnInit, OnChanges, OnDestroy, AfterContentChecked {
   @Input() config: any;
   @Input() data: any;
   @Input() first: boolean;
@@ -164,7 +171,11 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     Endpoints.Company,
     Endpoints.CompanyContact,
   ];
-  public mobileDesign = [Endpoints.TimesheetHistory, Endpoints.TimesheetCandidate, Endpoints.TimesheetUnapproved];
+  public mobileDesign = [
+    Endpoints.TimesheetHistory,
+    Endpoints.TimesheetCandidate,
+    Endpoints.TimesheetUnapproved,
+  ];
   public collapsed = true;
   public updateButtons = new Map();
   public sortedField: any;
@@ -206,16 +217,22 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       this.filtersHidden = false;
     }
 
-    this.noneEdit = this.pictures.indexOf(this.endpoint as Endpoints) > -1 || this.config.list.editDisable;
+    this.noneEdit =
+      this.pictures.indexOf(this.endpoint as Endpoints) > -1 ||
+      this.config.list.editDisable;
 
     this.subscriptions.push(
       this.listService.updateRow$.subscribe((rowData) => {
-        const row = this.fullData[this.responseField].find((item) => item.id === rowData.id);
+        const row = this.fullData[this.responseField].find(
+          (item) => item.id === rowData.id
+        );
 
         Object.assign(row, rowData.data);
 
         if (rowData.updateList) {
-          this.body = [...this.generateBody(this.config, this.fullData, this.innerTables)];
+          this.body = [
+            ...this.generateBody(this.config, this.fullData, this.innerTables),
+          ];
         }
       })
     );
@@ -223,9 +240,14 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   public ngOnChanges(changes: SimpleChanges) {
     const config =
-      changes['config'] && changes['config'].isFirstChange() ? changes['config'].currentValue : this.config;
+      changes['config'] && changes['config'].isFirstChange()
+        ? changes['config'].currentValue
+        : this.config;
 
-    const data = changes['data'] && changes['data'].isFirstChange() ? changes['data'].currentValue : this.data;
+    const data =
+      changes['data'] && changes['data'].isFirstChange()
+        ? changes['data'].currentValue
+        : this.data;
 
     const innerTables =
       changes['innerTables'] && changes['innerTables'].isFirstChange()
@@ -233,8 +255,12 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         : this.innerTables;
 
     const addData = changes['addData'] && changes['addData'].currentValue;
+    console.log(this.config.list.columns);
 
-    this.config.list.columns = this.purposeService.filterListColumns(this.endpoint, this.config.list.columns);
+    this.config.list.columns = this.purposeService.filterListColumns(
+      this.endpoint,
+      this.config.list.columns
+    );
 
     if (this.actionData !== this.currentActionData) {
       this.currentActionData = this.actionData;
@@ -248,7 +274,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       if (this.actionEndpoint.indexOf('pdf') > -1) {
         setTimeout(() => {
           this.modalInfo = {
-            url: this.sanitizer.bypassSecurityTrustResourceUrl(location.origin + this.currentActionData.pdf_url),
+            url: this.sanitizer.bypassSecurityTrustResourceUrl(
+              location.origin + this.currentActionData.pdf_url
+            ),
           };
           this.open(this.pdfDocumentModal, { size: 'lg' });
         }, 100);
@@ -277,7 +305,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     }
 
     if (this.datatable) {
-      this.datatable.nativeElement.style.zIndex = this.active ? 100 : this.id * 5;
+      this.datatable.nativeElement.style.zIndex = this.active
+        ? 100
+        : this.id * 5;
     }
 
     if (changes.hasOwnProperty('config') && changes['config'].isFirstChange()) {
@@ -291,15 +321,24 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
       this.fullData = data;
       this.body.push(...this.generateBody(config, data, innerTables));
-    } else if (changes.hasOwnProperty('data') && !changes['data'].isFirstChange()) {
+    } else if (
+      changes.hasOwnProperty('data') &&
+      !changes['data'].isFirstChange()
+    ) {
       this.fullData = data;
       this.body = [...this.generateBody(config, data, innerTables)];
     }
 
-    if (changes.hasOwnProperty('addData') && !changes['addData'].isFirstChange()) {
+    if (
+      changes.hasOwnProperty('addData') &&
+      !changes['addData'].isFirstChange()
+    ) {
       this.fullData = {
         ...this.fullData,
-        [this.responseField]: [...this.fullData[this.responseField], ...addData[this.responseField]],
+        [this.responseField]: [
+          ...this.fullData[this.responseField],
+          ...addData[this.responseField],
+        ],
       };
       this.body.push(...this.generateBody(config, addData, innerTables));
     }
@@ -329,7 +368,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         endpoint: this.parentEndpoint || this.endpoint,
         list: this.config.list,
       };
-      this.filtersOfList = this.filterService.getFiltersByEndpoint(this.endpoint);
+      this.filtersOfList = this.filterService.getFiltersByEndpoint(
+        this.endpoint
+      );
     }
     if (this.config.list.search_enabled) {
       if (this.filtersOfList && this.filtersOfList.length > 1) {
@@ -348,13 +389,17 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     this.updateMetadataByTabs(config.list.columns);
 
     if (this.tabs) {
-      const tabsMetadata = config.list.columns.filter((el) => el.tab && el.tab.is_collapsed);
+      const tabsMetadata = config.list.columns.filter(
+        (el) => el.tab && el.tab.is_collapsed
+      );
 
       if (tabsMetadata.length) {
         this.tabs.forEach((tab) => {
           if (tab.is_collapsed) {
             tab.fields.forEach((field) => {
-              this.additionalMetadata.push(tabsMetadata.find((el) => el.name === field));
+              this.additionalMetadata.push(
+                tabsMetadata.find((el) => el.name === field)
+              );
             });
           }
         });
@@ -373,14 +418,20 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       if (config.list) {
         this.sortedColumns = this.getSortedColumns(config.list.columns);
         if (this.tabs) {
-          const mainMetadata = config.list.columns.filter((el) => !el.tab || !el.tab.is_collapsed);
+          const mainMetadata = config.list.columns.filter(
+            (el) => !el.tab || !el.tab.is_collapsed
+          );
           const additionalBody = this.prepareData(
             this.additionalMetadata,
             data[this.responseField],
             config.list.highlight
           );
 
-          body = this.prepareData(mainMetadata, data[this.responseField], config.list.highlight);
+          body = this.prepareData(
+            mainMetadata,
+            data[this.responseField],
+            config.list.highlight
+          );
           this.groupedValues(body);
           body.forEach((main) => {
             additionalBody.forEach((additional) => {
@@ -397,7 +448,11 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
             });
           });
         } else {
-          body = this.prepareData(config.list.columns, data[this.responseField], config.list.highlight);
+          body = this.prepareData(
+            config.list.columns,
+            data[this.responseField],
+            config.list.highlight
+          );
           this.groupedValues(body);
         }
         if (this.asyncData) {
@@ -455,11 +510,16 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     if (innerTables && this.innerTableCall) {
       const currentRow = innerTables[this.innerTableCall.row];
       if (currentRow) {
-        const currentCell = innerTables[this.innerTableCall.row][this.innerTableCall.cell];
+        const currentCell =
+          innerTables[this.innerTableCall.row][this.innerTableCall.cell];
         if (currentCell) {
-          const cell = innerTables[this.innerTableCall.row][this.innerTableCall.cell];
+          const cell =
+            innerTables[this.innerTableCall.row][this.innerTableCall.cell];
           if (cell.metadata && cell.data) {
-            cell.body = this.prepareData(cell.metadata.list.columns, cell.data.results);
+            cell.body = this.prepareData(
+              cell.metadata.list.columns,
+              cell.data.results
+            );
           }
         }
       }
@@ -507,7 +567,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   public parseMultipleFilter(filters: any[]): void {
     if (filters) {
-      const multipleFilters = filters.filter((filter) => filter.type === 'multiple');
+      const multipleFilters = filters.filter(
+        (filter) => filter.type === 'multiple'
+      );
       multipleFilters.forEach((filter) => {
         if (!filter.parsed) {
           if (filter.data.data) {
@@ -517,10 +579,12 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
           if (filter.data.endpoint && !filter.data.data) {
             filter.endpoint = this.format(filter.endpoint, this.data);
-            this.genericFormService.getAll(filter.endpoint).subscribe((res: any) => {
-              filter.data = res;
-              filter.parsed = true;
-            });
+            this.genericFormService
+              .getAll(filter.endpoint)
+              .subscribe((res: any) => {
+                filter.data = res;
+                filter.parsed = true;
+              });
           }
         }
       });
@@ -540,13 +604,15 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
               query = `${query}`;
             }
             this.genericFormService.getByQuery(endpoint, query).subscribe(
-              (res: any) => this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
+              (res: any) =>
+                this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
               (err: any) => (this.error = err)
             );
           } else {
             const body: any = this.generateParams(this.asyncData[endpoint]);
             this.genericFormService.submitForm(endpoint, body).subscribe(
-              (res: any) => this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
+              (res: any) =>
+                this.updateValuesOfAsyncData(res, this.asyncData[endpoint]),
               (err: any) => (this.error = err)
             );
           }
@@ -787,6 +853,7 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       show: element.updateButton ? new BehaviorSubject(false) : undefined,
       required: element.required,
       currency: element.currency,
+      translationKey: element.translationKey,
     };
     if (cell.timezone) {
       obj.timezone = this.getPropValue(el, cell.timezone);
@@ -798,9 +865,15 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     if (obj.form && Object.keys(obj.form).length) {
       fillingForm([obj.form], el);
       if (obj.form.templateOptions.display) {
-        const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+        const currency = getCurrencySymbol(
+          this.siteSettings.settings.currency,
+          'wide'
+        );
 
-        obj.display = this.format(obj.form.templateOptions.display, { ...el, currency });
+        obj.display = this.format(obj.form.templateOptions.display, {
+          ...el,
+          currency,
+        });
       }
     }
     if (this.listStorage.hasTrackingInfo(el.id)) {
@@ -810,7 +883,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       obj.disableAction = true;
     }
     if (obj.description) {
-      const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+      const currency = getCurrencySymbol(
+        this.siteSettings.settings.currency,
+        'wide'
+      );
 
       obj.description = this.format(obj.description, { ...el, currency });
     }
@@ -831,16 +907,25 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         obj.display = formatCurrency(
           value,
           'en',
-          getCurrencySymbol(this.siteSettings.settings.currency, 'wide') || 'USD'
+          getCurrencySymbol(this.siteSettings.settings.currency, 'wide') ||
+            'USD'
         );
       } else {
-        const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+        const currency = getCurrencySymbol(
+          this.siteSettings.settings.currency,
+          'wide'
+        );
 
-        obj.display = this.format(element.display.replace(/{field}/gi, `{${element.field}}`), { ...el, currency });
+        obj.display = this.format(
+          element.display.replace(/{field}/gi, `{${element.field}}`),
+          { ...el, currency }
+        );
       }
     }
     if (element.type === 'datepicker') {
-      const field = this.config.fields && this.config.fields.find((elem) => elem.key === element.field);
+      const field =
+        this.config.fields &&
+        this.config.fields.find((elem) => elem.key === element.field);
       if (field) {
         obj.templateOptions = field.templateOptions;
       }
@@ -849,7 +934,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       if (element.type === 'icon') {
         obj.label = element.label;
       }
-      const field = this.config.fields && this.config.fields.find((elem) => elem.key === element.field);
+      const field =
+        this.config.fields &&
+        this.config.fields.find((elem) => elem.key === element.field);
       if (field) {
         obj['values'] = field.templateOptions.values || element.values;
         obj['color'] = field.templateOptions.color || element.color;
@@ -877,7 +964,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         element.endpoint += '/';
       }
       if (indexOf) {
-        element.endpoint = element.endpoint.replace(/{field}/gi, `{${element.field}}`);
+        element.endpoint = element.endpoint.replace(
+          /{field}/gi,
+          `{${element.field}}`
+        );
       }
       if (Array.isArray(obj.value)) {
         obj.link = [];
@@ -899,18 +989,26 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     if (element.type === 'static') {
       if (element.text) {
         if (element.field === 'totalTime') {
-          obj.value = this.format(element.text.replace(/{field}/gi, `{${element.field}}`), {
-            ...el,
-            totalTime: this.getTotalTime(el),
-          });
+          obj.value = this.format(
+            element.text.replace(/{field}/gi, `{${element.field}}`),
+            {
+              ...el,
+              totalTime: this.getTotalTime(el),
+            }
+          );
         } else {
-          obj.value = this.format(element.text.replace(/{field}/gi, `{${element.field}}`), el);
+          obj.value = this.format(
+            element.text.replace(/{field}/gi, `{${element.field}}`),
+            el
+          );
         }
       }
       obj.label = element.label;
     }
     if (element.type === 'picture') {
-      const field = this.config.fields && this.config.fields.find((elem) => elem.key === element.field);
+      const field =
+        this.config.fields &&
+        this.config.fields.find((elem) => elem.key === element.field);
       if (field) {
         obj.default = field.default;
       }
@@ -920,7 +1018,12 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     }
     if (element.type === 'buttonGroup') {
       obj.content = element.content.map((elem) => {
-        const newObj = Object.assign({}, elem, { rowId: obj.rowId }, { disableAction: this.disableActions });
+        const newObj = Object.assign(
+          {},
+          elem,
+          { rowId: obj.rowId },
+          { disableAction: this.disableActions }
+        );
 
         this.updateButtonTypeCell(newObj, elem, el);
         return newObj;
@@ -1010,7 +1113,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     obj.list = true;
     obj.templateOptions = {
       label: element.label,
-      icon: element.icon ? element.icon.slice(element.icon.indexOf('-') + 1) : null,
+      icon: element.icon
+        ? element.icon.slice(element.icon.indexOf('-') + 1)
+        : null,
       small: true,
       mb: false,
       p: true,
@@ -1045,7 +1150,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     }
     const { sort_field } = field;
 
-    const data = this.sortService.updateSortParams(this.sortedColumns, sort_field);
+    const data = this.sortService.updateSortParams(
+      this.sortedColumns,
+      sort_field
+    );
     field.sorted = data[sort_field];
 
     const query = this.sortService.getSortQuery(data);
@@ -1089,7 +1197,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
           object[param] = data[prop] ? data[prop].__str__ : '';
         }
       } else if (object.type === 'static' && !object[param]) {
-        object[param] = data[prop] && data[prop].__str__ ? data[prop].__str__ : data[prop];
+        object[param] =
+          data[prop] && data[prop].__str__ ? data[prop].__str__ : data[prop];
       } else if (!object[param]) {
         if (prop === 'totalTime') {
           object[param] = this.getTotalTime(data);
@@ -1104,7 +1213,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   public getTotalTime(data) {
     const timezone = data['timezone'] || data['time_zone'];
-    const timeInstance = timezone ? getTimeInstance().tz.setDefault(timezone) : getTimeInstance();
+    const timeInstance = timezone
+      ? getTimeInstance().tz.setDefault(timezone)
+      : getTimeInstance();
     const shift_ended_at = timeInstance(data.shift_ended_at);
     const shift_started_at = timeInstance(data.shift_started_at);
 
@@ -1164,7 +1275,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   public actionHandler(e) {
     this.actionEndpoint = e.action.endpoint;
-    if (e.action.required && !Object.keys(this.select).some((el) => el && this.select[el])) {
+    if (
+      e.action.required &&
+      !Object.keys(this.select).some((el) => el && this.select[el])
+    ) {
       this.actionProcess = false;
       this.toastr.sendMessage(e.action.selectionError, MessageType.error);
       return;
@@ -1257,7 +1371,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   }
 
   public popedTable() {
-    this.filtersOfList = this.filterService.getFiltersOfList(this.parentEndpoint, this.config.list.list);
+    this.filtersOfList = this.filterService.getFiltersOfList(
+      this.parentEndpoint,
+      this.config.list.list
+    );
     this.poped = true;
   }
 
@@ -1376,7 +1493,15 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   }
 
   private openSmsTemplateModal(e) {
-    const { name, slug, message_text_template, reply_timeout, delivery_timeout, type, company_id } = this.getRowData(e);
+    const {
+      name,
+      slug,
+      message_text_template,
+      reply_timeout,
+      delivery_timeout,
+      type,
+      company_id,
+    } = this.getRowData(e);
 
     const data = {
       name: this.getDataAction(name),
@@ -1432,12 +1557,14 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   }
 
   public setDefaultLanguage(e) {
-    this.genericFormService.updateForm(e.el.endpoint, { default: true }).subscribe(() => {
-      this.event.emit({
-        type: 'update',
-        list: this.config.list.list,
+    this.genericFormService
+      .updateForm(e.el.endpoint, { default: true })
+      .subscribe(() => {
+        this.event.emit({
+          type: 'update',
+          list: this.config.list.list,
+        });
       });
-    });
   }
 
   public updateListObject() {
@@ -1446,7 +1573,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   public buyCandidate(e) {
     const rowData = this.getRowData(e);
-    const currency = getCurrencySymbol(this.siteSettings.settings.currency, 'wide');
+    const currency = getCurrencySymbol(
+      this.siteSettings.settings.currency,
+      'wide'
+    );
 
     this.modalInfo = {
       amount: currency + rowData.profile_price,
@@ -1482,7 +1612,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         },
         () => {
           this.modalRef.close();
-          this.toastr.sendMessage(`Please add Credit Card for paid services!`, MessageType.error);
+          this.toastr.sendMessage(
+            `Please add Credit Card for paid services!`,
+            MessageType.error
+          );
           this.router.navigate(['/billing']);
         }
       );
@@ -1599,7 +1732,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     }
 
     if (this.modalInfo.data.evaluation_score && !this.modalInfo.evaluated) {
-      this.sendEvaluateData(this.modalInfo.evaluateEndpoint, this.modalInfo.data);
+      this.sendEvaluateData(
+        this.modalInfo.evaluateEndpoint,
+        this.modalInfo.data
+      );
     }
 
     if (this.modalInfo.changeEndpoint) {
@@ -1718,7 +1854,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   public changeTimesheet(e) {
     const data = this.getRowData(e);
-    const signature = data.company.supervisor_approved_scheme.includes('SIGNATURE');
+    const signature = data.company.supervisor_approved_scheme.includes(
+      'SIGNATURE'
+    );
 
     if (data) {
       const contact = data.job_offer.candidate_contact.contact;
@@ -1729,7 +1867,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         edit: true,
         evaluated: data.evaluated,
         total: this.getTotalTime(data),
-        metadataQuery: isMobile() && getOrientation() !== 90 ? 'type=mobile' : '',
+        metadataQuery:
+          isMobile() && getOrientation() !== 90 ? 'type=mobile' : '',
         signatureStep: false,
         form: {},
         supervisor_signature: data.supervisor_signature.origin,
@@ -1777,7 +1916,8 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         if (this.modalInfo.changeMetadata) {
           const orientation = getOrientation();
 
-          this.modalInfo.metadataQuery = isMobile() && orientation === 90 ? '' : 'type=mobile';
+          this.modalInfo.metadataQuery =
+            isMobile() && orientation === 90 ? '' : 'type=mobile';
 
           setTimeout(() => {
             this.modalInfo.changeMetadata.next(true);
@@ -1795,7 +1935,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
   public approveTimesheet(e) {
     const data = this.getRowData(e);
-    const signature = data.company.supervisor_approved_scheme.includes('SIGNATURE');
+    const signature = data.company.supervisor_approved_scheme.includes(
+      'SIGNATURE'
+    );
 
     if (data) {
       e.el.endpoint = this.format(this.evaluateEndpoint, data);
@@ -1810,10 +1952,19 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
           timesheet: {
             date: this.format('{shift_started_at__date}', data),
             started_at: this.format('{shift_started_at__time}', data),
-            break: this.format('{break_started_at__time} - {break_ended_at__time}', data),
+            break: this.format(
+              '{break_started_at__time} - {break_ended_at__time}',
+              data
+            ),
             ended_at: this.format('{shift_ended_at__time}', data),
-            shift_start_end: this.format('{shift_started_at__time} - {shift_ended_at__time}', data),
-            break_start_and: this.format('{break_started_at__time} - {break_ended_at__time}', data),
+            shift_start_end: this.format(
+              '{shift_started_at__time} - {shift_ended_at__time}',
+              data
+            ),
+            break_start_and: this.format(
+              '{break_started_at__time} - {break_ended_at__time}',
+              data
+            ),
             unformated_date: data.shift_started_at,
             total: this.getTotalTime(data),
           },
@@ -1849,7 +2000,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   }
 
   public getRowData(event): any {
-    return this.fullData[this.responseField].find((el) => el.id === event.el.rowId);
+    return this.fullData[this.responseField].find(
+      (el) => el.id === event.el.rowId
+    );
   }
 
   public openFrame(e, param = 'recipient') {
@@ -2019,7 +2172,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
     if (!props.length) {
       if (data) {
         if (prop.indexOf('__') > -1) {
-          const timeInstance = timezone ? getTimeInstance().tz.setDefault(timezone) : getTimeInstance();
+          const timeInstance = timezone
+            ? getTimeInstance().tz.setDefault(timezone)
+            : getTimeInstance();
           const [field, format] = prop.split('__');
           const datetime = ['date', 'time', 'datetime', 'diff'];
           if (datetime.indexOf(format) > -1) {
@@ -2029,7 +2184,11 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
               }
 
               return timeInstance(data[field]).format(
-                format === 'time' ? 'hh:mm A' : format === 'datetime' ? 'DD/MM/YYYY hh:mm A' : 'DD/MM/YYYY'
+                format === 'time'
+                  ? 'hh:mm A'
+                  : format === 'datetime'
+                  ? 'DD/MM/YYYY hh:mm A'
+                  : 'DD/MM/YYYY'
               );
             } else {
               return isMobile() && isCandidate() ? '-' : '';
@@ -2087,13 +2246,15 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
         closeModal();
       }
       if (this.approveEndpoint) {
-        this.genericFormService.editForm(this.approveEndpoint, {}).subscribe((res: any) => {
-          this.event.emit({
-            type: 'update',
-            list: this.config.list.list,
+        this.genericFormService
+          .editForm(this.approveEndpoint, {})
+          .subscribe((res: any) => {
+            this.event.emit({
+              type: 'update',
+              list: this.config.list.list,
+            });
+            this.approveEndpoint = null;
           });
-          this.approveEndpoint = null;
-        });
       } else {
         this.formEvent(e, closeModal);
       }
@@ -2157,22 +2318,26 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
   public printPDF(e) {
     this.genericFormService.getAll(e.el.endpoint).subscribe((res: any) => {
       this.modalInfo = {
-        url: this.sanitizer.bypassSecurityTrustResourceUrl(environment.api + res.pdf),
+        url: this.sanitizer.bypassSecurityTrustResourceUrl(
+          environment.api + res.pdf
+        ),
       };
       this.open(this.pdfDocumentModal, { size: 'lg' });
     });
   }
 
   public delete(e) {
-    this.genericFormService.delete(this.endpoint, e.el.name !== 'id' ? e.el.value : e.el.rowId).subscribe(
-      (res: any) => {
-        this.event.emit({
-          type: 'update',
-          list: this.config.list.list,
-        });
-      },
-      (err: any) => (this.error = err)
-    );
+    this.genericFormService
+      .delete(this.endpoint, e.el.name !== 'id' ? e.el.value : e.el.rowId)
+      .subscribe(
+        (res: any) => {
+          this.event.emit({
+            type: 'update',
+            list: this.config.list.list,
+          });
+        },
+        (err: any) => (this.error = err)
+      );
   }
 
   public identifyDevice() {
@@ -2207,7 +2372,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       endpoint = [...arr, ''].join('/');
     } else {
       endpoint = e.el.endpoint || this.endpoint;
-      if (e.el.notParsedEndpoint && e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/') {
+      if (
+        e.el.notParsedEndpoint &&
+        e.el.notParsedEndpoint[e.el.notParsedEndpoint.length - 1] !== '/'
+      ) {
         const arr: string[] = e.el.endpoint.split('/');
         arr.pop();
         const lastElement = arr.pop();
@@ -2270,7 +2438,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       this.modalInfo.label = 'Edit skills';
     }
 
-    if (smallModalEndpoints.includes(this.modalInfo.endpoint) || e.el.size === 'small') {
+    if (
+      smallModalEndpoints.includes(this.modalInfo.endpoint) ||
+      e.el.size === 'small'
+    ) {
       size = undefined;
       windowClass = 'small-modal';
     }
@@ -2296,7 +2467,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
 
     const id = arr.pop();
     const endpoint = [...arr, ''].join('/');
-    const metadataQuery = `type=${e.el.messageType === 'received' ? 'reply' : e.el.messageType}`;
+    const metadataQuery = `type=${
+      e.el.messageType === 'received' ? 'reply' : e.el.messageType
+    }`;
 
     const label =
       e.el.messageType === 'sent'
@@ -2382,7 +2555,10 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
       },
       (err: any) => {
         this.error = err;
-        if (endpoint.includes('/core/invoices/') && endpoint.includes('/approve/')) {
+        if (
+          endpoint.includes('/core/invoices/') &&
+          endpoint.includes('/approve/')
+        ) {
           this.toastr.sendMessage(err.errors, MessageType.error);
           this.approveInvoice = e;
           const invoice = this.getRowData(e);
@@ -2397,7 +2573,9 @@ export class DynamicListComponent implements OnInit, OnChanges, OnDestroy, After
           this.open(this.modal, { size: 'lg' });
 
           setTimeout(() => {
-            const input = document.querySelector('input[name="billing_email"]') as HTMLInputElement;
+            const input = document.querySelector(
+              'input[name="billing_email"]'
+            ) as HTMLInputElement;
             input.focus();
           }, 2000);
         }

@@ -1,52 +1,53 @@
 import { Color, Endpoints } from '@webui/data';
 import { List, Filter } from '@webui/metadata';
 
-const list = function() {
+const list = function () {
   return {
-  list: new List.main.element('timesheet', 'Timesheet history')
-    .disableSearch()
-    .disableEdit()
-    .removeCreateButton()
-    .setFilters([
-      new Filter.date.element({
-        key: 'shift_started_at',
-        label: 'Shift date',
-        yesterday: true,
-        today: true,
-        tomorrow: true
-      }),
+    list: new List.main.element('timesheet', 'Timesheet history')
+      .disableSearch()
+      .disableEdit()
+      .removeCreateButton()
+      .setFilters([
+        new Filter.date.element({
+          key: 'shift_started_at',
+          label: 'Shift date',
+          yesterday: true,
+          today: true,
+          tomorrow: true,
+        }),
 
-      new Filter.select.element({
-        key: 'status',
-        label: 'Status',
-        values: [
-          { label: 'Pending submission', value: '4' },
-          { label: 'Pending approval', value: '5' },
-          { label: 'Approved', value: '7' }
-        ]
-      })
-    ])
-    .setColumns([
-      new List.column.element('jobsite', 'Position / Jobsite')
-        .setSort(true, 'jobsite')
-        .setContent([
-          new List.static.element('position')
-            .setStyles(['bolder']),
+        new Filter.select.element({
+          key: 'status',
+          label: 'Status',
+          values: [
+            { label: 'Pending submission', value: '4' },
+            { label: 'Pending approval', value: '5' },
+            { label: 'Approved', value: '7' },
+          ],
+        }),
+      ])
+      .setColumns([
+        new List.column.element('jobsite', 'Position / Jobsite')
+          .setSort(true, 'jobsite')
+          .setContent([
+            new List.static.element('position').setStyles(['bolder']),
 
-          new List.related.element('jobsite', Endpoints.Jobsite)
-            .setStyles(['secondary'])
-        ]),
+            new List.related.element('jobsite', Endpoints.Jobsite).setStyles([
+              'secondary',
+            ]),
+          ]),
 
-      new List.column.element('tracking', 'Tracking')
-        .setCenter()
-        .setContent([
-          new List.button.element('id', 'showTracking')
-            .setEndpoint(`${Endpoints.CandidateLocation}{job_offer.candidate_contact.id}/history/`)
-            .setCustomLink('/assets/img/map-lg.jpg')
-        ]),
+        new List.column.element('tracking', 'Tracking')
+          .setCenter()
+          .setContent([
+            new List.button.element('id', 'showTracking')
+              .setEndpoint(
+                `${Endpoints.CandidateLocation}{job_offer.candidate_contact.id}/history/`
+              )
+              .setCustomLink('/assets/img/map-lg.jpg'),
+          ]),
 
-      new List.column.element('times', 'Times')
-        .setContent([
+        new List.column.element('times', 'Times').setContent([
           new List.static.element('shift_started_at')
             .setLabel('Date')
             .setDisplay('{shift_started_at__date}'),
@@ -73,12 +74,10 @@ const list = function() {
           new List.static.element('shift_ended_at')
             .setLabel('End')
             .setDisplay('{shift_ended_at__time}')
-            .setShowIfRule([{ status: [5, 6, 7] }])
+            .setShowIfRule([{ status: [5, 6, 7] }]),
         ]),
 
-      new List.column.element('mobileTimes', 'Times')
-        .setHide()
-        .setContent([
+        new List.column.element('mobileTimes', 'Times').setHide().setContent([
           new List.static.element('shift_started_at')
             .setLabel('Shift date')
             .setDisplay('{shift_started_at__date}'),
@@ -104,12 +103,11 @@ const list = function() {
             .setShowIfRule([{ status: [5, 6, 7] }]),
         ]),
 
-      new List.column.element('totalTime', 'Total time')
-        .setContent([
+        new List.column.element('totalTime', 'Total time').setContent([
           new List.static.element('totalTime')
             .setDisplay('{totalTime}')
             .setStyles(['success'])
-            .setShowIfRule([ { status: [5, 6, 7] } ]),
+            .setShowIfRule([{ status: [5, 6, 7] }]),
 
           new List.static.element('status')
             .setDisplay('Not started yet')
@@ -123,12 +121,12 @@ const list = function() {
 
           new List.static.element('status')
             .setDisplay('No record')
+            .setTranslationKey('no_record')
             .setStyles(['muted'])
             .setShowIfRule([{ status: [3, 4] }]),
         ]),
 
-      new List.column.element('status', 'Status')
-        .setContent([
+        new List.column.element('status', 'Status').setContent([
           new List.select.element('status')
             .setValues({
               0: 'New',
@@ -152,57 +150,74 @@ const list = function() {
             }),
 
           new List.static.element('status')
-            .setDisplay('Your shift is schedulled to start at {shift_started_at__time}')
+            .setDisplay(
+              'Your shift is schedulled to start at {shift_started_at__time}'
+            )
             .setStyles(['muted'])
-            .setShowIfRule([ { status: 0 } ]),
+            .setShowIfRule([{ status: 0 }]),
 
           new List.static.element('status')
             .setDisplay('Confirm if you are going to work')
             .setStyles(['muted'])
-            .setShowIfRule([ { status: 1 } ]),
+            .setTranslationKey('confirm_going_to_work')
+            .setShowIfRule([{ status: 1 }]),
 
           new List.button.element('id', 'emptyPost')
             .setDisplay('Accept')
+            .setTranslationKey('accept')
             .setEndpoint(`${Endpoints.Timesheet}{id}/confirm/`)
-            .setStyles(['success', 'shadow', 'shadow-success', 'size-m', 'mr', 'resize'])
-            .setShowIfRule([ { status: 1 } ])
+            .setStyles([
+              'success',
+              'shadow',
+              'shadow-success',
+              'size-m',
+              'mr',
+              'resize',
+            ])
+            .setShowIfRule([{ status: 1 }])
             .withoutDelim(),
 
           new List.button.element('id', 'emptyPost')
             .setDisplay('Decline')
+            .setTranslationKey('decline')
             .setEndpoint(`${Endpoints.Timesheet}{id}/decline/`)
             .setStyles(['danger', 'shadow', 'shadow-danger', 'size-m'])
-            .setShowIfRule([ { status: 1 } ]),
+            .setShowIfRule([{ status: 1 }]),
 
           new List.static.element('status')
             .setDisplay('Your shift will start {shift_started_at__diff}')
             .setStyles(['muted'])
-            .setShowIfRule([ { status: 2 } ]),
+            .setShowIfRule([{ status: 2 }]),
 
           new List.static.element('status')
             .setDisplay('Inactive timesheet will be deleted in 48 hours')
+            .setTranslationKey('inactive_timesheet')
             .setStyles(['muted'])
-            .setShowIfRule([ { status: 3 } ]),
+            .setShowIfRule([{ status: 3 }]),
 
           new List.button.element('id', 'submitTimesheet')
             .setDisplay('Submit')
+            .setTranslationKey('submit')
             .setEndpoint(`${Endpoints.TimesheetCandidate}{id}/submit/`)
             .setStyles(['success', 'shadow', 'shadow-success', 'size-l'])
-            .setShowIfRule([ { status: 4 } ]),
+            .setShowIfRule([{ status: 4 }]),
 
           new List.button.element('id', 'submitTimesheet')
             .setDisplay('Edit submission')
+            .setTranslationKey('edit_submission')
             .setEndpoint(`${Endpoints.TimesheetCandidate}{id}/submit/`)
             .setStyles(['size-l', 'default'])
-            .setShowIfRule([ { status: 5 } ]),
+            .setShowIfRule([{ status: 5 }]),
 
           new List.static.element('status')
             .setDisplay('Timesheet will be automatically approved in 4 hours')
+            .setTranslationKey('timesheet_will_approved')
             .setStyles(['muted'])
-            .setShowIfRule([ { status: 6 } ]),
+            .setShowIfRule([{ status: 6 }]),
 
-          new List.static.element('supervisor.name')
-            .setShowIfRule([ { status: 7 } ]),
+          new List.static.element('supervisor.name').setShowIfRule([
+            { status: 7 },
+          ]),
 
           new List.static.element('supervisor_approved_at')
             .setDisplay('{supervisor_approved_at__datetime}')
@@ -210,28 +225,22 @@ const list = function() {
             .setShowIfRule([
               { status: 7 },
               'supervisor_approved_at',
-              { supervisor_modified_at: null }
+              { supervisor_modified_at: null },
             ]),
 
           new List.static.element('supervisor_modified_at')
             .setDisplay('{supervisor_modified_at__datetime}')
             .setStyles(['muted'])
-            .setShowIfRule([
-              { status: 7 },
-              'supervisor_modified_at'
-            ]),
+            .setShowIfRule([{ status: 7 }, 'supervisor_modified_at']),
 
           new List.picture.element('supervisor_signature', false)
             .setSignature()
-            .setShowIfRule([
-              { status: 7 },
-              'supervisor_signature.origin'
-            ])
-        ])
-    ])
+            .setShowIfRule([{ status: 7 }, 'supervisor_signature.origin']),
+        ]),
+      ]),
   };
 };
 
 export const metadataTimesheetsCandidate = {
-  list
+  list,
 };

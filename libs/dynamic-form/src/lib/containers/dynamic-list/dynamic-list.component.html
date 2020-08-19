@@ -244,7 +244,7 @@
                 style="width: 2rem"
               >
                 <div *ngIf="(!inForm && config.list.actions) || actions">
-                  <label for="all-checkbox">All</label>
+                  <label for="all-checkbox">{{'all' | translate}}</label>
                   <input
                     id="all-checkbox"
                     type="checkbox"
@@ -286,7 +286,7 @@
               </ng-container>
               <th *ngIf="config.list.tabs" class="last-cell">
                 <span (click)="openAllTabs()" class="more__header">
-                  More
+                  {{'more' | translate}}
                   <fa-icon
                     class="ml-2 sort-icon"
                     [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"

@@ -1,11 +1,17 @@
 {
+	"accept": "",
 	"actions": "",
 	"add": "",
 	"add_new": "",
 	"add_photo": "",
+	"all": "",
 	"are_you_sure": "",
 	"back": "",
 	"cancel": "",
+	"client": {
+		"label": ""
+	},
+	"confirm_going_to_work": "",
 	"contact": {
 		"address": {
 			"street_address": {
@@ -35,17 +41,29 @@
 			"label": ""
 		}
 	},
+	"decline": "",
 	"default": "",
 	"delete": "",
 	"drag_and_drop": "",
 	"edit": "",
+	"edit_submission": "",
 	"file": "",
 	"file_size": "",
 	"height": {
 		"label": ""
 	},
+	"inactive_timesheet": "",
 	"industry": {
 		"description": "",
+		"label": ""
+	},
+	"job_site_-_map": {
+		"label": ""
+	},
+	"job_site_contact": {
+		"label": ""
+	},
+	"jobsite": {
 		"label": ""
 	},
 	"login": {
@@ -58,11 +76,16 @@
 	},
 	"make_default": "",
 	"max_size": "",
+	"more": "",
 	"nationality": {
 		"label": ""
 	},
 	"next": "Next step",
+	"no_record": "",
+	"no_tracking_data": "",
 	"open_in_tab": "",
+	"open_map": "",
+	"open_tracking_map": "",
 	"pass_test": "",
 	"passed": "",
 	"password": {
@@ -81,11 +104,66 @@
 		"label": ""
 	},
 	"save": "",
+	"shift": {
+		"date": {
+			"job": {
+				"notes": {
+					"label": ""
+				},
+				"position": {
+					"label": ""
+				}
+			}
+		}
+	},
+	"show_map": "",
 	"skill": {
 		"label": ""
 	},
+	"status": {
+		"label": ""
+	},
+	"submit": "",
 	"take_a_photo": "",
 	"tax_file_number": {
+		"label": ""
+	},
+	"times": {
+		"break_started_at": {
+			"label": ""
+		},
+		"label": "",
+		"shift": {
+			"date": {
+				"job": {
+					"notes": {
+						"label": ""
+					},
+					"position": {
+						"label": ""
+					}
+				},
+				"shift_date": {
+					"label": ""
+				}
+			},
+			"time": {
+				"label": ""
+			}
+		},
+		"shift_ended_at": {
+			"label": ""
+		},
+		"shift_started_at": {
+			"date": "",
+			"label": ""
+		}
+	},
+	"timesheet_will_approved": "",
+	"totalTime": {
+		"label": ""
+	},
+	"tracking": {
 		"label": ""
 	},
 	"transportation_to_work": {

@@ -1,13 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
-import { isMobile, getTimeInstance } from '@webui/utilities';
+import { isMobile, getTimeInstance, getTranslationKey } from '@webui/utilities';
 import { getValueOfData, generateCssStyles } from '../../../helpers';
 
 @Component({
   selector: 'app-list-text',
   templateUrl: './list-text.component.html',
   styleUrls: ['./list-text.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListTextComponent implements OnInit {
   private stylePrefix = 'list-text';
@@ -29,10 +29,11 @@ export class ListTextComponent implements OnInit {
     2: '#fc9183',
     3: '#FFA236',
     4: '#ffbf00',
-    5: '#FFD042'
+    5: '#FFD042',
   };
 
   public isMobile = isMobile;
+  translationKey = '';
 
   public ngOnInit() {
     if (this.config.value || this.config.value === 0) {
@@ -44,7 +45,7 @@ export class ListTextComponent implements OnInit {
           this.arrayValue = true;
 
           if (this.config.param) {
-            this.value.forEach(el => {
+            this.value.forEach((el) => {
               const obj = { value: '' };
               getValueOfData(el, this.config.param, obj);
 
@@ -65,6 +66,10 @@ export class ListTextComponent implements OnInit {
     this.checkDate(timeInstance);
     this.customizeStatic(this.config.value);
     this.cssClasses = generateCssStyles(this.config.styles, this.stylePrefix);
+    this.translationKey = getTranslationKey(
+      `${this.config.key}.${this.config.name}`,
+      this.config.label === 'Date' ? 'date' : 'label'
+    );
   }
 
   public getScore(score) {
@@ -78,7 +83,7 @@ export class ListTextComponent implements OnInit {
     if (type === 'time' || type === 'date' || type === 'datetime') {
       if (type === 'time') {
         if (this.arrayValue) {
-          const result = this.value.map(el => {
+          const result = this.value.map((el) => {
             return el ? moment(el, 'hh:mm:ss').format('hh:mm A') : ' ';
           });
           this.value = result;
@@ -90,7 +95,7 @@ export class ListTextComponent implements OnInit {
       }
       if (type === 'date') {
         if (this.arrayValue) {
-          const result = this.value.map(el => {
+          const result = this.value.map((el) => {
             return el ? moment(el, 'YYYY-MM-DD').format('DD/MM/YYYY') : ' ';
           });
           this.value = result;
@@ -102,7 +107,7 @@ export class ListTextComponent implements OnInit {
       }
       if (type === 'datetime') {
         if (this.arrayValue) {
-          const result = this.value.map(el => {
+          const result = this.value.map((el) => {
             return el ? moment(el).format('DD/MM/YYYY hh:mm A') : ' ';
           });
           this.value = result;
@@ -142,7 +147,7 @@ export class ListTextComponent implements OnInit {
         'success',
         'warning',
         'description',
-        'comment'
+        'comment',
       ];
       const color = this.config.color;
       this.iconClass = classes.indexOf(color) > -1 ? `text-${color}` : '';
@@ -155,11 +160,11 @@ export class ListTextComponent implements OnInit {
     const statusList = Object.keys(data);
 
     statusList.forEach((status: string) => {
-      data[status].forEach(candidate => {
+      data[status].forEach((candidate) => {
         if (candidate) {
           result.push({
             name: candidate.name,
-            status
+            status,
           });
         }
       });

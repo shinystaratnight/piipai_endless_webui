@@ -1,4 +1,12 @@
-import { Component, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
@@ -10,7 +18,7 @@ import { generateCssStyles } from '../../../helpers';
   selector: 'app-form-button',
   templateUrl: 'form-button.component.html',
   styleUrls: ['./form-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormButtonComponent implements OnInit, OnDestroy {
   private stylePrefix = 'app-button';
@@ -43,6 +51,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
+    console.log(this);
     const replace_by = this.config.replace_by;
     const templateOptions = this.config.templateOptions;
 
@@ -63,20 +72,20 @@ export class FormButtonComponent implements OnInit, OnDestroy {
     this.customizeButton();
 
     if (this.config.process) {
-      const processSubscription = this.config.process
-        .subscribe(
-          (value) => {
-            this.saveProcess = value;
-            this.cd.detectChanges();
-          }
-        );
+      const processSubscription = this.config.process.subscribe((value) => {
+        this.saveProcess = value;
+        this.cd.detectChanges();
+      });
 
       this.subscriptions.push(processSubscription);
     }
 
     this.isDisabled = this.checkSmsDisabled(this.config.endpoint);
     this.disabledTitle = this.getSmsTitle(this.isDisabled);
-    this.cssClasses = generateCssStyles(this.config.styles, this.stylePrefix)[0];
+    this.cssClasses = generateCssStyles(
+      this.config.styles,
+      this.stylePrefix
+    )[0];
   }
 
   public ngOnDestroy() {
@@ -125,7 +134,14 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   public customizeButton() {
     if (!this.config.shadow || this.config.inverse) {
       const color = this.config.color;
-      const classes = ['primary', 'danger', 'info', 'success', 'warning', 'link'];
+      const classes = [
+        'primary',
+        'danger',
+        'info',
+        'success',
+        'warning',
+        'link',
+      ];
 
       if (!this.config.inverse) {
         this.buttonClass = classes.indexOf(color) > -1 ? `btn-${color}` : '';
@@ -133,7 +149,8 @@ export class FormButtonComponent implements OnInit, OnDestroy {
           this.buttonColor = color || '';
         }
       } else {
-        this.textClass = classes.indexOf(color) > -1 ? `text-${color} py-2` : '';
+        this.textClass =
+          classes.indexOf(color) > -1 ? `text-${color} py-2` : '';
       }
     } else {
       this.buttonClass = `${this.config.color}-btn`;
@@ -146,7 +163,10 @@ export class FormButtonComponent implements OnInit, OnDestroy {
     }
 
     if (!this.checkSmsDisabled(this.config.endpoint)) {
-      if (this.config.templateOptions.type !== 'submit' && !this.config.disableAction) {
+      if (
+        this.config.templateOptions.type !== 'submit' &&
+        !this.config.disableAction
+      ) {
         let id;
         if (this.config.name === 'id') {
           id = this.config.rowId;
@@ -155,7 +175,7 @@ export class FormButtonComponent implements OnInit, OnDestroy {
           type: e.type,
           el: this.config,
           value: this.config.templateOptions.action,
-          id
+          id,
         });
       }
     }
@@ -181,8 +201,6 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   }
 
   public getSmsTitle(disabled?: boolean): string {
-    return disabled
-      ? this.siteSettings.getSmsSendTitle()
-      : '';
+    return disabled ? this.siteSettings.getSmsSendTitle() : '';
   }
 }

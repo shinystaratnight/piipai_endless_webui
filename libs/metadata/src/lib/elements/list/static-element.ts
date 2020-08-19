@@ -9,38 +9,45 @@ export class StaticElement extends BasicListElement {
   setColor?: string;
   info?: string;
   description?: string;
+  translationKey?: string;
 
   constructor(field: string) {
     super(field, Static);
   }
 
-  setLabel(label: string) {
+  setLabel(label: string): StaticElement {
     this.label = label;
 
     return this;
   }
 
-  setHideValue(value: any) {
+  setHideValue(value: any): StaticElement {
     this.hideValue = value;
 
     return this;
   }
 
-  changeColor(color: string, setColorIf?: string) {
+  changeColor(color: string, setColorIf?: string): StaticElement {
     this.color = color;
     this.setColor = setColorIf;
 
     return this;
   }
 
-  setInfoText(text: string) {
+  setInfoText(text: string): StaticElement {
     this.info = text;
 
     return this;
   }
 
-  setDescriptionStyle() {
+  setDescriptionStyle(): StaticElement {
     this.description = ' ';
+
+    return this;
+  }
+
+  setTranslationKey(key: string): StaticElement {
+    this.translationKey = key;
 
     return this;
   }

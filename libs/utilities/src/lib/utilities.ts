@@ -163,5 +163,5 @@ export class FormatString {
 }
 
 export function getTranslationKey(key, type) {
-  return `${this.config.key}.${type}`;
+  return `${key}.${type}`;
 }
