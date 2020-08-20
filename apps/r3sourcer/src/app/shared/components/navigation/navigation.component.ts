@@ -8,29 +8,33 @@ import {
   EventEmitter,
   Output,
   ViewEncapsulation,
-  OnDestroy,
+  OnDestroy
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { AuthService, NavigationService, UserService } from '@webui/core';
+import {
+  AuthService,
+  NavigationService,
+  TranslateHelperService,
+  UserService
+} from '@webui/core';
 import { User, Page, Role, Language } from '@webui/data';
 import {
   getContactAvatar,
   isClient,
   isCandidate,
   isManager,
-  getTimeInstance,
+  getTimeInstance
 } from '@webui/utilities';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('header') public header: any;
@@ -82,16 +86,14 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService,
     private navigationService: NavigationService,
     private userService: UserService,
-    private translate: TranslateService
+    private translate: TranslateHelperService
   ) {}
 
   public ngOnInit() {
     this.getUserInformation();
 
     this.languageSubscription = this.language.valueChanges.subscribe((v) => {
-      console.log(v, this.translate);
-      this.translate.use(v);
-      // this.translate.reloadLang(v).subscribe(() => this.translate.use(v));
+      this.translate.setLang(v);
     });
   }
 

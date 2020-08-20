@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { TranslateHelperService } from '@webui/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -17,15 +19,24 @@ import { TranslateService } from '@ngx-translate/core';
       (deactivate)="loader = true"
     ></router-outlet>
     <app-toast></app-toast>
-  `,
+  `
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   loader = true;
+  langSubscription: Subscription;
 
-  constructor(translate: TranslateService) {
-    // this language will be used as a fallback when a translation isn't found in the current language
-    console.log(translate);
+  constructor(
+    private translate: TranslateService,
+    private translateHelper: TranslateHelperService
+  ) {}
 
-    // the lang to use, if the lang isn't available, it will use the current loader to get them
+  ngOnInit() {
+    this.langSubscription = this.translateHelper.langChange$.subscribe((v) => {
+      this.translate.use(v);
+    });
+  }
+
+  ngOnDestroy() {
+    this.langSubscription.unsubscribe();
   }
 }

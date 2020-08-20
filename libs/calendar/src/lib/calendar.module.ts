@@ -18,7 +18,7 @@ import {
   SelectDateService,
 } from './services';
 
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 import { DynamicFormModule } from '@webui/dynamic-form';
 
 @NgModule({
@@ -30,7 +30,7 @@ import { DynamicFormModule } from '@webui/dynamic-form';
     FontAwesomeModule,
     NgbTooltipModule,
     ButtonsModule,
-    SharedModule,
+    // SharedModule,
     DynamicFormModule,
   ],
   declarations: [

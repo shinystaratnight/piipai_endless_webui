@@ -3,7 +3,7 @@ import {
   OnInit,
   ViewEncapsulation,
   ViewChild,
-  OnDestroy,
+  OnDestroy
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -18,7 +18,7 @@ import { environment } from '../../environments/environment';
   selector: 'app-login',
   templateUrl: 'login.component.html',
   styleUrls: ['./login.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild('modal') public modal;
@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     client_id: {
       action: 'add',
       data: {
-        value: environment.clientId,
-      },
+        value: environment.clientId
+      }
     },
     username: {
       action: 'add',
@@ -51,9 +51,9 @@ export class LoginComponent implements OnInit, OnDestroy {
           placeholder: 'Login',
           addon: '/assets/img/mail.svg',
           description: '',
-          max: 255,
-        },
-      },
+          max: 255
+        }
+      }
     },
     password: {
       action: 'add',
@@ -65,10 +65,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           addon: '/assets/img/key.svg',
           type: 'password',
           description: '',
-          max: 128,
-        },
-      },
-    },
+          max: 128
+        }
+      }
+    }
   };
 
   constructor(
@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private modalService: NgbModal,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   public ngOnInit() {

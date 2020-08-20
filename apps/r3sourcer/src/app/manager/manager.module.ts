@@ -25,7 +25,7 @@ import * as formComponents from './components';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { CalendarModule } from '@webui/calendar';
 
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 // import { CoreModule } from '@webui/core';
 import { DashboardModule } from '@webui/dashboard';
 
@@ -60,7 +60,7 @@ import { CommonModule } from '@angular/common';
     // NgxWebstorageModule.forRoot({ prefix: 'web', separator: '.' }),
     RouterModule.forChild(routes),
     DynamicFormModule.forChild({ metadata: Metadata }),
-    SharedModule,
+    // SharedModule,
     InfiniteScrollModule,
     MasterGuideModule,
 

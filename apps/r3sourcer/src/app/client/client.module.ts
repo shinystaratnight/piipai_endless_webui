@@ -12,7 +12,7 @@ import { components } from './components';
 
 import { routes } from './client.routing';
 
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { CalendarModule } from '@webui/calendar';
 
@@ -33,7 +33,7 @@ import { CommonModule } from '@angular/common';
     InfiniteScrollModule,
     NgbTabsetModule,
 
-    SharedModule,
+    // SharedModule,
     DynamicFormModule.forChild({ metadata: Metadata }),
     CalendarModule,
   ],

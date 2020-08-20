@@ -11,7 +11,7 @@ import { CompanyComponent } from './company/company.component';
 import { PermissionsService } from './permissions/permissions.service';
 import { MyobComponent } from './myob/myob.component';
 
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 import { MasterGuideModule } from '../master-guide/master-guide.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -26,7 +26,7 @@ import { Metadata } from './metadata.config';
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
-    SharedModule,
+    // SharedModule,
     NgbModule,
     CommonModule,
     FormsModule,

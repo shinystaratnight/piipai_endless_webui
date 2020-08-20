@@ -1,7 +1,6 @@
 // LDS Spinner
 
 .lds-spinner {
-  color: official;
   display: inline-block;
   position: relative;
   width: 1rem;
@@ -11,7 +10,6 @@
   &.sm {
     width: 0.5rem;
     height: .5rem;
-    margin-left: 0rem;
     top: 10px;
     margin: 0 7px;
     left: -4px;

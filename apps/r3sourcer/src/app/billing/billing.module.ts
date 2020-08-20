@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { MasterGuideModule } from '../master-guide/master-guide.module';
 
@@ -29,7 +29,7 @@ import { Metadata } from './metadata.config';
     FontAwesomeModule,
     NgbModule,
 
-    SharedModule,
+    // SharedModule,
     DynamicFormModule.forChild({ metadata: Metadata }),
     MasterGuideModule
   ],

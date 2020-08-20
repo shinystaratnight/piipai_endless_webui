@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+// import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import {
   MasterGuideComponent,
@@ -14,11 +14,11 @@ import {
 import { MasterGuideService } from './services';
 
 @NgModule({
-  imports: [CommonModule, RouterModule, FontAwesomeModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   declarations: [
     MasterGuideComponent,
     MasterGuideContentComponent,
-    MasterGuideIconComponent,
+    MasterGuideIconComponent
   ],
   providers: [MasterGuideService],
   exports: [MasterGuideComponent]

@@ -16,7 +16,7 @@ import {
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 import { CalendarModule } from '@webui/calendar';
 import { DynamicFormModule } from '@webui/dynamic-form';
 
@@ -36,7 +36,7 @@ import { DashboardComponent } from './dashboard.component';
     RouterModule,
     FontAwesomeModule,
     InfiniteScrollModule,
-    SharedModule,
+    // SharedModule,
     CalendarModule,
     DynamicFormModule,
     NgbTooltipModule,
