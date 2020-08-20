@@ -12,7 +12,7 @@ import { ToastService, MessageType } from '@webui/core';
   styleUrls: ['./billing-sms.component.scss'],
 })
 export class BillingSmsComponent implements OnInit, OnDestroy {
-  @Input() currency: string = 'USD';
+  @Input() currency = 'USD';
 
   public smsBalance: any;
   public amount = 20;
