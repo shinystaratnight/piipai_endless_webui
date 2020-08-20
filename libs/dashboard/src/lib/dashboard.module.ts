@@ -4,8 +4,15 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faEllipsisH, faArrowsAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  FontAwesomeModule,
+  FaIconLibrary
+} from '@fortawesome/angular-fontawesome';
+import {
+  faEllipsisH,
+  faArrowsAlt,
+  faTrash
+} from '@fortawesome/free-solid-svg-icons';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +21,12 @@ import { CalendarModule } from '@webui/calendar';
 import { DynamicFormModule } from '@webui/dynamic-form';
 
 import { DashboardService, WidgetService } from './services';
-import { ButtonsWidget, CandidateWidget, CalendarWidgetComponent, DashboardMenuComponent } from './components';
+import {
+  ButtonsWidget,
+  CandidateWidget,
+  CalendarWidgetComponent,
+  DashboardMenuComponent
+} from './components';
 import { WidgetDirective } from './directives';
 import { DashboardComponent } from './dashboard.component';
 
@@ -31,7 +43,7 @@ import { DashboardComponent } from './dashboard.component';
     FormsModule,
     NgbModalModule,
     DragDropModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     DashboardComponent,
@@ -39,11 +51,11 @@ import { DashboardComponent } from './dashboard.component';
     CandidateWidget,
     CalendarWidgetComponent,
     WidgetDirective,
-    DashboardMenuComponent,
+    DashboardMenuComponent
   ],
   providers: [DashboardService],
   entryComponents: [ButtonsWidget, CandidateWidget, CalendarWidgetComponent],
-  exports: [DashboardComponent],
+  exports: [DashboardComponent]
 })
 export class DashboardModule {
   constructor(library: FaIconLibrary) {

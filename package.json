@@ -28,7 +28,8 @@
     "prod": "ng build --prod --configuration=production",
     "stage": "ng build --prod --configuration=stage",
     "nx": "nx",
-    "postinstall": "node ./decorate-angular-cli.js"
+    "postinstall": "node ./decorate-angular-cli.js",
+    "eslint": "tsc --noEmit && eslint . --ext js,ts,json --quiet --fix"
   },
   "private": true,
   "dependencies": {
@@ -88,12 +89,17 @@
     "@nrwl/workspace": "10.0.11",
     "@types/jest": "26.0.9",
     "@types/node": "~14.0.27",
+    "@typescript-eslint/eslint-plugin": "^3.9.1",
     "codelyzer": "~6.0.0",
     "cypress": "4.12.1",
     "dotenv": "8.2.0",
+    "eslint": "^7.7.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "jest": "26.3.0",
     "jest-preset-angular": "^8.2.1",
-    "prettier": "2.0.5",
+    "prettier": "^2.0.5",
+    "prettier-eslint": "^11.0.0",
     "ts-jest": "^26.2.0",
     "ts-node": "~8.10.2",
     "tslib": "^2.0.1",

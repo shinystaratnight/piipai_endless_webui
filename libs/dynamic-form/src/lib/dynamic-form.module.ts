@@ -25,13 +25,13 @@ import * as fromContainers from './containers';
 import { modals } from './modals';
 import { directives } from './directives';
 
-import {
-  TranslateModule,
-  TranslateLoader,
-  TranslateCompiler,
-  MissingTranslationHandler,
-} from '@ngx-translate/core';
-import { MissingTranslationHelper } from '../../../../apps/r3sourcer/src/app/translate.loader';
+// import {
+//   TranslateModule,
+//   TranslateLoader,
+//   TranslateCompiler,
+//   MissingTranslationHandler,
+// } from '@ngx-translate/core';
+// import { MissingTranslationHelper } from '../../../../apps/r3sourcer/src/app/translate.loader';
 import { SharedModule } from '@webui/shared';
 
 @NgModule({
