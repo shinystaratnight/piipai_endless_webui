@@ -7,175 +7,141 @@
 	"all": "",
 	"are_you_sure": "",
 	"back": "",
+	"bmi.label": "",
 	"cancel": "",
-	"client": {
-		"label": ""
-	},
+	"candidate_score.client_feedback.label": "",
+	"candidate_score.loyalty.label": "",
+	"candidate_score.recruitment_score.label": "",
+	"candidate_score.reliability.label": "",
+	"candidate_score.skill_score.label": "",
+	"candidate_scores.client_feedback": "",
+	"candidate_scores.client_feedback.label": "",
+	"candidate_scores.loyalty": "",
+	"candidate_scores.loyalty.label": "",
+	"candidate_scores.recruitment_score": "",
+	"candidate_scores.recruitment_score.label": "",
+	"candidate_scores.reliability": "",
+	"candidate_scores.reliability.label": "",
+	"candidate_scores.skill_score": "",
+	"candidate_scores.skill_score.label": "",
+	"client.label": "",
 	"confirm_going_to_work": "",
-	"contact": {
-		"address": {
-			"street_address": {
-				"description": "",
-				"label": ""
-			}
-		},
-		"email": {
-			"label": ""
-		},
-		"first_name": {
-			"label": ""
-		},
-		"gender": {
-			"label": ""
-		},
-		"last_name": {
-			"label": ""
-		},
-		"phone_mobile": {
-			"label": ""
-		},
-		"picture": {
-			"label_photo": ""
-		},
-		"title": {
-			"label": ""
-		}
-	},
+	"confirm_password.description": "",
+	"confirm_password.label": "",
+	"contact.address.street_address.description": "",
+	"contact.address.street_address.label": "",
+	"contact.email.label": "",
+	"contact.first_name.label": "",
+	"contact.gender.label": "",
+	"contact.last_name.label": "",
+	"contact.phone_mobile.label": "",
+	"contact.picture.label_photo": "",
+	"contact.title.label": "",
 	"decline": "",
 	"default": "",
 	"delete": "",
 	"drag_and_drop": "",
 	"edit": "",
 	"edit_submission": "",
+	"emergency_contact_name.label": "",
+	"emergency_contact_phone.label": "",
+	"evaluated_at.label": "",
+	"evaluation_score.label": "",
 	"file": "",
 	"file_size": "",
-	"height": {
-		"label": ""
-	},
+	"filter.shift_started_at": "",
+	"filter.shift_started_at.from": "",
+	"filter.shift_started_at.label": "",
+	"filter.shift_started_at.to": "",
+	"filter.shift_started_at.today": "",
+	"filter.shift_started_at.tomorrow": "",
+	"filter.shift_started_at.yesterday": "",
+	"filter.status": "",
+	"filter.status.4": "",
+	"filter.status.5": "",
+	"filter.status.7": "",
+	"filter.status.label": "",
+	"filters": "",
+	"height.label": "",
 	"inactive_timesheet": "",
-	"industry": {
-		"description": "",
-		"label": ""
-	},
-	"job_site_-_map": {
-		"label": ""
-	},
-	"job_site_contact": {
-		"label": ""
-	},
-	"jobsite": {
-		"label": ""
-	},
-	"login": {
-		"forgot_password": "",
-		"login": "",
-		"register": "",
-		"remember_me": "",
-		"subtitle": "",
-		"title": ""
-	},
+	"industry.description": "",
+	"industry.label": "",
+	"job_site_-_map.label": "",
+	"job_site_contact.label": "",
+	"joboffer": "",
+	"jobsite.label": "",
+	"login.forgot_password": "",
+	"login.login": "",
+	"login.register": "",
+	"login.remember_me": "",
+	"login.subtitle": "",
+	"login.title": "",
 	"make_default": "",
 	"max_size": "",
 	"more": "",
-	"nationality": {
-		"label": ""
-	},
+	"nationality.label": "",
 	"next": "Next step",
 	"no_record": "",
 	"no_tracking_data": "",
+	"old_password.label": "",
 	"open_in_tab": "",
 	"open_map": "",
 	"open_tracking_map": "",
 	"pass_test": "",
 	"passed": "",
-	"password": {
-		"placeholder": "",
-		"reset": ""
-	},
+	"password.description": "",
+	"password.label": "",
+	"password.placeholder": "",
+	"password.reset": "",
 	"photo": "",
-	"registration": {
-		"fill_error": "",
-		"of": "",
-		"register": "",
-		"step": ""
-	},
+	"prior_experience.label": "",
+	"reference_timesheet.label": "",
+	"registration.fill_error": "",
+	"registration.of": "",
+	"registration.register": "",
+	"registration.step": "",
 	"reset": "",
-	"residency": {
-		"label": ""
-	},
+	"reset_all": "",
+	"residency.label": "",
 	"save": "",
-	"shift": {
-		"date": {
-			"job": {
-				"notes": {
-					"label": ""
-				},
-				"position": {
-					"label": ""
-				}
-			}
-		}
-	},
+	"score.label": "",
+	"shift.date.job.notes.label": "",
+	"shift.date.job.position.label": "",
 	"show_map": "",
-	"skill": {
-		"label": ""
-	},
-	"status": {
-		"label": ""
-	},
+	"skill.label": "",
+	"status.label": "",
 	"submit": "",
+	"supervisor.label": "",
+	"tabs.evaluations.label": "",
+	"tabs.evaluations.name": "",
+	"tabs.personal.label": "",
+	"tabs.personal.name": "",
+	"tabs.skills.label": "",
+	"tabs.skills.name": "",
+	"tabs.tags.label": "",
+	"tabs.tags.name": "",
+	"tag.label": "",
 	"take_a_photo": "",
-	"tax_file_number": {
-		"label": ""
-	},
-	"times": {
-		"break_started_at": {
-			"label": ""
-		},
-		"label": "",
-		"shift": {
-			"date": {
-				"job": {
-					"notes": {
-						"label": ""
-					},
-					"position": {
-						"label": ""
-					}
-				},
-				"shift_date": {
-					"label": ""
-				}
-			},
-			"time": {
-				"label": ""
-			}
-		},
-		"shift_ended_at": {
-			"label": ""
-		},
-		"shift_started_at": {
-			"date": "",
-			"label": ""
-		}
-	},
+	"tax_file_number.label": "",
+	"times.break_started_at.label": "",
+	"times.label": "",
+	"times.shift.date.job.notes.label": "",
+	"times.shift.date.job.position.label": "",
+	"times.shift.date.shift_date.label": "",
+	"times.shift.time.label": "",
+	"times.shift_ended_at.label": "",
+	"times.shift_started_at.date": "",
+	"times.shift_started_at.label": "",
+	"timesheet": "",
 	"timesheet_will_approved": "",
-	"totalTime": {
-		"label": ""
-	},
-	"tracking": {
-		"label": ""
-	},
-	"transportation_to_work": {
-		"label": ""
-	},
+	"totalTime.label": "",
+	"tracking.label": "",
+	"transportation_to_work.label": "",
 	"try_again": "",
 	"upload_file": "",
 	"use_camera": "",
-	"username": {
-		"placeholder": ""
-	},
-	"weight": {
-		"label": ""
-	}
+	"username.placeholder": "",
+	"verification_evidence.label": "",
+	"verified_by.label": "",
+	"weight.label": ""
 }

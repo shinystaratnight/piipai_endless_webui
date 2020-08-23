@@ -1,6 +1,6 @@
 <div class="filter-element datepicker-element">
   <label class="filter-label">
-    {{ config.label }}
+    {{ getTranslateKey('label') | translate: {"Default": config.label} }}
     <fa-icon
       class="reset-icon text-danger ml-1"
       style="cursor: pointer"
@@ -18,7 +18,7 @@
         [class.text-primary]="query === getListElementQuery(item.query)"
         (click)="selectQuery(getListElementQuery(item.query))"
       >
-        <a href="#">{{ item.label }}</a>
+        <a href="#">{{ getTranslateKey(item.key) | translate: {"Default": item.label} }}</a>
       </li>
     </ul>
     <div class="input-group datepicker" *ngFor="let input of config.input">
@@ -31,7 +31,7 @@
           [(ngModel)]="data[input.query]"
         />
         <div class="placeholder">
-          {{ input.label }}
+          {{ getTranslateKey(input.key) | translate: {"Default": input.label} }}
         </div>
       </ng-container>
 
@@ -47,7 +47,7 @@
           (ngModelChange)="changeDateOnMobile($event)"
         />
         <div class="placeholder">
-          {{ input.label }}
+          {{ getTranslateKey(input.key) | translate: {"Default": input.label} }}
         </div>
       </ng-container>
     </div>

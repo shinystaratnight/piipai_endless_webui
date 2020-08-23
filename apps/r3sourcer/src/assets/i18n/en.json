@@ -7,175 +7,141 @@
 	"all": "All",
 	"are_you_sure": "Are you sure?",
 	"back": "Back",
+	"bmi.label": "Bmi",
 	"cancel": "Cancel",
-	"client": {
-		"label": "Client"
-	},
+	"candidate_score.client_feedback.label": "Client feedback",
+	"candidate_score.loyalty.label": "Loyalty",
+	"candidate_score.recruitment_score.label": "Average test",
+	"candidate_score.reliability.label": "Reliability",
+	"candidate_score.skill_score.label": "Average skill",
+	"candidate_scores.client_feedback": "",
+	"candidate_scores.client_feedback.label": "",
+	"candidate_scores.loyalty": "",
+	"candidate_scores.loyalty.label": "",
+	"candidate_scores.recruitment_score": "",
+	"candidate_scores.recruitment_score.label": "",
+	"candidate_scores.reliability": "",
+	"candidate_scores.reliability.label": "",
+	"candidate_scores.skill_score": "",
+	"candidate_scores.skill_score.label": "",
+	"client.label": "Client",
 	"confirm_going_to_work": "Confirm if you are going to work",
-	"contact": {
-		"address": {
-			"street_address": {
-				"description": "",
-				"label": "Street Address"
-			}
-		},
-		"email": {
-			"label": "Email"
-		},
-		"first_name": {
-			"label": "First Name"
-		},
-		"gender": {
-			"label": "Gender"
-		},
-		"last_name": {
-			"label": "Last Name"
-		},
-		"phone_mobile": {
-			"label": "Mobile Phone"
-		},
-		"picture": {
-			"label_photo": "Take a photo"
-		},
-		"title": {
-			"label": "Title"
-		}
-	},
+	"confirm_password.description": "To confirm, type the new password again.",
+	"confirm_password.label": "Verify",
+	"contact.address.street_address.description": "",
+	"contact.address.street_address.label": "Street Address",
+	"contact.email.label": "Email",
+	"contact.first_name.label": "First Name",
+	"contact.gender.label": "Gender",
+	"contact.last_name.label": "Last Name",
+	"contact.phone_mobile.label": "Mobile Phone",
+	"contact.picture.label_photo": "Take a photo",
+	"contact.title.label": "Title",
 	"decline": "Decline",
 	"default": "default",
 	"delete": "Delete",
 	"drag_and_drop": "Drag the photo to the area or click the button",
 	"edit": "Edit",
 	"edit_submission": "Edit submission",
+	"emergency_contact_name.label": "Name",
+	"emergency_contact_phone.label": "Phone Number",
+	"evaluated_at.label": "Evaluated at",
+	"evaluation_score.label": "Evaluation",
 	"file": "file",
 	"file_size": "File size is too large!",
-	"height": {
-		"label": "Height, cm"
-	},
+	"filter.shift_started_at": "",
+	"filter.shift_started_at.from": "From",
+	"filter.shift_started_at.label": "Shift date",
+	"filter.shift_started_at.to": "To",
+	"filter.shift_started_at.today": "Today",
+	"filter.shift_started_at.tomorrow": "Tomorrow",
+	"filter.shift_started_at.yesterday": "Yesterday",
+	"filter.status": "",
+	"filter.status.4": "Pending submission",
+	"filter.status.5": "Pending approval",
+	"filter.status.7": "Approved",
+	"filter.status.label": "Status",
+	"filters": "Filters",
+	"height.label": "Height, cm",
 	"inactive_timesheet": "Inactive timesheet will be deleted in 48 hours",
-	"industry": {
-		"description": "",
-		"label": "Industry"
-	},
-	"job_site_-_map": {
-		"label": "Job site - map"
-	},
-	"job_site_contact": {
-		"label": "Job site contact"
-	},
-	"jobsite": {
-		"label": "Position / Jobsite"
-	},
-	"login": {
-		"forgot_password": "Forgot Password?",
-		"login": "Login",
-		"register": "Register",
-		"remember_me": "Remember me",
-		"subtitle": "Please enter your email and password",
-		"title": "Login"
-	},
+	"industry.description": "",
+	"industry.label": "Industry",
+	"job_site_-_map.label": "Job site - map",
+	"job_site_contact.label": "Job site contact",
+	"joboffer": "Job Offer",
+	"jobsite.label": "Position / Jobsite",
+	"login.forgot_password": "Forgot Password?",
+	"login.login": "Login",
+	"login.register": "Register",
+	"login.remember_me": "Remember me",
+	"login.subtitle": "Please enter your email and password",
+	"login.title": "Login",
 	"make_default": "make default",
 	"max_size": "Maximum allowed file size is 10 Mb.",
 	"more": "More",
-	"nationality": {
-		"label": "Nationality"
-	},
+	"nationality.label": "Nationality",
 	"next": "Next step",
 	"no_record": "No record",
 	"no_tracking_data": "No tracking info",
+	"old_password.label": "Current Password",
 	"open_in_tab": "Open in new tab",
 	"open_map": "Open Map",
 	"open_tracking_map": "Open tracking map",
 	"pass_test": "Pass test",
 	"passed": "Passed",
-	"password": {
-		"placeholder": "Password",
-		"reset": "Password Reset"
-	},
+	"password.description": "The password must be 8-20 characters, and must not contain spaces.",
+	"password.label": "New Password",
+	"password.placeholder": "",
+	"password.reset": "",
 	"photo": "Photo",
-	"registration": {
-		"fill_error": "Please fill all the REQUIRED fields",
-		"of": "of",
-		"register": "Register",
-		"step": "step"
-	},
+	"prior_experience.label": "Prior Experience",
+	"reference_timesheet.label": "Related timesheet",
+	"registration.fill_error": "Please fill all the REQUIRED fields",
+	"registration.of": "of",
+	"registration.register": "Register",
+	"registration.step": "step",
 	"reset": "Reset",
-	"residency": {
-		"label": "Residency"
-	},
+	"reset_all": "Reset All",
+	"residency.label": "Residency",
 	"save": "Save",
-	"shift": {
-		"date": {
-			"job": {
-				"notes": {
-					"label": "Notes"
-				},
-				"position": {
-					"label": "Position"
-				}
-			}
-		}
-	},
+	"score.label": "Score",
+	"shift.date.job.notes.label": "Notes",
+	"shift.date.job.position.label": "Position",
 	"show_map": "Show map",
-	"skill": {
-		"label": "Skill"
-	},
-	"status": {
-		"label": "Status"
-	},
+	"skill.label": "Skill",
+	"status.label": "Status",
 	"submit": "Submit",
+	"supervisor.label": "Supervisor",
+	"tabs.evaluations.label": "Evaluations",
+	"tabs.evaluations.name": "Evaluations",
+	"tabs.personal.label": "Personal information",
+	"tabs.personal.name": "Personal Info",
+	"tabs.skills.label": "Skills",
+	"tabs.skills.name": "Skills",
+	"tabs.tags.label": "Tags",
+	"tabs.tags.name": "Tags",
+	"tag.label": "Tag",
 	"take_a_photo": "Take a photo",
-	"tax_file_number": {
-		"label": "Tax file number"
-	},
-	"times": {
-		"break_started_at": {
-			"label": "Break"
-		},
-		"label": "Times",
-		"shift": {
-			"date": {
-				"job": {
-					"notes": {
-						"label": "Notes"
-					},
-					"position": {
-						"label": "Position"
-					}
-				},
-				"shift_date": {
-					"label": "Shift date"
-				}
-			},
-			"time": {
-				"label": "Shift Time"
-			}
-		},
-		"shift_ended_at": {
-			"label": "End"
-		},
-		"shift_started_at": {
-			"date": "Date",
-			"label": "Start"
-		}
-	},
+	"tax_file_number.label": "Tax file number",
+	"times.break_started_at.label": "Break",
+	"times.label": "Times",
+	"times.shift.date.job.notes.label": "Notes",
+	"times.shift.date.job.position.label": "Position",
+	"times.shift.date.shift_date.label": "Shift date",
+	"times.shift.time.label": "Shift Time",
+	"times.shift_ended_at.label": "End",
+	"times.shift_started_at.date": "Date",
+	"times.shift_started_at.label": "Start",
+	"timesheet": "Timesheet History",
 	"timesheet_will_approved": "Timesheet will be automatically approved in 4 hours",
-	"totalTime": {
-		"label": "Total time"
-	},
-	"tracking": {
-		"label": "Tracking"
-	},
-	"transportation_to_work": {
-		"label": "Transportation to work"
-	},
+	"totalTime.label": "Total time",
+	"tracking.label": "Tracking",
+	"transportation_to_work.label": "Transportation to work",
 	"try_again": "Try again",
 	"upload_file": "Upload new file",
 	"use_camera": "Use camera",
-	"username": {
-		"placeholder": "Login"
-	},
-	"weight": {
-		"label": "Weight, kg"
-	}
+	"username.placeholder": "Login",
+	"verification_evidence.label": "Verification Evidence",
+	"verified_by.label": "Verified by",
+	"weight.label": "Weight, kg"
 }

@@ -51,7 +51,7 @@
     class="form-element-label"
     *ngIf="label && config.templateOptions.label"
   >
-    {{ config.templateOptions.label }}:
+    {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
   </label>
   <div
     class="form-element-content"

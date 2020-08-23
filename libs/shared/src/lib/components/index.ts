@@ -11,7 +11,7 @@ import { IconPlusComponent } from './icons';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 
 export * from './breadcrumb/breadcrumb.component';
-export * from './navigation/navigation.component';
+// export * from './navigation/navigation.component';
 // export * from './spinner/spinner.component';
 // export * from './toast/toast.component';
 

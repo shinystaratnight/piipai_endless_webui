@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-// import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
@@ -23,7 +23,7 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    // FontAwesomeModule,
+    FontAwesomeModule,
     InfiniteScrollModule,
 
     // SharedModule,
