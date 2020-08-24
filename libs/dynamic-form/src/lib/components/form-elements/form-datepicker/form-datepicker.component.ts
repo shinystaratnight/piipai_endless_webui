@@ -16,7 +16,7 @@ import { Subscription, Subject } from 'rxjs';
 import { getDatePickerConfig, getTimePickerConfig } from './form-datepicker.config';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
-import { FormatString, isMobile, getPropValue } from '@webui/utilities';
+import { FormatString, isMobile, getPropValue, getTranslationKey } from '@webui/utilities';
 import { DateService, DateInstance, Format } from '@webui/core';
 
 enum DateType {
@@ -68,6 +68,7 @@ export class FormDatepickerComponent extends BasicElementComponent implements On
   public editMode = true;
 
   public currentField: boolean;
+  getTranslationKey = getTranslationKey;
 
   private subscriptions: Subscription[] = [];
 

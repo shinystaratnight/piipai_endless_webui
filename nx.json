@@ -53,6 +53,9 @@
     },
     "dashboard": {
       "tags": []
+    },
+    "ui": {
+      "tags": []
     }
   },
   "tasksRunnerOptions": {

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
@@ -29,7 +30,8 @@ import { SharedModule } from '../shared/shared.module';
     // SharedModule,
     DynamicFormModule.forChild({ metadata: Metadata }),
     CalendarModule,
-    SharedModule
+    SharedModule,
+    TranslateModule,
   ]
 })
 export class CandidateModule {}

@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           placeholder: 'Password',
           addon: '/assets/img/key.svg',
           type: 'password',
-          description: '',
+          description: ' ',
           max: 128
         }
       }

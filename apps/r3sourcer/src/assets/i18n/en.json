@@ -1,4 +1,6 @@
 {
+	"/hr/joboffers-candidate/": "Job Offers",
+	"/hr/timesheets-candidate/": "Timesheets",
 	"accept": "Accept",
 	"actions": "Actions",
 	"add": "Add",
@@ -8,23 +10,29 @@
 	"are_you_sure": "Are you sure?",
 	"back": "Back",
 	"bmi.label": "Bmi",
+	"break_ended_at": {
+		"label": "Break End"
+	},
+	"break_started_at": {
+		"label": "Break Start"
+	},
+	"calendar": "Calendar",
 	"cancel": "Cancel",
 	"candidate_score.client_feedback.label": "Client feedback",
 	"candidate_score.loyalty.label": "Loyalty",
 	"candidate_score.recruitment_score.label": "Average test",
 	"candidate_score.reliability.label": "Reliability",
 	"candidate_score.skill_score.label": "Average skill",
-	"candidate_scores.client_feedback": "",
 	"candidate_scores.client_feedback.label": "",
-	"candidate_scores.loyalty": "",
 	"candidate_scores.loyalty.label": "",
-	"candidate_scores.recruitment_score": "",
 	"candidate_scores.recruitment_score.label": "",
-	"candidate_scores.reliability": "",
 	"candidate_scores.reliability.label": "",
-	"candidate_scores.skill_score": "",
 	"candidate_scores.skill_score.label": "",
+	"change_password": "Change Password",
 	"client.label": "Client",
+	"company": {
+		"label": "Company"
+	},
 	"confirm_going_to_work": "Confirm if you are going to work",
 	"confirm_password.description": "To confirm, type the new password again.",
 	"confirm_password.label": "Verify",
@@ -43,9 +51,14 @@
 	"drag_and_drop": "Drag the photo to the area or click the button",
 	"edit": "Edit",
 	"edit_submission": "Edit submission",
+	"email": {
+		"description": "Password reset instructions will be sent to this email address.",
+		"label": "Email"
+	},
 	"emergency_contact_name.label": "Name",
 	"emergency_contact_phone.label": "Phone Number",
 	"evaluated_at.label": "Evaluated at",
+	"evaluation": "Evaluation",
 	"evaluation_score.label": "Evaluation",
 	"file": "file",
 	"file_size": "File size is too large!",
@@ -62,6 +75,16 @@
 	"filter.status.7": "Approved",
 	"filter.status.label": "Status",
 	"filters": "Filters",
+	"group": {
+		"additional_info": "Additional info",
+		"contacts": "Contacts",
+		"emergency_contact": "Emergency contact",
+		"phisical_parameters": "Phisical parameters",
+		"rating": "Rating",
+		"residency": "Residency",
+		"scores": "Scores",
+		"times": "Times"
+	},
 	"height.label": "Height, cm",
 	"inactive_timesheet": "Inactive timesheet will be deleted in 48 hours",
 	"industry.description": "",
@@ -70,6 +93,19 @@
 	"job_site_contact.label": "Job site contact",
 	"joboffer": "Job Offer",
 	"jobsite.label": "Position / Jobsite",
+	"list": {
+		"status": [
+			"New",
+			"Pre-Shift check pending",
+			"Pre-Shift check confirmed",
+			"Pre-Shift check failed",
+			"Submit pending",
+			"Approval pending",
+			"Supervisor modified",
+			"Approved"
+		]
+	},
+	"log_out": "Log out",
 	"login.forgot_password": "Forgot Password?",
 	"login.login": "Login",
 	"login.register": "Register",
@@ -78,9 +114,23 @@
 	"login.title": "Login",
 	"make_default": "make default",
 	"max_size": "Maximum allowed file size is 10 Mb.",
+	"mobileTimes": {
+		"break_started_at": {
+			"label": "Break start/end"
+		},
+		"shift_ended_at": {
+			"label": "Shift start/end"
+		},
+		"shift_started_at": {
+			"label": "Shift date"
+		}
+	},
 	"more": "More",
 	"nationality.label": "Nationality",
 	"next": "Next step",
+	"noBreak": {
+		"text": "No Break"
+	},
 	"no_record": "No record",
 	"no_tracking_data": "No tracking info",
 	"old_password.label": "Current Password",
@@ -93,8 +143,13 @@
 	"password.label": "New Password",
 	"password.placeholder": "",
 	"password.reset": "",
+	"password_reset": "Password Reset",
 	"photo": "Photo",
+	"position": {
+		"label": "Position"
+	},
 	"prior_experience.label": "Prior Experience",
+	"profile": "Profile",
 	"reference_timesheet.label": "Related timesheet",
 	"registration.fill_error": "Please fill all the REQUIRED fields",
 	"registration.of": "of",
@@ -107,6 +162,12 @@
 	"score.label": "Score",
 	"shift.date.job.notes.label": "Notes",
 	"shift.date.job.position.label": "Position",
+	"shift_ended_at": {
+		"label": "Shift End"
+	},
+	"shift_started_at": {
+		"label": "Shift Start"
+	},
 	"show_map": "Show map",
 	"skill.label": "Skill",
 	"status.label": "Status",
@@ -135,6 +196,9 @@
 	"timesheet": "Timesheet History",
 	"timesheet_will_approved": "Timesheet will be automatically approved in 4 hours",
 	"totalTime.label": "Total time",
+	"total_time": {
+		"label": "Total time"
+	},
 	"tracking.label": "Tracking",
 	"transportation_to_work.label": "Transportation to work",
 	"try_again": "Try again",

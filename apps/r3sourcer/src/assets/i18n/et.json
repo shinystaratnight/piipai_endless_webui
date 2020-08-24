@@ -1,4 +1,6 @@
 {
+	"/hr/joboffers-candidate/": "",
+	"/hr/timesheets-candidate/": "",
 	"accept": "",
 	"actions": "",
 	"add": "",
@@ -8,23 +10,29 @@
 	"are_you_sure": "",
 	"back": "",
 	"bmi.label": "",
+	"break_ended_at": {
+		"label": ""
+	},
+	"break_started_at": {
+		"label": ""
+	},
+	"calendar": "",
 	"cancel": "",
 	"candidate_score.client_feedback.label": "",
 	"candidate_score.loyalty.label": "",
 	"candidate_score.recruitment_score.label": "",
 	"candidate_score.reliability.label": "",
 	"candidate_score.skill_score.label": "",
-	"candidate_scores.client_feedback": "",
 	"candidate_scores.client_feedback.label": "",
-	"candidate_scores.loyalty": "",
 	"candidate_scores.loyalty.label": "",
-	"candidate_scores.recruitment_score": "",
 	"candidate_scores.recruitment_score.label": "",
-	"candidate_scores.reliability": "",
 	"candidate_scores.reliability.label": "",
-	"candidate_scores.skill_score": "",
 	"candidate_scores.skill_score.label": "",
+	"change_password": "",
 	"client.label": "",
+	"company": {
+		"label": ""
+	},
 	"confirm_going_to_work": "",
 	"confirm_password.description": "",
 	"confirm_password.label": "",
@@ -43,9 +51,14 @@
 	"drag_and_drop": "",
 	"edit": "",
 	"edit_submission": "",
+	"email": {
+		"description": "",
+		"label": ""
+	},
 	"emergency_contact_name.label": "",
 	"emergency_contact_phone.label": "",
 	"evaluated_at.label": "",
+	"evaluation": "",
 	"evaluation_score.label": "",
 	"file": "",
 	"file_size": "",
@@ -62,6 +75,16 @@
 	"filter.status.7": "",
 	"filter.status.label": "",
 	"filters": "",
+	"group": {
+		"additional_info": "",
+		"contacts": "",
+		"emergency_contact": "",
+		"phisical_parameters": "",
+		"rating": "",
+		"residency": "",
+		"scores": "",
+		"times": ""
+	},
 	"height.label": "",
 	"inactive_timesheet": "",
 	"industry.description": "",
@@ -70,6 +93,19 @@
 	"job_site_contact.label": "",
 	"joboffer": "",
 	"jobsite.label": "",
+	"list": {
+		"status": [
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			""
+		]
+	},
+	"log_out": "",
 	"login.forgot_password": "",
 	"login.login": "",
 	"login.register": "",
@@ -78,9 +114,23 @@
 	"login.title": "",
 	"make_default": "",
 	"max_size": "",
+	"mobileTimes": {
+		"break_started_at": {
+			"label": ""
+		},
+		"shift_ended_at": {
+			"label": ""
+		},
+		"shift_started_at": {
+			"label": ""
+		}
+	},
 	"more": "",
 	"nationality.label": "",
 	"next": "Next step",
+	"noBreak": {
+		"text": ""
+	},
 	"no_record": "",
 	"no_tracking_data": "",
 	"old_password.label": "",
@@ -93,8 +143,13 @@
 	"password.label": "",
 	"password.placeholder": "",
 	"password.reset": "",
+	"password_reset": "",
 	"photo": "",
+	"position": {
+		"label": ""
+	},
 	"prior_experience.label": "",
+	"profile": "",
 	"reference_timesheet.label": "",
 	"registration.fill_error": "",
 	"registration.of": "",
@@ -107,6 +162,12 @@
 	"score.label": "",
 	"shift.date.job.notes.label": "",
 	"shift.date.job.position.label": "",
+	"shift_ended_at": {
+		"label": ""
+	},
+	"shift_started_at": {
+		"label": ""
+	},
 	"show_map": "",
 	"skill.label": "",
 	"status.label": "",
@@ -135,6 +196,9 @@
 	"timesheet": "",
 	"timesheet_will_approved": "",
 	"totalTime.label": "",
+	"total_time": {
+		"label": ""
+	},
 	"tracking.label": "",
 	"transportation_to_work.label": "",
 	"try_again": "",

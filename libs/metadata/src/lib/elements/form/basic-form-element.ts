@@ -34,7 +34,8 @@ export class BasicFormElement {
     this.key = key;
     this.type = type;
     this.templateOptions = {
-      label
+      label,
+      description: ''
     };
   }
 

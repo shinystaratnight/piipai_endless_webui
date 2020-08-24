@@ -17,6 +17,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 import { MetadataModule } from '@webui/metadata';
+import { UiModule } from '@webui/ui';
 
 import { services, METADATA } from './services';
 import * as fromComponents from './components';
@@ -49,7 +50,9 @@ import { TranslateModule } from '@ngx-translate/core';
 
     MetadataModule,
 
-    TranslateModule
+    TranslateModule,
+
+    UiModule,
   ],
   exports: [
     fromComponents.GenericFormComponent,

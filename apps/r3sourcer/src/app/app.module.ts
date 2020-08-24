@@ -66,6 +66,7 @@ import { CoreModule } from '@webui/core';
 import { environment } from '../environments/environment';
 import { AgmCoreModule } from '@agm/core';
 import { DynamicFormModule } from '@webui/dynamic-form';
+import { UiModule } from '@webui/ui';
 
 import { Metadata } from './metadata.config';
 import { MasterGuideModule } from './master-guide/master-guide.module';
@@ -109,7 +110,8 @@ import { MissingTranslationHelper } from './helpers/translate.helper';
 
     CoreModule.forRoot(environment),
     DynamicFormModule.forRoot({ metadata: Metadata }),
-    MasterGuideModule
+    MasterGuideModule,
+    UiModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

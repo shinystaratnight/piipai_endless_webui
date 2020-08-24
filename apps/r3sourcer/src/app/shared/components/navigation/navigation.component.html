@@ -103,14 +103,14 @@
           </select>
         </div>
       </li>
-      <li *ngIf="candidate"><a routerLink="/cd/profile">Profile</a></li>
+      <li *ngIf="candidate"><a routerLink="/cd/profile">{{ 'profile' | translate: {"Default": "Profile" } }}</a></li>
       <li class="d-xl-none description">
         <span>{{ user.data.contact.__str__ }}</span
         ><br />
         <span *ngIf="company">{{ company }}</span>
       </li>
-      <li><a href="" (click)="changePassword()">Change password</a></li>
-      <li><a routerLink="/" (click)="logOut()">Log out</a></li>
+      <li><a href="" (click)="changePassword()">{{ 'change_password' | translate: {"Default": "Change password"} }}</a></li>
+      <li><a routerLink="/" (click)="logOut()">{{ 'log_out' | translate: {"Default": "Log out"} }}</a></li>
     </ul>
 
 
@@ -157,14 +157,14 @@
       class="navigation-link"
       [class.active]="p.active"
       (click)="clickAction($event, p)"
-      >{{ p.name }}</a
+      >{{ p.url | translate: {"Default": p.name} }}</a
     >
     <span
       class="navigation-link disabled"
       *ngIf="p.disabled"
       (click)="isCollapsed = false"
       [attr.title]="getDisableTitle(p.name)"
-      >{{ p.name }}</span
+      >{{ p.url | translate: {"Default": p.name} }}</span
     >
     <fa-icon
       class="icon"

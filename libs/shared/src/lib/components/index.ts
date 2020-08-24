@@ -2,10 +2,10 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 // import { NavigationComponent } from './navigation/navigation.component';
 // import { SpinnerComponent } from './spinner/spinner.component';
 // import { ToastComponent } from './toast/toast.component';
-import { CloseButtonComponent } from './close-button/close-button.component';
+// import { CloseButtonComponent } from './close-button/close-button.component';
 import { BackLinkComponent } from './back-link/back-link.component';
 import { SiteLoaderCompoennt } from './site-loader/site-loader.component';
-import { TimeComponent } from './time/time.component';
+// import { TimeComponent } from './time/time.component';
 import { LoaderComponent } from './loader/loader.component';
 import { IconPlusComponent } from './icons';
 import { CheckboxComponent } from './checkbox/checkbox.component';
@@ -20,10 +20,10 @@ export const components = [
   // NavigationComponent,
   // SpinnerComponent,
   // ToastComponent,
-  CloseButtonComponent,
+  // CloseButtonComponent,
   BackLinkComponent,
   SiteLoaderCompoennt,
-  TimeComponent,
+  // TimeComponent,
   LoaderComponent,
   IconPlusComponent,
   CheckboxComponent

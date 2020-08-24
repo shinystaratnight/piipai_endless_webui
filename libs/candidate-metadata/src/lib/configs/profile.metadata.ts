@@ -26,7 +26,7 @@ const profile = function () {
           ]),
 
           new Form.row.element().setChildren([
-            new Form.group.element('Contacts')
+            new Form.group.element('Contacts', 'contacts')
               .setWidth(0.5)
               .setChildren([
                 new Form.datepicker.element(
@@ -67,7 +67,7 @@ const profile = function () {
                 )
               ]),
 
-            new Form.group.element('Emergency contact')
+            new Form.group.element('Emergency contact', 'emergency_contact')
               .setWidth(0.5)
               .setChildren([
                 new Form.input.element(
@@ -85,7 +85,7 @@ const profile = function () {
           ]),
 
           new Form.row.element().setChildren([
-            new Form.group.element('Additional info')
+            new Form.group.element('Additional info', 'additional_info')
               .setWidth(0.25)
               .setChildren([
                 new Form.select.element('contact.gender', 'Gender').addOptions({
@@ -102,7 +102,7 @@ const profile = function () {
                 })
               ]),
 
-            new Form.group.element('Phisical parameters')
+            new Form.group.element('Phisical parameters', 'phisical_parameters')
               .setWidth(0.25)
               .setChildren([
                 new Form.input.element('height', 'Height, cm', InputType.Text),
@@ -112,7 +112,7 @@ const profile = function () {
                 new Form.static.element('bmi', 'Bmi')
               ]),
 
-            new Form.group.element('Scores')
+            new Form.group.element('Scores', 'scores')
               .setWidth(0.25)
               .setChildren([
                 new Form.static.element(
@@ -128,7 +128,7 @@ const profile = function () {
                 ).setDanger('No rating')
               ]),
 
-            new Form.group.element('Rating')
+            new Form.group.element('Rating', 'rating')
               .setWidth(0.25)
               .setChildren([
                 new Form.static.element(
@@ -152,7 +152,7 @@ const profile = function () {
           ]),
 
           new Form.row.element().setChildren([
-            new Form.group.element('Residency').setWidth(0.25).setChildren([
+            new Form.group.element('Residency', 'residency').setWidth(0.25).setChildren([
               new Form.select.element(
                 'residency',
                 'Residency Status'

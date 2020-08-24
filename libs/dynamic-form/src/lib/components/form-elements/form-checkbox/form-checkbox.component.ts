@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 import { SiteSettingsService } from '@webui/core';
+import { getTranslationKey } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-checkbox',
@@ -40,6 +41,8 @@ export class FormCheckboxComponent extends BasicElementComponent implements OnIn
   public disabledTitle: string;
 
   public viewMode: boolean;
+
+  getTranslationKey = getTranslationKey;
 
   @Output()
   public event: EventEmitter<any> = new EventEmitter();

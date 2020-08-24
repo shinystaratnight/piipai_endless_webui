@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -32,6 +33,7 @@ import { DynamicFormModule } from '@webui/dynamic-form';
     ButtonsModule,
     // SharedModule,
     DynamicFormModule,
+    TranslateModule
   ],
   declarations: [
     CalendarComponent,
