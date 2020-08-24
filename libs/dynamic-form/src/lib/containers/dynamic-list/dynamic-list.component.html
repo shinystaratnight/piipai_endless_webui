@@ -79,7 +79,7 @@
         <span
           *ngIf="!inForm && !description"
           class="mr-auto my-1">
-            {{ config.list.list | translate: {"Default": label || config.list.label} }}
+            {{ getListLabelKey() | translate: {"Default": label || config.list.label} }}
         </span>
         <p *ngIf="description">
           <span>{{ label || config.list.label }}</span> <br />
@@ -658,7 +658,7 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title" [class.text-center]="modalInfo.signature">
-          <ng-container *ngIf="modalInfo.evaluate">Evaluate</ng-container>
+          <ng-container *ngIf="modalInfo.evaluate">{{'evaluate.label' | translate: {"Default": "Evaluate"} }}</ng-container>
 
           <ng-container *ngIf="!modalInfo.evaluate">
             <ng-container *ngIf="modalInfo.label.picture">
@@ -773,7 +773,7 @@
             </span>
           </div>
           <div class="d-flex justify-content-center flex-column">
-            Approve timesheet <br />
+            {{ 'approve_timesheet' | translate: {"Default": "Approve timesheet"} }} <br />
             <span class="secondary-title">for {{ modalInfo.label.name }}</span>
           </div>
         </h2>
@@ -796,12 +796,12 @@
         <div class="content-info">
           <div *ngIf="modalInfo.timesheet" class="flex-fill">
             <div class="desktop-version">
-              <h3 class="group-title hide-sm">Times</h3>
+              <h3 class="group-title hide-sm">{{ 'times.label' | translate: {"Default": "Times"} }}</h3>
 
               <ng-container
                 *ngTemplateOutlet="
                   line;
-                  context: { label: 'Date', value: modalInfo.timesheet.date }
+                  context: { label: 'Date', key: 'date', value: modalInfo.timesheet.date }
                 "
               ></ng-container>
               <ng-container
@@ -809,6 +809,7 @@
                   line;
                   context: {
                     label: 'Start',
+                    key: 'start',
                     value: modalInfo.timesheet.started_at,
                     muted: true
                   }
@@ -819,6 +820,7 @@
                   line;
                   context: {
                     label: 'Break',
+                    key: 'break',
                     value: modalInfo.timesheet.break,
                     muted: true
                   }
@@ -829,6 +831,7 @@
                   line;
                   context: {
                     label: 'End',
+                    key: 'end',
                     value: modalInfo.timesheet.ended_at,
                     muted: true
                   }
@@ -839,6 +842,7 @@
                   line;
                   context: {
                     label: 'Total time',
+                    key: 'total_time.label',
                     value: modalInfo.timesheet.total,
                     totalTime: true
                   }
@@ -859,6 +863,7 @@
                   line;
                   context: {
                     label: 'Shift start/end',
+                    key: 'shift_start_end',
                     value: modalInfo.timesheet.shift_start_end,
                     muted: true
                   }
@@ -869,6 +874,7 @@
                   line;
                   context: {
                     label: 'Break start/end',
+                    key: 'break',
                     value: modalInfo.timesheet.break_start_and,
                     muted: true
                   }
@@ -879,6 +885,7 @@
                   line;
                   context: {
                     label: 'Total time',
+                    key: 'total_time.label',
                     value: modalInfo.timesheet.total,
                     totalTime: true
                   }
@@ -892,7 +899,7 @@
               class="group-title times"
               [class.change-form]="modalInfo.changeEndpoint"
             >
-              Times
+              {{'times.label' | translate: {"Default": "Times"} }}
             </h3>
 
             <app-generic-form
@@ -915,12 +922,13 @@
             let-value="value"
             let-total="totalTime"
             let-muted="muted"
+            let-key="key"
           >
             <div
               class="time-line d-flex align-items-center flex-wrap"
               [class.text-success]="total"
             >
-              <span class="label" [class.description]="muted">{{ label }}:</span
+              <span class="label" [class.description]="muted">{{ key | translate: {"Default": label}  }}:</span
               >&nbsp;
               <span>{{ value }}</span>
             </div>
@@ -930,7 +938,7 @@
             class="flex-fill evaluation-content"
             [class.evaluated]="modalInfo.evaluated"
           >
-            <h3 class="group-title">Evaluation</h3>
+            <h3 class="group-title">{{ 'evaluate.label' | translate: {"Default": "Evaluation"} }}</h3>
 
             <div
               class="evaluation-wrapper d-flex align-items-center text-warning"
@@ -974,6 +982,7 @@
                 (landscape() && !modalInfo.approve)
               "
               label="Back to times"
+              key="back"
               (backEvent)="modalInfo.signatureStep = false"
             >
             </app-back-link>
@@ -981,14 +990,14 @@
             <h3
               class="group-title signature-title d-flex align-items-center w-100"
             >
-              Signature
+              {{ 'signature' | translate: {"Default": "Signature"} }}
               <button
                 *ngIf="modalInfo.signature"
                 type="button"
                 class="btn btn-link text-danger ml-auto pr-0 py-0 only-mobile"
                 (click)="signatureCanvas.clear()"
               >
-                Clear area
+                {{ 'clear' | translate: {"Default": "Clear area"} }}
               </button>
             </h3>
             <app-signature
@@ -1011,7 +1020,7 @@
           [class.signature-step]="modalInfo.signatureStep"
           (click)="signatureCanvas.clear()"
         >
-          Clear
+          {{'clear' | translate: {"Default": "Clear" } }}
         </button>
         <button
           type="button"
@@ -1037,7 +1046,7 @@
           "
           (click)="modalInfo.signatureStep = true"
         >
-          Next
+          {{'next' | translate: {"Default": "Next" } }}
           <svg
             class="ml-1"
             width="16"
@@ -1226,7 +1235,7 @@
       <span
         class="text-success mr-1"
         style="display: inline-block; font-size: 15px; width: 50%"
-        >{{ 'tital_time' | translate: {"Default": "Total time"}:&nbsp;</span
+        >{{ 'total_time.label' | translate: {"Default": "Total time"} }}:&nbsp;</span
       >
       <ng-container
         *ngFor="let field of getElement('totalTime', data.content).content"
@@ -1248,7 +1257,7 @@
       >
       </ng-container>
     </div>
-    <span class="label">Evaluation:</span>
+    <span class="label">{{ 'evaluate.label' | translate: {"Default": "Evaluation"} }}:</span>
     <div class="d-inline-block">
       <ng-container
         *ngFor="let field of getElement('evaluate', data.content).content"

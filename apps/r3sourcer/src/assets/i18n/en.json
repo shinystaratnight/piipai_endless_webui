@@ -1,15 +1,30 @@
 {
 	"/hr/joboffers-candidate/": "Job Offers",
+	"/hr/jobs/client_contact_job/": "Jobs",
+	"/hr/jobsites/client_contact_jobsite/": "Jobsites",
 	"/hr/timesheets-candidate/": "Timesheets",
+	"/hr/timesheets/history/": "Timesheet history",
+	"/hr/timesheets/unapproved/": "Unapproved timesheets",
+	"__str__": {
+		"label": "Job"
+	},
 	"accept": "Accept",
 	"actions": "Actions",
+	"actions.label": "Actions",
 	"add": "Add",
 	"add_new": "Add new",
 	"add_photo": "Add photo",
+	"address": {
+		"label": "Address"
+	},
 	"all": "All",
+	"approve": "Approve",
+	"approve.label": "Approve/Change",
+	"approve_timesheet": "Approve timesheet",
 	"are_you_sure": "Are you sure?",
 	"back": "Back",
 	"bmi.label": "Bmi",
+	"break": "Break",
 	"break_ended_at": {
 		"label": "Break End"
 	},
@@ -18,6 +33,12 @@
 	},
 	"calendar": "Calendar",
 	"cancel": "Cancel",
+	"candidate_contact": {
+		"label": "Candidate contact"
+	},
+	"candidate_rate": {
+		"label": "Candidate rate override"
+	},
 	"candidate_score.client_feedback.label": "Client feedback",
 	"candidate_score.loyalty.label": "Loyalty",
 	"candidate_score.recruitment_score.label": "Average test",
@@ -28,8 +49,16 @@
 	"candidate_scores.recruitment_score.label": "",
 	"candidate_scores.reliability.label": "",
 	"candidate_scores.skill_score.label": "",
+	"change": "Change",
 	"change_password": "Change Password",
+	"city": {
+		"label": "City"
+	},
+	"clear": "Clear",
 	"client.label": "Client",
+	"client/candidate_rate": {
+		"label": "Rate"
+	},
 	"company": {
 		"label": "Company"
 	},
@@ -45,8 +74,23 @@
 	"contact.phone_mobile.label": "Mobile Phone",
 	"contact.picture.label_photo": "Take a photo",
 	"contact.title.label": "Title",
+	"created": {
+		"label": "Created"
+	},
+	"customer_company": {
+		"label": "Client"
+	},
+	"customer_representative": {
+		"label": "Client representative"
+	},
+	"date": "Date",
+	"date.shift_date.label": "Date",
+	"day": "Day",
 	"decline": "Decline",
 	"default": "default",
+	"default_shift_starting_time": {
+		"label": "Default Shift Starting Time"
+	},
 	"delete": "Delete",
 	"drag_and_drop": "Drag the photo to the area or click the button",
 	"edit": "Edit",
@@ -57,11 +101,22 @@
 	},
 	"emergency_contact_name.label": "Name",
 	"emergency_contact_phone.label": "Phone Number",
+	"end": "End",
+	"end_date": {
+		"label": "End Date"
+	},
+	"evaluate": {
+		"button": "Evaluate",
+		"label": "Evaluate"
+	},
 	"evaluated_at.label": "Evaluated at",
 	"evaluation": "Evaluation",
 	"evaluation_score.label": "Evaluation",
 	"file": "file",
 	"file_size": "File size is too large!",
+	"fill_in": {
+		"label": "Fill in"
+	},
 	"filter.shift_started_at": "",
 	"filter.shift_started_at.from": "From",
 	"filter.shift_started_at.label": "Shift date",
@@ -75,20 +130,40 @@
 	"filter.status.7": "Approved",
 	"filter.status.label": "Status",
 	"filters": "Filters",
+	"fulfilled": {
+		"label": "Fulfilled"
+	},
 	"group": {
 		"additional_info": "Additional info",
+		"client": "Client",
 		"contacts": "Contacts",
 		"emergency_contact": "Emergency contact",
+		"general": "General",
 		"phisical_parameters": "Phisical parameters",
+		"portfolio_manager": "Portfolio Manager",
+		"primary_contact": "Primary Contact",
+		"provider": "Provider",
 		"rating": "Rating",
 		"residency": "Residency",
 		"scores": "Scores",
 		"times": "Times"
 	},
 	"height.label": "Height, cm",
+	"hourly_rate_default": {
+		"label": "Candidate rate override"
+	},
 	"inactive_timesheet": "Inactive timesheet will be deleted in 48 hours",
+	"industry": {
+		"placeholder": "Select or add new"
+	},
 	"industry.description": "",
 	"industry.label": "Industry",
+	"is_available": {
+		"label": "Status"
+	},
+	"job": {
+		"label": "Job"
+	},
 	"job_site_-_map.label": "Job site - map",
 	"job_site_contact.label": "Job site contact",
 	"joboffer": "Job Offer",
@@ -113,6 +188,10 @@
 	"login.subtitle": "Please enter your email and password",
 	"login.title": "Login",
 	"make_default": "make default",
+	"master_company": {
+		"label": "Provider company",
+		"placeholder": "Select or add new"
+	},
 	"max_size": "Maximum allowed file size is 10 Mb.",
 	"mobileTimes": {
 		"break_started_at": {
@@ -125,6 +204,7 @@
 			"label": "Shift date"
 		}
 	},
+	"month": "Month",
 	"more": "More",
 	"nationality.label": "Nationality",
 	"next": "Next step",
@@ -133,6 +213,9 @@
 	},
 	"no_record": "No record",
 	"no_tracking_data": "No tracking info",
+	"note": {
+		"label": "Notes"
+	},
 	"old_password.label": "Current Password",
 	"open_in_tab": "Open in new tab",
 	"open_map": "Open Map",
@@ -144,17 +227,61 @@
 	"password.placeholder": "",
 	"password.reset": "",
 	"password_reset": "Password Reset",
+	"personal_info": {
+		"label": "Candidate/Position"
+	},
 	"photo": "Photo",
+	"portfolio_manager": {
+		"contact": {
+			"email": {
+				"label": "E-mail"
+			},
+			"phone_mobile": {
+				"label": "Phone number"
+			}
+		},
+		"job_title": {
+			"label": "Job Title"
+		},
+		"label": "Portfolio manager",
+		"placeholder": "Select or add new"
+	},
 	"position": {
 		"label": "Position"
 	},
+	"primary_contact": {
+		"contact": {
+			"email": {
+				"label": "E-mail"
+			},
+			"phone_mobile": {
+				"label": "Phone number"
+			}
+		},
+		"job_title": {
+			"label": "Job Title"
+		},
+		"label": "Name"
+	},
 	"prior_experience.label": "Prior Experience",
 	"profile": "Profile",
+	"provider_company": {
+		"label": "Provider company"
+	},
+	"provider_representative": {
+		"label": "Provider representative"
+	},
+	"provider_signed_at": {
+		"label": "Accepted at"
+	},
 	"reference_timesheet.label": "Related timesheet",
 	"registration.fill_error": "Please fill all the REQUIRED fields",
 	"registration.of": "of",
 	"registration.register": "Register",
 	"registration.step": "step",
+	"regular_company": {
+		"label": "Client"
+	},
 	"reset": "Reset",
 	"reset_all": "Reset All",
 	"residency.label": "Residency",
@@ -162,21 +289,60 @@
 	"score.label": "Score",
 	"shift.date.job.notes.label": "Notes",
 	"shift.date.job.position.label": "Position",
+	"shift.date.shift_date.label": "Shift info",
 	"shift_ended_at": {
 		"label": "Shift End"
 	},
+	"shift_start_end": "Shift start/end",
 	"shift_started_at": {
 		"label": "Shift Start"
 	},
+	"shift_starting_time": {
+		"label": "Shift Starting Time"
+	},
+	"short_name": {
+		"label": "Site name"
+	},
 	"show_map": "Show map",
+	"signature": "Signature",
+	"site_name": {
+		"label": "Site Name"
+	},
 	"skill.label": "Skill",
-	"status.label": "Status",
+	"sms_history": {
+		"label": "SMS History"
+	},
+	"start": "Start",
+	"start_date": {
+		"label": "Start Date"
+	},
+	"state": {
+		"label": "State"
+	},
+	"status": {
+		"label": "Status",
+		"status": {
+			"label": "Waiting submission"
+		},
+		"supervisor_approved": {
+			"label": "Approved"
+		}
+	},
+	"status.label": "",
 	"submit": "Submit",
 	"supervisor.label": "Supervisor",
 	"tabs.evaluations.label": "Evaluations",
 	"tabs.evaluations.name": "Evaluations",
+	"tabs.general.label": "General information",
+	"tabs.general.name": "General Info",
+	"tabs.job.name": "Jobs",
+	"tabs.job_info.label": "Job information",
+	"tabs.job_info.name": "Job info",
+	"tabs.job_offers.name": "Job Offers",
+	"tabs.notes.name": "Notes",
 	"tabs.personal.label": "Personal information",
 	"tabs.personal.name": "Personal Info",
+	"tabs.shift_dates.name": "Shift Dates",
 	"tabs.skills.label": "Skills",
 	"tabs.skills.name": "Skills",
 	"tabs.tags.label": "Tags",
@@ -184,6 +350,9 @@
 	"tag.label": "Tag",
 	"take_a_photo": "Take a photo",
 	"tax_file_number.label": "Tax file number",
+	"time": {
+		"label": "Shift start time"
+	},
 	"times.break_started_at.label": "Break",
 	"times.label": "Times",
 	"times.shift.date.job.notes.label": "Notes",
@@ -202,10 +371,26 @@
 	"tracking.label": "Tracking",
 	"transportation_to_work.label": "Transportation to work",
 	"try_again": "Try again",
+	"updated": {
+		"label": "Updated"
+	},
 	"upload_file": "Upload new file",
 	"use_camera": "Use camera",
 	"username.placeholder": "Login",
 	"verification_evidence.label": "Verification Evidence",
 	"verified_by.label": "Verified by",
-	"weight.label": "Weight, kg"
+	"week": "Week",
+	"weight.label": "Weight, kg",
+	"work_start_date": {
+		"label": "Work Start Date"
+	},
+	"workers": {
+		"label": "Workers"
+  },
+  "notes": {
+    "label": "Notes",
+    "description": "Job Description/Instructions for candidate"
+  },
+  "add_shifts_and_workers": "Add shifts and workers",
+  "add_shifts_and_workers.description": "Create dates, shifts and time for tasks, add workers."
 }

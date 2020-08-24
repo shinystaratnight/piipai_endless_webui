@@ -7,10 +7,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
-import { TimeComponent } from './components/time/time.component';
+// import { TimeComponent } from './components/time/time.component';
 
 @NgModule({
-  declarations: [NavigationComponent, SpinnerComponent, TimeComponent],
+  declarations: [NavigationComponent, SpinnerComponent],
   imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule, FormsModule, FontAwesomeModule],
   exports: [NavigationComponent, SpinnerComponent]
 })

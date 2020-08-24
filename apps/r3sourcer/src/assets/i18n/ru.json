@@ -1,15 +1,30 @@
 {
 	"/hr/joboffers-candidate/": "",
+	"/hr/jobs/client_contact_job/": "",
+	"/hr/jobsites/client_contact_jobsite/": "",
 	"/hr/timesheets-candidate/": "Смены",
+	"/hr/timesheets/history/": "",
+	"/hr/timesheets/unapproved/": "",
+	"__str__": {
+		"label": ""
+	},
 	"accept": "Подтвердить",
 	"actions": "Действия",
+	"actions.label": "",
 	"add": "Добавить",
 	"add_new": "Добавить",
 	"add_photo": "Добавить фото",
+	"address": {
+		"label": ""
+	},
 	"all": "Все",
+	"approve": "",
+	"approve.label": "",
+	"approve_timesheet": "",
 	"are_you_sure": "Вы уверены?",
 	"back": "Назад",
 	"bmi.label": "Индекс массы тела",
+	"break": "",
 	"break_ended_at": {
 		"label": "Обед (Конец)"
 	},
@@ -18,6 +33,12 @@
 	},
 	"calendar": "Календарь",
 	"cancel": "Отмена",
+	"candidate_contact": {
+		"label": ""
+	},
+	"candidate_rate": {
+		"label": ""
+	},
 	"candidate_score.client_feedback.label": "Отзыв клиента",
 	"candidate_score.loyalty.label": "Лояльность",
 	"candidate_score.recruitment_score.label": "Средний тест",
@@ -28,8 +49,16 @@
 	"candidate_scores.recruitment_score.label": "",
 	"candidate_scores.reliability.label": "",
 	"candidate_scores.skill_score.label": "",
+	"change": "",
 	"change_password": "Сменить пароль",
+	"city": {
+		"label": ""
+	},
+	"clear": "",
 	"client.label": "Клиент",
+	"client/candidate_rate": {
+		"label": ""
+	},
 	"company": {
 		"label": "Компания"
 	},
@@ -45,8 +74,23 @@
 	"contact.phone_mobile.label": "Номер телефона",
 	"contact.picture.label_photo": "Сделать фото",
 	"contact.title.label": "Обращение",
+	"created": {
+		"label": ""
+	},
+	"customer_company": {
+		"label": ""
+	},
+	"customer_representative": {
+		"label": ""
+	},
+	"date": "",
+	"date.shift_date.label": "",
+	"day": "",
 	"decline": "Отклонить",
 	"default": "по умолчанию",
+	"default_shift_starting_time": {
+		"label": ""
+	},
 	"delete": "Удалить",
 	"drag_and_drop": "Перенесите файл и нажмите на кнопку",
 	"edit": "Изменить",
@@ -57,11 +101,22 @@
 	},
 	"emergency_contact_name.label": "Имя Фамилия",
 	"emergency_contact_phone.label": "Номер телефона",
+	"end": "",
+	"end_date": {
+		"label": ""
+	},
+	"evaluate": {
+		"button": "",
+		"label": ""
+	},
 	"evaluated_at.label": "Оценено",
 	"evaluation": "Оценка",
 	"evaluation_score.label": "Оценка",
 	"file": "файл",
 	"file_size": "Файл слишком большой!",
+	"fill_in": {
+		"label": ""
+	},
 	"filter.shift_started_at": "",
 	"filter.shift_started_at.from": "От",
 	"filter.shift_started_at.label": "Дата смены",
@@ -75,20 +130,40 @@
 	"filter.status.7": "Подтверждено",
 	"filter.status.label": "Статус",
 	"filters": "Фильтры",
+	"fulfilled": {
+		"label": ""
+	},
 	"group": {
 		"additional_info": "Дополнительная информация",
+		"client": "",
 		"contacts": "Контакты",
 		"emergency_contact": "Экстренный контакт",
+		"general": "",
 		"phisical_parameters": "Физические параметры",
+		"portfolio_manager": "",
+		"primary_contact": "",
+		"provider": "",
 		"rating": "Рейтинг",
 		"residency": "Резиденция",
 		"scores": "Оценки",
 		"times": "Время"
 	},
 	"height.label": "Рост, см",
+	"hourly_rate_default": {
+		"label": ""
+	},
 	"inactive_timesheet": "Не активные смены будут удалены через 48 часов",
+	"industry": {
+		"placeholder": ""
+	},
 	"industry.description": "",
 	"industry.label": "Промышленность",
+	"is_available": {
+		"label": ""
+	},
+	"job": {
+		"label": ""
+	},
 	"job_site_-_map.label": "Место работы - карта",
 	"job_site_contact.label": "Контакт места работы",
 	"joboffer": "Предложение на работу",
@@ -113,6 +188,10 @@
 	"login.subtitle": "Введите ваш email и пароль",
 	"login.title": "Вход",
 	"make_default": "сделать по умолчанию",
+	"master_company": {
+		"label": "",
+		"placeholder": ""
+	},
 	"max_size": "Максимальный размер - 10 Mb",
 	"mobileTimes": {
 		"break_started_at": {
@@ -125,6 +204,7 @@
 			"label": "Смена"
 		}
 	},
+	"month": "",
 	"more": "Еще",
 	"nationality.label": "Национальность",
 	"next": "Дальше",
@@ -133,6 +213,9 @@
 	},
 	"no_record": "Нет записи",
 	"no_tracking_data": "Нет информации о местоположении",
+	"note": {
+		"label": ""
+	},
 	"old_password.label": "Текущий пароль",
 	"open_in_tab": "Открыть в новой вкладке",
 	"open_map": "Открыть карты",
@@ -144,17 +227,61 @@
 	"password.placeholder": "Пароль",
 	"password.reset": "Сбросить пароль",
 	"password_reset": "Сбросить пароль",
+	"personal_info": {
+		"label": ""
+	},
 	"photo": "Фото",
+	"portfolio_manager": {
+		"contact": {
+			"email": {
+				"label": ""
+			},
+			"phone_mobile": {
+				"label": ""
+			}
+		},
+		"job_title": {
+			"label": ""
+		},
+		"label": "",
+		"placeholder": ""
+	},
 	"position": {
 		"label": "Должность"
 	},
+	"primary_contact": {
+		"contact": {
+			"email": {
+				"label": ""
+			},
+			"phone_mobile": {
+				"label": ""
+			}
+		},
+		"job_title": {
+			"label": ""
+		},
+		"label": ""
+	},
 	"prior_experience.label": "Предыдущий опыт",
 	"profile": "Профиль",
+	"provider_company": {
+		"label": ""
+	},
+	"provider_representative": {
+		"label": ""
+	},
+	"provider_signed_at": {
+		"label": ""
+	},
 	"reference_timesheet.label": "Связанное смены",
 	"registration.fill_error": "Пожалуйста заполните обязательные поля",
 	"registration.of": "из",
 	"registration.register": "Отправить",
 	"registration.step": "шаг",
+	"regular_company": {
+		"label": ""
+	},
 	"reset": "Сбросить",
 	"reset_all": "Сбросить все",
 	"residency.label": "Резиденция",
@@ -162,21 +289,60 @@
 	"score.label": "Оценка",
 	"shift.date.job.notes.label": "Заметки",
 	"shift.date.job.position.label": "Должность",
+	"shift.date.shift_date.label": "",
 	"shift_ended_at": {
 		"label": "Смена (Конец)"
 	},
+	"shift_start_end": "",
 	"shift_started_at": {
 		"label": "Смена (Начало)"
 	},
+	"shift_starting_time": {
+		"label": ""
+	},
+	"short_name": {
+		"label": ""
+	},
 	"show_map": "Показать карту",
+	"signature": "",
+	"site_name": {
+		"label": ""
+	},
 	"skill.label": "Навык",
+	"sms_history": {
+		"label": ""
+	},
+	"start": "",
+	"start_date": {
+		"label": ""
+	},
+	"state": {
+		"label": ""
+	},
+	"status": {
+		"label": "",
+		"status": {
+			"label": ""
+		},
+		"supervisor_approved": {
+			"label": ""
+		}
+	},
 	"status.label": "Статус",
 	"submit": "Отправить",
 	"supervisor.label": "Супервизор",
 	"tabs.evaluations.label": "Оценки",
 	"tabs.evaluations.name": "Оценки",
+	"tabs.general.label": "",
+	"tabs.general.name": "",
+	"tabs.job.name": "",
+	"tabs.job_info.label": "",
+	"tabs.job_info.name": "",
+	"tabs.job_offers.name": "",
+	"tabs.notes.name": "",
 	"tabs.personal.label": "Персональная информация",
 	"tabs.personal.name": "Данные",
+	"tabs.shift_dates.name": "",
 	"tabs.skills.label": "Навыки",
 	"tabs.skills.name": "Навыки",
 	"tabs.tags.label": "Теги",
@@ -184,6 +350,9 @@
 	"tag.label": "Тег",
 	"take_a_photo": "Сделать фото",
 	"tax_file_number.label": "Номер налогового дела",
+	"time": {
+		"label": ""
+	},
 	"times.break_started_at.label": "Обед",
 	"times.label": "Время работы",
 	"times.shift.date.job.notes.label": "Заметки",
@@ -202,10 +371,20 @@
 	"tracking.label": "Передвижение",
 	"transportation_to_work.label": "Транспорт",
 	"try_again": "Попробовать еще",
+	"updated": {
+		"label": ""
+	},
 	"upload_file": "Загрузить файл",
 	"use_camera": "Использовать камеру",
 	"username.placeholder": "Вход",
 	"verification_evidence.label": "Доказательства проверки",
 	"verified_by.label": "Проверено",
-	"weight.label": "Вес ,кг"
+	"week": "",
+	"weight.label": "Вес ,кг",
+	"work_start_date": {
+		"label": ""
+	},
+	"workers": {
+		"label": ""
+	}
 }

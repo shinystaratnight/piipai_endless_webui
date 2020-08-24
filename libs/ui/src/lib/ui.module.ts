@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CloseButtonComponent } from './components';
+import { CloseButtonComponent, TimeComponent } from './components';
 
 @NgModule({
-  declarations: [CloseButtonComponent],
+  declarations: [CloseButtonComponent, TimeComponent],
   imports: [CommonModule],
-  exports: [CloseButtonComponent]
+  exports: [CloseButtonComponent, TimeComponent]
 })
 export class UiModule {}

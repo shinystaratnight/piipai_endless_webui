@@ -19,7 +19,7 @@
       <span *ngIf="!iconView && !iconClass && !workers && !config.translationKey">{{value}}</span>
       <span *ngIf="!iconView && !iconClass && !workers && config.translationKey">{{ config.translationKey | translate: {"Default": value} }}</span>
       <span class="py-1" *ngIf="!iconView && !iconClass && workers" [placement]="'right'" [ngbTooltip]="workersdetail" style="cursor: default; padding-right: 1rem">{{value}}</span>
-      <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{value}}</span>
+      <span [ngClass]="[iconClass]" *ngIf="!iconView && iconClass">{{ translationKey | translate: {"Default": value} }}</span>
       <fa-icon *ngIf="iconView" [icon]="['fas', value]" [ngClass]="[iconClass]" [ngStyle]="{'color': iconColor}"></fa-icon>
       <app-info *ngIf="config.info" [description]="config.info" placement="bottom"></app-info>
   </span>

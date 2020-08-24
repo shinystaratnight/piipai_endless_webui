@@ -37,6 +37,7 @@ import { Metadata } from './metadata.config';
 
 import { MasterGuideModule } from '../master-guide/master-guide.module';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   // bootstrap: [ ManagerComponent ],
@@ -68,6 +69,7 @@ import { CommonModule } from '@angular/common';
     // CoreModule.forRoot(environment),
     CalendarModule,
     DashboardModule,
+    SharedModule
   ],
   providers: [
     // ...guards,

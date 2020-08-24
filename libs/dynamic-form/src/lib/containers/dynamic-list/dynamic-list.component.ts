@@ -2727,6 +2727,10 @@ export class DynamicListComponent
     return false;
   }
 
+  getListLabelKey(): string {
+    return `${this.config.list.list}.label`;
+  }
+
   openDetails(row, e) {
     if (e.target instanceof HTMLInputElement) {
       return;

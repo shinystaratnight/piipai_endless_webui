@@ -18,6 +18,7 @@ import { CalendarModule } from '@webui/calendar';
 
 import { Metadata } from './metadata.config';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { CommonModule } from '@angular/common';
     // SharedModule,
     DynamicFormModule.forChild({ metadata: Metadata }),
     CalendarModule,
+    SharedModule
   ],
 })
 export class ClientModule {}

@@ -1,15 +1,30 @@
 {
 	"/hr/joboffers-candidate/": "",
+	"/hr/jobs/client_contact_job/": "",
+	"/hr/jobsites/client_contact_jobsite/": "",
 	"/hr/timesheets-candidate/": "",
+	"/hr/timesheets/history/": "",
+	"/hr/timesheets/unapproved/": "",
+	"__str__": {
+		"label": ""
+	},
 	"accept": "",
 	"actions": "",
+	"actions.label": "",
 	"add": "",
 	"add_new": "",
 	"add_photo": "",
+	"address": {
+		"label": ""
+	},
 	"all": "",
+	"approve": "",
+	"approve.label": "",
+	"approve_timesheet": "",
 	"are_you_sure": "",
 	"back": "",
 	"bmi.label": "",
+	"break": "",
 	"break_ended_at": {
 		"label": ""
 	},
@@ -18,6 +33,12 @@
 	},
 	"calendar": "",
 	"cancel": "",
+	"candidate_contact": {
+		"label": ""
+	},
+	"candidate_rate": {
+		"label": ""
+	},
 	"candidate_score.client_feedback.label": "",
 	"candidate_score.loyalty.label": "",
 	"candidate_score.recruitment_score.label": "",
@@ -28,8 +49,16 @@
 	"candidate_scores.recruitment_score.label": "",
 	"candidate_scores.reliability.label": "",
 	"candidate_scores.skill_score.label": "",
+	"change": "",
 	"change_password": "",
+	"city": {
+		"label": ""
+	},
+	"clear": "",
 	"client.label": "",
+	"client/candidate_rate": {
+		"label": ""
+	},
 	"company": {
 		"label": ""
 	},
@@ -45,8 +74,23 @@
 	"contact.phone_mobile.label": "",
 	"contact.picture.label_photo": "",
 	"contact.title.label": "",
+	"created": {
+		"label": ""
+	},
+	"customer_company": {
+		"label": ""
+	},
+	"customer_representative": {
+		"label": ""
+	},
+	"date": "",
+	"date.shift_date.label": "",
+	"day": "",
 	"decline": "",
 	"default": "",
+	"default_shift_starting_time": {
+		"label": ""
+	},
 	"delete": "",
 	"drag_and_drop": "",
 	"edit": "",
@@ -57,11 +101,22 @@
 	},
 	"emergency_contact_name.label": "",
 	"emergency_contact_phone.label": "",
+	"end": "",
+	"end_date": {
+		"label": ""
+	},
+	"evaluate": {
+		"button": "",
+		"label": ""
+	},
 	"evaluated_at.label": "",
 	"evaluation": "",
 	"evaluation_score.label": "",
 	"file": "",
 	"file_size": "",
+	"fill_in": {
+		"label": ""
+	},
 	"filter.shift_started_at": "",
 	"filter.shift_started_at.from": "",
 	"filter.shift_started_at.label": "",
@@ -75,20 +130,40 @@
 	"filter.status.7": "",
 	"filter.status.label": "",
 	"filters": "",
+	"fulfilled": {
+		"label": ""
+	},
 	"group": {
 		"additional_info": "",
+		"client": "",
 		"contacts": "",
 		"emergency_contact": "",
+		"general": "",
 		"phisical_parameters": "",
+		"portfolio_manager": "",
+		"primary_contact": "",
+		"provider": "",
 		"rating": "",
 		"residency": "",
 		"scores": "",
 		"times": ""
 	},
 	"height.label": "",
+	"hourly_rate_default": {
+		"label": ""
+	},
 	"inactive_timesheet": "",
+	"industry": {
+		"placeholder": ""
+	},
 	"industry.description": "",
 	"industry.label": "",
+	"is_available": {
+		"label": ""
+	},
+	"job": {
+		"label": ""
+	},
 	"job_site_-_map.label": "",
 	"job_site_contact.label": "",
 	"joboffer": "",
@@ -113,6 +188,10 @@
 	"login.subtitle": "",
 	"login.title": "",
 	"make_default": "",
+	"master_company": {
+		"label": "",
+		"placeholder": ""
+	},
 	"max_size": "",
 	"mobileTimes": {
 		"break_started_at": {
@@ -125,6 +204,7 @@
 			"label": ""
 		}
 	},
+	"month": "",
 	"more": "",
 	"nationality.label": "",
 	"next": "Next step",
@@ -133,6 +213,9 @@
 	},
 	"no_record": "",
 	"no_tracking_data": "",
+	"note": {
+		"label": ""
+	},
 	"old_password.label": "",
 	"open_in_tab": "",
 	"open_map": "",
@@ -144,17 +227,61 @@
 	"password.placeholder": "",
 	"password.reset": "",
 	"password_reset": "",
+	"personal_info": {
+		"label": ""
+	},
 	"photo": "",
+	"portfolio_manager": {
+		"contact": {
+			"email": {
+				"label": ""
+			},
+			"phone_mobile": {
+				"label": ""
+			}
+		},
+		"job_title": {
+			"label": ""
+		},
+		"label": "",
+		"placeholder": ""
+	},
 	"position": {
+		"label": ""
+	},
+	"primary_contact": {
+		"contact": {
+			"email": {
+				"label": ""
+			},
+			"phone_mobile": {
+				"label": ""
+			}
+		},
+		"job_title": {
+			"label": ""
+		},
 		"label": ""
 	},
 	"prior_experience.label": "",
 	"profile": "",
+	"provider_company": {
+		"label": ""
+	},
+	"provider_representative": {
+		"label": ""
+	},
+	"provider_signed_at": {
+		"label": ""
+	},
 	"reference_timesheet.label": "",
 	"registration.fill_error": "",
 	"registration.of": "",
 	"registration.register": "",
 	"registration.step": "",
+	"regular_company": {
+		"label": ""
+	},
 	"reset": "",
 	"reset_all": "",
 	"residency.label": "",
@@ -162,21 +289,60 @@
 	"score.label": "",
 	"shift.date.job.notes.label": "",
 	"shift.date.job.position.label": "",
+	"shift.date.shift_date.label": "",
 	"shift_ended_at": {
 		"label": ""
 	},
+	"shift_start_end": "",
 	"shift_started_at": {
 		"label": ""
 	},
+	"shift_starting_time": {
+		"label": ""
+	},
+	"short_name": {
+		"label": ""
+	},
 	"show_map": "",
+	"signature": "",
+	"site_name": {
+		"label": ""
+	},
 	"skill.label": "",
+	"sms_history": {
+		"label": ""
+	},
+	"start": "",
+	"start_date": {
+		"label": ""
+	},
+	"state": {
+		"label": ""
+	},
+	"status": {
+		"label": "",
+		"status": {
+			"label": ""
+		},
+		"supervisor_approved": {
+			"label": ""
+		}
+	},
 	"status.label": "",
 	"submit": "",
 	"supervisor.label": "",
 	"tabs.evaluations.label": "",
 	"tabs.evaluations.name": "",
+	"tabs.general.label": "",
+	"tabs.general.name": "",
+	"tabs.job.name": "",
+	"tabs.job_info.label": "",
+	"tabs.job_info.name": "",
+	"tabs.job_offers.name": "",
+	"tabs.notes.name": "",
 	"tabs.personal.label": "",
 	"tabs.personal.name": "",
+	"tabs.shift_dates.name": "",
 	"tabs.skills.label": "",
 	"tabs.skills.name": "",
 	"tabs.tags.label": "",
@@ -184,6 +350,9 @@
 	"tag.label": "",
 	"take_a_photo": "",
 	"tax_file_number.label": "",
+	"time": {
+		"label": ""
+	},
 	"times.break_started_at.label": "",
 	"times.label": "",
 	"times.shift.date.job.notes.label": "",
@@ -202,10 +371,20 @@
 	"tracking.label": "",
 	"transportation_to_work.label": "",
 	"try_again": "",
+	"updated": {
+		"label": ""
+	},
 	"upload_file": "",
 	"use_camera": "",
 	"username.placeholder": "",
 	"verification_evidence.label": "",
 	"verified_by.label": "",
-	"weight.label": ""
+	"week": "",
+	"weight.label": "",
+	"work_start_date": {
+		"label": ""
+	},
+	"workers": {
+		"label": ""
+	}
 }

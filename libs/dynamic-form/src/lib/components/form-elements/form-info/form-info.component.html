@@ -213,16 +213,16 @@
     </ng-container>
 
     <div *ngIf="job && !config.disableButtons && !disableButtons" class="extend-block">
-      <b>Add shifts and workers</b>
-      <p>Create dates, shifts and time for tasks, add workers.</p>
-      <button class="btn btn-primary btn-shadow" type="button" (click)="extendJob()">Add shifts and workers</button>
-      <button class="btn btn-primary btn-shadow ml-2" type="button" (click)="fillInJob()">Fill In</button>
+      <b>{{ 'add_shifts_and_workers' | translate: {"Default": "Add shifts and workers"} }}</b>
+      <p>{{ 'add_shifts_and_workers.description' | translate: {"Default": "Create dates, shifts and time for tasks, add workers."} }}</p>
+      <button class="btn btn-primary btn-shadow" type="button" (click)="extendJob()">{{ 'add_shifts_and_workers' | translate: {"Default": "Add shifts and workers"} }}</button>
+      <button class="btn btn-primary btn-shadow ml-2" type="button" (click)="fillInJob()">{{ 'fill_in.label' | translate: {"Default": "Fill In"} }}</button>
     </div>
   </div>
 
   <div class="date" *ngIf="created_at || updated_at">
-    <span *ngIf="created_at"><span class="description">Created:</span> {{created_at | dateFormat:'date'}} <br></span>
-    <span *ngIf="updated_at"><span class="description">Updated:</span> {{updated_at | dateFormat:'date'}}</span>
+    <span *ngIf="created_at"><span class="description">{{ 'created' | translate: {"Default": "Created"} }}:</span> {{created_at | dateFormat:'date'}} <br></span>
+    <span *ngIf="updated_at"><span class="description">{{ 'updated' | translate: {"Default": "Updated"} }}:</span> {{updated_at | dateFormat:'date'}}</span>
   </div>
 </div>
 
@@ -247,7 +247,7 @@
           <div class="text-center">
             <button type="submit" class="btn btn-shadow btn-primary text-white button-save mt-3 mb-4"
               [disabled]="saveProcess">
-                Save
+                {{ 'save' | translate: {"Default": "Save"} }}
                 <app-spinner *ngIf="saveProcess"></app-spinner>
             </button>
           </div>

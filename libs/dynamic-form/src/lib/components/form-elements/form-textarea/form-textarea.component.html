@@ -6,9 +6,9 @@
       [attr.for]="key"
       *ngIf="label && config.templateOptions.label"
     >
-      {{ config.templateOptions.label }}:
+      {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
     </label>
-    <app-info [description]="config.templateOptions.description"></app-info>
+    <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
     <div
       class="form-element-content edit"
       [class.full-width]="config.templateOptions.full"

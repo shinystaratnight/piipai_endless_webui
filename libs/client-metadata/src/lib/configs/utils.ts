@@ -84,6 +84,7 @@ export function getEvaluateColumn() {
     .setContent([
       new List.button.element('id', 'evaluateCandidate')
         .setEndpoint(`${Endpoints.Timesheet}{id}/evaluate/`)
+        .setTranslationKey('evaluate.button')
         .setDisplay('Evaluate')
         .customButton('warning', 'evaluate')
         .setShowIfRule([{ evaluated: false }]),
@@ -97,6 +98,7 @@ export function getEvaluateColumn() {
 export function getChangeButton() {
   return new List.button.element('id', 'changeTimesheet')
     .setDisplay('Change')
+    .setTranslationKey('change')
     .setEndpoint(`${Endpoints.Timesheet}{id}/not_agree/`)
     .customButton('danger', 'change');
 }
@@ -104,6 +106,7 @@ export function getChangeButton() {
 export function getApproveButton() {
   return new List.button.element('id', 'approveTimesheet')
     .setDisplay('Approve')
+    .setTranslationKey('approve')
     .setEndpoint(`${Endpoints.Timesheet}{id}/approve/`)
     .customButton('success', 'approve');
 }

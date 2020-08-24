@@ -4,9 +4,9 @@
     <h3 class="widget-name">{{ 'calendar' | translate: {"Default": "Calendar"} }}</h3>
 
     <div *ngIf="calendarType !== 2" class="btn-group range-buttons" btnRadioGroup [formControl]="currentRange">
-      <label [btnRadio]="range.Month" role="button"  [class.active]="isMonthRange">Month</label>
-      <label [btnRadio]="range.Week" role="button"  [class.active]="isWeekRange">Week</label>
-      <label [btnRadio]="range.Day" role="button"  [class.active]="isDayRange">Day</label>
+      <label [btnRadio]="range.Month" role="button"  [class.active]="isMonthRange">{{ 'month' | translate: {"Default": "Month"} }}</label>
+      <label [btnRadio]="range.Week" role="button"  [class.active]="isWeekRange">{{ 'week' | translate: {"Default": "Week"} }}</label>
+      <label [btnRadio]="range.Day" role="button"  [class.active]="isDayRange">{{ 'day' | translate: {"Default": "Day"} }}</label>
     </div>
 
     <div class="range-title-wrapper">

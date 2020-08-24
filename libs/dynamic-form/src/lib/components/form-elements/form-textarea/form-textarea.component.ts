@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { BasicElementComponent } from './../basic-element/basic-element.component';
+import { getTranslationKey } from '@webui/utilities';
 
 @Component({
   selector: 'app-form-textarea',
@@ -33,6 +34,8 @@ export class FormTextareaComponent extends BasicElementComponent implements OnIn
     this.subscriptions = [];
     this.editMode = true;
   }
+
+  getTranslationKey = getTranslationKey;
 
   public ngOnInit() {
     this.addControl(this.config, this.fb);

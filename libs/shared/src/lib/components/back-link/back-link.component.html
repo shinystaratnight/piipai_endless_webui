@@ -3,7 +3,7 @@
     <a href="" (click)="back($event)">
       <ng-container *ngTemplateOutlet="arrow"></ng-container>
 
-      {{label}}
+      {{ translationKey | translate: {"Default": label} }}
     </a>
   </ng-container>
 
@@ -11,7 +11,7 @@
     <a [routerLink]="urlPrefix + path">
       <ng-container *ngTemplateOutlet="arrow"></ng-container>
 
-      {{label}}
+      {{ translationKey | translate: {"Default": label} }}
     </a>
   </ng-container>
 </div>

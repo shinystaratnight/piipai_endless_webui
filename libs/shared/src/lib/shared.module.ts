@@ -10,11 +10,11 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { components } from './components';
 import { directives } from './directives';
 import { pipes } from './pipes';
-// import {
-//   MissingTranslationHandler,
-//   TranslateLoader,
-//   TranslateModule
-// } from '@ngx-translate/core';
+import {
+  // MissingTranslationHandler,
+  // TranslateLoader,
+  TranslateModule
+} from '@ngx-translate/core';
 // import { HttpClient } from '@angular/common/http';
 // import {
 //   HttpLoaderFactory,
@@ -28,7 +28,8 @@ import { pipes } from './pipes';
     FormsModule,
     // FontAwesomeModule,
     NgbTooltipModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule,
     // TranslateModule.forChild({
     //   missingTranslationHandler: {
     //     provide: MissingTranslationHandler,
