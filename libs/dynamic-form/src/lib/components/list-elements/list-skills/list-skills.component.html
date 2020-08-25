@@ -26,7 +26,7 @@
 <ng-container *ngIf="!list && !config.stars">
   <div>
     <span class="skill-title">
-      {{config.display || config.skillName}} {{evaluationCount}}
+      {{ config.key + '.label' | translate: {"Default": config.display || config.skillName} }} {{evaluationCount}}
 
       <ng-container *ngTemplateOutlet="score; context: {score: getScore(config.value), value: config.value}"></ng-container>
     </span>

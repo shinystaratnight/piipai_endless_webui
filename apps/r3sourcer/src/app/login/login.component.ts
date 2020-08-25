@@ -50,7 +50,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           required: true,
           placeholder: 'Login',
           addon: '/assets/img/mail.svg',
-          description: '',
           max: 255
         }
       }
@@ -64,7 +63,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           placeholder: 'Password',
           addon: '/assets/img/key.svg',
           type: 'password',
-          description: ' ',
           max: 128
         }
       }

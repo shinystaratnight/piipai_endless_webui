@@ -1,6 +1,6 @@
 <div class="filter-element" [class.active]="!isCollapsed">
   <label class="filter-label" [class.active]="!isCollapsed">
-    {{ config.label }}
+    {{ getTranslateKey('label') | translate: {"Default": config.label} }}
     <fa-icon
       *ngIf="query"
       class="reset-icon text-danger ml-1"
@@ -21,7 +21,7 @@
           hidden
         />
         <app-checkbox [sm]="true" [checked]="item.checked"></app-checkbox>
-        {{ item.label }}
+        {{ getTranslateKey(item.key) | translate: {"Default": item.label} }}
       </label>
     </div>
   </div>

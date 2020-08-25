@@ -5,6 +5,9 @@
 	"/hr/timesheets-candidate/": "",
 	"/hr/timesheets/history/": "",
 	"/hr/timesheets/unapproved/": "",
+	"Job.back": "",
+	"Scores.label": "",
+	"Tags.label": "",
 	"__str__": {
 		"label": ""
 	},
@@ -14,6 +17,8 @@
 	"add": "",
 	"add_new": "",
 	"add_photo": "",
+	"add_shifts_and_workers": "",
+	"add_shifts_and_workers.description": "",
 	"address": {
 		"label": ""
 	},
@@ -22,6 +27,10 @@
 	"approve.label": "",
 	"approve_timesheet": "",
 	"are_you_sure": "",
+	"autocomplete": "",
+	"available": {
+		"label": ""
+	},
 	"back": "",
 	"bmi.label": "",
 	"break": "",
@@ -39,16 +48,25 @@
 	"candidate_rate": {
 		"label": ""
 	},
+	"candidate_score": "",
 	"candidate_score.client_feedback.label": "",
 	"candidate_score.loyalty.label": "",
 	"candidate_score.recruitment_score.label": "",
 	"candidate_score.reliability.label": "",
 	"candidate_score.skill_score.label": "",
+	"candidate_scores.client_feedback": "",
 	"candidate_scores.client_feedback.label": "",
+	"candidate_scores.loyalty": "",
 	"candidate_scores.loyalty.label": "",
+	"candidate_scores.recruitment_score": "",
 	"candidate_scores.recruitment_score.label": "",
+	"candidate_scores.reliability": "",
 	"candidate_scores.reliability.label": "",
+	"candidate_scores.skill_score": "",
 	"candidate_scores.skill_score.label": "",
+	"candidates": {
+		"label": ""
+	},
 	"change": "",
 	"change_password": "",
 	"city": {
@@ -65,6 +83,11 @@
 	"confirm_going_to_work": "",
 	"confirm_password.description": "",
 	"confirm_password.label": "",
+	"contact": {
+		"__str__": {
+			"label": ""
+		}
+	},
 	"contact.address.street_address.description": "",
 	"contact.address.street_address.label": "",
 	"contact.email.label": "",
@@ -92,6 +115,10 @@
 		"label": ""
 	},
 	"delete": "",
+	"distance": "",
+	"distance.distance_to_jobsite.label": "",
+	"distance.label": "",
+	"distance.time_to_jobsite.label": "",
 	"drag_and_drop": "",
 	"edit": "",
 	"edit_submission": "",
@@ -112,11 +139,28 @@
 	"evaluated_at.label": "",
 	"evaluation": "",
 	"evaluation_score.label": "",
+	"extend": "",
+	"extendCandidates": {
+		"text": ""
+	},
+	"extendDates": {
+		"text": ""
+	},
+	"favourite": {
+		"label": ""
+	},
 	"file": "",
 	"file_size": "",
 	"fill_in": {
 		"label": ""
 	},
+	"fill_shifts": "",
+	"filter.available.label": "",
+	"filter.available.partialy_available": "",
+	"filter.date.label": "",
+	"filter.distance_to_jobsite.label": "",
+	"filter.overpriced.label": "",
+	"filter.overpriced.show_overpriced": "",
 	"filter.shift_started_at": "",
 	"filter.shift_started_at.from": "",
 	"filter.shift_started_at.label": "",
@@ -124,11 +168,16 @@
 	"filter.shift_started_at.today": "",
 	"filter.shift_started_at.tomorrow": "",
 	"filter.shift_started_at.yesterday": "",
+	"filter.show_without_tags.label": "",
+	"filter.show_without_tags.only_job_tags": "",
 	"filter.status": "",
 	"filter.status.4": "",
 	"filter.status.5": "",
 	"filter.status.7": "",
 	"filter.status.label": "",
+	"filter.transportation_to_work.label": "",
+	"filter.transportation_to_work.own_car": "",
+	"filter.transportation_to_work.public_transportation": "",
 	"filters": "",
 	"fulfilled": {
 		"label": ""
@@ -149,6 +198,9 @@
 		"times": ""
 	},
 	"height.label": "",
+	"hourly_rate": {
+		"label": ""
+	},
 	"hourly_rate_default": {
 		"label": ""
 	},
@@ -180,6 +232,7 @@
 			""
 		]
 	},
+	"list.transportation_to_work.1": "",
 	"log_out": "",
 	"login.forgot_password": "",
 	"login.login": "",
@@ -214,6 +267,10 @@
 	"no_record": "",
 	"no_tracking_data": "",
 	"note": {
+		"label": ""
+	},
+	"notes": {
+		"description": "",
 		"label": ""
 	},
 	"old_password.label": "",
@@ -287,6 +344,8 @@
 	"residency.label": "",
 	"save": "",
 	"score.label": "",
+	"search_by_distance": "",
+	"select_dates": "",
 	"shift.date.job.notes.label": "",
 	"shift.date.job.position.label": "",
 	"shift.date.shift_date.label": "",
@@ -300,6 +359,7 @@
 	"shift_starting_time": {
 		"label": ""
 	},
+	"shifts": "",
 	"short_name": {
 		"label": ""
 	},
@@ -363,6 +423,9 @@
 	"times.shift_started_at.date": "",
 	"times.shift_started_at.label": "",
 	"timesheet": "",
+	"timesheet.count_timesheets.label": "",
+	"timesheet.days_from_last_timesheet.label": "",
+	"timesheet.label": "",
 	"timesheet_will_approved": "",
 	"totalTime.label": "",
 	"total_time": {
@@ -385,6 +448,7 @@
 		"label": ""
 	},
 	"workers": {
-		"label": ""
+		"label": "",
+		"placeholder": ""
 	}
 }

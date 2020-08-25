@@ -5,6 +5,9 @@
 	"/hr/timesheets-candidate/": "Timesheets",
 	"/hr/timesheets/history/": "Timesheet history",
 	"/hr/timesheets/unapproved/": "Unapproved timesheets",
+	"Job.back": "Back to job list",
+	"Scores.label": "Scores",
+	"Tags.label": "Tags",
 	"__str__": {
 		"label": "Job"
 	},
@@ -14,6 +17,8 @@
 	"add": "Add",
 	"add_new": "Add new",
 	"add_photo": "Add photo",
+	"add_shifts_and_workers": "Add shifts and workers",
+	"add_shifts_and_workers.description": "Create dates, shifts and time for tasks, add workers.",
 	"address": {
 		"label": "Address"
 	},
@@ -22,6 +27,10 @@
 	"approve.label": "Approve/Change",
 	"approve_timesheet": "Approve timesheet",
 	"are_you_sure": "Are you sure?",
+	"autocomplete": "Autocomplete",
+	"available": {
+		"label": "Available"
+	},
 	"back": "Back",
 	"bmi.label": "Bmi",
 	"break": "Break",
@@ -39,16 +48,25 @@
 	"candidate_rate": {
 		"label": "Candidate rate override"
 	},
+	"candidate_score": "Candidate Score",
 	"candidate_score.client_feedback.label": "Client feedback",
 	"candidate_score.loyalty.label": "Loyalty",
 	"candidate_score.recruitment_score.label": "Average test",
 	"candidate_score.reliability.label": "Reliability",
 	"candidate_score.skill_score.label": "Average skill",
-	"candidate_scores.client_feedback.label": "",
-	"candidate_scores.loyalty.label": "",
-	"candidate_scores.recruitment_score.label": "",
-	"candidate_scores.reliability.label": "",
-	"candidate_scores.skill_score.label": "",
+	"candidate_scores.client_feedback": "Client feedback",
+	"candidate_scores.client_feedback.label": "Client feedback",
+	"candidate_scores.loyalty": "Loyality",
+	"candidate_scores.loyalty.label": "Loyality",
+	"candidate_scores.recruitment_score": "Average test",
+	"candidate_scores.recruitment_score.label": "Average test",
+	"candidate_scores.reliability": "Reliability",
+	"candidate_scores.reliability.label": "Reliability",
+	"candidate_scores.skill_score": "Average skills",
+	"candidate_scores.skill_score.label": "Average skills",
+	"candidates": {
+		"label": "Select workers"
+	},
 	"change": "Change",
 	"change_password": "Change Password",
 	"city": {
@@ -65,6 +83,11 @@
 	"confirm_going_to_work": "Confirm if you are going to work",
 	"confirm_password.description": "To confirm, type the new password again.",
 	"confirm_password.label": "Verify",
+	"contact": {
+		"__str__": {
+			"label": "Average score"
+		}
+	},
 	"contact.address.street_address.description": "",
 	"contact.address.street_address.label": "Street Address",
 	"contact.email.label": "Email",
@@ -92,6 +115,10 @@
 		"label": "Default Shift Starting Time"
 	},
 	"delete": "Delete",
+	"distance": "Distanse to the jobsite",
+	"distance.distance_to_jobsite.label": "Distance",
+	"distance.label": "Distance/time",
+	"distance.time_to_jobsite.label": "Time",
 	"drag_and_drop": "Drag the photo to the area or click the button",
 	"edit": "Edit",
 	"edit_submission": "Edit submission",
@@ -112,11 +139,28 @@
 	"evaluated_at.label": "Evaluated at",
 	"evaluation": "Evaluation",
 	"evaluation_score.label": "Evaluation",
+	"extend": "Extend",
+	"extendCandidates": {
+		"text": "Candidates"
+	},
+	"extendDates": {
+		"text": "Dates"
+	},
+	"favourite": {
+		"label": ""
+	},
 	"file": "file",
 	"file_size": "File size is too large!",
 	"fill_in": {
 		"label": "Fill in"
 	},
+	"fill_shifts": "Fills shifts automatically using criteria",
+	"filter.available.label": "Available",
+	"filter.available.partialy_available": "Show partialy available",
+	"filter.date.label": "Shifts",
+	"filter.distance_to_jobsite.label": "Distance",
+	"filter.overpriced.label": "Overpriced",
+	"filter.overpriced.show_overpriced": "Show overpriced",
 	"filter.shift_started_at": "",
 	"filter.shift_started_at.from": "From",
 	"filter.shift_started_at.label": "Shift date",
@@ -124,11 +168,16 @@
 	"filter.shift_started_at.today": "Today",
 	"filter.shift_started_at.tomorrow": "Tomorrow",
 	"filter.shift_started_at.yesterday": "Yesterday",
+	"filter.show_without_tags.label": "Tags",
+	"filter.show_without_tags.only_job_tags": "Only job tags",
 	"filter.status": "",
 	"filter.status.4": "Pending submission",
 	"filter.status.5": "Pending approval",
 	"filter.status.7": "Approved",
 	"filter.status.label": "Status",
+	"filter.transportation_to_work.label": "Transportation to Work",
+	"filter.transportation_to_work.own_car": "Own Car",
+	"filter.transportation_to_work.public_transportation": "Public Transportation",
 	"filters": "Filters",
 	"fulfilled": {
 		"label": "Fulfilled"
@@ -149,6 +198,9 @@
 		"times": "Times"
 	},
 	"height.label": "Height, cm",
+	"hourly_rate": {
+		"label": "Hourly rate"
+	},
 	"hourly_rate_default": {
 		"label": "Candidate rate override"
 	},
@@ -180,6 +232,7 @@
 			"Approved"
 		]
 	},
+	"list.transportation_to_work.1": "Own Car",
 	"log_out": "Log out",
 	"login.forgot_password": "Forgot Password?",
 	"login.login": "Login",
@@ -216,6 +269,10 @@
 	"note": {
 		"label": "Notes"
 	},
+	"notes": {
+		"description": "Job Description/Instructions for candidate",
+		"label": "Notes"
+	},
 	"old_password.label": "Current Password",
 	"open_in_tab": "Open in new tab",
 	"open_map": "Open Map",
@@ -224,7 +281,7 @@
 	"passed": "Passed",
 	"password.description": "The password must be 8-20 characters, and must not contain spaces.",
 	"password.label": "New Password",
-	"password.placeholder": "",
+	"password.placeholder": "Password",
 	"password.reset": "",
 	"password_reset": "Password Reset",
 	"personal_info": {
@@ -287,6 +344,8 @@
 	"residency.label": "Residency",
 	"save": "Save",
 	"score.label": "Score",
+	"search_by_distance": "Search by distance",
+	"select_dates": "Select Dates",
 	"shift.date.job.notes.label": "Notes",
 	"shift.date.job.position.label": "Position",
 	"shift.date.shift_date.label": "Shift info",
@@ -300,6 +359,7 @@
 	"shift_starting_time": {
 		"label": "Shift Starting Time"
 	},
+	"shifts": "Shifts",
 	"short_name": {
 		"label": "Site name"
 	},
@@ -363,6 +423,9 @@
 	"times.shift_started_at.date": "Date",
 	"times.shift_started_at.label": "Start",
 	"timesheet": "Timesheet History",
+	"timesheet.count_timesheets.label": "Total",
+	"timesheet.days_from_last_timesheet.label": "From last",
+	"timesheet.label": "Timesheet",
 	"timesheet_will_approved": "Timesheet will be automatically approved in 4 hours",
 	"totalTime.label": "Total time",
 	"total_time": {
@@ -385,12 +448,7 @@
 		"label": "Work Start Date"
 	},
 	"workers": {
-		"label": "Workers"
-  },
-  "notes": {
-    "label": "Notes",
-    "description": "Job Description/Instructions for candidate"
-  },
-  "add_shifts_and_workers": "Add shifts and workers",
-  "add_shifts_and_workers.description": "Create dates, shifts and time for tasks, add workers."
+		"label": "Workers",
+		"placeholder": ""
+	}
 }

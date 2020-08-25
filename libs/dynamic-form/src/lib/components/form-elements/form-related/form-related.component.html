@@ -6,7 +6,7 @@
         {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
       </label>
 
-      <app-info [description]="getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description}"></app-info>
+      <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
       <app-info *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible"
         [description]="getTranslationKey(config.key, 'error_message') | translate: {'Default': config.errorMessage.message}" [danger]="true"></app-info>
 
@@ -93,7 +93,7 @@
         [class.required]="config.templateOptions.required">
         {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
       </label>
-      <app-info [description]="getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description}"></app-info>
+      <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
       <div #autocomplete *ngIf="config.many && results && !config.useOptions"
         class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results"
         style="position: relative">

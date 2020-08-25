@@ -221,8 +221,8 @@
   </div>
 
   <div class="date" *ngIf="created_at || updated_at">
-    <span *ngIf="created_at"><span class="description">{{ 'created' | translate: {"Default": "Created"} }}:</span> {{created_at | dateFormat:'date'}} <br></span>
-    <span *ngIf="updated_at"><span class="description">{{ 'updated' | translate: {"Default": "Updated"} }}:</span> {{updated_at | dateFormat:'date'}}</span>
+    <span *ngIf="created_at"><span class="description">{{ 'created.label' | translate: {"Default": "Created"} }}:</span> {{created_at | dateFormat:'date'}} <br></span>
+    <span *ngIf="updated_at"><span class="description">{{ 'updated.label' | translate: {"Default": "Updated"} }}:</span> {{updated_at | dateFormat:'date'}}</span>
   </div>
 </div>
 

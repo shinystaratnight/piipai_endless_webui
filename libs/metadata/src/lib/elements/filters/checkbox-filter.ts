@@ -6,7 +6,7 @@ export interface CheckboxFilterOptions {
   query: string;
   multiple?: boolean;
   defaultValue?: any;
-  values: { value: string | boolean, label: string }[];
+  values: { value: string | boolean, label: string, key?: string }[];
 }
 
 export const Checkbox = 'checkbox';
@@ -19,7 +19,7 @@ export class CheckboxFilter implements FilterModel {
   public label: string;
   public query: string;
   public multiple: boolean;
-  public options: { value: string | boolean, label: string }[];
+  public options: { value: string | boolean, label: string, key?: string }[];
 
   constructor(options: CheckboxFilterOptions) {
     const { key, label, multiple = false, defaultValue = null, values = [] } = options;

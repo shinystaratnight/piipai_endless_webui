@@ -358,9 +358,9 @@
                     [attr.data-label]="cell.label"
                     [hidden]="cell.tab && cell.tab.is_collapsed"
                   >
-                    <label class="cell-label" *ngIf="isMobileDevice">{{
-                      cell.label
-                    }}</label>
+                    <label class="cell-label" *ngIf="isMobileDevice">
+                      {{ cell.label }}
+                    </label>
                     <br *ngIf="isMobileDevice" />
 
                     <ng-container
@@ -453,7 +453,8 @@
                     <thead>
                       <tr>
                         <th *ngFor="let acell of row.additionalBody.content">
-                          <span>{{ acell.label }}</span>
+                          <span>{{ acell.name + '.label' | translate: {"Default": acell.label} }}</span>
+                          <!-- <span>{{ acell.label }}</span> -->
                         </th>
                       </tr>
                     </thead>
@@ -497,9 +498,11 @@
                       class="additional-data-wrapper"
                       *ngFor="let acell of row.additionalBody.content"
                     >
-                      <span class="additional-data-label">{{
+                    <!-- {{acell|json}} -->
+                      <span class="additional-data-label">{{ acell.label + '.label' | translate: {"Default": acell.label} }}</span>
+                      <!-- <span >{{
                         acell.label
-                      }}</span>
+                      }}</span> -->
                       <div
                         class="additional-data inline"
                         *ngFor="let field of acell.content"

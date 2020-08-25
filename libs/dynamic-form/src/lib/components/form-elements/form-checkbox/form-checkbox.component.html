@@ -44,7 +44,7 @@
         {{ getTranslationKey(config.key, 'text') | translate: {"Default": config.templateOptions.text || config.templateOptions.label}  }}
         <button *ngIf="hasButton" type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendAction($event)">Resend</button>
       </label>
-      <app-info description="{{ getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description} }}"></app-info>
+      <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
     </div>
   </div>
   <div *ngIf="errors">
@@ -98,7 +98,7 @@
           {{ getTranslationKey(config.key, 'text') | translate: {"Default": config.templateOptions.text || config.templateOptions.label} }}
           <button *ngIf="hasButton" type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendAction($event)">Resend</button>
         </label>
-        <app-info description="{{ getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description} }}"></app-info>
+        <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
       </div>
     </div>
   </div>

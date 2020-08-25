@@ -12,7 +12,7 @@
     >
       {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}
     </label>
-    <app-info [description]="getTranslationKey(config.key, 'description') | translate: {'Default': config.templateOptions.description}"></app-info>
+    <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
     <div class="form-element-content edit">
       <select
         class="form-control custom-select"
