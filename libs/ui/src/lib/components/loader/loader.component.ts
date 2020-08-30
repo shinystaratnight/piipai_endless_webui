@@ -11,7 +11,7 @@ import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/
     </div>
   `,
   styleUrls: ['./loader.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  // encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoaderComponent {}

@@ -8,6 +8,7 @@ import {
 } from '@ngx-translate/core';
 
 import { DynamicFormModule } from '@webui/dynamic-form';
+import { UiModule } from '@webui/ui';
 
 import { LoginComponent } from './login.component';
 import { SharedModule } from '../shared/shared.module';
@@ -31,7 +32,8 @@ import { MissingTranslationHelper } from '../helpers/translate.helper';
     }),
 
     DynamicFormModule,
-    SharedModule
+    SharedModule,
+    UiModule
   ]
 })
 export class LoginModule {}

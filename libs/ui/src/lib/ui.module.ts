@@ -4,11 +4,11 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { CloseButtonComponent, TimeComponent, BackLinkComponent, CheckboxComponent } from './components';
+import { CloseButtonComponent, TimeComponent, BackLinkComponent, CheckboxComponent, LoaderComponent } from './components';
 
 @NgModule({
-  declarations: [CloseButtonComponent, TimeComponent, BackLinkComponent, CheckboxComponent],
+  declarations: [CloseButtonComponent, TimeComponent, BackLinkComponent, CheckboxComponent, LoaderComponent],
   imports: [CommonModule, RouterModule, TranslateModule, FontAwesomeModule],
-  exports: [CloseButtonComponent, TimeComponent, BackLinkComponent, CheckboxComponent]
+  exports: [CloseButtonComponent, TimeComponent, BackLinkComponent, CheckboxComponent, LoaderComponent]
 })
 export class UiModule {}

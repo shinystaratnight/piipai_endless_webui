@@ -156,7 +156,7 @@
 	},
 	"fill_shifts": "Fills shifts automatically using criteria",
 	"filter.available.label": "Available",
-	"filter.available.partialy_available": "Show partialy available",
+	"filter.available.partialy_available": "Show partially available",
 	"filter.date.label": "Shifts",
 	"filter.distance_to_jobsite.label": "Distance",
 	"filter.overpriced.label": "Overpriced",

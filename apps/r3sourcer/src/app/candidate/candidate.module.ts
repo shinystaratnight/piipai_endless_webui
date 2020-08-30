@@ -14,6 +14,7 @@ import { routes } from './candidate.routing';
 // import { SharedModule } from '@webui/shared';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { CalendarModule } from '@webui/calendar';
+import { UiModule } from '@webui/ui';
 
 import { Metadata } from './metadata.config';
 import { CommonModule } from '@angular/common';
@@ -32,6 +33,7 @@ import { SharedModule } from '../shared/shared.module';
     CalendarModule,
     SharedModule,
     TranslateModule,
+    UiModule
   ]
 })
 export class CandidateModule {}

@@ -11,7 +11,7 @@ import { CompanyComponent } from './company/company.component';
 import { PermissionsService } from './permissions/permissions.service';
 import { MyobComponent } from './myob/myob.component';
 
-// import { SharedModule } from '@webui/shared';
+import { SharedModule } from '@webui/shared';
 import { MasterGuideModule } from '../master-guide/master-guide.module';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -22,11 +22,12 @@ import { SettingsService } from './settings.service';
 
 import { MyobResolver } from './myob/myob.resolver';
 import { Metadata } from './metadata.config';
+import { SharedModule as Shared } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
-    // SharedModule,
+    SharedModule,
     NgbModule,
     CommonModule,
     FormsModule,
@@ -35,6 +36,7 @@ import { Metadata } from './metadata.config';
     DynamicFormModule.forChild({ metadata: Metadata }),
     MasterGuideModule,
     QuillModule.forRoot(),
+    Shared
   ],
   declarations: [
     PermissionsComponent,

@@ -18,6 +18,8 @@ import { services } from './services';
 
 import { routes } from './billing.routing';
 import { Metadata } from './metadata.config';
+import { SharedModule } from '../shared/shared.module';
+import { UiModule } from '@webui/ui';
 
 @NgModule({
   imports: [
@@ -31,7 +33,9 @@ import { Metadata } from './metadata.config';
 
     // SharedModule,
     DynamicFormModule.forChild({ metadata: Metadata }),
-    MasterGuideModule
+    MasterGuideModule,
+    SharedModule,
+    UiModule
   ],
   declarations: [
     BillingComponent,
