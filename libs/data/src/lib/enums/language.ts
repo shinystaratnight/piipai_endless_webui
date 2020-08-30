@@ -4,3 +4,8 @@ export enum Language {
   Estonian = 'et',
   Finnish = 'fi',
 }
+
+export enum CountryCodeLanguage {
+  EE = Language.Estonian,
+  FI = Language.Finnish
+}

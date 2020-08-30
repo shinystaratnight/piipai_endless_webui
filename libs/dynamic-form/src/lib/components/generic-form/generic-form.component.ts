@@ -2016,7 +2016,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         query +=
           typeof queries[el] === 'string'
             ? queries[el] === 'currentCompany'
-              ? `${el}=${this.settingsService.settings.company_settings.company}&`
+              ? `${el}=${this.settingsService.settings.company}&`
               : `${el}=${format.format(queries[el], data)}&`
             : `${el}=${queries[el]}&`;
       });

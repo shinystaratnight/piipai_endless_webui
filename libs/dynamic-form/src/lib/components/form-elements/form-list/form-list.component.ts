@@ -66,6 +66,8 @@ export class FormListComponent implements OnInit, OnDestroy {
   public initialized: boolean;
   public metadataQuery: string;
   public addMetadataQuery: string;
+  labelTranslateKey: string;
+  helpTranslateKey: string;
 
   private subscriptions: Subscription[];
 
@@ -95,6 +97,9 @@ export class FormListComponent implements OnInit, OnDestroy {
     this.checkHiddenProperty();
     this.allowMethods = this.permission.getAllowMethods(undefined, this.config.endpoint);
     this.hasAddForm = this.config.add_form;
+
+    this.labelTranslateKey = `tabs.${this.config.translateKey}.label`;
+    this.helpTranslateKey = `tabs.${this.config.translateKey}.help`;
 
     if (this.hasAddForm) {
       this.addFormConfig = this.getAddFormConfig();

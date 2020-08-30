@@ -4,7 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
-import { Endpoints } from '@webui/data';
+import { Endpoints, CountryCodeLanguage, Language } from '@webui/data';
+import { TranslateHelperService } from './translate-helper-service';
 
 interface CompanySettings {
   sms_enabled: boolean;
@@ -29,7 +30,7 @@ export class SiteSettingsService {
     }
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private translate: TranslateHelperService) {}
 
   public resolve() {
     return this.getSettings();
@@ -53,6 +54,8 @@ export class SiteSettingsService {
         tap(settings => {
           this.settings = settings;
           this.updateBrowserStyles(settings);
+
+          this.translate.setLang(CountryCodeLanguage[settings.country_code] || Language.English);
         }),
         map(settings => {
           if (settings.redirect_to) {

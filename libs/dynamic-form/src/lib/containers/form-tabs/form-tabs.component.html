@@ -8,7 +8,7 @@
         [id]="'ngb-tab-' + i"
         *ngIf="!field.hide && (!config.editForm ? field.main : true)"
         title="
-          {{ getTranslateKey(field.key, 'name') | translate: {'Default': field.name || (field.templateOptions && field.templateOptions.label) } }}
+          {{ getTranslateKey(field.translateKey, 'name') | translate: {'Default': field.name || (field.templateOptions && field.templateOptions.label) } }}
         "
       >
         <ng-template ngbTabContent>
@@ -16,7 +16,7 @@
             class="label"
             *ngIf="field.main && !isMobileDevice && !config.notEdit"
           >
-            {{ getTranslateKey(field.key, 'label') | translate: {"Default": field.label} }}
+            {{ getTranslateKey(field.translateKey, 'label') | translate: {"Default": field.label} }}
             <button
               type="button"
               class="btn edit-mode"

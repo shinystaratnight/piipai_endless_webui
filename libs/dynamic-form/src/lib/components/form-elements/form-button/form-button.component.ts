@@ -51,7 +51,6 @@ export class FormButtonComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    console.log(this);
     const replace_by = this.config.replace_by;
     const templateOptions = this.config.templateOptions;
 

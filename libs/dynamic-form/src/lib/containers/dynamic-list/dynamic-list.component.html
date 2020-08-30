@@ -69,17 +69,18 @@
         [class.has-description]="description"
         *ngIf="
           (config.list &&
-            (inForm &&
+            inForm &&
               (config.list.search_enabled ||
                 (config.list.buttons && config.list.buttons.length)) &&
-              !delay)) ||
+              !delay) ||
           (!inForm && !poped)
         "
       >
-        <span
-          *ngIf="!inForm && !description"
-          class="mr-auto my-1">
-            {{ getListLabelKey() | translate: {"Default": label || config.list.label} }}
+        <span *ngIf="!inForm && !description" class="mr-auto my-1">
+          {{
+            getListLabelKey()
+              | translate: { Default: label || config.list.label }
+          }}
         </span>
         <p *ngIf="description">
           <span>{{ label || config.list.label }}</span> <br />
@@ -113,11 +114,7 @@
           (click)="toggleFilterBlock()"
           *ngIf="showFilters && !(identifyDevice() || isMobileDevice)"
         >
-          <svg
-            width="20"
-            height="15"
-            viewBox="0 0 20 15"
-          >
+          <svg width="20" height="15" viewBox="0 0 20 15">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
@@ -125,7 +122,7 @@
               fill="#FDFDFD"
             />
           </svg>
-          {{ 'filters' | translate: {"Default": "Filters"} }}
+          {{ 'filters' | translate: { Default: 'Filters' } }}
         </button>
         <app-list-search-bar
           class="datatable-search"
@@ -173,21 +170,16 @@
           class="btn btn-link text-secondary d-flex align-items-center text-uppercase fw-600 mb-0"
           (click)="toggleFilterBlock()"
           *ngIf="showFilters"
-          style="font-size: 14px"
+          style="font-size: 14px;"
         >
-          <svg
-            class="mr-1"
-            width="16"
-            height="12"
-            viewBox="0 0 20 15"
-          >
+          <svg class="mr-1" width="16" height="12" viewBox="0 0 20 15">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
               d="M 5.58236 3.51318C 4.87141 3.51318 4.29285 2.93807 4.29285 2.23032C 4.29285 1.52304 4.87141 0.94746 5.58236 0.94746C 6.29331 0.94746 6.87189 1.52304 6.87189 2.23032C 6.87189 2.93807 6.29331 3.51318 5.58236 3.51318ZM 19.0476 1.77933L 8.09522 1.77933C 7.9776 1.77933 7.87332 1.82623 7.78998 1.89682C 7.62665 0.826186 6.70379 1.30114e-07 5.58236 1.30114e-07C 4.49808 1.30114e-07 3.59142 0.770285 3.38523 1.78975C 3.36761 1.78786 3.35189 1.77933 3.33332 1.77933L 0.476187 1.77933C 0.21333 1.77933 -2.46465e-06 1.99156 -2.46465e-06 2.25306C -2.46465e-06 2.51456 0.21333 2.72679 0.476187 2.72679L 3.33332 2.72679C 3.35618 2.72679 3.37523 2.71684 3.39713 2.714C 3.61999 3.7112 4.51332 4.46064 5.58236 4.46064C 6.68903 4.46064 7.60522 3.65672 7.7857 2.60599C 7.86951 2.67894 7.97569 2.72679 8.09522 2.72679L 19.5238 2.72679C 19.7871 2.72679 20 2.51456 20 2.25306C 20 1.99156 19.7871 1.77933 19.5238 1.77933L 19.0476 1.77933ZM 19.5238 7.46419L 16.8252 7.46419C 16.7067 6.34381 15.7633 5.46505 14.6067 5.46505C 13.45 5.46505 12.5067 6.34381 12.3886 7.46419L 0.476231 7.46419C 0.213374 7.46419 4.11318e-05 7.67594 4.11318e-05 7.93792C 4.11318e-05 8.19941 0.213374 8.41164 0.476231 8.41164L 12.4943 8.41164C 12.7957 9.28899 13.6238 9.92569 14.6067 9.92569C 15.5895 9.92569 16.4176 9.28899 16.7195 8.41164L 19.5238 8.41164C 19.7867 8.41164 20 8.19941 20 7.93792C 20 7.67594 19.7867 7.46419 19.5238 7.46419ZM 14.6067 8.97823C 13.8957 8.97823 13.3172 8.40264 13.3172 7.69536C 13.3172 6.98809 13.8957 6.41251 14.6067 6.41251C 15.3176 6.41251 15.8962 6.98809 15.8962 7.69536C 15.8962 8.40264 15.3176 8.97823 14.6067 8.97823ZM 20 12.6749C 20 12.4134 19.7871 12.2012 19.5238 12.2012L 8.09522 12.2012C 7.97284 12.2012 7.86331 12.2505 7.77903 12.3263C 7.57141 11.3082 6.66569 10.5394 5.58236 10.5394C 4.53855 10.5394 3.66666 11.2561 3.41809 12.2183C 3.38952 12.213 3.36332 12.2012 3.33332 12.2012L 0.476187 12.2012C 0.21333 12.2012 -2.46465e-06 12.4134 -2.46465e-06 12.6749C -2.46465e-06 12.9369 0.21333 13.1487 0.476187 13.1487L 3.33332 13.1487C 3.34951 13.1487 3.36284 13.1416 3.37808 13.1397C 3.55665 14.1932 4.47332 15 5.58236 15C 6.72712 15 7.66283 14.1392 7.79712 13.0359C 7.87902 13.1032 7.98045 13.1487 8.09522 13.1487L 19.5238 13.1487C 19.7871 13.1487 20 12.9369 20 12.6749ZM 5.58236 14.0525C 4.87141 14.0525 4.29285 13.4774 4.29285 12.7697C 4.29285 12.0624 4.87141 11.4868 5.58236 11.4868C 6.29331 11.4868 6.87189 12.0624 6.87189 12.7697C 6.87189 13.4774 6.29331 14.0525 5.58236 14.0525Z"
             />
           </svg>
-          {{ 'filters' | translate: {"Default": "Filters"} }}
+          {{ 'filters' | translate: { Default: 'Filters' } }}
         </button>
 
         <!-- TODO: fix dropdown -->
@@ -237,10 +229,10 @@
                   (!noneEdit && !inForm)
                 "
                 class="active first-cell"
-                style="width: 2rem"
+                style="width: 2rem;"
               >
                 <div *ngIf="(!inForm && config.list.actions) || actions">
-                  <label for="all-checkbox">{{'all' | translate}}</label>
+                  <label for="all-checkbox">{{ 'all' | translate }}</label>
                   <input
                     id="all-checkbox"
                     type="checkbox"
@@ -282,7 +274,7 @@
               </ng-container>
               <th *ngIf="config.list.tabs" class="last-cell">
                 <span (click)="openAllTabs()" class="more__header">
-                  {{'more' | translate}}
+                  {{ 'more' | translate }}
                   <fa-icon
                     class="ml-2 sort-icon"
                     [icon]="['fas', collapsed ? 'chevron-down' : 'chevron-up']"
@@ -453,7 +445,10 @@
                     <thead>
                       <tr>
                         <th *ngFor="let acell of row.additionalBody.content">
-                          <span>{{ acell.name + '.label' | translate: {"Default": acell.label} }}</span>
+                          <span>{{
+                            acell.name + '.label'
+                              | translate: { Default: acell.label }
+                          }}</span>
                           <!-- <span>{{ acell.label }}</span> -->
                         </th>
                       </tr>
@@ -498,8 +493,11 @@
                       class="additional-data-wrapper"
                       *ngFor="let acell of row.additionalBody.content"
                     >
-                    <!-- {{acell|json}} -->
-                      <span class="additional-data-label">{{ acell.label + '.label' | translate: {"Default": acell.label} }}</span>
+                      <!-- {{acell|json}} -->
+                      <span class="additional-data-label">{{
+                        acell.label + '.label'
+                          | translate: { Default: acell.label }
+                      }}</span>
                       <!-- <span >{{
                         acell.label
                       }}</span> -->
@@ -588,7 +586,7 @@
           class="btn btn-shadow btn-primary text-white button-save mt-3"
           [disabled]="saveProcess || modalInfo.form.disableSaveButton"
         >
-          {{'save' | translate: {"Default": "Save"} }}
+          {{ 'save' | translate: { Default: 'Save' } }}
           <app-spinner *ngIf="saveProcess"></app-spinner>
         </button>
       </app-generic-form>
@@ -597,7 +595,7 @@
         [latitude]="modalInfo.latitude"
         [longitude]="modalInfo.longitude"
         [zoom]="13"
-        [mapTypeControl]="true"
+        [disableDefaultUI]="true"
       >
         <agm-marker
           [latitude]="modalInfo.latitude"
@@ -661,14 +659,16 @@
     <div class="modal-header-wrapper">
       <div class="modal-header">
         <h5 class="modal-title" [class.text-center]="modalInfo.signature">
-          <ng-container *ngIf="modalInfo.evaluate">{{'evaluate.label' | translate: {"Default": "Evaluate"} }}</ng-container>
+          <ng-container *ngIf="modalInfo.evaluate">{{
+            'evaluate.label' | translate: { Default: 'Evaluate' }
+          }}</ng-container>
 
           <ng-container *ngIf="!modalInfo.evaluate">
             <ng-container *ngIf="modalInfo.label.picture">
               <img
                 class="mr-2"
                 alt="Photo"
-                style="border-radius: 50%"
+                style="border-radius: 50%;"
                 width="40"
                 height="40"
                 [src]="modalInfo.label.picture"
@@ -701,7 +701,7 @@
       >
         <div class="d-flex">
           <button class="btn btn-shadow btn-primary button-save ml-lg-auto">
-            {{'save' | translate: {"Default": "Save"} }}
+            {{ 'save' | translate: { Default: 'Save' } }}
           </button>
         </div>
       </app-generic-form>
@@ -713,7 +713,7 @@
           <img
             [src]="modalInfo.label.picture"
             alt="Photo"
-            style="border-radius: 50%"
+            style="border-radius: 50%;"
             height="100"
             width="100"
           />
@@ -747,7 +747,7 @@
           class="btn btn-shadow btn-primary button-save"
           (click)="sendEvaluateData(modalInfo.endpoint, modalInfo.data)"
         >
-        {{'save' | translate: {"Default": "Save"} }}
+          {{ 'save' | translate: { Default: 'Save' } }}
           <app-spinner *ngIf="saveProcess"></app-spinner>
         </button>
       </div>
@@ -776,7 +776,10 @@
             </span>
           </div>
           <div class="d-flex justify-content-center flex-column">
-            {{ 'approve_timesheet' | translate: {"Default": "Approve timesheet"} }} <br />
+            {{
+              'approve_timesheet' | translate: { Default: 'Approve timesheet' }
+            }}
+            <br />
             <span class="secondary-title">for {{ modalInfo.label.name }}</span>
           </div>
         </h2>
@@ -799,12 +802,18 @@
         <div class="content-info">
           <div *ngIf="modalInfo.timesheet" class="flex-fill">
             <div class="desktop-version">
-              <h3 class="group-title hide-sm">{{ 'times.label' | translate: {"Default": "Times"} }}</h3>
+              <h3 class="group-title hide-sm">
+                {{ 'times.label' | translate: { Default: 'Times' } }}
+              </h3>
 
               <ng-container
                 *ngTemplateOutlet="
                   line;
-                  context: { label: 'Date', key: 'date', value: modalInfo.timesheet.date }
+                  context: {
+                    label: 'Date',
+                    key: 'date',
+                    value: modalInfo.timesheet.date
+                  }
                 "
               ></ng-container>
               <ng-container
@@ -902,7 +911,7 @@
               class="group-title times"
               [class.change-form]="modalInfo.changeEndpoint"
             >
-              {{'times.label' | translate: {"Default": "Times"} }}
+              {{ 'times.label' | translate: { Default: 'Times' } }}
             </h3>
 
             <app-generic-form
@@ -931,7 +940,8 @@
               class="time-line d-flex align-items-center flex-wrap"
               [class.text-success]="total"
             >
-              <span class="label" [class.description]="muted">{{ key | translate: {"Default": label}  }}:</span
+              <span class="label" [class.description]="muted"
+                >{{ key | translate: { Default: label } }}:</span
               >&nbsp;
               <span>{{ value }}</span>
             </div>
@@ -941,7 +951,9 @@
             class="flex-fill evaluation-content"
             [class.evaluated]="modalInfo.evaluated"
           >
-            <h3 class="group-title">{{ 'evaluate.label' | translate: {"Default": "Evaluation"} }}</h3>
+            <h3 class="group-title">
+              {{ 'evaluate.label' | translate: { Default: 'Evaluation' } }}
+            </h3>
 
             <div
               class="evaluation-wrapper d-flex align-items-center text-warning"
@@ -993,14 +1005,14 @@
             <h3
               class="group-title signature-title d-flex align-items-center w-100"
             >
-              {{ 'signature' | translate: {"Default": "Signature"} }}
+              {{ 'signature' | translate: { Default: 'Signature' } }}
               <button
                 *ngIf="modalInfo.signature"
                 type="button"
                 class="btn btn-link text-danger ml-auto pr-0 py-0 only-mobile"
                 (click)="signatureCanvas.clear()"
               >
-                {{ 'clear' | translate: {"Default": "Clear area"} }}
+                {{ 'clear' | translate: { Default: 'Clear area' } }}
               </button>
             </h3>
             <app-signature
@@ -1023,7 +1035,7 @@
           [class.signature-step]="modalInfo.signatureStep"
           (click)="signatureCanvas.clear()"
         >
-          {{'clear' | translate: {"Default": "Clear" } }}
+          {{ 'clear' | translate: { Default: 'Clear' } }}
         </button>
         <button
           type="button"
@@ -1035,7 +1047,7 @@
           "
           (click)="sendSignature(sendFormButton)"
         >
-        {{'approve' | translate: {"Default": "Approve"} }}
+          {{ 'approve' | translate: { Default: 'Approve' } }}
           <app-spinner *ngIf="saveProcess"></app-spinner>
         </button>
 
@@ -1049,7 +1061,7 @@
           "
           (click)="modalInfo.signatureStep = true"
         >
-          {{'next' | translate: {"Default": "Next" } }}
+          {{ 'next' | translate: { Default: 'Next' } }}
           <svg
             class="ml-1"
             width="16"
@@ -1137,7 +1149,7 @@
     <object
       type="application/pdf"
       [data]="modalInfo.url"
-      style="width: 100%; height: 80vh"
+      style="width: 100%; height: 80vh;"
     ></object>
   </div>
 </ng-template>
@@ -1151,7 +1163,7 @@
     [latitude]="modalInfo.latitude"
     [longitude]="modalInfo.longitude"
     [zoom]="13"
-    [mapTypeControl]="true"
+    [disableDefaultUI]="true"
   >
     <agm-marker
       [iconUrl]="marker.iconUrl"
@@ -1183,10 +1195,11 @@
     (click)="modal.close()"
   ></app-close-button>
   <agm-map
+    [disableDefaultUI]="true"
     [latitude]="modalInfo.latitude"
     [longitude]="modalInfo.longitude"
     [zoom]="13"
-    [mapTypeControl]="true"
+    [disableDefaultUI]="true"
   >
     <agm-marker
       [latitude]="modalInfo.latitude"
@@ -1237,8 +1250,10 @@
     <div class="mb-3 total-time-wrapper">
       <span
         class="text-success mr-1"
-        style="display: inline-block; font-size: 15px; width: 50%"
-        >{{ 'total_time.label' | translate: {"Default": "Total time"} }}:&nbsp;</span
+        style="display: inline-block; font-size: 15px; width: 50%;"
+        >{{
+          'total_time.label' | translate: { Default: 'Total time' }
+        }}:&nbsp;</span
       >
       <ng-container
         *ngFor="let field of getElement('totalTime', data.content).content"
@@ -1260,7 +1275,9 @@
       >
       </ng-container>
     </div>
-    <span class="label">{{ 'evaluate.label' | translate: {"Default": "Evaluation"} }}:</span>
+    <span class="label"
+      >{{ 'evaluate.label' | translate: { Default: 'Evaluation' } }}:</span
+    >
     <div class="d-inline-block">
       <ng-container
         *ngFor="let field of getElement('evaluate', data.content).content"
@@ -1349,7 +1366,7 @@
     <div class="mb-3 d-flex">
       <span
         class="text-success mr-1"
-        style="display: inline-block; font-size: 15px; width: 50%"
+        style="display: inline-block; font-size: 15px; width: 50%;"
         >Total time:&nbsp;</span
       >
       <ng-container
@@ -1449,7 +1466,7 @@
     <div class="mb-3 total-time-wrapper">
       <span
         class="text-success mr-1"
-        style="display: inline-block; font-size: 15px; width: 50%"
+        style="display: inline-block; font-size: 15px; width: 50%;"
         >Total time:&nbsp;</span
       >
       <ng-container

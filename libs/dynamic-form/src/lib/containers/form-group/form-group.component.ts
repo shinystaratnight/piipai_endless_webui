@@ -26,7 +26,7 @@ export class FormGroupComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.translationKey = `group.${this.config.key}`;
+    this.translationKey = `group.${this.config.translateKey}`;
   }
 
   public eventHandler(e) {

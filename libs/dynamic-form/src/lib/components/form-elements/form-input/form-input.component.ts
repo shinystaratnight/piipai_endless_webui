@@ -28,7 +28,6 @@ import { FormatString, getTotalTime, getTimeInstance } from '@webui/utilities';
 import { BasicElementComponent } from '../basic-element/basic-element.component';
 import { SiteSettingsService } from '@webui/core';
 import { formatCurrency, getCurrencySymbol } from '@angular/common';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-form-input',
@@ -117,7 +116,6 @@ export class FormInputComponent extends BasicElementComponent
     public elementRef: ElementRef,
     private cd: ChangeDetectorRef,
     private siteSettings: SiteSettingsService,
-    private translate: TranslateService
   ) {
     super();
     this.subscriptions = [];
@@ -126,7 +124,6 @@ export class FormInputComponent extends BasicElementComponent
   }
 
   public ngOnInit() {
-    console.log(this);
     if (
       this.config.type !== 'static' ||
       this.config.type === 'static' ||
