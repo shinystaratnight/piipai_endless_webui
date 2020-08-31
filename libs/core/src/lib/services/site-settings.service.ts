@@ -86,7 +86,7 @@ export class SiteSettingsService {
     const isManager = location.pathname.includes('/mn');
 
     if (!isManager) {
-      this.translate.setLang(CountryCodeLanguage[settings.country_code] || Language.English);
+      this.translate.setLang(this.translate.currentLang || CountryCodeLanguage[settings.country_code] || Language.English);
     } else {
       this.translate.setLang(Language.English);
     }

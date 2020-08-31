@@ -85,6 +85,7 @@
     </div>
 
     <ul *ngIf="!hideUserMenu" class="user-menu">
+      <li class="px-3" *ngIf="!isManager()"><app-language-selector></app-language-selector></li>
       <li>
         <div
           *ngIf="user && user.data.roles && user.data.roles.length > 1"
@@ -115,13 +116,6 @@
 
 
   </div>
-
-  <!-- <select class="ml-3" [formControl]="language">
-    <option [value]="Language.English">English</option>
-    <option [value]="Language.Russian">Russian</option>
-    <option [value]="Language.Estonian">Estonian</option>
-    <option [value]="Language.Finnish">Finnish</option>
-  </select> -->
 </header>
 
 <ng-template #list let-p="pages" let-h="height">
