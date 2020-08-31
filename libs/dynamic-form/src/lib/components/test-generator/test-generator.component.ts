@@ -52,7 +52,7 @@ export class TestGeneratorComponent implements OnInit {
     this.testData = {
       name: data.test_name,
       description: data.description,
-      questions: []
+      questions: [],
     };
 
     data.acceptance_test_questions.forEach((question) => {
@@ -88,7 +88,8 @@ export class TestGeneratorComponent implements OnInit {
       answerMetadata: data.type === QuestionType.Text
         ? this.getTextMetadata()
         : this.getOptionsMetadata(answerOptions),
-      group: this.form.get(data.id)
+      group: this.form.get(data.id),
+      pictures: data.pictures.map(el => el.picture.origin)
     };
 
     if (question.type === QuestionType.Text) {

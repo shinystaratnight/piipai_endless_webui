@@ -456,7 +456,7 @@ const form = [
                     read_only: false,
                     templateOptions: {
                       label: 'Industries',
-                      values: ['__str__'],
+                      values: ['__str__', 'translations'],
                       type: 'related'
                     },
                     column: true,

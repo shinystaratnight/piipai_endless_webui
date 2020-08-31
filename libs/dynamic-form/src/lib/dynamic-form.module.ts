@@ -63,7 +63,8 @@ import { TranslateModule } from '@ngx-translate/core';
     fromComponents.WorkflowComponent,
     fromComponents.TestGeneratorComponent,
     fromContainers.FormBuilderFormComponent,
-    fromComponents.FilterRelatedComponent
+    fromComponents.FilterRelatedComponent,
+    fromComponents.ImageUploaderComponent,
   ],
   declarations: [
     fromComponents.WebcamComponent,

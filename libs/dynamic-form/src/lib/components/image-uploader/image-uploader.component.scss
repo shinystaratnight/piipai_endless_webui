@@ -1,0 +1,31 @@
+@import '../../../../../../styles/variables';
+
+.wrapper {
+  display: inline-flex;
+  flex-direction: column;
+
+  label {
+    color: $primary;
+  }
+
+  input {
+    display: none;
+  }
+
+  .images {
+    display: flex;
+    align-items: center;
+  }
+
+  .image {
+    width: 100px;
+    height: auto;
+    border-radius: .25rem;
+    object-fit: cover;
+    object-position: center;
+
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
+}

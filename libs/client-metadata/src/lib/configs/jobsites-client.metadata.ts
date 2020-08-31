@@ -399,7 +399,7 @@ const form = [
                     read_only: true,
                     templateOptions: {
                       label: 'Industry',
-                      values: ['__str__'],
+                      values: ['__str__', 'translations'],
                       type: 'related',
                     },
                     type: 'related',
@@ -676,7 +676,7 @@ const formadd = [
               label: 'Industry',
               add: true,
               delete: false,
-              values: ['__str__'],
+              values: ['__str__', 'translations'],
               type: 'related',
               edit: true,
               required: true,

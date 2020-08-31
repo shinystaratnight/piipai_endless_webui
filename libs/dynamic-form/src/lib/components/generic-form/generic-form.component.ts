@@ -182,6 +182,7 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
   public selectedDates: string[];
 
   public activeTabId: string;
+  public canEdit = true;
 
   private subscriptions: Subscription[] = [];
 
@@ -665,6 +666,10 @@ export class GenericFormComponent implements OnChanges, OnDestroy, OnInit {
         })
       )
       .subscribe((data: any) => {
+        if (this.endpoint === Endpoints.Tag) {
+          this.canEdit = data.owner !== 'system';
+        }
+
         this.getRelatedDataForOptions(this.metadata, data);
         this.fillingForm(this.metadata, data);
         this.checkRuleElement(this.metadata);

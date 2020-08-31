@@ -15,7 +15,7 @@ const form = [
     read_only: true,
     templateOptions: {
       label: 'Tag',
-      values: ['__str__'],
+      values: ['__str__', 'owner', 'translation'],
       type: 'related'
     },
     type: 'related',
@@ -40,7 +40,7 @@ const formadd = [
     read_only: true,
     templateOptions: {
       label: 'Tag',
-      values: ['__str__'],
+      values: ['__str__', 'owner', 'translation'],
       type: 'related'
     },
     type: 'related',
