@@ -71,6 +71,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     ? '/mn'
     : '';
   public initTime: boolean;
+  isManager = isManager;
 
   language = new FormControl(Language.English);
   Language = Language;

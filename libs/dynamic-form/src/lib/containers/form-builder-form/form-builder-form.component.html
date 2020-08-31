@@ -1,5 +1,9 @@
 <div *ngIf="config" class="form-builder-form">
   <section class="form">
+    <div class="p-3 d-flex align-items-center justify-content-end">
+      <app-language-selector></app-language-selector>
+    </div>
+
     <header class="form__header" *ngIf="steps.length > 1">
       <span class="form__steps">{{'registration.step' | translate}} {{ currentStep + 1 }} {{'registration.of' | translate}} {{ steps.length }}</span>
       <h3 class="form__name">{{ steps[currentStep].title }}</h3>
