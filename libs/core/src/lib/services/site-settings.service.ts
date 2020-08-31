@@ -4,7 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
-import { Endpoints } from '@webui/data';
+import { Endpoints, CountryCodeLanguage, Language } from '@webui/data';
+import { TranslateHelperService } from './translate-helper-service';
+import { ActivatedRoute } from '@angular/router';
 
 interface CompanySettings {
   sms_enabled: boolean;
@@ -29,7 +31,7 @@ export class SiteSettingsService {
     }
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private translate: TranslateHelperService, private route: ActivatedRoute) {}
 
   public resolve() {
     return this.getSettings();
@@ -54,6 +56,7 @@ export class SiteSettingsService {
           this.settings = settings;
           this.updateBrowserStyles(settings);
         }),
+        tap((settings) => this.setLanguage(settings)),
         map(settings => {
           if (settings.redirect_to) {
             location.href = settings.redirect_to;
@@ -68,7 +71,7 @@ export class SiteSettingsService {
         })
       );
     } else if (this.settings) {
-      return of(this.settings);
+      return of(this.settings).pipe(tap((settings) => this.setLanguage(this.settings)));
     }
   }
 
@@ -77,5 +80,15 @@ export class SiteSettingsService {
 
     body.parentElement.classList.add(`${settings.color_scheme}-theme`);
     body.style.fontFamily = `${settings.font || 'Source Sans Pro'}, sans-serif`;
+  }
+
+  private setLanguage(settings: CompanySettings) {
+    const isManager = location.pathname.includes('/mn');
+
+    if (!isManager) {
+      this.translate.setLang(CountryCodeLanguage[settings.country_code] || Language.English);
+    } else {
+      this.translate.setLang(Language.English);
+    }
   }
 }

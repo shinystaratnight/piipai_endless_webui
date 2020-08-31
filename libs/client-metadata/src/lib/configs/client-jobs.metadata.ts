@@ -823,6 +823,7 @@ const form = [
       {
         main: true,
         name: 'Job info',
+        key: 'job_info',
         type: 'group',
         label: 'Job information',
         children: [
@@ -831,6 +832,7 @@ const form = [
             children: [
               {
                 label: 'General',
+                key: 'general',
                 type: 'group',
                 children: [
                   {
@@ -886,6 +888,7 @@ const form = [
               },
               {
                 label: 'Client',
+                key: 'client',
                 type: 'group',
                 children: [
                   {
@@ -947,6 +950,7 @@ const form = [
               },
               {
                 label: 'Provider',
+                key: 'provider',
                 type: 'group',
                 children: [
                   {
@@ -1007,6 +1011,7 @@ const form = [
           type: 'list',
           text: 'Shift Dates'
         },
+        key: 'shift_dates',
         query: {
           job: '{id}'
         },
@@ -1029,6 +1034,7 @@ const form = [
           type: 'list',
           text: 'Job Offers'
         },
+        key: 'job_offers',
         visibleMode: true,
         type: 'list',
         query: {

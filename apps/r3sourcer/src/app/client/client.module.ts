@@ -12,12 +12,15 @@ import { components } from './components';
 
 import { routes } from './client.routing';
 
-import { SharedModule } from '@webui/shared';
+// import { SharedModule } from '@webui/shared';
 import { DynamicFormModule } from '@webui/dynamic-form';
 import { CalendarModule } from '@webui/calendar';
 
 import { Metadata } from './metadata.config';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '../shared/shared.module';
+import { UiModule } from '@webui/ui';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -33,9 +36,12 @@ import { CommonModule } from '@angular/common';
     InfiniteScrollModule,
     NgbTabsetModule,
 
-    SharedModule,
+    // SharedModule,
     DynamicFormModule.forChild({ metadata: Metadata }),
     CalendarModule,
+    SharedModule,
+    UiModule,
+    TranslateModule
   ],
 })
 export class ClientModule {}

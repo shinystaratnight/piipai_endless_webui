@@ -10,12 +10,18 @@ import {
   ViewEncapsulation,
   OnDestroy
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { AuthService, NavigationService, UserService } from '@webui/core';
-import { User, Page, Role } from '@webui/data';
+import {
+  AuthService,
+  NavigationService,
+  TranslateHelperService,
+  UserService
+} from '@webui/core';
+import { User, Page, Role, Language } from '@webui/data';
 import {
   getContactAvatar,
   isClient,
@@ -31,12 +37,12 @@ import {
   encapsulation: ViewEncapsulation.None
 })
 export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('header', { static: false }) public header: any;
-  @ViewChild('list', { static: false }) public list: any;
-  @ViewChild('item', { static: false }) public item: any;
-  @ViewChild('nav', { static: false }) public nav: any;
-  @ViewChild('userBlock', { static: false }) public userBlock: any;
-  @ViewChild('modal', { static: false }) public modal: any;
+  @ViewChild('header') public header: any;
+  @ViewChild('list') public list: any;
+  @ViewChild('item') public item: any;
+  @ViewChild('nav') public nav: any;
+  @ViewChild('userBlock') public userBlock: any;
+  @ViewChild('modal') public modal: any;
 
   @Input() public user: User;
   @Input() public logo = '/assets/img/new-software.svg';
@@ -66,20 +72,29 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     : '';
   public initTime: boolean;
 
+  language = new FormControl(Language.English);
+  Language = Language;
+
   get pages(): Page[] {
     return this.navigationService.navigationList[this.currentRole];
   }
 
   public resizeSubscription: Subscription;
+  public languageSubscription: Subscription;
 
   constructor(
     private authService: AuthService,
     private navigationService: NavigationService,
-    private userService: UserService
+    private userService: UserService,
+    private translate: TranslateHelperService
   ) {}
 
   public ngOnInit() {
     this.getUserInformation();
+
+    this.languageSubscription = this.language.valueChanges.subscribe((v) => {
+      this.translate.setLang(v);
+    });
   }
 
   public ngAfterViewInit() {
@@ -103,6 +118,10 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngOnDestroy() {
     if (this.resizeSubscription) {
       this.resizeSubscription.unsubscribe();
+    }
+
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
     }
   }
 
@@ -160,7 +179,7 @@ export class NavigationComponent implements OnInit, AfterViewInit, OnDestroy {
     this.userService.currentRole(role);
   }
 
-  public clickActione(e, p) {
+  public clickAction(e, p) {
     e.stopPropagation();
     e.preventDefault();
 

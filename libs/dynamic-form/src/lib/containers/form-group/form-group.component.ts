@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { isMobile, isCandidate } from '@webui/utilities';
 
@@ -8,12 +8,13 @@ import { isMobile, isCandidate } from '@webui/utilities';
   styleUrls: ['./form-group.component.scss']
 })
 
-export class FormGroupComponent {
+export class FormGroupComponent implements OnInit {
   public config: any;
   public group: FormGroup;
   public errors: any;
   public message: any;
   public isMobileDevice = isMobile() && isCandidate();
+  translationKey: string;
 
   @Output() public event = new EventEmitter();
   @Output() public buttonAction = new EventEmitter();
@@ -22,6 +23,10 @@ export class FormGroupComponent {
     return this.config.name
       ? this.config.label || ''
       : this.config.label || ' ';
+  }
+
+  ngOnInit() {
+    this.translationKey = `group.${this.config.translateKey}`;
   }
 
   public eventHandler(e) {

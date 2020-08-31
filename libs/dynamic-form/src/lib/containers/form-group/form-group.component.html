@@ -6,7 +6,7 @@
       [class.normal]="config.normal"
       [style.marginBottom.px]="config.marginBottom"
       *ngIf="!config.main && (config.name ? config.label : true)">
-        {{labelText === ' ' ? '&nbsp;' : labelText}}
+        {{ translationKey | translate: {"Default": labelText === ' ' ? '&nbsp;' : labelText} }}
     </label>
 
     <ng-container *ngFor="let field of config.children">

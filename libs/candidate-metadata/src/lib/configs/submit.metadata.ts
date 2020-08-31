@@ -20,7 +20,7 @@ const form = function() {
     new Form.row.element()
       .noBorder()
       .setChildren([
-        new Form.group.element('Times')
+        new Form.group.element('Times', 'times')
           .setChildren([
             new Form.checkbox.element('noBreak', 'No Break', CheckboxType.Checkbox)
               .seDefaultValue(false)

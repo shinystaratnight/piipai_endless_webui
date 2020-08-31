@@ -9,7 +9,7 @@ import {
   OnDestroy,
   HostListener,
   ElementRef,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -23,10 +23,9 @@ import { debounceTime, skip, filter } from 'rxjs/operators';
 @Component({
   selector: 'app-filter-related',
   templateUrl: 'filter-related.component.html',
-  styleUrls: ['./filter-related.component.scss']
+  styleUrls: ['./filter-related.component.scss'],
 })
-export class FilterRelatedComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+export class FilterRelatedComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public config: any;
   public data: any;
   public item: any;
@@ -57,12 +56,12 @@ export class FilterRelatedComponent
   public icons = {
     r3sourcer: {
       true: 'chevron-right',
-      false: 'chevron-down'
+      false: 'chevron-down',
     },
     default: {
       true: 'eye',
-      false: 'eye-slash'
-    }
+      false: 'eye-slash',
+    },
   };
 
   public cashResults: any[];
@@ -70,7 +69,7 @@ export class FilterRelatedComponent
   public filterSubscription: Subscription;
   public querySubscription: Subscription;
 
-  @ViewChild('search', { static: false })
+  @ViewChild('search')
   public search;
 
   @Output()
@@ -97,22 +96,13 @@ export class FilterRelatedComponent
         }
       }, 200);
     });
-    this.filterSubscription = this.fs.reset.subscribe(() =>
-      this.updateFilter()
-    );
-    this.isCollapsed =
-      this.query || document.body.classList.contains('r3sourcer')
-        ? false
-        : true;
+    this.filterSubscription = this.fs.reset.subscribe(() => this.updateFilter());
+    this.isCollapsed = this.query || document.body.classList.contains('r3sourcer') ? false : true;
     this.defaultValue = {
       [this.config.data.key]: '',
-      [this.config.data.value]: this.multiple
-        ? `Select ${this.config.label}`
-        : 'All'
+      [this.config.data.value]: this.multiple ? `Select ${this.config.label}` : 'All',
     };
-    this.theme = document.body.classList.contains('r3sourcer')
-      ? 'r3sourcer'
-      : 'default';
+    this.theme = document.body.classList.contains('r3sourcer') ? 'r3sourcer' : 'default';
   }
 
   public ngAfterViewInit() {
@@ -120,7 +110,7 @@ export class FilterRelatedComponent
       this.subscription = this.search.valueChanges
         .pipe(
           skip(2),
-          filter(value => value !== null),
+          filter((value) => value !== null),
           debounceTime(400)
         )
         .subscribe(() => {
@@ -157,7 +147,7 @@ export class FilterRelatedComponent
   }
 
   public openAutocomplete($event) {
-    if (this.multiple && (this.item && !this.item.hideAutocomplete)) {
+    if (this.multiple && this.item && !this.item.hideAutocomplete) {
       this.item.hideAutocomplete = true;
       return;
     }
@@ -203,12 +193,10 @@ export class FilterRelatedComponent
     } else {
       let filteredList;
       if (this.searchValue && this.chashValues) {
-        filteredList = this.chashValues.filter(el => {
+        filteredList = this.chashValues.filter((el) => {
           const val = el[this.config.data.value];
           if (val) {
-            return (
-              val.toLowerCase().indexOf(this.searchValue.toLowerCase()) > -1
-            );
+            return val.toLowerCase().indexOf(this.searchValue.toLowerCase()) > -1;
           }
         });
         this.previewList = filteredList;
@@ -229,8 +217,8 @@ export class FilterRelatedComponent
 
   public setValue(value, list?) {
     if (this.multiple) {
-      this.selected = list.filter(item => item.checked);
-      this.item.data = this.selected.map(el => this.getValue(el, this.config.data.key));
+      this.selected = list.filter((item) => item.checked);
+      this.item.data = this.selected.map((el) => this.getValue(el, this.config.data.key));
       this.item.displayValue = this.selected.length
         ? `Selected ${this.selected.length} ${this.config.label}`
         : `Select ${this.config.label}`;
@@ -260,25 +248,20 @@ export class FilterRelatedComponent
     const element = {
       data,
       lastElement: 0,
-      hideAutocomplete: true
+      hideAutocomplete: true,
     };
     return element;
   }
 
   public onChange() {
-    this.fs.generateQuery(
-      this.genericQuery(this.config.query),
-      this.config.key,
-      this.config.listName,
-      this.item
-    );
+    this.fs.generateQuery(this.genericQuery(this.config.query), this.config.key, this.config.listName, this.item);
     this.changeQuery();
   }
 
   public genericQuery(query) {
     let result = '';
     if (Array.isArray(this.item.data)) {
-      this.item.data.forEach(el => {
+      this.item.data.forEach((el) => {
         result += `${query}=${el}&`;
       });
     } else {
@@ -292,7 +275,7 @@ export class FilterRelatedComponent
     this.event.emit({
       list: this.config.listName,
       key: this.config.query,
-      value: this.item
+      value: this.item,
     });
   }
 
@@ -343,11 +326,11 @@ export class FilterRelatedComponent
         this.item.data = '';
         this.item.displayValue = 'All';
       } else if (this.previewList) {
-        this.previewList.forEach(el => {
+        this.previewList.forEach((el) => {
           el.checked = false;
         });
-        this.selected = this.previewList.filter(item => item.checked);
-        this.item.data = this.selected.map(el => this.getValue(el, this.config.data.key));
+        this.selected = this.previewList.filter((item) => item.checked);
+        this.item.data = this.selected.map((el) => this.getValue(el, this.config.data.key));
         this.item.displayValue =
           this.selected && this.selected.length
             ? `Selected ${this.selected.length} ${this.config.label}`
@@ -377,27 +360,18 @@ export class FilterRelatedComponent
       const formatString = new FormatString();
       const data = {
         ...this.siteSettingsService.settings,
-        filter_value: value
-      }
-      endpoint = formatString.format(
-        this.config.data.endpoint,
-        data
-      );
+        filter_value: value,
+      };
+      endpoint = formatString.format(this.config.data.endpoint, data);
       this.genericFormService.getAll(endpoint).subscribe((res: any) => {
         if (res.results) {
-          this.item.displayValue = this.getValue(
-            res.results[0],
-            this.config.data.value
-          );
+          this.item.displayValue = this.getValue(res.results[0], this.config.data.value);
         }
       });
     } else {
       const index = this.config.data.endpoint.indexOf('?');
       if (index !== -1) {
-        endpoint =
-          this.config.data.endpoint.slice(0, index) +
-          `${value}/` +
-          this.config.data.endpoint.slice(index);
+        endpoint = this.config.data.endpoint.slice(0, index) + `${value}/` + this.config.data.endpoint.slice(index);
       } else {
         endpoint = `${this.config.data.endpoint}${value}/`;
       }
@@ -411,67 +385,58 @@ export class FilterRelatedComponent
   public getOptions(value, concat = false) {
     const formatString = new FormatString();
     const endpoint = this.config.data.endpoint.includes('{')
-      ? formatString.format(
-          this.config.data.endpoint,
-          this.siteSettingsService.settings
-        )
+      ? formatString.format(this.config.data.endpoint, this.siteSettingsService.settings)
       : this.config.data.endpoint;
     const offset = this.item.lastElement;
     let query = '';
 
     if (value) {
-      query +=
-        endpoint.indexOf('?') === -1 ? `?search=${value}` : `&search=${value}`;
+      query += endpoint.indexOf('?') === -1 ? `?search=${value}` : `&search=${value}`;
     }
     query += !query && endpoint.indexOf('?') === -1 ? '?' : '&';
     query += `&limit=${this.limit}&offset=${offset}`;
     query += this.generateFields(this.config.data);
-    if (
-      !this.item.count ||
-      (this.item.count && offset < this.item.count && concat)
-    ) {
+    if (!this.item.count || (this.item.count && offset < this.item.count && concat)) {
       this.item.lastElement += this.limit;
-      this.genericFormService
-        .getByQuery(endpoint, query)
-        .subscribe((res: any) => {
-          this.skipScroll = false;
-          this.item.count = res.count;
-          if (res.results) {
-            if (concat) {
-              if (this.previewList) {
-                res.results.forEach(el => {
-                  if (el) {
-                    el.__str__ = this.getValue(el, this.config.data.value);
-                  }
-                });
-
-                this.previewList.push(...res.results);
-              }
-            } else {
-              if (!this.chashValues && this.multiple) {
-                if (this.selected) {
-                  res.results.forEach(el => {
-                    if (this.selected.indexOf(el[this.config.data.key]) > -1) {
-                      el.checked = true;
-                    }
-                  });
-                }
-                this.chashValues = res.results;
-                this.previewList = this.chashValues;
-                this.selected = this.filterSelectedValues(this.previewList);
-                return;
-              }
-              res.results.forEach(el => {
+      this.genericFormService.getByQuery(endpoint, query).subscribe((res: any) => {
+        this.skipScroll = false;
+        this.item.count = res.count;
+        if (res.results) {
+          if (concat) {
+            if (this.previewList) {
+              res.results.forEach((el) => {
                 if (el) {
                   el.__str__ = this.getValue(el, this.config.data.value);
                 }
               });
 
-              this.previewList = res.results;
-              this.cd.detectChanges();
+              this.previewList.push(...res.results);
             }
+          } else {
+            if (!this.chashValues && this.multiple) {
+              if (this.selected) {
+                res.results.forEach((el) => {
+                  if (this.selected.indexOf(el[this.config.data.key]) > -1) {
+                    el.checked = true;
+                  }
+                });
+              }
+              this.chashValues = res.results;
+              this.previewList = this.chashValues;
+              this.selected = this.filterSelectedValues(this.previewList);
+              return;
+            }
+            res.results.forEach((el) => {
+              if (el) {
+                el.__str__ = this.getValue(el, this.config.data.value);
+              }
+            });
+
+            this.previewList = res.results;
+            this.cd.detectChanges();
           }
-        });
+        }
+      });
     } else {
       this.skipScroll = false;
     }
@@ -481,7 +446,7 @@ export class FilterRelatedComponent
     let result;
 
     if (Array.isArray(value)) {
-      value.forEach(el => {
+      value.forEach((el) => {
         result = result ? result : data[el];
       });
     } else {
@@ -500,7 +465,7 @@ export class FilterRelatedComponent
     query += `fields=${data.key}&`;
 
     if (Array.isArray(data.value)) {
-      data.value.forEach(el => {
+      data.value.forEach((el) => {
         query += `fields=${el}&`;
       });
     } else {
@@ -511,23 +476,21 @@ export class FilterRelatedComponent
   }
 
   public selectAll(list) {
-    list.forEach(el => {
+    list.forEach((el) => {
       el.checked = true;
     });
     this.setValue(null, list);
   }
 
   public resetAll(list) {
-    list.forEach(el => {
+    list.forEach((el) => {
       el.checked = false;
     });
     this.setValue(null, list);
   }
 
   public filterSelectedValues(list) {
-    return list.filter(
-      el => this.selected && this.selected.indexOf(el.id) > -1
-    );
+    return list.filter((el) => this.selected && this.selected.indexOf(el.id) > -1);
   }
 
   public removeItem(item) {

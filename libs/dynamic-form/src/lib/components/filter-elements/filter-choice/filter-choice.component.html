@@ -1,6 +1,6 @@
 <div class="filter-element" [class.active]="!isCollapsed">
   <label class="filter-label"  [class.active]="!isCollapsed">
-    {{config.label}}
+    {{ getTranslateKey('label') | translate: {"Default": config.label} }}
     <!-- <i
       fa
       class="p-2 ml-auto"
@@ -23,7 +23,7 @@
       [class.selected]="query === item.value"
       style="cursor: pointer"
       (click)="select(item.value)">
-        {{item.label}}
+      {{ getTranslateKey(item.value) | translate: { Default: item.label } }}
     </li>
   </ul>
 </div>

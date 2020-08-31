@@ -17,7 +17,8 @@ import {
   FilterMultipleComponent,
   FilterRangeComponent,
   FilterRelatedComponent,
-  FilterSelectComponent
+  FilterSelectComponent,
+  FilterHeaderComponent
 } from './filter-elements';
 
 // Form elements
@@ -92,6 +93,7 @@ export const entryComponents = [
   FilterRangeComponent,
   FilterRelatedComponent,
   FilterSelectComponent,
+  FilterHeaderComponent,
 
   FormButtonComponent,
   FormCheckboxComponent,

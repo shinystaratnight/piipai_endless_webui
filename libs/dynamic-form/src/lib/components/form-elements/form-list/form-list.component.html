@@ -12,7 +12,7 @@
       aria-controls="collapseExample"
       style="cursor: pointer"
     ></fa-icon>
-    {{ config.templateOptions.label }}
+    {{ labelTranslateKey | translate: {"Default": config.templateOptions.label}  }}
     <button
       *ngIf="showButton || config.delay"
       type="button"
@@ -25,8 +25,8 @@
 
   <div class="d-flex">
     <div class="mr-auto">
-      <h4>{{ config.templateOptions.label }}</h4>
-      <p>{{ config.help }}</p>
+      <h4>{{ labelTranslateKey | translate: {"Default": config.templateOptions.label} }}</h4>
+      <p>{{ config.help || (helpTranslateKey | translate: {"Default": config.help }) }}</p>
     </div>
     <button
       type="button"

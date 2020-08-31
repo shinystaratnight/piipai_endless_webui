@@ -16,7 +16,7 @@
       (currentPosition && currentPosition.longitude) || defaultlongitude
     "
     [zoom]="13"
-    [mapTypeControl]="true"
+    [disableDefaultUI]="true"
   >
     <agm-marker
       *ngFor="let marker of markers; trackBy: trackByFn"

@@ -16,13 +16,15 @@ export class ListElement {
   prefilled?: { [key: string]: string };
   query?: { [key: string]: any };
   metadata_query?: { [key: string]: any };
+  translateKey?: string;
 
-  constructor(label: string, endpoint: string) {
+  constructor(label: string, endpoint: string, translateKey?: string) {
     this.templateOptions = {
       label
     };
 
     this.endpoint = endpoint;
+    this.translateKey = translateKey;
   }
 
   setAdditionalInfo(text: string, help: string) {
@@ -55,5 +57,4 @@ export class ListElement {
 
     return this;
   }
-
 }

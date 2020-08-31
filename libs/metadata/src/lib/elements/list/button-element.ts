@@ -19,6 +19,7 @@ export class ButtonElement extends BasicListElement {
   svg?: string;
   shadow?: boolean;
   replace_by?: string;
+  translationKey: string;
 
   constructor(field: string, action: string, title?: string) {
     super(field, Button);
@@ -27,7 +28,7 @@ export class ButtonElement extends BasicListElement {
     this.title = title;
   }
 
-  setCustomLink(image?: string) {
+  setCustomLink(image?: string): ButtonElement {
     this.customLink = true;
 
     if (image) {
@@ -37,43 +38,43 @@ export class ButtonElement extends BasicListElement {
     return this;
   }
 
-  setEndpoint(endpoint: string) {
+  setEndpoint(endpoint: string): ButtonElement {
     this.endpoint = endpoint;
 
     return this;
   }
 
-  withoutDelim() {
+  withoutDelim(): ButtonElement {
     this.noDelim = true;
 
     return this;
   }
 
-  setFields(fields: any[]) {
+  setFields(fields: any[]): ButtonElement {
     this.fields = fields;
 
     return this;
   }
 
-  setIcon(icon: string) {
+  setIcon(icon: string): ButtonElement {
     this.icon = `fa-${icon}`;
 
     return this;
   }
 
-  setTextColor(color: string) {
+  setTextColor(color: string): ButtonElement {
     this.text_color = color;
 
     return this;
   }
 
-  setHidden(value: string) {
+  setHidden(value: string): ButtonElement {
     this.hidden = value;
 
     return this;
   }
 
-  customButton(color: string, svgName: string) {
+  customButton(color: string, svgName: string): ButtonElement {
     this.color = color;
     this.svg = svgName;
     this.shadow = true;
@@ -81,8 +82,14 @@ export class ButtonElement extends BasicListElement {
     return this;
   }
 
-  addReplaceBy(field: string) {
+  addReplaceBy(field: string): ButtonElement {
     this.replace_by = field;
+
+    return this;
+  }
+
+  setTranslationKey(key: string): ButtonElement {
+    this.translationKey = key;
 
     return this;
   }

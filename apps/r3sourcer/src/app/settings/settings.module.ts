@@ -22,6 +22,7 @@ import { SettingsService } from './settings.service';
 
 import { MyobResolver } from './myob/myob.resolver';
 import { Metadata } from './metadata.config';
+import { SharedModule as Shared } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { Metadata } from './metadata.config';
     DynamicFormModule.forChild({ metadata: Metadata }),
     MasterGuideModule,
     QuillModule.forRoot(),
+    Shared
   ],
   declarations: [
     PermissionsComponent,

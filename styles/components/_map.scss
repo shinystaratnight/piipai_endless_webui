@@ -1,5 +1,5 @@
 $map-height: 500px;
 
-.sebm-google-map-container {
-  height: $map-height;
+.agm-map-container-inner {
+  height: $map-height !important;
 }

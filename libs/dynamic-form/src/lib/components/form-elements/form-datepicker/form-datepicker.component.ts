@@ -7,36 +7,32 @@ import {
   ChangeDetectorRef,
   ElementRef,
   HostBinding,
-  HostListener
+  HostListener,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { Subscription, Subject } from 'rxjs';
 
-import {
-  getDatePickerConfig,
-  getTimePickerConfig
-} from './form-datepicker.config';
+import { getDatePickerConfig, getTimePickerConfig } from './form-datepicker.config';
 import { BasicElementComponent } from './../basic-element/basic-element.component';
 
-import { FormatString, isMobile, getPropValue } from '@webui/utilities';
+import { FormatString, isMobile, getPropValue, getTranslationKey } from '@webui/utilities';
 import { DateService, DateInstance, Format } from '@webui/core';
 
 enum DateType {
   Date = 'date',
   Datetime = 'datetime',
-  Time = 'time'
+  Time = 'time',
 }
 
 @Component({
   selector: 'app-form-datepicker',
   templateUrl: './form-datepicker.component.html',
-  styleUrls: ['./form-datepicker.component.scss']
+  styleUrls: ['./form-datepicker.component.scss'],
 })
-export class FormDatepickerComponent extends BasicElementComponent
-  implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('d', { static: false }) public d: ElementRef;
-  @ViewChild('t', { static: false }) public t: ElementRef;
+export class FormDatepickerComponent extends BasicElementComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('d') public d: ElementRef;
+  @ViewChild('t') public t: ElementRef;
 
   @HostBinding('class.mobile-device') mobile = isMobile();
 
@@ -48,7 +44,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   public model = {
     date: '',
-    time: ''
+    time: '',
   };
 
   public label: boolean;
@@ -65,13 +61,14 @@ export class FormDatepickerComponent extends BasicElementComponent
   public formats = {
     date: Format.Date,
     datetime: Format.DateTime,
-    time: Format.Time
+    time: Format.Time,
   };
 
   public viewMode: boolean;
   public editMode = true;
 
   public currentField: boolean;
+  getTranslationKey = getTranslationKey;
 
   private subscriptions: Subscription[] = [];
 
@@ -102,7 +99,7 @@ export class FormDatepickerComponent extends BasicElementComponent
   }
 
   public ngOnDestroy() {
-    this.subscriptions.forEach(s => s && s.unsubscribe());
+    this.subscriptions.forEach((s) => s && s.unsubscribe());
   }
 
   public ngAfterViewInit() {
@@ -140,7 +137,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           }
 
           this.opened = null;
-        }
+        },
       });
 
       this.getDatepicker(this.d).datebox(config);
@@ -164,11 +161,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           const hours = date.getHours();
           const minutes = date.getMinutes();
 
-          const dateInstance = this.dateService.parse(
-            `${hours}:${minutes}`,
-            this.timezone,
-            'H:m'
-          );
+          const dateInstance = this.dateService.parse(`${hours}:${minutes}`, this.timezone, 'H:m');
 
           const newDateInstance = this.parseValues(
             type,
@@ -186,7 +179,7 @@ export class FormDatepickerComponent extends BasicElementComponent
           }
 
           this.opened = null;
-        }
+        },
       });
 
       this.getDatepicker(this.t).datebox(config);
@@ -221,11 +214,7 @@ export class FormDatepickerComponent extends BasicElementComponent
       this.formats.date = dateFormat;
 
       if (value) {
-        const dateInstance = this.dateService.parse(
-          value,
-          time_zone,
-          parseFormat
-        );
+        const dateInstance = this.dateService.parse(value, time_zone, parseFormat);
 
         this.config.value = this.dateService.format(dateInstance, 'YYYY-MM-DD');
       }
@@ -233,12 +222,12 @@ export class FormDatepickerComponent extends BasicElementComponent
   }
 
   private subscribeOnChanges(): Subscription {
-    return this.group.get(this.key).valueChanges.subscribe(val => {
+    return this.group.get(this.key).valueChanges.subscribe((val) => {
       if (!val) {
         setTimeout(() => {
           this.event.emit({
             el: this.config,
-            type: 'change'
+            type: 'change',
           });
         }, 150);
       }
@@ -247,7 +236,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   private checkHiddenProperty() {
     if (this.config && this.config.hidden) {
-      const subscription = this.config.hidden.subscribe(hide => {
+      const subscription = this.config.hidden.subscribe((hide) => {
         if (hide && !this.config.hide) {
           this.config.hide = hide;
           if (this.group.get(this.key).value) {
@@ -269,7 +258,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   private checkModeProperty() {
     if (this.config && this.config.mode) {
-      const subscription = this.config.mode.subscribe(mode => {
+      const subscription = this.config.mode.subscribe((mode) => {
         if (mode === 'view') {
           this.viewMode = true;
           this.editMode = false;
@@ -289,7 +278,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
   private checkFormData() {
     if (this.config.formData) {
-      const subscription = this.config.formData.subscribe(data => {
+      const subscription = this.config.formData.subscribe((data) => {
         if (
           data.key !== this.config.key &&
           this.config.default &&
@@ -368,14 +357,10 @@ export class FormDatepickerComponent extends BasicElementComponent
     const formValue = this.group.get(this.key).value;
     const defaultValue = this.config.default;
 
-    let value = updateFromForm
-      ? formValue || initValue
-      : initValue || formValue;
+    let value = updateFromForm ? formValue || initValue : initValue || formValue;
 
-    if ((!value && (defaultValue && defaultValue !== '-')) || shouldUpdate) {
-      value = this.config.default.includes('{')
-        ? FormatString.format(defaultValue, this.formData)
-        : defaultValue;
+    if ((!value && defaultValue && defaultValue !== '-') || shouldUpdate) {
+      value = this.config.default.includes('{') ? FormatString.format(defaultValue, this.formData) : defaultValue;
     }
 
     if (value) {
@@ -417,11 +402,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     if (this.mobileDevice) {
       const { date, time } = this.model;
 
-      return this.parseValues(
-        type,
-        { value: date, format: 'YYYY-MM-DD' },
-        { value: time, format: 'HH:mm' }
-      );
+      return this.parseValues(type, { value: date, format: 'YYYY-MM-DD' }, { value: time, format: 'HH:mm' });
     }
 
     const date = this.d.nativeElement.value;
@@ -443,9 +424,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
     switch (type) {
       case DateType.Date: {
-        result = date.value
-          ? this.dateService.parse(date.value, this.timezone, date.format)
-          : null;
+        result = date.value ? this.dateService.parse(date.value, this.timezone, date.format) : null;
         break;
       }
 
@@ -453,11 +432,7 @@ export class FormDatepickerComponent extends BasicElementComponent
         if (!date.value) {
           result = null;
         } else if (!time.value) {
-          result = this.dateService.parse(
-            date.value,
-            this.timezone,
-            date.format
-          );
+          result = this.dateService.parse(date.value, this.timezone, date.format);
         } else {
           result = this.dateService.parse(
             `${date.value} ${time.value}`,
@@ -469,9 +444,7 @@ export class FormDatepickerComponent extends BasicElementComponent
       }
 
       case DateType.Time: {
-        result = time.value
-          ? this.dateService.parse(time.value, this.timezone, time.format)
-          : null;
+        result = time.value ? this.dateService.parse(time.value, this.timezone, time.format) : null;
         break;
       }
     }
@@ -485,11 +458,7 @@ export class FormDatepickerComponent extends BasicElementComponent
 
     if (value && type === 'date') {
       const now = this.dateService.instance();
-      const dateInstance = this.dateService.parse(
-        value,
-        this.timezone,
-        'YYYY-MM-DD'
-      );
+      const dateInstance = this.dateService.parse(value, this.timezone, 'YYYY-MM-DD');
 
       const maxValue = now.year() - dateInstance.year();
 
@@ -501,7 +470,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     this.event.emit({
       el: this.config,
       type: 'change',
-      value: this.group.get(this.key).value
+      value: this.group.get(this.key).value,
     });
   }
 
@@ -541,15 +510,10 @@ export class FormDatepickerComponent extends BasicElementComponent
       Start = 'shift_started_at',
       End = 'shift_ended_at',
       BreakStart = 'break_started_at',
-      BreakEnd = 'break_ended_at'
+      BreakEnd = 'break_ended_at',
     }
 
-    const timesheetKeys = [
-      TimesheetTime.Start,
-      TimesheetTime.BreakStart,
-      TimesheetTime.BreakEnd,
-      TimesheetTime.End
-    ];
+    const timesheetKeys = [TimesheetTime.Start, TimesheetTime.BreakStart, TimesheetTime.BreakEnd, TimesheetTime.End];
 
     if (!timesheetKeys.includes(this.config.key)) {
       return true;
@@ -558,7 +522,7 @@ export class FormDatepickerComponent extends BasicElementComponent
     const data = this.config.formData.value.data;
 
     const times = {};
-    timesheetKeys.forEach(key => {
+    timesheetKeys.forEach((key) => {
       times[key] = getPropValue(data, key) && this.parseValue(DateType.Datetime, getPropValue(data, key));
     });
 
@@ -592,8 +556,7 @@ export class FormDatepickerComponent extends BasicElementComponent
         if (valid && times[TimesheetTime.End]) {
           valid = dateUtc.isBefore(times[TimesheetTime.End]);
         }
-      break;
-
+        break;
       }
 
       case TimesheetTime.BreakEnd: {
@@ -608,8 +571,7 @@ export class FormDatepickerComponent extends BasicElementComponent
         if (valid && times[TimesheetTime.End]) {
           valid = dateUtc.isBefore(times[TimesheetTime.End]);
         }
-      break;
-
+        break;
       }
 
       case TimesheetTime.End: {
@@ -625,7 +587,6 @@ export class FormDatepickerComponent extends BasicElementComponent
           valid = dateUtc.isAfter(times[TimesheetTime.BreakEnd]);
         }
         break;
-
       }
 
       default:

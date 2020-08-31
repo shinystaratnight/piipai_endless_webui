@@ -11,9 +11,11 @@ export class GroupElement {
   name?: string;
   hideLabel?: boolean;
   marginBottom?: number;
+  translateKey?: string;
 
-  constructor(label?: string) {
+  constructor(label?: string, translateKey?: string) {
     this.label = label;
+    this.translateKey = translateKey;
   }
 
   mainTab(name: string) {

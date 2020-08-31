@@ -48,8 +48,8 @@ export class DateFilter implements FilterModel {
 
   public key: string;
   public label: string;
-  public list: { label: string; query: DateTypes }[];
-  public input: { label: string; query: string }[];
+  public list: { label: string; query: DateTypes; key: string }[];
+  public input: { label: string; query: string; key: string }[];
 
   constructor(options: DateFilterOptions) {
     const {
@@ -67,10 +67,12 @@ export class DateFilter implements FilterModel {
     this.input = [
       {
         label: 'From',
+        key: 'from',
         query: `${key}_0`
       },
       {
         label: 'To',
+        key: 'to',
         query: `${key}_1`
       }
     ];
@@ -79,6 +81,7 @@ export class DateFilter implements FilterModel {
     if (yesterday) {
       this.list.push({
         label: 'Yesterday',
+        key: 'yesterday',
         query: DateTypes.Yesterday
       });
     }
@@ -86,6 +89,7 @@ export class DateFilter implements FilterModel {
     if (today) {
       this.list.push({
         label: 'Today',
+        key: 'today',
         query: DateTypes.Today
       });
     }
@@ -93,6 +97,7 @@ export class DateFilter implements FilterModel {
     if (tomorrow) {
       this.list.push({
         label: 'Tomorrow',
+        key: 'tomorrow',
         query: DateTypes.Tomorrow
       });
     }
@@ -100,6 +105,7 @@ export class DateFilter implements FilterModel {
     if (week) {
       this.list.push({
         label: 'This week',
+        key: 'this_week',
         query: DateTypes.Week
       });
     }
@@ -107,6 +113,7 @@ export class DateFilter implements FilterModel {
     if (month) {
       this.list.push({
         label: 'This month',
+        key: 'this_month',
         query: DateTypes.Month
       });
     }

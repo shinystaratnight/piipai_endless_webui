@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  HostListener,
-  ElementRef,
-  ViewChild,
-  OnDestroy
-} from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { MapService, Marker } from './map.service';
 
 import { FilterService } from '@webui/dynamic-form';
@@ -14,10 +7,10 @@ import { FilterEvent } from 'libs/dynamic-form/src/lib/interfaces';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss']
+  styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
-  @ViewChild('filterBlock', { static: false }) public elementRef: ElementRef;
+  @ViewChild('filterBlock') public elementRef: ElementRef;
 
   public config: {
     list: string;
@@ -38,73 +31,68 @@ export class MapComponent implements OnInit, OnDestroy {
   public defaultLatitude = -33.865143;
   public defaultlongitude = 151.2099;
 
-  constructor(
-    private mapService: MapService,
-    private filterService: FilterService
-  ) {}
+  constructor(private mapService: MapService, private filterService: FilterService) {}
 
   public ngOnInit() {
     this.icons = {
       current: {
         exist: false,
         name: 'Your current position',
-        path: '/assets/img/location-yellow.svg'
+        path: '/assets/img/location-yellow.svg',
       },
       client: {
         exist: false,
         name: 'Clients',
-        path: '/assets/img/location-orange.svg'
+        path: '/assets/img/location-orange.svg',
       },
       jobsite: {
         exist: false,
         name: 'Jobsites',
-        path: '/assets/img/location-blue.svg'
+        path: '/assets/img/location-blue.svg',
       },
       client_hq: {
         exist: false,
         name: 'Primary Client addresses',
-        path: '/assets/img/location-red.svg'
+        path: '/assets/img/location-red.svg',
       },
       jobsite_open: {
         exist: false,
         name: 'Jobsites with Booking on "Open" state',
-        path: '/assets/img/location-bluesky.svg'
-      }
+        path: '/assets/img/location-bluesky.svg',
+      },
     };
     this.types = ['current', 'client_hq', 'jobsite', 'jobsite_open', 'client'];
 
     this.preloader = true;
     this.getCurrentPosition();
     this.config = {
-      list: 'jobsitesMap'
+      list: 'jobsitesMap',
     };
 
     this.config.filters = this.mapService.getFilters();
 
     this.filterService.filters = {
       endpoint: this.mapService.endpoint,
-      list: this.config
+      list: this.config,
     };
-    this.filtersOfList = this.filterService.getFiltersByEndpoint(
-      this.mapService.endpoint
-    );
+    this.filtersOfList = this.filterService.getFiltersByEndpoint(this.mapService.endpoint);
   }
 
   public ngOnDestroy() {
     this.filterService.filters = {
       endpoint: this.mapService.endpoint,
-      list: null
+      list: null,
     };
     this.filterService.resetQueries(this.config.list);
   }
 
   public getPositions(query: string = '') {
-    this.types.forEach(el => {
+    this.types.forEach((el) => {
       this.icons[el].exist = false;
     });
 
     this.mapService.getPositions(query).subscribe((res: Marker[]) => {
-      this.markers = res.map(el => {
+      this.markers = res.map((el) => {
         el.latitude = parseFloat(<any>el.latitude);
         el.longitude = parseFloat(<any>el.longitude);
         this.icons[el.type].exist = true;
@@ -143,13 +131,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
   public getCurrentPosition() {
     navigator.geolocation.getCurrentPosition(
-      pos => {
+      (pos) => {
         this.currentPosition = pos.coords;
         this.currentPosition.type = 'current';
 
         this.getPositions();
       },
-      err => this.getPositions()
+      (err) => this.getPositions()
     );
   }
 

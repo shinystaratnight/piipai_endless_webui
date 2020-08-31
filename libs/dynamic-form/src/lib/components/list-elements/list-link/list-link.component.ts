@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  EventEmitter,
-  ViewEncapsulation,
-  ViewChild
-} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewEncapsulation, ViewChild } from '@angular/core';
 
 import { SiteSettingsService } from '@webui/core';
 
@@ -13,11 +6,9 @@ import { SiteSettingsService } from '@webui/core';
   selector: 'app-list-link',
   templateUrl: 'list-link.component.html',
   styleUrls: ['./list-link.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
-
 export class ListLinkComponent implements OnInit {
-
   public config;
   public href: string | string[];
   public link: boolean;
@@ -36,15 +27,14 @@ export class ListLinkComponent implements OnInit {
   @Output()
   public buttonAction: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild('view', { static: false })
+  @ViewChild('view')
   public linkView;
 
-  constructor(
-    private siteSettings: SiteSettingsService
-  ) {}
+  constructor(private siteSettings: SiteSettingsService) {}
 
   public ngOnInit() {
-    if (this.config.value && this.config.value instanceof Object && !Array.isArray(this.config.value)) { //tslint:disable-line
+    if (this.config.value && this.config.value instanceof Object && !Array.isArray(this.config.value)) {
+      //tslint:disable-line
       this.value = this.config.value && (this.config.text || this.config.value.__str__);
     } else {
       this.value = this.config.value && (this.config.text || this.config.value);
@@ -71,9 +61,7 @@ export class ListLinkComponent implements OnInit {
     }
 
     this.smsDisabled = !this.siteSettings.isSmsEnabled();
-    this.smsDisabledTitle = this.smsDisabled
-      ? this.siteSettings.getSmsSendTitle()
-      : '';
+    this.smsDisabledTitle = this.smsDisabled ? this.siteSettings.getSmsSendTitle() : '';
   }
 
   public isEmail(value) {
@@ -104,8 +92,8 @@ export class ListLinkComponent implements OnInit {
       this.event.emit({
         target: 'form',
         endpoint,
-        label: (<any> this.value[index]).__str__,
-        id
+        label: (<any>this.value[index]).__str__,
+        id,
       });
       return;
     }
@@ -118,14 +106,14 @@ export class ListLinkComponent implements OnInit {
       if (this.config.action) {
         this.buttonAction.emit({
           el: this.config,
-          value: this.config.action
+          value: this.config.action,
         });
       } else {
         this.event.emit({
           target: 'form',
           endpoint: endpoint || this.config.endpoint,
           label: e.target.innerText,
-          id: id || this.config.id
+          id: id || this.config.id,
         });
       }
     }
@@ -147,12 +135,14 @@ export class ListLinkComponent implements OnInit {
         type: 'click',
         value: 'sendSMS',
         el: Object.assign({}, this.config, {
-          fields: [{
-            type: 'link',
-            field: this.config.key,
-            value: this.config.value
-          }]
-        })
+          fields: [
+            {
+              type: 'link',
+              field: this.config.key,
+              value: this.config.value,
+            },
+          ],
+        }),
       });
     }
   }
@@ -160,5 +150,4 @@ export class ListLinkComponent implements OnInit {
   clickHandler(event) {
     event.stopPropagation();
   }
-
 }

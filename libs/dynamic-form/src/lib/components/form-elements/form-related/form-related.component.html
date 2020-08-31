@@ -3,19 +3,19 @@
     <div class="form-element" *ngIf="!config.many">
       <label class="form-element-label" [attr.for]="key" [class.required]="config.templateOptions.required"
         *ngIf="label && config.templateOptions.label">
-        {{ config.templateOptions.label }}:
+        {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
       </label>
 
-      <app-info [description]="config.templateOptions.description"></app-info>
+      <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
       <app-info *ngIf="!viewMode && config.errorMessage && config.errorMessage.visible"
-        [description]="config.errorMessage.message" [danger]="true"></app-info>
+        [description]="getTranslationKey(config.key, 'error_message') | translate: {'Default': config.errorMessage.message}" [danger]="true"></app-info>
 
       <div class="form-element-content flex-row edit position-relative" [class.disabled]="fieldDisabled"
         tooltipClass="dark-tooltip" placement="bottom" [ngbTooltip]="disableMessage">
         <div class="form-control autocomplete-value" [class.placeholder]="placeholder && !displayValue"
           (click)="openAutocomplete()">
           <div style="overflow: hidden; white-space: nowrap">
-            {{ displayValue || placeholder }}
+            {{ displayValue || getTranslationKey(config.key, 'placeholder') | translate: {'Default': placeholder} }}
           </div>
         </div>
 
@@ -37,7 +37,7 @@
               )
             " *ngIf="config.templateOptions.add && checkPermission('post')" (click)="open('post')">
             <!-- <i class="text-white mr-1" fa name="plus"></i>  -->
-            Add new
+            {{'add_new' | translate}}
           </button>
           <button type="button" class="btn btn-warning text-white mr-1" *ngIf="
               config.templateOptions.edit &&
@@ -45,7 +45,7 @@
               checkPermission('update')
             " (click)="open('update')">
             <!-- <i class="text-white mr-1" fa name="pencil"></i>  -->
-            Edit
+            {{'edit' | translate}}
           </button>
           <button type="button" class="btn btn-danger text-white" *ngIf="
               config.templateOptions.delete &&
@@ -53,7 +53,7 @@
               checkPermission('delete')
             " (click)="open('delete')">
             <!-- <i class="text-white mr-1" fa name="trash"></i>  -->
-            Delete
+            {{'delete' | translate}}
           </button>
         </div>
 
@@ -84,16 +84,16 @@
       </div>
 
       <div *ngIf="config.additional_text" class="additional-text">
-        {{ config.additional_text }}
+        {{ getTranslationKey(config.key, 'additional_text') | translate:{"Default": config.additional_text} }}
       </div>
     </div>
 
     <div class="form-element" *ngIf="config.many">
       <label class="form-element-label" [attr.for]="key" *ngIf="label && config.templateOptions.label"
         [class.required]="config.templateOptions.required">
-        {{ config.templateOptions.label }}:
+        {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
       </label>
-      <app-info [description]="config.templateOptions.description"></app-info>
+      <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
       <div #autocomplete *ngIf="config.many && results && !config.useOptions"
         class="form-element-content flex-column align-items-start edit" [class.many]="config.many && results"
         style="position: relative">
@@ -106,7 +106,7 @@
             <button type="button" class="btn btn-primary text-white alone"
               *ngIf="config.templateOptions.add && checkPermission('post')" (click)="open('post')">
               <!-- <i class="text-white mr-1" fa name="plus"></i>  -->
-              Add new
+              {{'add_new' | translate}}
             </button>
           </div>
         </div>
@@ -139,10 +139,10 @@
                 <span>
                   {{ item.__str__ }}
                   <ng-container *ngIf="config.sendData">
-                    <span *ngIf="item.default" class="text-secondary">(&nbsp;default&nbsp;)</span>
+                    <span *ngIf="item.default" class="text-secondary">(&nbsp;{{'default' | translate}}&nbsp;)</span>
                     <button *ngIf="!item.default" type="button" class="btn btn-outline-secondary mt-1"
                       style="font-size: 10px; line-height: 12px" (click)="setDefault(i, item)">
-                      make default
+                      {{'make_default' | translate}}
                     </button>
                   </ng-container>
                 </span>
@@ -158,11 +158,11 @@
             <fa-icon class="ml-2 mr-3 text-danger" icon="times" (click)="deleteItem(i, item)"></fa-icon>
             <button type="button" *ngIf="item.tests && item.tests.length && !item.passed"
               class="object-list__btn btn btn-outline-primary" (click)="passTests(item, $event)">
-              Pass test
+              {{'pass_test' | translate}}
             </button>
             <button type="button" *ngIf="item.passed" disabled
               class="object-list__btn btn btn-outline-primary bg-primary text-white">
-              Passed
+              {{'passed' | translate}}
             </button>
           </div>
         </div>
@@ -222,10 +222,10 @@
     <h6 class="card flex-row align-items-center" [ngClass]="{ 'bg-primary text-white': !isCollapsed }">
       <fa-icon class="p-2" [icon]="['fas', isCollapsed ? 'eye' : 'eye-slash']" (click)="isCollapsed = !isCollapsed"
         [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" style="cursor: pointer"></fa-icon>
-      {{ config.templateOptions.label }}
+      {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}
       <button *ngIf="config.delay && checkPermission('post')" type="button" class="btn btn-sm btn-primary ml-auto mr-2"
         (click)="addObject()">
-        Add
+        {{'add' | translate}}
       </button>
     </h6>
     <div #tableWrapper id="collapseExample" [ngbCollapse]="isCollapsed" class="list-related p-2 datatable">
@@ -237,7 +237,7 @@
                 {{ col.templateOptions.label }}
               </th>
             </ng-container>
-            <th style="width: 100px">Actions</th>
+            <th style="width: 100px">{{'actions' | translate}}</th>
           </tr>
         </thead>
         <tbody>
@@ -260,13 +260,13 @@
                       config.templateOptions.delete && checkPermission('delete')
                     " (click)="deleteObject(object, $event)">
                     <fa-icon class="icon text-danger mr-2" title="Delete" [icon]="['fas', 'trash']"></fa-icon>
-                    Delete
+                    {{'delete' | translate}}
                   </span>
                   <span class="custom-button d-flex align-items-center" *ngIf="
                       config.templateOptions.edit && checkPermission('update')
                     " (click)="editObject(object, $event)">
                     <fa-icon class="icon text-warning mr-2" title="Edit" [icon]="['fas', 'pencil-alt']"></fa-icon>
-                    Edit
+                    {{'edit' | translate}}
                   </span>
                   <span class="custom-button d-flex align-items-center"
                     *ngIf="skillEndpoint && !object.allData.default_rate" (click)="setAsDefault(object)">
@@ -277,7 +277,7 @@
               <span *ngIf="!object.id" class="custom-button d-flex align-items-center"
                 (click)="removeItem(index, $event)">
                 <fa-icon class="icon text-danger mr-2" title="Delete" [icon]="['fas', 'trash']"></fa-icon>
-                Delete
+                {{'delete' | translate}}
               </span>
             </td>
           </tr>
@@ -301,7 +301,7 @@
   <label class="form-element-label" *ngIf="
       label && config.templateOptions.label && !config.templateOptions.hideLabel
     ">
-    {{ config.templateOptions.label }}<span *ngIf="!customTemplate">:</span>
+    {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}<span *ngIf="!customTemplate">:</span>
   </label>
   <div class="form-element-content" [class.many]="config.many && results">
     <span *ngIf="
@@ -391,19 +391,19 @@
           " (event)="formEvent($event, c)" (errorForm)="formError($event)">
           <button *ngIf="checkPermission('update')" type="submit" class="btn btn-primary button-save"
             [disabled]="saveProcess">
-            Save
+            {{'save' | translate}}
             <app-spinner *ngIf="saveProcess"></app-spinner>
           </button>
         </app-generic-form>
       </div>
       <div *ngIf="modalData.type === 'delete'">
-        Are you sure?
+        {{'are_you_sure' | translate}}
       </div>
     </div>
 
     <div *ngIf="modalData.type === 'delete'" class="modal-footer">
       <button type="button" class="btn btn-danger" (click)="deleteElement(c)">
-        Delete
+        {{'delete' | translate}}
       </button>
     </div>
   </div>

@@ -13,7 +13,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { FilterService } from '../../../services';
-import { isMobile, getTimeInstance, isTouchDevice } from '@webui/utilities';
+import {
+  isMobile,
+  getTimeInstance,
+  isTouchDevice,
+  getTranslationKey
+} from '@webui/utilities';
 
 import { date as DateFilter } from '@webui/metadata';
 
@@ -45,6 +50,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChildren('d')
   public d: any;
+  translationKey = '';
 
   constructor(
     private fs: FilterService,
@@ -53,6 +59,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
+    console.log(this);
     this.data = this.createInputs(this.config.input);
     this.mobileDevice = isTouchDevice();
 
@@ -70,6 +77,8 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterSubscription = this.fs.reset.subscribe(() =>
       this.updateFilter()
     );
+
+    this.translationKey = `filter.${this.config.key}`;
   }
 
   public ngOnDestroy() {
@@ -81,7 +90,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.init && this.d) {
       const dateType = this.mobileDevice ? 'flipbox' : 'calbox';
       this.init = true;
-      this.d.forEach(el => {
+      this.d.forEach((el) => {
         (window as any).$(el.nativeElement).datebox({
           mode: dateType,
           dateFormat: '%d/%m/%Y',
@@ -189,7 +198,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   public createInputs(inputs: any[]): Params {
     const params = {};
 
-    inputs.forEach(el => {
+    inputs.forEach((el) => {
       params[el.query] = '';
     });
 
@@ -200,7 +209,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     const keys = Object.keys(data);
 
     if (keys.length) {
-      keys.forEach(el => {
+      keys.forEach((el) => {
         data[el] = '';
       });
     }
@@ -241,7 +250,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     //tslint:disable-line
     const newParams = { ...params };
 
-    Object.keys(newParams).forEach(el => {
+    Object.keys(newParams).forEach((el) => {
       newParams[el] = newParams[el]
         ? this.parseDateValue(newParams[el], moment, from).format(to)
         : '';
@@ -259,7 +268,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     const params = query.split('&');
     const result = {};
 
-    params.forEach(param => {
+    params.forEach((param) => {
       const parts = param.split('=');
       result[parts[0]] = parts[1];
     });
@@ -271,7 +280,7 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     const keys = Object.keys(params);
 
     if (keys.length) {
-      const quesries = keys.map(param => {
+      const quesries = keys.map((param) => {
         return `${param}=${params[param]}`;
       });
 
@@ -279,5 +288,9 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return '';
+  }
+
+  public getTranslateKey(type: string): string {
+    return `filter.${this.config.key}.${type}`;
   }
 }

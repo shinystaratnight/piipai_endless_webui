@@ -7,7 +7,7 @@
       "
       [attr.for]="key"
     >
-      {{ config.templateOptions.label }}:
+      {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label}  }}:
     </label>
     <div class="form-element-content edit">
       <label
@@ -41,10 +41,10 @@
           [checked]="group.get(key).value"
           *ngIf="config.templateOptions.type !== 'icon'"
         ></app-checkbox>
-        {{ config.templateOptions.text || config.templateOptions.label }}
+        {{ getTranslationKey(config.key, 'text') | translate: {"Default": config.templateOptions.text || config.templateOptions.label}  }}
         <button *ngIf="hasButton" type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendAction($event)">Resend</button>
       </label>
-      <app-info [description]="config.templateOptions.description"></app-info>
+      <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
     </div>
   </div>
   <div *ngIf="errors">
@@ -68,7 +68,7 @@
       "
       [attr.for]="key"
     >
-      {{ config.templateOptions.label }}:
+      {{ getTranslationKey(config.key, 'label') | translate: {"Default": config.templateOptions.label} }}:
     </label>
     <div class="form-element-content">
       <div class="form-element-checkbox">
@@ -95,10 +95,10 @@
           "
         ></fa-icon>
         <label [class.has-button]="hasButton" class="mb-0" *ngIf="label && config.templateOptions.label">
-          {{config.templateOptions.text || config.templateOptions.label}}
+          {{ getTranslationKey(config.key, 'text') | translate: {"Default": config.templateOptions.text || config.templateOptions.label} }}
           <button *ngIf="hasButton" type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendAction($event)">Resend</button>
         </label>
-        <app-info [description]="config.templateOptions.description"></app-info>
+        <app-info *ngIf="config.templateOptions.description" [description]="getTranslationKey('description') | translate: {'Default': config.templateOptions.description || ''}"></app-info>
       </div>
     </div>
   </div>

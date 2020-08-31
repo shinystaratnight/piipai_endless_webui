@@ -7,13 +7,6 @@
 
 <agm-map
   style="height: 320px"
-  [fullscreenControl]="false"
-  [streetViewControl]="false"
-  [mapTypeControl]="false"
-  [panControl]="false"
-  [rotateControl]="false"
-  [scaleControl]="false"
-  [zoomControl]="false"
   [latitude]="latitude"
   [longitude]="longitude"
   [zoom]="13">
@@ -25,13 +18,13 @@
     <agm-polyline-point
       [latitude]="point.lat"
       [longitude]="point.lng"
-      *ngFor="let point of path; trackBy: trackByTraking">
+      *ngFor="let point of path; trackBy: trackByTracking">
     </agm-polyline-point>
     <ng-container *ngIf="breakPath.length">
       <agm-polyline-point
         [latitude]="point.lat"
         [longitude]="point.lng"
-        *ngFor="let point of breakPath; trackBy: trackByTraking">
+        *ngFor="let point of breakPath; trackBy: trackByTracking">
       </agm-polyline-point>
     </ng-container>
   </agm-polyline>

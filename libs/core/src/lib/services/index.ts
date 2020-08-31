@@ -10,6 +10,7 @@ import { ErrorsService } from './errors.service';
 import { ToastService } from './toast.service';
 import { EventService } from './event.service';
 import { DateService } from './date.service';
+import { TranslateHelperService } from './translate-helper-service';
 
 export * from './navigation.service';
 export * from './user.service';
@@ -24,6 +25,7 @@ export * from './toast.service';
 export * from './env.service';
 export * from './event.service';
 export * from './date.service';
+export * from './translate-helper-service';
 
 export const services = [
   NavigationService,
@@ -37,5 +39,6 @@ export const services = [
   ErrorsService,
   ToastService,
   EventService,
-  DateService
+  DateService,
+  TranslateHelperService
 ];

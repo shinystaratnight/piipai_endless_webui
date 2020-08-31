@@ -92,4 +92,8 @@ export class FilterChoiceComponent implements OnInit, OnDestroy {
     this.fs.generateQuery(this.query, this.config.key, this.config.listName);
     this.changeQuery();
   }
+
+  public getTranslateKey(type: string): string {
+    return `filter.${this.config.key}.${type}`;
+  }
 }

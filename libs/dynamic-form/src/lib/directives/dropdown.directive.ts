@@ -1,20 +1,12 @@
-import {
-  Directive,
-  ElementRef,
-  Renderer,
-  Input,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
 
 @Directive({
-  selector: '[appDropDown]'
+  selector: '[appDropDown]',
 })
 export class DropdownDirective implements OnInit, OnDestroy {
-
   @Input() public element: any;
   @Input() public target: any;
   @Input() public update: Subject<any>;
@@ -24,10 +16,7 @@ export class DropdownDirective implements OnInit, OnDestroy {
   public scrollHeight: number;
   public subscription: Subscription;
 
-  constructor(
-    private el: ElementRef,
-    public renderer: Renderer
-  ) {}
+  constructor(private el: ElementRef, public renderer: Renderer2) {}
 
   public ngOnInit() {
     this.subscription = this.update.subscribe(() => {
@@ -50,12 +39,11 @@ export class DropdownDirective implements OnInit, OnDestroy {
     const parent = this.getParent(el);
     const bottomHeight = this.getBottomHeight(elOffsetTop, 48, parent);
 
-    if ((dropDownHeight > bottomHeight) && (elOffsetTop > dropDownHeight)) {
-      this.renderer.setElementStyle(dropDown, 'top', `-${dropDownHeight + 14}px`);
+    if (dropDownHeight > bottomHeight && elOffsetTop > dropDownHeight) {
+      this.renderer.setStyle(dropDown, 'top', `-${dropDownHeight + 14}px`);
     } else {
-      this.renderer.setElementStyle(this.dropDownElement, 'top', this.top);
+      this.renderer.setStyle(this.dropDownElement, 'top', this.top);
     }
-
   }
 
   public getTop() {
@@ -106,11 +94,8 @@ export class DropdownDirective implements OnInit, OnDestroy {
     if (el) {
       do {
         if (
-          testParent.classList
-          && (
-            testParent.classList.contains('modal-content')
-            || testParent.classList.contains('r3sourcer')
-          )
+          testParent.classList &&
+          (testParent.classList.contains('modal-content') || testParent.classList.contains('r3sourcer'))
         ) {
           parent = testParent;
         }
@@ -120,5 +105,4 @@ export class DropdownDirective implements OnInit, OnDestroy {
 
     return parent;
   }
-
 }

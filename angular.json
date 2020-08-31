@@ -16,14 +16,14 @@
               "libs/utilities/tsconfig.lib.json",
               "libs/utilities/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/utilities/**"]
+            "exclude": ["**/node_modules/**", "!libs/utilities/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/utilities/jest.config.js",
-            "tsConfig": "libs/utilities/tsconfig.spec.json"
+            "passWithNoTests": true
           }
         }
       }
@@ -41,15 +41,14 @@
               "libs/shared/tsconfig.lib.json",
               "libs/shared/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared/jest.config.js",
-            "tsConfig": "libs/shared/tsconfig.spec.json",
-            "setupFile": "libs/shared/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -68,14 +67,14 @@
               "libs/data/tsconfig.lib.json",
               "libs/data/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/data/**"]
+            "exclude": ["**/node_modules/**", "!libs/data/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/data/jest.config.js",
-            "tsConfig": "libs/data/tsconfig.spec.json"
+            "passWithNoTests": true
           }
         }
       }
@@ -93,15 +92,14 @@
               "libs/core/tsconfig.lib.json",
               "libs/core/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/core/**"]
+            "exclude": ["**/node_modules/**", "!libs/core/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/core/jest.config.js",
-            "tsConfig": "libs/core/tsconfig.spec.json",
-            "setupFile": "libs/core/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -120,15 +118,14 @@
               "libs/metadata/tsconfig.lib.json",
               "libs/metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/metadata/**"]
+            "exclude": ["**/node_modules/**", "!libs/metadata/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/metadata/jest.config.js",
-            "tsConfig": "libs/metadata/tsconfig.spec.json",
-            "setupFile": "libs/metadata/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -147,15 +144,14 @@
               "libs/dynamic-form/tsconfig.lib.json",
               "libs/dynamic-form/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/dynamic-form/**"]
+            "exclude": ["**/node_modules/**", "!libs/dynamic-form/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/dynamic-form/jest.config.js",
-            "tsConfig": "libs/dynamic-form/tsconfig.spec.json",
-            "setupFile": "libs/dynamic-form/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -174,15 +170,14 @@
               "libs/calendar/tsconfig.lib.json",
               "libs/calendar/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/calendar/**"]
+            "exclude": ["**/node_modules/**", "!libs/calendar/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/calendar/jest.config.js",
-            "tsConfig": "libs/calendar/tsconfig.spec.json",
-            "setupFile": "libs/calendar/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -201,14 +196,14 @@
               "libs/candidate-metadata/tsconfig.lib.json",
               "libs/candidate-metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/candidate-metadata/**"]
+            "exclude": ["**/node_modules/**", "!libs/candidate-metadata/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/candidate-metadata/jest.config.js",
-            "tsConfig": "libs/candidate-metadata/tsconfig.spec.json"
+            "passWithNoTests": true
           }
         }
       }
@@ -226,14 +221,14 @@
               "libs/shared-metadata/tsconfig.lib.json",
               "libs/shared-metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared-metadata/**"]
+            "exclude": ["**/node_modules/**", "!libs/shared-metadata/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/shared-metadata/jest.config.js",
-            "tsConfig": "libs/shared-metadata/tsconfig.spec.json"
+            "passWithNoTests": true
           }
         }
       }
@@ -251,14 +246,14 @@
               "libs/manager-metadata/tsconfig.lib.json",
               "libs/manager-metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/manager-metadata/**"]
+            "exclude": ["**/node_modules/**", "!libs/manager-metadata/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/manager-metadata/jest.config.js",
-            "tsConfig": "libs/manager-metadata/tsconfig.spec.json"
+            "passWithNoTests": true
           }
         }
       }
@@ -276,14 +271,14 @@
               "libs/client-metadata/tsconfig.lib.json",
               "libs/client-metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/client-metadata/**"]
+            "exclude": ["**/node_modules/**", "!libs/client-metadata/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/client-metadata/jest.config.js",
-            "tsConfig": "libs/client-metadata/tsconfig.spec.json"
+            "passWithNoTests": true
           }
         }
       }
@@ -323,6 +318,14 @@
               "node_modules/jquery/dist/jquery.js",
               "node_modules/jquery-ui-dist/jquery-ui.js",
               "node_modules/jtsage-datebox-bootstrap4/jtsage-datebox.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "angular2-signaturepad",
+              "ngx-google-places-autocomplete",
+              "moment-timezone",
+              "wnumb",
+              "nouislider",
+              "angular2-signaturepad/signature-pad"
             ]
           },
           "configurations": {
@@ -394,15 +397,14 @@
               "apps/r3sourcer/tsconfig.app.json",
               "apps/r3sourcer/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/r3sourcer/**"]
+            "exclude": ["**/node_modules/**", "!apps/r3sourcer/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/r3sourcer/jest.config.js",
-            "tsConfig": "apps/r3sourcer/tsconfig.spec.json",
-            "setupFile": "apps/r3sourcer/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       }
@@ -429,7 +431,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/r3sourcer-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**", "!apps/r3sourcer-e2e/**"]
+            "exclude": ["**/node_modules/**", "!apps/r3sourcer-e2e/**/*"]
           }
         }
       }
@@ -447,14 +449,14 @@
               "libs/billing-metadata/tsconfig.lib.json",
               "libs/billing-metadata/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/billing-metadata/**"]
+            "exclude": ["**/node_modules/**", "!libs/billing-metadata/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/billing-metadata/jest.config.js",
-            "tsConfig": "libs/billing-metadata/tsconfig.spec.json"
+            "passWithNoTests": true
           }
         }
       }
@@ -472,19 +474,50 @@
               "libs/dashboard/tsconfig.lib.json",
               "libs/dashboard/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/dashboard/**"]
+            "exclude": ["**/node_modules/**", "!libs/dashboard/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/dashboard/jest.config.js",
-            "tsConfig": "libs/dashboard/tsconfig.spec.json",
-            "setupFile": "libs/dashboard/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
       "schematics": {}
+    },
+    "ui": {
+      "projectType": "library",
+      "root": "libs/ui",
+      "sourceRoot": "libs/ui/src",
+      "prefix": "webui",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ui/tsconfig.lib.json",
+              "libs/ui/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ui/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ui/jest.config.js",
+            "tsConfig": "libs/ui/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ui/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

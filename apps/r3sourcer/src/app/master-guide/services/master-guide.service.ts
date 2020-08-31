@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
-import { Endpoints, Purpose, Page } from '@webui/data';
+import { Endpoints, Purpose } from '@webui/data';
 import {
   ErrorsService,
-  CompanyPurposeService,
-  SiteSettingsService
+  CompanyPurposeService
+  // SiteSettingsService
 } from '@webui/core';
 
 @Injectable()
@@ -16,9 +16,9 @@ export class MasterGuideService {
   constructor(
     private http: HttpClient,
     private errors: ErrorsService,
-    private purpose: CompanyPurposeService,
-    private settings: SiteSettingsService
-  ) {}
+    private purpose: CompanyPurposeService
+  ) // private settings: SiteSettingsService
+  {}
 
   getGuide() {
     return this.http
