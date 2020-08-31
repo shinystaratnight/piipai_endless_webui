@@ -11,7 +11,7 @@ export class APIInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let api: string = this.env.api;
     if (req.url.includes('/assets')) {
-      api = api.replace('api.', '');
+      api = location.origin;
     }
     // if (!this.env.production && req.url.includes('/assets')) {
     //   api = api.replace('/api', '');
