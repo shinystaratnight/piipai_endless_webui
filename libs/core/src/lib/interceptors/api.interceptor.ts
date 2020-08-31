@@ -10,9 +10,12 @@ export class APIInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let api: string = this.env.api;
-    if (!this.env.production && req.url.includes('/assets')) {
-      api = api.replace('/api', '');
+    if (req.url.includes('/assets')) {
+      api = api.replace('api.', '');
     }
+    // if (!this.env.production && req.url.includes('/assets')) {
+    //   api = api.replace('/api', '');
+    // }
 
     const apiReq = req.clone({ url: `${api}${req.url}` });
     return next.handle(apiReq);
