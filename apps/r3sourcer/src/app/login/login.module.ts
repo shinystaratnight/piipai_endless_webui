@@ -23,13 +23,7 @@ import { MissingTranslationHelper } from '../helpers/translate.helper';
     CommonModule,
     FormsModule,
     RouterModule.forChild(routes),
-    TranslateModule.forChild({
-      missingTranslationHandler: {
-        provide: MissingTranslationHandler,
-        useClass: MissingTranslationHelper
-      },
-      extend: true
-    }),
+    TranslateModule,
 
     DynamicFormModule,
     SharedModule,

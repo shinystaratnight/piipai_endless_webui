@@ -26,7 +26,7 @@
   <div class="d-flex">
     <div class="mr-auto">
       <h4>{{ labelTranslateKey | translate: {"Default": config.templateOptions.label} }}</h4>
-      <p>{{ helpTranslateKey | translate: {"Default": config.help} }}</p>
+      <p>{{ config.help || (helpTranslateKey | translate: {"Default": config.help }) }}</p>
     </div>
     <button
       type="button"

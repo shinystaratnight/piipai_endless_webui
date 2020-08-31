@@ -545,7 +545,11 @@
         </ngb-pagination>
         <div class="ml-2">
           {{ data.count }}
-          {{ config.list.pagination_label || config.list.label }}
+          <!-- {{ config.list.pagination_label || config.list.label }} -->
+          {{
+            getListLabelKey()
+              | translate: { Default: label || config.list.label }
+          }}
         </div>
       </div>
     </div>
