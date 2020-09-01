@@ -206,7 +206,6 @@ export class DynamicListComponent
   public isMobile = isMobile;
 
   public ngOnInit() {
-    console.log(this);
     if (this.config.list.searchParameter) {
       this.searchFilter.query = this.config.list.searchParameter;
       // this.searchFilter.key = this.config.list.searchParameter;
@@ -256,7 +255,6 @@ export class DynamicListComponent
         : this.innerTables;
 
     const addData = changes['addData'] && changes['addData'].currentValue;
-    console.log(this.config.list.columns);
 
     this.config.list.columns = this.purposeService.filterListColumns(
       this.endpoint,
