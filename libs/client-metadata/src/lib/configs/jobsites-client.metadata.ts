@@ -321,6 +321,7 @@ const form = [
         main: true,
         name: 'General Info',
         key: 'general',
+        translateKey: 'general',
         type: 'group',
         label: 'General information',
         children: [
@@ -330,6 +331,7 @@ const form = [
               {
                 label: 'Primary Contact',
                 key: 'primary_contact',
+                translateKey: 'primary_contact',
                 type: 'group',
                 children: [
                   {
@@ -392,6 +394,7 @@ const form = [
               {
                 label: 'Additional Info',
                 key: 'additional_info',
+                translateKey: 'additional_info',
                 type: 'group',
                 children: [
                   {
@@ -431,6 +434,7 @@ const form = [
               {
                 label: 'Portfolio Manager',
                 key: 'portfolio_manager',
+                translateKey: 'portfolio_manager',
                 type: 'group',
                 children: [
                   {
@@ -480,6 +484,7 @@ const form = [
       {
         endpoint: Endpoints.Job,
         key: 'job',
+        translateKey: 'job',
         templateOptions: {
           label: 'Jobs',
           type: 'list',
@@ -502,6 +507,7 @@ const form = [
       {
         endpoint: '/core/notes/',
         key: 'notes',
+        translateKey: 'notes',
         templateOptions: {
           label: 'Notes',
           type: 'list',

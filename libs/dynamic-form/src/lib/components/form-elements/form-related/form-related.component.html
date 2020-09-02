@@ -188,7 +188,7 @@
       <div #autocomplete class="form-element-content flex-column align-items-start edit" style="position: relative"
         *ngIf="config.many && results && config.useOptions" [class.many]="config.many && results">
         <input type="text" class="form-control autocomplete-value" autocomplete="off" #search="ngModel" #searchElement
-          [(ngModel)]="searchValue" [ngModelOptions]="{ standalone: true }" placeholder="Select"
+          [(ngModel)]="searchValue" [ngModelOptions]="{ standalone: true }" placeholder="{{ 'select' | translate: {'Default': 'Select'} }}"
           (focus)="generateList()" />
 
         <div class="autocomplete" [hidden]="hideAutocomplete">

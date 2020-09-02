@@ -252,10 +252,10 @@
           (event)="resetEvent($event)"
         >
           <a class="forgot" href="" (click)="openResetForm()"
-            >{{ 'forgot_password' | translate: {"Default": "Forgot Password"} }}?</a
+            >{{ 'forgot_password' | translate: {"Default": "Forgot Password?"} }}?</a
           >
           <div class="d-flex align-items-center">
-            <button type="submit" class="btn btn-primary ml-auto">Save</button>
+            <button type="submit" class="btn btn-primary ml-auto">{{ 'save' | translate: {"Default": "Save"} }}</button>
           </div>
         </app-generic-form>
       </div>

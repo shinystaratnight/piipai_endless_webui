@@ -6,6 +6,7 @@
 	"/hr/timesheets/history/": "Timesheet history",
 	"/hr/timesheets/unapproved/": "Unapproved timesheets",
 	"Job.back": "Back to job list",
+	"Jobsite.back": "Back to jobsite list",
 	"Scores.label": "Scores",
 	"Tags.label": "Tags",
 	"__str__": {
@@ -19,6 +20,7 @@
 	"add_photo": "Add photo",
 	"add_shifts_and_workers": "Add shifts and workers",
 	"add_shifts_and_workers.description": "Create dates, shifts and time for tasks, add workers.",
+	"additional_information": "Additional information",
 	"address": {
 		"label": "Address"
 	},
@@ -26,12 +28,14 @@
 	"approve": "Approve",
 	"approve.label": "Approve/Change",
 	"approve_timesheet": "Approve timesheet",
+	"approved": "Approved",
 	"are_you_sure": "Are you sure?",
 	"autocomplete": "Autocomplete",
 	"available": {
 		"label": "Available"
 	},
 	"back": "Back",
+	"bank_and_superannuation_informatioin": "Bank and superannuation information",
 	"bmi.label": "Bmi",
 	"break": "Break",
 	"break_ended_at": {
@@ -77,9 +81,11 @@
 	"client/candidate_rate": {
 		"label": "Rate"
 	},
+	"close_without_save": "Close without save",
 	"company": {
 		"label": "Company"
 	},
+	"confirm": "Confirm?",
 	"confirm_going_to_work": "Confirm if you are going to work",
 	"confirm_password.description": "To confirm, type the new password again.",
 	"confirm_password.label": "Verify",
@@ -94,6 +100,8 @@
 	"contact.phone_mobile.label": "Mobile Phone",
 	"contact.picture.label_photo": "Take a photo",
 	"contact.title.label": "Title",
+	"contact_information": "Contact information",
+	"create_job": "Create Job",
 	"created": {
 		"label": "Created"
 	},
@@ -118,6 +126,7 @@
 	"distance.time_to_jobsite.label": "Time",
 	"drag_and_drop": "Drag the photo to the area or click the button",
 	"edit": "Edit",
+	"edit_mode": "Edit mode",
 	"edit_submission": "Edit submission",
 	"email": {
 		"description": "Password reset instructions will be sent to this email address.",
@@ -146,12 +155,14 @@
 	"favourite": {
 		"label": ""
 	},
+	"female": "Female",
 	"file": "file",
 	"file_size": "File size is too large!",
 	"fill_in": {
 		"label": "Fill in"
 	},
 	"fill_shifts": "Fills shifts automatically using criteria",
+	"filled": "Filled",
 	"filter.available.label": "Available",
 	"filter.available.partialy_available": "Show partially available",
 	"filter.date.label": "Shifts",
@@ -176,6 +187,7 @@
 	"filter.transportation_to_work.own_car": "Own Car",
 	"filter.transportation_to_work.public_transportation": "Public Transportation",
 	"filters": "Filters",
+	"forgot_password": "Forgot Password?",
 	"fulfilled": {
 		"label": "Fulfilled"
 	},
@@ -207,6 +219,8 @@
 	},
 	"industry.description": "",
 	"industry.label": "Industry",
+	"industry_and_skills": "Industry and skills",
+	"info_layers": "Info layers",
 	"is_available": {
 		"label": "Status"
 	},
@@ -216,7 +230,9 @@
 	"job_site_-_map.label": "Job site - map",
 	"job_site_contact.label": "Job site contact",
 	"joboffer": "Job Offer",
+	"joboffer.label": "Job Offer",
 	"jobsite.label": "Position / Jobsite",
+	"layers": "layers",
 	"list": {
 		"status": [
 			"New",
@@ -238,6 +254,7 @@
 	"login.subtitle": "Please enter your email and password",
 	"login.title": "Login",
 	"make_default": "make default",
+	"male": "Male",
 	"master_company": {
 		"label": "Provider company",
 		"placeholder": "Select or add new"
@@ -271,6 +288,7 @@
 		"label": "Notes"
 	},
 	"old_password.label": "Current Password",
+	"open": "Open",
 	"open_in_tab": "Open in new tab",
 	"open_map": "Open Map",
 	"open_tracking_map": "Open tracking map",
@@ -281,6 +299,7 @@
 	"password.placeholder": "Password",
 	"password.reset": "",
 	"password_reset": "Password Reset",
+	"pending": "Pending",
 	"personal_info": {
 		"label": "Candidate/Position"
 	},
@@ -338,14 +357,18 @@
 	},
 	"reset": "Reset",
 	"reset_all": "Reset All",
+	"reset_dates": "Reset selected dates",
 	"residency.label": "Residency",
 	"save": "Save",
+	"save_changes": "Save changes",
 	"score.label": "Score",
 	"search_by_distance": "Search by distance",
+	"select": "Select",
 	"select_dates": "Select Dates",
 	"shift.date.job.notes.label": "Notes",
 	"shift.date.job.position.label": "Position",
 	"shift.date.shift_date.label": "Shift info",
+	"shift.label": "Shift",
 	"shift_ended_at": {
 		"label": "Shift End"
 	},
@@ -366,6 +389,7 @@
 		"label": "Site Name"
 	},
 	"skill.label": "Skill",
+	"skillrel.label": "Candidate Skill",
 	"sms_history": {
 		"label": "SMS History"
 	},
@@ -400,10 +424,12 @@
 	"tabs.job_info.help": "",
 	"tabs.job_info.label": "Job information",
 	"tabs.job_info.name": "Job info",
+	"tabs.job_offers.label": "Job Offers",
 	"tabs.job_offers.name": "Job Offers",
 	"tabs.notes.name": "Notes",
 	"tabs.personal.label": "Personal information",
 	"tabs.personal.name": "Personal Info",
+	"tabs.shift_dates.label": "Shift Dates",
 	"tabs.shift_dates.name": "Shift Dates",
 	"tabs.skills.help": "Here you can see skills",
 	"tabs.skills.label": "Skills",
@@ -438,6 +464,11 @@
 	"tracking.label": "Tracking",
 	"transportation_to_work.label": "Transportation to work",
 	"try_again": "Try again",
+	"unavailable": {
+		"label": "Unavailable"
+	},
+	"unfulfilled": "Unfulfilled",
+	"update": "Update",
 	"updated": {
 		"label": "Updated"
 	},
