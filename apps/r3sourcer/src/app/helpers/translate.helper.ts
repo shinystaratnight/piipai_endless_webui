@@ -14,6 +14,8 @@ export class MissingTranslationHelper implements MissingTranslationHandler {
     //   return params.interpolateParams['Default'];
     // }
 
+    // console.log(params);
+
     if (params.interpolateParams) {
       return params.interpolateParams['Default'];
     }

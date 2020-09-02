@@ -6,7 +6,7 @@
 
     <header class="form__header" *ngIf="steps.length > 1">
       <span class="form__steps">{{'registration.step' | translate}} {{ currentStep + 1 }} {{'registration.of' | translate}} {{ steps.length }}</span>
-      <h3 class="form__name">{{ steps[currentStep].title }}</h3>
+      <h3 class="form__name">{{ steps[currentStep].title | translate }}</h3>
     </header>
 
     <div class="content">

@@ -1,15 +1,16 @@
 {
 	"/hr/joboffers-candidate/": "Tööpakkumised",
-	"/hr/jobs/client_contact_job/": "Vuorot",
+	"/hr/jobs/client_contact_job/": "Tööd",
 	"/hr/jobsites/client_contact_jobsite/": "Töökohad",
 	"/hr/timesheets-candidate/": "Tunnilehed",
 	"/hr/timesheets/history/": "Tunnilehtede ajalugu",
 	"/hr/timesheets/unapproved/": "Kinnitamata tunnilehed",
 	"Job.back": "Tagasi tööde nimekirja",
+	"Jobsite.back": "",
 	"Scores.label": "Hinnang",
 	"Tags.label": "Märksõnad",
 	"__str__": {
-		"label": "Töö"
+		"label": "Tööd"
 	},
 	"accept": "Nõus",
 	"actions": "Tegevused",
@@ -19,6 +20,7 @@
 	"add_photo": "Lisage foto",
 	"add_shifts_and_workers": "Lisage vahetused ja töötajad",
 	"add_shifts_and_workers.description": "Valige töö kuupäevad, vahetused ja algusaeg, lisage töötajaid.",
+	"additional_information": "",
 	"address": {
 		"label": "Aadress"
 	},
@@ -26,12 +28,14 @@
 	"approve": "Kinnita",
 	"approve.label": "Kinnita / muuda",
 	"approve_timesheet": "Töötundide kinnitamine",
+	"approved": "",
 	"are_you_sure": "Oled sa kindel?",
 	"autocomplete": "Automaatne täitmine",
 	"available": {
 		"label": "Saadaval"
 	},
 	"back": "Tagasi",
+	"bank_and_superannuation_informatioin": "",
 	"bmi.label": "Kehamassiindeks",
 	"break": "Paus",
 	"break_ended_at": {
@@ -77,9 +81,11 @@
 	"client/candidate_rate": {
 		"label": "Hinne"
 	},
+	"close_without_save": "",
 	"company": {
 		"label": "Ettevõte"
 	},
+	"confirm": "",
 	"confirm_going_to_work": "Kinnitage, kas lähete tööle",
 	"confirm_password.description": "Kinnitamiseks tippige uus parool uuesti.",
 	"confirm_password.label": "Kinnita",
@@ -94,6 +100,8 @@
 	"contact.phone_mobile.label": "Mobiiltelefon",
 	"contact.picture.label_photo": "Pildista",
 	"contact.title.label": "Tiitel",
+	"contact_information": "",
+	"create_job": "",
 	"created": {
 		"label": "Loodud"
 	},
@@ -118,6 +126,7 @@
 	"distance.time_to_jobsite.label": "Aeg",
 	"drag_and_drop": "Lohistage foto alale või klõpsake nuppu",
 	"edit": "Muuda",
+	"edit_mode": "",
 	"edit_submission": "Esituse muutmine",
 	"email": {
 		"description": "Sellele e-posti aadressile saadetakse parooli lähtestamise juhised.",
@@ -146,12 +155,14 @@
 	"favourite": {
 		"label": "Lemmik"
 	},
+	"female": "",
 	"file": "Fail",
 	"file_size": "Faili suurus on liiga suur!",
 	"fill_in": {
 		"label": "Täida"
 	},
 	"fill_shifts": "Täidab vahetused automaatselt, kasutades kriteeriume",
+	"filled": "",
 	"filter.available.label": "Saadaval",
 	"filter.available.partialy_available": "Kuva osaliselt saadaval",
 	"filter.date.label": "Vahetused",
@@ -176,6 +187,7 @@
 	"filter.transportation_to_work.own_car": "Oma auto",
 	"filter.transportation_to_work.public_transportation": "Ühistransport",
 	"filters": "Filtrid",
+	"forgot_password": "",
 	"fulfilled": {
 		"label": "Täidetud"
 	},
@@ -207,6 +219,8 @@
 	},
 	"industry.description": "",
 	"industry.label": "Ala",
+	"industry_and_skills": "",
+	"info_layers": "",
 	"is_available": {
 		"label": "Staatus"
 	},
@@ -216,7 +230,9 @@
 	"job_site_-_map.label": "Töökoht - kaart",
 	"job_site_contact.label": "Töökoha kontakt",
 	"joboffer": "Tööpakkumine",
+	"joboffer.label": "",
 	"jobsite.label": "Ametikoht / töökoht",
+	"layers": "",
 	"list": {
 		"status": [
 			"Uus",
@@ -238,6 +254,7 @@
 	"login.subtitle": "Sisestage oma e-posti aadress ja parool",
 	"login.title": "Logi sisse",
 	"make_default": "Muuda vaikeseadeks",
+	"male": "",
 	"master_company": {
 		"label": "Teenusepakkuja ettevõte",
 		"placeholder": "Valige või lisage uus"
@@ -271,6 +288,7 @@
 		"label": "Märkused"
 	},
 	"old_password.label": "Praegune salasõna",
+	"open": "",
 	"open_in_tab": "Ava uuel vahekaardil",
 	"open_map": "Avage kaart",
 	"open_tracking_map": "Avage jälgimiskaart",
@@ -281,6 +299,7 @@
 	"password.placeholder": "Salasõna",
 	"password.reset": "Parooli lähtestamine",
 	"password_reset": "Parooli lähtestamine",
+	"pending": "",
 	"personal_info": {
 		"label": "Kandidaat / ametikoht"
 	},
@@ -338,14 +357,18 @@
 	},
 	"reset": "Tühista",
 	"reset_all": "Tühista kõik",
+	"reset_dates": "",
 	"residency.label": "Residentsus",
 	"save": "Salvesta",
+	"save_changes": "",
 	"score.label": "Skoor",
 	"search_by_distance": "Otsige kauguse järgi",
+	"select": "",
 	"select_dates": "Valige Kuupäevad",
 	"shift.date.job.notes.label": "Märkused",
 	"shift.date.job.position.label": "Amet",
 	"shift.date.shift_date.label": "Vahetuse info",
+	"shift.label": "",
 	"shift_ended_at": {
 		"label": "Vahetuse lõpp"
 	},
@@ -366,6 +389,7 @@
 		"label": "Asukoht"
 	},
 	"skill.label": "Oskus",
+	"skillrel.label": "",
 	"sms_history": {
 		"label": "SMS-i ajalugu"
 	},
@@ -400,10 +424,12 @@
 	"tabs.job_info.help": "",
 	"tabs.job_info.label": "Tööalane teave",
 	"tabs.job_info.name": "Tööinfo",
+	"tabs.job_offers.label": "",
 	"tabs.job_offers.name": "Tööpakkumised",
 	"tabs.notes.name": "Märkused",
 	"tabs.personal.label": "Isiklik informatsioon",
 	"tabs.personal.name": "Personaalne informatsioon",
+	"tabs.shift_dates.label": "",
 	"tabs.shift_dates.name": "Vahetuse kuupäevad",
 	"tabs.skills.help": "",
 	"tabs.skills.label": "Oskused",
@@ -438,6 +464,11 @@
 	"tracking.label": "Jälgimine",
 	"transportation_to_work.label": "Transport tööle",
 	"try_again": "Proovi uuesti",
+	"unavailable": {
+		"label": ""
+	},
+	"unfulfilled": "",
+	"update": "",
 	"updated": {
 		"label": "Uuendatud"
 	},

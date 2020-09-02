@@ -6,6 +6,7 @@
 	"/hr/timesheets/history/": "Табеля",
 	"/hr/timesheets/unapproved/": "Не подтвержденные табеля",
 	"Job.back": "Назад к списку",
+	"Jobsite.back": "Назад",
 	"Scores.label": "Оценка",
 	"Tags.label": "Теги",
 	"__str__": {
@@ -19,6 +20,7 @@
 	"add_photo": "Добавить фото",
 	"add_shifts_and_workers": "Добавить смену и рабочих",
 	"add_shifts_and_workers.description": "Создайте смены и добавьте рабочих",
+	"additional_information": "Дополнительная информация",
 	"address": {
 		"label": "Адрес"
 	},
@@ -26,12 +28,14 @@
 	"approve": "Подтвердить",
 	"approve.label": "Подтвердить/Изменить",
 	"approve_timesheet": "Подтвердите табель",
+	"approved": "Одобрены",
 	"are_you_sure": "Вы уверены?",
 	"autocomplete": "Автозаполнение",
 	"available": {
 		"label": "Доступен"
 	},
 	"back": "Назад",
+	"bank_and_superannuation_informatioin": "Информация о банке и пенсии",
 	"bmi.label": "Индекс массы тела",
 	"break": "Перерыв",
 	"break_ended_at": {
@@ -77,9 +81,11 @@
 	"client/candidate_rate": {
 		"label": "Ставка"
 	},
+	"close_without_save": "Закрыть без сохранения",
 	"company": {
 		"label": "Компания"
 	},
+	"confirm": "Подтверждаете?",
 	"confirm_going_to_work": "Подтвердите что вы идете на работу",
 	"confirm_password.description": "Для подтверждения введите новый пароль",
 	"confirm_password.label": "Повторите",
@@ -94,6 +100,8 @@
 	"contact.phone_mobile.label": "Номер телефона",
 	"contact.picture.label_photo": "Сделать фото",
 	"contact.title.label": "Обращение",
+	"contact_information": "Контактная информация",
+	"create_job": "Создать работу",
 	"created": {
 		"label": "Создан"
 	},
@@ -118,6 +126,7 @@
 	"distance.time_to_jobsite.label": "Время",
 	"drag_and_drop": "Перенесите файл и нажмите на кнопку",
 	"edit": "Изменить",
+	"edit_mode": "Режим редактирования",
 	"edit_submission": "Изменить",
 	"email": {
 		"description": "Инструкции будут отправлены на этот почтовый адрес",
@@ -146,12 +155,14 @@
 	"favourite": {
 		"label": ""
 	},
+	"female": "Женский",
 	"file": "файл",
 	"file_size": "Файл слишком большой!",
 	"fill_in": {
 		"label": "Заполнить"
 	},
 	"fill_shifts": "Заполняет смены автоматически по критериям",
+	"filled": "Заполнены",
 	"filter.available.label": "Доступен",
 	"filter.available.partialy_available": "Показать частично доступных",
 	"filter.date.label": "Смены",
@@ -176,6 +187,7 @@
 	"filter.transportation_to_work.own_car": "Своя машина",
 	"filter.transportation_to_work.public_transportation": "Общественный транспорт",
 	"filters": "Фильтры",
+	"forgot_password": "Забыли пароль?",
 	"fulfilled": {
 		"label": "Заполнен"
 	},
@@ -207,6 +219,8 @@
 	},
 	"industry.description": "",
 	"industry.label": "Отрасль",
+	"industry_and_skills": "Промышленность и навыки",
+	"info_layers": "типа",
 	"is_available": {
 		"label": "Статус"
 	},
@@ -215,8 +229,10 @@
 	},
 	"job_site_-_map.label": "Место работы - карта",
 	"job_site_contact.label": "Контакт места работы",
-	"joboffer": "Предложение на работу",
+	"joboffer": "Предложение работы",
+	"joboffer.label": "Предложение работы",
 	"jobsite.label": "Должность / Место работы",
+	"layers": "типы",
 	"list": {
 		"status": [
 			"Новый",
@@ -238,6 +254,7 @@
 	"login.subtitle": "Введите ваш email и пароль",
 	"login.title": "Вход",
 	"make_default": "сделать по умолчанию",
+	"male": "Мужской",
 	"master_company": {
 		"label": "Компания-провайдер",
 		"placeholder": "Выберете или создайте"
@@ -271,6 +288,7 @@
 		"label": "Заметки"
 	},
 	"old_password.label": "Текущий пароль",
+	"open": "Открыты",
 	"open_in_tab": "Открыть в новой вкладке",
 	"open_map": "Открыть карту",
 	"open_tracking_map": "Открыть карту местоположения",
@@ -281,6 +299,7 @@
 	"password.placeholder": "Пароль",
 	"password.reset": "Сбросить пароль",
 	"password_reset": "Сбросить пароль",
+	"pending": "Ожидают",
 	"personal_info": {
 		"label": "Кандидат / Должность"
 	},
@@ -338,14 +357,18 @@
 	},
 	"reset": "Сбросить",
 	"reset_all": "Сбросить все",
+	"reset_dates": "Сбросить выбранные даты",
 	"residency.label": "Резиденция",
 	"save": "Сохранить",
+	"save_changes": "Сохранить изменения",
 	"score.label": "Оценка",
 	"search_by_distance": "Поиск по расстоянию",
+	"select": "Выбрать",
 	"select_dates": "Выберите даты",
 	"shift.date.job.notes.label": "Заметки",
 	"shift.date.job.position.label": "Должность",
 	"shift.date.shift_date.label": "Информация",
+	"shift.label": "Смена",
 	"shift_ended_at": {
 		"label": "Смена (Конец)"
 	},
@@ -366,6 +389,7 @@
 		"label": "Название"
 	},
 	"skill.label": "Навык",
+	"skillrel.label": "Навыки",
 	"sms_history": {
 		"label": "SMS история"
 	},
@@ -388,7 +412,7 @@
 	"status.label": "Статус",
 	"submit": "Отправить",
 	"supervisor.label": "Супервизор",
-	"tabs.evaluations.help": "",
+	"tabs.evaluations.help": "Здесь вы можете увидеть оценки",
 	"tabs.evaluations.label": "Оценки",
 	"tabs.evaluations.name": "Оценки",
 	"tabs.general.help": "",
@@ -400,15 +424,17 @@
 	"tabs.job_info.help": "",
 	"tabs.job_info.label": "Информация о работе",
 	"tabs.job_info.name": "Информация",
+	"tabs.job_offers.label": "Предложения о работе",
 	"tabs.job_offers.name": "Предложения",
 	"tabs.notes.name": "Заметки",
 	"tabs.personal.label": "Персональная информация",
 	"tabs.personal.name": "Данные",
+	"tabs.shift_dates.label": "Смены",
 	"tabs.shift_dates.name": "Смены",
-	"tabs.skills.help": "",
+	"tabs.skills.help": "Здесь вы можете увидеть навыки",
 	"tabs.skills.label": "Навыки",
 	"tabs.skills.name": "Навыки",
-	"tabs.tags.help": "",
+	"tabs.tags.help": "Здесь вы можете увидеть теги",
 	"tabs.tags.label": "Теги",
 	"tabs.tags.name": "Теги",
 	"tag.label": "Тег",
@@ -438,6 +464,11 @@
 	"tracking.label": "Передвижение",
 	"transportation_to_work.label": "Транспорт",
 	"try_again": "Попробовать еще",
+	"unavailable": {
+		"label": "Недоступен"
+	},
+	"unfulfilled": "Невыполненный",
+	"update": "Обновить",
 	"updated": {
 		"label": "Обновлен"
 	},

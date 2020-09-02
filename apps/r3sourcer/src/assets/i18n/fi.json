@@ -6,6 +6,7 @@
 	"/hr/timesheets/history/": "Aikatauluhistoria",
 	"/hr/timesheets/unapproved/": "Hyväksymättömät aikataulut",
 	"Job.back": "Takaisin vuoroluetteloon",
+	"Jobsite.back": "",
 	"Scores.label": "Tulokset",
 	"Tags.label": "Tulokset",
 	"__str__": {
@@ -19,6 +20,7 @@
 	"add_photo": "Lisää valokuva",
 	"add_shifts_and_workers": "Lisää vuoroja ja työntekijöitä",
 	"add_shifts_and_workers.description": "Luo tehtävien päivämäärät, vuorot ja aika, lisää työntekijöitä.",
+	"additional_information": "",
 	"address": {
 		"label": "Osoite"
 	},
@@ -26,12 +28,14 @@
 	"approve": "Hyväksyä",
 	"approve.label": "Hyväksy / muuta",
 	"approve_timesheet": "Hyväksä aikataulut",
+	"approved": "",
 	"are_you_sure": "Oletko varma?",
 	"autocomplete": "Automaattinen täydennys",
 	"available": {
 		"label": "Käytettävissä"
 	},
 	"back": "Takaisin",
+	"bank_and_superannuation_informatioin": "",
 	"bmi.label": "Painoindeksi",
 	"break": "Tauko",
 	"break_ended_at": {
@@ -77,9 +81,11 @@
 	"client/candidate_rate": {
 		"label": "Pisteet"
 	},
+	"close_without_save": "",
 	"company": {
 		"label": "Yhtiö"
 	},
+	"confirm": "",
 	"confirm_going_to_work": "Vahvista, oletko menossa töihin",
 	"confirm_password.description": "Vahvista kirjoittamalla uusi salasana uudelleen.",
 	"confirm_password.label": "Tarkistaa",
@@ -94,6 +100,8 @@
 	"contact.phone_mobile.label": "Kännykkä",
 	"contact.picture.label_photo": "Ottaa valokuva",
 	"contact.title.label": "Otsikko",
+	"contact_information": "",
+	"create_job": "",
 	"created": {
 		"label": "Luotu"
 	},
@@ -118,6 +126,7 @@
 	"distance.time_to_jobsite.label": "Aika",
 	"drag_and_drop": "Vedä valokuva alueelle tai napsauta painiketta",
 	"edit": "Muokata",
+	"edit_mode": "",
 	"edit_submission": "Muokkaa lähetystä",
 	"email": {
 		"description": "Salasanan vaihto-ohjeet lähetetään tähän sähköpostiosoitteeseen.",
@@ -146,12 +155,14 @@
 	"favourite": {
 		"label": "Suosikki"
 	},
+	"female": "",
 	"file": "Tiedosto",
 	"file_size": "Tiedoston koko on liian suuri!",
 	"fill_in": {
 		"label": "Täyttää"
 	},
 	"fill_shifts": "Täyttää vuorot automaattisesti kriteereillä",
+	"filled": "",
 	"filter.available.label": "Käytettävissä",
 	"filter.available.partialy_available": "Näytä osittain saatavana",
 	"filter.date.label": "Vuorot",
@@ -176,6 +187,7 @@
 	"filter.transportation_to_work.own_car": "Oma auto",
 	"filter.transportation_to_work.public_transportation": "Julkinen liikenne",
 	"filters": "Suodattimet",
+	"forgot_password": "",
 	"fulfilled": {
 		"label": "Täytetty"
 	},
@@ -207,6 +219,8 @@
 	},
 	"industry.description": "",
 	"industry.label": "Älä",
+	"industry_and_skills": "",
+	"info_layers": "",
 	"is_available": {
 		"label": "Tila"
 	},
@@ -216,7 +230,9 @@
 	"job_site_-_map.label": "Työpaikka - kartta",
 	"job_site_contact.label": "Yhteys työpaikkaan",
 	"joboffer": "Työtarjous",
+	"joboffer.label": "",
 	"jobsite.label": "Rooli / Työpaikka",
+	"layers": "",
 	"list": {
 		"status": [
 			"Uusi",
@@ -238,6 +254,7 @@
 	"login.subtitle": "Anna sähköpostiosoitteesi ja salasanasi",
 	"login.title": "Kirjaudu sisään",
 	"make_default": "Laita oletusarvoksi",
+	"male": "",
 	"master_company": {
 		"label": "Palveluntarjoajayritys",
 		"placeholder": "Valitse tai lisää uusi"
@@ -271,6 +288,7 @@
 		"label": "Huomautuksia"
 	},
 	"old_password.label": "Nykyinen salasana",
+	"open": "",
 	"open_in_tab": "Avaa uudessa välilehdessä",
 	"open_map": "Avaa Kartta",
 	"open_tracking_map": "Avaa seurantakartta",
@@ -281,6 +299,7 @@
 	"password.placeholder": "Salasana",
 	"password.reset": "Salasanan nollaus",
 	"password_reset": "Salasanan nollaus",
+	"pending": "",
 	"personal_info": {
 		"label": "Ehdokas / asema"
 	},
@@ -338,14 +357,18 @@
 	},
 	"reset": "Asettaa uudelleen",
 	"reset_all": "Nollaa kaikki",
+	"reset_dates": "",
 	"residency.label": "Residenssi",
 	"save": "Tallentaa",
+	"save_changes": "",
 	"score.label": "Pisteet",
 	"search_by_distance": "Etsi etäisyyden mukaan",
+	"select": "",
 	"select_dates": "Valitse päivämäärät",
 	"shift.date.job.notes.label": "Huomautuksia",
 	"shift.date.job.position.label": "Asento",
 	"shift.date.shift_date.label": "Vaihtotiedot",
+	"shift.label": "",
 	"shift_ended_at": {
 		"label": "Vaihto päättyy"
 	},
@@ -366,6 +389,7 @@
 		"label": "Sivuston nimi"
 	},
 	"skill.label": "Taito",
+	"skillrel.label": "",
 	"sms_history": {
 		"label": "SMS-historia"
 	},
@@ -400,10 +424,12 @@
 	"tabs.job_info.help": "",
 	"tabs.job_info.label": "Työtiedot",
 	"tabs.job_info.name": "Työtiedot",
+	"tabs.job_offers.label": "",
 	"tabs.job_offers.name": "Työtarjoukset",
 	"tabs.notes.name": "Huomautuksia",
 	"tabs.personal.label": "Henkilökohtaisia tietoja",
 	"tabs.personal.name": "Henkilökohtaiset tiedot",
+	"tabs.shift_dates.label": "",
 	"tabs.shift_dates.name": "Vaihtopäivät",
 	"tabs.skills.help": "",
 	"tabs.skills.label": "Taidot",
@@ -438,6 +464,11 @@
 	"tracking.label": "Seuranta",
 	"transportation_to_work.label": "Kuljetus töihin",
 	"try_again": "Yritä uudelleen",
+	"unavailable": {
+		"label": ""
+	},
+	"unfulfilled": "",
+	"update": "",
 	"updated": {
 		"label": "Päivitetty"
 	},

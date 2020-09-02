@@ -64,7 +64,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
 
   public steps = [
     {
-      title: 'Contact information',
+      title: 'contact_information',
       metadata: [],
       content: [
         'contact.picture',
@@ -83,7 +83,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       ],
     },
     {
-      title: 'Additional information',
+      title: 'additional_information',
       metadata: [],
       content: [
         'nationality',
@@ -94,7 +94,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       ],
     },
     {
-      title: 'Bank and superannuation informatioin',
+      title: 'bank_and_superannuation_informatioin',
       metadata: [],
       content: [
         'bank_account.bank_name',
@@ -106,7 +106,7 @@ export class FormBuilderFormComponent implements OnInit, OnDestroy {
       ],
     },
     {
-      title: 'Industry and skills',
+      title: 'industry_and_skills',
       metadata: [],
       content: ['industry', 'skill'],
     },

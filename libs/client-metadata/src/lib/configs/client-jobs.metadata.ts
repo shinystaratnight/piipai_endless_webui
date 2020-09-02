@@ -824,6 +824,7 @@ const form = [
         main: true,
         name: 'Job info',
         key: 'job_info',
+        translateKey: 'job_info',
         type: 'group',
         label: 'Job information',
         children: [
@@ -833,6 +834,7 @@ const form = [
               {
                 label: 'General',
                 key: 'general',
+                translateKey: 'general',
                 type: 'group',
                 children: [
                   {
@@ -889,6 +891,7 @@ const form = [
               {
                 label: 'Client',
                 key: 'client',
+                translateKey: 'client',
                 type: 'group',
                 children: [
                   {
@@ -951,6 +954,7 @@ const form = [
               {
                 label: 'Provider',
                 key: 'provider',
+                translateKey: 'provider',
                 type: 'group',
                 children: [
                   {
@@ -1022,6 +1026,7 @@ const form = [
           workers: '{workers}'
         },
         type: 'list',
+        translateKey: 'shift_dates',
         add_metadata_query: {
           fieldsets_type: 'job'
         },
@@ -1029,6 +1034,7 @@ const form = [
       },
       {
         endpoint: '/hr/joboffers/',
+        translateKey: 'job_offers',
         templateOptions: {
           label: 'Job Offers',
           type: 'list',
