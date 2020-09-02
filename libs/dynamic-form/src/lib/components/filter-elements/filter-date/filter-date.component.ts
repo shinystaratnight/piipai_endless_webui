@@ -59,7 +59,6 @@ export class FilterDateComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    console.log(this);
     this.data = this.createInputs(this.config.input);
     this.mobileDevice = isTouchDevice();
 

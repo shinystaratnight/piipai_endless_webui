@@ -72,14 +72,14 @@
         [icon]="['fas', config.templateOptions.icon]"
       >
       </fa-icon>
-      {{ config.translationKey ? (config.translationKey | translate: {"Default": config.templateOptions.text}) : config.templateOptions.text }}
+      {{ config.translationKey && config.templateOptions.text ? (config.translationKey | translate: {"Default": config.templateOptions.text}) : config.templateOptions.text }}
     </span>
 
     <ng-container
       *ngTemplateOutlet="icon; context: { icon: config.svg }"
     ></ng-container>
 
-    <span *ngIf="!repeatArray">{{ config.translationKey ? (config.translationKey | translate: {"Default": config.templateOptions.text}) : config.templateOptions.text }}</span>
+    <span *ngIf="!repeatArray && config.templateOptions.text">{{ config.translationKey ? (config.translationKey | translate: {"Default": config.templateOptions.text}) : config.templateOptions.text }}</span>
   </button>
   <button
     class="btn btn-sm btn-link mr-1"
@@ -89,7 +89,7 @@
     [ngbTooltip]="detail"
     (click)="action($event)"
   >
-    {{ config.translationKey ? (config.translationKey | translate: {"Default": config.templateOptions.text}) : config.templateOptions.text }}
+    {{ config.translationKey && config.templateOptions.text ? (config.translationKey | translate: {"Default": config.templateOptions.text}) : config.templateOptions.text }}
   </button>
   <span class="postfix mr-1" *ngIf="config.postfix">{{ config.postfix }}</span>
   <span
@@ -113,8 +113,7 @@
       [title]="config.title"
     >
     </fa-icon>
-<!--    {{ config.title }}-->
-    {{ config.translationKey | translate: {"Default": config.title} }}
+    {{ config.translationKey ? (config.translationKey | translate: {"Default": config.title}) : config.title }}
   </span>
   <div *ngIf="config.customLink && config.image" class="image-wrapper">
     <div class="tracking-mobile">

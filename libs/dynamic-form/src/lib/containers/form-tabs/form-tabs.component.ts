@@ -47,7 +47,6 @@ export class FormTabsComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    console.log(this);
     this.form = this.formService.getForm(this.formId);
 
     this.canUpdate =

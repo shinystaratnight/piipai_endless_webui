@@ -17,7 +17,6 @@ export class ImageUploaderComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    console.log(this);
     if (this.source.length) {
       this.source.forEach((src, i) => {
         this.data.add(src);

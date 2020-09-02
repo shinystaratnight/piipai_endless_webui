@@ -2,13 +2,12 @@
   <div #calendar class="vacancy-dates-wrapper">
     <ngb-datepicker
       class="text-center"
-      [ngModel]="vacancyDate"
       [minDate]="minDate"
       [markDisabled]="markDisabled"
       [dayTemplate]="customDay"
       [displayMonths]="displayMonths"
       [navigation]="navigation"
-      (ngModelChange)="selectVacancyDate($event)">
+      (dateSelect)="selectVacancyDate($event)">
     </ngb-datepicker>
   </div>
 </div>

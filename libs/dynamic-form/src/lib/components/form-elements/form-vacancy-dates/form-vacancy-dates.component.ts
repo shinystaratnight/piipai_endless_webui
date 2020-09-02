@@ -8,6 +8,7 @@ import {
   OnDestroy,
   AfterContentInit,
   ViewEncapsulation,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
@@ -21,6 +22,7 @@ import { getTimeInstance, getToday } from '@webui/utilities';
   templateUrl: 'form-vacancy-dates.component.html',
   styleUrls: ['./form-vacancy-dates.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormVacancyDatesComponent extends BasicElementComponent implements OnInit, OnDestroy, AfterContentInit {
   @Input()
@@ -39,7 +41,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
   public dateFormat = 'YYYY-MM-DD';
   public minDate: any;
   public markDisabled: Function;
-  public vacancyDate: any;
+  // public vacancyDate: any;
   public vacancyDates: string[];
   public dates: any = {};
   public todayElement: any;
@@ -83,10 +85,9 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
   public ngAfterContentInit() {
     setTimeout(() => {
       if (this.calendar) {
-        const today = this.calendar.nativeElement.querySelector('.bg-primary');
+        const today = this.calendar.nativeElement.querySelector('.today');
 
         if (today) {
-          today.classList.remove('bg-primary');
           this.todayElement = today.parentElement;
 
           if (this.todayElement) {
@@ -148,13 +149,13 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
 
         setTimeout(() => {
           this.markSelectedDates(date);
-        }, 50);
+        }, 150);
       } else {
         this.vacancyDates.splice(this.vacancyDates.indexOf(date), 1);
 
         setTimeout(() => {
           this.markSelectedDates(date, true);
-        }, 50);
+        }, 150);
       }
 
       this.group.get(this.key).patchValue(this.vacancyDates);
@@ -170,7 +171,7 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
 
     setTimeout(() => {
       this.markSelectedDates(date, true);
-    }, 50);
+    }, 150);
   }
 
   public markSelectedDates(date?, remove?) {
@@ -182,33 +183,31 @@ export class FormVacancyDatesComponent extends BasicElementComponent implements 
       this.dates[date] = currentDate.parentElement;
     }
 
-    this.vacancyDate = {};
-
-    setTimeout(() => {
-      if (remove) {
-        if (this.dates[date]) {
-          this.dates[date].children[0].classList.remove('bg-primary');
-          this.dates[date].children[0].classList.remove('text-white');
-          this.dates[date].children[0].classList.remove('not-current');
-        }
-
-        delete this.dates[date];
+    if (remove) {
+      if (this.dates[date]) {
+        this.dates[date].children[0].classList.remove('bg-primary');
+        this.dates[date].children[0].classList.remove('text-white');
+        this.dates[date].children[0].classList.remove('not-current');
       }
-      Object.keys(this.dates).forEach((el) => {
-        if (this.dates[el]) {
-          const element = this.dates[el].children[0];
 
-          if (element) {
-            element.classList.add('bg-primary');
-            element.classList.add('text-white');
-            element.classList.add('not-current');
-          }
+      delete this.dates[date];
+    }
+
+    Object.keys(this.dates).forEach((el) => {
+      if (this.dates[el]) {
+        const element = this.dates[el].children[0];
+
+        if (element) {
+          element.classList.add('bg-primary');
+          element.classList.add('text-white');
+          element.classList.add('not-current');
         }
-      });
-      if (this.todayElement) {
-        this.todayElement.classList.add('current-day');
       }
-    }, 50);
+    });
+
+    if (this.todayElement) {
+      this.todayElement.classList.add('current-day');
+    }
   }
 
   public isToday(month: number, day: number): boolean {
