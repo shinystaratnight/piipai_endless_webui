@@ -90,7 +90,7 @@
 	"confirm_password.description": "To confirm, type the new password again.",
 	"confirm_password.label": "Verify",
 	"contact.__str__.label": "Average score",
-	"contact.address.street_address.description": "",
+	"contact.address.street_address.description": "Address",
 	"contact.address.street_address.label": "Street Address",
 	"contact.birthday.label": "birthday",
 	"contact.email.label": "Email",
@@ -153,7 +153,7 @@
 		"text": "Dates"
 	},
 	"favourite": {
-		"label": ""
+		"label": "Favourite"
 	},
 	"female": "Female",
 	"file": "file",
@@ -232,7 +232,7 @@
 	"joboffer": "Job Offer",
 	"joboffer.label": "Job Offer",
 	"jobsite.label": "Position / Jobsite",
-	"layers": "layers",
+	"layers": "Layers",
 	"list": {
 		"status": [
 			"New",
@@ -297,7 +297,7 @@
 	"password.description": "The password must be 8-20 characters, and must not contain spaces.",
 	"password.label": "New Password",
 	"password.placeholder": "Password",
-	"password.reset": "",
+	"password.reset": "Reset password",
 	"password_reset": "Password Reset",
 	"pending": "Pending",
 	"personal_info": {
@@ -409,7 +409,7 @@
 			"label": "Approved"
 		}
 	},
-	"status.label": "",
+	"status.label": "Status",
 	"submit": "Submit",
 	"supervisor.label": "Supervisor",
 	"tabs.evaluations.help": "Here you can see evaluations",
@@ -484,6 +484,6 @@
 	},
 	"workers": {
 		"label": "Workers",
-		"placeholder": ""
+		"placeholder": "Workers"
 	}
 }
